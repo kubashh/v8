@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "026a6cf6_3369783f",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-24T21:57:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75d1bfe0_bea7b6ab",
+      "range": {
+        "startLine": 809,
+        "startChar": 32,
+        "endLine": 809,
+        "endChar": 69
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d84f1c9_805721fc",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-11-24T17:03:34Z",
       "side": 1,
       "message": "How about just using a `SmallVector` inside of the function instead? It should be extremely rare to have many outputs.",
+      "range": {
+        "startLine": 55,
+        "startChar": 2,
+        "endLine": 55,
+        "endChar": 47
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb6aa2de_0367b896",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-24T21:57:06Z",
+      "side": 1,
+      "message": "Why not... I\u0027ve gone for a `SmallVector\u003c32\u003e`; sounds large enough for the vast majority of cases, but still small enough that it shouldn\u0027t waste too much stack.",
+      "parentUuid": "6d84f1c9_805721fc",
       "range": {
         "startLine": 55,
         "startChar": 2,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e95314e8_ffced68b",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-24T21:57:06Z",
+      "side": 1,
+      "message": "Good point and good point; done and done ;)",
+      "parentUuid": "095ac368_9a3c264e",
+      "range": {
+        "startLine": 161,
+        "startChar": 32,
+        "endLine": 161,
+        "endChar": 34
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a61780bd_6567d58e",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-11-24T17:03:34Z",
       "side": 1,
       "message": "As discussed offline, let\u0027s have the frame state be separate.",
+      "range": {
+        "startLine": 808,
+        "startChar": 8,
+        "endLine": 808,
+        "endChar": 46
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a7a7baf_9a2fb0d8",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-24T21:57:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a61780bd_6567d58e",
       "range": {
         "startLine": 808,
         "startChar": 8,
@@ -135,6 +231,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f922a498_113ad19e",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-24T21:57:06Z",
+      "side": 1,
+      "message": "Do you mean just this part?\n```\n// Adding the exception type (Tagged) to {output_reps}. We\u0027ve already\n// reserved space for this when creating {output_reps}.\noutput_reps[output_reps.size() - 1] \u003d RegisterRepresentation::Tagged();\n```\nThis was indeed left-over from a previous version; I\u0027ve removed it ;)",
+      "parentUuid": "323c52c0_8e44afa1",
+      "range": {
+        "startLine": 814,
+        "startChar": 6,
+        "endLine": 828,
+        "endChar": 7
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "007585f9_3ed258ce",
         "filename": "src/compiler/turboshaft/operations.h",
         "patchSetId": 8
@@ -146,6 +266,30 @@
       "writtenOn": "2022-11-24T17:03:34Z",
       "side": 1,
       "message": "How about `HasFrameState()`?",
+      "range": {
+        "startLine": 1711,
+        "startChar": 7,
+        "endLine": 1711,
+        "endChar": 22
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "480d91ac_3fad79be",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1711,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-24T21:57:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "007585f9_3ed258ce",
       "range": {
         "startLine": 1711,
         "startChar": 7,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa2d92a4_b826c1ad",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-24T21:57:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2485bd58_a1c77eb1",
+      "range": {
+        "startLine": 1750,
+        "startChar": 2,
+        "endLine": 1750,
+        "endChar": 69
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e546a00a_c66de985",
@@ -192,6 +360,30 @@
       "writtenOn": "2022-11-24T17:03:34Z",
       "side": 1,
       "message": "How about just checking the representations vector?",
+      "range": {
+        "startLine": 2032,
+        "startChar": 22,
+        "endLine": 2032,
+        "endChar": 38
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bdca529_0bb90f8c",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-24T21:57:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e546a00a_c66de985",
       "range": {
         "startLine": 2032,
         "startChar": 22,
