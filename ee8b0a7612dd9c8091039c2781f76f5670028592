@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2df3ffd_dc57cde7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2022-11-24T09:18:42Z",
+      "side": 1,
+      "message": "ptal (since syg@ is away because of t-giving)",
+      "revId": "ee8b0a7612dd9c8091039c2781f76f5670028592",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
