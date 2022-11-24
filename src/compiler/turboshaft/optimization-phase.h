@@ -219,6 +219,7 @@ class GraphVisitor {
 
   template <bool can_be_invalid = false>
   OpIndex MapToNewGraph(OpIndex old_index, int predecessor_index = -1) {
+    DCHECK(old_index.valid());
     OpIndex result = op_mapping_[old_index.id()];
     if (!result.valid()) {
       // {op_mapping} doesn't have a mapping for {old_index}. The assembler
@@ -229,6 +230,7 @@ class GraphVisitor {
           return OpIndex::Invalid();
         }
       }
+      DCHECK(var.has_value());
       if (predecessor_index == -1) {
         result = assembler().Get(var.value());
       } else {
@@ -385,12 +387,6 @@ class GraphVisitor {
     return assembler().ReduceBranch(MapToNewGraph(op.condition()), if_true,
                                     if_false);
   }
-  OpIndex VisitCatchException(const CatchExceptionOp& op) {
-    Block* if_success = MapToNewGraph(op.if_success->index());
-    Block* if_exception = MapToNewGraph(op.if_exception->index());
-    return assembler().ReduceCatchException(MapToNewGraph(op.call()),
-                                            if_success, if_exception);
-  }
   OpIndex VisitSwitch(const SwitchOp& op) {
     base::SmallVector<SwitchOp::Case, 16> cases;
     for (SwitchOp::Case c : op.cases) {
@@ -515,6 +511,18 @@ class GraphVisitor {
     return assembler().ReduceCall(callee, base::VectorOf(arguments),
                                   op.descriptor);
   }
+  OpIndex VisitCallAndCatchException(const CallAndCatchExceptionOp& op) {
+    OpIndex callee = MapToNewGraph(op.callee());
+    Block* if_success = MapToNewGraph(op.if_success->index());
+    Block* if_exception = MapToNewGraph(op.if_exception->index());
+    auto arguments = MapToNewGraph<16>(op.arguments());
+    return assembler().ReduceCallAndCatchException(
+        callee, if_success, if_exception, base::VectorOf(arguments),
+        op.descriptor);
+  }
+  OpIndex VisitLoadException(const LoadExceptionOp& op) {
+    return assembler().ReduceLoadException();
+  }
   OpIndex VisitTailCall(const TailCallOp& op) {
     OpIndex callee = MapToNewGraph(op.callee());
     auto arguments = MapToNewGraph<16>(op.arguments());
@@ -608,10 +616,6 @@ class GraphVisitor {
   }
   OpIndex VisitFrameConstant(const FrameConstantOp& op) {
     return assembler().ReduceFrameConstant(op.kind);
-  }
-  OpIndex VisitCheckLazyDeopt(const CheckLazyDeoptOp& op) {
-    return assembler().ReduceCheckLazyDeopt(MapToNewGraph(op.call()),
-                                            MapToNewGraph(op.frame_state()));
   }
   OpIndex VisitDeoptimize(const DeoptimizeOp& op) {
     return assembler().ReduceDeoptimize(MapToNewGraph(op.frame_state()),
