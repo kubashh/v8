@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e16edeee_f0b5d188",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-24T14:33:35Z",
+      "side": 1,
+      "message": "New patchset where I\u0027ve introduced LoadException to get the exception of a CallAndCatchException rather than using a Projection for that. PTAL :)",
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
