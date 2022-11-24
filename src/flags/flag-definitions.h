@@ -234,6 +234,7 @@ DEFINE_BOOL(harmony_shipping, true, "enable all shipped harmony features")
 #define HARMONY_STAGED_BASE(V)                                  \
   V(harmony_rab_gsab,                                           \
     "harmony ResizableArrayBuffer / GrowableSharedArrayBuffer") \
+  V(harmony_rab_gsab_transfer, "harmony ArrayBuffer.transfer")  \
   V(harmony_array_grouping, "harmony array grouping")
 
 #ifdef V8_INTL_SUPPORT
