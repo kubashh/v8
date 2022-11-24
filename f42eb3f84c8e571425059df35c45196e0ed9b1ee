@@ -331,6 +331,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9c7db90_14577bd0",
+        "filename": "src/init/isolate-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-24T11:42:09Z",
+      "side": 1,
+      "message": "\u003e Does that test make sense with process-wide code range? In particular, the code range expects to be initialised with a process-wide allocator: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/heap.cc;l\u003d5437;drc\u003d5c38a2513a75aba2889d6355ef106bbd18608f74\n\nI don\u0027t think it makes sense for the setup requirements that we have now.\n\nHowever, the tests ensure that we don\u0027t leak pages by intercepting which I believe does generally make sense.\n\nShould we build some other intercepter mechanism there in the process-wide cases to allow for testing?",
+      "parentUuid": "942c2651_4088a6b7",
+      "range": {
+        "startLine": 66,
+        "startChar": 23,
+        "endLine": 66,
+        "endChar": 60
+      },
+      "revId": "f42eb3f84c8e571425059df35c45196e0ed9b1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b347e934_33551db9",
         "filename": "src/snapshot/embedded/embedded-data.h",
         "patchSetId": 2
