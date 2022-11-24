@@ -353,6 +353,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2c773c8_b3267102",
+        "filename": "src/init/isolate-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-24T11:56:36Z",
+      "side": 1,
+      "message": "That would make sense (as a general cleanup / followup)",
+      "parentUuid": "d9c7db90_14577bd0",
+      "range": {
+        "startLine": 66,
+        "startChar": 23,
+        "endLine": 66,
+        "endChar": 60
+      },
+      "revId": "f42eb3f84c8e571425059df35c45196e0ed9b1ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b347e934_33551db9",
