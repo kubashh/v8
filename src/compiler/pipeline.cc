@@ -85,6 +85,7 @@
 #include "src/compiler/turboshaft/graph-builder.h"
 #include "src/compiler/turboshaft/graph-visualizer.h"
 #include "src/compiler/turboshaft/graph.h"
+#include "src/compiler/turboshaft/late-escape-analysis-reducer.h"
 #include "src/compiler/turboshaft/machine-optimization-reducer.h"
 #include "src/compiler/turboshaft/memory-optimization.h"
 #include "src/compiler/turboshaft/optimization-phase.h"
@@ -1964,10 +1965,10 @@ struct LateOptimizationPhase {
 
   void Run(PipelineData* data, Zone* temp_zone) {
     if (data->HasTurboshaftGraph()) {
-      // TODO(dmercadier,tebbi): add missing reducers (LateEscapeAnalysis and
-      // CommonOperatorReducer).
+      // TODO(dmercadier,tebbi): add missing CommonOperatorReducer.
       turboshaft::OptimizationPhase<
           turboshaft::VariableReducer, turboshaft::BranchEliminationReducer,
+          turboshaft::LateEscapeAnalysisReducer,
           turboshaft::SelectLoweringReducer,
           turboshaft::MachineOptimizationReducerSignallingNanImpossible,
           turboshaft::ValueNumberingReducer>::Run(&data->turboshaft_graph(),
