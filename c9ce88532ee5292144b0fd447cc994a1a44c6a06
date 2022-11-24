@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46a46e8e_78b65c8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-24T22:00:38Z",
+      "side": 1,
+      "message": "Fixed review comments.",
+      "revId": "c9ce88532ee5292144b0fd447cc994a1a44c6a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5051ab8_f975e7d0",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-11-24T18:01:52Z",
       "side": 1,
       "message": "I\u0027d suggest using `MachineRepresentation::PointerRepresentation()` here, to make sure this works the same on 32-bit platforms.",
+      "range": {
+        "startLine": 5503,
+        "startChar": 60,
+        "endLine": 5503,
+        "endChar": 67
+      },
+      "revId": "c9ce88532ee5292144b0fd447cc994a1a44c6a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c512243_163261d2",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 5503,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-24T22:00:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a5051ab8_f975e7d0",
       "range": {
         "startLine": 5503,
         "startChar": 60,
@@ -64,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96ba21d2_3abe6b0b",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-24T22:00:38Z",
+      "side": 1,
+      "message": "Yup, since nullptr is the one special case for pointer passing, and turns into a `null` in JS. I\u0027ll rename this to `GetNullPointer`.",
+      "parentUuid": "d8b1e697_d602b1ad",
+      "range": {
+        "startLine": 1030,
+        "startChar": 11,
+        "endLine": 1030,
+        "endChar": 18
+      },
+      "revId": "c9ce88532ee5292144b0fd447cc994a1a44c6a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36b380a7_e1f13d5c",
@@ -77,6 +142,30 @@
       "writtenOn": "2022-11-24T18:01:52Z",
       "side": 1,
       "message": "Please check `args.Length()` to avoid crashes, same for the functions below that index the `args` struct.",
+      "range": {
+        "startLine": 1057,
+        "startChar": 34,
+        "endLine": 1057,
+        "endChar": 41
+      },
+      "revId": "c9ce88532ee5292144b0fd447cc994a1a44c6a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2edb2dc0_bf308a32",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-24T22:00:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "36b380a7_e1f13d5c",
       "range": {
         "startLine": 1057,
         "startChar": 34,
@@ -110,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d52732d_5cb4951b",
+        "filename": "test/mjsunit/compiler/fast-api-calls-pointer.js",
+        "patchSetId": 17
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-24T22:00:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0e82462c_b555fdf6",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 12
+      },
+      "revId": "c9ce88532ee5292144b0fd447cc994a1a44c6a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a6f70e7_8d003bc1",
@@ -123,6 +236,30 @@
       "writtenOn": "2022-11-24T18:01:52Z",
       "side": 1,
       "message": "That\u0027s good, should we try with other object types that are not External?",
+      "range": {
+        "startLine": 70,
+        "startChar": 32,
+        "endLine": 70,
+        "endChar": 43
+      },
+      "revId": "c9ce88532ee5292144b0fd447cc994a1a44c6a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3329c824_af9240de",
+        "filename": "test/mjsunit/compiler/fast-api-calls-pointer.js",
+        "patchSetId": 17
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-24T22:00:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0a6f70e7_8d003bc1",
       "range": {
         "startLine": 70,
         "startChar": 32,
@@ -156,6 +293,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d9e7529_0827eb54",
+        "filename": "test/mjsunit/compiler/fast-api-calls-pointer.js",
+        "patchSetId": 17
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-24T22:00:38Z",
+      "side": 1,
+      "message": "As mentioned two lines up, this is showing off that `assertEquals` is doing a deep equality comparison and from a JS point of view these two objects are deeply equal. Likewise as mentioned in the comment, this is here to show off that the External\u0027s properties can be viewed properly (since that was the issue we were fighting against this whole time :) )",
+      "parentUuid": "2bf1d504_805b0040",
+      "range": {
+        "startLine": 75,
+        "startChar": 37,
+        "endLine": 75,
+        "endChar": 48
+      },
+      "revId": "c9ce88532ee5292144b0fd447cc994a1a44c6a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d5d0fd6_51180d84",
@@ -169,6 +330,30 @@
       "writtenOn": "2022-11-24T18:01:52Z",
       "side": 1,
       "message": "Checking for optimized/unoptimized does the job here, but what I believe what we want to check here is actually whether the slow/fast path was called, which might both happen from optimized code. You could ensure that using fast_c_api.fast_call_count()|slow_call_count() - it\u0027s somewhat clumsy to maintain the count expectations in JS, but at least it\u0027s explicit about what TF should have executed.",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 17
+      },
+      "revId": "c9ce88532ee5292144b0fd447cc994a1a44c6a06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87bddb17_fac4bded",
+        "filename": "test/mjsunit/compiler/fast-api-calls-pointer.js",
+        "patchSetId": 17
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-24T22:00:38Z",
+      "side": 1,
+      "message": "That\u0027s true, actually, and very good point. I had somehow forgotten that those functions existed :D",
+      "parentUuid": "4d5d0fd6_51180d84",
       "range": {
         "startLine": 85,
         "startChar": 0,
