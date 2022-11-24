@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1df60a9_6d132db0",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-11-24T08:14:56Z",
+      "side": 1,
+      "message": "Can ArrayLength also be Uint32?",
+      "revId": "79e6947d8d7ea9e2f473ba117d6da4b7fea41552",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9434435d_4b4cad1c",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-11-24T08:14:56Z",
+      "side": 1,
+      "message": "Maybe MakeWeak can be replaced by MakeWeakForComparison?",
+      "revId": "79e6947d8d7ea9e2f473ba117d6da4b7fea41552",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c1bf4bc_33d7b293",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-11-24T08:14:56Z",
+      "side": 1,
+      "message": "This might work for other 32-bit binop too?",
+      "revId": "79e6947d8d7ea9e2f473ba117d6da4b7fea41552",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

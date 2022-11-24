@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b2a4445_4e35bb3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-11-24T08:14:56Z",
+      "side": 1,
+      "message": "We used to unroll some critical loops in builtins and it seems that there is positive impact to speedometer2. https://chromium-review.googlesource.com/c/v8/v8/+/4022363\n\nNow I\u0027m looking at the loop to search polymorphic IC. But before trying loop unrolling to it, I found that we can optimize the assembly codes with some tricks. These tricks include the changes to both CSA and Turbofan. Please take a look at the commit message.\n\nMany of the tricks might be extended to other use cases. Please let me know if you prefer to separate these tricks into different CLs. Thanks!",
+      "revId": "4fd66f69902f77bf0549875fdfc44c944ac4666a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
