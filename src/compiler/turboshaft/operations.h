@@ -1679,6 +1679,18 @@ struct TrapIfOp : FixedArityOperationT<1, TrapIfOp> {
   auto options() const { return std::tuple{negated, trap_id}; }
 };
 
+struct StaticAssertOp : FixedArityOperationT<1, StaticAssertOp> {
+  const char* source;
+
+  static constexpr OpProperties properties = OpProperties::Reading();
+
+  OpIndex condition() const { return input(0); }
+
+  StaticAssertOp(OpIndex condition, const char* source)
+      : Base(condition), source(source) {}
+  auto options() const { return std::tuple{source}; }
+};
+
 struct ParameterOp : FixedArityOperationT<0, ParameterOp> {
   int32_t parameter_index;
   RegisterRepresentation rep;
