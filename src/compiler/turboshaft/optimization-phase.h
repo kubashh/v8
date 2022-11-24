@@ -646,7 +646,7 @@ class GraphVisitor {
     return assembler().ReduceUnreachable();
   }
   OpIndex VisitStaticAssert(const StaticAssertOp& op) {
-    return assembler().ReduceStaticAssert(op.input(), op.source);
+    return assembler().ReduceStaticAssert(op.condition(), op.source);
   }
 
   void CreateOldToNewMapping(OpIndex old_index, OpIndex new_index) {
