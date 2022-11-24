@@ -16,6 +16,190 @@
       "message": "New patchset where I\u0027ve introduced LoadException to get the exception of a CallAndCatchException rather than using a Projection for that. PTAL :)",
       "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75d1bfe0_bea7b6ab",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-24T17:03:34Z",
+      "side": 1,
+      "message": "There is a convention to always have all inputs first and then the options, therefore `arguments` should go before the `Block*` parameters. Also in the constructor, of course.",
+      "range": {
+        "startLine": 809,
+        "startChar": 32,
+        "endLine": 809,
+        "endChar": 69
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d84f1c9_805721fc",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-24T17:03:34Z",
+      "side": 1,
+      "message": "How about just using a `SmallVector` inside of the function instead? It should be extremely rare to have many outputs.",
+      "range": {
+        "startLine": 55,
+        "startChar": 2,
+        "endLine": 55,
+        "endChar": 47
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "095ac368_9a3c264e",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-24T17:03:34Z",
+      "side": 1,
+      "message": "`\u003c\u003d`? Or maybe add a 0 case and return `OpIndex::Invalid()`?\nAlso, how about assigning `op.outputs_rep()` to a local variable, saves the C++ compiler some effort to do load elimination and makes the code below a tiny bit shorter.",
+      "range": {
+        "startLine": 161,
+        "startChar": 32,
+        "endLine": 161,
+        "endChar": 34
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a61780bd_6567d58e",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-24T17:03:34Z",
+      "side": 1,
+      "message": "As discussed offline, let\u0027s have the frame state be separate.",
+      "range": {
+        "startLine": 808,
+        "startChar": 8,
+        "endLine": 808,
+        "endChar": 46
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "323c52c0_8e44afa1",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-24T17:03:34Z",
+      "side": 1,
+      "message": "I don\u0027t think this logic is still needed.",
+      "range": {
+        "startLine": 814,
+        "startChar": 6,
+        "endLine": 828,
+        "endChar": 7
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "007585f9_3ed258ce",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1711,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-24T17:03:34Z",
+      "side": 1,
+      "message": "How about `HasFrameState()`?",
+      "range": {
+        "startLine": 1711,
+        "startChar": 7,
+        "endLine": 1711,
+        "endChar": 22
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2485bd58_a1c77eb1",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-24T17:03:34Z",
+      "side": 1,
+      "message": "Not needed anymore?",
+      "range": {
+        "startLine": 1750,
+        "startChar": 2,
+        "endLine": 1750,
+        "endChar": 69
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e546a00a_c66de985",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2032,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-24T17:03:34Z",
+      "side": 1,
+      "message": "How about just checking the representations vector?",
+      "range": {
+        "startLine": 2032,
+        "startChar": 22,
+        "endLine": 2032,
+        "endChar": 38
+      },
+      "revId": "519b373ab18e2611a3ed4c9fbc500841e1b59d8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
