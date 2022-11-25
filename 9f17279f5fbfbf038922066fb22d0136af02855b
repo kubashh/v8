@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8d8a89b_3181060f",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-25T11:18:35Z",
+      "side": 1,
+      "message": "Yup good catch; one of the reasons for the currently red try jobs results :D\nRegarding `op.outputs_rep().size()` vs `op.descriptor-\u003edescriptor-\u003eReturnCount()`: true, I\u0027ve swapped them :)",
+      "parentUuid": "38dae727_62d0639a",
+      "range": {
+        "startLine": 304,
+        "startChar": 53,
+        "endLine": 304,
+        "endChar": 57
+      },
+      "revId": "9f17279f5fbfbf038922066fb22d0136af02855b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0df5f436_86899e76",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ed06a6_1d72f422",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2040,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-25T11:18:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0df5f436_86899e76",
+      "range": {
+        "startLine": 2040,
+        "startChar": 75,
+        "endLine": 2040,
+        "endChar": 77
+      },
+      "revId": "9f17279f5fbfbf038922066fb22d0136af02855b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f8ae728_d18e0415",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-11-25T09:49:07Z",
       "side": 1,
       "message": "How about a small helper `MapToNewGraphIfValid`? Could also be used for loads and stores.",
+      "range": {
+        "startLine": 511,
+        "startChar": 32,
+        "endLine": 511,
+        "endChar": 45
+      },
+      "revId": "9f17279f5fbfbf038922066fb22d0136af02855b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdbd5d20_e40a398e",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-25T11:18:35Z",
+      "side": 1,
+      "message": "Good idea; done :)",
+      "parentUuid": "2f8ae728_d18e0415",
       "range": {
         "startLine": 511,
         "startChar": 32,
