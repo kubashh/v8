@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72cf221d_7091b830",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-25T15:37:18Z",
+      "side": 1,
+      "message": "Locally this LateEscapeAnalysis works, but you could wait for Memory Optimization to land before reviewing (I\u0027ll rebase and let you know once you can review).\n\nAlso, we might want to pause and think a bit about Analyzers before landing this CL. I\u0027ve modified MemoryOptimization so that it calls Assembler::SkipOperation (which calls LateEscapeAnalysis::SkipOperation), but I\u0027m not fully satisfied with this.",
+      "revId": "e6adff75e4a4759c911563794d4b25d9ba472381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
