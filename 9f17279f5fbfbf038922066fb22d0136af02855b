@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38dae727_62d0639a",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-25T09:49:07Z",
+      "side": 1,
+      "message": "Why `- 1`? Looks like we still didn\u0027t fully get rid of the exception projection?\n\nnit: `op.outputs_rep().size()` is one indirection less far than `op.descriptor-\u003edescriptor-\u003eReturnCount()`, so I guess it\u0027s better to use that.",
+      "range": {
+        "startLine": 304,
+        "startChar": 53,
+        "endLine": 304,
+        "endChar": 57
+      },
+      "revId": "9f17279f5fbfbf038922066fb22d0136af02855b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0df5f436_86899e76",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 2040,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-25T09:49:07Z",
+      "side": 1,
+      "message": "typo: has",
+      "range": {
+        "startLine": 2040,
+        "startChar": 75,
+        "endLine": 2040,
+        "endChar": 77
+      },
+      "revId": "9f17279f5fbfbf038922066fb22d0136af02855b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f8ae728_d18e0415",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-25T09:49:07Z",
+      "side": 1,
+      "message": "How about a small helper `MapToNewGraphIfValid`? Could also be used for loads and stores.",
+      "range": {
+        "startLine": 511,
+        "startChar": 32,
+        "endLine": 511,
+        "endChar": 45
+      },
+      "revId": "9f17279f5fbfbf038922066fb22d0136af02855b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

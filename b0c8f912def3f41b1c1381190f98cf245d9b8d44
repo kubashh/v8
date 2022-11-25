@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca09d10f_d1133137",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-25T09:49:07Z",
+      "side": 1,
+      "message": "32 is even very much on the large end ... it\u0027s essentially almost never more than 2 :)",
+      "range": {
+        "startLine": 160,
+        "startChar": 31,
+        "endLine": 160,
+        "endChar": 33
+      },
+      "revId": "b0c8f912def3f41b1c1381190f98cf245d9b8d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
