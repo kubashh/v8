@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6de6e488_22ddb3e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-25T18:06:30Z",
+      "side": 1,
+      "message": "PTAL.\n\nI fixed the park/unpark issue as we discussed offline.\nTwo main differences w.r.t. the previous patchset that you reviewed:\n- Context saving is now in `LocalHeap::Park`, not in `ParkedScope`.\n- I added the `IterateRootsMode` enumeration for distinguishing between scanning the stack for a local or shared heap. The conservative stack visitor must use the correct isolate for visiting pointers, otherwise shared GC will not work.\n\nI also added several tests. They should probably go to a new file as they are not specific for the conservative stack visitor, and they should also run without CSS.",
+      "revId": "5cb58bba3a2da5deb3ab42a32cf4019ae1077223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

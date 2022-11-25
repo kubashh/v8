@@ -266,6 +266,24 @@
       "parentUuid": "95edddcf_a64adabc",
       "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83315af0_e36bd76e",
+        "filename": "src/heap/parked-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-25T18:06:30Z",
+      "side": 1,
+      "message": "I think the solution implemented in patchset #6 works for both the above scenaria, modulo the concerns about data races that we have already discussed offline. I added some tests that were failing for previous patchsets.",
+      "parentUuid": "5d1c699a_c7c1d994",
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
