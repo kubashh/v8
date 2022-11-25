@@ -624,6 +624,11 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   inline void Bind(Label* label,
                    BranchTargetIdentifier id = BranchTargetIdentifier::kNone);
 
+  inline void PushAll(RegList registers) {}
+  inline void PopAll(RegList registers) {}
+  inline void PushAll(DoubleRegList registers, int stack_slot_size) {}
+  inline void PopAll(DoubleRegList registers, int stack_slot_size) {}
+
   // Control-flow integrity:
 
   // Define a function entrypoint.
