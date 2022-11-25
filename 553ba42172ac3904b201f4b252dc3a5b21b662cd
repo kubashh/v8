@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92b7f8ad_9d47aa23",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-25T08:44:45Z",
+      "side": 1,
+      "message": "I think we should use `LABEL_BLOCK` and move it to the beginning of the function, to keep it consistent with cases where this is necessary.",
+      "range": {
+        "startLine": 1558,
+        "startChar": 2,
+        "endLine": 1558,
+        "endChar": 11
+      },
+      "revId": "553ba42172ac3904b201f4b252dc3a5b21b662cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aecb947_387bad32",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1563,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-25T08:44:45Z",
+      "side": 1,
+      "message": "I don\u0027t think we should ever skip the reduction of static assert, as it will make the compilation fail.",
+      "range": {
+        "startLine": 1563,
+        "startChar": 4,
+        "endLine": 1563,
+        "endChar": 53
+      },
+      "revId": "553ba42172ac3904b201f4b252dc3a5b21b662cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9412665f_f4d0fa9d",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-25T08:44:45Z",
+      "side": 1,
+      "message": "here too.",
+      "range": {
+        "startLine": 1573,
+        "startChar": 2,
+        "endLine": 1573,
+        "endChar": 11
+      },
+      "revId": "553ba42172ac3904b201f4b252dc3a5b21b662cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1a430fd_8b3383f5",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1584,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-25T08:44:45Z",
+      "side": 1,
+      "message": "nit: This would be a bit nicer with a range-based for-loop:\n```\nfor (const SwitchOp::Case\u0026 if_value : cases) {\n```",
+      "range": {
+        "startLine": 1583,
+        "startChar": 6,
+        "endLine": 1584,
+        "endChar": 49
+      },
+      "revId": "553ba42172ac3904b201f4b252dc3a5b21b662cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab34889_df1b3f0e",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1593,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-25T08:44:45Z",
+      "side": 1,
+      "message": "Can we use the `no_change` label approach here too?",
+      "range": {
+        "startLine": 1593,
+        "startChar": 4,
+        "endLine": 1593,
+        "endChar": 29
+      },
+      "revId": "553ba42172ac3904b201f4b252dc3a5b21b662cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
