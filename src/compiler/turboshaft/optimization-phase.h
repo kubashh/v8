@@ -319,6 +319,10 @@ class GraphVisitor {
     OpIndex new_index;
     if (input_block->IsLoop() && op.Is<PhiOp>()) {
       const PhiOp& phi = op.Cast<PhiOp>();
+      if (assembler().SkipOperation(phi, index)) {
+        if constexpr (trace_reduction) TraceOperationSkipped();
+        return true;
+      }
       new_index = assembler().PendingLoopPhi(MapToNewGraph(phi.inputs()[0]),
                                              phi.rep, phi.inputs()[1]);
       CreateOldToNewMapping(index, new_index);
@@ -327,12 +331,16 @@ class GraphVisitor {
       }
     } else {
       switch (op.opcode) {
-#define EMIT_INSTR_CASE(Name)                           \
-  case Opcode::k##Name:                                 \
-    new_index = this->Visit##Name(op.Cast<Name##Op>()); \
-    if constexpr (CanBeUsedAsInput<Name##Op>()) {       \
-      CreateOldToNewMapping(index, new_index);          \
-    }                                                   \
+#define EMIT_INSTR_CASE(Name)                                    \
+  case Opcode::k##Name:                                          \
+    if (assembler().SkipOperation(op.Cast<Name##Op>(), index)) { \
+      if constexpr (trace_reduction) TraceOperationSkipped();    \
+      return true;                                               \
+    }                                                            \
+    new_index = this->Visit##Name(op.Cast<Name##Op>());          \
+    if constexpr (CanBeUsedAsInput<Name##Op>()) {                \
+      CreateOldToNewMapping(index, new_index);                   \
+    }                                                            \
     break;
         TURBOSHAFT_OPERATION_LIST(EMIT_INSTR_CASE)
 #undef EMIT_INSTR_CASE
@@ -350,6 +358,7 @@ class GraphVisitor {
               << OperationPrintStyle{input_graph().Get(index), "#o"} << "\n";
   }
   void TraceOperationUnused() { std::cout << "╰─> unused\n\n"; }
+  void TraceOperationSkipped() { std::cout << "╰─> skipped\n\n"; }
   void TraceBlockUnreachable() { std::cout << "╰─> unreachable\n\n"; }
   void TraceReductionResult(Block* current_block, OpIndex first_output_index,
                             OpIndex new_index) {
