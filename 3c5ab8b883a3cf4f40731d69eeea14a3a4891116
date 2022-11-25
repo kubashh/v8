@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "342f2cdc_a5c84083",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-25T11:28:29Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "3c5ab8b883a3cf4f40731d69eeea14a3a4891116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c568759c_7caa8e1e",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-25T11:28:29Z",
+      "side": 1,
+      "message": "Do we need some annotations here?\n\nI guess in release builds they are anyways gone as there\u0027s no callers?",
+      "range": {
+        "startLine": 355,
+        "startChar": 17,
+        "endLine": 355,
+        "endChar": 31
+      },
+      "revId": "3c5ab8b883a3cf4f40731d69eeea14a3a4891116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
