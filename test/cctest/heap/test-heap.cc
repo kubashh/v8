@@ -6961,6 +6961,7 @@ UNINITIALIZED_TEST(RestoreHeapLimit) {
   heap->AutomaticallyRestoreInitialHeapLimit(0.5);
   const int kFixedArrayLength = 1000000;
   {
+    DisableConservativeStackScanningScopeForTesting no_stack_scanning(heap);
     HandleScope handle_scope(isolate);
     while (!state.oom_triggered) {
       factory->NewFixedArray(kFixedArrayLength);
@@ -6969,6 +6970,7 @@ UNINITIALIZED_TEST(RestoreHeapLimit) {
   heap->MemoryPressureNotification(MemoryPressureLevel::kCritical, true);
   state.oom_triggered = false;
   {
+    DisableConservativeStackScanningScopeForTesting no_stack_scanning(heap);
     HandleScope handle_scope(isolate);
     while (!state.oom_triggered) {
       factory->NewFixedArray(kFixedArrayLength);
