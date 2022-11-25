@@ -63,6 +63,30 @@
       },
       "revId": "3c5ab8b883a3cf4f40731d69eeea14a3a4891116",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32710f2c_db1eabd8",
+        "filename": "src/heap/basic-memory-chunk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-25T11:45:52Z",
+      "side": 1,
+      "message": "sg",
+      "parentUuid": "b2b35db6_87aa57b3",
+      "range": {
+        "startLine": 355,
+        "startChar": 17,
+        "endLine": 355,
+        "endChar": 31
+      },
+      "revId": "3c5ab8b883a3cf4f40731d69eeea14a3a4891116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
