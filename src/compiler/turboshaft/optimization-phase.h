@@ -110,8 +110,9 @@ struct LivenessAnalyzer : AnalyzerBase {
 template <template <class> class... Reducers>
 class OptimizationPhase {
  public:
-  static void Run(Graph* input, Zone* phase_zone, NodeOriginTable* origins) {
-    Assembler<Reducers...> phase(*input, input->GetOrCreateCompanion(),
+  static void Run(Isolate* isolate, Graph* input, Zone* phase_zone,
+                  NodeOriginTable* origins) {
+    Assembler<Reducers...> phase(isolate, *input, input->GetOrCreateCompanion(),
                                  phase_zone, origins);
     if (v8_flags.turboshaft_trace_reduction) {
       phase.template VisitGraph<true>();

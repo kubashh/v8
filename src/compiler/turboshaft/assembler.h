@@ -879,10 +879,11 @@ class Assembler
                              v8::internal::compiler::turboshaft::ReducerBase>;
 
  public:
-  explicit Assembler(Graph& input_graph, Graph& output_graph, Zone* phase_zone,
+  explicit Assembler(Isolate* isolate, Graph& input_graph, Graph& output_graph,
+                     Zone* phase_zone,
                      compiler::NodeOriginTable* origins = nullptr)
-      : GraphVisitor<Assembler>(input_graph, output_graph, phase_zone,
-                                origins) {
+      : GraphVisitor<Assembler>(input_graph, output_graph, phase_zone, origins),
+        isolate_(isolate) {
     SupportedOperations::Initialize();
   }
 
@@ -915,6 +916,7 @@ class Assembler
 
   Block* current_block() const { return current_block_; }
   OpIndex current_operation_origin() const { return current_operation_origin_; }
+  Isolate* isolate() const { return isolate_; }
 
   // ReduceProjection eliminates projections to tuples and returns instead the
   // corresponding tuple input. We do this at the top of the stack to avoid
@@ -1078,6 +1080,7 @@ class Assembler
   // TODO(dmercadier,tebbi): remove {current_operation_origin_} and pass instead
   // additional parameters to ReduceXXX methods.
   OpIndex current_operation_origin_ = OpIndex::Invalid();
+  Isolate* isolate_;
 };
 
 }  // namespace v8::internal::compiler::turboshaft

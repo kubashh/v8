@@ -1,0 +1,219 @@
+// Copyright 2022 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#ifndef V8_COMPILER_TURBOSHAFT_ASSERT_TYPES_REDUCER_H_
+#define V8_COMPILER_TURBOSHAFT_ASSERT_TYPES_REDUCER_H_
+
+#include <limits>
+
+#include "src/base/logging.h"
+#include "src/base/vector.h"
+#include "src/codegen/callable.h"
+#include "src/compiler/common-operator.h"
+#include "src/compiler/frame.h"
+#include "src/compiler/turboshaft/assembler.h"
+#include "src/compiler/turboshaft/operations.h"
+#include "src/compiler/turboshaft/representations.h"
+#include "src/compiler/turboshaft/sidetable.h"
+#include "src/compiler/turboshaft/types.h"
+#include "src/heap/parked-scope.h"
+
+namespace v8::internal::compiler::turboshaft {
+
+class DetectReentranceScope {
+ public:
+  explicit DetectReentranceScope(bool* flag)
+      : is_reentrant_(*flag), flag_(flag) {
+    *flag_ = true;
+  }
+  ~DetectReentranceScope() { *flag_ = is_reentrant_; }
+  bool IsReentrant() const { return is_reentrant_; }
+
+ private:
+  bool is_reentrant_;
+  bool* flag_;
+};
+
+template <class Next>
+class AssertTypesReducer : public Next {
+ public:
+  using Next::Asm;
+  AssertTypesReducer() : output_graph_(Asm().output_graph()) {}
+
+  uint32_t NoContextConstant() { return IntToSmi(Context::kNoContext); }
+
+  OpIndex ReducePhi(base::Vector<const OpIndex> inputs,
+                    RegisterRepresentation rep) {
+    OpIndex index = Next::ReducePhi(inputs, rep);
+    if (!index.valid()) return index;
+
+    Type type = TypeOf(index);
+    if (type.IsInvalid()) return index;
+    // For now allow Type::Any().
+    if (type.IsAny()) return index;
+
+    DetectReentranceScope reentrance_scope(&emitting_asserts_);
+    DCHECK(!reentrance_scope.IsReentrant());
+
+    InsertTypeAssert(rep, index, type);
+    return index;
+  }
+
+  OpIndex ReduceConstant(ConstantOp::Kind kind, ConstantOp::Storage value) {
+    OpIndex index = Next::ReduceConstant(kind, value);
+    if (!index.valid()) return index;
+
+    Type type = TypeOf(index);
+    if (type.IsInvalid()) return index;
+
+    DetectReentranceScope reentrance_scope(&emitting_asserts_);
+    if (reentrance_scope.IsReentrant()) return index;
+
+    switch (kind) {
+      case ConstantOp::Kind::kWord32:
+        InsertTypeAssert(RegisterRepresentation::Word32(), index, type);
+        break;
+      case ConstantOp::Kind::kWord64:
+        InsertTypeAssert(RegisterRepresentation::Word64(), index, type);
+        break;
+      case ConstantOp::Kind::kFloat32:
+        InsertTypeAssert(RegisterRepresentation::Float32(), index, type);
+        break;
+      case ConstantOp::Kind::kFloat64:
+        InsertTypeAssert(RegisterRepresentation::Float64(), index, type);
+        break;
+      case ConstantOp::Kind::kNumber:
+      case ConstantOp::Kind::kTaggedIndex:
+      case ConstantOp::Kind::kExternal:
+      case ConstantOp::Kind::kHeapObject:
+      case ConstantOp::Kind::kCompressedHeapObject:
+      case ConstantOp::Kind::kRelocatableWasmCall:
+      case ConstantOp::Kind::kRelocatableWasmStubCall:
+        // TODO(nicohartmann@): Support remaining {kind}s.
+        UNIMPLEMENTED();
+    }
+    return index;
+  }
+
+  OpIndex ReduceWordBinop(OpIndex left, OpIndex right, WordBinopOp::Kind kind,
+                          WordRepresentation rep) {
+    OpIndex index = Next::ReduceWordBinop(left, right, kind, rep);
+    if (!index.valid()) return index;
+
+    Type type = TypeOf(index);
+    if (type.IsInvalid()) return index;
+
+    DetectReentranceScope reentrance_scope(&emitting_asserts_);
+    DCHECK(!reentrance_scope.IsReentrant());
+
+    InsertTypeAssert(rep, index, type);
+    return index;
+  }
+
+  OpIndex ReduceFloatBinop(OpIndex left, OpIndex right, FloatBinopOp::Kind kind,
+                           FloatRepresentation rep) {
+    OpIndex index = Next::ReduceFloatBinop(left, right, kind, rep);
+    if (!index.valid()) return index;
+
+    Type type = TypeOf(index);
+    if (type.IsInvalid()) return index;
+
+    DetectReentranceScope reentrance_scope(&emitting_asserts_);
+    DCHECK(!reentrance_scope.IsReentrant());
+
+    InsertTypeAssert(rep, index, type);
+    return index;
+  }
+
+  void InsertTypeAssert(RegisterRepresentation rep, OpIndex value,
+                        const Type& type) {
+    DCHECK(!type.IsInvalid());
+    if (type.IsNone()) {
+      Asm().Unreachable();
+      return;
+    }
+
+    switch (rep.value()) {
+      case RegisterRepresentation::Word32(): {
+        DCHECK(type.IsWord32());
+        base::SmallVector<OpIndex, 6> actual_value_indices = {value};
+        CallBuiltin(Builtin::kCheckTurboshaftWord32Type, value,
+                    std::move(actual_value_indices), type);
+        break;
+      }
+      case RegisterRepresentation::Word64(): {
+        DCHECK(type.IsWord64());
+        OpIndex value_high = Asm().Word64ShiftRightLogical(
+            value, Asm().Word64Constant(static_cast<uint64_t>(32)));
+        OpIndex value_low = value;  // Use implicit truncation to word32.
+        base::SmallVector<OpIndex, 6> actual_value_indices = {value_high,
+                                                              value_low};
+        CallBuiltin(Builtin::kCheckTurboshaftWord64Type, value,
+                    std::move(actual_value_indices), type);
+        break;
+      }
+      case RegisterRepresentation::Float32(): {
+        DCHECK(type.IsFloat32());
+        base::SmallVector<OpIndex, 6> actual_value_indices = {value};
+        CallBuiltin(Builtin::kCheckTurboshaftFloat32Type, value,
+                    std::move(actual_value_indices), type);
+        break;
+      }
+      case RegisterRepresentation::Float64(): {
+        DCHECK(type.IsFloat64());
+        base::SmallVector<OpIndex, 6> actual_value_indices = {value};
+        CallBuiltin(Builtin::kCheckTurboshaftFloat64Type, value,
+                    std::move(actual_value_indices), type);
+        break;
+      }
+      case RegisterRepresentation::Tagged():
+      case RegisterRepresentation::Compressed():
+        // TODO(nicohartmann@): Handle remaining cases.
+        break;
+    }
+  }
+
+  void CallBuiltin(Builtin builtin, OpIndex original_value,
+                   base::SmallVector<OpIndex, 6> actual_value_indices,
+                   const Type& type) {
+    const uint32_t op_id = original_value.id();
+    Callable const callable = Builtins::CallableFor(Asm().isolate(), builtin);
+    const CallDescriptor* call_descriptor = Linkage::GetStubCallDescriptor(
+        output_graph_.graph_zone(), callable.descriptor(),
+        callable.descriptor().GetStackParameterCount(),
+        CallDescriptor::kNoFlags, Operator::kNoThrow | Operator::kNoDeopt);
+
+    const TSCallDescriptor* ts_call_descriptor =
+        output_graph_.graph_zone()->New<TSCallDescriptor>(
+            call_descriptor, base::Vector<RegisterRepresentation>());
+
+    OpIndex callee = Asm().HeapConstant(callable.code());
+    // Add expected type and operation id.
+    Handle<TurboshaftType> expected_type = type.AllocateOnHeap(factory());
+    actual_value_indices.push_back(Asm().HeapConstant(expected_type));
+    actual_value_indices.push_back(
+        Asm().Word32Constant(static_cast<uint32_t>(IntToSmi(op_id))));
+    actual_value_indices.push_back(Asm().Word32Constant(NoContextConstant()));
+    Asm().Call(callee, OpIndex::Invalid(),
+               {actual_value_indices.data(), actual_value_indices.size()},
+               ts_call_descriptor);
+    PrintF("Inserted assert for %3d:%-40s (%s)\n", op_id,
+           output_graph_.Get(original_value).ToString().c_str(),
+           type.ToString().c_str());
+  }
+
+  Type TypeOf(const OpIndex index) const {
+    return output_graph_.operation_types()[index];
+  }
+
+ private:
+  Factory* factory() { return Asm().isolate()->factory(); }
+  Graph& output_graph_;
+  //  const GrowingSidetable<Type>& types_;
+  bool emitting_asserts_ = false;
+};
+
+}  // namespace v8::internal::compiler::turboshaft
+
+#endif  // V8_COMPILER_TURBOSHAFT_ASSERT_TYPES_REDUCER_H_

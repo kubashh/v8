@@ -930,15 +930,16 @@ OpIndex GraphBuilder::Process(
 
 }  // namespace
 
-base::Optional<BailoutReason> BuildGraph(Schedule* schedule, Zone* graph_zone,
-                                         Zone* phase_zone, Graph* graph,
-                                         Linkage* linkage,
+base::Optional<BailoutReason> BuildGraph(Schedule* schedule, Isolate* isolate,
+                                         Zone* graph_zone, Zone* phase_zone,
+                                         Graph* graph, Linkage* linkage,
                                          SourcePositionTable* source_positions,
                                          NodeOriginTable* origins) {
-  GraphBuilder builder{graph_zone, phase_zone,
-                       *schedule,  Assembler<>(*graph, *graph, phase_zone),
-                       linkage,    source_positions,
-                       origins};
+  GraphBuilder builder{
+      graph_zone, phase_zone,
+      *schedule,  Assembler<>(isolate, *graph, *graph, phase_zone),
+      linkage,    source_positions,
+      origins};
   return builder.Run();
 }
 

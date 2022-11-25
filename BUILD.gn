@@ -1858,6 +1858,7 @@ torque_files = [
   "src/objects/templates.tq",
   "src/objects/torque-defined-classes.tq",
   "src/objects/turbofan-types.tq",
+  "src/objects/turboshaft-types.tq",
   "test/torque/test-torque.tq",
   "third_party/v8/builtins/array-sort.tq",
 ]
@@ -2927,6 +2928,7 @@ v8_header_set("v8_internal_headers") {
     "src/compiler/state-values-utils.h",
     "src/compiler/store-store-elimination.h",
     "src/compiler/turboshaft/assembler.h",
+    "src/compiler/turboshaft/assert-types-reducer.h",
     "src/compiler/turboshaft/branch-elimination-reducer.h",
     "src/compiler/turboshaft/decompression-optimization.h",
     "src/compiler/turboshaft/deopt-data.h",
@@ -2946,6 +2948,8 @@ v8_header_set("v8_internal_headers") {
     "src/compiler/turboshaft/sidetable.h",
     "src/compiler/turboshaft/simplify-tf-loops.h",
     "src/compiler/turboshaft/snapshot-table.h",
+    "src/compiler/turboshaft/type-inference-reducer.h",
+    "src/compiler/turboshaft/types.h",
     "src/compiler/turboshaft/utils.h",
     "src/compiler/turboshaft/value-numbering-reducer.h",
     "src/compiler/turboshaft/variable-reducer.h",
@@ -3409,6 +3413,8 @@ v8_header_set("v8_internal_headers") {
     "src/objects/transitions.h",
     "src/objects/turbofan-types-inl.h",
     "src/objects/turbofan-types.h",
+    "src/objects/turboshaft-types-inl.h",
+    "src/objects/turboshaft-types.h",
     "src/objects/type-hints.h",
     "src/objects/value-serializer.h",
     "src/objects/visitors-inl.h",
@@ -4274,6 +4280,7 @@ v8_source_set("v8_turboshaft") {
     "src/compiler/turboshaft/recreate-schedule.cc",
     "src/compiler/turboshaft/representations.cc",
     "src/compiler/turboshaft/simplify-tf-loops.cc",
+    "src/compiler/turboshaft/types.cc",
     "src/compiler/turboshaft/utils.cc",
   ]
 
