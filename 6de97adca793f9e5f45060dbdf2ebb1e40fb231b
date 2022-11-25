@@ -16,6 +16,23 @@
       "message": "While the externals now work as expected as both JSExternalObjects and as JS objects with properties and all, I found a bug that happens when more than a million of these objects are allocated in a for-loop without any GC allowed in between. https://bugs.chromium.org/p/v8/issues/detail?id\u003d13531",
       "revId": "6de97adca793f9e5f45060dbdf2ebb1e40fb231b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a67a2d9_d604503a",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-11-25T16:00:16Z",
+      "side": 1,
+      "message": "Toon pointed out, and I tend to agree, that this isn\u0027t really an exception. It\u0027s just that instead of V8, the Embedder needs to ensure that these pointers can be safely swapped. Maybe we should just move this comment just above the `kExternalObjectValueTag` in the macro below and drop the part about it being an exception:\n```\nThis tag essentially stands for a `void*` pointer in the V8 API, and it is the\nEmbedder\u0027s responsibility to ensure type safety (against substitution) and\nlifetime validity of these objects.\n```\nWDYT?",
+      "revId": "6de97adca793f9e5f45060dbdf2ebb1e40fb231b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
