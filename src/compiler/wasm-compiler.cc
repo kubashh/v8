@@ -6574,11 +6574,6 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     }
   }
 
-  enum UnwrapExternalFunctions : bool {
-    kUnwrapWasmExternalFunctions = true,
-    kLeaveFunctionsAlone = false
-  };
-
   Node* BuildChangeBigIntToInt64(Node* input, Node* context,
                                  Node* frame_state) {
     Node* target;
