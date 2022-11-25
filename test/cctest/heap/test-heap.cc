@@ -6954,6 +6954,7 @@ UNINITIALIZED_TEST(RestoreHeapLimit) {
       reinterpret_cast<Isolate*>(v8::Isolate::New(create_params));
   Heap* heap = isolate->heap();
   Factory* factory = isolate->factory();
+  DisableConservativeStackScanningScopeForTesting no_stack_scanning(heap);
   OutOfMemoryState state;
   state.heap = heap;
   state.oom_triggered = false;

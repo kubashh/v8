@@ -1034,8 +1034,11 @@ class Heap {
   // garbage collection and is usually only performed as part of
   // (de)serialization or heap verification.
 
+  enum class IterateRootsMode { kLocal, kShared };
+
   // Iterates over the strong roots and the weak roots.
-  void IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options);
+  void IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options,
+                    IterateRootsMode mode = IterateRootsMode::kLocal);
   void IterateRootsIncludingClients(RootVisitor* v,
                                     base::EnumSet<SkipRoot> options);
   void IterateRootsFromStackIncludingClients(RootVisitor* v,
@@ -1048,7 +1051,8 @@ class Heap {
   void IterateWeakRoots(RootVisitor* v, base::EnumSet<SkipRoot> options);
   void IterateWeakGlobalHandles(RootVisitor* v);
   void IterateBuiltins(RootVisitor* v);
-  void IterateStackRoots(RootVisitor* v, StackState stack_state);
+  void IterateStackRoots(RootVisitor* v, StackState stack_state,
+                         IterateRootsMode mode = IterateRootsMode::kLocal);
 
   // ===========================================================================
   // Remembered set API. =======================================================
