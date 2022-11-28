@@ -2,19 +2,48 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/maglev/maglev-graph-processor.h"
+#include "src/maglev/maglev-graph.h"
 #include "src/maglev/maglev-ir.h"
 
 namespace v8 {
 namespace internal {
 namespace maglev {
 
-#define UNIMPLEMENTED_NODE(Node, ...)                                \
-  void Node ::AllocateVreg(MaglevVregAllocationState* vreg_state) {} \
-                                                                     \
-  void Node ::GenerateCode(MaglevAssembler* masm,                    \
-                           const ProcessingState& state) {           \
-    USE(__VA_ARGS__);                                                \
+// TODO(v8:7700): Remove this logic when all nodes are implemented.
+static bool unimplemented_node_ = false;
+
+class MaglevUnimplementedIRNode {
+ public:
+  MaglevUnimplementedIRNode() {}
+  void PreProcessGraph(Graph* graph) {}
+  void PostProcessGraph(Graph* graph) {}
+  void PreProcessBasicBlock(BasicBlock* block) {}
+  template <typename NodeT>
+  void Process(NodeT* node, const ProcessingState& state);
+};
+
+#define UNIMPLEMENTED_NODE(Node, ...)                                     \
+  void Node ::AllocateVreg(MaglevVregAllocationState* vreg_state) {       \
+    unimplemented_node_ = true;                                           \
+  }                                                                       \
+                                                                          \
+  void Node ::GenerateCode(MaglevAssembler* masm,                         \
+                           const ProcessingState& state) {                \
+    USE(__VA_ARGS__);                                                     \
+  }                                                                       \
+  template <>                                                             \
+  void MaglevUnimplementedIRNode::Process(Node* node,                     \
+                                          const ProcessingState& state) { \
+    std::cerr << "Unimplemented Maglev IR Node: " #Node << std::endl;     \
+    unimplemented_node_ = true;                                           \
   }
+
+bool MaglevGraphHasUnimplementedNode(Graph* graph) {
+  GraphProcessor<MaglevUnimplementedIRNode> processor;
+  processor.ProcessGraph(graph);
+  return unimplemented_node_;
+}
 
 #define UNIMPLEMENTED_NODE_WITH_PRINT_PARAMS(Node, ...) \
   UNIMPLEMENTED_NODE(Node, __VA_ARGS__)                 \
