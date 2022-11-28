@@ -16,6 +16,52 @@
       "message": "Thanks, ptal again!",
       "revId": "c8bebc3e34ba6b52890dea8d18e5eacf4ba68728",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "395b4858_79490290",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1569,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-28T15:08:30Z",
+      "side": 1,
+      "message": "It won\u0027t really be lowered actually.",
+      "range": {
+        "startLine": 1569,
+        "startChar": 8,
+        "endLine": 1569,
+        "endChar": 68
+      },
+      "revId": "c8bebc3e34ba6b52890dea8d18e5eacf4ba68728",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32e9b0bc_7ecd21e4",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-28T15:08:30Z",
+      "side": 1,
+      "message": "This is wrong: It means we remove the static assert if we cannot decide the condition. Instead, we should do `goto no_change;`.",
+      "range": {
+        "startLine": 1573,
+        "startChar": 4,
+        "endLine": 1573,
+        "endChar": 30
+      },
+      "revId": "c8bebc3e34ba6b52890dea8d18e5eacf4ba68728",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
