@@ -1858,9 +1858,12 @@ TNode<Smi> CodeStubAssembler::LoadWeakFixedArrayLength(
   return LoadObjectField<Smi>(array, WeakFixedArray::kLengthOffset);
 }
 
-TNode<IntPtrT> CodeStubAssembler::LoadAndUntagWeakFixedArrayLength(
+TNode<Uint32T> CodeStubAssembler::LoadAndUntagWeakFixedArrayLength(
     TNode<WeakFixedArray> array) {
-  return LoadAndUntagObjectField(array, WeakFixedArray::kLengthOffset);
+  TNode<Int32T> length =
+      LoadAndUntagToWord32ObjectField(array, WeakFixedArray::kLengthOffset);
+  CSA_DCHECK(this, Int32GreaterThanOrEqual(length, Int32Constant(0)));
+  return Unsigned(length);
 }
 
 TNode<Int32T> CodeStubAssembler::LoadNumberOfDescriptors(
@@ -2243,9 +2246,28 @@ TNode<BoolT> CodeStubAssembler::IsWeakReferenceTo(
   }
 }
 
-TNode<MaybeObject> CodeStubAssembler::MakeWeak(TNode<HeapObject> value) {
-  return ReinterpretCast<MaybeObject>(BitcastWordToTagged(
-      WordOr(BitcastTaggedToWord(value), IntPtrConstant(kWeakHeapObjectTag))));
+TNode<BoolT> CodeStubAssembler::IsWeakReferenceTo(
+    TNode<MaybeObject> maybe_object, TNode<WordT> weak_reference) {
+  CSA_DCHECK(this, IsWeakOrCleared(ReinterpretCast<MaybeObject>(
+                       BitcastWordToTagged(weak_reference))));
+  if (COMPRESS_POINTERS_BOOL) {
+    return Word32Equal(
+        TruncateWordToInt32(BitcastMaybeObjectToWord(maybe_object)),
+        TruncateWordToInt32(weak_reference));
+  } else {
+    return WordEqual(BitcastMaybeObjectToWord(maybe_object), weak_reference);
+  }
+}
+
+TNode<WordT> CodeStubAssembler::MakeWeakForComparison(TNode<HeapObject> value) {
+  if (COMPRESS_POINTERS_BOOL) {
+    return ChangeUint32ToWord(
+        Word32Or(TruncateWordToInt32(BitcastTaggedToWord(value)),
+                 Int32Constant(kWeakHeapObjectMask)));
+  } else {
+    return WordOr(BitcastTaggedToWord(value),
+                  IntPtrConstant(kWeakHeapObjectMask));
+  }
 }
 
 TNode<MaybeObject> CodeStubAssembler::ClearedValue() {
@@ -2260,7 +2282,8 @@ TNode<IntPtrT> CodeStubAssembler::LoadArrayLength(TNode<FixedArray> array) {
 
 template <>
 TNode<IntPtrT> CodeStubAssembler::LoadArrayLength(TNode<WeakFixedArray> array) {
-  return LoadAndUntagWeakFixedArrayLength(array);
+  return ReinterpretCast<IntPtrT>(
+      ChangeUint32ToWord(LoadAndUntagWeakFixedArrayLength(array)));
 }
 
 template <>
@@ -2278,7 +2301,8 @@ TNode<IntPtrT> CodeStubAssembler::LoadArrayLength(
 template <>
 TNode<IntPtrT> CodeStubAssembler::LoadArrayLength(
     TNode<TransitionArray> array) {
-  return LoadAndUntagWeakFixedArrayLength(array);
+  return ReinterpretCast<IntPtrT>(
+      ChangeUint32ToWord(LoadAndUntagWeakFixedArrayLength(array)));
 }
 
 template <typename Array, typename TIndex, typename TValue>
@@ -9151,7 +9175,8 @@ TNode<Uint32T> CodeStubAssembler::NumberOfEntries<DescriptorArray>(
 template <>
 TNode<Uint32T> CodeStubAssembler::NumberOfEntries<TransitionArray>(
     TNode<TransitionArray> transitions) {
-  TNode<IntPtrT> length = LoadAndUntagWeakFixedArrayLength(transitions);
+  TNode<UintPtrT> length =
+      ChangeUint32ToWord(LoadAndUntagWeakFixedArrayLength(transitions));
   return Select<Uint32T>(
       UintPtrLessThan(length, IntPtrConstant(TransitionArray::kFirstIndex)),
       [=] { return Unsigned(Int32Constant(0)); },
@@ -11917,7 +11942,8 @@ TNode<AllocationSite> CodeStubAssembler::CreateAllocationSiteInFeedbackVector(
 TNode<MaybeObject> CodeStubAssembler::StoreWeakReferenceInFeedbackVector(
     TNode<FeedbackVector> feedback_vector, TNode<UintPtrT> slot,
     TNode<HeapObject> value, int additional_offset) {
-  TNode<MaybeObject> weak_value = MakeWeak(value);
+  TNode<MaybeObject> weak_value =
+      BitcastWordToTagged(MakeWeakForComparison(value));
   StoreFeedbackVectorSlot(feedback_vector, slot, weak_value,
                           UPDATE_WRITE_BARRIER, additional_offset);
   return weak_value;

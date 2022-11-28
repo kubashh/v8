@@ -1429,7 +1429,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<IntPtrT> LoadAndUntagFixedArrayBaseLength(TNode<FixedArrayBase> array);
   // Load the length of a WeakFixedArray.
   TNode<Smi> LoadWeakFixedArrayLength(TNode<WeakFixedArray> array);
-  TNode<IntPtrT> LoadAndUntagWeakFixedArrayLength(TNode<WeakFixedArray> array);
+  TNode<Uint32T> LoadAndUntagWeakFixedArrayLength(TNode<WeakFixedArray> array);
   // Load the number of descriptors in DescriptorArray.
   TNode<Int32T> LoadNumberOfDescriptors(TNode<DescriptorArray> array);
   // Load the number of own descriptors of a map.
@@ -1533,13 +1533,18 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Works for both any tagged |maybe_object| values.
   TNode<BoolT> IsWeakReferenceTo(TNode<MaybeObject> maybe_object,
                                  TNode<HeapObject> heap_object);
+  // Checks if |maybe_object| is a weak reference to given |weak_reference|.
+  // Works for both any tagged |maybe_object| values.
+  TNode<BoolT> IsWeakReferenceTo(TNode<MaybeObject> maybe_object,
+                                 TNode<WordT> weak_reference);
   // Returns true if the |object| is a HeapObject and |maybe_object| is a weak
   // reference to |object|.
   // The |maybe_object| must not be a Smi.
   TNode<BoolT> IsWeakReferenceToObject(TNode<MaybeObject> maybe_object,
                                        TNode<Object> object);
 
-  TNode<MaybeObject> MakeWeak(TNode<HeapObject> value);
+  // Convert |value| to weak reference but only keep significant bits.
+  TNode<WordT> MakeWeakForComparison(TNode<HeapObject> value);
   TNode<MaybeObject> ClearedValue();
 
   void FixedArrayBoundsCheck(TNode<FixedArrayBase> array, TNode<Smi> index,
