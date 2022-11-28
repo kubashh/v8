@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b72d66bf_e6b275a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-28T20:05:08Z",
+      "side": 1,
+      "message": "For some reason `git cl upload` always wants to put the most recent commit message at the top of the whole CL message... I sort of get it but it\u0027s not what I\u0027m used to exactly 😄\n\nI edited the CL description and added the bug link. Should I also squish the changes?",
+      "parentUuid": "3bbe600c_11449284",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "3a560e2b8b6a1df8ff7b1e3ec2f81cc32cfee636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "96280fa1_c6e34ab8",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 19
