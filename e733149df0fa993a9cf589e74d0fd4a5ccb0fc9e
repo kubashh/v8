@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d3f765_4411c208",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-28T14:56:55Z",
+      "side": 1,
+      "message": "Actually this is wrong, since it will always bailout (for other compilations), once a previous one has any unimplemented nodes.\nI changed to be a member of MaglevUnimplementedIRNode, which does not need to be thread safe, since it is only accessed by the compilation thread.",
+      "parentUuid": "6ffb1a48_b942b5b5",
+      "range": {
+        "startLine": 14,
+        "startChar": 12,
+        "endLine": 14,
+        "endChar": 31
+      },
+      "revId": "e733149df0fa993a9cf589e74d0fd4a5ccb0fc9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a125333b_2b67a075",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-11-28T13:05:55Z",
       "side": 1,
       "message": "add a TODO to remove the type from ::Compile once this can\u0027t return true.",
+      "range": {
+        "startLine": 307,
+        "startChar": 55,
+        "endLine": 307,
+        "endChar": 60
+      },
+      "revId": "e733149df0fa993a9cf589e74d0fd4a5ccb0fc9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b37db98f_794527d7",
+        "filename": "src/maglev/maglev-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-11-28T14:56:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a125333b_2b67a075",
       "range": {
         "startLine": 307,
         "startChar": 55,
