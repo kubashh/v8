@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cec33aee_69a1cfdc",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-11-28T05:46:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1df60a9_6d132db0",
+      "revId": "79e6947d8d7ea9e2f473ba117d6da4b7fea41552",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9434435d_4b4cad1c",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-11-24T08:14:56Z",
       "side": 1,
       "message": "Maybe MakeWeak can be replaced by MakeWeakForComparison?",
+      "revId": "79e6947d8d7ea9e2f473ba117d6da4b7fea41552",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39e917bc_817f975b",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-11-28T05:46:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9434435d_4b4cad1c",
       "revId": "79e6947d8d7ea9e2f473ba117d6da4b7fea41552",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
