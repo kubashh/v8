@@ -1093,8 +1093,8 @@ struct ControlBase : public PcForErrors<ValidationTag::full_validation> {
     bool null_succeeds)                                                        \
   F(RefCastAbstract, const Value& obj, HeapType type, Value* result,           \
     bool null_succeeds)                                                        \
-  F(AssertNull, const Value& obj, Value* result)                               \
-  F(AssertNotNull, const Value& obj, Value* result)                            \
+  F(AssertNullTypecheck, const Value& obj, Value* result)                      \
+  F(AssertNotNullTypecheck, const Value& obj, Value* result)                   \
   F(BrOnCast, const Value& obj, const Value& rtt, Value* result_on_branch,     \
     uint32_t depth)                                                            \
   F(BrOnCastFail, const Value& obj, const Value& rtt,                          \
@@ -1474,7 +1474,7 @@ class WasmDecoder : public Decoder {
     }
     imm.global = &module_->globals[imm.index];
 
-    if (decoding_mode == kConstantExpression) {
+    if constexpr (decoding_mode == kConstantExpression) {
       if (!VALIDATE(!imm.global->mutability)) {
         this->DecodeError(pc,
                           "mutable globals cannot be used in constant "
@@ -2747,7 +2747,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
       control_.emplace_back(kControlBlock, kStackDepth, kInitStackDepth,
                             this->pc_, kReachable);
       Control* c = &control_.back();
-      if (decoding_mode == kFunctionBody) {
+      if constexpr (decoding_mode == kFunctionBody) {
         InitMerge(&c->start_merge, 0, [](uint32_t) -> Value { UNREACHABLE(); });
         InitMerge(&c->end_merge,
                   static_cast<uint32_t>(this->sig_->return_count()),
@@ -2992,7 +2992,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
 
 #define BUILD_SIMPLE_OPCODE(op, _, sig, ...)                \
   DECODE(op) {                                              \
-    if (decoding_mode == kConstantExpression) {             \
+    if constexpr (decoding_mode == kConstantExpression) {   \
       if (!VALIDATE(this->enabled_.has_extended_const())) { \
         NonConstError(this, kExpr##op);                     \
         return 0;                                           \
@@ -3279,7 +3279,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
 
   DECODE(End) {
     DCHECK(!control_.empty());
-    if (decoding_mode == kFunctionBody) {
+    if constexpr (decoding_mode == kFunctionBody) {
       Control* c = &control_.back();
       if (c->is_incomplete_try()) {
         // Catch-less try, fall through to the implicit catch-all.
@@ -3869,13 +3869,13 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   // Hence just list all implementations explicitly here, which also gives more
   // freedom to use the same implementation for different opcodes.
 #define DECODE_IMPL(opcode) DECODE_IMPL2(kExpr##opcode, opcode)
-#define DECODE_IMPL2(opcode, name)              \
-  if (idx == opcode) {                          \
-    if (decoding_mode == kConstantExpression) { \
-      return &WasmFullDecoder::NonConstError;   \
-    } else {                                    \
-      return &WasmFullDecoder::Decode##name;    \
-    }                                           \
+#define DECODE_IMPL2(opcode, name)                        \
+  if (idx == opcode) {                                    \
+    if constexpr (decoding_mode == kConstantExpression) { \
+      return &WasmFullDecoder::NonConstError;             \
+    } else {                                              \
+      return &WasmFullDecoder::Decode##name;              \
+    }                                                     \
   }
 #define DECODE_IMPL_CONST(opcode) DECODE_IMPL_CONST2(kExpr##opcode, opcode)
 #define DECODE_IMPL_CONST2(opcode, name) \
@@ -4257,7 +4257,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   }
 
   uint32_t DecodeSimdOpcode(WasmOpcode opcode, uint32_t opcode_length) {
-    if (decoding_mode == kConstantExpression) {
+    if constexpr (decoding_mode == kConstantExpression) {
       // Currently, only s128.const is allowed in constant expressions.
       if (opcode != kExprS128Const) {
         this->DecodeError("opcode %s is not allowed in constant expressions",
@@ -4426,7 +4426,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   }
 
 #define NON_CONST_ONLY                                                    \
-  if (decoding_mode == kConstantExpression) {                             \
+  if constexpr (decoding_mode == kConstantExpression) {                   \
     this->DecodeError("opcode %s is not allowed in constant expressions", \
                       this->SafeOpcodeNameAt(this->pc()));                \
     return 0;                                                             \
@@ -4892,7 +4892,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
               CALL_INTERFACE(Drop);
             }
             if (obj.type.is_nullable() && !null_succeeds) {
-              CALL_INTERFACE(AssertNotNull, obj, &value);
+              CALL_INTERFACE(AssertNotNullTypecheck, obj, &value);
             } else {
               CALL_INTERFACE(Forward, obj, &value);
             }
@@ -4905,7 +4905,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
             // is null.
             if (obj.type.is_nullable() && null_succeeds) {
               // Drop rtt from the stack, then assert that obj is null.
-              CALL_INTERFACE(AssertNull, obj, &value);
+              CALL_INTERFACE(AssertNullTypecheck, obj, &value);
             } else {
               CALL_INTERFACE(Trap, TrapReason::kTrapIllegalCast);
               // We know that the following code is not reachable, but according
@@ -5115,7 +5115,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
             if (obj.type.is_nullable()) {
               // Drop rtt from the stack, then assert that obj is null.
               CALL_INTERFACE(Drop);
-              CALL_INTERFACE(AssertNull, obj, &value);
+              CALL_INTERFACE(AssertNullTypecheck, obj, &value);
             } else {
               CALL_INTERFACE(Trap, TrapReason::kTrapIllegalCast);
               // We know that the following code is not reachable, but according
@@ -6079,7 +6079,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   }
 
   void PushMergeValues(Control* c, Merge<Value>* merge) {
-    if (decoding_mode == kConstantExpression) return;
+    if constexpr (decoding_mode == kConstantExpression) return;
     DCHECK_EQ(c, &control_.back());
     DCHECK(merge == &c->start_merge || merge == &c->end_merge);
     stack_.shrink_to(c->stack_depth);
@@ -6282,7 +6282,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     for (int i = arity - 1, depth = drop_values; i >= 0; --i, ++depth) {
       Peek(depth, i, (*merge)[i].type);
     }
-    if (push_branch_values) {
+    if constexpr (push_branch_values) {
       uint32_t inserted_value_count =
           static_cast<uint32_t>(EnsureStackArguments(drop_values + arity));
       if (inserted_value_count > 0) {
