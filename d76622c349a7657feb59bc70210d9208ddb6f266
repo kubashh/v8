@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21e3bb97_06488ec0",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T13:43:24Z",
+      "side": 1,
+      "message": "Not sure what you are asking here. Do you want me to collect the relative command in `formatted_result_output` ?",
+      "parentUuid": "be8b2050_1bac2a99",
+      "range": {
+        "startLine": 46,
+        "startChar": 24,
+        "endLine": 46,
+        "endChar": 47
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb453113_977b8790",
         "filename": "tools/testrunner/testproc/resultdb.py",
         "patchSetId": 7
@@ -37,6 +61,30 @@
       "writtenOn": "2022-11-28T13:24:56Z",
       "side": 1,
       "message": "Do artifacts need to be files on disc or are there maybe other options? E.g. just passing a file-like object? Or just the buffered string content?",
+      "range": {
+        "startLine": 49,
+        "startChar": 19,
+        "endLine": 49,
+        "endChar": 50
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e59fcf3_643ef81e",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T13:43:24Z",
+      "side": 1,
+      "message": "Artifacts need to be files on disk or can be embedded in the request. However embedding leads to that same 4*1024 chars limitations as we had on summary_html.",
+      "parentUuid": "cb453113_977b8790",
       "range": {
         "startLine": 49,
         "startChar": 19,
@@ -93,6 +141,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ead4430_b9fd4e3b",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T13:43:24Z",
+      "side": 1,
+      "message": "no",
+      "parentUuid": "1bf2b4ce_e888992e",
+      "range": {
+        "startLine": 64,
+        "startChar": 42,
+        "endLine": 64,
+        "endChar": 43
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b128dcdd_03c67f9a",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T13:43:24Z",
+      "side": 1,
+      "message": "We cannot remove these files. `rdb` will perform a bulk update after the test runner process finishes and it needs to find the files.",
+      "parentUuid": "671d3cc5_8eb5cbf7",
+      "range": {
+        "startLine": 64,
+        "startChar": 46,
+        "endLine": 64,
+        "endChar": 58
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd25277e_288125e7",
@@ -110,6 +206,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3ab1e1f_a6808767",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T13:43:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd25277e_288125e7",
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22c888b1_63b9013e",
@@ -123,6 +237,30 @@
       "writtenOn": "2022-11-28T13:24:56Z",
       "side": 1,
       "message": "Why does it not work like before? Is the linebreak one of the control characters? Maybe that could be omitted in the regexp instead? Maybe a regexp option like re.M makes this work?\n\nAlso, please mention this change in the CL desc.",
+      "range": {
+        "startLine": 83,
+        "startChar": 14,
+        "endLine": 83,
+        "endChar": 28
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a0431ad_b2eeb415",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T13:43:24Z",
+      "side": 1,
+      "message": "Actually this is not needed at all. I am no longer cleaning multiline strings since I create those artifacts.",
+      "parentUuid": "22c888b1_63b9013e",
       "range": {
         "startLine": 83,
         "startChar": 14,
