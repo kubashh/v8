@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cfaebbe_78e33315",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1558,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-28T14:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92b7f8ad_9d47aa23",
+      "range": {
+        "startLine": 1558,
+        "startChar": 2,
+        "endLine": 1558,
+        "endChar": 11
+      },
+      "revId": "553ba42172ac3904b201f4b252dc3a5b21b662cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7aecb947_387bad32",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-11-25T08:44:45Z",
       "side": 1,
       "message": "I don\u0027t think we should ever skip the reduction of static assert, as it will make the compilation fail.",
+      "range": {
+        "startLine": 1563,
+        "startChar": 4,
+        "endLine": 1563,
+        "endChar": 53
+      },
+      "revId": "553ba42172ac3904b201f4b252dc3a5b21b662cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a608bd1a_6e5a2efc",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1563,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-28T14:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7aecb947_387bad32",
       "range": {
         "startLine": 1563,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a802c06e_42656210",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-28T14:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9412665f_f4d0fa9d",
+      "range": {
+        "startLine": 1573,
+        "startChar": 2,
+        "endLine": 1573,
+        "endChar": 11
+      },
+      "revId": "553ba42172ac3904b201f4b252dc3a5b21b662cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1a430fd_8b3383f5",
@@ -93,6 +165,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90610d4b_9efb7707",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1584,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-28T14:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1a430fd_8b3383f5",
+      "range": {
+        "startLine": 1583,
+        "startChar": 6,
+        "endLine": 1584,
+        "endChar": 49
+      },
+      "revId": "553ba42172ac3904b201f4b252dc3a5b21b662cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ab34889_df1b3f0e",
@@ -106,6 +202,30 @@
       "writtenOn": "2022-11-25T08:44:45Z",
       "side": 1,
       "message": "Can we use the `no_change` label approach here too?",
+      "range": {
+        "startLine": 1593,
+        "startChar": 4,
+        "endLine": 1593,
+        "endChar": 29
+      },
+      "revId": "553ba42172ac3904b201f4b252dc3a5b21b662cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be7e6310_3c448723",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1593,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-28T14:47:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ab34889_df1b3f0e",
       "range": {
         "startLine": 1593,
         "startChar": 4,
