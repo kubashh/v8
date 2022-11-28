@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bbe600c_11449284",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-28T16:31:49Z",
+      "side": 1,
+      "message": "nit: this seems like it shouldn\u0027t be part of the commit message, just the one-line message you specify when doing another `git cl upload` (which is shown when you open the drop-down with Base -\u003e Patchset N comparison).\n\nAlso, please add \"Bug: chromium:1052746\" as a line just before Change-Id, thanks!",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "3a560e2b8b6a1df8ff7b1e3ec2f81cc32cfee636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96280fa1_c6e34ab8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-28T16:31:49Z",
+      "side": 1,
+      "message": "Last bits from me, huge thanks for your work and to Samuel, Jakob and Toon about the thorough review and help!",
+      "revId": "3a560e2b8b6a1df8ff7b1e3ec2f81cc32cfee636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
