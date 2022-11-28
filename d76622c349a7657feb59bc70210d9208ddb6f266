@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3fd7e708_17609fbd",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T14:09:14Z",
+      "side": 1,
+      "message": "Maybe make the \"relative\" param available and pass it here as True, but keep original behavior for the locally used SimpleProgressIndicator?",
+      "parentUuid": "21e3bb97_06488ec0",
+      "range": {
+        "startLine": 46,
+        "startChar": 24,
+        "endLine": 46,
+        "endChar": 47
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb453113_977b8790",
         "filename": "tools/testrunner/testproc/resultdb.py",
         "patchSetId": 7
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "We cannot remove these files. `rdb` will perform a bulk update after the test runner process finishes and it needs to find the files.",
       "parentUuid": "671d3cc5_8eb5cbf7",
+      "range": {
+        "startLine": 64,
+        "startChar": 46,
+        "endLine": 64,
+        "endChar": 58
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d15ee42_80e13f42",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T14:09:14Z",
+      "side": 1,
+      "message": "Hmm, can you add this information to the design doc please? We might then want some sort of clean-up step at the end of our recipe.",
+      "parentUuid": "b128dcdd_03c67f9a",
       "range": {
         "startLine": 64,
         "startChar": 46,
