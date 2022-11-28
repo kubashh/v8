@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be8b2050_1bac2a99",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T13:24:56Z",
+      "side": 1,
+      "message": "Fly-By: I realized that in here we also print the command, but in the non-relative version. Maybe that\u0027s useful when running locally, e.g. for SimpleProgressIndicator, but I think for the bot usage, we should always show the relative command.",
+      "range": {
+        "startLine": 46,
+        "startChar": 24,
+        "endLine": 46,
+        "endChar": 47
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb453113_977b8790",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T13:24:56Z",
+      "side": 1,
+      "message": "Do artifacts need to be files on disc or are there maybe other options? E.g. just passing a file-like object? Or just the buffered string content?",
+      "range": {
+        "startLine": 49,
+        "startChar": 19,
+        "endLine": 49,
+        "endChar": 50
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "671d3cc5_8eb5cbf7",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T13:24:56Z",
+      "side": 1,
+      "message": "When is this deleted? IIUC, it is not removed on after the context closes, but is it still removed by end of process?",
+      "range": {
+        "startLine": 64,
+        "startChar": 46,
+        "endLine": 64,
+        "endChar": 58
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bf2b4ce_e888992e",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T13:24:56Z",
+      "side": 1,
+      "message": "nit: Do we need the +?",
+      "range": {
+        "startLine": 64,
+        "startChar": 42,
+        "endLine": 64,
+        "endChar": 43
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd25277e_288125e7",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T13:24:56Z",
+      "side": 1,
+      "message": "nit: two empty lines?",
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22c888b1_63b9013e",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T13:24:56Z",
+      "side": 1,
+      "message": "Why does it not work like before? Is the linebreak one of the control characters? Maybe that could be omitted in the regexp instead? Maybe a regexp option like re.M makes this work?\n\nAlso, please mention this change in the CL desc.",
+      "range": {
+        "startLine": 83,
+        "startChar": 14,
+        "endLine": 83,
+        "endChar": 28
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
