@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9afa4dd_0757b306",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T11:36:17Z",
+      "side": 1,
+      "message": "Was this CL ready for review? Maybe you can clean it up a bit more first.\n\nWhat is the testing plan? Can we get a few unittests where possible?",
+      "revId": "ecdf38294ee115e76da955ee89874c207fe34d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b23adad5_a17b61a8",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T11:36:17Z",
+      "side": 1,
+      "message": "nit: alpha",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "ecdf38294ee115e76da955ee89874c207fe34d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c713fde9_f50d48ae",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T11:36:17Z",
+      "side": 1,
+      "message": "Any particular reason for this size? Which size triggers the errors?",
+      "range": {
+        "startLine": 18,
+        "startChar": 19,
+        "endLine": 18,
+        "endChar": 22
+      },
+      "revId": "ecdf38294ee115e76da955ee89874c207fe34d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94d19637_6826a303",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T11:36:17Z",
+      "side": 1,
+      "message": "Was this for testing?",
+      "range": {
+        "startLine": 73,
+        "startChar": 30,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "ecdf38294ee115e76da955ee89874c207fe34d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "064ce8b3_d7b1be51",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-11-28T11:36:17Z",
+      "side": 1,
+      "message": "print?",
+      "range": {
+        "startLine": 82,
+        "startChar": 2,
+        "endLine": 82,
+        "endChar": 15
+      },
+      "revId": "ecdf38294ee115e76da955ee89874c207fe34d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
