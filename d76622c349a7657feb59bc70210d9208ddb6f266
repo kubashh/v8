@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1ba1559_ee1d67d8",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T14:13:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fd7e708_17609fbd",
+      "range": {
+        "startLine": 46,
+        "startChar": 24,
+        "endLine": 46,
+        "endChar": 47
+      },
+      "revId": "d76622c349a7657feb59bc70210d9208ddb6f266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb453113_977b8790",
