@@ -77,20 +77,6 @@ def base_test_record(test, result, run):
   return record
 
 
-def extract_tags(record):
-  tags = []
-  for k, v in record.items():
-    if type(v) == list:
-      tags += [sanitized_kv_dict(k, e) for e in v]
-    else:
-      tags.append(sanitized_kv_dict(k, v))
-  return tags
-
-
-def sanitized_kv_dict(k, v):
-  return dict(key=k, value=strip_ascii_control_characters(v))
-
-
 class FixedSizeTopList():
   """Utility collection for gathering a fixed number of elements with the
   biggest value for the given key. It employs a heap from which we pop the
