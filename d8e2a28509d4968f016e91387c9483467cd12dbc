@@ -22,6 +22,30 @@
       },
       "revId": "d8e2a28509d4968f016e91387c9483467cd12dbc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35e21955_f4fad3a2",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T12:18:20Z",
+      "side": 0,
+      "message": "Got confused by the work in the other CL that did not land. Cleaned up now.",
+      "parentUuid": "3830915f_7109e634",
+      "range": {
+        "startLine": 17,
+        "startChar": 4,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "d8e2a28509d4968f016e91387c9483467cd12dbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

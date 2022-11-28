@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93490060_41b49e1d",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T12:18:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b23adad5_a17b61a8",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "ecdf38294ee115e76da955ee89874c207fe34d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c713fde9_f50d48ae",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-11-28T11:36:17Z",
       "side": 1,
       "message": "Any particular reason for this size? Which size triggers the errors?",
+      "range": {
+        "startLine": 18,
+        "startChar": 19,
+        "endLine": 18,
+        "endChar": 22
+      },
+      "revId": "ecdf38294ee115e76da955ee89874c207fe34d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5af81bc_51f33554",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T12:18:20Z",
+      "side": 1,
+      "message": "Leftover from size experiemnts: you can have 256 char in a tag value and 4096 chars in summary_html. Fortunately you can embed artifacts in summary.",
+      "parentUuid": "c713fde9_f50d48ae",
       "range": {
         "startLine": 18,
         "startChar": 19,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87c9a99b_c963d4ff",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T12:18:20Z",
+      "side": 1,
+      "message": "yes; removed the whole variant handling code",
+      "parentUuid": "94d19637_6826a303",
+      "range": {
+        "startLine": 73,
+        "startChar": 30,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "ecdf38294ee115e76da955ee89874c207fe34d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "064ce8b3_d7b1be51",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-11-28T11:36:17Z",
       "side": 1,
       "message": "print?",
+      "range": {
+        "startLine": 82,
+        "startChar": 2,
+        "endLine": 82,
+        "endChar": 15
+      },
+      "revId": "ecdf38294ee115e76da955ee89874c207fe34d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccb9ae48_fd28b917",
+        "filename": "tools/testrunner/testproc/resultdb.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2022-11-28T12:18:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "064ce8b3_d7b1be51",
       "range": {
         "startLine": 82,
         "startChar": 2,
