@@ -16,6 +16,24 @@
       "message": "If we make the store above a Uint32 store, then I think we should be able to add this DCHECK back.",
       "revId": "0afe3f519821449f00c746df3747543d3458bb68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbf9f30a_bf8c613a",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-29T11:27:56Z",
+      "side": 0,
+      "message": "It would not hold for sandboxless code.",
+      "parentUuid": "5dc95318_0a1c2c1c",
+      "revId": "0afe3f519821449f00c746df3747543d3458bb68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

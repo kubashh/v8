@@ -34,6 +34,24 @@
       "parentUuid": "d3c105c1_649b7fac",
       "revId": "994d66b5ecc831f11a625c4446bd78477b507590",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a16b12bf_c2069baa",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 7186,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-29T11:27:56Z",
+      "side": 1,
+      "message": "I can try setting a `V8_ENABLE_SANDBOX` ifdef in the `JSExternalObjectValue` field access to change the input type again. I earlier tried that with `SandboxedPointer` type but that was patently incorrect and caused exceptions.\n\nI\u0027m honestly not sure which storing it\u0027s performing. The field access of course says it\u0027s storing an external pointer, but the same access is also used for loading from the `JSExternalObject` and correct loads the actual pointer value, and not the pointer handle that I\u0027m convinced some lowering code somewhere is taking the field access and turning it into the correct one, somehow.\n\n... Actually, maybe setting an ifdef in the field access would break the loading of the pointer, so that\u0027s not a good idea. Anyway, I\u0027ll take a look.",
+      "parentUuid": "93002793_9caf0449",
+      "revId": "994d66b5ecc831f11a625c4446bd78477b507590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
