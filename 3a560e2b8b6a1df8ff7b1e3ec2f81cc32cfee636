@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6f31e2c6_a580f025",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T09:32:39Z",
+      "side": 1,
+      "message": "Thanks! No need, Gerrit does the squashing.\nBtw for a single CL it\u0027s easier to amend everything in a single commit and then Gerrit shows the differences to the previous version of the commit as a \"patch set\", at least that\u0027s my typical workflow. But I guess that could be useful for the next time. 😊",
+      "parentUuid": "b72d66bf_e6b275a3",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "3a560e2b8b6a1df8ff7b1e3ec2f81cc32cfee636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "96280fa1_c6e34ab8",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 19
