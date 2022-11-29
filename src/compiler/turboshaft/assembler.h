@@ -88,6 +88,7 @@ class ReducerBaseForwarder : public Next {
 // (Goto, Branch, Switch, CallAndCatchException), and takes care of updating
 // Block predecessors (and calls the Assembler to maintain split-edge form).
 // ReducerBase is always added by Assembler at the bottom of the reducer stack.
+// It also provides a default SkipOperation method that returns false.
 template <class Next>
 class ReducerBase : public ReducerBaseForwarder<Next> {
  public:
@@ -189,6 +190,15 @@ class ReducerBase : public ReducerBaseForwarder<Next> {
     Asm().AddPredecessor(saved_current_block, default_case, true);
     return new_opindex;
   }
+
+  bool SkipOperation(const Operation&, OpIndex) { return false; }
+
+  // #define SKIP_OPERATION(Name) \
+//   bool SkipOperation(const Name##Op&, OpIndex) { return false; }
+  //   TURBOSHAFT_OPERATION_LIST(SKIP_OPERATION)
+  // #undef SKIP_OPERATION
+
+  // bool SkipOperation(const StoreOp& op, OpIndex old_idx) { return false; }
 };
 
 template <class Assembler>
