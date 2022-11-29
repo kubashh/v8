@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45185a60_ce535dcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T17:52:55Z",
+      "side": 1,
+      "message": "I\u0027ve rebased now that MemoryOptimization has landed. PTAL.\n\nAs you can see, I\u0027ve had to move a bunch of stuff from memory-optimization.cc to the header, because MemoryAnalyzer is not Assembler-independent anymore and has an Assembler template parameter and takes an assembler in its constructor... \nI\u0027m OK trying to find a cleaner solution, but I\u0027m also OK to land this sooner as-is rather than later and cleaner... Let me know what you think!",
+      "revId": "7ecc3171725b8bcf37a3a644d6f1764bc4e7ecfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
