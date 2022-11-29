@@ -52,6 +52,24 @@
       "parentUuid": "93002793_9caf0449",
       "revId": "994d66b5ecc831f11a625c4446bd78477b507590",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f602e739_037bdc8f",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 7186,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-11-29T12:26:39Z",
+      "side": 1,
+      "message": "I think for load access (given a JSExternalObject, get the raw pointer), the current `AccessInfo` struct is correct, but for this store (given a JSExternalObject, set its ExternalPointerHandle), it\u0027d require a different `AccessInfo` struct that specifies a Uint32 store (the handle, not the raw pointer).",
+      "parentUuid": "a16b12bf_c2069baa",
+      "revId": "994d66b5ecc831f11a625c4446bd78477b507590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
