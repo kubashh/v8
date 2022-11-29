@@ -70,6 +70,24 @@
       "parentUuid": "a16b12bf_c2069baa",
       "revId": "994d66b5ecc831f11a625c4446bd78477b507590",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "793ae4ca_c7c0ba5a",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 7186,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-29T18:32:19Z",
+      "side": 1,
+      "message": "I implemented a separate field access for `JSExternalObjectPointerHandle` and it both works AND fixed the garbage collection issue I was seeing that I reported a bug about as well.\n\nNow this CL is definitely good to go.",
+      "parentUuid": "f602e739_037bdc8f",
+      "revId": "994d66b5ecc831f11a625c4446bd78477b507590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

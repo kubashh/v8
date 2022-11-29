@@ -52,6 +52,24 @@
       "parentUuid": "cbf9f30a_bf8c613a",
       "revId": "0afe3f519821449f00c746df3747543d3458bb68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "162f93c6_a5eb0cf1",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-29T18:32:19Z",
+      "side": 0,
+      "message": "I returned the DCHECK with the proposed change. I\u0027ll also try and see if I couldn\u0027t implement a `ReduceStoreExternalPointerField` call, possibly in a later pull request.",
+      "parentUuid": "b158a6ee_e50df834",
+      "revId": "0afe3f519821449f00c746df3747543d3458bb68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
