@@ -109,6 +109,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "853cd28a_04c643c8",
+        "filename": "src/heap/local-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-29T08:43:08Z",
+      "side": 1,
+      "message": "Since we already have LocalHeaps running _and_ we cannot distinguish from where runtime functions are called, we need to support this right away to be able to move handles to pointers.",
+      "parentUuid": "6b316bc0_7c13ed0c",
+      "range": {
+        "startLine": 376,
+        "startChar": 8,
+        "endLine": 376,
+        "endChar": 22
+      },
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f45fe447_a79d2c2f",
         "filename": "src/heap/parked-scope.h",
         "patchSetId": 2
