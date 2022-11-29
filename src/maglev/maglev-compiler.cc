@@ -360,7 +360,6 @@ MaybeHandle<CodeT> MaglevCompiler::GenerateCode(
     code->Print();
   }
 
-  isolate->native_context()->AddOptimizedCode(ToCodeT(*code));
   return ToCodeT(code, isolate);
 }
 
