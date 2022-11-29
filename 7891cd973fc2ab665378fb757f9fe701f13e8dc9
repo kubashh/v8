@@ -16,6 +16,506 @@
       "message": "PTAL\n\nStill a few TODOs and cleanups, but I would like to get some feedback sooner rather than later.\n\nThanks",
       "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "351738b7_b6c652f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "Very cool stuff! :)\n\nSome of my remarks are not super important, and are stuff you\u0027d have fixed without me pointing at them, but I felt that it was better to point out too many things rather than too few :)",
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bab9291_6fd95231",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "We usually prefer to use `Asm().output_graph()` in the reducers rather than storing the `output_graph_` in each reducers.",
+      "range": {
+        "startLine": 42,
+        "startChar": 25,
+        "endLine": 42,
+        "endChar": 60
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e140559b_a1ae6e3c",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "You could write this as:\n```\nRegisterRepresentation rep \u003d ConstantOp::Representation(kind);\nif (!(rep.IsWord() || rep.IsFloat()) UNIMPLEMENTED();\nInsertTypeAssert(rep, index, type);\n```",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 5
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bebb423_0c6acee5",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "Would it make sense to automate for all Operations with something like:\n```\n#define REDUCE_OP(Operation, ...)                               \\\n  template \u003cclass... Args\u003e                                      \\\n  OpIndex Reduce##Operation(Args... args) {                     \\\n    OpIndex index \u003d Next::Reduce##Op(args...);                  \\\n    if (!index.valid()) return index;                           \\\n                                                                \\\n    const Operation##Op\u0026 op \u003d Asm().output_graph().Get(index);  \\\n    if (op.outputs_rep().size() !\u003d 1) return index;             \\\n                                                                \\\n    Type type \u003d TypeOf(index);                                  \\\n    if (type.IsInvalid()) return index;                         \\\n                                                                \\\n    DetectReentranceScope reentrance_scope(\u0026emitting_asserts_); \\\n    if (reentrance_scope.IsReentrant()) return index;           \\\n                                                                \\\n    InsertTypeAssert(op.outputs_rep()[0], index, type);         \\\n    return index;                                               \\\n  }\n  TURBOSHAFT_OPERATION_LIST(REDUCE_OP)\n#undef REDUCE_OP\n```\n?",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 127,
+        "endChar": 3
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "968815fc_97b6a4a5",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "I don\u0027t think that you want to split the OpIndex. Instead you might want to introduce a SplitWord64Op Operation (or something like that), emit it, and use its OpIndex for the Call.",
+      "range": {
+        "startLine": 178,
+        "startChar": 19,
+        "endLine": 178,
+        "endChar": 69
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42ccbbde_23429ab6",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "that should maybe be in `types.h`/`types.cc`, no?",
+      "range": {
+        "startLine": 573,
+        "startChar": 2,
+        "endLine": 573,
+        "endChar": 56
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9637c83_4a2ff9e9",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "You are assuming that `Next::ReduceBranch` actually generated a Branch whose condition is `condition`. This is true because this reducer is the last of the stack. You could maybe add those 2 DCHECKS to make sure that if someone were to use this Reducer earlier in the Stack things would fail on the DCHECKs rather that somewhere else:\n```\nDCHECK(Asm().output_graph().Get(index).Is\u003cBranchOp\u003e());\nDCHECK_EQ(Asm().output_graph().Get(index).Cast\u003cBranchOp\u003e().condition, condition);\n```\n(technically, `.Cast\u003cXXX\u003e` does a `DCHECK(... .Is\u003cXXX\u003e)`, but I think that having 2 DCHECKs makes things clearer).",
+      "range": {
+        "startLine": 616,
+        "startChar": 61,
+        "endLine": 616,
+        "endChar": 70
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41b9d7db_72e576c0",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "It would be interesting to remove the `Add` altogether if `result_type` is a constant. Probably can be done with something like:\n```\nif (result_type.is_constant()) {\n    Asm().output_graph().RemoveLast();\n    index \u003d Asm().Constant(result_type.try_get_constant().value);\n}\n```\n(it would be nice to have it in this CL just to showcase what can be done)\n\n(same thing for all other kinds and for floats as well)",
+      "range": {
+        "startLine": 721,
+        "startChar": 10,
+        "endLine": 721,
+        "endChar": 12
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "322c971d_87eeb41d",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "The way you compute `type_refinements_` now is a bit broken because of edge splitting: we sometimes back-patch Branches to update their destination to split edges (see https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/assembler.h;l\u003d997).\n\nThe way I\u0027ve dealt with this in Branch Elimination is to compute this kind of things only when entering a Block (when a block is bound, its predecessors should never change), rather than when exiting a Branching block. (see https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/branch-elimination-reducer.h;l\u003d161-173) \nBasically, in `Bind`, you could check if you have a single predecessor and it ends with a Branch, and, if so, compute the type information related to the comparison for the current block. This has the downside that you\u0027d compute twice the same thing (once in the IfTrue and once in the IfFalse), but I\u0027d find it a bit cleaner.\nTo avoid computing twice the types, you could maybe cache the IfTrue result in this `type_refinements_` map so that you don\u0027t have to recompute in the IfFalse (although this may have the same issue with edge splitting as your current approach)...",
+      "range": {
+        "startLine": 826,
+        "startChar": 6,
+        "endLine": 826,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64881f93_a1b4d4ac",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "As discussed offline, this should probably be relaxed so that equivalent ranges and sets are considered equal.",
+      "range": {
+        "startLine": 129,
+        "startChar": 2,
+        "endLine": 129,
+        "endChar": 51
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56c0deb2_2f420c19",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "I think that this is wrong when `e` in inside the range.",
+      "range": {
+        "startLine": 155,
+        "startChar": 10,
+        "endLine": 157,
+        "endChar": 48
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20dbd241_32b43bc9",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "A `SmallVector\u003cword_t, 16\u003e` should work.",
+      "range": {
+        "startLine": 171,
+        "startChar": 4,
+        "endLine": 171,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53013fb5_e69032b1",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "Might be worth to replace this with `return LeastUpperBound(rhs, lhs, zone)` to simplify things a bit.",
+      "range": {
+        "startLine": 185,
+        "startChar": 4,
+        "endLine": 198,
+        "endChar": 49
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a6020a1_7530cec2",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "Suggestion of additional drawing:\n```\n-|XX|-------\n-------|XX|-\n-|XXXXXXXX|-\n```\nThis makes it clearer that new items can be added to the range.",
+      "range": {
+        "startLine": 203,
+        "startChar": 2,
+        "endLine": 205,
+        "endChar": 66
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08b74378_2d1d406e",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "I don\u0027t think that this can ever return something that\u0027s not `None`. Intersection should be commutative: `inter(a,inter(b,c)) \u003d\u003d inter(inter(a,c),b)`, which means that this function snippet tries to compute the intersection of the start and end of a wrapping range (ie of `Range(0, x.range_to())` and `Range(x.range_from(), max())`), which is always `None`. Or did I miss something?",
+      "range": {
+        "startLine": 297,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 1
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ccbc940_a91121d3",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "You could check `bitfield_` instead, so that this doesn\u0027t accidentally break when other special values are added.",
+      "range": {
+        "startLine": 384,
+        "startChar": 13,
+        "endLine": 384,
+        "endChar": 41
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0047470a_864d71db",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "As discussed offline, you should probably remove those, so that types are created directly with `Float32Type::Range`, `Float32Type::Set`, etc.",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 41
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c7615d5_5dec6240",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "Could you add a comment explaining how the payload works? Something like:\nFor ranges, `payload_` contains the start and end of the range.\nFor sets of 2 items or less, `payload_` contains the (1 or 2) items.\nFor sets of more than 2 items, `payload_[0]` is the number of items in the set, and `payload_[0]` contains a pointer to a (zone-allocated) array containing `payload_[1]` items.",
+      "range": {
+        "startLine": 179,
+        "startChar": 2,
+        "endLine": 179,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81dafe55_424b50f0",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "What about replacing this constant with `sizeof(payload_)`? (same thing in `FloatType`)",
+      "range": {
+        "startLine": 187,
+        "startChar": 43,
+        "endLine": 187,
+        "endChar": 44
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79bd359e_3617d437",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "nit: DCHECK_NOT_NULL",
+      "range": {
+        "startLine": 224,
+        "startChar": 6,
+        "endLine": 224,
+        "endChar": 20
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da0feb77_98a83570",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "What about introducing a special constant `kNoSpecialValue \u003d 0` to avoid using `0` explicitly here and elsewhere?",
+      "range": {
+        "startLine": 350,
+        "startChar": 51,
+        "endLine": 350,
+        "endChar": 52
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22bcc170_46eb163c",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-11-29T09:43:03Z",
+      "side": 1,
+      "message": "Before this DCHECK, could you add a comment saying \"NaN should be passed in the `special_values` as `kNaN` rather than in `elements`\"?",
+      "range": {
+        "startLine": 361,
+        "startChar": 4,
+        "endLine": 361,
+        "endChar": 77
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
