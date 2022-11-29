@@ -680,13 +680,12 @@ void WasmEngine::AsyncCompile(
   }
   // Make a copy of the wire bytes in case the user program changes them
   // during asynchronous compilation.
-  std::unique_ptr<byte[]> copy(new byte[bytes.length()]);
-  memcpy(copy.get(), bytes.start(), bytes.length());
+  base::OwnedVector<const uint8_t> copy =
+      base::OwnedVector<const uint8_t>::Of(bytes.module_bytes());
 
   AsyncCompileJob* job = CreateAsyncCompileJob(
-      isolate, enabled, std::move(copy), bytes.length(),
-      handle(isolate->context(), isolate), api_method_name_for_errors,
-      std::move(resolver), compilation_id);
+      isolate, enabled, std::move(copy), handle(isolate->context(), isolate),
+      api_method_name_for_errors, std::move(resolver), compilation_id);
   job->Start();
 }
 
@@ -698,9 +697,9 @@ std::shared_ptr<StreamingDecoder> WasmEngine::StartStreamingCompilation(
   TRACE_EVENT1("v8.wasm", "wasm.StartStreamingCompilation", "id",
                compilation_id);
   if (v8_flags.wasm_async_compilation) {
-    AsyncCompileJob* job = CreateAsyncCompileJob(
-        isolate, enabled, std::unique_ptr<byte[]>(nullptr), 0, context,
-        api_method_name, std::move(resolver), compilation_id);
+    AsyncCompileJob* job =
+        CreateAsyncCompileJob(isolate, enabled, {}, context, api_method_name,
+                              std::move(resolver), compilation_id);
     return job->CreateStreamingDecoder();
   }
   return StreamingDecoder::CreateSyncStreamingDecoder(
@@ -735,7 +734,7 @@ void WasmEngine::TierDownAllModulesPerIsolate(Isolate* isolate) {
   }
 }
 
-void WasmEngine::TierUpAllModulesPerIsolate(Isolate* isolate) {
+void WasmEngine::LeaveDebuggingForIsolate(Isolate* isolate) {
   // Only trigger recompilation after releasing the mutex, otherwise we risk
   // deadlocks because of lock inversion. The bool tells whether the module
   // needs recompilation for tier up.
@@ -743,7 +742,7 @@ void WasmEngine::TierUpAllModulesPerIsolate(Isolate* isolate) {
   {
     base::MutexGuard lock(&mutex_);
     isolates_[isolate]->keep_tiered_down = false;
-    auto test_can_tier_up = [this](NativeModule* native_module) {
+    auto can_remove_debug_code = [this](NativeModule* native_module) {
       DCHECK_EQ(1, native_modules_.count(native_module));
       for (auto* isolate : native_modules_[native_module]->isolates) {
         DCHECK_EQ(1, isolates_.count(isolate));
@@ -758,19 +757,19 @@ void WasmEngine::TierUpAllModulesPerIsolate(Isolate* isolate) {
       if (!native_module->IsTieredDown()) continue;
       // Only start tier-up if no other isolate needs this module in tiered
       // down state.
-      bool tier_up = test_can_tier_up(native_module);
-      if (tier_up) native_module->SetTieringState(kTieredUp);
-      native_modules.emplace_back(std::move(shared_ptr), tier_up);
+      bool remove_debug_code = can_remove_debug_code(native_module);
+      if (remove_debug_code) native_module->SetTieringState(kTieredUp);
+      native_modules.emplace_back(std::move(shared_ptr), remove_debug_code);
     }
   }
   for (auto& entry : native_modules) {
     auto& native_module = entry.first;
-    bool tier_up = entry.second;
+    bool remove_debug_code = entry.second;
     // Remove all breakpoints set by this isolate.
     if (native_module->HasDebugInfo()) {
       native_module->GetDebugInfo()->RemoveIsolate(isolate);
     }
-    if (tier_up) native_module->RecompileForTiering();
+    if (remove_debug_code) native_module->RemoveAllCompiledCode();
   }
 }
 
@@ -871,6 +870,7 @@ Handle<WasmModuleObject> WasmEngine::ImportNativeModule(
   ModuleWireBytes wire_bytes(native_module->wire_bytes());
   Handle<Script> script =
       GetOrCreateScript(isolate, shared_native_module, source_url);
+  native_module->LogWasmCodes(isolate, *script);
   Handle<WasmModuleObject> module_object =
       WasmModuleObject::New(isolate, std::move(shared_native_module), script);
   {
@@ -920,13 +920,13 @@ CodeTracer* WasmEngine::GetCodeTracer() {
 
 AsyncCompileJob* WasmEngine::CreateAsyncCompileJob(
     Isolate* isolate, const WasmFeatures& enabled,
-    std::unique_ptr<byte[]> bytes_copy, size_t length, Handle<Context> context,
+    base::OwnedVector<const uint8_t> bytes, Handle<Context> context,
     const char* api_method_name,
     std::shared_ptr<CompilationResultResolver> resolver, int compilation_id) {
   Handle<Context> incumbent_context = isolate->GetIncumbentContext();
   AsyncCompileJob* job = new AsyncCompileJob(
-      isolate, enabled, std::move(bytes_copy), length, context,
-      incumbent_context, api_method_name, std::move(resolver), compilation_id);
+      isolate, enabled, std::move(bytes), context, incumbent_context,
+      api_method_name, std::move(resolver), compilation_id);
   // Pass ownership to the unique_ptr in {async_compile_jobs_}.
   base::MutexGuard guard(&mutex_);
   async_compile_jobs_[job] = std::unique_ptr<AsyncCompileJob>(job);

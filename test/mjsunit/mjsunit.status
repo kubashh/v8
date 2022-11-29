@@ -983,6 +983,10 @@
   # not possible.
   'wasm/serialization-with-compilation-hints': [SKIP],
 
+  # The test enables the global profiler, and there can only exist one profiler
+  # at a time.
+  'wasm/log-code-after-post-message': [SKIP],
+
   # The test explicitly deserializes a wasm module and expects the resulting
   # wasm module to match the serialized one. With multiple isolate the resulting
   # wasm module can however, come from the native module cache, and therefore
@@ -1185,6 +1189,9 @@
   # stack overflow
   'big-array-literal': [SKIP],
   'regress/regress-353551': [SKIP],
+
+  # Limited wasm code space
+  'wasm/max-wasm-functions': [SKIP],
 }],  # 'arch == ppc64'
 
 ##############################################################################
@@ -1195,6 +1202,9 @@
   # PASE environment currently ships with no tzdata database
   'tzoffset-transition-new-york-noi18n': [SKIP],
   'tzoffset-seoul-noi18n': [SKIP],
+  # Manipulating addresses in in tools/system-analyzer/processor.mjs can cause
+  # computation errors due to unsafe integers (v8:13440)
+  'tools/processor': [PASS, ['component_build', SKIP]],
 }],  # 'system == aix'
 
 ##############################################################################

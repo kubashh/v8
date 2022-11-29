@@ -110,9 +110,12 @@ struct LivenessAnalyzer : AnalyzerBase {
 template <template <class> class... Reducers>
 class OptimizationPhase {
  public:
-  static void Run(Graph* input, Zone* phase_zone, NodeOriginTable* origins) {
+  template <class... ReducerArgs>
+  static void Run(Graph* input, Zone* phase_zone, NodeOriginTable* origins,
+                  const typename Assembler<Reducers...>::ArgT& reducer_args =
+                      std::tuple<>{}) {
     Assembler<Reducers...> phase(*input, input->GetOrCreateCompanion(),
-                                 phase_zone, origins);
+                                 phase_zone, origins, reducer_args);
     if (v8_flags.turboshaft_trace_reduction) {
       phase.template VisitGraph<true>();
     } else {
@@ -121,7 +124,7 @@ class OptimizationPhase {
   }
   static void RunWithoutTracing(Graph* input, Zone* phase_zone) {
     Assembler<Reducers...> phase(input, input->GetOrCreateCompanion(),
-                                 phase_zone);
+                                 phase_zone, nullptr);
     phase->template VisitGraph<false>();
   }
 };
@@ -148,6 +151,8 @@ class GraphVisitor {
   // runtime.
   template <bool trace_reduction>
   void VisitGraph() {
+    assembler().Analyze();
+
     // Creating initial old-to-new Block mapping.
     for (const Block& input_block : input_graph().blocks()) {
       Block* new_block = input_block.IsLoop() ? assembler().NewLoopHeader()
@@ -219,6 +224,7 @@ class GraphVisitor {
 
   template <bool can_be_invalid = false>
   OpIndex MapToNewGraph(OpIndex old_index, int predecessor_index = -1) {
+    DCHECK(old_index.valid());
     OpIndex result = op_mapping_[old_index.id()];
     if (!result.valid()) {
       // {op_mapping} doesn't have a mapping for {old_index}. The assembler
@@ -229,6 +235,7 @@ class GraphVisitor {
           return OpIndex::Invalid();
         }
       }
+      DCHECK(var.has_value());
       if (predecessor_index == -1) {
         result = assembler().Get(var.value());
       } else {
@@ -265,7 +272,12 @@ class GraphVisitor {
         blocks_needing_variables.find(input_block->index()) !=
         blocks_needing_variables.end();
     if constexpr (trace_reduction) {
-      std::cout << PrintAsBlockHeader{*input_block} << "\n";
+      std::cout << "\nold " << PrintAsBlockHeader{*input_block} << "\n";
+      std::cout
+          << "new "
+          << PrintAsBlockHeader{*MapToNewGraph(input_block->index()),
+                                assembler().output_graph().next_block_index()}
+          << "\n";
     }
     if (!assembler().Bind(MapToNewGraph(input_block->index()), input_block)) {
       if constexpr (trace_reduction) TraceBlockUnreachable();
@@ -293,7 +305,8 @@ class GraphVisitor {
 
   template <bool trace_reduction>
   bool VisitOp(OpIndex index, const Block* input_block) {
-    if (!assembler().current_block()) return false;
+    Block* current_block = assembler().current_block();
+    if (!current_block) return false;
     assembler().SetCurrentOrigin(index);
     OpIndex first_output_index =
         assembler().output_graph().next_operation_index();
@@ -312,14 +325,14 @@ class GraphVisitor {
                                              phi.rep, phi.inputs()[1]);
       CreateOldToNewMapping(index, new_index);
       if constexpr (trace_reduction) {
-        TraceReductionResult(first_output_index, new_index);
+        TraceReductionResult(current_block, first_output_index, new_index);
       }
     } else {
       switch (op.opcode) {
 #define EMIT_INSTR_CASE(Name)                           \
   case Opcode::k##Name:                                 \
     new_index = this->Visit##Name(op.Cast<Name##Op>()); \
-    if constexpr (CanBeUsedAsInput<Name##Op>()) {       \
+    if (CanBeUsedAsInput(op.Cast<Name##Op>())) {        \
       CreateOldToNewMapping(index, new_index);          \
     }                                                   \
     break;
@@ -327,7 +340,7 @@ class GraphVisitor {
 #undef EMIT_INSTR_CASE
       }
       if constexpr (trace_reduction) {
-        TraceReductionResult(first_output_index, new_index);
+        TraceReductionResult(current_block, first_output_index, new_index);
       }
     }
     return true;
@@ -340,7 +353,8 @@ class GraphVisitor {
   }
   void TraceOperationUnused() { std::cout << "╰─> unused\n\n"; }
   void TraceBlockUnreachable() { std::cout << "╰─> unreachable\n\n"; }
-  void TraceReductionResult(OpIndex first_output_index, OpIndex new_index) {
+  void TraceReductionResult(Block* current_block, OpIndex first_output_index,
+                            OpIndex new_index) {
     if (new_index < first_output_index) {
       // The operation was replaced with an already existing one.
       std::cout << "╰─> #n" << new_index.id() << "\n";
@@ -361,6 +375,12 @@ class GraphVisitor {
       std::cout << prefix << " n" << index.id() << ": "
                 << PaddingSpace{5 - CountDecimalDigits(index.id())}
                 << OperationPrintStyle{output_graph_.Get(index), "#n"} << "\n";
+      if (op.Properties().is_block_terminator && assembler().current_block() &&
+          assembler().current_block() != current_block) {
+        current_block = &assembler().output_graph().Get(
+            BlockIndex(current_block->index().id() + 1));
+        std::cout << "new " << PrintAsBlockHeader{*current_block} << "\n";
+      }
     }
     std::cout << "\n";
   }
@@ -384,12 +404,6 @@ class GraphVisitor {
     Block* if_false = MapToNewGraph(op.if_false->index());
     return assembler().ReduceBranch(MapToNewGraph(op.condition()), if_true,
                                     if_false);
-  }
-  OpIndex VisitCatchException(const CatchExceptionOp& op) {
-    Block* if_success = MapToNewGraph(op.if_success->index());
-    Block* if_exception = MapToNewGraph(op.if_exception->index());
-    return assembler().ReduceCatchException(MapToNewGraph(op.call()),
-                                            if_success, if_exception);
   }
   OpIndex VisitSwitch(const SwitchOp& op) {
     base::SmallVector<SwitchOp::Case, 16> cases;
@@ -511,9 +525,23 @@ class GraphVisitor {
   }
   OpIndex VisitCall(const CallOp& op) {
     OpIndex callee = MapToNewGraph(op.callee());
+    OpIndex frame_state = MapToNewGraphIfValid(op.frame_state());
     auto arguments = MapToNewGraph<16>(op.arguments());
-    return assembler().ReduceCall(callee, base::VectorOf(arguments),
-                                  op.descriptor);
+    return assembler().ReduceCall(callee, frame_state,
+                                  base::VectorOf(arguments), op.descriptor);
+  }
+  OpIndex VisitCallAndCatchException(const CallAndCatchExceptionOp& op) {
+    OpIndex callee = MapToNewGraph(op.callee());
+    Block* if_success = MapToNewGraph(op.if_success->index());
+    Block* if_exception = MapToNewGraph(op.if_exception->index());
+    OpIndex frame_state = MapToNewGraphIfValid(op.frame_state());
+    auto arguments = MapToNewGraph<16>(op.arguments());
+    return assembler().ReduceCallAndCatchException(
+        callee, frame_state, base::VectorOf(arguments), if_success,
+        if_exception, op.descriptor);
+  }
+  OpIndex VisitLoadException(const LoadExceptionOp& op) {
+    return assembler().ReduceLoadException();
   }
   OpIndex VisitTailCall(const TailCallOp& op) {
     OpIndex callee = MapToNewGraph(op.callee());
@@ -578,16 +606,22 @@ class GraphVisitor {
   }
   OpIndex VisitLoad(const LoadOp& op) {
     return assembler().ReduceLoad(
-        MapToNewGraph(op.base()),
-        op.index().valid() ? MapToNewGraph(op.index()) : OpIndex::Invalid(),
-        op.kind, op.loaded_rep, op.result_rep, op.offset, op.element_size_log2);
+        MapToNewGraph(op.base()), MapToNewGraphIfValid(op.index()), op.kind,
+        op.loaded_rep, op.result_rep, op.offset, op.element_size_log2);
   }
   OpIndex VisitStore(const StoreOp& op) {
     return assembler().ReduceStore(
-        MapToNewGraph(op.base()),
-        op.index().valid() ? MapToNewGraph(op.index()) : OpIndex::Invalid(),
+        MapToNewGraph(op.base()), MapToNewGraphIfValid(op.index()),
         MapToNewGraph(op.value()), op.kind, op.stored_rep, op.write_barrier,
         op.offset, op.element_size_log2);
+  }
+  OpIndex VisitAllocate(const AllocateOp& op) {
+    return assembler().Allocate(MapToNewGraph(op.size()), op.type,
+                                op.allow_large_objects);
+  }
+  OpIndex VisitDecodeExternalPointer(const DecodeExternalPointerOp& op) {
+    return assembler().DecodeExternalPointer(MapToNewGraph(op.handle()),
+                                             op.tag);
   }
   OpIndex VisitRetain(const RetainOp& op) {
     return assembler().ReduceRetain(MapToNewGraph(op.retained()));
@@ -608,10 +642,6 @@ class GraphVisitor {
   }
   OpIndex VisitFrameConstant(const FrameConstantOp& op) {
     return assembler().ReduceFrameConstant(op.kind);
-  }
-  OpIndex VisitCheckLazyDeopt(const CheckLazyDeoptOp& op) {
-    return assembler().ReduceCheckLazyDeopt(MapToNewGraph(op.call()),
-                                            MapToNewGraph(op.frame_state()));
   }
   OpIndex VisitDeoptimize(const DeoptimizeOp& op) {
     return assembler().ReduceDeoptimize(MapToNewGraph(op.frame_state()),
@@ -646,7 +676,7 @@ class GraphVisitor {
     return assembler().ReduceUnreachable();
   }
   OpIndex VisitStaticAssert(const StaticAssertOp& op) {
-    return assembler().ReduceStaticAssert(op.input(), op.source);
+    return assembler().ReduceStaticAssert(op.condition(), op.source);
   }
 
   void CreateOldToNewMapping(OpIndex old_index, OpIndex new_index) {
@@ -672,6 +702,13 @@ class GraphVisitor {
     Block* result = block_mapping_[old_index.id()];
     DCHECK_NOT_NULL(result);
     return result;
+  }
+
+  template <bool can_be_invalid = false>
+  OpIndex MapToNewGraphIfValid(OpIndex old_index, int predecessor_index = -1) {
+    return old_index.valid()
+               ? MapToNewGraph<can_be_invalid>(old_index, predecessor_index)
+               : OpIndex::Invalid();
   }
 
   MaybeVariable GetVariableFor(OpIndex old_index) const {

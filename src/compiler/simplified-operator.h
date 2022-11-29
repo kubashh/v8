@@ -41,8 +41,6 @@ class Operator;
 struct SimplifiedOperatorGlobalCache;
 struct WasmTypeCheckConfig;
 
-enum BaseTaggedness : uint8_t { kUntaggedBase, kTaggedBase };
-
 size_t hash_value(BaseTaggedness);
 
 std::ostream& operator<<(std::ostream&, BaseTaggedness);
@@ -1086,7 +1084,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* VerifyType();
 
 #if V8_ENABLE_WEBASSEMBLY
-  const Operator* AssertNotNull();
+  const Operator* AssertNotNull(TrapId trap_id);
   const Operator* IsNull();
   const Operator* IsNotNull();
   const Operator* Null();

@@ -234,7 +234,10 @@ DEFINE_BOOL(harmony_shipping, true, "enable all shipped harmony features")
 #define HARMONY_STAGED_BASE(V)                                  \
   V(harmony_rab_gsab,                                           \
     "harmony ResizableArrayBuffer / GrowableSharedArrayBuffer") \
+  V(harmony_rab_gsab_transfer, "harmony ArrayBuffer.transfer")  \
   V(harmony_array_grouping, "harmony array grouping")
+
+DEFINE_IMPLICATION(harmony_rab_gsab_transfer, harmony_rab_gsab)
 
 #ifdef V8_INTL_SUPPORT
 #define HARMONY_STAGED(V) HARMONY_STAGED_BASE(V)
@@ -1443,7 +1446,7 @@ DEFINE_BOOL(compact_with_stack, true,
 DEFINE_BOOL(
     compact_code_space_with_stack, true,
     "Perform code space compaction when finalizing a full GC with stack")
-DEFINE_BOOL(shortcut_strings_with_stack, false,
+DEFINE_BOOL(shortcut_strings_with_stack, true,
             "Shortcut Strings during GC with stack")
 DEFINE_BOOL(stress_compaction, false,
             "Stress GC compaction to flush out bugs (implies "

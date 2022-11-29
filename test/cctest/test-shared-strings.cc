@@ -1788,7 +1788,6 @@ UNINITIALIZED_TEST(SharedStringInGlobalHandle) {
 
   v8_flags.shared_string_table = true;
 
-  ExternalResourceFactory resource_factory;
   MultiClientIsolateTest test;
   Isolate* i_isolate = test.i_main_isolate();
   Factory* factory = i_isolate->factory();
@@ -1806,6 +1805,77 @@ UNINITIALIZED_TEST(SharedStringInGlobalHandle) {
   CcTest::CollectGarbage(OLD_SPACE, i_isolate);
 
   CHECK(!gh_shared_string.IsEmpty());
+}
+
+class WakeupTask : public CancelableTask {
+ public:
+  explicit WakeupTask(Isolate* isolate) : CancelableTask(isolate) {}
+
+ private:
+  // v8::internal::CancelableTask overrides.
+  void RunInternal() override {}
+};
+
+class WorkerIsolateThread : public v8::base::Thread {
+ public:
+  WorkerIsolateThread(const char* name, MultiClientIsolateTest* test,
+                      std::atomic<bool>* done)
+      : v8::base::Thread(base::Thread::Options(name)),
+        test_(test),
+        done_(done) {}
+
+  void Run() override {
+    v8::Isolate* client = test_->NewClientIsolate();
+    Isolate* i_client = reinterpret_cast<Isolate*>(client);
+    Factory* factory = i_client->factory();
+
+    v8::Global<v8::String> gh_shared_string;
+
+    {
+      HandleScope handle_scope(i_client);
+      Handle<String> shared_string = factory->NewStringFromAsciiChecked(
+          "foobar", AllocationType::kSharedOld);
+      CHECK(shared_string->InSharedWritableHeap());
+      v8::Local<v8::String> lh_shared_string =
+          Utils::Convert<String, v8::String>(shared_string);
+      gh_shared_string.Reset(test_->main_isolate(), lh_shared_string);
+      gh_shared_string.SetWeak();
+    }
+
+    i_client->heap()->CollectGarbageShared(i_client->main_thread_local_heap(),
+                                           GarbageCollectionReason::kTesting);
+    CHECK(gh_shared_string.IsEmpty());
+    client->Dispose();
+
+    *done_ = true;
+
+    V8::GetCurrentPlatform()
+        ->GetForegroundTaskRunner(test_->main_isolate())
+        ->PostTask(std::make_unique<WakeupTask>(test_->i_main_isolate()));
+  }
+
+ private:
+  MultiClientIsolateTest* test_;
+  std::atomic<bool>* done_;
+};
+
+UNINITIALIZED_TEST(SharedStringInClientGlobalHandle) {
+  if (!V8_CAN_CREATE_SHARED_HEAP_BOOL) return;
+
+  v8_flags.shared_string_table = true;
+
+  MultiClientIsolateTest test;
+  std::atomic<bool> done = false;
+  WorkerIsolateThread thread("worker", &test, &done);
+  CHECK(thread.Start());
+
+  while (!done) {
+    v8::platform::PumpMessageLoop(
+        i::V8::GetCurrentPlatform(), test.main_isolate(),
+        v8::platform::MessageLoopBehavior::kWaitForWork);
+  }
+
+  thread.Join();
 }
 
 }  // namespace test_shared_strings

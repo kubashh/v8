@@ -196,6 +196,40 @@ class VerifyReadOnlyPointersVisitor : public VerifyPointersVisitor {
   }
 };
 
+class VerifySharedHeapObjectVisitor : public VerifyPointersVisitor {
+ public:
+  explicit VerifySharedHeapObjectVisitor(Heap* heap)
+      : VerifyPointersVisitor(heap),
+        shared_space_(heap->shared_space()),
+        shared_lo_space_(heap->shared_lo_space()) {
+    DCHECK_NOT_NULL(shared_space_);
+    DCHECK_NOT_NULL(shared_lo_space_);
+  }
+
+ protected:
+  void VerifyPointers(HeapObject host, MaybeObjectSlot start,
+                      MaybeObjectSlot end) override {
+    if (!host.is_null()) {
+      Map map = host.map();
+      CHECK(ReadOnlyHeap::Contains(map) || shared_space_->Contains(map));
+    }
+    VerifyPointersVisitor::VerifyPointers(host, start, end);
+
+    for (MaybeObjectSlot current = start; current < end; ++current) {
+      HeapObject heap_object;
+      if ((*current)->GetHeapObject(&heap_object)) {
+        CHECK(ReadOnlyHeap::Contains(heap_object) ||
+              shared_space_->Contains(heap_object) ||
+              shared_lo_space_->Contains(heap_object));
+      }
+    }
+  }
+
+ private:
+  SharedSpace* shared_space_;
+  SharedLargeObjectSpace* shared_lo_space_;
+};
+
 class HeapVerification final : public SpaceVerificationVisitor {
  public:
   explicit HeapVerification(Heap* heap)
@@ -345,12 +379,25 @@ void HeapVerification::VerifyObject(HeapObject object) {
 }
 
 void HeapVerification::VerifyOutgoingPointers(HeapObject object) {
-  if (current_space_identity() == RO_SPACE) {
-    VerifyReadOnlyPointersVisitor visitor(heap());
-    object.Iterate(cage_base_, &visitor);
-  } else {
-    VerifyPointersVisitor visitor(heap());
-    object.Iterate(cage_base_, &visitor);
+  switch (current_space_identity()) {
+    case RO_SPACE: {
+      VerifyReadOnlyPointersVisitor visitor(heap());
+      object.Iterate(cage_base_, &visitor);
+      break;
+    }
+
+    case SHARED_SPACE:
+    case SHARED_LO_SPACE: {
+      VerifySharedHeapObjectVisitor visitor(heap());
+      object.Iterate(cage_base_, &visitor);
+      break;
+    }
+
+    default: {
+      VerifyPointersVisitor visitor(heap());
+      object.Iterate(cage_base_, &visitor);
+      break;
+    }
   }
 }
 
@@ -359,7 +406,8 @@ void HeapVerification::VerifyObjectMap(HeapObject object) {
   // in map space or read-only space.
   Map map = object.map(cage_base_);
   CHECK(map.IsMap(cage_base_));
-  CHECK(ReadOnlyHeap::Contains(map) || old_space()->Contains(map));
+  CHECK(ReadOnlyHeap::Contains(map) || old_space()->Contains(map) ||
+        (shared_space() && shared_space()->Contains(map)));
 
   if (Heap::InYoungGeneration(object)) {
     // The object should not be code or a map.
@@ -612,6 +660,11 @@ void HeapVerification::VerifyRememberedSetFor(HeapObject object) {
   OldToSharedSlotVerifyingVisitor old_to_shared_visitor(
       isolate(), &old_to_shared, &typed_old_to_shared);
   object.IterateBody(cage_base_, &old_to_shared_visitor);
+
+  if (object.InSharedWritableHeap()) {
+    CHECK_NULL(chunk->slot_set<OLD_TO_SHARED>());
+    CHECK_NULL(chunk->typed_slot_set<OLD_TO_SHARED>());
+  }
 
   if (Heap::InYoungGeneration(object)) {
     CHECK_NULL(chunk->slot_set<OLD_TO_NEW>());

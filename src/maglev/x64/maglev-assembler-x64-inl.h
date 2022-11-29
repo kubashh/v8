@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_MAGLEV_MAGLEV_ASSEMBLER_INL_H_
-#define V8_MAGLEV_MAGLEV_ASSEMBLER_INL_H_
+#ifndef V8_MAGLEV_X64_MAGLEV_ASSEMBLER_X64_INL_H_
+#define V8_MAGLEV_X64_MAGLEV_ASSEMBLER_X64_INL_H_
 
 #include <tuple>
 #include <type_traits>
@@ -72,6 +72,20 @@ Register MaglevAssembler::FromAnyToRegister(const Input& input,
     movq(scratch, ToMemOperand(input));
     return scratch;
   }
+}
+
+inline MemOperand MaglevAssembler::GetStackSlot(
+    const compiler::AllocatedOperand& operand) {
+  return MemOperand(rbp, GetFramePointerOffsetForStackSlot(operand));
+}
+
+inline MemOperand MaglevAssembler::ToMemOperand(
+    const compiler::InstructionOperand& operand) {
+  return GetStackSlot(compiler::AllocatedOperand::cast(operand));
+}
+
+inline MemOperand MaglevAssembler::ToMemOperand(const ValueLocation& location) {
+  return ToMemOperand(location.operand());
 }
 
 inline void MaglevAssembler::DefineLazyDeoptPoint(LazyDeoptInfo* info) {
@@ -375,4 +389,4 @@ inline void MaglevAssembler::EmitEagerDeoptIf(Condition cond,
 }  // namespace internal
 }  // namespace v8
 
-#endif  // V8_MAGLEV_MAGLEV_ASSEMBLER_INL_H_
+#endif  // V8_MAGLEV_X64_MAGLEV_ASSEMBLER_X64_INL_H_

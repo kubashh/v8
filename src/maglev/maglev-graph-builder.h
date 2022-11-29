@@ -1132,6 +1132,27 @@ class MaglevGraphBuilder {
   ValueNode* TryBuildStoreDataView(const CallArguments& args,
                                    ExternalArrayType type, Function&& getValue);
 
+#define MATH_UNARY_IEEE_BUILTIN(V) \
+  V(MathAcos)                      \
+  V(MathAcosh)                     \
+  V(MathAsin)                      \
+  V(MathAsinh)                     \
+  V(MathAtan)                      \
+  V(MathAtanh)                     \
+  V(MathCbrt)                      \
+  V(MathCos)                       \
+  V(MathCosh)                      \
+  V(MathExp)                       \
+  V(MathExpm1)                     \
+  V(MathLog)                       \
+  V(MathLog1p)                     \
+  V(MathLog10)                     \
+  V(MathLog2)                      \
+  V(MathSin)                       \
+  V(MathSinh)                      \
+  V(MathTan)                       \
+  V(MathTanh)
+
 #define MAGLEV_REDUCED_BUILTIN(V) \
   V(DataViewPrototypeGetInt8)     \
   V(DataViewPrototypeSetInt8)     \
@@ -1142,8 +1163,10 @@ class MaglevGraphBuilder {
   V(DataViewPrototypeGetFloat64)  \
   V(DataViewPrototypeSetFloat64)  \
   V(FunctionPrototypeCall)        \
+  V(MathPow)                      \
   V(StringFromCharCode)           \
-  V(StringPrototypeCharCodeAt)
+  V(StringPrototypeCharCodeAt)    \
+  MATH_UNARY_IEEE_BUILTIN(V)
 
 #define DEFINE_BUILTIN_REDUCER(Name)                                 \
   ValueNode* TryReduce##Name(compiler::JSFunctionRef builtin_target, \
@@ -1201,7 +1224,7 @@ class MaglevGraphBuilder {
   void BuildCheckString(ValueNode* object);
   void BuildCheckSymbol(ValueNode* object);
   void BuildCheckMaps(ValueNode* object,
-                      ZoneVector<compiler::MapRef> const& maps);
+                      base::Vector<const compiler::MapRef> maps);
   // Emits an unconditional deopt and returns false if the node is a constant
   // that doesn't match the ref.
   bool BuildCheckValue(ValueNode* node, const compiler::ObjectRef& ref);
@@ -1307,6 +1330,9 @@ class MaglevGraphBuilder {
   ValueNode* TryFoldInt32BinaryOperation(ValueNode* left, int right);
 
   template <Operation kOperation>
+  void BuildInt32UnaryOperationNode();
+  void BuildTruncatingInt32BitwiseNotForNumber();
+  template <Operation kOperation>
   void BuildInt32BinaryOperationNode();
   template <Operation kOperation>
   void BuildInt32BinarySmiOperationNode();
@@ -1314,6 +1340,8 @@ class MaglevGraphBuilder {
   void BuildTruncatingInt32BinaryOperationNodeForNumber();
   template <Operation kOperation>
   void BuildTruncatingInt32BinarySmiOperationNodeForNumber();
+  template <Operation kOperation>
+  void BuildFloat64UnaryOperationNode();
   template <Operation kOperation>
   void BuildFloat64BinaryOperationNode();
   template <Operation kOperation>

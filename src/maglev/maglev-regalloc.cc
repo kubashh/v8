@@ -11,7 +11,6 @@
 #include "src/codegen/machine-type.h"
 #include "src/codegen/register.h"
 #include "src/codegen/reglist.h"
-#include "src/codegen/x64/register-x64.h"
 #include "src/compiler/backend/instruction.h"
 #include "src/heap/parked-scope.h"
 #include "src/maglev/maglev-code-gen-state.h"
@@ -25,6 +24,14 @@
 #include "src/maglev/maglev-ir-inl.h"
 #include "src/maglev/maglev-ir.h"
 #include "src/maglev/maglev-regalloc-data.h"
+
+#ifdef V8_TARGET_ARCH_ARM64
+#include "src/codegen/arm64/register-arm64.h"
+#elif V8_TARGET_ARCH_X64
+#include "src/codegen/x64/register-x64.h"
+#else
+#error "Maglev does not supported this architecture."
+#endif
 
 namespace v8 {
 namespace internal {
@@ -609,6 +616,20 @@ void StraightForwardRegisterAllocator::AllocateNode(Node* node) {
   if (node->properties().can_lazy_deopt()) {
     if (v8_flags.trace_maglev_regalloc) {
       printing_visitor_->os() << "Allocating lazy deopt inputs...\n";
+    }
+    // Ensure all values live from a throwing node across its catch block are
+    // spilled so they can properly be merged after the catch block.
+    if (node->properties().can_throw()) {
+      ExceptionHandlerInfo* info = node->exception_handler_info();
+      if (info->HasExceptionHandler() && !node->properties().is_call()) {
+        BasicBlock* block = info->catch_block.block_ptr();
+        auto spill = [&](auto reg, ValueNode* node) {
+          if (node->live_range().end < block->first_id()) return;
+          Spill(node);
+        };
+        general_registers_.ForEachUsedRegister(spill);
+        double_registers_.ForEachUsedRegister(spill);
+      }
     }
     AllocateLazyDeopt(*node->lazy_deopt_info());
   }
@@ -1895,6 +1916,9 @@ void StraightForwardRegisterAllocator::MergeRegisterValues(ControlNode* control,
                                 << PrintNodeLabel(graph_labeller(), node)
                                 << ", dropping the merge\n";
       }
+      // We always need to be able to restore values on JumpLoop since the value
+      // is definitely live at the loop header.
+      CHECK(!control->Is<JumpLoop>());
       state = {nullptr, initialized_node};
       return;
     }

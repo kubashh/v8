@@ -856,6 +856,14 @@ Node* ScheduleBuilder::ProcessOperation(const SelectOp& op) {
 Node* ScheduleBuilder::ProcessOperation(const PendingLoopPhiOp& op) {
   UNREACHABLE();
 }
+Node* ScheduleBuilder::ProcessOperation(const DecodeExternalPointerOp& op) {
+  // This should have been lowered before already.
+  UNREACHABLE();
+}
+Node* ScheduleBuilder::ProcessOperation(const AllocateOp& op) {
+  // This should have been lowered before already.
+  UNREACHABLE();
+}
 Node* ScheduleBuilder::ProcessOperation(const TupleOp& op) {
   // Tuples are only used for lowerings during reduction. Therefore, we can
   // assume that it is unused if it occurs at this point.
@@ -1018,12 +1026,6 @@ Node* ScheduleBuilder::ProcessOperation(const FrameConstantOp& op) {
       return AddNode(machine.LoadParentFramePointer(), {});
   }
 }
-Node* ScheduleBuilder::ProcessOperation(const CheckLazyDeoptOp& op) {
-  Node* call = GetNode(op.call());
-  Node* frame_state = GetNode(op.frame_state());
-  call->AppendInput(graph_zone, frame_state);
-  return nullptr;
-}
 Node* ScheduleBuilder::ProcessOperation(const DeoptimizeIfOp& op) {
   Node* condition = GetNode(op.condition());
   Node* frame_state = GetNode(op.frame_state());
@@ -1075,7 +1077,7 @@ Node* ScheduleBuilder::ProcessOperation(const StaticAssertOp& op) {
   // Static asserts should be (statically asserted and) removed by turboshaft.
   UnparkedScopeIfNeeded scope(broker);
   AllowHandleDereference allow_handle_dereference;
-  std::cout << input_graph.Get(op.input());
+  std::cout << input_graph.Get(op.condition());
   FATAL(
       "Expected Turbofan static assert to hold, but got non-true input:\n  %s",
       op.source);
@@ -1089,6 +1091,15 @@ std::pair<Node*, MachineType> ScheduleBuilder::BuildDeoptInput(
       MachineType type;
       OpIndex input;
       it->ConsumeInput(&type, &input);
+      const Operation& op = input_graph.Get(input);
+      if (op.outputs_rep()[0] == RegisterRepresentation::Word64() &&
+          type.representation() == MachineRepresentation::kWord32) {
+        // 64 to 32-bit conversion is implicit in turboshaft, but explicit in
+        // turbofan, so we insert this conversion.
+        Node* conversion =
+            AddNode(machine.TruncateInt64ToInt32(), {GetNode(input)});
+        return {conversion, type};
+      }
       return {GetNode(input), type};
     }
     case Instr::kDematerializedObject: {
@@ -1207,8 +1218,45 @@ Node* ScheduleBuilder::ProcessOperation(const CallOp& op) {
   for (OpIndex i : op.arguments()) {
     inputs.push_back(GetNode(i));
   }
+  if (op.HasFrameState()) {
+    DCHECK(op.frame_state().valid());
+    inputs.push_back(GetNode(op.frame_state()));
+  }
   return AddNode(common.Call(op.descriptor->descriptor),
                  base::VectorOf(inputs));
+}
+Node* ScheduleBuilder::ProcessOperation(const CallAndCatchExceptionOp& op) {
+  // Re-building the call
+  base::SmallVector<Node*, 16> inputs;
+  inputs.push_back(GetNode(op.callee()));
+  for (OpIndex i : op.arguments()) {
+    inputs.push_back(GetNode(i));
+  }
+  if (op.HasFrameState()) {
+    DCHECK(op.frame_state().valid());
+    inputs.push_back(GetNode(op.frame_state()));
+  }
+  Node* call =
+      AddNode(common.Call(op.descriptor->descriptor), base::VectorOf(inputs));
+
+  // Re-building the IfSuccess/IfException mechanism.
+  BasicBlock* success_block = GetBlock(*op.if_success);
+  BasicBlock* exception_block = GetBlock(*op.if_exception);
+  schedule->AddCall(current_block, call, success_block, exception_block);
+  // Pass `call` as the control input of `IfSuccess` and as both the effect and
+  // control input of `IfException`.
+  Node* if_success = MakeNode(common.IfSuccess(), {call});
+  Node* if_exception = MakeNode(common.IfException(), {call, call});
+  schedule->AddNode(success_block, if_success);
+  schedule->AddNode(exception_block, if_exception);
+  current_block = nullptr;
+  return call;
+}
+Node* ScheduleBuilder::ProcessOperation(const LoadExceptionOp& op) {
+  Node* if_exception = current_block->NodeAt(0);
+  DCHECK(if_exception != nullptr &&
+         if_exception->opcode() == IrOpcode::kIfException);
+  return if_exception;
 }
 Node* ScheduleBuilder::ProcessOperation(const TailCallOp& op) {
   base::SmallVector<Node*, 16> inputs;
@@ -1250,19 +1298,6 @@ Node* ScheduleBuilder::ProcessOperation(const BranchOp& op) {
   schedule->AddNode(false_block, MakeNode(common.IfFalse(), {branch}));
   current_block = nullptr;
   return nullptr;
-}
-Node* ScheduleBuilder::ProcessOperation(const CatchExceptionOp& op) {
-  Node* call = GetNode(op.call());
-  BasicBlock* success_block = GetBlock(*op.if_success);
-  BasicBlock* exception_block = GetBlock(*op.if_exception);
-  schedule->AddCall(current_block, call, success_block, exception_block);
-  Node* if_success = MakeNode(common.IfSuccess(), {call});
-  Node* if_exception = MakeNode(common.IfException(), {call, call});
-  schedule->AddNode(success_block, if_success);
-  // Pass `call` as both the effect and control input of `IfException`.
-  schedule->AddNode(exception_block, if_exception);
-  current_block = nullptr;
-  return if_exception;
 }
 Node* ScheduleBuilder::ProcessOperation(const SwitchOp& op) {
   size_t succ_count = op.cases.size() + 1;

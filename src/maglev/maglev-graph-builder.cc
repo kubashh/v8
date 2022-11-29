@@ -6,6 +6,7 @@
 
 #include "src/base/optional.h"
 #include "src/base/v8-fallthrough.h"
+#include "src/base/vector.h"
 #include "src/builtins/builtins-constructor.h"
 #include "src/codegen/interface-descriptors-inl.h"
 #include "src/common/globals.h"
@@ -346,11 +347,12 @@ template <Operation kOperation>
 using GenericNodeForOperation =
     typename NodeForOperationHelper<kOperation>::generic_type;
 
-// Bitwise operations reinterpreters the numeric input as Int32 bits for a
+// Bitwise operations reinterprets the numeric input as Int32 bits for a
 // bitwise operation, which means we want to do slightly different conversions.
 template <Operation kOperation>
 constexpr bool BinaryOperationIsBitwiseInt32() {
   switch (kOperation) {
+    case Operation::kBitwiseNot:
     case Operation::kBitwiseAnd:
     case Operation::kBitwiseOr:
     case Operation::kBitwiseXor:
@@ -362,46 +364,6 @@ constexpr bool BinaryOperationIsBitwiseInt32() {
       return false;
   }
 }
-
-// TODO(victorgomes): Remove this once all operations have fast paths.
-template <Operation kOperation>
-constexpr bool BinaryOperationHasInt32FastPath() {
-  switch (kOperation) {
-    case Operation::kAdd:
-    case Operation::kSubtract:
-    case Operation::kMultiply:
-    case Operation::kDivide:
-    case Operation::kModulus:
-    case Operation::kBitwiseAnd:
-    case Operation::kBitwiseOr:
-    case Operation::kBitwiseXor:
-    case Operation::kShiftLeft:
-    case Operation::kShiftRight:
-    case Operation::kShiftRightLogical:
-    case Operation::kEqual:
-    case Operation::kStrictEqual:
-    case Operation::kLessThan:
-    case Operation::kLessThanOrEqual:
-    case Operation::kGreaterThan:
-    case Operation::kGreaterThanOrEqual:
-      return true;
-    case Operation::kExponentiate:
-      return false;
-  }
-}
-template <Operation kOperation>
-constexpr bool BinaryOperationHasFloat64FastPath() {
-  switch (kOperation) {
-    case Operation::kAdd:
-    case Operation::kSubtract:
-    case Operation::kMultiply:
-    case Operation::kDivide:
-      return true;
-    default:
-      return false;
-  }
-}
-
 }  // namespace
 
 // MAP_OPERATION_TO_NODES are tuples with the following format:
@@ -409,18 +371,24 @@ constexpr bool BinaryOperationHasFloat64FastPath() {
 // - Int32 operation node,
 // - Identity of int32 operation (e.g, 0 for add/sub and 1 for mul/div), if it
 //   exists, or otherwise {}.
-#define MAP_OPERATION_TO_INT32_NODE(V)      \
-  V(Add, Int32AddWithOverflow, 0)           \
-  V(Subtract, Int32SubtractWithOverflow, 0) \
-  V(Multiply, Int32MultiplyWithOverflow, 1) \
-  V(Divide, Int32DivideWithOverflow, 1)     \
-  V(Modulus, Int32ModulusWithOverflow, {})  \
-  V(BitwiseAnd, Int32BitwiseAnd, ~0)        \
-  V(BitwiseOr, Int32BitwiseOr, 0)           \
-  V(BitwiseXor, Int32BitwiseXor, 0)         \
-  V(ShiftLeft, Int32ShiftLeft, 0)           \
-  V(ShiftRight, Int32ShiftRight, 0)         \
+#define MAP_BINARY_OPERATION_TO_INT32_NODE(V) \
+  V(Add, Int32AddWithOverflow, 0)             \
+  V(Subtract, Int32SubtractWithOverflow, 0)   \
+  V(Multiply, Int32MultiplyWithOverflow, 1)   \
+  V(Divide, Int32DivideWithOverflow, 1)       \
+  V(Modulus, Int32ModulusWithOverflow, {})    \
+  V(BitwiseAnd, Int32BitwiseAnd, ~0)          \
+  V(BitwiseOr, Int32BitwiseOr, 0)             \
+  V(BitwiseXor, Int32BitwiseXor, 0)           \
+  V(ShiftLeft, Int32ShiftLeft, 0)             \
+  V(ShiftRight, Int32ShiftRight, 0)           \
   V(ShiftRightLogical, Int32ShiftRightLogical, {})
+
+#define MAP_UNARY_OPERATION_TO_INT32_NODE(V) \
+  V(BitwiseNot, Int32BitwiseNot)             \
+  V(Increment, Int32IncrementWithOverflow)   \
+  V(Decrement, Int32DecrementWithOverflow)   \
+  V(Negate, Int32NegateWithOverflow)
 
 #define MAP_COMPARE_OPERATION_TO_INT32_NODE(V) \
   V(Equal, Int32Equal)                         \
@@ -436,7 +404,18 @@ constexpr bool BinaryOperationHasFloat64FastPath() {
   V(Add, Float64Add)                     \
   V(Subtract, Float64Subtract)           \
   V(Multiply, Float64Multiply)           \
-  V(Divide, Float64Divide)
+  V(Divide, Float64Divide)               \
+  V(Modulus, Float64Modulus)             \
+  V(Negate, Float64Negate)               \
+  V(Exponentiate, Float64Exponentiate)
+
+#define MAP_COMPARE_OPERATION_TO_FLOAT64_NODE(V) \
+  V(Equal, Float64Equal)                         \
+  V(StrictEqual, Float64StrictEqual)             \
+  V(LessThan, Float64LessThan)                   \
+  V(LessThanOrEqual, Float64LessThanOrEqual)     \
+  V(GreaterThan, Float64GreaterThan)             \
+  V(GreaterThanOrEqual, Float64GreaterThanOrEqual)
 
 template <Operation kOperation>
 static constexpr base::Optional<int> Int32Identity() {
@@ -444,7 +423,7 @@ static constexpr base::Optional<int> Int32Identity() {
 #define CASE(op, _, identity) \
   case Operation::k##op:      \
     return identity;
-    MAP_OPERATION_TO_INT32_NODE(CASE)
+    MAP_BINARY_OPERATION_TO_INT32_NODE(CASE)
 #undef CASE
     default:
       UNREACHABLE();
@@ -459,7 +438,8 @@ struct Int32NodeForHelper;
   struct Int32NodeForHelper<Operation::k##op> { \
     using type = OpNode;                        \
   };
-MAP_OPERATION_TO_INT32_NODE(SPECIALIZATION)
+MAP_UNARY_OPERATION_TO_INT32_NODE(SPECIALIZATION)
+MAP_BINARY_OPERATION_TO_INT32_NODE(SPECIALIZATION)
 MAP_COMPARE_OPERATION_TO_INT32_NODE(SPECIALIZATION)
 #undef SPECIALIZATION
 
@@ -474,6 +454,7 @@ struct Float64NodeForHelper;
     using type = OpNode;                          \
   };
 MAP_OPERATION_TO_FLOAT64_NODE(SPECIALIZATION)
+MAP_COMPARE_OPERATION_TO_FLOAT64_NODE(SPECIALIZATION)
 #undef SPECIALIZATION
 
 template <Operation kOperation>
@@ -505,6 +486,30 @@ void MaglevGraphBuilder::BuildGenericBinarySmiOperationNode() {
   FeedbackSlot slot_index = GetSlotOperand(1);
   SetAccumulator(AddNewNode<GenericNodeForOperation<kOperation>>(
       {left, right}, compiler::FeedbackSource{feedback(), slot_index}));
+}
+
+template <Operation kOperation>
+void MaglevGraphBuilder::BuildInt32UnaryOperationNode() {
+  static const bool input_is_truncated =
+      BinaryOperationIsBitwiseInt32<kOperation>();
+  // TODO(v8:7700): Do constant folding.
+  ValueNode* value = input_is_truncated ? GetAccumulatorTruncatedInt32()
+                                        : GetAccumulatorInt32();
+  using OpNodeT = Int32NodeFor<kOperation>;
+  OpNodeT* result = AddNewNode<OpNodeT>({value});
+  NodeInfo* node_info = known_node_aspects().GetOrCreateInfoFor(result);
+  node_info->type = NodeType::kSmi;
+  static_assert(OpNodeT::kProperties.value_representation() ==
+                ValueRepresentation::kInt32);
+  node_info->tagged_alternative = AddNewNode<CheckedSmiTagInt32>({result});
+  SetAccumulator(result);
+}
+
+void MaglevGraphBuilder::BuildTruncatingInt32BitwiseNotForNumber() {
+  // TODO(v8:7700): Do constant folding.
+  ValueNode* value =
+      GetTruncatedInt32FromNumber(current_interpreter_frame_.accumulator());
+  SetAccumulator(AddNewNode<Int32BitwiseNot>({value}));
 }
 
 template <Operation kOperation>
@@ -559,7 +564,6 @@ void MaglevGraphBuilder::BuildInt32BinaryOperationNode() {
     SetAccumulator(result);
     return;
   }
-
   using OpNodeT = Int32NodeFor<kOperation>;
 
   OpNodeT* result = AddNewNode<OpNodeT>({left, right});
@@ -678,17 +682,54 @@ void MaglevGraphBuilder::BuildFloat64BinarySmiOperationNode() {
 }
 
 template <Operation kOperation>
+void MaglevGraphBuilder::BuildFloat64UnaryOperationNode() {
+  // TODO(v8:7700): Do constant folding.
+  ValueNode* value = GetAccumulatorFloat64();
+  switch (kOperation) {
+    case Operation::kNegate:
+      SetAccumulator(AddNewNode<Float64Negate>({value}));
+      break;
+    case Operation::kIncrement:
+      SetAccumulator(AddNewNode<Float64Add>({value, GetFloat64Constant(1)}));
+      break;
+    case Operation::kDecrement:
+      SetAccumulator(
+          AddNewNode<Float64Subtract>({value, GetFloat64Constant(1)}));
+      break;
+    default:
+      UNREACHABLE();
+  }
+}
+
+template <Operation kOperation>
 void MaglevGraphBuilder::BuildFloat64BinaryOperationNode() {
   // TODO(v8:7700): Do constant folding.
   ValueNode* left = LoadRegisterFloat64(0);
   ValueNode* right = GetAccumulatorFloat64();
-
   SetAccumulator(AddNewNode<Float64NodeFor<kOperation>>({left, right}));
 }
 
 template <Operation kOperation>
 void MaglevGraphBuilder::VisitUnaryOperation() {
-  // TODO(victorgomes): Use feedback info and create optimized versions.
+  FeedbackNexus nexus = FeedbackNexusForOperand(0);
+  switch (nexus.GetBinaryOperationFeedback()) {
+    case BinaryOperationHint::kNone:
+      return EmitUnconditionalDeopt(
+          DeoptimizeReason::kInsufficientTypeFeedbackForBinaryOperation);
+    case BinaryOperationHint::kSignedSmall:
+      return BuildInt32UnaryOperationNode<kOperation>();
+    case BinaryOperationHint::kSignedSmallInputs:
+    case BinaryOperationHint::kNumber:
+      if constexpr (BinaryOperationIsBitwiseInt32<kOperation>()) {
+        static_assert(kOperation == Operation::kBitwiseNot);
+        return BuildTruncatingInt32BitwiseNotForNumber();
+      }
+      return BuildFloat64UnaryOperationNode<kOperation>();
+      break;
+    default:
+      // Fallback to generic node.
+      break;
+  }
   BuildGenericUnaryOperationNode<kOperation>();
 }
 
@@ -700,17 +741,18 @@ void MaglevGraphBuilder::VisitBinaryOperation() {
       return EmitUnconditionalDeopt(
           DeoptimizeReason::kInsufficientTypeFeedbackForBinaryOperation);
     case BinaryOperationHint::kSignedSmall:
-      if constexpr (BinaryOperationHasInt32FastPath<kOperation>()) {
+      if constexpr (kOperation == Operation::kExponentiate) {
+        // Exponentiate never updates the feedback to be a Smi.
+        UNREACHABLE();
+      } else {
         return BuildInt32BinaryOperationNode<kOperation>();
       }
-      break;
     case BinaryOperationHint::kSignedSmallInputs:
     case BinaryOperationHint::kNumber:
-      if constexpr (BinaryOperationHasFloat64FastPath<kOperation>()) {
-        return BuildFloat64BinaryOperationNode<kOperation>();
-      } else if constexpr (BinaryOperationHasInt32FastPath<kOperation>() &&
-                           BinaryOperationIsBitwiseInt32<kOperation>()) {
+      if constexpr (BinaryOperationIsBitwiseInt32<kOperation>()) {
         return BuildTruncatingInt32BinaryOperationNodeForNumber<kOperation>();
+      } else {
+        return BuildFloat64BinaryOperationNode<kOperation>();
       }
       break;
     default:
@@ -728,18 +770,19 @@ void MaglevGraphBuilder::VisitBinarySmiOperation() {
       return EmitUnconditionalDeopt(
           DeoptimizeReason::kInsufficientTypeFeedbackForBinaryOperation);
     case BinaryOperationHint::kSignedSmall:
-      if constexpr (BinaryOperationHasInt32FastPath<kOperation>()) {
+      if constexpr (kOperation == Operation::kExponentiate) {
+        // Exponentiate never updates the feedback to be a Smi.
+        UNREACHABLE();
+      } else {
         return BuildInt32BinarySmiOperationNode<kOperation>();
       }
-      break;
     case BinaryOperationHint::kSignedSmallInputs:
     case BinaryOperationHint::kNumber:
-      if constexpr (BinaryOperationHasFloat64FastPath<kOperation>()) {
-        return BuildFloat64BinarySmiOperationNode<kOperation>();
-      } else if constexpr (BinaryOperationHasInt32FastPath<kOperation>() &&
-                           BinaryOperationIsBitwiseInt32<kOperation>()) {
+      if constexpr (BinaryOperationIsBitwiseInt32<kOperation>()) {
         return BuildTruncatingInt32BinarySmiOperationNodeForNumber<
             kOperation>();
+      } else {
+        return BuildFloat64BinarySmiOperationNode<kOperation>();
       }
       break;
     default:
@@ -817,38 +860,26 @@ void MaglevGraphBuilder::VisitCompareOperation() {
       EmitUnconditionalDeopt(
           DeoptimizeReason::kInsufficientTypeFeedbackForCompareOperation);
       return;
-    case CompareOperationHint::kSignedSmall:
-      if constexpr (BinaryOperationHasInt32FastPath<kOperation>()) {
-        ValueNode* left = LoadRegisterInt32(0);
-        ValueNode* right = GetAccumulatorInt32();
-
-        if (TryBuildCompareOperation<BranchIfInt32Compare>(kOperation, left,
+    case CompareOperationHint::kSignedSmall: {
+      ValueNode* left = LoadRegisterInt32(0);
+      ValueNode* right = GetAccumulatorInt32();
+      if (TryBuildCompareOperation<BranchIfInt32Compare>(kOperation, left,
+                                                         right)) {
+        return;
+      }
+      SetAccumulator(AddNewNode<Int32NodeFor<kOperation>>({left, right}));
+      return;
+    }
+    case CompareOperationHint::kNumber: {
+      ValueNode* left = LoadRegisterFloat64(0);
+      ValueNode* right = GetAccumulatorFloat64();
+      if (TryBuildCompareOperation<BranchIfFloat64Compare>(kOperation, left,
                                                            right)) {
-          return;
-        }
-        SetAccumulator(AddNewNode<Int32NodeFor<kOperation>>({left, right}));
         return;
       }
-      break;
-    case CompareOperationHint::kNumber:
-      if constexpr (BinaryOperationHasFloat64FastPath<kOperation>()) {
-        ValueNode* left = LoadRegisterFloat64(0);
-        ValueNode* right = GetAccumulatorFloat64();
-
-        if (TryBuildCompareOperation<BranchIfFloat64Compare>(kOperation, left,
-                                                             right)) {
-          return;
-        }
-        SetAccumulator(AddNewNode<Float64NodeFor<kOperation>>({left, right}));
-        return;
-        // } else if constexpr (BinaryOperationHasInt32FastPath<kOperation>()) {
-        //   // Fall back to int32 fast path if there is one (this will be the
-        //   case
-        //   // for operations that deal with bits rather than numbers).
-        //   BuildInt32BinaryOperationNode<kOperation>();
-        //   return;
-      }
-      break;
+      SetAccumulator(AddNewNode<Float64NodeFor<kOperation>>({left, right}));
+      return;
+    }
     case CompareOperationHint::kInternalizedString: {
       DCHECK(kOperation == Operation::kEqual ||
              kOperation == Operation::kStrictEqual);
@@ -1460,7 +1491,7 @@ class KnownMapsMerger {
  public:
   explicit KnownMapsMerger(compiler::JSHeapBroker* broker, ValueNode* object,
                            KnownNodeAspects& known_node_aspects,
-                           ZoneVector<compiler::MapRef> const& maps)
+                           base::Vector<const compiler::MapRef> maps)
       : broker_(broker),
         maps_(maps),
         known_maps_are_subset_of_maps_(true),
@@ -1496,7 +1527,7 @@ class KnownMapsMerger {
 
  private:
   compiler::JSHeapBroker* broker_;
-  ZoneVector<compiler::MapRef> const& maps_;
+  base::Vector<const compiler::MapRef> maps_;
   bool known_maps_are_subset_of_maps_;
   bool emit_check_with_migration_;
   ZoneHandleSet<Map> stable_map_set_;
@@ -1574,7 +1605,7 @@ class KnownMapsMerger {
 }  // namespace
 
 void MaglevGraphBuilder::BuildCheckMaps(
-    ValueNode* object, ZoneVector<compiler::MapRef> const& maps) {
+    ValueNode* object, base::Vector<const compiler::MapRef> maps) {
   // TODO(verwaest): Support other objects with possible known stable maps as
   // well.
   if (object->Is<Constant>()) {
@@ -1846,9 +1877,8 @@ bool MaglevGraphBuilder::TryBuildStoreField(
       // Emit a map check for the field type, if needed, otherwise just a
       // HeapObject check.
       if (access_info.field_map().has_value()) {
-        ZoneVector<compiler::MapRef> maps({access_info.field_map().value()},
-                                          zone());
-        BuildCheckMaps(value, maps);
+        BuildCheckMaps(value,
+                       base::VectorOf({access_info.field_map().value()}));
       } else {
         BuildCheckHeapObject(value);
       }
@@ -1980,14 +2010,14 @@ bool MaglevGraphBuilder::TryBuildPropertyAccess(
 }
 
 namespace {
-bool HasOnlyStringMaps(ZoneVector<compiler::MapRef> const& maps) {
+bool HasOnlyStringMaps(base::Vector<const compiler::MapRef> maps) {
   for (compiler::MapRef map : maps) {
     if (!map.IsStringMap()) return false;
   }
   return true;
 }
 
-bool HasOnlyNumberMaps(ZoneVector<compiler::MapRef> const& maps) {
+bool HasOnlyNumberMaps(base::Vector<const compiler::MapRef> maps) {
   for (compiler::MapRef map : maps) {
     if (map.instance_type() != HEAP_NUMBER_TYPE) return false;
   }
@@ -2031,8 +2061,8 @@ bool MaglevGraphBuilder::TryBuildNamedAccess(
   // Check for monomorphic case.
   if (access_infos.size() == 1) {
     compiler::PropertyAccessInfo access_info = access_infos.front();
-    const ZoneVector<compiler::MapRef>& maps =
-        access_info.lookup_start_object_maps();
+    base::Vector<const compiler::MapRef> maps =
+        base::VectorOf(access_info.lookup_start_object_maps());
     if (HasOnlyStringMaps(maps)) {
       // Check for string maps before checking if we need to do an access
       // check. Primitive strings always get the prototype from the native
@@ -2181,7 +2211,8 @@ bool MaglevGraphBuilder::TryBuildElementAccess(
       // TODO(victorgomes): polymorphic case.
       return false;
     }
-    BuildCheckMaps(object, access_info.lookup_start_object_maps());
+    BuildCheckMaps(object,
+                   base::VectorOf(access_info.lookup_start_object_maps()));
 
     // TODO(victorgomes): To support large typed array access, we should use
     // Uint32 here.
@@ -3038,6 +3069,10 @@ ValueNode* MaglevGraphBuilder::TryReduceDataViewPrototypeSetFloat64(
 
 ValueNode* MaglevGraphBuilder::TryReduceFunctionPrototypeCall(
     compiler::JSFunctionRef target, CallArguments& args) {
+  // We can't reduce Function#call when there is no receiver function.
+  if (args.receiver_mode() == ConvertReceiverMode::kNullOrUndefined) {
+    return nullptr;
+  }
   // Use Function.prototype.call context, to ensure any exception is thrown in
   // the correct context.
   ValueNode* context = GetConstant(target.context());
@@ -3045,6 +3080,53 @@ ValueNode* MaglevGraphBuilder::TryReduceFunctionPrototypeCall(
   args.PopReceiver(ConvertReceiverMode::kAny);
   return BuildGenericCall(receiver, context, Call::TargetType::kAny, args);
 }
+
+ValueNode* MaglevGraphBuilder::TryReduceMathPow(compiler::JSFunctionRef target,
+                                                CallArguments& args) {
+  if (args.count() < 2) {
+    return GetRootConstant(RootIndex::kNanValue);
+  }
+  ValueNode* left = GetFloat64(args[0]);
+  ValueNode* right = GetFloat64(args[1]);
+  return AddNewNode<Float64Exponentiate>({left, right});
+}
+
+#define MAP_MATH_UNARY_TO_IEEE_754(V) \
+  V(MathAcos, acos)                   \
+  V(MathAcosh, acosh)                 \
+  V(MathAsin, asin)                   \
+  V(MathAsinh, asinh)                 \
+  V(MathAtan, atan)                   \
+  V(MathAtanh, atanh)                 \
+  V(MathCbrt, cbrt)                   \
+  V(MathCos, cos)                     \
+  V(MathCosh, cosh)                   \
+  V(MathExp, exp)                     \
+  V(MathExpm1, expm1)                 \
+  V(MathLog, log)                     \
+  V(MathLog1p, log1p)                 \
+  V(MathLog10, log10)                 \
+  V(MathLog2, log2)                   \
+  V(MathSin, sin)                     \
+  V(MathSinh, sinh)                   \
+  V(MathTan, tan)                     \
+  V(MathTanh, tanh)
+
+#define MATH_UNARY_IEEE_BUILTIN_REDUCER(Name, IeeeOp)               \
+  ValueNode* MaglevGraphBuilder::TryReduce##Name(                   \
+      compiler::JSFunctionRef target, CallArguments& args) {        \
+    if (args.count() < 1) {                                         \
+      return GetRootConstant(RootIndex::kNanValue);                 \
+    }                                                               \
+    ValueNode* value = GetFloat64(args[0]);                         \
+    return AddNewNode<Float64Ieee754Unary>(                         \
+        {value}, ExternalReference::ieee754_##IeeeOp##_function()); \
+  }
+
+MAP_MATH_UNARY_TO_IEEE_754(MATH_UNARY_IEEE_BUILTIN_REDUCER)
+
+#undef MATH_UNARY_IEEE_BUILTIN_REDUCER
+#undef MAP_MATH_UNARY_TO_IEEE_754
 
 ValueNode* MaglevGraphBuilder::TryReduceBuiltin(
     compiler::JSFunctionRef target, CallArguments& args,
@@ -3820,7 +3902,7 @@ bool MaglevGraphBuilder::TryBuildFastInstanceOf(
     // Monomorphic property access.
     if (callable_node_if_not_constant) {
       BuildCheckMaps(callable_node_if_not_constant,
-                     access_info.lookup_start_object_maps());
+                     base::VectorOf(access_info.lookup_start_object_maps()));
     }
 
     BuildOrdinaryHasInstance(object, callable, callable_node_if_not_constant);
