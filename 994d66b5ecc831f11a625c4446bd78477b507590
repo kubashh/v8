@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3c105c1_649b7fac",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 7186,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2022-11-29T09:12:59Z",
+      "side": 1,
+      "message": "I\u0027m wondering, does this end up performing a 64-bit or a 32-bit store? The slot in the JSExternalObject is only 32 bits large (the size of an ExternalPointerHandle), but the `MachineType::Pointer()` from the `AccessBuilder::ForJSExternalObjectValue()` should be 64 bit large. Maybe it\u0027s anyway nicer to make this an explicit Uint32 store since we are not storing a pointer, but an ExternalPointerHandle. That might mean that we\u0027d need a separate `AccessBuilder::ForJSExternalObjectExternalPointerHandle()` or something along these lines.",
+      "revId": "994d66b5ecc831f11a625c4446bd78477b507590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
