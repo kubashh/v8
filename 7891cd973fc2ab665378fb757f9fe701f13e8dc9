@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d7ac883_1d9f31c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "Mostly nits from my side, overall design looks good.\nStill have to read the join/intersect operations in detail and the typing assertions.",
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23f1bef7_dc7eb059",
@@ -221,6 +238,121 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "49adf6d7_1bb76df2",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "Isn\u0027t it possible that the different type is Type::Float32|Float64 in this case? Does it mean we need to return Any type?",
+      "range": {
+        "startLine": 352,
+        "startChar": 13,
+        "endLine": 352,
+        "endChar": 35
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "694e3066_0477c44f",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "nit: Please add a comment what this can be used for.",
+      "range": {
+        "startLine": 421,
+        "startChar": 31,
+        "endLine": 421,
+        "endChar": 47
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4ca4b2b_bd38b6b2",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "nit: could we give more descriptive names, e.g.\nlhs -\u003e range\nrhs -\u003e split_point?",
+      "range": {
+        "startLine": 422,
+        "startChar": 24,
+        "endLine": 422,
+        "endChar": 27
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95987feb_f83a5293",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "Should we return None type in the else branch?",
+      "range": {
+        "startLine": 469,
+        "startChar": 6,
+        "endLine": 469,
+        "endChar": 8
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e27e4f5c_b95c4162",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "nit: could you add a comment explaining the algorithm at a high level?",
+      "range": {
+        "startLine": 514,
+        "startChar": 7,
+        "endLine": 514,
+        "endChar": 11
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42ccbbde_23429ab6",
         "filename": "src/compiler/turboshaft/type-inference-reducer.h",
         "patchSetId": 1
@@ -244,6 +376,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9d614e2e_6c8358d3",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "I\u0027d suggest so for simplicity, unless we have a single dedicated zone for the Typing phase, if we see that we create too many intermediate types.",
+      "range": {
+        "startLine": 601,
+        "startChar": 30,
+        "endLine": 602,
+        "endChar": 22
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b9637c83_4a2ff9e9",
         "filename": "src/compiler/turboshaft/type-inference-reducer.h",
         "patchSetId": 1
@@ -260,6 +415,29 @@
         "startChar": 61,
         "endLine": 616,
         "endChar": 70
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caffac88_8079919a",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "nit: let\u0027s flip the branch condition and do an early return instead of nesting.",
+      "range": {
+        "startLine": 716,
+        "startChar": 4,
+        "endLine": 716,
+        "endChar": 6
       },
       "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -313,6 +491,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a9b7f6d_62ee99d3",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "Slightly better, still not too complex would be:\n`fabs(lhs - rhs) \u003c std::numeric_limits\u003cfloat|double\u003e::epsilon()`.",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 19
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "64881f93_a1b4d4ac",
         "filename": "src/compiler/turboshaft/types.cc",
         "patchSetId": 1
@@ -329,6 +530,29 @@
         "startChar": 2,
         "endLine": 129,
         "endChar": 51
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75d20e72_06230b08",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "Should we consider sets with the same elements in a different order equal?",
+      "range": {
+        "startLine": 138,
+        "startChar": 12,
+        "endLine": 138,
+        "endChar": 50
       },
       "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -520,6 +744,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "545ba4ff_404f562a",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "Optionally we could also have unions for the 3 cases.",
+      "parentUuid": "2c7615d5_5dec6240",
+      "range": {
+        "startLine": 179,
+        "startChar": 2,
+        "endLine": 179,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "81dafe55_424b50f0",
         "filename": "src/compiler/turboshaft/types.h",
         "patchSetId": 1
@@ -566,6 +814,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2748131e_d4a201cc",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "nit: DCHECK that set_size \u003e\u003d 1.",
+      "range": {
+        "startLine": 297,
+        "startChar": 27,
+        "endLine": 297,
+        "endChar": 37
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "da0feb77_98a83570",
         "filename": "src/compiler/turboshaft/types.h",
         "patchSetId": 1
@@ -605,6 +876,98 @@
         "startChar": 4,
         "endLine": 361,
         "endChar": 77
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53cc91c8_8bf68071",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "nit: how about naming this `range`?",
+      "range": {
+        "startLine": 458,
+        "startChar": 30,
+        "endLine": 458,
+        "endChar": 36
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "549622f8_b6a95671",
+        "filename": "src/objects/object-list-macros.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "Does it also make sense to have Float set types?",
+      "range": {
+        "startLine": 243,
+        "startChar": 14,
+        "endLine": 243,
+        "endChar": 25
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54c343fb_d51e53d3",
+        "filename": "test/unittests/compiler/turboshaft/turboshaft-types-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "Do these fail still?",
+      "range": {
+        "startLine": 136,
+        "startChar": 1,
+        "endLine": 136,
+        "endChar": 5
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aa9c382_148b0476",
+        "filename": "test/unittests/compiler/turboshaft/turboshaft-types-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-29T17:27:39Z",
+      "side": 1,
+      "message": "Can we introduce an enum for IncludesNaN?",
+      "range": {
+        "startLine": 153,
+        "startChar": 27,
+        "endLine": 153,
+        "endChar": 32
       },
       "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
