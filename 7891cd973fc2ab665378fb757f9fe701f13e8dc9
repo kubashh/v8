@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23f1bef7_dc7eb059",
+        "filename": "src/base/vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-29T16:26:55Z",
+      "side": 1,
+      "message": "I don\u0027t think this overload is needed. A `base::Vector` doesn\u0027t own its data, that\u0027s why its `begin()` method is always const and gives you a `T*` nevertheless. The same for `end` below.",
+      "range": {
+        "startLine": 361,
+        "startChar": 0,
+        "endLine": 361,
+        "endChar": 33
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9bab9291_6fd95231",
         "filename": "src/compiler/turboshaft/assert-types-reducer.h",
         "patchSetId": 1
@@ -106,6 +129,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7189491_6b085aa7",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-29T16:26:55Z",
+      "side": 1,
+      "message": "How about adding\n```\nOpIndex CallBuiltin(Builtin builtin, std::initializer_list\u003cOpIndex\u003e arguments);\n```\nto `Assembler`. This seems like a universally useful helper. The memory optimization CL introduces `TSCallDescriptor::Create(const CallDescriptor* descriptor, Zone* graph_zone)`, which could be helpful.",
+      "range": {
+        "startLine": 177,
+        "startChar": 7,
+        "endLine": 177,
+        "endChar": 18
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "968815fc_97b6a4a5",
         "filename": "src/compiler/turboshaft/assert-types-reducer.h",
         "patchSetId": 1
@@ -122,6 +168,52 @@
         "startChar": 19,
         "endLine": 178,
         "endChar": 69
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a39ee97_b0fcc101",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-29T16:26:55Z",
+      "side": 1,
+      "message": "This function also behaves wrongly for infinite values and for the largest values next to the infinities. We should at least DCHECK that we didn\u0027t hit these cases.",
+      "range": {
+        "startLine": 29,
+        "startChar": 14,
+        "endLine": 29,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33cf9495_de9a8b63",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-11-29T16:26:55Z",
+      "side": 1,
+      "message": "nit: How about using `std::array` or `base::Vector` instead?",
+      "range": {
+        "startLine": 41,
+        "startChar": 12,
+        "endLine": 41,
+        "endChar": 27
       },
       "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
