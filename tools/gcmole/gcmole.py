@@ -14,6 +14,7 @@ import collections
 import difflib
 import json
 import os
+import pickle
 import re
 import subprocess
 import sys
@@ -122,6 +123,7 @@ def make_clang_command_line(plugin, plugin_args, options):
       "-DV8_ENABLE_WEBASSEMBLY",
       "-DV8_GC_MOLE",
       "-DV8_INTL_SUPPORT",
+      #"--sysroot=build/linux/debian_bullseye_i386-sysroot",
       "-I{}".format(options.v8_root_dir),
       "-I{}".format(options.v8_root_dir / 'include'),
       "-I{}".format(options.v8_build_dir / 'gen'),
@@ -254,7 +256,10 @@ def build_file_list(options, for_test):
         for file in file_pattern.findall(sources):
           result.append(options.v8_root_dir / prefix / file)
 
-  return result
+  def is_in_shard(index):
+    return index % options.shard_count == options.shard_index
+
+  return [f for i, f in enumerate(result) if is_in_shard(i)]
 
 
 # -----------------------------------------------------------------------------
@@ -374,17 +379,18 @@ class GCSuspectsCollector:
       if self.gc.get(funcname, False):
         mark(funcname)
 
-
-def generate_gc_suspects(files, options):
-  # Reset the global state.
-  call_graph = CallGraph()
+def generate_callgraph(files, options):
+  callgraph = CallGraph()
 
   log("Building GC Suspects for {}", options.v8_target_cpu)
-  for _, stdout, _ in invoke_clang_plugin_for_each_file(files, "dump-callees",
-                                                        [], options):
-    call_graph.parse(stdout.splitlines())
+  for _, stdout, _ in invoke_clang_plugin_for_each_file(
+      files, "dump-callees", [], options):
+    callgraph.parse(stdout.splitlines())
 
-  collector = GCSuspectsCollector(options, call_graph.funcs)
+  return callgraph
+
+def generate_gc_suspects(callgraph, options):
+  collector = GCSuspectsCollector(options, callgraph.funcs)
   collector.propagate()
   # TODO(cbruni): remove once gcmole.cc is migrated
   write_gcmole_results(collector, options, options.v8_root_dir)
@@ -435,7 +441,8 @@ def check_correctness_for_arch(options, for_test):
   files = build_file_list(options, for_test)
 
   if not options.reuse_gcsuspects:
-    generate_gc_suspects(files, options)
+    call_graph = generate_callgraph(files, options)
+    generate_gc_suspects(call_graph, options)
   else:
     log("Reusing GCSuspects for {}", options.v8_target_cpu)
 
@@ -575,6 +582,16 @@ def main(argv):
         action="store_true",
         default=False,
         help="Flag for setting build bot specific settings.")
+    parser.add_argument(
+        "--shard-count",
+        default=1,
+        type=int,
+        help="")
+    parser.add_argument(
+        "--shard-index",
+        default=0,
+        type=int,
+        help="")
 
     group = parser.add_argument_group("GCMOLE options")
     group.add_argument(
@@ -626,6 +643,32 @@ def main(argv):
   add_common_args(subp)
   subp.set_defaults(func=full_run)
 
+  subp = subps.add_parser(
+      "collect", description="")
+  add_common_args(subp)
+  subp.set_defaults(func=collect_run)
+
+  subp.add_argument(
+      "--output",
+      required=True,
+      help="TODO")
+
+  subp = subps.add_parser(
+      "merge", description="")
+  add_common_args(subp)
+  subp.set_defaults(func=merge_run)
+
+  subp.add_argument(
+      "--input",
+      action='append',
+      required=True,
+      help="TODO")
+
+  subp = subps.add_parser(
+      "check", description="")
+  add_common_args(subp)
+  subp.set_defaults(func=check_run)
+
   options = parser.parse_args(argv[1:])
 
   verify_and_convert_dirs(parser, options, default_gcmole_dir,
@@ -633,6 +676,7 @@ def main(argv):
   verify_clang_plugin(parser, options)
   prepare_gcmole_files(options)
   verify_build_config(parser, options)
+  override_env_options(options)
 
   options.func(options)
 
@@ -646,6 +690,29 @@ def full_run(options):
     any_errors_found = any_errors_found or errors_found
 
   sys.exit(1 if any_errors_found else 0)
+
+
+def collect_run(options):
+  files = build_file_list(options, False)
+  callgraph = generate_callgraph(files, options)
+  log(f"Writing serialized callgraph to {options.output}")
+  with open(options.output, 'wb') as f:
+    pickle.dump(callgraph, f)
+
+
+def merge_run(options):
+  callgraph = CallGraph()
+  for input_file in options.input:
+    with open(input_file, 'rb') as f:
+      callgraph.funcs.update(pickle.load(f).funcs)
+
+  generate_gc_suspects(callgraph, options)
+
+
+def check_run(options):
+  options.reuse_gcsuspects = True
+  errors_found, _ = check_correctness_for_arch(options, False)
+  sys.exit(1 if errors_found else 0)
 
 
 def verify_and_convert_dirs(parser, options, default_tools_gcmole_dir,
@@ -749,6 +816,13 @@ def verify_build_config(parser, options):
       return
   parser.error("Build dir '{}' config doesn't match request cpu. {}: {}".format(
       options.v8_build_dir, options.v8_target_cpu, found_cpu))
+
+
+def override_env_options(options):
+   options.shard_count = int(
+      os.environ.get('GTEST_TOTAL_SHARDS', options.shard_count))
+   options.shard_index = int(
+      os.environ.get('GTEST_SHARD_INDEX', options.shard_index))
 
 
 if __name__ == "__main__":
