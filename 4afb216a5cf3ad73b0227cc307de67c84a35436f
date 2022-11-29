@@ -131,6 +131,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bde9a89a_34423808",
+        "filename": "src/heap/local-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-29T14:32:58Z",
+      "side": 1,
+      "message": "You are right. ATM, stack information is stored in `thread_local_top`, so we only have stack information for an isolate\u0027s main thread. To support this, we need a data structure for the stacks of background threads. It will come in a subsequent CL.",
+      "parentUuid": "853cd28a_04c643c8",
+      "range": {
+        "startLine": 376,
+        "startChar": 8,
+        "endLine": 376,
+        "endChar": 22
+      },
+      "revId": "4afb216a5cf3ad73b0227cc307de67c84a35436f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f45fe447_a79d2c2f",

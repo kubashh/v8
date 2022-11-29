@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cba969c0_985efb00",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4811,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-29T14:32:58Z",
+      "side": 1,
+      "message": "When we iterate through the client isolates waiting in a global safepoint, we\u0027re currently going through the main isolate as well. This `return` is to make sure we don\u0027t do this twice for the main isolate.\n\nWe may want to change this behavior, but this is how we do it now; see, e.g.\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/heap.cc;drc\u003d9acc6f96d8121b5094dd601e1636629591c5b7a6;l\u003d2276",
+      "parentUuid": "508c9940_e8fcd905",
+      "range": {
+        "startLine": 4811,
+        "startChar": 22,
+        "endLine": 4811,
+        "endChar": 44
+      },
+      "revId": "5cb58bba3a2da5deb3ab42a32cf4019ae1077223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c3ca1c1_9f750a65",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-11-29T08:43:08Z",
       "side": 1,
       "message": "When we iterate clients, we should iterate their stacks, with `kShared`, we are using the shared isolate for iteration below (:4862), no?",
+      "range": {
+        "startLine": 4827,
+        "startChar": 62,
+        "endLine": 4827,
+        "endChar": 69
+      },
+      "revId": "5cb58bba3a2da5deb3ab42a32cf4019ae1077223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa316f43_8f0bebbe",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4827,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-11-29T14:32:58Z",
+      "side": 1,
+      "message": "Yes. This parameter is for making sure that when we perform a shared GC, pointers found on client stacks are looked up in the shared heap (and not client heaps).",
+      "parentUuid": "2c3ca1c1_9f750a65",
       "range": {
         "startLine": 4827,
         "startChar": 62,
