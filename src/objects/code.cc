@@ -417,37 +417,6 @@ bool Code::Inlines(SharedFunctionInfo sfi) {
   return false;
 }
 
-Code::OptimizedCodeIterator::OptimizedCodeIterator(Isolate* isolate) {
-  isolate_ = isolate;
-  Object list = isolate->heap()->native_contexts_list();
-  next_context_ =
-      list.IsUndefined(isolate_) ? NativeContext() : NativeContext::cast(list);
-}
-
-Code Code::OptimizedCodeIterator::Next() {
-  do {
-    Object next;
-    if (!current_code_.is_null()) {
-      // Get next code in the linked list.
-      next = current_code_.next_code_link();
-    } else if (!next_context_.is_null()) {
-      // Linked list of code exhausted. Get list of next context.
-      next = next_context_.OptimizedCodeListHead();
-      Object next_context = next_context_.next_context_link();
-      next_context_ = next_context.IsUndefined(isolate_)
-                          ? NativeContext()
-                          : NativeContext::cast(next_context);
-    } else {
-      // Exhausted contexts.
-      return Code();
-    }
-    current_code_ =
-        next.IsUndefined(isolate_) ? Code() : FromCodeT(CodeT::cast(next));
-  } while (current_code_.is_null());
-  DCHECK(CodeKindCanDeoptimize(current_code_.kind()));
-  return current_code_;
-}
-
 Handle<DeoptimizationData> DeoptimizationData::New(Isolate* isolate,
                                                    int deopt_entry_count,
                                                    AllocationType allocation) {
