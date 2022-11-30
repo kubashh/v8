@@ -575,8 +575,7 @@ class CompilationStateImpl {
                                      int num_export_wrappers,
                                      ProfileInformation* pgo_info);
 
-  // Initialize the compilation progress after deserialization. This is needed
-  // for recompilation (e.g. for tier down) to work later.
+  // Initialize the compilation progress after deserialization.
   void InitializeCompilationProgressAfterDeserialization(
       base::Vector<const int> lazy_functions,
       base::Vector<const int> eager_functions);
@@ -590,14 +589,6 @@ class CompilationStateImpl {
   // {CompilationUnitBuilder}. This function is the streaming compilation
   // equivalent to {InitializeCompilationUnits}.
   void AddCompilationUnit(CompilationUnitBuilder* builder, int func_index);
-
-  // Initialize recompilation of the whole module: Setup compilation progress
-  // for recompilation and add the respective compilation units. The callback is
-  // called immediately if no recompilation is needed, or called later
-  // otherwise.
-  void InitializeRecompilation(TieringState new_tiering_state,
-                               std::unique_ptr<CompilationEventCallback>
-                                   recompilation_finished_callback);
 
   // Add the callback to be called on compilation events. Needs to be
   // set before {CommitCompilationUnits} is run to ensure that it receives all
@@ -649,11 +640,6 @@ class CompilationStateImpl {
     base::MutexGuard guard(&callbacks_mutex_);
     return outstanding_baseline_units_ == 0 &&
            outstanding_export_wrappers_ == 0;
-  }
-
-  bool recompilation_finished() const {
-    base::MutexGuard guard(&callbacks_mutex_);
-    return outstanding_recompilation_functions_ == 0;
   }
 
   DynamicTiering dynamic_tiering() const { return dynamic_tiering_; }
@@ -770,8 +756,7 @@ class CompilationStateImpl {
   size_t bytes_since_last_chunk_ = 0;
   std::vector<uint8_t> compilation_progress_;
 
-  int outstanding_recompilation_functions_ = 0;
-  TieringState tiering_state_ = kTieredUp;
+  DebugState debug_state_ = kNoDebugState;
 
   // End of fields protected by {callbacks_mutex_}.
   //////////////////////////////////////////////////////////////////////////////
@@ -785,7 +770,6 @@ class CompilationStateImpl {
   using RequiredBaselineTierField = base::BitField8<ExecutionTier, 0, 2>;
   using RequiredTopTierField = base::BitField8<ExecutionTier, 2, 2>;
   using ReachedTierField = base::BitField8<ExecutionTier, 4, 2>;
-  using MissingRecompilationField = base::BitField8<bool, 6, 1>;
 };
 
 CompilationStateImpl* Impl(CompilationState* compilation_state) {
@@ -868,10 +852,6 @@ bool CompilationState::baseline_compilation_finished() const {
   return Impl(this)->baseline_compilation_finished();
 }
 
-bool CompilationState::recompilation_finished() const {
-  return Impl(this)->recompilation_finished();
-}
-
 void CompilationState::set_compilation_id(int compilation_id) {
   Impl(this)->set_compilation_id(compilation_id);
 }
@@ -952,8 +932,7 @@ ExecutionTierPair GetDefaultTiersPerModule(NativeModule* native_module,
   if (is_asmjs_module(module)) {
     return {ExecutionTier::kTurbofan, ExecutionTier::kTurbofan};
   }
-  // TODO(13224): Use lazy compilation for debug code.
-  if (native_module->IsTieredDown()) {
+  if (native_module->IsDebugState()) {
     return {ExecutionTier::kLiftoff, ExecutionTier::kLiftoff};
   }
   if (lazy_module) {
@@ -976,6 +955,8 @@ ExecutionTierPair GetLazyCompilationTiers(NativeModule* native_module,
   constexpr bool kNotLazy = false;
   ExecutionTierPair tiers =
       GetDefaultTiersPerModule(native_module, dynamic_tiering, kNotLazy);
+  // If we are in debug mode, we ignore compilation hints.
+  if (native_module->IsDebugState()) return tiers;
 
   // Check if compilation hints override default tiering behaviour.
   if (native_module->enabled_features().has_compilation_hints()) {
@@ -1031,13 +1012,6 @@ class CompilationUnitBuilder {
   void AddDebugUnit(int func_index) {
     baseline_units_.emplace_back(func_index, ExecutionTier::kLiftoff,
                                  kForDebugging);
-  }
-
-  void AddRecompilationUnit(int func_index, ExecutionTier tier) {
-    // For recompilation, just treat all units like baseline units.
-    baseline_units_.emplace_back(
-        func_index, tier,
-        tier == ExecutionTier::kLiftoff ? kForDebugging : kNoDebugging);
   }
 
   bool Commit() {
@@ -1143,8 +1117,9 @@ bool CompileLazy(Isolate* isolate, WasmInstanceObject instance,
 
   DCHECK_LE(native_module->num_imported_functions(), func_index);
   DCHECK_LT(func_index, native_module->num_functions());
-  WasmCompilationUnit baseline_unit{func_index, tiers.baseline_tier,
-                                    kNoDebugging};
+  WasmCompilationUnit baseline_unit{
+      func_index, tiers.baseline_tier,
+      native_module->IsDebugState() ? kForDebugging : kNoDebugging};
   CompilationEnv env = native_module->CreateCompilationEnv();
   // TODO(wasm): Use an assembler buffer cache for lazy compilation.
   AssemblerBufferCache* assembler_buffer_cache = nullptr;
@@ -2019,44 +1994,6 @@ std::shared_ptr<NativeModule> CompileToNativeModule(
   return native_module;
 }
 
-void RecompileNativeModule(NativeModule* native_module,
-                           TieringState tiering_state) {
-  // Install a callback to notify us once background recompilation finished.
-  auto recompilation_finished_semaphore = std::make_shared<base::Semaphore>(0);
-  auto* compilation_state = Impl(native_module->compilation_state());
-
-  class RecompilationFinishedCallback : public CompilationEventCallback {
-   public:
-    explicit RecompilationFinishedCallback(
-        std::shared_ptr<base::Semaphore> recompilation_finished_semaphore)
-        : recompilation_finished_semaphore_(
-              std::move(recompilation_finished_semaphore)) {}
-
-    void call(CompilationEvent event) override {
-      DCHECK_NE(CompilationEvent::kFailedCompilation, event);
-      if (event == CompilationEvent::kFinishedRecompilation) {
-        recompilation_finished_semaphore_->Signal();
-      }
-    }
-
-   private:
-    std::shared_ptr<base::Semaphore> recompilation_finished_semaphore_;
-  };
-
-  // The callback captures a shared ptr to the semaphore.
-  // Initialize the compilation units and kick off background compile tasks.
-  compilation_state->InitializeRecompilation(
-      tiering_state, std::make_unique<RecompilationFinishedCallback>(
-                         recompilation_finished_semaphore));
-
-  constexpr JobDelegate* kNoDelegate = nullptr;
-  ExecuteCompilationUnits(compilation_state->native_module_weak(),
-                          compilation_state->counters(), kNoDelegate,
-                          kBaselineOnly);
-  recompilation_finished_semaphore->Wait();
-  DCHECK(!compilation_state->failed());
-}
-
 AsyncCompileJob::AsyncCompileJob(
     Isolate* isolate, WasmFeatures enabled_features,
     base::OwnedVector<const uint8_t> bytes, Handle<Context> context,
@@ -2299,11 +2236,10 @@ void AsyncCompileJob::FinishCompile(bool is_after_cache_hit) {
   // We can only update the feature counts once the entire compile is done.
   compilation_state->PublishDetectedFeatures(isolate_);
 
-  // We might need to recompile the module for debugging, if the debugger was
-  // enabled while streaming compilation was running. Since handling this while
-  // compiling via streaming is tricky, we just tier down now, before publishing
-  // the module.
-  if (native_module_->IsTieredDown()) native_module_->RecompileForTiering();
+  // We might need debug code for the module, if the debugger was enabled while
+  // streaming compilation was running. Since handling this while compiling via
+  // streaming is tricky, we just tier down now, before publishing the module.
+  if (native_module_->IsDebugState()) native_module_->RemoveAllCompiledCode();
 
   // Finally, log all generated code (it does not matter if this happens
   // repeatedly in case the script is shared).
@@ -2389,10 +2325,6 @@ class AsyncCompileJob::CompilationStateCallback
           job_->DoSync<CompileFailed>();
         }
         break;
-      case CompilationEvent::kFinishedRecompilation:
-        // This event can happen out of order, hence don't remember this in
-        // {last_event_}.
-        return;
     }
 #ifdef DEBUG
     last_event_ = event;
@@ -3281,7 +3213,7 @@ uint8_t CompilationStateImpl::AddCompilationUnitInternal(
 void CompilationStateImpl::InitializeCompilationUnits(
     std::unique_ptr<CompilationUnitBuilder> builder) {
   int offset = native_module_->module()->num_imported_functions;
-  if (native_module_->IsTieredDown()) {
+  if (native_module_->IsDebugState()) {
     for (size_t i = 0; i < compilation_progress_.size(); ++i) {
       int func_index = offset + static_cast<int>(i);
       builder->AddDebugUnit(func_index);
@@ -3301,7 +3233,7 @@ void CompilationStateImpl::InitializeCompilationUnits(
 
 void CompilationStateImpl::AddCompilationUnit(CompilationUnitBuilder* builder,
                                               int func_index) {
-  if (native_module_->IsTieredDown()) {
+  if (native_module_->IsDebugState()) {
     builder->AddDebugUnit(func_index);
     return;
   }
@@ -3400,87 +3332,6 @@ void CompilationStateImpl::InitializeCompilationProgressAfterDeserialization(
   auto builder = std::make_unique<CompilationUnitBuilder>(native_module_);
   InitializeCompilationUnits(std::move(builder));
   WaitForCompilationEvent(CompilationEvent::kFinishedBaselineCompilation);
-}
-
-void CompilationStateImpl::InitializeRecompilation(
-    TieringState new_tiering_state,
-    std::unique_ptr<CompilationEventCallback> recompilation_finished_callback) {
-  DCHECK(!failed());
-
-  // Hold the mutex as long as possible, to synchronize between multiple
-  // recompilations that are triggered at the same time (e.g. when the profiler
-  // is disabled).
-  base::Optional<base::MutexGuard> guard(&callbacks_mutex_);
-
-  // As long as there are outstanding recompilation functions, take part in
-  // compilation. This is to avoid recompiling for the same tier or for
-  // different tiers concurrently. Note that the compilation unit queues can run
-  // empty before {outstanding_recompilation_functions_} drops to zero. In this
-  // case, we do not wait for the last running compilation threads to finish
-  // their units, but just start our own recompilation already.
-  while (outstanding_recompilation_functions_ > 0 &&
-         compilation_unit_queues_.GetTotalSize() > 0) {
-    guard.reset();
-    constexpr JobDelegate* kNoDelegate = nullptr;
-    ExecuteCompilationUnits(native_module_weak_, async_counters_.get(),
-                            kNoDelegate, kBaselineOrTopTier);
-    guard.emplace(&callbacks_mutex_);
-  }
-
-  // Information about compilation progress is shared between this class and the
-  // NativeModule. Before updating information here, consult the NativeModule to
-  // find all functions that need recompilation.
-  // Since the current tiering state is updated on the NativeModule before
-  // triggering recompilation, it's OK if the information is slightly outdated.
-  // If we compile functions twice, the NativeModule will ignore all redundant
-  // code (or code compiled for the wrong tier).
-  std::vector<int> recompile_function_indexes =
-      native_module_->FindFunctionsToRecompile(new_tiering_state);
-
-  callbacks_.emplace_back(std::move(recompilation_finished_callback));
-  tiering_state_ = new_tiering_state;
-
-  // If compilation progress is not initialized yet, then compilation didn't
-  // start yet, and new code will be kept tiered-down from the start. For
-  // streaming compilation, there is a special path to tier down later, when
-  // the module is complete. In any case, we don't need to recompile here.
-  base::Optional<CompilationUnitBuilder> builder;
-  if (compilation_progress_.size() > 0) {
-    builder.emplace(native_module_);
-    const WasmModule* module = native_module_->module();
-    DCHECK_EQ(module->num_declared_functions, compilation_progress_.size());
-    DCHECK_GE(module->num_declared_functions,
-              recompile_function_indexes.size());
-    outstanding_recompilation_functions_ =
-        static_cast<int>(recompile_function_indexes.size());
-    // Restart recompilation if another recompilation is already happening.
-    for (auto& progress : compilation_progress_) {
-      progress = MissingRecompilationField::update(progress, false);
-    }
-    auto new_tier = new_tiering_state == kTieredDown ? ExecutionTier::kLiftoff
-                                                     : ExecutionTier::kTurbofan;
-    int imported = module->num_imported_functions;
-    // Generate necessary compilation units on the fly.
-    for (int function_index : recompile_function_indexes) {
-      DCHECK_LE(imported, function_index);
-      int slot_index = function_index - imported;
-      auto& progress = compilation_progress_[slot_index];
-      progress = MissingRecompilationField::update(progress, true);
-      builder->AddRecompilationUnit(function_index, new_tier);
-    }
-  }
-
-  // Trigger callback if module needs no recompilation.
-  if (outstanding_recompilation_functions_ == 0) {
-    TriggerCallbacks(base::EnumSet<CompilationEvent>(
-        {CompilationEvent::kFinishedRecompilation}));
-  }
-
-  if (builder.has_value()) {
-    // Avoid holding lock while scheduling a compile job.
-    guard.reset();
-    builder->Commit();
-  }
 }
 
 void CompilationStateImpl::AddCallback(
@@ -3644,25 +3495,6 @@ void CompilationStateImpl::OnFinishedUnits(
         bytes_since_last_chunk_ += code->instructions().size();
       }
 
-      if (V8_UNLIKELY(MissingRecompilationField::decode(function_progress))) {
-        DCHECK_LT(0, outstanding_recompilation_functions_);
-        // If tiering up, accept any TurboFan code. For tiering down, look at
-        // the {for_debugging} flag. The tier can be Liftoff or TurboFan and is
-        // irrelevant here. In particular, we want to ignore any outstanding
-        // non-debugging units.
-        bool matches = tiering_state_ == kTieredDown
-                           ? code->for_debugging()
-                           : code->tier() == ExecutionTier::kTurbofan;
-        if (matches) {
-          outstanding_recompilation_functions_--;
-          compilation_progress_[slot_index] = MissingRecompilationField::update(
-              compilation_progress_[slot_index], false);
-          if (outstanding_recompilation_functions_ == 0) {
-            triggered_events.Add(CompilationEvent::kFinishedRecompilation);
-          }
-        }
-      }
-
       // Update function's compilation progress.
       if (code->tier() > reached_tier) {
         compilation_progress_[slot_index] = ReachedTierField::update(
@@ -3712,11 +3544,9 @@ void CompilationStateImpl::TriggerCallbacks(
 
   // Don't trigger past events again.
   triggered_events -= finished_events_;
-  // Recompilation can happen multiple times, thus do not store this. There can
-  // also be multiple compilation chunks.
-  finished_events_ |= triggered_events -
-                      CompilationEvent::kFinishedRecompilation -
-                      CompilationEvent::kFinishedCompilationChunk;
+  // There can be multiple compilation chunks, thus do not store this.
+  finished_events_ |=
+      triggered_events - CompilationEvent::kFinishedCompilationChunk;
 
   for (auto event :
        {std::make_pair(CompilationEvent::kFailedCompilation,
@@ -3726,9 +3556,7 @@ void CompilationStateImpl::TriggerCallbacks(
         std::make_pair(CompilationEvent::kFinishedBaselineCompilation,
                        "wasm.BaselineFinished"),
         std::make_pair(CompilationEvent::kFinishedCompilationChunk,
-                       "wasm.CompilationChunkFinished"),
-        std::make_pair(CompilationEvent::kFinishedRecompilation,
-                       "wasm.RecompilationFinished")}) {
+                       "wasm.CompilationChunkFinished")}) {
     if (!triggered_events.contains(event.first)) continue;
     DCHECK_NE(compilation_id_, kInvalidCompilationID);
     TRACE_EVENT1("v8.wasm", event.second, "id", compilation_id_);
@@ -3737,8 +3565,7 @@ void CompilationStateImpl::TriggerCallbacks(
     }
   }
 
-  if (outstanding_baseline_units_ == 0 && outstanding_export_wrappers_ == 0 &&
-      outstanding_recompilation_functions_ == 0) {
+  if (outstanding_baseline_units_ == 0 && outstanding_export_wrappers_ == 0) {
     auto new_end = std::remove_if(
         callbacks_.begin(), callbacks_.end(), [](const auto& callback) {
           return callback->release_after_final_event();

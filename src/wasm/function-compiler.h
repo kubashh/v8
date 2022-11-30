@@ -62,7 +62,10 @@ struct WasmCompilationResult {
 class V8_EXPORT_PRIVATE WasmCompilationUnit final {
  public:
   WasmCompilationUnit(int index, ExecutionTier tier, ForDebugging for_debugging)
-      : func_index_(index), tier_(tier), for_debugging_(for_debugging) {}
+      : func_index_(index), tier_(tier), for_debugging_(for_debugging) {
+    DCHECK_IMPLIES(for_debugging != ForDebugging::kNoDebugging,
+                   tier_ != ExecutionTier::kTurbofan);
+  }
 
   WasmCompilationResult ExecuteCompilation(CompilationEnv*,
                                            const WireBytesStorage*, Counters*,
