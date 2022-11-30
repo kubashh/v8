@@ -86,6 +86,16 @@ inline bool none_of(const C& container, const P& predicate) {
   return std::none_of(begin(container), end(container), predicate);
 }
 
+// Helper for std::sort.
+template <typename C>
+inline void sort(C& container) {
+  std::sort(begin(container), end(container));
+}
+template <typename C, typename Comp>
+inline void sort(C& container, Comp comp) {
+  std::sort(begin(container), end(container), comp);
+}
+
 // Returns true iff all elements of {container} compare equal using operator==.
 template <typename C>
 inline bool all_equal(const C& container) {
