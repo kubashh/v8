@@ -7464,5 +7464,28 @@ SaveStackContextScope::~SaveStackContextScope() {
 #endif  // V8_ENABLE_WEBASSEMBLY
 }
 
+DisableConservativeStackScanningScopeForSharedTesting::
+    DisableConservativeStackScanningScopeForSharedTesting(Heap* heap) {
+  DCHECK(heap->IsShared());
+  heaps_and_old_values_.emplace_back(
+      heap, heap->disable_conservative_stack_scanning_for_testing_);
+  heap->disable_conservative_stack_scanning_for_testing_ = true;
+  heap->isolate()->global_safepoint()->IterateClientIsolates(
+      [this](Isolate* client) {
+        if (client->is_shared_heap_isolate()) return;
+        heaps_and_old_values_.emplace_back(
+            client->heap(),
+            client->heap()->disable_conservative_stack_scanning_for_testing_);
+        client->heap()->disable_conservative_stack_scanning_for_testing_ = true;
+      });
+}
+
+DisableConservativeStackScanningScopeForSharedTesting::
+    ~DisableConservativeStackScanningScopeForSharedTesting() {
+  for (auto [heap, old_value] : heaps_and_old_values_) {
+    heap->disable_conservative_stack_scanning_for_testing_ = old_value;
+  }
+}
+
 }  // namespace internal
 }  // namespace v8
