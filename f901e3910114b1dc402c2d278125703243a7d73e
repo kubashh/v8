@@ -68,6 +68,24 @@
       "parentUuid": "089093ec_6c75bf90",
       "revId": "f901e3910114b1dc402c2d278125703243a7d73e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c0c5732_a799c57f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-11-30T20:48:18Z",
+      "side": 1,
+      "message": "I added the same `!V8_ENABLE_SANDBOX_BOOL` check there as well.",
+      "parentUuid": "655dd6b5_81766a02",
+      "revId": "f901e3910114b1dc402c2d278125703243a7d73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
