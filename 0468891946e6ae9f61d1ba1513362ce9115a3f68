@@ -39,6 +39,30 @@
       },
       "revId": "0468891946e6ae9f61d1ba1513362ce9115a3f68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5972a736_c03e436b",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-11-30T12:35:59Z",
+      "side": 1,
+      "message": "see the safepoint_scope_ above -- my offline question was whether this is enough",
+      "parentUuid": "c1f6c4c3_10c91174",
+      "range": {
+        "startLine": 425,
+        "startChar": 6,
+        "endLine": 425,
+        "endChar": 22
+      },
+      "revId": "0468891946e6ae9f61d1ba1513362ce9115a3f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
