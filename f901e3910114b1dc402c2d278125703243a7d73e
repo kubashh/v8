@@ -50,6 +50,24 @@
       "message": "Looks like arm32 is unhappy with the access we build, not sure why. It should be a pointer compressed build, right Samuel@?",
       "revId": "f901e3910114b1dc402c2d278125703243a7d73e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "655dd6b5_81766a02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-30T11:31:08Z",
+      "side": 1,
+      "message": "Actually Jakob pointed out 32-bit builds are never pointer compressed.\nOn a second thought, I think we just need to extend the DCHECK in src/compiler/turboshaft/graph-builder.cc, similar to the one in memory-lowering.cc.",
+      "parentUuid": "089093ec_6c75bf90",
+      "revId": "f901e3910114b1dc402c2d278125703243a7d73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
