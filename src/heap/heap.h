@@ -2461,6 +2461,7 @@ class Heap {
   friend class PagedSpaceBase;
   friend class PretenturingHandler;
   friend class ReadOnlyRoots;
+  friend class DisableConservativeStackScanningScopeForSharedTesting;
   friend class DisableConservativeStackScanningScopeForTesting;
   friend class Scavenger;
   friend class ScavengerCollector;
@@ -2704,9 +2705,18 @@ class V8_NODISCARD DisableConservativeStackScanningScopeForTesting {
     heap_->disable_conservative_stack_scanning_for_testing_ = old_value_;
   }
 
- protected:
+ private:
   Heap* heap_;
   bool old_value_;
+};
+
+class V8_NODISCARD DisableConservativeStackScanningScopeForSharedTesting {
+ public:
+  explicit DisableConservativeStackScanningScopeForSharedTesting(Heap* heap);
+  ~DisableConservativeStackScanningScopeForSharedTesting();
+
+ private:
+  std::vector<std::pair<Heap*, bool>> heaps_and_old_values_;
 };
 
 // Space iterator for iterating over all the paged spaces of the heap: Map
