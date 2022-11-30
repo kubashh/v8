@@ -16,6 +16,29 @@
       "message": "Michi, PTAL overall",
       "revId": "0468891946e6ae9f61d1ba1513362ce9115a3f68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1f6c4c3_10c91174",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-11-30T12:22:02Z",
+      "side": 1,
+      "message": "I guess this is what you asked for: Since background threads could allocate in code space, we should have a safepoint. The API you are using is internal and doesn\u0027t provide that.\n\nYou can either add an `IsolateSafePointScope` or adapt the publicly exposed iterator `HeapObjectIterator` in heap.h",
+      "range": {
+        "startLine": 425,
+        "startChar": 6,
+        "endLine": 425,
+        "endChar": 22
+      },
+      "revId": "0468891946e6ae9f61d1ba1513362ce9115a3f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
