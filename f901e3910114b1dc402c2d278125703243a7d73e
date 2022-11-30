@@ -16,6 +16,23 @@
       "message": "LGTM, thanks!",
       "revId": "f901e3910114b1dc402c2d278125703243a7d73e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "990e6d20_73640465",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-11-30T10:00:18Z",
+      "side": 1,
+      "message": "Really good, thank you! LGTM on my side.\nToon was OOO the day before, but I\u0027ll check if he\u0027s back or recruit another reviewer for the changes in include/*.\n@Aapo I guess you don\u0027t have permissions to land this? If not, then let me know and I\u0027ll do it.",
+      "revId": "f901e3910114b1dc402c2d278125703243a7d73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
