@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85c2d873_2808cb08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1130574
+      },
+      "writtenOn": "2022-11-30T17:11:01Z",
+      "side": 1,
+      "message": "Merge to canary branch 5450, PTAL and Submit please, this is needed for P0 security fix verification (crbug.com.1394403)",
+      "revId": "46ff8d6c34bc657bcdddafc1bad46c7e36d2dd44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
