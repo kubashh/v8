@@ -56,6 +56,30 @@
       },
       "revId": "bc1f34fa899c3b7d60555b452059a2e50716ace6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98ccd559_791afbc2",
+        "filename": "src/heap/heap-verifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-12-01T14:58:20Z",
+      "side": 1,
+      "message": "This came up as a hard invariant in our offline discussion with Dominik. ATM, it\u0027s just six cctests that violate it:\n\n- cctest test-alloc/StressHandles\n- cctest test-alloc/StressJS\n- cctest test-heap/CodeLargeObjectSpace\n- cctest test-heap/CodeLargeObjectSpace64k\n- cctest test-spaces/AllocationObserver\n- cctest test-spaces/OldLargeObjectSpace\n\nIf we don\u0027t want to enforce it, I\u0027ll just leave a comment (no TODO) in the implementation of IPR. I\u0027ll go with whatever you two decide on this.",
+      "parentUuid": "6d2155a7_6871642d",
+      "range": {
+        "startLine": 412,
+        "startChar": 11,
+        "endLine": 412,
+        "endChar": 17
+      },
+      "revId": "bc1f34fa899c3b7d60555b452059a2e50716ace6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
