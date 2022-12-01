@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2ec0b98_293b029d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-01T13:40:51Z",
+      "side": 1,
+      "message": "Thanks everyone, I\u0027m submitting this on behalf of Aapo.",
+      "revId": "1348154774847b00ce74c734227bc3c0a81c8213",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
