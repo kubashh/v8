@@ -409,6 +409,11 @@ void HeapVerification::VerifyObjectMap(HeapObject object) {
   CHECK(ReadOnlyHeap::Contains(map) || old_space()->Contains(map) ||
         (shared_space() && shared_space()->Contains(map)));
 
+  // There should not be free space or filler objects in large pages.
+  // TODO(v8:13257): A few cctests violate this now, let's enable the check when
+  // they are fixed.
+  // CHECK_IMPLIES(Heap::IsLargeObject(object), !object.IsFreeSpaceOrFiller());
+
   if (Heap::InYoungGeneration(object)) {
     // The object should not be code or a map.
     CHECK(!object.IsMap(cage_base_));
