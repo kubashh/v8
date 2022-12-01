@@ -156,6 +156,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94f1d0a0_debc99e6",
+        "filename": "src/heap/heap-verifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-12-01T16:59:04Z",
+      "side": 1,
+      "message": "The implementation of IPR tried to make sure that it would never return a filler/free space object. For normal pages, this is true [2], but not for large pages without this fix, unless such objects cannot exist there.\n\nAlso, related to this and to black allocation, notice that normal objects are not returned by IPR if they are already marked [3], whereas for objects on large pages we do not have such a bailout.\n\nIIUC, this invariant is not guaranteed to hold at the moment and I suggest that we do not try to enforce it (at least not on this CL).\n\n[2] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/mark-compact.cc;drc\u003d4f2d5b3b77c402f5fe5aadecd156d87d434e026a;l\u003d2188\n[3] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/mark-compact.cc;drc\u003d4f2d5b3b77c402f5fe5aadecd156d87d434e026a;l\u003d2178",
+      "parentUuid": "60ba00ee_63c5023c",
+      "range": {
+        "startLine": 412,
+        "startChar": 11,
+        "endLine": 412,
+        "endChar": 17
+      },
+      "revId": "bc1f34fa899c3b7d60555b452059a2e50716ace6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f087c225_ea3d6de9",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 1
