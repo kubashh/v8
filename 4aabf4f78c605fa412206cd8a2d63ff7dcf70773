@@ -16,6 +16,23 @@
       "message": "fuchsia tryjob failed but apparently that\u0027s not important?",
       "revId": "4aabf4f78c605fa412206cd8a2d63ff7dcf70773",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f3a2cff_4bc149e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-01T10:59:50Z",
+      "side": 1,
+      "message": "Looks like all bots succeeded, thanks for the fix!\n@Toon could you ptal again, nothing has changed in the interface?",
+      "revId": "4aabf4f78c605fa412206cd8a2d63ff7dcf70773",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
