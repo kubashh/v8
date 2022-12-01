@@ -43,7 +43,7 @@ enum ForDebugging : int8_t {
   kForStepping
 };
 
-enum TieringState : int8_t { kTieredUp, kTieredDown };
+enum DebugState : int8_t { kNoDebugState, kDebugState };
 
 }  // namespace wasm
 }  // namespace internal
