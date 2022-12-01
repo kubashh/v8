@@ -84,6 +84,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05659996_9949ff26",
+        "filename": "src/heap/heap-verifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-12-01T15:13:13Z",
+      "side": 1,
+      "message": "If there\u0027s a good chance that we can fix it, please leave a TODO. (I am thinking whether  If there\u0027s no chance though, I think we can leave it with a regular comment.\n\nThe reason I am skeptical is `NewFillerObject()` [1]. Which also allows allocating LO objects with fillers in them. If there\u0027s code that can end up in verification while the object is not fully initialized, the invariant would be broken. I guess it\u0027s reasonable to assume that the object doesn\u0027t escape until the basic setup (map) is done.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/factory.cc;drc\u003d2df668b7cbf6c1d0766b6ee0ae8147adc8830f2e;bpv\u003d1;bpt\u003d1;l\u003d395",
+      "parentUuid": "98ccd559_791afbc2",
+      "range": {
+        "startLine": 412,
+        "startChar": 11,
+        "endLine": 412,
+        "endChar": 17
+      },
+      "revId": "bc1f34fa899c3b7d60555b452059a2e50716ace6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f087c225_ea3d6de9",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 1
