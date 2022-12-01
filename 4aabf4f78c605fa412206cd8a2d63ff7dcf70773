@@ -51,6 +51,23 @@
       "parentUuid": "2f3a2cff_4bc149e6",
       "revId": "4aabf4f78c605fa412206cd8a2d63ff7dcf70773",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac3ed9bd_d00527ce",
+        "filename": "include/v8-fast-api-calls.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-12-01T12:02:33Z",
+      "side": 1,
+      "message": "I would honestly like to place the `kPointer` just above `kV8Value` and below `kFloat64`, as it feels more \"proper\" to me to have the C types (or similar) in one set, and the V8 API types in another (`kV8Value`, `kSeqOneByteString`, `kApiObject`) but I\u0027m not sure if it\u0027s safe to reorder these, causing `kSeqOneByteString` to change from 9i to 10i.",
+      "revId": "4aabf4f78c605fa412206cd8a2d63ff7dcf70773",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
