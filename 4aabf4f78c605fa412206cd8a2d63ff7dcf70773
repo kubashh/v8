@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99fc4b8e_bdcad6d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-12-01T09:34:59Z",
+      "side": 1,
+      "message": "fuchsia tryjob failed but apparently that\u0027s not important?",
+      "revId": "4aabf4f78c605fa412206cd8a2d63ff7dcf70773",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
