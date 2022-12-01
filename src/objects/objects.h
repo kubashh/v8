@@ -904,7 +904,17 @@ class MapWord {
   // View this map word as a forwarding address.
   inline HeapObject ToForwardingAddress(HeapObject map_word_host);
 
-  inline Address ptr() { return value_; }
+  inline Address ptr() const { return value_; }
+
+  // When pointer compression is enabled, MapWord is uniquely identified by
+  // the lower 32 bits. On the other hand full-value comparison is not correct
+  // because map word in a forwarding state might have corrupted upper part.
+  constexpr bool operator==(const MapWord& other) const {
+    return static_cast<Tagged_t>(value_) == static_cast<Tagged_t>(other.ptr());
+  }
+  constexpr bool operator!=(const MapWord& other) const {
+    return static_cast<Tagged_t>(value_) != static_cast<Tagged_t>(other.ptr());
+  }
 
 #ifdef V8_MAP_PACKING
   static constexpr Address Pack(Address map) {
