@@ -290,6 +290,23 @@
       "parentUuid": "5256a633_ba026614",
       "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0c7932b_5ec8315a",
+        "filename": "test/debugger/debug/wasm/debug-enabled-tier-down-wasm.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-01T17:22:15Z",
+      "side": 1,
+      "message": "nit: This line still says \"tiered up\" (this is what I meant by \"and below\", but I should have added another comment here).",
+      "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

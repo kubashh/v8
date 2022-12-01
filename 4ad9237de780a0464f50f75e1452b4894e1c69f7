@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "84266ae1_4301dd94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-01T17:22:15Z",
+      "side": 1,
+      "message": "LGTM with nits.",
+      "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "32d4c181_2eb33d93",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 4
@@ -31,6 +48,57 @@
       "writtenOn": "2022-12-01T15:48:25Z",
       "side": 1,
       "message": "Here we delete all compiled code anyways if the native_module switched to debugging, so there is no need to consider the debug state when creating compilation units.",
+      "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c971bda_c1b6fedf",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-01T17:22:15Z",
+      "side": 1,
+      "message": "nit: should be const.",
+      "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8666c98_48d26af7",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-01T17:22:15Z",
+      "side": 1,
+      "message": "This could be implemented inline as `return debug_state() \u003d\u003d kDebugging;`. Actually, you could make the `DebugState` a boolean enum and just use `debug_state()` as a boolean predicate (and drop the `IsInDebugState` method). But I think I remember that you don\u0027t like such constructs, so no need to do it that way.",
+      "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eba5e9d7_06c37182",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-01T17:22:15Z",
+      "side": 1,
+      "message": "nit: should be const.",
       "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
