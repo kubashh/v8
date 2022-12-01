@@ -145,6 +145,24 @@
       "message": "Not sure I am happy that we change production code here for misbehaving tests. Wdyt?",
       "revId": "bc1f34fa899c3b7d60555b452059a2e50716ace6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "150d0446_64fd31b3",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2173,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-12-01T16:15:22Z",
+      "side": 1,
+      "message": "This code was wrong, unless we want to enforce the invariant we\u0027ve mentioned above. Let\u0027s discuss it in one place.",
+      "parentUuid": "f087c225_ea3d6de9",
+      "revId": "bc1f34fa899c3b7d60555b452059a2e50716ace6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
