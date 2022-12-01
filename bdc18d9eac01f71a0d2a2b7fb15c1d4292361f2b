@@ -541,6 +541,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd63fca9_91fbf4aa",
+        "filename": "src/compiler/turboshaft/memory-optimization.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-12-01T15:47:02Z",
+      "side": 1,
+      "message": "Yes, thank you!",
+      "parentUuid": "949a5075_c621a7bc",
+      "range": {
+        "startLine": 259,
+        "startChar": 32,
+        "endLine": 259,
+        "endChar": 36
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53d07df7_57d9309b",

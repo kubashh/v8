@@ -39,6 +39,30 @@
       },
       "revId": "dc532a2dc48ee82e4d5a96b67dbc424d329f88c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dc2ad7c_3cb53332",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-12-01T15:47:02Z",
+      "side": 1,
+      "message": "Yes, thanks! How about\n```\n  auto [it, new_entry] \u003d alloc_uses_.try_emplace(alloc, phase_zone_);\n  auto\u0026 uses \u003d it-\u003esecond;\n  if (new_entry) {\n    uses.reserve(graph_.Get(alloc).saturated_use_count);\n  }\n  uses.push_back(use);\n```",
+      "parentUuid": "f162f8be_0e5b141e",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 1
+      },
+      "revId": "dc532a2dc48ee82e4d5a96b67dbc424d329f88c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
