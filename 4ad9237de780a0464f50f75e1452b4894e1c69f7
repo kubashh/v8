@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bc1d3ce_9120c866",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T17:53:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c971bda_c1b6fedf",
+      "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8666c98_48d26af7",
@@ -99,6 +117,42 @@
       "writtenOn": "2022-12-01T17:22:15Z",
       "side": 1,
       "message": "nit: should be const.",
+      "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6718f8eb_536c248f",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T17:53:56Z",
+      "side": 1,
+      "message": "I made `DebugState` a boolean enum now, but I deleted `debug_state()` and not `IsInDebugState()`.\n\nIf the code reads like `if (debug_state())`, then I feel like it\u0027s not clear what this should mean. but `if (IsInDebugState())` makes sense. and `DebugState is_in_debug_state \u003d IsInDebugState()` also makes sense.",
+      "parentUuid": "e8666c98_48d26af7",
+      "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7deb607d_529681c8",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T17:53:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eba5e9d7_06c37182",
       "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
