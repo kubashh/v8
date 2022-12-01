@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e36be96_2df8f1ee",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-01T17:09:42Z",
+      "side": 1,
+      "message": "Thanks. Added a TODO for the baseline Push.",
+      "parentUuid": "0d2fc2ae_e37a6240",
+      "range": {
+        "startLine": 302,
+        "startChar": 13,
+        "endLine": 302,
+        "endChar": 17
+      },
+      "revId": "3eadafc8f12b9fba9e9bf6232087e5f834553fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3233dc76_3aa4feed",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-12-01T16:26:42Z",
       "side": 1,
       "message": "You may not want to keep this here?",
+      "revId": "3eadafc8f12b9fba9e9bf6232087e5f834553fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "453b6aef_270e2de9",
+        "filename": "src/maglev/x64/maglev-assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-01T17:09:42Z",
+      "side": 1,
+      "message": "Thanks! I had register aliasing in the arm version and I didn\u0027t understand what\u0027s going on. So I stepped in the x64 to check what was suppose to... 😊",
+      "parentUuid": "3233dc76_3aa4feed",
       "revId": "3eadafc8f12b9fba9e9bf6232087e5f834553fe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
