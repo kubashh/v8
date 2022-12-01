@@ -2340,8 +2340,11 @@ void TurboAssembler::LoadCodeDataContainerEntry(
   ASM_CODE_COMMENT(this);
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
 
-  Ldr(destination, FieldMemOperand(code_data_container_object,
-                                   CodeDataContainer::kCodeEntryPointOffset));
+  LoadExternalPointerField(
+      destination,
+      FieldMemOperand(code_data_container_object,
+                      CodeDataContainer::kCodeEntryPointOffset),
+      kCodePointerTag);
 }
 
 void TurboAssembler::LoadCodeDataContainerCodeNonBuiltin(
@@ -2349,8 +2352,11 @@ void TurboAssembler::LoadCodeDataContainerCodeNonBuiltin(
   ASM_CODE_COMMENT(this);
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
   // Compute the Code object pointer from the code entry point.
-  Ldr(destination, FieldMemOperand(code_data_container_object,
-                                   CodeDataContainer::kCodeEntryPointOffset));
+  LoadExternalPointerField(
+      destination,
+      FieldMemOperand(code_data_container_object,
+                      CodeDataContainer::kCodeEntryPointOffset),
+      kCodePointerTag);
   Sub(destination, destination, Immediate(Code::kHeaderSize - kHeapObjectTag));
 }
 

@@ -2964,10 +2964,9 @@ Node* WasmGraphBuilder::BuildCallRef(const wasm::FunctionSig* sig,
         wasm::ObjectAccess::ToTagged(WasmInternalFunction::kCodeOffset));
     Node* call_target;
     if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-      call_target =
-          gasm_->LoadFromObject(MachineType::Pointer(), wrapper_code,
-                                wasm::ObjectAccess::ToTagged(
-                                    CodeDataContainer::kCodeEntryPointOffset));
+      call_target = BuildLoadExternalPointerFromObject(
+          wrapper_code, CodeDataContainer::kCodeEntryPointOffset,
+          kCodePointerTag);
     } else {
       call_target = gasm_->IntAdd(
           wrapper_code, gasm_->IntPtrConstant(

@@ -847,9 +847,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Code> FromCodeTNonBuiltin(TNode<CodeT> code) {
 #ifdef V8_EXTERNAL_CODE_SPACE
     // Compute the Code object pointer from the code entry point.
-    TNode<RawPtrT> code_entry = Load<RawPtrT>(
-        code, IntPtrConstant(CodeDataContainer::kCodeEntryPointOffset -
-                             kHeapObjectTag));
+    TNode<RawPtrT> code_entry = LoadExternalPointerFromObject(
+        code, IntPtrConstant(CodeDataContainer::kCodeEntryPointOffset),
+        kCodePointerTag);
     TNode<Object> o = BitcastWordToTagged(IntPtrSub(
         code_entry, IntPtrConstant(Code::kHeaderSize - kHeapObjectTag)));
     return CAST(o);
