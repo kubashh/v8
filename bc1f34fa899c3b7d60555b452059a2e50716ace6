@@ -108,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f6c040d5_da59f352",
+        "filename": "src/heap/heap-verifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-12-01T15:46:05Z",
+      "side": 1,
+      "message": "Ah true, haven\u0027t seen that yet. I think this invariant should hold even with that in mind. Even if that object escapes that should be handled by black allocation for the marker (the initial symptom here was a grey object after marking). And it will definitely be properly initialized at the next GC.",
+      "parentUuid": "05659996_9949ff26",
+      "range": {
+        "startLine": 412,
+        "startChar": 11,
+        "endLine": 412,
+        "endChar": 17
+      },
+      "revId": "bc1f34fa899c3b7d60555b452059a2e50716ace6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f087c225_ea3d6de9",
         "filename": "src/heap/mark-compact.cc",
         "patchSetId": 1
