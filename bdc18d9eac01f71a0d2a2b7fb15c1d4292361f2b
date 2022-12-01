@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34065155_9c76df1f",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e97fafea_107ac6b9",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 76
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e7b88f3_cfbd0ee4",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-12-01T10:50:36Z",
       "side": 1,
       "message": "How about `EscapesThroughUse`?",
+      "range": {
+        "startLine": 56,
+        "startChar": 33,
+        "endLine": 56,
+        "endChar": 48
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e93d6e9_13e27344",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Thanks, I was struggling to find a good name for this function \u003e\u003c",
+      "parentUuid": "3e7b88f3_cfbd0ee4",
       "range": {
         "startLine": 56,
         "startChar": 33,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4900e257_33dc18a1",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d5121a7_e55de9a8",
+      "range": {
+        "startLine": 58,
+        "startChar": 6,
+        "endLine": 58,
+        "endChar": 73
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "145c3cd4_9e78efa3",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-12-01T10:50:36Z",
       "side": 1,
       "message": "this is not necessary",
+      "range": {
+        "startLine": 63,
+        "startChar": 53,
+        "endLine": 63,
+        "endChar": 74
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e0483b1_6f33d9e9",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "145c3cd4_9e78efa3",
       "range": {
         "startLine": 63,
         "startChar": 53,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ddb40db_60eb08b6",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Good catch!",
+      "parentUuid": "3cdda91d_df50311c",
+      "range": {
+        "startLine": 67,
+        "startChar": 11,
+        "endLine": 67,
+        "endChar": 36
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d58abb4_1479f637",
@@ -133,6 +253,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79591505_b595986b",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d58abb4_1479f637",
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "318ecc37_a9b2ef2e",
@@ -146,6 +284,30 @@
       "writtenOn": "2022-12-01T10:50:36Z",
       "side": 1,
       "message": "`operations_to_skip_.count(index) \u003e 0`",
+      "range": {
+        "startLine": 31,
+        "startChar": 11,
+        "endLine": 31,
+        "endChar": 71
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42fd591c_b429bf78",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "318ecc37_a9b2ef2e",
       "range": {
         "startLine": 31,
         "startChar": 11,
@@ -179,6 +341,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "497a946d_f9e0ee9d",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fa91cf1_60743c26",
+      "range": {
+        "startLine": 35,
+        "startChar": 25,
+        "endLine": 35,
+        "endChar": 52
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59bc7049_3264f741",
@@ -192,6 +378,24 @@
       "writtenOn": "2022-12-01T10:50:36Z",
       "side": 1,
       "message": "How about adding\n```\nuses.reserve(graph_.Get(source).saturated_use_count);\n```",
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d8c33a8_e3ba955d",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59bc7049_3264f741",
       "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -219,6 +423,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "073b72a7_e9dab8c2",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cbdc265_f8a4694f",
+      "range": {
+        "startLine": 39,
+        "startChar": 28,
+        "endLine": 39,
+        "endChar": 32
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4033e823_e283c33c",
@@ -232,6 +460,30 @@
       "writtenOn": "2022-12-01T10:50:36Z",
       "side": 1,
       "message": "I think this one should also be called `ShouldSkipOperation` since it is not actually doing the skipping.",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 20
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea8a6b37_b656a8d8",
+        "filename": "src/compiler/turboshaft/late-escape-analysis-reducer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4033e823_e283c33c",
       "range": {
         "startLine": 81,
         "startChar": 7,
@@ -267,6 +519,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "949a5075_c621a7bc",
+        "filename": "src/compiler/turboshaft/memory-optimization.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done. Could you check that what I\u0027ve done is what you had in mind? :)",
+      "parentUuid": "90296863_da8a073c",
+      "range": {
+        "startLine": 259,
+        "startChar": 32,
+        "endLine": 259,
+        "endChar": 36
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "53d07df7_57d9309b",
         "filename": "src/compiler/turboshaft/optimization-phase.h",
         "patchSetId": 5
@@ -278,6 +554,30 @@
       "writtenOn": "2022-12-01T10:50:36Z",
       "side": 1,
       "message": "We should actually move this down to after the switch too in order to eliminate the check based on the static type of the operation. Maybe we could merge this logic with `SkipOperation`, using it as the default behavior of `SkipOperation`?",
+      "range": {
+        "startLine": 315,
+        "startChar": 0,
+        "endLine": 319,
+        "endChar": 5
+      },
+      "revId": "bdc18d9eac01f71a0d2a2b7fb15c1d4292361f2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "803f4878_5f28c7b5",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-01T15:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53d07df7_57d9309b",
       "range": {
         "startLine": 315,
         "startChar": 0,
