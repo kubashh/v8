@@ -33,6 +33,24 @@
       "message": "Looks like all bots succeeded, thanks for the fix!\n@Toon could you ptal again, nothing has changed in the interface?",
       "revId": "4aabf4f78c605fa412206cd8a2d63ff7dcf70773",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ac75b31_5dbb0de4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-12-01T11:01:20Z",
+      "side": 1,
+      "message": "Well, fuchsia_rel tryjob did fail but after taking a look at that job\u0027s history it seems to be failing for everyone everywhere and in the same way, so does not seem relevant.",
+      "parentUuid": "2f3a2cff_4bc149e6",
+      "revId": "4aabf4f78c605fa412206cd8a2d63ff7dcf70773",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
