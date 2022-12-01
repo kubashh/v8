@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d2fc2ae_e37a6240",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-01T16:39:59Z",
+      "side": 1,
+      "message": "There\u0027s a `PushArgument` helper which could help here -- also might be good (in a followup) to port the baseline `Push(T...)` methods to MacroAssembler and use those.",
+      "range": {
+        "startLine": 302,
+        "startChar": 13,
+        "endLine": 302,
+        "endChar": 17
+      },
+      "revId": "3eadafc8f12b9fba9e9bf6232087e5f834553fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3233dc76_3aa4feed",
         "filename": "src/maglev/x64/maglev-assembler-x64.cc",
         "patchSetId": 2
