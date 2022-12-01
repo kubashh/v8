@@ -5108,6 +5108,9 @@ Maybe<bool> JSObject::SetPrototype(Isolate* isolate, Handle<JSObject> object,
   // SpiderMonkey behaves this way.
   if (!value->IsJSReceiver() && !value->IsNull(isolate)) return Just(true);
 
+  // Silently ignore the changes if value is a JSSharedArray or JSSharedStruct.
+  if (value->IsJSSharedArray() || value->IsJSSharedStruct()) return Just(true);
+
   bool all_extensible = object->map().is_extensible();
   Handle<JSObject> real_receiver = object;
   if (from_javascript) {
