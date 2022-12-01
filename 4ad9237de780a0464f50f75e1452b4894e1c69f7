@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77d8cae0_153c40a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T15:48:25Z",
+      "side": 1,
+      "message": "The update to the last PS got quite big, because of enum renames. There are also changes to avoid the problem of a potentially changed debug state between two calls to `IsInDebugState`.",
+      "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32d4c181_2eb33d93",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2248,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T15:48:25Z",
+      "side": 1,
+      "message": "Here we delete all compiled code anyways if the native_module switched to debugging, so there is no need to consider the debug state when creating compilation units.",
+      "revId": "4ad9237de780a0464f50f75e1452b4894e1c69f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

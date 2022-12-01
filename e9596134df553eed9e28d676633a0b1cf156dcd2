@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "065af599_54844f8e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3304,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T15:48:25Z",
+      "side": 0,
+      "message": "This code only gets called by streaming compilation. There is no need to create debug units here, because at the end of streaming compilation all code gets removed anyways.",
+      "revId": "e9596134df553eed9e28d676633a0b1cf156dcd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdd42a92_b30519c1",
+        "filename": "src/runtime/runtime.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T15:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aceeaa4e_4b60b008",
+      "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3e3725b_a50d5227",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfb5ec1e_0c29efd8",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T15:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3e3725b_a50d5227",
+      "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5c864ad_6d8d4d39",
@@ -82,6 +118,24 @@
       "writtenOn": "2022-12-01T10:46:15Z",
       "side": 1,
       "message": "This comment does not say more than the function name. We should just drop it.",
+      "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dacd78d7_4d1c9c18",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T15:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5c864ad_6d8d4d39",
       "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +163,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c010b915_4b796cd1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T15:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15a3969f_5e91af05",
+      "range": {
+        "startLine": 1119,
+        "startChar": 0,
+        "endLine": 1120,
+        "endChar": 68
+      },
+      "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d661e85_33ec3f3d",
@@ -122,6 +200,24 @@
       "writtenOn": "2022-12-01T10:46:15Z",
       "side": 1,
       "message": "This name is wrong. What does it mean that a native module \"is debug state\"? Should this be `IsDebugging`? Or `IsInDebugState`?",
+      "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afdd5f5f_7997d17a",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2435,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T15:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d661e85_33ec3f3d",
       "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -143,6 +239,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58f36461_14e810c0",
+        "filename": "src/wasm/wasm-tier.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T15:48:25Z",
+      "side": 1,
+      "message": "Done\n\nI chose these names to avoid naming conflicts with the `ForDebugging` enum, especially `kNoDebugging` vs `kNotDebugging`. I renamed now `kNoDebugging` into `kNotForDebugging`, so I can use `kNotDebugging` for the `DebugState`.",
+      "parentUuid": "97fc541d_efdcfd4c",
+      "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5256a633_ba026614",
@@ -156,6 +270,24 @@
       "writtenOn": "2022-12-01T10:46:15Z",
       "side": 1,
       "message": "nit: The mentions of \"tiered up\" (here and below) should be reworded.",
+      "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d50c02f2_b46cd1ac",
+        "filename": "test/debugger/debug/wasm/debug-enabled-tier-down-wasm.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-01T15:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5256a633_ba026614",
       "revId": "df940a6f960f165f375a7c5eb6946ac07d5ca875",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
