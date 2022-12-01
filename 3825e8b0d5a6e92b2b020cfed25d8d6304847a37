@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcaecaac_c77537f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2022-12-01T23:55:10Z",
+      "side": 1,
+      "message": "syg@ PTAL. When trying to assign a shared object as a prototype for another object V8 was crashing because it wasn\u0027t using the correct executing isolate. But I think it makes more sense to prevent objects from using shared objects as prototypes.",
+      "revId": "3825e8b0d5a6e92b2b020cfed25d8d6304847a37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
