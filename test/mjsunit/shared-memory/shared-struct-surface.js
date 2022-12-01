@@ -102,3 +102,15 @@ let S = new SharedStructType(['field']);
   const EmptyStruct = new SharedStructType([]);
   let s = new EmptyStruct();
 })();
+
+(function TestCannotBePrototype() {
+  // For now shared struct cannot be set as prototype for other objects
+  // and setPrototype silently fails.
+  let struct = new S();
+  let proto1 = {'a': 'a'};
+  let obj = {};
+  Object.setPrototypeOf(obj, proto1);
+  assertEquals(proto1, Object.getPrototypeOf(obj));
+  Object.setPrototypeOf(obj, struct);
+  assertEquals(proto1, Object.getPrototypeOf(obj));
+})();
