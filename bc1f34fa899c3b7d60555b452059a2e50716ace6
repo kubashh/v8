@@ -80,6 +80,23 @@
       },
       "revId": "bc1f34fa899c3b7d60555b452059a2e50716ace6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f087c225_ea3d6de9",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2173,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-12-01T15:03:33Z",
+      "side": 1,
+      "message": "Not sure I am happy that we change production code here for misbehaving tests. Wdyt?",
+      "revId": "bc1f34fa899c3b7d60555b452059a2e50716ace6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
