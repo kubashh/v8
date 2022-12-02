@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b89b869_880267f7",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2736,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-02T12:24:37Z",
+      "side": 0,
+      "message": "This is now merged into `OnFinishedStream`.",
+      "revId": "f6f64ed599d7102e2a7f9c676f7e2f974765f458",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

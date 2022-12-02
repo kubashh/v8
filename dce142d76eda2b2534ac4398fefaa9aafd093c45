@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55089b86_340a460f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-02T12:24:37Z",
+      "side": 1,
+      "message": "This is the big refactoring to re-validate on a streaming decoder error. It\u0027s a bit big, but still manageable IMO. I left a few comments that might help reviewing.",
+      "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ed9b911_005dac09",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2892,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-02T12:24:37Z",
+      "side": 1,
+      "message": "This sample was missing before, in the streaming case.",
+      "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "375c86ed_6deeec79",
+        "filename": "src/wasm/module-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-02T12:24:37Z",
+      "side": 1,
+      "message": "Here I added a better error message; previously we produced a generic \"expected %u bytes, fell off end\".",
+      "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
