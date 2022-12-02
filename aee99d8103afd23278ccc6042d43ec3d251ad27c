@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b19c3d54_9f12978d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-02T10:30:02Z",
+      "side": 1,
+      "message": "thanks for the quick review, despite me not actually then acting on the comments without delay 😂",
+      "revId": "aee99d8103afd23278ccc6042d43ec3d251ad27c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85839641_2423f728",
@@ -48,6 +65,54 @@
       "writtenOn": "2022-11-28T14:34:21Z",
       "side": 1,
       "message": "Nit: I guess the TODO is still valid?\n```\n  // TODO(victorgomes): Consider refactor this function to share code with\n  // MaglevGraphBuilder::GetSmiConstant.\n```",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 1
+      },
+      "revId": "aee99d8103afd23278ccc6042d43ec3d251ad27c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb0900a4_1f1ec460",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-02T10:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85839641_2423f728",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 1
+      },
+      "revId": "aee99d8103afd23278ccc6042d43ec3d251ad27c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3045d36_863e0c13",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-02T10:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85839641_2423f728",
       "range": {
         "startLine": 253,
         "startChar": 0,
