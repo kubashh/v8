@@ -221,7 +221,7 @@ def invoke_clang_plugin_for_each_file(filenames, plugin, plugin_args, options):
 # -----------------------------------------------------------------------------
 
 
-def build_file_list(options, for_test):
+def build_file_list(options):
   """Calculates the list of source files to be checked with gcmole.
 
   The list comprises all files from marked source sections in the
@@ -236,7 +236,7 @@ def build_file_list(options, for_test):
 
   Returns: List of file paths (of type Path).
   """
-  if for_test:
+  if options.test_run:
     return [options.v8_root_dir / "tools/gcmole/gcmole-test.cc"]
   result = []
   gn_files = [
@@ -431,8 +431,8 @@ def write_gcmole_results(collector, options, dst):
 # Analysis
 
 
-def check_correctness_for_arch(options, for_test):
-  files = build_file_list(options, for_test)
+def check_correctness_for_arch(options):
+  files = build_file_list(options)
 
   if not options.reuse_gcsuspects:
     generate_gc_suspects(files, options)
@@ -459,7 +459,7 @@ def check_correctness_for_arch(options, for_test):
     if not errors_found:
       errors_found = re.search("^[^:]+:\d+:\d+: (warning|error)", stderr,
                                re.MULTILINE) is not None
-    if for_test:
+    if options.test_run:
       output = output + stderr
     else:
       sys.stdout.write(stderr)
@@ -471,10 +471,8 @@ def check_correctness_for_arch(options, for_test):
 
 
 def test_run(options):
-  if not options.test_run:
-    return True
   log("Test Run")
-  errors_found, output = check_correctness_for_arch(options, True)
+  errors_found, output = check_correctness_for_arch(options)
   if not errors_found:
     log("Test file should produce errors, but none were found. Output:")
     print(output)
@@ -494,9 +492,9 @@ def test_run(options):
     print("#" * 79)
     log("Output mismatch from running tests.")
     log("Please run gcmole manually with --test-run --verbose.")
-    log("Expected: " + expected_file)
-    log("New:      " + new_file)
-    log("*Diff:*   " + diff_file)
+    log(f"Expected: {expected_file}")
+    log(f"New:      {new_file}")
+    log(f"*Diff:*   {diff_file}")
     print("#" * 79)
     for line in difflib.unified_diff(
         expectations.splitlines(),
@@ -509,9 +507,9 @@ def test_run(options):
 
     print("#" * 79)
     log("Full output")
-    log("Expected: " + expected_file)
-    log("Diff:     " + diff_file)
-    log("*New:*    " + new_file)
+    log(f"Expected: {expected_file}")
+    log(f"Diff:     {diff_file}")
+    log(f"*New*:    {new_file}")
     print("#" * 79)
     print(output)
     print("#" * 79)
@@ -638,14 +636,11 @@ def main(argv):
 
 
 def full_run(options):
-  any_errors_found = False
-  if not test_run(options):
-    any_errors_found = True
-  else:
-    errors_found, output = check_correctness_for_arch(options, False)
-    any_errors_found = any_errors_found or errors_found
+  if options.test_run:
+    sys.exit(not test_run(options))
 
-  sys.exit(1 if any_errors_found else 0)
+  errors_found, _ = check_correctness_for_arch(options)
+  sys.exit(errors_found)
 
 
 def verify_and_convert_dirs(parser, options, default_tools_gcmole_dir,
