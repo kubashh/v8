@@ -118,6 +118,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a8da53a4_a3ef3753",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4705,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-12-02T17:45:14Z",
+      "side": 1,
+      "message": "I think so as well. We should implement it for V8 as well, but it can be a separate followup CL.",
+      "parentUuid": "6f1b0d8c_94a0ff71",
+      "range": {
+        "startLine": 4705,
+        "startChar": 17,
+        "endLine": 4705,
+        "endChar": 28
+      },
+      "revId": "a56e42fe46fa8ee2212cf8b021c9d352f1a950b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d7321895_81586046",
         "filename": "src/heap/heap.cc",
         "patchSetId": 7
