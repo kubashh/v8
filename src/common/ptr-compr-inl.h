@@ -19,6 +19,13 @@ PtrComprCageBase::PtrComprCageBase(const Isolate* isolate)
 PtrComprCageBase::PtrComprCageBase(const LocalIsolate* isolate)
     : address_(isolate->cage_base()) {}
 
+Address PtrComprCageBase::address() const {
+  Address ret = address_;
+  ret = reinterpret_cast<Address>(V8_ASSUME_ALIGNED(
+      reinterpret_cast<void*>(ret), kPtrComprCageBaseAlignment));
+  return ret;
+}
+
 //
 // V8HeapCompressionScheme
 //
@@ -32,10 +39,7 @@ Address V8HeapCompressionScheme::GetPtrComprCageBaseAddress(
 // static
 Address V8HeapCompressionScheme::GetPtrComprCageBaseAddress(
     PtrComprCageBase cage_base) {
-  Address base = cage_base.address();
-  base = reinterpret_cast<Address>(V8_ASSUME_ALIGNED(
-      reinterpret_cast<void*>(base), kPtrComprCageBaseAlignment));
-  return base;
+  return cage_base.address();
 }
 
 #ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE

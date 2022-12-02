@@ -59,7 +59,6 @@ class V8HeapCompressionScheme {
 };
 
 #ifdef V8_EXTERNAL_CODE_SPACE
-
 // Compression scheme used for fields containing Code objects (namely for the
 // CodeDataContainer::code field).
 // Same as V8HeapCompressionScheme but with a different base value.
