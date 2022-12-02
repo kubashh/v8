@@ -56,6 +56,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
 #ifdef V8_ENABLE_SANDBOX
         ,
         external_pointer_table_(&heap->isolate()->external_pointer_table()),
+        code_pointer_table_(&heap->isolate()->code_pointer_table()),
         shared_external_pointer_table_(
             &heap->isolate()->shared_external_pointer_table())
 #endif  // V8_ENABLE_SANDBOX
@@ -194,6 +195,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   const bool should_mark_shared_heap_;
 #ifdef V8_ENABLE_SANDBOX
   ExternalPointerTable* const external_pointer_table_;
+  ExternalPointerTable* const code_pointer_table_;
   ExternalPointerTable* const shared_external_pointer_table_;
 #endif  // V8_ENABLE_SANDBOX
 };

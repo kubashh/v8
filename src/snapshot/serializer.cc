@@ -1229,7 +1229,7 @@ void Serializer::ObjectSerializer::OutputRawData(Address up_to) {
       // code_entry_point field contains a raw value that will be recomputed
       // after deserialization, so write zeros to keep the snapshot
       // deterministic.
-      static byte field_value[kSystemPointerSize] = {0};
+      static byte field_value[kExternalPointerSlotSize] = {0};
       OutputRawWithCustomField(sink_, object_start, base, bytes_to_output,
                                CodeDataContainer::kCodeEntryPointOffset,
                                sizeof(field_value), field_value);
