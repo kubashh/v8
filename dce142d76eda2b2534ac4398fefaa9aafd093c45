@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "07cabc3f_2671b71a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2633,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-02T16:53:23Z",
+      "side": 1,
+      "message": "Does this step have to run in the foreground just because the isolate counters get updated here?",
+      "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0ed9b911_005dac09",
@@ -48,6 +65,23 @@
       "writtenOn": "2022-12-02T12:24:37Z",
       "side": 1,
       "message": "Here I added a better error message; previously we produced a generic \"expected %u bytes, fell off end\".",
+      "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "747e36ee_5cbad736",
+        "filename": "src/wasm/streaming-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-02T16:53:23Z",
+      "side": 1,
+      "message": "I think the section buffers could just be views (offset + length) into `full_wire_bytes_`. Access to the section buffers and `full_wire_bytes_` is single-threaded, so the growing of the std::vector should not be a problem.",
       "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
