@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23ed0353_50ed1099",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-12-02T02:18:14Z",
+      "side": 1,
+      "message": "Hi,\n\nCurrent basic block display in turbolizer looks like:\n\n`Block B1 \u003c- B0`\n\nthe number behind \u0027B\u0027 is RPO number, but in some scenario, like Builtin PGO, we would like to see basic block id istead of RPO number.\n\nThis CL could display a block like:\n\n`Block B1 Id:24 \u003c- B0`\n\nThe number behind \u0027Id:\u0027 is the id of the basic block.\n\nPTAL, thanks!",
+      "revId": "8d8d079a1d19ad754547cd435fe0c46f8c99705d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
