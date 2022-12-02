@@ -33,6 +33,69 @@
       "message": "Just the new CSS bot failing, for unrelated reasons.\nPTAL.",
       "revId": "a56e42fe46fa8ee2212cf8b021c9d352f1a950b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e705bf0_fa1a9101",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-12-02T12:34:56Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "a56e42fe46fa8ee2212cf8b021c9d352f1a950b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0efab8eb_55bae5c4",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4705,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-12-02T12:34:56Z",
+      "side": 1,
+      "message": "I just noticed this part. Will we be scanning the stack when doing a GC in a task? That is the one case where we know there is no interesting stack, so we should be able to bailout of stack scanning in that case. If that is already implemented, can you point me to it?",
+      "range": {
+        "startLine": 4705,
+        "startChar": 17,
+        "endLine": 4705,
+        "endChar": 28
+      },
+      "revId": "a56e42fe46fa8ee2212cf8b021c9d352f1a950b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7321895_81586046",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4891,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-12-02T12:34:56Z",
+      "side": 1,
+      "message": "Do we need to check both the testing bailout for main_isolate and the one for the current isolate (line 4884 above)?",
+      "range": {
+        "startLine": 4891,
+        "startChar": 28,
+        "endLine": 4891,
+        "endChar": 76
+      },
+      "revId": "a56e42fe46fa8ee2212cf8b021c9d352f1a950b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

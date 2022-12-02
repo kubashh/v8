@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4916023c_59e5085b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-12-02T12:34:56Z",
+      "side": 1,
+      "message": "I agree. It may make sense to move the CSS tests that are not specific to the visitor to a new dedicated file.",
+      "parentUuid": "6de6e488_22ddb3e3",
+      "revId": "5cb58bba3a2da5deb3ab42a32cf4019ae1077223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "508c9940_e8fcd905",
