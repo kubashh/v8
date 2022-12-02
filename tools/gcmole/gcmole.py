@@ -14,6 +14,7 @@ import collections
 import difflib
 import json
 import os
+import pickle
 import re
 import subprocess
 import sys
@@ -122,6 +123,7 @@ def make_clang_command_line(plugin, plugin_args, options):
       "-DV8_ENABLE_WEBASSEMBLY",
       "-DV8_GC_MOLE",
       "-DV8_INTL_SUPPORT",
+      "--sysroot=build/linux/debian_bullseye_i386-sysroot",
       "-I{}".format(options.v8_root_dir),
       "-I{}".format(options.v8_root_dir / 'include'),
       "-I{}".format(options.v8_build_dir / 'gen'),
@@ -221,7 +223,7 @@ def invoke_clang_plugin_for_each_file(filenames, plugin, plugin_args, options):
 # -----------------------------------------------------------------------------
 
 
-def build_file_list(options, for_test):
+def build_file_list(options, for_test=False):
   """Calculates the list of source files to be checked with gcmole.
 
   The list comprises all files from marked source sections in the
@@ -254,7 +256,11 @@ def build_file_list(options, for_test):
         for file in file_pattern.findall(sources):
           result.append(options.v8_root_dir / prefix / file)
 
-  return result
+  # Filter files of current shard if running on multiple hosts.
+  def is_in_shard(index):
+    return index % options.shard_count == options.shard_index
+
+  return [f for i, f in enumerate(result) if is_in_shard(i)]
 
 
 # -----------------------------------------------------------------------------
@@ -375,16 +381,19 @@ class GCSuspectsCollector:
         mark(funcname)
 
 
-def generate_gc_suspects(files, options):
-  # Reset the global state.
-  call_graph = CallGraph()
+def generate_callgraph(files, options):
+  callgraph = CallGraph()
 
-  log("Building GC Suspects for {}", options.v8_target_cpu)
-  for _, stdout, _ in invoke_clang_plugin_for_each_file(files, "dump-callees",
-                                                        [], options):
-    call_graph.parse(stdout.splitlines())
+  log(f"Building call graph for {options.v8_target_cpu}")
+  for _, stdout, _ in invoke_clang_plugin_for_each_file(
+      files, "dump-callees", [], options):
+    callgraph.parse(stdout.splitlines())
 
-  collector = GCSuspectsCollector(options, call_graph.funcs)
+  return callgraph
+
+
+def generate_gc_suspects(callgraph, options):
+  collector = GCSuspectsCollector(options, callgraph.funcs)
   collector.propagate()
   # TODO(cbruni): remove once gcmole.cc is migrated
   write_gcmole_results(collector, options, options.v8_root_dir)
@@ -431,14 +440,7 @@ def write_gcmole_results(collector, options, dst):
 # Analysis
 
 
-def check_correctness_for_arch(options, for_test):
-  files = build_file_list(options, for_test)
-
-  if not options.reuse_gcsuspects:
-    generate_gc_suspects(files, options)
-  else:
-    log("Reusing GCSuspects for {}", options.v8_target_cpu)
-
+def check_correctness_for_arch(files, options, for_test=False):
   processed_files = 0
   errors_found = False
   output = ""
@@ -474,7 +476,12 @@ def test_run(options):
   if not options.test_run:
     return True
   log("Test Run")
-  errors_found, output = check_correctness_for_arch(options, True)
+
+  files = build_file_list(options, True)
+  call_graph = generate_callgraph(files, options)
+  generate_gc_suspects(call_graph, options)
+
+  errors_found, output = check_correctness_for_arch(files, options, True)
   if not errors_found:
     log("Test file should produce errors, but none were found. Output:")
     print(output)
@@ -494,9 +501,9 @@ def test_run(options):
     print("#" * 79)
     log("Output mismatch from running tests.")
     log("Please run gcmole manually with --test-run --verbose.")
-    log("Expected: " + expected_file)
-    log("New:      " + new_file)
-    log("*Diff:*   " + diff_file)
+    log("Expected: " + str(expected_file))
+    log("New:      " + str(new_file))
+    log("*Diff:*   " + str(diff_file))
     print("#" * 79)
     for line in difflib.unified_diff(
         expectations.splitlines(),
@@ -509,9 +516,9 @@ def test_run(options):
 
     print("#" * 79)
     log("Full output")
-    log("Expected: " + expected_file)
-    log("Diff:     " + diff_file)
-    log("*New:*    " + new_file)
+    log("Expected: " + str(expected_file))
+    log("Diff:     " + str(diff_file))
+    log("*New:*    " + str(new_file))
     print("#" * 79)
     print(output)
     print("#" * 79)
@@ -575,13 +582,18 @@ def main(argv):
         action="store_true",
         default=False,
         help="Flag for setting build bot specific settings.")
+    parser.add_argument(
+        "--shard-count",
+        default=1,
+        type=int,
+        help="")
+    parser.add_argument(
+        "--shard-index",
+        default=0,
+        type=int,
+        help="")
 
     group = parser.add_argument_group("GCMOLE options")
-    group.add_argument(
-        "--reuse-gcsuspects",
-        action="store_true",
-        default=False,
-        help="Don't build gcsuspects file and reuse previously generated one.")
     group.add_argument(
         "--sequential",
         action="store_true",
@@ -626,6 +638,32 @@ def main(argv):
   add_common_args(subp)
   subp.set_defaults(func=full_run)
 
+  subp = subps.add_parser(
+      "collect", description="")
+  add_common_args(subp)
+  subp.set_defaults(func=collect_run)
+
+  subp.add_argument(
+      "--output",
+      required=True,
+      help="TODO")
+
+  subp = subps.add_parser(
+      "merge", description="")
+  add_common_args(subp)
+  subp.set_defaults(func=merge_run)
+
+  subp.add_argument(
+      "--input",
+      action='append',
+      required=True,
+      help="TODO")
+
+  subp = subps.add_parser(
+      "check", description="")
+  add_common_args(subp)
+  subp.set_defaults(func=check_run)
+
   options = parser.parse_args(argv[1:])
 
   verify_and_convert_dirs(parser, options, default_gcmole_dir,
@@ -633,19 +671,44 @@ def main(argv):
   verify_clang_plugin(parser, options)
   prepare_gcmole_files(options)
   verify_build_config(parser, options)
+  override_env_options(options)
 
   options.func(options)
 
 
 def full_run(options):
-  any_errors_found = False
   if not test_run(options):
-    any_errors_found = True
-  else:
-    errors_found, output = check_correctness_for_arch(options, False)
-    any_errors_found = any_errors_found or errors_found
+    sys.exit(1)
 
-  sys.exit(1 if any_errors_found else 0)
+  files = build_file_list(options)
+  call_graph = generate_callgraph(files, options)
+  generate_gc_suspects(call_graph, options)
+
+  errors_found, _ = check_correctness_for_arch(files, options)
+  sys.exit(1 if errors_found else 0)
+
+
+def collect_run(options):
+  files = build_file_list(options)
+  callgraph = generate_callgraph(files, options)
+  log(f"Writing serialized callgraph to {options.output}")
+  with open(options.output, 'wb') as f:
+    pickle.dump(callgraph, f)
+
+
+def merge_run(options):
+  callgraph = CallGraph()
+  for input_file in options.input:
+    with open(input_file, 'rb') as f:
+      callgraph.funcs.update(pickle.load(f).funcs)
+
+  generate_gc_suspects(callgraph, options)
+
+
+def check_run(options):
+  files = build_file_list(options)
+  errors_found, _ = check_correctness_for_arch(files, options)
+  sys.exit(1 if errors_found else 0)
 
 
 def verify_and_convert_dirs(parser, options, default_tools_gcmole_dir,
@@ -749,6 +812,13 @@ def verify_build_config(parser, options):
       return
   parser.error("Build dir '{}' config doesn't match request cpu. {}: {}".format(
       options.v8_build_dir, options.v8_target_cpu, found_cpu))
+
+
+def override_env_options(options):
+   options.shard_count = int(
+      os.environ.get('GTEST_TOTAL_SHARDS', options.shard_count))
+   options.shard_index = int(
+      os.environ.get('GTEST_SHARD_INDEX', options.shard_index))
 
 
 if __name__ == "__main__":
