@@ -2909,10 +2909,18 @@ Node* WasmGraphBuilder::BuildLoadExternalPointerFromObject(
       gasm_->Int32Constant(kExternalPointerIndexShift - kSystemPointerSizeLog2);
   Node* scaled_index = gasm_->Word32Shr(external_pointer, shift_amount);
   Node* isolate_root = BuildLoadIsolateRoot();
-  Node* table =
-      gasm_->LoadFromObject(MachineType::Pointer(), isolate_root,
-                            IsolateData::external_pointer_table_offset() +
-                                Internals::kExternalPointerTableBufferOffset);
+  Node* table;
+  if (IsCodePointerTag(tag)) {
+    table =
+        gasm_->LoadFromObject(MachineType::Pointer(), isolate_root,
+                              IsolateData::code_pointer_table_offset() +
+                                  Internals::kExternalPointerTableBufferOffset);
+  } else {
+    table =
+        gasm_->LoadFromObject(MachineType::Pointer(), isolate_root,
+                              IsolateData::external_pointer_table_offset() +
+                                  Internals::kExternalPointerTableBufferOffset);
+  }
   Node* decoded_ptr = gasm_->Load(MachineType::Pointer(), table, scaled_index);
   return gasm_->WordAnd(decoded_ptr, gasm_->IntPtrConstant(~tag));
 #else
@@ -2964,10 +2972,9 @@ Node* WasmGraphBuilder::BuildCallRef(const wasm::FunctionSig* sig,
         wasm::ObjectAccess::ToTagged(WasmInternalFunction::kCodeOffset));
     Node* call_target;
     if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-      call_target =
-          gasm_->LoadFromObject(MachineType::Pointer(), wrapper_code,
-                                wasm::ObjectAccess::ToTagged(
-                                    CodeDataContainer::kCodeEntryPointOffset));
+      call_target = BuildLoadExternalPointerFromObject(
+          wrapper_code, CodeDataContainer::kCodeEntryPointOffset,
+          kCodePointerTag);
     } else {
       call_target = gasm_->IntAdd(
           wrapper_code, gasm_->IntPtrConstant(

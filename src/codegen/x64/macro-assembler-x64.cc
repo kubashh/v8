@@ -446,14 +446,26 @@ void TurboAssembler::LoadExternalPointerField(
   DCHECK(!field_operand.AddressUsesRegister(scratch));
   if (isolateRootLocation == IsolateRootLocation::kInRootRegister) {
     DCHECK(root_array_available_);
-    movq(scratch, Operand(kRootRegister,
-                          IsolateData::external_pointer_table_offset() +
-                              Internals::kExternalPointerTableBufferOffset));
+    if (IsCodePointerTag(tag)) {
+      movq(scratch, Operand(kRootRegister,
+                            IsolateData::code_pointer_table_offset() +
+                                Internals::kExternalPointerTableBufferOffset));
+    } else {
+      movq(scratch, Operand(kRootRegister,
+                            IsolateData::external_pointer_table_offset() +
+                                Internals::kExternalPointerTableBufferOffset));
+    }
   } else {
     DCHECK(isolateRootLocation == IsolateRootLocation::kInScratchRegister);
-    movq(scratch,
-         Operand(scratch, IsolateData::external_pointer_table_offset() +
-                              Internals::kExternalPointerTableBufferOffset));
+    if (IsCodePointerTag(tag)) {
+      movq(scratch,
+           Operand(scratch, IsolateData::code_pointer_table_offset() +
+                                Internals::kExternalPointerTableBufferOffset));
+    } else {
+      movq(scratch,
+           Operand(scratch, IsolateData::external_pointer_table_offset() +
+                                Internals::kExternalPointerTableBufferOffset));
+    }
   }
     movl(destination, field_operand);
     shrq(destination, Immediate(kExternalPointerIndexShift));
@@ -2265,8 +2277,10 @@ void TurboAssembler::LoadCodeObjectEntry(Register destination,
                                          Register code_object) {
   ASM_CODE_COMMENT(this);
   if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    movq(destination,
-         FieldOperand(code_object, CodeDataContainer::kCodeEntryPointOffset));
+    LoadExternalPointerField(
+        destination,
+        FieldOperand(code_object, CodeDataContainer::kCodeEntryPointOffset),
+        kCodePointerTag, kScratchRegister);
     return;
   }
 
@@ -2333,8 +2347,11 @@ void TurboAssembler::LoadCodeDataContainerEntry(
     Register destination, Register code_data_container_object) {
   ASM_CODE_COMMENT(this);
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
-  movq(destination, FieldOperand(code_data_container_object,
-                                 CodeDataContainer::kCodeEntryPointOffset));
+  LoadExternalPointerField(
+      destination,
+      FieldOperand(code_data_container_object,
+                   CodeDataContainer::kCodeEntryPointOffset),
+      kCodePointerTag, kScratchRegister);
 }
 
 void TurboAssembler::LoadCodeDataContainerCodeNonBuiltin(
@@ -2342,8 +2359,11 @@ void TurboAssembler::LoadCodeDataContainerCodeNonBuiltin(
   ASM_CODE_COMMENT(this);
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
   // Compute the Code object pointer from the code entry point.
-  movq(destination, FieldOperand(code_data_container_object,
-                                 CodeDataContainer::kCodeEntryPointOffset));
+  LoadExternalPointerField(
+      destination,
+      FieldOperand(code_data_container_object,
+                   CodeDataContainer::kCodeEntryPointOffset),
+      kCodePointerTag, kScratchRegister);
   subq(destination, Immediate(Code::kHeaderSize - kHeapObjectTag));
 }
 

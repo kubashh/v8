@@ -412,10 +412,16 @@ constexpr uint64_t kAllExternalPointerTypeTags[] = {
   V(kWasmContinuationJmpbufTag,                 TAG(20)) \
   V(kArrayBufferExtensionTag,                   TAG(21))
 
+#define CODE_POINTER_TAGS(V)                             \
+  V(kFirstCodePointerTag,                       TAG(30)) \
+  V(kCodePointerTag,                            TAG(30)) \
+  V(kLastCodePointerTag,                        TAG(30))
+
 // All external pointer tags.
-#define ALL_EXTERNAL_POINTER_TAGS(V) \
-  SHARED_EXTERNAL_POINTER_TAGS(V)    \
-  PER_ISOLATE_EXTERNAL_POINTER_TAGS(V)
+#define ALL_EXTERNAL_POINTER_TAGS(V)   \
+  SHARED_EXTERNAL_POINTER_TAGS(V)      \
+  PER_ISOLATE_EXTERNAL_POINTER_TAGS(V) \
+  CODE_POINTER_TAGS(V)
 
 #define EXTERNAL_POINTER_TAG_ENUM(Name, Tag) Name = Tag,
 #define MAKE_TAG(HasMarkBit, TypeTag)                             \
@@ -447,6 +453,11 @@ enum ExternalPointerTag : uint64_t {
 V8_INLINE static constexpr bool IsSharedExternalPointerType(
     ExternalPointerTag tag) {
   return tag >= kFirstSharedTag && tag <= kLastSharedTag;
+}
+
+// True if the external pointer must be accessed from the code pointer table.
+V8_INLINE static constexpr bool IsCodePointerTag(ExternalPointerTag tag) {
+  return tag >= kFirstCodePointerTag && tag <= kLastCodePointerTag;
 }
 
 // Sanity checks.
@@ -542,8 +553,10 @@ class Internals {
 #ifdef V8_COMPRESS_POINTERS
   static const int kIsolateExternalPointerTableOffset =
       kIsolateLongTaskStatsCounterOffset + kApiSizetSize;
-  static const int kIsolateSharedExternalPointerTableAddressOffset =
+  static const int kIsolateCodePointerTableOffset =
       kIsolateExternalPointerTableOffset + kExternalPointerTableSize;
+  static const int kIsolateSharedExternalPointerTableAddressOffset =
+      kIsolateCodePointerTableOffset + kExternalPointerTableSize;
   static const int kIsolateRootsOffset =
       kIsolateSharedExternalPointerTableAddressOffset + kApiSystemPointerSize;
 #else

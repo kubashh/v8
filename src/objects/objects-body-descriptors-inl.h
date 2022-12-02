@@ -1065,6 +1065,9 @@ class CodeDataContainer::BodyDescriptor final : public BodyDescriptorBase {
 
     if (V8_EXTERNAL_CODE_SPACE_BOOL) {
       v->VisitCodePointer(obj, obj.RawCodeField(kCodeOffset));
+      v->VisitExternalPointer(
+          obj, obj.RawExternalPointerField(kCodeEntryPointOffset),
+          kCodePointerTag);
     }
   }
 

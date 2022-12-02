@@ -1701,9 +1701,13 @@ TNode<RawPtrT> CodeStubAssembler::ExternalPointerTableAddress(
             isolate()));
     return UncheckedCast<RawPtrT>(
         Load(MachineType::Pointer(), table_address_address));
+  } else if (IsCodePointerTag(tag)) {
+    return ExternalConstant(
+        ExternalReference::code_pointer_table_address(isolate()));
+  } else {
+    return ExternalConstant(
+        ExternalReference::external_pointer_table_address(isolate()));
   }
-  return ExternalConstant(
-      ExternalReference::external_pointer_table_address(isolate()));
 }
 #endif  // V8_ENABLE_SANDBOX
 
@@ -15340,8 +15344,9 @@ TNode<CodeT> CodeStubAssembler::GetSharedFunctionInfoCode(
 TNode<RawPtrT> CodeStubAssembler::GetCodeEntry(TNode<CodeT> code) {
 #ifdef V8_EXTERNAL_CODE_SPACE
   TNode<CodeDataContainer> cdc = CodeDataContainerFromCodeT(code);
-  return LoadObjectField<RawPtrT>(
-      cdc, IntPtrConstant(CodeDataContainer::kCodeEntryPointOffset));
+  return LoadExternalPointerFromObject(
+      cdc, IntPtrConstant(CodeDataContainer::kCodeEntryPointOffset),
+      kCodePointerTag);
 #else
   TNode<IntPtrT> object = BitcastTaggedToWord(code);
   return ReinterpretCast<RawPtrT>(
