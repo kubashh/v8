@@ -413,6 +413,7 @@ void MemoryChunk::RegisterObjectWithInvalidatedSlots(HeapObject object,
   InvalidatedSlots& invalidated_slots = *this->invalidated_slots<type>();
   DCHECK_IMPLIES(invalidated_slots.count(object) > 0,
                  new_size <= invalidated_slots[object]);
+  DCHECK(!InSharedHeap());
   invalidated_slots.insert_or_assign(object, new_size);
 }
 
@@ -436,6 +437,7 @@ void MemoryChunk::UpdateInvalidatedObjectSize(HeapObject object, int new_size) {
   if (invalidated_slots.count(object) > 0) {
     DCHECK_LE(new_size, invalidated_slots[object]);
     DCHECK_NE(0, invalidated_slots[object]);
+    DCHECK(!InSharedHeap());
     invalidated_slots.insert_or_assign(object, new_size);
   }
 }
