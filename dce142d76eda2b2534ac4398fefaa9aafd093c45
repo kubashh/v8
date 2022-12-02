@@ -37,6 +37,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d5cafd62_e1a50e98",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2633,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-02T18:24:49Z",
+      "side": 1,
+      "message": "There are multiple things that need to run in the foreground: `PrepareRuntimeObjects`, `OnAfterCompile`, `FinalizeJSToWasmWrappers`, and finally resolving the promise. This is all done in `AsyncCompileJob::FinishCompile`.",
+      "parentUuid": "07cabc3f_2671b71a",
+      "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0ed9b911_005dac09",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 4
@@ -82,6 +100,24 @@
       "writtenOn": "2022-12-02T16:53:23Z",
       "side": 1,
       "message": "I think the section buffers could just be views (offset + length) into `full_wire_bytes_`. Access to the section buffers and `full_wire_bytes_` is single-threaded, so the growing of the std::vector should not be a problem.",
+      "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7d523fd_95253df1",
+        "filename": "src/wasm/streaming-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-02T18:24:49Z",
+      "side": 1,
+      "message": "I think the problem is that background compilation and validation accesses the section buffers. So the memory should not get relocated. Maybe we can use something like a chunked list instead of a vector to fix this. I would propose to do that in a follow-up though, hence the TODO.",
+      "parentUuid": "747e36ee_5cbad736",
       "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
