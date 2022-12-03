@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10fda654_8ef19e1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-12-03T14:18:57Z",
+      "side": 1,
+      "message": "Thanks for fixing this! LGTM",
+      "revId": "b8647800b7824089eb4920cc56f04bfa755d44f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4fb50ce_280de601",
+        "filename": "src/heap/memory-chunk.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-12-03T14:18:57Z",
+      "side": 1,
+      "message": "Nit: I would move that up if possible as well (same reasoning as below). I would like the invariant that we don\u0027t even invoke this method in the shared heap. However, here I am less sure this actually holds. If so, let\u0027s keep it as is.",
+      "revId": "b8647800b7824089eb4920cc56f04bfa755d44f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40152db7_a32b3dfa",
+        "filename": "src/heap/memory-chunk.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-12-03T14:18:57Z",
+      "side": 1,
+      "message": "Nit: I would move this DCHECK to the beginning of the function (if possible). Otherwise we might bail out earlier and might miss invocations. Judging from the callers I believe this would hold.",
+      "revId": "b8647800b7824089eb4920cc56f04bfa755d44f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4d1e5fa_a07d3fd7",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-12-03T14:18:57Z",
+      "side": 1,
+      "message": "Nit: InSharedHeap() works as well but it would also return true for RO objects. That\u0027s why I would use InSharedWritableHeap() here instead (I agree it\u0027s confusing but I haven\u0027t renamed those methods yet). Here and in the following uses.",
+      "revId": "b8647800b7824089eb4920cc56f04bfa755d44f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
