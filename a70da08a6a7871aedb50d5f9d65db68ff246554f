@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a800ea3_3c9297bb",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-05T14:15:20Z",
+      "side": 1,
+      "message": "Good point. We should deal with it here, since this is where it actually happens.",
+      "parentUuid": "e565865f_ce24d8e5",
+      "range": {
+        "startLine": 299,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 65
+      },
+      "revId": "a70da08a6a7871aedb50d5f9d65db68ff246554f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d820f0ab_bd5f5c23",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a38d868e_ed7ada4c",
+        "filename": "src/maglev/maglev-vreg-allocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-05T14:15:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d820f0ab_bd5f5c23",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 45
+      },
+      "revId": "a70da08a6a7871aedb50d5f9d65db68ff246554f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59a99487_ffc90e16",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-12-05T13:32:22Z",
       "side": 1,
       "message": "Can you do the same logic in maglev-assembler-arm64.cc?\nMaybe this is the best place to guarantee max_stack_slots_used % 2?",
+      "range": {
+        "startLine": 443,
+        "startChar": 0,
+        "endLine": 448,
+        "endChar": 68
+      },
+      "revId": "a70da08a6a7871aedb50d5f9d65db68ff246554f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bebb767_40174104",
+        "filename": "src/maglev/x64/maglev-assembler-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-05T14:15:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59a99487_ffc90e16",
       "range": {
         "startLine": 443,
         "startChar": 0,
