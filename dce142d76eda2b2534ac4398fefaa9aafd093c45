@@ -138,6 +138,24 @@
       "parentUuid": "a7d523fd_95253df1",
       "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80db2925_0953f3e8",
+        "filename": "src/wasm/streaming-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-05T09:56:17Z",
+      "side": 1,
+      "message": "Yes, something like this. We can either make the section buffers the single source of truth, and keep adding them after decoding errors, or we other way around (section buffers only point into the `full_wire_bytes_`, and those don\u0027t move).",
+      "parentUuid": "6f4c2c3b_3038c8c3",
+      "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
