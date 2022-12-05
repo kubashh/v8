@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d282374_fb492494",
+        "filename": "tools/gcmole/gcmole.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-12-05T15:08:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f674f6c_e1a42dc9",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 61
+      },
+      "revId": "b54320116e2443fe0ac6ef80f4bd9d22c36f36a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98f14099_c1578f76",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-12-05T10:56:46Z",
       "side": 1,
       "message": "is it worth adding some sort of versioning or checksum here, to guard against stale call graph files? Particularly since pickling is \"unsafe\"",
+      "range": {
+        "startLine": 336,
+        "startChar": 6,
+        "endLine": 336,
+        "endChar": 13
+      },
+      "revId": "b54320116e2443fe0ac6ef80f4bd9d22c36f36a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d60086f_a2d59f53",
+        "filename": "tools/gcmole/gcmole.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-12-05T15:08:01Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s worth it since the connections are secure. And if an attacker could get a hold of the pickled data, they also could get a hold of the whole python script (since they are bundled together). They could just change the script.\n\nDid you with \u0027stale\u0027 have other non-security related scenarios in mind?",
+      "parentUuid": "98f14099_c1578f76",
       "range": {
         "startLine": 336,
         "startChar": 6,
