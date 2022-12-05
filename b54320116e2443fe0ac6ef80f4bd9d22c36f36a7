@@ -18,6 +18,29 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "98f14099_c1578f76",
+        "filename": "tools/gcmole/gcmole.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-05T10:56:46Z",
+      "side": 1,
+      "message": "is it worth adding some sort of versioning or checksum here, to guard against stale call graph files? Particularly since pickling is \"unsafe\"",
+      "range": {
+        "startLine": 336,
+        "startChar": 6,
+        "endLine": 336,
+        "endChar": 13
+      },
+      "revId": "b54320116e2443fe0ac6ef80f4bd9d22c36f36a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9287064a_9021180e",
