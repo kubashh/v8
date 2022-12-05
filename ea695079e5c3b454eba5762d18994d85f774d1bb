@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18101023_28fa6805",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-12-05T15:16:47Z",
+      "side": 0,
+      "message": "I\u0027ve been hunting for this for quite some time. This guy didn\u0027t dispatch to the proper ShouldVisit() that calls GreyToBlack() and performs live-byte accounting.",
+      "range": {
+        "startLine": 239,
+        "startChar": 7,
+        "endLine": 239,
+        "endChar": 24
+      },
+      "revId": "ea695079e5c3b454eba5762d18994d85f774d1bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
