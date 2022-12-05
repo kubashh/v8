@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f389550f_f8e8827f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-12-05T08:28:14Z",
+      "side": 1,
+      "message": "PTAL. This is implemented as described in the design doc. The v8_linux_rel trybot actually executes this already on this CL.",
+      "revId": "b54320116e2443fe0ac6ef80f4bd9d22c36f36a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9287064a_9021180e",
+        "filename": "tools/gcmole/gcmole.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-12-05T08:28:14Z",
+      "side": 1,
+      "message": "This naming is probably technical debt. Someone at some point started using these gtest env vars all over swarming and now most of the infra sharding uses those. There\u0027s a way to also make swarming pass --shard-count and --shard-index parameters, but it\u0027s quite a hassle on the infra side with a lot of code...",
+      "range": {
+        "startLine": 847,
+        "startChar": 36,
+        "endLine": 847,
+        "endChar": 41
+      },
+      "revId": "b54320116e2443fe0ac6ef80f4bd9d22c36f36a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
