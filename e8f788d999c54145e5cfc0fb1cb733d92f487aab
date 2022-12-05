@@ -33,6 +33,23 @@
       "message": "I think we normally want a couple of +1s for OWNERs so not triggering auto submit",
       "revId": "e8f788d999c54145e5cfc0fb1cb733d92f487aab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc4d7b77_7939d204",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-05T10:55:10Z",
+      "side": 1,
+      "message": "Okay, so adding Igor as well!",
+      "revId": "e8f788d999c54145e5cfc0fb1cb733d92f487aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
