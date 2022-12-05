@@ -120,6 +120,24 @@
       "parentUuid": "747e36ee_5cbad736",
       "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f4c2c3b_3038c8c3",
+        "filename": "src/wasm/streaming-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2022-12-05T07:43:19Z",
+      "side": 1,
+      "message": "Sure, this comment was not meant to block this CL, but to think about possible solutions for this TODO.\n\nThe idea of the section buffers came up to implement a chunked list, as we don\u0027t know how many bytes to expect in total. Naturally this depends on the section size information from the module, which is only available in a well-formed module. We could introduce invalid sections though, with a fixed length, and then just fill all bytes that come after an error into SectionBuffers of invalid sections.",
+      "parentUuid": "a7d523fd_95253df1",
+      "revId": "dce142d76eda2b2534ac4398fefaa9aafd093c45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
