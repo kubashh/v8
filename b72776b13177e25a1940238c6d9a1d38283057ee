@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0793fb5c_3d516d50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531727
+      },
+      "writtenOn": "2022-12-05T08:43:14Z",
+      "side": 1,
+      "message": "I\u0027m sorry, there is a bug in the `Onclick` event for a basic block in schedule phase, pelase revert this CL, and I will fix this bug and reland it.",
+      "revId": "b72776b13177e25a1940238c6d9a1d38283057ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
