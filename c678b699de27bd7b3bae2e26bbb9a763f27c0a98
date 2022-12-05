@@ -39,6 +39,30 @@
       },
       "revId": "c678b699de27bd7b3bae2e26bbb9a763f27c0a98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae2ccc09_ad1b8d3d",
+        "filename": "src/heap/marking-visitor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2022-12-05T18:05:43Z",
+      "side": 1,
+      "message": "I guess we would need to define a set of types that may have embedder fields and check in the rest of Visit methods that the traced object doesn\u0027t have embedder fields.",
+      "parentUuid": "26d9e932_c45da374",
+      "range": {
+        "startLine": 248,
+        "startChar": 16,
+        "endLine": 248,
+        "endChar": 33
+      },
+      "revId": "c678b699de27bd7b3bae2e26bbb9a763f27c0a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
