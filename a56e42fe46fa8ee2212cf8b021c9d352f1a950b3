@@ -142,6 +142,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f4a6b1c0_ca0ef006",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4705,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-12-05T11:41:52Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand, so I\u0027ll leave this unresolved.\n\nBy setting `SkipRoot::kStack` we can disable stack scanning enirely and by setting `SkipRoot::kConservativeStack` we can disable CSS. I suppose the former should be set already in places that stack scanning is not useful, like in GC tasks. If not, we can fix them.\n\nThe only new thing in this CL regarding this is line heap.cc:4849, which enables CSS for client isolates even if it was not requested. Which reminds me that this logic is also required in line heap.cc:4832; I\u0027m adding it there too.",
+      "parentUuid": "a8da53a4_a3ef3753",
+      "range": {
+        "startLine": 4705,
+        "startChar": 17,
+        "endLine": 4705,
+        "endChar": 28
+      },
+      "revId": "a56e42fe46fa8ee2212cf8b021c9d352f1a950b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d7321895_81586046",
         "filename": "src/heap/heap.cc",
         "patchSetId": 7
