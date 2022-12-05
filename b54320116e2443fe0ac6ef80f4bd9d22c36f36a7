@@ -114,6 +114,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2de5c429_b50a27bc",
+        "filename": "tools/gcmole/gcmole.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-05T15:19:13Z",
+      "side": 1,
+      "message": "Only accidental staleness, less about security and more about accidental corrupted behaviour. You\u0027re likely right that it\u0027s not worth it.",
+      "parentUuid": "4d60086f_a2d59f53",
+      "range": {
+        "startLine": 336,
+        "startChar": 6,
+        "endLine": 336,
+        "endChar": 13
+      },
+      "revId": "b54320116e2443fe0ac6ef80f4bd9d22c36f36a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9287064a_9021180e",
         "filename": "tools/gcmole/gcmole.py",
         "patchSetId": 15
