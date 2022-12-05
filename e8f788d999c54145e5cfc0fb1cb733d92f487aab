@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05e17b6e_f2e744e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-05T10:37:19Z",
+      "side": 1,
+      "message": "With \u003e80 CL touching src/codegen, I wonder if it is time to be an owner here as well 😊\nPTAL!",
+      "revId": "e8f788d999c54145e5cfc0fb1cb733d92f487aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
