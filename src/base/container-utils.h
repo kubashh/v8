@@ -10,6 +10,8 @@
 #include <optional>
 #include <vector>
 
+#include "src/base/small-vector.h"
+
 namespace v8::base {
 
 // Returns true iff the {element} is found in the {container}.
@@ -61,10 +63,9 @@ inline size_t erase_at(C& container, size_t index, size_t count = 1) {
 // TODO(C++20): Replace with std::erase_if.
 template <typename C, typename P>
 inline size_t erase_if(C& container, const P& predicate) {
-  auto it =
-      std::remove_if(std::begin(container), std::end(container), predicate);
-  auto count = std::distance(it, std::end(container));
-  container.erase(it, std::end(container));
+  auto it = std::remove_if(begin(container), end(container), predicate);
+  auto count = std::distance(it, end(container));
+  container.erase(it, end(container));
   return count;
 }
 
@@ -84,6 +85,16 @@ inline bool all_of(const C& container, const P& predicate) {
 template <typename C, typename P>
 inline bool none_of(const C& container, const P& predicate) {
   return std::none_of(begin(container), end(container), predicate);
+}
+
+// Helper for std::sort.
+template <typename C>
+inline void sort(C& container) {
+  std::sort(begin(container), end(container));
+}
+template <typename C, typename Comp>
+inline void sort(C& container, Comp comp) {
+  std::sort(begin(container), end(container), comp);
 }
 
 // Returns true iff all elements of {container} compare equal using operator==.
@@ -108,6 +119,13 @@ inline bool all_equal(const C& container, const T& value) {
 // {end(container)}.
 template <typename T, typename A, typename C>
 inline void vector_append(std::vector<T, A>& v, const C& container) {
+  v.insert(end(v), begin(container), end(container));
+}
+
+// Appends to vector {v} all the elements in the range {begin(container)} and
+// {end(container)}.
+template <typename T, size_t S, typename A, typename C>
+inline void vector_append(SmallVector<T, S, A>& v, const C& container) {
   v.insert(end(v), begin(container), end(container));
 }
 
