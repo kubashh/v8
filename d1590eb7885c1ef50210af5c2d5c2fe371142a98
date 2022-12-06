@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a327d48c_5e7b7da1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2022-12-06T19:13:24Z",
+      "side": 1,
+      "message": "Reference lowering is at: https://github.com/WebAssembly/relaxed-simd/issues/52. Trying to decide if the way I\u0027m using the acc register is a bad thing, let me know what you think! Can add an extra mov if we decide that\u0027s better.",
+      "revId": "d1590eb7885c1ef50210af5c2d5c2fe371142a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
