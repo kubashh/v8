@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "319ad719_69c995a4",
+        "filename": "src/base/vector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23f1bef7_dc7eb059",
+      "range": {
+        "startLine": 361,
+        "startChar": 0,
+        "endLine": 361,
+        "endChar": 33
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bab9291_6fd95231",
@@ -98,6 +122,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9e7578b_fce038db",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bab9291_6fd95231",
+      "range": {
+        "startLine": 42,
+        "startChar": 25,
+        "endLine": 42,
+        "endChar": 60
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e140559b_a1ae6e3c",
@@ -111,6 +159,30 @@
       "writtenOn": "2022-11-29T09:43:03Z",
       "side": 1,
       "message": "You could write this as:\n```\nRegisterRepresentation rep \u003d ConstantOp::Representation(kind);\nif (!(rep.IsWord() || rep.IsFloat()) UNIMPLEMENTED();\nInsertTypeAssert(rep, index, type);\n```",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 5
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "777e5925_726a7042",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Using `rep` makes it simpler indeed. Simplified it, but would like to keep the switch for now, because it makes it more obvious for me what is still not implemented. We can remove it when everything is supported.",
+      "parentUuid": "e140559b_a1ae6e3c",
       "range": {
         "startLine": 73,
         "startChar": 0,
@@ -146,6 +218,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "16f89356_0f759a3c",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "I think this would work for the default cases. But some cases might need special handling? E.g. with multiple outputs?\n\nI think it might be a solution eventually, but I would rather keep it with separate functions for now until I have supported more ops and have an idea whether we might have a few special cases. It also makes debugging a bit easier for now if things don\u0027t involve more macros than neccessary.\n\nCould we support such a thing on the reducer level? I thought about something like `template\u003ctypename Reducer\u003e UniformOperationReducerWrapper { ... }` that funnels all `ReduceXyz` into a single\n\n```\ntemplate\u003ctypename NextFn, typename... Args\u003e\nOpIndex ReduceOperation(Opcode opcode, Args\u0026\u0026... args) {\n  OpIndex index \u003d NextFn(std::forward\u003cArgs\u003e(args)...);\n  if constexpr(opcode \u003d\u003d /*something*/) {\n    // special case handling for something\n  }\n  // common handling for all operations\n  return index;\n}\n```",
+      "parentUuid": "3bebb423_0c6acee5",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 127,
+        "endChar": 3
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c7189491_6b085aa7",
         "filename": "src/compiler/turboshaft/assert-types-reducer.h",
         "patchSetId": 1
@@ -157,6 +253,30 @@
       "writtenOn": "2022-11-29T16:26:55Z",
       "side": 1,
       "message": "How about adding\n```\nOpIndex CallBuiltin(Builtin builtin, std::initializer_list\u003cOpIndex\u003e arguments);\n```\nto `Assembler`. This seems like a universally useful helper. The memory optimization CL introduces `TSCallDescriptor::Create(const CallDescriptor* descriptor, Zone* graph_zone)`, which could be helpful.",
+      "range": {
+        "startLine": 177,
+        "startChar": 7,
+        "endLine": 177,
+        "endChar": 18
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ba0412b_29eb0e2e",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7189491_6b085aa7",
       "range": {
         "startLine": 177,
         "startChar": 7,
@@ -192,6 +312,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21dcfaaf_637bf807",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "But this operation would be lowered to what I generate here right? Do we have such a case more frequently? If this is the only place where this might be required, I think adding a new operation might be overkill.",
+      "parentUuid": "968815fc_97b6a4a5",
+      "range": {
+        "startLine": 178,
+        "startChar": 19,
+        "endLine": 178,
+        "endChar": 69
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a39ee97_b0fcc101",
         "filename": "src/compiler/turboshaft/type-inference-reducer.h",
         "patchSetId": 1
@@ -203,6 +347,30 @@
       "writtenOn": "2022-11-29T16:26:55Z",
       "side": 1,
       "message": "This function also behaves wrongly for infinite values and for the largest values next to the infinities. We should at least DCHECK that we didn\u0027t hit these cases.",
+      "range": {
+        "startLine": 29,
+        "startChar": 14,
+        "endLine": 29,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5e177bc_f2e32ce3",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "I am not sure I understand what you mean? What is wrong?",
+      "parentUuid": "2a39ee97_b0fcc101",
       "range": {
         "startLine": 29,
         "startChar": 14,
@@ -236,6 +404,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41552592_1f7d0fba",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33cf9495_de9a8b63",
+      "range": {
+        "startLine": 41,
+        "startChar": 12,
+        "endLine": 41,
+        "endChar": 27
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49adf6d7_1bb76df2",
@@ -249,6 +441,30 @@
       "writtenOn": "2022-11-29T17:27:39Z",
       "side": 1,
       "message": "Isn\u0027t it possible that the different type is Type::Float32|Float64 in this case? Does it mean we need to return Any type?",
+      "range": {
+        "startLine": 352,
+        "startChar": 13,
+        "endLine": 352,
+        "endChar": 35
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84e97ff5_11d7362e",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "As discussed offline: WordBinops will always return a value of the respective Word type.",
+      "parentUuid": "49adf6d7_1bb76df2",
       "range": {
         "startLine": 352,
         "startChar": 13,
@@ -282,6 +498,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfe4b4af_1fc74d43",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Redesigned this a bit and added a comment.",
+      "parentUuid": "694e3066_0477c44f",
+      "range": {
+        "startLine": 421,
+        "startChar": 31,
+        "endLine": 421,
+        "endChar": 47
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4ca4b2b_bd38b6b2",
@@ -295,6 +535,30 @@
       "writtenOn": "2022-11-29T17:27:39Z",
       "side": 1,
       "message": "nit: could we give more descriptive names, e.g.\nlhs -\u003e range\nrhs -\u003e split_point?",
+      "range": {
+        "startLine": 422,
+        "startChar": 24,
+        "endLine": 422,
+        "endChar": 27
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8923b21e_cf220db0",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4ca4b2b_bd38b6b2",
       "range": {
         "startLine": 422,
         "startChar": 24,
@@ -330,6 +594,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "02de9e3c_286a9c8b",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Changed this slightly, but the idea here is that in a properly typed graph, the input to a Word32 operation should never be any.\nHowever, for now (where the typer is still incomplete) this can still happen. And the predicate `allow_invalid_inputs()` reflects this fact. So in this case we just treat `Type::Any()` like the complete word32 range `now Word32Type::Any()`. In invalid inputs are not allowed, this should hit the `UNREACHABLE` at the bottom of the function.",
+      "parentUuid": "95987feb_f83a5293",
+      "range": {
+        "startLine": 469,
+        "startChar": 6,
+        "endLine": 469,
+        "endChar": 8
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e27e4f5c_b95c4162",
         "filename": "src/compiler/turboshaft/type-inference-reducer.h",
         "patchSetId": 1
@@ -341,6 +629,30 @@
       "writtenOn": "2022-11-29T17:27:39Z",
       "side": 1,
       "message": "nit: could you add a comment explaining the algorithm at a high level?",
+      "range": {
+        "startLine": 514,
+        "startChar": 7,
+        "endLine": 514,
+        "endChar": 11
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "989e97fa_56964104",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e27e4f5c_b95c4162",
       "range": {
         "startLine": 514,
         "startChar": 7,
@@ -376,6 +688,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "88a3bf5e_f8ca613f",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Types don\u0027t know anything about RegisterRepresentation yet, so I think we should not introduce this dependency unless necessary.\n\nI hope to get rid of this function eventually. For now it is mostly used to get at least some type information (other than `Type::Any()`) for operations we don\u0027t handle yet.",
+      "parentUuid": "42ccbbde_23429ab6",
+      "range": {
+        "startLine": 573,
+        "startChar": 2,
+        "endLine": 573,
+        "endChar": 56
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d614e2e_6c8358d3",
         "filename": "src/compiler/turboshaft/type-inference-reducer.h",
         "patchSetId": 1
@@ -387,6 +723,30 @@
       "writtenOn": "2022-11-29T17:27:39Z",
       "side": 1,
       "message": "I\u0027d suggest so for simplicity, unless we have a single dedicated zone for the Typing phase, if we see that we create too many intermediate types.",
+      "range": {
+        "startLine": 601,
+        "startChar": 30,
+        "endLine": 602,
+        "endChar": 22
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed972797_578db7a6",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9d614e2e_6c8358d3",
       "range": {
         "startLine": 601,
         "startChar": 30,
@@ -420,6 +780,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d73cb146_d5abe131",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9637c83_4a2ff9e9",
+      "range": {
+        "startLine": 616,
+        "startChar": 61,
+        "endLine": 616,
+        "endChar": 70
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "caffac88_8079919a",
@@ -433,6 +817,30 @@
       "writtenOn": "2022-11-29T17:27:39Z",
       "side": 1,
       "message": "nit: let\u0027s flip the branch condition and do an early return instead of nesting.",
+      "range": {
+        "startLine": 716,
+        "startChar": 4,
+        "endLine": 716,
+        "endChar": 6
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79ff2424_cd12ea93",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "caffac88_8079919a",
       "range": {
         "startLine": 716,
         "startChar": 4,
@@ -468,6 +876,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d27fcbb_f2f257b7",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "That\u0027s an interesting question: Should we do optimizations in the typing pass already?\nMy first guess: probably not. We should discuss this.",
+      "parentUuid": "41b9d7db_72e576c0",
+      "range": {
+        "startLine": 721,
+        "startChar": 10,
+        "endLine": 721,
+        "endChar": 12
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "322c971d_87eeb41d",
         "filename": "src/compiler/turboshaft/type-inference-reducer.h",
         "patchSetId": 1
@@ -479,6 +911,30 @@
       "writtenOn": "2022-11-29T09:43:03Z",
       "side": 1,
       "message": "The way you compute `type_refinements_` now is a bit broken because of edge splitting: we sometimes back-patch Branches to update their destination to split edges (see https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/assembler.h;l\u003d997).\n\nThe way I\u0027ve dealt with this in Branch Elimination is to compute this kind of things only when entering a Block (when a block is bound, its predecessors should never change), rather than when exiting a Branching block. (see https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/branch-elimination-reducer.h;l\u003d161-173) \nBasically, in `Bind`, you could check if you have a single predecessor and it ends with a Branch, and, if so, compute the type information related to the comparison for the current block. This has the downside that you\u0027d compute twice the same thing (once in the IfTrue and once in the IfFalse), but I\u0027d find it a bit cleaner.\nTo avoid computing twice the types, you could maybe cache the IfTrue result in this `type_refinements_` map so that you don\u0027t have to recompute in the IfFalse (although this may have the same issue with edge splitting as your current approach)...",
+      "range": {
+        "startLine": 826,
+        "startChar": 6,
+        "endLine": 826,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4a2ff90_9f518041",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "322c971d_87eeb41d",
       "range": {
         "startLine": 826,
         "startChar": 6,
@@ -502,6 +958,30 @@
       "writtenOn": "2022-11-29T17:27:39Z",
       "side": 1,
       "message": "Slightly better, still not too complex would be:\n`fabs(lhs - rhs) \u003c std::numeric_limits\u003cfloat|double\u003e::epsilon()`.",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 19
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b9bce42_f552b7bb",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Somehow the function was unused anyway.",
+      "parentUuid": "2a9b7f6d_62ee99d3",
       "range": {
         "startLine": 27,
         "startChar": 8,
@@ -537,6 +1017,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "053b7eb4_4a7e0b65",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Implemented normalization of ranges `[a, b]` with `b - a + 1 \u003c\u003d kMaxSetSize` to sets. While the opposite is more compact to represent for sizes `2 \u003c size \u003c\u003d kMaxSetSize`, sets are typically a bit easier to process, so I chose that direction. We can easily change this any time though.",
+      "parentUuid": "64881f93_a1b4d4ac",
+      "range": {
+        "startLine": 129,
+        "startChar": 2,
+        "endLine": 129,
+        "endChar": 51
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "75d20e72_06230b08",
         "filename": "src/compiler/turboshaft/types.cc",
         "patchSetId": 1
@@ -548,6 +1052,30 @@
       "writtenOn": "2022-11-29T17:27:39Z",
       "side": 1,
       "message": "Should we consider sets with the same elements in a different order equal?",
+      "range": {
+        "startLine": 138,
+        "startChar": 12,
+        "endLine": 138,
+        "endChar": 50
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9964d0b_f1b87c25",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Set elements are always in order.",
+      "parentUuid": "75d20e72_06230b08",
       "range": {
         "startLine": 138,
         "startChar": 12,
@@ -581,6 +1109,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b924aa65_40b9c871",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Good catch!",
+      "parentUuid": "56c0deb2_2f420c19",
+      "range": {
+        "startLine": 155,
+        "startChar": 10,
+        "endLine": 157,
+        "endChar": 48
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20dbd241_32b43bc9",
@@ -594,6 +1146,30 @@
       "writtenOn": "2022-11-29T09:43:03Z",
       "side": 1,
       "message": "A `SmallVector\u003cword_t, 16\u003e` should work.",
+      "range": {
+        "startLine": 171,
+        "startChar": 4,
+        "endLine": 171,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f57b270a_84d9c728",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Extended the types\u0027 APIs to work with different kinds of vectors. So this works now.",
+      "parentUuid": "20dbd241_32b43bc9",
       "range": {
         "startLine": 171,
         "startChar": 4,
@@ -627,6 +1203,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccf32740_73800455",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53013fb5_e69032b1",
+      "range": {
+        "startLine": 185,
+        "startChar": 4,
+        "endLine": 198,
+        "endChar": 49
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a6020a1_7530cec2",
@@ -640,6 +1240,30 @@
       "writtenOn": "2022-11-29T09:43:03Z",
       "side": 1,
       "message": "Suggestion of additional drawing:\n```\n-|XX|-------\n-------|XX|-\n-|XXXXXXXX|-\n```\nThis makes it clearer that new items can be added to the range.",
+      "range": {
+        "startLine": 203,
+        "startChar": 2,
+        "endLine": 205,
+        "endChar": 66
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c7baa39_3f4687aa",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a6020a1_7530cec2",
       "range": {
         "startLine": 203,
         "startChar": 2,
@@ -675,6 +1299,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b7a6a51_8c0960c8",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "After the long discussion offline: Computing the intersection for wrapping ranges is not well specified (in addition to this implementation being incorrect as pointed out). I have added an additional `ResolutionMode` to `Intersect` that allows to specify how to handle the cases where the concrete solution cannot be represented precisely in the type.",
+      "parentUuid": "08b74378_2d1d406e",
+      "range": {
+        "startLine": 297,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 1
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ccbc940_a91121d3",
         "filename": "src/compiler/turboshaft/types.cc",
         "patchSetId": 1
@@ -686,6 +1334,30 @@
       "writtenOn": "2022-11-29T09:43:03Z",
       "side": 1,
       "message": "You could check `bitfield_` instead, so that this doesn\u0027t accidentally break when other special values are added.",
+      "range": {
+        "startLine": 384,
+        "startChar": 13,
+        "endLine": 384,
+        "endChar": 41
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfa05d87_0ff99b7f",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "I added a `special_values()` accessor and I compare those here to not rely on the bitfield_ detail too much.",
+      "parentUuid": "4ccbc940_a91121d3",
       "range": {
         "startLine": 384,
         "startChar": 13,
@@ -768,6 +1440,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4893dc6d_a98ff21f",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "I don\u0027t want to put implementation details of the derived type classes here in the base class. I did the following: The payload is now only accessible through a `payload\u003c\u003e()` method and writable through the type\u0027s constructor. Derived classes define a payload struct for every kind they need, e.g. there is a\n`struct Payload_Range { float_t min; float_t max; }` and then payload is only accessed through those structs, e.g. `payload\u003cPayload_Range\u003e().min`. This way it is somewhat documented what the payload for each (sub)kind is and all access and reinterpretation of the payload memory is bottlenecked through those.",
+      "parentUuid": "545ba4ff_404f562a",
+      "range": {
+        "startLine": 179,
+        "startChar": 2,
+        "endLine": 179,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "81dafe55_424b50f0",
         "filename": "src/compiler/turboshaft/types.h",
         "patchSetId": 1
@@ -779,6 +1475,30 @@
       "writtenOn": "2022-11-29T09:43:03Z",
       "side": 1,
       "message": "What about replacing this constant with `sizeof(payload_)`? (same thing in `FloatType`)",
+      "range": {
+        "startLine": 187,
+        "startChar": 43,
+        "endLine": 187,
+        "endChar": 44
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a101049_bf2c2a05",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "It is a bit different here. Although the payload is in `uint64_t payload_[2]`, when we store the inline elements of a `Float32Type::Set()`, the second element is not in `payload_[1]`, but both elements end up in the memory of `payload_[0]`. This is important, because in order to have `base::Vector\u003cfloat_t\u003e \u0027Float32Type::set_elements() const` return an elements vector, they need to be stored in contiguous memory. So in general, for `Float32Type` we could have 4 inline elements (while only 2 for `Float64Type`), I chose to make this independent of the actual type. We could change this to allow more (e.g. 4) inline elements for e.g. `Float32Type` and `Word32Type`. So in general there is no 1:1 correspondence between the size of the `payload_[]` and the elements that can be inlined. I would rather keep that a separate number. Wdyt?",
+      "parentUuid": "81dafe55_424b50f0",
       "range": {
         "startLine": 187,
         "startChar": 43,
@@ -812,6 +1532,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef59c6a_6b8930e0",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79bd359e_3617d437",
+      "range": {
+        "startLine": 224,
+        "startChar": 6,
+        "endLine": 224,
+        "endChar": 20
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2748131e_d4a201cc",
@@ -825,6 +1569,30 @@
       "writtenOn": "2022-11-29T17:27:39Z",
       "side": 1,
       "message": "nit: DCHECK that set_size \u003e\u003d 1.",
+      "range": {
+        "startLine": 297,
+        "startChar": 27,
+        "endLine": 297,
+        "endChar": 37
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7123025c_fb148be1",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2748131e_d4a201cc",
       "range": {
         "startLine": 297,
         "startChar": 27,
@@ -858,6 +1626,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b3e751e_e4bebb9c",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da0feb77_98a83570",
+      "range": {
+        "startLine": 350,
+        "startChar": 51,
+        "endLine": 350,
+        "endChar": 52
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22bcc170_46eb163c",
@@ -871,6 +1663,30 @@
       "writtenOn": "2022-11-29T09:43:03Z",
       "side": 1,
       "message": "Before this DCHECK, could you add a comment saying \"NaN should be passed in the `special_values` as `kNaN` rather than in `elements`\"?",
+      "range": {
+        "startLine": 361,
+        "startChar": 4,
+        "endLine": 361,
+        "endChar": 77
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fe0e1cc_13db4d09",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22bcc170_46eb163c",
       "range": {
         "startLine": 361,
         "startChar": 4,
@@ -906,6 +1722,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3127f5b_c54c23e0",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "There is already a `range` method that returns `range_min()` and `range_max()`. I have distinguished those explicitly, because `range`, `range_min` and `range_max` are the accessor if the type `is_range` while the others (`min`, `max` and `minmax`) return the minimal and maximal values regardless of the `sub_kind`. So the latter also work for e.g. sets and return the min and max values respectively. We can unify that, though, if you think that distinction is unnecessary.",
+      "parentUuid": "53cc91c8_8bf68071",
+      "range": {
+        "startLine": 458,
+        "startChar": 30,
+        "endLine": 458,
+        "endChar": 36
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "549622f8_b6a95671",
         "filename": "src/objects/object-list-macros.h",
         "patchSetId": 1
@@ -917,6 +1757,30 @@
       "writtenOn": "2022-11-29T17:27:39Z",
       "side": 1,
       "message": "Does it also make sense to have Float set types?",
+      "range": {
+        "startLine": 243,
+        "startChar": 14,
+        "endLine": 243,
+        "endChar": 25
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea45985b_a3d8c38b",
+        "filename": "src/objects/object-list-macros.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "549622f8_b6a95671",
       "range": {
         "startLine": 243,
         "startChar": 14,
@@ -950,6 +1814,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d22363a_2c97c67d",
+        "filename": "test/unittests/compiler/turboshaft/turboshaft-types-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "54c343fb_d51e53d3",
+      "range": {
+        "startLine": 136,
+        "startChar": 1,
+        "endLine": 136,
+        "endChar": 5
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5aa9c382_148b0476",
@@ -963,6 +1851,30 @@
       "writtenOn": "2022-11-29T17:27:39Z",
       "side": 1,
       "message": "Can we introduce an enum for IncludesNaN?",
+      "range": {
+        "startLine": 153,
+        "startChar": 27,
+        "endLine": 153,
+        "endChar": 32
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93801f49_497ac0e3",
+        "filename": "test/unittests/compiler/turboshaft/turboshaft-types-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-06T09:45:31Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5aa9c382_148b0476",
       "range": {
         "startLine": 153,
         "startChar": 27,
