@@ -1702,9 +1702,10 @@ TNode<RawPtrT> CodeStubAssembler::ExternalPointerTableAddress(
             isolate()));
     return UncheckedCast<RawPtrT>(
         Load(MachineType::Pointer(), table_address_address));
+  } else {
+    return ExternalConstant(
+        ExternalReference::external_pointer_table_address(isolate()));
   }
-  return ExternalConstant(
-      ExternalReference::external_pointer_table_address(isolate()));
 }
 #endif  // V8_ENABLE_SANDBOX
 
@@ -1762,6 +1763,32 @@ void CodeStubAssembler::StoreExternalPointerToObject(TNode<HeapObject> object,
                       value);
 #else
   StoreObjectFieldNoWriteBarrier<RawPtrT>(object, offset, pointer);
+#endif  // V8_ENABLE_SANDBOX
+}
+
+TNode<RawPtrT> CodeStubAssembler::LoadCodePointerFromObject(
+    TNode<HeapObject> object, TNode<IntPtrT> offset) {
+#ifdef V8_ENABLE_SANDBOX
+  TNode<RawPtrT> code_pointer_table_address = ExternalConstant(
+      ExternalReference::code_pointer_table_address(isolate()));
+  TNode<RawPtrT> table = UncheckedCast<RawPtrT>(
+      Load(MachineType::Pointer(), code_pointer_table_address,
+           UintPtrConstant(Internals::kExternalPointerTableBufferOffset)));
+
+  TNode<ExternalPointerHandleT> handle =
+      LoadObjectField<ExternalPointerHandleT>(object, offset);
+  TNode<Uint32T> index =
+      Word32Shr(handle, Uint32Constant(kExternalPointerIndexShift));
+  // TODO(v8:10391): consider updating ElementOffsetFromIndex to generate code
+  // that does one shift right instead of two shifts (right and then left).
+  TNode<IntPtrT> table_offset = ElementOffsetFromIndex(
+      ChangeUint32ToWord(index), SYSTEM_POINTER_ELEMENTS, 0);
+
+  TNode<UintPtrT> entry = Load<UintPtrT>(table, table_offset);
+  entry = UncheckedCast<UintPtrT>(WordShr(entry, UintPtrConstant(1)));
+  return UncheckedCast<RawPtrT>(UncheckedCast<WordT>(entry));
+#else
+  return LoadObjectField<RawPtrT>(object, offset);
 #endif  // V8_ENABLE_SANDBOX
 }
 
@@ -15457,7 +15484,7 @@ TNode<CodeT> CodeStubAssembler::GetSharedFunctionInfoCode(
 TNode<RawPtrT> CodeStubAssembler::GetCodeEntry(TNode<CodeT> code) {
 #ifdef V8_EXTERNAL_CODE_SPACE
   TNode<CodeDataContainer> cdc = CodeDataContainerFromCodeT(code);
-  return LoadObjectField<RawPtrT>(
+  return LoadCodePointerFromObject(
       cdc, IntPtrConstant(CodeDataContainer::kCodeEntryPointOffset));
 #else
   TNode<IntPtrT> object = BitcastTaggedToWord(code);

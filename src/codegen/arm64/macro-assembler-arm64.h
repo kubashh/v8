@@ -1465,11 +1465,16 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void StoreSandboxedPointerField(const Register& value,
                                   const MemOperand& dst_field_operand);
 
-  // Loads a field containing off-heap pointer and does necessary decoding
-  // if sandboxed external pointers are enabled.
+  // Loads a field containing an off-heap ("external") pointer and does the
+  // necessary decoding if the sandbox is enabled.
   void LoadExternalPointerField(Register destination, MemOperand field_operand,
                                 ExternalPointerTag tag,
                                 Register isolate_root = Register::no_reg());
+
+  // Loads a field containing a code pointer and does the necessary decoding if
+  // the sandbox is enabled.
+  void LoadCodePointerField(Register destination, MemOperand field_operand,
+                            Register isolate_root = Register::no_reg());
 
  protected:
   // The actual Push and Pop implementations. These don't generate any code
