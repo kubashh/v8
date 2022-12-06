@@ -16,6 +16,23 @@
       "message": "PTAL. I would like to fuzz this flag or 1 or 2 days to find problems/repros before I try to enable that flag by default again.",
       "revId": "213b7e79bf6a244bef27d4bc56f5b6ad7b5864de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a243c911_db91236d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-12-06T22:07:44Z",
+      "side": 1,
+      "message": "I will only land this CL after landing another CL with a fix for this flag first.",
+      "revId": "213b7e79bf6a244bef27d4bc56f5b6ad7b5864de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
