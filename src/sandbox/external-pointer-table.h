@@ -64,16 +64,17 @@ class Isolate;
  * When V8_COMPRESS_POINTERS, external pointer tables are also used to ease
  * alignment requirements in heap object fields via indirection.
  */
-class V8_EXPORT_PRIVATE ExternalPointerTable {
+template <Address kMarkingBit>
+class V8_EXPORT_PRIVATE ExternalEntityTable {
  public:
-  // Size of an ExternalPointerTable, for layout computation in IsolateData.
+  // Size of an ExternalEntityTable, for layout computation in IsolateData.
   // Asserted to be equal to the actual size in external-pointer-table.cc.
   static int constexpr kSize = 4 * kSystemPointerSize;
 
-  ExternalPointerTable() = default;
+  ExternalEntityTable() = default;
 
-  ExternalPointerTable(const ExternalPointerTable&) = delete;
-  ExternalPointerTable& operator=(const ExternalPointerTable&) = delete;
+  ExternalEntityTable(const ExternalEntityTable&) = delete;
+  ExternalEntityTable& operator=(const ExternalEntityTable&) = delete;
 
   // Initializes this external pointer table by reserving the backing memory
   // and initializing the freelist.
@@ -194,7 +195,7 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
   friend class Isolate;
 
   //
-  // ExternalPointerTable constants.
+  // ExternalEntityTable constants.
   //
   // An external pointer table grows and shrinks in blocks of this size. This
   // is also the initial size of the table.
@@ -383,7 +384,7 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
 #endif  // DEBUG
 
   //
-  // Entries of an ExternalPointerTable.
+  // Entries of an ExternalEntityTable.
   //
   class Entry {
    public:
@@ -393,7 +394,14 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
     // Returns the payload of this entry. If the provided tag does not match
     // the tag of the entry, the returned pointer cannot be dereferenced as
     // some of its top bits will be set.
-    Address Untag(ExternalPointerTag tag) { return value_ & ~tag; }
+    Address Untag(ExternalPointerTag tag) {
+      // TODO(saelo) hack
+      if (kMarkingBit == 1) {
+        return value_ >> 1;
+      } else {
+        return value_ & ~tag;
+      }
+    }
 
     // Return the payload of this entry without performing a tag check. The
     // caller must ensure that the pointer is not used in an unsafe way.
@@ -405,9 +413,9 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
     }
 
     // Check, set, and clear the marking bit of this entry.
-    bool IsMarked() const { return (value_ & kExternalPointerMarkBit) != 0; }
-    void SetMarkBit() { value_ |= kExternalPointerMarkBit; }
-    void ClearMarkBit() { value_ &= ~kExternalPointerMarkBit; }
+    bool IsMarked() const { return (value_ & kMarkingBit) != 0; }
+    void SetMarkBit() { value_ |= kMarkingBit; }
+    void ClearMarkBit() { value_ &= ~kMarkingBit; }
 
     // Returns true if this entry is part of the freelist.
     bool IsFreelistEntry() const {
@@ -448,7 +456,12 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
     static Entry MakeRegularEntry(Address value, ExternalPointerTag tag) {
       DCHECK_NE(tag, kExternalPointerFreeEntryTag);
       DCHECK_NE(tag, kExternalPointerEvacuationEntryTag);
-      return Entry(value | tag);
+      // TODO(saelo) hack
+      if (kMarkingBit == 1) {
+        return Entry((value << 1) | 1);
+      } else {
+        return Entry(value | tag);
+      }
     }
 
     // Constructs a freelist entry given the current freelist head and size.
@@ -479,7 +492,7 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
 
     // The raw content of an entry. The top bits will contain the tag and
     // marking bit, the lower bits contain the pointer payload. Refer to the
-    // ExternalPointerTag and kExternalPointerMarkBit definitions to see which
+    // ExternalPointerTag and kMarkingBit definitions to see which
     // bits are used for what purpose.
     Address value_;
   };
@@ -555,7 +568,7 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
   }
 
   //
-  // ExternalPointerTable fields.
+  // ExternalEntityTable fields.
   //
   // The buffer backing this table. Essentially an array of Entry instances.
   // This is const after initialization. Should only be accessed using the
@@ -594,6 +607,9 @@ class V8_EXPORT_PRIVATE ExternalPointerTable {
   // pointer to one.
   base::Mutex* mutex_ = nullptr;
 };
+
+using ExternalPointerTable = ExternalEntityTable<kExternalPointerMarkBit>;
+using CodePointerTable = ExternalEntityTable<kCodePointerMarkBit>;
 
 }  // namespace internal
 }  // namespace v8

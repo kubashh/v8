@@ -62,7 +62,7 @@ class VerifyPointersVisitor : public ObjectVisitorWithCageBases,
                      ObjectSlot end) override;
   void VisitPointers(HeapObject host, MaybeObjectSlot start,
                      MaybeObjectSlot end) override;
-  void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override;
+  void VisitCodeSpacePointer(HeapObject host, CodeObjectSlot slot) override;
   void VisitCodeTarget(Code host, RelocInfo* rinfo) override;
   void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) override;
 
@@ -97,8 +97,8 @@ void VerifyPointersVisitor::VisitPointers(HeapObject host,
   VerifyPointers(host, start, end);
 }
 
-void VerifyPointersVisitor::VisitCodePointer(HeapObject host,
-                                             CodeObjectSlot slot) {
+void VerifyPointersVisitor::VisitCodeSpacePointer(HeapObject host,
+                                                  CodeObjectSlot slot) {
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
   Object maybe_code = slot.load(code_cage_base());
   HeapObject code;
@@ -474,7 +474,7 @@ class SlotVerifyingVisitor : public ObjectVisitorWithCageBases {
     }
   }
 
-  void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override {
+  void VisitCodeSpacePointer(HeapObject host, CodeObjectSlot slot) override {
     CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
     if (ShouldHaveBeenRecorded(
             host, MaybeObject::FromObject(slot.load(code_cage_base())))) {
@@ -604,7 +604,7 @@ class SlotCollectingVisitor final : public ObjectVisitor {
     }
   }
 
-  void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override {
+  void VisitCodeSpacePointer(HeapObject host, CodeObjectSlot slot) override {
     CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
 #ifdef V8_EXTERNAL_CODE_SPACE
     code_slots_.push_back(slot);
