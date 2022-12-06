@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dd3cb4a_826216b4",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-06T13:54:11Z",
+      "side": 1,
+      "message": "Not sure if we can DCHECK in the constructor, but how about verifying that end \u003e\u003d begin?",
+      "range": {
+        "startLine": 61,
+        "startChar": 38,
+        "endLine": 61,
+        "endChar": 63
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dac73060_16a7bd1f",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-06T13:54:11Z",
+      "side": 1,
+      "message": "nit: you could use `is_wrapping` for readability.",
+      "range": {
+        "startLine": 115,
+        "startChar": 11,
+        "endLine": 115,
+        "endChar": 38
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e4b4163_17c9770f",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-06T13:54:11Z",
+      "side": 1,
+      "message": "nit: you might also check if the index is in range.",
+      "range": {
+        "startLine": 513,
+        "startChar": 33,
+        "endLine": 513,
+        "endChar": 56
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "494317ee_24b08be9",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-06T13:54:11Z",
+      "side": 1,
+      "message": "nit: if we are to keep this code (I guess we do), let\u0027s add comments to what are the different cases supported. The cascade of ternary conditions doesn\u0027t make it super easy to follow.\nAs an alternative, you might introduce two helper functions, e.g.\n`uint32_t GetUpperLimit(uint32_t limit, bool is_less_than)` and similarly `GetLowerLimit` that do the ternary branching and reduce next_smaller|next_larger or the original limit.",
+      "range": {
+        "startLine": 592,
+        "startChar": 14,
+        "endLine": 592,
+        "endChar": 25
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edf0bb3c_b3e050a4",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-06T13:54:11Z",
+      "side": 1,
+      "message": "nit: could we turn this into a static_assert?",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 233,
+        "endChar": 10
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0f62ab9_886ae35f",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-06T13:54:11Z",
+      "side": 1,
+      "message": "nit: why not simply loop until `i \u003c\u003d to`?",
+      "range": {
+        "startLine": 265,
+        "startChar": 17,
+        "endLine": 265,
+        "endChar": 26
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67f68483_c55dc3f6",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-06T13:54:11Z",
+      "side": 1,
+      "message": "This and the else branch are almost identical to what `WordType::Set` does, could we extract it to the base class?",
+      "range": {
+        "startLine": 479,
+        "startChar": 6,
+        "endLine": 482,
+        "endChar": 59
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
