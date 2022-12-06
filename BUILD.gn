@@ -3506,6 +3506,8 @@ v8_header_set("v8_internal_headers") {
     "src/runtime/runtime.h",
     "src/sandbox/bounded-size-inl.h",
     "src/sandbox/bounded-size.h",
+    "src/sandbox/code-pointer-inl.h",
+    "src/sandbox/code-pointer.h",
     "src/sandbox/external-pointer-inl.h",
     "src/sandbox/external-pointer-table-inl.h",
     "src/sandbox/external-pointer-table.h",
@@ -5697,14 +5699,12 @@ if (v8_use_libm_trig_functions) {
       "third_party/glibc/src/sysdeps/ieee754/dbl-64/dla.h",
       "third_party/glibc/src/sysdeps/ieee754/dbl-64/endian.h",
       "third_party/glibc/src/sysdeps/ieee754/dbl-64/mydefs.h",
-      "third_party/glibc/src/sysdeps/ieee754/dbl-64/sincostab.c",
       "third_party/glibc/src/sysdeps/ieee754/dbl-64/s_sin.c",
+      "third_party/glibc/src/sysdeps/ieee754/dbl-64/sincostab.c",
       "third_party/glibc/src/sysdeps/ieee754/dbl-64/trig.h",
       "third_party/glibc/src/sysdeps/ieee754/dbl-64/usncs.h",
     ]
-    configs += [
-      "//build/config/compiler:no_chromium_code",
-    ]
+    configs += [ "//build/config/compiler:no_chromium_code" ]
     configs -= [ "//build/config/compiler:chromium_code" ]
     if (!is_debug) {
       # Build code using -O3, see: crbug.com/1084371.
