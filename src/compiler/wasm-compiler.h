@@ -820,6 +820,8 @@ class WasmGraphBuilder {
       Node* object, int offset,
       ExternalPointerTag tag = kForeignForeignAddressTag);
 
+  Node* BuildLoadCodePointerFromObject(Node* object, int offset);
+
   Node* BuildLoadCallTargetFromExportedFunctionData(Node* function_data);
 
   //-----------------------------------------------------------------------

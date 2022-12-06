@@ -2340,8 +2340,11 @@ void TurboAssembler::LoadCodeDataContainerEntry(
   ASM_CODE_COMMENT(this);
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
 
-  Ldr(destination, FieldMemOperand(code_data_container_object,
-                                   CodeDataContainer::kCodeEntryPointOffset));
+  LoadExternalPointerField(
+      destination,
+      FieldMemOperand(code_data_container_object,
+                      CodeDataContainer::kCodeEntryPointOffset),
+      kCodePointerTag);
 }
 
 void TurboAssembler::LoadCodeDataContainerCodeNonBuiltin(
@@ -2349,8 +2352,11 @@ void TurboAssembler::LoadCodeDataContainerCodeNonBuiltin(
   ASM_CODE_COMMENT(this);
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
   // Compute the Code object pointer from the code entry point.
-  Ldr(destination, FieldMemOperand(code_data_container_object,
-                                   CodeDataContainer::kCodeEntryPointOffset));
+  LoadExternalPointerField(
+      destination,
+      FieldMemOperand(code_data_container_object,
+                      CodeDataContainer::kCodeEntryPointOffset),
+      kCodePointerTag);
   Sub(destination, destination, Immediate(Code::kHeaderSize - kHeapObjectTag));
 }
 
@@ -3344,6 +3350,35 @@ void TurboAssembler::LoadExternalPointerField(Register destination,
     Mov(destination, Operand(destination, LSR, shift_amount));
     Ldr(destination, MemOperand(external_table, destination));
     And(destination, destination, Immediate(~tag));
+#else
+  Ldr(destination, field_operand);
+#endif  // V8_ENABLE_SANDBOX
+}
+
+void TurboAssembler::LoadCodePointerField(Register destination,
+                                          MemOperand field_operand,
+                                          Register isolate_root) {
+  DCHECK(!AreAliased(destination, isolate_root));
+  ASM_CODE_COMMENT(this);
+#ifdef V8_ENABLE_SANDBOX
+  UseScratchRegisterScope temps(this);
+  Register external_table = temps.AcquireX();
+  if (isolate_root == no_reg) {
+    DCHECK(root_array_available_);
+    isolate_root = kRootRegister;
+  }
+  Ldr(external_table,
+      MemOperand(isolate_root,
+                 IsolateData::code_pointer_table_offset() +
+                     Internals::kExternalPointerTableBufferOffset));
+  Ldr(destination.W(), field_operand);
+  // MemOperand doesn't support LSR currently (only LSL), so here we do the
+  // offset computation separately first.
+  static_assert(kExternalPointerIndexShift > kSystemPointerSizeLog2);
+  int shift_amount = kExternalPointerIndexShift - kSystemPointerSizeLog2;
+  Mov(destination, Operand(destination, LSR, shift_amount));
+  Ldr(destination, MemOperand(external_table, destination));
+  Mov(destination, Operand(destination, LSR, 1));
 #else
   Ldr(destination, field_operand);
 #endif  // V8_ENABLE_SANDBOX

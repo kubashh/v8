@@ -2066,6 +2066,8 @@ filegroup(
         "src/runtime/runtime-weak-refs.cc",
         "src/runtime/runtime.cc",
         "src/runtime/runtime.h",
+        "src/sandbox/code-pointer-inl.h",
+        "src/sandbox/code-pointer.h",
         "src/sandbox/external-pointer-inl.h",
         "src/sandbox/external-pointer.h",
         "src/sandbox/external-pointer-table.cc",

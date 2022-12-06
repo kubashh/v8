@@ -639,12 +639,20 @@ class V8_EXPORT_PRIVATE TurboAssembler
   void StoreSandboxedPointerField(Operand dst_field_operand, Register value);
 
   enum class IsolateRootLocation { kInScratchRegister, kInRootRegister };
-  // Loads a field containing off-heap pointer and does necessary decoding
-  // if sandboxed external pointers are enabled.
+
+  // Loads a field containing an off-heap ("external") pointer and does the
+  // necessary decoding if the sandbox is enabled.
   void LoadExternalPointerField(Register destination, Operand field_operand,
                                 ExternalPointerTag tag, Register scratch,
                                 IsolateRootLocation isolateRootLocation =
                                     IsolateRootLocation::kInRootRegister);
+
+  // Loads a field containing a code pointer and does the necessary decoding if
+  // the sandbox is enabled.
+  void LoadCodePointerField(Register destination, Operand field_operand,
+                            Register scratch,
+                            IsolateRootLocation isolateRootLocation =
+                                IsolateRootLocation::kInRootRegister);
 
  protected:
   static const int kSmiShift = kSmiTagSize + kSmiShiftSize;
