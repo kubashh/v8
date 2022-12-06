@@ -56,6 +56,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
 #ifdef V8_ENABLE_SANDBOX
         ,
         external_pointer_table_(&heap->isolate()->external_pointer_table()),
+        code_pointer_table_(&heap->isolate()->code_pointer_table()),
         shared_external_pointer_table_(
             &heap->isolate()->shared_external_pointer_table())
 #endif  // V8_ENABLE_SANDBOX
@@ -98,8 +99,9 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
                                MaybeObjectSlot end) final {
     VisitPointersImpl(host, start, end);
   }
-  V8_INLINE void VisitCodePointer(HeapObject host, CodeObjectSlot slot) final {
-    VisitCodePointerImpl(host, slot);
+  V8_INLINE void VisitCodeSpacePointer(HeapObject host,
+                                       CodeObjectSlot slot) final {
+    VisitCodeSpacePointerImpl(host, slot);
   }
   V8_INLINE void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) final;
   V8_INLINE void VisitCodeTarget(Code host, RelocInfo* rinfo) final;
@@ -111,6 +113,10 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
 
   V8_INLINE void VisitExternalPointer(HeapObject host, ExternalPointerSlot slot,
                                       ExternalPointerTag tag) final;
+
+  V8_INLINE void VisitCodePointer(HeapObject host,
+                                  ExternalPointerSlot slot) final;
+
   void SynchronizePageAccess(HeapObject heap_object) {
 #ifdef THREAD_SANITIZER
     // This is needed because TSAN does not process the memory fence
@@ -146,7 +152,8 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
 
   // Similar to VisitPointersImpl() but using code cage base for loading from
   // the slot.
-  V8_INLINE void VisitCodePointerImpl(HeapObject host, CodeObjectSlot slot);
+  V8_INLINE void VisitCodeSpacePointerImpl(HeapObject host,
+                                           CodeObjectSlot slot);
 
   V8_INLINE void VisitDescriptors(DescriptorArray descriptors,
                                   int number_of_own_descriptors);
@@ -194,6 +201,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   const bool should_mark_shared_heap_;
 #ifdef V8_ENABLE_SANDBOX
   ExternalPointerTable* const external_pointer_table_;
+  CodePointerTable* const code_pointer_table_;
   ExternalPointerTable* const shared_external_pointer_table_;
 #endif  // V8_ENABLE_SANDBOX
 };
@@ -215,8 +223,8 @@ class YoungGenerationMarkingVisitorBase
     VisitPointersImpl(host, start, end);
   }
 
-  V8_INLINE void VisitCodePointer(HeapObject host,
-                                  CodeObjectSlot slot) override {
+  V8_INLINE void VisitCodeSpacePointer(HeapObject host,
+                                       CodeObjectSlot slot) override {
     CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
     // Code slots never appear in new space because CodeDataContainers, the
     // only object that can contain code pointers, are always allocated in

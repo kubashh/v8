@@ -249,7 +249,7 @@ class CodeDataContainer : public HeapObject {
   V(kCodePointerFieldsStrongEndOffset, 0)                           \
   /* Raw data fields. */                                            \
   V(kCodeEntryPointOffset,                                          \
-    V8_EXTERNAL_CODE_SPACE_BOOL ? kSystemPointerSize : 0)           \
+    V8_EXTERNAL_CODE_SPACE_BOOL ? kExternalPointerSlotSize : 0)     \
   V(kFlagsOffset, V8_EXTERNAL_CODE_SPACE_BOOL ? kUInt16Size : 0)    \
   V(kBuiltinIdOffset, V8_EXTERNAL_CODE_SPACE_BOOL ? kInt16Size : 0) \
   V(kKindSpecificFlagsOffset, kInt32Size)                           \

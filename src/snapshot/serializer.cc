@@ -928,8 +928,8 @@ void Serializer::ObjectSerializer::VisitPointers(HeapObject host,
   }
 }
 
-void Serializer::ObjectSerializer::VisitCodePointer(HeapObject host,
-                                                    CodeObjectSlot slot) {
+void Serializer::ObjectSerializer::VisitCodeSpacePointer(HeapObject host,
+                                                         CodeObjectSlot slot) {
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
   // A version of VisitPointers() customized for CodeObjectSlot.
   HandleScope scope(isolate());
@@ -1116,11 +1116,18 @@ void Serializer::ObjectSerializer::VisitExternalPointer(
         InstanceTypeChecker::IsNativeContext(instance_type) ||
         // See ContextSerializer::SerializeJSObjectWithEmbedderFields().
         (InstanceTypeChecker::IsJSObject(instance_type) &&
-         JSObject::cast(host).GetEmbedderFieldCount() > 0) ||
-        // See ObjectSerializer::OutputRawData().
-        (V8_EXTERNAL_CODE_SPACE_BOOL &&
-         InstanceTypeChecker::IsCodeDataContainer(instance_type)));
+         JSObject::cast(host).GetEmbedderFieldCount() > 0));
   }
+}
+
+void Serializer::ObjectSerializer::VisitCodePointer(HeapObject host,
+                                                    ExternalPointerSlot slot) {
+  PtrComprCageBase cage_base(isolate());
+  InstanceType instance_type = object_->map(cage_base).instance_type();
+  // Serialization of code data containers is handled by
+  // ObjectSerializer::OutputRawData().
+  CHECK(V8_EXTERNAL_CODE_SPACE_BOOL &&
+        InstanceTypeChecker::IsCodeDataContainer(instance_type));
 }
 
 void Serializer::ObjectSerializer::VisitOffHeapTarget(Code host,
@@ -1229,7 +1236,7 @@ void Serializer::ObjectSerializer::OutputRawData(Address up_to) {
       // code_entry_point field contains a raw value that will be recomputed
       // after deserialization, so write zeros to keep the snapshot
       // deterministic.
-      static byte field_value[kSystemPointerSize] = {0};
+      static byte field_value[kExternalPointerSlotSize] = {0};
       OutputRawWithCustomField(sink_, object_start, base, bytes_to_output,
                                CodeDataContainer::kCodeEntryPointOffset,
                                sizeof(field_value), field_value);

@@ -97,7 +97,7 @@ MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitPointersImpl(
 
 template <typename ConcreteVisitor, typename MarkingState>
 V8_INLINE void
-MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitCodePointerImpl(
+MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitCodeSpacePointerImpl(
     HeapObject host, CodeObjectSlot slot) {
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
   Object object =
@@ -152,6 +152,15 @@ void MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitExternalPointer(
                                     ? shared_external_pointer_table_
                                     : external_pointer_table_;
   table->Mark(handle, slot.address());
+#endif  // V8_ENABLE_SANDBOX
+}
+
+template <typename ConcreteVisitor, typename MarkingState>
+void MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitCodePointer(
+    HeapObject host, ExternalPointerSlot slot) {
+#ifdef V8_ENABLE_SANDBOX
+  ExternalPointerHandle handle = slot.Relaxed_LoadHandle();
+  code_pointer_table_->Mark(handle, slot.address());
 #endif  // V8_ENABLE_SANDBOX
 }
 

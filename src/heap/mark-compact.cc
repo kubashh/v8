@@ -129,7 +129,7 @@ class MarkingVerifier : public ObjectVisitorWithCageBases, public RootVisitor {
     VerifyPointers(start, end);
   }
 
-  void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override {
+  void VisitCodeSpacePointer(HeapObject host, CodeObjectSlot slot) override {
     CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
     VerifyCodePointer(slot);
   }
@@ -928,6 +928,7 @@ void MarkCompactCollector::Prepare() {
     }
 #ifdef V8_COMPRESS_POINTERS
     heap_->isolate()->external_pointer_table().StartCompactingIfNeeded();
+    heap_->isolate()->code_pointer_table().StartCompactingIfNeeded();
 #endif  // V8_COMPRESS_POINTERS
   }
 
@@ -1175,7 +1176,7 @@ class MarkCompactCollector::CustomRootBodyMarkingVisitor final
     }
   }
 
-  void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override {
+  void VisitCodeSpacePointer(HeapObject host, CodeObjectSlot slot) override {
     CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
     MarkObject(host, slot.load(code_cage_base()));
   }
@@ -1237,7 +1238,7 @@ class MarkCompactCollector::SharedHeapObjectVisitor final
     }
   }
 
-  void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override {
+  void VisitCodeSpacePointer(HeapObject host, CodeObjectSlot slot) override {
     UNREACHABLE();
   }
 
@@ -1387,7 +1388,7 @@ class MarkExternalPointerFromExternalStringTable : public RootVisitor {
                        MaybeObjectSlot end) override {
       UNREACHABLE();
     }
-    void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override {
+    void VisitCodeSpacePointer(HeapObject host, CodeObjectSlot slot) override {
       UNREACHABLE();
     }
     void VisitCodeTarget(Code host, RelocInfo* rinfo) override {
@@ -1481,7 +1482,8 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
     }
   }
 
-  inline void VisitCodePointer(HeapObject host, CodeObjectSlot slot) final {
+  inline void VisitCodeSpacePointer(HeapObject host,
+                                    CodeObjectSlot slot) final {
     CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
     // This code is similar to the implementation of VisitPointer() modulo
     // new kind of slot.
@@ -3087,6 +3089,7 @@ void MarkCompactCollector::ClearNonLiveReferences() {
     // objects as it may perform table compaction, which requires objects to
     // still be at the same location as during marking.
     isolate()->external_pointer_table().SweepAndCompact(isolate());
+    isolate()->code_pointer_table().SweepAndCompact(isolate());
     if (isolate()->owns_shareable_data()) {
       isolate()->shared_external_pointer_table().SweepAndCompact(isolate());
     }
@@ -3935,7 +3938,7 @@ class PointersUpdatingVisitor final : public ObjectVisitorWithCageBases,
     }
   }
 
-  void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override {
+  void VisitCodeSpacePointer(HeapObject host, CodeObjectSlot slot) override {
     CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
     UpdateStrongCodeSlot<AccessMode::NON_ATOMIC>(host, cage_base(),
                                                  code_cage_base(), slot);

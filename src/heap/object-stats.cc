@@ -96,8 +96,8 @@ class FieldStatsCollector : public ObjectVisitorWithCageBases {
     *tagged_fields_count_ += (end - start);
   }
 
-  V8_INLINE void VisitCodePointer(HeapObject host,
-                                  CodeObjectSlot slot) override {
+  V8_INLINE void VisitCodeSpacePointer(HeapObject host,
+                                       CodeObjectSlot slot) override {
     CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
     *tagged_fields_count_ += 1;
   }
