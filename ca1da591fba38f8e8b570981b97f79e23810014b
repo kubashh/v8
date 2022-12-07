@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "06361c53_522b482a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-12-07T13:18:46Z",
+      "side": 1,
+      "message": "Oh, cool, I didn\u0027t know that WIP don\u0027t generate mails when people are added. I thought it was a \"not ready to merge yet\" flag...\nI didn\u0027t get a mail for your comment either.\n\nAdnreas and me had some discussion about this.\nIt\u0027s a follow-up to https://chromium-review.googlesource.com/c/v8/v8/+/3976515 as Andreas wasn\u0027t very happy about the fix.\nMy issue with this WIP change is that I don\u0027t believe that it works in all scenarios and it\u0027s hard to verify / test...\nBecause of that I\u0027ll close this CL now. If anybody fancies picking this up, please go ahead.",
+      "parentUuid": "403cbb74_49f9f1af",
+      "revId": "ca1da591fba38f8e8b570981b97f79e23810014b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7bccf5fd_353a806f",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 1
