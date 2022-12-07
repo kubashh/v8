@@ -39,7 +39,13 @@ class ConcurrentAllocator {
   static constexpr int kMaxLabSize = 32 * KB;
   static constexpr int kMaxLabObjectSize = 2 * KB;
 
-  ConcurrentAllocator(LocalHeap* local_heap, PagedSpace* space);
+  enum class Context {
+    kGC,
+    kNotGC,
+  };
+
+  ConcurrentAllocator(LocalHeap* local_heap, PagedSpace* space,
+                      Context context = Context::kGC);
 
   inline AllocationResult AllocateRaw(int object_size,
                                       AllocationAlignment alignment,
@@ -96,6 +102,7 @@ class ConcurrentAllocator {
   PagedSpace* const space_;
   Heap* const owning_heap_;
   LinearAllocationArea lab_;
+  const Context context_;
 };
 
 }  // namespace internal
