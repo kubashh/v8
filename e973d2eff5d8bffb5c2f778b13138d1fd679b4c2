@@ -33,6 +33,137 @@
       "message": "src/heap LGTM",
       "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c871388d_600f584e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-07T15:34:25Z",
+      "side": 1,
+      "message": "I only looked at src/base. Left a few nits and questions.",
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd0effba_a6f1ece0",
+        "filename": "src/base/container-utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-07T15:34:25Z",
+      "side": 1,
+      "message": "Interesting change. Does this fix anything, or is it just a simplification as the `std` namespace is looked into as part of argument-dependent lookup anyway?",
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf9d3037_8a392ccc",
+        "filename": "src/base/container-utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-07T15:34:25Z",
+      "side": 1,
+      "message": "Please merge this with the `vector_append` function above. Just templatize the vector type:\n\n    template\u003ctypename V, typename C\u003e\n    inline void vector_append(V\u0026 v, const C\u0026 container) {...}\n  \nThis would also work for the new ZoneVector then, which does not inherit from `std::vector` any more but provides the same interface.",
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94ad6a74_4c9416bb",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-07T15:34:25Z",
+      "side": 1,
+      "message": "Since you use `T*` here, you can replace the `std::distance` calls by direct pointer arithmetic to make the code simpler. You could also just use `base::VectorOf(start, end - start)` at the call site.\n\nI would propose to either templatize this constructor to accept arbitrary interators, or (if this is not needed) just use the `Vector`-based constructor above.",
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df65824_81eeae0c",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-07T15:34:25Z",
+      "side": 1,
+      "message": "Again, if we are only operating with pointer types anyway, simple pointer arithmetic reads simpler.",
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d63c1138_fba723ac",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-07T15:34:25Z",
+      "side": 1,
+      "message": "This can be expressed in (probably) one line via `std::copy`.",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 5
+      },
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "880738b5_d10e9523",
+        "filename": "src/base/vector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-07T15:34:25Z",
+      "side": 1,
+      "message": "What are these needed for?",
+      "range": {
+        "startLine": 376,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 1
+      },
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
