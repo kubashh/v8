@@ -31,7 +31,9 @@ constexpr int kTranslationArrayElementSize = kInt32Size;
 
 TranslationArrayIterator::TranslationArrayIterator(TranslationArray buffer,
                                                    int index)
-    : buffer_(buffer), index_(index) {
+    : buffer_(buffer) {
+  state_[0].index = index;
+  state_[0].remaining_ops_to_use_from_previous_translation = 0;
 #ifdef V8_USE_ZLIB
   if (V8_UNLIKELY(v8_flags.turbo_compress_translation_arrays)) {
     const int size = buffer_.get_int(kUncompressedSizeOffset);
@@ -60,81 +62,124 @@ TranslationArrayIterator::TranslationArrayIterator(TranslationArray buffer,
 
 int32_t TranslationArrayIterator::NextOperand() {
   if (V8_UNLIKELY(v8_flags.turbo_compress_translation_arrays)) {
-    return uncompressed_contents_[index_++];
-  } else if (remaining_ops_to_use_from_previous_translation_) {
-    return previous_translation_->NextOperand();
-  } else {
-    int32_t value = base::VLQDecode(buffer_.GetDataStartAddress(), &index_);
-    DCHECK_LE(index_, buffer_.length());
-    return value;
+    return uncompressed_contents_[state_[0].index++];
   }
+  for (int i = 0; i < num_states_; ++i) {
+    if (state_[i].remaining_ops_to_use_from_previous_translation == 0) {
+      int32_t value =
+          base::VLQDecode(buffer_.GetDataStartAddress(), &state_[i].index);
+      DCHECK_LE(state_[i].index, buffer_.length());
+      return value;
+    }
+  }
+  UNREACHABLE();
 }
 
 uint32_t TranslationArrayIterator::NextOperandUnsigned() {
   if (V8_UNLIKELY(v8_flags.turbo_compress_translation_arrays)) {
-    return uncompressed_contents_[index_++];
-  } else if (remaining_ops_to_use_from_previous_translation_) {
-    return previous_translation_->NextOperandUnsigned();
-  } else {
-    uint32_t value =
-        base::VLQDecodeUnsigned(buffer_.GetDataStartAddress(), &index_);
-    DCHECK_LE(index_, buffer_.length());
-    return value;
+    return uncompressed_contents_[state_[0].index++];
   }
+  for (int i = 0; i < num_states_; ++i) {
+    if (state_[i].remaining_ops_to_use_from_previous_translation == 0) {
+      int32_t value = base::VLQDecodeUnsigned(buffer_.GetDataStartAddress(),
+                                              &state_[i].index);
+      DCHECK_LE(state_[i].index, buffer_.length());
+      return value;
+    }
+  }
+  UNREACHABLE();
 }
 
 TranslationOpcode TranslationArrayIterator::NextOpcode() {
   if (V8_UNLIKELY(v8_flags.turbo_compress_translation_arrays)) {
     return static_cast<TranslationOpcode>(NextOperandUnsigned());
   }
-  if (remaining_ops_to_use_from_previous_translation_) {
-    --remaining_ops_to_use_from_previous_translation_;
-  }
-  if (remaining_ops_to_use_from_previous_translation_) {
-    return previous_translation_->NextOpcode();
-  }
-  TranslationOpcode opcode =
-      static_cast<TranslationOpcode>(NextOperandUnsigned());
-  DCHECK_LT(static_cast<uint32_t>(opcode), kNumTranslationOpcodes);
-  if (opcode == TranslationOpcode::BEGIN) {
-    int temp_index = index_;
+  std::pair<TranslationOpcode, int> result = NextOpcodeInternal(0);
+  DCHECK_LT(static_cast<uint32_t>(result.first), kNumTranslationOpcodes);
+  // We already have the answer, but we need to update the rest of the internal
+  // iterator states so that future MATCH_PREVIOUS_TRANSLATION instructions
+  // work.
+  if (result.first == TranslationOpcode::BEGIN) {
+    int i = result.second;
+    DCHECK_EQ(i, 0);  // BEGIN is never replaced by MATCH_PREVIOUS_TRANSLATION.
+    int index_of_lookback_distance = state_[0].index;
+    int temp_index = index_of_lookback_distance;
     // The first argument for BEGIN is the distance, in bytes, since the
     // previous BEGIN, or zero to indicate that MATCH_PREVIOUS_TRANSLATION will
     // not be used in this translation.
     uint32_t lookback_distance =
         base::VLQDecodeUnsigned(buffer_.GetDataStartAddress(), &temp_index);
-    if (lookback_distance) {
-      previous_translation_ = std::make_unique<TranslationArrayIterator>(
-          buffer_, index_ - 1 - lookback_distance);
-    } else {
-      previous_translation_ = nullptr;
+    while (lookback_distance != 0) {
+      ++i;
+      DCHECK_LT(i, kNumInternalStates);
+      index_of_lookback_distance -= lookback_distance;
+      state_[i].index = index_of_lookback_distance;
+      state_[i].remaining_ops_to_use_from_previous_translation = 0;
+      // We're not actually reading the BEGIN opcode, but it should still be
+      // there.
+      DCHECK_EQ(buffer_.GetDataStartAddress()[state_[i].index - 1],
+                static_cast<byte>(TranslationOpcode::BEGIN));
+      // Read the lookback distance, and skip the other operands.
+      lookback_distance = base::VLQDecodeUnsigned(buffer_.GetDataStartAddress(),
+                                                  &state_[i].index);
+      DCHECK_EQ(TranslationOpcodeOperandCount(TranslationOpcode::BEGIN), 4);
+      for (int j = 0; j < 3; ++j) {
+        base::VLQDecodeUnsigned(buffer_.GetDataStartAddress(),
+                                &state_[i].index);
+      }
     }
-    ops_since_previous_iterator_was_updated_ = 1;
-  } else if (opcode == TranslationOpcode::MATCH_PREVIOUS_TRANSLATION) {
-    remaining_ops_to_use_from_previous_translation_ = NextOperandUnsigned();
-    for (int i = 0; i < ops_since_previous_iterator_was_updated_; ++i) {
-      previous_translation_->SkipOpcodeAndItsOperands();
-    }
-    ops_since_previous_iterator_was_updated_ = 0;
-    opcode = previous_translation_->NextOpcode();
+    num_states_ = i + 1;
   } else {
-    ++ops_since_previous_iterator_was_updated_;
+    for (int i = result.second + 1; i < num_states_; ++i) {
+      TranslationOpcode opcode;
+      std::tie(opcode, i) = NextOpcodeInternal(i);
+      if (opcode == TranslationOpcode::BEGIN) {
+        // No lookback is possible past this point.
+        num_states_ = i;
+        break;
+      }
+      int operand_count = TranslationOpcodeOperandCount(opcode);
+      while (operand_count != 0) {
+        base::VLQDecodeUnsigned(buffer_.GetDataStartAddress(),
+                                &state_[i].index);
+        --operand_count;
+      }
+    }
   }
-  return opcode;
+  return result.first;
+}
+
+std::pair<TranslationOpcode, int> TranslationArrayIterator::NextOpcodeInternal(
+    int state_index) {
+  for (int i = state_index; i < num_states_; ++i) {
+    if (state_[i].remaining_ops_to_use_from_previous_translation) {
+      --state_[i].remaining_ops_to_use_from_previous_translation;
+    }
+    if (state_[i].remaining_ops_to_use_from_previous_translation) {
+      continue;
+    }
+    TranslationOpcode opcode =
+        static_cast<TranslationOpcode>(base::VLQDecodeUnsigned(
+            buffer_.GetDataStartAddress(), &state_[i].index));
+    DCHECK_LE(state_[i].index, buffer_.length());
+    DCHECK_LT(static_cast<uint32_t>(opcode), kNumTranslationOpcodes);
+    if (opcode == TranslationOpcode::MATCH_PREVIOUS_TRANSLATION) {
+      state_[i].remaining_ops_to_use_from_previous_translation =
+          base::VLQDecodeUnsigned(buffer_.GetDataStartAddress(),
+                                  &state_[i].index);
+      continue;
+    }
+    return {opcode, i};
+  }
+  UNREACHABLE();
 }
 
 bool TranslationArrayIterator::HasNextOpcode() const {
   if (V8_UNLIKELY(v8_flags.turbo_compress_translation_arrays)) {
-    return index_ < static_cast<int>(uncompressed_contents_.size());
-  } else {
-    return index_ < buffer_.length() ||
-           remaining_ops_to_use_from_previous_translation_ > 1;
+    return state_[0].index < static_cast<int>(uncompressed_contents_.size());
   }
-}
-
-void TranslationArrayIterator::SkipOpcodeAndItsOperands() {
-  TranslationOpcode opcode = NextOpcode();
-  SkipOperands(TranslationOpcodeOperandCount(opcode));
+  return state_[0].index < buffer_.length() ||
+         state_[0].remaining_ops_to_use_from_previous_translation > 1;
 }
 
 int TranslationArrayBuilder::BeginTranslation(int frame_count,

@@ -42,24 +42,29 @@ class TranslationArrayIterator {
     for (int i = 0; i < n; i++) NextOperand();
   }
 
+  static constexpr int kNumInternalStates = 11;
+
  private:
-  void SkipOpcodeAndItsOperands();
+  // Returns the opcode and the index of the IteratorState it's from.
+  std::pair<TranslationOpcode, int> NextOpcodeInternal(int state_index);
 
   std::vector<int32_t> uncompressed_contents_;
   TranslationArray buffer_;
-  int index_;
 
-  // This decrementing counter indicates how many more times to read operations
-  // from the previous translation before continuing to move the index forward.
-  int remaining_ops_to_use_from_previous_translation_ = 0;
+  struct IteratorState {
+    // The index within buffer_ to read next.
+    int index;
 
-  // An iterator for operations starting at the previous BEGIN, which can be
-  // used to read operations referred to by MATCH_PREVIOUS_TRANSLATION.
-  std::unique_ptr<TranslationArrayIterator> previous_translation_;
+    // This decrementing counter indicates how many more times to read
+    // operations from the previous translation before continuing to move the
+    // index forward.
+    int remaining_ops_to_use_from_previous_translation;
+  };
 
-  // When starting a new MATCH_PREVIOUS_TRANSLATION operation, we'll need to
-  // advance the previous_translation_ iterator by this many steps.
-  int ops_since_previous_iterator_was_updated_ = 0;
+  // state_[0] refers to the current translation being decoded. state_[1] is the
+  // previous translation, state_[2] is the one before that, etc.
+  IteratorState state_[kNumInternalStates];
+  int num_states_ = 1;
 };
 
 class TranslationArrayBuilder {
@@ -123,7 +128,8 @@ class TranslationArrayBuilder {
   // How many translations in a row can use MATCH_PREVIOUS_TRANSLATION opcodes
   // before a translation needs to redefine all instructions. This puts a limit
   // on the recursion depth required when decoding.
-  static constexpr int kMaxLookback = 10;
+  static constexpr int kMaxLookback =
+      TranslationArrayIterator::kNumInternalStates - 1;
 
   struct Instruction {
     Instruction() = default;
