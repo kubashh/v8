@@ -81,6 +81,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   // ObjectVisitor overrides.
   void VisitMapPointer(HeapObject host) final {
     Map map = host.map(ObjectVisitorWithCageBases::cage_base());
+    if (!ShouldMarkObject(map)) return;
     MarkObject(host, map);
     concrete_visitor()->RecordSlot(host, host.map_slot(), map);
   }

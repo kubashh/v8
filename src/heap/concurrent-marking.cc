@@ -363,7 +363,7 @@ class YoungGenerationConcurrentMarkingVisitor final
     return SeqTwoByteString::SizeFor(object.length(kAcquireLoad));
   }
 
-  void VisitMapPointer(HeapObject host) { UNREACHABLE(); }
+  void VisitMapPointer(HeapObject host) override { UNREACHABLE(); }
 
   // HeapVisitor override.
 
