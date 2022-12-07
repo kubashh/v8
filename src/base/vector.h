@@ -373,6 +373,21 @@ class EmbeddedVector : public Vector<T> {
   T buffer_[kSize];
 };
 
+template <typename T>
+inline auto begin(const Vector<T>& v) {
+  return v.begin();
+}
+
+template <typename T>
+inline auto end(const Vector<T>& v) {
+  return v.end();
+}
+
+template <typename T>
+inline size_t size(const Vector<T>& v) {
+  return v.size();
+}
+
 }  // namespace base
 }  // namespace v8
 
