@@ -51,7 +51,7 @@
 
 (function TestNotExtensible() {
   let arr = new SharedArray(1);
-  // Shared structs are non-extensible.
+  // Shared arrays are non-extensible.
   assertThrows(() => {
     arr[1] = 42;
   });
@@ -118,4 +118,16 @@
   let a = new SharedArray(2);
   let proxy = new Proxy(a, {});
   assertEquals(2, proxy.length);
+})();
+
+(function TestCannotBePrototype() {
+  // For now shared arrays cannot be set as prototypes for other objects
+  // and setPrototypeOf silently fails.
+  let arr = new SharedArray();
+  let proto1 = {'a': 'a'};
+  let obj = {};
+  Object.setPrototypeOf(obj, proto1);
+  assertEquals(proto1, Object.getPrototypeOf(obj));
+  Object.setPrototypeOf(obj, arr);
+  assertEquals(proto1, Object.getPrototypeOf(obj));
 })();
