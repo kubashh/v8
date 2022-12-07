@@ -16,6 +16,24 @@
       "message": "Nit: Maybe add a comment here.",
       "revId": "8c76dab0bb3d1b69b1a6f884a7fbc5e7867d6413",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c883f19_ae7e0a15",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-12-07T15:51:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ee33bbd_8f8b6cd0",
+      "revId": "8c76dab0bb3d1b69b1a6f884a7fbc5e7867d6413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

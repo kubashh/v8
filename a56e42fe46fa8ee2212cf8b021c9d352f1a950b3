@@ -188,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1653b19b_b2c47000",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4705,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2022-12-07T15:51:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7cea3b8b_9a2d63da",
+      "range": {
+        "startLine": 4705,
+        "startChar": 17,
+        "endLine": 4705,
+        "endChar": 28
+      },
+      "revId": "a56e42fe46fa8ee2212cf8b021c9d352f1a950b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7321895_81586046",
