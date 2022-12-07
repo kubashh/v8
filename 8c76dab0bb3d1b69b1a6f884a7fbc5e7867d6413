@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ee33bbd_8f8b6cd0",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-12-07T14:25:04Z",
+      "side": 1,
+      "message": "Nit: Maybe add a comment here.",
+      "revId": "8c76dab0bb3d1b69b1a6f884a7fbc5e7867d6413",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
