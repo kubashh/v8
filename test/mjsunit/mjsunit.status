@@ -570,6 +570,20 @@
 ['arch == arm64 and simulator_run', {
   'try': [PASS, SLOW],
   'non-extensible-array-reduce': [PASS, SLOW],
+
+  'tools/processor': [SKIP],
+  'regress/regress-crbug-1209152': [SKIP],
+  'regress/regress-crbug-1191886': [SKIP],
+
+  'array-constructor': [PASS, SLOW],
+  'unicode-test': [PASS, SLOW],
+  'large-object-literal-slow-elements': [PASS, SLOW],
+  'regress/regress-708247': [PASS, SLOW],
+  'compiler/osr-big': [PASS, SLOW],
+  'unbox-double-arrays': [PASS, SLOW],
+  'random-bit-correlations': [PASS, SLOW],
+  'string-indexof-2': [PASS, SLOW],
+  'compiler/osr-follow': [PASS, SLOW],
 }],  # 'arch == arm64 and simulator_run'
 
 ##############################################################################
