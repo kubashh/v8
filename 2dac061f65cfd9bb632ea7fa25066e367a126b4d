@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "831c3567_9836a46b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-07T12:17:09Z",
+      "side": 1,
+      "message": "PTAL\n\nQuick and dirty to increase test coverage (Will be improved when porting the other call variants).",
+      "revId": "2dac061f65cfd9bb632ea7fa25066e367a126b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
