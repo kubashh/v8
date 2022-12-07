@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ed6db674_3bc96515",
+        "filename": "src/base/container-utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-07T16:14:19Z",
+      "side": 1,
+      "message": "I wrote the rest of the functions here in such a way that they can be used with arbitrary containes. Someone changed this implementation lately, so I changed this as a drive by.\n\nThe advantage of this pattern is that if you define your own container\n```\nnamespace my_containers {\n\nclass MyContainer {\n  iterator_type MyBegin() { /* ... */ }\n};\n\nauto begin(MyContainer\u0026 c) { return c.MyBegin(); }\n}\n```\nthen using `begin(container)` will find the above `begin`, because ADL will look for `my_containers::begin` when resolving, because the `container` argument is defined in that namespace. You lose this flexibility when using either `container.begin()` or `std::begin(container)` (the latter will force lookup in `namespace std`). Also allows functions to be called with C-style arrays for example.\n\nIs that generality necessary in our code base? Probably not, but there is also no disadvantage and since the rest of this file applies this style, I changed it for consistency.",
+      "parentUuid": "dd0effba_a6f1ece0",
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf9d3037_8a392ccc",
         "filename": "src/base/container-utils.h",
         "patchSetId": 7
@@ -82,6 +100,24 @@
       "writtenOn": "2022-12-07T15:34:25Z",
       "side": 1,
       "message": "Please merge this with the `vector_append` function above. Just templatize the vector type:\n\n    template\u003ctypename V, typename C\u003e\n    inline void vector_append(V\u0026 v, const C\u0026 container) {...}\n  \nThis would also work for the new ZoneVector then, which does not inherit from `std::vector` any more but provides the same interface.",
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "726e8132_bfdcde07",
+        "filename": "src/base/container-utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-07T16:14:19Z",
+      "side": 1,
+      "message": "good point. done",
+      "parentUuid": "bf9d3037_8a392ccc",
       "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +139,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea30bc77_cddce375",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-07T16:14:19Z",
+      "side": 1,
+      "message": "Removed it for now.",
+      "parentUuid": "94ad6a74_4c9416bb",
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4df65824_81eeae0c",
@@ -116,6 +170,24 @@
       "writtenOn": "2022-12-07T15:34:25Z",
       "side": 1,
       "message": "Again, if we are only operating with pointer types anyway, simple pointer arithmetic reads simpler.",
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c372792c_39c0b68a",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-07T16:14:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4df65824_81eeae0c",
       "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -143,6 +215,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9c64bf6_103c4c5d",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-07T16:14:19Z",
+      "side": 1,
+      "message": "Good catch. Also replaced the loop in the above method with `std::fill_n`.",
+      "parentUuid": "d63c1138_fba723ac",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 5
+      },
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "880738b5_d10e9523",
@@ -156,6 +252,30 @@
       "writtenOn": "2022-12-07T15:34:25Z",
       "side": 1,
       "message": "What are these needed for?",
+      "range": {
+        "startLine": 376,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 1
+      },
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "276056e9_b6a79312",
+        "filename": "src/base/vector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-07T16:14:19Z",
+      "side": 1,
+      "message": "See long comment above. An alternative to pull `std` versions of those functions into the `base` namespace, which is also okay I guess. Changed it accordingly (see top of `container-utils.h`). Wdyt?",
+      "parentUuid": "880738b5_d10e9523",
       "range": {
         "startLine": 376,
         "startChar": 0,
