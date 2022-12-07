@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f1eca62_5ab4fbaa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-12-07T19:43:18Z",
+      "side": 1,
+      "message": "Having shared objects in the [[Prototype]] slots of thread-local objects is expected to work. It\u0027s the other direction that\u0027s not supposed to work: shared objects shouldn\u0027t have non-shared values in their [[Prototype]] slots, and for now the dev trial just sets that slot to null for now.\n\nI think the fix here is to make prevent shared objects from being optimized as prototypes. I\u0027m happy to take this over if you don\u0027t mind while you\u0027re OOO.",
+      "revId": "e4bb945b46cd963420e36c1ae4925b690aed9cb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
