@@ -80,7 +80,6 @@ class MaglevAssembler : public MacroAssembler {
 
   inline void Branch(Condition condition, BasicBlock* if_true,
                      BasicBlock* if_false, BasicBlock* next_block);
-  inline void PushInput(const Input& input);
   inline Register FromAnyToRegister(const Input& input, Register scratch);
 
   inline void LoadBoundedSizeFromObject(Register result, Register object,

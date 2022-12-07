@@ -19,6 +19,7 @@ constexpr Register kScratchRegisterW = w16;
 constexpr DoubleRegister kScratchDoubleReg = d30;
 
 namespace detail {
+
 template <typename Arg>
 inline Register ToRegister(MaglevAssembler* masm, Register reg, Arg arg) {
   masm->Move(reg, arg);
@@ -28,30 +29,50 @@ inline Register ToRegister(MaglevAssembler* masm, Register scratch,
                            Register reg) {
   return reg;
 }
+inline Register ToRegister(MaglevAssembler* masm, Register scratch,
+                           const Input& input) {
+  if (input.operand().IsConstant()) {
+    input.node()->LoadToRegister(masm, scratch);
+    return scratch;
+  }
+  const compiler::AllocatedOperand& operand =
+      compiler::AllocatedOperand::cast(input.operand());
+  if (operand.IsRegister()) {
+    return ToRegister(input);
+  } else {
+    DCHECK(operand.IsStackSlot());
+    masm->Move(scratch, masm->ToMemOperand(input));
+    return scratch;
+  }
+}
+
 template <typename... Args>
 struct PushAllHelper;
+
 template <typename... Args>
 inline void PushAll(MaglevAssembler* basm, Args... args) {
   PushAllHelper<Args...>::Push(basm, args...);
 }
+
 template <>
 struct PushAllHelper<> {
   static void Push(MaglevAssembler* basm) {}
 };
+
 template <typename Arg>
 struct PushAllHelper<Arg> {
   static void Push(MaglevAssembler* basm, Arg) { FATAL("Unaligned push"); }
 };
+
 template <typename Arg1, typename Arg2, typename... Args>
 struct PushAllHelper<Arg1, Arg2, Args...> {
   static void Push(MaglevAssembler* masm, Arg1 arg1, Arg2 arg2, Args... args) {
-    {
-      masm->MacroAssembler::Push(ToRegister(masm, ip0, arg1),
-                                 ToRegister(masm, ip1, arg2));
-    }
+    masm->MacroAssembler::Push(ToRegister(masm, ip0, arg1),
+                               ToRegister(masm, ip1, arg2));
     PushAll(masm, args...);
   }
 };
+
 }  // namespace detail
 
 template <typename... T>

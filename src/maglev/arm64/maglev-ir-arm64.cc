@@ -5,6 +5,7 @@
 #include "src/codegen/arm64/assembler-arm64-inl.h"
 #include "src/codegen/arm64/register-arm64.h"
 #include "src/codegen/interface-descriptors-inl.h"
+#include "src/codegen/interface-descriptors.h"
 #include "src/maglev/arm64/maglev-assembler-arm64-inl.h"
 #include "src/maglev/maglev-graph-processor.h"
 #include "src/maglev/maglev-graph.h"
@@ -131,7 +132,107 @@ UNIMPLEMENTED_NODE(Float64GreaterThanOrEqual)
 UNIMPLEMENTED_NODE_WITH_CALL(Float64Ieee754Unary)
 UNIMPLEMENTED_NODE_WITH_CALL(BuiltinStringFromCharCode)
 UNIMPLEMENTED_NODE_WITH_CALL(BuiltinStringPrototypeCharCodeAt)
-UNIMPLEMENTED_NODE_WITH_CALL(Call, receiver_mode_, target_type_, feedback_)
+
+int Call::MaxCallStackArgs() const { return num_args(); }
+
+void Call::SetValueLocationConstraints() {
+  // TODO(leszeks): Consider splitting Call into with- and without-feedback
+  // opcodes, rather than checking for feedback validity.
+  if (feedback_.IsValid()) {
+    using D = CallTrampoline_WithFeedbackDescriptor;
+    UseFixed(function(), D::GetRegisterParameter(D::kFunction));
+    UseFixed(arg(0), D::GetRegisterParameter(D::kReceiver));
+  } else {
+    using D = CallTrampolineDescriptor;
+    UseFixed(function(), D::GetRegisterParameter(D::kFunction));
+    UseAny(arg(0));
+  }
+  for (int i = 1; i < num_args(); i++) {
+    UseAny(arg(i));
+  }
+  UseFixed(context(), kContextRegister);
+  DefineAsFixed(this, kReturnRegister0);
+}
+
+void Call::GenerateCode(MaglevAssembler* masm, const ProcessingState& state) {
+  // TODO(leszeks): Port the nice Sparkplug CallBuiltin helper.
+#ifdef DEBUG
+  if (feedback_.IsValid()) {
+    using D = CallTrampoline_WithFeedbackDescriptor;
+    DCHECK_EQ(ToRegister(function()), D::GetRegisterParameter(D::kFunction));
+    DCHECK_EQ(ToRegister(arg(0)), D::GetRegisterParameter(D::kReceiver));
+  } else {
+    using D = CallTrampolineDescriptor;
+    DCHECK_EQ(ToRegister(function()), D::GetRegisterParameter(D::kFunction));
+  }
+#endif
+  DCHECK_EQ(ToRegister(context()), kContextRegister);
+
+  uint32_t arg_count = num_args();
+
+  // TODO(pthier): Create helper to push arguments.
+  for (int i = arg_count - 1; i >= 1; --i) {
+    __ Push(arg(i), arg(i - 1));
+  }
+  if (arg_count % 2 != 0) {
+    __ Push(arg(0), padreg);
+  }
+
+  if (feedback_.IsValid()) {
+    DCHECK_EQ(TargetType::kAny, target_type_);
+    using D = CallTrampoline_WithFeedbackDescriptor;
+    __ Move(D::GetRegisterParameter(D::kActualArgumentsCount), arg_count);
+    __ Move(D::GetRegisterParameter(D::kFeedbackVector), feedback().vector);
+    __ Move(D::GetRegisterParameter(D::kSlot), feedback().index());
+
+    switch (receiver_mode_) {
+      case ConvertReceiverMode::kNullOrUndefined:
+        __ CallBuiltin(Builtin::kCall_ReceiverIsNullOrUndefined_WithFeedback);
+        break;
+      case ConvertReceiverMode::kNotNullOrUndefined:
+        __ CallBuiltin(
+            Builtin::kCall_ReceiverIsNotNullOrUndefined_WithFeedback);
+        break;
+      case ConvertReceiverMode::kAny:
+        __ CallBuiltin(Builtin::kCall_ReceiverIsAny_WithFeedback);
+        break;
+    }
+  } else if (target_type_ == TargetType::kAny) {
+    using D = CallTrampolineDescriptor;
+    __ Move(D::GetRegisterParameter(D::kActualArgumentsCount), arg_count);
+
+    switch (receiver_mode_) {
+      case ConvertReceiverMode::kNullOrUndefined:
+        __ CallBuiltin(Builtin::kCall_ReceiverIsNullOrUndefined);
+        break;
+      case ConvertReceiverMode::kNotNullOrUndefined:
+        __ CallBuiltin(Builtin::kCall_ReceiverIsNotNullOrUndefined);
+        break;
+      case ConvertReceiverMode::kAny:
+        __ CallBuiltin(Builtin::kCall_ReceiverIsAny);
+        break;
+    }
+  } else {
+    DCHECK_EQ(TargetType::kJSFunction, target_type_);
+    using D = CallTrampolineDescriptor;
+    __ Move(D::GetRegisterParameter(D::kActualArgumentsCount), arg_count);
+
+    switch (receiver_mode_) {
+      case ConvertReceiverMode::kNullOrUndefined:
+        __ CallBuiltin(Builtin::kCallFunction_ReceiverIsNullOrUndefined);
+        break;
+      case ConvertReceiverMode::kNotNullOrUndefined:
+        __ CallBuiltin(Builtin::kCallFunction_ReceiverIsNotNullOrUndefined);
+        break;
+      case ConvertReceiverMode::kAny:
+        __ CallBuiltin(Builtin::kCallFunction_ReceiverIsAny);
+        break;
+    }
+  }
+
+  masm->DefineExceptionHandlerAndLazyDeoptPoint(this);
+}
+
 UNIMPLEMENTED_NODE_WITH_CALL(CallBuiltin)
 UNIMPLEMENTED_NODE_WITH_CALL(CallRuntime)
 UNIMPLEMENTED_NODE_WITH_CALL(CallWithArrayLike)

@@ -20,11 +20,40 @@ namespace internal {
 namespace maglev {
 
 namespace detail {
+
 template <typename... Args>
 struct PushAllHelper;
+
 template <>
 struct PushAllHelper<> {
   static void Push(MaglevAssembler* masm) {}
+};
+
+inline void PushInput(MaglevAssembler* masm, const Input& input) {
+  if (input.operand().IsConstant()) {
+    input.node()->LoadToRegister(masm, kScratchRegister);
+    masm->Push(kScratchRegister);
+  } else {
+    // TODO(leszeks): Consider special casing the value. (Toon: could possibly
+    // be done through Input directly?)
+    const compiler::AllocatedOperand& operand =
+        compiler::AllocatedOperand::cast(input.operand());
+
+    if (operand.IsRegister()) {
+      masm->Push(operand.GetRegister());
+    } else {
+      DCHECK(operand.IsStackSlot());
+      masm->Push(masm->GetStackSlot(operand));
+    }
+  }
+}
+
+template <typename... Args>
+struct PushAllHelper<Input, Args...> {
+  static void Push(MaglevAssembler* masm, const Input& arg, Args... args) {
+    PushInput(masm, arg);
+    PushAllHelper<Args...>::Push(masm, args...);
+  }
 };
 template <typename Arg, typename... Args>
 struct PushAllHelper<Arg, Args...> {
@@ -33,6 +62,7 @@ struct PushAllHelper<Arg, Args...> {
     PushAllHelper<Args...>::Push(masm, args...);
   }
 };
+
 }  // namespace detail
 
 template <typename... T>
@@ -53,25 +83,6 @@ void MaglevAssembler::Branch(Condition condition, BasicBlock* if_true,
     // Jump to the true block if it's not the next block.
     if (if_true != next_block) {
       jmp(if_true->label());
-    }
-  }
-}
-
-void MaglevAssembler::PushInput(const Input& input) {
-  if (input.operand().IsConstant()) {
-    input.node()->LoadToRegister(this, kScratchRegister);
-    Push(kScratchRegister);
-  } else {
-    // TODO(leszeks): Consider special casing the value. (Toon: could possibly
-    // be done through Input directly?)
-    const compiler::AllocatedOperand& operand =
-        compiler::AllocatedOperand::cast(input.operand());
-
-    if (operand.IsRegister()) {
-      Push(operand.GetRegister());
-    } else {
-      DCHECK(operand.IsStackSlot());
-      Push(GetStackSlot(operand));
     }
   }
 }
