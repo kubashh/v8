@@ -55,6 +55,11 @@ class SmallVector {
       : SmallVector(init.size(), allocator) {
     memcpy(begin_, init.begin(), sizeof(T) * init.size());
   }
+  V8_INLINE SmallVector(T* begin, T* end,
+                        const Allocator& allocator = Allocator())
+      : SmallVector(std::distance(begin, end), allocator) {
+    memcpy(begin_, begin, sizeof(T) * std::distance(begin, end));
+  }
 
   ~SmallVector() {
     if (is_big()) FreeDynamicStorage();
@@ -110,6 +115,15 @@ class SmallVector {
   bool empty() const { return end_ == begin_; }
   size_t capacity() const { return end_of_storage_ - begin_; }
 
+  T& front() {
+    DCHECK_NE(0, size());
+    return begin_[0];
+  }
+  const T& front() const {
+    DCHECK_NE(0, size());
+    return begin_[0];
+  }
+
   T& back() {
     DCHECK_NE(0, size());
     return end_[-1];
@@ -144,6 +158,33 @@ class SmallVector {
   void pop_back(size_t count = 1) {
     DCHECK_GE(size(), count);
     end_ -= count;
+  }
+
+  T* insert(T* pos, const T& value) { return insert(pos, 1, value); }
+  T* insert(T* pos, size_t count, const T& value) {
+    DCHECK_LE(pos, end_);
+    size_t offset = std::distance(begin_, pos);
+    size_t elements_to_move = std::distance(pos, end_);
+    resize_no_init(size() + count);
+    pos = begin_ + offset;
+    std::memmove(pos + count, pos, elements_to_move);
+    for (; count; --count) pos[count - 1] = value;
+    return pos;
+  }
+  template <typename It>
+  T* insert(T* pos, It begin, It end) {
+    DCHECK_LE(pos, end_);
+    size_t offset = std::distance(begin_, pos);
+    size_t count = std::distance(begin, end);
+    size_t elements_to_move = std::distance(pos, end_);
+    resize_no_init(size() + count);
+    pos = begin_ + offset;
+    std::memmove(pos + count, pos, elements_to_move);
+    for (T* p = pos; begin != end; ++begin, ++p) {
+      DCHECK_LT(p, pos + count);
+      *p = *begin;
+    }
+    return pos;
   }
 
   void resize_no_init(size_t new_size) {
