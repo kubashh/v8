@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2946ef6f_2a8330d3",
+        "filename": "src/compiler/scheduler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-12-07T13:34:26Z",
+      "side": 0,
+      "message": "Leftover comment, see https://chromium-review.googlesource.com/c/v8/v8/+/4013552/comment/dd8af2ef_b210682a/",
+      "revId": "4304bbdc66afbae4e7a318175cd14670fb22374b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
