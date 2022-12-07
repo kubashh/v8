@@ -28,6 +28,36 @@ class SemiSpaceNewSpace;
 
 enum SemiSpaceId { kFromSpace = 0, kToSpace = 1 };
 
+namespace {
+class SlowPathTimer {
+ public:
+  V8_INLINE SlowPathTimer()
+      : start_time_(base::TimeTicks::Now().ToInternalValue()) {}
+  V8_INLINE ~SlowPathTimer() {
+    double end_time = base::TimeTicks::Now().ToInternalValue();
+    overall_time_ += end_time - start_time_;
+    ++overall_count_;
+  }
+
+  V8_INLINE static double GetOverallDuration() {
+    // This is the same computation used by
+    // GCTracer::MonotonicallyIncreasingTimeInMs.
+    return overall_time_ /
+           static_cast<double>(base::Time::kMicrosecondsPerMillisecond);
+  }
+
+  V8_INLINE static size_t GetOverallCount() { return overall_count_; }
+
+ private:
+  double start_time_;
+  static double overall_time_;
+  static size_t overall_count_;
+};
+
+double SlowPathTimer::overall_time_ = 0.0;
+size_t SlowPathTimer::overall_count_ = 0;
+}  // namespace
+
 // -----------------------------------------------------------------------------
 // SemiSpace in young generation
 //

@@ -500,6 +500,9 @@ SemiSpaceNewSpace::~SemiSpaceNewSpace() {
 
   to_space_.TearDown();
   from_space_.TearDown();
+
+  printf("Slow paths\toverall count = %zu\toverall time = %.2f\n",
+         SlowPathTimer::GetOverallCount(), SlowPathTimer::GetOverallDuration());
 }
 
 void SemiSpaceNewSpace::Grow() {
@@ -1022,6 +1025,9 @@ PagedNewSpace::~PagedNewSpace() {
   allocation_info_.Reset(kNullAddress, kNullAddress);
 
   paged_space_.TearDown();
+
+  printf("Slow paths\toverall count = %zu\toverall time = %.2f\n",
+         SlowPathTimer::GetOverallCount(), SlowPathTimer::GetOverallDuration());
 }
 
 }  // namespace internal

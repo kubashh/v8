@@ -61,6 +61,7 @@ V8_WARN_UNUSED_RESULT inline AllocationResult NewSpace::AllocateRawSynchronized(
 V8_INLINE bool SemiSpaceNewSpace::EnsureAllocation(
     int size_in_bytes, AllocationAlignment alignment, AllocationOrigin origin,
     int* out_max_aligned_size) {
+  SlowPathTimer timer;
   size_in_bytes = ALIGN_TO_ALLOCATION_ALIGNMENT(size_in_bytes);
   DCHECK_SEMISPACE_ALLOCATION_INFO(allocation_info_, to_space_);
 #if DEBUG
@@ -106,6 +107,7 @@ V8_INLINE bool SemiSpaceNewSpace::EnsureAllocation(
 V8_INLINE bool PagedSpaceForNewSpace::EnsureAllocation(
     int size_in_bytes, AllocationAlignment alignment, AllocationOrigin origin,
     int* out_max_aligned_size) {
+  SlowPathTimer timer;
   if (!PagedSpaceBase::EnsureAllocation(size_in_bytes, alignment, origin,
                                         out_max_aligned_size)) {
     return false;
