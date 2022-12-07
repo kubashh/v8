@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "205ca1f8_a1d26d3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-07T11:03:07Z",
+      "side": 1,
+      "message": "PTAL :)\n\nI\u0027ve tried to factorize a bit Float64Modulus and Float64Exponentiate in maglev-ir.h. I have mixed feelings about this: on one side it avoids code duplication, but on the other side it introduces a bit of complexity for something that is just used twice... What do you think?",
+      "revId": "4c7739396dc20d7fbbd6319c31a167ec64f74cac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
