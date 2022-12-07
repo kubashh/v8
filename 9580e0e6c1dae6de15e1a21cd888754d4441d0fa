@@ -22,6 +22,30 @@
       },
       "revId": "9580e0e6c1dae6de15e1a21cd888754d4441d0fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed2fc36_4bd6cf5f",
+        "filename": "test/unittests/compiler/turboshaft/turboshaft-types-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-07T14:06:34Z",
+      "side": 1,
+      "message": "Removed the test for now, as it is not very useful in its current state. In order for tests to be reasonable, we need a subtype check, which is introduced in a following CL.",
+      "parentUuid": "6e33efc0_0f51cb39",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 62
+      },
+      "revId": "9580e0e6c1dae6de15e1a21cd888754d4441d0fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
