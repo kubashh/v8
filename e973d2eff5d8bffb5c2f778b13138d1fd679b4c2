@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7999bad2_a424fce3",
+        "filename": "src/base/container-utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-07T16:44:02Z",
+      "side": 1,
+      "message": "Let skip this until we need it. Using just `begin` works for data types defined in `std`, because the `std` namespace is used for unqualified name lookup (and `std::begin` will be used). I don\u0027t see why we would not just define `begin()` and `end()` accessors for custom data types. `std::begin` and `std::end` would use those then.\n\nI think most people understand what `std::begin` and `std::end` are doing, but using `begin` and `end` unqualified and then having a `using std::begin` in this header just adds another layer of indirection, which is unnecessary for now.\n\nI would propose to consistently use `std::begin` and `std::end` everywhere in this file.",
+      "parentUuid": "ed6db674_3bc96515",
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf9d3037_8a392ccc",
         "filename": "src/base/container-utils.h",
         "patchSetId": 7
@@ -276,6 +294,30 @@
       "side": 1,
       "message": "See long comment above. An alternative to pull `std` versions of those functions into the `base` namespace, which is also okay I guess. Changed it accordingly (see top of `container-utils.h`). Wdyt?",
       "parentUuid": "880738b5_d10e9523",
+      "range": {
+        "startLine": 376,
+        "startChar": 0,
+        "endLine": 389,
+        "endChar": 1
+      },
+      "revId": "e973d2eff5d8bffb5c2f778b13138d1fd679b4c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e636937_bcffeca0",
+        "filename": "src/base/vector.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-07T16:44:02Z",
+      "side": 1,
+      "message": "See the other comment.",
+      "parentUuid": "276056e9_b6a79312",
       "range": {
         "startLine": 376,
         "startChar": 0,
