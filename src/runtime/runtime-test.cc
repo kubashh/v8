@@ -1569,7 +1569,7 @@ RUNTIME_FUNCTION(Runtime_HeapObjectVerify) {
   DCHECK_EQ(1, args.length());
   Handle<Object> object = args.at(0);
 #ifdef VERIFY_HEAP
-  object->ObjectVerify(isolate);
+  if (v8_flags.verify_heap) object->ObjectVerify(isolate);
 #else
   CHECK(object->IsObject());
   if (object->IsHeapObject()) {
