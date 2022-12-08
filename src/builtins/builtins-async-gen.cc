@@ -160,7 +160,7 @@ void AsyncBuiltinsAssembler::InitializeNativeClosure(
              IntPtrEqual(LoadMapInstanceSizeInWords(function_map),
                          IntPtrConstant(JSFunction::kSizeWithoutPrototype /
                                         kTaggedSize)));
-  static_assert(JSFunction::kSizeWithoutPrototype == 7 * kTaggedSize);
+  static_assert(JSFunction::kSizeWithoutPrototype == 8 * kTaggedSize);
   StoreMapNoWriteBarrier(function, function_map);
   StoreObjectFieldRoot(function, JSObject::kPropertiesOrHashOffset,
                        RootIndex::kEmptyFixedArray);
@@ -182,6 +182,10 @@ void AsyncBuiltinsAssembler::InitializeNativeClosure(
       shared_info, SharedFunctionInfo::kFunctionDataOffset);
   TNode<CodeT> code = LoadBuiltin(builtin_id);
   StoreObjectFieldNoWriteBarrier(function, JSFunction::kCodeOffset, code);
+  TNode<Uint32T> code_entry_handle =
+      LoadObjectField<Uint32T>(code, CodeDataContainer::kCodeEntryPointOffset);
+  StoreObjectFieldNoWriteBarrier(function, JSFunction::kCodeEntryPointOffset,
+                                 code_entry_handle);
 }
 
 TNode<JSFunction> AsyncBuiltinsAssembler::CreateUnwrapClosure(

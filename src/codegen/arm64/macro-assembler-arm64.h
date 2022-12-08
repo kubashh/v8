@@ -1466,11 +1466,16 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void StoreSandboxedPointerField(const Register& value,
                                   const MemOperand& dst_field_operand);
 
-  // Loads a field containing off-heap pointer and does necessary decoding
-  // if sandboxed external pointers are enabled.
+  // Loads a field containing an off-heap ("external") pointer and does the
+  // necessary decoding if the sandbox is enabled.
   void LoadExternalPointerField(Register destination, MemOperand field_operand,
                                 ExternalPointerTag tag,
                                 Register isolate_root = Register::no_reg());
+
+  // Loads a field containing a code pointer and does the necessary decoding if
+  // the sandbox is enabled.
+  void LoadCodePointerField(Register destination, MemOperand field_operand,
+                            Register isolate_root = Register::no_reg());
 
  protected:
   // The actual Push and Pop implementations. These don't generate any code
@@ -1870,8 +1875,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
   // Tiering support.
   void AssertFeedbackVector(Register object,
                             Register scratch) NOOP_UNLESS_DEBUG_CODE
-  void ReplaceClosureCodeWithOptimizedCode(Register optimized_code,
-                                           Register closure);
+      void ReplaceClosureCodeWithOptimizedCode(Register optimized_code,
+                                               Register closure,
+                                               Register scratch);
   void GenerateTailCallToReturnedCode(Runtime::FunctionId function_id);
   void LoadFeedbackVectorFlagsAndJumpIfNeedsProcessing(
       Register flags, Register feedback_vector, CodeKind current_code_kind,

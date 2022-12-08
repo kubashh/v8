@@ -3509,6 +3509,9 @@ void Isolate::CheckIsolateLayout() {
   CHECK_EQ(static_cast<int>(
                OFFSET_OF(Isolate, isolate_data_.external_pointer_table_)),
            Internals::kIsolateExternalPointerTableOffset);
+  CHECK_EQ(
+      static_cast<int>(OFFSET_OF(Isolate, isolate_data_.code_pointer_table_)),
+      Internals::kIsolateCodePointerTableOffset);
 #endif
   CHECK_EQ(static_cast<int>(OFFSET_OF(Isolate, isolate_data_.roots_table_)),
            Internals::kIsolateRootsOffset);
@@ -3711,6 +3714,7 @@ void Isolate::Deinit() {
 
 #ifdef V8_COMPRESS_POINTERS
   external_pointer_table().TearDown();
+  code_pointer_table().TearDown();
   if (owns_shareable_data()) {
     shared_external_pointer_table().TearDown();
     delete isolate_data_.shared_external_pointer_table_;
@@ -4352,9 +4356,11 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
 #endif  // V8_EXTERNAL_CODE_SPACE
 
   isolate_data_.external_reference_table()->Init(this);
+  isolate_data_.external_reference_table()->Init(this);
 
 #ifdef V8_COMPRESS_POINTERS
   external_pointer_table().Init(this);
+  code_pointer_table().Init(this);
   if (owns_shareable_data()) {
     isolate_data_.shared_external_pointer_table_ = new ExternalPointerTable();
     shared_external_pointer_table().Init(this);
