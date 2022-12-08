@@ -104,6 +104,30 @@
       },
       "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b843dde_8c453175",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-08T15:03:27Z",
+      "side": 1,
+      "message": "Due to the iterators we don\u0027t know the number of arguments we push statically anymore. Therefore the number of pushed arguments is tracked dynamically.\nThis is currently only used for DCHECKs, so we could also disable it for release builds (that would make the code a lot uglier though, as we would have macro calls all over the place).\nIf you strongly prefer to unify `Push` and `PushArguments`, I could do this though.",
+      "parentUuid": "37eda5cf_0d8c4488",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 0
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
