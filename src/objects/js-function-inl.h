@@ -69,10 +69,25 @@ AbstractCode JSFunction::abstract_code(IsolateT* isolate) {
 
 int JSFunction::length() { return shared().length(); }
 
-ACCESSORS_RELAXED(JSFunction, code, CodeT, kCodeOffset)
+// ACCESSORS_RELAXED(JSFunction, code, CodeT, kCodeOffset)
+CodeT JSFunction::code() const {
+  PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
+  return JSFunction::code(cage_base);
+}
+CodeT JSFunction::code(PtrComprCageBase cage_base) const {
+  CodeT value = TaggedField<CodeT, kCodeOffset>::Relaxed_Load(cage_base, *this);
+  return value;
+}
+void JSFunction::set_code(CodeT value, WriteBarrierMode mode) {
+  TaggedField<CodeT, kCodeOffset>::Relaxed_Store(*this, value);
+  set_code_entry_point_handle(value.entrypoint_handle());
+  CONDITIONAL_WRITE_BARRIER(*this, kCodeOffset, value, mode);
+}
+
 RELEASE_ACQUIRE_GETTER_CHECKED(JSFunction, code, CodeT, kCodeOffset, true)
 void JSFunction::set_code(CodeT value, ReleaseStoreTag, WriteBarrierMode mode) {
   TaggedField<CodeT, kCodeOffset>::Release_Store(*this, value);
+  set_code_entry_point_handle(value.entrypoint_handle());
   CONDITIONAL_WRITE_BARRIER(*this, kCodeOffset, value, mode);
   if (V8_UNLIKELY(v8_flags.log_function_events && has_feedback_vector())) {
     feedback_vector().set_log_next_execution(true);
@@ -87,6 +102,7 @@ void JSFunction::set_code(Code code, ReleaseStoreTag, WriteBarrierMode mode) {
 #endif
 
 Address JSFunction::code_entry_point() const {
+  // TODO(saelo) add lookup here
   if (V8_EXTERNAL_CODE_SPACE_BOOL) {
     return CodeDataContainer::cast(code()).code_entry_point();
   } else {
