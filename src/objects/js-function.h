@@ -97,6 +97,10 @@ class JSFunction : public TorqueGeneratedJSFunction<
   // Fast binding requires length and name accessors.
   static const int kMinDescriptorsForFastBindAndWrap = 2;
 
+  void set_code_entry_point_handle(ExternalPointerHandle h) {
+    RELEASE_WRITE_UINT32_FIELD(*this, kCodeEntryPointOffset, h);
+  }
+
   // [context]: The context for this function.
   inline Context context();
   DECL_RELAXED_GETTER(context, Context)

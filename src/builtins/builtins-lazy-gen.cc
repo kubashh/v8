@@ -75,6 +75,10 @@ void LazyBuiltinsAssembler::MaybeTailCallOptimizedCodeSlot(
     // Optimized code is good, get it into the closure and link the closure into
     // the optimized functions list, then tail call the optimized code.
     StoreObjectField(function, JSFunction::kCodeOffset, optimized_code);
+    TNode<Uint32T> entrypoint = LoadObjectField<Uint32T>(
+        optimized_code, CodeDataContainer::kCodeEntryPointOffset);
+    StoreObjectFieldNoWriteBarrier(function, JSFunction::kCodeEntryPointOffset,
+                                   entrypoint);
     Comment("MaybeTailCallOptimizedCodeSlot:: GenerateTailCallToJSCode");
     GenerateTailCallToJSCode(optimized_code, function);
 
@@ -111,6 +115,10 @@ void LazyBuiltinsAssembler::CompileLazy(TNode<JSFunction> function) {
   CSA_DCHECK(this, TaggedNotEqual(sfi_code, HeapConstant(BUILTIN_CODE(
                                                 isolate(), CompileLazy))));
   StoreObjectField(function, JSFunction::kCodeOffset, sfi_code);
+  TNode<Uint32T> entrypoint = LoadObjectField<Uint32T>(
+      sfi_code, CodeDataContainer::kCodeEntryPointOffset);
+  StoreObjectFieldNoWriteBarrier(function, JSFunction::kCodeEntryPointOffset,
+                                 entrypoint);
 
   Label maybe_use_sfi_code(this);
   // If there is no feedback, don't check for optimized code.
@@ -167,6 +175,10 @@ TF_BUILTIN(CompileLazyDeoptimizedCode, LazyBuiltinsAssembler) {
   TNode<CodeT> code = HeapConstant(BUILTIN_CODE(isolate(), CompileLazy));
   // Set the code slot inside the JSFunction to CompileLazy.
   StoreObjectField(function, JSFunction::kCodeOffset, code);
+  TNode<Uint32T> entrypoint =
+      LoadObjectField<Uint32T>(code, CodeDataContainer::kCodeEntryPointOffset);
+  StoreObjectFieldNoWriteBarrier(function, JSFunction::kCodeEntryPointOffset,
+                                 entrypoint);
   GenerateTailCallToJSCode(code, function);
 }
 
