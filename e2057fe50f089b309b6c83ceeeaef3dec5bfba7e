@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d8abdb7_e14f302e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-08T14:26:56Z",
+      "side": 1,
+      "message": "Victor, PTAL\n\nAnton: My template magic isn\u0027t very strong. Could you please take a look specifically at maglev-assembler.h and maglev-assembler-arm64-inl.h to check if template magic can be improved?",
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
