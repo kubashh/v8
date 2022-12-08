@@ -142,6 +142,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0829e5e6_b0f337b7",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-08T10:42:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "524d0e43_1c4e5646",
+      "range": {
+        "startLine": 513,
+        "startChar": 33,
+        "endLine": 513,
+        "endChar": 56
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "494317ee_24b08be9",
@@ -179,6 +203,30 @@
       "side": 1,
       "message": "It is a very specific piece of code that is only really useful here, so I left it here instead of putting it to a separate function. I rewrote it without the ternaries. Wdyt?",
       "parentUuid": "494317ee_24b08be9",
+      "range": {
+        "startLine": 592,
+        "startChar": 14,
+        "endLine": 592,
+        "endChar": 25
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e3d22d3_8d737382",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-08T10:42:51Z",
+      "side": 1,
+      "message": "I think it\u0027s more readable now, thanks!",
+      "parentUuid": "3bf0178f_e59726ac",
       "range": {
         "startLine": 592,
         "startChar": 14,
@@ -236,6 +284,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56de8c30_97e8b6c8",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-08T10:42:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aae04daf_a7f4b4d0",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 233,
+        "endChar": 10
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0f62ab9_886ae35f",
@@ -283,6 +355,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "921fcfe7_6134dfc5",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-08T10:42:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "05a7e1d1_1582c571",
+      "range": {
+        "startLine": 265,
+        "startChar": 17,
+        "endLine": 265,
+        "endChar": 26
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67f68483_c55dc3f6",
@@ -320,6 +416,30 @@
       "side": 1,
       "message": "The problem is that those functions need to construct an object of the derived types (`WordSetType` and `FloatSetType` respectively). Moving the entire Set factory into `Type` is thus not feasible. We could move some of the implementation into a helper function in the base class and pass the derived type as a template argument. But since the two constructors require different arguments (due to `FloatType`\u0027s `special_values`), this might not be very uniform and require additional special casing. I thought that for the moment that was not worth it just to save 6-8 lines of similar code. I was planning to reevaluate this once we have more derived types that have similar `Set` logic. Wdyt?",
       "parentUuid": "67f68483_c55dc3f6",
+      "range": {
+        "startLine": 479,
+        "startChar": 6,
+        "endLine": 482,
+        "endChar": 59
+      },
+      "revId": "7d63ef4a35b09ee248bcada9b474b00d2c903da0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6680c1a3_d879fce8",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-08T10:42:51Z",
+      "side": 1,
+      "message": "Sounds good to reevaluate it later, thanks!",
+      "parentUuid": "6b6543d7_80b5e07f",
       "range": {
         "startLine": 479,
         "startChar": 6,

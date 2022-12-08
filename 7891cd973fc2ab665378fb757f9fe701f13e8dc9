@@ -266,6 +266,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72573871_1e1d8ac5",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2022-12-08T10:42:51Z",
+      "side": 1,
+      "message": "In general I agree with Darius\u0027es suggestion to automate the checking done in almost all reduction functions, but\u0027s let\u0027s leave that for a follow-up CL.",
+      "parentUuid": "16f89356_0f759a3c",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 127,
+        "endChar": 3
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c7189491_6b085aa7",
         "filename": "src/compiler/turboshaft/assert-types-reducer.h",
         "patchSetId": 1
