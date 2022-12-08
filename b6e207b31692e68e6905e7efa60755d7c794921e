@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f8ea039_e75c132d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "LGTM with just a few comments :)",
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54d389c8_e0257a4a",
@@ -31,6 +48,213 @@
       "writtenOn": "2022-12-07T16:44:02Z",
       "side": 1,
       "message": "nit: This is the only place where using `std::distance` would actually be preferable.",
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03b249cc_ad0f8f8f",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "It looks like you don\u0027t use this variable.",
+      "range": {
+        "startLine": 567,
+        "startChar": 6,
+        "endLine": 567,
+        "endChar": 38
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d135657_919b60d0",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "\"TODO\"? :D",
+      "range": {
+        "startLine": 586,
+        "startChar": 25,
+        "endLine": 586,
+        "endChar": 32
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0db484a8_a189e29f",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "It\u0027s a bit sad that this could do Zone allocations, even though the constructed Set would be completely local. Maybe it would be worth adding an overload to Word32Type::Range (and probably Word32Type::Set) so that it can take a `base::SmallVector` (or `base::Vector`?) instead of a `Zone` as argument, and use this instead of allocating something in the Zone...",
+      "range": {
+        "startLine": 611,
+        "startChar": 10,
+        "endLine": 612,
+        "endChar": 66
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b726f0ea_6bf3f4d9",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "Maybe omit the ToString when TRACE_TYPING is not enabled?",
+      "range": {
+        "startLine": 674,
+        "startChar": 53,
+        "endLine": 674,
+        "endChar": 78
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251765d5_d1642008",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "I think this is unused.",
+      "range": {
+        "startLine": 846,
+        "startChar": 1,
+        "endLine": 846,
+        "endChar": 42
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c984f677_11979e66",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "Nitiest of nits: any chance you could fit that on the previous line?",
+      "range": {
+        "startLine": 149,
+        "startChar": 5,
+        "endLine": 151,
+        "endChar": 21
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26bcacec_a384dcaf",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "That\u0027s always true given the preceding `static_assert`, no?",
+      "range": {
+        "startLine": 206,
+        "startChar": 7,
+        "endLine": 206,
+        "endChar": 54
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7124c367_4fff60cf",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "Could you add a comment saying \"Normalizing non-wrapping range to a Set\" or something like that?",
+      "range": {
+        "startLine": 259,
+        "startChar": 6,
+        "endLine": 259,
+        "endChar": 8
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fce2fc6a_95390541",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "Could you add a comment saying something like \"Normalizing wrapping range to a Set\"?",
+      "range": {
+        "startLine": 267,
+        "startChar": 6,
+        "endLine": 267,
+        "endChar": 8
+      },
       "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

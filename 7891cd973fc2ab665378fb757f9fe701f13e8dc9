@@ -240,6 +240,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20271e60_719d9484",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "Ok, makes sense to keep a separate function for each op until you\u0027ve looked at everything one by one to figure out the special cases indeed :)",
+      "parentUuid": "16f89356_0f759a3c",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 127,
+        "endChar": 3
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7189491_6b085aa7",
@@ -324,6 +348,30 @@
       "side": 1,
       "message": "But this operation would be lowered to what I generate here right? Do we have such a case more frequently? If this is the only place where this might be required, I think adding a new operation might be overkill.",
       "parentUuid": "968815fc_97b6a4a5",
+      "range": {
+        "startLine": 178,
+        "startChar": 19,
+        "endLine": 178,
+        "endChar": 69
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da47efdd_116c2e23",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "I think that I just misunderstood your code when I wrote my comment, so you can just disregard it. What you\u0027re doing now is good :)",
+      "parentUuid": "21dcfaaf_637bf807",
       "range": {
         "startLine": 178,
         "startChar": 19,
@@ -734,6 +782,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4e17661_c47d7798",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "88a3bf5e_f8ca613f",
+      "range": {
+        "startLine": 573,
+        "startChar": 2,
+        "endLine": 573,
+        "endChar": 56
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d614e2e_6c8358d3",
@@ -922,6 +994,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "521015eb_2b10e839",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "As discussed offline: you\u0027re right, it\u0027s probably better to do that elsewhere.",
+      "parentUuid": "5d27fcbb_f2f257b7",
+      "range": {
+        "startLine": 721,
+        "startChar": 10,
+        "endLine": 721,
+        "endChar": 12
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "322c971d_87eeb41d",
@@ -1053,6 +1149,30 @@
       "side": 1,
       "message": "Implemented normalization of ranges `[a, b]` with `b - a + 1 \u003c\u003d kMaxSetSize` to sets. While the opposite is more compact to represent for sizes `2 \u003c size \u003c\u003d kMaxSetSize`, sets are typically a bit easier to process, so I chose that direction. We can easily change this any time though.",
       "parentUuid": "64881f93_a1b4d4ac",
+      "range": {
+        "startLine": 129,
+        "startChar": 2,
+        "endLine": 129,
+        "endChar": 51
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbcd1c6f_8838d0e8",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "053b7eb4_4a7e0b65",
       "range": {
         "startLine": 129,
         "startChar": 2,
@@ -1571,6 +1691,30 @@
       "side": 1,
       "message": "It is a bit different here. Although the payload is in `uint64_t payload_[2]`, when we store the inline elements of a `Float32Type::Set()`, the second element is not in `payload_[1]`, but both elements end up in the memory of `payload_[0]`. This is important, because in order to have `base::Vector\u003cfloat_t\u003e \u0027Float32Type::set_elements() const` return an elements vector, they need to be stored in contiguous memory. So in general, for `Float32Type` we could have 4 inline elements (while only 2 for `Float64Type`), I chose to make this independent of the actual type. We could change this to allow more (e.g. 4) inline elements for e.g. `Float32Type` and `Word32Type`. So in general there is no 1:1 correspondence between the size of the `payload_[]` and the elements that can be inlined. I would rather keep that a separate number. Wdyt?",
       "parentUuid": "81dafe55_424b50f0",
+      "range": {
+        "startLine": 187,
+        "startChar": 43,
+        "endLine": 187,
+        "endChar": 44
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fb4f64c_1dc464ad",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "Makes sense, thanks for the explanation :)",
+      "parentUuid": "3a101049_bf2c2a05",
       "range": {
         "startLine": 187,
         "startChar": 43,

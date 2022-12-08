@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ab1c265_64c5db21",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "Don\u0027t forget to remove this before landing ;)",
+      "range": {
+        "startLine": 157,
+        "startChar": 10,
+        "endLine": 159,
+        "endChar": 42
+      },
+      "revId": "94e7edbdd99f714725c43ef945a83af12a735e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb5c9973_5484fe34",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "That\u0027s unused, no?",
+      "range": {
+        "startLine": 202,
+        "startChar": 2,
+        "endLine": 202,
+        "endChar": 27
+      },
+      "revId": "94e7edbdd99f714725c43ef945a83af12a735e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a288edd_323c8263",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2022-12-08T10:29:10Z",
+      "side": 1,
+      "message": "Some",
+      "range": {
+        "startLine": 134,
+        "startChar": 5,
+        "endLine": 134,
+        "endChar": 9
+      },
+      "revId": "94e7edbdd99f714725c43ef945a83af12a735e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
