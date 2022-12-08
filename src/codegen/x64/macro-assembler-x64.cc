@@ -455,11 +455,37 @@ void TurboAssembler::LoadExternalPointerField(
          Operand(scratch, IsolateData::external_pointer_table_offset() +
                               Internals::kExternalPointerTableBufferOffset));
   }
-    movl(destination, field_operand);
-    shrq(destination, Immediate(kExternalPointerIndexShift));
-    movq(destination, Operand(scratch, destination, times_8, 0));
-    movq(scratch, Immediate64(~tag));
-    andq(destination, scratch);
+  movl(destination, field_operand);
+  shrq(destination, Immediate(kExternalPointerIndexShift));
+  movq(destination, Operand(scratch, destination, times_8, 0));
+  movq(scratch, Immediate64(~tag));
+  andq(destination, scratch);
+#else
+  movq(destination, field_operand);
+#endif  // V8_ENABLE_SANDBOX
+}
+
+void TurboAssembler::LoadCodePointerField(
+    Register destination, Operand field_operand, Register scratch,
+    IsolateRootLocation isolateRootLocation) {
+  DCHECK(!AreAliased(destination, scratch));
+#ifdef V8_ENABLE_SANDBOX
+  DCHECK(!field_operand.AddressUsesRegister(scratch));
+  if (isolateRootLocation == IsolateRootLocation::kInRootRegister) {
+    DCHECK(root_array_available_);
+    movq(scratch, Operand(kRootRegister,
+                          IsolateData::code_pointer_table_offset() +
+                              Internals::kExternalPointerTableBufferOffset));
+  } else {
+    DCHECK(isolateRootLocation == IsolateRootLocation::kInScratchRegister);
+    movq(scratch,
+         Operand(scratch, IsolateData::code_pointer_table_offset() +
+                              Internals::kExternalPointerTableBufferOffset));
+  }
+  movl(destination, field_operand);
+  shrq(destination, Immediate(kExternalPointerIndexShift));
+  movq(destination, Operand(scratch, destination, times_8, 0));
+  shrq(destination, Immediate(1));
 #else
   movq(destination, field_operand);
 #endif  // V8_ENABLE_SANDBOX
@@ -880,6 +906,11 @@ void MacroAssembler::ReplaceClosureCodeWithOptimizedCode(
   AssertCodeT(optimized_code);
   StoreTaggedField(FieldOperand(closure, JSFunction::kCodeOffset),
                    optimized_code);
+  LoadTaggedPointerField(
+      scratch1,
+      FieldOperand(optimized_code, CodeDataContainer::kCodeEntryPointOffset));
+  StoreTaggedField(FieldOperand(closure, JSFunction::kCodeEntryPointOffset),
+                   scratch1);
   // Write barrier clobbers scratch1 below.
   Register value = scratch1;
   movq(value, optimized_code);
@@ -2265,8 +2296,10 @@ void TurboAssembler::LoadCodeObjectEntry(Register destination,
                                          Register code_object) {
   ASM_CODE_COMMENT(this);
   if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-    movq(destination,
-         FieldOperand(code_object, CodeDataContainer::kCodeEntryPointOffset));
+    LoadCodePointerField(
+        destination,
+        FieldOperand(code_object, CodeDataContainer::kCodeEntryPointOffset),
+        kScratchRegister);
     return;
   }
 
@@ -2333,8 +2366,10 @@ void TurboAssembler::LoadCodeDataContainerEntry(
     Register destination, Register code_data_container_object) {
   ASM_CODE_COMMENT(this);
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
-  movq(destination, FieldOperand(code_data_container_object,
-                                 CodeDataContainer::kCodeEntryPointOffset));
+  LoadCodePointerField(destination,
+                       FieldOperand(code_data_container_object,
+                                    CodeDataContainer::kCodeEntryPointOffset),
+                       kScratchRegister);
 }
 
 void TurboAssembler::LoadCodeDataContainerCodeNonBuiltin(
@@ -2342,8 +2377,10 @@ void TurboAssembler::LoadCodeDataContainerCodeNonBuiltin(
   ASM_CODE_COMMENT(this);
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
   // Compute the Code object pointer from the code entry point.
-  movq(destination, FieldOperand(code_data_container_object,
-                                 CodeDataContainer::kCodeEntryPointOffset));
+  LoadCodePointerField(destination,
+                       FieldOperand(code_data_container_object,
+                                    CodeDataContainer::kCodeEntryPointOffset),
+                       kScratchRegister);
   subq(destination, Immediate(Code::kHeaderSize - kHeapObjectTag));
 }
 
@@ -2931,6 +2968,19 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
   // allow recompilation to take effect without changing any of the
   // call sites.
   static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
+#ifdef V8_ENABLE_SANDBOX
+  LoadCodePointerField(
+      rcx, FieldOperand(function, JSFunction::kCodeEntryPointOffset),
+      kScratchRegister);
+  switch (type) {
+    case InvokeType::kCall:
+      call(rcx);
+      break;
+    case InvokeType::kJump:
+      jmp(rcx);
+      break;
+  }
+#else
   LoadTaggedPointerField(rcx, FieldOperand(function, JSFunction::kCodeOffset));
   switch (type) {
     case InvokeType::kCall:
@@ -2940,6 +2990,7 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
       JumpCodeTObject(rcx);
       break;
   }
+#endif
   jmp(&done, Label::kNear);
 
   // Deferred debug hook.
