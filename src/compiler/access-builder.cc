@@ -232,6 +232,32 @@ FieldAccess AccessBuilder::ForJSFunctionCode() {
 }
 
 // static
+FieldAccess AccessBuilder::ForJSFunctionCodeEntry() {
+  FieldAccess access = {kTaggedBase,
+                        JSFunction::kCodeEntryPointOffset,
+                        Handle<Name>(),
+                        MaybeHandle<Map>(),
+                        TypeCache::Get()->kUint32,
+                        MachineType::Uint32(),
+                        kPointerWriteBarrier,
+                        "JSFunctionCodeEntry"};
+  return access;
+}
+
+// static
+FieldAccess AccessBuilder::ForCodeDataContainerEntryPoint() {
+  FieldAccess access = {kTaggedBase,
+                        CodeDataContainer::kCodeEntryPointOffset,
+                        Handle<Name>(),
+                        MaybeHandle<Map>(),
+                        TypeCache::Get()->kUint32,
+                        MachineType::Uint32(),
+                        kPointerWriteBarrier,
+                        "CodeDataContainerEntryPointHandle"};
+  return access;
+}
+
+// static
 FieldAccess AccessBuilder::ForJSBoundFunctionBoundTargetFunction() {
   FieldAccess access = {
       kTaggedBase,          JSBoundFunction::kBoundTargetFunctionOffset,

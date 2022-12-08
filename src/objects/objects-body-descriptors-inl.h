@@ -366,6 +366,11 @@ class JSFunction::BodyDescriptor final : public BodyDescriptorBase {
     IteratePointers(obj, kCodeOffset + kTaggedSize, header_size, v);
     // Iterate rest of the fields starting after the header.
     IterateJSObjectBodyImpl(map, obj, header_size, object_size, v);
+
+    /*
+      v->VisitCodePointer(obj,
+                          obj.RawExternalPointerField(kCodeEntryPointOffset));
+    */
   }
 
   static inline int SizeOf(Map map, HeapObject object) {
@@ -1064,7 +1069,9 @@ class CodeDataContainer::BodyDescriptor final : public BodyDescriptorBase {
         CodeDataContainer::kPointerFieldsWeakEndOffset, v);
 
     if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-      v->VisitCodePointer(obj, obj.RawCodeField(kCodeOffset));
+      v->VisitCodeSpacePointer(obj, obj.RawCodeField(kCodeOffset));
+      v->VisitCodePointer(obj,
+                          obj.RawExternalPointerField(kCodeEntryPointOffset));
     }
   }
 

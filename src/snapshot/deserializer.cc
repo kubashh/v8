@@ -489,6 +489,11 @@ void Deserializer<IsolateT>::PostProcessNewObject(Handle<Map> map,
     }
   }
 
+  if (InstanceTypeChecker::IsJSFunction(instance_type)) {
+    auto function = JSFunction::cast(raw_obj);
+    function.set_code_entry_point_handle(function.code().entrypoint_handle());
+  }
+
   if (InstanceTypeChecker::IsCode(instance_type)) {
     // We flush all code pages after deserializing the startup snapshot.
     // Hence we only remember each individual code object when deserializing

@@ -120,12 +120,11 @@ class ObjectVisitor {
                              ObjectSlot end) = 0;
   virtual void VisitPointers(HeapObject host, MaybeObjectSlot start,
                              MaybeObjectSlot end) = 0;
-  // When V8_EXTERNAL_CODE_SPACE is enabled, visits a Code pointer slot.
-  // The values may be modified on return.
-  // Not used when V8_EXTERNAL_CODE_SPACE is not enabled (the Code pointer
-  // slots are visited as a part of on-heap slot visitation - via
-  // VisitPointers()).
-  virtual void VisitCodePointer(HeapObject host, CodeObjectSlot slot) = 0;
+  // When V8_EXTERNAL_CODE_SPACE is enabled, visits a pointer to an object in
+  // code space. The values may be modified on return. Not used when
+  // V8_EXTERNAL_CODE_SPACE is not enabled (the Code pointer slots are visited
+  // as a part of on-heap slot visitation - via VisitPointers()).
+  virtual void VisitCodeSpacePointer(HeapObject host, CodeObjectSlot slot) = 0;
 
   // Custom weak pointers must be ignored by the GC but not other
   // visitors. They're used for e.g., lists that are recreated after GC. The
@@ -168,6 +167,9 @@ class ObjectVisitor {
   // Visits an external pointer.
   virtual void VisitExternalPointer(HeapObject host, ExternalPointerSlot slot,
                                     ExternalPointerTag tag) {}
+
+  // Visits a code pointer.
+  virtual void VisitCodePointer(HeapObject host, ExternalPointerSlot slot) {}
 
   // Visits an (encoded) internal reference.
   virtual void VisitInternalReference(Code host, RelocInfo* rinfo) {}

@@ -240,6 +240,11 @@ ExternalReference ExternalReference::external_pointer_table_address(
   return ExternalReference(isolate->external_pointer_table_address());
 }
 
+ExternalReference ExternalReference::code_pointer_table_address(
+    Isolate* isolate) {
+  return ExternalReference(isolate->code_pointer_table_address());
+}
+
 ExternalReference
 ExternalReference::shared_external_pointer_table_address_address(
     Isolate* isolate) {

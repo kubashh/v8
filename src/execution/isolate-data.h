@@ -12,6 +12,7 @@
 #include "src/execution/thread-local-top.h"
 #include "src/heap/linear-allocation-area.h"
 #include "src/roots/roots.h"
+#include "src/sandbox/code-pointer-table.h"
 #include "src/sandbox/external-pointer-table.h"
 #include "src/utils/utils.h"
 #include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
@@ -62,10 +63,11 @@ class Isolate;
   V(kOldAllocationInfo, LinearAllocationArea::kSize, old_allocation_info)
 
 #ifdef V8_COMPRESS_POINTERS
-#define ISOLATE_DATA_FIELDS_POINTER_COMPRESSION(V)            \
-  V(kExternalPointerTableOffset, ExternalPointerTable::kSize, \
-    external_pointer_table)                                   \
-  V(kSharedExternalPointerTableOffset, kSystemPointerSize,    \
+#define ISOLATE_DATA_FIELDS_POINTER_COMPRESSION(V)                            \
+  V(kExternalPointerTableOffset, ExternalPointerTable::kSize,                 \
+    external_pointer_table)                                                   \
+  V(kCodePointerTableOffset, ExternalPointerTable::kSize, code_pointer_table) \
+  V(kSharedExternalPointerTableOffset, kSystemPointerSize,                    \
     shared_external_pointer_table)
 #else
 #define ISOLATE_DATA_FIELDS_POINTER_COMPRESSION(V)
@@ -234,6 +236,7 @@ class IsolateData final {
   // Table containing pointers to external objects.
 #ifdef V8_COMPRESS_POINTERS
   ExternalPointerTable external_pointer_table_;
+  CodePointerTable code_pointer_table_;
   ExternalPointerTable* shared_external_pointer_table_;
 #endif
 
