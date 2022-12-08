@@ -41,7 +41,8 @@
 #include "src/objects/debug-objects.h"
 #include "src/objects/js-objects.h"
 #include "src/runtime/runtime.h"
-#include "src/sandbox/external-pointer.h"
+#include "src/sandbox/code-pointer-table.h"
+#include "src/sandbox/external-pointer-table.h"
 #include "src/utils/allocation.h"
 
 #ifdef DEBUG
@@ -1937,6 +1938,18 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   Address external_pointer_table_address() {
     return reinterpret_cast<Address>(&isolate_data_.external_pointer_table_);
+  }
+
+  CodePointerTable& code_pointer_table() {
+    return isolate_data_.code_pointer_table_;
+  }
+
+  const CodePointerTable& code_pointer_table() const {
+    return isolate_data_.code_pointer_table_;
+  }
+
+  Address code_pointer_table_address() {
+    return reinterpret_cast<Address>(&isolate_data_.code_pointer_table_);
   }
 
   ExternalPointerTable& shared_external_pointer_table() {

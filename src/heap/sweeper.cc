@@ -642,7 +642,8 @@ class PromotedPageRecordMigratedSlotVisitor
     }
   }
 
-  inline void VisitCodePointer(HeapObject host, CodeObjectSlot slot) final {
+  inline void VisitCodeSpacePointer(HeapObject host,
+                                    CodeObjectSlot slot) final {
     CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
     // This code is similar to the implementation of VisitPointer() modulo
     // new kind of slot.

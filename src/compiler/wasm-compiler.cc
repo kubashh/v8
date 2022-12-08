@@ -2909,12 +2909,36 @@ Node* WasmGraphBuilder::BuildLoadExternalPointerFromObject(
       gasm_->Int32Constant(kExternalPointerIndexShift - kSystemPointerSizeLog2);
   Node* scaled_index = gasm_->Word32Shr(external_pointer, shift_amount);
   Node* isolate_root = BuildLoadIsolateRoot();
-  Node* table =
+  Node* table;
+  table =
       gasm_->LoadFromObject(MachineType::Pointer(), isolate_root,
                             IsolateData::external_pointer_table_offset() +
                                 Internals::kExternalPointerTableBufferOffset);
   Node* decoded_ptr = gasm_->Load(MachineType::Pointer(), table, scaled_index);
   return gasm_->WordAnd(decoded_ptr, gasm_->IntPtrConstant(~tag));
+#else
+  return gasm_->LoadFromObject(MachineType::Pointer(), object,
+                               wasm::ObjectAccess::ToTagged(offset));
+#endif  // V8_ENABLE_SANDBOX
+}
+
+Node* WasmGraphBuilder::BuildLoadCodePointerFromObject(Node* object,
+                                                       int offset) {
+#ifdef V8_ENABLE_SANDBOX
+  Node* external_pointer = gasm_->LoadFromObject(
+      MachineType::Uint32(), object, wasm::ObjectAccess::ToTagged(offset));
+  static_assert(kExternalPointerIndexShift > kSystemPointerSizeLog2);
+  Node* shift_amount =
+      gasm_->Int32Constant(kExternalPointerIndexShift - kSystemPointerSizeLog2);
+  Node* scaled_index = gasm_->Word32Shr(external_pointer, shift_amount);
+  Node* isolate_root = BuildLoadIsolateRoot();
+  Node* table;
+  table =
+      gasm_->LoadFromObject(MachineType::Pointer(), isolate_root,
+                            IsolateData::code_pointer_table_offset() +
+                                Internals::kExternalPointerTableBufferOffset);
+  Node* decoded_ptr = gasm_->Load(MachineType::Pointer(), table, scaled_index);
+  return gasm_->WordShr(decoded_ptr, gasm_->IntPtrConstant(1));
 #else
   return gasm_->LoadFromObject(MachineType::Pointer(), object,
                                wasm::ObjectAccess::ToTagged(offset));
@@ -2964,10 +2988,8 @@ Node* WasmGraphBuilder::BuildCallRef(const wasm::FunctionSig* sig,
         wasm::ObjectAccess::ToTagged(WasmInternalFunction::kCodeOffset));
     Node* call_target;
     if (V8_EXTERNAL_CODE_SPACE_BOOL) {
-      call_target =
-          gasm_->LoadFromObject(MachineType::Pointer(), wrapper_code,
-                                wasm::ObjectAccess::ToTagged(
-                                    CodeDataContainer::kCodeEntryPointOffset));
+      call_target = BuildLoadCodePointerFromObject(
+          wrapper_code, CodeDataContainer::kCodeEntryPointOffset);
     } else {
       call_target = gasm_->IntAdd(
           wrapper_code, gasm_->IntPtrConstant(

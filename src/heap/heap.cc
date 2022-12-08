@@ -6369,7 +6369,7 @@ class UnreachableObjectsFilter : public HeapObjectsFilter {
       MarkPointers(start, end);
     }
 
-    void VisitCodePointer(HeapObject host, CodeObjectSlot slot) override {
+    void VisitCodeSpacePointer(HeapObject host, CodeObjectSlot slot) override {
       CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
       Object maybe_code = slot.load(code_cage_base());
       HeapObject heap_object;

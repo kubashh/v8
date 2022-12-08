@@ -909,7 +909,7 @@ void JSFunction::JSFunctionVerify(Isolate* isolate) {
   // This assertion exists to encourage updating this verification function if
   // new fields are added in the Torque class layout definition.
   static_assert(JSFunction::TorqueGeneratedClass::kHeaderSize ==
-                8 * kTaggedSize);
+                9 * kTaggedSize);
 
   JSFunctionOrBoundFunctionOrWrappedFunctionVerify(isolate);
   CHECK(IsJSFunction());
@@ -925,6 +925,11 @@ void JSFunction::JSFunctionVerify(Isolate* isolate) {
   Handle<JSFunction> function(*this, isolate);
   LookupIterator it(isolate, function, isolate->factory()->prototype_string(),
                     LookupIterator::OWN_SKIP_INTERCEPTOR);
+  uint32_t cached_handle = ReadField<uint32_t>(kCodeEntryPointOffset);
+  uint32_t expected_handle = code(isolate).ReadField<uint32_t>(
+      CodeDataContainer::kCodeEntryPointOffset);
+  CHECK_EQ(cached_handle, expected_handle);
+  // TODO(saelo)
   if (has_prototype_slot()) {
     VerifyObjectField(isolate, kPrototypeOrInitialMapOffset);
   }

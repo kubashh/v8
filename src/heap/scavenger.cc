@@ -61,7 +61,8 @@ class IterateAndScavengePromotedObjectsVisitor final : public ObjectVisitor {
     VisitPointersImpl(host, start, end);
   }
 
-  V8_INLINE void VisitCodePointer(HeapObject host, CodeObjectSlot slot) final {
+  V8_INLINE void VisitCodeSpacePointer(HeapObject host,
+                                       CodeObjectSlot slot) final {
     CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
     // Code slots never appear in new space because CodeDataContainers, the
     // only object that can contain code pointers, are always allocated in
