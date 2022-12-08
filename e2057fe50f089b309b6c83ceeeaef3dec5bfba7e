@@ -128,6 +128,30 @@
       },
       "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80dc3392_63c66e31",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-08T15:05:39Z",
+      "side": 1,
+      "message": "Ah well my previous comment was not 100% correct.\nWe use the number of pushed arguments only in DCHECKs right now for arguments.\nFor general pushes, we want to have the padding in front of the other pushed values though (for arguments padding is the last pushed value).\nSo due to the dynamically tracked nubmer of values, this wouldn\u0027t be possible.",
+      "parentUuid": "5b843dde_8c453175",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 0
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
