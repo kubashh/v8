@@ -1098,9 +1098,11 @@ struct ControlBase : public PcForErrors<ValidationTag::full_validation> {
   F(BrOnCast, const Value& obj, const Value& rtt, Value* result_on_branch,     \
     uint32_t depth, bool null_succeeds)                                        \
   F(BrOnCastFail, const Value& obj, const Value& rtt,                          \
-    Value* result_on_fallthrough, uint32_t depth)                              \
+    Value* result_on_fallthrough, uint32_t depth, bool null_succeeds)          \
   F(BrOnCastAbstract, const Value& obj, HeapType type,                         \
     Value* result_on_branch, uint32_t depth, bool null_succeeds)               \
+  F(BrOnCastFailAbstract, const Value& obj, HeapType type,                     \
+    Value* result_on_fallthrough, uint32_t depth, bool null_succeeds)          \
   F(RefIsStruct, const Value& object, Value* result)                           \
   F(RefIsEq, const Value& object, Value* result)                               \
   F(RefIsI31, const Value& object, Value* result)                              \
@@ -1115,11 +1117,11 @@ struct ControlBase : public PcForErrors<ValidationTag::full_validation> {
   F(BrOnArray, const Value& object, Value* value_on_branch, uint32_t br_depth, \
     bool null_succeeds)                                                        \
   F(BrOnNonStruct, const Value& object, Value* value_on_fallthrough,           \
-    uint32_t br_depth)                                                         \
+    uint32_t br_depth, bool null_succeeds)                                     \
   F(BrOnNonI31, const Value& object, Value* value_on_fallthrough,              \
-    uint32_t br_depth)                                                         \
+    uint32_t br_depth, bool null_succeeds)                                     \
   F(BrOnNonArray, const Value& object, Value* value_on_fallthrough,            \
-    uint32_t br_depth)                                                         \
+    uint32_t br_depth, bool null_succeeds)                                     \
   F(StringNewWtf8, const MemoryIndexImmediate& memory,                         \
     const unibrow::Utf8Variant variant, const Value& offset,                   \
     const Value& size, Value* result)                                          \
@@ -2199,7 +2201,8 @@ class WasmDecoder : public Decoder {
           }
           case kExprBrOnCast:
           case kExprBrOnCastNull:
-          case kExprBrOnCastFail: {
+          case kExprBrOnCastFail:
+          case kExprBrOnCastFailNull: {
             BranchDepthImmediate branch(decoder, pc + length, validate);
             HeapTypeImmediate imm(WasmFeatures::All(), decoder,
                                   pc + length + branch.length, validate);
@@ -2207,6 +2210,7 @@ class WasmDecoder : public Decoder {
             (ios.HeapType(imm), ...);
             return length + branch.length + imm.length;
           }
+          case kExprBrOnCastFailDeprecated:
           case kExprBrOnCastDeprecated: {
             BranchDepthImmediate branch(decoder, pc + length, validate);
             IndexImmediate index(decoder, pc + length + branch.length,
@@ -2437,6 +2441,8 @@ class WasmDecoder : public Decoder {
           case kExprBrOnCast:
           case kExprBrOnCastNull:
           case kExprBrOnCastFail:
+          case kExprBrOnCastFailNull:
+          case kExprBrOnCastFailDeprecated:
           case kExprBrOnCastDeprecated:
             return {1, 1};
           case kExprStructSet:
@@ -5320,7 +5326,102 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Push(obj);  // Restore stack state on fallthrough.
         return pc_offset;
       }
-      case kExprBrOnCastFail: {
+      case kExprBrOnCastFail:
+      case kExprBrOnCastFailNull: {
+        NON_CONST_ONLY
+        BranchDepthImmediate branch_depth(this, this->pc_ + opcode_length,
+                                          validate);
+        if (!this->Validate(this->pc_ + opcode_length, branch_depth,
+                            control_.size())) {
+          return 0;
+        }
+        uint32_t pc_offset = opcode_length + branch_depth.length;
+        HeapTypeImmediate imm(this->enabled_, this, this->pc_ + pc_offset,
+                              validate);
+        this->Validate(this->pc_ + opcode_length, imm);
+        if (!VALIDATE(this->ok())) return 0;
+        pc_offset += imm.length;
+
+        std::optional<Value> rtt;
+        HeapType target_type = imm.type;
+        if (imm.type.is_index()) {
+          rtt = CreateValue(ValueType::Rtt(imm.type.ref_index()));
+          CALL_INTERFACE_IF_OK_AND_REACHABLE(RttCanon, imm.type.ref_index(),
+                                             &rtt.value());
+          // Differently to other instructions we don't push the RTT yet.
+        }
+
+        Value obj = Peek(0);
+
+        if (!VALIDATE((obj.type.is_object_reference() &&
+                       IsSameTypeHierarchy(obj.type.heap_type(), target_type,
+                                           this->module_)) ||
+                      obj.type.is_bottom())) {
+          this->DecodeError(
+              obj.pc(),
+              "Invalid types for %s: %s of type %s has to "
+              "be in the same reference type hierarchy as (ref %s)",
+              WasmOpcodes::OpcodeName(opcode), SafeOpcodeNameAt(obj.pc()),
+              obj.type.name().c_str(), target_type.name().c_str());
+          return 0;
+        }
+
+        Control* c = control_at(branch_depth.depth);
+        if (c->br_merge()->arity == 0) {
+          this->DecodeError("%s must target a branch of arity at least 1",
+                            WasmOpcodes::OpcodeName(opcode));
+          return 0;
+        }
+
+        if (!VALIDATE(TypeCheckBranch<true>(c, 0))) return 0;
+        bool null_succeeds = opcode == kExprBrOnCastFailNull;
+        Value result_on_fallthrough = CreateValue(ValueType::Ref(target_type));
+        if (V8_LIKELY(current_code_reachable_and_ok_)) {
+          // This logic ensures that code generation can assume that functions
+          // can only be cast between compatible types.
+          if (V8_UNLIKELY(
+                  TypeCheckAlwaysFails(obj, target_type, null_succeeds))) {
+            if (rtt.has_value()) {
+              CALL_INTERFACE(Drop);  // rtt
+            }
+            // The types are incompatible (i.e. neither of the two types is a
+            // subtype of the other). Always branch.
+            CALL_INTERFACE(BrOrRet, branch_depth.depth, 0);
+            // We know that the following code is not reachable, but according
+            // to the spec it technically is. Set it to spec-only reachable.
+            SetSucceedingCodeDynamicallyUnreachable();
+            c->br_merge()->reached = true;
+          } else if (V8_UNLIKELY(TypeCheckAlwaysSucceeds(obj, target_type))) {
+            if (rtt.has_value()) {
+              CALL_INTERFACE(Drop);  // rtt
+            }
+            // The branch can still be taken on null.
+            if (obj.type.is_nullable() && !null_succeeds) {
+              CALL_INTERFACE(BrOnNull, obj, branch_depth.depth, true,
+                             &result_on_fallthrough);
+              c->br_merge()->reached = true;
+            }
+            // Otherwise, the type check always succeeds. Do not branch. Also,
+            // the object is already on the stack; do not manipulate the stack.
+          } else {
+            if (rtt.has_value()) {
+              CALL_INTERFACE(BrOnCastFail, obj, rtt.value(),
+                             &result_on_fallthrough, branch_depth.depth,
+                             null_succeeds);
+            } else {
+              CALL_INTERFACE(BrOnCastFailAbstract, obj, target_type,
+                             &result_on_fallthrough, branch_depth.depth,
+                             null_succeeds);
+            }
+            c->br_merge()->reached = true;
+          }
+        }
+        // Make sure the correct value is on the stack state on fallthrough.
+        Drop(obj);
+        Push(result_on_fallthrough);
+        return pc_offset;
+      }
+      case kExprBrOnCastFailDeprecated: {
         NON_CONST_ONLY
         BranchDepthImmediate branch_depth(this, this->pc_ + opcode_length,
                                           validate);
@@ -5350,12 +5451,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
               "br_on_cast_fail must target a branch of arity at least 1");
           return 0;
         }
-        // Attention: contrary to most other instructions, we modify the stack
-        // before calling the interface function. This makes it significantly
-        // more convenient to pass around the values that will be on the stack
-        // when the branch is taken. In this case, we leave {obj} on the stack
-        // to type check the branch.
-        // TODO(jkummerow): Reconsider this choice.
+
         if (!VALIDATE(TypeCheckBranch<true>(c, 0))) return 0;
         Value result_on_fallthrough = CreateValue(ValueType::Ref(imm.index));
         if (V8_LIKELY(current_code_reachable_and_ok_)) {
@@ -5382,8 +5478,9 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
             // Otherwise, the type check always succeeds. Do not branch. Also,
             // the object is already on the stack; do not manipulate the stack.
           } else {
+            bool null_succeeds = false;
             CALL_INTERFACE(BrOnCastFail, obj, rtt, &result_on_fallthrough,
-                           branch_depth.depth);
+                           branch_depth.depth, null_succeeds);
             c->br_merge()->reached = true;
           }
         }
@@ -5541,15 +5638,16 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value value_on_fallthrough = CreateValue(ValueType::Ref(heap_type));
 
         if (V8_LIKELY(current_code_reachable_and_ok_)) {
+          bool null_succeeds = false;
           if (opcode == kExprBrOnNonStruct) {
             CALL_INTERFACE(BrOnNonStruct, obj, &value_on_fallthrough,
-                           branch_depth.depth);
+                           branch_depth.depth, null_succeeds);
           } else if (opcode == kExprBrOnNonArray) {
             CALL_INTERFACE(BrOnNonArray, obj, &value_on_fallthrough,
-                           branch_depth.depth);
+                           branch_depth.depth, null_succeeds);
           } else {
             CALL_INTERFACE(BrOnNonI31, obj, &value_on_fallthrough,
-                           branch_depth.depth);
+                           branch_depth.depth, null_succeeds);
           }
           c->br_merge()->reached = true;
         }
