@@ -19,6 +19,7 @@ constexpr Register kScratchRegisterW = w16;
 constexpr DoubleRegister kScratchDoubleReg = d30;
 
 namespace detail {
+
 template <typename Arg>
 inline Register ToRegister(MaglevAssembler* masm, Register reg, Arg arg) {
   masm->Move(reg, arg);
@@ -28,30 +29,93 @@ inline Register ToRegister(MaglevAssembler* masm, Register scratch,
                            Register reg) {
   return reg;
 }
+inline Register ToRegister(MaglevAssembler* masm, Register scratch,
+                           const Input& input) {
+  if (input.operand().IsConstant()) {
+    input.node()->LoadToRegister(masm, scratch);
+    return scratch;
+  }
+  const compiler::AllocatedOperand& operand =
+      compiler::AllocatedOperand::cast(input.operand());
+  if (operand.IsRegister()) {
+    return ToRegister(input);
+  } else {
+    DCHECK(operand.IsStackSlot());
+    masm->Move(scratch, masm->ToMemOperand(input));
+    return scratch;
+  }
+}
+
 template <typename... Args>
 struct PushAllHelper;
+
 template <typename... Args>
-inline void PushAll(MaglevAssembler* basm, Args... args) {
-  PushAllHelper<Args...>::Push(basm, args...);
+inline void PushAll(MaglevAssembler* masm, Args... args) {
+  PushAllHelper<Args...>::Push(masm, args...);
 }
+
 template <>
 struct PushAllHelper<> {
-  static void Push(MaglevAssembler* basm) {}
+  static void Push(MaglevAssembler* masm) {}
 };
+
 template <typename Arg>
 struct PushAllHelper<Arg> {
-  static void Push(MaglevAssembler* basm, Arg) { FATAL("Unaligned push"); }
+  static void Push(MaglevAssembler* masm, Arg) { FATAL("Unaligned push"); }
 };
+
 template <typename Arg1, typename Arg2, typename... Args>
 struct PushAllHelper<Arg1, Arg2, Args...> {
   static void Push(MaglevAssembler* masm, Arg1 arg1, Arg2 arg2, Args... args) {
-    {
-      masm->MacroAssembler::Push(ToRegister(masm, ip0, arg1),
-                                 ToRegister(masm, ip1, arg2));
-    }
+    masm->MacroAssembler::Push(ToRegister(masm, ip0, arg1),
+                               ToRegister(masm, ip1, arg2));
     PushAll(masm, args...);
   }
 };
+
+template <>
+struct PushArgumentsHelper<> {
+  static void Push(MaglevAssembler* masm, uint32_t pushed) {
+    DCHECK_EQ(pushed % 2, 0);
+  }
+};
+
+template <typename Arg>
+struct PushArgumentsHelper<Arg> {
+  static void Push(MaglevAssembler* masm, uint32_t pushed, Arg arg) {
+    if constexpr (is_repeat_arguments<Arg>::value) {
+      PushRepeat(masm, pushed, arg);
+    } else if constexpr (is_push_arguments_iterator<Arg>::value) {
+      PushIterator(masm, pushed, arg);
+    } else {
+      masm->Push(arg, padreg);
+    }
+  }
+};
+
+template <typename Arg1, typename Arg2, typename... Args>
+struct PushArgumentsHelper<Arg1, Arg2, Args...> {
+  static void Push(MaglevAssembler* masm, uint32_t pushed, Arg1 arg1, Arg2 arg2,
+                   Args... args) {
+    if constexpr (is_repeat_arguments<Arg1>::value) {
+      PushRepeat(masm, pushed, arg1, arg2, args...);
+    } else if constexpr (is_push_arguments_iterator<Arg1>::value) {
+      PushIterator(masm, pushed, arg1, arg2, args...);
+    } else if constexpr (is_repeat_arguments<Arg2>::value ||
+                         is_push_arguments_iterator<Arg2>::value) {
+      if (arg2.has_more()) {
+        masm->Push(arg1, arg2.next());
+        PushArguments(masm, pushed + 2, arg2, args...);
+      } else {
+        PushArguments(masm, pushed, arg1, args...);
+      }
+    } else {
+      masm->Push(arg1, arg2);
+      PushArguments(masm, pushed + 2, args...);
+    }
+  }
+};
+
 }  // namespace detail
 
 template <typename... T>
@@ -61,6 +125,11 @@ void MaglevAssembler::Push(T... vals) {
   } else {
     detail::PushAll(this, padreg, vals...);
   }
+}
+
+template <typename... T>
+void MaglevAssembler::PushArguments(T... vals) {
+  detail::PushArguments(this, 0, vals...);
 }
 
 inline MemOperand MaglevAssembler::StackSlotOperand(StackSlot slot) {
