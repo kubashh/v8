@@ -246,7 +246,7 @@ TF_BUILTIN(FastNewClosure, ConstructorBuiltinsAssembler) {
     BIND(&done);
   }
 
-  static_assert(JSFunction::kSizeWithoutPrototype == 7 * kTaggedSize);
+  static_assert(JSFunction::kSizeWithoutPrototype == 8 * kTaggedSize);
   StoreObjectFieldNoWriteBarrier(result, JSFunction::kFeedbackCellOffset,
                                  feedback_cell);
   StoreObjectFieldNoWriteBarrier(result, JSFunction::kSharedFunctionInfoOffset,
@@ -255,6 +255,10 @@ TF_BUILTIN(FastNewClosure, ConstructorBuiltinsAssembler) {
   TNode<CodeT> lazy_builtin =
       HeapConstant(BUILTIN_CODE(isolate(), CompileLazy));
   StoreObjectFieldNoWriteBarrier(result, JSFunction::kCodeOffset, lazy_builtin);
+  TNode<Uint32T> entry_point_handle = LoadObjectField<Uint32T>(
+      lazy_builtin, CodeDataContainer::kCodeEntryPointOffset);
+  StoreObjectFieldNoWriteBarrier(result, JSFunction::kCodeEntryPointOffset,
+                                 entry_point_handle);
   Return(result);
 }
 

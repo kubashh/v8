@@ -482,7 +482,8 @@ class ScavengeVisitor final : public NewSpaceVisitor<ScavengeVisitor> {
 
   V8_INLINE void VisitPointers(HeapObject host, MaybeObjectSlot start,
                                MaybeObjectSlot end) final;
-  V8_INLINE void VisitCodePointer(HeapObject host, CodeObjectSlot slot) final;
+  V8_INLINE void VisitCodeSpacePointer(HeapObject host,
+                                       CodeObjectSlot slot) final;
 
   V8_INLINE void VisitCodeTarget(Code host, RelocInfo* rinfo) final;
   V8_INLINE void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) final;
@@ -510,7 +511,8 @@ void ScavengeVisitor::VisitPointers(HeapObject host, MaybeObjectSlot start,
   return VisitPointersImpl(host, start, end);
 }
 
-void ScavengeVisitor::VisitCodePointer(HeapObject host, CodeObjectSlot slot) {
+void ScavengeVisitor::VisitCodeSpacePointer(HeapObject host,
+                                            CodeObjectSlot slot) {
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
   // Code slots never appear in new space because CodeDataContainers, the
   // only object that can contain code pointers, are always allocated in

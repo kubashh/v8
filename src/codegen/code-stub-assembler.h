@@ -847,9 +847,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Code> FromCodeTNonBuiltin(TNode<CodeT> code) {
 #ifdef V8_EXTERNAL_CODE_SPACE
     // Compute the Code object pointer from the code entry point.
-    TNode<RawPtrT> code_entry = Load<RawPtrT>(
-        code, IntPtrConstant(CodeDataContainer::kCodeEntryPointOffset -
-                             kHeapObjectTag));
+    TNode<RawPtrT> code_entry = LoadCodePointerFromObject(
+        code, IntPtrConstant(CodeDataContainer::kCodeEntryPointOffset));
     TNode<Object> o = BitcastWordToTagged(IntPtrSub(
         code_entry, IntPtrConstant(Code::kHeaderSize - kHeapObjectTag)));
     return CAST(o);
@@ -1164,6 +1163,15 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                     TNode<IntPtrT> offset,
                                     TNode<RawPtrT> pointer,
                                     ExternalPointerTag tag);
+
+  // Load a code pointer from an object.
+  TNode<RawPtrT> LoadCodePointerFromObject(TNode<HeapObject> object,
+                                           int offset) {
+    return LoadCodePointerFromObject(object, IntPtrConstant(offset));
+  }
+
+  TNode<RawPtrT> LoadCodePointerFromObject(TNode<HeapObject> object,
+                                           TNode<IntPtrT> offset);
 
   TNode<RawPtrT> LoadForeignForeignAddressPtr(TNode<Foreign> object) {
     return LoadExternalPointerFromObject(object, Foreign::kForeignAddressOffset,

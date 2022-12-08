@@ -98,6 +98,14 @@ class V8_EXPORT_PRIVATE AccessBuilder final
   // Provides access to JSFunction::code() field.
   static FieldAccess ForJSFunctionCode();
 
+#ifdef V8_ENABLE_SANDBOX
+  // Provides access to JSFunction::code_entry() CodePointer field.
+  static FieldAccess ForJSFunctionCodeEntry();
+
+  // Provides access to CodeDataContainer::code_entry_point() CodePointer field.
+  static FieldAccess ForCodeDataContainerEntryPoint();
+#endif
+
   // Provides access to JSBoundFunction::bound_target_function() field.
   static FieldAccess ForJSBoundFunctionBoundTargetFunction();
 
