@@ -4832,6 +4832,9 @@ class Call : public ValueNodeT<Call> {
   void set_arg(int i, ValueNode* node) {
     set_input(i + kFixedInputCount, node);
   }
+  constexpr auto args_rbegin() { return &arg(num_args() - 1); }
+  constexpr auto args_rend() { return &arg(-1); }
+
   compiler::FeedbackSource feedback() const { return feedback_; }
 
   void VerifyInputs(MaglevGraphLabeller* graph_labeller) const;
@@ -5135,6 +5138,8 @@ class CallKnownJSFunction : public ValueNodeT<CallKnownJSFunction> {
   void set_arg(int i, ValueNode* node) {
     set_input(i + kFixedInputCount, node);
   }
+  constexpr auto args_rbegin() { return &arg(num_args() - 1); }
+  constexpr auto args_rend() { return &arg(-1); }
 
   compiler::SharedFunctionInfoRef shared_function_info() const {
     return function_.shared();
