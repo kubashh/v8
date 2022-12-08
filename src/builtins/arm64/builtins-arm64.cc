@@ -1502,7 +1502,11 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     // Load the baseline code into the closure.
     __ Move(x2, kInterpreterBytecodeArrayRegister);
     static_assert(kJavaScriptCallCodeStartRegister == x2, "ABI mismatch");
-    __ ReplaceClosureCodeWithOptimizedCode(x2, closure);
+    {
+      UseScratchRegisterScope temps(masm);
+      Register scratch = temps.AcquireX();
+      __ ReplaceClosureCodeWithOptimizedCode(x2, closure, scratch);
+    }
     __ JumpCodeTObject(x2);
 
     __ bind(&install_baseline_code);

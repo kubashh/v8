@@ -8,7 +8,8 @@
 #include "include/v8-internal.h"
 #include "src/base/atomic-utils.h"
 #include "src/execution/isolate.h"
-#include "src/sandbox/external-pointer-table-inl.h"
+#include "src/sandbox/external-entity-table-inl.h"
+#include "src/sandbox/external-pointer-table.h"
 #include "src/sandbox/external-pointer.h"
 
 namespace v8 {

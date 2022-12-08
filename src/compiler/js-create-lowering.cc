@@ -927,6 +927,10 @@ Reduction JSCreateLowering::ReduceJSCreateClosure(Node* node) {
   Control control = n.control();
   Node* context = n.context();
 
+  Node* code_entry_handle = effect = graph()->NewNode(
+      simplified()->LoadField(AccessBuilder::ForCodeDataContainerEntryPoint()),
+      jsgraph()->Constant(code), effect, control);
+
   // Use inline allocation of closures only for instantiation sites that have
   // seen more than one instantiation, this simplifies the generated code and
   // also serves as a heuristic of which allocation sites benefit from it.
@@ -955,7 +959,7 @@ Reduction JSCreateLowering::ReduceJSCreateClosure(Node* node) {
   AllocationType allocation = AllocationType::kYoung;
 
   // Emit code to allocate the JSFunction instance.
-  static_assert(JSFunction::kSizeWithoutPrototype == 7 * kTaggedSize);
+  static_assert(JSFunction::kSizeWithoutPrototype == 8 * kTaggedSize);
   AllocationBuilder a(jsgraph(), effect, control);
   a.Allocate(function_map.instance_size(), allocation,
              Type::CallableFunction());
@@ -964,15 +968,18 @@ Reduction JSCreateLowering::ReduceJSCreateClosure(Node* node) {
           jsgraph()->EmptyFixedArrayConstant());
   a.Store(AccessBuilder::ForJSObjectElements(),
           jsgraph()->EmptyFixedArrayConstant());
+#ifdef V8_ENABLE_SANDBOX
+  a.Store(AccessBuilder::ForJSFunctionCodeEntry(), code_entry_handle);
+#endif
   a.Store(AccessBuilder::ForJSFunctionSharedFunctionInfo(), shared);
   a.Store(AccessBuilder::ForJSFunctionContext(), context);
   a.Store(AccessBuilder::ForJSFunctionFeedbackCell(), feedback_cell);
   a.Store(AccessBuilder::ForJSFunctionCode(), code);
-  static_assert(JSFunction::kSizeWithoutPrototype == 7 * kTaggedSize);
+  static_assert(JSFunction::kSizeWithoutPrototype == 8 * kTaggedSize);
   if (function_map.has_prototype_slot()) {
     a.Store(AccessBuilder::ForJSFunctionPrototypeOrInitialMap(),
             jsgraph()->TheHoleConstant());
-    static_assert(JSFunction::kSizeWithPrototype == 8 * kTaggedSize);
+    static_assert(JSFunction::kSizeWithPrototype == 9 * kTaggedSize);
   }
   for (int i = 0; i < function_map.GetInObjectProperties(); i++) {
     a.Store(AccessBuilder::ForJSObjectInObjectProperty(function_map, i),

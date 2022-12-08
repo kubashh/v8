@@ -1518,16 +1518,19 @@ Code CodeDataContainer::code(PtrComprCageBase cage_base,
 
 DEF_GETTER(CodeDataContainer, code_entry_point, Address) {
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
-  return ReadField<Address>(kCodeEntryPointOffset);
+  Isolate* isolate = GetIsolateForSandbox(*this);
+  return ReadCodePointerField(kCodeEntryPointOffset, isolate);
 }
 
-void CodeDataContainer::init_code_entry_point(Isolate* isolate, Address value) {
-  set_code_entry_point(isolate, value);
+void CodeDataContainer::init_code_entry_point(Isolate* isolate,
+                                              Address initial_value) {
+  CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
+  InitCodePointerField(kCodeEntryPointOffset, isolate, initial_value);
 }
 
 void CodeDataContainer::set_code_entry_point(Isolate* isolate, Address value) {
   CHECK(V8_EXTERNAL_CODE_SPACE_BOOL);
-  WriteField<Address>(kCodeEntryPointOffset, value);
+  WriteCodePointerField(kCodeEntryPointOffset, isolate, value);
 }
 
 void CodeDataContainer::SetCodeAndEntryPoint(Isolate* isolate_for_sandbox,

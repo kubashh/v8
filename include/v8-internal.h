@@ -268,6 +268,7 @@ static const size_t kMaxExternalPointers = 0;
 
 #endif  // V8_COMPRESS_POINTERS
 
+// TODO(saelo) rename to ExernalEntityHandle
 // A ExternalPointerHandle represents a (opaque) reference to an external
 // pointer that can be stored inside the sandbox. A ExternalPointerHandle has
 // meaning only in combination with an (active) Isolate as it references an
@@ -285,6 +286,9 @@ using ExternalPointer_t = ExternalPointerHandle;
 #else
 using ExternalPointer_t = Address;
 #endif
+
+constexpr ExternalPointer_t kNullExternalPointer = 0;
+constexpr ExternalPointerHandle kNullExternalPointerHandle = 0;
 
 // When the sandbox is enabled, external pointers are stored in an external
 // pointer table and are referenced from HeapObjects through an index (a
@@ -354,6 +358,7 @@ using ExternalPointer_t = Address;
 // use ExternalPointerHandles directly and use them to access the pointers in an
 // ExternalPointerTable.
 constexpr uint64_t kExternalPointerMarkBit = 1ULL << 62;
+constexpr uint64_t kCodePointerMarkBit = 1ULL;
 constexpr uint64_t kExternalPointerTagMask = 0x40ff000000000000;
 constexpr uint64_t kExternalPointerTagShift = 48;
 
@@ -416,8 +421,8 @@ constexpr uint64_t kAllExternalPointerTypeTags[] = {
   V(kArrayBufferExtensionTag,                   TAG(21))
 
 // All external pointer tags.
-#define ALL_EXTERNAL_POINTER_TAGS(V) \
-  SHARED_EXTERNAL_POINTER_TAGS(V)    \
+#define ALL_EXTERNAL_POINTER_TAGS(V)   \
+  SHARED_EXTERNAL_POINTER_TAGS(V)      \
   PER_ISOLATE_EXTERNAL_POINTER_TAGS(V)
 
 #define EXTERNAL_POINTER_TAG_ENUM(Name, Tag) Name = Tag,
@@ -543,10 +548,13 @@ class Internals {
   static const int kIsolateLongTaskStatsCounterOffset =
       kIsolateFastApiCallTargetOffset + kApiSystemPointerSize;
 #ifdef V8_COMPRESS_POINTERS
+  // TODO(saelo) rename to ExternalEntityTable
   static const int kIsolateExternalPointerTableOffset =
       kIsolateLongTaskStatsCounterOffset + kApiSizetSize;
-  static const int kIsolateSharedExternalPointerTableAddressOffset =
+  static const int kIsolateCodePointerTableOffset =
       kIsolateExternalPointerTableOffset + kExternalPointerTableSize;
+  static const int kIsolateSharedExternalPointerTableAddressOffset =
+      kIsolateCodePointerTableOffset + kExternalPointerTableSize;
   static const int kIsolateRootsOffset =
       kIsolateSharedExternalPointerTableAddressOffset + kApiSystemPointerSize;
 #else
