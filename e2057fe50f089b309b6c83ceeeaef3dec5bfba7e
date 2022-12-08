@@ -16,6 +16,46 @@
       "message": "Victor, PTAL\n\nAnton: My template magic isn\u0027t very strong. Could you please take a look specifically at maglev-assembler.h and maglev-assembler-arm64-inl.h to check if template magic can be improved?",
       "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "782e542c_5d1d02cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-08T14:50:22Z",
+      "side": 1,
+      "message": "Impressive use of template voodoo! I\u0027ll let Anton review that! 😊\nLGTM % a small question...",
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccd3f55a_983b3289",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-08T14:50:22Z",
+      "side": 1,
+      "message": "Why distinguish PushArguments(...) vs Push(...)? What\u0027s supposed to be the difference? Can we unify?",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 0
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
