@@ -56,6 +56,30 @@
       },
       "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80f49a7f_0316ca5f",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-08T14:53:54Z",
+      "side": 1,
+      "message": "We could if we ever see a need to use iterators and/or repeating the same value for normal pushes.\nThese possiblities come at a slight cost and therefore I decided to not merge them with regular `Push` (as we don\u0027t need these added functionality there at least right now).",
+      "parentUuid": "ccd3f55a_983b3289",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 0
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
