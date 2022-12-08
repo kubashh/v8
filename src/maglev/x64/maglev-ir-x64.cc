@@ -2969,6 +2969,7 @@ void TruncateFloat64ToInt32::GenerateCode(MaglevAssembler* masm,
   __ TruncateDoubleToInt32(ToRegister(result()), ToDoubleRegister(input()));
 }
 
+#if 0
 int Call::MaxCallStackArgs() const { return num_args(); }
 void Call::SetValueLocationConstraints() {
   // TODO(leszeks): Consider splitting Call into with- and without-feedback
@@ -3003,7 +3004,7 @@ void Call::GenerateCode(MaglevAssembler* masm, const ProcessingState& state) {
   DCHECK_EQ(ToRegister(context()), kContextRegister);
 
   for (int i = num_args() - 1; i >= 0; --i) {
-    __ PushInput(arg(i));
+    __ Push(arg(i));
   }
 
   uint32_t arg_count = num_args();
@@ -3085,9 +3086,9 @@ void CallKnownJSFunction::GenerateCode(MaglevAssembler* masm,
     }
   }
   for (int i = num_args() - 1; i >= 0; --i) {
-    __ PushInput(arg(i));
+    __ Push(arg(i));
   }
-  __ PushInput(receiver());
+  __ Push(receiver());
   __ Move(kContextRegister, function_.context().object());
   __ Move(kJavaScriptCallTargetRegister, function_.object());
   __ LoadRoot(kJavaScriptCallNewTargetRegister, RootIndex::kUndefinedValue);
@@ -3103,7 +3104,7 @@ void CallKnownJSFunction::GenerateCode(MaglevAssembler* masm,
   }
   masm->DefineExceptionHandlerAndLazyDeoptPoint(this);
 }
-
+#endif
 int Construct::MaxCallStackArgs() const {
   using D = Construct_WithFeedbackDescriptor;
   return num_args() + D::GetStackParameterCount();
@@ -3126,7 +3127,7 @@ void Construct::GenerateCode(MaglevAssembler* masm,
   DCHECK_EQ(ToRegister(context()), kContextRegister);
 
   for (int i = num_args() - 1; i >= 0; --i) {
-    __ PushInput(arg(i));
+    __ Push(arg(i));
   }
   static_assert(D::GetStackParameterIndex(D::kFeedbackVector) == 0);
   static_assert(D::GetStackParameterCount() == 1);
@@ -3233,7 +3234,7 @@ void CallBuiltin::GenerateCode(MaglevAssembler* masm,
 
   if (descriptor.GetStackArgumentOrder() == StackArgumentOrder::kDefault) {
     for (int i = InputsInRegisterCount(); i < InputCountWithoutContext(); ++i) {
-      __ PushInput(input(i));
+      __ Push(input(i));
     }
     if (has_feedback()) {
       PushFeedback(masm);
@@ -3245,7 +3246,7 @@ void CallBuiltin::GenerateCode(MaglevAssembler* masm,
     }
     for (int i = InputCountWithoutContext() - 1; i >= InputsInRegisterCount();
          --i) {
-      __ PushInput(input(i));
+      __ Push(input(i));
     }
   }
   __ CallBuiltin(builtin());
@@ -3264,7 +3265,7 @@ void CallRuntime::GenerateCode(MaglevAssembler* masm,
                                const ProcessingState& state) {
   DCHECK_EQ(ToRegister(context()), kContextRegister);
   for (int i = 0; i < num_args(); i++) {
-    __ PushInput(arg(i));
+    __ Push(arg(i));
   }
   __ CallRuntime(function_id(), num_args());
   // TODO(victorgomes): Not sure if this is needed for all runtime calls.
@@ -3317,14 +3318,14 @@ void CallWithSpread::GenerateCode(MaglevAssembler* masm,
   // Push other arguments (other than the spread) to the stack.
   int argc_no_spread = num_args() - 1;
   for (int i = argc_no_spread - 1; i >= 0; --i) {
-    __ PushInput(arg(i));
+    __ Push(arg(i));
   }
   if (feedback_.IsValid()) {
     using D =
         CallInterfaceDescriptorFor<Builtin::kCallWithSpread_WithFeedback>::type;
     static_assert(D::GetStackParameterIndex(D::kReceiver) == 0);
     static_assert(D::GetStackParameterCount() == 1);
-    __ PushInput(arg(0));
+    __ Push(arg(0));
     __ Move(D::GetRegisterParameter(D::kArgumentsCount), argc_no_spread);
     __ Move(D::GetRegisterParameter(D::kFeedbackVector), feedback().vector);
     __ Move(D::GetRegisterParameter(D::kSlot), feedback().index());
@@ -3359,7 +3360,7 @@ void CallWithArrayLike::GenerateCode(MaglevAssembler* masm,
             D::GetRegisterParameter(D::kArgumentsList));
   DCHECK_EQ(ToRegister(context()), kContextRegister);
 #endif  // DEBUG
-  __ PushInput(receiver());
+  __ Push(receiver());
   __ CallBuiltin(Builtin::kCallWithArrayLike);
   masm->DefineExceptionHandlerAndLazyDeoptPoint(this);
 }
@@ -3392,7 +3393,7 @@ void ConstructWithSpread::GenerateCode(MaglevAssembler* masm,
   // Push other arguments (other than the spread) to the stack.
   int argc_no_spread = num_args() - 1;
   for (int i = argc_no_spread - 1; i >= 0; --i) {
-    __ PushInput(arg(i));
+    __ Push(arg(i));
   }
   static_assert(D::GetStackParameterIndex(D::kFeedbackVector) == 0);
   static_assert(D::GetStackParameterCount() == 1);

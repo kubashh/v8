@@ -80,7 +80,6 @@ class MaglevAssembler : public MacroAssembler {
 
   inline void Branch(Condition condition, BasicBlock* if_true,
                      BasicBlock* if_false, BasicBlock* next_block);
-  inline void PushInput(const Input& input);
   inline Register FromAnyToRegister(const Input& input, Register scratch);
 
   inline void LoadBoundedSizeFromObject(Register result, Register object,
@@ -157,6 +156,8 @@ class MaglevAssembler : public MacroAssembler {
 
   template <typename... T>
   inline void Push(T... vals);
+  template <typename... T>
+  inline void PushArguments(T... vals);
 
   void Prologue(Graph* graph);
 
@@ -471,6 +472,104 @@ inline void MaglevAssembler::DefineExceptionHandlerAndLazyDeoptPoint(
   DefineExceptionHandlerPoint(node);
   DefineLazyDeoptPoint(node->lazy_deopt_info());
 }
+
+// Helpers for pushing arguments.
+template <typename T>
+class PushArgumentRepeat {
+ public:
+  PushArgumentRepeat(T arg, int count) : arg_(arg), count_(count) {}
+  inline T arg() const { return arg_; }
+  inline int count() const { return count_; }
+  inline T next() {
+    count_--;
+    return arg_;
+  }
+  inline bool has_more() const { return count_ > 0; }
+
+ private:
+  T arg_;
+  int count_;
+};
+
+template <typename T>
+class PushArgumentsIterator {
+ public:
+  using value_type = std::iterator_traits<T>::value_type;
+
+  PushArgumentsIterator(T begin, T end) : begin_(begin), end_(end) {}
+  inline T begin() const { return begin_; }
+  inline T end() const { return end_; }
+  inline value_type next() { return *begin_++; }
+  inline bool has_more() const { return begin_ != end_; }
+
+ private:
+  T begin_;
+  T end_;
+};
+
+namespace detail {
+
+template <class T>
+struct is_repeat_arguments : std::false_type {};
+template <typename T>
+struct is_repeat_arguments<PushArgumentRepeat<T>> : std::true_type {};
+
+template <class T>
+struct is_push_arguments_iterator : std::false_type {};
+template <typename T>
+struct is_push_arguments_iterator<PushArgumentsIterator<T>> : std::true_type {};
+
+template <typename... Args>
+struct PushArgumentsHelper;
+
+template <typename... Args>
+inline void PushArguments(MaglevAssembler* masm, uint32_t pushed = 0,
+                          Args... args) {
+  PushArgumentsHelper<Args...>::Push(masm, pushed, args...);
+}
+
+template <typename T, typename... Args>
+inline void PushRepeat(MaglevAssembler* masm, uint32_t pushed,
+                       PushArgumentRepeat<T> repeat, Args... args) {
+  if (!repeat.has_more()) {
+    PushArguments(masm, pushed, args...);
+    return;
+  }
+  T argument = repeat.arg();
+  int count = repeat.count();
+  int i = 0;
+  for (; i < count - 1; i += 2) {
+    masm->Push(argument, argument);
+  }
+  if (i == count) {
+    PushArguments(masm, pushed + i, args...);
+  } else {
+    PushArguments(masm, pushed + i, argument, args...);
+  }
+}
+
+template <typename T, typename... Args>
+inline void PushIterator(MaglevAssembler* masm, uint32_t pushed,
+                         PushArgumentsIterator<T> iterator, Args... args) {
+  using value_type = std::iterator_traits<T>::value_type;
+  auto begin = iterator.begin();
+  auto end = iterator.end();
+  uint32_t values_pushed = 0;
+  for (auto iter = begin; iter != end; ++iter) {
+    value_type val1 = *iter;
+    ++iter;
+    if (iter == end) {
+      PushArguments(masm, pushed + values_pushed, val1, args...);
+      return;
+    }
+    value_type val2 = *iter;
+    masm->Push(val1, val2);
+    values_pushed += 2;
+  }
+  PushArguments(masm, pushed + values_pushed, args...);
+}
+
+}  // namespace detail
 
 }  // namespace maglev
 }  // namespace internal
