@@ -2035,6 +2035,10 @@ void TranslatedState::InitializeJSObjectAt(
       WRITE_BARRIER(*object_storage, offset, *field_value);
     }
   }
+  if (InstanceTypeChecker::IsJSFunction(map->instance_type())) {
+    auto function = JSFunction::cast(*object_storage);
+    function.set_code_entry_point_handle(function.code().entrypoint_handle());
+  }
   object_storage->set_map(*map, kReleaseStore);
 }
 
