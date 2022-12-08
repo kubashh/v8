@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66909b9b_be8fbcc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-12-08T09:54:37Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "42d92e17faf7acc8e9857ccd5396cf1b13300a86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "224e857f_8124f666",
+        "filename": "src/heap/concurrent-allocator.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-12-08T09:54:37Z",
+      "side": 1,
+      "message": "Can we avoid the default parameter here?",
+      "range": {
+        "startLine": 48,
+        "startChar": 37,
+        "endLine": 48,
+        "endChar": 39
+      },
+      "revId": "42d92e17faf7acc8e9857ccd5396cf1b13300a86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
