@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b60b04b_c81be1ef",
+        "filename": "src/base/container-utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54d389c8_e0257a4a",
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bda0d47_209336b4",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dd3a27d_b5d4c946",
+        "filename": "src/base/small-vector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bda0d47_209336b4",
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03b249cc_ad0f8f8f",
@@ -82,6 +118,30 @@
       "writtenOn": "2022-12-08T10:29:10Z",
       "side": 1,
       "message": "It looks like you don\u0027t use this variable.",
+      "range": {
+        "startLine": 567,
+        "startChar": 6,
+        "endLine": 567,
+        "endChar": 38
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "641ecd40_93cbdc22",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03b249cc_ad0f8f8f",
       "range": {
         "startLine": 567,
         "startChar": 6,
@@ -115,6 +175,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2676ed4_3768b6af",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d135657_919b60d0",
+      "range": {
+        "startLine": 586,
+        "startChar": 25,
+        "endLine": 586,
+        "endChar": 32
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0db484a8_a189e29f",
@@ -128,6 +212,30 @@
       "writtenOn": "2022-12-08T10:29:10Z",
       "side": 1,
       "message": "It\u0027s a bit sad that this could do Zone allocations, even though the constructed Set would be completely local. Maybe it would be worth adding an overload to Word32Type::Range (and probably Word32Type::Set) so that it can take a `base::SmallVector` (or `base::Vector`?) instead of a `Zone` as argument, and use this instead of allocating something in the Zone...",
+      "range": {
+        "startLine": 611,
+        "startChar": 10,
+        "endLine": 612,
+        "endChar": 66
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c9a24e_dcbaa837",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Yes, I agree. This is an issue for many of the temporary types. We can think about solutions for this problem in follow up CLs.",
+      "parentUuid": "0db484a8_a189e29f",
       "range": {
         "startLine": 611,
         "startChar": 10,
@@ -161,6 +269,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "315d78de_079e0f03",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "I did assume this was going to be eliminated by the compiler in that case. Anyway: Moved it into the macro.",
+      "parentUuid": "b726f0ea_6bf3f4d9",
+      "range": {
+        "startLine": 674,
+        "startChar": 53,
+        "endLine": 674,
+        "endChar": 78
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "251765d5_d1642008",
@@ -174,6 +306,30 @@
       "writtenOn": "2022-12-08T10:29:10Z",
       "side": 1,
       "message": "I think this is unused.",
+      "range": {
+        "startLine": 846,
+        "startChar": 1,
+        "endLine": 846,
+        "endChar": 42
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ec2de1a_47e2f4d3",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "251765d5_d1642008",
       "range": {
         "startLine": 846,
         "startChar": 1,
@@ -207,6 +363,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "894c2c58_b79c1afd",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c984f677_11979e66",
+      "range": {
+        "startLine": 149,
+        "startChar": 5,
+        "endLine": 151,
+        "endChar": 21
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26bcacec_a384dcaf",
@@ -220,6 +400,30 @@
       "writtenOn": "2022-12-08T10:29:10Z",
       "side": 1,
       "message": "That\u0027s always true given the preceding `static_assert`, no?",
+      "range": {
+        "startLine": 206,
+        "startChar": 7,
+        "endLine": 206,
+        "endChar": 54
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d265c90_0919d4a8",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Yes. This was supposed to be a `\u003c` comparison. Fixed.",
+      "parentUuid": "26bcacec_a384dcaf",
       "range": {
         "startLine": 206,
         "startChar": 7,
@@ -253,6 +457,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0b3bc74_760934db",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7124c367_4fff60cf",
+      "range": {
+        "startLine": 259,
+        "startChar": 6,
+        "endLine": 259,
+        "endChar": 8
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fce2fc6a_95390541",
@@ -266,6 +494,30 @@
       "writtenOn": "2022-12-08T10:29:10Z",
       "side": 1,
       "message": "Could you add a comment saying something like \"Normalizing wrapping range to a Set\"?",
+      "range": {
+        "startLine": 267,
+        "startChar": 6,
+        "endLine": 267,
+        "endChar": 8
+      },
+      "revId": "b6e207b31692e68e6905e7efa60755d7c794921e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afdd495f_84ba00a5",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fce2fc6a_95390541",
       "range": {
         "startLine": 267,
         "startChar": 6,

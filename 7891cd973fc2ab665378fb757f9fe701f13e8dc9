@@ -288,6 +288,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ca11453_49da02ee",
+        "filename": "src/compiler/turboshaft/assert-types-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "72573871_1e1d8ac5",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 127,
+        "endChar": 3
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7189491_6b085aa7",
@@ -443,6 +467,30 @@
       "side": 1,
       "message": "I am not sure I understand what you mean? What is wrong?",
       "parentUuid": "2a39ee97_b0fcc101",
+      "range": {
+        "startLine": 29,
+        "startChar": 14,
+        "endLine": 29,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a8976e6_3ed706ba",
+        "filename": "src/compiler/turboshaft/type-inference-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a5e177bc_f2e32ce3",
       "range": {
         "startLine": 29,
         "startChar": 14,
@@ -1489,6 +1537,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be00e976_c62eae7e",
+        "filename": "src/compiler/turboshaft/types.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8b7a6a51_8c0960c8",
+      "range": {
+        "startLine": 297,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 1
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ccbc940_a91121d3",
@@ -1668,6 +1740,30 @@
       "side": 1,
       "message": "Sg, thanks!",
       "parentUuid": "4893dc6d_a98ff21f",
+      "range": {
+        "startLine": 179,
+        "startChar": 2,
+        "endLine": 179,
+        "endChar": 23
+      },
+      "revId": "7891cd973fc2ab665378fb757f9fe701f13e8dc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3f94ce5_0b5c0456",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-09T13:53:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aeef5c49_7a02c0f9",
       "range": {
         "startLine": 179,
         "startChar": 2,
