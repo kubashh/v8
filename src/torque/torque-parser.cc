@@ -664,8 +664,6 @@ base::Optional<ParseResult> MakeTorqueMacroDeclaration(
 
 base::Optional<ParseResult> MakeTorqueBuiltinDeclaration(
     ParseResultIterator* child_results) {
-  const bool has_custom_interface_descriptor = HasAnnotation(
-      child_results, ANNOTATION_CUSTOM_INTERFACE_DESCRIPTOR, "builtin");
   auto transitioning = child_results->NextAs<bool>();
   auto javascript_linkage = child_results->NextAs<bool>();
   auto name = child_results->NextAs<Identifier*>();
@@ -680,8 +678,7 @@ base::Optional<ParseResult> MakeTorqueBuiltinDeclaration(
   auto return_type = child_results->NextAs<TypeExpression*>();
   auto body = child_results->NextAs<base::Optional<Statement*>>();
   CallableDeclaration* declaration = MakeNode<TorqueBuiltinDeclaration>(
-      transitioning, javascript_linkage, name, args, return_type,
-      has_custom_interface_descriptor, body);
+      transitioning, javascript_linkage, name, args, return_type, body);
   Declaration* result = declaration;
   if (generic_parameters.empty()) {
     if (!body) ReportError("A non-generic declaration needs a body.");
@@ -2836,8 +2833,8 @@ struct TorqueGrammar : Grammar {
             &parameterListNoVararg, &returnType, optionalLabelList,
             &optionalBody},
            AsSingletonVector<Declaration*, MakeTorqueMacroDeclaration>()),
-      Rule({annotations, CheckIf(Token("transitioning")),
-            CheckIf(Token("javascript")), Token("builtin"), &name,
+      Rule({CheckIf(Token("transitioning")), CheckIf(Token("javascript")),
+            Token("builtin"), &name,
             TryOrDefault<GenericParameters>(&genericParameters),
             &parameterListAllowVararg, &returnType, &optionalBody},
            AsSingletonVector<Declaration*, MakeTorqueBuiltinDeclaration>()),

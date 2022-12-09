@@ -80,7 +80,6 @@
 #include "src/compiler/simplified-operator.h"
 #include "src/compiler/store-store-elimination.h"
 #include "src/compiler/turboshaft/assembler.h"
-#include "src/compiler/turboshaft/assert-types-reducer.h"
 #include "src/compiler/turboshaft/branch-elimination-reducer.h"
 #include "src/compiler/turboshaft/decompression-optimization.h"
 #include "src/compiler/turboshaft/graph-builder.h"
@@ -93,8 +92,6 @@
 #include "src/compiler/turboshaft/recreate-schedule.h"
 #include "src/compiler/turboshaft/select-lowering-reducer.h"
 #include "src/compiler/turboshaft/simplify-tf-loops.h"
-#include "src/compiler/turboshaft/type-inference-reducer.h"
-#include "src/compiler/turboshaft/types.h"
 #include "src/compiler/turboshaft/value-numbering-reducer.h"
 #include "src/compiler/turboshaft/variable-reducer.h"
 #include "src/compiler/type-narrowing-reducer.h"
@@ -2082,9 +2079,8 @@ struct BuildTurboshaftPhase {
     data->reset_schedule();
     data->CreateTurboshaftGraph();
     if (auto bailout = turboshaft::BuildGraph(
-            schedule, data->isolate(), data->graph_zone(), temp_zone,
-            &data->turboshaft_graph(), linkage, data->source_positions(),
-            data->node_origins())) {
+            schedule, data->graph_zone(), temp_zone, &data->turboshaft_graph(),
+            linkage, data->source_positions(), data->node_origins())) {
       return bailout;
     }
     return {};
@@ -2105,28 +2101,6 @@ struct OptimizeTurboshaftPhase {
         Run(&data->turboshaft_graph(), temp_zone, data->node_origins(),
             std::tuple{
                 turboshaft::MemoryOptimizationReducerArgs{data->isolate()}});
-  }
-};
-
-struct TurboshaftTypeInferencePhase {
-  DECL_PIPELINE_PHASE_CONSTANTS(TurboshaftTypeInference)
-
-  void Run(PipelineData* data, Zone* temp_zone) {
-    DCHECK(data->HasTurboshaftGraph());
-    UnparkedScopeIfNeeded scope(data->broker());
-
-    if (v8_flags.turboshaft_assert_types) {
-      turboshaft::OptimizationPhase<turboshaft::AssertTypesReducer,
-                                    turboshaft::ValueNumberingReducer,
-                                    turboshaft::TypeInferenceReducer>::
-          Run(&data->turboshaft_graph(), temp_zone, data->node_origins(),
-              std::tuple{turboshaft::TypeInferenceReducerArgs{data->isolate()},
-                         turboshaft::AssertTypesReducerArgs{data->isolate()}});
-    } else {
-      turboshaft::OptimizationPhase<turboshaft::TypeInferenceReducer>::Run(
-          &data->turboshaft_graph(), temp_zone, data->node_origins(),
-          std::tuple{turboshaft::TypeInferenceReducerArgs{data->isolate()}});
-    }
   }
 };
 
@@ -2708,17 +2682,6 @@ struct PrintTurboshaftGraphPhase {
             op.PrintOptions(stream);
             return true;
           });
-      PrintTurboshaftCustomDataPerOperation(
-          data->info(), "Types", data->turboshaft_graph(),
-          [](std::ostream& stream, const turboshaft::Graph& graph,
-             turboshaft::OpIndex index) -> bool {
-            turboshaft::Type type = graph.operation_types()[index];
-            if (!type.IsInvalid() && !type.IsNone()) {
-              type.PrintTo(stream);
-              return true;
-            }
-            return false;
-          });
     }
 
     if (data->info()->trace_turbo_graph()) {
@@ -3096,9 +3059,6 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
     Run<DecompressionOptimizationPhase>();
     Run<PrintTurboshaftGraphPhase>(
         DecompressionOptimizationPhase::phase_name());
-
-    Run<TurboshaftTypeInferencePhase>();
-    Run<PrintTurboshaftGraphPhase>(TurboshaftTypeInferencePhase::phase_name());
 
     Run<TurboshaftRecreateSchedulePhase>(linkage);
     TraceSchedule(data->info(), data, data->schedule(),

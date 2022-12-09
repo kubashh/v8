@@ -17,7 +17,6 @@
 #include "src/codegen/source-position.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/sidetable.h"
-#include "src/compiler/turboshaft/types.h"
 #include "src/zone/zone-containers.h"
 
 namespace v8::internal::compiler::turboshaft {
@@ -428,8 +427,7 @@ class Graph {
         all_blocks_(graph_zone),
         graph_zone_(graph_zone),
         source_positions_(graph_zone),
-        operation_origins_(graph_zone),
-        operation_types_(graph_zone) {}
+        operation_origins_(graph_zone) {}
 
   // Reset the graph to recycle its memory.
   void Reset() {
@@ -437,7 +435,6 @@ class Graph {
     bound_blocks_.clear();
     source_positions_.Reset();
     operation_origins_.Reset();
-    operation_types_.Reset();
     next_block_ = 0;
     dominator_tree_depth_ = 0;
   }
@@ -726,10 +723,6 @@ class Graph {
   GrowingSidetable<OpIndex>& operation_origins() { return operation_origins_; }
 
   uint32_t DominatorTreeDepth() const { return dominator_tree_depth_; }
-  const GrowingSidetable<Type>& operation_types() const {
-    return operation_types_;
-  }
-  GrowingSidetable<Type>& operation_types() { return operation_types_; }
 
   Graph& GetOrCreateCompanion() {
     if (!companion_) {
@@ -752,7 +745,6 @@ class Graph {
     std::swap(graph_zone_, companion.graph_zone_);
     std::swap(source_positions_, companion.source_positions_);
     std::swap(operation_origins_, companion.operation_origins_);
-    std::swap(operation_types_, companion.operation_types_);
 #ifdef DEBUG
     // Update generation index.
     DCHECK_EQ(generation_ + 1, companion.generation_);
@@ -823,7 +815,6 @@ class Graph {
   GrowingSidetable<SourcePosition> source_positions_;
   GrowingSidetable<OpIndex> operation_origins_;
   uint32_t dominator_tree_depth_ = 0;
-  GrowingSidetable<Type> operation_types_;
 
   std::unique_ptr<Graph> companion_ = {};
 #ifdef DEBUG
