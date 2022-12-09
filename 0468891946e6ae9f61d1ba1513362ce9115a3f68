@@ -35,6 +35,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b635470_54702799",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-12-09T08:41:01Z",
+      "side": 1,
+      "message": "lgtm, thanks",
+      "revId": "0468891946e6ae9f61d1ba1513362ce9115a3f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7e9d585_91000c7a",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-12-09T08:41:01Z",
+      "side": 1,
+      "message": "nit: not need for explicit",
+      "range": {
+        "startLine": 232,
+        "startChar": 2,
+        "endLine": 232,
+        "endChar": 10
+      },
+      "revId": "0468891946e6ae9f61d1ba1513362ce9115a3f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76cdb66f_07a6dc48",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-12-09T08:41:01Z",
+      "side": 1,
+      "message": "`DeoptimizeAllMarkedCode()`?",
+      "range": {
+        "startLine": 283,
+        "startChar": 18,
+        "endLine": 283,
+        "endChar": 38
+      },
+      "revId": "0468891946e6ae9f61d1ba1513362ce9115a3f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1f6c4c3_10c91174",
@@ -72,6 +135,30 @@
       "side": 1,
       "message": "see the safepoint_scope_ above -- my offline question was whether this is enough",
       "parentUuid": "c1f6c4c3_10c91174",
+      "range": {
+        "startLine": 425,
+        "startChar": 6,
+        "endLine": 425,
+        "endChar": 22
+      },
+      "revId": "0468891946e6ae9f61d1ba1513362ce9115a3f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e4371f3_80628739",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-12-09T08:41:01Z",
+      "side": 1,
+      "message": "Ack (It is)",
+      "parentUuid": "5972a736_c03e436b",
       "range": {
         "startLine": 425,
         "startChar": 6,
