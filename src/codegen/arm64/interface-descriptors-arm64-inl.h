@@ -242,6 +242,14 @@ constexpr auto CompareDescriptor::registers() {
 }
 
 // static
+constexpr auto StringEqualDescriptor::registers() {
+  // x1: left operand
+  // x0: right operand
+  // x2: string length
+  return RegisterArray(x1, x0, x2);
+}
+
+// static
 constexpr auto Compare_BaselineDescriptor::registers() {
   // x1: left operand
   // x0: right operand

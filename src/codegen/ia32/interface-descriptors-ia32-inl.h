@@ -238,6 +238,11 @@ constexpr auto CompareDescriptor::registers() {
 }
 
 // static
+constexpr auto StringEqualDescriptor::registers() {
+  return RegisterArray(edx, eax, ecx);
+}
+
+// static
 constexpr auto Compare_BaselineDescriptor::registers() {
   return RegisterArray(edx, eax, ecx);
 }
