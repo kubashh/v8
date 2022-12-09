@@ -86,6 +86,24 @@
       "parentUuid": "be11fafc_7cad7e34",
       "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77685ce8_92a9a20d",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-12-09T14:54:37Z",
+      "side": 1,
+      "message": "Well, it might but it does tons of other stuff before it reaches that string-to-string comparison case, so I think we shouldn\u0027t worry about that. We should probably consider switching other descriptors to default registers. IIRC the only place it\u0027s worth having a manually-defined descriptors is for ICs dispatchers (like LoadWithVectorDescriptor vs. LoadDescriptor, where one tail calls to another, see GenerateLoadICTrampoline).\n\nAnother option you could give a try is to `return Compare_BaselineDescriptor::registers();` with a respective comment.",
+      "parentUuid": "d96788ec_565aa78c",
+      "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
