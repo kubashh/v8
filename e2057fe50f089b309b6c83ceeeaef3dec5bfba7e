@@ -37,6 +37,121 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9eb9829b_1ebc5498",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-09T00:12:17Z",
+      "side": 1,
+      "message": "is this correct? This is pushing the padding register as the _last_ value. Shouldn\u0027t it push it as the _first_ value? See PushAll in baseline-assembler-arm64",
+      "range": {
+        "startLine": 91,
+        "startChar": 6,
+        "endLine": 91,
+        "endChar": 30
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9be34094_1e58dd59",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-09T00:12:17Z",
+      "side": 1,
+      "message": "optional: a \"repeat\" is really just a kind of iteration, so you could implement this in terms of `PushArgumentsIterator/Range` and a custom repeating iterator, e.g. something like\n\n```\ntemplate\u003ctypename T\u003e\nclass RepeatIterator {\n public:\n  T operator*() { return val_; }\n  RepeatIterator\u0026 operator++() { ++i_; return *this; }\n  bool operator!\u003d(RepeatIterator\u003cT\u003e\u0026 that) { return i_ !\u003d  that-\u003ei_; }\n  T val_\n  int i_;\n};\n\ntemplate\u003ctypename T\u003e\nPushArgumentsIterator repeat(T val, int count) {\n  return PushArgumentsIterator(RepeatIterator(val, 0), RepeatIterator(val, count));\n}\n```\n\nThen you could get rid of the PushArgumentRepeat specializations.",
+      "range": {
+        "startLine": 478,
+        "startChar": 6,
+        "endLine": 478,
+        "endChar": 24
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adfc6b4d_6aef57c0",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-09T00:12:17Z",
+      "side": 1,
+      "message": "nit: in C++ parlance a pair of iterators should be \"Range\", not \"Iterator\".\n\nAlso, maybe this is useful for normal Push too? Doesn\u0027t need to be restricted to PushArguments.",
+      "range": {
+        "startLine": 495,
+        "startChar": 6,
+        "endLine": 495,
+        "endChar": 27
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7edbedc0_42882501",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-09T00:12:17Z",
+      "side": 1,
+      "message": "I think it would be preferable for the range to be immutable, and to iterate over it just using begin/end -- you can support the `Arg2` usecase in arm64 by adding a `pop` method (or similar) that returns a new range of `[begin+1,end]`",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 503,
+        "endChar": 57
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22ebbe79_1118a71b",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-09T00:12:17Z",
+      "side": 1,
+      "message": "you shouldn\u0027t need to specify this, C++17 has type deduction from constructor arguments",
+      "range": {
+        "startLine": 1327,
+        "startChar": 29,
+        "endLine": 1327,
+        "endChar": 37
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ccd3f55a_983b3289",
         "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
         "patchSetId": 7
