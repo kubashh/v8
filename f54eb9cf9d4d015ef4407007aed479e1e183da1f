@@ -33,6 +33,23 @@
       "message": "Still LGTM :)",
       "revId": "f54eb9cf9d4d015ef4407007aed479e1e183da1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "422bc31c_5937bf9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-09T14:04:37Z",
+      "side": 1,
+      "message": "base LGTM, thanks!",
+      "revId": "f54eb9cf9d4d015ef4407007aed479e1e183da1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
