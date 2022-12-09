@@ -16,6 +16,24 @@
       "message": "What does it return if it wasn\u0027t created from such a buffer? Please add to the comment, and a test.",
       "revId": "608c5406ec81a2a2e6b0433d9477761761704afe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c15f9802_18ef6781",
+        "filename": "include/v8-array-buffer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-12-09T21:19:51Z",
+      "side": 1,
+      "message": "Added a comment. The semantics is already tested, albeit transitively, in `ArrayBuffer_FixedLength`.",
+      "parentUuid": "e24cb712_37662e47",
+      "revId": "608c5406ec81a2a2e6b0433d9477761761704afe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
