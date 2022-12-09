@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d80b201a_2018ad3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-09T15:03:39Z",
+      "side": 1,
+      "message": "PTAL. This uses similar code for the actual copying as {memcpy}, but with less branches (because we know that the size is between 1 and 6 bytes).",
+      "revId": "dae6222286190447db6f580871a22005354a8bd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
