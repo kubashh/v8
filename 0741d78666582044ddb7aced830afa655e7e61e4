@@ -51,6 +51,24 @@
       "parentUuid": "10a20ad3_8bb8434d",
       "revId": "0741d78666582044ddb7aced830afa655e7e61e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08419ae8_074a00bc",
+        "filename": "tools/v8heapconst.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-09T16:56:05Z",
+      "side": 1,
+      "message": "This is where the `shipping` / `non-shipping` string is being generated:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/test/mkgrokdump/mkgrokdump.cc;l\u003d34;drc\u003d34d6823f8b8bdc3a316b0670114fb132c8b792e9\n\nThis suggests that you need a no-debug build with the sandbox enabled.",
+      "parentUuid": "40b9d784_e7dd566e",
+      "revId": "0741d78666582044ddb7aced830afa655e7e61e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
