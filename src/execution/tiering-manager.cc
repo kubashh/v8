@@ -28,7 +28,8 @@ namespace internal {
 #define OPTIMIZATION_REASON_LIST(V)   \
   V(DoNotOptimize, "do not optimize") \
   V(HotAndStable, "hot and stable")   \
-  V(SmallFunction, "small function")
+  V(SmallFunction, "small function")  \
+  V(NoFeedbackRequireFunction, "no feedback require")
 
 enum class OptimizationReason : uint8_t {
 #define OPTIMIZATION_REASON_CONSTANTS(Constant, message) k##Constant,
@@ -66,6 +67,10 @@ class OptimizationDecision {
   }
   static constexpr OptimizationDecision TurbofanSmallFunction() {
     return {OptimizationReason::kSmallFunction, CodeKind::TURBOFAN,
+            ConcurrencyMode::kConcurrent};
+  }
+  static constexpr OptimizationDecision TurbofanNoFeedbackRequireFunction() {
+    return {OptimizationReason::kNoFeedbackRequireFunction, CodeKind::TURBOFAN,
             ConcurrencyMode::kConcurrent};
   }
   static constexpr OptimizationDecision DoNotOptimize() {
@@ -351,6 +356,10 @@ OptimizationDecision TieringManager::ShouldOptimize(
   if (!v8_flags.turbofan ||
       !function.shared().PassesFilter(v8_flags.turbo_filter)) {
     return OptimizationDecision::DoNotOptimize();
+  }
+
+  if (function.feedback_vector().length() == 0) {
+    return OptimizationDecision::TurbofanNoFeedbackRequireFunction();
   }
 
   BytecodeArray bytecode = function.shared().GetBytecodeArray(isolate_);
