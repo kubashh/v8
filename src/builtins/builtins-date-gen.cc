@@ -207,19 +207,30 @@ TF_BUILTIN(DatePrototypeToPrimitive, CodeStubAssembler) {
   // Slow-case with actual string comparisons.
   GotoIf(TaggedIsSmi(hint), &hint_is_invalid);
   GotoIfNot(IsString(CAST(hint)), &hint_is_invalid);
-  GotoIf(TaggedEqual(
-             CallBuiltin(Builtin::kStringEqual, context, hint, number_string),
-             TrueConstant()),
-         &hint_is_number);
-  GotoIf(TaggedEqual(
-             CallBuiltin(Builtin::kStringEqual, context, hint, default_string),
-             TrueConstant()),
-         &hint_is_string);
-  GotoIf(TaggedEqual(
-             CallBuiltin(Builtin::kStringEqual, context, hint, string_string),
-             TrueConstant()),
-         &hint_is_string);
-  Goto(&hint_is_invalid);
+  TNode<IntPtrT> hint_length = LoadStringLengthAsWord(CAST(hint));
+  TNode<IntPtrT> number_string_length = LoadStringLengthAsWord(number_string);
+  Label hint_is_not_number(this), hint_is_not_default_string(this);
+
+  BranchIfStringEqual(CAST(hint), hint_length, number_string,
+                      number_string_length, &hint_is_number,
+                      &hint_is_not_number);
+
+  BIND(&hint_is_not_number);
+  {
+    TNode<IntPtrT> default_string_length =
+        LoadStringLengthAsWord(default_string);
+    BranchIfStringEqual(CAST(hint), hint_length, default_string,
+                        default_string_length, &hint_is_string,
+                        &hint_is_not_default_string);
+  }
+
+  BIND(&hint_is_not_default_string);
+  {
+    TNode<IntPtrT> string_string_length = LoadStringLengthAsWord(string_string);
+    BranchIfStringEqual(CAST(hint), hint_length, string_string,
+                        string_string_length, &hint_is_string,
+                        &hint_is_invalid);
+  }
 
   // Use the OrdinaryToPrimitive builtin to convert to a Number.
   BIND(&hint_is_number);

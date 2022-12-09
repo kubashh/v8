@@ -253,6 +253,11 @@ constexpr auto CompareDescriptor::registers() {
 }
 
 // static
+constexpr auto StringEqualDescriptor::registers() {
+  return RegisterArray(rdx, rax, rbx);
+}
+
+// static
 constexpr auto BinaryOpDescriptor::registers() {
   return RegisterArray(rdx, rax);
 }

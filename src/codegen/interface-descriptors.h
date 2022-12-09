@@ -55,6 +55,7 @@ namespace internal {
   V(CloneObjectBaseline)                             \
   V(CloneObjectWithVector)                           \
   V(Compare)                                         \
+  V(StringEqual)                                     \
   V(Compare_Baseline)                                \
   V(Compare_WithFeedback)                            \
   V(Construct_Baseline)                              \
@@ -1559,6 +1560,18 @@ class CompareDescriptor
  public:
   DEFINE_PARAMETERS(kLeft, kRight)
   DECLARE_DESCRIPTOR(CompareDescriptor)
+
+  static constexpr inline auto registers();
+};
+
+class StringEqualDescriptor
+    : public StaticCallInterfaceDescriptor<StringEqualDescriptor> {
+ public:
+  DEFINE_PARAMETERS(kLeft, kRight, kLength)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kLeft
+                         MachineType::AnyTagged(),  // kRight
+                         MachineType::IntPtr())     // kLength
+  DECLARE_DESCRIPTOR(StringEqualDescriptor)
 
   static constexpr inline auto registers();
 };

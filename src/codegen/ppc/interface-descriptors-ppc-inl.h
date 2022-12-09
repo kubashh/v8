@@ -239,6 +239,11 @@ constexpr auto AbortDescriptor::registers() { return RegisterArray(r4); }
 constexpr auto CompareDescriptor::registers() { return RegisterArray(r4, r3); }
 
 // static
+constexpr auto StringEqualDescriptor::registers() {
+  return RegisterArray(r4, r3, r5);
+}
+
+// static
 constexpr auto Compare_BaselineDescriptor::registers() {
   return RegisterArray(r4, r3, r5);
 }
