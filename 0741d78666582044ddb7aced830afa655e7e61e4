@@ -16,6 +16,23 @@
       "message": "I need another set of lgtms...\n\nThanks",
       "revId": "0741d78666582044ddb7aced830afa655e7e61e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10a20ad3_8bb8434d",
+        "filename": "tools/v8heapconst.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2022-12-09T16:50:46Z",
+      "side": 1,
+      "message": "This change looks concerning. Let\u0027s see if the bot is happy with that...",
+      "revId": "0741d78666582044ddb7aced830afa655e7e61e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
