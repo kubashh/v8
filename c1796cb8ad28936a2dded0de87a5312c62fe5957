@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32fde4d5_a3a56f2a",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-12-09T13:03:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eaa3c168_62557b5f",
+      "range": {
+        "startLine": 1295,
+        "startChar": 2,
+        "endLine": 1295,
+        "endChar": 13
+      },
+      "revId": "c1796cb8ad28936a2dded0de87a5312c62fe5957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58e7ac56_a79373cb",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-12-09T12:00:59Z",
       "side": 1,
       "message": "Please CSA_DCHECK both lengths against `length` value.",
+      "revId": "c1796cb8ad28936a2dded0de87a5312c62fe5957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f3934d3_bbddccab",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-12-09T13:03:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58e7ac56_a79373cb",
       "revId": "c1796cb8ad28936a2dded0de87a5312c62fe5957",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b9a59ce_7e4bca1c",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 13887,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-12-09T13:03:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c3fbf08_47852f1c",
+      "revId": "c1796cb8ad28936a2dded0de87a5312c62fe5957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09881384_c78e2d43",
@@ -75,6 +135,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb792f00_a9b876f2",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-12-09T13:03:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09881384_c78e2d43",
+      "revId": "c1796cb8ad28936a2dded0de87a5312c62fe5957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "383c16a3_a5a3b000",
@@ -88,6 +166,30 @@
       "writtenOn": "2022-12-09T12:00:59Z",
       "side": 1,
       "message": "This approach works only for string equality because for other cases non-equal lengths doesn\u0027t tell us the answer about which string is say less. \nPlease inline this function into the call site.",
+      "range": {
+        "startLine": 4487,
+        "startChar": 48,
+        "endLine": 4487,
+        "endChar": 73
+      },
+      "revId": "c1796cb8ad28936a2dded0de87a5312c62fe5957",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "182884b8_c6c91359",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4487,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-12-09T13:03:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "383c16a3_a5a3b000",
       "range": {
         "startLine": 4487,
         "startChar": 48,

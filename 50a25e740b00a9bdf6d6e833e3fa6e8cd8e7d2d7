@@ -68,6 +68,24 @@
       "parentUuid": "95b114fe_16c4a113",
       "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d96788ec_565aa78c",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-12-09T13:03:55Z",
+      "side": 1,
+      "message": "It seems that Builtin::StrictEqual_Baseline (which use Compare_BaselineDescriptor) might call Builtin::StringEqual?",
+      "parentUuid": "be11fafc_7cad7e34",
+      "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
