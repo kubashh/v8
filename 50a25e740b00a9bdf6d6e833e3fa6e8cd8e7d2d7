@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40f3e892_9abcf8b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-12-09T10:21:08Z",
+      "side": 1,
+      "message": "PTAL. Thanks!",
+      "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95b114fe_16c4a113",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-12-09T10:21:08Z",
+      "side": 1,
+      "message": "Do we need to use same registers for lhs and rhs as its caller (e.g. Compare_BaselineDescriptor)? This might avoid register moves.\n\nIf not, I will  use default registers set.",
+      "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
