@@ -54,6 +54,12 @@ class V8_EXPORT BackingStore : public v8::internal::BackingStoreBase {
   size_t ByteLength() const;
 
   /**
+   * The maximum length (in bytes) that this backing store may grow to, if it
+   * was created for a resizable ArrayBuffer or a growable SharedArrayBuffer.
+   */
+  size_t MaxByteLength() const;
+
+  /**
    * Indicates whether the backing store was created for an ArrayBuffer or
    * a SharedArrayBuffer.
    */
