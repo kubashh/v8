@@ -5215,7 +5215,7 @@ class ConvertReceiver : public FixedInputValueNodeT<1, ConvertReceiver> {
   Input& receiver_input() { return input(0); }
 
   // The implementation currently calls runtime.
-  static constexpr OpProperties kProperties = OpProperties::JSCall();
+  static constexpr OpProperties kProperties = OpProperties::Call();
   static constexpr
       typename Base::InputTypes kInputTypes{ValueRepresentation::kTagged};
 
