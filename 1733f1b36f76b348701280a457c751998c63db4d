@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3a0fca0_d6135b1d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-12-12T14:16:28Z",
+      "side": 1,
+      "message": "You can add these two lines here to speed up landing the CL:\n```\nNo-Tree-Checks: true\nNo-Try: true\n```",
+      "revId": "1733f1b36f76b348701280a457c751998c63db4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8a13ae72_49a04c91",
