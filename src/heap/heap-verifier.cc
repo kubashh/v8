@@ -346,6 +346,7 @@ void HeapVerification::VerifyPage(const BasicMemoryChunk* chunk) {
   CHECK(!current_chunk_.has_value());
   CHECK(!chunk->IsFlagSet(Page::PAGE_NEW_OLD_PROMOTION));
   CHECK(!chunk->IsFlagSet(Page::PAGE_NEW_NEW_PROMOTION));
+  CHECK(!chunk->IsFlagSet(Page::SHARED_HEAP_PROMOTION));
   current_chunk_ = chunk;
 }
 
