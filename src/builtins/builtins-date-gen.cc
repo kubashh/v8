@@ -207,18 +207,14 @@ TF_BUILTIN(DatePrototypeToPrimitive, CodeStubAssembler) {
   // Slow-case with actual string comparisons.
   GotoIf(TaggedIsSmi(hint), &hint_is_invalid);
   GotoIfNot(IsString(CAST(hint)), &hint_is_invalid);
-  GotoIf(TaggedEqual(
-             CallBuiltin(Builtin::kStringEqual, context, hint, number_string),
-             TrueConstant()),
-         &hint_is_number);
-  GotoIf(TaggedEqual(
-             CallBuiltin(Builtin::kStringEqual, context, hint, default_string),
-             TrueConstant()),
-         &hint_is_string);
-  GotoIf(TaggedEqual(
-             CallBuiltin(Builtin::kStringEqual, context, hint, string_string),
-             TrueConstant()),
-         &hint_is_string);
+
+  TNode<IntPtrT> hint_length = LoadStringLengthAsWord(CAST(hint));
+  BranchIfStringEqual(CAST(hint), hint_length, number_string, &hint_is_number);
+
+  BranchIfStringEqual(CAST(hint), hint_length, default_string, &hint_is_string);
+
+  BranchIfStringEqual(CAST(hint), hint_length, string_string, &hint_is_string);
+
   Goto(&hint_is_invalid);
 
   // Use the OrdinaryToPrimitive builtin to convert to a Number.
