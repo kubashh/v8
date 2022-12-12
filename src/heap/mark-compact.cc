@@ -4642,7 +4642,14 @@ void MarkCompactCollector::EvacuatePagesInParallel() {
       LargePage* current = *(it++);
       HeapObject object = current->GetObject();
       DCHECK(!marking_state->IsGrey(object));
-      if (marking_state->IsBlack(object)) {
+      if (!marking_state->IsBlack(object)) continue;
+
+      if (uses_shared_heap_ && v8_flags.shared_string_table &&
+          String::IsInPlaceInternalizable(object.map().instance_type())) {
+        DCHECK(ReadOnlyHeap::Contains(object.map()));
+        DCHECK(StringShape(String::cast(object), isolate()).IsDirect());
+        heap_->shared_lo_allocation_space()->PromoteNewLargeObject(current);
+      } else {
         heap()->lo_space()->PromoteNewLargeObject(current);
         current->SetFlag(Page::PAGE_NEW_OLD_PROMOTION);
         promoted_large_pages_.push_back(current);
