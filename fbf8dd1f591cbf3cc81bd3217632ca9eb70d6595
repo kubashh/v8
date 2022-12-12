@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5db53248_eaa95463",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2022-12-12T17:04:56Z",
+      "side": 1,
+      "message": "Changed the extension to word64 as discussed offline.\nPlease take another quick look.",
+      "revId": "fbf8dd1f591cbf3cc81bd3217632ca9eb70d6595",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
