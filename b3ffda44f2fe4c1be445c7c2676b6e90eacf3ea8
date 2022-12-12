@@ -34,6 +34,24 @@
       "parentUuid": "48a6567b_a57f07c6",
       "revId": "b3ffda44f2fe4c1be445c7c2676b6e90eacf3ea8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26848c39_a4271409",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-12-12T17:04:22Z",
+      "side": 1,
+      "message": "For sure, here is a CL crrev.com/c/4097624",
+      "parentUuid": "5a7ea598_e40236d1",
+      "revId": "b3ffda44f2fe4c1be445c7c2676b6e90eacf3ea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
