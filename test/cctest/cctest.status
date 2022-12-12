@@ -301,6 +301,9 @@
   'test-serialize/StartupSerializerOnceRunScript': [SKIP],
   'test-serialize/StartupSerializerTwiceRunScript': [SKIP],
   'test-serialize/StartupSerializerTwice': [SKIP],
+
+  # Test too slow with ASan
+  'test-serialize/CreateIsolateFromReadOnlySnapshot': [SKIP],
 }],  # 'system == windows and arch == x64 and mode == debug'
 
 ##############################################################################
