@@ -352,15 +352,15 @@ class Typer {
 
   static Type TypeWord32Add(const Type& lhs, const Type& rhs, Zone* zone) {
     if (lhs.IsNone() || rhs.IsNone()) return Type::None();
-    auto l = TruncateWord32Input(lhs, true);
-    auto r = TruncateWord32Input(rhs, true);
+    auto l = TruncateWord32Input(lhs, true, zone);
+    auto r = TruncateWord32Input(rhs, true, zone);
     return WordOperationTyper<32>::Add(l, r, zone);
   }
 
   static Type TypeWord32Sub(const Type& lhs, const Type& rhs, Zone* zone) {
     if (lhs.IsNone() || rhs.IsNone()) return Type::None();
-    auto l = TruncateWord32Input(lhs, true);
-    auto r = TruncateWord32Input(rhs, true);
+    auto l = TruncateWord32Input(lhs, true, zone);
+    auto r = TruncateWord32Input(rhs, true, zone);
     return WordOperationTyper<32>::Subtract(l, r, zone);
   }
 
@@ -437,8 +437,17 @@ class Typer {
     return FloatOperationTyper<64>::Subtract(l, r, zone);
   }
 
+  static Word64Type ExtendWord32ToWord64(const Word32Type& t, Zone* zone) {
+    // We cannot infer much, but the lower bound of the word32 is also the lower
+    // bound of the word64 type.
+    if (t.is_wrapping()) return Word64Type::Any();
+    return Word64Type::Range(static_cast<uint64_t>(t.unsigned_min()),
+                             std::numeric_limits<uint64_t>::max(), zone);
+  }
+
   static Word32Type TruncateWord32Input(const Type& input,
-                                        bool implicit_word64_narrowing) {
+                                        bool implicit_word64_narrowing,
+                                        Zone* zone) {
     DCHECK(!input.IsInvalid());
     DCHECK(!input.IsNone());
 
@@ -449,10 +458,23 @@ class Typer {
     } else if (input.IsWord64() && implicit_word64_narrowing) {
       // The input is implicitly converted to word32.
       const auto& w64 = input.AsWord64();
-      if (auto constant_opt = w64.try_get_constant()) {
-        return Word32Type::Constant(static_cast<uint32_t>(*constant_opt));
+      if (w64.is_set()) {
+        WordOperationTyper<32>::ElementsVector elements;
+        for (uint64_t e : w64.set_elements()) {
+          elements.push_back(static_cast<uint32_t>(e));
+        }
+        return WordOperationTyper<32>::FromElements(std::move(elements), zone);
       }
-      // TODO(nicohartmann@): Compute a more precise range here.
+
+      if (w64.is_any() || w64.is_wrapping()) return Word32Type::Any();
+
+      if (w64.range_to() <= std::numeric_limits<uint32_t>::max()) {
+        DCHECK_LE(w64.range_from(), std::numeric_limits<uint32_t>::max());
+        return Word32Type::Range(static_cast<uint32_t>(w64.range_from()),
+                                 static_cast<uint32_t>(w64.range_to()), zone);
+      }
+
+      // TODO(nicohartmann@): Might compute a more precise range here.
       return Word32Type::Any();
     }
     UNREACHABLE();
@@ -585,8 +607,10 @@ class TypeInferenceReducer : public Next {
             // TODO(nicohartmann@): Support signed comparison.
             return;
           }
-          lhs = Typer::TruncateWord32Input(lhs, true);
-          rhs = Typer::TruncateWord32Input(rhs, true);
+          const bool lhs_is_word32_truncated = lhs.IsWord64();
+          const bool rhs_is_word32_truncated = lhs.IsWord64();
+          lhs = Typer::TruncateWord32Input(lhs, true, zone);
+          rhs = Typer::TruncateWord32Input(rhs, true, zone);
           Word32Type l = lhs.AsWord32();
           Word32Type r = rhs.AsWord32();
           uint32_t l_min, l_max, r_min, r_max;
@@ -613,8 +637,14 @@ class TypeInferenceReducer : public Next {
           auto r_restrict = Word32Type::Range(r_min, r_max, zone);
           l_refined = Word32Type::Intersect(
               l, l_restrict, Type::ResolutionMode::kOverApproximate, zone);
+          if (l_refined.IsWord32() && lhs_is_word32_truncated) {
+            l_refined = Typer::ExtendWord32ToWord64(l_refined.AsWord32(), zone);
+          }
           r_refined = Word32Type::Intersect(
               r, r_restrict, Type::ResolutionMode::kOverApproximate, zone);
+          if (r_refined.IsWord32() && rhs_is_word32_truncated) {
+            r_refined = Typer::ExtendWord32ToWord64(r_refined.AsWord32(), zone);
+          }
           break;
         }
         case RegisterRepresentation::Float64(): {
