@@ -122,6 +122,24 @@
       "parentUuid": "77685ce8_92a9a20d",
       "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90a2c63c_d62376f3",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-12-12T11:00:25Z",
+      "side": 1,
+      "message": "Using default descriptor in this CL SG.\nOur mental model was that having a couple of register-to-register moves is not an issue for modern CPUs.\nIf you have resources to experiment with calling conventions you can give it a try, although I think we need to have a clear evidence that using custom descriptors improve things because using/maintaining them does complicate things a lot.\nProbably your other work in StringEquals area might bring more benefits.",
+      "parentUuid": "c5f6b8c5_ae4b8a82",
+      "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
