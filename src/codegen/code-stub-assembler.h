@@ -3737,6 +3737,22 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Oddball> StrictEqual(TNode<Object> lhs, TNode<Object> rhs,
                              TVariable<Smi>* var_type_feedback = nullptr);
 
+  void BranchIfStringEqual(TNode<String> lhs, TNode<IntPtrT> lhs_length,
+                           TNode<String> rhs, Label* if_true);
+
+  void BranchIfStringEqual(TNode<String> lhs, TNode<String> rhs, Label* if_true,
+                           Label* if_false,
+                           TVariable<Oddball>* result = nullptr) {
+    return BranchIfStringEqual(lhs, LoadStringLengthAsWord(lhs), rhs,
+                               LoadStringLengthAsWord(rhs), if_true, if_false,
+                               result);
+  }
+
+  void BranchIfStringEqual(TNode<String> lhs, TNode<IntPtrT> lhs_length,
+                           TNode<String> rhs, TNode<IntPtrT> rhs_length,
+                           Label* if_true, Label* if_false,
+                           TVariable<Oddball>* result = nullptr);
+
   // ECMA#sec-samevalue
   // Similar to StrictEqual except that NaNs are treated as equal and minus zero
   // differs from positive zero.

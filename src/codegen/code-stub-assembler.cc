@@ -13192,12 +13192,16 @@ TNode<Oddball> CodeStubAssembler::Equal(TNode<Object> left, TNode<Object> right,
       BIND(&if_left_string);
       {
         GotoIfNot(IsStringInstanceType(right_type), &use_symmetry);
-        result =
-            CAST(CallBuiltin(Builtin::kStringEqual, context(), left, right));
-        CombineFeedback(var_type_feedback,
-                        SmiOr(CollectFeedbackForString(left_type),
-                              CollectFeedbackForString(right_type)));
-        Goto(&end);
+        Label combine_feedback(this);
+        BranchIfStringEqual(CAST(left), CAST(right), &combine_feedback,
+                            &combine_feedback, &result);
+        BIND(&combine_feedback);
+        {
+          CombineFeedback(var_type_feedback,
+                          SmiOr(CollectFeedbackForString(left_type),
+                                CollectFeedbackForString(right_type)));
+          Goto(&end);
+        }
       }
 
       BIND(&if_left_number);
@@ -13658,9 +13662,7 @@ TNode<Oddball> CodeStubAssembler::StrictEqual(
                     CollectFeedbackForString(rhs_instance_type);
                 *var_type_feedback = SmiOr(lhs_feedback, rhs_feedback);
               }
-              result = CAST(CallBuiltin(Builtin::kStringEqual,
-                                        NoContextConstant(), lhs, rhs));
-              Goto(&end);
+              BranchIfStringEqual(CAST(lhs), CAST(rhs), &end, &end, &result);
             }
 
             BIND(&if_rhsisnotstring);
@@ -13860,6 +13862,50 @@ TNode<Oddball> CodeStubAssembler::StrictEqual(
   return result.value();
 }
 
+void CodeStubAssembler::BranchIfStringEqual(TNode<String> lhs,
+                                            TNode<IntPtrT> lhs_length,
+                                            TNode<String> rhs, Label* if_true) {
+  Label if_false(this);
+  TNode<IntPtrT> rhs_length = LoadStringLengthAsWord(rhs);
+  GotoIfNot(IntPtrEqual(lhs_length, rhs_length), &if_false);
+
+  TNode<Oddball> value = CAST(CallBuiltin(
+      Builtin::kStringEqual, NoContextConstant(), lhs, rhs, lhs_length));
+  Branch(TaggedEqual(value, TrueConstant()), if_true, &if_false);
+
+  BIND(&if_false);
+}
+
+void CodeStubAssembler::BranchIfStringEqual(TNode<String> lhs,
+                                            TNode<IntPtrT> lhs_length,
+                                            TNode<String> rhs,
+                                            TNode<IntPtrT> rhs_length,
+                                            Label* if_true, Label* if_false,
+                                            TVariable<Oddball>* result) {
+  Label length_equal(this), length_not_equal(this);
+  Branch(IntPtrEqual(lhs_length, rhs_length), &length_equal, &length_not_equal);
+
+  BIND(&length_not_equal);
+  {
+    if (result != nullptr) *result = FalseConstant();
+    Goto(if_false);
+  }
+
+  BIND(&length_equal);
+  {
+    TNode<Oddball> value = CAST(CallBuiltin(
+        Builtin::kStringEqual, NoContextConstant(), lhs, rhs, lhs_length));
+    if (result != nullptr) {
+      *result = value;
+    }
+    if (if_true == if_false) {
+      Goto(if_true);
+    } else {
+      Branch(TaggedEqual(value, TrueConstant()), if_true, if_false);
+    }
+  }
+}
+
 // ECMA#sec-samevalue
 // This algorithm differs from the Strict Equality Comparison Algorithm in its
 // treatment of signed zeroes and NaNs.
@@ -13934,9 +13980,7 @@ void CodeStubAssembler::BranchIfSameValue(TNode<Object> lhs, TNode<Object> rhs,
               // Now we can only yield true if {rhs} is also a String
               // with the same sequence of characters.
               GotoIfNot(IsString(CAST(rhs)), if_false);
-              const TNode<Object> result = CallBuiltin(
-                  Builtin::kStringEqual, NoContextConstant(), lhs, rhs);
-              Branch(IsTrue(result), if_true, if_false);
+              BranchIfStringEqual(CAST(lhs), CAST(rhs), if_true, if_false);
             }
 
             BIND(&if_lhsisbigint);
