@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dd856cf_512bd62e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-12-12T12:45:39Z",
+      "side": 1,
+      "message": "Please wrap the line to 72 chars.",
+      "revId": "4c77cde72f8178b14abdb6bf3aceda49cb7c9fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "abfe47c9_c0429d86",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-12-12T12:42:31Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "4c77cde72f8178b14abdb6bf3aceda49cb7c9fed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d1a2456_c207cc29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-12-12T12:45:39Z",
+      "side": 1,
+      "message": "lgtm with a nit",
       "revId": "4c77cde72f8178b14abdb6bf3aceda49cb7c9fed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
