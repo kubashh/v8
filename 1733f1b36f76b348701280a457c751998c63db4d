@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a13ae72_49a04c91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-12T14:12:53Z",
+      "side": 1,
+      "message": "PTAL\n\nreason: https://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux64%20-%20cfi/37936/overview",
+      "revId": "1733f1b36f76b348701280a457c751998c63db4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
