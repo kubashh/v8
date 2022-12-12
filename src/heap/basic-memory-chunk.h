@@ -188,6 +188,11 @@ class BasicMemoryChunk {
     return heap_;
   }
 
+  void set_heap(Heap* heap) {
+    DCHECK_NOT_NULL(heap);
+    heap_ = heap;
+  }
+
   // Gets the chunk's owner or null if the space has been detached.
   BaseSpace* owner() const { return owner_; }
 

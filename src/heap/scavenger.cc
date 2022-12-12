@@ -543,6 +543,7 @@ void ScavengerCollector::SweepArrayBufferExtensions() {
 }
 
 void ScavengerCollector::HandleSurvivingNewLargeObjects() {
+  const bool has_shared_heap = heap_->isolate()->has_shared_heap();
   const bool is_compacting = heap_->incremental_marking()->IsCompacting();
   AtomicMarkingState* marking_state = heap_->atomic_marking_state();
 
@@ -554,13 +555,21 @@ void ScavengerCollector::HandleSurvivingNewLargeObjects() {
     // to meta-data like size during page promotion.
     object.set_map_word(map, kRelaxedStore);
 
-    if (is_compacting && marking_state->IsBlack(object) &&
-        MarkCompactCollector::IsOnEvacuationCandidate(map)) {
-      RememberedSet<OLD_TO_OLD>::Insert<AccessMode::ATOMIC>(
-          MemoryChunk::FromHeapObject(object), object.map_slot().address());
+    if (has_shared_heap &&
+        String::IsInPlaceInternalizable(map.instance_type())) {
+      DCHECK(ReadOnlyHeap::Contains(map));
+      DCHECK(StringShape(String::cast(object), heap_->isolate()).IsDirect());
+      LargePage* page = LargePage::FromHeapObject(object);
+      heap_->shared_lo_allocation_space()->PromoteNewLargeObject(page);
+    } else {
+      if (is_compacting && marking_state->IsBlack(object) &&
+          MarkCompactCollector::IsOnEvacuationCandidate(map)) {
+        RememberedSet<OLD_TO_OLD>::Insert<AccessMode::ATOMIC>(
+            MemoryChunk::FromHeapObject(object), object.map_slot().address());
+      }
+      LargePage* page = LargePage::FromHeapObject(object);
+      heap_->lo_space()->PromoteNewLargeObject(page);
     }
-    LargePage* page = LargePage::FromHeapObject(object);
-    heap_->lo_space()->PromoteNewLargeObject(page);
   }
   surviving_new_large_objects_.clear();
   heap_->new_lo_space()->set_objects_size(0);
