@@ -104,6 +104,24 @@
       "parentUuid": "d96788ec_565aa78c",
       "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5f6b8c5_ae4b8a82",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-12-12T05:09:58Z",
+      "side": 1,
+      "message": "I think `StrictEqual_Baseline` uses manually-defined registers because of the location of `kInterpreterAccumulatorRegister` (https://chromium-review.googlesource.com/c/v8/v8/+/4090410/5/src/baseline/baseline-compiler.cc#1463). I also checked the code and found that using manually-defined descriptors for `StringEqual` do avoid some register moves in `StrictEqual_Baseline`.\n\nBut currently I just use default descriptors because I found that `StrictEqual_WithFeedback` (which uses default descriptors) also calls `StringEqual`.\n\nMaybe a better choice is to use manually-defined descriptors for all cases? If it worth it, I can do this in a follow-up CL that fix all the inconsistency between `XXX_Baseline` and `XXX_WithFeedback` builtins.",
+      "parentUuid": "77685ce8_92a9a20d",
+      "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
