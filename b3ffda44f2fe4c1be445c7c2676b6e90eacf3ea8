@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48a6567b_a57f07c6",
+        "filename": "src/compiler/turboshaft/types.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2022-12-12T15:24:53Z",
+      "side": 1,
+      "message": "Hi Nico,\n\nThis line is causing a compilation error with gcc versions \u003c 9 with this error:\n\u003e \u0027\u003canonymous\u003e\u0027 is used uninitialized in this function\n\nHere\u0027s reproducible sample on godbolt:\nhttps://godbolt.org/z/PfanPrEGG\n\nSeems to be related to passing an empty struct to a const reference.\nIt\u0027s definitely a gcc bug but I can\u0027t pin point the exact bug as there is many of them, i.e:\nhttps://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d86465\nhttps://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d33802\nhttps://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d86485\n\nA workaround is to just add a data type to the empty struct ie:\n```\n+struct Payload_Empty {char a;};\n```\n\nSince nodejs still uses gcc 8 as its minimum compiler this needs to be resolved, would you have any recommendations beside the above workaround?",
+      "revId": "b3ffda44f2fe4c1be445c7c2676b6e90eacf3ea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
