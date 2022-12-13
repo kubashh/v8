@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84f86d37_b9396490",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-13T15:51:54Z",
+      "side": 1,
+      "message": "`PushArguments` should be similar to `PushReverse` in baseline-assembler. Due to memory override while context switching, the push operations were not all carried out in reverse though. Fixed now.",
+      "parentUuid": "9eb9829b_1ebc5498",
+      "range": {
+        "startLine": 91,
+        "startChar": 6,
+        "endLine": 91,
+        "endChar": 30
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9be34094_1e58dd59",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-12-09T00:12:17Z",
       "side": 1,
       "message": "optional: a \"repeat\" is really just a kind of iteration, so you could implement this in terms of `PushArgumentsIterator/Range` and a custom repeating iterator, e.g. something like\n\n```\ntemplate\u003ctypename T\u003e\nclass RepeatIterator {\n public:\n  T operator*() { return val_; }\n  RepeatIterator\u0026 operator++() { ++i_; return *this; }\n  bool operator!\u003d(RepeatIterator\u003cT\u003e\u0026 that) { return i_ !\u003d  that-\u003ei_; }\n  T val_\n  int i_;\n};\n\ntemplate\u003ctypename T\u003e\nPushArgumentsIterator repeat(T val, int count) {\n  return PushArgumentsIterator(RepeatIterator(val, 0), RepeatIterator(val, count));\n}\n```\n\nThen you could get rid of the PushArgumentRepeat specializations.",
+      "range": {
+        "startLine": 478,
+        "startChar": 6,
+        "endLine": 478,
+        "endChar": 24
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e606eda3_10d8790e",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-13T15:51:54Z",
+      "side": 1,
+      "message": "That\u0027s a very nice idea!\nMaybe even worth providing this `RepeatIterator` in base for other uses? WDYT?",
+      "parentUuid": "9be34094_1e58dd59",
       "range": {
         "startLine": 478,
         "startChar": 6,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2357444b_d2d55672",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-13T15:51:54Z",
+      "side": 1,
+      "message": "Renamed and also adapted `Push()`",
+      "parentUuid": "adfc6b4d_6aef57c0",
+      "range": {
+        "startLine": 495,
+        "startChar": 6,
+        "endLine": 495,
+        "endChar": 27
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7edbedc0_42882501",
@@ -127,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14b70014_74c3277b",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-13T15:51:54Z",
+      "side": 1,
+      "message": "Removed.\n`PushArgumentsRange` now provides `rbegin()` + `rend()` instead.",
+      "parentUuid": "7edbedc0_42882501",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 503,
+        "endChar": 57
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22ebbe79_1118a71b",
@@ -140,6 +236,30 @@
       "writtenOn": "2022-12-09T00:12:17Z",
       "side": 1,
       "message": "you shouldn\u0027t need to specify this, C++17 has type deduction from constructor arguments",
+      "range": {
+        "startLine": 1327,
+        "startChar": 29,
+        "endLine": 1327,
+        "endChar": 37
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d904e887_98e3da7d",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-13T15:51:54Z",
+      "side": 1,
+      "message": "This was one of the things I was confused about.\nI got warnings: `\u0027PushArgumentsIterator\u0027 may not intend to support class template argument deduction [-Werror,-Wctad-maybe-unsupported]`.\nIt felt kinda weird that I need to add a generic deduction guide to supress this warning.\nDid that now, but it somehow doesn\u0027t feel like it is the right thing to do?",
+      "parentUuid": "22ebbe79_1118a71b",
       "range": {
         "startLine": 1327,
         "startChar": 29,
@@ -259,6 +379,30 @@
       "side": 1,
       "message": "Ah well my previous comment was not 100% correct.\nWe use the number of pushed arguments only in DCHECKs right now for arguments.\nFor general pushes, we want to have the padding in front of the other pushed values though (for arguments padding is the last pushed value).\nSo due to the dynamically tracked nubmer of values, this wouldn\u0027t be possible.",
       "parentUuid": "5b843dde_8c453175",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 0
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e15e8e6e_3bda03df",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-13T15:51:54Z",
+      "side": 1,
+      "message": "As Leszek was also pro support of iterators for `Push`, I implemented it now.",
+      "parentUuid": "80dc3392_63c66e31",
       "range": {
         "startLine": 88,
         "startChar": 0,

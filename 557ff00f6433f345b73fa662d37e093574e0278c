@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eb599f9_ffcdd138",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-13T15:51:54Z",
+      "side": 1,
+      "message": "Finally gcc and msvc are satisfied.. \nVictor PTAL again.\nAlso Leszek PTAL.",
+      "revId": "557ff00f6433f345b73fa662d37e093574e0278c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
