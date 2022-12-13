@@ -1084,8 +1084,7 @@ bool MapRef::CanInlineElementAccess() const {
   ElementsKind kind = elements_kind();
   if (IsFastElementsKind(kind)) return true;
   if (IsSharedArrayElementsKind(kind)) return true;
-  if (IsTypedArrayElementsKind(kind) && kind != BIGUINT64_ELEMENTS &&
-      kind != BIGINT64_ELEMENTS) {
+  if (IsTypedArrayElementsKind(kind)) {
     return true;
   }
   if (v8_flags.turbo_rab_gsab && IsRabGsabTypedArrayElementsKind(kind) &&

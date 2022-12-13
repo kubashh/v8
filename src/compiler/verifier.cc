@@ -1014,6 +1014,10 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
       CheckValueInputIs(node, 1, Type::BigInt());
       CheckTypeIs(node, Type::BigInt());
       break;
+    case IrOpcode::kSpeculativeToBigInt:
+      CheckValueInputIs(node, 0, Type::Any());
+      CheckTypeIs(node, Type::BigInt());
+      break;
     case IrOpcode::kBigIntNegate:
       CheckValueInputIs(node, 0, Type::BigInt());
       CheckTypeIs(node, Type::BigInt());
