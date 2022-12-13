@@ -80,7 +80,6 @@ class MaglevAssembler : public MacroAssembler {
 
   inline void Branch(Condition condition, BasicBlock* if_true,
                      BasicBlock* if_false, BasicBlock* next_block);
-  inline void PushInput(const Input& input);
   inline Register FromAnyToRegister(const Input& input, Register scratch);
 
   inline void LoadBoundedSizeFromObject(Register result, Register object,
@@ -160,6 +159,8 @@ class MaglevAssembler : public MacroAssembler {
 
   template <typename... T>
   inline void Push(T... vals);
+  template <typename... T>
+  inline void PushReverse(T... vals);
 
   void Prologue(Graph* graph);
 
@@ -474,6 +475,89 @@ inline void MaglevAssembler::DefineExceptionHandlerAndLazyDeoptPoint(
   DefineExceptionHandlerPoint(node);
   DefineLazyDeoptPoint(node->lazy_deopt_info());
 }
+
+// Helpers for pushing arguments.
+template <
+    typename T,
+    // We need at least a bidirectional iterator. So bidirectional and random
+    // access iterators are OK.
+    typename = typename std::enable_if<
+        std::is_same<typename std::iterator_traits<T>::iterator_category,
+                     std::random_access_iterator_tag>::value ||
+            std::is_same<typename std::iterator_traits<T>::iterator_category,
+                         std::bidirectional_iterator_tag>::value,
+        T>::type>
+class PushRange {
+ public:
+  using value_type = typename std::iterator_traits<T>::value_type;
+  using difference_type = typename std::iterator_traits<T>::difference_type;
+  PushRange(T begin, T end) : begin_(begin), end_(end) {}
+  inline T begin() const { return begin_; }
+  inline T end() const { return end_; }
+  inline auto rbegin() const { return std::make_reverse_iterator(end_); }
+  inline auto rend() const { return std::make_reverse_iterator(begin_); }
+
+ private:
+  T begin_;
+  T end_;
+};
+
+template <typename Iterator>
+PushRange(Iterator begin, Iterator end) -> PushRange<Iterator>;
+
+template <typename T>
+class RepeatIterator {
+ public:
+  // Although we pretend to be a random access iterator, only methods that are
+  // required for Push() are implemented right now.
+  typedef std::random_access_iterator_tag iterator_category;
+  typedef T value_type;
+  typedef int difference_type;
+  typedef T* pointer;
+  typedef T& reference;
+  RepeatIterator(T val, int count) : val_(val), count_(count) {}
+  reference operator*() { return val_; }
+  RepeatIterator& operator++() {
+    ++count_;
+    return *this;
+  }
+  RepeatIterator& operator--() {
+    --count_;
+    return *this;
+  }
+  RepeatIterator& operator+=(difference_type diff) {
+    count_ += diff;
+    return *this;
+  }
+  bool operator!=(const RepeatIterator<T>& that) const {
+    return count_ != that.count_;
+  }
+  bool operator==(const RepeatIterator<T>& that) const {
+    return count_ == that.count_;
+  }
+  difference_type operator-(const RepeatIterator<T>& it) {
+    return count_ - it.count_;
+  }
+
+ private:
+  T val_;
+  int count_;
+};
+
+template <typename T>
+PushRange<RepeatIterator<T>> RepeatValue(T val, int count) {
+  return PushRange<RepeatIterator<T>>(RepeatIterator<T>(val, 0),
+                                      RepeatIterator<T>(val, count));
+}
+
+namespace detail {
+
+template <class T>
+struct is_push_range : std::false_type {};
+template <typename T>
+struct is_push_range<PushRange<T>> : std::true_type {};
+
+}  // namespace detail
 
 }  // namespace maglev
 }  // namespace internal
