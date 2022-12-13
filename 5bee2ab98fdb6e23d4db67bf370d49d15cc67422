@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "5bee2ab98fdb6e23d4db67bf370d49d15cc67422",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13fb3433_b6e0fedd",
+        "filename": "src/heap/large-spaces.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-12-13T08:29:10Z",
+      "side": 1,
+      "message": "Do we need the guard also for `AddPage()`? If not, we can move the mutex into the branch.",
+      "range": {
+        "startLine": 273,
+        "startChar": 44,
+        "endLine": 273,
+        "endChar": 49
+      },
+      "revId": "5bee2ab98fdb6e23d4db67bf370d49d15cc67422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "995345ad_8eee3dea",
+        "filename": "src/heap/large-spaces.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2022-12-13T08:29:10Z",
+      "side": 1,
+      "message": "We only need the mutex for this call, right? Can we reshuffle to make this clear?",
+      "range": {
+        "startLine": 278,
+        "startChar": 32,
+        "endLine": 278,
+        "endChar": 49
+      },
+      "revId": "5bee2ab98fdb6e23d4db67bf370d49d15cc67422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
