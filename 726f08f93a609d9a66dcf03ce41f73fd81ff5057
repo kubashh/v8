@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6735760_88878003",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-13T14:32:39Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "726f08f93a609d9a66dcf03ce41f73fd81ff5057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "052dc564_8394f87e",
@@ -48,6 +65,30 @@
       "writtenOn": "2022-12-13T14:20:30Z",
       "side": 1,
       "message": "Since https://chromium-review.googlesource.com/c/v8/v8/+/4092266, x64\u0027s macro assembler has CmpTagged as well. So you could implement this entirely in an architecture-independent way:\n```\n  CmpTagged(src1, src2);\n  JumpIf(ConditionFor(Operation::kEqual), target);\n```\n(I haven\u0027t tested, but I think this should work)",
+      "range": {
+        "startLine": 156,
+        "startChar": 2,
+        "endLine": 156,
+        "endChar": 73
+      },
+      "revId": "726f08f93a609d9a66dcf03ce41f73fd81ff5057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fd3531d_3503e406",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-13T14:32:39Z",
+      "side": 1,
+      "message": "I think it would. Although I like the expressivity of JumpIfTaggedEqual. Additionally, ConditionFor was originally created for mapping JS operations to arch conditions.",
+      "parentUuid": "052dc564_8394f87e",
       "range": {
         "startLine": 156,
         "startChar": 2,
