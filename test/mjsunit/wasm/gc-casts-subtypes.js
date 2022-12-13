@@ -263,7 +263,7 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
     builder.addFunction(`brOnCastFailNull_${name}`,
       makeSig([kWasmFuncRef], [kWasmI32]))
     .addBody([
-      kExprBlock, kFuncRefCode,
+      kExprBlock, kWasmRef, kFuncRefCode,
         kExprLocalGet, 0,
         kGCPrefix, kExprBrOnCastFailNull, 0, typeCode,
         kExprI32Const, 0,
@@ -542,7 +542,7 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
   builder.addFunction('castFailNullToExternRef',
     makeSig([kWasmExternRef], [kWasmI32]))
   .addBody([
-    kExprBlock, kWasmRefNull, kExternRefCode,
+    kExprBlock, kWasmRef, kExternRefCode,
       kExprLocalGet, 0,
       kGCPrefix, kExprBrOnCastFailNull, 0, kExternRefCode,
       kExprI32Const, 0,
@@ -556,7 +556,7 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
   builder.addFunction('castFailNullToNullExternRef',
     makeSig([kWasmExternRef], [kWasmI32]))
   .addBody([
-    kExprBlock, kWasmRefNull, kExternRefCode,
+    kExprBlock, kWasmRef, kExternRefCode,
       kExprLocalGet, 0,
       kGCPrefix, kExprBrOnCastFailNull, 0, kNullExternRefCode,
       kExprI32Const, 0,
@@ -825,7 +825,7 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
       builder.addFunction(`brOnCastFailNull_${test.source}_to_${target}`,
                           makeSig([wasmRefType(creatorType)], [kWasmI32]))
       .addBody([
-        kExprBlock, kWasmRefNull, sourceHeapType,
+        kExprBlock, kWasmRef, sourceHeapType,
           kExprLocalGet, 0,
           kExprCallRef, ...wasmUnsignedLeb(creatorType),
           kGCPrefix, kExprBrOnCastFailNull, 0, heapType,
