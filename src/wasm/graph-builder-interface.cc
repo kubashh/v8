@@ -1278,20 +1278,40 @@ class WasmGraphBuildingInterface {
                                  &match_env->control, &match_env->effect,
                                  &no_match_env->control, &no_match_env->effect);
     builder_->SetControl(no_branch_env->control);
-    SetEnv(branch_env);
+
     if (branch_on_match) {
+      SetEnv(branch_env);
       // Narrow type for the successful cast target branch.
       SetAndTypeNode(forwarding_value,
                      builder_->TypeGuard(object.node, forwarding_value->type));
-    }
-    // Currently, br_on_* instructions modify the value stack before calling
-    // the interface function, so we don't need to drop any values here.
-    BrOrRet(decoder, br_depth, 0);
-    SetEnv(no_branch_env);
-    if (!branch_on_match) {
+      // Currently, br_on_* instructions modify the value stack before calling
+      // the interface function, so we don't need to drop any values here.
+      BrOrRet(decoder, br_depth, 0);
+
+      SetEnv(no_branch_env);
+      if (null_succeeds) {
+        // FIXME(mliedtke): We need to make it non-const!
+        Value* value = const_cast<Value*>(&object);
+        value->type = value->type.AsNonNull();
+        SetAndTypeNode(value, builder_->TypeGuard(value->node, value->type));
+      }
+    } else {
+      // Note: It's easier to first update the no-branch env as the branch env
+      // modifies {object} which is used by both branches.
+      SetEnv(no_branch_env);
       // Narrow type for the successful cast fallthrough branch.
       SetAndTypeNode(forwarding_value,
                      builder_->TypeGuard(object.node, forwarding_value->type));
+
+      SetEnv(branch_env);
+      if (null_succeeds) {
+        // FIXME(mliedtke): Input has to be non-const!
+        Value* value = const_cast<Value*>(&object);
+        value->type = value->type.AsNonNull();
+        SetAndTypeNode(value, builder_->TypeGuard(value->node, value->type));
+      }
+      BrOrRet(decoder, br_depth, 0);
+      SetEnv(no_branch_env);
     }
   }
 

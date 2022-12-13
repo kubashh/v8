@@ -5205,9 +5205,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Drop(obj);
         bool null_succeeds = opcode == kExprBrOnCastNull;
         Push(CreateValue(ValueType::RefMaybeNull(
-            imm.type, (obj.type.is_bottom() || !null_succeeds)
-                          ? kNonNullable
-                          : obj.type.nullability())));
+            target_type, null_succeeds ? kNullable : kNonNullable)));
         // The {value_on_branch} parameter we pass to the interface must
         // be pointer-identical to the object on the stack.
         Value* value_on_branch = stack_value(1);
@@ -5248,6 +5246,11 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         }
 
         Drop(1);    // value_on_branch
+        if (null_succeeds) {
+          // As null branches, the type on fallthrough will be the non-null
+          // variant of the input type.
+          obj.type = obj.type.AsNonNull();
+        }
         Push(obj);  // Restore stack state on fallthrough.
         return pc_offset;
       }
@@ -5349,18 +5352,18 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           // Differently to other instructions we don't push the RTT yet.
         }
 
-        Value obj = Peek(0);
+        Value* obj = stack_value(1);
 
-        if (!VALIDATE((obj.type.is_object_reference() &&
-                       IsSameTypeHierarchy(obj.type.heap_type(), target_type,
+        if (!VALIDATE((obj->type.is_object_reference() &&
+                       IsSameTypeHierarchy(obj->type.heap_type(), target_type,
                                            this->module_)) ||
-                      obj.type.is_bottom())) {
+                      obj->type.is_bottom())) {
           this->DecodeError(
-              obj.pc(),
+              obj->pc(),
               "Invalid types for %s: %s of type %s has to "
               "be in the same reference type hierarchy as (ref %s)",
-              WasmOpcodes::OpcodeName(opcode), SafeOpcodeNameAt(obj.pc()),
-              obj.type.name().c_str(), target_type.name().c_str());
+              WasmOpcodes::OpcodeName(opcode), SafeOpcodeNameAt(obj->pc()),
+              obj->type.name().c_str(), target_type.name().c_str());
           return 0;
         }
 
@@ -5371,14 +5374,29 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           return 0;
         }
 
-        if (!VALIDATE(TypeCheckBranch<true>(c, 0))) return 0;
         bool null_succeeds = opcode == kExprBrOnCastFailNull;
-        Value result_on_fallthrough = CreateValue(ValueType::Ref(target_type));
+        if (null_succeeds) {
+          // If null is treated as a successful cast, then the branch type is
+          // guaranteed to be non-null.
+          ValueType original_type = obj->type;
+          obj->type = original_type.AsNonNull();
+          if (!VALIDATE(TypeCheckBranch<true>(c, 0))) return 0;
+          // We have to restore the type on the stack because it is used by
+          // Turbofan for typing the input.
+          obj->type = original_type;
+        } else {
+          if (!VALIDATE(TypeCheckBranch<true>(c, 0))) return 0;
+        }
+
+        Value result_on_fallthrough = CreateValue(ValueType::RefMaybeNull(
+            target_type, (obj->type.is_bottom() || !null_succeeds)
+                             ? kNonNullable
+                             : obj->type.nullability()));
         if (V8_LIKELY(current_code_reachable_and_ok_)) {
           // This logic ensures that code generation can assume that functions
           // can only be cast between compatible types.
           if (V8_UNLIKELY(
-                  TypeCheckAlwaysFails(obj, target_type, null_succeeds))) {
+                  TypeCheckAlwaysFails(*obj, target_type, null_succeeds))) {
             if (rtt.has_value()) {
               CALL_INTERFACE(Drop);  // rtt
             }
@@ -5389,13 +5407,13 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
             // to the spec it technically is. Set it to spec-only reachable.
             SetSucceedingCodeDynamicallyUnreachable();
             c->br_merge()->reached = true;
-          } else if (V8_UNLIKELY(TypeCheckAlwaysSucceeds(obj, target_type))) {
+          } else if (V8_UNLIKELY(TypeCheckAlwaysSucceeds(*obj, target_type))) {
             if (rtt.has_value()) {
               CALL_INTERFACE(Drop);  // rtt
             }
             // The branch can still be taken on null.
-            if (obj.type.is_nullable() && !null_succeeds) {
-              CALL_INTERFACE(BrOnNull, obj, branch_depth.depth, true,
+            if (obj->type.is_nullable() && !null_succeeds) {
+              CALL_INTERFACE(BrOnNull, *obj, branch_depth.depth, true,
                              &result_on_fallthrough);
               c->br_merge()->reached = true;
             }
@@ -5403,11 +5421,11 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
             // the object is already on the stack; do not manipulate the stack.
           } else {
             if (rtt.has_value()) {
-              CALL_INTERFACE(BrOnCastFail, obj, rtt.value(),
+              CALL_INTERFACE(BrOnCastFail, *obj, rtt.value(),
                              &result_on_fallthrough, branch_depth.depth,
                              null_succeeds);
             } else {
-              CALL_INTERFACE(BrOnCastFailAbstract, obj, target_type,
+              CALL_INTERFACE(BrOnCastFailAbstract, *obj, target_type,
                              &result_on_fallthrough, branch_depth.depth,
                              null_succeeds);
             }
@@ -5415,7 +5433,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           }
         }
         // Make sure the correct value is on the stack state on fallthrough.
-        Drop(obj);
+        Drop(*obj);
         Push(result_on_fallthrough);
         return pc_offset;
       }
