@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "576071dd_39783b27",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-12-13T20:13:25Z",
+      "side": 1,
+      "message": "So `GetKeywordValuesFromLocale` uses `std::sort` to do the sorting. I think this is fine but I want to talk through it. PR#63 specifies the sorting to be \"as if %A.p.sort% were called\". The main difference is that %A.p.sort% is specced to be stable [1], and `std::sort` isn\u0027t (but `std::stable_sort` is). But in this particular case, the values are always strings, which have value semantics in JS instead of reference semantics, so it wouldn\u0027t be possible to distinguish different non-stable sorting orders of the same strings anyways.\n\nActually, are there ever duplicates in the collation identifiers?",
+      "revId": "9538d2d29649b7644a16c46ae0b78f9d5012f211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb8dc9f4_fe428a67",
+        "filename": "test/intl/locale/locale-collations.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2022-12-13T20:13:25Z",
+      "side": 1,
+      "message": "Can you use `assertArrayEquals`?",
+      "revId": "9538d2d29649b7644a16c46ae0b78f9d5012f211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
