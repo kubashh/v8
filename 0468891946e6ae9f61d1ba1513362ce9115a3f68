@@ -100,6 +100,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "74d5a687_3e40e4ab",
+        "filename": "src/deoptimizer/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-13T10:26:55Z",
+      "side": 1,
+      "message": "I was preserving the old name (see removed function below), but I can drive-by change it if you want.",
+      "parentUuid": "76cdb66f_07a6dc48",
+      "range": {
+        "startLine": 283,
+        "startChar": 18,
+        "endLine": 283,
+        "endChar": 38
+      },
+      "revId": "0468891946e6ae9f61d1ba1513362ce9115a3f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c1f6c4c3_10c91174",
         "filename": "src/objects/code.cc",
         "patchSetId": 3
