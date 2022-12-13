@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "813e976d_1ff49479",
+        "filename": "src/heap/large-spaces.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-12-13T09:38:59Z",
+      "side": 1,
+      "message": "Yes I think we need a need mutex for this since we could add pages from multiple threads to the same shared lo space.",
+      "parentUuid": "13fb3433_b6e0fedd",
+      "range": {
+        "startLine": 273,
+        "startChar": 44,
+        "endLine": 273,
+        "endChar": 49
+      },
+      "revId": "5bee2ab98fdb6e23d4db67bf370d49d15cc67422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "995345ad_8eee3dea",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-12-13T08:29:10Z",
       "side": 1,
       "message": "We only need the mutex for this call, right? Can we reshuffle to make this clear?",
+      "range": {
+        "startLine": 278,
+        "startChar": 32,
+        "endLine": 278,
+        "endChar": 49
+      },
+      "revId": "5bee2ab98fdb6e23d4db67bf370d49d15cc67422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90e76ae6_3f183797",
+        "filename": "src/heap/large-spaces.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2022-12-13T09:38:59Z",
+      "side": 1,
+      "message": "Thinking about this again, I don\u0027t think TakeOverLargePage even needs the mutex. Adjusting size_ is atomic and the other events are protected with their own mutex. I\u0027ve moved code around to reflect this.",
+      "parentUuid": "995345ad_8eee3dea",
       "range": {
         "startLine": 278,
         "startChar": 32,
