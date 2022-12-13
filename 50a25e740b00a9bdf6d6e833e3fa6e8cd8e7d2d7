@@ -140,6 +140,24 @@
       "parentUuid": "c5f6b8c5_ae4b8a82",
       "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "284bdef2_ef51c5c0",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2022-12-13T03:42:11Z",
+      "side": 1,
+      "message": "Got it. Thanks for your explanation!",
+      "parentUuid": "90a2c63c_d62376f3",
+      "revId": "50a25e740b00a9bdf6d6e833e3fa6e8cd8e7d2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
