@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab2ca7a0_10020334",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 5386,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-12-13T11:39:47Z",
+      "side": 1,
+      "message": "This is horrible.",
+      "range": {
+        "startLine": 5379,
+        "startChar": 0,
+        "endLine": 5386,
+        "endChar": 36
+      },
+      "revId": "5dd839b2effbaa3ba90dbb769faf7f82982f7a45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1baf8c49_29f28bd6",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-12-13T11:39:47Z",
+      "side": 1,
+      "message": "So here we have to update the `Value` that is passed as const. Making it non-const will require us to change the interfaces in liftoff and turbofan.\n\nI thought for a second that I can circumvent this issue by simply taking the value from the stack via `decoder-\u003estack_value(1)` which actually worked for the `br_on_cast_fail` instructions but not for `br_on_cast` which drops the value from the stack. There is a comment to \"reconsider this choice\", so I\u0027m unsure what would be the better way:\nA) Try to align the stack and make this use the stack.\nB) Update all the `BrOn*` interfaches in liftoff and turbofan to take a non-const `Value\u0026` for the input, so turbofan can replace it with the TypeGuard.\n\nAny opinions (even just based on intuition)?",
+      "range": {
+        "startLine": 1293,
+        "startChar": 0,
+        "endLine": 1294,
+        "endChar": 51
+      },
+      "revId": "5dd839b2effbaa3ba90dbb769faf7f82982f7a45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
