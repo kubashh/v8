@@ -1114,6 +1114,8 @@ V8_NOINLINE void StackToStackTest(v8::Isolate* v8_isolate,
 
 TEST_F(EmbedderTracingTest, TracedReferenceMove) {
   ManualGCScope manual_gc(i_isolate());
+  DisableConservativeStackScanningScopeForTesting no_stack_scanning(
+      i_isolate()->heap());
   TestEmbedderHeapTracer tracer;
   heap::TemporaryEmbedderHeapTracerScope tracer_scope(v8_isolate(), &tracer);
   tracer.SetStackStart(
@@ -1140,6 +1142,8 @@ TEST_F(EmbedderTracingTest, TracedReferenceMove) {
 
 TEST_F(EmbedderTracingTest, TracedReferenceCopy) {
   ManualGCScope manual_gc(i_isolate());
+  DisableConservativeStackScanningScopeForTesting no_stack_scanning(
+      i_isolate()->heap());
   TestEmbedderHeapTracer tracer;
   heap::TemporaryEmbedderHeapTracerScope tracer_scope(v8_isolate(), &tracer);
   tracer.SetStackStart(
