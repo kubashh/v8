@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5412ba60_cd6416ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2022-12-13T12:29:28Z",
+      "side": 1,
+      "message": "Thanks for the review, I will use the footers to bypass the tests following our process, but it was tested locally.",
+      "revId": "bdb1cfab8038896b8e790a496f7d7174031bd568",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
