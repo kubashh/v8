@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1ebd0cd_7488e8d0",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 5254,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-12-13T14:31:02Z",
+      "side": 1,
+      "message": "This is still unfortunate but caused by the 2 lines above this if.\nI am afraid of touching this difference because all other old branch instructions would have to be adapted / ensured that they don\u0027t break by changes in turbofan.\nSo I\u0027m not so sure, maybe I\u0027d like to keep it in this inconsistent way for now.",
+      "range": {
+        "startLine": 5253,
+        "startChar": 10,
+        "endLine": 5254,
+        "endChar": 48
+      },
+      "revId": "dbaf00db78788571e3b760970ceb5d1c7c9d87de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a5cda0e_01e1b31a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 5385,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-12-13T14:31:02Z",
+      "side": 1,
+      "message": "This is inspired by `brOnNonNull`:\nWe just push the branch type to the stack and don\u0027t set a node for it.\nSomebody(tm) will  (hopefully) take care of it (e.g. by calling `Forward` in line 5403 or the `BrOnCastFail`).\nAs we can see by the CI checks, this doesn\u0027t seem to be the case yet in all cases. 😊",
+      "range": {
+        "startLine": 5382,
+        "startChar": 1,
+        "endLine": 5385,
+        "endChar": 50
+      },
+      "revId": "dbaf00db78788571e3b760970ceb5d1c7c9d87de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
