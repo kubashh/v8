@@ -1278,20 +1278,31 @@ class WasmGraphBuildingInterface {
                                  &match_env->control, &match_env->effect,
                                  &no_match_env->control, &no_match_env->effect);
     builder_->SetControl(no_branch_env->control);
-    SetEnv(branch_env);
+
     if (branch_on_match) {
+      SetEnv(branch_env);
       // Narrow type for the successful cast target branch.
-      SetAndTypeNode(forwarding_value,
-                     builder_->TypeGuard(object.node, forwarding_value->type));
-    }
-    // Currently, br_on_* instructions modify the value stack before calling
-    // the interface function, so we don't need to drop any values here.
-    BrOrRet(decoder, br_depth, 0);
-    SetEnv(no_branch_env);
-    if (!branch_on_match) {
+      Forward(decoder, object, forwarding_value);
+      // Currently, br_on_* instructions modify the value stack before calling
+      // the interface function, so we don't need to drop any values here.
+      BrOrRet(decoder, br_depth, 0);
+
+      SetEnv(no_branch_env);
+      // Note: Differently to below for !{branch_on_match}, we do not Forward
+      // the value here to perform a TypeGuard. It can't be done here due to
+      // asymmetric decoder code. A Forward here would be poped from the stack
+      // and ignored by the decoder. Therefore the decoder has to call Forward
+      // itself.
+    } else {
+      SetEnv(branch_env);
+      // It is necessary in case of {null_succeeds} to forward the value.
+      // This will add a TypeGuard to the non-null type (as in this case the
+      // object is non-nullable).
+      Forward(decoder, object, decoder->stack_value(1));
+      BrOrRet(decoder, br_depth, 0);
+      SetEnv(no_branch_env);
       // Narrow type for the successful cast fallthrough branch.
-      SetAndTypeNode(forwarding_value,
-                     builder_->TypeGuard(object.node, forwarding_value->type));
+      Forward(decoder, object, forwarding_value);
     }
   }
 
