@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e30687a_e0ecf983",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-12-14T21:02:38Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "d759bed1ba8b3a59a8683ef2eb4b18fcee5f68b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7d8d91c_6404b7c3",
@@ -14,6 +31,30 @@
       "writtenOn": "2022-12-13T01:11:11Z",
       "side": 1,
       "message": "Please bucket these together under https://bugs.chromium.org/p/v8/issues/detail?id\u003d12763",
+      "range": {
+        "startLine": 988,
+        "startChar": 0,
+        "endLine": 997,
+        "endChar": 125
+      },
+      "revId": "d759bed1ba8b3a59a8683ef2eb4b18fcee5f68b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f978765f_65b7eb0c",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-12-14T21:02:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7d8d91c_6404b7c3",
       "range": {
         "startLine": 988,
         "startChar": 0,
