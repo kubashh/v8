@@ -131,6 +131,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "073ef0e6_a689e493",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-14T10:28:59Z",
+      "side": 1,
+      "message": "That would make sense, maybe in a followup?",
+      "parentUuid": "e606eda3_10d8790e",
+      "range": {
+        "startLine": 478,
+        "startChar": 6,
+        "endLine": 478,
+        "endChar": 24
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "adfc6b4d_6aef57c0",
         "filename": "src/maglev/maglev-assembler.h",
         "patchSetId": 7
@@ -260,6 +284,30 @@
       "side": 1,
       "message": "This was one of the things I was confused about.\nI got warnings: `\u0027PushArgumentsIterator\u0027 may not intend to support class template argument deduction [-Werror,-Wctad-maybe-unsupported]`.\nIt felt kinda weird that I need to add a generic deduction guide to supress this warning.\nDid that now, but it somehow doesn\u0027t feel like it is the right thing to do?",
       "parentUuid": "22ebbe79_1118a71b",
+      "range": {
+        "startLine": 1327,
+        "startChar": 29,
+        "endLine": 1327,
+        "endChar": 37
+      },
+      "revId": "e2057fe50f089b309b6c83ceeeaef3dec5bfba7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f0d9f41_c068bdf5",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-14T10:28:59Z",
+      "side": 1,
+      "message": "Looks like requiring explicit deduction guides is an intentional consequence of this warning being enabled -- an alternative would be to provide a helper function, similar to `make_pair` or `make_unique`.",
+      "parentUuid": "d904e887_98e3da7d",
       "range": {
         "startLine": 1327,
         "startChar": 29,

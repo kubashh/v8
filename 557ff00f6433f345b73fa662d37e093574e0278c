@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c0c9163_bacfb794",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-14T10:28:59Z",
+      "side": 1,
+      "message": "maybe it\u0027s clearer to load `iter \u003d range.rbegin()` and `end \u003d range.rend()` before this `if`, and then do something like `PushAllReverse(masm, *iter, args...); iter++;` here.",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 61
+      },
+      "revId": "557ff00f6433f345b73fa662d37e093574e0278c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "414df8b5_f00231ef",
         "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
         "patchSetId": 11
@@ -77,6 +100,29 @@
         "startChar": 8,
         "endLine": 169,
         "endChar": 33
+      },
+      "revId": "557ff00f6433f345b73fa662d37e093574e0278c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62926957_a6345835",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-14T10:28:59Z",
+      "side": 1,
+      "message": "would `base::iterator_range` work here instead of a custom type for maglev?",
+      "range": {
+        "startLine": 490,
+        "startChar": 6,
+        "endLine": 490,
+        "endChar": 15
       },
       "revId": "557ff00f6433f345b73fa662d37e093574e0278c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
