@@ -30,6 +30,7 @@ class Isolate;
 
 typedef uintptr_t Address;
 static const Address kNullAddress = 0;
+static const Address kLocalTaggedNullAddress = 1;
 
 constexpr int KB = 1024;
 constexpr int MB = KB * 1024;

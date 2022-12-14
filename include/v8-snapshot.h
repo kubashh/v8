@@ -180,15 +180,23 @@ class V8_EXPORT SnapshotCreator {
 template <class T>
 size_t SnapshotCreator::AddData(Local<Context> context, Local<T> object) {
   T* object_ptr = *object;
-  internal::Address* p = reinterpret_cast<internal::Address*>(object_ptr);
-  return AddData(context, *p);
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  internal::Address p = reinterpret_cast<internal::Address>(object_ptr);
+#else
+  internal::Address p = *reinterpret_cast<internal::Address*>(object_ptr);
+#endif
+  return AddData(context, p);
 }
 
 template <class T>
 size_t SnapshotCreator::AddData(Local<T> object) {
   T* object_ptr = *object;
-  internal::Address* p = reinterpret_cast<internal::Address*>(object_ptr);
-  return AddData(*p);
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  internal::Address p = reinterpret_cast<internal::Address>(object_ptr);
+#else
+  internal::Address p = *reinterpret_cast<internal::Address*>(object_ptr);
+#endif
+  return AddData(p);
 }
 
 }  // namespace v8

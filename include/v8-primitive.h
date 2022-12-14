@@ -777,13 +777,21 @@ Local<String> String::Empty(Isolate* isolate) {
   using I = internal::Internals;
   I::CheckInitialized(isolate);
   S* slot = I::GetRoot(isolate, I::kEmptyStringRootIndex);
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<String>(*reinterpret_cast<String**>(slot));
+#else
   return Local<String>(reinterpret_cast<String*>(slot));
+#endif
 }
 
 String::ExternalStringResource* String::GetExternalStringResource() const {
   using A = internal::Address;
   using I = internal::Internals;
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  A obj = reinterpret_cast<const A>(this);
+#else
   A obj = *reinterpret_cast<const A*>(this);
+#endif
 
   ExternalStringResource* result;
   if (I::IsExternalTwoByteString(I::GetInstanceType(obj))) {
@@ -804,7 +812,11 @@ String::ExternalStringResourceBase* String::GetExternalStringResourceBase(
     String::Encoding* encoding_out) const {
   using A = internal::Address;
   using I = internal::Internals;
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  A obj = reinterpret_cast<const A>(this);
+#else
   A obj = *reinterpret_cast<const A*>(this);
+#endif
   int type = I::GetInstanceType(obj) & I::kStringRepresentationAndEncodingMask;
   *encoding_out = static_cast<Encoding>(type & I::kStringEncodingMask);
   ExternalStringResourceBase* resource;
@@ -830,7 +842,11 @@ V8_INLINE Local<Primitive> Undefined(Isolate* isolate) {
   using I = internal::Internals;
   I::CheckInitialized(isolate);
   S* slot = I::GetRoot(isolate, I::kUndefinedValueRootIndex);
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Primitive>(*reinterpret_cast<Primitive**>(slot));
+#else
   return Local<Primitive>(reinterpret_cast<Primitive*>(slot));
+#endif
 }
 
 V8_INLINE Local<Primitive> Null(Isolate* isolate) {
@@ -838,7 +854,11 @@ V8_INLINE Local<Primitive> Null(Isolate* isolate) {
   using I = internal::Internals;
   I::CheckInitialized(isolate);
   S* slot = I::GetRoot(isolate, I::kNullValueRootIndex);
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Primitive>(*reinterpret_cast<Primitive**>(slot));
+#else
   return Local<Primitive>(reinterpret_cast<Primitive*>(slot));
+#endif
 }
 
 V8_INLINE Local<Boolean> True(Isolate* isolate) {
@@ -846,7 +866,11 @@ V8_INLINE Local<Boolean> True(Isolate* isolate) {
   using I = internal::Internals;
   I::CheckInitialized(isolate);
   S* slot = I::GetRoot(isolate, I::kTrueValueRootIndex);
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Boolean>(*reinterpret_cast<Boolean**>(slot));
+#else
   return Local<Boolean>(reinterpret_cast<Boolean*>(slot));
+#endif
 }
 
 V8_INLINE Local<Boolean> False(Isolate* isolate) {
@@ -854,7 +878,11 @@ V8_INLINE Local<Boolean> False(Isolate* isolate) {
   using I = internal::Internals;
   I::CheckInitialized(isolate);
   S* slot = I::GetRoot(isolate, I::kFalseValueRootIndex);
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Boolean>(*reinterpret_cast<Boolean**>(slot));
+#else
   return Local<Boolean>(reinterpret_cast<Boolean*>(slot));
+#endif
 }
 
 Local<Boolean> Boolean::New(Isolate* isolate, bool value) {

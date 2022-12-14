@@ -285,7 +285,11 @@ void ReturnValue<T>::Set(const Local<S> handle) {
   if (V8_UNLIKELY(handle.IsEmpty())) {
     *value_ = GetDefaultValue();
   } else {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    *value_ = reinterpret_cast<internal::Address>(*handle);
+#else
     *value_ = *reinterpret_cast<internal::Address*>(*handle);
+#endif
   }
 }
 
@@ -388,30 +392,51 @@ template <typename T>
 Local<Value> FunctionCallbackInfo<T>::operator[](int i) const {
   // values_ points to the first argument (not the receiver).
   if (i < 0 || length_ <= i) return Local<Value>(*Undefined(GetIsolate()));
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Value>(*reinterpret_cast<Value**>(values_ + i));
+#else
   return Local<Value>(reinterpret_cast<Value*>(values_ + i));
+#endif
 }
 
 template <typename T>
 Local<Object> FunctionCallbackInfo<T>::This() const {
   // values_ points to the first argument (not the receiver).
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Object>(*reinterpret_cast<Object**>(values_ - 1));
+#else
   return Local<Object>(reinterpret_cast<Object*>(values_ - 1));
+#endif
 }
 
 template <typename T>
 Local<Object> FunctionCallbackInfo<T>::Holder() const {
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Object>(reinterpret_cast<Object*>(implicit_args_[kHolderIndex]));
+#else
   return Local<Object>(
       reinterpret_cast<Object*>(&implicit_args_[kHolderIndex]));
+#endif
 }
 
 template <typename T>
 Local<Value> FunctionCallbackInfo<T>::NewTarget() const {
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Value>(
+      reinterpret_cast<Value*>(implicit_args_[kNewTargetIndex]));
+#else
   return Local<Value>(
       reinterpret_cast<Value*>(&implicit_args_[kNewTargetIndex]));
+#endif
 }
 
 template <typename T>
 Local<Value> FunctionCallbackInfo<T>::Data() const {
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Value>(reinterpret_cast<Value*>(implicit_args_[kDataIndex]));
+#else
   return Local<Value>(reinterpret_cast<Value*>(&implicit_args_[kDataIndex]));
+#endif
 }
 
 template <typename T>
@@ -441,17 +466,29 @@ Isolate* PropertyCallbackInfo<T>::GetIsolate() const {
 
 template <typename T>
 Local<Value> PropertyCallbackInfo<T>::Data() const {
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Value>(reinterpret_cast<Value*>(args_[kDataIndex]));
+#else
   return Local<Value>(reinterpret_cast<Value*>(&args_[kDataIndex]));
+#endif
 }
 
 template <typename T>
 Local<Object> PropertyCallbackInfo<T>::This() const {
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Object>(reinterpret_cast<Object*>(args_[kThisIndex]));
+#else
   return Local<Object>(reinterpret_cast<Object*>(&args_[kThisIndex]));
+#endif
 }
 
 template <typename T>
 Local<Object> PropertyCallbackInfo<T>::Holder() const {
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  return Local<Object>(reinterpret_cast<Object*>(args_[kHolderIndex]));
+#else
   return Local<Object>(reinterpret_cast<Object*>(&args_[kHolderIndex]));
+#endif
 }
 
 template <typename T>
