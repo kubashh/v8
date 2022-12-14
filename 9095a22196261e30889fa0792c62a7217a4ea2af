@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f5dc785_c249763d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2022-12-14T09:48:53Z",
+      "side": 1,
+      "message": "I think this will probably be the most controversial CL for the CSS work. In order for `Local`s to work we need to fudge them, this litters the v8-*.h files with a bunch of ifdefs for CSS flags. I\u0027m open to suggestions if there\u0027s a nicer way to do this.",
+      "revId": "9095a22196261e30889fa0792c62a7217a4ea2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e43c65cb_23af318b",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2022-12-14T09:48:53Z",
+      "side": 1,
+      "message": "This CL is a WIP right now because of this line. To go from `Local` to a normal (indirect) `Handle`, we need to get the isolate. In the past, I\u0027ve been doing this by getting the current thread\u0027s isolate, but since rebasing this onto the latest main branch this causes a linker error as it can\u0027t find the thread_local `v8::internal::g_current_isolate_` symbol.\n\nBefore I go about trying to debug this I first should ask is this even correct? Is there a proper way here to get the isolate? I thought about `IsolateFromNeverReadOnlySpaceObject` but I don\u0027t think that\u0027s correct as Locals can point to read-only space.",
+      "revId": "9095a22196261e30889fa0792c62a7217a4ea2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
