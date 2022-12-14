@@ -16,6 +16,46 @@
       "message": "Finally gcc and msvc are satisfied.. \nVictor PTAL again.\nAlso Leszek PTAL.",
       "revId": "557ff00f6433f345b73fa662d37e093574e0278c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5db8d6be_597dabca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-14T09:26:24Z",
+      "side": 1,
+      "message": "LGTM! But wait for Leszek to review the template sorcery!",
+      "revId": "557ff00f6433f345b73fa662d37e093574e0278c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "414df8b5_f00231ef",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-14T09:26:24Z",
+      "side": 1,
+      "message": "Maybe we should remove the ip0, ip1 dependency here.\nWrite something like\n```\n  UseScratchRegisterScope temps(masm);\n  Register r1 \u003d temps.AcquireX();\n  Register r2 \u003d temps.AcquireX();\n```\nIn the end, it will be ip0 and ip1 used, but this checks if they were not used by the Push caller before.",
+      "range": {
+        "startLine": 169,
+        "startChar": 8,
+        "endLine": 169,
+        "endChar": 33
+      },
+      "revId": "557ff00f6433f345b73fa662d37e093574e0278c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
