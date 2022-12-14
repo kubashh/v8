@@ -84,6 +84,24 @@
       "message": "While we are here, I wonder if it makes sense to call `VerifyExtensionSlot` before we set eh value?",
       "revId": "3039bff146d8b23d1eb08f240e2a80bd3053ef6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71d4e211_519ad44c",
+        "filename": "src/objects/contexts.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2022-12-14T12:59:58Z",
+      "side": 1,
+      "message": "I think this check may have some merit at finding corruptions between setting it and resetting it, but it likely very minimal. I\u0027m fine with dropping it if you think it\u0027s not needed.",
+      "parentUuid": "e3073e3a_a54d584a",
+      "revId": "3039bff146d8b23d1eb08f240e2a80bd3053ef6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
