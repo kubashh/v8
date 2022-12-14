@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8867c89_f9523601",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2022-12-14T09:11:09Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL. This change is consistent with the changes for the other branch instructions in terms of functionality.\nHowever, it lacks (like the ones before) the new null handling following the spec change.\nProper updating of nullability for both branch targets is addressed in https://chromium-review.googlesource.com/c/v8/v8/+/4100909.\n\n@dmercadier@chromium.org: Please rubber stamp the comment change in the scheduler.cc.",
+      "revId": "b11ad4810f7942f0c590c233565eb3d3cecbafae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
