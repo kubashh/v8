@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acf2b178_472fb2d7",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-12-14T21:17:05Z",
+      "side": 1,
+      "message": "\u003e duplicates\nnot it should not. all unique.",
+      "parentUuid": "576071dd_39783b27",
+      "revId": "9538d2d29649b7644a16c46ae0b78f9d5012f211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb8dc9f4_fe428a67",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-13T20:13:25Z",
       "side": 1,
       "message": "Can you use `assertArrayEquals`?",
+      "revId": "9538d2d29649b7644a16c46ae0b78f9d5012f211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e81949ba_0f50d2f1",
+        "filename": "test/intl/locale/locale-collations.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2022-12-14T21:17:05Z",
+      "side": 1,
+      "message": "OK, I did. But I also need to add the implementation of assertArrayEquals to test/intl/assert.js",
+      "parentUuid": "bb8dc9f4_fe428a67",
       "revId": "9538d2d29649b7644a16c46ae0b78f9d5012f211",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
