@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "c751c67baa9cf728ab406f9079f9c6ac9456a33c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d85f49b_a70f3288",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-15T14:04:20Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "c751c67baa9cf728ab406f9079f9c6ac9456a33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80fdcbb9_29e5c80d",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5135,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-15T14:04:20Z",
+      "side": 1,
+      "message": "nit: DCHECK num_args \u003e 0",
+      "range": {
+        "startLine": 5135,
+        "startChar": 35,
+        "endLine": 5135,
+        "endChar": 56
+      },
+      "revId": "c751c67baa9cf728ab406f9079f9c6ac9456a33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
