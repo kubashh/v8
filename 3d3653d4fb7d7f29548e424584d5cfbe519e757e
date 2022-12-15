@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1ed16ac_13852fa5",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-15T15:25:31Z",
+      "side": 1,
+      "message": "This is identical to the x64 version, so can be moved to arch independent.",
+      "range": {
+        "startLine": 354,
+        "startChar": 22,
+        "endLine": 354,
+        "endChar": 47
+      },
+      "revId": "3d3653d4fb7d7f29548e424584d5cfbe519e757e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3927fb41_e77c67fb",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-15T15:25:31Z",
+      "side": 1,
+      "message": "`And` not `Add`",
+      "range": {
+        "startLine": 403,
+        "startChar": 11,
+        "endLine": 403,
+        "endChar": 14
+      },
+      "revId": "3d3653d4fb7d7f29548e424584d5cfbe519e757e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa40e79e_62ede19e",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-15T15:25:31Z",
+      "side": 1,
+      "message": "Should be 32-bit register for `strh`",
+      "range": {
+        "startLine": 404,
+        "startChar": 16,
+        "endLine": 404,
+        "endChar": 23
+      },
+      "revId": "3d3653d4fb7d7f29548e424584d5cfbe519e757e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be057b4d_4dbda94b",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-15T15:25:31Z",
+      "side": 1,
+      "message": "nit: Just `Push(src)`",
+      "range": {
+        "startLine": 585,
+        "startChar": 8,
+        "endLine": 585,
+        "endChar": 42
+      },
+      "revId": "3d3653d4fb7d7f29548e424584d5cfbe519e757e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e261ab91_b9360177",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-15T15:25:31Z",
+      "side": 1,
+      "message": "`dst.W()`",
+      "range": {
+        "startLine": 587,
+        "startChar": 15,
+        "endLine": 587,
+        "endChar": 18
+      },
+      "revId": "3d3653d4fb7d7f29548e424584d5cfbe519e757e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f6eb5e6_5af0c063",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-15T15:25:31Z",
+      "side": 1,
+      "message": "since a temporary is reserved, you could use `general_temporaries().PopFirst()` here.",
+      "range": {
+        "startLine": 195,
+        "startChar": 6,
+        "endLine": 196,
+        "endChar": 42
+      },
+      "revId": "3d3653d4fb7d7f29548e424584d5cfbe519e757e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84b1402c_a99303e4",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-15T15:25:31Z",
+      "side": 1,
+      "message": "Should be a 32-bit register for `strh`.",
+      "range": {
+        "startLine": 198,
+        "startChar": 14,
+        "endLine": 198,
+        "endChar": 21
+      },
+      "revId": "3d3653d4fb7d7f29548e424584d5cfbe519e757e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a1d431a_ddc52a34",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-15T15:25:31Z",
+      "side": 1,
+      "message": "nit: leftover",
+      "range": {
+        "startLine": 202,
+        "startChar": 4,
+        "endLine": 202,
+        "endChar": 53
+      },
+      "revId": "3d3653d4fb7d7f29548e424584d5cfbe519e757e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
