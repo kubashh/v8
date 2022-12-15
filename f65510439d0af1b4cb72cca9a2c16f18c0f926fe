@@ -16,6 +16,23 @@
       "message": "Could you please review this patch?",
       "revId": "f65510439d0af1b4cb72cca9a2c16f18c0f926fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1ef068e_3cbb7412",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2022-12-15T09:47:47Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "f65510439d0af1b4cb72cca9a2c16f18c0f926fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
