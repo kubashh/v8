@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da198289_177f7cf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2022-12-15T04:09:26Z",
+      "side": 1,
+      "message": "This isn\u0027t pretty, but it should be temporary. If builtins.h isn\u0027t a good place for the ifdefs, can you suggest a better one?",
+      "revId": "b3ec3a62a2edeec23fd598f3d338ca37e1a0ae0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
