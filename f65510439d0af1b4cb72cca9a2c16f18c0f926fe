@@ -33,6 +33,23 @@
       "message": "PTAL",
       "revId": "f65510439d0af1b4cb72cca9a2c16f18c0f926fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f622a206_177a0870",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-15T09:54:33Z",
+      "side": 1,
+      "message": "The ticks are not just about feedback stability, but also hotness. Are you seeing measurable improvements from adding these additional heuristics?",
+      "revId": "f65510439d0af1b4cb72cca9a2c16f18c0f926fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
