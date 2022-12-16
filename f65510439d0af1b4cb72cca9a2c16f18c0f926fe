@@ -50,6 +50,24 @@
       "message": "The ticks are not just about feedback stability, but also hotness. Are you seeing measurable improvements from adding these additional heuristics?",
       "revId": "f65510439d0af1b4cb72cca9a2c16f18c0f926fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bcfcedb_f24dc7f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-12-16T03:23:18Z",
+      "side": 1,
+      "message": "No measurable performance improvement. There is only measurable profiler ticks reduction (~20 ticks). The no feedback require functions are small functions in general, they are marked optimization after over one tick is caused by the global any_ic_changed_, not hotness. Because no feedback require functions don\u0027t inline, any_ic_changed_ is irrelevant.\nI simplified implementation for hotness irrelevance and introducing less complexity to tiering heuristics.\nCould you please further review?",
+      "parentUuid": "f622a206_177a0870",
+      "revId": "f65510439d0af1b4cb72cca9a2c16f18c0f926fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
