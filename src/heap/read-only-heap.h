@@ -98,6 +98,9 @@ class ReadOnlyHeap {
 
   bool init_complete() { return init_complete_; }
 
+  // Zero paddings of all objects on the heap to prepare for memory dumps.
+  void ClearReadOnlyHeapPaddings();
+
  protected:
   friend class ReadOnlyArtifacts;
   friend class PointerCompressedReadOnlyArtifacts;

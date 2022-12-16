@@ -116,7 +116,24 @@ bool Heap::CreateReadOnlyHeapObjects() {
     DCHECK(roots.at(pos));
   }
 #endif
+
   return true;
+}
+
+void ReadOnlyHeap::ClearReadOnlyHeapPaddings() {
+  CHECK(!init_complete());
+  ReadOnlyHeapObjectIterator iterator(this);
+  for (HeapObject object = iterator.Next(); !object.is_null();
+       object = iterator.Next()) {
+    if (object.IsSeqString()) {
+      auto sizes = SeqString::cast(object).GetDataAndPaddingSizes();
+      char* padding =
+          reinterpret_cast<char*>(object.address() + sizes.data_size);
+      for (auto i = 0; i < sizes.padding_size; ++i) {
+        padding[i] = 0;
+      }
+    }
+  }
 }
 
 bool Heap::CreateMutableHeapObjects() {
@@ -735,10 +752,15 @@ void Heap::CreateInitialReadOnlyObjects() {
     if (required == obj.Size()) return;
     CHECK_LT(obj.Size(), required);
     int filler_size = required - obj.Size();
-    auto filler = factory->NewFillerObject(filler_size,
-                                           AllocationAlignment::kTaggedAligned,
-                                           AllocationType::kReadOnly);
-    CHECK_EQ(filler->address() + filler->Size(), obj.address() + required);
+
+    HeapObject filler =
+        allocator()->AllocateRawWith<HeapAllocator::kRetryOrFail>(
+            filler_size, AllocationType::kReadOnly, AllocationOrigin::kRuntime,
+            AllocationAlignment::kTaggedAligned);
+    CreateFillerObjectAt(filler.address(), filler_size,
+                         ClearFreedMemoryMode::kClearFreedMemory);
+
+    CHECK_EQ(filler.address() + filler.Size(), obj.address() + required);
 #endif
   };
 

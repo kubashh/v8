@@ -27,6 +27,13 @@ void SetupIsolateDelegate::SetupBuiltins(Isolate* isolate,
     return;
   }
   SetupBuiltinsInternal(isolate);
+
+#ifdef V8_STATIC_ROOTS_BOOL
+  if (!isolate->read_only_heap()->init_complete()) {
+    isolate->read_only_heap()->ClearReadOnlyHeapPaddings();
+  }
+#endif
+
 #ifdef DEBUG
   DebugEvaluate::VerifyTransitiveBuiltins(isolate);
 #endif  // DEBUG
