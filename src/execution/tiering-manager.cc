@@ -260,8 +260,9 @@ void TryRequestOsrAtNextOpportunity(Isolate* isolate, JSFunction function) {
   TrySetOsrUrgency(isolate, function, FeedbackVector::kMaxOsrUrgency);
 }
 
-bool ShouldOptimizeAsSmallFunction(int bytecode_size, bool any_ic_changed) {
-  return !any_ic_changed &&
+bool ShouldOptimizeAsSmallFunction(int bytecode_size, int feedback_vector_size,
+                                   bool any_ic_changed) {
+  return (feedback_vector_size == 0 || !any_ic_changed) &&
          bytecode_size < v8_flags.max_bytecode_size_for_early_opt;
 }
 
@@ -364,6 +365,7 @@ OptimizationDecision TieringManager::ShouldOptimize(
   if (ticks >= ticks_for_optimization) {
     return OptimizationDecision::TurbofanHotAndStable();
   } else if (ShouldOptimizeAsSmallFunction(bytecode.length(),
+                                           function.feedback_vector().length(),
                                            any_ic_changed_)) {
     // If no IC was patched since the last tick and this function is very
     // small, optimistically optimize it now.
