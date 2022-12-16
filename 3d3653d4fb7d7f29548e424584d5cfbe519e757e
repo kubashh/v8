@@ -277,6 +277,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f192fd51_05334746",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2022-12-16T09:56:57Z",
+      "side": 1,
+      "message": "Nope. This is the result of Builtins::Generate_DoubleToI (in builtins-arm64), which afaik only does truncate to int32. Truncating to int64 would be just `Fcvtzs`.",
+      "parentUuid": "decd0a2a_8a037716",
+      "range": {
+        "startLine": 587,
+        "startChar": 15,
+        "endLine": 587,
+        "endChar": 18
+      },
+      "revId": "3d3653d4fb7d7f29548e424584d5cfbe519e757e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f6eb5e6_5af0c063",
