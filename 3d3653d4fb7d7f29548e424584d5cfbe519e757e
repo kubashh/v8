@@ -255,6 +255,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "decd0a2a_8a037716",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2022-12-16T09:46:27Z",
+      "side": 1,
+      "message": "Oh it does matter, or am I missing something? Without the 32-bit destination register this would be `TruncateDoubleToInt64` and not int32?",
+      "parentUuid": "66f5ae6b_69047b49",
+      "range": {
+        "startLine": 587,
+        "startChar": 15,
+        "endLine": 587,
+        "endChar": 18
+      },
+      "revId": "3d3653d4fb7d7f29548e424584d5cfbe519e757e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0f6eb5e6_5af0c063",
         "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
         "patchSetId": 2
