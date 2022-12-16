@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64e2cf61_2423d9ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2022-12-16T08:36:21Z",
+      "side": 1,
+      "message": "if there\u0027s no measurable performance improvement, then why are we adding extra logic?",
+      "revId": "a7a638bcfafbe89b1f41efcc49b2aca0df9f0b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
