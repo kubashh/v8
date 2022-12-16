@@ -119,6 +119,22 @@ bool Heap::CreateReadOnlyHeapObjects() {
   return true;
 }
 
+void ReadOnlyHeap::ClearObjectPaddings() {
+  CHECK(!init_complete());
+  ReadOnlyHeapObjectIterator iterator(this);
+  for (HeapObject object = iterator.Next(); !object.is_null();
+       object = iterator.Next()) {
+    // As of now only SeqStrings have uninitialized padding on the read-only
+    // heap. This is guaranteed by an msan check in the ReadOnlySerializer.
+    if (object.IsSeqString()) {
+      auto sizes = SeqString::cast(object).GetDataAndPaddingSizes();
+      auto padding =
+          reinterpret_cast<void*>(object.address() + sizes.data_size);
+      memset(padding, 0, sizes.padding_size);
+    }
+  }
+}
+
 bool Heap::CreateMutableHeapObjects() {
   ReadOnlyRoots roots(this);
 
@@ -735,10 +751,15 @@ void Heap::CreateInitialReadOnlyObjects() {
     if (required == obj.Size()) return;
     CHECK_LT(obj.Size(), required);
     int filler_size = required - obj.Size();
-    auto filler = factory->NewFillerObject(filler_size,
-                                           AllocationAlignment::kTaggedAligned,
-                                           AllocationType::kReadOnly);
-    CHECK_EQ(filler->address() + filler->Size(), obj.address() + required);
+
+    HeapObject filler =
+        allocator()->AllocateRawWith<HeapAllocator::kRetryOrFail>(
+            filler_size, AllocationType::kReadOnly, AllocationOrigin::kRuntime,
+            AllocationAlignment::kTaggedAligned);
+    CreateFillerObjectAt(filler.address(), filler_size,
+                         ClearFreedMemoryMode::kClearFreedMemory);
+
+    CHECK_EQ(filler.address() + filler.Size(), obj.address() + required);
 #endif
   };
 
