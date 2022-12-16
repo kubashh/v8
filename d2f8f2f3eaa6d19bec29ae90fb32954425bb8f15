@@ -33,6 +33,24 @@
       "message": "FYI: actually, we\u0027d like to make this padding cleared in all strings for other reasons too - in order to be able to compare on-heap strings by kTaggedSize chunks instead of by chars (see discussions https://chromium-review.googlesource.com/c/v8/v8/+/4065267/comments/cbb819b3_a0c1ab9c).\n\nCould you please try to ensure that padding is cleared for all on-heap SeqStrings when they are allocated? It should be enough to write 0 to the last tagged word before we copy chars there.",
       "revId": "d2f8f2f3eaa6d19bec29ae90fb32954425bb8f15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fa05f31_d350010f",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-16T12:54:24Z",
+      "side": 1,
+      "message": "oh sure. I\u0027d much rather do that. I was thinking there is a reason for them to not be initialized...",
+      "parentUuid": "ff66af3a_2af2322b",
+      "revId": "d2f8f2f3eaa6d19bec29ae90fb32954425bb8f15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
