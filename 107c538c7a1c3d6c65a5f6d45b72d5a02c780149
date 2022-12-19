@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d505c909_9623d0f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-19T17:29:40Z",
+      "side": 1,
+      "message": "PTAL, since Igor is OOO\n\nPS: This zeros the padding on all objects created by the runtime. To ensure every string is padded -- like ishell suggested -- requires additional changes to the native allocation of strings in torque Allocate(NonEmpty)?Seq(One|Two)ByteString. Since this is a bigger change on even more unfamiliar territory I would like to keep the scope of this CL as is for now.",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
