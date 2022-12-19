@@ -711,6 +711,9 @@ class SeqString : public TorqueGeneratedSeqString<SeqString, String> {
   };
   DataAndPaddingSizes GetDataAndPaddingSizes() const;
 
+  // Zero out the padding bytes of this string.
+  void clear_padding();
+
   TQ_OBJECT_CONSTRUCTORS(SeqString)
 };
 

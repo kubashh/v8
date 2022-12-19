@@ -627,6 +627,7 @@ Handle<SeqOneByteString> FactoryBase<Impl>::NewOneByteInternalizedString(
   DisallowGarbageCollection no_gc;
   MemCopy(result->GetChars(no_gc, SharedStringAccessGuardIfNeeded::NotNeeded()),
           str.begin(), str.length());
+  result->clear_padding();
   return result;
 }
 
@@ -640,6 +641,7 @@ Handle<SeqTwoByteString> FactoryBase<Impl>::NewTwoByteInternalizedString(
   DisallowGarbageCollection no_gc;
   MemCopy(result->GetChars(no_gc, SharedStringAccessGuardIfNeeded::NotNeeded()),
           str.begin(), str.length() * base::kUC16Size);
+  result->clear_padding();
   return result;
 }
 
@@ -653,6 +655,7 @@ FactoryBase<Impl>::NewOneByteInternalizedStringFromTwoByte(
   CopyChars(
       result->GetChars(no_gc, SharedStringAccessGuardIfNeeded::NotNeeded()),
       str.begin(), str.length());
+  result->clear_padding();
   return result;
 }
 
@@ -677,6 +680,7 @@ MaybeHandle<SeqStringT> FactoryBase<Impl>::NewRawStringWithMap(
   string.set_length(length);
   string.set_raw_hash_field(String::kEmptyHashField);
   DCHECK_EQ(size, string.Size());
+  string.clear_padding();
   return handle(string, isolate());
 }
 
@@ -772,6 +776,7 @@ MaybeHandle<String> FactoryBase<Impl>::NewConsString(
             right->template GetChars<uint8_t>(isolate(), no_gc, access_guard);
         CopyChars(dest + left_length, src, right_length);
       }
+      result->clear_padding();
       return result;
     }
 
@@ -849,6 +854,7 @@ MaybeHandle<String> FactoryBase<Impl>::NewStringFromOneByte(
   CopyChars(SeqOneByteString::cast(*result).GetChars(
                 no_gc, SharedStringAccessGuardIfNeeded::NotNeeded()),
             string.begin(), length);
+  result->clear_padding();
   return result;
 }
 namespace {
@@ -1057,6 +1063,7 @@ FactoryBase<Impl>::AllocateRawOneByteInternalizedString(
   answer.set_length(length);
   answer.set_raw_hash_field(raw_hash_field);
   DCHECK_EQ(size, answer.Size());
+  answer.clear_padding();
   return handle(answer, isolate());
 }
 
