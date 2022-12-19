@@ -4,6 +4,9 @@
 
 #include "test/cctest/setup-isolate-for-tests.h"
 
+#include "src/common/globals.h"
+#include "src/execution/isolate.h"
+
 // Almost identical to setup-isolate-full.cc. The difference is that while
 // testing the embedded snapshot blob can be missing.
 

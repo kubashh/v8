@@ -27,6 +27,7 @@ void SetupIsolateDelegate::SetupBuiltins(Isolate* isolate,
     return;
   }
   SetupBuiltinsInternal(isolate);
+
 #ifdef DEBUG
   DebugEvaluate::VerifyTransitiveBuiltins(isolate);
 #endif  // DEBUG
