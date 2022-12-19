@@ -1824,6 +1824,7 @@ Handle<String> SeqString::Truncate(Isolate* isolate, Handle<SeqString> string,
   // We are storing the new length using release store after creating a filler
   // for the left-over space to avoid races with the sweeper thread.
   string->set_length(new_length, kReleaseStore);
+  string->clear_padding();
 
   return string;
 }
@@ -1847,6 +1848,13 @@ SeqString::DataAndPaddingSizes SeqTwoByteString::GetDataAndPaddingSizes()
   int data_size = SeqString::kHeaderSize + length() * base::kUC16Size;
   int padding_size = SizeFor(length()) - data_size;
   return DataAndPaddingSizes{data_size, padding_size};
+}
+
+void SeqString::clear_padding() {
+  auto sz = GetDataAndPaddingSizes();
+  DCHECK_EQ(address() + sz.data_size + sz.padding_size, address() + Size());
+  if (sz.padding_size == 0) return;
+  memset(reinterpret_cast<void*>(address() + sz.data_size), 0, sz.padding_size);
 }
 
 uint16_t ConsString::Get(
