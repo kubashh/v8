@@ -16,6 +16,24 @@
       "message": "if there\u0027s no measurable performance improvement, then why are we adding extra logic?",
       "revId": "a7a638bcfafbe89b1f41efcc49b2aca0df9f0b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "857603ae_f9098643",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-12-19T06:07:53Z",
+      "side": 1,
+      "message": "The reason of no measurable performance improvement is that the proportion is small. I think we can get measurable performance improvement if running a micro case. The added logic is not complex. So the question is, a small modification can improve performance in few cases, is it worthy? I\u0027m ok whether you think it\u0027s worthy or not.",
+      "parentUuid": "64e2cf61_2423d9ed",
+      "revId": "a7a638bcfafbe89b1f41efcc49b2aca0df9f0b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
