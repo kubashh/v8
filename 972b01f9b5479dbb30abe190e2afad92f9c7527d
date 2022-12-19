@@ -22,6 +22,30 @@
       },
       "revId": "972b01f9b5479dbb30abe190e2afad92f9c7527d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f727b07f_0cf5f527",
+        "filename": "test/mjsunit/maglev/tier-to-ml-to-tf.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-12-19T09:25:01Z",
+      "side": 1,
+      "message": "Sorry I missed this comment. Because this test exercises the real pipeline, i.e. a while loop and not OptimizeFunctionOnNextCall. With the loop, we don\u0027t know when V8 decides to tier up, and thus don\u0027t know when the WaitForBackgroundOptimization call would be appropriate.",
+      "parentUuid": "886e0f90_03ede7ab",
+      "range": {
+        "startLine": 16,
+        "startChar": 30,
+        "endLine": 16,
+        "endChar": 72
+      },
+      "revId": "972b01f9b5479dbb30abe190e2afad92f9c7527d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
