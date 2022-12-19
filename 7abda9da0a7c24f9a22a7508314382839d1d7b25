@@ -16,6 +16,24 @@
       "message": "This might work for other reduction? It seems that there are already similar restriction in turboshaft.",
       "revId": "7abda9da0a7c24f9a22a7508314382839d1d7b25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eb1a97f_7b927594",
+        "filename": "src/compiler/machine-operator-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2529,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2022-12-19T15:36:42Z",
+      "side": 1,
+      "message": "The Turboshaft reductions that do this were inspired by existing ones in `MachineOperatorReducer`... 😊",
+      "parentUuid": "d0ac310b_724f2e38",
+      "revId": "7abda9da0a7c24f9a22a7508314382839d1d7b25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
