@@ -194,6 +194,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddd98bb3_eb7cc4f1",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-20T10:38:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "56c37be6_8fda9995",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b0eac72_61864176",
@@ -278,6 +296,24 @@
       "side": 1,
       "message": "I see, thanks. Please update the variable name and leave a short comment to explain exactly this somewhat subtle point.",
       "parentUuid": "3e371c0b_de9b6d90",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7aec733_702d9818",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-20T10:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "898ee5d5_c648c8fb",
       "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
