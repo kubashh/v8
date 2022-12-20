@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3615ec8_ebe0418e",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-20T10:05:46Z",
+      "side": 1,
+      "message": "yeah, I switched strategy half-way and made a mess. thanks. This should only be done in `AllocateRaw(One|Two)ByteInternalizedString`.",
+      "parentUuid": "755c5c56_40031b51",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7146afa8_c9c32e5b",
         "filename": "src/heap/factory-base.cc",
         "patchSetId": 7
@@ -48,6 +66,24 @@
       "writtenOn": "2022-12-20T07:10:37Z",
       "side": 1,
       "message": "Already cleared by NewRawOneByteString",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26466161_6490aa62",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-20T10:05:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7146afa8_c9c32e5b",
       "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2022-12-20T07:10:37Z",
       "side": 1,
       "message": "Same here",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49ddb8e4_a9662176",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-20T10:05:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0ed3679_3e9d45c2",
       "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dc10a2b3_03bbc37a",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-20T10:05:46Z",
+      "side": 1,
+      "message": "The type is `DataAndPaddingSizes` which in my book is cumbersome :) But apparently not obvious. Wdyt?",
+      "parentUuid": "b4d1800d_fd433a49",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3b0eac72_61864176",
         "filename": "src/objects/string.h",
         "patchSetId": 7
@@ -99,6 +171,24 @@
       "writtenOn": "2022-12-20T07:10:37Z",
       "side": 1,
       "message": "Might be worth making this an inline function (in string-inl.h) since we call it on all new strings.",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfefe783_a6701218",
+        "filename": "src/objects/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-20T10:05:46Z",
+      "side": 1,
+      "message": "Agreed. This required a bit of code duplication by moving it to the more specific classes.",
+      "parentUuid": "3b0eac72_61864176",
       "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -116,6 +206,24 @@
       "writtenOn": "2022-12-20T07:10:37Z",
       "side": 1,
       "message": "Why? From https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/read-only-heap.cc;l\u003d177;drc\u003d506e1970ddb3f4c94756e2585a18709febbd082a it looks like RO pages are already shrunk. If so, I\u0027d prefer keeping the simpler area_size() call. Otherwise, please also update the variable name to `shrunk_page_size` or something.",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e371c0b_de9b6d90",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-20T10:05:46Z",
+      "side": 1,
+      "message": "They are shrunk, yes. But only to the OS page size. So there is still trailing uninitialized memory.",
+      "parentUuid": "86df60b5_ea8ed2bb",
       "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
