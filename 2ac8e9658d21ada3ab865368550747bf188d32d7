@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc8bc7f0_8d274798",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2022-12-20T14:08:42Z",
+      "side": 1,
+      "message": "Need re-approve, had to fix an offset in gcmole/test-expectations.txt ...",
+      "revId": "2ac8e9658d21ada3ab865368550747bf188d32d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
