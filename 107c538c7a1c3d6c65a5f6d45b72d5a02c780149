@@ -16,6 +16,108 @@
       "message": "PTAL, since Igor is OOO\n\nPS: This zeros the padding on all objects created by the runtime. To ensure every string is padded -- like ishell suggested -- requires additional changes to the native allocation of strings in torque Allocate(NonEmpty)?Seq(One|Two)ByteString. Since this is a bigger change on even more unfamiliar territory I would like to keep the scope of this CL as is for now.",
       "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "755c5c56_40031b51",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-12-20T07:10:37Z",
+      "side": 1,
+      "message": "Should this go into AllocateRawOneByteInternalizedString? Same for TwoByte.",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7146afa8_c9c32e5b",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-12-20T07:10:37Z",
+      "side": 1,
+      "message": "Already cleared by NewRawOneByteString",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0ed3679_3e9d45c2",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-12-20T07:10:37Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4d1800d_fd433a49",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-12-20T07:10:37Z",
+      "side": 1,
+      "message": "nit: I think our convention is to use `auto` when the type is 1. obvious and 2. cumbersome to spell out. Here, IMO it\u0027s neither so please let\u0027s just say `int` or `size_t` or whatever. Same in all future code :)",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b0eac72_61864176",
+        "filename": "src/objects/string.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-12-20T07:10:37Z",
+      "side": 1,
+      "message": "Might be worth making this an inline function (in string-inl.h) since we call it on all new strings.",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86df60b5_ea8ed2bb",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-12-20T07:10:37Z",
+      "side": 1,
+      "message": "Why? From https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/read-only-heap.cc;l\u003d177;drc\u003d506e1970ddb3f4c94756e2585a18709febbd082a it looks like RO pages are already shrunk. If so, I\u0027d prefer keeping the simpler area_size() call. Otherwise, please also update the variable name to `shrunk_page_size` or something.",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
