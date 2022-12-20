@@ -2796,11 +2796,6 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     if (V8_LIKELY(this->current_inst_trace_->first == 0)) {
       // Decode the function body.
       while (this->pc_ < this->end_) {
-        // Most operations only grow the stack by at least one element (unary
-        // and binary operations, local.get, constants, ...). Thus check that
-        // there is enough space for those operations centrally, and avoid any
-        // bounds checks in those operations.
-        stack_.EnsureMoreCapacity(1, this->compilation_zone_);
         uint8_t first_byte = *this->pc_;
         WasmOpcode opcode = static_cast<WasmOpcode>(first_byte);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(NextInstruction, opcode);
@@ -2834,11 +2829,6 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           this->current_inst_trace_++;
         }
 
-        // Most operations only grow the stack by at least one element (unary
-        // and binary operations, local.get, constants, ...). Thus check that
-        // there is enough space for those operations centrally, and avoid any
-        // bounds checks in those operations.
-        stack_.EnsureMoreCapacity(1, this->compilation_zone_);
         uint8_t first_byte = *this->pc_;
         WasmOpcode opcode = static_cast<WasmOpcode>(first_byte);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(NextInstruction, opcode);
@@ -3116,7 +3106,8 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     const WasmTagSig* sig = imm.tag->sig;
     stack_.EnsureMoreCapacity(static_cast<int>(sig->parameter_count()),
                               this->compilation_zone_);
-    for (ValueType type : sig->parameters()) Push(CreateValue(type));
+    for (ValueType type : sig->parameters())
+      PushUnsafeNoGrow(CreateValue(type));
     base::Vector<Value> values(stack_.begin() + c->stack_depth,
                                sig->parameter_count());
     current_catch_ = c->previous_catch;  // Pop try scope.
@@ -3201,7 +3192,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         // In unreachable code, we still have to push a value of the correct
         // type onto the stack.
         Drop(ref_object);
-        Push(result);
+        PushUnsafeNoGrow(result);
         break;
       }
       default:
@@ -3226,7 +3217,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     Drop(ref_object);
     // Typechecking the branch and creating the branch merges requires the
     // non-null value on the stack, so we push it temporarily.
-    Push(CreateValue(ref_object.type.AsNonNull()));
+    PushUnsafeNoGrow(CreateValue(ref_object.type.AsNonNull()));
     // The {value_on_branch} parameter we pass to the interface must be
     // pointer-identical to the object on the stack.
     Value* value_on_branch = stack_value(1);
@@ -3376,7 +3367,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     Value result = CreateValue(type);
     CALL_INTERFACE_IF_OK_AND_REACHABLE(Select, cond, fval, tval, &result);
     Drop(3);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return 1;
   }
 
@@ -3391,7 +3382,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     Value result = CreateValue(imm.type);
     CALL_INTERFACE_IF_OK_AND_REACHABLE(Select, cond, fval, tval, &result);
     Drop(3);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return 1 + imm.length;
   }
 
@@ -3535,7 +3526,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(UnOp, kExprRefIsNull, value,
                                            &result);
         Drop(value);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return 1;
       case kBottom:
         // We are in unreachable code, the return value does not matter.
@@ -3544,7 +3535,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(Drop);
         Drop(value);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(I32Const, &result, 0);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return 1;
       default:
         if (ValidationTag::validate) {
@@ -3581,7 +3572,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value result = CreateValue(ValueType::Ref(value.type.heap_type()));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(RefAsNonNull, value, &result);
         Drop(value);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return 1;
       }
       default:
@@ -3624,7 +3615,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     Value result = CreateValue(local_type);
     CALL_INTERFACE_IF_OK_AND_REACHABLE(LocalTee, value, &result, imm);
     Drop(value);
-    Push(result);
+    PushUnsafeNoGrow(result);
     this->set_local_initialized(imm.index);
     return 1 + imm.length;
   }
@@ -3666,7 +3657,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     Value result = CreateValue(this->module_->tables[imm.index].type);
     CALL_INTERFACE_IF_OK_AND_REACHABLE(TableGet, index, &result, imm);
     Drop(index);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return 1 + imm.length;
   }
 
@@ -3695,7 +3686,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     Value result = CreateValue(mem_type);
     CALL_INTERFACE_IF_OK_AND_REACHABLE(MemoryGrow, value, &result);
     Drop(value);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return 1 + imm.length;
   }
 
@@ -4174,7 +4165,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     Value result = CreateValue(type.value_type());
     CALL_INTERFACE_IF_OK_AND_REACHABLE(LoadMem, type, imm, index, &result);
     Drop(index);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return prefix_len + imm.length;
   }
 
@@ -4192,7 +4183,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     CALL_INTERFACE_IF_OK_AND_REACHABLE(LoadTransform, type, transform, imm,
                                        index, &result);
     Drop(index);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return opcode_length + imm.length;
   }
 
@@ -4210,7 +4201,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     CALL_INTERFACE_IF_OK_AND_REACHABLE(LoadLane, type, v128, index, mem_imm,
                                        lane_imm.lane, &result);
     Drop(2);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return opcode_length + mem_imm.length + lane_imm.length;
   }
 
@@ -4260,7 +4251,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
       CALL_INTERFACE_IF_OK_AND_REACHABLE(SimdLaneOp, opcode, imm,
                                          base::ArrayVector(inputs), &result);
       Drop(1);
-      Push(result);
+      PushUnsafeNoGrow(result);
     }
     return opcode_length + imm.length;
   }
@@ -4274,7 +4265,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
       CALL_INTERFACE_IF_OK_AND_REACHABLE(SimdLaneOp, opcode, imm,
                                          base::ArrayVector(inputs), &result);
       Drop(2);
-      Push(result);
+      PushUnsafeNoGrow(result);
     }
     return opcode_length + imm.length;
   }
@@ -4288,7 +4279,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
       CALL_INTERFACE_IF_OK_AND_REACHABLE(Simd8x16ShuffleOp, imm, input0, input1,
                                          &result);
       Drop(2);
-      Push(result);
+      PushUnsafeNoGrow(result);
     }
     return opcode_length + 16;
   }
@@ -4488,7 +4479,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
                                            &value);
         Drop(rtt);
         DropArgs(imm.struct_type);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length + imm.length;
       }
       case kExprStructNewDefault: {
@@ -4513,7 +4504,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value value = CreateValue(ValueType::Ref(imm.index));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StructNewDefault, imm, rtt, &value);
         Drop(rtt);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length + imm.length;
       }
       case kExprStructGet: {
@@ -4536,7 +4527,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StructGet, struct_obj, field, true,
                                            &value);
         Drop(struct_obj);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length + field.length;
       }
       case kExprStructGetU:
@@ -4560,7 +4551,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StructGet, struct_obj, field,
                                            opcode == kExprStructGetS, &value);
         Drop(struct_obj);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length + field.length;
       }
       case kExprStructSet: {
@@ -4596,7 +4587,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayNew, imm, length, initial_value,
                                            rtt, &value);
         Drop(3);  // rtt, length, initial_value.
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length + imm.length;
       }
       case kExprArrayNewDefault: {
@@ -4618,7 +4609,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayNewDefault, imm, length, rtt,
                                            &value);
         Drop(2);  // rtt, length
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length + imm.length;
       }
       case kExprArrayNewData: {
@@ -4661,7 +4652,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
                                            data_segment, offset, length, rtt,
                                            &array);
         Drop(3);  // rtt, length, offset
-        Push(array);
+        PushUnsafeNoGrow(array);
         return opcode_length + array_imm.length + data_segment.length;
       }
       case kExprArrayNewElem: {
@@ -4708,7 +4699,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
                                            elem_segment, offset, length, rtt,
                                            &array);
         Drop(3);  // rtt, length, offset
-        Push(array);
+        PushUnsafeNoGrow(array);
         return opcode_length + array_imm.length + elem_segment.length;
       }
       case kExprArrayGetS:
@@ -4730,7 +4721,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayGet, array_obj, imm, index,
                                            opcode == kExprArrayGetS, &value);
         Drop(2);  // index, array_obj
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length + imm.length;
       }
       case kExprArrayGet: {
@@ -4750,7 +4741,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayGet, array_obj, imm, index,
                                            true, &value);
         Drop(2);  // index, array_obj
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length + imm.length;
       }
       case kExprArraySet: {
@@ -4776,7 +4767,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value value = CreateValue(kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayLen, array_obj, &value);
         Drop(array_obj);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length;
       }
       case kExprArrayLenDeprecated: {
@@ -4788,7 +4779,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value value = CreateValue(kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayLen, array_obj, &value);
         Drop(array_obj);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length + imm.length;
       }
       case kExprArrayCopy: {
@@ -4853,7 +4844,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayNewFixed, array_imm, elements,
                                            rtt, &result);
         Drop(elem_count + 1);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length + array_imm.length + length_imm.length;
       }
       case kExprI31New: {
@@ -4861,7 +4852,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value value = CreateValue(ValueType::Ref(HeapType::kI31));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(I31New, input, &value);
         Drop(input);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length;
       }
       case kExprI31GetS: {
@@ -4870,7 +4861,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value value = CreateValue(kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(I31GetS, i31, &value);
         Drop(i31);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length;
       }
       case kExprI31GetU: {
@@ -4879,7 +4870,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value value = CreateValue(kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(I31GetU, i31, &value);
         Drop(i31);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length;
       }
       case kExprRefCast:
@@ -4957,7 +4948,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           }
         }
         Drop(1 + rtt.has_value());
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length;
       }
       case kExprRefTestNull:
@@ -5031,7 +5022,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           }
         }
         Drop(1 + rtt.has_value());
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length;
       }
       case kExprRefTestDeprecated: {
@@ -5078,7 +5069,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           }
         }
         Drop(2);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length;
       }
       case kExprRefCastNop: {
@@ -5109,7 +5100,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
             obj.type.is_bottom() ? kNonNullable : obj.type.nullability()));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(Forward, obj, &value);
         Drop(obj);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length;
       }
       case kExprRefCastDeprecated: {
@@ -5163,7 +5154,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           }
         }
         Drop(2);
-        Push(value);
+        PushUnsafeNoGrow(value);
         return opcode_length;
       }
       case kExprBrOnCast:
@@ -5314,7 +5305,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         // will be on the stack when the branch is taken.
         // TODO(jkummerow): Reconsider this choice.
         Drop(obj);
-        Push(CreateValue(ValueType::Ref(imm.index)));
+        PushUnsafeNoGrow(CreateValue(ValueType::Ref(imm.index)));
         // The {value_on_branch} parameter we pass to the interface must
         // be pointer-identical to the object on the stack.
         Value* value_on_branch = stack_value(1);
@@ -5346,7 +5337,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         }
 
         Drop(1);    // value_on_branch
-        Push(obj);  // Restore stack state on fallthrough.
+        PushUnsafeNoGrow(obj);  // Restore stack state on fallthrough.
         return pc_offset;
       }
       case kExprBrOnCastFail:
@@ -5520,7 +5511,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         }
         // Make sure the correct value is on the stack state on fallthrough.
         Drop(obj);
-        Push(result_on_fallthrough);
+        PushUnsafeNoGrow(result_on_fallthrough);
         return pc_offset;
       }
 #define ABSTRACT_TYPE_CHECK(h_type)                                            \
@@ -5642,7 +5633,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           c->br_merge()->reached = true;
         }
         Drop(result_on_branch);
-        Push(obj);  // Restore stack state on fallthrough.
+        PushUnsafeNoGrow(obj);  // Restore stack state on fallthrough.
         return opcode_length + branch_depth.length;
       }
       case kExprBrOnNonStruct:
@@ -5686,7 +5677,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
           c->br_merge()->reached = true;
         }
         Drop(obj);
-        Push(value_on_fallthrough);
+        PushUnsafeNoGrow(value_on_fallthrough);
         return opcode_length + branch_depth.length;
       }
       case kExprExternInternalize: {
@@ -5698,7 +5689,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(UnOp, kExprExternInternalize,
                                            extern_val, &intern_val);
         Drop(extern_val);
-        Push(intern_val);
+        PushUnsafeNoGrow(intern_val);
         return opcode_length;
       }
       case kExprExternExternalize: {
@@ -5710,7 +5701,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(UnOp, kExprExternExternalize, val,
                                            &extern_val);
         Drop(val);
-        Push(extern_val);
+        PushUnsafeNoGrow(extern_val);
         return opcode_length;
       }
       default:
@@ -5733,7 +5724,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     CALL_INTERFACE_IF_OK_AND_REACHABLE(StringNewWtf8, memory, variant, offset,
                                        size, &result);
     Drop(2);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return opcode_length + memory.length;
   }
 
@@ -5745,7 +5736,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     CALL_INTERFACE_IF_OK_AND_REACHABLE(StringMeasureWtf8, variant, str,
                                        &result);
     Drop(str);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return opcode_length;
   }
 
@@ -5761,7 +5752,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     CALL_INTERFACE_IF_OK_AND_REACHABLE(StringEncodeWtf8, memory, variant, str,
                                        addr, &result);
     Drop(2);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return opcode_length + memory.length;
   }
 
@@ -5781,8 +5772,8 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
                                        view, addr, pos, bytes, &next_pos,
                                        &bytes_out);
     Drop(4);
-    Push(next_pos);
-    Push(bytes_out);
+    PushUnsafeNoGrow(next_pos);
+    PushUnsafeNoGrow(bytes_out);
     return opcode_length + memory.length;
   }
 
@@ -5796,7 +5787,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     CALL_INTERFACE_IF_OK_AND_REACHABLE(StringNewWtf8Array, variant, array,
                                        start, end, &result);
     Drop(3);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return opcode_length;
   }
 
@@ -5810,7 +5801,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     CALL_INTERFACE_IF_OK_AND_REACHABLE(StringEncodeWtf8Array, variant, str,
                                        array, start, &result);
     Drop(3);
-    Push(result);
+    PushUnsafeNoGrow(result);
     return opcode_length;
   }
 
@@ -5841,7 +5832,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringNewWtf16, imm, offset, size,
                                            &result);
         Drop(2);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length + imm.length;
       }
       case kExprStringConst: {
@@ -5864,7 +5855,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value result = CreateValue(kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringMeasureWtf16, str, &result);
         Drop(str);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringEncodeUtf8:
@@ -5887,7 +5878,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringEncodeWtf16, imm, str, addr,
                                            &result);
         Drop(2);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length + imm.length;
       }
       case kExprStringConcat: {
@@ -5897,7 +5888,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value result = CreateValue(ValueType::Ref(HeapType::kString));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringConcat, head, tail, &result);
         Drop(2);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringEq: {
@@ -5907,7 +5898,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value result = CreateValue(kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringEq, a, b, &result);
         Drop(2);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringIsUSVSequence: {
@@ -5916,7 +5907,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value result = CreateValue(kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringIsUSVSequence, str, &result);
         Drop(1);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringAsWtf8: {
@@ -5925,7 +5916,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value result = CreateValue(ValueType::Ref(HeapType::kStringViewWtf8));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringAsWtf8, str, &result);
         Drop(str);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringViewWtf8Advance: {
@@ -5937,7 +5928,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf8Advance, view, pos,
                                            bytes, &result);
         Drop(3);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringViewWtf8EncodeUtf8:
@@ -5958,7 +5949,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf8Slice, view, start,
                                            end, &result);
         Drop(3);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringAsWtf16: {
@@ -5967,7 +5958,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value result = CreateValue(ValueType::Ref(HeapType::kStringViewWtf16));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringAsWtf16, str, &result);
         Drop(str);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringViewWtf16Length: {
@@ -5976,7 +5967,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value result = CreateValue(kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringMeasureWtf16, view, &result);
         Drop(view);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringViewWtf16GetCodeUnit: {
@@ -5987,7 +5978,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf16GetCodeUnit, view,
                                            pos, &result);
         Drop(2);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringViewWtf16Encode: {
@@ -6003,7 +5994,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf16Encode, imm, view,
                                            addr, pos, codeunits, &result);
         Drop(4);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length + imm.length;
       }
       case kExprStringViewWtf16Slice: {
@@ -6015,7 +6006,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewWtf16Slice, view, start,
                                            end, &result);
         Drop(3);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringAsIter: {
@@ -6024,7 +6015,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value result = CreateValue(ValueType::Ref(HeapType::kStringViewIter));
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringAsIter, str, &result);
         Drop(str);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringViewIterNext: {
@@ -6033,7 +6024,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Value result = CreateValue(kWasmI32);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewIterNext, view, &result);
         Drop(view);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringViewIterAdvance: {
@@ -6044,7 +6035,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewIterAdvance, view,
                                            codepoints, &result);
         Drop(2);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringViewIterRewind: {
@@ -6055,7 +6046,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewIterRewind, view,
                                            codepoints, &result);
         Drop(2);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringViewIterSlice: {
@@ -6066,7 +6057,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringViewIterSlice, view,
                                            codepoints, &result);
         Drop(2);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringNewUtf8Array:
@@ -6091,7 +6082,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringNewWtf16Array, array, start,
                                            end, &result);
         Drop(3);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       case kExprStringEncodeUtf8Array:
@@ -6116,7 +6107,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(StringEncodeWtf16Array, str, array,
                                            start, &result);
         Drop(3);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length;
       }
       default:
@@ -6186,7 +6177,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
       CALL_INTERFACE_IF_OK_AND_REACHABLE(AtomicOp, opcode, base::VectorOf(args),
                                          imm, &result);
       DropArgs(sig);
-      Push(result);
+      PushUnsafeNoGrow(result);
     }
     return opcode_length + imm.length;
   }
@@ -6292,7 +6283,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         CALL_INTERFACE_IF_OK_AND_REACHABLE(TableGrow, imm, value, delta,
                                            &result);
         Drop(2);
-        Push(result);
+        PushUnsafeNoGrow(result);
         return opcode_length + imm.length;
       }
       case kExprTableSize: {
@@ -6322,12 +6313,18 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   }
 
   V8_INLINE Value CreateValue(ValueType type) { return Value{this->pc_, type}; }
-  V8_INLINE void Push(Value value) {
+
+  // Unsafe, because it does not ensure that the {stack_} has enough capacity
+  // for the new value. Only call when it is guaranteed that the stack has
+  // enough capacity, e.g., after a previous {Drop}. Alternatively, call just
+  // {Push} instead, which grows the stack if needed.
+  V8_INLINE void PushUnsafeNoGrow(Value value) {
     DCHECK_NE(kWasmVoid, value.type);
-    // {stack_.EnsureMoreCapacity} should have been called before, either in the
-    // central decoding loop, or individually if more than one element is
-    // pushed.
     stack_.push(value);
+  }
+  V8_INLINE void Push(Value value) {
+    stack_.EnsureMoreCapacity(1, this->compilation_zone_);
+    PushUnsafeNoGrow(value);
   }
 
   void PushMergeValues(Control* c, Merge<Value>* merge) {
@@ -6358,7 +6355,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   V8_INLINE void PushReturns(ReturnVector values) {
     stack_.EnsureMoreCapacity(static_cast<int>(values.size()),
                               this->compilation_zone_);
-    for (Value& value : values) Push(value);
+    for (Value& value : values) PushUnsafeNoGrow(value);
   }
 
   // We do not inline these functions because doing so causes a large binary
@@ -6653,7 +6650,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     Value ret = CreateValue(return_type);
     CALL_INTERFACE_IF_OK_AND_REACHABLE(UnOp, opcode, val, &ret);
     Drop(val);
-    Push(ret);
+    PushUnsafeNoGrow(ret);
     return 1;
   }
 
@@ -6668,7 +6665,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
       Value ret = CreateValue(return_type);
       CALL_INTERFACE_IF_OK_AND_REACHABLE(BinOp, opcode, lval, rval, &ret);
       Drop(2);
-      Push(ret);
+      PushUnsafeNoGrow(ret);
     }
     return 1;
   }
