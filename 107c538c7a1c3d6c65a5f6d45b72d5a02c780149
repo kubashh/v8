@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "022d3b9e_0606643e",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-12-20T10:20:08Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d3615ec8_ebe0418e",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7146afa8_c9c32e5b",
@@ -160,6 +178,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "56c37be6_8fda9995",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-12-20T10:20:08Z",
+      "side": 1,
+      "message": "Right I\u0027d prefer spelling it out then. That way all future readers avoid having to look up the non-obvious type.",
+      "parentUuid": "dc10a2b3_03bbc37a",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3b0eac72_61864176",
         "filename": "src/objects/string.h",
         "patchSetId": 7
@@ -224,6 +260,24 @@
       "side": 1,
       "message": "They are shrunk, yes. But only to the OS page size. So there is still trailing uninitialized memory.",
       "parentUuid": "86df60b5_ea8ed2bb",
+      "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "898ee5d5_c648c8fb",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2022-12-20T10:20:08Z",
+      "side": 1,
+      "message": "I see, thanks. Please update the variable name and leave a short comment to explain exactly this somewhat subtle point.",
+      "parentUuid": "3e371c0b_de9b6d90",
       "revId": "107c538c7a1c3d6c65a5f6d45b72d5a02c780149",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
