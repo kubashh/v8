@@ -2129,6 +2129,31 @@ const Operator* SimplifiedOperatorBuilder::FastApiCall(
       FastApiCallParameters(c_functions, feedback, descriptor));
 }
 
+Type FastApiCallNode::TypeForFastApiCallReturnType(
+    const CTypeInfo::Type& type) {
+  switch (type) {
+    case CTypeInfo::Type::kInt64:
+      return Type::SignedBigInt64();
+    case CTypeInfo::Type::kUint64:
+      return Type::UnsignedBigInt64();
+    case CTypeInfo::Type::kBool:
+    case CTypeInfo::Type::kInt32:
+    case CTypeInfo::Type::kUint32:
+    case CTypeInfo::Type::kFloat32:
+    case CTypeInfo::Type::kFloat64:
+    case CTypeInfo::Type::kVoid:
+    case CTypeInfo::Type::kPointer:
+    case CTypeInfo::Type::kAny:
+      // TODO(panq): Extend to more C types.
+      return Type::Any();
+    case CTypeInfo::Type::kSeqOneByteString:
+    case CTypeInfo::Type::kV8Value:
+    case CTypeInfo::Type::kApiObject:
+    case CTypeInfo::Type::kUint8:
+      UNREACHABLE();
+  }
+}
+
 int FastApiCallNode::FastCallArgumentCount() const {
   FastApiCallParameters p = FastApiCallParametersOf(node()->op());
   const CFunctionInfo* signature = p.c_functions()[0].signature;

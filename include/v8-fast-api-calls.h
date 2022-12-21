@@ -620,11 +620,13 @@ class CFunctionInfoImpl : public CFunctionInfo {
                       kReturnType == CTypeInfo::Type::kBool ||
                       kReturnType == CTypeInfo::Type::kInt32 ||
                       kReturnType == CTypeInfo::Type::kUint32 ||
+                      kReturnType == CTypeInfo::Type::kInt64 ||
+                      kReturnType == CTypeInfo::Type::kUint64 ||
                       kReturnType == CTypeInfo::Type::kFloat32 ||
                       kReturnType == CTypeInfo::Type::kFloat64 ||
                       kReturnType == CTypeInfo::Type::kPointer ||
                       kReturnType == CTypeInfo::Type::kAny,
-                  "64-bit int, string and api object values are not currently "
+                  "String and api object values are not currently "
                   "supported return types.");
   }
 

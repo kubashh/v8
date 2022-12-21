@@ -1162,7 +1162,13 @@ Type Typer::Visitor::TypeTypedObjectState(Node* node) {
 
 Type Typer::Visitor::TypeCall(Node* node) { return Type::Any(); }
 
-Type Typer::Visitor::TypeFastApiCall(Node* node) { return Type::Any(); }
+Type Typer::Visitor::TypeFastApiCall(Node* node) {
+  const FastApiCallParameters& op_params = FastApiCallParametersOf(node->op());
+  // We only consider the first function signature here.
+  const CFunctionInfo* c_signature = op_params.c_functions()[0].signature;
+  return FastApiCallNode::TypeForFastApiCallReturnType(
+      c_signature->ReturnInfo().GetType());
+}
 
 #if V8_ENABLE_WEBASSEMBLY
 Type Typer::Visitor::TypeJSWasmCall(Node* node) {

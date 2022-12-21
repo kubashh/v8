@@ -7,6 +7,7 @@
 #include "include/v8-fast-api-calls.h"
 #include "include/v8-template.h"
 #include "src/api/api-inl.h"
+#include "src/common/globals.h"
 
 // This file exposes a d8.test.fast_c_api object, which adds testing facility
 // for writing mjsunit tests that exercise fast API calls. The fast_c_api object
@@ -1163,6 +1164,96 @@ class FastCApiObject {
     args.GetReturnValue().Set(pointer_a == pointer_b);
   }
 
+  static int64_t SumInt64FastCallback(Local<Object> receiver, int64_t a,
+                                      int64_t b,
+                                      FastApiCallbackOptions& options) {
+    FastCApiObject* self = UnwrapObject(receiver);
+    CHECK_SELF_OR_FALLBACK(0);
+    self->fast_call_count_++;
+
+    return a + b;
+  }
+
+  static void SumInt64SlowCallback(const FunctionCallbackInfo<Value>& args) {
+    Isolate* isolate = args.GetIsolate();
+    FastCApiObject* self = UnwrapObject(args.This());
+    CHECK_SELF_OR_THROW();
+    self->slow_call_count_++;
+
+    if (args.Length() != 2) {
+      args.GetIsolate()->ThrowError(
+          "Invalid number of arguments, expected two.");
+      return;
+    }
+
+    Local<Value> value_a = args[0];
+    Local<Value> value_b = args[1];
+
+    int64_t a;
+    if (value_a->IsBigInt()) {
+      a = static_cast<int64_t>(value_a.As<BigInt>()->Int64Value());
+    } else {
+      args.GetIsolate()->ThrowError("Did not get a bigint as first parameter.");
+      return;
+    }
+
+    int64_t b;
+    if (value_b->IsBigInt()) {
+      b = static_cast<int64_t>(value_b.As<BigInt>()->Int64Value());
+    } else {
+      args.GetIsolate()->ThrowError(
+          "Did not get a bigint as second parameter.");
+      return;
+    }
+
+    args.GetReturnValue().Set(BigInt::New(isolate, a + b));
+  }
+
+  static uint64_t SumUint64FastCallback(Local<Object> receiver, uint64_t a,
+                                        uint64_t b,
+                                        FastApiCallbackOptions& options) {
+    FastCApiObject* self = UnwrapObject(receiver);
+    CHECK_SELF_OR_FALLBACK(0);
+    self->fast_call_count_++;
+
+    return a + b;
+  }
+
+  static void SumUint64SlowCallback(const FunctionCallbackInfo<Value>& args) {
+    Isolate* isolate = args.GetIsolate();
+    FastCApiObject* self = UnwrapObject(args.This());
+    CHECK_SELF_OR_THROW();
+    self->slow_call_count_++;
+
+    if (args.Length() != 2) {
+      args.GetIsolate()->ThrowError(
+          "Invalid number of arguments, expected two.");
+      return;
+    }
+
+    Local<Value> value_a = args[0];
+    Local<Value> value_b = args[1];
+
+    uint64_t a;
+    if (value_a->IsBigInt()) {
+      a = static_cast<uint64_t>(value_a.As<BigInt>()->Uint64Value());
+    } else {
+      args.GetIsolate()->ThrowError("Did not get a number as first parameter.");
+      return;
+    }
+
+    uint64_t b;
+    if (value_b->IsBigInt()) {
+      b = static_cast<uint64_t>(value_b.As<BigInt>()->Uint64Value());
+    } else {
+      args.GetIsolate()->ThrowError(
+          "Did not get a number as second parameter.");
+      return;
+    }
+
+    args.GetReturnValue().Set(BigInt::NewFromUnsigned(isolate, a + b));
+  }
+
   static void FastCallCount(const FunctionCallbackInfo<Value>& args) {
     FastCApiObject* self = UnwrapObject(args.This());
     CHECK_SELF_OR_THROW();
@@ -1637,6 +1728,23 @@ Local<FunctionTemplate> Shell::CreateTestFastCApiTemplate(Isolate* isolate) {
             isolate, FastCApiObject::ComparePointersSlowCallback,
             Local<Value>(), signature, 1, ConstructorBehavior::kThrow,
             SideEffectType::kHasSideEffect, &compare_pointers_c_func));
+    CFunction sum_int64_c_func =
+        CFunctionBuilder().Fn(FastCApiObject::SumInt64FastCallback).Build();
+    // TODO(panq): Check the arguments.
+    api_obj_ctor->PrototypeTemplate()->Set(
+        isolate, "sum_int64",
+        FunctionTemplate::New(
+            isolate, FastCApiObject::SumInt64SlowCallback, Local<Value>(),
+            signature, 1, ConstructorBehavior::kThrow,
+            SideEffectType::kHasSideEffect, &sum_int64_c_func));
+    CFunction sum_uint64_c_func =
+        CFunctionBuilder().Fn(FastCApiObject::SumUint64FastCallback).Build();
+    api_obj_ctor->PrototypeTemplate()->Set(
+        isolate, "sum_uint64",
+        FunctionTemplate::New(
+            isolate, FastCApiObject::SumUint64SlowCallback, Local<Value>(),
+            signature, 1, ConstructorBehavior::kThrow,
+            SideEffectType::kHasSideEffect, &sum_uint64_c_func));
 
     api_obj_ctor->PrototypeTemplate()->Set(
         isolate, "fast_call_count",

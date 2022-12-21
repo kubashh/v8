@@ -1932,6 +1932,19 @@ class RepresentationSelector {
     }
   }
 
+  static MachineType MachineTypeForFastApiCallReturnType(CTypeInfo::Type type) {
+    // TODO(panq): Decide whether to replace MachineType with
+    // MachineRepresentation because only the representation is consumed.
+    switch (type) {
+      case CTypeInfo::Type::kInt64:
+        return MachineType::Int64();
+      case CTypeInfo::Type::kUint64:
+        return MachineType::Uint64();
+      default:
+        return MachineType::AnyTagged();
+    }
+  }
+
   UseInfo UseInfoForFastApiCallArgument(CTypeInfo type,
                                         FeedbackSource const& feedback) {
     switch (type.GetSequenceType()) {
@@ -1955,6 +1968,7 @@ class RepresentationSelector {
           // path.
           case CTypeInfo::Type::kInt64:
           case CTypeInfo::Type::kUint64:
+            return UseInfo::CheckedBigIntTruncatingWord64(feedback);
           case CTypeInfo::Type::kAny:
             return UseInfo::CheckedSigned64AsWord64(kIdentifyZeros, feedback);
           case CTypeInfo::Type::kFloat32:
@@ -2019,7 +2033,13 @@ class RepresentationSelector {
       ProcessInput<T>(node, i, UseInfo::AnyTagged());
     }
     ProcessRemainingInputs<T>(node, value_input_count);
-    SetOutput<T>(node, MachineRepresentation::kTagged);
+
+    CTypeInfo return_info = c_signature->ReturnInfo();
+    MachineType return_type =
+        MachineTypeForFastApiCallReturnType(return_info.GetType());
+    SetOutput<T>(
+        node, return_type.representation(),
+        FastApiCallNode::TypeForFastApiCallReturnType(return_info.GetType()));
   }
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -2028,7 +2048,7 @@ class RepresentationSelector {
       case wasm::kI32:
         return MachineType::Int32();
       case wasm::kI64:
-        return MachineType::SignedBigInt64();
+        return MachineType::Int64();
       case wasm::kF32:
         return MachineType::Float32();
       case wasm::kF64:

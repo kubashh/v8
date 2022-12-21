@@ -5785,9 +5785,6 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
             return ChangeInt32ToTagged(c_call_result);
           case CTypeInfo::Type::kUint32:
             return ChangeUint32ToTagged(c_call_result);
-          case CTypeInfo::Type::kInt64:
-          case CTypeInfo::Type::kUint64:
-            UNREACHABLE();
           case CTypeInfo::Type::kFloat32:
             return ChangeFloat64ToTagged(
                 __ ChangeFloat32ToFloat64(c_call_result),
@@ -5797,6 +5794,9 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
                 c_call_result, CheckForMinusZeroMode::kCheckForMinusZero);
           case CTypeInfo::Type::kPointer:
             return BuildAllocateJSExternalObject(c_call_result);
+          case CTypeInfo::Type::kInt64:
+          case CTypeInfo::Type::kUint64:
+            return c_call_result;
           case CTypeInfo::Type::kSeqOneByteString:
           case CTypeInfo::Type::kV8Value:
           case CTypeInfo::Type::kApiObject:

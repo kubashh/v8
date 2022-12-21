@@ -1228,6 +1228,8 @@ class FastApiCallNode final : public SimplifiedNodeWrapperBase {
     return c_arg_count + js_arg_count + kEffectAndControlInputCount;
   }
 
+  static Type TypeForFastApiCallReturnType(const CTypeInfo::Type& type);
+
   int FastCallArgumentCount() const;
   int SlowCallArgumentCount() const;
 
