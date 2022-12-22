@@ -52,6 +52,24 @@
       "parentUuid": "857603ae_f9098643",
       "revId": "a7a638bcfafbe89b1f41efcc49b2aca0df9f0b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08fc0acc_640511cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2022-12-22T03:54:09Z",
+      "side": 1,
+      "message": "OK, I\u0027ll abandon this patch. Thanks for your review!\nI think optimizing functions which don\u0027t have feedback get few benefit from frontend optimization and get relatively more benefit from backend optimization.\nOptimizing functions which don\u0027t have feedback are not rare, optimizing these functions after over one tick are rare.",
+      "parentUuid": "c3941d87_04136667",
+      "revId": "a7a638bcfafbe89b1f41efcc49b2aca0df9f0b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
