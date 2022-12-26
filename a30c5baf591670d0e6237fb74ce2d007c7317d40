@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c658382_069aa626",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1971,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-12-26T15:55:10Z",
+      "side": 1,
+      "message": "Does this one-liner work to allow BigInt parameters in fast calls? If so, I presume this at least breaks support for plain numbers support which currently works.",
+      "revId": "a30c5baf591670d0e6237fb74ce2d007c7317d40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e04ba998_e10a7e4a",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-12-26T15:55:10Z",
+      "side": 1,
+      "message": "I guess this function was the main thing that I was missing from my attempts at lowering fast calls in SL.",
+      "revId": "a30c5baf591670d0e6237fb74ce2d007c7317d40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
