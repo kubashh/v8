@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "410da585_c2264fde",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1558499
+      },
+      "writtenOn": "2022-12-26T17:36:21Z",
+      "side": 1,
+      "message": "I tried adding other C type support like this, and I found that when a fast call fallbacks its return value will apparently be interpreted as coming from the fast call node. Or at least that\u0027s what I think is happening here:\n\nOn line 116 of `fast-api-calls.js` the `add_32bit_int` is called with a fallback requested. I\u0027ve verified that the binding function gets the correct arguments (-42 and 45) and it returns the correct value (3) but the equality assertion on the return value fails, in JS the return value is 6. This seems like the fallback callback return value `v8::Local\u003cv8::Number\u003e` SMI getting interpreted as the Int32 return value of the fast call node.",
+      "revId": "a30c5baf591670d0e6237fb74ce2d007c7317d40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e04ba998_e10a7e4a",
         "filename": "src/compiler/typer.cc",
         "patchSetId": 1
