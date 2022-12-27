@@ -36,7 +36,7 @@ describe('Mutate functions', () => {
   });
 
   it('is robust without available functions', () => {
-    sandbox.stub(random, 'random').callsFake(() => { return 0.3; });
+    sandbox.stub(random, 'random').callsFake(() => { return 0.2; });
 
     // We just ensure here that mutating this file doesn't throw.
     loadAndMutate('mutate_function_call.js');
@@ -44,6 +44,7 @@ describe('Mutate functions', () => {
 
   it('optimizes functions in V8', () => {
     sandbox.stub(random, 'random').callsFake(() => { return 0.5; });
+    sandbox.stub(random, 'choose').callsFake(() => { return 0.5; });
 
     const source = loadAndMutate('mutate_function_call.js');
     const mutated = sourceHelpers.generateCode(source);
