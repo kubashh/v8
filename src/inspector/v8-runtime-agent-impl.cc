@@ -375,16 +375,23 @@ void V8RuntimeAgentImpl::callFunctionOn(
     Maybe<bool> silent, Maybe<bool> returnByValue, Maybe<bool> generatePreview,
     Maybe<bool> userGesture, Maybe<bool> awaitPromise,
     Maybe<int> executionContextId, Maybe<String16> objectGroup,
-    Maybe<bool> throwOnSideEffect, Maybe<bool> generateWebDriverValue,
+    Maybe<bool> throwOnSideEffect, Maybe<String16> uniqueContextId,
+    Maybe<bool> generateWebDriverValue,
     std::unique_ptr<CallFunctionOnCallback> callback) {
-  if (objectId.isJust() && executionContextId.isJust()) {
+  int cnt = static_cast<int>(objectId.isJust()) +
+            static_cast<int>(executionContextId.isJust()) +
+            static_cast<int>(uniqueContextId.isJust());
+  if (cnt > 1) {
     callback->sendFailure(Response::ServerError(
-        "ObjectId must not be specified together with executionContextId"));
+        "ObjectId, executionContextId and uniqueContextId must not be mutially "
+        "exclusive"));
     return;
   }
-  if (!objectId.isJust() && !executionContextId.isJust()) {
-    callback->sendFailure(Response::ServerError(
-        "Either ObjectId or executionContextId must be specified"));
+  if (!objectId.isJust() && !executionContextId.isJust() &&
+      !uniqueContextId.isJust()) {
+    callback->sendFailure(
+        Response::ServerError("Either ObjectId or executionContextId or "
+                              "uniqueContextId must be specified"));
     return;
   }
   WrapMode wrap_mode = generatePreview.fromMaybe(false) ? WrapMode::kWithPreview
@@ -409,8 +416,8 @@ void V8RuntimeAgentImpl::callFunctionOn(
   } else {
     int contextId = 0;
     Response response = ensureContext(m_inspector, m_session->contextGroupId(),
-                                      std::move(executionContextId.fromJust()),
-                                      /* uniqueContextId */ {}, &contextId);
+                                      std::move(executionContextId),
+                                      std::move(uniqueContextId), &contextId);
     if (!response.IsSuccess()) {
       callback->sendFailure(response);
       return;
