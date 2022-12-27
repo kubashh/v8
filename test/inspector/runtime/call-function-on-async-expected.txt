@@ -212,7 +212,7 @@ Running test: testPassingBothObjectIdAndExecutionContextId
 {
     error : {
         code : -32000
-        message : ObjectId must not be specified together with executionContextId
+        message : ObjectId, executionContextId and uniqueContextId must mutually exclude each other
     }
     id : <messageId>
 }
