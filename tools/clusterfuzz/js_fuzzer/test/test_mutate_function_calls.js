@@ -36,19 +36,30 @@ describe('Mutate functions', () => {
   });
 
   it('is robust without available functions', () => {
-    sandbox.stub(random, 'random').callsFake(() => { return 0.3; });
+    sandbox.stub(random, 'random').callsFake(() => { return 0.2; });
 
     // We just ensure here that mutating this file doesn't throw.
     loadAndMutate('mutate_function_call.js');
   });
 
-  it('optimizes functions in V8', () => {
+  it('optimizes functions with turbofan in V8', () => {
     sandbox.stub(random, 'random').callsFake(() => { return 0.5; });
+    sandbox.stub(random, 'choose').callsFake(() => { return 0.5; });
 
     const source = loadAndMutate('mutate_function_call.js');
     const mutated = sourceHelpers.generateCode(source);
     helpers.assertExpectedResult(
         'mutate_function_call_expected.js', mutated);
+  });
+
+  it('optimizes functions with maglev in V8', () => {
+    sandbox.stub(random, 'random').callsFake(() => { return 0.5; });
+    sandbox.stub(random, 'choose').callsFake(() => { return 0.8; });
+
+    const source = loadAndMutate('mutate_function_call.js');
+    const mutated = sourceHelpers.generateCode(source);
+    helpers.assertExpectedResult(
+        'mutate_function_call_maglev_expected.js', mutated);
   });
 
   it('compiles functions in V8 to baseline', () => {
