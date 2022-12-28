@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca56a06b_0f7cad12",
+        "filename": "src/inspector/v8-runtime-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1524704
+      },
+      "writtenOn": "2022-12-28T09:37:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90c9d661_311dbd2e",
+      "revId": "d1d09b37b2f8ad6797dffcbde8d4aa9d310ac22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9d1a8cb_4376128d",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5cd3fe4_5ed21b5d",
+        "filename": "src/inspector/v8-runtime-agent-impl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1524704
+      },
+      "writtenOn": "2022-12-28T09:37:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9d1a8cb_4376128d",
+      "revId": "d1d09b37b2f8ad6797dffcbde8d4aa9d310ac22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "007e4c8c_b0feb494",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-12-28T06:12:42Z",
       "side": 1,
       "message": "nit: here and below, you can omit these two for clarity.",
+      "revId": "d1d09b37b2f8ad6797dffcbde8d4aa9d310ac22e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90c42274_1eae6796",
+        "filename": "test/inspector/runtime/call-function-on-async.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1524704
+      },
+      "writtenOn": "2022-12-28T09:37:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "007e4c8c_b0feb494",
       "revId": "d1d09b37b2f8ad6797dffcbde8d4aa9d310ac22e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
