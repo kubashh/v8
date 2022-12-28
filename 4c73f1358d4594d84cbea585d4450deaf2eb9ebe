@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbdd5359_cdc414c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-12-28T14:48:53Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "4c73f1358d4594d84cbea585d4450deaf2eb9ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a6e788a_c997e95a",
@@ -31,6 +48,30 @@
       "writtenOn": "2022-12-28T14:27:14Z",
       "side": 1,
       "message": "since this might create branches in the test it might make it hard to debug. Maybe we can add a spy and check how many times this function was called and with what args:\n```\nconst chooseSpy \u003d sinon.spy(random, \u0027choose\u0027);\n...\nconst chooseSpyCalls \u003d spy.getCalls();\nassertTrue(chooseSpyCalls[0].returned(true));\nassertTrue(chooseSpyCalls[1].returned(false));\n```\n\nPlease note that you should only check this if you are sure of how the function will be called throughout the test. You can find documentation for spies here:\n- https://sinonjs.org/releases/latest/spies/\n- https://sinonjs.org/releases/latest/spy-call/",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 75
+      },
+      "revId": "4c73f1358d4594d84cbea585d4450deaf2eb9ebe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "991f2124_d2b7c443",
+        "filename": "tools/clusterfuzz/js_fuzzer/test/test_mutate_function_calls.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-12-28T14:48:53Z",
+      "side": 1,
+      "message": "As discussed after looking into this offline: It\u0027s actually called 6 times - 3 passes on 3 expressions it visits. Each time, checking if mutation should apply (first choose) then the type (second choose). Checking all this makes the test more brittle than flexible as we\u0027d test for even more implementation details in a hard-coded way.",
+      "parentUuid": "9a6e788a_c997e95a",
       "range": {
         "startLine": 59,
         "startChar": 4,
