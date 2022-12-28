@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22b91e29_51eb4565",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-12-28T09:51:44Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "a8c47f11b1130f3ec7c2378a492cfe88a8656922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fa03ceb_aa448b27",
+        "filename": "tools/clusterfuzz/js_fuzzer/test/test_mutate_function_calls.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-12-28T09:51:44Z",
+      "side": 1,
+      "message": "This is the same as above, but making it chose \u0027Maglev\u0027 as optimization method.",
+      "range": {
+        "startLine": 55,
+        "startChar": 2,
+        "endLine": 55,
+        "endChar": 53
+      },
+      "revId": "a8c47f11b1130f3ec7c2378a492cfe88a8656922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c63a8b_981f7ab3",
+        "filename": "tools/clusterfuzz/js_fuzzer/test_data/mutation_order/output_expected.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2022-12-28T09:51:44Z",
+      "side": 1,
+      "message": "This file uses a deterministic random seed, hence it is sensitive to changing probabilities. The changes here are a re-baseline.\n\nThe main part it demonstrates is the mutation order in lines ~50, i.e. number mutator after optimization pattern. And that\u0027s still preserved.",
+      "revId": "a8c47f11b1130f3ec7c2378a492cfe88a8656922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
