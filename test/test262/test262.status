@@ -348,9 +348,6 @@
   'staging/Intl402/Temporal/old/yearmonth-toLocaleString': [FAIL],
   'staging/Intl402/Temporal/old/zoneddatetime-toLocaleString': [FAIL],
 
-  # intl402
-  'intl402/Temporal/TimeZone/from/timezone-case-insensitive': [FAIL],
-
   'built-ins/Temporal/Duration/compare/precision-exact-mathematical-values-1': [FAIL],
   'built-ins/Temporal/Duration/compare/precision-exact-mathematical-values-2': [FAIL],
   'built-ins/Temporal/Duration/prototype/round/precision-exact-in-balance-duration-relative-months': [FAIL],
