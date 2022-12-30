@@ -227,7 +227,6 @@ const add_all_32bit_int_result_6args = add_all_32bit_int_result_5args +
   %OptimizeFunctionOnNextCall(overloaded_add_all);
   result = overloaded_add_all();
   assertOptimized(overloaded_add_all);
-
   // Only the call with less arguments goes falls back to the slow path.
   assertEquals(4, fast_c_api.fast_call_count());
   assertEquals(1, fast_c_api.slow_call_count());
@@ -237,4 +236,26 @@ const add_all_32bit_int_result_6args = add_all_32bit_int_result_5args +
   assertEquals(add_all_32bit_int_result_6args, result[2]);
   assertEquals(add_all_32bit_int_result_6args, result[3]);
   assertEquals(add_all_32bit_int_result_4args, result[4]);
+})();
+
+(function () {
+  function fallback_and_throw() {
+    fast_c_api.throw_fallback();
+  }
+
+  assertThrows(fallback_and_throw);
+
+  %PrepareFunctionForOptimization(fallback_and_throw);
+
+  let e = false;
+  for (let i = 0; i < 1_000_000; i++) {
+    try {
+      fallback_and_throw();
+      e = true
+    } catch (e) {
+
+    }
+  }
+
+  assertFalse(e);
 })();
