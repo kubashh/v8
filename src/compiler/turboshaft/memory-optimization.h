@@ -92,6 +92,42 @@ struct MemoryOptimizationReducerArgs {
   Isolate* isolate;
 };
 
+inline void PropagatePreTenuring(Zone* phase_zone, Graph& input_graph) {
+  // The {for} loop is here to propagate the pre-tenuring through all
+  // allocations rather than just "current-next". A cleaner (and more efficient)
+  // way to do this would be to have a "revisit stack", or revisiting right
+  // away, or something like this (but this is just a prototype :p).
+  for (int i = 0; i < 10; i++) {
+    for (Block& block : input_graph.blocks()) {
+      for (Operation& op : input_graph.operations(block)) {
+        if (StoreOp* store = op.TryCast<StoreOp>()) {
+          if (AllocateOp* dst_alloc =
+                  input_graph.Get(store->base()).TryCast<AllocateOp>()) {
+            if (dst_alloc->type == AllocationType::kOld) {
+              if (AllocateOp* input_alloc =
+                      input_graph.Get(store->value()).TryCast<AllocateOp>()) {
+                // {input_alloc} is an allocation that gets stored into an Old
+                // object; it should be Old as well.
+                input_alloc->type = AllocationType::kOld;
+              }
+            } else {
+              DCHECK_EQ(dst_alloc->type, AllocationType::kYoung);
+              if (AllocateOp* input_alloc =
+                      input_graph.Get(store->value()).TryCast<AllocateOp>()) {
+                if (input_alloc->type == AllocationType::kOld) {
+                  // We are storing an old object into a young object; we should
+                  // pre-tenure the destination so that it's old as well.
+                  dst_alloc->type = AllocationType::kOld;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 template <class Next>
 class MemoryOptimizationReducer : public Next {
  public:
@@ -105,6 +141,7 @@ class MemoryOptimizationReducer : public Next {
         isolate_(std::get<MemoryOptimizationReducerArgs>(args).isolate) {}
 
   void Analyze() {
+    PropagatePreTenuring(Asm().phase_zone(), Asm().modifiable_input_graph());
     analyzer_.emplace(Asm().phase_zone(), Asm().input_graph());
     analyzer_->Run();
     Next::Analyze();
