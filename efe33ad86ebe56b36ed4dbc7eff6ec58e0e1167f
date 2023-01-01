@@ -70,6 +70,30 @@
       },
       "revId": "efe33ad86ebe56b36ed4dbc7eff6ec58e0e1167f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4af999e_4eb097ee",
+        "filename": "include/v8-cppgc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1333583
+      },
+      "writtenOn": "2023-01-01T07:00:38Z",
+      "side": 1,
+      "message": "Look providing ctors works, Can you take another look ?",
+      "parentUuid": "4290dcfc_b5130637",
+      "range": {
+        "startLine": 81,
+        "startChar": 2,
+        "endLine": 81,
+        "endChar": 21
+      },
+      "revId": "efe33ad86ebe56b36ed4dbc7eff6ec58e0e1167f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
