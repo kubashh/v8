@@ -588,6 +588,8 @@ bool ShouldReduceMemory(CppHeap::GarbageCollectionFlags flags) {
   return IsMemoryReducingGC(flags) || IsForceGC(flags);
 }
 
+constexpr size_t kIncrementalMarkingCheckInterval = 128 * KB;
+
 }  // namespace
 
 CppHeap::MarkingType CppHeap::SelectMarkingType() const {
@@ -785,11 +787,17 @@ void CppHeap::TraceEpilogue() {
   }
   marker_.reset();
   if (isolate_) {
-    auto* tracer = isolate_->heap()->local_embedder_heap_tracer();
-    DCHECK_NOT_NULL(tracer);
-    tracer->UpdateRemoteStats(
-        stats_collector_->marked_bytes(),
-        stats_collector_->marking_time().InMillisecondsF());
+    used_size_ = stats_collector_->marked_bytes();
+    // Force a check next time increased memory is reported. This allows for
+    // setting limits close to actual heap sizes.
+    allocated_size_limit_for_check_ = 0;
+
+    constexpr auto kMinReportingTime = base::TimeDelta::FromMillisecondsD(0.5);
+    const auto marking_time = stats_collector_->marking_time();
+    if (marking_time > kMinReportingTime) {
+      isolate_->heap()->tracer()->RecordEmbedderSpeed(
+          used_size_, marking_time.InMillisecondsF());
+    }
   }
   // The allocated bytes counter in v8 was reset to the current marked bytes, so
   // any pending allocated bytes updates should be discarded.
@@ -858,18 +866,36 @@ void CppHeap::ReportBufferedAllocationSizeIfPossible() {
     return;
   }
 
+  // We are in attached state.
+  DCHECK_NOT_NULL(isolate_);
+
   // The calls below may trigger full GCs that are synchronous and also execute
   // epilogue callbacks. Since such callbacks may allocate, the counter must
   // already be zeroed by that time.
   const int64_t bytes_to_report = buffered_allocated_bytes_;
   buffered_allocated_bytes_ = 0;
 
-  auto* const tracer = isolate_->heap()->local_embedder_heap_tracer();
-  DCHECK_NOT_NULL(tracer);
   if (bytes_to_report < 0) {
-    tracer->DecreaseAllocatedSize(static_cast<size_t>(-bytes_to_report));
+    DCHECK_GE(used_size_.load(std::memory_order_relaxed), bytes_to_report);
+    used_size_.fetch_sub(bytes_to_report, std::memory_order_relaxed);
   } else {
-    tracer->IncreaseAllocatedSize(static_cast<size_t>(bytes_to_report));
+    used_size_.fetch_add(bytes_to_report, std::memory_order_relaxed);
+    allocated_size_ += bytes_to_report;
+
+    if (v8_flags.global_gc_scheduling && v8_flags.incremental_marking) {
+      if (allocated_size_ > allocated_size_limit_for_check_) {
+        Heap* heap = isolate_->heap();
+        heap->StartIncrementalMarkingIfAllocationLimitIsReached(
+            heap->GCFlagsForIncrementalMarking(),
+            kGCCallbackScheduleIdleGarbageCollection);
+        if (heap->AllocationLimitOvershotByLargeMargin()) {
+          heap->FinalizeIncrementalMarkingAtomically(
+              i::GarbageCollectionReason::kExternalFinalize);
+        }
+        allocated_size_limit_for_check_ =
+            allocated_size_ + kIncrementalMarkingCheckInterval;
+      }
+    }
   }
 }
 
@@ -1069,6 +1095,7 @@ const cppgc::EmbedderStackState* CppHeap::override_stack_state() const {
 void CppHeap::StartIncrementalGarbageCollection(cppgc::internal::GCConfig) {
   UNIMPLEMENTED();
 }
+
 size_t CppHeap::epoch() const { UNIMPLEMENTED(); }
 
 void CppHeap::ResetCrossHeapRememberedSet() {
