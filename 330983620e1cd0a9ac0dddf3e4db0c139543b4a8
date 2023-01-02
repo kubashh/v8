@@ -16,6 +16,23 @@
       "message": "As discussed earlier, I\u0027ve updated CheckPageFlags so that it\u0027s consistent between architectures.",
       "revId": "330983620e1cd0a9ac0dddf3e4db0c139543b4a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c935c398_24749a18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-01-02T08:57:10Z",
+      "side": 1,
+      "message": "Thanks, lgtm - adding Anton for a GC reviewer",
+      "revId": "330983620e1cd0a9ac0dddf3e4db0c139543b4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
