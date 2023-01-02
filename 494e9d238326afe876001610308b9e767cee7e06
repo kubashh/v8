@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c33b5a_cb91be56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-02T09:41:54Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "494e9d238326afe876001610308b9e767cee7e06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fbf69f4_59c25183",
+        "filename": "include/v8-cppgc.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-02T09:41:54Z",
+      "side": 1,
+      "message": "nit: Let\u0027s put a newline before the deleted ctors.",
+      "revId": "494e9d238326afe876001610308b9e767cee7e06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
