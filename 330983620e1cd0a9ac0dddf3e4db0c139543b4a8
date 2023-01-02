@@ -33,6 +33,23 @@
       "message": "Thanks, lgtm - adding Anton for a GC reviewer",
       "revId": "330983620e1cd0a9ac0dddf3e4db0c139543b4a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1332bc8_0189e916",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-01-02T09:05:30Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "330983620e1cd0a9ac0dddf3e4db0c139543b4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
