@@ -236,8 +236,6 @@ void ToString::GenerateCode(MaglevAssembler* masm,
   __ bind(&done);
 }
 
-UNIMPLEMENTED_NODE(AssertInt32, condition_, reason_)
-UNIMPLEMENTED_NODE(CheckUint32IsSmi)
 UNIMPLEMENTED_NODE(CheckJSArrayBounds)
 UNIMPLEMENTED_NODE(CheckJSDataViewBounds, element_type_)
 UNIMPLEMENTED_NODE(CheckJSObjectElementsBounds)
