@@ -3325,9 +3325,19 @@ void Parser::InsertShadowingVarBindingInitializers(Block* inner_block) {
   Scope* function_scope = inner_scope->outer_scope();
   DCHECK(function_scope->is_function_scope());
   BlockState block_state(&scope_, inner_scope);
+  std::set<Variable*> declared_vars;
+  std::vector<Declaration*> shadowing_decls;
   for (Declaration* decl : *inner_scope->declarations()) {
     if (decl->var()->mode() != VariableMode::kVar ||
         !decl->IsVariableDeclaration()) {
+      declared_vars.insert(decl->var());
+      continue;
+    }
+    shadowing_decls.push_back(decl);
+  }
+
+  for (Declaration* decl : shadowing_decls) {
+    if (declared_vars.find(decl->var()) != declared_vars.end()) {
       continue;
     }
     const AstRawString* name = decl->var()->raw_name();
