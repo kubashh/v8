@@ -200,6 +200,7 @@ class V8_EXPORT_PRIVATE TurboAssembler
   void Popcntq(Register dst, Register src);
   void Popcntq(Register dst, Operand src);
 
+  void Cmp(Register dst, Register src);
   void Cmp(Register dst, Smi src);
   void Cmp(Operand dst, Smi src);
   void Cmp(Register dst, int32_t src);

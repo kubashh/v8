@@ -1685,6 +1685,8 @@ SmiIndex TurboAssembler::SmiToIndex(Register dst, Register src, int shift) {
   }
 }
 
+void TurboAssembler::Cmp(Register dst, Register src) { cmpq(dst, src); }
+
 void TurboAssembler::Switch(Register scratch, Register reg, int case_value_base,
                             Label** labels, int num_labels) {
   Register table = scratch;

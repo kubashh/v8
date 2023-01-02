@@ -212,16 +212,6 @@ void CreateEmptyObjectLiteral::GenerateCode(MaglevAssembler* masm,
   }
 }
 
-void AssertInt32::SetValueLocationConstraints() {
-  UseRegister(left_input());
-  UseRegister(right_input());
-}
-void AssertInt32::GenerateCode(MaglevAssembler* masm,
-                               const ProcessingState& state) {
-  __ cmpq(ToRegister(left_input()), ToRegister(right_input()));
-  __ Check(ToCondition(condition_), reason_);
-}
-
 void CheckMaps::SetValueLocationConstraints() { UseRegister(receiver_input()); }
 void CheckMaps::GenerateCode(MaglevAssembler* masm,
                              const ProcessingState& state) {
@@ -1980,15 +1970,6 @@ void CheckInt32IsSmi::GenerateCode(MaglevAssembler* masm,
   DCHECK_REGLIST_EMPTY(RegList{reg} &
                        GetGeneralRegistersUsedAsInputs(eager_deopt_info()));
   __ EmitEagerDeoptIf(overflow, DeoptimizeReason::kNotASmi, this);
-}
-
-void CheckUint32IsSmi::SetValueLocationConstraints() { UseRegister(input()); }
-void CheckUint32IsSmi::GenerateCode(MaglevAssembler* masm,
-                                    const ProcessingState& state) {
-  Register reg = ToRegister(input());
-  // Perform an unsigned comparison against Smi::kMaxValue.
-  __ cmpl(reg, Immediate(Smi::kMaxValue));
-  __ EmitEagerDeoptIf(above, DeoptimizeReason::kNotASmi, this);
 }
 
 void CheckedSmiTagInt32::SetValueLocationConstraints() {
