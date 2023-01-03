@@ -16,6 +16,69 @@
       "message": "ptal",
       "revId": "7755baaf9a8dba3bab11901b054dbc8f8cba740b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08f3a39c_7d1623ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-01-03T09:34:36Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "7755baaf9a8dba3bab11901b054dbc8f8cba740b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8903b94e_e18a95f4",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-01-03T09:34:36Z",
+      "side": 1,
+      "message": "nit: Maybe extract to a function to improve caller readability.",
+      "range": {
+        "startLine": 790,
+        "startChar": 0,
+        "endLine": 800,
+        "endChar": 5
+      },
+      "revId": "7755baaf9a8dba3bab11901b054dbc8f8cba740b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f725494_6ef5a5aa",
+        "filename": "src/heap/cppgc-js/cpp-heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-01-03T09:34:36Z",
+      "side": 1,
+      "message": "nit: Total",
+      "range": {
+        "startLine": 233,
+        "startChar": 5,
+        "endLine": 233,
+        "endChar": 12
+      },
+      "revId": "7755baaf9a8dba3bab11901b054dbc8f8cba740b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
