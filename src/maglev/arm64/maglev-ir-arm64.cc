@@ -244,7 +244,6 @@ void AssertInt32::GenerateCode(MaglevAssembler* masm,
 
 UNIMPLEMENTED_NODE(CheckJSObjectElementsBounds)
 UNIMPLEMENTED_NODE(CheckJSTypedArrayBounds, elements_kind_)
-UNIMPLEMENTED_NODE_WITH_CALL(JumpLoopPrologue, loop_depth_, unit_)
 
 int BuiltinStringFromCharCode::MaxCallStackArgs() const {
   return AllocateDescriptor::GetStackParameterCount();
