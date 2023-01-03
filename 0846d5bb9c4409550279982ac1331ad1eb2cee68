@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a7b9170_0278d788",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-01-03T18:51:30Z",
+      "side": 1,
+      "message": "Only the sliced string case in the new tests actually hits the runtime version, as the Flatten macro in Torque can handles flat cons and thin strings already. I added those tests for completeness.",
+      "revId": "0846d5bb9c4409550279982ac1331ad1eb2cee68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
