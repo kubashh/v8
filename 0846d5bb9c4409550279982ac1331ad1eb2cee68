@@ -16,6 +16,23 @@
       "message": "Only the sliced string case in the new tests actually hits the runtime version, as the Flatten macro in Torque can handles flat cons and thin strings already. I added those tests for completeness.",
       "revId": "0846d5bb9c4409550279982ac1331ad1eb2cee68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb254508_a4496f32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-01-03T19:00:38Z",
+      "side": 1,
+      "message": "lgtm\n\nNot for this CL but seems like it\u0027d be good to limit use of String::GetChars to extremely performance-sensitive code (maybe make it private?), since for any other case GetFlatContent is the right API.",
+      "revId": "0846d5bb9c4409550279982ac1331ad1eb2cee68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
