@@ -3325,16 +3325,27 @@ void Parser::InsertShadowingVarBindingInitializers(Block* inner_block) {
   Scope* function_scope = inner_scope->outer_scope();
   DCHECK(function_scope->is_function_scope());
   BlockState block_state(&scope_, inner_scope);
+  std::set<Variable*> immune_vars;
+  std::vector<std::pair<Variable*, Variable*>> var_param_bindings;
   for (Declaration* decl : *inner_scope->declarations()) {
     if (decl->var()->mode() != VariableMode::kVar ||
         !decl->IsVariableDeclaration()) {
+      immune_vars.insert(decl->var());
       continue;
     }
     const AstRawString* name = decl->var()->raw_name();
     Variable* parameter = function_scope->LookupLocal(name);
     if (parameter == nullptr) continue;
+    var_param_bindings.push_back(std::pair(decl->var(), parameter));
+  }
+
+  for (auto decl : var_param_bindings) {
+    if (immune_vars.find(decl.first) != immune_vars.end()) {
+      continue;
+    }
+    const AstRawString* name = decl.first->raw_name();
     VariableProxy* to = NewUnresolved(name);
-    VariableProxy* from = factory()->NewVariableProxy(parameter);
+    VariableProxy* from = factory()->NewVariableProxy(decl.second);
     Expression* assignment =
         factory()->NewAssignment(Token::ASSIGN, to, from, kNoSourcePosition);
     Statement* statement =
