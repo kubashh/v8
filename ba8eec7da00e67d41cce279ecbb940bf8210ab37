@@ -22,6 +22,30 @@
       },
       "revId": "ba8eec7da00e67d41cce279ecbb940bf8210ab37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6b0ed2a_01a50a93",
+        "filename": "src/maglev/x64/maglev-ir-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-01-03T09:52:09Z",
+      "side": 0,
+      "message": "I am not 100% certain but I think `cmpq` is the better option. If both inputs are 32-bit `cmpq` and `cmpl` are identical.\nIf however one of the inputs is 64-bit, we would get unexpected results with `cmpl`. E.g. if you have 32-bit value `less` 64-bit value.\nBut as you wrote the code initially you probably know best. WDYT?",
+      "parentUuid": "b99e24ae_6042999e",
+      "range": {
+        "startLine": 221,
+        "startChar": 5,
+        "endLine": 221,
+        "endChar": 9
+      },
+      "revId": "ba8eec7da00e67d41cce279ecbb940bf8210ab37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
