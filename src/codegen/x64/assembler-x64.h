@@ -2131,7 +2131,7 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   }
 
   // Code emission.
-  void GrowBuffer();
+  V8_NOINLINE void V8_PRESERVE_MOST GrowBuffer();
 
   template <typename T>
   static uint8_t* emit(uint8_t* __restrict pc, T t) {
