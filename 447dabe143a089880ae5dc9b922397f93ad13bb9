@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "447dabe143a089880ae5dc9b922397f93ad13bb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cf3c521_6d3d6acb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-03T09:43:17Z",
+      "side": 1,
+      "message": "Thanks, Patrick.",
+      "revId": "447dabe143a089880ae5dc9b922397f93ad13bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c955d8bc_450bcf4c",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1688,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-03T09:43:17Z",
+      "side": 1,
+      "message": "Are we not comparing 32 bits? cmpl?",
+      "range": {
+        "startLine": 1688,
+        "startChar": 55,
+        "endLine": 1688,
+        "endChar": 59
+      },
+      "revId": "447dabe143a089880ae5dc9b922397f93ad13bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

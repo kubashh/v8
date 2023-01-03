@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b99e24ae_6042999e",
+        "filename": "src/maglev/x64/maglev-ir-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-03T09:43:17Z",
+      "side": 0,
+      "message": "I think it was an error here. We should probably compare 32 bits, don\u0027t you think? cmpl.",
+      "range": {
+        "startLine": 221,
+        "startChar": 5,
+        "endLine": 221,
+        "endChar": 9
+      },
+      "revId": "ba8eec7da00e67d41cce279ecbb940bf8210ab37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
