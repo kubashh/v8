@@ -46,6 +46,30 @@
       },
       "revId": "ba8eec7da00e67d41cce279ecbb940bf8210ab37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8035851_a7d83598",
+        "filename": "src/maglev/x64/maglev-ir-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-03T09:57:06Z",
+      "side": 0,
+      "message": "Both inputs should be Int32 (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/maglev/maglev-ir.h;drc\u003d0d9bacb958ea7d4bc41df913430a80967988a1c5;l\u003d3482). cmpq could actually give a false negative here (although it seems it never did so far). Since we don\u0027t usually assume that the high 32 bits are always zero. Maybe we should (for security)... there is something we are debating about it.",
+      "parentUuid": "d6b0ed2a_01a50a93",
+      "range": {
+        "startLine": 221,
+        "startChar": 5,
+        "endLine": 221,
+        "endChar": 9
+      },
+      "revId": "ba8eec7da00e67d41cce279ecbb940bf8210ab37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
