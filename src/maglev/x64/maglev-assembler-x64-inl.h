@@ -325,6 +325,14 @@ inline void MaglevAssembler::SignExtend32To64Bits(Register dst, Register src) {
   movsxlq(dst, src);
 }
 
+inline void MaglevAssembler::LoadByte(Register dst, MemOperand src) {
+  movb(dst, src);
+}
+
+inline void MaglevAssembler::CompareInt32(Register reg, int32_t imm) {
+  cmpl(reg, Immediate(imm));
+}
+
 inline void MaglevAssembler::CompareInt32(Register src1, Register src2) {
   cmpl(src1, src2);
 }
