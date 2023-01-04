@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab5a7e5d_ef8303c8",
+        "filename": "src/heap/marking-worklist.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-04T17:20:41Z",
+      "side": 0,
+      "message": "`PopWrapper()` is dead code (since I removed `EmbedderHeapTracer`).",
+      "range": {
+        "startLine": 170,
+        "startChar": 14,
+        "endLine": 170,
+        "endChar": 24
+      },
+      "revId": "a934b72483b6407f6a4e4de1df8d66af3056d79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
