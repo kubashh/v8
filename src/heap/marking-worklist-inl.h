@@ -59,16 +59,6 @@ void MarkingWorklists::Local::PushExtractedWrapper(
   cpp_marking_state_->MarkAndPush(snapshot);
 }
 
-void MarkingWorklists::Local::PushWrapper(HeapObject object) {
-  DCHECK_NULL(cpp_marking_state_);
-  wrapper_.Push(object);
-}
-
-bool MarkingWorklists::Local::PopWrapper(HeapObject* object) {
-  DCHECK_NULL(cpp_marking_state_);
-  return wrapper_.Pop(object);
-}
-
 Address MarkingWorklists::Local::SwitchToContext(Address context) {
   if (context == active_context_) return context;
   return SwitchToContextSlow(context);
