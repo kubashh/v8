@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12d14e37_16bcf774",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-01-04T14:18:45Z",
+      "side": 1,
+      "message": "A tiny bugfix, PTAL",
+      "revId": "47bb0c55a7ffef3377a5b350905c08828630d84d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
