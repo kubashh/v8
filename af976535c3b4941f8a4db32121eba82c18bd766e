@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b86b93d9_d06f32e3",
+        "filename": "src/temporal/temporal-parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-01-04T00:34:08Z",
+      "side": 1,
+      "message": "Naming nit: I think `CaseInsensitive` is easier to grep for than `Caseless`.",
+      "range": {
+        "startLine": 539,
+        "startChar": 17,
+        "endLine": 539,
+        "endChar": 25
+      },
+      "revId": "af976535c3b4941f8a4db32121eba82c18bd766e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81356aff_f9dda47f",
+        "filename": "src/temporal/temporal-parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-01-04T00:34:08Z",
+      "side": 1,
+      "message": "Nit: `length`?",
+      "range": {
+        "startLine": 540,
+        "startChar": 55,
+        "endLine": 540,
+        "endChar": 60
+      },
+      "revId": "af976535c3b4941f8a4db32121eba82c18bd766e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75de260d_e39dcc16",
+        "filename": "src/temporal/temporal-parser.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-01-04T00:34:08Z",
+      "side": 1,
+      "message": "Please use `IsAsciiUpper` and `ToAsciiLower` in `src/strings/char-predicates.h` instead of one-off macros here.",
+      "revId": "af976535c3b4941f8a4db32121eba82c18bd766e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
