@@ -168,8 +168,8 @@ static constexpr StoreType GetStoreType(WasmOpcode opcode) {
 
 // Decoder error with explicit PC and format arguments.
 template <typename ValidationTag, typename... Args>
-void DecodeError(Decoder* decoder, const byte* pc, const char* str,
-                 Args&&... args) {
+void V8_PRESERVE_MOST DecodeError(Decoder* decoder, const byte* pc,
+                                  const char* str, Args&&... args) {
   if constexpr (!ValidationTag::validate) UNREACHABLE();
   static_assert(sizeof...(Args) > 0);
   if constexpr (ValidationTag::full_validation) {
@@ -181,7 +181,8 @@ void DecodeError(Decoder* decoder, const byte* pc, const char* str,
 
 // Decoder error with explicit PC and no format arguments.
 template <typename ValidationTag>
-void DecodeError(Decoder* decoder, const byte* pc, const char* str) {
+void V8_PRESERVE_MOST DecodeError(Decoder* decoder, const byte* pc,
+                                  const char* str) {
   if constexpr (!ValidationTag::validate) UNREACHABLE();
   if constexpr (ValidationTag::full_validation) {
     decoder->error(pc, str);
@@ -192,7 +193,8 @@ void DecodeError(Decoder* decoder, const byte* pc, const char* str) {
 
 // Decoder error without explicit PC, but with format arguments.
 template <typename ValidationTag, typename... Args>
-void DecodeError(Decoder* decoder, const char* str, Args&&... args) {
+void V8_PRESERVE_MOST DecodeError(Decoder* decoder, const char* str,
+                                  Args&&... args) {
   if constexpr (!ValidationTag::validate) UNREACHABLE();
   static_assert(sizeof...(Args) > 0);
   if constexpr (ValidationTag::full_validation) {
@@ -204,7 +206,7 @@ void DecodeError(Decoder* decoder, const char* str, Args&&... args) {
 
 // Decoder error without explicit PC and without format arguments.
 template <typename ValidationTag>
-void DecodeError(Decoder* decoder, const char* str) {
+void V8_PRESERVE_MOST DecodeError(Decoder* decoder, const char* str) {
   if constexpr (!ValidationTag::validate) UNREACHABLE();
   if constexpr (ValidationTag::full_validation) {
     decoder->error(str);
@@ -1413,7 +1415,7 @@ class WasmDecoder : public Decoder {
   // Shorthand that forwards to the {DecodeError} functions above, passing our
   // {ValidationTag}.
   template <typename... Args>
-  void DecodeError(Args... args) {
+  V8_INLINE void DecodeError(Args... args) {
     wasm::DecodeError<ValidationTag>(this, std::forward<Args>(args)...);
   }
 
