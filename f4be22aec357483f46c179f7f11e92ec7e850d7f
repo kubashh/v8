@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b135951_e7fa4d58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-04T16:35:51Z",
+      "side": 1,
+      "message": "LGTM % nit.",
+      "revId": "f4be22aec357483f46c179f7f11e92ec7e850d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53d02857_83efb23e",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2366,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-04T16:35:51Z",
+      "side": 1,
+      "message": "nit: scratch?",
+      "range": {
+        "startLine": 2366,
+        "startChar": 75,
+        "endLine": 2366,
+        "endChar": 78
+      },
+      "revId": "f4be22aec357483f46c179f7f11e92ec7e850d7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
