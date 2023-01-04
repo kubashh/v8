@@ -486,8 +486,8 @@ class Decoder {
 
   template <typename IntType, typename ValidationTag, TraceFlag trace,
             size_t size_in_bits = 8 * sizeof(IntType)>
-  V8_NOINLINE IntType read_leb_slowpath(const byte* pc, uint32_t* length,
-                                        Name<ValidationTag> name) {
+  V8_NOINLINE V8_PRESERVE_MOST IntType read_leb_slowpath(
+      const byte* pc, uint32_t* length, Name<ValidationTag> name) {
     // Create an unrolled LEB decoding function per integer type.
     return read_leb_tail<IntType, ValidationTag, trace, size_in_bits, 0>(
         pc, length, name, 0);
