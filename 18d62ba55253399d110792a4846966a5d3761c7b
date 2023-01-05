@@ -33,6 +33,24 @@
       "message": "As far as I understand, this CL allocates the whole signature object including types array in one allocation, whereas the original code with the Signature::Builder uses two allocations. Nice find! One question though: Could you not just have done this refactoring in the Signature::Builder, so that all uses of Signature::Builder benefit from the change? The Signature::Builder seems to be a nice design pattern, and not inherently the issue here. As far as I understand the code, it is not necessary to inline the builder code in the CallDescriptor code manually.\n\nThe other small cleanups are naturally nice though.",
       "revId": "18d62ba55253399d110792a4846966a5d3761c7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf01a5b8_0a6d3d42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-01-05T16:43:00Z",
+      "side": 1,
+      "message": "This CL specifically avoids the use of `Signature::Builder`, since it\u0027s an unnecessary abstraction which does not improve readability here IMO. There is also a chance that writing to the array directly is faster, but I did not measure that specifically.\n\nI can look into applying the same optimization to `Signature::Builder`, but I think that\u0027s independent of this CL.",
+      "parentUuid": "4737c7a1_f9708553",
+      "revId": "18d62ba55253399d110792a4846966a5d3761c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
