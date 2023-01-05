@@ -16,6 +16,23 @@
       "message": "Another little optimization; PTAL.",
       "revId": "18d62ba55253399d110792a4846966a5d3761c7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4737c7a1_f9708553",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-01-05T07:17:22Z",
+      "side": 1,
+      "message": "As far as I understand, this CL allocates the whole signature object including types array in one allocation, whereas the original code with the Signature::Builder uses two allocations. Nice find! One question though: Could you not just have done this refactoring in the Signature::Builder, so that all uses of Signature::Builder benefit from the change? The Signature::Builder seems to be a nice design pattern, and not inherently the issue here. As far as I understand the code, it is not necessary to inline the builder code in the CallDescriptor code manually.\n\nThe other small cleanups are naturally nice though.",
+      "revId": "18d62ba55253399d110792a4846966a5d3761c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
