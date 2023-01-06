@@ -1432,6 +1432,18 @@ TNode<HeapObject> CodeStubAssembler::AllocateRaw(TNode<IntPtrT> size_in_bytes,
   // When there is enough space, return `top' and bump it up.
   BIND(&no_runtime_call);
   {
+    if (flags & AllocationFlag::kClearPadding) {
+      Label next(this);
+      GotoIf(IntPtrEqual(adjusted_size.value(), size_in_bytes), &next);
+
+      auto last_tagged = IntPtrSub(new_top, IntPtrConstant(4));
+      StoreNoWriteBarrier(MachineRepresentation::kWord32, last_tagged,
+                          Int32Constant(0));
+      Goto(&next);
+
+      BIND(&next);
+    }
+
     StoreNoWriteBarrier(MachineType::PointerRepresentation(), top_address,
                         new_top);
 
@@ -1517,7 +1529,8 @@ TNode<HeapObject> CodeStubAssembler::Allocate(TNode<IntPtrT> size_in_bytes,
       CSA_DCHECK(this, IsRegularHeapObjectSize(size_in_bytes));
     }
   }
-  if (!(flags & AllocationFlag::kDoubleAlignment)) {
+  if (!(flags & AllocationFlag::kDoubleAlignment) &&
+      !(flags & AllocationFlag::kClearPadding)) {
     return OptimizedAllocate(
         size_in_bytes,
         new_space ? AllocationType::kYoung : AllocationType::kOld,
@@ -3731,6 +3744,12 @@ TNode<String> CodeStubAssembler::AllocateSeqOneByteString(
                                  Uint32Constant(length));
   StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kRawHashFieldOffset,
                                  Int32Constant(String::kEmptyHashField));
+
+  if (length != static_cast<uint32_t>(SeqOneByteString::SizeFor(length))) {
+    StoreObjectFieldNoWriteBarrier(
+        result, SeqOneByteString::SizeFor(length) - kObjectAlignment,
+        Uint32Constant(0));
+  }
   return CAST(result);
 }
 
@@ -3753,6 +3772,11 @@ TNode<String> CodeStubAssembler::AllocateSeqTwoByteString(
                                  Uint32Constant(length));
   StoreObjectFieldNoWriteBarrier(result, SeqTwoByteString::kRawHashFieldOffset,
                                  Int32Constant(String::kEmptyHashField));
+  if (length != static_cast<uint32_t>(SeqTwoByteString::SizeFor(length))) {
+    StoreObjectFieldNoWriteBarrier(
+        result, SeqTwoByteString::SizeFor(length) - kObjectAlignment,
+        Uint32Constant(0));
+  }
   return CAST(result);
 }
 

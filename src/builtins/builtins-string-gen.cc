@@ -245,6 +245,12 @@ void StringBuiltinsAssembler::StringEqual_Loop(
   CSA_DCHECK(this, WordEqual(LoadStringLengthAsWord(lhs), length));
   CSA_DCHECK(this, WordEqual(LoadStringLengthAsWord(rhs), length));
 
+  //  if (lhs_type == rhs_type) {
+  //    length = IntPtrAdd(length, IntPtrConstant(3));
+  //    length = WordShr(length, 2);
+  //    lhs_type = rhs_type = MachineType::Uint32();
+  //  }
+
   // Compute the effective offset of the first character.
   TNode<RawPtrT> lhs_data = DirectStringData(lhs, lhs_instance_type);
   TNode<RawPtrT> rhs_data = DirectStringData(rhs, rhs_instance_type);

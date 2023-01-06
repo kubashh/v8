@@ -7,6 +7,7 @@
 #include "src/api/api-inl.h"
 #include "src/api/api.h"
 #include "src/builtins/builtins.h"
+#include "src/common/globals.h"
 #include "src/common/message-template.h"
 #include "src/execution/arguments-inl.h"
 #include "src/execution/isolate-inl.h"
@@ -15,7 +16,9 @@
 #include "src/handles/maybe-handles.h"
 #include "src/logging/counters.h"
 #include "src/numbers/conversions.h"
+#include "src/objects/heap-object.h"
 #include "src/objects/template-objects-inl.h"
+#include "src/runtime/runtime.h"
 #include "src/utils/ostreams.h"
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -474,9 +477,14 @@ RUNTIME_FUNCTION(Runtime_AllocateInYoungGeneration) {
   // allocations, don't request it.
   alignment = kTaggedAligned;
 
-  return *isolate->factory()->NewFillerObject(size, alignment,
-                                              AllocationType::kYoung,
-                                              AllocationOrigin::kGeneratedCode);
+  Handle<HeapObject> res = isolate->factory()->NewFillerObject(
+      size, alignment, AllocationType::kYoung,
+      AllocationOrigin::kGeneratedCode);
+  if (ClearPaddingFlag::decode(flags)) {
+    memset(reinterpret_cast<void*>(res->address() + size - kObjectAlignment), 0,
+           kObjectAlignment);
+  }
+  return *res;
 }
 
 RUNTIME_FUNCTION(Runtime_AllocateInOldGeneration) {
@@ -494,8 +502,13 @@ RUNTIME_FUNCTION(Runtime_AllocateInOldGeneration) {
   if (!allow_large_object_allocation) {
     CHECK(size <= kMaxRegularHeapObjectSize);
   }
-  return *isolate->factory()->NewFillerObject(
+  Handle<HeapObject> res = isolate->factory()->NewFillerObject(
       size, alignment, AllocationType::kOld, AllocationOrigin::kGeneratedCode);
+  if (ClearPaddingFlag::decode(flags)) {
+    memset(reinterpret_cast<void*>(res->address() + size - kObjectAlignment), 0,
+           kObjectAlignment);
+  }
+  return *res;
 }
 
 RUNTIME_FUNCTION(Runtime_AllocateByteArray) {

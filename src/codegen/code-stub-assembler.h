@@ -339,6 +339,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     kDoubleAlignment = 1,
     kPretenured = 1 << 1,
     kAllowLargeObjectAllocation = 1 << 2,
+    kClearPadding = 1 << 3,
   };
 
   enum SlackTrackingMode { kWithSlackTracking, kNoSlackTracking };

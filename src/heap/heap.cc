@@ -3177,7 +3177,6 @@ void CreateFillerObjectAtImpl(Heap* heap, Address addr, int size,
       MemsetTagged(ObjectSlot(addr) + 2, Object(kClearedFreeMemoryValue),
                    (size / kTaggedSize) - 2);
     }
-
     // During bootstrapping we need to create a free space object before its
     // map is initialized. In this case we cannot access the map yet, as it
     // might be null, or not set up properly yet.

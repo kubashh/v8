@@ -341,7 +341,8 @@ constexpr 'CodeStubAssembler::AllocationFlag' {
   kNone,
   kDoubleAlignment,
   kPretenured,
-  kAllowLargeObjectAllocation
+  kAllowLargeObjectAllocation,
+  kClearPadding
 }
 
 extern enum SlackTrackingMode
