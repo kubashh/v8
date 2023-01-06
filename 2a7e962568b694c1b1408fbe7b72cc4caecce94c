@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c64f4ad6_340e68ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-01-06T10:53:26Z",
+      "side": 1,
+      "message": "Hi there~\nThe ECMAScript specification about the hoisting and binding is here: https://tc39.es/ecma262/multipage/ordinary-and-exotic-objects-behaviours.html#sec-functiondeclarationinstantiation:~:text\u003d3.%20If%20n%20is%20not%20an%20element.\nIf I got it right, when a variable shared a name with a function inside another function, this variable should not be bound during initialization.\nBesides, this bug does not occur in JavaScriptCore and SpiderMonkey.\nPTAL, thanks~",
+      "revId": "2a7e962568b694c1b1408fbe7b72cc4caecce94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
