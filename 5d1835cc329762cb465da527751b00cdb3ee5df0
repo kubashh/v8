@@ -16,6 +16,23 @@
       "message": "lgtm, thanks for the fix!\n\nIs it possible to add a test for this? I fixed another TF issue recently in https://chromium-review.googlesource.com/c/v8/v8/+/4136980, maybe you can adapt the test in there.",
       "revId": "5d1835cc329762cb465da527751b00cdb3ee5df0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d38f217_de8d4b75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-01-06T22:48:13Z",
+      "side": 1,
+      "message": "Oops, I\u0027m not an OWNER in src/compiler/. +Jakob for OWNER stamp.",
+      "revId": "5d1835cc329762cb465da527751b00cdb3ee5df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
