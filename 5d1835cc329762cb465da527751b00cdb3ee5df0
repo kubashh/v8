@@ -33,6 +33,24 @@
       "message": "Oops, I\u0027m not an OWNER in src/compiler/. +Jakob for OWNER stamp.",
       "revId": "5d1835cc329762cb465da527751b00cdb3ee5df0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a3e3ac8_a3b23dc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2023-01-07T00:16:15Z",
+      "side": 1,
+      "message": "Funny enough, the test case that you have on that CL covers this bug, and actually, your CL also fixes this problem. I think it is worth deleting this line anyway, since we can\u0027t actually inline the element access right now.",
+      "parentUuid": "fcf43e8e_710459b2",
+      "revId": "5d1835cc329762cb465da527751b00cdb3ee5df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
