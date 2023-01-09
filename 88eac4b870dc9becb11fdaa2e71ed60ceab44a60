@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "536802a7_4911d7d9",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-09T15:11:15Z",
+      "side": 0,
+      "message": "\u003e I think `AdvanceTracing` should publish before restarting concurrent marking (as well as after it stops tracing).\n\nFor `CppHeap::AdvanceTracing()` I think we only have `NotifyConcurrentMarkingOfWorkIfNeeded()` to signal `kUserBlocking` to the atomic pause. There\u0027s no regular concurrent marking restart in there for the incremental marking case. (Unless I did miss something.)\n\nConcurrent marking is really restarted in `AdvanceMarkingWithLimits()` where it\u0027s paired with the `Publish()` call which is all part of the general marking mechanism as long as we keep on reusing the marking states (by design).\n\nI\u0027d like to keep the CL as is. An improvement would be handling the `kUserBlocking` priority increase in `cppgc` instead of `CppHeap` as that\u0027s actually generally useful. Thoughts?",
+      "parentUuid": "2a182042_189e5034",
+      "range": {
+        "startLine": 562,
+        "startChar": 33,
+        "endLine": 562,
+        "endChar": 47
+      },
+      "revId": "88eac4b870dc9becb11fdaa2e71ed60ceab44a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82928f36_7090e32a",
         "filename": "src/heap/incremental-marking.cc",
         "patchSetId": 1
@@ -108,6 +132,30 @@
       "writtenOn": "2023-01-09T14:53:33Z",
       "side": 0,
       "message": "I think this return is still needed otherwise you will overwrite |duration_ms|.",
+      "range": {
+        "startLine": 554,
+        "startChar": 4,
+        "endLine": 554,
+        "endChar": 10
+      },
+      "revId": "88eac4b870dc9becb11fdaa2e71ed60ceab44a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ceb625a_af534532",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-09T15:11:15Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "4f99196a_d5b49381",
       "range": {
         "startLine": 554,
         "startChar": 4,
