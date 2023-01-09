@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80acbed7_89f99506",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-09T16:07:17Z",
+      "side": 0,
+      "message": "\u003e Moving the priority increase to `cppgc` sgtm, but it can wait for a followup.\n\u003e \n\u003e Increasing the priority also calls `NotifyConcurrencyIncrease` that would restart the concurrent jobs. For the calls here that have a deadline, I suppose starting concurrent marking after the step is fine. My concern is for the calls in mark-compact.cc as part of the atomic pause where there is no deadline for the calls to `AdvanceTracing`. I guess since we should have had parallel marking already, and it\u0027s only the current private segments that are not published, it should overall be negligible, right? wdyt?\n\nYeah, I think so. There\u0027s room for improvement in the way we schedule this but it doesn\u0027t look like it\u0027s plain wrong.",
+      "parentUuid": "581202b7_cac0a305",
+      "range": {
+        "startLine": 562,
+        "startChar": 33,
+        "endLine": 562,
+        "endChar": 47
+      },
+      "revId": "88eac4b870dc9becb11fdaa2e71ed60ceab44a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82928f36_7090e32a",
