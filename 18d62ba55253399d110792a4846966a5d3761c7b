@@ -87,6 +87,24 @@
       "parentUuid": "cd103301_1bc125c4",
       "revId": "18d62ba55253399d110792a4846966a5d3761c7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52c739fa_a3635e62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-01-09T13:52:56Z",
+      "side": 1,
+      "message": "You could also argue that `AddParamAt` is a method which should not even exist in the signature builder (because it allows to build \"incomplete\" signatures by avoiding some DCHECKs). Avoiding the use of the builder here would remove the only use of that method.\n\nI\u0027ll split this CL in multiple, so we can discuss the individual optimizations.",
+      "parentUuid": "d1622a9f_8e51a9a2",
+      "revId": "18d62ba55253399d110792a4846966a5d3761c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
