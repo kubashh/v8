@@ -2454,7 +2454,7 @@ void BytecodeGenerator::VisitForOfStatement(ForOfStatement* stmt) {
         // Finish the iteration in the finally block.
         BuildFinalizeIteration(iterator, done, iteration_continuation_token);
       },
-      HandlerTable::UNCAUGHT);
+      catch_prediction());
 }
 
 void BytecodeGenerator::VisitTryCatchStatement(TryCatchStatement* stmt) {
