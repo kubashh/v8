@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "437421b7_4132f91c",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-09T14:30:32Z",
+      "side": 0,
+      "message": "Here and below: We do publish the mutator marking state in `CppHeap::AdvanceTracing()` (to allow concurrent marking to pick up objects as well), so I think this is also obsolete.",
+      "range": {
+        "startLine": 562,
+        "startChar": 33,
+        "endLine": 562,
+        "endChar": 47
+      },
+      "revId": "88eac4b870dc9becb11fdaa2e71ed60ceab44a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82928f36_7090e32a",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-09T14:30:32Z",
+      "side": 0,
+      "message": "I don\u0027t think this was doing anything (anymore) as we already have a `marking_done_` bool in CppHeap.",
+      "range": {
+        "startLine": 570,
+        "startChar": 16,
+        "endLine": 570,
+        "endChar": 40
+      },
+      "revId": "88eac4b870dc9becb11fdaa2e71ed60ceab44a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
