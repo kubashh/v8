@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab0fe472_21744579",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-01-09T15:47:46Z",
+      "side": 1,
+      "message": "PTAL (I like this refactoring independent of any preserve_most work)",
+      "revId": "e50bb20674c8f0ee12e4f8473c5ec9c792abda42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
