@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4730cd02_36ae0af2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-01-09T16:54:58Z",
+      "side": 1,
+      "message": "PTAL. The goal with this change is I want to try and vectorize string comparison. First time I touch anything torque related, let me know if there is a better way for what I am trying...",
+      "revId": "5f97364d29b7fcf6c07ec35798d177f87ccb2c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
