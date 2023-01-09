@@ -70,6 +70,30 @@
       },
       "revId": "95e4e7a87feab8ec24d6782b45fd460895064892",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "631aa91c_86a9af34",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2457,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-01-09T10:53:36Z",
+      "side": 1,
+      "message": "you also need to add tests for the for loop body itself throwing; in particular, an exception is swallowed when: a) the for loop body throws, and b) .return _also_ throws. Then, the b) exception is swallowed because the a) exception is rethrown.\n\nAll that said, the more I page this logic back in, the more inheriting the parent catch prediction seems to be the right thing to do (both here and in BuildFinalizeIteration)",
+      "parentUuid": "6edde533_bf710c13",
+      "range": {
+        "startLine": 2457,
+        "startChar": 6,
+        "endLine": 2457,
+        "endChar": 24
+      },
+      "revId": "95e4e7a87feab8ec24d6782b45fd460895064892",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
