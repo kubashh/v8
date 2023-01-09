@@ -69,6 +69,24 @@
       "parentUuid": "bf01a5b8_0a6d3d42",
       "revId": "18d62ba55253399d110792a4846966a5d3761c7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1622a9f_8e51a9a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-01-09T06:15:18Z",
+      "side": 1,
+      "message": "You did several great optimizations and cleanups here, which make the code more readable and faster. Indeed, the call to `FunctionSigToMachineSig` was unnecessary, and introducing `has_tagged_param` was a great idea. But the last step, to also eliminate `Signature::Builder`, is unnecessary, and it\u0027s better to just optimize `Signature::Builder`, as you do it in https://crrev.com/c/4138268.\n\nI don\u0027t agree that `Signature::Builder` is an unnecessary abstraction. It hides all the memory management, and all the pointer arithmetic. I mean, by removing the `Signature::Builder` you require from the reader of the code to know the internal memory layout of a `Signature`, whereas with the `Signature::Builder` it is sufficient to know what a signature is.\n\nYou could argue that the `++param_locations;` makes the code cleaner and avoids the `+ param_offset` in the original code. But I would argue that this actually hides important information in this function and may make the reader misunderstand the code: if you glance at the code quickly it looks like parameter 3 gets written into position 3, whereas actually it gets written into position 4 in the parameter array.\n\nOverall I think this is a great CL with many improvements, but removing `Signature::Builder` in `BuildLocations` is a bit too much. \n\nIf you can measure a big enough performance advantage of writing to the array directly, then I\u0027m okay with the change. In that case we may want to question the `Signature::Builder` in general.",
+      "parentUuid": "cd103301_1bc125c4",
+      "revId": "18d62ba55253399d110792a4846966a5d3761c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
