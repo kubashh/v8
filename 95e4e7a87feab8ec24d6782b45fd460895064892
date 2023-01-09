@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51992537_54944691",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2457,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-01-09T07:11:42Z",
+      "side": 1,
+      "message": "I hope I\u0027m holding this right. The \"VisitTryFinallyStatement\" does the same thing.",
+      "range": {
+        "startLine": 2457,
+        "startChar": 6,
+        "endLine": 2457,
+        "endChar": 24
+      },
+      "revId": "95e4e7a87feab8ec24d6782b45fd460895064892",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
