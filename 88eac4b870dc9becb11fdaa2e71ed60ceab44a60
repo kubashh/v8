@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a182042_189e5034",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-09T14:53:33Z",
+      "side": 0,
+      "message": "Following the assignment to see that we indeed use the same marking state was not trivial. Perhaps we should document it better somewhere.\n\nI think you\u0027re right that it\u0027s not necessary, but I\u0027m concerned it might cause an issue in `CppHeap::AdvanceTracing()`. `AdvanceTracing` restarts concurrent tasks, then traces on the main thread (until the deadline is reached), and only then publishes. It worked fine until now because we published before calling `AdvanceTracing`. Now it may happen that concurrent marking thread are restarted, but don\u0027t see any available work and bail out before we publish to them.\nI think `AdvanceTracing` should publish before restarting concurrent marking (as well as after it stops tracing).",
+      "parentUuid": "437421b7_4132f91c",
+      "range": {
+        "startLine": 562,
+        "startChar": 33,
+        "endLine": 562,
+        "endChar": 47
+      },
+      "revId": "88eac4b870dc9becb11fdaa2e71ed60ceab44a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82928f36_7090e32a",
         "filename": "src/heap/incremental-marking.cc",
         "patchSetId": 1
@@ -42,6 +66,53 @@
         "startChar": 16,
         "endLine": 570,
         "endChar": 40
+      },
+      "revId": "88eac4b870dc9becb11fdaa2e71ed60ceab44a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d753a59b_8880df0b",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-09T14:53:33Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "82928f36_7090e32a",
+      "range": {
+        "startLine": 570,
+        "startChar": 16,
+        "endLine": 570,
+        "endChar": 40
+      },
+      "revId": "88eac4b870dc9becb11fdaa2e71ed60ceab44a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f99196a_d5b49381",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-09T14:53:33Z",
+      "side": 0,
+      "message": "I think this return is still needed otherwise you will overwrite |duration_ms|.",
+      "range": {
+        "startLine": 554,
+        "startChar": 4,
+        "endLine": 554,
+        "endChar": 10
       },
       "revId": "88eac4b870dc9becb11fdaa2e71ed60ceab44a60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
