@@ -1851,6 +1851,16 @@ SeqString::DataAndPaddingSizes SeqTwoByteString::GetDataAndPaddingSizes()
   return DataAndPaddingSizes{data_size, padding_size};
 }
 
+V8_EXPORT_PRIVATE void SeqString::SeqStringVerify(Isolate* isolate) {
+  TorqueGeneratedSeqString<SeqString, String>::SeqStringVerify(isolate);
+  DataAndPaddingSizes sz = GetDataAndPaddingSizes();
+  auto padding = reinterpret_cast<char*>(address() + sz.data_size);
+  CHECK(sz.padding_size <= kTaggedSize);
+  for (int i = 0; i < sz.padding_size; ++i) {
+    CHECK(padding[i] == 0);
+  }
+}
+
 void SeqString::ClearPadding() {
   DataAndPaddingSizes sz = GetDataAndPaddingSizes();
   DCHECK_EQ(address() + sz.data_size + sz.padding_size, address() + Size());
