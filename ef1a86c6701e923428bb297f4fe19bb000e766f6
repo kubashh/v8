@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74486c9e_529f7c68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-09T14:10:03Z",
+      "side": 1,
+      "message": "ptal.\n\nDelaying pretenuring decisions until the next GC cycle is a side effect of iterating promoted pages concurrently. I want to do it explicitly in this CL to separate the regression caused by delaying from any improvements due to shorter GC pauses.",
+      "revId": "ef1a86c6701e923428bb297f4fe19bb000e766f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
