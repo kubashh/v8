@@ -22,6 +22,30 @@
       },
       "revId": "c8f89cc0c88243f9319e945da52818c5d6fecd4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "878a6a5b_457deb5d",
+        "filename": "test/inspector/debugger/break-on-exception-async-gen-expected.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2023-01-10T14:15:21Z",
+      "side": 1,
+      "message": "SGTM",
+      "parentUuid": "06830ed7_146be77b",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 28
+      },
+      "revId": "c8f89cc0c88243f9319e945da52818c5d6fecd4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
