@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06830ed7_146be77b",
+        "filename": "test/inspector/debugger/break-on-exception-async-gen-expected.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-01-10T13:23:03Z",
+      "side": 1,
+      "message": "Seems we receive 2 ExceptionThrown events here. The second comes from the \"throw\" bytecode in the generator once it resumes and I assume we don\u0027t properly detect that case yet.\n\nMaybe we can land the CL as-is for now, as it fixes a CAUGHT vs UNCAUGHT confusion. Even if we pause twice we do it correctly for both the UNCAUGHT and the CAUGHT case. I\u0027d file a separate P3 bug to follow-up with this case. Wdyt?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 28
+      },
+      "revId": "c8f89cc0c88243f9319e945da52818c5d6fecd4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
