@@ -2601,7 +2601,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
             zone, module, enabled, detected, body.sig, body.start, body.end,
             body.offset),
         interface_(std::forward<InterfaceArgs>(interface_args)...),
-        stack_(16, zone),
+        stack_(64, zone),
         control_(16, zone) {}
 
   ~WasmFullDecoder() {
@@ -2804,7 +2804,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         // and binary operations, local.get, constants, ...). Thus check that
         // there is enough space for those operations centrally, and avoid any
         // bounds checks in those operations.
-        stack_.EnsureMoreCapacity(1, this->compilation_zone_);
+        // stack_.EnsureMoreCapacity(1, this->compilation_zone_);
         uint8_t first_byte = *this->pc_;
         WasmOpcode opcode = static_cast<WasmOpcode>(first_byte);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(NextInstruction, opcode);
@@ -2842,7 +2842,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         // and binary operations, local.get, constants, ...). Thus check that
         // there is enough space for those operations centrally, and avoid any
         // bounds checks in those operations.
-        stack_.EnsureMoreCapacity(1, this->compilation_zone_);
+        // stack_.EnsureMoreCapacity(1, this->compilation_zone_);
         uint8_t first_byte = *this->pc_;
         WasmOpcode opcode = static_cast<WasmOpcode>(first_byte);
         CALL_INTERFACE_IF_OK_AND_REACHABLE(NextInstruction, opcode);
@@ -3118,8 +3118,8 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     c->reachability = control_at(1)->innerReachability();
     RollbackLocalsInitialization(c);
     const WasmTagSig* sig = imm.tag->sig;
-    stack_.EnsureMoreCapacity(static_cast<int>(sig->parameter_count()),
-                              this->compilation_zone_);
+    // stack_.EnsureMoreCapacity(static_cast<int>(sig->parameter_count()),
+    //                           this->compilation_zone_);
     for (ValueType type : sig->parameters()) Push(CreateValue(type));
     base::Vector<Value> values(stack_.begin() + c->stack_depth,
                                sig->parameter_count());
@@ -4061,7 +4061,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     int current_values = stack_.size() - limit;
     int additional_values = count - current_values;
     DCHECK_GT(additional_values, 0);
-    stack_.EnsureMoreCapacity(additional_values, this->compilation_zone_);
+    // stack_.EnsureMoreCapacity(additional_values, this->compilation_zone_);
     Value unreachable_value = UnreachableValue(this->pc_);
     for (int i = 0; i < additional_values; ++i) stack_.push(unreachable_value);
     if (current_values > 0) {
@@ -6344,7 +6344,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
       // central decoding loop.
       stack_.push(merge->vals.first);
     } else {
-      stack_.EnsureMoreCapacity(merge->arity, this->compilation_zone_);
+      // stack_.EnsureMoreCapacity(merge->arity, this->compilation_zone_);
       for (uint32_t i = 0; i < merge->arity; i++) {
         stack_.push(merge->vals.array[i]);
       }
@@ -6360,8 +6360,8 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     return values;
   }
   V8_INLINE void PushReturns(ReturnVector values) {
-    stack_.EnsureMoreCapacity(static_cast<int>(values.size()),
-                              this->compilation_zone_);
+    // stack_.EnsureMoreCapacity(static_cast<int>(values.size()),
+    //                           this->compilation_zone_);
     for (Value& value : values) Push(value);
   }
 
