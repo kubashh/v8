@@ -118,6 +118,30 @@
       },
       "revId": "efe33ad86ebe56b36ed4dbc7eff6ec58e0e1167f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49869f23_677e3cb3",
+        "filename": "include/v8-cppgc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1296743
+      },
+      "writtenOn": "2023-01-10T17:10:44Z",
+      "side": 1,
+      "message": "As I mentioned here (https://github.com/nodejs/node/issues/45402#issuecomment-1349270448) I think the long term fix is to add proper constructors here.  This can be addressed when someone wants C++20 with MSVC (I suspect we will soon).",
+      "parentUuid": "bf889be9_c0b621a6",
+      "range": {
+        "startLine": 81,
+        "startChar": 2,
+        "endLine": 81,
+        "endChar": 21
+      },
+      "revId": "efe33ad86ebe56b36ed4dbc7eff6ec58e0e1167f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
