@@ -50,6 +50,24 @@
       "message": "Would it be worth to have a ZeroExtend32To64(Register) in MaglevAssembler?\nLike SignExtend32To64Bits",
       "revId": "e059e4e7448f96df02f10a187df9147351e24242",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60e049b3_bc7c25f0",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-01-10T10:18:27Z",
+      "side": 1,
+      "message": "Let\u0027s see if we ever need it again, given the invariant that int32 inputs are always zero extended.",
+      "parentUuid": "ec3c1f5b_7307f45b",
+      "revId": "e059e4e7448f96df02f10a187df9147351e24242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
