@@ -16,6 +16,23 @@
       "message": "PTAL. The goal with this change is I want to try and vectorize string comparison. First time I touch anything torque related, let me know if there is a better way for what I am trying...",
       "revId": "5f97364d29b7fcf6c07ec35798d177f87ccb2c3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2b4d596_b3ade028",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-01-10T11:28:57Z",
+      "side": 1,
+      "message": "non-maglev parts LGTM",
+      "revId": "5f97364d29b7fcf6c07ec35798d177f87ccb2c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
