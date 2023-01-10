@@ -33,6 +33,46 @@
       "message": "Hi, thanks for sending this. I just got back to work and this is on my radar. I might not have time to look into it today, but I\u0027ll do it tomorrow-ish.",
       "revId": "2a7e962568b694c1b1408fbe7b72cc4caecce94c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f1664dd_6d1fd85b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-01-10T12:42:04Z",
+      "side": 1,
+      "message": "Starting some try jobs to see if there are test failures. I didn\u0027t yet verify whether this is the most reasonable approach, but nevertheless, a comment below:",
+      "revId": "2a7e962568b694c1b1408fbe7b72cc4caecce94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cabd19d_9deba1a0",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3343,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-01-10T12:42:04Z",
+      "side": 1,
+      "message": "This is quadratic behavior, as the number of declarations in the scope increases. Unlike LookupLocal, which is a hash map. I\u0027m not convinced we want to do this..",
+      "range": {
+        "startLine": 3342,
+        "startChar": 0,
+        "endLine": 3343,
+        "endChar": 60
+      },
+      "revId": "2a7e962568b694c1b1408fbe7b72cc4caecce94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
