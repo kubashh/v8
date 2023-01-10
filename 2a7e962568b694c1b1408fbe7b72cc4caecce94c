@@ -73,6 +73,30 @@
       },
       "revId": "2a7e962568b694c1b1408fbe7b72cc4caecce94c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4960772a_1903e735",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3343,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-01-10T13:05:50Z",
+      "side": 1,
+      "message": "Ah, wait, not, you\u0027re using a set, only the var_param_bindings is a vector. Oops, pls ignore this",
+      "parentUuid": "2cabd19d_9deba1a0",
+      "range": {
+        "startLine": 3342,
+        "startChar": 0,
+        "endLine": 3343,
+        "endChar": 60
+      },
+      "revId": "2a7e962568b694c1b1408fbe7b72cc4caecce94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
