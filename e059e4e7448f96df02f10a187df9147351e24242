@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "e059e4e7448f96df02f10a187df9147351e24242",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76972b74_5bdd3adb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-10T10:15:43Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "e059e4e7448f96df02f10a187df9147351e24242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec3c1f5b_7307f45b",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-10T10:15:43Z",
+      "side": 1,
+      "message": "Would it be worth to have a ZeroExtend32To64(Register) in MaglevAssembler?\nLike SignExtend32To64Bits",
+      "revId": "e059e4e7448f96df02f10a187df9147351e24242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
