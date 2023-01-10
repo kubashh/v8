@@ -1,0 +1,22 @@
+Check that "break on uncaught" exceptions works for async generators.
+
+Running test: testSimpleGeneratorThrow
+SUCCESS
+
+Running test: testYieldBeforeThrow
+SUCCESS
+
+Running test: testAwaitBeforeThrow
+SUCCESS
+
+Running test: testYieldBeforeThrowWithAwait
+SUCCESS
+
+Running test: testAwaitBeforeThrowWithYield
+SUCCESS
+
+Running test: testYieldThrows
+SUCCESS
+
+Running test: testAwaitThrows
+SUCCESS
