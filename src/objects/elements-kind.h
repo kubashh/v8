@@ -285,6 +285,36 @@ inline bool IsFloatTypedArrayElementsKind(ElementsKind kind) {
          kind == RAB_GSAB_FLOAT32_ELEMENTS || kind == RAB_GSAB_FLOAT64_ELEMENTS;
 }
 
+inline bool IsSignedIntTypedArrayElementsKind(ElementsKind kind) {
+  switch (kind) {
+    case INT8_ELEMENTS:
+    case RAB_GSAB_INT8_ELEMENTS:
+    case INT16_ELEMENTS:
+    case RAB_GSAB_INT16_ELEMENTS:
+    case INT32_ELEMENTS:
+    case RAB_GSAB_INT32_ELEMENTS:
+      return true;
+    default:
+      return false;
+  }
+}
+
+inline bool IsUnsignedIntTypedArrayElementsKind(ElementsKind kind) {
+  switch (kind) {
+    case UINT8_CLAMPED_ELEMENTS:
+    case RAB_GSAB_UINT8_CLAMPED_ELEMENTS:
+    case UINT8_ELEMENTS:
+    case RAB_GSAB_UINT8_ELEMENTS:
+    case UINT16_ELEMENTS:
+    case RAB_GSAB_UINT16_ELEMENTS:
+    case UINT32_ELEMENTS:
+    case RAB_GSAB_UINT32_ELEMENTS:
+      return true;
+    default:
+      return false;
+  }
+}
+
 inline bool IsWasmArrayElementsKind(ElementsKind kind) {
   return kind == WASM_ARRAY_ELEMENTS;
 }
