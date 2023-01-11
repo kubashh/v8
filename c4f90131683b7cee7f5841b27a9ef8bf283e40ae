@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c06e3a40_1a5be3d7",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6572,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-01-11T12:47:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ac87385_b09e99aa",
+      "revId": "c4f90131683b7cee7f5841b27a9ef8bf283e40ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d1e5304_829a7252",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0ed775e_1d6b27b6",
+        "filename": "src/wasm/wasm-opcodes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-01-11T12:47:33Z",
+      "side": 1,
+      "message": "I think stringview in a struct is fine. We cannot inspect struct fields in JS. In any case, this function could not possibly traverse types to find out what struct fields are included; this would have to be done when we declare struct types.",
+      "parentUuid": "1d1e5304_829a7252",
+      "revId": "c4f90131683b7cee7f5841b27a9ef8bf283e40ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa01644f_c46a6b0f",
@@ -65,6 +101,24 @@
       "writtenOn": "2023-01-11T10:45:34Z",
       "side": 1,
       "message": "Please add\n```\nassertThrows(\n    () \u003d\u003e instance.exports.raw_struct_id(instance.exports.array_producer()),\n    TypeError,\n    \u0027type incompatibility when transforming from/to JS\u0027);\nassertThrows(\n    () \u003d\u003e instance.exports.raw_array_id(instance.exports.struct_producer()),\n    TypeError,\n    \u0027type incompatibility when transforming from/to JS\u0027);\n```\nif it isn\u0027t somewhere already.",
+      "revId": "c4f90131683b7cee7f5841b27a9ef8bf283e40ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0ff287f_728d4669",
+        "filename": "test/mjsunit/wasm/wasm-gc-js-roundtrip.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-01-11T12:47:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa01644f_c46a6b0f",
       "revId": "c4f90131683b7cee7f5841b27a9ef8bf283e40ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
