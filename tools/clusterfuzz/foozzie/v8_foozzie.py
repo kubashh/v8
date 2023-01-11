@@ -186,6 +186,9 @@ DISALLOWED_FLAGS = [
 CONTRADICTORY_FLAGS = [
   ('--always-turbofan', '--jitless'),
   ('--assert-types', '--stress-concurrent-inlining'),
+  ('--assert-types', '--stress-concurrent-inlining-attach-code'),
+  ('--jitless', '--stress-concurrent-inlining'),
+  ('--jitless', '--stress-concurrent-inlining-attach-code'),
 ]
 
 
