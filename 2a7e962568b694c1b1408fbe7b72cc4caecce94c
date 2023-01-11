@@ -94,6 +94,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "316fc381_4e780a9d",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-01-11T13:45:27Z",
+      "side": 1,
+      "message": "OK, I\u0027ll also paste the link to relevant content of the specification.",
+      "parentUuid": "85aae0cb_6134ba6a",
+      "range": {
+        "startLine": 3328,
+        "startChar": 2,
+        "endLine": 3328,
+        "endChar": 34
+      },
+      "revId": "2a7e962568b694c1b1408fbe7b72cc4caecce94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "326b0268_441eebd2",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 9
@@ -105,6 +129,30 @@
       "writtenOn": "2023-01-11T09:37:22Z",
       "side": 1,
       "message": "Why are we still adding let declarations to immune_vars? (Might not matter for the outcome, since they\u0027re not allowed to conflict with param names anyway.)\n\nWhat\u0027s immune_vars meant to contain? Only function declarations are relevant here, no? Could there be a more descriptive name?",
+      "range": {
+        "startLine": 3331,
+        "startChar": 8,
+        "endLine": 3331,
+        "endChar": 49
+      },
+      "revId": "2a7e962568b694c1b1408fbe7b72cc4caecce94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb80f22b_481d9a02",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-01-11T13:45:27Z",
+      "side": 1,
+      "message": "Yes, both \u0027let\u0027 and \u0027const\u0027 declarations do not matter for the outcome. I just did not want to introduce another if statement. Logically, they should not be put in the set. I\u0027ll split this \u0027if\u0027 and only put function-related variables in the set.",
+      "parentUuid": "326b0268_441eebd2",
       "range": {
         "startLine": 3331,
         "startChar": 8,
@@ -187,6 +235,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea4a851b_391ad099",
+        "filename": "test/mjsunit/regress/regress-v8-13459.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-01-11T13:45:27Z",
+      "side": 1,
+      "message": "👌 BTW, happy new year😊",
+      "parentUuid": "ed572480_d4432d54",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "2a7e962568b694c1b1408fbe7b72cc4caecce94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6b129e1_fcc2ed02",
         "filename": "test/mjsunit/regress/regress-v8-13459.js",
         "patchSetId": 9
@@ -198,6 +270,30 @@
       "writtenOn": "2023-01-11T09:37:22Z",
       "side": 1,
       "message": "Afaics the bug occurred with parameter names in non-simple parameter lists. Could you add tests with other kinds of non-simple parameter lists, like function f(x \u003d 0) { }?\n\n\nCould you also add tests for all the possible cases, like: parameter shadowed by a function (no \u0027var\u0027, parameter shadowed by \u0027var\u0027, (parameter shadowed by let is not possible, it\u0027ll throw an error), and the \u0027var\u0027 might have an initializer, or not. And all these for simple and non-simple parameter lists? Those tests could be in a different file. I\u0027m not sure if we\u0027re already covering all the possible cases with existing tests.\n\nLike:\n\nfunction f(x) {\n  var x \u003d 5;\n  //assert something interesting\n}\n\nf(1);\n\n\nfunction f(x) {\n  var x;\n  //assert something interesting\n}\n\nf(1);\n\nfunction f(x \u003d 3) {\n  var x \u003d 5;\n  //assert something interesting\n}\n\nf(1);\n\n\nfunction f(x \u003d 3) {\n  var x;\n  //assert something interesting\n}\n\nf(1);\n\nfunction f(...x) {\n  var x \u003d 5;\n  //assert something interesting\n}\n\nf(1);\n\n\nfunction f(...x) {\n  var x;\n  //assert something interesting\n}\n\nf(1);\n\n\n-\u003e Your CL shouldn\u0027t change the behavior with these ones.",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 8
+      },
+      "revId": "2a7e962568b694c1b1408fbe7b72cc4caecce94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0234e5a1_9641cd0d",
+        "filename": "test/mjsunit/regress/regress-v8-13459.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-01-11T13:45:27Z",
+      "side": 1,
+      "message": "Got it～ I\u0027ll make some tests to cover f(x), f(x\u003d1) and f(...x) with both shadowing \u0026 not-shadowing cases.",
+      "parentUuid": "d6b129e1_fcc2ed02",
       "range": {
         "startLine": 17,
         "startChar": 7,
