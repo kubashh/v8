@@ -16,6 +16,57 @@
       "message": "Matthias, PTAL.",
       "revId": "c4f90131683b7cee7f5841b27a9ef8bf283e40ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ac87385_b09e99aa",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6572,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-11T10:45:34Z",
+      "side": 1,
+      "message": "This sounds misleading. The wrapping mechanism is already removed. We just skip converting the wasm function to the JS representation, right? Can we adapt the comment?",
+      "revId": "c4f90131683b7cee7f5841b27a9ef8bf283e40ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d1e5304_829a7252",
+        "filename": "src/wasm/wasm-opcodes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-11T10:45:34Z",
+      "side": 1,
+      "message": "Having a stringview in a struct would be valid then?\nNot sure if stringviews are allowed in structs and if they are whether there would be any issues on the boundary? (I guess, not.)",
+      "revId": "c4f90131683b7cee7f5841b27a9ef8bf283e40ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa01644f_c46a6b0f",
+        "filename": "test/mjsunit/wasm/wasm-gc-js-roundtrip.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-11T10:45:34Z",
+      "side": 1,
+      "message": "Please add\n```\nassertThrows(\n    () \u003d\u003e instance.exports.raw_struct_id(instance.exports.array_producer()),\n    TypeError,\n    \u0027type incompatibility when transforming from/to JS\u0027);\nassertThrows(\n    () \u003d\u003e instance.exports.raw_array_id(instance.exports.struct_producer()),\n    TypeError,\n    \u0027type incompatibility when transforming from/to JS\u0027);\n```\nif it isn\u0027t somewhere already.",
+      "revId": "c4f90131683b7cee7f5841b27a9ef8bf283e40ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
