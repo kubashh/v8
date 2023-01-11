@@ -1,4 +1,4 @@
 {
   "crash_type": "Data race\nWRITE 8",
-  "crash_state": "NULL"
+  "crash_state": "learCellRangeRelaxed\nlear\nlearMarkBitsAndHandleLivenessStatistics"
 }

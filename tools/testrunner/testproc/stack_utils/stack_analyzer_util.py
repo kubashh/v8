@@ -6,6 +6,13 @@
 import logging
 import os
 import sys
+from .overrides import *
+
+
+def override_constants(constants_dict):
+  import clusterfuzz.stacktraces
+  for k, v in constants_dict.items():
+    setattr(sys.modules['clusterfuzz.stacktraces'], k, v)
 
 
 def fake_clusterfuzz_imports(modules):
@@ -23,6 +30,8 @@ def pre_clusterfuzz_import():
       'clusterfuzz._internal.config.local_config',
   ])
 
+  override_constants(constants_override)
+
 
 class CustomStackParser:
 
@@ -34,6 +43,8 @@ class CustomStackParser:
     from clusterfuzz.stacktraces import constants
 
     self.stack_parser = StackParser()
+    self.stack_parser.add_frame_on_match.__func__.__defaults__ = (
+        0, filter_stack_frame_override, False, True, None, None)
     self.constants = constants
     self.llvm_test_one_input_override = llvm_test_one_input_override
 

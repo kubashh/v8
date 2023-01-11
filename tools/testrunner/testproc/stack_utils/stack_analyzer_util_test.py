@@ -28,6 +28,7 @@ class TestScript(unittest.TestCase):
   ]
 
   def logs_test(self):
+    self.maxDiff = None
     stack_parser = create_stack_parser()
     for file in [f for f in os.listdir(TEST_DATA_ROOT) if f.endswith('.txt')]:
       if file in self.skipped_tests:
