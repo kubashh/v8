@@ -16,6 +16,46 @@
       "message": "You could +1 once again please? Your +1 disappeared because I modified a new file :/",
       "revId": "1a8bc56e6cf2ed2dafe3726b434d94fee1fb5167",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9554e85d_32b7e6fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-11T13:32:19Z",
+      "side": 1,
+      "message": "Sure, with another nit! 😊",
+      "revId": "1a8bc56e6cf2ed2dafe3726b434d94fee1fb5167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b37a433c_f2bf9d54",
+        "filename": "src/objects/elements-kind.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-11T13:32:19Z",
+      "side": 1,
+      "message": "Nit: Why not use the same pattern as the others? i.e. `kind \u003d\u003d XXX || kind \u003d\u003d YYY`.\nBonus (maybe a follow up, since it could break things):\nWhat if we reshuffle the order in the enum, so that we can do a simpler test:\n```\nreturn base::IsInRange(kind, SIGNED_INT_FIRST_KIND, SIGNED_INT_LAST_KIND)\n```",
+      "range": {
+        "startLine": 290,
+        "startChar": 0,
+        "endLine": 295,
+        "endChar": 33
+      },
+      "revId": "1a8bc56e6cf2ed2dafe3726b434d94fee1fb5167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
