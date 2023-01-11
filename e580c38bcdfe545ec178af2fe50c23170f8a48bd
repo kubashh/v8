@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2680b42_f5155123",
+        "filename": "tools/testrunner/testproc/stack_utils/stack_analyzer_util.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2023-01-11T10:53:39Z",
+      "side": 1,
+      "message": "suggestion for a better way to override this?",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 64
+      },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c69b7be8_4df1a1fd",
+        "filename": "tools/testrunner/testproc/stack_utils/stack_analyzer_util_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2023-01-11T10:53:39Z",
+      "side": 1,
+      "message": "included to help with debug",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 23
+      },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f51d1d2_e4271be7",
+        "filename": "tools/testrunner/testproc/stack_utils/testdata/data_race_2.expected.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2023-01-11T10:53:39Z",
+      "side": 1,
+      "message": "I am not sure why the first letter is not included here, can we handle this in a separate cl or should we fix it before landing this?",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 38
+      },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3315a2a5_18e6ee96",
+        "filename": "tools/testrunner/testproc/stack_utils/testdata/data_race_clusterfuzz.expected.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2023-01-11T10:53:39Z",
+      "side": 1,
+      "message": "please let me know if this is okay, or should we adjust the filter more.",
+      "range": {
+        "startLine": 3,
+        "startChar": 84,
+        "endLine": 3,
+        "endChar": 98
+      },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
