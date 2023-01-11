@@ -6557,25 +6557,37 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
           case wasm::HeapType::kString:
           case wasm::HeapType::kExtern:
           case wasm::HeapType::kAny:
-            return node;
           case wasm::HeapType::kNone:
           case wasm::HeapType::kNoFunc:
           case wasm::HeapType::kNoExtern:
           case wasm::HeapType::kI31:
-            UNREACHABLE();
-          default:
+            return node;
+          default: {
             DCHECK(type.has_index());
             if (module_->has_signature(type.ref_index())) {
               // Typed function. Extract the external function.
-              return gasm_->LoadFromObject(
-                  MachineType::TaggedPointer(), node,
-                  wasm::ObjectAccess::ToTagged(
-                      WasmInternalFunction::kExternalOffset));
+              if (type.kind() == wasm::kRefNull) {
+                auto done =
+                    gasm_->MakeLabel(MachineRepresentation::kTaggedPointer);
+                // Do not wrap {null}.
+                gasm_->GotoIf(IsNull(node), &done, node);
+                gasm_->Goto(&done,
+                            gasm_->LoadFromObject(
+                                MachineType::TaggedPointer(), node,
+                                wasm::ObjectAccess::ToTagged(
+                                    WasmInternalFunction::kExternalOffset)));
+                gasm_->Bind(&done);
+                return done.PhiAt(0);
+              } else {
+                return gasm_->LoadFromObject(
+                    MachineType::TaggedPointer(), node,
+                    wasm::ObjectAccess::ToTagged(
+                        WasmInternalFunction::kExternalOffset));
+              }
+            } else {
+              return node;
             }
-            // If this is reached, then IsJSCompatibleSignature() is too
-            // permissive.
-            // TODO(7748): Figure out a JS interop story for arrays and structs.
-            UNREACHABLE();
+          }
         }
       case wasm::kRtt:
       case wasm::kI8:
@@ -6649,7 +6661,6 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
           case wasm::HeapType::kNoFunc:
           case wasm::HeapType::kNoExtern:
           case wasm::HeapType::kI31:
-            UNREACHABLE();
           case wasm::HeapType::kAny:
           case wasm::HeapType::kFunc:
           case wasm::HeapType::kStruct:
@@ -6970,8 +6981,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     }
   }
 
-  void BuildJSToWasmWrapper(const wasm::WasmModule* module, bool is_import,
-                            bool do_conversion = true,
+  void BuildJSToWasmWrapper(bool is_import, bool do_conversion = true,
                             Node* frame_state = nullptr) {
     const int wasm_param_count = static_cast<int>(sig_->parameter_count());
 
@@ -6984,7 +6994,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         Linkage::GetJSCallContextParamIndex(wasm_param_count + 1), "%context");
     Node* function_data = gasm_->LoadFunctionDataFromJSFunction(js_closure);
 
-    if (!wasm::IsJSCompatibleSignature(sig_, module_, enabled_features_)) {
+    if (!wasm::IsJSCompatibleSignature(sig_)) {
       // Throw a TypeError. Use the js_context of the calling javascript
       // function (passed as a parameter), such that the generated code is
       // js_context independent.
@@ -7035,7 +7045,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     for (int i = 0; i < wasm_param_count; ++i) {
       if (do_conversion) {
         args[i + 1] = FromJS(params[i + 1], js_context, sig_->GetParam(i),
-                             module, frame_state);
+                             module_, frame_state);
       } else {
         Node* wasm_param = params[i + 1];
 
@@ -7590,7 +7600,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     Node* context = Param(Linkage::GetJSCallContextParamIndex(wasm_count + 1));
 
     // Throw a TypeError if the signature is incompatible with JavaScript.
-    if (!wasm::IsJSCompatibleSignature(sig_, module_, enabled_features_)) {
+    if (!wasm::IsJSCompatibleSignature(sig_)) {
       BuildCallToRuntimeWithContext(Runtime::kWasmThrowJSTypeError, context,
                                     nullptr, 0);
       TerminateThrow(effect(), control());
@@ -7768,7 +7778,7 @@ void BuildInlinedJSToWasmWrapper(Zone* zone, MachineGraph* mcgraph,
                                   WasmGraphBuilder::kNoSpecialParameterMode,
                                   isolate, spt,
                                   StubCallMode::kCallBuiltinPointer, features);
-  builder.BuildJSToWasmWrapper(module, false, false, frame_state);
+  builder.BuildJSToWasmWrapper(false, false, frame_state);
 }
 
 std::unique_ptr<TurbofanCompilationJob> NewJSToWasmCompilationJob(
@@ -7792,7 +7802,7 @@ std::unique_ptr<TurbofanCompilationJob> NewJSToWasmCompilationJob(
       zone.get(), mcgraph, sig, module,
       WasmGraphBuilder::kNoSpecialParameterMode, isolate, nullptr,
       StubCallMode::kCallBuiltinPointer, enabled_features);
-  builder.BuildJSToWasmWrapper(module, is_import);
+  builder.BuildJSToWasmWrapper(is_import);
 
   //----------------------------------------------------------------------------
   // Create the compilation job.
@@ -7926,10 +7936,9 @@ bool ResolveBoundJSFastApiFunction(const wasm::FunctionSig* expected_sig,
   return IsSupportedWasmFastApiFunction(expected_sig, shared);
 }
 
-WasmImportData ResolveWasmImportCall(
-    Handle<JSReceiver> callable, const wasm::FunctionSig* expected_sig,
-    uint32_t expected_canonical_type_index, const wasm::WasmModule* module,
-    const wasm::WasmFeatures& enabled_features) {
+WasmImportData ResolveWasmImportCall(Handle<JSReceiver> callable,
+                                     const wasm::FunctionSig* expected_sig,
+                                     uint32_t expected_canonical_type_index) {
   Isolate* isolate = callable->GetIsolate();
   if (WasmExportedFunction::IsWasmExportedFunction(*callable)) {
     auto imported_function = Handle<WasmExportedFunction>::cast(callable);
@@ -7965,7 +7974,7 @@ WasmImportData ResolveWasmImportCall(
     return {WasmImportCallKind::kWasmToCapi, callable, wasm::kNoSuspend};
   }
   // Assuming we are calling to JS, check whether this would be a runtime error.
-  if (!wasm::IsJSCompatibleSignature(expected_sig, module, enabled_features)) {
+  if (!wasm::IsJSCompatibleSignature(expected_sig)) {
     return {WasmImportCallKind::kRuntimeTypeError, callable, wasm::kNoSuspend};
   }
   // Check if this can be a JS fast API call.
