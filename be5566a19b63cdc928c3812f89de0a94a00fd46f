@@ -16,6 +16,41 @@
       "message": "ptal.\nThe timeouts I saw in the revert were without MinorMC and this CL would only affect MinorMC.",
       "revId": "be5566a19b63cdc928c3812f89de0a94a00fd46f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1767d46_6a5857dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-11T13:30:38Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "be5566a19b63cdc928c3812f89de0a94a00fd46f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f87929_b4dfa643",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-11T13:30:38Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "e2521c6e_8710ddd4",
+      "revId": "be5566a19b63cdc928c3812f89de0a94a00fd46f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
