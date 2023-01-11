@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce9a5212_14f99d18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-11T13:24:22Z",
+      "side": 1,
+      "message": "You could +1 once again please? Your +1 disappeared because I modified a new file :/",
+      "revId": "1a8bc56e6cf2ed2dafe3726b434d94fee1fb5167",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
