@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8b5aa07_5f46b8bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-11T12:37:56Z",
+      "side": 1,
+      "message": "I like it! 😊",
+      "revId": "aa0df471c1253adebbba71f52f2730f1c423aac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29230616_32e8f6f3",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1809,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-11T12:37:56Z",
+      "side": 1,
+      "message": "We don\u0027t need this. Why don\u0027t we switch on the elements kind?\nOr create a constexpr function `IsElementsKindSignedInteger`?",
+      "range": {
+        "startLine": 1809,
+        "startChar": 0,
+        "endLine": 1809,
+        "endChar": 47
+      },
+      "revId": "aa0df471c1253adebbba71f52f2730f1c423aac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b15b127f_f0ba7e96",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2270,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-11T12:37:56Z",
+      "side": 1,
+      "message": "Nit: hoist this check in line 2263:\n```\nbool depend_on_detaching_protector \u003d broker()-\u003edependencies()\n                  -\u003eDependOnArrayBufferDetachingProtector())\n```\nI think it would be more readable.",
+      "range": {
+        "startLine": 2268,
+        "startChar": 14,
+        "endLine": 2270,
+        "endChar": 59
+      },
+      "revId": "aa0df471c1253adebbba71f52f2730f1c423aac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af795eba_a639c79b",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-11T12:37:56Z",
+      "side": 1,
+      "message": "Maybe add a TODO to move some of the utils to a shared code, instead of Turboshaft specific.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 42
+      },
+      "revId": "aa0df471c1253adebbba71f52f2730f1c423aac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a17758f_37e43354",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4209,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-11T12:37:56Z",
+      "side": 1,
+      "message": "Larger, since it contains the DeoptInfo.",
+      "range": {
+        "startLine": 4208,
+        "startChar": 3,
+        "endLine": 4209,
+        "endChar": 63
+      },
+      "revId": "aa0df471c1253adebbba71f52f2730f1c423aac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
