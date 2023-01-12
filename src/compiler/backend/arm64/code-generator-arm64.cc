@@ -3047,12 +3047,15 @@ void CodeGenerator::AssembleArchTableSwitch(Instruction* instr) {
   int entry_size_log2 = 2;
 #ifdef V8_ENABLE_CONTROL_FLOW_INTEGRITY
   ++entry_size_log2;  // Account for BTI.
+  const int instructions_per_case = 2;
+#else
+  const int instructions_per_case = 1;
 #endif
   __ Add(temp, temp, Operand(input, UXTW, entry_size_log2));
   __ Br(temp);
   {
-    TurboAssembler::BlockPoolsScope block_pools(tasm(),
-                                                case_count * kInstrSize);
+    TurboAssembler::BlockPoolsScope block_pools(
+        tasm(), case_count * kInstrSize * instructions_per_case);
     __ Bind(&table);
     for (size_t index = 0; index < case_count; ++index) {
       __ JumpTarget();
