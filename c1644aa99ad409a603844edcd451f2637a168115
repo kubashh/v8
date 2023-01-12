@@ -33,6 +33,24 @@
       "message": "I can confirm it fixed the issue in our repro (George built chromium for me with this patch and I tested it with a OnePlus9 phone running AOSP).\n\nLooking at the other compilers, I think sparkplug has exactly the same bug, would be it worth fixing it as well preemptively? I think the maglev code is OK. https://source.chromium.org/chromium/chromium/src/+/main:v8/src/baseline/arm64/baseline-assembler-arm64-inl.h;l\u003d613\n\nOtherwise LGTM!",
       "revId": "c1644aa99ad409a603844edcd451f2637a168115",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8697b92_1ea0590d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-01-12T17:29:37Z",
+      "side": 1,
+      "message": "Yea, looks like the Sparkplug thing is very similar, so I added it here. Thanks!",
+      "parentUuid": "b40a32b9_48ed2d7c",
+      "revId": "c1644aa99ad409a603844edcd451f2637a168115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
