@@ -16,6 +16,23 @@
       "message": "Daniel, PTAL.",
       "revId": "4b0527504d948bd0e3e9a44a287c1a0f5a7c8373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e78d95b_cd43fd06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-01-12T17:17:14Z",
+      "side": 1,
+      "message": "LGTM.\n\nJust out of interest: Did you see if that already improves the x64 assembly of callers, e.g., `PushMergeValues` (which calls inlined `stack_.EnsureMoreCapacity`, which calls `Grow`)?\n\nAlso question on process: should I do CQ +1 or you?",
+      "revId": "4b0527504d948bd0e3e9a44a287c1a0f5a7c8373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
