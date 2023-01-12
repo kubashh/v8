@@ -1,4 +1,4 @@
-// Copyright 2020 the V8 project authors. All rights reserved.
+// Copyright 2020-2023 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -82,10 +82,10 @@ class V8_EXPORT_PRIVATE Stack final {
     static constexpr int kNumberOfCalleeSavedRegisters = 8;
 #elif V8_HOST_ARCH_PPC64
     // Must be consistent with heap/base/asm/ppc/.
-    static constexpr int kNumberOfCalleeSavedRegisters = 20;
+    static constexpr int kNumberOfCalleeSavedRegisters = 21;
 #elif V8_HOST_ARCH_PPC
     // Must be consistent with heap/base/asm/ppc/.
-    static constexpr int kNumberOfCalleeSavedRegisters = 20;
+    static constexpr int kNumberOfCalleeSavedRegisters = 21;
 #elif V8_HOST_ARCH_MIPS64
     // Must be consistent with heap/base/asm/mips64el/.
     static constexpr int kNumberOfCalleeSavedRegisters = 9;

@@ -1,4 +1,4 @@
-// Copyright 2020 the V8 project authors. All rights reserved.
+// Copyright 2020-2023 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -21,8 +21,8 @@
 
 #ifdef __PPC64__
 
-// 20 64-bit registers = 20 intprt_t
-static_assert(heap::base::Stack::NumberOfCalleeSavedRegisters() == 20,
+// 20 64-bit registers + 1x 64-bit start offset = 21 intprt_t
+static_assert(heap::base::Stack::NumberOfCalleeSavedRegisters() == 21,
               "Mismatch in the number of callee-saved registers");
 static_assert(sizeof(intptr_t) == 8, "Mismatch in word size");
 
@@ -68,8 +68,8 @@ asm(
 
 #else  // !__PPC64__
 
-// 20 32-bit registers = 20 intprt_t
-static_assert(heap::base::Stack::NumberOfCalleeSavedRegisters() == 20,
+// 20 32-bit registers + 1x 32-bit start offset = 21 intprt_t
+static_assert(heap::base::Stack::NumberOfCalleeSavedRegisters() == 21,
               "Mismatch in the number of callee-saved registers");
 static_assert(sizeof(intptr_t) == 4, "Mismatch in word size");
 
