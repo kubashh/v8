@@ -16,6 +16,108 @@
       "message": "Next one. Daniel, PTAL.",
       "revId": "cf8683cb0018a42efca092d775670fd5e5370bb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b70f45ce_030da8d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-01-13T09:24:53Z",
+      "side": 1,
+      "message": "LGTM, but could you check if we need to add `V8_NOINLINE` to `DecodeError`?",
+      "revId": "cf8683cb0018a42efca092d775670fd5e5370bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b0325bf_45406457",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-01-13T09:24:53Z",
+      "side": 1,
+      "message": "I vaguely remember from looking at generated assembly of the bytecode handlers, that there was a call to `errorf` in them, i.e., the `DecodeError()` call itself got inlined.\n\nCould you check if `preserve_most` actually changes the assembly here? (I assume if it is inlined, the calling convention doesn\u0027t matter.) To be on the safe side, we could add `V8_NOINLINE` to `DecodeError`. (I think I tried adding `preserve_most` to `errorf` before, but that didn\u0027t work because of `PRINTF_FORMAT` for some reason.)",
+      "revId": "cf8683cb0018a42efca092d775670fd5e5370bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ad128f2_ccb75815",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-01-13T09:24:53Z",
+      "side": 1,
+      "message": "same: double check if not inlined, otherwise add `V8_NOINLINE`",
+      "revId": "cf8683cb0018a42efca092d775670fd5e5370bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "940038aa_c1874dbc",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-01-13T09:24:53Z",
+      "side": 1,
+      "message": "same: double check if not inlined, otherwise add `V8_NOINLINE`",
+      "revId": "cf8683cb0018a42efca092d775670fd5e5370bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aff366de_80d21978",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-01-13T09:24:53Z",
+      "side": 1,
+      "message": "same: double check if not inlined, otherwise add `V8_NOINLINE`",
+      "revId": "cf8683cb0018a42efca092d775670fd5e5370bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a93808d4_ef8f73b6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-01-13T09:24:53Z",
+      "side": 1,
+      "message": "Did you add that just to be on the safe side, or did you actually see a call to this?",
+      "revId": "cf8683cb0018a42efca092d775670fd5e5370bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
