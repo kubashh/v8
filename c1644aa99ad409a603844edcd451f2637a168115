@@ -51,6 +51,24 @@
       "parentUuid": "b40a32b9_48ed2d7c",
       "revId": "c1644aa99ad409a603844edcd451f2637a168115",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e62aeaf_f2ea2035",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-01-13T09:29:40Z",
+      "side": 1,
+      "message": "What I\u0027m *not* adding in this CL though is adding a CHECK that it\u0027s not too late to emit veneers in EndBlockVeneerPool. Currently there\u0027s DCHECK and it could be changed to CHECK as a follow up. Didn\u0027t want to do that in this CL, so that this fix doesn\u0027t cause more crashes. (It shouldn\u0027t... but..)",
+      "parentUuid": "d8697b92_1ea0590d",
+      "revId": "c1644aa99ad409a603844edcd451f2637a168115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
