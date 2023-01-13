@@ -82,10 +82,13 @@ class ReducerBase;
 template <class Next>
 class ReducerBaseForwarder : public Next {
  public:
-#define EMIT_OP(Name)                                    \
-  template <class... Args>                               \
-  OpIndex Reduce##Name(Args... args) {                   \
-    return this->Asm().template Emit<Name##Op>(args...); \
+#define EMIT_OP(Name)                                                    \
+  OpIndex ReduceInputGraph##Name(OpIndex ig_index, const Name##Op& op) { \
+    return this->Asm().AssembleOutputGraph##Name(op);                    \
+  }                                                                      \
+  template <class... Args>                                               \
+  OpIndex Reduce##Name(Args... args) {                                   \
+    return this->Asm().template Emit<Name##Op>(args...);                 \
   }
   TURBOSHAFT_OPERATION_LIST(EMIT_OP)
 #undef EMIT_OP
