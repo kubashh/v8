@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d2c2629_86bcc69a",
+        "filename": "src/heap/base/asm/ppc/save_registers_asm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-01-13T09:21:07Z",
+      "side": 1,
+      "message": "I don\u0027t follow why the 64-bit start offset is needed. This was probably caused by my CL (crrev.com/c/3989143) which wrongly started storing registers at offset 8, instead of 0. It\u0027s just 20 registers to be saved, not 21.",
+      "revId": "985d7e3533e1362082affb10d50bd1d5c5993f97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ea5efc4_3188f94d",
+        "filename": "src/heap/base/asm/ppc/save_registers_asm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-01-13T09:21:07Z",
+      "side": 1,
+      "message": "I think this should become `std 0, 0(3)`, and so on below.",
+      "revId": "985d7e3533e1362082affb10d50bd1d5c5993f97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
