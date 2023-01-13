@@ -70,6 +70,30 @@
       },
       "revId": "0179803265f33bbfc75fa40d8b4fbd883172f5a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6ddd303_1434208c",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3064,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-01-13T09:46:34Z",
+      "side": 1,
+      "message": "This is adding the + 1 only in the CFI case, since for non-cfi, instructions_per_jump_target is set to 0.",
+      "parentUuid": "6f20a7aa_933e1429",
+      "range": {
+        "startLine": 3064,
+        "startChar": 7,
+        "endLine": 3064,
+        "endChar": 17
+      },
+      "revId": "0179803265f33bbfc75fa40d8b4fbd883172f5a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
