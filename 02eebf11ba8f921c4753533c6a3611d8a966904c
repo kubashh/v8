@@ -56,6 +56,30 @@
       },
       "revId": "02eebf11ba8f921c4753533c6a3611d8a966904c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b239eff_a4d9fbf8",
+        "filename": "test/mjsunit/regress/wasm/regress-1395604.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-01-13T14:16:32Z",
+      "side": 1,
+      "message": "Ha, done! (I created the local branch in 2022...)",
+      "parentUuid": "17dce9e0_131227ac",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "02eebf11ba8f921c4753533c6a3611d8a966904c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
