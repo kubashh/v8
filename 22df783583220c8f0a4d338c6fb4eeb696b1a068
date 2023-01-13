@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f34d10f7_17f6b97e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 39
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "Could you link the design doc in the CL description?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "775b26a1_906efa8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "Not done, but here are some comments already.",
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "450ea8df_0090f50b",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "The block argument is a bit cryptic. How about having a separate function `EndStringBuilderConcatForLoopPhi(phi, block)` that uses `EndStringBuilderConcat(phi)`, updates the uses and has return type `void`?",
+      "range": {
+        "startLine": 815,
+        "startChar": 50,
+        "endLine": 815,
+        "endChar": 63
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c28460_f158a27b",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2242,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "How about `__ Int32Constant(~kObjectAlignmentMask)`?",
+      "range": {
+        "startLine": 2241,
+        "startChar": 7,
+        "endLine": 2242,
+        "endChar": 42
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "377a971b_06042d75",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2339,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "That sounds like the result is always a constant, but it is not.",
+      "range": {
+        "startLine": 2339,
+        "startChar": 13,
+        "endLine": 2339,
+        "endChar": 66
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61f27b4d_3a943588",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2353,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "`a string builder of`?",
+      "range": {
+        "startLine": 2353,
+        "startChar": 54,
+        "endLine": 2353,
+        "endChar": 75
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e6c8caf_0283b1cd",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2506,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "Are you sure that right-trimming also works in large-object space?",
+      "range": {
+        "startLine": 2506,
+        "startChar": 2,
+        "endLine": 2506,
+        "endChar": 69
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c497392a_ca66795c",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2597,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "What about other uses? Can they exist? Should we somehow assert that they don\u0027t?",
+      "range": {
+        "startLine": 2597,
+        "startChar": 6,
+        "endLine": 2597,
+        "endChar": 7
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15577de5_408db480",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2648,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "How can we be sure it\u0027s a one-byte sliced string?",
+      "range": {
+        "startLine": 2648,
+        "startChar": 45,
+        "endLine": 2648,
+        "endChar": 71
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ef7c321_40e8d5a7",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2685,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "This label name can be read as \"correct the representation\" instead of \"has correct representation\"...\nHow about `has_correct_representation`?",
+      "range": {
+        "startLine": 2685,
+        "startChar": 9,
+        "endLine": 2685,
+        "endChar": 31
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcc74267_fe2cbbf7",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2741,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-13T15:54:41Z",
+      "side": 1,
+      "message": "Why not just `2*new_length`?",
+      "range": {
+        "startLine": 2741,
+        "startChar": 26,
+        "endLine": 2741,
+        "endChar": 36
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
