@@ -16,6 +16,23 @@
       "message": "And this one is a bit more complex because we need to switch to output parameters. PTAL.",
       "revId": "ae8bf3a5a9da2cb156e4c93e066f7080f6c494ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81366877_aa8bb3c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-01-13T09:27:44Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "ae8bf3a5a9da2cb156e4c93e066f7080f6c494ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
