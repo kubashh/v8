@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ae1533d_3a6143fd",
+        "filename": "src/heap/base/asm/ppc/save_registers_asm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-01-14T23:15:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d6579627_110c87f6",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 22
+      },
+      "revId": "985d7e3533e1362082affb10d50bd1d5c5993f97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d2c2629_86bcc69a",
@@ -55,6 +79,24 @@
       "side": 1,
       "message": "+1 to what Nikolaos wrote. Is there a reason not to start at index 0?",
       "parentUuid": "8d2c2629_86bcc69a",
+      "revId": "985d7e3533e1362082affb10d50bd1d5c5993f97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b36220a_a79fd052",
+        "filename": "src/heap/base/asm/ppc/save_registers_asm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-01-14T23:15:59Z",
+      "side": 1,
+      "message": "I wasn\u0027t sure if this structure was read elsewhere and expected the offset.  If that is not the case, then yes, the save area should start at 0 and I will update the patch accordingly.",
+      "parentUuid": "deb4bd0d_fbff21a4",
       "revId": "985d7e3533e1362082affb10d50bd1d5c5993f97",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
