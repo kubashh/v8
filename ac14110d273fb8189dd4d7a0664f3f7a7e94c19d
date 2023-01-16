@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1740f6d_e3ebee44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-01-16T21:52:44Z",
+      "side": 1,
+      "message": "Hi Jakob,\n\nAfter https://crrev.com/c/4138254 we have seen a number of test failures on big endian paltforms.\n\nIf I\u0027m not mistaken the size of KindFeild is 2 bytes based on the offset of this entry and the one after it https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/code.h;l\u003d244 and if so then we would need to load the correct amount on BE. This patch does fix the test failures. Please take a look when you have a chance.",
+      "revId": "ac14110d273fb8189dd4d7a0664f3f7a7e94c19d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
