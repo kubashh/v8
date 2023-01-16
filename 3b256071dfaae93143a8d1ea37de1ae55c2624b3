@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cf91ce85_dfc05df5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-16T11:15:35Z",
+      "side": 1,
+      "message": "Please the message on the v8_presubmit bot. As first time contributor, you need to sign a CLA.",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 6
+      },
+      "revId": "3b256071dfaae93143a8d1ea37de1ae55c2624b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b385b5ac_6a601cf7",
         "filename": "src/heap/base/asm/ppc/save_registers_asm.cc",
         "patchSetId": 2
