@@ -16,6 +16,24 @@
       "message": "Windows debug build failed, but stdout mentions missing `msvcp140`, which seems to be independent of this change?",
       "revId": "2dd614d61e54dd50e12a9492e3aa338b62d32172",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd0a6d8e_589dffd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-01-16T10:36:54Z",
+      "side": 1,
+      "message": "Yes, that\u0027s a bot I added manually because related patches had problems on Win64 debug. Seems like this bot has other problems, so we can just ignore it. It\u0027s not part of the CQ by default anyway.",
+      "parentUuid": "c9c86c44_80a99c3a",
+      "revId": "2dd614d61e54dd50e12a9492e3aa338b62d32172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
