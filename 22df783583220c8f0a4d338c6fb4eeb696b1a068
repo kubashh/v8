@@ -64,6 +64,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97a60fd5_94ce2096",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "Good idea, done :)",
+      "parentUuid": "450ea8df_0090f50b",
+      "range": {
+        "startLine": 815,
+        "startChar": 50,
+        "endLine": 815,
+        "endChar": 63
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8c28460_f158a27b",
@@ -77,6 +101,30 @@
       "writtenOn": "2023-01-13T15:54:41Z",
       "side": 1,
       "message": "How about `__ Int32Constant(~kObjectAlignmentMask)`?",
+      "range": {
+        "startLine": 2241,
+        "startChar": 7,
+        "endLine": 2242,
+        "endChar": 42
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ca8a761_f1881cdf",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2242,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "Definitely! :)",
+      "parentUuid": "f8c28460_f158a27b",
       "range": {
         "startLine": 2241,
         "startChar": 7,
@@ -110,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5ede403_71964a8f",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2339,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "377a971b_06042d75",
+      "range": {
+        "startLine": 2339,
+        "startChar": 13,
+        "endLine": 2339,
+        "endChar": 66
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61f27b4d_3a943588",
@@ -123,6 +195,30 @@
       "writtenOn": "2023-01-13T15:54:41Z",
       "side": 1,
       "message": "`a string builder of`?",
+      "range": {
+        "startLine": 2353,
+        "startChar": 54,
+        "endLine": 2353,
+        "endChar": 75
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c154eae_53342aa5",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2353,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "I should drink less before writing comments :D",
+      "parentUuid": "61f27b4d_3a943588",
       "range": {
         "startLine": 2353,
         "startChar": 54,
@@ -156,6 +252,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0724be33_ddfc696f",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2506,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "Good question, I hadn\u0027t thought about it, but GC people say that it\u0027s fine :)",
+      "parentUuid": "2e6c8caf_0283b1cd",
+      "range": {
+        "startLine": 2506,
+        "startChar": 2,
+        "endLine": 2506,
+        "endChar": 69
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c497392a_ca66795c",
@@ -169,6 +289,30 @@
       "writtenOn": "2023-01-13T15:54:41Z",
       "side": 1,
       "message": "What about other uses? Can they exist? Should we somehow assert that they don\u0027t?",
+      "range": {
+        "startLine": 2597,
+        "startChar": 6,
+        "endLine": 2597,
+        "endChar": 7
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "031fea2d_dd5eb723",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2597,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "True. I don\u0027t think that there can be other uses: \n  - {user_block} cannot be before the loop, otherwise it couldn\u0027t use {node}.\n  - {user_block} cannot be inside the loop\nSince {user_block} is after the loop **and** uses {node}:\n  - either it\u0027s dominated by {block}\n  - or it\u0027s not dominated by {block}, in which case it has to be a merge so that it can receive another value for {node} from its other predecessor(s).\n  \nI\u0027ve replaced the `if (BasicBlock::GetCommonDominator(block, user_block) \u003d\u003d block)` by a DCHECK, and I\u0027ve added a comment basically copy-pasting the beginning of this reply.",
+      "parentUuid": "c497392a_ca66795c",
       "range": {
         "startLine": 2597,
         "startChar": 6,
@@ -202,6 +346,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28760604_b8f6a0a7",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2648,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "Whups, good point. I\u0027ve changed that to generate the right kind of sliced string :)",
+      "parentUuid": "15577de5_408db480",
+      "range": {
+        "startLine": 2648,
+        "startChar": 45,
+        "endLine": 2648,
+        "endChar": 71
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ef7c321_40e8d5a7",
@@ -225,6 +393,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17fd9e59_6c26e0c1",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2685,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "Right, sounds good :)",
+      "parentUuid": "3ef7c321_40e8d5a7",
+      "range": {
+        "startLine": 2685,
+        "startChar": 9,
+        "endLine": 2685,
+        "endChar": 31
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dcc74267_fe2cbbf7",
@@ -238,6 +430,30 @@
       "writtenOn": "2023-01-13T15:54:41Z",
       "side": 1,
       "message": "Why not just `2*new_length`?",
+      "range": {
+        "startLine": 2741,
+        "startChar": 26,
+        "endLine": 2741,
+        "endChar": 36
+      },
+      "revId": "22df783583220c8f0a4d338c6fb4eeb696b1a068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cf00c62_fee4f1ae",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2741,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "Yeah, it would probably make sense. I was worried that this might waste a bit of memory in some cases, but it would also make the code much simpler, and on average shouldn\u0027t really waste that much memory. I\u0027ve switched it to `2*new_length`.",
+      "parentUuid": "dcc74267_fe2cbbf7",
       "range": {
         "startLine": 2741,
         "startChar": 26,

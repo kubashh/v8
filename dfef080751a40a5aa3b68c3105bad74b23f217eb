@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22308ba9_5b937b2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 41
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "Thanks for the comments. I addressed everything in patchset 41. PTAL :)",
+      "revId": "dfef080751a40a5aa3b68c3105bad74b23f217eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4809b592_dd2b0e66",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T11:07:15Z",
+      "side": 1,
+      "message": "Shouldn\u0027t I check for overflow here?",
+      "range": {
+        "startLine": 2832,
+        "startChar": 6,
+        "endLine": 2833,
+        "endChar": 56
+      },
+      "revId": "dfef080751a40a5aa3b68c3105bad74b23f217eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
