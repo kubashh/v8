@@ -909,6 +909,23 @@ void LoadTaggedField::GenerateCode(MaglevAssembler* masm,
                          FieldMemOperand(object, offset()));
 }
 
+void LoadEnumCacheLength::SetValueLocationConstraints() {
+  UseRegister(map_input());
+  DefineAsRegister(this);
+}
+void LoadEnumCacheLength::GenerateCode(MaglevAssembler* masm,
+                                       const ProcessingState& state) {
+  Register map = ToRegister(map_input());
+  Register result_reg = ToRegister(result());
+  __ AssertNotSmi(map);
+  if (v8_flags.debug_code) {
+    __ CmpObjectType(map, MAP_TYPE, kScratchRegister);
+    __ Assert(equal, AbortReason::kUnexpectedValue);
+  }
+  __ LoadBitField<Map::Bits3::EnumLengthBits>(
+      result_reg, FieldMemOperand(map, Map::kBitField3Offset));
+}
+
 int LoadGlobal::MaxCallStackArgs() const {
   if (typeof_mode() == TypeofMode::kNotInside) {
     using D = CallInterfaceDescriptorFor<Builtin::kLoadGlobalIC>::type;
