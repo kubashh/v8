@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9c86c44_80a99c3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-01-16T09:35:02Z",
+      "side": 1,
+      "message": "Windows debug build failed, but stdout mentions missing `msvcp140`, which seems to be independent of this change?",
+      "revId": "2dd614d61e54dd50e12a9492e3aa338b62d32172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
