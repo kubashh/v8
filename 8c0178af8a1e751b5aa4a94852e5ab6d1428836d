@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "8c0178af8a1e751b5aa4a94852e5ab6d1428836d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50908f79_df2f521f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-16T11:00:25Z",
+      "side": 1,
+      "message": "Nice! LGTM!",
+      "revId": "8c0178af8a1e751b5aa4a94852e5ab6d1428836d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33afbaf3_81b0dce1",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-16T11:00:25Z",
+      "side": 1,
+      "message": "Nit: I know this is debatable, some people might not agree, but I kind of like when we inline the lambdas. For instance, it shows the code is used only once and that {feedback_vector} is only alive from here. We would need some helper function like: GetDefferedCodeLabel(...).",
+      "range": {
+        "startLine": 209,
+        "startChar": 9,
+        "endLine": 209,
+        "endChar": 39
+      },
+      "revId": "8c0178af8a1e751b5aa4a94852e5ab6d1428836d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
