@@ -2471,6 +2471,8 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
     return;
   }
 
+  const bool use_global_memory_scheduling = v8_flags.global_gc_scheduling;
+
   double v8_gc_speed =
       tracer()->CombinedMarkCompactSpeedInBytesPerMillisecond();
   double v8_mutator_speed =
@@ -2478,7 +2480,7 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
   double v8_growing_factor = MemoryController<V8HeapTrait>::GrowingFactor(
       this, max_old_generation_size(), v8_gc_speed, v8_mutator_speed);
   double global_growing_factor = 0;
-  if (UseGlobalMemoryScheduling()) {
+  if (use_global_memory_scheduling) {
     DCHECK_NOT_NULL(local_embedder_heap_tracer());
     double embedder_gc_speed = tracer()->EmbedderSpeedInBytesPerMillisecond();
     double embedder_speed =
@@ -2505,7 +2507,7 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
             this, old_gen_size, min_old_generation_size_,
             max_old_generation_size(), new_space_capacity, v8_growing_factor,
             mode));
-    if (UseGlobalMemoryScheduling()) {
+    if (use_global_memory_scheduling) {
       DCHECK_GT(global_growing_factor, 0);
       global_allocation_limit_ =
           MemoryController<GlobalMemoryTrait>::CalculateAllocationLimit(
@@ -2525,7 +2527,7 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
     if (new_old_generation_limit < old_generation_allocation_limit()) {
       set_old_generation_allocation_limit(new_old_generation_limit);
     }
-    if (UseGlobalMemoryScheduling()) {
+    if (use_global_memory_scheduling) {
       DCHECK_GT(global_growing_factor, 0);
       size_t new_global_limit =
           MemoryController<GlobalMemoryTrait>::CalculateAllocationLimit(
@@ -3128,7 +3130,7 @@ void Heap::ConfigureInitialOldGenerationSize() {
     } else {
       old_generation_size_configured_ = true;
     }
-    if (UseGlobalMemoryScheduling()) {
+    if (v8_flags.global_gc_scheduling) {
       const size_t new_global_memory_limit = std::max(
           GlobalSizeOfObjects() + minimum_growing_step,
           static_cast<size_t>(static_cast<double>(global_allocation_limit_) *
@@ -3696,7 +3698,7 @@ bool Heap::HasLowOldGenerationAllocationRate() {
 }
 
 bool Heap::HasLowEmbedderAllocationRate() {
-  if (!UseGlobalMemoryScheduling()) return true;
+  if (!v8_flags.global_gc_scheduling) return true;
 
   DCHECK_NOT_NULL(local_embedder_heap_tracer());
   double mu = ComputeMutatorUtilization(
@@ -5261,7 +5263,7 @@ Heap::HeapGrowingMode Heap::CurrentHeapGrowingMode() {
 }
 
 base::Optional<size_t> Heap::GlobalMemoryAvailable() {
-  if (!UseGlobalMemoryScheduling()) return {};
+  if (!v8_flags.global_gc_scheduling) return {};
 
   size_t global_size = GlobalSizeOfObjects();
 
