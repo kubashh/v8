@@ -16,6 +16,10 @@ namespace v8 {
 namespace internal {
 namespace maglev {
 
+#define PREPARE_TEMPORARIES_FOR_PUSH(masm)       \
+  UseScratchRegisterScope prepare_temps((masm)); \
+  prepare_temps.Include(general_temporaries().PopFirst())
+
 constexpr Condition ConditionFor(Operation operation) {
   switch (operation) {
     case Operation::kEqual:
@@ -148,18 +152,9 @@ inline void PushIteratorReverse(MaglevAssembler* masm,
 
 template <typename Arg1, typename Arg2>
 inline void PushAligned(MaglevAssembler* masm, Arg1 arg1, Arg2 arg2) {
-  {
-    // Push the first argument together with padding to ensure alignment.
-    // The second argument is not pushed together with the first so we can
-    // re-use any scratch registers used to materialise the first argument for
-    // the second one.
-    UseScratchRegisterScope temps(masm);
-    masm->MacroAssembler::Push(ToRegister(masm, &temps, arg1), padreg);
-  }
-  {
-    UseScratchRegisterScope temps(masm);
-    masm->MacroAssembler::str(ToRegister(masm, &temps, arg2), MemOperand(sp));
-  }
+  UseScratchRegisterScope temps(masm);
+  masm->MacroAssembler::Push(ToRegister(masm, &temps, arg1),
+                             ToRegister(masm, &temps, arg2));
 }
 
 template <typename Arg>

@@ -1840,6 +1840,7 @@ void Call::SetValueLocationConstraints() {
   }
   UseFixed(context(), kContextRegister);
   DefineAsFixed(this, kReturnRegister0);
+  set_temporaries_needed(1);
 }
 
 void Call::GenerateCode(MaglevAssembler* masm, const ProcessingState& state) {
@@ -1856,7 +1857,10 @@ void Call::GenerateCode(MaglevAssembler* masm, const ProcessingState& state) {
 #endif
   DCHECK_EQ(ToRegister(context()), kContextRegister);
 
-  __ PushReverse(base::make_iterator_range(args_begin(), args_end()));
+  {
+    PREPARE_TEMPORARIES_FOR_PUSH(masm);
+    __ PushReverse(base::make_iterator_range(args_begin(), args_end()));
+  }
 
   uint32_t arg_count = num_args();
   if (feedback_.IsValid()) {
@@ -1924,7 +1928,7 @@ void CallKnownJSFunction::SetValueLocationConstraints() {
     UseAny(arg(i));
   }
   DefineAsFixed(this, kReturnRegister0);
-  set_temporaries_needed(1);
+  set_temporaries_needed(2);
 }
 
 void CallKnownJSFunction::GenerateCode(MaglevAssembler* masm,
@@ -1935,10 +1939,14 @@ void CallKnownJSFunction::GenerateCode(MaglevAssembler* masm,
     int number_of_undefineds =
         expected_parameter_count_ - actual_parameter_count;
     __ LoadRoot(scratch, RootIndex::kUndefinedValue);
-    __ PushReverse(receiver(),
-                   base::make_iterator_range(args_begin(), args_end()),
-                   RepeatValue(scratch, number_of_undefineds));
+    {
+      PREPARE_TEMPORARIES_FOR_PUSH(masm);
+      __ PushReverse(receiver(),
+                     base::make_iterator_range(args_begin(), args_end()),
+                     RepeatValue(scratch, number_of_undefineds));
+    }
   } else {
+    PREPARE_TEMPORARIES_FOR_PUSH(masm);
     __ PushReverse(receiver(),
                    base::make_iterator_range(args_begin(), args_end()));
   }
@@ -1983,11 +1991,13 @@ void CallBuiltin::SetValueLocationConstraints() {
     UseFixed(input(i), kContextRegister);
   }
   DefineAsFixed(this, kReturnRegister0);
+  set_temporaries_needed(1);
 }
 
 template <typename... Args>
 void CallBuiltin::PushArguments(MaglevAssembler* masm, Args... extra_args) {
   auto descriptor = Builtins::CallInterfaceDescriptorFor(builtin());
+  PREPARE_TEMPORARIES_FOR_PUSH(masm);
   if (descriptor.GetStackArgumentOrder() == StackArgumentOrder::kDefault) {
     // In Default order we cannot have extra args (feedback).
     DCHECK_EQ(sizeof...(extra_args), 0);
@@ -2071,11 +2081,15 @@ void CallRuntime::SetValueLocationConstraints() {
     UseAny(arg(i));
   }
   DefineAsFixed(this, kReturnRegister0);
+  set_temporaries_needed(1);
 }
 void CallRuntime::GenerateCode(MaglevAssembler* masm,
                                const ProcessingState& state) {
   DCHECK_EQ(ToRegister(context()), kContextRegister);
-  __ Push(base::make_iterator_range(args_begin(), args_end()));
+  {
+    PREPARE_TEMPORARIES_FOR_PUSH(masm);
+    __ Push(base::make_iterator_range(args_begin(), args_end()));
+  }
   __ CallRuntime(function_id(), num_args());
   // TODO(victorgomes): Not sure if this is needed for all runtime calls.
   masm->DefineExceptionHandlerAndLazyDeoptPoint(this);
@@ -2108,6 +2122,7 @@ void CallWithSpread::SetValueLocationConstraints() {
     UseAny(arg(i));
   }
   DefineAsFixed(this, kReturnRegister0);
+  set_temporaries_needed(1);
 }
 void CallWithSpread::GenerateCode(MaglevAssembler* masm,
                                   const ProcessingState& state) {
@@ -2128,8 +2143,11 @@ void CallWithSpread::GenerateCode(MaglevAssembler* masm,
   if (feedback_.IsValid()) {
     using D =
         CallInterfaceDescriptorFor<Builtin::kCallWithSpread_WithFeedback>::type;
-    __ PushReverse(base::make_iterator_range(args_no_spread_begin(),
-                                             args_no_spread_end()));
+    {
+      PREPARE_TEMPORARIES_FOR_PUSH(masm);
+      __ PushReverse(base::make_iterator_range(args_no_spread_begin(),
+                                               args_no_spread_end()));
+    }
     // Receiver needs to be pushed (aligned) separately as it is consumed by
     // CallWithSpread_WithFeedback directly while the other arguments on the
     // stack are passed through to CallWithSpread.
@@ -2143,8 +2161,11 @@ void CallWithSpread::GenerateCode(MaglevAssembler* masm,
     __ CallBuiltin(Builtin::kCallWithSpread_WithFeedback);
   } else {
     using D = CallInterfaceDescriptorFor<Builtin::kCallWithSpread>::type;
-    __ PushReverse(base::make_iterator_range(args_no_spread_begin(),
-                                             args_no_spread_end()));
+    {
+      PREPARE_TEMPORARIES_FOR_PUSH(masm);
+      __ PushReverse(base::make_iterator_range(args_no_spread_begin(),
+                                               args_no_spread_end()));
+    }
     __ Move(D::GetRegisterParameter(D::kArgumentsCount), num_args_no_spread());
     __ CallBuiltin(Builtin::kCallWithSpread);
   }
@@ -2195,6 +2216,7 @@ void Construct::SetValueLocationConstraints() {
     UseAny(arg(i));
   }
   DefineAsFixed(this, kReturnRegister0);
+  set_temporaries_needed(1);
 }
 void Construct::GenerateCode(MaglevAssembler* masm,
                              const ProcessingState& state) {
@@ -2203,7 +2225,10 @@ void Construct::GenerateCode(MaglevAssembler* masm,
   DCHECK_EQ(ToRegister(new_target()), D::GetRegisterParameter(D::kNewTarget));
   DCHECK_EQ(ToRegister(context()), kContextRegister);
 
-  __ PushReverse(base::make_iterator_range(args_begin(), args_end()));
+  {
+    PREPARE_TEMPORARIES_FOR_PUSH(masm);
+    __ PushReverse(base::make_iterator_range(args_begin(), args_end()));
+  }
   // Feedback needs to be pushed (aligned) separately as it is consumed by
   // Construct_WithFeedback directly while the other arguments on the stack
   // are passed through to Construct.
@@ -2235,6 +2260,7 @@ void ConstructWithSpread::SetValueLocationConstraints() {
   }
   UseFixed(spread(), D::GetRegisterParameter(D::kSpread));
   DefineAsFixed(this, kReturnRegister0);
+  set_temporaries_needed(1);
 }
 void ConstructWithSpread::GenerateCode(MaglevAssembler* masm,
                                        const ProcessingState& state) {
@@ -2243,8 +2269,11 @@ void ConstructWithSpread::GenerateCode(MaglevAssembler* masm,
   DCHECK_EQ(ToRegister(function()), D::GetRegisterParameter(D::kTarget));
   DCHECK_EQ(ToRegister(new_target()), D::GetRegisterParameter(D::kNewTarget));
   DCHECK_EQ(ToRegister(context()), kContextRegister);
-  __ PushReverse(
-      base::make_iterator_range(args_no_spread_begin(), args_no_spread_end()));
+  {
+    PREPARE_TEMPORARIES_FOR_PUSH(masm);
+    __ PushReverse(base::make_iterator_range(args_no_spread_begin(),
+                                             args_no_spread_end()));
+  }
 
   // Feedback needs to be pushed (aligned) separately as it is consumed by
   // Construct_WithFeedback directly while the other arguments on the stack

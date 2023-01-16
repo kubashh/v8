@@ -20,6 +20,8 @@ namespace v8 {
 namespace internal {
 namespace maglev {
 
+#define PREPARE_TEMPORARIES_FOR_PUSH(masm) ((void)0)
+
 constexpr Condition ConditionFor(Operation operation) {
   switch (operation) {
     case Operation::kEqual:
