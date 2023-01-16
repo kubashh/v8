@@ -33,6 +33,46 @@
       "message": "Cool, OptimizationPhase is much nicer like that, good job :)",
       "revId": "bd6fbbe6df1aa9e78da3b09cdb7fdf0bd0256dbb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5ca199f_ad6ad2b1",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-16T15:44:09Z",
+      "side": 1,
+      "message": "I wonder if we should check `ShouldSkipOperation` sooner, that is, before the RIG stack, to avoid the operation being lowered nevertheless.",
+      "revId": "bd6fbbe6df1aa9e78da3b09cdb7fdf0bd0256dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72b613bb_0bad6e5b",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-16T15:44:09Z",
+      "side": 1,
+      "message": "This is now much slower than before. Could we avoid the binary search in this case? For example by remembering the current input block in a field? Or we even might have a boolean whether we are currently visiting a loop header directly.",
+      "range": {
+        "startLine": 447,
+        "startChar": 29,
+        "endLine": 447,
+        "endChar": 60
+      },
+      "revId": "bd6fbbe6df1aa9e78da3b09cdb7fdf0bd0256dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
