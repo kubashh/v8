@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0cbfd18_62caf3ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T13:29:37Z",
+      "side": 1,
+      "message": "Could you add a quick description of the new stack? Ideally, as a comment in the code, but I\u0027m not sure where would be a good place, so if you are not inspired either, in the commit message will do :)",
+      "revId": "8f5cd6f5de0931fc71c8a621340f7b9660e138bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7b3bf9da_5ec02eb9",
@@ -14,6 +31,23 @@
       "writtenOn": "2023-01-13T16:29:25Z",
       "side": 1,
       "message": "PTAL, thanks",
+      "revId": "8f5cd6f5de0931fc71c8a621340f7b9660e138bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aee811e_c12a4a68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-16T13:29:37Z",
+      "side": 1,
+      "message": "LGTM :)",
       "revId": "8f5cd6f5de0931fc71c8a621340f7b9660e138bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
