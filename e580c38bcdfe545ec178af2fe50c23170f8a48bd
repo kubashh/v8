@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2c104e72_ef9161b6",
+        "filename": "tools/testrunner/testproc/stack_utils/overrides.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-01-16T08:26:24Z",
+      "side": 1,
+      "message": "There\u0027s also a way to access the pattern, e.g.:\npattern \u003d clusterfuzz.stacktraces.SAN_STACK_FRAME_REGEX.pattern\n\nThen you could do some replacements, e.g.:\npattern \u003d pattern.replace(r\u0027([xX0-9a-fA-F]+)\\s+\u0027, r\u0027([xX0-9a-fA-F]*)\\s*\u0027)\npattern \u003d pattern.replace(r\u0027in\\s\u0027, r\u0027[in\\s*]\u0027)\n\nre.compile(pattern)\n\nThen maybe comment on each replacement.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 18
+      },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2680b42_f5155123",
         "filename": "tools/testrunner/testproc/stack_utils/stack_analyzer_util.py",
         "patchSetId": 1
@@ -72,6 +95,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "706fcf55_6ec5beef",
+        "filename": "tools/testrunner/testproc/stack_utils/testdata/data_race_2.expected.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-01-16T08:26:24Z",
+      "side": 1,
+      "message": "This should be investigated. Otherwise our hashes diverge out there.",
+      "parentUuid": "2f51d1d2_e4271be7",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 38
+      },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3315a2a5_18e6ee96",
         "filename": "tools/testrunner/testproc/stack_utils/testdata/data_race_clusterfuzz.expected.json",
         "patchSetId": 1
@@ -89,6 +136,47 @@
         "endLine": 3,
         "endChar": 98
       },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1526e8cc_e5583801",
+        "filename": "tools/testrunner/testproc/stack_utils/testdata/data_race_clusterfuzz.expected.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-01-16T08:26:24Z",
+      "side": 1,
+      "message": "So this is different to the other CL you have prepared, where this file doesn\u0027t change?\n\nIt looks somehow wrong. Why a line stargint with v8::internal: or is something capped there?",
+      "parentUuid": "3315a2a5_18e6ee96",
+      "range": {
+        "startLine": 3,
+        "startChar": 84,
+        "endLine": 3,
+        "endChar": 98
+      },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ccbd513_2b54c1e4",
+        "filename": "tools/testrunner/testproc/stack_utils/testdata/tsan_data_race.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-01-16T08:26:24Z",
+      "side": 1,
+      "message": "What\u0027s particular about this test?",
       "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
