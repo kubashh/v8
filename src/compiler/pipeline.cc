@@ -385,6 +385,7 @@ class PipelineData {
   MachineOperatorBuilder* machine() const { return machine_; }
   SimplifiedOperatorBuilder* simplified() const { return simplified_; }
   CommonOperatorBuilder* common() const { return common_; }
+  SimplifiedOperatorBuilder* simplified() const { return simplified_; }
   JSOperatorBuilder* javascript() const { return javascript_; }
   JSGraph* jsgraph() const { return jsgraph_; }
   MachineGraph* mcgraph() const { return mcgraph_; }
@@ -1857,6 +1858,9 @@ struct EffectControlLinearizationPhase {
           &data->info()->tick_counter(), data->profile_data());
       TraceScheduleAndVerify(data->info(), data, schedule,
                              "effect linearization schedule");
+
+      // LinearizeEffectControl accesses the heap for StringBuilderOptimizer.
+      UnparkedScopeIfNeeded scope(data->broker());
 
       // Post-pass for wiring the control/effects
       // - connect allocating representation changes into the control&effect
