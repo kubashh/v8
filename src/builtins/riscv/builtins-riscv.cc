@@ -132,8 +132,6 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   //  --      ra: return address
   //  -- sp[...]: constructor arguments
   // -----------------------------------
-  UseScratchRegisterScope temps(masm);
-  temps.Include(t0, t1);
   // Enter a construct frame.
   FrameScope scope(masm, StackFrame::MANUAL);
   Label post_instantiation_deopt_entry, not_create_implicit_receiver;
@@ -154,6 +152,7 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   // -----------------------------------
   {
     UseScratchRegisterScope temps(masm);
+    temps.Include(t0);
     Register func_info = temps.Acquire();
     __ LoadTaggedPointerField(
         func_info, FieldMemOperand(a1, JSFunction::kSharedFunctionInfoOffset));
@@ -297,6 +296,7 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   // FIRST_JS_RECEIVER_TYPE, it is not an object in the ECMA sense.
   {
     UseScratchRegisterScope temps(masm);
+    temps.Include(t0);
     Register map = temps.Acquire(), type = temps.Acquire();
     __ GetObjectType(a0, map, type);
 
@@ -322,14 +322,14 @@ void Builtins::Generate_JSBuiltinsConstructStub(MacroAssembler* masm) {
   Generate_JSBuiltinsConstructStubHelper(masm);
 }
 
-static void AssertCodeIsBaseline(MacroAssembler* masm, Register code,
-                                 Register scratch) {
+static void AssertCodeTIsBaseline(MacroAssembler* masm, Register code,
+                                  Register scratch) {
   DCHECK(!AreAliased(code, scratch));
   // Verify that the code kind is baseline code via the CodeKind.
-  __ LoadWord(scratch, FieldMemOperand(code, Code::kFlagsOffset));
-  __ DecodeField<Code::KindField>(scratch);
+  __ LoadWord(scratch, FieldMemOperand(code, CodeT::kFlagsOffset));
+  __ DecodeField<CodeT::KindField>(scratch);
   __ Assert(eq, AbortReason::kExpectedBaselineData, scratch,
-            Operand(static_cast<int64_t>(CodeKind::BASELINE)));
+            Operand(static_cast<int>(CodeKind::BASELINE)));
 }
 // TODO(v8:11429): Add a path for "not_compiled" and unify the two uses under
 // the more general dispatch.
@@ -341,7 +341,15 @@ static void GetSharedFunctionInfoBytecodeOrBaseline(MacroAssembler* masm,
   Label done;
 
   __ GetObjectType(sfi_data, scratch1, scratch1);
-  __ Branch(is_baseline, eq, scratch1, Operand(CODET_TYPE));
+  if (v8_flags.debug_code) {
+    Label not_baseline;
+    __ Branch(&not_baseline, ne, scratch1, Operand(CODET_TYPE));
+    AssertCodeTIsBaseline(masm, sfi_data, scratch1);
+    __ Branch(is_baseline, eq, scratch1, Operand(CODET_TYPE));
+    __ bind(&not_baseline);
+  } else {
+    __ Branch(is_baseline, eq, scratch1, Operand(CODET_TYPE));
+  }
 
   __ Branch(&done, ne, scratch1, Operand(INTERPRETER_DATA_TYPE),
             Label::Distance::kNear);
@@ -461,7 +469,7 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
     __ Move(a1, a4);
     static_assert(kJavaScriptCallCodeStartRegister == a2, "ABI mismatch");
     __ LoadTaggedPointerField(a2, FieldMemOperand(a1, JSFunction::kCodeOffset));
-    __ JumpCodeObject(a2);
+    __ JumpCodeDataContainerObject(a2);
   }
 
   __ bind(&prepare_step_in_if_stepping);
@@ -683,7 +691,7 @@ void Generate_JSEntryVariant(MacroAssembler* masm, StackFrame::Type type,
   // Invoke the function by calling through JS entry trampoline builtin and
   // pop the faked function when we return.
 
-  Handle<Code> trampoline_code =
+  Handle<CodeT> trampoline_code =
       masm->isolate()->builtins()->code_handle(entry_trampoline);
   __ Call(trampoline_code, RelocInfo::CODE_TARGET);
 
@@ -796,9 +804,9 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
     // s7 is cp. Do not init.
 
     // Invoke the code.
-    Handle<Code> builtin = is_construct
-                               ? BUILTIN_CODE(masm->isolate(), Construct)
-                               : masm->isolate()->builtins()->Call();
+    Handle<CodeT> builtin = is_construct
+                                ? BUILTIN_CODE(masm->isolate(), Construct)
+                                : masm->isolate()->builtins()->Call();
     __ Call(builtin, RelocInfo::CODE_TARGET);
 
     // Leave internal frame.
@@ -1120,10 +1128,6 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     MacroAssembler* masm, InterpreterEntryTrampolineMode mode) {
   Register closure = a1;
   Register feedback_vector = a2;
-  UseScratchRegisterScope temps(masm);
-  temps.Include(t0, t1);
-  Register scratch = temps.Acquire();
-  Register scratch2 = temps.Acquire();
   // Get the bytecode array from the function object and load it into
   // kInterpreterBytecodeArrayRegister.
   __ LoadTaggedPointerField(
@@ -1293,7 +1297,12 @@ void Builtins::Generate_InterpreterEntryTrampoline(
 
   __ bind(&do_return);
   // The return value is in a0.
-  LeaveInterpreterFrame(masm, scratch, scratch2);
+  {
+    UseScratchRegisterScope temps(masm);
+    Register scratch = temps.Acquire();
+    Register scratch2 = temps.Acquire();
+    LeaveInterpreterFrame(masm, scratch, scratch2);
+  }
   __ Jump(ra);
 
   __ bind(&stack_check_interrupt);
@@ -1336,11 +1345,16 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     Label install_baseline_code;
     // Check if feedback vector is valid. If not, call prepare for baseline to
     // allocate it.
-    __ LoadTaggedPointerField(
-        scratch, FieldMemOperand(feedback_vector, HeapObject::kMapOffset));
-    __ Lhu(scratch, FieldMemOperand(scratch, Map::kInstanceTypeOffset));
-    __ Branch(&install_baseline_code, ne, scratch,
-              Operand(FEEDBACK_VECTOR_TYPE));
+
+    {
+      UseScratchRegisterScope temps(masm);
+      Register scratch = temps.Acquire();
+      __ LoadTaggedPointerField(
+          scratch, FieldMemOperand(feedback_vector, HeapObject::kMapOffset));
+      __ Lhu(scratch, FieldMemOperand(scratch, Map::kInstanceTypeOffset));
+      __ Branch(&install_baseline_code, ne, scratch,
+                Operand(FEEDBACK_VECTOR_TYPE));
+    }
 
     // Check for an tiering state.
     __ LoadFeedbackVectorFlagsAndJumpIfNeedsProcessing(
@@ -1350,7 +1364,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     __ Move(a2, kInterpreterBytecodeArrayRegister);
     static_assert(kJavaScriptCallCodeStartRegister == a2, "ABI mismatch");
     __ ReplaceClosureCodeWithOptimizedCode(a2, closure);
-    __ JumpCodeObject(a2);
+    __ JumpCodeDataContainerObject(a2);
 
     __ bind(&install_baseline_code);
     __ GenerateTailCallToReturnedCode(Runtime::kInstallBaselineCode);
@@ -1519,7 +1533,7 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
 
   __ LoadTaggedPointerField(
       t0, FieldMemOperand(t0, InterpreterData::kInterpreterTrampolineOffset));
-  __ AddWord(t0, t0, Operand(Code::kHeaderSize - kHeapObjectTag));
+  __ LoadCodeDataContainerEntry(t0, t0);
   __ BranchShort(&trampoline_loaded);
 
   __ bind(&builtin_trampoline);
@@ -1752,6 +1766,8 @@ void OnStackReplacement(MacroAssembler* masm, OsrSourceTier source,
     // JavaScript frame. This is the case then OSR is triggered from bytecode.
     __ LeaveFrame(StackFrame::STUB);
   }
+
+  __ LoadCodeDataContainerCodeNonBuiltin(a0, a0);
   // Load deoptimization data from the code object.
   // <deopt_data> = <code>[#deoptimization_data_offset]
   __ LoadTaggedPointerField(
@@ -2037,6 +2053,7 @@ void Generate_AllocateSpaceAndShiftExistingArguments(
     MacroAssembler* masm, Register count, Register argc_in_out,
     Register pointer_to_new_space_out) {
   UseScratchRegisterScope temps(masm);
+  temps.Include(t0, t1);
   Register scratch1 = temps.Acquire();
   Register scratch2 = temps.Acquire();
   Register scratch3 = temps.Acquire();
@@ -2071,9 +2088,7 @@ void Generate_AllocateSpaceAndShiftExistingArguments(
 
 // static
 void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
-                                               Handle<Code> code) {
-  UseScratchRegisterScope temps(masm);
-  temps.Include(t1, t0);
+                                               Handle<CodeT> code) {
   // ----------- S t a t e -------------
   //  -- a1 : target
   //  -- a0 : number of parameters on the stack
@@ -2147,16 +2162,13 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
 // static
 void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
                                                       CallOrConstructMode mode,
-                                                      Handle<Code> code) {
+                                                      Handle<CodeT> code) {
   // ----------- S t a t e -------------
   //  -- a0 : the number of arguments
   //  -- a3 : the new.target (for [[Construct]] calls)
   //  -- a1 : the target to call (can be any Object)
   //  -- a2 : start index (to support rest parameters)
   // -----------------------------------
-  UseScratchRegisterScope temps(masm);
-  temps.Include(t0, t1);
-  temps.Include(t2);
   // Check if new.target has a [[Construct]] internal method.
   if (mode == CallOrConstructMode::kConstruct) {
     Label new_target_constructor, new_target_not_constructor;
@@ -2585,16 +2597,18 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
 
   // Check if target has a [[Construct]] internal method.
   UseScratchRegisterScope temps(masm);
-  temps.Include(t0, t1);
-  Register map = temps.Acquire();
   Register scratch = temps.Acquire();
-  __ LoadTaggedPointerField(map, FieldMemOperand(a1, HeapObject::kMapOffset));
-  __ Lbu(scratch, FieldMemOperand(map, Map::kBitFieldOffset));
-  __ And(scratch, scratch, Operand(Map::Bits1::IsConstructorBit::kMask));
-  __ Branch(&non_constructor, eq, scratch, Operand(zero_reg));
-  Register range = temps.Acquire();
-  // Dispatch based on instance type.
-  __ GetInstanceTypeRange(map, scratch, FIRST_JS_FUNCTION_TYPE, range);
+  Register range = kScratchReg;
+  {
+    UseScratchRegisterScope temps(masm);
+    Register map = temps.Acquire();
+    __ LoadTaggedPointerField(map, FieldMemOperand(a1, HeapObject::kMapOffset));
+    __ Lbu(scratch, FieldMemOperand(map, Map::kBitFieldOffset));
+    __ And(scratch, scratch, Operand(Map::Bits1::IsConstructorBit::kMask));
+    __ Branch(&non_constructor, eq, scratch, Operand(zero_reg));
+    // Dispatch based on instance type.
+    __ GetInstanceTypeRange(map, scratch, FIRST_JS_FUNCTION_TYPE, range);
+  }
   __ Jump(BUILTIN_CODE(masm->isolate(), ConstructFunction),
           RelocInfo::CODE_TARGET, Uless_equal, range,
           Operand(LAST_JS_FUNCTION_TYPE - FIRST_JS_FUNCTION_TYPE));
@@ -3685,8 +3699,10 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
   if (v8_flags.debug_code) {
     UseScratchRegisterScope temps(masm);
     Register scratch = temps.Acquire();
-    AssertCodeIsBaseline(masm, code_obj, scratch);
+    AssertCodeTIsBaseline(masm, code_obj, scratch);
   }
+  __ LoadCodeDataContainerCodeNonBuiltin(code_obj, code_obj);
+
   // Replace BytecodeOffset with the feedback vector.
   Register feedback_vector = a2;
   __ LoadTaggedPointerField(
