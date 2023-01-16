@@ -2613,10 +2613,10 @@ using CodePageHeaderModificationScope = RwxMemoryWriteScope;
 using CodePageHeaderModificationScope = NopRwxMemoryWriteScope;
 #endif  // V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
 
-// The CodeTPageHeaderModificationScope enables write access to CodeT objects
-// page headers.
-// This scope is no-op because CodeT objects are data objects and thus the page
-// header is always in writable state.
+// The CodeTPageHeaderModificationScope enables write access to
+// CodeDataContainer objects page headers. This scope is no-op because
+// CodeDataContainer objects are data objects and thus the page header is always
+// in writable state.
 using CodeTPageHeaderModificationScope = NopRwxMemoryWriteScope;
 
 // The CodePageMemoryModificationScope does not check if transitions to

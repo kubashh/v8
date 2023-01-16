@@ -391,8 +391,8 @@ void Builtins::Generate_ConstructedNonConstructable(MacroAssembler* masm) {
 static void AssertCodeTIsBaselineAllowClobber(MacroAssembler* masm,
                                               Register code, Register scratch) {
   // Verify that the code kind is baseline code via the CodeKind.
-  __ Ldr(scratch, FieldMemOperand(code, CodeT::kFlagsOffset));
-  __ DecodeField<CodeT::KindField>(scratch);
+  __ Ldr(scratch, FieldMemOperand(code, CodeDataContainer::kFlagsOffset));
+  __ DecodeField<CodeDataContainer::KindField>(scratch);
   __ Cmp(scratch, Operand(static_cast<int>(CodeKind::BASELINE)));
   __ Assert(eq, AbortReason::kExpectedBaselineData);
 }
@@ -411,7 +411,7 @@ static void GetSharedFunctionInfoBytecodeOrBaseline(MacroAssembler* masm,
                                                     Label* is_baseline) {
   ASM_CODE_COMMENT(masm);
   Label done;
-  __ CompareObjectType(sfi_data, scratch1, scratch1, CODET_TYPE);
+  __ CompareObjectType(sfi_data, scratch1, scratch1, CODE_DATA_CONTAINER_TYPE);
   if (v8_flags.debug_code) {
     Label not_baseline;
     __ B(ne, &not_baseline);
@@ -758,7 +758,7 @@ void Generate_JSEntryVariant(MacroAssembler* masm, StackFrame::Type type,
   //
   // Invoke the function by calling through JS entry trampoline builtin and
   // pop the faked function when we return.
-  Handle<CodeT> trampoline_code =
+  Handle<CodeDataContainer> trampoline_code =
       masm->isolate()->builtins()->code_handle(entry_trampoline);
   __ Call(trampoline_code, RelocInfo::CODE_TARGET);
 
@@ -932,9 +932,9 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
     // x28 : pointer cage base register (kPtrComprCageBaseRegister).
     // x29 : frame pointer (fp).
 
-    Handle<CodeT> builtin = is_construct
-                                ? BUILTIN_CODE(masm->isolate(), Construct)
-                                : masm->isolate()->builtins()->Call();
+    Handle<CodeDataContainer> builtin =
+        is_construct ? BUILTIN_CODE(masm->isolate(), Construct)
+                     : masm->isolate()->builtins()->Call();
     __ Call(builtin, RelocInfo::CODE_TARGET);
 
     // Exit the JS internal frame and remove the parameters (except function),
@@ -2334,7 +2334,7 @@ void Generate_PrepareForCopyingVarargs(MacroAssembler* masm, Register argc,
 // static
 // TODO(v8:11615): Observe Code::kMaxArguments in CallOrConstructVarargs
 void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
-                                               Handle<CodeT> code) {
+                                               Handle<CodeDataContainer> code) {
   // ----------- S t a t e -------------
   //  -- x1 : target
   //  -- x0 : number of parameters on the stack
@@ -2407,9 +2407,9 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
 }
 
 // static
-void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
-                                                      CallOrConstructMode mode,
-                                                      Handle<CodeT> code) {
+void Builtins::Generate_CallOrConstructForwardVarargs(
+    MacroAssembler* masm, CallOrConstructMode mode,
+    Handle<CodeDataContainer> code) {
   // ----------- S t a t e -------------
   //  -- x0 : the number of arguments
   //  -- x3 : the new.target (for [[Construct]] calls)
@@ -5705,7 +5705,7 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
   // always have baseline code.
   if (!is_osr) {
     Label start_with_baseline;
-    __ CompareObjectType(code_obj, x3, x3, CODET_TYPE);
+    __ CompareObjectType(code_obj, x3, x3, CODE_DATA_CONTAINER_TYPE);
     __ B(eq, &start_with_baseline);
 
     // Start with bytecode as there is no baseline code.
@@ -5718,7 +5718,7 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
     // Start with baseline code.
     __ bind(&start_with_baseline);
   } else if (v8_flags.debug_code) {
-    __ CompareObjectType(code_obj, x3, x3, CODET_TYPE);
+    __ CompareObjectType(code_obj, x3, x3, CODE_DATA_CONTAINER_TYPE);
     __ Assert(eq, AbortReason::kExpectedBaselineData);
   }
 

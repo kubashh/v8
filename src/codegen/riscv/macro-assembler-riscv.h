@@ -1476,7 +1476,8 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
                                        ArgumentsCountMode mode,
                                        Register scratch = no_reg);
   void JumpIfCodeTIsMarkedForDeoptimization(
-      Register codet, Register scratch, Label* if_marked_for_deoptimization);
+      Register code_data_container, Register scratch,
+      Label* if_marked_for_deoptimization);
   Operand ClearedValue() const;
 
   // Jump if the register contains a non-smi.
