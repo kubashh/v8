@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5145e3e8_c9b84433",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-01-16T09:48:41Z",
+      "side": 1,
+      "message": "Maybe include a link to the new failure in CL description? Otherwise it will be hard to track later why you also skipped this test.",
+      "revId": "9f84d13e3975cf5ed73a714bd9c2472437a3270d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
