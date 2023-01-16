@@ -47,7 +47,8 @@ TNode<IntPtrT> RegExpBuiltinsAssembler::IntPtrZero() {
 
 // If code is a builtin, return the address to the (possibly embedded) builtin
 // code entry, otherwise return the entry of the code object itself.
-TNode<RawPtrT> RegExpBuiltinsAssembler::LoadCodeObjectEntry(TNode<CodeT> code) {
+TNode<RawPtrT> RegExpBuiltinsAssembler::LoadCodeObjectEntry(
+    TNode<CodeDataContainer> code) {
   return GetCodeEntry(code);
 }
 
@@ -522,7 +523,7 @@ TNode<HeapObject> RegExpBuiltinsAssembler::RegExpExecInternal(
 #endif
 
   GotoIf(TaggedIsSmi(var_code.value()), &runtime);
-  TNode<CodeT> code = CAST(var_code.value());
+  TNode<CodeDataContainer> code = CAST(var_code.value());
 
   Label if_success(this), if_exception(this, Label::kDeferred);
   {

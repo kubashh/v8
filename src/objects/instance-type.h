@@ -292,7 +292,7 @@ namespace InstanceTypeChecker {
 
 INSTANCE_TYPE_CHECKERS(IS_TYPE_FUNCTION_DECL)
 
-IS_TYPE_FUNCTION_DECL(CodeT)
+IS_TYPE_FUNCTION_DECL(CodeDataContainer)
 
 #undef IS_TYPE_FUNCTION_DECL
 }  // namespace InstanceTypeChecker

@@ -18,9 +18,9 @@ namespace internal {
 
 namespace {
 
-template <typename CodeOrCodeT>
+template <typename CodeOrCodeDataContainer>
 struct CodeOrCodeTOps {
-  Handle<CodeOrCodeT> code;
+  Handle<CodeOrCodeDataContainer> code;
 
   Address constant_pool() const { return code->constant_pool(); }
   Address instruction_start() const { return code->InstructionStart(); }
@@ -34,7 +34,7 @@ struct CodeOrCodeTOps {
 };
 
 using CodeOps = CodeOrCodeTOps<Code>;
-using CodeTOps = CodeOrCodeTOps<CodeT>;
+using CodeTOps = CodeOrCodeTOps<CodeDataContainer>;
 
 #if V8_ENABLE_WEBASSEMBLY
 struct WasmCodeOps {
@@ -98,8 +98,8 @@ struct CodeDescOps {
     switch (kind_) {                                          \
       case Kind::CODE:                                        \
         return CodeOps{code_}.method();                       \
-      case Kind::CODET:                                       \
-        return CodeTOps{codet_}.method();                     \
+      case Kind::CODE_DATA_CONTAINER:                         \
+        return CodeTOps{code_data_container_}.method();       \
       case Kind::WASM_CODE:                                   \
         HANDLE_WASM(return WasmCodeOps{wasm_code_}.method()); \
       case Kind::CODE_DESC:                                   \

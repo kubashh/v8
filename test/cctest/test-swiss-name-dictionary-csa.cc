@@ -91,14 +91,14 @@ class CSATestRunner {
   compiler::FunctionTester copy_ft_;
 
   // Used to create the FunctionTesters above.
-  static Handle<CodeT> create_get_data(Isolate* isolate);
-  static Handle<CodeT> create_find_entry(Isolate* isolate);
-  static Handle<CodeT> create_put(Isolate* isolate);
-  static Handle<CodeT> create_delete(Isolate* isolate);
-  static Handle<CodeT> create_add(Isolate* isolate);
-  static Handle<CodeT> create_allocate(Isolate* isolate);
-  static Handle<CodeT> create_get_counts(Isolate* isolate);
-  static Handle<CodeT> create_copy(Isolate* isolate);
+  static Handle<CodeDataContainer> create_get_data(Isolate* isolate);
+  static Handle<CodeDataContainer> create_find_entry(Isolate* isolate);
+  static Handle<CodeDataContainer> create_put(Isolate* isolate);
+  static Handle<CodeDataContainer> create_delete(Isolate* isolate);
+  static Handle<CodeDataContainer> create_add(Isolate* isolate);
+  static Handle<CodeDataContainer> create_allocate(Isolate* isolate);
+  static Handle<CodeDataContainer> create_get_counts(Isolate* isolate);
+  static Handle<CodeDataContainer> create_copy(Isolate* isolate);
 
   // Number of parameters of each of the tester functions above.
   static constexpr int kFindEntryParams = 2;  // (table, key)
@@ -262,7 +262,7 @@ void CSATestRunner::PrintTable() {
 #endif
 }
 
-Handle<CodeT> CSATestRunner::create_find_entry(Isolate* isolate) {
+Handle<CodeDataContainer> CSATestRunner::create_find_entry(Isolate* isolate) {
   // TODO(v8:11330): Remove once CSA implementation has a fallback for
   // non-SSSE3/AVX configurations.
   if (!IsEnabled()) {
@@ -291,7 +291,7 @@ Handle<CodeT> CSATestRunner::create_find_entry(Isolate* isolate) {
   return asm_tester.GenerateCodeTCloseAndEscape();
 }
 
-Handle<CodeT> CSATestRunner::create_get_data(Isolate* isolate) {
+Handle<CodeDataContainer> CSATestRunner::create_get_data(Isolate* isolate) {
   static_assert(kGetDataParams == 2);  // (table, entry)
   compiler::CodeAssemblerTester asm_tester(isolate,
                                            JSParameterCount(kGetDataParams));
@@ -315,7 +315,7 @@ Handle<CodeT> CSATestRunner::create_get_data(Isolate* isolate) {
   return asm_tester.GenerateCodeTCloseAndEscape();
 }
 
-Handle<CodeT> CSATestRunner::create_put(Isolate* isolate) {
+Handle<CodeDataContainer> CSATestRunner::create_put(Isolate* isolate) {
   static_assert(kPutParams == 4);  // (table, entry, value, details)
   compiler::CodeAssemblerTester asm_tester(isolate,
                                            JSParameterCount(kPutParams));
@@ -337,7 +337,7 @@ Handle<CodeT> CSATestRunner::create_put(Isolate* isolate) {
   return asm_tester.GenerateCodeTCloseAndEscape();
 }
 
-Handle<CodeT> CSATestRunner::create_delete(Isolate* isolate) {
+Handle<CodeDataContainer> CSATestRunner::create_delete(Isolate* isolate) {
   // TODO(v8:11330): Remove once CSA implementation has a fallback for
   // non-SSSE3/AVX configurations.
   if (!IsEnabled()) {
@@ -363,7 +363,7 @@ Handle<CodeT> CSATestRunner::create_delete(Isolate* isolate) {
   return asm_tester.GenerateCodeTCloseAndEscape();
 }
 
-Handle<CodeT> CSATestRunner::create_add(Isolate* isolate) {
+Handle<CodeDataContainer> CSATestRunner::create_add(Isolate* isolate) {
   // TODO(v8:11330): Remove once CSA implementation has a fallback for
   // non-SSSE3/AVX configurations.
   if (!IsEnabled()) {
@@ -393,7 +393,7 @@ Handle<CodeT> CSATestRunner::create_add(Isolate* isolate) {
   return asm_tester.GenerateCodeTCloseAndEscape();
 }
 
-Handle<CodeT> CSATestRunner::create_allocate(Isolate* isolate) {
+Handle<CodeDataContainer> CSATestRunner::create_allocate(Isolate* isolate) {
   static_assert(kAllocateParams == 1);  // (capacity)
   compiler::CodeAssemblerTester asm_tester(isolate,
                                            JSParameterCount(kAllocateParams));
@@ -409,7 +409,7 @@ Handle<CodeT> CSATestRunner::create_allocate(Isolate* isolate) {
   return asm_tester.GenerateCodeTCloseAndEscape();
 }
 
-Handle<CodeT> CSATestRunner::create_get_counts(Isolate* isolate) {
+Handle<CodeDataContainer> CSATestRunner::create_get_counts(Isolate* isolate) {
   static_assert(kGetCountsParams == 1);  // (table)
   compiler::CodeAssemblerTester asm_tester(isolate,
                                            JSParameterCount(kGetCountsParams));
@@ -443,7 +443,7 @@ Handle<CodeT> CSATestRunner::create_get_counts(Isolate* isolate) {
   return asm_tester.GenerateCodeTCloseAndEscape();
 }
 
-Handle<CodeT> CSATestRunner::create_copy(Isolate* isolate) {
+Handle<CodeDataContainer> CSATestRunner::create_copy(Isolate* isolate) {
   static_assert(kCopyParams == 1);  // (table)
   compiler::CodeAssemblerTester asm_tester(isolate,
                                            JSParameterCount(kCopyParams));
