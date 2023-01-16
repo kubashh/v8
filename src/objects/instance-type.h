@@ -292,8 +292,6 @@ namespace InstanceTypeChecker {
 
 INSTANCE_TYPE_CHECKERS(IS_TYPE_FUNCTION_DECL)
 
-IS_TYPE_FUNCTION_DECL(CodeT)
-
 #undef IS_TYPE_FUNCTION_DECL
 }  // namespace InstanceTypeChecker
 

@@ -4448,7 +4448,8 @@ void TurboAssembler::TailCallBuiltin(Builtin builtin) {
     }
     case BuiltinCallJumpMode::kForMksnapshot: {
       if (options().use_pc_relative_calls_and_jumps_for_mksnapshot) {
-        Handle<CodeT> code = isolate()->builtins()->code_handle(builtin);
+        Handle<CodeDataContainer> code =
+            isolate()->builtins()->code_handle(builtin);
         EmbeddedObjectIndex index = AddEmbeddedObject(code);
         DCHECK(is_int32(index));
         RecordRelocInfo(RelocInfo::RELATIVE_CODE_TARGET,
@@ -5734,9 +5735,11 @@ void TurboAssembler::JumpIfSmi(Register value, Label* smi_label) {
 }
 
 void MacroAssembler::JumpIfCodeTIsMarkedForDeoptimization(
-    Register codet, Register scratch, Label* if_marked_for_deoptimization) {
+    Register code_data_container, Register scratch,
+    Label* if_marked_for_deoptimization) {
   LoadTaggedPointerField(
-      scratch, FieldMemOperand(codet, Code::kCodeDataContainerOffset));
+      scratch,
+      FieldMemOperand(code_data_container, Code::kCodeDataContainerOffset));
   Lw(scratch,
      FieldMemOperand(scratch, CodeDataContainer::kKindSpecificFlagsOffset));
   And(scratch, scratch, Operand(1 << Code::kMarkedForDeoptimizationBit));
