@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d17b334c_79f32877",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2023-01-16T15:12:15Z",
+      "side": 1,
+      "message": "Abandoning this since the approach in https://chromium-review.googlesource.com/c/v8/v8/+/4165085 seems to be the better way to do this.",
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c104e72_ef9161b6",
@@ -14,6 +31,30 @@
       "writtenOn": "2023-01-16T08:26:24Z",
       "side": 1,
       "message": "There\u0027s also a way to access the pattern, e.g.:\npattern \u003d clusterfuzz.stacktraces.SAN_STACK_FRAME_REGEX.pattern\n\nThen you could do some replacements, e.g.:\npattern \u003d pattern.replace(r\u0027([xX0-9a-fA-F]+)\\s+\u0027, r\u0027([xX0-9a-fA-F]*)\\s*\u0027)\npattern \u003d pattern.replace(r\u0027in\\s\u0027, r\u0027[in\\s*]\u0027)\n\nre.compile(pattern)\n\nThen maybe comment on each replacement.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 18
+      },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9a7a1cd_09a0c54e",
+        "filename": "tools/testrunner/testproc/stack_utils/overrides.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2023-01-16T15:12:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2c104e72_ef9161b6",
       "range": {
         "startLine": 34,
         "startChar": 0,
@@ -117,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "840cc4ba_6c327c02",
+        "filename": "tools/testrunner/testproc/stack_utils/testdata/data_race_2.expected.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2023-01-16T15:12:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "706fcf55_6ec5beef",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 38
+      },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3315a2a5_18e6ee96",
@@ -164,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1da69bc_c151d375",
+        "filename": "tools/testrunner/testproc/stack_utils/testdata/data_race_clusterfuzz.expected.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2023-01-16T15:12:15Z",
+      "side": 1,
+      "message": "It seems that it is cut off either by the filter or the regex, either way overriding the regex might not be the best approach because it is difficult to predict where the issue is coming from.",
+      "parentUuid": "1526e8cc_e5583801",
+      "range": {
+        "startLine": 3,
+        "startChar": 84,
+        "endLine": 3,
+        "endChar": 98
+      },
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ccbd513_2b54c1e4",
@@ -177,6 +266,24 @@
       "writtenOn": "2023-01-16T08:26:24Z",
       "side": 1,
       "message": "What\u0027s particular about this test?",
+      "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad07aed8_1ad854cf",
+        "filename": "tools/testrunner/testproc/stack_utils/testdata/tsan_data_race.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2023-01-16T15:12:15Z",
+      "side": 1,
+      "message": "it has function names in the stack such as `Get\u003c(v8::internal::AccessMode)1\u003e` which were being cutoff by the filter.",
+      "parentUuid": "5ccbd513_2b54c1e4",
       "revId": "e580c38bcdfe545ec178af2fe50c23170f8a48bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
