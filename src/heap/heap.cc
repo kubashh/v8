@@ -7046,7 +7046,8 @@ void Heap::WriteBarrierForRangeImpl(MemoryChunk* source_page, HeapObject object,
   MarkCompactCollector* collector = this->mark_compact_collector();
 
   CodeTPageHeaderModificationScope rwx_write_scope(
-      "Marking CodeT objects might require write access to the CodeT page "
+      "Marking CodeDataContainer objects might require write access to the "
+      "CodeDataContainer page "
       "header");
 
   for (TSlot slot = start_slot; slot < end_slot; ++slot) {

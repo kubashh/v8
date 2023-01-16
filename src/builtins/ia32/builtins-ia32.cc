@@ -414,7 +414,7 @@ void Generate_JSEntryVariant(MacroAssembler* masm, StackFrame::Type type,
 
   // Invoke the function by calling through JS entry trampoline builtin and
   // pop the faked function when we return.
-  Handle<CodeT> trampoline_code =
+  Handle<CodeDataContainer> trampoline_code =
       masm->isolate()->builtins()->code_handle(entry_trampoline);
   __ Call(trampoline_code, RelocInfo::CODE_TARGET);
 
@@ -513,9 +513,9 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
     __ mov(edi, Operand(scratch2, EntryFrameConstants::kFunctionArgOffset));
 
     // Invoke the code.
-    Handle<CodeT> builtin = is_construct
-                                ? BUILTIN_CODE(masm->isolate(), Construct)
-                                : masm->isolate()->builtins()->Call();
+    Handle<CodeDataContainer> builtin =
+        is_construct ? BUILTIN_CODE(masm->isolate(), Construct)
+                     : masm->isolate()->builtins()->Call();
     __ Call(builtin, RelocInfo::CODE_TARGET);
 
     // Exit the internal frame. Notice that this also removes the empty.
@@ -559,8 +559,8 @@ static void AssertCodeTIsBaseline(MacroAssembler* masm, Register code,
                                   Register scratch) {
   DCHECK(!AreAliased(code, scratch));
   // Verify that the code kind is baseline code via the CodeKind.
-  __ mov(scratch, FieldOperand(code, CodeT::kFlagsOffset));
-  __ DecodeField<CodeT::KindField>(scratch);
+  __ mov(scratch, FieldOperand(code, CodeDataContainer::kFlagsOffset));
+  __ DecodeField<CodeDataContainer::KindField>(scratch);
   __ cmp(scratch, Immediate(static_cast<int>(CodeKind::BASELINE)));
   __ Assert(equal, AbortReason::kExpectedBaselineData);
 }
@@ -2054,7 +2054,7 @@ void Generate_AllocateSpaceAndShiftExistingArguments(
 // static
 // TODO(v8:11615): Observe Code::kMaxArguments in CallOrConstructVarargs
 void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
-                                               Handle<CodeT> code) {
+                                               Handle<CodeDataContainer> code) {
   // ----------- S t a t e -------------
   //  -- edi    : target
   //  -- esi    : context for the Call / Construct builtin
@@ -2147,9 +2147,9 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
 }
 
 // static
-void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
-                                                      CallOrConstructMode mode,
-                                                      Handle<CodeT> code) {
+void Builtins::Generate_CallOrConstructForwardVarargs(
+    MacroAssembler* masm, CallOrConstructMode mode,
+    Handle<CodeDataContainer> code) {
   // ----------- S t a t e -------------
   //  -- eax : the number of arguments
   //  -- edi : the target to call (can be any Object)

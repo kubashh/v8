@@ -974,12 +974,14 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
 
   void Jump(Register target, Condition cond = al);
   void Jump(Address target, RelocInfo::Mode rmode, Condition cond = al);
-  void Jump(Handle<CodeT> code, RelocInfo::Mode rmode, Condition cond = al);
+  void Jump(Handle<CodeDataContainer> code, RelocInfo::Mode rmode,
+            Condition cond = al);
   void Jump(const ExternalReference& reference);
 
   void Call(Register target);
   void Call(Address target, RelocInfo::Mode rmode);
-  void Call(Handle<CodeT> code, RelocInfo::Mode rmode = RelocInfo::CODE_TARGET);
+  void Call(Handle<CodeDataContainer> code,
+            RelocInfo::Mode rmode = RelocInfo::CODE_TARGET);
   void Call(ExternalReference target);
 
   // Generate an indirect call (for when a direct call's range is not adequate).
@@ -1898,7 +1900,8 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
   }
 
   void JumpIfCodeTIsMarkedForDeoptimization(
-      Register codet, Register scratch, Label* if_marked_for_deoptimization);
+      Register code_data_container, Register scratch,
+      Label* if_marked_for_deoptimization);
   Operand ClearedValue() const;
 
   Operand ReceiverOperand(const Register arg_count);
@@ -1907,8 +1910,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public TurboAssembler {
 
   inline void JumpIfNotSmi(Register value, Label* not_smi_label);
 
-  // Abort execution if argument is not a CodeT, enabled via --debug-code.
-  void AssertCodeT(Register object) NOOP_UNLESS_DEBUG_CODE
+  // Abort execution if argument is not a CodeDataContainer, enabled via
+  // --debug-code.
+  void AssertCodeDataContainer(Register object) NOOP_UNLESS_DEBUG_CODE
 
       // Abort execution if argument is not a Constructor, enabled via
       // --debug-code.

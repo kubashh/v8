@@ -631,7 +631,7 @@ void Generate_JSEntryVariant(MacroAssembler* masm, StackFrame::Type type,
   //
   // Invoke the function by calling through JS entry trampoline builtin and
   // pop the faked function when we return.
-  Handle<CodeT> trampoline_code =
+  Handle<CodeDataContainer> trampoline_code =
       masm->isolate()->builtins()->code_handle(entry_trampoline);
   DCHECK_EQ(kPushedStackSpace, pushed_stack_space);
   USE(pushed_stack_space);
@@ -769,9 +769,9 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
     }
 
     // Invoke the code.
-    Handle<CodeT> builtin = is_construct
-                                ? BUILTIN_CODE(masm->isolate(), Construct)
-                                : masm->isolate()->builtins()->Call();
+    Handle<CodeDataContainer> builtin =
+        is_construct ? BUILTIN_CODE(masm->isolate(), Construct)
+                     : masm->isolate()->builtins()->Call();
     __ Call(builtin, RelocInfo::CODE_TARGET);
 
     // Exit the JS frame and remove the parameters (except function), and
@@ -1458,7 +1458,8 @@ void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
 
     // Tail call to the array construct stub (still in the caller
     // context at this point).
-    Handle<CodeT> code = BUILTIN_CODE(masm->isolate(), ArrayConstructorImpl);
+    Handle<CodeDataContainer> code =
+        BUILTIN_CODE(masm->isolate(), ArrayConstructorImpl);
     __ Jump(code, RelocInfo::CODE_TARGET);
   } else if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
     // Call the constructor with r0, r1, and r3 unmodified.
@@ -2001,7 +2002,7 @@ void Generate_AllocateSpaceAndShiftExistingArguments(
 // static
 // TODO(v8:11615): Observe Code::kMaxArguments in CallOrConstructVarargs
 void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
-                                               Handle<CodeT> code) {
+                                               Handle<CodeDataContainer> code) {
   // ----------- S t a t e -------------
   //  -- r1 : target
   //  -- r0 : number of parameters on the stack
@@ -2067,9 +2068,9 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
 }
 
 // static
-void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
-                                                      CallOrConstructMode mode,
-                                                      Handle<CodeT> code) {
+void Builtins::Generate_CallOrConstructForwardVarargs(
+    MacroAssembler* masm, CallOrConstructMode mode,
+    Handle<CodeDataContainer> code) {
   // ----------- S t a t e -------------
   //  -- r0 : the number of arguments
   //  -- r3 : the new.target (for [[Construct]] calls)
