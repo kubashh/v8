@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "97c0e69093ffbeb2913b5a7150b75b20981dc27c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f03547fe_ca9fcc2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2023-01-17T18:45:49Z",
+      "side": 1,
+      "message": "LGTM.  I had not used this mechanism before.  I see from the docs that this is only used by \"git cl upload\" (\"Watchlist processing takes place during git-cl upload and are non-binding\" - https://chromium.googlesource.com/chromium/src/+/HEAD/docs/infra/watchlists.md).  So it presumably won\u0027t apply for CLs where the developer uploads directly to Gerrit with \"git push\".  Still, it\u0027s probably worth using anyway.",
+      "revId": "97c0e69093ffbeb2913b5a7150b75b20981dc27c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
