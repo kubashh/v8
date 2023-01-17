@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c98ad596_3a837c4d",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-17T12:22:16Z",
+      "side": 1,
+      "message": "Nit: uses.",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "492fd3a4_952d8af1",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-17T12:22:16Z",
+      "side": 1,
+      "message": "I think we already record this time in MC_BACKGROUND_MARKING, could you use that one instead?",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9aa69a4c_c161e08c",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-17T12:22:16Z",
+      "side": 1,
+      "message": "Can we get to these values through the previous event somehow?",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2422e348_59b0da68",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2594,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-17T12:22:16Z",
+      "side": 1,
+      "message": "I think it would be good if the existing code would remain unaffected and move the new code needed for --memory-balancer into the memory-balancer.cc and invoke it when the flag is enabled.",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6d0e7c5_4b4a1779",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2256,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-17T12:22:16Z",
+      "side": 1,
+      "message": "Can we move that field into the MemoryBalancer class as well? This would move the ownership of that field to that class instead.",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e645bf7e_b9d8cf1c",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2515,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-17T12:22:16Z",
+      "side": 1,
+      "message": "Let\u0027s move all these fields into the MemoryBalancer class in memory-balancer.h",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5aee79b_e9f08798",
+        "filename": "src/heap/memory-measurement-task.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-17T12:22:16Z",
+      "side": 1,
+      "message": "Can we name this file memory-balancer.(h|cpp) and move the heap internal heap here?",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a801d966_40336b0f",
+        "filename": "src/heap/memory-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-17T12:22:16Z",
+      "side": 1,
+      "message": "I think we can solve this using a DEF_NEG_IMPLICATION(memory_balancer, memory_reducer). That should disable the memory reducer with --memory-balancer.",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
