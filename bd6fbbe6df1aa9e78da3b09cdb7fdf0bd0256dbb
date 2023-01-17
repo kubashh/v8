@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab99e858_db812cc1",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-01-17T14:42:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5ca199f_ad6ad2b1",
+      "revId": "bd6fbbe6df1aa9e78da3b09cdb7fdf0bd0256dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72b613bb_0bad6e5b",
@@ -65,6 +83,30 @@
       "writtenOn": "2023-01-16T15:44:09Z",
       "side": 1,
       "message": "This is now much slower than before. Could we avoid the binary search in this case? For example by remembering the current input block in a field? Or we even might have a boolean whether we are currently visiting a loop header directly.",
+      "range": {
+        "startLine": 447,
+        "startChar": 29,
+        "endLine": 447,
+        "endChar": 60
+      },
+      "revId": "bd6fbbe6df1aa9e78da3b09cdb7fdf0bd0256dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0547cd25_70dccdfe",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-01-17T14:42:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72b613bb_0bad6e5b",
       "range": {
         "startLine": 447,
         "startChar": 29,
