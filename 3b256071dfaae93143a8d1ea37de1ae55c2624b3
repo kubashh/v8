@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3681a901_fdfff92e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-18T08:33:21Z",
+      "side": 1,
+      "message": "Perfect. Then we just need to add you to the V8 authors file.\nPlease update this CL to add \"Raptor Computing Systems, LLC \u003c*@raptorcs.com\u003e\" to v8/AUTHORS ([1] see the top part of that file that list corporations)\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/AUTHORS",
+      "parentUuid": "5fcfbfb7_80806aee",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 6
+      },
+      "revId": "3b256071dfaae93143a8d1ea37de1ae55c2624b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b385b5ac_6a601cf7",
         "filename": "src/heap/base/asm/ppc/save_registers_asm.cc",
         "patchSetId": 2
