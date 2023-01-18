@@ -610,7 +610,7 @@ bool IC::UpdateMegaDOMIC(const MaybeObjectHandle& handler, Handle<Name> name) {
 
   // Check if current lookup object is an API object
   Handle<Map> map = lookup_start_object_map();
-  if (!InstanceTypeChecker::IsJSApiObject(map->instance_type())) return false;
+  if (!InstanceTypeChecker::IsJSApiObject(*map)) return false;
 
   Handle<Object> accessor_obj;
   // TODO(gsathya): Check if there are overloads possible for this accessor and

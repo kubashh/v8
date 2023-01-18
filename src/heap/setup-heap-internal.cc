@@ -476,6 +476,8 @@ bool Heap::CreateInitialReadOnlyMaps() {
     ALLOCATE_VARSIZE_MAP(BYTE_ARRAY_TYPE, byte_array)
     ALLOCATE_VARSIZE_MAP(BYTECODE_ARRAY_TYPE, bytecode_array)
     ALLOCATE_VARSIZE_MAP(FREE_SPACE_TYPE, free_space)
+    ALLOCATE_MAP(FILLER_TYPE, kTaggedSize, one_pointer_filler)
+    ALLOCATE_MAP(FILLER_TYPE, 2 * kTaggedSize, two_pointer_filler)
     ALLOCATE_VARSIZE_MAP(PROPERTY_ARRAY_TYPE, property_array)
     ALLOCATE_VARSIZE_MAP(SMALL_ORDERED_HASH_MAP_TYPE, small_ordered_hash_map)
     ALLOCATE_VARSIZE_MAP(SMALL_ORDERED_HASH_SET_TYPE, small_ordered_hash_set)
@@ -510,8 +512,6 @@ bool Heap::CreateInitialReadOnlyMaps() {
     }
 
     ALLOCATE_MAP(PROPERTY_CELL_TYPE, PropertyCell::kSize, global_property_cell)
-    ALLOCATE_MAP(FILLER_TYPE, kTaggedSize, one_pointer_filler)
-    ALLOCATE_MAP(FILLER_TYPE, 2 * kTaggedSize, two_pointer_filler)
 
     // The "no closures" and "one closure" FeedbackCell maps need
     // to be marked unstable because their objects can change maps.
@@ -734,6 +734,7 @@ void Heap::CreateInitialReadOnlyObjects() {
   auto StaticRootsEnsureAllocatedSize = [&](HeapObject obj, int required) {
 #ifdef V8_STATIC_ROOTS_BOOL
     if (required == obj.Size()) return;
+    CHECK(roots.is_initialized(RootIndex::kFreeSpaceMap));
     CHECK_LT(obj.Size(), required);
     int filler_size = required - obj.Size();
 
