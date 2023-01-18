@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "837f4190_6f8c16fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-18T03:48:23Z",
+      "side": 1,
+      "message": "I had addressed/comment on all the reviews. Can you guys take another look?",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c98ad596_3a837c4d",
@@ -14,6 +31,24 @@
       "writtenOn": "2023-01-17T12:22:16Z",
       "side": 1,
       "message": "Nit: uses.",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0becc7b_f497f9ad",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-18T03:48:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c98ad596_3a837c4d",
       "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -35,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b5b19e3_3dd80ae1",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-18T03:48:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "492fd3a4_952d8af1",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9aa69a4c_c161e08c",
@@ -48,6 +101,24 @@
       "writtenOn": "2023-01-17T12:22:16Z",
       "side": 1,
       "message": "Can we get to these values through the previous event somehow?",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ba1f5dc_95de298b",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-18T03:48:23Z",
+      "side": 1,
+      "message": "I move some of them. The rest I dont think is in there.",
+      "parentUuid": "9aa69a4c_c161e08c",
       "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6c845bd_cce4affd",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2594,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-18T03:48:23Z",
+      "side": 1,
+      "message": "I dont think it is too possible. Ultimately, the variable could be managed by either the original code or by membalancer, and if latter the old code should not assign to the variable.",
+      "parentUuid": "2422e348_59b0da68",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6d0e7c5_4b4a1779",
@@ -82,6 +171,24 @@
       "writtenOn": "2023-01-17T12:22:16Z",
       "side": 1,
       "message": "Can we move that field into the MemoryBalancer class as well? This would move the ownership of that field to that class instead.",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8edf9548_59fbd5ca",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2256,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-18T03:48:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6d0e7c5_4b4a1779",
       "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d4286d4_709b17b2",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2515,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-18T03:48:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e645bf7e_b9d8cf1c",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5aee79b_e9f08798",
@@ -120,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a49349a3_da490b75",
+        "filename": "src/heap/memory-measurement-task.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-18T03:48:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5aee79b_e9f08798",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a801d966_40336b0f",
@@ -133,6 +276,24 @@
       "writtenOn": "2023-01-17T12:22:16Z",
       "side": 1,
       "message": "I think we can solve this using a DEF_NEG_IMPLICATION(memory_balancer, memory_reducer). That should disable the memory reducer with --memory-balancer.",
+      "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d550d696_b40f9a8d",
+        "filename": "src/heap/memory-reducer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-18T03:48:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a801d966_40336b0f",
       "revId": "3bfc2ea2a1c3ea12eda44dd73e27f9defebdacf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
