@@ -1128,7 +1128,7 @@ struct ControlBase : public PcForErrors<ValidationTag::full_validation> {
     uint32_t br_depth, bool null_succeeds)                                     \
   F(StringNewWtf8, const MemoryIndexImmediate& memory,                         \
     const unibrow::Utf8Variant variant, const Value& offset,                   \
-    const Value& size, Value* result)                                          \
+    const Value& size, Value* result, bool null_on_invalid)                    \
   F(StringNewWtf8Array, const unibrow::Utf8Variant variant,                    \
     const Value& array, const Value& start, const Value& end, Value* result)   \
   F(StringNewWtf16, const MemoryIndexImmediate& memory, const Value& offset,   \
@@ -2243,6 +2243,7 @@ class WasmDecoder : public Decoder {
           case kExprArrayLen:
             return length;
           case kExprStringNewUtf8:
+          case kExprStringNewUtf8Try:
           case kExprStringNewLossyUtf8:
           case kExprStringNewWtf8:
           case kExprStringEncodeUtf8:
@@ -2493,6 +2494,7 @@ class WasmDecoder : public Decoder {
           case kExprStringViewIterNext:
             return { 1, 1 };
           case kExprStringNewUtf8:
+          case kExprStringNewUtf8Try:
           case kExprStringNewLossyUtf8:
           case kExprStringNewWtf8:
           case kExprStringNewWtf16:
@@ -5718,8 +5720,8 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
 
   enum class WasmArrayAccess { kRead, kWrite };
 
-  int DecodeStringNewWtf8(unibrow::Utf8Variant variant,
-                          uint32_t opcode_length) {
+  int DecodeStringNewWtf8(unibrow::Utf8Variant variant, uint32_t opcode_length,
+                          bool null_on_invalid = false) {
     NON_CONST_ONLY
     MemoryIndexImmediate memory(this, this->pc_ + opcode_length, validate);
     if (!this->Validate(this->pc_ + opcode_length, memory)) return 0;
@@ -5728,7 +5730,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     Value size = Peek(0, 1, kWasmI32);
     Value result = CreateValue(ValueType::Ref(HeapType::kString));
     CALL_INTERFACE_IF_OK_AND_REACHABLE(StringNewWtf8, memory, variant, offset,
-                                       size, &result);
+                                       size, &result, null_on_invalid);
     Drop(2);
     Push(result);
     return opcode_length + memory.length;
@@ -5822,6 +5824,9 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
     switch (opcode) {
       case kExprStringNewUtf8:
         return DecodeStringNewWtf8(unibrow::Utf8Variant::kUtf8, opcode_length);
+      case kExprStringNewUtf8Try:
+        return DecodeStringNewWtf8(unibrow::Utf8Variant::kUtf8, opcode_length,
+                                   /*null_on_invalid*/ true);
       case kExprStringNewLossyUtf8:
         return DecodeStringNewWtf8(unibrow::Utf8Variant::kLossyUtf8,
                                    opcode_length);

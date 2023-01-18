@@ -165,6 +165,13 @@ function makeWtf8TestDataSegment() {
       ...GCInstr(kExprStringNewUtf8), 0
     ]);
 
+  builder.addFunction("string_new_utf8_try", kSig_w_ii)
+    .exportFunc()
+    .addBody([
+      kExprLocalGet, 0, kExprLocalGet, 1,
+      ...GCInstr(kExprStringNewUtf8Try), 0
+    ]);
+
   builder.addFunction("string_new_wtf8", kSig_w_ii)
     .exportFunc()
     .addBody([
@@ -185,6 +192,7 @@ function makeWtf8TestDataSegment() {
     if (HasIsolatedSurrogate(str)) {
       assertThrows(() => instance.exports.string_new_utf8(offset, length),
                    WebAssembly.RuntimeError, "invalid UTF-8 string");
+      assertEquals(null, instance.exports.string_new_utf8_try(offset, length));
 
       // Isolated surrogates have the three-byte pattern ED [A0,BF]
       // [80,BF].  When the sloppy decoder gets to the second byte, it
@@ -197,6 +205,7 @@ function makeWtf8TestDataSegment() {
                    instance.exports.string_new_utf8_sloppy(offset, length));
     } else {
       assertEquals(str, instance.exports.string_new_utf8(offset, length));
+      assertEquals(str, instance.exports.string_new_utf8_try(offset, length));
       assertEquals(str,
                    instance.exports.string_new_utf8_sloppy(offset, length));
     }
@@ -206,6 +215,7 @@ function makeWtf8TestDataSegment() {
                  WebAssembly.RuntimeError, "invalid WTF-8 string");
     assertThrows(() => instance.exports.string_new_utf8(offset, length),
                  WebAssembly.RuntimeError, "invalid UTF-8 string");
+    assertEquals(null, instance.exports.string_new_utf8_try(offset, length));
   }
 })();
 

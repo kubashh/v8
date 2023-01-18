@@ -1571,9 +1571,10 @@ class WasmGraphBuildingInterface {
 
   void StringNewWtf8(FullDecoder* decoder, const MemoryIndexImmediate& memory,
                      const unibrow::Utf8Variant variant, const Value& offset,
-                     const Value& size, Value* result) {
-    SetAndTypeNode(result, builder_->StringNewWtf8(memory.index, variant,
-                                                   offset.node, size.node));
+                     const Value& size, Value* result, bool null_on_invalid) {
+    SetAndTypeNode(result,
+                   builder_->StringNewWtf8(memory.index, variant, offset.node,
+                                           size.node, null_on_invalid));
   }
 
   void StringNewWtf8Array(FullDecoder* decoder,
