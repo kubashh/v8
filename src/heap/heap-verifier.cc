@@ -791,7 +791,7 @@ void HeapVerifier::VerifySafeMapTransition(Heap* heap, HeapObject object,
   }
 
   if (v8_flags.shared_string_table && object.IsString(cage_base) &&
-      InstanceTypeChecker::IsInternalizedString(new_map.instance_type())) {
+      InstanceTypeChecker::IsInternalizedString(new_map)) {
     // In-place internalization does not change a string's fields.
     //
     // When sharing the string table, the setting and re-setting of maps below

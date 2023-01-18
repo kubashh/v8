@@ -8,11 +8,67 @@
 
 #include "src/common/ptr-compr-inl.h"
 #include "src/execution/isolate.h"
+#include "src/objects/instance-type-inl.h"
 #include "src/roots/roots-inl.h"
 #include "src/roots/roots.h"
+#include "src/roots/static-roots.h"
 
 namespace v8 {
 namespace internal {
+
+namespace {
+
+// Used to compute ranges of objects next to each other on the r/o heap
+struct ObjectRange {
+  ObjectRange(const char* name, const std::list<RootIndex> objects)
+      : name(name), objects(objects) {}
+  ~ObjectRange() {
+    CHECK(!open);
+    CHECK(start != kNullAddress);
+  }
+
+  ObjectRange(ObjectRange& range) = delete;
+  ObjectRange& operator=(ObjectRange& range) = delete;
+  ObjectRange(ObjectRange&& range) V8_NOEXCEPT = default;
+  ObjectRange& operator=(ObjectRange&& range) V8_NOEXCEPT = default;
+
+  std::string name;
+  std::list<RootIndex> objects;
+
+  bool open = false;
+  Tagged_t start = kNullAddress;
+  Tagged_t end = kNullAddress;
+
+  int status() { return (start != kNullAddress) + (end != kNullAddress); }
+  void apply(RootIndex obj, Tagged_t cur, Isolate* isolate) {
+    auto test = [&](RootIndex obj) {
+      return std::find(objects.begin(), objects.end(), obj) != objects.end();
+    };
+    if (open) {
+      if (test(obj)) {
+        end = cur;
+      } else {
+        open = false;
+      }
+      return;
+    }
+
+    if (start == kNullAddress) {
+      if (test(obj)) {
+        start = end = cur;
+        open = true;
+      }
+    } else {
+      CHECK_WITH_MSG(!test(obj), (name +
+                                  " does not specify a continuous range of "
+                                  "objects. There is a gap before " +
+                                  isolate->roots_table().name(obj))
+                                     .c_str());
+    }
+  }
+};
+
+}  //  namespace
 
 void StaticRootsTableGen::write(Isolate* isolate, const char* file) {
   CHECK_WITH_MSG(!V8_STATIC_ROOTS_BOOL,
@@ -23,7 +79,6 @@ void StaticRootsTableGen::write(Isolate* isolate, const char* file) {
 
   std::ofstream out(file);
   const auto roots = isolate->roots_table();
-  const auto size = static_cast<int>(RootIndex::kReadOnlyRootsCount);
 
   out << "// Copyright 2022 the V8 project authors. All rights reserved.\n"
       << "// Use of this source code is governed by a BSD-style license "
@@ -53,28 +108,98 @@ void StaticRootsTableGen::write(Isolate* isolate, const char* file) {
       << "namespace v8 {\n"
       << "namespace internal {\n"
       << "\n"
-      << "struct kStaticReadOnlyRoot {\n";
-  RootIndex pos = RootIndex::kFirstReadOnlyRoot;
-  for (; pos <= RootIndex::kLastReadOnlyRoot; ++pos) {
-    auto el = roots[pos];
-    auto n = roots.name(pos);
-    el = V8HeapCompressionScheme::CompressTagged(el);
-    out << "  static constexpr Tagged_t " << n << " =";
-    if (strlen(n) + 38 > 80) out << "\n     ";
-    out << " " << reinterpret_cast<void*>(el) << ";\n";
+      << "struct StaticReadOnlyRoot {\n";
+
+  // Define some object ranges of interest
+  std::list<ObjectRange> obj_ranges;
+  {
+    std::list<RootIndex> string_types, internalized_string_types;
+#define ELEMENT(type, size, name, CamelName)                             \
+  {                                                                      \
+    if (InstanceTypeChecker::IsInternalizedString(type))                 \
+      internalized_string_types.push_back(RootIndex::k##CamelName##Map); \
+    string_types.push_back(RootIndex::k##CamelName##Map);                \
   }
-  out << "};\n"
-      << "\nstatic constexpr std::array<Tagged_t, " << size
-      << "> StaticReadOnlyRootsPointerTable = {\n";
-  pos = RootIndex::kFirstReadOnlyRoot;
-  for (; pos <= RootIndex::kLastReadOnlyRoot; ++pos) {
-    auto el = roots[pos];
-    auto n = roots.name(pos);
-    el = V8HeapCompressionScheme::CompressTagged(el);
-    out << "    kStaticReadOnlyRoot::" << n << ",\n";
+    STRING_TYPE_LIST(ELEMENT)
+#undef ELEMENT
+
+    obj_ranges.emplace_back("StringMap", string_types);
+    obj_ranges.emplace_back("InternalizedStringMap", internalized_string_types);
+    obj_ranges.emplace_back(
+        "FreeSpaceOrFillerMap",
+        std::list{RootIndex::kFreeSpaceMap, RootIndex::kOnePointerFillerMap,
+                  RootIndex::kTwoPointerFillerMap});
   }
+
+  // Output a symbol for every root. Ordered by ptr to make it easier to see the
+  // memory layout of the read only page.
+  const auto size = static_cast<int>(RootIndex::kReadOnlyRootsCount);
+  {
+    std::map<Tagged_t, std::list<RootIndex>> sorted_roots;
+    size_t found = 0;
+    for (RootIndex pos = RootIndex::kFirstReadOnlyRoot;
+         pos <= RootIndex::kLastReadOnlyRoot; ++pos) {
+      Tagged_t ptr = V8HeapCompressionScheme::CompressTagged(roots[pos]);
+      sorted_roots[ptr].push_back(pos);
+      found++;
+    }
+    CHECK_EQ(size, found);
+    for (auto entry : sorted_roots) {
+      Tagged_t ptr = entry.first;
+      std::list<RootIndex>& positions = entry.second;
+
+      // Find camel names of the roots
+      std::list<std::string> camel_names;
+      {
+        RootIndex i = RootIndex::kFirstReadOnlyRoot;
+#define FIND_CAMEL_NAME(_1, _2, CamelName)                                   \
+  if (std::find(positions.begin(), positions.end(), i) != positions.end()) { \
+    camel_names.push_back(#CamelName);                                       \
+  }                                                                          \
+  ++i;
+        READ_ONLY_ROOT_LIST(FIND_CAMEL_NAME)
+#undef FIND_CAMEL_NAME
+      }
+
+      for (std::string& camel_name : camel_names) {
+        out << "  static constexpr Tagged_t k" << camel_name << " =";
+        if (camel_name.length() + 39 > 80) out << "\n     ";
+        out << " " << reinterpret_cast<void*>(ptr) << ";\n";
+      }
+
+      // Update ranges
+      for (RootIndex pos : positions) {
+        for (auto& range : obj_ranges) {
+          range.apply(pos, ptr, isolate);
+        }
+      }
+    }
+    out << "\n";
+  }
+
+  // Output ranges
+  for (auto& range : obj_ranges) {
+    CHECK(range.start <= range.end);
+    out << "  static constexpr Tagged_t kFirst" << range.name << " = "
+        << reinterpret_cast<void*>(range.start) << ";\n";
+    out << "  static constexpr Tagged_t kLast" << range.name << " = "
+        << reinterpret_cast<void*>(range.end) << ";\n";
+  }
+
   out << "};\n";
-  CHECK_EQ(static_cast<int>(pos), size);
+
+  // Output in order of roots table
+  out << "\nstatic constexpr std::array<Tagged_t, " << size
+      << "> StaticReadOnlyRootsPointerTable = {\n";
+
+  {
+#define ENTRY(_1, _2, CamelName) \
+  { out << "    StaticReadOnlyRoot::k" << #CamelName << ",\n"; }
+    READ_ONLY_ROOT_LIST(ENTRY)
+#undef ENTRY
+    out << "};\n";
+  }
+
   out << "\n}  // namespace internal\n"
       << "}  // namespace v8\n"
       << "#endif  // V8_STATIC_ROOTS_BOOL\n"
