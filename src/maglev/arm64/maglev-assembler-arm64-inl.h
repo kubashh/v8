@@ -372,6 +372,23 @@ inline void MaglevAssembler::LoadUnsignedField(Register result,
   }
 }
 
+template <typename BitField>
+inline void MaglevAssembler::LoadBitField(Register result, MemOperand operand) {
+  DCHECK(result.IsW());
+  // Pick a load with the right size, which makes sure to read the whole field.
+  static constexpr int load_size =
+      RoundUp<8>(BitField::kSize + BitField::kShift) / 8;
+  LoadUnsignedField(result, operand, load_size);
+  if (BitField::kShift > 0) {
+    // TODO(leszeks): If the shift is 8 or 16, we could have loaded from a
+    // shifted address instead.
+    Shl(result, result, BitField::kShift);
+  }
+  // TODO(leszeks): No need to mask if we loaded an 8 or 16 bit value and didn't
+  // shift.
+  And(result, result, BitField::kMask);
+}
+
 inline void MaglevAssembler::StoreField(MemOperand operand, Register value,
                                         int size) {
   DCHECK(size == 1 || size == 2 || size == 4);
