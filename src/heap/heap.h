@@ -31,6 +31,7 @@
 #include "src/heap/gc-callbacks.h"
 #include "src/heap/heap-allocator.h"
 #include "src/heap/marking-state.h"
+#include "src/heap/memory-balancer.h"
 #include "src/heap/pretenuring-handler.h"
 #include "src/heap/sweeper.h"
 #include "src/init/heap-symbols.h"
@@ -2241,7 +2242,8 @@ class Heap {
   // which collector to invoke, before expanding a paged space in the old
   // generation and on every allocation in large object space.
   std::atomic<size_t> old_generation_allocation_limit_{0};
-  size_t global_allocation_limit_ = 0;
+  std::atomic<size_t> global_allocation_limit_{0};
+  std::atomic<size_t> global_allocation_limit_delta_{0};
 
   // Weak list heads, threaded through the objects.
   // List heads are initialized lazily and contain the undefined_value at start.
@@ -2474,6 +2476,16 @@ class Heap {
 
   // Used in cctest.
   friend class heap::HeapTester;
+
+  friend class MemoryMeasurementTask;
+  constexpr static int SecondsToNanoseconds = 1e9;
+  constexpr static int MillisecondsToNanoseconds = 1e6;
+  // also touch global allocation limit
+  void UpdateHeapLimit(size_t new_limit);
+  void PostMemoryMeasurementTask();
+  void MembalancerUpdate();
+  std::atomic<bool> allocation_measurer_started{false};
+  MemoryBalancer mb;
 };
 
 class HeapStats {
