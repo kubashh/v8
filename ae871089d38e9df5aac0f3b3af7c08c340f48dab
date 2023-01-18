@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a892aa62_5fdbf36d",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-18T16:04:38Z",
+      "side": 1,
+      "message": "Alternatively, I could also duplicate the interface into `StringNewWtf8Try`, if that is preferred.",
+      "revId": "ae871089d38e9df5aac0f3b3af7c08c340f48dab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b8be353_ef0996d1",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-18T16:04:38Z",
+      "side": 1,
+      "message": "I\u0027ve just picked the next free opcode in the stringref opcodes (`0xfb80+`).",
+      "revId": "ae871089d38e9df5aac0f3b3af7c08c340f48dab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
