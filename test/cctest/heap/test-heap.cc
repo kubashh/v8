@@ -6530,7 +6530,7 @@ HEAP_TEST(RegressMissingWriteBarrierInAllocate) {
   Handle<Map> map;
   {
     AlwaysAllocateScopeForTesting always_allocate(heap);
-    map = isolate->factory()->NewMap(HEAP_NUMBER_TYPE, HeapNumber::kSize);
+    map = isolate->factory()->NewMap(BIGINT_TYPE, HeapNumber::kSize);
   }
   CHECK(heap->incremental_marking()->black_allocation());
   Handle<HeapObject> object;
