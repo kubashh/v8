@@ -973,10 +973,7 @@ inline InstructionStream FromCode(Code code);
 inline InstructionStream FromCode(Code code, Isolate* isolate, RelaxedLoadTag);
 inline InstructionStream FromCode(Code code, PtrComprCageBase, RelaxedLoadTag);
 
-// AbstractCode is a helper wrapper around
-// {InstructionStream|Code|BytecodeArray}.  Note that the same
-// abstract code can be represented either by InstructionStream object or by
-// respective Code object.
+// AbstractCode is a helper wrapper around {Code|BytecodeArray}.
 class AbstractCode : public HeapObject {
  public:
   NEVER_READ_ONLY_SPACE
@@ -1029,26 +1026,11 @@ class AbstractCode : public HeapObject {
   // purpose - in order to avoid the expensive cage base computation that
   // should work for both regular V8 heap objects and external code space
   // objects.
-  inline bool IsInstructionStream(PtrComprCageBase cage_base) const;
   inline bool IsCode(PtrComprCageBase cage_base) const;
   inline bool IsBytecodeArray(PtrComprCageBase cage_base) const;
 
-  inline InstructionStream ToInstructionStream(PtrComprCageBase cage_base);
-  inline Code ToCode(PtrComprCageBase cage_base);
-
-  inline InstructionStream GetInstructionStream();
   inline Code GetCode();
   inline BytecodeArray GetBytecodeArray();
-
-  // AbstractCode might be represented by both InstructionStream and
-  // non-InstructionStream objects and thus regular comparison of tagged values
-  // might not be correct. SafeEquals() must be used instead.
-  constexpr bool operator==(AbstractCode other) const {
-    return SafeEquals(other);
-  }
-  constexpr bool operator!=(AbstractCode other) const {
-    return !SafeEquals(other);
-  }
 
  private:
   inline ByteArray SourcePositionTableInternal(PtrComprCageBase cage_base);

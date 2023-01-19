@@ -82,8 +82,6 @@ void ProfilerListener::CodeCreateEvent(CodeTag tag, Handle<AbstractCode> code,
                            GetName(InferScriptName(*script_name, *shared)),
                            CpuProfileNode::kNoLineNumberInfo,
                            CpuProfileNode::kNoColumnNumberInfo, nullptr);
-  DCHECK_IMPLIES(code->IsInstructionStream(cage_base),
-                 code->kind(cage_base) == CodeKind::BASELINE);
   rec->entry->FillFunctionInfo(*shared);
   rec->instruction_size = code->InstructionSize(cage_base);
   weak_code_registry_.Track(rec->entry, code);
@@ -136,7 +134,7 @@ void ProfilerListener::CodeCreateEvent(CodeTag tag,
       Handle<BytecodeArray> bytecodes(shared->GetBytecodeArray(isolate_),
                                       isolate_);
       Handle<ByteArray> bytecode_offsets(
-          abstract_code->ToInstructionStream(cage_base).bytecode_offset_table(
+          abstract_code->GetCode().instruction_stream().bytecode_offset_table(
               cage_base),
           isolate_);
       baseline_iterator = std::make_unique<baseline::BytecodeOffsetIterator>(
@@ -164,9 +162,9 @@ void ProfilerListener::CodeCreateEvent(CodeTag tag,
         line_table->SetPosition(code_offset, line_number, inlining_id);
       } else {
         DCHECK(!is_baseline);
-        DCHECK(abstract_code->IsInstructionStream(cage_base));
+        DCHECK(abstract_code->IsCode(cage_base));
         Handle<InstructionStream> code =
-            handle(abstract_code->GetInstructionStream(), isolate_);
+            handle(abstract_code->GetCode().instruction_stream(), isolate_);
         std::vector<SourcePositionInfo> stack =
             it.source_position().InliningStack(code);
         DCHECK(!stack.empty());
