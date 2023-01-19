@@ -321,6 +321,7 @@ ObjectEntriesValuesBuiltinsAssembler::FinalizeValuesOrEntriesJSArray(
 }
 
 TF_BUILTIN(ObjectPrototypeHasOwnProperty, ObjectBuiltinsAssembler) {
+  // Print("ObjectPrototypeHasOwnProperty");
   auto object = Parameter<Object>(Descriptor::kReceiver);
   auto key = Parameter<Object>(Descriptor::kKey);
   auto context = Parameter<Context>(Descriptor::kContext);
@@ -333,6 +334,7 @@ TF_BUILTIN(ObjectPrototypeHasOwnProperty, ObjectBuiltinsAssembler) {
   Label if_objectisnotsmi(this);
   Branch(TaggedIsSmi(object), &to_primitive, &if_objectisnotsmi);
   BIND(&if_objectisnotsmi);
+  // Print("ObjectPrototypeHasOwnProperty / if_objectisnotsmi");
 
   TNode<HeapObject> heap_object = CAST(object);
 
@@ -349,11 +351,13 @@ TF_BUILTIN(ObjectPrototypeHasOwnProperty, ObjectBuiltinsAssembler) {
               &call_runtime, &if_notunique_name);
 
     BIND(&if_unique_name);
-    TryHasOwnProperty(heap_object, map, instance_type, var_unique.value(),
-                      &return_true, &return_false, &call_runtime);
+    // Print("ObjectPrototypeHasOwnProperty / if_unique_name");
+    TryHasOwnPropertyForHas(heap_object, map, instance_type, var_unique.value(),
+                            &return_true, &return_false, &call_runtime);
 
     BIND(&if_index);
     {
+      // Print("ObjectPrototypeHasOwnProperty / if_index");
       TryLookupElement(heap_object, map, instance_type, var_index.value(),
                        &return_true, &return_false, &return_false,
                        &call_runtime);
@@ -361,12 +365,14 @@ TF_BUILTIN(ObjectPrototypeHasOwnProperty, ObjectBuiltinsAssembler) {
 
     BIND(&if_notunique_name);
     {
+      // Print("ObjectPrototypeHasOwnProperty / if_notunique_name");
       Label not_in_string_table(this);
       TryInternalizeString(CAST(key), &if_index, &var_index, &if_unique_name,
                            &var_unique, &not_in_string_table, &call_runtime);
 
       BIND(&not_in_string_table);
       {
+        // Print("ObjectPrototypeHasOwnProperty / not_in_string_table");
         // If the string was not found in the string table, then no regular
         // object can have a property with that name, so return |false|.
         // "Special API objects" with interceptors must take the slow path.
@@ -386,6 +392,7 @@ TF_BUILTIN(ObjectPrototypeHasOwnProperty, ObjectBuiltinsAssembler) {
   Return(FalseConstant());
 
   BIND(&call_runtime);
+  // Print("ObjectPrototypeHasOwnProperty / Calling runtime");
   Return(CallRuntime(Runtime::kObjectHasOwnProperty, context, object, key));
 }
 

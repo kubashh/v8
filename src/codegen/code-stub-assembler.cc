@@ -9271,7 +9271,9 @@ void CodeStubAssembler::LookupLinear(TNode<Name> unique_name,
         TNode<MaybeObject> element =
             LoadArrayElement(array, Array::kHeaderSize, name_index);
         TNode<Name> candidate_name = CAST(element);
-        *var_name_index = name_index;
+        if (var_name_index) {
+          *var_name_index = name_index;
+        }
         GotoIf(TaggedEqual(candidate_name, unique_name), if_found);
       },
       -Array::kEntrySize, LoopUnrollingMode::kYes, IndexAdvanceMode::kPre);
@@ -9420,7 +9422,9 @@ void CodeStubAssembler::LookupBinary(TNode<Name> unique_name,
     GotoIf(TaggedNotEqual(current_name, unique_name), &next);
     GotoIf(Uint32GreaterThanOrEqual(sort_index, number_of_valid_entries),
            if_not_found);
-    *var_name_index = ToKeyIndex<Array>(sort_index);
+    if (var_name_index) {
+      *var_name_index = ToKeyIndex<Array>(sort_index);
+    }
     Goto(if_found);
 
     BIND(&next);
@@ -9827,6 +9831,39 @@ void CodeStubAssembler::TryLookupPropertyInSimpleObject(
   }
 }
 
+void CodeStubAssembler::TryLookupPropertyInSimpleObjectForHas(
+    TNode<JSObject> object, TNode<Map> map, TNode<Name> unique_name,
+    Label* if_found_fast, Label* if_found_dict,
+    TVariable<HeapObject>* var_meta_storage, TVariable<IntPtrT>* var_name_index,
+    Label* if_not_found, Label* bailout) {
+  // Print("TryLookupPropertyInSimpleObject (for Has...)");
+  CSA_DCHECK(this, IsSimpleObjectMap(map));
+  CSA_DCHECK(this, IsUniqueNameNoCachedIndex(unique_name));
+
+  TNode<Uint32T> bit_field3 = LoadMapBitField3(map);
+  Label if_isfastmap(this), if_isslowmap(this);
+  Branch(IsSetWord32<Map::Bits3::IsDictionaryMapBit>(bit_field3), &if_isslowmap,
+         &if_isfastmap);
+  BIND(&if_isfastmap);
+  {
+    // Print("TryLookupPropertyInSimpleObject (for Has...) / fast map");
+    TNode<DescriptorArray> descriptors = LoadMapDescriptors(map);
+    *var_meta_storage = descriptors;
+
+    DescriptorLookup(unique_name, descriptors, bit_field3, if_found_fast,
+                     nullptr, if_not_found);
+  }
+  BIND(&if_isslowmap);
+  {
+    // Print("TryLookupPropertyInSimpleObject (for Has...) / slow map");
+    TNode<PropertyDictionary> dictionary = CAST(LoadSlowProperties(object));
+    *var_meta_storage = dictionary;
+
+    NameDictionaryLookup<PropertyDictionary>(
+        dictionary, unique_name, if_found_dict, nullptr, if_not_found);
+  }
+}
+
 void CodeStubAssembler::TryLookupProperty(
     TNode<HeapObject> object, TNode<Map> map, TNode<Int32T> instance_type,
     TNode<Name> unique_name, Label* if_found_fast, Label* if_found_dict,
@@ -9860,6 +9897,42 @@ void CodeStubAssembler::TryLookupProperty(
   }
 }
 
+void CodeStubAssembler::TryLookupPropertyForHas(
+    TNode<HeapObject> object, TNode<Map> map, TNode<Int32T> instance_type,
+    TNode<Name> unique_name, Label* if_found_fast, Label* if_found_dict,
+    Label* if_found_global, TVariable<HeapObject>* var_meta_storage,
+    TVariable<IntPtrT>* var_name_index, Label* if_not_found,
+    Label* if_bailout) {
+  Label if_objectisspecial(this);
+  // Print("TryLookupProperty (for Has...)");
+  GotoIf(IsSpecialReceiverInstanceType(instance_type), &if_objectisspecial);
+
+  TryLookupPropertyInSimpleObjectForHas(
+      CAST(object), map, unique_name, if_found_fast, if_found_dict,
+      var_meta_storage, var_name_index, if_not_found, if_bailout);
+
+  BIND(&if_objectisspecial);
+  {
+    // Print("TryLookupProperty (for Has...) / if_objectisspecial");
+    //  Handle global object here and bailout for other special objects.
+    GotoIfNot(InstanceTypeEqual(instance_type, JS_GLOBAL_OBJECT_TYPE),
+              if_bailout);
+
+    // Print("TryLookupProperty (for Has...) / if_objectisspecial saw global");
+    //  Handle interceptors and access checks in runtime.
+    TNode<Int32T> bit_field = LoadMapBitField(map);
+    int mask = Map::Bits1::HasNamedInterceptorBit::kMask |
+               Map::Bits1::IsAccessCheckNeededBit::kMask;
+    GotoIf(IsSetWord32(bit_field, mask), if_bailout);
+
+    TNode<GlobalDictionary> dictionary = CAST(LoadSlowProperties(CAST(object)));
+    *var_meta_storage = dictionary;
+
+    NameDictionaryLookup<GlobalDictionary>(
+        dictionary, unique_name, if_found_global, var_name_index, if_not_found);
+  }
+}
+
 void CodeStubAssembler::TryHasOwnProperty(TNode<HeapObject> object,
                                           TNode<Map> map,
                                           TNode<Int32T> instance_type,
@@ -9880,7 +9953,36 @@ void CodeStubAssembler::TryHasOwnProperty(TNode<HeapObject> object,
   {
     TVARIABLE(Object, var_value);
     TVARIABLE(Uint32T, var_details);
-    // Check if the property cell is not deleted.
+    // Print("TryHasOwnProperty / if_found_global");
+    //  Check if the property cell is not deleted.
+    LoadPropertyFromGlobalDictionary(CAST(var_meta_storage.value()),
+                                     var_name_index.value(), &var_details,
+                                     &var_value, if_not_found);
+    Goto(if_found);
+  }
+}
+
+void CodeStubAssembler::TryHasOwnPropertyForHas(
+    TNode<HeapObject> object, TNode<Map> map, TNode<Int32T> instance_type,
+    TNode<Name> unique_name, Label* if_found, Label* if_not_found,
+    Label* if_bailout) {
+  Comment("TryHasOwnProperty");
+  // Print("TryHasOwnProperty (for Has...)");
+  CSA_DCHECK(this, IsUniqueNameNoCachedIndex(unique_name));
+  TVARIABLE(HeapObject, var_meta_storage);
+  TVARIABLE(IntPtrT, var_name_index);
+
+  Label if_found_global(this);
+  TryLookupPropertyForHas(object, map, instance_type, unique_name, if_found,
+                          if_found, &if_found_global, &var_meta_storage,
+                          &var_name_index, if_not_found, if_bailout);
+
+  BIND(&if_found_global);
+  {
+    TVARIABLE(Object, var_value);
+    TVARIABLE(Uint32T, var_details);
+    // Print("TryHasOwnProperty / if_found_global");
+    //  Check if the property cell is not deleted.
     LoadPropertyFromGlobalDictionary(CAST(var_meta_storage.value()),
                                      var_name_index.value(), &var_details,
                                      &var_value, if_not_found);
