@@ -16,6 +16,23 @@
       "message": "PTALA had to use the older initialization syntax for MSVC.",
       "revId": "6e0afadf17e71903b6a412b58ebb4eacde8bbf8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "814585bf_4c499012",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-19T14:35:29Z",
+      "side": 1,
+      "message": "still lgtm",
+      "revId": "6e0afadf17e71903b6a412b58ebb4eacde8bbf8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
