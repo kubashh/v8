@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc63b75d_91921da6",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-01-19T13:32:51Z",
+      "side": 1,
+      "message": "Creating the exception object isn\u0027t free, but probably cheap enough.\n\nI think a few parts of this CL could look more elegant if we introduced `Utf8Variant::kUtf8NoTrap`, and using that to make the `ThrowInvalidEncodedStringBytes` call in `NewStringFromBytes` optional (e.g. by passing `MessageTemplate::kNone` from that helper\u0027s direct caller); producing the actual `null_value` would likely still happen in the runtime function because of `MaybeHandle\u003cString\u003e` typing. We could then get by with a single runtime function, and even a single Torque builtin if we decide that `String|Null` is sufficiently precise typing for all variants, which is probably good enough because non-Torque callers don\u0027t care about the return types of builtins anyway AFAIK.\n\nI\u0027ll leave it up to you whether you want to spend the time to follow this suggestion, or just keep what you have.",
+      "parentUuid": "3c5d2e7b_36182116",
+      "range": {
+        "startLine": 981,
+        "startChar": 0,
+        "endLine": 982,
+        "endChar": 39
+      },
+      "revId": "ae871089d38e9df5aac0f3b3af7c08c340f48dab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a892aa62_5fdbf36d",
