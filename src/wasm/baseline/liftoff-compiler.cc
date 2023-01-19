@@ -6477,7 +6477,7 @@ class LiftoffCompiler {
 
   void StringNewWtf8(FullDecoder* decoder, const MemoryIndexImmediate& imm,
                      const unibrow::Utf8Variant variant, const Value& offset,
-                     const Value& size, Value* result) {
+                     const Value& size, Value* result, bool null_on_invalid) {
     LiftoffRegList pinned;
 
     LiftoffRegister memory_reg =
@@ -6491,7 +6491,8 @@ class LiftoffCompiler {
     LiftoffAssembler::VarState variant_var(kSmiKind, variant_reg, 0);
 
     CallRuntimeStub(
-        WasmCode::kWasmStringNewWtf8,
+        null_on_invalid ? WasmCode::kWasmStringNewWtf8Try
+                        : WasmCode::kWasmStringNewWtf8,
         MakeSig::Returns(kRef).Params(kI32, kI32, kSmiKind, kSmiKind),
         {
             __ cache_state()->stack_state.end()[-2],  // offset

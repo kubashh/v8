@@ -123,6 +123,7 @@ struct WasmModule;
   V(WasmOnStackReplace)                  \
   V(WasmSuspend)                         \
   V(WasmStringNewWtf8)                   \
+  V(WasmStringNewWtf8Try)                \
   V(WasmStringNewWtf16)                  \
   V(WasmStringConst)                     \
   V(WasmStringMeasureUtf8)               \

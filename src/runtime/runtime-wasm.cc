@@ -950,6 +950,41 @@ RUNTIME_FUNCTION(Runtime_WasmStringNewWtf8) {
       isolate->factory()->NewStringFromUtf8(bytes, utf8_variant));
 }
 
+// Returns the new string if the operation succeeds, null otherwise.
+RUNTIME_FUNCTION(Runtime_WasmStringNewWtf8Try) {
+  ClearThreadInWasmScope flag_scope(isolate);
+  DCHECK_EQ(5, args.length());
+  HandleScope scope(isolate);
+  WasmInstanceObject instance = WasmInstanceObject::cast(args[0]);
+  uint32_t memory = args.positive_smi_value_at(1);
+  uint32_t utf8_variant_value = args.positive_smi_value_at(2);
+  uint32_t offset = NumberToUint32(args[3]);
+  uint32_t size = NumberToUint32(args[4]);
+
+  DCHECK_EQ(memory, 0);
+  USE(memory);
+  DCHECK(utf8_variant_value <=
+         static_cast<uint32_t>(unibrow::Utf8Variant::kLastUtf8Variant));
+
+  auto utf8_variant = static_cast<unibrow::Utf8Variant>(utf8_variant_value);
+
+  uint64_t mem_size = instance.memory_size();
+  if (!base::IsInBounds<uint64_t>(offset, size, mem_size)) {
+    return ThrowWasmError(isolate, MessageTemplate::kWasmTrapMemOutOfBounds);
+  }
+
+  const base::Vector<const uint8_t> bytes{instance.memory_start() + offset,
+                                          size};
+  MaybeHandle<v8::internal::String> result =
+      isolate->factory()->NewStringFromUtf8(bytes, utf8_variant);
+  if (result.is_null()) {
+    DCHECK(isolate->has_pending_exception());
+    isolate->clear_pending_exception();
+    return *isolate->factory()->null_value();
+  }
+  return *result.ToHandleChecked();
+}
+
 RUNTIME_FUNCTION(Runtime_WasmStringNewWtf8Array) {
   ClearThreadInWasmScope flag_scope(isolate);
   DCHECK_EQ(4, args.length());

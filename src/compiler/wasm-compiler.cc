@@ -5960,8 +5960,10 @@ void WasmGraphBuilder::ArrayCopy(Node* dst_array, Node* dst_index,
 
 Node* WasmGraphBuilder::StringNewWtf8(uint32_t memory,
                                       unibrow::Utf8Variant variant,
-                                      Node* offset, Node* size) {
-  return gasm_->CallBuiltin(Builtin::kWasmStringNewWtf8,
+                                      Node* offset, Node* size,
+                                      bool null_on_invalid) {
+  return gasm_->CallBuiltin(null_on_invalid ? Builtin::kWasmStringNewWtf8Try
+                                            : Builtin::kWasmStringNewWtf8,
                             Operator::kNoDeopt | Operator::kNoThrow, offset,
                             size, gasm_->SmiConstant(memory),
                             gasm_->SmiConstant(static_cast<int32_t>(variant)));
