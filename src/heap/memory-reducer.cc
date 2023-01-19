@@ -96,9 +96,13 @@ void MemoryReducer::NotifyTimer(const Event& event) {
   }
 }
 
-
-void MemoryReducer::NotifyMarkCompact(const Event& event) {
-  DCHECK_EQ(kMarkCompact, event.type);
+void MemoryReducer::NotifyMarkCompact(bool next_gc_likely_to_collect_more,
+                                      size_t committed_memory) {
+  MemoryReducer::Event event;
+  event.type = MemoryReducer::kMarkCompact;
+  event.time_ms = heap()->MonotonicallyIncreasingTimeInMs();
+  event.next_gc_likely_to_collect_more = next_gc_likely_to_collect_more;
+  event.committed_memory = committed_memory;
   Action old_action = state_.action;
   state_ = Step(state_, event);
   if (old_action != kWait && state_.action == kWait) {
@@ -114,8 +118,10 @@ void MemoryReducer::NotifyMarkCompact(const Event& event) {
   }
 }
 
-void MemoryReducer::NotifyPossibleGarbage(const Event& event) {
-  DCHECK_EQ(kPossibleGarbage, event.type);
+void MemoryReducer::NotifyPossibleGarbage() {
+  MemoryReducer::Event event;
+  event.type = MemoryReducer::kPossibleGarbage;
+  event.time_ms = heap()->MonotonicallyIncreasingTimeInMs();
   Action old_action = state_.action;
   state_ = Step(state_, event);
   if (old_action != kWait && state_.action == kWait) {
@@ -123,7 +129,6 @@ void MemoryReducer::NotifyPossibleGarbage(const Event& event) {
     ScheduleTimer(state_.next_gc_start_ms - event.time_ms);
   }
 }
-
 
 bool MemoryReducer::WatchdogGC(const State& state, const Event& event) {
   return state.last_gc_time_ms != 0 &&
