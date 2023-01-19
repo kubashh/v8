@@ -36,30 +36,30 @@ MemoryReducer::TimerTask::TimerTask(MemoryReducer* memory_reducer)
 
 void MemoryReducer::TimerTask::RunInternal() {
   Heap* heap = memory_reducer_->heap();
-  Event event;
-  double time_ms = heap->MonotonicallyIncreasingTimeInMs();
+  const double time_ms = heap->MonotonicallyIncreasingTimeInMs();
   heap->tracer()->SampleAllocation(time_ms, heap->NewSpaceAllocationCounter(),
                                    heap->OldGenerationAllocationCounter(),
                                    heap->EmbedderAllocationCounter());
-  bool low_allocation_rate = heap->HasLowAllocationRate();
-  bool optimize_for_memory = heap->ShouldOptimizeForMemoryUsage();
+  const bool low_allocation_rate = heap->HasLowAllocationRate();
+  const bool optimize_for_memory = heap->ShouldOptimizeForMemoryUsage();
   if (v8_flags.trace_gc_verbose) {
     heap->isolate()->PrintWithTimestamp(
         "Memory reducer: %s, %s\n",
         low_allocation_rate ? "low alloc" : "high alloc",
         optimize_for_memory ? "background" : "foreground");
   }
-  event.type = kTimer;
-  event.time_ms = time_ms;
-  // The memory reducer will start incremental markig if
+  // The memory reducer will start incremental marking if
   // 1) mutator is likely idle: js call rate is low and allocation rate is low.
   // 2) mutator is in background: optimize for memory flag is set.
-  event.should_start_incremental_gc =
-      low_allocation_rate || optimize_for_memory;
-  event.can_start_incremental_gc =
-      heap->incremental_marking()->IsStopped() &&
-      (heap->incremental_marking()->CanBeStarted() || optimize_for_memory);
-  event.committed_memory = heap->CommittedOldGenerationMemory();
+  const Event event{
+      .type = kTimer,
+      .time_ms = time_ms,
+      .committed_memory = heap->CommittedOldGenerationMemory(),
+      .should_start_incremental_gc = low_allocation_rate || optimize_for_memory,
+      .can_start_incremental_gc =
+          heap->incremental_marking()->IsStopped() &&
+          (heap->incremental_marking()->CanBeStarted() || optimize_for_memory),
+  };
   memory_reducer_->NotifyTimer(event);
 }
 
@@ -96,10 +96,15 @@ void MemoryReducer::NotifyTimer(const Event& event) {
   }
 }
 
-
-void MemoryReducer::NotifyMarkCompact(const Event& event) {
-  DCHECK_EQ(kMarkCompact, event.type);
-  Action old_action = state_.action;
+void MemoryReducer::NotifyMarkCompact(bool next_gc_likely_to_collect_more,
+                                      size_t committed_memory) {
+  const MemoryReducer::Event event{
+      .type = MemoryReducer::kMarkCompact,
+      .time_ms = heap()->MonotonicallyIncreasingTimeInMs(),
+      .committed_memory = committed_memory,
+      .next_gc_likely_to_collect_more = next_gc_likely_to_collect_more,
+  };
+  const Action old_action = state_.action;
   state_ = Step(state_, event);
   if (old_action != kWait && state_.action == kWait) {
     // If we are transitioning to the WAIT state, start the timer.
@@ -114,16 +119,17 @@ void MemoryReducer::NotifyMarkCompact(const Event& event) {
   }
 }
 
-void MemoryReducer::NotifyPossibleGarbage(const Event& event) {
-  DCHECK_EQ(kPossibleGarbage, event.type);
-  Action old_action = state_.action;
+void MemoryReducer::NotifyPossibleGarbage() {
+  const MemoryReducer::Event event{
+      .type = MemoryReducer::kPossibleGarbage,
+      .time_ms = heap()->MonotonicallyIncreasingTimeInMs()};
+  const Action old_action = state_.action;
   state_ = Step(state_, event);
   if (old_action != kWait && state_.action == kWait) {
     // If we are transitioning to the WAIT state, start the timer.
     ScheduleTimer(state_.next_gc_start_ms - event.time_ms);
   }
 }
-
 
 bool MemoryReducer::WatchdogGC(const State& state, const Event& event) {
   return state.last_gc_time_ms != 0 &&
