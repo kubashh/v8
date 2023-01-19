@@ -96,10 +96,15 @@ void MemoryReducer::NotifyTimer(const Event& event) {
   }
 }
 
-
-void MemoryReducer::NotifyMarkCompact(const Event& event) {
-  DCHECK_EQ(kMarkCompact, event.type);
-  Action old_action = state_.action;
+void MemoryReducer::NotifyMarkCompact(bool next_gc_likely_to_collect_more,
+                                      size_t committed_memory) {
+  const MemoryReducer::Event event{
+      .type = MemoryReducer::kMarkCompact,
+      .time_ms = heap()->MonotonicallyIncreasingTimeInMs(),
+      .committed_memory = committed_memory,
+      .next_gc_likely_to_collect_more = next_gc_likely_to_collect_more,
+  };
+  const Action old_action = state_.action;
   state_ = Step(state_, event);
   if (old_action != kWait && state_.action == kWait) {
     // If we are transitioning to the WAIT state, start the timer.
@@ -114,16 +119,17 @@ void MemoryReducer::NotifyMarkCompact(const Event& event) {
   }
 }
 
-void MemoryReducer::NotifyPossibleGarbage(const Event& event) {
-  DCHECK_EQ(kPossibleGarbage, event.type);
-  Action old_action = state_.action;
+void MemoryReducer::NotifyPossibleGarbage() {
+  const MemoryReducer::Event event{
+      .type = MemoryReducer::kPossibleGarbage,
+      .time_ms = heap()->MonotonicallyIncreasingTimeInMs()};
+  const Action old_action = state_.action;
   state_ = Step(state_, event);
   if (old_action != kWait && state_.action == kWait) {
     // If we are transitioning to the WAIT state, start the timer.
     ScheduleTimer(state_.next_gc_start_ms - event.time_ms);
   }
 }
-
 
 bool MemoryReducer::WatchdogGC(const State& state, const Event& event) {
   return state.last_gc_time_ms != 0 &&
