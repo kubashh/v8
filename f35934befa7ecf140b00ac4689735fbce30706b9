@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5434818e_a5cee3da",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-19T08:50:05Z",
+      "side": 1,
+      "message": "It seems like we use the variable only once, so let\u0027s remove it and just use the expression directly in the condition.",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d946b57_547b898c",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1846,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-19T08:50:05Z",
+      "side": 1,
+      "message": "Please move this code here into a method in MemoryBalancer as well.",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96e31ab6_c6b6b303",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2245,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-19T08:50:05Z",
+      "side": 1,
+      "message": "Why did you change this to atomic? It seems this field is still read/written only on the main thread?",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66ed18a8_f4f695d2",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2480,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-19T08:50:05Z",
+      "side": 1,
+      "message": "constants in V8 usually start with k. I guess when moving the other methods over to MemoryBalancer, this method can be moved as well.",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "931e1576_523e5292",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2481,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-19T08:50:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1eedb787_ddcb4d4e",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-19T08:50:05Z",
+      "side": 1,
+      "message": "Let\u0027s move these 3 methods to the MemoryBalancer class/file.",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20784ffe_602e5218",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2486,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-19T08:50:05Z",
+      "side": 1,
+      "message": "I guess this one will be moved as well to MemoryBalancer.",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc15a787_e938e8aa",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-19T08:50:05Z",
+      "side": 1,
+      "message": "I think here in the Heap class it is more common to use std::unique_ptr for such classes.",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
