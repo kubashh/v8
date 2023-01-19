@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4875f2e0_2bee3996",
+        "filename": "builders/try.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-01-19T10:39:13Z",
+      "side": 1,
+      "message": "Maybe we can first convert all bots except this one and the one above, which both use the chromium recipe. We need a different strategy for those...\n\nNot sure if there\u0027s a good one though. How were chromium trybots switched to reclient? Was there need to sync the switch change with a chrome source side change? If so, we could prepare all changes and then land them roughly in parallel - maybe I\u0027ll take down this bot from blocking CQ for an hour - or land the CLs will fewer folks are working...",
+      "range": {
+        "startLine": 199,
+        "startChar": 12,
+        "endLine": 199,
+        "endChar": 36
+      },
+      "revId": "c867dec12f5e2082aa0ad5e9bc822ce90ff2affb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
