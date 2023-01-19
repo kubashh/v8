@@ -63,6 +63,30 @@
       },
       "revId": "dfef080751a40a5aa3b68c3105bad74b23f217eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99909f5a_a0abe1f7",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-19T13:03:48Z",
+      "side": 1,
+      "message": "as discussed: We cannot overflow, but we should truncate to `String::kMaxLength`.",
+      "parentUuid": "e577a457_e35e4d48",
+      "range": {
+        "startLine": 2832,
+        "startChar": 6,
+        "endLine": 2833,
+        "endChar": 56
+      },
+      "revId": "dfef080751a40a5aa3b68c3105bad74b23f217eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
