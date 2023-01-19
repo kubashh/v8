@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2733f955_107dc942",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1747,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-19T11:18:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebb99b7c_f886857b",
+      "range": {
+        "startLine": 1747,
+        "startChar": 12,
+        "endLine": 1747,
+        "endChar": 32
+      },
+      "revId": "6e2f50ada465edc28f92e43fbf6f497c2e87789c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "885e3093_e1a86abc",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-01-19T10:08:57Z",
       "side": 1,
       "message": "`MemoryReducer` has a dependency on `Heap`, so you can move everything into the Notify method.",
+      "range": {
+        "startLine": 1749,
+        "startChar": 25,
+        "endLine": 1749,
+        "endChar": 42
+      },
+      "revId": "6e2f50ada465edc28f92e43fbf6f497c2e87789c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "083891b7_6c493a1d",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-19T11:18:48Z",
+      "side": 1,
+      "message": "I still needed one argument for the committed memory before the GC.",
+      "parentUuid": "885e3093_e1a86abc",
       "range": {
         "startLine": 1749,
         "startChar": 25,
