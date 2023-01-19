@@ -16,6 +16,75 @@
       "message": "PTAL!",
       "revId": "6c7cc7ede18914edce8c111b55e048e7e493cd12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ad65284_4312e329",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-01-19T12:14:25Z",
+      "side": 1,
+      "message": "add a comment that we can include `scratch` since the branch to `done` jumps over the use of `scratch`",
+      "range": {
+        "startLine": 824,
+        "startChar": 14,
+        "endLine": 824,
+        "endChar": 21
+      },
+      "revId": "6c7cc7ede18914edce8c111b55e048e7e493cd12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d94cd8f_3fcb8252",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-01-19T12:14:25Z",
+      "side": 1,
+      "message": "alternative option: include/exclude scratch around the call to `JumpToDeferredIf`",
+      "range": {
+        "startLine": 830,
+        "startChar": 21,
+        "endLine": 830,
+        "endChar": 28
+      },
+      "revId": "6c7cc7ede18914edce8c111b55e048e7e493cd12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5dadc38_d0f07c0a",
+        "filename": "src/maglev/arm64/maglev-ir-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1733,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-01-19T12:14:25Z",
+      "side": 1,
+      "message": "can this also come from a ScratchRegisterScope rather than being passed in?",
+      "range": {
+        "startLine": 1733,
+        "startChar": 41,
+        "endLine": 1733,
+        "endChar": 49
+      },
+      "revId": "6c7cc7ede18914edce8c111b55e048e7e493cd12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
