@@ -38,6 +38,33 @@ constexpr Condition ConditionFor(Operation operation) {
   }
 }
 
+class MaglevAssembler::ScratchRegisterScope {
+ public:
+  explicit ScratchRegisterScope(MaglevAssembler* masm)
+      : masm_(masm),
+        prev_scope_(masm->scratch_register_scope_),
+        available_(masm->scratch_register_scope_
+                       ? masm_->scratch_register_scope_->available_
+                       : RegList()),
+        available_double_(
+            masm->scratch_register_scope_
+                ? masm_->scratch_register_scope_->available_double_
+                : DoubleRegList()) {
+    masm_->scratch_register_scope_ = this;
+  }
+  ~ScratchRegisterScope() { masm_->scratch_register_scope_ = prev_scope_; }
+
+  Register Acquire() { return available_.PopFirst(); }
+
+  DoubleRegister AcquireDouble() { return available_double_.PopFirst(); }
+
+ private:
+  MaglevAssembler* masm_;
+  ScratchRegisterScope* prev_scope_;
+  RegList available_;
+  DoubleRegList available_double_;
+};
+
 namespace detail {
 
 template <typename... Args>

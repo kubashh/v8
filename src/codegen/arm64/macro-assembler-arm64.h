@@ -2247,6 +2247,10 @@ class V8_NODISCARD UseScratchRegisterScope {
   }
   void ExcludeFP(const VRegister& reg) { ExcludeFP(CPURegList(reg)); }
 
+  void Set(const CPURegList& list) { *available_ = list; }
+  CPURegList* Available() { return available_; }
+  CPURegList* AvailableFP() { return availablefp_; }
+
  private:
   V8_EXPORT_PRIVATE static CPURegister AcquireNextAvailable(
       CPURegList* available);
