@@ -1154,7 +1154,9 @@ class NodeBase : public ZoneObject {
     }
   }
 
+  // TODO(victorgomes): We should deprecate these!
   RegList& general_temporaries() { return temporaries_; }
+  RegList& specific_general_temporaries() { return specific_temporaries_; }
   DoubleRegList& double_temporaries() { return double_temporaries_; }
 
   template <typename RegisterT>
@@ -1246,7 +1248,10 @@ class NodeBase : public ZoneObject {
 
   // Require that a specific register is free (and therefore clobberable) by the
   // entry into this node.
-  void RequireSpecificTemporary(Register reg) { temporaries_.set(reg); }
+  void RequireSpecificTemporary(Register reg) {
+    temporaries_.set(reg);
+    specific_temporaries_.set(reg);
+  }
 
   void RequireSpecificDoubleTemporary(DoubleRegister reg) {
     double_temporaries_.set(reg);
@@ -1316,6 +1321,7 @@ class NodeBase : public ZoneObject {
   uint64_t bitfield_;
   NodeIdT id_ = kInvalidNodeId;
   RegList temporaries_;
+  RegList specific_temporaries_;
   DoubleRegList double_temporaries_;
 
   NodeBase() = delete;
