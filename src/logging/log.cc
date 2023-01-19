@@ -1958,8 +1958,7 @@ EnumerateCompiledFunctions(Heap* heap) {
       // only on a type feedback vector. We should make this mroe precise.
       if (function.HasAttachedOptimizedCode() &&
           Script::cast(function.shared().script()).HasValidSource()) {
-        record(function.shared(),
-               AbstractCode::cast(FromCode(function.code())));
+        record(function.shared(), AbstractCode::cast(function.code()));
       }
     }
   }
@@ -2337,9 +2336,6 @@ void ExistingCodeLogger::LogCodeObjects() {
   for (HeapObject obj = iterator.Next(); !obj.is_null();
        obj = iterator.Next()) {
     InstanceType instance_type = obj.map(cage_base).instance_type();
-    // AbstactCode is InstructionStream|Code|BytecodeArray but we
-    // want to log code objects only once, thus we ignore InstructionStream
-    // objects which will be logged via corresponding Code.
     if (InstanceTypeChecker::IsCode(instance_type) ||
         InstanceTypeChecker::IsBytecodeArray(instance_type)) {
       LogCodeObject(AbstractCode::cast(obj));
@@ -2374,15 +2370,13 @@ void ExistingCodeLogger::LogCompiledFunctions(
       LogExistingFunction(
           shared,
           Handle<AbstractCode>(
-              AbstractCode::cast(FromCode(shared->InterpreterTrampoline())),
-              isolate_));
+              AbstractCode::cast(shared->InterpreterTrampoline()), isolate_));
     }
     if (shared->HasBaselineCode()) {
       LogExistingFunction(
-          shared,
-          Handle<AbstractCode>(
-              AbstractCode::cast(FromCode(shared->baseline_code(kAcquireLoad))),
-              isolate_));
+          shared, Handle<AbstractCode>(
+                      AbstractCode::cast(shared->baseline_code(kAcquireLoad)),
+                      isolate_));
     }
     // Can't use .is_identical_to() because AbstractCode might be both
     // InstructionStream and non-InstructionStream object and regular tagged
