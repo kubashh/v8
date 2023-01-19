@@ -39,6 +39,30 @@
       },
       "revId": "dfef080751a40a5aa3b68c3105bad74b23f217eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e577a457_e35e4d48",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 2833,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-01-19T12:55:02Z",
+      "side": 1,
+      "message": "We have this protecting us\n```\n  // - adding two string lengths must still fit into a 32-bit int without\n  //   overflow\n  static_assert(kMaxLength * 2 \u003c\u003d kMaxInt,\n                \"String::kMaxLength * 2 must fit into an int32\");\n```\nSo maybe it is fine if the new string length was already bounds-checked?",
+      "parentUuid": "4809b592_dd2b0e66",
+      "range": {
+        "startLine": 2832,
+        "startChar": 6,
+        "endLine": 2833,
+        "endChar": 56
+      },
+      "revId": "dfef080751a40a5aa3b68c3105bad74b23f217eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
