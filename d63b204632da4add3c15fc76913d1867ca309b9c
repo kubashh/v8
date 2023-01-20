@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc082828_b1b19068",
+        "filename": "src/heap/memory-balancer.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-20T07:33:27Z",
+      "side": 1,
+      "message": "V8 uses kMinHeapExtraSpace as naming convention for such constants.",
+      "revId": "d63b204632da4add3c15fc76913d1867ca309b9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c43353e2_f7554ddc",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-20T07:33:27Z",
+      "side": 1,
+      "message": "I suspect those variables don\u0027t need to be all atomic? I think they should all be non-atomic by default and we should only make those atomic which actually need to be.",
+      "revId": "d63b204632da4add3c15fc76913d1867ca309b9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
