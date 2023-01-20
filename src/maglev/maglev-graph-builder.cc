@@ -3154,6 +3154,19 @@ ValueNode* MaglevGraphBuilder::TryReduceFunctionPrototypeCall(
   return BuildGenericCall(receiver, context, Call::TargetType::kAny, args);
 }
 
+ValueNode* MaglevGraphBuilder::TryReduceObjectPrototypeHasOwnProperty(
+    compiler::JSFunctionRef target, CallArguments& args) {
+  // We can't reduce Function#call when there is no receiver function.
+  if (args.receiver_mode() == ConvertReceiverMode::kNullOrUndefined) {
+    return nullptr;
+  }
+  ValueNode* node = args.receiver();
+  if (node != current_for_in_receiver_) {
+    return nullptr;
+  }
+  return GetRootConstant(RootIndex::kTrueValue);
+}
+
 ValueNode* MaglevGraphBuilder::TryReduceMathPow(compiler::JSFunctionRef target,
                                                 CallArguments& args) {
   if (args.count() < 2) {
@@ -4555,12 +4568,27 @@ void MaglevGraphBuilder::BuildBranchIfToBooleanTrue(ValueNode* node,
                                                     JumpType jump_type) {
   int fallthrough_offset = next_offset();
   int jump_offset = iterator_.GetJumpTargetOffset();
+
+  if (IsConstantNode(node->opcode())) {
+    bool constant_is_true = FromConstantToBool(local_isolate(), node);
+    bool is_jump_taken = constant_is_true == (jump_type == kJumpIfTrue);
+    if (is_jump_taken) {
+      BasicBlock* block = FinishBlock<Jump>({}, &jump_targets_[jump_offset]);
+      MergeDeadIntoFrameState(fallthrough_offset);
+      MergeIntoFrameState(block, jump_offset);
+    } else {
+      MergeDeadIntoFrameState(jump_offset);
+    }
+    return;
+  }
+
   BasicBlockRef* true_target = jump_type == kJumpIfTrue
                                    ? &jump_targets_[jump_offset]
                                    : &jump_targets_[fallthrough_offset];
   BasicBlockRef* false_target = jump_type == kJumpIfFalse
                                     ? &jump_targets_[jump_offset]
                                     : &jump_targets_[fallthrough_offset];
+
   BasicBlock* block =
       FinishBlock<BranchIfToBooleanTrue>({node}, true_target, false_target);
   if (jump_type == kJumpIfTrue) {
@@ -4732,6 +4760,16 @@ void MaglevGraphBuilder::VisitForInNext() {
           AddNewNode<LoadTaggedField>({receiver}, HeapObject::kMapOffset);
       AddNewNode<CheckDynamicValue>({receiver_map, cache_type});
       SetAccumulator(AddNewNode<LoadFixedArrayElement>({cache_array, index}));
+      current_for_in_receiver_ = receiver;
+      if (ToObject* to_object = current_for_in_receiver_->TryCast<ToObject>()) {
+        current_for_in_receiver_ = to_object->value_input().node();
+      }
+      // We know that the enum cache entry is not undefined, so skip over the
+      // next JumpIfUndefined.
+      DCHECK_EQ(iterator_.next_bytecode(),
+                interpreter::Bytecode::kJumpIfUndefined);
+      iterator_.Advance();
+      MergeDeadIntoFrameState(iterator_.GetJumpTargetOffset());
       break;
     }
     case ForInHint::kAny: {
@@ -4748,6 +4786,7 @@ void MaglevGraphBuilder::VisitForInNext() {
 void MaglevGraphBuilder::VisitForInStep() {
   ValueNode* index = LoadRegisterInt32(0);
   SetAccumulator(AddNewNode<Int32NodeFor<Operation::kIncrement>>({index}));
+  current_for_in_receiver_ = nullptr;
 }
 
 void MaglevGraphBuilder::VisitSetPendingMessage() {

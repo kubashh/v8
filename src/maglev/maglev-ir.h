@@ -410,6 +410,7 @@ enum class ValueRepresentation : uint8_t {
 
 constexpr Condition ConditionFor(Operation cond);
 
+bool FromConstantToBool(LocalIsolate* local_isolate, ValueNode* node);
 bool FromConstantToBool(MaglevAssembler* masm, ValueNode* node);
 
 inline int ExternalArrayElementSize(const ExternalArrayType element_type) {
