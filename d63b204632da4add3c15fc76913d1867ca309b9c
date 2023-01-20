@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9faf85e_8848c096",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T19:50:23Z",
+      "side": 1,
+      "message": "I had addressed the review comment.",
+      "revId": "d63b204632da4add3c15fc76913d1867ca309b9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc082828_b1b19068",
@@ -18,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceb44bc0_a92c1841",
+        "filename": "src/heap/memory-balancer.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T19:50:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc082828_b1b19068",
+      "revId": "d63b204632da4add3c15fc76913d1867ca309b9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c43353e2_f7554ddc",
@@ -31,6 +66,24 @@
       "writtenOn": "2023-01-20T07:33:27Z",
       "side": 1,
       "message": "I suspect those variables don\u0027t need to be all atomic? I think they should all be non-atomic by default and we should only make those atomic which actually need to be.",
+      "revId": "d63b204632da4add3c15fc76913d1867ca309b9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffb315c8_f0dbdd9d",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T19:50:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c43353e2_f7554ddc",
       "revId": "d63b204632da4add3c15fc76913d1867ca309b9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
