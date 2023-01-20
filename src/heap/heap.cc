@@ -2238,8 +2238,7 @@ size_t Heap::PerformGarbageCollection(GarbageCollector collector,
 
           if (collector == GarbageCollector::MARK_COMPACTOR) {
             Sweeper* const client_sweeper = client->heap()->sweeper();
-            client_sweeper->ParallelIteratePromotedPagesForRememberedSets();
-            client_sweeper->WaitForPromotedPagesIteration();
+            client_sweeper->ContributeAndWaitForPromotedPagesIteration();
           }
           HeapVerifier::VerifyHeapIfEnabled(client->heap());
         });
