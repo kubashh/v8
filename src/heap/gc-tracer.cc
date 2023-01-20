@@ -17,6 +17,7 @@
 #include "src/heap/heap-inl.h"
 #include "src/heap/heap.h"
 #include "src/heap/incremental-marking.h"
+#include "src/heap/memory-balancer.h"
 #include "src/heap/spaces.h"
 #include "src/logging/counters.h"
 #include "src/logging/metrics.h"
@@ -391,6 +392,21 @@ void GCTracer::UpdateStatistics(GarbageCollector collector) {
     RecordGCSumCounters();
     combined_mark_compact_speed_cache_ = 0.0;
     long_task_stats->gc_full_atomic_wall_clock_duration_us += duration_us;
+    auto time_taken = duration + current_.incremental_marking_duration;
+    major_gc_time = time_taken;
+    if (has_last_gc) {
+      // Incremental gc may cause the difference to decrease, so we need to max.
+      auto allocation_bytes = std::max<int64_t>(
+          0, current_.start_object_size + current_.incremental_marking_bytes -
+                 previous_.end_object_size +
+                 heap_->AllocatedExternalMemorySinceMarkCompact());
+      CHECK(current_.end_time - previous_.end_time - time_taken > 0);
+      auto allocation_time =
+          current_.end_time - previous_.end_time - time_taken;
+      major_allocation_bytes_and_duration =
+          MakeBytesAndDuration(allocation_bytes, allocation_time);
+    }
+    has_last_gc = true;
   }
 
   heap_->UpdateTotalGCTime(duration);
@@ -1445,6 +1461,7 @@ void GCTracer::RecordGCSumCounters() {
           .total_duration_ms +
       background_counter_[Scope::MC_BACKGROUND_MARKING].total_duration_ms +
       background_counter_[Scope::MC_BACKGROUND_SWEEPING].total_duration_ms;
+  heap_->mb->concurrent_gc_time_ += background_duration;
   const double atomic_marking_duration =
       current_.scopes[Scope::MC_PROLOGUE] + current_.scopes[Scope::MC_MARK];
   const double marking_duration = atomic_marking_duration + incremental_marking;

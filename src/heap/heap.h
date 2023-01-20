@@ -109,6 +109,7 @@ class JSFinalizationRegistry;
 class LinearAllocationArea;
 class LocalHeap;
 class MemoryAllocator;
+class MemoryBalancer;
 class MemoryChunk;
 class MemoryMeasurement;
 class MemoryReducer;
@@ -2231,7 +2232,7 @@ class Heap {
   // which collector to invoke, before expanding a paged space in the old
   // generation and on every allocation in large object space.
   std::atomic<size_t> old_generation_allocation_limit_{0};
-  size_t global_allocation_limit_ = 0;
+  std::atomic<size_t> global_allocation_limit_{0};
 
   // Weak list heads, threaded through the objects.
   // List heads are initialized lazily and contain the undefined_value at start.
@@ -2467,6 +2468,10 @@ class Heap {
 
   // Used in cctest.
   friend class heap::HeapTester;
+
+  friend class MemoryBalancer;
+  friend class MemoryMeasurementTask;
+  std::unique_ptr<MemoryBalancer> mb;
 };
 
 class HeapStats {
