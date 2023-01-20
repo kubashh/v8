@@ -125,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d64aa79f_9ec3d0b9",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2245,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-20T07:28:45Z",
+      "side": 1,
+      "message": "AFAICS the MemoryMeasurementTask uses the \"foreground task runner\" which means the MemoryMeasurementTask is only ever run on the main thread. So it should still be read/written only on the main thread.",
+      "parentUuid": "a6eeaf5a_af000ad4",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "66ed18a8_f4f695d2",
         "filename": "src/heap/heap.h",
         "patchSetId": 14
