@@ -219,7 +219,7 @@ FieldAccess AccessBuilder::ForSharedFunctionInfoLength() {
                         SharedFunctionInfo::kLengthOffset,
                         Handle<Name>(),
                         MaybeHandle<Map>(),
-                        TypeCache::Get()->kArgumentsLengthType,
+                        TypeCache::Get()->kMaxArgumentsType,
                         MachineType::Uint16(),
                         kNoWriteBarrier,
                         "SharedFunctionInfoLength"};

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --allow-natives-syntax --turbofan --no-always-turbofan
+// Flags: --allow-natives-syntax --no-turbofan --maglev --no-always-turbofan
 
 function f(g) {
   return g.length;
@@ -15,7 +15,7 @@ function OptimizeAndTest(fn) {
   assertEquals(2, fn(g));
   assertEquals(3, fn(h));
 
-  %OptimizeFunctionOnNextCall(fn);
+  %OptimizeMaglevOnNextCall(fn);
   fn(g);
   assertOptimized(fn);
 
@@ -29,16 +29,3 @@ function OptimizeAndTest(fn) {
 }
 
 OptimizeAndTest(f);
-
-function fn() {
-}
-function assign(v) {
-    v[v.length] = v.length;
-}
-var v = {length: 42};
-%PrepareFunctionForOptimization(assign);
-assign(fn);
-assign(v);
-%OptimizeFunctionOnNextCall(assign);
-assign(v);
-assertOptimized(assign);

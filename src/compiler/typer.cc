@@ -2288,7 +2288,7 @@ Type Typer::Visitor::TypeStringLength(Node* node) {
 Type Typer::Visitor::TypeStringSubstring(Node* node) { return Type::String(); }
 
 Type Typer::Visitor::TypeFunctionLength(Node* node) {
-  return Type::Range(0, InstructionStream::kMaxArguments, zone());
+  return typer_->cache_->kMaxArgumentsType;
 }
 
 Type Typer::Visitor::TypeCheckBounds(Node* node) {

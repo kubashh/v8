@@ -2800,7 +2800,7 @@ JSNativeContextSpecialization::BuildPropertyLoad(
     value = graph()->NewNode(simplified()->StringLength(), receiver);
   } else if (access_info.IsFunctionLength()) {
     DCHECK_EQ(receiver, lookup_start_object);
-    value = graph()->NewNode(simplified()->FunctionLength(), receiver);
+    value = graph()->NewNode(simplified()->FunctionLength(), receiver, control);
   } else {
     DCHECK(access_info.IsDataField() || access_info.IsFastDataConstant() ||
            access_info.IsDictionaryProtoDataConstant());
