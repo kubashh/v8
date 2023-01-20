@@ -410,6 +410,9 @@ class V8_EXPORT_PRIVATE GCTracer {
   }
 
   GarbageCollector GetCurrentCollector() const;
+  bool has_last_gc = false;
+  base::Optional<BytesAndDuration> major_allocation_bytes_and_duration;
+  base::Optional<double> major_gc_time;
 
  private:
   FRIEND_TEST(GCTracer, AverageSpeed);
