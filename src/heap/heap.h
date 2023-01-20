@@ -109,6 +109,7 @@ class JSFinalizationRegistry;
 class LinearAllocationArea;
 class LocalHeap;
 class MemoryAllocator;
+class MemoryBalancer;
 class MemoryChunk;
 class MemoryMeasurement;
 class MemoryReducer;
@@ -2467,6 +2468,10 @@ class Heap {
 
   // Used in cctest.
   friend class heap::HeapTester;
+
+  friend class MemoryBalancer;
+  friend class MemoryMeasurementTask;
+  std::unique_ptr<MemoryBalancer> mb;
 };
 
 class HeapStats {

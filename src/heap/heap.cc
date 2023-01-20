@@ -68,6 +68,7 @@
 #include "src/heap/marking-barrier.h"
 #include "src/heap/marking-state-inl.h"
 #include "src/heap/marking-state.h"
+#include "src/heap/memory-balancer.h"
 #include "src/heap/memory-chunk-inl.h"
 #include "src/heap/memory-chunk-layout.h"
 #include "src/heap/memory-measurement.h"
@@ -238,7 +239,8 @@ Heap::Heap()
       marking_state_(isolate_),
       non_atomic_marking_state_(isolate_),
       atomic_marking_state_(isolate_),
-      pretenuring_handler_(this) {
+      pretenuring_handler_(this),
+      mb(std::make_unique<MemoryBalancer>(this)) {
   // Ensure old_generation_size_ is a multiple of kPageSize.
   DCHECK_EQ(0, max_old_generation_size() & (Page::kPageSize - 1));
 
@@ -1633,9 +1635,9 @@ bool Heap::CollectGarbage(AllocationSpace space,
   // 3. The epilogue part which may execute callbacks. These callbacks may
   // allocate and trigger another garbage collection
 
-  // Part 1: Invoke all callbacks which should happen before the actual garbage
-  // collection is triggered. Note that these callbacks may trigger another
-  // garbage collection since they may allocate.
+  // Part 1: Invoke all callbacks which should happen before the actual
+  // garbage collection is triggered. Note that these callbacks may trigger
+  // another garbage collection since they may allocate.
 
   DCHECK(AllowGarbageCollection::IsAllowed());
 
@@ -1679,6 +1681,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
   size_t committed_memory_before = collector == GarbageCollector::MARK_COMPACTOR
                                        ? CommittedOldGenerationMemory()
                                        : 0;
+  size_t pre_gc_memory =
+      OldGenerationSizeOfObjects() + AllocatedExternalMemorySinceMarkCompact();
   {
     tracer()->StartObservablePause();
     VMState<GC> state(isolate());
@@ -1803,8 +1807,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
     isolate()->CountUsage(v8::Isolate::kForcedGC);
   }
 
-  // Start incremental marking for the next cycle. We do this only for scavenger
-  // to avoid a loop where mark-compact causes another mark-compact.
+  // Start incremental marking for the next cycle. We do this only for
+  // scavenger to avoid a loop where mark-compact causes another mark-compact.
   if (IsYoungGenerationCollector(collector)) {
     StartIncrementalMarkingIfAllocationLimitIsReached(
         GCFlagsForIncrementalMarking(),
@@ -1818,6 +1822,10 @@ bool Heap::CollectGarbage(AllocationSpace space,
     }
   }
 
+  size_t post_gc_memory = OldGenerationSizeOfObjects();
+  if ((!IsYoungGenerationCollector(collector)) && v8_flags.memory_balancer) {
+    mb->NotifyGC(pre_gc_memory, post_gc_memory);
+  }
   return freed_global_handles > 0;
 }
 
@@ -2490,22 +2498,23 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
   size_t new_space_capacity = NewSpaceCapacity();
   HeapGrowingMode mode = CurrentHeapGrowingMode();
 
+  size_t old_generation_allocation_limit_temp = 0;
+  size_t global_allocation_limit_temp = 0;
+
   if (collector == GarbageCollector::MARK_COMPACTOR) {
     external_memory_.ResetAfterGC();
 
-    set_old_generation_allocation_limit(
+    old_generation_allocation_limit_temp =
         MemoryController<V8HeapTrait>::CalculateAllocationLimit(
             this, old_gen_size, min_old_generation_size_,
             max_old_generation_size(), new_space_capacity, v8_growing_factor,
-            mode));
+            mode);
     DCHECK_GT(global_growing_factor, 0);
-    global_allocation_limit_ =
+    global_allocation_limit_temp =
         MemoryController<GlobalMemoryTrait>::CalculateAllocationLimit(
             this, GlobalSizeOfObjects(), min_global_memory_size_,
             max_global_memory_size_, new_space_capacity, global_growing_factor,
             mode);
-    CheckIneffectiveMarkCompact(
-        old_gen_size, tracer()->AverageMarkCompactMutatorUtilization());
   } else if (HasLowYoungGenerationAllocationRate() &&
              old_generation_size_configured_) {
     size_t new_old_generation_limit =
@@ -2514,7 +2523,7 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
             max_old_generation_size(), new_space_capacity, v8_growing_factor,
             mode);
     if (new_old_generation_limit < old_generation_allocation_limit()) {
-      set_old_generation_allocation_limit(new_old_generation_limit);
+      old_generation_allocation_limit_temp = new_old_generation_limit;
     }
     DCHECK_GT(global_growing_factor, 0);
     size_t new_global_limit =
@@ -2523,7 +2532,19 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
             max_global_memory_size_, new_space_capacity, global_growing_factor,
             mode);
     if (new_global_limit < global_allocation_limit_) {
-      global_allocation_limit_ = new_global_limit;
+      global_allocation_limit_temp = new_global_limit;
+    }
+  }
+  global_allocation_limit_temp = std::max(old_generation_allocation_limit_temp,
+                                          global_allocation_limit_temp);
+  mb->global_allocation_limit_delta_ =
+      global_allocation_limit_temp - old_generation_allocation_limit_temp;
+  if (!v8_flags.memory_balancer) {
+    set_old_generation_allocation_limit(old_generation_allocation_limit_temp);
+    global_allocation_limit_ = global_allocation_limit_temp;
+    if (collector == GarbageCollector::MARK_COMPACTOR) {
+      CheckIneffectiveMarkCompact(
+          old_gen_size, tracer()->AverageMarkCompactMutatorUtilization());
     }
   }
 }
