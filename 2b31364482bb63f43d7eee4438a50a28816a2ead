@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a66673a0_05098959",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1565770
+      },
+      "writtenOn": "2023-01-20T17:20:05Z",
+      "side": 1,
+      "message": "There was a number of bugs in my previous CL. I\u0027m sorry about that. It is a large code base and I\u0027m struggling to understand it. Here are some fixes. Since one of the bugs was fixed by Leszek Swirski in a merged CL, I\u0027m wondering whether I should revert my previous CL instead, and reland it later instead.",
+      "revId": "2b31364482bb63f43d7eee4438a50a28816a2ead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
