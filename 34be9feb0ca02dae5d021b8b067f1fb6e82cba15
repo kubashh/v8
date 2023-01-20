@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5dd78f4_683e60e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-01-20T16:28:03Z",
+      "side": 1,
+      "message": "Fix lgtm, rubber-stamp on test. I usually don\u0027t review c++ changes and I\u0027m not familiar with this code...",
+      "revId": "34be9feb0ca02dae5d021b8b067f1fb6e82cba15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
