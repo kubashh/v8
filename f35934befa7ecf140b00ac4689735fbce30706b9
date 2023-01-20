@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f4181e8_2b0a7ee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T03:58:56Z",
+      "side": 1,
+      "message": "I had addressed all the comment, can you guys take another look?",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5434818e_a5cee3da",
@@ -14,6 +31,24 @@
       "writtenOn": "2023-01-19T08:50:05Z",
       "side": 1,
       "message": "It seems like we use the variable only once, so let\u0027s remove it and just use the expression directly in the condition.",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da3f50eb_36c8c728",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1666,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T03:58:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5434818e_a5cee3da",
       "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -35,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b401a3b_5de81f54",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1846,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T03:58:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d946b57_547b898c",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96e31ab6_c6b6b303",
@@ -48,6 +101,24 @@
       "writtenOn": "2023-01-19T08:50:05Z",
       "side": 1,
       "message": "Why did you change this to atomic? It seems this field is still read/written only on the main thread?",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6eeaf5a_af000ad4",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2245,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T03:58:56Z",
+      "side": 1,
+      "message": "memorymeasurementtask call membalancerupdate which write to it.",
+      "parentUuid": "96e31ab6_c6b6b303",
       "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20a7c833_583c618a",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2480,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T03:58:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66ed18a8_f4f695d2",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "931e1576_523e5292",
@@ -82,6 +171,24 @@
       "writtenOn": "2023-01-19T08:50:05Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9db43bd8_5b2a0a19",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2481,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T03:58:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "931e1576_523e5292",
       "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8113e203_62955547",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T03:58:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1eedb787_ddcb4d4e",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20784ffe_602e5218",
@@ -120,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db797ad6_9fb7c189",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2486,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T03:58:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20784ffe_602e5218",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc15a787_e938e8aa",
@@ -133,6 +276,24 @@
       "writtenOn": "2023-01-19T08:50:05Z",
       "side": 1,
       "message": "I think here in the Heap class it is more common to use std::unique_ptr for such classes.",
+      "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4efab8fc_36fb31df",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-01-20T03:58:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc15a787_e938e8aa",
       "revId": "f35934befa7ecf140b00ac4689735fbce30706b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
