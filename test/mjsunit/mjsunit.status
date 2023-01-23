@@ -712,6 +712,10 @@
   'wasm/many-memories': [SKIP],
   'wasm/multiple-code-spaces': [SKIP],
   'wasm/shared-memory-worker-gc-stress': [SKIP],
+
+  # BUG(v8:13548): Slow on TSAN.
+  'wasm/memory64': [PASS, ['mode == debug', SLOW]],
+  'wasm/huge-memory': [PASS, ['mode == debug', SLOW]],
 }],  # 'tsan == True'
 
 ##############################################################################
