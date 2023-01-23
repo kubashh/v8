@@ -16,6 +16,29 @@
       "message": "ptal",
       "revId": "fd6e0b8cf2bd069e0f31536757de1d530318bce8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d41a6299_9c40564a",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-01-23T09:35:50Z",
+      "side": 1,
+      "message": "nit: should we move this down to `running_` and make that one byte-sized as well? (probably word-size is faster in genera though).",
+      "range": {
+        "startLine": 1006,
+        "startChar": 0,
+        "endLine": 1006,
+        "endChar": 75
+      },
+      "revId": "fd6e0b8cf2bd069e0f31536757de1d530318bce8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
