@@ -16,6 +16,24 @@
       "message": "We could DHECK here that we are actually in a GC (e.g. with `DCHECK_EQ(heap-\u003estate(), MARK_COMPACT`). I am just not sure whether we could always get to the heap from the InstructionStream object\u0027s page header? Does embedded code use an InstructionStream as well?",
       "revId": "ad7515db34e66593e4f9a85a1103e2082f2cecc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "113f6440_59495147",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-01-23T12:38:13Z",
+      "side": 1,
+      "message": "No, embedded builtins don\u0027t have InstructionStream objects (the Code obj points directly off-heap). Done.",
+      "parentUuid": "75cda4b8_6778f057",
+      "revId": "ad7515db34e66593e4f9a85a1103e2082f2cecc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
