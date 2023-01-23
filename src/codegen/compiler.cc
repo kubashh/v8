@@ -594,9 +594,8 @@ void TurbofanCompilationJob::RecordCompilationStats(ConcurrencyMode mode,
 
 void TurbofanCompilationJob::RecordFunctionCompilation(
     LogEventListener::CodeTag code_type, Isolate* isolate) const {
-  Handle<InstructionStream> istream(
-      compilation_info()->code()->instruction_stream(), isolate);
-  Handle<AbstractCode> abstract_code = Handle<AbstractCode>::cast(istream);
+  Handle<AbstractCode> abstract_code =
+      Handle<AbstractCode>::cast(compilation_info()->code());
 
   double time_taken_ms = time_taken_to_prepare_.InMillisecondsF() +
                          time_taken_to_execute_.InMillisecondsF() +
@@ -658,8 +657,7 @@ void InstallInterpreterTrampolineCopy(Isolate* isolate,
   shared_info->set_interpreter_data(*interpreter_data);
 
   Handle<Script> script(Script::cast(shared_info->script()), isolate);
-  Handle<InstructionStream> istream(code->instruction_stream(), isolate);
-  Handle<AbstractCode> abstract_code = Handle<AbstractCode>::cast(istream);
+  Handle<AbstractCode> abstract_code = Handle<AbstractCode>::cast(code);
   int line_num =
       Script::GetLineNumber(script, shared_info->StartPosition()) + 1;
   int column_num =
@@ -1183,7 +1181,7 @@ void RecordMaglevFunctionCompilation(Isolate* isolate,
   // in here, but LinuxPerfJitLogger only supports InstructionStream
   // AbstractCode.
   Handle<AbstractCode> abstract_code(
-      AbstractCode::cast(FromCode(function->code(cage_base))), isolate);
+      AbstractCode::cast(function->code(cage_base)), isolate);
   Handle<SharedFunctionInfo> shared(function->shared(cage_base), isolate);
   Handle<Script> script(Script::cast(shared->script(cage_base)), isolate);
   Handle<FeedbackVector> feedback_vector(function->feedback_vector(cage_base),
@@ -2659,12 +2657,11 @@ bool Compiler::CompileSharedWithBaseline(Isolate* isolate,
   CompilerTracer::TraceFinishBaselineCompile(isolate, shared, time_taken_ms);
 
   if (shared->script().IsScript()) {
-    Handle<InstructionStream> istream(code->instruction_stream(), isolate);
     LogFunctionCompilation(isolate, LogEventListener::CodeTag::kFunction,
                            handle(Script::cast(shared->script()), isolate),
                            shared, Handle<FeedbackVector>(),
-                           Handle<AbstractCode>::cast(istream),
-                           CodeKind::BASELINE, time_taken_ms);
+                           Handle<AbstractCode>::cast(code), CodeKind::BASELINE,
+                           time_taken_ms);
   }
   return true;
 }
