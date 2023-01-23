@@ -69,6 +69,24 @@
       "parentUuid": "cf304f32_8f4b48e2",
       "revId": "34be9feb0ca02dae5d021b8b067f1fb6e82cba15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67d6afe5_04b3690c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-01-23T19:06:45Z",
+      "side": 1,
+      "message": "Ah! Interesting, I\u0027m a committer, but no OWNER. So we need someone who\u0027s both...",
+      "parentUuid": "4738737d_08c0780d",
+      "revId": "34be9feb0ca02dae5d021b8b067f1fb6e82cba15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
