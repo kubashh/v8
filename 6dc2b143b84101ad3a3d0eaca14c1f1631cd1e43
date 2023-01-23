@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfff9414_b6562c5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-23T10:19:20Z",
+      "side": 1,
+      "message": "I already marked then in crrev.com/c/4187217",
+      "revId": "6dc2b143b84101ad3a3d0eaca14c1f1631cd1e43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
