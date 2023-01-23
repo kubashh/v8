@@ -61,6 +61,11 @@ class V8_EXPORT_PRIVATE Stack final {
   void AddStackSegment(const void* start, const void* top);
   void ClearStackSegments();
 
+  void SetStackMarker(const void* stack_marker) {
+    stack_marker_ = stack_marker;
+  }
+  const void* GetStackMarker() const { return stack_marker_; }
+
  private:
 #ifdef DEBUG
   static bool IsOnCurrentStack(const void* ptr);
@@ -70,6 +75,10 @@ class V8_EXPORT_PRIVATE Stack final {
                                   const void* stack_end);
 
   const void* stack_start_;
+
+  // Marker that signals end of the interesting stack region in which on-heap
+  // pointers can be found.
+  const void* stack_marker_;
 
   // TODO(v8:13493): This is for suppressing the check that we are in the
   // correct stack, in the case of  WASM stack switching. It will be removed as

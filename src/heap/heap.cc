@@ -1686,6 +1686,9 @@ bool Heap::CollectGarbage(AllocationSpace space,
         this, IsYoungGenerationCollector(collector) ? "MinorGC" : "MajorGC",
         GarbageCollectionReasonToString(gc_reason));
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    stack().SetStackMarker(v8::base::Stack::GetCurrentStackPosition());
+#else
     if (cpp_heap()) {
       if (collector == GarbageCollector::MARK_COMPACTOR ||
           (collector == GarbageCollector::MINOR_MARK_COMPACTOR &&
@@ -1696,11 +1699,10 @@ bool Heap::CollectGarbage(AllocationSpace space,
         //
         // TODO(chromium:1056170): Consider adding a component that keeps track
         // of relevant GC stack regions where interesting pointers can be found.
-        static_cast<v8::internal::CppHeap*>(cpp_heap())
-            ->SetStackEndOfCurrentGC(
-                v8::base::Stack::GetCurrentStackPosition());
+        stack().SetStackMarker(v8::base::Stack::GetCurrentStackPosition());
       }
     }
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 
     GarbageCollectionPrologue(gc_reason, gc_callback_flags);
     {
@@ -4706,10 +4708,11 @@ void Heap::IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options) {
     v->Synchronize(VisitorSynchronization::kGlobalHandles);
 
     if (!options.contains(SkipRoot::kStack)) {
-      StackState stack_state = options.contains(SkipRoot::kConservativeStack)
-                                   ? StackState::kNoHeapPointers
-                                   : StackState::kMayContainHeapPointers;
-      IterateStackRoots(v, stack_state);
+      ScanStackMode stack_mode =
+          options.contains(SkipRoot::kConservativeStack) ? ScanStackMode::kNone
+          : options.contains(SkipRoot::kTopOfStack) ? ScanStackMode::kFromMarker
+                                                    : ScanStackMode::kComplete;
+      IterateStackRoots(v, stack_mode);
       v->Synchronize(VisitorSynchronization::kStackRoots);
     }
 
@@ -4841,9 +4844,9 @@ void Heap::IterateRootsIncludingClients(RootVisitor* v,
   }
 }
 
-void Heap::IterateRootsFromStackIncludingClients(RootVisitor* v,
-                                                 StackState stack_state) {
-  IterateStackRoots(v, stack_state);
+void Heap::IterateStackRootsIncludingClients(RootVisitor* v,
+                                             ScanStackMode stack_mode) {
+  IterateStackRoots(v, stack_mode);
 
   if (isolate()->is_shared_heap_isolate()) {
     ClientRootVisitor client_root_visitor(v);
@@ -4851,7 +4854,7 @@ void Heap::IterateRootsFromStackIncludingClients(RootVisitor* v,
         [v = &client_root_visitor](Isolate* client) {
           // TODO(v8:13257): We cannot run CSS on client isolates now, as the
           // stack markers will not be correct.
-          client->heap()->IterateStackRoots(v, StackState::kNoHeapPointers);
+          client->heap()->IterateStackRoots(v, ScanStackMode::kNone);
         });
   }
 }
@@ -4879,14 +4882,18 @@ void Heap::IterateBuiltins(RootVisitor* v) {
   static_assert(Builtins::AllBuiltinsAreIsolateIndependent());
 }
 
-void Heap::IterateStackRoots(RootVisitor* v, StackState stack_state) {
+void Heap::IterateStackRoots(RootVisitor* v, ScanStackMode stack_mode) {
   isolate_->Iterate(v);
 
 #ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
-  if (stack_state == StackState::kNoHeapPointers || !IsGCWithStack()) return;
+  if (stack_mode == ScanStackMode::kNone || !IsGCWithStack()) return;
 
   ConservativeStackVisitor stack_visitor(isolate_, v);
-  stack().IteratePointers(&stack_visitor);
+  if (stack_mode == ScanStackMode::kComplete) {
+    stack().IteratePointers(&stack_visitor);
+  } else {
+    stack().IteratePointersUnsafe(&stack_visitor, stack().GetStackMarker());
+  }
 #endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 }
 
