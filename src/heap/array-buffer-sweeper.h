@@ -9,6 +9,7 @@
 
 #include "src/base/logging.h"
 #include "src/base/platform/mutex.h"
+#include "src/heap/sweeper.h"
 #include "src/objects/js-array-buffer.h"
 #include "src/tasks/cancelable-task.h"
 
@@ -67,7 +68,11 @@ class ArrayBufferSweeper final {
   // Bytes accounted in the old generation. Rebuilt during sweeping.
   size_t OldBytes() const { return old().ApproximateBytes(); }
 
-  bool sweeping_in_progress() const { return job_.get(); }
+  bool sweeping_in_progress() const {
+    DCHECK_IMPLIES(!job_.get(),
+                   local_pretenuring_feedback_and_remembered_sets_.IsEmpty());
+    return job_.get();
+  }
 
  private:
   struct SweepingJob;
@@ -93,6 +98,8 @@ class ArrayBufferSweeper final {
   base::ConditionVariable job_finished_;
   ArrayBufferList young_;
   ArrayBufferList old_;
+  Sweeper::LocalPretenuringFeedbackAndRememberedSets
+      local_pretenuring_feedback_and_remembered_sets_;
 };
 
 }  // namespace internal
