@@ -68,6 +68,30 @@
       },
       "revId": "8e19f6464a428a4325dad3939fbe54cf431971ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2257627c_c1caf390",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4840,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-24T10:59:38Z",
+      "side": 1,
+      "message": "Looking at it again now, I think I was wrong. We can only get kNone in stack_mode when we also don\u0027t want it for the clients. In that case we could just pass stack_mode as is to the clients and get the desired behavior.",
+      "parentUuid": "16b628f2_d8026df3",
+      "range": {
+        "startLine": 4840,
+        "startChar": 62,
+        "endLine": 4840,
+        "endChar": 67
+      },
+      "revId": "8e19f6464a428a4325dad3939fbe54cf431971ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
