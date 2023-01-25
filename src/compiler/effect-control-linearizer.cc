@@ -84,7 +84,6 @@ class EffectControlLinearizer {
   Node* LowerCheckReceiver(Node* node, Node* frame_state);
   Node* LowerCheckReceiverOrNullOrUndefined(Node* node, Node* frame_state);
   Node* LowerCheckString(Node* node, Node* frame_state);
-  Node* LowerCheckBigInt(Node* node, Node* frame_state);
   Node* LowerCheckedBigIntToBigInt64(Node* node, Node* frame_state);
   Node* LowerCheckSymbol(Node* node, Node* frame_state);
   void LowerCheckIf(Node* node, Node* frame_state);
@@ -908,7 +907,7 @@ void EffectControlLinearizer::ProcessNode(Node* node, Node** frame_state) {
     // effect that is passed. The frame state is preserved for lowering.
     DCHECK_EQ(RegionObservability::kObservable, region_observability_);
     *frame_state = NodeProperties::GetFrameStateInput(node);
-    return;
+    //    return;
   }
 
   if (node->opcode() == IrOpcode::kStoreField) {
@@ -1021,9 +1020,6 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       break;
     case IrOpcode::kCheckedUint64ToInt64:
       result = LowerCheckedUint64ToInt64(node, frame_state);
-      break;
-    case IrOpcode::kCheckBigInt:
-      result = LowerCheckBigInt(node, frame_state);
       break;
     case IrOpcode::kCheckedBigIntToBigInt64:
       result = LowerCheckedBigIntToBigInt64(node, frame_state);
@@ -2969,24 +2965,6 @@ Node* EffectControlLinearizer::LowerCheckedTaggedToTaggedPointer(
   return value;
 }
 
-Node* EffectControlLinearizer::LowerCheckBigInt(Node* node, Node* frame_state) {
-  Node* value = node->InputAt(0);
-  const CheckParameters& params = CheckParametersOf(node->op());
-
-  // Check for Smi.
-  Node* smi_check = ObjectIsSmi(value);
-  __ DeoptimizeIf(DeoptimizeReason::kSmi, params.feedback(), smi_check,
-                  frame_state);
-
-  // Check for BigInt.
-  Node* value_map = __ LoadField(AccessBuilder::ForMap(), value);
-  Node* bi_check = __ TaggedEqual(value_map, __ BigIntMapConstant());
-  __ DeoptimizeIfNot(DeoptimizeReason::kWrongInstanceType, params.feedback(),
-                     bi_check, frame_state);
-
-  return value;
-}
-
 Node* EffectControlLinearizer::LowerCheckedBigIntToBigInt64(Node* node,
                                                             Node* frame_state) {
   DCHECK(machine()->Is64());
@@ -3142,28 +3120,11 @@ Node* EffectControlLinearizer::LowerCheckedInt64Mod(Node* node,
 
 Node* EffectControlLinearizer::LowerChangeInt64ToBigInt(Node* node) {
   DCHECK(machine()->Is64());
-
-  auto done = __ MakeLabel(MachineRepresentation::kTagged);
+  // ChangeInt64ToBigInt is allocting when lowered, so we must fix its position
+  // in the effect chain such that it is non-floating after ECL and cannot
+  // mess up when rescheduling (e.g. in Turboshaft's graph builder).
   Node* value = node->InputAt(0);
-
-  // BigInts with value 0 must be of size 0 (canonical form).
-  __ GotoIf(__ Word64Equal(value, __ IntPtrConstant(0)), &done,
-            BuildAllocateBigInt(nullptr, nullptr));
-
-  // Shift sign bit into BigInt's sign bit position.
-  Node* sign =
-      __ Word64Shr(value, __ IntPtrConstant(63 - BigInt::SignBits::kShift));
-  Node* bitfield =
-      __ Word32Or(__ Int32Constant(BigInt::LengthBits::encode(1)), sign);
-
-  // We use (value XOR (value >> 63)) - (value >> 63) to compute the
-  // absolute value, in a branchless fashion.
-  Node* sign_mask = __ Word64Sar(value, __ Int64Constant(63));
-  Node* absolute_value = __ Int64Sub(__ Word64Xor(value, sign_mask), sign_mask);
-  __ Goto(&done, BuildAllocateBigInt(bitfield, absolute_value));
-
-  __ Bind(&done);
-  return done.PhiAt(0);
+  return __ Chained(node->op(), value);
 }
 
 Node* EffectControlLinearizer::LowerChangeUint64ToBigInt(Node* node) {
