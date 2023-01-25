@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69ecec13_916b9496",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-25T16:26:49Z",
+      "side": 0,
+      "message": "Note: Moving it to cc had some negative effects on binary size due to different inlining decisions, so it was decided to keep it in the impl header.",
+      "revId": "d7816e41da0e538d7490b2caee6df97a5a29dd46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
