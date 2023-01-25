@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e63add2_cf3443f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-25T16:25:28Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL.",
+      "revId": "0ca91ce6b91c50a426f0b270766558672cee765b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ada6c251_a8b4ffa6",
+        "filename": "src/wasm/module-decoder-impl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-25T16:25:28Z",
+      "side": 1,
+      "message": "Renaming it to `Impl` as that suits the Pimpl pattern used by `ModuleDecoder`.",
+      "revId": "0ca91ce6b91c50a426f0b270766558672cee765b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
