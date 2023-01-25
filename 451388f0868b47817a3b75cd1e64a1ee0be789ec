@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53872e04_d174c7ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-01-25T09:36:20Z",
+      "side": 1,
+      "message": "This was actually part of a longer refactoring... and I think we should revert this CL again and manually invalidate the V8FileLogger once it\u0027s deactivated.\n\nIterating over all listeners is not very efficient.\nSee https://docs.google.com/document/d/1rGpYWAdpeQbGDsCI4PSU4AG_yoeW8QSFoZnxX8YN580/edit#heading\u003dh.n1atlriavj6v",
+      "revId": "451388f0868b47817a3b75cd1e64a1ee0be789ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
