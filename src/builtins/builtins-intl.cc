@@ -1195,7 +1195,8 @@ BUILTIN(SegmentsPrototypeIterator) {
   RETURN_RESULT_OR_FAILURE(
       isolate,
       JSSegmentIterator::Create(isolate, segments->icu_break_iterator().raw(),
-                                segments->granularity()));
+                                segments->granularity(),
+                                handle(segments->input_string(), isolate)));
 }
 
 BUILTIN(V8BreakIteratorConstructor) {
