@@ -16,6 +16,91 @@
       "message": "PTAL!",
       "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cbe79ef_4f19fab8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-01-25T17:02:04Z",
+      "side": 1,
+      "message": "Very nice!",
+      "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05b6d384_09643724",
+        "filename": "src/maglev/maglev-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-01-25T17:02:04Z",
+      "side": 1,
+      "message": "Nice cleanup!",
+      "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62fa4d01_3bed1621",
+        "filename": "src/maglev/maglev-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-01-25T17:02:04Z",
+      "side": 1,
+      "message": "`DCHECK(!is_number-\u003eis_bound())`?",
+      "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4767b804_93d0077f",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-01-25T17:02:04Z",
+      "side": 1,
+      "message": "What about converting smi fields to double?\nAlso if we only have smi values, we could keep that as KnownNodeInfo or have a LoadPolymorphicSmi...?",
+      "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfe608ac_f655073c",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-01-25T17:02:04Z",
+      "side": 1,
+      "message": "If you add support, and the current representation is Smi you could SmiToDouble here.",
+      "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
