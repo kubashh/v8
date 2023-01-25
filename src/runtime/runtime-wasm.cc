@@ -1381,5 +1381,31 @@ RUNTIME_FUNCTION(Runtime_WasmStringCompare) {
   }
 }
 
+RUNTIME_FUNCTION(Runtime_WasmStringFromCodePoint) {
+  ClearThreadInWasmScope flag_scope(isolate);
+  DCHECK_EQ(1, args.length());
+  HandleScope scope(isolate);
+
+  uint32_t code_point = NumberToUint32(args[0]);
+  if (code_point <= std::numeric_limits<uint16_t>::max()) {
+    return *isolate->factory()->LookupSingleCharacterStringFromCode(code_point);
+  }
+  if (code_point > 0x10FFFF) {
+    return ThrowWasmError(isolate, MessageTemplate::kWasmTrapStringInvalidUtf8);
+  }
+
+  base::uc16 char_buffer[] = {
+      unibrow::Utf16::LeadSurrogate(code_point),
+      unibrow::Utf16::TrailSurrogate(code_point),
+  };
+  Handle<SeqTwoByteString> result =
+      isolate->factory()
+          ->NewRawTwoByteString(arraysize(char_buffer))
+          .ToHandleChecked();
+  DisallowGarbageCollection no_gc;
+  CopyChars(result->GetChars(no_gc), char_buffer, arraysize(char_buffer));
+  return *result;
+}
+
 }  // namespace internal
 }  // namespace v8
