@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab72f416_8ef85fda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175237
+      },
+      "writtenOn": "2023-01-25T00:58:16Z",
+      "side": 1,
+      "message": "PTAL! Note that the test here is failing because https://chromium-review.googlesource.com/c/chromium/src/+/4193348 has not landed yet. Once it lands, then the test will pass because the console implementation will be aligned with the webexposed test expectations.\n\nAs mentioned in the commit description, this CL implements a web-exposed change. It is small enough to not justify an I2S, as per chrishtr@\u0027s judgement. Chris, please register your support for this here.",
+      "revId": "5848dd151cd0540c497f7a0a9281dbe2b7a850bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
