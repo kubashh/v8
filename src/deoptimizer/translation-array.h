@@ -47,6 +47,10 @@ class TranslationArrayIterator {
   uint32_t NextUnsignedOperandAtPreviousIndex();
   void SkipOpcodeAndItsOperandsAtPreviousIndex();
 
+  // Returns the opcode that is encoded within the opcode byte. If the opcode
+  // byte also contains the first operand, sets pending_operand_.
+  TranslationOpcode ConvertOpcodeByteToOpcode(byte value);
+
   std::vector<int32_t> uncompressed_contents_;
   TranslationArray buffer_;
   int index_;
@@ -62,6 +66,10 @@ class TranslationArrayIterator {
   // When starting a new MATCH_PREVIOUS_TRANSLATION operation, we'll need to
   // advance the previous_index_ by this many steps.
   int ops_since_previous_index_was_updated_ = 0;
+
+  // An operand which was already read. If set, the next call to NextOperand or
+  // NextOperandUnsigned should return this rather than advancing the index.
+  base::Optional<byte> pending_operand_;
 };
 
 class TranslationArrayBuilder {

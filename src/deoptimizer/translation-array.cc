@@ -27,6 +27,56 @@ constexpr int kCompressedDataOffset =
 constexpr int kTranslationArrayElementSize = kInt32Size;
 #endif  // V8_USE_ZLIB
 
+// To save space, we can encode an opcode and its first operand together in a
+// single byte if both are small, generating a value which is large enough that
+// it would never be confused with a plain opcode. The encoding is
+//   encoded_value = ((opcode + 2) << 5) | operand
+// which works if:
+//   0 <= opcode < 6,
+//   0 <= operand < 32, and
+//   all other opcodes are less than 64.
+
+constexpr int kShortOperandBits = 5;
+constexpr uint32_t kMaxShortOperand = (1 << kShortOperandBits) - 1;
+constexpr int kShortOpcodeBits = kBitsPerByte - kShortOperandBits;
+constexpr int kShortOpcodeAddend = 2;
+constexpr uint32_t kMaxShortOpcode =
+    (1 << kShortOpcodeBits) - 1 - kShortOpcodeAddend;
+
+constexpr bool CanUseShortEncoding(TranslationOpcode opcode, uint32_t operand) {
+  return static_cast<uint32_t>(opcode) <= kMaxShortOpcode &&
+         operand <= kMaxShortOperand;
+}
+
+constexpr uint8_t EncodeShortOpcodeAndOperand(TranslationOpcode opcode,
+                                              uint32_t operand) {
+  DCHECK(CanUseShortEncoding(opcode, operand));
+  return static_cast<uint8_t>(
+      ((static_cast<uint32_t>(opcode) + kShortOpcodeAddend)
+       << kShortOperandBits) |
+      operand);
+}
+
+constexpr uint8_t kMinShortEncodedValue =
+    EncodeShortOpcodeAndOperand(static_cast<TranslationOpcode>(0), 0);
+
+// The lowest possible output from EncodeShortOpcodeAndOperand must be greater
+// than any standalone opcode.
+static_assert(kMinShortEncodedValue >= kNumTranslationOpcodes);
+
+constexpr bool IsShortEncoded(uint8_t value) {
+  return value >= kMinShortEncodedValue;
+}
+
+constexpr std::pair<TranslationOpcode, uint32_t> DecodeShortOpcodeAndOperand(
+    uint8_t value) {
+  DCHECK(IsShortEncoded(value));
+  return {static_cast<TranslationOpcode>(
+              (static_cast<uint32_t>(value) >> kShortOperandBits) -
+              kShortOpcodeAddend),
+          value & kMaxShortOperand};
+}
+
 }  // namespace
 
 TranslationArrayIterator::TranslationArrayIterator(TranslationArray buffer,
@@ -61,6 +111,10 @@ TranslationArrayIterator::TranslationArrayIterator(TranslationArray buffer,
 int32_t TranslationArrayIterator::NextOperand() {
   if (V8_UNLIKELY(v8_flags.turbo_compress_translation_arrays)) {
     return uncompressed_contents_[index_++];
+  } else if (pending_operand_.has_value()) {
+    int32_t value = *pending_operand_;
+    pending_operand_.reset();
+    return value;
   } else if (remaining_ops_to_use_from_previous_translation_) {
     int32_t value =
         base::VLQDecode(buffer_.GetDataStartAddress(), &previous_index_);
@@ -73,9 +127,19 @@ int32_t TranslationArrayIterator::NextOperand() {
   }
 }
 
+TranslationOpcode TranslationArrayIterator::ConvertOpcodeByteToOpcode(
+    byte value) {
+  if (IsShortEncoded(value)) {
+    auto decoded = DecodeShortOpcodeAndOperand(value);
+    pending_operand_ = decoded.second;
+    return decoded.first;
+  }
+  return static_cast<TranslationOpcode>(value);
+}
+
 TranslationOpcode TranslationArrayIterator::NextOpcodeAtPreviousIndex() {
   TranslationOpcode opcode =
-      static_cast<TranslationOpcode>(buffer_.get(previous_index_++));
+      ConvertOpcodeByteToOpcode(buffer_.get(previous_index_++));
   DCHECK_LT(static_cast<uint32_t>(opcode), kNumTranslationOpcodes);
   DCHECK_NE(opcode, TranslationOpcode::MATCH_PREVIOUS_TRANSLATION);
   DCHECK_LT(previous_index_, index_);
@@ -92,6 +156,10 @@ uint32_t TranslationArrayIterator::NextUnsignedOperandAtPreviousIndex() {
 uint32_t TranslationArrayIterator::NextOperandUnsigned() {
   if (V8_UNLIKELY(v8_flags.turbo_compress_translation_arrays)) {
     return uncompressed_contents_[index_++];
+  } else if (pending_operand_.has_value()) {
+    uint32_t value = *pending_operand_;
+    pending_operand_.reset();
+    return value;
   } else if (remaining_ops_to_use_from_previous_translation_) {
     return NextUnsignedOperandAtPreviousIndex();
   } else {
@@ -112,8 +180,7 @@ TranslationOpcode TranslationArrayIterator::NextOpcode() {
   if (remaining_ops_to_use_from_previous_translation_) {
     return NextOpcodeAtPreviousIndex();
   }
-  TranslationOpcode opcode =
-      static_cast<TranslationOpcode>(buffer_.get(index_++));
+  TranslationOpcode opcode = ConvertOpcodeByteToOpcode(buffer_.get(index_++));
   DCHECK_LE(index_, buffer_.length());
   DCHECK_LT(static_cast<uint32_t>(opcode), kNumTranslationOpcodes);
   if (TranslationOpcodeIsBegin(opcode)) {
@@ -156,7 +223,15 @@ bool TranslationArrayIterator::HasNextOpcode() const {
 
 void TranslationArrayIterator::SkipOpcodeAndItsOperandsAtPreviousIndex() {
   TranslationOpcode opcode = NextOpcodeAtPreviousIndex();
-  for (int count = TranslationOpcodeOperandCount(opcode); count != 0; --count) {
+  int count = TranslationOpcodeOperandCount(opcode);
+  // NextOpcodeAtPreviousIndex might have already read the first operand and put
+  // it in pending_operand_.
+  if (pending_operand_.has_value()) {
+    DCHECK(count > 0);
+    --count;
+    pending_operand_.reset();
+  }
+  for (; count != 0; --count) {
     NextUnsignedOperandAtPreviousIndex();
   }
 }
@@ -204,6 +279,20 @@ inline bool OperandsEqual(uint32_t* expected_operands, T... operands) {
   return (... && (*(expected_operands++) == operands.value()));
 }
 
+inline bool TryShortEncoding(ZoneVector<uint8_t>* buffer,
+                             TranslationOpcode opcode) {
+  return false;
+}
+template <typename TFirst, typename... TRest>
+inline bool TryShortEncoding(ZoneVector<uint8_t>* buffer,
+                             TranslationOpcode opcode, TFirst first_operand,
+                             TRest... rest_operands) {
+  if (!CanUseShortEncoding(opcode, first_operand.value())) return false;
+  buffer->push_back(EncodeShortOpcodeAndOperand(opcode, first_operand.value()));
+  (..., rest_operands.WriteVLQ(buffer));
+  return true;
+}
+
 }  // namespace
 
 template <typename... T>
@@ -211,8 +300,10 @@ void TranslationArrayBuilder::AddRawToContents(TranslationOpcode opcode,
                                                T... operands) {
   DCHECK_EQ(sizeof...(T), TranslationOpcodeOperandCount(opcode));
   DCHECK(!v8_flags.turbo_compress_translation_arrays);
-  contents_.push_back(static_cast<byte>(opcode));
-  (..., operands.WriteVLQ(&contents_));
+  if (!TryShortEncoding(&contents_, opcode, operands...)) {
+    contents_.push_back(static_cast<byte>(opcode));
+    (..., operands.WriteVLQ(&contents_));
+  }
 }
 
 template <typename... T>

@@ -11,7 +11,15 @@ namespace v8 {
 namespace internal {
 
 // V(name, operand_count)
+// Order matters: the first six opcodes can use a more compact encoding if their
+// first operand is in the range [0, 31].
 #define TRANSLATION_OPCODE_LIST(V)                        \
+  V(MATCH_PREVIOUS_TRANSLATION, 1)                        \
+  V(STACK_SLOT, 1)                                        \
+  V(REGISTER, 1)                                          \
+  V(LITERAL, 1)                                           \
+  V(INT32_STACK_SLOT, 1)                                  \
+  V(INT32_REGISTER, 1)                                    \
   V(ARGUMENTS_ELEMENTS, 1)                                \
   V(ARGUMENTS_LENGTH, 0)                                  \
   V(BEGIN_WITHOUT_FEEDBACK, 3)                            \
@@ -27,8 +35,6 @@ namespace internal {
   V(FLOAT_REGISTER, 1)                                    \
   V(FLOAT_STACK_SLOT, 1)                                  \
   V(INLINED_EXTRA_ARGUMENTS, 2)                           \
-  V(INT32_REGISTER, 1)                                    \
-  V(INT32_STACK_SLOT, 1)                                  \
   V(INT64_REGISTER, 1)                                    \
   V(INT64_STACK_SLOT, 1)                                  \
   V(SIGNED_BIGINT64_REGISTER, 1)                          \
@@ -41,13 +47,9 @@ namespace internal {
   V(JAVA_SCRIPT_BUILTIN_CONTINUATION_WITH_CATCH_FRAME, 3) \
   IF_WASM(V, JS_TO_WASM_BUILTIN_CONTINUATION_FRAME, 4)    \
   V(OPTIMIZED_OUT, 0)                                     \
-  V(LITERAL, 1)                                           \
-  V(REGISTER, 1)                                          \
-  V(STACK_SLOT, 1)                                        \
   V(UINT32_REGISTER, 1)                                   \
   V(UINT32_STACK_SLOT, 1)                                 \
-  V(UPDATE_FEEDBACK, 2)                                   \
-  V(MATCH_PREVIOUS_TRANSLATION, 1)
+  V(UPDATE_FEEDBACK, 2)
 
 enum class TranslationOpcode {
 #define CASE(name, ...) name,
