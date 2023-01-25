@@ -33,6 +33,23 @@
       "message": "PTAL",
       "revId": "4a01257466672b19390d831b5b565cf4588bcbb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44dc5920_9020df68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-25T18:11:56Z",
+      "side": 1,
+      "message": "Sorry, I say \"Michael\" and thought I was on the reviewer list. Removed the +2.",
+      "revId": "4a01257466672b19390d831b5b565cf4588bcbb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
