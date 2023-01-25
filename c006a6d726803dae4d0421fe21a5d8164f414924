@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f643ce5_f7f4f169",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-25T15:32:44Z",
+      "side": 1,
+      "message": "Taken from https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/builtins-string.cc;l\u003d37.\n\nIs there anything more to be checked?\nI based this mainly on `StringFromCodePoint` but I\u0027m not very knowledgeable with any encoding.",
+      "revId": "c006a6d726803dae4d0421fe21a5d8164f414924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d725498_00c1f95d",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-25T15:32:44Z",
+      "side": 1,
+      "message": "Can this fail?",
+      "revId": "c006a6d726803dae4d0421fe21a5d8164f414924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0d5791a_1b6333dc",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7273,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-01-25T15:32:44Z",
+      "side": 1,
+      "message": "I just noticed this (from my previous CL): We convert the Smi to an int32, so technically it isn\u0027t a ref any more. Should this be changed to `__ PushRegister(kI32, result_reg);`?",
+      "revId": "c006a6d726803dae4d0421fe21a5d8164f414924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
