@@ -982,6 +982,50 @@ void Heap::CreateInitialReadOnlyObjects() {
   Handle<ScopeInfo> shadow_realm_scope_info =
       ScopeInfo::CreateForShadowRealmNativeContext(isolate());
   set_shadow_realm_scope_info(*shadow_realm_scope_info);
+
+  // Initialize the wasm null_value.
+
+  // Ensure all of the following lands on the same V8 page
+  read_only_space_->EnsureSpaceForAllocation(2 * kMinExpectedOSPageSize);
+  int offset_after_map_word = HeapObject::kMapOffset + sizeof(Tagged_t);
+  auto next_page = RoundUp(read_only_space_->top(), kMinimumOSPageSize);
+  CHECK(offset_after_map_word % kObjectAlignment == 0);
+
+  // add some filler to end up right before a page boundary
+  {
+    int filler_size = static_cast<int>(next_page - read_only_space_->top() -
+                                       offset_after_map_word);
+    HeapObject filler =
+        allocator()->AllocateRawWith<HeapAllocator::kRetryOrFail>(
+            filler_size, AllocationType::kReadOnly, AllocationOrigin::kRuntime,
+            AllocationAlignment::kTaggedAligned);
+    CreateFillerObjectAt(filler.address(), filler_size,
+                         ClearFreedMemoryMode::kClearFreedMemory);
+    CHECK_EQ(read_only_space_->top() + offset_after_map_word, next_page);
+  }
+
+  // create the value
+  Handle<Oddball> wasm_null = factory->NewOddball(
+      factory->null_map(), "wasm null", handle(Smi::zero(), isolate()),
+      "object", Oddball::kNull);
+  set_wasm_null_value(*wasm_null);
+  auto afterMap = wasm_null->address() + offset_after_map_word;
+  CHECK_EQ(afterMap, next_page);
+  CHECK_EQ(afterMap % kMinimumOSPageSize, 0);
+
+  // create some filler to finish the os page
+  {
+    int filler_size =
+        kMinimumOSPageSize - wasm_null->Size() + offset_after_map_word;
+    HeapObject filler =
+        allocator()->AllocateRawWith<HeapAllocator::kRetryOrFail>(
+            filler_size, AllocationType::kReadOnly, AllocationOrigin::kRuntime,
+            AllocationAlignment::kTaggedAligned);
+    CreateFillerObjectAt(filler.address(), filler_size,
+                         ClearFreedMemoryMode::kClearFreedMemory);
+    auto afterFiller = filler.address() + filler.Size();
+    CHECK_EQ(afterFiller % kMinimumOSPageSize, 0);
+  }
 }
 
 void Heap::CreateInitialMutableObjects() {

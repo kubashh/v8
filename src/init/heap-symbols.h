@@ -345,6 +345,7 @@
   V(_, NFKD_string, "NFKD")                                          \
   V(_, not_equal_string, "not-equal")                                \
   V(_, null_string, "null")                                          \
+  V(_, wasm_null_string, "wasm null")                                \
   V(_, null_to_string, "[object Null]")                              \
   V(_, Number_string, "Number")                                      \
   V(_, number_string, "number")                                      \
