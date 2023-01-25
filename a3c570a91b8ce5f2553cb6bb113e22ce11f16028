@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cdf6e0c_43e30356",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-01-25T23:40:21Z",
+      "side": 1,
+      "message": "Thanks for making this spec compliant. A few questions:\n\n- This must be sequenced after https://chromium-review.googlesource.com/c/chromium/src/+/4193348, is that right?\n- Do you happen to know if this has Node ecosystem implications?",
+      "revId": "a3c570a91b8ce5f2553cb6bb113e22ce11f16028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
