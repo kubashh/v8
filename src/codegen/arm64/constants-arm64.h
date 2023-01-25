@@ -1691,6 +1691,7 @@ constexpr NEON3DifferentOp NEON_USUBL = NEON_SSUBL | NEON3SameUBit;
 constexpr NEON3DifferentOp NEON_USUBL2 = NEON_USUBL | NEON_Q;
 constexpr NEON3DifferentOp NEON_USUBW = NEON_SSUBW | NEON3SameUBit;
 constexpr NEON3DifferentOp NEON_USUBW2 = NEON_USUBW | NEON_Q;
+constexpr NEON3DifferentOp NEON_SDOT = NEON3DifferentFixed | 0x00009400;
 
 // NEON instructions operating across vectors.
 using NEONAcrossLanesOp = uint32_t;

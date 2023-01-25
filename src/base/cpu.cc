@@ -336,6 +336,7 @@ bool CPU::StarboardDetectCPU() {
       has_vfp3_ = features.arm.has_vfp3;
       has_vfp3_d32_ = features.arm.has_vfp3_d32;
       has_idiva_ = features.arm.has_idiva;
+      has_dot_prod_ = features.arm.has_dot;
       break;
     case kSbCPUFeaturesArchitectureX86:
     case kSbCPUFeaturesArchitectureX86_64:
@@ -404,6 +405,7 @@ CPU::CPU()
       has_vfp3_(false),
       has_vfp3_d32_(false),
       has_jscvt_(false),
+      has_dot_prod_(false),
       is_fp64_mode_(false),
       has_non_stop_time_stamp_counter_(false),
       is_running_in_vm_(false),
@@ -633,6 +635,7 @@ CPU::CPU()
     has_vfp3_ = (hwcaps & (HWCAP_VFPv3 | HWCAP_VFPv3D16 | HWCAP_VFPv4)) != 0;
     has_vfp3_d32_ = (has_vfp3_ && ((hwcaps & HWCAP_VFPv3D16) == 0 ||
                                    (hwcaps & HWCAP_VFPD32) != 0));
+    has_dot_prod_ = (hwcaps & HWCAP_ASIMDDP) != -1;
   } else {
     // Try to fallback to "Features" CPUInfo field.
     char* features = cpu_info.ExtractField("Features");
@@ -646,6 +649,7 @@ CPU::CPU()
       has_vfp3_ = true;
       has_vfp3_d32_ = true;
     }
+    has_dot_prod_ = HasListItem(features, "asimddp");
     delete[] features;
   }
 

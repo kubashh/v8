@@ -67,6 +67,9 @@ constexpr unsigned CpuFeaturesFromCompiler() {
 #if defined(__ARM_FEATURE_JCVT)
   features |= 1u << JSCVT;
 #endif
+#if defined(__ARM_FEATURE_DOTPROD)
+  features |= 1u << DOTPROD;
+#endif
   return features;
 }
 
@@ -75,6 +78,7 @@ constexpr unsigned CpuFeaturesFromTargetOS() {
 #if defined(V8_TARGET_OS_MACOS) && !defined(V8_TARGET_OS_IOS)
   // TODO(v8:13004): Detect if an iPhone is new enough to support jscvt.
   features |= 1u << JSCVT;
+  features |= 1u << DOTPROD;
 #endif
   return features;
 }
@@ -105,6 +109,9 @@ void CpuFeatures::ProbeImpl(bool cross_compile) {
   unsigned runtime = 0;
   if (cpu.has_jscvt()) {
     runtime |= 1u << JSCVT;
+  }
+  if (cpu.has_dot_prod()) {
+    runtime |= 1u << DOTPROD;
   }
 
   // Use the best of the features found by CPU detection and those inferred from
@@ -1495,7 +1502,8 @@ void Assembler::NEON3DifferentHN(const VRegister& vd, const VRegister& vn,
   V(sqdmlsl, NEON_SQDMLSL, vn.Is1H() || vn.Is1S() || vn.Is4H() || vn.Is2S())   \
   V(sqdmlsl2, NEON_SQDMLSL2, vn.Is1H() || vn.Is1S() || vn.Is8H() || vn.Is4S()) \
   V(sqdmull, NEON_SQDMULL, vn.Is1H() || vn.Is1S() || vn.Is4H() || vn.Is2S())   \
-  V(sqdmull2, NEON_SQDMULL2, vn.Is1H() || vn.Is1S() || vn.Is8H() || vn.Is4S())
+  V(sqdmull2, NEON_SQDMULL2, vn.Is1H() || vn.Is1S() || vn.Is8H() || vn.Is4S()) \
+  V(sdot, NEON_SDOT, vn.IsVector() && vn.Is16B())
 
 #define DEFINE_ASM_FUNC(FN, OP, AS)                            \
   void Assembler::FN(const VRegister& vd, const VRegister& vn, \
