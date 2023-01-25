@@ -2098,17 +2098,18 @@ bool MaglevGraphBuilder::TryBuildNamedAccess(
       return false;
     }
 
+    bool only_double_load = true;
+
     // Check if we support the polymorphic load.
     for (compiler::PropertyAccessInfo access_info : access_infos) {
       switch (access_info.kind()) {
         case compiler::PropertyAccessInfo::kNotFound:
         case compiler::PropertyAccessInfo::kModuleExport:
+          only_double_load = false;
           break;
         case compiler::PropertyAccessInfo::kDataField:
         case compiler::PropertyAccessInfo::kFastDataConstant:
-          if (access_info.field_index().is_double()) {
-            return false;
-          }
+          only_double_load &= access_info.field_index().is_double();
           break;
         default:
           // TODO(victorgomes): Support other access.
@@ -2133,8 +2134,13 @@ bool MaglevGraphBuilder::TryBuildNamedAccess(
       }
     }
 
-    SetAccumulator(AddNewNode<LoadPolymorphicTaggedField>(
-        {lookup_start_object}, std::move(access_infos)));
+    if (only_double_load) {
+      SetAccumulator(AddNewNode<LoadPolymorphicDoubleField>(
+          {lookup_start_object}, std::move(access_infos)));
+    } else {
+      SetAccumulator(AddNewNode<LoadPolymorphicTaggedField>(
+          {lookup_start_object}, std::move(access_infos)));
+    }
     return true;
   }
 }
