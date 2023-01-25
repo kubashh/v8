@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff0fbc1b_99d4fb15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-01-25T14:23:10Z",
+      "side": 1,
+      "message": "This should give you some pointers how I would go about placing your wasm null on the r/o heap",
+      "revId": "049f19aaecaf1b1314c80bd9176eb014d3b704d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
