@@ -336,6 +336,7 @@ bool CPU::StarboardDetectCPU() {
       has_vfp3_ = features.arm.has_vfp3;
       has_vfp3_d32_ = features.arm.has_vfp3_d32;
       has_idiva_ = features.arm.has_idiva;
+      has_dot_prod_ = features.arm.has_dot;
       break;
     case kSbCPUFeaturesArchitectureX86:
     case kSbCPUFeaturesArchitectureX86_64:
@@ -404,6 +405,7 @@ CPU::CPU()
       has_vfp3_(false),
       has_vfp3_d32_(false),
       has_jscvt_(false),
+      has_dot_prod_(false),
       is_fp64_mode_(false),
       has_non_stop_time_stamp_counter_(false),
       is_running_in_vm_(false),
@@ -735,11 +737,13 @@ CPU::CPU()
   uint32_t hwcaps = ReadELFHWCaps();
   if (hwcaps != 0) {
     has_jscvt_ = (hwcaps & HWCAP_JSCVT) != 0;
+    has_dot_prod_ = (hwcaps & HWCAP_ASIMDDP) != 0;
   } else {
     // Try to fallback to "Features" CPUInfo field
     CPUInfo cpu_info;
     char* features = cpu_info.ExtractField("Features");
     has_jscvt_ = HasListItem(features, "jscvt");
+    has_dot_prod_ = HasListItem(features, "asimddp");
     delete[] features;
   }
 #elif V8_OS_DARWIN
@@ -753,8 +757,9 @@ CPU::CPU()
     has_jscvt_ = feat_jscvt;
   }
 #else
-  // ARM64 Macs always have JSCVT.
+  // ARM64 Macs always have JSCVT and ASIMDDP
   has_jscvt_ = true;
+  has_dot_prod_ = true;
 #endif  // V8_OS_IOS
 #endif  // V8_OS_WIN
 
