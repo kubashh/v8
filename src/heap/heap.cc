@@ -1907,8 +1907,6 @@ void Heap::StartIncrementalMarking(int gc_flags,
 }
 
 void Heap::CompleteSweepingFull() {
-  EnsureSweepingCompleted(SweepingForcedFinalizationMode::kUnifiedHeap);
-
   if (array_buffer_sweeper()->sweeping_in_progress()) {
     GCTracer::Scope::ScopeId scope_id;
 
@@ -1926,6 +1924,8 @@ void Heap::CompleteSweepingFull() {
     TRACE_GC_EPOCH(tracer(), scope_id, ThreadKind::kMain);
     array_buffer_sweeper()->EnsureFinished();
   }
+
+  EnsureSweepingCompleted(SweepingForcedFinalizationMode::kUnifiedHeap);
 
   DCHECK(!sweeping_in_progress());
   DCHECK_IMPLIES(cpp_heap(),
@@ -2238,8 +2238,7 @@ size_t Heap::PerformGarbageCollection(GarbageCollector collector,
 
           if (collector == GarbageCollector::MARK_COMPACTOR) {
             Sweeper* const client_sweeper = client->heap()->sweeper();
-            client_sweeper->ParallelIteratePromotedPagesForRememberedSets();
-            client_sweeper->WaitForPromotedPagesIteration();
+            client_sweeper->ContributeAndWaitForPromotedPagesIteration();
           }
           HeapVerifier::VerifyHeapIfEnabled(client->heap());
         });
@@ -2414,15 +2413,6 @@ void Heap::PerformSharedGarbageCollection(Isolate* initiator,
 }
 
 void Heap::CompleteSweepingYoung() {
-  // If sweeping is in progress and there are no sweeper tasks running, finish
-  // the sweeping here, to avoid having to pause and resume during the young
-  // generation GC.
-  FinishSweepingIfOutOfWork();
-
-  if (v8_flags.minor_mc && sweeping_in_progress()) {
-    PauseSweepingAndEnsureYoungSweepingCompleted();
-  }
-
   if (array_buffer_sweeper()->sweeping_in_progress()) {
     GCTracer::Scope::ScopeId scope_id;
 
@@ -2439,6 +2429,15 @@ void Heap::CompleteSweepingYoung() {
 
     TRACE_GC_EPOCH(tracer(), scope_id, ThreadKind::kMain);
     array_buffer_sweeper()->EnsureFinished();
+  }
+
+  // If sweeping is in progress and there are no sweeper tasks running, finish
+  // the sweeping here, to avoid having to pause and resume during the young
+  // generation GC.
+  FinishSweepingIfOutOfWork();
+
+  if (v8_flags.minor_mc && sweeping_in_progress()) {
+    PauseSweepingAndEnsureYoungSweepingCompleted();
   }
 
 #if defined(CPPGC_YOUNG_GENERATION)
@@ -7291,6 +7290,11 @@ void Heap::EnsureSweepingCompleted(SweepingForcedFinalizationMode mode) {
                    !pretenuring_handler_.HasPretenuringFeedback());
     if (collector == GarbageCollector::MINOR_MARK_COMPACTOR) {
       DCHECK(v8_flags.minor_mc);
+      // Pretenuring feedback processing for MinorMC requires that sweeping is
+      // not active. Otherwise we may miss some feedback and/or get data races
+      // with concurrent tracing.
+      DCHECK(!sweeper()->AreSweeperTasksRunning());
+      DCHECK(!array_buffer_sweeper()->sweeping_in_progress());
       pretenuring_handler_.ProcessPretenuringFeedback();
     }
   }
@@ -7332,6 +7336,11 @@ void Heap::PauseSweepingAndEnsureYoungSweepingCompleted() {
                    !pretenuring_handler_.HasPretenuringFeedback());
     if (collector == GarbageCollector::MINOR_MARK_COMPACTOR) {
       DCHECK(v8_flags.minor_mc);
+      // Pretenuring feedback processing for MinorMC requires that sweeping is
+      // not active. Otherwise we may miss some feedback and/or get data races
+      // with concurrent tracing.
+      DCHECK(!sweeper()->AreSweeperTasksRunning());
+      DCHECK(!array_buffer_sweeper()->sweeping_in_progress());
       pretenuring_handler_.ProcessPretenuringFeedback();
     }
   }
