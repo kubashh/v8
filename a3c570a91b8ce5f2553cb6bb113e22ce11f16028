@@ -16,6 +16,24 @@
       "message": "Thanks for making this spec compliant. A few questions:\n\n- This must be sequenced after https://chromium-review.googlesource.com/c/chromium/src/+/4193348, is that right?\n- Do you happen to know if this has Node ecosystem implications?",
       "revId": "a3c570a91b8ce5f2553cb6bb113e22ce11f16028",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e609f03a_21c79d62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175237
+      },
+      "writtenOn": "2023-01-26T04:17:07Z",
+      "side": 1,
+      "message": "That\u0027s correct, and that CL has landed now.\n\nThere should be no implications for node that I\u0027m aware of, since Node implements console manually in JS: https://github.com/nodejs/node/blob/main/lib/internal/console/constructor.js#L470-L471",
+      "parentUuid": "4cdf6e0c_43e30356",
+      "revId": "a3c570a91b8ce5f2553cb6bb113e22ce11f16028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
