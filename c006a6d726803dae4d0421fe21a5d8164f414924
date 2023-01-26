@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a2a4091_33e79cd2",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-01-26T10:33:13Z",
+      "side": 1,
+      "message": "Following that existing builtin sounds good. I don\u0027t think there\u0027s anything else to be checked.",
+      "parentUuid": "6f643ce5_f7f4f169",
+      "revId": "c006a6d726803dae4d0421fe21a5d8164f414924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d725498_00c1f95d",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4804d49a_2b5e4394",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-01-26T10:33:13Z",
+      "side": 1,
+      "message": "Only for invalid lengths. So `ToHandleChecked` is fine.",
+      "parentUuid": "3d725498_00c1f95d",
+      "revId": "c006a6d726803dae4d0421fe21a5d8164f414924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0d5791a_1b6333dc",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-01-25T15:32:44Z",
       "side": 1,
       "message": "I just noticed this (from my previous CL): We convert the Smi to an int32, so technically it isn\u0027t a ref any more. Should this be changed to `__ PushRegister(kI32, result_reg);`?",
+      "revId": "c006a6d726803dae4d0421fe21a5d8164f414924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc35675f_4f5cf5a9",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7273,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-01-26T10:33:13Z",
+      "side": 1,
+      "message": "Yes! Good catch.",
+      "parentUuid": "b0d5791a_1b6333dc",
       "revId": "c006a6d726803dae4d0421fe21a5d8164f414924",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
