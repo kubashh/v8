@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9bbdb1b_e7be8f0c",
+        "filename": "src/heap/array-buffer-sweeper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-26T12:34:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71d8eff8_e0f9d58a",
+      "range": {
+        "startLine": 166,
+        "startChar": 9,
+        "endLine": 166,
+        "endChar": 14
+      },
+      "revId": "9e55ab520f90c1fa3affe9e2ac0697a5307b1a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a289788_aa8d3f9a",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-01-24T17:16:45Z",
       "side": 1,
       "message": "How about modelling this with a `Sweeper::LocalSweeper` which we \na) use to call into sweeping, and\nb) finalize at the same place",
+      "range": {
+        "startLine": 101,
+        "startChar": 11,
+        "endLine": 101,
+        "endChar": 52
+      },
+      "revId": "9e55ab520f90c1fa3affe9e2ac0697a5307b1a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7496844_15934a1f",
+        "filename": "src/heap/array-buffer-sweeper.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-26T12:34:41Z",
+      "side": 1,
+      "message": "Done\n(I went through a few iterations here but decided to go with a simpler version; We can make it more like LocalHeap but I don\u0027t think that\u0027s necessary.)",
+      "parentUuid": "9a289788_aa8d3f9a",
       "range": {
         "startLine": 101,
         "startChar": 11,
