@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9be9720_446d9516",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-01-26T12:39:29Z",
+      "side": 1,
+      "message": "LGTM, 2 nits (also fine to fix in a follow-up).",
+      "revId": "c334837594b3b03e2128fdce5ed3ad72dfca0db1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

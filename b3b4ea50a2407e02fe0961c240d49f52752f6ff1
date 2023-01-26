@@ -33,6 +33,52 @@
       "message": "LGTM :)",
       "revId": "b3b4ea50a2407e02fe0961c240d49f52752f6ff1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfeae7db_43171dad",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-01-26T12:39:29Z",
+      "side": 1,
+      "message": "nit: allocating",
+      "range": {
+        "startLine": 1137,
+        "startChar": 34,
+        "endLine": 1137,
+        "endChar": 43
+      },
+      "revId": "b3b4ea50a2407e02fe0961c240d49f52752f6ff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "530bc4d8_8206c928",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-01-26T12:39:29Z",
+      "side": 1,
+      "message": "nit: Use the GraphAssembler helper for this.",
+      "range": {
+        "startLine": 1141,
+        "startChar": 17,
+        "endLine": 1141,
+        "endChar": 32
+      },
+      "revId": "b3b4ea50a2407e02fe0961c240d49f52752f6ff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
