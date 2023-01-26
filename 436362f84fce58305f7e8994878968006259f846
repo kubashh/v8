@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32392c34_0846afd9",
+        "filename": "src/compiler/common-operator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-01-26T12:00:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aa3bf09_a0b6c5ab",
+      "range": {
+        "startLine": 518,
+        "startChar": 45,
+        "endLine": 518,
+        "endChar": 49
+      },
+      "revId": "436362f84fce58305f7e8994878968006259f846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b097fdde_91f1a4ec",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-01-26T09:52:45Z",
       "side": 1,
       "message": "Checkpoint",
+      "range": {
+        "startLine": 206,
+        "startChar": 59,
+        "endLine": 206,
+        "endChar": 67
+      },
+      "revId": "436362f84fce58305f7e8994878968006259f846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07a9b986_aad8cb73",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-01-26T12:00:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b097fdde_91f1a4ec",
       "range": {
         "startLine": 206,
         "startChar": 59,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3012ade5_c1017928",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-01-26T12:00:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "873b9358_520ce90c",
+      "range": {
+        "startLine": 47,
+        "startChar": 16,
+        "endLine": 47,
+        "endChar": 24
+      },
+      "revId": "436362f84fce58305f7e8994878968006259f846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1e4d7f2_02ea5566",
@@ -117,6 +189,24 @@
       "writtenOn": "2023-01-26T09:52:45Z",
       "side": 1,
       "message": "To avoid the `zero_result`, `non_zero_result` and `if (zero_result.valid() \u0026\u0026 non_zero_result.valid())`, you could do something like:\n```\n// We use a Variable for the result, because some optimization could remove\n// one branch of the diamond by replacing the Branch by a Goto: if this\n// happens, we need to figure out which side was removed, and which side\n// wasn\u0027t to get the correct result, and if this doesn\u0027t happen, we need to\n// insert a Phi. Using a Variable leverages the VariableReducer to automate\n// all of that: we can Set the Variable in the blocks if they are bound, and\n// the VariableReducer will automatically introduce a Phi is needed at the\n// end when Binding merge_block.\nVariable result \u003d NewFreshVariable(RegisterRepresentation::Tagged());\n\nif (Asm().Bind(zero_block)) {\n    Set(result, BuildAllocateBigInt(OpIndex::Invalid(), OpIndex::Invalid()));\n    Asm().Goto(merge);\n}\n\nif (Asm().Bind(non_zero_block)) {\n    ...\n    Set(result, ...);\n    Asm().Goto(merge);\n}\n\nAsm().BindReachable(merge_block);\nreturn Get(result);\n```\n\nAlthough, since EffectControlLinearizer doesn\u0027t run with optimizations in the same phase, you could do BindReachable instead of Bind and always insert the Phi manually... (even then, the Variable could be useful to not have to insert the Phi manually)",
+      "revId": "436362f84fce58305f7e8994878968006259f846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1263a049_e634de9f",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-01-26T12:00:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1e4d7f2_02ea5566",
       "revId": "436362f84fce58305f7e8994878968006259f846",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
