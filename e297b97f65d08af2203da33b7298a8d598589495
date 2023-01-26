@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee6374e0_7dd7580d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-26T14:28:02Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "e297b97f65d08af2203da33b7298a8d598589495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "378c6049_b94448c5",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-26T14:28:02Z",
+      "side": 1,
+      "message": "I assume this is copied from below.",
+      "range": {
+        "startLine": 151,
+        "startChar": 14,
+        "endLine": 151,
+        "endChar": 26
+      },
+      "revId": "e297b97f65d08af2203da33b7298a8d598589495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40e36a91_bbacbb08",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-26T14:28:02Z",
+      "side": 1,
+      "message": "Isn\u0027t this block already covered by `Join()`?",
+      "range": {
+        "startLine": 446,
+        "startChar": 1,
+        "endLine": 450,
+        "endChar": 74
+      },
+      "revId": "e297b97f65d08af2203da33b7298a8d598589495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
