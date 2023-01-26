@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbbeb90c_4b1ff4a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-01-26T10:39:12Z",
+      "side": 1,
+      "message": "LGTM, nice cleanup!\n\n(There are two more places in js-temporal-objects.cc that could receive similar treatment, but we can always do that later; that file leaves plenty of room for general improvement.)",
+      "revId": "dfeef4e52997855bd4065cb9fcf5201dca9ff6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
