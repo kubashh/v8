@@ -293,9 +293,9 @@ void HeapVerification::Verify() {
   SafepointScope safepoint_scope(isolate(), safepoint_kind);
   HandleScope scope(isolate());
 
-  heap()->MakeHeapIterable();
-
   heap()->array_buffer_sweeper()->EnsureFinished();
+
+  heap()->MakeHeapIterable();
 
   VerifyPointersVisitor visitor(heap());
   heap()->IterateRoots(&visitor,
