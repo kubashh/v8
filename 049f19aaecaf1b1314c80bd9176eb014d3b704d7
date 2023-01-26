@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f144116f_1f2ca1a7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-01-26T05:48:20Z",
+      "side": 1,
+      "message": "Can we tag this as wasm-gc with Bug: v8:7748?",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "049f19aaecaf1b1314c80bd9176eb014d3b704d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ff0fbc1b_99d4fb15",
@@ -14,6 +37,46 @@
       "writtenOn": "2023-01-25T14:23:10Z",
       "side": 1,
       "message": "This should give you some pointers how I would go about placing your wasm null on the r/o heap",
+      "revId": "049f19aaecaf1b1314c80bd9176eb014d3b704d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fee0c760_908ead4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-01-26T05:48:20Z",
+      "side": 1,
+      "message": "Thanks so much for doing this! Just a couple of questions.",
+      "revId": "049f19aaecaf1b1314c80bd9176eb014d3b704d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4734867_82308374",
+        "filename": "src/roots/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-01-26T05:48:20Z",
+      "side": 1,
+      "message": "Are we sure the GC will never try to read fields past the map of this object? Do we maybe need a custom object to ensure that?",
+      "range": {
+        "startLine": 142,
+        "startChar": 13,
+        "endLine": 142,
+        "endChar": 20
+      },
       "revId": "049f19aaecaf1b1314c80bd9176eb014d3b704d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
