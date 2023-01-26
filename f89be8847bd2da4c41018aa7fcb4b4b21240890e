@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b5aa9cb_51507beb",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2988,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-01-26T09:52:45Z",
+      "side": 0,
+      "message": "That\u0027s a bit aggressive no? `if (v8_flags.turboshaft)` might be useful ;)\n(not sure if you were planning to do this before landing or if you just forgot, but in doubt, better have a comment here to not forget!)",
+      "range": {
+        "startLine": 2971,
+        "startChar": 0,
+        "endLine": 2988,
+        "endChar": 1
+      },
+      "revId": "f89be8847bd2da4c41018aa7fcb4b4b21240890e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
