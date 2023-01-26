@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25286d52_45fe68e4",
+        "filename": "src/maglev/maglev-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-26T09:32:52Z",
+      "side": 1,
+      "message": "😊",
+      "parentUuid": "05b6d384_09643724",
+      "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62fa4d01_3bed1621",
@@ -65,6 +83,24 @@
       "writtenOn": "2023-01-25T17:02:04Z",
       "side": 1,
       "message": "`DCHECK(!is_number-\u003eis_bound())`?",
+      "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "146c7c03_24baf3eb",
+        "filename": "src/maglev/maglev-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-26T09:32:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62fa4d01_3bed1621",
       "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1122198f_846b4b1c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-26T09:32:52Z",
+      "side": 1,
+      "message": "I\u0027ll do the Smi to double now. But I will change the KnownNodeInfo in a follow up. LoadPolymorphicSmi \u003d\u003d LoadPolymorphicTagged (the only difference is the KnownNodeInfo update). What we can also do is LoadPolymorphicInt32, but I am not convinced.",
+      "parentUuid": "4767b804_93d0077f",
+      "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfe608ac_f655073c",
@@ -99,6 +153,24 @@
       "writtenOn": "2023-01-25T17:02:04Z",
       "side": 1,
       "message": "If you add support, and the current representation is Smi you could SmiToDouble here.",
+      "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cce8cf8_62c32f8a",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-26T09:32:52Z",
+      "side": 1,
+      "message": "Great idea! Thanks!",
+      "parentUuid": "dfe608ac_f655073c",
       "revId": "aca8a0db0e79562019a6aab8ee2f6726867da46b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
