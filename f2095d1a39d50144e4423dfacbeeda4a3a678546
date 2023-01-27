@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e66db2ff_31a64936",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2023-01-27T06:33:02Z",
+      "side": 1,
+      "message": "I\u0027m not really sure how to test the feature detection for hardware dot product instructions on Android/Windows/iOS Arm64 devices because they\u0027re not on the bots either. If there\u0027s precedent on how to do that, happy to take a look. The M1s run these instructions, so the encoding + codegen is tested on those bots.",
+      "revId": "f2095d1a39d50144e4423dfacbeeda4a3a678546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
