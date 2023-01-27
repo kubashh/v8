@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ae5db61_0bba73c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2023-01-27T18:54:49Z",
+      "side": 1,
+      "message": "Thanks for the review, the details for the optimization request are in this github issue if you\u0027d like to take a look:https://github.com/WebAssembly/relaxed-simd/issues/52.",
+      "parentUuid": "02282251_c78fb25b",
+      "revId": "f2095d1a39d50144e4423dfacbeeda4a3a678546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea6c0858_35769c2d",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cc243eb_095a5f52",
+        "filename": "src/base/cpu.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2023-01-27T18:54:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea6c0858_35769c2d",
+      "revId": "f2095d1a39d50144e4423dfacbeeda4a3a678546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "485b8b45_9e4b7d2b",
@@ -65,6 +101,24 @@
       "writtenOn": "2023-01-27T18:10:51Z",
       "side": 1,
       "message": "As the only difference is in the output operand, can we only special-case that parameter, and keep a single `Emit` call?\nSomething like\n\n    InstructionOperand output \u003d CpuFeatures::IsSupported(DOTPROD) ? g.DefineSameAsInput(node, 2) : g.DefineAsRegister(node);\n    Emit(kArm64I32x4DotI8x16AddS, output, ...);",
+      "revId": "f2095d1a39d50144e4423dfacbeeda4a3a678546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b90fc96_de34f21e",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3890,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2023-01-27T18:54:49Z",
+      "side": 1,
+      "message": "Oh yeah, that\u0027s better, thanks. Done.",
+      "parentUuid": "485b8b45_9e4b7d2b",
       "revId": "f2095d1a39d50144e4423dfacbeeda4a3a678546",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
