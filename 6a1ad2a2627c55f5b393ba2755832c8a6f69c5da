@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0617fb99_913275e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-27T14:44:07Z",
+      "side": 1,
+      "message": "PTAL! The reland is verbatim, the bug was somewhere else.",
+      "revId": "6a1ad2a2627c55f5b393ba2755832c8a6f69c5da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
