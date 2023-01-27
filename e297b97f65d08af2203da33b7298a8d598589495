@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6e0d5a9_ebddca26",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-27T09:49:02Z",
+      "side": 1,
+      "message": "It is",
+      "parentUuid": "378c6049_b94448c5",
+      "range": {
+        "startLine": 151,
+        "startChar": 14,
+        "endLine": 151,
+        "endChar": 26
+      },
+      "revId": "e297b97f65d08af2203da33b7298a8d598589495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40e36a91_bbacbb08",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-01-26T14:28:02Z",
       "side": 1,
       "message": "Isn\u0027t this block already covered by `Join()`?",
+      "range": {
+        "startLine": 446,
+        "startChar": 1,
+        "endLine": 450,
+        "endChar": 74
+      },
+      "revId": "e297b97f65d08af2203da33b7298a8d598589495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1891be3_59db584f",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-27T09:49:02Z",
+      "side": 1,
+      "message": "Unless concurrent sweeping is disabled. Without concurrent sweeping, we need to explicitly contribute to sweeping. See the comment above at line 433.",
+      "parentUuid": "40e36a91_bbacbb08",
       "range": {
         "startLine": 446,
         "startChar": 1,
