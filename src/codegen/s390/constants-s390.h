@@ -110,17 +110,38 @@ enum Condition {
   kGreaterThan = gt,
   kLessThanEqual = le,
   kGreaterThanEqual = ge,
-  kUnsignedLessThan = lt,
-  kUnsignedGreaterThan = gt,
-  kUnsignedLessThanEqual = le,
-  kUnsignedGreaterThanEqual = ge,
+  kUnsignedLessThan = 16,
+  kUnsignedGreaterThan = 17,
+  kUnsignedLessThanEqual = 18,
+  kUnsignedGreaterThanEqual = 19,
   kOverflow = overflow,
   kNoOverflow = nooverflow,
-  kZero = eq,
-  kNotZero = ne,
+  kZero = 20,
+  kNotZero = 21,
 };
 
+inline Condition check_condition(Condition cond) {
+  switch (cond) {
+    case kUnsignedLessThan:
+      return lt;
+    case kUnsignedGreaterThan:
+      return gt;
+    case kUnsignedLessThanEqual:
+      return le;
+    case kUnsignedGreaterThanEqual:
+      return ge;
+    case kZero:
+      return eq;
+    case kNotZero:
+      return ne;
+    default:
+      break;
+  }
+  return cond;
+}
+
 inline Condition NegateCondition(Condition cond) {
+  cond = check_condition(cond);
   DCHECK(cond != al);
   switch (cond) {
     case eq:
