@@ -16,6 +16,57 @@
       "message": "I\u0027m not really sure how to test the feature detection for hardware dot product instructions on Android/Windows/iOS Arm64 devices because they\u0027re not on the bots either. If there\u0027s precedent on how to do that, happy to take a look. The M1s run these instructions, so the encoding + codegen is tested on those bots.",
       "revId": "f2095d1a39d50144e4423dfacbeeda4a3a678546",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02282251_c78fb25b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-01-27T18:10:51Z",
+      "side": 1,
+      "message": "I don\u0027t know much about arm and SIMD, so I can only check the code style and consistency with previous code. Left two comments, LGTM otherwise.",
+      "revId": "f2095d1a39d50144e4423dfacbeeda4a3a678546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea6c0858_35769c2d",
+        "filename": "src/base/cpu.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-01-27T18:10:51Z",
+      "side": 1,
+      "message": "This is discouraged by the style guide IIRC; can you move `feat_dot_prod` down to the new code (above `feat_dot_prod_size`)?",
+      "revId": "f2095d1a39d50144e4423dfacbeeda4a3a678546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "485b8b45_9e4b7d2b",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3890,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-01-27T18:10:51Z",
+      "side": 1,
+      "message": "As the only difference is in the output operand, can we only special-case that parameter, and keep a single `Emit` call?\nSomething like\n\n    InstructionOperand output \u003d CpuFeatures::IsSupported(DOTPROD) ? g.DefineSameAsInput(node, 2) : g.DefineAsRegister(node);\n    Emit(kArm64I32x4DotI8x16AddS, output, ...);",
+      "revId": "f2095d1a39d50144e4423dfacbeeda4a3a678546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
