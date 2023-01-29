@@ -77,6 +77,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1046377_291fb961",
+        "filename": "include/v8-function-callback.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-01-29T23:11:31Z",
+      "side": 1,
+      "message": "That\u0027s a good idea. I\u0027ve changed the callers to use these helper functions where possible.",
+      "parentUuid": "a862410d_1fe4b535",
+      "range": {
+        "startLine": 289,
+        "startChar": 14,
+        "endLine": 289,
+        "endChar": 58
+      },
+      "revId": "9095a22196261e30889fa0792c62a7217a4ea2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e43c65cb_23af318b",
         "filename": "src/api/api-inl.h",
         "patchSetId": 1
@@ -106,6 +130,24 @@
       "side": 1,
       "message": "That symbol should exist and is currently the best way for you to get the current isolate.",
       "parentUuid": "e43c65cb_23af318b",
+      "revId": "9095a22196261e30889fa0792c62a7217a4ea2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e82d25c_03aa2066",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-01-29T23:11:31Z",
+      "side": 1,
+      "message": "I had to mess around a bit to get this to compile as it doesn\u0027t exist in the *-inl headers. It works now",
+      "parentUuid": "696db1cb_f60c1aaa",
       "revId": "9095a22196261e30889fa0792c62a7217a4ea2af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
