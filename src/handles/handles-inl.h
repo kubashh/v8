@@ -176,6 +176,11 @@ Address* HandleScope::CreateHandle(Isolate* isolate, Address value) {
   return result;
 }
 
+/* Address* HandleScope::CreateHandleForCurrentIsolate(Address value) { */
+/*     Isolate* isolate = Isolate::Current(); */
+/*     return CreateHandle(isolate, value); */
+/* } */
+
 Address* HandleScope::GetHandle(Isolate* isolate, Address value) {
   DCHECK(AllowHandleAllocation::IsAllowed());
   DCHECK(isolate->main_thread_local_heap()->IsRunning());

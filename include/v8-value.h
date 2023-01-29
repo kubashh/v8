@@ -450,6 +450,19 @@ class V8_EXPORT Value : public Data {
   static void CheckCast(Data* that);
 };
 
+class ValueHelper {
+  using A = internal::Address;
+
+ public:
+  static A ValueToAddress(const Value* value) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    return reinterpret_cast<const A>(value);
+#else
+    return *reinterpret_cast<const A*>(value);
+#endif
+  }
+};
+
 template <>
 V8_INLINE Value* Value::Cast(Data* value) {
 #ifdef V8_ENABLE_CHECKS
@@ -469,7 +482,7 @@ bool Value::IsUndefined() const {
 bool Value::QuickIsUndefined() const {
   using A = internal::Address;
   using I = internal::Internals;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj = ValueHelper::ValueToAddress(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   if (I::GetInstanceType(obj) != I::kOddballType) return false;
   return (I::GetOddballKind(obj) == I::kUndefinedOddballKind);
@@ -486,7 +499,7 @@ bool Value::IsNull() const {
 bool Value::QuickIsNull() const {
   using A = internal::Address;
   using I = internal::Internals;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj = ValueHelper::ValueToAddress(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   if (I::GetInstanceType(obj) != I::kOddballType) return false;
   return (I::GetOddballKind(obj) == I::kNullOddballKind);
@@ -503,7 +516,7 @@ bool Value::IsNullOrUndefined() const {
 bool Value::QuickIsNullOrUndefined() const {
   using A = internal::Address;
   using I = internal::Internals;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj = ValueHelper::ValueToAddress(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   if (I::GetInstanceType(obj) != I::kOddballType) return false;
   int kind = I::GetOddballKind(obj);
@@ -521,7 +534,7 @@ bool Value::IsString() const {
 bool Value::QuickIsString() const {
   using A = internal::Address;
   using I = internal::Internals;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj = ValueHelper::ValueToAddress(this);
   if (!I::HasHeapObjectTag(obj)) return false;
   return (I::GetInstanceType(obj) < I::kFirstNonstringType);
 }
