@@ -22,6 +22,30 @@
       },
       "revId": "c867dec12f5e2082aa0ad5e9bc822ce90ff2affb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40345221_216bea01",
+        "filename": "builders/try.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1429892
+      },
+      "writtenOn": "2023-01-30T12:10:35Z",
+      "side": 1,
+      "message": "Following the log in https://chromium.googlesource.com/chromium/src/+/56f9ae7c2ed9d8537c1b3100edb232cda24e7de7/infra/config/subprojects/chromium/gpu.try.star which also has builders using the chromium_trybot recipe, I\u0027m seeing CLs like https://crrev.com/c/4015119.\n\nCould mb_config changes be needed similar to that CL? Wrapping up for today, but leaving this note here for now.\n\nFor now sending https://crrev.com/c/4196760 which migrates all builders except for the chromium_trybot ones.",
+      "parentUuid": "4875f2e0_2bee3996",
+      "range": {
+        "startLine": 199,
+        "startChar": 12,
+        "endLine": 199,
+        "endChar": 36
+      },
+      "revId": "c867dec12f5e2082aa0ad5e9bc822ce90ff2affb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
