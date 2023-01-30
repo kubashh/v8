@@ -46,6 +46,30 @@
       },
       "revId": "c867dec12f5e2082aa0ad5e9bc822ce90ff2affb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac670eb9_6042d231",
+        "filename": "builders/try.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-01-30T14:31:13Z",
+      "side": 1,
+      "message": "We\u0027ve changed a few Chromium builders in V8 CI before. This is similar. Unfortunately the infra/config part of a change and the mb_config part don\u0027t have an atomic effect. While in Chrome, they at least land together, for the V8 builders, we need a separate mb_config change on the Chrome side, and an infra/config change here.\n\nIf you prepare both changes, I can land them somewhat in sync. E.g. landing our infra/config part right after the chrome side has landed.",
+      "parentUuid": "40345221_216bea01",
+      "range": {
+        "startLine": 199,
+        "startChar": 12,
+        "endLine": 199,
+        "endChar": 36
+      },
+      "revId": "c867dec12f5e2082aa0ad5e9bc822ce90ff2affb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
