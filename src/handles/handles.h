@@ -230,6 +230,10 @@ class V8_NODISCARD HandleScope {
   // Creates a new handle with the given value.
   V8_INLINE static Address* CreateHandle(Isolate* isolate, Address value);
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  V8_INLINE static Address* CreateHandleForCurrentIsolate(Address value);
+#endif
+
   // Deallocates any extensions used by the current scope.
   V8_EXPORT_PRIVATE static void DeleteExtensions(Isolate* isolate);
 

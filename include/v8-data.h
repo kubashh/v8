@@ -56,6 +56,19 @@ class V8_EXPORT Data {
   Data();
 };
 
+class ValueHelper {
+  using A = internal::Address;
+
+ public:
+  static A ValueToAddress(const Data* value) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    return reinterpret_cast<const A>(value);
+#else
+    return *reinterpret_cast<const A*>(value);
+#endif
+  }
+};
+
 /**
  * A fixed-sized array with elements of type Data.
  */
