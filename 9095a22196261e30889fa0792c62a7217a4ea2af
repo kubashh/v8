@@ -99,6 +99,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a43527c8_293728b6",
+        "filename": "include/v8-function-callback.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-01-30T18:24:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1046377_291fb961",
+      "range": {
+        "startLine": 289,
+        "startChar": 14,
+        "endLine": 289,
+        "endChar": 58
+      },
+      "revId": "9095a22196261e30889fa0792c62a7217a4ea2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e43c65cb_23af318b",
@@ -148,6 +172,24 @@
       "side": 1,
       "message": "I had to mess around a bit to get this to compile as it doesn\u0027t exist in the *-inl headers. It works now",
       "parentUuid": "696db1cb_f60c1aaa",
+      "revId": "9095a22196261e30889fa0792c62a7217a4ea2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6572b60c_2cb32655",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-01-30T18:24:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e82d25c_03aa2066",
       "revId": "9095a22196261e30889fa0792c62a7217a4ea2af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
