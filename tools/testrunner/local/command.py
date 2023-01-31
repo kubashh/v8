@@ -71,7 +71,7 @@ def handle_sigterm(process, abort_fun, enabled):
 
 class BaseCommand(object):
   def __init__(self, shell, args=None, cmd_prefix=None, timeout=60, env=None,
-               verbose=False, resources_func=None, handle_sigterm=False):
+               verbose=False, test_case=None, handle_sigterm=False):
     """Initialize the command.
 
     Args:
@@ -81,7 +81,7 @@ class BaseCommand(object):
       timeout: Timeout in seconds.
       env: Environment dict for execution.
       verbose: Print additional output.
-      resources_func: Callable, returning all test files needed by this command.
+      test_case: Test case ref we might need to ask for additional resources
       handle_sigterm: Flag indicating if SIGTERM will be used to terminate the
           underlying process. Should not be used from the main thread, e.g. when
           using a command to list tests.
@@ -268,13 +268,13 @@ class AndroidCommand(BaseCommand):
   driver = None
 
   def __init__(self, shell, args=None, cmd_prefix=None, timeout=60, env=None,
-               verbose=False, resources_func=None, handle_sigterm=False):
+               verbose=False, test_case=None, handle_sigterm=False):
     """Initialize the command and all files that need to be pushed to the
     Android device.
     """
     self.shell_name = os.path.basename(shell)
     self.shell_dir = os.path.dirname(shell)
-    self.files_to_push = (resources_func or (lambda: []))()
+    self.files_to_push = test_case.get_android_resources()
 
     # Make all paths in arguments relative and also prepare files from arguments
     # for pushing to the device.
