@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa09627e_14a073eb",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4175,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T12:15:09Z",
+      "side": 1,
+      "message": "We should still filter before this point though, as this seems to be invoked only after evacuation. So all invalid slots should be filtered out by marking already. Could be that the ReleaseInvalidatedSlots there is missing but I believe this DCHECK should still hold.",
+      "parentUuid": "856d42cf_1b114373",
+      "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03d33c41_2e4cee7d",
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "It is still required for heap verification at least. Maybe we can skip it when heap verification is disabled. I plan to check later.",
       "parentUuid": "03d33c41_2e4cee7d",
+      "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d6d822c_5bc3e0fb",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5839,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T12:15:09Z",
+      "side": 1,
+      "message": "Ah right, I guess it is still needed for promotion. Sorry, forgot about that.\n\nCould you please update the comment for why we still need this code? Right now it still mentions that we update pointers.",
+      "parentUuid": "b0625e68_0810f850",
       "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
