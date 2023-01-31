@@ -33,6 +33,23 @@
       "message": "lgtm, nice!",
       "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03d33c41_2e4cee7d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5839,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T11:22:19Z",
+      "side": 1,
+      "message": "I don\u0027t think we need this anymore. We don\u0027t need to update references AFAIU and we seem to remove dead entries in MinorMarkCompactCollector::ClearNonLiveReferences already. So we should be able to remove that method entirely.\n\nThat said we don\u0027t even allow MakeExternal on young strings from embedders, only for tests and that may or may not be by accident. So there should be very few items in that table. But I believe we could even remove that table iteration if we want so.",
+      "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
