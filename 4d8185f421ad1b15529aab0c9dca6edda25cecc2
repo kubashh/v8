@@ -16,6 +16,23 @@
       "message": "ptal.\n\nRemembered set filtering during marking is already implemented at https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/mark-compact.cc;l\u003d6303;drc\u003d3297fb6d70a02d8c4af8db2bc9e315053744442b;bpv\u003d1;bpt\u003d1",
       "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "024870fb_00cd21a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-01-31T10:56:43Z",
+      "side": 1,
+      "message": "lgtm, nice!",
+      "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
