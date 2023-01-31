@@ -87,9 +87,14 @@ int AbstractCode::SizeIncludingMetadata(PtrComprCageBase cage_base) {
   Map map_object = map(cage_base);
   if (InstanceTypeChecker::IsCode(map_object)) {
     Code code = GetCode();
-    return code.is_off_heap_trampoline()
-               ? 0
-               : FromCode(code).SizeIncludingMetadata(cage_base);
+    // Due to concurrent compilation the Code object might still have an
+    // uninitialized code_entry_point.
+    if (code.is_off_heap_trampoline() ||
+        code.code_entry_point() == kNullAddress) {
+      return 0;
+    } else {
+      return FromCode(code).SizeIncludingMetadata(cage_base);
+    }
   } else {
     DCHECK(InstanceTypeChecker::IsBytecodeArray(map_object));
     return GetBytecodeArray().SizeIncludingMetadata();
