@@ -56,7 +56,8 @@ class TestCase(testcase.TestCase):
     return 'inspector-test'
 
   def _get_resources(self):
-    return [
+    super_resources = super()._get_resources()
+    return super_resources + [
         os.path.join('test', 'inspector', 'debugger', 'resources',
                      'break-locations.js'),
         os.path.join('test', 'inspector', WASM_INSPECTOR_JS),

@@ -495,25 +495,6 @@ class TestCase(object):
   def processor_name(self):
     return self.processor.name
 
-
-class DuckProcessor:
-  """Dummy default processor for original tests implemented by duck-typing."""
-
-  def test_suffix(self, test):
-    return None
-
-  @property
-  def name(self):
-    return None
-
-
-class D8TestCase(TestCase):
-  def get_shell(self):
-    return "d8"
-
-  def _get_shell_flags(self):
-    return ['--test']
-
   def _get_resources_for_file(self, file):
     """Returns for a given file a list of absolute paths of files needed by the
     given file.
@@ -562,6 +543,25 @@ class D8TestCase(TestCase):
         if resource not in result and os.path.exists(resource):
           to_check.append(resource)
     return sorted(list(result))
+
+
+class DuckProcessor:
+  """Dummy default processor for original tests implemented by duck-typing."""
+
+  def test_suffix(self, test):
+    return None
+
+  @property
+  def name(self):
+    return None
+
+
+class D8TestCase(TestCase):
+  def get_shell(self):
+    return "d8"
+
+  def _get_shell_flags(self):
+    return ['--test']
 
   def skip_predictable(self):
     """Returns True if the test case is not suitable for predictable testing."""
