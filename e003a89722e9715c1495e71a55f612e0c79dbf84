@@ -135,6 +135,23 @@
       "message": "Do we need to befriend MemoryMeasurementTask?",
       "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e097e6a_114ca9e6",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T15:30:02Z",
+      "side": 1,
+      "message": "We usually don\u0027t use upper case in snake cases names like `last_M_update_time_`. Could we change this? Can you please also document these fields somewhat?",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
