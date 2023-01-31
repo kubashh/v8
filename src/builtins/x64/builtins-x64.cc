@@ -802,12 +802,12 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
         rcx, FieldOperand(rcx, SharedFunctionInfo::kFunctionDataOffset));
     GetSharedFunctionInfoBytecodeOrBaseline(masm, rcx, kScratchRegister,
                                             &is_baseline);
-    __ CmpObjectType(rcx, BYTECODE_ARRAY_TYPE, rcx);
+    __ CmpObjectTypeEq(rcx, BYTECODE_ARRAY_TYPE, rcx);
     __ Assert(equal, AbortReason::kMissingBytecodeArray);
     __ jmp(&ok);
 
     __ bind(&is_baseline);
-    __ CmpObjectType(rcx, CODE_TYPE, rcx);
+    __ CmpObjectTypeEq(rcx, CODE_TYPE, rcx);
     __ Assert(equal, AbortReason::kMissingBytecodeArray);
 
     __ bind(&ok);
@@ -1034,8 +1034,8 @@ void Builtins::Generate_InterpreterEntryTrampoline(
   // The bytecode array could have been flushed from the shared function info,
   // if so, call into CompileLazy.
   Label compile_lazy;
-  __ CmpObjectType(kInterpreterBytecodeArrayRegister, BYTECODE_ARRAY_TYPE,
-                   kScratchRegister);
+  __ CmpObjectTypeEq(kInterpreterBytecodeArrayRegister, BYTECODE_ARRAY_TYPE,
+                     kScratchRegister);
   __ j(not_equal, &compile_lazy);
 
   // Load the feedback vector from the closure.
@@ -1048,8 +1048,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(
   Label push_stack_frame;
   // Check if feedback vector is valid. If valid, check for optimized code
   // and update invocation count. Otherwise, setup the stack frame.
-  __ LoadMap(rcx, feedback_vector);
-  __ CmpInstanceType(rcx, FEEDBACK_VECTOR_TYPE);
+  __ CmpObjectTypeEq(feedback_vector, FEEDBACK_VECTOR_TYPE, rcx);
   __ j(not_equal, &push_stack_frame);
 
   // Check the tiering state.
@@ -1228,8 +1227,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     Label install_baseline_code;
     // Check if feedback vector is valid. If not, call prepare for baseline to
     // allocate it.
-    __ LoadMap(rcx, feedback_vector);
-    __ CmpInstanceType(rcx, FEEDBACK_VECTOR_TYPE);
+    __ CmpObjectTypeEq(feedback_vector, FEEDBACK_VECTOR_TYPE, rcx);
     __ j(not_equal, &install_baseline_code);
 
     // Check the tiering state.
@@ -1423,7 +1421,7 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
   __ LoadTaggedPointerField(
       rbx, FieldOperand(shared_function_info,
                         SharedFunctionInfo::kFunctionDataOffset));
-  __ CmpObjectType(rbx, INTERPRETER_DATA_TYPE, kScratchRegister);
+  __ CmpObjectTypeEq(rbx, INTERPRETER_DATA_TYPE, kScratchRegister);
   __ j(not_equal, &builtin_trampoline, Label::kNear);
 
   __ LoadTaggedPointerField(
@@ -1456,8 +1454,8 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
   if (v8_flags.debug_code) {
     // Check function data field is actually a BytecodeArray object.
     __ AssertNotSmi(kInterpreterBytecodeArrayRegister);
-    __ CmpObjectType(kInterpreterBytecodeArrayRegister, BYTECODE_ARRAY_TYPE,
-                     rbx);
+    __ CmpObjectTypeEq(kInterpreterBytecodeArrayRegister, BYTECODE_ARRAY_TYPE,
+                       rbx);
     __ Assert(
         equal,
         AbortReason::kFunctionDataShouldBeBytecodeArrayOnInterpreterEntry);
@@ -5344,7 +5342,7 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
   // always have baseline code.
   if (!is_osr) {
     Label start_with_baseline;
-    __ CmpObjectType(code_obj, CODE_TYPE, kScratchRegister);
+    __ CmpObjectTypeEq(code_obj, CODE_TYPE, kScratchRegister);
     __ j(equal, &start_with_baseline);
 
     // Start with bytecode as there is no baseline code.
@@ -5357,7 +5355,7 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
     // Start with baseline code.
     __ bind(&start_with_baseline);
   } else if (v8_flags.debug_code) {
-    __ CmpObjectType(code_obj, CODE_TYPE, kScratchRegister);
+    __ CmpObjectTypeEq(code_obj, CODE_TYPE, kScratchRegister);
     __ Assert(equal, AbortReason::kExpectedBaselineData);
   }
 
@@ -5378,7 +5376,7 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
   Label install_baseline_code;
   // Check if feedback vector is valid. If not, call prepare for baseline to
   // allocate it.
-  __ CmpObjectType(feedback_vector, FEEDBACK_VECTOR_TYPE, kScratchRegister);
+  __ CmpObjectTypeEq(feedback_vector, FEEDBACK_VECTOR_TYPE, kScratchRegister);
   __ j(not_equal, &install_baseline_code);
 
   // Save BytecodeOffset from the stack frame.
