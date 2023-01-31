@@ -1436,7 +1436,7 @@ void TailCallOptimizedCodeSlot(MacroAssembler* masm,
 #ifdef V8_ENABLE_DEBUG_CODE
 void MacroAssembler::AssertFeedbackVector(Register object, Register scratch) {
   if (v8_flags.debug_code) {
-    CompareObjectType(object, scratch, scratch, FEEDBACK_VECTOR_TYPE);
+    CompareObjectTypeEq(object, scratch, scratch, FEEDBACK_VECTOR_TYPE);
     Assert(eq, AbortReason::kExpectedFeedbackVector);
   }
 }
@@ -1604,7 +1604,7 @@ void MacroAssembler::AssertMap(Register object) {
   UseScratchRegisterScope temps(this);
   Register temp = temps.AcquireX();
 
-  CompareObjectType(object, temp, temp, MAP_TYPE);
+  CompareObjectTypeEq(object, temp, temp, MAP_TYPE);
   Check(eq, AbortReason::kOperandIsNotAMap);
 }
 
@@ -1616,7 +1616,7 @@ void MacroAssembler::AssertCode(Register object) {
   UseScratchRegisterScope temps(this);
   Register temp = temps.AcquireX();
 
-  CompareObjectType(object, temp, temp, CODE_TYPE);
+  CompareObjectTypeEq(object, temp, temp, CODE_TYPE);
   Check(eq, AbortReason::kOperandIsNotACode);
 }
 
@@ -1669,7 +1669,7 @@ void MacroAssembler::AssertBoundFunction(Register object) {
   UseScratchRegisterScope temps(this);
   Register temp = temps.AcquireX();
 
-  CompareObjectType(object, temp, temp, JS_BOUND_FUNCTION_TYPE);
+  CompareObjectTypeEq(object, temp, temp, JS_BOUND_FUNCTION_TYPE);
   Check(eq, AbortReason::kOperandIsNotABoundFunction);
 }
 
@@ -3000,6 +3000,33 @@ void MacroAssembler::JumpIfObjectType(Register object, Register map,
   ASM_CODE_COMMENT(this);
   CompareObjectType(object, map, type_reg, type);
   B(cond, if_cond_pass);
+}
+
+// Sets equality condition flags.
+void MacroAssembler::CompareObjectTypeEq(Register object, Register scratch1,
+                                         Register scratch2, InstanceType type) {
+  ASM_CODE_COMMENT(this);
+
+  if (V8_STATIC_ROOTS_BOOL) {
+    if (auto expected = InstanceTypeChecker::UniqueMapOfInstanceType(type)) {
+      UseScratchRegisterScope temps(this);
+      Tagged_t ptr = ReadOnlyRootPtr(*expected);
+      if (IsImmAddSub(ptr) || scratch1 != scratch2 || temps.CanAcquire()) {
+        // Load without decompression.
+        Ldr(scratch1.W(), FieldMemOperand(object, HeapObject::kMapOffset));
+        if (!IsImmAddSub(ptr) && scratch1 != scratch2) {
+          Operand imm_operand =
+              MoveImmediateForShiftedOp(scratch2, ptr, kAnyShift);
+          CmpTagged(scratch1, imm_operand);
+        } else {
+          CmpTagged(scratch1, Immediate(ptr));
+        }
+        return;
+      }
+    }
+  }
+
+  CompareObjectType(object, scratch1, scratch2, type);
 }
 
 // Sets condition flags based on comparison, and returns type in type_reg.
