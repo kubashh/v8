@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fa9dd25_b2d6b9d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T12:24:18Z",
+      "side": 1,
+      "message": "Please also mention this CL here: https://bugs.chromium.org/p/v8/issues/detail?id\u003d13698",
+      "revId": "d65f319abfc9f2eb0357d8b6db9e7f06fe9021c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38f7f450_4f0c1480",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T12:24:18Z",
+      "side": 1,
+      "message": "Awesome! Thanks a lot for the refactoring! LGTM",
+      "revId": "d65f319abfc9f2eb0357d8b6db9e7f06fe9021c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
