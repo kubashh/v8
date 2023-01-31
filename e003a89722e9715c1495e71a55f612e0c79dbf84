@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a07a83c3_a563162d",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T15:28:07Z",
+      "side": 1,
+      "message": "Seems like we don\u0027t really need `has_last_gc`? Isn\u0027t `major_gc_time.has_value()` the same?",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b962f4d3_80d6d1ff",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T15:28:07Z",
+      "side": 1,
+      "message": "Feels like we only sum up values here to report values as trace events on the bottom but not change the state.\n\nFeels like we shouldn\u0027t update this field here but where we set the other fields. Btw why do we store the field in MemoryBalancer here and not treat the field the same as the other fields of GCTracer?",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92d8f0b6_290f1110",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T15:28:07Z",
+      "side": 1,
+      "message": "Please add _ suffix like for other fields and define these fields as private.",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15b2933b_96cc6a42",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T15:28:07Z",
+      "side": 1,
+      "message": "Let\u0027s create the MemoryBalancer object only when --memory-balancer is enabled. Heap::SetUp is the location we tend to set up such objects.",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c081ef57_4970def5",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2501,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T15:28:07Z",
+      "side": 1,
+      "message": "Is there a strong need to change this method like this? I would prefer if we would keep the current code (almost) as-is and just restructure to something like:\n\n```\n  if (!v8_flags.memory_balancer) {\n    // ... existing code here\n  } else {\n    mb-\u003eFoo(x, y);\n  }\n```",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c6fab51_457a36a3",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2540,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T15:28:07Z",
+      "side": 1,
+      "message": "Feels like we should only invoke this line when --memory-balancer is enabled.",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a7baa5f_426f1ef6",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2472,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T15:28:07Z",
+      "side": 1,
+      "message": "Can we avoid this by only invoking public methods from Heap?",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9c1aeb0_bddb46c0",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2473,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-01-31T15:28:07Z",
+      "side": 1,
+      "message": "Do we need to befriend MemoryMeasurementTask?",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
