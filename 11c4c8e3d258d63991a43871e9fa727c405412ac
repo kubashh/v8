@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64013868_83866c4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-01-31T17:26:14Z",
+      "side": 1,
+      "message": "This has broken ETW stack walking, as reported at https://bugs.chromium.org/p/v8/issues/detail?id\u003d13702",
+      "revId": "11c4c8e3d258d63991a43871e9fa727c405412ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
