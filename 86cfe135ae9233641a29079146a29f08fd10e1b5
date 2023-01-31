@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ad512d3_e859e121",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-31T13:15:50Z",
+      "side": 1,
+      "message": "CSA is usually CodeStubAssembler. Maybe you mean in MacroAssembler?",
+      "range": {
+        "startLine": 7,
+        "startChar": 59,
+        "endLine": 7,
+        "endChar": 62
+      },
+      "revId": "86cfe135ae9233641a29079146a29f08fd10e1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "311371f9_56ad9db3",
@@ -14,6 +37,69 @@
       "writtenOn": "2023-01-31T12:52:09Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "86cfe135ae9233641a29079146a29f08fd10e1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbbe9f7a_d30f8d1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-31T13:15:50Z",
+      "side": 1,
+      "message": "Nice! Can you change Maglev as well? Maybe as a follow up.\nLook for MaglevAssembler::CompareObjectType.",
+      "revId": "86cfe135ae9233641a29079146a29f08fd10e1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d73886a_6fa13d2a",
+        "filename": "src/baseline/arm64/baseline-assembler-arm64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-31T13:15:50Z",
+      "side": 1,
+      "message": "Can we use CompareAndBranch here?\nMaybe a CompareObjectTypeAndBranch (like in CompareTaggedAndBranch)?",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 21
+      },
+      "revId": "86cfe135ae9233641a29079146a29f08fd10e1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75b4db18_bac02ecd",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2575,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-01-31T13:15:50Z",
+      "side": 1,
+      "message": "Nit: a more imo expressive name would be IsObjectType, then it is clear you get a equal or not_equal.",
+      "range": {
+        "startLine": 2575,
+        "startChar": 21,
+        "endLine": 2575,
+        "endChar": 36
+      },
       "revId": "86cfe135ae9233641a29079146a29f08fd10e1b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
