@@ -121,6 +121,14 @@ void BaselineAssembler::JumpIf(Condition cc, Register lhs, const Operand& rhs,
   __ cmp(lhs, rhs);
   __ j(cc, target, distance);
 }
+
+void BaselineAssembler::JumpIfObjectTypeFast(Condition cc, Register object,
+                                             InstanceType instance_type,
+                                             Register scratch, Label* target,
+                                             Label::Distance distance) {
+  JumpIfObjectType(cc, object, instance_type, scratch, target, distance);
+}
+
 void BaselineAssembler::JumpIfObjectType(Condition cc, Register object,
                                          InstanceType instance_type,
                                          Register map, Label* target,

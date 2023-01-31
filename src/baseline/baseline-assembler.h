@@ -65,6 +65,11 @@ class BaselineAssembler {
                                InstanceType instance_type, Register map,
                                Label* target,
                                Label::Distance distance = Label::kFar);
+  // Might not load the map into the scratch register.
+  inline void JumpIfObjectTypeFast(Condition cc, Register object,
+                                   InstanceType instance_type, Register scratch,
+                                   Label* target,
+                                   Label::Distance distance = Label::kFar);
   inline void JumpIfInstanceType(Condition cc, Register map,
                                  InstanceType instance_type, Label* target,
                                  Label::Distance distance = Label::kFar);
