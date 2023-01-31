@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "856d42cf_1b114373",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4175,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-31T11:36:03Z",
+      "side": 1,
+      "message": "We drop the invalidated_slot when filtering the remembered set, but since we don\u0027t filter anymore (before this verification is called) we also won\u0027t drop the invalidated_slots.",
+      "parentUuid": "0349f988_0f1dc85c",
+      "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03d33c41_2e4cee7d",
@@ -65,6 +83,24 @@
       "writtenOn": "2023-01-31T11:22:19Z",
       "side": 1,
       "message": "I don\u0027t think we need this anymore. We don\u0027t need to update references AFAIU and we seem to remove dead entries in MinorMarkCompactCollector::ClearNonLiveReferences already. So we should be able to remove that method entirely.\n\nThat said we don\u0027t even allow MakeExternal on young strings from embedders, only for tests and that may or may not be by accident. So there should be very few items in that table. But I believe we could even remove that table iteration if we want so.",
+      "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0625e68_0810f850",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5839,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-31T11:36:03Z",
+      "side": 1,
+      "message": "It is still required for heap verification at least. Maybe we can skip it when heap verification is disabled. I plan to check later.",
+      "parentUuid": "03d33c41_2e4cee7d",
       "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
