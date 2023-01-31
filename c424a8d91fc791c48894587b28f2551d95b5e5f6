@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aecbbd67_e3dbad86",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1384634
+      },
+      "writtenOn": "2023-01-31T09:53:31Z",
+      "side": 1,
+      "message": "See the failure here: https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8790534775113584033/+/u/Num_Fuzz_-_stack/regress-crbug-1399490.\nNote that adding `--no-concurrent-recompilation` to the test didn\u0027t help.",
+      "range": {
+        "startLine": 1164,
+        "startChar": 3,
+        "endLine": 1164,
+        "endChar": 33
+      },
+      "revId": "c424a8d91fc791c48894587b28f2551d95b5e5f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
