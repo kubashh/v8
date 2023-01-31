@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7771437_b9f68771",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4175,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-31T12:46:31Z",
+      "side": 1,
+      "message": "The only case where we call ReleaseInvalidatedSlots during marking is for OLD_TO_SHARED when iterating clients. We don\u0027t release OLD_TO_NEW during marking.",
+      "parentUuid": "aa09627e_14a073eb",
+      "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03d33c41_2e4cee7d",
@@ -137,6 +155,24 @@
       "side": 1,
       "message": "Ah right, I guess it is still needed for promotion. Sorry, forgot about that.\n\nCould you please update the comment for why we still need this code? Right now it still mentions that we update pointers.",
       "parentUuid": "b0625e68_0810f850",
+      "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a63a3c6c_6ce4cc3b",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5839,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-01-31T12:46:31Z",
+      "side": 1,
+      "message": "I plan to update scope names as well later. I\u0027ll update the comment when I do that.",
+      "parentUuid": "9d6d822c_5bc3e0fb",
       "revId": "4d8185f421ad1b15529aab0c9dca6edda25cecc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
