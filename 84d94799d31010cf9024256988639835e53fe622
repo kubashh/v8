@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "84d94799d31010cf9024256988639835e53fe622",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daa73dd0_1d25f88f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-01T10:34:25Z",
+      "side": 1,
+      "message": "Looks nice! Thanks! Just a small comment...",
+      "revId": "84d94799d31010cf9024256988639835e53fe622",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc8aeb97_0c6dff79",
+        "filename": "BUILD.bazel",
+        "patchSetId": 4
+      },
+      "lineNbr": 3838,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-01T10:34:25Z",
+      "side": 1,
+      "message": "You will probably need two cases here: icu and no_icu.",
+      "range": {
+        "startLine": 3838,
+        "startChar": 4,
+        "endLine": 3838,
+        "endChar": 26
+      },
+      "revId": "84d94799d31010cf9024256988639835e53fe622",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
