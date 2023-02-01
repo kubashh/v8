@@ -2578,7 +2578,11 @@ void MaglevGraphBuilder::VisitGetKeyedProperty() {
     case compiler::ProcessedFeedback::kNamedAccess: {
       ValueNode* key = GetAccumulatorTagged();
       compiler::NameRef name = processed_feedback.AsNamedAccess().name();
-      if (!BuildCheckValue(key, name)) return;
+      if (name.IsString()) {
+        AddNewNode<CheckValueEqualsString>({key}, name.AsInternalizedString());
+      } else {
+        if (!BuildCheckValue(key, name)) return;
+      }
       if (TryReuseKnownPropertyLoad(object, name)) return;
       if (TryBuildNamedAccess(object, object,
                               processed_feedback.AsNamedAccess(),
@@ -3427,7 +3431,15 @@ bool MaglevGraphBuilder::BuildCheckValue(ValueNode* node,
     EmitUnconditionalDeopt(DeoptimizeReason::kUnknown);
     return false;
   }
-  AddNewNode<CheckValue>({node}, ref);
+  // TODO: Add CheckValue support for numbers (incl. conversion between Smi and
+  // HeapNumber).
+  DCHECK(!ref.IsSmi());
+  DCHECK(!ref.IsHeapNumber());
+  if (ref.IsString()) {
+    AddNewNode<CheckValueEqualsString>({node}, ref.AsInternalizedString());
+  } else {
+    AddNewNode<CheckValue>({node}, ref);
+  }
   return true;
 }
 
