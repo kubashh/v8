@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a012d33_a10ce67a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-02-01T16:32:00Z",
+      "side": 1,
+      "message": "Removed some commented code that shouldn\u0027t have made its way into the patch.",
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
