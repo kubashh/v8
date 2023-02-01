@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeb9ce53_685aed2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-01T07:23:26Z",
+      "side": 1,
+      "message": "Well.. this change seems to be invalid because `code_space()-\u003eContains(addr)` requires `addr` to be on a managed page; so the (undocumented) invariant of GcSafeFindCodeForInnerPointer is that `addr` must be in a V8-managed space, and we must check LO space before code space.",
+      "revId": "9901a041444538233d208ca8a094456e08df76df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
