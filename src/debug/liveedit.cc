@@ -939,7 +939,7 @@ void LiveEdit::PatchScript(Isolate* isolate, Handle<Script> script,
     }
 
     if (!sfi->HasBytecodeArray()) continue;
-    FixedArray constants = sfi->GetBytecodeArray(isolate).constant_pool();
+    FixedArray constants = sfi->GetBytecodeArray(isolate).ConstantPool();
     for (int i = 0; i < constants.length(); ++i) {
       if (!constants.get(i).IsSharedFunctionInfo()) continue;
       data = nullptr;
@@ -989,7 +989,7 @@ void LiveEdit::PatchScript(Isolate* isolate, Handle<Script> script,
   SharedFunctionInfo::ScriptIterator it(isolate, *new_script);
   for (SharedFunctionInfo sfi = it.Next(); !sfi.is_null(); sfi = it.Next()) {
     if (!sfi.HasBytecodeArray()) continue;
-    FixedArray constants = sfi.GetBytecodeArray(isolate).constant_pool();
+    FixedArray constants = sfi.GetBytecodeArray(isolate).ConstantPool();
     for (int i = 0; i < constants.length(); ++i) {
       if (!constants.get(i).IsSharedFunctionInfo()) continue;
       SharedFunctionInfo inner_sfi = SharedFunctionInfo::cast(constants.get(i));
@@ -1038,7 +1038,7 @@ void LiveEdit::PatchScript(Isolate* isolate, Handle<Script> script,
       // Check that all the functions in this function's constant pool are also
       // on the new script, and that their id matches their index in the new
       // scripts function list.
-      FixedArray constants = sfi.GetBytecodeArray(isolate).constant_pool();
+      FixedArray constants = sfi.GetBytecodeArray(isolate).ConstantPool();
       for (int i = 0; i < constants.length(); ++i) {
         if (!constants.get(i).IsSharedFunctionInfo()) continue;
         SharedFunctionInfo inner_sfi =

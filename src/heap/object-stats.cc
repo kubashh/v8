@@ -994,11 +994,11 @@ void ObjectStatsCollectorImpl::
 void ObjectStatsCollectorImpl::RecordVirtualBytecodeArrayDetails(
     BytecodeArray bytecode) {
   RecordSimpleVirtualObjectStats(
-      bytecode, bytecode.constant_pool(),
+      bytecode, bytecode.ConstantPool(),
       ObjectStats::BYTECODE_ARRAY_CONSTANT_POOL_TYPE);
   // FixedArrays on constant pool are used for holding descriptor information.
   // They are shared with optimized code.
-  FixedArray constant_pool = FixedArray::cast(bytecode.constant_pool());
+  FixedArray constant_pool = bytecode.ConstantPool();
   for (int i = 0; i < constant_pool.length(); i++) {
     Object entry = constant_pool.get(i);
     if (entry.IsFixedArrayExact(cage_base())) {
@@ -1008,7 +1008,7 @@ void ObjectStatsCollectorImpl::RecordVirtualBytecodeArrayDetails(
     }
   }
   RecordSimpleVirtualObjectStats(
-      bytecode, bytecode.handler_table(),
+      bytecode, bytecode.HandlerTable(),
       ObjectStats::BYTECODE_ARRAY_HANDLER_TABLE_TYPE);
   if (bytecode.HasSourcePositionTable()) {
     RecordSimpleVirtualObjectStats(bytecode, bytecode.SourcePositionTable(),

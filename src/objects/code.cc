@@ -699,11 +699,11 @@ void BytecodeArray::PrintJson(std::ostream& os) {
 
   os << "]";
 
-  int constant_pool_lenght = constant_pool().length();
+  int constant_pool_lenght = ConstantPool().length();
   if (constant_pool_lenght > 0) {
     os << ", \"constantPool\": [";
     for (int i = 0; i < constant_pool_lenght; i++) {
-      Object object = constant_pool().get(i);
+      Object object = ConstantPool().get(i);
       if (i > 0) os << ", ";
       os << "\"" << object << "\"";
     }
@@ -773,17 +773,17 @@ void BytecodeArray::Disassemble(Handle<BytecodeArray> handle,
     iterator.Advance();
   }
 
-  os << "Constant pool (size = " << handle->constant_pool().length() << ")\n";
+  os << "Constant pool (size = " << handle->ConstantPool().length() << ")\n";
 #ifdef OBJECT_PRINT
-  if (handle->constant_pool().length() > 0) {
-    handle->constant_pool().Print(os);
+  if (handle->ConstantPool().length() > 0) {
+    handle->ConstantPool().Print(os);
   }
 #endif
 
-  os << "Handler Table (size = " << handle->handler_table().length() << ")\n";
+  os << "Handler Table (size = " << handle->HandlerTable().length() << ")\n";
 #ifdef ENABLE_DISASSEMBLER
-  if (handle->handler_table().length() > 0) {
-    HandlerTable table(*handle);
+  if (handle->HandlerTable().length() > 0) {
+    class HandlerTable table(*handle);
     table.HandlerTableRangePrint(os);
   }
 #endif

@@ -1066,6 +1066,14 @@ class BytecodeArray
   // this will return empty_byte_array.
   DECL_GETTER(SourcePositionTable, ByteArray)
 
+  // If constant_pool has not been initialized, this will return
+  // empty_fixed_array.
+  DECL_GETTER(ConstantPool, FixedArray)
+
+  // If handler_table has not been initialized, this will return
+  // empty_byte_array.
+  DECL_GETTER(HandlerTable, ByteArray)
+
   // Indicates that an attempt was made to collect source positions, but that it
   // failed most likely due to stack exhaustion. When in this state
   // |SourcePositionTable| will return an empty byte array rather than crashing
