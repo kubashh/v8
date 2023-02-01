@@ -383,7 +383,7 @@ void BytecodeExpectationsPrinter::PrintBytecodeArray(
     std::ostream* stream, i::Handle<i::BytecodeArray> bytecode_array) const {
   PrintFrameSize(stream, bytecode_array);
   PrintBytecodeSequence(stream, bytecode_array);
-  PrintConstantPool(stream, bytecode_array->constant_pool());
+  PrintConstantPool(stream, bytecode_array->ConstantPool());
   PrintHandlers(stream, bytecode_array);
 }
 

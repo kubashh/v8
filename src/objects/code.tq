@@ -6,9 +6,9 @@ type DependentCode extends WeakFixedArray;
 
 extern class BytecodeArray extends FixedArrayBase {
   // TODO(v8:8983): bytecode array object sizes vary based on their contents.
-  constant_pool: FixedArray;
+  constant_pool: FixedArray|Smi;
   // The handler table contains offsets of exception handlers.
-  handler_table: ByteArray;
+  handler_table: ByteArray|Smi;
   // Source position table. Can contain:
   // * undefined (initial value)
   // * empty_byte_array (for bytecode generated for functions that will never
@@ -18,7 +18,7 @@ extern class BytecodeArray extends FixedArrayBase {
   // positions for pre-existing bytecode).
   @cppAcquireLoad
   @cppReleaseStore
-  source_position_table: Undefined|ByteArray|Exception;
+  source_position_table: Smi|Undefined|ByteArray|Exception;
   frame_size: int32;
   parameter_size: int32;
   incoming_new_target_or_generator_register: int32;

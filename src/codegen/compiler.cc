@@ -1687,7 +1687,7 @@ class MergeAssumptionChecker final : public ObjectVisitor {
         HeapObject sfis = Script::cast(current).shared_function_infos();
         QueueVisit(sfis, kScriptSfiList);
       } else if (current.IsBytecodeArray()) {
-        HeapObject constants = BytecodeArray::cast(current).constant_pool();
+        FixedArray constants = BytecodeArray::cast(current).ConstantPool();
         QueueVisit(constants, kConstantPool);
       }
       current_object_kind_ = pair.second;
@@ -1937,7 +1937,7 @@ class ConstantPoolPointerForwarder {
     for (Handle<BytecodeArray> bytecode_array : bytecode_arrays_to_update_) {
       local_heap_->Safepoint();
       DisallowGarbageCollection no_gc;
-      FixedArray constant_pool = bytecode_array->constant_pool();
+      FixedArray constant_pool = bytecode_array->ConstantPool();
       IterateConstantPool(constant_pool);
     }
   }
