@@ -34,7 +34,7 @@ HandlerTable::HandlerTable(const wasm::WasmCode* code)
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 HandlerTable::HandlerTable(BytecodeArray bytecode_array)
-    : HandlerTable(bytecode_array.handler_table()) {}
+    : HandlerTable(bytecode_array.HandlerTable()) {}
 
 HandlerTable::HandlerTable(ByteArray byte_array)
     : HandlerTable(reinterpret_cast<Address>(byte_array.GetDataStartAddress()),

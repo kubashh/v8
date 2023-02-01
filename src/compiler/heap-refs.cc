@@ -1370,11 +1370,11 @@ Handle<ByteArray> BytecodeArrayRef::SourcePositionTable() const {
 
 Address BytecodeArrayRef::handler_table_address() const {
   return reinterpret_cast<Address>(
-      object()->handler_table().GetDataStartAddress());
+      object()->HandlerTable().GetDataStartAddress());
 }
 
 int BytecodeArrayRef::handler_table_size() const {
-  return object()->handler_table().length();
+  return object()->HandlerTable().length();
 }
 
 #define IF_ACCESS_FROM_HEAP_C(name)  \

@@ -364,9 +364,9 @@ void BytecodeArray::BytecodeArrayVerify(Isolate* isolate) {
   // - No Illegal bytecodes.
   // - No consecutive sequences of prefix Wide / ExtraWide.
   TorqueGeneratedClassVerifiers::BytecodeArrayVerify(*this, isolate);
-  for (int i = 0; i < constant_pool(isolate).length(); ++i) {
+  for (int i = 0; i < ConstantPool(isolate).length(); ++i) {
     // No ThinStrings in the constant pool.
-    CHECK(!constant_pool(isolate).get(isolate, i).IsThinString(isolate));
+    CHECK(!ConstantPool(isolate).get(isolate, i).IsThinString(isolate));
   }
 }
 
