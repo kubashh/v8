@@ -16,6 +16,23 @@
       "message": "I\u0027ve got it passing the bots now too.",
       "revId": "a959eca52f97c3532b8cbe6d2773c673cc62b5c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e266af8_829be152",
+        "filename": "src/api/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5462,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-02-01T12:17:10Z",
+      "side": 1,
+      "message": "Does Local\u003cv8::Value\u003e under V8_ENABLE_CONSERVATIVE_STACK_SCANNING map essentially to Object? If so perhaps we could change Execution::Call / Invoke to take something similar to https://source.chromium.org/chromium/chromium/src/+/main:v8/src/api/api-arguments.h;l\u003d175;drc\u003dbb3b4d73e56f7c6d8494b398a703c13fa5d08d2f instead of copying the arguments.",
+      "revId": "a959eca52f97c3532b8cbe6d2773c673cc62b5c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
