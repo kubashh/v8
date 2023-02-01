@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e3287e9_604dee1f",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1323,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-01T16:47:53Z",
+      "side": 1,
+      "message": "Is this related to this CL? Maybe add a Drive-By in the comments?",
+      "range": {
+        "startLine": 1310,
+        "startChar": 0,
+        "endLine": 1323,
+        "endChar": 9
+      },
+      "revId": "ba074e88c823e8dd78e6d1a8942f3bdc284564b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e6902a5_b56d52b9",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2583,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-01T16:47:53Z",
+      "side": 1,
+      "message": "Isn\u0027t this already in BuildCheckValue?",
+      "range": {
+        "startLine": 2581,
+        "startChar": 6,
+        "endLine": 2583,
+        "endChar": 14
+      },
+      "revId": "ba074e88c823e8dd78e6d1a8942f3bdc284564b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f656341_a1e1be3e",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-01T16:47:53Z",
+      "side": 1,
+      "message": "Do we really need this include?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 28
+      },
+      "revId": "ba074e88c823e8dd78e6d1a8942f3bdc284564b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97b8bb3a_93f1ab00",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-01T16:47:53Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 1260,
+        "startChar": 0,
+        "endLine": 1275,
+        "endChar": 67
+      },
+      "revId": "ba074e88c823e8dd78e6d1a8942f3bdc284564b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
