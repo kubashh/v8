@@ -80,6 +80,30 @@
       },
       "revId": "9fc9a00551f11c776fe5ffd17d4451e66e9af6c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0461fb3e_7f2cee5c",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-02T11:59:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d8e0ed55_06a83587",
+      "range": {
+        "startLine": 233,
+        "startChar": 58,
+        "endLine": 233,
+        "endChar": 69
+      },
+      "revId": "9fc9a00551f11c776fe5ffd17d4451e66e9af6c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
