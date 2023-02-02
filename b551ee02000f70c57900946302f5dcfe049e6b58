@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82d9519c_09a2647e",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-02T11:53:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61ae68ca_c9eb8965",
+      "revId": "b551ee02000f70c57900946302f5dcfe049e6b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d3171b1_43682348",
@@ -82,6 +100,24 @@
       "writtenOn": "2023-02-02T06:14:06Z",
       "side": 1,
       "message": "If camelcase accessors translate Smi to empty arrays, we could use just `ConstantPool().Size()` here",
+      "revId": "b551ee02000f70c57900946302f5dcfe049e6b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9fab9af_bbd0d911",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-02T11:53:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d3171b1_43682348",
       "revId": "b551ee02000f70c57900946302f5dcfe049e6b58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
