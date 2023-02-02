@@ -16,6 +16,91 @@
       "message": "I updated the CL, could you PTALA?",
       "revId": "6776041ef150710cb1f25e83e41ce1f5ddd51af6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e431f82c_c65e0333",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-02T11:57:41Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "6776041ef150710cb1f25e83e41ce1f5ddd51af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f34e8442_4ed0d7ec",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-02T11:57:41Z",
+      "side": 1,
+      "message": "nit: Consider Smi::zero(), also below",
+      "revId": "6776041ef150710cb1f25e83e41ce1f5ddd51af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd96d1b8_9b784c75",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1403,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-02T11:57:41Z",
+      "side": 1,
+      "message": "merge with the next line? also below",
+      "revId": "6776041ef150710cb1f25e83e41ce1f5ddd51af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54dcf0bf_a2ff422c",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-02T11:57:41Z",
+      "side": 1,
+      "message": "Please comment why it could be Smi zero.",
+      "revId": "6776041ef150710cb1f25e83e41ce1f5ddd51af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c72cb339_f9dfdf2d",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-02T11:57:41Z",
+      "side": 1,
+      "message": "DCHECK here as well? To rule out the Undefined/Exception cases.",
+      "revId": "6776041ef150710cb1f25e83e41ce1f5ddd51af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
