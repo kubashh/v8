@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a04c8501_e2a3432b",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1690,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-02T11:57:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c4ce4eb_29e7afc6",
+      "revId": "b551ee02000f70c57900946302f5dcfe049e6b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9803d49_a2005627",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-02-02T06:14:06Z",
       "side": 1,
       "message": "Especially here, we rely on field immutability and the camel case accs are a bit confusing.",
+      "revId": "b551ee02000f70c57900946302f5dcfe049e6b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9407963a_2267f3a5",
+        "filename": "src/compiler/heap-refs.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-02T11:57:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9803d49_a2005627",
       "revId": "b551ee02000f70c57900946302f5dcfe049e6b58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
