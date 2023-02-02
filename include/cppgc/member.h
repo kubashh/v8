@@ -309,11 +309,12 @@ class V8_TRIVIAL_ABI BasicMember final : private MemberBase<StorageType>,
     WriteBarrierPolicy::InitializingBarrier(Base::GetRawSlot(), value);
   }
   V8_INLINE void AssigningWriteBarrier(T* value) const {
-    WriteBarrierPolicy::AssigningBarrier(Base::GetRawSlot(), value);
+    WriteBarrierPolicy::AssigningBarrier<StorageType::kWriteBarrierSlotType>(
+        Base::GetRawSlot(), value);
   }
   V8_INLINE void AssigningWriteBarrier() const {
-    WriteBarrierPolicy::AssigningBarrier(Base::GetRawSlot(),
-                                         Base::GetRawStorage());
+    WriteBarrierPolicy::AssigningBarrier<StorageType::kWriteBarrierSlotType>(
+        Base::GetRawSlot(), Base::GetRawStorage());
   }
 
   V8_INLINE void ClearFromGC() const { Base::ClearFromGC(); }

@@ -226,14 +226,20 @@ bool YoungGenerationEnabler::IsEnabled() {
 #ifdef CPPGC_SLIM_WRITE_BARRIER
 
 // static
+template <WriteBarrier::CombinedWriteBarrierSlotType SlotType>
 void WriteBarrier::CombinedWriteBarrierSlow(const void* slot) {
+  DCHECK_NOT_NULL(slot);
+  const void* value = nullptr;
+  if constexpr (SlotType == CombinedWriteBarrierSlotType::kCompressed) {
 #if defined(CPPGC_POINTER_COMPRESSION)
-  using MemberStorage = CompressedPointer;
-#else   // !defined(CPPGC_POINTER_COMPRESSION)
-  using MemberStorage = RawPointer;
-#endif  // !defined(CPPGC_POINTER_COMPRESSION)
-  const auto* storage = reinterpret_cast<const MemberStorage*>(slot);
-  const void* value = storage->Load();
+    value = CompressedPointer::Decompress(
+        *static_cast<const CompressedPointer::IntegralType*>(slot));
+#else
+    value = *reinterpret_cast<const void* const*>(slot);
+#endif
+  } else {
+    value = *reinterpret_cast<const void* const*>(slot);
+  }
   WriteBarrier::Params params;
   const WriteBarrier::Type type =
       WriteBarrier::GetWriteBarrierType(slot, value, params);
