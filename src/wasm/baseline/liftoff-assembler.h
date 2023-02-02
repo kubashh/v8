@@ -473,15 +473,41 @@ class LiftoffAssembler : public MacroAssembler {
   explicit LiftoffAssembler(std::unique_ptr<AssemblerBuffer>);
   ~LiftoffAssembler() override;
 
-  LiftoffRegister LoadToRegister(VarState slot, LiftoffRegList pinned);
+  // Load a cache slot to a free register.
+  V8_INLINE LiftoffRegister LoadToRegister(VarState slot,
+                                           LiftoffRegList pinned) {
+    if (V8_LIKELY(slot.is_reg())) return slot.reg();
+    // TODO(clemensb): Remove this hack once https://reviews.llvm.org/D141020 is
+    // available.
+    std::aligned_storage_t<sizeof(LiftoffRegister), alignof(LiftoffRegister)>
+        reg_storage;
+    LiftoffRegister* out_reg = reinterpret_cast<LiftoffRegister*>(&reg_storage);
+    LoadToRegister(slot, pinned, out_reg);
+    return *out_reg;
+  }
 
-  LiftoffRegister LoadToRegister(VarState slot, LiftoffRegister dst);
+  // Slow path called for the method above.
+  // TODO(clemensb): Use a return value instead of output parameter once
+  // https://reviews.llvm.org/D141020 is available.
+  V8_NOINLINE V8_PRESERVE_MOST void LoadToRegister(VarState slot,
+                                                   LiftoffRegList pinned,
+                                                   LiftoffRegister* dst);
 
-  LiftoffRegister PopToRegister(LiftoffRegList pinned = {}) {
+  // Load a non-register cache slot to a given (fixed) register.
+  void LoadToFixedRegister(VarState slot, LiftoffRegister reg) {
+    DCHECK(slot.is_const() || slot.is_stack());
+    if (slot.is_const()) {
+      LoadConstant(reg, slot.constant());
+    } else {
+      Fill(reg, slot.offset(), slot.kind());
+    }
+  }
+
+  V8_INLINE LiftoffRegister PopToRegister(LiftoffRegList pinned = {}) {
     DCHECK(!cache_state_.stack_state.empty());
     VarState slot = cache_state_.stack_state.back();
     cache_state_.stack_state.pop_back();
-    if (slot.is_reg()) {
+    if (V8_LIKELY(slot.is_reg())) {
       cache_state_.dec_used(slot.reg());
       return slot.reg();
     }
@@ -492,7 +518,7 @@ class LiftoffAssembler : public MacroAssembler {
     DCHECK(!cache_state_.stack_state.empty());
     VarState slot = cache_state_.stack_state.back();
     cache_state_.stack_state.pop_back();
-    if (slot.is_reg()) {
+    if (V8_LIKELY(slot.is_reg())) {
       cache_state_.dec_used(slot.reg());
       if (slot.reg() == reg) return;
       if (cache_state_.is_used(reg)) SpillRegister(reg);
@@ -500,7 +526,7 @@ class LiftoffAssembler : public MacroAssembler {
       return;
     }
     if (cache_state_.is_used(reg)) SpillRegister(reg);
-    LoadToRegister(slot, reg);
+    LoadToFixedRegister(slot, reg);
   }
 
   // Use this to pop a value into a register that has no other uses, so it
@@ -580,7 +606,7 @@ class LiftoffAssembler : public MacroAssembler {
     cache_state_.stack_state.emplace_back(kind, NextSpillOffset(kind));
   }
 
-  void SpillRegister(LiftoffRegister);
+  V8_NOINLINE V8_PRESERVE_MOST void SpillRegister(LiftoffRegister);
 
   uint32_t GetNumUses(LiftoffRegister reg) const {
     return cache_state_.get_use_count(reg);
@@ -625,13 +651,15 @@ class LiftoffAssembler : public MacroAssembler {
   LiftoffRegister GetUnusedRegister(LiftoffRegList candidates) {
     DCHECK(!cache_state_.frozen);
     DCHECK(!candidates.is_empty());
-    if (cache_state_.has_unused_register(candidates)) {
+    if (V8_LIKELY(cache_state_.has_unused_register(candidates))) {
       return cache_state_.unused_register(candidates);
     }
     if (cache_state_.has_volatile_register(candidates)) {
       return cache_state_.take_volatile_register(candidates);
     }
-    return SpillOneRegister(candidates);
+    SpillOneRegister(candidates);
+    DCHECK(V8_LIKELY(cache_state_.has_unused_register(candidates)));
+    return cache_state_.unused_register(candidates);
   }
 
   // Performs operations on locals and the top {arity} value stack entries
@@ -1652,7 +1680,10 @@ class LiftoffAssembler : public MacroAssembler {
  private:
   LiftoffRegister LoadI64HalfIntoRegister(VarState slot, RegPairHalf half);
 
-  V8_NOINLINE LiftoffRegister SpillOneRegister(LiftoffRegList candidates);
+  // Spill one of the candidate registers.
+  // TODO(clemensb): Return the spilled iregister once
+  // https://reviews.llvm.org/D141020 is available.
+  V8_NOINLINE V8_PRESERVE_MOST void SpillOneRegister(LiftoffRegList candidates);
   // Spill one or two fp registers to get a pair of adjacent fp registers.
   LiftoffRegister SpillAdjacentFpRegisters(LiftoffRegList pinned);
 
