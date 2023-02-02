@@ -68,6 +68,24 @@
       "message": "WDYT about a test to testRegExp in test/inspector/runtime/remote-object.js? We had cases before where new flags were shipped without inspector support (which wouldn’t happen here since you’ve already added proper support to value-mirror.cc, but still)",
       "revId": "45434cc37be9057e41557508baf1c66fb6180f4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fdfdbc1_b1a7f0c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-02T11:55:01Z",
+      "side": 1,
+      "message": "Sorry I was to quick to press the +2 button.\nWill add a test for inspector as a follow-up.",
+      "parentUuid": "b7b87149_02941af8",
+      "revId": "45434cc37be9057e41557508baf1c66fb6180f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
