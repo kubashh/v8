@@ -146,8 +146,7 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
   }
 
   static_assert(Code::kOnHeapBodyIsContiguous);
-  Heap* heap = isolate_->heap();
-  CodePageCollectionMemoryModificationScope code_allocation(heap);
+  RwxMemoryWriteScope rwx_write_scope("Factory::CodeBuilder::BuildInternal");
 
   Handle<Code> code;
   if (CompiledWithConcurrentBaseline()) {
@@ -221,7 +220,7 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
     // like a handle) that are dereferenced during the copy to point directly
     // to the actual heap objects. These pointers can include references to
     // the code object itself, through the self_reference parameter.
-    raw_code.CopyFromNoFlush(*reloc_info, heap, code_desc_);
+    raw_code.CopyFromNoFlush(*reloc_info, isolate_->heap(), code_desc_);
 
     raw_code.clear_padding();
 
@@ -2519,7 +2518,8 @@ Handle<CodeT> Factory::NewOffHeapTrampolineFor(Handle<CodeT> code,
   // builtin (e.g. the safepoint-table offset). We set them manually here.
   {
     DisallowGarbageCollection no_gc;
-    CodePageMemoryModificationScope code_allocation(*result);
+    RwxMemoryWriteScope rwx_write_scope(
+        "Factory::NewDeoptimizationLiteralArray");
     Code raw_code = FromCodeT(*code);
     Code raw_result = *result;
 

@@ -491,7 +491,7 @@ UNINITIALIZED_TEST(ConcurrentRecordRelocSlot) {
   {
     Code code;
     HeapObject value;
-    CodePageCollectionMemoryModificationScopeForTesting code_scope(heap);
+    RwxMemoryWriteScope rwx_write_scope("ConcurrentRecordRelocSlot");
     {
       HandleScope handle_scope(i_isolate);
       i::byte buffer[i::Assembler::kDefaultBufferSize];

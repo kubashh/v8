@@ -4523,7 +4523,7 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
 
   // If we are deserializing, read the state into the now-empty heap.
   {
-    CodePageCollectionMemoryModificationScope modification_scope(heap());
+    RwxMemoryWriteScope rwx_write_scope("Isolate::Init");
 
     if (create_heap_objects) {
       if (!setup_up_existing_read_only_roots) {
