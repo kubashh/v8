@@ -18,6 +18,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db5aaf7c_58d830f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-02-02T13:27:43Z",
+      "side": 1,
+      "message": "Nice work! LGTM with minor comments.",
+      "revId": "3da587985fc0887635cee61afce45b62aa369a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92ee4ecb_40e9bb4f",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-02-02T13:27:43Z",
+      "side": 1,
+      "message": "`kNoContext` is enough (can\u0027t trap or throw).",
+      "range": {
+        "startLine": 1259,
+        "startChar": 41,
+        "endLine": 1259,
+        "endChar": 63
+      },
+      "revId": "3da587985fc0887635cee61afce45b62aa369a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e1fa683_80d92701",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6274,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-02-02T13:27:43Z",
+      "side": 1,
+      "message": "Use `kHashNotComputedMask`, then you can test both cases with one comparison: when that bit is 0, go to `fast_label` (i.e. the two `GotoIf`s in lines 6280 and 6284 become one).",
+      "range": {
+        "startLine": 6274,
+        "startChar": 27,
+        "endLine": 6274,
+        "endChar": 57
+      },
+      "revId": "3da587985fc0887635cee61afce45b62aa369a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34585c24_cc2f55de",
@@ -36,6 +99,99 @@
         "startChar": 0,
         "endLine": 6284,
         "endChar": 44
+      },
+      "revId": "3da587985fc0887635cee61afce45b62aa369a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f7541f2_9b36e1a5",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6284,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-02-02T13:27:43Z",
+      "side": 1,
+      "message": "Should be possible with something like:\n```\nvar dummy_obj \u003d {123: 456};\nvar index_string \u003d \"123\";\nassertEquals(456, dummy_obj[index_string]);  \nassertEquals(123, instance.exports.hash(index_string));\n```\n(I\u0027m not even sure the `dummy_obj` property lookup is necessary, because we internalize all string literals in the JS parser, so they should have a computed hash code even before that, but at the very least having that explicit step documents the intention of the test.)",
+      "parentUuid": "34585c24_cc2f55de",
+      "range": {
+        "startLine": 6281,
+        "startChar": 0,
+        "endLine": 6284,
+        "endChar": 44
+      },
+      "revId": "3da587985fc0887635cee61afce45b62aa369a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1065cef2_32a3911d",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6290,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-02-02T13:27:43Z",
+      "side": 1,
+      "message": "unnecessary because it\u0027s subsumed by the following shift; just do `static_assert(Name::HashBits::kLastUsedBit \u003d\u003d kBitsPerInt - 1);`",
+      "range": {
+        "startLine": 6290,
+        "startChar": 13,
+        "endLine": 6290,
+        "endChar": 22
+      },
+      "revId": "3da587985fc0887635cee61afce45b62aa369a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7479dbb4_f75ad7b6",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-02-02T13:27:43Z",
+      "side": 1,
+      "message": "we don\u0027t need handlification here, so this can be just:\n```\nString string \u003d String::cast(args[0]);\nuint32_t hash \u003d string.EnsureHash();\n```",
+      "range": {
+        "startLine": 1406,
+        "startChar": 2,
+        "endLine": 1408,
+        "endChar": 39
+      },
+      "revId": "3da587985fc0887635cee61afce45b62aa369a0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "828d2138_35e98c92",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7306,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-02-02T13:27:43Z",
+      "side": 1,
+      "message": "This is only necessary for operations that can trap or throw (so that the debugger knows what state to show when you enable \"break on exception\").",
+      "range": {
+        "startLine": 7306,
+        "startChar": 4,
+        "endLine": 7306,
+        "endChar": 75
       },
       "revId": "3da587985fc0887635cee61afce45b62aa369a0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
