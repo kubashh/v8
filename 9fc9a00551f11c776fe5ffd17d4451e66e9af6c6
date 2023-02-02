@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94922997_e6aef798",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-02T10:14:34Z",
+      "side": 1,
+      "message": "bug id",
+      "revId": "9fc9a00551f11c776fe5ffd17d4451e66e9af6c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9db56f34_f364fbfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-02T10:14:34Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "9fc9a00551f11c776fe5ffd17d4451e66e9af6c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02cedfca_72062ca1",
+        "filename": "src/heap/cppgc/write-barrier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-02T10:14:34Z",
+      "side": 1,
+      "message": "If we have `kCompressed`, then we must be running with `CPPGC_POINTER_COMPRESSION`? (We don\u0027t have cage base updater otherwise for example which would mean that nothing compressed would work.)\n\nIsn\u0027t this as simple as\n```\nif constexpr (... kCompressed) {\n  value \u003d  Decompress();\n} else{\n  value \u003d *slot;\n}\n```",
+      "range": {
+        "startLine": 233,
+        "startChar": 58,
+        "endLine": 233,
+        "endChar": 69
+      },
+      "revId": "9fc9a00551f11c776fe5ffd17d4451e66e9af6c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
