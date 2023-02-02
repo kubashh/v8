@@ -76,7 +76,8 @@ void EvacuationVerifier::VerifyEvacuation(PagedSpaceBase* space) {
   for (Page* p : *space) {
     if (p->IsEvacuationCandidate()) continue;
     if (p->Contains(space->top())) {
-      CodePageMemoryModificationScope memory_modification_scope(p);
+      RwxMemoryWriteScope rwx_write_scope(
+          "EvacuationVerifier::VerifyEvacuation");
       heap_->CreateFillerObjectAt(
           space->top(), static_cast<int>(space->limit() - space->top()));
     }
