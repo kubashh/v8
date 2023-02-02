@@ -1296,3 +1296,28 @@ function makeWtf16TestDataSegment() {
                  WebAssembly.RuntimeError, /Invalid code point [0-9]+/);
   }
 })();
+
+(function TestStringHash() {
+  print(arguments.callee.name);
+  let builder = new WasmModuleBuilder();
+  builder.addFunction("hash", kSig_i_w)
+    .exportFunc()
+    .addBody([
+      kExprLocalGet, 0,
+      ...GCInstr(kExprStringHash),
+    ]);
+
+  let hash = builder.instantiate().exports.hash;
+  assertEquals(hash(""), hash(""));
+  assertEquals(hash("foo"), hash("foo"));
+  assertEquals(hash("bar"), hash("bar"));
+  assertEquals(hash("123"), hash("123"));
+  // Assuming that hash collisions are very rare.
+  assertNotEquals(hash("foo"), hash("bar"));
+  // Test with cons strings.
+  assertEquals(hash("f" + "o" + "o"), hash("foo"));
+  assertEquals(hash("f" + 1), hash("f1"));
+
+  assertEquals(hash(new String(" foo ").trim()), hash("foo"));
+  assertEquals(hash(new String("xfoox").substring(1, 4)), hash("foo"));
+})();
