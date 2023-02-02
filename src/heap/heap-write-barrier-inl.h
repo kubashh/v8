@@ -116,11 +116,10 @@ inline void CombinedWriteBarrierInternal(HeapObject host, HeapObjectSlot slot,
 
   // Marking barrier: mark value & record slots when marking is on.
   if (V8_UNLIKELY(is_marking)) {
-    // CodePageHeaderModificationScope is not required because the only case
+    // RwxMemoryWriteScope is not required because the only case
     // when a InstructionStream value is stored somewhere is during creation of
     // a new InstructionStream object which is then stored to
-    // Code's code field and this case is already guarded by
-    // CodePageMemoryModificationScope.
+    // Code's code field and this case is already guarded.
     WriteBarrier::MarkingSlow(host, HeapObjectSlot(slot), value);
   }
 }

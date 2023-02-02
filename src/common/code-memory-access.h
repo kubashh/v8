@@ -11,9 +11,6 @@
 namespace v8 {
 namespace internal {
 
-class CodePageCollectionMemoryModificationScope;
-class CodePageMemoryModificationScope;
-class CodeSpaceMemoryModificationScope;
 class RwxMemoryWriteScopeForTesting;
 namespace wasm {
 class CodeSpaceWriteScope;

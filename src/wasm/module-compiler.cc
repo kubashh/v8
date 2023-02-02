@@ -16,7 +16,6 @@
 #include "src/compiler/wasm-compiler.h"
 #include "src/debug/debug.h"
 #include "src/handles/global-handles-inl.h"
-#include "src/heap/heap-inl.h"  // For CodePageCollectionMemoryModificationScope.
 #include "src/logging/counters-scopes.h"
 #include "src/logging/metrics.h"
 #include "src/tracing/trace-event.h"
@@ -3352,7 +3351,7 @@ void CompilationStateImpl::FinalizeJSToWasmWrappers(Isolate* isolate,
 
   isolate->heap()->EnsureWasmCanonicalRttsSize(module->MaxCanonicalTypeIndex() +
                                                1);
-  CodePageCollectionMemoryModificationScope modification_scope(isolate->heap());
+  RwxMemoryWriteScope rwx_write_scope("FinalizeJSToWasmWrappers");
   for (auto& unit : js_to_wasm_wrapper_units_) {
     DCHECK_EQ(isolate, unit->isolate());
     // Note: The code is either the compiled signature-specific wrapper or the
@@ -3818,7 +3817,7 @@ void CompileJsToWasmWrappers(Isolate* isolate, const WasmModule* module) {
   // optimization we create a code memory modification scope that avoids
   // changing the page permissions back-and-forth between RWX and RX, because
   // many such wrapper are allocated in sequence below.
-  CodePageCollectionMemoryModificationScope modification_scope(isolate->heap());
+  RwxMemoryWriteScope rwx_write_scope("CompileJsToWasmWrappers");
   for (auto& pair : compilation_units) {
     JSToWasmWrapperKey key = pair.first;
     JSToWasmWrapperCompilationUnit* unit = pair.second.get();
