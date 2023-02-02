@@ -101,6 +101,24 @@
       "message": "DCHECK here as well? To rule out the Undefined/Exception cases.",
       "revId": "6776041ef150710cb1f25e83e41ce1f5ddd51af6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9560bc53_995ddb9c",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-02T12:05:36Z",
+      "side": 1,
+      "message": "I think Undefined/Exception could also happen here, so I would need to check Smi(0) || Undefined || Exception. That\u0027s why I didn\u0027t add a DCHECK here. You think I should?",
+      "parentUuid": "c72cb339_f9dfdf2d",
+      "revId": "6776041ef150710cb1f25e83e41ce1f5ddd51af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
