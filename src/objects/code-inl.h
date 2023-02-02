@@ -1394,19 +1394,53 @@ DEF_GETTER(BytecodeArray, SourcePositionTable, ByteArray) {
   Object maybe_table = source_position_table(cage_base, kAcquireLoad);
   if (maybe_table.IsByteArray(cage_base)) return ByteArray::cast(maybe_table);
   ReadOnlyRoots roots = GetReadOnlyRoots();
-  DCHECK(maybe_table.IsUndefined(roots) || maybe_table.IsException(roots));
+  DCHECK(maybe_table.IsUndefined(roots) || maybe_table.IsException(roots) ||
+         maybe_table == Smi(0));
   return roots.empty_byte_array();
+}
+
+DEF_GETTER(BytecodeArray, raw_constant_pool, Object) {
+  Object value;
+  value = TaggedField<Object>::load(cage_base, *this, kConstantPoolOffset);
+  DCHECK(value == Smi(0) || value.IsFixedArray());
+  return value;
+}
+
+DEF_GETTER(BytecodeArray, raw_handler_table, Object) {
+  Object value;
+  value = TaggedField<Object>::load(cage_base, *this, kHandlerTableOffset);
+  DCHECK(value == Smi(0) || value.IsByteArray());
+  return value;
+}
+
+DEF_GETTER(BytecodeArray, raw_source_position_table, Object) {
+  Object value;
+  value =
+      TaggedField<Object>::load(cage_base, *this, kSourcePositionTableOffset);
+  DCHECK(value == Smi(0) || value.IsByteArray() || value.IsUndefined() ||
+         value.IsException());
+  return value;
 }
 
 int BytecodeArray::BytecodeArraySize() const { return SizeFor(this->length()); }
 
 DEF_GETTER(BytecodeArray, SizeIncludingMetadata, int) {
   int size = BytecodeArraySize();
-  size += constant_pool(cage_base).Size(cage_base);
-  size += handler_table(cage_base).Size();
-  ByteArray table = SourcePositionTable(cage_base);
-  if (table.length() != 0) {
-    size += table.Size();
+  Object maybe_constant_pool = raw_constant_pool(cage_base);
+  if (maybe_constant_pool.IsFixedArray()) {
+    size += FixedArray::cast(maybe_constant_pool).Size(cage_base);
+  } else {
+    DCHECK_EQ(maybe_constant_pool, Smi(0));
+  }
+  Object maybe_handler_table = raw_handler_table(cage_base);
+  if (maybe_handler_table.IsByteArray()) {
+    size += ByteArray::cast(maybe_handler_table).Size();
+  } else {
+    DCHECK_EQ(maybe_handler_table, Smi(0));
+  }
+  Object maybe_table = raw_source_position_table(cage_base);
+  if (maybe_table.IsByteArray()) {
+    size += ByteArray::cast(maybe_table).Size();
   }
   return size;
 }
