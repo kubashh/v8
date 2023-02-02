@@ -39,6 +39,7 @@
 #include "src/logging/counters.h"
 #include "src/objects/heap-number.h"
 #include "src/objects/instance-type.h"
+#include "src/objects/name.h"
 #include "src/roots/roots.h"
 #include "src/tracing/trace-event.h"
 #include "src/trap-handler/trap-handler.h"
@@ -6254,6 +6255,50 @@ Node* WasmGraphBuilder::StringCompare(Node* lhs, CheckForNull null_check_lhs,
 Node* WasmGraphBuilder::StringFromCodePoint(Node* code_point) {
   return gasm_->CallBuiltin(Builtin::kWasmStringFromCodePoint,
                             Operator::kEliminatable, code_point);
+}
+
+Node* WasmGraphBuilder::StringHash(Node* string, CheckForNull null_check,
+                                   wasm::WasmCodePosition position) {
+  if (null_check == kWithNullCheck) {
+    string = AssertNotNull(string, position);
+  }
+  // Fast path if hash is already computed.
+  auto fast_label = gasm_->MakeLabel();
+  auto runtime_label = gasm_->MakeLabel();
+  auto end_label = gasm_->MakeLabel(MachineRepresentation::kWord32);
+
+  Node* raw_hash = gasm_->LoadFromObject(
+      MachineType::Int32(), string,
+      wasm::ObjectAccess::ToTagged(Name::kRawHashFieldOffset));
+  Node* type_mask = gasm_->Int32Constant(
+      static_cast<int32_t>(Name::HashFieldTypeBits::kMask));
+  static_assert(Name::HashFieldTypeBits::kShift == 0);
+  Node* type_val = gasm_->Word32And(raw_hash, type_mask);
+  Node* is_hashed = gasm_->Word32Equal(
+      type_val,
+      gasm_->Int32Constant(static_cast<int32_t>(Name::HashFieldType::kHash)));
+  gasm_->GotoIf(is_hashed, &fast_label);
+  Node* is_index_hash = gasm_->Word32Equal(
+      type_val, gasm_->Int32Constant(
+                    static_cast<int32_t>(Name::HashFieldType::kIntegerIndex)));
+  gasm_->GotoIf(is_index_hash, &fast_label);
+  gasm_->Goto(&runtime_label);
+
+  gasm_->Bind(&fast_label);
+  // Decode raw hash.
+  Node* hash = gasm_->Word32Shr(
+      gasm_->Word32And(raw_hash, gasm_->Int32Constant(static_cast<int32_t>(
+                                     Name::HashBits::kMask))),
+      gasm_->Int32Constant(static_cast<int32_t>(Name::HashBits::kShift)));
+  gasm_->Goto(&end_label, hash);
+
+  gasm_->Bind(&runtime_label);
+  Node* hash_runtime = gasm_->CallBuiltin(Builtin::kWasmStringHash,
+                                          Operator::kEliminatable, string);
+  gasm_->Goto(&end_label, hash_runtime);
+
+  gasm_->Bind(&end_label);
+  return end_label.PhiAt(0);
 }
 
 Node* WasmGraphBuilder::I31New(Node* input) {

@@ -1400,5 +1400,14 @@ RUNTIME_FUNCTION(Runtime_WasmStringFromCodePoint) {
   return *result;
 }
 
+RUNTIME_FUNCTION(Runtime_WasmStringHash) {
+  ClearThreadInWasmScope flag_scope(isolate);
+  DCHECK_EQ(1, args.length());
+  HandleScope scope(isolate);
+  Handle<String> string(String::cast(args[0]), isolate);
+  uint32_t hash = string->EnsureHash();
+  return Smi::FromInt(static_cast<int>(hash));
+}
+
 }  // namespace internal
 }  // namespace v8
