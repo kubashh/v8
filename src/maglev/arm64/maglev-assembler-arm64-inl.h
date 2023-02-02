@@ -472,6 +472,9 @@ inline void MaglevAssembler::Move(Register dst, Handle<HeapObject> obj) {
 inline void MaglevAssembler::SignExtend32To64Bits(Register dst, Register src) {
   Mov(dst, Operand(src.W(), SXTW));
 }
+inline void MaglevAssembler::NegateInt32(Register val) {
+  Neg(val.W(), val.W());
+}
 
 template <typename NodeT>
 inline void MaglevAssembler::DeoptIfBufferDetached(Register array,
@@ -569,6 +572,23 @@ inline void MaglevAssembler::CompareInt32AndJumpIf(Register r1, Register r2,
                                                    Label* target,
                                                    Label::Distance distance) {
   CompareAndBranch(r1.W(), r2.W(), cond, target);
+}
+
+inline void MaglevAssembler::CompareInt32AndJumpIf(Register r1, int32_t value,
+                                                   Condition cond,
+                                                   Label* target,
+                                                   Label::Distance distance) {
+  CompareAndBranch(r1.W(), Immediate(value), cond, target);
+}
+
+inline void MaglevAssembler::TestInt32AndJumpIfAnySet(
+    Register r1, int32_t mask, Label* target, Label::Distance distance) {
+  TestAndBranchIfAnySet(r1.W(), mask, target);
+}
+
+inline void MaglevAssembler::TestInt32AndJumpIfAllClear(
+    Register r1, int32_t mask, Label* target, Label::Distance distance) {
+  TestAndBranchIfAllClear(r1.W(), mask, target);
 }
 
 inline void MaglevAssembler::LoadHeapNumberValue(DoubleRegister result,

@@ -150,12 +150,10 @@ class MaglevAssembler : public MacroAssembler {
   inline void DefineExceptionHandlerAndLazyDeoptPoint(NodeBase* node);
 
   template <typename Function, typename... Args>
-  inline DeferredCodeInfo* PushDeferredCode(Function&& deferred_code_gen,
-                                            Args&&... args);
+  inline Label* MakeDeferredCode(Function&& deferred_code_gen, Args&&... args);
   template <typename Function, typename... Args>
   inline void JumpToDeferredIf(Condition cond, Function&& deferred_code_gen,
                                Args&&... args);
-
   template <typename NodeT>
   inline Label* GetDeoptLabel(NodeT* node, DeoptimizeReason reason);
   template <typename NodeT>
@@ -189,6 +187,7 @@ class MaglevAssembler : public MacroAssembler {
   inline void LoadByte(Register dst, MemOperand src);
 
   inline void SignExtend32To64Bits(Register dst, Register src);
+  inline void NegateInt32(Register val);
 
   template <typename NodeT>
   inline void DeoptIfBufferDetached(Register array, Register scratch,
@@ -222,6 +221,14 @@ class MaglevAssembler : public MacroAssembler {
   inline void CompareInt32AndJumpIf(Register r1, Register r2, Condition cond,
                                     Label* target,
                                     Label::Distance distance = Label::kFar);
+  inline void CompareInt32AndJumpIf(Register r1, int32_t value, Condition cond,
+                                    Label* target,
+                                    Label::Distance distance = Label::kFar);
+  inline void TestInt32AndJumpIfAnySet(Register r1, int32_t mask, Label* target,
+                                       Label::Distance distance = Label::kFar);
+  inline void TestInt32AndJumpIfAllClear(
+      Register r1, int32_t mask, Label* target,
+      Label::Distance distance = Label::kFar);
 
   inline void Int32ToDouble(DoubleRegister result, Register n);
   inline void SmiToDouble(DoubleRegister result, Register smi);
