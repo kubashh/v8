@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30f89d33_837f9810",
+        "filename": "src/baseline/arm64/baseline-assembler-arm64-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-02-03T13:36:46Z",
+      "side": 1,
+      "message": "rather than passing in a scratch register here, consider using ScratchRegisterScope inside this function.",
+      "range": {
+        "startLine": 118,
+        "startChar": 54,
+        "endLine": 118,
+        "endChar": 61
+      },
+      "revId": "4682a9222ca2823b4d54424bd15ab314186e39c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
