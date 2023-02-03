@@ -962,7 +962,7 @@ class LiftoffCompiler {
       CheckMaxSteps(decoder, 16 + __ num_locals());
     }
 
-    if (v8_flags.trace_wasm) TraceFunctionEntry(decoder);
+    if (V8_UNLIKELY(v8_flags.trace_wasm)) TraceFunctionEntry(decoder);
   }
 
   void GenerateOutOfLineCode(OutOfLineCode* ool) {
@@ -2364,7 +2364,7 @@ class LiftoffCompiler {
   }
 
   void ReturnImpl(FullDecoder* decoder, Register tmp1, Register tmp2) {
-    if (v8_flags.trace_wasm) TraceFunctionExit(decoder);
+    if (V8_UNLIKELY(v8_flags.trace_wasm)) TraceFunctionExit(decoder);
     if (dynamic_tiering()) {
       TierupCheck(decoder, decoder->position(), __ pc_offset(), tmp1, tmp2);
     }
