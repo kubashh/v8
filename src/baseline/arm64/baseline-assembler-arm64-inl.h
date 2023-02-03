@@ -113,6 +113,17 @@ void BaselineAssembler::JumpIf(Condition cc, Register lhs, const Operand& rhs,
                                Label* target, Label::Distance) {
   __ CompareAndBranch(lhs, rhs, cc, target);
 }
+void BaselineAssembler::JumpIfObjectTypeFast(Condition cc, Register object,
+                                             InstanceType instance_type,
+                                             Register scratch, Label* target,
+                                             Label::Distance distance) {
+  if (cc == eq || cc == ne) {
+    __ CompareObjectTypeEq(object, scratch, scratch, instance_type);
+    __ B(cc, target);
+    return;
+  }
+  JumpIfObjectType(cc, object, instance_type, scratch, target, distance);
+}
 void BaselineAssembler::JumpIfObjectType(Condition cc, Register object,
                                          InstanceType instance_type,
                                          Register map, Label* target,
