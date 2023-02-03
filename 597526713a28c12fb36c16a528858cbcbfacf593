@@ -16,6 +16,98 @@
       "message": "Still needs a bit of cleanup but I\u0027d welcome some initial comments",
       "revId": "597526713a28c12fb36c16a528858cbcbfacf593",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bcfd2cc_8d88623c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4697,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-03T15:15:55Z",
+      "side": 1,
+      "message": "Nice! Does it make sense to generalise for all BranchIf\u003c\u003e?",
+      "range": {
+        "startLine": 4685,
+        "startChar": 0,
+        "endLine": 4697,
+        "endChar": 0
+      },
+      "revId": "597526713a28c12fb36c16a528858cbcbfacf593",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef608700_6b96936d",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4842,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-03T15:15:55Z",
+      "side": 1,
+      "message": "Feels weird not to use the result here!",
+      "range": {
+        "startLine": 4842,
+        "startChar": 6,
+        "endLine": 4842,
+        "endChar": 14
+      },
+      "revId": "597526713a28c12fb36c16a528858cbcbfacf593",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84ef31b1_ed3a5611",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-03T15:15:55Z",
+      "side": 1,
+      "message": "What about bundle these in an anonymous (or named) struct?\n```\nstruct {\n  ValueNode* receiver;\n  ....\n} current_for_in_state_;\n```",
+      "range": {
+        "startLine": 1521,
+        "startChar": 0,
+        "endLine": 1526,
+        "endChar": 56
+      },
+      "revId": "597526713a28c12fb36c16a528858cbcbfacf593",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8751b3ad_b3fb33cb",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-03T15:15:55Z",
+      "side": 1,
+      "message": "We want a constructor for MacroAssembler with LocalIsolate! 😊",
+      "range": {
+        "startLine": 200,
+        "startChar": 2,
+        "endLine": 203,
+        "endChar": 50
+      },
+      "revId": "597526713a28c12fb36c16a528858cbcbfacf593",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
