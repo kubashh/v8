@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3effbdcd_66f6f7ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-03T15:40:39Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL.\n@tebbi@chromium.org: Please provide a component approval for src/compiler.",
+      "revId": "f42b91feddae74c7eac53dc2636b62508675789a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19049c33_5afa9b90",
+        "filename": "src/compiler/loop-analysis.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-03T15:40:39Z",
+      "side": 1,
+      "message": "This condition is the only real change. If we are unrolling, we don\u0027t care if the loop `has_instruction_worth_peeling`.",
+      "revId": "f42b91feddae74c7eac53dc2636b62508675789a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
