@@ -68,6 +68,7 @@
 #include "src/heap/marking-barrier.h"
 #include "src/heap/marking-state-inl.h"
 #include "src/heap/marking-state.h"
+#include "src/heap/memory-balancer.h"
 #include "src/heap/memory-chunk-inl.h"
 #include "src/heap/memory-chunk-layout.h"
 #include "src/heap/memory-measurement.h"
@@ -1657,9 +1658,9 @@ bool Heap::CollectGarbage(AllocationSpace space,
   // 3. The epilogue part which may execute callbacks. These callbacks may
   // allocate and trigger another garbage collection
 
-  // Part 1: Invoke all callbacks which should happen before the actual garbage
-  // collection is triggered. Note that these callbacks may trigger another
-  // garbage collection since they may allocate.
+  // Part 1: Invoke all callbacks which should happen before the actual
+  // garbage collection is triggered. Note that these callbacks may trigger
+  // another garbage collection since they may allocate.
 
   DCHECK(AllowGarbageCollection::IsAllowed());
 
@@ -1802,12 +1803,16 @@ bool Heap::CollectGarbage(AllocationSpace space,
     isolate()->CountUsage(v8::Isolate::kForcedGC);
   }
 
-  // Start incremental marking for the next cycle. We do this only for scavenger
-  // to avoid a loop where mark-compact causes another mark-compact.
+  // Start incremental marking for the next cycle. We do this only for
+  // scavenger to avoid a loop where mark-compact causes another mark-compact.
   if (IsYoungGenerationCollector(collector)) {
     StartIncrementalMarkingIfAllocationLimitIsReached(
         GCFlagsForIncrementalMarking(),
         kGCCallbackScheduleIdleGarbageCollection);
+  } else if (v8_flags.memory_balancer) {
+    mb_->external_allocation_limit_ =
+        global_allocation_limit_ - old_generation_allocation_limit_;
+    mb_->NotifyGC();
   }
 
   if (!CanExpandOldGeneration(0)) {
@@ -2516,6 +2521,8 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
       global_allocation_limit_ = new_global_limit;
     }
   }
+  global_allocation_limit_ = std::max<size_t>(old_generation_allocation_limit_,
+                                              global_allocation_limit_);
 }
 
 void Heap::CallGCPrologueCallbacks(GCType gc_type, GCCallbackFlags flags,
@@ -5508,6 +5515,9 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
                           nullptr);
     AddGCEpilogueCallback(HeapLayoutTracer::GCEpiloguePrintHeapLayout, gc_type,
                           nullptr);
+  }
+  if (v8_flags.memory_balancer) {
+    mb_.reset(new MemoryBalancer(this));
   }
 }
 
