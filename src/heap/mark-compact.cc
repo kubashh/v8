@@ -5580,9 +5580,18 @@ void MarkCompactCollector::Sweep() {
     StartSweepSpace(heap()->code_space());
   }
   if (heap()->shared_space()) {
-    GCTracer::Scope sweep_scope(
-        heap()->tracer(), GCTracer::Scope::MC_SWEEP_SHARED, ThreadKind::kMain);
-    StartSweepSpace(heap()->shared_space());
+    {
+      GCTracer::Scope sweep_scope(heap()->tracer(),
+                                  GCTracer::Scope::MC_SWEEP_SHARED,
+                                  ThreadKind::kMain);
+      StartSweepSpace(heap()->shared_space());
+    }
+    {
+      GCTracer::Scope sweep_scope(heap()->tracer(),
+                                  GCTracer::Scope::MC_SWEEP_SHARED_LO,
+                                  ThreadKind::kMain);
+      SweepLargeSpace(heap()->shared_lo_space());
+    }
   }
   if (v8_flags.minor_mc && heap()->new_space()) {
     GCTracer::Scope sweep_scope(heap()->tracer(), GCTracer::Scope::MC_SWEEP_NEW,
