@@ -1639,6 +1639,7 @@ void MaglevGraphBuilder::BuildCheckMaps(
   if (merger.emit_check_with_migration()) {
     AddNewNode<CheckMapsWithMigration>({object}, merger.intersect_set(),
                                        GetCheckType(known_info->type));
+    MarkPossibleMapMigration();
   } else {
     AddNewNode<CheckMaps>({object}, merger.intersect_set(),
                           GetCheckType(known_info->type));
@@ -2540,6 +2541,26 @@ void MaglevGraphBuilder::VisitGetKeyedProperty() {
       broker()->GetFeedbackForPropertyAccess(
           feedback_source, compiler::AccessMode::kLoad, base::nullopt);
 
+  if (current_for_in_index_ != nullptr && current_for_in_receiver_ == object &&
+      current_for_in_key_ == current_interpreter_frame_.accumulator()) {
+    if (current_for_in_receiver_needs_map_check_) {
+      auto* receiver_map =
+          AddNewNode<LoadTaggedField>({object}, HeapObject::kMapOffset);
+      AddNewNode<CheckDynamicValue>({receiver_map, current_for_in_cache_type_});
+      current_for_in_receiver_needs_map_check_ = false;
+    }
+    // TODO(leszeks): Cache the indices across the loop.
+    auto* cache_array = AddNewNode<LoadTaggedField>(
+        {current_for_in_enum_cache_}, EnumCache::kIndicesOffset);
+    // TODO(leszeks): Do we need to check that the indices aren't empty?
+    // TODO(leszeks): Cache the field index per iteration.
+    auto* field_index =
+        AddNewNode<LoadFixedArrayElement>({cache_array, current_for_in_index_});
+    SetAccumulator(
+        AddNewNode<LoadTaggedFieldByFieldIndex>({object, field_index}));
+    return;
+  }
+
   switch (processed_feedback.kind()) {
     case compiler::ProcessedFeedback::kInsufficient:
       EmitUnconditionalDeopt(
@@ -3234,6 +3255,21 @@ ValueNode* MaglevGraphBuilder::TryReduceFunctionPrototypeCall(
   ValueNode* receiver = GetTaggedOrUndefined(args.receiver());
   args.PopReceiver(ConvertReceiverMode::kAny);
   return BuildGenericCall(receiver, context, Call::TargetType::kAny, args);
+}
+
+ValueNode* MaglevGraphBuilder::TryReduceObjectPrototypeHasOwnProperty(
+    compiler::JSFunctionRef target, CallArguments& args) {
+  // We can't reduce Function#call when there is no receiver function.
+  if (args.receiver_mode() == ConvertReceiverMode::kNullOrUndefined) {
+    return nullptr;
+  }
+  if (args.receiver() != current_for_in_receiver_) {
+    return nullptr;
+  }
+  if (args.count() != 1 || args[0] != current_for_in_key_) {
+    return nullptr;
+  }
+  return GetRootConstant(RootIndex::kTrueValue);
 }
 
 ValueNode* MaglevGraphBuilder::TryReduceMathPow(compiler::JSFunctionRef target,
@@ -4645,12 +4681,27 @@ void MaglevGraphBuilder::BuildBranchIfToBooleanTrue(ValueNode* node,
                                                     JumpType jump_type) {
   int fallthrough_offset = next_offset();
   int jump_offset = iterator_.GetJumpTargetOffset();
+
+  if (IsConstantNode(node->opcode())) {
+    bool constant_is_true = FromConstantToBool(local_isolate(), node);
+    bool is_jump_taken = constant_is_true == (jump_type == kJumpIfTrue);
+    if (is_jump_taken) {
+      BasicBlock* block = FinishBlock<Jump>({}, &jump_targets_[jump_offset]);
+      MergeDeadIntoFrameState(fallthrough_offset);
+      MergeIntoFrameState(block, jump_offset);
+    } else {
+      MergeDeadIntoFrameState(jump_offset);
+    }
+    return;
+  }
+
   BasicBlockRef* true_target = jump_type == kJumpIfTrue
                                    ? &jump_targets_[jump_offset]
                                    : &jump_targets_[fallthrough_offset];
   BasicBlockRef* false_target = jump_type == kJumpIfFalse
                                     ? &jump_targets_[jump_offset]
                                     : &jump_targets_[fallthrough_offset];
+
   BasicBlock* block =
       FinishBlock<BranchIfToBooleanTrue>({node}, true_target, false_target);
   if (jump_type == kJumpIfTrue) {
@@ -4763,6 +4814,7 @@ void MaglevGraphBuilder::VisitForInPrepare() {
           {descriptor_array}, DescriptorArray::kEnumCacheOffset);
       auto* cache_array =
           AddNewNode<LoadTaggedField>({enum_cache}, EnumCache::kKeysOffset);
+      current_for_in_enum_cache_ = enum_cache;
 
       auto* cache_length = AddNewNode<LoadEnumCacheLength>({enumerator});
 
@@ -4786,6 +4838,8 @@ void MaglevGraphBuilder::VisitForInPrepare() {
       // cache_array, and cache_length respectively. Cache type is already set
       // above, so store the remaining two now.
       StoreRegisterPair({cache_array_reg, cache_length_reg}, result);
+      // Force a conversion to Int32 for the cache length value.
+      GetInt32(cache_length_reg);
       break;
     }
   }
@@ -4793,10 +4847,14 @@ void MaglevGraphBuilder::VisitForInPrepare() {
 
 void MaglevGraphBuilder::VisitForInContinue() {
   // ForInContinue <index> <cache_length>
-  ValueNode* index = LoadRegisterTagged(0);
-  ValueNode* cache_length = LoadRegisterTagged(1);
-  // TODO(verwaest): Fold with the next instruction.
-  SetAccumulator(AddNewNode<TaggedNotEqual>({index, cache_length}));
+  ValueNode* index = LoadRegisterInt32(0);
+  ValueNode* cache_length = LoadRegisterInt32(1);
+  if (TryBuildBranchFor<BranchIfInt32Compare>({index, cache_length},
+                                              Operation::kLessThan)) {
+    return;
+  }
+  SetAccumulator(
+      AddNewNode<Int32NodeFor<Operation::kLessThan>>({index, cache_length}));
 }
 
 void MaglevGraphBuilder::VisitForInNext() {
@@ -4821,7 +4879,24 @@ void MaglevGraphBuilder::VisitForInNext() {
       auto* receiver_map =
           AddNewNode<LoadTaggedField>({receiver}, HeapObject::kMapOffset);
       AddNewNode<CheckDynamicValue>({receiver_map, cache_type});
-      SetAccumulator(AddNewNode<LoadFixedArrayElement>({cache_array, index}));
+      auto* key = AddNewNode<LoadFixedArrayElement>({cache_array, index});
+      SetAccumulator(key);
+      current_for_in_receiver_ = receiver;
+      if (ToObject* to_object = current_for_in_receiver_->TryCast<ToObject>()) {
+        current_for_in_receiver_ = to_object->value_input().node();
+      }
+      current_for_in_receiver_needs_map_check_ = false;
+      current_for_in_cache_type_ = cache_type;
+      current_for_in_key_ = key;
+      if (hint == ForInHint::kEnumCacheKeysAndIndices) {
+        current_for_in_index_ = index;
+      }
+      // We know that the enum cache entry is not undefined, so skip over the
+      // next JumpIfUndefined.
+      DCHECK_EQ(iterator_.next_bytecode(),
+                interpreter::Bytecode::kJumpIfUndefined);
+      iterator_.Advance();
+      MergeDeadIntoFrameState(iterator_.GetJumpTargetOffset());
       break;
     }
     case ForInHint::kAny: {
@@ -4830,6 +4905,10 @@ void MaglevGraphBuilder::VisitForInNext() {
       SetAccumulator(AddNewNode<ForInNext>(
           {context, receiver, cache_array, cache_type, index},
           feedback_source));
+      current_for_in_receiver_ = nullptr;
+      current_for_in_cache_type_ = nullptr;
+      current_for_in_key_ = nullptr;
+      current_for_in_index_ = nullptr;
       break;
     };
   }
@@ -4838,6 +4917,10 @@ void MaglevGraphBuilder::VisitForInNext() {
 void MaglevGraphBuilder::VisitForInStep() {
   ValueNode* index = LoadRegisterInt32(0);
   SetAccumulator(AddNewNode<Int32NodeFor<Operation::kIncrement>>({index}));
+  current_for_in_receiver_ = nullptr;
+  current_for_in_cache_type_ = nullptr;
+  current_for_in_key_ = nullptr;
+  current_for_in_index_ = nullptr;
 }
 
 void MaglevGraphBuilder::VisitSetPendingMessage() {
