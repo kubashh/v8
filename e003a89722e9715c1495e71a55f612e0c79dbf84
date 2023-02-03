@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9a3135_b6eafb81",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-03T15:02:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a07a83c3_a563162d",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b962f4d3_80d6d1ff",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-31T15:28:07Z",
       "side": 1,
       "message": "Feels like we only sum up values here to report values as trace events on the bottom but not change the state.\n\nFeels like we shouldn\u0027t update this field here but where we set the other fields. Btw why do we store the field in MemoryBalancer here and not treat the field the same as the other fields of GCTracer?",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8564355_d5cd65a7",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-03T15:02:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b962f4d3_80d6d1ff",
       "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1965ac1_9361ea6b",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-03T15:02:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92d8f0b6_290f1110",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15b2933b_96cc6a42",
@@ -65,6 +119,24 @@
       "writtenOn": "2023-01-31T15:28:07Z",
       "side": 1,
       "message": "Let\u0027s create the MemoryBalancer object only when --memory-balancer is enabled. Heap::SetUp is the location we tend to set up such objects.",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b67ff9f6_b876ed1d",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-03T15:02:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15b2933b_96cc6a42",
       "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d2e62e9_03cfe7e6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2501,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-03T15:02:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c081ef57_4970def5",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c6fab51_457a36a3",
@@ -99,6 +189,24 @@
       "writtenOn": "2023-01-31T15:28:07Z",
       "side": 1,
       "message": "Feels like we should only invoke this line when --memory-balancer is enabled.",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8bee89c_38a72a50",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2540,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-03T15:02:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c6fab51_457a36a3",
       "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +228,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8ca211f_d84bd44b",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2472,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-03T15:02:26Z",
+      "side": 1,
+      "message": "I have to set the old generation limit and the global limit. Should I make them public or have a friend?",
+      "parentUuid": "4a7baa5f_426f1ef6",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9c1aeb0_bddb46c0",
@@ -137,6 +263,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16e5b645_525c9e66",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2473,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-03T15:02:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9c1aeb0_bddb46c0",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e097e6a_114ca9e6",
@@ -150,6 +294,24 @@
       "writtenOn": "2023-01-31T15:30:02Z",
       "side": 1,
       "message": "We usually don\u0027t use upper case in snake cases names like `last_M_update_time_`. Could we change this? Can you please also document these fields somewhat?",
+      "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da28758b_bc75c0b0",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-03T15:02:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e097e6a_114ca9e6",
       "revId": "e003a89722e9715c1495e71a55f612e0c79dbf84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
