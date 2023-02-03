@@ -16,6 +16,24 @@
       "message": "ptal.\n\nThe alternative solution would be to not bailout in \u0027MinorMarkCompactCollector::UpdatePointersAfterEvacuation\u0027, but I prefer the solution in this CL since I think it will be (perhaps only slightly) more performant.",
       "revId": "053e193860344ea83fcd20275bb32a56662182b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70006e17_28f84ccf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-03T18:20:53Z",
+      "side": 1,
+      "message": "I think this CL makes sense.",
+      "parentUuid": "8e2bf2e7_a7583352",
+      "revId": "053e193860344ea83fcd20275bb32a56662182b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
