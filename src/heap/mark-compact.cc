@@ -1367,19 +1367,20 @@ class ExternalStringTableCleaner : public RootVisitor {
     Object the_hole = ReadOnlyRoots(heap_).the_hole_value();
     for (FullObjectSlot p = start; p < end; ++p) {
       Object o = *p;
-      if (o.IsHeapObject()) {
-        HeapObject heap_object = HeapObject::cast(o);
-        if (marking_state->IsWhite(heap_object)) {
-          if (o.IsExternalString()) {
-            heap_->FinalizeExternalString(String::cast(o));
-          } else {
-            // The original external string may have been internalized.
-            DCHECK(o.IsThinString());
-          }
-          // Set the entry to the_hole_value (as deleted).
-          p.store(the_hole);
-        }
+      if (!o.IsHeapObject()) continue;
+      HeapObject heap_object = HeapObject::cast(o);
+      // MinorMC doesn't update the young strings set and so it may contain
+      // strings that are already in old space.
+      if (!marking_state->IsWhite(heap_object)) continue;
+      if (!Heap::InYoungGeneration(heap_object)) continue;
+      if (o.IsExternalString()) {
+        heap_->FinalizeExternalString(String::cast(o));
+      } else {
+        // The original external string may have been internalized.
+        DCHECK(o.IsThinString());
       }
+      // Set the entry to the_hole_value (as deleted).
+      p.store(the_hole);
     }
   }
 
