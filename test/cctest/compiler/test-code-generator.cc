@@ -823,8 +823,7 @@ class TestEnvironment : public HandleAndZoneScope {
     for (auto move : *moves) {
       int to_index = OperandToStatePosition(
           TeardownLayout(), AllocatedOperand::cast(move->destination()));
-      Object source = GetMoveSource(state_out, move);
-      state_out->set(to_index, source);
+      state_out->set(to_index, GetMoveSource(state_out, move));
     }
     return state_out;
   }
