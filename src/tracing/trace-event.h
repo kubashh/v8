@@ -662,6 +662,7 @@ class CallStatsScopedTracer {
   }
 
 #endif  // defined(V8_RUNTIME_CALL_STATS)
+#define TRACE_EVENT_CALL_STATS_SCOPED(isolate, category, name)
 #endif  // defined(V8_USE_PERFETTO)
 
 #endif  // V8_TRACING_TRACE_EVENT_H_
