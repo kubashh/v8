@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c24808_4bc9bbdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449080
+      },
+      "writtenOn": "2023-02-06T07:48:07Z",
+      "side": 1,
+      "message": "Hi Marja, are there any design docs to explain that why web-snapshots are deleted? Cause my personal project relys on it, thank you!",
+      "revId": "1f349da554800d9278cd1472850ca90a1fd7dc1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
