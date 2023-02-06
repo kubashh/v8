@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43e8198e_238ac797",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-02-06T15:28:04Z",
+      "side": 1,
+      "message": "In retrospect maybe I should have updated this commit message.\n\nFor future readers of this code review, the message would have been something like:\n\n```\nAdd support for tracking the receiver, enum cache, index, etc. of\nfast for-in loops, and add optimizations for hasOwnProperty checks\nand keyed access of the current for-in key.\n```",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 3
+      },
+      "revId": "58076e42635815f04d49b11e7773d044d613480a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
