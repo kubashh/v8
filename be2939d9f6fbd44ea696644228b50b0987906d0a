@@ -16,6 +16,46 @@
       "message": "Jakob and Michael, please approve this.",
       "revId": "be2939d9f6fbd44ea696644228b50b0987906d0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec8efd16_f8fdd738",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-06T12:40:47Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "be2939d9f6fbd44ea696644228b50b0987906d0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8128420e_611bd889",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-06T12:40:47Z",
+      "side": 1,
+      "message": "nit: We do have MemsetTagged/MemsetPointer that bottleneck a bunch of special cases. I realize that you just want to write `0` but I wonder if it makes still sense to go through our bottlenecks here.",
+      "range": {
+        "startLine": 1027,
+        "startChar": 4,
+        "endLine": 1027,
+        "endChar": 10
+      },
+      "revId": "be2939d9f6fbd44ea696644228b50b0987906d0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
