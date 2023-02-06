@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b22b6ca9_8a97e491",
+        "filename": "src/regexp/regexp-ast.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-06T13:17:33Z",
+      "side": 1,
+      "message": "Not const on purpose.\nWe do modify the operands in-place to avoid allocating intermediate results while computing set expressions.",
+      "parentUuid": "4ab8b76e_5e792755",
+      "revId": "de444d139b3e14df488025c7c462708ab52ac9a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "16aa3c34_2df4ac96",
         "filename": "src/regexp/regexp-parser.cc",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2023-02-06T12:53:53Z",
       "side": 1,
       "message": "Could we wrap this block in `RegExpClassSetExpression::Empty` or so? It\u0027s kinda hard to read what\u0027s going on here otherwise.",
+      "revId": "de444d139b3e14df488025c7c462708ab52ac9a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8beec23e_21b411e7",
+        "filename": "src/regexp/regexp-parser.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2917,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-06T13:17:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16aa3c34_2df4ac96",
       "revId": "de444d139b3e14df488025c7c462708ab52ac9a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
