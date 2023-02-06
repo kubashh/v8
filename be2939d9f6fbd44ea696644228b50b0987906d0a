@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87e2b234_38607c7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-06T12:18:30Z",
+      "side": 1,
+      "message": "Jakob and Michael, please approve this.",
+      "revId": "be2939d9f6fbd44ea696644228b50b0987906d0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
