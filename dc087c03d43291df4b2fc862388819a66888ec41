@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "dc087c03d43291df4b2fc862388819a66888ec41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e22d11b3_c2def548",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-06T11:37:03Z",
+      "side": 1,
+      "message": "lgtm, thanks",
+      "revId": "dc087c03d43291df4b2fc862388819a66888ec41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2b8756d_be279090",
+        "filename": "src/heap/base/active-system-pages.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-06T11:37:03Z",
+      "side": 1,
+      "message": "Move initialization to L47 and get rid of the ctor?",
+      "range": {
+        "startLine": 23,
+        "startChar": 31,
+        "endLine": 23,
+        "endChar": 33
+      },
+      "revId": "dc087c03d43291df4b2fc862388819a66888ec41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
