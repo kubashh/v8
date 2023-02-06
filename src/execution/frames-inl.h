@@ -167,15 +167,8 @@ inline Address CommonFrame::caller_fp() const {
 }
 
 inline Address CommonFrame::caller_pc() const {
-  return ReadPC(reinterpret_cast<Address*>(ComputePCAddress(fp())));
-}
-
-inline Address CommonFrame::ComputePCAddress(Address fp) {
-  return fp + StandardFrameConstants::kCallerPCOffset;
-}
-
-inline Address CommonFrame::ComputeConstantPoolAddress(Address fp) {
-  return fp + StandardFrameConstants::kConstantPoolOffset;
+  return ReadPC(reinterpret_cast<Address*>(
+      fp() + StandardFrameConstants::kCallerPCOffset));
 }
 
 inline bool CommonFrameWithJSLinkage::IsConstructFrame(Address fp) {
@@ -287,28 +280,10 @@ inline JavaScriptBuiltinContinuationWithCatchFrame::
         StackFrameIteratorBase* iterator)
     : JavaScriptBuiltinContinuationFrame(iterator) {}
 
-inline JavaScriptFrameIterator::JavaScriptFrameIterator(Isolate* isolate)
-    : iterator_(isolate) {
-  if (!done()) Advance();
-}
+inline IrregexpFrame::IrregexpFrame(StackFrameIteratorBase* iterator)
+    : TypedFrame(iterator) {}
 
-inline JavaScriptFrameIterator::JavaScriptFrameIterator(Isolate* isolate,
-                                                        ThreadLocalTop* top)
-    : iterator_(isolate, top) {
-  if (!done()) Advance();
-}
-
-inline JavaScriptFrame* JavaScriptFrameIterator::frame() const {
-  StackFrame* frame = iterator_.frame();
-  return JavaScriptFrame::cast(frame);
-}
-
-inline JavaScriptFrame* JavaScriptFrameIterator::Reframe() {
-  StackFrame* frame = iterator_.Reframe();
-  return JavaScriptFrame::cast(frame);
-}
-
-inline CommonFrame* StackTraceFrameIterator::frame() const {
+inline CommonFrame* DebuggableFrameIterator::frame() const {
   StackFrame* frame = iterator_.frame();
 #if V8_ENABLE_WEBASSEMBLY
   DCHECK(frame->is_java_script() || frame->is_wasm());
@@ -318,33 +293,38 @@ inline CommonFrame* StackTraceFrameIterator::frame() const {
   return static_cast<CommonFrame*>(frame);
 }
 
-inline CommonFrame* StackTraceFrameIterator::Reframe() {
+inline CommonFrame* DebuggableFrameIterator::Reframe() {
   iterator_.Reframe();
   return frame();
 }
 
-bool StackTraceFrameIterator::is_javascript() const {
+bool DebuggableFrameIterator::is_javascript() const {
   return frame()->is_java_script();
 }
 
 #if V8_ENABLE_WEBASSEMBLY
-bool StackTraceFrameIterator::is_wasm() const { return frame()->is_wasm(); }
+bool DebuggableFrameIterator::is_wasm() const { return frame()->is_wasm(); }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
-JavaScriptFrame* StackTraceFrameIterator::javascript_frame() const {
+JavaScriptFrame* DebuggableFrameIterator::javascript_frame() const {
   return JavaScriptFrame::cast(frame());
+}
+
+// static
+inline bool SafeStackFrameIterator::IsValidFrameType(StackFrame::Type type) {
+#if V8_ENABLE_WEBASSEMBLY
+  return StackFrame::IsJavaScript(type) || type == StackFrame::EXIT ||
+         type == StackFrame::BUILTIN_EXIT || type == StackFrame::WASM ||
+         type == StackFrame::WASM_TO_JS || type == StackFrame::JS_TO_WASM;
+#else
+  return StackFrame::IsJavaScript(type) || type == StackFrame::EXIT ||
+         type == StackFrame::BUILTIN_EXIT;
+#endif  // V8_ENABLE_WEBASSEMBLY
 }
 
 inline StackFrame* SafeStackFrameIterator::frame() const {
   DCHECK(!done());
-#if V8_ENABLE_WEBASSEMBLY
-  DCHECK(frame_->is_java_script() || frame_->is_exit() ||
-         frame_->is_builtin_exit() || frame_->is_wasm() ||
-         frame_->is_wasm_to_js() || frame_->is_js_to_wasm());
-#else
-  DCHECK(frame_->is_java_script() || frame_->is_exit() ||
-         frame_->is_builtin_exit());
-#endif  // V8_ENABLE_WEBASSEMBLY
+  DCHECK(IsValidFrameType(frame_->type()));
   return frame_;
 }
 
