@@ -139,7 +139,10 @@ class IsolateData final {
   ThreadLocalTop const& thread_local_top() const { return thread_local_top_; }
   Address* builtin_entry_table() { return builtin_entry_table_; }
   Address* builtin_table() { return builtin_table_; }
-  uint8_t stack_is_iterable() const { return stack_is_iterable_; }
+  bool stack_is_iterable() const {
+    DCHECK(stack_is_iterable_ == 0 || stack_is_iterable_ == 1);
+    return stack_is_iterable_ != 0;
+  }
 
   // Returns true if this address points to data stored in this instance. If
   // it's the case then the value can be accessed indirectly through the root
