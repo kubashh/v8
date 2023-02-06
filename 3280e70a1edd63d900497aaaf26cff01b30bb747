@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b92718ef_cd026ada",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-02-06T11:13:18Z",
+      "side": 1,
+      "message": "LGTM with one nit.",
+      "revId": "3280e70a1edd63d900497aaaf26cff01b30bb747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf1790a1_573815b8",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-02-06T11:13:18Z",
+      "side": 1,
+      "message": "Add `V8_PRESERVE_MOST`?",
+      "revId": "3280e70a1edd63d900497aaaf26cff01b30bb747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
