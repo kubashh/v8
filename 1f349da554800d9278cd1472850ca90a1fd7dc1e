@@ -16,6 +16,24 @@
       "message": "Hi Marja, are there any design docs to explain that why web-snapshots are deleted? Cause my personal project relys on it, thank you!",
       "revId": "1f349da554800d9278cd1472850ca90a1fd7dc1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c45eac51_91473eac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-02-06T08:11:01Z",
+      "side": 1,
+      "message": "Hi,\n\nThere are no public docs about it. The TL;DR: is that while the format provided performance improvements, integrating it into any real-world-scale web development was tricky (it\u0027s non-trivial to isolate snapshottable code).\n\nDepending on what your project does, you might look into the ValueSerializer / ValueDeserializer API instead.",
+      "parentUuid": "71c24808_4bc9bbdd",
+      "revId": "1f349da554800d9278cd1472850ca90a1fd7dc1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
