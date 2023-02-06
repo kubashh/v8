@@ -20,6 +20,8 @@ class ActiveSystemPages final {
   // instance.
   static constexpr size_t kMaxPages = 64;
 
+  ActiveSystemPages() : value_(0) {}
+
   // Initializes the set of active pages to the system pages for the header.
   V8_EXPORT_PRIVATE size_t Init(size_t header_size, size_t page_size_bits,
                                 size_t user_page_size);
