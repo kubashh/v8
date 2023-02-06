@@ -413,9 +413,12 @@ class RegExpClassSetOperand final : public RegExpTree {
   void Subtract(RegExpClassSetOperand* other,
                 ZoneList<CharacterRange>* temp_ranges, Zone* zone);
 
-  bool has_strings() const { return !strings_->empty(); }
+  bool has_strings() const { return strings_ != nullptr && !strings_->empty(); }
   ZoneList<CharacterRange>* ranges() { return ranges_; }
-  CharacterClassStrings* strings() { return strings_; }
+  CharacterClassStrings* strings() {
+    DCHECK(has_strings());
+    return strings_;
+  }
 
  private:
   ZoneList<CharacterRange>* ranges_;
