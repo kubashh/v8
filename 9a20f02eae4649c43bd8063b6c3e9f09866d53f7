@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24903471_c1a79219",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-07T13:41:28Z",
+      "side": 1,
+      "message": "Thanks, looks good with a few comments.",
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "189a5263_139f3082",
@@ -64,6 +81,98 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d33ef3ec_ed44664a",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-07T13:41:28Z",
+      "side": 1,
+      "message": "You can change the logic so that you do not materialize this constant if you don\u0027t take the branch.\n\nnit: Maybe you can give the lowered form directly here.",
+      "range": {
+        "startLine": 355,
+        "startChar": 15,
+        "endLine": 355,
+        "endChar": 45
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16973442_5c3c138c",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-07T13:41:28Z",
+      "side": 1,
+      "message": "nit: This name is a bit misleading. Smi !\u003d i31ref, but this function checks for smis. Maybe rename it or add a comment.",
+      "range": {
+        "startLine": 356,
+        "startChar": 21,
+        "endLine": 356,
+        "endChar": 26
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c28f3d20_877b0481",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-07T13:41:28Z",
+      "side": 1,
+      "message": "nit: Maybe it\u0027s better to use `gasm_.LoadInstanceType`.",
+      "range": {
+        "startLine": 358,
+        "startChar": 2,
+        "endLine": 359,
+        "endChar": 76
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43de51fc_77e6c4d0",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-07T13:41:28Z",
+      "side": 1,
+      "message": "nit: is this label required?",
+      "range": {
+        "startLine": 368,
+        "startChar": 4,
+        "endLine": 368,
+        "endChar": 50
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7e9a722f_4a4177aa",
@@ -82,6 +191,29 @@
         "startChar": 0,
         "endLine": 381,
         "endChar": 66
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce4fb135_42ae6322",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-07T13:41:28Z",
+      "side": 1,
+      "message": "nit: Also here you can materialize this constant only in the branch where it is used.",
+      "range": {
+        "startLine": 403,
+        "startChar": 2,
+        "endLine": 403,
+        "endChar": 19
       },
       "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
