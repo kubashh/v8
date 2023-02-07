@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b98037d_599bcbb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-07T13:15:38Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL.",
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "189a5263_139f3082",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-07T13:15:38Z",
+      "side": 1,
+      "message": "I copied this from `wasm-objects.cc`.\nWould there be some nice header where these constants could be stored and reused?",
+      "range": {
+        "startLine": 336,
+        "startChar": 0,
+        "endLine": 340,
+        "endChar": 15
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16fb65fd_939610eb",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-07T13:15:38Z",
+      "side": 1,
+      "message": "This is pretty much the same as what `JsToWasmObject` does for `kAny` target type: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/wasm-objects.cc;l\u003d2277",
+      "range": {
+        "startLine": 342,
+        "startChar": 10,
+        "endLine": 342,
+        "endChar": 53
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e9a722f_4a4177aa",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-07T13:15:38Z",
+      "side": 1,
+      "message": "Still a built-in-call but I guess, this is anyways only for non-pointer compressed builds and floating points that don\u0027t fit into Smis, so the relevance might not be too high.",
+      "range": {
+        "startLine": 380,
+        "startChar": 0,
+        "endLine": 381,
+        "endChar": 66
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
