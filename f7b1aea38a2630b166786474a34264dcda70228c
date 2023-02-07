@@ -16,6 +16,115 @@
       "message": "Removed some commented code that shouldn\u0027t have made its way into the patch.",
       "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c9bdb54_b00b236a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-07T16:57:54Z",
+      "side": 1,
+      "message": "Looks good, I think this is ready to go. Thanks a lot and sorry for the delay.",
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96e150e7_eb746d25",
+        "filename": "include/v8-data.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-07T16:57:54Z",
+      "side": 1,
+      "message": "nit: `final`",
+      "range": {
+        "startLine": 59,
+        "startChar": 17,
+        "endLine": 59,
+        "endChar": 19
+      },
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07e8716c_0669b461",
+        "filename": "include/v8-data.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-07T16:57:54Z",
+      "side": 1,
+      "message": "Can we move this to `v8-internal.h`?",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 5
+      },
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "152a3697_967855a4",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-07T16:57:54Z",
+      "side": 1,
+      "message": "Use `ValueToAddress`?",
+      "range": {
+        "startLine": 1678,
+        "startChar": 4,
+        "endLine": 1678,
+        "endChar": 41
+      },
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f216cca1_0e90c6a9",
+        "filename": "include/v8-local-handle.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-07T16:57:54Z",
+      "side": 1,
+      "message": "This is obsolete? I see `CreateHandleForCurrentIsolate()` for `v8::internal::HandleScope` which is called from the macro.",
+      "range": {
+        "startLine": 104,
+        "startChar": 28,
+        "endLine": 104,
+        "endChar": 57
+      },
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
