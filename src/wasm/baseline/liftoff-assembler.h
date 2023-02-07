@@ -554,9 +554,12 @@ class LiftoffAssembler : public MacroAssembler {
 
   void DropValues(int count);
 
+  // Drop a specific value from the stack; this is an expensive operation which
+  // is currently only used for exceptions.
+  // TODO(clemensb): Find a more efficient way.
   // Careful: this indexes "from the other end", i.e. depth=0 is the value
   // at the bottom of the stack!
-  void DropValue(int depth);
+  void DropExceptionValueAtOffset(int offset);
 
   // Ensure that the loop inputs are either in a register or spilled to the
   // stack, so that we can merge different values on the back-edge.
