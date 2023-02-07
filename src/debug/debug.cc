@@ -428,7 +428,7 @@ char* Debug::RestoreDebug(char* storage) {
     int current_frame_count = CurrentFrameCount();
     int target_frame_count = thread_local_.target_frame_count_;
     DCHECK(current_frame_count >= target_frame_count);
-    StackTraceFrameIterator frames_it(isolate_);
+    DebuggableFrameIterator frames_it(isolate_);
     while (current_frame_count > target_frame_count) {
       current_frame_count -= frames_it.FrameFunctionCount();
       frames_it.Advance();
@@ -1235,7 +1235,7 @@ void Debug::PrepareStep(StepAction step_action) {
 
   thread_local_.last_step_action_ = step_action;
 
-  StackTraceFrameIterator frames_it(isolate_, frame_id);
+  DebuggableFrameIterator frames_it(isolate_, frame_id);
   CommonFrame* frame = frames_it.frame();
 
   BreakLocation location = BreakLocation::Invalid();
@@ -2246,7 +2246,7 @@ bool Debug::IsExceptionBlackboxed(bool uncaught) {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
   // Uncaught exception is blackboxed if all current frames are blackboxed,
   // caught exception if top frame is blackboxed.
-  StackTraceFrameIterator it(isolate_);
+  DebuggableFrameIterator it(isolate_);
 #if V8_ENABLE_WEBASSEMBLY
   while (!it.done() && it.is_wasm()) it.Advance();
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -2429,7 +2429,7 @@ bool Debug::ShouldBeSkipped() {
   PostponeInterruptsScope no_interrupts(isolate_);
   DisableBreak no_recursive_break(this);
 
-  StackTraceFrameIterator iterator(isolate_);
+  DebuggableFrameIterator iterator(isolate_);
   FrameSummary summary = iterator.GetTopValidFrame();
   Handle<Object> script_obj = summary.script();
   if (!script_obj->IsScript()) return false;
@@ -2450,7 +2450,7 @@ bool Debug::ShouldBeSkipped() {
 bool Debug::AllFramesOnStackAreBlackboxed() {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
   HandleScope scope(isolate_);
-  for (StackTraceFrameIterator it(isolate_); !it.done(); it.Advance()) {
+  for (DebuggableFrameIterator it(isolate_); !it.done(); it.Advance()) {
     if (!it.is_javascript()) continue;
     if (!IsFrameBlackboxed(it.javascript_frame())) return false;
   }
@@ -2515,7 +2515,7 @@ void Debug::ProcessCompileEvent(bool has_compile_error, Handle<Script> script) {
 }
 
 int Debug::CurrentFrameCount() {
-  StackTraceFrameIterator it(isolate_);
+  DebuggableFrameIterator it(isolate_);
   if (break_frame_id() != StackFrameId::NO_ID) {
     // Skip to break frame.
     DCHECK(in_debug_scope());
@@ -2576,7 +2576,7 @@ void Debug::HandleDebugBreak(IgnoreBreakMode ignore_break_mode,
   HandleScope scope(isolate_);
   MaybeHandle<FixedArray> break_points;
   {
-    StackTraceFrameIterator it(isolate_);
+    DebuggableFrameIterator it(isolate_);
     DCHECK(!it.done());
     JavaScriptFrame* frame = it.frame()->is_java_script()
                                  ? JavaScriptFrame::cast(it.frame())
@@ -2648,7 +2648,7 @@ void Debug::PrintBreakLocation() {
   if (!v8_flags.print_break_location) return;
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
   HandleScope scope(isolate_);
-  StackTraceFrameIterator iterator(isolate_);
+  DebuggableFrameIterator iterator(isolate_);
   if (iterator.done()) return;
   CommonFrame* frame = iterator.frame();
   std::vector<FrameSummary> frames;
@@ -2701,7 +2701,7 @@ DebugScope::DebugScope(Debug* debug)
 
   // Create the new break info. If there is no proper frames there is no break
   // frame id.
-  StackTraceFrameIterator it(isolate());
+  DebuggableFrameIterator it(isolate());
   bool has_frames = !it.done();
   debug_->thread_local_.break_frame_id_ =
       has_frames ? it.frame()->id() : StackFrameId::NO_ID;
