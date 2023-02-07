@@ -33,6 +33,24 @@
       "message": "Wait, how can we change the expectations (from FAIL to PASS) without updating either the test suite or V8? Or do the tests not exist any more?",
       "revId": "94c97dd405ddf86ebecc30e22508915dd76b84e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5795b4c9_0d94e20f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-02-07T15:57:59Z",
+      "side": 1,
+      "message": "The tests don\u0027t exist anymore in proposals/tail-call/. Only tests that differ from the main spec are added to the proposal-specific directories by update-wasm-spec-tests.sh. Now the tail call repository is up to date, and the tests don\u0027t differ, so they are not added to proposals/tail-call.",
+      "parentUuid": "ba07ab1e_a6025b8a",
+      "revId": "94c97dd405ddf86ebecc30e22508915dd76b84e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
