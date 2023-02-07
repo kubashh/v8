@@ -1036,12 +1036,7 @@ Node* WasmGraphBuilder::Unop(wasm::WasmOpcode opcode, Node* input,
     case wasm::kExprF64AsmjsLoadMem:
       return BuildAsmjsLoadMem(MachineType::Float64(), input);
     case wasm::kExprExternInternalize: {
-      // TODO(7748): Either add fast path for non-numbers, or implement
-      // entirely in TF.
-      Node* parameters[] = {
-          input, mcgraph()->IntPtrConstant(IntToSmi(
-                     static_cast<int>(wasm::kWasmAnyRef.raw_bit_field())))};
-      return BuildCallToRuntime(Runtime::kWasmJSToWasmObject, parameters, 2);
+      return gasm_->WasmExternInternalize(input);
     }
     case wasm::kExprExternExternalize:
       return gasm_->WasmExternExternalize(input);
