@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80775745_be129572",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-07T17:19:15Z",
+      "side": 1,
+      "message": "Daniel, PTAL (Jakob as well, if you like).\nPS2 adds two regression tests and the respective fixes.",
+      "revId": "104747aa51fd8ea405b064dac4ec9bed97eb0dc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
