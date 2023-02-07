@@ -2441,7 +2441,7 @@ void Isolate::PrintCurrentStackTrace(std::ostream& out) {
 }
 
 bool Isolate::ComputeLocation(MessageLocation* target) {
-  StackTraceFrameIterator it(this);
+  DebuggableFrameIterator it(this);
   if (it.done()) return false;
   // Compute the location from the function and the relocation info of the
   // baseline code. For optimized code this will use the deoptimization

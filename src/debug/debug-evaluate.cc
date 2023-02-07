@@ -96,7 +96,7 @@ MaybeHandle<Object> DebugEvaluate::Local(Isolate* isolate,
   DisableBreak disable_break_scope(isolate->debug());
 
   // Get the frame where the debugging is performed.
-  StackTraceFrameIterator it(isolate, frame_id);
+  DebuggableFrameIterator it(isolate, frame_id);
 #if V8_ENABLE_WEBASSEMBLY
   if (it.is_wasm()) {
     WasmFrame* frame = WasmFrame::cast(it.frame());
