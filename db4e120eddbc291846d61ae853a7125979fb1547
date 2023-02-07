@@ -39,6 +39,30 @@
       },
       "revId": "db4e120eddbc291846d61ae853a7125979fb1547",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a58724e_7cf8a1e9",
+        "filename": "definitions.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-02-07T11:24:59Z",
+      "side": 1,
+      "message": "Ack. Refactored so that definitions does not change.",
+      "parentUuid": "dd0baabf_40f675b2",
+      "range": {
+        "startLine": 1,
+        "startChar": 66,
+        "endLine": 1,
+        "endChar": 82
+      },
+      "revId": "db4e120eddbc291846d61ae853a7125979fb1547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
