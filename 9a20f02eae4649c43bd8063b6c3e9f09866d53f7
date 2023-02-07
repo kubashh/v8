@@ -104,6 +104,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a704dd7_f5a194ba",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-07T14:40:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d33ef3ec_ed44664a",
+      "range": {
+        "startLine": 355,
+        "startChar": 15,
+        "endLine": 355,
+        "endChar": 45
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16973442_5c3c138c",
@@ -117,6 +141,30 @@
       "writtenOn": "2023-02-07T13:41:28Z",
       "side": 1,
       "message": "nit: This name is a bit misleading. Smi !\u003d i31ref, but this function checks for smis. Maybe rename it or add a comment.",
+      "range": {
+        "startLine": 356,
+        "startChar": 21,
+        "endLine": 356,
+        "endChar": 26
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "750cce8b_93d30a2f",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-07T14:40:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16973442_5c3c138c",
       "range": {
         "startLine": 356,
         "startChar": 21,
@@ -150,6 +198,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17452f49_f8f1c19a",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-07T14:40:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c28f3d20_877b0481",
+      "range": {
+        "startLine": 358,
+        "startChar": 2,
+        "endLine": 359,
+        "endChar": 76
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43de51fc_77e6c4d0",
@@ -163,6 +235,30 @@
       "writtenOn": "2023-02-07T13:41:28Z",
       "side": 1,
       "message": "nit: is this label required?",
+      "range": {
+        "startLine": 368,
+        "startChar": 4,
+        "endLine": 368,
+        "endChar": 50
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "268d59c7_65e6b1af",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-07T14:40:54Z",
+      "side": 1,
+      "message": "No, it wasn\u0027t because I messed it up and implemented `int_value \u003c\u003d max_value || min_value \u003c\u003d int_value` but it should\u0027ve been a logical and... 😮\nFixed now and now I need the label.",
+      "parentUuid": "43de51fc_77e6c4d0",
       "range": {
         "startLine": 368,
         "startChar": 4,
@@ -209,6 +305,30 @@
       "writtenOn": "2023-02-07T13:41:28Z",
       "side": 1,
       "message": "nit: Also here you can materialize this constant only in the branch where it is used.",
+      "range": {
+        "startLine": 403,
+        "startChar": 2,
+        "endLine": 403,
+        "endChar": 19
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6185bb8_328abc8c",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-02-07T14:40:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce4fb135_42ae6322",
       "range": {
         "startLine": 403,
         "startChar": 2,
