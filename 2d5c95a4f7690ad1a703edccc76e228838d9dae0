@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5d64dfe_0593f02d",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 4220,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-02-07T13:54:36Z",
+      "side": 1,
+      "message": "This is where we need the `stack_depth_` even if we don\u0027t track the full value stack.",
+      "revId": "2d5c95a4f7690ad1a703edccc76e228838d9dae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06caf321_8a998861",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 6646,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-02-07T13:54:36Z",
+      "side": 1,
+      "message": "This is where we need the `stack_depth_` even if we don\u0027t track the full value stack.",
+      "revId": "2d5c95a4f7690ad1a703edccc76e228838d9dae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
