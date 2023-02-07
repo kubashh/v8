@@ -64,14 +64,16 @@ namespace internal {
  *  - fp[8]      lr                 Return from the RegExp code.
  *  - fp[0]      fp                 Old frame pointer.
  *  ^^^^^^^^^ fp ^^^^^^^^^
- *  - fp[-8]     direct_call        1 => Direct call from JavaScript code.
+ *  - fp[-8]     frame marker
+ *  - fp[-16]    isolate
+ *  - fp[-24]    direct_call        1 => Direct call from JavaScript code.
  *                                  0 => Call through the runtime system.
- *  - fp[-16]    output_size        Output may fit multiple sets of matches.
- *  - fp[-24]    input              Handle containing the input string.
- *  - fp[-32]    success_counter
+ *  - fp[-32]    output_size        Output may fit multiple sets of matches.
+ *  - fp[-40]    input              Handle containing the input string.
+ *  - fp[-48]    success_counter
  *  ^^^^^^^^^^^^^ From here and downwards we store 32 bit values ^^^^^^^^^^^^^
- *  - fp[-40]    register N         Capture registers initialized with
- *  - fp[-44]    register N + 1     non_position_value.
+ *  - fp[-56]    register N         Capture registers initialized with
+ *  - fp[-60]    register N + 1     non_position_value.
  *               ...                The first kNumCachedRegisters (N) registers
  *               ...                are cached in x0 to x7.
  *               ...                Only positions must be stored in the first
