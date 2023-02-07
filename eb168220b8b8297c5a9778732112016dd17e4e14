@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bd6adba_2c6addd5",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-02-07T13:32:52Z",
+      "side": 1,
+      "message": "+1\nIt would be nice to handle this more strictly for the non-profiling iterators.",
+      "range": {
+        "startLine": 675,
+        "startChar": 0,
+        "endLine": 677,
+        "endChar": 13
+      },
+      "revId": "eb168220b8b8297c5a9778732112016dd17e4e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82346ca1_fcb2edbd",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-02-07T13:32:52Z",
+      "side": 1,
+      "message": "nit: why not part of the initializer list?",
+      "range": {
+        "startLine": 216,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 29
+      },
+      "revId": "eb168220b8b8297c5a9778732112016dd17e4e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
