@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f487c471_6d00ed18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-07T12:38:39Z",
+      "side": 1,
+      "message": "Nice! Just some nits, looks good overall!",
+      "revId": "6c335c90cdbc0454e18e3680464ebc7e04dc8c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8efcf8e9_0ac3621d",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-07T12:38:39Z",
+      "side": 1,
+      "message": "nit: All the offsets could also be `constexpr`, since you are touching these lines already.",
+      "range": {
+        "startLine": 110,
+        "startChar": 9,
+        "endLine": 110,
+        "endChar": 14
+      },
+      "revId": "6c335c90cdbc0454e18e3680464ebc7e04dc8c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66c35c72_3b0599b2",
+        "filename": "test/cctest/test-regexp.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-07T12:38:39Z",
+      "side": 1,
+      "message": "IIUC this was mostly copied from test-api.cc, so consider all comments on this test as nits.\n\nNot sure if it is great adding new cctests, as cctests are migrated to unittests right now. Maybe this can be a unittest without too much effort?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 12
+      },
+      "revId": "6c335c90cdbc0454e18e3680464ebc7e04dc8c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef702e56_b2b8619f",
+        "filename": "test/cctest/test-regexp.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-07T12:38:39Z",
+      "side": 1,
+      "message": "Why is the reason `kRuntime` instead of `kTesting`?\nAlso there is a `PreciseCollectAllGarbage` in `cctest.h` that could be used instead.",
+      "range": {
+        "startLine": 80,
+        "startChar": 57,
+        "endLine": 80,
+        "endChar": 65
+      },
+      "revId": "6c335c90cdbc0454e18e3680464ebc7e04dc8c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f1cc7c8_9b9b42f8",
+        "filename": "test/cctest/test-regexp.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-07T12:38:39Z",
+      "side": 1,
+      "message": "nit: A more meaningful name would be nice.",
+      "range": {
+        "startLine": 145,
+        "startChar": 46,
+        "endLine": 145,
+        "endChar": 47
+      },
+      "revId": "6c335c90cdbc0454e18e3680464ebc7e04dc8c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
