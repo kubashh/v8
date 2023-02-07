@@ -68,6 +68,24 @@
       "message": "Ah, makes sense. Maybe add a sentence to the description.",
       "revId": "94c97dd405ddf86ebecc30e22508915dd76b84e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84d7ed28_e3268c34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-02-07T17:16:07Z",
+      "side": 1,
+      "message": "done.",
+      "parentUuid": "aa7053a1_30214069",
+      "revId": "94c97dd405ddf86ebecc30e22508915dd76b84e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
