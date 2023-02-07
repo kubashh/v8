@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4461e13_2f222478",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-07T17:17:29Z",
+      "side": 1,
+      "message": "Jakob, PTAL.\nDaniel FYI.",
+      "revId": "0412c107bc2d3a8f5e7294f160eeb0183d01d0b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
