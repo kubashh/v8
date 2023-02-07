@@ -12222,10 +12222,11 @@ TNode<Int32T> CodeStubAssembler::LoadElementsKind(
 
 template <typename TIndex>
 TNode<TIndex> CodeStubAssembler::BuildFastLoop(
-    const VariableList& vars, TNode<TIndex> start_index,
-    TNode<TIndex> end_index, const FastLoopBody<TIndex>& body, int increment,
+    const VariableList& vars, TVariable<TIndex>& var_index,
+    TNode<TIndex> start_index, TNode<TIndex> end_index,
+    const FastLoopBody<TIndex>& body, int increment,
     LoopUnrollingMode unrolling_mode, IndexAdvanceMode advance_mode) {
-  TVARIABLE(TIndex, var_index, start_index);
+  var_index = start_index;
   VariableList vars_copy(vars.begin(), vars.end(), zone());
   vars_copy.push_back(&var_index);
   Label loop(this, vars_copy);
