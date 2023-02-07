@@ -15,16 +15,20 @@ namespace v8 {
 namespace internal {
 
 RwxMemoryWriteScope::RwxMemoryWriteScope(const char* comment) {
+#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT || V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
   DCHECK(is_key_permissions_initialized_for_current_thread());
   if (!v8_flags.jitless) {
     SetWritable();
   }
+#endif
 }
 
 RwxMemoryWriteScope::~RwxMemoryWriteScope() {
+#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT || V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
   if (!v8_flags.jitless) {
     SetExecutable();
   }
+#endif
 }
 
 #if V8_HAS_PTHREAD_JIT_WRITE_PROTECT

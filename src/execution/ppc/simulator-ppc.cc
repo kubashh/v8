@@ -23,7 +23,6 @@
 #include "src/diagnostics/disasm.h"
 #include "src/execution/ppc/frame-constants-ppc.h"
 #include "src/heap/combined-heap.h"
-#include "src/heap/heap-inl.h"  // For CodeSpaceMemoryModificationScope.
 #include "src/objects/objects-inl.h"
 #include "src/runtime/runtime-utils.h"
 #include "src/utils/ostreams.h"
@@ -129,7 +128,7 @@ namespace {
 // (simulator) builds.
 void SetInstructionBitsInCodeSpace(Instruction* instr, Instr value,
                                    Heap* heap) {
-  CodeSpaceMemoryModificationScope scope(heap);
+  RwxMemoryWriteScope rwx_write_scope("SetInstructionBitsInCodeSpace");
   instr->SetInstructionBits(value);
 }
 }  // namespace
