@@ -51,6 +51,23 @@
       "parentUuid": "ba07ab1e_a6025b8a",
       "revId": "94c97dd405ddf86ebecc30e22508915dd76b84e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa7053a1_30214069",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-07T15:59:22Z",
+      "side": 1,
+      "message": "Ah, makes sense. Maybe add a sentence to the description.",
+      "revId": "94c97dd405ddf86ebecc30e22508915dd76b84e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
