@@ -84,7 +84,7 @@ Handle<Object> HeapTester::TestAllocateAfterFailures() {
 
   // Code space.
   heap::SimulateFullSpace(heap->code_space());
-  CodePageCollectionMemoryModificationScopeForTesting code_scope(heap);
+  RwxMemoryWriteScope rwx_write_scope("HeapTester::TestAllocateAfterFailures");
   size = CcTest::i_isolate()->builtins()->code(Builtin::kIllegal).Size();
   obj =
       heap->AllocateRaw(size, AllocationType::kCode, AllocationOrigin::kRuntime)
