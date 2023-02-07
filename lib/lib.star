@@ -93,6 +93,13 @@ branch_descriptors = [
         version_tag = "extended",
         priority = 50,
     ),
+    branch_descriptor(
+        "ci.br.extwin",
+        "v8-trigger-br-extwin",
+        ["refs/branch-heads/%s"],
+        version_tag = "extwin",
+        priority = 50,
+    ),
 ]
 
 NAMING_CONVENTION_EXCLUDED_BUILDERS = [
@@ -185,6 +192,7 @@ defaults_dict = {
     "ci.br.beta": defaults_ci_br,
     "ci.br.stable": defaults_ci_br,
     "ci.br.extended": defaults_ci_br,
+    "ci.br.extwin": defaults_ci_br,
 }
 
 GOMA = struct(
