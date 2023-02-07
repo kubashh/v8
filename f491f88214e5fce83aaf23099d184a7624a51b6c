@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "087324d9_17f2cff0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-07T11:56:53Z",
+      "side": 1,
+      "message": "Hi Patrick, please review x64 before I start on platform ports",
+      "revId": "f491f88214e5fce83aaf23099d184a7624a51b6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
