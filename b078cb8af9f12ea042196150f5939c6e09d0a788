@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76a224eb_8d71d5c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-08T08:03:11Z",
+      "side": 1,
+      "message": "Thanks! The ports are now done, ptal.",
+      "revId": "b078cb8af9f12ea042196150f5939c6e09d0a788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
