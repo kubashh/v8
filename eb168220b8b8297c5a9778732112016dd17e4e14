@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4f7c245_31d9913b",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-08T07:02:12Z",
+      "side": 1,
+      "message": "Yeah.. Also I tripped on the STUB kind, which apparently we still apply to builtins (even though we also have the BUILTIN kind). Another possible future cleanup.",
+      "parentUuid": "7bd6adba_2c6addd5",
+      "range": {
+        "startLine": 675,
+        "startChar": 0,
+        "endLine": 677,
+        "endChar": 13
+      },
+      "revId": "eb168220b8b8297c5a9778732112016dd17e4e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82346ca1_fcb2edbd",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-02-07T13:32:52Z",
       "side": 1,
       "message": "nit: why not part of the initializer list?",
+      "range": {
+        "startLine": 216,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 29
+      },
+      "revId": "eb168220b8b8297c5a9778732112016dd17e4e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f99aa088_49bf155e",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-08T07:02:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82346ca1_fcb2edbd",
       "range": {
         "startLine": 216,
         "startChar": 0,
