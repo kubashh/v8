@@ -16,6 +16,23 @@
       "message": "Daniel, PTAL (Jakob as well, if you like).\nPS2 adds two regression tests and the respective fixes.",
       "revId": "104747aa51fd8ea405b064dac4ec9bed97eb0dc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3a6413b_c5d2dc94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-02-08T16:12:45Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "104747aa51fd8ea405b064dac4ec9bed97eb0dc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
