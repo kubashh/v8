@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa870bec_9b65a451",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-08T13:04:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83b84ed3_47f96a5f",
+      "range": {
+        "startLine": 718,
+        "startChar": 58,
+        "endLine": 718,
+        "endChar": 70
+      },
+      "revId": "3e0544061383ae98564091f80bbe92afaced8649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08eeca12_29aeffbc",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-02-08T09:56:58Z",
       "side": 1,
       "message": "nit: This comment it outdated (`r4..r10`)",
+      "range": {
+        "startLine": 938,
+        "startChar": 27,
+        "endLine": 938,
+        "endChar": 30
+      },
+      "revId": "3e0544061383ae98564091f80bbe92afaced8649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "702d7e33_d9ddd271",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-08T13:04:59Z",
+      "side": 1,
+      "message": "Discussed offline, it\u0027s still valid (fp is r11 :)",
+      "parentUuid": "08eeca12_29aeffbc",
       "range": {
         "startLine": 938,
         "startChar": 27,
