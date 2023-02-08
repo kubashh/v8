@@ -39,6 +39,30 @@
       },
       "revId": "a2b9ac43db9a96ee9ce1378af026ed73d39b2e22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13ac2f84_b9c7e39d",
+        "filename": "test/mjsunit/regress/regress-crbug-1404820.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-02-08T12:19:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da93709e_cd01f0a4",
+      "range": {
+        "startLine": 7,
+        "startChar": 2,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "a2b9ac43db9a96ee9ce1378af026ed73d39b2e22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
