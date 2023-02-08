@@ -60,6 +60,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "34a6fe23_e84e901e",
+        "filename": "src/compiler/wasm-gc-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-08T09:09:25Z",
+      "side": 1,
+      "message": "I think we can live with two lines of duplication.",
+      "parentUuid": "189a5263_139f3082",
+      "range": {
+        "startLine": 336,
+        "startChar": 0,
+        "endLine": 340,
+        "endChar": 15
+      },
+      "revId": "9a20f02eae4649c43bd8063b6c3e9f09866d53f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "16fb65fd_939610eb",
         "filename": "src/compiler/wasm-gc-lowering.cc",
         "patchSetId": 2
