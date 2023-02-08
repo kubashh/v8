@@ -16,6 +16,24 @@
       "message": "This function is only implemented when V8_TARGET_ARCH_RISCV64 is defined. So could IsRV64 be removed here？",
       "revId": "f0e68aac722e052701da4b6935e3a6e35c52f891",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72303c25_7f680cbe",
+        "filename": "src/codegen/riscv/assembler-riscv.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2023-02-08T09:40:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a9b9823_3d3b50aa",
+      "revId": "f0e68aac722e052701da4b6935e3a6e35c52f891",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
