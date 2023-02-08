@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "153b74ff_2516e565",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-08T09:27:28Z",
+      "side": 1,
+      "message": "Ah, sorry, I clicked CQ+1 instead of CR+1. Fixed.",
+      "revId": "7c76b5e6bc8d5e29c2f6207be3564c704be0d59d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
