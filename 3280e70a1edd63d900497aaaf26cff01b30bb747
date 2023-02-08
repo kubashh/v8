@@ -33,6 +33,24 @@
       "message": "Add `V8_PRESERVE_MOST`?",
       "revId": "3280e70a1edd63d900497aaaf26cff01b30bb747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c61e152_c66528d7",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-08T12:02:36Z",
+      "side": 1,
+      "message": "Yeah, why not. Done.",
+      "parentUuid": "cf1790a1_573815b8",
+      "revId": "3280e70a1edd63d900497aaaf26cff01b30bb747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
