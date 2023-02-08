@@ -637,6 +637,7 @@ FRAME_MARKERS = (
   "BUILTIN",
   "BUILTIN_EXIT",
   "NATIVE",
+  "IRREGEXP",
 )
 
 # This set of constants is generated from a shipping build.
