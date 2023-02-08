@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9268306_5ab88706",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-08T09:56:58Z",
+      "side": 1,
+      "message": "Thanks! LGTM with micro-nits",
+      "revId": "3e0544061383ae98564091f80bbe92afaced8649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83b84ed3_47f96a5f",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-08T09:56:58Z",
+      "side": 1,
+      "message": "nit: `kSystemPointerSize` please.",
+      "range": {
+        "startLine": 718,
+        "startChar": 58,
+        "endLine": 718,
+        "endChar": 70
+      },
+      "revId": "3e0544061383ae98564091f80bbe92afaced8649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08eeca12_29aeffbc",
+        "filename": "src/regexp/arm/regexp-macro-assembler-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-08T09:56:58Z",
+      "side": 1,
+      "message": "nit: This comment it outdated (`r4..r10`)",
+      "range": {
+        "startLine": 938,
+        "startChar": 27,
+        "endLine": 938,
+        "endChar": 30
+      },
+      "revId": "3e0544061383ae98564091f80bbe92afaced8649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

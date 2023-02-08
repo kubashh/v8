@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c4433c8_a5791ccf",
+        "filename": "test/cctest/test-regexp.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-08T09:56:58Z",
+      "side": 1,
+      "message": "😂",
+      "parentUuid": "64d8b416_221e2db8",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 12
+      },
+      "revId": "6c335c90cdbc0454e18e3680464ebc7e04dc8c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef702e56_b2b8619f",
