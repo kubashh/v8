@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7e461bea_25c2d368",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-02-08T16:27:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ad512d3_e859e121",
+      "range": {
+        "startLine": 7,
+        "startChar": 59,
+        "endLine": 7,
+        "endChar": 62
+      },
+      "revId": "86cfe135ae9233641a29079146a29f08fd10e1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "311371f9_56ad9db3",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65531077_58c6b796",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-02-08T16:27:53Z",
+      "side": 1,
+      "message": "I will. I actually already started, but it took me too long to figure everything out given how fast maglev is moving at times 😊",
+      "parentUuid": "fbbe9f7a_d30f8d1d",
+      "revId": "86cfe135ae9233641a29079146a29f08fd10e1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d73886a_6fa13d2a",
@@ -83,6 +125,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2446bd23_74868a93",
+        "filename": "src/baseline/arm64/baseline-assembler-arm64-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-02-08T16:27:53Z",
+      "side": 1,
+      "message": "CompareAndBranch only has a special case for immediate 0, which won\u0027t help here. Or do you think there might be future room for better branching?",
+      "parentUuid": "4d73886a_6fa13d2a",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 21
+      },
+      "revId": "86cfe135ae9233641a29079146a29f08fd10e1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "75b4db18_bac02ecd",
         "filename": "src/codegen/x64/macro-assembler-x64.cc",
         "patchSetId": 2
@@ -94,6 +160,30 @@
       "writtenOn": "2023-01-31T13:15:50Z",
       "side": 1,
       "message": "Nit: a more imo expressive name would be IsObjectType, then it is clear you get a equal or not_equal.",
+      "range": {
+        "startLine": 2575,
+        "startChar": 21,
+        "endLine": 2575,
+        "endChar": 36
+      },
+      "revId": "86cfe135ae9233641a29079146a29f08fd10e1b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1cb0cf1_7bfff1b5",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2575,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-02-08T16:27:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75b4db18_bac02ecd",
       "range": {
         "startLine": 2575,
         "startChar": 21,
