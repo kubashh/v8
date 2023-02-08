@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd3b3b4b_74802b42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-02-08T07:29:47Z",
+      "side": 1,
+      "message": "lgtm, thanks for fixing :)",
+      "revId": "a2b9ac43db9a96ee9ce1378af026ed73d39b2e22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da93709e_cd01f0a4",
+        "filename": "test/mjsunit/regress/regress-crbug-1404820.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-02-08T07:29:47Z",
+      "side": 1,
+      "message": "Nit: The regression test would be clearer if this object was written out... is this Array.prototype?",
+      "range": {
+        "startLine": 7,
+        "startChar": 2,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "a2b9ac43db9a96ee9ce1378af026ed73d39b2e22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
