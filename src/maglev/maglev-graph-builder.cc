@@ -3117,6 +3117,9 @@ ReduceResult MaglevGraphBuilder::TryBuildInlinedCall(
   BasicBlockRef start_ref, end_ref;
   BasicBlock* block = FinishBlock<JumpToInlined>({}, &start_ref, inner_unit);
 
+  // An inlined call is a side effect.
+  MarkPossibleSideEffect();
+
   ReduceResult result =
       inner_graph_builder.BuildInlined(args, &start_ref, &end_ref);
   if (result.IsDoneWithAbort()) {
