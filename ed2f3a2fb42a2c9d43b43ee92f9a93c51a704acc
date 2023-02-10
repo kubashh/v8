@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a26b68c3_42bde574",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-02-10T10:56:29Z",
+      "side": 1,
+      "message": "three is the charm...\nPTAL, Patchset1 is identical to the last try. What makes this try better: (1) I fixed two more places with missing checks. (2) I don\u0027t remove the code that keeps the r/o markbits black. That should have gone into the second CL :( Keeping it in this CL caused segv for all the cases I missed, because the marker tried to mark R/O objects (where the markbits are write protected).",
+      "revId": "ed2f3a2fb42a2c9d43b43ee92f9a93c51a704acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
