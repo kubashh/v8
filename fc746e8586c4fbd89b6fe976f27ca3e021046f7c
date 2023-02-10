@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c7b1c6e_6ae2d6e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-10T20:27:42Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "fc746e8586c4fbd89b6fe976f27ca3e021046f7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a93bfdc_b03f07a5",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "I think is because \n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/googletest/src/googletest/include/gtest/internal/gtest-death-test-internal.h;l\u003d173\n\nis inside a GTEST_HAS_DEATH_TEST so:\n\nEXPECT_DEATH_IF_SUPPORTED(CPPGC_DCHECK(5 \u003d\u003d 7),\n                            ContainsRegex(\"failed.*5 \u003d\u003d 7\"));\n                            \ngenerates:\n\n../../v8/test/unittests/heap/cppgc/logging-unittest.cc:56:3: error: no matching function for call to \u0027PartialMatch\u0027\n  EXPECT_DEATH_IF_SUPPORTED(CPPGC_DCHECK(5 \u003d\u003d 7),\n  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n../../third_party/googletest/src/googletest/include/gtest/gtest-death-test.h:338:3: note: expanded from macro \u0027EXPECT_DEATH_IF_SUPPORTED\u0027\n  GTEST_UNSUPPORTED_DEATH_TEST(statement, regex, )\n  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n../../third_party/googletest/src/googletest/include/gtest/gtest-death-test.h:320:5: note: expanded from macro \u0027GTEST_UNSUPPORTED_DEATH_TEST\u0027\n    ::testing::internal::RE::PartialMatch(\".*\", (regex));                      \\\n    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n../../third_party/googletest/src/googletest/include/gtest/internal/gtest-port.h:927:15: note: candidate function not viable: no known conversion from \u0027PolymorphicMatcher\u003cinternal::MatchesRegexMatcher\u003e\u0027 to \u0027const RE\u0027 for 2nd argument\n  static bool PartialMatch(const char* str, const RE\u0026 re);\n              ^\n../../third_party/googletest/src/googletest/include/gtest/internal/gtest-port.h:922:15: note: candidate function not viable: no known conversion from \u0027PolymorphicMatcher\u003cinternal::MatchesRegexMatcher\u003e\u0027 to \u0027const RE\u0027 for 2nd argument\n  static bool PartialMatch(const ::std::string\u0026 str, const RE\u0026 re) {\n              ^\n../../v8/test/unittests/heap/cppgc/logging-unittest.cc:58:3: error: no matching function for call to \u0027PartialMatch\u0027\n  EXPECT_DEATH_IF_SUPPORTED(CPPGC_CHECK(5 \u003d\u003d 7),\n  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n../../third_party/googletest/src/googletest/include/gtest/gtest-death-test.h:338:3: note: expanded from macro \u0027EXPECT_DEATH_IF_SUPPORTED\u0027\n  GTEST_UNSUPPORTED_DEATH_TEST(statement, regex, )\n  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n../../third_party/googletest/src/googletest/include/gtest/gtest-death-test.h:320:5: note: expanded from macro \u0027GTEST_UNSUPPORTED_DEATH_TEST\u0027\n    ::testing::internal::RE::PartialMatch(\".*\", (regex));                      \\\n    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n../../third_party/googletest/src/googletest/include/gtest/internal/gtest-port.h:927:15: note: candidate function not viable: no known conversion from \u0027PolymorphicMatcher\u003cinternal::MatchesRegexMatcher\u003e\u0027 to \u0027const RE\u0027 for 2nd argument\n  static bool PartialMatch(const char* str, const RE\u0026 re);\n  \n  \nI think it is a problem with gtest and the regex filtering.",
       "parentUuid": "6a93bfdc_b03f07a5",
+      "range": {
+        "startLine": 53,
+        "startChar": 41,
+        "endLine": 53,
+        "endChar": 61
+      },
+      "revId": "fc746e8586c4fbd89b6fe976f27ca3e021046f7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2912a52_8305443a",
+        "filename": "test/unittests/heap/cppgc/logging-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-10T20:27:42Z",
+      "side": 1,
+      "message": "Thanks that explains it. Essentially the macro is not just discarded but generates a block that is supposed to compile [1]\n\n```\n/  The branch that has an always false condition is used to ensure that\n//  statement and regex are compiled (and thus syntactically correct) but\n//  never executed. \n```\n\nSince the Regex is behind `GTEST_HAS_DEATH_TEST` this fails. Thanks for clarifying.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/googletest/src/googletest/include/gtest/gtest-death-test.h;l\u003d332?q\u003dEXPECT_DEATH_IF_SUPPORTED\u0026ss\u003dchromium",
+      "parentUuid": "f2044ab3_ad60e192",
       "range": {
         "startLine": 53,
         "startChar": 41,
