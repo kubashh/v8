@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bf3bd28_b62f7bd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-02-10T10:27:11Z",
+      "side": 1,
+      "message": "PTAL. This feels a bit hacky, but I\u0027m not sure how to tell msan more explicitly about these unused bits.",
+      "revId": "83ce723ed2294adcf1d5e8f5b8f47125029007c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
