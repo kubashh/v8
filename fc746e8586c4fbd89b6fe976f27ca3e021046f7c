@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a93bfdc_b03f07a5",
+        "filename": "test/unittests/heap/cppgc/logging-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-10T20:06:43Z",
+      "side": 1,
+      "message": "Sorry, I cannot follow the CL description. Can you explain a little what\u0027s going on.\n\nCan we not rely on `EXPECT_DEATH_IF_SUPPORTED()` anymore in other places?",
+      "range": {
+        "startLine": 53,
+        "startChar": 41,
+        "endLine": 53,
+        "endChar": 61
+      },
+      "revId": "fc746e8586c4fbd89b6fe976f27ca3e021046f7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
