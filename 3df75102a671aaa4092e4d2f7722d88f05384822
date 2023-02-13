@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ee73f0e_0f074d3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-02-13T09:02:18Z",
+      "side": 1,
+      "message": "PTAL, the previous CL went smoothly this time. So let\u0027s try again...",
+      "revId": "3df75102a671aaa4092e4d2f7722d88f05384822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
