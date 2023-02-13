@@ -422,7 +422,7 @@ void Assembler::FinalizeJumpOptimizationInfo() {
       for (int i = 0; i < num; i++) {
         int disp_pos = farjmp_positions_[i];
         int disp = long_at(disp_pos);
-        if (is_int8(disp)) {
+        if (is_int8(disp + 40)) {
           bitmap[i / 32] |= 1 << (i & 31);
           can_opt = true;
         }
