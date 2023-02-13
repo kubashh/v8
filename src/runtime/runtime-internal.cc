@@ -324,7 +324,7 @@ RUNTIME_FUNCTION(Runtime_ThrowApplyNonFunction) {
 RUNTIME_FUNCTION(Runtime_StackGuard) {
   SealHandleScope shs(isolate);
   DCHECK_EQ(0, args.length());
-  TRACE_EVENT0("v8.execute", "V8.StackGuard");
+  // TRACE_EVENT0("v8.execute", "V8.StackGuard");
 
   // First check if this is a real stack overflow.
   StackLimitCheck check(isolate);
@@ -339,7 +339,7 @@ RUNTIME_FUNCTION(Runtime_StackGuardWithGap) {
   SealHandleScope shs(isolate);
   DCHECK_EQ(args.length(), 1);
   uint32_t gap = args.positive_smi_value_at(0);
-  TRACE_EVENT0("v8.execute", "V8.StackGuard");
+  // TRACE_EVENT0("v8.execute", "V8.StackGuard");
 
   // First check if this is a real stack overflow.
   StackLimitCheck check(isolate);
@@ -358,7 +358,7 @@ Object BytecodeBudgetInterruptWithStackCheck(Isolate* isolate,
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
   Handle<JSFunction> function = args.at<JSFunction>(0);
-  TRACE_EVENT0("v8.execute", "V8.BytecodeBudgetInterruptWithStackCheck");
+  // TRACE_EVENT0("v8.execute", "V8.BytecodeBudgetInterruptWithStackCheck");
 
   // Check for stack interrupts here so that we can fold the interrupt check
   // into bytecode budget interrupts.
@@ -384,7 +384,7 @@ Object BytecodeBudgetInterrupt(Isolate* isolate, RuntimeArguments& args,
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
   Handle<JSFunction> function = args.at<JSFunction>(0);
-  TRACE_EVENT0("v8.execute", "V8.BytecodeBudgetInterrupt");
+  // TRACE_EVENT0("v8.execute", "V8.BytecodeBudgetInterrupt");
 
   isolate->tiering_manager()->OnInterruptTick(function, code_kind);
   return ReadOnlyRoots(isolate).undefined_value();

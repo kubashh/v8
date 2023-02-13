@@ -2203,7 +2203,7 @@ MaybeLocal<Value> Script::Run(Local<Context> context,
                               Local<Data> host_defined_options) {
   auto v8_isolate = context->GetIsolate();
   auto i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
   ENTER_V8(i_isolate, context, Script, Run, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
@@ -2625,7 +2625,7 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
     Isolate* v8_isolate, Source* source, CompileOptions options,
     NoCacheReason no_cache_reason) {
   auto i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
   ENTER_V8_NO_SCRIPT(i_isolate, v8_isolate->GetCurrentContext(), ScriptCompiler,
                      CompileUnbound, MaybeLocal<UnboundScript>(),
                      InternalEscapableScope);
@@ -2633,7 +2633,7 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
   i::Handle<i::String> str = Utils::OpenHandle(*(source->source_string));
 
   i::Handle<i::SharedFunctionInfo> result;
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.CompileScript");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.CompileScript");
   i::ScriptDetails script_details = GetScriptDetails(
       i_isolate, source->resource_name, source->resource_line_offset,
       source->resource_column_offset, source->source_map_url,
@@ -2756,7 +2756,7 @@ MaybeLocal<Function> ScriptCompiler::CompileFunctionInternal(
   {
     PREPARE_FOR_EXECUTION(v8_context, ScriptCompiler, CompileFunction,
                           Function);
-    TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
+    // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
 
     DCHECK(options == CompileOptions::kConsumeCodeCache ||
            options == CompileOptions::kEagerCompile ||
@@ -5369,14 +5369,14 @@ MaybeLocal<Object> Function::NewInstanceWithSideEffectType(
   TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
   ENTER_V8(i_isolate, context, Function, NewInstance, MaybeLocal<Object>(),
            InternalEscapableScope);
-  i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
-  i::NestedTimedHistogramScope execute_timer(i_isolate->counters()->execute(),
-                                             i_isolate);
+  // i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
+  // i::NestedTimedHistogramScope execute_timer(i_isolate->counters()->execute(),
+  //                                            i_isolate);
   auto self = Utils::OpenHandle(this);
   static_assert(sizeof(v8::Local<v8::Value>) == sizeof(i::Handle<i::Object>));
-  bool should_set_has_no_side_effect =
-      side_effect_type == SideEffectType::kHasNoSideEffect &&
-      i_isolate->debug_execution_mode() == i::DebugInfo::kSideEffects;
+  bool should_set_has_no_side_effect = false;
+      // side_effect_type == SideEffectType::kHasNoSideEffect &&
+      // i_isolate->debug_execution_mode() == i::DebugInfo::kSideEffects;
   if (should_set_has_no_side_effect) {
     CHECK(self->IsJSFunction() &&
           i::JSFunction::cast(*self).shared().IsApiFunction());
