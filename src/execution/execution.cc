@@ -189,11 +189,11 @@ MaybeHandle<Context> NewScriptContext(Isolate* isolate,
   // TODO(cbruni, 1244145): Use passed in host_defined_options.
   // Creating a script context is a side effect, so abort if that's not
   // allowed.
-  if (isolate->debug_execution_mode() == DebugInfo::kSideEffects) {
-    isolate->Throw(*isolate->factory()->NewEvalError(
-        MessageTemplate::kNoSideEffectDebugEvaluate));
-    return MaybeHandle<Context>();
-  }
+  // if (isolate->debug_execution_mode() == DebugInfo::kSideEffects) {
+  //   isolate->Throw(*isolate->factory()->NewEvalError(
+  //       MessageTemplate::kNoSideEffectDebugEvaluate));
+  //   return MaybeHandle<Context>();
+  // }
   SaveAndSwitchContext save(isolate, function->context());
   SharedFunctionInfo sfi = function->shared();
   Handle<Script> script(Script::cast(sfi.script()), isolate);

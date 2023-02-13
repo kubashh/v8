@@ -167,15 +167,15 @@ int MicrotaskQueue::RunMicrotasks(Isolate* isolate) {
         reinterpret_cast<v8::Isolate*>(isolate), this);
     HandleScopeImplementer::EnteredContextRewindScope rewind_scope(
         isolate->handle_scope_implementer());
-    TRACE_EVENT_BEGIN0("v8.execute", "RunMicrotasks");
+    // TRACE_EVENT_BEGIN0("v8.execute", "RunMicrotasks");
     {
-      TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.RunMicrotasks");
+      // TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.RunMicrotasks");
       maybe_result = Execution::TryRunMicrotasks(isolate, this);
       processed_microtask_count =
           static_cast<int>(finished_microtask_count_ - base_count);
     }
-    TRACE_EVENT_END1("v8.execute", "RunMicrotasks", "microtask_count",
-                     processed_microtask_count);
+    // TRACE_EVENT_END1("v8.execute", "RunMicrotasks", "microtask_count",
+    //                  processed_microtask_count);
   }
 
   if (isolate->is_execution_terminating()) {

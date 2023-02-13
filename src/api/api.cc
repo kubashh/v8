@@ -2203,7 +2203,7 @@ MaybeLocal<Value> Script::Run(Local<Context> context,
                               Local<Data> host_defined_options) {
   auto v8_isolate = context->GetIsolate();
   auto i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
   ENTER_V8(i_isolate, context, Script, Run, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
@@ -2511,7 +2511,7 @@ Maybe<bool> Module::InstantiateModule(Local<Context> context,
 
 MaybeLocal<Value> Module::Evaluate(Local<Context> context) {
   auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
   ENTER_V8(i_isolate, context, Module, Evaluate, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
@@ -2625,7 +2625,7 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
     Isolate* v8_isolate, Source* source, CompileOptions options,
     NoCacheReason no_cache_reason) {
   auto i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
   ENTER_V8_NO_SCRIPT(i_isolate, v8_isolate->GetCurrentContext(), ScriptCompiler,
                      CompileUnbound, MaybeLocal<UnboundScript>(),
                      InternalEscapableScope);
@@ -2633,7 +2633,7 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
   i::Handle<i::String> str = Utils::OpenHandle(*(source->source_string));
 
   i::Handle<i::SharedFunctionInfo> result;
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.CompileScript");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.CompileScript");
   i::ScriptDetails script_details = GetScriptDetails(
       i_isolate, source->resource_name, source->resource_line_offset,
       source->resource_column_offset, source->source_map_url,
@@ -2756,7 +2756,7 @@ MaybeLocal<Function> ScriptCompiler::CompileFunctionInternal(
   {
     PREPARE_FOR_EXECUTION(v8_context, ScriptCompiler, CompileFunction,
                           Function);
-    TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
+    // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
 
     DCHECK(options == CompileOptions::kConsumeCodeCache ||
            options == CompileOptions::kEagerCompile ||
@@ -2923,9 +2923,9 @@ MaybeLocal<Script> ScriptCompiler::Compile(Local<Context> context,
                                            Local<String> full_source_string,
                                            const ScriptOrigin& origin) {
   PREPARE_FOR_EXECUTION(context, ScriptCompiler, Compile, Script);
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-               "V8.CompileStreamedScript");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+  //              "V8.CompileStreamedScript");
   i::Handle<i::SharedFunctionInfo> sfi;
   i::MaybeHandle<i::SharedFunctionInfo> maybe_sfi =
       CompileStreamedSource(i_isolate, v8_source, full_source_string, origin);
@@ -2943,9 +2943,9 @@ MaybeLocal<Module> ScriptCompiler::CompileModule(
     Local<Context> context, StreamedSource* v8_source,
     Local<String> full_source_string, const ScriptOrigin& origin) {
   PREPARE_FOR_EXECUTION(context, ScriptCompiler, Compile, Module);
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-               "V8.CompileStreamedModule");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.ScriptCompiler");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+  //              "V8.CompileStreamedModule");
   i::Handle<i::SharedFunctionInfo> sfi;
   i::MaybeHandle<i::SharedFunctionInfo> maybe_sfi =
       CompileStreamedSource(i_isolate, v8_source, full_source_string, origin);
@@ -5307,7 +5307,7 @@ MaybeLocal<Value> Object::CallAsFunction(Local<Context> context,
                                          Local<Value> recv, int argc,
                                          Local<Value> argv[]) {
   auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
   ENTER_V8(i_isolate, context, Object, CallAsFunction, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
@@ -5327,7 +5327,7 @@ MaybeLocal<Value> Object::CallAsFunction(Local<Context> context,
 MaybeLocal<Value> Object::CallAsConstructor(Local<Context> context, int argc,
                                             Local<Value> argv[]) {
   auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
   ENTER_V8(i_isolate, context, Object, CallAsConstructor, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
@@ -5366,17 +5366,17 @@ MaybeLocal<Object> Function::NewInstanceWithSideEffectType(
     Local<Context> context, int argc, v8::Local<v8::Value> argv[],
     SideEffectType side_effect_type) const {
   auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
   ENTER_V8(i_isolate, context, Function, NewInstance, MaybeLocal<Object>(),
            InternalEscapableScope);
-  i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
-  i::NestedTimedHistogramScope execute_timer(i_isolate->counters()->execute(),
-                                             i_isolate);
+  // i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
+  // i::NestedTimedHistogramScope execute_timer(i_isolate->counters()->execute(),
+  //                                            i_isolate);
   auto self = Utils::OpenHandle(this);
   static_assert(sizeof(v8::Local<v8::Value>) == sizeof(i::Handle<i::Object>));
-  bool should_set_has_no_side_effect =
-      side_effect_type == SideEffectType::kHasNoSideEffect &&
-      i_isolate->debug_execution_mode() == i::DebugInfo::kSideEffects;
+  bool should_set_has_no_side_effect = false;
+      // side_effect_type == SideEffectType::kHasNoSideEffect &&
+      // i_isolate->debug_execution_mode() == i::DebugInfo::kSideEffects;
   if (should_set_has_no_side_effect) {
     CHECK(self->IsJSFunction() &&
           i::JSFunction::cast(*self).shared().IsApiFunction());
@@ -5417,7 +5417,7 @@ MaybeLocal<v8::Value> Function::Call(Local<Context> context,
                                      v8::Local<v8::Value> recv, int argc,
                                      v8::Local<v8::Value> argv[]) {
   auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
   ENTER_V8(i_isolate, context, Function, Call, MaybeLocal<Value>(),
            InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
@@ -6629,7 +6629,7 @@ Local<Context> NewContext(
   // Sanity-check that the isolate is initialized and usable.
   CHECK(i_isolate->builtins()->code(i::Builtin::kIllegal).IsCode());
 
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.NewContext");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.NewContext");
   API_RCS_SCOPE(i_isolate, Context, New);
   i::HandleScope scope(i_isolate);
   ExtensionConfiguration no_extensions;
@@ -8308,7 +8308,7 @@ CompiledWasmModule::CompiledWasmModule(
 
 OwnedBuffer CompiledWasmModule::Serialize() {
 #if V8_ENABLE_WEBASSEMBLY
-  TRACE_EVENT0("v8.wasm", "wasm.SerializeModule");
+  // TRACE_EVENT0("v8.wasm", "wasm.SerializeModule");
   i::wasm::WasmSerializer wasm_serializer(native_module_.get());
   size_t buffer_size = wasm_serializer.GetSerializedNativeModuleSize();
   std::unique_ptr<uint8_t[]> buffer(new uint8_t[buffer_size]);
@@ -9181,7 +9181,7 @@ Isolate::CreateParams::~CreateParams() = default;
 void Isolate::Initialize(Isolate* v8_isolate,
                          const v8::Isolate::CreateParams& params) {
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.IsolateInitialize");
+  // TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.IsolateInitialize");
   if (auto allocator = params.array_buffer_allocator_shared) {
     CHECK(params.array_buffer_allocator == nullptr ||
           params.array_buffer_allocator == allocator.get());
@@ -9785,7 +9785,7 @@ void Isolate::LowMemoryNotification() {
   {
     i::NestedTimedHistogramScope idle_notification_scope(
         i_isolate->counters()->gc_low_memory_notification());
-    TRACE_EVENT0("v8", "V8.GCLowMemoryNotification");
+    // TRACE_EVENT0("v8", "V8.GCLowMemoryNotification");
     i_isolate->heap()->CollectAllAvailableGarbage(
         i::GarbageCollectionReason::kLowMemoryNotification);
   }
