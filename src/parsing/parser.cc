@@ -564,19 +564,19 @@ void Parser::ParseProgram(Isolate* isolate, Handle<Script> script,
 
   HandleSourceURLComments(isolate, script);
 
-  if (V8_UNLIKELY(v8_flags.log_function_events && result != nullptr)) {
-    double ms = timer.Elapsed().InMillisecondsF();
-    const char* event_name = "parse-eval";
-    int start = -1;
-    int end = -1;
-    if (!flags().is_eval()) {
-      event_name = "parse-script";
-      start = 0;
-      end = String::cast(script->source()).length();
-    }
-    LOG(isolate,
-        FunctionEvent(event_name, flags().script_id(), ms, start, end, "", 0));
-  }
+  // if (V8_UNLIKELY(v8_flags.log_function_events && result != nullptr)) {
+  //   // double ms = timer.Elapsed().InMillisecondsF();
+  //   const char* event_name = "parse-eval";
+  //   int start = -1;
+  //   int end = -1;
+  //   if (!flags().is_eval()) {
+  //     event_name = "parse-script";
+  //     start = 0;
+  //     end = String::cast(script->source()).length();
+  //   }
+  //   LOG(isolate,
+  //       FunctionEvent(event_name, flags().script_id(), ms, start, end, "", 0));
+  // }
 }
 
 FunctionLiteral* Parser::DoParseProgram(Isolate* isolate, ParseInfo* info) {
@@ -919,16 +919,16 @@ void Parser::ParseFunction(Isolate* isolate, ParseInfo* info,
   }
   PostProcessParseResult(isolate, info, result);
   if (V8_UNLIKELY(v8_flags.log_function_events && result != nullptr)) {
-    double ms = timer.Elapsed().InMillisecondsF();
-    // We should already be internalized by now, so the debug name will be
-    // available.
-    DeclarationScope* function_scope = result->scope();
-    std::unique_ptr<char[]> function_name = result->GetDebugName();
-    LOG(isolate,
-        FunctionEvent("parse-function", flags().script_id(), ms,
-                      function_scope->start_position(),
-                      function_scope->end_position(), function_name.get(),
-                      strlen(function_name.get())));
+    // double ms = timer.Elapsed().InMillisecondsF();
+    // // We should already be internalized by now, so the debug name will be
+    // // available.
+    // DeclarationScope* function_scope = result->scope();
+    // std::unique_ptr<char[]> function_name = result->GetDebugName();
+    // LOG(isolate,
+    //     FunctionEvent("parse-function", flags().script_id(), ms,
+    //                   function_scope->start_position(),
+    //                   function_scope->end_position(), function_name.get(),
+    //                   strlen(function_name.get())));
   }
 }
 
@@ -3386,21 +3386,21 @@ template void Parser::HandleSourceURLComments(LocalIsolate* isolate,
                                               Handle<Script> script);
 
 void Parser::UpdateStatistics(Isolate* isolate, Handle<Script> script) {
-  CHECK_NOT_NULL(isolate);
+  // CHECK_NOT_NULL(isolate);
 
-  // Move statistics to Isolate.
-  for (int feature = 0; feature < v8::Isolate::kUseCounterFeatureCount;
-       ++feature) {
-    if (use_counts_[feature] > 0) {
-      isolate->CountUsage(v8::Isolate::UseCounterFeature(feature));
-    }
-  }
-  if (scanner_.FoundHtmlComment()) {
-    isolate->CountUsage(v8::Isolate::kHtmlComment);
-    if (script->line_offset() == 0 && script->column_offset() == 0) {
-      isolate->CountUsage(v8::Isolate::kHtmlCommentInExternalScript);
-    }
-  }
+  // // Move statistics to Isolate.
+  // for (int feature = 0; feature < v8::Isolate::kUseCounterFeatureCount;
+  //      ++feature) {
+  //   if (use_counts_[feature] > 0) {
+  //     isolate->CountUsage(v8::Isolate::UseCounterFeature(feature));
+  //   }
+  // }
+  // if (scanner_.FoundHtmlComment()) {
+  //   isolate->CountUsage(v8::Isolate::kHtmlComment);
+  //   if (script->line_offset() == 0 && script->column_offset() == 0) {
+  //     isolate->CountUsage(v8::Isolate::kHtmlCommentInExternalScript);
+  //   }
+  // }
 }
 
 void Parser::UpdateStatistics(
@@ -3408,18 +3408,18 @@ void Parser::UpdateStatistics(
     base::SmallVector<v8::Isolate::UseCounterFeature, 8>* use_counts,
     int* preparse_skipped) {
   // Move statistics to Isolate.
-  for (int feature = 0; feature < v8::Isolate::kUseCounterFeatureCount;
-       ++feature) {
-    if (use_counts_[feature] > 0) {
-      use_counts->emplace_back(v8::Isolate::UseCounterFeature(feature));
-    }
-  }
-  if (scanner_.FoundHtmlComment()) {
-    use_counts->emplace_back(v8::Isolate::kHtmlComment);
-    if (script->line_offset() == 0 && script->column_offset() == 0) {
-      use_counts->emplace_back(v8::Isolate::kHtmlCommentInExternalScript);
-    }
-  }
+  // for (int feature = 0; feature < v8::Isolate::kUseCounterFeatureCount;
+  //      ++feature) {
+  //   if (use_counts_[feature] > 0) {
+  //     use_counts->emplace_back(v8::Isolate::UseCounterFeature(feature));
+  //   }
+  // }
+  // if (scanner_.FoundHtmlComment()) {
+  //   use_counts->emplace_back(v8::Isolate::kHtmlComment);
+  //   if (script->line_offset() == 0 && script->column_offset() == 0) {
+  //     use_counts->emplace_back(v8::Isolate::kHtmlCommentInExternalScript);
+  //   }
+  // }
   *preparse_skipped = total_preparse_skipped_;
 }
 

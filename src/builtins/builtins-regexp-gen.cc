@@ -520,7 +520,7 @@ TNode<HeapObject> RegExpBuiltinsAssembler::RegExpExecInternal(
 
   Label if_success(this), if_exception(this, Label::kDeferred);
   {
-    IncrementCounter(isolate()->counters()->regexp_entry_native(), 1);
+    // IncrementCounter(isolate()->counters()->regexp_entry_native(), 1);
 
     // Set up args for the final call into generated Irregexp code.
 

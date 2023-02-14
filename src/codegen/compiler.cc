@@ -372,11 +372,11 @@ void Compiler::LogFunctionCompilation(Isolate* isolate,
       UNREACHABLE();
   }
 
-  Handle<String> debug_name = SharedFunctionInfo::DebugName(shared);
-  DisallowGarbageCollection no_gc;
-  LOG(isolate, FunctionEvent(name.c_str(), script->id(), time_taken_ms,
-                             shared->StartPosition(), shared->EndPosition(),
-                             *debug_name));
+  // Handle<String> debug_name = SharedFunctionInfo::DebugName(shared);
+  // DisallowGarbageCollection no_gc;
+  // LOG(isolate, FunctionEvent(name.c_str(), script->id(), time_taken_ms,
+  //                            shared->StartPosition(), shared->EndPosition(),
+  //                            *debug_name));
 }
 
 // Helper that times a scoped region and records the elapsed time.
@@ -544,51 +544,51 @@ void TurbofanCompilationJob::RecordCompilationStats(ConcurrencyMode mode,
   // Don't record samples from machines without high-resolution timers,
   // as that can cause serious reporting issues. See the thread at
   // http://g/chrome-metrics-team/NwwJEyL8odU/discussion for more details.
-  if (base::TimeTicks::IsHighResolution()) {
-    Counters* const counters = isolate->counters();
-    if (compilation_info()->is_osr()) {
-      counters->turbofan_osr_prepare()->AddSample(
-          static_cast<int>(time_taken_to_prepare_.InMicroseconds()));
-      counters->turbofan_osr_execute()->AddSample(
-          static_cast<int>(time_taken_to_execute_.InMicroseconds()));
-      counters->turbofan_osr_finalize()->AddSample(
-          static_cast<int>(time_taken_to_finalize_.InMicroseconds()));
-      counters->turbofan_osr_total_time()->AddSample(
-          static_cast<int>(ElapsedTime().InMicroseconds()));
-    } else {
-      counters->turbofan_optimize_prepare()->AddSample(
-          static_cast<int>(time_taken_to_prepare_.InMicroseconds()));
-      counters->turbofan_optimize_execute()->AddSample(
-          static_cast<int>(time_taken_to_execute_.InMicroseconds()));
-      counters->turbofan_optimize_finalize()->AddSample(
-          static_cast<int>(time_taken_to_finalize_.InMicroseconds()));
-      counters->turbofan_optimize_total_time()->AddSample(
-          static_cast<int>(ElapsedTime().InMicroseconds()));
+  // if (base::TimeTicks::IsHighResolution()) {
+  //   Counters* const counters = isolate->counters();
+  //   if (compilation_info()->is_osr()) {
+  //     counters->turbofan_osr_prepare()->AddSample(
+  //         static_cast<int>(time_taken_to_prepare_.InMicroseconds()));
+  //     counters->turbofan_osr_execute()->AddSample(
+  //         static_cast<int>(time_taken_to_execute_.InMicroseconds()));
+  //     counters->turbofan_osr_finalize()->AddSample(
+  //         static_cast<int>(time_taken_to_finalize_.InMicroseconds()));
+  //     counters->turbofan_osr_total_time()->AddSample(
+  //         static_cast<int>(ElapsedTime().InMicroseconds()));
+  //   } else {
+  //     counters->turbofan_optimize_prepare()->AddSample(
+  //         static_cast<int>(time_taken_to_prepare_.InMicroseconds()));
+  //     counters->turbofan_optimize_execute()->AddSample(
+  //         static_cast<int>(time_taken_to_execute_.InMicroseconds()));
+  //     counters->turbofan_optimize_finalize()->AddSample(
+  //         static_cast<int>(time_taken_to_finalize_.InMicroseconds()));
+  //     counters->turbofan_optimize_total_time()->AddSample(
+  //         static_cast<int>(ElapsedTime().InMicroseconds()));
 
-      // Compute foreground / background time.
-      base::TimeDelta time_background;
-      base::TimeDelta time_foreground =
-          time_taken_to_prepare_ + time_taken_to_finalize_;
-      switch (mode) {
-        case ConcurrencyMode::kConcurrent:
-          time_background += time_taken_to_execute_;
-          counters->turbofan_optimize_concurrent_total_time()->AddSample(
-              static_cast<int>(ElapsedTime().InMicroseconds()));
-          break;
-        case ConcurrencyMode::kSynchronous:
-          counters->turbofan_optimize_non_concurrent_total_time()->AddSample(
-              static_cast<int>(ElapsedTime().InMicroseconds()));
-          time_foreground += time_taken_to_execute_;
-          break;
-      }
-      counters->turbofan_optimize_total_background()->AddSample(
-          static_cast<int>(time_background.InMicroseconds()));
-      counters->turbofan_optimize_total_foreground()->AddSample(
-          static_cast<int>(time_foreground.InMicroseconds()));
-    }
-    counters->turbofan_ticks()->AddSample(static_cast<int>(
-        compilation_info()->tick_counter().CurrentTicks() / 1000));
-  }
+  //     // Compute foreground / background time.
+  //     base::TimeDelta time_background;
+  //     base::TimeDelta time_foreground =
+  //         time_taken_to_prepare_ + time_taken_to_finalize_;
+  //     switch (mode) {
+  //       case ConcurrencyMode::kConcurrent:
+  //         time_background += time_taken_to_execute_;
+  //         counters->turbofan_optimize_concurrent_total_time()->AddSample(
+  //             static_cast<int>(ElapsedTime().InMicroseconds()));
+  //         break;
+  //       case ConcurrencyMode::kSynchronous:
+  //         counters->turbofan_optimize_non_concurrent_total_time()->AddSample(
+  //             static_cast<int>(ElapsedTime().InMicroseconds()));
+  //         time_foreground += time_taken_to_execute_;
+  //         break;
+  //     }
+  //     counters->turbofan_optimize_total_background()->AddSample(
+  //         static_cast<int>(time_background.InMicroseconds()));
+  //     counters->turbofan_optimize_total_foreground()->AddSample(
+  //         static_cast<int>(time_foreground.InMicroseconds()));
+  //   }
+  //   counters->turbofan_ticks()->AddSample(static_cast<int>(
+  //       compilation_info()->tick_counter().CurrentTicks() / 1000));
+  // }
 }
 
 void TurbofanCompilationJob::RecordFunctionCompilation(
@@ -1503,12 +1503,12 @@ MaybeHandle<SharedFunctionInfo> CompileToplevel(
   // Measure how long it takes to do the compilation; only take the
   // rest of the function into account to avoid overlap with the
   // parsing statistics.
-  NestedTimedHistogram* rate = parse_info->flags().is_eval()
-                                   ? isolate->counters()->compile_eval()
-                                   : isolate->counters()->compile();
-  NestedTimedHistogramScope timer(rate);
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-               parse_info->flags().is_eval() ? "V8.CompileEval" : "V8.Compile");
+  // NestedTimedHistogram* rate = parse_info->flags().is_eval()
+  //                                  ? isolate->counters()->compile_eval()
+  //                                  : isolate->counters()->compile();
+  // NestedTimedHistogramScope timer(rate);
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+  //              parse_info->flags().is_eval() ? "V8.CompileEval" : "V8.Compile");
 
   // Create the SharedFunctionInfo and add it to the script's list.
   Handle<SharedFunctionInfo> shared_info =
@@ -2400,8 +2400,8 @@ bool Compiler::CollectSourcePositions(Isolate* isolate,
   RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileCollectSourcePositions);
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
                "V8.CollectSourcePositions");
-  NestedTimedHistogramScope timer(
-      isolate->counters()->collect_source_positions());
+  // NestedTimedHistogramScope timer(
+  //     isolate->counters()->collect_source_positions());
 
   // Set up parse info.
   UnoptimizedCompileFlags flags =
@@ -2477,10 +2477,10 @@ bool Compiler::Compile(Isolate* isolate, Handle<SharedFunctionInfo> shared_info,
 
   VMState<BYTECODE_COMPILER> state(isolate);
   PostponeInterruptsScope postpone(isolate);
-  TimerEventScope<TimerEventCompileCode> compile_timer(isolate);
-  RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileFunction);
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.CompileCode");
-  AggregatedHistogramTimerScope timer(isolate->counters()->compile_lazy());
+  // TimerEventScope<TimerEventCompileCode> compile_timer(isolate);
+  // RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileFunction);
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.CompileCode");
+  // AggregatedHistogramTimerScope timer(isolate->counters()->compile_lazy());
 
   Handle<Script> script(Script::cast(shared_info->script()), isolate);
 
@@ -3093,7 +3093,7 @@ struct ScriptCompileTimerScope {
   explicit ScriptCompileTimerScope(
       Isolate* isolate, ScriptCompiler::NoCacheReason no_cache_reason)
       : isolate_(isolate),
-        all_scripts_histogram_scope_(isolate->counters()->compile_script()),
+        // all_scripts_histogram_scope_(isolate->counters()->compile_script()),
         no_cache_reason_(no_cache_reason),
         hit_isolate_cache_(false),
         producing_code_cache_(false),
@@ -3101,20 +3101,20 @@ struct ScriptCompileTimerScope {
         consuming_code_cache_failed_(false) {}
 
   ~ScriptCompileTimerScope() {
-    CacheBehaviour cache_behaviour = GetCacheBehaviour();
+    // CacheBehaviour cache_behaviour = GetCacheBehaviour();
 
-    Histogram* cache_behaviour_histogram =
-        isolate_->counters()->compile_script_cache_behaviour();
-    // Sanity check that the histogram has exactly one bin per enum entry.
-    DCHECK_EQ(0, cache_behaviour_histogram->min());
-    DCHECK_EQ(static_cast<int>(CacheBehaviour::kCount),
-              cache_behaviour_histogram->max() + 1);
-    DCHECK_EQ(static_cast<int>(CacheBehaviour::kCount),
-              cache_behaviour_histogram->num_buckets());
-    cache_behaviour_histogram->AddSample(static_cast<int>(cache_behaviour));
+    // Histogram* cache_behaviour_histogram =
+    //     isolate_->counters()->compile_script_cache_behaviour();
+    // // Sanity check that the histogram has exactly one bin per enum entry.
+    // DCHECK_EQ(0, cache_behaviour_histogram->min());
+    // DCHECK_EQ(static_cast<int>(CacheBehaviour::kCount),
+    //           cache_behaviour_histogram->max() + 1);
+    // DCHECK_EQ(static_cast<int>(CacheBehaviour::kCount),
+    //           cache_behaviour_histogram->num_buckets());
+    // cache_behaviour_histogram->AddSample(static_cast<int>(cache_behaviour));
 
-    histogram_scope_.set_histogram(
-        GetCacheBehaviourTimedHistogram(cache_behaviour));
+    // histogram_scope_.set_histogram(
+    //     GetCacheBehaviourTimedHistogram(cache_behaviour));
   }
 
   void set_hit_isolate_cache() { hit_isolate_cache_ = true; }
@@ -3129,10 +3129,10 @@ struct ScriptCompileTimerScope {
 
  private:
   Isolate* isolate_;
-  LazyTimedHistogramScope histogram_scope_;
+  // LazyTimedHistogramScope histogram_scope_;
   // TODO(leszeks): This timer is the sum of the other times, consider removing
   // it to save space.
-  NestedTimedHistogramScope all_scripts_histogram_scope_;
+  // NestedTimedHistogramScope all_scripts_histogram_scope_;
   ScriptCompiler::NoCacheReason no_cache_reason_;
   bool hit_isolate_cache_;
   bool producing_code_cache_;
@@ -3478,11 +3478,11 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
     } else if (can_consume_code_cache) {
       compile_timer.set_consuming_code_cache();
       // Then check cached code provided by embedder.
-      NestedTimedHistogramScope timer(
-          isolate->counters()->compile_deserialize());
-      RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileDeserialize);
-      TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-                   "V8.CompileDeserialize");
+      // NestedTimedHistogramScope timer(
+      //     isolate->counters()->compile_deserialize());
+      // RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileDeserialize);
+      // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+      //              "V8.CompileDeserialize");
       if (deserialize_task) {
         // If there's a cache consume task, finish it.
         maybe_result = deserialize_task->Finish(isolate, source,
@@ -3644,10 +3644,10 @@ MaybeHandle<JSFunction> Compiler::GetWrappedFunction(
   if (can_consume_code_cache) {
     compile_timer.set_consuming_code_cache();
     // Then check cached code provided by embedder.
-    NestedTimedHistogramScope timer(isolate->counters()->compile_deserialize());
-    RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileDeserialize);
-    TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-                 "V8.CompileDeserialize");
+    // NestedTimedHistogramScope timer(isolate->counters()->compile_deserialize());
+    // RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileDeserialize);
+    // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+    //              "V8.CompileDeserialize");
     maybe_result = CodeSerializer::Deserialize(isolate, cached_data, source,
                                                script_details.origin_options);
     if (maybe_result.is_null()) {

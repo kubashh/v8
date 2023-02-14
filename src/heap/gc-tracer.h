@@ -32,26 +32,26 @@ enum ScavengeSpeedMode { kForAllObjects, kForSurvivedObjects };
 // Sweeping for full GC may be interleaved with sweeping for minor
 // gc. The below scopes should use TRACE_GC_EPOCH to associate them
 // with the right cycle.
-#define TRACE_GC(tracer, scope_id)                                    \
-  DCHECK_NE(GCTracer::Scope::MC_SWEEP, scope_id);                     \
-  DCHECK_NE(GCTracer::Scope::MC_BACKGROUND_SWEEPING, scope_id);       \
-  GCTracer::Scope UNIQUE_IDENTIFIER(gc_tracer_scope)(                 \
-      tracer, GCTracer::Scope::ScopeId(scope_id), ThreadKind::kMain); \
-  TRACE_EVENT0(TRACE_GC_CATEGORIES,                                   \
-               GCTracer::Scope::Name(GCTracer::Scope::ScopeId(scope_id)))
+#define TRACE_GC(tracer, scope_id)                                    
+  // DCHECK_NE(GCTracer::Scope::MC_SWEEP, scope_id);                     \
+  // DCHECK_NE(GCTracer::Scope::MC_BACKGROUND_SWEEPING, scope_id);       \
+  // GCTracer::Scope UNIQUE_IDENTIFIER(gc_tracer_scope)(                 \
+  //     tracer, GCTracer::Scope::ScopeId(scope_id), ThreadKind::kMain); \
+  // TRACE_EVENT0(TRACE_GC_CATEGORIES,                                   \
+  //              GCTracer::Scope::Name(GCTracer::Scope::ScopeId(scope_id)))
 
-#define TRACE_GC1(tracer, scope_id, thread_kind)                \
-  GCTracer::Scope UNIQUE_IDENTIFIER(gc_tracer_scope)(           \
-      tracer, GCTracer::Scope::ScopeId(scope_id), thread_kind); \
-  TRACE_EVENT0(TRACE_GC_CATEGORIES,                             \
-               GCTracer::Scope::Name(GCTracer::Scope::ScopeId(scope_id)))
+#define TRACE_GC1(tracer, scope_id, thread_kind)
+  // GCTracer::Scope UNIQUE_IDENTIFIER(gc_tracer_scope)(           \
+  //     tracer, GCTracer::Scope::ScopeId(scope_id), thread_kind); \
+  // TRACE_EVENT0(TRACE_GC_CATEGORIES,                             \
+  //              GCTracer::Scope::Name(GCTracer::Scope::ScopeId(scope_id)))
 
-#define TRACE_GC_EPOCH(tracer, scope_id, thread_kind)                     \
-  GCTracer::Scope UNIQUE_IDENTIFIER(gc_tracer_scope)(                     \
-      tracer, GCTracer::Scope::ScopeId(scope_id), thread_kind);           \
-  TRACE_EVENT1(TRACE_GC_CATEGORIES,                                       \
-               GCTracer::Scope::Name(GCTracer::Scope::ScopeId(scope_id)), \
-               "epoch", tracer->CurrentEpoch(scope_id))
+#define TRACE_GC_EPOCH(tracer, scope_id, thread_kind) 
+  // GCTracer::Scope UNIQUE_IDENTIFIER(gc_tracer_scope)(                     \
+  //     tracer, GCTracer::Scope::ScopeId(scope_id), thread_kind);           \
+  // TRACE_EVENT1(TRACE_GC_CATEGORIES,                                       \
+  //              GCTracer::Scope::Name(GCTracer::Scope::ScopeId(scope_id)), \
+  //              "epoch", tracer->CurrentEpoch(scope_id))
 
 using CollectionEpoch = uint32_t;
 

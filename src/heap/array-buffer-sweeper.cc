@@ -159,12 +159,12 @@ void ArrayBufferSweeper::RequestSweep(SweepingType type) {
   Prepare(type);
   if (!heap_->IsTearingDown() && !heap_->ShouldReduceMemory() &&
       v8_flags.concurrent_array_buffer_sweeping) {
-    auto task = MakeCancelableTask(heap_->isolate(), [this, type] {
-      GCTracer::Scope::ScopeId scope_id =
-          type == SweepingType::kYoung
-              ? GCTracer::Scope::BACKGROUND_YOUNG_ARRAY_BUFFER_SWEEP
-              : GCTracer::Scope::BACKGROUND_FULL_ARRAY_BUFFER_SWEEP;
-      TRACE_GC_EPOCH(heap_->tracer(), scope_id, ThreadKind::kBackground);
+    auto task = MakeCancelableTask(heap_->isolate(), [this] {
+      // GCTracer::Scope::ScopeId scope_id =
+      //     type == SweepingType::kYoung
+      //         ? GCTracer::Scope::BACKGROUND_YOUNG_ARRAY_BUFFER_SWEEP
+      //         : GCTracer::Scope::BACKGROUND_FULL_ARRAY_BUFFER_SWEEP;
+      // TRACE_GC_EPOCH(heap_->tracer(), scope_id, ThreadKind::kBackground);
       base::MutexGuard guard(&sweeping_mutex_);
       DoSweep();
       job_finished_.NotifyAll();

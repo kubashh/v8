@@ -309,18 +309,18 @@ void LocalHeap::UnparkSlowPath() {
 }
 
 void LocalHeap::SleepInUnpark() {
-  GCTracer::Scope::ScopeId scope_id;
-  ThreadKind thread_kind;
+  // GCTracer::Scope::ScopeId scope_id;
+  // ThreadKind thread_kind;
 
-  if (is_main_thread()) {
-    scope_id = GCTracer::Scope::UNPARK;
-    thread_kind = ThreadKind::kMain;
-  } else {
-    scope_id = GCTracer::Scope::BACKGROUND_UNPARK;
-    thread_kind = ThreadKind::kBackground;
-  }
+  // if (is_main_thread()) {
+  //   scope_id = GCTracer::Scope::UNPARK;
+  //   thread_kind = ThreadKind::kMain;
+  // } else {
+  //   scope_id = GCTracer::Scope::BACKGROUND_UNPARK;
+  //   thread_kind = ThreadKind::kBackground;
+  // }
 
-  TRACE_GC1(heap_->tracer(), scope_id, thread_kind);
+  // TRACE_GC1(heap_->tracer(), scope_id, thread_kind);
   heap_->safepoint()->WaitInUnpark();
 }
 
@@ -352,18 +352,18 @@ void LocalHeap::SafepointSlowPath() {
 }
 
 void LocalHeap::SleepInSafepoint() {
-  GCTracer::Scope::ScopeId scope_id;
-  ThreadKind thread_kind;
+  // GCTracer::Scope::ScopeId scope_id;
+  // ThreadKind thread_kind;
 
-  if (is_main_thread()) {
-    scope_id = GCTracer::Scope::SAFEPOINT;
-    thread_kind = ThreadKind::kMain;
-  } else {
-    scope_id = GCTracer::Scope::BACKGROUND_SAFEPOINT;
-    thread_kind = ThreadKind::kBackground;
-  }
+  // if (is_main_thread()) {
+  //   scope_id = GCTracer::Scope::SAFEPOINT;
+  //   thread_kind = ThreadKind::kMain;
+  // } else {
+  //   scope_id = GCTracer::Scope::BACKGROUND_SAFEPOINT;
+  //   thread_kind = ThreadKind::kBackground;
+  // }
 
-  TRACE_GC1(heap_->tracer(), scope_id, thread_kind);
+  // TRACE_GC1(heap_->tracer(), scope_id, thread_kind);
 
   // Parking the running thread here is an optimization. We do not need to
   // wake this thread up to reach the next safepoint.

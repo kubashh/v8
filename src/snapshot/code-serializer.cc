@@ -50,11 +50,11 @@ CodeSerializer::CodeSerializer(Isolate* isolate, uint32_t source_hash)
 ScriptCompiler::CachedData* CodeSerializer::Serialize(
     Handle<SharedFunctionInfo> info) {
   Isolate* isolate = info->GetIsolate();
-  TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.Execute");
-  NestedTimedHistogramScope histogram_timer(
-      isolate->counters()->compile_serialize());
-  RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileSerialize);
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.CompileSerialize");
+  // TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.Execute");
+  // NestedTimedHistogramScope histogram_timer(
+  //     isolate->counters()->compile_serialize());
+  // RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileSerialize);
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"), "V8.CompileSerialize");
 
   base::ElapsedTimer timer;
   if (v8_flags.profile_deserialization) timer.Start();

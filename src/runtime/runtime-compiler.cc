@@ -21,24 +21,24 @@ namespace internal {
 
 namespace {
 void LogExecution(Isolate* isolate, Handle<JSFunction> function) {
-  DCHECK(v8_flags.log_function_events);
-  if (!function->has_feedback_vector()) return;
-  if (!function->feedback_vector().log_next_execution()) return;
-  Handle<SharedFunctionInfo> sfi(function->shared(), isolate);
-  Handle<String> name = SharedFunctionInfo::DebugName(sfi);
-  DisallowGarbageCollection no_gc;
-  auto raw_sfi = *sfi;
-  std::string event_name = "first-execution";
-  CodeKind kind = function->abstract_code(isolate).kind(isolate);
-  // Not adding "-interpreter" for tooling backwards compatiblity.
-  if (kind != CodeKind::INTERPRETED_FUNCTION) {
-    event_name += "-";
-    event_name += CodeKindToString(kind);
-  }
-  LOG(isolate,
-      FunctionEvent(event_name.c_str(), Script::cast(raw_sfi.script()).id(), 0,
-                    raw_sfi.StartPosition(), raw_sfi.EndPosition(), *name));
-  function->feedback_vector().set_log_next_execution(false);
+  // DCHECK(v8_flags.log_function_events);
+  // if (!function->has_feedback_vector()) return;
+  // if (!function->feedback_vector().log_next_execution()) return;
+  // Handle<SharedFunctionInfo> sfi(function->shared(), isolate);
+  // // Handle<String> name = SharedFunctionInfo::DebugName(sfi);
+  // DisallowGarbageCollection no_gc;
+  // auto raw_sfi = *sfi;
+  // std::string event_name = "first-execution";
+  // CodeKind kind = function->abstract_code(isolate).kind(isolate);
+  // // Not adding "-interpreter" for tooling backwards compatiblity.
+  // if (kind != CodeKind::INTERPRETED_FUNCTION) {
+  //   event_name += "-";
+  //   event_name += CodeKindToString(kind);
+  // }
+  // LOG(isolate,
+  //     FunctionEvent(event_name.c_str(), Script::cast(raw_sfi.script()).id(), 0,
+  //                   raw_sfi.StartPosition(), raw_sfi.EndPosition(), *name));
+  // function->feedback_vector().set_log_next_execution(false);
 }
 }  // namespace
 

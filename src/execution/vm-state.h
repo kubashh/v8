@@ -50,7 +50,7 @@ class V8_NODISCARD ExternalCallbackScope {
   Address const callback_;
   ExternalCallbackScope* const previous_scope_;
   VMState<EXTERNAL> const vm_state_;
-  PauseNestedTimedHistogramScope const pause_timed_histogram_scope_;
+  // PauseNestedTimedHistogramScope const pause_timed_histogram_scope_;
 #ifdef USE_SIMULATOR
   Address scope_address_;
 #endif

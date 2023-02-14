@@ -529,7 +529,7 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
     }
 
     WriteBarrier(fp_mode);
-    IncrementCounter(isolate()->counters()->write_barriers(), 1);
+    // IncrementCounter(isolate()->counters()->write_barriers(), 1);
     Return(TrueConstant());
   }
 
@@ -553,7 +553,7 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
         std::make_pair(MachineTypeOf<ExternalReference>::value,
                        isolate_constant));
 
-    IncrementCounter(isolate()->counters()->write_barriers(), 1);
+    // IncrementCounter(isolate()->counters()->write_barriers(), 1);
     Return(TrueConstant());
   }
 };

@@ -263,11 +263,11 @@ template <typename IsolateT>
 void Deserializer<IsolateT>::LogNewMapEvents() {
   if (V8_LIKELY(!v8_flags.log_maps)) return;
   DisallowGarbageCollection no_gc;
-  for (Handle<Map> map : new_maps_) {
-    DCHECK(v8_flags.log_maps);
-    LOG(isolate(), MapCreate(*map));
-    LOG(isolate(), MapDetails(*map));
-  }
+  // for (Handle<Map> map : new_maps_) {
+  //   DCHECK(v8_flags.log_maps);
+  //   LOG(isolate(), MapCreate(*map));
+  //   LOG(isolate(), MapDetails(*map));
+  // }
 }
 
 template <typename IsolateT>

@@ -74,16 +74,16 @@ class ETWJitLogger;
 #endif
 
 #undef LOG
-#define LOG(isolate, Call)                                             \
-  do {                                                                 \
-    if (v8::internal::v8_flags.log) (isolate)->v8_file_logger()->Call; \
-  } while (false)
+#define LOG(isolate, Call)
+  // do {                                                                 \
+  //   if (v8::internal::v8_flags.log) (isolate)->v8_file_logger()->Call; \
+  // } while (false)
 
-#define LOG_CODE_EVENT(isolate, Call)                        \
-  do {                                                       \
-    auto&& logger = (isolate)->v8_file_logger();             \
-    if (logger->is_listening_to_code_events()) logger->Call; \
-  } while (false)
+#define LOG_CODE_EVENT(isolate, Call)
+  // do {                                                       \
+  //   auto&& logger = (isolate)->v8_file_logger();             \
+  //   if (logger->is_listening_to_code_events()) logger->Call; \
+  // } while (false)
 
 class ExistingCodeLogger {
  public:
@@ -393,13 +393,13 @@ template <class TimerEvent>
 class V8_NODISCARD TimerEventScope {
  public:
   explicit TimerEventScope(Isolate* isolate) : isolate_(isolate) {
-    LogTimerEvent(v8::LogEventStatus::kStart);
+    // LogTimerEvent(v8::LogEventStatus::kStart);
   }
 
-  ~TimerEventScope() { LogTimerEvent(v8::LogEventStatus::kEnd); }
+  ~TimerEventScope() { } // LogTimerEvent(v8::LogEventStatus::kEnd); }
 
  private:
-  void LogTimerEvent(v8::LogEventStatus se);
+  // void LogTimerEvent(v8::LogEventStatus se);
   Isolate* isolate_;
 };
 

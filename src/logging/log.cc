@@ -1122,11 +1122,11 @@ Profiler::Profiler(Isolate* isolate)
 void Profiler::Engage() {
   std::vector<base::OS::SharedLibraryAddress> addresses =
       base::OS::GetSharedLibraryAddresses();
-  for (const auto& address : addresses) {
-    LOG(isolate_, SharedLibraryEvent(address.library_path, address.start,
-                                     address.end, address.aslr_slide));
-  }
-  LOG(isolate_, SharedLibraryEnd());
+  // for (const auto& address : addresses) {
+  //   LOG(isolate_, SharedLibraryEvent(address.library_path, address.start,
+  //                                    address.end, address.aslr_slide));
+  // }
+  // LOG(isolate_, SharedLibraryEnd());
 
   // Start thread processing the profiler buffer.
   base::Relaxed_Store(&running_, 1);
@@ -1156,11 +1156,11 @@ void Profiler::Disengage() {
 
 void Profiler::Run() {
   TickSample sample;
-  bool overflow = Remove(&sample);
-  while (base::Relaxed_Load(&running_)) {
-    LOG(isolate_, TickEvent(&sample, overflow));
-    overflow = Remove(&sample);
-  }
+  // bool overflow = Remove(&sample);
+  // while (base::Relaxed_Load(&running_)) {
+  //   LOG(isolate_, TickEvent(&sample, overflow));
+  //   overflow = Remove(&sample);
+  // }
 }
 
 //
@@ -1271,11 +1271,11 @@ bool V8FileLogger::is_logging() {
 }
 
 // Instantiate template methods.
-#define V(TimerName, expose)                                           \
-  template void TimerEventScope<TimerEvent##TimerName>::LogTimerEvent( \
-      v8::LogEventStatus se);
-TIMER_EVENTS_LIST(V)
-#undef V
+// #define V(TimerName, expose)                                           \
+//   template void TimerEventScope<TimerEvent##TimerName>::LogTimerEvent( \
+//       v8::LogEventStatus se);
+// TIMER_EVENTS_LIST(V)
+// #undef V
 
 void V8FileLogger::NewEvent(const char* name, void* object, size_t size) {
   if (!v8_flags.log) return;
