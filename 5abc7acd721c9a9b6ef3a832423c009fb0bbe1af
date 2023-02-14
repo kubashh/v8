@@ -16,6 +16,227 @@
       "message": "I had addressed all the review comment.",
       "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63277a30_01a94313",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "Great work! I believe we are close to landing this CL. Already looking forward to see the results.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0509659d_489b9c35",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "We invoke three different methods here of the MemBalancer class. Wdyt about invoking just one method with e.g. `heap_-\u003emb_-\u003eUpdateMajorGC(...)` and then doing all those computations over in memory-balancer.cc? Feels like we only need a few values from GCTracer, the rest we can get from heap in MemoryBalancer as well. No need to do this if it gets too tricky.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25c7493d_4178ec0a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "I don\u0027t think it would be a problem but I would move this code here into PerformGarbageCollection. The reason for this is that in V8 concurrent threads can allocate as well and at this point here may already be allocating again. In PerformGarbageCollection all allocating threads are still stopped.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c0dd331_31533b23",
+        "filename": "src/heap/memory-balancer.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "I guess in this method we could just `DCHECK(v8_flags.memory_balancer)` as this instance shouldn\u0027t even exist without that flag enabled.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf00362f_9200f5f0",
+        "filename": "src/heap/memory-balancer.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be `major_allocation_duration` here?",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "482d9fcf_cde13c63",
+        "filename": "src/heap/memory-balancer.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "From here it\u0027s hard to see that 0.95 is the decay rate. You can create a local constant for this: `const double kDecayRate \u003d 0.95` (or create a private constant in the class for it - then we would one less argument here as well).",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3df15062_f530afbd",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "Should be defined after methods.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae40d052_0efab8e3",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "Let\u0027s try to keep these fields here private and add `private:`. Instead of setting these fields directly we should be able to pass the values to the Update* or NotifyGC methods.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d92510a9_900e765f",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "Nit: What do you think about `live_memory_after_gc_` as name here? I was a bit confused at first why we had two different fields for live memory. This would imho make their purpose a bit clearer.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31409ae0_66dee2ef",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "Let\u0027s not add the global_allocation_limit_ field for now. I agree it definitely makes sense to manage the Oilpan heap with MemBalancer as well. But no need to do that right away if that takes additonal time or so - let\u0027s aim try to land this CL as soon as possible.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "790bf3c8_288e6b2d",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "Nit: What do you think about `major_allocation_rate_` and `major_gc_speed_` as field names? Can you also document its type? I believe it is `bytes per ns`, isn\u0027t it?",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "073835f3_0b5afd88",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "Nit: I understand that M is used in the paper but we should strive to make this code understandable even when not remembering all details from the paper anymore. Can we rename these two fields here something like `last_live_memory_` and `last_live_memory_time_` or so. You can totally come up with alternative names as well, I would like to avoid the single letter name though.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b715cc2e_ae8c455f",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-14T14:07:39Z",
+      "side": 1,
+      "message": "Nit: Please use the underscore suffix here as well, maybe rename to `task_was_started_` or so as it is clear from the context which task this is about.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
