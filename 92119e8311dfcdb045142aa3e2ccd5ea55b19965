@@ -16,6 +16,29 @@
       "message": "PTAL!",
       "revId": "92119e8311dfcdb045142aa3e2ccd5ea55b19965",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ae6928e_ca65fd83",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-02-14T10:50:38Z",
+      "side": 1,
+      "message": "could we make this conditional on whether or not there is a parent? This is what TF does, by checking for an outer frame state: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/js-generic-lowering.cc;l\u003d278;drc\u003d14de33a440c3235e26e6f7e1e7b6250bd6dd0d7e",
+      "range": {
+        "startLine": 1322,
+        "startChar": 26,
+        "endLine": 1322,
+        "endChar": 32
+      },
+      "revId": "92119e8311dfcdb045142aa3e2ccd5ea55b19965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
