@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "08f2b109f041b02d2381ef974579cff561cb64fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86ec78ad_4a7f33ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-02-15T08:47:13Z",
+      "side": 1,
+      "message": "dominik PTAL, as michael is OOO",
+      "revId": "08f2b109f041b02d2381ef974579cff561cb64fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
