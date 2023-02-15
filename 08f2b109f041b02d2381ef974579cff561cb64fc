@@ -33,6 +33,40 @@
       "message": "dominik PTAL, as michael is OOO",
       "revId": "08f2b109f041b02d2381ef974579cff561cb64fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53f18e96_32abe8a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-15T09:11:16Z",
+      "side": 1,
+      "message": "Thanks for addressing this so quickly, LGTM",
+      "revId": "08f2b109f041b02d2381ef974579cff561cb64fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "953631de_b3df71cf",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-15T09:11:16Z",
+      "side": 1,
+      "message": "Nit: Feels like just `#define CHECK_STATIC_ROOT(obj, name)` is more common in the codebase.",
+      "revId": "08f2b109f041b02d2381ef974579cff561cb64fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
