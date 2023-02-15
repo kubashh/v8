@@ -16,6 +16,46 @@
       "message": "PTAL, thanks",
       "revId": "f5b1de8f8092f050f586200375128cf1ef8ee958",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "827c6e6b_d34bc0d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-15T13:18:48Z",
+      "side": 1,
+      "message": "LGTM :)",
+      "revId": "f5b1de8f8092f050f586200375128cf1ef8ee958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3741fbe_c3412939",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-15T13:18:48Z",
+      "side": 1,
+      "message": "What about folding those 3 cases a little bit, since they all start with the Smi check, then load the map and the instance type?",
+      "range": {
+        "startLine": 217,
+        "startChar": 6,
+        "endLine": 274,
+        "endChar": 7
+      },
+      "revId": "f5b1de8f8092f050f586200375128cf1ef8ee958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
