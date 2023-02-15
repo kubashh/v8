@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "9c362abd5638148a6722666670f2f7126522a8e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c15c54bc_ef84f3ac",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4205,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-15T13:27:34Z",
+      "side": 1,
+      "message": "doublechecking, is this comment still valid?",
+      "revId": "9c362abd5638148a6722666670f2f7126522a8e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fcb85ef_10a8c62a",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1973,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-02-15T13:27:34Z",
+      "side": 1,
+      "message": "why keep these?",
+      "revId": "9c362abd5638148a6722666670f2f7126522a8e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
