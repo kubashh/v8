@@ -3204,14 +3204,35 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                            next_enum_index_smi, SKIP_WRITE_BARRIER);
   }
 
+  template <class Dictionary>
+  TNode<Smi> GetNameDictionaryFlags(TNode<Dictionary> dictionary);
+  template <class Dictionary>
+  void SetNameDictionaryFlags(TNode<Dictionary>, TNode<Smi> flags);
+
+  template <>
   TNode<Smi> GetNameDictionaryFlags(TNode<NameDictionary> dictionary) {
     return CAST(LoadFixedArrayElement(dictionary, NameDictionary::kFlagsIndex));
   }
 
+  template <>
   void SetNameDictionaryFlags(TNode<NameDictionary> dictionary,
                               TNode<Smi> flags) {
     StoreFixedArrayElement(dictionary, NameDictionary::kFlagsIndex, flags,
                            SKIP_WRITE_BARRIER);
+  }
+
+  template <>
+  TNode<Smi> GetNameDictionaryFlags(TNode<SwissNameDictionary> dictionary) {
+    // TODO(pthier): Add flags to swiss dictionaries.
+    Unreachable();
+    return SmiConstant(0);
+  }
+
+  template <>
+  void SetNameDictionaryFlags(TNode<SwissNameDictionary> dictionary,
+                              TNode<Smi> flags) {
+    // TODO(pthier): Add flags to swiss dictionaries.
+    Unreachable();
   }
 
   // Looks up an entry in a NameDictionaryBase successor. If the entry is found
