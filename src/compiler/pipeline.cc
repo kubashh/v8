@@ -4245,6 +4245,47 @@ MaybeHandle<Code> PipelineImpl::GenerateCode(CallDescriptor* call_descriptor) {
   return FinalizeCode();
 }
 
+<<<<<<< Updated upstream
+||||||| Stash base
+// We must not embed deprecated maps, as we rely in the compiler on all explicit
+// maps not being deprecated.
+bool PipelineImpl::CheckNoDeprecatedMaps(Handle<Code> code) {
+  int mode_mask = RelocInfo::EmbeddedObjectModeMask();
+  for (RelocIterator it(*code, mode_mask); !it.done(); it.next()) {
+    DCHECK(RelocInfo::IsEmbeddedObjectMode(it.rinfo()->rmode()));
+    HeapObject obj = it.rinfo()->target_object(data_->isolate());
+    if (obj.IsMap() && Map::cast(obj).is_deprecated()) {
+      return false;
+    }
+  }
+  return true;
+}
+
+=======
+// The CheckMaps node can migrate objects with deprecated maps. Afterwards, we
+// check the resulting object against a fixed list of maps known at compile
+// time. This is problematic if we made any assumptions about an object with the
+// deprecated map, as it now changed shape. Therefore, we want to avoid
+// embedding deprecated maps, as objects with these maps can be changed by
+// CheckMaps.
+// This only checks for deprecated maps at the end of compilation, but doesn't
+// protect us against the embedded maps becoming deprecated later. However, this
+// is probably enough, since if the map becomes deprecated later, it will
+// migrate to a new map not yet known at compile time, so if we migrate to it as
+// part of a CheckMaps, this check will always fail afterwards and deoptimize.
+bool PipelineImpl::CheckNoDeprecatedMaps(Handle<Code> code) {
+  int mode_mask = RelocInfo::EmbeddedObjectModeMask();
+  for (RelocIterator it(*code, mode_mask); !it.done(); it.next()) {
+    DCHECK(RelocInfo::IsEmbeddedObjectMode(it.rinfo()->rmode()));
+    HeapObject obj = it.rinfo()->target_object(data_->isolate());
+    if (obj.IsMap() && Map::cast(obj).is_deprecated()) {
+      return false;
+    }
+  }
+  return true;
+}
+
+>>>>>>> Stashed changes
 bool PipelineImpl::CommitDependencies(Handle<Code> code) {
   return data_->dependencies() == nullptr ||
          data_->dependencies()->Commit(code);
