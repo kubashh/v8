@@ -16,6 +16,40 @@
       "message": "PTAL. Another path I initially missed 😐",
       "revId": "cae2660c198d82d649766cf5d05c7818f2f61207",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de67da8b_981d6002",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-02-15T10:45:36Z",
+      "side": 1,
+      "message": "lgtm with a nit",
+      "revId": "cae2660c198d82d649766cf5d05c7818f2f61207",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd963988_25e8c8ea",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-02-15T10:45:36Z",
+      "side": 1,
+      "message": "I\u0027m afraid this line will not compile if you enable swiss dictionaries because this method doesn\u0027t exist there. Please consider adding an UNREACHABLE accessors there too.",
+      "revId": "cae2660c198d82d649766cf5d05c7818f2f61207",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
