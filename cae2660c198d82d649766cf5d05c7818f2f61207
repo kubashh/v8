@@ -50,6 +50,24 @@
       "message": "I\u0027m afraid this line will not compile if you enable swiss dictionaries because this method doesn\u0027t exist there. Please consider adding an UNREACHABLE accessors there too.",
       "revId": "cae2660c198d82d649766cf5d05c7818f2f61207",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07983362_ac51a1fc",
+        "filename": "src/runtime/runtime-classes.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-02-15T11:31:29Z",
+      "side": 1,
+      "message": "Done (also in CSA now).\n\nFWIW enabling swiss dictionaries was already broken (That\u0027s the main reason I didn\u0027t add flags for them and just left a bunch of TODOs, as I didn\u0027t want to invest too much time investigating).",
+      "parentUuid": "dd963988_25e8c8ea",
+      "revId": "cae2660c198d82d649766cf5d05c7818f2f61207",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
