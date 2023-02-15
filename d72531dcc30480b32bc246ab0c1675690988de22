@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbdd820e_1f4884f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-02-15T11:49:39Z",
+      "side": 1,
+      "message": "PTAL. This is also protected by a Chrome feature flag which I\u0027ll enable next.",
+      "revId": "d72531dcc30480b32bc246ab0c1675690988de22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
