@@ -1763,17 +1763,17 @@ void Shell::PerformanceMeasure(
   double end_timestamp = GetTimestamp();
 
   if (options.trace_enabled) {
-    size_t hash = base::hash_combine(name->GetIdentityHash(), start_timestamp,
-                                     end_timestamp);
+    // size_t hash = base::hash_combine(name->GetIdentityHash(), start_timestamp,
+    //                                  end_timestamp);
 
-    String::Utf8Value utf8(isolate, name);
-    TRACE_EVENT_COPY_NESTABLE_ASYNC_BEGIN_WITH_TIMESTAMP1(
-        "v8", *utf8, static_cast<uint64_t>(hash),
-        GetTracingTimestampFromPerformanceTimestamp(start_timestamp),
-        "startTime", start_timestamp);
-    TRACE_EVENT_COPY_NESTABLE_ASYNC_END_WITH_TIMESTAMP0(
-        "v8", *utf8, static_cast<uint64_t>(hash),
-        GetTracingTimestampFromPerformanceTimestamp(end_timestamp));
+    // String::Utf8Value utf8(isolate, name);
+    // TRACE_EVENT_COPY_NESTABLE_ASYNC_BEGIN_WITH_TIMESTAMP1(
+    //     "v8", *utf8, static_cast<uint64_t>(hash),
+    //     GetTracingTimestampFromPerformanceTimestamp(start_timestamp),
+    //     "startTime", start_timestamp);
+    // TRACE_EVENT_COPY_NESTABLE_ASYNC_END_WITH_TIMESTAMP0(
+    //     "v8", *utf8, static_cast<uint64_t>(hash),
+    //     GetTracingTimestampFromPerformanceTimestamp(end_timestamp));
   }
 
   Local<Object> performance_entry = Object::New(isolate);

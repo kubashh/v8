@@ -175,13 +175,13 @@ CompilationCacheScript::LookupResult CompilationCacheScript::Lookup(
   if (result.script().ToHandle(&script)) {
     Handle<SharedFunctionInfo> sfi;
     if (result.toplevel_sfi().ToHandle(&sfi)) {
-      isolate()->counters()->compilation_cache_hits()->Increment();
+      // isolate()->counters()->compilation_cache_hits()->Increment();
       LOG(isolate(), CompilationCacheEvent("hit", "script", *sfi));
     } else {
-      isolate()->counters()->compilation_cache_partial_hits()->Increment();
+      // isolate()->counters()->compilation_cache_partial_hits()->Increment();
     }
   } else {
-    isolate()->counters()->compilation_cache_misses()->Increment();
+    // isolate()->counters()->compilation_cache_misses()->Increment();
   }
   return result;
 }
@@ -207,11 +207,11 @@ InfoCellPair CompilationCacheEval::Lookup(Handle<String> source,
   Handle<CompilationCacheTable> table = GetTable();
   result = CompilationCacheTable::LookupEval(
       table, source, outer_info, native_context, language_mode, position);
-  if (result.has_shared()) {
-    isolate()->counters()->compilation_cache_hits()->Increment();
-  } else {
-    isolate()->counters()->compilation_cache_misses()->Increment();
-  }
+  // if (result.has_shared()) {
+  //   isolate()->counters()->compilation_cache_hits()->Increment();
+  // } else {
+  //   isolate()->counters()->compilation_cache_misses()->Increment();
+  // }
   return result;
 }
 
@@ -246,10 +246,10 @@ MaybeHandle<FixedArray> CompilationCacheRegExp::Lookup(Handle<String> source,
     if (generation != 0) {
       Put(source, flags, data);
     }
-    isolate()->counters()->compilation_cache_hits()->Increment();
+    // isolate()->counters()->compilation_cache_hits()->Increment();
     return scope.CloseAndEscape(data);
   } else {
-    isolate()->counters()->compilation_cache_misses()->Increment();
+    // isolate()->counters()->compilation_cache_misses()->Increment();
     return MaybeHandle<FixedArray>();
   }
 }
@@ -285,19 +285,19 @@ InfoCellPair CompilationCache::LookupEval(Handle<String> source,
   InfoCellPair result;
   if (!IsEnabledScriptAndEval()) return result;
 
-  const char* cache_type;
+  // const char* cache_type;
 
   if (context->IsNativeContext()) {
     result = eval_global_.Lookup(source, outer_info, context, language_mode,
                                  position);
-    cache_type = "eval-global";
+    // cache_type = "eval-global";
 
   } else {
     DCHECK_NE(position, kNoSourcePosition);
     Handle<Context> native_context(context->native_context(), isolate());
     result = eval_contextual_.Lookup(source, outer_info, native_context,
                                      language_mode, position);
-    cache_type = "eval-contextual";
+    // cache_type = "eval-contextual";
   }
 
   if (result.has_shared()) {
@@ -329,18 +329,18 @@ void CompilationCache::PutEval(Handle<String> source,
                                int position) {
   if (!IsEnabledScriptAndEval()) return;
 
-  const char* cache_type;
+  // const char* cache_type;
   HandleScope scope(isolate());
   if (context->IsNativeContext()) {
     eval_global_.Put(source, outer_info, function_info, context, feedback_cell,
                      position);
-    cache_type = "eval-global";
+    // cache_type = "eval-global";
   } else {
     DCHECK_NE(position, kNoSourcePosition);
     Handle<Context> native_context(context->native_context(), isolate());
     eval_contextual_.Put(source, outer_info, function_info, native_context,
                          feedback_cell, position);
-    cache_type = "eval-contextual";
+    // cache_type = "eval-contextual";
   }
   LOG(isolate(), CompilationCacheEvent("put", cache_type, *function_info));
 }

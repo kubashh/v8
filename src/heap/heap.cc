@@ -1901,21 +1901,21 @@ namespace {
 void CompleteArrayBufferSweeping(Heap* heap) {
   auto* array_buffer_sweeper = heap->array_buffer_sweeper();
   if (array_buffer_sweeper->sweeping_in_progress()) {
-    auto* tracer = heap->tracer();
-    GCTracer::Scope::ScopeId scope_id;
+    // auto* tracer = heap->tracer();
+    // GCTracer::Scope::ScopeId scope_id;
 
-    switch (tracer->GetCurrentCollector()) {
-      case GarbageCollector::MINOR_MARK_COMPACTOR:
-        scope_id = GCTracer::Scope::MINOR_MC_COMPLETE_SWEEP_ARRAY_BUFFERS;
-        break;
-      case GarbageCollector::SCAVENGER:
-        scope_id = GCTracer::Scope::SCAVENGER_COMPLETE_SWEEP_ARRAY_BUFFERS;
-        break;
-      case GarbageCollector::MARK_COMPACTOR:
-        scope_id = GCTracer::Scope::MC_COMPLETE_SWEEP_ARRAY_BUFFERS;
-    }
+    // switch (tracer->GetCurrentCollector()) {
+    //   case GarbageCollector::MINOR_MARK_COMPACTOR:
+    //     scope_id = GCTracer::Scope::MINOR_MC_COMPLETE_SWEEP_ARRAY_BUFFERS;
+    //     break;
+    //   case GarbageCollector::SCAVENGER:
+    //     scope_id = GCTracer::Scope::SCAVENGER_COMPLETE_SWEEP_ARRAY_BUFFERS;
+    //     break;
+    //   case GarbageCollector::MARK_COMPACTOR:
+    //     scope_id = GCTracer::Scope::MC_COMPLETE_SWEEP_ARRAY_BUFFERS;
+    // }
 
-    TRACE_GC_EPOCH(tracer, scope_id, ThreadKind::kMain);
+    // TRACE_GC_EPOCH(tracer, scope_id, ThreadKind::kMain);
     array_buffer_sweeper->EnsureFinished();
   }
 }
@@ -2134,17 +2134,17 @@ void Heap::UpdateSurvivalStatistics(int start_new_space_size) {
 
 namespace {
 
-GCTracer::Scope::ScopeId CollectorScopeId(GarbageCollector collector) {
-  switch (collector) {
-    case GarbageCollector::MARK_COMPACTOR:
-      return GCTracer::Scope::ScopeId::MARK_COMPACTOR;
-    case GarbageCollector::MINOR_MARK_COMPACTOR:
-      return GCTracer::Scope::ScopeId::MINOR_MARK_COMPACTOR;
-    case GarbageCollector::SCAVENGER:
-      return GCTracer::Scope::ScopeId::SCAVENGER;
-  }
-  UNREACHABLE();
-}
+// GCTracer::Scope::ScopeId CollectorScopeId(GarbageCollector collector) {
+//   switch (collector) {
+//     case GarbageCollector::MARK_COMPACTOR:
+//       return GCTracer::Scope::ScopeId::MARK_COMPACTOR;
+//     case GarbageCollector::MINOR_MARK_COMPACTOR:
+//       return GCTracer::Scope::ScopeId::MINOR_MARK_COMPACTOR;
+//     case GarbageCollector::SCAVENGER:
+//       return GCTracer::Scope::ScopeId::SCAVENGER;
+//   }
+//   UNREACHABLE();
+// }
 
 void ClearStubCaches(Isolate* isolate) {
   isolate->load_stub_cache()->Clear();
@@ -4002,9 +4002,9 @@ bool Heap::IdleNotification(double deadline_in_seconds) {
   double deadline_in_ms =
       deadline_in_seconds *
       static_cast<double>(base::Time::kMillisecondsPerSecond);
-  NestedTimedHistogramScope idle_notification_scope(
-      isolate_->counters()->gc_idle_notification());
-  TRACE_EVENT0("v8", "V8.GCIdleNotification");
+  // NestedTimedHistogramScope idle_notification_scope(
+  //     isolate_->counters()->gc_idle_notification());
+  // TRACE_EVENT0("v8", "V8.GCIdleNotification");
   double start_ms = MonotonicallyIncreasingTimeInMs();
   double idle_time_in_ms = deadline_in_ms - start_ms;
 

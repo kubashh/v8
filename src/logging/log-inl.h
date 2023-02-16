@@ -26,11 +26,11 @@ LogEventListener::CodeTag V8FileLogger::ToNativeByScript(
   }
 }
 
-template <class TimerEvent>
-void TimerEventScope<TimerEvent>::LogTimerEvent(v8::LogEventStatus se) {
-  V8FileLogger::CallEventLogger(isolate_, TimerEvent::name(), se,
-                                TimerEvent::expose_to_api());
-}
+// template <class TimerEvent>
+// void TimerEventScope<TimerEvent>::LogTimerEvent(v8::LogEventStatus se) {
+//   // V8FileLogger::CallEventLogger(isolate_, TimerEvent::name(), se,
+//   //                               TimerEvent::expose_to_api());
+// }
 
 }  // namespace internal
 }  // namespace v8

@@ -73,8 +73,8 @@ PipelineStatistics::~PipelineStatistics() {
 void PipelineStatistics::BeginPhaseKind(const char* phase_kind_name) {
   DCHECK(!InPhase());
   if (InPhaseKind()) EndPhaseKind();
-  TRACE_EVENT_BEGIN1(kTraceCategory, phase_kind_name, "kind",
-                     CodeKindToString(code_kind_));
+  // TRACE_EVENT_BEGIN1(kTraceCategory, phase_kind_name, "kind",
+  //                    CodeKindToString(code_kind_));
   phase_kind_name_ = phase_kind_name;
   phase_kind_stats_.Begin(this);
 }
@@ -84,14 +84,14 @@ void PipelineStatistics::EndPhaseKind() {
   CompilationStatistics::BasicStats diff;
   phase_kind_stats_.End(this, &diff);
   compilation_stats_->RecordPhaseKindStats(phase_kind_name_, diff);
-  TRACE_EVENT_END2(kTraceCategory, phase_kind_name_, "kind",
-                   CodeKindToString(code_kind_), "stats",
-                   TRACE_STR_COPY(diff.AsJSON().c_str()));
+  // TRACE_EVENT_END2(kTraceCategory, phase_kind_name_, "kind",
+  //                  CodeKindToString(code_kind_), "stats",
+  //                  TRACE_STR_COPY(diff.AsJSON().c_str()));
 }
 
 void PipelineStatistics::BeginPhase(const char* phase_name) {
-  TRACE_EVENT_BEGIN1(kTraceCategory, phase_name, "kind",
-                     CodeKindToString(code_kind_));
+  // TRACE_EVENT_BEGIN1(kTraceCategory, phase_name, "kind",
+  //                    CodeKindToString(code_kind_));
   DCHECK(InPhaseKind());
   phase_name_ = phase_name;
   phase_stats_.Begin(this);
@@ -102,9 +102,9 @@ void PipelineStatistics::EndPhase() {
   CompilationStatistics::BasicStats diff;
   phase_stats_.End(this, &diff);
   compilation_stats_->RecordPhaseStats(phase_kind_name_, phase_name_, diff);
-  TRACE_EVENT_END2(kTraceCategory, phase_name_, "kind",
-                   CodeKindToString(code_kind_), "stats",
-                   TRACE_STR_COPY(diff.AsJSON().c_str()));
+  // TRACE_EVENT_END2(kTraceCategory, phase_name_, "kind",
+  //                  CodeKindToString(code_kind_), "stats",
+  //                  TRACE_STR_COPY(diff.AsJSON().c_str()));
 }
 
 }  // namespace compiler

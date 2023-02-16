@@ -8218,8 +8218,8 @@ wasm::WasmCompilationResult CompileWasmMathIntrinsic(
     WasmImportCallKind kind, const wasm::FunctionSig* sig) {
   DCHECK_EQ(1, sig->return_count());
 
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
-               "wasm.CompileWasmMathIntrinsic");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
+  //              "wasm.CompileWasmMathIntrinsic");
 
   Zone zone(wasm::GetWasmEngine()->allocator(), ZONE_NAME, kCompressGraphZone);
 
@@ -8292,8 +8292,8 @@ wasm::WasmCompilationResult CompileWasmImportCallWrapper(
     return CompileWasmMathIntrinsic(kind, sig);
   }
 
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
-               "wasm.CompileWasmImportCallWrapper");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
+  //              "wasm.CompileWasmImportCallWrapper");
   base::TimeTicks start_time;
   if (V8_UNLIKELY(v8_flags.trace_wasm_compilation_times)) {
     start_time = base::TimeTicks::Now();

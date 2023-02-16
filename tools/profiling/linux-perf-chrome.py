@@ -139,7 +139,6 @@ with tempfile.TemporaryDirectory(prefix="chrome-") as tmp_dir_path:
     cmd.append(f"--user-data-dir={tempdir}")
   cmd += [
       "--no-sandbox",
-      "--incognito",
       "--enable-benchmarking",
       "--no-first-run",
       "--no-default-browser-check",

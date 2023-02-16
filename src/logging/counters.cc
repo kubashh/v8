@@ -28,7 +28,7 @@ namespace {
 std::atomic<int> unused_counter_dump{0};
 }
 
-bool StatsCounter::Enabled() { return GetPtr() != &unused_counter_dump; }
+// bool StatsCounter::Enabled() { return GetPtr() != &unused_counter_dump; }
 
 std::atomic<int>* StatsCounter::SetupPtrFromStatsTable() {
   // {Init} must have been called.
@@ -46,46 +46,46 @@ std::atomic<int>* StatsCounter::SetupPtrFromStatsTable() {
   return ptr;
 }
 
-void Histogram::AddSample(int sample) {
-  if (Enabled()) {
-    counters_->AddHistogramSample(histogram_, sample);
-  }
-}
+// void Histogram::AddSample(int sample) {
+//   if (Enabled()) {
+//     counters_->AddHistogramSample(histogram_, sample);
+//   }
+// }
 
 void* Histogram::CreateHistogram() const {
   return counters_->CreateHistogram(name_, min_, max_, num_buckets_);
 }
 
-void TimedHistogram::Stop(base::ElapsedTimer* timer) {
-  DCHECK(Enabled());
-  AddTimedSample(timer->Elapsed());
-  timer->Stop();
-}
+// void TimedHistogram::Stop(base::ElapsedTimer* timer) {
+//   DCHECK(Enabled());
+//   AddTimedSample(timer->Elapsed());
+//   timer->Stop();
+// }
 
-void TimedHistogram::AddTimedSample(base::TimeDelta sample) {
-  if (Enabled()) {
-    int64_t sample_int = resolution_ == TimedHistogramResolution::MICROSECOND
-                             ? sample.InMicroseconds()
-                             : sample.InMilliseconds();
-    AddSample(static_cast<int>(sample_int));
-  }
-}
+// void TimedHistogram::AddTimedSample(base::TimeDelta sample) {
+//   if (Enabled()) {
+//     int64_t sample_int = resolution_ == TimedHistogramResolution::MICROSECOND
+//                              ? sample.InMicroseconds()
+//                              : sample.InMilliseconds();
+//     AddSample(static_cast<int>(sample_int));
+//   }
+// }
 
-void TimedHistogram::RecordAbandon(base::ElapsedTimer* timer,
-                                   Isolate* isolate) {
-  if (Enabled()) {
-    DCHECK(timer->IsStarted());
-    timer->Stop();
-    int64_t sample = resolution_ == TimedHistogramResolution::MICROSECOND
-                         ? base::TimeDelta::Max().InMicroseconds()
-                         : base::TimeDelta::Max().InMilliseconds();
-    AddSample(static_cast<int>(sample));
-  }
-  if (isolate != nullptr) {
-    V8FileLogger::CallEventLogger(isolate, name(), v8::LogEventStatus::kEnd,
-                                  true);
-  }
-}
+// void TimedHistogram::RecordAbandon(base::ElapsedTimer* timer,
+//                                    Isolate* isolate) {
+//   if (Enabled()) {
+//     DCHECK(timer->IsStarted());
+//     timer->Stop();
+//     int64_t sample = resolution_ == TimedHistogramResolution::MICROSECOND
+//                          ? base::TimeDelta::Max().InMicroseconds()
+//                          : base::TimeDelta::Max().InMilliseconds();
+//     AddSample(static_cast<int>(sample));
+//   }
+//   if (isolate != nullptr) {
+//     V8FileLogger::CallEventLogger(isolate, name(), v8::LogEventStatus::kEnd,
+//                                   true);
+//   }
+// }
 
 #ifdef DEBUG
 bool TimedHistogram::ToggleRunningState(bool expect_to_run) const {

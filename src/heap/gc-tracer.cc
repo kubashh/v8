@@ -88,51 +88,51 @@ const char* GCTracer::Event::TypeName(bool short_name) const {
 
 GCTracer::RecordGCPhasesInfo::RecordGCPhasesInfo(Heap* heap,
                                                  GarbageCollector collector) {
-  if (Heap::IsYoungGenerationCollector(collector)) {
-    type_timer_ = nullptr;
-    type_priority_timer_ = nullptr;
-    if (!v8_flags.minor_mc) {
-      mode_ = Mode::Scavenger;
-      trace_event_name_ = "V8.GCScavenger";
-    } else {
-      mode_ = Mode::None;
-      trace_event_name_ = "V8.GCMinorMC";
-    }
-  } else {
-    DCHECK_EQ(GarbageCollector::MARK_COMPACTOR, collector);
-    Counters* counters = heap->isolate()->counters();
-    const bool in_background = heap->isolate()->IsIsolateInBackground();
-    if (heap->incremental_marking()->IsStopped()) {
-      mode_ = Mode::None;
-      type_timer_ = counters->gc_compactor();
-      type_priority_timer_ = in_background
-                                 ? counters->gc_compactor_background()
-                                 : counters->gc_compactor_foreground();
-      trace_event_name_ = "V8.GCCompactor";
-    } else if (heap->ShouldReduceMemory()) {
-      mode_ = Mode::None;
-      type_timer_ = counters->gc_finalize_reduce_memory();
-      type_priority_timer_ =
-          in_background ? counters->gc_finalize_reduce_memory_background()
-                        : counters->gc_finalize_reduce_memory_foreground();
-      trace_event_name_ = "V8.GCFinalizeMCReduceMemory";
-    } else {
-      if (heap->incremental_marking()->IsMarking() &&
-          heap->incremental_marking()
-              ->local_marking_worklists()
-              ->IsPerContextMode()) {
-        mode_ = Mode::None;
-        type_timer_ = counters->gc_finalize_measure_memory();
-        trace_event_name_ = "V8.GCFinalizeMCMeasureMemory";
-      } else {
-        mode_ = Mode::Finalize;
-        type_timer_ = counters->gc_finalize();
-        trace_event_name_ = "V8.GCFinalizeMC";
-      }
-      type_priority_timer_ = in_background ? counters->gc_finalize_background()
-                                           : counters->gc_finalize_foreground();
-    }
-  }
+  // if (Heap::IsYoungGenerationCollector(collector)) {
+  //   type_timer_ = nullptr;
+  //   type_priority_timer_ = nullptr;
+  //   if (!v8_flags.minor_mc) {
+  //     mode_ = Mode::Scavenger;
+  //     trace_event_name_ = "V8.GCScavenger";
+  //   } else {
+  //     mode_ = Mode::None;
+  //     trace_event_name_ = "V8.GCMinorMC";
+  //   }
+  // } else {
+  //   DCHECK_EQ(GarbageCollector::MARK_COMPACTOR, collector);
+  //   Counters* counters = heap->isolate()->counters();
+  //   const bool in_background = heap->isolate()->IsIsolateInBackground();
+  //   if (heap->incremental_marking()->IsStopped()) {
+  //     mode_ = Mode::None;
+  //     type_timer_ = counters->gc_compactor();
+  //     type_priority_timer_ = in_background
+  //                                ? counters->gc_compactor_background()
+  //                                : counters->gc_compactor_foreground();
+  //     trace_event_name_ = "V8.GCCompactor";
+  //   } else if (heap->ShouldReduceMemory()) {
+  //     mode_ = Mode::None;
+  //     type_timer_ = counters->gc_finalize_reduce_memory();
+  //     type_priority_timer_ =
+  //         in_background ? counters->gc_finalize_reduce_memory_background()
+  //                       : counters->gc_finalize_reduce_memory_foreground();
+  //     trace_event_name_ = "V8.GCFinalizeMCReduceMemory";
+  //   } else {
+  //     if (heap->incremental_marking()->IsMarking() &&
+  //         heap->incremental_marking()
+  //             ->local_marking_worklists()
+  //             ->IsPerContextMode()) {
+  //       mode_ = Mode::None;
+  //       type_timer_ = counters->gc_finalize_measure_memory();
+  //       trace_event_name_ = "V8.GCFinalizeMCMeasureMemory";
+  //     } else {
+  //       mode_ = Mode::Finalize;
+  //       type_timer_ = counters->gc_finalize();
+  //       trace_event_name_ = "V8.GCFinalizeMC";
+  //     }
+  //     type_priority_timer_ = in_background ? counters->gc_finalize_background()
+  //                                          : counters->gc_finalize_foreground();
+  //   }
+  // }
 }
 
 GCTracer::GCTracer(Heap* heap)
@@ -170,18 +170,18 @@ GCTracer::GCTracer(Heap* heap)
   }
   // Check that the trace event names used in metrics code coincide with the
   // names of the respective counters, when applicable.
-  DCHECK_EQ(0, strcmp(heap->isolate()->counters()->gc_compactor()->name(),
-                      "V8.GCCompactor"));
-  DCHECK_EQ(
-      0,
-      strcmp(heap->isolate()->counters()->gc_finalize_reduce_memory()->name(),
-             "V8.GCFinalizeMCReduceMemory"));
-  DCHECK_EQ(
-      0,
-      strcmp(heap->isolate()->counters()->gc_finalize_measure_memory()->name(),
-             "V8.GCFinalizeMCMeasureMemory"));
-  DCHECK_EQ(0, strcmp(heap->isolate()->counters()->gc_finalize()->name(),
-                      "V8.GCFinalizeMC"));
+  // DCHECK_EQ(0, strcmp(heap->isolate()->counters()->gc_compactor()->name(),
+  //                     "V8.GCCompactor"));
+  // DCHECK_EQ(
+  //     0,
+  //     strcmp(heap->isolate()->counters()->gc_finalize_reduce_memory()->name(),
+  //            "V8.GCFinalizeMCReduceMemory"));
+  // DCHECK_EQ(
+  //     0,
+  //     strcmp(heap->isolate()->counters()->gc_finalize_measure_memory()->name(),
+  //            "V8.GCFinalizeMCMeasureMemory"));
+  // DCHECK_EQ(0, strcmp(heap->isolate()->counters()->gc_finalize()->name(),
+  //                     "V8.GCFinalizeMC"));
 }
 
 void GCTracer::ResetForTesting() {
@@ -407,16 +407,16 @@ void GCTracer::UpdateStatistics(GarbageCollector collector) {
     heap_->PrintShortHeapStatistics();
   }
 
-  if (V8_UNLIKELY(TracingFlags::gc.load(std::memory_order_relaxed) &
-                  v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
-    TRACE_EVENT0(TRACE_GC_CATEGORIES, "V8.GC_HEAP_DUMP_STATISTICS");
-    std::stringstream heap_stats;
-    heap_->DumpJSONHeapStatistics(heap_stats);
+  // if (V8_UNLIKELY(TracingFlags::gc.load(std::memory_order_relaxed) &
+  //                 v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
+  //   TRACE_EVENT0(TRACE_GC_CATEGORIES, "V8.GC_HEAP_DUMP_STATISTICS");
+  //   std::stringstream heap_stats;
+  //   heap_->DumpJSONHeapStatistics(heap_stats);
 
-    TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("v8.gc"), "V8.GC_Heap_Stats",
-                         TRACE_EVENT_SCOPE_THREAD, "stats",
-                         TRACE_STR_COPY(heap_stats.str().c_str()));
-  }
+  //   // TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("v8.gc"), "V8.GC_Heap_Stats",
+  //   //                      TRACE_EVENT_SCOPE_THREAD, "stats",
+  //   //                      TRACE_STR_COPY(heap_stats.str().c_str()));
+  // }
 }
 
 void GCTracer::FinalizeCurrentEvent() {
@@ -1352,103 +1352,103 @@ void GCTracer::NotifyIncrementalMarkingStart() {
 }
 
 void GCTracer::FetchBackgroundMarkCompactCounters() {
-  FetchBackgroundCounters(Scope::FIRST_MC_BACKGROUND_SCOPE,
-                          Scope::LAST_MC_BACKGROUND_SCOPE);
-  heap_->isolate()->counters()->background_marking()->AddSample(
-      static_cast<int>(current_.scopes[Scope::MC_BACKGROUND_MARKING]));
-  heap_->isolate()->counters()->background_sweeping()->AddSample(
-      static_cast<int>(current_.scopes[Scope::MC_BACKGROUND_SWEEPING]));
+  // FetchBackgroundCounters(Scope::FIRST_MC_BACKGROUND_SCOPE,
+  //                         Scope::LAST_MC_BACKGROUND_SCOPE);
+  // heap_->isolate()->counters()->background_marking()->AddSample(
+  //     static_cast<int>(current_.scopes[Scope::MC_BACKGROUND_MARKING]));
+  // heap_->isolate()->counters()->background_sweeping()->AddSample(
+  //     static_cast<int>(current_.scopes[Scope::MC_BACKGROUND_SWEEPING]));
 }
 
 void GCTracer::FetchBackgroundMinorGCCounters() {
-  FetchBackgroundCounters(Scope::FIRST_MINOR_GC_BACKGROUND_SCOPE,
-                          Scope::LAST_MINOR_GC_BACKGROUND_SCOPE);
+  // FetchBackgroundCounters(Scope::FIRST_MINOR_GC_BACKGROUND_SCOPE,
+  //                         Scope::LAST_MINOR_GC_BACKGROUND_SCOPE);
 }
 
 void GCTracer::FetchBackgroundGeneralCounters() {
-  FetchBackgroundCounters(Scope::FIRST_GENERAL_BACKGROUND_SCOPE,
-                          Scope::LAST_GENERAL_BACKGROUND_SCOPE);
+  // FetchBackgroundCounters(Scope::FIRST_GENERAL_BACKGROUND_SCOPE,
+  //                         Scope::LAST_GENERAL_BACKGROUND_SCOPE);
 }
 
 void GCTracer::FetchBackgroundCounters(int first_scope, int last_scope) {
-  base::MutexGuard guard(&background_counter_mutex_);
-  for (int i = first_scope; i <= last_scope; i++) {
-    current_.scopes[i] += background_counter_[i].total_duration_ms;
-    background_counter_[i].total_duration_ms = 0;
-  }
+  // base::MutexGuard guard(&background_counter_mutex_);
+  // for (int i = first_scope; i <= last_scope; i++) {
+  //   current_.scopes[i] += background_counter_[i].total_duration_ms;
+  //   background_counter_[i].total_duration_ms = 0;
+  // }
 }
 
 void GCTracer::RecordGCPhasesHistograms(RecordGCPhasesInfo::Mode mode) {
-  Counters* counters = heap_->isolate()->counters();
-  if (mode == RecordGCPhasesInfo::Mode::Finalize) {
-    DCHECK_EQ(Scope::FIRST_TOP_MC_SCOPE, Scope::MC_CLEAR);
-    counters->gc_finalize_clear()->AddSample(
-        static_cast<int>(current_.scopes[Scope::MC_CLEAR]));
-    counters->gc_finalize_epilogue()->AddSample(
-        static_cast<int>(current_.scopes[Scope::MC_EPILOGUE]));
-    counters->gc_finalize_evacuate()->AddSample(
-        static_cast<int>(current_.scopes[Scope::MC_EVACUATE]));
-    counters->gc_finalize_finish()->AddSample(
-        static_cast<int>(current_.scopes[Scope::MC_FINISH]));
-    counters->gc_finalize_mark()->AddSample(
-        static_cast<int>(current_.scopes[Scope::MC_MARK]));
-    counters->gc_finalize_prologue()->AddSample(
-        static_cast<int>(current_.scopes[Scope::MC_PROLOGUE]));
-    counters->gc_finalize_sweep()->AddSample(
-        static_cast<int>(current_.scopes[Scope::MC_SWEEP]));
-    if (incremental_marking_duration_ > 0) {
-      heap_->isolate()->counters()->incremental_marking_sum()->AddSample(
-          static_cast<int>(incremental_marking_duration_));
-    }
-    const double overall_marking_time =
-        incremental_marking_duration_ + current_.scopes[Scope::MC_MARK];
-    heap_->isolate()->counters()->gc_marking_sum()->AddSample(
-        static_cast<int>(overall_marking_time));
+  // Counters* counters = heap_->isolate()->counters();
+  // if (mode == RecordGCPhasesInfo::Mode::Finalize) {
+  //   DCHECK_EQ(Scope::FIRST_TOP_MC_SCOPE, Scope::MC_CLEAR);
+  //   counters->gc_finalize_clear()->AddSample(
+  //       static_cast<int>(current_.scopes[Scope::MC_CLEAR]));
+  //   counters->gc_finalize_epilogue()->AddSample(
+  //       static_cast<int>(current_.scopes[Scope::MC_EPILOGUE]));
+  //   counters->gc_finalize_evacuate()->AddSample(
+  //       static_cast<int>(current_.scopes[Scope::MC_EVACUATE]));
+  //   counters->gc_finalize_finish()->AddSample(
+  //       static_cast<int>(current_.scopes[Scope::MC_FINISH]));
+  //   counters->gc_finalize_mark()->AddSample(
+  //       static_cast<int>(current_.scopes[Scope::MC_MARK]));
+  //   counters->gc_finalize_prologue()->AddSample(
+  //       static_cast<int>(current_.scopes[Scope::MC_PROLOGUE]));
+  //   counters->gc_finalize_sweep()->AddSample(
+  //       static_cast<int>(current_.scopes[Scope::MC_SWEEP]));
+  //   if (incremental_marking_duration_ > 0) {
+  //     heap_->isolate()->counters()->incremental_marking_sum()->AddSample(
+  //         static_cast<int>(incremental_marking_duration_));
+  //   }
+  //   const double overall_marking_time =
+  //       incremental_marking_duration_ + current_.scopes[Scope::MC_MARK];
+  //   heap_->isolate()->counters()->gc_marking_sum()->AddSample(
+  //       static_cast<int>(overall_marking_time));
 
-    DCHECK_EQ(Scope::LAST_TOP_MC_SCOPE, Scope::MC_SWEEP);
-  } else if (mode == RecordGCPhasesInfo::Mode::Scavenger) {
-    counters->gc_scavenger_scavenge_main()->AddSample(
-        static_cast<int>(current_.scopes[Scope::SCAVENGER_SCAVENGE_PARALLEL]));
-    counters->gc_scavenger_scavenge_roots()->AddSample(
-        static_cast<int>(current_.scopes[Scope::SCAVENGER_SCAVENGE_ROOTS]));
-  }
+  //   DCHECK_EQ(Scope::LAST_TOP_MC_SCOPE, Scope::MC_SWEEP);
+  // } else if (mode == RecordGCPhasesInfo::Mode::Scavenger) {
+  //   counters->gc_scavenger_scavenge_main()->AddSample(
+  //       static_cast<int>(current_.scopes[Scope::SCAVENGER_SCAVENGE_PARALLEL]));
+  //   counters->gc_scavenger_scavenge_roots()->AddSample(
+  //       static_cast<int>(current_.scopes[Scope::SCAVENGER_SCAVENGE_ROOTS]));
+  // }
 }
 
 void GCTracer::RecordGCSumCounters() {
-  base::MutexGuard guard(&background_counter_mutex_);
+  // base::MutexGuard guard(&background_counter_mutex_);
 
-  const double atomic_pause_duration = current_.scopes[Scope::MARK_COMPACTOR];
-  const double incremental_marking =
-      incremental_scopes_[Scope::MC_INCREMENTAL_LAYOUT_CHANGE].duration +
-      incremental_scopes_[Scope::MC_INCREMENTAL_START].duration +
-      incremental_marking_duration_ +
-      incremental_scopes_[Scope::MC_INCREMENTAL_FINALIZE].duration;
-  const double incremental_sweeping =
-      incremental_scopes_[Scope::MC_INCREMENTAL_SWEEPING].duration;
-  const double overall_duration =
-      atomic_pause_duration + incremental_marking + incremental_sweeping;
-  const double background_duration =
-      background_counter_[Scope::MC_BACKGROUND_EVACUATE_COPY]
-          .total_duration_ms +
-      background_counter_[Scope::MC_BACKGROUND_EVACUATE_UPDATE_POINTERS]
-          .total_duration_ms +
-      background_counter_[Scope::MC_BACKGROUND_MARKING].total_duration_ms +
-      background_counter_[Scope::MC_BACKGROUND_SWEEPING].total_duration_ms;
-  const double atomic_marking_duration =
-      current_.scopes[Scope::MC_PROLOGUE] + current_.scopes[Scope::MC_MARK];
-  const double marking_duration = atomic_marking_duration + incremental_marking;
-  const double marking_background_duration =
-      background_counter_[Scope::MC_BACKGROUND_MARKING].total_duration_ms;
+  // const double atomic_pause_duration = current_.scopes[Scope::MARK_COMPACTOR];
+  // const double incremental_marking =
+  //     incremental_scopes_[Scope::MC_INCREMENTAL_LAYOUT_CHANGE].duration +
+  //     incremental_scopes_[Scope::MC_INCREMENTAL_START].duration +
+  //     incremental_marking_duration_ +
+  //     incremental_scopes_[Scope::MC_INCREMENTAL_FINALIZE].duration;
+  // const double incremental_sweeping =
+  //     incremental_scopes_[Scope::MC_INCREMENTAL_SWEEPING].duration;
+  // const double overall_duration =
+  //     atomic_pause_duration + incremental_marking + incremental_sweeping;
+  // const double background_duration =
+  //     background_counter_[Scope::MC_BACKGROUND_EVACUATE_COPY]
+  //         .total_duration_ms +
+  //     background_counter_[Scope::MC_BACKGROUND_EVACUATE_UPDATE_POINTERS]
+  //         .total_duration_ms +
+  //     background_counter_[Scope::MC_BACKGROUND_MARKING].total_duration_ms +
+  //     background_counter_[Scope::MC_BACKGROUND_SWEEPING].total_duration_ms;
+  // const double atomic_marking_duration =
+  //     current_.scopes[Scope::MC_PROLOGUE] + current_.scopes[Scope::MC_MARK];
+  // const double marking_duration = atomic_marking_duration + incremental_marking;
+  // const double marking_background_duration =
+  //     background_counter_[Scope::MC_BACKGROUND_MARKING].total_duration_ms;
 
-  // Emit trace event counters.
-  TRACE_EVENT_INSTANT2(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
-                       "V8.GCMarkCompactorSummary", TRACE_EVENT_SCOPE_THREAD,
-                       "duration", overall_duration, "background_duration",
-                       background_duration);
-  TRACE_EVENT_INSTANT2(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
-                       "V8.GCMarkCompactorMarkingSummary",
-                       TRACE_EVENT_SCOPE_THREAD, "duration", marking_duration,
-                       "background_duration", marking_background_duration);
+  // // Emit trace event counters.
+  // TRACE_EVENT_INSTANT2(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
+  //                      "V8.GCMarkCompactorSummary", TRACE_EVENT_SCOPE_THREAD,
+  //                      "duration", overall_duration, "background_duration",
+  //                      background_duration);
+  // TRACE_EVENT_INSTANT2(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
+  //                      "V8.GCMarkCompactorMarkingSummary",
+  //                      TRACE_EVENT_SCOPE_THREAD, "duration", marking_duration,
+  //                      "background_duration", marking_background_duration);
 }
 
 namespace {

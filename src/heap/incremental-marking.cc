@@ -165,16 +165,16 @@ void IncrementalMarking::Start(GarbageCollector garbage_collector,
     counters->incremental_marking_reason()->AddSample(
         static_cast<int>(gc_reason));
   }
-  NestedTimedHistogramScope incremental_marking_scope(
-      is_major ? counters->gc_incremental_marking_start()
-               : counters->gc_minor_incremental_marking_start());
-  const auto scope_id = is_major ? GCTracer::Scope::MC_INCREMENTAL_START
-                                 : GCTracer::Scope::MINOR_MC_INCREMENTAL_START;
-  TRACE_EVENT1("v8",
-               is_major ? "V8.GCIncrementalMarkingStart"
-                        : "V8.GCMinorIncrementalMarkingStart",
-               "epoch", heap_->tracer()->CurrentEpoch(scope_id));
-  TRACE_GC_EPOCH(heap()->tracer(), scope_id, ThreadKind::kMain);
+  // NestedTimedHistogramScope incremental_marking_scope(
+  //     is_major ? counters->gc_incremental_marking_start()
+  //              : counters->gc_minor_incremental_marking_start());
+  // const auto scope_id = is_major ? GCTracer::Scope::MC_INCREMENTAL_START
+  //                                : GCTracer::Scope::MINOR_MC_INCREMENTAL_START;
+  // TRACE_EVENT1("v8",
+  //              is_major ? "V8.GCIncrementalMarkingStart"
+  //                       : "V8.GCMinorIncrementalMarkingStart",
+  //              "epoch", heap_->tracer()->CurrentEpoch(scope_id));
+  // TRACE_GC_EPOCH(heap()->tracer(), scope_id, ThreadKind::kMain);
   heap_->tracer()->NotifyIncrementalMarkingStart();
 
   start_time_ms_ = heap()->MonotonicallyIncreasingTimeInMs();
@@ -895,12 +895,12 @@ size_t IncrementalMarking::ComputeStepSizeInBytes(StepOrigin step_origin) {
 
 void IncrementalMarking::Step(double max_step_size_in_ms,
                               StepOrigin step_origin) {
-  NestedTimedHistogramScope incremental_marking_scope(
-      isolate()->counters()->gc_incremental_marking());
-  TRACE_EVENT1("v8", "V8.GCIncrementalMarking", "epoch",
-               heap_->tracer()->CurrentEpoch(GCTracer::Scope::MC_INCREMENTAL));
-  TRACE_GC_EPOCH(heap_->tracer(), GCTracer::Scope::MC_INCREMENTAL,
-                 ThreadKind::kMain);
+  // NestedTimedHistogramScope incremental_marking_scope(
+  //     isolate()->counters()->gc_incremental_marking());
+  // TRACE_EVENT1("v8", "V8.GCIncrementalMarking", "epoch",
+  //              heap_->tracer()->CurrentEpoch(GCTracer::Scope::MC_INCREMENTAL));
+  // TRACE_GC_EPOCH(heap_->tracer(), GCTracer::Scope::MC_INCREMENTAL,
+  //                ThreadKind::kMain);
   DCHECK(IsMajorMarking());
   double start = heap_->MonotonicallyIncreasingTimeInMs();
 

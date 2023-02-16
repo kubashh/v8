@@ -88,8 +88,6 @@ class BuiltinArguments : public JavaScriptArguments {
       int args_length, Address* args_object, Isolate* isolate) {            \
     BuiltinArguments args(args_length, args_object);                        \
     RCS_SCOPE(isolate, RuntimeCallCounterId::kBuiltin_##name);              \
-    TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.runtime"),                   \
-                 "V8.Builtin_" #name);                                      \
     return BUILTIN_CONVERT_RESULT(Builtin_Impl_##name(args, isolate));      \
   }                                                                         \
                                                                             \

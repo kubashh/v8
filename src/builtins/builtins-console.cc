@@ -169,13 +169,13 @@ void LogTimerEvent(Isolate* isolate, BuiltinArguments args,
   if (!isolate->v8_file_logger()->is_logging()) return;
   HandleScope scope(isolate);
   std::unique_ptr<char[]> name;
-  const char* raw_name = "default";
-  if (args.length() > 1 && args[1].IsString()) {
-    // Try converting the first argument to a string.
-    name = args.at<String>(1)->ToCString();
-    raw_name = name.get();
-  }
-  LOG(isolate, TimerEvent(se, raw_name));
+  // const char* raw_name = "default";
+  // if (args.length() > 1 && args[1].IsString()) {
+  //   // Try converting the first argument to a string.
+  //   name = args.at<String>(1)->ToCString();
+  //   raw_name = name.get();
+  // }
+  // LOG(isolate, TimerEvent(se, raw_name));
 }
 
 }  // namespace

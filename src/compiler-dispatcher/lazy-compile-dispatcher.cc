@@ -147,8 +147,8 @@ void SetUncompiledDataJobPointer(LocalIsolate* isolate,
 void LazyCompileDispatcher::Enqueue(
     LocalIsolate* isolate, Handle<SharedFunctionInfo> shared_info,
     std::unique_ptr<Utf16CharacterStream> character_stream) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-               "V8.LazyCompilerDispatcherEnqueue");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+  //              "V8.LazyCompilerDispatcherEnqueue");
   RCS_SCOPE(isolate, RuntimeCallCounterId::kCompileEnqueueOnDispatcher);
 
   Job* job = new Job(std::make_unique<BackgroundCompileTask>(
@@ -195,8 +195,8 @@ bool LazyCompileDispatcher::IsEnqueued(
 
 void LazyCompileDispatcher::WaitForJobIfRunningOnBackground(
     Job* job, const base::MutexGuard& lock) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-               "V8.LazyCompilerDispatcherWaitForBackgroundJob");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+  //              "V8.LazyCompilerDispatcherWaitForBackgroundJob");
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kCompileWaitForDispatcher);
 
   if (!job->is_running_on_background()) {
@@ -244,8 +244,8 @@ void LazyCompileDispatcher::WaitForJobIfRunningOnBackground(
 }
 
 bool LazyCompileDispatcher::FinishNow(Handle<SharedFunctionInfo> function) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-               "V8.LazyCompilerDispatcherFinishNow");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+  //              "V8.LazyCompilerDispatcherFinishNow");
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kCompileFinishNowOnDispatcher);
   if (trace_compiler_dispatcher_) {
     PrintF("LazyCompileDispatcher: finishing ");
@@ -393,8 +393,8 @@ void LazyCompileDispatcher::ScheduleIdleTaskFromAnyThread(
 }
 
 void LazyCompileDispatcher::DoBackgroundWork(JobDelegate* delegate) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-               "V8.LazyCompileDispatcherDoBackgroundWork");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+  //              "V8.LazyCompileDispatcherDoBackgroundWork");
 
   LocalIsolate isolate(isolate_, ThreadKind::kBackground);
   UnparkedScope unparked_scope(&isolate);
@@ -509,8 +509,8 @@ bool LazyCompileDispatcher::FinalizeSingleJob() {
 }
 
 void LazyCompileDispatcher::DoIdleWork(double deadline_in_seconds) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
-               "V8.LazyCompilerDispatcherDoIdleWork");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+  //              "V8.LazyCompilerDispatcherDoIdleWork");
   {
     base::MutexGuard lock(&mutex_);
     idle_task_scheduled_ = false;

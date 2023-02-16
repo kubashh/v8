@@ -1918,8 +1918,8 @@ std::shared_ptr<NativeModule> CompileToNativeModule(
 
   base::Optional<TimedHistogramScope> wasm_compile_module_time_scope;
   if (base::TimeTicks::IsHighResolution()) {
-    wasm_compile_module_time_scope.emplace(SELECT_WASM_COUNTER(
-        isolate->counters(), module->origin, wasm_compile, module_time));
+    // wasm_compile_module_time_scope.emplace(SELECT_WASM_COUNTER(
+    //     isolate->counters(), module->origin, wasm_compile, module_time));
   }
 
   // Embedder usage count for declared shared memories.

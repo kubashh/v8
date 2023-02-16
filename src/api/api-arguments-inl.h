@@ -70,19 +70,11 @@ inline JSReceiver FunctionCallbackArguments::holder() const {
 
 #define PREPARE_CALLBACK_INFO(ISOLATE, F, RETURN_VALUE, API_RETURN_TYPE, \
                               CALLBACK_INFO, RECEIVER, ACCESSOR_KIND)    \
-  if (ISOLATE->debug_execution_mode() == DebugInfo::kSideEffects &&      \
-      !ISOLATE->debug()->PerformSideEffectCheckForCallback(              \
-          CALLBACK_INFO, RECEIVER, Debug::k##ACCESSOR_KIND)) {           \
-    return RETURN_VALUE();                                               \
-  }                                                                      \
   ExternalCallbackScope call_scope(ISOLATE, FUNCTION_ADDR(F));           \
   PropertyCallbackInfo<API_RETURN_TYPE> callback_info(values_);
 
 #define PREPARE_CALLBACK_INFO_FAIL_SIDE_EFFECT_CHECK(ISOLATE, F, RETURN_VALUE, \
                                                      API_RETURN_TYPE)          \
-  if (ISOLATE->debug_execution_mode() == DebugInfo::kSideEffects) {            \
-    return RETURN_VALUE();                                                     \
-  }                                                                            \
   ExternalCallbackScope call_scope(ISOLATE, FUNCTION_ADDR(F));                 \
   PropertyCallbackInfo<API_RETURN_TYPE> callback_info(values_);
 
@@ -135,12 +127,12 @@ Handle<Object> FunctionCallbackArguments::Call(CallHandlerInfo handler) {
   v8::FunctionCallback f =
       reinterpret_cast<v8::FunctionCallback>(handler.callback());
   Handle<Object> receiver_check_unsupported;
-  if (isolate->debug_execution_mode() == DebugInfo::kSideEffects &&
-      !isolate->debug()->PerformSideEffectCheckForCallback(
-          handle(handler, isolate), receiver_check_unsupported,
-          Debug::kNotAccessor)) {
-    return Handle<Object>();
-  }
+  // if (isolate->debug_execution_mode() == DebugInfo::kSideEffects &&
+  //     !isolate->debug()->PerformSideEffectCheckForCallback(
+  //         handle(handler, isolate), receiver_check_unsupported,
+  //         Debug::kNotAccessor)) {
+  //   return Handle<Object>();
+  // }
   ExternalCallbackScope call_scope(isolate, FUNCTION_ADDR(f));
   FunctionCallbackInfo<v8::Value> info(values_, argv_, argc_);
   f(info);

@@ -661,9 +661,9 @@ class ConcurrentMarking::JobTaskMajor : public v8::JobTask {
                                     mark_compact_epoch_,
                                     should_keep_ages_unchanged_);
     } else {
-      TRACE_GC_EPOCH(concurrent_marking_->heap_->tracer(),
-                     GCTracer::Scope::MC_BACKGROUND_MARKING,
-                     ThreadKind::kBackground);
+      // TRACE_GC_EPOCH(concurrent_marking_->heap_->tracer(),
+      //                GCTracer::Scope::MC_BACKGROUND_MARKING,
+      //                ThreadKind::kBackground);
       concurrent_marking_->RunMajor(delegate, code_flush_mode_,
                                     mark_compact_epoch_,
                                     should_keep_ages_unchanged_);

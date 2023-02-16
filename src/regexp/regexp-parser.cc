@@ -2434,8 +2434,8 @@ void RegExpParserImpl<CharT>::ParseClassEscape(
           IsClassSetSyntaxCharacter(*char_out) ||
           IsClassSetReservedDoublePunctuator(*char_out);
       if (unicode_sets_invalid) {
-        isolate()->CountUsage(
-            v8::Isolate::kRegExpUnicodeSetIncompatibilitiesWithUnicodeMode);
+        // isolate()->CountUsage(
+        //     v8::Isolate::kRegExpUnicodeSetIncompatibilitiesWithUnicodeMode);
       }
     }
     Advance();

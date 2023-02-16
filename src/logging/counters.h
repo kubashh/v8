@@ -101,19 +101,19 @@ class StatsTable {
 // This class is thread-safe.
 class StatsCounter {
  public:
-  void Set(int value) { GetPtr()->store(value, std::memory_order_relaxed); }
+  void Set(int value) { } //GetPtr()->store(value, std::memory_order_relaxed); }
 
   void Increment(int value = 1) {
-    GetPtr()->fetch_add(value, std::memory_order_relaxed);
+    // GetPtr()->fetch_add(value, std::memory_order_relaxed);
   }
 
   void Decrement(int value = 1) {
-    GetPtr()->fetch_sub(value, std::memory_order_relaxed);
+    // GetPtr()->fetch_sub(value, std::memory_order_relaxed);
   }
 
   // Returns true if this counter is enabled (a lookup function was provided and
   // it returned a non-null pointer).
-  V8_EXPORT_PRIVATE bool Enabled();
+  V8_EXPORT_PRIVATE bool Enabled() { return false; }
 
   // Get the internal pointer to the counter. This is used
   // by the code generator to emit code that manipulates a
@@ -155,10 +155,10 @@ class StatsCounter {
 class Histogram {
  public:
   // Add a single sample to this histogram.
-  V8_EXPORT_PRIVATE void AddSample(int sample);
+  V8_EXPORT_PRIVATE void AddSample(int sample) {}
 
   // Returns true if this histogram is enabled.
-  bool Enabled() { return histogram_ != nullptr; }
+  bool Enabled() { return false; }
 
   const char* name() const { return name_; }
 
@@ -196,11 +196,11 @@ class Histogram {
 
   // Lazily create the histogram, if it has not been created yet.
   void EnsureCreated(bool create_new = true) {
-    if (create_new && histogram_.load(std::memory_order_acquire) == nullptr) {
-      base::MutexGuard Guard(&mutex_);
-      if (histogram_.load(std::memory_order_relaxed) == nullptr)
-        histogram_.store(CreateHistogram(), std::memory_order_release);
-    }
+    // if (create_new && histogram_.load(std::memory_order_acquire) == nullptr) {
+    //   base::MutexGuard Guard(&mutex_);
+    //   if (histogram_.load(std::memory_order_relaxed) == nullptr)
+    //     histogram_.store(CreateHistogram(), std::memory_order_release);
+    // }
   }
 
  private:
@@ -223,12 +223,12 @@ enum class TimedHistogramResolution { MILLISECOND, MICROSECOND };
 // nested timed results.
 class TimedHistogram : public Histogram {
  public:
-  // Records a TimeDelta::Max() result. Useful to record percentage of tasks
-  // that never got to run in a given scenario. Log if isolate non-null.
-  void RecordAbandon(base::ElapsedTimer* timer, Isolate* isolate);
+  // // Records a TimeDelta::Max() result. Useful to record percentage of tasks
+  // // that never got to run in a given scenario. Log if isolate non-null.
+  // void RecordAbandon(base::ElapsedTimer* timer, Isolate* isolate);
 
   // Add a single sample to this histogram.
-  V8_EXPORT_PRIVATE void AddTimedSample(base::TimeDelta sample);
+  V8_EXPORT_PRIVATE void AddTimedSample(base::TimeDelta sample) {}
 
 #ifdef DEBUG
   // Ensures that we don't have nested timers for TimedHistogram per thread, use
@@ -240,12 +240,12 @@ class TimedHistogram : public Histogram {
 #endif  // DEBUG
 
  protected:
-  void Stop(base::ElapsedTimer* timer);
-  void LogStart(Isolate* isolate);
-  void LogEnd(Isolate* isolate);
+  // void Stop(base::ElapsedTimer* timer);
+  // void LogStart(Isolate* isolate);
+  // void LogEnd(Isolate* isolate);
 
   friend class Counters;
-  TimedHistogramResolution resolution_;
+  // TimedHistogramResolution resolution_;
 
   TimedHistogram() = default;
   TimedHistogram(const TimedHistogram&) = delete;
@@ -254,8 +254,8 @@ class TimedHistogram : public Histogram {
   void Initialize(const char* name, int min, int max,
                   TimedHistogramResolution resolution, int num_buckets,
                   Counters* counters) {
-    Histogram::Initialize(name, min, max, num_buckets, counters);
-    resolution_ = resolution;
+    // Histogram::Initialize(name, min, max, num_buckets, counters);
+    // resolution_ = resolution;
   }
 };
 
@@ -270,7 +270,7 @@ class NestedTimedHistogram : public TimedHistogram {
                        TimedHistogramResolution resolution, int num_buckets,
                        Counters* counters)
       : NestedTimedHistogram() {
-    Initialize(name, min, max, resolution, num_buckets, counters);
+    // Initialize(name, min, max, resolution, num_buckets, counters);
   }
 
  private:
@@ -278,17 +278,17 @@ class NestedTimedHistogram : public TimedHistogram {
   friend class NestedTimedHistogramScope;
   friend class PauseNestedTimedHistogramScope;
 
-  inline NestedTimedHistogramScope* Enter(NestedTimedHistogramScope* next) {
-    NestedTimedHistogramScope* previous = current_;
-    current_ = next;
-    return previous;
-  }
+  // inline NestedTimedHistogramScope* Enter(NestedTimedHistogramScope* next) {
+  //   // NestedTimedHistogramScope* previous = current_;
+  //   // current_ = next;
+  //   // return previous;
+  // }
 
-  inline void Leave(NestedTimedHistogramScope* previous) {
-    current_ = previous;
-  }
+  // inline void Leave(NestedTimedHistogramScope* previous) {
+  //   // current_ = previous;
+  // }
 
-  NestedTimedHistogramScope* current_ = nullptr;
+  // NestedTimedHistogramScope* current_ = nullptr;
 
   NestedTimedHistogram() = default;
   NestedTimedHistogram(const NestedTimedHistogram&) = delete;
@@ -311,17 +311,17 @@ class NestedTimedHistogram : public TimedHistogram {
 class AggregatableHistogramTimer : public Histogram {
  public:
   // Start/stop the "outer" scope.
-  void Start() { time_ = base::TimeDelta(); }
+  void Start() {} // time_ = base::TimeDelta(); }
   void Stop() {
-    if (time_ != base::TimeDelta()) {
-      // Only add non-zero samples, since zero samples represent situations
-      // where there were no aggregated samples added.
-      AddSample(static_cast<int>(time_.InMicroseconds()));
-    }
+    // if (time_ != base::TimeDelta()) {
+    //   // Only add non-zero samples, since zero samples represent situations
+    //   // where there were no aggregated samples added.
+    //   AddSample(static_cast<int>(time_.InMicroseconds()));
+    // }
   }
 
   // Add a time value ("inner" scope).
-  void Add(base::TimeDelta other) { time_ += other; }
+  void Add(base::TimeDelta other) { } //time_ += other; }
 
  private:
   friend class Counters;
@@ -331,7 +331,7 @@ class AggregatableHistogramTimer : public Histogram {
   AggregatableHistogramTimer& operator=(const AggregatableHistogramTimer&) =
       delete;
 
-  base::TimeDelta time_;
+  // base::TimeDelta time_;
 };
 
 // A helper class for use with AggregatableHistogramTimer. This is the
@@ -339,29 +339,29 @@ class AggregatableHistogramTimer : public Histogram {
 // // aggregate the information from the inner AggregatedHistogramTimerScope.
 class V8_NODISCARD AggregatingHistogramTimerScope {
  public:
-  explicit AggregatingHistogramTimerScope(AggregatableHistogramTimer* histogram)
-      : histogram_(histogram) {
-    histogram_->Start();
-  }
-  ~AggregatingHistogramTimerScope() { histogram_->Stop(); }
+  explicit AggregatingHistogramTimerScope(AggregatableHistogramTimer* histogram) {}
+  //     : histogram_(histogram) {
+  //   histogram_->Start();
+  // }
+  ~AggregatingHistogramTimerScope() { } //histogram_->Stop(); }
 
  private:
-  AggregatableHistogramTimer* histogram_;
+  // AggregatableHistogramTimer* histogram_;
 };
 
 // A helper class for use with AggregatableHistogramTimer, the "inner" scope
 // // which defines the events to be timed.
 class V8_NODISCARD AggregatedHistogramTimerScope {
  public:
-  explicit AggregatedHistogramTimerScope(AggregatableHistogramTimer* histogram)
-      : histogram_(histogram) {
-    timer_.Start();
-  }
-  ~AggregatedHistogramTimerScope() { histogram_->Add(timer_.Elapsed()); }
+  explicit AggregatedHistogramTimerScope(AggregatableHistogramTimer* histogram) {}
+  //     : histogram_(histogram) {
+  //   timer_.Start();
+  // }
+  ~AggregatedHistogramTimerScope() { } //histogram_->Add(timer_.Elapsed()); }
 
  private:
-  base::ElapsedTimer timer_;
-  AggregatableHistogramTimer* histogram_;
+  // base::ElapsedTimer timer_;
+  // AggregatableHistogramTimer* histogram_;
 };
 
 // AggretatedMemoryHistogram collects (time, value) sample pairs and turns
@@ -379,7 +379,7 @@ class AggregatedMemoryHistogram {
   // Note: public for testing purposes only.
   explicit AggregatedMemoryHistogram(Histogram* backing_histogram)
       : AggregatedMemoryHistogram() {
-    backing_histogram_ = backing_histogram;
+    // backing_histogram_ = backing_histogram;
   }
 
   // Invariants that hold before and after AddSample if
@@ -416,70 +416,71 @@ class AggregatedMemoryHistogram {
 template <typename Histogram>
 void AggregatedMemoryHistogram<Histogram>::AddSample(double current_ms,
                                                      double current_value) {
-  if (!is_initialized_) {
-    aggregate_value_ = current_value;
-    start_ms_ = current_ms;
-    last_value_ = current_value;
-    last_ms_ = current_ms;
-    is_initialized_ = true;
-  } else {
-    const double kEpsilon = 1e-6;
-    const int kMaxSamples = 1000;
-    if (current_ms < last_ms_ + kEpsilon) {
-      // Two samples have the same time, remember the last one.
-      last_value_ = current_value;
-    } else {
-      double sample_interval_ms = v8_flags.histogram_interval;
-      double end_ms = start_ms_ + sample_interval_ms;
-      if (end_ms <= current_ms + kEpsilon) {
-        // Linearly interpolate between the last_ms_ and the current_ms.
-        double slope = (current_value - last_value_) / (current_ms - last_ms_);
-        int i;
-        // Send aggregated samples to the backing histogram from the start_ms
-        // to the current_ms.
-        for (i = 0; i < kMaxSamples && end_ms <= current_ms + kEpsilon; i++) {
-          double end_value = last_value_ + (end_ms - last_ms_) * slope;
-          double sample_value;
-          if (i == 0) {
-            // Take aggregate_value_ into account.
-            sample_value = Aggregate(end_ms, end_value);
-          } else {
-            // There is no aggregate_value_ for i > 0.
-            sample_value = (last_value_ + end_value) / 2;
-          }
-          backing_histogram_->AddSample(static_cast<int>(sample_value + 0.5));
-          last_value_ = end_value;
-          last_ms_ = end_ms;
-          end_ms += sample_interval_ms;
-        }
-        if (i == kMaxSamples) {
-          // We hit the sample limit, ignore the remaining samples.
-          aggregate_value_ = current_value;
-          start_ms_ = current_ms;
-        } else {
-          aggregate_value_ = last_value_;
-          start_ms_ = last_ms_;
-        }
-      }
-      aggregate_value_ = current_ms > start_ms_ + kEpsilon
-                             ? Aggregate(current_ms, current_value)
-                             : aggregate_value_;
-      last_value_ = current_value;
-      last_ms_ = current_ms;
-    }
-  }
+  // if (!is_initialized_) {
+  //   aggregate_value_ = current_value;
+  //   start_ms_ = current_ms;
+  //   last_value_ = current_value;
+  //   last_ms_ = current_ms;
+  //   is_initialized_ = true;
+  // } else {
+  //   const double kEpsilon = 1e-6;
+  //   const int kMaxSamples = 1000;
+  //   if (current_ms < last_ms_ + kEpsilon) {
+  //     // Two samples have the same time, remember the last one.
+  //     last_value_ = current_value;
+  //   } else {
+  //     double sample_interval_ms = v8_flags.histogram_interval;
+  //     double end_ms = start_ms_ + sample_interval_ms;
+  //     if (end_ms <= current_ms + kEpsilon) {
+  //       // Linearly interpolate between the last_ms_ and the current_ms.
+  //       double slope = (current_value - last_value_) / (current_ms - last_ms_);
+  //       int i;
+  //       // Send aggregated samples to the backing histogram from the start_ms
+  //       // to the current_ms.
+  //       for (i = 0; i < kMaxSamples && end_ms <= current_ms + kEpsilon; i++) {
+  //         double end_value = last_value_ + (end_ms - last_ms_) * slope;
+  //         double sample_value;
+  //         if (i == 0) {
+  //           // Take aggregate_value_ into account.
+  //           sample_value = Aggregate(end_ms, end_value);
+  //         } else {
+  //           // There is no aggregate_value_ for i > 0.
+  //           sample_value = (last_value_ + end_value) / 2;
+  //         }
+  //         backing_histogram_->AddSample(static_cast<int>(sample_value + 0.5));
+  //         last_value_ = end_value;
+  //         last_ms_ = end_ms;
+  //         end_ms += sample_interval_ms;
+  //       }
+  //       if (i == kMaxSamples) {
+  //         // We hit the sample limit, ignore the remaining samples.
+  //         aggregate_value_ = current_value;
+  //         start_ms_ = current_ms;
+  //       } else {
+  //         aggregate_value_ = last_value_;
+  //         start_ms_ = last_ms_;
+  //       }
+  //     }
+  //     aggregate_value_ = current_ms > start_ms_ + kEpsilon
+  //                            ? Aggregate(current_ms, current_value)
+  //                            : aggregate_value_;
+  //     last_value_ = current_value;
+  //     last_ms_ = current_ms;
+  //   }
+  // }
 }
 
 template <typename Histogram>
 double AggregatedMemoryHistogram<Histogram>::Aggregate(double current_ms,
                                                        double current_value) {
-  double interval_ms = current_ms - start_ms_;
-  double value = (current_value + last_value_) / 2;
-  // The aggregate_value_ is the average for [start_ms_; last_ms_].
-  // The value is the average for [last_ms_; current_ms].
-  // Return the weighted average of the aggregate_value_ and the value.
-  return aggregate_value_ * ((last_ms_ - start_ms_) / interval_ms) +
-         value * ((current_ms - last_ms_) / interval_ms);
+  // double interval_ms = current_ms - start_ms_;
+  // double value = (current_value + last_value_) / 2;
+  // // The aggregate_value_ is the average for [start_ms_; last_ms_].
+  // // The value is the average for [last_ms_; current_ms].
+  // // Return the weighted average of the aggregate_value_ and the value.
+  // return aggregate_value_ * ((last_ms_ - start_ms_) / interval_ms) +
+  //        value * ((current_ms - last_ms_) / interval_ms);
+  return 0.0;
 }
 
 // This file contains all the v8 counters that are in use.
@@ -632,7 +633,7 @@ class Counters : public std::enable_shared_from_this<Counters> {
   }
 
   void AddHistogramSample(void* histogram, int sample) {
-    stats_table_.AddHistogramSample(histogram, sample);
+    // stats_table_.AddHistogramSample(histogram, sample);
   }
 
   Isolate* isolate() { return isolate_; }

@@ -197,28 +197,28 @@ void V8Console::Debug(const v8::debug::ConsoleCallArguments& info,
 
 void V8Console::Error(const v8::debug::ConsoleCallArguments& info,
                       const v8::debug::ConsoleContext& consoleContext) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.inspector"), "V8Console::Error");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.inspector"), "V8Console::Error");
   ConsoleHelper(info, consoleContext, m_inspector)
       .reportCall(ConsoleAPIType::kError);
 }
 
 void V8Console::Info(const v8::debug::ConsoleCallArguments& info,
                      const v8::debug::ConsoleContext& consoleContext) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.inspector"), "V8Console::Info");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.inspector"), "V8Console::Info");
   ConsoleHelper(info, consoleContext, m_inspector)
       .reportCall(ConsoleAPIType::kInfo);
 }
 
 void V8Console::Log(const v8::debug::ConsoleCallArguments& info,
                     const v8::debug::ConsoleContext& consoleContext) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.inspector"), "V8Console::Log");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.inspector"), "V8Console::Log");
   ConsoleHelper(info, consoleContext, m_inspector)
       .reportCall(ConsoleAPIType::kLog);
 }
 
 void V8Console::Warn(const v8::debug::ConsoleCallArguments& info,
                      const v8::debug::ConsoleContext& consoleContext) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.inspector"), "V8Console::Warn");
+  // TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.inspector"), "V8Console::Warn");
   ConsoleHelper(info, consoleContext, m_inspector)
       .reportCall(ConsoleAPIType::kWarning);
 }
