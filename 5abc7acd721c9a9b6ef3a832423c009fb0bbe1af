@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1839a338_ffb0e25b",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0509659d_489b9c35",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25c7493d_4178ec0a",
@@ -65,6 +83,24 @@
       "writtenOn": "2023-02-14T14:07:39Z",
       "side": 1,
       "message": "I don\u0027t think it would be a problem but I would move this code here into PerformGarbageCollection. The reason for this is that in V8 concurrent threads can allocate as well and at this point here may already be allocating again. In PerformGarbageCollection all allocating threads are still stopped.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe7eaf61_f9ef1995",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1813,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25c7493d_4178ec0a",
       "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d7493ce_1f85756e",
+        "filename": "src/heap/memory-balancer.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c0dd331_31533b23",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf00362f_9200f5f0",
@@ -99,6 +153,24 @@
       "writtenOn": "2023-02-14T14:07:39Z",
       "side": 1,
       "message": "Shouldn\u0027t this be `major_allocation_duration` here?",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "709b59cb_972fa4fd",
+        "filename": "src/heap/memory-balancer.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf00362f_9200f5f0",
       "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4fb2eb3_178269c0",
+        "filename": "src/heap/memory-balancer.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "482d9fcf_cde13c63",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3df15062_f530afbd",
@@ -133,6 +223,24 @@
       "writtenOn": "2023-02-14T14:07:39Z",
       "side": 1,
       "message": "Should be defined after methods.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dcd7d0d_d9251811",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3df15062_f530afbd",
       "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -154,6 +262,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75d6cc0a_2f4c06f7",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae40d052_0efab8e3",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d92510a9_900e765f",
@@ -167,6 +293,24 @@
       "writtenOn": "2023-02-14T14:07:39Z",
       "side": 1,
       "message": "Nit: What do you think about `live_memory_after_gc_` as name here? I was a bit confused at first why we had two different fields for live memory. This would imho make their purpose a bit clearer.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57fcbcc3_825d3eb1",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d92510a9_900e765f",
       "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -188,6 +332,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b3053c9_32bce81b",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31409ae0_66dee2ef",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "790bf3c8_288e6b2d",
@@ -201,6 +363,24 @@
       "writtenOn": "2023-02-14T14:07:39Z",
       "side": 1,
       "message": "Nit: What do you think about `major_allocation_rate_` and `major_gc_speed_` as field names? Can you also document its type? I believe it is `bytes per ns`, isn\u0027t it?",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38983844_402be5be",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "790bf3c8_288e6b2d",
       "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -222,6 +402,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecc49a61_d00b582e",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "they are not live memory, but the memory at last hearbeat measurement - we only know live memory at GC! I will change the name to last_heartbeat_memory_.",
+      "parentUuid": "073835f3_0b5afd88",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b715cc2e_ae8c455f",
@@ -235,6 +433,24 @@
       "writtenOn": "2023-02-14T14:07:39Z",
       "side": 1,
       "message": "Nit: Please use the underscore suffix here as well, maybe rename to `task_was_started_` or so as it is clear from the context which task this is about.",
+      "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a284f2f_1a2027fb",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 20
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-16T23:21:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b715cc2e_ae8c455f",
       "revId": "5abc7acd721c9a9b6ef3a832423c009fb0bbe1af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
