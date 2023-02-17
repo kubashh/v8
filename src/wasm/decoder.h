@@ -339,7 +339,7 @@ class Decoder {
 
   // Use this for "boolean validation", i.e. if the error message is not used
   // anyway.
-  void V8_NOINLINE MarkError() {
+  void V8_NOINLINE V8_PRESERVE_MOST MarkError() {
     if (!ok()) return;
     error_ = {0, "validation failed"};
     onFirstError();
@@ -347,22 +347,25 @@ class Decoder {
 
   // Do not inline error methods. This has measurable impact on validation time,
   // see https://crbug.com/910432.
-  void V8_NOINLINE error(const char* msg) { errorf(pc_offset(), "%s", msg); }
-  void V8_NOINLINE error(const uint8_t* pc, const char* msg) {
+  void V8_NOINLINE V8_PRESERVE_MOST error(const char* msg) {
+    errorf(pc_offset(), "%s", msg);
+  }
+  void V8_NOINLINE V8_PRESERVE_MOST error(const uint8_t* pc, const char* msg) {
     errorf(pc_offset(pc), "%s", msg);
   }
-  void V8_NOINLINE error(uint32_t offset, const char* msg) {
+  void V8_NOINLINE V8_PRESERVE_MOST error(uint32_t offset, const char* msg) {
     errorf(offset, "%s", msg);
   }
 
-  void V8_NOINLINE PRINTF_FORMAT(2, 3) errorf(const char* format, ...) {
+  void V8_NOINLINE V8_PRESERVE_MOST PRINTF_FORMAT(2, 3)
+      errorf(const char* format, ...) {
     va_list args;
     va_start(args, format);
     verrorf(pc_offset(), format, args);
     va_end(args);
   }
 
-  void V8_NOINLINE PRINTF_FORMAT(3, 4)
+  void V8_NOINLINE V8_PRESERVE_MOST PRINTF_FORMAT(3, 4)
       errorf(uint32_t offset, const char* format, ...) {
     va_list args;
     va_start(args, format);
@@ -370,8 +373,8 @@ class Decoder {
     va_end(args);
   }
 
-  void V8_NOINLINE PRINTF_FORMAT(3, 4)
-      errorf(const uint8_t* pc, const char* format, ...) {
+  V8_NOINLINE V8_PRESERVE_MOST
+  PRINTF_FORMAT(3, 4) void errorf(const uint8_t* pc, const char* format, ...) {
     va_list args;
     va_start(args, format);
     verrorf(pc_offset(pc), format, args);
