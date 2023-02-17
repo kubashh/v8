@@ -168,16 +168,10 @@ MaybeHandle<Object> JsonParseInternalizer::InternalizeJsonProperty(
   // if the reviver has not mucked with the originally parsed value.
   //
   // When with_source == kWithoutSource, this is unused.
-  bool pass_source_to_reviver = false;
+  bool pass_source_to_reviver =
+      with_source == kWithSource && value->SameValue(*snapshot);
 
   if (value->IsJSReceiver()) {
-    // Array and object snapshots are FixedArrays of length 2 consisting
-    // (original value, elements/properties snapshots). If the reviver mutated
-    // the holder, the snapshot may not be a FixedArray anymore.
-    pass_source_to_reviver =
-        with_source == kWithSource && snapshot->IsFixedArray() &&
-        value->SameValue(Handle<FixedArray>::cast(snapshot)->get(0));
-
     Handle<JSReceiver> object = Handle<JSReceiver>::cast(value);
     Maybe<bool> is_array = Object::IsArray(object);
     if (is_array.IsNothing()) return MaybeHandle<Object>();
@@ -188,12 +182,9 @@ MaybeHandle<Object> JsonParseInternalizer::InternalizeJsonProperty(
           Object::GetLengthFromArrayLike(isolate_, object), Object);
       double length = length_object->Number();
       if (pass_source_to_reviver) {
-        Handle<FixedArray> val_nodes = Handle<FixedArray>::cast(val_node);
-        Handle<FixedArray> element_snapshots(
-            FixedArray::cast(Handle<FixedArray>::cast(snapshot)->get(1)),
-            isolate_);
-        DCHECK_EQ(val_nodes->length(), element_snapshots->length());
-        int snapshot_length = element_snapshots->length();
+        Handle<FixedArray> val_nodes_and_snapshots =
+            Handle<FixedArray>::cast(val_node);
+        int snapshot_length = val_nodes_and_snapshots->length() / 2;
         for (int i = 0; i < length; i++) {
           HandleScope inner_scope(isolate_);
           Handle<Object> index = isolate_->factory()->NewNumber(i);
@@ -205,8 +196,10 @@ MaybeHandle<Object> JsonParseInternalizer::InternalizeJsonProperty(
           const bool rv =
               i < snapshot_length
                   ? RecurseAndApply<kWithSource>(
-                        object, index_name, handle(val_nodes->get(i), isolate_),
-                        handle(element_snapshots->get(i), isolate_))
+                        object, index_name,
+                        handle(val_nodes_and_snapshots->get(i * 2), isolate_),
+                        handle(val_nodes_and_snapshots->get(i * 2 + 1),
+                               isolate_))
                   : RecurseAndApply<kWithoutSource>(
                         object, index_name, Handle<Object>(), Handle<Object>());
           if (!rv) {
@@ -234,20 +227,17 @@ MaybeHandle<Object> JsonParseInternalizer::InternalizeJsonProperty(
                                   GetKeysConversion::kConvertToString),
           Object);
       if (pass_source_to_reviver) {
-        Handle<ObjectHashTable> val_nodes =
-            Handle<ObjectHashTable>::cast(val_node);
-        Handle<ObjectHashTable> property_snapshots(
-            ObjectHashTable::cast(Handle<FixedArray>::cast(snapshot)->get(1)),
-            isolate_);
+        Handle<ObjectTwoHashTable> val_nodes_and_snapshots =
+            Handle<ObjectTwoHashTable>::cast(val_node);
         for (int i = 0; i < contents->length(); i++) {
           HandleScope inner_scope(isolate_);
           Handle<String> key_name(String::cast(contents->get(i)), isolate_);
-          Handle<Object> property_val_node(val_nodes->Lookup(key_name),
+          auto property_val_node_and_snapshot =
+              val_nodes_and_snapshots->Lookup(isolate_, key_name);
+          Handle<Object> property_val_node(property_val_node_and_snapshot[0],
                                            isolate_);
-          Handle<Object> property_snapshot(property_snapshots->Lookup(key_name),
+          Handle<Object> property_snapshot(property_val_node_and_snapshot[1],
                                            isolate_);
-          DCHECK_EQ(property_val_node->IsTheHole(),
-                    property_snapshot->IsTheHole());
           // Even if the object pointer snapshot matched, it's possible the
           // object had new properties added that are not in the snapshotted
           // contents.
@@ -272,9 +262,6 @@ MaybeHandle<Object> JsonParseInternalizer::InternalizeJsonProperty(
         }
       }
     }
-  } else {
-    pass_source_to_reviver =
-        with_source == kWithSource && value->SameValue(*snapshot);
   }
 
   Handle<Object> result;
@@ -1003,20 +990,24 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
   // For primitive values, the val_node is the source string of the JSON value.
   //
   // For JSObject values, the val_node is an ObjectHashTable in which the key is
-  // the property name and the value is the property value's parse node. The
-  // order in which properties are defined may be different from the order in
-  // which properties are enumerated when calling InternalizeJSONProperty for
-  // the JSObject value. E.g., the JSON source string is '{"a": 1, "1": 2}', and
-  // the properties enumerate order is ["1", "a"]. Moreover, properties may be
-  // defined repeatedly in the JSON string.  E.g., the JSON string is '{"a": 1,
-  // "a": 1}', and the properties enumerate order is ["a"]. So we cannot use the
-  // FixedArray to record the properties's parse node by the order in which
-  // properties are defined and we use a ObjectHashTable here to record the
-  // property name and the property's parse node. We then look up the property's
-  // parse node by the property name when calling InternalizeJSONProperty.
+  // the property name and the first value is the property value's parse
+  // node. The order in which properties are defined may be different from the
+  // order in which properties are enumerated when calling
+  // InternalizeJSONProperty for the JSObject value. E.g., the JSON source
+  // string is '{"a": 1, "1": 2}', and the properties enumerate order is ["1",
+  // "a"]. Moreover, properties may be defined repeatedly in the JSON string.
+  // E.g., the JSON string is '{"a": 1, "a": 1}', and the properties enumerate
+  // order is ["a"]. So we cannot use the FixedArray to record the properties's
+  // parse node by the order in which properties are defined and we use a
+  // ObjectHashTable here to record the property name and the property's parse
+  // node. We then look up the property's parse node by the property name when
+  // calling InternalizeJSONProperty. The second value associated with the key
+  // is the property value's snapshot.
   //
   // For JSArray values, the val_node is a FixedArray containing the parse nodes
-  // of the elements.
+  // and snapshots of the elements.
+  //
+  // For information about snapshotting, see below.
   Handle<Object> val_node;
   // Record the start position and end position for the primitive values.
   int start_position;
@@ -1030,25 +1021,25 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
   //
   // For primitive values, the value_snapshot is the same as value.
   //
-  // For JSObject values, the value_snapshot is a FixedArray of length 2 (i.e. a
-  // pair) of the object value and a ObjectHashTable where the key is the
-  // property name and the value is the property's value_snapshot.
+  // For JSObject values, the val_node hash table also contains the
+  // value_snapshot value for each property.
   //
-  // For JSArray values, the snapshot is a FixedArray of length 2 (i.e. a pair)
-  // of the array value and a FixedArray containing the value_snapshot value of
-  // each element.
+  // For JSArray values, the val_node FixedArray also contains the
+  // value_snapshot value for each element.
   Handle<Object> value_snapshot;
 
-  // element_val_{node,snapshot}_stack is used to track all the elements's parse
-  // nodes and value snapshots. And we use this to construct the JSArray's parse
-  // node and value snapshot.
-  SmallVector<Handle<Object>> element_val_node_stack;
-  SmallVector<Handle<Object>> element_snapshot_stack;
-  // property_val_{node,snapshot}_stack is used to track all the property
+  struct ValNodeAndSnapshot {
+    Handle<Object> val_node;
+    Handle<Object> snapshot;
+  };
+  // element_val_node_and_snapshot_stack is used to track all the elements's
+  // parse nodes and value snapshots. And we use this to construct the JSArray's
+  // parse node and value snapshot.
+  SmallVector<ValNodeAndSnapshot> element_val_node_and_snapshot_stack;
+  // property_val_node_and_snapshot_stack is used to track all the property
   // value's parse nodes and value snapshots. And we use this to construct the
   // JSObject's parse node and value snapshot.
-  SmallVector<Handle<Object>> property_val_node_stack;
-  SmallVector<Handle<Object>> property_snapshot_stack;
+  SmallVector<ValNodeAndSnapshot> property_val_node_and_snapshot_stack;
   while (true) {
     // Produce a json value.
     //
@@ -1090,9 +1081,8 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
           if (Check(JsonToken::RBRACE)) {
             // TODO(verwaest): Directly use the map instead.
             value = factory()->NewJSObject(object_constructor_);
-            val_node = ObjectHashTable::New(isolate_, 0);
-            // Reuse the empty val_node table as the empty snapshot table.
-            value_snapshot = factory()->NewFixedArrayTuple({value, val_node});
+            val_node = ObjectTwoHashTable::New(isolate_, 0);
+            value_snapshot = value;
             break;
           }
 
@@ -1106,8 +1096,8 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
                      MessageTemplate::kJsonParseExpectedPropNameOrRBrace);
           property_stack.emplace_back(ScanJsonPropertyKey(&cont));
           if (should_track_json_source) {
-            property_val_node_stack.emplace_back(Handle<Object>());
-            property_snapshot_stack.emplace_back(Handle<Object>());
+            property_val_node_and_snapshot_stack.emplace_back(
+                ValNodeAndSnapshot());
           }
 
           ExpectNext(JsonToken::COLON,
@@ -1122,8 +1112,7 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
           if (Check(JsonToken::RBRACK)) {
             value = factory()->NewJSArray(0, PACKED_SMI_ELEMENTS);
             val_node = factory()->NewFixedArray(0);
-            // Reuse the empty val_node array as the empty snapshot array.
-            value_snapshot = factory()->NewFixedArrayTuple({value, val_node});
+            value_snapshot = value;
             break;
           }
 
@@ -1205,8 +1194,8 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
           // Store the previous property value into its property info.
           property_stack.back().value = value;
           if (should_track_json_source) {
-            property_val_node_stack.back() = val_node;
-            property_snapshot_stack.back() = value_snapshot;
+            property_val_node_and_snapshot_stack.back() =
+                ValNodeAndSnapshot{val_node, value_snapshot};
           }
 
           if (V8_LIKELY(Check(JsonToken::COMMA))) {
@@ -1217,8 +1206,8 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
 
             property_stack.emplace_back(ScanJsonPropertyKey(&cont));
             if (should_track_json_source) {
-              property_val_node_stack.emplace_back(Handle<Object>());
-              property_snapshot_stack.emplace_back(Handle<Object>());
+              property_val_node_and_snapshot_stack.emplace_back(
+                  ValNodeAndSnapshot());
             }
             ExpectNext(JsonToken::COLON);
 
@@ -1247,41 +1236,32 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
           // Return the object.
           if (should_track_json_source) {
             size_t start = cont.index;
-            int length = static_cast<int>(property_stack.size() - start);
-            Handle<ObjectHashTable> table =
-                ObjectHashTable::New(isolate(), length);
-            Handle<ObjectHashTable> snapshot_table =
-                ObjectHashTable::New(isolate(), length);
-            for (int i = 0; i < length; i++) {
+            int num_properties =
+                static_cast<int>(property_stack.size() - start);
+            Handle<ObjectTwoHashTable> table =
+                ObjectTwoHashTable::New(isolate(), num_properties);
+            for (int i = 0; i < num_properties; i++) {
               const JsonProperty& property = property_stack[start + i];
               Handle<Object> property_val_node =
-                  property_val_node_stack[start + i];
+                  property_val_node_and_snapshot_stack[start + i].val_node;
               Handle<Object> property_snapshot =
-                  property_snapshot_stack[start + i];
+                  property_val_node_and_snapshot_stack[start + i].snapshot;
+              Handle<String> key;
               if (property.string.is_index()) {
-                Handle<String> key =
-                    factory()->Uint32ToString(property.string.index());
-                table = ObjectHashTable::Put(table, key, property_val_node);
-                snapshot_table = ObjectHashTable::Put(snapshot_table, key,
-                                                      property_snapshot);
+                key = factory()->Uint32ToString(property.string.index());
               } else {
-                Handle<String> key = MakeString(property.string);
-                table = ObjectHashTable::Put(table, key, property_val_node);
-                snapshot_table = ObjectHashTable::Put(snapshot_table, key,
-                                                      property_snapshot);
+                key = MakeString(property.string);
               }
+              table = ObjectTwoHashTable::Put(
+                  isolate(), table, key,
+                  {property_val_node, property_snapshot});
             }
-            property_val_node_stack.resize_no_init(cont.index);
-            property_snapshot_stack.resize_no_init(cont.index);
-            Handle<FixedArray> snapshot_pair =
-                factory()->NewFixedArrayTuple({value, snapshot_table});
+            property_val_node_and_snapshot_stack.resize_no_init(cont.index);
             DisallowGarbageCollection no_gc;
             auto raw_table = *table;
-            auto raw_snapshot_pair = *snapshot_pair;
             value = cont.scope.CloseAndEscape(value);
             val_node = cont.scope.CloseAndEscape(handle(raw_table, isolate_));
-            value_snapshot =
-                cont.scope.CloseAndEscape(handle(raw_snapshot_pair, isolate_));
+            value_snapshot = value;
           } else {
             value = cont.scope.CloseAndEscape(value);
           }
@@ -1298,8 +1278,8 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
           // Store the previous element on the stack.
           element_stack.emplace_back(value);
           if (should_track_json_source) {
-            element_val_node_stack.emplace_back(val_node);
-            element_snapshot_stack.emplace_back(value_snapshot);
+            element_val_node_and_snapshot_stack.emplace_back(
+                ValNodeAndSnapshot{val_node, value_snapshot});
           }
           // Break to start producing the subsequent element value.
           if (V8_LIKELY(Check(JsonToken::COMMA))) break;
@@ -1310,28 +1290,24 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
           // Return the array.
           if (should_track_json_source) {
             size_t start = cont.index;
-            int length = static_cast<int>(element_stack.size() - start);
-            Handle<FixedArray> val_node_array =
-                factory()->NewFixedArray(length);
-            Handle<FixedArray> snapshot_array =
-                factory()->NewFixedArray(length);
-            Handle<FixedArray> snapshot_pair =
-                factory()->NewFixedArrayTuple({value, snapshot_array});
+            int num_elements = static_cast<int>(element_stack.size() - start);
+            Handle<FixedArray> val_node_and_snapshot_array =
+                factory()->NewFixedArray(num_elements * 2);
             DisallowGarbageCollection no_gc;
-            auto raw_val_node_array = *val_node_array;
-            auto raw_snapshot_array = *snapshot_array;
-            for (int i = 0; i < length; i++) {
-              raw_val_node_array.set(i, *element_val_node_stack[start + i]);
-              raw_snapshot_array.set(i, *element_snapshot_stack[start + i]);
+            auto raw_val_node_and_snapshot_array = *val_node_and_snapshot_array;
+            for (int i = 0; i < num_elements; i++) {
+              raw_val_node_and_snapshot_array.set(
+                  i * 2,
+                  *element_val_node_and_snapshot_stack[start + i].val_node);
+              raw_val_node_and_snapshot_array.set(
+                  i * 2 + 1,
+                  *element_val_node_and_snapshot_stack[start + i].snapshot);
             }
-            element_val_node_stack.resize_no_init(cont.index);
-            element_snapshot_stack.resize_no_init(cont.index);
-            auto raw_snapshot_pair = *snapshot_pair;
+            element_val_node_and_snapshot_stack.resize_no_init(cont.index);
             value = cont.scope.CloseAndEscape(value);
-            val_node =
-                cont.scope.CloseAndEscape(handle(raw_val_node_array, isolate_));
-            value_snapshot =
-                cont.scope.CloseAndEscape(handle(raw_snapshot_pair, isolate_));
+            val_node = cont.scope.CloseAndEscape(
+                handle(raw_val_node_and_snapshot_array, isolate_));
+            value_snapshot = value;
           } else {
             value = cont.scope.CloseAndEscape(value);
           }
