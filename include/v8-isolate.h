@@ -1675,7 +1675,8 @@ uint32_t Isolate::GetNumberOfDataSlots() {
 
 template <class T>
 MaybeLocal<T> Isolate::GetDataFromSnapshotOnce(size_t index) {
-  T* data = reinterpret_cast<T*>(GetDataFromSnapshotOnce(index));
+  T* data = reinterpret_cast<T*>(internal::ValueHelper::ValueToAddress(
+      reinterpret_cast<T*>(GetDataFromSnapshotOnce(index))));
   if (data) internal::PerformCastCheck(data);
   return Local<T>(data);
 }
