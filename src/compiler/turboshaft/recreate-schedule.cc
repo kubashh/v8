@@ -182,7 +182,9 @@ void ScheduleBuilder::ProcessOperation(const Operation& op) {
   V(Allocate)                           \
   V(ConvertToObject)                    \
   V(DecodeExternalPointer)              \
-  V(ObjectIs)
+  V(ObjectIs)                           \
+  V(Tag)                                \
+  V(Untag)
 #define PROCESS_OPERATION_UNREACHABLE(op) \
   Node* ScheduleBuilder::ProcessOperation(const op##Op&) { UNREACHABLE(); }
 SHOULD_HAVE_BEEN_LOWERED_OPS(PROCESS_OPERATION_UNREACHABLE)
