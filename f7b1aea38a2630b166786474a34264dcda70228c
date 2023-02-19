@@ -81,6 +81,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24ff532e_50b6a2ad",
+        "filename": "include/v8-data.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-02-19T16:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07e8716c_0669b461",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 5
+      },
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fd7c8c8_607e1a4f",
+        "filename": "include/v8-data.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-02-19T16:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96e150e7_eb746d25",
+      "range": {
+        "startLine": 59,
+        "startChar": 17,
+        "endLine": 59,
+        "endChar": 19
+      },
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "152a3697_967855a4",
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0abffe82_dc8cf6dd",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-02-19T16:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "152a3697_967855a4",
+      "range": {
+        "startLine": 1678,
+        "startChar": 4,
+        "endLine": 1678,
+        "endChar": 41
+      },
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f216cca1_0e90c6a9",
@@ -117,6 +189,30 @@
       "writtenOn": "2023-02-07T16:57:54Z",
       "side": 1,
       "message": "This is obsolete? I see `CreateHandleForCurrentIsolate()` for `v8::internal::HandleScope` which is called from the macro.",
+      "range": {
+        "startLine": 104,
+        "startChar": 28,
+        "endLine": 104,
+        "endChar": 57
+      },
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3958e3a_2bb2d3c4",
+        "filename": "include/v8-local-handle.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-02-19T16:21:05Z",
+      "side": 1,
+      "message": "Ah yeah. This was a weird one and I messed this up when I committed it. I have changed this to instead use `CreateHandleForCurrentIsolate()` on the API layer for this to work. If I put this in `handles.h` and call it from here, the linker complains that the thread local `g_current_isolate_` symbol does not exist.",
+      "parentUuid": "f216cca1_0e90c6a9",
       "range": {
         "startLine": 104,
         "startChar": 28,
