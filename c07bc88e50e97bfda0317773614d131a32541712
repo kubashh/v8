@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de8eda8d_ced20900",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 57
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "Thanks for the comments. I\u0027ve addressed most of them, but I need to figure something out regarding the 1-byte strings that can randomly become 2-byte. I\u0027ll let you know ;)",
+      "revId": "c07bc88e50e97bfda0317773614d131a32541712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

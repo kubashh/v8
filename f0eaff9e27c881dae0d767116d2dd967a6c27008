@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65e5f326_a6444a77",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 55
+      },
+      "lineNbr": 2772,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "Good to know, thanks :)",
+      "parentUuid": "fe1b8df0_8f2672ed",
+      "range": {
+        "startLine": 2772,
+        "startChar": 6,
+        "endLine": 2772,
+        "endChar": 74
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4dc0b419_22af54c8",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2749b014_4a89a451",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 55
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "True. I renamed to `ConcatResultIsOneOrTwoByte` to be a bit more explicit.",
+      "parentUuid": "4dc0b419_22af54c8",
+      "range": {
+        "startLine": 71,
+        "startChar": 50,
+        "endLine": 71,
+        "endChar": 61
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db2fa7de_468d713d",
@@ -94,6 +142,30 @@
       "writtenOn": "2023-02-17T16:52:51Z",
       "side": 1,
       "message": "Is this a heuristic or do things break (beyond deopt looos) if the result is wrong? Maybe add a comment answering this question.",
+      "range": {
+        "startLine": 83,
+        "startChar": 66,
+        "endLine": 83,
+        "endChar": 77
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4afbdcc8_7c8f29cd",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 55
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "The analysis sound be sound but not complete (ie, it never makes mistake, but it sometimes bails out). We thus assume its result to be correct. (and thus, if I made a mistake, the String Builder could produce the wrong strings)\nI\u0027ve added a comment (in the header) mentioning that.",
+      "parentUuid": "db2fa7de_468d713d",
       "range": {
         "startLine": 83,
         "startChar": 66,
@@ -150,6 +222,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26c220a6_cd8f0017",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 55
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "True, I meant \"Returns false\" rather than \"Return true\". I\u0027ve reworded the comment.",
+      "parentUuid": "60b00376_21511075",
+      "range": {
+        "startLine": 472,
+        "startChar": 0,
+        "endLine": 474,
+        "endChar": 14
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0dc028d8_1b60f3e7",
@@ -163,6 +259,30 @@
       "writtenOn": "2023-02-17T16:52:51Z",
       "side": 1,
       "message": "Hmm, I\u0027m having difficulty understanding what exactly is wrong here. The picture above looks fine to me even if `child` modifies the string builder, as long as `other_child` is using the last version of the string builder regarding the control flow that reaches it.",
+      "range": {
+        "startLine": 516,
+        "startChar": 0,
+        "endLine": 521,
+        "endChar": 33
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d30df596_eb953d67",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 55
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "The picture is a little bit confusing indeed. But the idea is that the loop has a single exit (or at least doesn\u0027t exit between \"node\" and \"child\", and thus, \"other_child\" will always have an invalid value). I\u0027ll rephrase.",
+      "parentUuid": "0dc028d8_1b60f3e7",
       "range": {
         "startLine": 516,
         "startChar": 0,
@@ -196,6 +316,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e56f756e_56cb199a",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 55
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00435876_d2a7b5b6",
+      "range": {
+        "startLine": 954,
+        "startChar": 35,
+        "endLine": 954,
+        "endChar": 46
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7e8699b_391227fa",
@@ -213,6 +357,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3588400_7d40af25",
+        "filename": "src/compiler/string-builder-optimizer.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7e8699b_391227fa",
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3d0cce6_860c3bf8",
@@ -226,6 +388,30 @@
       "writtenOn": "2023-02-17T16:52:51Z",
       "side": 1,
       "message": "I guess a string builder end is not allowed to happen in the middle of a loop body? Maybe mention here how we prevent that.",
+      "range": {
+        "startLine": 198,
+        "startChar": 2,
+        "endLine": 199,
+        "endChar": 57
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7553cf6_ab7f016e",
+        "filename": "src/compiler/string-builder-optimizer.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "Good point, I\u0027ve added a comment explaining that.",
+      "parentUuid": "e3d0cce6_860c3bf8",
       "range": {
         "startLine": 198,
         "startChar": 2,
@@ -259,6 +445,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a9715ee_42febecf",
+        "filename": "src/compiler/string-builder-optimizer.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba56fcdf_e0ae2f5d",
+      "range": {
+        "startLine": 217,
+        "startChar": 68,
+        "endLine": 217,
+        "endChar": 73
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eece7e98_4d666400",
@@ -272,6 +482,30 @@
       "writtenOn": "2023-02-17T16:52:51Z",
       "side": 1,
       "message": "typo, should be `beginning`. Also in other places.",
+      "range": {
+        "startLine": 231,
+        "startChar": 49,
+        "endLine": 231,
+        "endChar": 57
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73240ce3_d27d13d8",
+        "filename": "src/compiler/string-builder-optimizer.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "Wow, beginning looks weird with 2 n! I should send a request to whoever has the authority to update the English language so that beginning has a single n.... In the meantime, I\u0027ve fixed the 13 instances of \"begining\" 😜",
+      "parentUuid": "eece7e98_4d666400",
       "range": {
         "startLine": 231,
         "startChar": 49,
@@ -305,6 +539,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9eca887_f30cfcf2",
+        "filename": "src/compiler/string-builder-optimizer.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "Ok good to know thanks, I\u0027ve switch to `* 1.1` :)",
+      "parentUuid": "33499f0a_efa3bea0",
+      "range": {
+        "startLine": 262,
+        "startChar": 6,
+        "endLine": 267,
+        "endChar": 56
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fefcfcc_c256ab60",
@@ -318,6 +576,30 @@
       "writtenOn": "2023-02-17T16:52:51Z",
       "side": 1,
       "message": "not really accurate, no?",
+      "range": {
+        "startLine": 325,
+        "startChar": 31,
+        "endLine": 327,
+        "endChar": 17
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83cbf326_c40deffd",
+        "filename": "src/compiler/string-builder-optimizer.h",
+        "patchSetId": 55
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-20T11:55:28Z",
+      "side": 1,
+      "message": "Mmmh, true. The only issue is that we could end up with a SlicedString that is less than 13 characters long. Is that what you had in mind? (I\u0027ve modified the comment to say that this could indeed be an issue)",
+      "parentUuid": "7fefcfcc_c256ab60",
       "range": {
         "startLine": 325,
         "startChar": 31,
