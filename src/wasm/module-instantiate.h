@@ -32,7 +32,10 @@ class MaybeHandle;
 
 namespace wasm {
 class ConstantExpression;
+class Decoder;
 class ErrorThrower;
+using ValueOrError = std::variant<WasmValue, MessageTemplate>;
+struct WasmElemSegment;
 
 MaybeHandle<WasmInstanceObject> InstantiateToInstanceObject(
     Isolate* isolate, ErrorThrower* thrower,
@@ -46,6 +49,11 @@ base::Optional<MessageTemplate> LoadElemSegment(
     Isolate* isolate, Handle<WasmInstanceObject> instance, uint32_t table_index,
     uint32_t segment_index, uint32_t dst, uint32_t src,
     uint32_t count) V8_WARN_UNUSED_RESULT;
+
+ValueOrError ConsumeElementSegmentEntry(Zone* zone, Isolate* isolate,
+                                        Handle<WasmInstanceObject> instance,
+                                        const WasmElemSegment& segment,
+                                        Decoder& decoder);
 
 }  // namespace wasm
 }  // namespace internal
