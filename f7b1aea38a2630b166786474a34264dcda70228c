@@ -221,6 +221,30 @@
       },
       "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1082d0f0_baee64e5",
+        "filename": "include/v8-local-handle.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-02-20T11:21:39Z",
+      "side": 1,
+      "message": "We can address this as a follow up. I don\u0027t think this needs to be on the API, as the macro itself is only used internally from a .cc file which is allowed to include all kinds of internals.",
+      "parentUuid": "c3958e3a_2bb2d3c4",
+      "range": {
+        "startLine": 104,
+        "startChar": 28,
+        "endLine": 104,
+        "endChar": 57
+      },
+      "revId": "f7b1aea38a2630b166786474a34264dcda70228c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
