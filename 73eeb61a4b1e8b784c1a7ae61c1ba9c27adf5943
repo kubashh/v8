@@ -33,6 +33,23 @@
       "message": "This would change `global_allocation_limit_` also when `--memory-balancer` is off. Let\u0027s not update this field here.",
       "revId": "73eeb61a4b1e8b784c1a7ae61c1ba9c27adf5943",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38caf54b_389ae79b",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-20T10:18:13Z",
+      "side": 1,
+      "message": "Let\u0027s rename declarations in here to: 1) types 2) constants 3) methods 4) fields. See here: https://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "revId": "73eeb61a4b1e8b784c1a7ae61c1ba9c27adf5943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
