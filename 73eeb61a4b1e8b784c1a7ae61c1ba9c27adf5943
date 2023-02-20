@@ -16,6 +16,23 @@
       "message": "I had addressed all the review comments.",
       "revId": "73eeb61a4b1e8b784c1a7ae61c1ba9c27adf5943",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2497d198_a8088148",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 2505,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-20T10:13:20Z",
+      "side": 1,
+      "message": "This would change `global_allocation_limit_` also when `--memory-balancer` is off. Let\u0027s not update this field here.",
+      "revId": "73eeb61a4b1e8b784c1a7ae61c1ba9c27adf5943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
