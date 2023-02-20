@@ -962,6 +962,11 @@ Node* GraphAssembler::IntPtrAdd(Node* a, Node* b) {
       machine()->Is64() ? machine()->Int64Add() : machine()->Int32Add(), a, b));
 }
 
+Node* GraphAssembler::IntPtrSub(Node* a, Node* b) {
+  return AddNode(graph()->NewNode(
+      machine()->Is64() ? machine()->Int64Sub() : machine()->Int32Sub(), a, b));
+}
+
 TNode<Number> JSGraphAssembler::PlainPrimitiveToNumber(TNode<Object> value) {
   return AddNode<Number>(graph()->NewNode(
       PlainPrimitiveToNumberOperator(), PlainPrimitiveToNumberBuiltinConstant(),
