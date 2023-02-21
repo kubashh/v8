@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbe71fdc_c0b70e39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-21T11:14:25Z",
+      "side": 1,
+      "message": "LGTM with one comment.",
+      "revId": "1bcf90cdfcd8ef63f2fca7bfd708f7ba1053becc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "841ebb74_6a90de22",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-21T11:14:25Z",
+      "side": 1,
+      "message": "nit: `else` after `return` is not needed, and in this case it adds indentation to a big block of code.",
+      "revId": "1bcf90cdfcd8ef63f2fca7bfd708f7ba1053becc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
