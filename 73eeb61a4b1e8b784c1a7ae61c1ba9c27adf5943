@@ -86,6 +86,24 @@
       "parentUuid": "38caf54b_389ae79b",
       "revId": "73eeb61a4b1e8b784c1a7ae61c1ba9c27adf5943",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c0d102a_56c84d65",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-21T07:43:06Z",
+      "side": 1,
+      "message": "Sorry, I should have been more clear here. The overall order is supposed to be A) public B) protected C) private as described in the link above. Declarations within those sections should then be ordered as described above.",
+      "parentUuid": "38caf54b_389ae79b",
+      "revId": "73eeb61a4b1e8b784c1a7ae61c1ba9c27adf5943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
