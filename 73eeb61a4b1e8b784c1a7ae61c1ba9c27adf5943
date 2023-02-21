@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5d1a5df_48cd3ed1",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 2505,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-21T03:34:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2497d198_a8088148",
+      "revId": "73eeb61a4b1e8b784c1a7ae61c1ba9c27adf5943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38caf54b_389ae79b",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-02-20T10:18:13Z",
       "side": 1,
       "message": "Let\u0027s rename declarations in here to: 1) types 2) constants 3) methods 4) fields. See here: https://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "revId": "73eeb61a4b1e8b784c1a7ae61c1ba9c27adf5943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d1af648_a54d7579",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1555077
+      },
+      "writtenOn": "2023-02-21T03:34:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38caf54b_389ae79b",
       "revId": "73eeb61a4b1e8b784c1a7ae61c1ba9c27adf5943",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
