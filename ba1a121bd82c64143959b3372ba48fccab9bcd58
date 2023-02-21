@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbd66b8d_b5150b02",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 2871,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-21T11:19:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8c437d0_0a325753",
+      "range": {
+        "startLine": 2871,
+        "startChar": 9,
+        "endLine": 2871,
+        "endChar": 17
+      },
+      "revId": "ba1a121bd82c64143959b3372ba48fccab9bcd58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efbb28e8_5fb82399",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-02-21T09:03:29Z",
       "side": 1,
       "message": "Is it possible to put this code before the `if (input_interpretation \u003d\u003d kSigned)` in order to share it with the unsigned case? (and also share `Label\u003cTagged\u003e done(this)` \u0026\u0026 `BIND(done, result); return result;`)",
+      "range": {
+        "startLine": 263,
+        "startChar": 10,
+        "endLine": 266,
+        "endChar": 11
+      },
+      "revId": "ba1a121bd82c64143959b3372ba48fccab9bcd58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df5974ed_a922e142",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-21T11:19:16Z",
+      "side": 1,
+      "message": "That\u0027s much better indeed.",
+      "parentUuid": "efbb28e8_5fb82399",
       "range": {
         "startLine": 263,
         "startChar": 10,
@@ -110,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "590d74e3_974b1855",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-21T11:19:16Z",
+      "side": 1,
+      "message": "I keep an eye out for this pattern. For just the two cases we have right now I\u0027d p refert to not add an additional helper.",
+      "parentUuid": "9ac41ccf_3b465abf",
+      "range": {
+        "startLine": 397,
+        "startChar": 10,
+        "endLine": 401,
+        "endChar": 11
+      },
+      "revId": "ba1a121bd82c64143959b3372ba48fccab9bcd58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af4cbbf8_7c135d62",
@@ -123,6 +195,30 @@
       "writtenOn": "2023-02-21T09:03:29Z",
       "side": 1,
       "message": "You should maybe add a `DCHECK_EQ(kind, TagKind::kSmiTag)` or an `if (kind !\u003d TagKind::kSmiTag) UNIMPLEMENTED();`.",
+      "range": {
+        "startLine": 28,
+        "startChar": 35,
+        "endLine": 28,
+        "endChar": 47
+      },
+      "revId": "ba1a121bd82c64143959b3372ba48fccab9bcd58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4357f67_85d469e5",
+        "filename": "src/compiler/turboshaft/tag-untag-lowering-reducer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-21T11:19:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af4cbbf8_7c135d62",
       "range": {
         "startLine": 28,
         "startChar": 35,
