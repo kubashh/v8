@@ -33,6 +33,23 @@
       "message": "I tested with a local chromium build and the UI looks like this, by the way:\n\nhttps://user-images.githubusercontent.com/4299420/220149932-b33aa969-8408-4837-8ea2-7667adfabcc8.png\n\nNot sure if any UI tests would be needed after this? This is reusing the UI that\u0027s already implemented for other internal lists like [[Scopes]] and [[Entries]].",
       "revId": "ebb5e5198d533ae2c7394b00413c29e45f114647",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18129e15_4a869922",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2023-02-21T06:04:32Z",
+      "side": 1,
+      "message": "Could you include Before: / After: screenshots of DevTools in the CL description please (just put them on imgur)?\n\nThe inspector bits LGTM, but I\u0027d also like to hear Simon\u0027s opinion.",
+      "revId": "ebb5e5198d533ae2c7394b00413c29e45f114647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
