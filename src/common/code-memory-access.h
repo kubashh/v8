@@ -11,9 +11,6 @@
 namespace v8 {
 namespace internal {
 
-class CodePageCollectionMemoryModificationScope;
-class CodePageMemoryModificationScope;
-class CodeSpaceMemoryModificationScope;
 class RwxMemoryWriteScopeForTesting;
 namespace wasm {
 class CodeSpaceWriteScope;
@@ -79,9 +76,6 @@ class V8_NODISCARD RwxMemoryWriteScope {
 #endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
 
  private:
-  friend class CodePageCollectionMemoryModificationScope;
-  friend class CodePageMemoryModificationScope;
-  friend class CodeSpaceMemoryModificationScope;
   friend class RwxMemoryWriteScopeForTesting;
   friend class wasm::CodeSpaceWriteScope;
 

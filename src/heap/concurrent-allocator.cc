@@ -91,10 +91,8 @@ ConcurrentAllocator::ConcurrentAllocator(LocalHeap* local_heap,
 void ConcurrentAllocator::FreeLinearAllocationArea() {
   // The code page of the linear allocation area needs to be unprotected
   // because we are going to write a filler into that memory area below.
-  base::Optional<CodePageMemoryModificationScope> optional_scope;
-  if (IsLabValid() && space_->identity() == CODE_SPACE) {
-    optional_scope.emplace(MemoryChunk::FromAddress(lab_.top()));
-  }
+  RwxMemoryWriteScope rwx_write_scope(
+      "ConcurrentAllocator::FreeLinearAllocationArea");
   if (lab_.top() != lab_.limit() && IsBlackAllocationEnabled()) {
     Page::FromAddress(lab_.top())
         ->DestroyBlackAreaBackground(lab_.top(), lab_.limit());
@@ -107,10 +105,9 @@ void ConcurrentAllocator::FreeLinearAllocationArea() {
 void ConcurrentAllocator::MakeLinearAllocationAreaIterable() {
   // The code page of the linear allocation area needs to be unprotected
   // because we are going to write a filler into that memory area below.
-  base::Optional<CodePageMemoryModificationScope> optional_scope;
-  if (IsLabValid() && space_->identity() == CODE_SPACE) {
-    optional_scope.emplace(MemoryChunk::FromAddress(lab_.top()));
-  }
+  // TODO: remove indirection call
+  RwxMemoryWriteScope rwx_write_scope(
+      "ConcurrentAllocator::MakeLinearAllocationAreaIterable");
   MakeLabIterable();
 }
 
@@ -119,7 +116,7 @@ void ConcurrentAllocator::MarkLinearAllocationAreaBlack() {
   Address limit = lab_.limit();
 
   if (top != kNullAddress && top != limit) {
-    base::Optional<CodePageHeaderModificationScope> optional_rwx_write_scope;
+    base::Optional<RwxMemoryWriteScope> optional_rwx_write_scope;
     if (space_->identity() == CODE_SPACE) {
       optional_rwx_write_scope.emplace(
           "Marking InstructionStream objects requires write access to the "
@@ -134,7 +131,7 @@ void ConcurrentAllocator::UnmarkLinearAllocationArea() {
   Address limit = lab_.limit();
 
   if (top != kNullAddress && top != limit) {
-    base::Optional<CodePageHeaderModificationScope> optional_rwx_write_scope;
+    base::Optional<RwxMemoryWriteScope> optional_rwx_write_scope;
     if (space_->identity() == CODE_SPACE) {
       optional_rwx_write_scope.emplace(
           "Marking InstructionStream objects requires write access to the "

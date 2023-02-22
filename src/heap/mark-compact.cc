@@ -687,9 +687,8 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
   std::vector<LiveBytesPagePair> pages;
   pages.reserve(number_of_pages);
 
-  CodePageHeaderModificationScope rwx_write_scope(
-      "Modification of Code page header flags requires write "
-      "access");
+  RwxMemoryWriteScope rwx_write_scope(
+      "Modification of Code page header flags requires write access");
 
   DCHECK(!sweeper()->sweeping_in_progress());
   Page* owner_of_linear_allocation_area =
@@ -817,9 +816,8 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
 
 void MarkCompactCollector::AbortCompaction() {
   if (compacting_) {
-    CodePageHeaderModificationScope rwx_write_scope(
-        "Changing Code page flags and remembered sets require "
-        "write access "
+    RwxMemoryWriteScope rwx_write_scope(
+        "Changing Code page flags and remembered sets require write access "
         "to the page header");
     RememberedSet<OLD_TO_OLD>::ClearAll(heap());
     RememberedSet<OLD_TO_CODE>::ClearAll(heap());
@@ -2491,9 +2489,9 @@ std::pair<size_t, size_t> MarkCompactCollector::ProcessMarkingWorklist(
   bool is_per_context_mode = local_marking_worklists()->IsPerContextMode();
   Isolate* isolate = heap()->isolate();
   PtrComprCageBase cage_base(isolate);
-  CodePageHeaderModificationScope rwx_write_scope(
-      "Marking of InstructionStream objects require write access to "
-      "Code page headers");
+  RwxMemoryWriteScope rwx_write_scope(
+      "Marking of InstructionStream objects require write access to Code page "
+      "headers");
   if (parallel_marking_)
     heap_->concurrent_marking()->RescheduleJobIfNeeded(
         GarbageCollector::MARK_COMPACTOR, TaskPriority::kUserBlocking);
@@ -4911,7 +4909,7 @@ class RememberedSetUpdatingItem : public UpdatingItem {
   void Process() override {
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
                  "RememberedSetUpdatingItem::Process");
-    CodePageMemoryModificationScope memory_modification_scope(chunk_);
+    RwxMemoryWriteScope rwx_write_scope("RememberedSetUpdatingItem::Process");
     UpdateUntypedPointers();
     UpdateTypedPointers();
   }
@@ -5361,9 +5359,10 @@ void MarkCompactCollector::UpdatePointersInClientHeap(Isolate* client) {
   PtrComprCageBase cage_base(client);
   MemoryChunkIterator chunk_iterator(client->heap());
 
+  RwxMemoryWriteScope rwx_write_scope(
+      "MarkCompactCollector::UpdatePointersInClientHeap");
   while (chunk_iterator.HasNext()) {
     MemoryChunk* chunk = chunk_iterator.Next();
-    CodePageMemoryModificationScope unprotect_code_page(chunk);
 
     DCHECK_NULL(chunk->invalidated_slots<OLD_TO_SHARED>());
     RememberedSet<OLD_TO_SHARED>::Iterate(

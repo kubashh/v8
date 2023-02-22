@@ -683,7 +683,7 @@ void Scavenger::AddPageToSweeperIfNecessary(MemoryChunk* page) {
 }
 
 void Scavenger::ScavengePage(MemoryChunk* page) {
-  CodePageMemoryModificationScope memory_modification_scope(page);
+  RwxMemoryWriteScope rwx_write_scope("Scavenger::ScavengePage");
   const bool record_old_to_shared_slots = heap_->isolate()->has_shared_heap();
 
   if (page->slot_set<OLD_TO_NEW, AccessMode::ATOMIC>() != nullptr) {

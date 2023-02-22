@@ -209,7 +209,7 @@ class IncrementalMarking::IncrementalMarkingRootMarkingVisitor final
 
 void IncrementalMarking::MarkRoots() {
   IncrementalMarkingRootMarkingVisitor visitor(heap_);
-  CodePageHeaderModificationScope rwx_write_scope(
+  RwxMemoryWriteScope rwx_write_scope(
       "Marking of builtins table entries require write access to Code page "
       "header");
   if (IsMajorMarking()) {
@@ -367,7 +367,7 @@ void IncrementalMarking::StartBlackAllocation() {
   black_allocation_ = true;
   heap()->old_space()->MarkLinearAllocationAreaBlack();
   {
-    CodePageHeaderModificationScope rwx_write_scope(
+    RwxMemoryWriteScope rwx_write_scope(
         "Marking Code objects requires write access to the Code page header");
     heap()->code_space()->MarkLinearAllocationAreaBlack();
   }
@@ -390,7 +390,7 @@ void IncrementalMarking::PauseBlackAllocation() {
   DCHECK(IsMarking());
   heap()->old_space()->UnmarkLinearAllocationArea();
   {
-    CodePageHeaderModificationScope rwx_write_scope(
+    RwxMemoryWriteScope rwx_write_scope(
         "Marking Code objects requires write access to the Code page header");
     heap()->code_space()->UnmarkLinearAllocationArea();
   }

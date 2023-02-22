@@ -467,8 +467,6 @@ void MemoryAllocator::UnregisterBasicMemoryChunk(BasicMemoryChunk* chunk,
 #ifdef DEBUG
     UnregisterExecutableMemoryChunk(static_cast<MemoryChunk*>(chunk));
 #endif  // DEBUG
-    chunk->heap()->UnregisterUnprotectedMemoryChunk(
-        static_cast<MemoryChunk*>(chunk));
   }
   chunk->SetFlag(MemoryChunk::UNREGISTERED);
 }
@@ -511,7 +509,7 @@ void MemoryAllocator::PreFreeMemory(MemoryChunk* chunk) {
 }
 
 void MemoryAllocator::PerformFreeMemory(MemoryChunk* chunk) {
-  base::Optional<CodePageHeaderModificationScope> rwx_write_scope;
+  base::Optional<RwxMemoryWriteScope> rwx_write_scope;
   if (chunk->executable() == EXECUTABLE) {
     rwx_write_scope.emplace(
         "We are going to modify the chunk's header, so ensure we have write "

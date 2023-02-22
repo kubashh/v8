@@ -131,10 +131,6 @@ V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult HeapAllocator::AllocateRaw(
 
   if (allocation.To(&object)) {
     if (AllocationType::kCode == type && !V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
-      // Unprotect the memory chunk of the object if it was not unprotected
-      // already.
-      heap_->UnprotectAndRegisterMemoryChunk(
-          object, UnprotectMemoryOrigin::kMainThread);
       heap_->ZapCodeObject(object.address(), size_in_bytes);
       if (!large_object) {
         MemoryChunk::FromHeapObject(object)

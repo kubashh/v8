@@ -121,7 +121,6 @@ class PagedSpace;
 class PagedNewSpace;
 class ReadOnlyHeap;
 class RootVisitor;
-class RwxMemoryWriteScope;
 class SafepointScope;
 class ScavengeJob;
 class Scavenger;
@@ -610,43 +609,6 @@ class Heap {
 
   // Dump heap statistics in JSON format.
   void DumpJSONHeapStatistics(std::stringstream& stream);
-
-  bool write_protect_code_memory() const {
-    if (V8_HAS_PTHREAD_JIT_WRITE_PROTECT) {
-      // On MacOS on ARM64 ("Apple M1"/Apple Silicon) code modification
-      // protection must be used. It can be achieved by one of the following
-      // approaches:
-      // 1) switching memory protection between RW-RX as on other architectures
-      //    => return true,
-      // 2) fast W^X machinery (see V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) which
-      //    doesn not require memory protection changes => return false.
-      return !V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT;
-    }
-    return write_protect_code_memory_;
-  }
-
-  uintptr_t code_space_memory_modification_scope_depth() {
-    return code_space_memory_modification_scope_depth_;
-  }
-
-  void increment_code_space_memory_modification_scope_depth() {
-    code_space_memory_modification_scope_depth_++;
-  }
-
-  void decrement_code_space_memory_modification_scope_depth() {
-    code_space_memory_modification_scope_depth_--;
-  }
-
-  void UnprotectAndRegisterMemoryChunk(MemoryChunk* chunk,
-                                       UnprotectMemoryOrigin origin);
-  V8_EXPORT_PRIVATE void UnprotectAndRegisterMemoryChunk(
-      HeapObject object, UnprotectMemoryOrigin origin);
-  void UnregisterUnprotectedMemoryChunk(MemoryChunk* chunk);
-  V8_EXPORT_PRIVATE void ProtectUnprotectedMemoryChunks();
-
-  inline void IncrementCodePageCollectionMemoryModificationScopeDepth();
-  inline bool DecrementCodePageCollectionMemoryModificationScopeDepth();
-  inline uintptr_t code_page_collection_memory_modification_scope_depth();
 
   inline HeapState gc_state() const {
     return gc_state_.load(std::memory_order_relaxed);
@@ -2179,13 +2141,6 @@ class Heap {
 
   LocalHeap* main_thread_local_heap_ = nullptr;
 
-  // Determines whether code space is write-protected. This is essentially a
-  // race-free copy of the {v8_flags.write_protect_code_memory} flag.
-  bool write_protect_code_memory_ = false;
-
-  // Holds the number of open CodeSpaceMemoryModificationScopes.
-  uintptr_t code_space_memory_modification_scope_depth_ = 0;
-
   std::atomic<HeapState> gc_state_{NOT_IN_GC};
 
   // Returns the amount of external memory registered since last global gc.
@@ -2537,88 +2492,6 @@ class V8_NODISCARD AlwaysAllocateScopeForTesting {
 
  private:
   AlwaysAllocateScope scope_;
-};
-
-// The CodeSpaceMemoryModificationScope can only be used by the main thread.
-class V8_NODISCARD CodeSpaceMemoryModificationScope {
- public:
-  explicit inline CodeSpaceMemoryModificationScope(Heap* heap);
-  inline ~CodeSpaceMemoryModificationScope();
-
- private:
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT || V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
-  V8_NO_UNIQUE_ADDRESS RwxMemoryWriteScope rwx_write_scope_;
-#endif
-  Heap* heap_;
-};
-
-// The CodePageCollectionMemoryModificationScope can be used by any thread. It
-// will not be enabled if a CodeSpaceMemoryModificationScope is already active.
-class V8_NODISCARD CodePageCollectionMemoryModificationScope {
- public:
-  explicit inline CodePageCollectionMemoryModificationScope(Heap* heap);
-  inline ~CodePageCollectionMemoryModificationScope();
-
- private:
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT || V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
-  V8_NO_UNIQUE_ADDRESS RwxMemoryWriteScope rwx_write_scope_;
-#endif
-  Heap* heap_;
-};
-
-// Same as the CodePageCollectionMemoryModificationScope but without inlining
-// the code. This is a workaround for component build issue (crbug/1316800),
-// when a thread_local value can't be properly exported.
-class V8_EXPORT_PRIVATE V8_NODISCARD
-    CodePageCollectionMemoryModificationScopeForTesting
-    : public CodePageCollectionMemoryModificationScope {
- public:
-  V8_NOINLINE explicit CodePageCollectionMemoryModificationScopeForTesting(
-      Heap* heap);
-  V8_NOINLINE ~CodePageCollectionMemoryModificationScopeForTesting();
-};
-
-// The CodePageHeaderModificationScope enables write access to Code
-// space page headers. On most of the configurations it's a no-op because
-// Code space page headers are configured as writable and
-// permissions are never changed. However, on MacOS on ARM64 ("Apple M1"/Apple
-// Silicon) the situation is different. In order to be able to use fast W^X
-// permissions switching machinery (APRR/MAP_JIT) it's necessary to configure
-// executable memory as readable writable executable (RWX). Also, on MacOS on
-// ARM64 reconfiguration of RWX page permissions to anything else is prohibited.
-// So, in order to be able to allocate large code pages over freed regular
-// code pages and vice versa we have to allocate Code page headers
-// as RWX too and switch them to writable mode when it's necessary to modify the
-// code page header. The scope can be used from any thread and affects only
-// current thread, see RwxMemoryWriteScope for details about semantics of the
-// scope.
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
-using CodePageHeaderModificationScope = RwxMemoryWriteScope;
-#else
-// When write protection of code page headers is not required the scope is
-// a no-op.
-using CodePageHeaderModificationScope = NopRwxMemoryWriteScope;
-#endif  // V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT
-
-// The CodePageMemoryModificationScope does not check if transitions to
-// writeable and back to executable are actually allowed, i.e. the MemoryChunk
-// was registered to be executable. It can be used by concurrent threads.
-class V8_NODISCARD CodePageMemoryModificationScope {
- public:
-  explicit inline CodePageMemoryModificationScope(BasicMemoryChunk* chunk);
-  explicit inline CodePageMemoryModificationScope(InstructionStream object);
-  inline ~CodePageMemoryModificationScope();
-
- private:
-#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT || V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
-  V8_NO_UNIQUE_ADDRESS RwxMemoryWriteScope rwx_write_scope_;
-#endif
-  BasicMemoryChunk* chunk_;
-  bool scope_active_;
-
-  // Disallow any GCs inside this scope, as a relocation of the underlying
-  // object would change the {MemoryChunk} that this scope targets.
-  DISALLOW_GARBAGE_COLLECTION(no_heap_allocation_)
 };
 
 class V8_NODISCARD IgnoreLocalGCRequests {
