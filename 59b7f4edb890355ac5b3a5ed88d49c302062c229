@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d6b40dd_c4c1485e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-22T10:18:16Z",
+      "side": 1,
+      "message": "nit: The link does not work. Maybe replace by `https://crrev.com/c/4269410`?",
+      "revId": "59b7f4edb890355ac5b3a5ed88d49c302062c229",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0192c6ac_0dc6e875",
@@ -14,6 +31,29 @@
       "writtenOn": "2023-02-22T08:25:12Z",
       "side": 1,
       "message": "Clemens, PTAL.",
+      "revId": "59b7f4edb890355ac5b3a5ed88d49c302062c229",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81363bf4_89e9b48c",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-22T10:18:16Z",
+      "side": 1,
+      "message": "The message template is in fact a format string, even though in this case without any placeholders. So wrapping it in another \"%s\" is unnecessary.",
+      "range": {
+        "startLine": 2158,
+        "startChar": 0,
+        "endLine": 2160,
+        "endChar": 78
+      },
       "revId": "59b7f4edb890355ac5b3a5ed88d49c302062c229",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
