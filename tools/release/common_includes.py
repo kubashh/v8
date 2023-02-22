@@ -113,9 +113,9 @@ def Command(cmd, args="", prefix="", pipe=True, cwd=None):
     sys.stderr.flush()
 
 
-def SanitizeVersionTag(tag):
-  version_without_prefix = re.compile(r"^\d+\.\d+\.\d+(?:\.\d+)?$")
-  version_with_prefix = re.compile(r"^tags\/\d+\.\d+\.\d+(?:\.\d+)?$")
+def SanitizeVersionTag(tag, suffix=''):
+  version_without_prefix = re.compile(f"^\d+\.\d+\.\d+(?:\.\d+){suffix}?$")
+  version_with_prefix = re.compile(f"^tags\/\d+\.\d+\.\d+(?:\.\d+){suffix}?$")
 
   if version_without_prefix.match(tag):
     return tag
@@ -532,9 +532,14 @@ class Step(GitRecipesMixin):
     except GitFailedException:
       self.WaitForResolvingConflicts(patch_file)
 
-  def GetVersionTag(self, revision):
-    tag = self.Git("describe --tags %s" % revision).strip()
-    return SanitizeVersionTag(tag)
+  def GetVersionTag(self, revision, suffix=''):
+    tags = self.Git(f"tag --points-at {revision}").strip().split('\n')
+    for tag in tags:
+      sanitized_tag = SanitizeVersionTag(tag, suffix)
+      if sanitized_tag:
+        return sanitized_tag
+
+    return None
 
   def GetRecentReleases(self, max_age):
     # Make sure tags are fetched.
