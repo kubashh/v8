@@ -1,6 +1,7 @@
 # UUID                                  	Group Name
 #
 143448a87011dcdf0c0c3038b06d7c88db797d4a	v8-committers
+2c1d570f44dc7594a694e4987c948b830224ac16	v8-ci-pgo-builder
 3d0a66ed8f9706f4df433a293bac0330232af1d6	chromium-branch-creators
 898b5eed07ea276d2b27ff2c8ce4b0a31c152e14	v8-admins
 c013d7a25b7bd04e66bc5d18ceca0ef7d661bfd0	v8-autoroll
