@@ -51,6 +51,23 @@
       "parentUuid": "5f025a7c_5aae74c6",
       "revId": "8ceae94f19804b21a88c817bc2c1fd1e04d0bcfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05c6b5be_3bd508d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2023-02-22T20:08:12Z",
+      "side": 1,
+      "message": "Quick note on this that this should be ok to land. If we want to make sure that fuzzing for all instructions is enabled in the same CL, Dot/DotAdd instructions should also be added after this lands (https://chromium-review.googlesource.com/c/v8/v8/+/4270950).",
+      "revId": "8ceae94f19804b21a88c817bc2c1fd1e04d0bcfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
