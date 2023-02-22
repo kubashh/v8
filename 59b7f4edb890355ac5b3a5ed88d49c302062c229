@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b342fc22_42cd66b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-22T10:35:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d6b40dd_c4c1485e",
+      "revId": "59b7f4edb890355ac5b3a5ed88d49c302062c229",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0192c6ac_0dc6e875",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -48,6 +66,30 @@
       "writtenOn": "2023-02-22T10:18:16Z",
       "side": 1,
       "message": "The message template is in fact a format string, even though in this case without any placeholders. So wrapping it in another \"%s\" is unnecessary.",
+      "range": {
+        "startLine": 2158,
+        "startChar": 0,
+        "endLine": 2160,
+        "endChar": 78
+      },
+      "revId": "59b7f4edb890355ac5b3a5ed88d49c302062c229",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef6ad708_d11606f7",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-22T10:35:34Z",
+      "side": 1,
+      "message": "Leaving this as-is to avoid the error \"format string is not a string literal (potentially insecure)\".",
+      "parentUuid": "81363bf4_89e9b48c",
       "range": {
         "startLine": 2158,
         "startChar": 0,
