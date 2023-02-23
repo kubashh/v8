@@ -16,6 +16,46 @@
       "message": "cbruni@ PTAL. No rush to do this week if you\u0027re OOO on a Friday. Thanks.",
       "revId": "e8f9e24b52f6831f75822760ef7f22d1ca42bd90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf7c328c_0b964a45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-02-23T22:44:06Z",
+      "side": 1,
+      "message": "LGTM with nit",
+      "revId": "e8f9e24b52f6831f75822760ef7f22d1ca42bd90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3bb5594_a3789edb",
+        "filename": "src/libsampler/sampler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-02-23T22:44:06Z",
+      "side": 1,
+      "message": "nit: while we\u0027re at it, maybe let\u0027s use a temp variable for this.",
+      "range": {
+        "startLine": 272,
+        "startChar": 8,
+        "endLine": 272,
+        "endChar": 27
+      },
+      "revId": "e8f9e24b52f6831f75822760ef7f22d1ca42bd90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
