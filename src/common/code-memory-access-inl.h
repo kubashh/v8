@@ -15,16 +15,22 @@ namespace v8 {
 namespace internal {
 
 RwxMemoryWriteScope::RwxMemoryWriteScope(const char* comment) {
+#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT || V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
   DCHECK(is_key_permissions_initialized_for_current_thread());
   if (!v8_flags.jitless) {
     SetWritable();
   }
+#endif
+  code_space_write_nesting_level_++;
 }
 
 RwxMemoryWriteScope::~RwxMemoryWriteScope() {
+  code_space_write_nesting_level_--;
+#if V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT || V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
   if (!v8_flags.jitless) {
     SetExecutable();
   }
+#endif
 }
 
 #if V8_HAS_PTHREAD_JIT_WRITE_PROTECT
@@ -42,12 +48,10 @@ void RwxMemoryWriteScope::SetWritable() {
   if (code_space_write_nesting_level_ == 0) {
     pthread_jit_write_protect_np(0);
   }
-  code_space_write_nesting_level_++;
 }
 
 // static
 void RwxMemoryWriteScope::SetExecutable() {
-  code_space_write_nesting_level_--;
   if (code_space_write_nesting_level_ == 0) {
     pthread_jit_write_protect_np(1);
   }
@@ -73,14 +77,12 @@ void RwxMemoryWriteScope::SetWritable() {
     base::MemoryProtectionKey::SetPermissionsForKey(
         memory_protection_key_, base::MemoryProtectionKey::kNoRestrictions);
   }
-  code_space_write_nesting_level_++;
 }
 
 // static
 void RwxMemoryWriteScope::SetExecutable() {
   DCHECK(pkey_initialized);
   if (!IsSupported()) return;
-  code_space_write_nesting_level_--;
   if (code_space_write_nesting_level_ == 0) {
     DCHECK_EQ(
         base::MemoryProtectionKey::GetKeyPermission(memory_protection_key_),

@@ -28,7 +28,6 @@
 #include "src/objects/objects-inl.h"
 #include "src/snapshot/embedded/embedded-data-inl.h"
 #include "src/utils/ostreams.h"
-#include "src/wasm/code-space-access.h"
 #include "src/wasm/compilation-environment.h"
 #include "src/wasm/function-compiler.h"
 #include "src/wasm/jump-table-assembler.h"
@@ -853,7 +852,8 @@ void NativeModule::ReserveCodeTableForTesting(uint32_t max_functions) {
       JumpTableAssembler::SizeForNumberOfSlots(max_functions),
       single_code_space_region);
   code_space_data_[0].jump_table = main_jump_table_;
-  CodeSpaceWriteScope code_space_write_scope(this);
+  RwxMemoryWriteScope rwx_write_scope(
+      "Initialize jump table for lazy compilation");
   InitializeJumpTableForLazyCompilation(max_functions);
 }
 
@@ -884,7 +884,7 @@ CompilationEnv NativeModule::CreateCompilationEnv() const {
 }
 
 WasmCode* NativeModule::AddCodeForTesting(Handle<InstructionStream> code) {
-  CodeSpaceWriteScope code_space_write_scope(this);
+  RwxMemoryWriteScope rwx_write_scope("Add code for testing");
   const size_t relocation_size = code->relocation_size();
   base::OwnedVector<byte> reloc_info;
   if (relocation_size > 0) {
@@ -979,7 +979,7 @@ void NativeModule::InitializeJumpTableForLazyCompilation(
     uint32_t num_wasm_functions) {
   if (!num_wasm_functions) return;
   allocation_mutex_.AssertHeld();
-  DCHECK(CodeSpaceWriteScope::IsInScope());
+  DCHECK(RwxMemoryWriteScope::IsInScope());
 
   DCHECK_NULL(lazy_compile_table_);
   lazy_compile_table_ = CreateEmptyJumpTableLocked(
@@ -1010,7 +1010,7 @@ void NativeModule::UseLazyStubLocked(uint32_t func_index) {
             module_->num_imported_functions + module_->num_declared_functions);
   // Avoid opening a new write scope per function. The caller should hold the
   // scope instead.
-  DCHECK(CodeSpaceWriteScope::IsInScope());
+  DCHECK(RwxMemoryWriteScope::IsInScope());
 
   DCHECK_NOT_NULL(lazy_compile_table_);
 
@@ -1117,15 +1117,15 @@ WasmCode* NativeModule::PublishCode(std::unique_ptr<WasmCode> code) {
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
                "wasm.PublishCode");
   base::RecursiveMutexGuard lock(&allocation_mutex_);
-  CodeSpaceWriteScope code_space_write_scope(this);
+  RwxMemoryWriteScope rwx_write_scope("Native Module publish code");
   return PublishCodeLocked(std::move(code));
 }
 
 std::vector<WasmCode*> NativeModule::PublishCode(
     base::Vector<std::unique_ptr<WasmCode>> codes) {
   // Publishing often happens in a loop, so the caller should hold the
-  // {CodeSpaceWriteScope} outside of such a loop.
-  DCHECK(CodeSpaceWriteScope::IsInScope());
+  // {RwxMemoryWriteScope} outside of such a loop.
+  DCHECK(RwxMemoryWriteScope::IsInScope());
   TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("v8.wasm.detailed"),
                "wasm.PublishCode", "number", codes.size());
   std::vector<WasmCode*> published_code;
@@ -1255,7 +1255,7 @@ void NativeModule::ReinstallDebugCode(WasmCode* code) {
   code_table_[slot_idx] = code;
   code->IncRef();
 
-  CodeSpaceWriteScope code_space_write_scope(this);
+  RwxMemoryWriteScope rwx_write_scope("Reinstall debug code");
   PatchJumpTablesLocked(slot_idx, code->instruction_start());
 }
 
@@ -1345,7 +1345,7 @@ WasmCode* NativeModule::CreateEmptyJumpTableInRegionLocked(
   allocation_mutex_.AssertHeld();
   // Only call this if we really need a jump table.
   DCHECK_LT(0, jump_table_size);
-  CodeSpaceWriteScope code_space_write_scope(this);
+  RwxMemoryWriteScope rwx_write_scope("Create empty jump table");
   base::Vector<uint8_t> code_space =
       code_allocator_.AllocateForCodeInRegion(this, jump_table_size, region);
   DCHECK(!code_space.empty());
@@ -1425,7 +1425,7 @@ void NativeModule::AddCodeSpaceLocked(base::AddressRegion region) {
   DCHECK_GE(region.size(),
             2 * OverheadPerCodeSpace(module()->num_declared_functions));
 
-  CodeSpaceWriteScope code_space_write_scope(this);
+  RwxMemoryWriteScope rwx_write_scope("Add code space");
 #if defined(V8_OS_WIN64)
   // On some platforms, specifically Win64, we need to reserve some pages at
   // the beginning of an executable space.
@@ -1782,7 +1782,7 @@ void WasmCodeManager::Commit(base::AddressRegion region) {
 
   bool success = false;
   if (MemoryProtectionKeysEnabled()) {
-    DCHECK(CodeSpaceWriteScope::IsInScope());
+    DCHECK(RwxMemoryWriteScope::IsInScope());
 #if V8_HAS_PKU_JIT_WRITE_PROTECT
     TRACE_HEAP(
         "Setting rwx permissions and memory protection key for 0x%" PRIxPTR
@@ -2191,7 +2191,7 @@ std::vector<std::unique_ptr<WasmCode>> NativeModule::AddCompiledCode(
   }
   base::Vector<byte> code_space;
   NativeModule::JumpTablesRef jump_tables;
-  CodeSpaceWriteScope code_space_write_scope(this);
+  RwxMemoryWriteScope rwx_write_scope("Add compiled code");
   {
     base::RecursiveMutexGuard guard{&allocation_mutex_};
     code_space = code_allocator_.AllocateForCode(this, total_code_space);
@@ -2258,7 +2258,7 @@ void NativeModule::RemoveCompiledCode(RemoveFilter filter) {
   const uint32_t num_imports = module_->num_imported_functions;
   const uint32_t num_functions = module_->num_declared_functions;
   WasmCodeRefScope ref_scope;
-  CodeSpaceWriteScope write_scope(this);
+  RwxMemoryWriteScope rwx_write_scope("Remoe compiled code");
   base::RecursiveMutexGuard guard(&allocation_mutex_);
   for (uint32_t i = 0; i < num_functions; i++) {
     WasmCode* code = code_table_[i];

@@ -567,9 +567,9 @@ void ConcurrentMarking::RunMajor(JobDelegate* delegate,
     }
     bool is_per_context_mode = local_marking_worklists.IsPerContextMode();
     bool done = false;
-    CodePageHeaderModificationScope rwx_write_scope(
-        "Marking a InstructionStream object requires write access to the "
-        "Code page header");
+    RwxMemoryWriteScope rwx_write_scope(
+        "Marking a InstructionStream object requires write access to the Code "
+        "page header");
     while (!done) {
       size_t current_marked_bytes = 0;
       int objects_processed = 0;
@@ -675,9 +675,9 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
   {
     TimedScope scope(&time_ms);
     bool done = false;
-    CodePageHeaderModificationScope rwx_write_scope(
-        "Marking a InstructionStream object requires write access to the "
-        "Code page header");
+    RwxMemoryWriteScope rwx_write_scope(
+        "Marking a InstructionStream object requires write access to the Code "
+        "page header");
     while (!done) {
       size_t current_marked_bytes = 0;
       int objects_processed = 0;

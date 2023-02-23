@@ -9,10 +9,6 @@
 #include "test/cctest/cctest.h"
 #include "test/common/assembler-tester.h"
 
-#if V8_ENABLE_WEBASSEMBLY
-#include "src/wasm/code-space-access.h"
-#endif  // V8_ENABLE_WEBASSEMBLY
-
 namespace v8 {
 namespace internal {
 namespace test_icache {

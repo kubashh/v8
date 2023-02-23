@@ -231,10 +231,10 @@ void SetupIsolateDelegate::PopulateWithPlaceholders(Isolate* isolate) {
 
 // static
 void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
-  // Replace references from all builtin code objects to placeholders.
   Builtins* builtins = isolate->builtins();
   DisallowGarbageCollection no_gc;
-  CodePageCollectionMemoryModificationScope modification_scope(isolate->heap());
+  RwxMemoryWriteScope rwx_write_scope(
+      "Replace references from all builtin code objects to placeholders");
   static const int kRelocMask =
       RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
       RelocInfo::ModeMask(RelocInfo::FULL_EMBEDDED_OBJECT) |
@@ -244,8 +244,6 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
   for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
        ++builtin) {
     InstructionStream code = FromCode(builtins->code(builtin));
-    isolate->heap()->UnprotectAndRegisterMemoryChunk(
-        code, UnprotectMemoryOrigin::kMainThread);
     bool flush_icache = false;
     for (RelocIterator it(code, kRelocMask); !it.done(); it.next()) {
       RelocInfo* rinfo = it.rinfo();

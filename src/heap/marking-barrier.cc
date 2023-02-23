@@ -187,7 +187,7 @@ void ActivateSpace(NewSpace* space) {
 void ActivateSpaces(Heap* heap) {
   ActivateSpace(heap->old_space());
   {
-    CodePageHeaderModificationScope rwx_write_scope(
+    RwxMemoryWriteScope rwx_write_scope(
         "Modification of InstructionStream page header flags requires write "
         "access");
     ActivateSpace(heap->code_space());
@@ -207,7 +207,7 @@ void ActivateSpaces(Heap* heap) {
   }
 
   {
-    CodePageHeaderModificationScope rwx_write_scope(
+    RwxMemoryWriteScope rwx_write_scope(
         "Modification of InstructionStream page header flags requires write "
         "access");
     for (LargePage* p : *heap->code_lo_space()) {
@@ -370,9 +370,9 @@ void MarkingBarrier::PublishAll(Heap* heap) {
 void MarkingBarrier::PublishIfNeeded() {
   if (is_activated_) {
     current_worklist_->Publish();
-    base::Optional<CodePageHeaderModificationScope> optional_rwx_write_scope;
+    base::Optional<RwxMemoryWriteScope> rwx_write_scope;
     if (!typed_slots_map_.empty()) {
-      optional_rwx_write_scope.emplace(
+      rwx_write_scope.emplace(
           "Merging typed slots may require allocating a new typed slot set.");
     }
     for (auto& it : typed_slots_map_) {

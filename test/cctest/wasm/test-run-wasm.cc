@@ -8,7 +8,6 @@
 
 #include "src/base/overflowing-math.h"
 #include "src/utils/utils.h"
-#include "src/wasm/code-space-access.h"
 #include "src/wasm/wasm-opcodes-inl.h"
 #include "test/cctest/cctest.h"
 #include "test/cctest/wasm/wasm-run-utils.h"
@@ -3907,7 +3906,7 @@ TEST(Liftoff_tier_up) {
   desc.buffer = buffer.get();
   desc.instr_size = static_cast<int>(sub_size);
   {
-    CodeSpaceWriteScope write_scope(native_module);
+    RwxMemoryWriteScope rwx_write_scope("Compile native module");
     std::unique_ptr<WasmCode> new_code = native_module->AddCode(
         add.function_index(), desc, 0, 0, {}, {}, WasmCode::kWasmFunction,
         ExecutionTier::kTurbofan, kNotForDebugging);

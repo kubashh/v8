@@ -16,12 +16,10 @@
 #include "src/compiler/wasm-compiler.h"
 #include "src/debug/debug.h"
 #include "src/handles/global-handles-inl.h"
-#include "src/heap/heap-inl.h"  // For CodePageCollectionMemoryModificationScope.
 #include "src/logging/counters-scopes.h"
 #include "src/logging/metrics.h"
 #include "src/tracing/trace-event.h"
 #include "src/wasm/assembler-buffer-cache.h"
-#include "src/wasm/code-space-access.h"
 #include "src/wasm/module-decoder.h"
 #include "src/wasm/pgo.h"
 #include "src/wasm/streaming-decoder.h"
@@ -1103,7 +1101,7 @@ bool CompileLazy(Isolate* isolate, WasmInstanceObject instance,
   NativeModule* native_module = module_object.native_module();
   Counters* counters = isolate->counters();
 
-  // Put the timer scope around everything, including the {CodeSpaceWriteScope}
+  // Put the timer scope around everything, including the {RwxMemoryWriteScope}
   // and its destruction, to measure complete overhead (apart from the runtime
   // function itself, which has constant overhead).
   base::Optional<CompileLazyTimingScope> lazy_compile_time_scope;
@@ -1146,7 +1144,7 @@ bool CompileLazy(Isolate* isolate, WasmInstanceObject instance,
   WasmCodeRefScope code_ref_scope;
   WasmCode* code;
   {
-    CodeSpaceWriteScope code_space_write_scope(native_module);
+    RwxMemoryWriteScope rwx_write_scope("Compile lazy native module");
     code = native_module->PublishCode(
         native_module->AddCompiledCode(std::move(result)));
   }
@@ -1542,9 +1540,9 @@ CompilationExecutionResult ExecuteCompilationUnits(
   // that bit of overhead over the memory consumption increase by the cache.
   base::Optional<AssemblerBufferCache> optional_assembler_buffer_cache;
   AssemblerBufferCache* assembler_buffer_cache = nullptr;
-  // Also, open a CodeSpaceWriteScope now to have (thread-local) write access to
+  // Also, open a RwxMemoryWriteScope now to have (thread-local) write access to
   // the assembler buffers.
-  base::Optional<CodeSpaceWriteScope> write_scope_for_assembler_buffers;
+  base::Optional<RwxMemoryWriteScope> write_scope_for_assembler_buffers;
   if (WasmCodeManager::MemoryProtectionKeysEnabled()) {
     optional_assembler_buffer_cache.emplace();
     assembler_buffer_cache = &*optional_assembler_buffer_cache;
@@ -3207,9 +3205,10 @@ void CompilationStateImpl::InitializeCompilationProgressAfterDeserialization(
   }
 
   auto* module = native_module_->module();
-  base::Optional<CodeSpaceWriteScope> lazy_code_space_write_scope;
+  base::Optional<RwxMemoryWriteScope> lazy_code_space_write_scope;
   if (IsLazyModule(module) || !lazy_functions.empty()) {
-    lazy_code_space_write_scope.emplace(native_module_);
+    lazy_code_space_write_scope.emplace(
+        "Initialize compilation progress after deserialization");
   }
   {
     base::MutexGuard guard(&callbacks_mutex_);
@@ -3317,10 +3316,10 @@ void CompilationStateImpl::CommitTopTierCompilationUnit(
 void CompilationStateImpl::AddTopTierPriorityCompilationUnit(
     WasmCompilationUnit unit, size_t priority) {
   compilation_unit_queues_.AddTopTierPriorityUnit(unit, priority);
-  // We should not have a {CodeSpaceWriteScope} open at this point, as
+  // We should not have a {RwxMemoryWriteScope} open at this point, as
   // {NotifyConcurrencyIncrease} can spawn new threads which could inherit PKU
   // permissions (which would be a security issue).
-  DCHECK(!CodeSpaceWriteScope::IsInScope());
+  DCHECK(!RwxMemoryWriteScope::IsInScope());
   compile_job_->NotifyConcurrencyIncrease();
 }
 
@@ -3352,7 +3351,7 @@ void CompilationStateImpl::FinalizeJSToWasmWrappers(Isolate* isolate,
 
   isolate->heap()->EnsureWasmCanonicalRttsSize(module->MaxCanonicalTypeIndex() +
                                                1);
-  CodePageCollectionMemoryModificationScope modification_scope(isolate->heap());
+  RwxMemoryWriteScope rwx_write_scope("FinalizeJSToWasmWrappers");
   for (auto& unit : js_to_wasm_wrapper_units_) {
     DCHECK_EQ(isolate, unit->isolate());
     // Note: The code is either the compiled signature-specific wrapper or the
@@ -3584,7 +3583,8 @@ void CompilationStateImpl::SchedulePublishCompilationResults(
     }
     publisher_running_ = true;
   }
-  CodeSpaceWriteScope code_space_write_scope(native_module_);
+  RwxMemoryWriteScope code_space_write_scope(
+      "Schedule publish compliation results");
   while (true) {
     PublishCompilationResults(std::move(unpublished_code));
     unpublished_code.clear();
@@ -3818,7 +3818,7 @@ void CompileJsToWasmWrappers(Isolate* isolate, const WasmModule* module) {
   // optimization we create a code memory modification scope that avoids
   // changing the page permissions back-and-forth between RWX and RX, because
   // many such wrapper are allocated in sequence below.
-  CodePageCollectionMemoryModificationScope modification_scope(isolate->heap());
+  RwxMemoryWriteScope rwx_write_scope("CompileJsToWasmWrappers");
   for (auto& pair : compilation_units) {
     JSToWasmWrapperKey key = pair.first;
     JSToWasmWrapperCompilationUnit* unit = pair.second.get();
@@ -3854,7 +3854,7 @@ WasmCode* CompileImportWrapper(
       &env, kind, sig, source_positions, expected_arity, suspend);
   WasmCode* published_code;
   {
-    CodeSpaceWriteScope code_space_write_scope(native_module);
+    RwxMemoryWriteScope rwx_write_scope("Compile import wrapper");
     std::unique_ptr<WasmCode> wasm_code = native_module->AddCode(
         result.func_index, result.code_desc, result.frame_slot_count,
         result.tagged_parameter_slots,

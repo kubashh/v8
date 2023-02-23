@@ -11,7 +11,6 @@
 
 #include "src/base/macros.h"
 #include "src/flags/flags.h"
-#include "src/wasm/code-space-access.h"
 #include "src/wasm/module-compiler.h"
 #include "src/wasm/module-decoder.h"
 #include "src/wasm/wasm-engine.h"
@@ -140,14 +139,14 @@ TEST_P(ParameterizedMemoryProtectionTest, CodeNotWritableAfterCompilation) {
 
 TEST_P(ParameterizedMemoryProtectionTest, CodeWritableWithinScope) {
   CompileModule();
-  CodeSpaceWriteScope write_scope(native_module());
+  RwxMemoryWriteScope write_scope("Write to code");
   WriteToCode();
 }
 
 TEST_P(ParameterizedMemoryProtectionTest, CodeNotWritableAfterScope) {
   CompileModule();
   {
-    CodeSpaceWriteScope write_scope(native_module());
+    RwxMemoryWriteScope write_scope("Write to code");
     WriteToCode();
   }
   AssertCodeEventuallyProtected();
@@ -273,8 +272,8 @@ TEST_P(ParameterizedMemoryProtectionTestWithSignalHandling, TestSignalHandler) {
 #if GTEST_HAS_DEATH_TEST
     ASSERT_DEATH(
         {
-          base::Optional<CodeSpaceWriteScope> write_scope;
-          if (open_write_scope) write_scope.emplace(native_module());
+          base::Optional<RwxMemoryWriteScope> write_scope;
+          if (open_write_scope) write_scope.emplace("Write to code");
           pthread_kill(pthread_self(), SIGPROF);
           base::OS::Sleep(base::TimeDelta::FromMilliseconds(10));
         },
@@ -293,8 +292,8 @@ TEST_P(ParameterizedMemoryProtectionTestWithSignalHandling, TestSignalHandler) {
                                  "UndefinedBehaviorSanitizer:DEADLYSIGNAL")));
 #endif  // GTEST_HAS_DEATH_TEST
   } else {
-    base::Optional<CodeSpaceWriteScope> write_scope;
-    if (open_write_scope) write_scope.emplace(native_module());
+    base::Optional<RwxMemoryWriteScope> write_scope;
+    if (open_write_scope) write_scope.emplace("Write to code");
     // The signal handler does not write or code is not protected, hence this
     // should succeed.
     pthread_kill(pthread_self(), SIGPROF);

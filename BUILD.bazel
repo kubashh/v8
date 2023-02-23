@@ -2497,8 +2497,6 @@ filegroup(
             "src/wasm/branch-hint-map.h",
             "src/wasm/canonical-types.cc",
             "src/wasm/canonical-types.h",
-            "src/wasm/code-space-access.cc",
-            "src/wasm/code-space-access.h",
             "src/wasm/compilation-environment.h",
             "src/wasm/constant-expression.cc",
             "src/wasm/constant-expression.h",

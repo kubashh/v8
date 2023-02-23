@@ -127,13 +127,6 @@
 namespace v8 {
 namespace internal {
 
-CodePageCollectionMemoryModificationScopeForTesting::
-    CodePageCollectionMemoryModificationScopeForTesting(Heap* heap)
-    : CodePageCollectionMemoryModificationScope(heap) {}
-
-CodePageCollectionMemoryModificationScopeForTesting::
-    ~CodePageCollectionMemoryModificationScopeForTesting() = default;
-
 #ifdef V8_ENABLE_THIRD_PARTY_HEAP
 Isolate* Heap::GetIsolateFromWritableObject(HeapObject object) {
   return reinterpret_cast<Isolate*>(
@@ -1197,7 +1190,7 @@ void Heap::PublishPendingAllocations() {
 }
 
 void Heap::InvalidateCodeDeoptimizationData(InstructionStream code) {
-  CodePageMemoryModificationScope modification_scope(code);
+  RwxMemoryWriteScope rwx_write_scope("Heap::InvalidateCodeDeoptimizationData");
   code.set_deoptimization_data(ReadOnlyRoots(this).empty_fixed_array());
 }
 
@@ -2503,7 +2496,7 @@ void Heap::MarkCompact() {
   SetGCState(MARK_COMPACT);
 
   PROFILE(isolate_, CodeMovingGCEvent());
-  CodeSpaceMemoryModificationScope code_modification(this);
+  RwxMemoryWriteScope rwx_write_scope("Heap::MarkCompact");
 
   UpdateOldGenerationAllocationCounter();
   uint64_t size_of_objects_before_gc = SizeOfObjects();
@@ -2609,42 +2602,6 @@ void Heap::Scavenge() {
   scavenger_collector_->CollectGarbage();
 
   SetGCState(NOT_IN_GC);
-}
-
-void Heap::UnprotectAndRegisterMemoryChunk(MemoryChunk* chunk,
-                                           UnprotectMemoryOrigin origin) {
-  if (!write_protect_code_memory()) return;
-
-  // No need to register any unprotected chunks during a GC. This also avoids
-  // the use of CurrentLocalHeap() on GC workers, which don't have a LocalHeap.
-  if (code_space_memory_modification_scope_depth_ > 0) return;
-
-  LocalHeap* local_heap = isolate()->CurrentLocalHeap();
-  DCHECK_GT(local_heap->code_page_collection_memory_modification_scope_depth_,
-            0);
-  if (local_heap->unprotected_memory_chunks_.insert(chunk).second) {
-    chunk->SetCodeModificationPermissions();
-  }
-}
-
-void Heap::UnregisterUnprotectedMemoryChunk(MemoryChunk* chunk) {
-  safepoint()->IterateLocalHeaps([chunk](LocalHeap* local_heap) {
-    local_heap->unprotected_memory_chunks_.erase(chunk);
-  });
-}
-
-void Heap::UnprotectAndRegisterMemoryChunk(HeapObject object,
-                                           UnprotectMemoryOrigin origin) {
-  UnprotectAndRegisterMemoryChunk(MemoryChunk::FromHeapObject(object), origin);
-}
-
-void Heap::ProtectUnprotectedMemoryChunks() {
-  LocalHeap* local_heap = isolate()->CurrentLocalHeap();
-  for (MemoryChunk* chunk : local_heap->unprotected_memory_chunks_) {
-    DCHECK(memory_allocator()->IsMemoryChunkExecutable(chunk));
-    chunk->SetDefaultCodePermissions();
-  }
-  local_heap->unprotected_memory_chunks_.clear();
 }
 
 bool Heap::ExternalStringTable::Contains(String string) {
@@ -5371,7 +5328,7 @@ void Heap::DisableInlineAllocation() {
   }
   // Update inline allocation limit for old spaces.
   PagedSpaceIterator spaces(this);
-  CodePageCollectionMemoryModificationScope modification_scope(this);
+  RwxMemoryWriteScope rwx_write_scope("Heap::DisableInlineAllocation");
   for (PagedSpace* space = spaces.Next(); space != nullptr;
        space = spaces.Next()) {
     base::MutexGuard guard(space->mutex());
@@ -5617,15 +5574,6 @@ void Heap::SetUpSpaces(LinearAllocationArea& new_allocation_info,
     stress_scavenge_observer_ = new StressScavengeObserver(this);
     new_space()->AddAllocationObserver(stress_scavenge_observer_);
   }
-
-  write_protect_code_memory_ = v8_flags.write_protect_code_memory;
-#if V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
-  if (RwxMemoryWriteScope::IsSupported()) {
-    // If PKU machinery is available then use it instead of conventional
-    // mprotect.
-    write_protect_code_memory_ = false;
-  }
-#endif  // V8_HEAP_USE_PKU_JIT_WRITE_PROTECT
 
   if (isolate()->shared_space_isolate()) {
     Heap* heap = isolate()->shared_space_isolate()->heap();
@@ -5923,7 +5871,7 @@ void Heap::TearDown() {
   shared_space_allocator_.reset();
 
   {
-    CodePageHeaderModificationScope rwx_write_scope(
+    RwxMemoryWriteScope rwx_write_scope(
         "Deletion of CODE_SPACE and CODE_LO_SPACE requires write access to "
         "Code page headers");
     for (int i = FIRST_MUTABLE_SPACE; i <= LAST_MUTABLE_SPACE; i++) {
@@ -7209,7 +7157,7 @@ void Heap::EnsureSweepingCompleted(SweepingForcedFinalizationMode mode) {
                    ThreadKind::kMain);
     old_space()->RefillFreeList();
     {
-      CodePageHeaderModificationScope rwx_write_scope(
+      RwxMemoryWriteScope rwx_write_scope(
           "Updating per-page stats stored in page headers requires write "
           "access to Code page headers");
       code_space()->RefillFreeList();

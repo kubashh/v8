@@ -10,7 +10,6 @@
 #include "src/diagnostics/code-tracer.h"
 #include "src/heap/heap-inl.h"
 #include "src/wasm/baseline/liftoff-compiler.h"
-#include "src/wasm/code-space-access.h"
 #include "src/wasm/graph-builder-interface.h"
 #include "src/wasm/leb-helper.h"
 #include "src/wasm/module-compiler.h"
@@ -89,7 +88,7 @@ TestingModuleBuilder::TestingModuleBuilder(
         static_cast<int>(maybe_import->sig->parameter_count()), kNoSuspend);
     auto import_wrapper = cache_scope[key];
     if (import_wrapper == nullptr) {
-      CodeSpaceWriteScope write_scope(native_module_);
+      RwxMemoryWriteScope write_scope("Compile native module");
       import_wrapper = CompileImportWrapper(
           native_module_, isolate_->counters(), kind, maybe_import->sig,
           canonical_type_index,

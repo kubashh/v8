@@ -141,8 +141,7 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
   }
 
   static_assert(InstructionStream::kOnHeapBodyIsContiguous);
-  Heap* heap = isolate_->heap();
-  CodePageCollectionMemoryModificationScope code_allocation(heap);
+  RwxMemoryWriteScope rwx_write_scope("Factory::CodeBuilder::BuildInternal");
 
   Handle<InstructionStream> instruction_stream;
   if (CompiledWithConcurrentBaseline()) {
@@ -215,7 +214,7 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
     // like a handle) that are dereferenced during the copy to point directly
     // to the actual heap objects. These pointers can include references to
     // the code object itself, through the self_reference parameter.
-    raw_istream.CopyFromNoFlush(*reloc_info, heap, code_desc_);
+    raw_istream.CopyFromNoFlush(*reloc_info, isolate_->heap(), code_desc_);
 
     raw_istream.clear_padding();
 

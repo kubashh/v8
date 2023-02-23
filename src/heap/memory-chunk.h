@@ -197,12 +197,6 @@ class MemoryChunk : public BasicMemoryChunk {
                : PageAllocator::kReadWrite;
   }
 
-  V8_EXPORT_PRIVATE void SetReadable();
-  V8_EXPORT_PRIVATE void SetReadAndExecutable();
-
-  V8_EXPORT_PRIVATE void SetCodeModificationPermissions();
-  V8_EXPORT_PRIVATE void SetDefaultCodePermissions();
-
   heap::ListNode<MemoryChunk>& list_node() { return list_node_; }
   const heap::ListNode<MemoryChunk>& list_node() const { return list_node_; }
 
@@ -232,11 +226,6 @@ class MemoryChunk : public BasicMemoryChunk {
   // Release all memory allocated by the chunk. Should be called when memory
   // chunk is about to be freed.
   void ReleaseAllAllocatedMemory();
-
-  // Sets the requested page permissions only if the write unprotect counter
-  // has reached 0.
-  void DecrementWriteUnprotectCounterAndMaybeSetPermissions(
-      PageAllocator::Permission permission);
 
 #ifdef DEBUG
   static void ValidateOffsets(MemoryChunk* chunk);
@@ -273,20 +262,6 @@ class MemoryChunk : public BasicMemoryChunk {
   base::SharedMutex* shared_mutex_;
 
   std::atomic<ConcurrentSweepingState> concurrent_sweeping_;
-
-  base::Mutex* page_protection_change_mutex_;
-
-  // This field is only relevant for code pages. It depicts the number of
-  // times a component requested this page to be read+writeable. The
-  // counter is decremented when a component resets to read+executable.
-  // If Value() == 0 => The memory is read and executable.
-  // If Value() >= 1 => The Memory is read and writable (and maybe executable).
-  // All executable MemoryChunks are allocated rw based on the assumption that
-  // they will be used immediately for an allocation. They are initialized
-  // with the number of open CodeSpaceMemoryModificationScopes. The caller
-  // that triggers the page allocation is responsible for decrementing the
-  // counter.
-  uintptr_t write_unprotect_counter_;
 
   // Tracks off-heap memory used by this memory chunk.
   std::atomic<size_t> external_backing_store_bytes_[kNumTypes];

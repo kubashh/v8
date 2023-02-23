@@ -44,74 +44,6 @@ void MemoryChunk::InitializationMemoryFence() {
 #endif
 }
 
-void MemoryChunk::DecrementWriteUnprotectCounterAndMaybeSetPermissions(
-    PageAllocator::Permission permission) {
-  DCHECK(!V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT);
-  DCHECK(permission == PageAllocator::kRead ||
-         permission == PageAllocator::kReadExecute);
-  DCHECK(IsFlagSet(MemoryChunk::IS_EXECUTABLE));
-  DCHECK(owner_identity() == CODE_SPACE || owner_identity() == CODE_LO_SPACE);
-  // Decrementing the write_unprotect_counter_ and changing the page
-  // protection mode has to be atomic.
-  base::MutexGuard guard(page_protection_change_mutex_);
-  if (write_unprotect_counter_ == 0) {
-    // This is a corner case that may happen when we have a
-    // CodeSpaceMemoryModificationScope open and this page was newly
-    // added.
-    return;
-  }
-  write_unprotect_counter_--;
-  if (write_unprotect_counter_ == 0) {
-    Address protect_start =
-        address() + MemoryChunkLayout::ObjectStartOffsetInCodePage();
-    size_t page_size = MemoryAllocator::GetCommitPageSize();
-    DCHECK(IsAligned(protect_start, page_size));
-    size_t protect_size = RoundUp(area_size(), page_size);
-    CHECK(reservation_.SetPermissions(protect_start, protect_size, permission));
-  }
-}
-
-void MemoryChunk::SetReadable() {
-  DecrementWriteUnprotectCounterAndMaybeSetPermissions(PageAllocator::kRead);
-}
-
-void MemoryChunk::SetReadAndExecutable() {
-  DCHECK(!v8_flags.jitless);
-  DecrementWriteUnprotectCounterAndMaybeSetPermissions(
-      PageAllocator::kReadExecute);
-}
-
-void MemoryChunk::SetCodeModificationPermissions() {
-  DCHECK(!V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT);
-  DCHECK(IsFlagSet(MemoryChunk::IS_EXECUTABLE));
-  DCHECK(owner_identity() == CODE_SPACE || owner_identity() == CODE_LO_SPACE);
-  // Incrementing the write_unprotect_counter_ and changing the page
-  // protection mode has to be atomic.
-  base::MutexGuard guard(page_protection_change_mutex_);
-  write_unprotect_counter_++;
-  if (write_unprotect_counter_ == 1) {
-    Address unprotect_start =
-        address() + MemoryChunkLayout::ObjectStartOffsetInCodePage();
-    size_t page_size = MemoryAllocator::GetCommitPageSize();
-    DCHECK(IsAligned(unprotect_start, page_size));
-    size_t unprotect_size = RoundUp(area_size(), page_size);
-    // We may use RWX pages to write code. Some CPUs have optimisations to push
-    // updates to code to the icache through a fast path, and they may filter
-    // updates based on the written memory being executable.
-    CHECK(reservation_.SetPermissions(
-        unprotect_start, unprotect_size,
-        MemoryChunk::GetCodeModificationPermission()));
-  }
-}
-
-void MemoryChunk::SetDefaultCodePermissions() {
-  if (v8_flags.jitless) {
-    SetReadable();
-  } else {
-    SetReadAndExecutable();
-  }
-}
-
 namespace {
 
 PageAllocator::Permission DefaultWritableCodePermissions() {
@@ -150,8 +82,6 @@ MemoryChunk::MemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
   invalidated_slots_[OLD_TO_SHARED] = nullptr;
   progress_bar_.Initialize();
   set_concurrent_sweeping_state(ConcurrentSweepingState::kDone);
-  page_protection_change_mutex_ = new base::Mutex();
-  write_unprotect_counter_ = 0;
   mutex_ = new base::Mutex();
   shared_mutex_ = new base::SharedMutex();
 
@@ -163,10 +93,8 @@ MemoryChunk::MemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
   heap->non_atomic_marking_state()->SetLiveBytes(this, 0);
   if (executable == EXECUTABLE) {
     SetFlag(IS_EXECUTABLE);
-    if (heap->write_protect_code_memory()) {
-      write_unprotect_counter_ =
-          heap->code_space_memory_modification_scope_depth();
-    } else if (!V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) {
+    // TODO: simplify
+    if (!V8_HEAP_USE_PTHREAD_JIT_WRITE_PROTECT) {
       size_t page_size = MemoryAllocator::GetCommitPageSize();
       DCHECK(IsAligned(area_start_, page_size));
       size_t area_size = RoundUp(area_end_ - area_start_, page_size);
@@ -239,14 +167,6 @@ void MemoryChunk::ReleaseAllocatedMemoryNeededForWritableChunk() {
   if (mutex_ != nullptr) {
     delete mutex_;
     mutex_ = nullptr;
-  }
-  if (shared_mutex_) {
-    delete shared_mutex_;
-    shared_mutex_ = nullptr;
-  }
-  if (page_protection_change_mutex_ != nullptr) {
-    delete page_protection_change_mutex_;
-    page_protection_change_mutex_ = nullptr;
   }
   if (code_object_registry_ != nullptr) {
     delete code_object_registry_;
@@ -501,12 +421,6 @@ void MemoryChunk::ValidateOffsets(MemoryChunk* chunk) {
   DCHECK_EQ(reinterpret_cast<Address>(&chunk->concurrent_sweeping_) -
                 chunk->address(),
             MemoryChunkLayout::kConcurrentSweepingOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->page_protection_change_mutex_) -
-                chunk->address(),
-            MemoryChunkLayout::kPageProtectionChangeMutexOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->write_unprotect_counter_) -
-                chunk->address(),
-            MemoryChunkLayout::kWriteUnprotectCounterOffset);
   DCHECK_EQ(reinterpret_cast<Address>(&chunk->external_backing_store_bytes_) -
                 chunk->address(),
             MemoryChunkLayout::kExternalBackingStoreBytesOffset);

@@ -13,7 +13,6 @@
 #include "src/objects/objects-inl.h"
 #include "src/objects/shared-function-info.h"
 #include "src/utils/utils.h"
-#include "src/wasm/code-space-access.h"
 #include "src/wasm/module-compiler.h"
 #include "src/wasm/module-decoder.h"
 #include "src/wasm/module-instantiate.h"
@@ -1420,7 +1419,7 @@ void WasmInstanceObject::ImportWasmJSFunctionIntoTable(
     // TODO(manoskouk): Reuse js_function->wasm_to_js_wrapper_code().
     wasm::WasmCompilationResult result = compiler::CompileWasmImportCallWrapper(
         &env, kind, sig, false, expected_arity, suspend);
-    wasm::CodeSpaceWriteScope write_scope(native_module);
+    RwxMemoryWriteScope rwx_write_scope("Imprt Wasm JS function into table");
     std::unique_ptr<wasm::WasmCode> wasm_code = native_module->AddCode(
         result.func_index, result.code_desc, result.frame_slot_count,
         result.tagged_parameter_slots,

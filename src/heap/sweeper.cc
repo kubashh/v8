@@ -206,10 +206,9 @@ int Sweeper::LocalSweeper::ParallelSweepPage(Page* page,
   {
     base::MutexGuard guard(page->mutex());
     DCHECK(!page->SweepingDone());
-    // If the page is a code page, the CodePageMemoryModificationScope changes
-    // the page protection mode from rx -> rw while sweeping.
-    CodePageMemoryModificationScope code_page_scope(page);
-
+    base::Optional<RwxMemoryWriteScope> rwx_write_scope;
+    if (page->owner()->identity() == CODE_SPACE)
+      rwx_write_scope.emplace("Sweeper:ParallelSweepPage");
     DCHECK_EQ(Page::ConcurrentSweepingState::kPending,
               page->concurrent_sweeping_state());
     page->set_concurrent_sweeping_state(
@@ -623,8 +622,9 @@ int Sweeper::RawSweep(
   DCHECK(!p->IsEvacuationCandidate() && !p->SweepingDone());
 
   // Phase 1: Prepare the page for sweeping.
-  base::Optional<CodePageMemoryModificationScope> write_scope;
-  if (space->identity() == CODE_SPACE) write_scope.emplace(p);
+  base::Optional<RwxMemoryWriteScope> rwx_write_scope;
+  if (space->identity() == CODE_SPACE)
+    rwx_write_scope.emplace("Sweeper:RawSweep");
 
   // Set the allocated_bytes_ counter to area_size and clear the wasted_memory_
   // counter. The free operations below will decrease allocated_bytes_ to actual

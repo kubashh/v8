@@ -168,9 +168,9 @@ class ConcurrentBaselineCompiler {
       UnparkedScope unparked_scope(&local_isolate);
       LocalHandleScope handle_scope(&local_isolate);
 
-      // Since we're going to compile an entire batch, this guarantees that
-      // we only switch back the memory chunks to RX at the end.
-      CodePageCollectionMemoryModificationScope batch_alloc(isolate_->heap());
+      RwxMemoryWriteScope rwx_write_scope(
+          "ConcurrentBaselineCompiler: Compile an entire batch of code in a "
+          "job");
 
       while (!incoming_queue_->IsEmpty() && !delegate->ShouldYield()) {
         std::unique_ptr<BaselineBatchCompilerJob> job;
@@ -315,7 +315,7 @@ void BaselineBatchCompiler::EnsureQueueCapacity() {
 }
 
 void BaselineBatchCompiler::CompileBatch(Handle<JSFunction> function) {
-  CodePageCollectionMemoryModificationScope batch_allocation(isolate_->heap());
+  RwxMemoryWriteScope rwx_write_scope("BaslineBatchCompiler: complie batch");
   {
     IsCompiledScope is_compiled_scope(
         function->shared().is_compiled_scope(isolate_));

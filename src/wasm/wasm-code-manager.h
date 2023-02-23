@@ -832,7 +832,6 @@ class V8_EXPORT_PRIVATE NativeModule final {
   friend class WasmCode;
   friend class WasmCodeAllocator;
   friend class WasmCodeManager;
-  friend class CodeSpaceWriteScope;
 
   struct CodeSpaceData {
     base::AddressRegion region;
@@ -943,9 +942,9 @@ class V8_EXPORT_PRIVATE NativeModule final {
 
   // This mutex protects concurrent calls to {AddCode} and friends.
   // TODO(dlehmann): Revert this to a regular {Mutex} again.
-  // This needs to be a {RecursiveMutex} only because of {CodeSpaceWriteScope}
+  // This needs to be a {RecursiveMutex} only because of {RwxMemoryWriteScope}
   // usages, which are (1) either at places that already hold the
-  // {allocation_mutex_} or (2) because of multiple open {CodeSpaceWriteScope}s
+  // {allocation_mutex_} or (2) because of multiple open {RwxMemoryWriteScope}s
   // in the call hierarchy. Both are fixable.
   mutable base::RecursiveMutex allocation_mutex_;
 

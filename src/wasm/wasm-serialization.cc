@@ -11,7 +11,6 @@
 #include "src/snapshot/snapshot-data.h"
 #include "src/utils/ostreams.h"
 #include "src/utils/version.h"
-#include "src/wasm/code-space-access.h"
 #include "src/wasm/function-compiler.h"
 #include "src/wasm/module-compiler.h"
 #include "src/wasm/module-decoder.h"
@@ -612,7 +611,7 @@ class DeserializeCodeTask : public JobTask {
       : deserializer_(deserializer), reloc_queue_(reloc_queue) {}
 
   void Run(JobDelegate* delegate) override {
-    CodeSpaceWriteScope code_space_write_scope(deserializer_->native_module_);
+    RwxMemoryWriteScope rwx_write_scope("Deserialize code");
     bool finished = false;
     while (!finished) {
       // Repeatedly publish everything that was copied already.
@@ -703,7 +702,7 @@ bool NativeModuleDeserializer::Read(Reader* reader) {
 
   std::vector<DeserializationUnit> batch;
   size_t batch_size = 0;
-  CodeSpaceWriteScope code_space_write_scope(native_module_);
+  RwxMemoryWriteScope rwx_write_scope("Native module deserializer");
   for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
     DeserializationUnit unit = ReadCode(i, reader);
     if (!unit.code) continue;

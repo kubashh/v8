@@ -11,13 +11,7 @@
 namespace v8 {
 namespace internal {
 
-class CodePageCollectionMemoryModificationScope;
-class CodePageMemoryModificationScope;
-class CodeSpaceMemoryModificationScope;
 class RwxMemoryWriteScopeForTesting;
-namespace wasm {
-class CodeSpaceWriteScope;
-}
 
 // This scope is a wrapper for APRR/MAP_JIT machinery on MacOS on ARM64
 // ("Apple M1"/Apple Silicon) or Intel PKU (aka. memory protection keys)
@@ -65,6 +59,10 @@ class V8_NODISCARD RwxMemoryWriteScope {
   // access.
   V8_EXPORT_PRIVATE static void SetDefaultPermissionsForNewThread();
 
+  static bool IsInScope() {
+    DCHECK_LE(0, code_space_write_nesting_level_);
+    return code_space_write_nesting_level_ != 0;
+  }
 #if V8_HAS_PKU_JIT_WRITE_PROTECT
   static int memory_protection_key() { return memory_protection_key_; }
 
@@ -79,11 +77,7 @@ class V8_NODISCARD RwxMemoryWriteScope {
 #endif  // V8_HAS_PKU_JIT_WRITE_PROTECT
 
  private:
-  friend class CodePageCollectionMemoryModificationScope;
-  friend class CodePageMemoryModificationScope;
-  friend class CodeSpaceMemoryModificationScope;
   friend class RwxMemoryWriteScopeForTesting;
-  friend class wasm::CodeSpaceWriteScope;
 
   // {SetWritable} and {SetExecutable} implicitly enters/exits the scope.
   // These methods are exposed only for the purpose of implementing other
@@ -91,10 +85,8 @@ class V8_NODISCARD RwxMemoryWriteScope {
   V8_INLINE static void SetWritable();
   V8_INLINE static void SetExecutable();
 
-#if V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_HAS_PKU_JIT_WRITE_PROTECT
   // This counter is used for supporting scope reentrance.
   static thread_local int code_space_write_nesting_level_;
-#endif  // V8_HAS_PTHREAD_JIT_WRITE_PROTECT || V8_HAS_PKU_JIT_WRITE_PROTECT
 
 #if V8_HAS_PKU_JIT_WRITE_PROTECT
   static int memory_protection_key_;
