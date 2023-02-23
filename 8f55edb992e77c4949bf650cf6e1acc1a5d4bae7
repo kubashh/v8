@@ -16,6 +16,29 @@
       "message": "Tobias, PTAL.\nJakob, FYI.",
       "revId": "8f55edb992e77c4949bf650cf6e1acc1a5d4bae7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b1d93ef_df31a36d",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-02-23T10:46:04Z",
+      "side": 1,
+      "message": "How about using `UnsafeCast` instead, to have an assertion in debug builds?",
+      "range": {
+        "startLine": 431,
+        "startChar": 30,
+        "endLine": 431,
+        "endChar": 53
+      },
+      "revId": "8f55edb992e77c4949bf650cf6e1acc1a5d4bae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
