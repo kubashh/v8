@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fa788f4_6b463756",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-02-23T14:07:54Z",
+      "side": 1,
+      "message": "ptal – I think we need to remove the change from the release branch as well to be able to generate the pgo profiles.",
+      "revId": "6d5bab3971b4b787a33b57c764f120ae60424d14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
