@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "250963cd_78cc283e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1149139
+      },
+      "writtenOn": "2023-02-23T22:32:56Z",
+      "side": 1,
+      "message": "cbruni@ PTAL. No rush to do this week if you\u0027re OOO on a Friday. Thanks.",
+      "revId": "e8f9e24b52f6831f75822760ef7f22d1ca42bd90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
