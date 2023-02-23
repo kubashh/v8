@@ -39,6 +39,30 @@
       },
       "revId": "8f55edb992e77c4949bf650cf6e1acc1a5d4bae7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eaf61f7_7fdfe909",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-23T13:30:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b1d93ef_df31a36d",
+      "range": {
+        "startLine": 431,
+        "startChar": 30,
+        "endLine": 431,
+        "endChar": 53
+      },
+      "revId": "8f55edb992e77c4949bf650cf6e1acc1a5d4bae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
