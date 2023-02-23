@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b5f15cb_4f3e1e3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-02-23T11:47:59Z",
+      "side": 1,
+      "message": "ptal\n\nI didn\u0027t think JSRabGsabDataViews can flow into here, but looks like they can, with --stress-snapshot.",
+      "revId": "f1630f248a0b8f38e9aceb08d75124a30e6343f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
