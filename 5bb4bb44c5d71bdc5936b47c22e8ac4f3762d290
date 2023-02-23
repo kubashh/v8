@@ -56,6 +56,30 @@
       },
       "revId": "5bb4bb44c5d71bdc5936b47c22e8ac4f3762d290",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "860cca80_e6bf3f19",
+        "filename": "src/wasm/graph-builder-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-23T13:27:46Z",
+      "side": 1,
+      "message": "Right, why not. Maybe this even catches the crash we see in the wild.\nDone.",
+      "parentUuid": "32398865_ac9e7ae9",
+      "range": {
+        "startLine": 2383,
+        "startChar": 2,
+        "endLine": 2383,
+        "endChar": 8
+      },
+      "revId": "5bb4bb44c5d71bdc5936b47c22e8ac4f3762d290",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
