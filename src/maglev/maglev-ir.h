@@ -2342,15 +2342,15 @@ class Float64Constant : public FixedInputValueNodeT<0, Float64Constant> {
  public:
   using OutputRegister = DoubleRegister;
 
-  explicit Float64Constant(uint64_t bitfield, double value)
+  explicit Float64Constant(uint64_t bitfield, Float64 value)
       : Base(bitfield), value_(value) {}
 
   static constexpr OpProperties kProperties = OpProperties::Float64();
 
-  double value() const { return value_; }
+  Float64 value() const { return value_; }
 
   bool ToBoolean(LocalIsolate* local_isolate) const {
-    return value_ != 0.0 && !std::isnan(value_);
+    return value_.get_scalar() != 0.0 && !value_.is_nan();
   }
 
   void SetValueLocationConstraints();
@@ -2361,7 +2361,7 @@ class Float64Constant : public FixedInputValueNodeT<0, Float64Constant> {
   Handle<Object> DoReify(LocalIsolate* isolate);
 
  private:
-  const double value_;
+  const Float64 value_;
 };
 
 class Int32ToNumber : public FixedInputValueNodeT<1, Int32ToNumber> {
