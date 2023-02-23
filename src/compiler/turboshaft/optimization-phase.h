@@ -766,6 +766,15 @@ class GraphVisitor {
     return assembler().ReduceCheckTurboshaftTypeOf(
         MapToNewGraph(op.input()), op.rep, op.type, op.successful);
   }
+  OpIndex AssembleOutputGraphNewConsString(const NewConsStringOp& op) {
+    return assembler().ReduceNewConsString(MapToNewGraph(op.length()),
+                                           MapToNewGraph(op.first()),
+                                           MapToNewGraph(op.second()));
+  }
+  OpIndex AssembleOutputGraphNewArray(const NewArrayOp& op) {
+    return assembler().ReduceNewArray(MapToNewGraph(op.length()), op.kind,
+                                      op.allocation_type);
+  }
 
   void CreateOldToNewMapping(OpIndex old_index, OpIndex new_index) {
     if (current_block_needs_variables_) {

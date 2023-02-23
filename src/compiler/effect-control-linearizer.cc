@@ -1258,6 +1258,7 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       result = LowerTypeOf(node);
       break;
     case IrOpcode::kNewDoubleElements:
+      //      if (v8_flags.turboshaft) return false;
       result = LowerNewDoubleElements(node);
       break;
     case IrOpcode::kNewSmiOrObjectElements:
@@ -1267,6 +1268,7 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       result = LowerNewArgumentsElements(node);
       break;
     case IrOpcode::kNewConsString:
+      if (v8_flags.turboshaft) return false;
       result = LowerNewConsString(node);
       break;
     case IrOpcode::kSameValue:
@@ -3901,6 +3903,7 @@ Node* EffectControlLinearizer::LowerRestLength(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerNewDoubleElements(Node* node) {
+  //  DCHECK(!v8_flags.turboshaft);
   AllocationType const allocation = AllocationTypeOf(node->op());
   Node* length = node->InputAt(0);
 
@@ -4023,6 +4026,7 @@ Node* EffectControlLinearizer::LowerNewArgumentsElements(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerNewConsString(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   Node* length = node->InputAt(0);
   Node* first = node->InputAt(1);
   Node* second = node->InputAt(2);

@@ -1196,6 +1196,18 @@ OpIndex GraphBuilder::Process(
                                              false);
     }
 
+    case IrOpcode::kNewConsString:
+      return assembler.NewConsString(
+          Map(node->InputAt(0)), Map(node->InputAt(1)), Map(node->InputAt(2)));
+    case IrOpcode::kNewDoubleElements:
+      return assembler.NewArray(Map(node->InputAt(0)),
+                                NewArrayOp::Kind::kDouble,
+                                AllocationTypeOf(node->op()));
+    case IrOpcode::kNewSmiOrObjectElements:
+      return assembler.NewArray(Map(node->InputAt(0)),
+                                NewArrayOp::Kind::kObject,
+                                AllocationTypeOf(node->op()));
+
     case IrOpcode::kBeginRegion:
       return OpIndex::Invalid();
     case IrOpcode::kFinishRegion:

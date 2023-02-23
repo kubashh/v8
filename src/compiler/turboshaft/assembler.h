@@ -34,6 +34,25 @@ enum class Builtin : int32_t;
 namespace v8::internal::compiler::turboshaft {
 
 namespace detail {
+template <typename A, typename Values, typename ConstOrValues,
+          size_t... indices>
+void ResolveAllImpl(A& assembler, Values& values,
+                    const ConstOrValues& const_or_values,
+                    std::index_sequence<indices...>) {
+  (void)std::initializer_list<int>{
+      (std::get<indices>(values) =
+           assembler.resolve(std::get<indices>(const_or_values)),
+       0)...};
+}
+
+template <typename A, typename Values, typename ConstOrValues>
+void ResolveAll(A& assembler, Values& values,
+                const ConstOrValues& const_or_values) {
+  static_assert(std::tuple_size_v<Values> == std::tuple_size_v<ConstOrValues>);
+  return ResolveAllImpl(assembler, values, const_or_values,
+                        std::make_index_sequence<std::tuple_size_v<Values>>());
+}
+
 template <typename A, typename Vars, typename Vals, size_t... indices>
 void SetVariablesHelper(A& assembler, Vars& vars, const Vals& vals,
                         std::index_sequence<indices...>) {
@@ -85,19 +104,117 @@ using make_const_or_v_t = typename make_const_or_v<Rep, void>::type;
 template <typename... Reps>
 class Label {
   using variables_t = std::tuple<std::conditional_t<true, Variable, Reps>...>;
-  using values_t = std::tuple<V<Reps>...>;
   static constexpr size_t size = sizeof...(Reps);
 
  public:
+  using values_t = std::tuple<V<Reps>...>;
   using const_or_values_t = std::tuple<detail::make_const_or_v_t<Reps>...>;
+  using recorded_values_t = std::tuple<base::SmallVector<V<Reps>, 2>...>;
 
   template <typename Reducer>
   explicit Label(Reducer* reducer)
       : Label(reducer->Asm().NewBlock(),
               std::tuple{NewFreshVariable<Reps>(reducer->Asm())...}) {}
 
+  template <typename Reducer>
+  Label(Reducer* reducer, bool)
+      : Label(reducer->Asm().NewLoopHeader(),
+              std::tuple{NewFreshVariable<Reps>(reducer->Asm())...}) {}
+
   Block* block() { return block_; }
 
+  void RecordValues(Block* source, const values_t& values) {
+    DCHECK_NOT_NULL(source);
+    RecordValuesImpl(source, values, std::make_index_sequence<size>());
+  }
+
+  template <size_t... indices>
+  void RecordValuesImpl(Block* source, const values_t& values,
+                        std::index_sequence<indices...>) {
+#ifdef DEBUG
+    std::initializer_list<size_t> sizes{std::get<indices>(values_).size()...};
+    DCHECK(base::all_equal(sizes,
+                           static_cast<size_t>(block_->PredecessorCount())));
+    DCHECK_EQ(block_->PredecessorCount(), sources_.size());
+#endif
+    (void)std::initializer_list<int>{(
+        std::get<indices>(values_).push_back(std::get<indices>(values)), 0)...};
+    sources_.push_back(source);
+  }
+
+  template <typename A>
+  values_t MaterializePhis(A& assembler) {
+    return MaterializePhisImpl(assembler, std::make_index_sequence<size>());
+  }
+
+  template <typename A, size_t... indices>
+  values_t MaterializePhisImpl(A& assembler, std::index_sequence<indices...>) {
+    size_t inputs_size = 0;
+    if constexpr (size > 0) {
+      inputs_size = block_->PredecessorCount();
+      DCHECK_EQ(std::get<0>(values_).size(), inputs_size);
+    }
+    DCHECK_EQ(sources_.size(), block_->PredecessorCount());
+    if constexpr (size == 0) {
+      return values_t{};
+    }
+
+    if (inputs_size == 1) {
+      values_t result;
+      (void)std::initializer_list<int>{
+          (std::get<indices>(result) = std::get<indices>(values_)[0], 0)...};
+      return result;
+    } else {
+      DCHECK_LT(1, inputs_size);
+      // We might have to sort inputs.
+      base::SmallVector<size_t, 4> order(sources_.size());
+      for (size_t i = 0; i < sources_.size(); ++i) {
+        Block* source = sources_[i];
+        size_t pos = sources_.size() - 1;
+        order[i] = std::numeric_limits<size_t>::max();
+        for (Block* pred = block_->LastPredecessor(); pred;
+             pred = pred->NeighboringPredecessor()) {
+          if (pred == source) {
+            order[i] = pos;
+          } else if (pred->LastPredecessor() == source) {
+            DCHECK_EQ(pred->PredecessorCount(), 1);
+            order[i] = pos;
+          } else {
+            --pos;
+          }
+        }
+        DCHECK_LT(order[i], sources_.size());
+      }
+
+      (void)std::initializer_list<int>{
+          (Reorder(std::get<indices>(values_), order), 0)...};
+      auto sorted_sources = sources_;
+      for (size_t i = 0; i < sources_.size(); ++i) {
+        sorted_sources[order[i]] = sources_[i];
+      }
+      sources_ = sorted_sources;
+      return values_t{
+          assembler.Phi(base::VectorOf(std::get<indices>(values_)))...};
+    }
+  }
+
+  template <typename Rep>
+  void Reorder(base::SmallVector<V<Rep>, 2>& values,
+               const base::SmallVector<size_t, 4>& order) {
+    DCHECK_EQ(order.size(), values.size());
+    auto sorted = values;
+    for (size_t i = 0; i < values.size(); ++i) {
+      sorted[order[i]] = values[i];
+    }
+    values = sorted;
+  }
+
+//  template<typename A, typename Rep>
+//  V<Rep> MaterializePhi(A& assembler, const base::SmallVector<V<Rep>, 2>&
+//  inputs) {
+//    return assembler.Phi(base::VectorOf(inputs));
+//  }
+#if 0
   template <typename A>
   void Set(A& assembler, const const_or_values_t& values) {
     detail::SetVariablesHelper(assembler, vars_, values,
@@ -118,7 +235,7 @@ class Label {
     // a dummy nullptr value here in order to prevent empty bindings.
     return std::tuple_cat(std::tuple<std::nullptr_t>{}, values);
   }
-
+#endif
  private:
   Label(Block* block, variables_t vars)
       : block_(block), vars_(std::move(vars)) {}
@@ -134,6 +251,8 @@ class Label {
 
   Block* block_;
   variables_t vars_;
+  base::SmallVector<Block*, 2> sources_;
+  recorded_values_t values_;
 };
 
 Handle<Code> BuiltinCodeHandle(Builtin builtin, Isolate* isolate);
@@ -370,6 +489,7 @@ class AssemblerOpInterface {
   DECL_MULTI_REP_BINOP(WordAdd, WordBinop, WordRepresentation, Add)
   DECL_SINGLE_REP_BINOP_V(Word32Add, WordBinop, Add, Word32)
   DECL_SINGLE_REP_BINOP_V(Word64Add, WordBinop, Add, Word64)
+  DECL_SINGLE_REP_BINOP_V(WordPtrAdd, WordBinop, Add, WordPtr)
   DECL_SINGLE_REP_BINOP(PointerAdd, WordBinop, Add,
                         WordRepresentation::PointerSized())
 
@@ -542,6 +662,7 @@ class AssemblerOpInterface {
   }
   DECL_SINGLE_REP_EQUAL_V(Word32Equal, Equal, Word32)
   DECL_SINGLE_REP_EQUAL_V(Word64Equal, Equal, Word64)
+  DECL_SINGLE_REP_EQUAL_V(WordPtrEqual, Equal, WordPtr)
   DECL_SINGLE_REP_EQUAL_V(Float32Equal, Equal, Float32)
   DECL_SINGLE_REP_EQUAL_V(Float64Equal, Equal, Float64)
 #undef DECL_SINGLE_REP_EQUAL_V
@@ -1286,6 +1407,15 @@ class AssemblerOpInterface {
               RegisterRepresentation rep) {
     return Phi(base::VectorOf(inputs), rep);
   }
+  template <typename Rep>
+  V<Rep> Phi(const base::Vector<V<Rep>>& inputs) {
+    if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
+      return OpIndex::Invalid();
+    }
+    std::vector<OpIndex> temp(inputs.size());
+    for (std::size_t i = 0; i < inputs.size(); ++i) temp[i] = inputs[i];
+    return Phi(base::VectorOf(temp), Rep::Rep);
+  }
   OpIndex PendingLoopPhi(OpIndex first, RegisterRepresentation rep,
                          OpIndex old_backedge_index) {
     if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
@@ -1380,6 +1510,23 @@ class AssemblerOpInterface {
     return stack().Call(callee, frame_state, arguments, ts_call_descriptor);
   }
 
+  V<Tagged> NewConsString(V<Word32> length, V<Tagged> first, V<Tagged> second) {
+    if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
+      return OpIndex::Invalid();
+    }
+    return stack().ReduceNewConsString(length, first, second);
+  }
+  V<Tagged> NewArray(V<WordPtr> length, NewArrayOp::Kind kind,
+                     AllocationType allocation_type) {
+    if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
+      return OpIndex::Invalid();
+    }
+    return stack().ReduceNewArray(length, kind, allocation_type);
+  }
+  V<Tagged> NewDoubleArray(V<WordPtr> length, AllocationType allocation_type) {
+    return NewArray(length, NewArrayOp::Kind::kDouble, allocation_type);
+  }
+
   template <typename Rep>
   V<Rep> resolve(const V<Rep>& v) {
     return v;
@@ -1403,29 +1550,43 @@ class AssemblerOpInterface {
   }
 
   // These methods are used by the assembler macros (IF, ELSE, ELSE_IF, END_IF).
-  template <typename... Reps>
-  void ControlFlowHelper_Goto(
-      Label<Reps...>& label,
-      const typename Label<Reps...>::const_or_values_t& values) {
-    label.Set(stack(), values);
+  template <typename L>
+  auto ControlFlowHelper_Bind(L& label)
+      -> base::prepend_tuple_type<bool, typename L::values_t> {
+    if (!stack().Bind(label.block())) {
+      return std::tuple_cat(std::tuple<bool>{false}, typename L::values_t{});
+    }
+    DCHECK_EQ(label.block(), stack().current_block());
+    typename L::values_t values = label.MaterializePhis(stack());
+    return std::tuple_cat(std::tuple<bool>{true}, values);
+  }
+
+  template <typename L>
+  void ControlFlowHelper_Goto(L& label,
+                              const typename L::const_or_values_t& values) {
+    typename L::values_t resolved_values;
+    detail::ResolveAll(stack(), resolved_values, values);
+    label.RecordValues(stack().current_block(), resolved_values);
     Goto(label.block());
   }
 
-  template <typename... Reps>
-  void ControlFlowHelper_GotoIf(
-      V<Word32> condition, Label<Reps...>& label,
-      const typename Label<Reps...>::const_or_values_t& values,
-      BranchHint hint) {
-    label.Set(stack(), values);
+  template <typename L>
+  void ControlFlowHelper_GotoIf(V<Word32> condition, L& label,
+                                const typename L::const_or_values_t& values,
+                                BranchHint hint) {
+    typename L::values_t resolved_values;
+    detail::ResolveAll(stack(), resolved_values, values);
+    label.RecordValues(stack().current_block(), resolved_values);
     GotoIf(condition, label.block(), hint);
   }
 
-  template <typename... Reps>
-  void ControlFlowHelper_GotoIfNot(
-      V<Word32> condition, Label<Reps...>& label,
-      const typename Label<Reps...>::const_or_values_t& values,
-      BranchHint hint) {
-    label.Set(stack(), values);
+  template <typename L>
+  void ControlFlowHelper_GotoIfNot(V<Word32> condition, L& label,
+                                   const typename L::const_or_values_t& values,
+                                   BranchHint hint) {
+    typename L::values_t resolved_values;
+    detail::ResolveAll(stack(), resolved_values, values);
+    label.RecordValues(stack().current_block(), resolved_values);
     GotoIfNot(condition, label.block(), hint);
   }
 

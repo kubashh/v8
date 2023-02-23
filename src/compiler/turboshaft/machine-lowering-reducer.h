@@ -533,11 +533,101 @@ class MachineLoweringReducer : public Next {
     UNREACHABLE();
   }
 
+  OpIndex ReduceNewConsString(OpIndex length, OpIndex first, OpIndex second) {
+    // Determine the instance types of {first} and {second}.
+    V<Tagged> first_map = LoadField<Tagged>(first, AccessBuilder::ForMap());
+    V<Word32> first_type =
+        LoadField<Word32>(first_map, AccessBuilder::ForMapInstanceType());
+    V<Tagged> second_map = LoadField<Tagged>(second, AccessBuilder::ForMap());
+    V<Word32> second_type =
+        LoadField<Word32>(second_map, AccessBuilder::ForMapInstanceType());
+
+    Label<Tagged> allocate_string(this);
+    // Determine the proper map for the resulting ConsString.
+    // If both {first} and {second} are one-byte strings, we
+    // create a new ConsOneByteString, otherwise we create a
+    // new ConsString instead.
+    static_assert(kOneByteStringTag != 0);
+    static_assert(kTwoByteStringTag == 0);
+    V<Word32> instance_type = __ Word32BitwiseAnd(first_type, second_type);
+    V<Word32> encoding =
+        __ Word32BitwiseAnd(instance_type, kStringEncodingMask);
+    IF(__ Word32Equal(encoding, kTwoByteStringTag)) {
+      GOTO(allocate_string, __ HeapConstant(factory_->cons_string_map()));
+    }
+    ELSE {
+      GOTO(allocate_string,
+           __ HeapConstant(factory_->cons_one_byte_string_map()));
+    }
+
+    // Allocate the resulting ConsString.
+    BIND(allocate_string, map);
+    V<Tagged> string =
+        __ Allocate(__ IntPtrConstant(ConsString::kSize),
+                    AllocationType::kYoung, AllowLargeObjects::kFalse);
+    StoreField(string, AccessBuilder::ForMap(), map);
+    StoreField(string, AccessBuilder::ForNameRawHashField(),
+               __ Word32Constant(Name::kEmptyHashField));
+    StoreField(string, AccessBuilder::ForStringLength(), length);
+    StoreField(string, AccessBuilder::ForConsStringFirst(), first);
+    StoreField(string, AccessBuilder::ForConsStringSecond(), second);
+    return string;
+  }
+
+#if 0 
+  OpIndex ReduceNewArray(V<WordPtr> length, NewArrayOp::Kind kind,
+                         AllocationType allocation_type) {
+    Label<Tagged> done(this);
+
+    GOTO_IF(__ WordPtrEqual(length, 0), done,
+            __ HeapConstant(factory_->empty_fixed_array()));
+
+    // Compute the effective size of the backing store.
+    V<WordPtr> size =
+        __ WordPtrAdd(__ WordPtrShiftLeft(length, kDoubleSizeLog2),
+                      FixedDoubleArray::kHeaderSize);
+
+    // Allocate the result and initialize the header.
+    V<Tagged> array =
+        __ Allocate(size, allocation_type, AllowLargeObjects::kFalse);
+    StoreField(array, AccessBuilder::ForMap(),
+               __ HeapConstant(factory_->fixed_double_array_map()));
+    StoreField(array, AccessBuilder::ForFixedArrayLength(), __ SmiTag(length));
+
+    // Initialize the backing store with holes.
+    STATIC_ASSERT_FIELD_OFFSETS_EQUAL(HeapNumber::kValueOffset,
+                                      Oddball::kToNumberRawOffset);
+    V<Float64> the_hole =
+        LoadField<Float64>(__ HeapConstant(factory_->the_hole_value()),
+                           AccessBuilder::ForHeapNumberValue());
+
+    V<WordPtr> first_index = __ IntPtrConstant(0);
+    Label<WordPtr> loop(this, true);
+    GOTO(loop, first_index);
+
+    if (BIND(loop, index)) {
+      GOTO_IF_NOT_UNLIKELY(__ UintPtrLessThan(index, length), done, array);
+
+      ElementAccess access = {kTaggedBase, FixedDoubleArray::kHeaderSize,
+                              compiler::Type::NumberOrHole(), MachineType::Float64(),
+                              kNoWriteBarrier};
+      StoreElement(array, access, index, the_hole);
+
+      // Advance the {index}.
+      GOTO(loop, __ WordPtrAdd(index, 1));
+    }
+
+    BIND(done, result);
+    return result;
+  }
+#endif
+
   // TODO(nicohartmann@): Remove this once ECL has been fully ported.
   // ECL: ChangeInt64ToSmi(input) ==> MLR: __ SmiTag(input)
   // ECL: ChangeInt32ToSmi(input) ==> MLR: __ SmiTag(input)
   // ECL: ChangeUint32ToSmi(input) ==> MLR: __ SmiTag(input)
   // ECL: ChangeUint64ToSmi(input) ==> MLR: __ SmiTag(input)
+  // ECL: ChangeIntPtrToSmi(input) ==> MLR: __ SmiTag(input)
 
  private:
   // TODO(nicohartmann@): Might move some of those helpers into the assembler
@@ -608,11 +698,22 @@ class MachineLoweringReducer : public Next {
   template <typename Rep = Any>
   V<Rep> LoadElement(V<Tagged> object, const ElementAccess& access,
                      V<WordPtr> index) {
+    DCHECK_EQ(access.base_is_tagged, BaseTaggedness::kTaggedBase);
     LoadOp::Kind kind = LoadOp::Kind::Aligned(access.base_is_tagged);
     MemoryRepresentation rep =
         MemoryRepresentation::FromMachineType(access.machine_type);
     return __ Load(object, index, kind, rep, access.header_size,
                    rep.SizeInBytesLog2());
+  }
+
+  void StoreElement(V<Tagged> object, const ElementAccess& access,
+                    V<WordPtr> index, V<Any> value) {
+    DCHECK_EQ(access.base_is_tagged, BaseTaggedness::kTaggedBase);
+    LoadOp::Kind kind = LoadOp::Kind::Aligned(access.base_is_tagged);
+    MemoryRepresentation rep =
+        MemoryRepresentation::FromMachineType(access.machine_type);
+    __ Store(object, index, value, kind, rep, access.write_barrier_kind,
+             access.header_size, rep.SizeInBytesLog2());
   }
 
   // Pass {bitfield} = {digit} = OpIndex::Invalid() to construct the canonical

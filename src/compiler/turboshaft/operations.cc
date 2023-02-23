@@ -767,6 +767,15 @@ std::ostream& operator<<(
   }
 }
 
+std::ostream& operator<<(std::ostream& os, NewArrayOp::Kind kind) {
+  switch (kind) {
+    case NewArrayOp::Kind::kDouble:
+      return os << "Double";
+    case NewArrayOp::Kind::kObject:
+      return os << "Object";
+  }
+}
+
 std::string Operation::ToString() const {
   std::stringstream ss;
   ss << *this;

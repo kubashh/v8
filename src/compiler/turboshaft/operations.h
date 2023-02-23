@@ -115,7 +115,9 @@ class Graph;
   V(ObjectIs)                        \
   V(ConvertToObject)                 \
   V(Tag)                             \
-  V(Untag)
+  V(Untag)                           \
+  V(NewConsString)                   \
+  V(NewArray)
 
 enum class Opcode : uint8_t {
 #define ENUM_CONSTANT(Name) k##Name,
@@ -2498,6 +2500,52 @@ struct UntagOp : FixedArityOperationT<1, UntagOp> {
 
   auto options() const { return std::tuple{kind, rep}; }
 };
+
+struct NewConsStringOp : FixedArityOperationT<3, NewConsStringOp> {
+  static constexpr OpProperties properties = OpProperties::PureMayAllocate();
+  base::Vector<const RegisterRepresentation> outputs_rep() const {
+    return RepVector<RegisterRepresentation::Tagged()>();
+  }
+
+  OpIndex length() const { return Base::input(0); }
+  OpIndex first() const { return Base::input(1); }
+  OpIndex second() const { return Base::input(2); }
+
+  NewConsStringOp(OpIndex length, OpIndex first, OpIndex second)
+      : Base(length, first, second) {}
+  void Validate(const Graph& graph) const {
+    DCHECK(ValidOpInputRep(graph, length(), RegisterRepresentation::Word32()));
+    DCHECK(ValidOpInputRep(graph, first(), RegisterRepresentation::Tagged()));
+    DCHECK(ValidOpInputRep(graph, second(), RegisterRepresentation::Tagged()));
+  }
+
+  auto options() const { return std::tuple{}; }
+};
+
+struct NewArrayOp : FixedArityOperationT<1, NewArrayOp> {
+  enum class Kind : uint8_t {
+    kDouble,
+    kObject,
+  };
+  Kind kind;
+  AllocationType allocation_type;
+
+  static constexpr OpProperties properties = OpProperties::PureMayAllocate();
+  base::Vector<const RegisterRepresentation> outputs_rep() const {
+    return RepVector<RegisterRepresentation::Tagged()>();
+  }
+
+  OpIndex length() const { return Base::input(0); }
+
+  NewArrayOp(OpIndex length, Kind kind, AllocationType allocation_type)
+      : Base(length), kind(kind), allocation_type(allocation_type) {}
+  void Validate(const Graph& graph) const {
+    DCHECK(ValidOpInputRep(graph, length(), WordPtr::Rep));
+  }
+
+  auto options() const { return std::tuple{kind, allocation_type}; }
+};
+std::ostream& operator<<(std::ostream& os, NewArrayOp::Kind kind);
 
 #define OPERATION_PROPERTIES_CASE(Name) Name##Op::PropertiesIfStatic(),
 static constexpr base::Optional<OpProperties>
