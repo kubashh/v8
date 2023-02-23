@@ -16,6 +16,52 @@
       "message": "PTAL!",
       "revId": "62e5c98fa1964d45f27d3cc0c74ee67919ab074f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd8dd853_11acfe3e",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5242,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-02-23T08:51:32Z",
+      "side": 1,
+      "message": "I think you can skip this too, it\u0027s just OSR (maybe we should rename the node to mention OSR)",
+      "range": {
+        "startLine": 5242,
+        "startChar": 15,
+        "endLine": 5242,
+        "endChar": 31
+      },
+      "revId": "62e5c98fa1964d45f27d3cc0c74ee67919ab074f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a940184_4f02321d",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5822,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-02-23T08:51:32Z",
+      "side": 1,
+      "message": "side note: this returns unconditionally, does inlining generator functions even work?",
+      "range": {
+        "startLine": 5822,
+        "startChar": 14,
+        "endLine": 5822,
+        "endChar": 20
+      },
+      "revId": "62e5c98fa1964d45f27d3cc0c74ee67919ab074f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
