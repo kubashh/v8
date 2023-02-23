@@ -2845,11 +2845,18 @@ void CallKnownJSFunction::GenerateCode(MaglevAssembler* masm,
   compiler::JSHeapBroker* broker = masm->compilation_info()->broker();
   __ Move(kContextRegister, function_.context(broker).object());
   __ Move(kJavaScriptCallTargetRegister, function_.object());
-  __ LoadRoot(kJavaScriptCallNewTargetRegister, RootIndex::kUndefinedValue);
   __ Move(kJavaScriptCallArgCountRegister, actual_parameter_count);
   if (shared_function_info(broker).HasBuiltinId()) {
+    __ LoadRoot(kJavaScriptCallNewTargetRegister, RootIndex::kUndefinedValue);
     __ CallBuiltin(shared_function_info(broker).builtin_id());
   } else {
+    compiler::SharedFunctionInfoRef shared = shared_function_info(broker);
+    if (!shared.HasBytecodeArray() ||
+        shared.GetBytecodeArray(broker)
+            .incoming_new_target_or_generator_register()
+            .is_valid()) {
+      __ LoadRoot(kJavaScriptCallNewTargetRegister, RootIndex::kUndefinedValue);
+    }
     __ AssertCallableFunction(kJavaScriptCallTargetRegister);
     __ LoadTaggedField(kJavaScriptCallCodeStartRegister,
                        FieldMemOperand(kJavaScriptCallTargetRegister,
