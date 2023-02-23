@@ -490,13 +490,13 @@ DEFINE_EXPERIMENTAL_FEATURE(maglev_inlining,
 DEFINE_IMPLICATION(maglev_inlining, maglev)
 DEFINE_INT(max_maglev_inline_depth, 1,
            "max depth of functions that Maglev will inline")
-DEFINE_INT(max_maglev_inlined_bytecode_size, 460,
+DEFINE_INT(max_maglev_inlined_bytecode_size, 400,
            "maximum size of bytecode for a single inlining")
-DEFINE_INT(max_maglev_inlined_bytecode_size_cumulative, 920,
+DEFINE_INT(max_maglev_inlined_bytecode_size_cumulative, 600,
            "maximum cumulative size of bytecode considered for inlining")
-DEFINE_INT(max_maglev_inlined_bytecode_size_small, 27,
+DEFINE_INT(max_maglev_inlined_bytecode_size_small, 25,
            "maximum size of bytecode considered for small function inlining")
-DEFINE_FLOAT(min_maglev_inlining_frequency, 0.10,
+DEFINE_FLOAT(min_maglev_inlining_frequency, 0.27,
              "minimum frequency for inlining")
 DEFINE_BOOL(maglev_reuse_stack_slots, true,
             "reuse stack slots in the maglev optimizing compiler")
