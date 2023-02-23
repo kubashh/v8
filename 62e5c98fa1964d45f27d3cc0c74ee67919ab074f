@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79f1db70_2c14b5dd",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5242,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-23T09:08:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd8dd853_11acfe3e",
+      "range": {
+        "startLine": 5242,
+        "startChar": 15,
+        "endLine": 5242,
+        "endChar": 31
+      },
+      "revId": "62e5c98fa1964d45f27d3cc0c74ee67919ab074f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a940184_4f02321d",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-02-23T08:51:32Z",
       "side": 1,
       "message": "side note: this returns unconditionally, does inlining generator functions even work?",
+      "range": {
+        "startLine": 5822,
+        "startChar": 14,
+        "endLine": 5822,
+        "endChar": 20
+      },
+      "revId": "62e5c98fa1964d45f27d3cc0c74ee67919ab074f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d257d328_c09a836c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5822,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-02-23T09:08:37Z",
+      "side": 1,
+      "message": "No! Generators use the RegisterInput IR (like NewTarget) that we do not support. Future work! 😊",
+      "parentUuid": "6a940184_4f02321d",
       "range": {
         "startLine": 5822,
         "startChar": 14,
