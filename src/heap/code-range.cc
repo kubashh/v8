@@ -166,20 +166,20 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
 
     VirtualMemoryCage candidate_cage;
 
-    // Most of the times using existing function as a hint might give us the
-    // best region from the first attempt.
-    params.requested_start_hint = the_hint;
+    // // Most of the times using existing function as a hint might give us the
+    // // best region from the first attempt.
+    // params.requested_start_hint = the_hint;
 
-    if (candidate_cage.InitReservation(params)) {
-      TRACE("=== First attempt, hint=%p: [%p, %p)\n",
-            reinterpret_cast<void*>(params.requested_start_hint),
-            reinterpret_cast<void*>(candidate_cage.region().begin()),
-            reinterpret_cast<void*>(candidate_cage.region().end()));
-      if (!preferred_region.contains(candidate_cage.region())) {
-        // Keep trying.
-        candidate_cage.Free();
-      }
-    }
+    // if (candidate_cage.InitReservation(params)) {
+    //   TRACE("=== First attempt, hint=%p: [%p, %p)\n",
+    //         reinterpret_cast<void*>(params.requested_start_hint),
+    //         reinterpret_cast<void*>(candidate_cage.region().begin()),
+    //         reinterpret_cast<void*>(candidate_cage.region().end()));
+    //   if (!preferred_region.contains(candidate_cage.region())) {
+    //     // Keep trying.
+    //     candidate_cage.Free();
+    //   }
+    // }
     if (!candidate_cage.IsReserved()) {
       // Try to allocate code range at the end of preferred region, by going
       // towards the start in steps.
