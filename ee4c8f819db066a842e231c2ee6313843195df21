@@ -16,6 +16,138 @@
       "message": "base LGTM",
       "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "362d09e4_e553ef61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-24T11:19:16Z",
+      "side": 1,
+      "message": "src/compiler LGTM except assembler.h: I\u0027m not super comfortable with such template magic. Tobias, could you review assembler.h please?",
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d5c11c8_dc2832cc",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-24T11:19:16Z",
+      "side": 1,
+      "message": "Given how often we\u0027re going to load maps in this reducer, I think that it would make sense to have a LoadMap helper.",
+      "range": {
+        "startLine": 539,
+        "startChar": 26,
+        "endLine": 539,
+        "endChar": 76
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2625796b_74139b51",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-24T11:19:16Z",
+      "side": 1,
+      "message": "I think that it the majority of cases where Allocate is called, this argument will be the same. Maybe we could make it an optional argument defaulting to kFalse.",
+      "range": {
+        "startLine": 568,
+        "startChar": 44,
+        "endLine": 568,
+        "endChar": 69
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61584864_54326c51",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-24T11:19:16Z",
+      "side": 1,
+      "message": "Could you add a `static_assert(FixedDoubleArray::kHeaderSize \u003d\u003d FixedArray::kHeaderSize)` or introduce a `header_size` variable that you would set in each of the case of the switch?",
+      "range": {
+        "startLine": 615,
+        "startChar": 36,
+        "endLine": 615,
+        "endChar": 65
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83903271_08380c41",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-24T11:19:16Z",
+      "side": 1,
+      "message": "I find it a bit awkward to start a loop with `if (BIND(...)) {`. Maybe `LOOP(loop, index) {` would be better, with the macro just desugaring to `if (BIND(loop, index)) {`.\nI know that you had ideas to add loop helpers, but I just wanted to point this out as well.\n(feel free to ignore and add such a macro later)",
+      "range": {
+        "startLine": 627,
+        "startChar": 4,
+        "endLine": 627,
+        "endChar": 28
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a16eefb9_f69d1b0a",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2535,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-24T11:19:16Z",
+      "side": 1,
+      "message": "ObjectOrSmi maybe? (I don\u0027t feel strongly about this though)",
+      "range": {
+        "startLine": 2535,
+        "startChar": 5,
+        "endLine": 2535,
+        "endChar": 11
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
