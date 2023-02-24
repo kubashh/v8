@@ -16,6 +16,29 @@
       "message": "Clemens, PTAL.",
       "revId": "57fe7753d48f1cd0158d4706ac5163df8adcb5a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9cab15f_82590644",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-02-24T15:08:39Z",
+      "side": 1,
+      "message": "{WasmTableObject::Set} with a `wasm_null` object seems to do exactly the same as `SetFunctionTablePlaceholder`, after a small number of additional branches. If you measured that this indeed brings performance back, then LGTM. But it surprises me a bit.",
+      "range": {
+        "startLine": 2190,
+        "startChar": 0,
+        "endLine": 2194,
+        "endChar": 56
+      },
+      "revId": "57fe7753d48f1cd0158d4706ac5163df8adcb5a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
