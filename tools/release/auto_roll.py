@@ -96,6 +96,16 @@ class PrepareRollCandidate(Step):
     version = self.GetVersionTag(self["last_roll"])
     assert version, "The revision used as last roll is not tagged."
 
+    # Make sure a pgo tag is available before we continue rolling
+    pgo_version = self.GetVersionTag(self["roll"], suffix="-pgo")
+    if not pgo_version:
+      print(
+          f"Abort: PGO profiles for {version} are not available yet; missing "
+          f"refs/tags/{version}-pgo on {self['roll']}.")
+      return True
+
+    assert version == pgo_version, f"Tags for {self['roll']} do not match."
+
 
 class SwitchChromium(Step):
   MESSAGE = "Switch to Chromium checkout."
