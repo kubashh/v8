@@ -274,8 +274,10 @@ void StringBuiltinsAssembler::StringEqual_FastLoop(
   TNode<RawPtrT> lhs_end = RawPtrAdd(lhs_data, rounded_up_len);
 
 #ifdef ENABLE_SLOW_DCHECKS
-  // The padding must me zeroed for chunked comparison to be correct. This loop
+  // The padding must be zeroed for chunked comparison to be correct. This loop
   // checks all bytes being 0 from byte_length up to rounded_up_len.
+  // If we ever stop zeroing the padding, GenerateStringRelationalComparison
+  // below will also need to be updated.
   {
     TVARIABLE(IntPtrT, var_padding_offset, byte_length);
     Label loop(this, &var_padding_offset), loop_end(this);
@@ -704,43 +706,50 @@ void StringBuiltinsAssembler::GenerateStringRelationalComparison(
 
     // Loop over the {lhs} and {rhs} strings to see if they are equal.
     TVARIABLE(IntPtrT, var_offset, begin);
-    Label loop(this, &var_offset);
-    Goto(&loop);
-    BIND(&loop);
+    Label chunk_loop(this, &var_offset), char_loop(this, &var_offset);
+    Label if_done(this);
+    Goto(&chunk_loop);
+
+    // Try skipping over chunks of 4 identical characters.
+    // This depends on padding (between strings' lengths and the actual end
+    // of the heap object) being zeroed out.
+    // We could make the chunk size depend on kTaggedSize, but kTaggedSize > 4
+    // is rare at the time of this writing.
+    BIND(&chunk_loop);
     {
-      // Check if {offset} equals {end}.
-      Label if_done(this), if_notdone(this);
-      Branch(WordEqual(var_offset.value(), end), &if_done, &if_notdone);
+      GotoIf(IntPtrGreaterThanOrEqual(var_offset.value(), end), &if_done);
 
-      BIND(&if_notdone);
-      {
-        // Load the next characters from {lhs} and {rhs}.
-        TNode<Uint8T> lhs_value = Load<Uint8T>(lhs, var_offset.value());
-        TNode<Uint8T> rhs_value = Load<Uint8T>(rhs, var_offset.value());
+      TNode<Uint32T> lhs_chunk = Load<Uint32T>(lhs, var_offset.value());
+      TNode<Uint32T> rhs_chunk = Load<Uint32T>(rhs, var_offset.value());
+      GotoIf(Word32NotEqual(lhs_chunk, rhs_chunk), &char_loop);
 
-        // Check if the characters match.
-        Label if_valueissame(this), if_valueisnotsame(this);
-        Branch(Word32Equal(lhs_value, rhs_value), &if_valueissame,
-               &if_valueisnotsame);
+      var_offset = IntPtrAdd(var_offset.value(), IntPtrConstant(4));
+      Goto(&chunk_loop);
+    }
 
-        BIND(&if_valueissame);
-        {
-          // Advance to next character.
-          var_offset = IntPtrAdd(var_offset.value(), IntPtrConstant(1));
-        }
-        Goto(&loop);
+    BIND(&char_loop);
+    {
+      GotoIf(WordEqual(var_offset.value(), end), &if_done);
 
-        BIND(&if_valueisnotsame);
-        Branch(Uint32LessThan(lhs_value, rhs_value), &if_less, &if_greater);
-      }
+      TNode<Uint8T> lhs_char = Load<Uint8T>(lhs, var_offset.value());
+      TNode<Uint8T> rhs_char = Load<Uint8T>(rhs, var_offset.value());
 
-      BIND(&if_done);
-      {
-        // All characters up to the min length are equal, decide based on
-        // string length.
-        GotoIf(IntPtrEqual(lhs_length, rhs_length), &if_equal);
-        Branch(IntPtrLessThan(lhs_length, rhs_length), &if_less, &if_greater);
-      }
+      Label if_valuediffers(this);
+      GotoIf(Word32NotEqual(lhs_char, rhs_char), &if_valuediffers);
+
+      var_offset = IntPtrAdd(var_offset.value(), IntPtrConstant(1));
+      Goto(&char_loop);
+
+      BIND(&if_valuediffers);
+      Branch(Uint32LessThan(lhs_char, rhs_char), &if_less, &if_greater);
+    }
+
+    BIND(&if_done);
+    {
+      // All characters up to the min length are equal, decide based on
+      // string length.
+      GotoIf(IntPtrEqual(lhs_length, rhs_length), &if_equal);
+      Branch(IntPtrLessThan(lhs_length, rhs_length), &if_less, &if_greater);
     }
   }
 
