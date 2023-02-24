@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "af4eff973eeefa7876f680047107832970e7d8b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46862d20_85614b95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-02-24T16:14:40Z",
+      "side": 1,
+      "message": "Nice! Test data? Run presubmit or directly execute tools/release/script_test.py\n\nProbably needs a few different git calls and their fake return values in the fake test data.",
+      "revId": "af4eff973eeefa7876f680047107832970e7d8b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
