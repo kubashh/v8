@@ -3295,6 +3295,18 @@ bool MaglevGraphBuilder::ShouldInlineCall(compiler::JSFunctionRef function,
     TRACE_CANNOT_INLINE("use unsupported expection handlers");
     return false;
   }
+  if (call_frequency < v8_flags.min_inlining_frequency) {
+    TRACE_CANNOT_INLINE("call frequency ("
+                        << call_frequency << ") < minimum thredshold ("
+                        << v8_flags.min_maglev_inlining_frequency << ")");
+    return false;
+  }
+  if (bytecode.length() > v8_flags.max_maglev_inlined_bytecode_size) {
+    TRACE_CANNOT_INLINE("big function, size ("
+                        << bytecode.length() << ") >= max-size ("
+                        << v8_flags.max_maglev_inlined_bytecode_size << ")");
+    return false;
+  }
   // TODO(victorgomes): Support arguments object.
   // We currently do not materialize the arguments object correctly, bailout
   // if we have any bytecode that create the arguments object.
@@ -3310,21 +3322,10 @@ bool MaglevGraphBuilder::ShouldInlineCall(compiler::JSFunctionRef function,
         break;
     }
   }
-  if (call_frequency < v8_flags.min_inlining_frequency) {
-    TRACE_CANNOT_INLINE("call frequency ("
-                        << call_frequency << ") < minimum thredshold ("
-                        << v8_flags.min_maglev_inlining_frequency << ")");
-    return false;
-  }
   if (bytecode.length() < v8_flags.max_maglev_inlined_bytecode_size_small) {
     TRACE_INLINING("  inlining " << shared << ": small function");
+    graph()->add_inlined_bytecode_size(bytecode.length());
     return true;
-  }
-  if (bytecode.length() > v8_flags.max_maglev_inlined_bytecode_size) {
-    TRACE_CANNOT_INLINE("big function, size ("
-                        << bytecode.length() << ") >= max-size ("
-                        << v8_flags.max_maglev_inlined_bytecode_size << ")");
-    return false;
   }
   if (inlining_depth() > v8_flags.max_maglev_inline_depth) {
     TRACE_CANNOT_INLINE("inlining depth ("
