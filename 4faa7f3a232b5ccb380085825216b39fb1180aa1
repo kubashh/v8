@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d99dfcb_fb03d9fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-02-24T14:22:33Z",
+      "side": 1,
+      "message": "ptal – I am not submitting this until a few canaries got successfully tagged with a -pgo tag.",
+      "revId": "4faa7f3a232b5ccb380085825216b39fb1180aa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
