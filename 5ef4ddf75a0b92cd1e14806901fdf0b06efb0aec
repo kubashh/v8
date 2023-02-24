@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da9845ca_4910b2df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-02-24T06:20:56Z",
+      "side": 1,
+      "message": "lgtm \u0026 thanks.\n\nNoting, this file is consumed by [depot_tools](https://chromium.googlesource.com/chromium/tools/depot_tools.git/+/refs/heads/main/yapf) running on yapf\u003d\u003d0.29.1. This version supports [both styles in parallel](https://github.com/google/yapf/compare/v0.29.0...v0.29.1), but chromium is supposed to be deprecated in one of the upcoming versions.",
+      "revId": "5ef4ddf75a0b92cd1e14806901fdf0b06efb0aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
