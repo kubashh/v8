@@ -16,6 +16,23 @@
       "message": "ptal – I am not submitting this until a few canaries got successfully tagged with a -pgo tag.",
       "revId": "4faa7f3a232b5ccb380085825216b39fb1180aa1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4b6af02_bf337c45",
+        "filename": "tools/release/auto_roll.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-02-24T14:29:22Z",
+      "side": 1,
+      "message": "How about we instead change GetRecentReleases to already filter for only the -pgo tags? Then we also don\u0027t get a race of repeatedly creating a newer version and not-yet having the pgo for it...",
+      "revId": "4faa7f3a232b5ccb380085825216b39fb1180aa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
