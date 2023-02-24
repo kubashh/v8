@@ -39,6 +39,30 @@
       },
       "revId": "57fe7753d48f1cd0158d4706ac5163df8adcb5a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "767695b2_ce9c789b",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2194,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-02-24T15:20:21Z",
+      "side": 1,
+      "message": "It surprises me too, but I measured a 5-6% speedup. After this there is nothing else obvious.",
+      "parentUuid": "b9cab15f_82590644",
+      "range": {
+        "startLine": 2190,
+        "startChar": 0,
+        "endLine": 2194,
+        "endChar": 56
+      },
+      "revId": "57fe7753d48f1cd0158d4706ac5163df8adcb5a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
