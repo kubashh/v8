@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5a5fe9b_73fb7299",
+        "filename": "tools/release/common_includes.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-02-24T16:06:05Z",
+      "side": 0,
+      "message": "We already fetch in the preparation step.",
+      "range": {
+        "startLine": 541,
+        "startChar": 4,
+        "endLine": 541,
+        "endChar": 53
+      },
+      "revId": "80f5456646811c8cb1aa54e1d5a4c690ca8485fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
