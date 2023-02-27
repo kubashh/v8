@@ -863,13 +863,11 @@ TF_BUILTIN(StringGreaterThan, StringBuiltinsAssembler) {
                                      StringComparison::kGreaterThan);
 }
 
-#if V8_ENABLE_WEBASSEMBLY
-TF_BUILTIN(WasmStringCompare, StringBuiltinsAssembler) {
+TF_BUILTIN(StringCompare, StringBuiltinsAssembler) {
   auto left = Parameter<String>(Descriptor::kLeft);
   auto right = Parameter<String>(Descriptor::kRight);
   GenerateStringRelationalComparison(left, right, StringComparison::kCompare);
 }
-#endif
 
 TF_BUILTIN(StringGreaterThanOrEqual, StringBuiltinsAssembler) {
   auto left = Parameter<String>(Descriptor::kLeft);
