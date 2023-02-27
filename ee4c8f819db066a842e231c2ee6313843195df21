@@ -54,6 +54,167 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d083d19f_17d4d22f",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-02-27T16:39:59Z",
+      "side": 1,
+      "message": "How about:\n```\ntemplate \u003ctypename A, typename ConstOrValues\u003e\nauto ResolveAll(A\u0026 assembler, const ConstOrValues\u0026 const_or_values) {\n  return std::apply([\u0026](auto\u0026... args) {\n    return std::tuple{assembler.resolve(args)...};\n  }, const_or_values);\n}\n```\nThis also simplifies the callsite slightly, as it returns the tuple.",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 1
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a3cc57a_0aa1341e",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-02-27T16:39:59Z",
+      "side": 1,
+      "message": "nit: This is similar to the code in `graph-builder.cc`, where it is called `permutation`.",
+      "range": {
+        "startLine": 85,
+        "startChar": 49,
+        "endLine": 85,
+        "endChar": 54
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09c73b11_0e357cb9",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-02-27T16:39:59Z",
+      "side": 1,
+      "message": "Can this be replaced with the macro `USE()`?",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 55
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ea53894_8b00d77e",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-02-27T16:39:59Z",
+      "side": 1,
+      "message": "How about:\n```\n((std::get\u003cindices\u003e(recorded_values_)\n       .push_back(std::get\u003cindices\u003e(values)), 0), ...);\n```",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 150,
+        "endChar": 45
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd65bff_7a8f6a84",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-02-27T16:39:59Z",
+      "side": 1,
+      "message": "How about:\n```\nreturn std::tuple{ std::get\u003cindices\u003e(recorded_values_)[0]...};\n```",
+      "range": {
+        "startLine": 175,
+        "startChar": 8,
+        "endLine": 179,
+        "endChar": 22
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99402406_ac673016",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-02-27T16:39:59Z",
+      "side": 1,
+      "message": "How about adding a TODO that this becomes unnecessary if the predecessors are always sorted by their block id, that is, their visitation order.",
+      "range": {
+        "startLine": 183,
+        "startChar": 6,
+        "endLine": 183,
+        "endChar": 38
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baeeb6bb_fe4d5365",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-02-27T16:39:59Z",
+      "side": 1,
+      "message": "```\n(detail::OrderBy(std::get\u003cindices\u003e(recorded_values_),\n                           predecessor_indices), ...);",
+      "range": {
+        "startLine": 185,
+        "startChar": 6,
+        "endLine": 188,
+        "endChar": 18
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d5c11c8_dc2832cc",
         "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
         "patchSetId": 7
@@ -157,6 +318,30 @@
       "writtenOn": "2023-02-24T11:19:16Z",
       "side": 1,
       "message": "ObjectOrSmi maybe? (I don\u0027t feel strongly about this though)",
+      "range": {
+        "startLine": 2535,
+        "startChar": 5,
+        "endLine": 2535,
+        "endChar": 11
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a14bbd6_ef61eed2",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2535,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-02-27T16:39:59Z",
+      "side": 1,
+      "message": "`Object` is already the term for `HeapObject` or `Smi` throughout the codebase.",
+      "parentUuid": "a16eefb9_f69d1b0a",
       "range": {
         "startLine": 2535,
         "startChar": 5,
