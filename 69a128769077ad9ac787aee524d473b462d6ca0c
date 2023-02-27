@@ -33,6 +33,23 @@
       "message": "The failures look like infra failures? Trying again..",
       "revId": "69a128769077ad9ac787aee524d473b462d6ca0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f313960_90374354",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2023-02-27T15:06:07Z",
+      "side": 1,
+      "message": "I can\u0027t tell if the webdriver failures are related or not - it doesn\u0027t appear to me that they use DevTools at all. So giving it another try before I attempt to figure out how to reproduce locally..",
+      "revId": "69a128769077ad9ac787aee524d473b462d6ca0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
