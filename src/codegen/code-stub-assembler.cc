@@ -12948,7 +12948,7 @@ TNode<Oddball> CodeStubAssembler::RelationalComparison(
             default:
               UNREACHABLE();
           }
-          var_result = CAST(CallBuiltin(builtin, context(), left, right));
+          var_result = CAST(CallBuiltin(builtin, TNode<Object>(), left, right));
           Goto(&end);
 
           BIND(&if_right_not_string);
