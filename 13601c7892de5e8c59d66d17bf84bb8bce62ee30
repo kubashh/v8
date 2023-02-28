@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "13601c7892de5e8c59d66d17bf84bb8bce62ee30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3db45bae_b115349a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5673,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-02-28T14:55:39Z",
+      "side": 1,
+      "message": "This method is only called from `Isolate::Init`.\nWe have a similar DCHECK already at the end of `Isolate::Init` that new space is empty and no GCs occured (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/isolate.cc;drc\u003de8d509833a9ec05d1322c84cd9fc5c911685f30f;l\u003d4549).\nIt doesn\u0027t cover `new_lo_space` so maybe just add that one there?",
+      "range": {
+        "startLine": 5673,
+        "startChar": 6,
+        "endLine": 5673,
+        "endChar": 15
+      },
+      "revId": "13601c7892de5e8c59d66d17bf84bb8bce62ee30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
