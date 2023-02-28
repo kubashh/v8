@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2abdbf05_c162f377",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T14:28:19Z",
+      "side": 1,
+      "message": "PTAL, thanks",
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5affa23a_e5c98300",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T14:28:19Z",
+      "side": 1,
+      "message": "TODO: Remove this comment.",
+      "range": {
+        "startLine": 206,
+        "startChar": 4,
+        "endLine": 208,
+        "endChar": 41
+      },
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
