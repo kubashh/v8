@@ -544,6 +544,7 @@ V8_INLINE void Sweeper::CleanupRememberedSetEntriesForFreedMemory(
     Address free_start, Address free_end, Page* page, bool record_free_ranges,
     TypedSlotSet::FreeRangesMap* free_ranges_map, SweepingMode sweeping_mode,
     InvalidatedSlotsCleanup* invalidated_old_to_new_cleanup,
+    InvalidatedSlotsCleanup* invalidated_old_to_old_cleanup,
     InvalidatedSlotsCleanup* invalidated_old_to_shared_cleanup) {
   DCHECK_LE(free_start, free_end);
   if (sweeping_mode == SweepingMode::kEagerDuringGC) {
@@ -575,6 +576,7 @@ V8_INLINE void Sweeper::CleanupRememberedSetEntriesForFreedMemory(
   }
 
   invalidated_old_to_new_cleanup->Free(free_start, free_end);
+  invalidated_old_to_old_cleanup->Free(free_start, free_end);
   invalidated_old_to_shared_cleanup->Free(free_start, free_end);
 }
 
@@ -661,10 +663,13 @@ int Sweeper::RawSweep(
   // in free memory.
   InvalidatedSlotsCleanup invalidated_old_to_new_cleanup =
       InvalidatedSlotsCleanup::NoCleanup(p);
+  InvalidatedSlotsCleanup invalidated_old_to_old_cleanup =
+      InvalidatedSlotsCleanup::NoCleanup(p);
   InvalidatedSlotsCleanup invalidated_old_to_shared_cleanup =
       InvalidatedSlotsCleanup::NoCleanup(p);
   if (sweeping_mode == SweepingMode::kEagerDuringGC) {
     invalidated_old_to_new_cleanup = InvalidatedSlotsCleanup::OldToNew(p);
+    invalidated_old_to_old_cleanup = InvalidatedSlotsCleanup::OldToOld(p);
     invalidated_old_to_shared_cleanup = InvalidatedSlotsCleanup::OldToShared(p);
   }
 
@@ -693,7 +698,7 @@ int Sweeper::RawSweep(
       CleanupRememberedSetEntriesForFreedMemory(
           free_start, free_end, p, record_free_ranges, &free_ranges_map,
           sweeping_mode, &invalidated_old_to_new_cleanup,
-          &invalidated_old_to_shared_cleanup);
+          &invalidated_old_to_old_cleanup, &invalidated_old_to_shared_cleanup);
     }
     Map map = object.map(cage_base, kAcquireLoad);
     DCHECK(MarkCompactCollector::IsMapOrForwarded(map));
@@ -727,7 +732,7 @@ int Sweeper::RawSweep(
     CleanupRememberedSetEntriesForFreedMemory(
         free_start, free_end, p, record_free_ranges, &free_ranges_map,
         sweeping_mode, &invalidated_old_to_new_cleanup,
-        &invalidated_old_to_shared_cleanup);
+        &invalidated_old_to_old_cleanup, &invalidated_old_to_shared_cleanup);
   }
 
   // Phase 3: Post process the page.

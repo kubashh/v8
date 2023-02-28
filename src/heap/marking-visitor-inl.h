@@ -522,30 +522,6 @@ int MarkingVisitorBase<ConcreteVisitor, MarkingState>::
 }
 
 template <typename ConcreteVisitor, typename MarkingState>
-int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitThinString(
-    Map map, ThinString object) {
-  if (!concrete_visitor()->ShouldVisitUnchecked(object)) return 0;
-  int size = ThinString::BodyDescriptor::SizeOf(map, object);
-  if (concrete_visitor()->ShouldVisitMapPointer()) {
-    VisitMapPointer(object);
-  }
-  ThinString::BodyDescriptor::IterateBody(map, object, size, this);
-  return size;
-}
-
-template <typename ConcreteVisitor, typename MarkingState>
-int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitExternalString(
-    Map map, ExternalString object) {
-  if (!concrete_visitor()->ShouldVisitUnchecked(object)) return 0;
-  int size = ExternalString::BodyDescriptor::SizeOf(map, object);
-  if (concrete_visitor()->ShouldVisitMapPointer()) {
-    VisitMapPointer(object);
-  }
-  ExternalString::BodyDescriptor::IterateBody(map, object, size, this);
-  return size;
-}
-
-template <typename ConcreteVisitor, typename MarkingState>
 int MarkingVisitorBase<ConcreteVisitor, MarkingState>::VisitDescriptorsForMap(
     Map map) {
   if (!map.CanTransition()) return 0;
