@@ -33,6 +33,23 @@
       "message": "lgtm",
       "revId": "6d706ee7839db953fd3f54223fbbf1a8b469c8a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d0ec799_af90d913",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4551,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-02-28T15:48:59Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this check be done behind `if (heap()-\u003enew_lo_space())` ?",
+      "revId": "6d706ee7839db953fd3f54223fbbf1a8b469c8a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
