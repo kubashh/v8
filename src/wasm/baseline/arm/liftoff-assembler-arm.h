@@ -787,9 +787,8 @@ void LiftoffAssembler::StoreTaggedPointer(Register dst_addr,
   b(&exit);
   bind(&write_barrier);
   JumpIfSmi(src.gp(), &exit);
-  CheckPageFlag(src.gp(),
-                MemoryChunk::kPointersToHereAreInterestingOrInSharedHeapMask,
-                eq, &exit);
+  CheckPageFlag(src.gp(), MemoryChunk::kPointersToHereAreInterestingMask, eq,
+                &exit);
   CallRecordWriteStubSaveRegisters(
       dst_addr,
       actual_offset_reg == no_reg ? Operand(offset_imm)

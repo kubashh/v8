@@ -417,8 +417,8 @@ void LiftoffAssembler::StoreTaggedPointer(Register dst_addr,
     DecompressTagged(src.gp(), src.gp());
   }
   CheckPageFlag(src.gp(), scratch,
-                MemoryChunk::kPointersToHereAreInterestingOrInSharedHeapMask,
-                zero, &exit, Label::kNear);
+                MemoryChunk::kPointersToHereAreInterestingMask, zero, &exit,
+                Label::kNear);
   leaq(scratch, dst_op);
 
   CallRecordWriteStubSaveRegisters(dst_addr, scratch, SaveFPRegsMode::kSave,
