@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a68053b0_cd0f8f2a",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-02-28T09:19:36Z",
+      "side": 1,
+      "message": "Note that this is a partial port. Point (2) in the commit description is talking about dropping this block.",
+      "range": {
+        "startLine": 309,
+        "startChar": 2,
+        "endLine": 311,
+        "endChar": 3
+      },
+      "revId": "82bb5ea9a9bd1184f30dd6177cafb3d68136bc7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25a1519f_4d7e7f3d",
+        "filename": "src/wasm/baseline/s390/liftoff-assembler-s390.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-02-28T09:19:36Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 294,
+        "startChar": 2,
+        "endLine": 296,
+        "endChar": 3
+      },
+      "revId": "82bb5ea9a9bd1184f30dd6177cafb3d68136bc7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
