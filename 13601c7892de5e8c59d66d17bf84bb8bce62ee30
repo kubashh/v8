@@ -39,6 +39,30 @@
       },
       "revId": "13601c7892de5e8c59d66d17bf84bb8bce62ee30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ea2e46b_eed62dad",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5673,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-02-28T15:08:42Z",
+      "side": 1,
+      "message": "Ah thanks, I haven\u0027t seen that DCHECK. I\u0027ve cleaned up the DCHECK in Isolate::Init and added one for new_lo_space as well.\n\nI still think this DCHECK here in NotifyDeserializationComplete make sense as well. We already iterate all spaces in here and it makes sense to document why we don\u0027t do anything for the new space here. There are also a bit over 100 LOC between the invocation of NotifyDeserializationComplete in Isolate::Init and the DCHECKs at the end of the moment.",
+      "parentUuid": "3db45bae_b115349a",
+      "range": {
+        "startLine": 5673,
+        "startChar": 6,
+        "endLine": 5673,
+        "endChar": 15
+      },
+      "revId": "13601c7892de5e8c59d66d17bf84bb8bce62ee30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
