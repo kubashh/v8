@@ -264,7 +264,8 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
           is_inline() ? parent->current_interpreter_frame_.known_node_aspects()
                       : compilation_unit_->zone()->New<KnownNodeAspects>(
                             compilation_unit_->zone())),
-      catch_block_stack_(zone()) {
+      catch_block_stack_(zone()),
+      inlined_call_offsets_(bytecode().length(), zone()) {
   memset(merge_states_, 0,
          (bytecode().length() + 1) * sizeof(InterpreterFrameState*));
   // Default construct basic block refs.
@@ -283,7 +284,51 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
     new (&jump_targets_[inline_exit_offset()]) BasicBlockRef();
   }
 
-  CalculatePredecessorCounts();
+  std::vector<InlinedCallCandidate> inlined_call_candidates;
+  CalculatePredecessorCountsAndAddInlinedCallCandidates(
+      inlined_call_candidates);
+  FillInlinedCallOffsets(inlined_call_candidates);
+}
+
+void MaglevGraphBuilder::CalculatePredecessorCountsAndAddInlinedCallCandidates(
+    std::vector<InlinedCallCandidate>& inlined_call_candidates) {
+  // Add 1 after the end of the bytecode so we can always write to the offset
+  // after the last bytecode.
+  size_t array_length = bytecode().length() + 1;
+  predecessors_ = zone()->NewArray<uint32_t>(array_length);
+  MemsetUint32(predecessors_, 1, array_length);
+
+  interpreter::BytecodeArrayIterator iterator(bytecode().object());
+  for (; !iterator.done(); iterator.Advance()) {
+    interpreter::Bytecode bytecode = iterator.current_bytecode();
+    if (interpreter::Bytecodes::IsJump(bytecode)) {
+      predecessors_[iterator.GetJumpTargetOffset()]++;
+      if (!interpreter::Bytecodes::IsConditionalJump(bytecode)) {
+        predecessors_[iterator.next_offset()]--;
+      }
+    } else if (interpreter::Bytecodes::IsSwitch(bytecode)) {
+      for (auto offset : iterator.GetJumpTableTargetOffsets()) {
+        predecessors_[offset.target_offset]++;
+      }
+    } else if (interpreter::Bytecodes::Returns(bytecode) ||
+               interpreter::Bytecodes::UnconditionallyThrows(bytecode)) {
+      predecessors_[iterator.next_offset()]--;
+      // Collect inline return jumps in the slot after the last bytecode.
+      if (is_inline() && interpreter::Bytecodes::Returns(bytecode)) {
+        predecessors_[array_length - 1]++;
+      }
+    }
+    if (v8_flags.maglev_inlining) {
+      if (interpreter::Bytecodes::IsCallOrConstruct(bytecode)) {
+        AddInlinedCallCandidate(inlined_call_candidates, iterator);
+      }
+    }
+    // TODO(leszeks): Also consider handler entries (the bytecode analysis)
+    // will do this automatically I guess if we merge this into that.
+  }
+  if (!is_inline()) {
+    DCHECK_EQ(0, predecessors_[bytecode().length()]);
+  }
 }
 
 void MaglevGraphBuilder::StartPrologue() {
@@ -3254,17 +3299,12 @@ ReduceResult MaglevGraphBuilder::BuildInlined(const CallArguments& args,
   } while (false)
 
 #define TRACE_CANNOT_INLINE(...) \
-  TRACE_INLINING("  cannot inline " << shared << ": " << __VA_ARGS__)
+  TRACE_INLINING("Cannot inline " << shared << ": " << __VA_ARGS__)
 
 bool MaglevGraphBuilder::ShouldInlineCall(compiler::JSFunctionRef function,
-                                          float call_frequency) {
+                                          float call_frequency) const {
   compiler::OptionalCodeRef code = function.code(broker());
   compiler::SharedFunctionInfoRef shared = function.shared(broker());
-  if (graph()->total_inlined_bytecode_size() >
-      v8_flags.max_maglev_inlined_bytecode_size_cumulative) {
-    TRACE_CANNOT_INLINE("maximum inlined bytecode size");
-    return false;
-  }
   if (!code) {
     // TODO(verwaest): Soft deopt instead?
     TRACE_CANNOT_INLINE("it has not been compiled yet");
@@ -3317,7 +3357,7 @@ bool MaglevGraphBuilder::ShouldInlineCall(compiler::JSFunctionRef function,
     return false;
   }
   if (bytecode.length() < v8_flags.max_maglev_inlined_bytecode_size_small) {
-    TRACE_INLINING("  inlining " << shared << ": small function");
+    TRACE_INLINING("Inline candidate " << shared << ": small function");
     return true;
   }
   if (bytecode.length() > v8_flags.max_maglev_inlined_bytecode_size) {
@@ -3332,18 +3372,108 @@ bool MaglevGraphBuilder::ShouldInlineCall(compiler::JSFunctionRef function,
                         << v8_flags.max_maglev_inline_depth << ")");
     return false;
   }
-  TRACE_INLINING("  inlining " << shared);
-  if (v8_flags.trace_maglev_inlining_verbose) {
-    BytecodeArray::Disassemble(bytecode.object(), std::cout);
-    function.feedback_vector(broker())->object()->Print(std::cout);
-  }
-  graph()->add_inlined_bytecode_size(bytecode.length());
+  TRACE_INLINING("Inline candidate " << shared);
   return true;
+}
+
+void MaglevGraphBuilder::AddInlinedCallCandidate(
+    std::vector<InlinedCallCandidate>& inlined_call_candidates,
+    const interpreter::BytecodeArrayIterator& iterator) const {
+  // Get slot operand.
+  int slot_operand;
+  switch (iterator.current_bytecode()) {
+    case interpreter::Bytecode::kCallAnyReceiver:
+    case interpreter::Bytecode::kCallProperty:
+    case interpreter::Bytecode::kCallProperty1:
+    case interpreter::Bytecode::kCallUndefinedReceiver:
+    case interpreter::Bytecode::kCallUndefinedReceiver2:
+      slot_operand = 3;
+      break;
+    case interpreter::Bytecode::kCallUndefinedReceiver0:
+      slot_operand = 1;
+      break;
+    case interpreter::Bytecode::kCallProperty0:
+    case interpreter::Bytecode::kCallUndefinedReceiver1:
+      slot_operand = 2;
+      break;
+    case interpreter::Bytecode::kCallProperty2:
+      slot_operand = 4;
+      break;
+    // TODO(victorgomes): Inline constructs and calls with spread.
+    case interpreter::Bytecode::kCallWithSpread:
+    case interpreter::Bytecode::kConstructWithSpread:
+    case interpreter::Bytecode::kConstruct:
+    case interpreter::Bytecode::kCallJSRuntime:
+      return;  // Do nothing.
+    default:
+      UNREACHABLE();
+  }
+  // Get call feedback.
+  FeedbackSlot slot = iterator.GetSlotOperand(slot_operand);
+  compiler::FeedbackSource feedback_source(feedback(), slot);
+  DCHECK(feedback_source.IsValid());
+  const compiler::ProcessedFeedback& processed_feedback =
+      broker()->GetFeedbackForCall(feedback_source);
+  if (processed_feedback.IsInsufficient()) return;
+  compiler::CallFeedback const& call_feedback = processed_feedback.AsCall();
+  if (!call_feedback.target().has_value()) return;
+  // TODO(victorgomes): We might be able to inline PrototypeApply the function
+  // depending on the arguments.
+  if (call_feedback.call_feedback_content() == CallFeedbackContent::kReceiver)
+    return;
+  if (!call_feedback.target()->IsJSFunction()) return;
+  compiler::JSFunctionRef target = call_feedback.target()->AsJSFunction();
+  float frequency = call_feedback.frequency() * call_frequency_;
+  if (!ShouldInlineCall(target, frequency)) return;
+  // Add candidate.
+  int bytecode_size =
+      target.shared(broker()).GetBytecodeArray(broker()).length();
+  inlined_call_candidates.emplace_back(iterator.current_offset(), bytecode_size,
+                                       target, frequency);
+}
+
+void MaglevGraphBuilder::FillInlinedCallOffsets(
+    std::vector<InlinedCallCandidate>& candidates) {
+  // Sort by priority.
+  std::sort(candidates.begin(), candidates.end(),
+            [](const InlinedCallCandidate& c1, const InlinedCallCandidate& c2) {
+              return c1.frequency / c1.bytecode_size >
+                     c2.frequency / c2.bytecode_size;
+            });
+  // Set inlined bytecode offsets.
+  int total = graph()->total_inlined_bytecode_size();
+  for (auto& candidate : candidates) {
+    if (total + candidate.bytecode_size >
+        v8_flags.max_maglev_inlined_bytecode_size_cumulative) {
+      break;
+    }
+    inlined_call_offsets_.Add(candidate.bytecode_offset);
+    total += candidate.bytecode_size;
+    compiler::SharedFunctionInfoRef shared = candidate.target.shared(broker());
+    TRACE_INLINING("Will inline " << shared);
+    if (v8_flags.trace_maglev_inlining_verbose) {
+      BytecodeArray::Disassemble(shared.GetBytecodeArray(broker()).object(),
+                                 std::cout);
+      candidate.target.feedback_vector(broker())->object()->Print(std::cout);
+    }
+  }
+  graph()->set_total_inlined_bytecode_size(total);
 }
 
 ReduceResult MaglevGraphBuilder::TryBuildInlinedCall(
     compiler::JSFunctionRef function, CallArguments& args,
     const compiler::FeedbackSource& feedback_source) {
+  if (!inlined_call_offsets_.Contains(iterator_.current_offset())) {
+    return ReduceResult::Fail();
+  }
+  compiler::SharedFunctionInfoRef shared = function.shared(broker());
+  TRACE_INLINING("  inlining " << shared);
+
+  compiler::BytecodeArrayRef bytecode = shared.GetBytecodeArray(broker());
+  graph()->inlined_functions().push_back(
+      OptimizedCompilationInfo::InlinedFunctionHolder(
+          shared.object(), bytecode.object(), current_source_position_));
+
   float feedback_frequency = 0.0f;
   if (feedback_source.IsValid()) {
     compiler::ProcessedFeedback const& feedback =
@@ -3352,16 +3482,6 @@ ReduceResult MaglevGraphBuilder::TryBuildInlinedCall(
         feedback.IsInsufficient() ? 0.0f : feedback.AsCall().frequency();
   }
   float call_frequency = feedback_frequency * call_frequency_;
-  if (!ShouldInlineCall(function, call_frequency)) {
-    return ReduceResult::Fail();
-  }
-
-  compiler::BytecodeArrayRef bytecode =
-      function.shared(broker()).GetBytecodeArray(broker());
-  graph()->inlined_functions().push_back(
-      OptimizedCompilationInfo::InlinedFunctionHolder(
-          function.shared(broker()).object(), bytecode.object(),
-          current_source_position_));
 
   // Create a new compilation unit and graph builder for the inlined
   // function.

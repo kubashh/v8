@@ -78,8 +78,8 @@ class Graph final : public ZoneObject {
   int total_inlined_bytecode_size() const {
     return total_inlined_bytecode_size_;
   }
-  void add_inlined_bytecode_size(int size) {
-    total_inlined_bytecode_size_ += size;
+  void set_total_inlined_bytecode_size(int total) {
+    total_inlined_bytecode_size_ = total;
   }
 
   uint32_t stack_check_offset() {
