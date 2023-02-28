@@ -468,11 +468,13 @@ def multibranch_builder(**kwargs):
         args["priority"] = branch.priority
 
         if branch.bucket == "ci":
+            args["disable_resultdb_exports"] = kwargs.get("disable_resultdb_exports", False)
             if close_tree:
                 notifies = args.pop("notifies", [])
                 notifies.append("v8 tree closer")
                 args["notifies"] = notifies
         else:
+            args["disable_resultdb_exports"] = True
             args["notifies"] = ["sheriffs"]
             if _builder_is_not_supported(branch.bucket, first_branch_version):
                 continue
