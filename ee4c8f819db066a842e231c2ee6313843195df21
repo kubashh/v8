@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76cd4162_2d6ac81e",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d083d19f_17d4d22f",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 1
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a3cc57a_0aa1341e",
@@ -88,6 +112,30 @@
       "writtenOn": "2023-02-27T16:39:59Z",
       "side": 1,
       "message": "nit: This is similar to the code in `graph-builder.cc`, where it is called `permutation`.",
+      "range": {
+        "startLine": 85,
+        "startChar": 49,
+        "endLine": 85,
+        "endChar": 54
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e592c15_8acba45c",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a3cc57a_0aa1341e",
       "range": {
         "startLine": 85,
         "startChar": 49,
@@ -121,6 +169,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a49ff3b6_12ea221a",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Unfortunately no, because we need the value of the expression and `USE` expands to a `do { } while(...)` loop.",
+      "parentUuid": "09c73b11_0e357cb9",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 55
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ea53894_8b00d77e",
@@ -134,6 +206,30 @@
       "writtenOn": "2023-02-27T16:39:59Z",
       "side": 1,
       "message": "How about:\n```\n((std::get\u003cindices\u003e(recorded_values_)\n       .push_back(std::get\u003cindices\u003e(values)), 0), ...);\n```",
+      "range": {
+        "startLine": 148,
+        "startChar": 4,
+        "endLine": 150,
+        "endChar": 45
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "288c54b6_776819dc",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Interesting. This is a fold expression using the `,`-operator, right?",
+      "parentUuid": "6ea53894_8b00d77e",
       "range": {
         "startLine": 148,
         "startChar": 4,
@@ -167,6 +263,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cdce5fb_5214d0b3",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bd65bff_7a8f6a84",
+      "range": {
+        "startLine": 175,
+        "startChar": 8,
+        "endLine": 179,
+        "endChar": 22
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99402406_ac673016",
@@ -180,6 +300,30 @@
       "writtenOn": "2023-02-27T16:39:59Z",
       "side": 1,
       "message": "How about adding a TODO that this becomes unnecessary if the predecessors are always sorted by their block id, that is, their visitation order.",
+      "range": {
+        "startLine": 183,
+        "startChar": 6,
+        "endLine": 183,
+        "endChar": 38
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49315e7a_2e70a974",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99402406_ac673016",
       "range": {
         "startLine": 183,
         "startChar": 6,
@@ -213,6 +357,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90f14650_07483d88",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baeeb6bb_fe4d5365",
+      "range": {
+        "startLine": 185,
+        "startChar": 6,
+        "endLine": 188,
+        "endChar": 18
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d5c11c8_dc2832cc",
@@ -226,6 +394,30 @@
       "writtenOn": "2023-02-24T11:19:16Z",
       "side": 1,
       "message": "Given how often we\u0027re going to load maps in this reducer, I think that it would make sense to have a LoadMap helper.",
+      "range": {
+        "startLine": 539,
+        "startChar": 26,
+        "endLine": 539,
+        "endChar": 76
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc26b104_4651bc8c",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d5c11c8_dc2832cc",
       "range": {
         "startLine": 539,
         "startChar": 26,
@@ -259,6 +451,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19bc1239_a2493836",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2625796b_74139b51",
+      "range": {
+        "startLine": 568,
+        "startChar": 44,
+        "endLine": 568,
+        "endChar": 69
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61584864_54326c51",
@@ -282,6 +498,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db8acaa7_ed99d4ff",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61584864_54326c51",
+      "range": {
+        "startLine": 615,
+        "startChar": 36,
+        "endLine": 615,
+        "endChar": 65
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83903271_08380c41",
@@ -295,6 +535,30 @@
       "writtenOn": "2023-02-24T11:19:16Z",
       "side": 1,
       "message": "I find it a bit awkward to start a loop with `if (BIND(...)) {`. Maybe `LOOP(loop, index) {` would be better, with the macro just desugaring to `if (BIND(loop, index)) {`.\nI know that you had ideas to add loop helpers, but I just wanted to point this out as well.\n(feel free to ignore and add such a macro later)",
+      "range": {
+        "startLine": 627,
+        "startChar": 4,
+        "endLine": 627,
+        "endChar": 28
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "364bdd7d_0de154ae",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "83903271_08380c41",
       "range": {
         "startLine": 627,
         "startChar": 4,
@@ -342,6 +606,30 @@
       "side": 1,
       "message": "`Object` is already the term for `HeapObject` or `Smi` throughout the codebase.",
       "parentUuid": "a16eefb9_f69d1b0a",
+      "range": {
+        "startLine": 2535,
+        "startChar": 5,
+        "endLine": 2535,
+        "endChar": 11
+      },
+      "revId": "ee4c8f819db066a842e231c2ee6313843195df21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2aa9c0b4_1724038c",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2535,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T09:44:35Z",
+      "side": 1,
+      "message": "Yeah that was also my intuition that `Object` is already the right term for that.",
+      "parentUuid": "2a14bbd6_ef61eed2",
       "range": {
         "startLine": 2535,
         "startChar": 5,
