@@ -73,8 +73,6 @@ class PropertyCallbackArguments final
   static const int kThisIndex = T::kThisIndex;
   static const int kHolderIndex = T::kHolderIndex;
   static const int kDataIndex = T::kDataIndex;
-  static const int kReturnValueDefaultValueIndex =
-      T::kReturnValueDefaultValueIndex;
   static const int kIsolateIndex = T::kIsolateIndex;
   static const int kShouldThrowOnErrorIndex = T::kShouldThrowOnErrorIndex;
 
@@ -180,8 +178,6 @@ class FunctionCallbackArguments
   static const int kArgsLength = T::kArgsLength;
   static const int kHolderIndex = T::kHolderIndex;
   static const int kDataIndex = T::kDataIndex;
-  static const int kReturnValueDefaultValueIndex =
-      T::kReturnValueDefaultValueIndex;
   static const int kIsolateIndex = T::kIsolateIndex;
   static const int kNewTargetIndex = T::kNewTargetIndex;
 

@@ -3443,11 +3443,10 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
 
   using FCA = FunctionCallbackArguments;
 
-  static_assert(FCA::kArgsLength == 6);
-  static_assert(FCA::kNewTargetIndex == 5);
-  static_assert(FCA::kDataIndex == 4);
-  static_assert(FCA::kReturnValueOffset == 3);
-  static_assert(FCA::kReturnValueDefaultValueIndex == 2);
+  static_assert(FCA::kArgsLength == 5);
+  static_assert(FCA::kNewTargetIndex == 4);
+  static_assert(FCA::kDataIndex == 3);
+  static_assert(FCA::kReturnValueOffset == 2);
   static_assert(FCA::kIsolateIndex == 1);
   static_assert(FCA::kHolderIndex == 0);
 
@@ -3460,16 +3459,14 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
   //   esp[0 * kSystemPointerSize]: return address
   //   esp[1 * kSystemPointerSize]: kHolder
   //   esp[2 * kSystemPointerSize]: kIsolate
-  //   esp[3 * kSystemPointerSize]: undefined (kReturnValueDefaultValue)
-  //   esp[4 * kSystemPointerSize]: undefined (kReturnValue)
-  //   esp[5 * kSystemPointerSize]: kData
-  //   esp[6 * kSystemPointerSize]: undefined (kNewTarget)
+  //   esp[3 * kSystemPointerSize]: undefined (kReturnValue)
+  //   esp[4 * kSystemPointerSize]: kData
+  //   esp[5 * kSystemPointerSize]: undefined (kNewTarget)
 
   __ PopReturnAddressTo(ecx);
   __ PushRoot(RootIndex::kUndefinedValue);
   __ Push(call_data);
-  __ PushRoot(RootIndex::kUndefinedValue);
-  __ PushRoot(RootIndex::kUndefinedValue);
+  __ PushRoot(RootIndex::kUndefinedValue); // return value
   __ Push(Immediate(ExternalReference::isolate_address(masm->isolate())));
   __ Push(holder);
   __ PushReturnAddressFrom(ecx);
@@ -3539,11 +3536,10 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   static_assert(PropertyCallbackArguments::kShouldThrowOnErrorIndex == 0);
   static_assert(PropertyCallbackArguments::kHolderIndex == 1);
   static_assert(PropertyCallbackArguments::kIsolateIndex == 2);
-  static_assert(PropertyCallbackArguments::kReturnValueDefaultValueIndex == 3);
-  static_assert(PropertyCallbackArguments::kReturnValueOffset == 4);
-  static_assert(PropertyCallbackArguments::kDataIndex == 5);
-  static_assert(PropertyCallbackArguments::kThisIndex == 6);
-  static_assert(PropertyCallbackArguments::kArgsLength == 7);
+  static_assert(PropertyCallbackArguments::kReturnValueOffset == 3);
+  static_assert(PropertyCallbackArguments::kDataIndex == 4);
+  static_assert(PropertyCallbackArguments::kThisIndex == 5);
+  static_assert(PropertyCallbackArguments::kArgsLength == 6);
 
   Register receiver = ApiGetterDescriptor::ReceiverRegister();
   Register holder = ApiGetterDescriptor::HolderRegister();
@@ -3554,9 +3550,7 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   __ pop(scratch);  // Pop return address to extend the frame.
   __ push(receiver);
   __ push(FieldOperand(callback, AccessorInfo::kDataOffset));
-  __ PushRoot(RootIndex::kUndefinedValue);  // ReturnValue
-  // ReturnValue default value
-  __ PushRoot(RootIndex::kUndefinedValue);
+  __ PushRoot(RootIndex::kUndefinedValue); // return value
   __ Push(Immediate(ExternalReference::isolate_address(masm->isolate())));
   __ push(holder);
   __ push(Immediate(Smi::zero()));  // should_throw_on_error -> false

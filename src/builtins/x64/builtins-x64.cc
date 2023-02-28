@@ -4735,11 +4735,10 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
 
   using FCA = FunctionCallbackArguments;
 
-  static_assert(FCA::kArgsLength == 6);
-  static_assert(FCA::kNewTargetIndex == 5);
-  static_assert(FCA::kDataIndex == 4);
-  static_assert(FCA::kReturnValueOffset == 3);
-  static_assert(FCA::kReturnValueDefaultValueIndex == 2);
+  static_assert(FCA::kArgsLength == 5);
+  static_assert(FCA::kNewTargetIndex == 4);
+  static_assert(FCA::kDataIndex == 3);
+  static_assert(FCA::kReturnValueOffset == 2);
   static_assert(FCA::kIsolateIndex == 1);
   static_assert(FCA::kHolderIndex == 0);
 
@@ -4752,17 +4751,15 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
   //   rsp[0 * kSystemPointerSize]: return address
   //   rsp[1 * kSystemPointerSize]: kHolder
   //   rsp[2 * kSystemPointerSize]: kIsolate
-  //   rsp[3 * kSystemPointerSize]: undefined (kReturnValueDefaultValue)
-  //   rsp[4 * kSystemPointerSize]: undefined (kReturnValue)
-  //   rsp[5 * kSystemPointerSize]: kData
-  //   rsp[6 * kSystemPointerSize]: undefined (kNewTarget)
+  //   rsp[3 * kSystemPointerSize]: undefined (kReturnValue)
+  //   rsp[4 * kSystemPointerSize]: kData
+  //   rsp[5 * kSystemPointerSize]: undefined (kNewTarget)
 
   __ PopReturnAddressTo(rax);
   __ LoadRoot(kScratchRegister, RootIndex::kUndefinedValue);
-  __ Push(kScratchRegister);
+  __ Push(kScratchRegister); // new target
   __ Push(call_data);
-  __ Push(kScratchRegister);
-  __ Push(kScratchRegister);
+  __ Push(kScratchRegister); // return value
   __ PushAddress(ExternalReference::isolate_address(masm->isolate()));
   __ Push(holder);
   __ PushReturnAddressFrom(rax);
@@ -4846,20 +4843,17 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   static_assert(PropertyCallbackArguments::kShouldThrowOnErrorIndex == 0);
   static_assert(PropertyCallbackArguments::kHolderIndex == 1);
   static_assert(PropertyCallbackArguments::kIsolateIndex == 2);
-  static_assert(PropertyCallbackArguments::kReturnValueDefaultValueIndex == 3);
-  static_assert(PropertyCallbackArguments::kReturnValueOffset == 4);
-  static_assert(PropertyCallbackArguments::kDataIndex == 5);
-  static_assert(PropertyCallbackArguments::kThisIndex == 6);
-  static_assert(PropertyCallbackArguments::kArgsLength == 7);
+  static_assert(PropertyCallbackArguments::kReturnValueOffset == 3);
+  static_assert(PropertyCallbackArguments::kDataIndex == 4);
+  static_assert(PropertyCallbackArguments::kThisIndex == 5);
+  static_assert(PropertyCallbackArguments::kArgsLength == 6);
 
   // Insert additional parameters into the stack frame above return address.
   __ PopReturnAddressTo(scratch);
   __ Push(receiver);
   __ PushTaggedField(FieldOperand(callback, AccessorInfo::kDataOffset),
                      decompr_scratch1);
-  __ LoadRoot(kScratchRegister, RootIndex::kUndefinedValue);
-  __ Push(kScratchRegister);  // return value
-  __ Push(kScratchRegister);  // return value default
+  __ PushRoot(RootIndex::kUndefinedValue);  // return value
   __ PushAddress(ExternalReference::isolate_address(masm->isolate()));
   __ Push(holder);
   __ Push(Smi::zero());  // should_throw_on_error -> false

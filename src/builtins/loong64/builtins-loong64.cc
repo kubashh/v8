@@ -3161,11 +3161,10 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
 
   using FCA = FunctionCallbackArguments;
 
-  static_assert(FCA::kArgsLength == 6);
-  static_assert(FCA::kNewTargetIndex == 5);
-  static_assert(FCA::kDataIndex == 4);
-  static_assert(FCA::kReturnValueOffset == 3);
-  static_assert(FCA::kReturnValueDefaultValueIndex == 2);
+  static_assert(FCA::kArgsLength == 5);
+  static_assert(FCA::kNewTargetIndex == 4);
+  static_assert(FCA::kDataIndex == 3);
+  static_assert(FCA::kReturnValueOffset == 2);
   static_assert(FCA::kIsolateIndex == 1);
   static_assert(FCA::kHolderIndex == 0);
 
@@ -3174,10 +3173,9 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
   // Target state:
   //   sp[0 * kPointerSize]: kHolder
   //   sp[1 * kPointerSize]: kIsolate
-  //   sp[2 * kPointerSize]: undefined (kReturnValueDefaultValue)
-  //   sp[3 * kPointerSize]: undefined (kReturnValue)
-  //   sp[4 * kPointerSize]: kData
-  //   sp[5 * kPointerSize]: undefined (kNewTarget)
+  //   sp[2 * kPointerSize]: undefined (kReturnValue)
+  //   sp[3 * kPointerSize]: kData
+  //   sp[4 * kPointerSize]: undefined (kNewTarget)
 
   // Set up the base register for addressing through MemOperands. It will point
   // at the receiver (located at sp + argc * kPointerSize).
@@ -3196,13 +3194,12 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
   // kReturnValueDefaultValue and kReturnValue.
   __ LoadRoot(scratch, RootIndex::kUndefinedValue);
   __ St_d(scratch, MemOperand(sp, 2 * kPointerSize));
-  __ St_d(scratch, MemOperand(sp, 3 * kPointerSize));
 
   // kData.
-  __ St_d(call_data, MemOperand(sp, 4 * kPointerSize));
+  __ St_d(call_data, MemOperand(sp, 3 * kPointerSize));
 
   // kNewTarget.
-  __ St_d(scratch, MemOperand(sp, 5 * kPointerSize));
+  __ St_d(scratch, MemOperand(sp, 4 * kPointerSize));
 
   // Keep a pointer to kHolder (= implicit_args) in a scratch register.
   // We use it below to set up the FunctionCallbackInfo object.
@@ -3266,11 +3263,10 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   static_assert(PropertyCallbackArguments::kShouldThrowOnErrorIndex == 0);
   static_assert(PropertyCallbackArguments::kHolderIndex == 1);
   static_assert(PropertyCallbackArguments::kIsolateIndex == 2);
-  static_assert(PropertyCallbackArguments::kReturnValueDefaultValueIndex == 3);
-  static_assert(PropertyCallbackArguments::kReturnValueOffset == 4);
-  static_assert(PropertyCallbackArguments::kDataIndex == 5);
-  static_assert(PropertyCallbackArguments::kThisIndex == 6);
-  static_assert(PropertyCallbackArguments::kArgsLength == 7);
+  static_assert(PropertyCallbackArguments::kReturnValueOffset == 3);
+  static_assert(PropertyCallbackArguments::kDataIndex == 4);
+  static_assert(PropertyCallbackArguments::kThisIndex == 5);
+  static_assert(PropertyCallbackArguments::kArgsLength == 6);
 
   Register receiver = ApiGetterDescriptor::ReceiverRegister();
   Register holder = ApiGetterDescriptor::HolderRegister();
@@ -3289,9 +3285,6 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   __ LoadRoot(scratch, RootIndex::kUndefinedValue);
   __ St_d(scratch,
           MemOperand(sp, (PCA::kReturnValueOffset + 1) * kPointerSize));
-  __ St_d(scratch, MemOperand(sp, (PCA::kReturnValueDefaultValueIndex + 1) *
-                                      kPointerSize));
-  __ li(scratch, ExternalReference::isolate_address(masm->isolate()));
   __ St_d(scratch, MemOperand(sp, (PCA::kIsolateIndex + 1) * kPointerSize));
   __ St_d(holder, MemOperand(sp, (PCA::kHolderIndex + 1) * kPointerSize));
   // should_throw_on_error -> false
