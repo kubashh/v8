@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9c5db0e_66aed97c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-02-28T13:46:52Z",
+      "side": 1,
+      "message": "PTAL. Analysis based on a reference CL:\nhttps://chromium-swarm.appspot.com/tasklist?c\u003dname\u0026c\u003dcreated_ts\u0026c\u003dpending_time\u0026c\u003dduration\u0026c\u003dbot\u0026c\u003dpool-tag\u0026c\u003dstate\u0026d\u003ddesc\u0026et\u003d1677591339374\u0026f\u003dgerrit-tag%3Ahttps%3A%2F%2Fchromium-review.googlesource.com%2Fc%2F4294980%2F1\u0026s\u003dduration\u0026st\u003d1677504939000",
+      "revId": "a76403f66ab62120498f72dd1e7a2d682c99c498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
