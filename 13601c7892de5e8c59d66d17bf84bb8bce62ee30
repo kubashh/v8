@@ -63,6 +63,30 @@
       },
       "revId": "13601c7892de5e8c59d66d17bf84bb8bce62ee30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61d43de7_95f5f22b",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5673,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-02-28T15:14:50Z",
+      "side": 1,
+      "message": "The 100 LOC are exactly why I think the DCHECK in `Isolate::Init` is stronger than this one.\nImo the DCHECK here doesn\u0027t contribute much on top of the existing DCHECK in `Isolate::Init`. If the goal of the DCHECK here is for documentation, we could also add a comment.\nHaving said that, I don\u0027t feel strongly enough against these DCHECKs to fight for it.",
+      "parentUuid": "4ea2e46b_eed62dad",
+      "range": {
+        "startLine": 5673,
+        "startChar": 6,
+        "endLine": 5673,
+        "endChar": 15
+      },
+      "revId": "13601c7892de5e8c59d66d17bf84bb8bce62ee30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
