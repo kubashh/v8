@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd558602_0da9e1e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-28T15:08:07Z",
+      "side": 1,
+      "message": "LGTM :)",
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5affa23a_e5c98300",
@@ -35,6 +52,98 @@
         "startLine": 206,
         "startChar": 4,
         "endLine": 208,
+        "endChar": 41
+      },
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d9f799d_786e9aa0",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-28T15:08:07Z",
+      "side": 1,
+      "message": "This could be `Word32ShiftRightArithmeticShiftOutZero`.",
+      "range": {
+        "startLine": 1264,
+        "startChar": 18,
+        "endLine": 1264,
+        "endChar": 44
+      },
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2617b0fc_115419cb",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-28T15:08:07Z",
+      "side": 1,
+      "message": "`IF_UNLIKELY`?",
+      "range": {
+        "startLine": 1282,
+        "startChar": 10,
+        "endLine": 1282,
+        "endChar": 12
+      },
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbaf67a2_271a1e5e",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-28T15:08:07Z",
+      "side": 1,
+      "message": "Could you add a small comment explaining what this case is? I think something like the earlier comment:\n```\n// Check if {lhs} is kMinInt and {rhs} is -1, in which case we\u0027d have\n// to return -kMinInt, which is not representable as Word32.\n```\n(but with min() \u0026 Word64 instead of kMinInt \u0026 Word32)",
+      "range": {
+        "startLine": 1309,
+        "startChar": 6,
+        "endLine": 1309,
+        "endChar": 8
+      },
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71031c60_6f49a983",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-02-28T15:08:07Z",
+      "side": 1,
+      "message": "ShiftOutZeros here as well",
+      "range": {
+        "startLine": 1336,
+        "startChar": 18,
+        "endLine": 1336,
         "endChar": 41
       },
       "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
