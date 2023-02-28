@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c3094fc_46df1647",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T17:27:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5affa23a_e5c98300",
+      "range": {
+        "startLine": 206,
+        "startChar": 4,
+        "endLine": 208,
+        "endChar": 41
+      },
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d9f799d_786e9aa0",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-02-28T15:08:07Z",
       "side": 1,
       "message": "This could be `Word32ShiftRightArithmeticShiftOutZero`.",
+      "range": {
+        "startLine": 1264,
+        "startChar": 18,
+        "endLine": 1264,
+        "endChar": 44
+      },
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be487528_b9eff8f5",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T17:27:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d9f799d_786e9aa0",
       "range": {
         "startLine": 1264,
         "startChar": 18,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4d2bad6_75b7b838",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T17:27:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2617b0fc_115419cb",
+      "range": {
+        "startLine": 1282,
+        "startChar": 10,
+        "endLine": 1282,
+        "endChar": 12
+      },
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbaf67a2_271a1e5e",
@@ -127,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b754936_7effa81b",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T17:27:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbaf67a2_271a1e5e",
+      "range": {
+        "startLine": 1309,
+        "startChar": 6,
+        "endLine": 1309,
+        "endChar": 8
+      },
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71031c60_6f49a983",
@@ -140,6 +236,30 @@
       "writtenOn": "2023-02-28T15:08:07Z",
       "side": 1,
       "message": "ShiftOutZeros here as well",
+      "range": {
+        "startLine": 1336,
+        "startChar": 18,
+        "endLine": 1336,
+        "endChar": 41
+      },
+      "revId": "032e72ec3f12c7a2ec0a33a2c2a040268ef4bea8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "421fd825_10848f7a",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-02-28T17:27:36Z",
+      "side": 1,
+      "message": "This is not correct I think. If we do an arithmetic right shift here (which is the only one that has \"ShiftOutZeros\"), we would turn `100...000` into `111111100...000` or not?",
+      "parentUuid": "71031c60_6f49a983",
       "range": {
         "startLine": 1336,
         "startChar": 18,
