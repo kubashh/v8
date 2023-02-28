@@ -6861,11 +6861,10 @@ void Heap::CombinedGenerationalAndSharedBarrierSlow(HeapObject object,
 
   } else {
     DCHECK(value_chunk->InSharedHeap());
-
     heap_internals::MemoryChunk* object_chunk =
         heap_internals::MemoryChunk::FromHeapObject(object);
-    if (!object_chunk->InSharedHeap())
-      Heap::SharedHeapBarrierSlow(object, slot);
+    DCHECK(!object_chunk->InSharedHeap());
+    Heap::SharedHeapBarrierSlow(object, slot);
   }
 }
 
