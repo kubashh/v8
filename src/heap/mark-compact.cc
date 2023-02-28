@@ -5564,6 +5564,12 @@ YoungGenerationMainMarkingVisitor::YoungGenerationMainMarkingVisitor(
       marking_state_(marking_state) {}
 
 bool YoungGenerationMainMarkingVisitor::ShouldVisit(HeapObject object) {
+  CHECK(marking_state_->GreyToBlack(object));
+  return true;
+}
+
+bool YoungGenerationMainMarkingVisitor::ShouldVisitUnchecked(
+    HeapObject object) {
   return marking_state_->GreyToBlack(object);
 }
 
