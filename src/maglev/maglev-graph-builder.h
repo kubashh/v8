@@ -33,6 +33,7 @@
 #include "src/maglev/maglev-graph.h"
 #include "src/maglev/maglev-interpreter-frame-state.h"
 #include "src/maglev/maglev-ir.h"
+#include "src/utils/bit-vector.h"
 #include "src/utils/memcopy.h"
 
 namespace v8 {
@@ -1421,7 +1422,8 @@ class MaglevGraphBuilder {
   ReduceResult TryBuildCallKnownJSFunction(
       compiler::JSFunctionRef function, CallArguments& args,
       const compiler::FeedbackSource& feedback_source);
-  bool ShouldInlineCall(compiler::JSFunctionRef function, float call_frequency);
+  bool ShouldInlineCall(compiler::JSFunctionRef function,
+                        float call_frequency) const;
   ReduceResult TryBuildInlinedCall(
       compiler::JSFunctionRef function, CallArguments& args,
       const compiler::FeedbackSource& feedback_source);
@@ -1641,40 +1643,26 @@ class MaglevGraphBuilder {
 
   void BuildToNumberOrToNumeric(Object::Conversion mode);
 
-  void CalculatePredecessorCounts() {
-    // Add 1 after the end of the bytecode so we can always write to the offset
-    // after the last bytecode.
-    size_t array_length = bytecode().length() + 1;
-    predecessors_ = zone()->NewArray<uint32_t>(array_length);
-    MemsetUint32(predecessors_, 1, array_length);
+  struct InlinedCallCandidate {
+    int bytecode_offset;
+    int bytecode_size;
+    compiler::JSFunctionRef target;
+    float frequency;
 
-    interpreter::BytecodeArrayIterator iterator(bytecode().object());
-    for (; !iterator.done(); iterator.Advance()) {
-      interpreter::Bytecode bytecode = iterator.current_bytecode();
-      if (interpreter::Bytecodes::IsJump(bytecode)) {
-        predecessors_[iterator.GetJumpTargetOffset()]++;
-        if (!interpreter::Bytecodes::IsConditionalJump(bytecode)) {
-          predecessors_[iterator.next_offset()]--;
-        }
-      } else if (interpreter::Bytecodes::IsSwitch(bytecode)) {
-        for (auto offset : iterator.GetJumpTableTargetOffsets()) {
-          predecessors_[offset.target_offset]++;
-        }
-      } else if (interpreter::Bytecodes::Returns(bytecode) ||
-                 interpreter::Bytecodes::UnconditionallyThrows(bytecode)) {
-        predecessors_[iterator.next_offset()]--;
-        // Collect inline return jumps in the slot after the last bytecode.
-        if (is_inline() && interpreter::Bytecodes::Returns(bytecode)) {
-          predecessors_[array_length - 1]++;
-        }
-      }
-      // TODO(leszeks): Also consider handler entries (the bytecode analysis)
-      // will do this automatically I guess if we merge this into that.
-    }
-    if (!is_inline()) {
-      DCHECK_EQ(0, predecessors_[bytecode().length()]);
-    }
-  }
+    InlinedCallCandidate(int offset, int size, compiler::JSFunctionRef func,
+                         float freq)
+        : bytecode_offset(offset),
+          bytecode_size(size),
+          target(func),
+          frequency(freq) {}
+  };
+  void AddInlinedCallCandidate(
+      std::vector<InlinedCallCandidate>& inlined_call_candidates,
+      const interpreter::BytecodeArrayIterator& iterator) const;
+  void FillInlinedCallOffsets(std::vector<InlinedCallCandidate>& candidates);
+
+  void CalculatePredecessorCountsAndAddInlinedCallCandidates(
+      std::vector<InlinedCallCandidate>& inlined_call_candidates);
 
   int NumPredecessors(int offset) { return predecessors_[offset]; }
 
@@ -1766,6 +1754,8 @@ class MaglevGraphBuilder {
   };
   ZoneStack<HandlerTableEntry> catch_block_stack_;
   int next_handler_table_index_ = 0;
+
+  BitVector inlined_call_offsets_;
 
 #ifdef DEBUG
   bool IsNodeCreatedForThisBytecode(ValueNode* node) const {
