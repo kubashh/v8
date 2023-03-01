@@ -16,6 +16,24 @@
       "message": "Hi folks, I just realized this increased RO snapshot size from 85KB to 141KB. I think it could be worth special handling to avoid this single huge object blowing up the RO snapshot.",
       "revId": "455d38ff8df7303474e8ead05cad659aac0a1bbc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a73e715f_08277573",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-01T10:10:07Z",
+      "side": 1,
+      "message": "Filed crbug.com/v8/13783",
+      "parentUuid": "750b3bbb_c6848c43",
+      "revId": "455d38ff8df7303474e8ead05cad659aac0a1bbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
