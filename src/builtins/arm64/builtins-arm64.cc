@@ -5211,11 +5211,10 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
 
   using FCA = FunctionCallbackArguments;
 
-  static_assert(FCA::kArgsLength == 6);
-  static_assert(FCA::kNewTargetIndex == 5);
-  static_assert(FCA::kDataIndex == 4);
-  static_assert(FCA::kReturnValueOffset == 3);
-  static_assert(FCA::kReturnValueDefaultValueIndex == 2);
+  static_assert(FCA::kArgsLength == 5);
+  static_assert(FCA::kNewTargetIndex == 4);
+  static_assert(FCA::kDataIndex == 3);
+  static_assert(FCA::kReturnValueOffset == 2);
   static_assert(FCA::kIsolateIndex == 1);
   static_assert(FCA::kHolderIndex == 0);
 
@@ -5224,10 +5223,9 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
   // Target state:
   //   sp[0 * kSystemPointerSize]: kHolder
   //   sp[1 * kSystemPointerSize]: kIsolate
-  //   sp[2 * kSystemPointerSize]: undefined (kReturnValueDefaultValue)
-  //   sp[3 * kSystemPointerSize]: undefined (kReturnValue)
-  //   sp[4 * kSystemPointerSize]: kData
-  //   sp[5 * kSystemPointerSize]: undefined (kNewTarget)
+  //   sp[2 * kSystemPointerSize]: undefined (kReturnValue)
+  //   sp[3 * kSystemPointerSize]: kData
+  //   sp[4 * kSystemPointerSize]: undefined (kNewTarget)
 
   // Reserve space on the stack.
   __ Claim(FCA::kArgsLength, kSystemPointerSize);
@@ -5242,13 +5240,12 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
   // kReturnValueDefaultValue and kReturnValue.
   __ LoadRoot(scratch, RootIndex::kUndefinedValue);
   __ Str(scratch, MemOperand(sp, 2 * kSystemPointerSize));
-  __ Str(scratch, MemOperand(sp, 3 * kSystemPointerSize));
 
   // kData.
-  __ Str(call_data, MemOperand(sp, 4 * kSystemPointerSize));
+  __ Str(call_data, MemOperand(sp, 3 * kSystemPointerSize));
 
   // kNewTarget.
-  __ Str(scratch, MemOperand(sp, 5 * kSystemPointerSize));
+  __ Str(scratch, MemOperand(sp, 4 * kSystemPointerSize));
 
   // Keep a pointer to kHolder (= implicit_args) in a scratch register.
   // We use it below to set up the FunctionCallbackInfo object.
@@ -5313,11 +5310,10 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   static_assert(PropertyCallbackArguments::kShouldThrowOnErrorIndex == 0);
   static_assert(PropertyCallbackArguments::kHolderIndex == 1);
   static_assert(PropertyCallbackArguments::kIsolateIndex == 2);
-  static_assert(PropertyCallbackArguments::kReturnValueDefaultValueIndex == 3);
-  static_assert(PropertyCallbackArguments::kReturnValueOffset == 4);
-  static_assert(PropertyCallbackArguments::kDataIndex == 5);
-  static_assert(PropertyCallbackArguments::kThisIndex == 6);
-  static_assert(PropertyCallbackArguments::kArgsLength == 7);
+  static_assert(PropertyCallbackArguments::kReturnValueOffset == 3);
+  static_assert(PropertyCallbackArguments::kDataIndex == 4);
+  static_assert(PropertyCallbackArguments::kThisIndex == 5);
+  static_assert(PropertyCallbackArguments::kArgsLength == 6);
 
   Register receiver = ApiGetterDescriptor::ReceiverRegister();
   Register holder = ApiGetterDescriptor::HolderRegister();
@@ -5341,7 +5337,7 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   //   should_throw_on_error
   // These are followed by the property name, which is also pushed below the
   // exit frame to make the GC aware of it.
-  __ Push(receiver, data, undef, undef, isolate_address, holder, xzr, name);
+  __ Push(receiver, data, undef, isolate_address, holder, xzr, name);
 
   // v8::PropertyCallbackInfo::args_ array and name handle.
   static const int kStackUnwindSpace =
