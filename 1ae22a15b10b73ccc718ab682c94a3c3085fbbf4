@@ -16,6 +16,52 @@
       "message": "PTAL!",
       "revId": "1ae22a15b10b73ccc718ab682c94a3c3085fbbf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0065a062_e256cb24",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3449,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-01T10:16:06Z",
+      "side": 1,
+      "message": "IIRC TF also has a threshold for small functions which get inlined even with low frequency.",
+      "range": {
+        "startLine": 3449,
+        "startChar": 4,
+        "endLine": 3449,
+        "endChar": 5
+      },
+      "revId": "1ae22a15b10b73ccc718ab682c94a3c3085fbbf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9aa86416_66c8c420",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3466,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-01T10:16:06Z",
+      "side": 1,
+      "message": "this means that we won\u0027t be able to inline e.g. accessors, since we didn\u0027t collect info on them during preprocessing. I think this is too strong a constraint, we could still be greedy with things like accessors (if they\u0027re small enough) and drop the tail of the inlined candidates to compensate.",
+      "range": {
+        "startLine": 3466,
+        "startChar": 7,
+        "endLine": 3466,
+        "endChar": 28
+      },
+      "revId": "1ae22a15b10b73ccc718ab682c94a3c3085fbbf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
