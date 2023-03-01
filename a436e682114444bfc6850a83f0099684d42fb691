@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33c63307_9276b4aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2023-03-01T19:12:59Z",
+      "side": 1,
+      "message": "This is a simple change which fixes ARM64 Windows builds. PTAL",
+      "revId": "a436e682114444bfc6850a83f0099684d42fb691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
