@@ -16,6 +16,125 @@
       "message": "Leszek, PTAL @ include\nJakob, PTAL @ all",
       "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "434b1179_4d277f55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-02T14:05:33Z",
+      "side": 1,
+      "message": "lg with comments",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70c30e60_95378a13",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5311,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-02T14:05:33Z",
+      "side": 1,
+      "message": "Why not remove the `ok` var?",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b84457a1_06f9de17",
+        "filename": "src/objects/js-objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-02T14:05:33Z",
+      "side": 1,
+      "message": "Not your code, but it looks like this may allocate so `this` may move. I think we should handlify this function.",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bc11c4c_b45edc34",
+        "filename": "src/objects/js-objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-02T14:05:33Z",
+      "side": 1,
+      "message": "No need for the {}",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99ad70a4_74aa110f",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-02T14:05:33Z",
+      "side": 1,
+      "message": "optional nit: ugh, do we really have to use auto everywhere? Yes, from the next line I can guess the type, but I\u0027d really prefer it to be explicit and that\u0027s also what the chromium style guide says.",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ccc94d3_95ecb8c8",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-02T14:05:33Z",
+      "side": 1,
+      "message": "OTOH here I wouldn\u0027t mind `return {};`",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da04f39c_43416597",
+        "filename": "src/objects/js-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-02T14:05:33Z",
+      "side": 1,
+      "message": "base::Optional, unless you have a reason to use the std version here.",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
