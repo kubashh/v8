@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea410c35_b73c91ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:41:29Z",
+      "side": 1,
+      "message": "Leszek, PTAL @ include\nJakob, PTAL @ all",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
