@@ -116,13 +116,18 @@ V8_INLINE bool PagedSpaceBase::EnsureAllocation(int size_in_bytes,
                                                 AllocationAlignment alignment,
                                                 AllocationOrigin origin,
                                                 int* out_max_aligned_size) {
-  if ((identity() != NEW_SPACE) && !is_compaction_space()) {
-    // Start incremental marking before the actual allocation, this allows the
-    // allocation function to mark the object black when incremental marking is
-    // running.
-    heap()->StartIncrementalMarkingIfAllocationLimitIsReached(
-        heap()->GCFlagsForIncrementalMarking(),
-        kGCCallbackScheduleIdleGarbageCollection);
+  if (!is_compaction_space()) {
+    if (identity() == NEW_SPACE) {
+      heap()->StartMinorMCIncrementalMarkingIfNeeded();
+      heap()->ScheduleScavengeTaskIfNeeded();
+    } else {
+      // Start incremental marking before the actual allocation, this allows the
+      // allocation function to mark the object black when incremental marking
+      // is running.
+      heap()->StartIncrementalMarkingIfAllocationLimitIsReached(
+          heap()->GCFlagsForIncrementalMarking(),
+          kGCCallbackScheduleIdleGarbageCollection);
+    }
   }
 
   // We don't know exactly how much filler we need to align until space is
