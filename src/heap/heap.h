@@ -1994,6 +1994,8 @@ class Heap {
 
   void ScheduleScavengeTaskIfNeeded();
   void StartMinorMCIncrementalMarkingIfNeeded();
+  size_t ComputeMinorCollectionStepSize();
+  size_t ComputeMinorMarkingStepSize();
   size_t MinorMCTaskTriggerSize() const;
   bool MinorMCSizeTaskTriggerReached() const;
 
@@ -2175,10 +2177,6 @@ class Heap {
   // Starts marking when stress_marking_percentage_% of the marking start limit
   // is reached.
   int stress_marking_percentage_ = 0;
-
-  // Observer that causes more frequent checks for reached incremental
-  // marking limit.
-  AllocationObserver* stress_marking_observer_ = nullptr;
 
   // Observer that can cause early scavenge start.
   StressScavengeObserver* stress_scavenge_observer_ = nullptr;
@@ -2427,6 +2425,7 @@ class Heap {
   friend class ScavengerCollector;
   friend class StressConcurrentAllocationObserver;
   friend class Space;
+  friend class SpaceWithLinearArea;
   friend class Sweeper;
   friend class UnifiedHeapMarkingState;
   friend class heap::TestMemoryAllocatorScope;
