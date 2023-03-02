@@ -40,16 +40,8 @@ class ReadOnlyPage : public BasicMemoryChunk {
   // Returns the address for a given offset in this page.
   Address OffsetToAddress(size_t offset) const {
     Address address_in_page = address() + offset;
-    if (V8_SHARED_RO_HEAP_BOOL && COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL) {
-      // Pointer compression with a per-Isolate cage and shared ReadOnlyPages
-      // means that the area_start and area_end cannot be defined since they are
-      // stored within the pages which can be mapped at multiple memory
-      // addresses.
-      DCHECK_LT(offset, size());
-    } else {
-      DCHECK_GE(address_in_page, area_start());
-      DCHECK_LT(address_in_page, area_end());
-    }
+    DCHECK_GE(address_in_page, area_start());
+    DCHECK_LT(address_in_page, area_end());
     return address_in_page;
   }
 
@@ -140,35 +132,6 @@ class SingleCopyReadOnlyArtifacts : public ReadOnlyArtifacts {
 
  private:
   v8::PageAllocator* page_allocator_ = nullptr;
-};
-
-// -----------------------------------------------------------------------------
-// Artifacts used to construct a new SharedReadOnlySpace when pointer
-// compression is enabled and so there is a ReadOnlySpace for each Isolate with
-// with its own set of pages mapped from the canonical set stored here.
-class PointerCompressedReadOnlyArtifacts : public ReadOnlyArtifacts {
- public:
-  ReadOnlyHeap* GetReadOnlyHeapForIsolate(Isolate* isolate) override;
-  void Initialize(Isolate* isolate, std::vector<ReadOnlyPage*>&& pages,
-                  const AllocationStats& stats) override;
-  void ReinstallReadOnlySpace(Isolate* isolate) override;
-  void VerifyHeapAndSpaceRelationships(Isolate* isolate) override;
-
- private:
-  SharedReadOnlySpace* CreateReadOnlySpace(Isolate* isolate);
-  Tagged_t OffsetForPage(size_t index) const { return page_offsets_[index]; }
-  void InitializeRootsIn(Isolate* isolate);
-  void InitializeRootsFrom(Isolate* isolate);
-
-  std::unique_ptr<v8::PageAllocator::SharedMemoryMapping> RemapPageTo(
-      size_t i, Address new_address, ReadOnlyPage*& new_page);
-
-  static constexpr size_t kReadOnlyRootsCount =
-      static_cast<size_t>(RootIndex::kReadOnlyRootsCount);
-
-  Address read_only_roots_[kReadOnlyRootsCount];
-  std::vector<Tagged_t> page_offsets_;
-  std::vector<std::unique_ptr<PageAllocator::SharedMemory>> shared_memory_;
 };
 
 // -----------------------------------------------------------------------------
@@ -284,13 +247,6 @@ class SharedReadOnlySpace : public ReadOnlySpace {
     is_marked_read_only_ = true;
   }
 
-  SharedReadOnlySpace(Heap* heap,
-                      PointerCompressedReadOnlyArtifacts* artifacts);
-  SharedReadOnlySpace(
-      Heap* heap, std::vector<ReadOnlyPage*>&& new_pages,
-      std::vector<std::unique_ptr<::v8::PageAllocator::SharedMemoryMapping>>&&
-          mappings,
-      AllocationStats&& new_stats);
   SharedReadOnlySpace(Heap* heap, SingleCopyReadOnlyArtifacts* artifacts);
   SharedReadOnlySpace(const SharedReadOnlySpace&) = delete;
 

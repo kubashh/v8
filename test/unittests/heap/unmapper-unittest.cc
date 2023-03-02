@@ -314,7 +314,7 @@ class SequentialUnmapperTest : public                                     //
              SetPlatformPageAllocatorForTesting(tracking_page_allocator_));
     old_sweeping_flag_ = i::v8_flags.concurrent_sweeping;
     i::v8_flags.concurrent_sweeping = false;
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
     // Reinitialize the process-wide pointer cage so it can pick up the
     // TrackingPageAllocator.
     // The pointer cage must be destroyed before the sandbox.
@@ -331,7 +331,7 @@ class SequentialUnmapperTest : public                                     //
   }
 
   static void DoMixinTearDown() {
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
     // Free the process-wide cage reservation, otherwise the pages won't be
     // freed until process teardown.
     IsolateAllocator::FreeProcessWidePtrComprCageForTesting();

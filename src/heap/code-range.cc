@@ -148,12 +148,10 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
         reinterpret_cast<void*>(preferred_region.begin()),
         reinterpret_cast<void*>(preferred_region.end()));
 
-  // For configurations with enabled pointer compression and shared external
-  // code range we can afford trying harder to allocate code range near .text
-  // section.
-  const bool kShouldTryHarder = V8_EXTERNAL_CODE_SPACE_BOOL &&
-                                COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL &&
-                                v8_flags.better_code_range_allocation;
+  // For configurations with enabled pointer compression we can afford trying
+  // harder to allocate code range near .text section.
+  const bool kShouldTryHarder =
+      V8_EXTERNAL_CODE_SPACE_BOOL && v8_flags.better_code_range_allocation;
 
   if (kShouldTryHarder) {
     // Relax alignment requirement while trying to allocate code range inside
@@ -444,11 +442,9 @@ void InitProcessWideCodeRange(v8::PageAllocator* page_allocator,
   }
   process_wide_code_range_ = code_range;
 #ifdef V8_EXTERNAL_CODE_SPACE
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
   ExternalCodeCompressionScheme::InitBase(
       ExternalCodeCompressionScheme::PrepareCageBaseAddress(
           code_range->base()));
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 #endif  // V8_EXTERNAL_CODE_SPACE
 }
 }  // namespace

@@ -101,7 +101,7 @@ class EmbeddedData final {
       // the un-embedded one.
       if (global_d.IsInCodeRange(maybe_builtin_pc)) return global_d;
     }
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
     if (V8_SHORT_BUILTIN_CALLS_BOOL && !d.IsInCodeRange(maybe_builtin_pc)) {
       // When shared pointer compression cage is enabled and it has the embedded
       // code blob copy then it could have been used regardless of whether the

@@ -21,13 +21,7 @@ UNINITIALIZED_TEST(PtrComprCageAndIsolateRoot) {
   v8::Isolate* isolate2 = v8::Isolate::New(create_params);
   Isolate* i_isolate2 = reinterpret_cast<Isolate*>(isolate2);
 
-#ifdef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
-  CHECK_EQ(i_isolate1->isolate_root(), i_isolate1->cage_base());
-  CHECK_EQ(i_isolate2->isolate_root(), i_isolate2->cage_base());
-  CHECK_NE(i_isolate1->cage_base(), i_isolate2->cage_base());
-#endif
-
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
   CHECK_NE(i_isolate1->isolate_root(), i_isolate1->cage_base());
   CHECK_NE(i_isolate2->isolate_root(), i_isolate2->cage_base());
   CHECK_NE(i_isolate1->isolate_root(), i_isolate2->isolate_root());
@@ -55,7 +49,7 @@ UNINITIALIZED_TEST(PtrComprCageCodeRange) {
   isolate->Dispose();
 }
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
 UNINITIALIZED_TEST(SharedPtrComprCage) {
   v8::Isolate::CreateParams create_params;
   create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
@@ -171,7 +165,7 @@ UNINITIALIZED_TEST(SharedPtrComprCageImpliesSharedReadOnlyHeap) {
   isolate2->Dispose();
 }
 #endif  // V8_SHARED_RO_HEAP
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#endif  // V8_COMPRESS_POINTERS
 
 }  // namespace internal
 }  // namespace v8

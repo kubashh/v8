@@ -5262,7 +5262,7 @@ UNINITIALIZED_TEST(BreakPointAccessorContextSnapshot) {
 // These two flags are preconditions for static roots to work. We don't check
 // for V8_STATIC_ROOTS_BOOL since the test targets mksnapshot built without
 // static roots, to be able to generate the static-roots.h file.
-#if defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE) && defined(V8_SHARED_RO_HEAP)
+#if defined(V8_COMPRESS_POINTERS) && defined(V8_SHARED_RO_HEAP)
 UNINITIALIZED_TEST(StaticRootsPredictableSnapshot) {
   if (v8_flags.random_seed == 0) {
     return;
@@ -5287,8 +5287,7 @@ UNINITIALIZED_TEST(StaticRootsPredictableSnapshot) {
   blobs2.Dispose();
   FreeCurrentEmbeddedBlob();
 }
-#endif  // defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE) &&
-        // defined(V8_SHARED_RO_HEAP)
+#endif  // defined(V8_COMPRESS_POINTERS) && defined(V8_SHARED_RO_HEAP)
 
 }  // namespace internal
 }  // namespace v8

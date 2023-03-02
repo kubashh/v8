@@ -41,8 +41,6 @@ Address V8HeapCompressionScheme::GetPtrComprCageBaseAddress(
   return base;
 }
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
-
 // static
 void V8HeapCompressionScheme::InitBase(Address base) {
   CHECK_EQ(base, GetPtrComprCageBaseAddress(base));
@@ -58,7 +56,6 @@ V8_CONST Address V8HeapCompressionScheme::base() {
   return reinterpret_cast<Address>(V8_ASSUME_ALIGNED(
       reinterpret_cast<void*>(base_), kPtrComprCageBaseAlignment));
 }
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 // static
 Tagged_t V8HeapCompressionScheme::CompressObject(Address tagged) {
@@ -83,8 +80,7 @@ Address V8HeapCompressionScheme::DecompressTaggedSigned(Tagged_t raw_value) {
 template <typename TOnHeapAddress>
 Address V8HeapCompressionScheme::DecompressTagged(TOnHeapAddress on_heap_addr,
                                                   Tagged_t raw_value) {
-#if defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE) && \
-    !defined(V8_COMPRESS_POINTERS_DONT_USE_GLOBAL_BASE)
+#ifndef V8_COMPRESS_POINTERS_DONT_USE_GLOBAL_BASE
   Address cage_base = base();
 #else
   Address cage_base = GetPtrComprCageBaseAddress(on_heap_addr);
@@ -133,8 +129,6 @@ Address ExternalCodeCompressionScheme::GetPtrComprCageBaseAddress(
   return base;
 }
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
-
 // static
 void ExternalCodeCompressionScheme::InitBase(Address base) {
   CHECK_EQ(base, PrepareCageBaseAddress(base));
@@ -150,7 +144,6 @@ V8_CONST Address ExternalCodeCompressionScheme::base() {
   return reinterpret_cast<Address>(V8_ASSUME_ALIGNED(
       reinterpret_cast<void*>(base_), kPtrComprCageBaseAlignment));
 }
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 // static
 Tagged_t ExternalCodeCompressionScheme::CompressObject(Address tagged) {
@@ -176,8 +169,7 @@ Address ExternalCodeCompressionScheme::DecompressTaggedSigned(
 template <typename TOnHeapAddress>
 Address ExternalCodeCompressionScheme::DecompressTagged(
     TOnHeapAddress on_heap_addr, Tagged_t raw_value) {
-#if defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE) && \
-    !defined(V8_COMPRESS_POINTERS_DONT_USE_GLOBAL_BASE)
+#ifndef V8_COMPRESS_POINTERS_DONT_USE_GLOBAL_BASE
   Address cage_base = base();
 #else
   Address cage_base = GetPtrComprCageBaseAddress(on_heap_addr);
@@ -199,7 +191,7 @@ GetPtrComprCageBaseFromOnHeapAddress(Address address) {
       V8HeapCompressionScheme::GetPtrComprCageBaseAddress(address));
 }
 
-#else
+#else  // V8_COMPRESS_POINTERS
 
 //
 // V8HeapCompressionScheme

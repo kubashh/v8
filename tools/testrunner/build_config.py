@@ -46,8 +46,6 @@ class BuildConfig(object):
     self.msan = build_config['is_msan']
     self.no_i18n = not build_config['v8_enable_i18n_support']
     self.pointer_compression = build_config['v8_enable_pointer_compression']
-    self.pointer_compression_shared_cage = build_config[
-        'v8_enable_pointer_compression_shared_cage']
     self.predictable = build_config['v8_enable_verify_predictable']
     self.sandbox = build_config['v8_enable_sandbox']
     self.shared_ro_heap = build_config['v8_enable_shared_ro_heap']
@@ -79,9 +77,7 @@ class BuildConfig(object):
 
   @property
   def no_js_shared_memory(self):
-    return (not self.shared_ro_heap) or (
-        self.pointer_compression and
-        not self.pointer_compression_shared_cage) or (not self.write_barriers)
+    return (not self.shared_ro_heap) or (not self.write_barriers)
 
   @property
   def is_mips_arch(self):
@@ -164,7 +160,6 @@ class BuildConfig(object):
         'msan',
         'no_i18n',
         'pointer_compression',
-        'pointer_compression_shared_cage',
         'predictable',
         'sandbox',
         'slow_dchecks',
