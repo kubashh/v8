@@ -2529,6 +2529,7 @@ void Heap::MinorMarkCompact() {
   AlwaysAllocateScope always_allocate(this);
 
   SetGCState(MINOR_MARK_COMPACT);
+  CodeSpaceMemoryModificationScope code_modification(this);
   minor_mark_compact_collector_->CollectGarbage();
   SetGCState(NOT_IN_GC);
 }
