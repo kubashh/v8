@@ -51,6 +51,24 @@
       "parentUuid": "9de3e163_714edb32",
       "revId": "44af4462c7eb8f466d85d06040b83349abb6057b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "538c9cb1_fdb3b05d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-02T14:07:38Z",
+      "side": 1,
+      "message": "Igor sent out a mail to v8-team \"Heads-up: Upcoming removal of non-shared pointer compression cage mode\" last November, but I guess that doesn\u0027t include embedders.. Igor wdyt?",
+      "parentUuid": "594efae4_5710bef1",
+      "revId": "44af4462c7eb8f466d85d06040b83349abb6057b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
