@@ -16,6 +16,24 @@
       "message": "ptal again.\n\nNo need to update the entire code space (and to do on the main thread). We can update just the needed pages (and concurrently).",
       "revId": "7e61a371b767dbb3776b8236c6c52730be83ad65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fae78e20_99cb074f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-02T12:43:13Z",
+      "side": 1,
+      "message": "Hannes is updating these scopes now and I am not sure what survives. I think on Mac they are anyways cheap.",
+      "parentUuid": "7040e047_672d82b4",
+      "revId": "7e61a371b767dbb3776b8236c6c52730be83ad65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
