@@ -240,26 +240,39 @@ Address SpaceWithLinearArea::ComputeLimit(Address start, Address end,
     return start + min_size;
   }
 
+  // When LABs are enabled, first always pick the largest possible LAB size by
+  // default.
+  size_t step_size = end - start;
+
   if (SupportsAllocationObserver() && allocation_counter_.IsActive()) {
     // Ensure there are no unaccounted allocations.
     DCHECK_EQ(allocation_info_.start(), allocation_info_.top());
 
     // Generated code may allocate inline from the linear allocation area for.
-    // To make sure we can observe these allocations, we use a lower ©limit.
+    // To make sure we can observe these allocations, we use a lower limit.
     size_t step = allocation_counter_.NextBytes();
     DCHECK_NE(step, 0);
-    size_t rounded_step =
-        RoundSizeDownToObjectAlignment(static_cast<int>(step - 1));
-    // Use uint64_t to avoid overflow on 32-bit
-    uint64_t step_end =
-        static_cast<uint64_t>(start) + std::max(min_size, rounded_step);
-    uint64_t new_end = std::min(step_end, static_cast<uint64_t>(end));
-    return static_cast<Address>(new_end);
+    step_size =
+        std::min(step_size, static_cast<size_t>(RoundSizeDownToObjectAlignment(
+                                static_cast<int>(step - 1))));
   }
 
-  // LABs are enabled and no observers attached. Return the whole node for the
-  // LAB.
-  return end;
+  if (v8_flags.stress_marking) {
+    step_size = std::min(step_size, static_cast<size_t>(64));
+  }
+
+  if (v8_flags.minor_mc && identity() == NEW_SPACE &&
+      !heap()->incremental_marking()->IsMarking()) {
+    size_t goal = heap()->MinorMCTaskTriggerSize();
+    size_t current_size = heap()->new_space()->Size();
+
+    if (current_size < goal) {
+      step_size = std::min(step_size, goal - current_size);
+    }
+  }
+
+  DCHECK_LE(start + step_size, end);
+  return start + std::max(step_size, min_size);
 }
 
 void SpaceWithLinearArea::DisableInlineAllocation() {
