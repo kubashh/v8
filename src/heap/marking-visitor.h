@@ -63,6 +63,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   }
 
   V8_INLINE int VisitBytecodeArray(Map map, BytecodeArray object);
+  V8_INLINE int VisitDescriptorArrayStrongly(Map map, DescriptorArray object);
   V8_INLINE int VisitDescriptorArray(Map map, DescriptorArray object);
   V8_INLINE int VisitStrongDescriptorArray(Map map,
                                            StrongDescriptorArray object);
@@ -156,10 +157,7 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   // the slot.
   V8_INLINE void VisitCodePointerImpl(HeapObject host, CodeObjectSlot slot);
 
-  V8_INLINE void VisitDescriptors(DescriptorArray descriptors,
-                                  int number_of_own_descriptors);
-
-  V8_INLINE int VisitDescriptorsForMap(Map map);
+  V8_INLINE void VisitDescriptorsForMap(Map map);
 
   template <typename T>
   int VisitEmbedderTracingSubclass(Map map, T object);
@@ -171,10 +169,6 @@ class MarkingVisitorBase : public HeapVisitor<int, ConcreteVisitor> {
   V8_INLINE int VisitFixedArrayWithProgressBar(Map map, FixedArray object,
                                                ProgressBar& progress_bar);
   V8_INLINE int VisitFixedArrayRegularly(Map map, FixedArray object);
-  // Marks the descriptor array black without pushing it on the marking work
-  // list and visits its header. Returns the size of the descriptor array
-  // if it was successully marked as black.
-  V8_INLINE int MarkDescriptorArrayBlack(DescriptorArray descriptors);
 
   V8_INLINE void AddStrongReferenceForReferenceSummarizer(HeapObject host,
                                                           HeapObject obj) {
@@ -281,6 +275,51 @@ class YoungGenerationMarkingVisitorBase
   void VisitPointerImpl(HeapObject host, TSlot slot);
 
   MarkingWorklists::Local* worklists_local_;
+};
+
+// Custom DescriptorArray marking state for visitors that are allowed to write
+// into the heap. The marking state uses DescriptorArray::raw_gc_state() as
+// storage.
+//
+// The state essentially keeps track of 3 fields:
+// 1. The collector epoch: The rest of the state is only valid if the epoch
+//    matches. If the epoch doesn't match, the other fields should be considered
+//    invalid. The epoch is necessary, as not all DescriptorArray objects are
+//    eventually trimmed in the atomic pause and thus available for resetting
+//    the state.
+// 2. Number of already marked descriptors.
+// 3. Delta of to be marked descriptors in this cycle. This must be 0 after
+//    marking is done.
+class DescriptorArrayMarkingState final {
+ public:
+#define BIT_FIELD_FIELDS(V, _) \
+  V(Epoch, unsigned, 2, _)     \
+  V(Marked, uint16_t, 14, _)   \
+  V(Delta, uint16_t, 16, _)
+  DEFINE_BIT_FIELDS(BIT_FIELD_FIELDS)
+#undef BIT_FIELD_FIELDS
+  static_assert(Marked::kMax <= Delta::kMax);
+  static_assert(kMaxNumberOfDescriptors <= Marked::kMax);
+
+  using DescriptorIndex = uint16_t;
+  using RawGCStateType = uint32_t;
+
+  static constexpr RawGCStateType kInitialGCState = 0;
+
+  // Potentially updates the delta of to be marked descriptors. Returns true if
+  // the update was successful and the object should be processed via a marking
+  // visitor.
+  static inline bool TryUpdateIndicesToMark(unsigned gc_epoch,
+                                            DescriptorArray array,
+                                            DescriptorIndex index_to_mark);
+
+  // Used from the visitor when processing a DescriptorArray. Returns a range of
+  // start and end descriptor indices. No processing is required for start ==
+  // end. The method signals the first invocation by returning start == 0, and
+  // end != 0.
+  static inline std::pair<DescriptorIndex, DescriptorIndex>
+  UpdateMarkedDescriptorsForProcessing(unsigned gc_epoch,
+                                       DescriptorArray array);
 };
 
 }  // namespace internal
