@@ -94,7 +94,7 @@ Builtin OffHeapInstructionStream::TryLookupCode(Isolate* isolate,
     builtin = i::TryLookupCode(EmbeddedData::FromBlob(), address);
   }
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
   if (V8_SHORT_BUILTIN_CALLS_BOOL && !Builtins::IsBuiltinId(builtin)) {
     // When shared pointer compression cage is enabled and it has the embedded
     // code blob copy then it could have been used regardless of whether the

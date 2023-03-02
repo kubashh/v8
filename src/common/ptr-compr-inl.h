@@ -41,7 +41,7 @@ Address V8HeapCompressionScheme::GetPtrComprCageBaseAddress(
   return base;
 }
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
 
 // static
 void V8HeapCompressionScheme::InitBase(Address base) {
@@ -58,7 +58,7 @@ V8_CONST Address V8HeapCompressionScheme::base() {
   return reinterpret_cast<Address>(V8_ASSUME_ALIGNED(
       reinterpret_cast<void*>(base_), kPtrComprCageBaseAlignment));
 }
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#endif  // V8_COMPRESS_POINTERS
 
 // static
 Tagged_t V8HeapCompressionScheme::CompressObject(Address tagged) {
@@ -83,7 +83,7 @@ Address V8HeapCompressionScheme::DecompressTaggedSigned(Tagged_t raw_value) {
 template <typename TOnHeapAddress>
 Address V8HeapCompressionScheme::DecompressTagged(TOnHeapAddress on_heap_addr,
                                                   Tagged_t raw_value) {
-#if defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE) && \
+#if defined(V8_COMPRESS_POINTERS) && \
     !defined(V8_COMPRESS_POINTERS_DONT_USE_GLOBAL_BASE)
   Address cage_base = base();
 #else
@@ -133,7 +133,7 @@ Address ExternalCodeCompressionScheme::GetPtrComprCageBaseAddress(
   return base;
 }
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
 
 // static
 void ExternalCodeCompressionScheme::InitBase(Address base) {
@@ -150,7 +150,7 @@ V8_CONST Address ExternalCodeCompressionScheme::base() {
   return reinterpret_cast<Address>(V8_ASSUME_ALIGNED(
       reinterpret_cast<void*>(base_), kPtrComprCageBaseAlignment));
 }
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#endif  // V8_COMPRESS_POINTERS
 
 // static
 Tagged_t ExternalCodeCompressionScheme::CompressObject(Address tagged) {
@@ -176,7 +176,7 @@ Address ExternalCodeCompressionScheme::DecompressTaggedSigned(
 template <typename TOnHeapAddress>
 Address ExternalCodeCompressionScheme::DecompressTagged(
     TOnHeapAddress on_heap_addr, Tagged_t raw_value) {
-#if defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE) && \
+#if defined(V8_COMPRESS_POINTERS) && \
     !defined(V8_COMPRESS_POINTERS_DONT_USE_GLOBAL_BASE)
   Address cage_base = base();
 #else

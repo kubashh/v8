@@ -645,8 +645,6 @@ class BaseTestRunner(object):
             self.build_config.lite_mode,
         "pointer_compression":
             self.build_config.pointer_compression,
-        "pointer_compression_shared_cage":
-            self.build_config.pointer_compression_shared_cage,
         "no_js_shared_memory":
             self.build_config.no_js_shared_memory,
         "sandbox":

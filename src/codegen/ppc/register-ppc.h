@@ -29,7 +29,7 @@ namespace internal {
 #define MAYBE_ALLOCATEABLE_CONSTANT_POOL_REGISTER(V) V(r28)
 #endif
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
 #define MAYBE_ALLOCATABLE_CAGE_REGISTERS(V)
 #else
 #define MAYBE_ALLOCATABLE_CAGE_REGISTERS(V)  V(r27)
@@ -146,7 +146,7 @@ constexpr Register no_reg = Register::no_reg();
 constexpr Register kConstantPoolRegister = r28;  // Constant pool.
 constexpr Register kRootRegister = r29;          // Roots array pointer.
 constexpr Register cp = r30;                     // JavaScript context pointer.
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
 constexpr Register kPtrComprCageBaseRegister = r27;  // callee save
 #else
 constexpr Register kPtrComprCageBaseRegister = kRootRegister;

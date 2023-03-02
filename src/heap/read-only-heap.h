@@ -94,8 +94,7 @@ class ReadOnlyHeap {
   // Returns whether the ReadOnlySpace will actually be shared taking into
   // account whether shared memory is available with pointer compression.
   static constexpr bool IsReadOnlySpaceShared() {
-    return V8_SHARED_RO_HEAP_BOOL &&
-           (!COMPRESS_POINTERS_BOOL || COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL);
+    return V8_SHARED_RO_HEAP_BOOL;
   }
 
   virtual void InitializeIsolateRoots(Isolate* isolate) {}
@@ -132,7 +131,6 @@ class ReadOnlyHeap {
   static bool IsSharedMemoryAvailable();
 
   explicit ReadOnlyHeap(ReadOnlySpace* ro_space) : read_only_space_(ro_space) {}
-  ReadOnlyHeap(ReadOnlyHeap* ro_heap, ReadOnlySpace* ro_space);
 };
 
 // This is used without pointer compression when there is just a single

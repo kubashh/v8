@@ -220,32 +220,6 @@ selects.config_setting_group(
     ],
 )
 
-# Pointer cage, true by default if v8_enable_pointer_compression.
-v8_flag(
-    name = "v8_enable_pointer_compression_shared_cage",
-    default = True,
-)
-
-# Enable shared cage if v8_enable_pointer_compression
-# and v8_enable_pointer_compression_shared_cage.
-selects.config_setting_group(
-    name = "enable_pointer_compression_shared_cage",
-    match_all = [
-        ":is_v8_enable_pointer_compression",
-        ":is_v8_enable_pointer_compression_shared_cage",
-    ],
-)
-
-# Enable isolated cage if v8_enable_pointer_compression and
-# NOT v8_enable_pointer_compression_shared_cage.
-selects.config_setting_group(
-    name = "enable_pointer_compression_isolated_cage",
-    match_all = [
-        ":is_v8_enable_pointer_compression",
-        ":is_not_v8_enable_pointer_compression_shared_cage",
-    ],
-)
-
 # We use a string flag to create a 3 value-logic.
 # If no explicit value for v8_enable_short_builtin_calls, we set it to 'none'.
 v8_string(
@@ -401,14 +375,6 @@ v8_config(
         ":is_v8_enable_pointer_compression": [
             "V8_COMPRESS_POINTERS",
             "V8_31BIT_SMIS_ON_64BIT_ARCH",
-        ],
-        "//conditions:default": [],
-    }) + select({
-        ":enable_pointer_compression_shared_cage": [
-            "V8_COMPRESS_POINTERS_IN_SHARED_CAGE",
-        ],
-        ":enable_pointer_compression_isolated_cage": [
-            "V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE",
         ],
         "//conditions:default": [],
     }) + select({

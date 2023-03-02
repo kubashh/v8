@@ -1100,7 +1100,7 @@ void Code::CodeVerify(Isolate* isolate) {
 
     // Ensure the cached code entry point corresponds to the InstructionStream
     // object associated with this Code.
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
     if (V8_SHORT_BUILTIN_CALLS_BOOL) {
       if (istream.instruction_start() == code_entry_point()) {
         // Most common case, all good.
@@ -1122,7 +1122,7 @@ void Code::CodeVerify(Isolate* isolate) {
     }
 #else
     CHECK_EQ(istream.instruction_start(), code_entry_point());
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#endif  // V8_COMPRESS_POINTERS
   }
 }
 
