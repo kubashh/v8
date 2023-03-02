@@ -1,0 +1,192 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1ba864a_29ef0769",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:35:31Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "7406b14b4738424fa6b6bf52f3072a7b9f42d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0f791a0_7d688714",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:35:31Z",
+      "side": 1,
+      "message": "Please add `v8_enable_pointer_compression \u0026\u0026` just to be explicit.\nLater we might want to have different sets of root constants for other configurations, but `v8_enable_pointer_compression` is the main unavoidable requirement.",
+      "revId": "7406b14b4738424fa6b6bf52f3072a7b9f42d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32fbbaf4_1897bfec",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:35:31Z",
+      "side": 1,
+      "message": "Ditto: `v8_enable_pointer_compression \u0026\u0026`.",
+      "revId": "7406b14b4738424fa6b6bf52f3072a7b9f42d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2606c015_361012f6",
+        "filename": "src/common/ptr-compr-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:35:31Z",
+      "side": 1,
+      "message": "This is redundant, see line 15.",
+      "revId": "7406b14b4738424fa6b6bf52f3072a7b9f42d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ae16ffd_ad599acc",
+        "filename": "src/common/ptr-compr-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:35:31Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 86,
+        "startChar": 4,
+        "endLine": 86,
+        "endChar": 36
+      },
+      "revId": "7406b14b4738424fa6b6bf52f3072a7b9f42d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7d0ebd5_18553d70",
+        "filename": "src/common/ptr-compr-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:35:31Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "7406b14b4738424fa6b6bf52f3072a7b9f42d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c198d264_ce82066e",
+        "filename": "src/common/ptr-compr-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:35:31Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 179,
+        "startChar": 4,
+        "endLine": 179,
+        "endChar": 36
+      },
+      "revId": "7406b14b4738424fa6b6bf52f3072a7b9f42d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86268b51_5356fabe",
+        "filename": "src/execution/isolate-utils-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:35:31Z",
+      "side": 1,
+      "message": "Could you please check if these methods are still used? I think we should be able to remove them.",
+      "revId": "7406b14b4738424fa6b6bf52f3072a7b9f42d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f073b87_faef04b0",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1962,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:35:31Z",
+      "side": 1,
+      "message": "... enabled pointer compression.",
+      "range": {
+        "startLine": 1962,
+        "startChar": 13,
+        "endLine": 1962,
+        "endChar": 45
+      },
+      "revId": "7406b14b4738424fa6b6bf52f3072a7b9f42d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44d9720e_b3c0e3d4",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5291,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-02T13:35:31Z",
+      "side": 1,
+      "message": "Please merge two lines.",
+      "revId": "7406b14b4738424fa6b6bf52f3072a7b9f42d2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
