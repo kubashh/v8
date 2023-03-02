@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7040e047_672d82b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-03-02T11:48:00Z",
+      "side": 1,
+      "message": "ptal again.\n\nNo need to update the entire code space (and to do on the main thread). We can update just the needed pages (and concurrently).",
+      "revId": "7e61a371b767dbb3776b8236c6c52730be83ad65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
