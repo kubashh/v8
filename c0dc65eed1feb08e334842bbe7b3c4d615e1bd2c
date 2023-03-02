@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5137c990_e8f6c1dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-03-02T11:07:25Z",
+      "side": 1,
+      "message": "ptal\n\nCodeSpaceMemoryModificationScope was missing from Heap::MinorMarkCompact, causing MinorMC to crash on mac.\nAfter this I believe we should be able to run MinorMC on M1 as well.",
+      "revId": "c0dc65eed1feb08e334842bbe7b3c4d615e1bd2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
