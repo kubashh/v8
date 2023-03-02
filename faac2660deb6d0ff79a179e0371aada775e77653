@@ -16,6 +16,23 @@
       "message": "This is ready now",
       "revId": "faac2660deb6d0ff79a179e0371aada775e77653",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94e82463_1b98c989",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-02T10:25:37Z",
+      "side": 1,
+      "message": "Still LGTM",
+      "revId": "faac2660deb6d0ff79a179e0371aada775e77653",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
