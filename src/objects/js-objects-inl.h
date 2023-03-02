@@ -13,6 +13,7 @@
 #include "src/objects/field-index-inl.h"
 #include "src/objects/hash-table-inl.h"
 #include "src/objects/heap-number-inl.h"
+#include "src/objects/js-generator-inl.h"
 #include "src/objects/js-objects.h"
 #include "src/objects/keys.h"
 #include "src/objects/lookup-inl.h"
@@ -810,6 +811,28 @@ DEF_GETTER(JSReceiver, property_array, PropertyArray) {
     return GetReadOnlyRoots(cage_base).empty_property_array();
   }
   return PropertyArray::cast(prop);
+}
+
+std::optional<NativeContext> JSReceiver::GetCreationContextRaw() {
+  JSReceiver receiver = *this;
+  // Externals are JSObjects with null as a constructor.
+  DCHECK(!receiver.IsJSExternalObject());
+  Object constructor = receiver.map().GetConstructor();
+  JSFunction function;
+  if (V8_LIKELY(constructor.IsJSFunction())) {
+    function = JSFunction::cast(constructor);
+  } else if (constructor.IsFunctionTemplateInfo()) {
+    // Remote objects don't have a creation context.
+    return {};
+  } else if (receiver.IsJSGeneratorObject()) {
+    function = JSGeneratorObject::cast(receiver).function();
+  } else if (receiver.IsJSFunction()) {
+    function = JSFunction::cast(receiver);
+  } else {
+    return {};
+  }
+  if (function.has_context()) return {function.native_context()};
+  return {};
 }
 
 Maybe<bool> JSReceiver::HasProperty(Isolate* isolate, Handle<JSReceiver> object,
