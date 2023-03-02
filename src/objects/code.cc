@@ -40,15 +40,10 @@ namespace {
 // builtins when short builtin calls are enabled.
 inline EmbeddedData EmbeddedDataWithMaybeRemappedEmbeddedBuiltins(
     HeapObject code) {
-#if defined(V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE)
-  // GetIsolateFromWritableObject(*this) works for both read-only and writable
-  // objects when pointer compression is enabled with a per-Isolate cage.
-  return EmbeddedData::FromBlob(GetIsolateFromWritableObject(code));
-#elif defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
-  // When pointer compression is enabled with a shared cage, there is also a
-  // shared CodeRange. When short builtin calls are enabled, there is a single
-  // copy of the re-embedded builtins in the shared CodeRange, so use that if
-  // it's present.
+#if defined(V8_COMPRESS_POINTERS)
+  // When pointer compression is enabled, there is also a shared CodeRange.
+  // When short builtin calls are enabled, there is a single copy of the
+  // re-embedded builtins in the shared CodeRange, so use that if it's present.
   if (v8_flags.jitless) return EmbeddedData::FromBlob();
   CodeRange* code_range = CodeRange::GetProcessWideCodeRange();
   return (code_range && code_range->embedded_blob_code_copy() != nullptr)

@@ -104,7 +104,7 @@ class V8_EXPORT ResourceConstraints {
    * The amount of virtual memory reserved for generated code. This is relevant
    * for 64-bit architectures that rely on code range for calls in code.
    *
-   * When V8_COMPRESS_POINTERS_IN_SHARED_CAGE is defined, there is a shared
+   * When V8_COMPRESS_POINTERS is defined, there is a shared
    * process-wide code range that is lazily initialized. This value is used to
    * configure that shared code range when the first Isolate is
    * created. Subsequent Isolates ignore this value.

@@ -1955,13 +1955,11 @@ DEFINE_BOOL(trace_code_range_allocation, false,
 #endif  // V8_TARGET_OS_CHROMEOS
 
 // TODO(1417652): Enable on ChromeOS once the issue is fixed.
-DEFINE_BOOL(
-    better_code_range_allocation,
-    V8_EXTERNAL_CODE_SPACE_BOOL&& COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL &&
-        !V8_TARGET_OS_CHROMEOS_BOOL,
-    "This mode tries harder to allocate code range near .text section. "
-    "Works only for configurations with external code space and "
-    "shared pointer compression cage.")
+DEFINE_BOOL(better_code_range_allocation,
+            V8_EXTERNAL_CODE_SPACE_BOOL && !V8_TARGET_OS_CHROMEOS_BOOL,
+            "This mode tries harder to allocate code range near .text section. "
+            "Works only for configurations with external code space and "
+            "shared pointer compression cage.")
 DEFINE_BOOL(abort_on_far_code_range, false,
             "Abort if code range is allocated further away than 4GB from the"
             ".text section")

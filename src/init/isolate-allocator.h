@@ -63,9 +63,6 @@ class V8_EXPORT_PRIVATE IsolateAllocator final {
   // The allocated memory for Isolate instance.
   void* isolate_memory_ = nullptr;
   v8::PageAllocator* page_allocator_ = nullptr;
-#ifdef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
-  VirtualMemoryCage isolate_ptr_compr_cage_;
-#endif
 };
 
 }  // namespace internal

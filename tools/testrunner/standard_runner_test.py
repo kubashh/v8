@@ -226,7 +226,6 @@ class StandardRunnerTest(TestRunnerTest):
           v8_enable_i18n_support=False, v8_target_cpu='x86',
           v8_enable_verify_csa=False, v8_enable_lite_mode=False,
           v8_enable_pointer_compression=False,
-          v8_enable_pointer_compression_shared_cage=False,
           v8_enable_shared_ro_heap=False,
           v8_enable_sandbox=False
         )

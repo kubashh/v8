@@ -3273,10 +3273,6 @@ Isolate* Isolate::Allocate() {
   // Construct Isolate object in the allocated memory.
   void* isolate_ptr = isolate_allocator->isolate_memory();
   Isolate* isolate = new (isolate_ptr) Isolate(std::move(isolate_allocator));
-#ifdef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
-  DCHECK(IsAligned(isolate->isolate_root(), kPtrComprCageBaseAlignment));
-  DCHECK_EQ(isolate->isolate_root(), isolate->cage_base());
-#endif
 
 #ifdef DEBUG
   non_disposed_isolates_++;
@@ -4129,9 +4125,9 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
                    SnapshotData* shared_heap_snapshot_data, bool can_rehash) {
   TRACE_ISOLATE(init);
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
   CHECK_EQ(V8HeapCompressionScheme::base(), cage_base());
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#endif  // V8_COMPRESS_POINTERS
 
   const bool create_heap_objects = (shared_heap_snapshot_data == nullptr);
   // We either have both or none.
@@ -4293,7 +4289,7 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
 #endif  // defined(V8_OS_ANDROID)
     // Additionally, enable if there is already a process-wide CodeRange that
     // has re-embedded builtins.
-    if (COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL) {
+    if (COMPRESS_POINTERS_BOOL) {
       CodeRange* code_range = CodeRange::GetProcessWideCodeRange();
       if (code_range && code_range->embedded_blob_code_copy() != nullptr) {
         is_short_builtin_calls_enabled_ = true;
@@ -4320,9 +4316,9 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
     }
     code_cage_base_ = ExternalCodeCompressionScheme::PrepareCageBaseAddress(
         code_cage->base());
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#ifdef V8_COMPRESS_POINTERS
     CHECK_EQ(ExternalCodeCompressionScheme::base(), code_cage_base_);
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+#endif  // V8_COMPRESS_POINTERS
 
     // Ensure that ExternalCodeCompressionScheme is applicable to all objects
     // stored in the code cage.

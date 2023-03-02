@@ -612,7 +612,6 @@ def build_config_content(cpu, icu):
         ("v8_enable_lite_mode", "false"),
         ("v8_enable_runtime_call_stats", "false"),
         ("v8_enable_pointer_compression", "true"),
-        ("v8_enable_pointer_compression_shared_cage", "false"),
         ("v8_enable_third_party_heap", "false"),
         ("v8_enable_webassembly", "false"),
         ("v8_control_flow_integrity", "false"),

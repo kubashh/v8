@@ -99,9 +99,8 @@ void SingleCopyReadOnlyArtifacts::Initialize(Isolate* isolate,
   // Do not use the platform page allocator when sharing a pointer compression
   // cage, as the Isolate's page allocator is a BoundedPageAllocator tied to the
   // shared cage.
-  page_allocator_ = COMPRESS_POINTERS_IN_SHARED_CAGE_BOOL
-                        ? isolate->page_allocator()
-                        : GetPlatformPageAllocator();
+  page_allocator_ = COMPRESS_POINTERS_BOOL ? isolate->page_allocator()
+                                           : GetPlatformPageAllocator();
   pages_ = std::move(pages);
   set_accounting_stats(stats);
   set_shared_read_only_space(
@@ -119,171 +118,6 @@ void SingleCopyReadOnlyArtifacts::VerifyHeapAndSpaceRelationships(
   // Confirm the Isolate is using the shared ReadOnlyHeap and ReadOnlySpace.
   DCHECK_EQ(read_only_heap(), isolate->read_only_heap());
   DCHECK_EQ(shared_read_only_space(), isolate->heap()->read_only_space());
-}
-
-void PointerCompressedReadOnlyArtifacts::InitializeRootsFrom(Isolate* isolate) {
-  auto isolate_ro_roots =
-      isolate->roots_table().read_only_roots_begin().location();
-  CopyAndRebaseRoots(isolate_ro_roots, read_only_roots_, 0);
-}
-
-void PointerCompressedReadOnlyArtifacts::InitializeRootsIn(Isolate* isolate) {
-  auto isolate_ro_roots =
-      isolate->roots_table().read_only_roots_begin().location();
-  CopyAndRebaseRoots(read_only_roots_, isolate_ro_roots,
-                     isolate->isolate_root());
-}
-
-SharedReadOnlySpace* PointerCompressedReadOnlyArtifacts::CreateReadOnlySpace(
-    Isolate* isolate) {
-  AllocationStats new_stats;
-  new_stats.IncreaseCapacity(accounting_stats().Capacity());
-
-  std::vector<std::unique_ptr<v8::PageAllocator::SharedMemoryMapping>> mappings;
-  std::vector<ReadOnlyPage*> pages;
-  Address isolate_root = isolate->isolate_root();
-  for (size_t i = 0; i < pages_.size(); ++i) {
-    const ReadOnlyPage* page = pages_[i];
-    const Tagged_t offset = OffsetForPage(i);
-    Address new_address = isolate_root + offset;
-    ReadOnlyPage* new_page = nullptr;
-    bool success = isolate->heap()
-                       ->memory_allocator()
-                       ->data_page_allocator()
-                       ->ReserveForSharedMemoryMapping(
-                           reinterpret_cast<void*>(new_address), page->size());
-    CHECK(success);
-    auto shared_memory = RemapPageTo(i, new_address, new_page);
-    // Later it's possible that this might fail, but for now on Linux this is
-    // not possible. When we move onto windows, it's not possible to reserve
-    // memory and then map into the middle of it at which point we will have to
-    // reserve the memory free it and then attempt to remap to it which could
-    // fail. At that point this will need to change.
-    CHECK(shared_memory);
-    CHECK_NOT_NULL(new_page);
-
-    new_stats.IncreaseAllocatedBytes(page->allocated_bytes(), new_page);
-    mappings.push_back(std::move(shared_memory));
-    pages.push_back(new_page);
-  }
-
-  auto* shared_read_only_space =
-      new SharedReadOnlySpace(isolate->heap(), std::move(pages),
-                              std::move(mappings), std::move(new_stats));
-  return shared_read_only_space;
-}
-
-ReadOnlyHeap* PointerCompressedReadOnlyArtifacts::GetReadOnlyHeapForIsolate(
-    Isolate* isolate) {
-  DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
-  InitializeRootsIn(isolate);
-
-  SharedReadOnlySpace* shared_read_only_space = CreateReadOnlySpace(isolate);
-  ReadOnlyHeap* read_only_heap = new ReadOnlyHeap(shared_read_only_space);
-
-  // TODO(v8:10699): The cache should just live uncompressed in
-  // ReadOnlyArtifacts and be decompressed on the fly.
-  auto original_cache = read_only_heap_->read_only_object_cache_;
-  auto& cache = read_only_heap->read_only_object_cache_;
-  Address isolate_root = isolate->isolate_root();
-  for (Object original_object : original_cache) {
-    Address original_address = original_object.ptr();
-    Address new_address =
-        isolate_root +
-        V8HeapCompressionScheme::CompressObject(original_address);
-    Object new_object = Object(new_address);
-    cache.push_back(new_object);
-  }
-
-  return read_only_heap;
-}
-
-std::unique_ptr<::v8::PageAllocator::SharedMemoryMapping>
-PointerCompressedReadOnlyArtifacts::RemapPageTo(size_t i, Address new_address,
-                                                ReadOnlyPage*& new_page) {
-  std::unique_ptr<::v8::PageAllocator::SharedMemoryMapping> mapping =
-      shared_memory_[i]->RemapTo(reinterpret_cast<void*>(new_address));
-  if (mapping) {
-    new_page = static_cast<ReadOnlyPage*>(reinterpret_cast<void*>(new_address));
-    return mapping;
-  } else {
-    return {};
-  }
-}
-
-void PointerCompressedReadOnlyArtifacts::Initialize(
-    Isolate* isolate, std::vector<ReadOnlyPage*>&& pages,
-    const AllocationStats& stats) {
-  DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
-  DCHECK(pages_.empty());
-  DCHECK(!pages.empty());
-
-  // It's not possible to copy the AllocationStats directly as the new pages
-  // will be mapped to different addresses.
-  stats_.IncreaseCapacity(stats.Capacity());
-
-  v8::PageAllocator* page_allocator = GetPlatformPageAllocator();
-  DCHECK(page_allocator->CanAllocateSharedPages());
-
-  for (const ReadOnlyPage* page : pages) {
-    size_t size = RoundUp(page->size(), page_allocator->AllocatePageSize());
-    // 1. Allocate some new memory for a shared copy of the page and copy the
-    // original contents into it. Doesn't need to be V8 page aligned, since
-    // we'll never use it directly.
-    auto shared_memory = page_allocator->AllocateSharedPages(size, page);
-    void* ptr = shared_memory->GetMemory();
-    CHECK_NOT_NULL(ptr);
-
-    // 2. Copy the contents of the original page into the shared page.
-    ReadOnlyPage* new_page = reinterpret_cast<ReadOnlyPage*>(ptr);
-
-    pages_.push_back(new_page);
-    shared_memory_.push_back(std::move(shared_memory));
-    // This is just CompressTagged but inlined so it will always compile.
-    Tagged_t compressed_address =
-        V8HeapCompressionScheme::CompressAny(page->address());
-    page_offsets_.push_back(compressed_address);
-
-    // 3. Update the accounting stats so the allocated bytes are for the new
-    // shared page rather than the original.
-    stats_.IncreaseAllocatedBytes(page->allocated_bytes(), new_page);
-  }
-
-  InitializeRootsFrom(isolate);
-  set_shared_read_only_space(
-      std::make_unique<SharedReadOnlySpace>(isolate->heap(), this));
-}
-
-void PointerCompressedReadOnlyArtifacts::ReinstallReadOnlySpace(
-    Isolate* isolate) {
-  // We need to build a new SharedReadOnlySpace that occupies the same memory as
-  // the original one, so first the original space's pages must be freed.
-  Heap* heap = isolate->heap();
-  heap->read_only_space()->TearDown(heap->memory_allocator());
-
-  heap->ReplaceReadOnlySpace(CreateReadOnlySpace(heap->isolate()));
-
-  DCHECK_NE(heap->read_only_space(), shared_read_only_space());
-
-  // Also recreate the ReadOnlyHeap using the this space.
-  auto* ro_heap = new ReadOnlyHeap(isolate->read_only_heap(),
-                                   isolate->heap()->read_only_space());
-  isolate->set_read_only_heap(ro_heap);
-
-  DCHECK_NE(*isolate->roots_table().read_only_roots_begin().location(), 0);
-}
-
-void PointerCompressedReadOnlyArtifacts::VerifyHeapAndSpaceRelationships(
-    Isolate* isolate) {
-  // Confirm the canonical versions of the ReadOnlySpace/ReadOnlyHeap from the
-  // ReadOnlyArtifacts are not accidentally present in a real Isolate (which
-  // might destroy them) and the ReadOnlyHeaps and Spaces are correctly
-  // associated with each other.
-  DCHECK_NE(shared_read_only_space(), isolate->heap()->read_only_space());
-  DCHECK_NE(read_only_heap(), isolate->read_only_heap());
-  DCHECK_EQ(read_only_heap()->read_only_space(), shared_read_only_space());
-  DCHECK_EQ(isolate->read_only_heap()->read_only_space(),
-            isolate->heap()->read_only_space());
 }
 
 // -----------------------------------------------------------------------------
@@ -322,12 +156,9 @@ void ReadOnlySpace::DetachPagesAndAddToArtifacts(
   DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
 
   Heap* heap = ReadOnlySpace::heap();
-  // Without pointer compression in a per-Isolate cage, ReadOnlySpace pages are
-  // directly shared between all heaps and so must be unregistered from their
-  // originating allocator.
-  Seal(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL
-           ? SealMode::kDetachFromHeap
-           : SealMode::kDetachFromHeapAndUnregisterMemory);
+  // ReadOnlySpace pages are directly shared between all heaps and so must be
+  // unregistered from their originating allocator.
+  Seal(SealMode::kDetachFromHeapAndUnregisterMemory);
   artifacts->Initialize(heap->isolate(), std::move(pages_), accounting_stats_);
 }
 
@@ -707,47 +538,12 @@ void ReadOnlySpace::ShrinkPages() {
   limit_ = pages_.back()->area_end();
 }
 
-SharedReadOnlySpace::SharedReadOnlySpace(
-    Heap* heap, PointerCompressedReadOnlyArtifacts* artifacts)
-    : SharedReadOnlySpace(heap) {
-  // This constructor should only be used when RO_SPACE is shared with pointer
-  // compression in a per-Isolate cage.
-  DCHECK(V8_SHARED_RO_HEAP_BOOL);
-  DCHECK(COMPRESS_POINTERS_BOOL);
-  DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL);
-  DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
-  DCHECK(!artifacts->pages().empty());
-
-  accounting_stats_.IncreaseCapacity(artifacts->accounting_stats().Capacity());
-  for (ReadOnlyPage* page : artifacts->pages()) {
-    pages_.push_back(page);
-    accounting_stats_.IncreaseAllocatedBytes(page->allocated_bytes(), page);
-  }
-}
-
-SharedReadOnlySpace::SharedReadOnlySpace(
-    Heap* heap, std::vector<ReadOnlyPage*>&& new_pages,
-    std::vector<std::unique_ptr<::v8::PageAllocator::SharedMemoryMapping>>&&
-        mappings,
-    AllocationStats&& new_stats)
-    : SharedReadOnlySpace(heap) {
-  DCHECK(V8_SHARED_RO_HEAP_BOOL);
-  DCHECK(COMPRESS_POINTERS_BOOL);
-  DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL);
-  DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
-
-  accounting_stats_ = std::move(new_stats);
-  pages_ = std::move(new_pages);
-  shared_memory_mappings_ = std::move(mappings);
-}
-
 SharedReadOnlySpace::SharedReadOnlySpace(Heap* heap,
                                          SingleCopyReadOnlyArtifacts* artifacts)
     : SharedReadOnlySpace(heap) {
   // This constructor should only be used when RO_SPACE is shared without
   // pointer compression in a per-Isolate cage.
   DCHECK(V8_SHARED_RO_HEAP_BOOL);
-  DCHECK(!COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL);
   accounting_stats_ = artifacts->accounting_stats();
   pages_ = artifacts->pages();
 }
