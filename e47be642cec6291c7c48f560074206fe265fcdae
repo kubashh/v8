@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f39b49c3_8081f265",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3957,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-03-02T19:39:45Z",
+      "side": 1,
+      "message": "There\u0027s likely other places that rely on this flip that I forgot about. Instead of this bailout, what if we replace the condition at line 4828 with `if(v8_flags.minor_mc \u0026\u0026 !Page::FromHeapObject(heap_object)-\u003eIsLargePage())`?",
+      "range": {
+        "startLine": 3957,
+        "startChar": 4,
+        "endLine": 3957,
+        "endChar": 27
+      },
+      "revId": "e47be642cec6291c7c48f560074206fe265fcdae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
