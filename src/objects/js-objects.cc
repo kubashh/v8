@@ -654,28 +654,9 @@ Handle<String> JSReceiver::GetConstructorName(Isolate* isolate,
 }
 
 MaybeHandle<NativeContext> JSReceiver::GetCreationContext() {
-  JSReceiver receiver = *this;
-  // Externals are JSObjects with null as a constructor.
-  DCHECK(!receiver.IsJSExternalObject());
-  Object constructor = receiver.map().GetConstructor();
-  JSFunction function;
-  if (constructor.IsJSFunction()) {
-    function = JSFunction::cast(constructor);
-  } else if (constructor.IsFunctionTemplateInfo()) {
-    // Remote objects don't have a creation context.
-    return MaybeHandle<NativeContext>();
-  } else if (receiver.IsJSGeneratorObject()) {
-    function = JSGeneratorObject::cast(receiver).function();
-  } else if (receiver.IsJSFunction()) {
-    function = JSFunction::cast(receiver);
-  } else {
-    return MaybeHandle<NativeContext>();
-  }
-
-  return function.has_context()
-             ? Handle<NativeContext>(function.native_context(),
-                                     receiver.GetIsolate())
-             : MaybeHandle<NativeContext>();
+  auto maybe_context = GetCreationContextRaw();
+  if (!maybe_context.has_value()) return MaybeHandle<NativeContext>();
+  return handle(maybe_context.value(), GetIsolate());
 }
 
 // static
