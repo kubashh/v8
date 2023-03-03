@@ -107,6 +107,7 @@
 #include "src/objects/synthetic-module-inl.h"
 #include "src/objects/templates.h"
 #include "src/objects/value-serializer.h"
+#include "src/parsing/compile-hints.h"
 #include "src/parsing/parse-info.h"
 #include "src/parsing/parser.h"
 #include "src/parsing/pending-compilation-error-handler.h"
@@ -3002,6 +3003,13 @@ ScriptCompiler::CachedData* ScriptCompiler::CreateCodeCacheForFunction(
                   "v8::ScriptCompiler::CreateCodeCacheForFunction",
                   "Expected SharedFunctionInfo with wrapped source code");
   return i::CodeSerializer::Serialize(shared);
+}
+
+ScriptCompiler::CachedData* ScriptCompiler::CreateCompileHints(
+    Local<Script> script) {
+    std::vector<int> compile_hints = script->GetProducedCompileHints();
+  DCHECK_NO_SCRIPT_NO_EXCEPTION(isolate);
+  return i::CompileHints::Serialize(compile_hints);
 }
 
 MaybeLocal<Script> Script::Compile(Local<Context> context, Local<String> source,
