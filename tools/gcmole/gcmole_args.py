@@ -1,6 +1,7 @@
 # Copyright 2023 the V8 project authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+
 """Calculate arguments for the gcmole plugin based on flags passed to the
 compiler for a typical target in V8.
 """
@@ -11,6 +12,8 @@ import os
 import re
 import sys
 
+
+CFLAGS_CC_RE = re.compile(r'^cflags_cc = (.*)$', re.M)
 DEFINES_RE = re.compile(r'^defines = (.*)$', re.M)
 INCLUDES_RE = re.compile(r'^include_dirs = (.*)$', re.M)
 
@@ -39,20 +42,28 @@ def main():
   with ninja_file.open() as f:
     ninja_config = f.read()
 
+  cflags_cc = search_flags(CFLAGS_CC_RE, ninja_config)
   defines = search_flags(DEFINES_RE, ninja_config)
   includes = search_flags(INCLUDES_RE, ninja_config)
 
   # Include flags are relative to the build root. Make them relative to the
   # base directory for gcmole.
   # E.g. BUILD_DIR_REL = out/build and -I../../include gives -Iinclude.
-  include_flags = []
+  result_flags = []
   for flag in includes.strip().split():
     prefix, suffix = flag[:2], flag[2:]
     assert prefix == '-I'
-    include_flags.append(prefix + os.path.normpath(BUILD_DIR_REL / suffix))
+    result_flags.append(prefix + os.path.normpath(BUILD_DIR_REL / suffix))
+
+  # Process the sysroot flag.
+  for flag in cflags_cc.strip().split():
+    if flag.startswith('--sysroot='):
+      prefix, suffix = flag.split('=')
+      rel_sysroot = os.path.normpath(BUILD_DIR_REL / suffix)
+      result_flags.append(f'--sysroot={rel_sysroot}')
 
   with open('v8_gcmole.args', 'w') as f:
-    f.write(' '.join([defines] + include_flags))
+    f.write(' '.join([defines] + result_flags))
 
 
 if __name__ == '__main__':
