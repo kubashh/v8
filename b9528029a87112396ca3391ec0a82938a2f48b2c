@@ -68,6 +68,24 @@
       "parentUuid": "c131e36c_f4b15b6a",
       "revId": "b9528029a87112396ca3391ec0a82938a2f48b2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2923c95_48f3d9bb",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-03T14:25:45Z",
+      "side": 1,
+      "message": "Yeah, I am not worried about performance here. I just thought it makes more sense semantically to only notify if we changed anything. But it was just a suggestion, feel free to ignore if you feel differently.",
+      "parentUuid": "7be129f6_2e5429db",
+      "revId": "b9528029a87112396ca3391ec0a82938a2f48b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
