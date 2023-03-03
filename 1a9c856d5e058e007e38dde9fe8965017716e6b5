@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eea7a46e_446c2295",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-03T12:20:21Z",
+      "side": 0,
+      "message": "Comments on the `kTaggedSizeLog2 - 1` would help here btw.",
+      "parentUuid": "43714238_5e0d4dca",
+      "range": {
+        "startLine": 818,
+        "startChar": 59,
+        "endLine": 818,
+        "endChar": 78
+      },
+      "revId": "1a9c856d5e058e007e38dde9fe8965017716e6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b883e94_33230e71",
