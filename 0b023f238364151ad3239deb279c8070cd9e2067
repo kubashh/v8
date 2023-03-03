@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d7a41ec_bca961bb",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-03T13:07:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa7b5a3b_4f7cf74d",
+      "range": {
+        "startLine": 263,
+        "startChar": 7,
+        "endLine": 263,
+        "endChar": 11
+      },
+      "revId": "0b023f238364151ad3239deb279c8070cd9e2067",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c7d9bbb_87c088fc",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-03-03T10:59:07Z",
       "side": 1,
       "message": "Just use `start + std::max(step_size, min_size)` as return value? There\u0027s a branch either way.",
+      "range": {
+        "startLine": 269,
+        "startChar": 2,
+        "endLine": 273,
+        "endChar": 3
+      },
+      "revId": "0b023f238364151ad3239deb279c8070cd9e2067",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17438e67_2b8cc0eb",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-03T13:07:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c7d9bbb_87c088fc",
       "range": {
         "startLine": 269,
         "startChar": 2,
