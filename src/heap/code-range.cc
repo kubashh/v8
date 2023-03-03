@@ -138,11 +138,11 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
       v8_flags.jitless ? JitPermission::kNoJit : JitPermission::kMapAsJittable;
 
   Address the_hint =
-      GetCodeRangeAddressHint()->GetAddressHint(requested, allocate_page_size);
+      GetCodeRangeAddressHint()->GetAddressHint(requested, params.page_size);
 
   constexpr size_t kRadiusInMB =
       kMaxPCRelativeCodeRangeInMB > 1024 ? kMaxPCRelativeCodeRangeInMB : 4096;
-  auto preferred_region = GetPreferredRegion(kRadiusInMB, allocate_page_size);
+  auto preferred_region = GetPreferredRegion(kRadiusInMB, params.page_size);
 
   TRACE("=== Preferred region: [%p, %p)\n",
         reinterpret_cast<void*>(preferred_region.begin()),
@@ -158,8 +158,7 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
   if (kShouldTryHarder) {
     // Relax alignment requirement while trying to allocate code range inside
     // preferred region.
-    params.base_alignment =
-        VirtualMemoryCage::ReservationParams::kAnyBaseAlignment;
+    params.base_alignment = params.page_size;
 
     // TODO(v8:11880): consider using base::OS::GetFreeMemoryRangesWithin()
     // to avoid attempts that's going to fail anyway.
@@ -170,9 +169,9 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
     // towards the start in steps.
     const int kAllocationTries = 16;
     params.requested_start_hint =
-        RoundDown(preferred_region.end() - requested, allocate_page_size);
-    Address step = RoundDown(preferred_region.size() / kAllocationTries,
-                             allocate_page_size);
+        RoundDown(preferred_region.end() - requested, params.page_size);
+    Address step =
+        RoundDown(preferred_region.size() / kAllocationTries, params.page_size);
     for (int i = 0; i < kAllocationTries; i++) {
       TRACE("=== Attempt #%d, hint=%p\n", i,
             reinterpret_cast<void*>(params.requested_start_hint));
