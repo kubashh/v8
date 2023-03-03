@@ -50,6 +50,24 @@
       "message": "just a thought: would it make sense to notify only if we actually erased something from the map?",
       "revId": "b9528029a87112396ca3391ec0a82938a2f48b2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7be129f6_2e5429db",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-03-03T13:25:46Z",
+      "side": 1,
+      "message": "I don\u0027t know. This means an additional branch for a majority of cases where it\u0027s not needed. With branch predictions the cost might be extremely small, but OTOH the case where the module was already erased should be very rare and only affects invalid modules, so I don\u0027t think this has any practical implications either way.",
+      "parentUuid": "c131e36c_f4b15b6a",
+      "revId": "b9528029a87112396ca3391ec0a82938a2f48b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
