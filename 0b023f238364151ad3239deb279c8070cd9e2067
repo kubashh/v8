@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "107c4647_6f2e275a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-03T10:59:07Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "0b023f238364151ad3239deb279c8070cd9e2067",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa7b5a3b_4f7cf74d",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-03T10:59:07Z",
+      "side": 1,
+      "message": "I think you can remove this TODO as it is not attributed to a bug or user and will anyways not be resolved.",
+      "range": {
+        "startLine": 263,
+        "startChar": 7,
+        "endLine": 263,
+        "endChar": 11
+      },
+      "revId": "0b023f238364151ad3239deb279c8070cd9e2067",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c7d9bbb_87c088fc",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-03T10:59:07Z",
+      "side": 1,
+      "message": "Just use `start + std::max(step_size, min_size)` as return value? There\u0027s a branch either way.",
+      "range": {
+        "startLine": 269,
+        "startChar": 2,
+        "endLine": 273,
+        "endChar": 3
+      },
+      "revId": "0b023f238364151ad3239deb279c8070cd9e2067",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
