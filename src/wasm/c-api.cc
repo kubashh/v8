@@ -28,6 +28,7 @@
 #include "include/libplatform/libplatform.h"
 #include "include/v8-initialization.h"
 #include "src/api/api-inl.h"
+#include "src/base/platform/mutex.h"
 #include "src/builtins/builtins.h"
 #include "src/compiler/wasm-compiler.h"
 #include "src/objects/call-site-info-inl.h"
@@ -1186,6 +1187,7 @@ auto Module::exports() const -> ownvec<ExportType> {
 auto Module::serialize() const -> vec<byte_t> {
   i::wasm::NativeModule* native_module =
       impl(this)->v8_object()->native_module();
+  v8::base::LockGuard<i::wasm::NativeModule> lock(native_module);
   native_module->compilation_state()->TierUpAllFunctions();
   v8::base::Vector<const uint8_t> wire_bytes = native_module->wire_bytes();
   size_t binary_size = wire_bytes.size();
