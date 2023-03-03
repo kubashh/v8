@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "b9528029a87112396ca3391ec0a82938a2f48b2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ab08fec_7bebdfe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-03T10:39:08Z",
+      "side": 1,
+      "message": "LGTM with one question / comment.",
+      "revId": "b9528029a87112396ca3391ec0a82938a2f48b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c131e36c_f4b15b6a",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-03T10:39:08Z",
+      "side": 1,
+      "message": "just a thought: would it make sense to notify only if we actually erased something from the map?",
+      "revId": "b9528029a87112396ca3391ec0a82938a2f48b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
