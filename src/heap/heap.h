@@ -653,6 +653,9 @@ class Heap {
   }
   void SetGCState(HeapState state);
   bool IsTearingDown() const { return gc_state() == TEAR_DOWN; }
+  bool IsInGC() const {
+    return gc_state() != NOT_IN_GC && gc_state() != TEAR_DOWN;
+  }
   bool force_oom() const { return force_oom_; }
 
   bool ignore_local_gc_requests() const {
@@ -2176,10 +2179,6 @@ class Heap {
   // is reached.
   int stress_marking_percentage_ = 0;
 
-  // Observer that causes more frequent checks for reached incremental
-  // marking limit.
-  AllocationObserver* stress_marking_observer_ = nullptr;
-
   // Observer that can cause early scavenge start.
   StressScavengeObserver* stress_scavenge_observer_ = nullptr;
 
@@ -2427,6 +2426,7 @@ class Heap {
   friend class ScavengerCollector;
   friend class StressConcurrentAllocationObserver;
   friend class Space;
+  friend class SpaceWithLinearArea;
   friend class Sweeper;
   friend class UnifiedHeapMarkingState;
   friend class heap::TestMemoryAllocatorScope;
