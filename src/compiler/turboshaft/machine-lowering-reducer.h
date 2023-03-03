@@ -810,21 +810,24 @@ class MachineLoweringReducer : public Next {
         V<Tagged> properties = LoadField<Tagged>(
             object, AccessBuilder::ForJSObjectPropertiesOrHashKnownPointer());
 
-        V<WordPtr> out_of_object_index = __ WordPtrSub(0, double_index);
+        V<WordPtr> out_of_object_index =
+            __ WordPtrAdd(__ WordPtrShiftLeft(__ WordPtrSub(0, double_index),
+                                              kTaggedSizeLog2),
+                          (FixedArray::kHeaderSize - kTaggedSize));
         V<Tagged> result =
             __ Load(properties, out_of_object_index,
                     LoadOp::Kind::Aligned(BaseTaggedness::kTaggedBase),
-                    MemoryRepresentation::AnyTagged(),
-                    FixedArray::kHeaderSize - kTaggedSize, kTaggedSizeLog2 - 1);
+                    MemoryRepresentation::AnyTagged());
         GOTO(loaded_field, result);
       }
       ELSE {
         // The field is located in the {object} itself.
-        V<Tagged> result =
-            __ Load(object, double_index,
-                    LoadOp::Kind::Aligned(BaseTaggedness::kTaggedBase),
-                    MemoryRepresentation::AnyTagged(), JSObject::kHeaderSize,
-                    kTaggedSizeLog2);
+        V<WordPtr> offset =
+            __ WordPtrAdd(__ WordPtrShiftLeft(double_index, kTaggedSizeLog2),
+                          JSObject::kHeaderSize);
+        V<Tagged> result = __ Load(
+            object, offset, LoadOp::Kind::Aligned(BaseTaggedness::kTaggedBase),
+            MemoryRepresentation::AnyTagged());
         GOTO(loaded_field, result);
       }
       END_IF
