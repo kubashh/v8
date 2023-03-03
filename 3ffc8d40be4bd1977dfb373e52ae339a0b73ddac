@@ -16,6 +16,23 @@
       "message": "PTAL, thanks",
       "revId": "3ffc8d40be4bd1977dfb373e52ae339a0b73ddac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5261a100_1a35a4c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-03T11:33:56Z",
+      "side": 1,
+      "message": "Could you add the repro as a unit test as well ? :)\n(we are somewhat lacking unit tests in this area, as highlighted by the fact that the bug that Maya/Lezsek fixed was around for months/years before we realized it was there, and it took a few days for a fuzzer to realize that there was a bug in your current implem, so a few more tests probably wouldn\u0027t hurt :) )",
+      "revId": "3ffc8d40be4bd1977dfb373e52ae339a0b73ddac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

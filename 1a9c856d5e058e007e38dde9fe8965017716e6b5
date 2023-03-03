@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fdf55336_1f68b6f7",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-03T11:33:56Z",
+      "side": 0,
+      "message": "+1\nI think that you can just remove the `-1` and you don\u0027t have to extract the shift/add out of the Load.\n\nSide node: I don\u0027t think that we currently have a pass that extracts shift/add from Loads, but it might make sense to add one, so that other optimizations (such as machine-optimization-reducer) can try to optimize those away.",
+      "parentUuid": "3b4f0a88_f86f0361",
+      "range": {
+        "startLine": 818,
+        "startChar": 59,
+        "endLine": 818,
+        "endChar": 78
+      },
+      "revId": "1a9c856d5e058e007e38dde9fe8965017716e6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0b883e94_33230e71",
         "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2023-03-03T10:13:23Z",
       "side": 0,
       "message": "I think this old code was fine.",
+      "range": {
+        "startLine": 824,
+        "startChar": 15,
+        "endLine": 824,
+        "endChar": 19
+      },
+      "revId": "1a9c856d5e058e007e38dde9fe8965017716e6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0db7e556_a4802496",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-03T11:33:56Z",
+      "side": 0,
+      "message": "+1",
+      "parentUuid": "0b883e94_33230e71",
       "range": {
         "startLine": 824,
         "startChar": 15,
