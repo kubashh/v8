@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6923e0e2_a4c88bc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2023-03-03T17:14:15Z",
+      "side": 1,
+      "message": "Hello, please take a look. here\u0027s an simple example of the gcc-10 error: https://godbolt.org/z/v8YMob3ob",
+      "revId": "eb3978e22d386b13929a044ef1012e0d40bdad0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
