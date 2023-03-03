@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b4f0a88_f86f0361",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-03T10:13:23Z",
+      "side": 0,
+      "message": "I think this might have been a bug, since double_index is already shifted above with `WordPtrShiftRightArithmetic` (the non-double path has `kTaggedSizeLog2 - 1` because it doesn\u0027t shift the index)",
+      "range": {
+        "startLine": 818,
+        "startChar": 59,
+        "endLine": 818,
+        "endChar": 78
+      },
+      "revId": "1a9c856d5e058e007e38dde9fe8965017716e6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b883e94_33230e71",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-03T10:13:23Z",
+      "side": 0,
+      "message": "I think this old code was fine.",
+      "range": {
+        "startLine": 824,
+        "startChar": 15,
+        "endLine": 824,
+        "endChar": 19
+      },
+      "revId": "1a9c856d5e058e007e38dde9fe8965017716e6b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
