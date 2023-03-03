@@ -1012,8 +1012,11 @@ class EagerDeoptInfo : public DeoptInfo {
 class LazyDeoptInfo : public DeoptInfo {
  public:
   LazyDeoptInfo(Zone* zone, DeoptFrame&& top_frame,
+                interpreter::Register result_location, int result_size,
                 compiler::FeedbackSource feedback_to_update)
-      : DeoptInfo(zone, std::move(top_frame), feedback_to_update) {}
+      : DeoptInfo(zone, std::move(top_frame), feedback_to_update),
+        result_location_(result_location),
+        result_size_(result_size) {}
 
   interpreter::Register result_location() const {
     // We should only be checking this for interpreted frames, other kinds of
@@ -1029,13 +1032,12 @@ class LazyDeoptInfo : public DeoptInfo {
   }
 
   bool IsResultRegister(interpreter::Register reg) const;
-  void SetResultLocation(interpreter::Register result_location,
-                         int result_size) {
-    // We should only be checking this for interpreted frames, other kinds of
-    // frames shouldn't be considered for result locations.
-    DCHECK_EQ(top_frame().type(), DeoptFrame::FrameType::kInterpretedFrame);
-    DCHECK(result_location.is_valid());
-    DCHECK(!result_location_.is_valid());
+  void UpdateResultLocation(interpreter::Register result_location,
+                            int result_size) {
+    // We should only update to a subset of the existing result location.
+    DCHECK_GE(result_location.index(), result_location_.index());
+    DCHECK_LE(result_location.index() + result_size,
+              result_location_.index() + result_size_);
     result_location_ = result_location;
     result_size_ = result_size;
   }
@@ -1050,10 +1052,9 @@ class LazyDeoptInfo : public DeoptInfo {
   void set_deopting_call_return_pc(int pc) { deopting_call_return_pc_ = pc; }
 
  private:
+  interpreter::Register result_location_;
+  int result_size_;
   int deopting_call_return_pc_ = -1;
-  interpreter::Register result_location_ =
-      interpreter::Register::invalid_value();
-  int result_size_ = 1;
 };
 
 class ExceptionHandlerInfo {

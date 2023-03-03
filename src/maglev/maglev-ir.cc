@@ -6,6 +6,7 @@
 
 #include <limits>
 
+#include "src/base/bounds.h"
 #include "src/builtins/builtins-constructor.h"
 #include "src/codegen/interface-descriptors-inl.h"
 #include "src/compiler/heap-refs.h"
@@ -287,6 +288,9 @@ DeoptInfo::DeoptInfo(Zone* zone, DeoptFrame top_frame,
 bool LazyDeoptInfo::IsResultRegister(interpreter::Register reg) const {
   if (V8_LIKELY(result_size_ == 1)) {
     return reg == result_location_;
+  }
+  if (result_size_ == 0) {
+    return false;
   }
   DCHECK_EQ(result_size_, 2);
   return reg == result_location_ ||
