@@ -338,7 +338,7 @@ class NodeWrapper {
 
 class Effect : public NodeWrapper {
  public:
-  explicit constexpr Effect(Node* node) : NodeWrapper(node) {
+  explicit const Effect(Node* node) : NodeWrapper(node) {
     // TODO(jgruber): Remove the End special case.
     SLOW_DCHECK(node == nullptr || node->op()->opcode() == IrOpcode::kEnd ||
                 node->op()->EffectOutputCount() > 0);
@@ -354,7 +354,7 @@ class Effect : public NodeWrapper {
 
 class Control : public NodeWrapper {
  public:
-  explicit constexpr Control(Node* node) : NodeWrapper(node) {
+  explicit const Control(Node* node) : NodeWrapper(node) {
     // TODO(jgruber): Remove the End special case.
     SLOW_DCHECK(node == nullptr || node->opcode() == IrOpcode::kEnd ||
                 node->op()->ControlOutputCount() > 0);
