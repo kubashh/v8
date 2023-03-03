@@ -24,12 +24,12 @@ class ScavengeJob {
 
   void ScheduleTaskIfNeeded(Heap* heap);
 
+  static size_t YoungGenerationTaskTriggerSize(Heap* heap);
+
  private:
   class Task;
 
   static bool YoungGenerationSizeTaskTriggerReached(Heap* heap);
-  static size_t YoungGenerationTaskTriggerSize(Heap* heap);
-
   void set_task_pending(bool value) { task_pending_ = value; }
 
   bool task_pending_ = false;
