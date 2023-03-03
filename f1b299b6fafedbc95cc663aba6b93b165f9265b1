@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5c3ef0b_3dd2fe95",
+        "filename": "include/v8-object.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-03T11:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d971450f_9db65146",
+      "range": {
+        "startLine": 621,
+        "startChar": 8,
+        "endLine": 621,
+        "endChar": 59
+      },
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70c30e60_95378a13",
@@ -71,6 +95,24 @@
       "writtenOn": "2023-03-02T14:05:33Z",
       "side": 1,
       "message": "Why not remove the `ok` var?",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7eb523c_d28b8a1f",
+        "filename": "src/api/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5311,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-03T11:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70c30e60_95378a13",
       "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -94,6 +136,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5e3d586_32c7d3fe",
+        "filename": "src/objects/js-objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-03T11:50:46Z",
+      "side": 1,
+      "message": "It just walks the chain of back pointers, so we are safe here.",
+      "parentUuid": "b84457a1_06f9de17",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0bc11c4c_b45edc34",
         "filename": "src/objects/js-objects-inl.h",
         "patchSetId": 2
@@ -105,6 +165,24 @@
       "writtenOn": "2023-03-02T14:05:33Z",
       "side": 1,
       "message": "No need for the {}",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "220c9013_e680adf6",
+        "filename": "src/objects/js-objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-03T11:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bc11c4c_b45edc34",
       "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -126,6 +204,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3db6db63_f8409925",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-03T11:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99ad70a4_74aa110f",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ccc94d3_95ecb8c8",
@@ -143,6 +239,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e48f6d3_15dd0f61",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-03T11:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ccc94d3_95ecb8c8",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da04f39c_43416597",
@@ -156,6 +270,24 @@
       "writtenOn": "2023-03-02T14:05:33Z",
       "side": 1,
       "message": "base::Optional, unless you have a reason to use the std version here.",
+      "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c705a61d_dbf731fd",
+        "filename": "src/objects/js-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-03T11:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da04f39c_43416597",
       "revId": "f1b299b6fafedbc95cc663aba6b93b165f9265b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
