@@ -109,6 +109,7 @@ class JSFinalizationRegistry;
 class LinearAllocationArea;
 class LocalHeap;
 class MemoryAllocator;
+class MemoryBalancer;
 class MemoryChunk;
 class MemoryMeasurement;
 class MemoryReducer;
@@ -1651,6 +1652,9 @@ class Heap {
 
   PretenuringHandler* pretenuring_handler() { return &pretenuring_handler_; }
 
+  // Returns the amount of external memory registered since last global gc.
+  V8_EXPORT_PRIVATE uint64_t AllocatedExternalMemorySinceMarkCompact() const;
+
  private:
   class AllocationTrackerForDebugging;
 
@@ -2187,9 +2191,6 @@ class Heap {
 
   std::atomic<HeapState> gc_state_{NOT_IN_GC};
 
-  // Returns the amount of external memory registered since last global gc.
-  V8_EXPORT_PRIVATE uint64_t AllocatedExternalMemorySinceMarkCompact() const;
-
   // Starts marking when stress_marking_percentage_% of the marking start limit
   // is reached.
   int stress_marking_percentage_ = 0;
@@ -2464,6 +2465,9 @@ class Heap {
 
   // Used in cctest.
   friend class heap::HeapTester;
+
+  friend class MemoryBalancer;
+  std::unique_ptr<MemoryBalancer> mb_;
 };
 
 class HeapStats {
