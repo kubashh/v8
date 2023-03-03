@@ -158,8 +158,7 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
   if (kShouldTryHarder) {
     // Relax alignment requirement while trying to allocate code range inside
     // preferred region.
-    params.base_alignment =
-        VirtualMemoryCage::ReservationParams::kAnyBaseAlignment;
+    params.base_alignment = params.page_size;
 
     // TODO(v8:11880): consider using base::OS::GetFreeMemoryRangesWithin()
     // to avoid attempts that's going to fail anyway.
