@@ -336,9 +336,7 @@ bool VirtualMemoryCage::InitReservation(
   const size_t allocate_page_size = params.page_allocator->AllocatePageSize();
   CHECK(IsAligned(params.reservation_size, allocate_page_size));
   CHECK(params.base_alignment == ReservationParams::kAnyBaseAlignment ||
-        (IsAligned(params.base_alignment, allocate_page_size) &&
-         IsAligned(params.base_bias_size, allocate_page_size)));
-  CHECK_LE(params.base_bias_size, params.reservation_size);
+        (IsAligned(params.base_alignment, allocate_page_size)));
 
   if (!existing_reservation.is_empty()) {
     CHECK_EQ(existing_reservation.size(), params.reservation_size);
