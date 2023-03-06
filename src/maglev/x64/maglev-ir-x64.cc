@@ -2379,7 +2379,9 @@ void BranchIfFloat64Compare::GenerateCode(MaglevAssembler* masm,
   DoubleRegister left = ToDoubleRegister(left_input());
   DoubleRegister right = ToDoubleRegister(right_input());
   __ Ucomisd(left, right);
-  __ j(parity_even, if_false()->label());
+  if (nan_is_false_) {
+    __ j(parity_even, if_false()->label());
+  }
   __ Branch(ConditionForFloat64(operation_), if_true(), if_false(),
             state.next_block());
 }

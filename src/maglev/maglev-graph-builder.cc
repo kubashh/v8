@@ -5478,10 +5478,14 @@ void MaglevGraphBuilder::BuildBranchIfToBooleanTrue(ValueNode* node,
     // below.
     DCHECK_EQ(repr, cond->value_representation());
     switch (repr) {
-      case ValueRepresentation::kFloat64:
-        return FinishBlock<BranchIfFloat64Compare>(
+      case ValueRepresentation::kFloat64: {
+        BasicBlock* block = FinishBlock<BranchIfFloat64Compare>(
             {cond, GetFloat64Constant(0)}, Operation::kEqual, false_target,
             false_interrupt_correction, true_target, true_interrupt_correction);
+        block->control_node()->Cast<BranchIfFloat64Compare>()->set_nan_is_false(
+            false);
+        return block;
+      }
       case ValueRepresentation::kInt32:
         return FinishBlock<BranchIfInt32Compare>(
             {cond, GetInt32Constant(0)}, Operation::kEqual, false_target,

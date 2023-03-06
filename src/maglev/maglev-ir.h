@@ -6576,8 +6576,11 @@ class BranchIfFloat64Compare
   void GenerateCode(MaglevAssembler*, const ProcessingState&);
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
 
+  void set_nan_is_false(bool b) { nan_is_false_ = b; }
+
  private:
   Operation operation_;
+  bool nan_is_false_ = true;
 };
 
 class BranchIfReferenceCompare
