@@ -16,6 +16,121 @@
       "message": "PTAL!",
       "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "969bd699_286a6d6e",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-06T15:27:27Z",
+      "side": 1,
+      "message": "helper struct",
+      "range": {
+        "startLine": 860,
+        "startChar": 0,
+        "endLine": 860,
+        "endChar": 19
+      },
+      "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f71ee5d8_37e25137",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-06T15:27:27Z",
+      "side": 1,
+      "message": "nit: pre-size, maybe even create a base::Vector here straight away with `zone-\u003eNewVector` to avoid std::vector overheads.",
+      "range": {
+        "startLine": 3213,
+        "startChar": 37,
+        "endLine": 3213,
+        "endChar": 47
+      },
+      "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b20d2fc4_77abd559",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-06T15:27:27Z",
+      "side": 1,
+      "message": "could we pass in CallArguments for inlined_arguments_? Possibly not because of stack allocation?",
+      "range": {
+        "startLine": 3216,
+        "startChar": 6,
+        "endLine": 3216,
+        "endChar": 24
+      },
+      "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf1cafb2_7187b421",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3384,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-06T15:27:27Z",
+      "side": 1,
+      "message": "you could initialise this in the graph builder constructor, from `parent_`",
+      "range": {
+        "startLine": 3384,
+        "startChar": 22,
+        "endLine": 3384,
+        "endChar": 45
+      },
+      "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12ea489b_97787b39",
+        "filename": "src/maglev/maglev-graph-printer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-06T15:27:27Z",
+      "side": 1,
+      "message": "I never remember -- do we use a0 for the receiver, or for the first argument?",
+      "range": {
+        "startLine": 412,
+        "startChar": 21,
+        "endLine": 412,
+        "endChar": 30
+      },
+      "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
