@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8c546d3_e4d3a910",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-06T18:53:31Z",
+      "side": 1,
+      "message": "Forgot to say, nice cleanup! 100% in support.",
+      "revId": "c7578774cde67b5ddde46d6933932570c28d8076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5528edd7_7fb6413d",
