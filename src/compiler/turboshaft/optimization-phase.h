@@ -331,28 +331,14 @@ class GraphVisitor {
     Block* new_block = MapToNewGraph(input_block->index());
     if (!assembler().Bind(new_block, input_block)) {
       if constexpr (trace_reduction) TraceBlockUnreachable();
-      // If we eliminate a loop backedge, we need to turn the loop into a
-      // single-predecessor merge block.
-      const Operation& last_op =
-          *base::Reversed(input_graph().operations(*input_block)).begin();
-      if (auto* final_goto = last_op.TryCast<GotoOp>()) {
-        if (final_goto->destination->IsLoop()) {
-          if (input_block->index() > final_goto->destination->index()) {
-            Block* new_loop = MapToNewGraph(final_goto->destination->index());
-            DCHECK(new_loop->IsLoop());
-            if (new_loop->IsLoop() && new_loop->PredecessorCount() == 1) {
-              output_graph_.TurnLoopIntoMerge(new_loop);
-            }
-          } else {
-            // We have a forward jump to a loop, rather than a backedge. We
-            // don't need to do anything.
-          }
-        }
-      }
+      MaybeFixRemovedBackedge(input_block);
       return;
     }
     for (OpIndex index : input_graph().OperationIndices(*input_block)) {
-      if (!VisitOp<trace_reduction>(index, input_block)) break;
+      if (!VisitOp<trace_reduction>(index, input_block)) {
+        MaybeFixRemovedBackedge(input_block);
+        break;
+      }
     }
     if constexpr (trace_reduction) TraceBlockFinished();
   }
@@ -846,6 +832,34 @@ class GraphVisitor {
                 {pending_phi->first(),
                  MapToNewGraph(pending_phi->data.old_backedge_index)}),
             pending_phi->rep);
+      }
+    }
+  }
+
+  // When an input block is not fully emitted (either because we don't emit it
+  // at all because it's not reachable, or because we don't emit its last
+  // instruction because a Reducer inserted a block terminator earlier that
+  // expected), if this block was a loop backedge, then the PendingLoopPhis of
+  // the loop will never be "fixed" (with FixLoopPhis). To fix this,
+  // `MaybeFixRemovedBackedge` should be called: it will transform those
+  // PendingLoopPhis into regular Phis with a single input.
+  void MaybeFixRemovedBackedge(const Block* input_block) {
+    // If we eliminate a loop backedge, we need to turn the loop into a
+    // single-predecessor merge block.
+    const Operation& last_op =
+        *base::Reversed(input_graph().operations(*input_block)).begin();
+    if (auto* final_goto = last_op.TryCast<GotoOp>()) {
+      if (final_goto->destination->IsLoop()) {
+        if (input_block->index() > final_goto->destination->index()) {
+          Block* new_loop = MapToNewGraph(final_goto->destination->index());
+          DCHECK(new_loop->IsLoop());
+          if (new_loop->IsLoop() && new_loop->PredecessorCount() == 1) {
+            output_graph_.TurnLoopIntoMerge(new_loop);
+          }
+        } else {
+          // We have a forward jump to a loop, rather than a backedge. We
+          // don't need to do anything.
+        }
       }
     }
   }
