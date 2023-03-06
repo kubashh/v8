@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3081be7d_9144706f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-06T11:18:54Z",
+      "side": 1,
+      "message": "Could you use `Fixed` instead of `Bug`? :)",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 3
+      },
+      "revId": "6b26c5ccb0dca8d0035ede9aca41b9fbf1011ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
