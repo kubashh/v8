@@ -1807,6 +1807,11 @@ class MaglevGraphBuilder {
   InterpreterFrameState current_interpreter_frame_;
   compiler::FeedbackSource current_speculation_feedback_;
 
+  // TODO(victorgomes): Refactor all inlined data to a
+  // base::Optional<InlinedGraphBuilderData>.
+  ZoneVector<ValueNode*>* inlined_arguments_ = nullptr;
+  BytecodeOffset caller_bytecode_offset_ = BytecodeOffset::None();
+
   LazyDeoptContinuationScope* current_lazy_deopt_continuation_scope_ = nullptr;
 
   struct HandlerTableEntry {
