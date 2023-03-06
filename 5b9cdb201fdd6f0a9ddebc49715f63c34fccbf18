@@ -39,6 +39,30 @@
       },
       "revId": "5b9cdb201fdd6f0a9ddebc49715f63c34fccbf18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4af2b147_eca5a492",
+        "filename": "tools/gcmole/BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-06T09:00:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1171a1b_6707e5a6",
+      "range": {
+        "startLine": 49,
+        "startChar": 49,
+        "endLine": 49,
+        "endChar": 50
+      },
+      "revId": "5b9cdb201fdd6f0a9ddebc49715f63c34fccbf18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
