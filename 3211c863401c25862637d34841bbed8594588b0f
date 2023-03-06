@@ -135,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c249f7fc_462dba7d",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-06T14:55:24Z",
+      "side": 1,
+      "message": "Makes sense. I\u0027ll leave as is because neither of us has an idea on how to improve it, but maybe we\u0027ll re-evaluate if lazy deopts get any more confusing.",
+      "parentUuid": "b1c3adcf_4d558039",
+      "range": {
+        "startLine": 1233,
+        "startChar": 0,
+        "endLine": 1235,
+        "endChar": 72
+      },
+      "revId": "3211c863401c25862637d34841bbed8594588b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34df2003_ff66ef55",
@@ -172,6 +196,30 @@
       "side": 1,
       "message": "I like that! Let me try it out, maybe I can squeeze all of this into a single bitfield.",
       "parentUuid": "34df2003_ff66ef55",
+      "range": {
+        "startLine": 1056,
+        "startChar": 6,
+        "endLine": 1056,
+        "endChar": 18
+      },
+      "revId": "3211c863401c25862637d34841bbed8594588b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fe9e3b8_7f73811e",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1056,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-06T14:55:24Z",
+      "side": 1,
+      "message": "Ok, I can\u0027t put the register in there too, but I can use two bits of the pc for the result count.",
+      "parentUuid": "861e1a76_68c3dae8",
       "range": {
         "startLine": 1056,
         "startChar": 6,
