@@ -33,6 +33,24 @@
       "message": "`return shape.encoding_tag() \u003d\u003d static_cast\u003cuint32_t\u003e(encoding);`",
       "revId": "8488c585018c94e7c069a7145ba7a4c2875937ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c33c1a1_00fa5599",
+        "filename": "src/objects/string.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-03-06T16:06:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e507b302_b54d977b",
+      "revId": "8488c585018c94e7c069a7145ba7a4c2875937ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
