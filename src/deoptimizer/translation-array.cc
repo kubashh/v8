@@ -331,6 +331,7 @@ void TranslationArrayBuilder::FinishPendingInstructionIfNeeded() {
 template <typename... T>
 void TranslationArrayBuilder::Add(TranslationOpcode opcode, T... operands) {
   DCHECK_EQ(sizeof...(T), TranslationOpcodeOperandCount(opcode));
+  // printf("Adding: %s\n", TranslationOpcodeToString(opcode));
   if (V8_UNLIKELY(v8_flags.turbo_compress_translation_arrays)) {
     AddRawToContentsForCompression(opcode, operands...);
     return;
