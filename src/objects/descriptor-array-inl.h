@@ -32,9 +32,7 @@ RELAXED_INT16_ACCESSORS(DescriptorArray, number_of_all_descriptors,
                         kNumberOfAllDescriptorsOffset)
 RELAXED_INT16_ACCESSORS(DescriptorArray, number_of_descriptors,
                         kNumberOfDescriptorsOffset)
-RELAXED_INT16_ACCESSORS(DescriptorArray, raw_number_of_marked_descriptors,
-                        kRawNumberOfMarkedDescriptorsOffset)
-RELAXED_INT16_ACCESSORS(DescriptorArray, filler16bits, kFiller16BitsOffset)
+RELAXED_UINT32_ACCESSORS(DescriptorArray, raw_gc_state, kRawGcStateOffset)
 
 inline int16_t DescriptorArray::number_of_slack_descriptors() const {
   return number_of_all_descriptors() - number_of_descriptors();
@@ -42,14 +40,6 @@ inline int16_t DescriptorArray::number_of_slack_descriptors() const {
 
 inline int DescriptorArray::number_of_entries() const {
   return number_of_descriptors();
-}
-
-inline int16_t DescriptorArray::CompareAndSwapRawNumberOfMarkedDescriptors(
-    int16_t expected, int16_t value) {
-  return base::Relaxed_CompareAndSwap(
-      reinterpret_cast<base::Atomic16*>(
-          FIELD_ADDR(*this, kRawNumberOfMarkedDescriptorsOffset)),
-      expected, value);
 }
 
 void DescriptorArray::CopyEnumCacheFrom(DescriptorArray array) {
@@ -267,6 +257,69 @@ void DescriptorArray::SwapSortedKeys(int first, int second) {
   int first_key = GetSortedKeyIndex(first);
   SetSortedKey(first, GetSortedKeyIndex(second));
   SetSortedKey(second, first_key);
+}
+
+// static
+bool DescriptorArrayMarkingState::TryUpdateIndicesToMark(
+    unsigned gc_epoch, DescriptorArray array, DescriptorIndex index_to_mark) {
+  const auto masked_epoch = gc_epoch & Epoch::kMask;
+  while (true) {
+    const RawGCStateType raw_gc_state = array.raw_gc_state(kRelaxedLoad);
+    const auto epoch_from_state = Epoch::decode(raw_gc_state);
+    const auto current_epoch = masked_epoch;
+    RawGCStateType new_raw_gc_state = 0;
+    if (current_epoch != epoch_from_state) {
+      // If the epochs do not match, then either the raw_gc_state is zero
+      // (freshly allocated descriptor array) or the epoch from value lags
+      // by 1.
+      DCHECK_IMPLIES(raw_gc_state != 0,
+                     Epoch::decode(epoch_from_state + 1) == current_epoch);
+      new_raw_gc_state = Epoch::encode(masked_epoch) | Marked::encode(0) |
+                         Delta::encode(index_to_mark);
+    } else {
+      const DescriptorIndex already_marked = Marked::decode(raw_gc_state);
+      const DescriptorIndex delta = Delta::decode(raw_gc_state);
+      if ((already_marked + delta) >= index_to_mark) {
+        return false;
+      }
+      const DescriptorIndex new_delta = index_to_mark - already_marked - delta;
+      new_raw_gc_state = raw_gc_state;
+      new_raw_gc_state = Delta::update(new_raw_gc_state, new_delta);
+    }
+    if (static_cast<RawGCStateType>(base::Relaxed_CompareAndSwap(
+            reinterpret_cast<base::Atomic32*>(
+                FIELD_ADDR(array, DescriptorArray::kRawGcStateOffset)),
+            raw_gc_state, new_raw_gc_state)) == raw_gc_state) {
+      return true;
+    }
+  }
+}
+
+// static
+std::pair<DescriptorArrayMarkingState::DescriptorIndex,
+          DescriptorArrayMarkingState::DescriptorIndex>
+DescriptorArrayMarkingState::UpdateMarkedDescriptorsForProcessing(
+    unsigned gc_epoch, DescriptorArray array) {
+  while (true) {
+    const RawGCStateType raw_gc_state = array.raw_gc_state(kRelaxedLoad);
+    const DescriptorIndex marked = Marked::decode(raw_gc_state);
+    const DescriptorIndex delta = Delta::decode(raw_gc_state);
+    // The delta is 0, so everything has been processed. Return the marked
+    // indices.
+    if (delta == 0) return {marked, marked};
+
+    RawGCStateType new_raw_gc_state =
+        Marked::update(raw_gc_state, marked + delta);
+    new_raw_gc_state = Delta::update(new_raw_gc_state, 0);
+    if (static_cast<RawGCStateType>(base::Relaxed_CompareAndSwap(
+            reinterpret_cast<base::Atomic32*>(
+                FIELD_ADDR(array, DescriptorArray::kRawGcStateOffset)),
+            raw_gc_state, new_raw_gc_state)) == raw_gc_state) {
+      // Success: Updated with 0 delta, so we return the old delta as up for
+      // processing.
+      return {marked, marked + delta};
+    }
+  }
 }
 
 }  // namespace internal
