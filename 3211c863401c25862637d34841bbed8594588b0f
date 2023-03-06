@@ -89,6 +89,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27444cfb_6376f737",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-06T11:15:37Z",
+      "side": 1,
+      "message": "`IsResultRegister` should be, I guess, `IsAResultRegister`/`IsOneOfTheResultRegisters`/something like that. The DCHECK you\u0027re referring to is checking that these are consecutive, while these two DCHECKs are checking that those two registers are both registered in the value\u0027s lazy deopt as a result register. The fact that the lazy deopt machinery only allows consecutive result registers is kind of irrelevant for this check.\n\nWith that explanation, is there a way I could write these DCHECKs less surprisingly?",
+      "parentUuid": "14cd4daa_6a549796",
+      "range": {
+        "startLine": 1233,
+        "startChar": 0,
+        "endLine": 1235,
+        "endChar": 72
+      },
+      "revId": "3211c863401c25862637d34841bbed8594588b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "34df2003_ff66ef55",
         "filename": "src/maglev/maglev-ir.h",
         "patchSetId": 2
@@ -100,6 +124,30 @@
       "writtenOn": "2023-03-06T11:07:44Z",
       "side": 1,
       "message": "I guess the result_size is the number of result registers? Namely 0, 1 or 2?\nIf you want to remove this field completely (since size of lazydeoptinfo matters), you could use the first bit of deopting_call_return_pc_ to indicate 2 results.\nAnd invalid result_location \u003d 0 size.",
+      "range": {
+        "startLine": 1056,
+        "startChar": 6,
+        "endLine": 1056,
+        "endChar": 18
+      },
+      "revId": "3211c863401c25862637d34841bbed8594588b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "861e1a76_68c3dae8",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1056,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-06T11:15:37Z",
+      "side": 1,
+      "message": "I like that! Let me try it out, maybe I can squeeze all of this into a single bitfield.",
+      "parentUuid": "34df2003_ff66ef55",
       "range": {
         "startLine": 1056,
         "startChar": 6,
