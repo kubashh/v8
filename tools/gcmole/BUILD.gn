@@ -38,6 +38,7 @@ if (v8_gcmole) {
       "../../third_party/wasm-api/wasm.hh",
       "../../third_party/zlib/",
       "../../third_party/inspector_protocol/",
+      "../../build/linux/debian_bullseye_amd64-sysroot/",
       "$target_gen_dir/../../",
       "$target_gen_dir/../../torque-generated/",
 
