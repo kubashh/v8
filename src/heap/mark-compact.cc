@@ -3029,7 +3029,7 @@ void MarkCompactCollector::MarkDependentCodeForDeoptimization() {
     if (!non_atomic_marking_state()->IsBlackOrGrey(object) &&
         !code.embedded_objects_cleared()) {
       if (!code.marked_for_deoptimization()) {
-        code.SetMarkedForDeoptimization("weak objects");
+        code.SetMarkedForDeoptimization(isolate(), "weak objects");
         have_code_to_deoptimize_ = true;
       }
       code.ClearEmbeddedObjects(heap_);

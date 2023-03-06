@@ -341,7 +341,7 @@ void Deoptimizer::DeoptimizeAll(Isolate* isolate) {
     InstructionStream::OptimizedCodeIterator it(isolate);
     for (InstructionStream code = it.Next(); !code.is_null();
          code = it.Next()) {
-      code.set_marked_for_deoptimization(true);
+      code.set_marked_for_deoptimization(isolate, true);
     }
   }
 
@@ -360,7 +360,7 @@ void Deoptimizer::DeoptimizeFunction(JSFunction function, Code code) {
     // Mark the code for deoptimization and unlink any functions that also
     // refer to that code. The code cannot be shared across native contexts,
     // so we only need to search one.
-    code.set_marked_for_deoptimization(true);
+    code.set_marked_for_deoptimization(isolate, true);
     // The code in the function's optimized code feedback vector slot might
     // be different from the code on the function - evict it if necessary.
     function.feedback_vector().EvictOptimizedCodeMarkedForDeoptimization(
@@ -387,7 +387,7 @@ void Deoptimizer::DeoptimizeAllOptimizedCodeWithFunction(
     for (InstructionStream code = it.Next(); !code.is_null();
          code = it.Next()) {
       if (code.Inlines(*function)) {
-        code.set_marked_for_deoptimization(true);
+        code.set_marked_for_deoptimization(isolate, true);
         any_marked = true;
       }
     }

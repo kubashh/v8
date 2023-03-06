@@ -928,7 +928,7 @@ void DependentCode::IterateAndCompact(const IterateAndCompactFn& fn) {
 }
 
 bool DependentCode::MarkCodeForDeoptimization(
-    DependentCode::DependencyGroups deopt_groups) {
+    Isolate* isolate, DependentCode::DependencyGroups deopt_groups) {
   DisallowGarbageCollection no_gc;
 
   bool marked_something = false;
@@ -936,7 +936,7 @@ bool DependentCode::MarkCodeForDeoptimization(
     if ((groups & deopt_groups) == 0) return false;
 
     if (!code.marked_for_deoptimization()) {
-      code.SetMarkedForDeoptimization("code dependencies");
+      code.SetMarkedForDeoptimization(isolate, "code dependencies");
       marked_something = true;
     }
 
@@ -964,7 +964,7 @@ int DependentCode::FillEntryFromBack(int index, int length) {
 void DependentCode::DeoptimizeDependencyGroups(
     Isolate* isolate, DependentCode::DependencyGroups groups) {
   DisallowGarbageCollection no_gc_scope;
-  bool marked_something = MarkCodeForDeoptimization(groups);
+  bool marked_something = MarkCodeForDeoptimization(isolate, groups);
   if (marked_something) {
     DCHECK(AllowCodeDependencyChange::IsAllowed());
     Deoptimizer::DeoptimizeMarkedCode(isolate);
@@ -976,13 +976,14 @@ DependentCode DependentCode::empty_dependent_code(const ReadOnlyRoots& roots) {
   return DependentCode::cast(roots.empty_weak_array_list());
 }
 
-void InstructionStream::SetMarkedForDeoptimization(const char* reason) {
-  set_marked_for_deoptimization(true);
+void InstructionStream::SetMarkedForDeoptimization(Isolate* isolate,
+                                                   const char* reason) {
+  set_marked_for_deoptimization(isolate, true);
   Deoptimizer::TraceMarkForDeoptimization(*this, reason);
 }
 
-void Code::SetMarkedForDeoptimization(const char* reason) {
-  set_marked_for_deoptimization(true);
+void Code::SetMarkedForDeoptimization(Isolate* isolate, const char* reason) {
+  set_marked_for_deoptimization(isolate, true);
   Deoptimizer::TraceMarkForDeoptimization(FromCode(*this), reason);
 }
 

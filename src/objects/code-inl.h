@@ -38,9 +38,6 @@ OBJECT_CONSTRUCTORS_IMPL(DependentCode, WeakArrayList)
 OBJECT_CONSTRUCTORS_IMPL(Code, HeapObject)
 OBJECT_CONSTRUCTORS_IMPL(GcSafeCode, HeapObject)
 
-NEVER_READ_ONLY_SPACE_IMPL(AbstractCode)
-NEVER_READ_ONLY_SPACE_IMPL(Code)
-
 CAST_ACCESSOR(AbstractCode)
 CAST_ACCESSOR(GcSafeCode)
 CAST_ACCESSOR(InstructionStream)
@@ -917,17 +914,18 @@ bool InstructionStream::marked_for_deoptimization() const {
   return code(kAcquireLoad).marked_for_deoptimization();
 }
 
-void Code::set_marked_for_deoptimization(bool flag) {
+void Code::set_marked_for_deoptimization(Isolate* isolate, bool flag) {
   DCHECK(CodeKindCanDeoptimize(kind()));
-  DCHECK_IMPLIES(flag, AllowDeoptimization::IsAllowed(GetIsolate()));
+  DCHECK_IMPLIES(flag, AllowDeoptimization::IsAllowed(isolate));
   int32_t previous = kind_specific_flags(kRelaxedLoad);
   int32_t updated =
       InstructionStream::MarkedForDeoptimizationField::update(previous, flag);
   set_kind_specific_flags(updated, kRelaxedStore);
 }
 
-void InstructionStream::set_marked_for_deoptimization(bool flag) {
-  code(kAcquireLoad).set_marked_for_deoptimization(flag);
+void InstructionStream::set_marked_for_deoptimization(Isolate* isolate,
+                                                      bool flag) {
+  code(kAcquireLoad).set_marked_for_deoptimization(isolate, flag);
 }
 
 bool InstructionStream::embedded_objects_cleared() const {
@@ -1154,8 +1152,14 @@ bool Code::has_instruction_stream(RelaxedLoadTag tag) const {
 
 PtrComprCageBase Code::code_cage_base() const {
 #ifdef V8_EXTERNAL_CODE_SPACE
+#ifdef V8_COMPRESS_POINTERS_DONT_USE_GLOBAL_BASE
+  // TODO(jgruber): This fails for Code objects in RO space. Remove
+  // V8_COMPRESS_POINTERS_DONT_USE_GLOBAL_BASE.
   Isolate* isolate = GetIsolateFromWritableObject(*this);
   return PtrComprCageBase(isolate->code_cage_base());
+#else
+  return PtrComprCageBase(ExternalCodeCompressionScheme::base());
+#endif  // V8_COMPRESS_POINTERS_DONT_USE_GLOBAL_BASE
 #else
   return GetPtrComprCageBase(*this);
 #endif
@@ -1532,11 +1536,11 @@ void DependentCode::DeoptimizeDependencyGroups(Isolate* isolate, ObjectT object,
 
 // static
 template <typename ObjectT>
-bool DependentCode::MarkCodeForDeoptimization(ObjectT object,
+bool DependentCode::MarkCodeForDeoptimization(Isolate* isolate, ObjectT object,
                                               DependencyGroups groups) {
   // Shared objects are designed to never invalidate code.
   DCHECK(!object.InSharedHeap());
-  return object.dependent_code().MarkCodeForDeoptimization(groups);
+  return object.dependent_code().MarkCodeForDeoptimization(isolate, groups);
 }
 
 }  // namespace internal

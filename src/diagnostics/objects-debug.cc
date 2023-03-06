@@ -1092,7 +1092,7 @@ void PropertyCell::PropertyCellVerify(Isolate* isolate) {
 
 void Code::CodeVerify(Isolate* isolate) {
   CHECK(IsCode());
-  if (raw_instruction_stream() != Smi::zero()) {
+  if (has_instruction_stream()) {
     InstructionStream istream = instruction_stream();
     CHECK_EQ(istream.kind(), kind());
     CHECK_EQ(istream.builtin_id(), builtin_id());
