@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d748303d_a1ff1997",
+        "filename": "src/wasm/baseline/riscv/liftoff-assembler-riscv64.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1572588
+      },
+      "writtenOn": "2023-03-06T13:35:11Z",
+      "side": 1,
+      "message": "In the CheckPageFlag function, is there any difference between \"scratch\" and \"kScratchReg\"? I noticed that in the \"src/wasm/baseline/riscv/liftoff-assembler-riscv32.h\" , only \"kScratchReg\" is used.",
+      "revId": "65f94c1ab84e84182ea3d11694baada11b1f462e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
