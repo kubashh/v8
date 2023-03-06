@@ -16,6 +16,24 @@
       "message": "I reshuffled checks a bit to start with `receiver` instead of `receiver`\u0027s constructor. The change doesn\u0027t change the logic, it just allows us to get to the context faster for certain types of receivers (like JSFunction and JSGenerator.",
       "revId": "f57a6f16ddf830343e7c6a133c0a5949639908d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db01019c_6f07894a",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-06T06:46:52Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b35d56fe_c13ea009",
+      "revId": "f57a6f16ddf830343e7c6a133c0a5949639908d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
