@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "864fbdbf_87bb3780",
+        "filename": "src/inspector/v8-debugger.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-03-06T08:46:01Z",
+      "side": 1,
+      "message": "nit: maybe add `DCHECK(m_terminateExecutionReported)`",
+      "range": {
+        "startLine": 346,
+        "startChar": 2,
+        "endLine": 346,
+        "endChar": 30
+      },
+      "revId": "982ad248829419986fc030df8bb0efc8de6af4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
