@@ -460,8 +460,8 @@ DEFINE_BOOL(future, FUTURE_BOOL,
             "Implies all staged features that we want to ship in the "
             "not-too-far future")
 
-DEFINE_BOOL(lower_tier_as_toptier, false,
-            "remove tier-up logic from the top tier")
+DEFINE_BOOL(force_emit_interrupt_budget_checks, false,
+            "force emit tier-up logic from the top tier")
 
 #ifdef V8_ENABLE_MAGLEV
 #define V8_ENABLE_MAGLEV_BOOL true
