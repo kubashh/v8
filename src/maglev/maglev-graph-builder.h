@@ -1251,6 +1251,7 @@ class MaglevGraphBuilder {
   }
 
   DeoptFrame* GetParentDeoptFrame();
+  DeoptFrame* GetInlinedArgumentsOrParentFrame();
   DeoptFrame GetLatestCheckpointedFrame();
   DeoptFrame GetDeoptFrameForLazyDeopt();
   DeoptFrame GetDeoptFrameForLazyDeoptHelper(
@@ -1806,6 +1807,8 @@ class MaglevGraphBuilder {
 
   InterpreterFrameState current_interpreter_frame_;
   compiler::FeedbackSource current_speculation_feedback_;
+
+  ZoneVector<ValueNode*>* inlined_arguments_ = nullptr;
 
   LazyDeoptContinuationScope* current_lazy_deopt_continuation_scope_ = nullptr;
 

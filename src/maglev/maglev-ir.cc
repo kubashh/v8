@@ -189,6 +189,9 @@ size_t GetInputLocationsArraySize(const DeoptFrame& top_frame) {
         size += frame->as_interpreted().frame_state()->size(
             frame->as_interpreted().unit());
         break;
+      case DeoptFrame::FrameType::kInlinedArgumentsFrame:
+        size += frame->as_inlined_arguments().arguments().size();
+        break;
       case DeoptFrame::FrameType::kBuiltinContinuationFrame:
         size += frame->as_builtin_continuation().parameters().size() + 1;
         break;
@@ -3034,6 +3037,7 @@ void CallRuntime::GenerateCode(MaglevAssembler* masm,
                                const ProcessingState& state) {
   DCHECK_EQ(ToRegister(context()), kContextRegister);
   __ Push(base::make_iterator_range(args_begin(), args_end()));
+  // __ Move(kContextRegister, masm->native_context().object());
   __ CallRuntime(function_id(), num_args());
   // TODO(victorgomes): Not sure if this is needed for all runtime calls.
   masm->DefineExceptionHandlerAndLazyDeoptPoint(this);

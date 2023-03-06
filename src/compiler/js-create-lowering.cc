@@ -54,8 +54,8 @@ Reduction JSCreateLowering::Reduce(Node* node) {
   switch (node->opcode()) {
     case IrOpcode::kJSCreate:
       return ReduceJSCreate(node);
-    case IrOpcode::kJSCreateArguments:
-      return ReduceJSCreateArguments(node);
+    // case IrOpcode::kJSCreateArguments:
+    //   return ReduceJSCreateArguments(node);
     case IrOpcode::kJSCreateArray:
       return ReduceJSCreateArray(node);
     case IrOpcode::kJSCreateArrayIterator:

@@ -110,7 +110,9 @@ TranslationOpcode TranslationArrayIterator::NextOpcode() {
     --remaining_ops_to_use_from_previous_translation_;
   }
   if (remaining_ops_to_use_from_previous_translation_) {
-    return NextOpcodeAtPreviousIndex();
+    auto opcode = NextOpcodeAtPreviousIndex();
+    // std::cerr << TranslationOpcodeToString(opcode) << std::endl;
+    return opcode;
   }
   uint8_t opcode_byte = buffer_.get(index_++);
 
@@ -157,6 +159,7 @@ TranslationOpcode TranslationArrayIterator::NextOpcode() {
   } else {
     ++ops_since_previous_index_was_updated_;
   }
+  // std::cerr << TranslationOpcodeToString(opcode) << std::endl;
   return opcode;
 }
 
@@ -331,6 +334,7 @@ void TranslationArrayBuilder::FinishPendingInstructionIfNeeded() {
 template <typename... T>
 void TranslationArrayBuilder::Add(TranslationOpcode opcode, T... operands) {
   DCHECK_EQ(sizeof...(T), TranslationOpcodeOperandCount(opcode));
+  // printf("Adding: %s\n", TranslationOpcodeToString(opcode));
   if (V8_UNLIKELY(v8_flags.turbo_compress_translation_arrays)) {
     AddRawToContentsForCompression(opcode, operands...);
     return;

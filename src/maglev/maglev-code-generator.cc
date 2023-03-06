@@ -682,7 +682,7 @@ class MaglevCodeGeneratingNodeProcessor {
 
     if (std::is_base_of<ValueNode, NodeT>::value) {
       ValueNode* value_node = node->template Cast<ValueNode>();
-      if (value_node->has_valid_live_range() && value_node->is_spilled()) {
+      if (value_node->is_spilled()) {
         compiler::AllocatedOperand source =
             compiler::AllocatedOperand::cast(value_node->result().operand());
         // We shouldn't spill nodes which already output to the stack.
@@ -864,10 +864,22 @@ int GetFrameCount(const DeoptFrame& deopt_frame) {
   }
   return count;
 }
+int GetJSFrameCount(const DeoptFrame& deopt_frame) {
+  int count =
+      deopt_frame.type() == DeoptFrame::FrameType::kInlinedArgumentsFrame ? 0
+                                                                          : 1;
+  if (deopt_frame.parent()) {
+    count += GetJSFrameCount(*deopt_frame.parent());
+  }
+  return count;
+}
 BytecodeOffset GetBytecodeOffset(const DeoptFrame& deopt_frame) {
   switch (deopt_frame.type()) {
     case DeoptFrame::FrameType::kInterpretedFrame:
       return deopt_frame.as_interpreted().bytecode_position();
+    case DeoptFrame::FrameType::kInlinedArgumentsFrame:
+      DCHECK_NOT_NULL(deopt_frame.parent());
+      return GetBytecodeOffset(*deopt_frame.parent());
     case DeoptFrame::FrameType::kBuiltinContinuationFrame:
       return Builtins::GetContinuationBytecodeOffset(
           deopt_frame.as_builtin_continuation().builtin_id());
@@ -877,6 +889,9 @@ SourcePosition GetSourcePosition(const DeoptFrame& deopt_frame) {
   switch (deopt_frame.type()) {
     case DeoptFrame::FrameType::kInterpretedFrame:
       return deopt_frame.as_interpreted().source_position();
+    case DeoptFrame::FrameType::kInlinedArgumentsFrame:
+      DCHECK_NOT_NULL(deopt_frame.parent());
+      return GetSourcePosition(*deopt_frame.parent());
     case DeoptFrame::FrameType::kBuiltinContinuationFrame:
       return SourcePosition::Unknown();
   }
@@ -886,6 +901,7 @@ compiler::SharedFunctionInfoRef GetSharedFunctionInfo(
   switch (deopt_frame.type()) {
     case DeoptFrame::FrameType::kInterpretedFrame:
       return deopt_frame.as_interpreted().unit().shared_function_info();
+    case DeoptFrame::FrameType::kInlinedArgumentsFrame:
     case DeoptFrame::FrameType::kBuiltinContinuationFrame:
       return GetSharedFunctionInfo(*deopt_frame.parent());
   }
@@ -905,7 +921,7 @@ class MaglevTranslationArrayBuilder {
 
   void BuildEagerDeopt(EagerDeoptInfo* deopt_info) {
     int frame_count = GetFrameCount(deopt_info->top_frame());
-    int jsframe_count = frame_count;
+    int jsframe_count = GetJSFrameCount(deopt_info->top_frame());
     deopt_info->set_translation_index(
         translation_array_builder_->BeginTranslation(
             frame_count, jsframe_count,
@@ -922,7 +938,7 @@ class MaglevTranslationArrayBuilder {
 
   void BuildLazyDeopt(LazyDeoptInfo* deopt_info) {
     int frame_count = GetFrameCount(deopt_info->top_frame());
-    int jsframe_count = frame_count;
+    int jsframe_count = GetJSFrameCount(deopt_info->top_frame());
     deopt_info->set_translation_index(
         translation_array_builder_->BeginTranslation(
             frame_count, jsframe_count,
@@ -981,6 +997,31 @@ class MaglevTranslationArrayBuilder {
             interpreted_frame.unit(), interpreted_frame.frame_state(),
             current_input_location, deopt_info->result_location(),
             deopt_info->result_size());
+        break;
+      }
+      case DeoptFrame::FrameType::kInlinedArgumentsFrame: {
+        const InlinedArgumentsDeoptFrame& inlined_arguments_frame =
+            top_frame.as_inlined_arguments();
+
+        translation_array_builder_->BeginInlinedExtraArguments(
+            GetDeoptLiteral(
+                *GetSharedFunctionInfo(inlined_arguments_frame).object()),
+            static_cast<uint32_t>(inlined_arguments_frame.arguments().size()));
+
+        // Closure
+        translation_array_builder_->StoreLiteral(GetDeoptLiteral(
+            *inlined_arguments_frame.unit().function().object()));
+
+        for (ValueNode* value : inlined_arguments_frame.arguments()) {
+          BuildDeoptFrameSingleValue(value, *current_input_location);
+          current_input_location++;
+        }
+
+        // Context
+        // ValueNode* value = inlined_arguments_frame.context();
+        // BuildDeoptFrameSingleValue(value, *current_input_location);
+        // current_input_location++;
+
         break;
       }
       case DeoptFrame::FrameType::kBuiltinContinuationFrame: {
@@ -1055,6 +1096,32 @@ class MaglevTranslationArrayBuilder {
             interpreted_frame.unit(), interpreted_frame.frame_state(),
             current_input_location, interpreter::Register::invalid_value(),
             return_count);
+        break;
+      }
+      case DeoptFrame::FrameType::kInlinedArgumentsFrame: {
+        const InlinedArgumentsDeoptFrame& inlined_arguments_frame =
+            frame.as_inlined_arguments();
+
+        translation_array_builder_->BeginInlinedExtraArguments(
+            GetDeoptLiteral(
+                *GetSharedFunctionInfo(inlined_arguments_frame).object()),
+            static_cast<uint32_t>(inlined_arguments_frame.arguments().size()));
+
+        // Closure
+        translation_array_builder_->StoreLiteral(GetDeoptLiteral(
+            *inlined_arguments_frame.unit().function().object()));
+
+        for (ValueNode* value : inlined_arguments_frame.arguments()) {
+          BuildDeoptFrameSingleValue(value, *current_input_location);
+          current_input_location++;
+        }
+
+        // Context
+        // translation_array_builder_->StoreOptimizedOut();
+        // ValueNode* value = inlined_arguments_frame.context();
+        // BuildDeoptFrameSingleValue(value, *current_input_location);
+        // current_input_location++;
+
         break;
       }
       case DeoptFrame::FrameType::kBuiltinContinuationFrame: {

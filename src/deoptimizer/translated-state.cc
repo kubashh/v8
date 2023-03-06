@@ -1446,7 +1446,7 @@ TranslatedState::TranslatedState(const JavaScriptFrame* frame)
                               data.TranslationIndex(deopt_index).value());
   int actual_argc = frame->GetActualArgumentCount();
   Init(frame->isolate(), frame->fp(), frame->fp(), &it, data.LiteralArray(),
-       nullptr /* registers */, nullptr /* trace file */,
+       nullptr /* registers */, stdout,  // nullptr /* trace file */,
        frame->function()
            .shared()
            .internal_formal_parameter_count_without_receiver(),

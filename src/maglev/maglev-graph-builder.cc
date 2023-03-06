@@ -385,9 +385,17 @@ DeoptFrame* MaglevGraphBuilder::GetParentDeoptFrame() {
     // LazyDeoptContinuationScope.
     DCHECK(interpreter::Bytecodes::WritesAccumulator(
         parent_->iterator_.current_bytecode()));
+
     parent_deopt_frame_ =
         zone()->New<DeoptFrame>(parent_->GetDeoptFrameForLazyDeoptHelper(
             parent_->current_lazy_deopt_continuation_scope_, true));
+    if (inlined_arguments_) {
+      // TODO(victorgomes): this context is incorrect, we probably want the
+      // entry one.
+      parent_deopt_frame_ = zone()->New<InlinedArgumentsDeoptFrame>(
+          *compilation_unit_, base::VectorOf(*inlined_arguments_),
+          GetConstant(function().context(broker())), parent_deopt_frame_);
+    }
   }
   return parent_deopt_frame_;
 }
@@ -3192,7 +3200,8 @@ ReduceResult MaglevGraphBuilder::BuildInlined(const CallArguments& args,
   StartPrologue();
 
   // Set receiver.
-  SetArgument(0, GetConvertReceiver(function(), args));
+  ValueNode* receiver = GetConvertReceiver(function(), args);
+  SetArgument(0, receiver);
   // Set remaining arguments.
   RootConstant* undefined_constant =
       GetRootConstant(RootIndex::kUndefinedValue);
@@ -3201,6 +3210,15 @@ ReduceResult MaglevGraphBuilder::BuildInlined(const CallArguments& args,
     if (arg_value == nullptr) arg_value = undefined_constant;
     SetArgument(i, arg_value);
   }
+
+  if (static_cast<int>(args.count()) > parameter_count()) {
+    inlined_arguments_ = zone()->New<ZoneVector<ValueNode*>>(zone());
+    inlined_arguments_->push_back(receiver);
+    for (int i = 0; i < static_cast<int>(args.count()); i++) {
+      inlined_arguments_->push_back(args[i]);
+    }
+  }
+
   BuildRegisterFrameInitialization(GetConstant(function().context(broker())),
                                    GetConstant(function()));
   BuildMergeStates();
@@ -3293,7 +3311,7 @@ bool MaglevGraphBuilder::ShouldInlineCall(compiler::JSFunctionRef function,
   interpreter::BytecodeArrayIterator iterator(bytecode.object());
   for (; !iterator.done(); iterator.Advance()) {
     switch (iterator.current_bytecode()) {
-      case interpreter::Bytecode::kCreateMappedArguments:
+      // case interpreter::Bytecode::kCreateMappedArguments:
       case interpreter::Bytecode::kCreateUnmappedArguments:
       case interpreter::Bytecode::kCreateRestParameter:
         TRACE_CANNOT_INLINE("use unsupported arguments object");
@@ -5245,7 +5263,9 @@ void MaglevGraphBuilder::VisitCreateMappedArguments() {
         BuildCallRuntime(Runtime::kNewSloppyArguments, {GetClosure()}));
   } else {
     SetAccumulator(
-        BuildCallBuiltin<Builtin::kFastNewSloppyArguments>({GetClosure()}));
+        BuildCallRuntime(Runtime::kNewSloppyArguments, {GetClosure()}));
+    // SetAccumulator(
+    //     BuildCallBuiltin<Builtin::kFastNewSloppyArguments>({GetClosure()}));
   }
 }
 

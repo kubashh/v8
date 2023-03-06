@@ -117,6 +117,11 @@ class MaxCallDepthProcessor {
             deopt_frame->as_interpreted().unit().register_count());
         return info.frame_size_in_bytes();
       }
+      case DeoptFrame::FrameType::kInlinedArgumentsFrame: {
+        // TODO(victorgomes):
+        return static_cast<int>(
+            deopt_frame->as_inlined_arguments().arguments().size());
+      }
       case DeoptFrame::FrameType::kBuiltinContinuationFrame: {
         // PC + FP + Closure + Params + Context
         const RegisterConfiguration* config = RegisterConfiguration::Default();
