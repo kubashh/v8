@@ -55,6 +55,7 @@
 #include "src/objects/objects-body-descriptors-inl.h"
 #include "src/objects/shared-function-info.h"
 #include "src/objects/string.h"
+#include "src/parsing/compile-hints.h"
 #include "src/parsing/parse-info.h"
 #include "src/parsing/parser.h"
 #include "src/parsing/parsing.h"
@@ -3274,6 +3275,30 @@ Handle<Script> NewScript(
   return script;
 }
 
+// FIXME: are compile hints relevant for streaming: do we ever stream if we have
+// the cache?
+MaybeHandle<SharedFunctionInfo> CompileScriptOnMainThread(
+    const UnoptimizedCompileFlags flags, Handle<String> source,
+    const ScriptDetails& script_details, NativesFlag natives,
+    v8::Extension* extension, Isolate* isolate,
+    MaybeHandle<Script> maybe_script, IsCompiledScope* is_compiled_scope,
+    std::vector<int>&& compile_hints) {
+  UnoptimizedCompileState compile_state;
+  ReusableUnoptimizedCompileState reusable_state(isolate);
+  ParseInfo parse_info(isolate, flags, &compile_state, &reusable_state);
+  parse_info.set_extension(extension);
+  parse_info.set_compile_hints(std::move(compile_hints));
+
+  Handle<Script> script;
+  if (!maybe_script.ToHandle(&script)) {
+    script = NewScript(isolate, &parse_info, source, script_details, natives);
+  }
+  DCHECK_EQ(parse_info.flags().is_repl_mode(), script->is_repl_mode());
+
+  return Compiler::CompileToplevel(&parse_info, script, isolate,
+                                   is_compiled_scope);
+}
+
 MaybeHandle<SharedFunctionInfo> CompileScriptOnMainThread(
     const UnoptimizedCompileFlags flags, Handle<String> source,
     const ScriptDetails& script_details, NativesFlag natives,
@@ -3440,10 +3465,15 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
     ScriptCompiler::NoCacheReason no_cache_reason, NativesFlag natives) {
   ScriptCompileTimerScope compile_timer(isolate, no_cache_reason);
 
+  // FIXME: make sure we don't add a DeserializeTask for compile hints.
   if (compile_options == ScriptCompiler::kConsumeCodeCache) {
     // Have to have exactly one of cached_data or deserialize_task.
     DCHECK(cached_data || deserialize_task);
     DCHECK(!(cached_data && deserialize_task));
+    DCHECK_NULL(extension);
+  } else if (compile_options == ScriptCompiler::kConsumeCompileHints) {
+    DCHECK(cached_data);
+    DCHECK_NULL(deserialize_task);
     DCHECK_NULL(extension);
   } else {
     DCHECK_NULL(cached_data);
@@ -3552,9 +3582,17 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
         flags.set_script_id(script->id());
       }
 
-      maybe_result = CompileScriptOnMainThread(
-          flags, source, script_details, natives, extension, isolate,
-          maybe_script, &is_compiled_scope);
+      if (compile_options == ScriptCompiler::kConsumeCompileHints) {
+        maybe_result = CompileScriptOnMainThread(
+            flags, source, script_details, natives, extension, isolate,
+            maybe_script, &is_compiled_scope,
+            CompileHints::Deserialize(cached_data->data(),
+                                      cached_data->length()));
+      } else {
+        maybe_result = CompileScriptOnMainThread(
+            flags, source, script_details, natives, extension, isolate,
+            maybe_script, &is_compiled_scope);
+      }
     }
 
     // Add the result to the isolate cache.
