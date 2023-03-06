@@ -16,6 +16,23 @@
       "message": "As this has lead to confusion multiple times now, I propose to make the error message more clear. WDYT?",
       "revId": "5eaa0001170e6ac3da0f30086fb8f51150ed3cb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "794ef59c_dd531d61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-03-06T06:40:08Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "5eaa0001170e6ac3da0f30086fb8f51150ed3cb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
