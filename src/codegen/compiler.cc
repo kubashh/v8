@@ -3440,10 +3440,15 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
     ScriptCompiler::NoCacheReason no_cache_reason, NativesFlag natives) {
   ScriptCompileTimerScope compile_timer(isolate, no_cache_reason);
 
+  // FIXME: make sure we don't add a DeserializeTask for compile hints.
   if (compile_options == ScriptCompiler::kConsumeCodeCache) {
     // Have to have exactly one of cached_data or deserialize_task.
     DCHECK(cached_data || deserialize_task);
     DCHECK(!(cached_data && deserialize_task));
+    DCHECK_NULL(extension);
+  } else if (compile_options == ScriptCompiler::kConsumeCompileHints) {
+    DCHECK(cached_data);
+    DCHECK_NULL(deserialize_task);
     DCHECK_NULL(extension);
   } else {
     DCHECK_NULL(cached_data);
@@ -3529,6 +3534,10 @@ MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScriptImpl(
   }
 
   if (maybe_result.is_null()) {
+    if (compile_options == ScriptCompiler::kConsumeCompileHints) {
+      printf("Using compile hints\n");
+    }
+
     // No cache entry found compile the script.
     if (v8_flags.stress_background_compile &&
         CanBackgroundCompile(script_details, extension, compile_options,

@@ -569,7 +569,8 @@ class V8_EXPORT ScriptCompiler {
     kNoCompileOptions = 0,
     kConsumeCodeCache,
     kEagerCompile,
-    kProduceCompileHints
+    kProduceCompileHints,
+    kConsumeCompileHints
   };
 
   /**
@@ -749,6 +750,13 @@ class V8_EXPORT ScriptCompiler {
    * CachedData returned by this function should be owned by the caller.
    */
   static CachedData* CreateCodeCacheForFunction(Local<Function> function);
+
+  /**
+   * Creates and returns compile hints cache data for the specified
+   * unbound_script. This will return nullptr if the data cannot be retrieved.
+   * The CachedData returned by this function should be owned by the caller.
+   */
+  static CachedData* CreateCompileHints(Local<Script> script);
 
  private:
   static V8_WARN_UNUSED_RESULT MaybeLocal<UnboundScript> CompileUnboundInternal(
