@@ -72,7 +72,6 @@ class ReturnValue {
   template <class F, class G, class H>
   friend class PersistentValueMapBase;
   V8_INLINE void SetInternal(internal::Address value) { *value_ = value; }
-  V8_INLINE internal::Address GetDefaultValue();
   V8_INLINE explicit ReturnValue(internal::Address* slot);
   internal::Address* value_;
 };
@@ -117,7 +116,7 @@ class FunctionCallbackInfo {
   /** The ReturnValue for the call. */
   V8_INLINE ReturnValue<T> GetReturnValue() const;
   // This shouldn't be public, but the arm compiler needs it.
-  static const int kArgsLength = 6;
+  static const int kArgsLength = 5;
 
  protected:
   friend class internal::FunctionCallbackArguments;
@@ -125,10 +124,9 @@ class FunctionCallbackInfo {
   friend class debug::ConsoleCallArguments;
   static const int kHolderIndex = 0;
   static const int kIsolateIndex = 1;
-  static const int kReturnValueDefaultValueIndex = 2;
-  static const int kReturnValueIndex = 3;
-  static const int kDataIndex = 4;
-  static const int kNewTargetIndex = 5;
+  static const int kReturnValueIndex = 2;
+  static const int kDataIndex = 3;
+  static const int kNewTargetIndex = 4;
 
   V8_INLINE FunctionCallbackInfo(internal::Address* implicit_args,
                                  internal::Address* values, int length);
@@ -230,7 +228,7 @@ class PropertyCallbackInfo {
   V8_INLINE bool ShouldThrowOnError() const;
 
   // This shouldn't be public, but the arm compiler needs it.
-  static const int kArgsLength = 7;
+  static const int kArgsLength = 6;
 
  protected:
   friend class MacroAssembler;
@@ -239,10 +237,9 @@ class PropertyCallbackInfo {
   static const int kShouldThrowOnErrorIndex = 0;
   static const int kHolderIndex = 1;
   static const int kIsolateIndex = 2;
-  static const int kReturnValueDefaultValueIndex = 3;
-  static const int kReturnValueIndex = 4;
-  static const int kDataIndex = 5;
-  static const int kThisIndex = 6;
+  static const int kReturnValueIndex = 3;
+  static const int kDataIndex = 4;
+  static const int kThisIndex = 5;
 
   V8_INLINE PropertyCallbackInfo(internal::Address* args) : args_(args) {}
   internal::Address* args_;
@@ -259,22 +256,14 @@ template <typename T>
 template <typename S>
 void ReturnValue<T>::Set(const Global<S>& handle) {
   static_assert(std::is_base_of<T, S>::value, "type check");
-  if (V8_UNLIKELY(handle.IsEmpty())) {
-    *value_ = GetDefaultValue();
-  } else {
-    *value_ = *reinterpret_cast<internal::Address*>(*handle);
-  }
+   *value_ = *reinterpret_cast<internal::Address*>(*handle);
 }
 
 template <typename T>
 template <typename S>
 void ReturnValue<T>::Set(const BasicTracedReference<S>& handle) {
   static_assert(std::is_base_of<T, S>::value, "type check");
-  if (V8_UNLIKELY(handle.IsEmpty())) {
-    *value_ = GetDefaultValue();
-  } else {
-    *value_ = *reinterpret_cast<internal::Address*>(handle.val_);
-  }
+  *value_ = *reinterpret_cast<internal::Address*>(handle.val_);
 }
 
 template <typename T>
@@ -282,11 +271,7 @@ template <typename S>
 void ReturnValue<T>::Set(const Local<S> handle) {
   static_assert(std::is_void<T>::value || std::is_base_of<T, S>::value,
                 "type check");
-  if (V8_UNLIKELY(handle.IsEmpty())) {
-    *value_ = GetDefaultValue();
-  } else {
-    *value_ = internal::ValueHelper::ValueAsAddress(*handle);
-  }
+   *value_ = internal::ValueHelper::ValueAsAddress(*handle);
 }
 
 template <typename T>
@@ -372,11 +357,6 @@ void ReturnValue<T>::Set(S* whatever) {
   static_assert(sizeof(S) < 0, "incompilable to prevent inadvertent misuse");
 }
 
-template <typename T>
-internal::Address ReturnValue<T>::GetDefaultValue() {
-  // Default value is always the pointer below value_ on the stack.
-  return value_[-1];
-}
 
 template <typename T>
 FunctionCallbackInfo<T>::FunctionCallbackInfo(internal::Address* implicit_args,

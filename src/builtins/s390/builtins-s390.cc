@@ -3383,11 +3383,10 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
 
   using FCA = FunctionCallbackArguments;
 
-  static_assert(FCA::kArgsLength == 6);
-  static_assert(FCA::kNewTargetIndex == 5);
-  static_assert(FCA::kDataIndex == 4);
-  static_assert(FCA::kReturnValueOffset == 3);
-  static_assert(FCA::kReturnValueDefaultValueIndex == 2);
+  static_assert(FCA::kArgsLength == 5);
+  static_assert(FCA::kNewTargetIndex == 4);
+  static_assert(FCA::kDataIndex == 3);
+  static_assert(FCA::kReturnValueOffset == 2);
   static_assert(FCA::kIsolateIndex == 1);
   static_assert(FCA::kHolderIndex == 0);
 
@@ -3396,10 +3395,9 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
   // Target state:
   //   sp[0 * kSystemPointerSize]: kHolder
   //   sp[1 * kSystemPointerSize]: kIsolate
-  //   sp[2 * kSystemPointerSize]: undefined (kReturnValueDefaultValue)
-  //   sp[3 * kSystemPointerSize]: undefined (kReturnValue)
-  //   sp[4 * kSystemPointerSize]: kData
-  //   sp[5 * kSystemPointerSize]: undefined (kNewTarget)
+  //   sp[2 * kSystemPointerSize]: undefined (kReturnValue)
+  //   sp[3 * kSystemPointerSize]: kData
+  //   sp[4 * kSystemPointerSize]: undefined (kNewTarget)
 
   // Reserve space on the stack.
   __ lay(sp, MemOperand(sp, -(FCA::kArgsLength * kSystemPointerSize)));
@@ -3411,16 +3409,15 @@ void Builtins::Generate_CallApiCallback(MacroAssembler* masm) {
   __ Move(scratch, ExternalReference::isolate_address(masm->isolate()));
   __ StoreU64(scratch, MemOperand(sp, 1 * kSystemPointerSize));
 
-  // kReturnValueDefaultValue and kReturnValue.
+  // kReturnValue.
   __ LoadRoot(scratch, RootIndex::kUndefinedValue);
   __ StoreU64(scratch, MemOperand(sp, 2 * kSystemPointerSize));
-  __ StoreU64(scratch, MemOperand(sp, 3 * kSystemPointerSize));
 
   // kData.
-  __ StoreU64(call_data, MemOperand(sp, 4 * kSystemPointerSize));
+  __ StoreU64(call_data, MemOperand(sp, 3 * kSystemPointerSize));
 
   // kNewTarget.
-  __ StoreU64(scratch, MemOperand(sp, 5 * kSystemPointerSize));
+  __ StoreU64(scratch, MemOperand(sp, 4 * kSystemPointerSize));
 
   // Keep a pointer to kHolder (= implicit_args) in a scratch register.
   // We use it below to set up the FunctionCallbackInfo object.
@@ -3495,11 +3492,10 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   static_assert(PropertyCallbackArguments::kShouldThrowOnErrorIndex == 0);
   static_assert(PropertyCallbackArguments::kHolderIndex == 1);
   static_assert(PropertyCallbackArguments::kIsolateIndex == 2);
-  static_assert(PropertyCallbackArguments::kReturnValueDefaultValueIndex == 3);
-  static_assert(PropertyCallbackArguments::kReturnValueOffset == 4);
-  static_assert(PropertyCallbackArguments::kDataIndex == 5);
-  static_assert(PropertyCallbackArguments::kThisIndex == 6);
-  static_assert(PropertyCallbackArguments::kArgsLength == 7);
+  static_assert(PropertyCallbackArguments::kReturnValueOffset == 3);
+  static_assert(PropertyCallbackArguments::kDataIndex == 4);
+  static_assert(PropertyCallbackArguments::kThisIndex == 5);
+  static_assert(PropertyCallbackArguments::kArgsLength == 6);
 
   Register receiver = ApiGetterDescriptor::ReceiverRegister();
   Register holder = ApiGetterDescriptor::HolderRegister();
@@ -3515,7 +3511,7 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
                      FieldMemOperand(callback, AccessorInfo::kDataOffset), r1);
   __ push(scratch);
   __ LoadRoot(scratch, RootIndex::kUndefinedValue);
-  __ Push(scratch, scratch);
+  __ push(scratch);
   __ Move(scratch, ExternalReference::isolate_address(masm->isolate()));
   __ Push(scratch, holder);
   __ Push(Smi::zero());  // should_throw_on_error -> false
