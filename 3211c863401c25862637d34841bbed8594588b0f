@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6999f96a_108cf927",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-06T11:07:44Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "3211c863401c25862637d34841bbed8594588b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f46e81b_de57c3d7",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-06T11:07:44Z",
+      "side": 1,
+      "message": "cases.",
+      "range": {
+        "startLine": 384,
+        "startChar": 12,
+        "endLine": 384,
+        "endChar": 16
+      },
+      "revId": "3211c863401c25862637d34841bbed8594588b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cac837f_d9607376",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-06T11:07:44Z",
+      "side": 1,
+      "message": "Impressive magic! 😊",
+      "range": {
+        "startLine": 481,
+        "startChar": 0,
+        "endLine": 497,
+        "endChar": 1
+      },
+      "revId": "3211c863401c25862637d34841bbed8594588b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14cd4daa_6a549796",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-06T11:07:44Z",
+      "side": 1,
+      "message": "This DCHECK is _basically_ useless and I was caught a bit by surprise: because IsResultRegister sounds like there is only one register.\n\nSo I thought, that would imply target0 \u003d\u003d target1, which is obviously not true.\n\nIt is useless, because we already check that, here:\nDCHECK_EQ(interpreter::Register(target0.index() + 1), target1);\n\nI don\u0027t know how to improve this either... I am just mentioning that it is a bit confusing. Maybe one could add a comment: when we return two registers (or when we have two result registers), they must be consecutive, or something like that.",
+      "range": {
+        "startLine": 1233,
+        "startChar": 0,
+        "endLine": 1235,
+        "endChar": 72
+      },
+      "revId": "3211c863401c25862637d34841bbed8594588b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34df2003_ff66ef55",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1056,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-06T11:07:44Z",
+      "side": 1,
+      "message": "I guess the result_size is the number of result registers? Namely 0, 1 or 2?\nIf you want to remove this field completely (since size of lazydeoptinfo matters), you could use the first bit of deopting_call_return_pc_ to indicate 2 results.\nAnd invalid result_location \u003d 0 size.",
+      "range": {
+        "startLine": 1056,
+        "startChar": 6,
+        "endLine": 1056,
+        "endChar": 18
+      },
+      "revId": "3211c863401c25862637d34841bbed8594588b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
