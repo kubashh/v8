@@ -16,6 +16,29 @@
       "message": "PTAL again!",
       "revId": "47ef91312f709e20cdca76aebccf6b5cd5cabb7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dabbf144_7f03c814",
+        "filename": "src/maglev/maglev-graph-printer.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T14:11:49Z",
+      "side": 1,
+      "message": "nit: put parentheses around this since the operator precedence is not immediately obvious.",
+      "range": {
+        "startLine": 415,
+        "startChar": 21,
+        "endLine": 415,
+        "endChar": 26
+      },
+      "revId": "47ef91312f709e20cdca76aebccf6b5cd5cabb7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
