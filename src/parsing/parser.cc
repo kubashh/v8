@@ -2650,6 +2650,15 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
           ? FunctionLiteral::kShouldEagerCompile
           : default_eager_compile_hint();
 
+  // Add compile hints from external sources.
+  printf("Thinking about compile hint for position %d\n", pos);
+  auto compile_hint_position = peek_position();
+  if (eager_compile_hint == FunctionLiteral::kShouldLazyCompile &&
+      info_->HasCompileHint(compile_hint_position)) {
+    eager_compile_hint = FunctionLiteral::kShouldEagerCompile;
+    printf("compiling eagerly because of a compile hint\n");
+  }
+
   // Determine if the function can be parsed lazily. Lazy parsing is
   // different from lazy compilation; we need to parse more eagerly than we
   // compile.
@@ -2688,6 +2697,7 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
 
   const bool is_lazy =
       eager_compile_hint == FunctionLiteral::kShouldLazyCompile;
+
   const bool is_top_level = AllowsLazyParsingWithoutUnresolvedVariables();
   const bool is_eager_top_level_function = !is_lazy && is_top_level;
 

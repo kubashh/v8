@@ -32,6 +32,7 @@ struct ScriptDetails {
   MaybeHandle<Object> host_defined_options;
   REPLMode repl_mode;
   const ScriptOriginOptions origin_options;
+  std::vector<int> compile_hints;
 };
 
 }  // namespace internal

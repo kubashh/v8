@@ -7,6 +7,7 @@
 #include "include/v8-local-handle.h"
 #include "include/v8-primitive.h"
 #include "include/v8-template.h"
+#include "src/builtins/builtins.h"
 #include "src/objects/objects-inl.h"
 #include "test/unittests/test-utils.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -224,6 +225,95 @@ TEST_F(ScriptTest, ProduceCompileHints) {
     {
       auto compile_hints = script->GetProducedCompileHints();
       EXPECT_EQ(0u, compile_hints.size());
+    }
+  }
+}
+
+TEST_F(ScriptTest, LocalCompileHints) {
+  const char* url = "http://www.foo.com/foo.js";
+  v8::ScriptOrigin origin(isolate(), NewString(url), 13, 0);
+  v8::Local<v8::Context> context = v8::Context::New(isolate());
+
+  // Produce compile hints.
+  std::unique_ptr<v8::ScriptCompiler::CachedData> data;
+  {
+    // Run the top level code.
+    const char* code = "function lazy1() {} function lazy2() {}";
+    v8::ScriptCompiler::Source script_source(NewString(code), origin);
+    Local<Script> script =
+        v8::ScriptCompiler::Compile(
+            v8_context(), &script_source,
+            v8::ScriptCompiler::CompileOptions::kProduceCompileHints)
+            .ToLocalChecked();
+
+    v8::MaybeLocal<v8::Value> result = script->Run(context);
+    EXPECT_FALSE(result.IsEmpty());
+
+    // Run lazy1.
+    const char* code2 = "lazy1();";
+    v8::ScriptCompiler::Source script_source2(NewString(code2), origin);
+
+    Local<Script> script2 =
+        v8::ScriptCompiler::Compile(v8_context(), &script_source2)
+            .ToLocalChecked();
+    v8::MaybeLocal<v8::Value> result2 = script2->Run(context);
+    EXPECT_FALSE(result2.IsEmpty());
+
+    // Retrieve compile hints.
+    data.reset(v8::ScriptCompiler::CreateCompileHints(script));
+  }
+
+  // Consume compile hints.
+  // FIXME: add an API check that the task is nullptr if we're consuming compile
+  // hints.
+  printf("using compile hints\n");
+  {
+    // Artificially change the code so that the isolate cache won't hit.
+    const char* code = "function lazy1() {} function lazy2() {} //";
+    v8::ScriptCompiler::Source script_source(NewString(code), origin,
+                                             data.release(), nullptr);
+    Local<Script> script =
+        v8::ScriptCompiler::Compile(
+            v8_context(), &script_source,
+            v8::ScriptCompiler::CompileOptions::kConsumeCompileHints)
+            .ToLocalChecked();
+    USE(script);
+
+    // Retrieve the function object for lazy1.
+    {
+      const char* code2 = "lazy1";
+      v8::ScriptCompiler::Source script_source2(NewString(code2), origin);
+
+      Local<Script> script2 =
+          v8::ScriptCompiler::Compile(v8_context(), &script_source2)
+              .ToLocalChecked();
+      v8::MaybeLocal<v8::Value> result2 = script2->Run(context);
+
+      auto function = i::Handle<i::JSFunction>::cast(
+          Utils::OpenHandle(*result2.ToLocalChecked()));
+      i::Builtin builtin = function->code().builtin_id();
+
+      // lazy1 was not compiled lazily.
+      EXPECT_NE(i::Builtin::kCompileLazy, builtin);
+    }
+
+    // Retrieve the function object for lazy2.
+    {
+      const char* code2 = "lazy2";
+      v8::ScriptCompiler::Source script_source2(NewString(code2), origin);
+
+      Local<Script> script2 =
+          v8::ScriptCompiler::Compile(v8_context(), &script_source2)
+              .ToLocalChecked();
+      v8::MaybeLocal<v8::Value> result2 = script2->Run(context);
+
+      auto function = i::Handle<i::JSFunction>::cast(
+          Utils::OpenHandle(*result2.ToLocalChecked()));
+
+      i::Builtin builtin = function->code().builtin_id();
+
+      // lazy2 was compiled lazily.
+      EXPECT_EQ(i::Builtin::kCompileLazy, builtin);
     }
   }
 }
