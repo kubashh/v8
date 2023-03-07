@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d6070c2_d31c5064",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T17:20:35Z",
+      "side": 1,
+      "message": "worth adding an ascii art comment of the transformation here too.",
+      "range": {
+        "startLine": 273,
+        "startChar": 2,
+        "endLine": 273,
+        "endChar": 4
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecd0ed79_1a5272a9",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T17:20:35Z",
+      "side": 1,
+      "message": "might be worth creating a helper `NodeBase::CopyEagerDeoptInfo` or similar.",
+      "range": {
+        "startLine": 286,
+        "startChar": 4,
+        "endLine": 286,
+        "endChar": 7
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5519395f_ab346484",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T17:20:35Z",
+      "side": 1,
+      "message": "this is all shared code so could be hoisted out of the macro (and switch).",
+      "range": {
+        "startLine": 289,
+        "startChar": 4,
+        "endLine": 295,
+        "endChar": 21
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ff035bb_192b54d7",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T17:20:35Z",
+      "side": 1,
+      "message": "can you extract some level of indentation here into a helper, to help with the readability? e.g. `UpdateNodePhiInput(n, phi, i)`. It could even have overloads then instead of `if constexpr`, e.g. `UpdateNodePhiInput(CheckedStoreSmiField*, Phi*, int)`",
+      "range": {
+        "startLine": 83,
+        "startChar": 48,
+        "endLine": 83,
+        "endChar": 49
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5a0883d_80f8634d",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T17:20:35Z",
+      "side": 1,
+      "message": "some ascii art diagrams would be helpful here.",
+      "range": {
+        "startLine": 85,
+        "startChar": 15,
+        "endLine": 85,
+        "endChar": 16
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbf0cae0_d85516ec",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T17:20:35Z",
+      "side": 1,
+      "message": "I don\u0027t understand the grammar in this sentence",
+      "range": {
+        "startLine": 87,
+        "startChar": 52,
+        "endLine": 87,
+        "endChar": 54
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15c8f607_92d30704",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T17:20:35Z",
+      "side": 1,
+      "message": "DCHECK `i` is `kObjectIndex`",
+      "range": {
+        "startLine": 90,
+        "startChar": 21,
+        "endLine": 90,
+        "endChar": 22
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e5f2f0e_474206e8",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T17:20:35Z",
+      "side": 1,
+      "message": "static assert the input offsets here too.",
+      "range": {
+        "startLine": 109,
+        "startChar": 22,
+        "endLine": 109,
+        "endChar": 54
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb7ba6f1_bfc8c600",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T17:20:35Z",
+      "side": 1,
+      "message": "maybe OverwriteWith should be templated on the type, e.g.\n\n```\ntemplate\u003ctypename NodeT\u003e\nvoid OverwriteWith() {\n  OverwriteWith(NodeBase::opcode_of\u003cNodeT\u003e, NodeT::kProperties);\n}\n...\nnode-\u003eOverwriteWith\u003cStoreTaggedFieldWithWriteBarrier\u003e();\n```",
+      "range": {
+        "startLine": 109,
+        "startChar": 56,
+        "endLine": 109,
+        "endChar": 67
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "209d50db_b07086e3",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-07T17:20:35Z",
+      "side": 1,
+      "message": "nit: SmiTagPhi for consistency",
+      "range": {
+        "startLine": 133,
+        "startChar": 13,
+        "endLine": 133,
+        "endChar": 19
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
