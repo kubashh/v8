@@ -80,6 +80,30 @@
       },
       "revId": "520220a61e98f5f82e489454fb0d8766e259e751",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f1b4c64_b731eefe",
+        "filename": "src/heap/cppgc-js/cpp-marking-state-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-03-07T13:14:03Z",
+      "side": 1,
+      "message": "I\u0027ll also add a next action date to the tracking bug after this CL lands.",
+      "parentUuid": "3b500748_ef9ecd55",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 12
+      },
+      "revId": "520220a61e98f5f82e489454fb0d8766e259e751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
