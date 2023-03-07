@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "520220a61e98f5f82e489454fb0d8766e259e751",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37950f20_c9c853cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-07T12:57:51Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "520220a61e98f5f82e489454fb0d8766e259e751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6e298de_a5df2057",
+        "filename": "src/heap/cppgc-js/cpp-marking-state-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-07T12:57:51Z",
+      "side": 1,
+      "message": "Let\u0027s add a TODO with the bug# so that we can eventually remove this if it doesn\u0027t flush out anything.",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 12
+      },
+      "revId": "520220a61e98f5f82e489454fb0d8766e259e751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
