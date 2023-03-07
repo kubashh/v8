@@ -5,6 +5,7 @@
 #include "src/maglev/maglev-phi-representation-selector.h"
 
 #include "src/handles/handles-inl.h"
+#include "src/maglev/maglev-graph-processor.h"
 #include "src/maglev/maglev-ir.h"
 
 namespace v8 {
@@ -265,6 +266,48 @@ void MaglevPhiRepresentationSelector::UpdateUntagging(
   if (*needed_conversion != old_untagging->opcode()) {
     old_untagging->OverwriteWith(*needed_conversion);
   }
+}
+
+ValueNode* MaglevPhiRepresentationSelector::SmiTag(
+    Phi* phi, CheckedStoreSmiField* user_node, const ProcessingState& state) {
+  // The `CheckedStoreSmiField` could be overwritten with a regular
+  // `StoreTaggedFieldNoWriteBarrier`, so it's important to make sure that they
+  // have the same layouts. `OverwriteWith` will check the sizes and properties
+  // of the two operators, but it isn't aware of which inputs are at which
+  // index, so we check that here.
+  static_assert(StoreTaggedFieldNoWriteBarrier::kObjectIndex ==
+                CheckedStoreSmiField::kObjectIndex);
+  static_assert(StoreTaggedFieldNoWriteBarrier::kValueIndex ==
+                CheckedStoreSmiField::kValueIndex);
+
+#define TAG_INPUT(tagging_op)                                               \
+  {                                                                         \
+    ValueNode* tagged = NodeBase::New<tagging_op>(builder_->zone(), {phi}); \
+    new (tagged->eager_deopt_info()) EagerDeoptInfo(                        \
+        builder_->zone(), user_node->eager_deopt_info()->top_frame(),       \
+        user_node->eager_deopt_info()->feedback_to_update());               \
+    state.node_it()->InsertBefore(tagged);                                  \
+    if (builder_->has_graph_labeller()) {                                   \
+      builder_->graph_labeller()->RegisterNode(tagged);                     \
+    }                                                                       \
+    user_node->OverwriteWith(Opcode::kStoreTaggedFieldNoWriteBarrier);      \
+    return tagged;                                                          \
+  }
+
+  switch (phi->value_representation()) {
+    case ValueRepresentation::kFloat64:
+      TAG_INPUT(CheckedSmiTagFloat64)
+    case ValueRepresentation::kInt32:
+      TAG_INPUT(CheckedSmiTagInt32)
+    case ValueRepresentation::kUint32:
+      TAG_INPUT(CheckedSmiTagUint32)
+    case ValueRepresentation::kTagged:
+      return phi;
+    case ValueRepresentation::kWord64:
+      UNREACHABLE();
+  }
+
+#undef TAG_INPUT
 }
 
 ValueNode* MaglevPhiRepresentationSelector::TagPhi(Phi* phi, BasicBlock* block,
