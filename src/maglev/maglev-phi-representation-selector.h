@@ -35,8 +35,8 @@ class MaglevPhiRepresentationSelector {
   }
 
   template <class NodeT>
-  void Process(NodeT* node, const ProcessingState&) {
-    UpdateNodeInputs(node);
+  void Process(NodeT* node, const ProcessingState& state) {
+    UpdateNodeInputs(node, state);
   }
 
  private:
@@ -50,7 +50,7 @@ class MaglevPhiRepresentationSelector {
   // it. UpdateNodeInputs(n) removes such untagging from {n}'s input (and insert
   // new conversions if needed, from Int32 to Float64 for instance).
   template <class NodeT>
-  void UpdateNodeInputs(NodeT* n) {
+  void UpdateNodeInputs(NodeT* n, const ProcessingState& state) {
     NodeBase* node = static_cast<NodeBase*>(n);
 
     if (IsUntagging(n->opcode()) && node->input(0).node()->Is<Phi>() &&
@@ -81,8 +81,21 @@ class MaglevPhiRepresentationSelector {
           // have been inserted during this phase, because it knows that {phi}
           // isn't tagged. As such, we don't do anything in that case.
           if (!n->properties().is_conversion()) {
-            node->change_input(
-                i, TagPhi(phi, current_block_, NewNodePosition::kStart));
+            if constexpr (std::is_same_v<NodeT, CheckedStoreSmiField>) {
+              // The phi should not be able to be the `object` input of the
+              // CheckedStoreSmiField, because the graph builder is not able to
+              // see that a store is to a Smi field is the destination is a Phi.
+              if (i == CheckedStoreSmiField::kValueIndex) {
+                node->change_input(i, SmiTag(phi, n, state));
+              } else {
+                // The `object` input should never be untagged.
+                DCHECK_EQ(phi->value_representation(),
+                          ValueRepresentation::kTagged);
+              }
+            } else {
+              node->change_input(
+                  i, TagPhi(phi, current_block_, NewNodePosition::kStart));
+            }
           }
         }
       }
@@ -99,8 +112,13 @@ class MaglevPhiRepresentationSelector {
   void UpdateUntagging(ValueNode* old_untagging);
 
   // NewNodePosition is used to represent where a new node should be inserted:
-  // at the start of a block (kStart), at the end of a block (kEnd).
-  enum class NewNodePosition { kStart, kEnd };
+  // at the start of a block (kStart), at the end of a block (kEnd), or before
+  // the current node (kBeforeCurrentNode).
+  enum class NewNodePosition { kStart, kEnd, kBeforeCurrentNode };
+
+  // Tags {phi} as a Smi.
+  ValueNode* SmiTag(Phi* phi, CheckedStoreSmiField* user_node,
+                    const ProcessingState& state);
 
   // Returns a tagged node that represents a tagged version of {phi}.
   ValueNode* TagPhi(Phi* phi, BasicBlock* block, NewNodePosition pos);
