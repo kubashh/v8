@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9f6da21_9d6145c8",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-07T17:49:38Z",
+      "side": 1,
+      "message": "Actually, I misread the old code and this should be `{base(), size()}`. \nSo, I removed this helper function completely.",
+      "parentUuid": "5528edd7_7fb6413d",
+      "revId": "c7578774cde67b5ddde46d6933932570c28d8076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdb7c4b9_563f9202",
@@ -72,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "420406e0_87c9b06a",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-07T17:49:38Z",
+      "side": 1,
+      "message": "Having the writable region outside of the the code range broke the `GetAddressHint` logic - it was expected to return the address of the reservation but at the same time it should have taken into account the alignment of the allocatable area in the code range which it didn\u0027t do. \nSo, putting the optional writable region *into* the code range simplifies the whole machinery and fixes the issue.\n\nThe alignment parameter here should have been the `base_alignment` value.",
+      "parentUuid": "bdb7c4b9_563f9202",
+      "revId": "c7578774cde67b5ddde46d6933932570c28d8076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4fd1281e_c83d12cf",
         "filename": "src/heap/code-range.cc",
         "patchSetId": 4
@@ -83,6 +119,24 @@
       "writtenOn": "2023-03-07T10:26:12Z",
       "side": 1,
       "message": "Nit: Can you please describe here what logic would need to change?",
+      "revId": "c7578774cde67b5ddde46d6933932570c28d8076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6e128d7_2a514e4e",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-07T17:49:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fd1281e_c83d12cf",
       "revId": "c7578774cde67b5ddde46d6933932570c28d8076",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

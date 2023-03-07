@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73982d49_76cb53e5",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-07T17:49:38Z",
+      "side": 0,
+      "message": "I didn\u0027t plan to, but good point!",
+      "parentUuid": "5de78fa2_97fe1219",
+      "revId": "8a74d6a30e1679482b4cfec0c3c7445ba92af627",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "296bfe63_7de4804e",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-03-07T10:26:12Z",
       "side": 0,
       "message": "We don\u0027t need this anymore because the lifetime is determined by the CodeRange, right?",
+      "revId": "8a74d6a30e1679482b4cfec0c3c7445ba92af627",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b16b1c0b_2463fdf3",
+        "filename": "src/heap/code-range.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-07T17:49:38Z",
+      "side": 0,
+      "message": "Yes, exactly.",
+      "parentUuid": "296bfe63_7de4804e",
       "revId": "8a74d6a30e1679482b4cfec0c3c7445ba92af627",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
