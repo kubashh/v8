@@ -33,6 +33,23 @@
       "message": "Nice cleanup! LGTM",
       "revId": "77add10fed50532d2ec2e419f4d13fcc017e6b41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbdc847d_cd88cc29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-07T18:03:05Z",
+      "side": 1,
+      "message": "lgtm, thanks for the cleanup.",
+      "revId": "77add10fed50532d2ec2e419f4d13fcc017e6b41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
