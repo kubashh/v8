@@ -23,6 +23,7 @@
 #include "include/v8-locker.h"
 #include "include/v8-primitive-object.h"
 #include "include/v8-profiler.h"
+#include "include/v8-script.h"
 #include "include/v8-unwinder-state.h"
 #include "include/v8-util.h"
 #include "include/v8-wasm.h"
@@ -107,6 +108,7 @@
 #include "src/objects/synthetic-module-inl.h"
 #include "src/objects/templates.h"
 #include "src/objects/value-serializer.h"
+#include "src/parsing/compile-hints.h"
 #include "src/parsing/parse-info.h"
 #include "src/parsing/parser.h"
 #include "src/parsing/pending-compilation-error-handler.h"
@@ -2671,6 +2673,17 @@ MaybeLocal<UnboundScript> ScriptCompiler::CompileUnboundInternal(
               no_cache_reason, i::NOT_NATIVES_CODE);
       source->cached_data->rejected = cached_data->rejected();
     }
+  } else if (options == kConsumeCompileHints) {
+    DCHECK(source->cached_data);
+    // In this case we don't need to align the data. FIXME
+    auto cached_data = std::make_unique<i::AlignedCachedData>(
+        source->cached_data->data, source->cached_data->length);
+    maybe_function_info =
+        i::Compiler::GetSharedFunctionInfoForScriptWithCachedData(
+            i_isolate, str, script_details, cached_data.get(), options,
+            no_cache_reason, i::NOT_NATIVES_CODE);
+    // FIXME: make sure this is transmitted correctly - or can this ever fail?
+    source->cached_data->rejected = cached_data->rejected();
   } else {
     // Compile without any cache.
     maybe_function_info = i::Compiler::GetSharedFunctionInfoForScript(
@@ -2700,6 +2713,10 @@ MaybeLocal<Script> ScriptCompiler::Compile(Local<Context> context,
   Utils::ApiCheck(
       !source->GetResourceOptions().IsModule(), "v8::ScriptCompiler::Compile",
       "v8::ScriptCompiler::CompileModule must be used to compile modules");
+  Utils::ApiCheck(options != kConsumeCompileHints ||
+                      source->consume_cache_task.get() == nullptr,
+                  "v8::ScriptCompiler::Compile",
+                  "Can't use ConsumeCodeCacheTask for consuming compile hints");
   auto i_isolate = context->GetIsolate();
   MaybeLocal<UnboundScript> maybe =
       CompileUnboundInternal(i_isolate, source, options, no_cache_reason);
@@ -3002,6 +3019,12 @@ ScriptCompiler::CachedData* ScriptCompiler::CreateCodeCacheForFunction(
                   "v8::ScriptCompiler::CreateCodeCacheForFunction",
                   "Expected SharedFunctionInfo with wrapped source code");
   return i::CodeSerializer::Serialize(shared);
+}
+
+ScriptCompiler::CachedData* ScriptCompiler::CreateCompileHints(
+    Local<Script> script, int64_t prefix) {
+  std::vector<int> compile_hints = script->GetProducedCompileHints();
+  return i::CompileHints::Serialize(compile_hints, prefix);
 }
 
 MaybeLocal<Script> Script::Compile(Local<Context> context, Local<String> source,
