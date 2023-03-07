@@ -7947,7 +7947,8 @@ static MachineRepresentation NormalizeFastApiRepresentation(
 }
 
 static bool IsSupportedWasmFastApiFunction(
-    const wasm::FunctionSig* expected_sig, Handle<SharedFunctionInfo> shared) {
+    Isolate* isolate, const wasm::FunctionSig* expected_sig,
+    Handle<SharedFunctionInfo> shared) {
   if (!shared->IsApiFunction()) {
     return false;
   }
@@ -7966,9 +7967,10 @@ static bool IsSupportedWasmFastApiFunction(
     return false;
   }
 
-  const auto log_imported_function_mismatch = [&shared](const char* reason) {
+  const auto log_imported_function_mismatch = [&shared,
+                                               isolate](const char* reason) {
     if (v8_flags.trace_opt) {
-      CodeTracer::Scope scope(shared->GetIsolate()->GetCodeTracer());
+      CodeTracer::Scope scope(isolate->GetCodeTracer());
       PrintF(scope.file(), "[disabled optimization for ");
       shared->ShortPrint(scope.file());
       PrintF(scope.file(),
@@ -8050,8 +8052,9 @@ bool ResolveBoundJSFastApiFunction(const wasm::FunctionSig* expected_sig,
     return false;
   }
 
-  Handle<SharedFunctionInfo> shared(target->shared(), target->GetIsolate());
-  return IsSupportedWasmFastApiFunction(expected_sig, shared);
+  Isolate* isolate = target->GetIsolate();
+  Handle<SharedFunctionInfo> shared(target->shared(), isolate);
+  return IsSupportedWasmFastApiFunction(isolate, expected_sig, shared);
 }
 
 WasmImportData ResolveWasmImportCall(Handle<JSReceiver> callable,

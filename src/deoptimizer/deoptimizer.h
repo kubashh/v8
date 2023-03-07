@@ -48,6 +48,7 @@ class Deoptimizer : public Malloced {
     return Deoptimizer::GetDeoptInfo(compiled_code_, from_);
   }
 
+  // TODO(jgruber): Remove.
   static int ComputeSourcePositionFromBytecodeArray(
       Isolate* isolate, SharedFunctionInfo shared,
       BytecodeOffset bytecode_offset);
@@ -92,13 +93,14 @@ class Deoptimizer : public Malloced {
   // Deoptimizes all optimized code that implements the given function (whether
   // directly or inlined).
   static void DeoptimizeAllOptimizedCodeWithFunction(
-      Handle<SharedFunctionInfo> function);
+      Isolate* isolate, Handle<SharedFunctionInfo> function);
 
   // Check the given address against a list of allowed addresses, to prevent a
   // potential attacker from using the frame creation process in the
   // deoptimizer, in particular the signing process, to gain control over the
   // program.
   // When building mksnapshot, always return false.
+  // TODO(jgruber): Remove.
   static bool IsValidReturnAddress(Address pc, Isolate* isolate);
 
   ~Deoptimizer();
@@ -111,6 +113,7 @@ class Deoptimizer : public Malloced {
 
   // Returns true if {addr} is a deoptimization entry and stores its type in
   // {type_out}. Returns false if {addr} is not a deoptimization entry.
+  // TODO(jgruber): Remove.
   static bool IsDeoptimizationEntry(Isolate* isolate, Address addr,
                                     DeoptimizeKind* type_out);
 
@@ -141,7 +144,8 @@ class Deoptimizer : public Malloced {
   // Tracing.
   static void TraceMarkForDeoptimization(InstructionStream code,
                                          const char* reason);
-  static void TraceEvictFromOptimizedCodeCache(SharedFunctionInfo sfi,
+  static void TraceEvictFromOptimizedCodeCache(Isolate* isolate,
+                                               SharedFunctionInfo sfi,
                                                const char* reason);
 
  private:
