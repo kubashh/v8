@@ -111,7 +111,7 @@ void BuiltinStringFromCharCode::SetValueLocationConstraints() {
   if (code_input().node()->Is<Int32Constant>()) {
     UseAny(code_input());
   } else {
-    UseRegister(code_input());
+    UseAndClobberRegister(code_input());
   }
   set_temporaries_needed(1);
   DefineAsRegister(this);
