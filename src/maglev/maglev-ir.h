@@ -218,6 +218,7 @@ class MergePointInterpreterFrameState;
   V(Uint32ToNumber)                          \
   V(Float64Box)                              \
   V(HoleyFloat64Box)                         \
+  V(CheckedSmiTagFloat64)                    \
   V(CheckedFloat64Unbox)                     \
   V(UnsafeFloat64Unbox)                      \
   V(LogicalNot)                              \
@@ -277,6 +278,7 @@ class MergePointInterpreterFrameState;
   V(StoreDoubleDataViewElement)       \
   V(StoreTaggedFieldNoWriteBarrier)   \
   V(StoreTaggedFieldWithWriteBarrier) \
+  V(CheckedStoreSmiField)             \
   V(IncreaseInterruptBudget)          \
   V(ReduceInterruptBudgetForLoop)     \
   V(ReduceInterruptBudgetForReturn)   \
@@ -967,7 +969,7 @@ DeoptFrame::as_builtin_continuation() const {
 
 class DeoptInfo {
  protected:
-  DeoptInfo(Zone* zone, DeoptFrame top_frame,
+  DeoptInfo(Zone* zone, const DeoptFrame top_frame,
             compiler::FeedbackSource feedback_to_update);
 
  public:
@@ -998,9 +1000,9 @@ struct RegisterSnapshot {
 
 class EagerDeoptInfo : public DeoptInfo {
  public:
-  EagerDeoptInfo(Zone* zone, DeoptFrame&& top_frame,
+  EagerDeoptInfo(Zone* zone, const DeoptFrame top_frame,
                  compiler::FeedbackSource feedback_to_update)
-      : DeoptInfo(zone, std::move(top_frame), feedback_to_update) {}
+      : DeoptInfo(zone, top_frame, feedback_to_update) {}
 
   DeoptimizeReason reason() const { return reason_; }
   void set_reason(DeoptimizeReason reason) { reason_ = reason; }
@@ -1011,9 +1013,9 @@ class EagerDeoptInfo : public DeoptInfo {
 
 class LazyDeoptInfo : public DeoptInfo {
  public:
-  LazyDeoptInfo(Zone* zone, DeoptFrame&& top_frame,
+  LazyDeoptInfo(Zone* zone, const DeoptFrame top_frame,
                 compiler::FeedbackSource feedback_to_update)
-      : DeoptInfo(zone, std::move(top_frame), feedback_to_update) {}
+      : DeoptInfo(zone, top_frame, feedback_to_update) {}
 
   interpreter::Register result_location() const {
     // We should only be checking this for interpreted frames, other kinds of
@@ -1151,17 +1153,17 @@ class NodeBase : public ZoneObject {
   }
 
   template <class Derived, typename... Args>
-  static Derived* New(Zone* zone, DeoptFrame&& deopt_frame,
+  static Derived* New(Zone* zone, const DeoptFrame deopt_frame,
                       compiler::FeedbackSource feedback_to_update,
                       Args&&... args) {
     Derived* node = New<Derived>(zone, std::forward<Args>(args)...);
     if constexpr (Derived::kProperties.can_eager_deopt()) {
       new (node->eager_deopt_info())
-          EagerDeoptInfo(zone, std::move(deopt_frame), feedback_to_update);
+          EagerDeoptInfo(zone, deopt_frame, feedback_to_update);
     } else {
       static_assert(Derived::kProperties.can_lazy_deopt());
       new (node->lazy_deopt_info())
-          LazyDeoptInfo(zone, std::move(deopt_frame), feedback_to_update);
+          LazyDeoptInfo(zone, deopt_frame, feedback_to_update);
     }
     return node;
   }
@@ -2497,6 +2499,26 @@ class HoleyFloat64Box : public FixedInputValueNodeT<1, HoleyFloat64Box> {
   static constexpr OpProperties kProperties = OpProperties::DeferredCall();
   static constexpr
       typename Base::InputTypes kInputTypes{ValueRepresentation::kFloat64};
+
+  Input& input() { return Node::input(0); }
+
+  int MaxCallStackArgs() const { return 0; }
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+};
+
+class CheckedSmiTagFloat64
+    : public FixedInputValueNodeT<1, CheckedSmiTagFloat64> {
+  using Base = FixedInputValueNodeT<1, CheckedSmiTagFloat64>;
+
+ public:
+  explicit CheckedSmiTagFloat64(uint64_t bitfield) : Base(bitfield) {}
+  static constexpr
+      typename Base::InputTypes kInputTypes{ValueRepresentation::kFloat64};
+
+  static constexpr OpProperties kProperties =
+      OpProperties::EagerDeopt() | OpProperties::ConversionNode();
 
   Input& input() { return Node::input(0); }
 
@@ -4860,6 +4882,33 @@ class StoreFloat64 : public FixedInputNodeT<2, StoreFloat64> {
   static constexpr OpProperties kProperties = OpProperties::Writing();
   static constexpr typename Base::InputTypes kInputTypes{
       ValueRepresentation::kTagged, ValueRepresentation::kFloat64};
+
+  int offset() const { return offset_; }
+
+  static constexpr int kObjectIndex = 0;
+  static constexpr int kValueIndex = 1;
+  Input& object_input() { return input(kObjectIndex); }
+  Input& value_input() { return input(kValueIndex); }
+
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
+
+ private:
+  const int offset_;
+};
+
+class CheckedStoreSmiField : public FixedInputNodeT<2, CheckedStoreSmiField> {
+  using Base = FixedInputNodeT<2, CheckedStoreSmiField>;
+
+ public:
+  explicit CheckedStoreSmiField(uint64_t bitfield, int offset)
+      : Base(bitfield), offset_(offset) {}
+
+  static constexpr OpProperties kProperties =
+      OpProperties::Writing() | OpProperties::EagerDeopt();
+  static constexpr typename Base::InputTypes kInputTypes{
+      ValueRepresentation::kTagged, ValueRepresentation::kTagged};
 
   int offset() const { return offset_; }
 
