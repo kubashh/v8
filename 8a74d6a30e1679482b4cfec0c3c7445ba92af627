@@ -16,6 +16,23 @@
       "message": "With `kAnyBaseAlignment` uses in `CodeRange` removed, there aren\u0027t other users. I imagine you\u0027ll clean up the special cases around `kAnyBaseAlignment` in `VirtualMemoryCage` in a follow-up CL?",
       "revId": "8a74d6a30e1679482b4cfec0c3c7445ba92af627",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "296bfe63_7de4804e",
+        "filename": "src/heap/code-range.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-07T10:26:12Z",
+      "side": 0,
+      "message": "We don\u0027t need this anymore because the lifetime is determined by the CodeRange, right?",
+      "revId": "8a74d6a30e1679482b4cfec0c3c7445ba92af627",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

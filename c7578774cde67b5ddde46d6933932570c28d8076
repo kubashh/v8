@@ -50,6 +50,23 @@
       "message": "I don\u0027t fully understand the implications of switching from `allocate_page_size` alignment to `kPageSize` alignment here. It\u0027s a larger alignment, right? Is it needed?",
       "revId": "c7578774cde67b5ddde46d6933932570c28d8076",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fd1281e_c83d12cf",
+        "filename": "src/heap/code-range.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-07T10:26:12Z",
+      "side": 1,
+      "message": "Nit: Can you please describe here what logic would need to change?",
+      "revId": "c7578774cde67b5ddde46d6933932570c28d8076",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
