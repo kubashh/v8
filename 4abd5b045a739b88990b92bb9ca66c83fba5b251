@@ -16,6 +16,23 @@
       "message": "sorry i was sick. i now addressed the comments.",
       "revId": "4abd5b045a739b88990b92bb9ca66c83fba5b251",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ed0a645_a9ea84ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-07T07:38:08Z",
+      "side": 1,
+      "message": "Thanks for the update! The CL already LGTM now. Could you please take another look over the comments. I am not a native speaker but some sentences might need correction.\n\nIn the mean time I will ask one of my colleagues to take a look as well and to get a second opinion but we should be pretty close!",
+      "revId": "4abd5b045a739b88990b92bb9ca66c83fba5b251",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
