@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c833e95d_3b892f71",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-07T12:04:58Z",
+      "side": 1,
+      "message": "I initially did with a helper struct, but it felt so useless.\nRe-done.",
+      "parentUuid": "969bd699_286a6d6e",
+      "range": {
+        "startLine": 860,
+        "startChar": 0,
+        "endLine": 860,
+        "endChar": 19
+      },
+      "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f71ee5d8_37e25137",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-03-06T15:27:27Z",
       "side": 1,
       "message": "nit: pre-size, maybe even create a base::Vector here straight away with `zone-\u003eNewVector` to avoid std::vector overheads.",
+      "range": {
+        "startLine": 3213,
+        "startChar": 37,
+        "endLine": 3213,
+        "endChar": 47
+      },
+      "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae9222fc_6fd969ac",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3213,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-07T12:04:58Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "f71ee5d8_37e25137",
       "range": {
         "startLine": 3213,
         "startChar": 37,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b87dcf4_470aaa18",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3216,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-07T12:04:58Z",
+      "side": 1,
+      "message": "We allocate CallArguments in the stack, I think we would need to copy though.",
+      "parentUuid": "b20d2fc4_77abd559",
+      "range": {
+        "startLine": 3216,
+        "startChar": 6,
+        "endLine": 3216,
+        "endChar": 24
+      },
+      "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf1cafb2_7187b421",
         "filename": "src/maglev/maglev-graph-builder.cc",
         "patchSetId": 4
@@ -100,6 +172,30 @@
       "writtenOn": "2023-03-06T15:27:27Z",
       "side": 1,
       "message": "you could initialise this in the graph builder constructor, from `parent_`",
+      "range": {
+        "startLine": 3384,
+        "startChar": 22,
+        "endLine": 3384,
+        "endChar": 45
+      },
+      "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86b8f224_dd74a2b1",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3384,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-07T12:04:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf1cafb2_7187b421",
       "range": {
         "startLine": 3384,
         "startChar": 22,
@@ -123,6 +219,30 @@
       "writtenOn": "2023-03-06T15:27:27Z",
       "side": 1,
       "message": "I never remember -- do we use a0 for the receiver, or for the first argument?",
+      "range": {
+        "startLine": 412,
+        "startChar": 21,
+        "endLine": 412,
+        "endChar": 30
+      },
+      "revId": "e018c3c3b3291a60bc8eeba697763b171d3da769",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1c63bca_89604329",
+        "filename": "src/maglev/maglev-graph-printer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-07T12:04:58Z",
+      "side": 1,
+      "message": "Ooops... we use \u003cthis\u003e for the receiver.\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/interpreter/bytecode-register.cc;drc\u003d0df9606dcad535b282a73cd09ff3980dd1427d3e;l\u003d132",
+      "parentUuid": "12ea489b_97787b39",
       "range": {
         "startLine": 412,
         "startChar": 21,
