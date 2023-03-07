@@ -1236,10 +1236,9 @@ void Serializer::ObjectSerializer::OutputRawData(Address up_to) {
       // The number of marked descriptors field can be changed by GC
       // concurrently.
       static byte field_value[2] = {0};
-      OutputRawWithCustomField(
-          sink_, object_start, base, bytes_to_output,
-          DescriptorArray::kRawNumberOfMarkedDescriptorsOffset,
-          sizeof(field_value), field_value);
+      OutputRawWithCustomField(sink_, object_start, base, bytes_to_output,
+                               DescriptorArray::kRawGcStateOffset,
+                               sizeof(field_value), field_value);
     } else if (object_->IsCode(cage_base)) {
       // code_entry_point field contains a raw value that will be recomputed
       // after deserialization, so write zeros to keep the snapshot
