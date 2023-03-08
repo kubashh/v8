@@ -1346,6 +1346,9 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
 #ifdef DEBUG
   static size_t non_disposed_isolates() { return non_disposed_isolates_; }
+
+  bool HasTurbofanStringBuilders() { return has_turbofan_string_builders_; }
+  void SetHasTurbofanStringBuilders() { has_turbofan_string_builders_ = true; }
 #endif
 
   v8::internal::Factory* factory() {
@@ -2281,6 +2284,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   static std::atomic<size_t> non_disposed_isolates_;
 
   JSObject::SpillInformation js_spill_information_;
+
+  std::atomic<bool> has_turbofan_string_builders_ = false;
 #endif
 
   Debug* debug_ = nullptr;
