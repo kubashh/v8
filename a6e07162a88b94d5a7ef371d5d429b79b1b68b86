@@ -16,6 +16,29 @@
       "message": "PTAL, this is ready now",
       "revId": "a6e07162a88b94d5a7ef371d5d429b79b1b68b86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53b27c34_1475d1bf",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-08T12:57:21Z",
+      "side": 1,
+      "message": "For a follow up: We can actually avoid reporting the overall size and return byte-accurate accounting now because we now exactly how much we marked live at all times.",
+      "range": {
+        "startLine": 508,
+        "startChar": 16,
+        "endLine": 508,
+        "endChar": 22
+      },
+      "revId": "a6e07162a88b94d5a7ef371d5d429b79b1b68b86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
