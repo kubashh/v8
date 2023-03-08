@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcfe9e42_f3d0a4d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525732
+      },
+      "writtenOn": "2023-03-08T11:09:04Z",
+      "side": 1,
+      "message": "Hi @Nico, this this the bug fixed version. Please take a look, thanks!",
+      "revId": "07cb57b180393a612398dbbcc31bccff656e9362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51707d90_9e4246c5",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1525732
+      },
+      "writtenOn": "2023-03-08T11:09:04Z",
+      "side": 1,
+      "message": "Check the base and displacement node\u0027s opcode to avoid the GetImmediateIntegerValue function throw exception.",
+      "revId": "07cb57b180393a612398dbbcc31bccff656e9362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
