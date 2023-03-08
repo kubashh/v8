@@ -55,7 +55,8 @@ void Assembler::CheckBuffer() {
 // RelocInfo.
 
 void RelocInfo::apply(intptr_t delta) {
-  if (IsInternalReference(rmode_) || IsInternalReferenceEncoded(rmode_)) {
+  if (IsInternalReference(rmode_) || IsInternalReferenceEncoded(rmode_) ||
+      IsWasmStubCall(rmode_)) {
     // Absolute code pointer inside code object moves with the code object.
     Assembler::RelocateInternalReference(rmode_, pc_, delta);
   } else {
@@ -66,7 +67,7 @@ void RelocInfo::apply(intptr_t delta) {
 
 Address RelocInfo::target_address() {
   DCHECK(IsCodeTargetMode(rmode_) || IsWasmCall(rmode_) ||
-         IsNearBuiltinEntry(rmode_));
+         IsNearBuiltinEntry(rmode_) || IsWasmStubCall(rmode_));
   return Assembler::target_address_at(pc_, constant_pool_);
 }
 

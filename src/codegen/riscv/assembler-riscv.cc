@@ -136,7 +136,8 @@ const int RelocInfo::kApplyMask =
     RelocInfo::ModeMask(RelocInfo::NEAR_BUILTIN_ENTRY) |
     RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE_ENCODED) |
     RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET) |
-    RelocInfo::ModeMask(RelocInfo::CODE_TARGET);
+    RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
+    RelocInfo::ModeMask(RelocInfo::WASM_STUB_CALL);
 
 bool RelocInfo::IsCodedSpecially() {
   // The deserializer needs to know whether a pointer is specially coded.  Being
@@ -1234,7 +1235,8 @@ int Assembler::RelocateInternalReference(RelocInfo::Mode rmode, Address pc,
     return 2;  // Number of instructions patched.
   }
   Instr instr = instr_at(pc);
-  DCHECK(RelocInfo::IsInternalReferenceEncoded(rmode));
+  DCHECK(RelocInfo::IsInternalReferenceEncoded(rmode) ||
+         RelocInfo::IsWasmStubCall(rmode));
   if (IsLui(instr)) {
     uintptr_t target_address = target_address_at(pc) + pc_delta;
     DEBUG_PRINTF("\ttarget_address 0x%" PRIxPTR "\n", target_address);
