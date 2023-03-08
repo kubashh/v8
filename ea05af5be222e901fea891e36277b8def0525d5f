@@ -16,6 +16,23 @@
       "message": "Hi,\n\nIn passing while looking at the generated code for maglev, I noticed a few decompression ops could be removed by using the new LoadTaggedRoot(), taking advantage of static roots (adding Olivier on CC, in case I\u0027m not supposed to use this API just yet).\n\nThanks,\nPierre",
       "revId": "ea05af5be222e901fea891e36277b8def0525d5f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06c23f9f_bd5b32fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-03-08T08:53:38Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "ea05af5be222e901fea891e36277b8def0525d5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
