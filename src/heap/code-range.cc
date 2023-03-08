@@ -149,7 +149,7 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
   if (kShouldTryHarder) {
     // Relax alignment requirement while trying to allocate code range inside
     // preferred region.
-    params.base_alignment = kPageSize;
+    params.base_alignment = 64 * MB;
 
     // TODO(v8:11880): consider using base::OS::GetFreeMemoryRangesWithin()
     // to avoid attempts that's going to fail anyway.
@@ -160,9 +160,9 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
     // towards the start in steps.
     const int kAllocationTries = 16;
     params.requested_start_hint =
-        RoundDown(preferred_region.end() - requested, kPageSize);
-    Address step =
-        RoundDown(preferred_region.size() / kAllocationTries, kPageSize);
+        RoundDown(preferred_region.end() - requested, params.base_alignment);
+    Address step = RoundDown(preferred_region.size() / kAllocationTries,
+                             params.base_alignment);
     for (int i = 0; i < kAllocationTries; i++) {
       TRACE("=== Attempt #%d, hint=%p\n", i,
             reinterpret_cast<void*>(params.requested_start_hint));
