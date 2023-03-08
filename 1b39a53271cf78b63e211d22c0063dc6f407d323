@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e323bd63_4ab82b26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-08T10:54:34Z",
+      "side": 1,
+      "message": "Looks great!",
+      "revId": "1b39a53271cf78b63e211d22c0063dc6f407d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29467ca4_cc153272",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-08T10:54:34Z",
+      "side": 1,
+      "message": "optional: `UpdateUntaggingOfPhi` or similar?",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 23
+      },
+      "revId": "1b39a53271cf78b63e211d22c0063dc6f407d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
