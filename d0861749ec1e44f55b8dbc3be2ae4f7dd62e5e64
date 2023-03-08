@@ -67,6 +67,24 @@
       "message": "nit: keep these lower_case as is our convention for simple accessors, and add const. Also please add an (extensive) comment or point to a place where one can find more info (no idea what this implies otherwise).",
       "revId": "d0861749ec1e44f55b8dbc3be2ae4f7dd62e5e64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d37be5f6_ab12553d",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 60
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T13:56:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81e600f3_d404cb72",
+      "revId": "d0861749ec1e44f55b8dbc3be2ae4f7dd62e5e64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
