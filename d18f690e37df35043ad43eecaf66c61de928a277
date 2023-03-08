@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f9ac527_6dce0f3c",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-08T08:40:47Z",
+      "side": 0,
+      "message": "The CL essentially removed this `+\u003d` here...",
+      "range": {
+        "startLine": 579,
+        "startChar": 7,
+        "endLine": 579,
+        "endChar": 8
+      },
+      "revId": "d18f690e37df35043ad43eecaf66c61de928a277",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
