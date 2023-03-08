@@ -199,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8454127_74f13367",
+        "filename": "src/compiler/string-builder-optimizer.cc",
+        "patchSetId": 55
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T13:04:00Z",
+      "side": 1,
+      "message": "Good point, this could indeed break things. I\u0027ve disabled this analysis. Patrick is currently getting rid of the function that allows extarnalizing from 1-byte to 2-byte (see https://bugs.chromium.org/p/v8/issues/detail?id\u003d13785); once it\u0027s done, I\u0027ll re-enabled the analysis.",
+      "parentUuid": "a0182056_251b5337",
+      "range": {
+        "startLine": 228,
+        "startChar": 50,
+        "endLine": 228,
+        "endChar": 62
+      },
+      "revId": "f0eaff9e27c881dae0d767116d2dd967a6c27008",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60b00376_21511075",
