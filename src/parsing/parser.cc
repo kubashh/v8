@@ -2650,6 +2650,15 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
           ? FunctionLiteral::kShouldEagerCompile
           : default_eager_compile_hint();
 
+  // Add compile hints from external sources.
+  auto compile_hint_position = peek_position();
+  if (eager_compile_hint == FunctionLiteral::kShouldLazyCompile) {
+    // Local compile hints from cached data.
+    if (info_->HasCompileHint(compile_hint_position)) {
+      eager_compile_hint = FunctionLiteral::kShouldEagerCompile;
+    }
+  }
+
   // Determine if the function can be parsed lazily. Lazy parsing is
   // different from lazy compilation; we need to parse more eagerly than we
   // compile.

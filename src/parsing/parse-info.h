@@ -347,6 +347,12 @@ class V8_EXPORT_PRIVATE ParseInfo {
 
   void set_is_streaming_compilation() { is_streaming_compilation_ = true; }
 
+  void set_compile_hints(std::vector<int>&& compile_hints) {
+    compile_hints_ = std::move(compile_hints);
+  }
+
+  bool HasCompileHint(int pos);
+
  private:
   ParseInfo(const UnoptimizedCompileFlags flags, UnoptimizedCompileState* state,
             ReusableUnoptimizedCompileState* reusable_state,
@@ -364,6 +370,12 @@ class V8_EXPORT_PRIVATE ParseInfo {
   uintptr_t stack_limit_;
   int parameters_end_pos_;
   int max_function_literal_id_;
+
+  // Locations of functions which should be eagerly compiled.
+  std::vector<int> compile_hints_;
+  // Index into compile_hints_, the position we're reading the next compile hint
+  // from.
+  size_t compile_hints_ix_ = 0;
 
   //----------- Inputs+Outputs of parsing and scope analysis -----------------
   std::unique_ptr<Utf16CharacterStream> character_stream_;

@@ -1951,6 +1951,8 @@ filegroup(
         "src/objects/visitors-inl.h",
         "src/objects/visitors.h",
         "src/parsing/expression-scope.h",
+        "src/parsing/compile-hints.cc",
+        "src/parsing/compile-hints.h",
         "src/parsing/func-name-inferrer.cc",
         "src/parsing/func-name-inferrer.h",
         "src/parsing/import-assertions.cc",

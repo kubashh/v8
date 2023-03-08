@@ -17,7 +17,7 @@ class BackgroundMergeTask;
 
 class V8_EXPORT_PRIVATE AlignedCachedData {
  public:
-  AlignedCachedData(const byte* data, int length);
+  AlignedCachedData(const byte* data, int length, bool needs_alignment = true);
   ~AlignedCachedData() {
     if (owns_data_) DeleteArray(data_);
   }
