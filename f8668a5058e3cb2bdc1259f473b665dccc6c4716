@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "558d4abc_cf1b9a1e",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T10:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d6070c2_d31c5064",
+      "range": {
+        "startLine": 273,
+        "startChar": 2,
+        "endLine": 273,
+        "endChar": 4
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecd0ed79_1a5272a9",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84602037_44be9c34",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T10:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecd0ed79_1a5272a9",
+      "range": {
+        "startLine": 286,
+        "startChar": 4,
+        "endLine": 286,
+        "endChar": 7
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5519395f_ab346484",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-03-07T17:20:35Z",
       "side": 1,
       "message": "this is all shared code so could be hoisted out of the macro (and switch).",
+      "range": {
+        "startLine": 289,
+        "startChar": 4,
+        "endLine": 295,
+        "endChar": 21
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2425a385_8bd9ba99",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T10:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5519395f_ab346484",
       "range": {
         "startLine": 289,
         "startChar": 4,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a0b096d_7ade5d67",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T10:47:34Z",
+      "side": 1,
+      "message": "Nah, just 7 nested ifs, we\u0027re fiiiiine! 😬\nAlso, it\u0027s beautiful to have a function end with:\n```\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n```\nI\u0027m even considering putting this function at the end of the class to have one additional `}` at the end!",
+      "parentUuid": "4ff035bb_192b54d7",
+      "range": {
+        "startLine": 83,
+        "startChar": 48,
+        "endLine": 83,
+        "endChar": 49
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5a0883d_80f8634d",
         "filename": "src/maglev/maglev-phi-representation-selector.h",
         "patchSetId": 8
@@ -106,6 +202,30 @@
       "writtenOn": "2023-03-07T17:20:35Z",
       "side": 1,
       "message": "some ascii art diagrams would be helpful here.",
+      "range": {
+        "startLine": 85,
+        "startChar": 15,
+        "endLine": 85,
+        "endChar": 16
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "073b107d_03d26856",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T10:47:34Z",
+      "side": 1,
+      "message": "I haven\u0027t added ascii art diagrams, but I\u0027ve refactored a bit the code, and added some comments. I think that it\u0027s clear now, what do you think?",
+      "parentUuid": "e5a0883d_80f8634d",
       "range": {
         "startLine": 85,
         "startChar": 15,
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b744efe7_8457c76c",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T10:47:34Z",
+      "side": 1,
+      "message": "Yeah, that `is` was supposed to be a `if`, and in addition the sentence was wrong, so I\u0027ve removed it.",
+      "parentUuid": "bbf0cae0_d85516ec",
+      "range": {
+        "startLine": 87,
+        "startChar": 52,
+        "endLine": 87,
+        "endChar": 54
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15c8f607_92d30704",
@@ -152,6 +296,30 @@
       "writtenOn": "2023-03-07T17:20:35Z",
       "side": 1,
       "message": "DCHECK `i` is `kObjectIndex`",
+      "range": {
+        "startLine": 90,
+        "startChar": 21,
+        "endLine": 90,
+        "endChar": 22
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fa66db9_4be1df54",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T10:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15c8f607_92d30704",
       "range": {
         "startLine": 90,
         "startChar": 21,
@@ -208,6 +376,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "278f934f_90ac6043",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T10:47:34Z",
+      "side": 1,
+      "message": "Yea good idea :)",
+      "parentUuid": "fb7ba6f1_bfc8c600",
+      "range": {
+        "startLine": 109,
+        "startChar": 56,
+        "endLine": 109,
+        "endChar": 67
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fb33659_ef781fbd",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T10:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e5f2f0e_474206e8",
+      "range": {
+        "startLine": 109,
+        "startChar": 22,
+        "endLine": 109,
+        "endChar": 54
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "209d50db_b07086e3",
@@ -221,6 +437,30 @@
       "writtenOn": "2023-03-07T17:20:35Z",
       "side": 1,
       "message": "nit: SmiTagPhi for consistency",
+      "range": {
+        "startLine": 133,
+        "startChar": 13,
+        "endLine": 133,
+        "endChar": 19
+      },
+      "revId": "f8668a5058e3cb2bdc1259f473b665dccc6c4716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a608806f_517c6b4e",
+        "filename": "src/maglev/maglev-phi-representation-selector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-08T10:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "209d50db_b07086e3",
       "range": {
         "startLine": 133,
         "startChar": 13,
