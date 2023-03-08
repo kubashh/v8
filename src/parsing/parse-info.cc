@@ -325,5 +325,19 @@ void ParseInfo::CheckFlagsForFunctionFromScript(Script script) {
                  source_range_map() != nullptr);
 }
 
+bool ParseInfo::HasCompileHint(int pos) {
+  while (compile_hints_ix_ < compile_hints_.size() &&
+         compile_hints_[compile_hints_ix_] < pos) {
+    ++compile_hints_ix_;
+  }
+  if (compile_hints_ix_ >= compile_hints_.size() ||
+      compile_hints_[compile_hints_ix_] > pos) {
+    return false;
+  }
+  DCHECK_EQ(compile_hints_[compile_hints_ix_], pos);
+  ++compile_hints_ix_;
+  return true;
+}
+
 }  // namespace internal
 }  // namespace v8

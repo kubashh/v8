@@ -31,9 +31,11 @@
 namespace v8 {
 namespace internal {
 
-AlignedCachedData::AlignedCachedData(const byte* data, int length)
+AlignedCachedData::AlignedCachedData(const byte* data, int length,
+                                     bool needs_alignment)
     : owns_data_(false), rejected_(false), data_(data), length_(length) {
-  if (!IsAligned(reinterpret_cast<intptr_t>(data), kPointerAlignment)) {
+  if (needs_alignment &&
+      !IsAligned(reinterpret_cast<intptr_t>(data), kPointerAlignment)) {
     byte* copy = NewArray<byte>(length);
     DCHECK(IsAligned(reinterpret_cast<intptr_t>(copy), kPointerAlignment));
     CopyBytes(copy, data, length);
