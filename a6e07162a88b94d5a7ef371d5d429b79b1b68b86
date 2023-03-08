@@ -18,6 +18,57 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13684914_84ede509",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-08T14:08:34Z",
+      "side": 1,
+      "message": "Cool! LGTM",
+      "revId": "a6e07162a88b94d5a7ef371d5d429b79b1b68b86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2a4b524_2d011a29",
+        "filename": "src/heap/marking-barrier.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-08T14:08:34Z",
+      "side": 1,
+      "message": "I believe for this case here we need acq+rel for the CAS update.",
+      "revId": "a6e07162a88b94d5a7ef371d5d429b79b1b68b86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77a655e2_9718844a",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-08T14:08:34Z",
+      "side": 1,
+      "message": "Nit: Maybe it would be nice her to mention that this handles both the \"root case\" + \"visiting descriptors for a map\". Should we mention here the case of \"root\" after \"visit descriptors for map\"?",
+      "revId": "a6e07162a88b94d5a7ef371d5d429b79b1b68b86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53b27c34_1475d1bf",
@@ -37,6 +88,74 @@
         "endLine": 508,
         "endChar": 22
       },
+      "revId": "a6e07162a88b94d5a7ef371d5d429b79b1b68b86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f484b5_49701016",
+        "filename": "src/heap/marking-visitor-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-08T14:08:34Z",
+      "side": 1,
+      "message": "I believe this may loop infinitely.",
+      "revId": "a6e07162a88b94d5a7ef371d5d429b79b1b68b86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dfea9df_997cd1db",
+        "filename": "src/objects/descriptor-array-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-08T14:08:34Z",
+      "side": 1,
+      "message": "Nit: Does it make sense to rename this to something like `AcquireDescriptorRangeToMark`? I believe I understand why it\u0027s named that way, but for me personally it helps to understand that we \"compute\" here how much we need to mark afterwards. The name exposes the \"marked\" field but we could keep this is an internal implementation detail.",
+      "revId": "a6e07162a88b94d5a7ef371d5d429b79b1b68b86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f499ae4_d0fc9581",
+        "filename": "src/objects/descriptor-array-inl.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-08T14:08:34Z",
+      "side": 1,
+      "message": "Nit: Maybe mention here that \"epoch mismatch\" is for objects that survived at least one cycle. While the other case is for freshly allocated objects which have this field initialized to 0.",
+      "revId": "a6e07162a88b94d5a7ef371d5d429b79b1b68b86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa9d3776_9f8d11de",
+        "filename": "src/objects/descriptor-array.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-08T14:08:34Z",
+      "side": 1,
+      "message": "Does this CAS need to be acq+rel? E.g. the write barrier increases delta, the concurrent marker picks it up immediately but still reads an \"empty\" slot? I guess this changed because the write barrier used to mark itself but now we just increment delta.",
       "revId": "a6e07162a88b94d5a7ef371d5d429b79b1b68b86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
