@@ -77,11 +77,11 @@ bool Object::IsTaggedIndex() const {
 }
 
 bool Object::InSharedHeap() const {
-  return IsHeapObject() && HeapObject::cast(*this).InSharedHeap();
+  return IsHeapObject() && HeapObject::cast(*this).InAnySharedSpace();
 }
 
-bool Object::InSharedWritableHeap() const {
-  return IsHeapObject() && HeapObject::cast(*this).InSharedWritableHeap();
+bool Object::InWritableSharedSpace() const {
+  return IsHeapObject() && HeapObject::cast(*this).InWritableSharedSpace();
 }
 
 bool Object::IsJSObjectThatCanBeTrackedAsPrototype() const {
@@ -198,12 +198,12 @@ void Object::Relaxed_WriteField(size_t offset, T value) {
       static_cast<AtomicT>(value));
 }
 
-bool HeapObject::InSharedHeap() const {
+bool HeapObject::InAnySharedSpace() const {
   if (IsReadOnlyHeapObject(*this)) return V8_SHARED_RO_HEAP_BOOL;
-  return InSharedWritableHeap();
+  return InWritableSharedSpace();
 }
 
-bool HeapObject::InSharedWritableHeap() const {
+bool HeapObject::InWritableSharedSpace() const {
   return BasicMemoryChunk::FromHeapObject(*this)->InSharedHeap();
 }
 
@@ -213,7 +213,7 @@ bool HeapObject::IsJSObjectThatCanBeTrackedAsPrototype() const {
   // Do not optimize objects in the shared heap because it is not
   // threadsafe. Objects in the shared heap have fixed layouts and their maps
   // never change.
-  return IsJSObject() && !InSharedWritableHeap();
+  return IsJSObject() && !InWritableSharedSpace();
 }
 
 bool HeapObject::IsNullOrUndefined(Isolate* isolate) const {
@@ -1249,23 +1249,23 @@ bool Object::IsShared() const {
   // Check if this object is already shared.
   InstanceType instance_type = object.map().instance_type();
   if (InstanceTypeChecker::IsAlwaysSharedSpaceJSObject(instance_type)) {
-    DCHECK(object.InSharedHeap());
+    DCHECK(object.InAnySharedSpace());
     return true;
   }
   switch (instance_type) {
     case SHARED_STRING_TYPE:
     case SHARED_ONE_BYTE_STRING_TYPE:
-      DCHECK(object.InSharedHeap());
+      DCHECK(object.InAnySharedSpace());
       return true;
     case INTERNALIZED_STRING_TYPE:
     case ONE_BYTE_INTERNALIZED_STRING_TYPE:
       if (v8_flags.shared_string_table) {
-        DCHECK(object.InSharedHeap());
+        DCHECK(object.InAnySharedSpace());
         return true;
       }
       return false;
     case HEAP_NUMBER_TYPE:
-      return object.InSharedWritableHeap();
+      return object.InWritableSharedSpace();
     default:
       return false;
   }

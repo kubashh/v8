@@ -26,7 +26,7 @@ MarkingBarrier* WriteBarrier::CurrentMarkingBarrier(
   DCHECK_NOT_NULL(marking_barrier);
 #if DEBUG
   if (!verification_candidate.is_null() &&
-      !verification_candidate.InSharedHeap()) {
+      !verification_candidate.InAnySharedSpace()) {
     Heap* host_heap =
         MemoryChunk::FromHeapObject(verification_candidate)->heap();
     LocalHeap* local_heap = LocalHeap::Current();
@@ -112,7 +112,7 @@ int WriteBarrier::MarkingFromCode(Address raw_host, Address raw_slot) {
   // current isolate is enabled. However, we might still reach objects in the
   // shared space but only from the shared space isolate (= the main isolate).
   MarkingBarrier* barrier = CurrentMarkingBarrier(host);
-  DCHECK_IMPLIES(host.InSharedWritableHeap(),
+  DCHECK_IMPLIES(host.InWritableSharedSpace(),
                  barrier->heap()->isolate()->is_shared_space_isolate());
   barrier->AssertMarkingIsActivated();
 #endif  // DEBUG
@@ -128,7 +128,7 @@ int WriteBarrier::SharedMarkingFromCode(Address raw_host, Address raw_slot) {
   Address raw_value = (*slot).ptr();
   MaybeObject value(raw_value);
 
-  DCHECK(host.InSharedWritableHeap());
+  DCHECK(host.InWritableSharedSpace());
 
 #if DEBUG
   Heap* heap = MemoryChunk::FromHeapObject(host)->heap();
@@ -152,7 +152,7 @@ int WriteBarrier::SharedMarkingFromCode(Address raw_host, Address raw_slot) {
 int WriteBarrier::SharedFromCode(Address raw_host, Address raw_slot) {
   HeapObject host = HeapObject::cast(Object(raw_host));
 
-  if (!host.InSharedWritableHeap()) {
+  if (!host.InWritableSharedSpace()) {
     Heap::SharedHeapBarrierSlow(host, raw_slot);
   }
 

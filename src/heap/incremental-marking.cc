@@ -190,7 +190,7 @@ class IncrementalMarking::IncrementalMarkingRootMarkingVisitor final
     DCHECK(!MapWord::IsPacked(object.ptr()));
     HeapObject heap_object = HeapObject::cast(object);
 
-    if (heap_object.InSharedHeap() || heap_object.InReadOnlySpace()) return;
+    if (heap_object.InAnySharedSpace() || heap_object.InReadOnlySpace()) return;
 
     if (incremental_marking_->IsMajorMarking()) {
       if (incremental_marking_->WhiteToGreyAndPush(heap_object)) {
@@ -453,7 +453,7 @@ void IncrementalMarking::UpdateMarkingWorklistAfterYoungGenGC() {
       HeapObject dest = map_word.ToForwardingAddress(obj);
       USE(this);
       DCHECK_IMPLIES(marking_state->IsWhite(obj), obj.IsFreeSpaceOrFiller());
-      if (dest.InSharedWritableHeap() &&
+      if (dest.InWritableSharedSpace() &&
           !isolate()->is_shared_space_isolate()) {
         // Object got promoted into the shared heap. Drop it from the client
         // heap marking worklist.
