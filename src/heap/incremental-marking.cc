@@ -308,7 +308,8 @@ void IncrementalMarking::StartMarkingMajor() {
   }
 
   if (v8_flags.concurrent_marking && !heap_->IsTearingDown()) {
-    heap_->concurrent_marking()->ScheduleJob(GarbageCollector::MARK_COMPACTOR);
+    heap_->concurrent_marking()->ScheduleJob(GarbageCollector::MARK_COMPACTOR,
+                                             TaskPriority::kUserBlocking);
   }
 
   // Ready to start incremental marking.
