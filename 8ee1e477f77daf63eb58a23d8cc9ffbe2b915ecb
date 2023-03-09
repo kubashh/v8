@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "8ee1e477f77daf63eb58a23d8cc9ffbe2b915ecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f21a6012_fa78ea4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-03-09T13:24:30Z",
+      "side": 1,
+      "message": "LGTM with nit",
+      "revId": "8ee1e477f77daf63eb58a23d8cc9ffbe2b915ecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f6886f5_1c260262",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-03-09T13:24:30Z",
+      "side": 1,
+      "message": "nit: There are three different variables here with different types, but all have the name `bytes`. I think it could be less confusing to use different names.",
+      "range": {
+        "startLine": 675,
+        "startChar": 13,
+        "endLine": 675,
+        "endChar": 18
+      },
+      "revId": "8ee1e477f77daf63eb58a23d8cc9ffbe2b915ecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
