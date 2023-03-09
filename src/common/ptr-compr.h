@@ -48,14 +48,12 @@ class V8HeapCompressionScheme {
       PtrComprCageBase cage_base, Address raw_value,
       ProcessPointerCallback callback);
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
   // Process-wide cage base value used for decompression.
   V8_INLINE static void InitBase(Address base);
   V8_INLINE static Address base();
 
  private:
-  static V8_EXPORT_PRIVATE uintptr_t base_ V8_CONSTINIT;
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+  static thread_local V8_EXPORT_PRIVATE uintptr_t base_ V8_CONSTINIT;
 };
 
 #ifdef V8_EXTERNAL_CODE_SPACE
@@ -92,14 +90,12 @@ class ExternalCodeCompressionScheme {
   V8_INLINE static Address DecompressTagged(TOnHeapAddress on_heap_addr,
                                             Tagged_t raw_value);
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
   // Process-wide cage base value used for decompression.
   V8_INLINE static void InitBase(Address base);
   V8_INLINE static Address base();
 
  private:
-  static V8_EXPORT_PRIVATE uintptr_t base_ V8_CONSTINIT;
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
+  static thread_local V8_EXPORT_PRIVATE uintptr_t base_ V8_CONSTINIT;
 };
 
 #endif  // V8_EXTERNAL_CODE_SPACE

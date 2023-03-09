@@ -3275,10 +3275,6 @@ Isolate* Isolate::Allocate() {
   // Construct Isolate object in the allocated memory.
   void* isolate_ptr = isolate_allocator->isolate_memory();
   Isolate* isolate = new (isolate_ptr) Isolate(std::move(isolate_allocator));
-#ifdef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
-  DCHECK(IsAligned(isolate->isolate_root(), kPtrComprCageBaseAlignment));
-  DCHECK_EQ(isolate->isolate_root(), isolate->cage_base());
-#endif
 
 #ifdef DEBUG
   non_disposed_isolates_++;
@@ -3636,6 +3632,20 @@ void Isolate::SetIsolateThreadLocals(Isolate* isolate,
                                      PerIsolateThreadData* data) {
   g_current_isolate_ = isolate;
   g_current_per_isolate_thread_data_ = data;
+
+#ifdef V8_COMPRESS_POINTERS
+  if (isolate) {
+    V8HeapCompressionScheme::InitBase(isolate->cage_base());
+#ifdef V8_EXTERNAL_CODE_SPACE
+    ExternalCodeCompressionScheme::InitBase(isolate->code_cage_base());
+#endif  // V8_EXTERNAL_CODE_SPACE
+  } else {
+    V8HeapCompressionScheme::InitBase(kNullAddress);
+#ifdef V8_EXTERNAL_CODE_SPACE
+    ExternalCodeCompressionScheme::InitBase(kNullAddress);
+#endif  // V8_EXTERNAL_CODE_SPACE
+  }
+#endif  // V8_COMPRESS_POINTERS
 
   if (isolate && isolate->main_thread_local_isolate()) {
     WriteBarrier::SetForThread(

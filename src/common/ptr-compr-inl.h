@@ -41,8 +41,6 @@ Address V8HeapCompressionScheme::GetPtrComprCageBaseAddress(
   return base;
 }
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
-
 // static
 void V8HeapCompressionScheme::InitBase(Address base) {
   CHECK_EQ(base, GetPtrComprCageBaseAddress(base));
@@ -58,7 +56,6 @@ V8_CONST Address V8HeapCompressionScheme::base() {
   return reinterpret_cast<Address>(V8_ASSUME_ALIGNED(
       reinterpret_cast<void*>(base_), kPtrComprCageBaseAlignment));
 }
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 // static
 Tagged_t V8HeapCompressionScheme::CompressObject(Address tagged) {
@@ -135,8 +132,6 @@ Address ExternalCodeCompressionScheme::GetPtrComprCageBaseAddress(
   return base;
 }
 
-#ifdef V8_COMPRESS_POINTERS_IN_SHARED_CAGE
-
 // static
 void ExternalCodeCompressionScheme::InitBase(Address base) {
   CHECK_EQ(base, PrepareCageBaseAddress(base));
@@ -152,7 +147,6 @@ V8_CONST Address ExternalCodeCompressionScheme::base() {
   return reinterpret_cast<Address>(V8_ASSUME_ALIGNED(
       reinterpret_cast<void*>(base_), kPtrComprCageBaseAlignment));
 }
-#endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
 // static
 Tagged_t ExternalCodeCompressionScheme::CompressObject(Address tagged) {
