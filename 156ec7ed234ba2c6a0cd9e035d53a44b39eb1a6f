@@ -16,6 +16,29 @@
       "message": "Thanks for reviewing. All the comments are resolved.\nPTAL~",
       "revId": "156ec7ed234ba2c6a0cd9e035d53a44b39eb1a6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1ec19df_933a0481",
+        "filename": "test/mjsunit/wasm/simd-lane-memory64.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-09T15:20:46Z",
+      "side": 1,
+      "message": "Sorry, we are going in circles. I should have been more clear. I commented before that we should check the full 16 bytes at `DST_OFFSET` for the expected value, and then I commented that this should happen after every invocation (i.e. in the loop). Now we are doing it in the loop again, but only checking a single location each time, i.e. the first requirement is not met.\n\nTo be more concrete: We could have an `expected_values` array, which is `[1, 2, 3, 4]` initially, and in each iteration we update one slot and then check that the `buffer_view` contains those four values at `DST_OFFSET` (if that\u0027s the intended behavior).\nI think we can drop the check for `SRC_OFFSET`, that seems redundant.\n\nThe same applies in the loop below, of course.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 62
+      },
+      "revId": "156ec7ed234ba2c6a0cd9e035d53a44b39eb1a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
