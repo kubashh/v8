@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9c99ce2_ac11bf1b",
+        "filename": "test/mjsunit/wasm/simd-lane-memory64.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-03-09T11:50:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c1f39f70_da470a21",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 3
+      },
+      "revId": "337b3bb27f5741bdb439c90691284e989361f3f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "159f0e56_c4761d7f",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-03-07T12:36:54Z",
       "side": 1,
       "message": "Please check the full 16 bytes at `SRC_OFFSET` and `DST_OFFSET` for the expected value, to check that the operation did indeed the right thing.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 67
+      },
+      "revId": "337b3bb27f5741bdb439c90691284e989361f3f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56ed6984_d2b6175c",
+        "filename": "test/mjsunit/wasm/simd-lane-memory64.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-03-09T11:50:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "159f0e56_c4761d7f",
       "range": {
         "startLine": 69,
         "startChar": 0,

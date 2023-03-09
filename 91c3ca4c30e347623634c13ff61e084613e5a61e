@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69dafcf5_9cc2a54f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-03-09T11:50:56Z",
+      "side": 1,
+      "message": "Some changes have been made for different CPUs. Basic tests on arm, arm64, x86 and x64 passed. But maybe we have to submit this CL to CQ to test whether it will behave as expected especially on s390\\ppc\\mips64.\nPTAL~",
+      "revId": "91c3ca4c30e347623634c13ff61e084613e5a61e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
