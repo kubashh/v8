@@ -398,7 +398,7 @@ void Sweeper::StartSweeperTasks() {
     }
     DCHECK_EQ(NumberOfConcurrentSweepers(), concurrent_sweepers_.size());
     job_handle_ = V8::GetCurrentPlatform()->PostJob(
-        TaskPriority::kUserVisible,
+        TaskPriority::kUserBlocking,
         std::make_unique<SweeperJob>(heap_->isolate(), this));
   }
 }

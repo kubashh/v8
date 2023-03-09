@@ -1121,7 +1121,7 @@ class Sweeper::SweeperImpl final {
       return;
 
     concurrent_sweeper_handle_ =
-        platform_->PostJob(cppgc::TaskPriority::kUserVisible,
+        platform_->PostJob(cppgc::TaskPriority::kUserBlocking,
                            std::make_unique<ConcurrentSweepTask>(
                                *heap_.heap(), &space_states_, platform_,
                                config_.free_memory_handling));
