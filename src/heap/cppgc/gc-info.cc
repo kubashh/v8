@@ -22,67 +22,87 @@ HeapObjectName GetHiddenName(const void*, HeapObjectNameForUnnamedObject) {
 // static
 void EnsureGCInfoIndexTrait::EnsureGCInfoIndexPolymorphic(
     std::atomic<GCInfoIndex>& registered_index, TraceCallback trace_callback,
-    FinalizationCallback finalization_callback, NameCallback name_callback) {
+    FinalizationCallback finalization_callback, NameCallback name_callback,
+    ShouldDestroyObjectWithExternalLifetimeManagementCallback
+        is_externally_managed_alive) {
   GlobalGCInfoTable::GetMutable().RegisterNewGCInfo(
-      registered_index,
-      {finalization_callback, trace_callback, name_callback, true});
+      registered_index, {finalization_callback, trace_callback, name_callback,
+                         is_externally_managed_alive, true});
 }
 
 // static
 void EnsureGCInfoIndexTrait::EnsureGCInfoIndexPolymorphic(
     std::atomic<GCInfoIndex>& registered_index, TraceCallback trace_callback,
-    FinalizationCallback finalization_callback) {
+    FinalizationCallback finalization_callback,
+    ShouldDestroyObjectWithExternalLifetimeManagementCallback
+        is_externally_managed_alive) {
   GlobalGCInfoTable::GetMutable().RegisterNewGCInfo(
-      registered_index,
-      {finalization_callback, trace_callback, GetHiddenName, true});
+      registered_index, {finalization_callback, trace_callback, GetHiddenName,
+                         is_externally_managed_alive, true});
 }
 
 // static
 void EnsureGCInfoIndexTrait::EnsureGCInfoIndexPolymorphic(
     std::atomic<GCInfoIndex>& registered_index, TraceCallback trace_callback,
-    NameCallback name_callback) {
+    NameCallback name_callback,
+    ShouldDestroyObjectWithExternalLifetimeManagementCallback
+        is_externally_managed_alive) {
   GlobalGCInfoTable::GetMutable().RegisterNewGCInfo(
-      registered_index, {nullptr, trace_callback, name_callback, true});
+      registered_index, {nullptr, trace_callback, name_callback,
+                         is_externally_managed_alive, true});
 }
 
 // static
 void EnsureGCInfoIndexTrait::EnsureGCInfoIndexPolymorphic(
-    std::atomic<GCInfoIndex>& registered_index, TraceCallback trace_callback) {
+    std::atomic<GCInfoIndex>& registered_index, TraceCallback trace_callback,
+    ShouldDestroyObjectWithExternalLifetimeManagementCallback
+        is_externally_managed_alive) {
   GlobalGCInfoTable::GetMutable().RegisterNewGCInfo(
-      registered_index, {nullptr, trace_callback, GetHiddenName, true});
+      registered_index, {nullptr, trace_callback, GetHiddenName,
+                         is_externally_managed_alive, true});
 }
 
 // static
 void EnsureGCInfoIndexTrait::EnsureGCInfoIndexNonPolymorphic(
     std::atomic<GCInfoIndex>& registered_index, TraceCallback trace_callback,
-    FinalizationCallback finalization_callback, NameCallback name_callback) {
+    FinalizationCallback finalization_callback, NameCallback name_callback,
+    ShouldDestroyObjectWithExternalLifetimeManagementCallback
+        is_externally_managed_alive) {
   GlobalGCInfoTable::GetMutable().RegisterNewGCInfo(
-      registered_index,
-      {finalization_callback, trace_callback, name_callback, false});
+      registered_index, {finalization_callback, trace_callback, name_callback,
+                         is_externally_managed_alive, false});
 }
 
 // static
 void EnsureGCInfoIndexTrait::EnsureGCInfoIndexNonPolymorphic(
     std::atomic<GCInfoIndex>& registered_index, TraceCallback trace_callback,
-    FinalizationCallback finalization_callback) {
+    FinalizationCallback finalization_callback,
+    ShouldDestroyObjectWithExternalLifetimeManagementCallback
+        is_externally_managed_alive) {
   GlobalGCInfoTable::GetMutable().RegisterNewGCInfo(
-      registered_index,
-      {finalization_callback, trace_callback, GetHiddenName, false});
+      registered_index, {finalization_callback, trace_callback, GetHiddenName,
+                         is_externally_managed_alive, false});
 }
 
 // static
 void EnsureGCInfoIndexTrait::EnsureGCInfoIndexNonPolymorphic(
     std::atomic<GCInfoIndex>& registered_index, TraceCallback trace_callback,
-    NameCallback name_callback) {
+    NameCallback name_callback,
+    ShouldDestroyObjectWithExternalLifetimeManagementCallback
+        is_externally_managed_alive) {
   GlobalGCInfoTable::GetMutable().RegisterNewGCInfo(
-      registered_index, {nullptr, trace_callback, name_callback, false});
+      registered_index, {nullptr, trace_callback, name_callback,
+                         is_externally_managed_alive, false});
 }
 
 // static
 void EnsureGCInfoIndexTrait::EnsureGCInfoIndexNonPolymorphic(
-    std::atomic<GCInfoIndex>& registered_index, TraceCallback trace_callback) {
+    std::atomic<GCInfoIndex>& registered_index, TraceCallback trace_callback,
+    ShouldDestroyObjectWithExternalLifetimeManagementCallback
+        is_externally_managed_alive) {
   GlobalGCInfoTable::GetMutable().RegisterNewGCInfo(
-      registered_index, {nullptr, trace_callback, GetHiddenName, false});
+      registered_index, {nullptr, trace_callback, GetHiddenName,
+                         is_externally_managed_alive, false});
 }
 
 }  // namespace internal

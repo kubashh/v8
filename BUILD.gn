@@ -6082,6 +6082,7 @@ v8_header_set("cppgc_headers") {
     # TODO(v8:11952): Remove the testing header here once depending on both,
     # //v8:v8 and //v8:v8_for_testing does not result in ODR violations.
     "include/cppgc/testing.h",
+    "include/cppgc/thread-safe-destructable-data.h",
     "include/cppgc/trace-trait.h",
     "include/cppgc/type-traits.h",
     "include/cppgc/visitor.h",

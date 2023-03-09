@@ -37,6 +37,9 @@ struct TraceTraitImpl;
  */
 using TraceCallback = void (*)(Visitor* visitor, const void* object);
 
+using ShouldDestroyObjectWithExternalLifetimeManagementCallback =
+    bool (*)(const void* object);
+
 /**
  * Describes how to trace an object, i.e., how to visit all Oilpan-relevant
  * fields of an object.
@@ -112,6 +115,12 @@ struct TraceTraitImpl<T, true> {
   static TraceDescriptor GetTraceDescriptor(const void* self) {
     return internal::TraceTraitFromInnerAddressImpl::GetTraceDescriptor(self);
   }
+};
+
+template <typename T>
+struct ShouldDestroyWithExternalLifetimeManagementTrait {
+  static constexpr bool ShouldDestroy(const void* obj) { return false; }
+  static constexpr bool (*ShouldDestroyFn)(const void* obj) = nullptr;
 };
 
 }  // namespace internal

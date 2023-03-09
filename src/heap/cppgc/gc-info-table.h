@@ -25,6 +25,8 @@ struct GCInfo final {
   FinalizationCallback finalize;
   TraceCallback trace;
   NameCallback name;
+  ShouldDestroyObjectWithExternalLifetimeManagementCallback
+      should_destroy_object_with_external_lifetime_management;
   bool has_v_table;
 };
 

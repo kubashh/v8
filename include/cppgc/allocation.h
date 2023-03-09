@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <new>
+#include <tuple>
 #include <type_traits>
 #include <utility>
 
@@ -43,6 +44,10 @@ namespace cppgc {
 class AllocationHandle;
 
 namespace internal {
+
+template <typename T, typename Tuple>
+concept ConstructibleFromTuple =
+    requires(Tuple tuple) { std::make_from_tuple<T>(tuple); };
 
 // Similar to C++17 std::align_val_t;
 enum class AlignVal : size_t {};
@@ -300,6 +305,24 @@ V8_INLINE T* MakeGarbageCollected(AllocationHandle& handle,
                                                  std::forward<Args>(args)...);
   PostConstructionCallbackTrait<T>::Call(object);
   return object;
+}
+
+/**
+ * Constructs a series of objects managed objects transitively inherited from GarbageCollected.
+ *
+ * \param additional_bytes Denotes how many bytes to append to T.
+ * \param args List of arguments with which an instance of T will be
+ *   constructed.
+ * \returns an instance of type T.
+ */
+template <typename... T, typename... ArgTuples>
+  requires (internal::ConstructibleFromTuple<T, ArgTuples> && ...)
+V8_INLINE std::tuple<T*...> MakeGarbageCollectedFolded(AllocationHandle& handle,
+                                                       ArgTuples&&... arg_tuples) {
+  //T* object = MakeGarbageCollectedTrait<T>::Call(handle, additional_bytes,
+                                                 //std::forward<Args>(args)...);
+  //PostConstructionCallbackTrait<T>::Call(object);
+  return {};
 }
 
 }  // namespace cppgc

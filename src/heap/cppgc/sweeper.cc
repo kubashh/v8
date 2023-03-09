@@ -264,6 +264,7 @@ class InlinedFinalizationBuilder final : public InlinedFinalizationBuilderBase,
                     NormalPageSpace::From(page.space()).free_list(), page) {}
 
   void AddFinalizer(HeapObjectHeader* header, size_t size) {
+    //CHECK(!header->ShouldDestroyExternallyManagedObject());
     header->Finalize();
     SetMemoryInaccessible(header, size);
   }
@@ -292,6 +293,7 @@ class DeferredFinalizationBuilder final : public FreeHandler {
   }
 
   void AddFinalizer(HeapObjectHeader* header, size_t size) {
+    //CHECK(!header->ShouldDestroyExternallyManagedObject());
     if (header->IsFinalizable()) {
 #if defined(CPPGC_CAGED_HEAP)
       if (!current_unfinalized_) {
@@ -372,7 +374,9 @@ typename FinalizationBuilder::ResultType SweepNormalPage(
       continue;
     }
     // Check if object is not marked (not reachable).
-    if (!header->IsMarked<kAtomicAccess>()) {
+    if (!header->IsMarked<kAtomicAccess>() &&
+        (!header->IsExternallyManagedObject() ||
+         header->ShouldDestroyExternallyManagedObject())) {
       builder.AddFinalizer(header, size);
       clear_bit_if_coalesced_entry(begin);
       begin += size;
