@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b99c1e5e_c52628f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-09T14:17:48Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "577ff7dd3e9ca50e1bce1a2b391e5c6badc14683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49eb56ce_d5b84af1",
+        "filename": "test/mjsunit/wasm/gc-optimizations.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-09T14:17:48Z",
+      "side": 1,
+      "message": "This is certainly an artificial pattern. Any pattern containing phis or any other slightly more complicated pattern will not be detected.\nFor the wasm -\u003e js inlining we are far from being there as we do have the wasm-to-js wrappers in between.\nStill, this could be the first step to get there and the check shouldn\u0027t hurt us.",
+      "range": {
+        "startLine": 661,
+        "startChar": 6,
+        "endLine": 662,
+        "endChar": 40
+      },
+      "revId": "577ff7dd3e9ca50e1bce1a2b391e5c6badc14683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
