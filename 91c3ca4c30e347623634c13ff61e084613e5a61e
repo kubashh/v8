@@ -16,6 +16,115 @@
       "message": "Some changes have been made for different CPUs. Basic tests on arm, arm64, x86 and x64 passed. But maybe we have to submit this CL to CQ to test whether it will behave as expected especially on s390\\ppc\\mips64.\nPTAL~",
       "revId": "91c3ca4c30e347623634c13ff61e084613e5a61e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "117e73d2_b6b3ae15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-09T14:33:56Z",
+      "side": 1,
+      "message": "Fixing the four officially supported architectures is enough, that\u0027s all that\u0027s tested on the CQ (see https://v8.dev/docs/ports and https://v8.dev/docs/official-support).",
+      "parentUuid": "69dafcf5_9cc2a54f",
+      "revId": "91c3ca4c30e347623634c13ff61e084613e5a61e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2839e45a_4fca6c11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-09T14:33:56Z",
+      "side": 1,
+      "message": "Thanks, looking good so far. Let\u0027s see what the bots say. Left a few minor comments.",
+      "revId": "91c3ca4c30e347623634c13ff61e084613e5a61e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c48c28c0_d80c127b",
+        "filename": "src/wasm/baseline/arm64/liftoff-assembler-arm64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-09T14:33:56Z",
+      "side": 1,
+      "message": "nit: just `Operand(offset)`.",
+      "range": {
+        "startLine": 132,
+        "startChar": 27,
+        "endLine": 132,
+        "endChar": 47
+      },
+      "revId": "91c3ca4c30e347623634c13ff61e084613e5a61e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f273c8ec_01b8bde3",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-09T14:33:56Z",
+      "side": 1,
+      "message": "Let\u0027s not make this an optional argument. This just makes it easier to overlook.",
+      "revId": "91c3ca4c30e347623634c13ff61e084613e5a61e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02b7e0e6_d9d679e3",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-09T14:33:56Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "91c3ca4c30e347623634c13ff61e084613e5a61e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df04d7c7_bf617e24",
+        "filename": "test/mjsunit/wasm/simd-lane-memory64.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-09T14:33:56Z",
+      "side": 1,
+      "message": "Can we check after very update in the loop please? Otherwise there is not really a point in having the four different functions.",
+      "revId": "91c3ca4c30e347623634c13ff61e084613e5a61e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
