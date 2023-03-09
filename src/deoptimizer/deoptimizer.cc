@@ -348,6 +348,7 @@ void Deoptimizer::DeoptimizeAll(Isolate* isolate) {
   DeoptimizeMarkedCode(isolate);
 }
 
+// static
 void Deoptimizer::DeoptimizeFunction(JSFunction function, Code code) {
   Isolate* isolate = function.GetIsolate();
   RCS_SCOPE(isolate, RuntimeCallCounterId::kDeoptimizeCode);
@@ -364,15 +365,15 @@ void Deoptimizer::DeoptimizeFunction(JSFunction function, Code code) {
     // The code in the function's optimized code feedback vector slot might
     // be different from the code on the function - evict it if necessary.
     function.feedback_vector().EvictOptimizedCodeMarkedForDeoptimization(
-        function.shared(), "unlinking code marked for deopt");
+        isolate, function.shared(), "unlinking code marked for deopt");
 
     DeoptimizeMarkedCode(isolate);
   }
 }
 
+// static
 void Deoptimizer::DeoptimizeAllOptimizedCodeWithFunction(
-    Handle<SharedFunctionInfo> function) {
-  Isolate* isolate = function->GetIsolate();
+    Isolate* isolate, Handle<SharedFunctionInfo> function) {
   RCS_SCOPE(isolate, RuntimeCallCounterId::kDeoptimizeCode);
   TimerEventScope<TimerEventDeoptimizeCode> timer(isolate);
   TRACE_EVENT0("v8", "V8.DeoptimizeAllOptimizedCodeWithFunction");
@@ -656,12 +657,13 @@ void Deoptimizer::TraceMarkForDeoptimization(InstructionStream code,
 }
 
 // static
-void Deoptimizer::TraceEvictFromOptimizedCodeCache(SharedFunctionInfo sfi,
+void Deoptimizer::TraceEvictFromOptimizedCodeCache(Isolate* isolate,
+                                                   SharedFunctionInfo sfi,
                                                    const char* reason) {
   if (!v8_flags.trace_deopt_verbose) return;
 
   DisallowGarbageCollection no_gc;
-  CodeTracer::Scope scope(sfi.GetIsolate()->GetCodeTracer());
+  CodeTracer::Scope scope(isolate->GetCodeTracer());
   PrintF(scope.file(),
          "[evicting optimized code marked for deoptimization (%s) for ",
          reason);
