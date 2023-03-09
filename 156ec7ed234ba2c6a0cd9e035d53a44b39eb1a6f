@@ -39,6 +39,30 @@
       },
       "revId": "156ec7ed234ba2c6a0cd9e035d53a44b39eb1a6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa6a1d73_bebed577",
+        "filename": "test/mjsunit/wasm/simd-lane-memory64.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-03-09T15:34:45Z",
+      "side": 1,
+      "message": "Oh, sorry, I might did not really comprehend before.\nSo, I try to repeat the requirement we really want:\n\n1. we want to check the whole 16 bytes every time;\n2. we want to do step 1 in the loop;\n3. an `expected_values` array is used to check the target 16 bytes;\n4. remove check for bytes at `SRC_OFFSET`.\n\nAm I right?",
+      "parentUuid": "c1ec19df_933a0481",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 62
+      },
+      "revId": "156ec7ed234ba2c6a0cd9e035d53a44b39eb1a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
