@@ -56,6 +56,30 @@
       },
       "revId": "8ee1e477f77daf63eb58a23d8cc9ffbe2b915ecb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ef74c4d_7d643658",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-09T13:31:43Z",
+      "side": 1,
+      "message": "Ah, right. I renamed the two new `bytes` to `range`, and those also have the same type (and do not live at the same time).",
+      "parentUuid": "3f6886f5_1c260262",
+      "range": {
+        "startLine": 675,
+        "startChar": 13,
+        "endLine": 675,
+        "endChar": 18
+      },
+      "revId": "8ee1e477f77daf63eb58a23d8cc9ffbe2b915ecb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
