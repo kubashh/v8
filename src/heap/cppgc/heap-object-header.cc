@@ -32,9 +32,17 @@ void HeapObjectHeader::Finalize() {
   ASAN_UNPOISON_MEMORY_REGION(ObjectStart(), size);
 #endif  // V8_USE_ADDRESS_SANITIZER
   const GCInfo& gc_info = GlobalGCInfoTable::GCInfoFromIndex(GetGCInfoIndex());
-  if (gc_info.finalize) {
-    gc_info.finalize(ObjectStart());
-  }
+  if (!gc_info.finalize)
+    return;
+
+  gc_info.finalize(ObjectStart());
+}
+
+bool HeapObjectHeader::ShouldDestroyExternallyManagedObject() const {
+  CHECK(IsExternallyManagedObject());
+  const GCInfo& gc_info = GlobalGCInfoTable::GCInfoFromIndex(GetGCInfoIndex());
+  return gc_info.should_destroy_object_with_external_lifetime_management(
+      ObjectStart());
 }
 
 HeapObjectName HeapObjectHeader::GetName() const {
