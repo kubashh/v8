@@ -1042,8 +1042,10 @@ class MarkCompactCollector::RootMarkingVisitor final : public RootVisitor {
     Object istream_or_smi_zero = *istream_or_smi_zero_slot;
     DCHECK(istream_or_smi_zero == Smi::zero() ||
            istream_or_smi_zero.IsInstructionStream());
-    DCHECK_EQ(Code::cast(*code_slot).raw_instruction_stream(),
-              istream_or_smi_zero);
+    DCHECK_EQ(
+        Code::cast(*code_slot)
+            .raw_instruction_stream(PtrComprCageBase{collector_->isolate()}),
+        istream_or_smi_zero);
 
     if (istream_or_smi_zero != Smi::zero()) {
       InstructionStream istream = InstructionStream::cast(istream_or_smi_zero);
@@ -3025,7 +3027,7 @@ void MarkCompactCollector::MarkDependentCodeForDeoptimization() {
     if (!non_atomic_marking_state()->IsBlackOrGrey(object) &&
         !code.embedded_objects_cleared()) {
       if (!code.marked_for_deoptimization()) {
-        code.SetMarkedForDeoptimization("weak objects");
+        code.SetMarkedForDeoptimization(isolate(), "weak objects");
         have_code_to_deoptimize_ = true;
       }
       code.ClearEmbeddedObjects(heap_);

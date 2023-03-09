@@ -2502,8 +2502,18 @@ Handle<Code> Factory::NewOffHeapTrampolineFor(Handle<Code> code,
   CHECK_NE(0, isolate()->embedded_blob_code_size());
   CHECK(Builtins::IsIsolateIndependentBuiltin(*code));
 
+  const AllocationType allocation_type =
+#ifdef V8_COMPRESS_POINTERS
+      // Builtins have a single unique shared entry point per process. Their
+      // Code objects can be shared in RO space.
+      AllocationType::kReadOnly;
+#else
+      // Builtins may be remapped for different isolates and thus their Code
+      // objects cannot be shared.
+      AllocationType::kOld;
+#endif  // V8_COMPRESS_POINTERS
   const int no_flags = 0;
-  Handle<Code> off_heap_trampoline = NewCode(no_flags, AllocationType::kOld);
+  Handle<Code> off_heap_trampoline = NewCode(no_flags, allocation_type);
 
   off_heap_trampoline->initialize_flags(code->kind(), code->builtin_id(),
                                         code->is_turbofanned());
