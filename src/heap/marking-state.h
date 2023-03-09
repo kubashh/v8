@@ -59,8 +59,6 @@ class MarkingStateBase {
 
   V8_INLINE bool WhiteToGrey(HeapObject obj);
 
-  V8_INLINE bool WhiteToBlack(HeapObject obj);
-
   V8_INLINE bool GreyToBlack(HeapObject obj);
 
   V8_INLINE void ClearLiveness(MemoryChunk* chunk);
