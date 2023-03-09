@@ -63,6 +63,30 @@
       },
       "revId": "156ec7ed234ba2c6a0cd9e035d53a44b39eb1a6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa102e9c_2e5f5495",
+        "filename": "test/mjsunit/wasm/simd-lane-memory64.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-09T16:23:45Z",
+      "side": 1,
+      "message": "Sounds good, and I think the test in its current form fulfills everything. Thanks for that!\n\nI got a few last comments, but instead of commenting them all, I\u0027d propose applying this diff:\n```\ndiff --git a/test/mjsunit/wasm/simd-lane-memory64.js b/test/mjsunit/wasm/simd-lane-memory64.js\nindex 0872ff0a78d..77c81206e82 100644\n--- a/test/mjsunit/wasm/simd-lane-memory64.js\n+++ b/test/mjsunit/wasm/simd-lane-memory64.js\n@@ -50,49 +50,44 @@ for (let i \u003d 0; i \u003c 4; ++i) {\n       .exportFunc();\n }\n \n-var instance \u003d builder.instantiate({});\n-var buffer \u003d instance.exports.memory.buffer;\n-\n-function check(expected_values, target, length) {\n-  for (let i \u003d 0; i \u003c length; ++i) {\n-    assertEquals(expected_values[i], target[i]);\n-  }\n-}\n-\n (function TestLoadStoreLaneExternalOffset(){\n   print(arguments.callee.name);\n \n-  var src_view \u003d new Uint32Array(buffer, Number(SRC_OFFSET));\n-  var dst_view \u003d new Uint32Array(buffer, Number(DST_OFFSET));\n+  var instance \u003d builder.instantiate({});\n+  var buffer \u003d instance.exports.memory.buffer;\n+\n+  var src_view \u003d new Uint32Array(buffer, Number(SRC_OFFSET), 4);\n+  var dst_view \u003d new Uint32Array(buffer, Number(DST_OFFSET), 4);\n   var values \u003d [ 0x01234567, 0x89abcdef, 0x76543210, 0xfedcba98 ];\n-  var expected_values \u003d [ 1, 2, 3, 4 ];\n+  var expected_values \u003d [ 0, 0, 0, 0 ];\n   src_view.set(values, 0);\n-  dst_view.set(expected_values, 0);\n \n   for (let i \u003d 0n; i \u003c 4n; ++i) {\n     expected_values[i] \u003d values[i];\n     const offset \u003d 4n * i;\n     instance.exports[`load_lane_${i}`](SRC_OFFSET + offset);\n     instance.exports[`store_lane_${i}`](DST_OFFSET + offset);\n-    check(expected_values, dst_view, 4);\n+    assertEquals(expected_values, Array.from(dst_view.values()));\n   }\n })();\n \n (function TestLoadStoreLaneInternalOffset(){\n   print(arguments.callee.name);\n \n-  var src_view \u003d new Uint32Array(buffer, Number(SRC_OFFSET));\n-  var dst_view \u003d new Uint32Array(buffer, Number(DST_OFFSET));\n+  var instance \u003d builder.instantiate({});\n+  var buffer \u003d instance.exports.memory.buffer;\n+\n+  var src_view \u003d new Uint32Array(buffer, Number(SRC_OFFSET), 4);\n+  var dst_view \u003d new Uint32Array(buffer, Number(DST_OFFSET), 4);\n   var values \u003d [ 0x01234567, 0x89abcdef, 0x76543210, 0xfedcba98 ];\n-  var expected_values \u003d [ 1, 2, 3, 4 ];\n+  var expected_values \u003d [ 0, 0, 0, 0 ];\n   src_view.set(values, 0);\n-  dst_view.set(expected_values, 0);\n \n   for (let i \u003d 0n; i \u003c 4n; ++i) {\n     expected_values[i] \u003d values[i];\n     const offset \u003d 4n * i;\n     instance.exports[`Load_Lane_${i}`](offset);\n     instance.exports[`Store_Lane_${i}`](offset);\n-    check(expected_values, dst_view, 4);\n+    assertEquals(expected_values, Array.from(dst_view.values()));\n   }\n })();\n```\n\nWhat this does is:\n1) Make the tests independent from each other (by using a fresh instance with fresh memory).\n2) Limiting the `src_view` and `dst_view` to 4 elements.\n3) Skipping the initialization of the `dst_view` (unneeded).\n4) Comparing the full array of 4 integers, which gives a better error message on failure, and avoids the `check` function.\n\nIf this all makes sense to you, please apply the patch and we can land this.",
+      "parentUuid": "aa6a1d73_bebed577",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 62
+      },
+      "revId": "156ec7ed234ba2c6a0cd9e035d53a44b39eb1a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
