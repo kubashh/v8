@@ -18,6 +18,52 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d94b99bf_7a353bfe",
+        "filename": "src/compiler/wasm-gc-operator-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-09T14:25:36Z",
+      "side": 1,
+      "message": "nit: We generally prefer `NodeProperties::GetValueInput(node, 0)`.",
+      "range": {
+        "startLine": 337,
+        "startChar": 12,
+        "endLine": 337,
+        "endChar": 22
+      },
+      "revId": "577ff7dd3e9ca50e1bce1a2b391e5c6badc14683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35a4026d_e4a766c8",
+        "filename": "src/compiler/wasm-gc-operator-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-09T14:25:36Z",
+      "side": 1,
+      "message": "This does not seem correct. What if there are other uses of the externalized value? We do not want them to use `input` instead.",
+      "range": {
+        "startLine": 342,
+        "startChar": 4,
+        "endLine": 343,
+        "endChar": 24
+      },
+      "revId": "577ff7dd3e9ca50e1bce1a2b391e5c6badc14683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "49eb56ce_d5b84af1",
