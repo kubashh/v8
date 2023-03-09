@@ -162,7 +162,11 @@ AllocationResult OldLargeObjectSpace::AllocateRaw(int object_size,
       heap()->GCFlagsForIncrementalMarking(),
       kGCCallbackScheduleIdleGarbageCollection);
   if (heap()->incremental_marking()->black_allocation()) {
-    heap()->marking_state()->WhiteToBlack(object);
+    heap()->marking_state()->WhiteToGrey(object);
+    heap()->marking_state()->GreyToBlack(object);
+    heap()->marking_state()->IncrementLiveBytes(
+        MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(object)),
+        ALIGN_TO_ALLOCATION_ALIGNMENT(object.Size()));
   }
   DCHECK_IMPLIES(heap()->incremental_marking()->black_allocation(),
                  heap()->marking_state()->IsBlack(object));
@@ -196,7 +200,11 @@ AllocationResult OldLargeObjectSpace::AllocateRawBackground(
   HeapObject object = page->GetObject();
   heap()->StartIncrementalMarkingIfAllocationLimitIsReachedBackground();
   if (heap()->incremental_marking()->black_allocation()) {
-    heap()->marking_state()->WhiteToBlack(object);
+    heap()->marking_state()->WhiteToGrey(object);
+    heap()->marking_state()->GreyToBlack(object);
+    heap()->marking_state()->IncrementLiveBytes(
+        MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(object)),
+        ALIGN_TO_ALLOCATION_ALIGNMENT(object.Size()));
   }
   DCHECK_IMPLIES(heap()->incremental_marking()->black_allocation(),
                  heap()->marking_state()->IsBlack(object));
