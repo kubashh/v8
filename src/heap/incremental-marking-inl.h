@@ -25,9 +25,15 @@ void IncrementalMarking::TransferColor(HeapObject from, HeapObject to) {
     DCHECK(success);
     USE(success);
   } else if (atomic_marking_state()->IsBlack(from)) {
-    bool success = atomic_marking_state()->WhiteToBlack(to);
+    bool success = atomic_marking_state()->WhiteToGrey(to);
     DCHECK(success);
     USE(success);
+    success = atomic_marking_state()->GreyToBlack(to);
+    DCHECK(success);
+    USE(success);
+    atomic_marking_state()->IncrementLiveBytes(
+        MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(to)),
+        ALIGN_TO_ALLOCATION_ALIGNMENT(to.Size()));
   }
 }
 
