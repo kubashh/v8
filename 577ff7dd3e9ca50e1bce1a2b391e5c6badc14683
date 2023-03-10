@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b92cec0f_e6ea8844",
+        "filename": "src/compiler/wasm-gc-operator-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-10T09:37:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d94b99bf_7a353bfe",
+      "range": {
+        "startLine": 337,
+        "startChar": 12,
+        "endLine": 337,
+        "endChar": 22
+      },
+      "revId": "577ff7dd3e9ca50e1bce1a2b391e5c6badc14683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35a4026d_e4a766c8",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-03-09T14:25:36Z",
       "side": 1,
       "message": "This does not seem correct. What if there are other uses of the externalized value? We do not want them to use `input` instead.",
+      "range": {
+        "startLine": 342,
+        "startChar": 4,
+        "endLine": 343,
+        "endChar": 24
+      },
+      "revId": "577ff7dd3e9ca50e1bce1a2b391e5c6badc14683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "079ad12b_9119380e",
+        "filename": "src/compiler/wasm-gc-operator-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-10T09:37:25Z",
+      "side": 1,
+      "message": "Removed. I think it would be possible to:\n- check if the externalize use count the same as its effect output count plus control output count (2)?\n- if yes:\n  - replace effect input of the effect use with the effect input of the externalize\n  - replace control input of the control use with the control input of the externalize\n  \nSeems to be a bit much though and having proper dead code elimination would probably be the better strategy.\nThis optimization still reduces code size and amount of checks but unfortunately isn\u0027t as good as killing it completely.",
+      "parentUuid": "35a4026d_e4a766c8",
       "range": {
         "startLine": 342,
         "startChar": 4,
