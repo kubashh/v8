@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29142123_64d18ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-03-10T20:51:15Z",
+      "side": 1,
+      "message": "ptal.\n\nThe problem was that the invariant if `UsableCapacity() \u003c\u003d TotalCapacity()` doesn\u0027t hold after sweeping since free blocks are coalesced and bytes that were previously wasted may become usable, thus increasing `UsableCapacity()` while `TotalCapacity()` remains the same.\nhttps://chromium-review.googlesource.com/c/v8/v8/+/4324603/1..4 contains the fixing of dropping the invariant (which wouldn\u0027t hold anyway after the followup CL) and a couple of useful DCHECKs.",
+      "revId": "3eff9d777ccf7081b116ce6ef5a7eccf364185a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
