@@ -16,6 +16,24 @@
       "message": "ptal.\n\nThe problem was that the invariant if `UsableCapacity() \u003c\u003d TotalCapacity()` doesn\u0027t hold after sweeping since free blocks are coalesced and bytes that were previously wasted may become usable, thus increasing `UsableCapacity()` while `TotalCapacity()` remains the same.\nhttps://chromium-review.googlesource.com/c/v8/v8/+/4324603/1..4 contains the fixing of dropping the invariant (which wouldn\u0027t hold anyway after the followup CL) and a couple of useful DCHECKs.",
       "revId": "3eff9d777ccf7081b116ce6ef5a7eccf364185a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b525ddc8_6d0ee908",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-03-10T20:52:37Z",
+      "side": 1,
+      "message": "To clarify, `UsableCapacity()` may exceed `TotalCapacity()` (which is the target capacity) until the next full GC which empties new space and can get rid of redundant pages.",
+      "parentUuid": "29142123_64d18ab2",
+      "revId": "3eff9d777ccf7081b116ce6ef5a7eccf364185a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
