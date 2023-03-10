@@ -87,6 +87,30 @@
       },
       "revId": "156ec7ed234ba2c6a0cd9e035d53a44b39eb1a6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28ac401c_8309e73b",
+        "filename": "test/mjsunit/wasm/simd-lane-memory64.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1540328
+      },
+      "writtenOn": "2023-03-10T00:19:12Z",
+      "side": 1,
+      "message": "Sure, this approach is reasonable: it make two tests independent and thus it is more easier to found what goes wrong if this test fails; directly comparing the two array seems more clear.\nI\u0027d apply this diff.\nMany thanks for helping ~ 😊",
+      "parentUuid": "aa102e9c_2e5f5495",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 62
+      },
+      "revId": "156ec7ed234ba2c6a0cd9e035d53a44b39eb1a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
