@@ -5718,6 +5718,26 @@ int Heap::NextStressMarkingLimit() {
   return isolate()->fuzzer_rng()->NextInt(v8_flags.stress_marking + 1);
 }
 
+void Heap::WeakenDescriptorArrays(
+    GlobalHandleVector<DescriptorArray> strong_descriptor_arrays) {
+  if (incremental_marking()->IsMajorMarking()) {
+    mark_compact_collector()->RecordStrongDescriptorArraysForWeakening(
+        std::move(strong_descriptor_arrays));
+    return;
+  }
+
+  // No GC is running, weaken the arrays right away.
+  DisallowGarbageCollection no_gc;
+  Map descriptor_array_map = ReadOnlyRoots(isolate()).descriptor_array_map();
+  for (auto it = strong_descriptor_arrays.begin();
+       it != strong_descriptor_arrays.end(); ++it) {
+    DescriptorArray array = it.raw();
+    DCHECK(array.IsStrongDescriptorArray());
+    array.set_map_safe_transition_no_write_barrier(descriptor_array_map);
+    DCHECK_EQ(array.raw_gc_state(kRelaxedLoad), 0);
+  }
+}
+
 void Heap::NotifyDeserializationComplete() {
   PagedSpaceIterator spaces(this);
   for (PagedSpace* s = spaces.Next(); s != nullptr; s = spaces.Next()) {

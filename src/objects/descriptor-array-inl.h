@@ -5,6 +5,7 @@
 #ifndef V8_OBJECTS_DESCRIPTOR_ARRAY_INL_H_
 #define V8_OBJECTS_DESCRIPTOR_ARRAY_INL_H_
 
+#include "src/common/globals.h"
 #include "src/execution/isolate.h"
 #include "src/handles/maybe-handles-inl.h"
 #include "src/heap/heap-write-barrier.h"

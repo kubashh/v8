@@ -247,7 +247,10 @@ class GlobalHandleVector {
       return *this;
     }
     Handle<T> operator*() { return Handle<T>(&*it_); }
-    bool operator!=(Iterator& that) { return it_ != that.it_; }
+    bool operator==(const Iterator& that) { return it_ == that.it_; }
+    bool operator!=(const Iterator& that) { return it_ != that.it_; }
+
+    T raw() { return T::cast(Object(*it_)); }
 
    private:
     std::vector<Address, StrongRootBlockAllocator>::iterator it_;
