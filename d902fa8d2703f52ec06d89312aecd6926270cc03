@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "001b9f26_c43b3725",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-10T11:59:33Z",
+      "side": 1,
+      "message": "LGTM. We should check if the intermediate extern.extenralize node gets removed if redundant.",
+      "revId": "d902fa8d2703f52ec06d89312aecd6926270cc03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
