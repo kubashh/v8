@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec99e703_c7c1ec7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555812
+      },
+      "writtenOn": "2023-03-11T05:19:17Z",
+      "side": 1,
+      "message": "Hi all, I had take a look into the comments and fixed all the typo and grammar issue I can find.",
+      "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
