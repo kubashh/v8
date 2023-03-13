@@ -442,6 +442,9 @@ TEST_F(HeapTest, Regress978156) {
   // an out-of-bounds access of the marking bitmap in a bad case.
   marking_state->WhiteToGrey(filler);
   marking_state->GreyToBlack(filler);
+  marking_state->IncrementLiveBytes(
+      MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(filler)),
+      ALIGN_TO_ALLOCATION_ALIGNMENT(filler.Size()));
 }
 
 }  // namespace internal

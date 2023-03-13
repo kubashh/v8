@@ -47,6 +47,9 @@ HEAP_TEST(WriteBarrier_Marking) {
   CHECK(heap->marking_state()->IsGrey(value1));
   heap->marking_state()->WhiteToGrey(host);
   heap->marking_state()->GreyToBlack(host);
+  heap->marking_state()->IncrementLiveBytes(
+      MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(host)),
+      ALIGN_TO_ALLOCATION_ALIGNMENT(host.Size()));
   CHECK(heap->marking_state()->IsWhite(value2));
   WriteBarrier::Marking(host, host.RawFieldOfElementAt(0), value2);
   CHECK(heap->marking_state()->IsGrey(value2));

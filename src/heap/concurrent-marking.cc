@@ -374,6 +374,8 @@ class ConcurrentMarkingVisitor final
     MarkCompactCollector::RecordSlot(object, slot, target);
   }
 
+  ConcurrentMarkingState* marking_state() { return &marking_state_; }
+
  private:
   template <typename T, typename TBodyDescriptor = typename T::BodyDescriptor>
   int VisitJSObjectSubclass(Map map, T object) {
@@ -395,8 +397,6 @@ class ConcurrentMarkingVisitor final
     }
     data.typed_slots->Insert(info.slot_type, info.offset);
   }
-
-  ConcurrentMarkingState* marking_state() { return &marking_state_; }
 
   TraceRetainingPathMode retaining_path_mode() {
     return TraceRetainingPathMode::kDisabled;
@@ -622,7 +622,10 @@ void ConcurrentMarking::RunMajor(JobDelegate* delegate,
               local_marking_worklists.SwitchToContext(context);
             }
           }
-          size_t visited_size = visitor.Visit(map, object);
+          const auto visited_size = visitor.Visit(map, object);
+          visitor.marking_state()->IncrementLiveBytes(
+              MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(object)),
+              ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
           if (is_per_context_mode) {
             native_context_stats.IncrementSize(
                 local_marking_worklists.Context(), map, object, visited_size);
@@ -723,7 +726,13 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
           local_marking_worklists.PushOnHold(object);
         } else {
           Map map = object.map(isolate, kAcquireLoad);
-          current_marked_bytes += visitor.Visit(map, object);
+          const auto visited_size = visitor.Visit(map, object);
+          current_marked_bytes += visited_size;
+          if (visited_size) {
+            visitor.marking_state()->IncrementLiveBytes(
+                MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(object)),
+                ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
+          }
         }
       }
       marked_bytes += current_marked_bytes;

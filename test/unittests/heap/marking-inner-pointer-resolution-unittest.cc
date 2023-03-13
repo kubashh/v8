@@ -702,6 +702,9 @@ TEST_F(InnerPointerResolutionHeapTest, UnusedRegularYoungPages) {
     MarkingState* marking_state = heap()->marking_state();
     marking_state->WhiteToGrey(obj3);
     marking_state->GreyToBlack(obj3);
+    marking_state->IncrementLiveBytes(
+        MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(obj3)),
+        ALIGN_TO_ALLOCATION_ALIGNMENT(obj3.Size()));
   }
 
   // Garbage collection should reclaim the two large objects with the weak
