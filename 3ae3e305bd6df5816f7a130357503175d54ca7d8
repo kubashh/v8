@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3538f75_6f3c962a",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2023-03-13T19:25:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67b15ef4_be051aff",
+      "range": {
+        "startLine": 291,
+        "startChar": 3,
+        "endLine": 291,
+        "endChar": 7
+      },
+      "revId": "3ae3e305bd6df5816f7a130357503175d54ca7d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f6e71f9_a42c61d3",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3610f44_c9823dc1",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2023-03-13T19:25:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f6e71f9_a42c61d3",
+      "range": {
+        "startLine": 293,
+        "startChar": 46,
+        "endLine": 295,
+        "endChar": 50
+      },
+      "revId": "3ae3e305bd6df5816f7a130357503175d54ca7d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3dc67e43_bd661bb8",
@@ -94,6 +142,30 @@
       "writtenOn": "2023-03-13T19:09:11Z",
       "side": 1,
       "message": "nit: `const auto`",
+      "range": {
+        "startLine": 247,
+        "startChar": 2,
+        "endLine": 247,
+        "endChar": 6
+      },
+      "revId": "3ae3e305bd6df5816f7a130357503175d54ca7d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7f94243_ed968012",
+        "filename": "src/heap/safepoint.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2023-03-13T19:25:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dc67e43_bd661bb8",
       "range": {
         "startLine": 247,
         "startChar": 2,
