@@ -244,6 +244,8 @@ void IsolateSafepoint::Barrier::NotifyPark() {
 }
 
 void IsolateSafepoint::Barrier::WaitInSafepoint() {
+  const auto scoped_blocking_call =
+      V8::GetCurrentPlatform()->CreateBlockingScope(BlockingType::kWillBlock);
   base::MutexGuard guard(&mutex_);
   CHECK(IsArmed());
   stopped_++;
