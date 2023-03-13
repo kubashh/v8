@@ -143,6 +143,11 @@ if (build_with_chromium && use_perfetto_client_library) {
   v8_use_perfetto = true
 }
 
+# Includes profiles to optimize builtins.
+if (v8_enable_builtins_optimization == "") {
+  v8_enable_builtins_optimization = build_with_chromium  
+}
+
 # TODO(jgruber): Move v8_jitless from BUILD.gn here as these
 # all depend on each other and really should be derived from
 # v8_jitless.
