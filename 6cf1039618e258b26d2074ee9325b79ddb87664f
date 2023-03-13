@@ -16,6 +16,23 @@
       "message": "ptal, there\u0027s still some CLs to land/fix until we can use this (haven\u0027t measured locally yet)",
       "revId": "6cf1039618e258b26d2074ee9325b79ddb87664f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "758904ef_e5dc5bbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-03-13T17:30:15Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "6cf1039618e258b26d2074ee9325b79ddb87664f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
