@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a2dc1e0_08011cce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-03-13T09:53:49Z",
+      "side": 1,
+      "message": "This CL seems to make the results on the perf bots unstable, see https://chromeperf.appspot.com/group_report?sid\u003dca50e49e6e2c8eab9c192fcb21bf46745f9178f35d4042d9c998c38191fd0fd3. Maybe fixed sized chunks would be better? Or a second flag for performance measurements, so that the chunks have always the same size?",
+      "revId": "1b0007c0a341ed822b93e7dadfb6107b8347353a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
