@@ -5836,7 +5836,7 @@ void MinorMarkCompactCollector::ClearNonLiveReferences() {
 
 class PageMarkingItem;
 
-class YoungGenerationMarkingTask {
+class YoungGenerationMarkingTask final {
  public:
   YoungGenerationMarkingTask(Isolate* isolate, Heap* heap,
                              MarkingWorklists* global_worklists)
@@ -5848,13 +5848,18 @@ class YoungGenerationMarkingTask {
         marking_state_(heap->marking_state()),
         visitor_(isolate, marking_state_, marking_worklists_local()) {}
 
+  ~YoungGenerationMarkingTask() {
+    for (auto& pair : live_bytes_) {
+      marking_state_->IncrementLiveBytes(pair.first, pair.second);
+    }
+  }
+
   void MarkYoungObject(HeapObject heap_object) {
     if (marking_state_->WhiteToGrey(heap_object)) {
       const auto visited_size = visitor_.Visit(heap_object);
       if (visited_size) {
-        marking_state_->IncrementLiveBytes(
-            MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(heap_object)),
-            ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
+        live_bytes_[MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(
+            heap_object))] += ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size);
       }
       // Objects transition to black when visited.
       DCHECK(marking_state_->IsBlack(heap_object));
@@ -5867,9 +5872,8 @@ class YoungGenerationMarkingTask {
            marking_worklists_local_->PopOnHold(&heap_object)) {
       const auto visited_size = visitor_.Visit(heap_object);
       if (visited_size) {
-        marking_state_->IncrementLiveBytes(
-            MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(heap_object)),
-            ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
+        live_bytes_[MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(
+            heap_object))] += ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size);
       }
     }
     // Publish wrapper objects to the cppgc marking state, if registered.
@@ -5886,6 +5890,7 @@ class YoungGenerationMarkingTask {
   std::unique_ptr<MarkingWorklists::Local> marking_worklists_local_;
   MarkingState* marking_state_;
   YoungGenerationMainMarkingVisitor visitor_;
+  std::unordered_map<MemoryChunk*, size_t, MemoryChunk::Hasher> live_bytes_;
 };
 
 void PageMarkingItem::Process(YoungGenerationMarkingTask* task) {
