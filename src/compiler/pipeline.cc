@@ -1714,8 +1714,7 @@ struct WasmInliningPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(WasmInlining)
 
   void Run(PipelineData* data, Zone* temp_zone, wasm::CompilationEnv* env,
-           uint32_t function_index, const wasm::WireBytesStorage* wire_bytes,
-           std::vector<compiler::WasmLoopInfo>* loop_info) {
+           WasmCompilationData& compilation_data) {
     if (!WasmInliner::graph_size_allows_inlining(data->graph()->NodeCount())) {
       return;
     }
@@ -1725,9 +1724,7 @@ struct WasmInliningPhase {
     DeadCodeElimination dead(&graph_reducer, data->graph(), data->common(),
                              temp_zone);
     std::unique_ptr<char[]> debug_name = data->info()->GetDebugName();
-    WasmInliner inliner(&graph_reducer, env, function_index,
-                        data->source_positions(), data->node_origins(),
-                        data->mcgraph(), wire_bytes, loop_info,
+    WasmInliner inliner(&graph_reducer, env, compilation_data, data->mcgraph(),
                         debug_name.get());
     AddReducer(data, &graph_reducer, &dead);
     AddReducer(data, &graph_reducer, &inliner);
@@ -3642,23 +3639,22 @@ void LowerInt64(const wasm::FunctionSig* sig, MachineGraph* mcgraph,
 // static
 void Pipeline::GenerateCodeForWasmFunction(
     OptimizedCompilationInfo* info, wasm::CompilationEnv* env,
-    const wasm::WireBytesStorage* wire_bytes_storage, MachineGraph* mcgraph,
-    CallDescriptor* call_descriptor, SourcePositionTable* source_positions,
-    NodeOriginTable* node_origins, wasm::FunctionBody function_body,
-    const wasm::WasmModule* module, int function_index,
-    std::vector<compiler::WasmLoopInfo>* loop_info,
-    wasm::AssemblerBufferCache* buffer_cache) {
+    WasmCompilationData& compilation_data, MachineGraph* mcgraph,
+    CallDescriptor* call_descriptor) {
   auto* wasm_engine = wasm::GetWasmEngine();
+  const wasm::WasmModule* module = env->module;
   base::TimeTicks start_time;
   if (V8_UNLIKELY(v8_flags.trace_wasm_compilation_times)) {
     start_time = base::TimeTicks::Now();
   }
   ZoneStats zone_stats(wasm_engine->allocator());
   std::unique_ptr<PipelineStatistics> pipeline_statistics(
-      CreatePipelineStatistics(function_body, module, info, &zone_stats));
-  PipelineData data(&zone_stats, wasm_engine, info, mcgraph,
-                    pipeline_statistics.get(), source_positions, node_origins,
-                    WasmAssemblerOptions(), buffer_cache);
+      CreatePipelineStatistics(compilation_data.func_body, module, info,
+                               &zone_stats));
+  PipelineData data(
+      &zone_stats, wasm_engine, info, mcgraph, pipeline_statistics.get(),
+      compilation_data.source_positions, compilation_data.node_origins,
+      WasmAssemblerOptions(), compilation_data.buffer_cache);
 
   PipelineImpl pipeline(&data);
 
@@ -3681,16 +3677,15 @@ void Pipeline::GenerateCodeForWasmFunction(
 
   data.BeginPhaseKind("V8.WasmOptimization");
   if (v8_flags.wasm_inlining) {
-    pipeline.Run<WasmInliningPhase>(env, function_index, wire_bytes_storage,
-                                    loop_info);
+    pipeline.Run<WasmInliningPhase>(env, compilation_data);
     pipeline.RunPrintAndVerify(WasmInliningPhase::phase_name(), true);
   }
   if (v8_flags.wasm_loop_peeling) {
-    pipeline.Run<WasmLoopPeelingPhase>(loop_info);
+    pipeline.Run<WasmLoopPeelingPhase>(compilation_data.loop_infos);
     pipeline.RunPrintAndVerify(WasmLoopPeelingPhase::phase_name(), true);
   }
   if (v8_flags.wasm_loop_unrolling) {
-    pipeline.Run<WasmLoopUnrollingPhase>(loop_info);
+    pipeline.Run<WasmLoopUnrollingPhase>(compilation_data.loop_infos);
     pipeline.RunPrintAndVerify(WasmLoopUnrollingPhase::phase_name(), true);
   }
   const bool is_asm_js = is_asmjs_module(module);
@@ -3699,7 +3694,7 @@ void Pipeline::GenerateCodeForWasmFunction(
                 : MachineOperatorReducer::kSilenceSignallingNan;
 
   if (v8_flags.experimental_wasm_gc || v8_flags.experimental_wasm_stringref) {
-    pipeline.Run<WasmTypingPhase>(function_index);
+    pipeline.Run<WasmTypingPhase>(compilation_data.func_index);
     pipeline.RunPrintAndVerify(WasmTypingPhase::phase_name(), true);
     if (v8_flags.wasm_opt) {
       pipeline.Run<WasmGCOptimizationPhase>(module);
@@ -3719,7 +3714,8 @@ void Pipeline::GenerateCodeForWasmFunction(
   // to invoke it separately for the inlined function body).
   // It must also happen after WasmGCLowering, otherwise it would have to
   // add type annotations to nodes it creates, and handle wasm-gc nodes.
-  LowerInt64(function_body.sig, mcgraph, data.simplified(), pipeline);
+  LowerInt64(compilation_data.func_body.sig, mcgraph, data.simplified(),
+             pipeline);
 
   if (v8_flags.wasm_opt || is_asm_js) {
     pipeline.Run<WasmOptimizationPhase>(signalling_nan_propagation);
@@ -3842,13 +3838,13 @@ void Pipeline::GenerateCodeForWasmFunction(
     int codesize = result->code_desc.body_size();
     StdoutStream{} << "Compiled function "
                    << reinterpret_cast<const void*>(module) << "#"
-                   << function_index << " using TurboFan, took "
+                   << compilation_data.func_index << " using TurboFan, took "
                    << time.InMilliseconds() << " ms and "
                    << zone_stats.GetMaxAllocatedBytes() << " / "
                    << zone_stats.GetTotalAllocatedBytes()
                    << " max/total bytes; bodysize "
-                   << function_body.end - function_body.start << " codesize "
-                   << codesize << " name " << data.info()->GetDebugName().get()
+                   << compilation_data.body_size() << " codesize " << codesize
+                   << " name " << data.info()->GetDebugName().get()
                    << std::endl;
   }
 
