@@ -291,6 +291,17 @@ template("v8_executable") {
     if (is_linux || is_chromeos) {
       # For enabling ASLR.
       ldflags = [ "-pie" ]
+      cflags = []
+      if (pgo_data_path != "") {
+        cflags += [
+          "-fprofile-use=" + pgo_data_path,
+          "-Wno-profile-instr-unprofiled",
+          "-Wno-profile-instr-out-of-date",
+          "-Wno-backend-plugin",
+        ]
+        ldflags += [ "-fprofile-use=" + pgo_data_path ]
+      }
+
     }
     if (defined(testonly) && testonly && v8_code_coverage) {
       # Only add code coverage cflags for non-test files for performance
