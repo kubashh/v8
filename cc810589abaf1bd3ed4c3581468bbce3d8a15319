@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e504ad94_296b141c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-03-13T15:16:23Z",
+      "side": 1,
+      "message": "Andreas: PTAL.\n\nDaniel: FYI.",
+      "revId": "cc810589abaf1bd3ed4c3581468bbce3d8a15319",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4315b2a_8fac46a4",
+        "filename": "src/wasm/compilation-environment.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-03-13T15:16:23Z",
+      "side": 1,
+      "message": "This fix itself doesn\u0027t need this single-function entry point, but I\u0027ll need that soon for a follow-up CL, so I\u0027m adding the infrastructure while I\u0027m here.",
+      "range": {
+        "startLine": 155,
+        "startChar": 2,
+        "endLine": 155,
+        "endChar": 51
+      },
+      "revId": "cc810589abaf1bd3ed4c3581468bbce3d8a15319",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
