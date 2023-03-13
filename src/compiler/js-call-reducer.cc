@@ -631,7 +631,7 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
       const FunctionTemplateInfoRef function_template_info,
       const FastApiCallFunctionVector& c_candidate_functions, Node* receiver,
       Node* holder, const SharedFunctionInfoRef shared, Node* target,
-      const int arity, Node* effect)
+      const int arity, Node* effect, Node* control)
       : JSCallReducerAssembler(reducer, node),
         c_candidate_functions_(c_candidate_functions),
         function_template_info_(function_template_info),
@@ -642,7 +642,7 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
         arity_(arity) {
     DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
     CHECK_GT(c_candidate_functions.size(), 0);
-    InitializeEffectControl(effect, NodeProperties::GetControlInput(node));
+    InitializeEffectControl(effect, control);
   }
 
   TNode<Object> ReduceFastApiCall() {
@@ -733,10 +733,14 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
 
   TNode<Object> FastApiCall(CallDescriptor* descriptor, Node** inputs,
                             size_t inputs_size) {
-    return AddNode<Object>(
-        graph()->NewNode(simplified()->FastApiCall(c_candidate_functions_,
-                                                   feedback(), descriptor),
-                         static_cast<int>(inputs_size), inputs));
+    // TODO(mslekova): Check how we can reuse the IfException that is already
+    // connected to the original Call.
+    return MayThrow(_ {
+      return AddNode<Object>(
+          graph()->NewNode(simplified()->FastApiCall(c_candidate_functions_,
+                                                     feedback(), descriptor),
+                           static_cast<int>(inputs_size), inputs));
+    });
   }
 
   const FastApiCallFunctionVector c_candidate_functions_;
@@ -3871,10 +3875,9 @@ Reduction JSCallReducer::ReduceCallApiFunction(
   if (!c_candidate_functions.empty()) {
     FastApiCallReducerAssembler a(this, node, function_template_info,
                                   c_candidate_functions, receiver, holder,
-                                  shared, target, argc, effect);
+                                  shared, target, argc, effect, control);
     Node* fast_call_subgraph = a.ReduceFastApiCall();
     ReplaceWithSubgraph(&a, fast_call_subgraph);
-
     return Replace(fast_call_subgraph);
   }
 
