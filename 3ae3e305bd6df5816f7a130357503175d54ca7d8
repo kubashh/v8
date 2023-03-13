@@ -16,6 +16,92 @@
       "message": "PTAL",
       "revId": "3ae3e305bd6df5816f7a130357503175d54ca7d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e2692b0_e7aa6d80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-13T19:09:11Z",
+      "side": 1,
+      "message": "Thanks, already looking good",
+      "revId": "3ae3e305bd6df5816f7a130357503175d54ca7d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67b15ef4_be051aff",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-13T19:09:11Z",
+      "side": 1,
+      "message": "This is written for base users. It needs to be rewritten in terms of V8 API, e.g., saying that V8 will instantiate this scope through `CreateBlockingScope()` for calls that are potentially blocking. This allows embedders to make the right calls on their end.",
+      "range": {
+        "startLine": 291,
+        "startChar": 3,
+        "endLine": 291,
+        "endChar": 7
+      },
+      "revId": "3ae3e305bd6df5816f7a130357503175d54ca7d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f6e71f9_a42c61d3",
+        "filename": "include/v8-platform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-13T19:09:11Z",
+      "side": 1,
+      "message": "Also here: V8 may use this in a nested way. There\u0027s no need to mention what happens on overriding as that\u0027s implemented by the embedder.",
+      "range": {
+        "startLine": 293,
+        "startChar": 46,
+        "endLine": 295,
+        "endChar": 50
+      },
+      "revId": "3ae3e305bd6df5816f7a130357503175d54ca7d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dc67e43_bd661bb8",
+        "filename": "src/heap/safepoint.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-13T19:09:11Z",
+      "side": 1,
+      "message": "nit: `const auto`",
+      "range": {
+        "startLine": 247,
+        "startChar": 2,
+        "endLine": 247,
+        "endChar": 6
+      },
+      "revId": "3ae3e305bd6df5816f7a130357503175d54ca7d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
