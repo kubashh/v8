@@ -123,7 +123,6 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
   VirtualMemoryCage::ReservationParams params;
   params.page_allocator = page_allocator;
   params.reservation_size = requested;
-  params.base_bias_size = 0;
   params.page_size = kPageSize;
   params.jit =
       v8_flags.jitless ? JitPermission::kNoJit : JitPermission::kMapAsJittable;
