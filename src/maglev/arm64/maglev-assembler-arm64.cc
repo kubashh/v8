@@ -427,10 +427,16 @@ void MaglevAssembler::AllocateTwoByteString(RegisterSnapshot register_snapshot,
   ScratchRegisterScope scope(this);
   Register scratch = scope.Acquire();
   StoreTaggedField(xzr, FieldMemOperand(result, size - kObjectAlignment));
+#if V8_STATIC_ROOTS_BOOL
+  CHECK(HeapObject::kMapOffset + 4 == Name::kRawHashFieldOffset);
+  MoveFused(scratch, {StaticReadOnlyRoot::kStringMap, Name::kEmptyHashField});
+  Str(scratch, FieldMemOperand(result, HeapObject::kMapOffset));
+#else
   LoadTaggedRoot(scratch, RootIndex::kStringMap);
   StoreTaggedField(scratch, FieldMemOperand(result, HeapObject::kMapOffset));
   Move(scratch, Name::kEmptyHashField);
   StoreTaggedField(scratch, FieldMemOperand(result, Name::kRawHashFieldOffset));
+#endif  // V8_STATIC_ROOTS_BOOL
   Move(scratch, length);
   StoreTaggedField(scratch, FieldMemOperand(result, String::kLengthOffset));
 }
