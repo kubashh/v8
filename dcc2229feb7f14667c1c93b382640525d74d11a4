@@ -16,6 +16,98 @@
       "message": "Hi folks, this is the NumberIsNaN part of the previous slightly broader small CL. I tried keeping this as bite sized as possible, but still make it extendable for the rest of the NumberIs.. operations. It doesn\u0027t solve the question how to nicely compose the FloatIsOp with TF\u0027s ObjectIsNaN (and related) ops. Any comments are welcome, thanks!",
       "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2982afb0_7c5a5c4b",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-14T16:06:39Z",
+      "side": 1,
+      "message": "You can use `0` directly here. No need to wrap constants anymore.",
+      "range": {
+        "startLine": 369,
+        "startChar": 34,
+        "endLine": 369,
+        "endChar": 54
+      },
+      "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0302eb21_cd006723",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2471,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-14T16:06:39Z",
+      "side": 1,
+      "message": "` : uint8_t` to make sure it uses as little memory as necessary.",
+      "range": {
+        "startLine": 2471,
+        "startChar": 17,
+        "endLine": 2471,
+        "endChar": 19
+      },
+      "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29493780_d746d798",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2476,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-14T16:06:39Z",
+      "side": 1,
+      "message": "Typically, these kinds of operations use `RegisterRepresentation input_rep` (and then allow the expected ones in `Validate`) to express 32 vs 64 bit inputs.",
+      "range": {
+        "startLine": 2474,
+        "startChar": 1,
+        "endLine": 2476,
+        "endChar": 4
+      },
+      "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5097928f_67d681e8",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2485,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-14T16:06:39Z",
+      "side": 1,
+      "message": "nit: Just `input` is what many similar unary operations use here (and same below).",
+      "range": {
+        "startLine": 2485,
+        "startChar": 10,
+        "endLine": 2485,
+        "endChar": 22
+      },
+      "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
