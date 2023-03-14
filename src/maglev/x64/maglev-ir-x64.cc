@@ -13,6 +13,7 @@
 #include "src/maglev/maglev-ir-inl.h"
 #include "src/maglev/maglev-ir.h"
 #include "src/objects/feedback-cell.h"
+#include "src/objects/instance-type.h"
 #include "src/objects/js-function.h"
 
 namespace v8 {
@@ -1750,19 +1751,22 @@ void TryUnboxTagged(MaglevAssembler* masm, DoubleRegister dst,
   __ Cvtlsi2sd(dst, clobbered_src);
   __ jmp(&done, Label::kNear);
   __ bind(&is_not_smi);
-  // Check if HeapNumber, jump to fail otherwise.
+  // Check if HeapNumber or Oddball, jump to fail otherwise.
+  static_assert(InstanceType::HEAP_NUMBER_TYPE + 1 ==
+                InstanceType::ODDBALL_TYPE);
   if (fail) {
-    __ CompareRoot(FieldOperand(clobbered_src, HeapObject::kMapOffset),
-                   RootIndex::kHeapNumberMap);
-    __ JumpIf(kNotEqual, fail);
+    __ CompareObjectTypeRange(clobbered_src, InstanceType::HEAP_NUMBER_TYPE,
+                              InstanceType::ODDBALL_TYPE);
+    __ JumpIf(kUnsignedGreaterThan, fail);
   } else {
     if (v8_flags.debug_code) {
-      __ CompareRoot(FieldOperand(clobbered_src, HeapObject::kMapOffset),
-                     RootIndex::kHeapNumberMap);
-      __ Assert(kEqual, AbortReason::kUnexpectedValue);
+      __ CompareObjectTypeRange(clobbered_src, InstanceType::HEAP_NUMBER_TYPE,
+                                InstanceType::ODDBALL_TYPE);
+      __ Assert(kUnsignedLessThanEqual, AbortReason::kUnexpectedValue);
     }
   }
-  __ Movsd(dst, FieldOperand(clobbered_src, HeapNumber::kValueOffset));
+  static_assert(HeapNumber::kValueOffset == Oddball::kToNumberRawOffset);
+  __ LoadHeapNumberValue(dst, clobbered_src);
   __ bind(&done);
 }
 
@@ -1775,8 +1779,9 @@ void CheckedFloat64Unbox::SetValueLocationConstraints() {
 void CheckedFloat64Unbox::GenerateCode(MaglevAssembler* masm,
                                        const ProcessingState& state) {
   Register value = ToRegister(input());
-  TryUnboxTagged(masm, ToDoubleRegister(result()), value,
-                 __ GetDeoptLabel(this, DeoptimizeReason::kNotANumber));
+  TryUnboxTagged(
+      masm, ToDoubleRegister(result()), value,
+      __ GetDeoptLabel(this, DeoptimizeReason::kNotANumberOrOddball));
 }
 
 void UnsafeFloat64Unbox::SetValueLocationConstraints() {
@@ -1802,14 +1807,14 @@ void EmitTruncateNumberToInt32(MaglevAssembler* masm, Register value,
   __ bind(&is_not_smi);
   if (not_a_number != nullptr) {
     // Check if HeapNumber, deopt otherwise.
-    __ CompareRoot(FieldOperand(value, HeapObject::kMapOffset),
-                   RootIndex::kHeapNumberMap);
+    __ CompareObjectTypeRange(value, InstanceType::HEAP_NUMBER_TYPE,
+                              InstanceType::ODDBALL_TYPE);
     __ RecordComment("-- Jump to eager deopt");
-    __ JumpIf(not_equal, not_a_number);
+    __ JumpIf(kUnsignedGreaterThan, not_a_number);
   } else if (v8_flags.debug_code) {
-    __ CompareRoot(FieldOperand(value, HeapObject::kMapOffset),
-                   RootIndex::kHeapNumberMap);
-    __ Assert(equal, AbortReason::kUnexpectedValue);
+    __ CompareObjectTypeRange(value, InstanceType::HEAP_NUMBER_TYPE,
+                              InstanceType::ODDBALL_TYPE);
+    __ Assert(kUnsignedLessThanEqual, AbortReason::kUnexpectedValue);
   }
   auto double_value = kScratchDoubleReg;
   __ Movsd(double_value, FieldOperand(value, HeapNumber::kValueOffset));

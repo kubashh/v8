@@ -971,13 +971,17 @@ void MaglevGraphBuilder::VisitUnaryOperation() {
       return BuildInt32UnaryOperationNode<kOperation>();
     case BinaryOperationHint::kSignedSmallInputs:
     case BinaryOperationHint::kNumber:
+    case BinaryOperationHint::kNumberOrOddball:
       if constexpr (BinaryOperationIsBitwiseInt32<kOperation>()) {
         static_assert(kOperation == Operation::kBitwiseNot);
         return BuildTruncatingInt32BitwiseNotForNumber();
       }
       return BuildFloat64UnaryOperationNode<kOperation>();
       break;
-    default:
+    case BinaryOperationHint::kString:
+    case BinaryOperationHint::kBigInt:
+    case BinaryOperationHint::kBigInt64:
+    case BinaryOperationHint::kAny:
       // Fallback to generic node.
       break;
   }
@@ -1000,13 +1004,17 @@ void MaglevGraphBuilder::VisitBinaryOperation() {
       }
     case BinaryOperationHint::kSignedSmallInputs:
     case BinaryOperationHint::kNumber:
+    case BinaryOperationHint::kNumberOrOddball:
       if constexpr (BinaryOperationIsBitwiseInt32<kOperation>()) {
         return BuildTruncatingInt32BinaryOperationNodeForNumber<kOperation>();
       } else {
         return BuildFloat64BinaryOperationNode<kOperation>();
       }
       break;
-    default:
+    case BinaryOperationHint::kString:
+    case BinaryOperationHint::kBigInt:
+    case BinaryOperationHint::kBigInt64:
+    case BinaryOperationHint::kAny:
       // Fallback to generic node.
       break;
   }
@@ -1029,6 +1037,7 @@ void MaglevGraphBuilder::VisitBinarySmiOperation() {
       }
     case BinaryOperationHint::kSignedSmallInputs:
     case BinaryOperationHint::kNumber:
+    case BinaryOperationHint::kNumberOrOddball:
       if constexpr (BinaryOperationIsBitwiseInt32<kOperation>()) {
         return BuildTruncatingInt32BinarySmiOperationNodeForNumber<
             kOperation>();
@@ -1036,7 +1045,10 @@ void MaglevGraphBuilder::VisitBinarySmiOperation() {
         return BuildFloat64BinarySmiOperationNode<kOperation>();
       }
       break;
-    default:
+    case BinaryOperationHint::kString:
+    case BinaryOperationHint::kBigInt:
+    case BinaryOperationHint::kBigInt64:
+    case BinaryOperationHint::kAny:
       // Fallback to generic node.
       break;
   }
@@ -1114,7 +1126,8 @@ void MaglevGraphBuilder::VisitCompareOperation() {
       SetAccumulator(AddNewNode<Int32NodeFor<kOperation>>({left, right}));
       return;
     }
-    case CompareOperationHint::kNumber: {
+    case CompareOperationHint::kNumber:
+    case CompareOperationHint::kNumberOrOddball: {
       ValueNode* left = LoadRegisterFloat64(0);
       ValueNode* right = GetAccumulatorFloat64();
       if (TryBuildBranchFor<BranchIfFloat64Compare>({left, right},
@@ -1158,7 +1171,13 @@ void MaglevGraphBuilder::VisitCompareOperation() {
       SetAccumulator(AddNewNode<TaggedEqual>({left, right}));
       return;
     }
-    default:
+    case CompareOperationHint::kNumberOrBoolean:
+    case CompareOperationHint::kString:
+    case CompareOperationHint::kBigInt:
+    case CompareOperationHint::kBigInt64:
+    case CompareOperationHint::kReceiver:
+    case CompareOperationHint::kReceiverOrNullOrUndefined:
+    case CompareOperationHint::kAny:
       // Fallback to generic node.
       break;
   }
@@ -1737,7 +1756,7 @@ ValueNode* MaglevGraphBuilder::BuildSmiUntag(ValueNode* node) {
 
 ValueNode* MaglevGraphBuilder::BuildFloat64Unbox(ValueNode* node) {
   NodeType old_type;
-  if (EnsureType(node, NodeType::kNumber, &old_type)) {
+  if (EnsureType(node, NodeType::kNumberOrOddball, &old_type)) {
     if (old_type == NodeType::kSmi) {
       ValueNode* untagged_smi = AddNewNode<UnsafeSmiUntag>({node});
       return AddNewNode<ChangeInt32ToFloat64>({untagged_smi});
@@ -3871,7 +3890,7 @@ ReduceResult MaglevGraphBuilder::DoTryReduceMathRound(
       return arg;
     case ValueRepresentation::kTagged:
       if (CheckType(arg, NodeType::kSmi)) return arg;
-      if (CheckType(arg, NodeType::kNumber)) {
+      if (CheckType(arg, NodeType::kNumberOrOddball)) {
         arg = GetFloat64(arg);
       } else {
         LazyDeoptContinuationScope continuation_scope(
@@ -4935,7 +4954,10 @@ void MaglevGraphBuilder::BuildToNumberOrToNumeric(Object::Conversion mode) {
       }
       AddNewNode<CheckNumber>({value}, mode);
       break;
-    default:
+    case BinaryOperationHint::kNone:
+    case BinaryOperationHint::kNumberOrOddball:
+    case BinaryOperationHint::kString:
+    case BinaryOperationHint::kAny:
       if (CheckType(value, NodeType::kNumber)) return;
       SetAccumulator(
           AddNewNode<ToNumberOrNumeric>({GetContext(), value}, mode));

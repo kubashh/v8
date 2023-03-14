@@ -306,16 +306,14 @@ void EmitTruncateNumberToInt32(MaglevAssembler* masm, Register value,
   __ Bind(&is_not_smi);
   if (not_a_number != nullptr) {
     // Check if HeapNumber, deopt otherwise.
-    Register scratch = temps.Acquire().W();
-    __ Ldr(scratch, FieldMemOperand(value, HeapObject::kMapOffset));
-    __ CompareRoot(scratch, RootIndex::kHeapNumberMap);
+    __ CompareObjectTypeRange(value, InstanceType::HEAP_NUMBER_TYPE,
+                              InstanceType::ODDBALL_TYPE);
     __ RecordComment("-- Jump to eager deopt");
-    __ JumpIf(ne, not_a_number);
+    __ JumpIf(kUnsignedGreaterThan, not_a_number);
   } else if (v8_flags.debug_code) {
-    Register scratch = temps.Acquire().W();
-    __ Ldr(scratch, FieldMemOperand(value, HeapObject::kMapOffset));
-    __ CompareRoot(scratch, RootIndex::kHeapNumberMap);
-    __ Assert(eq, AbortReason::kUnexpectedValue);
+    __ CompareObjectTypeRange(value, InstanceType::HEAP_NUMBER_TYPE,
+                              InstanceType::ODDBALL_TYPE);
+    __ Assert(kUnsignedLessThanEqual, AbortReason::kUnexpectedValue);
   }
   DoubleRegister double_value = temps.AcquireDouble();
   __ Ldr(double_value, FieldMemOperand(value, HeapNumber::kValueOffset));
@@ -1336,31 +1334,35 @@ namespace {
 
 void TryUnboxTagged(MaglevAssembler* masm, DoubleRegister dst, Register src,
                     Label* fail) {
-  MaglevAssembler::ScratchRegisterScope temps(masm);
-  Register temp = temps.Acquire();
-
   Label is_not_smi, done;
   // Check if Smi.
   __ JumpIfNotSmi(src, &is_not_smi);
   // If Smi, convert to Float64.
-  __ SmiToInt32(temp, src);
-  __ Sxtw(temp, temp.W());
-  __ Scvtf(dst, temp);
+  {
+    MaglevAssembler::ScratchRegisterScope temps(masm);
+    Register temp = temps.Acquire();
+    __ SmiToInt32(temp, src);
+    __ Sxtw(temp, temp.W());
+    __ Scvtf(dst, temp);
+  }
   __ Jump(&done);
   __ Bind(&is_not_smi);
-  // Check if HeapNumber, jump to fail otherwise.
+  // Check if HeapNumber or Oddball, jump to fail otherwise.
+  static_assert(InstanceType::HEAP_NUMBER_TYPE + 1 ==
+                InstanceType::ODDBALL_TYPE);
   if (fail) {
-    __ Move(temp, FieldMemOperand(src, HeapObject::kMapOffset));
-    __ JumpIfNotRoot(temp, RootIndex::kHeapNumberMap, fail);
+    __ CompareObjectTypeRange(src, InstanceType::HEAP_NUMBER_TYPE,
+                              InstanceType::ODDBALL_TYPE);
+    __ JumpIf(kUnsignedGreaterThan, fail);
   } else {
     if (v8_flags.debug_code) {
-      __ Move(temp, FieldMemOperand(src, HeapObject::kMapOffset));
-      __ CompareRoot(temp, RootIndex::kHeapNumberMap);
-      __ Assert(eq, AbortReason::kUnexpectedValue);
+      __ CompareObjectTypeRange(src, InstanceType::HEAP_NUMBER_TYPE,
+                                InstanceType::ODDBALL_TYPE);
+      __ Assert(kLessThanEqual, AbortReason::kUnexpectedValue);
     }
   }
-  __ Move(temp, FieldMemOperand(src, HeapNumber::kValueOffset));
-  __ Fmov(dst, temp);
+  static_assert(HeapNumber::kValueOffset == Oddball::kToNumberRawOffset);
+  __ LoadHeapNumberValue(dst, src);
   __ Bind(&done);
 }
 

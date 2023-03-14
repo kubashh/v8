@@ -1692,7 +1692,7 @@ void CheckValueEqualsString::GenerateCode(MaglevAssembler* masm,
   __ CompareObjectTypeRange(target, FIRST_STRING_TYPE, LAST_STRING_TYPE);
 
   __ JumpToDeferredIf(
-      kLessThanEqual,
+      kUnsignedLessThanEqual,
       [](MaglevAssembler* masm, CheckValueEqualsString* node,
          ZoneLabelRef end) {
         Register target = D::GetRegisterParameter(D::kLeft);

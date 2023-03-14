@@ -975,12 +975,12 @@ class MaglevGraphBuilder {
           return node_info->truncated_int32_alternative;
         }
         NodeType old_type;
-        EnsureType(value, NodeType::kNumber, &old_type);
+        EnsureType(value, NodeType::kNumberOrOddball, &old_type);
         if (NodeTypeIsSmi(old_type)) {
           node_info->int32_alternative = AddNewNode<UnsafeSmiUntag>({value});
           return node_info->int32_alternative;
         }
-        if (NodeTypeIsNumber(old_type)) {
+        if (NodeTypeIsNumberOrOddball(old_type)) {
           node_info->truncated_int32_alternative =
               AddNewNode<TruncateNumberToInt32>({value});
         } else {
