@@ -16,6 +16,23 @@
       "message": "PTAL. We could add a different node to distinguish Number and NumberOrOddball but it seems like a pain.",
       "revId": "16e8098a1c2879e6bda22539958b6bec53cc1cae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34ee352d_9ad2c177",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-14T15:00:35Z",
+      "side": 1,
+      "message": "Actually compares seem kind of broken now..",
+      "revId": "16e8098a1c2879e6bda22539958b6bec53cc1cae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
