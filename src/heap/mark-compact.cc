@@ -5835,9 +5835,8 @@ void YoungGenerationMarkingTask::MarkYoungObject(HeapObject heap_object) {
   if (marking_state_->WhiteToGrey(heap_object)) {
     const auto visited_size = visitor_.Visit(heap_object);
     if (visited_size) {
-      marking_state_->IncrementLiveBytes(
-          MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(heap_object)),
-          ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
+      live_bytes_[MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(
+          heap_object))] += ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size);
     }
     // Objects transition to black when visited.
     DCHECK(marking_state_->IsBlack(heap_object));
@@ -5850,9 +5849,8 @@ void YoungGenerationMarkingTask::DrainMarkingWorklist() {
          marking_worklists_local_->PopOnHold(&heap_object)) {
     const auto visited_size = visitor_.Visit(heap_object);
     if (visited_size) {
-      marking_state_->IncrementLiveBytes(
-          MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(heap_object)),
-          ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
+      live_bytes_[MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(
+          heap_object))] += ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size);
     }
   }
   // Publish wrapper objects to the cppgc marking state, if registered.
@@ -5863,7 +5861,12 @@ void YoungGenerationMarkingTask::PublishMarkingWorklist() {
   marking_worklists_local_->Publish();
 }
 
-void YoungGenerationMarkingTask::Finalize() { visitor_.Finalize(); }
+void YoungGenerationMarkingTask::Finalize() {
+  visitor_.Finalize();
+  for (auto& pair : live_bytes_) {
+    marking_state_->IncrementLiveBytes(pair.first, pair.second);
+  }
+}
 
 void PageMarkingItem::Process(YoungGenerationMarkingTask* task) {
   base::MutexGuard guard(chunk_->mutex());
@@ -5934,18 +5937,18 @@ void YoungGenerationMarkingJob::Run(JobDelegate* delegate) {
 }
 
 size_t YoungGenerationMarkingJob::GetMaxConcurrency(size_t worker_count) const {
-  // Pages are not private to markers but we can still use them to estimate
-  // the amount of marking that is required.
+  // Pages are not private to markers but we can still use them to
+  // estimate the amount of marking that is required.
   const int kPagesPerTask = 2;
   size_t items = remaining_marking_items_.load(std::memory_order_relaxed);
   size_t num_tasks;
   if (ShouldDrainMarkingWorklist()) {
-    num_tasks = std::max(
-        (items + 1) / kPagesPerTask,
-        global_worklists_->shared()->Size() +
-            global_worklists_->on_hold()
-                ->Size());  // TODO(v8:13012): If this is used with concurrent
-                            // marking, we need to remove on_hold() here.
+    num_tasks = std::max((items + 1) / kPagesPerTask,
+                         global_worklists_->shared()->Size() +
+                             global_worklists_->on_hold()
+                                 ->Size());  // TODO(v8:13012): If this is used
+                                             // with concurrent marking, we need
+                                             // to remove on_hold() here.
   } else {
     num_tasks = (items + 1) / kPagesPerTask;
   }
@@ -5979,11 +5982,11 @@ void YoungGenerationMarkingJob::ProcessItems(JobDelegate* delegate) {
 
 void YoungGenerationMarkingJob::ProcessMarkingItems(
     YoungGenerationMarkingTask* task) {
-  // TODO(v8:13012): YoungGenerationMarkingJob is generally used to compute the
-  // transitive closure. In the context of concurrent MinorMC, it currently only
-  // seeds the worklists from the old-to-new remembered set, but does not empty
-  // them (this is done concurrently). The class should be refactored to make
-  // this clearer.
+  // TODO(v8:13012): YoungGenerationMarkingJob is generally used to
+  // compute the transitive closure. In the context of concurrent MinorMC,
+  // it currently only seeds the worklists from the old-to-new remembered
+  // set, but does not empty them (this is done concurrently). The class
+  // should be refactored to make this clearer.
   while (remaining_marking_items_.load(std::memory_order_relaxed) > 0) {
     base::Optional<size_t> index = generator_.GetNext();
     if (!index) return;
@@ -6057,7 +6060,8 @@ void MinorMarkCompactCollector::MarkLiveObjectsInParallel(
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MINOR_MC_MARK_CLOSURE_PARALLEL);
 
-    // CppGC starts parallel marking tasks that will trace TracedReferences.
+    // CppGC starts parallel marking tasks that will trace
+    // TracedReferences.
     if (heap_->cpp_heap()) {
       CppHeap::From(heap_->cpp_heap())
           ->EnterFinalPause(heap_->embedder_stack_state_);
@@ -6083,8 +6087,8 @@ void MinorMarkCompactCollector::MarkLiveObjectsInParallel(
     for (YoungGenerationMarkingTask& task : tasks) {
       task.Finalize();
     }
-    // If unified young generation is in progress, the parallel marker may add
-    // more entries into local_marking_worklists_.
+    // If unified young generation is in progress, the parallel marker may
+    // add more entries into local_marking_worklists_.
     DCHECK_IMPLIES(!v8_flags.cppgc_young_generation,
                    local_marking_worklists_->IsEmpty());
   }
@@ -6104,9 +6108,10 @@ void MinorMarkCompactCollector::MarkLiveObjects() {
     DCHECK(incremental_marking->IsMinorMarking());
     incremental_marking->Stop();
     MarkingBarrier::PublishAll(heap());
-    // TODO(v8:13012): TRACE_GC with MINOR_MC_MARK_FULL_CLOSURE_PARALLEL_JOIN.
-    // TODO(v8:13012): Instead of finishing concurrent marking here, we could
-    // continue running it to replace parallel marking.
+    // TODO(v8:13012): TRACE_GC with
+    // MINOR_MC_MARK_FULL_CLOSURE_PARALLEL_JOIN.
+    // TODO(v8:13012): Instead of finishing concurrent marking here, we
+    // could continue running it to replace parallel marking.
     FinishConcurrentMarking();
   }
 
@@ -6308,8 +6313,9 @@ void MinorMarkCompactCollector::Sweep() {
   if (SweepNewLargeSpace()) has_promoted_pages = true;
 
   if (v8_flags.verify_heap && has_promoted_pages) {
-    // Update the external string table in preparation for heap verification.
-    // Otherwise, updating the table will happen during the next full GC.
+    // Update the external string table in preparation for heap
+    // verification. Otherwise, updating the table will happen during the
+    // next full GC.
     TRACE_GC(heap()->tracer(),
              GCTracer::Scope::MINOR_MC_SWEEP_UPDATE_STRING_TABLE);
     heap()->UpdateYoungReferencesInExternalStringTable([](Heap* heap,
