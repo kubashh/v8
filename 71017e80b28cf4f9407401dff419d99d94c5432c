@@ -35,6 +35,109 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c1f951c_effd8c39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-14T13:52:58Z",
+      "side": 1,
+      "message": "Would be nice if we had a way to test a change like this on our trybots. E.g. a bot that sets this gn arg and downloads some fake profile?",
+      "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aae149b0_37da0fcc",
+        "filename": "BUILD.gn",
+        "patchSetId": 18
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-14T13:52:58Z",
+      "side": 1,
+      "message": "See my comment in v8.gni. I think the variable should be fully initialized there. If the initialization there is changed slightly, then this here is not necessary.",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 432,
+        "endChar": 1
+      },
+      "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c889bdc7_c3830a90",
+        "filename": "gni/v8.gni",
+        "patchSetId": 18
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-14T13:52:58Z",
+      "side": 1,
+      "message": "Ideally the variable should always end up containing a boolean, which it doesn\u0027t in v8 stand-alone. How about:\nif (v8_enable_builtins_optimization \u003d\u003d \"\") {\n  v8_enable_builtins_optimization \u003d build_with_chromium \u0026\u0026 chrome_pgo_phase \u003d\u003d 2\n}\n\nOr just fully drop the build_with_chromium check, since chrome_pgo_phase is only set to 2 when built with chromium?",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 1
+      },
+      "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f32262d_6a3c1c88",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 18
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-14T13:52:58Z",
+      "side": 1,
+      "message": "Fly-by nit: This Chromium pgo flag is now a bit confusing. Maybe we should clean-up some naming (separate CL) to make clear, which pgo we\u0027re talking about.",
+      "range": {
+        "startLine": 487,
+        "startChar": 55,
+        "endLine": 487,
+        "endChar": 66
+      },
+      "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "987529c8_55bdf5d6",
+        "filename": "tools/builtins-pgo/download_profiles.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-14T13:52:58Z",
+      "side": 1,
+      "message": "I assume the only change here is in line 21?\n / \u0027profiles\u0027",
+      "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "15102f14_fed2a14d",
