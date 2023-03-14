@@ -106,6 +106,9 @@ class HeapObjectHeader {
   inline bool IsFinalizable() const;
   void Finalize();
 
+  inline bool IsExternallyManagedObject() const;
+  bool ShouldDestroyExternallyManagedObject() const;
+
 #if defined(CPPGC_CAGED_HEAP)
   inline void SetNextUnfinalized(HeapObjectHeader* next);
   inline HeapObjectHeader* GetNextUnfinalized(uintptr_t cage_base) const;
@@ -308,6 +311,11 @@ bool HeapObjectHeader::IsFree() const {
 bool HeapObjectHeader::IsFinalizable() const {
   const GCInfo& gc_info = GlobalGCInfoTable::GCInfoFromIndex(GetGCInfoIndex());
   return gc_info.finalize;
+}
+
+bool HeapObjectHeader::IsExternallyManagedObject() const {
+  const GCInfo& gc_info = GlobalGCInfoTable::GCInfoFromIndex(GetGCInfoIndex());
+  return gc_info.should_destroy_object_with_external_lifetime_management;
 }
 
 #if defined(CPPGC_CAGED_HEAP)
