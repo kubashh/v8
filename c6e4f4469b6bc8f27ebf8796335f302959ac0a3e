@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d87716a1_789cc07a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-14T14:08:57Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL.\n@tebbi@chromium.org: Please sign-off src/compiler/pipeline.cc.",
+      "revId": "c6e4f4469b6bc8f27ebf8796335f302959ac0a3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "245a662d_4d7b2cc0",
+        "filename": "src/compiler/wasm-gc-operator-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-14T14:08:57Z",
+      "side": 1,
+      "message": "Unrelated, just adding this todo here not to forget it in the long run.",
+      "range": {
+        "startLine": 337,
+        "startChar": 5,
+        "endLine": 337,
+        "endChar": 20
+      },
+      "revId": "c6e4f4469b6bc8f27ebf8796335f302959ac0a3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "552f081e_4cfb44c1",
+        "filename": "test/mjsunit/wasm/wasm-gc-source-location.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-14T14:08:57Z",
+      "side": 1,
+      "message": "I am only covering the cases where the `SetSourcePosition` was missing in wasm-compiler.cc. I don\u0027t feel very tempted to provide test coverage for every single trap in the gc lowering also given that the pattern is always the same.",
+      "range": {
+        "startLine": 1,
+        "startChar": 3,
+        "endLine": 1,
+        "endChar": 12
+      },
+      "revId": "c6e4f4469b6bc8f27ebf8796335f302959ac0a3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ad57d7d_a0386902",
+        "filename": "test/mjsunit/wasm/wasm-gc-source-location.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-14T14:08:57Z",
+      "side": 1,
+      "message": "There is always one more thing... 😊",
+      "range": {
+        "startLine": 5,
+        "startChar": 3,
+        "endLine": 5,
+        "endChar": 17
+      },
+      "revId": "c6e4f4469b6bc8f27ebf8796335f302959ac0a3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
