@@ -5584,8 +5584,9 @@ Node* WasmGraphBuilder::RefTestAbstract(Node* object, wasm::HeapType type,
 Node* WasmGraphBuilder::RefCast(Node* object, Node* rtt,
                                 WasmTypeCheckConfig config,
                                 wasm::WasmCodePosition position) {
-  // TODO(mliedtke): What should happen with the position?
-  return gasm_->WasmTypeCast(object, rtt, config);
+  Node* cast = gasm_->WasmTypeCast(object, rtt, config);
+  SetSourcePosition(cast, position);
+  return cast;
 }
 
 Node* WasmGraphBuilder::RefCastAbstract(Node* object, wasm::HeapType type,

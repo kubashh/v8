@@ -7,6 +7,7 @@
 #include "src/base/logging.h"
 #include "src/common/globals.h"
 #include "src/compiler/common-operator.h"
+#include "src/compiler/compiler-source-position-table.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/opcodes.h"
 #include "src/compiler/operator.h"
@@ -24,7 +25,8 @@ namespace compiler {
 
 WasmGCLowering::WasmGCLowering(Editor* editor, MachineGraph* mcgraph,
                                const wasm::WasmModule* module,
-                               bool disable_trap_handler)
+                               bool disable_trap_handler,
+                               SourcePositionTable* source_position_table)
     : AdvancedReducer(editor),
       null_check_strategy_(trap_handler::IsTrapHandlerEnabled() &&
                                    V8_STATIC_ROOTS_BOOL && !disable_trap_handler
@@ -33,7 +35,8 @@ WasmGCLowering::WasmGCLowering(Editor* editor, MachineGraph* mcgraph,
       gasm_(mcgraph, mcgraph->zone()),
       module_(module),
       dead_(mcgraph->Dead()),
-      mcgraph_(mcgraph) {}
+      mcgraph_(mcgraph),
+      source_position_table_(source_position_table) {}
 
 Reduction WasmGCLowering::Reduce(Node* node) {
   switch (node->opcode()) {
@@ -204,18 +207,23 @@ Reduction WasmGCLowering::ReduceWasmTypeCast(Node* node) {
     if (config.to.is_nullable()) {
       gasm_.GotoIf(is_null, &end_label, BranchHint::kFalse);
     } else if (!v8_flags.experimental_wasm_skip_null_checks) {
-      gasm_.TrapIf(is_null, TrapId::kTrapIllegalCast);
+      Node* trap_null = gasm_.TrapIf(is_null, TrapId::kTrapIllegalCast);
+      UpdateSourcePosition(trap_null, node);
     }
   }
 
   if (object_can_be_i31) {
-    gasm_.TrapIf(gasm_.IsSmi(object), TrapId::kTrapIllegalCast);
+    Node* trap_smi =
+        gasm_.TrapIf(gasm_.IsSmi(object), TrapId::kTrapIllegalCast);
+    UpdateSourcePosition(trap_smi, node);
   }
 
   Node* map = gasm_.LoadMap(object);
 
   if (module_->types[config.to.ref_index()].is_final) {
-    gasm_.TrapUnless(gasm_.TaggedEqual(map, rtt), TrapId::kTrapIllegalCast);
+    Node* trap_cast =
+        gasm_.TrapUnless(gasm_.TaggedEqual(map, rtt), TrapId::kTrapIllegalCast);
+    UpdateSourcePosition(trap_cast, node);
     gasm_.Goto(&end_label);
   } else {
     // First, check if types happen to be equal. This has been shown to give
@@ -225,7 +233,8 @@ Reduction WasmGCLowering::ReduceWasmTypeCast(Node* node) {
     // Check if map instance type identifies a wasm object.
     if (is_cast_from_any) {
       Node* is_wasm_obj = gasm_.IsDataRefMap(map);
-      gasm_.TrapUnless(is_wasm_obj, TrapId::kTrapIllegalCast);
+      Node* trap_cast = gasm_.TrapUnless(is_wasm_obj, TrapId::kTrapIllegalCast);
+      UpdateSourcePosition(trap_cast, node);
     }
 
     Node* type_info = gasm_.LoadWasmTypeInfo(map);
@@ -239,9 +248,11 @@ Reduction WasmGCLowering::ReduceWasmTypeCast(Node* node) {
               MachineType::TaggedSigned(), type_info,
               wasm::ObjectAccess::ToTagged(
                   WasmTypeInfo::kSupertypesLengthOffset)));
-      gasm_.TrapUnless(gasm_.UintLessThan(gasm_.IntPtrConstant(rtt_depth),
-                                          supertypes_length),
-                       TrapId::kTrapIllegalCast);
+      Node* trap_cast =
+          gasm_.TrapUnless(gasm_.UintLessThan(gasm_.IntPtrConstant(rtt_depth),
+                                              supertypes_length),
+                           TrapId::kTrapIllegalCast);
+      UpdateSourcePosition(trap_cast, node);
     }
 
     Node* maybe_match = gasm_.LoadImmutableFromObject(
@@ -249,8 +260,9 @@ Reduction WasmGCLowering::ReduceWasmTypeCast(Node* node) {
         wasm::ObjectAccess::ToTagged(WasmTypeInfo::kSupertypesOffset +
                                      kTaggedSize * rtt_depth));
 
-    gasm_.TrapUnless(gasm_.TaggedEqual(maybe_match, rtt),
-                     TrapId::kTrapIllegalCast);
+    Node* trap_cast = gasm_.TrapUnless(gasm_.TaggedEqual(maybe_match, rtt),
+                                       TrapId::kTrapIllegalCast);
+    UpdateSourcePosition(trap_cast, node);
     gasm_.Goto(&end_label);
   }
 
@@ -282,18 +294,23 @@ Reduction WasmGCLowering::ReduceAssertNotNull(Node* node) {
           wasm::IsSubtypeOf(wasm::kWasmI31Ref.AsNonNull(), op_parameter.type,
                             module_) ||
           wasm::IsSubtypeOf(op_parameter.type, wasm::kWasmExternRef, module_)) {
-        gasm_.TrapIf(IsNull(object, op_parameter.type), op_parameter.trap_id);
+        Node* trap_null = gasm_.TrapIf(IsNull(object, op_parameter.type),
+                                       op_parameter.trap_id);
+        UpdateSourcePosition(trap_null, node);
       } else {
         static_assert(WasmStruct::kHeaderSize > kTaggedSize);
         static_assert(WasmArray::kHeaderSize > kTaggedSize);
         // TODO(manoskouk): JSFunction::kHeaderSize also has to be >kTaggedSize.
-        gasm_.LoadTrapOnNull(
+        Node* trap_null = gasm_.LoadTrapOnNull(
             MachineType::Int32(), object,
             gasm_.IntPtrConstant(wasm::ObjectAccess::ToTagged(kTaggedSize)));
+        UpdateSourcePosition(trap_null, node);
       }
     }
   } else {
-    gasm_.TrapIf(IsNull(object, op_parameter.type), op_parameter.trap_id);
+    Node* trap_null =
+        gasm_.TrapIf(IsNull(object, op_parameter.type), op_parameter.trap_id);
+    UpdateSourcePosition(trap_null, node);
   }
 
   ReplaceWithValue(node, object, gasm_.effect(), gasm_.control());
@@ -474,8 +491,9 @@ Reduction WasmGCLowering::ReduceWasmStructGet(Node* node) {
 
   if (null_check_strategy_ == kExplicitNullChecks &&
       info.null_check == kWithNullCheck) {
-    gasm_.TrapIf(IsNull(object, wasm::kWasmAnyRef),
-                 TrapId::kTrapNullDereference);
+    Node* trap_null = gasm_.TrapIf(IsNull(object, wasm::kWasmAnyRef),
+                                   TrapId::kTrapNullDereference);
+    UpdateSourcePosition(trap_null, node);
   }
 
   Node* load =
@@ -502,8 +520,9 @@ Reduction WasmGCLowering::ReduceWasmStructSet(Node* node) {
 
   if (null_check_strategy_ == kExplicitNullChecks &&
       info.null_check == kWithNullCheck) {
-    gasm_.TrapIf(IsNull(object, wasm::kWasmAnyRef),
-                 TrapId::kTrapNullDereference);
+    Node* trap_null = gasm_.TrapIf(IsNull(object, wasm::kWasmAnyRef),
+                                   TrapId::kTrapNullDereference);
+    UpdateSourcePosition(trap_null, node);
   }
 
   wasm::ValueType field_type = info.type->field(info.field_index);
@@ -581,8 +600,9 @@ Reduction WasmGCLowering::ReduceWasmArrayLength(Node* node) {
 
   if (null_check_strategy_ == kExplicitNullChecks &&
       null_check == kWithNullCheck) {
-    gasm_.TrapIf(IsNull(object, wasm::kWasmAnyRef),
-                 TrapId::kTrapNullDereference);
+    Node* trap_null = gasm_.TrapIf(IsNull(object, wasm::kWasmAnyRef),
+                                   TrapId::kTrapNullDereference);
+    UpdateSourcePosition(trap_null, node);
   }
 
   Node* length =
@@ -811,6 +831,20 @@ Reduction WasmGCLowering::ReduceStringPrepareForGetCodeunit(Node* node) {
 
   node->Kill();
   return Replace(base);
+}
+
+void WasmGCLowering::UpdateSourcePosition(Node* new_node, Node* old_node) {
+  if (source_position_table_) {
+    SourcePosition position =
+        source_position_table_->GetSourcePosition(old_node);
+    if (position.ScriptOffset() != kNoSourcePosition) {
+      source_position_table_->SetSourcePosition(new_node, position);
+    } else {
+      // TODO(mliedtke): Source positions are not yet supported for inlining
+      // wasm into JS. Add support for it and replace the if with a DCHECK.
+      DCHECK_EQ(kExplicitNullChecks, null_check_strategy_);
+    }
+  }
 }
 
 }  // namespace compiler
