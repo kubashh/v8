@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e572658_24fb7645",
+        "filename": "BUILD.gn",
+        "patchSetId": 18
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-03-14T16:49:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aae149b0_37da0fcc",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 432,
+        "endChar": 1
+      },
+      "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c889bdc7_c3830a90",
@@ -88,6 +112,30 @@
       "writtenOn": "2023-03-14T13:52:58Z",
       "side": 1,
       "message": "Ideally the variable should always end up containing a boolean, which it doesn\u0027t in v8 stand-alone. How about:\nif (v8_enable_builtins_optimization \u003d\u003d \"\") {\n  v8_enable_builtins_optimization \u003d build_with_chromium \u0026\u0026 chrome_pgo_phase \u003d\u003d 2\n}\n\nOr just fully drop the build_with_chromium check, since chrome_pgo_phase is only set to 2 when built with chromium?",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 1
+      },
+      "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f570dd_58e6c28d",
+        "filename": "gni/v8.gni",
+        "patchSetId": 18
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-03-14T16:49:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c889bdc7_c3830a90",
       "range": {
         "startLine": 151,
         "startChar": 0,
@@ -123,6 +171,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "af3f6387_6ac14f90",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 18
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-03-14T16:49:37Z",
+      "side": 1,
+      "message": "Refactored in https://crrev.com/c/4334274.",
+      "parentUuid": "2f32262d_6a3c1c88",
+      "range": {
+        "startLine": 487,
+        "startChar": 55,
+        "endLine": 487,
+        "endChar": 66
+      },
+      "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "987529c8_55bdf5d6",
         "filename": "tools/builtins-pgo/download_profiles.py",
         "patchSetId": 18
@@ -134,6 +206,24 @@
       "writtenOn": "2023-03-14T13:52:58Z",
       "side": 1,
       "message": "I assume the only change here is in line 21?\n / \u0027profiles\u0027",
+      "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1798e34e_b45fdf54",
+        "filename": "tools/builtins-pgo/download_profiles.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-03-14T16:49:37Z",
+      "side": 1,
+      "message": "It\u0027s slightly more: https://chromium-review.googlesource.com/c/v8/v8/+/4335220/12/tools/builtins-pgo/download_profiles.py",
+      "parentUuid": "987529c8_55bdf5d6",
       "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -151,6 +241,24 @@
       "writtenOn": "2023-03-14T13:13:47Z",
       "side": 1,
       "message": "Should we move/remove the empty profiles from tools/builtins-pgo/ dir?",
+      "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97092947_dfab8f86",
+        "filename": "tools/builtins-pgo/generate.py",
+        "patchSetId": 18
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-03-14T16:49:37Z",
+      "side": 1,
+      "message": "Yes thanks, they have been added back after my rebase :/ Removed again.\n\nWe can\u0027t move them as we want to gitignore those files. If they are checked in, git is tracking them regardless of any gitignore entry.\n\nIiuc, the build process fails now if we try to build with optimization flags as the files are not available. Though, having this strictness is probably good.",
+      "parentUuid": "15102f14_fed2a14d",
       "revId": "71017e80b28cf4f9407401dff419d99d94c5432c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
