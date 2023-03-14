@@ -33,6 +33,40 @@
       "message": "Great cleanup! LGTM",
       "revId": "817386dd0952fb3d238350b4d9fb28ed99b1a843",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "551ea0de_ef032718",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-14T19:00:38Z",
+      "side": 1,
+      "message": "lgtm % failures around hint alignment. Nice cleanup",
+      "revId": "817386dd0952fb3d238350b4d9fb28ed99b1a843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce818f79_13c13c82",
+        "filename": "src/utils/allocation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-14T19:00:38Z",
+      "side": 1,
+      "message": "The hint should still be rounded, judging by the failures.",
+      "revId": "817386dd0952fb3d238350b4d9fb28ed99b1a843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
