@@ -16,6 +16,23 @@
       "message": "Hi Leszek,\n\nThis CL is non-cache optimization solution of Function.prototype.toString, could you please review this CL?",
       "revId": "5e62cbf6a596b2641d9195bb5f806211c787b04e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2995719e_46677f44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2023-03-14T00:43:28Z",
+      "side": 1,
+      "message": "Thanks for your review!",
+      "revId": "5e62cbf6a596b2641d9195bb5f806211c787b04e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
