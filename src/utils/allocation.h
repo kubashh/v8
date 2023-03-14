@@ -303,29 +303,28 @@ class VirtualMemory final {
 // ranges (on platforms that require code ranges) and are configurable via
 // ReservationParams.
 //
-// +------------+-----------+------------ ~~~ --+- ~~~ -+
-// |     ...    |    ...    |   ...             |  ...  |
-// +------------+-----------+------------ ~~~ --+- ~~~ -+
-// ^            ^           ^
-// start        cage base   allocatable base
+// +-----------+------------ ~~~ --+- ~~~ -+
+// |    ...    |   ...             |  ...  |
+// +-----------+------------ ~~~ --+- ~~~ -+
+// ^           ^
+// cage base   allocatable base
 //
-// <------------>           <------------------->
-// base bias size              allocatable size
-//              <------------------------------->
-//                          cage size
-// <---------------------------------------------------->
-//                   reservation size
+//             <------------------->
+//               allocatable size
+// <------------------------------->
+//              cage size
+// <--------------------------------------->
+//            reservation size
 //
 // - The reservation is made using ReservationParams::page_allocator.
-// - start is the start of the virtual memory reservation.
-// - cage base is the base address of the cage.
+// - cage base is the start of the virtual memory reservation and the base
+//   address of the cage.
 // - allocatable base is the cage base rounded up to the nearest
 //   ReservationParams::page_size, and is the start of the allocatable area for
 //   the BoundedPageAllocator.
 // - cage size is the size of the area from cage base to the end of the
 //   allocatable area.
 //
-// - The base bias is configured by ReservationParams::base_bias_size.
 // - The reservation size is configured by ReservationParams::reservation_size
 //   but it might be actually bigger if we end up over-reserving the virtual
 //   address space.
@@ -343,8 +342,8 @@ class VirtualMemory final {
 // ReservationParams::page_allocator->AllocatePageSize().
 //
 // - The reservation size must be AllocatePageSize-aligned.
-// - If the base alignment is not kAnyBaseAlignment, both the base alignment
-//   and the base bias size must be AllocatePageSize-aligned.
+// - If the base alignment is not kAnyBaseAlignment then the base alignment
+//   must be AllocatePageSize-aligned.
 // - The base alignment may be kAnyBaseAlignment to denote any alignment is
 //   acceptable. In this case the base bias size does not need to be aligned.
 class VirtualMemoryCage {
@@ -384,7 +383,6 @@ class VirtualMemoryCage {
     // See diagram above.
     size_t reservation_size;
     size_t base_alignment;
-    size_t base_bias_size;
     size_t page_size;
     Address requested_start_hint;
     JitPermission jit;

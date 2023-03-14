@@ -21,12 +21,8 @@ struct PtrComprCageReservationParams
   PtrComprCageReservationParams() {
     page_allocator = GetPlatformPageAllocator();
 
-    // Unused.
-    // TODO(v8:13788): Remove base_bias_size.
-    const size_t kIsolateRootBiasPageSize = 0;
-    reservation_size = kPtrComprCageReservationSize + kIsolateRootBiasPageSize;
+    reservation_size = kPtrComprCageReservationSize;
     base_alignment = kPtrComprCageBaseAlignment;
-    base_bias_size = kIsolateRootBiasPageSize;
 
     // Simplify BoundedPageAllocator's life by configuring it to use same page
     // size as the Heap will use (MemoryChunk::kPageSize).
