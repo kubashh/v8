@@ -35,24 +35,30 @@ struct V8_EXPORT EnsureGCInfoIndexTrait final {
             bool = NameTrait<T>::HasNonHiddenName()>
   struct EnsureGCInfoIndexTraitDispatch;
 
-  static void V8_PRESERVE_MOST
-  EnsureGCInfoIndexPolymorphic(std::atomic<GCInfoIndex>&, TraceCallback,
-                               FinalizationCallback, NameCallback);
   static void V8_PRESERVE_MOST EnsureGCInfoIndexPolymorphic(
-      std::atomic<GCInfoIndex>&, TraceCallback, FinalizationCallback);
+      std::atomic<GCInfoIndex>&, TraceCallback, FinalizationCallback,
+      NameCallback, ShouldDestroyObjectWithExternalLifetimeManagementCallback);
   static void V8_PRESERVE_MOST EnsureGCInfoIndexPolymorphic(
-      std::atomic<GCInfoIndex>&, TraceCallback, NameCallback);
-  static void V8_PRESERVE_MOST
-  EnsureGCInfoIndexPolymorphic(std::atomic<GCInfoIndex>&, TraceCallback);
-  static void V8_PRESERVE_MOST
-  EnsureGCInfoIndexNonPolymorphic(std::atomic<GCInfoIndex>&, TraceCallback,
-                                  FinalizationCallback, NameCallback);
+      std::atomic<GCInfoIndex>&, TraceCallback, FinalizationCallback,
+      ShouldDestroyObjectWithExternalLifetimeManagementCallback);
+  static void V8_PRESERVE_MOST EnsureGCInfoIndexPolymorphic(
+      std::atomic<GCInfoIndex>&, TraceCallback, NameCallback,
+      ShouldDestroyObjectWithExternalLifetimeManagementCallback);
+  static void V8_PRESERVE_MOST EnsureGCInfoIndexPolymorphic(
+      std::atomic<GCInfoIndex>&, TraceCallback,
+      ShouldDestroyObjectWithExternalLifetimeManagementCallback);
   static void V8_PRESERVE_MOST EnsureGCInfoIndexNonPolymorphic(
-      std::atomic<GCInfoIndex>&, TraceCallback, FinalizationCallback);
+      std::atomic<GCInfoIndex>&, TraceCallback, FinalizationCallback,
+      NameCallback, ShouldDestroyObjectWithExternalLifetimeManagementCallback);
   static void V8_PRESERVE_MOST EnsureGCInfoIndexNonPolymorphic(
-      std::atomic<GCInfoIndex>&, TraceCallback, NameCallback);
-  static void V8_PRESERVE_MOST
-  EnsureGCInfoIndexNonPolymorphic(std::atomic<GCInfoIndex>&, TraceCallback);
+      std::atomic<GCInfoIndex>&, TraceCallback, FinalizationCallback,
+      ShouldDestroyObjectWithExternalLifetimeManagementCallback);
+  static void V8_PRESERVE_MOST EnsureGCInfoIndexNonPolymorphic(
+      std::atomic<GCInfoIndex>&, TraceCallback, NameCallback,
+      ShouldDestroyObjectWithExternalLifetimeManagementCallback);
+  static void V8_PRESERVE_MOST EnsureGCInfoIndexNonPolymorphic(
+      std::atomic<GCInfoIndex>&, TraceCallback,
+      ShouldDestroyObjectWithExternalLifetimeManagementCallback);
 };
 
 #define DISPATCH(is_polymorphic, has_finalizer, has_non_hidden_name, function) \
@@ -67,38 +73,62 @@ struct V8_EXPORT EnsureGCInfoIndexTrait final {
 // --------------------------------------------------------------------- //
 // DISPATCH(is_polymorphic, has_finalizer, has_non_hidden_name, function)
 // --------------------------------------------------------------------- //
-DISPATCH(true, true, true,                                               //
-         EnsureGCInfoIndexPolymorphic(registered_index,                  //
-                                      TraceTrait<T>::Trace,              //
-                                      FinalizerTrait<T>::kCallback,      //
-                                      NameTrait<T>::GetName))            //
-DISPATCH(true, true, false,                                              //
-         EnsureGCInfoIndexPolymorphic(registered_index,                  //
-                                      TraceTrait<T>::Trace,              //
-                                      FinalizerTrait<T>::kCallback))     //
-DISPATCH(true, false, true,                                              //
-         EnsureGCInfoIndexPolymorphic(registered_index,                  //
-                                      TraceTrait<T>::Trace,              //
-                                      NameTrait<T>::GetName))            //
-DISPATCH(true, false, false,                                             //
-         EnsureGCInfoIndexPolymorphic(registered_index,                  //
-                                      TraceTrait<T>::Trace))             //
-DISPATCH(false, true, true,                                              //
-         EnsureGCInfoIndexNonPolymorphic(registered_index,               //
-                                         TraceTrait<T>::Trace,           //
-                                         FinalizerTrait<T>::kCallback,   //
-                                         NameTrait<T>::GetName))         //
-DISPATCH(false, true, false,                                             //
-         EnsureGCInfoIndexNonPolymorphic(registered_index,               //
-                                         TraceTrait<T>::Trace,           //
-                                         FinalizerTrait<T>::kCallback))  //
-DISPATCH(false, false, true,                                             //
-         EnsureGCInfoIndexNonPolymorphic(registered_index,               //
-                                         TraceTrait<T>::Trace,           //
-                                         NameTrait<T>::GetName))         //
-DISPATCH(false, false, false,                                            //
-         EnsureGCInfoIndexNonPolymorphic(registered_index,               //
-                                         TraceTrait<T>::Trace))          //
+DISPATCH(
+    true, true, true,  //
+    EnsureGCInfoIndexPolymorphic(
+        registered_index,              //
+        TraceTrait<T>::Trace,          //
+        FinalizerTrait<T>::kCallback,  //
+        NameTrait<T>::GetName,         //
+        ShouldDestroyWithExternalLifetimeManagementTrait<T>::ShouldDestroyFn))
+DISPATCH(
+    true, true, false,  //
+    EnsureGCInfoIndexPolymorphic(
+        registered_index,              //
+        TraceTrait<T>::Trace,          //
+        FinalizerTrait<T>::kCallback,  //
+        ShouldDestroyWithExternalLifetimeManagementTrait<T>::ShouldDestroyFn))
+DISPATCH(
+    true, false, true,  //
+    EnsureGCInfoIndexPolymorphic(
+        registered_index,       //
+        TraceTrait<T>::Trace,   //
+        NameTrait<T>::GetName,  //
+        ShouldDestroyWithExternalLifetimeManagementTrait<T>::ShouldDestroyFn))
+DISPATCH(
+    true, false, false,  //
+    EnsureGCInfoIndexPolymorphic(
+        registered_index,      //
+        TraceTrait<T>::Trace,  //
+        ShouldDestroyWithExternalLifetimeManagementTrait<T>::ShouldDestroyFn))
+DISPATCH(
+    false, true, true,  //
+    EnsureGCInfoIndexNonPolymorphic(
+        registered_index,              //
+        TraceTrait<T>::Trace,          //
+        FinalizerTrait<T>::kCallback,  //
+        NameTrait<T>::GetName,         //
+        ShouldDestroyWithExternalLifetimeManagementTrait<T>::ShouldDestroyFn))
+DISPATCH(
+    false, true, false,  //
+    EnsureGCInfoIndexNonPolymorphic(
+        registered_index,              //
+        TraceTrait<T>::Trace,          //
+        FinalizerTrait<T>::kCallback,  //
+        ShouldDestroyWithExternalLifetimeManagementTrait<T>::ShouldDestroyFn))
+DISPATCH(
+    false, false, true,  //
+    EnsureGCInfoIndexNonPolymorphic(
+        registered_index,       //
+        TraceTrait<T>::Trace,   //
+        NameTrait<T>::GetName,  //
+        ShouldDestroyWithExternalLifetimeManagementTrait<T>::ShouldDestroyFn))
+DISPATCH(
+    false, false, false,  //
+    EnsureGCInfoIndexNonPolymorphic(
+        registered_index,      //
+        TraceTrait<T>::Trace,  //
+        ShouldDestroyWithExternalLifetimeManagementTrait<T>::ShouldDestroyFn))
 
 #undef DISPATCH
 

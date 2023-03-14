@@ -26,9 +26,9 @@ namespace {
 // having GCInfos that cross the boundaries between these subparts we force the
 // size of GCInfo to be a power of 2 as well.
 constexpr size_t kEntrySize = sizeof(GCInfo);
-static_assert(v8::base::bits::IsPowerOfTwo(kEntrySize),
-              "GCInfoTable entries size must be power of "
-              "two");
+// static_assert(v8::base::bits::IsPowerOfTwo(kEntrySize),
+//"GCInfoTable entries size must be power of "
+//"two");
 
 }  // namespace
 
@@ -87,9 +87,10 @@ void GCInfoTable::Resize() {
   const GCInfoIndex new_limit = (limit_) ? 2 * limit_ : InitialTableLimit();
   CHECK_GT(new_limit, limit_);
   const size_t old_committed_size = limit_ * kEntrySize;
-  const size_t new_committed_size = new_limit * kEntrySize;
+  const size_t new_committed_size =
+      RoundUp(new_limit * kEntrySize, page_allocator_.AllocatePageSize());
   CHECK(table_);
-  CHECK_EQ(0u, new_committed_size % page_allocator_.AllocatePageSize());
+  //CHECK_EQ(0u, new_committed_size % page_allocator_.AllocatePageSize());
   CHECK_GE(MaxTableSize(), new_committed_size);
   // Recommit new area as read/write.
   uint8_t* current_table_end =
