@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b344a108_623be45d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-14T15:56:24Z",
+      "side": 1,
+      "message": "Hi folks, this is the NumberIsNaN part of the previous slightly broader small CL. I tried keeping this as bite sized as possible, but still make it extendable for the rest of the NumberIs.. operations. It doesn\u0027t solve the question how to nicely compose the FloatIsOp with TF\u0027s ObjectIsNaN (and related) ops. Any comments are welcome, thanks!",
+      "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
