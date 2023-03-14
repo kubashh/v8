@@ -45,8 +45,8 @@ InstructionSelectorTest::Stream InstructionSelectorTest::StreamBuilder::Build(
   size_t max_unoptimized_frame_height = 0;
   size_t max_pushed_argument_count = 0;
   InstructionSelector selector(
-      test_->zone(), node_count, &linkage, &sequence, schedule,
-      &source_position_table, nullptr,
+      test_->zone(), node_count, &linkage, &sequence, schedule, common(),
+      machine(), &source_position_table, nullptr,
       InstructionSelector::kEnableSwitchJumpTable, &tick_counter, nullptr,
       &max_unoptimized_frame_height, &max_pushed_argument_count,
       source_position_mode, features, InstructionSelector::kDisableScheduling,

@@ -38,6 +38,7 @@ Smi NumberConstantToSmi(Node* node) {
 InstructionSelector::InstructionSelector(
     Zone* zone, size_t node_count, Linkage* linkage,
     InstructionSequence* sequence, Schedule* schedule,
+    CommonOperatorBuilder* common, MachineOperatorBuilder* machine,
     SourcePositionTable* source_positions, Frame* frame,
     EnableSwitchJumpTable enable_switch_jump_table, TickCounter* tick_counter,
     JSHeapBroker* broker, size_t* max_unoptimized_frame_height,
@@ -46,6 +47,8 @@ InstructionSelector::InstructionSelector(
     EnableRootsRelativeAddressing enable_roots_relative_addressing,
     EnableTraceTurboJson trace_turbo)
     : zone_(zone),
+      common_(common),
+      machine_(machine),
       linkage_(linkage),
       sequence_(sequence),
       source_positions_(source_positions),
@@ -1216,13 +1219,21 @@ void InstructionSelector::VisitBlock(BasicBlock* block) {
 
   // Visit code in reverse control flow order, because architecture-specific
   // matching may cover more than one node at a time.
-  for (auto node : base::Reversed(*block)) {
+  auto nodes = base::Reversed(*block);
+  for (auto pos = nodes.begin(); pos != nodes.end(); ++pos) {
+    auto node = *pos;
     int current_node_end = current_num_instructions();
     // Skip nodes that are unused or already defined.
     if (IsUsed(node) && !IsDefined(node)) {
       // Generate code for this node "top down", but schedule the code "bottom
       // up".
-      VisitNode(node);
+      auto next = pos + 1;
+      if (next != nodes.end() && TryVisitMerged(node, *next)) {
+        pos = next;
+        node = *next;
+      } else {
+        VisitNode(node);
+      }
       if (!FinishEmittedInstructions(node, current_node_end)) return;
     }
     if (trace_turbo_ == kEnableTraceTurboJson) {

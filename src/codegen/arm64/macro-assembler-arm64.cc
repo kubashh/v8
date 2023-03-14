@@ -3189,6 +3189,39 @@ void MacroAssembler::SmiUntagField(Register dst, const MemOperand& src) {
   SmiUntag(dst, src);
 }
 
+#if COMPRESS_POINTERS_BOOL
+
+void MacroAssembler::MoveFused4(const Register& scratch1,
+                                const Register& scratch2, Tagged_t value) {
+  std::array<Tagged_t, 4> values;
+  values.fill(value);
+  MoveFused(scratch1, scratch2, values);
+}
+
+void MacroAssembler::MoveFused2(const Register& scratch, Tagged_t value) {
+  std::array<Tagged_t, 2> values;
+  values.fill(value);
+  MoveFused(scratch, values);
+}
+
+void MacroAssembler::MoveFused(const Register& scratch1,
+                               const Register& scratch2,
+                               const std::array<Tagged_t, 4> values) {
+  CHECK(scratch2 != no_reg);
+  uint64_t fused1 = (static_cast<uint64_t>(values[0]) << 32) + values[1];
+  uint64_t fused2 = (static_cast<uint64_t>(values[2]) << 32) + values[3];
+  Mov(scratch1, fused1);
+  Mov(scratch2, fused2);
+}
+
+void MacroAssembler::MoveFused(const Register& scratch,
+                               const std::array<Tagged_t, 2> values) {
+  static_assert(std::is_same<Tagged_t, uint32_t>::value);
+  uint64_t fused = (static_cast<uint64_t>(values[0]) << 32) + values[1];
+  Mov(scratch, fused);
+}
+#endif
+
 void MacroAssembler::StoreTaggedField(const Register& value,
                                       const MemOperand& dst_field_operand) {
   if (COMPRESS_POINTERS_BOOL) {

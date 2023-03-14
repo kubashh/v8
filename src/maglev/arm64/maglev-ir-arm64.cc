@@ -13,6 +13,7 @@
 #include "src/maglev/maglev-ir-inl.h"
 #include "src/objects/feedback-cell.h"
 #include "src/objects/js-function.h"
+#include "src/roots/static-roots.h"
 
 namespace v8 {
 namespace internal {
@@ -197,10 +198,33 @@ void CreateEmptyObjectLiteral::GenerateCode(MaglevAssembler* masm,
       scratch, FieldMemOperand(object, JSObject::kPropertiesOrHashOffset));
   __ StoreTaggedField(scratch,
                       FieldMemOperand(object, JSObject::kElementsOffset));
-  __ LoadTaggedRoot(scratch, RootIndex::kUndefinedValue);
-  for (int i = 0; i < map().GetInObjectProperties(); i++) {
-    int offset = map().GetInObjectPropertyOffset(i);
-    __ StoreTaggedField(scratch, FieldMemOperand(object, offset));
+  int numProperties = map().GetInObjectProperties();
+  int pos = 0;
+  if (numProperties >= 4) {
+    Register scratch2 = temps.Acquire();
+    __ MoveFused4(scratch, scratch2, StaticReadOnlyRoot::kUndefinedValue);
+    for (; pos < numProperties - 4; pos += 4) {
+      int offset = map().GetInObjectPropertyOffset(pos);
+      int offset2 = map().GetInObjectPropertyOffset(pos + 3);
+      CHECK_EQ(offset + 12, offset2);
+      __ Stp(scratch, scratch2, FieldMemOperand(object, offset));
+    }
+  }
+  if (numProperties - pos >= 2) {
+    __ MoveFused2(scratch, StaticReadOnlyRoot::kUndefinedValue);
+    for (; pos < numProperties - 2; pos += 2) {
+      int offset = map().GetInObjectPropertyOffset(pos);
+      int offset2 = map().GetInObjectPropertyOffset(pos + 1);
+      CHECK_EQ(offset + 4, offset2);
+      __ Str(scratch, FieldMemOperand(object, offset));
+    }
+  }
+  if (pos < numProperties) {
+    __ LoadTaggedRoot(scratch, RootIndex::kUndefinedValue);
+    for (; pos < numProperties; pos++) {
+      int offset = map().GetInObjectPropertyOffset(pos);
+      __ StoreTaggedField(scratch, FieldMemOperand(object, offset));
+    }
   }
 }
 

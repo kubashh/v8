@@ -1425,6 +1425,162 @@ void InstructionSelector::VisitInt64SubWithOverflow(Node* node) {
   VisitBinop(this, node, kX64Sub, &cont);
 }
 
+bool GetRootIndexIfUsable(Handle<HeapObject> val, RootIndex& root_index,
+                          InstructionSelector* selector) {
+  if (!selector->isolate()) return false;
+  const RootsTable& roots_table = selector->isolate()->roots_table();
+  if (!val.is_null() && roots_table.IsRootHandle(val, &root_index)) {
+    if (RootsTable::IsReadOnly(root_index) &&
+        (V8_STATIC_ROOTS_BOOL || !selector->isolate()->bootstrapper())) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool InstructionSelector::TryVisitMerged(Node* node1, Node* node2) {
+  if (node1->opcode() != IrOpcode::kStore ||
+      node2->opcode() != IrOpcode::kStore) {
+    return false;
+  }
+
+  Node* base1 = node1->InputAt(0);
+  Node* base2 = node2->InputAt(0);
+  if (base1 != base2) return false;
+  if (base1 == base2) return false;
+
+  auto rep1 = StoreRepresentationOf(node1->op());
+  auto rep2 = StoreRepresentationOf(node2->op());
+  if (rep1.write_barrier_kind() != WriteBarrierKind::kNoWriteBarrier ||
+      rep2.write_barrier_kind() != WriteBarrierKind::kNoWriteBarrier ||
+      ElementSizeLog2Of(rep1.representation()) != 2 ||
+      ElementSizeLog2Of(rep2.representation()) != 2) {
+    return false;
+  }
+
+  Node* index1 = node1->InputAt(1);
+  Node* index2 = node2->InputAt(1);
+
+  if (index1->opcode() != IrOpcode::kInt64Constant ||
+      index2->opcode() != IrOpcode::kInt64Constant) {
+    return false;
+  }
+  int idx1 = static_cast<int32_t>(OpParameter<int64_t>(index1->op()));
+  int idx2 = static_cast<int32_t>(OpParameter<int64_t>(index2->op()));
+
+  if (idx1 - 4 != idx2 && idx1 + 4 != idx2) {
+    return false;
+  }
+
+  Node* value1 = node1->InputAt(2);
+  Node* value2 = node2->InputAt(2);
+
+  if (value1->opcode() == IrOpcode::kTruncateInt64ToInt32 ||
+      value1->opcode() == IrOpcode::kChangeUint32ToUint64) {
+    value1 = value1->InputAt(0);
+  }
+  if (value2->opcode() == IrOpcode::kTruncateInt64ToInt32 ||
+      value2->opcode() == IrOpcode::kChangeUint32ToUint64) {
+    value2 = value2->InputAt(0);
+  }
+
+  uint32_t const1;
+  if (value1->opcode() == IrOpcode::kInt32Constant) {
+    const1 = static_cast<uint32_t>(OpParameter<int32_t>(value1->op()));
+  } else if (value1->opcode() == IrOpcode::kInt64Constant) {
+    const1 = static_cast<uint32_t>(OpParameter<int64_t>(value1->op()));
+  } else if (value1->opcode() == IrOpcode::kHeapConstant) {
+    RootIndex root_index;
+    HeapObjectMatcher m(value1);
+    if (m.HasResolvedValue() &&
+        GetRootIndexIfUsable(m.ResolvedValue(), root_index, this)) {
+      const1 = MacroAssemblerBase::ReadOnlyRootPtr(root_index, isolate());
+    } else {
+      return false;
+    }
+  } else if (value1->opcode() == IrOpcode::kCompressedHeapConstant) {
+    RootIndex root_index;
+    CompressedHeapObjectMatcher m(value1);
+    if (m.HasResolvedValue() &&
+        GetRootIndexIfUsable(m.ResolvedValue(), root_index, this)) {
+      const1 = MacroAssemblerBase::ReadOnlyRootPtr(root_index, isolate());
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+
+  uint32_t const2;
+  if (value2->opcode() == IrOpcode::kInt32Constant) {
+    const2 = static_cast<uint32_t>(OpParameter<int32_t>(value2->op()));
+  } else if (value2->opcode() == IrOpcode::kInt64Constant) {
+    const2 = static_cast<uint32_t>(OpParameter<int64_t>(value2->op()));
+  } else if (value2->opcode() == IrOpcode::kHeapConstant) {
+    RootIndex root_index;
+    HeapObjectMatcher m(value2);
+    if (m.HasResolvedValue() &&
+        GetRootIndexIfUsable(m.ResolvedValue(), root_index, this)) {
+      const2 = MacroAssemblerBase::ReadOnlyRootPtr(root_index, isolate());
+    } else {
+      return false;
+    }
+  } else if (value2->opcode() == IrOpcode::kCompressedHeapConstant) {
+    RootIndex root_index;
+    CompressedHeapObjectMatcher m(value2);
+    if (m.HasResolvedValue() &&
+        GetRootIndexIfUsable(m.ResolvedValue(), root_index, this)) {
+      const2 = MacroAssemblerBase::ReadOnlyRootPtr(root_index, isolate());
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+
+  Node* index = index1;
+  uint64_t combined;
+  if (idx1 < idx2) {
+    combined = (static_cast<uint64_t>(const2) << 32) + const1;
+  } else {
+    index = index2;
+    combined = (static_cast<uint64_t>(const1) << 32) + const2;
+  }
+
+  X64OperandGenerator g(this);
+  InstructionOperand inputs[3];
+  bool fits = static_cast<uint64_t>(static_cast<int>(combined)) == combined;
+  // std::cout << const1 << " | " << const2 << " = " << (void*)(unsigned
+  // long)combined << "\n";
+
+  auto reg_kind = X64OperandGenerator::RegisterUseKind::kUseRegister;
+
+  AddressingMode mode = kMode_MRI;
+  if (IsCompressed(base1)) {
+    mode = kMode_MCR;
+  }
+
+  inputs[0] = g.UseRegister(base1, reg_kind);
+  inputs[1] = g.UseImmediate(index);
+  if (fits) {
+    inputs[2] = g.UseImmediate(static_cast<int>(combined));
+  } else {
+    Node* combined_value = Node::New(
+        zone_, value1->id(), common_->Int64Constant(combined), 0, {}, false);
+    inputs[2] = g.UseRegister(combined_value, reg_kind);
+  }
+  Operator::Opcode opcode = GetStoreOpcode(StoreRepresentation(
+      MachineRepresentation::kWord64, WriteBarrierKind::kNoWriteBarrier));
+
+  InstructionCode code =
+      opcode | AddressingModeField::encode(mode) |
+      AccessModeField::encode(MemoryAccessMode::kMemoryAccessDirect);
+  Emit(code, 0, static_cast<InstructionOperand*>(nullptr), 3, inputs, 0,
+       nullptr);
+
+  return true;
+}
+
 namespace {
 
 void VisitMul(InstructionSelector* selector, Node* node, ArchOpcode opcode) {

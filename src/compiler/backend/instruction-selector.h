@@ -280,6 +280,7 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   InstructionSelector(
       Zone* zone, size_t node_count, Linkage* linkage,
       InstructionSequence* sequence, Schedule* schedule,
+      CommonOperatorBuilder* common, MachineOperatorBuilder* machine,
       SourcePositionTable* source_positions, Frame* frame,
       EnableSwitchJumpTable enable_switch_jump_table, TickCounter* tick_counter,
       JSHeapBroker* broker, size_t* max_unoptimized_frame_height,
@@ -586,6 +587,8 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   // Visit the node and generate code, if any.
   void VisitNode(Node* node);
 
+  bool TryVisitMerged(Node* node1, Node* node2);
+
   // Visit the node and generate code for IEEE 754 functions.
   void VisitFloat64Ieee754Binop(Node*, InstructionCode code);
   void VisitFloat64Ieee754Unop(Node*, InstructionCode code);
@@ -673,6 +676,8 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   InstructionSequence* sequence() const { return sequence_; }
   Zone* instruction_zone() const { return sequence()->zone(); }
   Zone* zone() const { return zone_; }
+  CommonOperatorBuilder* common() const { return common_; }
+  MachineOperatorBuilder* machine() const { return machine_; }
 
   void set_instruction_selection_failed() {
     instruction_selection_failed_ = true;
@@ -732,6 +737,8 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   // ===========================================================================
 
   Zone* const zone_;
+  CommonOperatorBuilder* const common_;
+  MachineOperatorBuilder* const machine_;
   Linkage* const linkage_;
   InstructionSequence* const sequence_;
   SourcePositionTable* const source_positions_;

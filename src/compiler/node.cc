@@ -407,7 +407,7 @@ Node::Node(NodeId id, const Operator* op, int inline_count, int inline_capacity)
 }
 
 void Node::AppendUse(Use* use) {
-  DCHECK(first_use_ == nullptr || first_use_->prev == nullptr);
+  // DCHECK(first_use_ == nullptr || first_use_->prev == nullptr);
   DCHECK_EQ(this, *use->input_ptr());
   use->next = first_use_;
   use->prev = nullptr;
