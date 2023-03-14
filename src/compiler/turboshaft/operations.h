@@ -115,6 +115,7 @@ struct FrameStateOp;
   V(StaticAssert)                    \
   V(CheckTurboshaftTypeOf)           \
   V(ObjectIs)                        \
+  V(FloatIs)                         \
   V(ConvertToObject)                 \
   V(ConvertToObjectOrDeopt)          \
   V(ConvertObjectToPrimitive)        \
@@ -2465,6 +2466,40 @@ struct ObjectIsOp : FixedArityOperationT<1, ObjectIsOp> {
 std::ostream& operator<<(std::ostream& os, ObjectIsOp::Kind kind);
 std::ostream& operator<<(std::ostream& os,
                          ObjectIsOp::InputAssumptions input_assumptions);
+
+struct FloatIsOp : FixedArityOperationT<1, FloatIsOp> {
+  enum class Kind {
+    kNaN,
+  };
+  enum class Bitness {
+    k64,
+  };
+  Kind kind;
+  Bitness input_bitness;
+
+  static constexpr OpProperties properties = OpProperties::Reading();
+  base::Vector<const RegisterRepresentation> outputs_rep() const {
+    return RepVector<RegisterRepresentation::Word32()>();
+  }
+
+  OpIndex input_number() const { return Base::input(0); }
+
+  FloatIsOp(OpIndex input, Kind kind, Bitness input_bitness)
+      : Base(input), kind(kind), input_bitness(input_bitness) {}
+  void Validate(const Graph& graph) const {
+    DCHECK(input_bitness == Bitness::k64 &&
+           "Only 64-bit float supported currently for FloatIsOp.");
+    RegisterRepresentation expected_rep;
+    switch (input_bitness) {
+      case Bitness::k64:
+        expected_rep = RegisterRepresentation::Float64();
+    };
+    DCHECK(ValidOpInputRep(graph, input_number(), expected_rep));
+  }
+  auto options() const { return std::tuple{kind, input_bitness}; }
+};
+std::ostream& operator<<(std::ostream& os, FloatIsOp::Kind kind);
+std::ostream& operator<<(std::ostream& os, FloatIsOp::Bitness bitness);
 
 struct ConvertToObjectOp : FixedArityOperationT<1, ConvertToObjectOp> {
   enum class Kind : uint8_t {

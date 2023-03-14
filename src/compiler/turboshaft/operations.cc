@@ -761,6 +761,20 @@ std::ostream& operator<<(std::ostream& os,
   }
 }
 
+std::ostream& operator<<(std::ostream& os, FloatIsOp::Kind kind) {
+  switch (kind) {
+    case FloatIsOp::Kind::kNaN:
+      return os << "NaN";
+  }
+}
+
+std::ostream& operator<<(std::ostream& os, FloatIsOp::Bitness bitness) {
+  switch (bitness) {
+    case FloatIsOp::Bitness::k64:
+      return os << "64 bit";
+  }
+}
+
 std::ostream& operator<<(std::ostream& os, ConvertToObjectOp::Kind kind) {
   switch (kind) {
     case ConvertToObjectOp::Kind::kBigInt:

@@ -609,6 +609,10 @@ class GraphVisitor {
     return assembler().ReduceObjectIs(MapToNewGraph(op.input()), op.kind,
                                       op.input_assumptions);
   }
+  OpIndex AssembleOutputGraphFloatIs(const FloatIsOp& op) {
+    return assembler().ReduceFloatIs(MapToNewGraph(op.input_number()), op.kind,
+                                     op.input_bitness);
+  }
   OpIndex AssembleOutputGraphConvertToObject(const ConvertToObjectOp& op) {
     return assembler().ReduceConvertToObject(
         MapToNewGraph(op.input()), op.kind, op.input_rep,
