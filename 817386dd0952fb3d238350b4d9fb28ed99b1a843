@@ -67,6 +67,24 @@
       "message": "The hint should still be rounded, judging by the failures.",
       "revId": "817386dd0952fb3d238350b4d9fb28ed99b1a843",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0da39113_2e6d162c",
+        "filename": "src/utils/allocation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-15T13:07:07Z",
+      "side": 1,
+      "message": "Right, the caller must provide properly aligned hint since here we don\u0027t know whether we should align it up or down.",
+      "parentUuid": "ce818f79_13c13c82",
+      "revId": "817386dd0952fb3d238350b4d9fb28ed99b1a843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
