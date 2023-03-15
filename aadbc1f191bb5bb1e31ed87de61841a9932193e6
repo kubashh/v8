@@ -16,6 +16,23 @@
       "message": "Sorry for the typo. Meanwhile, the original CL has been reverted for unrelated reasons; I\u0027ll include this fix in the reland.",
       "revId": "aadbc1f191bb5bb1e31ed87de61841a9932193e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caaabf5d_0f08327e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1463217
+      },
+      "writtenOn": "2023-03-15T10:02:16Z",
+      "side": 1,
+      "message": "Ok, please fix this error in your patch if reland.\n\nThanks!",
+      "revId": "aadbc1f191bb5bb1e31ed87de61841a9932193e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
