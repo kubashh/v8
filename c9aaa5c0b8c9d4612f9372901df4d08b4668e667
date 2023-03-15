@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f616de84_8575b9f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-15T11:40:53Z",
+      "side": 1,
+      "message": "Thanks. Another approach would be to use `source_positions-\u003eAddDecorator()` and `SourcePositionTable::Scope`. See e.g. loop-unrolling.cc:37 and loop-analysis.h:233. Not sure if it\u0027s worth changing it now.",
+      "revId": "c9aaa5c0b8c9d4612f9372901df4d08b4668e667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7161736_dbee640f",
+        "filename": "src/compiler/wasm-graph-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-15T11:40:53Z",
+      "side": 1,
+      "message": "The convention is that nodes which are not values are not returned, and you can recover them with `gasm.effect()` or `control()`. I like the convention but don\u0027t strongly insist on maintaining it.",
+      "range": {
+        "startLine": 285,
+        "startChar": 2,
+        "endLine": 285,
+        "endChar": 7
+      },
+      "revId": "c9aaa5c0b8c9d4612f9372901df4d08b4668e667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
