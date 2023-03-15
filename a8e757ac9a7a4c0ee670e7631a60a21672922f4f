@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30cb7c53_ce9fdd60",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-15T12:53:13Z",
+      "side": 1,
+      "message": "Yup, done.",
+      "parentUuid": "c76afb10_7243f28b",
+      "range": {
+        "startLine": 367,
+        "startChar": 4,
+        "endLine": 367,
+        "endChar": 40
+      },
+      "revId": "a8e757ac9a7a4c0ee670e7631a60a21672922f4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64e8b00e_59d26187",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-03-15T12:41:08Z",
       "side": 1,
       "message": "This is a pure operation, so it should be `OpProperties::PureNoAllocation()`.",
+      "range": {
+        "startLine": 2477,
+        "startChar": 45,
+        "endLine": 2477,
+        "endChar": 68
+      },
+      "revId": "a8e757ac9a7a4c0ee670e7631a60a21672922f4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "378c76ff_99a9dda7",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2477,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-15T12:53:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64e8b00e_59d26187",
       "range": {
         "startLine": 2477,
         "startChar": 45,

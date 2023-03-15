@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c3351ad_353e6abe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-15T12:53:13Z",
+      "side": 1,
+      "message": "Thanks! Continuing with the other operations after the Switches CL.",
+      "revId": "a872f5e0237d80bafa892d1c8e7d44ef53fc2bb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
