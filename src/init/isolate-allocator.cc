@@ -76,13 +76,6 @@ void IsolateAllocator::InitializeOncePerProcess() {
         "Failed to reserve virtual memory for process-wide V8 "
         "pointer compression cage");
   }
-  V8HeapCompressionScheme::InitBase(GetProcessWidePtrComprCage()->base());
-#ifdef V8_EXTERNAL_CODE_SPACE
-  // Speculatively set the code cage base to the same value in case jitless
-  // mode will be used. Once the process-wide CodeRange instance is created
-  // the code cage base will be set accordingly.
-  ExternalCodeCompressionScheme::InitBase(V8HeapCompressionScheme::base());
-#endif  // V8_EXTERNAL_CODE_SPACE
 #endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 }
 
