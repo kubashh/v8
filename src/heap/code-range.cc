@@ -123,15 +123,12 @@ bool CodeRange::InitReservation(v8::PageAllocator* page_allocator,
   VirtualMemoryCage::ReservationParams params;
   params.page_allocator = page_allocator;
   params.reservation_size = requested;
-  params.base_bias_size = 0;
   params.page_size = kPageSize;
   params.jit =
       v8_flags.jitless ? JitPermission::kNoJit : JitPermission::kMapAsJittable;
 
-  const size_t allocate_page_size = page_allocator->AllocatePageSize();
-  // TODO(v8:11880): Use base_alignment here once ChromeOS issue is fixed.
   Address the_hint =
-      GetCodeRangeAddressHint()->GetAddressHint(requested, allocate_page_size);
+      GetCodeRangeAddressHint()->GetAddressHint(requested, base_alignment);
 
   constexpr size_t kRadiusInMB =
       kMaxPCRelativeCodeRangeInMB > 1024 ? kMaxPCRelativeCodeRangeInMB : 4096;
