@@ -16,6 +16,29 @@
       "message": "Needs a rebase but is otherwise ready",
       "revId": "39808b52b8a69aa211e38201ee2f0fe502a558cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6216269_8f8ca413",
+        "filename": "src/heap/incremental-marking-inl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-15T09:56:42Z",
+      "side": 1,
+      "message": "This is what we bought into: One off handlng of DescriptorArray.\n\nIt\u0027s not too bad in here as we don\u0027t want to have this in the long term though (minor mc doesn\u0027t have overlapping GCs)",
+      "range": {
+        "startLine": 36,
+        "startChar": 12,
+        "endLine": 36,
+        "endChar": 29
+      },
+      "revId": "39808b52b8a69aa211e38201ee2f0fe502a558cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
