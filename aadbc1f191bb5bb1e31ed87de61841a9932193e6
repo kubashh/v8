@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "872ae2f0_4984fb31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-03-15T09:54:54Z",
+      "side": 1,
+      "message": "Sorry for the typo. Meanwhile, the original CL has been reverted for unrelated reasons; I\u0027ll include this fix in the reland.",
+      "revId": "aadbc1f191bb5bb1e31ed87de61841a9932193e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
