@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2638d3ad_e2e744a5",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5291,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-15T12:12:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4509b09_fe9f28b0",
+      "range": {
+        "startLine": 5291,
+        "startChar": 4,
+        "endLine": 5291,
+        "endChar": 47
+      },
+      "revId": "3a653ca38a9936e4a7c5eb7b30d21d71d0623882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4ad72fa_db2bbd24",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-03-15T11:10:45Z",
       "side": 1,
       "message": "Unrelated to this CL, maybe write a drive-by fix in the comments?",
+      "range": {
+        "startLine": 1695,
+        "startChar": 6,
+        "endLine": 1695,
+        "endChar": 28
+      },
+      "revId": "3a653ca38a9936e4a7c5eb7b30d21d71d0623882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3efbc26_291b80d2",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1695,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-15T12:12:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4ad72fa_db2bbd24",
       "range": {
         "startLine": 1695,
         "startChar": 6,
