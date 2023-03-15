@@ -216,7 +216,7 @@ void LiftoffAssembler::PatchPrepareStackFrame(
   // for them anymore.
   int frame_size = GetTotalFrameSize() - 2 * kSystemPointerSize;
   // The frame setup builtin also pushes the feedback vector.
-  if (v8_flags.feedback_vector_slot) {
+  if (feedback_vector_slot) {
     frame_size -= kSystemPointerSize;
   }
 
