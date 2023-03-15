@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a5afc62_d1b6e781",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-15T13:28:03Z",
+      "side": 1,
+      "message": "Hm, I\u0027m not sure if I can follow.\nSo I\u0027d have to place a `SourcePositionTable::Scope` first and then call `gasm_-\u003egraph()-\u003eDecorate()` or sth. similar instead of the `UpdateSourcePosition`?\n\ni guess, the advantage is that I don\u0027t need to implement the `UpdateSourcePosition`?\nI\u0027ll leave this out for now however, as we don\u0027t have a SourcePositionTable in all cases and we might have no position for the source node (for wasm-\u003ejs inlining at least) and this might complicate things a bit as we certainly don\u0027t want to add entries with `kNoPosition` to the source position table.",
+      "parentUuid": "f616de84_8575b9f7",
+      "revId": "c9aaa5c0b8c9d4612f9372901df4d08b4668e667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7161736_dbee640f",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-03-15T11:40:53Z",
       "side": 1,
       "message": "The convention is that nodes which are not values are not returned, and you can recover them with `gasm.effect()` or `control()`. I like the convention but don\u0027t strongly insist on maintaining it.",
+      "range": {
+        "startLine": 285,
+        "startChar": 2,
+        "endLine": 285,
+        "endChar": 7
+      },
+      "revId": "c9aaa5c0b8c9d4612f9372901df4d08b4668e667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4365e7d3_a431e799",
+        "filename": "src/compiler/wasm-graph-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-15T13:28:03Z",
+      "side": 1,
+      "message": "Does it mean that `StoreTrapOnNull` also breaks this convention?\n\nI have adapted it now for `Trapif` and `TrapUnless` to be void.",
+      "parentUuid": "c7161736_dbee640f",
       "range": {
         "startLine": 285,
         "startChar": 2,
