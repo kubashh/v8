@@ -361,6 +361,17 @@ class MachineLoweringReducer : public Next {
     UNREACHABLE();
   }
 
+  V<Word32> ReduceFloatIs(OpIndex input, FloatIsOp::Kind kind,
+                          RegisterRepresentation input_rep) {
+    DCHECK_EQ(input_rep, RegisterRepresentation::Float64());
+    if (kind == FloatIsOp::Kind::kNaN) {
+      OpIndex diff = __ Float64Equal(input, input);
+      return __ Word32Equal(diff, 0);
+    }
+
+    UNREACHABLE();
+  }
+
   OpIndex ReduceConvertToObject(
       OpIndex input, ConvertToObjectOp::Kind kind,
       RegisterRepresentation input_rep,
