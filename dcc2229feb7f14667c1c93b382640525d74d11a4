@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b810b86_fe033169",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-15T08:19:37Z",
+      "side": 1,
+      "message": "Nice, thanks!",
+      "parentUuid": "2982afb0_7c5a5c4b",
+      "range": {
+        "startLine": 369,
+        "startChar": 34,
+        "endLine": 369,
+        "endChar": 54
+      },
+      "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0302eb21_cd006723",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-03-14T16:06:39Z",
       "side": 1,
       "message": "` : uint8_t` to make sure it uses as little memory as necessary.",
+      "range": {
+        "startLine": 2471,
+        "startChar": 17,
+        "endLine": 2471,
+        "endChar": 19
+      },
+      "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c429cd55_7290351d",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2471,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-15T08:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0302eb21_cd006723",
       "range": {
         "startLine": 2471,
         "startChar": 17,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4b419b8_323b9422",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2476,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-15T08:19:37Z",
+      "side": 1,
+      "message": "Thanks! This makes `Validate` way shorter and easier to follow.",
+      "parentUuid": "29493780_d746d798",
+      "range": {
+        "startLine": 2474,
+        "startChar": 1,
+        "endLine": 2476,
+        "endChar": 4
+      },
+      "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5097928f_67d681e8",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-03-14T16:06:39Z",
       "side": 1,
       "message": "nit: Just `input` is what many similar unary operations use here (and same below).",
+      "range": {
+        "startLine": 2485,
+        "startChar": 10,
+        "endLine": 2485,
+        "endChar": 22
+      },
+      "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01533bcb_637cd808",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2485,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-15T08:19:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5097928f_67d681e8",
       "range": {
         "startLine": 2485,
         "startChar": 10,
