@@ -207,6 +207,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eac12ae2_defc9e97",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2476,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-15T09:35:53Z",
+      "side": 1,
+      "message": "Yup, thanks! I didn\u0027t know about `FloatRepresentation`, I found `FloatWithBits` but it didn\u0027t seem suitable here.",
+      "parentUuid": "867e3ca5_4b7e9b6f",
+      "range": {
+        "startLine": 2474,
+        "startChar": 1,
+        "endLine": 2476,
+        "endChar": 4
+      },
+      "revId": "dcc2229feb7f14667c1c93b382640525d74d11a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5097928f_67d681e8",

@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a87a17b0_928e6959",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-15T09:35:53Z",
+      "side": 1,
+      "message": "Thanks. I wonder why cpplint didn\u0027t complain about this.",
+      "parentUuid": "24c7be2b_aa22e4e0",
+      "range": {
+        "startLine": 2490,
+        "startChar": 4,
+        "endLine": 2490,
+        "endChar": 40
+      },
+      "revId": "a48c9454a6a9ad712f801f39398f8341876cba28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c386e73_341bba36",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-03-15T09:11:05Z",
       "side": 1,
       "message": "I don\u0027t think we need a `switch` here. Even if we add more kinds, the check will stay the same.",
+      "range": {
+        "startLine": 2491,
+        "startChar": 4,
+        "endLine": 2491,
+        "endChar": 19
+      },
+      "revId": "a48c9454a6a9ad712f801f39398f8341876cba28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0de5bc6_e80159ea",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2491,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-15T09:35:53Z",
+      "side": 1,
+      "message": "Yes, good point. After switching to `FloatRepresentation`, the validation stays the same and in release, this would be a no-op.",
+      "parentUuid": "1c386e73_341bba36",
       "range": {
         "startLine": 2491,
         "startChar": 4,
