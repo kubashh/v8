@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "e3cdd4b6bc294bea7ba44830f154c525a95440da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da21b269_cb086be5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-03-15T21:54:40Z",
+      "side": 1,
+      "message": "lgtm % I\u0027m not sure all tests can be re-enabled.",
+      "revId": "e3cdd4b6bc294bea7ba44830f154c525a95440da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

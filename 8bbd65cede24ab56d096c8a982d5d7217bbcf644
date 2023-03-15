@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "836f01e7_dfaeac25",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-03-15T21:54:40Z",
+      "side": 0,
+      "message": "This was the only test we disabled recently. Are you sure the other 2 are also affected? I added the debug tsan bot to this CL to see what happens.",
+      "range": {
+        "startLine": 1924,
+        "startChar": 8,
+        "endLine": 1924,
+        "endChar": 26
+      },
+      "revId": "8bbd65cede24ab56d096c8a982d5d7217bbcf644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
