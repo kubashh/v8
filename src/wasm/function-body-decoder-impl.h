@@ -1123,9 +1123,6 @@ struct ControlBase : public PcForErrors<ValidationTag::full_validation> {
     Value* result_on_branch, uint32_t depth, bool null_succeeds)               \
   F(BrOnCastFailAbstract, const Value& obj, HeapType type,                     \
     Value* result_on_fallthrough, uint32_t depth, bool null_succeeds)          \
-  F(RefAsStruct, const Value& object, Value* result)                           \
-  F(RefAsI31, const Value& object, Value* result)                              \
-  F(RefAsArray, const Value& object, Value* result)                            \
   F(BrOnStruct, const Value& object, Value* value_on_branch,                   \
     uint32_t br_depth, bool null_succeeds)                                     \
   F(BrOnI31, const Value& object, Value* value_on_branch, uint32_t br_depth,   \
@@ -2274,9 +2271,6 @@ class WasmDecoder : public Decoder {
           case kExprI31New:
           case kExprI31GetS:
           case kExprI31GetU:
-          case kExprRefAsArray:
-          case kExprRefAsStruct:
-          case kExprRefAsI31:
           case kExprExternInternalize:
           case kExprExternExternalize:
           case kExprArrayLen:
@@ -5600,40 +5594,6 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Push(result_on_fallthrough);
         return pc_offset;
       }
-
-#define ABSTRACT_TYPE_CAST(h_type)                                             \
-  case kExprRefAs##h_type: {                                                   \
-    NON_CONST_ONLY                                                             \
-    Value arg = Peek(0, 0, kWasmAnyRef);                                       \
-    ValueType non_nullable_abstract_type =                                     \
-        ValueType::Ref(HeapType::k##h_type);                                   \
-    Value result = CreateValue(non_nullable_abstract_type);                    \
-    if (V8_LIKELY(current_code_reachable_and_ok_)) {                           \
-      if (IsHeapSubtypeOf(arg.type.heap_type(), HeapType(HeapType::k##h_type), \
-                          this->module_)) {                                    \
-        if (arg.type.is_nullable()) {                                          \
-          CALL_INTERFACE(RefAsNonNull, arg, &result);                          \
-        } else {                                                               \
-          CALL_INTERFACE(Forward, arg, &result);                               \
-        }                                                                      \
-      } else if (!IsHeapSubtypeOf(HeapType(HeapType::k##h_type),               \
-                                  arg.type.heap_type(), this->module_)) {      \
-        CALL_INTERFACE(Trap, TrapReason::kTrapIllegalCast);                    \
-        /* We know that the following code is not reachable, but according */  \
-        /* to the spec it technically is. Set it to spec-only reachable. */    \
-        SetSucceedingCodeDynamicallyUnreachable();                             \
-      } else {                                                                 \
-        CALL_INTERFACE(RefAs##h_type, arg, &result);                           \
-      }                                                                        \
-    }                                                                          \
-    Drop(arg);                                                                 \
-    Push(result);                                                              \
-    return opcode_length;                                                      \
-  }
-        ABSTRACT_TYPE_CAST(Struct)
-        ABSTRACT_TYPE_CAST(I31)
-        ABSTRACT_TYPE_CAST(Array)
-#undef ABSTRACT_TYPE_CAST
 
       case kExprBrOnStruct:
       case kExprBrOnArray:

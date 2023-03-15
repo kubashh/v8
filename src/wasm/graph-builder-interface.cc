@@ -1486,15 +1486,6 @@ class WasmGraphBuildingInterface {
         br_depth, false, null_succeeds);
   }
 
-  void RefAsStruct(FullDecoder* decoder, const Value& object, Value* result) {
-    bool null_succeeds = false;
-    TFNode* cast_object =
-        builder_->RefAsStruct(object.node, object.type.is_nullable(),
-                              decoder->position(), null_succeeds);
-    TFNode* rename = builder_->TypeGuard(cast_object, result->type);
-    SetAndTypeNode(result, rename);
-  }
-
   void BrOnStruct(FullDecoder* decoder, const Value& object,
                   Value* value_on_branch, uint32_t br_depth,
                   bool null_succeeds) {
@@ -1511,15 +1502,6 @@ class WasmGraphBuildingInterface {
         br_depth, false, null_succeeds);
   }
 
-  void RefAsArray(FullDecoder* decoder, const Value& object, Value* result) {
-    bool null_succeeds = false;
-    TFNode* cast_object =
-        builder_->RefAsArray(object.node, object.type.is_nullable(),
-                             decoder->position(), null_succeeds);
-    TFNode* rename = builder_->TypeGuard(cast_object, result->type);
-    SetAndTypeNode(result, rename);
-  }
-
   void BrOnArray(FullDecoder* decoder, const Value& object,
                  Value* value_on_branch, uint32_t br_depth,
                  bool null_succeeds) {
@@ -1534,14 +1516,6 @@ class WasmGraphBuildingInterface {
     BrOnCastAbs<&compiler::WasmGraphBuilder::BrOnArray>(
         decoder, object, Value{nullptr, kWasmBottom}, value_on_fallthrough,
         br_depth, false, null_succeeds);
-  }
-
-  void RefAsI31(FullDecoder* decoder, const Value& object, Value* result) {
-    bool null_succeeds = false;
-    TFNode* cast_object =
-        builder_->RefAsI31(object.node, decoder->position(), null_succeeds);
-    TFNode* rename = builder_->TypeGuard(cast_object, result->type);
-    SetAndTypeNode(result, rename);
   }
 
   void BrOnI31(FullDecoder* decoder, const Value& object,

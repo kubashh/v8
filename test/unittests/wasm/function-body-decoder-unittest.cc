@@ -1179,7 +1179,7 @@ TEST_F(FunctionBodyDecoderTest, UnreachableRefTypes) {
                   {WASM_UNREACHABLE, WASM_GC_OP(kExprRefCast), struct_index});
 
   ExpectValidates(FunctionSig::Build(zone(), {kWasmStructRef}, {}),
-                  {WASM_UNREACHABLE, WASM_GC_OP(kExprRefAsStruct)});
+                  {WASM_UNREACHABLE, WASM_GC_OP(kExprRefCast), kStructRefCode});
 
   ExpectValidates(FunctionSig::Build(zone(), {}, {struct_type_null}),
                   {WASM_UNREACHABLE, WASM_LOCAL_GET(0), kExprBrOnNull, 0,
@@ -4423,14 +4423,8 @@ TEST_F(FunctionBodyDecoderTest, BrOnAbstractType) {
   ValueType kNonNullableFunc = ValueType::Ref(HeapType::kFunc);
 
   ExpectValidates(
-      FunctionSig::Build(this->zone(), {kWasmStructRef}, {kWasmAnyRef}),
-      {WASM_LOCAL_GET(0), WASM_BR_ON_STRUCT(0), WASM_GC_OP(kExprRefAsStruct)});
-  ExpectValidates(
       FunctionSig::Build(this->zone(), {kWasmAnyRef}, {kWasmAnyRef}),
       {WASM_LOCAL_GET(0), WASM_BR_ON_NON_STRUCT(0)});
-  ExpectValidates(
-      FunctionSig::Build(this->zone(), {kWasmI31Ref}, {kWasmAnyRef}),
-      {WASM_LOCAL_GET(0), WASM_BR_ON_I31(0), WASM_GC_OP(kExprRefAsI31)});
   ExpectValidates(
       FunctionSig::Build(this->zone(), {kWasmAnyRef}, {kWasmAnyRef}),
       {WASM_LOCAL_GET(0), WASM_BR_ON_NON_I31(0)});
@@ -4454,13 +4448,6 @@ TEST_F(FunctionBodyDecoderTest, BrOnAbstractType) {
                 {WASM_BLOCK_I(WASM_LOCAL_GET(0), WASM_BR_ON_NON_STRUCT(0))},
                 kAppendEnd,
                 "type error in branch[0] (expected i32, got anyref)");
-
-  // Argument type error.
-  ExpectFailure(
-      FunctionSig::Build(this->zone(), {kWasmI31Ref}, {kWasmI32}),
-      {WASM_LOCAL_GET(0), WASM_BR_ON_I31(0), WASM_GC_OP(kExprRefAsI31)},
-      kAppendEnd,
-      "br_on_i31[0] expected type anyref, found local.get of type i32");
 }
 
 TEST_F(FunctionBodyDecoderTest, BrWithBottom) {
