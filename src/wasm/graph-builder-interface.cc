@@ -1468,13 +1468,6 @@ class WasmGraphBuildingInterface {
     }
   }
 
-  void RefIsEq(FullDecoder* decoder, const Value& object, Value* result) {
-    bool null_succeeds = false;
-    SetAndTypeNode(result,
-                   builder_->RefIsEq(object.node, object.type.is_nullable(),
-                                     null_succeeds));
-  }
-
   void BrOnEq(FullDecoder* decoder, const Value& object, Value* value_on_branch,
               uint32_t br_depth, bool null_succeeds) {
     BrOnCastAbs<&compiler::WasmGraphBuilder::BrOnEq>(
@@ -1491,13 +1484,6 @@ class WasmGraphBuildingInterface {
     BrOnCastAbs<&compiler::WasmGraphBuilder::BrOnEq>(
         decoder, object, Value{nullptr, kWasmBottom}, value_on_fallthrough,
         br_depth, false, null_succeeds);
-  }
-
-  void RefIsStruct(FullDecoder* decoder, const Value& object, Value* result) {
-    bool null_succeeds = false;
-    SetAndTypeNode(result,
-                   builder_->RefIsStruct(object.node, object.type.is_nullable(),
-                                         null_succeeds));
   }
 
   void RefAsStruct(FullDecoder* decoder, const Value& object, Value* result) {
@@ -1525,13 +1511,6 @@ class WasmGraphBuildingInterface {
         br_depth, false, null_succeeds);
   }
 
-  void RefIsArray(FullDecoder* decoder, const Value& object, Value* result) {
-    bool null_succeeds = false;
-    SetAndTypeNode(result,
-                   builder_->RefIsArray(object.node, object.type.is_nullable(),
-                                        null_succeeds));
-  }
-
   void RefAsArray(FullDecoder* decoder, const Value& object, Value* result) {
     bool null_succeeds = false;
     TFNode* cast_object =
@@ -1555,11 +1534,6 @@ class WasmGraphBuildingInterface {
     BrOnCastAbs<&compiler::WasmGraphBuilder::BrOnArray>(
         decoder, object, Value{nullptr, kWasmBottom}, value_on_fallthrough,
         br_depth, false, null_succeeds);
-  }
-
-  void RefIsI31(FullDecoder* decoder, const Value& object, Value* result) {
-    bool null_succeeds = false;
-    SetAndTypeNode(result, builder_->RefIsI31(object.node, null_succeeds));
   }
 
   void RefAsI31(FullDecoder* decoder, const Value& object, Value* result) {

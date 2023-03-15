@@ -557,9 +557,6 @@ inline uint16_t ExtractPrefixedOpcodeBytes(WasmOpcode opcode) {
 #define WASM_GC_INTERNALIZE(extern) extern, WASM_GC_OP(kExprExternInternalize)
 #define WASM_GC_EXTERNALIZE(ref) ref, WASM_GC_OP(kExprExternExternalize)
 
-#define WASM_REF_IS_STRUCT(ref) ref, WASM_GC_OP(kExprRefIsStruct)
-#define WASM_REF_IS_ARRAY(ref) ref, WASM_GC_OP(kExprRefIsArray)
-#define WASM_REF_IS_I31(ref) ref, WASM_GC_OP(kExprRefIsI31)
 #define WASM_REF_AS_STRUCT(ref) ref, WASM_GC_OP(kExprRefAsStruct)
 #define WASM_REF_AS_ARRAY(ref) ref, WASM_GC_OP(kExprRefAsArray)
 #define WASM_REF_AS_I31(ref) ref, WASM_GC_OP(kExprRefAsI31)
