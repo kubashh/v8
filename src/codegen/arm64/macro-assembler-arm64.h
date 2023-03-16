@@ -1518,6 +1518,15 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
     StoreTaggedField(value, dst_field_operand);
   }
 
+#if COMPRESS_POINTERS_BOOL
+  void MoveFused4(const Register& scratch1, const Register& scratch2,
+                  Tagged_t value);
+  void MoveFused2(const Register& scratch, Tagged_t value);
+  void MoveFused(const Register& scratch1, const Register& scratch2,
+                 const std::array<Tagged_t, 4> values);
+  void MoveFused(const Register& scratch, const std::array<Tagged_t, 2> values);
+#endif
+
   void AtomicStoreTaggedField(const Register& value, const Register& dst_base,
                               const Register& dst_index, const Register& temp);
 
