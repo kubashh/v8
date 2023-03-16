@@ -829,12 +829,12 @@ void InstructionSequence::ComputeAssemblyOrder() {
     if (block->ao_number() != invalid) continue;  // loop rotated.
     if (block->IsLoopHeader()) {
       bool header_align = true;
-      if (v8_flags.turbo_loop_rotation) {
+      /*if (v8_flags.turbo_loop_rotation) {
         // Perform loop rotation for non-deferred loops.
         InstructionBlock* loop_end =
             instruction_blocks_->at(block->loop_end().ToSize() - 1);
-        if (loop_end->SuccessorCount() == 1 && /* ends with goto */
-            loop_end != block /* not a degenerate infinite loop */) {
+        if (loop_end->SuccessorCount() == 1 &&
+            loop_end != block ) {
           // If the last block has an unconditional jump back to the header,
           // then move it to be in front of the header in the assembly order.
           DCHECK_EQ(block->rpo_number(), loop_end->successors()[0]);
@@ -845,7 +845,7 @@ void InstructionSequence::ComputeAssemblyOrder() {
           loop_end->set_loop_header_alignment(true);
           header_align = false;
         }
-      }
+      }*/
       block->set_loop_header_alignment(header_align);
     }
     if (block->loop_header().IsValid() && block->IsSwitchTarget()) {
