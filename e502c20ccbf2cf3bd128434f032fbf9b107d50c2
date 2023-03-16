@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8f089b8_c6e7df71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-03-16T13:08:07Z",
+      "side": 1,
+      "message": "I\u0027ve updated the CL. Locally I got some warnings for the deprecations, so I removed the invocations in d8 right away instead of manually allowing it.",
+      "revId": "e502c20ccbf2cf3bd128434f032fbf9b107d50c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
