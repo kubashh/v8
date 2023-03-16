@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be8789e0_28004db8",
+        "filename": "test/mjsunit/compiler/misc-ensure-no-deopt.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-16T15:26:12Z",
+      "side": 1,
+      "message": "I just added this to make a presubmit happy since this now has assertOptimized -- under the new flag this will include all the maglev stuff.",
+      "parentUuid": "ef969bcf_8d50e053",
+      "range": {
+        "startLine": 5,
+        "startChar": 33,
+        "endLine": 5,
+        "endChar": 43
+      },
+      "revId": "076354afbb8fff5619796566a864609654da7134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5295de13_1e1dad2e",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-03-16T15:22:39Z",
       "side": 1,
       "message": "Debugging?",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 20
+      },
+      "revId": "076354afbb8fff5619796566a864609654da7134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cda8a4c_82adf63c",
+        "filename": "test/mjsunit/compiler/regress-store-holey-double-array.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-16T15:26:12Z",
+      "side": 1,
+      "message": "oops yes thank you.",
+      "parentUuid": "5295de13_1e1dad2e",
       "range": {
         "startLine": 28,
         "startChar": 0,
