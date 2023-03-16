@@ -46,6 +46,30 @@
       },
       "revId": "8bbd65cede24ab56d096c8a982d5d7217bbcf644",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1033a54_b0ceaa71",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 1924,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-16T08:54:17Z",
+      "side": 0,
+      "message": "All three tests contain huge Wasm memories (multiple GB), so I assume they all suffered from the same problem.",
+      "parentUuid": "d26d6123_8ef57d27",
+      "range": {
+        "startLine": 1924,
+        "startChar": 8,
+        "endLine": 1924,
+        "endChar": 26
+      },
+      "revId": "8bbd65cede24ab56d096c8a982d5d7217bbcf644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
