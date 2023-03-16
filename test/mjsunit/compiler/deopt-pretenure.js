@@ -10,7 +10,7 @@
 function CheckOptimizationStatus(func, expectedOptimizationStatus) {
   let opt_status = %GetOptimizationStatus(func);
   assertTrue ((opt_status & expectedOptimizationStatus) !== 0,
-      "Expected flag " + expectedOptimizationStatus +
+      "Expected flag 0x" + expectedOptimizationStatus.toString(16) +
       " to be set in optimization status");
 }
 
@@ -30,14 +30,17 @@ DeoptEntry(V8OptimizationStatus.kTopmostFrameIsInterpreted
 %OptimizeFunctionOnNextCall(DeoptEntry);
 // Force the allocation site to be pretenured.
 assertTrue(%PretenureAllocationSite(empty));
-// This call should deopt at entry because of the pretenuring decision change.
+// This call should deopt Turbofan at entry because of the pretenuring decision
+// change. Maglev doesn't currently implement this optimization/deopt.
 DeoptEntry(V8OptimizationStatus.kTopmostFrameIsInterpreted
-            | V8OptimizationStatus.kTopmostFrameIsBaseline);
+            | V8OptimizationStatus.kTopmostFrameIsBaseline
+            | V8OptimizationStatus.kTopmostFrameIsMaglev);
 
 %PrepareFunctionForOptimization(DeoptEntry);
 %OptimizeFunctionOnNextCall(DeoptEntry);
 // Function should be compiled now.
-DeoptEntry(V8OptimizationStatus.kTopmostFrameIsTurboFanned);
+DeoptEntry(V8OptimizationStatus.kTopmostFrameIsTurboFanned
+            | V8OptimizationStatus.kTopmostFrameIsMaglev);
 
 // Trigger pretenuring decision change during OSR.
 function createSource(name, fillCnt) {
