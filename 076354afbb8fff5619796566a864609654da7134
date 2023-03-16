@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef969bcf_8d50e053",
+        "filename": "test/mjsunit/compiler/misc-ensure-no-deopt.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-16T15:22:39Z",
+      "side": 1,
+      "message": "What about maglev? Shouldn\u0027t be min-opt\u003d1 ?",
+      "range": {
+        "startLine": 5,
+        "startChar": 33,
+        "endLine": 5,
+        "endChar": 43
+      },
+      "revId": "076354afbb8fff5619796566a864609654da7134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5295de13_1e1dad2e",
+        "filename": "test/mjsunit/compiler/regress-store-holey-double-array.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-16T15:22:39Z",
+      "side": 1,
+      "message": "Debugging?",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 20
+      },
+      "revId": "076354afbb8fff5619796566a864609654da7134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
