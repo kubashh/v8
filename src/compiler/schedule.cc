@@ -163,6 +163,13 @@ Schedule::Schedule(Zone* zone, size_t node_count_hint)
   nodeid_to_block_.reserve(node_count_hint);
 }
 
+void Schedule::LateAdd(Node* node, BasicBlock* block) {
+  if (node->id() >= static_cast<NodeId>(nodeid_to_block_.size())) {
+    nodeid_to_block_.resize(node->id() + 10);
+  }
+  nodeid_to_block_[node->id()] = block;
+}
+
 BasicBlock* Schedule::block(Node* node) const {
   if (node->id() < static_cast<NodeId>(nodeid_to_block_.size())) {
     return nodeid_to_block_[node->id()];

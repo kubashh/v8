@@ -79,6 +79,7 @@
 #include "src/compiler/simplified-lowering.h"
 #include "src/compiler/simplified-operator-reducer.h"
 #include "src/compiler/simplified-operator.h"
+#include "src/compiler/store-fusion-optimizer.h"
 #include "src/compiler/store-store-elimination.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/build-graph-phase.h"
@@ -2116,6 +2117,17 @@ struct DecompressionOptimizationPhase {
   }
 };
 
+struct StoreFusionPhase {
+  DECL_PIPELINE_PHASE_CONSTANTS(StoreFusionOptimization)
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    StoreFusionOptimizer optimizer(temp_zone, data->isolate(), data->graph(),
+                                   data->schedule(), data->common(),
+                                   data->machine());
+    optimizer.Fuse();
+  }
+};
+
 struct BranchConditionDuplicationPhase {
   DECL_PIPELINE_PHASE_CONSTANTS(BranchConditionDuplication)
 
@@ -3065,6 +3077,8 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
                   turboshaft::RecreateSchedulePhase::phase_name());
   }
 
+  RunPrintAndVerify(StoreFusionPhase::phase_name(), true);
+
   return SelectInstructions(linkage);
 }
 
@@ -3240,6 +3254,8 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
   pipeline.ComputeScheduledGraph();
   DCHECK_NOT_NULL(data.schedule());
 
+  pipeline.Run<StoreFusionPhase>();
+  pipeline.RunPrintAndVerify(StoreFusionPhase::phase_name(), true);
   // First run code generation on a copy of the pipeline, in order to be able to
   // repeat it for jump optimization. The first run has to happen on a temporary
   // pipeline to avoid deletion of zones on the main pipeline.

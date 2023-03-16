@@ -207,6 +207,7 @@ class V8_EXPORT_PRIVATE Schedule final : public NON_EXPORTED_BASE(ZoneObject) {
 
   // Return the block which contains {node}, if any.
   BasicBlock* block(Node* node) const;
+  void LateAdd(Node* node, BasicBlock* block);
 
   bool IsScheduled(Node* node);
   BasicBlock* GetBlockById(BasicBlock::Id block_id);
