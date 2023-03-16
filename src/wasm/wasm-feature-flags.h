@@ -45,8 +45,8 @@
     false)                                                                     \
   V(skip_bounds_checks, "skip array bounds checks (unsafe)", false)            \
                                                                                \
-  /* Not user-visible, defined here so an Origin Trial can control it.*/       \
-  V(inlining, "enable wasm-into-wasm inlining", false)                         \
+  /* Not user-visible, defined here so an Origin Trial can control it. */      \
+  V(inlining, "wasm-into-wasm inlining", false)                                \
                                                                                \
   /* Typed function references proposal. */                                    \
   /* Official proposal: https://github.com/WebAssembly/function-references */  \
