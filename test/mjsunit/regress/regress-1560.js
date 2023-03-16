@@ -46,7 +46,7 @@ function mkNumberDictionary() {
   return a;
 }
 
-function write(a, i) { a[i] = "bazinga!"; }
+function write(a, i) { %DebugPrint(a);a[i] = "bazinga!"; }
 %PrepareFunctionForOptimization(write);
 
 function test(factories, w) {

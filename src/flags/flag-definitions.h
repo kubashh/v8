@@ -463,7 +463,6 @@ DEFINE_BOOL(future, FUTURE_BOOL,
 DEFINE_BOOL(force_emit_interrupt_budget_checks, false,
             "force emit tier-up logic from all non-turbofan code, even if it "
             "is the top enabled tier")
-
 #ifdef V8_ENABLE_MAGLEV
 #define V8_ENABLE_MAGLEV_BOOL true
 DEFINE_BOOL(maglev, false, "enable the maglev optimizing compiler")
@@ -483,6 +482,10 @@ DEFINE_FLOAT(min_maglev_inlining_frequency, 0.10,
              "minimum frequency for inlining")
 DEFINE_BOOL(maglev_reuse_stack_slots, true,
             "reuse stack slots in the maglev optimizing compiler")
+
+DEFINE_BOOL(
+    optimize_on_next_call_optimizes_to_maglev, false,
+    "make OptimizeFunctionOnNextCall optimize to maglev instead of turbofan")
 
 // We stress maglev by setting a very low interrupt budget for maglev. This
 // way, we still gather *some* feedback before compiling optimized code.

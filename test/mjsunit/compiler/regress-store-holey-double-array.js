@@ -25,6 +25,7 @@
   %OptimizeFunctionOnNextCall(g);
   g(f64, a, 0);
 
+  %DebugPrint(a[0]);
   assertTrue(Number.isNaN(a[0]));
 })();
 

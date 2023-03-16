@@ -1640,7 +1640,6 @@ void Float64Negate::GenerateCode(MaglevAssembler* masm,
   DoubleRegister value = ToDoubleRegister(input());
   __ Negpd(value, value, kScratchRegister);
 }
-
 void Float64Round::GenerateCode(MaglevAssembler* masm,
                                 const ProcessingState& state) {
   DoubleRegister in = ToDoubleRegister(input());
