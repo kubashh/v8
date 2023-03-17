@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0757cd8_51b27903",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-17T10:18:59Z",
+      "side": 1,
+      "message": "PTAL! I still think we should have a less heavy way of introducing stores. Maybe we can add these SmiTagPhi and UpdateNodePhi directly in the node. And introduce a CanBeConverted property?",
+      "revId": "6a27e6770cfd6db6bae02d6426defe10f7d961f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
