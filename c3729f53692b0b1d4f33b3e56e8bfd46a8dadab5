@@ -33,6 +33,24 @@
       "message": "Do you think a\n```\nif (!v8_flags.wasm_lazy_compilation) {\n  WaitForCompilationEvent(CompilationEvent::kFinishedBaselineCompilation);\n}\n```\nwould be sufficient?",
       "revId": "c3729f53692b0b1d4f33b3e56e8bfd46a8dadab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c6a5191_87fa3136",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-17T11:43:43Z",
+      "side": 1,
+      "message": "Do you mean instead of the change above, or in addition?\nAny of the two should be sufficient. Differences would only be observable in situations where we synchronously compile a module again after deserialization. Then the question is if baseline compilation should be considered \"done\" or not. I don\u0027t think that this makes a big difference.\n\nI think the current state is fine (i.e. setting baseline finished, but still making the call which should return immediately).",
+      "parentUuid": "660d70a9_8addebc4",
+      "revId": "c3729f53692b0b1d4f33b3e56e8bfd46a8dadab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
