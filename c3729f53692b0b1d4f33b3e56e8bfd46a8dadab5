@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "c3729f53692b0b1d4f33b3e56e8bfd46a8dadab5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "660d70a9_8addebc4",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3331,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-03-17T11:04:25Z",
+      "side": 1,
+      "message": "Do you think a\n```\nif (!v8_flags.wasm_lazy_compilation) {\n  WaitForCompilationEvent(CompilationEvent::kFinishedBaselineCompilation);\n}\n```\nwould be sufficient?",
+      "revId": "c3729f53692b0b1d4f33b3e56e8bfd46a8dadab5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
