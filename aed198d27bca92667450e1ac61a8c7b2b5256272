@@ -33,6 +33,41 @@
       "message": "LGTM.\nA follow-up question would be: Should we consider typing phi nodes in the future?",
       "revId": "aed198d27bca92667450e1ac61a8c7b2b5256272",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb61c9fa_261f7d7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-03-17T12:37:45Z",
+      "side": 1,
+      "message": "I think typing Phi nodes is best left to later compiler phases. To do a good job, it needs more effort than what\u0027s appropriate to do on the side in the graph builder.",
+      "parentUuid": "fc2e38ad_166b4b82",
+      "revId": "aed198d27bca92667450e1ac61a8c7b2b5256272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1e2445e_a893021c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-03-17T12:37:45Z",
+      "side": 1,
+      "message": "Thanks for reviewing!",
+      "revId": "aed198d27bca92667450e1ac61a8c7b2b5256272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
