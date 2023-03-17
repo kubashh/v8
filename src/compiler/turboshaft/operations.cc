@@ -935,6 +935,24 @@ std::ostream& operator<<(std::ostream& os, BigIntUnaryOp::Kind kind) {
   }
 }
 
+std::ostream& operator<<(std::ostream& os, StringAtOp::Kind kind) {
+  switch (kind) {
+    case StringAtOp::Kind::kCharCode:
+      return os << "CharCode";
+    case StringAtOp::Kind::kCodePoint:
+      return os << "CodePoint";
+  }
+}
+
+std::ostream& operator<<(std::ostream& os, StringToCaseIntlOp::Kind kind) {
+  switch (kind) {
+    case StringToCaseIntlOp::Kind::kLower:
+      return os << "Lower";
+    case StringToCaseIntlOp::Kind::kUpper:
+      return os << "Upper";
+  }
+}
+
 std::string Operation::ToString() const {
   std::stringstream ss;
   ss << *this;
