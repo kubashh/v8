@@ -68,6 +68,7 @@ struct WasmModule;
   V(WasmI64AtomicWait)                   \
   V(WasmGetOwnProperty)                  \
   V(WasmRefFunc)                         \
+  V(WasmInternalFunctionCreateExternal)  \
   V(WasmMemoryGrow)                      \
   V(WasmTableInit)                       \
   V(WasmTableCopy)                       \

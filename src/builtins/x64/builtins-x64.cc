@@ -3171,6 +3171,8 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   // -------------------------------------------
   // Compute offsets and prepare for GC.
   // -------------------------------------------
+  constexpr int kInstanceOffset =
+      BuiltinWasmWrapperConstants::kInstanceSlotOffset;
   constexpr int kGCScanSlotCountOffset =
       BuiltinWasmWrapperConstants::kGCScanSlotCountOffset;
   // The number of parameters passed to this function.
@@ -3207,6 +3209,8 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   Register function_data = rdi;
   Register wasm_instance = rsi;
   LoadFunctionDataAndWasmInstance(masm, function_data, wasm_instance);
+  // Spill instance.
+  __ movq(MemOperand(rbp, kInstanceOffset), wasm_instance);
 
   Label compile_wrapper, compile_wrapper_done;
   if (!stack_switch) {
@@ -4027,6 +4031,12 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   __ jmp(&return_done);
 
   __ bind(&return_kWasmFuncRef);
+  // Load the context into the context register. It will be implicitly recovered
+  // by the builtin.
+  __ Move(kContextRegister, MemOperand(rbp, kInstanceOffset));
+  __ LoadTaggedField(
+      kContextRegister,
+      FieldOperand(kContextRegister, WasmInstanceObject::kNativeContextOffset));
   __ Call(BUILTIN_CODE(masm->isolate(), WasmFuncRefToJS),
           RelocInfo::CODE_TARGET);
   __ jmp(&return_done);

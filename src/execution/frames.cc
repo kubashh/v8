@@ -2659,9 +2659,11 @@ void JsToWasmFrame::Iterate(RootVisitor* v) const {
   //        |       fp        |                     |
   //   fp-p |- - - - - - - - -|                     |
   //        |  frame marker   |                     | no GC scan
-  //  fp-2p |- - - - - - - - -|                     |
-  //        |   scan_count    |                     |
+  //  fp-2p |- - - - - - - - -|  -------------------|
+  //        |   instance      |                     | GC scan
   //  fp-3p |- - - - - - - - -|  -------------------|
+  //        |   scan_count    |                     | no GC scan
+  //  fp-4p |- - - - - - - - -|  -------------------|
   //        |      ....       | <- spill_slot_limit |
   //        |   spill slots   |                     | GC scan scan_count slots
   //        |      ....       | <- spill_slot_base--|
@@ -2676,6 +2678,9 @@ void JsToWasmFrame::Iterate(RootVisitor* v) const {
       &Memory<Address>(sp() + scan_count * kSystemPointerSize));
   v->VisitRootPointers(Root::kStackRoots, nullptr, spill_slot_base,
                        spill_slot_limit);
+  FullObjectSlot instance_slot(&Memory<Address>(
+      fp() + BuiltinWasmWrapperConstants::kInstanceSlotOffset));
+  v->VisitRootPointer(Root::kStackRoots, nullptr, instance_slot);
 }
 
 void StackSwitchFrame::Iterate(RootVisitor* v) const {
