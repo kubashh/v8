@@ -4,6 +4,8 @@
 
 #include "src/compiler/js-heap-broker.h"
 
+#include "src/objects/elements-kind.h"
+
 #ifdef ENABLE_SLOW_DCHECKS
 #include <algorithm>
 #endif
@@ -160,12 +162,13 @@ void JSHeapBroker::CollectArrayAndObjectPrototypes() {
 }
 
 StringRef JSHeapBroker::GetTypedArrayStringTag(ElementsKind kind) {
-  DCHECK(IsTypedArrayElementsKind(kind));
+  DCHECK(IsTypedArrayOrRabGsabTypedArrayElementsKind(kind));
   switch (kind) {
 #define TYPED_ARRAY_STRING_TAG(Type, type, TYPE, ctype) \
   case ElementsKind::TYPE##_ELEMENTS:                   \
     return Type##Array_string();
     TYPED_ARRAYS(TYPED_ARRAY_STRING_TAG)
+    RAB_GSAB_TYPED_ARRAYS_WITH_TYPED_ARRAY_TYPE(TYPED_ARRAY_STRING_TAG)
 #undef TYPED_ARRAY_STRING_TAG
     default:
       UNREACHABLE();
