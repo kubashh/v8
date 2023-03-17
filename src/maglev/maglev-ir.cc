@@ -2508,7 +2508,13 @@ void Float64Box::GenerateCode(MaglevAssembler* masm,
                               const ProcessingState& state) {
   DoubleRegister value = ToDoubleRegister(input());
   Register object = ToRegister(result());
+  Label box, done;
+  __ TryTruncateDoubleToInt32(object, value, &box);
+  __ SmiTagInt32(object, &box);
+  __ jmp(&done);
+  __ bind(&box);
   __ AllocateHeapNumber(register_snapshot(), object, value);
+  __ bind(&done);
 }
 
 void Float64Round::SetValueLocationConstraints() {
