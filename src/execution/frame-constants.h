@@ -210,13 +210,14 @@ class BuiltinWasmWrapperConstants : public TypedFrameConstants {
  public:
   // This slot contains the number of slots at the top of the frame that need to
   // be scanned by the GC.
+  static constexpr int kInstanceSlotOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
   static constexpr int kGCScanSlotCountOffset =
-      TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
+      TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
   // The number of parameters passed to this function.
-  static constexpr int kInParamCountOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+  static constexpr int kInParamCountOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(2);
   // The number of parameters according to the signature.
-  static constexpr int kParamCountOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(2);
-  static constexpr int kSuspenderOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(3);
+  static constexpr int kParamCountOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(3);
+  static constexpr int kSuspenderOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(4);
 };
 
 class ConstructFrameConstants : public TypedFrameConstants {

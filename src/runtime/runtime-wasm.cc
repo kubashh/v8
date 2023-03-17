@@ -301,7 +301,7 @@ void ReplaceWrapper(Isolate* isolate, Handle<WasmInstanceObject> instance,
                                                   function_index)
           .ToHandleChecked();
   Handle<WasmExternalFunction> exported_function =
-      handle(WasmExternalFunction::cast(internal->external()), isolate);
+      Handle<WasmExternalFunction>::cast(internal->GetOrCreateExternal());
   exported_function->set_code(*wrapper_code);
   WasmExportedFunctionData function_data =
       exported_function->shared().wasm_exported_function_data();
@@ -481,6 +481,15 @@ RUNTIME_FUNCTION(Runtime_WasmRefFunc) {
 
   return *WasmInstanceObject::GetOrCreateWasmInternalFunction(isolate, instance,
                                                               function_index);
+}
+
+RUNTIME_FUNCTION(Runtime_WasmInternalFunctionCreateExternal) {
+  ClearThreadInWasmScope flag_scope(isolate);
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  Handle<WasmInternalFunction> internal(WasmInternalFunction::cast(args[0]),
+                                        isolate);
+  return *internal->GetOrCreateExternal();
 }
 
 RUNTIME_FUNCTION(Runtime_WasmFunctionTableGet) {
