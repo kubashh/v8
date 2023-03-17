@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af9eff3a_23a01569",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-17T11:55:07Z",
+      "side": 1,
+      "message": "Thanks for fixing my Phi untagging bugs! :D\nLGTM with just a few comments :)",
+      "revId": "a8e767a73ae17f0b0ae4eadf843d1e04a48ec132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc3759a7_1c3f0803",
+        "filename": "src/maglev/x64/maglev-assembler-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-17T11:55:07Z",
+      "side": 1,
+      "message": "It would make sense to do a similar check for arm64, no?",
+      "range": {
+        "startLine": 743,
+        "startChar": 4,
+        "endLine": 744,
+        "endChar": 63
+      },
+      "revId": "a8e767a73ae17f0b0ae4eadf843d1e04a48ec132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a430d9f7_ddda8830",
+        "filename": "test/mjsunit/maglev/regress-4349817-2.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-17T11:55:07Z",
+      "side": 1,
+      "message": "nit: indent",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 13
+      },
+      "revId": "a8e767a73ae17f0b0ae4eadf843d1e04a48ec132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

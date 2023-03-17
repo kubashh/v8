@@ -16,6 +16,121 @@
       "message": "PTAL! I still think we should have a less heavy way of introducing stores. Maybe we can add these SmiTagPhi and UpdateNodePhi directly in the node. And introduce a CanBeConverted property?",
       "revId": "6a27e6770cfd6db6bae02d6426defe10f7d961f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37f814f2_3ace86db",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-17T11:55:07Z",
+      "side": 1,
+      "message": "I talked quickly about that with Leszek, who pointed out that with inlining, this could break. Maybe. \nFor StoreTaggedFieldWithWriteBarrier, it can break because of feedback sharing (see https://crrev.com/c/4339636), but this isn\u0027t an issue here. But still with inlining, we might be able to break this.\nSo calling UpdateNodePhiInput here is probably the safe thing to do.",
+      "range": {
+        "startLine": 327,
+        "startChar": 4,
+        "endLine": 328,
+        "endChar": 73
+      },
+      "revId": "6a27e6770cfd6db6bae02d6426defe10f7d961f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e66f6e04_fcec5a65",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-17T11:55:07Z",
+      "side": 1,
+      "message": "CheckedStoreFixedArraySmiElement",
+      "range": {
+        "startLine": 360,
+        "startChar": 21,
+        "endLine": 360,
+        "endChar": 57
+      },
+      "revId": "6a27e6770cfd6db6bae02d6426defe10f7d961f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bf5a106_56340610",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-17T11:55:07Z",
+      "side": 1,
+      "message": "Likewise, a UpdateNodePhiInput would probably be safer.",
+      "range": {
+        "startLine": 361,
+        "startChar": 4,
+        "endLine": 362,
+        "endChar": 73
+      },
+      "revId": "6a27e6770cfd6db6bae02d6426defe10f7d961f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "316c23ee_3821c6ac",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-17T11:55:07Z",
+      "side": 1,
+      "message": "CheckedStoreFixedArraySmiElement",
+      "range": {
+        "startLine": 365,
+        "startChar": 21,
+        "endLine": 365,
+        "endChar": 57
+      },
+      "revId": "6a27e6770cfd6db6bae02d6426defe10f7d961f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1868c98b_0f57fcc8",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-17T11:55:07Z",
+      "side": 1,
+      "message": "Can we keep the `user_node` name? I think that it makes it more obvious what the distinction between `phi` and `node` is.",
+      "range": {
+        "startLine": 396,
+        "startChar": 25,
+        "endLine": 396,
+        "endChar": 29
+      },
+      "revId": "6a27e6770cfd6db6bae02d6426defe10f7d961f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
