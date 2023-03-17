@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68a086f5_cc6055b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-17T10:25:07Z",
+      "side": 1,
+      "message": "PTAL, thanks.\n\nPS: How on earth could we get this wrong?!",
+      "revId": "7ec1d35216f242b838a3c08499d7aa60c3a85d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
