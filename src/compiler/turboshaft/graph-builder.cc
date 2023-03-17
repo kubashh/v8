@@ -1593,6 +1593,32 @@ OpIndex GraphBuilder::Process(
       // Inlined usage of wasm root register operation in JS.
       return assembler.ReduceLoadRootRegister();
 
+    case IrOpcode::kStringCharCodeAt:
+      return __ StringCharCodeAt(Map(node->InputAt(0)), Map(node->InputAt(1)));
+    case IrOpcode::kStringCodePointAt:
+      return __ StringCodePointAt(Map(node->InputAt(0)), Map(node->InputAt(1)));
+
+    case IrOpcode::kStringToLowerCaseIntl:
+      return __ StringToLowerCaseIntl(Map(node->InputAt(0)));
+    case IrOpcode::kStringToUpperCaseIntl:
+      return __ StringToUpperCaseIntl(Map(node->InputAt(0)));
+
+    case IrOpcode::kStringLength:
+      return __ LoadField(Map(node->InputAt(0)),
+                          AccessBuilder::ForStringLength());
+
+    case IrOpcode::kStringIndexOf:
+      return __ StringIndexOf(Map(node->InputAt(0)), Map(node->InputAt(1)),
+                              Map(node->InputAt(2)));
+
+    case IrOpcode::kStringFromCodePointAt:
+      return __ StringFromCodePointAt(Map(node->InputAt(0)),
+                                      Map(node->InputAt(1)));
+
+    case IrOpcode::kStringSubstring:
+      return __ StringSubstring(Map(node->InputAt(0)), Map(node->InputAt(1)),
+                                Map(node->InputAt(2)));
+
     case IrOpcode::kBeginRegion:
       return OpIndex::Invalid();
     case IrOpcode::kFinishRegion:

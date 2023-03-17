@@ -236,6 +236,11 @@ class TypeInferenceAnalysis {
         case Opcode::kBigIntEqual:
         case Opcode::kBigIntComparison:
         case Opcode::kBigIntUnary:
+        case Opcode::kStringAt:
+        case Opcode::kStringToCaseIntl:
+        case Opcode::kStringIndexOf:
+        case Opcode::kStringFromCodePointAt:
+        case Opcode::kStringSubstring:
           // TODO(nicohartmann@): Support remaining operations. For now we
           // compute fallback types.
           if (op.outputs_rep().size() > 0) {

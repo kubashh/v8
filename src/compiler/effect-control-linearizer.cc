@@ -1470,30 +1470,37 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       result = LowerStringFromSingleCodePoint(node);
       break;
     case IrOpcode::kStringIndexOf:
+      if (v8_flags.turboshaft) return false;
       result = LowerStringIndexOf(node);
       break;
     case IrOpcode::kStringFromCodePointAt:
       result = LowerStringFromCodePointAt(node);
       break;
     case IrOpcode::kStringLength:
+      if (v8_flags.turboshaft) return false;
       result = LowerStringLength(node);
       break;
     case IrOpcode::kStringToNumber:
       result = LowerStringToNumber(node);
       break;
     case IrOpcode::kStringCharCodeAt:
+      if (v8_flags.turboshaft) return false;
       result = LowerStringCharCodeAt(node);
       break;
     case IrOpcode::kStringCodePointAt:
+      if (v8_flags.turboshaft) return false;
       result = LowerStringCodePointAt(node);
       break;
     case IrOpcode::kStringToLowerCaseIntl:
+      if (v8_flags.turboshaft) return false;
       result = LowerStringToLowerCaseIntl(node);
       break;
     case IrOpcode::kStringToUpperCaseIntl:
+      if (v8_flags.turboshaft) return false;
       result = LowerStringToUpperCaseIntl(node);
       break;
     case IrOpcode::kStringSubstring:
+      if (v8_flags.turboshaft) return false;
       result = LowerStringSubstring(node);
       break;
     case IrOpcode::kStringEqual:
@@ -5274,12 +5281,14 @@ Node* EffectControlLinearizer::StringCharCodeAt(Node* receiver,
 }
 
 Node* EffectControlLinearizer::LowerStringCharCodeAt(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   Node* receiver = node->InputAt(0);
   Node* position = node->InputAt(1);
   return StringCharCodeAt(receiver, position);
 }
 
 Node* EffectControlLinearizer::LowerStringCodePointAt(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   Node* receiver = node->InputAt(0);
   Node* position = node->InputAt(1);
 
@@ -5392,6 +5401,7 @@ Node* EffectControlLinearizer::LowerStringFromSingleCharCode(Node* node) {
 #ifdef V8_INTL_SUPPORT
 
 Node* EffectControlLinearizer::LowerStringToLowerCaseIntl(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   Node* receiver = node->InputAt(0);
 
   Callable callable =
@@ -5406,6 +5416,7 @@ Node* EffectControlLinearizer::LowerStringToLowerCaseIntl(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerStringToUpperCaseIntl(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   Node* receiver = node->InputAt(0);
   Operator::Properties properties = Operator::kNoDeopt | Operator::kNoThrow;
   Runtime::FunctionId id = Runtime::kStringToUpperCaseIntl;
@@ -5537,6 +5548,7 @@ Node* EffectControlLinearizer::LowerStringFromSingleCodePoint(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerStringIndexOf(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   Node* subject = node->InputAt(0);
   Node* search_string = node->InputAt(1);
   Node* position = node->InputAt(2);
@@ -5567,6 +5579,7 @@ Node* EffectControlLinearizer::LowerStringFromCodePointAt(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerStringLength(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   Node* subject = node->InputAt(0);
 
   return __ LoadField(AccessBuilder::ForStringLength(), subject);
@@ -5613,6 +5626,7 @@ Node* EffectControlLinearizer::LowerStringComparison(Callable const& callable,
 }
 
 Node* EffectControlLinearizer::LowerStringSubstring(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   Node* receiver = node->InputAt(0);
   Node* start = ChangeInt32ToIntPtr(node->InputAt(1));
   Node* end = ChangeInt32ToIntPtr(node->InputAt(2));
