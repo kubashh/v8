@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9715175_1afb9a5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-03-17T09:19:23Z",
+      "side": 1,
+      "message": "Just to be clear: we still have other fuzzers that will execute `d8.terminate()`?",
+      "revId": "ff94c77d2d7406fcc2be38d8501a8c0caf306be8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
