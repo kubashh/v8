@@ -16,6 +16,23 @@
       "message": "PTAL.",
       "revId": "aed198d27bca92667450e1ac61a8c7b2b5256272",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc2e38ad_166b4b82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-17T10:23:49Z",
+      "side": 1,
+      "message": "LGTM.\nA follow-up question would be: Should we consider typing phi nodes in the future?",
+      "revId": "aed198d27bca92667450e1ac61a8c7b2b5256272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
