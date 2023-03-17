@@ -63,11 +63,6 @@
   'debug/es8/async-debug-caught-exception-cases2': [SKIP],
   'debug/es8/async-debug-caught-exception-cases3': [SKIP],
   'debug/es8/async-function-debug-scopes': [SKIP],
-
-  # https://crbug.com/v8/8141
-  'debug/debug-liveedit-1': [SKIP],
-  'debug/es6/debug-liveedit-new-target-3': [SKIP],
-  'debug/side-effect/debug-evaluate-no-side-effect-control': [SKIP],
 }],  # 'gc_stress == True'
 
 ##############################################################################
@@ -78,10 +73,6 @@
 
 ##############################################################################
 ['predictable == True', {
-  # https://crbug.com/v8/8147
-  'debug/debug-liveedit-*': [SKIP],
-  'debug/debug-set-variable-value': [SKIP],
-
   # Rely on (blocking) concurrent compilation.
   'debug/regress/regress-opt-after-debug-deopt': [SKIP],
   'debug/regress/regress-prepare-break-while-recompile': [SKIP],
