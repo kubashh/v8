@@ -1222,7 +1222,33 @@ void InstructionSelector::VisitBlock(BasicBlock* block) {
     if (IsUsed(node) && !IsDefined(node)) {
       // Generate code for this node "top down", but schedule the code "bottom
       // up".
-      VisitNode(node);
+      bool bs = false;
+      if (node->opcode() == IrOpcode::kStore) {
+        if (node->UseCount() == 1) {
+          Node* dom = node->InputAt(3);
+          if (dom->opcode() == IrOpcode::kStore) {
+            auto base = node->InputAt(0);
+            auto index = node->InputAt(1);
+            auto value = node->InputAt(2);
+            if (base == dom->InputAt(0) && index == dom->InputAt(1) &&
+                value == dom->InputAt(2)) {
+              auto rep1 = StoreRepresentationOf(node->op());
+              auto rep2 = StoreRepresentationOf(dom->op());
+              if (ElementSizeLog2Of(rep1.representation()) ==
+                      ElementSizeLog2Of(rep2.representation()) &&
+                  (rep1.write_barrier_kind() == rep2.write_barrier_kind() ||
+                   rep2.write_barrier_kind() ==
+                       WriteBarrierKind::kFullWriteBarrier)) {
+                bs = true;
+                //                node->Print();
+                //                dom->Print();
+                //                std::cout << "\n";
+              }
+            }
+          }
+        }
+      }
+      if (!bs) VisitNode(node);
       if (!FinishEmittedInstructions(node, current_node_end)) return;
     }
     if (trace_turbo_ == kEnableTraceTurboJson) {
