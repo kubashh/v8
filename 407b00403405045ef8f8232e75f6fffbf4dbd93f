@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e5709f2_34fe01b9",
+        "filename": "test/unittests/heap/marking-inner-pointer-resolution-unittest.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-03-17T12:07:16Z",
+      "side": 1,
+      "message": "When this relands, please make sure that this line is also fixed.\nIt broke the CSS builder bot:\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux64%20css%20-%20debug%20builder/2794/overview",
+      "revId": "407b00403405045ef8f8232e75f6fffbf4dbd93f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
