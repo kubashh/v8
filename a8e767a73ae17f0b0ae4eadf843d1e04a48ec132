@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1030821b_bd140d50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-17T13:02:31Z",
+      "side": 1,
+      "message": "No worries. I don\u0027t think this is your bug! I think we should create a more robust way to introduce Store IR nodes.",
+      "parentUuid": "af9eff3a_23a01569",
+      "revId": "a8e767a73ae17f0b0ae4eadf843d1e04a48ec132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc3759a7_1c3f0803",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6153689_bc6ddef3",
+        "filename": "src/maglev/x64/maglev-assembler-x64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-17T13:02:31Z",
+      "side": 1,
+      "message": "Fair. Done!",
+      "parentUuid": "dc3759a7_1c3f0803",
+      "range": {
+        "startLine": 743,
+        "startChar": 4,
+        "endLine": 744,
+        "endChar": 63
+      },
+      "revId": "a8e767a73ae17f0b0ae4eadf843d1e04a48ec132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a430d9f7_ddda8830",
@@ -54,6 +96,30 @@
       "writtenOn": "2023-03-17T11:55:07Z",
       "side": 1,
       "message": "nit: indent",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 13
+      },
+      "revId": "a8e767a73ae17f0b0ae4eadf843d1e04a48ec132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce048e5c_fd77246a",
+        "filename": "test/mjsunit/maglev/regress-4349817-2.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-03-17T13:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a430d9f7_ddda8830",
       "range": {
         "startLine": 8,
         "startChar": 0,
