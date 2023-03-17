@@ -222,7 +222,7 @@ class MergePointInterpreterFrameState;
   V(CheckedNumberToUint8Clamped)             \
   V(Int32ToNumber)                           \
   V(Uint32ToNumber)                          \
-  V(Float64Box)                              \
+  V(Float64ToTagged)                         \
   V(HoleyFloat64Box)                         \
   V(CheckedSmiTagFloat64)                    \
   V(CheckedNumberOrOddballToFloat64)         \
@@ -2770,11 +2770,11 @@ class Uint32ToNumber : public FixedInputValueNodeT<1, Uint32ToNumber> {
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
 };
 
-class Float64Box : public FixedInputValueNodeT<1, Float64Box> {
-  using Base = FixedInputValueNodeT<1, Float64Box>;
+class Float64ToTagged : public FixedInputValueNodeT<1, Float64ToTagged> {
+  using Base = FixedInputValueNodeT<1, Float64ToTagged>;
 
  public:
-  explicit Float64Box(uint64_t bitfield) : Base(bitfield) {}
+  explicit Float64ToTagged(uint64_t bitfield) : Base(bitfield) {}
   static constexpr
       typename Base::InputTypes kInputTypes{ValueRepresentation::kFloat64};
 
