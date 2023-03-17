@@ -16,6 +16,41 @@
       "message": "Just to be clear: we still have other fuzzers that will execute `d8.terminate()`?",
       "revId": "ff94c77d2d7406fcc2be38d8501a8c0caf306be8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbb6fc5d_a5b15a26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-03-17T09:21:50Z",
+      "side": 1,
+      "message": "Thanks for the quick review!",
+      "revId": "ff94c77d2d7406fcc2be38d8501a8c0caf306be8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcd39daa_3a5bb062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-03-17T09:21:50Z",
+      "side": 1,
+      "message": "Yes, the regular Clusterfuzz-based JS fuzzers do not use the REPRL mechanism so they will use it (they should be able to pick it up from some of the regression tests you\u0027ve added that call `d8.terminate()`)",
+      "parentUuid": "c9715175_1afb9a5d",
+      "revId": "ff94c77d2d7406fcc2be38d8501a8c0caf306be8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
