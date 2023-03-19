@@ -1896,6 +1896,7 @@ class V8_EXPORT_PRIVATE InstructionSequence final
 
   // Puts the deferred blocks last and may rotate loops.
   void ComputeAssemblyOrder();
+  int RotateLoopAndAddAssemblyOrder(InstructionBlock* const loop, int ao);
 
   Isolate* isolate_;
   Zone* const zone_;
