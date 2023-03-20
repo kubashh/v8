@@ -32,12 +32,17 @@
 #include "src/compiler/turboshaft/snapshot-table.h"
 #include "src/logging/runtime-call-stats.h"
 #include "src/objects/heap-number.h"
+#include "src/objects/oddball.h"
 
 namespace v8::internal {
 enum class Builtin : int32_t;
 }
 
 namespace v8::internal::compiler::turboshaft {
+
+// Currently we don't have an actual Boolean type. We define an alias to allow
+// `V<Boolean>` to be used.
+using Boolean = Oddball;
 
 namespace detail {
 template <typename T, typename = void>
@@ -1690,6 +1695,21 @@ class AssemblerOpInterface {
     }
   }
 
+  V<Boolean> CallBuiltin_StringEqual(Isolate* isolate, V<String> left,
+                                     V<String> right, V<WordPtr> length) {
+    return CallBuiltin<typename BuiltinCallDescriptor::StringEqual>(
+        isolate, {left, right, length});
+  }
+  V<Boolean> CallBuiltin_StringLessThan(Isolate* isolate, V<String> left,
+                                        V<String> right) {
+    return CallBuiltin<typename BuiltinCallDescriptor::StringLessThan>(
+        isolate, {left, right});
+  }
+  V<Boolean> CallBuiltin_StringLessThanOrEqual(Isolate* isolate, V<String> left,
+                                               V<String> right) {
+    return CallBuiltin<typename BuiltinCallDescriptor::StringLessThanOrEqual>(
+        isolate, {left, right});
+  }
   V<Smi> CallBuiltin_StringIndexOf(Isolate* isolate, V<String> string,
                                    V<String> search, V<Smi> position) {
     return CallBuiltin<typename BuiltinCallDescriptor::StringIndexOf>(
@@ -2165,6 +2185,28 @@ class AssemblerOpInterface {
       return OpIndex::Invalid();
     }
     return stack().ReduceStringSubstring(string, start, end);
+  }
+
+  V<Boolean> StringEqual(V<String> left, V<String> right) {
+    if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
+      return OpIndex::Invalid();
+    }
+    return stack().ReduceStringEqual(left, right);
+  }
+
+  V<Boolean> StringComparison(V<String> left, V<String> right,
+                              StringComparisonOp::Kind kind) {
+    if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
+      return OpIndex::Invalid();
+    }
+    return stack().ReduceStringComparison(left, right, kind);
+  }
+  V<Boolean> StringLessThan(V<String> left, V<String> right) {
+    return StringComparison(left, right, StringComparisonOp::Kind::kLessThan);
+  }
+  V<Boolean> StringLessThanOrEqual(V<String> left, V<String> right) {
+    return StringComparison(left, right,
+                            StringComparisonOp::Kind::kLessThanOrEqual);
   }
 
   template <typename Rep>

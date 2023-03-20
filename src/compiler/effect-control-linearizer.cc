@@ -1546,12 +1546,15 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       result = LowerStringSubstring(node);
       break;
     case IrOpcode::kStringEqual:
+      if (v8_flags.turboshaft) return false;
       result = LowerStringEqual(node);
       break;
     case IrOpcode::kStringLessThan:
+      if (v8_flags.turboshaft) return false;
       result = LowerStringLessThan(node);
       break;
     case IrOpcode::kStringLessThanOrEqual:
+      if (v8_flags.turboshaft) return false;
       result = LowerStringLessThanOrEqual(node);
       break;
     case IrOpcode::kBigIntAdd:
@@ -5640,6 +5643,7 @@ Node* EffectControlLinearizer::LowerStringLength(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerStringEqual(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   Callable callable = Builtins::CallableFor(isolate(), Builtin::kStringEqual);
   Node* lhs = node->InputAt(0);
   Node* rhs = node->InputAt(1);
@@ -5697,11 +5701,13 @@ Node* EffectControlLinearizer::LowerStringSubstring(Node* node) {
 }
 
 Node* EffectControlLinearizer::LowerStringLessThan(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   return LowerStringComparison(
       Builtins::CallableFor(isolate(), Builtin::kStringLessThan), node);
 }
 
 Node* EffectControlLinearizer::LowerStringLessThanOrEqual(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   return LowerStringComparison(
       Builtins::CallableFor(isolate(), Builtin::kStringLessThanOrEqual), node);
 }

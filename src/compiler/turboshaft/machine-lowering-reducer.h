@@ -1434,6 +1434,34 @@ class MachineLoweringReducer : public Next {
     return __ CallBuiltin_StringSubstring(isolate_, string, s, e);
   }
 
+  V<Boolean> ReduceStringEqual(V<String> left, V<String> right) {
+    V<Word32> left_length =
+        __ template LoadField<Word32>(left, AccessBuilder::ForStringLength());
+    V<Word32> right_length =
+        __ template LoadField<Word32>(right, AccessBuilder::ForStringLength());
+
+    Label<Boolean> done(this);
+    IF(__ Word32Equal(left_length, right_length)) {
+      GOTO(done,
+           __ CallBuiltin_StringEqual(isolate_, left, right,
+                                      __ ChangeInt32ToIntPtr(left_length)));
+    }
+    ELSE { GOTO(done, __ HeapConstant(factory_->false_value())); }
+
+    BIND(done, result);
+    return result;
+  }
+
+  V<Boolean> ReduceStringComaparison(V<String> left, V<String> right,
+                                     StringComparisonOp::Kind kind) {
+    switch (kind) {
+      case StringComparisonOp::Kind::kLessThan:
+        return __ CallBuiltin_StringLessThan(isolate_, left, right);
+      case StringComparisonOp::Kind::kLessThanOrEqual:
+        return __ CallBuiltin_StringLessThanOrEqual(isolate_, left, right);
+    }
+  }
+
   // TODO(nicohartmann@): Remove this once ECL has been fully ported.
   // ECL: ChangeInt64ToSmi(input) ==> MLR: __ SmiTag(input)
   // ECL: ChangeInt32ToSmi(input) ==> MLR: __ SmiTag(input)

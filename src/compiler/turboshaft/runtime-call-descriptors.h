@@ -64,6 +64,8 @@ struct RuntimeCallDescriptor {
 #endif  // DEBUG
   };
 
+  using Boolean = Oddball;
+
  public:
   struct StringCharCodeAt : public Descriptor<StringCharCodeAt> {
     static constexpr auto Function = Runtime::kStringCharCodeAt;

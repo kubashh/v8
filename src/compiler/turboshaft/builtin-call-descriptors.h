@@ -69,7 +69,19 @@ struct BuiltinCallDescriptor {
 #endif  // DEBUG
   };
 
+  using Boolean = Oddball;
+
  public:
+  struct StringEqual : public Descriptor<StringEqual> {
+    static constexpr auto Function = Builtin::kStringEqual;
+    using arguments_t = std::tuple<V<String>, V<String>, V<WordPtr>>;
+    using result_t = V<Boolean>;
+
+    static constexpr bool NeedsFrameState = false;
+    static constexpr bool NeedsContext = false;
+    static constexpr Operator::Properties Properties = Operator::kEliminatable;
+  };
+
   struct StringFromCodePointAt : public Descriptor<StringFromCodePointAt> {
     static constexpr auto Function = Builtin::kStringFromCodePointAt;
     using arguments_t = std::tuple<V<String>, V<WordPtr>>;
@@ -89,6 +101,20 @@ struct BuiltinCallDescriptor {
     static constexpr bool NeedsContext = false;
     static constexpr Operator::Properties Properties = Operator::kEliminatable;
   };
+
+  template <Builtin B>
+  struct StringComparison : public Descriptor<StringComparison<B>> {
+    static constexpr auto Function = B;
+    using arguments_t = std::tuple<V<String>, V<String>>;
+    using result_t = V<Boolean>;
+
+    static constexpr bool NeedsFrameState = false;
+    static constexpr bool NeedsContext = false;
+    static constexpr Operator::Properties Properties = Operator::kEliminatable;
+  };
+  using StringLessThan = StringComparison<Builtin::kStringLessThan>;
+  using StringLessThanOrEqual =
+      StringComparison<Builtin::kStringLessThanOrEqual>;
 
   struct StringSubstring : public Descriptor<StringSubstring> {
     static constexpr auto Function = Builtin::kStringSubstring;
