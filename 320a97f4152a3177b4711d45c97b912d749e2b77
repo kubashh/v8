@@ -1,0 +1,395 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f5ff8de_77e1b699",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "Maybe a quick `DCHECK(!data_.block-\u003eIsBound())`?",
+      "range": {
+        "startLine": 114,
+        "startChar": 2,
+        "endLine": 114,
+        "endChar": 4
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "821547d7_d40af8fe",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "What about calling that BindLoop instead of Loop? (same thing for ControlFlowHelper_Loop -\u003e ControlFlowHelper_BindLoop)",
+      "range": {
+        "startLine": 271,
+        "startChar": 43,
+        "endLine": 271,
+        "endChar": 47
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fd4c0c4_a11b05ed",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "Likewise, maybe a quick `DCHECK(!loop_header_data_.block-\u003eIsBound())`?",
+      "range": {
+        "startLine": 272,
+        "startChar": 2,
+        "endLine": 272,
+        "endChar": 3
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07aff0c4_95dc2ab5",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "This drops the `bool` at the begining of the tuple returned by `super::Bind` right? Maybe a quick comment reminder the structure of what Bind returns or something like that could be useful I think (to explain both the `std::get\u003c0\u003e` above, and the `tuple_drop\u003c1\u003e` here).",
+      "range": {
+        "startLine": 288,
+        "startChar": 26,
+        "endLine": 288,
+        "endChar": 39
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd689a04_35ec6212",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "Could be nice to have a `DCHECK_LE_LE(1, data.predecessors.size(), 2)` macro :)\n(I\u0027m pretty sure that this is not the first time that you or someone else has to write 2 DCHECKS to check `a \u003c\u003d b \u003c\u003d c`)",
+      "range": {
+        "startLine": 323,
+        "startChar": 4,
+        "endLine": 324,
+        "endChar": 43
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e1b23d8_23562a87",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "I assume that this is not a `DCHECK_EQ(2, data.predecessors.size())` because the final Goto could somehow be dropped/modified by a reducer in the stack right?",
+      "range": {
+        "startLine": 323,
+        "startChar": 4,
+        "endLine": 324,
+        "endChar": 43
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "059dbf04_b53e00bb",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "Should this be behind a `#ifdef DEBUG` to make sure that the loop doesn\u0027t get emitted in release mode? (I imagine that Clang would be able to optimize it away, but I\u0027m not entirely convinced)",
+      "range": {
+        "startLine": 336,
+        "startChar": 6,
+        "endLine": 338,
+        "endChar": 7
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "565a7815_1ea9afca",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "See? Here as well, `DCHECK_LE_LE`! :D",
+      "range": {
+        "startLine": 1161,
+        "startChar": 4,
+        "endLine": 1161,
+        "endChar": 49
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edc0fabd_a6785cab",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "JSGrap::CEntryStubConstant uses the cache for the kStack mode, but you use it instead for the kRegister mode; is this on purpose?",
+      "range": {
+        "startLine": 1156,
+        "startChar": 4,
+        "endLine": 1168,
+        "endChar": 48
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cac44db1_49a56a7d",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "You\u0027re not using the frame state, is this on purpose? If it is, then you could probably remove 2 of the 4 CallBuiltin and ignore `frame_state` over there.",
+      "range": {
+        "startLine": 1670,
+        "startChar": 60,
+        "endLine": 1670,
+        "endChar": 71
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2ed144a_42229691",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "Could you add a comment please, I\u0027m scared :bleeding-eyes:",
+      "range": {
+        "startLine": 1673,
+        "startChar": 4,
+        "endLine": 1678,
+        "endChar": 14
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ba9ac20_ce3b406b",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "You could `static_assert` that instead of `DCHECKing` it, no?",
+      "range": {
+        "startLine": 1764,
+        "startChar": 4,
+        "endLine": 1765,
+        "endChar": 33
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fb2ac35_56207ec3",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2242,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "Not sure what it will or won\u0027t change here, but I\u0027ve recently been told to use templates rather than `std::function` to avoid the allocation of the closure when possible. You probably know more than me about that, so feel free to keep or change as you see fit ;)",
+      "range": {
+        "startLine": 2242,
+        "startChar": 32,
+        "endLine": 2242,
+        "endChar": 58
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dabd24c6_8df9d88d",
+        "filename": "src/compiler/turboshaft/define-assembler-macros.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "Cool! :)",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 44
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e49757c7_a94cba3e",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "We might want an Assembler helper (or even a higher level Operation actually) for that at some point no?",
+      "range": {
+        "startLine": 1645,
+        "startChar": 13,
+        "endLine": 1646,
+        "endChar": 60
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ba17f0e_68602640",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "Wow, that\u0027s shorter :D",
+      "range": {
+        "startLine": 1225,
+        "startChar": 10,
+        "endLine": 1225,
+        "endChar": 67
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2bf12a0_cad567d0",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T08:53:15Z",
+      "side": 1,
+      "message": "I don\u0027t think that this is really unlikely, but I\u0027m ok with keeping the UNLIKELY to match more closely to what TF\u0027s ECL was doing. (and also, we\u0027re doing a runtime call, so it\u0027s probably going to be slow anyways)",
+      "range": {
+        "startLine": 1291,
+        "startChar": 14,
+        "endLine": 1294,
+        "endChar": 27
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
