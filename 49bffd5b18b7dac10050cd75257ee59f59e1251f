@@ -16,6 +16,86 @@
       "message": "PTAL, thanks",
       "revId": "49bffd5b18b7dac10050cd75257ee59f59e1251f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "931cb970_dcf22663",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T14:44:26Z",
+      "side": 1,
+      "message": "LGTM, which probably doesn\u0027t reflect so good on me, given that all of the tryjobs are red :/",
+      "revId": "49bffd5b18b7dac10050cd75257ee59f59e1251f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0942da1e_fdedaf85",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T14:44:26Z",
+      "side": 1,
+      "message": "I\u0027m wondering why we have 2 TF operators for this...",
+      "range": {
+        "startLine": 785,
+        "startChar": 39,
+        "endLine": 787,
+        "endChar": 62
+      },
+      "revId": "49bffd5b18b7dac10050cd75257ee59f59e1251f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98b8b03d_f1f5354e",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T14:44:26Z",
+      "side": 1,
+      "message": "I would have written this as `ELSE { GOTO(done, lsd); } END_IF`. I\u0027m OK with keeping your thing though.",
+      "range": {
+        "startLine": 1021,
+        "startChar": 10,
+        "endLine": 1022,
+        "endChar": 26
+      },
+      "revId": "49bffd5b18b7dac10050cd75257ee59f59e1251f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8721ab40_639d3e31",
+        "filename": "src/compiler/turboshaft/undef-assembler-macros.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-20T14:44:26Z",
+      "side": 1,
+      "message": "You forgot `ELSE_IF_WITH_HINT` (and I\u0027m surprising that this didn\u0027t cause a compile-time error...)",
+      "revId": "49bffd5b18b7dac10050cd75257ee59f59e1251f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
