@@ -1639,6 +1639,9 @@ class V8_EXPORT_PRIVATE InstructionBlock final
   void mark_must_deconstruct_frame() { must_deconstruct_frame_ = true; }
   void clear_must_deconstruct_frame() { must_deconstruct_frame_ = false; }
 
+  void set_best_rotation_loop_block(int b) { best_rotation_loop_block_ = b; }
+  int best_rotation_loop_block() { return best_rotation_loop_block_; }
+
  private:
   Successors successors_;
   Predecessors predecessors_;
@@ -1650,6 +1653,7 @@ class V8_EXPORT_PRIVATE InstructionBlock final
   RpoNumber dominator_;
   int32_t code_start_;   // start index of arch-specific code.
   int32_t code_end_ = -1;     // end index of arch-specific code.
+  int32_t best_rotation_loop_block_ = -1;
   const bool deferred_ : 1;   // Block contains deferred code.
   bool handler_ : 1;          // Block is a handler entry point.
   bool switch_target_ : 1;
@@ -1896,6 +1900,7 @@ class V8_EXPORT_PRIVATE InstructionSequence final
 
   // Puts the deferred blocks last and may rotate loops.
   void ComputeAssemblyOrder();
+  int RotateLoopAndAddAssemblyOrder(InstructionBlock* const loop, int ao);
 
   Isolate* isolate_;
   Zone* const zone_;

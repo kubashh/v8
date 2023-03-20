@@ -678,6 +678,10 @@ static InstructionBlock* InstructionBlockFor(Zone* zone,
   InstructionBlock* instr_block = zone->New<InstructionBlock>(
       zone, GetRpo(block), GetRpo(block->loop_header()), GetLoopEndRpo(block),
       GetRpo(block->dominator()), block->deferred(), is_handler);
+  if (block->IsLoopHeader()) {
+    instr_block->set_best_rotation_loop_block(
+        block->best_rotation_loop_block());
+  }
   // Map successors and precessors
   instr_block->successors().reserve(block->SuccessorCount());
   for (BasicBlock* successor : block->successors()) {
@@ -814,43 +818,165 @@ void InstructionSequence::ValidateSSA() const {
   }
 }
 
+int InstructionSequence::RotateLoopAndAddAssemblyOrder(
+    InstructionBlock* const loop, int ao) {
+  DCHECK(loop->IsLoopHeader());
+  RpoNumber invalid = RpoNumber::Invalid();
+
+  bool header_align = true;
+  int best_rotation_block = instruction_blocks_->at(loop->rpo_number().ToSize())
+                                ->best_rotation_loop_block();
+  if (best_rotation_block == -1) {
+    loop->set_ao_number(RpoNumber::FromInt(ao++));
+    ao_blocks_->push_back(loop);
+    return ao;
+  }
+  DCHECK_GE(best_rotation_block, loop->rpo_number().ToSize());
+  DCHECK_LT(best_rotation_block, loop->loop_end().ToSize());
+  size_t o = static_cast<size_t>(best_rotation_block) + 1;
+  // CHECK_LE(o, loop->loop_end().ToSize() - 1);
+  while (o <= loop->loop_end().ToSize() - 1) {
+    // PrintF("o is %zu\n", o);
+    InstructionBlock* loop_body_block = instruction_blocks_->at(o);
+    if (loop_body_block->IsDeferred() ||
+        loop_body_block->ao_number() != invalid) {
+      o++;
+      continue;
+    }
+    if (loop_body_block->IsLoopHeader()) {
+      ao = RotateLoopAndAddAssemblyOrder(loop_body_block, ao);
+      continue;
+    }
+    loop_body_block->set_ao_number(RpoNumber::FromInt(ao++));
+    ao_blocks_->push_back(loop_body_block);
+    loop_body_block->set_loop_header_alignment(header_align);
+    header_align = false;
+    o++;
+  }
+
+  loop->set_ao_number(RpoNumber::FromInt(ao++));
+  ao_blocks_->push_back(loop);
+  o = loop->rpo_number().ToSize() + 1;
+  while (o <= static_cast<size_t>(best_rotation_block)) {
+    InstructionBlock* loop_body_block = instruction_blocks_->at(o);
+    if (loop_body_block->IsDeferred() ||
+        loop_body_block->ao_number() != invalid) {
+      o++;
+      continue;
+    }
+    if (loop_body_block->IsLoopHeader()) {
+      ao = RotateLoopAndAddAssemblyOrder(loop_body_block, ao);
+      continue;
+    }
+    loop_body_block->set_ao_number(RpoNumber::FromInt(ao++));
+    ao_blocks_->push_back(loop_body_block);
+    loop_body_block->set_loop_header_alignment(header_align);
+    header_align = false;
+    o++;
+  }
+  /*if (loop->ao_number() != invalid) {
+    PrintF("123\n");
+  }
+  loop->set_ao_number(RpoNumber::FromInt(ao++));
+  ao_blocks_->push_back(loop);*/
+  return ao;
+}
+
 void InstructionSequence::ComputeAssemblyOrder() {
   int ao = 0;
   RpoNumber invalid = RpoNumber::Invalid();
+  // static int good_rotation = 0;
+  // static int bad_rotation = 0;
+  // static int switch_rotation = 0;
 
   ao_blocks_ = zone()->NewArray<InstructionBlocks>(1);
   new (ao_blocks_) InstructionBlocks(zone());
   ao_blocks_->reserve(instruction_blocks_->size());
+
+  // InstructionBlocks* loop_blocks = new InstructionBlocks(zone());
 
   // Place non-deferred blocks.
   for (InstructionBlock* const block : *instruction_blocks_) {
     DCHECK_NOT_NULL(block);
     if (block->IsDeferred()) continue;            // skip deferred blocks.
     if (block->ao_number() != invalid) continue;  // loop rotated.
-    if (block->IsLoopHeader()) {
-      bool header_align = true;
-      if (v8_flags.turbo_loop_rotation) {
-        // Perform loop rotation for non-deferred loops.
-        InstructionBlock* loop_end =
-            instruction_blocks_->at(block->loop_end().ToSize() - 1);
-        if (loop_end->SuccessorCount() == 1 && /* ends with goto */
-            loop_end != block /* not a degenerate infinite loop */) {
-          // If the last block has an unconditional jump back to the header,
-          // then move it to be in front of the header in the assembly order.
-          DCHECK_EQ(block->rpo_number(), loop_end->successors()[0]);
-          loop_end->set_ao_number(RpoNumber::FromInt(ao++));
-          ao_blocks_->push_back(loop_end);
-          // This block will be the new machine-level loop header, so align
-          // this block instead of the loop header block.
-          loop_end->set_loop_header_alignment(true);
-          header_align = false;
+    /*if(ao > 0){
+      InstructionBlock* const preblock = ao_blocks_->at(ao - 1);
+      if(preblock->IsLoopHeader()){
+        if(preblock->SuccessorCount() == 1){
+          PrintF("Loop with single successor!\n");
+        }
+        else{
+          RpoNumber s1 = preblock->successors().at(0);
+          RpoNumber s2 = preblock->successors().at(1);
+          RpoNumber rpo_block = block->rpo_number();
+          if(rpo_block == s1 || rpo_block == s2){
+            PrintF("good rotation %d\n", good_rotation ++);
+          }
+          else if(preblock->SuccessorCount() == 2){
+            PrintF("Not expect!\n");
+            PrintF("Loop rpo: %zu, sucessors rpo: %zu, %zu. block rpo: %zu\n",
+    preblock->rpo_number().ToSize(), s1.ToSize(), s2.ToSize(),
+    rpo_block.ToSize()); PrintF("bad rotation %d\n", bad_rotation ++);
+          }
+          else{
+            PrintF("Loop with more than 2 successors!\n");
+            PrintF("switch rotation %d\n", switch_rotation ++);
+          }
         }
       }
-      block->set_loop_header_alignment(header_align);
+    }*/
+    if (block->IsLoopHeader()) {
+      if (v8_flags.turbo_loop_rotation) {
+        ao = RotateLoopAndAddAssemblyOrder(block, ao);
+        continue;
+      } else {
+        block->set_ao_number(RpoNumber::FromInt(ao++));
+        ao_blocks_->push_back(block);
+      }
+      // PrintF("end id %zu\n", block->loop_end().ToSize());
+      // if (v8_flags.turbo_loop_rotation) {
+      /*size_t o = block->rpo_number().ToSize() + 1;
+      CHECK_LE(o, block->loop_end().ToSize() - 1);
+      while(o <= block->loop_end().ToSize() - 1) {
+        //PrintF("o is %zu\n", o);
+        InstructionBlock* loop_block = instruction_blocks_->at(o);
+        if (loop_block->IsDeferred() || loop_block->ao_number() != invalid){
+          o++;
+          continue;
+        }
+        loop_block->set_ao_number(RpoNumber::FromInt(ao++));
+        ao_blocks_->push_back(loop_block);
+        loop_block->set_loop_header_alignment(header_align);
+        header_align = false;
+        o++;
+      }*/
+      // block->set_ao_number(RpoNumber::FromInt(ao++));
+      // ao_blocks_->push_back(block);
+
+      // Perform loop rotation for non-deferred loops.
+      /*InstructionBlock* loop_end =
+          instruction_blocks_->at(block->loop_end().ToSize() - 1);
+      if (loop_end->SuccessorCount() == 1 &&
+          loop_end != block) {
+        // If the last block has an unconditional jump back to the header,
+        // then move it to be in front of the header in the assembly order.
+        DCHECK_EQ(block->rpo_number(), loop_end->successors()[0]);
+        loop_end->set_ao_number(RpoNumber::FromInt(ao++));
+        ao_blocks_->push_back(loop_end);
+        // This block will be the new machine-level loop header, so align
+        // this block instead of the loop header block.
+        loop_end->set_loop_header_alignment(true);
+        header_align = false;
+      }*/
+      //}
     }
     if (block->loop_header().IsValid() && block->IsSwitchTarget()) {
       block->set_code_target_alignment(true);
     }
+    /*if (block->ao_number() != invalid) {
+      PrintF("123\n");
+    }*/
     block->set_ao_number(RpoNumber::FromInt(ao++));
     ao_blocks_->push_back(block);
   }
@@ -861,6 +987,33 @@ void InstructionSequence::ComputeAssemblyOrder() {
       ao_blocks_->push_back(block);
     }
   }
+
+  /*if (v8_flags.turbo_loop_rotation) {
+    for (InstructionBlock* const loop : *loop_blocks) {
+      size_t start = loop->ao_number().ToSize();
+      size_t cur = start;
+      size_t next = cur + 1;
+      size_t end = instruction_blocks_->at(loop->loop_end().ToSize() - 1)
+                       ->ao_number()
+                       .ToSize();
+      // ao_blocks_->emplace(&ao_blocks_->at(end + 1), ao_blocks_->at(cur));
+      // ao_blocks_->erase(&ao_blocks_->at(cur));
+      if (cur >= end) continue;
+      ao_blocks_->at(cur)->set_loop_header_alignment(false);
+      ao_blocks_->at(next)->set_loop_header_alignment(true);
+
+      while (cur < end) {
+        ao_blocks_->at(cur)->set_ao_number(
+            RpoNumber::FromInt(static_cast<int>(cur + 1)));
+        ao_blocks_->at(next)->set_ao_number(
+            RpoNumber::FromInt(static_cast<int>(cur)));
+        std::swap(ao_blocks_->at(cur++), ao_blocks_->at(next++));
+        // int cur_ao = ao_blocks_->at(cur)->ao_number().ToInt();
+        // ao_blocks_->at(cur)->set_ao_number(RpoNumber::FromInt(cur_ao - 1));
+      }
+    }
+  }
+  delete loop_blocks;*/
   DCHECK_EQ(instruction_blocks_->size(), ao);
 }
 

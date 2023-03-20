@@ -162,6 +162,9 @@ class V8_EXPORT_PRIVATE BasicBlock final
   inline bool IsLoopHeader() const { return loop_end_ != nullptr; }
   bool LoopContains(BasicBlock* block) const;
 
+  void set_best_rotation_loop_block(int b) { best_rotation_loop_block_ = b; }
+  int best_rotation_loop_block() const { return best_rotation_loop_block_; }
+
   // Computes the immediate common dominator of {b1} and {b2}. The worst time
   // complexity is O(N) where N is the height of the dominator tree.
   static BasicBlock* GetCommonDominator(BasicBlock* b1, BasicBlock* b2);
@@ -178,6 +181,8 @@ class V8_EXPORT_PRIVATE BasicBlock final
   // enclosing loop header.
   BasicBlock* loop_end_;  // end of the loop, if this block is a loop header.
   int32_t loop_depth_;    // loop nesting, 0 is top-level
+  int32_t best_rotation_loop_block_;  // Only make sense when loop_end_ is not
+                                      // nullptr.
 
   Control control_;      // Control at the end of the block.
   Node* control_input_;  // Input value for control.

@@ -22,6 +22,7 @@ BasicBlock::BasicBlock(Zone* zone, Id id)
       loop_header_(nullptr),
       loop_end_(nullptr),
       loop_depth_(0),
+      best_rotation_loop_block_(-1),
       control_(kNone),
       control_input_(nullptr),
       nodes_(zone),

@@ -692,6 +692,13 @@ class SpecialRPONumberer : public ZoneObject {
       schedule_->rpo_order()->push_back(b);
     }
     BeyondEndSentinel()->set_rpo_number(number);
+    for (BasicBlock* b = order_; b != nullptr; b = b->rpo_next()) {
+      if (b->best_rotation_loop_block() != -1) {
+        BasicBlock* best_rotation_block = schedule_->GetBlockById(
+            BasicBlock::Id::FromInt(b->best_rotation_loop_block()));
+        b->set_best_rotation_loop_block(best_rotation_block->rpo_number());
+      }
+    }
   }
 
   // Print and verify the special reverse-post-order.
@@ -734,6 +741,7 @@ class SpecialRPONumberer : public ZoneObject {
     LoopInfo* prev;
     BasicBlock* end;
     BasicBlock* start;
+    BasicBlock* predecessor_of_end;
 
     void AddOutgoing(Zone* zone, BasicBlock* block) {
       if (outgoing == nullptr) {
@@ -939,6 +947,10 @@ class SpecialRPONumberer : public ZoneObject {
              current == current_header->loop_end()) {
         DCHECK(current_header->IsLoopHeader());
         DCHECK_NOT_NULL(current_loop);
+        /*if(current_loop->predecessor_of_end == nullptr){
+          static int count = 0;
+          PrintF("%d\n", ++count);
+        }*/
         current_loop = current_loop->prev;
         current_header =
             current_loop == nullptr ? nullptr : current_loop->header;
@@ -959,6 +971,16 @@ class SpecialRPONumberer : public ZoneObject {
       }
 
       current->set_loop_depth(loop_depth);
+
+      if (current_loop) {
+        for (BasicBlock* succ : current->successors()) {
+          if (succ == current_loop->end) {
+            current_loop->header->set_best_rotation_loop_block(
+                current->id().ToInt());
+            break;
+          }
+        }
+      }
 
       if (current->loop_header() == nullptr) {
         TRACE("id:%d is not in a loop (depth == %d)\n", current->id().ToInt(),
