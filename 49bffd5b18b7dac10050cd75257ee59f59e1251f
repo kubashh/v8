@@ -37,6 +37,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "11c56338_073e89ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-20T16:27:09Z",
+      "side": 1,
+      "message": "+1 to leaving more time for careful reviews, atm I\u0027m doing them somewhat superfluous to not block Nico.",
+      "parentUuid": "931cb970_dcf22663",
+      "revId": "49bffd5b18b7dac10050cd75257ee59f59e1251f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0942da1e_fdedaf85",
         "filename": "src/compiler/turboshaft/graph-builder.cc",
         "patchSetId": 2
@@ -48,6 +66,30 @@
       "writtenOn": "2023-03-20T14:44:26Z",
       "side": 1,
       "message": "I\u0027m wondering why we have 2 TF operators for this...",
+      "range": {
+        "startLine": 785,
+        "startChar": 39,
+        "endLine": 787,
+        "endChar": 62
+      },
+      "revId": "49bffd5b18b7dac10050cd75257ee59f59e1251f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3b3336e_67583b92",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-03-20T16:27:09Z",
+      "side": 1,
+      "message": "I was about to reply that Truncate* operators have 2 outputs, but that\u0027s actually the case for TryTruncate* - they return both the truncated value and a success/failure bit (whether truncation was performed). Having both Change and Truncate for tagged to float64 is confusing indeed.",
+      "parentUuid": "0942da1e_fdedaf85",
       "range": {
         "startLine": 785,
         "startChar": 39,
