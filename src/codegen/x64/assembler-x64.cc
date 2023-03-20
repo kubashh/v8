@@ -4,6 +4,7 @@
 
 #include "src/codegen/x64/assembler-x64.h"
 
+#include <cstdint>
 #include <cstring>
 
 #if V8_TARGET_ARCH_X64
@@ -527,6 +528,19 @@ void Assembler::bind_to(Label* L, int pos) {
       label_farjmp_maps_.erase(it);
     }
   }
+
+  // Jump table switch binding
+  if (auto it = label_tableswitchjmp_maps_.find(L);
+      it != label_tableswitchjmp_maps_.end()) {
+    for (const auto& p : it->second) {
+      int value_pos = p.first;
+      int table_pos = p.second;
+      uint64_t* value_addr =
+          reinterpret_cast<uint64_t*>(&buffer_start_[value_pos]);
+      *value_addr = pos - table_pos;
+    }
+  }
+
   L->bind_to(pos);
 }
 
@@ -535,6 +549,12 @@ void Assembler::bind(Label* L) { bind_to(L, pc_offset()); }
 void Assembler::record_farjmp_position(Label* L, int pos) {
   auto& pos_vector = label_farjmp_maps_[L];
   pos_vector.push_back(pos);
+}
+
+void Assembler::record_tableswitchjmp_postion(Label* L,
+                                              const std::pair<int, int> p) {
+  auto& pos_vector = label_tableswitchjmp_maps_[L];
+  pos_vector.push_back(p);
 }
 
 bool Assembler::is_optimizable_farjmp(int idx) {
@@ -4485,6 +4505,16 @@ void Assembler::dq(Label* label) {
       emitl(current);
       label->link_to(current);
     }
+  }
+}
+
+void Assembler::dq(Label* label, const int table_pos) {
+  EnsureSpace ensure_space(this);
+  if (label->is_bound()) {
+    emit(Immediate64(label->pos() - table_pos));
+  } else {
+    record_tableswitchjmp_postion(label, {pc_offset(), table_pos});
+    emitq(0);
   }
 }
 
