@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51deff8d_50c4a92d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-20T13:09:37Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL. As discussed I removed the optimization.",
+      "revId": "1a93676de732723334e0805a14c377ce7c93e64d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
