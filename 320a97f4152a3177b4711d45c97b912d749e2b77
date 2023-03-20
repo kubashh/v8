@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69f08594_dd6274d4",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f5ff8de_77e1b699",
+      "range": {
+        "startLine": 114,
+        "startChar": 2,
+        "endLine": 114,
+        "endChar": 4
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "821547d7_d40af8fe",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-03-20T08:53:15Z",
       "side": 1,
       "message": "What about calling that BindLoop instead of Loop? (same thing for ControlFlowHelper_Loop -\u003e ControlFlowHelper_BindLoop)",
+      "range": {
+        "startLine": 271,
+        "startChar": 43,
+        "endLine": 271,
+        "endChar": 47
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "481009bd_c7851c5a",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "821547d7_d40af8fe",
       "range": {
         "startLine": 271,
         "startChar": 43,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee453759_2d0bcbc9",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fd4c0c4_a11b05ed",
+      "range": {
+        "startLine": 272,
+        "startChar": 2,
+        "endLine": 272,
+        "endChar": 3
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07aff0c4_95dc2ab5",
@@ -83,6 +155,30 @@
       "writtenOn": "2023-03-20T08:53:15Z",
       "side": 1,
       "message": "This drops the `bool` at the begining of the tuple returned by `super::Bind` right? Maybe a quick comment reminder the structure of what Bind returns or something like that could be useful I think (to explain both the `std::get\u003c0\u003e` above, and the `tuple_drop\u003c1\u003e` here).",
+      "range": {
+        "startLine": 288,
+        "startChar": 26,
+        "endLine": 288,
+        "endChar": 39
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "baaa46f8_3771c808",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07aff0c4_95dc2ab5",
       "range": {
         "startLine": 288,
         "startChar": 26,
@@ -139,6 +235,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34d5fa8a_61f1da47",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1e1b23d8_23562a87",
+      "range": {
+        "startLine": 323,
+        "startChar": 4,
+        "endLine": 324,
+        "endChar": 43
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8498f391_a0b1e7e3",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "As discussed offline: There are a few open questions regarding such an implementation. Maybe discuss this more broadly and (in case) introduce in another CL.",
+      "parentUuid": "fd689a04_35ec6212",
+      "range": {
+        "startLine": 323,
+        "startChar": 4,
+        "endLine": 324,
+        "endChar": 43
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "059dbf04_b53e00bb",
@@ -152,6 +296,30 @@
       "writtenOn": "2023-03-20T08:53:15Z",
       "side": 1,
       "message": "Should this be behind a `#ifdef DEBUG` to make sure that the loop doesn\u0027t get emitted in release mode? (I imagine that Clang would be able to optimize it away, but I\u0027m not entirely convinced)",
+      "range": {
+        "startLine": 336,
+        "startChar": 6,
+        "endLine": 338,
+        "endChar": 7
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64f90935_0b4f83e5",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "059dbf04_b53e00bb",
       "range": {
         "startLine": 336,
         "startChar": 6,
@@ -185,6 +353,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c923c8bd_94f759f9",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "565a7815_1ea9afca",
+      "range": {
+        "startLine": 1161,
+        "startChar": 4,
+        "endLine": 1161,
+        "endChar": 49
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edc0fabd_a6785cab",
@@ -198,6 +390,30 @@
       "writtenOn": "2023-03-20T08:53:15Z",
       "side": 1,
       "message": "JSGrap::CEntryStubConstant uses the cache for the kStack mode, but you use it instead for the kRegister mode; is this on purpose?",
+      "range": {
+        "startLine": 1156,
+        "startChar": 4,
+        "endLine": 1168,
+        "endChar": 48
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13daec62_1ea5ccb9",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Oh 😮 that was a mistake I guess. I was trying to rewrite this horrible code in `JSGraph::CEntryStubConstant` in a readable way.\nNot sure what the implications of this mistake/fix are (I guess just minor performance differences). Fixed it either way.",
+      "parentUuid": "edc0fabd_a6785cab",
       "range": {
         "startLine": 1156,
         "startChar": 4,
@@ -231,6 +447,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d84ab78_66226618",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "That\u0027s a mistake indeed. Fixed it.",
+      "parentUuid": "cac44db1_49a56a7d",
+      "range": {
+        "startLine": 1670,
+        "startChar": 60,
+        "endLine": 1670,
+        "endChar": 71
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2ed144a_42229691",
@@ -244,6 +484,30 @@
       "writtenOn": "2023-03-20T08:53:15Z",
       "side": 1,
       "message": "Could you add a comment please, I\u0027m scared :bleeding-eyes:",
+      "range": {
+        "startLine": 1673,
+        "startChar": 4,
+        "endLine": 1678,
+        "endChar": 14
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b55eedd_5bdb38ed",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2ed144a_42229691",
       "range": {
         "startLine": 1673,
         "startChar": 4,
@@ -277,6 +541,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d3188eb_77e98527",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ba9ac20_ce3b406b",
+      "range": {
+        "startLine": 1764,
+        "startChar": 4,
+        "endLine": 1765,
+        "endChar": 33
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fb2ac35_56207ec3",
@@ -290,6 +578,30 @@
       "writtenOn": "2023-03-20T08:53:15Z",
       "side": 1,
       "message": "Not sure what it will or won\u0027t change here, but I\u0027ve recently been told to use templates rather than `std::function` to avoid the allocation of the closure when possible. You probably know more than me about that, so feel free to keep or change as you see fit ;)",
+      "range": {
+        "startLine": 2242,
+        "startChar": 32,
+        "endLine": 2242,
+        "endChar": 58
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73d3956c_b8f06c41",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2242,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "I don\u0027t think it makes much of a difference here. Changed it either way.",
+      "parentUuid": "6fb2ac35_56207ec3",
       "range": {
         "startLine": 2242,
         "startChar": 32,
@@ -348,6 +660,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2689b6b0_39886977",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e49757c7_a94cba3e",
+      "range": {
+        "startLine": 1645,
+        "startChar": 13,
+        "endLine": 1646,
+        "endChar": 60
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0ba17f0e_68602640",
         "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
         "patchSetId": 9
@@ -382,6 +718,30 @@
       "writtenOn": "2023-03-20T08:53:15Z",
       "side": 1,
       "message": "I don\u0027t think that this is really unlikely, but I\u0027m ok with keeping the UNLIKELY to match more closely to what TF\u0027s ECL was doing. (and also, we\u0027re doing a runtime call, so it\u0027s probably going to be slow anyways)",
+      "range": {
+        "startLine": 1291,
+        "startChar": 14,
+        "endLine": 1294,
+        "endChar": 27
+      },
+      "revId": "320a97f4152a3177b4711d45c97b912d749e2b77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f49ecda0_cbb9e9cd",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-20T10:49:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b2bf12a0_cad567d0",
       "range": {
         "startLine": 1291,
         "startChar": 14,
