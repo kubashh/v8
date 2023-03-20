@@ -33,6 +33,29 @@
       "message": "@cbruni: PTAL at src/d8",
       "revId": "f9936481386d439db7fdd383a3a55c383797e9d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b00d493a_f455c654",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-20T13:15:49Z",
+      "side": 1,
+      "message": "`V8_DEPRECATE_SOON`",
+      "range": {
+        "startLine": 1291,
+        "startChar": 2,
+        "endLine": 1291,
+        "endChar": 15
+      },
+      "revId": "f9936481386d439db7fdd383a3a55c383797e9d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
