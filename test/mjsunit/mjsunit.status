@@ -1456,6 +1456,12 @@
 
 ##############################################################################
 ['variant == stress_snapshot and arch == x64', {
+  # Workers aren't terminated early enough and serialization logic (which
+  # mutates heap state) messes with ongoing worker execution.
+  # TODO(v8:13839,jgruber): Wait for Worker threads to terminate before
+  # SerializeDeserializeAndVerifyForTesting.
+  'regress/regress-crbug-1406774': [SKIP],
+  'regress/regress-crbug-1421198': [SKIP],
   # Crashes the serializer due to recursion.
   'deep-recursion': [SKIP],
   'string-replace-gc': [SKIP],
