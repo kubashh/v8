@@ -587,10 +587,22 @@ Response V8DebuggerAgentImpl::setBreakpointByUrl(
 
   String16 hint;
   for (const auto& script : m_scripts) {
+<<<<<<< HEAD   (6bc81d Version 10.8.168.38)
     if (!matches(m_inspector, *script.second, type, selector)) continue;
     if (!hint.isEmpty()) {
       adjustBreakpointLocation(*script.second, hint, &lineNumber,
                                &columnNumber);
+=======
+    if (!matcher.matches(*script.second)) continue;
+    // Make sure the session was not disabled by some re-entrant call
+    // in the script matcher.
+    DCHECK(enabled());
+    int adjustedLineNumber = lineNumber;
+    int adjustedColumnNumber = columnNumber;
+    if (hint) {
+      adjustBreakpointLocation(*script.second, hint.get(), &adjustedLineNumber,
+                               &adjustedColumnNumber);
+>>>>>>> CHANGE (92a918 [inspector] Prevent regex breakpoints from re-entering the d)
     }
     std::unique_ptr<protocol::Debugger::Location> location = setBreakpointImpl(
         breakpointId, script.first, condition, lineNumber, columnNumber);
@@ -719,8 +731,15 @@ Response V8DebuggerAgentImpl::removeBreakpoint(const String16& breakpointId) {
   // not Wasm breakpoint.
   std::vector<V8DebuggerScript*> scripts;
   for (const auto& scriptIter : m_scripts) {
+<<<<<<< HEAD   (6bc81d Version 10.8.168.38)
     const bool scriptSelectorMatch =
         matches(m_inspector, *scriptIter.second, type, selector);
+=======
+    const bool scriptSelectorMatch = matcher.matches(*scriptIter.second);
+    // Make sure the session was not disabled by some re-entrant call
+    // in the script matcher.
+    DCHECK(enabled());
+>>>>>>> CHANGE (92a918 [inspector] Prevent regex breakpoints from re-entering the d)
     const bool isInstrumentation =
         type == BreakpointType::kInstrumentationBreakpoint;
     if (!scriptSelectorMatch && !isInstrumentation) continue;
@@ -1875,7 +1894,14 @@ void V8DebuggerAgentImpl::didParseSource(
       parseBreakpointId(breakpointId, &type, &selector, &lineNumber,
                         &columnNumber);
 
+<<<<<<< HEAD   (6bc81d Version 10.8.168.38)
       if (!matches(m_inspector, *scriptRef, type, selector)) continue;
+=======
+      if (!matcher.matches(*scriptRef)) continue;
+      // Make sure the session was not disabled by some re-entrant call
+      // in the script matcher.
+      DCHECK(enabled());
+>>>>>>> CHANGE (92a918 [inspector] Prevent regex breakpoints from re-entering the d)
       String16 condition;
       breakpointWithCondition.second->asString(&condition);
       String16 hint;
