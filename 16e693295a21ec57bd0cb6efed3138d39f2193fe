@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce096c3a_6e4265f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-21T12:54:13Z",
+      "side": 1,
+      "message": "Unfortunately the pinpoint results don\u0027t show a significant improvement, do they? A few line items improve, a few regress, and overall the result seems roughly net neutral. IMO we should only add new perf tweaks if they noticeably improve something somewhere.",
+      "revId": "16e693295a21ec57bd0cb6efed3138d39f2193fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
