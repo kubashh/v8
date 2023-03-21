@@ -16,6 +16,23 @@
       "message": "Hi Jakob, would you please review this change?",
       "revId": "b7679634a76438b0e7f5c875a7270d7dbc3c7bb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "179330bd_8397d463",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-21T10:30:30Z",
+      "side": 1,
+      "message": "Thanks! lgtm",
+      "revId": "b7679634a76438b0e7f5c875a7270d7dbc3c7bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
