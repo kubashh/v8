@@ -474,6 +474,15 @@ void IncrementalMarking::UpdateMarkingWorklistAfterYoungGenGC() {
         // heap marking worklist.
         return false;
       }
+      // For any object not a DescriptorArray, transferring the object always
+      // increments live bytes as the marked state cannot distinguish fully
+      // processed from to-be-processed. Decrement the counter for such objects
+      // here.
+      if (!dest.IsDescriptorArray()) {
+        atomic_marking_state()->IncrementLiveBytes(
+            MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(dest)),
+            -ALIGN_TO_ALLOCATION_ALIGNMENT(dest.Size()));
+      }
       *out = dest;
       return true;
     } else if (Heap::InToPage(obj)) {
