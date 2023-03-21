@@ -16,6 +16,40 @@
       "message": "Did you want me to review specific parts? lg if Adam/Shu are okay with the overall CL.",
       "revId": "f6075a5bfd48261b42f2842f9a9b28315092b80c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8c7db4e_24e92fdd",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-21T16:41:51Z",
+      "side": 1,
+      "message": "Does the usage info counted for the new functions affect the decision to unship the old getters? That is, is it needed to count usage of the new functions?\n\nWe mainly want use data on the old getters to see if they can be removed, I thought.",
+      "revId": "f6075a5bfd48261b42f2842f9a9b28315092b80c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd43a7cc_89dbdc80",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-21T16:41:51Z",
+      "side": 1,
+      "message": "Why isn\u0027t this a single flag to toggle between getters vs functions? The state where both getters are removed and functions aren\u0027t added is invalid.",
+      "revId": "f6075a5bfd48261b42f2842f9a9b28315092b80c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
