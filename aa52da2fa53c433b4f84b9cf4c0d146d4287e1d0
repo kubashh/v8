@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90deffcc_b58d3e5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-03-22T14:54:08Z",
+      "side": 1,
+      "message": "Nice work! Couple of nits and one major comment.",
+      "revId": "aa52da2fa53c433b4f84b9cf4c0d146d4287e1d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
