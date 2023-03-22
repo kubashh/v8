@@ -2102,8 +2102,33 @@ void WebAssemblyFunction(const v8::FunctionCallbackInfo<v8::Value>& args) {
     int func_index = data.function_index();
     i::Handle<i::Code> wrapper =
         BUILTIN_CODE(i_isolate, WasmReturnPromiseOnSuspend);
+
+    i::Handle<i::Map> rtt;
+    bool has_gc =
+        instance->module_object().native_module()->enabled_features().has_gc();
+    if (has_gc) {
+      int sig_index = instance->module()->functions[func_index].sig_index;
+      // TODO(7748): Create funcref RTTs lazily?
+      rtt = handle(i::Map::cast(instance->managed_object_maps().get(sig_index)),
+                   i_isolate);
+    } else {
+      rtt = i_isolate->factory()->wasm_internal_function_map();
+    }
+
+    int num_imported_functions = instance->module()->num_imported_functions;
+    i::Handle<i::HeapObject> ref =
+        func_index >= num_imported_functions
+            ? instance
+            : i::handle(i::HeapObject::cast(
+                            instance->imported_function_refs().get(func_index)),
+                        i_isolate);
+
+    i::Handle<i::WasmInternalFunction> internal =
+        i_isolate->factory()->NewWasmInternalFunction(
+            instance->GetCallTarget(func_index), ref, rtt, func_index);
+
     i::Handle<i::JSFunction> result = i::WasmExportedFunction::New(
-        i_isolate, instance, func_index,
+        i_isolate, instance, internal, func_index,
         static_cast<int>(data.sig()->parameter_count()), wrapper);
     args.GetReturnValue().Set(Utils::ToLocal(result));
     return;
