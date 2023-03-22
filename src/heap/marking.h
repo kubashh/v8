@@ -351,16 +351,6 @@ V8_EXPORT_PRIVATE bool ConcurrentBitmap<AccessMode::NON_ATOMIC>::IsClean();
 
 class Marking : public AllStatic {
  public:
-  // TODO(hpayer): The current mark bit operations use as default NON_ATOMIC
-  // mode for access. We should remove the default value or switch it with
-  // ATOMIC as soon we add concurrency.
-
-  // Black markbits: 11
-  template <AccessMode mode = AccessMode::NON_ATOMIC>
-  V8_INLINE static bool IsBlack(MarkBit mark_bit) {
-    return mark_bit.Get<mode>() && mark_bit.Next().Get<mode>();
-  }
-
   // White markbits: 00 - this is required by the mark bit clearer.
   template <AccessMode mode = AccessMode::NON_ATOMIC>
   V8_INLINE static bool IsWhite(MarkBit mark_bit) {
@@ -373,13 +363,6 @@ class Marking : public AllStatic {
     return mark_bit.Get<mode>() && !mark_bit.Next().Get<mode>();
   }
 
-  // IsBlackOrGrey assumes that the first bit is set for black or grey
-  // objects.
-  template <AccessMode mode = AccessMode::NON_ATOMIC>
-  V8_INLINE static bool IsBlackOrGrey(MarkBit mark_bit) {
-    return mark_bit.Get<mode>();
-  }
-
   template <AccessMode mode = AccessMode::NON_ATOMIC>
   V8_INLINE static void MarkWhite(MarkBit markbit) {
     static_assert(mode == AccessMode::NON_ATOMIC);
@@ -387,28 +370,9 @@ class Marking : public AllStatic {
     markbit.Next().Clear<mode>();
   }
 
-  // Warning: this method is not safe in general in concurrent scenarios.
-  // If you know that nobody else will change the bits on the given location
-  // then you may use it.
-  template <AccessMode mode = AccessMode::NON_ATOMIC>
-  V8_INLINE static void MarkBlack(MarkBit markbit) {
-    markbit.Set<mode>();
-    markbit.Next().Set<mode>();
-  }
-
   template <AccessMode mode = AccessMode::NON_ATOMIC>
   V8_INLINE static bool WhiteToGrey(MarkBit markbit) {
     return markbit.Set<mode>();
-  }
-
-  template <AccessMode mode = AccessMode::NON_ATOMIC>
-  V8_INLINE static bool WhiteToBlack(MarkBit markbit) {
-    return markbit.Set<mode>() && markbit.Next().Set<mode>();
-  }
-
-  template <AccessMode mode = AccessMode::NON_ATOMIC>
-  V8_INLINE static bool GreyToBlack(MarkBit markbit) {
-    return markbit.Get<mode>() && markbit.Next().Set<mode>();
   }
 
  private:
