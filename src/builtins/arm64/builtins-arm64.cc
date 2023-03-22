@@ -3643,9 +3643,14 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
     // Set a sentinel value for the suspender spill slot in the new frame.
     __ LoadRoot(scratch, RootIndex::kUndefinedValue);
     __ Str(scratch, MemOperand(fp, kSuspenderOffset));
+    __ Str(scratch, MemOperand(x9, kFunctionDataOffset));
   } else {
     original_fp = fp;
   }
+
+  // Spill {function_data}, it will be reused for other purposes later.
+  __ Str(function_data, MemOperand(fp, kFunctionDataOffset));
+
   regs.ResetExcept(original_fp, function_data, wasm_instance);
 
   Label prepare_for_wasm_call;
@@ -4005,9 +4010,6 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
 
   __ Str(ref_param_count, MemOperand(fp, kRefParamsCountOffset));
   __ bind(&ref_params_done);
-  // There is no potential GC calls after this point,
-  // so storing it in the spill to reuse register.
-  __ Str(function_data, MemOperand(fp, kFunctionDataOffset));
 
   regs.ResetExcept(valuetypes_array_ptr, param_count, current_int_param_slot,
                    current_float_param_slot, wasm_instance, original_fp);
@@ -4413,6 +4415,15 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   __ jmp(&return_done);
 
   __ bind(&return_kWasmFuncRef);
+  // The builtin needs the context in {kContextRegister}.
+  __ Ldr(kContextRegister, MemOperand(fp, kFunctionDataOffset));
+  __ LoadTaggedField(
+      kContextRegister,
+      FieldMemOperand(kContextRegister,
+                      WasmExportedFunctionData::kInstanceOffset));
+  __ LoadTaggedField(kContextRegister,
+                     FieldMemOperand(kContextRegister,
+                                     WasmInstanceObject::kNativeContextOffset));
   __ Call(BUILTIN_CODE(masm->isolate(), WasmFuncRefToJS),
           RelocInfo::CODE_TARGET);
   __ jmp(&return_done);
