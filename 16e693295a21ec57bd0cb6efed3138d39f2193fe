@@ -16,6 +16,24 @@
       "message": "Unfortunately the pinpoint results don\u0027t show a significant improvement, do they? A few line items improve, a few regress, and overall the result seems roughly net neutral. IMO we should only add new perf tweaks if they noticeably improve something somewhere.",
       "revId": "16e693295a21ec57bd0cb6efed3138d39f2193fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17653171_822a0afe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-03-22T08:30:01Z",
+      "side": 1,
+      "message": "Thanks for reply.\n\nI triggered the test again with flag `--extra-browser-args\u003d\"--js-flags\u003d--no-opt\"` to focus on the perf of built-in (this CL only affect built-in)\n\nHere is the result https://pinpoint-dot-chromeperf.appspot.com/job/11691468860000\n\nWe can observe some improvement on JetStream2.\n\nAnd as we discussed in the design doc[1], our final goal is using pgo to improve switch statement in built-in, enabling jump table is the first step.\n\n\n[1]. https://docs.google.com/document/d/1hpNg33tVXXYluA3anfx8y4pZwMhAT_M3dc93n2XgYrc/edit#heading\u003dh.qhvypj36kz74",
+      "parentUuid": "ce096c3a_6e4265f1",
+      "revId": "16e693295a21ec57bd0cb6efed3138d39f2193fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
