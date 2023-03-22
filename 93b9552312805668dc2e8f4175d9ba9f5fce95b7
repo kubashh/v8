@@ -16,6 +16,23 @@
       "message": "This cleanup will simplify incoming changes related to direct handles.",
       "revId": "93b9552312805668dc2e8f4175d9ba9f5fce95b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd63dd83_91378e82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-22T11:35:03Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "93b9552312805668dc2e8f4175d9ba9f5fce95b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
