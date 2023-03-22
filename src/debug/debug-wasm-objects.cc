@@ -276,10 +276,9 @@ struct FunctionsProxy : NamedDebugProxy<FunctionsProxy, kFunctionsProxy> {
   static Handle<Object> Get(Isolate* isolate,
                             Handle<WasmInstanceObject> instance,
                             uint32_t index) {
-    return handle(WasmInstanceObject::GetOrCreateWasmInternalFunction(
-                      isolate, instance, index)
-                      ->external(),
-                  isolate);
+    return WasmInstanceObject::GetOrCreateWasmInternalFunction(isolate,
+                                                               instance, index)
+        ->GetOrCreateExternal();
   }
 
   static Handle<String> GetName(Isolate* isolate,
@@ -936,7 +935,7 @@ Handle<WasmValueObject> WasmValueObject::New(
         v = ArrayProxy::Create(isolate, Handle<WasmArray>::cast(ref), module);
       } else if (ref->IsWasmInternalFunction()) {
         auto internal_fct = Handle<WasmInternalFunction>::cast(ref);
-        v = handle(internal_fct->external(), isolate);
+        v = internal_fct->GetOrCreateExternal();
         // If the module is not provided by the caller, retrieve it from the
         // instance object. If the function was created in JavaScript using
         // `new WebAssembly.Function(...)`, a module for name resolution is not
