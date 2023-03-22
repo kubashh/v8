@@ -320,37 +320,67 @@ class FastCApiObject {
   static const FastApiTypedArray<T>* AnyCTypeToTypedArray(AnyCType arg);
 
   template <>
+#ifdef V8_MSVC_X64_TO_ARM64
+  static const FastApiTypedArray<uint8_t>* AnyCTypeToTypedArray<uint8_t>(
+#else
   const FastApiTypedArray<uint8_t>* AnyCTypeToTypedArray<uint8_t>(
+#endif
       AnyCType arg) {
     return arg.uint8_ta_value;
   }
 
   template <>
+#ifdef V8_MSVC_X64_TO_ARM64
+  static const FastApiTypedArray<int32_t>* AnyCTypeToTypedArray<int32_t>(
+#else
   const FastApiTypedArray<int32_t>* AnyCTypeToTypedArray<int32_t>(
+#endif
       AnyCType arg) {
     return arg.int32_ta_value;
   }
   template <>
+#ifdef V8_MSVC_X64_TO_ARM64
+  static const FastApiTypedArray<uint32_t>* AnyCTypeToTypedArray<uint32_t>(
+#else
   const FastApiTypedArray<uint32_t>* AnyCTypeToTypedArray<uint32_t>(
+#endif
       AnyCType arg) {
     return arg.uint32_ta_value;
   }
   template <>
+#ifdef V8_MSVC_X64_TO_ARM64
+  static const FastApiTypedArray<int64_t>* AnyCTypeToTypedArray<int64_t>(
+#else
   const FastApiTypedArray<int64_t>* AnyCTypeToTypedArray<int64_t>(
+#endif
       AnyCType arg) {
     return arg.int64_ta_value;
   }
   template <>
+#ifdef V8_MSVC_X64_TO_ARM64
+  static const FastApiTypedArray<uint64_t>* AnyCTypeToTypedArray<uint64_t>(
+#else
   const FastApiTypedArray<uint64_t>* AnyCTypeToTypedArray<uint64_t>(
+#endif
       AnyCType arg) {
     return arg.uint64_ta_value;
   }
   template <>
+#ifdef V8_MSVC_X64_TO_ARM64
+  static const FastApiTypedArray<float>* AnyCTypeToTypedArray<float>(
+      AnyCType arg) {
+#else
   const FastApiTypedArray<float>* AnyCTypeToTypedArray<float>(AnyCType arg) {
+#endif
     return arg.float_ta_value;
   }
   template <>
+#ifdef V8_MSVC_X64_TO_ARM64
+  static const FastApiTypedArray<double>* AnyCTypeToTypedArray<double>(
+      AnyCType arg) {
+#else
   const FastApiTypedArray<double>* AnyCTypeToTypedArray<double>(AnyCType arg) {
+#endif
     return arg.double_ta_value;
   }
 

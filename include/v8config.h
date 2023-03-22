@@ -932,6 +932,12 @@ V8 shared library set USING_V8_SHARED.
 #error Unknown target architecture endianness
 #endif
 
+// Detect MSVC cross-compile x64 to arm64
+#if defined(_MSC_VER) && !defined(__clang__) && defined(V8_HOST_ARCH_X64) && \
+    defined(V8_TARGET_ARCH_ARM64)
+#define V8_MSVC_X64_TO_ARM64 1
+#endif
+
 #undef V8_HAS_CPP_ATTRIBUTE
 
 #if !defined(V8_STATIC_ROOTS)
