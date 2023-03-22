@@ -42,6 +42,8 @@ extern class WasmInternalFunction extends HeapObject {
   code: Code;
   // The call target. Tagged with the kWasmInternalFunctionCallTargetTag
   call_target: ExternalPointer;
+  // The function index if ref is a WasmInstanceObject, -1 otherwise.
+  function_index: int32;
 }
 
 extern operator '.call_target_ptr' macro LoadWasmInternalFunctionCallTargetPtr(
