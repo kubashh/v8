@@ -208,11 +208,9 @@ void TestingModuleBuilder::InitializeWrapperCache() {
 Handle<JSFunction> TestingModuleBuilder::WrapCode(uint32_t index) {
   CHECK(!interpreter_);
   InitializeWrapperCache();
-  return handle(
-      JSFunction::cast(WasmInstanceObject::GetOrCreateWasmInternalFunction(
-                           isolate_, instance_object(), index)
-                           ->external()),
-      isolate_);
+  return WasmInstanceObject::GetOrCreateWasmInternalFunction(
+             isolate_, instance_object(), index)
+      ->GetOrCreateExternal();
 }
 
 void TestingModuleBuilder::AddIndirectFunctionTable(
