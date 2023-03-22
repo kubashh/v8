@@ -16,6 +16,98 @@
       "message": "Nice work! Couple of nits and one major comment.",
       "revId": "aa52da2fa53c433b4f84b9cf4c0d146d4287e1d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91ee36f5_6cded7fd",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3644,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-03-22T16:04:05Z",
+      "side": 1,
+      "message": "nit: I think you suggested using Smi(0) here as the placeholder value, which sounds better to me since we don\u0027t have to load the undefined root. Could you change it here and for the suspender slot? (Also in the WasmResume builtin, and also on x64)",
+      "range": {
+        "startLine": 3644,
+        "startChar": 0,
+        "endLine": 3644,
+        "endChar": 57
+      },
+      "revId": "aa52da2fa53c433b4f84b9cf4c0d146d4287e1d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e12f08fd_44093f8b",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3651,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-03-22T16:04:05Z",
+      "side": 1,
+      "message": "nit: Can you move this a few lines below, next to where we initialize the other slots? (Also on x64)",
+      "range": {
+        "startLine": 3649,
+        "startChar": 0,
+        "endLine": 3651,
+        "endChar": 0
+      },
+      "revId": "aa52da2fa53c433b4f84b9cf4c0d146d4287e1d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df4286b2_1dec6ef7",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4602,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-03-22T16:04:05Z",
+      "side": 1,
+      "message": "5, or we will overwrite the function data slot with the next push instruction.",
+      "range": {
+        "startLine": 4602,
+        "startChar": 27,
+        "endLine": 4602,
+        "endChar": 28
+      },
+      "revId": "aa52da2fa53c433b4f84b9cf4c0d146d4287e1d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47bd0a73_9c7552f0",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4184,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-03-22T16:04:05Z",
+      "side": 1,
+      "message": "I think the value was wrong before... it should be 5 now, like on arm64.",
+      "range": {
+        "startLine": 4184,
+        "startChar": 25,
+        "endLine": 4184,
+        "endChar": 26
+      },
+      "revId": "aa52da2fa53c433b4f84b9cf4c0d146d4287e1d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
