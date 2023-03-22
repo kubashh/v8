@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad7568a4_6cd1bf8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-03-22T09:46:18Z",
+      "side": 1,
+      "message": "This cleanup will simplify incoming changes related to direct handles.",
+      "revId": "93b9552312805668dc2e8f4175d9ba9f5fce95b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
