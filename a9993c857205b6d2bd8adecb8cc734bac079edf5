@@ -105,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28d5dc2f_ed631d6d",
+        "filename": "src/execution/frame-constants.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-03-22T16:21:24Z",
+      "side": 1,
+      "message": "I understand, but when each platform\u0027s wrapper needs to define them, that is IMHO enough of a reason to just define them here instead -- in particular in the patch set that mentioned them here anyway; I feel slightly less opinionated about it now that they\u0027re only appended to the offsets defined here.",
+      "parentUuid": "5d68c16e_bf346dcf",
+      "range": {
+        "startLine": 221,
+        "startChar": 5,
+        "endLine": 221,
+        "endChar": 72
+      },
+      "revId": "a9993c857205b6d2bd8adecb8cc734bac079edf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7611a13_eceb990d",
