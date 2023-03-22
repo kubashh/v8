@@ -81,6 +81,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d68c16e_bf346dcf",
+        "filename": "src/execution/frame-constants.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-03-22T16:08:53Z",
+      "side": 1,
+      "message": "For context, the constants defined here are the one that are referenced from different builtins (generic js-to-wasm wrapper and wasm resume). The other ones are only used inside the js-to-wasm wrapper, so it\u0027s less important for them to be defined globally.",
+      "parentUuid": "42887ddd_1725b8c9",
+      "range": {
+        "startLine": 221,
+        "startChar": 5,
+        "endLine": 221,
+        "endChar": 72
+      },
+      "revId": "a9993c857205b6d2bd8adecb8cc734bac079edf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7611a13_eceb990d",
