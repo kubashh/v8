@@ -123,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10f1196d_91e11139",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-22T09:40:54Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "98b8b03d_f1f5354e",
+      "range": {
+        "startLine": 1021,
+        "startChar": 10,
+        "endLine": 1022,
+        "endChar": 26
+      },
+      "revId": "49bffd5b18b7dac10050cd75257ee59f59e1251f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8721ab40_639d3e31",
@@ -136,6 +160,24 @@
       "writtenOn": "2023-03-20T14:44:26Z",
       "side": 1,
       "message": "You forgot `ELSE_IF_WITH_HINT` (and I\u0027m surprising that this didn\u0027t cause a compile-time error...)",
+      "revId": "49bffd5b18b7dac10050cd75257ee59f59e1251f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8af793f6_c98a5640",
+        "filename": "src/compiler/turboshaft/undef-assembler-macros.inc",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-03-22T09:40:54Z",
+      "side": 1,
+      "message": "Right, added. There are currently only two files that include the `define-assembler-macros.inc` file and those two header files are themselves now included in different `.cc` files due to the pipeline split, so they don\u0027t see each other. Once we would include two or more reducers (that use those macros) in the same phase, this would cause an error, indeed.",
+      "parentUuid": "8721ab40_639d3e31",
       "revId": "49bffd5b18b7dac10050cd75257ee59f59e1251f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
