@@ -16,6 +16,29 @@
       "message": "PTAL. Just noticed that we can get a bit better fuzzer coverage here. No specific context.",
       "revId": "9e6938d99627cb8452b8d293974cab42ec105735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0befd481_4530cb6d",
+        "filename": "tools/clusterfuzz/trials/clusterfuzz_trials_config.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-23T18:03:24Z",
+      "side": 1,
+      "message": "Are these flags in conflict with any other flags from this list? In this case they could be listed with the contradicts key. If there are, and they are not listed, they just lead to d8 running into the contradiction DCHECK for a certain percentage.\n\nThere is:\nDEFINE_NEG_IMPLICATION(fuzzing, liftoff_only)\n\nNot that we pass --fuzzing on all fuzzers in all cases. Guess this might then always fail? Not sure why there\u0027s this neg implication.",
+      "range": {
+        "startLine": 29,
+        "startChar": 17,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "9e6938d99627cb8452b8d293974cab42ec105735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
