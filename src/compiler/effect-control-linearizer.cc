@@ -1100,9 +1100,14 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       result = LowerCheckClosure(node, frame_state);
       break;
     case IrOpcode::kCheckMaps:
+      if (v8_flags.turboshaft) {
+        gasm()->Checkpoint(FrameState{frame_state});
+        return false;
+      }
       LowerCheckMaps(node, frame_state);
       break;
     case IrOpcode::kCompareMaps:
+      if (v8_flags.turboshaft) return false;
       result = LowerCompareMaps(node);
       break;
     case IrOpcode::kCheckNumber:
@@ -2284,6 +2289,7 @@ void EffectControlLinearizer::MigrateInstanceOrDeopt(
 }
 
 void EffectControlLinearizer::LowerCheckMaps(Node* node, Node* frame_state) {
+  DCHECK(!v8_flags.turboshaft);
   CheckMapsParameters const& p = CheckMapsParametersOf(node->op());
   Node* value = node->InputAt(0);
 
@@ -2391,6 +2397,7 @@ Node* EffectControlLinearizer::CallBuiltinForBigIntBinop(Node* left,
 }
 
 Node* EffectControlLinearizer::LowerCompareMaps(Node* node) {
+  DCHECK(!v8_flags.turboshaft);
   ZoneHandleSet<Map> const& maps = CompareMapsParametersOf(node->op());
   size_t const map_count = maps.size();
   Node* value = node->InputAt(0);
