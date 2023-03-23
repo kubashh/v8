@@ -318,3 +318,43 @@ function TestHelperPrototypeSurface(helper) {
     iter.drop(4);
   });
 })();
+
+// --- Test FlatMap helper
+
+(function TestFlatMap() {
+  const iter = ['It\'s Sunny in', '', 'California'].values();
+  assertEquals('function', typeof iter.flatMap);
+  assertEquals(1, iter.flatMap.length);
+  assertEquals('flatMap', iter.flatMap.name);
+  const flatMapIter = iter.flatMap(value => value.split(' ').values());
+  TestHelperPrototypeSurface(flatMapIter);
+  assertEquals({value: 'It\'s', done: false}, flatMapIter.next());
+  assertEquals({value: 'Sunny', done: false}, flatMapIter.next());
+  assertEquals({value: 'in', done: false}, flatMapIter.next());
+  assertEquals({value: '', done: false}, flatMapIter.next());
+  assertEquals({value: 'California', done: false}, flatMapIter.next());
+  assertEquals({value: undefined, done: true}, flatMapIter.next());
+})();
+
+(function TestFlatMapNoInnerIterator() {
+  const iter = ['It\'s', 'Sunny', 'in', '', 'California'].values();
+  const flatMapIter = iter.flatMap(value => value.split(' ').values());
+  TestHelperPrototypeSurface(flatMapIter);
+  assertEquals({value: 'It\'s', done: false}, flatMapIter.next());
+  assertEquals({value: 'Sunny', done: false}, flatMapIter.next());
+  assertEquals({value: 'in', done: false}, flatMapIter.next());
+  assertEquals({value: '', done: false}, flatMapIter.next());
+  assertEquals({value: 'California', done: false}, flatMapIter.next());
+  assertEquals({value: undefined, done: true}, flatMapIter.next());
+})();
+
+(function TestFlatMapAllInnerIterator() {
+  const iter = ['It\'s Sunny', 'in California'].values();
+  const flatMapIter = iter.flatMap(value => value.split(' ').values());
+  TestHelperPrototypeSurface(flatMapIter);
+  assertEquals({value: 'It\'s', done: false}, flatMapIter.next());
+  assertEquals({value: 'Sunny', done: false}, flatMapIter.next());
+  assertEquals({value: 'in', done: false}, flatMapIter.next());
+  assertEquals({value: 'California', done: false}, flatMapIter.next());
+  assertEquals({value: undefined, done: true}, flatMapIter.next());
+})();
