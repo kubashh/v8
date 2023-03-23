@@ -51,6 +51,24 @@
       "parentUuid": "387e26a0_8a29a90a",
       "revId": "31642ea569b179e8e1bd9d41cb8a36f5e81e9e3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cef16b4_e90802a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-23T12:58:14Z",
+      "side": 1,
+      "message": "Random values of the individual flags makes sense. And that is also what we do to some degree on numfuzz (https://source.chromium.org/chromium/chromium/src/+/main:v8/tools/testrunner/testproc/fuzzer.py;l\u003d333). But it\u0027s just completely random and not directed in any way. We\u0027ll never know if one of the many random values was a good one (unless we find a bug). I wonder if fuzzilli could at some point start also tweaking the flag vector of a test case. And e.g. store it alongside the test case and manipulate it just like manipulating code. I.e. it could be that the same code leads to slightly better coverage just by tweaking one of these flags, e.g. a slightly lower interrupt budget. But maybe this discussion goes to far on this CL. We can continue it elsewhere.",
+      "parentUuid": "ffb8eb30_947733dd",
+      "revId": "31642ea569b179e8e1bd9d41cb8a36f5e81e9e3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
