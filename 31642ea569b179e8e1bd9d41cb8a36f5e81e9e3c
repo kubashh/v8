@@ -69,6 +69,24 @@
       "parentUuid": "ffb8eb30_947733dd",
       "revId": "31642ea569b179e8e1bd9d41cb8a36f5e81e9e3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36fb891b_5debebfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-03-23T13:10:09Z",
+      "side": 1,
+      "message": "Sounds good! One alternative idea might be to instead introduce runtime functions that control these values, and then letting the fuzzers call these with more or less random values. That should \"just work\" with our existing coverage feedback and would probably be a bit easier to implement than flag-tweaking (which would require changes to our REPRL logic), assuming V8 can handle these values changing at runtime. But yes, let\u0027s discuss this elsewhere :)",
+      "parentUuid": "2cef16b4_e90802a2",
+      "revId": "31642ea569b179e8e1bd9d41cb8a36f5e81e9e3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
