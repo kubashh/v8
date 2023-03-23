@@ -7,6 +7,7 @@
 
 #include <atomic>
 #include <fstream>
+#include <functional>
 #include <memory>
 #include <unordered_set>
 #include <vector>
@@ -29,8 +30,6 @@ class Mutex;
 
 namespace platform {
 namespace tracing {
-
-class TraceEventListener;
 
 const int kTraceMaxNumArgs = 2;
 
@@ -244,7 +243,8 @@ class V8_PLATFORM_EXPORT TracingController
   void InitializeForPerfetto(std::ostream* output_stream);
   // Provide an optional listener for testing that will receive trace events.
   // Must be called before StartTracing().
-  void SetTraceEventListenerForTesting(TraceEventListener* listener);
+  using TraceCallback = std::function<void(const std::vector<char>&)>;
+  void SetTraceCallbackForTesting(TraceCallback);
 #else   // defined(V8_USE_PERFETTO)
   // The pointer returned from GetCategoryGroupEnabled() points to a value with
   // zero or more of the following bits. Used in this class only. The
@@ -312,7 +312,7 @@ class V8_PLATFORM_EXPORT TracingController
   std::ostream* output_stream_ = nullptr;
   std::unique_ptr<perfetto::trace_processor::TraceProcessorStorage>
       trace_processor_;
-  TraceEventListener* listener_for_testing_ = nullptr;
+  TraceCallback trace_callback_for_testing_;
   std::unique_ptr<perfetto::TracingSession> tracing_session_;
 #else   // !defined(V8_USE_PERFETTO)
   std::unordered_set<v8::TracingController::TraceStateObserver*> observers_;

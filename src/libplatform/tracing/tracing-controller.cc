@@ -21,7 +21,6 @@
 #include "protos/perfetto/config/track_event/track_event_config.gen.h"
 #include "src/base/platform/platform.h"
 #include "src/base/platform/semaphore.h"
-#include "src/libplatform/tracing/trace-event-listener.h"
 #endif  // V8_USE_PERFETTO
 
 #ifdef V8_USE_PERFETTO
@@ -96,9 +95,9 @@ void TracingController::InitializeForPerfetto(std::ostream* output_stream) {
   DCHECK(output_stream->good());
 }
 
-void TracingController::SetTraceEventListenerForTesting(
-    TraceEventListener* listener) {
-  listener_for_testing_ = listener;
+void TracingController::SetTraceCallbackForTesting(
+    TraceCallback trace_callback) {
+  trace_callback_for_testing_ = trace_callback;
 }
 #else   // !V8_USE_PERFETTO
 void TracingController::Initialize(TraceBuffer* trace_buffer) {
@@ -251,7 +250,7 @@ void TracingController::StopTracing() {
       trace_processor_.get(), &output_writer, nullptr, nullptr, nullptr);
   DCHECK(status.ok());
 
-  if (listener_for_testing_) listener_for_testing_->ParseFromArray(trace);
+  if (trace_callback_for_testing_) trace_callback_for_testing_(trace);
 
   trace_processor_.reset();
 #else

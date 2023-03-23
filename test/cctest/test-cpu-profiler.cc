@@ -2973,7 +2973,8 @@ TEST(TracingCpuProfiler) {
   std::ostringstream perfetto_output;
   tracing_controller->InitializeForPerfetto(&perfetto_output);
   CpuProfilerListener listener;
-  tracing_controller->SetTraceEventListenerForTesting(&listener);
+  tracing_controller->SetTraceCallbackForTesting(std::bind(
+      &CpuProfilerListener::ParseFromArray, &listener, std::placeholders::_1));
 #else
   CpuProfileEventChecker* event_checker = new CpuProfileEventChecker();
   TraceBuffer* ring_buffer =
