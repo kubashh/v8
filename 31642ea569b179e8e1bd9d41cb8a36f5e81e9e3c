@@ -16,6 +16,23 @@
       "message": "Hi! (CCing a bunch of folks who may have inputs here, but feel free to unCC yourself!)\nWe have a bunch of tiering related flags now and I\u0027d like to have a single configuration option that sets all these thresholds to be suitable for JIT fuzzing. Previously we had a number of these flags in Fuzzilli (See https://team.git.corp.google.com/v8-team/fuzzilli/+/refs/heads/main/Sources/FuzzilliCli/Profiles/V8Profile.swift#288) but that is quite fragile and was missing a lot of these flags.\n\nI have to admit I don\u0027t fully understand what all of these thresholds control, so any help here would be much appreciated. I played around with this configuration locally and looked at the output of `%GetOptimizationStatus(f)`, and these values seemed to kind of work... Ideally, the configuration would be such that simply calling one function ~100 times, (and with --single-threaded) will lead to a few executions in Ignition, then a few in Sparkplug, then maybe a dozen or so in Maglev, and then finally tier up to Turbofan. But I guess it\u0027s far from straight-forward to set these thresholds in such a way... :)",
       "revId": "31642ea569b179e8e1bd9d41cb8a36f5e81e9e3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "387e26a0_8a29a90a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-23T12:09:29Z",
+      "side": 1,
+      "message": "I assume this is mainly going to be passed on fuzzilli. On other fuzzers we already manipulate all of those flags independently. Does it make sense to remove the individual flags and replace it all by this new flag? Can we reach more corner cases by different values on the different subflags?\n\nWould it make sense to add a certain pseudo-random component here? E.g. make these values random-seed dependent or introduce a new kind of random seed? (e.g. we already have https://source.chromium.org/chromium/chromium/src/+/main:v8/src/flags/flag-definitions.h;l\u003d1966;drc\u003d6588ba2f6bfbe641303f7f97dfa7aaf13837ce87) To get more variance into the fixed values. OTOH, I assume fuzzilli can\u0027t direct coverage based on flag values? I.e. reach more coverage by changing the flags belonging to a test.",
+      "revId": "31642ea569b179e8e1bd9d41cb8a36f5e81e9e3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
