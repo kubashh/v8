@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be6ede9c_8c923154",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3929,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-23T13:41:49Z",
+      "side": 1,
+      "message": "Perhaps don\u0027t mention \u00274GB\u0027 here in case the constant changes.",
+      "revId": "4c2020cbc1177435759708d03775e94ded5d0fdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33d12819_91584ba9",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3935,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-23T13:41:49Z",
+      "side": 1,
+      "message": "For clarity this could also move inside the ifdef.",
+      "revId": "4c2020cbc1177435759708d03775e94ded5d0fdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
