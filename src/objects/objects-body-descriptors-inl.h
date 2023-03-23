@@ -988,7 +988,7 @@ class InstructionStream::BodyDescriptor final : public BodyDescriptorBase {
     InstructionStream istream = InstructionStream::cast(obj);
     Code code = istream.unchecked_code();
     RelocIterator it(code, istream, code.unchecked_relocation_info(),
-                     code.constant_pool(), kRelocModeMask);
+                     code.constant_pool_offset(), kRelocModeMask);
     v->VisitRelocInfo(&it);
   }
 

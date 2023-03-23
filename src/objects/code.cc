@@ -53,8 +53,8 @@ void InstructionStream::Relocate(intptr_t delta) {
   // This is called during evacuation and code.instruction_stream() will point
   // to the old object. So pass *this directly to the RelocIterator and use a
   // dummy Code() since it's not needed.
-  for (RelocIterator it(Code(), *this, code.unchecked_relocation_info(),
-                        code.constant_pool(), RelocInfo::kApplyMask);
+  for (RelocIterator it(code, *this, code.unchecked_relocation_info(),
+                        code.constant_pool_offset(), RelocInfo::kApplyMask);
        !it.done(); it.next()) {
     it.rinfo()->apply(delta);
   }
