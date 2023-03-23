@@ -654,7 +654,8 @@ class TracingTestHarness {
         ->SetTracingController(std::move(tracing));
 
     tracing_controller_->InitializeForPerfetto(&perfetto_json_stream_);
-    tracing_controller_->SetTraceEventListenerForTesting(&listener_);
+    tracing_controller_->SetTraceCallbackForTesting(std::bind(
+        &TestListener::ParseFromArray, &listener_, std::placeholders::_1));
   }
 
   ~TracingTestHarness() { i::V8::SetPlatformForTesting(old_platform_); }
