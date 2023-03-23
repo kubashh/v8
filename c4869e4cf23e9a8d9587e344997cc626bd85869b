@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2685e3c1_65b45996",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-23T09:55:41Z",
+      "side": 1,
+      "message": "@thibaudm@chromium.org This call target is unchanged, and we need it to make tests work, but I cannot really justify it. Could you please explain why this is correct?",
+      "range": {
+        "startLine": 2129,
+        "startChar": 22,
+        "endLine": 2129,
+        "endChar": 47
+      },
+      "revId": "c4869e4cf23e9a8d9587e344997cc626bd85869b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

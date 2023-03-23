@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ff0f2c5e_740c1e78",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-23T09:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e80661d_8d067662",
+      "range": {
+        "startLine": 13,
+        "startChar": 46,
+        "endLine": 13,
+        "endChar": 49
+      },
+      "revId": "a9993c857205b6d2bd8adecb8cc734bac079edf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7023120e_6b47fcc1",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 9
@@ -152,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f15dc72e_f7d8ccc5",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-23T09:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7611a13_eceb990d",
+      "range": {
+        "startLine": 312,
+        "startChar": 9,
+        "endLine": 312,
+        "endChar": 29
+      },
+      "revId": "a9993c857205b6d2bd8adecb8cc734bac079edf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdc18c15_17feaeaa",
@@ -165,6 +213,30 @@
       "writtenOn": "2023-03-22T14:54:08Z",
       "side": 1,
       "message": "This is subsumed by the `!\u003d instance_` check below, right?",
+      "range": {
+        "startLine": 1276,
+        "startChar": 4,
+        "endLine": 1279,
+        "endChar": 5
+      },
+      "revId": "a9993c857205b6d2bd8adecb8cc734bac079edf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "913c33d1_70852763",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-23T09:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdc18c15_17feaeaa",
       "range": {
         "startLine": 1276,
         "startChar": 4,
@@ -198,6 +270,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63355746_5d3a5da9",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2153,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-23T09:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5003628a_1b155b7a",
+      "range": {
+        "startLine": 2152,
+        "startChar": 8,
+        "endLine": 2153,
+        "endChar": 80
+      },
+      "revId": "a9993c857205b6d2bd8adecb8cc734bac079edf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f44ddfd_3e844c61",
@@ -221,6 +317,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "abbb8acc_be56163e",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2107,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-23T09:55:41Z",
+      "side": 1,
+      "message": "This is not the same internal/external pair that is stored in the instance. The external function has the special `WasmReturnPromiseOnSuspend` wrapper. We cannot reuse the same internal function either as it would break the internal/external function bijection.",
+      "parentUuid": "1f44ddfd_3e844c61",
+      "range": {
+        "startLine": 2107,
+        "startChar": 4,
+        "endLine": 2107,
+        "endChar": 5
+      },
+      "revId": "a9993c857205b6d2bd8adecb8cc734bac079edf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46cd2899_3cf32c31",
@@ -234,6 +354,30 @@
       "writtenOn": "2023-03-22T14:54:08Z",
       "side": 1,
       "message": "`this-\u003eptr_` is an invalid/stale pointer here if the previous allocation caused a GC. (The fact that GCMole isn\u0027t complaining is a known limitation: crbug.com/v8/11202.)\nThe proper fix is to make this entire function static, and pass a `Handle\u003cWasmInternalFunction\u003e` as a parameter to it, replacing `this`. (If you look around, you\u0027ll see a _lot_ of existing functions in `src/objects/*` following that pattern. `WasmInstanceObject::GetOrCreateWasmInternalFunction` right above is another example.)",
+      "range": {
+        "startLine": 1447,
+        "startChar": 2,
+        "endLine": 1447,
+        "endChar": 6
+      },
+      "revId": "a9993c857205b6d2bd8adecb8cc734bac079edf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da00d70b_fc6ff201",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-23T09:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46cd2899_3cf32c31",
       "range": {
         "startLine": 1447,
         "startChar": 2,
