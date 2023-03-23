@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a04380f_88e56698",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-23T17:56:24Z",
+      "side": 1,
+      "message": "PTAL. Just noticed that we can get a bit better fuzzer coverage here. No specific context.",
+      "revId": "9e6938d99627cb8452b8d293974cab42ec105735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
