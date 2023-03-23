@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "000163f5_8d76348c",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4600,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-03-23T12:49:29Z",
+      "side": 1,
+      "message": "AFAICT `MacroAssembler::EnterFrame` already reserves the slot that\u0027ll be used for GCScanSlotCount (it calls it `fourth_reg \u003d padreg` and does it for alignment reasons).",
+      "parentUuid": "634a5aeb_2dcbdddf",
+      "range": {
+        "startLine": 4600,
+        "startChar": 27,
+        "endLine": 4600,
+        "endChar": 28
+      },
+      "revId": "c4869e4cf23e9a8d9587e344997cc626bd85869b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2685e3c1_65b45996",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 12
