@@ -613,13 +613,14 @@ ConcurrentAllocator* CreateSharedOldAllocator(Heap* heap) {
 
 // This returns true if the scavenger runs in a client isolate and incremental
 // marking is enabled in the shared space isolate.
-bool IsSharedIncrementalMarking(Isolate* isolate) {
-  return isolate->has_shared_space() && !isolate->is_shared_space_isolate() &&
-         isolate->shared_space_isolate()
-             ->heap()
-             ->incremental_marking()
-             ->IsMarking();
-}
+// bool IsSharedIncrementalMarking(Isolate* isolate) {
+//   return isolate->has_shared_space() && !isolate->is_shared_space_isolate()
+//   &&
+//          isolate->shared_space_isolate()
+//              ->heap()
+//              ->incremental_marking()
+//              ->IsMarking();
+// }
 
 }  // namespace
 
@@ -642,12 +643,9 @@ Scavenger::Scavenger(ScavengerCollector* collector, Heap* heap, bool is_logging,
       is_logging_(is_logging),
       is_incremental_marking_(heap->incremental_marking()->IsMarking()),
       is_compacting_(heap->incremental_marking()->IsCompacting()),
-      shared_string_table_(shared_old_allocator_.get() != nullptr),
+      shared_string_table_(false),
       mark_shared_heap_(heap->isolate()->is_shared_space_isolate()),
-      shortcut_strings_(
-          (!heap->IsGCWithStack() || v8_flags.shortcut_strings_with_stack) &&
-          !is_incremental_marking_ &&
-          !IsSharedIncrementalMarking(heap->isolate())) {}
+      shortcut_strings_(false) {}
 
 void Scavenger::IterateAndScavengePromotedObject(HeapObject target, Map map,
                                                  int size) {
@@ -920,6 +918,13 @@ RootScavengeVisitor::RootScavengeVisitor(Scavenger* scavenger)
 ScavengeVisitor::ScavengeVisitor(Scavenger* scavenger)
     : NewSpaceVisitor<ScavengeVisitor>(scavenger->heap()->isolate()),
       scavenger_(scavenger) {}
+
+// Code is never allocated in the young generation.
+void ScavengeVisitor::VisitCodePointer(Code host, CodeObjectSlot slot) {
+  UNREACHABLE();
+}
+void ScavengeVisitor::VisitCodeTarget(RelocInfo* rinfo) { UNREACHABLE(); }
+void ScavengeVisitor::VisitEmbeddedPointer(RelocInfo* rinfo) { UNREACHABLE(); }
 
 }  // namespace internal
 }  // namespace v8
