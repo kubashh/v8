@@ -4,6 +4,9 @@
 
 // Flags: --experimental-wasm-stringref --allow-natives-syntax
 // Flags: --trace-wasm-inlining --liftoff
+// Also explicitly enable inlining to avoid differences between --future and
+// --no-future runs.
+// Flags: --experimental-wasm-inlining
 
 d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
 

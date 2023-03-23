@@ -47,7 +47,7 @@ Reduction WasmInliner::ReduceCall(Node* call) {
          call->opcode() == IrOpcode::kTailCall);
 
   if (seen_.find(call) != seen_.end()) {
-    TRACE("function %d: have already seen node %d, skipping\n",
+    TRACE("[function %d: have already seen node %d, skipping]\n",
           data_.func_index, call->id());
     return NoChange();
   }
@@ -58,7 +58,7 @@ Reduction WasmInliner::ReduceCall(Node* call) {
                                      ? IrOpcode::kRelocatableInt32Constant
                                      : IrOpcode::kRelocatableInt64Constant;
   if (callee->opcode() != reloc_opcode) {
-    TRACE("[function %d: considering node %d... not a relocatable constant]\n",
+    TRACE("[function %d: node %d: not a relocatable constant]\n",
           data_.func_index, call->id());
     return NoChange();
   }
@@ -134,8 +134,9 @@ void WasmInliner::Trace(const CandidateInfo& candidate, const char* decision) {
 }
 
 void WasmInliner::Finalize() {
-  TRACE("function %d %s: going through inlining candidates...\n",
-        data_.func_index, debug_name_);
+  TRACE("[function %d (%s): %s]\n", data_.func_index, debug_name_,
+        inlining_candidates_.empty() ? "no inlining candidates"
+                                     : "going through inlining candidates");
   if (inlining_candidates_.empty()) return;
   while (!inlining_candidates_.empty()) {
     CandidateInfo candidate = inlining_candidates_.top();
