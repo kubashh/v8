@@ -921,5 +921,12 @@ ScavengeVisitor::ScavengeVisitor(Scavenger* scavenger)
     : NewSpaceVisitor<ScavengeVisitor>(scavenger->heap()->isolate()),
       scavenger_(scavenger) {}
 
+// Code is never allocated in the young generation.
+void ScavengeVisitor::VisitCodePointer(Code host, CodeObjectSlot slot) {
+  UNREACHABLE();
+}
+void ScavengeVisitor::VisitCodeTarget(RelocInfo* rinfo) { UNREACHABLE(); }
+void ScavengeVisitor::VisitEmbeddedPointer(RelocInfo* rinfo) { UNREACHABLE(); }
+
 }  // namespace internal
 }  // namespace v8
