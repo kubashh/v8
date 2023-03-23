@@ -692,6 +692,25 @@ DEFINE_WEAK_VALUE_IMPLICATION(maglev, ticks_before_optimization, 1)
 DEFINE_WEAK_VALUE_IMPLICATION(maglev, bytecode_size_allowance_per_tick, 10000)
 DEFINE_WEAK_VALUE_IMPLICATION(maglev, reset_ticks_on_ic_update, false)
 
+// Tiering: JIT fuzzing.
+// When --jit-fuzzing is enabled, various tiering related thresholds are
+// lowered so that the different JIT tiers are reached within a few dozen
+// executions of the code.
+DEFINE_BOOL(jit_fuzzing, false,
+            "Set JIT tiering thresholds suitable for JIT fuzzing")
+// When JIT fuzzing, tier up to Sparkplug should happen after one or two
+// executions in the interpreter,
+DEFINE_NEG_IMPLICATION(jit_fuzzing, lazy_feedback_allocation)
+DEFINE_NEG_IMPLICATION(jit_fuzzing, baseline_batch_compilation)
+// tier up to Maglev should happen after a handful of additional executions,
+DEFINE_VALUE_IMPLICATION(jit_fuzzing, invocation_count_for_maglev, 10)
+// and tier up to Turbofan/Turboshaft should happen roughly after a few dozen
+// executions.
+DEFINE_VALUE_IMPLICATION(jit_fuzzing, interrupt_budget, 10 * KB)
+// Additionally, some other JIT-related thresholds should also be lower.
+DEFINE_VALUE_IMPLICATION(jit_fuzzing, invocation_count_for_osr, 5)
+DEFINE_VALUE_IMPLICATION(jit_fuzzing, minimum_invocations_after_ic_update, 5)
+
 // Flags for inline caching and feedback vectors.
 DEFINE_BOOL(use_ic, true, "use inline caching")
 DEFINE_BOOL(lazy_feedback_allocation, true, "Allocate feedback vectors lazily")
