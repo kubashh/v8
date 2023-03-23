@@ -63,6 +63,30 @@
       },
       "revId": "9e6938d99627cb8452b8d293974cab42ec105735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da58e2c7_c16257b8",
+        "filename": "tools/clusterfuzz/trials/clusterfuzz_trials_config.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-23T20:41:03Z",
+      "side": 1,
+      "message": "I think it might just work to use the string \"--no-wasm-tier-up --no-wasm-dynamic-tiering\" as app_args in this config.\n\nCF code here suggests that this works, as in the end everything is just joined to a string anyways:\nhttps://github.com/google/clusterfuzz/blob/63a987ca1f37eaae31b0aa4ba9cab55f4d35e588/src/clusterfuzz/_internal/bot/tasks/trials.py#L101\n\nOnly the contradicts checking won\u0027t work intuitively anymore, since we don\u0027t split this string for that. E.g. if you have a contradiction to one of the flags in the string \"A B\", then I think you\u0027d need to list the whole string \"A B\" in the respective contradicts list.\n\nBut I assume there\u0027s no contradiction to any other flag in this list?\n\nLet\u0027s look a few days after this has landed into the CF crash stats and check if the contradiction cases have gone up.\n\nBtw, I assume it\u0027s WAI that liftoff-only and no-liftoff don\u0027t contradict each other? I.e. I assume no-liftoff takes precedence then?",
+      "parentUuid": "8d881021_559b4c51",
+      "range": {
+        "startLine": 29,
+        "startChar": 17,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "9e6938d99627cb8452b8d293974cab42ec105735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
