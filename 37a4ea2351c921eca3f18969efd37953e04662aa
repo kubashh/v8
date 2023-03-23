@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "258dd3e4_6cac459a",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-23T19:50:11Z",
+      "side": 1,
+      "message": "We need innerIterator to keep track of flattened iterators while mapping the values in the input iterator. The type of the innerIterator is `IteratorRecord` (struct) so I cannot set it to `Undefined`. I used the underlying as the initial value and it will be rewritten as soon as the mapper applied to first element of the iterator. I cannot think of any alternatives here. What is your suggestion?",
+      "range": {
+        "startLine": 470,
+        "startChar": 19,
+        "endLine": 470,
+        "endChar": 29
+      },
+      "revId": "37a4ea2351c921eca3f18969efd37953e04662aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc802204_eabd6043",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-23T19:50:11Z",
+      "side": 1,
+      "message": "`mapped` has a type of `JSAny` but `GetIteratorFlattenable` expects `JSReciever`. If the casting makes sense here, I can add a specific message template for it. The closest one is what is used here.",
+      "range": {
+        "startLine": 533,
+        "startChar": 14,
+        "endLine": 533,
+        "endChar": 24
+      },
+      "revId": "37a4ea2351c921eca3f18969efd37953e04662aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
