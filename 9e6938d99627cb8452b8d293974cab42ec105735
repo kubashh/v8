@@ -39,6 +39,30 @@
       },
       "revId": "9e6938d99627cb8452b8d293974cab42ec105735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d881021_559b4c51",
+        "filename": "tools/clusterfuzz/trials/clusterfuzz_trials_config.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-23T18:32:34Z",
+      "side": 1,
+      "message": "Ah, good point. The implication is probably there because the fuzzer could hit a case that Liftoff cannot handle, in particular if e.g. SSE is disabled. `--liftoff-only` would disallow the fallback to TurboFan then, which is problematic.\n\nCan we replace this by `--no-wasm-tier-up --no-wasm-dynamic-tiering`, or does that not work? If we can\u0027t specify two flags here, then I\u0027ll just drop this line and only add a `--no-liftoff` trial, which is the more important one anyway.",
+      "parentUuid": "0befd481_4530cb6d",
+      "range": {
+        "startLine": 29,
+        "startChar": 17,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "9e6938d99627cb8452b8d293974cab42ec105735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
