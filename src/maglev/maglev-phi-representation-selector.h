@@ -119,6 +119,9 @@ class MaglevPhiRepresentationSelector {
   // Returns true if {op} is an untagging node.
   bool IsUntagging(Opcode op);
 
+  int ComputeRepresentationsForPhi(Phi* backedge_phi, int repr_use,
+                                   int last_fully_processed);
+
   // Updates {old_untagging} to reflect that its Phi input has been untagged and
   // that a different conversion is now needed.
   void UpdateUntaggingOfPhi(ValueNode* old_untagging);

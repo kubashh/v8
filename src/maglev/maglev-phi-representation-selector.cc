@@ -31,31 +31,9 @@ void MaglevPhiRepresentationSelector::Process(Phi* node,
   // and this simplifies things a little bit.
   // TODO(dmercadier): evaluate what benefits untagged Uint32 Phis would bring,
   // and consider allowing them.
-  unsigned int representation_mask =
-      ~representation_mask_for(ValueRepresentation::kUint32);
-
-  for (int i = 0; i < node->input_count(); i++) {
-    Node* input = node->input(i).node();
-    if (input->Is<SmiConstant>()) {
-      // Could be any representation
-    } else if (Constant* constant = input->TryCast<Constant>()) {
-      if (constant->object().IsHeapNumber()) {
-        representation_mask &=
-            representation_mask_for(ValueRepresentation::kFloat64);
-      } else {
-        // Not a Constant that we can untag.
-        representation_mask = 0;
-        break;
-      }
-    } else if (input->properties().is_conversion()) {
-      DCHECK_EQ(input->input_count(), 1);
-      representation_mask &= representation_mask_for(
-          input->input(0).node()->properties().value_representation());
-    } else {
-      representation_mask = 0;
-      break;
-    }
-  }
+  unsigned int representation_mask = ComputeRepresentationsForPhi(
+      node, ~representation_mask_for(ValueRepresentation::kUint32),
+      node->merge_state()->merge_offset() - 1);
 
   if (base::bits::CountPopulation(representation_mask) == 1) {
     ConvertTaggedPhiTo(
@@ -75,6 +53,78 @@ void MaglevPhiRepresentationSelector::Process(Phi* node,
   }
 }
 
+int MaglevPhiRepresentationSelector::ComputeRepresentationsForPhi(
+    Phi* phi, int use_repr, int last_fully_processed) {
+  if (phi->repr_for_backwards_visit() != 0) {
+    // TODO: we might need a "& use_repr" here.
+    phi->set_repr_for_backwards_visit(phi->repr_for_backwards_visit() &
+                                      use_repr);
+    return phi->repr_for_backwards_visit();
+  }
+
+  unsigned int representation_mask = use_repr;
+
+  for (int i = 0; i < phi->input_count(); i++) {
+    if (representation_mask == 0) {
+      // The inputs so far aren't compatible with each others.
+      return 0;
+    }
+
+    ValueNode* input = phi->input(i).node();
+    if (input->Is<SmiConstant>()) {
+      // Could be any representation
+    } else if (Constant* constant = input->TryCast<Constant>()) {
+      if (constant->object().IsHeapNumber()) {
+        representation_mask &=
+            representation_mask_for(ValueRepresentation::kFloat64);
+      } else {
+        // Not a Constant that we can untag.
+        representation_mask = 0;
+        break;
+      }
+    } else if (input->properties().is_conversion()) {
+      DCHECK_EQ(input->input_count(), 1);
+      representation_mask &= representation_mask_for(
+          input->input(0).node()->properties().value_representation());
+    } else if (input->value_representation() != ValueRepresentation::kTagged) {
+      // The graph builder tags phi inputs. However, if an input is a Phi that
+      // has been untagged, then it will be untagged.
+      DCHECK(input->Is<Phi>());
+      representation_mask &=
+          representation_mask_for(input->value_representation());
+    } else if (input->Is<Phi>()) {
+      Phi* input_phi = input->Cast<Phi>();
+      if (last_fully_processed < input_phi->merge_state()->merge_offset()) {
+        // {input} hasn't been processed yet, so it's possible that we want to
+        // untag it but haven't done it yet.
+        phi->set_repr_for_backwards_visit(representation_mask);
+        int input_repr = ComputeRepresentationsForPhi(
+            input_phi, representation_mask, last_fully_processed);
+        representation_mask &= input_repr;
+      } else {
+        // Despite being the backedge of {phi}, {input} was defined earlier in
+        // the graph, and we have already decided not to untag it. Such
+        // situation could occur if the code is something like:
+        //
+        //    let backedge = a ? 1 : 10;
+        //    for (let i = 0; i < 10; ) {
+        //        ...
+        //        i = a;
+        //    }
+        representation_mask = 0;
+        break;
+      }
+    } else {
+      DCHECK_EQ(input->value_representation(), ValueRepresentation::kTagged);
+      representation_mask = 0;
+      break;
+    }
+  }
+
+  phi->set_repr_for_backwards_visit(representation_mask);
+  return representation_mask;
+}
+
 void MaglevPhiRepresentationSelector::EnsurePhiInputsTagged(Phi* phi) {
   // Since we are untagging some Phis, it's possible that one of the inputs of
   // {phi} is an untagged Phi. However, if this function is called, then we've
@@ -92,60 +142,6 @@ void MaglevPhiRepresentationSelector::EnsurePhiInputsTagged(Phi* phi) {
       // phis untagged by this class, but {phi} isn't one of them).
       DCHECK(input->is_tagged());
     }
-  }
-}
-
-void MaglevPhiRepresentationSelector::ConvertTaggedPhiTo(
-    Phi* phi, ValueRepresentation repr) {
-  phi->change_representation(repr);
-
-  for (int i = 0; i < phi->input_count(); i++) {
-    ValueNode* input = phi->input(i).node();
-    if (input->Is<SmiConstant>()) {
-      switch (repr) {
-        case ValueRepresentation::kInt32:
-          phi->change_input(i,
-                            builder_->GetInt32Constant(
-                                input->Cast<SmiConstant>()->value().value()));
-          break;
-        case ValueRepresentation::kFloat64:
-          phi->change_input(i,
-                            builder_->GetFloat64Constant(
-                                input->Cast<SmiConstant>()->value().value()));
-          break;
-        case ValueRepresentation::kUint32:
-          UNIMPLEMENTED();
-        default:
-          UNREACHABLE();
-      }
-    } else if (Constant* constant = input->TryCast<Constant>()) {
-      DCHECK(constant->object().IsHeapNumber());
-      DCHECK_EQ(repr, ValueRepresentation::kFloat64);
-      phi->change_input(i, builder_->GetFloat64Constant(
-                               constant->object().AsHeapNumber().value()));
-    } else if (input->properties().is_conversion()) {
-      // Unwrapping the conversion.
-      DCHECK_EQ(input->value_representation(), ValueRepresentation::kTagged);
-      DCHECK_EQ(input->input(0).node()->value_representation(), repr);
-      phi->set_input(i, input->input(0).node());
-    } else {
-      DCHECK_EQ(input->value_representation(), repr);
-    }
-  }
-}
-
-bool MaglevPhiRepresentationSelector::IsUntagging(Opcode op) {
-  switch (op) {
-    case Opcode::kCheckedSmiUntag:
-    case Opcode::kUnsafeSmiUntag:
-    case Opcode::kCheckedObjectToIndex:
-    case Opcode::kCheckedTruncateNumberOrOddballToInt32:
-    case Opcode::kTruncateNumberOrOddballToInt32:
-    case Opcode::kCheckedNumberOrOddballToFloat64:
-    case Opcode::kUncheckedNumberOrOddballToFloat64:
-      return true;
-    default:
-      return false;
   }
 }
 
@@ -207,6 +203,75 @@ Opcode GetOpcodeForCheckedConversion(ValueRepresentation from,
 }
 
 }  // namespace
+
+void MaglevPhiRepresentationSelector::ConvertTaggedPhiTo(
+    Phi* phi, ValueRepresentation repr) {
+  phi->change_representation(repr);
+
+  for (int i = 0; i < phi->input_count(); i++) {
+    ValueNode* input = phi->input(i).node();
+    if (input->Is<SmiConstant>()) {
+      switch (repr) {
+        case ValueRepresentation::kInt32:
+          phi->change_input(i,
+                            builder_->GetInt32Constant(
+                                input->Cast<SmiConstant>()->value().value()));
+          break;
+        case ValueRepresentation::kFloat64:
+          phi->change_input(i,
+                            builder_->GetFloat64Constant(
+                                input->Cast<SmiConstant>()->value().value()));
+          break;
+        case ValueRepresentation::kUint32:
+          UNIMPLEMENTED();
+        default:
+          UNREACHABLE();
+      }
+    } else if (Constant* constant = input->TryCast<Constant>()) {
+      DCHECK(constant->object().IsHeapNumber());
+      DCHECK_EQ(repr, ValueRepresentation::kFloat64);
+      phi->change_input(i, builder_->GetFloat64Constant(
+                               constant->object().AsHeapNumber().value()));
+    } else if (input->properties().is_conversion()) {
+      // Unwrapping the conversion.
+      DCHECK_EQ(input->value_representation(), ValueRepresentation::kTagged);
+      DCHECK_EQ(input->input(0).node()->value_representation(), repr);
+      phi->set_input(i, input->input(0).node());
+    } else if (input->value_representation() != repr) {
+      if (input->value_representation() == ValueRepresentation::kTagged) {
+        // Only the backedge can be tagged. We don't untag it yet, because we
+        // don't quite know what it will become. When processing a JumpLoop,
+        // we'll insert whatever conversion if necessary, if any.
+        DCHECK(phi->is_backedge_offset(i));
+      } else {
+        Opcode opcode = GetOpcodeForCheckedConversion(
+            input->value_representation(), repr, false);
+        ValueNode* conversion =
+            NodeBase::New(opcode, builder_->zone(), {input})->Cast<ValueNode>();
+        DCHECK(!conversion->properties().can_deopt());
+        phi->set_input(i, AddNode(conversion, phi->predecessor_at(i),
+                                  NewNodePosition::kEnd));
+      }
+    } else {
+      DCHECK_EQ(input->value_representation(), repr);
+    }
+  }
+}
+
+bool MaglevPhiRepresentationSelector::IsUntagging(Opcode op) {
+  switch (op) {
+    case Opcode::kCheckedSmiUntag:
+    case Opcode::kUnsafeSmiUntag:
+    case Opcode::kCheckedObjectToIndex:
+    case Opcode::kCheckedTruncateNumberOrOddballToInt32:
+    case Opcode::kTruncateNumberOrOddballToInt32:
+    case Opcode::kCheckedNumberOrOddballToFloat64:
+    case Opcode::kUncheckedNumberOrOddballToFloat64:
+      return true;
+    default:
+      return false;
+  }
+}
 
 void MaglevPhiRepresentationSelector::UpdateUntaggingOfPhi(
     ValueNode* old_untagging) {
