@@ -412,6 +412,7 @@ v8_source_set("cctest_sources") {
   if (v8_use_perfetto) {
     deps += [
       # TODO(skyostil): Migrate to protozero.
+      "../..:trace_event_listener",
       "//third_party/perfetto/protos/perfetto/trace:lite",
     ]
   }

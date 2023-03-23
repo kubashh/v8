@@ -5971,14 +5971,6 @@ v8_component("v8_libplatform") {
       "src/libplatform/tracing/trace-writer.cc",
       "src/libplatform/tracing/trace-writer.h",
     ]
-    sources += [
-      "src/libplatform/tracing/trace-event-listener.cc",
-      "src/libplatform/tracing/trace-event-listener.h",
-    ]
-    deps += [
-      # TODO(skyostil): Switch TraceEventListener to protozero.
-      "//third_party/perfetto/protos/perfetto/trace:lite",
-    ]
   }
 
   if (v8_enable_system_instrumentation) {
@@ -5992,6 +5984,21 @@ v8_component("v8_libplatform") {
 
   if (v8_current_cpu == "riscv64" || v8_current_cpu == "riscv32") {
     libs = [ "atomic" ]
+  }
+}
+
+if (v8_use_perfetto) {
+  v8_source_set("trace_event_listener") {
+    testonly = true
+    configs = [ ":internal_config_base" ]
+    sources = [
+      "src/libplatform/tracing/trace-event-listener.cc",
+      "src/libplatform/tracing/trace-event-listener.h",
+    ]
+    deps = [
+      # TODO(skyostil): Switch TraceEventListener to protozero.
+      "//third_party/perfetto/protos/perfetto/trace:lite",
+    ]
   }
 }
 
