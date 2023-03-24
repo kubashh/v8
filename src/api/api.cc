@@ -11410,9 +11410,8 @@ uint64_t ConvertDouble(double d) {
   return internal::DoubleToWebIDLUint64(d);
 }
 
-template <>
-EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
-bool ConvertDouble(double d) {
+template <typename T>
+V8_EXPORT_PRIVATE bool ConvertDouble(double d) {
   // Implements https://tc39.es/ecma262/#sec-toboolean.
   return !std::isnan(d) && d != 0;
 }
@@ -11421,7 +11420,6 @@ bool ConvertDouble(double d) {
 #undef SET_FIELD_WRAPPED
 #undef NEW_STRING
 #undef CALLBACK_SETTER
-
 }  // namespace internal
 
 template <>

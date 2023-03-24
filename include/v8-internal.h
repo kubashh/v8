@@ -52,7 +52,7 @@ const int kHeapObjectTagSize = 2;
 const intptr_t kHeapObjectTagMask = (1 << kHeapObjectTagSize) - 1;
 const intptr_t kHeapObjectReferenceTagMask = 1 << (kHeapObjectTagSize - 1);
 
-// Tag information for fowarding pointers stored in object headers.
+// Tag information for forwarding pointers stored in object headers.
 // 0b00 at the lowest 2 bits in the header indicates that the map word is a
 // forwarding pointer.
 const int kForwardingTag = 0;
@@ -643,6 +643,10 @@ class Internals {
 
   V8_INLINE static bool HasHeapObjectTag(Address value) {
     return (value & kHeapObjectTagMask) == static_cast<Address>(kHeapObjectTag);
+  }
+
+  V8_INLINE static bool HasSmiTag(Address value) {
+    return (value & kSmiTagMask) == static_cast<Address>(kSmiTag);
   }
 
   V8_INLINE static int SmiValue(Address value) {
