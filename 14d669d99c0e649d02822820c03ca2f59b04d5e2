@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "339ce39c_fce46fb8",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-24T13:40:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f056d027_4f9479dc",
+      "range": {
+        "startLine": 946,
+        "startChar": 13,
+        "endLine": 946,
+        "endChar": 56
+      },
+      "revId": "14d669d99c0e649d02822820c03ca2f59b04d5e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12569ee3_a3781750",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-03-24T13:02:04Z",
       "side": 1,
       "message": "Can we skip iterating the map pointer for promoted objects as well? Maps are old afaik.",
+      "range": {
+        "startLine": 1448,
+        "startChar": 5,
+        "endLine": 1448,
+        "endChar": 20
+      },
+      "revId": "14d669d99c0e649d02822820c03ca2f59b04d5e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b8783aa_d63008f6",
+        "filename": "src/objects/objects-body-descriptors-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-24T13:40:33Z",
+      "side": 1,
+      "message": "I thought so as well initially but they can be shared space which we may need to record.",
+      "parentUuid": "12569ee3_a3781750",
       "range": {
         "startLine": 1448,
         "startChar": 5,
