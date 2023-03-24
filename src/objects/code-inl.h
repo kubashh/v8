@@ -758,6 +758,12 @@ Address Code::constant_pool() const {
   return metadata_start() + constant_pool_offset();
 }
 
+Address Code::constant_pool(InstructionStream instruction_stream) const {
+  if (!has_constant_pool()) return kNullAddress;
+  return instruction_stream.instruction_start() + instruction_size() +
+         constant_pool_offset();
+}
+
 Address Code::code_comments() const {
   return metadata_start() + code_comments_offset();
 }

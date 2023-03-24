@@ -611,7 +611,10 @@ void StackFrame::IteratePc(RootVisitor* v, Address* pc_address,
   // TODO(v8:10026): avoid replacing a signed pointer.
   PointerAuthentication::ReplacePC(pc_address, new_pc, kSystemPointerSize);
   if (V8_EMBEDDED_CONSTANT_POOL_BOOL && constant_pool_address != nullptr) {
-    *constant_pool_address = visited_holder.constant_pool();
+    const uintptr_t pc_diff =
+        istream.address() -
+        InstructionStream::unchecked_cast(old_istream).address();
+    *constant_pool_address += pc_diff;
   }
 }
 
