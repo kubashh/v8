@@ -1067,8 +1067,8 @@ TEST(BreakPointBuiltinNewContext) {
   CheckDebuggerUnloaded();
 }
 
-void NoOpFunctionCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  args.GetReturnValue().Set(v8_num(2));
+void NoOpFunctionCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  info.GetReturnValue().Set(v8_num(2));
 }
 
 TEST(BreakPointApiFunction) {
@@ -1153,11 +1153,11 @@ TEST(BreakPointApiConstructor) {
   CheckDebuggerUnloaded();
 }
 
-void GetWrapperCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  args.GetReturnValue().Set(
-      args[0]
+void GetWrapperCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  info.GetReturnValue().Set(
+      info[0]
           .As<v8::Object>()
-          ->Get(args.GetIsolate()->GetCurrentContext(), args[1])
+          ->Get(info.GetIsolate()->GetCurrentContext(), info[1])
           .ToLocalChecked());
 }
 
@@ -1207,10 +1207,10 @@ TEST(BreakPointApiGetter) {
   CheckDebuggerUnloaded();
 }
 
-void SetWrapperCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  CHECK(args[0]
+void SetWrapperCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  CHECK(info[0]
             .As<v8::Object>()
-            ->Set(args.GetIsolate()->GetCurrentContext(), args[1], args[2])
+            ->Set(info.GetIsolate()->GetCurrentContext(), info[1], info[2])
             .FromJust());
 }
 
@@ -1605,7 +1605,7 @@ TEST(BreakPointConditionBuiltin) {
   // === Test rest arguments ===
   break_point_hit_count = 0;
   builtin = CompileRun("String.fromCharCode").As<v8::Function>();
-  CompileRun("function f(...args) { return String.fromCharCode(...args); }");
+  CompileRun("function f(...info) { return String.fromCharCode(...info); }");
   CHECK_EQ(0, break_point_hit_count);
 
   // Run with breakpoint.
@@ -2006,14 +2006,14 @@ TEST(DebugStepKeyedLoadLoop) {
 
   // Call function without any break points to ensure inlining is in place.
   const int kArgc = 1;
-  v8::Local<v8::Value> args[kArgc] = {a};
-  foo->Call(context, env->Global(), kArgc, args).ToLocalChecked();
+  v8::Local<v8::Value> info[kArgc] = {a};
+  foo->Call(context, env->Global(), kArgc, info).ToLocalChecked();
 
   // Set up break point and step through the function.
   SetBreakPoint(foo, 3);
   run_step.set_step_action(StepOver);
   break_point_hit_count = 0;
-  foo->Call(context, env->Global(), kArgc, args).ToLocalChecked();
+  foo->Call(context, env->Global(), kArgc, info).ToLocalChecked();
 
   // With stepping all break locations are hit.
   CHECK_EQ(44, break_point_hit_count);
@@ -2057,14 +2057,14 @@ TEST(DebugStepKeyedStoreLoop) {
 
   // Call function without any break points to ensure inlining is in place.
   const int kArgc = 1;
-  v8::Local<v8::Value> args[kArgc] = {a};
-  foo->Call(context, env->Global(), kArgc, args).ToLocalChecked();
+  v8::Local<v8::Value> info[kArgc] = {a};
+  foo->Call(context, env->Global(), kArgc, info).ToLocalChecked();
 
   // Set up break point and step through the function.
   SetBreakPoint(foo, 3);
   run_step.set_step_action(StepOver);
   break_point_hit_count = 0;
-  foo->Call(context, env->Global(), kArgc, args).ToLocalChecked();
+  foo->Call(context, env->Global(), kArgc, info).ToLocalChecked();
 
   // With stepping all break locations are hit.
   CHECK_EQ(44, break_point_hit_count);
@@ -3120,7 +3120,7 @@ TEST(DebugBreakInWrappedScript) {
   CheckDebuggerUnloaded();
 }
 
-static void EmptyHandler(const v8::FunctionCallbackInfo<v8::Value>& args) {}
+static void EmptyHandler(const v8::FunctionCallbackInfo<v8::Value>& info) {}
 
 TEST(DebugScopeIteratorWithFunctionTemplate) {
   LocalContext env;
@@ -3988,8 +3988,8 @@ class DebugBreakStackTraceListener : public v8::debug::DebugDelegate {
   }
 };
 
-static void AddDebugBreak(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::debug::SetBreakOnNextFunctionCall(args.GetIsolate());
+static void AddDebugBreak(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  v8::debug::SetBreakOnNextFunctionCall(info.GetIsolate());
 }
 
 TEST(DebugBreakStackTrace) {
@@ -4120,9 +4120,9 @@ class ArchiveRestoreThread : public v8::base::Thread,
       debug_->SetDebugDelegate(this);
       v8::internal::DisableBreak enable_break(debug_, false);
 
-      v8::Local<v8::Value> args[1] = {v8::Integer::New(isolate_, spawn_count_)};
+      v8::Local<v8::Value> info[1] = {v8::Integer::New(isolate_, spawn_count_)};
 
-      int result = test->Call(context, context->Global(), 1, args)
+      int result = test->Call(context, context->Global(), 1, info)
                        .ToLocalChecked()
                        ->Int32Value(context)
                        .FromJust();
@@ -4248,8 +4248,8 @@ class DebugEventExpectNoException : public v8::debug::DebugDelegate {
 };
 
 static void TryCatchWrappedThrowCallback(
-    const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::TryCatch try_catch(args.GetIsolate());
+    const v8::FunctionCallbackInfo<v8::Value>& info) {
+  v8::TryCatch try_catch(info.GetIsolate());
   CompileRun("throw 'rejection';");
   CHECK(try_catch.HasCaught());
 }
