@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47b092fc_b70d7cc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-24T22:31:11Z",
+      "side": 1,
+      "message": "Adding use counter to gather data to see if we can unship `import assert` at all.\n\nChromium CL at https://chromium-review.googlesource.com/c/chromium/src/+/4371121",
+      "revId": "7be7c97558d72db738f6efbea1dfde171d08395c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
