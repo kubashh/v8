@@ -725,14 +725,14 @@ TEST_F(AssemblerX64Test, AssemblerMultiByteNop) {
 #ifdef __GNUC__
 #define ELEMENT_COUNT 4u
 
-void DoSSE2(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
+void DoSSE2(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  v8::Isolate* isolate = info.GetIsolate();
   v8::HandleScope scope(isolate);
   v8::Local<v8::Context> context = isolate->GetCurrentContext();
   byte buffer[1024];
 
-  CHECK(args[0]->IsArray());
-  v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(args[0]);
+  CHECK(info[0]->IsArray());
+  v8::Local<v8::Array> vec = v8::Local<v8::Array>::Cast(info[0]);
   CHECK_EQ(ELEMENT_COUNT, vec->Length());
 
   Isolate* i_isolate = reinterpret_cast<v8::internal::Isolate*>(isolate);
@@ -776,7 +776,7 @@ void DoSSE2(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
   auto f = GeneratedCode<F0>::FromCode(i_isolate, *code);
   int res = f.Call();
-  args.GetReturnValue().Set(v8::Integer::New(isolate, res));
+  info.GetReturnValue().Set(v8::Integer::New(isolate, res));
 }
 
 TEST_F(AssemblerX64Test, StackAlignmentForSSE2) {
@@ -807,9 +807,9 @@ TEST_F(AssemblerX64Test, StackAlignmentForSSE2) {
     v8_vec->Set(context, i, v8::Number::New(isolate, vec[i])).FromJust();
   }
 
-  v8::Local<v8::Value> args[] = {v8_vec};
+  v8::Local<v8::Value> info[] = {v8_vec};
   v8::Local<v8::Value> result =
-      foo->Call(context, global_object, 1, args).ToLocalChecked();
+      foo->Call(context, global_object, 1, info).ToLocalChecked();
 
   // The mask should be 0b1000.
   CHECK_EQ(8, result->Int32Value(context).FromJust());
