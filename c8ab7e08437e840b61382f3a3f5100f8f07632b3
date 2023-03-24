@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4d56bbe_9cc20ff6",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-24T12:46:20Z",
+      "side": 0,
+      "message": "This already needs to read the instance type of the map. Checking the visitor id should be free here as we also need it in IterateFast in case we cannot bail out.",
+      "range": {
+        "startLine": 948,
+        "startChar": 13,
+        "endLine": 948,
+        "endChar": 28
+      },
+      "revId": "c8ab7e08437e840b61382f3a3f5100f8f07632b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
