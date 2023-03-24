@@ -2548,7 +2548,11 @@ Reduction MachineOperatorReducer::ReduceWord32Equal(Node* node) {
     return Changed(node);
   }
   // TODO(turbofan): fold HeapConstant, ExternalReference, pointer compares
-  if (m.LeftEqualsRight()) return ReplaceBool(true);  // x == x => true
+  if (m.LeftEqualsRight()) {
+    if (m.left().op()->HasProperty(Operator::kNoDeopt)) {
+      return ReplaceBool(true);  // x == x => true
+    }
+  }
   if (m.right().HasResolvedValue()) {
     base::Optional<std::pair<Node*, uint32_t>> replacements;
     if (m.left().IsTruncateInt64ToInt32()) {
