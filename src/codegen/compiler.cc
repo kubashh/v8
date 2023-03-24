@@ -1274,6 +1274,13 @@ MaybeHandle<Code> GetOrCompileOptimized(
   // Clear the optimization marker on the function so that we don't try to
   // re-optimize.
   if (!IsOSR(osr_offset)) {
+    int invocation_count =
+        function->feedback_vector().invocation_count(kRelaxedLoad);
+    if (invocation_count < 3) {
+      function->feedback_vector().set_invocation_count(invocation_count + 1,
+                                                       kRelaxedStore);
+      return {};
+    }
     ResetTieringState(*function, osr_offset);
   }
 
