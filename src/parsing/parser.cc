@@ -1368,6 +1368,12 @@ ImportAssertions* Parser::ParseImportAssertClause() {
     return import_assertions;
   }
 
+  // The 'assert' contextual keyword is deprecated in favor of 'with', and we
+  // need to investigate feasibility of unshipping.
+  //
+  // TODO(v8:13856): Remove once decision is made to unship 'assert' or keep.
+  ++use_counts_[v8::Isolate::kImportAssertionDeprecatedSyntax];
+
   Expect(Token::LBRACE);
 
   while (peek() != Token::RBRACE) {
