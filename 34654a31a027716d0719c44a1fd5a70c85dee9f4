@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e940c08e_35e9b786",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-24T21:30:01Z",
+      "side": 1,
+      "message": "Igor, PTAL. I think this is the right fix. `ElementsAccessor::FillImpl` seems to handle its own growing, so there\u0027s no security bug here.",
+      "revId": "34654a31a027716d0719c44a1fd5a70c85dee9f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
