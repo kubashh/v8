@@ -1279,6 +1279,11 @@ class NodeBase : public ZoneObject {
     return node;
   }
 
+  template <typename... Args>
+  static inline NodeBase* New(Opcode opcode, Zone* zone,
+                              std::initializer_list<ValueNode*> inputs,
+                              Args&&... args);
+
   // Inputs must be initialized manually.
   template <class Derived, typename... Args>
   static Derived* New(Zone* zone, size_t input_count, Args&&... args) {
@@ -6125,6 +6130,17 @@ class Phi : public ValueNodeT<Phi> {
 
   bool is_exception_phi() const { return input_count() == 0; }
 
+  bool is_loop_phi() const;
+
+  bool is_backedge_offset(int i) const {
+    return is_loop_phi() && i == input_count() - 1;
+  }
+
+  int repr_for_backwards_visit() const { return repr_for_backwards_visit_; }
+  void set_repr_for_backwards_visit(int repr) {
+    repr_for_backwards_visit_ = repr;
+  }
+
   void VerifyInputs(MaglevGraphLabeller* graph_labeller) const;
   void MarkTaggedInputsAsDecompressing() {
     // Do not mark inputs as decompressing here, since we don't yet know whether
@@ -6143,6 +6159,9 @@ class Phi : public ValueNodeT<Phi> {
   const interpreter::Register owner_;
   Phi* next_ = nullptr;
   MergePointInterpreterFrameState* const merge_state_;
+
+  uint8_t repr_for_backwards_visit_ = 0;
+
   friend base::ThreadedListTraits<Phi>;
 };
 
@@ -7444,6 +7463,36 @@ inline void NodeBase::ForAllInputsInRegallocAssignmentOrder(Function&& f) {
   iterate_inputs(InputAllocationPolicy::kFixedRegister);
   iterate_inputs(InputAllocationPolicy::kArbitraryRegister);
   iterate_inputs(InputAllocationPolicy::kAny);
+}
+
+namespace detail {
+
+template <class F, class Args, class Enable = void>
+struct can_be_called_with : std::bool_constant<false> {};
+
+template <class F, class... Args>
+struct can_be_called_with<F, std::tuple<Args...>,
+                          std::void_t<decltype(F(std::declval<Args>()...))>>
+    : std::bool_constant<true> {};
+
+}  // namespace detail
+
+template <typename... Args>
+inline NodeBase* NodeBase::New(Opcode opcode, Zone* zone,
+                               std::initializer_list<ValueNode*> inputs,
+                               Args&&... args) {
+  switch (opcode) {
+#define OP_CASE(op)                                                            \
+  case Opcode::k##op:                                                          \
+    if constexpr (detail::can_be_called_with<                                  \
+                      op, decltype(std::tuple<uint64_t, Args...>())>::value) { \
+      return New<op>(zone, inputs, std::forward<Args>(args)...);               \
+    }                                                                          \
+    UNREACHABLE();
+
+    NODE_BASE_LIST(OP_CASE)
+#undef OP_CASE
+  }
 }
 
 }  // namespace maglev

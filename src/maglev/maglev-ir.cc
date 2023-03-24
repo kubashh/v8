@@ -99,6 +99,8 @@ void NodeBase::CheckCanOverwriteWith(Opcode new_opcode,
 
 #endif  // DEBUG
 
+bool Phi::is_loop_phi() const { return merge_state()->is_loop(); }
+
 namespace {
 
 // ---
