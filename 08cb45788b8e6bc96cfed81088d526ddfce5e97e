@@ -16,6 +16,23 @@
       "message": "Hi Tobias, Would you please help take a look at this change? Thanks!",
       "revId": "08cb45788b8e6bc96cfed81088d526ddfce5e97e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbc5a3aa_75f1ec6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-03-24T08:00:04Z",
+      "side": 1,
+      "message": "Thanks for the patch! Did you consider using a `Word32Select` node, which lowers to a `cmov` instruction? I don\u0027t know which version is faster, but it might be worth a try.\nAlso, it would be good if you could also provide a Turboshaft version of this optimization, to make sure we don\u0027t lose it once we switch to Turboshaft. Let me know if you have questions or need help with Turboshaft.",
+      "revId": "08cb45788b8e6bc96cfed81088d526ddfce5e97e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
