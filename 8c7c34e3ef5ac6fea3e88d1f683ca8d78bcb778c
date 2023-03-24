@@ -16,6 +16,91 @@
       "message": "I have added two notes that we can discuss in our meeting tomorrow.",
       "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55347869_dc97009d",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-24T19:06:07Z",
+      "side": 1,
+      "message": "Nit: I think it\u0027s possible to hoist out `methodName` above and use it here as well.",
+      "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bda6e7b4_70596838",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-24T19:06:07Z",
+      "side": 1,
+      "message": "This need nested `try catch` as we discussed.",
+      "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c778b8b6_e4283b33",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-24T19:06:07Z",
+      "side": 1,
+      "message": "The closing logic should be moved up to the `return` method above as we discussed.",
+      "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f80e9e8_b99903f0",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-24T19:06:07Z",
+      "side": 1,
+      "message": "See if `unreachable;` works here.",
+      "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbd53531_9930b7c1",
+        "filename": "test/mjsunit/harmony/iterator-helpers.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-24T19:06:07Z",
+      "side": 1,
+      "message": "Let\u0027s also add some tests where the inner iterator throws, since the `return` logic here is tricky with 2 iterators.",
+      "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
