@@ -87,6 +87,30 @@
       },
       "revId": "9e6938d99627cb8452b8d293974cab42ec105735",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fab3aaee_be27287f",
+        "filename": "tools/clusterfuzz/trials/clusterfuzz_trials_config.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-24T13:05:36Z",
+      "side": 1,
+      "message": "Contradictions shouldn\u0027t be necessary, that should be fine.\nBut as this all sounds a bit uncertain, let\u0027s do the follow:\nI uploaded another CL to only add the `--no-liftoff` config, which should be fine in any case: https://crrev.com/c/4370022\n\nAfter this landed, we can try landing this updated CL, which uses `--no-wasm-tier-up --no-wasm-dynamic-tiering` instead of `--liftoff-only`. If this fails for any reason, we can revert and forget about this, it\u0027s not that important. Way more important is the `--no-liftoff` configuration.",
+      "parentUuid": "da58e2c7_c16257b8",
+      "range": {
+        "startLine": 29,
+        "startChar": 17,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "9e6938d99627cb8452b8d293974cab42ec105735",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
