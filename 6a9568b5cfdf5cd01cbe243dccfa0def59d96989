@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f76bf9b9_9f8b4f14",
+        "filename": "src/objects/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-03-27T16:38:00Z",
+      "side": 1,
+      "message": "Ah. Excuse me, I didn\u0027t notice that TryFastArrayFill was already a JSArray-only code.\nYour first version was better than what I suggested.",
+      "revId": "6a9568b5cfdf5cd01cbe243dccfa0def59d96989",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
