@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a5ef910_187a8247",
+        "filename": "test/unittests/deoptimizer/deoptimization-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-27T13:06:43Z",
+      "side": 1,
+      "message": "add to comment",
+      "range": {
+        "startLine": 65,
+        "startChar": 40,
+        "endLine": 65,
+        "endChar": 41
+      },
+      "revId": "8497d7b83df7be24e3506a2f4cdf00fb73e957d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c71b2fc_e9dac209",
+        "filename": "test/unittests/deoptimizer/deoptimization-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-27T13:06:43Z",
+      "side": 1,
+      "message": "also here",
+      "range": {
+        "startLine": 96,
+        "startChar": 40,
+        "endLine": 96,
+        "endChar": 41
+      },
+      "revId": "8497d7b83df7be24e3506a2f4cdf00fb73e957d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
