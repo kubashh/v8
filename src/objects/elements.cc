@@ -2270,6 +2270,25 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
     for (size_t index = start; index < end; ++index) {
       Subclass::SetImpl(receiver, InternalIndex(index), *obj_value);
     }
+
+    if (receiver->IsJSArray()) {
+      // It's possible the JSArray's 'length' property was assigned to after the
+      // length was loaded due to user code during argument coercion of the
+      // start and end parameters. The spec algorithm does a Set, meaning the
+      // length would grow as needed during the fill.
+      //
+      // ElementAccessor::Fill is able to grow the backing store as needed, but
+      // we need to ensure the JSArray's length is correctly set in case the
+      // user assigned a smaller value.
+      Handle<JSArray> array = Handle<JSArray>::cast(receiver);
+      if (array->length().Number() < end) {
+        Isolate* isolate = array->GetIsolate();
+        MAYBE_RETURN_NULL(
+            Subclass::SetLengthImpl(isolate, array, static_cast<uint32_t>(end),
+                                    handle(array->elements(), isolate)));
+      }
+    }
+
     return MaybeHandle<Object>(receiver);
   }
 
