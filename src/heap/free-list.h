@@ -466,6 +466,7 @@ class V8_EXPORT_PRIVATE FreeListManyCachedFastPathBase
  protected:
   // Objects in the 18th category are at least 2048 bytes
   static const FreeListCategoryType kFastPathFirstCategory = 18;
+  static const FreeListCategoryType kPreciseSearchFirstCategory = 20;
   static const size_t kFastPathStart = 2048;
   static const size_t kTinyObjectMaxSize = 128;
   static const size_t kFastPathOffset = kFastPathStart - kTinyObjectMaxSize;

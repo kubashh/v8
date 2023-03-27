@@ -378,21 +378,23 @@ FreeSpace FreeListManyCachedFastPathBase::Allocate(size_t size_in_bytes,
     }
   }
 
-  // Searching the last category
+  // Search categories prior to the fast path first category.
+  FreeListCategoryType precise_category =
+      SelectFreeListCategoryType(size_in_bytes);
   if (node.is_null()) {
-    // Searching each element of the last category.
-    type = last_category_;
-    node = SearchForNodeInList(type, size_in_bytes, node_size);
-  }
-
-  // Finally, search the most precise category
-  if (node.is_null()) {
-    type = SelectFreeListCategoryType(size_in_bytes);
+    type = precise_category;
     for (type = next_nonempty_category[type]; type < first_category;
          type = next_nonempty_category[type + 1]) {
       node = TryFindNodeIn(type, size_in_bytes, node_size);
       if (!node.is_null()) break;
     }
+  }
+
+  // Finally, for cateogry with large blocks, throughly search the most precise
+  // category.
+  if (node.is_null() && (precise_category >= kPreciseSearchFirstCategory)) {
+    type = precise_category;
+    node = SearchForNodeInList(type, size_in_bytes, node_size);
   }
 
   if (!node.is_null()) {
