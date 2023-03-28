@@ -16,6 +16,23 @@
       "message": "PTAL, a follow-up to 4358174 after I misspelled the macro several times...",
       "revId": "2f7e934b2aee284fe351571f281e952d85be841b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6c9a2f5_1a508958",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-28T16:20:46Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "2f7e934b2aee284fe351571f281e952d85be841b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
