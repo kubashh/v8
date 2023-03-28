@@ -46,6 +46,30 @@
       },
       "revId": "3cdae3b8b56ec318ef7581346921c0ea98f0ec90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8def4fd_3f89f88d",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 4482,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-03-28T07:33:32Z",
+      "side": 1,
+      "message": "Done as a drive-by.",
+      "parentUuid": "72c5fccc_21c2bd48",
+      "range": {
+        "startLine": 4482,
+        "startChar": 2,
+        "endLine": 4482,
+        "endChar": 64
+      },
+      "revId": "3cdae3b8b56ec318ef7581346921c0ea98f0ec90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
