@@ -61,3 +61,12 @@ delete Function.prototype.length;
 assertEquals(undefined, fun(Function.prototype));
 %OptimizeFunctionOnNextCall(fun);
 assertEquals(undefined, fun(Function.prototype));
+
+function no_length() {
+  "use strict";
+  Object.getOwnPropertyDescriptor(arguments, "callee").get.length;
+}
+%PrepareFunctionForOptimization(no_length);
+no_length();
+%OptimizeFunctionOnNextCall(no_length);
+no_length()

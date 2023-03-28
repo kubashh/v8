@@ -1060,7 +1060,7 @@ PropertyAccessInfo AccessInfoFactory::LookupSpecialFieldAccessor(
     NameRef length_name = map.GetPropertyKey(broker(), kLengthIndex);
     OptionalObjectRef length_value = map.GetStrongValue(broker(), kLengthIndex);
     if (*length_name.object() == *isolate()->factory()->length_string() &&
-        length_value->IsAccessorInfo() &&
+        length_value && length_value->IsAccessorInfo() &&
         length_value->AsAccessorInfo().object().is_identical_to(
             isolate()->factory()->function_length_accessor())) {
       return PropertyAccessInfo::FunctionLength(zone(), map);
