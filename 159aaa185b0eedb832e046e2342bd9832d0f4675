@@ -142,6 +142,30 @@
       },
       "revId": "159aaa185b0eedb832e046e2342bd9832d0f4675",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1318978_b156d662",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-28T15:02:26Z",
+      "side": 1,
+      "message": "They are not symmetrical because if a Phi has some Int32 inputs, it can become a Float64 Phi (if some other conditions are here), but if a Phi has Float64 inputs, it can never become a Int32 Phi.",
+      "parentUuid": "4e2f74c0_71e3e0ef",
+      "range": {
+        "startLine": 303,
+        "startChar": 8,
+        "endLine": 303,
+        "endChar": 61
+      },
+      "revId": "159aaa185b0eedb832e046e2342bd9832d0f4675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
