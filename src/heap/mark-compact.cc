@@ -918,15 +918,12 @@ void MarkCompactCollector::Finish() {
     TRACE_GC_EPOCH(heap()->tracer(), GCTracer::Scope::MC_SWEEP,
                    ThreadKind::kMain);
 
-    DCHECK_IMPLIES(!v8_flags.minor_mc,
-                   empty_new_space_pages_to_be_swept_.empty());
-    if (!empty_new_space_pages_to_be_swept_.empty()) {
+    DCHECK_IMPLIES(!v8_flags.minor_mc, !empty_new_space_page_to_be_swept_);
+    if (empty_new_space_page_to_be_swept_) {
       GCTracer::Scope sweep_scope(
           heap()->tracer(), GCTracer::Scope::MC_SWEEP_NEW, ThreadKind::kMain);
-      for (Page* p : empty_new_space_pages_to_be_swept_) {
-        sweeper()->SweepEmptyNewSpacePage(p);
-      }
-      empty_new_space_pages_to_be_swept_.clear();
+      sweeper()->SweepEmptyNewSpacePage(empty_new_space_page_to_be_swept_);
+      empty_new_space_page_to_be_swept_ = nullptr;
     }
 
     if (heap()->new_lo_space()) {
@@ -4599,10 +4596,10 @@ void MarkCompactCollector::Evacuate() {
         DCHECK_EQ(0, non_atomic_marking_state()->live_bytes(p));
         DCHECK(p->SweepingDone());
         PagedNewSpace* space = heap()->paged_new_space();
-        if (space->ShouldReleaseEmptyPage()) {
+        if (empty_new_space_page_to_be_swept_) {
           space->ReleasePage(p);
         } else {
-          sweeper()->SweepEmptyNewSpacePage(p);
+          empty_new_space_page_to_be_swept_ = p;
         }
       }
     }
@@ -5330,7 +5327,7 @@ void MarkCompactCollector::StartSweepNewSpace() {
     paged_space->StartShrinking();
   }
 
-  DCHECK(empty_new_space_pages_to_be_swept_.empty());
+  DCHECK_NULL(empty_new_space_page_to_be_swept_);
   for (auto it = paged_space->begin(); it != paged_space->end();) {
     Page* p = *(it++);
     DCHECK(p->SweepingDone());
@@ -5340,10 +5337,10 @@ void MarkCompactCollector::StartSweepNewSpace() {
       continue;
     }
 
-    if (paged_space->ShouldReleaseEmptyPage()) {
+    if (empty_new_space_page_to_be_swept_) {
       paged_space->ReleasePage(p);
     } else {
-      empty_new_space_pages_to_be_swept_.push_back(p);
+      empty_new_space_page_to_be_swept_ = p;
     }
     will_be_swept++;
   }
@@ -6199,6 +6196,7 @@ bool MinorMarkCompactCollector::StartSweepNewSpace() {
 
   int will_be_swept = 0;
   bool has_promoted_pages = false;
+  bool unused_page_present = false;
 
   DCHECK_EQ(Heap::ResizeNewSpaceMode::kNone, resize_new_space_);
   resize_new_space_ = heap()->ShouldResizeNewSpace();
@@ -6212,10 +6210,11 @@ bool MinorMarkCompactCollector::StartSweepNewSpace() {
 
     intptr_t live_bytes_on_page = non_atomic_marking_state()->live_bytes(p);
     if (live_bytes_on_page == 0) {
-      if (paged_space->ShouldReleaseEmptyPage()) {
+      if (unused_page_present) {
         paged_space->ReleasePage(p);
       } else {
         sweeper()->SweepEmptyNewSpacePage(p);
+        unused_page_present = true;
       }
       continue;
     }

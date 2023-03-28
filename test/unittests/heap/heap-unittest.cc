@@ -198,8 +198,7 @@ void ShrinkNewSpace(NewSpace* new_space) {
   tracer->StartAtomicPause();
   paged_new_space->StartShrinking();
   for (Page* page = paged_new_space->first_page();
-       page != paged_new_space->last_page() &&
-       (paged_new_space->ShouldReleaseEmptyPage());) {
+       page != paged_new_space->last_page();) {
     Page* current_page = page;
     page = page->next_page();
     if (current_page->allocated_bytes() == 0) {

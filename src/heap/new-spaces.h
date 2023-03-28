@@ -591,13 +591,13 @@ class V8_EXPORT_PRIVATE PagedSpaceForNewSpace final : public PagedSpaceBase {
   // Returns false if this isn't possible or reasonable (i.e., there
   // are no pages, or the current page is already empty), or true
   // if successful.
-  bool AddFreshPage() { return false; }
+  bool AddFreshPage();
 
   bool EnsureAllocation(int size_in_bytes, AllocationAlignment alignment,
                         AllocationOrigin origin,
                         int* out_max_aligned_size) final;
 
-  bool EnsureCurrentCapacity();
+  bool EnsureCurrentCapacity() { return true; }
 
   Page* InitializePage(MemoryChunk* chunk) final;
 
@@ -623,8 +623,6 @@ class V8_EXPORT_PRIVATE PagedSpaceForNewSpace final : public PagedSpaceBase {
 
   void MakeIterable() { free_list()->RepairLists(heap()); }
 
-  bool ShouldReleaseEmptyPage() const;
-
   void RefillFreeList() final;
 
   bool AddPageBeyondCapacity(int size_in_bytes, AllocationOrigin origin);
@@ -637,7 +635,6 @@ class V8_EXPORT_PRIVATE PagedSpaceForNewSpace final : public PagedSpaceBase {
     return current_capacity_ - free_list_->wasted_bytes();
   }
 
-  bool PreallocatePages();
   bool AllocatePage();
 
   const size_t initial_capacity_;
@@ -802,9 +799,6 @@ class V8_EXPORT_PRIVATE PagedNewSpace final : public NewSpace {
   // All operations on `memory_chunk_list_` should go through `paged_space_`.
   heap::List<MemoryChunk>& memory_chunk_list() final { UNREACHABLE(); }
 
-  bool ShouldReleaseEmptyPage() {
-    return paged_space_.ShouldReleaseEmptyPage();
-  }
   void ReleasePage(Page* page) { paged_space_.ReleasePage(page); }
 
   void ForceAllocationSuccessUntilNextGC() {
