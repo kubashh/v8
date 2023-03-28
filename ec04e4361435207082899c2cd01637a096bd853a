@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "735a12c5_a6778d2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-28T14:35:52Z",
+      "side": 1,
+      "message": "Darius, WDYT about this alternative to the table you had? I think the logic is sound and the result is equivalent, and this will make it simpler to add HoleyFloat64.",
+      "revId": "ec04e4361435207082899c2cd01637a096bd853a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
