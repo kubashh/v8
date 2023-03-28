@@ -70,6 +70,30 @@
       },
       "revId": "159aaa185b0eedb832e046e2342bd9832d0f4675",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37157fb4_b118edda",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-28T14:16:18Z",
+      "side": 1,
+      "message": "For a moment I thought that you broke my implementation, but I think that this is fine: when untagging the subsequent Phi, we take into account the current (post untagging) representation of its input. So, if a Phi has a Float64 input (be it an untagged Phi or something else), then it can\u0027t be untagged to Int32.\n\nWhile correct, this is possibly suboptimal, since this case will insert a Float64Box of the Float64 Phi input, but I think that we have to live with it if we don\u0027t want to iterate multiple times over the graph to find the optimal representation.",
+      "parentUuid": "687a5049_e26f8660",
+      "range": {
+        "startLine": 303,
+        "startChar": 8,
+        "endLine": 303,
+        "endChar": 61
+      },
+      "revId": "159aaa185b0eedb832e046e2342bd9832d0f4675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
