@@ -39,6 +39,30 @@
       },
       "revId": "3317c4ac7630bd7e7a3107c990d7d2324a407df3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4265fe3f_b43d37ce",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-03-28T15:48:25Z",
+      "side": 1,
+      "message": "what will the equivalent invariant be once HoleyFloat64 is there?",
+      "parentUuid": "1f9a3fe2_b8aafe12",
+      "range": {
+        "startLine": 175,
+        "startChar": 1,
+        "endLine": 175,
+        "endChar": 2
+      },
+      "revId": "3317c4ac7630bd7e7a3107c990d7d2324a407df3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
