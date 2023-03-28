@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe2b24a0_637433e7",
+        "filename": "include/v8-isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-03-28T19:05:47Z",
+      "side": 1,
+      "message": "If we see the functions were called several times more than the getters, it could also be seen as a signal to remove the old getters, right? That will provide a relative measurement to decide how safe to remove the old getters.",
+      "parentUuid": "a8c7db4e_24e92fdd",
+      "revId": "f6075a5bfd48261b42f2842f9a9b28315092b80c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cd43a7cc_89dbdc80",
         "filename": "src/flags/flag-definitions.h",
         "patchSetId": 3
@@ -48,6 +66,24 @@
       "writtenOn": "2023-03-21T16:41:51Z",
       "side": 1,
       "message": "Why isn\u0027t this a single flag to toggle between getters vs functions? The state where both getters are removed and functions aren\u0027t added is invalid.",
+      "revId": "f6075a5bfd48261b42f2842f9a9b28315092b80c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4958e43_a1c17b20",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-03-28T19:05:47Z",
+      "side": 1,
+      "message": "I do not believe the decision to remove the getters should block the addition of the functions. We may roll out the new functions, if somehow someone already use the getters, to allow them to migrate to the new functions before remove the functions, right?",
+      "parentUuid": "cd43a7cc_89dbdc80",
       "revId": "f6075a5bfd48261b42f2842f9a9b28315092b80c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
