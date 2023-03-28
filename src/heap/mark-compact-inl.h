@@ -100,7 +100,7 @@ bool MarkCompactCollector::ShouldMarkObject(HeapObject object) const {
   if (object.InReadOnlySpace()) return false;
   if (V8_LIKELY(!uses_shared_heap_)) return true;
   if (is_shared_space_isolate_) return true;
-  return !object.InAnySharedSpace();
+  return !object.InSharedHeap();
 }
 
 template <typename MarkingState>

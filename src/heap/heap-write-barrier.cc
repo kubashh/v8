@@ -26,7 +26,7 @@ MarkingBarrier* WriteBarrier::CurrentMarkingBarrier(
   DCHECK_NOT_NULL(marking_barrier);
 #if DEBUG
   if (!verification_candidate.is_null() &&
-      !verification_candidate.InAnySharedSpace()) {
+      !verification_candidate.InSharedHeap()) {
     Heap* host_heap =
         MemoryChunk::FromHeapObject(verification_candidate)->heap();
     LocalHeap* local_heap = LocalHeap::Current();

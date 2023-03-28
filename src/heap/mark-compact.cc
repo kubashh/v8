@@ -1237,7 +1237,7 @@ class MarkCompactCollector::SharedHeapObjectVisitor final
  private:
   V8_INLINE void CheckForSharedObject(HeapObject host, ObjectSlot slot,
                                       Object object) {
-    DCHECK(!host.InAnySharedSpace());
+    DCHECK(!host.InSharedHeap());
     if (!object.IsHeapObject()) return;
     HeapObject heap_object = HeapObject::cast(object);
     if (!heap_object.InWritableSharedSpace()) return;

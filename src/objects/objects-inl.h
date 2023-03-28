@@ -77,7 +77,7 @@ bool Object::IsTaggedIndex() const {
 }
 
 bool Object::InSharedHeap() const {
-  return IsHeapObject() && HeapObject::cast(*this).InAnySharedSpace();
+  return IsHeapObject() && HeapObject::cast(*this).InSharedHeap();
 }
 
 bool Object::InWritableSharedSpace() const {
@@ -198,7 +198,7 @@ void Object::Relaxed_WriteField(size_t offset, T value) {
       static_cast<AtomicT>(value));
 }
 
-bool HeapObject::InAnySharedSpace() const {
+bool HeapObject::InSharedHeap() const {
   if (IsReadOnlyHeapObject(*this)) return V8_SHARED_RO_HEAP_BOOL;
   return InWritableSharedSpace();
 }
@@ -1245,7 +1245,7 @@ bool Object::IsShared() const {
   // Check if this object is already shared.
   InstanceType instance_type = object.map().instance_type();
   if (InstanceTypeChecker::IsAlwaysSharedSpaceJSObject(instance_type)) {
-    DCHECK(object.InAnySharedSpace());
+    DCHECK(object.InSharedHeap());
     return true;
   }
   switch (instance_type) {
@@ -1255,7 +1255,7 @@ bool Object::IsShared() const {
     case SHARED_EXTERNAL_ONE_BYTE_STRING_TYPE:
     case SHARED_UNCACHED_EXTERNAL_STRING_TYPE:
     case SHARED_UNCACHED_EXTERNAL_ONE_BYTE_STRING_TYPE:
-      DCHECK(object.InAnySharedSpace());
+      DCHECK(object.InSharedHeap());
       return true;
     case INTERNALIZED_STRING_TYPE:
     case ONE_BYTE_INTERNALIZED_STRING_TYPE:
@@ -1264,7 +1264,7 @@ bool Object::IsShared() const {
     case UNCACHED_EXTERNAL_INTERNALIZED_STRING_TYPE:
     case UNCACHED_EXTERNAL_ONE_BYTE_INTERNALIZED_STRING_TYPE:
       if (v8_flags.shared_string_table) {
-        DCHECK(object.InAnySharedSpace());
+        DCHECK(object.InSharedHeap());
         return true;
       }
       return false;
