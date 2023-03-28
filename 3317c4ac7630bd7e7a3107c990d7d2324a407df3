@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87d7105d_a4bf902b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-28T15:40:32Z",
+      "side": 1,
+      "message": "Very nice, thanks! :)",
+      "revId": "3317c4ac7630bd7e7a3107c990d7d2324a407df3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f9a3fe2_b8aafe12",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-03-28T15:40:32Z",
+      "side": 1,
+      "message": "I think that here, `DCHECK(possible_inputs.contains(Float64) \u0026\u0026 allowed_inputs_for_uses.contains_only(Int32))` should hold. It will break when you introduce HoleyFloat64 representation, but it might make sense to still add this DCHECK for now.",
+      "range": {
+        "startLine": 175,
+        "startChar": 1,
+        "endLine": 175,
+        "endChar": 2
+      },
+      "revId": "3317c4ac7630bd7e7a3107c990d7d2324a407df3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
