@@ -69,6 +69,30 @@
       },
       "revId": "4c1b53f7f4ab3db06b2920c8b17469aa1809d41c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "101afda3_bc56b7c0",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 2171,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-29T12:27:54Z",
+      "side": 1,
+      "message": "That list contains a lot of `n1-highcpu-16` machines. Aren\u0027t they Intel machines? But why do they match the `cpu\u003darm64` filter then?",
+      "parentUuid": "30d52d66_a5bd57ec",
+      "range": {
+        "startLine": 2167,
+        "startChar": 4,
+        "endLine": 2171,
+        "endChar": 6
+      },
+      "revId": "4c1b53f7f4ab3db06b2920c8b17469aa1809d41c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
