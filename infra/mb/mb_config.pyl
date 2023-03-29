@@ -203,6 +203,7 @@
       'V8 Android Arm64 - builder': 'release_android_arm64',
       'V8 Android Arm64 - debug builder': 'debug_android_arm64',
       'V8 Arm64 - builder': 'release_arm64_hard_float',
+      'V8 Linux - arm64 - builder': 'release_simulate_arm64',
       'V8 Linux - arm64 - sim - builder': 'release_simulate_arm64_gcmole',
       'V8 Linux - arm64 - sim - debug builder': 'debug_simulate_arm64',
       'V8 Linux - arm64 - sim - gc stress - builder': 'debug_simulate_arm64',
