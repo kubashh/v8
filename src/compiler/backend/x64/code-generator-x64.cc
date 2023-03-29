@@ -4,6 +4,7 @@
 
 #include <limits>
 
+#include "src/base/logging.h"
 #include "src/base/optional.h"
 #include "src/base/overflowing-math.h"
 #include "src/codegen/assembler.h"
@@ -3097,6 +3098,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
             ASSEMBLE_SIMD256_BINOP(addps);
             break;
           }
+          case kL64: {
+            // F64x4Add
+            ASSEMBLE_SIMD256_BINOP(addpd);
+            break;
+          }
           default:
             UNREACHABLE();
         }
@@ -3128,6 +3134,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           case kL32: {
             // F32x8Sub
             ASSEMBLE_SIMD256_BINOP(subps);
+            break;
+          }
+          case kL64: {
+            // F64x4Sub
+            ASSEMBLE_SIMD256_BINOP(subpd);
             break;
           }
           default:
@@ -3771,6 +3782,31 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           default:
             UNREACHABLE();
         }
+      } else if (vec_len == kV256) {
+        switch (lane_size) {
+          case kL64: {
+            // I64x4Add
+            ASSEMBLE_SIMD256_BINOP(paddq);
+            break;
+          }
+          case kL32: {
+            // I32x8Add
+            ASSEMBLE_SIMD256_BINOP(paddd);
+            break;
+          }
+          case kL16: {
+            // I16x16Add
+            ASSEMBLE_SIMD256_BINOP(paddw);
+            break;
+          }
+          case kL8: {
+            // I8x32Add
+            ASSEMBLE_SIMD256_BINOP(paddb);
+            break;
+          }
+          default:
+            UNREACHABLE();
+        }
       } else {
         UNREACHABLE();
       }
@@ -3799,6 +3835,31 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           case kL64: {
             // I64x2Sub
             ASSEMBLE_SIMD_BINOP(psubq);
+            break;
+          }
+          default:
+            UNREACHABLE();
+        }
+      } else if (vec_len == kV256) {
+        switch (lane_size) {
+          case kL64: {
+            // I64x4Sub
+            ASSEMBLE_SIMD256_BINOP(psubq);
+            break;
+          }
+          case kL32: {
+            // I32x8Sub
+            ASSEMBLE_SIMD256_BINOP(psubd);
+            break;
+          }
+          case kL16: {
+            // I16x16Sub
+            ASSEMBLE_SIMD256_BINOP(psubw);
+            break;
+          }
+          case kL8: {
+            // I8x32Sub
+            ASSEMBLE_SIMD256_BINOP(psubb);
             break;
           }
           default:
