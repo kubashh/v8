@@ -45,6 +45,30 @@
       },
       "revId": "4c1b53f7f4ab3db06b2920c8b17469aa1809d41c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30d52d66_a5bd57ec",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 2171,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-29T11:59:15Z",
+      "side": 1,
+      "message": "Note those are devices used by Fuchsia. I don\u0027t know if our executables run on this. I remember trying this at some point and I didn\u0027t succeed...",
+      "parentUuid": "c4d937e0_772b30d9",
+      "range": {
+        "startLine": 2167,
+        "startChar": 4,
+        "endLine": 2171,
+        "endChar": 6
+      },
+      "revId": "4c1b53f7f4ab3db06b2920c8b17469aa1809d41c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

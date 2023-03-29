@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03a2bffa_f099a5f5",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 2177,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-29T11:59:15Z",
+      "side": 1,
+      "message": "Those two is enough for now.",
+      "range": {
+        "startLine": 2176,
+        "startChar": 6,
+        "endLine": 2177,
+        "endChar": 61
+      },
+      "revId": "e791633b0207f2f41ccedd7bf592251cafe3b2ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
