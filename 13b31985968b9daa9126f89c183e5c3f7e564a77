@@ -16,6 +16,24 @@
       "message": "Apparently, `GetStrongValue` can return a null pointer even when accessing a valid descriptor (with an index strictly less than the number of own descriptors).",
       "revId": "13b31985968b9daa9126f89c183e5c3f7e564a77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcd079dd_276285c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-03-29T05:51:10Z",
+      "side": 1,
+      "message": "Oh sorry, I only saw this CL post-revert. Could you please merge it into the reland as Patchset 1?",
+      "parentUuid": "19696fbb_56f9a1fc",
+      "revId": "13b31985968b9daa9126f89c183e5c3f7e564a77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
