@@ -142,6 +142,16 @@ in_category(
         notifies = ["V8 Flake Sheriff"],
     ),
     multibranch_builder_pair(
+        name = "V8 Linux - arm64",
+        triggered_by_gitiles = True,
+        dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
+        properties = {"builder_group": "client.v8.ports"},
+        gclient_vars = [GCLIENT_VARS.GCMOLE],
+        tester_notifies = ["V8 Flake Sheriff"],
+        use_goma = GOMA.NO,
+        use_remoteexec = RECLIENT.DEFAULT,
+    ),
+    multibranch_builder_pair(
         name = "V8 Linux - arm64 - sim",
         triggered_by_gitiles = True,
         dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
