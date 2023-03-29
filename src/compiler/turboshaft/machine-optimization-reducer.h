@@ -1682,6 +1682,67 @@ class MachineOptimizationReducer : public Next {
                       RegisterRepresentation rep) {
     LABEL_BLOCK(no_change) { return Next::ReducePhi(inputs, rep); }
     if (inputs.size() == 0) goto no_change;
+    if (inputs.size() == 2) {
+      OpIndex vtrue = inputs[0];
+      OpIndex vfalse = inputs[1];
+
+      DCHECK(Asm().current_block()->IsMerge());
+      DCHECK(Asm().current_block()->HasExactlyNPredecessors(2));
+      auto input_block = Asm().current_block()->Predecessors();
+      Block* if_true = input_block[0];
+      Block* if_false = input_block[1];
+
+      const Block* if_true_origin =
+          if_true->IsBranchTarget() ? if_true->LastPredecessor() : nullptr;
+      const Block* if_false_origin =
+          if_false->IsBranchTarget() ? if_false->LastPredecessor() : nullptr;
+      if (if_true_origin && if_false_origin &&
+          if_true_origin->index() == if_false_origin->index()) {
+        const Operation& last_op =
+            if_true_origin->LastOperation(Asm().output_graph());
+        if (const BranchOp* branch = last_op.template TryCast<BranchOp>()) {
+          if (branch->if_true->index() != if_true->index()) {
+            std::swap(vtrue, vfalse);
+          }
+          OpIndex condition = branch->condition();
+          if (OpIndex cond_left, cond_right;
+              Asm().MatchComparison(condition, &cond_left, &cond_right,
+                                    ComparisonOp::Kind::kSignedLessThan,
+                                    RegisterRepresentation::Word32())) {
+            OpIndex vfalse_left, vfalse_right;
+            if (Asm().MatchZero(cond_left) && cond_right == vtrue &&
+                Asm().MatchWordSub(vfalse, &vfalse_left, &vfalse_right,
+                                   WordRepresentation::Word32())) {
+              if (Asm().MatchZero(vfalse_left) && vfalse_right == vtrue) {
+                if (SupportedOperations::word32_select()) {
+                  // Select positive value with conditional move if is supported
+                  // by platform.
+                  OpIndex new_vfalse =
+                      Asm().Word32Sub(Asm().Word32Constant(0), vtrue);
+                  OpIndex new_condition =
+                      Asm().Int32LessThan(new_vfalse, Asm().Word32Constant(0));
+                  OpIndex abs = Asm().Select(new_condition, vtrue, new_vfalse,
+                                             RegisterRepresentation::Word32(),
+                                             BranchHint::kNone,
+                                             SelectOp::Implementation::kCMove);
+                  return abs;
+                } else {
+                  // Generate absolute integer value.
+                  //
+                  //    let sign = input >> 31 in
+                  //    (input ^ sign) - sign
+                  OpIndex sign = Asm().Word32ShiftRightArithmetic(
+                      vtrue, Asm().Word32Constant(31));
+                  OpIndex abs = Asm().Word32Sub(
+                      Asm().Word32BitwiseXor(vtrue, sign), sign);
+                  return abs;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     OpIndex first = inputs.first();
     for (const OpIndex& input : inputs) {
       if (input != first) goto no_change;
