@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "599f90c8_4956c382",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2023-03-29T11:34:48Z",
+      "side": 1,
+      "message": "cross-compile is good enough",
+      "range": {
+        "startLine": 206,
+        "startChar": 37,
+        "endLine": 206,
+        "endChar": 59
+      },
+      "revId": "4c1b53f7f4ab3db06b2920c8b17469aa1809d41c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4d937e0_772b30d9",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 2171,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2023-03-29T11:34:48Z",
+      "side": 1,
+      "message": "https://chromium-swarm.appspot.com/botlist?c\u003did\u0026c\u003dtask\u0026c\u003dos\u0026c\u003dstatus\u0026d\u003dasc\u0026f\u003dcpu%3Aarm64\u0026f\u003dos%3ALinux\u0026f\u003dpool%3Achromium.tests\u0026k\u003dpool\u0026s\u003did",
+      "range": {
+        "startLine": 2167,
+        "startChar": 4,
+        "endLine": 2171,
+        "endChar": 6
+      },
+      "revId": "4c1b53f7f4ab3db06b2920c8b17469aa1809d41c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
