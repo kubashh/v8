@@ -1617,6 +1617,13 @@ void JSIteratorDropHelper::JSIteratorDropHelperPrint(std::ostream& os) {
   JSObjectPrintBody(os, *this);
 }
 
+void JSIteratorFlatMapHelper::JSIteratorFlatMapHelperPrint(std::ostream& os) {
+  JSIteratorHelperPrintHeader(os, "JSIteratorFlatMapHelper");
+  os << "\n - mapper: " << Brief(mapper());
+  os << "\n - counter: " << counter();
+  JSObjectPrintBody(os, *this);
+}
+
 void JSWeakMap::JSWeakMapPrint(std::ostream& os) {
   JSObjectPrintHeader(os, *this, "JSWeakMap");
   os << "\n - table: " << Brief(table());
