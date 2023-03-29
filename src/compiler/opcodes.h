@@ -1080,7 +1080,12 @@
 
 // SIMD256 for AVX
 #define MACHINE_SIMD256_OP_LIST(V) \
+  V(F64x4Add)                      \
   V(F32x8Add)                      \
+  V(I64x4Add)                      \
+  V(I32x8Add)                      \
+  V(I16x16Add)                     \
+  V(I8x32Add)                      \
   V(F32x8Sub)                      \
   V(F32x8Mul)                      \
   V(F32x8Div)                      \
