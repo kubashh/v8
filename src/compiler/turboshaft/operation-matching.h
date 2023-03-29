@@ -235,6 +235,21 @@ class OperationMatching {
     return true;
   }
 
+  bool MatchComparison(OpIndex matched, OpIndex* left, OpIndex* right,
+                       ComparisonOp::Kind kind, RegisterRepresentation rep) {
+    const ComparisonOp* op = TryCast<ComparisonOp>(matched);
+    if (!op || kind != op->kind || rep != op->rep) return false;
+    *left = op->left();
+    *right = op->right();
+    return true;
+  }
+
+  bool MatchSignedLessThan(OpIndex matched, OpIndex* left, OpIndex* right,
+                           WordRepresentation rep) {
+    return MatchComparison(matched, left, right,
+                           ComparisonOp::Kind::kSignedLessThan, rep);
+  }
+
   bool MatchFloatUnary(OpIndex matched, OpIndex* input, FloatUnaryOp::Kind kind,
                        FloatRepresentation rep) {
     const FloatUnaryOp* op = TryCast<FloatUnaryOp>(matched);
