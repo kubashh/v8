@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da1515ea_73e39280",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-29T15:00:50Z",
+      "side": 1,
+      "message": "I am confused by some of the changes. Is this supposed to properly fix the issues, or is this meant as band-aid until someone finds time to fix it for real?",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "307f5e17_fec16217",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-29T15:00:50Z",
+      "side": 1,
+      "message": "Any reason to not add the `static` unconditionally?",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "083cd03c_9c0fe69b",
+        "filename": "src/execution/arm64/simulator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2560,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-29T15:00:50Z",
+      "side": 1,
+      "message": "Could you use a `std::atomic_thread_fence` instead, on all OSes?",
+      "range": {
+        "startLine": 2556,
+        "startChar": 0,
+        "endLine": 2560,
+        "endChar": 6
+      },
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "371ae563_1e7a0084",
+        "filename": "src/trap-handler/trap-handler-simulator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-29T15:00:50Z",
+      "side": 1,
+      "message": "Is there a definition for this function anywhere?",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d38ebba_9b109818",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14775,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-29T15:00:50Z",
+      "side": 1,
+      "message": "Can we express this via `std::aligned_storage`?",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
