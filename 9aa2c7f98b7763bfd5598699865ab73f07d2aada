@@ -16,6 +16,213 @@
       "message": "Hi all, I had take a look into the comments and fixed all the typo and grammar issue I can find.",
       "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8f4377b_c35a1979",
+        "filename": "BUILD.gn",
+        "patchSetId": 24
+      },
+      "lineNbr": 3197,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-29T10:01:19Z",
+      "side": 1,
+      "message": "This needs to be added to BUILD.bazel as well",
+      "range": {
+        "startLine": 3197,
+        "startChar": 14,
+        "endLine": 3197,
+        "endChar": 20
+      },
+      "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ee8bddc_dfaac220",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-29T10:01:19Z",
+      "side": 1,
+      "message": "Please come up with a proper one line description here.",
+      "range": {
+        "startLine": 1588,
+        "startChar": 37,
+        "endLine": 1588,
+        "endChar": 40
+      },
+      "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3a7042f_3878b162",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 1589,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-29T10:01:19Z",
+      "side": 1,
+      "message": "The comment can go into the description.",
+      "range": {
+        "startLine": 1589,
+        "startChar": 12,
+        "endLine": 1589,
+        "endChar": 13
+      },
+      "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44ae7ae5_64ada7ef",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1668,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-29T10:01:19Z",
+      "side": 1,
+      "message": "Spurious edits",
+      "range": {
+        "startLine": 1668,
+        "startChar": 5,
+        "endLine": 1668,
+        "endChar": 12
+      },
+      "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d768a799_60cf5509",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-29T10:01:19Z",
+      "side": 1,
+      "message": "Spurious edits",
+      "range": {
+        "startLine": 1810,
+        "startChar": 5,
+        "endLine": 1810,
+        "endChar": 10
+      },
+      "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21b1ddb6_83164b66",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2309,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-29T10:01:19Z",
+      "side": 1,
+      "message": "This can go into `RecomputeLimits()` above?",
+      "range": {
+        "startLine": 2309,
+        "startChar": 15,
+        "endLine": 2309,
+        "endChar": 30
+      },
+      "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c593bd3_c7d1b3df",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 2470,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-29T10:01:19Z",
+      "side": 1,
+      "message": "That should go to regular fields.",
+      "range": {
+        "startLine": 2470,
+        "startChar": 18,
+        "endLine": 2470,
+        "endChar": 32
+      },
+      "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afa5c0ef_cd6aeb07",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-29T10:01:19Z",
+      "side": 1,
+      "message": "Fields go to the bottom. Please follow Google C++ code style.",
+      "range": {
+        "startLine": 41,
+        "startChar": 11,
+        "endLine": 41,
+        "endChar": 16
+      },
+      "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc38d658_ddb84116",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-03-29T10:01:19Z",
+      "side": 1,
+      "message": "Here and below: Can we use `base::TimeSpan` for all durations?",
+      "range": {
+        "startLine": 43,
+        "startChar": 37,
+        "endLine": 43,
+        "endChar": 45
+      },
+      "revId": "9aa2c7f98b7763bfd5598699865ab73f07d2aada",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
