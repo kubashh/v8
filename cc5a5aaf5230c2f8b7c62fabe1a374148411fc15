@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc0b8981_05be88b8",
+        "filename": "builders/multibranch/ports.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-29T12:00:22Z",
+      "side": 1,
+      "message": "Please don\u0027t start adding something new on multibranch.\n\nNew \u003d\u003d experimental.",
+      "range": {
+        "startLine": 145,
+        "startChar": 16,
+        "endLine": 145,
+        "endChar": 32
+      },
+      "revId": "cc5a5aaf5230c2f8b7c62fabe1a374148411fc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bbdee97_524af353",
+        "filename": "builders/multibranch/ports.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-29T12:00:22Z",
+      "side": 1,
+      "message": "c/p? we don\u0027t need this.",
+      "range": {
+        "startLine": 149,
+        "startChar": 7,
+        "endLine": 149,
+        "endChar": 43
+      },
+      "revId": "cc5a5aaf5230c2f8b7c62fabe1a374148411fc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
