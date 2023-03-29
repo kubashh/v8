@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e22d0448_0a4c537e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-29T23:27:16Z",
+      "side": 1,
+      "message": "Shu, thanks for your comments. I have applied them and uploaded a new patch. I also added one comment/question for you on line 372 of `iterator-helpers.tq`.",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3494979_0b9d9920",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-29T23:27:16Z",
+      "side": 1,
+      "message": "Don\u0027t we need a `try/catch` here because of `?` in the spec description?",
+      "range": {
+        "startLine": 370,
+        "startChar": 10,
+        "endLine": 372,
+        "endChar": 53
+      },
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

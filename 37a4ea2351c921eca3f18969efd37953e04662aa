@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01fa43c8_ece7f2c9",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-29T23:27:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "258dd3e4_6cac459a",
+      "range": {
+        "startLine": 470,
+        "startChar": 19,
+        "endLine": 470,
+        "endChar": 29
+      },
+      "revId": "37a4ea2351c921eca3f18969efd37953e04662aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc802204_eabd6043",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-03-23T19:50:11Z",
       "side": 1,
       "message": "`mapped` has a type of `JSAny` but `GetIteratorFlattenable` expects `JSReciever`. If the casting makes sense here, I can add a specific message template for it. The closest one is what is used here.",
+      "range": {
+        "startLine": 533,
+        "startChar": 14,
+        "endLine": 533,
+        "endChar": 24
+      },
+      "revId": "37a4ea2351c921eca3f18969efd37953e04662aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72d734e1_7266e3c1",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-29T23:27:16Z",
+      "side": 1,
+      "message": "Done. Based on our discussion, it is supposed to cast the input of `GetIteratorFlattenable` before passing it.",
+      "parentUuid": "dc802204_eabd6043",
       "range": {
         "startLine": 533,
         "startChar": 14,

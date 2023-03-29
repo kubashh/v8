@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1e5f942_a10b61f6",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-29T23:27:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55347869_dc97009d",
+      "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bda6e7b4_70596838",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-03-24T19:06:07Z",
       "side": 1,
       "message": "This need nested `try catch` as we discussed.",
+      "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2edc34f0_ece211d1",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-29T23:27:16Z",
+      "side": 1,
+      "message": "Because of having `Done` label, I think we do not need another `try catch`. I have added `catch` to the existing try after `Done` label.",
+      "parentUuid": "bda6e7b4_70596838",
       "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dac9988d_24101efa",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-29T23:27:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c778b8b6_e4283b33",
+      "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f80e9e8_b99903f0",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "514a9d8f_2a59c949",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-29T23:27:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f80e9e8_b99903f0",
+      "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbd53531_9930b7c1",
@@ -99,6 +171,24 @@
       "writtenOn": "2023-03-24T19:06:07Z",
       "side": 1,
       "message": "Let\u0027s also add some tests where the inner iterator throws, since the `return` logic here is tricky with 2 iterators.",
+      "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dede6067_e654fad8",
+        "filename": "test/mjsunit/harmony/iterator-helpers.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-29T23:27:16Z",
+      "side": 1,
+      "message": "Sure, I have added 4 new tests.",
+      "parentUuid": "cbd53531_9930b7c1",
       "revId": "8c7c34e3ef5ac6fea3e88d1f683ca8d78bcb778c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
