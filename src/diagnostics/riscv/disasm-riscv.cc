@@ -2538,10 +2538,10 @@ void Decoder::DecodeRvvFVV(Instruction* instr) {
       Format(instr, "vfnmsac.vv 'vd, 'vs1, 'vs2'vm");
       break;
     case RO_V_VFMV_FS:
-      if (instr->Vs1Value() == 0x0) {
+      if (instr->RvvVM()) {
         Format(instr, "vfmv.f.s  'fd, 'vs2");
       } else {
-        UNSUPPORTED_RISCV();
+        Format(instr, "vfmerge.vfm 'vd, 'vs2, 'fs1, v0");
       }
       break;
     case RO_V_VFWADD_VV:

@@ -7148,16 +7148,31 @@ void Simulator::DecodeRvvFVF() {
           { vd = fsgnj64(vs2, fs1, false, true); })
       break;
     case RO_V_VFMV_VF:
-      RVV_VI_VFP_VF_LOOP(
-          {},
-          {
-            vd = fs1;
-            USE(vs2);
-          },
-          {
-            vd = fs1;
-            USE(vs2);
-          })
+      if (instr_.RvvVM()) {
+        RVV_VI_VFP_VF_LOOP(
+            {},
+            {
+              vd = fs1;
+              USE(vs2);
+            },
+            {
+              vd = fs1;
+              USE(vs2);
+            });
+      } else {
+        RVV_VI_VFP_VF_LOOP(
+            {},
+            {
+              bool use_first =
+                  (Rvvelt<uint64_t>(0, (i / 64)) >> (i % 64)) & 0x1;
+              vd = use_first ? fs1 : vs2;
+            },
+            {
+              bool use_first =
+                  (Rvvelt<uint64_t>(0, (i / 64)) >> (i % 64)) & 0x1;
+              vd = use_first ? fs1 : vs2;
+            });
+      }
       break;
     case RO_V_VFADD_VF:
       RVV_VI_VFP_VF_LOOP(
