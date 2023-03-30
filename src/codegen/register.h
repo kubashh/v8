@@ -5,6 +5,8 @@
 #ifndef V8_CODEGEN_REGISTER_H_
 #define V8_CODEGEN_REGISTER_H_
 
+#include <type_traits>
+
 #include "src/codegen/register-arch.h"
 #include "src/codegen/reglist.h"
 
@@ -23,7 +25,8 @@ template <typename... RegTypes,
           // All arguments must be either Register or DoubleRegister.
           typename = typename std::enable_if_t<
               std::conjunction_v<std::is_same<Register, RegTypes>...> ||
-              std::conjunction_v<std::is_same<DoubleRegister, RegTypes>...>>>
+              std::conjunction_v<std::is_same<DoubleRegister, RegTypes>...> ||
+              std::conjunction_v<std::is_same<YMMRegister, RegTypes>...>>>
 inline constexpr bool AreAliased(RegTypes... regs) {
   using FirstRegType = std::tuple_element_t<0, std::tuple<RegTypes...>>;
   int num_different_regs = RegListBase<FirstRegType>{regs...}.Count();
