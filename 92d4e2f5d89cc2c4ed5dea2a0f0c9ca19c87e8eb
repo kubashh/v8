@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57355bad_b768ea40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1575637
+      },
+      "writtenOn": "2023-03-30T23:21:58Z",
+      "side": 1,
+      "message": "I understand your confusion. Let me give a short introduction about this CL and my motives and goals for it.\n\nI\u0027m working on NodeJS supporting Windows. In Node, we periodically update the V8 engine. When updating to V8 11.2, we noticed issues with cross-compilation from x64 to arm64 (Node uses MSVC). I started investigating that and found the issues I am addressing in this CL.\n\nGiven that this is my first contact with the V8 source code, my knowledge of it is extremely low. That\u0027s why I aimed to mostly add changes that would not affect anything that\u0027s already working (thus wrapping all my changes in \"#ifdef V8_MSVC_X64_TO_ARM64\"). Also, my main focus is enabling V8 compilation as a part of Node.\n\nSo, to answer you in short, this is meant as a band-aid mainly because of my lack of knowledge about V8, but if you and/or other reviewers can offer some guidance I\u0027d be open to working on this and making it a real fix.",
+      "parentUuid": "da1515ea_73e39280",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "307f5e17_fec16217",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-03-29T15:00:50Z",
       "side": 1,
       "message": "Any reason to not add the `static` unconditionally?",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "099d8b36_f57f00c5",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1575637
+      },
+      "writtenOn": "2023-03-30T23:21:58Z",
+      "side": 1,
+      "message": "When I tried that, I got the error when cross-compiling Windows x64 to arm64 with clang-cl:\n\n```../../src/d8/d8-test.cc(324,44): error: explicit specialization cannot have a storage class [-Werror]\n  static const FastApiTypedArray\u003cuint8_t\u003e* AnyCTypeToTypedArray\u003cuint8_t\u003e(\n  ~~~~~~~                                  ^```",
+      "parentUuid": "307f5e17_fec16217",
       "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -60,6 +96,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94b49a63_122a2b4a",
+        "filename": "src/execution/arm64/simulator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2560,
+      "author": {
+        "id": 1575637
+      },
+      "writtenOn": "2023-03-30T23:21:58Z",
+      "side": 1,
+      "message": "Thanks for the suggestion, I\u0027ll change these with `std::atomic_thread_fence(std::memory_order_seq_cst);`. The construction I used was already used in this file (that\u0027s why I copied it), so I\u0027ll update those as well.",
+      "parentUuid": "083cd03c_9c0fe69b",
+      "range": {
+        "startLine": 2556,
+        "startChar": 0,
+        "endLine": 2560,
+        "endChar": 6
+      },
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "371ae563_1e7a0084",
         "filename": "src/trap-handler/trap-handler-simulator.h",
         "patchSetId": 1
@@ -77,6 +137,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d86f596b_43a1f363",
+        "filename": "src/trap-handler/trap-handler-simulator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1575637
+      },
+      "writtenOn": "2023-03-30T23:21:58Z",
+      "side": 1,
+      "message": "No. This is the dirtiest part of the CL by far. This was added mainly for making sure `asm` is not used when cross-compiling with MSVC as that\u0027s forbidden and it was making problems in NodeJS. Additionally, cross-compiling V8 is already broken on Windows with both clang-cl and MSVC (from my tests), so even this doesn\u0027t additionally break anything, but I\u0027m aware of the problem.",
+      "parentUuid": "371ae563_1e7a0084",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0d38ebba_9b109818",
         "filename": "test/cctest/test-assembler-arm64.cc",
         "patchSetId": 1
@@ -88,6 +166,24 @@
       "writtenOn": "2023-03-29T15:00:50Z",
       "side": 1,
       "message": "Can we express this via `std::aligned_storage`?",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5db6d63e_8d8b8c8b",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14775,
+      "author": {
+        "id": 1575637
+      },
+      "writtenOn": "2023-03-30T23:21:58Z",
+      "side": 1,
+      "message": "Thanks for the suggestion. As I already mentioned before, I was trying not to change any existing code, so I just added what was needed for cross-compilation with MSVC. I can make that change.",
+      "parentUuid": "0d38ebba_9b109818",
       "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
