@@ -471,6 +471,8 @@ class V8_EXPORT_PRIVATE SharedMacroAssemblerBase : public MacroAssemblerBase {
                  Register tmp_shift);
   void I64x2Mul(XMMRegister dst, XMMRegister lhs, XMMRegister rhs,
                 XMMRegister tmp1, XMMRegister tmp2);
+  void I64x4Mul(YMMRegister dst, YMMRegister lhs, YMMRegister rhs,
+                YMMRegister tmp1, YMMRegister tmp2);
   void I64x2ExtMul(XMMRegister dst, XMMRegister src1, XMMRegister src2,
                    XMMRegister scratch, bool low, bool is_signed);
   void I64x2SConvertI32x4High(XMMRegister dst, XMMRegister src);
