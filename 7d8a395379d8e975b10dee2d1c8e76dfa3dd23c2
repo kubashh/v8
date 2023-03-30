@@ -18,6 +18,57 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b0d2550_c40f8fb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T00:40:02Z",
+      "side": 1,
+      "message": "Looks pretty good! Mostly nits below.",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26a67372_553df74b",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T00:40:02Z",
+      "side": 1,
+      "message": "You can skip the extra `Cast` by doing `case (helper: JSIteratorFlatMapHelper)`, which will automatically do the cast.\n\n(The `Cast` as is currently written also can\u0027t fail, so you can do an `otherwise unreachable`, but there\u0027s no reason to do that anyways since you don\u0027t need to `Cast` at all.)",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a63c233_d9bd488a",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T00:40:02Z",
+      "side": 1,
+      "message": "This `try/catch` is unnecessary because `Return ? IteratorClose(completion, iterated)` just re-throws. We don\u0027t need to re-try to close the underlying.",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3494979_0b9d9920",
@@ -36,6 +87,144 @@
         "startChar": 10,
         "endLine": 372,
         "endChar": 53
+      },
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60218208_bcf99461",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T00:40:02Z",
+      "side": 1,
+      "message": "No, because this step rethrows whatever `IteratorClose()` throws, so there\u0027s no point in catching an exception only to re-throw it.",
+      "parentUuid": "e3494979_0b9d9920",
+      "range": {
+        "startLine": 370,
+        "startChar": 10,
+        "endLine": 372,
+        "endChar": 53
+      },
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d2c79e2_3426fe55",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T00:40:02Z",
+      "side": 1,
+      "message": "Please rename this `kFlatMapMethodName` since it\u0027s global now.",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23b76f51_01a3037f",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T00:40:02Z",
+      "side": 1,
+      "message": "Nit: Where multiple levels of spec steps appear in the same block in the code, please indent substeps like\n\n```\n      // 3. If innerNext is false, then\n      //   a. Set innerAlive to false.\n```",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb14ff30_62b8eb94",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T00:40:02Z",
+      "side": 1,
+      "message": "Nit: Please comment which steps this `IfAbruptCloseIterator` corresponds to.",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c1f67ed_a1b1979c",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1623,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T00:40:02Z",
+      "side": 1,
+      "message": "Probably also worth printing out `innerIterator` and `innerAlive`. For `innerIterator` you\u0027ll need to manually print out each individual field since it\u0027s a Torque struct.",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acf438c4_62f03cac",
+        "filename": "test/mjsunit/harmony/iterator-helpers.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T00:40:02Z",
+      "side": 1,
+      "message": "This test name doesn\u0027t seem accurate to me. There is an inner iterator (the `split(\u0027 \u0027).values`, no?",
+      "range": {
+        "startLine": 301,
+        "startChar": 10,
+        "endLine": 301,
+        "endChar": 36
+      },
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2426129_d8d12432",
+        "filename": "test/mjsunit/harmony/iterator-helpers.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T00:40:02Z",
+      "side": 1,
+      "message": "Also not sure what \"all\" refers to here.",
+      "range": {
+        "startLine": 313,
+        "startChar": 10,
+        "endLine": 313,
+        "endChar": 37
       },
       "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
