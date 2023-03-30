@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71d9e662_5f67683e",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-30T17:00:44Z",
+      "side": 1,
+      "message": "Good points. Done.",
+      "parentUuid": "26a67372_553df74b",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a63c233_d9bd488a",
@@ -65,6 +83,24 @@
       "writtenOn": "2023-03-30T00:40:02Z",
       "side": 1,
       "message": "This `try/catch` is unnecessary because `Return ? IteratorClose(completion, iterated)` just re-throws. We don\u0027t need to re-try to close the underlying.",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c51dbcd9_f51dacec",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-30T17:00:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a63c233_d9bd488a",
       "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -133,6 +169,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf8b99bf_bf23403d",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-30T17:00:44Z",
+      "side": 1,
+      "message": "Good point. Done.",
+      "parentUuid": "9d2c79e2_3426fe55",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23b76f51_01a3037f",
@@ -146,6 +200,24 @@
       "writtenOn": "2023-03-30T00:40:02Z",
       "side": 1,
       "message": "Nit: Where multiple levels of spec steps appear in the same block in the code, please indent substeps like\n\n```\n      // 3. If innerNext is false, then\n      //   a. Set innerAlive to false.\n```",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c2990f_408efbb3",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-30T17:00:44Z",
+      "side": 1,
+      "message": "Sure.",
+      "parentUuid": "23b76f51_01a3037f",
       "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -167,6 +239,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "515eeedb_a9ff7d77",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-30T17:00:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb14ff30_62b8eb94",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c1f67ed_a1b1979c",
@@ -180,6 +270,24 @@
       "writtenOn": "2023-03-30T00:40:02Z",
       "side": 1,
       "message": "Probably also worth printing out `innerIterator` and `innerAlive`. For `innerIterator` you\u0027ll need to manually print out each individual field since it\u0027s a Torque struct.",
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da0175bd_2f8997bc",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1623,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-30T17:00:44Z",
+      "side": 1,
+      "message": "Makes sense. Done.",
+      "parentUuid": "3c1f67ed_a1b1979c",
       "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -207,6 +315,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f11a6c_31b61cfa",
+        "filename": "test/mjsunit/harmony/iterator-helpers.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-30T17:00:44Z",
+      "side": 1,
+      "message": "When naming this test, I thought that because each element of the outer iterator has just one word, `split(\u0027 \u0027).values` returns no inner iterator, which I know is incorrect now. The same applies to the next test with `all` in the name. I thought because each element of outer iterator has more than one word, the `split(\u0027 \u0027).values` returns an inner iterator for each element. I have changed the names of these two tests now, but we can remove them if you think they are not testing anything new compared to `TestFlatMap`.",
+      "parentUuid": "acf438c4_62f03cac",
+      "range": {
+        "startLine": 301,
+        "startChar": 10,
+        "endLine": 301,
+        "endChar": 36
+      },
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2426129_d8d12432",
@@ -220,6 +352,30 @@
       "writtenOn": "2023-03-30T00:40:02Z",
       "side": 1,
       "message": "Also not sure what \"all\" refers to here.",
+      "range": {
+        "startLine": 313,
+        "startChar": 10,
+        "endLine": 313,
+        "endChar": 37
+      },
+      "revId": "7d8a395379d8e975b10dee2d1c8e76dfa3dd23c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "468fb9cb_94771713",
+        "filename": "test/mjsunit/harmony/iterator-helpers.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-03-30T17:00:44Z",
+      "side": 1,
+      "message": "Answered in the above comment.",
+      "parentUuid": "e2426129_d8d12432",
       "range": {
         "startLine": 313,
         "startChar": 10,
