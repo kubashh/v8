@@ -350,13 +350,13 @@ struct type_sew_t<128> {
   const uint8_t midx = i / 64; \
   const uint8_t mpos = i % 64;
 
-#define RVV_VI_LOOP_MASK_SKIP(BODY)                               \
-  RVV_VI_MASK_VARS                                                \
-  if (instr_.RvvVM() == 0) {                                      \
-    bool skip = ((Rvvelt<uint64_t>(0, midx) >> mpos) & 0x1) == 0; \
-    if (skip) {                                                   \
-      continue;                                                   \
-    }                                                             \
+#define RVV_VI_LOOP_MASK_SKIP(BODY)                                        \
+  RVV_VI_MASK_VARS                                                         \
+  if (instr_.RvvVM() == 0) {                                               \
+    bool skip = ((Rvvelt<uint64_t>(0, midx) >> mpos) & 0x1) == 0;          \
+    if (skip && (instr_.InstructionBits() & kVTypeMask) != RO_V_VFMV_VF) { \
+      continue;                                                            \
+    }                                                                      \
   }
 
 #define RVV_VI_VV_LOOP(BODY)      \
@@ -7148,16 +7148,31 @@ void Simulator::DecodeRvvFVF() {
           { vd = fsgnj64(vs2, fs1, false, true); })
       break;
     case RO_V_VFMV_VF:
-      RVV_VI_VFP_VF_LOOP(
-          {},
-          {
-            vd = fs1;
-            USE(vs2);
-          },
-          {
-            vd = fs1;
-            USE(vs2);
-          })
+      if (instr_.RvvVM()) {
+        RVV_VI_VFP_VF_LOOP(
+            {},
+            {
+              vd = fs1;
+              USE(vs2);
+            },
+            {
+              vd = fs1;
+              USE(vs2);
+            });
+      } else {
+        RVV_VI_VFP_VF_LOOP(
+            {},
+            {
+              bool use_first =
+                  (Rvvelt<uint64_t>(0, (i / 64)) >> (i % 64)) & 0x1;
+              vd = use_first ? fs1 : vs2;
+            },
+            {
+              bool use_first =
+                  (Rvvelt<uint64_t>(0, (i / 64)) >> (i % 64)) & 0x1;
+              vd = use_first ? fs1 : vs2;
+            });
+      }
       break;
     case RO_V_VFADD_VF:
       RVV_VI_VFP_VF_LOOP(
