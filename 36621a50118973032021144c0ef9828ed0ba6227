@@ -16,6 +16,23 @@
       "message": "Thanks for the comments. Applied them. The new patch is ready to review. Thank you!",
       "revId": "36621a50118973032021144c0ef9828ed0ba6227",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7124591_9ec6a6d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-03-30T17:54:50Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "36621a50118973032021144c0ef9828ed0ba6227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
