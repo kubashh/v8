@@ -788,22 +788,26 @@ HeapEntry* V8HeapExplorer::AllocateEntry(Smi smi) {
   return entry;
 }
 
-void V8HeapExplorer::ExtractLocation(HeapEntry* entry, HeapObject object) {
+JSFunction V8HeapExplorer::GetLocationFunction(HeapObject object) {
   if (object.IsJSFunction()) {
-    JSFunction func = JSFunction::cast(object);
-    ExtractLocationForJSFunction(entry, func);
-
+    return JSFunction::cast(object);
   } else if (object.IsJSGeneratorObject()) {
     JSGeneratorObject gen = JSGeneratorObject::cast(object);
-    ExtractLocationForJSFunction(entry, gen.function());
-
+    return gen.function();
   } else if (object.IsJSObject()) {
     JSObject obj = JSObject::cast(object);
     JSFunction maybe_constructor = GetConstructor(heap_->isolate(), obj);
 
-    if (!maybe_constructor.is_null()) {
-      ExtractLocationForJSFunction(entry, maybe_constructor);
-    }
+    return maybe_constructor;
+  }
+
+  return JSFunction();
+}
+
+void V8HeapExplorer::ExtractLocation(HeapEntry* entry, HeapObject object) {
+  JSFunction func = GetLocationFunction(object);
+  if (!func.is_null()) {
+    ExtractLocationForJSFunction(entry, func);
   }
 }
 
@@ -1021,6 +1025,29 @@ HeapEntry::Type V8HeapExplorer::GetSystemEntryType(HeapObject object) {
   }
 
   return HeapEntry::kHidden;
+}
+
+void V8HeapExplorer::PopulateLineEnds() {
+  std::vector<Handle<Script>> scripts;
+  HandleScope scope(isolate());
+
+  {
+    CombinedHeapObjectIterator iterator(heap_,
+                                        HeapObjectIterator::kFilterUnreachable);
+    for (HeapObject obj = iterator.Next(); !obj.is_null();
+         obj = iterator.Next()) {
+        JSFunction func = GetLocationFunction(obj);
+        if (!func.is_null() && func.shared().script().IsScript()) {
+        scripts.push_back(
+            handle(Script::cast(func.shared().script()), isolate()));
+        }
+    }
+  }
+
+  DCHECK(AllowHeapAllocation::IsAllowed());
+  for (auto script : scripts) {
+    Script::InitLineEnds(isolate(), script);
+  }
 }
 
 uint32_t V8HeapExplorer::EstimateObjectsCount() {
@@ -2814,6 +2841,8 @@ bool HeapSnapshotGenerator::GenerateSnapshot() {
     HeapVerifier::VerifyHeap(debug_heap);
   }
 #endif
+
+  v8_heap_explorer_.PopulateLineEnds();
 
   InitProgressCounter();
 
