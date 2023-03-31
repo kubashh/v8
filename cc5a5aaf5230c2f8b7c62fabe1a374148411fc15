@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa5ab4a0_8d485ba1",
+        "filename": "builders/multibranch/ports.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-03-31T09:26:47Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "cc0b8981_05be88b8",
+      "range": {
+        "startLine": 145,
+        "startChar": 16,
+        "endLine": 145,
+        "endChar": 32
+      },
+      "revId": "cc5a5aaf5230c2f8b7c62fabe1a374148411fc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bbdee97_524af353",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-03-29T12:00:22Z",
       "side": 1,
       "message": "c/p? we don\u0027t need this.",
+      "range": {
+        "startLine": 149,
+        "startChar": 7,
+        "endLine": 149,
+        "endChar": 43
+      },
+      "revId": "cc5a5aaf5230c2f8b7c62fabe1a374148411fc15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10ed21a2_97ec608d",
+        "filename": "builders/multibranch/ports.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-03-31T09:26:47Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "3bbdee97_524af353",
       "range": {
         "startLine": 149,
         "startChar": 7,
