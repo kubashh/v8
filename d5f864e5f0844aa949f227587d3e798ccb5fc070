@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b9c5b48_effaec74",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5252,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-03-31T13:33:40Z",
+      "side": 1,
+      "message": "As explained in the commit message, the CL only moves around the code and forwards `opcode` and `opcode_length` to the split-out code.\n\nThis is needed, so we can add another `case` for the new br_on_castcast instruction added at https://chromium-review.googlesource.com/c/v8/v8/+/4386463.",
+      "range": {
+        "startLine": 5252,
+        "startChar": 15,
+        "endLine": 5252,
+        "endChar": 28
+      },
+      "revId": "d5f864e5f0844aa949f227587d3e798ccb5fc070",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
