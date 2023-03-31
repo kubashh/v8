@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "495c3e3817d9a1ecdefcb67b89c71c2afc1553fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6f91c06_9aa000d4",
+        "filename": "tools/builtins-pgo/generate.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-03-31T14:41:31Z",
+      "side": 1,
+      "message": "That adds some redundancy and might be a typical config to be changed. Maybe use inline conditions within the f string, e.g.\n\n```\nGN_ARGS_TEMPLATE \u003d f\"\"\"\\\nis_debug \u003d false\nis_clang \u003d {args.clang}\n{\u0027use_custom_libcxx \u003d false\u0027 if not args.clang else \u0027\u0027}\ntarget_cpu \u003d \"{args.target_cpu}\"\nv8_target_cpu \u003d \"{args.v8_target_cpu}\"\nuse_goma \u003d {has_goma_str if args.clang else false}\nv8_enable_builtins_profiling \u003d true\n\"\"\"\n```",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 25
+      },
+      "revId": "495c3e3817d9a1ecdefcb67b89c71c2afc1553fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66a589a6_9c58b877",
+        "filename": "tools/builtins-pgo/generate.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-03-31T14:41:31Z",
+      "side": 1,
+      "message": "Maybe combine this into a local `label` variable?",
+      "range": {
+        "startLine": 114,
+        "startChar": 32,
+        "endLine": 114,
+        "endChar": 46
+      },
+      "revId": "495c3e3817d9a1ecdefcb67b89c71c2afc1553fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
