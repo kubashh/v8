@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61cfaa37_d8ed4bae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2023-03-31T19:27:34Z",
+      "side": 1,
+      "message": "\u003e I\u0027m working on NodeJS supporting Windows. In Node, we periodically update the V8 engine. When updating to V8 11.2, we noticed issues with cross-compilation from x64 to arm64 (Node uses MSVC).\n\nOne question, bearing in mind that I\u0027m not on the V8 team (I\u0027m just an owner for a small part of V8, src/trap-handler/):\n\nHave you considered using Clang instead of MSVC, at least for ARM64?  You could potentially use Clang just for V8 since it\u0027s meant to be ABI-compatible (and I assume that\u0027s true for ARM64 too).  I realise that build systems might make that difficult.  I don\u0027t think V8 tests against MSVC, so you might find it an uphill battle to use MSVC.  There were some recent changes for making V8 cross-compile successfully for ARM64 Windows with MSVC, but it\u0027s very easy for that to regress.",
+      "parentUuid": "3c819c0e_e463a602",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "307f5e17_fec16217",
