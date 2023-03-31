@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4384b81_ba964e7d",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-03-31T08:47:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "599f90c8_4956c382",
+      "range": {
+        "startLine": 206,
+        "startChar": 37,
+        "endLine": 206,
+        "endChar": 59
+      },
+      "revId": "4c1b53f7f4ab3db06b2920c8b17469aa1809d41c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4d937e0_772b30d9",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "That list contains a lot of `n1-highcpu-16` machines. Aren\u0027t they Intel machines? But why do they match the `cpu\u003darm64` filter then?",
       "parentUuid": "30d52d66_a5bd57ec",
+      "range": {
+        "startLine": 2167,
+        "startChar": 4,
+        "endLine": 2171,
+        "endChar": 6
+      },
+      "revId": "4c1b53f7f4ab3db06b2920c8b17469aa1809d41c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee4152d7_9cf4e6c9",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 2171,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-03-31T08:47:15Z",
+      "side": 1,
+      "message": "The name does not ring any bells for me. I am pretty sure these are the droids we are looking for.",
+      "parentUuid": "101afda3_bc56b7c0",
       "range": {
         "startLine": 2167,
         "startChar": 4,
