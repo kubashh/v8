@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c819c0e_e463a602",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-31T11:30:47Z",
+      "side": 1,
+      "message": "Thanks for the context. There is not reason to try to not change any existing code. Instead of all the `#ifdef`s, the code would be a lot more maintainable long-term if we find a way to rewrite it such that it works on all compilers and platforms.\n\nAs this CL does several things at once, you could also try splitting it into multiple CLs which might make reviewing and iterating on it easier.",
+      "parentUuid": "57355bad_b768ea40",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "307f5e17_fec16217",
@@ -155,6 +173,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ec08391_97f0a290",
+        "filename": "src/trap-handler/trap-handler-simulator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-31T11:30:47Z",
+      "side": 1,
+      "message": "I think it would be nicer to go back to this approach (which never landed): https://crrev.com/c/4188385/2/src/trap-handler/trap-handler-simulator.h",
+      "parentUuid": "d86f596b_43a1f363",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0d38ebba_9b109818",
         "filename": "test/cctest/test-assembler-arm64.cc",
         "patchSetId": 1
@@ -202,6 +238,24 @@
       "side": 1,
       "message": "By looking at this more closely, it seems that std::aligned_storage is deprecated in C++23 [1], and it\u0027s recommended to use alignas instead [2], available from C++11.\n\n[1] https://en.cppreference.com/w/cpp/types/aligned_storage\n[2] https://en.cppreference.com/w/cpp/language/alignas",
       "parentUuid": "5db6d63e_8d8b8c8b",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0106df4e_65515abe",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14775,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-03-31T11:30:47Z",
+      "side": 1,
+      "message": "Ack, `alignas` would work as well. Just anything that requires less special-casing per compiler / target.",
+      "parentUuid": "f7a86d6b_3eea47f1",
       "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
