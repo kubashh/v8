@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee8d9a63_ff4de83d",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 7
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-31T11:09:47Z",
+      "side": 1,
+      "message": "Yes, that one might be just right, we can reuse it\u0027s config. But there\u0027s no debug version and it never tested anything. So I suggest we remove the old bot after this works.",
+      "parentUuid": "20569f8e_1f0a1d34",
+      "range": {
+        "startLine": 209,
+        "startChar": 47,
+        "endLine": 209,
+        "endChar": 50
+      },
+      "revId": "7132dd181a103a53cb5975556ba13fa3aa28c1b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6165834e_59caa096",
         "filename": "infra/testing/builders.pyl",
         "patchSetId": 7
