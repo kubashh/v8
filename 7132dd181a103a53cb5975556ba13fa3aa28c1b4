@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "008305aa_b13c1843",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 7
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-31T10:11:28Z",
+      "side": 1,
+      "message": "x64 isn\u0027t right then. You need target_cpu\u003d\"arm64\"",
+      "range": {
+        "startLine": 209,
+        "startChar": 47,
+        "endLine": 209,
+        "endChar": 50
+      },
+      "revId": "7132dd181a103a53cb5975556ba13fa3aa28c1b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6165834e_59caa096",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 7
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-03-31T10:11:28Z",
+      "side": 1,
+      "message": "Does this pool selection mix some dockered and some non-dockered bots?\n\nBtw, you can hold off landing this and actually run these trybots on this CL, once the infra/config side has landed.",
+      "range": {
+        "startLine": 341,
+        "startChar": 6,
+        "endLine": 342,
+        "endChar": 31
+      },
+      "revId": "7132dd181a103a53cb5975556ba13fa3aa28c1b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
