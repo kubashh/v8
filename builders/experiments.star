@@ -123,6 +123,22 @@ in_category(
 
 in_category(
     "FYI",
+    experiment_builder_pair(
+        name = "V8 Linux64 - arm64",
+        dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
+        use_goma = GOMA.NO,
+        use_remoteexec = RECLIENT.DEFAULT,
+        notify_owners = ["nikolaos@chromium.org"],
+        notifies = ["blamelist"],
+    ),
+    experiment_builder_pair(
+        name = "V8 Linux64 - arm64 - debug",
+        dimensions = {"os": "Ubuntu-18.04", "cpu": "x86-64"},
+        use_goma = GOMA.NO,
+        use_remoteexec = RECLIENT.DEFAULT,
+        notify_owners = ["nikolaos@chromium.org"],
+        notifies = ["blamelist"],
+    ),
     experiment_builder(
         name = "V8 Linux64 - debug - fyi",
         parent_builder = "V8 Linux64 - debug builder",
