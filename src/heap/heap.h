@@ -109,6 +109,7 @@ class JSFinalizationRegistry;
 class LinearAllocationArea;
 class LocalHeap;
 class MemoryAllocator;
+class MemoryBalancer;
 class MemoryChunk;
 class MemoryMeasurement;
 class MemoryReducer;
@@ -1664,6 +1665,9 @@ class Heap {
 
   bool IsInlineAllocationEnabled() const { return inline_allocation_enabled_; }
 
+  // Returns the amount of external memory registered since last global gc.
+  V8_EXPORT_PRIVATE uint64_t AllocatedExternalMemorySinceMarkCompact() const;
+
  private:
   class AllocationTrackerForDebugging;
 
@@ -2181,9 +2185,6 @@ class Heap {
 
   std::atomic<HeapState> gc_state_{NOT_IN_GC};
 
-  // Returns the amount of external memory registered since last global gc.
-  V8_EXPORT_PRIVATE uint64_t AllocatedExternalMemorySinceMarkCompact() const;
-
   // Starts marking when stress_marking_percentage_% of the marking start limit
   // is reached.
   int stress_marking_percentage_ = 0;
@@ -2395,6 +2396,8 @@ class Heap {
   // This field is used only when not running with MinorMC.
   ResizeNewSpaceMode resize_new_space_mode_ = ResizeNewSpaceMode::kNone;
 
+  std::unique_ptr<MemoryBalancer> mb_;
+
   // Classes in "heap" can be friends.
   friend class AlwaysAllocateScope;
   friend class ArrayBufferCollector;
@@ -2457,6 +2460,8 @@ class Heap {
 
   // Used in cctest.
   friend class heap::HeapTester;
+
+  friend class MemoryBalancer;
 };
 
 class HeapStats {

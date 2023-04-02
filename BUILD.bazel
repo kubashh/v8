@@ -1541,6 +1541,8 @@ filegroup(
         "src/heap/marking.h",
         "src/heap/memory-allocator.cc",
         "src/heap/memory-allocator.h",
+        "src/heap/memory-balancer.cc",
+        "src/heap/memory-balancer.h",
         "src/heap/memory-chunk-inl.h",
         "src/heap/memory-chunk-layout.cc",
         "src/heap/memory-chunk-layout.h",

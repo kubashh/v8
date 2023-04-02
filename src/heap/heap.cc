@@ -69,6 +69,7 @@
 #include "src/heap/marking-barrier.h"
 #include "src/heap/marking-state-inl.h"
 #include "src/heap/marking-state.h"
+#include "src/heap/memory-balancer.h"
 #include "src/heap/memory-chunk-inl.h"
 #include "src/heap/memory-chunk-layout.h"
 #include "src/heap/memory-measurement.h"
@@ -2487,6 +2488,12 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
     if (new_global_limit < global_allocation_limit_) {
       global_allocation_limit_ = new_global_limit;
     }
+  }
+  if (v8_flags.memory_balancer) {
+    DCHECK(global_allocation_limit_ > old_generation_allocation_limit_);
+    mb_->UpdateExternalAllocationLimit(global_allocation_limit_ -
+                                       old_generation_allocation_limit_);
+    mb_->NotifyGC();
   }
 }
 
@@ -5472,6 +5479,9 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
                           nullptr);
     AddGCEpilogueCallback(HeapLayoutTracer::GCEpiloguePrintHeapLayout, gc_type,
                           nullptr);
+  }
+  if (v8_flags.memory_balancer) {
+    mb_.reset(new MemoryBalancer(this));
   }
 }
 
