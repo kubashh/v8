@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49dbf8a9_262b8404",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 8
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-04-03T11:13:35Z",
+      "side": 1,
+      "message": "Maybe remove the extra variant for now. It burns a lot of resources and I\u0027m not sure we have a business reason. I\u0027m not even sure about v8testing with all its variants?\n\nLet\u0027s add \u0027variant\u0027: \u0027default\u0027\nfor the v8testing step. Then let\u0027s verify if it actually tests what we need here and runs green.",
+      "range": {
+        "startLine": 348,
+        "startChar": 6,
+        "endLine": 348,
+        "endChar": 61
+      },
+      "revId": "b2308c26a9d27eee8b6a1760cc8e602e9cc7daff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
