@@ -335,6 +335,26 @@
   },
   ##############################################################################
   # Linux64
+  'v8_linux64_arm64_dbg': {
+    'swarming_dimensions': {
+      'os': 'Linux',
+      'cpu': 'arm64',
+      'pool': 'chromium.tests',
+    },
+    'tests': [
+      {'name': 'v8testing', 'variant': 'default', 'shards': 3},
+    ],
+  },
+  'v8_linux64_arm64_rel': {
+    'swarming_dimensions': {
+      'os': 'Linux',
+      'cpu': 'arm64',
+      'pool': 'chromium.tests',
+    },
+    'tests': [
+      {'name': 'v8testing', 'variant': 'default', 'shards': 3},
+    ],
+  },
   'v8_linux64_asan_rel': {
     'swarming_dimensions' : {
       'os': 'Ubuntu-18.04',
@@ -2286,6 +2306,26 @@
     },
     'tests': [
       {'name': 'v8testing', 'shards': 3},
+    ],
+  },
+  'V8 Linux64 - arm64': {
+    'swarming_dimensions': {
+      'os': 'Linux',
+      'cpu': 'arm64',
+      'pool': 'chromium.tests',
+    },
+    'tests': [
+      {'name': 'v8testing',  'variant': 'default', 'shards': 3},
+    ],
+  },
+  'V8 Linux64 - arm64 - debug': {
+    'swarming_dimensions': {
+      'os': 'Linux',
+      'cpu': 'arm64',
+      'pool': 'chromium.tests',
+    },
+    'tests': [
+      {'name': 'v8testing', 'variant': 'default', 'shards': 3},
     ],
   },
   'V8 Linux64 - arm64 - sim - no pointer compression': {
