@@ -93,6 +93,30 @@
       },
       "revId": "7132dd181a103a53cb5975556ba13fa3aa28c1b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "948b3a9f_38ba9949",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 7
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-04-03T11:05:34Z",
+      "side": 1,
+      "message": "I restricted the criteria just to be sure, but the pool remained the same content wise.",
+      "parentUuid": "6165834e_59caa096",
+      "range": {
+        "startLine": 341,
+        "startChar": 6,
+        "endLine": 342,
+        "endChar": 31
+      },
+      "revId": "7132dd181a103a53cb5975556ba13fa3aa28c1b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
