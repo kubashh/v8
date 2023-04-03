@@ -138,6 +138,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcbad492_408a4610",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-04-03T18:11:43Z",
+      "side": 1,
+      "message": "Thanks for working on this. sorry for my delay review.",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c43c09a5_09df4f64",
