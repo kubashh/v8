@@ -16,6 +16,24 @@
       "message": "format it",
       "revId": "24fc9bc6f573180a587bfb25f6d3a61ed205fa4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74b4fcb3_5a9ea0f8",
+        "filename": "src/execution/riscv/simulator-riscv.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1569947
+      },
+      "writtenOn": "2023-04-03T12:03:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abd9d1d3_a6e23d2b",
+      "revId": "24fc9bc6f573180a587bfb25f6d3a61ed205fa4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
