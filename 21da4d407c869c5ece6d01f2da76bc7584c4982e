@@ -16,6 +16,103 @@
       "message": "Hi Shu, \n\nCan you please review this CL whenever you have time?\n\nThanks!\nRezvan",
       "revId": "21da4d407c869c5ece6d01f2da76bc7584c4982e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a6f4b66_fa277f2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-03T23:16:32Z",
+      "side": 1,
+      "message": "lgtm with a minor correctness issue and some nits.",
+      "revId": "21da4d407c869c5ece6d01f2da76bc7584c4982e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84a1f9fd_9aa38a2c",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-03T23:16:32Z",
+      "side": 1,
+      "message": "Nit: You can save a variable by doing `const reducer \u003d Cast\u003cCallable\u003e(arguments[0]) otherwise ...`",
+      "revId": "21da4d407c869c5ece6d01f2da76bc7584c4982e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed1dbfbb_92104495",
+        "filename": "src/common/message-template.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-03T23:16:32Z",
+      "side": 1,
+      "message": "`CalledOnNoNext` is kind of a cryptic name. Maybe `IteratorReduceNoInitial` with `\"Reduce of a done iterator with no initial value\"` to parallel the message for `ReduceNoInitial`?",
+      "revId": "21da4d407c869c5ece6d01f2da76bc7584c4982e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dbace90_264719ab",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4579,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-03T23:16:32Z",
+      "side": 1,
+      "message": "This argument is for the value of the `.length` property, like `Iterator.prototype.reduce.length`. The JS convention for `.length` is the number of required parameters. So for `reduce` this should be `1` since `initialValue` is optional.",
+      "range": {
+        "startLine": 4579,
+        "startChar": 59,
+        "endLine": 4579,
+        "endChar": 60
+      },
+      "revId": "21da4d407c869c5ece6d01f2da76bc7584c4982e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fbef881_cca7803c",
+        "filename": "test/mjsunit/harmony/iterator-helpers.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-03T23:16:32Z",
+      "side": 1,
+      "message": "Typo: `InitialValue`",
+      "range": {
+        "startLine": 572,
+        "startChar": 10,
+        "endLine": 572,
+        "endChar": 36
+      },
+      "revId": "21da4d407c869c5ece6d01f2da76bc7584c4982e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
