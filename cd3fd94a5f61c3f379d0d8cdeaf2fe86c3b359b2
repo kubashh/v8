@@ -34,6 +34,24 @@
       "parentUuid": "cbd4ceda_9ed204cf",
       "revId": "cd3fd94a5f61c3f379d0d8cdeaf2fe86c3b359b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44807d3e_6042bd79",
+        "filename": "src/execution/riscv/simulator-riscv.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2023-04-03T11:00:21Z",
+      "side": 1,
+      "message": "My suggestion is that we can add a new macro RVV_VI_VF_MV_LOOP to replace RVV_VI_VFP_VF_LOOP in vmv_v and vmerge_v.",
+      "parentUuid": "f4a76b9a_1fe93372",
+      "revId": "cd3fd94a5f61c3f379d0d8cdeaf2fe86c3b359b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
