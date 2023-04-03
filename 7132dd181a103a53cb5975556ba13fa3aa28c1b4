@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5476b53_53995418",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 7
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-04-03T13:13:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee8d9a63_ff4de83d",
+      "range": {
+        "startLine": 209,
+        "startChar": 47,
+        "endLine": 209,
+        "endChar": 50
+      },
+      "revId": "7132dd181a103a53cb5975556ba13fa3aa28c1b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6165834e_59caa096",
@@ -109,6 +133,30 @@
       "side": 1,
       "message": "I restricted the criteria just to be sure, but the pool remained the same content wise.",
       "parentUuid": "6165834e_59caa096",
+      "range": {
+        "startLine": 341,
+        "startChar": 6,
+        "endLine": 342,
+        "endChar": 31
+      },
+      "revId": "7132dd181a103a53cb5975556ba13fa3aa28c1b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ae614dd_c8ff3117",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 7
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-04-03T13:13:25Z",
+      "side": 1,
+      "message": "Restricting the criteria does not work actually :\n`Key \"inside_docker\" must be one of [\u0027cores\u0027, \u0027cpu\u0027, \u0027device_os\u0027, \u0027device_type\u0027, \u0027gpu\u0027, \u0027os\u0027, \u0027pool\u0027]`\n\nThe pool is uniform for now, but I also have no idea what is the real diff between `inside_docker` possible values `0`, `1`, `stock`.",
+      "parentUuid": "948b3a9f_38ba9949",
       "range": {
         "startLine": 341,
         "startChar": 6,
