@@ -119,6 +119,125 @@
       "parentUuid": "7d29ade8_f9bdf278",
       "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f7eb867_ef006857",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-04-03T18:11:19Z",
+      "side": 1,
+      "message": "1. Please file a bug in v8 so we can attach this CL to that bug and track\n2. Could you see would it be possible to remove the unicode_string with this cl so this cl is not adding additional String but replacing the UnicodeString w/ String and only pass/ store one copy. I know it may have some other consequence but could you try to see would that hurt the performance if we do so?\n3. Is there an instruction to show the performance on the benchmark?",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c43c09a5_09df4f64",
+        "filename": "src/objects/js-segment-iterator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-04-03T18:11:19Z",
+      "side": 1,
+      "message": "for SegmentIterator, with your change, could we also remove the passing in and storing of unicode_string? Why do we need to keep both copy here?",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b0a1f77_f7325f1e",
+        "filename": "src/objects/js-segment-iterator.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-04-03T18:11:19Z",
+      "side": 1,
+      "message": "Do we need to keep unicode_string here in JSSegmentIterator if we store input_string as String type?",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2452d449_63b9cd4a",
+        "filename": "src/objects/js-segments-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-04-03T18:11:19Z",
+      "side": 1,
+      "message": "If we store input_string as String here. Why do we still need to keep unicode_string as UnicodeString? Can we remove it now?",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a118063c_66680278",
+        "filename": "src/objects/js-segments.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-04-03T18:11:19Z",
+      "side": 1,
+      "message": "Why do we still need to pass in the UnicodeString?",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f22130ee_726d194b",
+        "filename": "src/objects/js-segments.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-04-03T18:11:19Z",
+      "side": 1,
+      "message": "Can we remove the passing in of UnicodeString string here with your change?",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9100b08_42c28bff",
+        "filename": "src/objects/js-segments.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-04-03T18:11:19Z",
+      "side": 1,
+      "message": "Can we remove the unicode_string with your change?",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
