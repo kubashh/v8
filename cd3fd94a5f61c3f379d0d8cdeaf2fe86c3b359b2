@@ -16,6 +16,24 @@
       "message": "Why modify this？",
       "revId": "cd3fd94a5f61c3f379d0d8cdeaf2fe86c3b359b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4a76b9a_1fe93372",
+        "filename": "src/execution/riscv/simulator-riscv.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1569947
+      },
+      "writtenOn": "2023-04-03T06:02:58Z",
+      "side": 1,
+      "message": "vfmerge is a mask instruction. Assuming that the mask is 1100, if this condition is not added, only the first two digits (11) will execute the program defined in BODY, and the last two digits (00) will skip and not execute the program defined in BODY",
+      "parentUuid": "cbd4ceda_9ed204cf",
+      "revId": "cd3fd94a5f61c3f379d0d8cdeaf2fe86c3b359b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
