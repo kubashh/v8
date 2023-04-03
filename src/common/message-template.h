@@ -62,6 +62,7 @@ namespace internal {
   T(BigIntShr, "BigInts have no unsigned right shift, use >> instead")         \
   T(BigIntToNumber, "Cannot convert a BigInt value to a number")               \
   T(CalledNonCallable, "% is not a function")                                  \
+  T(CalledOnNoNext, "% is called with no initialValue on an empty iterator")   \
   T(CalledOnNonObject, "% called on non-object")                               \
   T(CalledOnNullOrUndefined, "% called on null or undefined")                  \
   T(CallShadowRealmEvaluateThrew, "ShadowRealm evaluate threw (%)")            \
