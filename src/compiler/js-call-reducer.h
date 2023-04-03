@@ -7,6 +7,7 @@
 
 #include "src/base/flags.h"
 #include "src/compiler/globals.h"
+#include "src/compiler/graph-assembler.h"
 #include "src/compiler/graph-reducer.h"
 #include "src/compiler/node-properties.h"
 #include "src/deoptimizer/deoptimize-reason.h"
@@ -27,6 +28,7 @@ class CompilationDependencies;
 struct FeedbackSource;
 struct FieldAccess;
 class JSCallReducerAssembler;
+class JSGraphAssembler;
 class JSGraph;
 class JSHeapBroker;
 class JSOperatorBuilder;
@@ -240,7 +242,7 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
   // The pendant to ReplaceWithValue when using GraphAssembler-based reductions.
   Reduction ReplaceWithSubgraph(JSCallReducerAssembler* gasm, Node* subgraph);
   std::pair<Node*, Node*> ReleaseEffectAndControlFromAssembler(
-      JSCallReducerAssembler* gasm);
+      JSGraphAssembler* gasm);
 
   // Helper to verify promise receiver maps are as expected.
   // On bailout from a reduction, be sure to return inference.NoChange().

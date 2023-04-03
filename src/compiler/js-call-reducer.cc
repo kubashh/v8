@@ -6,7 +6,9 @@
 
 #include <functional>
 
+#include "src/ast/ast.h"
 #include "src/base/container-utils.h"
+#include "src/base/logging.h"
 #include "src/base/small-vector.h"
 #include "src/builtins/builtins-promise.h"
 #include "src/builtins/builtins-utils.h"
@@ -626,26 +628,32 @@ class PromiseBuiltinReducerAssembler : public JSCallReducerAssembler {
   }
 };
 
-class FastApiCallReducerAssembler : public JSCallReducerAssembler {
+class FastApiCallReducerAssembler : public JSGraphAssembler {
  public:
   FastApiCallReducerAssembler(
       JSCallReducer* reducer, Node* node,
       const FunctionTemplateInfoRef function_template_info,
       const FastApiCallFunctionVector& c_candidate_functions, Node* receiver,
       Node* holder, const SharedFunctionInfoRef shared, Node* target,
-      const int arity, Node* effect)
-      : JSCallReducerAssembler(reducer, node),
+      const int arity, Node* effect, Node* control)
+      : JSGraphAssembler(
+            reducer->broker(), reducer->JSGraphForGraphAssembler(),
+            reducer->ZoneForGraphAssembler(), BranchSemantics::kJS,
+            [reducer](Node* n) { reducer->RevisitForGraphAssembler(n); }),
         c_candidate_functions_(c_candidate_functions),
         function_template_info_(function_template_info),
         receiver_(receiver),
         holder_(holder),
         shared_(shared),
         target_(target),
-        arity_(arity) {
+        arity_(arity),
+        node_(node) {
     DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
     CHECK_GT(c_candidate_functions.size(), 0);
-    InitializeEffectControl(effect, NodeProperties::GetControlInput(node));
+    InitializeEffectControl(effect, control);
   }
+
+  Node* node_ptr() const { return node_; }
 
   TNode<Object> ReduceFastApiCall() {
     JSCallNode n(node_ptr());
@@ -722,6 +730,24 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
     return FastApiCall(call_descriptor, inputs.begin(), inputs.size());
   }
 
+  TNode<Object> Argument(int index) const {
+    return TNode<Object>::UncheckedCast(JSCallNode{node_ptr()}.Argument(index));
+  }
+
+  TNode<Context> ContextInput() const {
+    return TNode<Context>::UncheckedCast(
+        NodeProperties::GetContextInput(node_));
+  }
+
+  FrameState FrameStateInput() const {
+    return FrameState(NodeProperties::GetFrameStateInput(node_));
+  }
+
+  const FeedbackSource& feedback() const {
+    CallParameters const& p = CallParametersOf(node_ptr()->op());
+    return p.feedback();
+  }
+
  private:
   static constexpr int kSlowTarget = 1;
   static constexpr int kEffectAndControl = 2;
@@ -735,10 +761,14 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
 
   TNode<Object> FastApiCall(CallDescriptor* descriptor, Node** inputs,
                             size_t inputs_size) {
-    return AddNode<Object>(
-        graph()->NewNode(simplified()->FastApiCall(c_candidate_functions_,
-                                                   feedback(), descriptor),
-                         static_cast<int>(inputs_size), inputs));
+    // TODO(mslekova): Check how we can reuse the IfException that is already
+    // connected to the original Call.
+    return MayThrow(_ {
+      return AddNode<Object>(
+          graph()->NewNode(simplified()->FastApiCall(c_candidate_functions_,
+                                                     feedback(), descriptor),
+                           static_cast<int>(inputs_size), inputs));
+    });
   }
 
   const FastApiCallFunctionVector c_candidate_functions_;
@@ -748,6 +778,7 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
   const SharedFunctionInfoRef shared_;
   Node* const target_;
   const int arity_;
+  Node* const node_;
 };
 
 TNode<Number> JSCallReducerAssembler::SpeculativeToNumber(
@@ -2318,7 +2349,7 @@ TNode<Object> PromiseBuiltinReducerAssembler::ReducePromiseConstructor(
 #undef _
 
 std::pair<Node*, Node*> JSCallReducer::ReleaseEffectAndControlFromAssembler(
-    JSCallReducerAssembler* gasm) {
+    JSGraphAssembler* gasm) {
   auto catch_scope = gasm->catch_scope();
   DCHECK(catch_scope->is_outermost());
 
@@ -2345,11 +2376,15 @@ Reduction JSCallReducer::ReplaceWithSubgraph(JSCallReducerAssembler* gasm,
   // Instead of manually tracking IfException nodes, we could iterate the
   // subgraph.
 
+  printf("Replacing %u with %u\n", gasm->node_ptr()->id(), subgraph->id());
   // Replace the Call node with the newly-produced subgraph.
   ReplaceWithValue(gasm->node_ptr(), subgraph, gasm->effect(), gasm->control());
+  printf("Effect, control before: %u %u\n", gasm->effect()->id(),
+         gasm->control()->id());
 
   // Wire exception edges contained in the newly-produced subgraph into the
   // outer graph.
+  // TODO(mslekova): call ReleaseEffectAndControlFromAssembler instead.
   auto catch_scope = gasm->catch_scope();
   DCHECK(catch_scope->is_outermost());
 
@@ -2360,6 +2395,10 @@ Reduction JSCallReducer::ReplaceWithSubgraph(JSCallReducerAssembler* gasm,
     Control handler_control{nullptr};
     gasm->catch_scope()->MergeExceptionalPaths(
         &handler_exception, &handler_effect, &handler_control);
+    printf("Effect, control after merge: %u %u\n", handler_effect->id(),
+           handler_control->id());
+    printf("Outermost handler, exception: %u %u\n",
+           gasm->outermost_handler()->id(), (*handler_exception).id());
 
     ReplaceWithValue(gasm->outermost_handler(), handler_exception,
                      handler_effect, handler_control);
@@ -3884,13 +3923,21 @@ Reduction JSCallReducer::ReduceCallApiFunction(Node* node,
   DCHECK_LE(c_candidate_functions.size(), 2);
 
   if (!c_candidate_functions.empty()) {
-    FastApiCallReducerAssembler a(this, node, function_template_info,
-                                  c_candidate_functions, receiver, holder,
-                                  shared, target, argc, effect);
-    Node* fast_call_subgraph = a.ReduceFastApiCall();
-    ReplaceWithSubgraph(&a, fast_call_subgraph);
-
+    FastApiCallReducerAssembler assembler(
+        this, node, function_template_info, c_candidate_functions, receiver,
+        holder, shared, target, argc, effect, control);
+    Node* fast_call_subgraph = assembler.ReduceFastApiCall();
+    std::tie(effect, control) =
+        ReleaseEffectAndControlFromAssembler(&assembler);
+    effect = control = fast_call_subgraph;
     return Replace(fast_call_subgraph);
+    // TODO(mslekova): if we Replace(node), the error is:
+    // #82:JSCall should be followed by IfSuccess/IfException, but is only
+    // followed by single #84:IfSuccess.
+    // How to properly replace the subgraph without the ReplaceWithSubgraph
+    // machinery?
+
+    // return ReplaceWithSubgraph(&assembler, fast_call_subgraph);
   }
 
   // Slow call

@@ -218,6 +218,10 @@ void Schedule::AddNode(BasicBlock* block, Node* node) {
 }
 
 void Schedule::AddGoto(BasicBlock* block, BasicBlock* succ) {
+  if (block->control() != BasicBlock::kNone) {
+    printf("Warning: block %u doesn't have kNone CI, but has %u; succ: %u\n",
+           block->id().ToInt(), block->control(), succ->id().ToInt());
+  }
   CHECK_EQ(BasicBlock::kNone, block->control());
   block->set_control(BasicBlock::kGoto);
   AddSuccessor(block, succ);
