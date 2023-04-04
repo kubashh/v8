@@ -5342,14 +5342,8 @@ Node* WasmGraphBuilder::StructNew(uint32_t struct_index,
   return s;
 }
 
-Node* WasmGraphBuilder::ArrayNew(uint32_t array_index,
-                                 const wasm::ArrayType* type, Node* length,
-                                 Node* initial_value, Node* rtt,
-                                 wasm::WasmCodePosition position) {
-  TrapIfFalse(wasm::kTrapArrayTooLarge,
-              gasm_->Uint32LessThanOrEqual(
-                  length, gasm_->Uint32Constant(WasmArray::MaxLength(type))),
-              position);
+Node* WasmGraphBuilder::CreateArrayHeader(const wasm::ArrayType* type,
+                                          Node* length, Node* rtt) {
   wasm::ValueType element_type = type->element_type();
 
   // RoundUp(length * value_size, kObjectAlignment) =
@@ -5371,15 +5365,24 @@ Node* WasmGraphBuilder::ArrayNew(uint32_t array_index,
       wasm::ObjectAccess::ToTagged(JSReceiver::kPropertiesOrHashOffset),
       LOAD_ROOT(EmptyFixedArray, empty_fixed_array));
   gasm_->ArrayInitializeLength(a, length);
+  return a;
+}
 
-  ArrayFillImpl(a, gasm_->Int32Constant(0),
+Node* WasmGraphBuilder::ArrayNew(const wasm::ArrayType* type, Node* length,
+                                 Node* initial_value, Node* rtt,
+                                 wasm::WasmCodePosition position) {
+  TrapIfFalse(wasm::kTrapArrayTooLarge,
+              gasm_->Uint32LessThanOrEqual(
+                  length, gasm_->Uint32Constant(WasmArray::MaxLength(type))),
+              position);
+  Node* array = CreateArrayHeader(type, length, rtt);
+  ArrayFillImpl(array, gasm_->Int32Constant(0),
                 initial_value != nullptr
                     ? initial_value
-                    : SetType(DefaultValue(element_type),
+                    : SetType(DefaultValue(type->element_type()),
                               type->element_type().Unpacked()),
                 length, type, false);
-
-  return a;
+  return array;
 }
 
 Node* WasmGraphBuilder::ArrayNewFixed(const wasm::ArrayType* type, Node* rtt,
@@ -5400,6 +5403,19 @@ Node* WasmGraphBuilder::ArrayNewFixed(const wasm::ArrayType* type, Node* rtt,
   for (int i = 0; i < static_cast<int>(elements.size()); i++) {
     gasm_->ArraySet(array, gasm_->Int32Constant(i), elements[i], type);
   }
+  return array;
+}
+
+Node* WasmGraphBuilder::ArrayNewCopy(Node* src, CheckForNull null_check,
+                                     Node* start_index, Node* length,
+                                     const wasm::ArrayType* array_type,
+                                     uint32_t array_type_index,
+                                     wasm::WasmCodePosition position) {
+  BoundsCheckArrayWithLength(src, start_index, length, null_check, position);
+  Node* rtt = RttCanon(array_type_index);
+  Node* array = CreateArrayHeader(array_type, length, rtt);
+  Node* dst_index = gasm_->Int32Constant(0);
+  ArrayCopyImpl(array, dst_index, src, start_index, length, array_type);
   return array;
 }
 
@@ -5892,7 +5908,13 @@ void WasmGraphBuilder::ArrayCopy(Node* dst_array, Node* dst_index,
                              position);
   BoundsCheckArrayWithLength(src_array, src_index, length, src_null_check,
                              position);
+  ArrayCopyImpl(dst_array, dst_index, src_array, src_index, length, array_type);
+}
 
+void WasmGraphBuilder::ArrayCopyImpl(Node* dst_array, Node* dst_index,
+                                     Node* src_array, Node* src_index,
+                                     Node* length,
+                                     const wasm::ArrayType* array_type) {
   auto end = gasm_->MakeLabel();
 
   gasm_->GotoIf(gasm_->Word32Equal(length, Int32Constant(0)), &end);

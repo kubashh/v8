@@ -442,9 +442,8 @@ class WasmGraphBuilder {
   void StructSet(Node* struct_object, const wasm::StructType* struct_type,
                  uint32_t field_index, Node* value, CheckForNull null_check,
                  wasm::WasmCodePosition position);
-  Node* ArrayNew(uint32_t array_index, const wasm::ArrayType* type,
-                 Node* length, Node* initial_value, Node* rtt,
-                 wasm::WasmCodePosition position);
+  Node* ArrayNew(const wasm::ArrayType* type, Node* length, Node* initial_value,
+                 Node* rtt, wasm::WasmCodePosition position);
   Node* ArrayGet(Node* array_object, const wasm::ArrayType* type, Node* index,
                  CheckForNull null_check, bool is_signed,
                  wasm::WasmCodePosition position);
@@ -460,6 +459,10 @@ class WasmGraphBuilder {
   void ArrayFill(Node* array, Node* index, Node* value, Node* length,
                  const wasm::ArrayType* type, CheckForNull null_check,
                  wasm::WasmCodePosition position);
+  Node* ArrayNewCopy(Node* src, CheckForNull null_check, Node* start_index,
+                     Node* length, const wasm::ArrayType* array_type,
+                     uint32_t array_type_index,
+                     wasm::WasmCodePosition position);
   Node* ArrayNewFixed(const wasm::ArrayType* type, Node* rtt,
                       base::Vector<Node*> elements);
   Node* ArrayNewSegment(const wasm::ArrayType* type, uint32_t segment_index,
@@ -784,6 +787,14 @@ class WasmGraphBuilder {
   Node* StoreInInt64StackSlot(Node* value, wasm::ValueType type);
   void ArrayFillImpl(Node* array, Node* index, Node* value, Node* length,
                      const wasm::ArrayType* type, bool emit_write_barrier);
+
+  // Allocates an array and initializes its header. The array elements are not
+  // initialized.
+  Node* CreateArrayHeader(const wasm::ArrayType* type, Node* length, Node* rtt);
+
+  void ArrayCopyImpl(Node* dst_array, Node* dst_index, Node* src_array,
+                     Node* src_index, Node* length,
+                     const wasm::ArrayType* array_type);
 
   // Asm.js specific functionality.
   Node* BuildI32AsmjsSConvertF32(Node* input);

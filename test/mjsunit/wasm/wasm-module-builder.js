@@ -501,6 +501,7 @@ let kExprArrayGetS = 0x14;
 let kExprArrayGetU = 0x15;
 let kExprArraySet = 0x16;
 let kExprArrayCopy = 0x18;
+let kExprArrayNewCopy = 0x0e;
 let kExprArrayLen = 0x19;
 let kExprArrayNewFixed = 0x1a;
 let kExprArrayNew = 0x1b;
