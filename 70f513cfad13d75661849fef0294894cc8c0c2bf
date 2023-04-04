@@ -16,6 +16,23 @@
       "message": "I had to regenerate `tools/v8heapconst.py`. Need your vote again.",
       "revId": "70f513cfad13d75661849fef0294894cc8c0c2bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59fa2240_003ec710",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-04T18:29:13Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "70f513cfad13d75661849fef0294894cc8c0c2bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
