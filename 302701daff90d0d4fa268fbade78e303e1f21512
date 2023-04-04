@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "302701daff90d0d4fa268fbade78e303e1f21512",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2156dd7d_4da1d11f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-04T22:51:43Z",
+      "side": 1,
+      "message": "lgtm. I was convinced it\u0027s okay to have 2 flags to so that the new functions can be staged and get fuzzer coverage while not disabling the getters.",
+      "revId": "302701daff90d0d4fa268fbade78e303e1f21512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d6f4b12_cf59981f",
+        "filename": "test/test262/testcfg.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-04T22:51:43Z",
+      "side": 1,
+      "message": "Should this also have `--harmony-remove-intl-locale-info-getters`?",
+      "revId": "302701daff90d0d4fa268fbade78e303e1f21512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
