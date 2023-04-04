@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b525ef9_39e9e169",
+        "filename": "src/builtins/wasm.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-04-04T14:34:11Z",
+      "side": 1,
+      "message": "This is true for wasm just like for C++, right? I.e. `struct E {}; static_assert(sizeof(E) \u003d\u003d 1);`.",
+      "range": {
+        "startLine": 481,
+        "startChar": 2,
+        "endLine": 481,
+        "endChar": 27
+      },
+      "revId": "1c24ac1eaa4642e165ca509115f3e01464229873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b56c954_31654b32",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5377,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-04-04T14:34:11Z",
+      "side": 1,
+      "message": "Moved from above.",
+      "range": {
+        "startLine": 5374,
+        "startChar": 2,
+        "endLine": 5377,
+        "endChar": 24
+      },
+      "revId": "1c24ac1eaa4642e165ca509115f3e01464229873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12c63902_afe6fc99",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5851,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-04-04T14:34:11Z",
+      "side": 1,
+      "message": "Is there any chance that `GetUnusedRegister` below could return `kReturnRegister0`?",
+      "range": {
+        "startLine": 5851,
+        "startChar": 4,
+        "endLine": 5851,
+        "endChar": 45
+      },
+      "revId": "1c24ac1eaa4642e165ca509115f3e01464229873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
