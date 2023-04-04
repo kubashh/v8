@@ -33,6 +33,23 @@
       "message": "Thanks!",
       "revId": "1593d34d3aa7ab2409460df30b77ab3ee7c0af20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca76d6e9_fbe67e7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-04-04T16:02:08Z",
+      "side": 1,
+      "message": "Hi Camillo, could you ptal at d8-test.cc, where we\u0027re adding API callbacks that throw an exception? The existing test in test-api.cc wasn\u0027t really verifying that and Deno embedders found this issue.",
+      "revId": "1593d34d3aa7ab2409460df30b77ab3ee7c0af20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
