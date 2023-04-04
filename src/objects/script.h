@@ -11,6 +11,7 @@
 #include "src/base/export-template.h"
 #include "src/objects/fixed-array.h"
 #include "src/objects/objects.h"
+#include "src/objects/primitive-heap-object.h"
 #include "src/objects/struct.h"
 #include "torque-generated/bit-fields.h"
 
@@ -166,6 +167,14 @@ class Script : public TorqueGeneratedScript<Script, Struct> {
   EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
   static void InitLineEnds(IsolateT* isolate, Handle<Script> script);
 
+  inline bool has_line_ends() const;
+
+  // Will initialize the line ends if required.
+  static void SetSource(Isolate* isolate, Handle<Script> script,
+                        Handle<String> source);
+  // Use SetSource instead.
+  inline void set_source_internal(PrimitiveHeapObject source);
+
   // Carries information about a source position.
   struct PositionInfo {
     PositionInfo() : line(-1), column(-1), line_start(-1), line_end(-1) {}
@@ -187,7 +196,8 @@ class Script : public TorqueGeneratedScript<Script, Struct> {
   // The non-static version is not allocating and safe for unhandlified
   // callsites.
   static bool GetPositionInfo(Handle<Script> script, int position,
-                              PositionInfo* info, OffsetFlag offset_flag);
+                              PositionInfo* info,
+                              OffsetFlag offset_flag = OffsetFlag::WITH_OFFSET);
   V8_EXPORT_PRIVATE bool GetPositionInfo(int position, PositionInfo* info,
                                          OffsetFlag offset_flag) const;
 
@@ -233,6 +243,9 @@ class Script : public TorqueGeneratedScript<Script, Struct> {
   using BodyDescriptor = StructBodyDescriptor;
 
  private:
+  // Use Script::SetSource instead.
+  using TorqueGeneratedScript::set_source;
+
   // Bit positions in the flags field.
   DEFINE_TORQUE_GENERATED_SCRIPT_FLAGS()
 
