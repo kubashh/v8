@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17085e35_70c67cc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2023-04-04T14:43:24Z",
+      "side": 1,
+      "message": "Hi Nico, could you ptal at this temporary workaround?",
+      "revId": "1593d34d3aa7ab2409460df30b77ab3ee7c0af20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
