@@ -412,3 +412,85 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
   assertThrows(() => builder.instantiate(), WebAssembly.CompileError,
                /array.init_elem can only be used with mutable arrays/);
 })();
+
+(function TestArrayNewCopy() {
+  print(arguments.callee.name);
+  let builder = new WasmModuleBuilder();
+  let array = builder.addArray(kWasmI32, true);
+
+  builder.addFunction(
+      "createArray", makeSig([kWasmI32], [wasmRefType(array)]))
+    .addLocals(kWasmI32, 1)
+    .addLocals(wasmRefNullType(array), 1)
+    .addBody([
+      kExprLocalGet, 0,
+      kExprLocalTee, 1,
+      kGCPrefix, kExprArrayNewDefault, array,
+      kExprLocalSet, 2,
+      kExprLoop, kWasmVoid,
+        // --i;
+        // array[i] = i;
+        kExprLocalGet, 2,
+        kExprLocalGet, 1,
+        kExprI32Const, 1,
+        kExprI32Sub,
+        kExprLocalTee, 1,
+        kExprLocalGet, 1,
+        kGCPrefix, kExprArraySet, array,
+        // if (i) continue;
+        kExprLocalGet, 1,
+        kExprBrIf, 0,
+      kExprEnd,
+      kExprLocalGet, 2,
+      kExprRefAsNonNull,
+    ])
+    .exportFunc();
+
+  builder.addFunction(
+      "get", makeSig([wasmRefNullType(array), kWasmI32], [kWasmI32]))
+    .addBody([
+        kExprLocalGet, 0,
+        kExprLocalGet, 1,
+        kGCPrefix, kExprArrayGet, array
+    ])
+    .exportFunc();
+
+  builder.addFunction(
+      "length", makeSig([wasmRefNullType(array)], [kWasmI32]))
+    .addBody([kExprLocalGet, 0, kGCPrefix, kExprArrayLen])
+    .exportFunc();
+
+  // Parameters: array, starting index, length.
+  builder.addFunction(
+      "copyNewArray",
+      makeSig([wasmRefNullType(array), kWasmI32, kWasmI32],
+              [wasmRefType(array)]))
+    .addBody([
+      kExprLocalGet, 0, kExprLocalGet, 1, kExprLocalGet, 2,
+      kGCPrefix, kExprArrayNewCopy, array
+    ])
+    .exportFunc();
+
+  let wasm = builder.instantiate().exports;
+
+  assertTraps(kTrapNullDereference, () => wasm.copyNewArray(null, 0, 1));
+  let wasmArray = wasm.createArray(10); // = [0, 1, ..., 9]
+  assertEquals(0, wasm.length(wasm.copyNewArray(wasmArray, 0, 0)));
+  assertEquals(0, wasm.length(wasm.copyNewArray(wasmArray, 10, 0)));
+  assertTraps(kTrapArrayOutOfBounds, () => wasm.copyNewArray(wasmArray, 11, 0));
+  assertTraps(kTrapArrayOutOfBounds, () => wasm.copyNewArray(wasmArray, -1, 0));
+  assertTraps(kTrapArrayOutOfBounds, () => wasm.copyNewArray(wasmArray, 10, 1));
+  assertTraps(kTrapArrayOutOfBounds, () => wasm.copyNewArray(wasmArray, 0, 11));
+  {
+    let copy = wasm.copyNewArray(wasmArray, 2, 3);
+    assertEquals(3, wasm.length(copy));
+    assertEquals(2, wasm.get(copy, 0));
+    assertEquals(3, wasm.get(copy, 1));
+    assertEquals(4, wasm.get(copy, 2));
+  }
+  {
+    let copy = wasm.copyNewArray(wasmArray, 9, 1);
+    assertEquals(1, wasm.length(copy));
+    assertEquals(9, wasm.get(copy, 0));
+  }
+})();

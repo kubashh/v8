@@ -4951,6 +4951,7 @@ class LiftoffCompiler {
   void CallRuntimeStub(WasmCode::RuntimeStubId stub_id, const ValueKindSig& sig,
                        std::initializer_list<LiftoffAssembler::VarState> params,
                        int position) {
+    DCHECK_EQ(sig.parameter_count(), params.size());
     CODE_COMMENT(
         (std::string{"call builtin: "} + GetRuntimeStubName(stub_id)).c_str());
     auto interface_descriptor = Builtins::CallInterfaceDescriptorFor(
@@ -5726,7 +5727,7 @@ class LiftoffCompiler {
     ArrayNew(decoder, imm, rtt.type.kind(), false);
   }
 
-  void ArrayFill(FullDecoder* decoder, ArrayIndexImmediate& imm,
+  void ArrayFill(FullDecoder* decoder, const ArrayIndexImmediate& imm,
                  const Value& array, const Value& /* index */,
                  const Value& /* value */, const Value& /* length */) {
     {
@@ -5841,9 +5842,32 @@ class LiftoffCompiler {
     __ DropValues(5);
   }
 
+  void ArrayNewCopy(FullDecoder* decoder, const ArrayIndexImmediate& imm,
+                    const Value& src, const Value& src_index,
+                    const Value& length, Value* /*result*/) {
+    int elem_size = value_kind_size(imm.array_type->element_type().kind());
+
+    LiftoffRegList pinned;
+    LiftoffRegister result(kReturnRegister0);
+    LiftoffRegister elem_size_reg =
+        pinned.set(__ GetUnusedRegister(kGpReg, pinned));
+    __ LoadConstant(elem_size_reg, WasmValue(elem_size));
+    LiftoffAssembler::VarState element_size_var(kI32, elem_size_reg, 0);
+    CallRuntimeStub(WasmCode::kWasmArrayNewCopy,
+                    MakeSig::Returns(kRef).Params(kI32, kI32, kI32, kRefNull),
+                    // Builtin parameter order:
+                    // [src_index, length, element_size, src].
+                    {__ cache_state()->stack_state.end()[-2],
+                     __ cache_state()->stack_state.end()[-1], element_size_var,
+                     __ cache_state()->stack_state.end()[-3]},
+                    decoder->position());
+    __ DropValues(3);
+    __ PushRegister(kRef, result);
+  }
+
   void ArrayNewFixed(FullDecoder* decoder, const ArrayIndexImmediate& imm,
                      const base::Vector<Value>& elements, const Value& rtt,
-                     Value* result) {
+                     Value* /*result*/) {
     ValueKind rtt_kind = rtt.type.kind();
     ValueKind elem_kind = imm.array_type->element_type().kind();
     // Allocate the array.

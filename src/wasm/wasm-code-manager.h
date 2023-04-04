@@ -121,6 +121,7 @@ enum class WellKnownImport : uint8_t;
   V(WasmAllocateArray_Uninitialized)     \
   V(WasmArrayCopy)                       \
   V(WasmArrayCopyWithChecks)             \
+  V(WasmArrayNewCopy)                    \
   V(WasmArrayNewSegment)                 \
   V(WasmArrayInitSegment)                \
   V(WasmAllocateStructWithRtt)           \

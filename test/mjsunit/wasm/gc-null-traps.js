@@ -88,6 +88,13 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
               kGCPrefix, kExprArrayCopy, array, array])
     .exportFunc();
 
+    builder.addFunction(
+      "arrayNewCopy",
+      makeSig([wasmRefNullType(array)], [wasmRefNullType(array)]))
+    .addBody([kExprLocalGet, 0, kExprI32Const, 1, kExprI32Const, 2,
+              kGCPrefix, kExprArrayNewCopy, array])
+    .exportFunc();
+
   builder.addFunction(
       "callFuncRef", makeSig([wasmRefNullType(sig), kWasmI32], [kWasmI32]))
     .addBody([kExprLocalGet, 1, kExprLocalGet, 0, kExprCallRef, sig])
@@ -158,6 +165,8 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
   assertTraps(kTrapNullDereference, () => instance.exports.arrayLen(null));
   assertTraps(kTrapNullDereference,
               () => instance.exports.arrayCopy(null, null));
+  assertTraps(kTrapNullDereference,
+                () => instance.exports.arrayNewCopy(null));
   assertTraps(kTrapNullDereference,
               () => instance.exports.callFuncRef(null, 42));
   assertTraps(kTrapNullDereference,

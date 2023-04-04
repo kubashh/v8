@@ -1143,6 +1143,8 @@ struct ControlBase : public PcForErrors<ValidationTag::full_validation> {
   F(ArrayLen, const Value& array_obj, Value* result)                           \
   F(ArrayCopy, const Value& src, const Value& src_index, const Value& dst,     \
     const Value& dst_index, const Value& length)                               \
+  F(ArrayNewCopy, const ArrayIndexImmediate& imm, const Value& src,            \
+    const Value& src_index, const Value& length, Value* result)                \
   F(ArrayFill, const ArrayIndexImmediate& imm, const Value& array,             \
     const Value& index, const Value& value, const Value& length)               \
   F(ArrayInitSegment, const ArrayIndexImmediate& array_imm,                    \
@@ -2254,6 +2256,11 @@ class WasmDecoder : public Decoder {
             (ios.Length(length_imm), ...);
             return length + array_imm.length + length_imm.length;
           }
+          case kExprArrayNewCopy: {
+            ArrayIndexImmediate src_imm(decoder, pc + length, validate);
+            (ios.TypeIndex(src_imm), ...);
+            return length + src_imm.length;
+          }
           case kExprArrayCopy: {
             ArrayIndexImmediate dst_imm(decoder, pc + length, validate);
             ArrayIndexImmediate src_imm(decoder, pc + length + dst_imm.length,
@@ -2582,6 +2589,8 @@ class WasmDecoder : public Decoder {
             return {3, 0};
           case kExprArrayCopy:
             return {5, 0};
+          case kExprArrayNewCopy:
+            return {3, 1};
           case kExprArrayFill:
           case kExprArrayInitData:
           case kExprArrayInitElem:
@@ -4997,6 +5006,19 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         Push(value);
         return opcode_length;
       }
+      case kExprArrayNewCopy: {
+        ArrayIndexImmediate src_imm(this, this->pc_ + opcode_length, validate);
+        if (!this->Validate(this->pc_ + opcode_length, src_imm)) return 0;
+        Value src = Peek(2, 0, ValueType::RefNull(src_imm.index));
+        Value src_index = Peek(1, 1, kWasmI32);
+        Value length = Peek(0, 2, kWasmI32);
+        Value result = CreateValue(ValueType::Ref(src_imm.index));
+        CALL_INTERFACE_IF_OK_AND_REACHABLE(ArrayNewCopy, src_imm, src,
+                                           src_index, length, &result);
+        Drop(3);
+        Push(result);
+        return opcode_length + src_imm.length;
+      };
       case kExprArrayCopy: {
         NON_CONST_ONLY
         ArrayIndexImmediate dst_imm(this, this->pc_ + opcode_length, validate);

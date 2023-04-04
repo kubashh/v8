@@ -1222,9 +1222,9 @@ class WasmGraphBuildingInterface {
   void ArrayNew(FullDecoder* decoder, const ArrayIndexImmediate& imm,
                 const Value& length, const Value& initial_value,
                 const Value& rtt, Value* result) {
-    SetAndTypeNode(result, builder_->ArrayNew(imm.index, imm.array_type,
-                                              length.node, initial_value.node,
-                                              rtt.node, decoder->position()));
+    SetAndTypeNode(result, builder_->ArrayNew(imm.array_type, length.node,
+                                              initial_value.node, rtt.node,
+                                              decoder->position()));
     // array.new(_default) introduces a loop. Therefore, we have to mark the
     // immediately nesting loop (if any) as non-innermost.
     if (!loop_infos_.empty()) loop_infos_.back().can_be_innermost = false;
@@ -1234,9 +1234,9 @@ class WasmGraphBuildingInterface {
                        const Value& length, const Value& rtt, Value* result) {
     // This will be set in {builder_}.
     TFNode* initial_value = nullptr;
-    SetAndTypeNode(result, builder_->ArrayNew(imm.index, imm.array_type,
-                                              length.node, initial_value,
-                                              rtt.node, decoder->position()));
+    SetAndTypeNode(
+        result, builder_->ArrayNew(imm.array_type, length.node, initial_value,
+                                   rtt.node, decoder->position()));
     // array.new(_default) introduces a loop. Therefore, we have to mark the
     // immediately nesting loop (if any) as non-innermost.
     if (!loop_infos_.empty()) loop_infos_.back().can_be_innermost = false;
@@ -1283,6 +1283,15 @@ class WasmGraphBuildingInterface {
     // array.fill introduces a loop. Therefore, we have to mark the immediately
     // nesting loop (if any) as non-innermost.
     if (!loop_infos_.empty()) loop_infos_.back().can_be_innermost = false;
+  }
+
+  void ArrayNewCopy(FullDecoder* decoder, const ArrayIndexImmediate& imm,
+                    const Value& src, const Value& src_index,
+                    const Value& length, Value* result) {
+    SetAndTypeNode(result, builder_->ArrayNewCopy(
+                               src.node, NullCheckFor(src.type), src_index.node,
+                               length.node, imm.array_type, imm.index,
+                               decoder->position()));
   }
 
   void ArrayNewFixed(FullDecoder* decoder, const ArrayIndexImmediate& imm,
