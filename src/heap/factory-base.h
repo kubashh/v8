@@ -13,7 +13,6 @@
 #include "src/objects/function-kind.h"
 #include "src/objects/instance-type.h"
 #include "src/roots/roots.h"
-#include "torque-generated/class-forward-declarations.h"
 
 namespace v8 {
 namespace internal {
