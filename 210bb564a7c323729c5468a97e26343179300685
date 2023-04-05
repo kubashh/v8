@@ -56,6 +56,30 @@
       },
       "revId": "210bb564a7c323729c5468a97e26343179300685",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "192deaf4_ce69b057",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3804,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-04-05T08:22:08Z",
+      "side": 1,
+      "message": "I mostly had Wasm in mind where Float32 values are common, but we might not need such an operator there. I\u0027ll remove the rep for now.",
+      "parentUuid": "9cafb275_692a5b8c",
+      "range": {
+        "startLine": 3804,
+        "startChar": 2,
+        "endLine": 3804,
+        "endChar": 26
+      },
+      "revId": "210bb564a7c323729c5468a97e26343179300685",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
