@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fd0f880_47f489a2",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-05T11:51:49Z",
+      "side": 1,
+      "message": "I kept the old names as they are still used in metrics and I am not changing those.",
+      "range": {
+        "startLine": 117,
+        "startChar": 8,
+        "endLine": 117,
+        "endChar": 25
+      },
+      "revId": "fee291c440a62ae2eaf476efa820a371f0260198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
