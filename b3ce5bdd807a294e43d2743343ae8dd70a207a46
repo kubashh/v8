@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5768cd90_25c825b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-05T05:48:03Z",
+      "side": 1,
+      "message": "Nice, thanks!",
+      "revId": "b3ce5bdd807a294e43d2743343ae8dd70a207a46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5662fd99_f4c48abd",
@@ -31,6 +48,23 @@
       "writtenOn": "2023-04-04T17:50:09Z",
       "side": 1,
       "message": "TODO: remove before landing.",
+      "revId": "b3ce5bdd807a294e43d2743343ae8dd70a207a46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecb40f86_88b0537c",
+        "filename": "src/common/ptr-compr.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-05T05:48:03Z",
+      "side": 1,
+      "message": "Could this (and non_inlined) be marked const?",
       "revId": "b3ce5bdd807a294e43d2743343ae8dd70a207a46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
