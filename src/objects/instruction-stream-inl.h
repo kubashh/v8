@@ -77,7 +77,7 @@ Address InstructionStream::body_end() const {
       !ObjectInYoungGeneration(value))
 
 RELEASE_ACQUIRE_INSTRUCTION_STREAM_ACCESSORS(code, Code, kCodeOffset)
-RELEASE_ACQUIRE_INSTRUCTION_STREAM_ACCESSORS(raw_code, HeapObject, kCodeOffset)
+RELEASE_ACQUIRE_INSTRUCTION_STREAM_ACCESSORS(raw_code, Object, kCodeOffset)
 INSTRUCTION_STREAM_ACCESSORS(relocation_info, ByteArray, kRelocationInfoOffset)
 #undef INSTRUCTION_STREAM_ACCESSORS
 #undef INSTRUCTION_STREAM_ACCESSORS_CHECKED2
@@ -86,6 +86,11 @@ INSTRUCTION_STREAM_ACCESSORS(relocation_info, ByteArray, kRelocationInfoOffset)
 
 // TODO(v8:13788): load base value from respective scheme class and drop
 // the kMainCageBaseUpper32BitsOffset field.
+
+void InstructionStream::initialize_code_to_smi_zero(ReleaseStoreTag) {
+  TaggedField<Object, kCodeOffset>::Release_Store(*this, Smi::zero());
+}
+
 PtrComprCageBase InstructionStream::main_cage_base() const {
 #ifdef V8_EXTERNAL_CODE_SPACE
   Address cage_base_hi = ReadField<Tagged_t>(kMainCageBaseUpper32BitsOffset);

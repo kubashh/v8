@@ -91,7 +91,9 @@ Code DeoptimizableCodeIterator::Next() {
       }
     }
     InstructionStream istream = InstructionStream::cast(object);
-    Code code = istream.code(kAcquireLoad);
+    Object maybe_code = istream.raw_code(kAcquireLoad);
+    if (maybe_code == Smi::zero()) continue;  // Not yet initialized.
+    Code code = Code::cast(maybe_code);
     if (!CodeKindCanDeoptimize(code.kind())) continue;
     return code;
   }
