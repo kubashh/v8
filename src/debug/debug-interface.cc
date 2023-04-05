@@ -9,6 +9,7 @@
 #include "src/base/utils/random-number-generator.h"
 #include "src/codegen/compiler.h"
 #include "src/codegen/script-details.h"
+#include "src/common/assert-scope.h"
 #include "src/date/date.h"
 #include "src/debug/debug-coverage.h"
 #include "src/debug/debug-evaluate.h"
@@ -593,8 +594,8 @@ bool Script::IsModule() const {
 
 namespace {
 
-int GetSmiValue(i::Handle<i::FixedArray> array, int index) {
-  return i::Smi::ToInt(array->get(index));
+int GetSmiValue(i::FixedArray array, int index) {
+  return i::Smi::ToInt(array.get(index));
 }
 
 bool CompareBreakLocation(const i::BreakLocation& loc1,
@@ -669,17 +670,17 @@ Maybe<int> Script::GetSourceOffset(const Location& location,
   }
 
   i::Script::InitLineEnds(script->GetIsolate(), script);
-  i::Handle<i::FixedArray> line_ends = i::Handle<i::FixedArray>::cast(
-      i::handle(script->line_ends(), script->GetIsolate()));
+  i::DisallowGarbageCollection no_gc;
+  auto line_ends = i::FixedArray::cast(script->line_ends());
   if (line < 0) {
     if (mode == GetSourceOffsetMode::kClamp) {
       return Just(0);
     }
     return Nothing<int>();
   }
-  if (line >= line_ends->length()) {
+  if (line >= line_ends.length()) {
     if (mode == GetSourceOffsetMode::kClamp) {
-      return Just(GetSmiValue(line_ends, line_ends->length() - 1));
+      return Just(GetSmiValue(line_ends, line_ends.length() - 1));
     }
     return Nothing<int>();
   }
@@ -699,7 +700,7 @@ Maybe<int> Script::GetSourceOffset(const Location& location,
     // Be permissive with columns that don't exist,
     // as long as they are clearly within the range
     // of the script.
-    if (line < line_ends->length() - 1 || mode == GetSourceOffsetMode::kClamp) {
+    if (line < line_ends.length() - 1 || mode == GetSourceOffsetMode::kClamp) {
       return Just(line_end_offset);
     }
     return Nothing<int>();
