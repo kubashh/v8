@@ -4,6 +4,7 @@
 
 #include "src/json/json-parser.h"
 
+#include "src/base/logging.h"
 #include "src/base/strings.h"
 #include "src/common/assert-scope.h"
 #include "src/common/globals.h"
@@ -455,10 +456,7 @@ void JsonParser<Char>::ReportUnexpectedToken(
                    : LookUpErrorMessageForJsonToken(token, arg, arg2, pos);
 
   Handle<Script> script(factory->NewScript(original_source_));
-  if (isolate()->NeedsSourcePositionsForProfiling()) {
-    Script::InitLineEnds(isolate(), script);
-  }
-
+  DCHECK_IMPLIES(isolate_->NeedsSourcePositions(), script->has_line_ends());
   DebuggableStackFrameIterator it(isolate_);
   if (!it.done() && it.is_javascript()) {
     FrameSummary summary = it.GetTopValidFrame();
