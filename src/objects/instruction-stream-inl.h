@@ -53,10 +53,14 @@ Address InstructionStream::body_end() const {
       !ObjectInYoungGeneration(value))
 
 RELEASE_ACQUIRE_INSTRUCTION_STREAM_ACCESSORS(code, Code, kCodeOffset)
-RELEASE_ACQUIRE_INSTRUCTION_STREAM_ACCESSORS(raw_code, HeapObject, kCodeOffset)
+RELEASE_ACQUIRE_INSTRUCTION_STREAM_ACCESSORS(raw_code, Object, kCodeOffset)
 ACCESSORS(InstructionStream, relocation_info, ByteArray, kRelocationInfoOffset)
 #undef RELEASE_ACQUIRE_INSTRUCTION_STREAM_ACCESSORS
 #undef RELEASE_ACQUIRE_INSTRUCTION_STREAM_ACCESSORS_CHECKED2
+
+void InstructionStream::initialize_code_to_smi_zero(ReleaseStoreTag) {
+  TaggedField<Object, kCodeOffset>::Release_Store(*this, Smi::zero());
+}
 
 PtrComprCageBase InstructionStream::main_cage_base() const {
 #ifdef V8_EXTERNAL_CODE_SPACE

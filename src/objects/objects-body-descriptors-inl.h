@@ -988,10 +988,15 @@ class InstructionStream::BodyDescriptor final : public BodyDescriptorBase {
                     v);
 
     InstructionStream istream = InstructionStream::cast(obj);
-    Code code = istream.unchecked_code(kAcquireLoad);
-    RelocIterator it(code, istream, istream.unchecked_relocation_info(),
-                     kRelocModeMask);
-    v->VisitRelocInfo(&it);
+    Object maybe_code = istream.raw_code(kAcquireLoad);
+    if (maybe_code == Smi::zero()) {
+      // The InstructionStream is currently being initialized and its
+      // associated Code object hasn't yet been allocated. Nothing to do.
+    } else {
+      RelocIterator it(Code::unchecked_cast(maybe_code), istream,
+                       istream.unchecked_relocation_info(), kRelocModeMask);
+      v->VisitRelocInfo(&it);
+    }
   }
 
   template <typename ObjectVisitor>
