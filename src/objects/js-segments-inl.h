@@ -24,8 +24,7 @@ TQ_OBJECT_CONSTRUCTORS_IMPL(JSSegments)
 // Base segments accessors.
 ACCESSORS(JSSegments, icu_break_iterator, Managed<icu::BreakIterator>,
           kIcuBreakIteratorOffset)
-ACCESSORS(JSSegments, unicode_string, Managed<icu::UnicodeString>,
-          kUnicodeStringOffset)
+ACCESSORS(JSSegments, input_string, String, kInputStringOffset)
 
 inline void JSSegments::set_granularity(JSSegmenter::Granularity granularity) {
   DCHECK_GE(GranularityBits::kMax, granularity);

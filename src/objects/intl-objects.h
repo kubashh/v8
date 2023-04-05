@@ -308,9 +308,8 @@ class Intl {
   };
 
   // Utility function to set text to BreakIterator.
-  static Handle<Managed<icu::UnicodeString>> SetTextToBreakIterator(
-      Isolate* isolate, Handle<String> text,
-      icu::BreakIterator* break_iterator);
+  static void SetTextToBreakIterator(Isolate* isolate, Handle<String> text,
+                                     icu::BreakIterator* break_iterator);
 
   // ecma262 #sec-string.prototype.normalize
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> Normalize(

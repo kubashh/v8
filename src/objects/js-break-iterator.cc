@@ -105,8 +105,6 @@ MaybeHandle<JSV8BreakIterator> JSV8BreakIterator::New(
   Handle<Managed<icu::BreakIterator>> managed_break_iterator =
       Managed<icu::BreakIterator>::FromUniquePtr(isolate, 0,
                                                  std::move(break_iterator));
-  Handle<Managed<icu::UnicodeString>> managed_unicode_string =
-      Managed<icu::UnicodeString>::FromRawPtr(isolate, 0, nullptr);
 
   Handle<String> locale_str =
       isolate->factory()->NewStringFromAsciiChecked(r.locale.c_str());
@@ -118,7 +116,6 @@ MaybeHandle<JSV8BreakIterator> JSV8BreakIterator::New(
   DisallowGarbageCollection no_gc;
   break_iterator_holder->set_locale(*locale_str);
   break_iterator_holder->set_break_iterator(*managed_break_iterator);
-  break_iterator_holder->set_unicode_string(*managed_unicode_string);
 
   // Return break_iterator_holder
   return break_iterator_holder;
@@ -195,9 +192,7 @@ void JSV8BreakIterator::AdoptText(
   icu::BreakIterator* break_iterator =
       break_iterator_holder->break_iterator().raw();
   DCHECK_NOT_NULL(break_iterator);
-  Handle<Managed<icu::UnicodeString>> unicode_string =
-      Intl::SetTextToBreakIterator(isolate, text, break_iterator);
-  break_iterator_holder->set_unicode_string(*unicode_string);
+  Intl::SetTextToBreakIterator(isolate, text, break_iterator);
 }
 
 Handle<Object> JSV8BreakIterator::Current(
