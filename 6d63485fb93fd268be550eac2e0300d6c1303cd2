@@ -244,6 +244,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb1de97d_c845bcc6",
+        "filename": "src/objects/js-segment-iterator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T08:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8081f399_0701a19f",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b0a1f77_f7325f1e",
@@ -279,6 +297,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44087a7b_e67abff9",
+        "filename": "src/objects/js-segment-iterator.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T08:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57fdbeb2_8a558cb1",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2452d449_63b9cd4a",
@@ -310,6 +346,24 @@
       "side": 1,
       "message": "Ditto.",
       "parentUuid": "2452d449_63b9cd4a",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3de84e7_8eccc732",
+        "filename": "src/objects/js-segments-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T08:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6c6f91f_278aa74f",
       "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -415,6 +469,24 @@
       "side": 1,
       "message": "For the same reason as above, probably not.",
       "parentUuid": "b9100b08_42c28bff",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0490e563_504e061f",
+        "filename": "src/objects/js-segments.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T08:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f83f3d9_102cf8cd",
       "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
