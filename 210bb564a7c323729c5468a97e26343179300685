@@ -16,6 +16,46 @@
       "message": "PTAL, thanks",
       "revId": "210bb564a7c323729c5468a97e26343179300685",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "890c1801_2611011a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-04-05T06:44:51Z",
+      "side": 1,
+      "message": "LGTM :)",
+      "revId": "210bb564a7c323729c5468a97e26343179300685",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cafb275_692a5b8c",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 3804,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-04-05T06:44:51Z",
+      "side": 1,
+      "message": "This is currently always Float64, and it doesn\u0027t look like TF has a very similar operation with something other than Float64. Do you have plans to make this accept other representations soon? If yes, then a TODO would probably make sense. If not, then I would suggest removing this field and re-adding it if/when we need it.",
+      "range": {
+        "startLine": 3804,
+        "startChar": 2,
+        "endLine": 3804,
+        "endChar": 26
+      },
+      "revId": "210bb564a7c323729c5468a97e26343179300685",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
