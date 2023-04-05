@@ -52,6 +52,7 @@ MaybeHandle<JSSegments> JSSegments::Create(Isolate* isolate,
 
   // 4. Set segments.[[SegmentsString]] to string.
   segments->set_unicode_string(*unicode_string);
+  segments->set_input_string(*string);
 
   // 5. Return segments.
   return segments;
@@ -61,8 +62,12 @@ MaybeHandle<JSSegments> JSSegments::Create(Isolate* isolate,
 MaybeHandle<Object> JSSegments::Containing(Isolate* isolate,
                                            Handle<JSSegments> segments,
                                            double n_double) {
+  icu::BreakIterator* break_iterator = segments->icu_break_iterator().raw();
+  icu::UnicodeString string;
+  break_iterator->getText().getText(string);
+
   // 5. Let len be the length of string.
-  int32_t len = segments->unicode_string().raw()->length();
+  int32_t len = string.length();
 
   // 7. If n < 0 or n ≥ len, return undefined.
   if (n_double < 0 || n_double >= len) {
@@ -70,10 +75,10 @@ MaybeHandle<Object> JSSegments::Containing(Isolate* isolate,
   }
 
   int32_t n = static_cast<int32_t>(n_double);
-  // n may point to the surrogate tail- adjust it back to the lead.
-  n = segments->unicode_string().raw()->getChar32Start(n);
 
-  icu::BreakIterator* break_iterator = segments->icu_break_iterator().raw();
+  // n may point to the surrogate tail- adjust it back to the lead.
+  n = string.getChar32Start(n);
+
   // 8. Let startIndex be ! FindBoundary(segmenter, string, n, before).
   int32_t start_index =
       break_iterator->isBoundary(n) ? n : break_iterator->preceding(n);
@@ -85,7 +90,7 @@ MaybeHandle<Object> JSSegments::Containing(Isolate* isolate,
   // endIndex).
   return CreateSegmentDataObject(
       isolate, segments->granularity(), break_iterator,
-      *(segments->unicode_string().raw()), start_index, end_index);
+      handle(segments->input_string(), isolate), start_index, end_index);
 }
 
 namespace {
@@ -106,9 +111,12 @@ bool CurrentSegmentIsWordLike(icu::BreakIterator* break_iterator) {
 // ecma402 #sec-createsegmentdataobject
 MaybeHandle<Object> JSSegments::CreateSegmentDataObject(
     Isolate* isolate, JSSegmenter::Granularity granularity,
-    icu::BreakIterator* break_iterator, const icu::UnicodeString& string,
+    icu::BreakIterator* break_iterator, Handle<String> input_string,
     int32_t start_index, int32_t end_index) {
   Factory* factory = isolate->factory();
+
+  icu::UnicodeString string;
+  break_iterator->getText().getText(string);
 
   // 1. Let len be the length of string.
   // 2. Assert: startIndex ≥ 0.
@@ -143,9 +151,6 @@ MaybeHandle<Object> JSSegments::CreateSegmentDataObject(
   USE(maybe_create_index);
 
   // 9. Perform ! CreateDataPropertyOrThrow(result, "input", string).
-  Handle<String> input_string;
-  ASSIGN_RETURN_ON_EXCEPTION(isolate, input_string,
-                             Intl::ToString(isolate, string), JSObject);
   Maybe<bool> maybe_create_input = JSReceiver::CreateDataProperty(
       isolate, result, factory->input_string(), input_string, Just(kDontThrow));
   DCHECK(maybe_create_input.FromJust());

@@ -2545,6 +2545,7 @@ void JSSegments::JSSegmentsPrint(std::ostream& os) {
   JSObjectPrintHeader(os, *this, "JSSegments");
   os << "\n - icu break iterator: " << Brief(icu_break_iterator());
   os << "\n - unicode string: " << Brief(unicode_string());
+  os << "\n - input string: " << Brief(input_string());
   os << "\n - granularity: " << GranularityAsString(GetIsolate());
   JSObjectPrintBody(os, *this);
 }

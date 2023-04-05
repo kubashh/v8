@@ -31,7 +31,7 @@ Handle<String> JSSegmentIterator::GranularityAsString(Isolate* isolate) const {
 // ecma402 #sec-createsegmentiterator
 MaybeHandle<JSSegmentIterator> JSSegmentIterator::Create(
     Isolate* isolate, icu::BreakIterator* break_iterator,
-    JSSegmenter::Granularity granularity) {
+    JSSegmenter::Granularity granularity, Handle<String> input_string) {
   // Clone a copy for both the ownership and not sharing with containing and
   // other calls to the iterator because icu::BreakIterator keep the iteration
   // position internally and cannot be shared across multiple calls to
@@ -63,6 +63,7 @@ MaybeHandle<JSSegmentIterator> JSSegmentIterator::Create(
   segment_iterator->set_granularity(granularity);
   segment_iterator->set_icu_break_iterator(*managed_break_iterator);
   segment_iterator->set_unicode_string(*unicode_string);
+  segment_iterator->set_input_string(*input_string);
 
   return segment_iterator;
 }
@@ -90,15 +91,13 @@ MaybeHandle<JSReceiver> JSSegmentIterator::Next(
   // 9. Let segmentData be ! CreateSegmentDataObject(segmenter, string,
   // startIndex, endIndex).
 
-  icu::UnicodeString string;
-  icu_break_iterator->getText().getText(string);
-
   Handle<Object> segment_data;
   ASSIGN_RETURN_ON_EXCEPTION(
       isolate, segment_data,
       JSSegments::CreateSegmentDataObject(
-          isolate, segment_iterator->granularity(), icu_break_iterator, string,
-          start_index, end_index),
+          isolate, segment_iterator->granularity(), icu_break_iterator,
+          handle(segment_iterator->input_string(), isolate), start_index,
+          end_index),
       JSReceiver);
 
   // 10. Return ! CreateIterResultObject(segmentData, false).
