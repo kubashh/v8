@@ -455,9 +455,6 @@ void JsonParser<Char>::ReportUnexpectedToken(
                    : LookUpErrorMessageForJsonToken(token, arg, arg2, pos);
 
   Handle<Script> script(factory->NewScript(original_source_));
-  if (isolate()->NeedsSourcePositionsForProfiling()) {
-    Script::InitLineEnds(isolate(), script);
-  }
 
   DebuggableStackFrameIterator it(isolate_);
   if (!it.done() && it.is_javascript()) {

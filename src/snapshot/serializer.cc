@@ -773,7 +773,7 @@ void Serializer::ObjectSerializer::Serialize() {
   if (InstanceTypeChecker::IsScript(instance_type)) {
     // Clear cached line ends & compiled lazy function positions.
     Oddball undefined = ReadOnlyRoots(isolate()).undefined_value();
-    Handle<Script>::cast(object_)->set_line_ends(undefined);
+    Handle<Script>::cast(object_)->set_line_ends(Smi::zero());
     Handle<Script>::cast(object_)->set_compiled_lazy_function_positions(
         undefined);
   }
