@@ -214,6 +214,7 @@ class MarkCompactCollector final : public CollectorBase {
   class ClientCustomRootBodyMarkingVisitor;
   class SharedHeapObjectVisitor;
   class RootMarkingVisitor;
+  class ClientRootMarkingVisitor;
 
   enum class StartCompactionMode {
     kIncremental,
