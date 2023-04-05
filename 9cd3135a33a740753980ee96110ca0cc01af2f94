@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b957701a_b558e9b3",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-05T15:39:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b720fe5b_d0d7282d",
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9343abd_efb975f9",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-04-05T15:18:40Z",
       "side": 1,
       "message": "It\u0027s already a part of IsPrivateName().",
+      "range": {
+        "startLine": 784,
+        "startChar": 8,
+        "endLine": 784,
+        "endChar": 55
+      },
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "146fb68c_aa99267a",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-05T15:39:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9343abd_efb975f9",
       "range": {
         "startLine": 784,
         "startChar": 8,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "87eb648b_b25f8de6",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-05T15:39:41Z",
+      "side": 1,
+      "message": "That looks out of scope for this cl though.",
+      "parentUuid": "5d72ca65_aa6ab045",
+      "range": {
+        "startLine": 1153,
+        "startChar": 30,
+        "endLine": 1153,
+        "endChar": 50
+      },
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3aa24c7d_5a30282f",
         "filename": "src/objects/objects.cc",
         "patchSetId": 7
@@ -77,6 +143,30 @@
       "writtenOn": "2023-04-05T15:18:40Z",
       "side": 1,
       "message": "Ditto.",
+      "range": {
+        "startLine": 1162,
+        "startChar": 12,
+        "endLine": 1162,
+        "endChar": 32
+      },
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7221ee4f_767a49e0",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-05T15:39:41Z",
+      "side": 1,
+      "message": "same as above",
+      "parentUuid": "3aa24c7d_5a30282f",
       "range": {
         "startLine": 1162,
         "startChar": 12,
@@ -110,6 +200,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f280701e_9e094269",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-05T15:39:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7863b8b2_6f4ac3da",
+      "range": {
+        "startLine": 1192,
+        "startChar": 8,
+        "endLine": 1192,
+        "endChar": 41
+      },
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46926dc4_b9c9518a",
@@ -123,6 +237,24 @@
       "writtenOn": "2023-04-05T15:18:40Z",
       "side": 1,
       "message": "Runtime::GetObjectProperty() does these checks again after `Object::GetProperty()` call.",
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "425a514d_3240d473",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1209,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-05T15:39:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46926dc4_b9c9518a",
       "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
