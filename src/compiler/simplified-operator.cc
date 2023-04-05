@@ -2250,7 +2250,7 @@ const Operator* SimplifiedOperatorBuilder::FastApiCall(
       FastApiCallNode::kEffectAndControlInputCount;
   return zone()->New<Operator1<FastApiCallParameters>>(
       IrOpcode::kFastApiCall, Operator::kNoThrow, "FastApiCall",
-      value_input_count, 1, 1, 1, 1, 0,
+      value_input_count, 1, 1, 2, 1, 0,
       FastApiCallParameters(c_functions, feedback, descriptor));
 }
 

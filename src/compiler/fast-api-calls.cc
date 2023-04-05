@@ -5,6 +5,7 @@
 #include "src/compiler/fast-api-calls.h"
 
 #include "src/codegen/cpu-features.h"
+#include "src/codegen/machine-type.h"
 #include "src/compiler/globals.h"
 
 namespace v8 {
@@ -351,7 +352,8 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
 
   Node* fast_call_result = convert_return_value_(c_signature, c_call_result);
 
-  auto merge = __ MakeLabel(MachineRepresentation::kTagged);
+  auto merge = __ MakeLabel(MachineRepresentation::kWord32,
+                            MachineRepresentation::kTagged);
   if (c_signature->HasOptions()) {
     DCHECK_NOT_NULL(stack_slot);
     Node* load = __ Load(
@@ -375,16 +377,18 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
     // Generate direct slow call.
     __ Bind(&if_error);
     {
-      Node* slow_call_result = generate_slow_api_call_();
-      __ Goto(&merge, slow_call_result);
+      // The actual return value is irrelevant.
+      __ Goto(&merge, __ Uint32Constant(fast_api_call::kFailureValue),
+              __ IntPtrConstant(0));
     }
   }
 
   __ Bind(&if_success);
-  __ Goto(&merge, fast_call_result);
+  __ Goto(&merge, __ Uint32Constant(fast_api_call::kSuccessValue),
+          fast_call_result);
 
   __ Bind(&merge);
-  return merge.PhiAt(0);
+  return merge.PhiAt(1);
 }
 
 #undef __

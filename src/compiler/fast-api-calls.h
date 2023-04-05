@@ -13,6 +13,9 @@ namespace internal {
 namespace compiler {
 namespace fast_api_call {
 
+static constexpr uint32_t kSuccessValue = 1;
+static constexpr uint32_t kFailureValue = 0;
+
 struct OverloadsResolutionResult {
   static OverloadsResolutionResult Invalid() {
     return OverloadsResolutionResult(-1, CTypeInfo::Type::kVoid);

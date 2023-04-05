@@ -1878,6 +1878,7 @@ OpIndex GraphBuilder::Process(
       const FastApiCallFunctionVector& c_functions = params.c_functions();
       const int c_arg_count = params.argument_count();
 
+      // TODO(mslekova): drop the slow call arguments
       base::SmallVector<OpIndex, 16> slow_call_arguments;
       DCHECK_EQ(node->op()->ValueInputCount() - c_arg_count,
                 n.SlowCallArgumentCount());

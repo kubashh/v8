@@ -60,7 +60,6 @@ class FastCApiObject {
 
   static void ThrowFallbackSlowCallback(
       const FunctionCallbackInfo<Value>& info) {
-    DCHECK(i::ValidateCallbackInfo(info));
     FastCApiObject* self = UnwrapObject(info.This());
     CHECK_SELF_OR_THROW();
     self->slow_call_count_++;

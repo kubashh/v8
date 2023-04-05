@@ -11,6 +11,7 @@
 #include "src/builtins/builtins-promise.h"
 #include "src/builtins/builtins-utils.h"
 #include "src/codegen/code-factory.h"
+#include "src/codegen/machine-type.h"
 #include "src/codegen/tnode.h"
 #include "src/compiler/access-builder.h"
 #include "src/compiler/access-info.h"
@@ -719,7 +720,10 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
 
     DCHECK_EQ(cursor, c_argument_count + arity_ + kExtraInputsCount);
 
-    return FastApiCall(call_descriptor, inputs.begin(), inputs.size());
+    // TODO(mslekova): compute from the signature and overloads
+    bool with_fallback = false;
+    return FastApiCall(call_descriptor, inputs.begin(), inputs.size(),
+                       with_fallback);
   }
 
  private:
@@ -733,12 +737,71 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
       kCallCodeDataAndArgc + kHolder + kReceiver;
   static constexpr int kInlineSize = 12;
 
+  // Lower generic API call, for which no access checks are needed.
+  Node* LowerGenericApiCall(Node* node) {
+    CallHandlerInfoRef call_handler_info =
+        *function_template_info_.call_code(broker());
+    Callable call_api_callback = CodeFactory::CallApiCallback(isolate());
+    CallInterfaceDescriptor cid = call_api_callback.descriptor();
+    auto call_descriptor =
+        Linkage::GetStubCallDescriptor(graph()->zone(), cid, arity_ + 1 /*
+       implicit receiver */, CallDescriptor::kNeedsFrameState);
+    ApiFunction api_function(call_handler_info.callback());
+    ExternalReference function_reference = ExternalReference::Create(
+        &api_function, ExternalReference::DIRECT_API_CALL);
+
+    Node* continuation_frame_state =
+        CreateGenericLazyDeoptContinuationFrameState(
+            jsgraph(), shared_, target_, ContextInput(), receiver_,
+            FrameStateInput());
+
+    node->RemoveInput(JSCallNode::FeedbackVectorIndexForArgc(arity_));
+    node->InsertInput(graph()->zone(), 0,
+                      jsgraph()->HeapConstant(call_api_callback.code()));
+    node->ReplaceInput(1, jsgraph()->ExternalConstant(function_reference));
+    node->InsertInput(graph()->zone(), 2, jsgraph()->Constant(arity_));
+    node->InsertInput(
+        graph()->zone(), 3,
+        jsgraph()->Constant(call_handler_info.data(broker()), broker()));
+    node->InsertInput(graph()->zone(), 4, holder_);
+    node->ReplaceInput(5, receiver_);  // Update receiver input.
+    // 6 + argc is context input.
+    node->ReplaceInput(6 + arity_ + 1, continuation_frame_state);
+    node->ReplaceInput(6 + arity_ + 2, effect());
+    NodeProperties::ChangeOp(node, common()->Call(call_descriptor));
+    return node;
+  }
+
   TNode<Object> FastApiCall(CallDescriptor* descriptor, Node** inputs,
                             size_t inputs_size) {
     return AddNode<Object>(
         graph()->NewNode(simplified()->FastApiCall(c_candidate_functions_,
                                                    feedback(), descriptor),
                          static_cast<int>(inputs_size), inputs));
+  }
+
+  TNode<Object> FastApiCall(CallDescriptor* descriptor, Node** inputs,
+                            size_t inputs_size, bool with_fallback) {
+    // TODO(mslekova): support optional fallback
+    auto done = MakeLabel(MachineRepresentation::kTagged);
+    Node* fast_call = AddNode<Object>(
+        graph()->NewNode(simplified()->FastApiCall(c_candidate_functions_,
+                                                   feedback(), descriptor),
+                         static_cast<int>(inputs_size), inputs));
+
+    TNode<Word32T> status =
+        TNode<Word32T>::UncheckedCast(Projection(0, fast_call));
+    TNode<Object> fast_call_result =
+        TNode<Object>::UncheckedCast(Projection(1, fast_call));
+    GotoIf(TaggedEqual(status, SmiConstant(fast_api_call::kSuccessValue)),
+           &done, fast_call_result);
+
+    TNode<Object> slow_call =
+        TNode<Object>::UncheckedCast(LowerGenericApiCall(node_ptr()));
+    Goto(&done, slow_call);
+
+    Bind(&done);
+    return done.PhiAt<Object>(0);
   }
 
   const FastApiCallFunctionVector c_candidate_functions_;
@@ -3883,16 +3946,14 @@ Reduction JSCallReducer::ReduceCallApiFunction(Node* node,
       broker(), graph()->zone(), function_template_info, argc);
   DCHECK_LE(c_candidate_functions.size(), 2);
 
-  // TODO(v8:13600): Support exception handling for FastApiCall nodes.
-  if (!c_candidate_functions.empty() &&
-      !NodeProperties::IsExceptionalCall(node)) {
+  if (!c_candidate_functions.empty()) {
     FastApiCallReducerAssembler a(this, node, function_template_info,
                                   c_candidate_functions, receiver, holder,
                                   shared, target, argc, effect);
     Node* fast_call_subgraph = a.ReduceFastApiCall();
-    ReplaceWithSubgraph(&a, fast_call_subgraph);
+    ReplaceWithValue(a.node_ptr(), fast_call_subgraph, a.effect(), a.control());
 
-    return Replace(fast_call_subgraph);
+    return Changed(fast_call_subgraph);
   }
 
   // Slow call

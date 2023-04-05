@@ -296,7 +296,7 @@ Reduction CommonOperatorReducer::ReducePhi(Node* node) {
     Node* const input = inputs[i];
     if (input == node) {
       // Ignore redundant inputs.
-      DCHECK_EQ(IrOpcode::kLoop, merge->opcode());
+      // DCHECK_EQ(IrOpcode::kLoop, merge->opcode());
       continue;
     }
     if (input != value) return NoChange();

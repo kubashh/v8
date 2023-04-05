@@ -2007,6 +2007,7 @@ class RepresentationSelector {
       ProcessInput<T>(node, i, arg_use_info[i]);
     }
 
+    // TODO(mslekova): drop the rest
     // The call code for the slow call.
     ProcessInput<T>(node, c_arg_count, UseInfo::AnyTagged());
     for (int i = 1; i <= js_arg_count; i++) {
@@ -2018,6 +2019,7 @@ class RepresentationSelector {
       ProcessInput<T>(node, i, UseInfo::AnyTagged());
     }
     ProcessRemainingInputs<T>(node, value_input_count);
+
     SetOutput<T>(node, MachineRepresentation::kTagged);
   }
 
