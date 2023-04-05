@@ -86,8 +86,8 @@ const char* GCTracer::Event::TypeName(bool short_name) const {
   return "Unknown Event Type";
 }
 
-GCTracer::RecordGCPhasesInfo::RecordGCPhasesInfo(Heap* heap,
-                                                 GarbageCollector collector) {
+GCTracer::RecordGCPhasesInfo::RecordGCPhasesInfo(
+    Heap* heap, GarbageCollector collector, GarbageCollectionReason reason) {
   if (Heap::IsYoungGenerationCollector(collector)) {
     type_timer_ = nullptr;
     type_priority_timer_ = nullptr;
@@ -102,35 +102,60 @@ GCTracer::RecordGCPhasesInfo::RecordGCPhasesInfo(Heap* heap,
     DCHECK_EQ(GarbageCollector::MARK_COMPACTOR, collector);
     Counters* counters = heap->isolate()->counters();
     const bool in_background = heap->isolate()->IsIsolateInBackground();
-    if (heap->incremental_marking()->IsStopped()) {
-      mode_ = Mode::None;
-      type_timer_ = counters->gc_compactor();
-      type_priority_timer_ = in_background
-                                 ? counters->gc_compactor_background()
-                                 : counters->gc_compactor_foreground();
-      trace_event_name_ = "V8.GCCompactor";
-    } else if (heap->ShouldReduceMemory()) {
-      mode_ = Mode::None;
-      type_timer_ = counters->gc_finalize_reduce_memory();
-      type_priority_timer_ =
-          in_background ? counters->gc_finalize_reduce_memory_background()
-                        : counters->gc_finalize_reduce_memory_foreground();
-      trace_event_name_ = "V8.GCFinalizeMCReduceMemory";
-    } else {
-      if (heap->incremental_marking()->IsMarking() &&
-          heap->incremental_marking()
-              ->local_marking_worklists()
-              ->IsPerContextMode()) {
-        mode_ = Mode::None;
-        type_timer_ = counters->gc_finalize_measure_memory();
+    const bool is_incremental = heap->incremental_marking()->IsStopped();
+    mode_ = Mode::None;
+    // The following block selects histogram counters to emit. The trace event
+    // name should be changed when metrics are updated.
+    if (is_incremental) {
+      if (heap->ShouldReduceMemory()) {
+        type_timer_ = counters->gc_finalize_incremental_memory_reducing();
+        type_priority_timer_ =
+            in_background
+                ? counters->gc_finalize_incremental_memory_reducing_background()
+                : counters
+                      ->gc_finalize_incremental_memory_reducing_foreground();
+        trace_event_name_ = "V8.GCFinalizeMCReduceMemory";
+      } else if (reason == GarbageCollectionReason::kMeasureMemory) {
+        type_timer_ = counters->gc_finalize_incremental_memory_measure();
+        type_priority_timer_ =
+            in_background
+                ? counters->gc_finalize_incremental_memory_measure_background()
+                : counters->gc_finalize_incremental_memory_measure_foreground();
         trace_event_name_ = "V8.GCFinalizeMCMeasureMemory";
       } else {
-        mode_ = Mode::Finalize;
-        type_timer_ = counters->gc_finalize();
+        type_timer_ = counters->gc_finalize_incremental_regular();
+        type_priority_timer_ =
+            in_background
+                ? counters->gc_finalize_incremental_regular_background()
+                : counters->gc_finalize_incremental_regular_foreground();
         trace_event_name_ = "V8.GCFinalizeMC";
+        mode_ = Mode::Finalize;
       }
-      type_priority_timer_ = in_background ? counters->gc_finalize_background()
-                                           : counters->gc_finalize_foreground();
+    } else {
+      trace_event_name_ = "V8.GCCompactor";
+      if (heap->ShouldReduceMemory()) {
+        type_timer_ = counters->gc_finalize_non_incremental_memory_reducing();
+        type_priority_timer_ =
+            in_background
+                ? counters
+                      ->gc_finalize_non_incremental_memory_reducing_background()
+                : counters
+                      ->gc_finalize_non_incremental_memory_reducing_foreground();
+      } else if (reason == GarbageCollectionReason::kMeasureMemory) {
+        type_timer_ = counters->gc_finalize_non_incremental_memory_measure();
+        type_priority_timer_ =
+            in_background
+                ? counters
+                      ->gc_finalize_non_incremental_memory_measure_background()
+                : counters
+                      ->gc_finalize_non_incremental_memory_measure_foreground();
+      } else {
+        type_timer_ = counters->gc_finalize_non_incremental_regular();
+        type_priority_timer_ =
+            in_background
+                ? counters->gc_finalize_non_incremental_regular_background()
+                : counters->gc_finalize_non_incremental_regular_foreground();
+      }
     }
   }
 }
