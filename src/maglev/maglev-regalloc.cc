@@ -847,7 +847,9 @@ void StraightForwardRegisterAllocator::DropRegisterValue(
   node->RemoveRegister(reg);
   // Return if the removed value already has another register or is loadable
   // from memory.
-  if (node->has_register() || node->is_loadable()) return;
+  if (node->has_register() ||
+      (node->is_loadable() && node->loadable_slot().IsConstant()))
+    return;
   // Try to move the value to another register. Do so without blocking that
   // register, as we may still want to use it elsewhere.
   if (!registers.UnblockedFreeIsEmpty() && !force_spill) {
