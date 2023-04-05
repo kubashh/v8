@@ -221,7 +221,9 @@ static void LookupForRead(LookupIterator* it, bool is_has_property) {
       }
       case LookupIterator::ACCESS_CHECK:
         // ICs know how to perform access checks on global proxies.
-        if (it->GetHolder<JSObject>()->IsJSGlobalProxy() && it->HasAccess()) {
+        if (it->GetHolder<JSObject>().is_identical_to(
+                it->isolate()->global_proxy()) &&
+            !it->isolate()->global_object()->IsDetached()) {
           break;
         }
         return;
@@ -448,30 +450,6 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name,
   // Named lookup in the object.
   LookupForRead(&it, IsAnyHas());
 
-  if (name->IsPrivate()) {
-    Handle<Symbol> private_symbol = Handle<Symbol>::cast(name);
-    if (!IsAnyHas() && private_symbol->is_private_name() && !it.IsFound()) {
-      Handle<String> name_string(String::cast(private_symbol->description()),
-                                 isolate());
-      if (private_symbol->is_private_brand()) {
-        Handle<String> class_name =
-            (name_string->length() == 0)
-                ? isolate()->factory()->anonymous_string()
-                : name_string;
-        return TypeError(MessageTemplate::kInvalidPrivateBrandInstance, object,
-                         class_name);
-      }
-      return TypeError(MessageTemplate::kInvalidPrivateMemberRead, object,
-                       name_string);
-    }
-
-    // IC handling of private symbols/fields lookup on JSProxy is not
-    // supported.
-    if (object->IsJSProxy()) {
-      use_ic = false;
-    }
-  }
-
   if (it.IsFound() || !ShouldThrowReferenceError()) {
     // Update inline cache and stub cache.
     if (use_ic) {
@@ -498,9 +476,30 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name,
     if (it.IsFound()) {
       return result;
     } else if (!ShouldThrowReferenceError()) {
+      if (name->IsPrivate()) {
+        if (it.state() == LookupIterator::ACCESS_CHECK && it.HasAccess()) {
+          it.Next();
+        }
+        Handle<Symbol> private_symbol = Handle<Symbol>::cast(name);
+        if (!IsAnyHas() && private_symbol->is_private_name() && !it.IsFound()) {
+          Handle<String> name_string(
+              String::cast(private_symbol->description()), isolate());
+          if (private_symbol->is_private_brand()) {
+            Handle<String> class_name =
+                (name_string->length() == 0)
+                    ? isolate()->factory()->anonymous_string()
+                    : name_string;
+            return TypeError(MessageTemplate::kInvalidPrivateBrandInstance,
+                             object, class_name);
+          }
+          return TypeError(MessageTemplate::kInvalidPrivateMemberRead, object,
+                           name_string);
+        }
+      }
       return result;
     }
   }
+
   return ReferenceError(name);
 }
 
@@ -1130,6 +1129,10 @@ MaybeObjectHandle LoadIC::ComputeHandler(LookupIterator* lookup) {
       return MaybeObjectHandle(LoadHandler::LoadNonExistent(isolate()));
 
     case LookupIterator::JSPROXY: {
+      // Private names on JSProxy is currently not supported.
+      if (lookup->name()->IsPrivate()) {
+        return MaybeObjectHandle(LoadHandler::LoadSlow(isolate()));
+      }
       Handle<Smi> smi_handler = LoadHandler::LoadProxy(isolate());
       if (holder_is_lookup_start_object) return MaybeObjectHandle(smi_handler);
 
