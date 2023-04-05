@@ -35,7 +35,7 @@ class JSSegmentIterator
   // ecma402 #sec-CreateSegmentIterator
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSSegmentIterator> Create(
       Isolate* isolate, icu::BreakIterator* icu_break_iterator,
-      JSSegmenter::Granularity granularity);
+      JSSegmenter::Granularity granularity, Handle<String> input_string);
 
   // ecma402 #sec-segment-iterator-prototype-next
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> Next(
@@ -45,7 +45,7 @@ class JSSegmentIterator
 
   // SegmentIterator accessors.
   DECL_ACCESSORS(icu_break_iterator, Managed<icu::BreakIterator>)
-  DECL_ACCESSORS(unicode_string, Managed<icu::UnicodeString>)
+  DECL_ACCESSORS(input_string, String)
 
   DECL_PRINTER(JSSegmentIterator)
 

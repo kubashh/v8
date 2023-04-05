@@ -7,7 +7,6 @@
 extern class JSV8BreakIterator extends JSObject {
   locale: String;
   break_iterator: Foreign;  // Managed<icu::BreakIterator>;
-  unicode_string: Foreign;  // Managed<icu::UnicodeString>;
   bound_adopt_text: Undefined|JSFunction;
   bound_first: Undefined|JSFunction;
   bound_next: Undefined|JSFunction;
