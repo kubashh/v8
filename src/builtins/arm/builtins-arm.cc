@@ -3023,7 +3023,7 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
   Label profiler_enabled, done_api_call;
   __ RecordComment("Check if profiler is enabled");
   __ ldrb(r8, __ ExternalReferenceAsOperand(
-                  ExternalReference::is_profiling_address(isolate), r8));
+                  ExternalReference::execution_mode_address(isolate), r8));
   __ cmp(r8, Operand(0));
   __ b(ne, &profiler_enabled);
 #ifdef V8_RUNTIME_CALL_STATS

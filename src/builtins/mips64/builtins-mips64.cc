@@ -3087,7 +3087,7 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
   Label profiler_enabled, done_api_call;
   __ RecordComment("Check if profiler is enabled");
   __ Lb(t9, __ ExternalReferenceAsOperand(
-                ExternalReference::is_profiling_address(isolate), t9));
+                ExternalReference::execution_mode_address(isolate), t9));
   __ Branch(&profiler_enabled, ne, t9, Operand(zero_reg));
 #ifdef V8_RUNTIME_CALL_STATS
   __ RecordComment("Check if RCS is enabled");

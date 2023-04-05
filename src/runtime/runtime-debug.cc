@@ -49,7 +49,7 @@ RUNTIME_FUNCTION_RETURN_PAIR(Runtime_DebugBreakOnBytecode) {
 
   // Get the top-most JavaScript frame.
   JavaScriptStackFrameIterator it(isolate);
-  if (isolate->debug_execution_mode() == DebugInfo::kBreakpoints) {
+  if (!isolate->should_check_side_effects()) {
     isolate->debug()->Break(it.frame(),
                             handle(it.frame()->function(), isolate));
   }
@@ -68,7 +68,7 @@ RUNTIME_FUNCTION_RETURN_PAIR(Runtime_DebugBreakOnBytecode) {
       reinterpret_cast<InterpretedFrame*>(it.frame());
 
   bool side_effect_check_failed = false;
-  if (isolate->debug_execution_mode() == DebugInfo::kSideEffects) {
+  if (isolate->should_check_side_effects()) {
     side_effect_check_failed =
         !isolate->debug()->PerformSideEffectCheckAtBytecode(interpreted_frame);
   }
@@ -704,10 +704,10 @@ RUNTIME_FUNCTION(Runtime_DebugOnFunctionCall) {
     isolate->debug()->DeoptimizeFunction(shared);
     if (isolate->debug()->last_step_action() >= StepInto ||
         isolate->debug()->break_on_next_function_call()) {
-      DCHECK_EQ(isolate->debug_execution_mode(), DebugInfo::kBreakpoints);
+      DCHECK(!isolate->should_check_side_effects());
       isolate->debug()->PrepareStepIn(fun);
     }
-    if (isolate->debug_execution_mode() == DebugInfo::kSideEffects &&
+    if (isolate->should_check_side_effects() &&
         !isolate->debug()->PerformSideEffectCheck(fun, receiver)) {
       return ReadOnlyRoots(isolate).exception();
     }
