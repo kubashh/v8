@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b720fe5b_d0d7282d",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-05T15:18:40Z",
+      "side": 1,
+      "message": "Spurious change.",
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9343abd_efb975f9",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 784,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-05T15:18:40Z",
+      "side": 1,
+      "message": "It\u0027s already a part of IsPrivateName().",
+      "range": {
+        "startLine": 784,
+        "startChar": 8,
+        "endLine": 784,
+        "endChar": 55
+      },
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d72ca65_aa6ab045",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-05T15:18:40Z",
+      "side": 1,
+      "message": "This call doesn\u0027t expect `name-\u003eIsPrivate()` case. Not yet sure what should we do in this case...",
+      "range": {
+        "startLine": 1153,
+        "startChar": 30,
+        "endLine": 1153,
+        "endChar": 50
+      },
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aa24c7d_5a30282f",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-05T15:18:40Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 1162,
+        "startChar": 12,
+        "endLine": 1162,
+        "endChar": 32
+      },
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7863b8b2_6f4ac3da",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-05T15:18:40Z",
+      "side": 1,
+      "message": "It\u0027s already a part of IsPrivateName() check above.",
+      "range": {
+        "startLine": 1192,
+        "startChar": 8,
+        "endLine": 1192,
+        "endChar": 41
+      },
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46926dc4_b9c9518a",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1209,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-05T15:18:40Z",
+      "side": 1,
+      "message": "Runtime::GetObjectProperty() does these checks again after `Object::GetProperty()` call.",
+      "revId": "9cd3135a33a740753980ee96110ca0cc01af2f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
