@@ -221,7 +221,9 @@ static void LookupForRead(LookupIterator* it, bool is_has_property) {
       }
       case LookupIterator::ACCESS_CHECK:
         // ICs know how to perform access checks on global proxies.
-        if (it->GetHolder<JSObject>()->IsJSGlobalProxy() && it->HasAccess()) {
+        if (it->GetHolder<JSObject>().is_identical_to(
+                it->isolate()->global_proxy()) &&
+            !it->isolate()->global_object()->IsDetached()) {
           break;
         }
         return;
@@ -449,6 +451,9 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name,
   LookupForRead(&it, IsAnyHas());
 
   if (name->IsPrivate()) {
+    if (it.state() == LookupIterator::ACCESS_CHECK && it.HasAccess()) {
+      it.Next();
+    }
     Handle<Symbol> private_symbol = Handle<Symbol>::cast(name);
     if (!IsAnyHas() && private_symbol->is_private_name() && !it.IsFound()) {
       Handle<String> name_string(String::cast(private_symbol->description()),
