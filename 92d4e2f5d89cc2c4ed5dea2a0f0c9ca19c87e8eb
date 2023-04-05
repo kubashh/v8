@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e382746b_6c64b25d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1575637
+      },
+      "writtenOn": "2023-04-05T13:06:17Z",
+      "side": 1,
+      "message": "@clemensb@chromium.org I\u0027ve opened [another CL](https://chromium-review.googlesource.com/c/v8/v8/+/4403215) for landing one part of these changes with your comments addressed. Another CL can be used for the ProbeMemory part afterwards.\n\n\u003e You could potentially use Clang just for V8 since it\u0027s meant to be ABI-compatible (and I assume that\u0027s true for ARM64 too)\n\nThere is [this PR in the NodeJS repo](https://github.com/nodejs/node/pull/35433) that does something like that, but it\u0027s been stale for some time.",
+      "parentUuid": "61cfaa37_d8ed4bae",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "307f5e17_fec16217",
@@ -121,6 +139,24 @@
       "side": 1,
       "message": "I uploaded a CL to simplify this whole thing. Hopefully MSVC likes this as well: https://crrev.com/c/4388581",
       "parentUuid": "099d8b36_f57f00c5",
+      "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa36da69_cec40b41",
+        "filename": "src/d8/d8-test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1575637
+      },
+      "writtenOn": "2023-04-05T13:06:17Z",
+      "side": 1,
+      "message": "Thanks, I used this (from the latest main) and confirmed it works in cross-compilation (with other changes required applied).",
+      "parentUuid": "1d60d89c_9982995a",
       "revId": "92d4e2f5d89cc2c4ed5dea2a0f0c9ca19c87e8eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
