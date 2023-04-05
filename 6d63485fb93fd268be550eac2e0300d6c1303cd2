@@ -191,6 +191,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2295d47_81a428a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T06:11:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01d52be8_2a0aad86",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c43c09a5_09df4f64",
@@ -204,6 +222,24 @@
       "writtenOn": "2023-04-03T18:11:19Z",
       "side": 1,
       "message": "for SegmentIterator, with your change, could we also remove the passing in and storing of unicode_string? Why do we need to keep both copy here?",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8081f399_0701a19f",
+        "filename": "src/objects/js-segment-iterator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T06:11:56Z",
+      "side": 1,
+      "message": "I think it can\u0027t be removed because of https://chromium-review.googlesource.com/c/v8/v8/+/2376173",
+      "parentUuid": "c43c09a5_09df4f64",
       "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -227,6 +263,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57fdbeb2_8a558cb1",
+        "filename": "src/objects/js-segment-iterator.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T06:11:56Z",
+      "side": 1,
+      "message": "Same, it probably can\u0027t be removed because of https://chromium-review.googlesource.com/c/v8/v8/+/2376173",
+      "parentUuid": "2b0a1f77_f7325f1e",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2452d449_63b9cd4a",
         "filename": "src/objects/js-segments-inl.h",
         "patchSetId": 2
@@ -238,6 +292,24 @@
       "writtenOn": "2023-04-03T18:11:19Z",
       "side": 1,
       "message": "If we store input_string as String here. Why do we still need to keep unicode_string as UnicodeString? Can we remove it now?",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6c6f91f_278aa74f",
+        "filename": "src/objects/js-segments-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T06:11:56Z",
+      "side": 1,
+      "message": "Ditto.",
+      "parentUuid": "2452d449_63b9cd4a",
       "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -259,6 +331,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fb22c4d_6dcdb324",
+        "filename": "src/objects/js-segments.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T06:11:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a118063c_66680278",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f22130ee_726d194b",
@@ -276,6 +366,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3219d651_e9cc3f69",
+        "filename": "src/objects/js-segments.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T06:11:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f22130ee_726d194b",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9100b08_42c28bff",
@@ -289,6 +397,24 @@
       "writtenOn": "2023-04-03T18:11:19Z",
       "side": 1,
       "message": "Can we remove the unicode_string with your change?",
+      "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f83f3d9_102cf8cd",
+        "filename": "src/objects/js-segments.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T06:11:56Z",
+      "side": 1,
+      "message": "For the same reason as above, probably not.",
+      "parentUuid": "b9100b08_42c28bff",
       "revId": "6d63485fb93fd268be550eac2e0300d6c1303cd2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

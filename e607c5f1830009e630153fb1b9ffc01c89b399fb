@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ba1de11_d54023f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1385074
+      },
+      "writtenOn": "2023-04-05T06:11:56Z",
+      "side": 1,
+      "message": "Thank you for your patience, I updated signature of CreateSegmentDataObject to drop the unicode_string from it. Unfortunately, I felt that it was safer for it to still grab the UnicodeString out of the icu::BreakIterator so that it could keep calling the Intl::ToString and be fully compatible to original version.\n\nI believe that the underlying structure of UnicodeString is just an array of U16 tokens, so I can potentially drop the Intl::ToString call and use factory-\u003eNewProperSubString() on the input_string. Let me know if you\u0027d prefer me to do so.\n\nAs for removing unicode_string from the Torque files, I\u0027m afraid that it doesn\u0027t sound safe either. Even if we don\u0027t have to use it - it seem that we have to keep a reference to it so that we don\u0027t cause use-after-free.",
+      "revId": "e607c5f1830009e630153fb1b9ffc01c89b399fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
