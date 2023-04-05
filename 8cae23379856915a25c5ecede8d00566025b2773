@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2da73078_fe0f7076",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-05T12:44:10Z",
+      "side": 1,
+      "message": "I believe `GarbageCollectionReason::kMeasureMemory` and `heap-\u003eShouldReduceMemory()` should be (in practice) mutually exclusive. Can we DCHECK that? (e.g. `DCHECK(!heap-\u003eShouldReduceMemory() || reason !\u003d GarbageCollectionReason::kMeasureMemory)`)\nI\u0027m not sure which counter we would want to use if ever get both at the same time.",
+      "range": {
+        "startLine": 144,
+        "startChar": 52,
+        "endLine": 144,
+        "endChar": 66
+      },
+      "revId": "8cae23379856915a25c5ecede8d00566025b2773",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea159ed4_6fd2ac94",
+        "filename": "src/logging/counters-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-05T12:44:10Z",
+      "side": 1,
+      "message": "The Blink CL doesn\u0027t have a period between mode and visibility (I assumed that was intentional since visibility can be omitted).",
+      "range": {
+        "startLine": 162,
+        "startChar": 61,
+        "endLine": 162,
+        "endChar": 62
+      },
+      "revId": "8cae23379856915a25c5ecede8d00566025b2773",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
