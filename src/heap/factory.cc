@@ -1488,16 +1488,23 @@ Handle<ErrorStackData> Factory::NewErrorStackData(
   return handle(error_stack_data, isolate());
 }
 
-void Factory::AddToScriptList(Handle<Script> script) {
-  Handle<WeakArrayList> scripts = script_list();
-  scripts =
-      WeakArrayList::Append(isolate(), scripts, MaybeObjectHandle::Weak(script),
-                            AllocationType::kOld);
-  isolate()->heap()->set_script_list(*scripts);
+void Factory::ProcessNewScript(Handle<Script> script,
+                               ScriptEventType script_event_type) {
+  int script_id = script->id();
+  if (script_id != Script::kTemporaryScriptId) {
+    Handle<WeakArrayList> scripts = script_list();
+    scripts = WeakArrayList::Append(isolate(), scripts,
+                                    MaybeObjectHandle::Weak(script),
+                                    AllocationType::kOld);
+    isolate()->heap()->set_script_list(*scripts);
+  }
+  if (script->source().IsString() && isolate()->NeedsSourcePositions()) {
+    Script::InitLineEnds(isolate(), script);
+  }
+  LOG(isolate(), ScriptEvent(script_event_type, script_id));
 }
 
 Handle<Script> Factory::CloneScript(Handle<Script> script) {
-  Heap* heap = isolate()->heap();
   int script_id = isolate()->GetNextScriptId();
 #ifdef V8_SCRIPTORMODULE_LEGACY_LIFETIME
   Handle<ArrayList> list = ArrayList::New(isolate(), 0);
@@ -1508,14 +1515,14 @@ Handle<Script> Factory::CloneScript(Handle<Script> script) {
     DisallowGarbageCollection no_gc;
     Script new_script = *new_script_handle;
     const Script old_script = *script;
-    new_script.set_source(old_script.source());
+    new_script.set_source_internal(old_script.source());
     new_script.set_name(old_script.name());
     new_script.set_id(script_id);
     new_script.set_line_offset(old_script.line_offset());
     new_script.set_column_offset(old_script.column_offset());
     new_script.set_context_data(old_script.context_data());
     new_script.set_type(old_script.type());
-    new_script.set_line_ends(*undefined_value(), SKIP_WRITE_BARRIER);
+    new_script.set_line_ends(Smi::zero());
     new_script.set_eval_from_shared_or_wrapped_arguments(
         script->eval_from_shared_or_wrapped_arguments());
     new_script.set_shared_function_infos(*empty_weak_fixed_array(),
@@ -1530,12 +1537,7 @@ Handle<Script> Factory::CloneScript(Handle<Script> script) {
     new_script.set_script_or_modules(*list);
 #endif
   }
-
-  Handle<WeakArrayList> scripts = script_list();
-  scripts = WeakArrayList::AddToEnd(isolate(), scripts,
-                                    MaybeObjectHandle::Weak(new_script_handle));
-  heap->set_script_list(*scripts);
-  LOG(isolate(), ScriptEvent(ScriptEventType::kCreate, script_id));
+  ProcessNewScript(new_script_handle, ScriptEventType::kCreate);
   return new_script_handle;
 }
 

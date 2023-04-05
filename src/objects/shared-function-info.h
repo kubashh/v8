@@ -444,7 +444,7 @@ class SharedFunctionInfo
   DECL_UINT8_ACCESSORS(flags2)
 
   // True if the outer class scope contains a private brand for
-  // private instance methdos.
+  // private instance methods.
   DECL_BOOLEAN_ACCESSORS(class_scope_has_private_brand)
   DECL_BOOLEAN_ACCESSORS(has_static_private_methods_or_accessors)
 

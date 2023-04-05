@@ -1090,7 +1090,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   bool EmptyStringRootIsInitialized();
   AllocationType AllocationTypeForInPlaceInternalizableString();
 
-  void AddToScriptList(Handle<Script> shared);
+  void ProcessNewScript(Handle<Script> shared,
+                        ScriptEventType script_event_type);
   // ------
 
   HeapObject AllocateRawWithAllocationSite(
