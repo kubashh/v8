@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "031e72d7_7b3466e4",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-05T12:53:20Z",
+      "side": 1,
+      "message": "I think they can happen at the same time as measuring memory is generally folded into any GC which can be memory reducing GC.\n\nI think we should use the memory reducing bucket in this case as the measure memory was not requesting the GC.\n\nAdded a comment that mentions that the conditions can overlap.",
+      "parentUuid": "2da73078_fe0f7076",
+      "range": {
+        "startLine": 144,
+        "startChar": 52,
+        "endLine": 144,
+        "endChar": 66
+      },
+      "revId": "8cae23379856915a25c5ecede8d00566025b2773",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea159ed4_6fd2ac94",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-04-05T12:44:10Z",
       "side": 1,
       "message": "The Blink CL doesn\u0027t have a period between mode and visibility (I assumed that was intentional since visibility can be omitted).",
+      "range": {
+        "startLine": 162,
+        "startChar": 61,
+        "endLine": 162,
+        "endChar": 62
+      },
+      "revId": "8cae23379856915a25c5ecede8d00566025b2773",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99618823_27d97c13",
+        "filename": "src/logging/counters-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-05T12:53:20Z",
+      "side": 1,
+      "message": "The Visibility token contains the \u0027.\u0027",
+      "parentUuid": "ea159ed4_6fd2ac94",
       "range": {
         "startLine": 162,
         "startChar": 61,
