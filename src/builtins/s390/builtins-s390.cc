@@ -3280,7 +3280,7 @@ static void CallApiFunctionAndReturn(MacroAssembler* masm,
   __ RecordComment("Check if profiler is enabled");
   __ LoadU8(scratch,
             __ ExternalReferenceAsOperand(
-                ExternalReference::is_profiling_address(isolate), scratch));
+                ExternalReference::execution_mode_address(isolate), scratch));
   __ CmpS64(scratch, Operand::Zero());
   __ bne(&profiler_enabled, Label::kNear);
 #ifdef V8_RUNTIME_CALL_STATS

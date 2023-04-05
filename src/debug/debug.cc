@@ -2577,10 +2577,9 @@ void Debug::UpdateState() {
 
 void Debug::UpdateHookOnFunctionCall() {
   static_assert(LastStepAction == StepInto);
-  hook_on_function_call_ =
-      thread_local_.last_step_action_ == StepInto ||
-      isolate_->debug_execution_mode() == DebugInfo::kSideEffects ||
-      thread_local_.break_on_next_function_call_;
+  hook_on_function_call_ = thread_local_.last_step_action_ == StepInto ||
+                           isolate_->should_check_side_effects() ||
+                           thread_local_.break_on_next_function_call_;
 }
 
 void Debug::HandleDebugBreak(IgnoreBreakMode ignore_break_mode,
@@ -2771,17 +2770,20 @@ void Debug::UpdateDebugInfosForExecutionMode() {
   // Walk all debug infos and update their execution mode if it is different
   // from the isolate execution mode.
   DebugInfoListNode* current = debug_info_list_;
+  DebugInfo::ExecutionMode current_debug_execution_mode =
+      isolate_->should_check_side_effects() ? DebugInfo::kSideEffects
+                                            : DebugInfo::kBreakpoints;
   while (current != nullptr) {
     Handle<DebugInfo> debug_info = current->debug_info();
     if (debug_info->HasInstrumentedBytecodeArray() &&
-        debug_info->DebugExecutionMode() != isolate_->debug_execution_mode()) {
+        debug_info->DebugExecutionMode() != current_debug_execution_mode) {
       DCHECK(debug_info->shared().HasBytecodeArray());
-      if (isolate_->debug_execution_mode() == DebugInfo::kBreakpoints) {
-        ClearSideEffectChecks(debug_info);
-        ApplyBreakPoints(debug_info);
-      } else {
+      if (isolate_->should_check_side_effects()) {
         ClearBreakPoints(debug_info);
         ApplySideEffectChecks(debug_info);
+      } else {
+        ClearSideEffectChecks(debug_info);
+        ApplyBreakPoints(debug_info);
       }
     }
     current = current->next();
@@ -2798,8 +2800,8 @@ void Debug::SetTerminateOnResume() {
 
 void Debug::StartSideEffectCheckMode() {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
-  DCHECK(isolate_->debug_execution_mode() != DebugInfo::kSideEffects);
-  isolate_->set_debug_execution_mode(DebugInfo::kSideEffects);
+  DCHECK(!isolate_->should_check_side_effects());
+  isolate_->set_should_check_side_effects(true);
   UpdateHookOnFunctionCall();
   side_effect_check_failed_ = false;
 
@@ -2817,7 +2819,7 @@ void Debug::StartSideEffectCheckMode() {
 
 void Debug::StopSideEffectCheckMode() {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
-  DCHECK(isolate_->debug_execution_mode() == DebugInfo::kSideEffects);
+  DCHECK(isolate_->should_check_side_effects());
   if (side_effect_check_failed_) {
     DCHECK(isolate_->has_pending_exception());
     DCHECK_IMPLIES(v8_flags.strict_termination_checks,
@@ -2827,7 +2829,7 @@ void Debug::StopSideEffectCheckMode() {
     isolate_->Throw(*isolate_->factory()->NewEvalError(
         MessageTemplate::kNoSideEffectDebugEvaluate));
   }
-  isolate_->set_debug_execution_mode(DebugInfo::kBreakpoints);
+  isolate_->set_should_check_side_effects(false);
   UpdateHookOnFunctionCall();
   side_effect_check_failed_ = false;
 
@@ -2868,7 +2870,7 @@ void Debug::ClearSideEffectChecks(Handle<DebugInfo> debug_info) {
 bool Debug::PerformSideEffectCheck(Handle<JSFunction> function,
                                    Handle<Object> receiver) {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
-  DCHECK_EQ(isolate_->debug_execution_mode(), DebugInfo::kSideEffects);
+  DCHECK(isolate_->should_check_side_effects());
   DisallowJavascriptExecution no_js(isolate_);
   IsCompiledScope is_compiled_scope(
       function->shared().is_compiled_scope(isolate_));
@@ -2919,7 +2921,7 @@ bool Debug::PerformSideEffectCheckForAccessor(
     Handle<AccessorInfo> accessor_info, Handle<Object> receiver,
     AccessorComponent component) {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
-  DCHECK_EQ(isolate_->debug_execution_mode(), DebugInfo::kSideEffects);
+  DCHECK(isolate_->should_check_side_effects());
 
   // List of allowlisted internal accessors can be found in accessors.h.
   SideEffectType side_effect_type =
@@ -2968,7 +2970,7 @@ void Debug::IgnoreSideEffectsOnNextCallTo(
 bool Debug::PerformSideEffectCheckForCallback(
     Handle<CallHandlerInfo> call_handler_info) {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
-  DCHECK_EQ(isolate_->debug_execution_mode(), DebugInfo::kSideEffects);
+  DCHECK(isolate_->should_check_side_effects());
 
   CallHandlerInfo info = CallHandlerInfo::cast(*call_handler_info);
   if (info.IsSideEffectFreeCallHandlerInfo()) {
@@ -2997,7 +2999,7 @@ bool Debug::PerformSideEffectCheckForCallback(
 bool Debug::PerformSideEffectCheckForInterceptor(
     Handle<InterceptorInfo> interceptor_info) {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
-  DCHECK_EQ(isolate_->debug_execution_mode(), DebugInfo::kSideEffects);
+  DCHECK(isolate_->should_check_side_effects());
 
   // Empty InterceptorInfo represents operations that do produce side effects.
   if (!interceptor_info.is_null()) {
@@ -3018,7 +3020,7 @@ bool Debug::PerformSideEffectCheckAtBytecode(InterpretedFrame* frame) {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
   using interpreter::Bytecode;
 
-  DCHECK_EQ(isolate_->debug_execution_mode(), DebugInfo::kSideEffects);
+  DCHECK(isolate_->should_check_side_effects());
   SharedFunctionInfo shared = frame->function().shared();
   BytecodeArray bytecode_array = shared.GetBytecodeArray(isolate_);
   int offset = frame->GetBytecodeOffset();
@@ -3054,7 +3056,7 @@ bool Debug::PerformSideEffectCheckAtBytecode(InterpretedFrame* frame) {
 
 bool Debug::PerformSideEffectCheckForObject(Handle<Object> object) {
   RCS_SCOPE(isolate_, RuntimeCallCounterId::kDebugger);
-  DCHECK_EQ(isolate_->debug_execution_mode(), DebugInfo::kSideEffects);
+  DCHECK(isolate_->should_check_side_effects());
 
   // We expect no side-effects for primitives.
   if (object->IsNumber()) return true;

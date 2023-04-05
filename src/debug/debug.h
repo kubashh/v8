@@ -458,7 +458,7 @@ class V8_EXPORT_PRIVATE Debug {
 
   inline bool ignore_events() const {
     return is_suppressed_ || !is_active_ ||
-           isolate_->debug_execution_mode() == DebugInfo::kSideEffects;
+           isolate_->should_check_side_effects();
   }
 
   void clear_suspended_generator() {
