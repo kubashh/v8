@@ -958,6 +958,7 @@ class MaglevFrame : public OptimizedFrame {
 
   int FindReturnPCForTrampoline(Code code, int trampoline_pc) const override;
 
+  Handle<JSFunction> GetMostInnerFunction() const;
   BytecodeOffset GetBytecodeOffsetForOSR() const;
 
   static intptr_t StackGuardFrameSize(int register_input_count);

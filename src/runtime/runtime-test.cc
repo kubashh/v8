@@ -19,6 +19,7 @@
 #include "src/deoptimizer/deoptimizer.h"
 #include "src/execution/arguments-inl.h"
 #include "src/execution/frames-inl.h"
+#include "src/execution/frames.h"
 #include "src/execution/isolate-inl.h"
 #include "src/execution/protectors-inl.h"
 #include "src/execution/tiering-manager.h"
@@ -26,6 +27,7 @@
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/heap/pretenuring-handler-inl.h"
 #include "src/ic/stub-cache.h"
+#include "src/objects/bytecode-array.h"
 #include "src/objects/js-collection-inl.h"
 #ifdef V8_ENABLE_MAGLEV
 #include "src/maglev/maglev-concurrent-dispatcher.h"
@@ -665,8 +667,9 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
           OffsetOfNextJumpLoop(isolate, bytecode_array, current_offset);
     } else {
       MaglevFrame* frame = MaglevFrame::cast(it.frame());
+      Handle<JSFunction> most_inner_function = frame->GetMostInnerFunction();
       Handle<BytecodeArray> bytecode_array(
-          frame->function().shared().GetBytecodeArray(isolate), isolate);
+          most_inner_function->shared().GetBytecodeArray(isolate), isolate);
       const int current_offset = frame->GetBytecodeOffsetForOSR().ToInt();
       osr_offset =
           OffsetOfNextJumpLoop(isolate, bytecode_array, current_offset);
