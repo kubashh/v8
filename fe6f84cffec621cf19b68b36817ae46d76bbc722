@@ -16,6 +16,57 @@
       "message": "PTAL",
       "revId": "fe6f84cffec621cf19b68b36817ae46d76bbc722",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01550d62_24ab41e9",
+        "filename": "src/base/flags.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-06T06:30:03Z",
+      "side": 1,
+      "message": "I\u0027d either leave out all explanation of T/MaskType/StoragetType here since the class impl is small enough, or explain more what MaskType vs. StorageType are used for.\n\nThe \u0027Mask\u0027 name bothers me a bit since \u0027mask\u0027 is what you apply to a bitfield, not the bitfield itself. Wdyt about renaming to EnumT / BitfieldT / StorageT? And renaming mask_ to bitfield_ or bits_ or storage_.",
+      "revId": "fe6f84cffec621cf19b68b36817ae46d76bbc722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "571bcfa6_6178957c",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 15500,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-06T06:30:03Z",
+      "side": 1,
+      "message": "IsSetWord32?",
+      "revId": "fe6f84cffec621cf19b68b36817ae46d76bbc722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46066e0b_d8a4b7a5",
+        "filename": "src/runtime/runtime-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-06T06:30:03Z",
+      "side": 1,
+      "message": "These negative checks / most parts that used to test for kBreakpoints don\u0027t work well for me. Reading `!should_check_side_effects` implies nothing about breakpoint behavior, and code like \n```\nif (!should_check_side_effects) {\n    Break()\n}\n```\nbecomes unexpected. IMO we should keep the \u0027breakpoint\u0027 name in a predicate we can use in these spots.",
+      "revId": "fe6f84cffec621cf19b68b36817ae46d76bbc722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
