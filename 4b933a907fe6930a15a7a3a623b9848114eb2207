@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3697810_11ec78a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-06T21:01:10Z",
+      "side": 1,
+      "message": "ptal, this implements the idea we last discussed around avoiding visiting read-only maps",
+      "revId": "4b933a907fe6930a15a7a3a623b9848114eb2207",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c23e1b93_45432423",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-06T21:01:10Z",
+      "side": 1,
+      "message": "This is very much incomplete but manages to reduce Map pointer visits in Splay from 2.6M to ~1.3M. Of these 1.3M there\u0027s another ~530k in RO space.",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 10
+      },
+      "revId": "4b933a907fe6930a15a7a3a623b9848114eb2207",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36e2e877_71ecc338",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-06T21:01:10Z",
+      "side": 1,
+      "message": "This cannot be `constexpr` because of the DCHECK below. I think it\u0027s still fully optimized in release builds because it\u0027s inline and merely returns true.",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 45,
+        "endChar": 13
+      },
+      "revId": "4b933a907fe6930a15a7a3a623b9848114eb2207",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
