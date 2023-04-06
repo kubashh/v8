@@ -25,6 +25,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#include "src/codegen/x64/assembler-x64.h"
+
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -33,7 +35,9 @@
 #include "src/base/numbers/double.h"
 #include "src/base/platform/platform.h"
 #include "src/base/utils/random-number-generator.h"
+#include "src/codegen/cpu-features.h"
 #include "src/codegen/macro-assembler.h"
+#include "src/codegen/x64/register-x64.h"
 #include "src/execution/simulator.h"
 #include "src/heap/factory.h"
 #include "src/objects/objects-inl.h"
@@ -2931,6 +2935,244 @@ TEST_F(AssemblerX64Test, AssemblerX64ShiftImm256bit) {
                      // vpsllq ymm6,ymm9,0x4
                      0xC4, 0xC1, 0x4D, 0x73, 0xF1, 0x04};
   CHECK_EQ(0, memcmp(expected, desc.buffer, sizeof(expected)));
+}
+
+TEST_F(AssemblerX64Test, AssemblerX64BinOp256bit) {
+  {
+    if (!CpuFeatures::IsSupported(AVX)) return;
+    auto buffer = AllocateAssemblerBuffer();
+    Isolate* isolate = i_isolate();
+    Assembler masm(AssemblerOptions{}, buffer->CreateView());
+    CpuFeatureScope fscope(&masm, AVX);
+
+    //  add
+    __ vaddps(ymm0, ymm1, ymm2);
+    __ vaddpd(ymm3, ymm4, ymm5);
+
+    // sub
+    __ vsubps(ymm0, ymm1, ymm2);
+    __ vsubpd(ymm3, ymm4, ymm5);
+
+    // mul
+    __ vmulps(ymm0, ymm1, ymm2);
+    __ vmulpd(ymm3, ymm4, ymm5);
+
+    // div
+    __ vdivps(ymm0, ymm1, ymm2);
+    __ vdivpd(ymm3, ymm4, ymm5);
+
+    CodeDesc desc;
+    masm.GetCode(isolate, &desc);
+#ifdef OBJECT_PRINT
+    Handle<Code> code =
+        Factory::CodeBuilder(isolate, desc, CodeKind::FOR_TESTING).Build();
+    StdoutStream os;
+    code->Print(os);
+#endif
+
+    byte expected[] = {// vaddps ymm0,ymm1,ymm2
+                       0xc5, 0xf4, 0x58, 0xc2,
+                       // vaddpd ymm3,ymm4,ymm5
+                       0xc5, 0xdd, 0x58, 0xdd,
+                       // vsubps ymm0,ymm1,ymm2
+                       0xc5, 0xf4, 0x5c, 0xc2,
+                       // vsubpd ymm3,ymm4,ymm5
+                       0xc5, 0xdd, 0x5c, 0xdd,
+                       // vmulps ymm0,ymm1,ymm2
+                       0xc5, 0xf4, 0x59, 0xc2,
+                       // vmulpd ymm3,ymm4,ymm5
+                       0xc5, 0xdd, 0x59, 0xdd,
+                       // vdivps ymm0,ymm1,ymm2
+                       0xc5, 0xf4, 0x5e, 0xc2,
+                       // vdivpd ymm3,ymm4,ymm5
+                       0xc5, 0xdd, 0x5e, 0xdd
+
+    };
+    CHECK_EQ(0, memcmp(expected, desc.buffer, sizeof(expected)));
+  }
+
+  {
+    if (!CpuFeatures::IsSupported(AVX2)) return;
+
+    auto buffer = AllocateAssemblerBuffer();
+    Isolate* isolate = i_isolate();
+    Assembler masm(AssemblerOptions{}, buffer->CreateView());
+    CpuFeatureScope fscope(&masm, AVX2);
+
+    //  add
+    __ vpaddb(ymm6, ymm7, ymm8);
+    __ vpaddw(ymm9, ymm10, ymm11);
+    __ vpaddd(ymm12, ymm13, ymm14);
+    __ vpaddq(ymm15, ymm1, ymm2);
+
+    // sub
+
+    __ vpsubb(ymm6, ymm7, ymm8);
+    __ vpsubw(ymm9, ymm10, ymm11);
+    __ vpsubd(ymm12, ymm13, ymm14);
+    __ vpsubq(ymm15, ymm1, ymm2);
+
+    // mul, exclude I64x4
+
+    __ vpmullw(ymm6, ymm7, ymm8);
+    __ vpmulld(ymm15, ymm1, ymm2);
+
+    CodeDesc desc;
+    masm.GetCode(isolate, &desc);
+#ifdef OBJECT_PRINT
+    Handle<Code> code =
+        Factory::CodeBuilder(isolate, desc, CodeKind::FOR_TESTING).Build();
+    StdoutStream os;
+    code->Print(os);
+#endif
+
+    byte expected[] = {// vpaddb ymm6,ymm7,ymm8
+                       0xc4, 0xc1, 0x45, 0xfc, 0xf0,
+                       // vpaddw ymm9,ymm10,ymm11
+                       0xc4, 0x41, 0x2d, 0xfd, 0xcb,
+                       // vpaddd ymm12,ymm13,ymm14
+                       0xc4, 0x41, 0x15, 0xfe, 0xe6,
+                       // vpaddq ymm15,ymm1,ymm2
+                       0xc5, 0x75, 0xd4, 0xfa,
+                       // vpsubb ymm6,ymm7,ymm8
+                       0xc4, 0xc1, 0x45, 0xf8, 0xf0,
+                       // vpsubw ymm9,ymm10,ymm11
+                       0xc4, 0x41, 0x2d, 0xf9, 0xcb,
+                       // vpsubd ymm12,ymm13,ymm14
+                       0xc4, 0x41, 0x15, 0xfa, 0xe6,
+                       // vpsubq ymm15,ymm1,ymm2
+                       0xc5, 0x75, 0xfb, 0xfa,
+                       // vpmullw ymm6,ymm7,ymm8
+                       0xc4, 0xc1, 0x45, 0xd5, 0xf0,
+                       // vpmulld ymm15,ymm1,ymm2
+                       0xc4, 0x62, 0x75, 0x40, 0xfa};
+    CHECK_EQ(0, memcmp(expected, desc.buffer, sizeof(expected)));
+  }
+}
+
+TEST_F(AssemblerX64Test, AssemblerX64I64x2Mul) {
+  auto buffer = AllocateAssemblerBuffer();
+  Assembler masm(AssemblerOptions{}, buffer->CreateView());
+
+  // Assemble a function that tests I64x2Mul, the result will be stored in the
+  // first argument.
+  const XMMRegister dst = xmm0;
+  const XMMRegister lhs = xmm1;
+  const XMMRegister rhs = xmm2;
+  const XMMRegister tmp1 = xmm3;
+  const XMMRegister tmp2 = xmm4;
+
+  __ movdqu(lhs, Operand(arg1, 0));
+  __ movdqu(rhs, Operand(arg2, 0));
+
+  // Calculation same as SharedMacroAssemblerBase::I64x2Mul
+  if (CpuFeatures::IsSupported(AVX)) {
+    CpuFeatureScope avx_scope(&masm, AVX);
+    __ vpsrlq(tmp1, lhs, byte{32});
+    __ vpmuludq(tmp1, tmp1, rhs);
+    __ vpsrlq(tmp2, rhs, byte{32});
+    __ vpmuludq(tmp2, tmp2, lhs);
+    __ vpaddq(tmp2, tmp2, tmp1);
+    __ vpsllq(tmp2, tmp2, byte{32});
+    __ vpmuludq(dst, lhs, rhs);
+    __ vpaddq(dst, dst, tmp2);
+  } else {
+    __ movaps(tmp1, lhs);
+    __ movaps(tmp2, rhs);
+    __ psrlq(tmp1, byte{32});
+    __ pmuludq(tmp1, rhs);
+    __ psrlq(tmp2, byte{32});
+    __ pmuludq(tmp2, lhs);
+    __ paddq(tmp2, tmp1);
+    __ psllq(tmp2, byte{32});
+    if (dst == rhs) {
+      __ pmuludq(dst, lhs);
+    } else {
+      if (dst != lhs) {
+        __ movaps(dst, lhs);
+      }
+      __ pmuludq(dst, rhs);
+    }
+    __ paddq(dst, tmp2);
+  }
+
+  // store the result
+  __ movdqu(Operand(arg1, 0), dst);
+  __ ret(0);
+
+  CodeDesc desc;
+  masm.GetCode(i_isolate(), &desc);
+
+#ifdef OBJECT_PRINT
+  Handle<Code> code =
+      Factory::CodeBuilder(i_isolate(), desc, CodeKind::FOR_TESTING).Build();
+  StdoutStream os;
+  code->Print(os);
+#endif
+  buffer->MakeExecutable();
+  // Call the function from C++.
+  uint64_t left[2] = {32, 64};
+  uint64_t right[2] = {84, 123};
+  auto f = GeneratedCode<F4>::FromBuffer(i_isolate(), buffer->start());
+  uint64_t result = f.Call(left, right);
+  // The result will be stored in left.
+  CHECK_EQ(left[0], 32 * 84);
+  CHECK_EQ(left[1], 64 * 123);
+  USE(result);
+}
+
+TEST_F(AssemblerX64Test, AssemblerX64I64x4Mul) {
+  if (!CpuFeatures::IsSupported(AVX) || !CpuFeatures::IsSupported(AVX2)) return;
+  auto buffer = AllocateAssemblerBuffer();
+  Assembler masm(AssemblerOptions{}, buffer->CreateView());
+  CpuFeatureScope avx_scope(&masm, AVX);
+  CpuFeatureScope avx2_scope(&masm, AVX2);
+
+  // Assemble a function that tests I64x2Mul, the result will be stored in the
+  // first argument.
+  const YMMRegister dst = ymm0;
+  const YMMRegister lhs = ymm1;
+  const YMMRegister rhs = ymm2;
+  const YMMRegister tmp1 = ymm3;
+  const YMMRegister tmp2 = ymm4;
+
+  // Load
+  __ vmovdqu(lhs, Operand(arg1, 0));
+  __ vmovdqu(rhs, Operand(arg2, 0));
+  // Calculation, same as MacroAssembler::I64x4Mul
+  __ vpsrlq(tmp1, lhs, byte{32});
+  __ vpmuludq(tmp1, tmp1, rhs);
+  __ vpsrlq(tmp2, rhs, byte{32});
+  __ vpmuludq(tmp2, tmp2, lhs);
+  __ vpaddq(tmp2, tmp2, tmp1);
+  __ vpsllq(tmp2, tmp2, byte{32});
+  __ vpmuludq(dst, lhs, rhs);
+  __ vpaddq(dst, dst, tmp2);
+  // Store result
+  __ vmovdqu(Operand(arg1, 0), dst);
+  __ ret(0);
+
+  CodeDesc desc;
+  masm.GetCode(i_isolate(), &desc);
+
+#ifdef OBJECT_PRINT
+  Handle<Code> code =
+      Factory::CodeBuilder(i_isolate(), desc, CodeKind::FOR_TESTING).Build();
+  StdoutStream os;
+  code->Print(os);
+#endif
+  buffer->MakeExecutable();
+  // Call the function from C++.
+  uint64_t left[4] = {32, 64, 235, 2355};
+  uint64_t right[4] = {84, 123, 636, 154};
+  auto f = GeneratedCode<F4>::FromBuffer(i_isolate(), buffer->start());
+  uint64_t result = f.Call(left, right);
+  // The result will be stored in left.
+  CHECK_EQ(left[0], 32 * 84);
+  CHECK_EQ(left[1], 64 * 123);
+  CHECK_EQ(left[2], 235 * 636);
+  CHECK_EQ(left[3], 2355 * 154);
+  USE(result);
 }
 
 TEST_F(AssemblerX64Test, CpuFeatures_ProbeImpl) {

@@ -4,6 +4,7 @@
 
 #include "src/codegen/shared-ia32-x64/macro-assembler-shared-ia32-x64.h"
 
+#include "src/base/logging.h"
 #include "src/codegen/assembler.h"
 #include "src/codegen/cpu-features.h"
 #include "src/codegen/register.h"
