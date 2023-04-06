@@ -22919,32 +22919,32 @@ TEST(ScriptPositionInfo) {
     // With offset.
 
     // Behave as if 0 was passed if position is negative.
-    CHECK(script1->GetPositionInfo(-1, &info, script1->WITH_OFFSET));
+    CHECK(script1->GetPositionInfo(-1, &info));
     CHECK_EQ(13, info.line);
     CHECK_EQ(0, info.column);
     CHECK_EQ(0, info.line_start);
     CHECK_EQ(8, info.line_end);
 
-    CHECK(script1->GetPositionInfo(0, &info, script1->WITH_OFFSET));
+    CHECK(script1->GetPositionInfo(0, &info));
     CHECK_EQ(13, info.line);
     CHECK_EQ(0, info.column);
     CHECK_EQ(0, info.line_start);
     CHECK_EQ(8, info.line_end);
 
-    CHECK(script1->GetPositionInfo(8, &info, script1->WITH_OFFSET));
+    CHECK(script1->GetPositionInfo(8, &info));
     CHECK_EQ(13, info.line);
     CHECK_EQ(8, info.column);
     CHECK_EQ(0, info.line_start);
     CHECK_EQ(8, info.line_end);
 
-    CHECK(script1->GetPositionInfo(9, &info, script1->WITH_OFFSET));
+    CHECK(script1->GetPositionInfo(9, &info));
     CHECK_EQ(14, info.line);
     CHECK_EQ(0, info.column);
     CHECK_EQ(9, info.line_start);
     CHECK_EQ(17, info.line_end);
 
     // Fail when position is larger than script size.
-    CHECK(!script1->GetPositionInfo(220384, &info, script1->WITH_OFFSET));
+    CHECK(!script1->GetPositionInfo(220384, &info));
 
     // Without offset.
 

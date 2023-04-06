@@ -6,6 +6,7 @@
 #define V8_OBJECTS_SCRIPT_INL_H_
 
 #include "src/objects/managed.h"
+#include "src/objects/primitive-heap-object.h"
 #include "src/objects/script.h"
 #include "src/objects/shared-function-info.h"
 #include "src/objects/smi-inl.h"
@@ -164,6 +165,12 @@ bool Script::HasValidSource() {
 
 bool Script::HasSourceURLComment() const {
   return source_url().IsString() && String::cast(source_url()).length() != 0;
+}
+
+bool Script::has_line_ends() const { return line_ends() != Smi::zero(); }
+
+void Script::set_source_internal(PrimitiveHeapObject source) {
+  set_source(source);
 }
 
 bool Script::IsMaybeUnfinalized(Isolate* isolate) const {

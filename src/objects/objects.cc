@@ -4882,7 +4882,7 @@ int Script::GetEvalPosition(Isolate* isolate, Handle<Script> script) {
 template <typename IsolateT>
 // static
 void Script::InitLineEnds(IsolateT* isolate, Handle<Script> script) {
-  if (!script->line_ends().IsUndefined(isolate)) return;
+  if (script->has_line_ends()) return;
 #if V8_ENABLE_WEBASSEMBLY
   DCHECK(script->type() != Script::TYPE_WASM ||
          script->source_mapping_url().IsString());
@@ -4899,7 +4899,13 @@ void Script::InitLineEnds(IsolateT* isolate, Handle<Script> script) {
     script->set_line_ends(*array);
   }
 
-  DCHECK(script->line_ends().IsFixedArray());
+  DCHECK(script->has_line_ends());
+}
+
+void Script::SetSource(Isolate* isolate, Handle<Script> script,
+                       Handle<String> source) {
+  script->set_source(*source);
+  if (isolate->NeedsSourcePositions()) InitLineEnds(isolate, script);
 }
 
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) void Script::InitLineEnds(
@@ -4915,7 +4921,7 @@ bool Script::GetPositionInfo(Handle<Script> script, int position,
   // translation directly.
   init_line_ends = script->type() != Script::TYPE_WASM;
 #endif  // V8_ENABLE_WEBASSEMBLY
-  if (init_line_ends) InitLineEnds(script->GetIsolate(), script);
+  if (V8_UNLIKELY(init_line_ends)) InitLineEnds(script->GetIsolate(), script);
   return script->GetPositionInfo(position, info, offset_flag);
 }
 
@@ -5003,7 +5009,7 @@ bool Script::GetPositionInfo(int position, PositionInfo* info,
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
-  if (line_ends().IsUndefined()) {
+  if (!has_line_ends()) {
     // Slow mode: we do not have line_ends. We have to iterate through source.
     if (!GetPositionInfoSlow(*this, position, no_gc, info)) {
       return false;
@@ -5075,25 +5081,25 @@ bool Script::GetPositionInfo(int position, PositionInfo* info,
 
 int Script::GetColumnNumber(Handle<Script> script, int code_pos) {
   PositionInfo info;
-  GetPositionInfo(script, code_pos, &info, WITH_OFFSET);
+  GetPositionInfo(script, code_pos, &info);
   return info.column;
 }
 
 int Script::GetColumnNumber(int code_pos) const {
   PositionInfo info;
-  GetPositionInfo(code_pos, &info, WITH_OFFSET);
+  GetPositionInfo(code_pos, &info);
   return info.column;
 }
 
 int Script::GetLineNumber(Handle<Script> script, int code_pos) {
   PositionInfo info;
-  GetPositionInfo(script, code_pos, &info, WITH_OFFSET);
+  GetPositionInfo(script, code_pos, &info);
   return info.line;
 }
 
 int Script::GetLineNumber(int code_pos) const {
   PositionInfo info;
-  GetPositionInfo(code_pos, &info, WITH_OFFSET);
+  GetPositionInfo(code_pos, &info);
   return info.line;
 }
 
