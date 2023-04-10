@@ -46,6 +46,7 @@ BUILTIN(SharedSpaceJSObjectHasInstance) {
   Maybe<bool> result = AlwaysSharedSpaceJSObject::HasInstance(
       isolate, Handle<JSFunction>::cast(constructor),
       args.atOrUndefined(isolate, 1));
+  if (result.IsNothing()) return ReadOnlyRoots(isolate).exception();
   return *isolate->factory()->ToBoolean(result.FromJust());
 }
 
