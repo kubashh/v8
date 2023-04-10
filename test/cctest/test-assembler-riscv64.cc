@@ -2817,6 +2817,45 @@ UTEST_RVV_VF_VFMERGE_VF_FORM_WITH_RES(float, int32_t, 32,
                                       ((mask >> i) & 0x1) ? rs1_fval : src[i])
 #undef UTEST_RVV_VF_VFMERGE_VF_FORM_WITH_RES
 
+TEST(RISCV_UTEST_vfmv_vf_double_nan) {
+  if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;
+  constexpr uint32_t n = 2;
+  CcTest::InitializeVM();
+
+  // int64_t rs1_fval = 0x7ff7654321fedcba;
+  int64_t rs1_fval = 0x7FF4000000000000;
+  int64_t dst[n] = {0};
+  auto fn = [](MacroAssembler& assm) {
+    __ VU.set(t0, VSew::E64, Vlmul::m1);
+    __ fld(ft0, a0, 0);
+    __ vfmv_vf(v1, ft0);
+    __ vs(v1, a1, 0, VSew::E64);
+  };
+  GenAndRunTest<int64_t, int64_t>((int64_t)&rs1_fval, (int64_t)dst, fn);
+  for (uint32_t i = 0; i < n; i++) {
+    CHECK_EQ(rs1_fval, dst[i]);
+  }
+}
+
+TEST(RISCV_UTEST_vfmv_vf_float_nan) {
+  if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;
+  constexpr uint32_t n = 4;
+  CcTest::InitializeVM();
+
+  int32_t rs1_fval = 0x7f400000;
+  int32_t dst[n] = {0};
+  auto fn = [](MacroAssembler& assm) {
+    __ VU.set(t0, VSew::E32, Vlmul::m1);
+    __ flw(ft0, a0, 0);
+    __ vfmv_vf(v1, ft0);
+    __ vs(v1, a1, 0, VSew::E32);
+  };
+  GenAndRunTest<int32_t, int64_t>((int64_t)&rs1_fval, (int64_t)dst, fn);
+  for (uint32_t i = 0; i < n; i++) {
+    CHECK_EQ(rs1_fval, dst[i]);
+  }
+}
+
 // Tests for vector permutation instructions vector slide instructions
 #define UTEST_RVV_VP_VSLIDE_VI_FORM_WITH_RES(instr_name, type, width, array, \
                                              expect_res)                     \
@@ -3021,7 +3060,7 @@ UTEST_RVV_VP_VSLIDE1_VX_FORM_WITH_RES(vslide1up_vx, uint8_t, 8, ARRAY(uint8_t),
 
 #define UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(instr_name, type, width, fval, \
                                               array, expect_res)             \
-  TEST(RISCV_UTEST_##instr_name##_##width) {                                 \
+  TEST(RISCV_UTEST_##instr_name##_##width##_##fval) {                        \
     if (!CpuFeatures::IsSupported(RISCV_SIMD)) return;                       \
     constexpr uint32_t n = kRvvVLEN / width;                                 \
     CcTest::InitializeVM();                                                  \
@@ -3045,17 +3084,31 @@ UTEST_RVV_VP_VSLIDE1_VX_FORM_WITH_RES(vslide1up_vx, uint8_t, 8, ARRAY(uint8_t),
   }
 
 // Test for vfslide1down_vf
-UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1down_vf, int64_t, 64, 1234.56,
-                                      ARRAY(int64_t),
+UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1down_vf, int64_t, 64,
+                                      0x40934A3D70A3D70A, ARRAY(int64_t),
                                       (i + 1) < n ? src[i + 1] : src[0])
-UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1down_vf, int32_t, 32, 1234.56f,
+UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1down_vf, int32_t, 32, 0x449A51EC,
+                                      ARRAY(int32_t),
+                                      (i + 1) < n ? src[i + 1] : src[0])
+// Test for vfslide1down_vf_nan_box
+UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1down_vf, int64_t, 64,
+                                      0x7FF4000000000000, ARRAY(int64_t),
+                                      (i + 1) < n ? src[i + 1] : src[0])
+UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1down_vf, int32_t, 32, 0x7F400000,
                                       ARRAY(int32_t),
                                       (i + 1) < n ? src[i + 1] : src[0])
 // Test for vfslide1up_vf
-UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1up_vf, int64_t, 64, 1234.56,
-                                      ARRAY(int64_t),
+UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1up_vf, int64_t, 64,
+                                      0x40934A3D70A3D70A, ARRAY(int64_t),
                                       (int64_t)i < 1 ? src[0] : src[i - 1])
-UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1up_vf, int32_t, 32, 1234.56f,
+UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1up_vf, int32_t, 32, 0x449A51EC,
+                                      ARRAY(int32_t),
+                                      (int32_t)i < 1 ? src[0] : src[i - 1])
+// Test for vfslide1up_vf_nan_box
+UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1up_vf, int64_t, 64,
+                                      0x7FF4000000000000, ARRAY(int64_t),
+                                      (int64_t)i < 1 ? src[0] : src[i - 1])
+UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES(vfslide1up_vf, int32_t, 32, 0x7F400000,
                                       ARRAY(int32_t),
                                       (int32_t)i < 1 ? src[0] : src[i - 1])
 #undef UTEST_RVV_VP_VSLIDE1_VF_FORM_WITH_RES
