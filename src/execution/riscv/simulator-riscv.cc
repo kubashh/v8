@@ -304,21 +304,23 @@ struct type_sew_t<128> {
     vd = src;                                                                 \
   }
 
-#define VF_SLIDE1DOWN_PARAMS(x, offset, ftype)                         \
+#define VF_SLIDE1DOWN_PARAMS(x, offset)                                \
   auto& vd = Rvvelt<type_sew_t<x>::type>(rvv_vd_reg(), i, true);       \
   if ((i + offset) == rvv_vlmax()) {                                   \
-    ftype src = (ftype)get_fpu_register_##ftype(rs1_reg());            \
-    vd = base::bit_cast<type_sew_t<x>::type>(src);                     \
+    auto src = base::bit_cast<type_sew_t<x>::type>(                    \
+        get_fpu_register_Float##x(rs1_reg()).get_bits());              \
+    vd = src;                                                          \
   } else {                                                             \
     auto src = Rvvelt<type_sew_t<x>::type>(rvv_vs2_reg(), i + offset); \
     vd = src;                                                          \
   }
 
-#define VF_SLIDE1UP_PARAMS(x, offset, ftype)                           \
+#define VF_SLIDE1UP_PARAMS(x, offset)                                  \
   auto& vd = Rvvelt<type_sew_t<x>::type>(rvv_vd_reg(), i, true);       \
   if (i == rvv_vstart() && i == 0) {                                   \
-    ftype src = (ftype)get_fpu_register_##ftype(rs1_reg());            \
-    vd = base::bit_cast<type_sew_t<x>::type>(src);                     \
+    auto src = base::bit_cast<type_sew_t<x>::type>(                    \
+        get_fpu_register_Float##x(rs1_reg()).get_bits());              \
+    vd = src;                                                          \
   } else {                                                             \
     auto src = Rvvelt<type_sew_t<x>::type>(rvv_vs2_reg(), i - offset); \
     vd = src;                                                          \
@@ -836,6 +838,12 @@ struct type_sew_t<128> {
   set_rvv_vstart(0);             \
   }
 
+#define RVV_VI_VF_MERGE_LOOP_BASE \
+  for (uint64_t i = rvv_vstart(); i < rvv_vl(); i++) {
+#define RVV_VI_VF_MERGE_LOOP_END \
+  set_rvv_vstart(0);             \
+  }
+
 #define RVV_VI_VF_MERGE_LOOP(BODY16, BODY32, BODY64)      \
   RVV_VI_VF_MERGE_LOOP_BASE                               \
   switch (rvv_vsew()) {                                   \
@@ -1257,9 +1265,7 @@ struct type_sew_t<128> {
   set_rvv_vstart(0);                                                           \
   if (v8_flags.trace_sim) {                                                    \
     __int128_t value = Vregister_[rvv_vd_reg()];                               \
-    SNPrintF(trace_buf_,                                                       \
-             "%016" REGIx_FORMAT "%016" REGIx_FORMAT                           \
-             " <-- 0x%016" REGIx_FORMAT,                                       \
+    SNPrintF(trace_buf_, "%016" PRIx64 "%016" PRIx64 " <-- 0x%016" PRIx64,     \
              *(reinterpret_cast<int64_t*>(&value) + 1),                        \
              *reinterpret_cast<int64_t*>(&value),                              \
              (uint64_t)(get_register(rs1_reg())));                             \
@@ -1283,9 +1289,7 @@ struct type_sew_t<128> {
   set_rvv_vstart(0);                                                           \
   if (v8_flags.trace_sim) {                                                    \
     __int128_t value = Vregister_[rvv_vd_reg()];                               \
-    SNPrintF(trace_buf_,                                                       \
-             "%016" REGIx_FORMAT "%016" REGIx_FORMAT                           \
-             " --> 0x%016" REGIx_FORMAT,                                       \
+    SNPrintF(trace_buf_, "%016" PRIx64 "%016" PRIx64 " --> 0x%016" PRIx64,     \
              *(reinterpret_cast<int64_t*>(&value) + 1),                        \
              *reinterpret_cast<int64_t*>(&value),                              \
              (uint64_t)(get_register(rs1_reg())));                             \
@@ -1818,7 +1822,7 @@ void RiscvDebugger::Debug() {
 #ifdef CAN_USE_RVV_INSTRUCTIONS
             } else if (vregnum != kInvalidVRegister) {
               __int128_t v = GetVRegisterValue(vregnum);
-              PrintF("\t%s:0x%016" REGIx_FORMAT "%016" REGIx_FORMAT "\n",
+              PrintF("\t%s:0x%016" PRIx64 "%016" PRIx64 "\n",
                      VRegisters::Name(vregnum), (uint64_t)(v >> 64),
                      (uint64_t)v);
 #endif
@@ -2510,7 +2514,7 @@ Float32 Simulator::get_fpu_register_Float32(int fpureg) const {
   DCHECK((fpureg >= 0) && (fpureg < kNumFPURegisters));
   if (!is_boxed_float(FPUregisters_[fpureg])) {
     std::cout << std::hex << FPUregisters_[fpureg] << std::endl;
-    return Float32::FromBits(0x7ffc0000);
+    return Float32::FromBits(0x7fc00000);
   }
   return Float32::FromBits(
       *base::bit_cast<uint32_t*>(const_cast<int64_t*>(&FPUregisters_[fpureg])));
@@ -7354,10 +7358,10 @@ void Simulator::DecodeRvvFVF() {
           UNSUPPORTED();
         }
         case E32: {
-          VF_SLIDE1DOWN_PARAMS(32, 1, float);
+          VF_SLIDE1DOWN_PARAMS(32, 1);
         } break;
         default: {
-          VF_SLIDE1DOWN_PARAMS(64, 1, double);
+          VF_SLIDE1DOWN_PARAMS(64, 1);
         } break;
       }
       RVV_VI_LOOP_END
@@ -7376,10 +7380,10 @@ void Simulator::DecodeRvvFVF() {
           UNSUPPORTED();
         }
         case E32: {
-          VF_SLIDE1UP_PARAMS(32, 1, float);
+          VF_SLIDE1UP_PARAMS(32, 1);
         } break;
         default: {
-          VF_SLIDE1UP_PARAMS(64, 1, double);
+          VF_SLIDE1UP_PARAMS(64, 1);
         } break;
       }
       RVV_VI_LOOP_END
