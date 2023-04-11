@@ -67,6 +67,24 @@
       "message": "Nit: this `let` can be scoped inside the `while (true)`.",
       "revId": "57d389da074781e1e6c254832bbbc954b26f1dbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68ad0cdc_9bac49f4",
+        "filename": "src/builtins/iterator-helpers.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 754,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-04-11T21:34:42Z",
+      "side": 1,
+      "message": "Done. Just a question, isn\u0027t it more optimal (memory-wise) to have it outside `while(true)`?",
+      "parentUuid": "0d6615c4_1cd4153f",
+      "revId": "57d389da074781e1e6c254832bbbc954b26f1dbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
