@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce1790c3_ec66c74e",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-11T13:53:00Z",
+      "side": 1,
+      "message": "fyi: The list now constains all the read-only Map instance types I found on various benchmarks and browsing benchmarks. Unfortunately, we cannot nicely compose it out of other lists.",
+      "parentUuid": "c23e1b93_45432423",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 10
+      },
+      "revId": "4b933a907fe6930a15a7a3a623b9848114eb2207",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36e2e877_71ecc338",
