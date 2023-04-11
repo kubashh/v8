@@ -56,6 +56,30 @@
       },
       "revId": "bdbf1d35173f42b466f52800de636e8f30ddb931",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f68fac55_f07d0d51",
+        "filename": "test/mjsunit/shared-memory/brand-checks.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-11T18:29:50Z",
+      "side": 1,
+      "message": "Good suggestions. I\u0027ve added a cross-Realm test and also test that shared objects don\u0027t return true for other shared objects\u0027 checks.",
+      "parentUuid": "d53a574d_42d88e66",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 10
+      },
+      "revId": "bdbf1d35173f42b466f52800de636e8f30ddb931",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
