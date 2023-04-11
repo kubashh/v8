@@ -33,6 +33,23 @@
       "message": "lgtm",
       "revId": "538bb14625cb9807128137fd08a2511b88cc2091",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31eb1052_2dba4517",
+        "filename": "src/builtins/builtins-struct.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-11T18:32:11Z",
+      "side": 1,
+      "message": "You can also do `MAYBE_ASSIGN_RETURN_FAILURE_ON_EXCEPTION` above.",
+      "revId": "538bb14625cb9807128137fd08a2511b88cc2091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
