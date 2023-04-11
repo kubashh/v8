@@ -86,12 +86,20 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Dictionary
 
   // This method is only safe to use when it is guaranteed that the dictionary
   // doesn't need to grow.
-  // The number of elements stored is not upted. Use
+  // The number of elements stored is not updated. Use
   // |SetInitialNumberOfElements| to update the number in one go.
   template <typename IsolateT>
   static void UncheckedAdd(IsolateT* isolate, Handle<Derived> dictionary,
                            Key key, Handle<Object> value,
                            PropertyDetails details);
+
+  // Like |UncheckedAdd|, with the ability to specify the AllocationType of the
+  // key handle.
+  template <AllocationType key_allocation>
+  static void UncheckedAddAllocateKeyIn(Isolate* isolate,
+                                        Handle<Derived> dictionary, Key key,
+                                        Handle<Object> value,
+                                        PropertyDetails details);
 
   static Handle<Derived> ShallowCopy(
       Isolate* isolate, Handle<Derived> dictionary,
@@ -295,6 +303,9 @@ class NumberDictionaryBaseShape : public BaseDictionaryShape<uint32_t> {
   static inline bool IsMatch(uint32_t key, Object other);
   static inline Handle<Object> AsHandle(Isolate* isolate, uint32_t key);
   static inline Handle<Object> AsHandle(LocalIsolate* isolate, uint32_t key);
+  template <AllocationType allocation>
+  static inline Handle<Object> AsHandleWithAllocation(Isolate* isolate,
+                                                      uint32_t key);
 
   static inline uint32_t Hash(ReadOnlyRoots roots, uint32_t key);
   static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);

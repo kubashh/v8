@@ -295,6 +295,12 @@ Handle<Object> NumberDictionaryBaseShape::AsHandle(LocalIsolate* isolate,
   return isolate->factory()->NewNumberFromUint<AllocationType::kOld>(key);
 }
 
+template <AllocationType allocation>
+Handle<Object> NumberDictionaryBaseShape::AsHandleWithAllocation(
+    Isolate* isolate, uint32_t key) {
+  return isolate->factory()->NewNumberFromUint<allocation>(key);
+}
+
 Handle<Map> NumberDictionary::GetMap(ReadOnlyRoots roots) {
   return roots.number_dictionary_map_handle();
 }

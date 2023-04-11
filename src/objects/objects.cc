@@ -6236,6 +6236,27 @@ void Dictionary<Derived, Shape>::UncheckedAdd(IsolateT* isolate,
 }
 
 template <typename Derived, typename Shape>
+template <AllocationType key_allocation>
+void Dictionary<Derived, Shape>::UncheckedAddAllocateKeyIn(
+    Isolate* isolate, Handle<Derived> dictionary, Key key, Handle<Object> value,
+    PropertyDetails details) {
+  ReadOnlyRoots roots(isolate);
+  uint32_t hash = Shape::Hash(roots, key);
+  // Validate that the key is absent and we capacity is sufficient.
+  SLOW_DCHECK(dictionary->FindEntry(isolate, key).is_not_found());
+  DCHECK(dictionary->HasSufficientCapacityToAdd(1));
+
+  // Compute the key object with the provided allocation.
+  Handle<Object> k =
+      Shape::template AsHandleWithAllocation<key_allocation>(isolate, key);
+
+  InternalIndex entry = dictionary->FindInsertionEntry(isolate, roots, hash);
+  dictionary->SetEntry(entry, *k, *value, details);
+  DCHECK(dictionary->KeyAt(isolate, entry).IsNumber() ||
+         Shape::Unwrap(dictionary->KeyAt(isolate, entry)).IsUniqueName());
+}
+
+template <typename Derived, typename Shape>
 Handle<Derived> Dictionary<Derived, Shape>::ShallowCopy(
     Isolate* isolate, Handle<Derived> dictionary, AllocationType allocation) {
   return Handle<Derived>::cast(isolate->factory()->CopyFixedArrayWithMap(
@@ -7197,6 +7218,11 @@ EXTERN_DEFINE_MULTI_OBJECT_BASE_HASH_TABLE(ObjectTwoHashTable, 2)
 
 EXTERN_DEFINE_DICTIONARY(SimpleNumberDictionary, SimpleNumberDictionaryShape)
 EXTERN_DEFINE_DICTIONARY(NumberDictionary, NumberDictionaryShape)
+
+template V8_EXPORT_PRIVATE void
+Dictionary<NumberDictionary, NumberDictionaryShape>::UncheckedAddAllocateKeyIn<
+    AllocationType::kSharedOld>(Isolate*, Handle<NumberDictionary>, uint32_t,
+                                Handle<Object>, PropertyDetails);
 
 EXTERN_DEFINE_BASE_NAME_DICTIONARY(NameDictionary, NameDictionaryShape)
 template V8_EXPORT_PRIVATE Handle<NameDictionary> NameDictionary::New(
