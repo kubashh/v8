@@ -16,6 +16,46 @@
       "message": "Marja, PTAL, thanks! I\u0027m adding these at the request of Sheets for the dev trial.",
       "revId": "bdbf1d35173f42b466f52800de636e8f30ddb931",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb4c4a3d_30061691",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-04-11T07:06:10Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "bdbf1d35173f42b466f52800de636e8f30ddb931",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d53a574d_42d88e66",
+        "filename": "test/mjsunit/shared-memory/brand-checks.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-04-11T07:06:10Z",
+      "side": 1,
+      "message": "It would be interesting to have a test which gets an object from another realm and then assert that isThatObject() is still true? (Or the other way around, passes an object into another realm and makes the other realm do the assert.)\n\nAlso a mega-nit: you\u0027re not testing that isSharedStruct returns false for a Mutex etc. So this test could pass with an implementation which makes all those funcs return true for {shared struct, shared array, mutex, condition} and false otherwise.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 10
+      },
+      "revId": "bdbf1d35173f42b466f52800de636e8f30ddb931",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
