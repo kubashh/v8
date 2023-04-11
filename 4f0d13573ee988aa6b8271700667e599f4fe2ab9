@@ -56,6 +56,30 @@
       },
       "revId": "4f0d13573ee988aa6b8271700667e599f4fe2ab9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8900424d_6a919cd6",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6251,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-11T16:03:31Z",
+      "side": 1,
+      "message": "Great idea, done. It\u0027s not 100% clean because `Add` and `UncheckedAdd` are already templatized on `IsolateT`, which currently *only* accepts `AllocationType::kOld`. So the additional `AllocationType` parameter has a different default depending on `IsolateT`, so the default logic is a little wonky.",
+      "parentUuid": "759b05c9_eb383ad8",
+      "range": {
+        "startLine": 6251,
+        "startChar": 5,
+        "endLine": 6251,
+        "endChar": 60
+      },
+      "revId": "4f0d13573ee988aa6b8271700667e599f4fe2ab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
