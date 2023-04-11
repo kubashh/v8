@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e86f7693_5803c6f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-11T00:25:10Z",
+      "side": 1,
+      "message": "Camillo, PTAL. This fixes elements for shared structs some more. Non-Smi keys in the NumberDictionary are currently allocated in the wrong space (young instead of shared).\n\nDominik for src/heap/ drive-by fix for a small bug in the range write barrier, which the elements issue also uncovered.",
+      "revId": "4f0d13573ee988aa6b8271700667e599f4fe2ab9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
