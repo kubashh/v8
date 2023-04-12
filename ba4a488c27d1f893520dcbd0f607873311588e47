@@ -16,6 +16,63 @@
       "message": "PTAL, thanks",
       "revId": "ba4a488c27d1f893520dcbd0f607873311588e47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d527ed9c_4dc33bea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-04-12T12:37:26Z",
+      "side": 1,
+      "message": "LGTM.\nCongratz on finishing the port! 🎉 🎉 🎉",
+      "revId": "ba4a488c27d1f893520dcbd0f607873311588e47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62792a63_74542e8d",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2085,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-04-12T12:37:26Z",
+      "side": 1,
+      "message": "I think that something like `IF (Int32GreaterThanOrEqual(elements_kind, HOLEY_SMI_ELEMENTS)` would be easier to understand (it avoids the negation), but since we don\u0027t have Int32GreaterThanOrEqual and this is the last part of the ECL port, I think it\u0027s fine to keep what you have. Still, might be worth adding later.",
+      "range": {
+        "startLine": 2085,
+        "startChar": 8,
+        "endLine": 2085,
+        "endChar": 78
+      },
+      "revId": "ba4a488c27d1f893520dcbd0f607873311588e47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b6ce23b_06d3e80e",
+        "filename": "tools/v8_presubmit.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-04-12T12:37:26Z",
+      "side": 1,
+      "message": "Could you add a comment here explaining why you\u0027ve removed whatespaces/parens?",
+      "revId": "ba4a488c27d1f893520dcbd0f607873311588e47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
