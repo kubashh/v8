@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74846cef_0c203a9e",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2691,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-12T09:46:05Z",
+      "side": 1,
+      "message": "Would kNoOffset do the trick?",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b5e826c_6c4ae529",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-12T09:46:05Z",
+      "side": 1,
+      "message": "Since it\u0027s used in multiple spots, could/should we also wrap the conversion into 1-based counts in GetPositionInfo? Maybe in a followup",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce8eb107_dae29922",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-12T09:46:05Z",
+      "side": 1,
+      "message": "nit: personally I\u0027d write out \u0027line\u0027 and \u0027column\u0027 here",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f475e36_a874bdfa",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1868,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-12T09:46:05Z",
+      "side": 1,
+      "message": "q: Why not col+1? Seems worth a comment",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1adfe0bf_07b46c1d",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-12T09:46:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b16a1fe_ee389484",
+        "filename": "src/objects/call-site-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-04-12T09:46:05Z",
+      "side": 1,
+      "message": "kNoOffset, maybe?",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
