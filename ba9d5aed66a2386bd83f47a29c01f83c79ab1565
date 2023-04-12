@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db560209_d0e75b48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2023-04-12T13:09:40Z",
+      "side": 1,
+      "message": "Hi Leszek, could you take another look? This is a reland as it was before.\n\nI landed a Blink patch to avoid passing empty source map URL if there is no\nSourceMap http header (and instead pass an empty handle). This avoids the failure\nthat caused the previous revert (checked with a manual Blink try job now).",
+      "revId": "ba9d5aed66a2386bd83f47a29c01f83c79ab1565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
