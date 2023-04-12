@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94e1bf72_9566e11e",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2691,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-12T10:00:06Z",
+      "side": 1,
+      "message": "ah right, that should work.",
+      "parentUuid": "74846cef_0c203a9e",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b5e826c_6c4ae529",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-04-12T09:46:05Z",
       "side": 1,
       "message": "Since it\u0027s used in multiple spots, could/should we also wrap the conversion into 1-based counts in GetPositionInfo? Maybe in a followup",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cfc5b8a_da5d6cc9",
+        "filename": "src/diagnostics/etw-jit-win.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-12T10:00:06Z",
+      "side": 1,
+      "message": "Yeah, I\u0027m considering it (baby steps, since I messed up already by doing too many refactorings at once :P)",
+      "parentUuid": "0b5e826c_6c4ae529",
       "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cc57366_3064d61a",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-12T10:00:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce8eb107_dae29922",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f475e36_a874bdfa",
@@ -65,6 +119,24 @@
       "writtenOn": "2023-04-12T09:46:05Z",
       "side": 1,
       "message": "q: Why not col+1? Seems worth a comment",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6376d5c_868cad23",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1868,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-12T10:00:06Z",
+      "side": 1,
+      "message": "let\u0027s go with +1, this is only used for ic-stats",
+      "parentUuid": "4f475e36_a874bdfa",
       "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed6a36d8_b678da35",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-12T10:00:06Z",
+      "side": 1,
+      "message": "Changed 1-indexed as well here.",
+      "parentUuid": "1adfe0bf_07b46c1d",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b16a1fe_ee389484",
@@ -99,6 +189,24 @@
       "writtenOn": "2023-04-12T09:46:05Z",
       "side": 1,
       "message": "kNoOffset, maybe?",
+      "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "418aa51b_6f327f62",
+        "filename": "src/objects/call-site-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-12T10:00:06Z",
+      "side": 1,
+      "message": "let me try that in a follow-up CL. Not 100% sure this is correct.",
+      "parentUuid": "4b16a1fe_ee389484",
       "revId": "78248ce10857fac012c4463ab7b1f2c460e94beb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
