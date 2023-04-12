@@ -1183,6 +1183,16 @@ bool Sweeper::ShouldRefillFreelistForSpace(AllocationSpace space) const {
       std::memory_order_acquire);
 }
 
+void Sweeper::SweepNewSpacePage(Page* page) {
+  size_t live_bytes = marking_state_->live_bytes(page);
+  heap_->IncrementNewSpaceSurvivingObjectSize(live_bytes);
+  heap_->IncrementYoungSurvivorsCounter(live_bytes);
+  page->ClearWasUsedForAllocation();
+  PrepareToBeSweptPage(NEW_SPACE, page);
+  main_thread_local_sweeper_.ParallelSweepPage(page, NEW_SPACE,
+                                               SweepingMode::kEagerDuringGC);
+}
+
 void Sweeper::SweepEmptyNewSpacePage(Page* page) {
   DCHECK(v8_flags.minor_mc);
   DCHECK_EQ(NEW_SPACE, page->owner_identity());
