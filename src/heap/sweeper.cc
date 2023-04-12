@@ -1183,6 +1183,16 @@ bool Sweeper::ShouldRefillFreelistForSpace(AllocationSpace space) const {
       std::memory_order_acquire);
 }
 
+void Sweeper::SweepNewSpacePage(Page* page) {
+  size_t live_bytes = marking_state_->live_bytes(page);
+  heap_->IncrementNewSpaceSurvivingObjectSize(live_bytes);
+  heap_->IncrementYoungSurvivorsCounter(live_bytes);
+  page->ClearWasUsedForAllocation();
+  PrepareToBeSweptPage(NEW_SPACE, page);
+  main_thread_local_sweeper_.ParallelSweepPage(page, NEW_SPACE,
+                                               SweepingMode::kEagerDuringGC);
+}
+
 void Sweeper::SweepEmptyNewSpacePage(Page* page) {
   DCHECK(v8_flags.minor_mc);
   DCHECK_EQ(NEW_SPACE, page->owner_identity());
@@ -1219,6 +1229,7 @@ void Sweeper::SweepEmptyNewSpacePage(Page* page) {
   paged_space->RelinkFreeListCategories(page);
 
   if (heap_->ShouldReduceMemory()) {
+    fprintf(stderr, "SHOULD REDUCE MEMORY!!!!\n");
     page->DiscardUnusedMemory(start, size);
     // Only decrement counter when we discard unused system pages.
     ActiveSystemPages active_system_pages_after_sweeping;

@@ -6265,8 +6265,9 @@ bool MinorMarkCompactCollector::StartSweepNewSpace() {
       EvacuateNewSpacePageVisitor<NEW_TO_OLD>::Move(p);
       has_promoted_pages = true;
       sweeper()->AddPromotedPageForIteration(p);
+    } else if (live_bytes_on_page < 4096) {
+      sweeper()->SweepNewSpacePage(p);
     } else {
-      // Page is not promoted. Sweep it instead.
       sweeper()->AddNewSpacePage(p);
       will_be_swept++;
     }
