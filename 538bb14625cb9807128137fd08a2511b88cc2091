@@ -50,6 +50,24 @@
       "message": "You can also do `MAYBE_ASSIGN_RETURN_FAILURE_ON_EXCEPTION` above.",
       "revId": "538bb14625cb9807128137fd08a2511b88cc2091",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0082c90_3fe8c400",
+        "filename": "src/builtins/builtins-struct.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2023-04-12T21:10:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31eb1052_2dba4517",
+      "revId": "538bb14625cb9807128137fd08a2511b88cc2091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
