@@ -68,6 +68,7 @@ LINT_RULES = """
 -runtime/references
 -whitespace/braces
 -whitespace/comments
+-whitespace/parens
 """.split()
 
 LINT_OUTPUT_PATTERN = re.compile(r'^.+[:(]\d+[:)]')
