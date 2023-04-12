@@ -50,6 +50,24 @@
       "message": "LGTM. I think you\u0027ll have to add yourself to the AUTHORS file to make the presubmit bot happy.",
       "revId": "2bcfc290f68740e898768d64904f7bb666ff7325",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "287d9766_bb33e6ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1575637
+      },
+      "writtenOn": "2023-04-12T10:54:23Z",
+      "side": 1,
+      "message": "I\u0027ve changed the AUTHORS file. Should be good now. Thanks for the heads up.",
+      "parentUuid": "00e64821_972306d6",
+      "revId": "2bcfc290f68740e898768d64904f7bb666ff7325",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
