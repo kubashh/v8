@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "819418d2_5e998053",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-12T14:48:38Z",
+      "side": 1,
+      "message": "lgtm with nits modulo redness",
+      "revId": "aec998339383336577451bbbebe0b1f5244e74ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cefc1d6c_1c058379",
+        "filename": "src/heap/local-factory.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-12T14:48:38Z",
+      "side": 1,
+      "message": "Please ifdef the if too and ident these lines.",
+      "revId": "aec998339383336577451bbbebe0b1f5244e74ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dda8f720_0ad4d301",
+        "filename": "src/objects/script.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-12T14:48:38Z",
+      "side": 1,
+      "message": "It might be nicer to add `friend class Factory` and keep using the `set_source` instead of adding set_source_internal.",
+      "revId": "aec998339383336577451bbbebe0b1f5244e74ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4857986_e424bd4d",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-12T14:48:38Z",
+      "side": 1,
+      "message": "Strictly speaking it\u0027s not necessary (and better not) to create a handle to perform the below two DCHECKs. Or did you mean to unconditionally update the `script` with `result-\u003escript()`?",
+      "revId": "aec998339383336577451bbbebe0b1f5244e74ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
