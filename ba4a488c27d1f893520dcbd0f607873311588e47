@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b45462b3_a97a24ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-04-12T12:44:08Z",
+      "side": 1,
+      "message": "@Michael: Could you please give owner\u0027s lgtm for `.clang-format`. Thanks",
+      "revId": "ba4a488c27d1f893520dcbd0f607873311588e47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62792a63_74542e8d",
@@ -58,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b85ef01_4923af78",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2085,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-04-12T12:44:08Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "62792a63_74542e8d",
+      "range": {
+        "startLine": 2085,
+        "startChar": 8,
+        "endLine": 2085,
+        "endChar": 78
+      },
+      "revId": "ba4a488c27d1f893520dcbd0f607873311588e47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b6ce23b_06d3e80e",
@@ -71,6 +112,24 @@
       "writtenOn": "2023-04-12T12:37:26Z",
       "side": 1,
       "message": "Could you add a comment here explaining why you\u0027ve removed whatespaces/parens?",
+      "revId": "ba4a488c27d1f893520dcbd0f607873311588e47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf59621a_6ebb712e",
+        "filename": "tools/v8_presubmit.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-04-12T12:44:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b6ce23b_06d3e80e",
       "revId": "ba4a488c27d1f893520dcbd0f607873311588e47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
