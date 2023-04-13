@@ -1495,16 +1495,23 @@ Handle<ErrorStackData> Factory::NewErrorStackData(
   return handle(error_stack_data, isolate());
 }
 
-void Factory::AddToScriptList(Handle<Script> script) {
-  Handle<WeakArrayList> scripts = script_list();
-  scripts =
-      WeakArrayList::Append(isolate(), scripts, MaybeObjectHandle::Weak(script),
-                            AllocationType::kOld);
-  isolate()->heap()->set_script_list(*scripts);
+void Factory::ProcessNewScript(Handle<Script> script,
+                               ScriptEventType script_event_type) {
+  int script_id = script->id();
+  if (script_id != Script::kTemporaryScriptId) {
+    Handle<WeakArrayList> scripts = script_list();
+    scripts = WeakArrayList::Append(isolate(), scripts,
+                                    MaybeObjectHandle::Weak(script),
+                                    AllocationType::kOld);
+    isolate()->heap()->set_script_list(*scripts);
+  }
+  if (script->source().IsString() && isolate()->NeedsSourcePositions()) {
+    Script::InitLineEnds(isolate(), script);
+  }
+  LOG(isolate(), ScriptEvent(script_event_type, script_id));
 }
 
 Handle<Script> Factory::CloneScript(Handle<Script> script) {
-  Heap* heap = isolate()->heap();
   int script_id = isolate()->GetNextScriptId();
 #ifdef V8_SCRIPTORMODULE_LEGACY_LIFETIME
   Handle<ArrayList> list = ArrayList::New(isolate(), 0);
@@ -1537,12 +1544,7 @@ Handle<Script> Factory::CloneScript(Handle<Script> script) {
     new_script.set_script_or_modules(*list);
 #endif
   }
-
-  Handle<WeakArrayList> scripts = script_list();
-  scripts = WeakArrayList::AddToEnd(isolate(), scripts,
-                                    MaybeObjectHandle::Weak(new_script_handle));
-  heap->set_script_list(*scripts);
-  LOG(isolate(), ScriptEvent(ScriptEventType::kCreate, script_id));
+  ProcessNewScript(new_script_handle, ScriptEventType::kCreate);
   return new_script_handle;
 }
 
