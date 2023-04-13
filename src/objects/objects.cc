@@ -4919,9 +4919,14 @@ void Script::InitLineEndsInternal(IsolateT* isolate, Handle<Script> script) {
     Handle<FixedArray> array = String::CalculateLineEnds(isolate, src, true);
     script->set_line_ends(*array);
   }
-
   DCHECK(script->line_ends().IsFixedArray());
   DCHECK(script->has_line_ends());
+}
+
+void Script::SetSource(Isolate* isolate, Handle<Script> script,
+                       Handle<String> source) {
+  script->set_source(*source);
+  if (isolate->NeedsSourcePositions()) InitLineEnds(isolate, script);
 }
 
 template EXPORT_TEMPLATE_DEFINE(
@@ -4939,7 +4944,7 @@ bool Script::GetPositionInfo(Handle<Script> script, int position,
   // translation directly.
   init_line_ends = script->type() != Script::TYPE_WASM;
 #endif  // V8_ENABLE_WEBASSEMBLY
-  if (init_line_ends) InitLineEnds(script->GetIsolate(), script);
+  if (V8_UNLIKELY(init_line_ends)) InitLineEnds(script->GetIsolate(), script);
   return script->GetPositionInfo(position, info, offset_flag);
 }
 
