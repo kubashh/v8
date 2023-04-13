@@ -16,6 +16,29 @@
       "message": "Before this change: GaussianBlur\u0027s `rand` function contains 78 instructions, including 19 ThrowReferenceErrorIfHole\nAfter this change: it contains 59 instructions, including a single ThrowReferenceErrorIfHole :)\n\n(hope my change is correct though, it would be sad otherwise ^^)",
       "revId": "831c5239bad37645aa60777b6e4bbbf41c8b8d44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42a9430d_092ea501",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7046,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-04-13T08:54:43Z",
+      "side": 1,
+      "message": "here\u0027s something fun: kHoleyFloat64 can never actually have a _hole_ value -- its conversion to Tagged makes it undefined, not the hole. So it can also early return.",
+      "range": {
+        "startLine": 7046,
+        "startChar": 63,
+        "endLine": 7046,
+        "endChar": 76
+      },
+      "revId": "831c5239bad37645aa60777b6e4bbbf41c8b8d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
