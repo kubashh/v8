@@ -6273,6 +6273,11 @@ class Phi : public ValueNodeT<Phi> {
 
   UseRepresentationSet get_uses_repr_hints() { return uses_repr_hint_; }
 
+  bool backedge_is_bound() const {
+    DCHECK(is_loop_phi());
+    return input(input_count() - 1).node() != nullptr;
+  }
+
  private:
   Phi** next() { return &next_; }
 
