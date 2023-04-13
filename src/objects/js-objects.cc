@@ -6,6 +6,7 @@
 
 #include "src/api/api-arguments-inl.h"
 #include "src/base/optional.h"
+#include "src/common/assert-scope.h"
 #include "src/common/globals.h"
 #include "src/date/date.h"
 #include "src/execution/arguments.h"
@@ -5806,6 +5807,7 @@ void JSMessageObject::EnsureSourcePositionsAvailable(
 }
 
 int JSMessageObject::GetLineNumber() const {
+  DisallowGarbageCollection no_gc;
   DCHECK(DidEnsureSourcePositionsAvailable());
   if (start_position() == -1) return Message::kNoLineNumberInfo;
 
@@ -5820,6 +5822,7 @@ int JSMessageObject::GetLineNumber() const {
 }
 
 int JSMessageObject::GetColumnNumber() const {
+  DisallowGarbageCollection no_gc;
   DCHECK(DidEnsureSourcePositionsAvailable());
   if (start_position() == -1) return -1;
 
@@ -5834,6 +5837,7 @@ int JSMessageObject::GetColumnNumber() const {
 }
 
 String JSMessageObject::GetSource() const {
+  DisallowGarbageCollection no_gc;
   Script script_object = script();
   if (script_object.HasValidSource()) {
     Object source = script_object.source();
@@ -5843,6 +5847,7 @@ String JSMessageObject::GetSource() const {
 }
 
 Handle<String> JSMessageObject::GetSourceLine() const {
+  DisallowGarbageCollection no_gc;
   Isolate* isolate = GetIsolate();
   Handle<Script> the_script(script(), isolate);
 

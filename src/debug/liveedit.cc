@@ -853,8 +853,8 @@ void LiveEdit::PatchScript(Isolate* isolate, Handle<Script> script,
                    &literals, result))
     return;
 
-  Handle<Script> new_script = isolate->factory()->CloneScript(script);
-  new_script->set_source(*new_source);
+  Handle<Script> new_script =
+      isolate->factory()->CloneScript(script, new_source);
   UnoptimizedCompileState new_compile_state;
   UnoptimizedCompileFlags new_flags =
       UnoptimizedCompileFlags::ForScriptCompile(isolate, *new_script);
