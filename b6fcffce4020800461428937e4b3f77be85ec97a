@@ -16,6 +16,23 @@
       "message": "Just some stuff I noticed while working on other stuff. PTAL.",
       "revId": "b6fcffce4020800461428937e4b3f77be85ec97a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8639fbfd_42549e73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-04-13T12:21:09Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "b6fcffce4020800461428937e4b3f77be85ec97a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
