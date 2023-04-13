@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "873a6e2e_0d56aa82",
+        "filename": "builders/tools.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-04-13T12:12:40Z",
+      "side": 1,
+      "message": "Can we run this ones per hour please, to get some more data?",
+      "range": {
+        "startLine": 27,
+        "startChar": 16,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "4f03e68f37fe8b77fe383cd59eb7107a464c26d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
