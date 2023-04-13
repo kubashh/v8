@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77b44f44_23e4c917",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-04-13T08:19:21Z",
+      "side": 1,
+      "message": "Before this change: GaussianBlur\u0027s `rand` function contains 78 instructions, including 19 ThrowReferenceErrorIfHole\nAfter this change: it contains 59 instructions, including a single ThrowReferenceErrorIfHole :)\n\n(hope my change is correct though, it would be sad otherwise ^^)",
+      "revId": "831c5239bad37645aa60777b6e4bbbf41c8b8d44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
