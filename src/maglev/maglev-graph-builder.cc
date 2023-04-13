@@ -7007,7 +7007,8 @@ void MaglevGraphBuilder::VisitReturn() {
 void MaglevGraphBuilder::VisitThrowReferenceErrorIfHole() {
   // ThrowReferenceErrorIfHole <variable_name>
   compiler::NameRef name = GetRefOperand<Name>(0);
-  ValueNode* value = GetAccumulatorTagged();
+  ValueNode* value = GetRawAccumulator();
+
   // Avoid the check if we know it is not the hole.
   if (IsConstantNode(value->opcode())) {
     if (IsTheHoleValue(value)) {
@@ -7018,8 +7019,36 @@ void MaglevGraphBuilder::VisitThrowReferenceErrorIfHole() {
     }
     return;
   }
+
+  // Avoid the check if {value}'s representation doesn't allow the hole.
+  switch (value->value_representation()) {
+    case ValueRepresentation::kInt32:
+    case ValueRepresentation::kUint32:
+    case ValueRepresentation::kFloat64:
+      // Can't be the hole.
+      return;
+
+    default:
+      // Could be the hole.
+      break;
+  }
+
+  // Avoid the check if {value} has an alternative whose representation doesn't
+  // allow the hole.
+  if (const NodeInfo* info = known_node_aspects().TryGetInfoFor(value)) {
+    if (info->int32_alternative || info->truncated_int32_to_number ||
+        info->float64_alternative) {
+      return;
+    }
+  }
+
+  DCHECK(value->value_representation() == ValueRepresentation::kTagged ||
+         value->value_representation() == ValueRepresentation::kHoleyFloat64);
+  value = GetTaggedValue(value);
+
   AddNewNode<ThrowReferenceErrorIfHole>({value}, name);
 }
+
 void MaglevGraphBuilder::VisitThrowSuperNotCalledIfHole() {
   // ThrowSuperNotCalledIfHole
   ValueNode* value = GetAccumulatorTagged();
