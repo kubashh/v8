@@ -56,6 +56,30 @@
       },
       "revId": "5e6ab9c63d60f2431a210697970e134bb2dd01d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58d1db90_f4923334",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-14T17:50:58Z",
+      "side": 1,
+      "message": "I moved the DCHECKs into a slightly better place so we don\u0027t check it for each reference (where host always stays the same) but once for map and once for the rest.",
+      "parentUuid": "b709eb25_b1443412",
+      "range": {
+        "startLine": 832,
+        "startChar": 6,
+        "endLine": 832,
+        "endChar": 64
+      },
+      "revId": "5e6ab9c63d60f2431a210697970e134bb2dd01d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
