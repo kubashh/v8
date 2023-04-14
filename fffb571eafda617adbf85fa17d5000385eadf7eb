@@ -16,6 +16,23 @@
       "message": "ptal, I found this much easier to follow (ignoring concurrent marking) and less prone to forgetting special cases across all uses",
       "revId": "fffb571eafda617adbf85fa17d5000385eadf7eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06075d4f_5f23a728",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-14T12:04:47Z",
+      "side": 1,
+      "message": "Pinpoint seems rather happy about a pure refactoring...\n\nhttps://pinpoint-dot-chromeperf.appspot.com/job/1746984f460000",
+      "revId": "fffb571eafda617adbf85fa17d5000385eadf7eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
