@@ -16,6 +16,23 @@
       "message": "PTAL.",
       "revId": "2573ec7abc3ac31003b95cbd2b20a99a79947b85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8cb069e_d8f0d272",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-14T10:12:32Z",
+      "side": 1,
+      "message": "Context: this was reported at https://github.com/WebAssembly/binaryen/pull/5663#issuecomment-1507616152",
+      "revId": "2573ec7abc3ac31003b95cbd2b20a99a79947b85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
