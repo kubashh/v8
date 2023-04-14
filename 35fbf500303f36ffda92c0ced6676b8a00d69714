@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35b1a6cc_2e7657c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-04-14T18:44:50Z",
+      "side": 1,
+      "message": "Shu, could you review this? Just a small cleanup.",
+      "revId": "35fbf500303f36ffda92c0ced6676b8a00d69714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
