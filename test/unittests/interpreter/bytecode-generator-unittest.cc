@@ -2252,6 +2252,9 @@ TEST_F(BytecodeGeneratorTest, ClassDeclarations) {
 }
 
 TEST_F(BytecodeGeneratorTest, ClassAndSuperClass) {
+  // TODO(v8:13723): Remove once TDZ elision ships.
+  i::v8_flags.ignition_elide_redundant_tdz_checks = false;
+
   printer().set_wrap(false);
   printer().set_test_function_name("test");
   std::string snippets[] = {
@@ -2864,6 +2867,9 @@ TEST_F(BytecodeGeneratorTest, AsyncGenerators) {
 }
 
 TEST_F(BytecodeGeneratorTest, Modules) {
+  // TODO(v8:13723): Remove once TDZ elision ships.
+  i::v8_flags.ignition_elide_redundant_tdz_checks = false;
+
   printer().set_wrap(false);
   printer().set_module(true);
   printer().set_top_level(true);
@@ -2930,6 +2936,9 @@ TEST_F(BytecodeGeneratorTest, AsyncModules) {
 }
 
 TEST_F(BytecodeGeneratorTest, SuperCallAndSpread) {
+  // TODO(v8:13723): Remove once TDZ elision ships.
+  i::v8_flags.ignition_elide_redundant_tdz_checks = false;
+
   printer().set_wrap(false);
   printer().set_test_function_name("test");
   std::string snippets[] = {
