@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "5e6ab9c63d60f2431a210697970e134bb2dd01d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c53694e2_9a7d0143",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-14T16:35:21Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5e6ab9c63d60f2431a210697970e134bb2dd01d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b709eb25_b1443412",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-14T16:35:21Z",
+      "side": 1,
+      "message": "I believe this should anyway hold, so we can move the DCHECK outside the branches.",
+      "range": {
+        "startLine": 832,
+        "startChar": 6,
+        "endLine": 832,
+        "endChar": 64
+      },
+      "revId": "5e6ab9c63d60f2431a210697970e134bb2dd01d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
