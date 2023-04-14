@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35a6c6fd_2868bb19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-14T10:43:46Z",
+      "side": 1,
+      "message": "ptal, I found this much easier to follow (ignoring concurrent marking) and less prone to forgetting special cases across all uses",
+      "revId": "fffb571eafda617adbf85fa17d5000385eadf7eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
