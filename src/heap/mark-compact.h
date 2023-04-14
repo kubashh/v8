@@ -139,6 +139,10 @@ class YoungGenerationMainMarkingVisitor final
 
   YoungGenerationMarkingState* marking_state() { return &marking_state_; }
 
+  // Returns whether a young generation object was found in slot.
+  template <bool VisitDirectly, typename TSlot>
+  V8_INLINE bool VisitObjectViaSlot(TSlot slot);
+
  private:
   YoungGenerationMarkingState marking_state_;
 
@@ -607,7 +611,6 @@ class MinorMarkCompactCollector final : public CollectorBase {
   void MarkLiveObjects();
   void MarkLiveObjectsInParallel(RootMarkingVisitor* root_visitor,
                                  bool was_marked_incrementally);
-  V8_INLINE void MarkRootObject(HeapObject obj);
   void DrainMarkingWorklist();
   void TraceFragmentation();
   void ClearNonLiveReferences();
@@ -697,8 +700,6 @@ class YoungGenerationMarkingTask final {
   YoungGenerationMarkingTask(Isolate* isolate, Heap* heap,
                              MarkingWorklists* global_worklists);
 
-  void MarkYoungObject(HeapObject heap_object);
-
   void DrainMarkingWorklist();
 
   void PublishMarkingWorklist();
@@ -708,6 +709,8 @@ class YoungGenerationMarkingTask final {
   }
 
   void Finalize();
+
+  YoungGenerationMainMarkingVisitor* visitor() { return &visitor_; }
 
  private:
   std::unique_ptr<MarkingWorklists::Local> marking_worklists_local_;
