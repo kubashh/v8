@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c841a6cb_a0160805",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-14T14:07:15Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57ddca84_1a801848",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-14T14:07:15Z",
+      "side": 1,
+      "message": "nit: Can we rewrite this method as early returns (if the conditions at lines 107 and 108 don\u0027t hold) and less indentation?",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 6
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "069e4e07_6062088f",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-14T14:07:15Z",
+      "side": 1,
+      "message": "nit: Here and in line 95 above, do we need the explicit cage or could we use the versions that don\u0027t take the case as an argument?",
+      "range": {
+        "startLine": 110,
+        "startChar": 34,
+        "endLine": 110,
+        "endChar": 73
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d54ca13_a1730527",
+        "filename": "src/heap/mark-compact-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-14T14:07:15Z",
+      "side": 1,
+      "message": "nit: `if (!...) return true;`?",
+      "range": {
+        "startLine": 125,
+        "startChar": 2,
+        "endLine": 125,
+        "endChar": 4
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2e13a25_e45612e2",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-14T14:07:15Z",
+      "side": 1,
+      "message": "Replace with `enum class HandlingMode { kPush, kVisit };` (or some other names) to improve readability of callsites?",
+      "range": {
+        "startLine": 143,
+        "startChar": 17,
+        "endLine": 143,
+        "endChar": 30
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff693811_37bc7356",
+        "filename": "src/heap/objects-visiting.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-14T14:07:15Z",
+      "side": 1,
+      "message": "const ConcreteVisitor?",
+      "range": {
+        "startLine": 130,
+        "startChar": 2,
+        "endLine": 130,
+        "endChar": 17
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
