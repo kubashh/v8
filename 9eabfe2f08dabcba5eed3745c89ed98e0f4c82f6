@@ -136,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4e7177b_3fbf68aa",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-14T14:50:02Z",
+      "side": 1,
+      "message": "Yes, I think people have been passing around the cage argument in many places to avoid the global load.\n\nAt this point the global is treated as const though, so maybe that\u0027s not necessary anymore.",
+      "parentUuid": "890c380a_54a6e5c2",
+      "range": {
+        "startLine": 110,
+        "startChar": 34,
+        "endLine": 110,
+        "endChar": 73
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d54ca13_a1730527",
