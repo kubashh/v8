@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ce308a6_29a52ade",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-14T14:22:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57ddca84_1a801848",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 6
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "069e4e07_6062088f",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-04-14T14:07:15Z",
       "side": 1,
       "message": "nit: Here and in line 95 above, do we need the explicit cage or could we use the versions that don\u0027t take the case as an argument?",
+      "range": {
+        "startLine": 110,
+        "startChar": 34,
+        "endLine": 110,
+        "endChar": 73
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c41da412_d8560b4c",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-14T14:22:29Z",
+      "side": 1,
+      "message": "We need to decompress so taking a cage is preferred. In general taking a cage is preferred as it works for all objects whereas the implicit retrieval will only work for non-Code (as it gets the main cage from some global variable).",
+      "parentUuid": "069e4e07_6062088f",
       "range": {
         "startLine": 110,
         "startChar": 34,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4dd7042_0ab414a5",
+        "filename": "src/heap/mark-compact-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-14T14:22:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d54ca13_a1730527",
+      "range": {
+        "startLine": 125,
+        "startChar": 2,
+        "endLine": 125,
+        "endChar": 4
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2e13a25_e45612e2",
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "921fe4fc_0099cd81",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-14T14:22:29Z",
+      "side": 1,
+      "message": "Done. We generally use that style. \n\nI personally think it regresses readability here.",
+      "parentUuid": "c2e13a25_e45612e2",
+      "range": {
+        "startLine": 143,
+        "startChar": 17,
+        "endLine": 143,
+        "endChar": 30
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff693811_37bc7356",
@@ -123,6 +219,30 @@
       "writtenOn": "2023-04-14T14:07:15Z",
       "side": 1,
       "message": "const ConcreteVisitor?",
+      "range": {
+        "startLine": 130,
+        "startChar": 2,
+        "endLine": 130,
+        "endChar": 17
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e198f523_cc28a5f3",
+        "filename": "src/heap/objects-visiting.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-14T14:22:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff693811_37bc7356",
       "range": {
         "startLine": 130,
         "startChar": 2,
