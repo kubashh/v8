@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "890c380a_54a6e5c2",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-14T14:44:56Z",
+      "side": 1,
+      "message": "Acknowledged.\nSo in this case the explicit cage is not actually needed (since young gen contains no code) but it makes sense to keep it if it\u0027s generally the preferred way.",
+      "parentUuid": "c41da412_d8560b4c",
+      "range": {
+        "startLine": 110,
+        "startChar": 34,
+        "endLine": 110,
+        "endChar": 73
+      },
+      "revId": "9eabfe2f08dabcba5eed3745c89ed98e0f4c82f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d54ca13_a1730527",
