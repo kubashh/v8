@@ -49,6 +49,7 @@ class Graph final : public ZoneObject {
   BasicBlock* last_block() const { return blocks_.back(); }
 
   void Add(BasicBlock* block) { blocks_.push_back(block); }
+  void RemoveLast() { blocks_.pop_back(); }
 
   uint32_t tagged_stack_slots() const { return tagged_stack_slots_; }
   uint32_t untagged_stack_slots() const { return untagged_stack_slots_; }

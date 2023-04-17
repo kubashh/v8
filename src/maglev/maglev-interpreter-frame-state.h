@@ -177,17 +177,15 @@ struct KnownNodeAspects {
     return zone->New<KnownNodeAspects>(*this);
   }
 
-  // Loop headers can safely clone the node types, since those won't be
+  // Loop headers can safely keep the node types, since those won't be
   // invalidated in the loop body, and similarly stable maps will have
-  // dependencies installed. Unstable maps however might be invalidated by
-  // calls, and we don't know about these until it's too late.
-  KnownNodeAspects* CloneForLoopHeader(Zone* zone) const {
-    KnownNodeAspects* clone = zone->New<KnownNodeAspects>(zone);
-    clone->node_infos = node_infos;
-    clone->stable_maps = stable_maps;
-    clone->loaded_constant_properties = loaded_constant_properties;
-    clone->loaded_context_constants = loaded_context_constants;
-    return clone;
+  // dependencies installed. Unstable maps and non-constant properties and
+  // context slots however might be invalidated in the loop body, and we don't
+  // know about these until it's too late.
+  void ResetForLoopHeader() {
+    unstable_maps.clear();
+    loaded_properties.clear();
+    loaded_context_slots.clear();
   }
 
   ZoneMap<ValueNode*, NodeInfo>::iterator FindInfo(ValueNode* node) {
@@ -598,6 +596,12 @@ class MergePointInterpreterFrameState {
   bool is_resumable_loop() const { return is_resumable_loop_; }
 
   int merge_offset() const { return merge_offset_; }
+
+  KnownNodeAspects& known_node_aspects() { return *known_node_aspects_; }
+  void set_known_node_aspects(KnownNodeAspects* known_node_aspects) {
+    DCHECK_NOT_NULL(known_node_aspects);
+    known_node_aspects_ = known_node_aspects;
+  }
 
  private:
   // For each non-Phi value in the frame state, store its alternative

@@ -641,6 +641,8 @@ class BasicBlockRef {
     return next_ref_;
   }
 
+  void RemoveNext() { next_ref_ = next_ref_->next_ref(); }
+
   bool has_ref() const {
     DCHECK_EQ(state_, kRefList);
     return next_ref_ != nullptr;

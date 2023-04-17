@@ -492,6 +492,8 @@ DEFINE_EXPERIMENTAL_FEATURE(
     "enable phi untagging in the maglev optimizing compiler")
 DEFINE_BOOL(maglev_loop_peeling, true,
             "enable loop peeling in the maglev optimizing compiler")
+DEFINE_BOOL(maglev_loop_fixed_point, true,
+            "try to compute a least fixed point of loop analysis information")
 DEFINE_WEAK_IMPLICATION(maglev_future, maglev_inlining)
 DEFINE_WEAK_IMPLICATION(maglev_future, maglev_untagged_phis)
 
