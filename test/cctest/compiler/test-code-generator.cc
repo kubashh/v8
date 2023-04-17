@@ -1143,7 +1143,7 @@ class CodeGeneratorTester {
     generator_ = new CodeGenerator(
         environment->main_zone(), &frame_, &linkage_,
         environment->instructions(), &info_, environment->main_isolate(),
-        base::Optional<OsrHelper>(), kNoSourcePosition, nullptr,
+        base::Optional<OsrHelper>(), kNoSourcePosition,
         AssemblerOptions::Default(environment->main_isolate()), kNoBufferCache,
         Builtin::kNoBuiltinId, kMaxUnoptimizedFrameHeight,
         kMaxPushedArgumentCount);

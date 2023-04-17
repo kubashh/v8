@@ -6,9 +6,11 @@
 
 #include "src/base/iterator.h"
 #include "src/codegen/assembler-inl.h"
+#include "src/codegen/assembler.h"
 #include "src/codegen/macro-assembler-inl.h"
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/compiler/backend/code-generator-impl.h"
+#include "src/compiler/backend/instruction.h"
 #include "src/compiler/globals.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/pipeline.h"
@@ -48,10 +50,10 @@ CodeGenerator::CodeGenerator(
     Zone* codegen_zone, Frame* frame, Linkage* linkage,
     InstructionSequence* instructions, OptimizedCompilationInfo* info,
     Isolate* isolate, base::Optional<OsrHelper> osr_helper,
-    int start_source_position, JumpOptimizationInfo* jump_opt,
-    const AssemblerOptions& options, wasm::AssemblerBufferCache* buffer_cache,
-    Builtin builtin, size_t max_unoptimized_frame_height,
-    size_t max_pushed_argument_count, const char* debug_name)
+    int start_source_position, const AssemblerOptions& options,
+    wasm::AssemblerBufferCache* buffer_cache, Builtin builtin,
+    size_t max_unoptimized_frame_height, size_t max_pushed_argument_count,
+    const char* debug_name)
     : zone_(codegen_zone),
       isolate_(isolate),
       frame_access_state_(nullptr),
@@ -98,7 +100,6 @@ CodeGenerator::CodeGenerator(
   }
   CreateFrameAccessState(frame);
   CHECK_EQ(info->is_osr(), osr_helper_.has_value());
-  masm_.set_jump_optimization_info(jump_opt);
   CodeKind code_kind = info->code_kind();
   if (code_kind == CodeKind::WASM_FUNCTION ||
       code_kind == CodeKind::WASM_TO_CAPI_FUNCTION ||
@@ -740,9 +741,44 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleInstruction(
   }
   bool adjust_stack =
       GetSlotAboveSPBeforeTailCall(instr, &first_unused_stack_slot);
+
+  ParallelMove* origins[2] = {instr->parallel_moves()[0],
+                              instr->parallel_moves()[1]};
+  ParallelMove* copy[2] = {nullptr, nullptr};
+  Zone* tmp_zone = nullptr;
+
+  JumpOptimizationInfo* jump_opt = masm()->jump_optimization_info();
+  bool need_to_copy_parallel_move =
+      jump_opt && jump_opt->is_collecting() && !instr->AreMovesRedundant();
+
+  if (need_to_copy_parallel_move) {
+    // If jump optimization is enabled, the original InstructionSequence
+    // is needed in the next round of Assemble. However, the ParallelMove
+    // of a instruction may be altered during AssembleTailCallBeforeGap,
+    // AssembleGaps and AssembleTailCallAfterGap. To keep the original
+    // InstructionSequence for next round of Assemble, we need to copy
+    // the original ParallelMove.
+    tmp_zone = new Zone(isolate()->allocator(), "TempZoneForParallelMoves");
+    copy[0] = instr->parallel_moves()[0]
+                  ? instr->parallel_moves()[0]->Copy(tmp_zone)
+                  : nullptr;
+    copy[1] = instr->parallel_moves()[1]
+                  ? instr->parallel_moves()[1]->Copy(tmp_zone)
+                  : nullptr;
+    instr->SetParallelMove(0, copy[0]);
+    instr->SetParallelMove(1, copy[1]);
+  }
+
   if (adjust_stack) AssembleTailCallBeforeGap(instr, first_unused_stack_slot);
   AssembleGaps(instr);
   if (adjust_stack) AssembleTailCallAfterGap(instr, first_unused_stack_slot);
+
+  if (need_to_copy_parallel_move) {
+    instr->SetParallelMove(0, origins[0]);
+    instr->SetParallelMove(1, origins[1]);
+  }
+  if (tmp_zone) delete tmp_zone;
+
   DCHECK_IMPLIES(
       block->must_deconstruct_frame(),
       instr != instructions()->InstructionAt(block->last_instruction_index()) ||
