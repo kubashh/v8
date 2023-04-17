@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c81840e2_0809bb52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2023-04-17T03:23:43Z",
+      "side": 1,
+      "message": "Thanks Tobias for reviewing this change! The turboshaft part is removed in the latest patchset.",
+      "revId": "760d623faf06ac2eb3aeaea39cdb2d48af882e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
