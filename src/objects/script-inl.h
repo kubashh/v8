@@ -26,12 +26,12 @@ NEVER_READ_ONLY_SPACE_IMPL(Script)
 #if V8_ENABLE_WEBASSEMBLY
 ACCESSORS_CHECKED(Script, wasm_breakpoint_infos, FixedArray,
                   kEvalFromSharedOrWrappedArgumentsOffset,
-                  this->type() == TYPE_WASM)
+                  this->type() == Type::kWasm)
 ACCESSORS_CHECKED(Script, wasm_managed_native_module, Object,
-                  kEvalFromPositionOffset, this->type() == TYPE_WASM)
+                  kEvalFromPositionOffset, this->type() == Type::kWasm)
 ACCESSORS_CHECKED(Script, wasm_weak_instance_list, WeakArrayList,
-                  kSharedFunctionInfosOffset, this->type() == TYPE_WASM)
-#define CHECK_SCRIPT_NOT_WASM this->type() != TYPE_WASM
+                  kSharedFunctionInfosOffset, this->type() == Type::kWasm)
+#define CHECK_SCRIPT_NOT_WASM this->type() != Type::kWasm
 #else
 #define CHECK_SCRIPT_NOT_WASM true
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -78,7 +78,7 @@ FixedArray Script::wrapped_arguments() const {
 
 DEF_GETTER(Script, shared_function_infos, WeakFixedArray) {
 #if V8_ENABLE_WEBASSEMBLY
-  if (type() == TYPE_WASM) {
+  if (type() == Type::kWasm) {
     return ReadOnlyRoots(GetHeap()).empty_weak_fixed_array();
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -88,7 +88,7 @@ DEF_GETTER(Script, shared_function_infos, WeakFixedArray) {
 void Script::set_shared_function_infos(WeakFixedArray value,
                                        WriteBarrierMode mode) {
 #if V8_ENABLE_WEBASSEMBLY
-  DCHECK_NE(TYPE_WASM, type());
+  DCHECK_NE(Type::kWasm, type());
 #endif  // V8_ENABLE_WEBASSEMBLY
   TaggedField<WeakFixedArray, kSharedFunctionInfosOffset>::store(*this, value);
   CONDITIONAL_WRITE_BARRIER(*this, kSharedFunctionInfosOffset, value, mode);
@@ -100,7 +100,7 @@ int Script::shared_function_info_count() const {
 
 #if V8_ENABLE_WEBASSEMBLY
 bool Script::has_wasm_breakpoint_infos() const {
-  return type() == TYPE_WASM && wasm_breakpoint_infos().length() > 0;
+  return type() == Type::kWasm && wasm_breakpoint_infos().length() > 0;
 }
 
 wasm::NativeModule* Script::wasm_native_module() const {
@@ -166,7 +166,7 @@ bool Script::has_line_ends() const { return line_ends() != Smi::zero(); }
 
 bool Script::CanHaveLineEnds() const {
 #if V8_ENABLE_WEBASSEMBLY
-  return type() != Script::TYPE_WASM;
+  return type() != Script::Type::kWasm;
 #else
   return true;
 #endif  // V8_ENABLE_WEBASSEMBLY

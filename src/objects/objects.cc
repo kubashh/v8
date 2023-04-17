@@ -4879,7 +4879,7 @@ void Oddball::Initialize(Isolate* isolate, Handle<Oddball> oddball,
 
 // static
 int Script::GetEvalPosition(Isolate* isolate, Handle<Script> script) {
-  DCHECK(script->compilation_type() == Script::COMPILATION_TYPE_EVAL);
+  DCHECK(script->compilation_type() == Script::CompilationType::kEval);
   int position = script->eval_from_position();
   if (position < 0) {
     // Due to laziness, the position may not have been translated from code
@@ -4933,7 +4933,7 @@ bool Script::GetPositionInfo(Handle<Script> script, int position,
   // For wasm, we do not create an artificial line_ends array, but do the
   // translation directly.
 #ifdef DEBUG
-  if (script->type() == Script::TYPE_WASM) {
+  if (script->type() == Type::kWasm) {
     DCHECK(script->has_line_ends());
     DCHECK_EQ(FixedArray::cast(script->line_ends()).length(), 0);
   }
@@ -4945,16 +4945,18 @@ bool Script::GetPositionInfo(Handle<Script> script, int position,
 
 bool Script::IsSubjectToDebugging() const {
   switch (type()) {
-    case TYPE_NORMAL:
+    case Type::kNormal:
 #if V8_ENABLE_WEBASSEMBLY
-    case TYPE_WASM:
+    case Type::kWasm:
 #endif  // V8_ENABLE_WEBASSEMBLY
       return true;
   }
   return false;
 }
 
-bool Script::IsUserJavaScript() const { return type() == Script::TYPE_NORMAL; }
+bool Script::IsUserJavaScript() const {
+  return type() == Script::Type::kNormal;
+}
 
 #if V8_ENABLE_WEBASSEMBLY
 bool Script::ContainsAsmModule() {
@@ -5014,7 +5016,7 @@ bool Script::GetPositionInfo(int position, PositionInfo* info,
 
 #if V8_ENABLE_WEBASSEMBLY
   // For wasm, we use the byte offset as the column.
-  if (type() == Script::TYPE_WASM) {
+  if (type() == Script::Type::kWasm) {
     DCHECK_LE(0, position);
     wasm::NativeModule* native_module = wasm_native_module();
     const wasm::WasmModule* module = native_module->module();

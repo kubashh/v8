@@ -40,23 +40,20 @@ class Script : public TorqueGeneratedScript<Script, Struct> {
   NEVER_READ_ONLY_SPACE
   // Script types.
   enum Type {
-    TYPE_NATIVE = 0,
-    TYPE_EXTENSION = 1,
-    TYPE_NORMAL = 2,
+    kNative = 0,
+    kExtension = 1,
+    kNormal = 2,
 #if V8_ENABLE_WEBASSEMBLY
-    TYPE_WASM = 3,
+    kWasm = 3,
 #endif  // V8_ENABLE_WEBASSEMBLY
-    TYPE_INSPECTOR = 4
+    kInspector = 4
   };
 
   // Script compilation types.
-  enum CompilationType { COMPILATION_TYPE_HOST = 0, COMPILATION_TYPE_EVAL = 1 };
+  enum class CompilationType { kHost = 0, kEval = 1 };
 
   // Script compilation state.
-  enum CompilationState {
-    COMPILATION_STATE_INITIAL = 0,
-    COMPILATION_STATE_COMPILED = 1
-  };
+  enum class CompilationState { kInitial = 0, kCompiled = 1 };
 
   // [type]: the script type.
   DECL_INT_ACCESSORS(type)
