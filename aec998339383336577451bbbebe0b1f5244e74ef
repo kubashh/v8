@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b7f6c3a_5fa98e3b",
+        "filename": "src/heap/local-factory.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-17T11:27:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cefc1d6c_1c058379",
+      "revId": "aec998339383336577451bbbebe0b1f5244e74ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dda8f720_0ad4d301",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f42f7955_a48af298",
+        "filename": "src/objects/script.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-17T11:27:36Z",
+      "side": 1,
+      "message": "DONE",
+      "parentUuid": "dda8f720_0ad4d301",
+      "revId": "aec998339383336577451bbbebe0b1f5244e74ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4857986_e424bd4d",
@@ -65,6 +101,24 @@
       "writtenOn": "2023-04-12T14:48:38Z",
       "side": 1,
       "message": "Strictly speaking it\u0027s not necessary (and better not) to create a handle to perform the below two DCHECKs. Or did you mean to unconditionally update the `script` with `result-\u003escript()`?",
+      "revId": "aec998339383336577451bbbebe0b1f5244e74ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d208dbc_78aff0eb",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-17T11:27:36Z",
+      "side": 1,
+      "message": "Yes, I want it to be the same as `result-\u003escript()`. Added comment to make this clear.",
+      "parentUuid": "d4857986_e424bd4d",
       "revId": "aec998339383336577451bbbebe0b1f5244e74ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
