@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/base/logging.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/common/globals.h"
 #include "src/date/date.h"
@@ -1953,6 +1954,16 @@ void AllocationSite::AllocationSiteVerify(Isolate* isolate) {
 
 void Script::ScriptVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::ScriptVerify(*this, isolate);
+  // Only check for fully initilized scripts
+  if (!name().IsUndefined() && type() == Script::TYPE_WASM) {
+    if (source_mapping_url().IsString()) {
+      CHECK(CanHaveLineEnds());
+    } else {
+      CHECK_EQ(line_ends(), ReadOnlyRoots(isolate).empty_fixed_array());
+    }
+  } else {
+    CHECK(CanHaveLineEnds());
+  }
   for (int i = 0; i < shared_function_info_count(); ++i) {
     MaybeObject maybe_object = shared_function_infos().Get(i);
     HeapObject heap_object;
