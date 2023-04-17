@@ -13,11 +13,7 @@ namespace v8 {
 namespace internal {
 
 PersistentHandles::PersistentHandles(Isolate* isolate)
-    : isolate_(isolate),
-      block_next_(nullptr),
-      block_limit_(nullptr),
-      prev_(nullptr),
-      next_(nullptr) {
+    : isolate_(isolate), block_top_(nullptr), prev_(nullptr), next_(nullptr) {
   isolate->persistent_handles_list()->Add(this);
 }
 
@@ -26,9 +22,9 @@ PersistentHandles::~PersistentHandles() {
 
   for (Address* block_start : blocks_) {
 #if ENABLE_HANDLE_ZAPPING
-    HandleScope::ZapRange(block_start, block_start + kHandleBlockSize);
+    HandleScopeUtils::ZapRange(block_start, block_start + kHandleBlockSize);
 #endif
-    DeleteArray(block_start);
+    HandleScopeUtils::FreeBlock(block_start);
   }
 }
 
@@ -55,20 +51,19 @@ bool PersistentHandles::Contains(Address* location) {
   if (*it == blocks_.back()) {
     // The last block is a special case because it may have
     // less than block_size_ handles.
-    return location < block_next_;
+    return location < block_top_;
   }
   return location < *it + kHandleBlockSize;
 }
 #endif
 
 void PersistentHandles::AddBlock() {
-  DCHECK_EQ(block_next_, block_limit_);
+  DCHECK(HandleScopeUtils::MayNeedExtend(block_top_));
 
-  Address* block_start = NewArray<Address>(kHandleBlockSize);
+  Address* block_start = HandleScopeUtils::AllocateBlock();
   blocks_.push_back(block_start);
 
-  block_next_ = block_start;
-  block_limit_ = block_start + kHandleBlockSize;
+  block_top_ = block_start;
 
 #ifdef DEBUG
   ordered_blocks_.insert(block_start);
@@ -76,13 +71,12 @@ void PersistentHandles::AddBlock() {
 }
 
 Address* PersistentHandles::GetHandle(Address value) {
-  if (block_next_ == block_limit_) {
+  if (V8_UNLIKELY(HandleScopeUtils::MayNeedExtend(block_top_))) {
     AddBlock();
   }
 
-  DCHECK_LT(block_next_, block_limit_);
-  *block_next_ = value;
-  return block_next_++;
+  *block_top_ = value;
+  return block_top_++;
 }
 
 void PersistentHandles::Iterate(RootVisitor* visitor) {
@@ -96,9 +90,10 @@ void PersistentHandles::Iterate(RootVisitor* visitor) {
 
   if (!blocks_.empty()) {
     Address* block_start = blocks_.back();
+    DCHECK(!HandleScopeUtils::IsSealed(block_top_));
     visitor->VisitRootPointers(Root::kHandleScope, nullptr,
                                FullObjectSlot(block_start),
-                               FullObjectSlot(block_next_));
+                               FullObjectSlot(block_top_));
   }
 }
 
@@ -134,35 +129,18 @@ PersistentHandlesScope::PersistentHandlesScope(Isolate* isolate)
     : impl_(isolate->handle_scope_implementer()) {
   impl_->BeginDeferredScope();
   HandleScopeData* data = impl_->isolate()->handle_scope_data();
-  Address* new_next = impl_->GetSpareOrNewBlock();
-  Address* new_limit = &new_next[kHandleBlockSize];
-  // Check that at least one HandleScope with at least one Handle in it exists,
-  // see the class description.
   DCHECK(!impl_->blocks()->empty());
-  impl_->blocks()->push_back(new_next);
-
-#ifdef DEBUG
-  prev_level_ = data->level;
-#endif
-  data->level++;
-  first_block_ = new_next;
-  prev_limit_ = data->limit;
-  prev_next_ = data->next;
-  data->next = new_next;
-  data->limit = new_limit;
+  prev_top_ = data->top;
+  // Set top to limit to force allocation of a new block for the next handle.
+  data->top = HandleScopeUtils::BlockLimit(data->top);
 }
 
-PersistentHandlesScope::~PersistentHandlesScope() {
-  DCHECK(handles_detached_);
-  impl_->isolate()->handle_scope_data()->level--;
-  DCHECK_EQ(impl_->isolate()->handle_scope_data()->level, prev_level_);
-}
+PersistentHandlesScope::~PersistentHandlesScope() { DCHECK(handles_detached_); }
 
 std::unique_ptr<PersistentHandles> PersistentHandlesScope::Detach() {
-  std::unique_ptr<PersistentHandles> ph = impl_->DetachPersistent(first_block_);
+  std::unique_ptr<PersistentHandles> ph = impl_->DetachPersistent();
   HandleScopeData* data = impl_->isolate()->handle_scope_data();
-  data->next = prev_next_;
-  data->limit = prev_limit_;
+  data->top = prev_top_;
 #ifdef DEBUG
   handles_detached_ = true;
 #endif

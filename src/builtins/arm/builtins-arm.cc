@@ -2986,10 +2986,6 @@ void Builtins::Generate_DoubleToI(MacroAssembler* masm) {
 
 namespace {
 
-int AddressOffset(ExternalReference ref0, ExternalReference ref1) {
-  return ref0.address() - ref1.address();
-}
-
 // Calls an API function.  Allocates HandleScope, extracts returned value
 // from handle and propagates exceptions.  Restores context.  stack_space
 // - space to be unwound on exit (includes the call JS arguments space and
@@ -3000,24 +2996,25 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
                               MemOperand return_value_operand) {
   ASM_CODE_COMMENT(masm);
   Isolate* isolate = masm->isolate();
-  ExternalReference next_address =
-      ExternalReference::handle_scope_next_address(isolate);
-  const int kNextOffset = 0;
-  const int kLimitOffset = AddressOffset(
-      ExternalReference::handle_scope_limit_address(isolate), next_address);
-  const int kLevelOffset = AddressOffset(
-      ExternalReference::handle_scope_level_address(isolate), next_address);
+  ExternalReference top_address =
+      ExternalReference::handle_scope_top_address(isolate);
 
+  Register handle_scope_base = r9;
+  Register prev_top_reg = r4;
   DCHECK(function_address == r1 || function_address == r2);
   {
     ASM_CODE_COMMENT_STRING(masm,
                             "Allocate HandleScope in callee-save registers.");
-    __ Move(r9, next_address);
-    __ ldr(r4, MemOperand(r9, kNextOffset));
-    __ ldr(r5, MemOperand(r9, kLimitOffset));
-    __ ldr(r6, MemOperand(r9, kLevelOffset));
-    __ add(r6, r6, Operand(1));
-    __ str(r6, MemOperand(r9, kLevelOffset));
+    __ Move(handle_scope_base, top_address);
+    __ ldr(prev_top_reg, MemOperand(handle_scope_base, 0));
+#ifdef DEBUG
+    // Make sure the current scope is not sealed, by clearing the sealed bit.
+    UseScratchRegisterScope temps(masm);
+    Register scratch = temps.Acquire();
+    __ Move(scratch, prev_top_reg);
+    __ bic(scratch, scratch, Operand(HandleScopeUtils::kHandleScopeSealedMask));
+    __ str(scratch, MemOperand(handle_scope_base, 0));
+#endif
   }
 
   Label profiler_or_side_effects_check_enabled, done_api_call;
@@ -3051,17 +3048,15 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
         masm,
         "No more valid handles (the result handle was the last one)."
         "Restore previous handle scope.");
-    __ str(r4, MemOperand(r9, kNextOffset));
-    if (v8_flags.debug_code) {
-      __ ldr(r1, MemOperand(r9, kLevelOffset));
-      __ cmp(r1, r6);
-      __ Check(eq, AbortReason::kUnexpectedLevelAfterReturnFromApiCall);
-    }
-    __ sub(r6, r6, Operand(1));
-    __ str(r6, MemOperand(r9, kLevelOffset));
-    __ ldr(r6, MemOperand(r9, kLimitOffset));
-    __ cmp(r5, r6);
-    __ b(ne, &delete_allocated_handles);
+    UseScratchRegisterScope temps(masm);
+    Register current_top = temps.Acquire();
+    __ ldr(current_top, MemOperand(handle_scope_base, 0));
+    __ str(prev_top_reg, MemOperand(handle_scope_base, 0));
+    // Check if new handle blocks were created by comparing the bits containing
+    // the block base address.
+    __ eor(current_top, current_top, prev_top_reg);
+    __ cmp(current_top, Operand(HandleScopeUtils::kHandleBlockSize));
+    __ b(ge, &delete_allocated_handles);
   }
 
   __ RecordComment("Leave the API exit frame.");
@@ -3121,12 +3116,11 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
     ASM_CODE_COMMENT_STRING(
         masm, "HandleScope limit has changed. Delete allocated extensions.");
     __ bind(&delete_allocated_handles);
-    __ str(r5, MemOperand(r9, kLimitOffset));
-    __ mov(r4, r0);
+    __ mov(prev_top_reg, r0);
     __ PrepareCallCFunction(1);
     __ Move(r0, ExternalReference::isolate_address(isolate));
     __ CallCFunction(ExternalReference::delete_handle_scope_extensions(), 1);
-    __ mov(r0, r4);
+    __ mov(r0, prev_top_reg);
     __ jmp(&leave_exit_frame);
   }
 }

@@ -32,11 +32,8 @@ class LocalHandles {
   std::vector<Address*> blocks_;
 
   V8_EXPORT_PRIVATE Address* AddBlock();
+  V8_EXPORT_PRIVATE void RemoveAllBlocks();
   V8_EXPORT_PRIVATE void RemoveUnusedBlocks();
-
-#ifdef ENABLE_HANDLE_ZAPPING
-  V8_EXPORT_PRIVATE static void ZapRange(Address* start, Address* end);
-#endif
 
   friend class LocalHandleScope;
 };
@@ -60,11 +57,9 @@ class V8_NODISCARD LocalHandleScope {
   void operator delete(void* size_t) = delete;
 
   // Close the handle scope resetting limits to a previous state.
-  static inline void CloseScope(LocalHeap* local_heap, Address* prev_next,
-                                Address* prev_limit);
+  static inline void CloseScope(LocalHeap* local_heap, Address* prev_top);
   V8_EXPORT_PRIVATE static void CloseMainThreadScope(LocalHeap* local_heap,
-                                                     Address* prev_next,
-                                                     Address* prev_limit);
+                                                     Address* prev_top);
 
   V8_EXPORT_PRIVATE void OpenMainThreadScope(LocalHeap* local_heap);
 
@@ -72,8 +67,7 @@ class V8_NODISCARD LocalHandleScope {
                                                         Address value);
 
   LocalHeap* local_heap_;
-  Address* prev_limit_;
-  Address* prev_next_;
+  Address* prev_top_;
 };
 
 }  // namespace internal

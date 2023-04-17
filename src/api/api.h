@@ -301,7 +301,7 @@ class HandleScopeImplementer {
         spare_(nullptr),
         last_handle_before_deferred_block_(nullptr) {}
 
-  ~HandleScopeImplementer() { DeleteArray(spare_); }
+  ~HandleScopeImplementer() { FreeBlock(spare_); }
 
   HandleScopeImplementer(const HandleScopeImplementer&) = delete;
   HandleScopeImplementer& operator=(const HandleScopeImplementer&) = delete;
@@ -318,7 +318,7 @@ class HandleScopeImplementer {
                                          char* data);
 
   inline internal::Address* GetSpareOrNewBlock();
-  inline void DeleteExtensions(internal::Address* prev_limit);
+  inline void DeleteExtensions(internal::Address* prev_top);
 
   inline void EnterContext(Context context);
   inline void LeaveContext();
@@ -339,9 +339,13 @@ class HandleScopeImplementer {
   inline DetachableVector<Address*>* blocks() { return &blocks_; }
   Isolate* isolate() const { return isolate_; }
 
+  Address* AllocateBlock() { return HandleScopeUtils::AllocateBlock(); }
+
+  void FreeBlock(Address* block) { HandleScopeUtils::FreeBlock(block); }
+
   void ReturnBlock(Address* block) {
     DCHECK_NOT_NULL(block);
-    if (spare_ != nullptr) DeleteArray(spare_);
+    if (spare_ != nullptr) FreeBlock(spare_);
     spare_ = block;
   }
 
@@ -369,14 +373,14 @@ class HandleScopeImplementer {
     is_microtask_context_.free();
     saved_contexts_.free();
     if (spare_ != nullptr) {
-      DeleteArray(spare_);
+      FreeBlock(spare_);
       spare_ = nullptr;
     }
     DCHECK(isolate_->thread_local_top()->CallDepthIsZero());
   }
 
   void BeginDeferredScope();
-  std::unique_ptr<PersistentHandles> DetachPersistent(Address* first_block);
+  std::unique_ptr<PersistentHandles> DetachPersistent();
 
   Isolate* isolate_;
   DetachableVector<Address*> blocks_;
@@ -404,7 +408,7 @@ class HandleScopeImplementer {
   friend class PersistentHandlesScope;
 };
 
-const int kHandleBlockSize = v8::internal::KB - 2;  // fit in one page
+const int kHandleBlockSize = HandleScopeUtils::kHandleBlockSize;
 
 void HandleScopeImplementer::SaveContext(Context context) {
   saved_contexts_.push_back(context);
@@ -434,42 +438,40 @@ bool HandleScopeImplementer::LastEnteredContextWas(Context context) {
 
 // If there's a spare block, use it for growing the current scope.
 internal::Address* HandleScopeImplementer::GetSpareOrNewBlock() {
-  internal::Address* block =
-      (spare_ != nullptr) ? spare_
-                          : NewArray<internal::Address>(kHandleBlockSize);
+  internal::Address* block = (spare_ != nullptr) ? spare_ : AllocateBlock();
   spare_ = nullptr;
   return block;
 }
 
-void HandleScopeImplementer::DeleteExtensions(internal::Address* prev_limit) {
+void HandleScopeImplementer::DeleteExtensions(internal::Address* prev_top) {
   while (!blocks_.empty()) {
     internal::Address* block_start = blocks_.back();
     internal::Address* block_limit = block_start + kHandleBlockSize;
 
     // SealHandleScope may make the prev_limit to point inside the block.
-    // Cast possibly-unrelated pointers to plain Addres before comparing them
+    // Cast possibly-unrelated pointers to plain Address before comparing them
     // to avoid undefined behavior.
     if (reinterpret_cast<Address>(block_start) <=
-            reinterpret_cast<Address>(prev_limit) &&
-        reinterpret_cast<Address>(prev_limit) <=
+            reinterpret_cast<Address>(prev_top) &&
+        reinterpret_cast<Address>(prev_top) <=
             reinterpret_cast<Address>(block_limit)) {
 #ifdef ENABLE_HANDLE_ZAPPING
-      internal::HandleScope::ZapRange(prev_limit, block_limit);
+      i::HandleScopeUtils::ZapRange(prev_top, block_limit);
 #endif
       break;
     }
 
     blocks_.pop_back();
 #ifdef ENABLE_HANDLE_ZAPPING
-    internal::HandleScope::ZapRange(block_start, block_limit);
+    i::HandleScopeUtils::ZapRange(block_start, block_limit);
 #endif
     if (spare_ != nullptr) {
-      DeleteArray(spare_);
+      FreeBlock(spare_);
     }
     spare_ = block_start;
   }
-  DCHECK((blocks_.empty() && prev_limit == nullptr) ||
-         (!blocks_.empty() && prev_limit != nullptr));
+  DCHECK((blocks_.empty() && prev_top == nullptr) ||
+         (!blocks_.empty() && prev_top != nullptr));
 }
 
 // Interceptor functions called from generated inline caches to notify

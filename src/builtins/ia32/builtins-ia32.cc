@@ -3297,20 +3297,20 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
   ASM_CODE_COMMENT(masm);
   Isolate* isolate = masm->isolate();
 
-  ExternalReference next_address =
-      ExternalReference::handle_scope_next_address(isolate);
-  ExternalReference limit_address =
-      ExternalReference::handle_scope_limit_address(isolate);
-  ExternalReference level_address =
-      ExternalReference::handle_scope_level_address(isolate);
+  ExternalReference top_address =
+      ExternalReference::handle_scope_top_address(isolate);
 
   DCHECK(edx == function_address);
   {
     ASM_CODE_COMMENT_STRING(masm,
                             "Allocate HandleScope in callee-save registers.");
-    __ add(__ ExternalReferenceAsOperand(level_address, esi), Immediate(1));
-    __ mov(esi, __ ExternalReferenceAsOperand(next_address, esi));
-    __ mov(edi, __ ExternalReferenceAsOperand(limit_address, edi));
+    __ mov(esi, __ ExternalReferenceAsOperand(top_address, esi));
+#ifdef DEBUG
+    // Make sure the current scope is not sealed, by clearing the sealed bit.
+    __ and_(__ ExternalReferenceAsOperand(top_address, edi),
+            Immediate(static_cast<std::make_signed_t<Address>>(
+                ~HandleScopeUtils::kHandleScopeSealedMask)));
+#endif
   }
 
   Label profiler_or_side_effects_check_enabled, done_api_call;
@@ -3343,11 +3343,11 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
         masm,
         "No more valid handles (the result handle was the last one)."
         "Restore previous handle scope.");
-    __ mov(__ ExternalReferenceAsOperand(next_address, ecx), esi);
-    __ sub(__ ExternalReferenceAsOperand(level_address, ecx), Immediate(1));
-    __ Assert(above_equal, AbortReason::kInvalidHandleScopeLevel);
-    __ cmp(edi, __ ExternalReferenceAsOperand(limit_address, ecx));
-    __ j(not_equal, &delete_allocated_handles);
+    __ mov(edi, esi);
+    __ mov(__ ExternalReferenceAsOperand(top_address, ecx), esi);
+    __ xor_(edi, esi);
+    __ cmp(edi, Immediate(HandleScopeUtils::kHandleBlockByteSize));
+    __ j(above_equal, &delete_allocated_handles);
   }
 
   __ RecordComment("Leave the API exit frame.");
@@ -3414,7 +3414,6 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
     ExternalReference delete_extensions =
         ExternalReference::delete_handle_scope_extensions();
     __ bind(&delete_allocated_handles);
-    __ mov(__ ExternalReferenceAsOperand(limit_address, ecx), edi);
     __ mov(edi, eax);
     __ Move(eax, Immediate(ExternalReference::isolate_address(isolate)));
     __ mov(Operand(esp, 0), eax);

@@ -24839,6 +24839,15 @@ TEST(NewStringRangeError) {
   free(buffer);
 }
 
+TEST(HandleWithoutHandleScope) {
+  v8::Isolate* isolate = CcTest::isolate();
+  LocalContext env;
+
+  // Should fail
+  v8::Local<v8::Object> obj = v8::Object::New(isolate);
+
+  USE(obj);
+}
 
 TEST(SealHandleScope) {
   v8::Isolate* isolate = CcTest::isolate();
@@ -24852,7 +24861,6 @@ TEST(SealHandleScope) {
 
   USE(obj);
 }
-
 
 TEST(SealHandleScopeNested) {
   v8::Isolate* isolate = CcTest::isolate();

@@ -1066,13 +1066,12 @@ void HandleScope::Initialize(Isolate* v8_isolate) {
                   "Entering the V8 API without proper locking in place");
   i::HandleScopeData* current = i_isolate->handle_scope_data();
   i_isolate_ = i_isolate;
-  prev_next_ = current->next;
-  prev_limit_ = current->limit;
-  current->level++;
+  prev_top_ = current->top;
+  current->top = i::HandleScopeUtils::OpenHandleScope(current->top);
 }
 
 HandleScope::~HandleScope() {
-  i::HandleScope::CloseScope(i_isolate_, prev_next_, prev_limit_);
+  i::HandleScope::CloseScope(i_isolate_, prev_top_);
 }
 
 void* HandleScope::operator new(size_t) { base::OS::Abort(); }
@@ -1127,18 +1126,18 @@ void EscapableHandleScope::operator delete[](void*, size_t) {
 SealHandleScope::SealHandleScope(Isolate* v8_isolate)
     : i_isolate_(reinterpret_cast<i::Isolate*>(v8_isolate)) {
   i::HandleScopeData* current = i_isolate_->handle_scope_data();
-  prev_limit_ = current->limit;
-  current->limit = current->next;
-  prev_sealed_level_ = current->sealed_level;
-  current->sealed_level = current->level;
+  prev_top_ = current->top;
+  current->top = i::HandleScopeUtils::SealHandleScope(current->top);
 }
 
 SealHandleScope::~SealHandleScope() {
   i::HandleScopeData* current = i_isolate_->handle_scope_data();
-  DCHECK_EQ(current->next, current->limit);
-  current->limit = prev_limit_;
-  DCHECK_EQ(current->level, current->sealed_level);
-  current->sealed_level = prev_sealed_level_;
+  // Check that no handles were created in the sealed scope.
+  // If this check is hit, re-run in a DEBUG build to crash at the invalid
+  // handle creation location.
+  CHECK_EQ(i::HandleScopeUtils::OpenHandleScope(current->top),
+           i::HandleScopeUtils::OpenHandleScope(prev_top_));
+  current->top = prev_top_;
 }
 
 void* SealHandleScope::operator new(size_t) { base::OS::Abort(); }
@@ -11245,15 +11244,30 @@ void HandleScopeImplementer::IterateThis(RootVisitor* v) {
     }
   }
 
-  DCHECK(last_handle_before_deferred_block_ == nullptr ||
-         found_block_before_deferred);
-
   // Iterate over live handles in the last block (if any).
   if (!blocks()->empty()) {
+    Address* block_start = blocks()->back();
+    Address* block_end =
+        i::HandleScopeUtils::OpenHandleScope(handle_scope_data_.top);
     v->VisitRootPointers(Root::kHandleScope, nullptr,
-                         FullObjectSlot(blocks()->back()),
-                         FullObjectSlot(handle_scope_data_.next));
+                         FullObjectSlot(block_start),
+                         FullObjectSlot(block_end));
+#ifdef DEBUG
+    // Open persistent handle scope with the last handle before deferred block
+    // in the last block is only possible if no persistent handle was created
+    // and the last block is full.
+    if (last_handle_before_deferred_block_ != nullptr &&
+        !found_block_before_deferred) {
+      DCHECK_EQ(last_handle_before_deferred_block_, block_end);
+      DCHECK_EQ(last_handle_before_deferred_block_,
+                &block_start[kHandleBlockSize]);
+      found_block_before_deferred = true;
+    }
+#endif
   }
+
+  DCHECK(last_handle_before_deferred_block_ == nullptr ||
+         found_block_before_deferred);
 
   DetachableVector<Context>* context_lists[2] = {&saved_contexts_,
                                                  &entered_contexts_};
@@ -11284,20 +11298,19 @@ char* HandleScopeImplementer::Iterate(RootVisitor* v, char* storage) {
   return storage + ArchiveSpacePerThread();
 }
 
-std::unique_ptr<PersistentHandles> HandleScopeImplementer::DetachPersistent(
-    Address* first_block) {
+std::unique_ptr<PersistentHandles> HandleScopeImplementer::DetachPersistent() {
   std::unique_ptr<PersistentHandles> ph(new PersistentHandles(isolate()));
-  DCHECK_NOT_NULL(first_block);
+  DCHECK_NOT_NULL(last_handle_before_deferred_block_);
+  Address* last_normal_block =
+      HandleScopeUtils::BlockStart(last_handle_before_deferred_block_);
 
-  Address* block_start;
-  do {
-    block_start = blocks_.back();
+  while (!blocks_.empty() && blocks_.back() != last_normal_block) {
     ph->blocks_.push_back(blocks_.back());
 #if DEBUG
     ph->ordered_blocks_.insert(blocks_.back());
 #endif
     blocks_.pop_back();
-  } while (block_start != first_block);
+  }
 
   // ph->blocks_ now contains the blocks installed on the
   // HandleScope stack since BeginDeferredScope was called, but in
@@ -11305,21 +11318,19 @@ std::unique_ptr<PersistentHandles> HandleScopeImplementer::DetachPersistent(
 
   // Switch first and last blocks, such that the last block is the one
   // that is potentially half full.
-  DCHECK(!blocks_.empty() && !ph->blocks_.empty());
-  std::swap(ph->blocks_.front(), ph->blocks_.back());
+  if (!ph->blocks_.empty()) {
+    DCHECK(!blocks_.empty() && !ph->blocks_.empty());
+    std::swap(ph->blocks_.front(), ph->blocks_.back());
+    ph->block_top_ = isolate()->handle_scope_data()->top;
+  }
 
-  ph->block_next_ = isolate()->handle_scope_data()->next;
-  block_start = ph->blocks_.back();
-  ph->block_limit_ = block_start + kHandleBlockSize;
-
-  DCHECK_NOT_NULL(last_handle_before_deferred_block_);
   last_handle_before_deferred_block_ = nullptr;
   return ph;
 }
 
 void HandleScopeImplementer::BeginDeferredScope() {
   DCHECK_NULL(last_handle_before_deferred_block_);
-  last_handle_before_deferred_block_ = isolate()->handle_scope_data()->next;
+  last_handle_before_deferred_block_ = isolate()->handle_scope_data()->top;
 }
 
 void InvokeAccessorGetterCallback(

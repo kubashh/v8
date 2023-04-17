@@ -4579,16 +4579,9 @@ void Builtins::Generate_DoubleToI(MacroAssembler* masm) {
 
 namespace {
 
-int Offset(ExternalReference ref0, ExternalReference ref1) {
-  int64_t offset = (ref0.address() - ref1.address());
-  // Check that fits into int.
-  DCHECK(static_cast<int>(offset) == offset);
-  return static_cast<int>(offset);
-}
-
 // Calls an API function.  Allocates HandleScope, extracts returned value
-// from handle and propagates exceptions.  Clobbers r12, r15, rbx and
-// caller-save registers.  Restores context.  On return removes
+// from handle and propagates exceptions.  Clobbers r12, r15 and caller-save
+// registers.  Restores context.  On return removes
 // stack_space * kSystemPointerSize (GCed).
 void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
                               ExternalReference thunk_ref,
@@ -4601,25 +4594,24 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
   Label leave_exit_frame;
 
   Isolate* isolate = masm->isolate();
-  ExternalReference next_address =
-      ExternalReference::handle_scope_next_address(isolate);
-  const int kNextOffset = 0;
-  const int kLimitOffset = Offset(
-      ExternalReference::handle_scope_limit_address(isolate), next_address);
-  const int kLevelOffset = Offset(
-      ExternalReference::handle_scope_level_address(isolate), next_address);
+  ExternalReference top_address =
+      ExternalReference::handle_scope_top_address(isolate);
+  const int kTopOffset = 0;
 
   DCHECK(rdx == function_address || r8 == function_address);
-  Register prev_next_address_reg = r12;
-  Register prev_limit_reg = rbx;
+  Register prev_top_reg = r12;
   Register base_reg = r15;
   {
     ASM_CODE_COMMENT_STRING(masm,
                             "Allocate HandleScope in callee-save registers.");
-    __ Move(base_reg, next_address);
-    __ movq(prev_next_address_reg, Operand(base_reg, kNextOffset));
-    __ movq(prev_limit_reg, Operand(base_reg, kLimitOffset));
-    __ addl(Operand(base_reg, kLevelOffset), Immediate(1));
+    __ Move(base_reg, top_address);
+    __ movq(prev_top_reg, Operand(base_reg, kTopOffset));
+#ifdef DEBUG
+    // Make sure the current scope is not sealed, by clearing the sealed bit.
+    __ andq(Operand(base_reg, kTopOffset),
+            Immediate(static_cast<std::make_signed_t<Address>>(
+                ~HandleScopeUtils::kHandleScopeSealedMask)));
+#endif
   }
 
   Label profiler_or_side_effects_check_enabled, done_api_call;
@@ -4648,10 +4640,14 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
         masm,
         "No more valid handles (the result handle was the last one)."
         "Restore previous handle scope.");
-    __ subl(Operand(base_reg, kLevelOffset), Immediate(1));
-    __ movq(Operand(base_reg, kNextOffset), prev_next_address_reg);
-    __ cmpq(prev_limit_reg, Operand(base_reg, kLimitOffset));
-    __ j(not_equal, &delete_allocated_handles);
+    __ movq(kScratchRegister, Operand(base_reg, kTopOffset));
+    __ movq(Operand(base_reg, kTopOffset), prev_top_reg);
+    // Check if new handle blocks were created by comparing the bits containing
+    // the block base address.
+    __ xorq(kScratchRegister, prev_top_reg);
+    __ cmpq(kScratchRegister,
+            Immediate(HandleScopeUtils::kHandleBlockByteSize));
+    __ j(above_equal, &delete_allocated_handles);
   }
 
   __ RecordComment("Leave the API exit frame.");
@@ -4717,12 +4713,11 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
     ASM_CODE_COMMENT_STRING(
         masm, "HandleScope limit has changed. Delete allocated extensions.");
     __ bind(&delete_allocated_handles);
-    __ movq(Operand(base_reg, kLimitOffset), prev_limit_reg);
-    __ movq(prev_limit_reg, rax);
+    __ movq(prev_top_reg, rax);
     __ LoadAddress(arg_reg_1, ExternalReference::isolate_address(isolate));
     __ LoadAddress(rax, ExternalReference::delete_handle_scope_extensions());
     __ call(rax);
-    __ movq(rax, prev_limit_reg);
+    __ movq(rax, prev_top_reg);
     __ jmp(&leave_exit_frame);
   }
 }
