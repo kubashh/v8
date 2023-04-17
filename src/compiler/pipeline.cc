@@ -19,6 +19,7 @@
 #include "src/codegen/reloc-info.h"
 #include "src/common/high-allocation-throughput-scope.h"
 #include "src/compiler/add-type-assertions-reducer.h"
+#include "src/compiler/address-reassociation.h"
 #include "src/compiler/all-nodes.h"
 #include "src/compiler/backend/bitcast-elider.h"
 #include "src/compiler/backend/code-generator.h"
@@ -2043,6 +2044,10 @@ struct MemoryOptimizationPhase {
         data->info()->allocation_folding()
             ? MemoryLowering::AllocationFolding::kDoAllocationFolding
             : MemoryLowering::AllocationFolding::kDontAllocationFolding,
+        data->info()->code_kind() == CodeKind::WASM_FUNCTION &&
+                v8_flags.turbo_wasm_address_reassociation
+            ? MemoryLowering::AddressReassociate::kDoAddressReassociate
+            : MemoryLowering::AddressReassociate::kDontAddressReassociate,
         data->debug_name(), &data->info()->tick_counter());
     optimizer.Optimize();
   }
