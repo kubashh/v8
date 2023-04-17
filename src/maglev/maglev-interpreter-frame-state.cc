@@ -214,8 +214,8 @@ void MergePointInterpreterFrameState::Merge(
   if (known_node_aspects_ == nullptr) {
     DCHECK(is_unmerged_loop());
     DCHECK_EQ(predecessors_so_far_, 0);
-    known_node_aspects_ = unmerged.known_node_aspects()->CloneForLoopHeader(
-        compilation_unit.zone());
+    known_node_aspects_ =
+        unmerged.known_node_aspects()->Clone(compilation_unit.zone());
   } else {
     known_node_aspects_->Merge(*unmerged.known_node_aspects(),
                                compilation_unit.zone());

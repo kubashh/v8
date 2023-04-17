@@ -4,6 +4,7 @@
 
 #include "src/maglev/maglev-graph-builder.h"
 
+#include <cstring>
 #include <limits>
 
 #include "src/base/logging.h"
@@ -279,6 +280,8 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
       source_position_iterator_(bytecode().SourcePositionTable(broker())),
       decremented_predecessor_offsets_(zone()),
       loop_headers_to_peel_(bytecode().length(), zone()),
+      incoming_loop_state_(is_inline() ? parent->incoming_loop_state_
+                                       : nullptr),
       call_frequency_(call_frequency),
       // Add an extra jump_target slot for the inline exit if needed.
       jump_targets_(zone()->NewArray<BasicBlockRef>(bytecode().length() +
@@ -3716,6 +3719,12 @@ void MaglevGraphBuilder::RecordKnownProperty(
                 << *name.object() << std::endl;
     }
     props_for_name.clear();
+    if (incoming_loop_state_) {
+      if (auto it = incoming_loop_state_->loaded_properties.find(name);
+          it != incoming_loop_state_->loaded_properties.end()) {
+        it->second.clear();
+      }
+    }
   }
 
   if (v8_flags.trace_maglev_graph_building) {
@@ -6568,27 +6577,15 @@ void MaglevGraphBuilder::VisitCreateRestParameter() {
   }
 }
 
-void MaglevGraphBuilder::PeelLoop() {
-  DCHECK(!in_peeled_iteration_);
-  int loop_header = iterator_.current_offset();
-  DCHECK(loop_headers_to_peel_.Contains(loop_header));
-  in_peeled_iteration_ = true;
-  while (iterator_.current_bytecode() != interpreter::Bytecode::kJumpLoop) {
-    local_isolate_->heap()->Safepoint();
-    VisitSingleBytecode();
-    iterator_.Advance();
-  }
-  VisitSingleBytecode();
-  in_peeled_iteration_ = false;
-
-  // After processing the peeled iteration and reaching the `JumpLoop`, we
-  // re-process the loop body. For this, we need to reset the graph building
-  // state roughly as if we didn't process it yet.
+void MaglevGraphBuilder::ResetToLoopHeader(int loop_header,
+                                           bool for_loop_peeling) {
+  DCHECK(bytecode_analysis().IsLoopHeader(loop_header));
 
   // Reset predecessors as if the loop body had not been visited.
-  while (!decremented_predecessor_offsets_.empty()) {
-    DCHECK_GE(decremented_predecessor_offsets_.back(), loop_header);
-    if (decremented_predecessor_offsets_.back() <= iterator_.current_offset()) {
+  while (!decremented_predecessor_offsets_.empty() &&
+         decremented_predecessor_offsets_.back() >= loop_header) {
+    if (!for_loop_peeling ||
+        decremented_predecessor_offsets_.back() <= iterator_.current_offset()) {
       predecessors_[decremented_predecessor_offsets_.back()]++;
     }
     decremented_predecessor_offsets_.pop_back();
@@ -6599,11 +6596,11 @@ void MaglevGraphBuilder::PeelLoop() {
   while (next_handler_table_index_ > 0) {
     next_handler_table_index_--;
     int start = table.GetRangeStart(next_handler_table_index_);
-    if (start < loop_header) break;
+    if (for_loop_peeling ? start < loop_header : start <= loop_header) break;
   }
 
   // Re-create catch handler merge states.
-  for (int offset = loop_header; offset <= iterator_.current_offset();
+  for (int offset = loop_header + 1; offset <= iterator_.current_offset();
        ++offset) {
     if (auto& merge_state = merge_states_[offset]) {
       if (merge_state->is_exception_handler()) {
@@ -6615,7 +6612,7 @@ void MaglevGraphBuilder::PeelLoop() {
                 ->owner(),
             graph_);
       } else {
-        // We only peel innermost loops.
+        // We only peel/reset innermost loops.
         DCHECK(!merge_state->is_loop());
         merge_state = nullptr;
       }
@@ -6623,6 +6620,33 @@ void MaglevGraphBuilder::PeelLoop() {
     new (&jump_targets_[offset]) BasicBlockRef();
   }
 
+  iterator_.SetOffset(loop_header);
+}
+
+void MaglevGraphBuilder::PeelLoop() {
+  int loop_header = iterator_.current_offset();
+  DCHECK(!in_peeled_iteration_);
+  DCHECK(loop_headers_to_peel_.Contains(loop_header));
+  in_peeled_iteration_ = true;
+
+  if (v8_flags.trace_maglev_graph_building) {
+    std::cout << "*** Start loop peeling...\n";
+  }
+
+  while (iterator_.current_bytecode() != interpreter::Bytecode::kJumpLoop) {
+    local_isolate_->heap()->Safepoint();
+    VisitSingleBytecode();
+    iterator_.Advance();
+  }
+  VisitSingleBytecode();
+  in_peeled_iteration_ = false;
+
+  // After processing the peeled iteration and reaching the `JumpLoop`, we
+  // re-process the loop body. For this, we need to reset the graph building
+  // state roughly as if we didn't process it yet.
+  ResetToLoopHeader(loop_header, true);
+
+  new (&jump_targets_[loop_header]) BasicBlockRef();
   if (current_block_) {
     // After resetting, the new loop header always has exactly 2 predecessors:
     // the two copies of `JumpLoop`.
@@ -6637,7 +6661,66 @@ void MaglevGraphBuilder::PeelLoop() {
     merge_states_[loop_header] = nullptr;
     predecessors_[loop_header] = 0;
   }
-  iterator_.SetOffset(loop_header);
+
+  if (v8_flags.trace_maglev_graph_building) {
+    std::cout << "*** End loop peeling.\n";
+  }
+}
+
+void MaglevGraphBuilder::VisitLoopAndEstimateSideEffects() {
+  MergePointInterpreterFrameState* state =
+      merge_states_[iterator_.current_offset()];
+  int total_inlined_bytecode_size = graph()->total_inlined_bytecode_size();
+  DCHECK(state->is_loop());
+  DCHECK(!in_loop_analysis_);
+  in_loop_analysis_ = true;
+  int loop_header = iterator_.current_offset();
+  BasicBlock* last_block = graph()->last_block();
+  lookahead_loop_end =
+      bytecode_analysis().GetLoopEndOffsetForInnermost(loop_header);
+  ForInState for_in_state = current_for_in_state;
+
+  if (v8_flags.trace_maglev_graph_building) {
+    std::cout << "*** Visiting loop body " << loop_header << "..."
+              << lookahead_loop_end << " to estimate side effects...\n";
+  }
+
+  base::Vector<BasicBlockRef> refs = zone()->NewVector<BasicBlockRef>(
+      bytecode().length() - loop_header - 1 + is_inline());
+  std::memcpy(refs.data(), &jump_targets_[loop_header + 1],
+              sizeof(BasicBlockRef) * refs.size());
+
+  DCHECK(current_block_);
+  BasicBlock* loop_header_block = current_block_;
+  EmitBytecodeGraph();
+  iterator_.Advance();
+  while (iterator_.current_bytecode() != interpreter::Bytecode::kJumpLoop) {
+    local_isolate_->heap()->Safepoint();
+    VisitSingleBytecode();
+    iterator_.Advance();
+  }
+  ResetToLoopHeader(loop_header, false);
+  std::memcpy(&jump_targets_[loop_header + 1], refs.data(),
+              sizeof(BasicBlockRef) * refs.size());
+
+  if (v8_flags.trace_maglev_graph_building) {
+    std::cout << "*** Reset to loop header, now emitting graph for real.\n";
+  }
+
+  while (graph()->last_block() != last_block) {
+    graph()->RemoveLast();
+  }
+
+  loop_header_block->Clear();
+  state->set_known_node_aspects(incoming_loop_state_);
+  current_interpreter_frame_.CopyFrom(*compilation_unit_, *state);
+  latest_checkpointed_frame_.reset();
+  incoming_loop_state_ = nullptr;
+  in_loop_analysis_ = false;
+  current_block_ = loop_header_block;
+  current_for_in_state = for_in_state;
+  graph()->add_inlined_bytecode_size(total_inlined_bytecode_size -
+                                     graph()->total_inlined_bytecode_size());
 }
 
 void MaglevGraphBuilder::VisitJumpLoop() {
@@ -6703,6 +6786,12 @@ void MaglevGraphBuilder::VisitJumpIfToBooleanFalseConstant() {
 
 void MaglevGraphBuilder::MergeIntoFrameState(BasicBlock* predecessor,
                                              int target) {
+  if (in_loop_analysis_ && target >= lookahead_loop_end) {
+    if (v8_flags.trace_maglev_graph_building) {
+      std::cout << "  * Not merging into " << target << "\n";
+    }
+    return;
+  }
   if (merge_states_[target] == nullptr) {
     DCHECK(!bytecode_analysis().IsLoopHeader(target) ||
            loop_headers_to_peel_.Contains(target));
@@ -6725,12 +6814,16 @@ void MaglevGraphBuilder::MergeIntoFrameState(BasicBlock* predecessor,
 }
 
 void MaglevGraphBuilder::MergeDeadIntoFrameState(int target) {
+  if (in_loop_analysis_ && target >= lookahead_loop_end) {
+    if (v8_flags.trace_maglev_graph_building) {
+      std::cout << "  * Not merging into " << target << "\n";
+    }
+    return;
+  }
   // If there is no merge state yet, don't create one, but just reduce the
   // number of possible predecessors to zero.
   predecessors_[target]--;
-  if (V8_UNLIKELY(in_peeled_iteration_)) {
-    decremented_predecessor_offsets_.push_back(target);
-  }
+  decremented_predecessor_offsets_.push_back(target);
   if (merge_states_[target]) {
     // If there already is a frame state, merge.
     merge_states_[target]->MergeDead(*compilation_unit_);
@@ -6746,12 +6839,11 @@ void MaglevGraphBuilder::MergeDeadIntoFrameState(int target) {
 }
 
 void MaglevGraphBuilder::MergeDeadLoopIntoFrameState(int target) {
+  DCHECK(!in_loop_analysis_);
   // If there is no merge state yet, don't create one, but just reduce the
   // number of possible predecessors to zero.
   predecessors_[target]--;
-  if (V8_UNLIKELY(in_peeled_iteration_)) {
-    decremented_predecessor_offsets_.push_back(target);
-  }
+  decremented_predecessor_offsets_.push_back(target);
   if (merge_states_[target]) {
     // If there already is a frame state, merge.
     merge_states_[target]->MergeDeadLoop(*compilation_unit_);
@@ -6760,6 +6852,12 @@ void MaglevGraphBuilder::MergeDeadLoopIntoFrameState(int target) {
 
 void MaglevGraphBuilder::MergeIntoInlinedReturnFrameState(
     BasicBlock* predecessor) {
+  if (in_loop_analysis_) {
+    if (v8_flags.trace_maglev_graph_building) {
+      std::cout << "  * Not merging into return state\n";
+    }
+    return;
+  }
   int target = inline_exit_offset();
   if (merge_states_[target] == nullptr) {
     // All returns should have the same liveness, which is that only the

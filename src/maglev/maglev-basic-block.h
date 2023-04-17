@@ -130,6 +130,11 @@ class BasicBlock {
   ZonePtrList<ValueNode>& reload_hints() { return reload_hints_; }
   ZonePtrList<ValueNode>& spill_hints() { return spill_hints_; }
 
+  void Clear() {
+    nodes_.Clear();
+    control_node_ = nullptr;
+  }
+
  private:
   bool is_edge_split_block_ = false;
   bool is_start_block_of_switch_case_ = false;

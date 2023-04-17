@@ -253,14 +253,28 @@ class MaglevGraphBuilder {
                                         ValueNode* closure = nullptr);
   void BuildMergeStates();
   BasicBlock* EndPrologue();
+  void ResetToLoopHeader(int offset, bool for_loop_peeling);
   void PeelLoop();
+  void VisitLoopAndEstimateSideEffects();
 
   void BuildBody() {
     for (iterator_.Reset(); !iterator_.done(); iterator_.Advance()) {
       local_isolate_->heap()->Safepoint();
       if (V8_UNLIKELY(
               loop_headers_to_peel_.Contains(iterator_.current_offset()))) {
+        DCHECK(!incoming_loop_state_);
+        DCHECK(!bytecode_analysis()
+                    .GetLoopInfoFor(iterator_.current_offset())
+                    .resumable());
         PeelLoop();
+        if (v8_flags.maglev_loop_fixed_point) {
+          MergeAndPrepareBlock(true);
+          if (current_block_) {
+            VisitLoopAndEstimateSideEffects();
+            EmitBytecodeGraph();
+          }
+          continue;
+        }
       }
       VisitSingleBytecode();
     }
@@ -481,6 +495,11 @@ class MaglevGraphBuilder {
   }
 
   void VisitSingleBytecode() {
+    MergeAndPrepareBlock(false);
+    if (current_block_) EmitBytecodeGraph();
+  }
+
+  void MergeAndPrepareBlock(bool is_analyzing_loop) {
     int offset = iterator_.current_offset();
     UpdateSourceAndBytecodePosition(offset);
 
@@ -513,6 +532,14 @@ class MaglevGraphBuilder {
         ProcessMergePointAtExceptionHandlerStart(offset);
       } else {
         ProcessMergePoint(offset);
+      }
+
+      if (merge_state->is_loop()) {
+        if (is_analyzing_loop) {
+          incoming_loop_state_ =
+              merge_state->known_node_aspects().Clone(zone());
+        }
+        merge_state->known_node_aspects().ResetForLoopHeader();
       }
 
       StartNewBlock(offset);
@@ -559,7 +586,9 @@ class MaglevGraphBuilder {
         next_handler_table_index_++;
       }
     }
+  }
 
+  void EmitBytecodeGraph() {
     DCHECK_NOT_NULL(current_block_);
     if (v8_flags.trace_maglev_graph_building) {
       std::cout << std::setw(4) << iterator_.current_offset() << " : ";
@@ -639,7 +668,9 @@ class MaglevGraphBuilder {
     AttachEagerDeoptInfo(node);
     AttachLazyDeoptInfo(node);
     AttachExceptionHandlerInfo(node);
-    MarkPossibleSideEffect(node);
+    MarkPossibleSideEffect(node, known_node_aspects());
+    if (incoming_loop_state_)
+      MarkPossibleSideEffect(node, *incoming_loop_state_);
     AddInitializedNodeToGraph(node);
     return node;
   }
@@ -1182,7 +1213,8 @@ class MaglevGraphBuilder {
   InterpretedDeoptFrame GetDeoptFrameForEntryStackCheck();
 
   template <typename NodeT>
-  void MarkPossibleSideEffect(NodeT* node) {
+  void MarkPossibleSideEffect(NodeT* node,
+                              KnownNodeAspects& known_node_aspects) {
     // Don't do anything for nodes without side effects.
     if constexpr (!NodeT::kProperties.has_any_side_effects()) return;
 
@@ -1218,21 +1250,21 @@ class MaglevGraphBuilder {
       // we can no longer assume that objects with unstable maps still have the
       // same map. Unstable maps can also transition to stable ones, so the
       // set of stable maps becomes invalid for a not that had a unstable map.
-      auto it = known_node_aspects().unstable_maps.begin();
-      while (it != known_node_aspects().unstable_maps.end()) {
+      auto it = known_node_aspects.unstable_maps.begin();
+      while (it != known_node_aspects.unstable_maps.end()) {
         if (it->second.size() == 0) {
           it++;
         } else {
-          known_node_aspects().stable_maps.erase(it->first);
-          it = known_node_aspects().unstable_maps.erase(it);
+          known_node_aspects.stable_maps.erase(it->first);
+          it = known_node_aspects.unstable_maps.erase(it);
         }
       }
       // Similarly, side-effects can change object contents, so we have to clear
       // our known loaded properties -- however, constant properties are known
       // to not change (and we added a dependency on this), so we don't have to
       // clear those.
-      known_node_aspects().loaded_properties.clear();
-      known_node_aspects().loaded_context_slots.clear();
+      known_node_aspects.loaded_properties.clear();
+      known_node_aspects.loaded_context_slots.clear();
     }
 
     // Other kinds of side effect have to be propagated up to the parent.
@@ -1676,7 +1708,8 @@ class MaglevGraphBuilder {
     MemsetUint32(predecessors_, 1, array_length);
 
     // We count jumps from peeled loops to outside of the loop twice.
-    bool do_loop_peeling = v8_flags.maglev_loop_peeling;
+    bool do_loop_peeling =
+        v8_flags.maglev_loop_peeling && !incoming_loop_state_;
     bool is_loop_peeling_iteration = false;
     base::Optional<int> peeled_loop_end;
     interpreter::BytecodeArrayIterator iterator(bytecode().object());
@@ -1794,6 +1827,7 @@ class MaglevGraphBuilder {
   uint32_t* predecessors_;
 
   bool in_peeled_iteration_ = false;
+  bool in_loop_analysis_ = false;
   // When processing the peeled iteration of a loop, we need to reset the
   // decremented predecessor counts inside of the loop before processing the
   // body again. For this, we record offsets where we decremented the
@@ -1801,6 +1835,9 @@ class MaglevGraphBuilder {
   ZoneVector<int> decremented_predecessor_offsets_;
   // The set of loop headers for which we decided to do loop peeling.
   BitVector loop_headers_to_peel_;
+
+  KnownNodeAspects* incoming_loop_state_;
+  int lookahead_loop_end = 0;
 
   // Current block information.
   BasicBlock* current_block_ = nullptr;

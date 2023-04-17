@@ -377,7 +377,13 @@ void PrintSingleDeoptFrame(
         frame.as_interpreted().frame_state()->ForEachValue(
             frame.as_interpreted().unit(),
             [&](ValueNode* node, interpreter::Register reg) { count++; });
-        os << " (" << count << " live vars)";
+        os << " (" << count << " live vars:";
+        frame.as_interpreted().frame_state()->ForEachValue(
+            frame.as_interpreted().unit(),
+            [&](ValueNode* node, interpreter::Register reg) {
+              os << " " << PrintNodeLabel(graph_labeller, node);
+            });
+        os << ")";
         return;
       }
       os << " : {";
