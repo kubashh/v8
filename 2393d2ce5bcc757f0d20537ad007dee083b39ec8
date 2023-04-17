@@ -33,6 +33,24 @@
       "message": "Thanks for trying! Unfortunately, and I\u0027m sorry I didn\u0027t see this coming, there are multiple problems:\n- It breaks the invariant that phis always come first in a block, which is used in `Block::HasPhis`.\n- It relies on the branch and blocks being eliminated later, but this might never happen. In this case, we generate non-optimal code.\n\nA proper solution is a bit complex, and it\u0027s easier for me to do it myself than to explain it. So I\u0027d suggest that you just remove the Turboshaft part from this CL and land it without it. I\u0027ll take care of adding it to Turboshaft myself.",
       "revId": "2393d2ce5bcc757f0d20537ad007dee083b39ec8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "568cb89c_15857470",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1685,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2023-04-17T03:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a7b7c84_8caa226d",
+      "revId": "2393d2ce5bcc757f0d20537ad007dee083b39ec8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
