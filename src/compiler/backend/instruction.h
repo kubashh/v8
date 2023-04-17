@@ -5,6 +5,7 @@
 #ifndef V8_COMPILER_BACKEND_INSTRUCTION_H_
 #define V8_COMPILER_BACKEND_INSTRUCTION_H_
 
+#include <cstddef>
 #include <iosfwd>
 #include <map>
 
@@ -761,8 +762,16 @@ class V8_EXPORT_PRIVATE MoveOperands final
     CheckPointerCompressionConsistency();
   }
 
-  MoveOperands(const MoveOperands&) = delete;
-  MoveOperands& operator=(const MoveOperands&) = delete;
+  MoveOperands(const MoveOperands& other) V8_NOEXCEPT {
+    source_ = other.source_;
+    destination_ = other.destination_;
+  }
+
+  MoveOperands& operator=(const MoveOperands& other) V8_NOEXCEPT {
+    source_ = other.source_;
+    destination_ = other.destination_;
+    return *this;
+  }
 
   void CheckPointerCompressionConsistency() {
 #if DEBUG && V8_COMPRESS_POINTERS
@@ -864,6 +873,18 @@ class V8_EXPORT_PRIVATE ParallelMove final
 
   // Eliminate all the MoveOperands in this ParallelMove.
   void Eliminate();
+
+  // Deep copy
+  ParallelMove* Copy(Zone* zone) {
+    ParallelMove* copy = zone->New<ParallelMove>(zone);
+    copy->reserve(size());
+    for (size_t i = 0; i < size(); ++i) {
+      copy->push_back(copy->zone()->New<MoveOperands>(*at(i)));
+    }
+    return copy;
+  }
+
+  void Print();
 };
 
 std::ostream& operator<<(std::ostream&, const ParallelMove&);
@@ -1062,6 +1083,10 @@ class V8_EXPORT_PRIVATE Instruction final {
 
   const ParallelMove* GetParallelMove(GapPosition pos) const {
     return parallel_moves_[pos];
+  }
+
+  void SetParallelMove(size_t pos, ParallelMove* move) {
+    parallel_moves_[pos] = move;
   }
 
   bool AreMovesRedundant() const;
