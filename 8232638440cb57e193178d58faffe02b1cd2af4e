@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e56b9d1_82e704ac",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-04-18T11:59:24Z",
+      "side": 1,
+      "message": "DCHECK that they are int32, otherwise we might have NaN problems.",
+      "range": {
+        "startLine": 1590,
+        "startChar": 14,
+        "endLine": 1590,
+        "endChar": 54
+      },
+      "revId": "8232638440cb57e193178d58faffe02b1cd2af4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
