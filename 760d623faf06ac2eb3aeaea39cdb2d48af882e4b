@@ -16,6 +16,23 @@
       "message": "Thanks Tobias for reviewing this change! The turboshaft part is removed in the latest patchset.",
       "revId": "760d623faf06ac2eb3aeaea39cdb2d48af882e4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "832f3c08_9df07fdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2023-04-18T01:49:15Z",
+      "side": 1,
+      "message": "Hi Tobias, would you please help take a look at this change again? The previous vote is outdated by the change on removing turboshaft part.",
+      "revId": "760d623faf06ac2eb3aeaea39cdb2d48af882e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
