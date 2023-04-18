@@ -70,6 +70,24 @@
       "parentUuid": "3f27b76e_e7ddaf85",
       "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c90fd802_e5684bd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-18T13:18:05Z",
+      "side": 1,
+      "message": "We limit to wasm because this seems to be a very wasm-shaped problem, I will update the comment to explain the wasm context which gives rise to it. I\u0027ve tried it in the JS pipeline and it triggered very rarely. And it\u0027s for ProtectedLoads only for legacy reasons, that\u0027s what I\u0027ve been benchmarking on arm64, for a while... :)\nMy downstream patch adds ProtectedStore support, I just need to run the benchmarks on my x64 machine and then I\u0027ll push it.\n\nAs for the flag, there is a chance it could cause regressions, but I think I\u0027ve tweaked the heuristics enough that it is good the vast majority of time.",
+      "parentUuid": "5a562bec_b6e02abb",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
