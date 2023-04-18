@@ -394,7 +394,7 @@ class Heap {
 #endif
     static_assert(kMaxSemiSpaceSize % (1 << kPageSizeBits) == 0);
 
-    return (v8_flags.minor_mc ? 2 : 1) * kMaxSemiSpaceSize;
+    return kMaxSemiSpaceSize;
   }
 
   // Young generation size is the same for compressed heaps and 32-bit heaps.
