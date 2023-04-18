@@ -16,6 +16,24 @@
       "message": "Scrolling over this CL, I feel like I totally miss the context here. Is there a tracking bug or a design doc that describes what this CL is trying to achieve?\n\nI\u0027ll move myself to CC for now as TurboFan is not my area of expertise anyway :)",
       "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c023d196_093149d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-18T12:32:33Z",
+      "side": 1,
+      "message": "There is neither of those, I was hoping that the comment in the main file would be enough to explain what\u0027s going on, but admittedly there\u0027s nothing wasm specific there... For a general context, it seems it can be hard to use immediate indexes in wasm memory operations but, I believe, once we get to this stage in TurboFan we should be able to modify them to use immediate indexes.\n\nDoes this make any more sense? Do you have any there any particular questions?",
+      "parentUuid": "651636f6_bee64024",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
