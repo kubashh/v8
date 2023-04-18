@@ -33,6 +33,24 @@
       "message": "Please also add this line to BUILD.bazel",
       "revId": "c6b6b1bc4dedc8e516f8f9af0006d235b9af9f52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2db1661_2813c751",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 2959,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-18T09:14:08Z",
+      "side": 1,
+      "message": "I think I\u0027ve added it in the right place...",
+      "parentUuid": "b8588477_fc513189",
+      "revId": "c6b6b1bc4dedc8e516f8f9af0006d235b9af9f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
