@@ -2676,6 +2676,8 @@ filegroup(
         "src/compiler/access-builder.h",
         "src/compiler/access-info.cc",
         "src/compiler/access-info.h",
+        "src/compiler/address-reassociation.cc",
+        "src/compiler/address-reassociation.h",
         "src/compiler/add-type-assertions-reducer.cc",
         "src/compiler/add-type-assertions-reducer.h",
         "src/compiler/all-nodes.cc",
