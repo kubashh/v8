@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e07e274_3e0278a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-04-18T15:21:25Z",
+      "side": 1,
+      "message": "Is there a downside to trying to normalize all memory accesses to `(base + reg) + imm`? I don\u0027t get why this needs to be so specific, and why we only change nodes if there are \u003e\u003d 2 occurrences.",
+      "parentUuid": "c90fd802_e5684bd6",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22b76f4e_42cdb3a1",
         "filename": "src/compiler/address-reassociation.cc",
         "patchSetId": 3
