@@ -88,6 +88,97 @@
       "parentUuid": "5a562bec_b6e02abb",
       "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1a256d0_562cfde7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-18T13:54:55Z",
+      "side": 1,
+      "message": "A couple of comments already, mostly superficial. I\u0027m also not a TurboFan expert, but that looks relatively self-explanatory.\nI haven\u0027t looked at the test yet.",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22b76f4e_42cdb3a1",
+        "filename": "src/compiler/address-reassociation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-18T13:54:55Z",
+      "side": 1,
+      "message": "Do I understand correctly from the code that you also match this pattern?\n\n    ProtectedLoad (base_reg, IntPtrAdd(register_offset, immediate_offset))\n\nFollow-up question, why not also:\n\n    ProtectedLoad (base_reg, IntPtrAdd(immediate_offset, register_offset))\n\n?",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c205a7d_43dd35c2",
+        "filename": "src/compiler/address-reassociation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-18T13:54:55Z",
+      "side": 1,
+      "message": "`DCHECK_EQ(load-\u003eopcode(), IrOpcode::kProtectedLoad);`",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd7dc61e_570e7779",
+        "filename": "src/compiler/address-reassociation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-18T13:54:55Z",
+      "side": 1,
+      "message": "This should not be needed, there is already an assert in std::vector::operator[].",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de6fd4a6_8dac9d13",
+        "filename": "src/compiler/address-reassociation.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-18T13:54:55Z",
+      "side": 1,
+      "message": "\"Object\" is a bit confusing, protected loads are used to load values from the wasm linear memory, not heap objects. Maybe something like \"CandidateLoadBase\"?\nSame thing in other places where \"object\" refers to the factorized base + register offset.\nBut feel free to ignore if you disagree, it\u0027s not worth bikeshedding.",
+      "range": {
+        "startLine": 30,
+        "startChar": 17,
+        "endLine": 30,
+        "endChar": 23
+      },
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
