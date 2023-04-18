@@ -34,6 +34,24 @@
       "parentUuid": "651636f6_bee64024",
       "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f27b76e_e7ddaf85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-18T12:40:54Z",
+      "side": 1,
+      "message": "Something that isn\u0027t currently in this patch, but something that I have been wondering about, is whether this transformation should only be applied for wasm32 on a 64-bit host.",
+      "parentUuid": "c023d196_093149d1",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
