@@ -197,6 +197,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b05f17d9_85ceb6e1",
+        "filename": "src/compiler/address-reassociation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-19T13:07:31Z",
+      "side": 1,
+      "message": "Not that I know of, but my knowledge there is limited. If it is the case, please add a DCHECK in VisitLoad to document and check this assumption.",
+      "parentUuid": "f0c5efba_6ff94699",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8c205a7d_43dd35c2",
         "filename": "src/compiler/address-reassociation.cc",
         "patchSetId": 3
@@ -290,6 +308,23 @@
         "endLine": 30,
         "endChar": 23
       },
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a52feda_380accc6",
+        "filename": "test/unittests/compiler/address-reassociation-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-19T13:07:31Z",
+      "side": 1,
+      "message": "Could this be a function rather than a macro? It looks like we would just need to pass a reference to `base_addrs`.\nSame question about the other macros below in this test.",
       "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

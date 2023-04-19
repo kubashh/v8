@@ -16,6 +16,75 @@
       "message": "I\u0027ve added ProtectedStore support, removed 32-bit machine support, added a wasm context description and lots of renaming. I\u0027m still investigating the heuristics.",
       "revId": "d894912dc4ef3632599de09cee5b15b1546321d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc8bfb42_88e394b5",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-19T13:07:31Z",
+      "side": 1,
+      "message": "`DCHECK_EQ` (same below)",
+      "range": {
+        "startLine": 126,
+        "startChar": 2,
+        "endLine": 126,
+        "endChar": 8
+      },
+      "revId": "d894912dc4ef3632599de09cee5b15b1546321d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e77c3887_c3432e57",
+        "filename": "test/unittests/compiler/wasm-address-reassociation-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-19T13:07:31Z",
+      "side": 1,
+      "message": "Are these needed? I can\u0027t find where they are used.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 0
+      },
+      "revId": "d894912dc4ef3632599de09cee5b15b1546321d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc62c6c6_eb68a2cd",
+        "filename": "test/unittests/compiler/wasm-address-reassociation-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-19T13:07:31Z",
+      "side": 1,
+      "message": "Can we also test protected stores here?\nAlso, this macro looks exactly like what happens in the first test, ProtectedBase. Can we reuse it there? In general I think the test could benefit from a bit more factorization.",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 0
+      },
+      "revId": "d894912dc4ef3632599de09cee5b15b1546321d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
