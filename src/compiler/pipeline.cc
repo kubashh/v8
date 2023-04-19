@@ -2043,6 +2043,10 @@ struct MemoryOptimizationPhase {
         data->info()->allocation_folding()
             ? MemoryLowering::AllocationFolding::kDoAllocationFolding
             : MemoryLowering::AllocationFolding::kDontAllocationFolding,
+        data->info()->code_kind() == CodeKind::WASM_FUNCTION &&
+                v8_flags.turbo_wasm_address_reassociation
+            ? MemoryLowering::WasmAddressReassociate::kDoAddressReassociate
+            : MemoryLowering::WasmAddressReassociate::kDontAddressReassociate,
         data->debug_name(), &data->info()->tick_counter());
     optimizer.Optimize();
   }
