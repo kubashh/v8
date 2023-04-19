@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac71a8eb_7001b4f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-19T08:57:50Z",
+      "side": 1,
+      "message": "So, initially I hadn\u0027t used a zone heuristic, and I found it wasn\u0027t always beneficial. I expect this was for two results: maybe the original base address was shared, so we don\u0027t reduce the operations, and also maybe the range is too large so we just introduce spills instead. I can\u0027t remember the last time I checked this heuristic though, so I will re-investigate... maybe it can be removed or I can just count the uses of the add.",
+      "parentUuid": "8e07e274_3e0278a5",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22b76f4e_42cdb3a1",
         "filename": "src/compiler/address-reassociation.cc",
         "patchSetId": 3
@@ -155,6 +173,24 @@
       "writtenOn": "2023-04-18T13:54:55Z",
       "side": 1,
       "message": "Do I understand correctly from the code that you also match this pattern?\n\n    ProtectedLoad (base_reg, IntPtrAdd(register_offset, immediate_offset))\n\nFollow-up question, why not also:\n\n    ProtectedLoad (base_reg, IntPtrAdd(immediate_offset, register_offset))\n\n?",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0c5efba_6ff94699",
+        "filename": "src/compiler/address-reassociation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-19T08:57:50Z",
+      "side": 1,
+      "message": "Yes, we match an add on the \u0027index\u0027 component, but I had assumed that there would be some canonicalization with respect to immediate operands being on the left-hand side. If that\u0027s not the case, then this needs to be changed.",
+      "parentUuid": "22b76f4e_42cdb3a1",
       "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -193,6 +229,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d5099cd_10828c3d",
+        "filename": "src/compiler/address-reassociation.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-19T08:57:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd7dc61e_570e7779",
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de6fd4a6_8dac9d13",
@@ -206,6 +260,30 @@
       "writtenOn": "2023-04-18T13:54:55Z",
       "side": 1,
       "message": "\"Object\" is a bit confusing, protected loads are used to load values from the wasm linear memory, not heap objects. Maybe something like \"CandidateLoadBase\"?\nSame thing in other places where \"object\" refers to the factorized base + register offset.\nBut feel free to ignore if you disagree, it\u0027s not worth bikeshedding.",
+      "range": {
+        "startLine": 30,
+        "startChar": 17,
+        "endLine": 30,
+        "endChar": 23
+      },
+      "revId": "cc94e0667347bc04466defcfda9553317c9a4869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2594a6d8_d8955867",
+        "filename": "src/compiler/address-reassociation.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-19T08:57:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de6fd4a6_8dac9d13",
       "range": {
         "startLine": 30,
         "startChar": 17,
