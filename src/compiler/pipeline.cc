@@ -12,6 +12,7 @@
 #include "src/base/optional.h"
 #include "src/builtins/profile-data-reader.h"
 #include "src/codegen/assembler-inl.h"
+#include "src/codegen/assembler.h"
 #include "src/codegen/bailout-reason.h"
 #include "src/codegen/compiler.h"
 #include "src/codegen/optimized-compilation-info.h"
@@ -110,6 +111,7 @@
 #include "src/diagnostics/code-tracer.h"
 #include "src/diagnostics/disassembler.h"
 #include "src/execution/isolate-inl.h"
+#include "src/execution/isolate.h"
 #include "src/flags/flags.h"
 #include "src/heap/local-heap.h"
 #include "src/logging/code-events.h"
@@ -269,7 +271,7 @@ class PipelineData {
                Isolate* isolate, AccountingAllocator* allocator, Graph* graph,
                JSGraph* jsgraph, Schedule* schedule,
                SourcePositionTable* source_positions,
-               NodeOriginTable* node_origins, JumpOptimizationInfo* jump_opt,
+               NodeOriginTable* node_origins,
                const AssemblerOptions& assembler_options,
                const ProfileDataFromFile* profile_data)
       : isolate_(isolate),
@@ -295,7 +297,6 @@ class PipelineData {
         register_allocation_zone_scope_(zone_stats_,
                                         kRegisterAllocationZoneName),
         register_allocation_zone_(register_allocation_zone_scope_.zone()),
-        jump_optimization_info_(jump_opt),
         assembler_options_(assembler_options),
         profile_data_(profile_data) {
     if (jsgraph) {
@@ -338,8 +339,7 @@ class PipelineData {
 
   ~PipelineData() {
     // Must happen before zones are destroyed.
-    delete code_generator_;
-    code_generator_ = nullptr;
+    DeleteCodeGenerator();
     DeleteTyper();
     DeleteRegisterAllocationZone();
     DeleteInstructionZone();
@@ -441,10 +441,6 @@ class PipelineData {
     source_position_output_ = source_position_output;
   }
 
-  JumpOptimizationInfo* jump_optimization_info() const {
-    return jump_optimization_info_;
-  }
-
   const AssemblerOptions& assembler_options() const {
     return assembler_options_;
   }
@@ -493,6 +489,11 @@ class PipelineData {
   void AddTyperFlag(Typer::Flag flag) {
     DCHECK_NULL(typer_);
     typer_flags_ |= flag;
+  }
+
+  void DeleteCodeGenerator() {
+    delete code_generator_;
+    code_generator_ = nullptr;
   }
 
   void DeleteTyper() {
@@ -603,9 +604,9 @@ class PipelineData {
 #endif  // V8_ENABLE_WEBASSEMBLY
     code_generator_ = new CodeGenerator(
         codegen_zone(), frame(), linkage, sequence(), info(), isolate(),
-        osr_helper_, start_source_position_, jump_optimization_info_,
-        assembler_options(), buffer_cache, info_->builtin(),
-        max_unoptimized_frame_height(), max_pushed_argument_count(),
+        osr_helper_, start_source_position_, assembler_options(), buffer_cache,
+        info_->builtin(), max_unoptimized_frame_height(),
+        max_pushed_argument_count(),
         v8_flags.trace_turbo_stack_accesses ? debug_name_.get() : nullptr);
   }
 
@@ -720,7 +721,6 @@ class PipelineData {
   // Source position output for --trace-turbo.
   std::string source_position_output_;
 
-  JumpOptimizationInfo* jump_optimization_info_ = nullptr;
   AssemblerOptions assembler_options_;
   Maybe<OuterContext> specialization_context_ = Nothing<OuterContext>();
 
@@ -767,7 +767,7 @@ class PipelineImpl final {
   bool SelectInstructions(Linkage* linkage);
 
   // Step C. Run the code assembly pass.
-  void AssembleCode(Linkage* linkage);
+  void AssembleCode(Linkage* linkage, JumpOptimizationInfo* jump_opt = nullptr);
 
   // Step D. Run the code finalization pass.
   MaybeHandle<Code> FinalizeCode(bool retire_broker = true);
@@ -778,7 +778,6 @@ class PipelineImpl final {
   // Step F. Install any code dependencies.
   bool CommitDependencies(Handle<Code> code);
 
-  void VerifyGeneratedCodeIsIdempotent();
   void RunPrintAndVerify(const char* phase, bool untyped = false);
   bool SelectInstructionsAndAssemble(CallDescriptor* call_descriptor);
   MaybeHandle<Code> GenerateCode(CallDescriptor* call_descriptor);
@@ -1178,6 +1177,7 @@ class PipelineCompilationJob final : public TurbofanCompilationJob {
   PipelineData data_;
   PipelineImpl pipeline_;
   Linkage* linkage_;
+  bool serializer_enabled_;
 };
 
 PipelineCompilationJob::PipelineCompilationJob(
@@ -1198,7 +1198,8 @@ PipelineCompilationJob::PipelineCompilationJob(
       data_(&zone_stats_, isolate, compilation_info(),
             pipeline_statistics_.get()),
       pipeline_(&data_),
-      linkage_(nullptr) {}
+      linkage_(nullptr),
+      serializer_enabled_(isolate->serializer_enabled()) {}
 
 PipelineCompilationJob::~PipelineCompilationJob() = default;
 
@@ -1300,8 +1301,21 @@ PipelineCompilationJob::Status PipelineCompilationJob::ExecuteJobImpl(
   // We selectively Unpark inside OptimizeGraph.
   if (!pipeline_.OptimizeGraph(linkage_)) return FAILED;
 
-  pipeline_.AssembleCode(linkage_);
+  bool should_optimize_jumps = serializer_enabled_ &&
+                               v8_flags.turbo_rewrite_far_jumps &&
+                               !v8_flags.turbo_profiling;
+  if (should_optimize_jumps) {
+    JumpOptimizationInfo jump_opt;
+    pipeline_.AssembleCode(linkage_, &jump_opt);
 
+    if (jump_opt.is_optimizable()) {
+      jump_opt.set_optimizing();
+      pipeline_.AssembleCode(linkage_, &jump_opt);
+    }
+
+  } else {
+    pipeline_.AssembleCode(linkage_);
+  }
   return SUCCEEDED;
 }
 
@@ -2746,7 +2760,7 @@ class WasmHeapStubCompilationJob final : public TurbofanCompilationJob {
         graph_(graph),
         data_(&zone_stats_, &info_, isolate, wasm::GetWasmEngine()->allocator(),
               graph_, nullptr, nullptr, nullptr,
-              zone_->New<NodeOriginTable>(graph_), nullptr, options, nullptr),
+              zone_->New<NodeOriginTable>(graph_), options, nullptr),
         pipeline_(&data_) {}
 
   WasmHeapStubCompilationJob(const WasmHeapStubCompilationJob&) = delete;
@@ -3175,13 +3189,8 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
   // Construct a pipeline for scheduling and code generation.
   ZoneStats zone_stats(isolate->allocator());
   NodeOriginTable node_origins(graph);
-  JumpOptimizationInfo jump_opt;
-  bool should_optimize_jumps = isolate->serializer_enabled() &&
-                               v8_flags.turbo_rewrite_far_jumps &&
-                               !v8_flags.turbo_profiling;
   PipelineData data(&zone_stats, &info, isolate, isolate->allocator(), graph,
-                    jsgraph, nullptr, source_positions, &node_origins,
-                    should_optimize_jumps ? &jump_opt : nullptr, options,
+                    jsgraph, nullptr, source_positions, &node_origins, options,
                     profile_data);
   PipelineJobScope scope(&data, isolate->counters()->runtime_call_stats());
   RCS_SCOPE(isolate, RuntimeCallCounterId::kOptimizeCode);
@@ -3267,30 +3276,31 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
   pipeline.ComputeScheduledGraph();
   DCHECK_NOT_NULL(data.schedule());
 
-  // First run code generation on a copy of the pipeline, in order to be able to
-  // repeat it for jump optimization. The first run has to happen on a temporary
-  // pipeline to avoid deletion of zones on the main pipeline.
-  PipelineData second_data(&zone_stats, &info, isolate, isolate->allocator(),
-                           data.graph(), data.jsgraph(), data.schedule(),
-                           data.source_positions(), data.node_origins(),
-                           data.jump_optimization_info(), options,
-                           profile_data);
-  PipelineJobScope second_scope(&second_data,
-                                isolate->counters()->runtime_call_stats());
-  second_data.set_verify_graph(v8_flags.verify_csa);
-  PipelineImpl second_pipeline(&second_data);
-  second_pipeline.SelectInstructionsAndAssemble(call_descriptor);
+  Linkage linkage(call_descriptor);
+  if (!pipeline.SelectInstructions(&linkage)) {
+    return MaybeHandle<Code>();
+  }
 
   if (v8_flags.turbo_profiling) {
     info.profiler_data()->SetHash(initial_graph_hash);
   }
 
+  bool should_optimize_jumps = isolate->serializer_enabled() &&
+                               v8_flags.turbo_rewrite_far_jumps &&
+                               !v8_flags.turbo_profiling;
+  if (!should_optimize_jumps) {
+    pipeline.AssembleCode(&linkage);
+    return pipeline.FinalizeCode();
+  }
+
+  JumpOptimizationInfo jump_opt;
+  pipeline.AssembleCode(&linkage, &jump_opt);
+
   if (jump_opt.is_optimizable()) {
     jump_opt.set_optimizing();
-    return pipeline.GenerateCode(call_descriptor);
-  } else {
-    return second_pipeline.FinalizeCode();
+    pipeline.AssembleCode(&linkage, &jump_opt);
   }
+  return pipeline.FinalizeCode();
 }
 
 struct BlockStartsAsJSON {
@@ -3723,8 +3733,8 @@ MaybeHandle<Code> Pipeline::GenerateCodeForTesting(
   ZoneStats zone_stats(isolate->allocator());
   NodeOriginTable* node_positions = info->zone()->New<NodeOriginTable>(graph);
   PipelineData data(&zone_stats, info, isolate, isolate->allocator(), graph,
-                    nullptr, schedule, nullptr, node_positions, nullptr,
-                    options, nullptr);
+                    nullptr, schedule, nullptr, node_positions, options,
+                    nullptr);
   PipelineJobScope scope(&data, isolate->counters()->runtime_call_stats());
   std::unique_ptr<PipelineStatistics> pipeline_statistics;
   if (v8_flags.turbo_stats || v8_flags.turbo_stats_nvp) {
@@ -3826,14 +3836,6 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
       (v8_flags.turbo_verify_machine_graph != nullptr &&
        (!strcmp(v8_flags.turbo_verify_machine_graph, "*") ||
         !strcmp(v8_flags.turbo_verify_machine_graph, data->debug_name())));
-  // Jump optimization runs instruction selection twice, but the instruction
-  // selector mutates nodes like swapping the inputs of a load, which can
-  // violate the machine graph verification rules. So we skip the second
-  // verification on a graph that already verified before.
-  auto jump_opt = data->jump_optimization_info();
-  if (jump_opt && jump_opt->is_optimizing()) {
-    verify_stub_graph = false;
-  }
   if (verify_stub_graph) {
     if (v8_flags.trace_verify_csa) {
       UnparkedScopeIfNeeded scope(data->broker());
@@ -3937,9 +3939,6 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
     AllocateRegistersForTopTier(config, call_descriptor, run_verifier);
   }
 
-  // Verify the instruction sequence has the same hash in two stages.
-  VerifyGeneratedCodeIsIdempotent();
-
   Run<FrameElisionPhase>();
 
   // TODO(mtrofin): move this off to the register allocator.
@@ -3953,29 +3952,6 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
   data->EndPhaseKind();
 
   return true;
-}
-
-void PipelineImpl::VerifyGeneratedCodeIsIdempotent() {
-  PipelineData* data = this->data_;
-  JumpOptimizationInfo* jump_opt = data->jump_optimization_info();
-  if (jump_opt == nullptr) return;
-
-  InstructionSequence* code = data->sequence();
-  int instruction_blocks = code->InstructionBlockCount();
-  int virtual_registers = code->VirtualRegisterCount();
-  size_t hash_code = base::hash_combine(instruction_blocks, virtual_registers);
-  for (auto instr : *code) {
-    hash_code = base::hash_combine(hash_code, instr->opcode(),
-                                   instr->InputCount(), instr->OutputCount());
-  }
-  for (int i = 0; i < virtual_registers; i++) {
-    hash_code = base::hash_combine(hash_code, code->GetRepresentation(i));
-  }
-  if (jump_opt->is_collecting()) {
-    jump_opt->hash_code = hash_code;
-  } else {
-    CHECK_EQ(hash_code, jump_opt->hash_code);
-  }
 }
 
 struct InstructionStartsAsJSON {
@@ -4019,10 +3995,21 @@ std::ostream& operator<<(std::ostream& out,
   return out;
 }
 
-void PipelineImpl::AssembleCode(Linkage* linkage) {
+void PipelineImpl::AssembleCode(Linkage* linkage,
+                                JumpOptimizationInfo* jump_opt) {
   PipelineData* data = this->data_;
   data->BeginPhaseKind("V8.TFCodeGeneration");
+  if (jump_opt && jump_opt->is_optimizing()) {
+    // Delete the code generator from the collecting stage.
+    DCHECK(data->code_generator());
+    data->DeleteCodeGenerator();
+  }
+
   data->InitializeCodeGenerator(linkage);
+
+  if (jump_opt) {
+    data->code_generator()->masm()->set_jump_optimization_info(jump_opt);
+  }
 
   UnparkedScopeIfNeeded unparked_scope(data->broker());
 
@@ -4036,7 +4023,9 @@ void PipelineImpl::AssembleCode(Linkage* linkage) {
                    &data->code_generator()->offsets_info()};
     json_of << "},\n";
   }
-  data->DeleteInstructionZone();
+  if (!jump_opt || !jump_opt->is_collecting() || !jump_opt->is_optimizable()) {
+    data->DeleteInstructionZone();
+  }
   data->EndPhaseKind();
 }
 
