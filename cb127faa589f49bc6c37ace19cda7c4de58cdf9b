@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a883756_f3be6771",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-20T10:18:12Z",
+      "side": 1,
+      "message": "nit: here and above for good measure let\u0027s add `DisallowHeapAllocation no_gc;`",
+      "range": {
+        "startLine": 808,
+        "startChar": 0,
+        "endLine": 808,
+        "endChar": 48
+      },
+      "revId": "cb127faa589f49bc6c37ace19cda7c4de58cdf9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37a54dd1_44e3b01e",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-04-20T10:18:12Z",
+      "side": 1,
+      "message": "You will get a lot of duplicate entries, since there can be multiple functions per script.\n\n- How about iterating over `isolate-\u003efactory()-\u003escript_list()` instead?\n- Use `Script::has_line_ends` to pre-filter already intialized scripts",
+      "range": {
+        "startLine": 1040,
+        "startChar": 0,
+        "endLine": 1042,
+        "endChar": 69
+      },
+      "revId": "cb127faa589f49bc6c37ace19cda7c4de58cdf9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
