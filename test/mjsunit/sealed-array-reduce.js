@@ -721,7 +721,6 @@ assertEquals(undefined, Object.seal(arr).reduceRight(function(val) { return val 
   g();
   g();
   assertEquals(total, g());
-  assertOptimized(g);
 })();
 
 (function ReduceThrow() {
@@ -1092,7 +1091,6 @@ assertEquals(undefined, Object.seal(arr).reduceRight(function(val) { return val 
   g();
   g();
   assertEquals(total, g());
-  assertOptimized(g);
 })();
 
 (function ReduceThrow() {

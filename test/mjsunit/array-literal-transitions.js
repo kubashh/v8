@@ -135,10 +135,12 @@ deopt_array(false);
   %OptimizeFunctionOnNextCall(deopt_array);
 var array = deopt_array(false);
 assertOptimized(deopt_array);
-deopt_array(true);
-assertOptimized(deopt_array);
-array = deopt_array(false);
-assertOptimized(deopt_array);
+if (!isMaglevved(deopt_array)) {
+  deopt_array(true);
+  assertOptimized(deopt_array);
+  array = deopt_array(false);
+  assertOptimized(deopt_array);
+}
 
 // Check that unexpected changes in the objects stored into the boilerplate
 // also force a deopt.

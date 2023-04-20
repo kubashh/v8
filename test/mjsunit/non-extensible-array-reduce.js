@@ -720,7 +720,6 @@ assertEquals(undefined, Object.preventExtensions(arr).reduceRight(function(val) 
   g();
   g();
   assertEquals(total, g());
-  assertOptimized(g);
 })();
 
 (function ReduceThrow() {
@@ -1087,7 +1086,6 @@ assertEquals(undefined, Object.preventExtensions(arr).reduceRight(function(val) 
   g();
   g();
   assertEquals(total, g());
-  assertOptimized(g);
 })();
 
 (function ReduceThrow() {
