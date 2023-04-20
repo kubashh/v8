@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6eb85d5_9df3f776",
+        "filename": "test/mjsunit/array-literal-transitions.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-04-20T11:28:19Z",
+      "side": 1,
+      "message": "this should rather check `OptimizationStatus::kOptimizeOnNextCallOptimizesToMaglev`",
+      "range": {
+        "startLine": 138,
+        "startChar": 5,
+        "endLine": 138,
+        "endChar": 16
+      },
+      "revId": "2ed395bf880a0bc4a23818892670277caa7e78c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

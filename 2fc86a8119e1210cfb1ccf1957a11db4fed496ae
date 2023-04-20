@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c82c770d_0cc02805",
+        "filename": "test/mjsunit/frozen-array-reduce.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-04-20T11:28:19Z",
+      "side": 0,
+      "message": "also here",
+      "range": {
+        "startLine": 723,
+        "startChar": 2,
+        "endLine": 723,
+        "endChar": 17
+      },
+      "revId": "2fc86a8119e1210cfb1ccf1957a11db4fed496ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
