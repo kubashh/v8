@@ -849,6 +849,20 @@ var prettyPrinted;
            (opt_status & V8OptimizationStatus.kMaglevved) !== 0;
   }
 
+  willBeMaglevved = function willBeMaglevved(fun) {
+    var opt_status = OptimizationStatus(fun, "");
+    assertTrue((opt_status & V8OptimizationStatus.kIsFunction) !== 0,
+               "not a function");
+    return (opt_status & V8OptimizationStatus.kOptimizeOnNextCallOptimizesToMaglev) !== 0;
+  }
+
+  willBeTurbofanned = function willBeTurbofanned(fun) {
+    var opt_status = OptimizationStatus(fun, "");
+    assertTrue((opt_status & V8OptimizationStatus.kIsFunction) !== 0,
+               "not a function");
+    return (opt_status & V8OptimizationStatus.kOptimizeOnNextCallOptimizesToMaglev) === 0;
+  }
+
   isTurboFanned = function isTurboFanned(fun) {
     var opt_status = OptimizationStatus(fun, "");
     assertTrue((opt_status & V8OptimizationStatus.kIsFunction) !== 0,
