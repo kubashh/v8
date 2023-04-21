@@ -16,6 +16,23 @@
       "message": "This patch won\u0027t have performance impact directly because the near jump optimization is only enabled for built-in.\n\nHowever, considering that the assemble step takes much less time than instruction selection, this patch make it possible to enable near jump optimization for JIT code without introducing too much compile time.",
       "revId": "236cfbc2109cd32d87ebadd2b19ea564db6e5a86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dec7d7a_14acd1f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-04-21T15:46:58Z",
+      "side": 1,
+      "message": "Thanks for your effort! However, I\u0027m not sure this change is worth it. It makes the pipeline and lifetimes more complicated than before, in particular around the mutations to the instructions. How much time does this save for the `mksnapshot` build stage?",
+      "revId": "236cfbc2109cd32d87ebadd2b19ea564db6e5a86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
