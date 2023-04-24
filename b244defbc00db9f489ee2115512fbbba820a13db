@@ -39,6 +39,30 @@
       },
       "revId": "b244defbc00db9f489ee2115512fbbba820a13db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f0a362b_a6f5e425",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3909,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-04-24T11:31:52Z",
+      "side": 1,
+      "message": "I wanted to see whether this CL sticks first. A subsequent CL would then get rid of registering as well.",
+      "parentUuid": "7eb42fa6_cf299b40",
+      "range": {
+        "startLine": 3909,
+        "startChar": 15,
+        "endLine": 3909,
+        "endChar": 49
+      },
+      "revId": "b244defbc00db9f489ee2115512fbbba820a13db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
