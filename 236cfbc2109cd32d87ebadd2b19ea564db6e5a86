@@ -33,6 +33,24 @@
       "message": "Thanks for your effort! However, I\u0027m not sure this change is worth it. It makes the pipeline and lifetimes more complicated than before, in particular around the mutations to the instructions. How much time does this save for the `mksnapshot` build stage?",
       "revId": "236cfbc2109cd32d87ebadd2b19ea564db6e5a86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49dc3479_c3a72851",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-04-24T02:09:01Z",
+      "side": 1,
+      "message": "It can save about 22% time for mksnapshot.",
+      "parentUuid": "1dec7d7a_14acd1f6",
+      "revId": "236cfbc2109cd32d87ebadd2b19ea564db6e5a86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
