@@ -87,6 +87,30 @@
       },
       "revId": "b244defbc00db9f489ee2115512fbbba820a13db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "964844d5_555afad2",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3909,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-04-24T11:56:07Z",
+      "side": 1,
+      "message": "The CL felt a bit less risky because we still check whether a slot is valid. But I guess I could remove it in this CL as well.",
+      "parentUuid": "8ae26250_26e34f96",
+      "range": {
+        "startLine": 3909,
+        "startChar": 15,
+        "endLine": 3909,
+        "endChar": 49
+      },
+      "revId": "b244defbc00db9f489ee2115512fbbba820a13db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
