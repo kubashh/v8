@@ -63,6 +63,30 @@
       },
       "revId": "b244defbc00db9f489ee2115512fbbba820a13db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ae26250_26e34f96",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3909,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-24T11:41:48Z",
+      "side": 1,
+      "message": "What do we gain from removing the range but still registering the object? Shouldn\u0027t we be able to check some range already?\n\n(I would avoid the intermediate state as I don\u0027t see what we actually gain here.)",
+      "parentUuid": "1f0a362b_a6f5e425",
+      "range": {
+        "startLine": 3909,
+        "startChar": 15,
+        "endLine": 3909,
+        "endChar": 49
+      },
+      "revId": "b244defbc00db9f489ee2115512fbbba820a13db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
