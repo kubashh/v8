@@ -16,6 +16,29 @@
       "message": "PTAL, will only land after the branch-cut",
       "revId": "b244defbc00db9f489ee2115512fbbba820a13db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb42fa6_cf299b40",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3909,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-24T11:21:35Z",
+      "side": 1,
+      "message": "Why do we still need to register the object?",
+      "range": {
+        "startLine": 3909,
+        "startChar": 15,
+        "endLine": 3909,
+        "endChar": 49
+      },
+      "revId": "b244defbc00db9f489ee2115512fbbba820a13db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
