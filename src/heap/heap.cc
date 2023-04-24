@@ -3891,22 +3891,26 @@ void Heap::NotifyObjectLayoutChange(
     InvalidateRecordedSlots invalidate_recorded_slots, int new_size) {
   if (invalidate_recorded_slots == InvalidateRecordedSlots::kYes) {
     const bool may_contain_recorded_slots = MayContainRecordedSlots(object);
+    MemoryChunk* const chunk = MemoryChunk::FromHeapObject(object);
+    const Address clear_range_start = object.address() + kTaggedSize;
+    const Address clear_range_end = object.address() + new_size;
 
     if (incremental_marking()->IsMarking()) {
       ExclusiveObjectLock::Lock(object);
       DCHECK_EQ(pending_layout_change_object_address, kNullAddress);
       pending_layout_change_object_address = object.address();
       if (may_contain_recorded_slots && incremental_marking()->IsCompacting()) {
-        MemoryChunk::FromHeapObject(object)
-            ->RegisterObjectWithInvalidatedSlots<OLD_TO_OLD>(object, new_size);
+        chunk->RegisterObjectWithInvalidatedSlots<OLD_TO_OLD>(object, new_size);
+        RememberedSet<OLD_TO_OLD>::RemoveRange(
+            chunk, clear_range_start, clear_range_end,
+            SlotSet::EmptyBucketMode::KEEP_EMPTY_BUCKETS);
       }
     }
 
     if (may_contain_recorded_slots) {
-      MemoryChunk::FromHeapObject(object)
-          ->RegisterObjectWithInvalidatedSlots<OLD_TO_NEW>(object, new_size);
-      MemoryChunk::FromHeapObject(object)
-          ->RegisterObjectWithInvalidatedSlots<OLD_TO_SHARED>(object, new_size);
+      chunk->RegisterObjectWithInvalidatedSlots<OLD_TO_NEW>(object, new_size);
+      chunk->RegisterObjectWithInvalidatedSlots<OLD_TO_SHARED>(object,
+                                                               new_size);
     }
   }
 #ifdef VERIFY_HEAP
