@@ -129,7 +129,7 @@ declare_args() {
   v8_enable_verify_csa = false
 
   # Enable pointer compression (sets -dV8_COMPRESS_POINTERS).
-  v8_enable_pointer_compression = ""
+  v8_enable_pointer_compression = true
   v8_enable_pointer_compression_shared_cage = ""
   v8_enable_31bit_smis_on_64bit_arch = false
 
@@ -207,7 +207,7 @@ declare_args() {
 
   # Enable short builtins call instruction sequences by un-embedding builtins.
   # Sets -dV8_SHORT_BUILTIN_CALLS
-  v8_enable_short_builtin_calls = ""
+  v8_enable_short_builtin_calls = true
 
   # Enable support for external code range relative to the pointer compression
   # cage.
