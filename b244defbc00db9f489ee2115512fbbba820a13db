@@ -135,6 +135,30 @@
       },
       "revId": "b244defbc00db9f489ee2115512fbbba820a13db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd07dd16_15fc388a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3909,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-04-24T12:49:45Z",
+      "side": 1,
+      "message": "I don\u0027t think you miss anything. We would indeed only filter slots added *after* invalidation because we simply remove all recorded slots in that area. My idea for this CL was to test whether we properly add all slots for the \"new\" object through the regular write barrier after clearing all slots. Not registering objects anymore felt like another step where stuff could potentially go wrong. But maybe that\u0027s not the case. At least tests seemed to have passed for the other CL as well, so we might test that change in here as well.",
+      "parentUuid": "b66c64f6_522c9b89",
+      "range": {
+        "startLine": 3909,
+        "startChar": 15,
+        "endLine": 3909,
+        "endChar": 49
+      },
+      "revId": "b244defbc00db9f489ee2115512fbbba820a13db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
