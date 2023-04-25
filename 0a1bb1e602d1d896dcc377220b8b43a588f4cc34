@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b8e9c04_2911cc08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-25T12:09:55Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "0a1bb1e602d1d896dcc377220b8b43a588f4cc34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acf284f2_47274432",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-25T12:09:55Z",
+      "side": 1,
+      "message": "This particular example is an artifact of CL splitting; it\u0027ll make more sense with the next CL :-)",
+      "range": {
+        "startLine": 258,
+        "startChar": 40,
+        "endLine": 258,
+        "endChar": 47
+      },
+      "revId": "0a1bb1e602d1d896dcc377220b8b43a588f4cc34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
