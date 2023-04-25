@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "cebb8a6d_13a5f94c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-04-25T16:45:36Z",
+      "side": 1,
+      "message": "Just two clarification questions.",
+      "revId": "0a1bb1e602d1d896dcc377220b8b43a588f4cc34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "acf284f2_47274432",
         "filename": "src/builtins/builtins.cc",
         "patchSetId": 1
@@ -36,6 +53,52 @@
         "startChar": 40,
         "endLine": 258,
         "endChar": 47
+      },
+      "revId": "0a1bb1e602d1d896dcc377220b8b43a588f4cc34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19cb052e_8119cafe",
+        "filename": "src/objects/call-site-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-04-25T16:45:36Z",
+      "side": 1,
+      "message": "In which cases do we reach this line (meaning that `info-\u003eIsBuiltin()` above returned false?\nIs it e.g. for null checks outside of the builtin?",
+      "range": {
+        "startLine": 312,
+        "startChar": 6,
+        "endLine": 312,
+        "endChar": 77
+      },
+      "revId": "0a1bb1e602d1d896dcc377220b8b43a588f4cc34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fef6cfb_6555ab96",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-04-25T16:45:36Z",
+      "side": 1,
+      "message": "When adding more special builtins, we might also have to do similar things for `ConvertToNumberOrNumeric` and similar conversions?\nJust to clarify, no action required.",
+      "range": {
+        "startLine": 424,
+        "startChar": 8,
+        "endLine": 424,
+        "endChar": 25
       },
       "revId": "0a1bb1e602d1d896dcc377220b8b43a588f4cc34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
