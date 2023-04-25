@@ -319,6 +319,7 @@ class RuntimeCallTimer final {
   ADD_THREAD_SPECIFIC_COUNTER(V, Compile, ScopeAnalysis)                    \
   ADD_THREAD_SPECIFIC_COUNTER(V, Compile, Script)                           \
   ADD_THREAD_SPECIFIC_COUNTER(V, Compile, CompileTask)                      \
+  ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, AddressReassociation)            \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, AllocateFPRegisters)             \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, AllocateSIMD128Registers)        \
   ADD_THREAD_SPECIFIC_COUNTER(V, Optimize, AllocateGeneralRegisters)        \

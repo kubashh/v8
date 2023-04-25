@@ -3154,6 +3154,7 @@ v8_header_set("v8_internal_headers") {
     "src/compiler/use-info.h",
     "src/compiler/value-numbering-reducer.h",
     "src/compiler/verifier.h",
+    "src/compiler/wasm-address-reassociation.h",
     "src/compiler/write-barrier-kind.h",
     "src/compiler/zone-stats.h",
     "src/date/date.h",
@@ -4385,6 +4386,7 @@ v8_compiler_sources = [
   "src/compiler/types.cc",
   "src/compiler/value-numbering-reducer.cc",
   "src/compiler/verifier.cc",
+  "src/compiler/wasm-address-reassociation.cc",
   "src/compiler/zone-stats.cc",
 ]
 

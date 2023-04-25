@@ -27,6 +27,10 @@ class Operator;
 class MemoryLowering final : public Reducer {
  public:
   enum class AllocationFolding { kDoAllocationFolding, kDontAllocationFolding };
+  enum class WasmAddressReassociate {
+    kDoAddressReassociate,
+    kDontAddressReassociate
+  };
   class AllocationGroup;
 
   // An allocation state is propagated on the effect paths through the graph.
