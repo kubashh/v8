@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4065967f_f68e61ea",
+        "filename": "src/compiler/memory-optimizer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-25T14:23:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "987fa968_3ddbc3c7",
+      "range": {
+        "startLine": 212,
+        "startChar": 4,
+        "endLine": 212,
+        "endChar": 45
+      },
+      "revId": "7ba53fb2b6b3d935a2fb9668caf5b7a5a5efbcb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e2c166c_82c1150c",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-04-25T12:30:52Z",
       "side": 1,
       "message": "nit: operations",
+      "range": {
+        "startLine": 25,
+        "startChar": 25,
+        "endLine": 25,
+        "endChar": 34
+      },
+      "revId": "7ba53fb2b6b3d935a2fb9668caf5b7a5a5efbcb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c496c0d8_893136c3",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-25T14:23:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e2c166c_82c1150c",
       "range": {
         "startLine": 25,
         "startChar": 25,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7ea5e5f_9a6cf491",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-25T14:23:08Z",
+      "side": 1,
+      "message": "I believe that the BinopMatcher does, if I understand this correctly: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/node-matchers.h;drc\u003d61830d3566f56be6e6421279e9f418aa9178b8f9;l\u003d280",
+      "parentUuid": "82e6818d_168d8189",
+      "range": {
+        "startLine": 115,
+        "startChar": 6,
+        "endLine": 116,
+        "endChar": 51
+      },
+      "revId": "7ba53fb2b6b3d935a2fb9668caf5b7a5a5efbcb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1d05e3e7_1d09f154",
         "filename": "src/compiler/wasm-address-reassociation.cc",
         "patchSetId": 6
@@ -100,6 +172,30 @@
       "writtenOn": "2023-04-25T12:30:52Z",
       "side": 1,
       "message": "It is generally possible that memory operations have negative immediate arguments. Can you please use a signed value here?",
+      "range": {
+        "startLine": 119,
+        "startChar": 6,
+        "endLine": 119,
+        "endChar": 14
+      },
+      "revId": "7ba53fb2b6b3d935a2fb9668caf5b7a5a5efbcb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4844e68_9c897736",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-25T14:23:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d05e3e7_1d09f154",
       "range": {
         "startLine": 119,
         "startChar": 6,
@@ -123,6 +219,30 @@
       "writtenOn": "2023-04-25T12:30:52Z",
       "side": 1,
       "message": "nit: Please remove.",
+      "range": {
+        "startLine": 102,
+        "startChar": 29,
+        "endLine": 102,
+        "endChar": 67
+      },
+      "revId": "7ba53fb2b6b3d935a2fb9668caf5b7a5a5efbcb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90fcd20e_6232bcaa",
+        "filename": "test/unittests/compiler/wasm-address-reassociation-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-25T14:23:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa3afc24_3bf9849d",
       "range": {
         "startLine": 102,
         "startChar": 29,
