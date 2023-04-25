@@ -35,6 +35,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1830031c_fdb20454",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-25T08:24:16Z",
+      "side": 1,
+      "message": "I\u0027ve essentially rewritten the test, reduced the heuristic of minimum shared nodes down to two, but now we also cover the case where both base and offset components are add nodes.",
+      "revId": "d894912dc4ef3632599de09cee5b15b1546321d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f8bc6c0_dfb2a8d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-25T08:24:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9d6d283_b023904f",
+      "revId": "d894912dc4ef3632599de09cee5b15b1546321d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc8bfb42_88e394b5",
@@ -48,6 +83,30 @@
       "writtenOn": "2023-04-19T13:07:31Z",
       "side": 1,
       "message": "`DCHECK_EQ` (same below)",
+      "range": {
+        "startLine": 126,
+        "startChar": 2,
+        "endLine": 126,
+        "endChar": 8
+      },
+      "revId": "d894912dc4ef3632599de09cee5b15b1546321d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1af00de5_3f6211ae",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-25T08:24:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc8bfb42_88e394b5",
       "range": {
         "startLine": 126,
         "startChar": 2,
@@ -81,6 +140,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bfcf996_deefdd5f",
+        "filename": "test/unittests/compiler/wasm-address-reassociation-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-25T08:24:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e77c3887_c3432e57",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 0
+      },
+      "revId": "d894912dc4ef3632599de09cee5b15b1546321d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc62c6c6_eb68a2cd",
@@ -94,6 +177,30 @@
       "writtenOn": "2023-04-19T13:07:31Z",
       "side": 1,
       "message": "Can we also test protected stores here?\nAlso, this macro looks exactly like what happens in the first test, ProtectedBase. Can we reuse it there? In general I think the test could benefit from a bit more factorization.",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 0
+      },
+      "revId": "d894912dc4ef3632599de09cee5b15b1546321d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc4762c6_5a09886e",
+        "filename": "test/unittests/compiler/wasm-address-reassociation-unittest.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-25T08:24:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc62c6c6_eb68a2cd",
       "range": {
         "startLine": 199,
         "startChar": 0,
