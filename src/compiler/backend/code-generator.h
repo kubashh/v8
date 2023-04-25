@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "src/base/optional.h"
+#include "src/builtins/builtins.h"
 #include "src/codegen/macro-assembler.h"
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/codegen/safepoint-table.h"
@@ -406,6 +407,8 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   // Emits a jump table.
   void AssembleJumpTable(Label** targets, size_t target_count);
 
+  void AssembleJumpTableForBuiltin(Label** targets, size_t target_count);
+
   // ===========================================================================
   // ================== Deoptimization table construction. =====================
   // ===========================================================================
@@ -472,6 +475,7 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   TranslationArrayBuilder translations_;
   int handler_table_offset_ = 0;
   int last_lazy_deopt_pc_ = 0;
+  Builtin maybe_builtin_ = Builtin::kNoBuiltinId;
 
   // Deoptimization exits must be as small as possible, since their count grows
   // with function size. {jump_deoptimization_entry_labels_} is an optimization

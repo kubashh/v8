@@ -2162,6 +2162,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void dp(uintptr_t data) { dq(data); }
   void dq(Label* label);
 
+  void dq(Label* label, const int table_pos);
+
   // Patch entries for partial constant pool.
   void PatchConstPool();
 
@@ -2656,6 +2658,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   // record the position of jmp/jcc instruction
   void record_farjmp_position(Label* L, int pos);
+
+  void record_tableswitchjmp_postion(Label* L, const std::pair<int, int> p);
 
   bool is_optimizable_farjmp(int idx);
 

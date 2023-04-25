@@ -77,6 +77,7 @@ CodeGenerator::CodeGenerator(
       deoptimization_exits_(codegen_zone),
       deoptimization_literals_(codegen_zone),
       translations_(codegen_zone),
+      maybe_builtin_(builtin),
       max_unoptimized_frame_height_(max_unoptimized_frame_height),
       max_pushed_argument_count_(max_pushed_argument_count),
       caller_registers_saved_(false),
@@ -409,7 +410,15 @@ void CodeGenerator::AssembleCode() {
     masm()->Align(kSystemPointerSize);
     for (JumpTable* table = jump_tables_; table; table = table->next()) {
       masm()->bind(table->label());
+#ifdef V8_TARGET_ARCH_X64
+      if (V8_UNLIKELY(Builtins::IsBuiltinId(maybe_builtin_))) {
+        AssembleJumpTableForBuiltin(table->targets(), table->target_count());
+      } else {
+        AssembleJumpTable(table->targets(), table->target_count());
+      }
+#else
       AssembleJumpTable(table->targets(), table->target_count());
+#endif  // V8_TARGET_ARCH_X64
     }
   }
 
