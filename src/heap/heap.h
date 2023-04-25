@@ -382,7 +382,7 @@ class Heap {
 #endif
     static_assert(kMinSemiSpaceSize % (1 << kPageSizeBits) == 0);
 
-    return kMinSemiSpaceSize;
+    return (v8_flags.minor_mc ? 2 : 1) * kMinSemiSpaceSize;
   }
 
   static size_t DefaultMaxSemiSpaceSize() {
