@@ -81,6 +81,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46e9ba08_339dbfa0",
+        "filename": "src/objects/call-site-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-25T17:26:11Z",
+      "side": 1,
+      "message": "This is the case mentioned in builtins.cc:257:\n\n  // - builtins that throw the same error as one of those above, but would\n  //   lose information and e.g. print \"indexOf\" instead of \"String.indexOf\".\n\nAdded a comment here as well.",
+      "parentUuid": "19cb052e_8119cafe",
+      "range": {
+        "startLine": 312,
+        "startChar": 6,
+        "endLine": 312,
+        "endChar": 77
+      },
+      "revId": "0a1bb1e602d1d896dcc377220b8b43a588f4cc34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fef6cfb_6555ab96",
@@ -94,6 +118,30 @@
       "writtenOn": "2023-04-25T16:45:36Z",
       "side": 1,
       "message": "When adding more special builtins, we might also have to do similar things for `ConvertToNumberOrNumeric` and similar conversions?\nJust to clarify, no action required.",
+      "range": {
+        "startLine": 424,
+        "startChar": 8,
+        "endLine": 424,
+        "endChar": 25
+      },
+      "revId": "0a1bb1e602d1d896dcc377220b8b43a588f4cc34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65df0878_faa5c70e",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-25T17:26:11Z",
+      "side": 1,
+      "message": "Yes, possibly. I don\u0027t have any such builtins on my radar yet. We can also always change our minds on this and emit `extern.externalize` nodes for all values.",
+      "parentUuid": "7fef6cfb_6555ab96",
       "range": {
         "startLine": 424,
         "startChar": 8,
