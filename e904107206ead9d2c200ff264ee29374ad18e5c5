@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d9c762_950131d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-26T13:48:08Z",
+      "side": 1,
+      "message": "The test looks much nicer! A few more minor comments, and adding Jakob to take over from Manos who is OOO.",
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1905d410_696ecc6f",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-26T13:48:08Z",
+      "side": 1,
+      "message": "nit: Isn\u0027t this condition redundant? Only wasm functions will have protected loads and stores. Also, could we not check the `turbo_wasm_address_reassociation` flag directly everywhere and skip the `WasmAddressReassociate` enum indirection?",
+      "range": {
+        "startLine": 2046,
+        "startChar": 8,
+        "endLine": 2046,
+        "endChar": 60
+      },
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7167a2dc_2034ec62",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-26T13:48:08Z",
+      "side": 1,
+      "message": "This looks up the key twice for each container. We can improve this using the return value of `emplace`, here is one suggestion:\n\n    bool is_new \u003d candidate_base_addrs_.emplace(key, ...).second;\n    auto it \u003d is_new ? candidates_.emplace(key, ...).first : candidates_.find(key);\n    it-\u003esecond.AddCandidate(mem_op, imm_offset);\n    \n(and then we can also remove `HasCandidateBaseAddr`).",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 55
+      },
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cbe0675_93617de0",
+        "filename": "src/logging/runtime-call-stats.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-26T13:48:08Z",
+      "side": 1,
+      "message": "Unused?",
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27e524f1_b49dda8c",
+        "filename": "test/unittests/compiler/wasm-address-reassociation-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-26T13:48:08Z",
+      "side": 1,
+      "message": "Unused?",
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
