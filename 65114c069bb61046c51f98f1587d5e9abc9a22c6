@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a51abcfa_b027008c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-04-26T15:10:17Z",
+      "side": 1,
+      "message": "LGTM, but please wait for Jakob\u0027s review (and Jakob, feel free to forward this again if you\u0027re not the right person to review it).",
+      "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
