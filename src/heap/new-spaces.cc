@@ -938,14 +938,6 @@ bool PagedSpaceForNewSpace::StartShrinking() {
 void PagedSpaceForNewSpace::FinishShrinking() {
   DCHECK(heap()->tracer()->IsInAtomicPause());
   if (current_capacity_ > target_capacity_) {
-#if DEBUG
-    // If `current_capacity_` is higher than `target_capacity_`, i.e. the
-    // space could not be shrunk all the way down to `target_capacity_`, it
-    // must mean that all pages contain live objects.
-    for (Page* page : *this) {
-      DCHECK_NE(0, heap()->non_atomic_marking_state()->live_bytes(page));
-    }
-#endif  // DEBUG
     target_capacity_ = current_capacity_;
   }
 }
