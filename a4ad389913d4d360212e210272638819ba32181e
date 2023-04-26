@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44ef2cc2_7118ec45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-04-26T10:19:36Z",
+      "side": 1,
+      "message": "Maybe add a sentence to explain what was changed.",
+      "revId": "a4ad389913d4d360212e210272638819ba32181e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "259421de_0979fee5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-04-26T10:19:36Z",
+      "side": 1,
+      "message": "Nice optimization! LGTM.",
+      "revId": "a4ad389913d4d360212e210272638819ba32181e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
