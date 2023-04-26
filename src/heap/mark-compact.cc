@@ -6304,6 +6304,8 @@ void MinorMarkCompactCollector::TraceFragmentation() {
 }
 
 bool MinorMarkCompactCollector::StartSweepNewSpace() {
+  static constexpr intptr_t kMaximumLiveBytesForEagerSweeping = 4096;
+
   TRACE_GC(heap()->tracer(), GCTracer::Scope::MINOR_MC_SWEEP_NEW);
   PagedSpaceForNewSpace* paged_space = heap()->paged_new_space()->paged_space();
   paged_space->ClearAllocatorState();
@@ -6321,7 +6323,8 @@ bool MinorMarkCompactCollector::StartSweepNewSpace() {
     Page* p = *(it++);
     DCHECK(p->SweepingDone());
 
-    intptr_t live_bytes_on_page = non_atomic_marking_state()->live_bytes(p);
+    const intptr_t live_bytes_on_page =
+        non_atomic_marking_state()->live_bytes(p);
     if (live_bytes_on_page == 0) {
       if (paged_space->ShouldReleaseEmptyPage()) {
         paged_space->ReleasePage(p);
@@ -6341,6 +6344,7 @@ bool MinorMarkCompactCollector::StartSweepNewSpace() {
       has_promoted_pages = true;
       sweeper()->AddPromotedPageForIteration(p);
     } else {
+      // Page is not promoted. Sweep it instead.
       if (live_bytes_on_page >
           Page::kPageSize * v8_flags.minor_mc_page_promotion_threshold / 100) {
         // Pages that are mostly full are not used for allocation and will be
@@ -6348,9 +6352,12 @@ bool MinorMarkCompactCollector::StartSweepNewSpace() {
         DCHECK_GT(p->AllocatedLabSize(), 0);
         p->SetFlag(Page::NEVER_ALLOCATE_ON_PAGE);
       }
-      // Page is not promoted. Sweep it instead.
-      sweeper()->AddNewSpacePage(p);
-      will_be_swept++;
+      if (live_bytes_on_page < kMaximumLiveBytesForEagerSweeping) {
+        sweeper()->SweepNewSpacePage(p);
+      } else {
+        sweeper()->AddNewSpacePage(p);
+        will_be_swept++;
+      }
     }
   }
 
