@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e9cdc23a_6075a885",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-04-26T16:32:35Z",
+      "side": 1,
+      "message": "Yeah, including both is the right call. You can have them on one line, comma separated, like `Bug: chromium:1439781, v8:13558`.",
+      "parentUuid": "721c1a99_cb6f703b",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 13
+      },
+      "revId": "c72b04ac3db40d5ed8a56d232238fc0f29b69e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "074727a7_8f06368d",
         "filename": "test/mjsunit/harmony/iterator-helpers.js",
         "patchSetId": 3
