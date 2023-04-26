@@ -16,6 +16,115 @@
       "message": "ptal",
       "revId": "262d9cc060860465c8bf81ab4cae392b0addd98c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d4f9e7f_551978cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-26T12:25:37Z",
+      "side": 1,
+      "message": "lgtm % comments",
+      "revId": "262d9cc060860465c8bf81ab4cae392b0addd98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4366354_dc0d1b15",
+        "filename": "src/heap/paged-spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-26T12:25:37Z",
+      "side": 1,
+      "message": "use ConcurrentAllocationMutex instead so that we don\u0027t need a lock for new space",
+      "range": {
+        "startLine": 1110,
+        "startChar": 10,
+        "endLine": 1110,
+        "endChar": 20
+      },
+      "revId": "262d9cc060860465c8bf81ab4cae392b0addd98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f713899d_a136b333",
+        "filename": "src/heap/paged-spaces.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-26T12:25:37Z",
+      "side": 1,
+      "message": "nit: final",
+      "range": {
+        "startLine": 416,
+        "startChar": 24,
+        "endLine": 416,
+        "endChar": 32
+      },
+      "revId": "262d9cc060860465c8bf81ab4cae392b0addd98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f378d5c5_60a7b8ca",
+        "filename": "src/heap/paged-spaces.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-26T12:25:37Z",
+      "side": 1,
+      "message": "nit: move below protected",
+      "range": {
+        "startLine": 418,
+        "startChar": 1,
+        "endLine": 418,
+        "endChar": 8
+      },
+      "revId": "262d9cc060860465c8bf81ab4cae392b0addd98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d857f159_a1606fce",
+        "filename": "src/heap/paged-spaces.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-26T12:25:37Z",
+      "side": 1,
+      "message": "nit: final",
+      "range": {
+        "startLine": 423,
+        "startChar": 68,
+        "endLine": 423,
+        "endChar": 76
+      },
+      "revId": "262d9cc060860465c8bf81ab4cae392b0addd98c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
