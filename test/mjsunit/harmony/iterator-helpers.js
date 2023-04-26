@@ -93,6 +93,21 @@ function TestHelperPrototypeSurface(helper) {
   assertEquals({value: undefined, done: true }, filterIter.next());
 })();
 
+(function TestIteratorConstructorinFilter() {
+  const iter = gen();
+  const filterIter = iter.filter((x, i) => {
+    return x == 0;
+  });
+  TestHelperPrototypeSurface(filterIter);
+
+  assertThrows(() => {
+    for (let i = 0; i < 3; i++) {
+      function func() {}
+      Object.defineProperty(filterIter, 58, {set: func});
+    }
+  });
+})();
+
 // --- Test take helper
 
 (function TestTake() {
