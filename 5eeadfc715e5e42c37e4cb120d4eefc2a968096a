@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b20c501_5651811e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-04-26T16:21:10Z",
+      "side": 1,
+      "message": "Hi! I\u0027d like to get some early-ish feedback on this change.\nI\u0027m assuming that we\u0027ll soon need at least an additional CodePointerTable, and that that table will sooner or later need entries \u003e 64-bits (e.g. to store native code pointer + pointer to code metadata). Maybe in the future we\u0027ll need more tables still (e.g. for Wasm function pointers). To be able to reuse the logic for e.g. atomic table entry allocation, I\u0027ve now factored out the common logic into a ExternalEntityTable class (feel free to suggest a different name if you have ideas!), which takes the Entry type as template parameter. The Entry then needs to define e.g. how it represents freelist entries. The code in ExternalEntityTable then looks something like this: `at(i).MakeFreelistEntry(next_free_entry);`. This would convert the ith entry into a freelist entry pointing to the next free entry, and so on.\nI\u0027ve also converted the table to use more std::atomic features and less v8-specific things.\n\nPlease let me know what you think of this approach!",
+      "revId": "5eeadfc715e5e42c37e4cb120d4eefc2a968096a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c979602_001232e8",
+        "filename": "src/sandbox/external-pointer-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-04-26T16:21:10Z",
+      "side": 1,
+      "message": "Should this move into its own external-pointer-table-entry.h?",
+      "revId": "5eeadfc715e5e42c37e4cb120d4eefc2a968096a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
