@@ -4,6 +4,8 @@
 
 #include "src/objects/js-objects.h"
 
+#include <iostream>
+
 #include "src/api/api-arguments-inl.h"
 #include "src/base/optional.h"
 #include "src/common/assert-scope.h"
@@ -1197,7 +1199,6 @@ Maybe<bool> JSReceiver::DefineOwnProperty(Isolate* isolate,
         isolate, Handle<AlwaysSharedSpaceJSObject>::cast(object), key, desc,
         should_throw);
   }
-
   // OrdinaryDefineOwnProperty, by virtue of calling
   // DefineOwnPropertyIgnoreAttributes, can handle arguments
   // (ES#sec-arguments-exotic-objects-defineownproperty-p-desc).
@@ -1433,7 +1434,6 @@ Maybe<bool> JSReceiver::OrdinaryDefineOwnProperty(
   // 2. ReturnIfAbrupt(current).
   PropertyDescriptor current;
   MAYBE_RETURN(GetOwnPropertyDescriptor(it, &current), Nothing<bool>());
-
   it->Restart();
   // Handle interceptor
   for (; it->IsFound(); it->Next()) {

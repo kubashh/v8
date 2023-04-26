@@ -258,6 +258,7 @@ transitioning builtin IteratorFilterHelperNext(implicit context: Context)(
           otherwise Done;
     } label Done {
       // ii. If next is false, return undefined.
+
       return AllocateJSIteratorResult(Undefined, True);
     }
 
