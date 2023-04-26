@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "721c1a99_cb6f703b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-04-26T00:40:16Z",
+      "side": 1,
+      "message": "I assumed we need to include both issues. Let me know if I have to remove one or use a different format for including both.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 13
+      },
+      "revId": "c72b04ac3db40d5ed8a56d232238fc0f29b69e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "074727a7_8f06368d",
         "filename": "test/mjsunit/harmony/iterator-helpers.js",
         "patchSetId": 3
@@ -14,6 +37,24 @@
       "writtenOn": "2023-04-26T00:24:51Z",
       "side": 1,
       "message": "This behavior is worth testing for all the helpers that return iterators. Mind adding tests for other ones?",
+      "revId": "c72b04ac3db40d5ed8a56d232238fc0f29b69e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2baccc4e_0b94faaa",
+        "filename": "test/mjsunit/harmony/iterator-helpers.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-04-26T00:40:16Z",
+      "side": 1,
+      "message": "Sure. Just added tests for all of them. I have also asked one question on the commit message. Thanks!",
+      "parentUuid": "074727a7_8f06368d",
       "revId": "c72b04ac3db40d5ed8a56d232238fc0f29b69e58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
