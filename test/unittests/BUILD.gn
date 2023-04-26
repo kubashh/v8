@@ -554,6 +554,7 @@ v8_source_set("v8_unittests_sources") {
       "compiler/typer-unittest.cc",
       "compiler/types-unittest.cc",
       "compiler/value-numbering-reducer-unittest.cc",
+      "compiler/wasm-address-reassociation-unittest.cc",
       "compiler/zone-stats-unittest.cc",
       "interpreter/interpreter-assembler-unittest.cc",
       "interpreter/interpreter-assembler-unittest.h",
