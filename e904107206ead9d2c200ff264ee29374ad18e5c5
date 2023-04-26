@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb08072f_943b6e51",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-26T14:33:09Z",
+      "side": 1,
+      "message": "Good point.",
+      "parentUuid": "1905d410_696ecc6f",
+      "range": {
+        "startLine": 2046,
+        "startChar": 8,
+        "endLine": 2046,
+        "endChar": 60
+      },
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7167a2dc_2034ec62",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-04-26T13:48:08Z",
       "side": 1,
       "message": "This looks up the key twice for each container. We can improve this using the return value of `emplace`, here is one suggestion:\n\n    bool is_new \u003d candidate_base_addrs_.emplace(key, ...).second;\n    auto it \u003d is_new ? candidates_.emplace(key, ...).first : candidates_.find(key);\n    it-\u003esecond.AddCandidate(mem_op, imm_offset);\n    \n(and then we can also remove `HasCandidateBaseAddr`).",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 55
+      },
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e2ce4e2_856a7e4f",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-26T14:33:09Z",
+      "side": 1,
+      "message": "Nice, thanks.",
+      "parentUuid": "7167a2dc_2034ec62",
       "range": {
         "startLine": 156,
         "startChar": 0,
@@ -81,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f028edd9_99e003e9",
+        "filename": "src/logging/runtime-call-stats.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-26T14:33:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cbe0675_93617de0",
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27e524f1_b49dda8c",
@@ -94,6 +160,24 @@
       "writtenOn": "2023-04-26T13:48:08Z",
       "side": 1,
       "message": "Unused?",
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cebeb29d_97c889c0",
+        "filename": "test/unittests/compiler/wasm-address-reassociation-unittest.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-04-26T14:33:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27e524f1_b49dda8c",
       "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
