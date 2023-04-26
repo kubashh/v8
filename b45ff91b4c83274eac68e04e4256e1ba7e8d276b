@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c57c133_24be41a2",
+        "filename": "src/heap/free-list.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-26T13:44:14Z",
+      "side": 0,
+      "message": "Keep in mind that freeing a LAB may also increase wasted bytes and won\u0027t be accounted until the next GC. I don\u0027t think it should have an impact, but it\u0027s a deviation from ToT.",
+      "range": {
+        "startLine": 160,
+        "startChar": 4,
+        "endLine": 160,
+        "endChar": 17
+      },
+      "revId": "b45ff91b4c83274eac68e04e4256e1ba7e8d276b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
