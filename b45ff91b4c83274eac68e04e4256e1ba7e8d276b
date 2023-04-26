@@ -46,6 +46,30 @@
       },
       "revId": "b45ff91b4c83274eac68e04e4256e1ba7e8d276b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "036d2787_1f808a08",
+        "filename": "src/heap/free-list.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-04-26T17:10:14Z",
+      "side": 0,
+      "message": "Can we DCHECK that all pages in `AccountedFree` are already linked? To make sure we never double account.",
+      "parentUuid": "0dcc1c3b_90bf6bdc",
+      "range": {
+        "startLine": 160,
+        "startChar": 4,
+        "endLine": 160,
+        "endChar": 17
+      },
+      "revId": "b45ff91b4c83274eac68e04e4256e1ba7e8d276b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
