@@ -225,7 +225,7 @@ class V8_EXPORT_PRIVATE PagedSpaceBase
 
   // Refills the free list from the corresponding free list filled by the
   // sweeper.
-  virtual void RefillFreeList() = 0;
+  virtual void RefillFreeList();
 
   base::Mutex* mutex() { return &space_mutex_; }
 
@@ -279,28 +279,7 @@ class V8_EXPORT_PRIVATE PagedSpaceBase
   base::Optional<std::pair<Address, size_t>> TryExpandBackground(
       size_t size_in_bytes);
 
- private:
-  class ConcurrentAllocationMutex {
-   public:
-    explicit ConcurrentAllocationMutex(const PagedSpaceBase* space) {
-      if (space->SupportsConcurrentAllocation()) {
-        guard_.emplace(&space->space_mutex_);
-      }
-    }
-
-    base::Optional<base::MutexGuard> guard_;
-  };
-
-  bool SupportsConcurrentAllocation() const {
-    return !is_compaction_space() && (identity() != NEW_SPACE);
-  }
-
-  // Set space linear allocation area.
-  void SetTopAndLimit(Address top, Address limit, Address end);
-  void DecreaseLimit(Address new_limit);
-  bool SupportsAllocationObserver() const override {
-    return !is_compaction_space();
-  }
+  void RefineAllocatedBytesAfterSweeping(Page* page);
 
  protected:
   // Updates the current lab limit without updating top, original_top or
@@ -308,8 +287,6 @@ class V8_EXPORT_PRIVATE PagedSpaceBase
   void SetLimit(Address limit);
 
   bool SupportsExtendingLAB() const { return identity() == NEW_SPACE; }
-
-  void RefineAllocatedBytesAfterSweeping(Page* page);
 
   void UpdateInlineAllocationLimit() override;
 
@@ -376,6 +353,29 @@ class V8_EXPORT_PRIVATE PagedSpaceBase
 
   std::atomic<size_t> committed_physical_memory_{0};
 
+ private:
+  class ConcurrentAllocationMutex {
+   public:
+    explicit ConcurrentAllocationMutex(const PagedSpaceBase* space) {
+      if (space->SupportsConcurrentAllocation()) {
+        guard_.emplace(&space->space_mutex_);
+      }
+    }
+
+    base::Optional<base::MutexGuard> guard_;
+  };
+
+  bool SupportsConcurrentAllocation() const {
+    return !is_compaction_space() && (identity() != NEW_SPACE);
+  }
+
+  // Set space linear allocation area.
+  void SetTopAndLimit(Address top, Address limit, Address end);
+  void DecreaseLimit(Address new_limit);
+  bool SupportsAllocationObserver() const override {
+    return !is_compaction_space();
+  }
+
   friend class IncrementalMarking;
   friend class MarkCompactCollector;
 
@@ -393,8 +393,6 @@ class V8_EXPORT_PRIVATE PagedSpace : public PagedSpaceBase {
       : PagedSpaceBase(heap, id, executable, free_list, allocation_counter_,
                        allocation_info, linear_area_original_data_,
                        compaction_space_kind) {}
-
-  void RefillFreeList() final;
 
  private:
   AllocationCounter allocation_counter_;
@@ -414,6 +412,8 @@ class V8_EXPORT_PRIVATE CompactionSpace final : public PagedSpace {
   }
 
   const std::vector<Page*>& GetNewPages() { return new_pages_; }
+
+  void RefillFreeList() override;
 
  private:
   LinearAllocationArea allocation_info_;
