@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a972183_56b592c1",
+        "filename": "lib/lib.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-04-27T15:08:55Z",
+      "side": 1,
+      "message": "Are you now not switching it off everywhere? Also on all CI builders?\n\nI strongly suggest two CLs. One for dropping export from branch builders and one for testing the predicate on the one arm builder.",
+      "range": {
+        "startLine": 448,
+        "startChar": 4,
+        "endLine": 449,
+        "endChar": 19
+      },
+      "revId": "8b963b5667aaada370d4de39e05e98b7f18fcac4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
