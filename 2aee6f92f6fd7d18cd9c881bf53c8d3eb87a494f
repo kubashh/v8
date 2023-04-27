@@ -39,6 +39,30 @@
       },
       "revId": "2aee6f92f6fd7d18cd9c881bf53c8d3eb87a494f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5cfb2f9_acafa2de",
+        "filename": "src/sandbox/external-pointer-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-04-27T14:03:38Z",
+      "side": 1,
+      "message": "So there are some practical problems with trying to do that:\n- Moving `Mark` into ExternalEntityTable is easy, but also not really useful since all it\u0027d do is `at(index).Mark()` and we\u0027d still need ExternalPointerTable::Mark to perform the handle -\u003e index conversion\n- Moving `SweepAndCompact` into ExternalEntityTable is tricky because\n    - compaction requires knowledge of how ExternalPointerTableHandles look like (see `ResolveEvacuationEntryDuringSweeping`), and that\u0027s something only the EPT (not the EET) should know about\n    - compaction assumes that there is a 1:1 relationship between HeapObject and Entry, which is the case for the EPT, but not necessarily for e.g. the upcoming CodePointerTable\n    - It becomes really awkward trying to split up Sweeping and Compacting (at least all my attempts at doing so needed some weird hacks to work). I tried moving the logic into `Entry::Sweep()`, but that also doesn\u0027t work because for compaction, you need to be able to access other entries in the table during sweeping. Only if you walk over the table twice (1st time just to compact, 2nd time to sweep) can you nicely separate the things, but that seems a bit too expensive?\n    \nSo in short, yes, it seems the GC parts (in particular, compacting) are specific to EPT and cannot cleanly be separated from the other GC parts.",
+      "parentUuid": "c35c54a6_6e31a756",
+      "range": {
+        "startLine": 31,
+        "startChar": 31,
+        "endLine": 31,
+        "endChar": 46
+      },
+      "revId": "2aee6f92f6fd7d18cd9c881bf53c8d3eb87a494f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
