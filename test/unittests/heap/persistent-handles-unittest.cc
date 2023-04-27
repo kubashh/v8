@@ -20,8 +20,7 @@ TEST_F(PersistentHandlesTest, OrderOfBlocks) {
   handle(ReadOnlyRoots(heap).empty_string(), isolate);
   HandleScopeData* data = isolate->handle_scope_data();
 
-  Address* next;
-  Address* limit;
+  Address* top;
   Handle<String> first_empty, last_empty;
   std::unique_ptr<PersistentHandles> ph;
 
@@ -31,7 +30,7 @@ TEST_F(PersistentHandlesTest, OrderOfBlocks) {
     // fill block
     first_empty = handle(ReadOnlyRoots(heap).empty_string(), isolate);
 
-    while (data->next < data->limit) {
+    while (!HandleScopeUtils::MayNeedExtend(data->top)) {
       handle(ReadOnlyRoots(heap).empty_string(), isolate);
     }
 
@@ -39,15 +38,13 @@ TEST_F(PersistentHandlesTest, OrderOfBlocks) {
     handle(ReadOnlyRoots(heap).empty_string(), isolate);
     last_empty = handle(ReadOnlyRoots(heap).empty_string(), isolate);
 
-    // remember next and limit in second block
-    next = data->next;
-    limit = data->limit;
+    // remember top in second block
+    top = data->top;
 
     ph = persistent_scope.Detach();
   }
 
-  CHECK_EQ(ph->block_next_, next);
-  CHECK_EQ(ph->block_limit_, limit);
+  CHECK_EQ(ph->block_top_, top);
 
   CHECK_EQ(first_empty->length(), 0);
   CHECK_EQ(last_empty->length(), 0);
@@ -86,7 +83,7 @@ TEST_F(PersistentHandlesTest, Iterate) {
   size_t handles_in_empty_scope = count_handles(isolate);
 
   Handle<Object> init(ReadOnlyRoots(heap).empty_string(), isolate);
-  Address* old_limit = data->limit;
+  Address* old_handle_block = HandleScopeUtils::BlockStart(data->top);
   CHECK_EQ(count_handles(isolate), handles_in_empty_scope + 1);
 
   std::unique_ptr<PersistentHandles> ph;
@@ -95,7 +92,7 @@ TEST_F(PersistentHandlesTest, Iterate) {
   {
     PersistentHandlesScope persistent_scope(isolate);
     verify_handle = handle(ReadOnlyRoots(heap).empty_string(), isolate);
-    CHECK_NE(old_limit, data->limit);
+    CHECK_NE(old_handle_block, HandleScopeUtils::BlockStart(data->top));
     CHECK_EQ(count_handles(isolate), handles_in_empty_scope + 2);
     ph = persistent_scope.Detach();
   }

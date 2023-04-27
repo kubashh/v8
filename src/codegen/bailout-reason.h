@@ -33,7 +33,6 @@ namespace internal {
   V(kInputDoesNotFitSmi, "Input number is too large to fit in a Smi")          \
   V(kInvalidBytecode, "Invalid bytecode")                                      \
   V(kInvalidBytecodeAdvance, "Cannot advance current bytecode, ")              \
-  V(kInvalidHandleScopeLevel, "Invalid HandleScope level")                     \
   V(kInvalidJumpTableIndex, "Invalid jump table index")                        \
   V(kInvalidParametersAndRegistersInGenerator,                                 \
     "invalid parameters and registers in generator")                           \

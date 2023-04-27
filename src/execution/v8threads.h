@@ -10,6 +10,9 @@
 #include "src/execution/isolate.h"
 
 namespace v8 {
+
+class Locker;
+
 namespace internal {
 
 class RootVisitor;
@@ -62,10 +65,10 @@ class ThreadManager {
   void Lock();
   V8_EXPORT_PRIVATE void Unlock();
 
-  void InitThread(const ExecutionAccess&);
+  void InitThread(const ExecutionAccess&, bool init_handle_blocks = true);
   void ArchiveThread();
   bool RestoreThread();
-  void FreeThreadResources();
+  void FreeThreadResources(bool free_handle_blocks = true);
   bool IsArchived();
 
   void Iterate(RootVisitor* v);
@@ -97,6 +100,7 @@ class ThreadManager {
   std::atomic<ThreadId> mutex_owner_;
   ThreadId lazily_archived_thread_;
   ThreadState* lazily_archived_thread_state_;
+  int locker_nest_level_;
 
   // In the following two lists there is always at least one object on the list.
   // The first object is a flying anchor that is only there to simplify linking
@@ -109,6 +113,7 @@ class ThreadManager {
   Isolate* isolate_;
 
   friend class Isolate;
+  friend class v8::Locker;
   friend class ThreadState;
 };
 
