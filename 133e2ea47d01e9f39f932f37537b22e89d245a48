@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ca3a382_4ed8bd68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-04-27T11:25:53Z",
+      "side": 1,
+      "message": "lgtm \u0026 thanks",
+      "revId": "133e2ea47d01e9f39f932f37537b22e89d245a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4afe56eb_44cd10ca",
+        "filename": "tools/clusterfuzz/foozzie/v8_foozzie.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-04-27T11:25:53Z",
+      "side": 1,
+      "message": "Could it make sense to call this granularity? We might want to have an `extended` mode in the future too. This might control a granularity class which could remove some redundancy we now added with the second header template. Maybe too much for this experiment though.",
+      "range": {
+        "startLine": 329,
+        "startChar": 7,
+        "endLine": 329,
+        "endChar": 15
+      },
+      "revId": "133e2ea47d01e9f39f932f37537b22e89d245a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
