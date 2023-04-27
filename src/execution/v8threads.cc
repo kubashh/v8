@@ -41,9 +41,16 @@ void Locker::Initialize(v8::Isolate* isolate) {
     isolate_->thread_manager()->Lock();
     has_lock_ = true;
 
-    // This may be a locker within an unlocker in which case we have to
-    // get the saved state for this thread and restore it.
-    if (isolate_->thread_manager()->RestoreThread()) {
+    const int nest_level = isolate_->thread_manager()->locker_nest_level_++;
+    // Global top-level lockers inherit the empty handle block that was
+    // already created during isolate setup.
+    // Otherwise this may be a locker within an unlocker in which case we have
+    // to get the saved state for this thread and restore it.
+    if (nest_level == 0) {
+      i::ExecutionAccess access(isolate_);
+      constexpr bool init_handle_blocks = false;
+      isolate_->thread_manager()->InitThread(access, init_handle_blocks);
+    } else if (isolate_->thread_manager()->RestoreThread()) {
       top_level_ = false;
     }
   }
@@ -59,8 +66,12 @@ bool Locker::IsLocked(v8::Isolate* isolate) {
 Locker::~Locker() {
   DCHECK(isolate_->thread_manager()->IsLockedByCurrentThread());
   if (has_lock_) {
+    const int nest_level = --isolate_->thread_manager()->locker_nest_level_;
     if (top_level_) {
-      isolate_->thread_manager()->FreeThreadResources();
+      // Global top-level lockers don't free the empty pre-allocated handle
+      // block.
+      const bool free_handle_blocks = nest_level > 0;
+      isolate_->thread_manager()->FreeThreadResources(free_handle_blocks);
     } else {
       isolate_->thread_manager()->ArchiveThread();
     }
@@ -84,10 +95,14 @@ Unlocker::~Unlocker() {
 
 namespace internal {
 
-void ThreadManager::InitThread(const ExecutionAccess& lock) {
+void ThreadManager::InitThread(const ExecutionAccess& lock,
+                               bool init_handle_blocks) {
   isolate_->InitializeThreadLocal();
   isolate_->stack_guard()->InitThread(lock);
   isolate_->debug()->InitThread(lock);
+  if (init_handle_blocks) {
+    isolate_->handle_scope_data()->Initialize(isolate_);
+  }
 }
 
 bool ThreadManager::RestoreThread() {
@@ -217,6 +232,7 @@ ThreadManager::ThreadManager(Isolate* isolate)
     : mutex_owner_(ThreadId::Invalid()),
       lazily_archived_thread_(ThreadId::Invalid()),
       lazily_archived_thread_state_(nullptr),
+      locker_nest_level_(0),
       free_anchor_(nullptr),
       in_use_anchor_(nullptr),
       isolate_(isolate) {
@@ -273,11 +289,11 @@ void ThreadManager::EagerlyArchiveThread() {
   lazily_archived_thread_state_ = nullptr;
 }
 
-void ThreadManager::FreeThreadResources() {
+void ThreadManager::FreeThreadResources(bool free_handle_blocks) {
   DCHECK(!isolate_->has_pending_exception());
   DCHECK(!isolate_->external_caught_exception());
   DCHECK_NULL(isolate_->try_catch_handler());
-  isolate_->handle_scope_implementer()->FreeThreadResources();
+  isolate_->handle_scope_implementer()->FreeThreadResources(free_handle_blocks);
   isolate_->FreeThreadResources();
   isolate_->debug()->FreeThreadResources();
   isolate_->stack_guard()->FreeThreadResources();

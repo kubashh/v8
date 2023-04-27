@@ -25,6 +25,7 @@ class Heap;
 class PersistentHandles {
  public:
   V8_EXPORT_PRIVATE explicit PersistentHandles(Isolate* isolate);
+  PersistentHandles(Isolate* isolate, Address* initial_block);
   V8_EXPORT_PRIVATE ~PersistentHandles();
 
   PersistentHandles(const PersistentHandles&) = delete;
@@ -52,6 +53,7 @@ class PersistentHandles {
 #endif
 
  private:
+  void AddBlock(Address* block);
   void AddBlock();
   V8_EXPORT_PRIVATE Address* GetHandle(Address value);
 
@@ -70,8 +72,7 @@ class PersistentHandles {
   Isolate* isolate_;
   std::vector<Address*> blocks_;
 
-  Address* block_next_;
-  Address* block_limit_;
+  Address* block_top_;
 
   PersistentHandles* prev_;
   PersistentHandles* next_;
@@ -118,14 +119,11 @@ class V8_NODISCARD PersistentHandlesScope {
   V8_EXPORT_PRIVATE static bool IsActive(Isolate* isolate);
 
  private:
-  Address* first_block_;
-  Address* prev_limit_;
-  Address* prev_next_;
+  Address* prev_top_;
   HandleScopeImplementer* const impl_;
 
 #ifdef DEBUG
   bool handles_detached_ = false;
-  int prev_level_;
 #endif
 };
 

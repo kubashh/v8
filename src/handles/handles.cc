@@ -126,77 +126,81 @@ bool DirectHandle<T>::IsDereferenceAllowed() const {
 
 #endif  // DEBUG
 
-int HandleScope::NumberOfHandles(Isolate* isolate) {
-  HandleScopeImplementer* impl = isolate->handle_scope_implementer();
-  int n = static_cast<int>(impl->blocks()->size());
-  if (n == 0) return 0;
-  return ((n - 1) * kHandleBlockSize) +
-         static_cast<int>(
-             (isolate->handle_scope_data()->next - impl->blocks()->back()));
+// static
+Address* HandleScopeUtils::AllocateBlock() {
+  return static_cast<Address*>(
+      AlignedAllocWithRetry(kHandleBlockByteSize, kHandleBlockAlignment));
 }
 
-Address* HandleScope::Extend(Isolate* isolate) {
-  HandleScopeData* current = isolate->handle_scope_data();
+// static
+void HandleScopeUtils::FreeBlock(Address* block) { AlignedFree(block); }
 
-  Address* result = current->next;
-
-  DCHECK(result == current->limit);
-  // Make sure there's at least one scope on the stack and that the
-  // top of the scope stack isn't a barrier.
-  if (!Utils::ApiCheck(current->level != current->sealed_level,
-                       "v8::HandleScope::CreateHandle()",
-                       "Cannot create a handle without a HandleScope")) {
-    return nullptr;
-  }
+// static
+Address* HandleScopeUtils::AddBlock(Isolate* isolate) {
   HandleScopeImplementer* impl = isolate->handle_scope_implementer();
-  // If there's more room in the last block, we use that. This is used
-  // for fast creation of scopes after scope barriers.
-  if (!impl->blocks()->empty()) {
-    Address* limit = &impl->blocks()->back()[kHandleBlockSize];
-    if (current->limit != limit) {
-      current->limit = limit;
-      DCHECK_LT(limit - current->next, kHandleBlockSize);
-    }
-  }
 
-  // If we still haven't found a slot for the handle, we extend the
-  // current handle scope by allocating a new handle block.
-  if (result == current->limit) {
-    // If there's a spare block, use it for growing the current scope.
-    result = impl->GetSpareOrNewBlock();
-    // Add the extension to the global list of blocks, but count the
-    // extension as part of the current scope.
-    impl->blocks()->push_back(result);
-    current->limit = &result[kHandleBlockSize];
-  }
+  Address* result = impl->GetSpareOrNewBlock();
+  impl->blocks()->push_back(result);
 
   return result;
 }
 
-void HandleScope::DeleteExtensions(Isolate* isolate) {
-  HandleScopeData* current = isolate->handle_scope_data();
-  isolate->handle_scope_implementer()->DeleteExtensions(current->limit);
+// static
+void HandleScopeUtils::UninitializeMemory(Address* start, Address* end) {
+  start = OpenHandleScope(start);
+  end = OpenHandleScope(end);
+#ifdef ENABLE_HANDLE_ZAPPING
+  ZapRange(start, end);
+#endif
+  MSAN_ALLOCATED_UNINITIALIZED_MEMORY(
+      start, static_cast<size_t>(reinterpret_cast<Address>(end) -
+                                 reinterpret_cast<Address>(start)));
 }
 
 #ifdef ENABLE_HANDLE_ZAPPING
-void HandleScope::ZapRange(Address* start, Address* end) {
+// static
+void HandleScopeUtils::ZapRange(Address* start, Address* end) {
   DCHECK_LE(end - start, kHandleBlockSize);
   for (Address* p = start; p != end; p++) {
     *p = static_cast<Address>(kHandleZapValue);
   }
 }
-#endif
+#endif  // ENABLE_HANDLE_ZAPPING
 
-Address HandleScope::current_level_address(Isolate* isolate) {
-  return reinterpret_cast<Address>(&isolate->handle_scope_data()->level);
+// static
+int HandleScope::NumberOfHandles(Isolate* isolate) {
+  HandleScopeImplementer* impl = isolate->handle_scope_implementer();
+  int n = static_cast<int>(impl->blocks()->size());
+  DCHECK_GT(n, 0);
+  return ((n - 1) * HandleScopeUtils::kHandleBlockSize) +
+         static_cast<int>(
+             (isolate->handle_scope_data()->top - impl->blocks()->back()));
 }
 
-Address HandleScope::current_next_address(Isolate* isolate) {
-  return reinterpret_cast<Address>(&isolate->handle_scope_data()->next);
+// static
+Address* HandleScope::Extend(Isolate* isolate) {
+  HandleScopeData* current = isolate->handle_scope_data();
+
+  DCHECK(HandleScopeUtils::MayNeedExtend(current->top));
+  // Make sure there's at least one scope on the stack and that the
+  // top of the scope stack isn't a barrier.
+  if (!Utils::ApiCheck(!HandleScopeUtils::IsSealed(current->top),
+                       "v8::HandleScope::CreateHandle()",
+                       "Cannot create a handle without a HandleScope")) {
+    return nullptr;
+  }
+  return HandleScopeUtils::AddBlock(isolate);
 }
 
-Address HandleScope::current_limit_address(Isolate* isolate) {
-  return reinterpret_cast<Address>(&isolate->handle_scope_data()->limit);
+// static
+void HandleScope::DeleteExtensions(Isolate* isolate) {
+  HandleScopeData* current = isolate->handle_scope_data();
+  Address* limit = HandleScopeUtils::OpenHandleScope(current->top);
+  isolate->handle_scope_implementer()->DeleteExtensions(limit);
+}
+
+Address HandleScope::current_top_address(Isolate* isolate) {
+  return reinterpret_cast<Address>(&isolate->handle_scope_data()->top);
 }
 
 }  // namespace internal

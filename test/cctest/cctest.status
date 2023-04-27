@@ -35,7 +35,11 @@
   # These tests always fail.  They are here to test test.py.  If
   # they don't fail then test.py has failed.
   'test-serialize/TestThatAlwaysFails': [FAIL],
+
+  # Tests expected to fail. Test API misuse.
   'test-api/SealHandleScope': [FAIL],
+  # Handles without HandleScopes is only detected in debug builds.
+  'test-api/HandleWithoutHandleScope': [SKIP, ['mode == debug', FAIL]],
 
   # These tests are expected to hit a CHECK (i.e. a FAIL result actually means
   # the test passed).
