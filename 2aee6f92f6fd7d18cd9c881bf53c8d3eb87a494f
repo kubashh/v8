@@ -87,6 +87,30 @@
       },
       "revId": "2aee6f92f6fd7d18cd9c881bf53c8d3eb87a494f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22bb2198_bd77cb28",
+        "filename": "src/sandbox/external-pointer-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-04-27T15:04:34Z",
+      "side": 1,
+      "message": "I see EET as an incomplete class that necessarily needs to be extended (that\u0027s why everything is `protected:`), and one of the things the derived class must implement is some way of reclaiming entries (in theory the derived class could even use explicit memory management if e.g. the external objects themselves own the entires, but currently that doesn\u0027t seem to be needed).\nWhile EET could implement a simple GC algorithm (essentially `Mark` and `Sweep` that simply forward to `Entry::Mark` and `Entry::Sweep` respectively, because only those know how the marking scheme is implemented), currently it seems EPT couldn\u0027t use that code at all because it also needs compaction to happen at the same time, and that logic is very EPT-specific (awareness of ExternalPointerHandle, etc.).\nI guess when we implement the CodePointerTable, we\u0027ll see how GC for that will work. Probably it\u0027ll be a simpler GC that just does Sweep but not Compact. We can then check if we can move some common parts of EPT::SweepAndCompact and CPT::Sweep into EET, but I\u0027m not too optimistic that we\u0027ll be able to share a lot of code...",
+      "parentUuid": "a59efc53_4bc7de78",
+      "range": {
+        "startLine": 31,
+        "startChar": 31,
+        "endLine": 31,
+        "endChar": 46
+      },
+      "revId": "2aee6f92f6fd7d18cd9c881bf53c8d3eb87a494f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
