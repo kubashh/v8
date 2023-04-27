@@ -33,6 +33,24 @@
       "message": "Should this move into its own external-pointer-table-entry.h?",
       "revId": "5eeadfc715e5e42c37e4cb120d4eefc2a968096a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0df95011_260481b3",
+        "filename": "src/sandbox/external-pointer-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-04-27T10:01:31Z",
+      "side": 1,
+      "message": "I think it\u0027s fine to keep it here since it\u0027s a part of ExternalPointerTable definition.",
+      "parentUuid": "4c979602_001232e8",
+      "revId": "5eeadfc715e5e42c37e4cb120d4eefc2a968096a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
