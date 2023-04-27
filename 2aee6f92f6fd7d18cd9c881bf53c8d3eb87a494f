@@ -111,6 +111,30 @@
       },
       "revId": "2aee6f92f6fd7d18cd9c881bf53c8d3eb87a494f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad744140_94853418",
+        "filename": "src/sandbox/external-pointer-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-27T15:12:30Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "22bb2198_bd77cb28",
+      "range": {
+        "startLine": 31,
+        "startChar": 31,
+        "endLine": 31,
+        "endChar": 46
+      },
+      "revId": "2aee6f92f6fd7d18cd9c881bf53c8d3eb87a494f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
