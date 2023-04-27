@@ -435,21 +435,33 @@ def v8_basic_builder(defaults, **kwargs):
     resultdb_bq_table_prefix = defaults.get("resultdb_bq_table_prefix")
     kwargs["resultdb_settings"] = resultdb.settings(
         enable = True,
-        bq_exports = bq_exports(rdb_export_disabled, resultdb_bq_table_prefix),
+        bq_exports = bq_exports(
+            rdb_export_disabled,
+            resultdb_bq_table_prefix,
+            kwargs["name"],
+        ) if kwargs["bucket"] == "ci" else None,
     )
 
     luci.builder(**kwargs)
 
-def bq_exports(rdb_export_disabled, resultdb_bq_table_prefix):
+def bq_exports(rdb_export_disabled, resultdb_bq_table_prefix, builder_name):
+    if builder_name != "V8 Linux64 - arm64":
+        return None
     if rdb_export_disabled:
         return None
-
+    results_predicate = resultdb.test_result_predicate(
+        test_id_regexp = "(?!\\/\\/test262\\/).*",
+    )
     return [
         resultdb.export_test_results(
             bq_table = "v8-resultdb.resultdb." + resultdb_bq_table_prefix + "_test_results",
+            predicate = results_predicate,
         ),
         resultdb.export_text_artifacts(
             bq_table = "v8-resultdb.resultdb." + resultdb_bq_table_prefix + "_text_artifacts",
+            predicate = resultdb.artifact_predicate(
+                test_result_predicate = results_predicate,
+            ),
         ),
     ]
 
