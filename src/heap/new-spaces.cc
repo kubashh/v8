@@ -941,9 +941,11 @@ void PagedSpaceForNewSpace::FinishShrinking() {
 #if DEBUG
     // If `current_capacity_` is higher than `target_capacity_`, i.e. the
     // space could not be shrunk all the way down to `target_capacity_`, it
-    // must mean that all pages contain live objects.
+    // must mean that all pages contain live objects or allocated bytes (for
+    // eagerly swept pages).
     for (Page* page : *this) {
-      DCHECK_NE(0, heap()->non_atomic_marking_state()->live_bytes(page));
+      DCHECK_IMPLIES(heap()->non_atomic_marking_state()->live_bytes(page) == 0,
+                     page->allocated_bytes() > 0);
     }
 #endif  // DEBUG
     target_capacity_ = current_capacity_;
