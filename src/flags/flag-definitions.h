@@ -1540,7 +1540,7 @@ DEFINE_BOOL(move_object_start, true, "enable moving of object starts")
 DEFINE_BOOL(memory_reducer, true, "use memory reducer")
 DEFINE_BOOL(memory_reducer_for_small_heaps, true,
             "use memory reducer for small heaps")
-DEFINE_BOOL(memory_reducer_single_gc, false,
+DEFINE_BOOL(memory_reducer_single_gc, true,
             "only schedule a single GC from memory reducer")
 DEFINE_INT(heap_growing_percent, 0,
            "specifies heap growing factor as (1 + heap_growing_percent/100)")
