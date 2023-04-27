@@ -153,8 +153,8 @@ class V8_EXPORT_PRIVATE MacroAssembler
 
   // Load the builtin given by the Smi in |builtin_index| into the same
   // register.
-  void LoadEntryFromBuiltinIndex(Register builtin_index);
-  void CallBuiltinByIndex(Register builtin_index);
+  void LoadEntryFromBuiltinIndex(Register builtin_index, Register target);
+  void CallBuiltinByIndex(Register builtin_index, Register target);
   void CallBuiltin(Builtin builtin);
   void TailCallBuiltin(Builtin builtin);
 

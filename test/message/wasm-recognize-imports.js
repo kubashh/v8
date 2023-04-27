@@ -59,14 +59,18 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
       makeSig([kWasmStringRef, kWasmStringRef, kWasmI32], [kWasmI32]);
   let sig_w_d = makeSig([kWasmF64], [kWasmStringRef]);
   let sig_w_ii = makeSig([kWasmI32, kWasmI32], [kWasmStringRef]);
+  let sig_w_ww = makeSig([kWasmStringRef, kWasmStringRef], [kWasmStringRef]);
   builder.addImport("m", "intToString", sig_w_ii);
   builder.addImport("m", "doubleToString", sig_w_d);
   builder.addImport("m", "parseFloat", sig_d_w);
   builder.addImport("m", "indexOf", sig_i_wwi);
+  builder.addImport("m", "toLocaleLowerCase", sig_w_ww);
   let indexOf = Function.prototype.call.bind(String.prototype.indexOf);
   let intToString = Function.prototype.call.bind(Number.prototype.toString);
   let doubleToString = intToString;
+  let toLocaleLowerCase =
+      Function.prototype.call.bind(String.prototype.toLocaleLowerCase);
   builder.instantiate({
-    m: {intToString, doubleToString, parseFloat, indexOf}
+    m: {intToString, doubleToString, parseFloat, indexOf, toLocaleLowerCase}
   });
 })();

@@ -1045,10 +1045,10 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
 
   // Load the builtin given by the Smi in |builtin_| into the same
   // register.
-  void LoadEntryFromBuiltinIndex(Register builtin);
+  void LoadEntryFromBuiltinIndex(Register builtin, Register target);
   void LoadEntryFromBuiltin(Builtin builtin, Register destination);
   MemOperand EntryFromBuiltinAsOperand(Builtin builtin);
-  void CallBuiltinByIndex(Register builtin);
+  void CallBuiltinByIndex(Register builtin, Register target);
   void CallBuiltin(Builtin builtin);
   void TailCallBuiltin(Builtin builtin, Condition cond = al);
 
