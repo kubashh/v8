@@ -39,6 +39,30 @@
       },
       "revId": "133e2ea47d01e9f39f932f37537b22e89d245a48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41b67072_95e42b9c",
+        "filename": "tools/clusterfuzz/foozzie/v8_foozzie.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-04-27T11:53:16Z",
+      "side": 1,
+      "message": "I\u0027ll consider this if we need to change it again. But actually extending the output is very unlikely. We\u0027d need some much more clever kind of clustering, potentially different to what this harness is doing.",
+      "parentUuid": "4afe56eb_44cd10ca",
+      "range": {
+        "startLine": 329,
+        "startChar": 7,
+        "endLine": 329,
+        "endChar": 15
+      },
+      "revId": "133e2ea47d01e9f39f932f37537b22e89d245a48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
