@@ -16,6 +16,29 @@
       "message": "lgtm modulo redness",
       "revId": "2aee6f92f6fd7d18cd9c881bf53c8d3eb87a494f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c35c54a6_6e31a756",
+        "filename": "src/sandbox/external-pointer-table.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-27T13:35:10Z",
+      "side": 1,
+      "message": "Are the GC parts really specific to EPT or should they be available to all of these tables?",
+      "range": {
+        "startLine": 31,
+        "startChar": 31,
+        "endLine": 31,
+        "endChar": 46
+      },
+      "revId": "2aee6f92f6fd7d18cd9c881bf53c8d3eb87a494f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

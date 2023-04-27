@@ -51,6 +51,24 @@
       "parentUuid": "4c979602_001232e8",
       "revId": "5eeadfc715e5e42c37e4cb120d4eefc2a968096a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edf07f0a_31057fa8",
+        "filename": "src/sandbox/external-pointer-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-27T13:35:10Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "0df95011_260481b3",
+      "revId": "5eeadfc715e5e42c37e4cb120d4eefc2a968096a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
