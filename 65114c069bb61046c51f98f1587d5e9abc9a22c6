@@ -16,6 +16,115 @@
       "message": "LGTM, but please wait for Jakob\u0027s review (and Jakob, feel free to forward this again if you\u0027re not the right person to review it).",
       "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ead08472_3040fc13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-27T10:42:30Z",
+      "side": 1,
+      "message": "A nice optimization! Some comments.",
+      "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0db2ca1c_51a1a12c",
+        "filename": "src/compiler/memory-optimizer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-27T10:42:30Z",
+      "side": 1,
+      "message": "We generally try to honor the `V8_ENABLE_WEBASSEMBLY` build flag, which in particular means keeping the non-Wasm build as lean as possible. For the way this extra optimization is integrated, that isn\u0027t super straightforward, but I think we should still do it. Suggestion: put this `#include` behind `#if V8_ENABLE_WEBASSEMBLY`, and provide an empty implementation of the public interface of the `class WasmAddressReassociation` otherwise, so you don\u0027t need to sprinkle `#if`s everywhere in `memory-optimizer.cc`.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 52
+      },
+      "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32b3c7f5_768cca4f",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-27T10:42:30Z",
+      "side": 1,
+      "message": "nit: missing a closing `)` here, and again in lines 37, 40, 41.",
+      "range": {
+        "startLine": 36,
+        "startChar": 75,
+        "endLine": 36,
+        "endChar": 76
+      },
+      "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc16816a_528d1dff",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-27T10:42:30Z",
+      "side": 1,
+      "message": "naming nit: I find the mixed use of the terms \"offset\" and \"index\" all across this file confusing. Please settle for a consistent scheme. In some contexts, it makes sense to distinguish \"dynamic (array) index\" and \"static offset\"; for the purposes here we\u0027re only interested in static values though, so I suppose \"imm_offset\" and \"reg_offset\" are better (see also `GraphAssembler::ProtectedLoad(MachineType type, Node* object, Node* offset)` for precedent). I\u0027m also fine with another scheme, as long as it doesn\u0027t lead to `Node* index \u003d ...imm_offset...` :-)",
+      "range": {
+        "startLine": 61,
+        "startChar": 7,
+        "endLine": 62,
+        "endChar": 43
+      },
+      "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1b4ba9f_41e55805",
+        "filename": "test/unittests/compiler/wasm-address-reassociation-unittest.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-27T10:42:30Z",
+      "side": 1,
+      "message": "nit: personally, I\u0027d find the resulting code easier to understand if you dropped this wrapper (and `ProtectedLoadRegOffset` and the two corresponding `...Store...` helpers), and exposed `public Node* base() { return base_; }` and `reg_offset()` instead, and let callers use the more general `ProtectedLoad(base, offset, ...)` function. But I don\u0027t feel strongly about it.",
+      "range": {
+        "startLine": 60,
+        "startChar": 8,
+        "endLine": 60,
+        "endChar": 25
+      },
+      "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
