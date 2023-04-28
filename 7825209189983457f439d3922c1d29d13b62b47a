@@ -70,6 +70,30 @@
       },
       "revId": "7825209189983457f439d3922c1d29d13b62b47a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df486270_1c3ac392",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 10
+      },
+      "lineNbr": 2008,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-04-28T09:01:08Z",
+      "side": 1,
+      "message": "Looks like it works fine. Hence, I think it\u0027s ok to keep this together so that labs team can reimage the other bots smoothly. Will remove the old dimension, once all are reimaged.",
+      "parentUuid": "cddbd890_01e0c5a7",
+      "range": {
+        "startLine": 2008,
+        "startChar": 35,
+        "endLine": 2008,
+        "endChar": 41
+      },
+      "revId": "7825209189983457f439d3922c1d29d13b62b47a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
