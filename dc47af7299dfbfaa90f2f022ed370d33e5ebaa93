@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d218ef4_730fe692",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-04-28T11:00:07Z",
+      "side": 1,
+      "message": "this doesn\u0027t work -- the node doesn\u0027t necessarily become an InternalizedString, it might become a ThinString -- this is why CheckedInternalizedString is a ValueNode. The old code was setting KnownType on the _new_ node.",
+      "range": {
+        "startLine": 772,
+        "startChar": 6,
+        "endLine": 772,
+        "endChar": 16
+      },
+      "revId": "dc47af7299dfbfaa90f2f022ed370d33e5ebaa93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
