@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfdfed0f_f109f899",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2023-04-28T14:38:54Z",
+      "side": 1,
+      "message": "Hi,\n\nI was recently debugging using arm64.release simulator build, and noticed the gdb `sim` command wasn\u0027t working, now fixed!\n\nThanks,\nPierre",
+      "revId": "8084e811c74daa8a9a385f2fe19b17f17ba016a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
