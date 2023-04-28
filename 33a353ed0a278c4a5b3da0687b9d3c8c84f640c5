@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7de2dd7f_e37b1adc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-04-28T09:26:44Z",
+      "side": 1,
+      "message": "LGTM with comments.",
+      "revId": "33a353ed0a278c4a5b3da0687b9d3c8c84f640c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87883518_5d05326e",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6611,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-04-28T09:26:44Z",
+      "side": 1,
+      "message": "Why is this not required for the locale?",
+      "range": {
+        "startLine": 6610,
+        "startChar": 4,
+        "endLine": 6611,
+        "endChar": 58
+      },
+      "revId": "33a353ed0a278c4a5b3da0687b9d3c8c84f640c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81bef778_213ba321",
+        "filename": "test/message/wasm-recognize-imports.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-04-28T09:26:44Z",
+      "side": 1,
+      "message": "It might be nice to have another case for `wasmRefType(kWasmStringRef)` as that (to my understanding) should also result in being mapped to a \"well-known built-in\".",
+      "range": {
+        "startLine": 62,
+        "startChar": 26,
+        "endLine": 62,
+        "endChar": 56
+      },
+      "revId": "33a353ed0a278c4a5b3da0687b9d3c8c84f640c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
