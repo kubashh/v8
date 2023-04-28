@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <windows.h>
+
 #include "include/v8-external.h"
 #include "include/v8-function.h"
 #include "include/v8-isolate.h"
@@ -9,14 +11,6 @@
 #include "include/v8-template.h"
 #include "src/base/macros.h"
 #include "test/cctest/cctest.h"
-
-#if defined(V8_OS_WIN_X64)
-#define CONTEXT_PC(context) (context.Rip)
-#elif defined(V8_OS_WIN_ARM64)
-#define CONTEXT_PC(context) (context.Pc)
-#endif
-
-#include <windows.h>
 
 // This has to come after windows.h.
 #include <versionhelpers.h>  // For IsWindows8OrGreater().
@@ -46,16 +40,15 @@ class UnwindingWin64Callbacks {
     int iframe = 0;
     while (++iframe < max_frames) {
       uint64_t image_base;
-      PRUNTIME_FUNCTION function_entry = ::RtlLookupFunctionEntry(
-          CONTEXT_PC(context_record), &image_base, nullptr);
+      PRUNTIME_FUNCTION function_entry =
+          ::RtlLookupFunctionEntry(context_record.Rip, &image_base, nullptr);
       if (!function_entry) break;
 
       void* handler_data;
       uint64_t establisher_frame;
-      ::RtlVirtualUnwind(UNW_FLAG_NHANDLER, image_base,
-                         CONTEXT_PC(context_record), function_entry,
-                         &context_record, &handler_data, &establisher_frame,
-                         NULL);
+      ::RtlVirtualUnwind(UNW_FLAG_NHANDLER, image_base, context_record.Rip,
+                         function_entry, &context_record, &handler_data,
+                         &establisher_frame, NULL);
     }
     return iframe;
   }
@@ -122,5 +115,3 @@ UNINITIALIZED_TEST(StackUnwindingWin64) {
 
 #endif  // V8_WIN64_UNWINDING_INFO
 }
-
-#undef CONTEXT_PC
