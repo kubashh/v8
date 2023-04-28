@@ -33,6 +33,24 @@
       "message": "Brendon, this is the stuff I was talking about in your CL (https://chromium-review.googlesource.com/c/v8/v8/+/4480171). We could probably change this around so that on LSan and HWAsan builds we use fat entries and separate the tag and the pointer completely. However, that\u0027d require a bit more work than this, in particular, all paths that load an external pointer would need to be modified to correctly handle fat entries I think. I\u0027m not sure if it\u0027s worth the effort (at this point in time), so we can also just disable the sandbox for HWAsan. Let me know what you think!",
       "revId": "1bbd36734507abae3a3eb529d1ef397e6f28b00f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c99506b_f1224ccd",
+        "filename": "src/sandbox/external-pointer-table.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1545138
+      },
+      "writtenOn": "2023-04-28T17:17:51Z",
+      "side": 1,
+      "message": "Dumped some state from our offline conversation here crbug.com/1440519, but yeah it seems like we would need fat entries if we wanted to get HWAsan working even when the heap sandbox is disabled.",
+      "parentUuid": "5ddb1d26_d68634a4",
+      "revId": "1bbd36734507abae3a3eb529d1ef397e6f28b00f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
