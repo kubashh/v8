@@ -13,7 +13,11 @@ namespace internal {
 // Special tag type used to denote some sentinel member. The semantics of the
 // sentinel is defined by the embedder.
 struct SentinelPointer {
+#if defined(CPPGC_ENABLE_LARGER_CAGE)
+  static constexpr intptr_t kSentinelValue = 0b1000;
+#else   // !defined(CPPGC_ENABLE_LARGER_CAGE)
   static constexpr intptr_t kSentinelValue = 0b10;
+#endif  // !defined(CPPGC_ENABLE_LARGER_CAGE)
   template <typename T>
   operator T*() const {
     return reinterpret_cast<T*>(kSentinelValue);
