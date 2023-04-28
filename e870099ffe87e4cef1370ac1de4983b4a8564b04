@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "e870099ffe87e4cef1370ac1de4983b4a8564b04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2fad3be_8e702056",
+        "filename": "src/heap/evacuation-verifier.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-04-28T13:02:40Z",
+      "side": 1,
+      "message": "super nit: I\u0027d personally remove the newlines here :)",
+      "revId": "e870099ffe87e4cef1370ac1de4983b4a8564b04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
