@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8491bf2_cffb54d5",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1718,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-28T12:31:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c75d51a8_bdb8e79f",
+      "range": {
+        "startLine": 1718,
+        "startChar": 56,
+        "endLine": 1718,
+        "endChar": 68
+      },
+      "revId": "d4fe990d12cb1e78d1531c75475b98b60c23cbbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "276d30db_9a056772",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-04-28T10:57:56Z",
       "side": 1,
       "message": "can skip this set since we\u0027re setting the accumulator to true anyway.",
+      "range": {
+        "startLine": 1761,
+        "startChar": 0,
+        "endLine": 1762,
+        "endChar": 64
+      },
+      "revId": "d4fe990d12cb1e78d1531c75475b98b60c23cbbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b091d978_70174fa0",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1762,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-28T12:31:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "276d30db_9a056772",
       "range": {
         "startLine": 1761,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0aecd47_2a3f0b44",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1764,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-28T12:31:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcef9534_18611388",
+      "range": {
+        "startLine": 1764,
+        "startChar": 8,
+        "endLine": 1764,
+        "endChar": 13
+      },
+      "revId": "d4fe990d12cb1e78d1531c75475b98b60c23cbbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "809ece76_60d89cbc",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-04-28T10:57:56Z",
       "side": 1,
       "message": "forcing tagging here could cause boxing if this is comparison of a Float64 against some constant, we could bail out for non-tagged values here and either do an untagged comparison, or return unconditional false.",
+      "range": {
+        "startLine": 1804,
+        "startChar": 38,
+        "endLine": 1804,
+        "endChar": 45
+      },
+      "revId": "d4fe990d12cb1e78d1531c75475b98b60c23cbbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf8b38bf_edfe7ac1",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-28T12:31:20Z",
+      "side": 1,
+      "message": "Acknowledged. Work for another cl :)",
+      "parentUuid": "809ece76_60d89cbc",
       "range": {
         "startLine": 1804,
         "startChar": 38,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61978dde_b12b49ad",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1832,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-28T12:31:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88b72db8_26217888",
+      "range": {
+        "startLine": 1803,
+        "startChar": 0,
+        "endLine": 1832,
+        "endChar": 22
+      },
+      "revId": "d4fe990d12cb1e78d1531c75475b98b60c23cbbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3998c0df_65b2daf0",
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66cfc7a2_89910889",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1846,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-28T12:31:20Z",
+      "side": 1,
+      "message": "ack, let\u0027s punt for now",
+      "parentUuid": "3998c0df_65b2daf0",
+      "range": {
+        "startLine": 1846,
+        "startChar": 24,
+        "endLine": 1846,
+        "endChar": 42
+      },
+      "revId": "d4fe990d12cb1e78d1531c75475b98b60c23cbbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2aa92643_77c6c25f",
@@ -169,6 +313,30 @@
       "writtenOn": "2023-04-28T10:57:56Z",
       "side": 1,
       "message": "might be worth adding known string types to RootConstant too.",
+      "range": {
+        "startLine": 2558,
+        "startChar": 17,
+        "endLine": 2558,
+        "endChar": 30
+      },
+      "revId": "d4fe990d12cb1e78d1531c75475b98b60c23cbbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a32060a_79edd0e8",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2558,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-28T12:31:20Z",
+      "side": 1,
+      "message": "ack, let\u0027s punt for now",
+      "parentUuid": "2aa92643_77c6c25f",
       "range": {
         "startLine": 2558,
         "startChar": 17,
@@ -220,6 +388,54 @@
         "startChar": 39,
         "endLine": 3057,
         "endChar": 40
+      },
+      "revId": "d4fe990d12cb1e78d1531c75475b98b60c23cbbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ea4cd9a_63b4b33c",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3057,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-28T12:31:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38dd60cc_832202e5",
+      "range": {
+        "startLine": 3057,
+        "startChar": 39,
+        "endLine": 3057,
+        "endChar": 40
+      },
+      "revId": "d4fe990d12cb1e78d1531c75475b98b60c23cbbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f3f5a98_d3262a58",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3057,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-04-28T12:31:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aeeb8846_3134d176",
+      "range": {
+        "startLine": 3057,
+        "startChar": 5,
+        "endLine": 3057,
+        "endChar": 16
       },
       "revId": "d4fe990d12cb1e78d1531c75475b98b60c23cbbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
