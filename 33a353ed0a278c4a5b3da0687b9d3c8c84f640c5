@@ -35,6 +35,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e15f25a_0ff61b9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-28T16:25:14Z",
+      "side": 1,
+      "message": "Thanks for the reviews! Comments addressed; landing.",
+      "revId": "33a353ed0a278c4a5b3da0687b9d3c8c84f640c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2ac270e_7196f00f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-28T16:25:14Z",
+      "side": 1,
+      "message": "Thanks for pointing that out. Added a warning comment.\n\nIt\u0027d be interesting to find a way to generalize this technique to arbitrary builtins; sounds like we\u0027ll have to develop an alternative solution for this detail to make that happen.",
+      "parentUuid": "d557f82d_32185ffd",
+      "revId": "33a353ed0a278c4a5b3da0687b9d3c8c84f640c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87883518_5d05326e",
@@ -58,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6060355_0db1be50",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6611,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-28T16:25:14Z",
+      "side": 1,
+      "message": "Because of this snippet you reviewed the other day: https://chromium-review.googlesource.com/c/v8/v8/+/4474710/comment/7fef6cfb_6555ab96/\n\nAdded an explanatory comment.",
+      "parentUuid": "87883518_5d05326e",
+      "range": {
+        "startLine": 6610,
+        "startChar": 4,
+        "endLine": 6611,
+        "endChar": 58
+      },
+      "revId": "33a353ed0a278c4a5b3da0687b9d3c8c84f640c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81bef778_213ba321",
@@ -71,6 +130,30 @@
       "writtenOn": "2023-04-28T09:26:44Z",
       "side": 1,
       "message": "It might be nice to have another case for `wasmRefType(kWasmStringRef)` as that (to my understanding) should also result in being mapped to a \"well-known built-in\".",
+      "range": {
+        "startLine": 62,
+        "startChar": 26,
+        "endLine": 62,
+        "endChar": 56
+      },
+      "revId": "33a353ed0a278c4a5b3da0687b9d3c8c84f640c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a30f4ce7_3e6408f8",
+        "filename": "test/message/wasm-recognize-imports.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-04-28T16:25:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81bef778_213ba321",
       "range": {
         "startLine": 62,
         "startChar": 26,
