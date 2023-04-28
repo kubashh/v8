@@ -435,7 +435,10 @@ def v8_basic_builder(defaults, **kwargs):
     resultdb_bq_table_prefix = defaults.get("resultdb_bq_table_prefix")
     kwargs["resultdb_settings"] = resultdb.settings(
         enable = True,
-        bq_exports = bq_exports(rdb_export_disabled, resultdb_bq_table_prefix),
+        bq_exports = bq_exports(
+            rdb_export_disabled,
+            resultdb_bq_table_prefix,
+        ) if kwargs["bucket"] == "ci" else None,
     )
 
     luci.builder(**kwargs)
