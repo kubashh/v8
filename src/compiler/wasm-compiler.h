@@ -121,8 +121,15 @@ V8_EXPORT_PRIVATE Handle<Code> CompileCWasmEntry(
 // and manipulated in wasm-compiler.{h,cc} instead of inside the Wasm decoder.
 // (Note that currently, the globals base is immutable, so not cached here.)
 struct WasmInstanceCacheNodes {
-  Node* mem_start = nullptr;
-  Node* mem_size = nullptr;
+  // Cache the memory start and size of the first memory.
+  // TODO(clemensb): Reconsider this for better performance of additional
+  // memories.
+  Node* mem0_start = nullptr;
+  Node* mem0_size = nullptr;
+
+  // For iteration support.
+  static constexpr Node* WasmInstanceCacheNodes::*kFields[] = {
+      &WasmInstanceCacheNodes::mem0_start, &WasmInstanceCacheNodes::mem0_size};
 };
 
 struct WasmLoopInfo {
