@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9bd792f_b62c9415",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 10
+      },
+      "lineNbr": 2008,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-04-28T07:17:40Z",
+      "side": 1,
+      "message": "Maybe add a comment that this is an experiment to validate the new odroids? On the other hand, could we just run a led run to validate they are working? As this might cause the builders to be flaky?",
+      "range": {
+        "startLine": 2008,
+        "startChar": 35,
+        "endLine": 2008,
+        "endChar": 41
+      },
+      "revId": "7825209189983457f439d3922c1d29d13b62b47a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
