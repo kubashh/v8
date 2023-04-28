@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d557f82d_32185ffd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-04-28T14:59:59Z",
+      "side": 1,
+      "message": "Calling a JS-linkage builtin with a Smi instead of a proper `JSFunction` is a bit risky. There are builtins that do use the `target` parameter for various things and do assume it to be a `JSFunction` object. So maybe we should add some words of warning to the code that using this method to call a builtin only works in some circumstances.",
+      "revId": "33a353ed0a278c4a5b3da0687b9d3c8c84f640c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87883518_5d05326e",
