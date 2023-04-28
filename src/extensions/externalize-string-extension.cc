@@ -87,11 +87,15 @@ void ExternalizeStringExtension::Externalize(
   }
   bool result = false;
   Handle<String> string = Utils::OpenHandle(*info[0].As<v8::String>());
-  if (!string->SupportsExternalization()) {
+  const bool externalize_as_one_byte =
+      string->IsOneByteRepresentation() && !force_two_byte;
+  if (!string->SupportsExternalization(
+          externalize_as_one_byte ? v8::String::Encoding::ONE_BYTE_ENCODING
+                                  : v8::String::Encoding::TWO_BYTE_ENCODING)) {
     info.GetIsolate()->ThrowError("string does not support externalization.");
     return;
   }
-  if (string->IsOneByteRepresentation() && !force_two_byte) {
+  if (externalize_as_one_byte) {
     uint8_t* data = new uint8_t[string->length()];
     String::WriteToFlat(*string, data, 0, string->length());
     SimpleOneByteStringResource* resource = new SimpleOneByteStringResource(
