@@ -769,17 +769,8 @@ ValueNode* MaglevGraphBuilder::GetSmiValue(
 ValueNode* MaglevGraphBuilder::GetInternalizedString(
     interpreter::Register reg) {
   ValueNode* node = GetTaggedValue(reg);
-  if (known_node_aspects().GetOrCreateInfoFor(node)->is_internalized_string()) {
-    return node;
-  }
-  if (Constant* constant = node->TryCast<Constant>()) {
-    if (constant->object().IsInternalizedString()) {
-      SetKnownType(constant, NodeType::kInternalizedString);
-      return constant;
-    }
-  }
+  if (EnsureType(node, NodeType::kInternalizedString)) return node;
   node = AddNewNode<CheckedInternalizedString>({node});
-  SetKnownType(node, NodeType::kInternalizedString);
   current_interpreter_frame_.set(reg, node);
   return node;
 }
@@ -1693,66 +1684,21 @@ bool MaglevGraphBuilder::TryBuildBranchFor(
   return true;
 }
 
-template <Operation kOperation>
-ValueNode* MaglevGraphBuilder::BuildInt32CompareNode(ValueNode* left,
-                                                     ValueNode* right) {
-  DCHECK(left->value_representation() == ValueRepresentation::kInt32 &&
-         right->value_representation() == ValueRepresentation::kInt32);
-
-  if (left == right) {
-    switch (kOperation) {
-      case Operation::kEqual:
-      case Operation::kStrictEqual:
-      case Operation::kLessThanOrEqual:
-      case Operation::kGreaterThanOrEqual:
-        return GetRootConstant(RootIndex::kTrueValue);
-      case Operation::kLessThan:
-      case Operation::kGreaterThan:
-        return GetRootConstant(RootIndex::kFalseValue);
-      default:
-        UNREACHABLE();
-    }
+template <Operation kOperation, typename type>
+bool OperationValue(type left, type right) {
+  switch (kOperation) {
+    case Operation::kEqual:
+    case Operation::kStrictEqual:
+      return left == right;
+    case Operation::kLessThan:
+      return left < right;
+    case Operation::kLessThanOrEqual:
+      return left <= right;
+    case Operation::kGreaterThan:
+      return left > right;
+    case Operation::kGreaterThanOrEqual:
+      return left >= right;
   }
-
-  auto try_get_constant = [&](ValueNode* node) -> base::Optional<int32_t> {
-    switch (node->opcode()) {
-      case Opcode::kSmiConstant:
-        return node->Cast<SmiConstant>()->value().value();
-      case Opcode::kInt32Constant:
-        return node->Cast<Int32Constant>()->value();
-      default:
-        return base::nullopt;
-    }
-  };
-  base::Optional<int> left_val = try_get_constant(left);
-  base::Optional<int> right_val = try_get_constant(right);
-  if (left_val.has_value() && right_val.has_value()) {
-    bool result_val;
-    switch (kOperation) {
-      case Operation::kEqual:
-      case Operation::kStrictEqual:
-        result_val = *left_val == *right_val;
-        break;
-      case Operation::kLessThanOrEqual:
-        result_val = *left_val <= *right_val;
-        break;
-      case Operation::kGreaterThanOrEqual:
-        result_val = *left_val >= *right_val;
-        break;
-      case Operation::kLessThan:
-        result_val = *left_val < *right_val;
-        break;
-      case Operation::kGreaterThan:
-        result_val = *left_val > *right_val;
-        break;
-      default:
-        UNREACHABLE();
-    }
-    return GetRootConstant(result_val ? RootIndex::kTrueValue
-                                      : RootIndex::kFalseValue);
-  }
-
-  return AddNewNode<Int32NodeFor<kOperation>>({left, right});
 }
 
 template <Operation kOperation>
@@ -1766,10 +1712,23 @@ void MaglevGraphBuilder::VisitCompareOperation() {
     case CompareOperationHint::kSignedSmall: {
       ValueNode* left = LoadRegisterInt32(0);
       ValueNode* right = GetAccumulatorInt32();
+      if (left == right) {
+        SetAccumulator(
+            GetBooleanConstant(kOperation == Operation::kEqual ||
+                               kOperation == Operation::kStrictEqual));
+        return;
+      }
+      if (left->Is<Int32Constant>() && right->Is<Int32Constant>()) {
+        int left_value = left->Cast<Int32Constant>()->value();
+        int right_value = right->Cast<Int32Constant>()->value();
+        SetAccumulator(GetBooleanConstant(
+            OperationValue<kOperation>(left_value, right_value)));
+        return;
+      }
       if (TryBuildBranchFor<BranchIfInt32Compare>({left, right}, kOperation)) {
         return;
       }
-      SetAccumulator(BuildInt32CompareNode<kOperation>(left, right));
+      SetAccumulator(AddNewNode<Int32NodeFor<kOperation>>({left, right}));
       return;
     }
     case CompareOperationHint::kNumber: {
@@ -1778,6 +1737,14 @@ void MaglevGraphBuilder::VisitCompareOperation() {
       // oddballs with NaN value (e.g. undefined) against themselves.
       ValueNode* left = LoadRegisterFloat64(0);
       ValueNode* right = GetAccumulatorFloat64();
+      if (left->Is<Float64Constant>() && right->Is<Float64Constant>()) {
+        double left_value = left->Cast<Float64Constant>()->value().get_scalar();
+        double right_value =
+            right->Cast<Float64Constant>()->value().get_scalar();
+        SetAccumulator(GetBooleanConstant(
+            OperationValue<kOperation>(left_value, right_value)));
+        return;
+      }
       if (TryBuildBranchFor<BranchIfFloat64Compare>({left, right},
                                                     kOperation)) {
         return;
@@ -1793,11 +1760,12 @@ void MaglevGraphBuilder::VisitCompareOperation() {
         left = right = GetInternalizedString(iterator_.GetRegisterOperand(0));
         current_interpreter_frame_.set(
             interpreter::Register::virtual_accumulator(), left);
-      } else {
-        left = GetInternalizedString(iterator_.GetRegisterOperand(0));
-        right =
-            GetInternalizedString(interpreter::Register::virtual_accumulator());
+        SetAccumulator(GetRootConstant(RootIndex::kTrueValue));
+        break;
       }
+      left = GetInternalizedString(iterator_.GetRegisterOperand(0));
+      right =
+          GetInternalizedString(interpreter::Register::virtual_accumulator());
       if (TryBuildBranchFor<BranchIfReferenceCompare>({left, right},
                                                       kOperation)) {
         return;
@@ -1812,6 +1780,10 @@ void MaglevGraphBuilder::VisitCompareOperation() {
       ValueNode* right = GetAccumulatorTagged();
       BuildCheckSymbol(left);
       BuildCheckSymbol(right);
+      if (left == right) {
+        SetAccumulator(GetRootConstant(RootIndex::kTrueValue));
+        return;
+      }
       if (TryBuildBranchFor<BranchIfReferenceCompare>({left, right},
                                                       kOperation)) {
         return;
@@ -1827,6 +1799,7 @@ void MaglevGraphBuilder::VisitCompareOperation() {
     case CompareOperationHint::kReceiver:
     case CompareOperationHint::kReceiverOrNullOrUndefined:
     case CompareOperationHint::kString:
+      // First handle strict equal comparison with constant.
       if (kOperation == Operation::kStrictEqual) {
         ValueNode* left = LoadRegisterTagged(0);
         ValueNode* right = GetAccumulatorTagged();
@@ -1842,7 +1815,6 @@ void MaglevGraphBuilder::VisitCompareOperation() {
                            : right->TryCast<RootConstant>()) {
           compiler::ObjectRef ref = MakeRef(
               broker(), local_isolate()->root_handle(constant->index()));
-          if (ref.IsSmi()) break;
           type = ref.AsHeapObject().map(broker()).instance_type();
         } else {
           break;
@@ -1856,7 +1828,59 @@ void MaglevGraphBuilder::VisitCompareOperation() {
           return;
         }
       }
-      // Fallback to generic node.
+      // Next try to specialize the operation without taking constant feedback
+      // into account.
+      break;
+  }
+
+  switch (nexus.GetCompareOperationFeedback()) {
+    case CompareOperationHint::kNone:
+    case CompareOperationHint::kSignedSmall:
+    case CompareOperationHint::kNumber:
+    case CompareOperationHint::kInternalizedString:
+    case CompareOperationHint::kSymbol:
+      // Already handled above.
+      UNREACHABLE();
+
+    case CompareOperationHint::kString: {
+      ValueNode* left = LoadRegisterTagged(0);
+      ValueNode* right = GetAccumulatorTagged();
+      BuildCheckString(left);
+      BuildCheckString(right);
+
+      ValueNode* result;
+      switch (kOperation) {
+        case Operation::kEqual:
+        case Operation::kStrictEqual:
+          result = AddNewNode<StringEqual>({left, right});
+          break;
+        case Operation::kLessThan:
+          result = BuildCallBuiltin<Builtin::kStringLessThan>({left, right});
+          break;
+        case Operation::kLessThanOrEqual:
+          result =
+              BuildCallBuiltin<Builtin::kStringLessThanOrEqual>({left, right});
+          break;
+        case Operation::kGreaterThan:
+          result = BuildCallBuiltin<Builtin::kStringGreaterThan>({left, right});
+          break;
+        case Operation::kGreaterThanOrEqual:
+          result = BuildCallBuiltin<Builtin::kStringGreaterThanOrEqual>(
+              {left, right});
+          break;
+      }
+
+      SetAccumulator(result);
+      return;
+    }
+
+    case CompareOperationHint::kAny:
+    case CompareOperationHint::kBigInt64:
+    case CompareOperationHint::kBigInt:
+    case CompareOperationHint::kNumberOrBoolean:
+    case CompareOperationHint::kNumberOrOddball:
+    case CompareOperationHint::kReceiver:
+    case CompareOperationHint::kReceiverOrNullOrUndefined:
       break;
   }
   BuildGenericBinaryOperationNode<kOperation>();
@@ -2518,6 +2542,9 @@ NodeType StaticTypeForNode(ValueNode* node) {
     case Opcode::kConstant: {
       compiler::HeapObjectRef ref = node->Cast<Constant>()->object();
       if (ref.IsString()) {
+        if (ref.IsInternalizedString()) {
+          return NodeType::kInternalizedString;
+        }
         return NodeType::kString;
       } else if (ref.IsSymbol()) {
         return NodeType::kSymbol;

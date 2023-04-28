@@ -1707,8 +1707,6 @@ class MaglevGraphBuilder {
                          Args&&... args);
 
   template <Operation kOperation>
-  ValueNode* BuildInt32CompareNode(ValueNode* left, ValueNode* right);
-  template <Operation kOperation>
   void VisitCompareOperation();
 
   void MergeIntoFrameState(BasicBlock* block, int target);
