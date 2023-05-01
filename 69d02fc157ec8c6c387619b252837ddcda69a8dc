@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07f0b262_9f1622d7",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2399,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2023-05-01T22:48:49Z",
+      "side": 1,
+      "message": "Need to add a similar check here? But how to tell if an {AbstractCode} (either a {Code} or a {BytecodeArray}) has been fully deserialized?",
+      "range": {
+        "startLine": 2399,
+        "startChar": 6,
+        "endLine": 2399,
+        "endChar": 45
+      },
+      "revId": "69d02fc157ec8c6c387619b252837ddcda69a8dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
