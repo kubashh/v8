@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8de6b1ec_b835bd81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-05-01T18:33:02Z",
+      "side": 1,
+      "message": "Hi Anton and Michael,\n\nAfter https://crrev.com/c/4483841 intermittent failures started coming up on our big endain platforms related to GC.\n\nPatching `IsUnmarked` here does fix all the failures. Please let me know if you know of any other places that might need this fix.",
+      "revId": "6fee705dd61cf25e756113b86ae2fb29869a9db7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
