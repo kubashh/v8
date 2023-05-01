@@ -154,9 +154,9 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
     TNode<IntPtrT> cell;
     TNode<IntPtrT> mask;
     GetMarkBit(object, &cell, &mask);
-    TNode<Int32T> mask32 = TruncateIntPtrToInt32(mask);
+    TNode<Int64T> mask64 = ReinterpretCast<Int64T>(mask);
     // Marked only requires checking a single bit here.
-    return Word32Equal(Word32And(Load<Int32T>(cell), mask32), Int32Constant(0));
+    return Word64Equal(Word64And(Load<Int64T>(cell), mask64), Int64Constant(0));
   }
 
   void GetMarkBit(TNode<IntPtrT> object, TNode<IntPtrT>* cell,
