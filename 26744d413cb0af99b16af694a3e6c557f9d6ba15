@@ -16,6 +16,29 @@
       "message": "ptal",
       "revId": "26744d413cb0af99b16af694a3e6c557f9d6ba15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6625a72_f8486193",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-05-02T13:45:22Z",
+      "side": 1,
+      "message": "Is this only filtering stress_concurrent_inlining_attach_code?\nCan/should we do the following instead?\n```\nif (!v8_flags.stress_concurrent_inlining_attach_code) return;\nDCHECK(!has_optimized_code() ||\n         optimized_code().marked_for_deoptimization() ||\n         (CodeKindCanTierUp(optimized_code().kind()) \u0026\u0026\n          optimized_code().kind() \u003c code.kind()));\n```",
+      "range": {
+        "startLine": 351,
+        "startChar": 0,
+        "endLine": 356,
+        "endChar": 3
+      },
+      "revId": "26744d413cb0af99b16af694a3e6c557f9d6ba15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
