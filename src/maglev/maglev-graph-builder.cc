@@ -2605,7 +2605,6 @@ NodeType StaticTypeForNode(compiler::JSHeapBroker* broker,
       return NodeType::kInternalizedString;
     case Opcode::kToObject:
     case Opcode::kCreateEmptyArrayLiteral:
-    case Opcode::kCreateEmptyObjectLiteral:
       return NodeType::kJSReceiver;
     case Opcode::kToName:
       return NodeType::kName;
@@ -6878,9 +6877,7 @@ ValueNode* MaglevGraphBuilder::BuildAllocateFastLiteral(
       object.map.instance_size(), allocation_type);
   AddNewNode<StoreMap>({allocation}, object.map);
   AddNewNode<StoreTaggedFieldNoWriteBarrier>(
-      {allocation,
-       GetConstant(MakeRefAssumeMemoryFence(
-           broker(), local_isolate()->factory()->empty_fixed_array()))},
+      {allocation, GetRootConstant(RootIndex::kEmptyFixedArray)},
       JSObject::kPropertiesOrHashOffset);
   if (object.js_array_length.has_value()) {
     BuildStoreTaggedField(allocation, GetConstant(*object.js_array_length),
@@ -6919,7 +6916,7 @@ ValueNode* MaglevGraphBuilder::BuildAllocateFastLiteral(
     case FastLiteralField::kConstant:
       return GetConstant(value.constant_value);
     case FastLiteralField::kUninitialized:
-      UNREACHABLE();
+      return GetRootConstant(RootIndex::kUndefinedValue);
   }
 }
 
@@ -6972,7 +6969,7 @@ ValueNode* MaglevGraphBuilder::BuildAllocateFastLiteral(
     case FastLiteralFixedArray::kCoW:
       return GetConstant(value.cow_value);
     case FastLiteralFixedArray::kUninitialized:
-      UNREACHABLE();
+      return GetRootConstant(RootIndex::kEmptyFixedArray);
   }
 }
 
@@ -7043,7 +7040,11 @@ void MaglevGraphBuilder::VisitCreateEmptyObjectLiteral() {
       native_context.object_function(broker()).initial_map(broker());
   DCHECK(!map.is_dictionary_map());
   DCHECK(!map.IsInobjectSlackTrackingInProgress());
-  SetAccumulator(AddNewNode<CreateEmptyObjectLiteral>({}, map));
+  SetAccumulator(BuildAllocateFastLiteral(FastLiteralObject(map, zone(), {}),
+                                          AllocationType::kYoung));
+  // TODO(leszeks): Don't eagerly clear the raw allocation, have the next side
+  // effect clear it.
+  ClearCurrentRawAllocation();
 }
 
 void MaglevGraphBuilder::VisitCloneObject() {
