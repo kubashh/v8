@@ -160,6 +160,10 @@ class V8_NODISCARD ParkingConditionVariable final
     USE(scope);
     Wait(mutex);
   }
+  void ParkedWait(const LocalHeap::ParkedWitness& witness, base::Mutex* mutex) {
+    USE(witness);
+    Wait(mutex);
+  }
 
   bool ParkedWaitFor(LocalIsolate* local_isolate, base::Mutex* mutex,
                      const base::TimeDelta& rel_time) V8_WARN_UNUSED_RESULT {
@@ -173,6 +177,11 @@ class V8_NODISCARD ParkingConditionVariable final
   bool ParkedWaitFor(const ParkedScope& scope, base::Mutex* mutex,
                      const base::TimeDelta& rel_time) V8_WARN_UNUSED_RESULT {
     USE(scope);
+    return WaitFor(mutex, rel_time);
+  }
+  bool ParkedWaitFor(const ParkedWitness& witness, base::Mutex* mutex,
+                     const base::TimeDelta& rel_time) V8_WARN_UNUSED_RESULT {
+    USE(witness);
     return WaitFor(mutex, rel_time);
   }
 

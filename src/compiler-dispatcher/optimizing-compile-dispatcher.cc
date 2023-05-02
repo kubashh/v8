@@ -146,11 +146,13 @@ void OptimizingCompileDispatcher::FlushInputQueue() {
 void OptimizingCompileDispatcher::AwaitCompileTasks() {
   {
     AllowGarbageCollection allow_before_parking;
-    ParkedScope parked_scope(isolate_->main_thread_local_isolate());
-    base::MutexGuard lock_guard(&ref_count_mutex_);
-    while (ref_count_ > 0) {
-      ref_count_zero_.ParkedWait(parked_scope, &ref_count_mutex_);
-    }
+    isolate_->main_thread_local_isolate()->ParkAndExecuteCallback(
+        [this](const LocalHeap::ParkedWitness& parked) {
+          base::MutexGuard lock_guard(&ref_count_mutex_);
+          while (ref_count_ > 0) {
+            ref_count_zero_.ParkedWait(parked, &ref_count_mutex_);
+          }
+        });
   }
 
 #ifdef DEBUG

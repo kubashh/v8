@@ -25,6 +25,7 @@ class Heap;
 class LocalHandles;
 class MarkingBarrier;
 class MemoryChunk;
+class ParkedWitness;
 class Safepoint;
 
 // LocalHeap is used by the GC to track all threads with heap access in order to
@@ -184,6 +185,17 @@ class V8_EXPORT_PRIVATE LocalHeap {
 
   // Used to make SetupMainThread() available to unit tests.
   void SetUpMainThreadForTesting();
+
+  template <typename Callback>
+  V8_INLINE void ParkAndExecuteCallback(Callback callback);
+
+  class V8_NODISCARD ParkedWitness {
+   private:
+    explicit ParkedWitness() = default;
+
+    template <typename Callback>
+    friend void LocalHeap::ParkAndExecuteCallback(Callback callback);
+  };
 
  private:
   using ParkedBit = base::BitField8<bool, 0, 1>;
@@ -351,6 +363,14 @@ class V8_EXPORT_PRIVATE LocalHeap {
   friend class ParkedScope;
   friend class UnparkedScope;
 };
+
+template <typename Callback>
+V8_INLINE void LocalHeap::ParkAndExecuteCallback(Callback callback) {
+  heap()->stack().SetMarkerAndCallback([callback]() {
+    ParkedWitness witness;
+    callback(witness);
+  });
+}
 
 }  // namespace internal
 }  // namespace v8

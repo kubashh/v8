@@ -146,6 +146,11 @@ class V8_EXPORT_PRIVATE LocalIsolate final : private HiddenLocalFactory {
     return isolate_->pending_message_address();
   }
 
+  template <typename Callback>
+  V8_INLINE void ParkAndExecuteCallback(Callback callback) {
+    heap_.ParkAndExecuteCallback(callback);
+  }
+
 #ifdef V8_INTL_SUPPORT
   // WARNING: This might be out-of-sync with the main-thread.
   const std::string& DefaultLocale();

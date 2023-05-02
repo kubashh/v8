@@ -154,7 +154,7 @@ class MaglevConcurrentDispatcher::JobTask final : public v8::JobTask {
 
   void Run(JobDelegate* delegate) override {
     LocalIsolate local_isolate(isolate(), ThreadKind::kBackground);
-    DCHECK(local_isolate.heap()->IsParked());
+    UnparkedScope unparked(local_isolate.heap());
 
     while (!incoming_queue()->IsEmpty() && !delegate->ShouldYield()) {
       std::unique_ptr<MaglevCompilationJob> job;

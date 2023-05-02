@@ -374,7 +374,12 @@ void LocalHeap::SleepInSafepoint() {
   CHECK(old_state.IsSafepointRequested());
   CHECK_IMPLIES(old_state.IsCollectionRequested(), is_main_thread());
 
-  heap_->safepoint()->WaitInSafepoint();
+  if (is_main_thread()) {
+    heap()->stack().SetMarkerAndCallback(
+        [this]() { heap_->safepoint()->WaitInSafepoint(); });
+  } else {
+    heap_->safepoint()->WaitInSafepoint();
+  }
 
   base::Optional<IgnoreLocalGCRequests> ignore_gc_requests;
   if (is_main_thread()) ignore_gc_requests.emplace(heap());
