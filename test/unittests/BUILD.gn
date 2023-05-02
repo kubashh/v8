@@ -336,6 +336,7 @@ v8_source_set("v8_unittests_sources") {
     "heap/gc-tracer-unittest.cc",
     "heap/global-handles-unittest.cc",
     "heap/global-safepoint-unittest.cc",
+    "heap/handle-scopes-unittest.cc",
     "heap/heap-controller-unittest.cc",
     "heap/heap-unittest.cc",
     "heap/heap-utils.cc",

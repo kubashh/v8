@@ -13,11 +13,14 @@ namespace v8 {
 namespace internal {
 
 PersistentHandles::PersistentHandles(Isolate* isolate)
+    : PersistentHandles(isolate, HandleScopeUtils::AllocateBlock()) {}
+
+PersistentHandles::PersistentHandles(Isolate* isolate, Address* initial_block)
     : isolate_(isolate),
-      block_next_(nullptr),
-      block_limit_(nullptr),
+      block_top_(initial_block),
       prev_(nullptr),
       next_(nullptr) {
+  AddBlock(initial_block);
   isolate->persistent_handles_list()->Add(this);
 }
 
@@ -26,9 +29,9 @@ PersistentHandles::~PersistentHandles() {
 
   for (Address* block_start : blocks_) {
 #if ENABLE_HANDLE_ZAPPING
-    HandleScope::ZapRange(block_start, block_start + kHandleBlockSize);
+    HandleScopeUtils::ZapRange(block_start, block_start + kHandleBlockSize);
 #endif
-    DeleteArray(block_start);
+    HandleScopeUtils::FreeBlock(block_start);
   }
 }
 
@@ -55,34 +58,34 @@ bool PersistentHandles::Contains(Address* location) {
   if (*it == blocks_.back()) {
     // The last block is a special case because it may have
     // less than block_size_ handles.
-    return location < block_next_;
+    return location < block_top_;
   }
   return location < *it + kHandleBlockSize;
 }
 #endif
 
-void PersistentHandles::AddBlock() {
-  DCHECK_EQ(block_next_, block_limit_);
-
-  Address* block_start = NewArray<Address>(kHandleBlockSize);
-  blocks_.push_back(block_start);
-
-  block_next_ = block_start;
-  block_limit_ = block_start + kHandleBlockSize;
+void PersistentHandles::AddBlock(Address* block) {
+  DCHECK(HandleScopeUtils::MayNeedExtend(block_top_));
+  blocks_.push_back(block);
 
 #ifdef DEBUG
-  ordered_blocks_.insert(block_start);
+  ordered_blocks_.insert(block);
 #endif
 }
 
+void PersistentHandles::AddBlock() {
+  Address* new_block = HandleScopeUtils::AllocateBlock();
+  AddBlock(new_block);
+  block_top_ = new_block;
+}
+
 Address* PersistentHandles::GetHandle(Address value) {
-  if (block_next_ == block_limit_) {
+  Address* result = block_top_++;
+  *result = value;
+  if (V8_UNLIKELY(HandleScopeUtils::MayNeedExtend(block_top_))) {
     AddBlock();
   }
-
-  DCHECK_LT(block_next_, block_limit_);
-  *block_next_ = value;
-  return block_next_++;
+  return result;
 }
 
 void PersistentHandles::Iterate(RootVisitor* visitor) {
@@ -96,9 +99,10 @@ void PersistentHandles::Iterate(RootVisitor* visitor) {
 
   if (!blocks_.empty()) {
     Address* block_start = blocks_.back();
+    DCHECK(!HandleScopeUtils::IsSealed(block_top_));
     visitor->VisitRootPointers(Root::kHandleScope, nullptr,
                                FullObjectSlot(block_start),
-                               FullObjectSlot(block_next_));
+                               FullObjectSlot(block_top_));
   }
 }
 
@@ -134,35 +138,17 @@ PersistentHandlesScope::PersistentHandlesScope(Isolate* isolate)
     : impl_(isolate->handle_scope_implementer()) {
   impl_->BeginDeferredScope();
   HandleScopeData* data = impl_->isolate()->handle_scope_data();
-  Address* new_next = impl_->GetSpareOrNewBlock();
-  Address* new_limit = &new_next[kHandleBlockSize];
-  // Check that at least one HandleScope with at least one Handle in it exists,
-  // see the class description.
   DCHECK(!impl_->blocks()->empty());
-  impl_->blocks()->push_back(new_next);
-
-#ifdef DEBUG
-  prev_level_ = data->level;
-#endif
-  data->level++;
-  first_block_ = new_next;
-  prev_limit_ = data->limit;
-  prev_next_ = data->next;
-  data->next = new_next;
-  data->limit = new_limit;
+  prev_top_ = data->top;
+  data->top = HandleScopeUtils::AddBlock(isolate);
 }
 
-PersistentHandlesScope::~PersistentHandlesScope() {
-  DCHECK(handles_detached_);
-  impl_->isolate()->handle_scope_data()->level--;
-  DCHECK_EQ(impl_->isolate()->handle_scope_data()->level, prev_level_);
-}
+PersistentHandlesScope::~PersistentHandlesScope() { DCHECK(handles_detached_); }
 
 std::unique_ptr<PersistentHandles> PersistentHandlesScope::Detach() {
-  std::unique_ptr<PersistentHandles> ph = impl_->DetachPersistent(first_block_);
+  std::unique_ptr<PersistentHandles> ph = impl_->DetachPersistent();
   HandleScopeData* data = impl_->isolate()->handle_scope_data();
-  data->next = prev_next_;
-  data->limit = prev_limit_;
+  data->top = prev_top_;
 #ifdef DEBUG
   handles_detached_ = true;
 #endif
