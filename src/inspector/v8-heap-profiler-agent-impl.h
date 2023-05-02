@@ -43,10 +43,10 @@ class V8HeapProfilerAgentImpl : public protocol::HeapProfiler::Backend {
 
   Response disable() override;
 
-  Response takeHeapSnapshot(Maybe<bool> reportProgress,
-                            Maybe<bool> treatGlobalObjectsAsRoots,
-                            Maybe<bool> captureNumericValue,
-                            Maybe<bool> exposeInternals) override;
+  void takeHeapSnapshot(
+      Maybe<bool> reportProgress, Maybe<bool> treatGlobalObjectsAsRoots,
+      Maybe<bool> captureNumericValue, Maybe<bool> exposeInternals,
+      std::unique_ptr<TakeHeapSnapshotCallback> callback) override;
 
   Response getObjectByHeapObjectId(
       const String16& heapSnapshotObjectId, Maybe<String16> objectGroup,
@@ -65,9 +65,14 @@ class V8HeapProfilerAgentImpl : public protocol::HeapProfiler::Backend {
       std::unique_ptr<protocol::HeapProfiler::SamplingHeapProfile>*) override;
 
  private:
-  struct AsyncGC;
+  struct AsyncCallbacks;
   class GCTask;
+  class HeapSnapshotTask;
+  struct HeapSnapshotProtocolOptions;
 
+  Response takeHeapSnapshotNow(
+      const HeapSnapshotProtocolOptions& protocolOptions,
+      cppgc::EmbedderStackState stackState);
   void startTrackingHeapObjectsInternal(bool trackAllocations);
   void stopTrackingHeapObjectsInternal();
   void requestHeapStatsUpdate();
@@ -78,7 +83,7 @@ class V8HeapProfilerAgentImpl : public protocol::HeapProfiler::Backend {
   protocol::HeapProfiler::Frontend m_frontend;
   protocol::DictionaryValue* m_state;
   bool m_hasTimer;
-  std::shared_ptr<AsyncGC> m_async_gc;
+  std::shared_ptr<AsyncCallbacks> m_asyncCallbacks;
 };
 
 }  // namespace v8_inspector
