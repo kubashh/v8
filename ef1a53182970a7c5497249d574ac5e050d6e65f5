@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67162c42_1df4cf50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-02T12:31:34Z",
+      "side": 1,
+      "message": "PTAL. This is a pretty boring CL, but let\u0027s get this out of the way before doing the more interesting stuff :)",
+      "revId": "ef1a53182970a7c5497249d574ac5e050d6e65f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
