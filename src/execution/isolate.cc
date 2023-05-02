@@ -3427,8 +3427,6 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator)
   // before it is entered.
   thread_manager_ = new ThreadManager(this);
 
-  handle_scope_data()->Initialize();
-
 #define ISOLATE_INIT_EXECUTE(type, name, initial_value) \
   name##_ = (initial_value);
   ISOLATE_INIT_LIST(ISOLATE_INIT_EXECUTE)
@@ -3644,6 +3642,9 @@ void Isolate::Deinit() {
   // After all concurrent tasks are stopped, we know for sure that stats aren't
   // updated anymore.
   DumpAndResetStats();
+
+  // From here on no more handles are created.
+  handle_scope_implementer()->FreeHandleBlocks();
 
   heap_.TearDown();
 
@@ -4306,6 +4307,7 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   eternal_handles_ = new EternalHandles();
   bootstrapper_ = new Bootstrapper(this);
   handle_scope_implementer_ = new HandleScopeImplementer(this);
+  handle_scope_data()->Initialize(this);
   load_stub_cache_ = new StubCache(this);
   store_stub_cache_ = new StubCache(this);
   materialized_object_store_ = new MaterializedObjectStore(this);

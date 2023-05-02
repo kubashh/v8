@@ -4020,12 +4020,12 @@ TEST(PersistentHandles) {
   v8::HandleScope scope(reinterpret_cast<v8::Isolate*>(isolate));
   HandleScopeData* data = isolate->handle_scope_data();
   Handle<Object> init(ReadOnlyRoots(heap).empty_string(), isolate);
-  while (data->next < data->limit) {
+  Address* handle_block = HandleScopeUtils::BlockStart(data->top);
+  while (handle_block == HandleScopeUtils::BlockStart(data->top)) {
     Handle<Object> obj(ReadOnlyRoots(heap).empty_string(), isolate);
   }
   // An entire block of handles has been filled.
-  // Next handle would require a new block.
-  CHECK(data->next == data->limit);
+  CHECK(HandleScopeUtils::MayNeedExtend(data->top));
 
   PersistentHandlesScope persistent(isolate);
   DummyVisitor visitor;

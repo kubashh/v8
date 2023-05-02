@@ -565,19 +565,9 @@ ExternalReference ExternalReference::old_space_allocation_limit_address(
   return ExternalReference(isolate->heap()->OldSpaceAllocationLimitAddress());
 }
 
-ExternalReference ExternalReference::handle_scope_level_address(
+ExternalReference ExternalReference::handle_scope_top_address(
     Isolate* isolate) {
-  return ExternalReference(HandleScope::current_level_address(isolate));
-}
-
-ExternalReference ExternalReference::handle_scope_next_address(
-    Isolate* isolate) {
-  return ExternalReference(HandleScope::current_next_address(isolate));
-}
-
-ExternalReference ExternalReference::handle_scope_limit_address(
-    Isolate* isolate) {
-  return ExternalReference(HandleScope::current_limit_address(isolate));
+  return ExternalReference(HandleScope::current_top_address(isolate));
 }
 
 ExternalReference ExternalReference::scheduled_exception_address(
