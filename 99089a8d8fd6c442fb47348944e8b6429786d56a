@@ -16,6 +16,29 @@
       "message": "As discussed offline; PTAL :)",
       "revId": "99089a8d8fd6c442fb47348944e8b6429786d56a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "782677ef_0fd3de87",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-02T13:58:43Z",
+      "side": 1,
+      "message": "this is only valid to call in kSpill state, i.e. during and after regalloc -- otherwise this piece of memory refers to `last_uses_next_use_id_`. You probably want to check whether `result_` is allocated first.",
+      "range": {
+        "startLine": 135,
+        "startChar": 12,
+        "endLine": 135,
+        "endChar": 22
+      },
+      "revId": "99089a8d8fd6c442fb47348944e8b6429786d56a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
