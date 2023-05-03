@@ -42,7 +42,11 @@
   #                       runner. So far, it only affects very few tests.
   'test-serialize/TestCheckThatAlwaysFails': [FAIL, ['is_official_build', CRASH]],
   'test-serialize/TestFatal': [FAIL],
+
+  # Tests expected to fail. Test API misuse.
   'test-api/SealHandleScope': [FAIL],
+  # Handles without HandleScopes is only detected in debug builds.
+  'test-api/HandleWithoutHandleScope': [SKIP, ['mode == debug', FAIL]],
 
   # These tests are expected to hit a CHECK (i.e. a FAIL result actually means
   # the test passed).

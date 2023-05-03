@@ -301,7 +301,7 @@ class HandleScopeImplementer {
         spare_(nullptr),
         last_handle_before_deferred_block_(nullptr) {}
 
-  ~HandleScopeImplementer() { DeleteArray(spare_); }
+  ~HandleScopeImplementer() { FreeBlock(spare_); }
 
   HandleScopeImplementer(const HandleScopeImplementer&) = delete;
   HandleScopeImplementer& operator=(const HandleScopeImplementer&) = delete;
@@ -310,7 +310,7 @@ class HandleScopeImplementer {
   static int ArchiveSpacePerThread();
   char* RestoreThread(char* from);
   char* ArchiveThread(char* to);
-  void FreeThreadResources();
+  void FreeThreadResources(bool free_handle_blocks);
 
   // Garbage collection support.
   V8_EXPORT_PRIVATE void Iterate(v8::internal::RootVisitor* v);
@@ -318,7 +318,7 @@ class HandleScopeImplementer {
                                          char* data);
 
   inline internal::Address* GetSpareOrNewBlock();
-  inline void DeleteExtensions(internal::Address* prev_limit);
+  inline void DeleteExtensions(internal::Address* prev_top);
 
   inline void EnterContext(Context context);
   inline void LeaveContext();
@@ -339,10 +339,22 @@ class HandleScopeImplementer {
   inline DetachableVector<Address*>* blocks() { return &blocks_; }
   Isolate* isolate() const { return isolate_; }
 
-  void ReturnBlock(Address* block) {
-    DCHECK_NOT_NULL(block);
-    if (spare_ != nullptr) DeleteArray(spare_);
-    spare_ = block;
+  Address* AllocateBlock() { return HandleScopeUtils::AllocateBlock(); }
+
+  void FreeBlock(Address* block) { HandleScopeUtils::FreeBlock(block); }
+
+  void FreeHandleBlocks() {
+    while (!blocks()->empty()) {
+      FreeBlock(blocks()->back());
+      blocks()->pop_back();
+    }
+    blocks()->free();
+  }
+
+  bool empty() const {
+    return blocks_.size() == 1 &&
+           blocks_.back() == i::HandleScopeUtils::OpenHandleScope(
+                                 isolate_->handle_scope_data()->top);
   }
 
   static const size_t kEnteredContextsOffset;
@@ -358,25 +370,25 @@ class HandleScopeImplementer {
     last_handle_before_deferred_block_ = nullptr;
   }
 
-  void Free() {
-    DCHECK(blocks_.empty());
+  void Free(bool free_handle_blocks) {
+    DCHECK(empty());
+    if (free_handle_blocks) FreeHandleBlocks();
     DCHECK(entered_contexts_.empty());
     DCHECK(is_microtask_context_.empty());
     DCHECK(saved_contexts_.empty());
 
-    blocks_.free();
     entered_contexts_.free();
     is_microtask_context_.free();
     saved_contexts_.free();
     if (spare_ != nullptr) {
-      DeleteArray(spare_);
+      FreeBlock(spare_);
       spare_ = nullptr;
     }
     DCHECK(isolate_->thread_local_top()->CallDepthIsZero());
   }
 
   void BeginDeferredScope();
-  std::unique_ptr<PersistentHandles> DetachPersistent(Address* first_block);
+  std::unique_ptr<PersistentHandles> DetachPersistent();
 
   Isolate* isolate_;
   DetachableVector<Address*> blocks_;
@@ -397,14 +409,12 @@ class HandleScopeImplementer {
   HandleScopeData handle_scope_data_;
 
   void IterateThis(RootVisitor* v);
-  char* RestoreThreadHelper(char* from);
-  char* ArchiveThreadHelper(char* to);
 
   friend class HandleScopeImplementerOffsets;
   friend class PersistentHandlesScope;
 };
 
-const int kHandleBlockSize = v8::internal::KB - 2;  // fit in one page
+const int kHandleBlockSize = HandleScopeUtils::kHandleBlockSize;
 
 void HandleScopeImplementer::SaveContext(Context context) {
   saved_contexts_.push_back(context);
@@ -434,42 +444,33 @@ bool HandleScopeImplementer::LastEnteredContextWas(Context context) {
 
 // If there's a spare block, use it for growing the current scope.
 internal::Address* HandleScopeImplementer::GetSpareOrNewBlock() {
-  internal::Address* block =
-      (spare_ != nullptr) ? spare_
-                          : NewArray<internal::Address>(kHandleBlockSize);
+  internal::Address* block = (spare_ != nullptr) ? spare_ : AllocateBlock();
   spare_ = nullptr;
   return block;
 }
 
-void HandleScopeImplementer::DeleteExtensions(internal::Address* prev_limit) {
+void HandleScopeImplementer::DeleteExtensions(internal::Address* prev_top) {
+  i::Address* prev_block_start = i::HandleScopeUtils::BlockStart(prev_top);
   while (!blocks_.empty()) {
-    internal::Address* block_start = blocks_.back();
-    internal::Address* block_limit = block_start + kHandleBlockSize;
-
-    // SealHandleScope may make the prev_limit to point inside the block.
-    // Cast possibly-unrelated pointers to plain Addres before comparing them
-    // to avoid undefined behavior.
-    if (reinterpret_cast<Address>(block_start) <=
-            reinterpret_cast<Address>(prev_limit) &&
-        reinterpret_cast<Address>(prev_limit) <=
-            reinterpret_cast<Address>(block_limit)) {
+    i::Address* block_start = blocks_.back();
+    if (block_start == prev_block_start) {
 #ifdef ENABLE_HANDLE_ZAPPING
-      internal::HandleScope::ZapRange(prev_limit, block_limit);
+      i::HandleScopeUtils::ZapRange(prev_top, block_start + kHandleBlockSize);
 #endif
       break;
     }
 
     blocks_.pop_back();
 #ifdef ENABLE_HANDLE_ZAPPING
-    internal::HandleScope::ZapRange(block_start, block_limit);
+    i::HandleScopeUtils::ZapRange(block_start, block_start + kHandleBlockSize);
 #endif
     if (spare_ != nullptr) {
-      DeleteArray(spare_);
+      FreeBlock(spare_);
     }
     spare_ = block_start;
   }
-  DCHECK((blocks_.empty() && prev_limit == nullptr) ||
-         (!blocks_.empty() && prev_limit != nullptr));
+  DCHECK((blocks_.empty() && prev_top == nullptr) ||
+         (!blocks_.empty() && prev_top != nullptr));
 }
 
 // This is a wrapper function called from CallApiGetter builtin when profiling

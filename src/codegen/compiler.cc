@@ -1629,7 +1629,7 @@ BackgroundCompileTask::BackgroundCompileTask(
 
   // Get the script out of the outer ParseInfo and turn it into a persistent
   // handle we can transfer to the background thread.
-  persistent_handles_ = std::make_unique<PersistentHandles>(isolate);
+  persistent_handles_ = isolate->NewPersistentHandles();
   input_shared_info_ = persistent_handles_->NewHandle(shared_info);
 }
 
@@ -2011,7 +2011,7 @@ void BackgroundMergeTask::SetUpOnMainThread(Isolate* isolate,
 void BackgroundMergeTask::SetUpOnMainThread(Isolate* isolate,
                                             Handle<Script> cached_script) {
   // Any data sent to the background thread will need to be a persistent handle.
-  persistent_handles_ = std::make_unique<PersistentHandles>(isolate);
+  persistent_handles_ = isolate->NewPersistentHandles();
   state_ = kPendingBackgroundWork;
   cached_script_ = persistent_handles_->NewHandle(*cached_script);
 }

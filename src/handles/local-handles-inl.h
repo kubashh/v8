@@ -21,13 +21,12 @@ V8_INLINE Address* LocalHandleScope::GetHandle(LocalHeap* local_heap,
     return LocalHandleScope::GetMainThreadHandle(local_heap, value);
 
   LocalHandles* handles = local_heap->handles();
-  Address* result = handles->scope_.next;
-  if (result == handles->scope_.limit) {
-    result = handles->AddBlock();
-  }
-  DCHECK_LT(result, handles->scope_.limit);
-  handles->scope_.next++;
+  static_assert(sizeof(Address*) == sizeof(Address));
+  Address* result = handles->scope_.top++;
   *result = value;
+  if (V8_UNLIKELY(HandleScopeUtils::MayNeedExtend(handles->scope_.top))) {
+    handles->scope_.top = handles->AddBlock();
+  }
   return result;
 }
 
@@ -42,17 +41,17 @@ LocalHandleScope::LocalHandleScope(LocalHeap* local_heap) {
   } else {
     LocalHandles* handles = local_heap->handles();
     local_heap_ = local_heap;
-    prev_next_ = handles->scope_.next;
-    prev_limit_ = handles->scope_.limit;
-    handles->scope_.level++;
+    prev_top_ = handles->scope_.top;
+    handles->scope_.top =
+        HandleScopeUtils::OpenHandleScope(handles->scope_.top);
   }
 }
 
 LocalHandleScope::~LocalHandleScope() {
   if (local_heap_->is_main_thread()) {
-    CloseMainThreadScope(local_heap_, prev_next_, prev_limit_);
+    CloseMainThreadScope(local_heap_, prev_top_);
   } else {
-    CloseScope(local_heap_, prev_next_, prev_limit_);
+    CloseScope(local_heap_, prev_top_);
   }
 }
 
@@ -63,44 +62,31 @@ Handle<T> LocalHandleScope::CloseAndEscape(Handle<T> handle_value) {
   // Throw away all handles in the current scope.
   if (local_heap_->is_main_thread()) {
     current = local_heap_->heap()->isolate()->handle_scope_data();
-    CloseMainThreadScope(local_heap_, prev_next_, prev_limit_);
+    CloseMainThreadScope(local_heap_, prev_top_);
   } else {
     current = &local_heap_->handles()->scope_;
-    CloseScope(local_heap_, prev_next_, prev_limit_);
+    CloseScope(local_heap_, prev_top_);
   }
   // Allocate one handle in the parent scope.
-  DCHECK(current->level > current->sealed_level);
+  DCHECK(!HandleScopeUtils::IsSealed(current->top));
   Handle<T> result(value, local_heap_);
   // Reinitialize the current scope (so that it's ready
   // to be used or closed again).
-  prev_next_ = current->next;
-  prev_limit_ = current->limit;
-  current->level++;
+  prev_top_ = current->top;
   return result;
 }
 
-void LocalHandleScope::CloseScope(LocalHeap* local_heap, Address* prev_next,
-                                  Address* prev_limit) {
+void LocalHandleScope::CloseScope(LocalHeap* local_heap, Address* prev_top) {
   LocalHandles* handles = local_heap->handles();
-  Address* old_limit = handles->scope_.limit;
 
-  handles->scope_.next = prev_next;
-  handles->scope_.limit = prev_limit;
-  handles->scope_.level--;
-
-  if (old_limit != handles->scope_.limit) {
+  if (HandleScopeUtils::CanDeleteExtensions(handles->scope_.top, prev_top)) {
     handles->RemoveUnusedBlocks();
-    old_limit = handles->scope_.limit;
   }
 
-#ifdef ENABLE_HANDLE_ZAPPING
-  LocalHandles::ZapRange(handles->scope_.next, old_limit);
-#endif
+  handles->scope_.top = prev_top;
 
-  MSAN_ALLOCATED_UNINITIALIZED_MEMORY(
-      handles->scope_.next,
-      static_cast<size_t>(reinterpret_cast<Address>(old_limit) -
-                          reinterpret_cast<Address>(handles->scope_.next)));
+  Address* limit = HandleScopeUtils::BlockLimit(handles->scope_.top);
+  HandleScopeUtils::UninitializeMemory(handles->scope_.top, limit);
 }
 
 }  // namespace internal
