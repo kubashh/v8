@@ -42,7 +42,7 @@ class V8_EXPORT_PRIVATE Stack final {
   // Word-aligned iteration of the stack. Callee-saved registers are pushed to
   // the stack before iterating pointers. Slot values are passed on to
   // `visitor`.
-  void IteratePointers(StackVisitor* visitor) const;
+  void IteratePointers(StackVisitor* visitor);
 
   // Word-aligned iteration of the stack, starting at the `stack_marker_`. Slot
   // values are passed on to `visitor`. This is intended to be used with
@@ -51,7 +51,7 @@ class V8_EXPORT_PRIVATE Stack final {
   // **Ignores:**
   // - Callee-saved registers.
   // - SafeStack.
-  void IteratePointersUntilMarker(StackVisitor* visitor) const;
+  void IteratePointersUntilMarker(StackVisitor* visitor);
 
   void AddStackSegment(const void* start, const void* top);
   void ClearStackSegments();
@@ -62,13 +62,20 @@ class V8_EXPORT_PRIVATE Stack final {
     stack_marker_ = v8::base::Stack::GetCurrentStackPosition();
   }
 
+  template <typename Callback>
+  V8_NOINLINE void SetMarkerAndCallback(Callback callback);
+
  private:
 #ifdef DEBUG
   static bool IsOnCurrentStack(const void* ptr);
 #endif
 
-  static void IteratePointersImpl(const Stack* stack, StackVisitor* visitor,
+  static void IteratePointersImpl(Stack* stack, void* argument,
                                   const void* stack_end);
+
+  template <typename Callback>
+  static void SetMarkerAndCallbackImpl(Stack* stack, void* argument,
+                                       const void* stack_end);
 
   const void* stack_start_;
 
@@ -83,6 +90,28 @@ class V8_EXPORT_PRIVATE Stack final {
   };
   std::vector<StackSegments> inactive_stacks_;
 };
+
+// Function with architecture-specific implementation:
+// Pushes all callee-saved registers to the stack and invokes the callback,
+// passing the supplied pointers (stack and argument) and the intended stack
+// marker.
+using IterateStackCallback = void (*)(Stack*, void*, const void*);
+extern "C" void PushAllRegistersAndIterateStack(Stack* stack, void* argument,
+                                                IterateStackCallback callback);
+
+template <typename Callback>
+void Stack::SetMarkerAndCallbackImpl(Stack* stack, void* argument,
+                                     const void* stack_end) {
+  stack->stack_marker_ = stack_end;
+  Callback* callback = static_cast<Callback*>(argument);
+  (*callback)();
+}
+
+template <typename Callback>
+V8_NOINLINE void Stack::SetMarkerAndCallback(Callback callback) {
+  PushAllRegistersAndIterateStack(this, static_cast<void*>(&callback),
+                                  &SetMarkerAndCallbackImpl<Callback>);
+}
 
 }  // namespace heap::base
 
