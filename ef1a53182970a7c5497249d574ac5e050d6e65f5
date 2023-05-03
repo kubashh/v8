@@ -174,6 +174,30 @@
       },
       "revId": "ef1a53182970a7c5497249d574ac5e050d6e65f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb7caecd_49dd3951",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-05-03T10:57:39Z",
+      "side": 1,
+      "message": "Ack. There are many places where we use `byte`, and I assume it was introduced on purpose at some point, but I don\u0027t really mind either way.",
+      "parentUuid": "67d73217_a422de4c",
+      "range": {
+        "startLine": 350,
+        "startChar": 50,
+        "endLine": 350,
+        "endChar": 57
+      },
+      "revId": "ef1a53182970a7c5497249d574ac5e050d6e65f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
