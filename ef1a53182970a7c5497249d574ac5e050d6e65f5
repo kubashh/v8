@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5e9da8f7_e2690668",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-03T10:14:01Z",
+      "side": 1,
+      "message": "Ha, good catch. Fixed.",
+      "parentUuid": "42217b78_615642ba",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 15
+      },
+      "revId": "ef1a53182970a7c5497249d574ac5e050d6e65f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "67162c42_1df4cf50",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5302a138_85d859ce",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3202,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-03T10:14:01Z",
+      "side": 1,
+      "message": "Oh, I think I rewrote this before I added `kFields`. Fixed.",
+      "parentUuid": "7dd747a6_6a6d3c0d",
+      "range": {
+        "startLine": 3202,
+        "startChar": 7,
+        "endLine": 3202,
+        "endChar": 64
+      },
+      "revId": "ef1a53182970a7c5497249d574ac5e050d6e65f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "192f5b43_087bed0f",
@@ -94,6 +142,30 @@
       "writtenOn": "2023-05-02T13:30:17Z",
       "side": 1,
       "message": "Why this change?",
+      "range": {
+        "startLine": 350,
+        "startChar": 50,
+        "endLine": 350,
+        "endChar": 57
+      },
+      "revId": "ef1a53182970a7c5497249d574ac5e050d6e65f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67d73217_a422de4c",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-03T10:14:01Z",
+      "side": 1,
+      "message": "`byte` is not a standard C++ type. `uint8_t` is more clear. We currently use a mix of both - might be worth a little cleanup CL to completely remove `byte`.",
+      "parentUuid": "192f5b43_087bed0f",
       "range": {
         "startLine": 350,
         "startChar": 50,
