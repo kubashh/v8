@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de8ae794_38db8397",
+        "filename": "src/compiler/memory-optimizer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-05-03T10:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0db2ca1c_51a1a12c",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 52
+      },
+      "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32b3c7f5_768cca4f",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-04-27T10:42:30Z",
       "side": 1,
       "message": "nit: missing a closing `)` here, and again in lines 37, 40, 41.",
+      "range": {
+        "startLine": 36,
+        "startChar": 75,
+        "endLine": 36,
+        "endChar": 76
+      },
+      "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f9b0be7_65290799",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-05-03T10:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32b3c7f5_768cca4f",
       "range": {
         "startLine": 36,
         "startChar": 75,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b9ba2f2_7383b44b",
+        "filename": "src/compiler/wasm-address-reassociation.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-05-03T10:31:07Z",
+      "side": 1,
+      "message": "Yep, fair enough! I\u0027ve gone with `offset`.",
+      "parentUuid": "fc16816a_528d1dff",
+      "range": {
+        "startLine": 61,
+        "startChar": 7,
+        "endLine": 62,
+        "endChar": 43
+      },
+      "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1b4ba9f_41e55805",
@@ -117,6 +189,30 @@
       "writtenOn": "2023-04-27T10:42:30Z",
       "side": 1,
       "message": "nit: personally, I\u0027d find the resulting code easier to understand if you dropped this wrapper (and `ProtectedLoadRegOffset` and the two corresponding `...Store...` helpers), and exposed `public Node* base() { return base_; }` and `reg_offset()` instead, and let callers use the more general `ProtectedLoad(base, offset, ...)` function. But I don\u0027t feel strongly about it.",
+      "range": {
+        "startLine": 60,
+        "startChar": 8,
+        "endLine": 60,
+        "endChar": 25
+      },
+      "revId": "65114c069bb61046c51f98f1587d5e9abc9a22c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efa6c93e_471c1672",
+        "filename": "test/unittests/compiler/wasm-address-reassociation-unittest.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-05-03T10:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1b4ba9f_41e55805",
       "range": {
         "startLine": 60,
         "startChar": 8,

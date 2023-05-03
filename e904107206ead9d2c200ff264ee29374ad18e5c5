@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15145586_20f8dece",
+        "filename": "BUILD.bazel",
+        "patchSetId": 7
+      },
+      "lineNbr": 2681,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-05-03T10:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "872f7176_d8f5ff36",
+      "range": {
+        "startLine": 2680,
+        "startChar": 8,
+        "endLine": 2681,
+        "endChar": 52
+      },
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8c942bc_c671b40b",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "920b210c_a9e0a557",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 3157,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-05-03T10:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8c942bc_c671b40b",
+      "range": {
+        "startLine": 3157,
+        "startChar": 4,
+        "endLine": 3157,
+        "endChar": 48
+      },
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc7d584c_0a305a1c",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-04-27T10:42:30Z",
       "side": 1,
       "message": "...and this around line 4479.",
+      "range": {
+        "startLine": 4389,
+        "startChar": 2,
+        "endLine": 4389,
+        "endChar": 47
+      },
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6716ef6e_0d86133f",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 4389,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-05-03T10:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc7d584c_0a305a1c",
       "range": {
         "startLine": 4389,
         "startChar": 2,
@@ -194,6 +266,30 @@
       "writtenOn": "2023-04-27T10:42:30Z",
       "side": 1,
       "message": "nit: please move this section up, and don\u0027t use default visibility, i.e. lines 24 - 56 can become part of the `private:` section.",
+      "range": {
+        "startLine": 58,
+        "startChar": 1,
+        "endLine": 58,
+        "endChar": 7
+      },
+      "revId": "e904107206ead9d2c200ff264ee29374ad18e5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "586b506b_ec3e8602",
+        "filename": "src/compiler/wasm-address-reassociation.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-05-03T10:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91c7fe62_d30a47e4",
       "range": {
         "startLine": 58,
         "startChar": 1,
