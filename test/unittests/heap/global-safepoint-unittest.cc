@@ -44,7 +44,7 @@ class InfiniteLooperThread final : public ParkingThread {
 
     sema_ready_->Signal();
     sema_execute_start_->ParkedWait(
-        isolate_wrapper.isolate()->main_thread_local_isolate());
+        isolate_wrapper.isolate()->main_thread_local_isolate(), true);
 
     USE(script->Run(context));
 
@@ -76,7 +76,7 @@ TEST_F(GlobalSafepointTest, Interrupt) {
 
   LocalIsolate* local_isolate = i_main_isolate->main_thread_local_isolate();
   for (int i = 0; i < kThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kThreads; i++) {
     sema_execute_start.Signal();
@@ -99,13 +99,15 @@ TEST_F(GlobalSafepointTest, Interrupt) {
   }
 
   for (int i = 0; i < kThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
-  ParkedScope parked(local_isolate);
-  for (auto& thread : threads) {
-    thread->ParkedJoin(parked);
-  }
+  local_isolate->ExecuteWithTrampoline([local_isolate, &threads]() {
+    ParkedScope parked(local_isolate);
+    for (auto& thread : threads) {
+      thread->ParkedJoin(parked);
+    }
+  });
 }
 
 }  // namespace internal
