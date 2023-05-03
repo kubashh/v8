@@ -23,22 +23,19 @@ void LocalHandleScope::OpenMainThreadScope(LocalHeap* local_heap) {
   Isolate* isolate = local_heap->heap()->isolate();
   HandleScopeData* data = isolate->handle_scope_data();
   local_heap_ = local_heap;
-  prev_next_ = data->next;
-  prev_limit_ = data->limit;
-  data->level++;
+  prev_top_ = data->top;
+  data->top = HandleScopeUtils::OpenHandleScope(data->top);
 }
 
 void LocalHandleScope::CloseMainThreadScope(LocalHeap* local_heap,
-                                            Address* prev_next,
-                                            Address* prev_limit) {
+                                            Address* prev_top) {
   Isolate* isolate = local_heap->heap()->isolate();
-  HandleScope::CloseScope(isolate, prev_next, prev_limit);
+  HandleScope::CloseScope(isolate, prev_top);
 }
 
-LocalHandles::LocalHandles() { scope_.Initialize(); }
+LocalHandles::LocalHandles() { AddBlock(); }
 LocalHandles::~LocalHandles() {
-  scope_.limit = nullptr;
-  RemoveUnusedBlocks();
+  RemoveAllBlocks();
   DCHECK(blocks_.empty());
 }
 
@@ -52,9 +49,9 @@ void LocalHandles::Iterate(RootVisitor* visitor) {
 
   if (!blocks_.empty()) {
     Address* block = blocks_.back();
-    visitor->VisitRootPointers(Root::kHandleScope, nullptr,
-                               FullObjectSlot(block),
-                               FullObjectSlot(scope_.next));
+    visitor->VisitRootPointers(
+        Root::kHandleScope, nullptr, FullObjectSlot(block),
+        FullObjectSlot(HandleScopeUtils::OpenHandleScope(scope_.top)));
   }
 }
 
@@ -67,7 +64,7 @@ bool LocalHandles::Contains(Address* location) {
     // block_size_ handles.
     Address* upper_bound = lower_bound != blocks_.back()
                                ? lower_bound + kHandleBlockSize
-                               : scope_.next;
+                               : scope_.top;
     if (lower_bound <= location && location < upper_bound) {
       return true;
     }
@@ -77,38 +74,46 @@ bool LocalHandles::Contains(Address* location) {
 #endif
 
 Address* LocalHandles::AddBlock() {
-  DCHECK_EQ(scope_.next, scope_.limit);
-  Address* block = NewArray<Address>(kHandleBlockSize);
+  Address* block = HandleScopeUtils::AllocateBlock();
   blocks_.push_back(block);
-  scope_.next = block;
-  scope_.limit = block + kHandleBlockSize;
+  scope_.top = block;
   return block;
 }
 
-void LocalHandles::RemoveUnusedBlocks() {
+void LocalHandles::RemoveAllBlocks() {
   while (!blocks_.empty()) {
     Address* block_start = blocks_.back();
-    Address* block_limit = block_start + kHandleBlockSize;
 
-    if (block_limit == scope_.limit) {
+    blocks_.pop_back();
+
+#ifdef ENABLE_HANDLE_ZAPPING
+    Address* block_limit = block_start + kHandleBlockSize;
+    HandleScopeUtils::ZapRange(block_start, block_limit);
+#endif
+
+    HandleScopeUtils::FreeBlock(block_start);
+  }
+}
+
+void LocalHandles::RemoveUnusedBlocks() {
+  Address* current_block_start = HandleScopeUtils::BlockStart(scope_.top);
+  while (!blocks_.empty()) {
+    Address* block_start = blocks_.back();
+
+    if (block_start == current_block_start) {
       break;
     }
 
     blocks_.pop_back();
 
 #ifdef ENABLE_HANDLE_ZAPPING
-    ZapRange(block_start, block_limit);
+    Address* block_limit = block_start + kHandleBlockSize;
+    HandleScopeUtils::ZapRange(block_start, block_limit);
 #endif
 
-    DeleteArray(block_start);
+    HandleScopeUtils::FreeBlock(block_start);
   }
 }
-
-#ifdef ENABLE_HANDLE_ZAPPING
-void LocalHandles::ZapRange(Address* start, Address* end) {
-  HandleScope::ZapRange(start, end);
-}
-#endif
 
 }  // namespace internal
 }  // namespace v8

@@ -50,9 +50,7 @@ class StatsCounter;
   V(old_space_allocation_top_address, "Heap::OldSpaceAllocationTopAddress")    \
   V(old_space_allocation_limit_address,                                        \
     "Heap::OldSpaceAllocationLimitAddress")                                    \
-  V(handle_scope_level_address, "HandleScope::level")                          \
-  V(handle_scope_next_address, "HandleScope::next")                            \
-  V(handle_scope_limit_address, "HandleScope::limit")                          \
+  V(handle_scope_top_address, "HandleScope::top")                              \
   V(scheduled_exception_address, "Isolate::scheduled_exception")               \
   V(address_of_pending_message, "address_of_pending_message")                  \
   V(promise_hook_flags_address, "Isolate::promise_hook_flags_address()")       \

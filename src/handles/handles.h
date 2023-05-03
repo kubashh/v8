@@ -188,6 +188,76 @@ class Handle final : public HandleBase {
 template <typename T>
 std::ostream& operator<<(std::ostream& os, Handle<T> handle);
 
+// Helper class for logic that is shared across different HandleScope
+// implementations.
+class HandleScopeUtils : public AllStatic {
+ public:
+  static constexpr int kHandleBlockSize = v8::internal::KB * 4;
+  static constexpr int kHandleBlockByteSize =
+      kHandleBlockSize * sizeof(Address);
+  static constexpr int kHandleBlockAlignment = kHandleBlockByteSize;
+  static constexpr Address kHandleBlockAddressMask = kHandleBlockByteSize - 1;
+
+  // Use lsb of the address as an indicator if a handle block is sealed in debug
+  // mode. In release mode all the helper functions for sealed scopes are
+  // no-ops.
+  static constexpr Address kHandleScopeSealedMask = 0x1;
+
+  static Address* AllocateBlock();
+  static void FreeBlock(Address* block);
+  static Address* AddBlock(Isolate* isolate);
+
+#ifdef DEBUG
+  V8_INLINE static Address* SealHandleScope(Address* top) {
+    return reinterpret_cast<Address*>(reinterpret_cast<Address>(top) |
+                                      kHandleScopeSealedMask);
+  }
+  V8_INLINE static Address* OpenHandleScope(Address* top) {
+    return reinterpret_cast<Address*>(reinterpret_cast<Address>(top) &
+                                      ~kHandleScopeSealedMask);
+  }
+  V8_INLINE static bool IsSealed(Address* top) {
+    return (reinterpret_cast<Address>(top) & kHandleScopeSealedMask) != 0;
+  }
+#else
+  V8_INLINE static Address* SealHandleScope(Address* top) { return top; }
+  V8_INLINE static Address* OpenHandleScope(Address* top) { return top; }
+  V8_INLINE static bool IsSealed(Address* top) { return false; }
+#endif
+
+  V8_INLINE static bool MayNeedExtend(Address* top) {
+    return (reinterpret_cast<Address>(top) & kHandleBlockAddressMask) == 0 ||
+           IsSealed(top);
+  }
+
+  V8_INLINE static bool CanDeleteExtensions(Address* top, Address* prev_top) {
+    return (reinterpret_cast<Address>(top) ^
+            reinterpret_cast<Address>(prev_top)) >= kHandleBlockByteSize;
+  }
+
+  V8_INLINE static Address* BlockStart(Address* top) {
+    if (top == nullptr) return nullptr;
+    return reinterpret_cast<Address*>(
+        RoundDown(reinterpret_cast<Address>(OpenHandleScope(top)),
+                  kHandleBlockAlignment));
+  }
+
+  V8_INLINE static Address* BlockLimit(Address* top) {
+    if (top == nullptr) return nullptr;
+    return reinterpret_cast<Address*>(
+        RoundUp(reinterpret_cast<Address>(OpenHandleScope(top)),
+                kHandleBlockAlignment));
+  }
+
+  V8_EXPORT_PRIVATE static void UninitializeMemory(Address* start,
+                                                   Address* end);
+
+#ifdef ENABLE_HANDLE_ZAPPING
+  // Zaps the handles in the half-open interval [start, end).
+  static void ZapRange(Address* start, Address* end);
+#endif
+};
+
 // ----------------------------------------------------------------------------
 // A stack-allocated class that governs a number of local handles.
 // After a handle scope has been created, all local handles will be
@@ -230,9 +300,7 @@ class V8_NODISCARD HandleScope {
   // Deallocates any extensions used by the current scope.
   V8_EXPORT_PRIVATE static void DeleteExtensions(Isolate* isolate);
 
-  static Address current_next_address(Isolate* isolate);
-  static Address current_limit_address(Isolate* isolate);
-  static Address current_level_address(Isolate* isolate);
+  static Address current_top_address(Isolate* isolate);
 
   // Closes the HandleScope (invalidating all handles
   // created in the scope of the HandleScope) and returns
@@ -250,21 +318,14 @@ class V8_NODISCARD HandleScope {
 
  private:
   Isolate* isolate_;
-  Address* prev_next_;
-  Address* prev_limit_;
+  Address* prev_top_;
 
   // Close the handle scope resetting limits to a previous state.
-  static V8_INLINE void CloseScope(Isolate* isolate, Address* prev_next,
-                                   Address* prev_limit);
+  static V8_INLINE void CloseScope(Isolate* isolate, Address* prev_top);
 
   // Extend the handle scope making room for more handles.
   V8_EXPORT_PRIVATE V8_NOINLINE V8_PRESERVE_MOST static Address* Extend(
       Isolate* isolate);
-
-#ifdef ENABLE_HANDLE_ZAPPING
-  // Zaps the handles in the half-open interval [start, end).
-  V8_EXPORT_PRIVATE static void ZapRange(Address* start, Address* end);
-#endif
 
   friend class v8::HandleScope;
   friend class HandleScopeImplementer;
@@ -293,23 +354,18 @@ class V8_NODISCARD SealHandleScope final {
 
  private:
   Isolate* isolate_;
-  Address* prev_limit_;
-  int prev_sealed_level_;
+  Address* prev_top_;
 #endif
 };
 
 struct HandleScopeData final {
-  static constexpr uint32_t kSizeInBytes =
-      2 * kSystemPointerSize + 2 * kInt32Size;
+  static constexpr uint32_t kSizeInBytes = kSystemPointerSize;
 
-  Address* next;
-  Address* limit;
-  int level;
-  int sealed_level;
+  Address* top;
 
-  void Initialize() {
-    next = limit = nullptr;
-    sealed_level = level = 0;
+  void Initialize(Isolate* isolate) {
+    top =
+        HandleScopeUtils::SealHandleScope(HandleScopeUtils::AddBlock(isolate));
   }
 };
 

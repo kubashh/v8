@@ -127,8 +127,7 @@ class V8_EXPORT V8_NODISCARD HandleScope {
   void operator delete[](void*, size_t);
 
   internal::Isolate* i_isolate_;
-  internal::Address* prev_next_;
-  internal::Address* prev_limit_;
+  internal::Address* prev_top_;
 
   // LocalBase<T>::New uses CreateHandle with an Isolate* parameter.
   template <typename T>
@@ -518,8 +517,7 @@ class V8_EXPORT V8_NODISCARD SealHandleScope {
   void operator delete[](void*, size_t);
 
   internal::Isolate* const i_isolate_;
-  internal::Address* prev_limit_;
-  int prev_sealed_level_;
+  internal::Address* prev_top_;
 };
 
 }  // namespace v8
