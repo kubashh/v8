@@ -158,7 +158,7 @@ void ReadOnlySerializer::SerializeReadOnlyRoots() {
   CHECK_NULL(isolate()->thread_manager()->FirstThreadStateInUse());
   // No active or weak handles.
   CHECK_IMPLIES(!allow_active_isolate_for_testing(),
-                isolate()->handle_scope_implementer()->blocks()->empty());
+                isolate()->handle_scope_implementer()->empty());
 
 #if V8_STATIC_ROOTS_BOOL
   // STATIC_ROOTS builds do not iterate the roots for serialization. Instead

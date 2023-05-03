@@ -4580,7 +4580,7 @@ void Builtins::Generate_DoubleToI(MacroAssembler* masm) {
 namespace {
 
 // Calls an API function.  Allocates HandleScope, extracts returned value
-// from handle and propagates exceptions.  Clobbers r12, r15 and caller-saved
+// from handle and propagates exceptions.  Clobbers r12, r15 and caller-save
 // registers.  Restores context.  On return removes
 // *stack_space_operand * kSystemPointerSize or stack_space * kSystemPointerSize
 // (GCed, includes the call JS arguments space and the additional space
@@ -4597,12 +4597,8 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
   using ER = ExternalReference;
 
   Isolate* isolate = masm->isolate();
-  MemOperand next_mem_op = __ ExternalReferenceAsOperand(
-      ER::handle_scope_next_address(isolate), no_reg);
-  MemOperand limit_mem_op = __ ExternalReferenceAsOperand(
-      ER::handle_scope_limit_address(isolate), no_reg);
-  MemOperand level_mem_op = __ ExternalReferenceAsOperand(
-      ER::handle_scope_level_address(isolate), no_reg);
+  MemOperand top_mem_op = __ ExternalReferenceAsOperand(
+      ER::handle_scope_top_address(isolate), no_reg);
 
   Register return_value = rax;
   Register scratch = arg_reg_4;
@@ -4610,30 +4606,30 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
   // Allocate HandleScope in callee-saved registers.
   // We will need to restore the HandleScope after the call to the API function,
   // by allocating it in callee-saved registers it'll be preserved by C code.
-  Register prev_next_address_reg = r12;
-  Register prev_limit_reg = r15;
+  Register prev_top_address_reg = r12;
 
   // C arguments (arg_reg_1/2) are expected to be initialized outside, so this
   // function must not corrupt them. kScratchRegister might be used implicitly
   // by the macro assembler.
   DCHECK(!AreAliased(arg_reg_1, arg_reg_2,  // C args
                      return_value, scratch, kScratchRegister,
-                     prev_next_address_reg, prev_limit_reg));
+                     prev_top_address_reg));
   // function_address and thunk_arg might overlap but this function must not
   // corrupted them until the call is made (i.e. overlap with return_value is
   // fine).
   DCHECK(!AreAliased(function_address,  // incoming parameters
-                     scratch, kScratchRegister, prev_next_address_reg,
-                     prev_limit_reg));
+                     scratch, kScratchRegister, prev_top_address_reg));
   DCHECK(!AreAliased(thunk_arg,  // incoming parameters
-                     scratch, kScratchRegister, prev_next_address_reg,
-                     prev_limit_reg));
+                     scratch, kScratchRegister, prev_top_address_reg));
   {
     ASM_CODE_COMMENT_STRING(masm,
                             "Allocate HandleScope in callee-save registers.");
-    __ movq(prev_next_address_reg, next_mem_op);
-    __ movq(prev_limit_reg, limit_mem_op);
-    __ addl(level_mem_op, Immediate(1));
+    __ movq(prev_top_address_reg, top_mem_op);
+#ifdef DEBUG
+    // Make sure the current scope is not sealed, by clearing the sealed bit.
+    __ andq(top_mem_op, Immediate(static_cast<std::make_signed_t<Address>>(
+                            ~HandleScopeUtils::kHandleScopeSealedMask)));
+#endif
   }
 
   Label profiler_or_side_effects_check_enabled, done_api_call;
@@ -4661,17 +4657,19 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
         masm,
         "No more valid handles (the result handle was the last one)."
         "Restore previous handle scope.");
-    __ subl(level_mem_op, Immediate(1));
-    __ Assert(above_equal, AbortReason::kInvalidHandleScopeLevel);
-    __ movq(next_mem_op, prev_next_address_reg);
-    __ cmpq(prev_limit_reg, limit_mem_op);
-    __ j(not_equal, &delete_allocated_handles);
+    __ movq(scratch, top_mem_op);
+    __ movq(top_mem_op, prev_top_address_reg);
+    // Check if new handle blocks were created by comparing the bits containing
+    // the block base address.
+    __ xorq(scratch, prev_top_address_reg);
+    __ cmpq(scratch, Immediate(HandleScopeUtils::kHandleBlockByteSize));
+    __ j(above_equal, &delete_allocated_handles);
   }
 
   __ RecordComment("Leave the API exit frame.");
   __ bind(&leave_exit_frame);
 
-  Register stack_space_reg = prev_limit_reg;
+  Register stack_space_reg = prev_top_address_reg;
   if (stack_space_operand != nullptr) {
     DCHECK_EQ(stack_space, 0);
     __ movq(stack_space_reg, *stack_space_operand);
@@ -4730,9 +4728,8 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, Register function_address,
     ASM_CODE_COMMENT_STRING(
         masm, "HandleScope limit has changed. Delete allocated extensions.");
     __ bind(&delete_allocated_handles);
-    __ movq(limit_mem_op, prev_limit_reg);
     // Save the return value in a callee-save register.
-    Register saved_result = prev_limit_reg;
+    Register saved_result = prev_top_address_reg;
     __ movq(saved_result, return_value);
     __ LoadAddress(arg_reg_1, ER::isolate_address(isolate));
     __ Call(ER::delete_handle_scope_extensions());
