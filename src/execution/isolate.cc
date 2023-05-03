@@ -3538,8 +3538,10 @@ void Isolate::Deinit() {
 
   if (has_shared_space() && !is_shared_space_isolate()) {
     IgnoreLocalGCRequests ignore_gc_requests(heap());
-    ParkedScope parked_scope(main_thread_local_heap());
-    shared_space_isolate()->global_safepoint()->clients_mutex_.Lock();
+    main_thread_local_heap()->ExecuteWithTrampoline([this]() {
+      ParkedScope parked_scope(main_thread_local_heap());
+      shared_space_isolate()->global_safepoint()->clients_mutex_.Lock();
+    });
   }
 
   DisallowGarbageCollection no_gc;
