@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a50eb81b_00f4e707",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-05-03T12:48:53Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "7e4539d532de0adf88da0bf136835e42db9f4cb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "73ae2362_37bc39ae",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 1
@@ -14,6 +31,30 @@
       "writtenOn": "2023-05-03T10:36:22Z",
       "side": 1,
       "message": "I\u0027ll add the wami tests in a follow-up CL, so far this was excluded but it seems this is now somewhat stable, so it makes sense to adapt it. I guess, we have to join the `source_imm` / `target_imm` heap type with the corresponding null bit of the flags into some kind of `ios.ValueType()` which I didn\u0027t find yet.",
+      "range": {
+        "startLine": 2313,
+        "startChar": 12,
+        "endLine": 2313,
+        "endChar": 48
+      },
+      "revId": "7e4539d532de0adf88da0bf136835e42db9f4cb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53ecec16_885b0d77",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-05-03T12:48:53Z",
+      "side": 1,
+      "message": "Yeah, I think we\u0027ll have to extend the ImmediateObserver interface. Adding a second argument to `HeapType(...)` might also be an option.",
+      "parentUuid": "73ae2362_37bc39ae",
       "range": {
         "startLine": 2313,
         "startChar": 12,
