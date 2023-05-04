@@ -25,6 +25,7 @@ from common_includes import VERSION_FILE
 GERRIT_HOST = 'chromium-review.googlesource.com'
 
 ROLLER_BOT_EMAIL = "v8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com"
+PGO_BOT_EMAIL = "v8-ci-pgo-builder@chops-service-accounts.iam.gserviceaccount.com"
 
 
 def ExtractVersion(include_file_text):
@@ -199,6 +200,27 @@ def main():
   gerrit_util.CreateGerritTag(GERRIT_HOST,
                               urllib.parse.quote_plus(cherry_pick["project"]),
                               version_string, cherry_pick_commit['commit'])
+
+  print("Waiting for message from PGO bot...")
+  pgo_message = None
+  while pgo_message is None:
+    cherry_pick_messages = gerrit_util.CallGerritApi(
+        GERRIT_HOST, 'changes/%s/messages' % cherry_pick_id, reqtype='GET')
+    for message in cherry_pick_messages:
+      author = message.get('author', None)
+      if author is None:
+        continue
+      email = author.get('email', None)
+      if email is None:
+        continue
+      if email == PGO_BOT_EMAIL:
+        pgo_message = message
+        break
+
+    if pgo_message is None:
+      time.sleep(5)
+
+  print("Found PGO bot message:\n---\n%s\n---" % pgo_message['message'])
 
   print("Done.")
 
