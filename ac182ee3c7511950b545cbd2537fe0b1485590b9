@@ -33,6 +33,24 @@
       "message": "Nit: may fail",
       "revId": "ac182ee3c7511950b545cbd2537fe0b1485590b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ed8c332_bc43f806",
+        "filename": "test/inspector/inspector.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-04T17:48:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd9b6588_518a2c90",
+      "revId": "ac182ee3c7511950b545cbd2537fe0b1485590b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
