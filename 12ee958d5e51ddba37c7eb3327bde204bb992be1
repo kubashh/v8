@@ -16,6 +16,29 @@
       "message": "Addressed comments",
       "revId": "12ee958d5e51ddba37c7eb3327bde204bb992be1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6bcf1f4_de7bfe20",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-04T15:57:47Z",
+      "side": 1,
+      "message": "SetAccumulatorInBranch",
+      "range": {
+        "startLine": 1781,
+        "startChar": 2,
+        "endLine": 1781,
+        "endChar": 16
+      },
+      "revId": "12ee958d5e51ddba37c7eb3327bde204bb992be1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
