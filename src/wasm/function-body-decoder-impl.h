@@ -2817,7 +2817,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   V8_INLINE MemoryAccessImmediate
   MakeMemoryAccessImmediate(uint32_t pc_offset, uint32_t max_alignment) {
     return MemoryAccessImmediate(this, this->pc_ + pc_offset, max_alignment,
-                                 this->module_->is_memory64, validate);
+                                 this->enabled_.has_memory64(), validate);
   }
 
 #ifdef DEBUG
