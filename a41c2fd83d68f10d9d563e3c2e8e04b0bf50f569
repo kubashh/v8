@@ -16,6 +16,23 @@
       "message": "The optimization we mentioned yesterday on your small example, PTAL :)",
       "revId": "a41c2fd83d68f10d9d563e3c2e8e04b0bf50f569",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d3c893a_d5235fa8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-04T14:17:02Z",
+      "side": 1,
+      "message": "lgtm, thanks",
+      "revId": "a41c2fd83d68f10d9d563e3c2e8e04b0bf50f569",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
