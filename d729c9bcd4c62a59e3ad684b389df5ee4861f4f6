@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e95be14_72fd566f",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-04T15:56:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2e7d511_28c1e1dc",
+      "range": {
+        "startLine": 1781,
+        "startChar": 2,
+        "endLine": 1781,
+        "endChar": 4
+      },
+      "revId": "d729c9bcd4c62a59e3ad684b389df5ee4861f4f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12812d72_e3819b1f",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-05-04T13:55:23Z",
       "side": 1,
       "message": "as per our previous discussion, should we only do this when `root_index \u003d\u003d RootIndex::kTrue/FalseValue`?",
+      "range": {
+        "startLine": 7626,
+        "startChar": 2,
+        "endLine": 7626,
+        "endChar": 7
+      },
+      "revId": "d729c9bcd4c62a59e3ad684b389df5ee4861f4f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad15ecbc_a9f62108",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7626,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-04T15:56:50Z",
+      "side": 1,
+      "message": "This is what the code above fixes. LogicalNot has a known type Boolean so it\u0027ll automatically consider it unmatched if the type means it\u0027s impossible for it to match.",
+      "parentUuid": "12812d72_e3819b1f",
       "range": {
         "startLine": 7626,
         "startChar": 2,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff2fdc3b_14ea505a",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7653,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-04T15:56:50Z",
+      "side": 1,
+      "message": "nice!",
+      "parentUuid": "96c4ab4a_d8756bd2",
+      "range": {
+        "startLine": 7653,
+        "startChar": 13,
+        "endLine": 7653,
+        "endChar": 17
+      },
+      "revId": "d729c9bcd4c62a59e3ad684b389df5ee4861f4f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bff2abe_91c90592",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-05-04T13:55:23Z",
       "side": 1,
       "message": "I could see this breaking for code like\n```\nfunction foo(x) {\n  if (x !\u003d\u003d true) {\n    print(\"not true\": x);\n  } else {\n    print(\"is true\": x);\n  }\n}\n```\nIt doesn\u0027t currently because we don\u0027t special case comparison against `true` like we do `null` or `undefined`, but that\u0027s one well-meaning optimisation away from being broken.\n\nMaybe we could make this dependent on the node type of the incoming accumulator being known to be Boolean instead?",
+      "range": {
+        "startLine": 7825,
+        "startChar": 37,
+        "endLine": 7825,
+        "endChar": 50
+      },
+      "revId": "d729c9bcd4c62a59e3ad684b389df5ee4861f4f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edfdc3be_2dffa389",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7825,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-04T15:56:50Z",
+      "side": 1,
+      "message": "As discussed offline, I\u0027ll do this in a follow-up.",
+      "parentUuid": "7bff2abe_91c90592",
       "range": {
         "startLine": 7825,
         "startChar": 37,
