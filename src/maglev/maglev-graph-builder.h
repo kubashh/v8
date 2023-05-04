@@ -1160,6 +1160,13 @@ class MaglevGraphBuilder {
                    value->lazy_deopt_info()->IsResultRegister(target));
   }
 
+  void SetAccumulatorInBranch(ValueNode* value) {
+    DCHECK_IMPLIES(value->properties().can_lazy_deopt(),
+                   !IsNodeCreatedForThisBytecode(value));
+    current_interpreter_frame_.set(interpreter::Register::virtual_accumulator(),
+                                   value);
+  }
+
   template <typename NodeT>
   void StoreRegisterPair(
       std::pair<interpreter::Register, interpreter::Register> target,
@@ -1716,12 +1723,16 @@ class MaglevGraphBuilder {
   void MergeIntoInlinedReturnFrameState(BasicBlock* block);
 
   enum JumpType { kJumpIfTrue, kJumpIfFalse };
+  enum class AccumulatorMode { kKeep, kBranchValue, kBooleanValue };
   JumpType NegateJumpType(JumpType jump_type);
   void BuildBranchIfRootConstant(ValueNode* node, JumpType jump_type,
-                                 RootIndex root_index);
-  void BuildBranchIfTrue(ValueNode* node, JumpType jump_type);
-  void BuildBranchIfNull(ValueNode* node, JumpType jump_type);
-  void BuildBranchIfUndefined(ValueNode* node, JumpType jump_type);
+                                 RootIndex root_index, AccumulatorMode mode);
+  void BuildBranchIfTrue(ValueNode* node, JumpType jump_type,
+                         AccumulatorMode mode);
+  void BuildBranchIfNull(ValueNode* node, JumpType jump_type,
+                         AccumulatorMode mode);
+  void BuildBranchIfUndefined(ValueNode* node, JumpType jump_type,
+                              AccumulatorMode mode);
   void BuildBranchIfToBooleanTrue(ValueNode* node, JumpType jump_type);
   ValueNode* BuildToBoolean(ValueNode* node);
   ValueNode* BuildToBooleanLogicalNot(ValueNode* node);

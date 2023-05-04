@@ -1679,17 +1679,6 @@ base::Optional<int> MaglevGraphBuilder::TryFindNextBranch() {
       case interpreter::Bytecode::kJumpIfTrueConstant:
       case interpreter::Bytecode::kJumpIfToBooleanTrue:
       case interpreter::Bytecode::kJumpIfToBooleanTrueConstant:
-        // This jump must kill the accumulator, otherwise we need to materialize
-        // the actual boolean value.
-        if (GetOutLivenessFor(it.current_offset())->AccumulatorIsLive()) {
-          if (v8_flags.trace_maglev_graph_building) {
-            std::cout
-                << "  ! Bailing out of test->branch fusion because accumulator "
-                   "is live"
-                << std::endl;
-          }
-          return {};
-        }
         return {it.current_offset()};
 
       default:
@@ -1789,7 +1778,16 @@ bool MaglevGraphBuilder::TryBuildBranchFor(
       control_inputs, std::forward<Args>(args)..., &jump_targets_[true_offset],
       &jump_targets_[false_offset]);
 
+  if (GetOutLivenessFor(iterator_.current_offset())->AccumulatorIsLive()) {
+    SetAccumulator(GetBooleanConstant((jump_type == kJumpIfTrue) ^ flip));
+  }
+
   MergeIntoFrameState(block, iterator_.GetJumpTargetOffset());
+
+  if (GetOutLivenessFor(iterator_.current_offset())->AccumulatorIsLive()) {
+    SetAccumulator(GetBooleanConstant((jump_type == kJumpIfFalse) ^ flip));
+  }
+
   StartFallthroughBlock(next_offset(), block);
   return true;
 }
@@ -7596,7 +7594,8 @@ MaglevGraphBuilder::JumpType MaglevGraphBuilder::NegateJumpType(
 
 void MaglevGraphBuilder::BuildBranchIfRootConstant(ValueNode* node,
                                                    JumpType jump_type,
-                                                   RootIndex root_index) {
+                                                   RootIndex root_index,
+                                                   AccumulatorMode mode) {
   int fallthrough_offset = next_offset();
   int jump_offset = iterator_.GetJumpTargetOffset();
 
@@ -7609,6 +7608,21 @@ void MaglevGraphBuilder::BuildBranchIfRootConstant(ValueNode* node,
     false_target = &jump_targets_[jump_offset];
   }
 
+  if (root_index != RootIndex::kTrueValue &&
+      root_index != RootIndex::kFalseValue &&
+      CheckType(node, NodeType::kBoolean)) {
+    bool is_jump_taken = jump_type == kJumpIfFalse;
+    if (is_jump_taken) {
+      BasicBlock* block = FinishBlock<Jump>({}, &jump_targets_[jump_offset]);
+      MergeDeadIntoFrameState(fallthrough_offset);
+      MergeIntoFrameState(block, jump_offset);
+    } else {
+      MergeDeadIntoFrameState(jump_offset);
+    }
+    return;
+  }
+
+  JumpType original_jump_type = jump_type;
   while (LogicalNot* logical_not = node->TryCast<LogicalNot>()) {
     // Bypassing logical not(s) on the input and swapping true/false
     // destinations.
@@ -7633,20 +7647,39 @@ void MaglevGraphBuilder::BuildBranchIfRootConstant(ValueNode* node,
   BasicBlock* block = FinishBlock<BranchIfRootConstant>(
       {node}, root_index, true_target, false_target);
 
+  if (mode == AccumulatorMode::kBooleanValue) {
+    SetAccumulatorInBranch(
+        GetBooleanConstant(original_jump_type == kJumpIfTrue));
+  } else if (mode == AccumulatorMode::kBranchValue) {
+    SetAccumulatorInBranch(
+        original_jump_type == kJumpIfTrue ? GetRootConstant(root_index) : node);
+  }
+
   MergeIntoFrameState(block, jump_offset);
+
+  if (mode == AccumulatorMode::kBooleanValue) {
+    SetAccumulatorInBranch(
+        GetBooleanConstant(original_jump_type == kJumpIfFalse));
+  } else if (mode == AccumulatorMode::kBranchValue) {
+    SetAccumulatorInBranch(original_jump_type == kJumpIfFalse
+                               ? GetRootConstant(root_index)
+                               : node);
+  }
+
   StartFallthroughBlock(fallthrough_offset, block);
 }
-void MaglevGraphBuilder::BuildBranchIfTrue(ValueNode* node,
-                                           JumpType jump_type) {
-  BuildBranchIfRootConstant(node, jump_type, RootIndex::kTrueValue);
+void MaglevGraphBuilder::BuildBranchIfTrue(ValueNode* node, JumpType jump_type,
+                                           AccumulatorMode mode) {
+  BuildBranchIfRootConstant(node, jump_type, RootIndex::kTrueValue, mode);
 }
-void MaglevGraphBuilder::BuildBranchIfNull(ValueNode* node,
-                                           JumpType jump_type) {
-  BuildBranchIfRootConstant(node, jump_type, RootIndex::kNullValue);
+void MaglevGraphBuilder::BuildBranchIfNull(ValueNode* node, JumpType jump_type,
+                                           AccumulatorMode mode) {
+  BuildBranchIfRootConstant(node, jump_type, RootIndex::kNullValue, mode);
 }
 void MaglevGraphBuilder::BuildBranchIfUndefined(ValueNode* node,
-                                                JumpType jump_type) {
-  BuildBranchIfRootConstant(node, jump_type, RootIndex::kUndefinedValue);
+                                                JumpType jump_type,
+                                                AccumulatorMode mode) {
+  BuildBranchIfRootConstant(node, jump_type, RootIndex::kUndefinedValue, mode);
 }
 
 BasicBlock* MaglevGraphBuilder::BuildSpecializedBranchIfCompareNode(
@@ -7788,22 +7821,28 @@ void MaglevGraphBuilder::VisitJumpIfToBooleanFalse() {
   BuildBranchIfToBooleanTrue(GetRawAccumulator(), kJumpIfFalse);
 }
 void MaglevGraphBuilder::VisitJumpIfTrue() {
-  BuildBranchIfTrue(GetAccumulatorTagged(), kJumpIfTrue);
+  BuildBranchIfTrue(GetAccumulatorTagged(), kJumpIfTrue,
+                    AccumulatorMode::kBooleanValue);
 }
 void MaglevGraphBuilder::VisitJumpIfFalse() {
-  BuildBranchIfTrue(GetAccumulatorTagged(), kJumpIfFalse);
+  BuildBranchIfTrue(GetAccumulatorTagged(), kJumpIfFalse,
+                    AccumulatorMode::kBooleanValue);
 }
 void MaglevGraphBuilder::VisitJumpIfNull() {
-  BuildBranchIfNull(GetAccumulatorTagged(), kJumpIfTrue);
+  BuildBranchIfNull(GetAccumulatorTagged(), kJumpIfTrue,
+                    AccumulatorMode::kBranchValue);
 }
 void MaglevGraphBuilder::VisitJumpIfNotNull() {
-  BuildBranchIfNull(GetAccumulatorTagged(), kJumpIfFalse);
+  BuildBranchIfNull(GetAccumulatorTagged(), kJumpIfFalse,
+                    AccumulatorMode::kBranchValue);
 }
 void MaglevGraphBuilder::VisitJumpIfUndefined() {
-  BuildBranchIfUndefined(GetAccumulatorTagged(), kJumpIfTrue);
+  BuildBranchIfUndefined(GetAccumulatorTagged(), kJumpIfTrue,
+                         AccumulatorMode::kBranchValue);
 }
 void MaglevGraphBuilder::VisitJumpIfNotUndefined() {
-  BuildBranchIfUndefined(GetAccumulatorTagged(), kJumpIfFalse);
+  BuildBranchIfUndefined(GetAccumulatorTagged(), kJumpIfFalse,
+                         AccumulatorMode::kBranchValue);
 }
 void MaglevGraphBuilder::VisitJumpIfUndefinedOrNull() {
   BasicBlock* block = FinishBlock<BranchIfUndefinedOrNull>(
