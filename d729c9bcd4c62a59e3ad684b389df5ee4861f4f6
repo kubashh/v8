@@ -16,6 +16,98 @@
       "message": "ptal",
       "revId": "d729c9bcd4c62a59e3ad684b389df5ee4861f4f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2e7d511_28c1e1dc",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-04T13:55:23Z",
+      "side": 1,
+      "message": "we don\u0027t strictly need to check this, I think, and it might be cheaper to not look up the liveness here.",
+      "range": {
+        "startLine": 1781,
+        "startChar": 2,
+        "endLine": 1781,
+        "endChar": 4
+      },
+      "revId": "d729c9bcd4c62a59e3ad684b389df5ee4861f4f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12812d72_e3819b1f",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7626,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-04T13:55:23Z",
+      "side": 1,
+      "message": "as per our previous discussion, should we only do this when `root_index \u003d\u003d RootIndex::kTrue/FalseValue`?",
+      "range": {
+        "startLine": 7626,
+        "startChar": 2,
+        "endLine": 7626,
+        "endChar": 7
+      },
+      "revId": "d729c9bcd4c62a59e3ad684b389df5ee4861f4f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96c4ab4a_d8756bd2",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7653,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-04T13:55:23Z",
+      "side": 1,
+      "message": "what if, instead of passing and checking \"accumulator mode\", we check whether `node` is the value in the accumulator?",
+      "range": {
+        "startLine": 7653,
+        "startChar": 13,
+        "endLine": 7653,
+        "endChar": 17
+      },
+      "revId": "d729c9bcd4c62a59e3ad684b389df5ee4861f4f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bff2abe_91c90592",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7825,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-04T13:55:23Z",
+      "side": 1,
+      "message": "I could see this breaking for code like\n```\nfunction foo(x) {\n  if (x !\u003d\u003d true) {\n    print(\"not true\": x);\n  } else {\n    print(\"is true\": x);\n  }\n}\n```\nIt doesn\u0027t currently because we don\u0027t special case comparison against `true` like we do `null` or `undefined`, but that\u0027s one well-meaning optimisation away from being broken.\n\nMaybe we could make this dependent on the node type of the incoming accumulator being known to be Boolean instead?",
+      "range": {
+        "startLine": 7825,
+        "startChar": 37,
+        "endLine": 7825,
+        "endChar": 50
+      },
+      "revId": "d729c9bcd4c62a59e3ad684b389df5ee4861f4f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
