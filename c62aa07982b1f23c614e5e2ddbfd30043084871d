@@ -16,6 +16,24 @@
       "message": "The inspector part looks good to me. I assume that you have tested this in DevTools to make sure the behavior is as expected?\n\nWhat this changes would be that as long as JS is running and not paused, heap snapshot will not be taken. I guess that\u0027s desired behavior? Can we document this in the protocol definition?\n\nI would also like to have Michael take a look. I\u0027m not familiar with the EmbedderStackStateScope and its implications.",
       "revId": "c62aa07982b1f23c614e5e2ddbfd30043084871d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b02a10f_72eed1e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2023-05-04T16:32:42Z",
+      "side": 1,
+      "message": "Thanks, Yang! I\u0027ve moved Michael to reviewer.\n\nYes, I\u0027ve tested this in DevTools and the behavior was as I expected.\n\n\u003e What this changes would be that as long as JS is running and not paused, heap snapshot will not be taken.\n\nIn the linked bug, I said that snapshots can be taken while JS is running, but I was wrong. In the current implementation, the takeHeapSnapshot message is processed on the main thread and does not interrupt JS execution. The message can be processed either when no JS is running, or when at a debug breakpoint (because runMessageLoopOnPause processes messages). So the inability to take a snapshot during execution is nothing new.\n\nHowever, there is a somewhat interesting case I didn\u0027t account for. With the current behavior, if you request a snapshot during execution and then press the pause button to interrupt script execution, the snapshot will be taken immediately upon pausing. With my change (as of patchset 4), that might happen or it might not. The trouble arises from the following series of steps:\n\n1. Process a takeHeapSnapshot message while not at a breakpoint. Queue the task to take the snapshot.\n2. Run some more script, because it was in the task queue ahead of the heap snapshot task.\n3. Use the debugger to pause the script. At this point, the takeHeapSnapshot message has already been processed, so runMessageLoopOnPause doesn\u0027t cause the heap snapshot to happen immediately. The snapshot task will just sit in the queue until after the user allows script to resume and the script execution finishes. The debugger refuses to request another snapshot until the previous one has completed, so there is now no way for the user to collect a snapshot during the breakpoint.\n\nI\u0027ll upload a new patchset with a fix for that problem.",
+      "parentUuid": "2922698e_cac2a06f",
+      "revId": "c62aa07982b1f23c614e5e2ddbfd30043084871d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
