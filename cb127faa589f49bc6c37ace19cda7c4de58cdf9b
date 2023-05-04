@@ -93,6 +93,30 @@
       },
       "revId": "cb127faa589f49bc6c37ace19cda7c4de58cdf9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb0fc412_464510a2",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-05-04T14:01:42Z",
+      "side": 1,
+      "message": "Patchset 4 includes the check for has_line_ends too.",
+      "parentUuid": "98ad1154_548987bf",
+      "range": {
+        "startLine": 1040,
+        "startChar": 0,
+        "endLine": 1042,
+        "endChar": 69
+      },
+      "revId": "cb127faa589f49bc6c37ace19cda7c4de58cdf9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
