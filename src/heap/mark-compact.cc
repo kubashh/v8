@@ -6073,9 +6073,6 @@ void YoungGenerationMarkingJob::ProcessMarkingItems(
       auto& work_item = marking_items_[i];
       if (!work_item.TryAcquire()) break;
       work_item.Process(task);
-      if (ShouldDrainMarkingWorklist()) {
-        task->DrainMarkingWorklist();
-      }
       if (remaining_marking_items_.fetch_sub(1, std::memory_order_relaxed) <=
           1) {
         return;
