@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2922698e_cac2a06f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2023-05-04T08:02:58Z",
+      "side": 1,
+      "message": "The inspector part looks good to me. I assume that you have tested this in DevTools to make sure the behavior is as expected?\n\nWhat this changes would be that as long as JS is running and not paused, heap snapshot will not be taken. I guess that\u0027s desired behavior? Can we document this in the protocol definition?\n\nI would also like to have Michael take a look. I\u0027m not familiar with the EmbedderStackStateScope and its implications.",
+      "revId": "c62aa07982b1f23c614e5e2ddbfd30043084871d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
