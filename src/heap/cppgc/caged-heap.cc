@@ -27,6 +27,10 @@
 #include "src/heap/cppgc/heap-page.h"
 #include "src/heap/cppgc/member-storage.h"
 
+#if defined(CPPGC_ENABLE_LARGER_CAGE)
+#include "src/flags/flags.h"
+#endif  // defined(CPPGC_ENABLE_LARGER_CAGE)
+
 namespace cppgc {
 namespace internal {
 
@@ -136,9 +140,16 @@ CagedHeap::CagedHeap(PageAllocator& platform_allocator)
   const size_t local_data_size_with_padding =
       caged_heap_start - reinterpret_cast<CagedAddress>(cage_start);
 
+#if defined(CPPGC_ENABLE_LARGER_CAGE)
+  const size_t total_heap_size =
+      v8::internal::v8_flags.cppgc_heap_size_gb * kGB;
+#else   // !defined(CPPGC_ENABLE_LARGER_CAGE)
+  const size_t total_heap_size = kCagedHeapReservationSize;
+#endif  // !defined(CPPGC_ENABLE_LARGER_CAGE)
+
   page_bounded_allocator_ = std::make_unique<v8::base::BoundedPageAllocator>(
       &platform_allocator, caged_heap_start,
-      kCagedHeapReservationSize - local_data_size_with_padding, kPageSize,
+      total_heap_size - local_data_size_with_padding, kPageSize,
       v8::base::PageInitializationMode::kAllocatedPagesMustBeZeroInitialized,
       v8::base::PageFreeingMode::kMakeInaccessible);
 

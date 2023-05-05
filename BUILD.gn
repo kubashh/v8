@@ -6344,6 +6344,8 @@ v8_source_set("cppgc_base") {
     ":cppgc_base_config",
   ]
 
+  deps = [ ":v8_flags" ]
+
   public_deps = [
     ":cppgc_headers",
     ":v8_heap_base",
