@@ -135,6 +135,30 @@
       },
       "revId": "075e8de2eb7aa36e2e2b0eba0ad869b63feb210f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4c6177d_f9bc222f",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-05T14:51:29Z",
+      "side": 1,
+      "message": "\u003e Perhaps then I should error if there are multiple new CLs? Patching a recently rolled branch doesn\u0027t make much sense, we almost always patch to unblock a roll, rather than to post-hoc fix a roll.\n\nYes – I think this was the context I have been missing. Thanks for the clarification.\n\n\u003e Perhaps then I should error if there are multiple new CLs?\nSg – maybe add the `--branch` flag to the error message for each new CL, so that a dev can just copy\u0027n\u0027paste the line to run the command again with the preferred branch.",
+      "parentUuid": "5ca3b21b_39ba58b2",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 38
+      },
+      "revId": "075e8de2eb7aa36e2e2b0eba0ad869b63feb210f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
