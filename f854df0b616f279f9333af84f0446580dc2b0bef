@@ -16,6 +16,24 @@
       "message": "Please also look at the new patch set. Context::DeepFreeze was failing because of the new tag object, so I added WasmTagObject to the list of types that are safe to freeze.",
       "revId": "f854df0b616f279f9333af84f0446580dc2b0bef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79cfa3a4_7d7e9331",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-05T14:06:34Z",
+      "side": 1,
+      "message": "LGTM, but this needs api owner approval now.",
+      "parentUuid": "620f18df_4b234a91",
+      "revId": "f854df0b616f279f9333af84f0446580dc2b0bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
