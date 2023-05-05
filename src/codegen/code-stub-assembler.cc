@@ -2069,6 +2069,28 @@ TNode<IntPtrT> CodeStubAssembler::LoadMapInobjectPropertiesStartInWords(
       map, Map::kInobjectPropertiesStartOrConstructorFunctionIndexOffset));
 }
 
+TNode<IntPtrT> CodeStubAssembler::MapUsedInstanceSizeInWords(TNode<Map> map) {
+  TNode<IntPtrT> used_or_unused =
+      ChangeInt32ToIntPtr(LoadMapUsedOrUnusedInstanceSizeInWords(map));
+  TVARIABLE(IntPtrT, result, used_or_unused);
+  Label done(this);
+
+  GotoIf(UintPtrGreaterThanOrEqual(used_or_unused,
+                                   IntPtrConstant(JSObject::kFieldsAdded)),
+         &done);
+  result = LoadMapInstanceSizeInWords(map);
+
+  Goto(&done);
+  BIND(&done);
+
+  return result.value();
+}
+
+TNode<IntPtrT> CodeStubAssembler::MapUsedInObjectProperties(TNode<Map> map) {
+  return IntPtrSub(MapUsedInstanceSizeInWords(map),
+                   LoadMapInobjectPropertiesStartInWords(map));
+}
+
 TNode<IntPtrT> CodeStubAssembler::LoadMapConstructorFunctionIndex(
     TNode<Map> map) {
   // See Map::GetConstructorFunctionIndex() for details.
@@ -3068,6 +3090,19 @@ TNode<Map> CodeStubAssembler::LoadObjectFunctionInitialMap(
   TNode<JSFunction> object_function =
       CAST(LoadContextElement(native_context, Context::OBJECT_FUNCTION_INDEX));
   return CAST(LoadJSFunctionPrototypeOrInitialMap(object_function));
+}
+
+TNode<Map> CodeStubAssembler::LoadCachedMap(TNode<NativeContext> native_context,
+                                            TNode<IntPtrT> number_of_properties,
+                                            Label* runtime) {
+  CSA_DCHECK(this, UintPtrLessThan(number_of_properties,
+                                   IntPtrConstant(JSObject::kMapCacheSize)));
+  TNode<WeakFixedArray> cache =
+      CAST(LoadContextElement(native_context, Context::MAP_CACHE_INDEX));
+  TNode<MaybeObject> value =
+      LoadWeakFixedArrayElement(cache, number_of_properties, 0);
+  TNode<Map> result = CAST(GetHeapObjectAssumeWeak(value, runtime));
+  return result;
 }
 
 TNode<Map> CodeStubAssembler::LoadSlowObjectWithNullPrototypeMap(
@@ -4101,10 +4136,19 @@ void CodeStubAssembler::InitializeJSObjectFromMap(
   }
   if (slack_tracking_mode == kNoSlackTracking) {
     InitializeJSObjectBodyNoSlackTracking(object, map, instance_size);
+  } else if (slack_tracking_mode == kIgnoreSlackTracking) {
+    InitializeJSObjectBodyIgnoreSlackTracking(object, map, instance_size);
   } else {
     DCHECK_EQ(slack_tracking_mode, kWithSlackTracking);
     InitializeJSObjectBodyWithSlackTracking(object, map, instance_size);
   }
+}
+
+void CodeStubAssembler::InitializeJSObjectBodyIgnoreSlackTracking(
+    TNode<HeapObject> object, TNode<Map> map, TNode<IntPtrT> instance_size,
+    int start_offset) {
+  InitializeFieldsWithRoot(object, IntPtrConstant(start_offset), instance_size,
+                           RootIndex::kUndefinedValue);
 }
 
 void CodeStubAssembler::InitializeJSObjectBodyNoSlackTracking(
@@ -4113,8 +4157,8 @@ void CodeStubAssembler::InitializeJSObjectBodyNoSlackTracking(
   static_assert(Map::kNoSlackTracking == 0);
   CSA_DCHECK(this, IsClearWord32<Map::Bits3::ConstructionCounterBits>(
                        LoadMapBitField3(map)));
-  InitializeFieldsWithRoot(object, IntPtrConstant(start_offset), instance_size,
-                           RootIndex::kUndefinedValue);
+  InitializeJSObjectBodyIgnoreSlackTracking(object, map, instance_size,
+                                            start_offset);
 }
 
 void CodeStubAssembler::InitializeJSObjectBodyWithSlackTracking(
