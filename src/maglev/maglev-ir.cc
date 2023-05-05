@@ -1967,7 +1967,12 @@ void CheckInstanceType::GenerateCode(MaglevAssembler* masm,
     Condition is_smi = __ CheckSmi(object);
     __ EmitEagerDeoptIf(is_smi, DeoptimizeReason::kWrongInstanceType, this);
   }
-  __ IsObjectType(object, instance_type());
+  if (first_instance_type_ == last_instance_type_) {
+    __ IsObjectType(object, first_instance_type_);
+  } else {
+    __ CompareInstanceTypeRange(object, first_instance_type_,
+                                last_instance_type_);
+  }
   __ EmitEagerDeoptIf(kNotEqual, DeoptimizeReason::kWrongInstanceType, this);
 }
 
@@ -4652,7 +4657,11 @@ void CheckValueEqualsString::PrintParams(
 
 void CheckInstanceType::PrintParams(std::ostream& os,
                                     MaglevGraphLabeller* graph_labeller) const {
-  os << "(" << instance_type() << ")";
+  os << "(" << first_instance_type_;
+  if (first_instance_type_ != last_instance_type_) {
+    os << " - " << last_instance_type_;
+  }
+  os << ")";
 }
 
 void CheckMapsWithMigration::PrintParams(
