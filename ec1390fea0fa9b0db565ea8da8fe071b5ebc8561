@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f53ebafe_0f10c16e",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-05T08:44:25Z",
+      "side": 1,
+      "message": "we should set `in_peeled_loop_` too, so that the next layer of inlining also sets this flag.\n\nAlso, consider calling it \"allow_loop_peeling\", which takes the flag by default and `!parent-\u003ein_peeled_loop_` in the inlining case.",
+      "range": {
+        "startLine": 308,
+        "startChar": 6,
+        "endLine": 308,
+        "endChar": 31
+      },
+      "revId": "ec1390fea0fa9b0db565ea8da8fe071b5ebc8561",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79f31b05_8c18a304",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7474,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-05T08:44:25Z",
+      "side": 1,
+      "message": "do we need this if we\u0027re also checking `loop_headers_to_peel_`?",
+      "range": {
+        "startLine": 7474,
+        "startChar": 26,
+        "endLine": 7474,
+        "endChar": 51
+      },
+      "revId": "ec1390fea0fa9b0db565ea8da8fe071b5ebc8561",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb73c06_c5b6dee0",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7475,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-05T08:44:25Z",
+      "side": 1,
+      "message": "in fact, do we need to check any of this, given that we know that only innermost loops are peeled?",
+      "range": {
+        "startLine": 7475,
+        "startChar": 6,
+        "endLine": 7475,
+        "endChar": 64
+      },
+      "revId": "ec1390fea0fa9b0db565ea8da8fe071b5ebc8561",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
