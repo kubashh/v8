@@ -569,14 +569,16 @@ class RunnableConfig(TraceConfig):
 
   def GetCommandFlags(self, extra_flags=None):
     suffix = ['--'] + self.test_flags if self.test_flags else []
-    return self.flags + (extra_flags or []) + [self.main] + suffix
+    prefix = []
+    if self.main.endswith('cli.js'):
+      prefix = ['-e', '"var testIterationCount = 1;"']
+    return self.flags + (extra_flags or []) + prefix + [self.main] + suffix
 
-  def GetCommand(self, cmd_prefix, shell_dir, extra_flags=None):
+  def GetCommand(self, cmd_prefix, shell_dir, extra_flags=None, timeout=None):
     # TODO(machenbach): This requires +.exe if run on windows.
     extra_flags = extra_flags or []
     if self.binary != 'd8' and '--prof' in extra_flags:
       logging.info('Profiler supported only on a benchmark run with d8')
-
     if self.process_size:
       cmd_prefix = ['/usr/bin/time', '--format=MaxMemory: %MKB'] + cmd_prefix
     if self.binary.endswith('.py'):
@@ -587,7 +589,7 @@ class RunnableConfig(TraceConfig):
         cmd_prefix=cmd_prefix,
         shell=os.path.join(shell_dir, self.binary),
         args=self.GetCommandFlags(extra_flags=extra_flags),
-        timeout=self.timeout or 60,
+        timeout=timeout or self.timeout or 60,
         handle_sigterm=True)
 
   def ProcessOutput(self, output, result_tracker, count):
@@ -835,7 +837,25 @@ class DesktopPlatform(Platform):
         self.command_prefix += ['-a', ('0x%x' % core)]
       self.command_prefix += ['-e']
 
+  def GetWarmupCommand(self, shell_dir):
+    # TODO test
+    #cmd_prefix = []
+    #if self.binary.endswith('.py'):
+    # Copy cmd_prefix instead of update (+=).
+    #  cmd_prefix = cmd_prefix + [sys.executable]
+    return command.Command(
+        cmd_prefix=[],
+        shell=os.path.join(shell_dir, 'd8'),
+        args=['--allow-natives-syntax', 'warmup.js'],
+        timeout=5,
+        handle_sigterm=True)
+
   def PreExecution(self):
+    # TODO: And secondary?
+    #warmup_cmd = self.GetWarmupCommand(self.shell_dir)
+    #logging.debug('Running command: %s' % warmup_cmd)
+    #output = warmup_cmd.execute()
+    #assert output.exit_code == 0
     pass
 
   def PostExecution(self):
@@ -847,6 +867,11 @@ class DesktopPlatform(Platform):
 
   def _Run(self, runnable, count, secondary=False):
     shell_dir = self.shell_dir_secondary if secondary else self.shell_dir
+
+    warmup_cmd = runnable.GetCommand(self.command_prefix, shell_dir, self.extra_flags)
+    logging.debug('Running command: %s' % warmup_cmd)
+    warmup_cmd.execute()
+
     cmd = runnable.GetCommand(self.command_prefix, shell_dir, self.extra_flags)
     logging.debug('Running command: %s' % cmd)
     output = Output() if self.is_dry_run else cmd.execute()
