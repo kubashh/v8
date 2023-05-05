@@ -3502,6 +3502,9 @@ void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
         break;
       }
       case ObjectLiteral::Property::SPREAD: {
+        // TODO(olivf, chrome:1204540) This can be a magnitude slower than the
+        // Babel translation. Should we compile this to a copying loop in
+        // bytecode?
         RegisterList args = register_allocator()->NewRegisterList(2);
         builder()->MoveRegister(literal, args[0]);
         builder()->SetExpressionPosition(property->value());
