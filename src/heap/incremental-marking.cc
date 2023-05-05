@@ -439,7 +439,7 @@ void IncrementalMarking::FinishBlackAllocation() {
   }
 }
 
-void IncrementalMarking::UpdateMarkingWorklistAfterYoungGenGC() {
+void IncrementalMarking::UpdateMarkingWorklistAfterScavenge() {
   if (!IsMarking()) return;
   DCHECK(!v8_flags.separate_gc_phases);
   DCHECK(IsMajorMarking());
