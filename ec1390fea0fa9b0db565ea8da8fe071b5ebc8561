@@ -229,6 +229,30 @@
       },
       "revId": "ec1390fea0fa9b0db565ea8da8fe071b5ebc8561",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee90addf_a45f7aec",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7475,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-05T09:30:07Z",
+      "side": 1,
+      "message": "Ah yeah, that\u0027s why I had initially added the second flag. I even avoided allocating the bitvector, but it was a little messy so I stopped doing it :) I guess it\u0027s fine to keep the code simple...",
+      "parentUuid": "00a8d1bf_ff41c151",
+      "range": {
+        "startLine": 7475,
+        "startChar": 6,
+        "endLine": 7475,
+        "endChar": 64
+      },
+      "revId": "ec1390fea0fa9b0db565ea8da8fe071b5ebc8561",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
