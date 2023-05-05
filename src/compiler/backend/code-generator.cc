@@ -712,9 +712,11 @@ RpoNumber CodeGenerator::ComputeBranchInfo(BranchInfo* branch,
     return true_rpo;
   }
   FlagsCondition condition = FlagsConditionField::decode(instr->opcode());
-  if (IsNextInAssemblyOrder(true_rpo) || instructions()
-                                             ->InstructionBlockAt(false_rpo)
-                                             ->IsLoopHeaderInAssemblyOrder()) {
+  if (IsNextInAssemblyOrder(true_rpo) ||
+      instructions()
+          ->InstructionBlockAt(false_rpo)
+          ->IsLoopHeaderInAssemblyOrder() ||
+      instructions()->InstructionBlockAt(true_rpo)->IsDeferred()) {
     // true block is next, can fall through if condition negated.
     // false block is loop header, can save one jump if condition negated.
     std::swap(true_rpo, false_rpo);
