@@ -205,6 +205,30 @@
       },
       "revId": "ec1390fea0fa9b0db565ea8da8fe071b5ebc8561",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00a8d1bf_ff41c151",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7475,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-05T09:22:13Z",
+      "side": 1,
+      "message": "what I meant was, we can avoid the bitvector lookup if we have two distinct flags. Your call.",
+      "parentUuid": "714de97b_42a59994",
+      "range": {
+        "startLine": 7475,
+        "startChar": 6,
+        "endLine": 7475,
+        "endChar": 64
+      },
+      "revId": "ec1390fea0fa9b0db565ea8da8fe071b5ebc8561",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
