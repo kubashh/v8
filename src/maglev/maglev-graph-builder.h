@@ -1748,7 +1748,8 @@ class MaglevGraphBuilder {
     MemsetUint32(predecessors_, 1, array_length);
 
     // We count jumps from peeled loops to outside of the loop twice.
-    bool do_loop_peeling = v8_flags.maglev_loop_peeling;
+    bool do_loop_peeling =
+        v8_flags.maglev_loop_peeling && !inlined_into_peeled_loop_;
     bool is_loop_peeling_iteration = false;
     base::Optional<int> peeled_loop_end;
     interpreter::BytecodeArrayIterator iterator(bytecode().object());
@@ -1863,6 +1864,8 @@ class MaglevGraphBuilder {
   uint32_t* predecessors_;
 
   bool in_peeled_iteration_ = false;
+  bool in_peeled_loop_ = false;
+  bool inlined_into_peeled_loop_;
   // When processing the peeled iteration of a loop, we need to reset the
   // decremented predecessor counts inside of the loop before processing the
   // body again. For this, we record offsets where we decremented the
