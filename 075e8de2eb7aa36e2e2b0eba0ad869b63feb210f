@@ -63,6 +63,30 @@
       },
       "revId": "075e8de2eb7aa36e2e2b0eba0ad869b63feb210f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35dc5868_f53d7d38",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-05T14:22:17Z",
+      "side": 1,
+      "message": "Is `gerrit_util.CherryPick` patching a CL? My understanding is that this script creates a new cherry-picked CL targeting the identified branch only.\n\nIf the script is only used to unblock roll CLs which cannot land, this makes sense. If we accept `new` and `merged` here, we update the most recently rolled branch, independent of being landed already?\n\nI am also wondering if a prompt could make sense to confirm that the dev really wanted to target this branch. It might happen that we have the most recent roll 11.5.49 (status new), and a newer cherry-pick on 11.5.40.1 (status new). The dev might plan to target 11.5.49, while he actually creates a cherry-pick on branch 11.5.40.",
+      "parentUuid": "a9ef23a8_fb943f99",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 38
+      },
+      "revId": "075e8de2eb7aa36e2e2b0eba0ad869b63feb210f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
