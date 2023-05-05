@@ -39,6 +39,30 @@
       },
       "revId": "075e8de2eb7aa36e2e2b0eba0ad869b63feb210f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9ef23a8_fb943f99",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-05T14:07:06Z",
+      "side": 1,
+      "message": "Because I want to avoid trying to patch abandoned or merged CLs. Filtering in the query could work though -- the thinking here was that I first pick the latest CL, and only then check whether it was actually merged or not.",
+      "parentUuid": "8ac4cd5d_7226a74f",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 38
+      },
+      "revId": "075e8de2eb7aa36e2e2b0eba0ad869b63feb210f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
