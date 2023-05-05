@@ -1862,7 +1862,7 @@ class MaglevGraphBuilder {
   SourcePositionTableIterator source_position_iterator_;
   uint32_t* predecessors_;
 
-  bool in_peeled_iteration_ = false;
+  bool in_peeled_iteration_;
   // When processing the peeled iteration of a loop, we need to reset the
   // decremented predecessor counts inside of the loop before processing the
   // body again. For this, we record offsets where we decremented the
