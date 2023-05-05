@@ -16,6 +16,52 @@
       "message": "Alex, could you take over this review?",
       "revId": "134b8416692e103f813dad32b4e9abd311e97fb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "101a82f5_1cee83f4",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-05T10:08:15Z",
+      "side": 1,
+      "message": "We don\u0027t guarantee that the message will always be posted, or we might add a new feature in the future to post other types of comments as well (e.g. errors in case of PGO generation failures), even without having PGO profiles available. The main purpose of this comment is to simplify debugging.\n\nA more reliable approach is listening to the `\u003cversion\u003e-pgo` tag (e.g. https://chromium.googlesource.com/v8/v8/+/refs/tags/11.5.58-pgo). We use it in our rolling pipeline to ensure that all conditions are met before rolling into chromium.\n\nThe tag is set just before we add the comment to the CL.",
+      "range": {
+        "startLine": 204,
+        "startChar": 2,
+        "endLine": 204,
+        "endChar": 46
+      },
+      "revId": "134b8416692e103f813dad32b4e9abd311e97fb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4018b59_528ed10f",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-05T10:08:15Z",
+      "side": 1,
+      "message": "nit: Maybe add a note that this takes 15 to 20 minutes. With this piece of data, you might also show an indicative progress bar here.",
+      "range": {
+        "startLine": 221,
+        "startChar": 6,
+        "endLine": 221,
+        "endChar": 19
+      },
+      "revId": "134b8416692e103f813dad32b4e9abd311e97fb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
