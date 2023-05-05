@@ -1645,6 +1645,12 @@ struct ConstantOp : FixedArityOperationT<0, ConstantOp> {
   }
 };
 
+enum class AccessFlag : uint8_t {
+  kHeap,
+  kOffHeap,
+};
+using AccessFlags = base::Flags<AccessFlag>;
+
 // Load `loaded_rep` from: base + offset + index * 2^element_size_log2.
 // For Kind::tagged_base: subtract kHeapObjectTag,
 //                        `base` has to be the object start.
@@ -1682,6 +1688,7 @@ struct LoadOp : OperationT<LoadOp> {
   Kind kind;
   MemoryRepresentation loaded_rep;
   RegisterRepresentation result_rep;
+  AccessFlags access_flags;
   uint8_t element_size_log2;  // multiply index with 2^element_size_log2
   int32_t offset;             // add offset to scaled index
 
@@ -1757,8 +1764,10 @@ struct StoreOp : OperationT<StoreOp> {
   Kind kind;
   MemoryRepresentation stored_rep;
   WriteBarrierKind write_barrier;
+  //  AccessFlags access_flags;
   uint8_t element_size_log2;  // multiply index with 2^element_size_log2
   int32_t offset;             // add offset to scaled index
+  bool maybe_initializing_or_transitioning;
 
   OpProperties Properties() const {
     return kind.with_trap_handler ? OpProperties::WritingAndCanAbort()
@@ -1774,13 +1783,16 @@ struct StoreOp : OperationT<StoreOp> {
 
   StoreOp(OpIndex base, OpIndex index, OpIndex value, Kind kind,
           MemoryRepresentation stored_rep, WriteBarrierKind write_barrier,
-          int32_t offset, uint8_t element_size_log2)
+          int32_t offset, uint8_t element_size_log2,
+          bool maybe_initializing_or_transitioning)
       : Base(2 + index.valid()),
         kind(kind),
         stored_rep(stored_rep),
         write_barrier(write_barrier),
         element_size_log2(element_size_log2),
-        offset(offset) {
+        offset(offset),
+        maybe_initializing_or_transitioning(
+            maybe_initializing_or_transitioning) {
     input(0) = base;
     input(1) = value;
     if (index.valid()) {
@@ -1806,16 +1818,19 @@ struct StoreOp : OperationT<StoreOp> {
   static StoreOp& New(Graph* graph, OpIndex base, OpIndex index, OpIndex value,
                       Kind kind, MemoryRepresentation stored_rep,
                       WriteBarrierKind write_barrier, int32_t offset,
-                      uint8_t element_size_log2) {
+                      uint8_t element_size_log2,
+                      bool maybe_initializing_or_transitioning) {
     return Base::New(graph, 2 + index.valid(), base, index, value, kind,
-                     stored_rep, write_barrier, offset, element_size_log2);
+                     stored_rep, write_barrier, offset, element_size_log2,
+                     maybe_initializing_or_transitioning);
   }
 
   void PrintInputs(std::ostream& os, const std::string& op_index_prefix) const;
   void PrintOptions(std::ostream& os) const;
   auto options() const {
-    return std::tuple{kind, stored_rep, write_barrier, offset,
-                      element_size_log2};
+    return std::tuple{
+        kind,   stored_rep,        write_barrier,
+        offset, element_size_log2, maybe_initializing_or_transitioning};
   }
 };
 

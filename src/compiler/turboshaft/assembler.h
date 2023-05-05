@@ -22,6 +22,7 @@
 #include "src/compiler/common-operator.h"
 #include "src/compiler/globals.h"
 #include "src/compiler/simplified-operator.h"
+#include "src/compiler/turboshaft/access.h"
 #include "src/compiler/turboshaft/builtin-call-descriptors.h"
 #include "src/compiler/turboshaft/graph.h"
 #include "src/compiler/turboshaft/operation-matching.h"
@@ -395,6 +396,35 @@ class LoopLabel : public LabelBase<true, Ts...> {
 };
 
 Handle<Code> BuiltinCodeHandle(Builtin builtin, Isolate* isolate);
+
+template <typename Assembler>
+class AssemblerOpInterface;
+
+template <typename T>
+class Uninitialized {
+  static_assert(std::is_base_of_v<HeapObject, T>);
+
+ public:
+  explicit Uninitialized(V<T> object) : object_(object) {}
+
+ private:
+  template <typename Assembler>
+  friend class AssemblerOpInterface;
+
+  V<T> object() const {
+    DCHECK(object_.has_value());
+    return *object_;
+  }
+
+  V<T> ReleaseObject() {
+    DCHECK(object_.has_value());
+    auto temp = *object_;
+    object_.reset();
+    return temp;
+  }
+
+  base::Optional<V<T>> object_;
+};
 
 // Forward declarations
 template <class Assembler>
@@ -1508,19 +1538,31 @@ class AssemblerOpInterface {
 
   void Store(OpIndex base, OpIndex index, OpIndex value, StoreOp::Kind kind,
              MemoryRepresentation stored_rep, WriteBarrierKind write_barrier,
-             int32_t offset = 0, uint8_t element_size_log2 = 0) {
+             int32_t offset = 0, uint8_t element_size_log2 = 0,
+             bool maybe_initializing_or_transitioning = false) {
     if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
       return;
     }
     stack().ReduceStore(base, index, value, kind, stored_rep, write_barrier,
-                        offset, element_size_log2);
+                        offset, element_size_log2,
+                        maybe_initializing_or_transitioning);
   }
   void Store(OpIndex base, OpIndex value, StoreOp::Kind kind,
              MemoryRepresentation stored_rep, WriteBarrierKind write_barrier,
-             int32_t offset = 0) {
+             int32_t offset = 0,
+             bool maybe_initializing_or_transitioning = false) {
     Store(base, OpIndex::Invalid(), value, kind, stored_rep, write_barrier,
-          offset);
+          offset, 0, maybe_initializing_or_transitioning);
   }
+
+  template <typename T>
+  void Initialize(Uninitialized<T>& object, OpIndex value,
+                  MemoryRepresentation stored_rep, int32_t offset = 0) {
+    return Store(object.object(), value,
+                 StoreOp::Kind::Aligned(BaseTaggedness::kTaggedBase),
+                 stored_rep, WriteBarrierKind::kNoWriteBarrier, offset, true);
+  }
+
   void StoreOffHeap(OpIndex address, OpIndex value, MemoryRepresentation rep,
                     int32_t offset = 0) {
     Store(address, value, StoreOp::Kind::RawAligned(), rep,
@@ -1573,16 +1615,59 @@ class AssemblerOpInterface {
     return value;
   }
 
+  template <typename Object, typename Field>
+  V<Field> LoadFieldT(V<Object> heap_object,
+                      const TSFieldAccess<Object, Field>& field) {
+    MemoryRepresentation memory_rep = field.memory_rep;
+#ifdef V8_ENABLE_SANDBOX
+    if (field.is_sandboxed_external) {
+      // Fields for sandboxed external pointer contain a 32-bit handle, not a
+      // 64-bit raw pointer.
+      memory_rep = MemoryRepresentation::Uint32();
+    }
+#endif  // V8_ENABLE_SANDBOX
+    V<Field> value =
+        Load(heap_object, LoadOp::Kind::Aligned(BaseTaggedness::kTaggedBase),
+             memory_rep, field.offset);
+#ifdef V8_ENABLE_SANDBOX
+    if (field.is_sandboxed_external) {
+      value = DecodeExternalPointer(value, field.external_pointer_tag);
+    }
+    if (field.is_bounded_size_access) {
+      DCHECK(!field.is_sandboxed_external);
+      value = ShiftRightLogical(value, kBoundedSizeShift,
+                                WordRepresentation::PointerSized());
+    }
+#endif  // V8_ENABLE_SANDBOX
+    return value;
+  }
+
+  TSAccessBuilder access_;
+
   // Helpers to read the most common fields.
+  // TODO(nicohartmann@): Strengthen this to `V<HeapObject>`.
   V<Map> LoadMapField(V<Object> object) {
-    return LoadField<Map>(object, AccessBuilder::ForMap());
+    return LoadFieldT(V<HeapObject>::Cast(object), access_.HeapObject_Map());
   }
   V<Word32> LoadInstanceTypeField(V<Map> map) {
-    return LoadField<Word32>(map, AccessBuilder::ForMapInstanceType());
+    return LoadFieldT(map, access_.Map_InstanceType());
   }
 
   template <typename Base>
   void StoreField(V<Base> object, const FieldAccess& access, V<Any> value) {
+    StoreFieldImpl(object, access, value,
+                   access.maybe_initializing_or_transitioning_store);
+  }
+
+  template <typename T>
+  void InitializeField(Uninitialized<T>& object, const FieldAccess& access,
+                       V<Any> value) {
+    StoreFieldImpl(object.object(), access, value, true);
+  }
+
+  template <typename Base>
+  void StoreFieldImpl(V<Base> object, const FieldAccess& access, V<Any> value,
+                      bool maybe_initializing_or_transitioning) {
     if constexpr (std::is_base_of_v<Object, Base>) {
       DCHECK_EQ(access.base_is_tagged, BaseTaggedness::kTaggedBase);
     } else {
@@ -1612,7 +1697,8 @@ class AssemblerOpInterface {
     }
     MemoryRepresentation rep =
         MemoryRepresentation::FromMachineType(machine_type);
-    Store(object, value, kind, rep, access.write_barrier_kind, access.offset);
+    Store(object, value, kind, rep, access.write_barrier_kind, access.offset,
+          maybe_initializing_or_transitioning);
   }
 
   template <typename T = Any, typename Base>
@@ -1647,13 +1733,25 @@ class AssemblerOpInterface {
           access.header_size, rep.SizeInBytesLog2());
   }
 
-  V<HeapObject> Allocate(
+  template <typename T = HeapObject>
+  Uninitialized<T> Allocate(
       ConstOrV<WordPtr> size, AllocationType type,
       AllowLargeObjects allow_large_objects = AllowLargeObjects::kFalse) {
+    static_assert(std::is_base_of_v<HeapObject, T>);
+    DCHECK(!in_object_initialization_);
+    in_object_initialization_ = true;
     if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
-      return OpIndex::Invalid();
+      return Uninitialized<T>(OpIndex::Invalid());
     }
-    return stack().ReduceAllocate(resolve(size), type, allow_large_objects);
+    return Uninitialized<T>{
+        stack().ReduceAllocate(resolve(size), type, allow_large_objects)};
+  }
+
+  template <typename T>
+  V<T> FinishInitialization(Uninitialized<T>&& uninitialized) {
+    DCHECK(in_object_initialization_);
+    in_object_initialization_ = false;
+    return uninitialized.ReleaseObject();
   }
 
   OpIndex DecodeExternalPointer(OpIndex handle, ExternalPointerTag tag) {
@@ -2862,6 +2960,7 @@ class AssemblerOpInterface {
   base::SmallVector<IfScopeInfo, 16> if_scope_stack_;
   // [0] contains the stub with exit frame.
   MaybeHandle<Code> cached_centry_stub_constants_[4];
+  bool in_object_initialization_ = false;
 };
 
 template <class Reducers>
