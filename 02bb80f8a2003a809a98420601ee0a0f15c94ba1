@@ -16,6 +16,23 @@
       "message": "PTAL. This improves 3d-cube --maglev-future --no-turbofan by ~40%, and improves a few other benchmarks as well (see pinpoints (one pinpoint is with --no-turbofan, the other without)).",
       "revId": "02bb80f8a2003a809a98420601ee0a0f15c94ba1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f58107d_7d1698ac",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-05T12:26:21Z",
+      "side": 1,
+      "message": "```int bound_inputs \u003d input_count();\nif (merge_state()-\u003eis_unmerged_loop()) --bound_inputs; \nfor (int i \u003d 0; i \u003c bound_inputs; i++) {\n  if (Phi*...)\n```",
+      "revId": "02bb80f8a2003a809a98420601ee0a0f15c94ba1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
