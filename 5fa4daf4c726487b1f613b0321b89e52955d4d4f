@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b558c3ce_6f6aaf9e",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 7374,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-05T09:08:35Z",
+      "side": 1,
+      "message": "false? Though I think actually you may want to keep `in_peeled_loop_ \u003d true` here, and have `allow_loop_peeling_` be initialised as `parent_-\u003eallow_loop_peeling_ \u0026\u0026 !parent_-\u003ein_peeled_loop_`",
+      "range": {
+        "startLine": 7374,
+        "startChar": 24,
+        "endLine": 7374,
+        "endChar": 28
+      },
+      "revId": "5fa4daf4c726487b1f613b0321b89e52955d4d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
