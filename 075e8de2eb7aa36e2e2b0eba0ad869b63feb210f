@@ -87,6 +87,30 @@
       },
       "revId": "075e8de2eb7aa36e2e2b0eba0ad869b63feb210f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0130f5e_967db926",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-05T14:24:41Z",
+      "side": 1,
+      "message": "Perhaps then I should error if there are multiple `new` CLs? Patching a recently rolled branch doesn\u0027t make much sense, we almost always patch to unblock a roll, rather than to post-hoc fix a roll.",
+      "parentUuid": "35dc5868_f53d7d38",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 38
+      },
+      "revId": "075e8de2eb7aa36e2e2b0eba0ad869b63feb210f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
