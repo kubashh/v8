@@ -5910,6 +5910,8 @@ void YoungGenerationMarkingTask::PublishMarkingWorklist() {
 void YoungGenerationMarkingTask::Finalize() { visitor_.Finalize(); }
 
 void PageMarkingItem::Process(YoungGenerationMarkingTask* task) {
+  CodePageHeaderModificationScope header_write_scope(
+      "PageMarking needs to write to the marking bitmap in the page header.");
   if (slots_type_ == SlotsType::kRegularSlots) {
     MarkUntypedPointers<OLD_TO_NEW>(task);
     MarkUntypedPointers<OLD_TO_NEW_BACKGROUND>(task);
