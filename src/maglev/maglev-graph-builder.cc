@@ -5613,6 +5613,9 @@ ReduceResult MaglevGraphBuilder::BuildCheckValue(ValueNode* node,
   } else {
     AddNewNode<CheckValue>({node}, ref);
   }
+  if (node == GetRawAccumulator()) {
+    SetAccumulatorInBranch(GetConstant(ref));
+  }
   return ReduceResult::Done();
 }
 
@@ -5646,6 +5649,9 @@ ReduceResult MaglevGraphBuilder::BuildCheckValue(ValueNode* node,
       // TODO(verwaest): Handle NaN.
       EmitUnconditionalDeopt(DeoptimizeReason::kUnknown);
       return ReduceResult::DoneWithAbort();
+    }
+    if (node == GetRawAccumulator()) {
+      SetAccumulatorInBranch(GetConstant(ref));
     }
     AddNewNode<CheckValueEqualsFloat64>({GetFloat64(node)}, ref_value);
   }
