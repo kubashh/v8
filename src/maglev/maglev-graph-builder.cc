@@ -1986,10 +1986,29 @@ void MaglevGraphBuilder::VisitCompareOperation() {
     case CompareOperationHint::kBigInt:
     case CompareOperationHint::kNumberOrBoolean:
     case CompareOperationHint::kNumberOrOddball:
-    case CompareOperationHint::kReceiver:
     case CompareOperationHint::kReceiverOrNullOrUndefined:
       if (TryReduceCompareEqualAgainstConstant<kOperation>()) return;
       break;
+    case CompareOperationHint::kReceiver: {
+      if (TryReduceCompareEqualAgainstConstant<kOperation>()) return;
+      DCHECK(kOperation == Operation::kEqual ||
+             kOperation == Operation::kStrictEqual);
+
+      ValueNode* left = LoadRegisterTagged(0);
+      ValueNode* right = GetAccumulatorTagged();
+      BuildCheckJSReceiver(left);
+      BuildCheckJSReceiver(right);
+      if (left == right) {
+        SetAccumulator(GetBooleanConstant(true));
+        return;
+      }
+      if (TryBuildBranchFor<BranchIfReferenceCompare>({left, right},
+                                                      kOperation)) {
+        return;
+      }
+      SetAccumulator(AddNewNode<TaggedEqual>({left, right}));
+      return;
+    }
   }
 
   BuildGenericBinaryOperationNode<kOperation>();
@@ -2838,6 +2857,13 @@ void MaglevGraphBuilder::BuildCheckSymbol(ValueNode* object) {
   NodeType known_type;
   if (EnsureType(object, NodeType::kSymbol, &known_type)) return;
   AddNewNode<CheckSymbol>({object}, GetCheckType(known_type));
+}
+
+void MaglevGraphBuilder::BuildCheckJSReceiver(ValueNode* object) {
+  NodeType known_type;
+  if (EnsureType(object, NodeType::kJSReceiver, &known_type)) return;
+  AddNewNode<CheckInstanceType>({object}, GetCheckType(known_type),
+                                FIRST_JS_RECEIVER_TYPE, LAST_JS_RECEIVER_TYPE);
 }
 
 namespace {
@@ -5587,6 +5613,9 @@ ReduceResult MaglevGraphBuilder::BuildCheckValue(ValueNode* node,
   } else {
     AddNewNode<CheckValue>({node}, ref);
   }
+  if (node == GetRawAccumulator()) {
+    SetAccumulatorInBranch(GetConstant(ref));
+  }
   return ReduceResult::Done();
 }
 
@@ -5620,6 +5649,9 @@ ReduceResult MaglevGraphBuilder::BuildCheckValue(ValueNode* node,
       // TODO(verwaest): Handle NaN.
       EmitUnconditionalDeopt(DeoptimizeReason::kUnknown);
       return ReduceResult::DoneWithAbort();
+    }
+    if (node == GetRawAccumulator()) {
+      SetAccumulatorInBranch(GetConstant(ref));
     }
     AddNewNode<CheckValueEqualsFloat64>({GetFloat64(node)}, ref_value);
   }
