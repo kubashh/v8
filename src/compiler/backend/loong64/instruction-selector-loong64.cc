@@ -1878,10 +1878,16 @@ static void VisitCompare(InstructionSelector* selector, InstructionCode opcode,
 #ifdef V8_COMPRESS_POINTERS
   if (opcode == kLoong64Cmp32) {
     Loong64OperandGenerator g(selector);
-    InstructionOperand temps[] = {g.TempRegister(), g.TempRegister()};
     InstructionOperand inputs[] = {left, right};
-    selector->EmitWithContinuation(opcode, 0, nullptr, arraysize(inputs),
-                                   inputs, arraysize(temps), temps, cont);
+    if (right.IsImmediate()) {
+      InstructionOperand temps[1] = {g.TempRegister()};
+      selector->EmitWithContinuation(opcode, 0, nullptr, arraysize(inputs),
+                                     inputs, arraysize(temps), temps, cont);
+    } else {
+      InstructionOperand temps[2] = {g.TempRegister(), g.TempRegister()};
+      selector->EmitWithContinuation(opcode, 0, nullptr, arraysize(inputs),
+                                     inputs, arraysize(temps), temps, cont);
+    }
     return;
   }
 #endif
