@@ -200,7 +200,7 @@ declare_args() {
   #    step 3 into a single file.
   # 5. Build again with v8_builtins_profiling_log_file set to the file created
   #    in step 3 or 4.
-  v8_builtins_profiling_log_file = "default"
+  v8_builtins_profiling_log_file = "tools/builtins-pgo/x64.profile"
 
   # Enables various testing features.
   v8_enable_test_features = ""
