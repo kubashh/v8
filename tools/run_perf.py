@@ -119,19 +119,24 @@ Path pieces are concatenated. D8 is always run with the suite's path as cwd.
 The test flags are passed to the js test file after '--'.
 """
 
+from abc import ABC, abstractmethod
 from collections import OrderedDict
 from math import sqrt
+from pathlib import Path
 from statistics import mean, stdev
+
+import argparse
 import copy
 import json
 import logging
 import math
-import argparse
-import pathlib
 import os
+import pathlib
+import psutil
 import re
 import subprocess
 import sys
+import tempfile
 import time
 import traceback
 
@@ -153,6 +158,8 @@ RESULT_LIST_RE = re.compile(r'^\[([^\]]+)\]$')
 TOOLS_BASE = os.path.abspath(os.path.dirname(__file__))
 INFRA_FAILURE_RETCODE = 87
 MIN_RUNS_FOR_CONFIDENCE = 10
+
+WARMUP_CACHE_FILE_NAME = 'v8_perf_warmup_cache.json'
 
 
 def GeometricMean(values):
@@ -569,14 +576,16 @@ class RunnableConfig(TraceConfig):
 
   def GetCommandFlags(self, extra_flags=None):
     suffix = ['--'] + self.test_flags if self.test_flags else []
-    return self.flags + (extra_flags or []) + [self.main] + suffix
+    prefix = []
+    if self.main.endswith('cli.js'):
+      prefix = ['-e', '"var testIterationCount = 1;"']
+    return self.flags + (extra_flags or []) + prefix + [self.main] + suffix
 
-  def GetCommand(self, cmd_prefix, shell_dir, extra_flags=None):
+  def GetCommand(self, cmd_prefix, shell_dir, extra_flags=None, timeout=None):
     # TODO(machenbach): This requires +.exe if run on windows.
     extra_flags = extra_flags or []
     if self.binary != 'd8' and '--prof' in extra_flags:
       logging.info('Profiler supported only on a benchmark run with d8')
-
     if self.process_size:
       cmd_prefix = ['/usr/bin/time', '--format=MaxMemory: %MKB'] + cmd_prefix
     if self.binary.endswith('.py'):
@@ -587,7 +596,7 @@ class RunnableConfig(TraceConfig):
         cmd_prefix=cmd_prefix,
         shell=os.path.join(shell_dir, self.binary),
         args=self.GetCommandFlags(extra_flags=extra_flags),
-        timeout=self.timeout or 60,
+        timeout=timeout or self.timeout or 60,
         handle_sigterm=True)
 
   def ProcessOutput(self, output, result_tracker, count):
@@ -749,6 +758,53 @@ def find_build_directory(base_path, arch):
   return actual_paths[0]
 
 
+class WarmUpManager(ABC):
+  @abstractmethod
+  def maybe_warm_up(self, name, warmup_fun):
+    raise NotImplementedError()  # pragma: no cover
+
+
+class NoWarmUpManager(WarmUpManager):
+  def maybe_warm_up(self, name, warmup_fun):
+    pass
+
+
+class TempfileWarmUpManager(WarmUpManager):
+  def __init__(self):
+    self.cache_file = Path(tempfile.gettempdir()) / WARMUP_CACHE_FILE_NAME
+    self.cache = self.read_cache()
+    self.last_reboot = psutil.boot_time()
+
+    # Update file stats to prevent file from being cleaned up too often.
+    self.cache_file.touch()
+
+  def read_cache(self):
+    try:
+      with open(self.cache_file) as f:
+        return json.load(f)
+    except json.decoder.JSONDecodeError:
+      logging.info("Warm-up cache parse error. Creating new.")
+    except FileNotFoundError:
+      logging.info("Warm-up cache doesn't exist yet. Creating new.")
+    return {}
+
+  def write_cache(self, cache):
+    with open(self.cache_file, 'w') as f:
+      return json.dump(cache, f)
+
+  def maybe_warm_up(self, name, warmup_fun):
+    if self.cache.get(name, 0) > self.last_reboot:
+      return
+
+    logging.info(f'Warm-up run of {name} - disregarding output.')
+    try:
+      warmup_fun()
+    finally:
+      self.cache[name] = time.time()
+      self.write_cache(self.cache)
+      logging.info(f'Warm-up done.')
+
+
 class Platform(object):
   def __init__(self, args):
     self.shell_dir = args.shell_dir
@@ -756,6 +812,7 @@ class Platform(object):
     self.is_dry_run = args.dry_run
     self.extra_flags = args.extra_flags.split()
     self.args = args
+    self.warmup_manager = TempfileWarmUpManager()
 
   @staticmethod
   def ReadBuildConfig(args):
@@ -775,11 +832,11 @@ class Platform(object):
   def _Run(self, runnable, count, secondary=False):
     raise NotImplementedError()  # pragma: no cover
 
-  def _LoggedRun(self, runnable, count, secondary=False):
+  def _LoggedRun(self, runnable, count, secondary=False, warmup=False):
     suffix = ' - secondary' if secondary else ''
     title = '>>> %%s (#%d)%s:' % ((count + 1), suffix)
     try:
-      output = self._Run(runnable, count, secondary)
+      output = self._Run(runnable, count, secondary, warmup)
     except OSError:
       logging.exception(title % 'OSError')
       raise
@@ -806,6 +863,9 @@ class Platform(object):
       A tuple with the two benchmark outputs. The latter will be NULL_OUTPUT if
       secondary is False.
     """
+    self.warmup_manager.maybe_warm_up(
+        runnable.name,
+        lambda: self._LoggedRun(runnable, 0, secondary=False, warmup=True))
     output = self._LoggedRun(runnable, count, secondary=False)
     if secondary:
       return output, self._LoggedRun(runnable, count, secondary=True)
@@ -845,13 +905,14 @@ class DesktopPlatform(Platform):
     if isinstance(node, RunnableConfig):
       node.ChangeCWD(path)
 
-  def _Run(self, runnable, count, secondary=False):
+  def _Run(self, runnable, count, secondary=False, warmup=False):
     shell_dir = self.shell_dir_secondary if secondary else self.shell_dir
+
     cmd = runnable.GetCommand(self.command_prefix, shell_dir, self.extra_flags)
     logging.debug('Running command: %s' % cmd)
     output = Output() if self.is_dry_run else cmd.execute()
 
-    if output.IsSuccess() and '--prof' in self.extra_flags:
+    if not warmup and output.IsSuccess() and '--prof' in self.extra_flags:
       os_prefix = {'linux': 'linux', 'macos': 'mac'}.get(utils.GuessOS())
       if os_prefix:
         if not self.is_dry_run:
