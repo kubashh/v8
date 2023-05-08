@@ -16,6 +16,23 @@
       "message": "Could you please take a look?",
       "revId": "cddfb0cc28a84e57a3e7b1751611c665daa5d812",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bed80c7b_d365f414",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-05-08T14:45:36Z",
+      "side": 1,
+      "message": "In theory, one could also change the `ranges_` to a sorted ZoneVector, but (1) I couldn\u0027t find iteration over it in any profile, and (2) insertions are a bit more frequent, so maybe this would be net negative for performance (and one would need to sprinkle `std::lower_bound` in a few more places or abstract it out).",
+      "revId": "cddfb0cc28a84e57a3e7b1751611c665daa5d812",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
