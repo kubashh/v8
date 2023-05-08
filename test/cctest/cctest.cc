@@ -208,6 +208,10 @@ void CcTest::AddGlobalFunction(v8::Local<v8::Context> env, const char* name,
   env->Global()->Set(env, v8_str(name), func).FromJust();
 }
 
+void CcTest::EmptyNewSpaceUsingGC(i::Isolate* isolate) {
+  CollectGarbage(i::AllocationSpace::OLD_SPACE, isolate);
+}
+
 void CcTest::CollectGarbage(i::AllocationSpace space, i::Isolate* isolate) {
   i::Isolate* iso = isolate ? isolate : i_isolate();
   iso->heap()->CollectGarbage(space, i::GarbageCollectionReason::kTesting);
