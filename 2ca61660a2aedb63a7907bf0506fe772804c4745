@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b068da70_6e9acc52",
+        "filename": "test/cctest/cctest.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-08T18:15:07Z",
+      "side": 1,
+      "message": "Most instances of \"2 minor GCs in a row\" are in cctests. I think it makes sense to add the helper for now to make it explicit, and get rid of it when we eventually migrate to unittests. Otherwise, to make the tests correct we would need to update them from 2 minor GCs to a full GC, and then replace the full GC with the helper when migrating. Having the helper in place now would make the transition later simpler imo.",
+      "parentUuid": "1cc6d149_60d4e235",
+      "range": {
+        "startLine": 174,
+        "startChar": 14,
+        "endLine": 174,
+        "endChar": 34
+      },
+      "revId": "2ca61660a2aedb63a7907bf0506fe772804c4745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "086abbc8_a4798bb1",
         "filename": "test/cctest/heap/test-heap.cc",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2023-05-08T17:36:22Z",
       "side": 1,
       "message": "Shouldn\u0027t this be the new call now?",
+      "range": {
+        "startLine": 3334,
+        "startChar": 10,
+        "endLine": 3334,
+        "endChar": 24
+      },
+      "revId": "2ca61660a2aedb63a7907bf0506fe772804c4745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cb7967c_adbe7d2a",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3334,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-08T18:15:07Z",
+      "side": 1,
+      "message": "Thanks, I missed that one.",
+      "parentUuid": "086abbc8_a4798bb1",
       "range": {
         "startLine": 3334,
         "startChar": 10,

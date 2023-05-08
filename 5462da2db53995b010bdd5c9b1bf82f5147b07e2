@@ -22,6 +22,30 @@
       },
       "revId": "5462da2db53995b010bdd5c9b1bf82f5147b07e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87eb81b1_326eab5b",
+        "filename": "test/cctest/heap/test-concurrent-allocation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-08T18:15:07Z",
+      "side": 0,
+      "message": "This was part of getting rid of helpers. This helper only has 2 callsites and it just delegates to another helper(`CollectAllGarbage`), so I went ahead and inlined it so that we can get rid of `InvokeMarkSweep`.",
+      "parentUuid": "335c7f87_4764a6bc",
+      "range": {
+        "startLine": 469,
+        "startChar": 8,
+        "endLine": 469,
+        "endChar": 23
+      },
+      "revId": "5462da2db53995b010bdd5c9b1bf82f5147b07e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
