@@ -44,10 +44,6 @@ void GcAndSweep(Heap* heap, AllocationSpace space);
 
 void ForceEvacuationCandidate(Page* page);
 
-void InvokeScavenge(Isolate* isolate = nullptr);
-
-void InvokeMarkSweep(Isolate* isolate = nullptr);
-
 void GrowNewSpace(Heap* heap);
 
 void GrowNewSpaceToMaximumCapacity(Heap* heap);

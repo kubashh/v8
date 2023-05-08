@@ -389,8 +389,7 @@ THREADED_TEST(SkipArrayBufferBackingStoreDuringGC) {
       v8::ArrayBuffer::New(isolate, std::move(backing_store));
 
   // Should not crash
-  CcTest::CollectGarbage(i::NEW_SPACE);  // in survivor space now
-  CcTest::CollectGarbage(i::NEW_SPACE);  // in old gen now
+  CcTest::EmptyNewSpaceUsingGC();
   CcTest::CollectAllGarbage();
   CcTest::CollectAllGarbage();
 
@@ -413,7 +412,6 @@ THREADED_TEST(SkipArrayBufferDuringScavenge) {
   auto backing_store = v8::ArrayBuffer::NewBackingStore(
       store_ptr, 8, [](void*, size_t, void*) {}, nullptr);
 
-  // Make `store_ptr` point to from space
   CcTest::CollectGarbage(i::NEW_SPACE);
 
   // Create ArrayBuffer with pointer-that-cannot-be-visited in the backing store
@@ -422,8 +420,7 @@ THREADED_TEST(SkipArrayBufferDuringScavenge) {
 
   // Should not crash,
   // i.e. backing store pointer should not be treated as a heap object pointer
-  CcTest::CollectGarbage(i::NEW_SPACE);  // in survivor space now
-  CcTest::CollectGarbage(i::NEW_SPACE);  // in old gen now
+  CcTest::EmptyNewSpaceUsingGC();
 
   CHECK_EQ(ab->GetBackingStore()->Data(), store_ptr);
   CHECK_EQ(ab->Data(), store_ptr);
