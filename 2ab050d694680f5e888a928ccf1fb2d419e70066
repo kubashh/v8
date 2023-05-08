@@ -22,6 +22,30 @@
       },
       "revId": "2ab050d694680f5e888a928ccf1fb2d419e70066",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a3664f8_8092e70c",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2023-05-08T16:16:39Z",
+      "side": 1,
+      "message": "Good point, thanks.",
+      "parentUuid": "018ee6dc_5c6fef7c",
+      "range": {
+        "startLine": 1059,
+        "startChar": 35,
+        "endLine": 1059,
+        "endChar": 58
+      },
+      "revId": "2ab050d694680f5e888a928ccf1fb2d419e70066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

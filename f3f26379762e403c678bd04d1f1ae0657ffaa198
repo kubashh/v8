@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc7339e6_01b94530",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2023-05-08T16:16:39Z",
+      "side": 1,
+      "message": "Thanks for reviewing, Michael! Yang, would you please take another look since some things have changed?",
+      "revId": "f3f26379762e403c678bd04d1f1ae0657ffaa198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
