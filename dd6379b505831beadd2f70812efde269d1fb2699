@@ -16,6 +16,24 @@
       "message": "PTAL. Do we also need a stress-maglev version for this?",
       "revId": "dd6379b505831beadd2f70812efde269d1fb2699",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c880544e_4f8a486b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-05-08T07:56:31Z",
+      "side": 1,
+      "message": "I would say that stress-maglev version of --no-turbofan is probably the one that makes more sense for our tests. Or at least a version with \"--optimize-on-next-call-optimizes-to-maglev\". I don\u0027t think we need maglev_no_turbofan alone. Wdyt Toon?",
+      "parentUuid": "a9917d4c_1e7825d0",
+      "revId": "dd6379b505831beadd2f70812efde269d1fb2699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
