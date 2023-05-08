@@ -16,6 +16,52 @@
       "message": "ptal",
       "revId": "2ca61660a2aedb63a7907bf0506fe772804c4745",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cc6d149_60d4e235",
+        "filename": "test/cctest/cctest.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-08T17:36:22Z",
+      "side": 1,
+      "message": "Let\u0027s not add any more helpers on `CcTest`. We should rather try to get rid of them.",
+      "range": {
+        "startLine": 174,
+        "startChar": 14,
+        "endLine": 174,
+        "endChar": 34
+      },
+      "revId": "2ca61660a2aedb63a7907bf0506fe772804c4745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "086abbc8_a4798bb1",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3334,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-08T17:36:22Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be the new call now?",
+      "range": {
+        "startLine": 3334,
+        "startChar": 10,
+        "endLine": 3334,
+        "endChar": 24
+      },
+      "revId": "2ca61660a2aedb63a7907bf0506fe772804c4745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
