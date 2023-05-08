@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4979cf9_fabcd208",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-08T05:47:47Z",
+      "side": 1,
+      "message": "As planned :) \nSee pinpoints if you\u0027re interested ;)",
+      "revId": "462574c62ae8e44963beacc337fd071f2889c922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
