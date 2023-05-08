@@ -471,9 +471,18 @@ Object CompileOptimizedOSR(Isolate* isolate, Handle<JSFunction> function,
           ? ConcurrencyMode::kConcurrent
           : ConcurrencyMode::kSynchronous;
 
+<<<<<<< HEAD   (b58e4a Version 10.8.168.30)
   Handle<CodeT> result;
   if (!Compiler::CompileOptimizedOSR(isolate, function, osr_offset, mode)
            .ToHandle(&result)) {
+=======
+  Handle<Code> result;
+  if (!Compiler::CompileOptimizedOSR(
+           isolate, function, osr_offset, mode,
+           v8_flags.maglev_osr ? CodeKind::MAGLEV : CodeKind::TURBOFAN)
+           .ToHandle(&result) ||
+      result->marked_for_deoptimization()) {
+>>>>>>> CHANGE (b9a0e4 [osr] Check whether the target is deoptimized)
     // An empty result can mean one of two things:
     // 1) we've started a concurrent compilation job - everything is fine.
     // 2) synchronous compilation failed for some reason.
