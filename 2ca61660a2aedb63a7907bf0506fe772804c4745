@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d263e6b_902dd6ed",
+        "filename": "test/cctest/cctest.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-08T18:46:26Z",
+      "side": 1,
+      "message": "I think `test/cctest/heap/heap-utils.h` is the right place for a heap helper.",
+      "parentUuid": "b068da70_6e9acc52",
+      "range": {
+        "startLine": 174,
+        "startChar": 14,
+        "endLine": 174,
+        "endChar": 34
+      },
+      "revId": "2ca61660a2aedb63a7907bf0506fe772804c4745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "086abbc8_a4798bb1",
         "filename": "test/cctest/heap/test-heap.cc",
         "patchSetId": 1

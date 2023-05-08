@@ -46,6 +46,30 @@
       },
       "revId": "5462da2db53995b010bdd5c9b1bf82f5147b07e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8750aa07_56b52d6e",
+        "filename": "test/cctest/heap/test-concurrent-allocation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-08T18:46:26Z",
+      "side": 0,
+      "message": "We should rather get rid of stuff in `cctest.h` and invoke GC helper in `heap-utils.h` (the file exists for both cctest and unittests)",
+      "parentUuid": "87eb81b1_326eab5b",
+      "range": {
+        "startLine": 469,
+        "startChar": 8,
+        "endLine": 469,
+        "endChar": 23
+      },
+      "revId": "5462da2db53995b010bdd5c9b1bf82f5147b07e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
