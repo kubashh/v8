@@ -32,7 +32,8 @@ class V8_EXPORT_PRIVATE ConservativeStackVisitor
   // objects in the young generation.
   static Address FindBasePtrForMarking(Address maybe_inner_ptr,
                                        MemoryAllocator* allocator,
-                                       GarbageCollector collector);
+                                       GarbageCollector collector,
+                                       bool test = false);
 
  private:
   void VisitConservativelyIfPointer(Address address);

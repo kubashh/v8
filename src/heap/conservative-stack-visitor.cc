@@ -29,25 +29,29 @@ namespace {
 // start of a valid object in the page. In case the markbit corresponding to
 // maybe_inner_ptr is set, the function bails out and returns kNullAddress.
 Address FindPreviousObjectForConservativeMarking(const Page* page,
-                                                 Address maybe_inner_ptr) {
-  auto* bitmap = page->marking_bitmap();
+                                                 Address maybe_inner_ptr,
+                                                 bool test) {
+  const auto* bitmap = page->marking_bitmap();
   const MarkBit::CellType* cells = bitmap->cells();
 
   // The first actual bit of the bitmap, corresponding to page->area_start(),
   // is at start_index which is somewhere in (not necessarily at the start of)
   // start_cell_index.
-  const uint32_t start_index =
-      MarkingBitmap::AddressToIndex(page->area_start());
-  const uint32_t start_cell_index = MarkingBitmap::IndexToCell(start_index);
+  const auto start_index = MarkingBitmap::AddressToIndex(page->area_start());
+  const auto start_cell_index = MarkingBitmap::IndexToCell(start_index);
   // We assume that all markbits before start_index are clear:
   // SLOW_DCHECK(bitmap->AllBitsClearInRange(0, start_index));
   // This has already been checked for the entire bitmap before starting marking
   // by MarkCompactCollector::VerifyMarkbitsAreClean.
 
-  const uint32_t index = MarkingBitmap::AddressToIndex(maybe_inner_ptr);
-  uint32_t cell_index = MarkingBitmap::IndexToCell(index);
-  const MarkBit::CellType mask = 1u << MarkingBitmap::IndexInCell(index);
-  MarkBit::CellType cell = cells[cell_index];
+  const auto index = MarkingBitmap::AddressToIndex(maybe_inner_ptr);
+  auto cell_index = MarkingBitmap::IndexToCell(index);
+  const auto mask = 1u  // static_cast<MarkBit::CellType>(1u)
+                    << MarkingBitmap::IndexInCell(index);
+  if (test) {
+    DCHECK_NE(0, mask);
+  }
+  auto cell = cells[cell_index];
 
   // If the markbit is already set, bail out.
   if ((cell & mask) != 0) return kNullAddress;
@@ -68,10 +72,10 @@ Address FindPreviousObjectForConservativeMarking(const Page* page,
   }
 
   // We have found such a cell.
-  const uint32_t leading_zeros = base::bits::CountLeadingZeros(cell);
-  const uint32_t leftmost_ones =
+  const auto leading_zeros = base::bits::CountLeadingZeros(cell);
+  const auto leftmost_ones =
       base::bits::CountLeadingZeros(~(cell << leading_zeros));
-  const uint32_t index_of_last_leftmost_one =
+  const auto index_of_last_leftmost_one =
       MarkingBitmap::kBitsPerCell - leading_zeros - leftmost_ones;
 
   // If the leftmost sequence of set bits does not reach the start of the cell,
@@ -100,8 +104,8 @@ Address FindPreviousObjectForConservativeMarking(const Page* page,
   }
 
   // We have found such a cell.
-  const uint32_t leading_ones = base::bits::CountLeadingZeros(~cell);
-  const uint32_t index_of_last_leading_one =
+  const auto leading_ones = base::bits::CountLeadingZeros(~cell);
+  const auto index_of_last_leading_one =
       MarkingBitmap::kBitsPerCell - leading_ones;
   DCHECK_LT(0, index_of_last_leading_one);
   return page->address() + MarkingBitmap::IndexToAddressOffset(
@@ -114,7 +118,7 @@ Address FindPreviousObjectForConservativeMarking(const Page* page,
 // static
 Address ConservativeStackVisitor::FindBasePtrForMarking(
     Address maybe_inner_ptr, MemoryAllocator* allocator,
-    GarbageCollector collector) {
+    GarbageCollector collector, bool test) {
   // Check if the pointer is contained by a normal or large page owned by this
   // heap. Bail out if it is not.
   const MemoryChunk* chunk =
@@ -140,7 +144,7 @@ Address ConservativeStackVisitor::FindBasePtrForMarking(
   if (page->IsFromPage()) return kNullAddress;
   // Try to find the address of a previous valid object on this page.
   Address base_ptr =
-      FindPreviousObjectForConservativeMarking(page, maybe_inner_ptr);
+      FindPreviousObjectForConservativeMarking(page, maybe_inner_ptr, test);
   // If the markbit is set, then we have an object that does not need to be
   // marked.
   if (base_ptr == kNullAddress) return kNullAddress;
