@@ -285,6 +285,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b3f80e0_fd544e1c",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-09T14:06:26Z",
+      "side": 1,
+      "message": "C++ lambdas can also have an optional return type annotation, maybe that\u0027s nice?",
+      "parentUuid": "07ae8366_a2995deb",
+      "range": {
+        "startLine": 102,
+        "startChar": 17,
+        "endLine": 102,
+        "endChar": 73
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "951ba6c5_08f34e01",
         "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
         "patchSetId": 2
@@ -319,6 +343,30 @@
       "writtenOn": "2023-05-09T10:54:34Z",
       "side": 1,
       "message": "Maybe make this a ZoneVector that you\u0027d reuse for every call to MarkPotentiallyAliasingStoresAsObservable? (like successor_snapshots_ is reused for all merges)",
+      "range": {
+        "startLine": 127,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 45
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24fd2928_b2f8fcb6",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-09T14:06:26Z",
+      "side": 1,
+      "message": "How about using a `SmallVector` instead? Keeps memory usage down and avoids allocations in the common case. This should usually not be too big.",
+      "parentUuid": "43351dfc_4d316844",
       "range": {
         "startLine": 127,
         "startChar": 4,
@@ -388,6 +436,30 @@
       "writtenOn": "2023-05-09T10:54:34Z",
       "side": 1,
       "message": "It\u0027s a bit sad that 1) you create a new snapshot just to know if 2 snapshots are different, and 2) you can\u0027t early return one you\u0027ve set snapshot_has_changed to true. What about adding a method CompareSnapshot(Snapshot a, Snapshot b) to SnapshotTable that compares 2 Snapshots? (it might need an additional callback for the comparison, I didn\u0027t think everything through :p)",
+      "range": {
+        "startLine": 167,
+        "startChar": 8,
+        "endLine": 174,
+        "endChar": 22
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b9705af_f518633d",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-09T14:06:26Z",
+      "side": 1,
+      "message": "I\u0027d actually recommend to use the merged snapshot, as this guarantees termination even if the analysis is not entirely monotone. In addition, the merged snapshot has a condensed history, which makes subsequent merging faster.",
+      "parentUuid": "8a18f989_2421b28d",
       "range": {
         "startLine": 167,
         "startChar": 8,
@@ -480,6 +552,30 @@
       "writtenOn": "2023-05-09T10:54:34Z",
       "side": 1,
       "message": "I think that this returns `true` for block terminators, which in turns means that everytime you start a new block (from the end), you mark all stores as observable. Or am I missing something?",
+      "range": {
+        "startLine": 308,
+        "startChar": 4,
+        "endLine": 308,
+        "endChar": 16
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48dfcabe_96df87b5",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-09T14:06:26Z",
+      "side": 1,
+      "message": "Ha! The new effect system separates block termination from effects :)",
+      "parentUuid": "39f29b9a_1c003878",
       "range": {
         "startLine": 308,
         "startChar": 4,
