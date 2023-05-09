@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c414c84_e0ed2adf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-05-09T04:57:51Z",
+      "side": 1,
+      "message": "I\u0027m not sure I follow, the CL only adds a comment but doesn\u0027t actually implement any limiting.",
+      "revId": "00ea7e7581c69fc630e7aa38d73e1f9d1af2e11a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3876ec96_46505201",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-05-09T04:57:51Z",
+      "side": 1,
+      "message": "For the future, please prefer tracking bugs instead of user names (`TODO(crbug.com/1420968`).",
+      "range": {
+        "startLine": 1171,
+        "startChar": 12,
+        "endLine": 1171,
+        "endChar": 17
+      },
+      "revId": "00ea7e7581c69fc630e7aa38d73e1f9d1af2e11a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
