@@ -16,6 +16,24 @@
       "message": "Hi bikineev@, I\u0027m a bit stuck and hoping to get your help.\n\nAs written, linking for cppgc.dll fails with:\n\nlld-link: error: undefined symbol: struct v8::internal::FlagValues \nv8::internal::v8_flags\n\u003e\u003e\u003e referenced by .\\..\\..\\v8\\src\\heap\\cppgc\\caged-heap.cc:144\n\u003e\u003e\u003e               obj/v8/cppgc_base/caged-heap.obj:(private: __cdecl \ncppgc::internal::CagedHeap::CagedHeap(class v8::PageAllocator \u0026))\n\nI\u0027m not sure whether the changes to BUILD.gn are incomplete, or if cppgc.dll fundamentally can\u0027t depend on v8_flags and I need to plumb the heap size as a parameter that comes from the embedder. Could you please take a look and let me know what you think? Thanks!",
       "revId": "b14574cfd80f7666ccae3a4e3f8339f2a55f3c72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47456ef6_21811bdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-05-09T16:00:49Z",
+      "side": 1,
+      "message": "\u003e if cppgc.dll fundamentally can\u0027t depend on v8_flags and I need to plumb the heap size as a parameter that comes from the embedder.\n\nThe latter. Oilpan shouldn\u0027t depend on `v8_flags`, since we still support the standalone configuration. The cage size can be passed through `cppgc::InitializeProcess()` -\u003e `CagedHeap::InitializeIfNeeded()`. However, since this would be an API change, this should probably go through https://v8.dev/docs/api#how-to-change-v8%E2%80%99s-public-api.",
+      "parentUuid": "9ae1e31d_d7d3f4f8",
+      "revId": "b14574cfd80f7666ccae3a4e3f8339f2a55f3c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
