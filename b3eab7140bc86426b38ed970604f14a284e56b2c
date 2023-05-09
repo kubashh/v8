@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36ee0c0b_47e0a269",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T07:36:14Z",
+      "side": 1,
+      "message": "PTAL. I\u0027ll make a small f-string clean-up and other things in this file in a separate CL. Here I tried to touch as little old code as possible.\n\nTested this locally. Led test will be possible as soon as I activate the flag.",
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
