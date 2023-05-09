@@ -142,6 +142,24 @@
       "parentUuid": "ac11359a_15cadce7",
       "revId": "dd6379b505831beadd2f70812efde269d1fb2699",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c21e98e7_9acb1fe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T08:39:24Z",
+      "side": 1,
+      "message": "I think since this new variant already adds --no-turbofan, we should add  --optimize-on-next-call-optimizes-to-maglev also there, otherwise the optimize calls for TF are all no-ops anyways. I try now to add two variants with no-turbo, both with the optimize flag and one with stress-maglev.\n\nMaybe I catch the current bug flood error right now ;)",
+      "parentUuid": "a903f569_e9f39210",
+      "revId": "dd6379b505831beadd2f70812efde269d1fb2699",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
