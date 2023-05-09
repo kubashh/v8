@@ -623,7 +623,25 @@ class MaglevGraphBuilder {
     // Clear new nodes for the next VisitFoo
     new_nodes_.clear();
 #endif
-    switch (iterator_.current_bytecode()) {
+
+    auto bc = iterator_.current_bytecode();
+    if (!interpreter::Bytecodes::IsPure(bc)) {
+      switch (bc) {
+        // TODO(cbruni) In case we are guaranteed to end up in
+        // BuildAllocateFastObject we could also fold allocations into
+        // kConstruct.
+        case interpreter::Bytecode::kCreateArrayLiteral:
+        case interpreter::Bytecode::kCreateObjectLiteral:
+        case interpreter::Bytecode::kCreateEmptyArrayLiteral:
+        case interpreter::Bytecode::kCreateEmptyObjectLiteral:
+          break;
+        default:
+          ClearCurrentRawAllocation();
+          break;
+      }
+    }
+
+    switch (bc) {
 #define BYTECODE_CASE(name, ...)       \
   case interpreter::Bytecode::k##name: \
     Visit##name();                     \
@@ -1325,6 +1343,10 @@ class MaglevGraphBuilder {
     if (merge_states_[offset] == nullptr) {
       DCHECK_NOT_NULL(predecessor);
       current_block_->set_predecessor(predecessor);
+    } else {
+      // TODO(cbruni) Track current raw allocation in the merge states and only
+      // clear if both inputs disagree.
+      ClearCurrentRawAllocation();
     }
     ResolveJumpsToBlockAtOffset(current_block_, offset);
   }
@@ -1354,6 +1376,7 @@ class MaglevGraphBuilder {
                   << std::endl;
       }
     }
+
     return block;
   }
 

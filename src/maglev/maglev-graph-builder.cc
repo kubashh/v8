@@ -1773,6 +1773,9 @@ bool MaglevGraphBuilder::TryBuildBranchFor(
 
   SetAccumulatorInBranch(GetBooleanConstant((jump_type == kJumpIfTrue) ^ flip));
 
+  // TODO(cbruni) Push allocation state into both branches instead of
+  // clearing.
+  ClearCurrentRawAllocation();
   MergeIntoFrameState(block, iterator_.GetJumpTargetOffset());
 
   SetAccumulatorInBranch(
@@ -6313,8 +6316,6 @@ ReduceResult MaglevGraphBuilder::ReduceConstruct(
               implicit_receiver = BuildAllocateFastObject(
                   FastObject(feedback_target.AsJSFunction(), zone(), broker()),
                   AllocationType::kYoung);
-              // TODO(leszeks): Don't eagerly clear the raw allocation, have the
-              // next side effect clear it.
               ClearCurrentRawAllocation();
             }
           }
@@ -6378,6 +6379,7 @@ void MaglevGraphBuilder::BuildConstruct(
         SetAccumulator);
   }
 
+  ClearCurrentRawAllocation();
   ValueNode* context = GetContext();
   SetAccumulator(BuildGenericConstruct(target, new_target, context, args,
                                        feedback_source));
@@ -6929,6 +6931,8 @@ void MaglevGraphBuilder::VisitCreateArrayLiteral() {
       TryBuildFastCreateObjectOrArrayLiteral(processed_feedback.AsLiteral());
   PROCESS_AND_RETURN_IF_DONE(result, SetAccumulator);
 
+  // TODO(cbruni) Do these really allocate?
+  ClearCurrentRawAllocation();
   if (interpreter::CreateArrayLiteralFlags::FastCloneSupportedBit::decode(
           bytecode_flags)) {
     // TODO(victorgomes): CreateShallowArrayLiteral should not need the
@@ -6968,9 +6972,6 @@ void MaglevGraphBuilder::VisitCreateEmptyArrayLiteral() {
   FastObject literal(map, zone(), {});
   literal.js_array_length = MakeRef(broker(), Object::cast(Smi::zero()));
   SetAccumulator(BuildAllocateFastObject(literal, AllocationType::kYoung));
-  // TODO(leszeks): Don't eagerly clear the raw allocation, have the next side
-  // effect clear it.
-  ClearCurrentRawAllocation();
 }
 
 base::Optional<FastObject> MaglevGraphBuilder::TryReadBoilerplateForFastLiteral(
@@ -7206,7 +7207,6 @@ ValueNode* MaglevGraphBuilder::BuildAllocateFastObject(
       BuildAllocateFastObject(object.elements, allocation_type);
 
   DCHECK(object.map.IsJSObjectMap());
-  // TODO(leszeks): Fold allocations.
   ValueNode* allocation = ExtendOrReallocateCurrentRawAllocation(
       object.instance_size, allocation_type);
   BuildStoreReceiverMap(allocation, object.map);
@@ -7325,9 +7325,6 @@ ReduceResult MaglevGraphBuilder::TryBuildFastCreateObjectOrArrayLiteral(
   // can get rid of this two pass approach.
   broker()->dependencies()->DependOnElementsKinds(site);
   ReduceResult result = BuildAllocateFastObject(*maybe_value, allocation_type);
-  // TODO(leszeks): Don't eagerly clear the raw allocation, have the next side
-  // effect clear it.
-  ClearCurrentRawAllocation();
   return result;
 }
 
@@ -7352,6 +7349,8 @@ void MaglevGraphBuilder::VisitCreateObjectLiteral() {
       TryBuildFastCreateObjectOrArrayLiteral(processed_feedback.AsLiteral());
   PROCESS_AND_RETURN_IF_DONE(result, SetAccumulator);
 
+  // TODO(cbruni) Do these really allocate?
+  ClearCurrentRawAllocation();
   if (interpreter::CreateObjectLiteralFlags::FastCloneSupportedBit::decode(
           bytecode_flags)) {
     // TODO(victorgomes): CreateShallowObjectLiteral should not need the
@@ -7374,9 +7373,6 @@ void MaglevGraphBuilder::VisitCreateEmptyObjectLiteral() {
   FastObject literal(map, zone(), {});
   literal.ClearFields();
   SetAccumulator(BuildAllocateFastObject(literal, AllocationType::kYoung));
-  // TODO(leszeks): Don't eagerly clear the raw allocation, have the next side
-  // effect clear it.
-  ClearCurrentRawAllocation();
 }
 
 void MaglevGraphBuilder::VisitCloneObject() {
@@ -8296,6 +8292,8 @@ void MaglevGraphBuilder::VisitThrowIfNotSuperConstructor() {
 }
 
 void MaglevGraphBuilder::VisitSwitchOnGeneratorState() {
+  DCHECK_NULL(current_raw_allocation_);
+
   // SwitchOnGeneratorState <generator> <table_start> <table_length>
   // It should be the first bytecode in the bytecode array.
   DCHECK_EQ(iterator_.current_offset(), 0);

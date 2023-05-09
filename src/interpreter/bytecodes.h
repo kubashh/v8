@@ -684,6 +684,20 @@ class V8_EXPORT_PRIVATE Bytecodes final : public AllStatic {
            bytecode <= Bytecode::kLdaImmutableCurrentContextSlot;
   }
 
+  static constexpr bool IsPure(Bytecode bytecode) {
+    switch (bytecode) {
+#define STAR(n, _) case interpreter::Bytecode::k##n:
+      SHORT_STAR_BYTECODE_LIST(STAR)
+      return true;
+#undef STAR
+      default:
+        break;
+    }
+    return (bytecode >= Bytecode::kLdar && bytecode <= Bytecode::kTestTypeOf) ||
+           (bytecode >= Bytecode::kJumpIfTrue &&
+            bytecode <= Bytecode::kJumpIfJSReceiver);
+  }
+
   // Returns true if |bytecode| is a compare operation without external effects
   // (e.g., Type cooersion).
   static constexpr bool IsCompareWithoutEffects(Bytecode bytecode) {
