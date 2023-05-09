@@ -462,6 +462,19 @@ ValueNode* MergePointInterpreterFrameState::MergeValue(
     unmerged = EnsureTagged(builder, unmerged_aspects, unmerged,
                             predecessors_[predecessors_so_far_]);
     result->set_input(predecessors_so_far_, unmerged);
+
+    NodeType unmerged_type = NodeType::kUnknown;
+    if (const NodeInfo* unmerged_info =
+            unmerged_aspects.TryGetInfoFor(unmerged)) {
+      unmerged_type = unmerged_info->type;
+    }
+    if (predecessors_so_far_ == 0) {
+      // Loop phis are created without a type, so we set the initial type now.
+      result->set_type(unmerged_type);
+    } else {
+      result->set_type(IntersectType(result->type(), unmerged_type));
+    }
+
     return result;
   }
 
@@ -499,32 +512,33 @@ ValueNode* MergePointInterpreterFrameState::MergeValue(
     }
   }
 
-  if (merged->properties().value_representation() ==
-      ValueRepresentation::kTagged) {
-    for (int i = 0; i < predecessors_so_far_; i++) {
-      result->set_input(i, merged);
+  bool is_tagged = merged->properties().value_representation() ==
+                   ValueRepresentation::kTagged;
+  NodeType type = per_predecessor_alternatives->first()->node_type();
+  int i = 0;
+  for (const Alternatives* alt : *per_predecessor_alternatives) {
+    ValueNode* tagged = is_tagged ? merged : alt->tagged_alternative();
+    if (tagged == nullptr) {
+      tagged = NonTaggedToTagged(builder, alt->node_type(), merged,
+                                 predecessors_[i]);
     }
-  } else {
-    // If the existing merged value is untagged, we look through the
-    // per-predecessor alternative representations, and try to find tagged
-    // representations there.
-    int i = 0;
-    for (const Alternatives* alt : *per_predecessor_alternatives) {
-      // TODO(victorgomes): Support Phi nodes of untagged values.
-      ValueNode* tagged = alt->tagged_alternative();
-      if (tagged == nullptr) {
-        tagged = NonTaggedToTagged(builder, alt->node_type(), merged,
-                                   predecessors_[i]);
-      }
-      result->set_input(i, tagged);
-      i++;
-    }
-    DCHECK_EQ(i, predecessors_so_far_);
+    result->set_input(i, tagged);
+    type = IntersectType(type, alt->node_type());
+    i++;
   }
+  DCHECK_EQ(i, predecessors_so_far_);
 
   unmerged = EnsureTagged(builder, unmerged_aspects, unmerged,
                           predecessors_[predecessors_so_far_]);
   result->set_input(predecessors_so_far_, unmerged);
+
+  if (const NodeInfo* unmerged_info =
+          unmerged_aspects.TryGetInfoFor(unmerged)) {
+    type = IntersectType(type, unmerged_info->type);
+  } else {
+    type = NodeType::kUnknown;
+  }
+  result->set_type(type);
 
   phis_.Add(result);
   return result;
@@ -542,6 +556,13 @@ void MergePointInterpreterFrameState::MergeLoopValue(
   unmerged = EnsureTagged(builder, unmerged_aspects, unmerged,
                           predecessors_[predecessors_so_far_]);
   result->set_input(predecessor_count_ - 1, unmerged);
+
+  if (const NodeInfo* unmerged_info =
+          unmerged_aspects.TryGetInfoFor(unmerged)) {
+    result->set_type(IntersectType(result->type(), unmerged_info->type));
+  } else {
+    result->set_type(NodeType::kUnknown);
+  }
 
   if (Phi* unmerged_phi = unmerged->TryCast<Phi>()) {
     // Propagating the `uses_repr` from {result} to {unmerged_phi}.
