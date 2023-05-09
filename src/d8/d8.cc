@@ -5163,19 +5163,20 @@ int Shell::RunMain(v8::Isolate* isolate, bool last_run) {
   bool success = RunMainIsolate(isolate, keep_context_alive);
   CollectGarbage(isolate);
 
-  {
-    // Park the main thread here to prevent deadlocks in shared GCs when waiting
-    // in JoinThread.
-    i::ParkedScope parked(i_isolate->main_thread_local_isolate());
-    for (int i = 1; i < options.num_isolates; ++i) {
-      if (last_run) {
-        options.isolate_sources[i].JoinThread(parked);
-      } else {
-        options.isolate_sources[i].WaitForThread(parked);
-      }
-    }
-    WaitForRunningWorkers(parked);
-  }
+  i_isolate->main_thread_local_heap()->ExecuteWithTrampoline(
+      [i_isolate, last_run]() {
+        // Park the main thread here to prevent deadlocks in shared GCs when
+        // waiting in JoinThread.
+        i::ParkedScope parked(i_isolate->main_thread_local_isolate());
+        for (int i = 1; i < options.num_isolates; ++i) {
+          if (last_run) {
+            options.isolate_sources[i].JoinThread(parked);
+          } else {
+            options.isolate_sources[i].WaitForThread(parked);
+          }
+        }
+        WaitForRunningWorkers(parked);
+      });
 
   // Other threads have terminated, we can now run the artifical
   // serialize-deserialize pass (which destructively mutates heap state).
