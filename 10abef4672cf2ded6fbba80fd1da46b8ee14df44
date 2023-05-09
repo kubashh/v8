@@ -16,6 +16,431 @@
       "message": "PTAL, thanks",
       "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32f65cc3_8db27950",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "Very cool! :)\nMostly LGTM, but I\u0027d like to have another look once you\u0027ve addressed my comments :)",
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae8e404c_a7856100",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "That sounds a bit surprising to me, because we can allocate directly old objects, and if we then initialize-store a young pointer in such old object, the generational writer barrier is always required. Or would such a case go through a InitializeField rather than a Initialize? Or am I missing something?",
+      "range": {
+        "startLine": 1562,
+        "startChar": 29,
+        "endLine": 1562,
+        "endChar": 62
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acdfe985_5faf4634",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "Can you add a high-level summary mentioning:\n  - what this file does (maybe with a quick example so that it\u0027s a bit more visual: `a[0] \u003d 42; a[0] \u003d 17;` becomes `a[0] \u003d 17` (or any other example you like more)).\n  - how it works",
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e7075c8_d743d8a6",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "What about renaming that to StoreData?",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 14
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce58bdf2_fb8efcbc",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "I think that you could just write `else { active_keys_.erase(key); }`.",
+      "range": {
+        "startLine": 68,
+        "startChar": 6,
+        "endLine": 70,
+        "endChar": 5
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e030e794_2c457d71",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "You always pass \"false\" for this parameter as far as I can see; I\u0027m guessing that it should be false the 1st time a block is visited, and true the next times or something like that.",
+      "range": {
+        "startLine": 74,
+        "startChar": 36,
+        "endLine": 74,
+        "endChar": 58
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d04de8d1_060adada",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "This looks wrong, no? I guess that you wanted to skip backedges here if the loop header hasn\u0027t been visited yet?",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 54
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac9dc93b_ab1a47a0",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "successors",
+      "range": {
+        "startLine": 98,
+        "startChar": 7,
+        "endLine": 98,
+        "endChar": 19
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07ae8366_a2995deb",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "Could you static_cast that to a StoreObservability, just so that it\u0027s a bit clearer what you\u0027re doing? :)",
+      "range": {
+        "startLine": 102,
+        "startChar": 17,
+        "endLine": 102,
+        "endChar": 73
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "951ba6c5_08f34e01",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "You could remove this parameter; but if you want to keep it to maybe later use it to have more precise aliasing, then feel free to keep it :)",
+      "range": {
+        "startLine": 123,
+        "startChar": 49,
+        "endLine": 123,
+        "endChar": 63
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43351dfc_4d316844",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "Maybe make this a ZoneVector that you\u0027d reuse for every call to MarkPotentiallyAliasingStoresAsObservable? (like successor_snapshots_ is reused for all merges)",
+      "range": {
+        "startLine": 127,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 45
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39c93441_5a25480d",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "Here as well, you could reuse a ZoneVector (the same as in MarkPotentiallyAliasingStoresAsObservable I would think).",
+      "range": {
+        "startLine": 144,
+        "startChar": 4,
+        "endLine": 144,
+        "endChar": 75
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fac8cbb_db8ce3c5",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "Why does this DCHECK hold?",
+      "range": {
+        "startLine": 147,
+        "startChar": 6,
+        "endLine": 147,
+        "endChar": 58
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a18f989_2421b28d",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "It\u0027s a bit sad that 1) you create a new snapshot just to know if 2 snapshots are different, and 2) you can\u0027t early return one you\u0027ve set snapshot_has_changed to true. What about adding a method CompareSnapshot(Snapshot a, Snapshot b) to SnapshotTable that compares 2 Snapshots? (it might need an additional callback for the comparison, I didn\u0027t think everything through :p)",
+      "range": {
+        "startLine": 167,
+        "startChar": 8,
+        "endLine": 174,
+        "endChar": 22
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0389c993_916c63ea",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "Should we have some kind of counter to prevent revisiting too many times a loop?",
+      "range": {
+        "startLine": 223,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 7
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fe2ac8f_66a874ec",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "You don\u0027t need this parameter (or at least, you\u0027re not using it ;) )",
+      "range": {
+        "startLine": 237,
+        "startChar": 38,
+        "endLine": 237,
+        "endChar": 59
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84a400cf_c1e6acaf",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "The relationship between the comment and the line of code that follows is not super obvious. Could you rephrase this comment (and the one from a few lines above as well) to something like \"We keep this store, but update its state as Unobservable: if we reach a previous store without having modified the state in between, we\u0027ll be able to remove this other store\"? (or any other comment that you think makes sense) :)",
+      "range": {
+        "startLine": 270,
+        "startChar": 19,
+        "endLine": 270,
+        "endChar": 38
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39f29b9a_1c003878",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "I think that this returns `true` for block terminators, which in turns means that everytime you start a new block (from the end), you mark all stores as observable. Or am I missing something?",
+      "range": {
+        "startLine": 308,
+        "startChar": 4,
+        "endLine": 308,
+        "endChar": 16
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "213d4a4e_c93888db",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-09T10:54:34Z",
+      "side": 1,
+      "message": "I don\u0027t think that you\u0027re using the UniformReducerAdapter here. Left over from a previous version maybe?",
+      "range": {
+        "startLine": 319,
+        "startChar": 13,
+        "endLine": 319,
+        "endChar": 34
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
