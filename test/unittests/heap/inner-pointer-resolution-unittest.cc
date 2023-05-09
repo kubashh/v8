@@ -10,6 +10,8 @@
 namespace v8 {
 namespace internal {
 
+static_assert(sizeof(MarkBit::CellType) == 4);
+
 namespace {
 
 constexpr int Tagged = kTaggedSize;
@@ -161,12 +163,12 @@ class InnerPointerResolutionTest
     // Create one last object that uses the remaining space on the page; this
     // simulates freeing the page's LAB.
     const int remaining_size = static_cast<int>(page->area_end() - ptr);
-    const uint32_t index = MarkingBitmap::AddressToIndex(ptr);
-    const int index_in_cell = MarkingBitmap::IndexInCell(index);
+    const auto index = MarkingBitmap::AddressToIndex(ptr);
+    const auto index_in_cell = MarkingBitmap::IndexInCell(index);
     ObjectRequest last{remaining_size,
                        ObjectRequest::FREE,
                        ObjectRequest::UNMARKED,
-                       index_in_cell,
+                       static_cast<int>(index_in_cell),
                        ObjectRequest::CONSECUTIVE,
                        page_id,
                        ptr};
