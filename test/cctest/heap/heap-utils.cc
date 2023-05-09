@@ -30,8 +30,8 @@ void SealCurrentObjects(Heap* heap) {
   // v8_flags.stress_concurrent_allocation = false;
   // Background thread allocating concurrently interferes with this function.
   CHECK(!v8_flags.stress_concurrent_allocation);
-  CcTest::CollectAllGarbage();
-  CcTest::CollectAllGarbage();
+  heap::CollectAllGarbage(heap);
+  heap::CollectAllGarbage(heap);
   heap->EnsureSweepingCompleted(Heap::SweepingForcedFinalizationMode::kV8Only);
   heap->old_space()->FreeLinearAllocationArea();
   for (Page* page : *heap->old_space()) {
@@ -325,8 +325,30 @@ void AbandonCurrentlyFreeMemory(PagedSpace* space) {
   }
 }
 
-void GcAndSweep(Heap* heap, AllocationSpace space) {
+void CollectGarbage(Heap* heap, AllocationSpace space) {
   heap->CollectGarbage(space, GarbageCollectionReason::kTesting);
+}
+
+void CollectAllGarbage(Heap* heap) {
+  heap->CollectAllGarbage(Heap::kNoGCFlags, GarbageCollectionReason::kTesting);
+}
+
+void CollectAllAvailableGarbage(Heap* heap) {
+  heap->CollectAllAvailableGarbage(GarbageCollectionReason::kTesting);
+}
+
+void PreciseCollectAllGarbage(Heap* heap) {
+  heap->PreciseCollectAllGarbage(Heap::kNoGCFlags,
+                                 GarbageCollectionReason::kTesting);
+}
+
+void CollectSharedGarbage(Heap* heap) {
+  heap->CollectGarbageShared(heap->main_thread_local_heap(),
+                             GarbageCollectionReason::kTesting);
+}
+
+void GcAndSweep(Heap* heap, AllocationSpace space) {
+  CollectGarbage(heap, space);
   if (heap->sweeping_in_progress()) {
     IsolateSafepointScope scope(heap);
     heap->EnsureSweepingCompleted(
@@ -334,9 +356,7 @@ void GcAndSweep(Heap* heap, AllocationSpace space) {
   }
 }
 
-void EmptyNewSpaceUsingGC(Heap* heap) {
-  heap->CollectGarbage(OLD_SPACE, GarbageCollectionReason::kTesting);
-}
+void EmptyNewSpaceUsingGC(Heap* heap) { CollectGarbage(heap, OLD_SPACE); }
 
 void ForceEvacuationCandidate(Page* page) {
   CHECK(v8_flags.manual_evacuation_candidates_selection);
