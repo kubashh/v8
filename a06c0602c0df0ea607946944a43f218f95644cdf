@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b84d7e3_4d18e9b2",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-05-09T05:54:39Z",
+      "side": 1,
+      "message": "Out of curiosity, why not fix this higher up and pass `1` here? It seems odd that we fix this in the \"Middle of the stack\" somewehere.",
+      "range": {
+        "startLine": 1160,
+        "startChar": 45,
+        "endLine": 1160,
+        "endChar": 69
+      },
+      "revId": "a06c0602c0df0ea607946944a43f218f95644cdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
