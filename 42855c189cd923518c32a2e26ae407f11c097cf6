@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ca45711_49082a03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-05-09T18:04:55Z",
+      "side": 1,
+      "message": "Camillo, not sure if you had a chance to take a look to the new changes?",
+      "revId": "42855c189cd923518c32a2e26ae407f11c097cf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
