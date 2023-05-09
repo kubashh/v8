@@ -16,6 +16,299 @@
       "message": "PTAL. I\u0027ll make a small f-string clean-up and other things in this file in a separate CL. Here I tried to touch as little old code as possible.\n\nTested this locally. Led test will be possible as soon as I activate the flag.",
       "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07fee4fd_1c195311",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "Mostly nits besides the missing warmup parameter in `AndroidPlatform._Run`.",
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "966a422e_c51eb4b2",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "This change adds `WARMUP`, `Warmup`, `WarmUp`, `Warm-up`, `warmup`, `warm_up`, `warm-up`.\n\nShould we use either {WARMUP, Warmup, warmup} or {WARM_UP, WarmUp, Warm-up, warm_up, warm-up} consistently?",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 6
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4ab4ed4_f9283696",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "This change adds a `WarmupCacheHandler` and a `WarmUpManager`.\n\nRight now, the warmup cache is handling file operations but is not warmup phase specific. We could either drop `warmup` from its name (and maybe make it re-usable by setting the cache_file as a constructor param), or move read and write cache into the the warmup manager.",
+      "range": {
+        "startLine": 758,
+        "startChar": 6,
+        "endLine": 758,
+        "endChar": 12
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef397b31_056906e3",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "nit: Maybe move this into the `WARMUP_CACHE_FILE_NAME` variable and use it directly as it will always have the same value.",
+      "range": {
+        "startLine": 760,
+        "startChar": 22,
+        "endLine": 760,
+        "endChar": 49
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9105ccf_983c8c01",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "Is this warning notifying someone or just logged on stdout?\n\nIf the write-to-disk part of this script continuously fails, we will always run the warmup part and don\u0027t recognise it till someone might wonder about longer runtimes. That seems to be a bit brittle.\n\nMaybe we fail here directly, or remove the file and file to get the next run green again, but at least a notification for one failing build will be send.",
+      "range": {
+        "startLine": 766,
+        "startChar": 0,
+        "endLine": 767,
+        "endChar": 65
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da4961a1_ddb030ff",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "nit: Not needed if there is a docstring.",
+      "range": {
+        "startLine": 781,
+        "startChar": 4,
+        "endLine": 781,
+        "endChar": 28
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c54550b_33a5b0f0",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "The way its implemented is platform agnostic, right? Is there a use case where we don\u0027t want to run it on a specific platform?",
+      "range": {
+        "startLine": 786,
+        "startChar": 2,
+        "endLine": 786,
+        "endChar": 39
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d7e6c38_1d086173",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "This is missing the `warmup` parameter.",
+      "range": {
+        "startLine": 852,
+        "startChar": 49,
+        "endLine": 852,
+        "endChar": 51
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "795e0ece_82665f3e",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "Could we call this `log_results` as the Platform does not need to be aware if this should not be logged due to a warmup phase or some other constraint?",
+      "range": {
+        "startLine": 931,
+        "startChar": 51,
+        "endLine": 931,
+        "endChar": 57
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbfb2d84_081f1450",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "nit: This statement could move three lines above.",
+      "range": {
+        "startLine": 940,
+        "startChar": 8,
+        "endLine": 940,
+        "endChar": 31
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c01b7918_ccf5fa34",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "Do we already know if the problem appears on Android as well? Is there a task somewhere to keep track of this issue on Android?",
+      "range": {
+        "startLine": 953,
+        "startChar": 6,
+        "endLine": 953,
+        "endChar": 21
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1b4e3c1_817c16ff",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "Missing `warmup`",
+      "range": {
+        "startLine": 987,
+        "startChar": 49,
+        "endLine": 987,
+        "endChar": 51
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de2994d8_9cef7113",
+        "filename": "tools/unittests/run_perf_test.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-09T14:12:09Z",
+      "side": 1,
+      "message": "nit: Seems like the other tests have a trailing `\\n`",
+      "range": {
+        "startLine": 295,
+        "startChar": 63,
+        "endLine": 295,
+        "endChar": 64
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
