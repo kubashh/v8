@@ -170,6 +170,7 @@ class CcTest {
 
   static void AddGlobalFunction(v8::Local<v8::Context> env, const char* name,
                                 v8::FunctionCallback callback);
+
   static void CollectGarbage(i::AllocationSpace space,
                              i::Isolate* isolate = nullptr);
   static void CollectAllGarbage(i::Isolate* isolate = nullptr);
