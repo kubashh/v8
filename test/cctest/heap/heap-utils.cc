@@ -25,12 +25,6 @@ namespace v8 {
 namespace internal {
 namespace heap {
 
-void InvokeScavenge(Isolate* isolate) {
-  CcTest::CollectGarbage(i::NEW_SPACE, isolate);
-}
-
-void InvokeMarkSweep(Isolate* isolate) { CcTest::CollectAllGarbage(isolate); }
-
 void SealCurrentObjects(Heap* heap) {
   // If you see this check failing, disable the flag at the start of your test:
   // v8_flags.stress_concurrent_allocation = false;
@@ -339,6 +333,8 @@ void GcAndSweep(Heap* heap, AllocationSpace space) {
         Heap::SweepingForcedFinalizationMode::kV8Only);
   }
 }
+
+void EmptyNewSpaceUsingGC(Heap* heap) { GcAndSweep(heap, OLD_SPACE); }
 
 void ForceEvacuationCandidate(Page* page) {
   CHECK(v8_flags.manual_evacuation_candidates_selection);
