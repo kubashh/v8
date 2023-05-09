@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0e05fd3_2e039853",
+        "filename": "test/cctest/cctest.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-09T07:39:55Z",
+      "side": 1,
+      "message": "Moved the new helper to `test/cctest/heap/heap-utils.h`.\n\nI think we can also easily move the existing garbage collection helpers to `test/cctest/heap/heap-utils.h` but I\u0027ll try that in a separate CL.",
+      "parentUuid": "8d263e6b_902dd6ed",
+      "range": {
+        "startLine": 174,
+        "startChar": 14,
+        "endLine": 174,
+        "endChar": 34
+      },
+      "revId": "2ca61660a2aedb63a7907bf0506fe772804c4745",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "086abbc8_a4798bb1",
