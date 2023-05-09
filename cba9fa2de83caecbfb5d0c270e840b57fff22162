@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c721f4_69da5ecc",
+        "filename": "test/cctest/test-stack-unwinding-win64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-09T10:48:24Z",
+      "side": 0,
+      "message": "This was introduced in https://crrev.com/c/1701133 to fix compilation on arm64 Windows. Maybe we need to replace the `defined(V8_OS_WIN_ARM64)` by `defined(V8_HOST_ARCH_ARM64)`?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 6
+      },
+      "revId": "cba9fa2de83caecbfb5d0c270e840b57fff22162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
