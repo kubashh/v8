@@ -42,11 +42,9 @@ void AbandonCurrentlyFreeMemory(PagedSpace* space);
 
 void GcAndSweep(Heap* heap, AllocationSpace space);
 
+void EmptyNewSpaceUsingGC(Heap* heap);
+
 void ForceEvacuationCandidate(Page* page);
-
-void InvokeScavenge(Isolate* isolate = nullptr);
-
-void InvokeMarkSweep(Isolate* isolate = nullptr);
 
 void GrowNewSpace(Heap* heap);
 
