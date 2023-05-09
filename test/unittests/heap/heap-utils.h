@@ -36,14 +36,6 @@ class WithHeapInternals : public TMixin, HeapInternalsBase {
     heap()->CollectGarbage(space, GarbageCollectionReason::kTesting);
   }
 
-  void FullGC() {
-    heap()->CollectGarbage(OLD_SPACE, GarbageCollectionReason::kTesting);
-  }
-
-  void YoungGC() {
-    heap()->CollectGarbage(NEW_SPACE, GarbageCollectionReason::kTesting);
-  }
-
   void CollectAllAvailableGarbage() {
     heap()->CollectAllAvailableGarbage(GarbageCollectionReason::kTesting);
   }
@@ -78,8 +70,8 @@ class WithHeapInternals : public TMixin, HeapInternalsBase {
     // test: v8_flags.stress_concurrent_allocation = false; Background thread
     // allocating concurrently interferes with this function.
     CHECK(!v8_flags.stress_concurrent_allocation);
-    FullGC();
-    FullGC();
+    CollectGarbage(OLD_SPACE);
+    CollectGarbage(OLD_SPACE);
     heap()->EnsureSweepingCompleted(
         Heap::SweepingForcedFinalizationMode::kV8Only);
     heap()->old_space()->FreeLinearAllocationArea();
@@ -115,16 +107,6 @@ using TestWithHeapInternalsAndContext =  //
 inline void CollectGarbage(AllocationSpace space, v8::Isolate* isolate) {
   Heap* heap = reinterpret_cast<i::Isolate*>(isolate)->heap();
   heap->CollectGarbage(space, GarbageCollectionReason::kTesting);
-}
-
-inline void FullGC(v8::Isolate* isolate) {
-  Heap* heap = reinterpret_cast<i::Isolate*>(isolate)->heap();
-  heap->CollectAllGarbage(Heap::kNoGCFlags, GarbageCollectionReason::kTesting);
-}
-
-inline void YoungGC(v8::Isolate* isolate) {
-  Heap* heap = reinterpret_cast<i::Isolate*>(isolate)->heap();
-  heap->CollectGarbage(NEW_SPACE, GarbageCollectionReason::kTesting);
 }
 
 template <typename GlobalOrPersistent>
