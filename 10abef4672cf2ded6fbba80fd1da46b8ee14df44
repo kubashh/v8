@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ead874f_06e88bac",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "70f1d8f4_770962e4",
+      "range": {
+        "startLine": 1562,
+        "startChar": 29,
+        "endLine": 1562,
+        "endChar": 62
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0ea3969_c272edeb",
@@ -95,6 +119,30 @@
       "writtenOn": "2023-05-09T13:20:21Z",
       "side": 1,
       "message": "Did you try the `friend size_t hash_value(Key key)` trick to avoid moving the templates out?",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 37
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21cd8d3f_6fb569a4",
+        "filename": "src/compiler/turboshaft/snapshot-table.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0ea3969_c272edeb",
       "range": {
         "startLine": 47,
         "startChar": 0,
@@ -168,6 +216,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "149981e6_6f6fa0dc",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0729d7b_355c8614",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 14
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f54bebdf_4ff1c546",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3e7075c8_d743d8a6",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 14
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce58bdf2_fb8efcbc",
@@ -181,6 +277,30 @@
       "writtenOn": "2023-05-09T10:54:34Z",
       "side": 1,
       "message": "I think that you could just write `else { active_keys_.erase(key); }`.",
+      "range": {
+        "startLine": 68,
+        "startChar": 6,
+        "endLine": 70,
+        "endChar": 5
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "084080b7_4c28818f",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce58bdf2_fb8efcbc",
       "range": {
         "startLine": 68,
         "startChar": 6,
@@ -214,6 +334,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "444c4638_002ac133",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e030e794_2c457d71",
+      "range": {
+        "startLine": 74,
+        "startChar": 36,
+        "endLine": 74,
+        "endChar": 58
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d04de8d1_060adada",
@@ -237,6 +381,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1dcb640_cb28cf26",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d04de8d1_060adada",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 54
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac9dc93b_ab1a47a0",
@@ -250,6 +418,30 @@
       "writtenOn": "2023-05-09T10:54:34Z",
       "side": 1,
       "message": "successors",
+      "range": {
+        "startLine": 98,
+        "startChar": 7,
+        "endLine": 98,
+        "endChar": 19
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97932de0_c1868fb9",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac9dc93b_ab1a47a0",
       "range": {
         "startLine": 98,
         "startChar": 7,
@@ -307,6 +499,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3a5b595_00f7b45d",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07ae8366_a2995deb",
+      "range": {
+        "startLine": 102,
+        "startChar": 17,
+        "endLine": 102,
+        "endChar": 73
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "951ba6c5_08f34e01",
@@ -320,6 +536,30 @@
       "writtenOn": "2023-05-09T10:54:34Z",
       "side": 1,
       "message": "You could remove this parameter; but if you want to keep it to maybe later use it to have more precise aliasing, then feel free to keep it :)",
+      "range": {
+        "startLine": 123,
+        "startChar": 49,
+        "endLine": 123,
+        "endChar": 63
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3f04950_2514d526",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Yeah that was my hope that we might later use some information (e.g. type information) to exclude certain objects from potentially aliasing.",
+      "parentUuid": "951ba6c5_08f34e01",
       "range": {
         "startLine": 123,
         "startChar": 49,
@@ -377,6 +617,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e516c39_c35b3aea",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Good idea!",
+      "parentUuid": "43351dfc_4d316844",
+      "range": {
+        "startLine": 127,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 45
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39c93441_5a25480d",
@@ -400,6 +664,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d32684_0611e3d4",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39c93441_5a25480d",
+      "range": {
+        "startLine": 144,
+        "startChar": 4,
+        "endLine": 144,
+        "endChar": 75
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fac8cbb_db8ce3c5",
@@ -413,6 +701,30 @@
       "writtenOn": "2023-05-09T10:54:34Z",
       "side": 1,
       "message": "Why does this DCHECK hold?",
+      "range": {
+        "startLine": 147,
+        "startChar": 6,
+        "endLine": 147,
+        "endChar": 58
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25fa0755_94a056d2",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Because keys with are `kObservable` (which is the key\u0027s default value) are not stored in the table and are not tracked in the `active_keys_`.",
+      "parentUuid": "8fac8cbb_db8ce3c5",
       "range": {
         "startLine": 147,
         "startChar": 6,
@@ -539,6 +851,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d189ee8_541103f3",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84a400cf_c1e6acaf",
+      "range": {
+        "startLine": 270,
+        "startChar": 19,
+        "endLine": 270,
+        "endChar": 38
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39f29b9a_1c003878",
@@ -599,6 +935,30 @@
       "writtenOn": "2023-05-09T10:54:34Z",
       "side": 1,
       "message": "I don\u0027t think that you\u0027re using the UniformReducerAdapter here. Left over from a previous version maybe?",
+      "range": {
+        "startLine": 319,
+        "startChar": 13,
+        "endLine": 319,
+        "endChar": 34
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1927cfce_c00a6632",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-09T16:06:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "213d4a4e_c93888db",
       "range": {
         "startLine": 319,
         "startChar": 13,
