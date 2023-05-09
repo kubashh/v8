@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54995db5_3e8d3fb5",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "I differentiate the verb \u0027to warm up\u0027 and the usage as noun \u0027the warm-up\u0027 when using English texts (when printing text and comments). In code I can\u0027t use a dash, so I write the noun as Warmup and the verb as warm_up or warmed_up. At least that was my intention. I found some inconsistencies and dropped them. E.g. I don\u0027t think WarmUp is needed.",
+      "parentUuid": "966a422e_c51eb4b2",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 6
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4ab4ed4_f9283696",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-05-09T14:12:09Z",
       "side": 1,
       "message": "This change adds a `WarmupCacheHandler` and a `WarmUpManager`.\n\nRight now, the warmup cache is handling file operations but is not warmup phase specific. We could either drop `warmup` from its name (and maybe make it re-usable by setting the cache_file as a constructor param), or move read and write cache into the the warmup manager.",
+      "range": {
+        "startLine": 758,
+        "startChar": 6,
+        "endLine": 758,
+        "endChar": 12
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "762ddc26_4298ca10",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "There are also the logging entries that are warm-up specific which makes it harder to drop that name. I mainly moved this piece out of the WarmUpManager in order to reuse it in tests. Otherwise I need to rewrite the logic for reading/writing to this file.",
+      "parentUuid": "c4ab4ed4_f9283696",
       "range": {
         "startLine": 758,
         "startChar": 6,
@@ -106,6 +154,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd35bd22_c7baefb5",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "If I call it for a top-level constant it will be executed at import time and it\u0027s hard to mock in the tests.",
+      "parentUuid": "ef397b31_056906e3",
+      "range": {
+        "startLine": 760,
+        "startChar": 22,
+        "endLine": 760,
+        "endChar": 49
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e9105ccf_983c8c01",
         "filename": "tools/run_perf.py",
         "patchSetId": 8
@@ -117,6 +189,30 @@
       "writtenOn": "2023-05-09T14:12:09Z",
       "side": 1,
       "message": "Is this warning notifying someone or just logged on stdout?\n\nIf the write-to-disk part of this script continuously fails, we will always run the warmup part and don\u0027t recognise it till someone might wonder about longer runtimes. That seems to be a bit brittle.\n\nMaybe we fail here directly, or remove the file and file to get the next run green again, but at least a notification for one failing build will be send.",
+      "range": {
+        "startLine": 766,
+        "startChar": 0,
+        "endLine": 767,
+        "endChar": 65
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d020758_9ab39081",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "OK, reraising it.",
+      "parentUuid": "e9105ccf_983c8c01",
       "range": {
         "startLine": 766,
         "startChar": 0,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f324207_fc404c5b",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da4961a1_ddb030ff",
+      "range": {
+        "startLine": 781,
+        "startChar": 4,
+        "endLine": 781,
+        "endChar": 28
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c54550b_33a5b0f0",
@@ -163,6 +283,30 @@
       "writtenOn": "2023-05-09T14:12:09Z",
       "side": 1,
       "message": "The way its implemented is platform agnostic, right? Is there a use case where we don\u0027t want to run it on a specific platform?",
+      "range": {
+        "startLine": 786,
+        "startChar": 2,
+        "endLine": 786,
+        "endChar": 39
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "439b23f4_6bb95a4c",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "We differentiate between Android and desktop. I think for Android this whole thing makes no sense the way it\u0027s implemented now. We don\u0027t care for the uptime of the host, but would need the uptime of the device. But I wouldn\u0027t look deeper before knowing that we have a problem there at all.",
+      "parentUuid": "4c54550b_33a5b0f0",
       "range": {
         "startLine": 786,
         "startChar": 2,
@@ -196,6 +340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "892f84e5_68c8063f",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d7e6c38_1d086173",
+      "range": {
+        "startLine": 852,
+        "startChar": 49,
+        "endLine": 852,
+        "endChar": 51
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "795e0ece_82665f3e",
@@ -209,6 +377,30 @@
       "writtenOn": "2023-05-09T14:12:09Z",
       "side": 1,
       "message": "Could we call this `log_results` as the Platform does not need to be aware if this should not be logged due to a warmup phase or some other constraint?",
+      "range": {
+        "startLine": 931,
+        "startChar": 51,
+        "endLine": 931,
+        "endChar": 57
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cc796be_9750ceec",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "The difference in the logic is that we don\u0027t run the profiler process in the warmup. I can call it post_process.",
+      "parentUuid": "795e0ece_82665f3e",
       "range": {
         "startLine": 931,
         "startChar": 51,
@@ -244,6 +436,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c3114411_19bee92a",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "But it has an else part that prints a chatty message which we don\u0027t want to print in the case in the surrounding if. Or maybe I didn\u0027t understand where to move this to.",
+      "parentUuid": "fbfb2d84_081f1450",
+      "range": {
+        "startLine": 940,
+        "startChar": 8,
+        "endLine": 940,
+        "endChar": 31
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c01b7918_ccf5fa34",
         "filename": "tools/run_perf.py",
         "patchSetId": 8
@@ -255,6 +471,30 @@
       "writtenOn": "2023-05-09T14:12:09Z",
       "side": 1,
       "message": "Do we already know if the problem appears on Android as well? Is there a task somewhere to keep track of this issue on Android?",
+      "range": {
+        "startLine": 953,
+        "startChar": 6,
+        "endLine": 953,
+        "endChar": 21
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bcb9c48_83d2eb53",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "Nope, we don\u0027t know. I\u0027ll put it on my list. But it\u0027d be low prio.",
+      "parentUuid": "c01b7918_ccf5fa34",
       "range": {
         "startLine": 953,
         "startChar": 6,
@@ -288,6 +528,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08c83eb2_0dcf521d",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1b4e3c1_817c16ff",
+      "range": {
+        "startLine": 987,
+        "startChar": 49,
+        "endLine": 987,
+        "endChar": 51
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de2994d8_9cef7113",
@@ -301,6 +565,30 @@
       "writtenOn": "2023-05-09T14:12:09Z",
       "side": 1,
       "message": "nit: Seems like the other tests have a trailing `\\n`",
+      "range": {
+        "startLine": 295,
+        "startChar": 63,
+        "endLine": 295,
+        "endChar": 64
+      },
+      "revId": "b3eab7140bc86426b38ed970604f14a284e56b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6e23ad4_73a11ed6",
+        "filename": "tools/unittests/run_perf_test.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-09T18:15:09Z",
+      "side": 1,
+      "message": "Added it. The other tests also tested multiple things at once, e.g. the proper parsing of these results. For this test I wanted to keep everything not relevant as simple as possible.",
+      "parentUuid": "de2994d8_9cef7113",
       "range": {
         "startLine": 295,
         "startChar": 63,
