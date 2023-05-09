@@ -16,6 +16,69 @@
       "message": "ptal",
       "revId": "5ffd036032d929b18345e9dc8dbcf91c4be56734",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c1db8ad_34825b81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-09T17:09:18Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5ffd036032d929b18345e9dc8dbcf91c4be56734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b10f62a7_d272c429",
+        "filename": "test/cctest/heap/heap-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-09T17:09:18Z",
+      "side": 1,
+      "message": "This should be the same as CollectGarbage module flags. We can probably just have an optional parameter and rename this to `FullGC()`.",
+      "range": {
+        "startLine": 332,
+        "startChar": 5,
+        "endLine": 332,
+        "endChar": 22
+      },
+      "revId": "5ffd036032d929b18345e9dc8dbcf91c4be56734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14234a06_7c0b1781",
+        "filename": "test/cctest/heap/heap-utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-09T17:09:18Z",
+      "side": 1,
+      "message": "Can we rename those to better reflect what they do? \n\n`CollectGarbage(heap, OLD_SPACE)` is less readable than `InvokeMarkSweep()` (which is also not great though)",
+      "range": {
+        "startLine": 43,
+        "startChar": 5,
+        "endLine": 43,
+        "endChar": 19
+      },
+      "revId": "5ffd036032d929b18345e9dc8dbcf91c4be56734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

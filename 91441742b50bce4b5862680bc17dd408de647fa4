@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "237c0107_7cb80ec4",
+        "filename": "test/cctest/cctest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-09T17:09:18Z",
+      "side": 0,
+      "message": "This one could also move to a separate file.",
+      "range": {
+        "startLine": 449,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 13
+      },
+      "revId": "91441742b50bce4b5862680bc17dd408de647fa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7edfcc61_65490426",
+        "filename": "test/unittests/heap/heap-utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-09T17:09:18Z",
+      "side": 0,
+      "message": "I find this rename a bit unfortunate. It\u0027s making things less readable here.",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 10
+      },
+      "revId": "91441742b50bce4b5862680bc17dd408de647fa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
