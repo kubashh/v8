@@ -22,6 +22,30 @@
       },
       "revId": "cba9fa2de83caecbfb5d0c270e840b57fff22162",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aed3cab2_8ec34731",
+        "filename": "test/cctest/test-stack-unwinding-win64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1575637
+      },
+      "writtenOn": "2023-05-09T13:20:44Z",
+      "side": 0,
+      "message": "I only tested cross-compiling, so this may very well break native ARM64 compilation. Your concern is valid, I\u0027ll make sure that `CONTEXT_PC` uses `Pc` only for native ARM64 compilation, and `Rip` in other cases.",
+      "parentUuid": "87c721f4_69da5ecc",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 6
+      },
+      "revId": "cba9fa2de83caecbfb5d0c270e840b57fff22162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
