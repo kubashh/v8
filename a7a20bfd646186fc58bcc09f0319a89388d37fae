@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "437ae9b3_eef5c19c",
+        "filename": "test/cctest/cctest.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-09T15:06:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46bc8eb8_35748516",
+      "revId": "a7a20bfd646186fc58bcc09f0319a89388d37fae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bdcefc0_d1dc553c",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "156fc8a3_98471780",
+        "filename": "test/cctest/heap/test-concurrent-allocation.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-09T15:06:46Z",
+      "side": 1,
+      "message": "Reverted for now.",
+      "parentUuid": "1bdcefc0_d1dc553c",
+      "range": {
+        "startLine": 469,
+        "startChar": 10,
+        "endLine": 469,
+        "endChar": 27
+      },
+      "revId": "a7a20bfd646186fc58bcc09f0319a89388d37fae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46c7663b_c1f95a0c",
@@ -71,6 +113,30 @@
       "writtenOn": "2023-05-09T13:52:24Z",
       "side": 1,
       "message": "`EmptyNewSpaceUsingGC()`?",
+      "range": {
+        "startLine": 5351,
+        "startChar": 10,
+        "endLine": 5351,
+        "endChar": 24
+      },
+      "revId": "a7a20bfd646186fc58bcc09f0319a89388d37fae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a1c2206_98c7efd0",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5351,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-09T15:06:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46c7663b_c1f95a0c",
       "range": {
         "startLine": 5351,
         "startChar": 10,
