@@ -60,6 +60,53 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70f1d8f4_770962e4",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1562,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-09T13:20:21Z",
+      "side": 1,
+      "message": "Right, we should be careful with this. Eliminating write barriers for pre-tenured allocations is wrong. Also, we do have memory optimization afterwards, which eliminates write barriers to the most recent allocation anyway (when it is not pre-tenured).",
+      "parentUuid": "ae8e404c_a7856100",
+      "range": {
+        "startLine": 1562,
+        "startChar": 29,
+        "endLine": 1562,
+        "endChar": 62
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0ea3969_c272edeb",
+        "filename": "src/compiler/turboshaft/snapshot-table.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-09T13:20:21Z",
+      "side": 1,
+      "message": "Did you try the `friend size_t hash_value(Key key)` trick to avoid moving the templates out?",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 37
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acdfe985_5faf4634",
         "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
         "patchSetId": 2
@@ -88,6 +135,29 @@
       "writtenOn": "2023-05-09T10:54:34Z",
       "side": 1,
       "message": "What about renaming that to StoreData?",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 14
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0729d7b_355c8614",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-09T13:20:21Z",
+      "side": 1,
+      "message": "A name `KeyData` in the `turboshaft` namespace could easily clash with other uses of `SnapshotTable`. Maybe give it a longer name and define an alias inside of the class?",
       "range": {
         "startLine": 19,
         "startChar": 7,
