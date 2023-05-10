@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e54a587f_ed28c407",
+        "filename": "src/heap/conservative-stack-visitor.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-05-10T09:00:41Z",
+      "side": 1,
+      "message": "The fix is the `static_cast` here, which constructs a 64-bit mask.\n\nThe rest of this CL is refactoring and using the proper types (or `auto`) for cells and indices, that were introduced in `MarkingBitmap` later than the original version of his code.",
+      "revId": "293f203937a9141a40a71afd4bd927a8692b8442",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
