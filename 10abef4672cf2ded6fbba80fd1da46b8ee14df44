@@ -170,6 +170,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a51acfb2_3ffd5d83",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-10T09:28:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acdfe985_5faf4634",
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e7075c8_d743d8a6",
@@ -782,6 +800,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e042fe37_85960044",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-10T09:28:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1b9705af_f518633d",
+      "range": {
+        "startLine": 167,
+        "startChar": 8,
+        "endLine": 174,
+        "endChar": 22
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0389c993_916c63ea",
@@ -807,6 +849,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5f83d7c6_e46a9289",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-10T09:28:28Z",
+      "side": 1,
+      "message": "I guess it is not necessary because the number of iterations are very limited already by the small height of the lattice, but very specific examples can probably constructed where we iterate a few rounds. Not sure if we need to take action here.",
+      "parentUuid": "0389c993_916c63ea",
+      "range": {
+        "startLine": 223,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 7
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1fe2ac8f_66a874ec",
         "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
         "patchSetId": 2
@@ -818,6 +884,30 @@
       "writtenOn": "2023-05-09T10:54:34Z",
       "side": 1,
       "message": "You don\u0027t need this parameter (or at least, you\u0027re not using it ;) )",
+      "range": {
+        "startLine": 237,
+        "startChar": 38,
+        "endLine": 237,
+        "endChar": 59
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54c03079_456fe4a9",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-10T09:28:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fe2ac8f_66a874ec",
       "range": {
         "startLine": 237,
         "startChar": 38,
@@ -912,6 +1002,30 @@
       "side": 1,
       "message": "Ha! The new effect system separates block termination from effects :)",
       "parentUuid": "39f29b9a_1c003878",
+      "range": {
+        "startLine": 308,
+        "startChar": 4,
+        "endLine": 308,
+        "endChar": 16
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bdadf97_c3acf1f0",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-10T09:28:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48dfcabe_96df87b5",
       "range": {
         "startLine": 308,
         "startChar": 4,
