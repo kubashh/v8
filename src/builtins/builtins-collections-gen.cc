@@ -1733,12 +1733,18 @@ TF_BUILTIN(MapPrototypeDelete, CollectionsBuiltinsAssembler) {
 }
 
 TF_BUILTIN(SetPrototypeAdd, CollectionsBuiltinsAssembler) {
+  ThrowIfNotInstanceType(context, receiver, JS_SET_TYPE, "Set.prototype.add");
+
   const auto receiver = Parameter<Object>(Descriptor::kReceiver);
   auto key = Parameter<Object>(Descriptor::kKey);
   const auto context = Parameter<Context>(Descriptor::kContext);
 
-  ThrowIfNotInstanceType(context, receiver, JS_SET_TYPE, "Set.prototype.add");
+  const result = AddtoSetTable(receiver, key, context);
+  Return(result);
+}
 
+TNode<Object> CollectionsBuiltinsAssembler::AddtoSetTable(
+    const TNode<Object> receiver, TNode<Object> key, TNode<Context> context) {
   key = NormalizeNumberKey(key);
 
   const TNode<OrderedHashSet> table =
