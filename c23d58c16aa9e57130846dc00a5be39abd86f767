@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e14ffbf2_2fd1f72d",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-10T15:28:14Z",
+      "side": 1,
+      "message": "Good idea, done :)",
+      "parentUuid": "4d359e70_7410c288",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5a3d459_12e94260",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-05-10T14:37:12Z",
       "side": 1,
       "message": "This type will be wrong for loop phis right, given that we don\u0027t know the back-edge type? What about only using the loop phi type post-loop? That way we don\u0027t need 2 types of phis (but need to ignore it until after the loop).",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76a73b05_d48ba6cb",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-10T15:28:14Z",
+      "side": 1,
+      "message": "(thinking about it :) (in principle, sounds good, in practice, I\u0027m wondering if it really simplifies things or not))",
+      "parentUuid": "a5a3d459_12e94260",
       "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "71991eb5_e4eb14bf",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-10T15:28:14Z",
+      "side": 1,
+      "message": "Not necessarily, I think that it could be kSmi as well.\nNot sure if this was your point, but I\u0027ve changed a bit the code to look first at the untagged type, and only look at the alternative\u0027s type if the untagged type is kUnknown.",
+      "parentUuid": "258fa133_d5e724b6",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d67787d0_7a42d815",
         "filename": "src/maglev/maglev-interpreter-frame-state.cc",
         "patchSetId": 4
@@ -82,6 +136,24 @@
       "writtenOn": "2023-05-10T14:37:12Z",
       "side": 1,
       "message": "StaticType I suppose should mostly not be unknown. If you introduce a helper you to check both you could call that one here.",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efc36c6f_3f61b85f",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-10T15:28:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d67787d0_7a42d815",
       "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb913f05_7a774a6e",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-10T15:28:14Z",
+      "side": 1,
+      "message": "No, if we reach this point, `result` is a freshly allocated Phi.",
+      "parentUuid": "ce01f919_e37ba3af",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "768fe904_dfdb1b17",
@@ -116,6 +206,24 @@
       "writtenOn": "2023-05-10T14:37:12Z",
       "side": 1,
       "message": "Instead of priming the node info with the phi type, can\u0027t we consider this \"the static type\" for the phi, updating the `StaticTypeForNode` function instead? That would avoid creating NodeInfo unnecessarily and more nicely fits with how we look at special nodes elsewhere.",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3016d12_674de642",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-10T15:28:14Z",
+      "side": 1,
+      "message": "Unfortunately, I think that this would prevent Phis from having dynamic types valid in only some control paths, because when a node has a StaticType, we don\u0027t check its NodeInfo dynamic type.",
+      "parentUuid": "768fe904_dfdb1b17",
       "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
