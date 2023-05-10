@@ -2671,6 +2671,8 @@ NodeType StaticTypeForConstant(compiler::ObjectRef ref) {
   if (ref.IsSmi()) return NodeType::kSmi;
   return StaticTypeForConstant(ref.AsHeapObject());
 }
+}  // namespace
+
 NodeType StaticTypeForNode(compiler::JSHeapBroker* broker,
                            LocalIsolate* isolate, ValueNode* node) {
   switch (node->properties().value_representation()) {
@@ -2775,7 +2777,6 @@ NodeType StaticTypeForNode(compiler::JSHeapBroker* broker,
       return NodeType::kUnknown;
   }
 }
-}  // namespace
 
 bool MaglevGraphBuilder::EnsureType(ValueNode* node, NodeType type,
                                     NodeType* old_type) {
