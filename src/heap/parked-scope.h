@@ -56,8 +56,11 @@ class V8_NODISCARD ParkedMutexGuard {
       : mutex_(mutex) {
     DCHECK(AllowGarbageCollection::IsAllowed());
     if (!mutex_->TryLock()) {
-      ParkedScope scope(local_heap);
-      mutex_->Lock();
+      local_heap->ExecuteMaybeWithTrampoline(local_heap->is_main_thread(),
+                                             [local_heap, this]() {
+                                               ParkedScope scope(local_heap);
+                                               mutex_->Lock();
+                                             });
     }
   }
 
@@ -82,8 +85,11 @@ class V8_NODISCARD ParkedRecursiveMutexGuard {
       : mutex_(mutex) {
     DCHECK(AllowGarbageCollection::IsAllowed());
     if (!mutex_->TryLock()) {
-      ParkedScope scope(local_heap);
-      mutex_->Lock();
+      local_heap->ExecuteMaybeWithTrampoline(local_heap->is_main_thread(),
+                                             [local_heap, this]() {
+                                               ParkedScope scope(local_heap);
+                                               mutex_->Lock();
+                                             });
     }
   }
 
@@ -113,13 +119,19 @@ class V8_NODISCARD ParkedSharedMutexGuardIf final {
 
     if (kIsShared) {
       if (!mutex_->TryLockShared()) {
-        ParkedScope scope(local_heap);
-        mutex_->LockShared();
+        local_heap->ExecuteMaybeWithTrampoline(local_heap->is_main_thread(),
+                                               [local_heap, this]() {
+                                                 ParkedScope scope(local_heap);
+                                                 mutex_->LockShared();
+                                               });
       }
     } else {
       if (!mutex_->TryLockExclusive()) {
-        ParkedScope scope(local_heap);
-        mutex_->LockExclusive();
+        local_heap->ExecuteMaybeWithTrampoline(local_heap->is_main_thread(),
+                                               [local_heap, this]() {
+                                                 ParkedScope scope(local_heap);
+                                                 mutex_->LockExclusive();
+                                               });
       }
     }
   }
@@ -189,12 +201,15 @@ class V8_NODISCARD ParkingSemaphore final : public base::Semaphore {
   ParkingSemaphore(const ParkingSemaphore&) = delete;
   ParkingSemaphore& operator=(const ParkingSemaphore&) = delete;
 
-  void ParkedWait(LocalIsolate* local_isolate) {
-    ParkedWait(local_isolate->heap());
+  void ParkedWait(LocalIsolate* local_isolate, bool with_trampoline = false) {
+    ParkedWait(local_isolate->heap(), with_trampoline);
   }
-  void ParkedWait(LocalHeap* local_heap) {
-    ParkedScope scope(local_heap);
-    ParkedWait(scope);
+  void ParkedWait(LocalHeap* local_heap, bool with_trampoline = false) {
+    local_heap->ExecuteMaybeWithTrampoline(with_trampoline,
+                                           [this, local_heap]() {
+                                             ParkedScope scope(local_heap);
+                                             ParkedWait(scope);
+                                           });
   }
   void ParkedWait(const ParkedScope& scope) {
     USE(scope);
