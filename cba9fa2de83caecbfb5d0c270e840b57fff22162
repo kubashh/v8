@@ -70,6 +70,30 @@
       },
       "revId": "cba9fa2de83caecbfb5d0c270e840b57fff22162",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34588406_0543eebf",
+        "filename": "test/cctest/test-stack-unwinding-win64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1575637
+      },
+      "writtenOn": "2023-05-10T11:14:14Z",
+      "side": 0,
+      "message": "A new patch set is uploaded.",
+      "parentUuid": "2512fda0_e1d7c892",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 6
+      },
+      "revId": "cba9fa2de83caecbfb5d0c270e840b57fff22162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
