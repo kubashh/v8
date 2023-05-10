@@ -1023,17 +1023,19 @@ bool CompileTurbofan_NotConcurrent(Isolate* isolate,
     return false;
   }
 
-  {
-    // Park main thread here to be in the same state as background threads.
-    ParkedScope parked_scope(isolate->main_thread_local_isolate());
-    if (job->ExecuteJob(isolate->counters()->runtime_call_stats(),
-                        isolate->main_thread_local_isolate())) {
-      UnparkedScope unparked_scope(isolate->main_thread_local_isolate());
-      CompilerTracer::TraceAbortedJob(
-          isolate, compilation_info, job->prepare_in_ms(), job->execute_in_ms(),
-          job->finalize_in_ms());
-      return false;
-    }
+  // Park main thread here to be in the same state as background threads.
+  bool job_failed;
+  isolate->main_thread_local_isolate()->ExecuteWithTrampoline(
+      [isolate, job, &job_failed]() {
+        ParkedScope parked_scope(isolate->main_thread_local_isolate());
+        job_failed = job->ExecuteJob(isolate->counters()->runtime_call_stats(),
+                                     isolate->main_thread_local_isolate());
+      });
+  if (job_failed) {
+    CompilerTracer::TraceAbortedJob(isolate, compilation_info,
+                                    job->prepare_in_ms(), job->execute_in_ms(),
+                                    job->finalize_in_ms());
+    return false;
   }
 
   if (job->FinalizeJob(isolate) != CompilationJob::SUCCEEDED) {
@@ -1222,20 +1224,21 @@ MaybeHandle<Code> CompileMaglev(Isolate* isolate, Handle<JSFunction> function,
   }
 
   if (IsSynchronous(mode)) {
-    {
-      // Park the main thread Isolate here, to be in the same state as
-      // background threads.
-      ParkedScope parked_scope(isolate->main_thread_local_isolate());
-      CompilationJob::Status status =
-          job->ExecuteJob(isolate->counters()->runtime_call_stats(),
-                          isolate->main_thread_local_isolate());
-      if (status == CompilationJob::FAILED) {
-        return {};
-      }
-      CHECK_EQ(status, CompilationJob::SUCCEEDED);
+    CompilationJob::Status status;
+    // Park the main thread Isolate here, to be in the same state as
+    // background threads.
+    isolate->main_thread_local_isolate()->ExecuteWithTrampoline(
+        [isolate, &job, &status]() {
+          ParkedScope parked_scope(isolate->main_thread_local_isolate());
+          status = job->ExecuteJob(isolate->counters()->runtime_call_stats(),
+                                   isolate->main_thread_local_isolate());
+        });
+    if (status == CompilationJob::FAILED) {
+      return {};
     }
+    CHECK_EQ(status, CompilationJob::SUCCEEDED);
 
-    { Compiler::FinalizeMaglevCompilationJob(job.get(), isolate); }
+    Compiler::FinalizeMaglevCompilationJob(job.get(), isolate);
 
     return handle(function->code(), isolate);
   }
@@ -3402,10 +3405,13 @@ MaybeHandle<SharedFunctionInfo> CompileScriptOnBothBackgroundAndMainThread(
   }
 
   // Join with background thread and finalize compilation.
-  {
-    ParkedScope scope(isolate->main_thread_local_isolate());
-    background_compile_thread.Join();
-  }
+  auto main_isolate = isolate->main_thread_local_isolate();
+  main_isolate->heap()->ExecuteMaybeWithTrampoline(
+      main_isolate->is_main_thread(),
+      [main_isolate, &background_compile_thread]() {
+        ParkedScope scope(main_isolate);
+        background_compile_thread.Join();
+      });
 
   MaybeHandle<SharedFunctionInfo> maybe_result =
       Compiler::GetSharedFunctionInfoForStreamedScript(
