@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "168f8e4c_47b075a0",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-10T16:27:47Z",
+      "side": 1,
+      "message": "It should work the other way around: First check if we have a node type in the info, since that\u0027s the most specific, and only return the static type if we didn\u0027t find one.\n\nCheckType works the other way around because it\u0027s trying to satisfy a type requirement and the StaticNodeType might already satisfy it.",
+      "revId": "7ab7e6f569c1cfe7276e6bf87f8134d5fecfc7d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
