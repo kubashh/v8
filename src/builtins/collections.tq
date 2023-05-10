@@ -3,8 +3,32 @@
 // found in the LICENSE file.
 
 #include 'src/builtins/builtins-collections-gen.h'
+#include 'src/builtins/builtins-collections-gen.cc'
+// #include 'src/builtins/iterator.tq'
 
 namespace collections {
+
+@export
+struct SetRecord {
+  // SetRecord.[[Set]]
+  object: JSReceiver;
+
+  // SetRecord.[[Size]]
+  // a non-negative integer or +∞
+  size: Number;
+
+  // SetRecord.[[Has]]
+  has: JSAny;
+
+  // SetRecord.[[Keys]]
+  keys: JSAny;
+}
+
+extern macro CollectionsBuiltinsAssembler::AddtoSetTable(
+    implicit context: Context)(Object, Object):
+    Object;  // TN<Object> may not be JSReceiver. Check other examples. Check
+             // the context also or add it as an argument.
+
 @export
 macro LoadKeyValuePairNoSideEffects(implicit context: Context)(o: JSAny):
     KeyValuePair labels MayHaveSideEffects {
@@ -53,4 +77,80 @@ transitioning macro LoadKeyValuePair(implicit context: Context)(o: JSAny):
     };
   }
 }
+
+transitioning macro GetSetRecord(implicit context: Context)(obj: JSAny):
+    SetRecord {
+  // 1. If obj is not an Object, throw a TypeError exception.
+  const obj = Cast<JSReceiver>(obj)
+      otherwise ThrowTypeError(MessageTemplate::kCalledOnNonObject, 'GetSetRecord');
+
+  // 2. Let rawSize be ? Get(obj, "size").
+  const rawSize = GetProperty(obj, kSizeString);
+
+  let numSize: Number;
+  if (IsUndefined(rawSize)) {
+    // 4. NOTE: If rawSize is undefined, then numSize will be NaN.
+    // 5. If numSize is NaN, throw a TypeError exception.
+    ThrowTypeError(MessageTemplate::kSizeisNaN);
+  } else {
+    // 3. Let numSize be ? ToNumber(rawSize).
+    numSize = ToNumber_Inline(rawSize);
+  }
+
+  // 6. Let intSize be ! ToIntegerOrInfinity(numSize).
+  const intSize = ToInteger_Inline(numSize);
+
+  // 7. Let has be ? Get(obj, "has").
+  let has = GetProperty(obj, kHasString);
+
+  // 8. If IsCallable(has) is false, throw a TypeError exception.
+  has = Cast<Callable>(has)
+      otherwise ThrowTypeError(MessageTemplate::kCalledNonCallable, kHasString);
+
+  // 9. Let keys be ? Get(obj, "keys").
+  let keys = GetProperty(obj, kKeysString);
+
+  // 10. If IsCallable(keys) is false, throw a TypeError exception.
+  keys = Cast<Callable>(keys)
+      otherwise ThrowTypeError(MessageTemplate::kCalledNonCallable, kKeysString);
+
+  // 11. Return a new Set Record { [[Set]]: obj, [[Size]]: intSize, [[Has]]:
+  // has, [[Keys]]: keys }.
+  return SetRecord{object: obj, size: intSize, has: has, keys: keys};
+}
+
+transitioning macro GetKeysIterator(implicit context: Context)(
+    set: JSReceiver, keys: JSAny): iterator::IteratorRecord {
+  // 1. Let keysIter be ? Call(setRec.[[Keys]], setRec.[[Set]]).
+  const keysIter = Call(context, keys, set);
+
+  // 2. If keysIter is not an Object, throw a TypeError exception.
+  const keysIterObj = Cast<JSReceiver>(keysIter)
+      otherwise ThrowTypeError(MessageTemplate::kCalledOnNonObject, kKeysString);
+
+  // 3. Let nextMethod be ? Get(keysIter, "next").
+  const nextMethod = GetProperty(keysIter, kNextString);
+
+  // 4. If IsCallable(nextMethod) is false, throw a TypeError exception.
+  Cast<Callable>(nextMethod)
+      otherwise ThrowTypeError(MessageTemplate::kCalledNonCallable, kNextString);
+
+  // 5. Return a new Iterator Record { [[Iterator]]: keysIter, [[NextMethod]]:
+  // nextMethod, [[Done]]: false }.
+  return iterator::IteratorRecord{object: keysIterObj, next: nextMethod};
+}
+
+// transitioning macro SetDataHas(implicit context: Context)(resultSetData:
+// FixedArray, value: JSAny): Boolean {
+//   // 1. For each element e of resultSetData, do
+//  for (let i:Smi = 0; i < resultSetData.length; i++) {
+//    const e = resultSetData.objects[i];
+//   //   a. If e is not empty and SameValueZero(e, value) is true, return true.
+//    if (e != Undefined && e.SameValueZero(value)) {
+//      return true;
+//   }
+//  }
+// 2. Return false.
+//  return false;
+//}
 }
