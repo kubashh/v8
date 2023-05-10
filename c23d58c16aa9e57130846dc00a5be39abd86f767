@@ -16,6 +16,108 @@
       "message": "PTAL :)",
       "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d359e70_7410c288",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-10T14:37:12Z",
+      "side": 1,
+      "message": "Instead of just using `TryGetInfoFor`, we should also look for `StaticTypeForNode` if the former isn\u0027t present.",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5a3d459_12e94260",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-10T14:37:12Z",
+      "side": 1,
+      "message": "This type will be wrong for loop phis right, given that we don\u0027t know the back-edge type? What about only using the loop phi type post-loop? That way we don\u0027t need 2 types of phis (but need to ignore it until after the loop).",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "258fa133_d5e724b6",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-10T14:37:12Z",
+      "side": 1,
+      "message": "The type of untagged nodes is always `Number`?",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d67787d0_7a42d815",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-10T14:37:12Z",
+      "side": 1,
+      "message": "StaticType I suppose should mostly not be unknown. If you introduce a helper you to check both you could call that one here.",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce01f919_e37ba3af",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-10T14:37:12Z",
+      "side": 1,
+      "message": "merge_type",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "768fe904_dfdb1b17",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-10T14:37:12Z",
+      "side": 1,
+      "message": "Instead of priming the node info with the phi type, can\u0027t we consider this \"the static type\" for the phi, updating the `StaticTypeForNode` function instead? That would avoid creating NodeInfo unnecessarily and more nicely fits with how we look at special nodes elsewhere.",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
