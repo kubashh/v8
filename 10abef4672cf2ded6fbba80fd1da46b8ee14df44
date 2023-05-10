@@ -188,6 +188,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e6396b3_9add7658",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-10T14:24:14Z",
+      "side": 1,
+      "message": "Nice, thanks :)",
+      "parentUuid": "a51acfb2_3ffd5d83",
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e7075c8_d743d8a6",
@@ -588,6 +606,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c5f5e9c_a3c8971f",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-10T14:24:14Z",
+      "side": 1,
+      "message": "Sounds good :)",
+      "parentUuid": "e3f04950_2514d526",
+      "range": {
+        "startLine": 123,
+        "startChar": 49,
+        "endLine": 123,
+        "endChar": 63
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43351dfc_4d316844",
@@ -755,6 +797,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0592f76f_7b941f49",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-10T14:24:14Z",
+      "side": 1,
+      "message": "OK I see. Could you add a comment before the declaration of `active_keys_` explaining what it contains (and pointing out that Observable keys are always directly removed from active_keys in OnValueChange)? :)",
+      "parentUuid": "25fa0755_94a056d2",
+      "range": {
+        "startLine": 147,
+        "startChar": 6,
+        "endLine": 147,
+        "endChar": 58
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8a18f989_2421b28d",
         "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
         "patchSetId": 2
@@ -861,6 +927,30 @@
       "side": 1,
       "message": "I guess it is not necessary because the number of iterations are very limited already by the small height of the lattice, but very specific examples can probably constructed where we iterate a few rounds. Not sure if we need to take action here.",
       "parentUuid": "0389c993_916c63ea",
+      "range": {
+        "startLine": 223,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 7
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c399e09b_7abc2dc5",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-10T14:24:14Z",
+      "side": 1,
+      "message": "While the lattice height is small, aren\u0027t there cases where during each iteration a single key would change state, causing a single other to change state at the next iteration and so on, which would mean that the number of iterations would be basically \"number of memory operations\" in the loop? (maybe this can\u0027t happen though...)",
+      "parentUuid": "5f83d7c6_e46a9289",
       "range": {
         "startLine": 223,
         "startChar": 0,
