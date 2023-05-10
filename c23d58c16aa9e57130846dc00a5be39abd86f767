@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c99b5ea_50796d55",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-10T16:26:15Z",
+      "side": 1,
+      "message": "Ok I just misunderstood the code. A small comment would be helpful (and I think you\u0027re already breaking OSR before it\u0027s landed :)). Basically what you\u0027re saying is that all loop phis start with a phi without any predecessors; and in that case we\u0027ll set the _type_ to Unknown, so none of the merges will make it more specific. Did I get that right?",
+      "parentUuid": "76a73b05_d48ba6cb",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "258fa133_d5e724b6",
         "filename": "src/maglev/maglev-interpreter-frame-state.cc",
         "patchSetId": 4
@@ -193,6 +211,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5afbf31a_cb14e440",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-10T16:26:15Z",
+      "side": 1,
+      "message": "oops.",
+      "parentUuid": "eb913f05_7a774a6e",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "768fe904_dfdb1b17",
@@ -224,6 +260,24 @@
       "side": 1,
       "message": "Unfortunately, I think that this would prevent Phis from having dynamic types valid in only some control paths, because when a node has a StaticType, we don\u0027t check its NodeInfo dynamic type.",
       "parentUuid": "768fe904_dfdb1b17",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb0a4961_ad33e616",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-10T16:26:15Z",
+      "side": 1,
+      "message": "That\u0027s not true, we check both. If we `CheckType(...)` for some type, we\u0027ll simply first check if the static type already satisfies it. If it doesn\u0027t, we\u0027ll check if the refined dynamic type does.",
+      "parentUuid": "f3016d12_674de642",
       "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
