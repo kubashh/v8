@@ -189,12 +189,15 @@ class V8_NODISCARD ParkingSemaphore final : public base::Semaphore {
   ParkingSemaphore(const ParkingSemaphore&) = delete;
   ParkingSemaphore& operator=(const ParkingSemaphore&) = delete;
 
-  void ParkedWait(LocalIsolate* local_isolate) {
-    ParkedWait(local_isolate->heap());
+  void ParkedWait(LocalIsolate* local_isolate, bool with_trampoline = false) {
+    ParkedWait(local_isolate->heap(), with_trampoline);
   }
-  void ParkedWait(LocalHeap* local_heap) {
-    ParkedScope scope(local_heap);
-    ParkedWait(scope);
+  void ParkedWait(LocalHeap* local_heap, bool with_trampoline = false) {
+    local_heap->ExecuteMaybeWithTrampoline(with_trampoline,
+                                           [this, local_heap]() {
+                                             ParkedScope scope(local_heap);
+                                             ParkedWait(scope);
+                                           });
   }
   void ParkedWait(const ParkedScope& scope) {
     USE(scope);

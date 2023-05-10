@@ -156,8 +156,10 @@ size_t IsolateSafepoint::SetSafepointRequestedFlags(
 
 void IsolateSafepoint::LockMutex(LocalHeap* local_heap) {
   if (!local_heaps_mutex_.TryLock()) {
-    ParkedScope parked_scope(local_heap);
-    local_heaps_mutex_.Lock();
+    local_heap->ExecuteWithTrampoline([this, local_heap]() {
+      ParkedScope parked_scope(local_heap);
+      local_heaps_mutex_.Lock();
+    });
   }
 }
 
@@ -343,9 +345,12 @@ void GlobalSafepoint::EnterGlobalSafepointScope(Isolate* initiator) {
   DCHECK_NULL(LocalHeap::Current());
 
   if (!clients_mutex_.TryLock()) {
-    IgnoreLocalGCRequests ignore_gc_requests(initiator->heap());
-    ParkedScope parked_scope(initiator->main_thread_local_heap());
-    clients_mutex_.Lock();
+    initiator->main_thread_local_heap()->ExecuteWithTrampoline(
+        [this, initiator]() {
+          IgnoreLocalGCRequests ignore_gc_requests(initiator->heap());
+          ParkedScope parked_scope(initiator->main_thread_local_heap());
+          clients_mutex_.Lock();
+        });
   }
 
   if (++active_safepoint_scopes_ > 1) return;

@@ -1023,17 +1023,19 @@ bool CompileTurbofan_NotConcurrent(Isolate* isolate,
     return false;
   }
 
-  {
-    // Park main thread here to be in the same state as background threads.
-    ParkedScope parked_scope(isolate->main_thread_local_isolate());
-    if (job->ExecuteJob(isolate->counters()->runtime_call_stats(),
-                        isolate->main_thread_local_isolate())) {
-      UnparkedScope unparked_scope(isolate->main_thread_local_isolate());
-      CompilerTracer::TraceAbortedJob(
-          isolate, compilation_info, job->prepare_in_ms(), job->execute_in_ms(),
-          job->finalize_in_ms());
-      return false;
-    }
+  // Park main thread here to be in the same state as background threads.
+  bool job_failed;
+  isolate->main_thread_local_isolate()->ExecuteWithTrampoline(
+      [isolate, job, &job_failed]() {
+        ParkedScope parked_scope(isolate->main_thread_local_isolate());
+        job_failed = job->ExecuteJob(isolate->counters()->runtime_call_stats(),
+                                     isolate->main_thread_local_isolate());
+      });
+  if (job_failed) {
+    CompilerTracer::TraceAbortedJob(isolate, compilation_info,
+                                    job->prepare_in_ms(), job->execute_in_ms(),
+                                    job->finalize_in_ms());
+    return false;
   }
 
   if (job->FinalizeJob(isolate) != CompilationJob::SUCCEEDED) {

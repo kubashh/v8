@@ -45,11 +45,12 @@ struct V8_NODISCARD IsolateParkOnDisposeWrapper {
       : isolate(isolate), isolate_to_park(isolate_to_park) {}
 
   ~IsolateParkOnDisposeWrapper() {
-    {
-      i::ParkedScope parked(reinterpret_cast<Isolate*>(isolate_to_park)
-                                ->main_thread_local_isolate());
+    auto main_isolate = reinterpret_cast<Isolate*>(isolate_to_park)
+                            ->main_thread_local_isolate();
+    main_isolate->ExecuteWithTrampoline([this, main_isolate]() {
+      i::ParkedScope parked(main_isolate);
       isolate->Dispose();
-    }
+    });
   }
 
   v8::Isolate* const isolate;
@@ -229,7 +230,7 @@ UNINITIALIZED_TEST(YoungInternalization) {
   Handle<String> young_two_byte_seq1;
   Handle<String> one_byte_intern1;
   Handle<String> two_byte_intern1;
-  {
+  i_isolate2->main_thread_local_isolate()->ExecuteWithTrampoline([&]() {
     ParkedScope parked_scope(i_isolate2->main_thread_local_isolate());
     young_one_byte_seq1 = factory1->NewStringFromAsciiChecked(
         raw_one_byte, AllocationType::kYoung);
@@ -246,7 +247,7 @@ UNINITIALIZED_TEST(YoungInternalization) {
     CHECK(!young_two_byte_seq1.equals(two_byte_intern1));
     CHECK_NE(*young_one_byte_seq1, *one_byte_intern1);
     CHECK_NE(*young_two_byte_seq1, *two_byte_intern1);
-  }
+  });
 
   // Allocate two young strings with the same contents in isolate2 then intern
   // them. They should be the same as the interned strings from isolate1.
@@ -296,7 +297,8 @@ class ConcurrentStringThreadBase : public v8::base::Thread {
     Setup();
 
     sema_ready_->Signal();
-    sema_execute_start_->ParkedWait(i_isolate->main_thread_local_isolate());
+    sema_execute_start_->ParkedWait(i_isolate->main_thread_local_isolate(),
+                                    true);
 
     {
       HandleScope scope(i_isolate);
@@ -449,19 +451,21 @@ void TestConcurrentInternalization(TestHitOrMiss hit_or_miss) {
 
   LocalIsolate* local_isolate = i_isolate->main_thread_local_isolate();
   for (int i = 0; i < kThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kThreads; i++) {
     sema_execute_start.Signal();
   }
   for (int i = 0; i < kThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
-  ParkedScope parked(local_isolate);
-  for (auto& thread : threads) {
-    thread->ParkedJoin(parked);
-  }
+  local_isolate->ExecuteWithTrampoline([local_isolate, &threads]() {
+    ParkedScope parked(local_isolate);
+    for (auto& thread : threads) {
+      thread->ParkedJoin(parked);
+    }
+  });
 }
 }  // namespace
 
@@ -540,19 +544,21 @@ UNINITIALIZED_TEST(ConcurrentStringTableLookup) {
 
   LocalIsolate* local_isolate = i_isolate->main_thread_local_isolate();
   for (int i = 0; i < kTotalThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kTotalThreads; i++) {
     sema_execute_start.Signal();
   }
   for (int i = 0; i < kTotalThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
-  ParkedScope parked(local_isolate);
-  for (auto& thread : threads) {
-    thread->ParkedJoin(parked);
-  }
+  local_isolate->ExecuteWithTrampoline([local_isolate, &threads]() {
+    ParkedScope parked(local_isolate);
+    for (auto& thread : threads) {
+      thread->ParkedJoin(parked);
+    }
+  });
 }
 
 namespace {
@@ -1722,13 +1728,13 @@ void TestConcurrentExternalization(bool share_resources) {
 
   LocalIsolate* local_isolate = i_isolate->main_thread_local_isolate();
   for (int i = 0; i < kThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kThreads; i++) {
     sema_execute_start.Signal();
   }
   for (int i = 0; i < kThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
   i_isolate->heap()->CollectGarbageShared(i_isolate->main_thread_local_heap(),
@@ -1742,10 +1748,12 @@ void TestConcurrentExternalization(bool share_resources) {
                            threads);
   }
 
-  ParkedScope parked(local_isolate);
-  for (auto& thread : threads) {
-    thread->ParkedJoin(parked);
-  }
+  local_isolate->ExecuteWithTrampoline([local_isolate, &threads]() {
+    ParkedScope parked(local_isolate);
+    for (auto& thread : threads) {
+      thread->ParkedJoin(parked);
+    }
+  });
 }
 
 UNINITIALIZED_TEST(ConcurrentExternalizationWithUniqueResources) {
@@ -1807,13 +1815,13 @@ void TestConcurrentExternalizationWithDeadStrings(bool share_resources,
 
   LocalIsolate* local_isolate = i_isolate->main_thread_local_isolate();
   for (int i = 0; i < kThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kThreads; i++) {
     sema_execute_start.Signal();
   }
   for (int i = 0; i < kThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
   Handle<String> empty_string =
@@ -1860,10 +1868,12 @@ void TestConcurrentExternalizationWithDeadStrings(bool share_resources,
     }
   }
 
-  ParkedScope parked(local_isolate);
-  for (auto& thread : threads) {
-    thread->ParkedJoin(parked);
-  }
+  local_isolate->ExecuteWithTrampoline([local_isolate, &threads]() {
+    ParkedScope parked(local_isolate);
+    for (auto& thread : threads) {
+      thread->ParkedJoin(parked);
+    }
+  });
 }
 
 UNINITIALIZED_TEST(
@@ -1934,13 +1944,13 @@ void TestConcurrentExternalizationAndInternalization(
 
   LocalIsolate* local_isolate = i_isolate->main_thread_local_isolate();
   for (int i = 0; i < kTotalThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kTotalThreads; i++) {
     sema_execute_start.Signal();
   }
   for (int i = 0; i < kTotalThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
   i_isolate->heap()->CollectGarbageShared(i_isolate->main_thread_local_heap(),
@@ -1974,10 +1984,12 @@ void TestConcurrentExternalizationAndInternalization(
     CHECK(string.HasHashCode());
   }
 
-  ParkedScope parked(local_isolate);
-  for (auto& thread : threads) {
-    thread->ParkedJoin(parked);
-  }
+  local_isolate->ExecuteWithTrampoline([local_isolate, &threads]() {
+    ParkedScope parked(local_isolate);
+    for (auto& thread : threads) {
+      thread->ParkedJoin(parked);
+    }
+  });
 }
 
 UNINITIALIZED_TEST(ConcurrentExternalizationAndInternalizationMiss) {
