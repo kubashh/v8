@@ -5137,23 +5137,26 @@ UNINITIALIZED_TEST(SharedStrings) {
   Isolate* i_isolate2 = reinterpret_cast<Isolate*>(isolate2);
 
   CHECK_EQ(i_isolate1->string_table(), i_isolate2->string_table());
-  {
-    ParkedScope parked(i_isolate2->main_thread_local_heap());
-    CheckObjectsAreInSharedHeap(i_isolate1);
-  }
+  i_isolate2->main_thread_local_heap()->ExecuteWithTrampoline(
+      [i_isolate1, i_isolate2]() {
+        ParkedScope parked(i_isolate2->main_thread_local_heap());
+        CheckObjectsAreInSharedHeap(i_isolate1);
+      });
 
-  {
-    ParkedScope parked(i_isolate1->main_thread_local_heap());
-    CheckObjectsAreInSharedHeap(i_isolate2);
-  }
+  i_isolate1->main_thread_local_heap()->ExecuteWithTrampoline(
+      [i_isolate1, i_isolate2]() {
+        ParkedScope parked(i_isolate1->main_thread_local_heap());
+        CheckObjectsAreInSharedHeap(i_isolate2);
+      });
 
-  {
-    // Because both isolate1 and isolate2 are considered running on the main
-    // thread, one must be parked to avoid deadlock in the shared heap
-    // verification that may happen on client heap disposal.
-    ParkedScope parked(i_isolate1->main_thread_local_isolate());
-    isolate2->Dispose();
-  }
+  i_isolate1->main_thread_local_heap()->ExecuteWithTrampoline(
+      [i_isolate1, isolate2]() {
+        // Because both isolate1 and isolate2 are considered running on the main
+        // thread, one must be parked to avoid deadlock in the shared heap
+        // verification that may happen on client heap disposal.
+        ParkedScope parked(i_isolate1->main_thread_local_isolate());
+        isolate2->Dispose();
+      });
   isolate1->Dispose();
 
   blobs.Dispose();
