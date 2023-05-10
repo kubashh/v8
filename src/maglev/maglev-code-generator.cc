@@ -703,7 +703,9 @@ class MaglevCodeGeneratingNodeProcessor {
       __ DebugBreak();
     }
 
-    __ Prologue(graph);
+    if (!graph->no_prologue()) {
+      __ Prologue(graph);
+    }
   }
 
   void PostProcessGraph(Graph* graph) {}
@@ -1481,8 +1483,6 @@ void MaglevCodeGenerator::EmitCode() {
     masm_.Abort(AbortReason::kShouldNotDirectlyEnterOsrFunction);
     masm_.RecordComment("-- OSR entrpoint --");
     masm_.bind(code_gen_state_.osr_entry());
-    // TODO(v8:7700): Implement compilation with OSR offset.
-    masm_.Abort(AbortReason::kMaglevOsrTodo);
   }
 
   processor.ProcessGraph(graph_);

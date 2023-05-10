@@ -223,7 +223,7 @@ class MaglevGraphBuilder {
   explicit MaglevGraphBuilder(
       LocalIsolate* local_isolate, MaglevCompilationUnit* compilation_unit,
       Graph* graph, float call_frequency = 1.0f,
-      BytecodeOffset bytecode_offset = BytecodeOffset::None(),
+      BytecodeOffset caller_bytecode_offset = BytecodeOffset::None(),
       MaglevGraphBuilder* parent = nullptr);
 
   void Build() {
@@ -270,7 +270,11 @@ class MaglevGraphBuilder {
   void PeelLoop();
 
   void BuildBody() {
-    for (iterator_.Reset(); !iterator_.done(); iterator_.Advance()) {
+    // TODO(olivf) We should actually start at the beginning and not emit any
+    // nodes up until the entrypoint_ is reached. This will make sure we get the
+    // known_node_aspects_ set up with the latest information.
+    for (iterator_.SetOffset(entrypoint_); !iterator_.done();
+         iterator_.Advance()) {
       local_isolate_->heap()->Safepoint();
       if (V8_UNLIKELY(
               loop_headers_to_peel_.Contains(iterator_.current_offset()))) {
@@ -278,6 +282,8 @@ class MaglevGraphBuilder {
       }
       VisitSingleBytecode();
     }
+    // TODO(olivf) Abort visitor eary if we exit from an osr'd loop into an
+    // outer loop, since that will generate loops with only back-edges live.
   }
 
   SmiConstant* GetSmiConstant(int constant) {
@@ -1937,6 +1943,9 @@ class MaglevGraphBuilder {
   // base::Vector<ValueNode*>* inlined_arguments_ = nullptr;
   base::Optional<base::Vector<ValueNode*>> inlined_arguments_;
   BytecodeOffset caller_bytecode_offset_;
+
+  // Bytecode offset at which compilation should start.
+  int entrypoint_;
 
   LazyDeoptFrameScope* current_lazy_deopt_scope_ = nullptr;
 

@@ -267,6 +267,8 @@ void TieringManager::MaybeOptimizeFrame(JSFunction function,
   // implemented.
   if (IsRequestTurbofan(tiering_state) ||
       function.HasAvailableCodeKind(CodeKind::TURBOFAN)) {
+    if (v8_flags.maglev_osr && !v8_flags.osr_from_maglev) return;
+
     // OSR kicks in only once we've previously decided to tier up, but we are
     // still in a lower-tier frame (this implies a long-running loop).
     TryIncrementOsrUrgency(isolate_, function);

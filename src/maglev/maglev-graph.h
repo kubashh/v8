@@ -101,6 +101,9 @@ class Graph final : public ZoneObject {
   bool has_recursive_calls() const { return has_recursive_calls_; }
   void set_has_recursive_calls(bool value) { has_recursive_calls_ = value; }
 
+  bool no_prologue() const { return no_prologue_; }
+  void set_no_prologue() { no_prologue_ = true; }
+
  private:
   uint32_t tagged_stack_slots_ = kMaxUInt32;
   uint32_t untagged_stack_slots_ = kMaxUInt32;
@@ -120,6 +123,7 @@ class Graph final : public ZoneObject {
       inlined_functions_;
   bool has_recursive_calls_ = false;
   int total_inlined_bytecode_size_ = 0;
+  bool no_prologue_ = false;
 };
 
 }  // namespace maglev

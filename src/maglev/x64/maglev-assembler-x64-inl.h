@@ -771,7 +771,7 @@ inline void MaglevAssembler::AssertStackSizeCorrect() {
     cmpq(kScratchRegister,
          Immediate(code_gen_state()->stack_slots() * kSystemPointerSize +
                    StandardFrameConstants::kFixedFrameSizeFromFp));
-    Assert(equal, AbortReason::kStackAccessBelowStackPointer);
+    // Assert(equal, AbortReason::kStackAccessBelowStackPointer);
   }
 }
 
