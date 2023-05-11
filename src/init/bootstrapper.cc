@@ -3673,6 +3673,8 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                           Builtin::kSetPrototypeEntries, 0, true);
     SimpleInstallFunction(isolate_, prototype, "forEach",
                           Builtin::kSetPrototypeForEach, 1, false);
+    SimpleInstallFunction(isolate_, prototype, "union",
+                          Builtin::kSetPrototypeUnion, 1, true);
     SimpleInstallGetter(isolate_, prototype,
                         factory->InternalizeUtf8String("size"),
                         Builtin::kSetPrototypeGetSize, true);
@@ -4634,6 +4636,15 @@ void Genesis::InitializeGlobal_harmony_iterator_helpers() {
 
 #undef INSTALL_ITERATOR_HELPER
 #undef ITERATOR_HELPERS
+}
+
+void Genesis::InitializeGlobal_harmony_set_methods() {
+  if (!v8_flags.harmony_set_methods) return;
+
+  Handle<JSObject> set_prototype(native_context()->initial_set_prototype(),
+                                 isolate());
+  SimpleInstallFunction(isolate(), set_prototype, "union",
+                        Builtin::kSetPrototypeUnion, 1, true);
 }
 
 void Genesis::InitializeGlobal_harmony_json_parse_with_source() {

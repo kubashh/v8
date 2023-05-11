@@ -878,6 +878,7 @@ filegroup(
         "src/builtins/regexp-source.tq",
         "src/builtins/regexp-split.tq",
         "src/builtins/regexp-test.tq",
+        "src/builtins/set-methods.tq",
         "src/builtins/string-at.tq",
         "src/builtins/string-endswith.tq",
         "src/builtins/string-html.tq",
