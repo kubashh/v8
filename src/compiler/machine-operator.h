@@ -1033,6 +1033,10 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
   const Operator* I16x16UConvertI8x16();
   const Operator* S256Select();
   const Operator* ExtractF128(int32_t lane_index);
+  const Operator* I64x4Splat();
+  const Operator* I32x8Splat();
+  const Operator* I16x16Splat();
+  const Operator* I8x32Splat();
 
   // load [base + index]
   const Operator* Load(LoadRepresentation rep);

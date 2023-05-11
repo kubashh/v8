@@ -1124,7 +1124,11 @@
   V(I16x16SConvertI8x16)           \
   V(I16x16UConvertI8x16)           \
   V(S256Select)                    \
-  V(ExtractF128)
+  V(ExtractF128)                   \
+  V(I64x4Splat)                    \
+  V(I32x8Splat)                    \
+  V(I16x16Splat)                   \
+  V(I8x32Splat)
 
 #define VALUE_OP_LIST(V)     \
   COMMON_OP_LIST(V)          \

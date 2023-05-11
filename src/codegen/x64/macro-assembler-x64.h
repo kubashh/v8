@@ -220,6 +220,35 @@ class V8_EXPORT_PRIVATE MacroAssembler
   // BinOp
   void I64x4Mul(YMMRegister dst, YMMRegister lhs, YMMRegister rhs,
                 YMMRegister tmp1, YMMRegister tmp2);
+
+// Splat
+#define ISPLAT_LIST(V) \
+  V(I8x32Splat, b)     \
+  V(I16x16Splat, w)    \
+  V(I32x8Splat, d)     \
+  V(I64x4Splat, q)
+
+#define DEFINE_ISPLAT(name, suffix)          \
+  void name(YMMRegister dst, Register src) { \
+    ASM_CODE_COMMENT(this);                  \
+    DCHECK(CpuFeatures::IsSupported(AVX2));  \
+    CpuFeatureScope avx2_scope(this, AVX2);  \
+    vmovd(dst, src);                         \
+    vpbroadcast##suffix(dst, dst);           \
+  }                                          \
+                                             \
+  void name(YMMRegister dst, Operand src) {  \
+    ASM_CODE_COMMENT(this);                  \
+    DCHECK(CpuFeatures::IsSupported(AVX2));  \
+    CpuFeatureScope avx2_scope(this, AVX2);  \
+    vpbroadcast##suffix(dst, src);           \
+  }
+
+  ISPLAT_LIST(DEFINE_ISPLAT)
+
+#undef DEFINE_ISPLAT
+#undef ISPLAT_LIST
+
   // ---------------------------------------------------------------------------
   // Conversions between tagged smi values and non-tagged integer values.
 
