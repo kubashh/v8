@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d66671e4_cec2743c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-11T06:48:02Z",
+      "side": 1,
+      "message": "FYI, there is currently an issue with loop phis (I had only tested my CL on non-loop phis): they don\u0027t have the correct type after the loop.\nI\u0027ll fix that in the morning, but just wanted to reply to your comments before :)",
+      "revId": "7ab7e6f569c1cfe7276e6bf87f8134d5fecfc7d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "168f8e4c_47b075a0",
@@ -14,6 +31,24 @@
       "writtenOn": "2023-05-10T16:27:47Z",
       "side": 1,
       "message": "It should work the other way around: First check if we have a node type in the info, since that\u0027s the most specific, and only return the static type if we didn\u0027t find one.\n\nCheckType works the other way around because it\u0027s trying to satisfy a type requirement and the StaticNodeType might already satisfy it.",
+      "revId": "7ab7e6f569c1cfe7276e6bf87f8134d5fecfc7d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c08cb0bd_a7ccd57c",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-11T06:48:02Z",
+      "side": 1,
+      "message": "Ah right, good point. Will do :)",
+      "parentUuid": "168f8e4c_47b075a0",
       "revId": "7ab7e6f569c1cfe7276e6bf87f8134d5fecfc7d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
