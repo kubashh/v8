@@ -492,6 +492,14 @@
   'wasm/huge-memory': [SKIP],
   'wasm/huge-typedarray': [SKIP],
   'wasm/bigint-opt': [SKIP],
+<<<<<<< HEAD   (e18998 [M108-LTS][osr] Check whether the target is deoptimized)
+=======
+  'wasm/simd-lane-memory64': [SKIP],
+  'regress/regress-1320641': [SKIP],
+
+  # Needs a huge Uint8Array.
+  'regress/regress-1432470': [SKIP],
+>>>>>>> CHANGE (c2eda6 [osr] Avoid handling interrupts in the middle of OSR)
 }],  # 'arch in (ia32, arm, riscv32)'
 
 ##############################################################################

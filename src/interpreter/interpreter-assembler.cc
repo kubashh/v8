@@ -1053,7 +1053,35 @@ void InterpreterAssembler::UpdateInterruptBudget(TNode<Int32T> weight,
 
   // Update budget.
   StoreObjectFieldNoWriteBarrier(
+<<<<<<< HEAD   (e18998 [M108-LTS][osr] Check whether the target is deoptimized)
       feedback_cell, FeedbackCell::kInterruptBudgetOffset, new_budget.value());
+=======
+      feedback_cell, FeedbackCell::kInterruptBudgetOffset, new_budget);
+  return new_budget;
+}
+
+void InterpreterAssembler::DecreaseInterruptBudget(
+    TNode<Int32T> weight, StackCheckBehavior stack_check_behavior) {
+  Comment("[ DecreaseInterruptBudget");
+  Label done(this), interrupt_check(this);
+
+  // Assert that the weight is positive.
+  CSA_DCHECK(this, Int32GreaterThanOrEqual(weight, Int32Constant(0)));
+
+  // Make sure we include the current bytecode in the budget calculation.
+  TNode<Int32T> weight_after_bytecode =
+      Int32Add(weight, Int32Constant(CurrentBytecodeSize()));
+  TNode<Int32T> new_budget = UpdateInterruptBudget(weight_after_bytecode);
+  Branch(Int32GreaterThanOrEqual(new_budget, Int32Constant(0)), &done,
+         &interrupt_check);
+
+  BIND(&interrupt_check);
+  TNode<JSFunction> function = CAST(LoadRegister(Register::function_closure()));
+  CallRuntime(stack_check_behavior == kEnableStackCheck
+                  ? Runtime::kBytecodeBudgetInterruptWithStackCheck_Ignition
+                  : Runtime::kBytecodeBudgetInterrupt_Ignition,
+              GetContext(), function);
+>>>>>>> CHANGE (c2eda6 [osr] Avoid handling interrupts in the middle of OSR)
   Goto(&done);
   BIND(&done);
   Comment("] UpdateInterruptBudget");
@@ -1093,7 +1121,13 @@ void InterpreterAssembler::Jump(TNode<IntPtrT> jump_offset) {
 }
 
 void InterpreterAssembler::JumpBackward(TNode<IntPtrT> jump_offset) {
+<<<<<<< HEAD   (e18998 [M108-LTS][osr] Check whether the target is deoptimized)
   Jump(jump_offset, true);
+=======
+  DecreaseInterruptBudget(TruncateIntPtrToInt32(jump_offset),
+                          kEnableStackCheck);
+  JumpToOffset(IntPtrSub(BytecodeOffset(), jump_offset));
+>>>>>>> CHANGE (c2eda6 [osr] Avoid handling interrupts in the middle of OSR)
 }
 
 void InterpreterAssembler::JumpConditional(TNode<BoolT> condition,
@@ -1320,7 +1354,11 @@ void InterpreterAssembler::UpdateInterruptBudgetOnReturn() {
   TNode<Int32T> profiling_weight =
       Int32Sub(TruncateIntPtrToInt32(BytecodeOffset()),
                Int32Constant(kFirstBytecodeOffset));
+<<<<<<< HEAD   (e18998 [M108-LTS][osr] Check whether the target is deoptimized)
   UpdateInterruptBudget(profiling_weight, true);
+=======
+  DecreaseInterruptBudget(profiling_weight, kDisableStackCheck);
+>>>>>>> CHANGE (c2eda6 [osr] Avoid handling interrupts in the middle of OSR)
 }
 
 TNode<Int8T> InterpreterAssembler::LoadOsrState(
@@ -1406,6 +1444,14 @@ void InterpreterAssembler::OnStackReplacement(
 
   BIND(&osr_to_turbofan);
   {
+<<<<<<< HEAD   (e18998 [M108-LTS][osr] Check whether the target is deoptimized)
+=======
+    TNode<IntPtrT> length =
+        LoadAndUntagFixedArrayBaseLength(BytecodeArrayTaggedPointer());
+    TNode<IntPtrT> weight =
+        IntPtrMul(length, IntPtrConstant(v8_flags.osr_to_tierup));
+    DecreaseInterruptBudget(TruncateWordToInt32(weight), kDisableStackCheck);
+>>>>>>> CHANGE (c2eda6 [osr] Avoid handling interrupts in the middle of OSR)
     Callable callable = CodeFactory::InterpreterOnStackReplacement(isolate());
     CallStub(callable, context, maybe_target_code.value());
     JumpBackward(relative_jump);

@@ -597,16 +597,26 @@ INTRINSICS_LIST(DECLARE_VISITOR)
 #undef DECLARE_VISITOR
 
 void BaselineCompiler::UpdateInterruptBudgetAndJumpToLabel(
-    int weight, Label* label, Label* skip_interrupt_label) {
+    int weight, Label* label, Label* skip_interrupt_label,
+    StackCheckBehavior stack_check_behavior) {
   if (weight != 0) {
     ASM_CODE_COMMENT(&masm_);
     __ AddToInterruptBudgetAndJumpIfNotExceeded(weight, skip_interrupt_label);
 
+<<<<<<< HEAD   (e18998 [M108-LTS][osr] Check whether the target is deoptimized)
     if (weight < 0) {
       SaveAccumulatorScope accumulator_scope(&basm_);
       CallRuntime(Runtime::kBytecodeBudgetInterruptWithStackCheck_Sparkplug,
                   __ FunctionOperand());
     }
+=======
+    DCHECK_LT(weight, 0);
+    SaveAccumulatorScope accumulator_scope(&basm_);
+    CallRuntime(stack_check_behavior == kEnableStackCheck
+                    ? Runtime::kBytecodeBudgetInterruptWithStackCheck_Sparkplug
+                    : Runtime::kBytecodeBudgetInterrupt_Sparkplug,
+                __ FunctionOperand());
+>>>>>>> CHANGE (c2eda6 [osr] Avoid handling interrupts in the middle of OSR)
   }
   if (label) __ Jump(label);
 }
@@ -1928,7 +1938,7 @@ void BaselineCompiler::VisitJumpLoop() {
   // We can pass in the same label twice since it's a back edge and thus already
   // bound.
   DCHECK(label->is_bound());
-  UpdateInterruptBudgetAndJumpToLabel(weight, label, label);
+  UpdateInterruptBudgetAndJumpToLabel(weight, label, label, kEnableStackCheck);
 
   {
     ASM_CODE_COMMENT_STRING(&masm_, "OSR Handle Armed");
@@ -1949,6 +1959,14 @@ void BaselineCompiler::VisitJumpLoop() {
                   &osr_not_armed, Label::kNear);
 
     __ Bind(&osr);
+<<<<<<< HEAD   (e18998 [M108-LTS][osr] Check whether the target is deoptimized)
+=======
+    Label do_osr;
+    int weight = bytecode_->length() * v8_flags.osr_to_tierup;
+    UpdateInterruptBudgetAndJumpToLabel(-weight, nullptr, &do_osr,
+                                        kDisableStackCheck);
+    __ Bind(&do_osr);
+>>>>>>> CHANGE (c2eda6 [osr] Avoid handling interrupts in the middle of OSR)
     CallBuiltin<Builtin::kBaselineOnStackReplacement>(maybe_target_code);
     __ Jump(&osr_not_armed, Label::kNear);
   }

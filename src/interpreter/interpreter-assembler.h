@@ -237,6 +237,21 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   // Updates the profiler interrupt budget for a return.
   void UpdateInterruptBudgetOnReturn();
 
+<<<<<<< HEAD   (e18998 [M108-LTS][osr] Check whether the target is deoptimized)
+=======
+  // Adjusts the interrupt budget by the provided weight. Returns the new
+  // budget.
+  TNode<Int32T> UpdateInterruptBudget(TNode<Int32T> weight);
+  // Decrements the bytecode array's interrupt budget by a 32-bit unsigned
+  // |weight| and calls Runtime::kInterrupt if counter reaches zero.
+  enum StackCheckBehavior {
+    kEnableStackCheck,
+    kDisableStackCheck,
+  };
+  void DecreaseInterruptBudget(TNode<Int32T> weight,
+                               StackCheckBehavior stack_check_behavior);
+
+>>>>>>> CHANGE (c2eda6 [osr] Avoid handling interrupts in the middle of OSR)
   TNode<Int8T> LoadOsrState(TNode<FeedbackVector> feedback_vector);
 
   // Dispatch to the bytecode.

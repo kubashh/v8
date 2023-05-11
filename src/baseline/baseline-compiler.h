@@ -102,11 +102,23 @@ class BaselineCompiler {
   // Jump helpers.
   Label* NewLabel();
   Label* BuildForwardJumpLabel();
+<<<<<<< HEAD   (e18998 [M108-LTS][osr] Check whether the target is deoptimized)
   void UpdateInterruptBudgetAndJumpToLabel(int weight, Label* label,
                                            Label* skip_interrupt_label);
   void UpdateInterruptBudgetAndDoInterpreterJump();
   void UpdateInterruptBudgetAndDoInterpreterJumpIfRoot(RootIndex root);
   void UpdateInterruptBudgetAndDoInterpreterJumpIfNotRoot(RootIndex root);
+=======
+  enum StackCheckBehavior {
+    kEnableStackCheck,
+    kDisableStackCheck,
+  };
+  void UpdateInterruptBudgetAndJumpToLabel(
+      int weight, Label* label, Label* skip_interrupt_label,
+      StackCheckBehavior stack_check_behavior);
+  void JumpIfRoot(RootIndex root);
+  void JumpIfNotRoot(RootIndex root);
+>>>>>>> CHANGE (c2eda6 [osr] Avoid handling interrupts in the middle of OSR)
 
   // Feedback vector.
   MemOperand FeedbackVector();
