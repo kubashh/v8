@@ -119,6 +119,8 @@ extern macro CopyFixedArrayElements(
 extern macro CopyFixedArrayElements(
     constexpr ElementsKind, FixedArray, constexpr ElementsKind, FixedArray,
     intptr, intptr, intptr): void;
+extern macro CopyFixedArrayElements(
+    constexpr ElementsKind, FixedArray, FixedArray, intptr): void;
 
 macro ExtractFixedArray(
     source: FixedArray, first: intptr, count: intptr,

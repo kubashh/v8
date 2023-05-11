@@ -30,6 +30,10 @@ class BaseCollectionsAssembler : public CodeStubAssembler {
   void GotoIfCannotBeHeldWeakly(const TNode<Object> obj,
                                 Label* if_cannot_be_held_weakly);
 
+  // Adds an element to a set if the element is not already in the set.
+  TNode<Object> AddToSetTable(const TNode<Object> receiver, TNode<Object> key,
+                              TNode<Object> context);
+
  protected:
   enum Variant { kMap, kSet, kWeakMap, kWeakSet };
 

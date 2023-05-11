@@ -1739,6 +1739,12 @@ TF_BUILTIN(SetPrototypeAdd, CollectionsBuiltinsAssembler) {
 
   ThrowIfNotInstanceType(context, receiver, JS_SET_TYPE, "Set.prototype.add");
 
+  const TNode<Object> result = AddToSetTable(receiver, key, context);
+  Return(result);
+}
+
+TNode<Object> BaseCollectionsAssembler::AddToSetTable(
+    const TNode<Object> receiver, TNode<Object> key, TNode<Object> context) {
   key = NormalizeNumberKey(key);
 
   const TNode<OrderedHashSet> table =
@@ -1804,7 +1810,7 @@ TF_BUILTIN(SetPrototypeAdd, CollectionsBuiltinsAssembler) {
   StoreOrderedHashSetNewEntry(table_var.value(), key,
                               entry_start_position_or_hash.value(),
                               number_of_buckets.value(), occupancy.value());
-  Return(receiver);
+  return receiver;
 }
 
 void CollectionsBuiltinsAssembler::StoreOrderedHashSetNewEntry(
