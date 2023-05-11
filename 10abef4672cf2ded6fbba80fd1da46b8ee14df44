@@ -819,6 +819,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d334bb90_076e29c5",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-11T12:06:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0592f76f_7b941f49",
+      "range": {
+        "startLine": 147,
+        "startChar": 6,
+        "endLine": 147,
+        "endChar": 58
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a18f989_2421b28d",
@@ -951,6 +975,30 @@
       "side": 1,
       "message": "While the lattice height is small, aren\u0027t there cases where during each iteration a single key would change state, causing a single other to change state at the next iteration and so on, which would mean that the number of iterations would be basically \"number of memory operations\" in the loop? (maybe this can\u0027t happen though...)",
       "parentUuid": "5f83d7c6_e46a9289",
+      "range": {
+        "startLine": 223,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 7
+      },
+      "revId": "10abef4672cf2ded6fbba80fd1da46b8ee14df44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8990d53a_bc28e40e",
+        "filename": "src/compiler/turboshaft/store-store-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-11T12:06:29Z",
+      "side": 1,
+      "message": "Yeah I think that\u0027s not really happening, if we have a sequence of stores\n```\no.x \u003d ... // (1)\no.x \u003d ... // (2)\no.x \u003d ... // (3)\n```\nthen the observability of `(1)` and `(2)` depends on `(3)` and the operations between them and will not change when we revisit this block. The only change that can happen on a revisit is that `(3)` goes from `kUnobservable` to `kGCObservable` or `kObservable`. In either case, `(1)` and `(2)` don\u0027t change. I would think the worst-case complexity is somewhat linear in the number of different offsets stored to after the last \"can-observe-anything\"-operation (e.g. Load) in the block.",
+      "parentUuid": "c399e09b_7abc2dc5",
       "range": {
         "startLine": 223,
         "startChar": 0,
