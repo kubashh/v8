@@ -142,6 +142,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03c286b1_1280b7f1",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-11T10:15:50Z",
+      "side": 1,
+      "message": "I\u0027m not certain; it may work. My thinking was that we might not go through the regular Merge path for OSR entry; which would then skip setting the type to undefined. It was just a thought; since we\u0027re working on OSR, I\u0027ll have it top of mind when reviewing :)",
+      "parentUuid": "6f218f89_c59625cf",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "258fa133_d5e724b6",
@@ -173,6 +191,24 @@
       "side": 1,
       "message": "Not necessarily, I think that it could be kSmi as well.\nNot sure if this was your point, but I\u0027ve changed a bit the code to look first at the untagged type, and only look at the alternative\u0027s type if the untagged type is kUnknown.",
       "parentUuid": "258fa133_d5e724b6",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69221c81_ab8666fa",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-11T10:15:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "71991eb5_e4eb14bf",
       "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
