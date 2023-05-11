@@ -203,6 +203,15 @@ class WeakCollectionsBuiltinsAssembler : public BaseCollectionsAssembler {
   TNode<IntPtrT> ValueIndexFromKeyIndex(TNode<IntPtrT> key_index);
 };
 
+class CollectionsBuiltinsAssembler : public BaseCollectionsAssembler {
+ public:
+  explicit CollectionsBuiltinsAssembler(compiler::CodeAssemblerState* state)
+      : BaseCollectionsAssembler(state) {}
+
+  TNode<Object> AddToSetTable(const TNode<Object> receiver, TNode<Object> key,
+                              TNode<Object> context);
+};
+
 }  // namespace internal
 }  // namespace v8
 
