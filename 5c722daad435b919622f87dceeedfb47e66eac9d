@@ -16,6 +16,23 @@
       "message": "Hi there! We\u0027re working on fixing the executable targets on iOS and tracking some of these ideas in the listed bug. I\u0027ll be following with sending the remaining changes in a separate CL (where I have e.g. d8 working on iOS simulator).\n\nCould you PTAL? Thank you very much.",
       "revId": "5c722daad435b919622f87dceeedfb47e66eac9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe00993f_3da3e0cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2023-05-11T19:38:14Z",
+      "side": 1,
+      "message": "moving mlippautz@ now as reviewer for bazel/defs.bzl. Tkx.",
+      "revId": "5c722daad435b919622f87dceeedfb47e66eac9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
