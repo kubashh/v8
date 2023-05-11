@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f218f89_c59625cf",
+        "filename": "src/maglev/maglev-interpreter-frame-state.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-11T07:55:38Z",
+      "side": 1,
+      "message": "There is a comment in maglev-ir.h explaining how this works, and I\u0027ve updated it with a bit more details. \nRegarding OSR, I don\u0027t see the problem, could you expand on what you think could go wrong?",
+      "parentUuid": "5e5da3db_db258a20",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "258fa133_d5e724b6",
         "filename": "src/maglev/maglev-interpreter-frame-state.cc",
         "patchSetId": 4
@@ -314,6 +332,24 @@
       "side": 1,
       "message": "Oh right, good point! Then yea, sounds good, I\u0027ll do that! :)",
       "parentUuid": "fb0a4961_ad33e616",
+      "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d88a695f_62bffc54",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-11T07:55:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3ab8b08_0c4f2f9d",
       "revId": "c23d58c16aa9e57130846dc00a5be39abd86f767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
