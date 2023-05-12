@@ -117,3 +117,8 @@ group("v8_debug_helper") {
   public_deps = [ ":v8_debug_helper_internal" ]
   public_configs = [ ":external_config" ]
 }
+
+shared_library("v8_debug_helper_shared") {
+  testonly = true
+  deps = [ ":v8_debug_helper_internal" ]
+}
