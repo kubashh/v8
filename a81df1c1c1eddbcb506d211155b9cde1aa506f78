@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4370a76c_584a66d6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 3016,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-12T14:45:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d7ead64_15f9053a",
+      "range": {
+        "startLine": 3015,
+        "startChar": 4,
+        "endLine": 3016,
+        "endChar": 38
+      },
+      "revId": "a81df1c1c1eddbcb506d211155b9cde1aa506f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7860dac1_8c7c89f2",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-05-12T14:07:17Z",
       "side": 1,
       "message": "Suggestion: if we had a variant of `void Drop(const Value\u0026 /* unused */)` that takes a `const Value*`, we could write `Drop(value_on_branch);` here and wouldn\u0027t need the comment.",
+      "range": {
+        "startLine": 3160,
+        "startChar": 4,
+        "endLine": 3161,
+        "endChar": 12
+      },
+      "revId": "a81df1c1c1eddbcb506d211155b9cde1aa506f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "529b9975_b6165256",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 3161,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-12T14:45:00Z",
+      "side": 1,
+      "message": "Ack; used `Drop(*value_on_branch)`.",
+      "parentUuid": "7860dac1_8c7c89f2",
       "range": {
         "startLine": 3160,
         "startChar": 4,
@@ -81,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64fa8e47_a9640f0a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 3629,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-12T14:45:00Z",
+      "side": 1,
+      "message": "Nope, oversight. Also fixed another last use of `CreateReturnValues` and dropped that method.",
+      "parentUuid": "a4866924_bb725f36",
+      "revId": "a81df1c1c1eddbcb506d211155b9cde1aa506f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81d373a6_88234666",
@@ -104,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ebdf301_c87e28ab",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 4269,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-12T14:45:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81d373a6_88234666",
+      "range": {
+        "startLine": 4269,
+        "startChar": 33,
+        "endLine": 4269,
+        "endChar": 51
+      },
+      "revId": "a81df1c1c1eddbcb506d211155b9cde1aa506f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32db078f_dd39cae3",
@@ -117,6 +207,30 @@
       "writtenOn": "2023-05-12T14:07:17Z",
       "side": 1,
       "message": "I\u0027m fine with postponing all rtt handling until later (the CL is big enough), but I\u0027d think it should be possible to simply not push/drop the `rtt`. If the `args` are already not on the stack during the interface call, there\u0027s no reason why the `rtt` should be.",
+      "range": {
+        "startLine": 4332,
+        "startChar": 8,
+        "endLine": 4332,
+        "endChar": 18
+      },
+      "revId": "a81df1c1c1eddbcb506d211155b9cde1aa506f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b23fe42_259780e6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 4332,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-12T14:45:00Z",
+      "side": 1,
+      "message": "I already have a commit lined up to fix the rtt stuff. I\u0027d suggest postponing until that is ready.",
+      "parentUuid": "32db078f_dd39cae3",
       "range": {
         "startLine": 4332,
         "startChar": 8,
@@ -173,6 +287,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4b8e53b_cab26faf",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 5131,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-12T14:45:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ca28943_7485aca4",
+      "range": {
+        "startLine": 5127,
+        "startChar": 8,
+        "endLine": 5131,
+        "endChar": 51
+      },
+      "revId": "a81df1c1c1eddbcb506d211155b9cde1aa506f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34d5ea2c_17a6b60a",
@@ -186,6 +324,30 @@
       "writtenOn": "2023-05-12T14:07:17Z",
       "side": 1,
       "message": "I think this can now be just:\n```\n  Value* value_on_branch \u003d Push(ValueType::Ref(imm.index));\n```",
+      "range": {
+        "startLine": 5133,
+        "startChar": 8,
+        "endLine": 5136,
+        "endChar": 48
+      },
+      "revId": "a81df1c1c1eddbcb506d211155b9cde1aa506f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efb697b8_5764481a",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 5136,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-12T14:45:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34d5ea2c_17a6b60a",
       "range": {
         "startLine": 5133,
         "startChar": 8,
@@ -219,6 +381,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d42959b0_fca07b2d",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 5251,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-12T14:45:00Z",
+      "side": 1,
+      "message": "Ack, changed this to `Push` directly (also below).",
+      "parentUuid": "b7dcbf38_393998af",
+      "range": {
+        "startLine": 5251,
+        "startChar": 19,
+        "endLine": 5251,
+        "endChar": 30
+      },
+      "revId": "a81df1c1c1eddbcb506d211155b9cde1aa506f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9cd02a9f_b2c7d4b7",
@@ -242,6 +428,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e97f651_b2c9c2a2",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 5336,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-12T14:45:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9cd02a9f_b2c7d4b7",
+      "range": {
+        "startLine": 5335,
+        "startChar": 8,
+        "endLine": 5336,
+        "endChar": 31
+      },
+      "revId": "a81df1c1c1eddbcb506d211155b9cde1aa506f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bae3ceec_e18f244d",
@@ -255,6 +465,30 @@
       "writtenOn": "2023-05-12T14:07:17Z",
       "side": 1,
       "message": "I don\u0027t think this is correct: we generally want the \"value on branch\" to be on the stack for possibly-branching instructions, the \"value on fallthrough\" is pushed afterwards. See e.g. lines 5356/5357.\n\nThese instructions, too, are deprecated, and it seems that we have already migrated our test coverage to use their replacements (based on an assumption that we wouldn\u0027t refactor this code before deleting it), so the green try jobs don\u0027t indicate that this change is OK.",
+      "range": {
+        "startLine": 5384,
+        "startChar": 38,
+        "endLine": 5384,
+        "endChar": 42
+      },
+      "revId": "a81df1c1c1eddbcb506d211155b9cde1aa506f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fbdc7ec_f0df0e79",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 5384,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-12T14:45:00Z",
+      "side": 1,
+      "message": "Ack, I undid this change. We still have the old methods, so no need to migrate those deprecated opcodes.",
+      "parentUuid": "bae3ceec_e18f244d",
       "range": {
         "startLine": 5384,
         "startChar": 38,
