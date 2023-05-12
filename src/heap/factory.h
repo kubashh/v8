@@ -119,6 +119,11 @@ enum FunctionMode {
       kWithReadonlyPrototypeBit | kWithNameBit,
 };
 
+enum class ArrayStorageAllocationMode {
+  DONT_INITIALIZE_ARRAY_ELEMENTS,
+  INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE
+};
+
 // Interface for handle based allocation.
 class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
  public:
