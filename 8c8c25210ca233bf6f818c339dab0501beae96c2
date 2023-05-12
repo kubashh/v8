@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15a57a1c_474ab5c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-12T09:47:46Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "8c8c25210ca233bf6f818c339dab0501beae96c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b0d3f65_94718575",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-12T09:47:46Z",
+      "side": 1,
+      "message": "The bug we found yesterday.",
+      "range": {
+        "startLine": 1482,
+        "startChar": 4,
+        "endLine": 1482,
+        "endChar": 18
+      },
+      "revId": "8c8c25210ca233bf6f818c339dab0501beae96c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
