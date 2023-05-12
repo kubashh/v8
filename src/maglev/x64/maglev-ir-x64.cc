@@ -60,14 +60,14 @@ void CheckNumber::GenerateCode(MaglevAssembler* masm,
   __ bind(&done);
 }
 
-void CheckMaps::MaybeGenerateMapLoad(MaglevAssembler* masm, Register object,
-                                     Register temp) {
-  register_for_map_compare_ = object;
+void CheckMaps::SetValueLocationConstraints() { UseRegister(receiver_input()); }
+
+void CheckMaps::MaybeGenerateMapLoad(MaglevAssembler* masm, Register object) {
+  map_or_object_ = object;
 }
 
-void CheckMaps::GenerateMapCompare(MaglevAssembler* masm, Handle<Map> map,
-                                   Register temp) {
-  __ Cmp(FieldOperand(register_for_map_compare_, HeapObject::kMapOffset), map);
+void CheckMaps::GenerateMapCompare(MaglevAssembler* masm, Handle<Map> map) {
+  __ Cmp(FieldOperand(map_or_object_, HeapObject::kMapOffset), map);
 }
 
 int CheckMapsWithMigration::MaxCallStackArgs() const {

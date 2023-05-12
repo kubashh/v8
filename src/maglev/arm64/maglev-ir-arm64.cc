@@ -212,16 +212,20 @@ void CheckedTruncateFloat64ToUint32::GenerateCode(
   __ Bind(&check_done);
 }
 
-void CheckMaps::MaybeGenerateMapLoad(MaglevAssembler* masm, Register object,
-                                     Register temp) {
-  register_for_map_compare_ = temp;
-  __ LoadMap(register_for_map_compare_, object);
+void CheckMaps::SetValueLocationConstraints() {
+  UseRegister(receiver_input());
+  set_temporaries_needed(2);
 }
 
-void CheckMaps::GenerateMapCompare(MaglevAssembler* masm, Handle<Map> map,
-                                   Register temp) {
-  __ Move(temp, map);
-  __ CmpTagged(register_for_map_compare_, temp);
+void CheckMaps::MaybeGenerateMapLoad(MaglevAssembler* masm, Register object) {
+  map_or_object_ = masm->scratch_register_scope()->Acquire();
+  temp_ = masm->scratch_register_scope()->Acquire();
+  __ LoadMap(map_or_object_, object);
+}
+
+void CheckMaps::GenerateMapCompare(MaglevAssembler* masm, Handle<Map> map) {
+  __ Move(temp_, map);
+  __ CmpTagged(map_or_object_, temp_);
 }
 
 int CheckMapsWithMigration::MaxCallStackArgs() const {
