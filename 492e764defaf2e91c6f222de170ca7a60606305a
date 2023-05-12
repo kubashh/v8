@@ -16,6 +16,69 @@
       "message": "PTAL, thanks",
       "revId": "492e764defaf2e91c6f222de170ca7a60606305a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b83c5e17_7922a915",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-12T14:10:28Z",
+      "side": 1,
+      "message": "LGTM, except for this BranchElimination + MemoryOptimization merge that I\u0027m not sure about...",
+      "revId": "492e764defaf2e91c6f222de170ca7a60606305a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4758d1a7_8d533ab1",
+        "filename": "src/compiler/turboshaft/dead-code-elimination-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-12T14:10:28Z",
+      "side": 1,
+      "message": "Could we rename this maybe? It\u0027s not super intuitive that DeadCodeEliminationPhase actually does some lowerings. I don\u0027t have a good name idea though, so if you don\u0027t either, feel free to keep DeadCodeEliminationPhase ;)",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 29
+      },
+      "revId": "492e764defaf2e91c6f222de170ca7a60606305a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8166451_ea20081b",
+        "filename": "src/compiler/turboshaft/optimize-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-12T14:10:28Z",
+      "side": 1,
+      "message": "I\u0027m not sure that you can safely combine BranchEliminationReducer and MemoryOptimizationReducer. Tobias and I had a discussion about that a while ago, and I think that we concluded that it would be better to have them in different phases, but maybe we were too cautious, and having them in a single phase is fine... We should loop Tobias in.",
+      "range": {
+        "startLine": 25,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 43
+      },
+      "revId": "492e764defaf2e91c6f222de170ca7a60606305a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
