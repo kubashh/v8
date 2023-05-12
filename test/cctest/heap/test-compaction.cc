@@ -76,7 +76,7 @@ HEAP_TEST(CompactionFullAbortedPage) {
       CheckAllObjectsOnPage(compaction_page_handles, to_be_aborted_page);
 
       heap->set_force_oom(true);
-      CcTest::CollectAllGarbage();
+      heap::CollectAllGarbage(heap);
       heap->EnsureSweepingCompleted(
           Heap::SweepingForcedFinalizationMode::kV8Only);
 
@@ -160,7 +160,7 @@ HEAP_TEST(CompactionPartiallyAbortedPage) {
             Page::FromAddress(page_to_fill_handles.front()->address());
 
         heap->set_force_oom(true);
-        CcTest::CollectAllGarbage();
+        heap::CollectAllGarbage(heap);
         heap->EnsureSweepingCompleted(
             Heap::SweepingForcedFinalizationMode::kV8Only);
 
@@ -258,7 +258,7 @@ HEAP_TEST(CompactionPartiallyAbortedPageIntraAbortedPointers) {
       DisableConservativeStackScanningScopeForTesting no_stack_scanning(heap);
 
       heap->set_force_oom(true);
-      CcTest::CollectAllGarbage();
+      heap::CollectAllGarbage(heap);
       heap->EnsureSweepingCompleted(
           Heap::SweepingForcedFinalizationMode::kV8Only);
 
@@ -366,7 +366,7 @@ HEAP_TEST(CompactionPartiallyAbortedPageWithRememberedSetEntries) {
       DisableConservativeStackScanningScopeForTesting no_stack_scanning(heap);
 
       heap->set_force_oom(true);
-      CcTest::CollectAllGarbage();
+      heap::CollectAllGarbage(heap);
       heap->EnsureSweepingCompleted(
           Heap::SweepingForcedFinalizationMode::kV8Only);
 
@@ -418,7 +418,7 @@ HEAP_TEST(CompactionPartiallyAbortedPageWithRememberedSetEntries) {
       // If remembered set entries are not properly filtered/reset for aborted
       // pages we have now a broken address at an object slot in old space and
       // the following scavenge will crash.
-      CcTest::CollectGarbage(NEW_SPACE);
+      heap::CollectGarbage(CcTest::heap(), NEW_SPACE);
     }
   }
   heap->RemoveNearHeapLimitCallback(reset_oom, 0u);
