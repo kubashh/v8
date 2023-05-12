@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa753f20_0916bd18",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-05-12T15:10:08Z",
+      "side": 0,
+      "message": "I didn\u0027t know what I was doing...\nWe don\u0027t run the fuzzer with `--experimental-wasm-stringref` so whenever we generate this cast target, it fails to compile.\nThis doesn\u0027t happen that often, so it took quite some iterations to run into this.",
+      "range": {
+        "startLine": 1287,
+        "startChar": 31,
+        "endLine": 1287,
+        "endChar": 48
+      },
+      "revId": "40e0880475a818f56b11912d3d111622ec6a2df4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
