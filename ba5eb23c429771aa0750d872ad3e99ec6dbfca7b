@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21e647ea_6f73c745",
+        "filename": "test/unittests/assembler/macro-assembler-x64-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-05-12T09:43:06Z",
+      "side": 1,
+      "message": "ack",
+      "parentUuid": "c2f7c4c1_21119a47",
+      "revId": "ba5eb23c429771aa0750d872ad3e99ec6dbfca7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "277b168e_900c8949",
