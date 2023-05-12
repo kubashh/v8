@@ -439,7 +439,7 @@ TEST_F(UnifiedHeapTest, TracedReferenceOnStack) {
     observer.SetWeak();
   }
   EXPECT_FALSE(observer.IsEmpty());
-  FullGC();
+  CollectGarbage(OLD_SPACE);
   EXPECT_FALSE(observer.IsEmpty());
 }
 
@@ -492,7 +492,7 @@ V8_NOINLINE void StackToHeapTest(v8::Isolate* v8_isolate, Operation op,
         IsNewObjectInCorrectGeneration(*v8::Utils::OpenHandle(*to_object)));
     if (!v8_flags.single_generation &&
         target_handling == TargetHandling::kInitializedOldGen) {
-      FullGC(v8_isolate);
+      CollectGarbage(OLD_SPACE, v8_isolate);
       EXPECT_FALSE(
           i::Heap::InYoungGeneration(*v8::Utils::OpenHandle(*to_object)));
     }
@@ -507,10 +507,10 @@ V8_NOINLINE void StackToHeapTest(v8::Isolate* v8_isolate, Operation op,
     observer.SetWeak();
   }
   EXPECT_FALSE(observer.IsEmpty());
-  FullGC(v8_isolate);
+  CollectGarbage(OLD_SPACE, v8_isolate);
   EXPECT_FALSE(observer.IsEmpty());
   PerformOperation(op, &cpp_heap_obj->heap_handle, &stack_handle);
-  FullGC(v8_isolate);
+  CollectGarbage(OLD_SPACE, v8_isolate);
   EXPECT_FALSE(observer.IsEmpty());
   cpp_heap_obj.Clear();
   {
@@ -518,7 +518,7 @@ V8_NOINLINE void StackToHeapTest(v8::Isolate* v8_isolate, Operation op,
     // Disable scanning, assuming the slots are overwritten.
     DisableConservativeStackScanningScopeForTesting no_stack_scanning(
         reinterpret_cast<i::Isolate*>(v8_isolate)->heap());
-    FullGC(v8_isolate);
+    CollectGarbage(OLD_SPACE, v8_isolate);
   }
   ASSERT_TRUE(observer.IsEmpty());
 }
@@ -539,7 +539,7 @@ V8_NOINLINE void HeapToStackTest(v8::Isolate* v8_isolate, Operation op,
         IsNewObjectInCorrectGeneration(*v8::Utils::OpenHandle(*to_object)));
     if (!v8_flags.single_generation &&
         target_handling == TargetHandling::kInitializedOldGen) {
-      FullGC(v8_isolate);
+      CollectGarbage(OLD_SPACE, v8_isolate);
       EXPECT_FALSE(
           i::Heap::InYoungGeneration(*v8::Utils::OpenHandle(*to_object)));
     }
@@ -554,10 +554,10 @@ V8_NOINLINE void HeapToStackTest(v8::Isolate* v8_isolate, Operation op,
     observer.SetWeak();
   }
   EXPECT_FALSE(observer.IsEmpty());
-  FullGC(v8_isolate);
+  CollectGarbage(OLD_SPACE, v8_isolate);
   EXPECT_FALSE(observer.IsEmpty());
   PerformOperation(op, &stack_handle, &cpp_heap_obj->heap_handle);
-  FullGC(v8_isolate);
+  CollectGarbage(OLD_SPACE, v8_isolate);
   EXPECT_FALSE(observer.IsEmpty());
   stack_handle.Reset();
   {
@@ -565,7 +565,7 @@ V8_NOINLINE void HeapToStackTest(v8::Isolate* v8_isolate, Operation op,
     // Disable scanning, assuming the slots are overwritten.
     DisableConservativeStackScanningScopeForTesting no_stack_scanning(
         reinterpret_cast<i::Isolate*>(v8_isolate)->heap());
-    FullGC(v8_isolate);
+    CollectGarbage(OLD_SPACE, v8_isolate);
   }
   EXPECT_TRUE(observer.IsEmpty());
 }
@@ -583,7 +583,7 @@ V8_NOINLINE void StackToStackTest(v8::Isolate* v8_isolate, Operation op,
         IsNewObjectInCorrectGeneration(*v8::Utils::OpenHandle(*to_object)));
     if (!v8_flags.single_generation &&
         target_handling == TargetHandling::kInitializedOldGen) {
-      FullGC(v8_isolate);
+      CollectGarbage(OLD_SPACE, v8_isolate);
       EXPECT_FALSE(
           i::Heap::InYoungGeneration(*v8::Utils::OpenHandle(*to_object)));
     }
@@ -598,10 +598,10 @@ V8_NOINLINE void StackToStackTest(v8::Isolate* v8_isolate, Operation op,
     observer.SetWeak();
   }
   EXPECT_FALSE(observer.IsEmpty());
-  FullGC(v8_isolate);
+  CollectGarbage(OLD_SPACE, v8_isolate);
   EXPECT_FALSE(observer.IsEmpty());
   PerformOperation(op, &stack_handle2, &stack_handle1);
-  FullGC(v8_isolate);
+  CollectGarbage(OLD_SPACE, v8_isolate);
   EXPECT_FALSE(observer.IsEmpty());
   stack_handle2.Reset();
   {
@@ -609,7 +609,7 @@ V8_NOINLINE void StackToStackTest(v8::Isolate* v8_isolate, Operation op,
     // Disable scanning, assuming the slots are overwritten.
     DisableConservativeStackScanningScopeForTesting no_stack_scanning(
         reinterpret_cast<i::Isolate*>(v8_isolate)->heap());
-    FullGC(v8_isolate);
+    CollectGarbage(OLD_SPACE, v8_isolate);
   }
   EXPECT_TRUE(observer.IsEmpty());
 }
