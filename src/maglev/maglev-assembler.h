@@ -217,6 +217,8 @@ class MaglevAssembler : public MacroAssembler {
   template <typename NodeT>
   inline void EmitEagerDeoptIfNotEqual(DeoptimizeReason reason, NodeT* node);
 
+  inline void JumpIfPreviousComparisonEqual(Label* label);
+
   inline void MaterialiseValueNode(Register dst, ValueNode* value);
 
   inline void IncrementInt32(Register reg);

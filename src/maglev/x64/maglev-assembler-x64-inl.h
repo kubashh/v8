@@ -677,6 +677,10 @@ inline void MaglevAssembler::EmitEagerDeoptIfNotEqual(DeoptimizeReason reason,
   EmitEagerDeoptIf(not_equal, reason, node);
 }
 
+inline void MaglevAssembler::JumpIfPreviousComparisonEqual(Label* label) {
+  j(equal, label);
+}
+
 inline void MaglevAssembler::MaterialiseValueNode(Register dst,
                                                   ValueNode* value) {
   switch (value->opcode()) {
