@@ -103,11 +103,12 @@ class CompilerTracer : public AllStatic {
   }
 
   static void TraceStartMaglevCompile(Isolate* isolate,
-                                      Handle<JSFunction> function,
+                                      Handle<JSFunction> function, bool osr,
                                       ConcurrencyMode mode) {
     if (!v8_flags.trace_opt) return;
     CodeTracer::Scope scope(isolate->GetCodeTracer());
     PrintTracePrefix(scope, "compiling method", function, CodeKind::MAGLEV);
+    if (osr) PrintF(scope.file(), " OSR");
     PrintF(scope.file(), ", mode: %s", ToString(mode));
     PrintTraceSuffix(scope);
   }
@@ -194,12 +195,13 @@ class CompilerTracer : public AllStatic {
   }
 
   static void TraceFinishMaglevCompile(Isolate* isolate,
-                                       Handle<JSFunction> function,
+                                       Handle<JSFunction> function, bool osr,
                                        double ms_prepare, double ms_execute,
                                        double ms_finalize) {
     if (!v8_flags.trace_opt) return;
     CodeTracer::Scope scope(isolate->GetCodeTracer());
     PrintTracePrefix(scope, "completed compiling", function, CodeKind::MAGLEV);
+    if (osr) PrintF(scope.file(), " OSR");
     PrintF(scope.file(), " - took %0.3f, %0.3f, %0.3f ms", ms_prepare,
            ms_execute, ms_finalize);
     PrintTraceSuffix(scope);
@@ -1216,7 +1218,8 @@ MaybeHandle<Code> CompileMaglev(Isolate* isolate, Handle<JSFunction> function,
         TRACE_DISABLED_BY_DEFAULT("v8.compile"),
         IsSynchronous(mode) ? "V8.MaglevPrepare" : "V8.MaglevConcurrentPrepare",
         job.get(), TRACE_EVENT_FLAG_FLOW_OUT);
-    CompilerTracer::TraceStartMaglevCompile(isolate, function, mode);
+    CompilerTracer::TraceStartMaglevCompile(
+        isolate, function, job->osr_offset() != BytecodeOffset::None(), mode);
     CompilationJob::Status status = job->PrepareJob(isolate);
     CHECK_EQ(status, CompilationJob::SUCCEEDED);  // TODO(v8:7700): Use status.
   }
@@ -1237,7 +1240,7 @@ MaybeHandle<Code> CompileMaglev(Isolate* isolate, Handle<JSFunction> function,
 
     { Compiler::FinalizeMaglevCompilationJob(job.get(), isolate); }
 
-    return handle(function->code(), isolate);
+    return job->code();
   }
 
   DCHECK(IsConcurrent(mode));
@@ -3868,6 +3871,16 @@ MaybeHandle<Code> Compiler::CompileOptimizedOSR(Isolate* isolate,
   // often.
   if (V8_UNLIKELY(!function->has_feedback_vector())) return {};
 
+  // Try to get existing compiled code even if some (potentially unrelated) osr
+  // compilation job exists.
+  Handle<Code> cached_code;
+  if (OptimizedCodeCache::Get(isolate, function, osr_offset, code_kind)
+          .ToHandle(&cached_code)) {
+    CompilerTracer::TraceOptimizeOSRAvailable(isolate, function, osr_offset,
+                                              mode);
+    return cached_code;
+  }
+
   // One OSR job per function at a time.
   if (IsInProgress(function->osr_tiering_state())) {
     return {};
@@ -3972,7 +3985,8 @@ void Compiler::FinalizeMaglevCompilationJob(maglev::MaglevCompilationJob* job,
   VMState<COMPILER> state(isolate);
 
   Handle<JSFunction> function = job->function();
-  if (function->ActiveTierIsTurbofan()) {
+  if (function->ActiveTierIsTurbofan() &&
+      job->osr_offset() == BytecodeOffset::None()) {
     CompilerTracer::TraceAbortedMaglevCompile(
         isolate, function, BailoutReason::kHigherTierAvailable);
     return;
@@ -3991,14 +4005,19 @@ void Compiler::FinalizeMaglevCompilationJob(maglev::MaglevCompilationJob* job,
     // Note the finalized InstructionStream object has already been installed on
     // the function by MaglevCompilationJob::FinalizeJobImpl.
 
-    OptimizedCodeCache::Insert(isolate, *function, osr_offset, function->code(),
+    if (osr_offset == BytecodeOffset::None()) {
+      job->function()->set_code(*job->code());
+    }
+
+    DCHECK(job->code()->is_maglevved());
+    OptimizedCodeCache::Insert(isolate, *function, osr_offset, *job->code(),
                                job->specialize_to_function_context());
 
     RecordMaglevFunctionCompilation(isolate, function);
     job->RecordCompilationStats(isolate);
     CompilerTracer::TraceFinishMaglevCompile(
-        isolate, function, job->prepare_in_ms(), job->execute_in_ms(),
-        job->finalize_in_ms());
+        isolate, function, job->osr_offset() != BytecodeOffset::None(),
+        job->prepare_in_ms(), job->execute_in_ms(), job->finalize_in_ms());
   }
 #endif
 }

@@ -768,7 +768,13 @@ void StraightForwardRegisterAllocator::AllocateNodeResult(ValueNode* node) {
 
   if (operand.basic_policy() == compiler::UnallocatedOperand::FIXED_SLOT) {
     DCHECK(node->Is<InitialValue>());
-    DCHECK_LT(operand.fixed_slot_index(), 0);
+    DCHECK_IMPLIES(!compilation_info_->is_osr(),
+                   operand.fixed_slot_index() < 0);
+    DCHECK_NE(operand.fixed_slot_index(), 0);
+    DCHECK_NE(operand.fixed_slot_index(), 1);
+    DCHECK_LT(
+        operand.fixed_slot_index(),
+        compilation_info_->toplevel_compilation_unit()->register_count() + 2);
     // Set the stack slot to exactly where the value is.
     compiler::AllocatedOperand location(compiler::AllocatedOperand::STACK_SLOT,
                                         node->GetMachineRepresentation(),

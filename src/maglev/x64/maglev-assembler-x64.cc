@@ -5,6 +5,7 @@
 #include "src/base/logging.h"
 #include "src/codegen/interface-descriptors-inl.h"
 #include "src/common/globals.h"
+#include "src/compiler/backend/instruction.h"
 #include "src/interpreter/bytecode-flags.h"
 #include "src/maglev/maglev-assembler-inl.h"
 #include "src/maglev/maglev-assembler.h"
@@ -631,7 +632,9 @@ void MaglevAssembler::TryTruncateDoubleToInt32(Register dst, DoubleRegister src,
 }
 
 void MaglevAssembler::Prologue(Graph* graph) {
-  BailoutIfDeoptimized(rbx);
+  if (!graph->is_osr()) {
+    BailoutIfDeoptimized(rbx);
+  }
 
   if (graph->has_recursive_calls()) {
     bind(code_gen_state()->entry_label());
@@ -640,7 +643,7 @@ void MaglevAssembler::Prologue(Graph* graph) {
   // Tiering support.
   // TODO(jgruber): Extract to a builtin (the tiering prologue is ~230 bytes
   // per Maglev code object on x64).
-  if (v8_flags.turbofan) {
+  if (v8_flags.turbofan && !graph->is_osr()) {
     // Scratch registers. Don't clobber regs related to the calling
     // convention (e.g. kJavaScriptCallArgCountRegister). Keep up-to-date
     // with deferred flags code.
@@ -665,8 +668,16 @@ void MaglevAssembler::Prologue(Graph* graph) {
         deferred_flags_need_processing);
   }
 
-  EnterFrame(StackFrame::MAGLEV);
-
+  if (graph->is_osr()) {
+    ASM_CODE_COMMENT_STRING(this, "Restoring osr frame");
+    movq(rsp, rbp);
+    movq(kJSFunctionRegister,
+         MemOperand(rbp, StandardFrameConstants::kFunctionOffset));
+    movq(kJavaScriptCallArgCountRegister,
+         MemOperand(rbp, StandardFrameConstants::kArgCOffset));
+  } else {
+    EnterFrame(StackFrame::MAGLEV);
+  }
   // Save arguments in frame.
   // TODO(leszeks): Consider eliding this frame if we don't make any calls
   // that could clobber these registers.
@@ -674,27 +685,50 @@ void MaglevAssembler::Prologue(Graph* graph) {
   Push(kJSFunctionRegister);              // Callee's JS function.
   Push(kJavaScriptCallArgCountRegister);  // Actual argument count.
 
-  // Initialize stack slots.
+  // TODO clean this up
+  std::unordered_map<int, int> initialized;
+  ASM_CODE_COMMENT_STRING(this, "Initializing osr values");
+  for (auto osr_val : graph->osr_values()) {
+    auto op = osr_val.second->result().operand();
+    if (op.IsAllocated()) {
+      if (op.IsStackSlot()) {
+        initialized[compiler::LocationOperand::cast(op).index()] =
+            osr_val.first;
+      } else {
+        Move(compiler::AllocatedOperand::cast(op).GetRegister(),
+             MemOperand(rbp,
+                        GetFramePointerOffsetForStackSlot(osr_val.first + 2)));
+      }
+    }
+  }
   if (graph->tagged_stack_slots() > 0) {
     ASM_CODE_COMMENT_STRING(this, "Initializing stack slots");
     // TODO(leszeks): Consider filling with xmm + movdqa instead.
-    Move(rax, 0);
+    Move(kScratchRegister, 0);
 
     // Magic value. Experimentally, an unroll size of 8 doesn't seem any
     // worse than fully unrolled pushes.
     const int kLoopUnrollSize = 8;
+
     int tagged_slots = graph->tagged_stack_slots();
-    if (tagged_slots < 2 * kLoopUnrollSize) {
+    if (tagged_slots < 2 * kLoopUnrollSize || !graph->osr_values().empty()) {
       // If the frame is small enough, just unroll the frame fill
       // completely.
       for (int i = 0; i < tagged_slots; ++i) {
-        pushq(rax);
+        if (!initialized.count(i)) {
+          pushq(kScratchRegister);
+        } else {
+          Move(kScratchRegister,
+               MemOperand(
+                   rbp, GetFramePointerOffsetForStackSlot(initialized.at(i))));
+          pushq(kScratchRegister);
+        }
       }
     } else {
       // Extract the first few slots to round to the unroll size.
       int first_slots = tagged_slots % kLoopUnrollSize;
       for (int i = 0; i < first_slots; ++i) {
-        pushq(rax);
+        pushq(kScratchRegister);
       }
       Move(rbx, tagged_slots / kLoopUnrollSize);
       // We enter the loop unconditionally, so make sure we need to loop at
@@ -703,7 +737,7 @@ void MaglevAssembler::Prologue(Graph* graph) {
       Label loop;
       bind(&loop);
       for (int i = 0; i < kLoopUnrollSize; ++i) {
-        pushq(rax);
+        pushq(kScratchRegister);
       }
       decl(rbx);
       j(greater, &loop);

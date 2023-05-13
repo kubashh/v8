@@ -295,7 +295,7 @@ class V8_NODISCARD MaglevGraphBuilder::LazyDeoptFrameScope {
 MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
                                        MaglevCompilationUnit* compilation_unit,
                                        Graph* graph, float call_frequency,
-                                       BytecodeOffset bytecode_offset,
+                                       BytecodeOffset caller_bytecode_offset,
                                        MaglevGraphBuilder* parent)
     : local_isolate_(local_isolate),
       compilation_unit_(compilation_unit),
@@ -323,7 +323,8 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
           is_inline() ? parent->current_interpreter_frame_.known_node_aspects()
                       : compilation_unit_->zone()->New<KnownNodeAspects>(
                             compilation_unit_->zone())),
-      caller_bytecode_offset_(bytecode_offset),
+      caller_bytecode_offset_(caller_bytecode_offset),
+      entrypoint_(0),
       catch_block_stack_(zone()) {
   memset(merge_states_, 0,
          (bytecode().length() + 1) * sizeof(InterpreterFrameState*));
@@ -343,6 +344,24 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
     new (&jump_targets_[inline_exit_offset()]) BasicBlockRef();
   }
 
+  if (compilation_unit_->info()->osr_offset() != BytecodeOffset::None()) {
+    int osr = compilation_unit_->info()->osr_offset().ToInt();
+    CHECK(!is_inline());
+    // OSR'ing into the middle of a loop is currently not supported. There
+    // should not be any issue with OSR'ing outside of loops, just we currently
+    // dont do it...
+    iterator_.SetOffset(osr);
+    CHECK(iterator_.current_bytecode() == interpreter::Bytecode::kJumpLoop);
+    entrypoint_ = iterator_.GetJumpTargetOffset();
+    iterator_.Reset();
+    graph_->set_is_osr();
+
+    if (v8_flags.trace_maglev_graph_building) {
+      std::cerr << "- Non-standard entrypoint @" << entrypoint_
+                << " by OSR from @" << osr << std::endl;
+    }
+  }
+
   CalculatePredecessorCounts();
 }
 
@@ -351,8 +370,8 @@ void MaglevGraphBuilder::StartPrologue() {
 }
 
 BasicBlock* MaglevGraphBuilder::EndPrologue() {
-  BasicBlock* first_block = FinishBlock<Jump>({}, &jump_targets_[0]);
-  MergeIntoFrameState(first_block, 0);
+  BasicBlock* first_block = FinishBlock<Jump>({}, &jump_targets_[entrypoint_]);
+  MergeIntoFrameState(first_block, entrypoint_);
   return first_block;
 }
 
@@ -380,9 +399,9 @@ void MaglevGraphBuilder::BuildRegisterFrameInitialization(ValueNode* context,
   interpreter::Register new_target_or_generator_register =
       bytecode().incoming_new_target_or_generator_register();
 
-  int register_index = 0;
   // TODO(leszeks): Don't emit if not needed.
   ValueNode* undefined_value = GetRootConstant(RootIndex::kUndefinedValue);
+  int register_index = 0;
   if (new_target_or_generator_register.is_valid()) {
     int new_target_index = new_target_or_generator_register.index();
     for (; register_index < new_target_index; register_index++) {
@@ -395,8 +414,16 @@ void MaglevGraphBuilder::BuildRegisterFrameInitialization(ValueNode* context,
     register_index++;
   }
   for (; register_index < register_count(); register_index++) {
-    current_interpreter_frame_.set(interpreter::Register(register_index),
-                                   undefined_value);
+    if (compilation_unit_->info()->is_osr()) {
+      auto osr_val = NodeBase::New<OsrValue>(zone(), 0, register_index);
+      AddInitializedNodeToGraph(osr_val);
+      if (has_graph_labeller()) graph_labeller()->RegisterNode(osr_val);
+      graph()->osr_values().emplace(register_index, osr_val);
+      InitializeRegister(interpreter::Register(register_index), osr_val);
+    } else {
+      InitializeRegister(interpreter::Register(register_index),
+                         undefined_value);
+    }
   }
 }
 

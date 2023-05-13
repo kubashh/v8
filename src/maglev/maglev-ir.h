@@ -169,6 +169,7 @@ class MergePointInterpreterFrameState;
   V(GetTemplateObject)                       \
   V(HasInPrototypeChain)                     \
   V(InitialValue)                            \
+  V(OsrValue)                                \
   V(LoadPolymorphicDoubleField)              \
   V(LoadPolymorphicTaggedField)              \
   V(LoadTaggedField)                         \
@@ -3854,6 +3855,22 @@ class InitialValue : public FixedInputValueNodeT<0, InitialValue> {
 
  private:
   const interpreter::Register source_;
+};
+
+class OsrValue : public FixedInputValueNodeT<0, OsrValue> {
+  using Base = FixedInputValueNodeT<0, OsrValue>;
+
+ public:
+  OsrValue(uint64_t bitfield, int index) : Base(bitfield), index_(index) {}
+
+  int index() const { return index_; }
+
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
+
+ private:
+  const int index_;
 };
 
 class RegisterInput : public FixedInputValueNodeT<0, RegisterInput> {

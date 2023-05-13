@@ -387,7 +387,8 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   if (osr_offset.IsNone()) {
     Deoptimizer::DeoptimizeFunction(*function, *optimized_code);
     DeoptAllOsrLoopsContainingDeoptExit(isolate, *function, deopt_exit_offset);
-  } else if (Deoptimizer::DeoptExitIsInsideOsrLoop(
+  } else if (deopt_reason != DeoptimizeReason::kOSREarlyExit &&
+             Deoptimizer::DeoptExitIsInsideOsrLoop(
                  isolate, *function, deopt_exit_offset, osr_offset)) {
     Deoptimizer::DeoptimizeFunction(*function, *optimized_code);
   }

@@ -831,6 +831,12 @@ void InitialValue::GenerateCode(MaglevAssembler* masm,
   // No-op, the value is already in the appropriate slot.
 }
 
+void OsrValue::SetValueLocationConstraints() { DefineAsRegister(this); }
+void OsrValue::GenerateCode(MaglevAssembler* masm,
+                            const ProcessingState& state) {
+  // TODO
+}
+
 void RegisterInput::SetValueLocationConstraints() {
   DefineAsFixed(this, input());
 }
@@ -4571,6 +4577,11 @@ void DeleteProperty::PrintParams(std::ostream& os,
 void InitialValue::PrintParams(std::ostream& os,
                                MaglevGraphLabeller* graph_labeller) const {
   os << "(" << source().ToString() << ")";
+}
+
+void OsrValue::PrintParams(std::ostream& os,
+                           MaglevGraphLabeller* graph_labeller) const {
+  os << "(" << index_ << ")";
 }
 
 void LoadGlobal::PrintParams(std::ostream& os,
