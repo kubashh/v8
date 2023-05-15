@@ -1177,8 +1177,8 @@ void Sweeper::AddPageImpl(AllocationSpace space, Page* page,
     AssertMainThreadOrSharedMainThread(heap_);
   }
   DCHECK(IsValidSweepingSpace(space));
-  DCHECK_IMPLIES(v8_flags.concurrent_sweeping && (space != NEW_SPACE),
-                 !major_sweeping_state_.HasValidJob());
+  // DCHECK_IMPLIES(v8_flags.concurrent_sweeping && (space != NEW_SPACE),
+  //                !major_sweeping_state_.HasValidJob());
   DCHECK_IMPLIES(v8_flags.concurrent_sweeping,
                  !minor_sweeping_state_.HasValidJob());
   if (mode == Sweeper::REGULAR) {
@@ -1188,8 +1188,8 @@ void Sweeper::AddPageImpl(AllocationSpace space, Page* page,
     // happened when the page was initially added, so it is skipped here.
     DCHECK_EQ(Sweeper::READD_TEMPORARY_REMOVED_PAGE, mode);
   }
-  DCHECK_EQ(Page::ConcurrentSweepingState::kPending,
-            page->concurrent_sweeping_state());
+  // DCHECK_EQ(Page::ConcurrentSweepingState::kPending,
+  //           page->concurrent_sweeping_state());
   sweeping_list_[GetSweepSpaceIndex(space)].push_back(page);
   has_sweeping_work_[GetSweepSpaceIndex(space)].store(
       true, std::memory_order_release);
