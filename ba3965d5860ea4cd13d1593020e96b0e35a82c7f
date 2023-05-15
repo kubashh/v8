@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "09e8af05_059ee76b",
+        "filename": "src/heap/scavenger.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-05-15T13:10:11Z",
+      "side": 0,
+      "message": "I wanted to drop those scopes if possible in a subsequent CL such that we keep those scopes until we know this CL sticks. Wdyt?",
+      "parentUuid": "e5a9c500_4ef27efc",
+      "range": {
+        "startLine": 326,
+        "startChar": 13,
+        "endLine": 326,
+        "endChar": 23
+      },
+      "revId": "ba3965d5860ea4cd13d1593020e96b0e35a82c7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a051cb1_684f20a5",
         "filename": "src/heap/scavenger.cc",
         "patchSetId": 7
