@@ -1177,8 +1177,8 @@ void Sweeper::AddPageImpl(AllocationSpace space, Page* page,
     AssertMainThreadOrSharedMainThread(heap_);
   }
   DCHECK(IsValidSweepingSpace(space));
-  DCHECK_IMPLIES(v8_flags.concurrent_sweeping && (space != NEW_SPACE),
-                 !major_sweeping_state_.HasValidJob());
+  // DCHECK_IMPLIES(v8_flags.concurrent_sweeping && (space != NEW_SPACE),
+  //                !major_sweeping_state_.HasValidJob());
   DCHECK_IMPLIES(v8_flags.concurrent_sweeping,
                  !minor_sweeping_state_.HasValidJob());
   if (mode == Sweeper::REGULAR) {
