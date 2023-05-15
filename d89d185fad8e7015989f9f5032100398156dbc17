@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f503544f_83f8b7b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-05-15T10:45:46Z",
+      "side": 1,
+      "message": "Does this feature have any known users? If not, can we revert it again? It makes all \"fast\" calls that use a `FastApiCallbackOptions` parameter slower, and the semantics do seem weird (why is it OK for calls from Wasm to just expose the module\u0027s entire memory to \"random\" imports? Why is it OK that calls to the same import expose a memory when they happen to have been made from Wasm code, but just pass `nullptr` when the call originated in JS? What\u0027s the expected behavior for (GC-enabled) Wasm modules that don\u0027t use linear memory?). So I don\u0027t think this behavior is worth having \"just in case\", it needs at least a sufficiently strong motivating use case, and the CL description doesn\u0027t mention any.\n\nA search query on the Node repo doesn\u0027t find any usages: https://github.com/nodejs/node/search?q\u003dFastApiCallbackOptions\nBut that\u0027s a bit surprising because presumably you wouldn\u0027t have gone to the trouble of implementing this if there hadn\u0027t been any demand for it? Was it maybe for an experiment or prospective use case that didn\u0027t pan out?",
+      "revId": "d89d185fad8e7015989f9f5032100398156dbc17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
