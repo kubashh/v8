@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "916d4c01_b05cedf9",
+        "filename": "src/compiler/turboshaft/dead-code-elimination-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-15T14:23:49Z",
+      "side": 1,
+      "message": "I\u0027ll keep it for now, we can discuss this again. Probably not the last time we reorganize the pipeline.",
+      "parentUuid": "faf8ebd1_43616936",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 29
+      },
+      "revId": "492e764defaf2e91c6f222de170ca7a60606305a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8166451_ea20081b",
@@ -167,6 +191,30 @@
       "side": 1,
       "message": "It should (probably?) be safe, but we could miss out on optimization opportunities as reducers that use analysis on the input graph don\u0027t take other reducers optimizations into account. How about putting `BranchEliminatinReducer` into the machine lowering phase?",
       "parentUuid": "b7013d51_41041061",
+      "range": {
+        "startLine": 25,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 43
+      },
+      "revId": "492e764defaf2e91c6f222de170ca7a60606305a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec77d3e2_3ba2e2d4",
+        "filename": "src/compiler/turboshaft/optimize-phase.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-15T14:23:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97a2d641_121872c3",
       "range": {
         "startLine": 25,
         "startChar": 18,
