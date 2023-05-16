@@ -43,6 +43,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "17a60b2e_f896ad40",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-16T08:50:14Z",
+      "side": 1,
+      "message": "From a boolean p-o-v it should not make a difference, right? Once the old var was True, it can\u0027t become False, hence we can always immediately return on True.\n\nBut the methods called below might have side affects. Basically all other added return statements change the logic for such side effects as well.\n\nI dare change the logic a bit and assume that the methods are side-effect free.",
+      "parentUuid": "c8775af1_eebaa38c",
+      "range": {
+        "startLine": 554,
+        "startChar": 0,
+        "endLine": 558,
+        "endChar": 17
+      },
+      "revId": "7a5ca7735632212ecd7857c49a553cdbd053755d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "97f9312a_9d763997",
         "filename": "tools/testrunner/local/statusfile.py",
         "patchSetId": 6
