@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79644be7_503c3a56",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-16T10:31:58Z",
+      "side": 0,
+      "message": "I wonder if it makes sense to keep a general GC method here as helper with the default param. I think it\u0027s fair to do a regular full GC without requiring a different helper mixin?",
+      "range": {
+        "startLine": 215,
+        "startChar": 7,
+        "endLine": 215,
+        "endChar": 24
+      },
+      "revId": "7ae2dc665f6be3d608c0da337bd7087d2c5a9343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
