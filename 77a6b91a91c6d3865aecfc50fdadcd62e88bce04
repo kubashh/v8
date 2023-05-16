@@ -22,6 +22,30 @@
       },
       "revId": "77a6b91a91c6d3865aecfc50fdadcd62e88bce04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73a4a653_d3e187f2",
+        "filename": "test/js-perf-test/TurboFan/wasm-inlining-loop-array.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-05-16T15:55:49Z",
+      "side": 1,
+      "message": "Ack. Nice to see the 5x speedup from inlining :-)",
+      "parentUuid": "7857f94a_ccb88a58",
+      "range": {
+        "startLine": 132,
+        "startChar": 6,
+        "endLine": 132,
+        "endChar": 16
+      },
+      "revId": "77a6b91a91c6d3865aecfc50fdadcd62e88bce04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
