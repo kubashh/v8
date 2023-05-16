@@ -194,7 +194,12 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::ExecuteJobImpl() {
     MaybePrintAst(parse_info(), compilation_info());
   }
 
+#if 0
+  // Was this necessary?
   ParkedScope parked_scope(local_isolate_);
+#else
+  USE(local_isolate_);
+#endif
 
   generator()->GenerateBytecode(stack_limit());
 

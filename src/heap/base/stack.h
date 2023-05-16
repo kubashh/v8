@@ -42,7 +42,7 @@ class V8_EXPORT_PRIVATE Stack final {
   // Word-aligned iteration of the stack. Callee-saved registers are pushed to
   // the stack before iterating pointers. Slot values are passed on to
   // `visitor`.
-  void IteratePointers(StackVisitor* visitor) const;
+  void IteratePointers(StackVisitor* visitor);
 
   // Word-aligned iteration of the stack, starting at the `stack_marker_`. Slot
   // values are passed on to `visitor`. This is intended to be used with
@@ -51,7 +51,7 @@ class V8_EXPORT_PRIVATE Stack final {
   // **Ignores:**
   // - Callee-saved registers.
   // - SafeStack.
-  void IteratePointersUntilMarker(StackVisitor* visitor) const;
+  void IteratePointersUntilMarker(StackVisitor* visitor);
 
   void AddStackSegment(const void* start, const void* top);
   void ClearStackSegments();
@@ -62,13 +62,32 @@ class V8_EXPORT_PRIVATE Stack final {
     stack_marker_ = v8::base::Stack::GetCurrentStackPosition();
   }
 
+  template <typename Callback>
+  V8_INLINE void SetMarkerAndCallback(Callback callback) {
+    SetMarkerAndCallbackHelper(static_cast<void*>(&callback),
+                               &SetMarkerAndCallbackImpl<Callback>);
+  }
+
+  using IterateStackCallback = void (*)(Stack*, void*, const void*);
+
  private:
 #ifdef DEBUG
   static bool IsOnCurrentStack(const void* ptr);
 #endif
 
-  static void IteratePointersImpl(const Stack* stack, StackVisitor* visitor,
+  static void IteratePointersImpl(Stack* stack, void* argument,
                                   const void* stack_end);
+
+  V8_NOINLINE void SetMarkerAndCallbackHelper(void* argument,
+                                              IterateStackCallback callback);
+
+  template <typename Callback>
+  static void SetMarkerAndCallbackImpl(Stack* stack, void* argument,
+                                       const void* stack_end) {
+    stack->stack_marker_ = stack_end;
+    Callback* callback = static_cast<Callback*>(argument);
+    (*callback)();
+  }
 
   const void* stack_start_;
 

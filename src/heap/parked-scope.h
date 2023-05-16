@@ -8,11 +8,31 @@
 #include "src/base/platform/condition-variable.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/semaphore.h"
+#include "src/base/witness.h"
 #include "src/execution/local-isolate.h"
 #include "src/heap/local-heap.h"
 
 namespace v8 {
 namespace internal {
+
+class ParkedWitness final : public base::Witness<LocalHeap> {
+ public:
+#ifdef DEBUG
+  bool IsValidAndStillParked() const {
+    if (!IsValid()) return false;
+    const LocalHeap* local_heap = resource();
+    DCHECK(local_heap->IsParked());
+    DCHECK_IMPLIES(local_heap->is_main_thread(),
+                   local_heap->is_in_trampoline());
+    return true;
+  }
+#endif
+
+ private:
+  explicit ParkedWitness(const LocalHeap* local_heap) : Witness(local_heap) {}
+
+  friend class ParkedScope;
+};
 
 // Scope that explicitly parks a thread, prohibiting access to the heap and the
 // creation of handles.
@@ -20,14 +40,18 @@ class V8_NODISCARD ParkedScope {
  public:
   explicit ParkedScope(LocalIsolate* local_isolate)
       : ParkedScope(local_isolate->heap()) {}
-  explicit ParkedScope(LocalHeap* local_heap) : local_heap_(local_heap) {
+  explicit ParkedScope(LocalHeap* local_heap)
+      : local_heap_(local_heap), witness_(local_heap) {
     local_heap_->Park();
   }
 
   ~ParkedScope() { local_heap_->Unpark(); }
 
+  operator ParkedWitness() const { return witness_; }
+
  private:
   LocalHeap* const local_heap_;
+  ParkedWitness witness_;
 };
 
 // Scope that explicitly unparks a thread, allowing access to the heap and the
@@ -50,16 +74,10 @@ class V8_NODISCARD UnparkedScope {
 // base::Mutex.
 class V8_NODISCARD ParkedMutexGuard {
  public:
-  explicit ParkedMutexGuard(LocalIsolate* local_isolate, base::Mutex* mutex)
-      : ParkedMutexGuard(local_isolate->heap(), mutex) {}
-  explicit ParkedMutexGuard(LocalHeap* local_heap, base::Mutex* mutex)
-      : mutex_(mutex) {
-    DCHECK(AllowGarbageCollection::IsAllowed());
-    if (!mutex_->TryLock()) {
-      ParkedScope scope(local_heap);
-      mutex_->Lock();
-    }
-  }
+  explicit V8_INLINE ParkedMutexGuard(LocalIsolate* local_isolate,
+                                      base::Mutex* mutex);
+  explicit V8_INLINE ParkedMutexGuard(LocalHeap* local_heap,
+                                      base::Mutex* mutex);
 
   ParkedMutexGuard(const ParkedMutexGuard&) = delete;
   ParkedMutexGuard& operator=(const ParkedMutexGuard&) = delete;
@@ -74,18 +92,10 @@ class V8_NODISCARD ParkedMutexGuard {
 // base::RecursiveMutex.
 class V8_NODISCARD ParkedRecursiveMutexGuard {
  public:
-  explicit ParkedRecursiveMutexGuard(LocalIsolate* local_isolate,
-                                     base::RecursiveMutex* mutex)
-      : ParkedRecursiveMutexGuard(local_isolate->heap(), mutex) {}
-  explicit ParkedRecursiveMutexGuard(LocalHeap* local_heap,
-                                     base::RecursiveMutex* mutex)
-      : mutex_(mutex) {
-    DCHECK(AllowGarbageCollection::IsAllowed());
-    if (!mutex_->TryLock()) {
-      ParkedScope scope(local_heap);
-      mutex_->Lock();
-    }
-  }
+  explicit V8_INLINE ParkedRecursiveMutexGuard(LocalIsolate* local_isolate,
+                                               base::RecursiveMutex* mutex);
+  explicit V8_INLINE ParkedRecursiveMutexGuard(LocalHeap* local_heap,
+                                               base::RecursiveMutex* mutex);
 
   ParkedRecursiveMutexGuard(const ParkedMutexGuard&) = delete;
   ParkedRecursiveMutexGuard& operator=(const ParkedMutexGuard&) = delete;
@@ -103,26 +113,9 @@ class V8_NODISCARD ParkedSharedMutexGuardIf final {
   ParkedSharedMutexGuardIf(LocalIsolate* local_isolate,
                            base::SharedMutex* mutex, bool enable_mutex)
       : ParkedSharedMutexGuardIf(local_isolate->heap(), mutex, enable_mutex) {}
-  ParkedSharedMutexGuardIf(LocalHeap* local_heap, base::SharedMutex* mutex,
-                           bool enable_mutex) {
-    DCHECK(AllowGarbageCollection::IsAllowed());
-    DCHECK_IMPLIES(Behavior == base::NullBehavior::kRequireNotNull,
-                   mutex != nullptr);
-    if (!enable_mutex) return;
-    mutex_ = mutex;
-
-    if (kIsShared) {
-      if (!mutex_->TryLockShared()) {
-        ParkedScope scope(local_heap);
-        mutex_->LockShared();
-      }
-    } else {
-      if (!mutex_->TryLockExclusive()) {
-        ParkedScope scope(local_heap);
-        mutex_->LockExclusive();
-      }
-    }
-  }
+  V8_INLINE ParkedSharedMutexGuardIf(LocalHeap* local_heap,
+                                     base::SharedMutex* mutex,
+                                     bool enable_mutex);
   ParkedSharedMutexGuardIf(const ParkedSharedMutexGuardIf&) = delete;
   ParkedSharedMutexGuardIf& operator=(const ParkedSharedMutexGuardIf&) = delete;
 
@@ -156,8 +149,8 @@ class V8_NODISCARD ParkingConditionVariable final
     ParkedScope scope(local_heap);
     ParkedWait(scope, mutex);
   }
-  void ParkedWait(const ParkedScope& scope, base::Mutex* mutex) {
-    USE(scope);
+  void ParkedWait(const ParkedWitness& parked, base::Mutex* mutex) {
+    DCHECK(parked.IsValidAndStillParked());
     Wait(mutex);
   }
 
@@ -170,9 +163,9 @@ class V8_NODISCARD ParkingConditionVariable final
     ParkedScope scope(local_heap);
     return ParkedWaitFor(scope, mutex, rel_time);
   }
-  bool ParkedWaitFor(const ParkedScope& scope, base::Mutex* mutex,
+  bool ParkedWaitFor(const ParkedWitness& parked, base::Mutex* mutex,
                      const base::TimeDelta& rel_time) V8_WARN_UNUSED_RESULT {
-    USE(scope);
+    DCHECK(parked.IsValidAndStillParked());
     return WaitFor(mutex, rel_time);
   }
 
@@ -189,15 +182,13 @@ class V8_NODISCARD ParkingSemaphore final : public base::Semaphore {
   ParkingSemaphore(const ParkingSemaphore&) = delete;
   ParkingSemaphore& operator=(const ParkingSemaphore&) = delete;
 
-  void ParkedWait(LocalIsolate* local_isolate) {
-    ParkedWait(local_isolate->heap());
-  }
-  void ParkedWait(LocalHeap* local_heap) {
-    ParkedScope scope(local_heap);
-    ParkedWait(scope);
-  }
-  void ParkedWait(const ParkedScope& scope) {
-    USE(scope);
+  V8_INLINE void ParkedWait(LocalIsolate* local_isolate,
+                            bool with_trampoline = false);
+  V8_INLINE void ParkedWait(LocalHeap* local_heap,
+                            bool with_trampoline = false);
+
+  void ParkedWait(const ParkedWitness& parked) {
+    DCHECK(parked.IsValidAndStillParked());
     Wait();
   }
 
@@ -210,15 +201,45 @@ class V8_NODISCARD ParkingSemaphore final : public base::Semaphore {
     ParkedScope scope(local_heap);
     return ParkedWaitFor(scope, rel_time);
   }
-  bool ParkedWaitFor(const ParkedScope& scope,
+  bool ParkedWaitFor(const ParkedWitness& parked,
                      const base::TimeDelta& rel_time) {
-    USE(scope);
+    DCHECK(parked.IsValidAndStillParked());
     return WaitFor(rel_time);
   }
 
  private:
   using base::Semaphore::Wait;
   using base::Semaphore::WaitFor;
+};
+
+class ParkingThread : public v8::base::Thread {
+ public:
+  explicit ParkingThread(const Options& options) : v8::base::Thread(options) {}
+
+  V8_INLINE void ParkedJoin(LocalIsolate* local_isolate);
+  V8_INLINE void ParkedJoin(LocalHeap* local_heap);
+
+  void ParkedJoin(const ParkedWitness& parked) {
+    DCHECK(parked.IsValidAndStillParked());
+    Join();
+  }
+
+  template <typename Thread>
+  static V8_INLINE void ParkedJoinAll(LocalIsolate* local_isolate,
+                                      const std::vector<Thread>& threads);
+  template <typename Thread>
+  static V8_INLINE void ParkedJoinAll(LocalHeap* local_heap,
+                                      const std::vector<Thread>& threads);
+
+  template <typename Thread>
+  static void ParkedJoinAll(const ParkedWitness& parked,
+                            const std::vector<Thread>& threads) {
+    DCHECK(parked.IsValidAndStillParked());
+    for (auto& thread : threads) thread->Join();
+  }
+
+ private:
+  using v8::base::Thread::Join;
 };
 
 }  // namespace internal
