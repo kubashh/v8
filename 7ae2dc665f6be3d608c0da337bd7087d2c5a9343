@@ -22,6 +22,30 @@
       },
       "revId": "7ae2dc665f6be3d608c0da337bd7087d2c5a9343",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fd389bf_2661d107",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-16T18:43:40Z",
+      "side": 0,
+      "message": "We have general helpers in heap-utils.h that we can use them without the mixin, they only require the heap-utils include. Giving them a default param is problematic though, which is the downside.\nDespite that, I\u0027m leaning towards collecting all GC methods in heap-utils and having all of them in the same place. I view this test-utils.h file as equivalent to cctest.h and we moved all the helpers out of cctest.h.\n\nIdeally we could move everything to heap-utils and have a default param, but I think we need to choose between them (unless we want to use macros).\n\n(Imo, also ideally, more tests that require GC would use the heap mixin, but I don\u0027t plan to start converting tests.)",
+      "parentUuid": "79644be7_503c3a56",
+      "range": {
+        "startLine": 215,
+        "startChar": 7,
+        "endLine": 215,
+        "endChar": 24
+      },
+      "revId": "7ae2dc665f6be3d608c0da337bd7087d2c5a9343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
