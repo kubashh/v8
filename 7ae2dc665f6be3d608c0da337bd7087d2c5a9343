@@ -70,6 +70,30 @@
       },
       "revId": "7ae2dc665f6be3d608c0da337bd7087d2c5a9343",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccab534e_4c0b367f",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-16T20:12:12Z",
+      "side": 0,
+      "message": "Is providing an isolate really that much more complicated? Afaict, that the only real diff.",
+      "parentUuid": "6b2dbf4b_62e1b218",
+      "range": {
+        "startLine": 215,
+        "startChar": 7,
+        "endLine": 215,
+        "endChar": 24
+      },
+      "revId": "7ae2dc665f6be3d608c0da337bd7087d2c5a9343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
