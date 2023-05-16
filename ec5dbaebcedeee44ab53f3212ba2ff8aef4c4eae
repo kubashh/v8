@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7d1c01b_e59d93f8",
+        "filename": "src/extensions/externalize-string-extension.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-05-16T19:15:11Z",
+      "side": 1,
+      "message": "Hi Patrick,\n\nThis is causing a number of test failures in ppc/s390 as we don\u0027t have sandbox enabled. Is it ok if we also check for `defined(V8_ENABLE_SANDBOX)` ?",
+      "revId": "ec5dbaebcedeee44ab53f3212ba2ff8aef4c4eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
