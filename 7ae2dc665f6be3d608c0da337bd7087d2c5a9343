@@ -46,6 +46,30 @@
       },
       "revId": "7ae2dc665f6be3d608c0da337bd7087d2c5a9343",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b2dbf4b_62e1b218",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-16T19:59:07Z",
+      "side": 0,
+      "message": "I think we should make it easy to write a test that does the most basic full GC without requiring a lot of utilities. That will mean that most tests can merely use the default setup.\n\nI agree that everything that\u0027s more complex than that should include heap utilities and use proper mixins/helpers.",
+      "parentUuid": "5fd389bf_2661d107",
+      "range": {
+        "startLine": 215,
+        "startChar": 7,
+        "endLine": 215,
+        "endChar": 24
+      },
+      "revId": "7ae2dc665f6be3d608c0da337bd7087d2c5a9343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
