@@ -4,7 +4,7 @@
 
 #include "src/base/platform/platform.h"
 #include "src/base/platform/time.h"
-#include "src/heap/parked-scope.h"
+#include "src/heap/parked-scope-inl.h"
 #include "src/objects/js-atomics-synchronization-inl.h"
 #include "test/unittests/test-utils.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -35,7 +35,7 @@ class LockingThread final : public ParkingThread {
     Isolate* isolate = isolate_wrapper.isolate();
 
     sema_ready_->Signal();
-    sema_execute_start_->ParkedWait(isolate->main_thread_local_isolate());
+    sema_execute_start_->ParkedWait(isolate->main_thread_local_isolate(), true);
 
     HandleScope scope(isolate);
     JSAtomicsMutex::Lock(isolate, mutex_);
@@ -76,17 +76,14 @@ TEST_F(JSAtomicsMutexTest, Contention) {
 
   LocalIsolate* local_isolate = i_main_isolate->main_thread_local_isolate();
   for (int i = 0; i < kThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kThreads; i++) sema_execute_start.Signal();
   for (int i = 0; i < kThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
-  ParkedScope parked(local_isolate);
-  for (auto& thread : threads) {
-    thread->ParkedJoin(parked);
-  }
+  ParkingThread::ParkedJoinAll(local_isolate, threads);
 
   EXPECT_FALSE(contended_mutex->IsHeld());
 }
@@ -158,7 +155,7 @@ TEST_F(JSAtomicsConditionTest, NotifyAll) {
 
   LocalIsolate* local_isolate = i_main_isolate->main_thread_local_isolate();
   for (uint32_t i = 0; i < kThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
 
   // Wait until all threads are waiting on the condition.
@@ -176,13 +173,10 @@ TEST_F(JSAtomicsConditionTest, NotifyAll) {
             condition->Notify(i_main_isolate, JSAtomicsCondition::kAllWaiters));
 
   for (uint32_t i = 0; i < kThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
-  ParkedScope parked(local_isolate);
-  for (auto& thread : threads) {
-    thread->ParkedJoin(parked);
-  }
+  ParkingThread::ParkedJoinAll(local_isolate, threads);
 
   EXPECT_EQ(0U, waiting_threads_count);
   EXPECT_FALSE(mutex->IsHeld());

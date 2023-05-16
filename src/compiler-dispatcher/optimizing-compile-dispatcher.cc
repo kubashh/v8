@@ -8,9 +8,9 @@
 #include "src/codegen/compiler.h"
 #include "src/codegen/optimized-compilation-info.h"
 #include "src/execution/isolate.h"
-#include "src/execution/local-isolate.h"
+#include "src/execution/local-isolate-inl.h"
 #include "src/handles/handles-inl.h"
-#include "src/heap/local-heap.h"
+#include "src/heap/local-heap-inl.h"
 #include "src/init/v8.h"
 #include "src/logging/counters.h"
 #include "src/logging/log.h"
@@ -146,11 +146,13 @@ void OptimizingCompileDispatcher::FlushInputQueue() {
 void OptimizingCompileDispatcher::AwaitCompileTasks() {
   {
     AllowGarbageCollection allow_before_parking;
-    ParkedScope parked_scope(isolate_->main_thread_local_isolate());
-    base::MutexGuard lock_guard(&ref_count_mutex_);
-    while (ref_count_ > 0) {
-      ref_count_zero_.ParkedWait(parked_scope, &ref_count_mutex_);
-    }
+    isolate_->main_thread_local_isolate()->ExecuteWhileParked(
+        [this](const ParkedWitness& parked) {
+          base::MutexGuard lock_guard(&ref_count_mutex_);
+          while (ref_count_ > 0) {
+            ref_count_zero_.ParkedWait(parked, &ref_count_mutex_);
+          }
+        });
   }
 
 #ifdef DEBUG
