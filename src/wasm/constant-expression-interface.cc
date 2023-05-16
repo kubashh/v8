@@ -256,10 +256,13 @@ void ConstantExpressionInterface::ArrayNewDefault(
 
 void ConstantExpressionInterface::ArrayNewFixed(
     FullDecoder* decoder, const ArrayIndexImmediate& imm,
-    base::Vector<const Value> elements, const Value& rtt, Value* result) {
+    const IndexImmediate& length_imm, const Value elements[], const Value& rtt,
+    Value* result) {
   if (!generate_value()) return;
   std::vector<WasmValue> element_values;
-  for (Value elem : elements) element_values.push_back(elem.runtime_value);
+  for (Value elem : base::VectorOf(elements, length_imm.index)) {
+    element_values.push_back(elem.runtime_value);
+  }
   result->runtime_value =
       WasmValue(isolate_->factory()->NewWasmArrayFromElements(
                     imm.array_type, element_values,
