@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29196854_9b308a0e",
+        "filename": "test/cctest/heap/heap-utils.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-16T09:03:27Z",
+      "side": 1,
+      "message": "Addressed in crrev.com/c/4530369",
+      "parentUuid": "b10f62a7_d272c429",
+      "range": {
+        "startLine": 332,
+        "startChar": 5,
+        "endLine": 332,
+        "endChar": 22
+      },
+      "revId": "5ffd036032d929b18345e9dc8dbcf91c4be56734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14234a06_7c0b1781",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-05-09T17:09:18Z",
       "side": 1,
       "message": "Can we rename those to better reflect what they do? \n\n`CollectGarbage(heap, OLD_SPACE)` is less readable than `InvokeMarkSweep()` (which is also not great though)",
+      "range": {
+        "startLine": 43,
+        "startChar": 5,
+        "endLine": 43,
+        "endChar": 19
+      },
+      "revId": "5ffd036032d929b18345e9dc8dbcf91c4be56734",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6c4a29b_3dec8232",
+        "filename": "test/cctest/heap/heap-utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-16T09:03:27Z",
+      "side": 1,
+      "message": "Addressed in crrev.com/c/4530369",
+      "parentUuid": "14234a06_7c0b1781",
       "range": {
         "startLine": 43,
         "startChar": 5,

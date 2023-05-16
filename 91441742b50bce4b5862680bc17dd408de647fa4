@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39b06e8a_e5595bcb",
+        "filename": "test/cctest/cctest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-16T09:03:27Z",
+      "side": 0,
+      "message": "Addressed in crrev.com/c/4526147",
+      "parentUuid": "237c0107_7cb80ec4",
+      "range": {
+        "startLine": 449,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 13
+      },
+      "revId": "91441742b50bce4b5862680bc17dd408de647fa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7edfcc61_65490426",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-05-09T17:09:18Z",
       "side": 0,
       "message": "I find this rename a bit unfortunate. It\u0027s making things less readable here.",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 10
+      },
+      "revId": "91441742b50bce4b5862680bc17dd408de647fa4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5acbb15a_34581500",
+        "filename": "test/unittests/heap/heap-utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-16T09:03:27Z",
+      "side": 0,
+      "message": "Addressed in crrev.com/c/4530369",
+      "parentUuid": "7edfcc61_65490426",
       "range": {
         "startLine": 81,
         "startChar": 4,
