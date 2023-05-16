@@ -67,6 +67,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "cabaa6af_7f108be8",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-16T09:01:11Z",
+      "side": 1,
+      "message": "As discussed offline this indeed changes logic a bit. I still keep it in the new way as it shouldn\u0027t make a difference. The --noenableX flags are all passed in testing on intel hardware. This code path is never mixed with testing mips or other architectures. Also the different if-branches for different arch values below are all exclusive (we enter only one of the ifs).",
+      "parentUuid": "17a60b2e_f896ad40",
+      "range": {
+        "startLine": 554,
+        "startChar": 0,
+        "endLine": 558,
+        "endChar": 17
+      },
+      "revId": "7a5ca7735632212ecd7857c49a553cdbd053755d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "97f9312a_9d763997",
         "filename": "tools/testrunner/local/statusfile.py",
         "patchSetId": 6
