@@ -25,6 +25,25 @@ class HeapInternalsBase {
                        std::vector<Handle<FixedArray>>* out_handles = nullptr);
 };
 
+inline void CollectGarbage(AllocationSpace space, Isolate* isolate) {
+  isolate->heap()->CollectGarbage(space, GarbageCollectionReason::kTesting);
+}
+
+inline void CollectAllGarbage(Isolate* isolate) {
+  isolate->heap()->CollectAllGarbage(GCFlag::kNoFlags,
+                                     GarbageCollectionReason::kTesting);
+}
+
+inline void CollectAllAvailableGarbage(Isolate* isolate) {
+  isolate->heap()->CollectAllAvailableGarbage(
+      GarbageCollectionReason::kTesting);
+}
+
+inline void PreciseCollectAllGarbage(Isolate* isolate) {
+  isolate->heap()->PreciseCollectAllGarbage(GCFlag::kNoFlags,
+                                            GarbageCollectionReason::kTesting);
+}
+
 template <typename TMixin>
 class WithHeapInternals : public TMixin, HeapInternalsBase {
  public:
@@ -36,16 +55,18 @@ class WithHeapInternals : public TMixin, HeapInternalsBase {
     heap()->CollectGarbage(space, GarbageCollectionReason::kTesting);
   }
 
-  void FullGC() {
-    heap()->CollectGarbage(OLD_SPACE, GarbageCollectionReason::kTesting);
-  }
-
-  void YoungGC() {
-    heap()->CollectGarbage(NEW_SPACE, GarbageCollectionReason::kTesting);
+  void CollectAllGarbage() {
+    heap()->CollectAllGarbage(GCFlag::kNoFlags,
+                              GarbageCollectionReason::kTesting);
   }
 
   void CollectAllAvailableGarbage() {
     heap()->CollectAllAvailableGarbage(GarbageCollectionReason::kTesting);
+  }
+
+  void PreciseCollectAllGarbage() {
+    heap()->PreciseCollectAllGarbage(GCFlag::kNoFlags,
+                                     GarbageCollectionReason::kTesting);
   }
 
   Heap* heap() const { return this->i_isolate()->heap(); }
@@ -111,21 +132,6 @@ using TestWithHeapInternals =                  //
 using TestWithHeapInternalsAndContext =  //
     WithContextMixin<                    //
         TestWithHeapInternals>;
-
-inline void CollectGarbage(AllocationSpace space, v8::Isolate* isolate) {
-  Heap* heap = reinterpret_cast<i::Isolate*>(isolate)->heap();
-  heap->CollectGarbage(space, GarbageCollectionReason::kTesting);
-}
-
-inline void FullGC(v8::Isolate* isolate) {
-  Heap* heap = reinterpret_cast<i::Isolate*>(isolate)->heap();
-  heap->CollectAllGarbage(GCFlag::kNoFlags, GarbageCollectionReason::kTesting);
-}
-
-inline void YoungGC(v8::Isolate* isolate) {
-  Heap* heap = reinterpret_cast<i::Isolate*>(isolate)->heap();
-  heap->CollectGarbage(NEW_SPACE, GarbageCollectionReason::kTesting);
-}
 
 template <typename GlobalOrPersistent>
 bool InYoungGeneration(v8::Isolate* isolate, const GlobalOrPersistent& global) {
