@@ -9,6 +9,7 @@
 #include "include/v8-primitive.h"
 #include "src/inspector/string-util.h"
 #include "src/inspector/v8-inspector-impl.h"
+#include "test/unittests/heap/heap-utils.h"
 #include "test/unittests/test-utils.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -300,14 +301,14 @@ TEST_F(InspectorTest, ApiCreatedTasksAreCleanedUp) {
     CHECK(!result.IsEmpty());
 
     // Run GC and check that the task is still here.
-    CollectAllGarbage();
+    CollectAllGarbage(i_isolate());
     CHECK_EQ(console->AllConsoleTasksForTest().size(), 1);
   }
 
   // Get rid of the task on the context, run GC and check we no longer have
   // the TaskInfo in the inspector.
   v8_context()->Global()->Delete(v8_context(), NewString("task")).Check();
-  CollectAllGarbage();
+  CollectAllGarbage(i_isolate());
   CHECK_EQ(console->AllConsoleTasksForTest().size(), 0);
 }
 
