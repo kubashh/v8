@@ -468,24 +468,24 @@ TEST_F(GlobalHandlesTest,
 
 namespace {
 
-void ForceScavenge2(const v8::WeakCallbackInfo<FlagAndHandles>& data) {
+void ForceMinorGC2(const v8::WeakCallbackInfo<FlagAndHandles>& data) {
   data.GetParameter()->flag = true;
-  YoungGC(data.GetIsolate());
+  CollectGarbage(NEW_SPACE, data.GetIsolate());
 }
 
-void ForceScavenge1(const v8::WeakCallbackInfo<FlagAndHandles>& data) {
+void ForceMinorGC1(const v8::WeakCallbackInfo<FlagAndHandles>& data) {
   data.GetParameter()->handle.Reset();
-  data.SetSecondPassCallback(ForceScavenge2);
+  data.SetSecondPassCallback(ForceMinorGC2);
 }
 
-void ForceMarkSweep2(const v8::WeakCallbackInfo<FlagAndHandles>& data) {
+void ForceFullGC2(const v8::WeakCallbackInfo<FlagAndHandles>& data) {
   data.GetParameter()->flag = true;
-  FullGC(data.GetIsolate());
+  CollectGarbage(OLD_SPACE, data.GetIsolate());
 }
 
-void ForceMarkSweep1(const v8::WeakCallbackInfo<FlagAndHandles>& data) {
+void ForceFullGC1(const v8::WeakCallbackInfo<FlagAndHandles>& data) {
   data.GetParameter()->handle.Reset();
-  data.SetSecondPassCallback(ForceMarkSweep2);
+  data.SetSecondPassCallback(ForceFullGC2);
 }
 
 }  // namespace
@@ -504,7 +504,7 @@ TEST_F(GlobalHandlesTest, GCFromWeakCallbacks) {
     CHECK_IMPLIES(!v8_flags.single_generation,
                   !InYoungGeneration(isolate, fp.handle));
     fp.flag = false;
-    fp.handle.SetWeak(&fp, &ForceMarkSweep1, v8::WeakCallbackType::kParameter);
+    fp.handle.SetWeak(&fp, &ForceFullGC1, v8::WeakCallbackType::kParameter);
     CollectAllGarbage();
     EmptyMessageQueues();
     CHECK(fp.flag);
@@ -513,8 +513,8 @@ TEST_F(GlobalHandlesTest, GCFromWeakCallbacks) {
 
   static const int kNumberOfGCTypes = 2;
   using Callback = v8::WeakCallbackInfo<FlagAndHandles>::Callback;
-  Callback gc_forcing_callback[kNumberOfGCTypes] = {&ForceScavenge1,
-                                                    &ForceMarkSweep1};
+  Callback gc_forcing_callback[kNumberOfGCTypes] = {&ForceMinorGC1,
+                                                    &ForceFullGC1};
 
   using GCInvoker = std::function<void(void)>;
   GCInvoker invoke_gc[kNumberOfGCTypes] = {
