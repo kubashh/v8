@@ -36,6 +36,7 @@
 #include "src/objects/smi.h"
 #include "src/utils/ostreams.h"
 #include "test/common/assembler-tester.h"
+#include "test/unittests/heap/heap-utils.h"
 #include "test/unittests/test-utils.h"
 
 namespace v8 {
@@ -524,9 +525,9 @@ TEST_F(MacroAssemblerX64Test, EmbeddedObj) {
   CHECK_EQ(old_array->ptr(), result.ptr());
 
   // Collect garbage to ensure reloc info can be walked by the heap.
-  CollectAllGarbage();
-  CollectAllGarbage();
-  CollectAllGarbage();
+  CollectAllGarbage(isolate);
+  CollectAllGarbage(isolate);
+  CollectAllGarbage(isolate);
 
   PtrComprCageBase cage_base(isolate);
 

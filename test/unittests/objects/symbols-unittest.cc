@@ -35,6 +35,7 @@
 #include "src/objects/name-inl.h"
 #include "src/objects/objects.h"
 #include "src/utils/ostreams.h"
+#include "test/unittests/heap/heap-utils.h"
 #include "test/unittests/test-utils.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -64,8 +65,8 @@ TEST_F(SymbolsTest, Create) {
 #endif
   }
 
-  CollectGarbage(i::NEW_SPACE);
-  CollectAllGarbage();
+  CollectGarbage(i::NEW_SPACE, isolate());
+  CollectAllGarbage(isolate());
 
   // All symbols should be distinct.
   for (int i = 0; i < kNumSymbols; ++i) {
