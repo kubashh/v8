@@ -33,6 +33,23 @@
       "message": "Hello again Yang and Michael, would you please review the latest patchset when you get a chance? Thanks!",
       "revId": "f3f26379762e403c678bd04d1f1ae0657ffaa198",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb8e640e_a42008ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-16T07:13:00Z",
+      "side": 1,
+      "message": "Change lgtm, please wait for Yang to take another look",
+      "revId": "f3f26379762e403c678bd04d1f1ae0657ffaa198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
