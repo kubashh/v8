@@ -162,6 +162,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
                               ClearRecordedSlots clear_recorded_slots);
 
   bool is_main_thread() const { return is_main_thread_; }
+  bool is_in_trampoline() const { return is_in_trampoline_; }
   bool deserialization_complete() const {
     return heap_->deserialization_complete();
   }
@@ -184,6 +185,9 @@ class V8_EXPORT_PRIVATE LocalHeap {
 
   // Used to make SetupMainThread() available to unit tests.
   void SetUpMainThreadForTesting();
+
+  template <typename Callback>
+  V8_INLINE void ExecuteWhileParked(Callback callback);
 
  private:
   using ParkedBit = base::BitField8<bool, 0, 1>;
@@ -282,9 +286,14 @@ class V8_EXPORT_PRIVATE LocalHeap {
                                             AllocationOrigin origin,
                                             AllocationAlignment alignment);
 
+  bool IsMainThreadOfClientIsolate() const;
+
+  template <typename Callback>
+  V8_INLINE void ExecuteWithStackMarkerIfNeeded(Callback callback);
+
   void Park() {
     DCHECK(AllowSafepoints::IsAllowed());
-    if (is_main_thread()) heap()->stack().SetMarkerToCurrentStackPosition();
+    CHECK_IMPLIES(IsMainThreadOfClientIsolate(), is_in_trampoline());
     ThreadState expected = ThreadState::Running();
     if (!state_.CompareExchangeWeak(expected, ThreadState::Parked())) {
       ParkSlowPath();
@@ -317,6 +326,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
 
   Heap* heap_;
   bool is_main_thread_;
+  bool is_in_trampoline_;
 
   AtomicThreadState state_;
 

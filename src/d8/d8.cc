@@ -54,7 +54,7 @@
 #include "src/execution/vm-state-inl.h"
 #include "src/flags/flags.h"
 #include "src/handles/maybe-handles.h"
-#include "src/heap/parked-scope.h"
+#include "src/heap/parked-scope-inl.h"
 #include "src/init/v8.h"
 #include "src/interpreter/interpreter.h"
 #include "src/logging/counters.h"
@@ -2949,9 +2949,11 @@ void Shell::WorkerTerminateAndWait(
     return;
   }
 
-  i::ParkedScope parked(
-      reinterpret_cast<i::Isolate*>(isolate)->main_thread_local_isolate());
-  worker->TerminateAndWaitForThread(parked);
+  reinterpret_cast<i::Isolate*>(isolate)
+      ->main_thread_local_isolate()
+      ->ExecuteWhileParked([worker](const i::ParkedWitness& parked) {
+        worker->TerminateAndWaitForThread(parked);
+      });
 }
 
 void Shell::QuitOnce(v8::FunctionCallbackInfo<v8::Value>* info) {
@@ -4464,8 +4466,9 @@ void SourceGroup::ExecuteInThread() {
 
     for (int i = 0; i < Shell::options.stress_runs; ++i) {
       {
-        next_semaphore_.ParkedWait(reinterpret_cast<i::Isolate*>(isolate)
-                                       ->main_thread_local_isolate());
+        next_semaphore_.ParkedWait(
+            reinterpret_cast<i::Isolate*>(isolate)->main_thread_local_isolate(),
+            true);
       }
       {
         {
@@ -4565,7 +4568,8 @@ bool Worker::StartWorkerThread(Isolate* requester,
   if (!thread->Start()) return false;
   // Wait until the worker is ready to receive messages.
   worker->started_semaphore_.ParkedWait(
-      reinterpret_cast<i::Isolate*>(requester)->main_thread_local_isolate());
+      reinterpret_cast<i::Isolate*>(requester)->main_thread_local_isolate(),
+      true);
   Shell::AddRunningWorker(std::move(worker));
   return true;
 }
@@ -4629,7 +4633,8 @@ std::unique_ptr<SerializationData> Worker::GetMessage(Isolate* requester) {
     // queue, don't expect any more messages from it.
     if (!is_running()) break;
     out_semaphore_.ParkedWait(
-        reinterpret_cast<i::Isolate*>(requester)->main_thread_local_isolate());
+        reinterpret_cast<i::Isolate*>(requester)->main_thread_local_isolate(),
+        true);
   }
   return result;
 }
@@ -5163,19 +5168,19 @@ int Shell::RunMain(v8::Isolate* isolate, bool last_run) {
   bool success = RunMainIsolate(isolate, keep_context_alive);
   CollectGarbage(isolate);
 
-  {
-    // Park the main thread here to prevent deadlocks in shared GCs when waiting
-    // in JoinThread.
-    i::ParkedScope parked(i_isolate->main_thread_local_isolate());
-    for (int i = 1; i < options.num_isolates; ++i) {
-      if (last_run) {
-        options.isolate_sources[i].JoinThread(parked);
-      } else {
-        options.isolate_sources[i].WaitForThread(parked);
-      }
-    }
-    WaitForRunningWorkers(parked);
-  }
+  // Park the main thread here to prevent deadlocks in shared GCs when
+  // waiting in JoinThread.
+  i_isolate->main_thread_local_heap()->ExecuteWhileParked(
+      [last_run](const i::ParkedWitness& parked) {
+        for (int i = 1; i < options.num_isolates; ++i) {
+          if (last_run) {
+            options.isolate_sources[i].JoinThread(parked);
+          } else {
+            options.isolate_sources[i].WaitForThread(parked);
+          }
+        }
+        WaitForRunningWorkers(parked);
+      });
 
   // Other threads have terminated, we can now run the artifical
   // serialize-deserialize pass (which destructively mutates heap state).

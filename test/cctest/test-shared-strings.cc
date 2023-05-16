@@ -14,7 +14,7 @@
 #include "src/heap/heap.h"
 #include "src/heap/memory-chunk-layout.h"
 #include "src/heap/memory-chunk.h"
-#include "src/heap/parked-scope.h"
+#include "src/heap/parked-scope-inl.h"
 #include "src/heap/remembered-set.h"
 #include "src/heap/safepoint.h"
 #include "src/objects/fixed-array.h"
@@ -45,11 +45,9 @@ struct V8_NODISCARD IsolateParkOnDisposeWrapper {
       : isolate(isolate), isolate_to_park(isolate_to_park) {}
 
   ~IsolateParkOnDisposeWrapper() {
-    {
-      i::ParkedScope parked(reinterpret_cast<Isolate*>(isolate_to_park)
-                                ->main_thread_local_isolate());
-      isolate->Dispose();
-    }
+    auto main_isolate = reinterpret_cast<Isolate*>(isolate_to_park)
+                            ->main_thread_local_isolate();
+    main_isolate->ExecuteWhileParked([this]() { isolate->Dispose(); });
   }
 
   v8::Isolate* const isolate;
@@ -229,8 +227,7 @@ UNINITIALIZED_TEST(YoungInternalization) {
   Handle<String> young_two_byte_seq1;
   Handle<String> one_byte_intern1;
   Handle<String> two_byte_intern1;
-  {
-    ParkedScope parked_scope(i_isolate2->main_thread_local_isolate());
+  i_isolate2->main_thread_local_isolate()->ExecuteWhileParked([&]() {
     young_one_byte_seq1 = factory1->NewStringFromAsciiChecked(
         raw_one_byte, AllocationType::kYoung);
     young_two_byte_seq1 =
@@ -246,7 +243,7 @@ UNINITIALIZED_TEST(YoungInternalization) {
     CHECK(!young_two_byte_seq1.equals(two_byte_intern1));
     CHECK_NE(*young_one_byte_seq1, *one_byte_intern1);
     CHECK_NE(*young_two_byte_seq1, *two_byte_intern1);
-  }
+  });
 
   // Allocate two young strings with the same contents in isolate2 then intern
   // them. They should be the same as the interned strings from isolate1.
@@ -296,7 +293,8 @@ class ConcurrentStringThreadBase : public ParkingThread {
     Setup();
 
     sema_ready_->Signal();
-    sema_execute_start_->ParkedWait(i_isolate->main_thread_local_isolate());
+    sema_execute_start_->ParkedWait(i_isolate->main_thread_local_isolate(),
+                                    true);
 
     {
       HandleScope scope(i_isolate);
@@ -442,13 +440,13 @@ void TestConcurrentInternalization(TestHitOrMiss hit_or_miss) {
 
   LocalIsolate* local_isolate = i_isolate->main_thread_local_isolate();
   for (int i = 0; i < kThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kThreads; i++) {
     sema_execute_start.Signal();
   }
   for (int i = 0; i < kThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
   ParkingThread::ParkedJoinAll(local_isolate, threads);
@@ -530,13 +528,13 @@ UNINITIALIZED_TEST(ConcurrentStringTableLookup) {
 
   LocalIsolate* local_isolate = i_isolate->main_thread_local_isolate();
   for (int i = 0; i < kTotalThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kTotalThreads; i++) {
     sema_execute_start.Signal();
   }
   for (int i = 0; i < kTotalThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
   ParkingThread::ParkedJoinAll(local_isolate, threads);
@@ -1709,13 +1707,13 @@ void TestConcurrentExternalization(bool share_resources) {
 
   LocalIsolate* local_isolate = i_isolate->main_thread_local_isolate();
   for (int i = 0; i < kThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kThreads; i++) {
     sema_execute_start.Signal();
   }
   for (int i = 0; i < kThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
   i_isolate->heap()->CollectGarbageShared(i_isolate->main_thread_local_heap(),
@@ -1791,13 +1789,13 @@ void TestConcurrentExternalizationWithDeadStrings(bool share_resources,
 
   LocalIsolate* local_isolate = i_isolate->main_thread_local_isolate();
   for (int i = 0; i < kThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kThreads; i++) {
     sema_execute_start.Signal();
   }
   for (int i = 0; i < kThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
   Handle<String> empty_string =
@@ -1915,13 +1913,13 @@ void TestConcurrentExternalizationAndInternalization(
 
   LocalIsolate* local_isolate = i_isolate->main_thread_local_isolate();
   for (int i = 0; i < kTotalThreads; i++) {
-    sema_ready.ParkedWait(local_isolate);
+    sema_ready.ParkedWait(local_isolate, true);
   }
   for (int i = 0; i < kTotalThreads; i++) {
     sema_execute_start.Signal();
   }
   for (int i = 0; i < kTotalThreads; i++) {
-    sema_execute_complete.ParkedWait(local_isolate);
+    sema_execute_complete.ParkedWait(local_isolate, true);
   }
 
   i_isolate->heap()->CollectGarbageShared(i_isolate->main_thread_local_heap(),
