@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0650a1e8_fe635b50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-16T10:28:03Z",
+      "side": 1,
+      "message": "ptal.\n\nthis is a similar cleanup to the one in cctests, before renaming the gc helper methods.",
+      "revId": "b7a1c508ba45a606763fb155a4d1d9a3ed327119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
