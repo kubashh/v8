@@ -18,6 +18,7 @@ import traceback
 from testrunner.build_config import BuildConfig
 from testrunner.local import testsuite
 from testrunner.local import utils
+from testrunner.local.variants import REQUIRED_BUILD_VARIABLES
 from testrunner.local.context import os_context
 from testrunner.test_config import TestConfig
 from testrunner.testproc import util
@@ -333,6 +334,9 @@ class BaseTestRunner(object):
       self.target_os = 'ios'
     else:
       self.target_os = utils.GuessOS()
+
+    # Verify integrity between build variables and variant configs.
+    self.build_config.ensure_vars(REQUIRED_BUILD_VARIABLES)
 
   def _do_load_build_config(self, outdir):
     build_config_path = os.path.join(outdir, "v8_build_config.json")

@@ -2408,12 +2408,25 @@ action("v8_dump_build_config") {
   is_full_debug = v8_enable_debugging_features && !v8_optimized_debug
   write_barriers = !v8_disable_write_barriers
 
+  arch = v8_target_cpu
+  if (v8_target_cpu == "x86") {
+    arch = "ia32"
+  }
+
   mips_arch_variant_var = ""
   mips_use_msa_var = false
-  if (v8_current_cpu == "mips64" || v8_current_cpu == "mips64el") {
+  if (arch == "mips64" || arch == "mips64el") {
     mips_arch_variant_var = mips_arch_variant
     mips_use_msa_var = mips_use_msa
   }
+
+  no_js_shared_memory = (
+      !v8_enable_shared_ro_heap
+      || v8_enable_pointer_compression && !v8_enable_pointer_compression_shared_cage
+      || v8_disable_write_barriers)
+  simd_mips = mips_arch_variant_var == "r6" && mips_use_msa
+  simulator_run = target_cpu != v8_target_cpu
+  use_sanitizer = is_asan || is_cfi || is_msan || is_tsan || is_ubsan
 
   # This lists all build-time switches consumed by the test framework. All
   # switches can be used automatically in the status files as is - no
@@ -2427,6 +2440,7 @@ action("v8_dump_build_config") {
   # v8_cfi disambiguates from the global cfi flag.
   args = [
     rebase_path("$root_out_dir/v8_build_config.json", root_build_dir),
+    "arch=\"$arch\"",
     "asan=$is_asan",
     "atomic_object_field_writes=$v8_enable_atomic_object_field_writes",
     "cet_shadow_stack=$v8_enable_cet_shadow_stack",
@@ -2458,18 +2472,22 @@ action("v8_dump_build_config") {
     "mips_arch_variant=\"$mips_arch_variant_var\"",
     "mips_use_msa=$mips_use_msa_var",
     "msan=$is_msan",
+    "no_js_shared_memory=$no_js_shared_memory",
     "official_build=$is_official_build",
     "pointer_compression=$v8_enable_pointer_compression",
     "pointer_compression_shared_cage=$v8_enable_pointer_compression_shared_cage",
     "runtime_call_stats=$v8_enable_runtime_call_stats",
     "sandbox=$v8_enable_sandbox",
     "shared_ro_heap=$v8_enable_shared_ro_heap",
+    "simd_mips=$simd_mips",
+    "simulator_run=$simulator_run",
     "single_generation=$v8_enable_single_generation",
     "slow_dchecks=$v8_enable_slow_dchecks",
     "target_cpu=\"$target_cpu\"",
     "third_party_heap=$v8_enable_third_party_heap",
     "tsan=$is_tsan",
     "ubsan=$is_ubsan",
+    "use_sanitizer=$use_sanitizer",
     "v8_cfi=$v8_control_flow_integrity",
     "v8_current_cpu=\"$v8_current_cpu\"",
     "v8_target_cpu=\"$v8_target_cpu\"",
