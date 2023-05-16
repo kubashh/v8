@@ -50,6 +50,23 @@
       "message": "Change lgtm, please wait for Yang to take another look",
       "revId": "f3f26379762e403c678bd04d1f1ae0657ffaa198",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e5643d5_3d9e3885",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2023-05-16T09:15:08Z",
+      "side": 1,
+      "message": "still lgtm.",
+      "revId": "f3f26379762e403c678bd04d1f1ae0657ffaa198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
