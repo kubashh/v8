@@ -8,11 +8,30 @@
 #include "src/base/platform/condition-variable.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/semaphore.h"
+#include "src/base/witness.h"
 #include "src/execution/local-isolate.h"
 #include "src/heap/local-heap.h"
 
 namespace v8 {
 namespace internal {
+
+class ParkedWitness final : public base::Witness<LocalHeap> {
+ public:
+#ifdef DEBUG
+  bool IsValidAndStillParked() const {
+    if (!IsValid()) return false;
+    const LocalHeap* local_heap = resource();
+    const LocalHeap* current_heap = LocalHeap::Current();
+    return (current_heap == nullptr || current_heap == local_heap) &&
+           local_heap->IsParked();
+  }
+#endif
+
+ private:
+  explicit ParkedWitness(const LocalHeap* local_heap) : Witness(local_heap) {}
+
+  friend class ParkedScope;
+};
 
 // Scope that explicitly parks a thread, prohibiting access to the heap and the
 // creation of handles.
@@ -20,14 +39,18 @@ class V8_NODISCARD ParkedScope {
  public:
   explicit ParkedScope(LocalIsolate* local_isolate)
       : ParkedScope(local_isolate->heap()) {}
-  explicit ParkedScope(LocalHeap* local_heap) : local_heap_(local_heap) {
+  explicit ParkedScope(LocalHeap* local_heap)
+      : local_heap_(local_heap), witness_(local_heap) {
     local_heap_->Park();
   }
 
   ~ParkedScope() { local_heap_->Unpark(); }
 
+  operator ParkedWitness() const { return witness_; }
+
  private:
   LocalHeap* const local_heap_;
+  ParkedWitness witness_;
 };
 
 // Scope that explicitly unparks a thread, allowing access to the heap and the
@@ -87,8 +110,9 @@ class V8_NODISCARD ParkedRecursiveMutexGuard {
     }
   }
 
-  ParkedRecursiveMutexGuard(const ParkedMutexGuard&) = delete;
-  ParkedRecursiveMutexGuard& operator=(const ParkedMutexGuard&) = delete;
+  ParkedRecursiveMutexGuard(const ParkedRecursiveMutexGuard&) = delete;
+  ParkedRecursiveMutexGuard& operator=(const ParkedRecursiveMutexGuard&) =
+      delete;
 
   ~ParkedRecursiveMutexGuard() { mutex_->Unlock(); }
 
@@ -156,8 +180,8 @@ class V8_NODISCARD ParkingConditionVariable final
     ParkedScope scope(local_heap);
     ParkedWait(scope, mutex);
   }
-  void ParkedWait(const ParkedScope& scope, base::Mutex* mutex) {
-    USE(scope);
+  void ParkedWait(const ParkedWitness& parked, base::Mutex* mutex) {
+    DCHECK(parked.IsValidAndStillParked());
     Wait(mutex);
   }
 
@@ -170,9 +194,9 @@ class V8_NODISCARD ParkingConditionVariable final
     ParkedScope scope(local_heap);
     return ParkedWaitFor(scope, mutex, rel_time);
   }
-  bool ParkedWaitFor(const ParkedScope& scope, base::Mutex* mutex,
+  bool ParkedWaitFor(const ParkedWitness& parked, base::Mutex* mutex,
                      const base::TimeDelta& rel_time) V8_WARN_UNUSED_RESULT {
-    USE(scope);
+    DCHECK(parked.IsValidAndStillParked());
     return WaitFor(mutex, rel_time);
   }
 
@@ -196,8 +220,8 @@ class V8_NODISCARD ParkingSemaphore final : public base::Semaphore {
     ParkedScope scope(local_heap);
     ParkedWait(scope);
   }
-  void ParkedWait(const ParkedScope& scope) {
-    USE(scope);
+  void ParkedWait(const ParkedWitness& parked) {
+    DCHECK(parked.IsValidAndStillParked());
     Wait();
   }
 
@@ -210,15 +234,57 @@ class V8_NODISCARD ParkingSemaphore final : public base::Semaphore {
     ParkedScope scope(local_heap);
     return ParkedWaitFor(scope, rel_time);
   }
-  bool ParkedWaitFor(const ParkedScope& scope,
+  bool ParkedWaitFor(const ParkedWitness& parked,
                      const base::TimeDelta& rel_time) {
-    USE(scope);
+    DCHECK(parked.IsValidAndStillParked());
     return WaitFor(rel_time);
   }
 
  private:
   using base::Semaphore::Wait;
   using base::Semaphore::WaitFor;
+};
+
+class ParkingThread : public v8::base::Thread {
+ public:
+  explicit ParkingThread(const Options& options) : v8::base::Thread(options) {}
+
+  V8_INLINE void ParkedJoin(LocalIsolate* local_isolate) {
+    ParkedJoin(local_isolate->heap());
+  }
+
+  V8_INLINE void ParkedJoin(LocalHeap* local_heap) {
+    ParkedScope scope(local_heap);
+    ParkedJoin(scope);
+  }
+
+  void ParkedJoin(const ParkedWitness& parked) {
+    DCHECK(parked.IsValidAndStillParked());
+    Join();
+  }
+
+  template <typename ThreadCollection>
+  static V8_INLINE void ParkedJoinAll(LocalIsolate* local_isolate,
+                                      const ThreadCollection& threads) {
+    ParkedJoinAll(local_isolate->heap(), threads);
+  }
+
+  template <typename ThreadCollection>
+  static V8_INLINE void ParkedJoinAll(LocalHeap* local_heap,
+                                      const ThreadCollection& threads) {
+    ParkedScope scope(local_heap);
+    ParkedJoinAll(scope, threads);
+  }
+
+  template <typename ThreadCollection>
+  static void ParkedJoinAll(const ParkedWitness& parked,
+                            const ThreadCollection& threads) {
+    DCHECK(parked.IsValidAndStillParked());
+    for (auto& thread : threads) thread->Join();
+  }
+
+ private:
+  using v8::base::Thread::Join;
 };
 
 }  // namespace internal

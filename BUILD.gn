@@ -5816,6 +5816,7 @@ v8_component("v8_libbase") {
     "src/base/vlq-base64.cc",
     "src/base/vlq-base64.h",
     "src/base/vlq.h",
+    "src/base/witness.h",
   ]
 
   configs = [ ":internal_config_base" ]

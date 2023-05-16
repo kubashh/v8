@@ -705,6 +705,7 @@ filegroup(
         "src/base/vlq.h",
         "src/base/vlq-base64.cc",
         "src/base/vlq-base64.h",
+        "src/base/witness.h",
         ":v8_config_headers_files",
         ":v8_flags",
         ":v8_headers_files",

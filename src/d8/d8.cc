@@ -4504,13 +4504,13 @@ void SourceGroup::StartExecuteInThread() {
   next_semaphore_.Signal();
 }
 
-void SourceGroup::WaitForThread(const i::ParkedScope& parked) {
+void SourceGroup::WaitForThread(const i::ParkedWitness& parked) {
   if (thread_ == nullptr) return;
   done_semaphore_.ParkedWait(parked);
 }
 
-void SourceGroup::JoinThread(const i::ParkedScope& parked) {
-  USE(parked);
+void SourceGroup::JoinThread(const i::ParkedWitness& parked) {
+  DCHECK(parked.IsValidAndStillParked());
   if (thread_ == nullptr) return;
   thread_->Join();
 }
@@ -4634,8 +4634,8 @@ std::unique_ptr<SerializationData> Worker::GetMessage(Isolate* requester) {
   return result;
 }
 
-void Worker::TerminateAndWaitForThread(const i::ParkedScope& parked) {
-  USE(parked);
+void Worker::TerminateAndWaitForThread(const i::ParkedWitness& parked) {
+  DCHECK(parked.IsValidAndStillParked());
   Terminate();
   {
     base::MutexGuard lock_guard(&worker_mutex_);
@@ -5674,7 +5674,7 @@ void Shell::RemoveRunningWorker(const std::shared_ptr<Worker>& worker) {
   if (it != running_workers_.end()) running_workers_.erase(it);
 }
 
-void Shell::WaitForRunningWorkers(const i::ParkedScope& parked) {
+void Shell::WaitForRunningWorkers(const i::ParkedWitness& parked) {
   // Make a copy of running_workers_, because we don't want to call
   // Worker::Terminate while holding the workers_mutex_ lock. Otherwise, if a
   // worker is about to create a new Worker, it would deadlock.
