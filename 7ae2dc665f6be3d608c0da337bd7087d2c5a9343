@@ -94,6 +94,30 @@
       },
       "revId": "7ae2dc665f6be3d608c0da337bd7087d2c5a9343",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5564c1bb_6d4dcb37",
+        "filename": "test/unittests/test-utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-16T20:16:04Z",
+      "side": 0,
+      "message": "Cctests require you to always specify the heap (which I think is really nice). Unittests will require you to (in some cases) specify the isolate (I would prefer to specify the heap here as well, but didn\u0027t want to add a call to `heap()` in all callsites). Imo that\u0027s reasonable.",
+      "parentUuid": "ccab534e_4c0b367f",
+      "range": {
+        "startLine": 215,
+        "startChar": 7,
+        "endLine": 215,
+        "endChar": 24
+      },
+      "revId": "7ae2dc665f6be3d608c0da337bd7087d2c5a9343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
