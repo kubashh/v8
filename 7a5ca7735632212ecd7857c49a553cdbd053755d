@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bef2b8a_2fee757a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-16T07:31:47Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "7a5ca7735632212ecd7857c49a553cdbd053755d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97f9312a_9d763997",
+        "filename": "tools/testrunner/local/statusfile.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-16T07:31:47Z",
+      "side": 1,
+      "message": "Tested this and the other place locally by removing some entries from BUILD.gn, building and testing.",
+      "range": {
+        "startLine": 167,
+        "startChar": 36,
+        "endLine": 167,
+        "endChar": 69
+      },
+      "revId": "7a5ca7735632212ecd7857c49a553cdbd053755d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

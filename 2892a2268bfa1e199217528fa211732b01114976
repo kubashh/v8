@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "699cbd57_4f7bf428",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 2417,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-16T07:31:47Z",
+      "side": 1,
+      "message": "This uses arch now, which is target_cpu not current_cpu, which is actually correct, but so far in all builds for mips, target and current have matched...",
+      "range": {
+        "startLine": 2417,
+        "startChar": 6,
+        "endLine": 2417,
+        "endChar": 10
+      },
+      "revId": "2892a2268bfa1e199217528fa211732b01114976",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a0c70db_e644f8b5",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 2422,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-16T07:31:47Z",
+      "side": 1,
+      "message": "This is the inversion of no_js_shared_memory from previous build_config.",
+      "range": {
+        "startLine": 2422,
+        "startChar": 2,
+        "endLine": 2422,
+        "endChar": 18
+      },
+      "revId": "2892a2268bfa1e199217528fa211732b01114976",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
