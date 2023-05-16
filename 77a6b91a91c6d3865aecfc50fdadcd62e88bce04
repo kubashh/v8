@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7857f94a_ccb88a58",
+        "filename": "test/js-perf-test/TurboFan/wasm-inlining-loop-array.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-05-16T13:45:18Z",
+      "side": 1,
+      "message": "Measurements:\n```\nWasmLoop:             110\nJSLoop (inlining):     55\nJSLoop (no inlining):  11\nPureJsLoop:           100\n```",
+      "range": {
+        "startLine": 132,
+        "startChar": 6,
+        "endLine": 132,
+        "endChar": 16
+      },
+      "revId": "77a6b91a91c6d3865aecfc50fdadcd62e88bce04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

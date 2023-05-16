@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e2aac61_99523ee0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-05-16T13:45:18Z",
+      "side": 1,
+      "message": "@jkummerow@chromium.org: PTAL.",
+      "revId": "8a84cb44859ee4eaaf5187004210f3aa44bd74c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9238f652_4a1b1b2a",
+        "filename": "src/compiler/wasm-load-elimination.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-05-16T13:45:18Z",
+      "side": 1,
+      "message": "This optimization also applies to pure wasm code, it\u0027s just less probable to have redundant `extern.internalize` calls in pure wasm.",
+      "range": {
+        "startLine": 374,
+        "startChar": 31,
+        "endLine": 374,
+        "endChar": 54
+      },
+      "revId": "8a84cb44859ee4eaaf5187004210f3aa44bd74c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
