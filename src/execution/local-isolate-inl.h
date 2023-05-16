@@ -32,6 +32,11 @@ Handle<Object> LocalIsolate::root_handle(RootIndex index) const {
   return isolate_->root_handle(index);
 }
 
+template <typename Callback>
+V8_INLINE void LocalIsolate::ExecuteWhileParked(Callback callback) {
+  heap_.ExecuteWhileParked(callback);
+}
+
 }  // namespace internal
 }  // namespace v8
 
