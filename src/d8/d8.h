@@ -106,8 +106,8 @@ class SourceGroup {
   bool Execute(Isolate* isolate);
 
   void StartExecuteInThread();
-  void WaitForThread(const i::ParkedScope& parked);
-  void JoinThread(const i::ParkedScope& parked);
+  void WaitForThread(const i::ParkedWitness& parked);
+  void JoinThread(const i::ParkedWitness& parked);
 
  private:
   class IsolateThread : public base::Thread {
@@ -203,7 +203,7 @@ class Worker : public std::enable_shared_from_this<Worker> {
   void Terminate();
   // Terminate and join the thread.
   // This function can be called by any thread.
-  void TerminateAndWaitForThread(const i::ParkedScope& parked);
+  void TerminateAndWaitForThread(const i::ParkedWitness& parked);
 
   // Start running the given worker in another thread.
   static bool StartWorkerThread(Isolate* requester,
@@ -711,7 +711,7 @@ class Shell : public i::AllStatic {
   }
   static bool is_valid_fuzz_script() { return valid_fuzz_script_.load(); }
 
-  static void WaitForRunningWorkers(const i::ParkedScope& parked);
+  static void WaitForRunningWorkers(const i::ParkedWitness& parked);
   static void AddRunningWorker(std::shared_ptr<Worker> worker);
   static void RemoveRunningWorker(const std::shared_ptr<Worker>& worker);
 

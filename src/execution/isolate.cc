@@ -60,7 +60,7 @@
 #include "src/handles/persistent-handles.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/heap-verifier.h"
-#include "src/heap/local-heap.h"
+#include "src/heap/local-heap-inl.h"
 #include "src/heap/parked-scope.h"
 #include "src/heap/read-only-heap.h"
 #include "src/heap/safepoint.h"
@@ -3556,8 +3556,9 @@ void Isolate::Deinit() {
 
   if (has_shared_space() && !is_shared_space_isolate()) {
     IgnoreLocalGCRequests ignore_gc_requests(heap());
-    ParkedScope parked_scope(main_thread_local_heap());
-    shared_space_isolate()->global_safepoint()->clients_mutex_.Lock();
+    main_thread_local_heap()->ExecuteWhileParked([this]() {
+      shared_space_isolate()->global_safepoint()->clients_mutex_.Lock();
+    });
   }
 
   DisallowGarbageCollection no_gc;

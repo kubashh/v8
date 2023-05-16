@@ -296,6 +296,7 @@ v8_source_set("v8_unittests_sources") {
     "base/virtual-address-space-unittest.cc",
     "base/vlq-base64-unittest.cc",
     "base/vlq-unittest.cc",
+    "base/witness-unittest.cc",
     "codegen/aligned-slot-allocator-unittest.cc",
     "codegen/code-layout-unittest.cc",
     "codegen/code-pages-unittest.cc",
