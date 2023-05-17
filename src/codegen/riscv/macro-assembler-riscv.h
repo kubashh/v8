@@ -203,6 +203,10 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
 
   void Branch(Label* L, Condition cond, Register rs, RootIndex index);
 
+  void CompareTaggedAndBranch(Label* label, Condition cond, Register r1,
+                              const Operand& r2,
+                              Label::Distance distance = Label::kFar);
+
   static int InstrCountForLi64Bit(int64_t value);
   inline void LiLower32BitHelper(Register rd, Operand j);
   void li_optimized(Register rd, Operand j, LiFlags mode = OPTIMIZE_SIZE);
@@ -1117,6 +1121,10 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void DecompressTagged(const Register& destination,
                         const MemOperand& field_operand);
   void DecompressTagged(const Register& destination, const Register& source);
+  void AtomicStoreTaggedField(Register dst, const MemOperand& src);
+  void AtomicDecompressTaggedSigned(Register dst, const MemOperand& src);
+  void AtomicDecompressTagged(Register dst, const MemOperand& src);
+
   void CmpTagged(const Register& rd, const Register& rs1, const Register& rs2) {
     if (COMPRESS_POINTERS_BOOL) {
       Sub32(rd, rs1, rs2);
@@ -1214,19 +1222,18 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   // Compare the object in a register to a value and jump if they are equal.
   void JumpIfRoot(Register with, RootIndex index, Label* if_equal,
                   Label::Distance distance = Label::kFar) {
-    UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
-    LoadRoot(scratch, index);
-    Branch(if_equal, eq, with, Operand(scratch), distance);
+    DCHECK(!AreAliased(with, kScratchReg));
+    LoadRoot(kScratchReg, index);
+    CompareTaggedAndBranch(if_equal, eq, with, Operand(kScratchReg), distance);
   }
 
   // Compare the object in a register to a value and jump if they are not equal.
   void JumpIfNotRoot(Register with, RootIndex index, Label* if_not_equal,
                      Label::Distance distance = Label::kFar) {
-    UseScratchRegisterScope temps(this);
-    Register scratch = temps.Acquire();
-    LoadRoot(scratch, index);
-    Branch(if_not_equal, ne, with, Operand(scratch), distance);
+    DCHECK(!AreAliased(with, kScratchReg));
+    LoadRoot(kScratchReg, index);
+    CompareTaggedAndBranch(if_not_equal, ne, with, Operand(kScratchReg),
+                           distance);
   }
 
   // Checks if value is in range [lower_limit, higher_limit] using a single

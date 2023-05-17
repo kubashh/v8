@@ -3916,7 +3916,7 @@ void MacroAssembler::Branch(Label* L, Condition cond, Register rs,
   UseScratchRegisterScope temps(this);
   Register scratch = temps.Acquire();
   LoadRoot(scratch, index);
-  Branch(L, cond, rs, Operand(scratch));
+  CompareTaggedAndBranch(L, cond, rs, Operand(scratch));
 }
 
 void MacroAssembler::BranchShortHelper(int32_t offset, Label* L) {
@@ -3931,6 +3931,33 @@ void MacroAssembler::BranchShort(int32_t offset) {
 }
 
 void MacroAssembler::BranchShort(Label* L) { BranchShortHelper(0, L); }
+
+void MacroAssembler::CompareTaggedAndBranch(Label* label, Condition cond,
+                                            Register r1, const Operand& r2,
+                                            Label::Distance distance) {
+#ifdef V8_TARGET_ARCH_RISCV64
+  if (COMPRESS_POINTERS_BOOL) {
+    UseScratchRegisterScope temps(this);
+    Register scratch0 = temps.Acquire();
+    slliw(scratch0, r1, 0);
+    if (IsZero(r2)) {
+      Branch(label, cond, scratch0, Operand(zero_reg), distance);
+    } else {
+      Register scratch1 = temps.Acquire();
+      if (r2.is_reg()) {
+        slliw(scratch1, r2.rm(), 0);
+      } else {
+        li(scratch1, r2);
+      }
+      Branch(label, cond, scratch0, Operand(scratch1), distance);
+    }
+  } else {
+    Branch(label, cond, r1, r2, distance);
+  }
+#else
+  Branch(label, cond, r1, r2, distance);
+#endif
+}
 
 int32_t MacroAssembler::GetOffset(int32_t offset, Label* L, OffsetSize bits) {
   if (L) {
@@ -4313,7 +4340,6 @@ void MacroAssembler::Jump(intptr_t target, RelocInfo::Mode rmode,
 
 void MacroAssembler::Jump(Address target, RelocInfo::Mode rmode, Condition cond,
                           Register rs, const Operand& rt) {
-  DCHECK(!RelocInfo::IsCodeTarget(rmode));
   Jump(static_cast<intptr_t>(target), rmode, cond, rs, rt);
 }
 
@@ -6279,6 +6305,41 @@ void MacroAssembler::StoreTaggedField(const Register& value,
   }
 }
 
+void MacroAssembler::AtomicStoreTaggedField(Register src,
+                                            const MemOperand& dst) {
+  UNIMPLEMENTED();
+  // UseScratchRegisterScope temps(this);
+  // Register scratch = temps.Acquire();
+  // Add_d(scratch, dst.base(), dst.offset());
+  // if (COMPRESS_POINTERS_BOOL) {
+  //   amswap_db_w(zero_reg, src, scratch);
+  // } else {
+  //   amswap_db_d(zero_reg, src, scratch);
+  // }
+}
+
+void MacroAssembler::AtomicDecompressTaggedSigned(Register dst,
+                                                  const MemOperand& src) {
+  UNIMPLEMENTED();
+  // ASM_CODE_COMMENT(this);
+  // Ld_wu(dst, src);
+  // dbar(0);
+  // if (v8_flags.debug_code) {
+  //   // Corrupt the top 32 bits. Made up of 16 fixed bits and 16 pc offset
+  //   bits. Add_d(dst, dst, ((kDebugZapValue << 16) | (pc_offset() & 0xffff))
+  //   << 32);
+  // }
+}
+
+void MacroAssembler::AtomicDecompressTagged(Register dst,
+                                            const MemOperand& src) {
+  UNIMPLEMENTED();
+  // ASM_CODE_COMMENT(this);
+  // Ld_wu(dst, src);
+  // dbar(0);
+  // Add_d(dst, kPtrComprCageBaseRegister, dst);
+}
+
 void MacroAssembler::DecompressTaggedSigned(const Register& destination,
                                             const MemOperand& field_operand) {
   ASM_CODE_COMMENT(this);
@@ -6308,13 +6369,13 @@ void MacroAssembler::DropArguments(Register count, ArgumentsCountType type,
                                    ArgumentsCountMode mode, Register scratch) {
   switch (type) {
     case kCountIsInteger: {
-      CalcScaledAddress(sp, sp, count, kPointerSizeLog2);
+      CalcScaledAddress(sp, sp, count, kSystemPointerSizeLog2);
       break;
     }
     case kCountIsSmi: {
       static_assert(kSmiTagSize == 1 && kSmiTag == 0);
       DCHECK_NE(scratch, no_reg);
-      SmiScale(scratch, count, kPointerSizeLog2);
+      SmiScale(scratch, count, kSystemPointerSizeLog2);
       AddWord(sp, sp, scratch);
       break;
     }
