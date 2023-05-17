@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51142177_911a6109",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-17T13:10:44Z",
+      "side": 1,
+      "message": "I am not sure if this guarantees that any spawned thread has read access for non-zero pkeys. Did you verify that this is the case? Or is the embedder responsible for initializing pkey permissions for each spawned thread?",
+      "range": {
+        "startLine": 9,
+        "startChar": 46,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "3fca2d22be4f0a023e37c79e334a37f614b262c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e460406_da656dce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-17T13:10:44Z",
+      "side": 1,
+      "message": "LGTM with one question / remark.",
+      "revId": "3fca2d22be4f0a023e37c79e334a37f614b262c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
