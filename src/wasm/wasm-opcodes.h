@@ -611,72 +611,72 @@ V8_EXPORT_PRIVATE bool IsJSCompatibleSignature(const FunctionSig* sig);
   FOREACH_NUMERIC_OPCODE_WITH_SIG(V) FOREACH_NUMERIC_OPCODE_VARIADIC(V)
 
 #define FOREACH_ATOMIC_OPCODE(V)                                              \
-  V(AtomicNotify, 0xfe00, i_ii, "memory.atomic.notify")                       \
-  V(I32AtomicWait, 0xfe01, i_iil, "memory.atomic.wait32")                     \
-  V(I64AtomicWait, 0xfe02, i_ill, "memory.atomic.wait64")                     \
-  V(I32AtomicLoad, 0xfe10, i_i, "i32.atomic.load")                            \
-  V(I64AtomicLoad, 0xfe11, l_i, "i64.atomic.load")                            \
-  V(I32AtomicLoad8U, 0xfe12, i_i, "i32.atomic.load8_u")                       \
-  V(I32AtomicLoad16U, 0xfe13, i_i, "i32.atomic.load16_u")                     \
-  V(I64AtomicLoad8U, 0xfe14, l_i, "i64.atomic.load8_u")                       \
-  V(I64AtomicLoad16U, 0xfe15, l_i, "i64.atomic.load16_u")                     \
-  V(I64AtomicLoad32U, 0xfe16, l_i, "i64.atomic.load32_u")                     \
-  V(I32AtomicStore, 0xfe17, v_ii, "i32.atomic.store")                         \
-  V(I64AtomicStore, 0xfe18, v_il, "i64.atomic.store")                         \
-  V(I32AtomicStore8U, 0xfe19, v_ii, "i32.atomic.store8")                      \
-  V(I32AtomicStore16U, 0xfe1a, v_ii, "i32.atomic.store16")                    \
-  V(I64AtomicStore8U, 0xfe1b, v_il, "i64.atomic.store8")                      \
-  V(I64AtomicStore16U, 0xfe1c, v_il, "i64.atomic.store16")                    \
-  V(I64AtomicStore32U, 0xfe1d, v_il, "i64.atomic.store32")                    \
-  V(I32AtomicAdd, 0xfe1e, i_ii, "i32.atomic.rmw.add")                         \
-  V(I64AtomicAdd, 0xfe1f, l_il, "i64.atomic.rmw.add")                         \
-  V(I32AtomicAdd8U, 0xfe20, i_ii, "i32.atomic.rmw8.add_u")                    \
-  V(I32AtomicAdd16U, 0xfe21, i_ii, "i32.atomic.rmw16.add_u")                  \
-  V(I64AtomicAdd8U, 0xfe22, l_il, "i64.atomic.rmw8.add_u")                    \
-  V(I64AtomicAdd16U, 0xfe23, l_il, "i64.atomic.rmw16.add_u")                  \
-  V(I64AtomicAdd32U, 0xfe24, l_il, "i64.atomic.rmw32.add_u")                  \
-  V(I32AtomicSub, 0xfe25, i_ii, "i32.atomic.rmw.sub")                         \
-  V(I64AtomicSub, 0xfe26, l_il, "i64.atomic.rmw.sub")                         \
-  V(I32AtomicSub8U, 0xfe27, i_ii, "i32.atomic.rmw8.sub_u")                    \
-  V(I32AtomicSub16U, 0xfe28, i_ii, "i32.atomic.rmw16.sub_u")                  \
-  V(I64AtomicSub8U, 0xfe29, l_il, "i64.atomic.rmw8.sub_u")                    \
-  V(I64AtomicSub16U, 0xfe2a, l_il, "i64.atomic.rmw16.sub_u")                  \
-  V(I64AtomicSub32U, 0xfe2b, l_il, "i64.atomic.rmw32.sub_u")                  \
-  V(I32AtomicAnd, 0xfe2c, i_ii, "i32.atomic.rmw.and")                         \
-  V(I64AtomicAnd, 0xfe2d, l_il, "i64.atomic.rmw.and")                         \
-  V(I32AtomicAnd8U, 0xfe2e, i_ii, "i32.atomic.rmw8.and_u")                    \
-  V(I32AtomicAnd16U, 0xfe2f, i_ii, "i32.atomic.rmw16.and_u")                  \
-  V(I64AtomicAnd8U, 0xfe30, l_il, "i64.atomic.rmw8.and_u")                    \
-  V(I64AtomicAnd16U, 0xfe31, l_il, "i64.atomic.rmw16.and_u")                  \
-  V(I64AtomicAnd32U, 0xfe32, l_il, "i64.atomic.rmw32.and_u")                  \
-  V(I32AtomicOr, 0xfe33, i_ii, "i32.atomic.rmw.or")                           \
-  V(I64AtomicOr, 0xfe34, l_il, "i64.atomic.rmw.or")                           \
-  V(I32AtomicOr8U, 0xfe35, i_ii, "i32.atomic.rmw8.or_u")                      \
-  V(I32AtomicOr16U, 0xfe36, i_ii, "i32.atomic.rmw16.or_u")                    \
-  V(I64AtomicOr8U, 0xfe37, l_il, "i64.atomic.rmw8.or_u")                      \
-  V(I64AtomicOr16U, 0xfe38, l_il, "i64.atomic.rmw16.or_u")                    \
-  V(I64AtomicOr32U, 0xfe39, l_il, "i64.atomic.rmw32.or_u")                    \
-  V(I32AtomicXor, 0xfe3a, i_ii, "i32.atomic.rmw.xor")                         \
-  V(I64AtomicXor, 0xfe3b, l_il, "i64.atomic.rmw.xor")                         \
-  V(I32AtomicXor8U, 0xfe3c, i_ii, "i32.atomic.rmw8.xor_u")                    \
-  V(I32AtomicXor16U, 0xfe3d, i_ii, "i32.atomic.rmw16.xor_u")                  \
-  V(I64AtomicXor8U, 0xfe3e, l_il, "i64.atomic.rmw8.xor_u")                    \
-  V(I64AtomicXor16U, 0xfe3f, l_il, "i64.atomic.rmw16.xor_u")                  \
-  V(I64AtomicXor32U, 0xfe40, l_il, "i64.atomic.rmw32.xor_u")                  \
-  V(I32AtomicExchange, 0xfe41, i_ii, "i32.atomic.rmw.xchg")                   \
-  V(I64AtomicExchange, 0xfe42, l_il, "i64.atomic.rmw.xchg")                   \
-  V(I32AtomicExchange8U, 0xfe43, i_ii, "i32.atomic.rmw8.xchg_u")              \
-  V(I32AtomicExchange16U, 0xfe44, i_ii, "i32.atomic.rmw16.xchg_u")            \
-  V(I64AtomicExchange8U, 0xfe45, l_il, "i64.atomic.rmw8.xchg_u")              \
-  V(I64AtomicExchange16U, 0xfe46, l_il, "i64.atomic.rmw16.xchg_u")            \
-  V(I64AtomicExchange32U, 0xfe47, l_il, "i64.atomic.rmw32.xchg_u")            \
-  V(I32AtomicCompareExchange, 0xfe48, i_iii, "i32.atomic.rmw.cmpxchg")        \
-  V(I64AtomicCompareExchange, 0xfe49, l_ill, "i64.atomic.rmw.cmpxchg")        \
-  V(I32AtomicCompareExchange8U, 0xfe4a, i_iii, "i32.atomic.rmw8.cmpxchg_u")   \
-  V(I32AtomicCompareExchange16U, 0xfe4b, i_iii, "i32.atomic.rmw16.cmpxchg_u") \
-  V(I64AtomicCompareExchange8U, 0xfe4c, l_ill, "i64.atomic.rmw8.cmpxchg_u")   \
-  V(I64AtomicCompareExchange16U, 0xfe4d, l_ill, "i64.atomic.rmw16.cmpxchg_u") \
-  V(I64AtomicCompareExchange32U, 0xfe4e, l_ill, "i64.atomic.rmw32.cmpxchg_u")
+  V(AtomicNotify, 0xfe00, i_bi, "memory.atomic.notify")                       \
+  V(I32AtomicWait, 0xfe01, i_bil, "memory.atomic.wait32")                     \
+  V(I64AtomicWait, 0xfe02, i_bll, "memory.atomic.wait64")                     \
+  V(I32AtomicLoad, 0xfe10, i_b, "i32.atomic.load")                            \
+  V(I64AtomicLoad, 0xfe11, l_b, "i64.atomic.load")                            \
+  V(I32AtomicLoad8U, 0xfe12, i_b, "i32.atomic.load8_u")                       \
+  V(I32AtomicLoad16U, 0xfe13, i_b, "i32.atomic.load16_u")                     \
+  V(I64AtomicLoad8U, 0xfe14, l_b, "i64.atomic.load8_u")                       \
+  V(I64AtomicLoad16U, 0xfe15, l_b, "i64.atomic.load16_u")                     \
+  V(I64AtomicLoad32U, 0xfe16, l_b, "i64.atomic.load32_u")                     \
+  V(I32AtomicStore, 0xfe17, v_bi, "i32.atomic.store")                         \
+  V(I64AtomicStore, 0xfe18, v_bl, "i64.atomic.store")                         \
+  V(I32AtomicStore8U, 0xfe19, v_bi, "i32.atomic.store8")                      \
+  V(I32AtomicStore16U, 0xfe1a, v_bi, "i32.atomic.store16")                    \
+  V(I64AtomicStore8U, 0xfe1b, v_bl, "i64.atomic.store8")                      \
+  V(I64AtomicStore16U, 0xfe1c, v_bl, "i64.atomic.store16")                    \
+  V(I64AtomicStore32U, 0xfe1d, v_bl, "i64.atomic.store32")                    \
+  V(I32AtomicAdd, 0xfe1e, i_bi, "i32.atomic.rmw.add")                         \
+  V(I64AtomicAdd, 0xfe1f, l_bl, "i64.atomic.rmw.add")                         \
+  V(I32AtomicAdd8U, 0xfe20, i_bi, "i32.atomic.rmw8.add_u")                    \
+  V(I32AtomicAdd16U, 0xfe21, i_bi, "i32.atomic.rmw16.add_u")                  \
+  V(I64AtomicAdd8U, 0xfe22, l_bl, "i64.atomic.rmw8.add_u")                    \
+  V(I64AtomicAdd16U, 0xfe23, l_bl, "i64.atomic.rmw16.add_u")                  \
+  V(I64AtomicAdd32U, 0xfe24, l_bl, "i64.atomic.rmw32.add_u")                  \
+  V(I32AtomicSub, 0xfe25, i_bi, "i32.atomic.rmw.sub")                         \
+  V(I64AtomicSub, 0xfe26, l_bl, "i64.atomic.rmw.sub")                         \
+  V(I32AtomicSub8U, 0xfe27, i_bi, "i32.atomic.rmw8.sub_u")                    \
+  V(I32AtomicSub16U, 0xfe28, i_bi, "i32.atomic.rmw16.sub_u")                  \
+  V(I64AtomicSub8U, 0xfe29, l_bl, "i64.atomic.rmw8.sub_u")                    \
+  V(I64AtomicSub16U, 0xfe2a, l_bl, "i64.atomic.rmw16.sub_u")                  \
+  V(I64AtomicSub32U, 0xfe2b, l_bl, "i64.atomic.rmw32.sub_u")                  \
+  V(I32AtomicAnd, 0xfe2c, i_bi, "i32.atomic.rmw.and")                         \
+  V(I64AtomicAnd, 0xfe2d, l_bl, "i64.atomic.rmw.and")                         \
+  V(I32AtomicAnd8U, 0xfe2e, i_bi, "i32.atomic.rmw8.and_u")                    \
+  V(I32AtomicAnd16U, 0xfe2f, i_bi, "i32.atomic.rmw16.and_u")                  \
+  V(I64AtomicAnd8U, 0xfe30, l_bl, "i64.atomic.rmw8.and_u")                    \
+  V(I64AtomicAnd16U, 0xfe31, l_bl, "i64.atomic.rmw16.and_u")                  \
+  V(I64AtomicAnd32U, 0xfe32, l_bl, "i64.atomic.rmw32.and_u")                  \
+  V(I32AtomicOr, 0xfe33, i_bi, "i32.atomic.rmw.or")                           \
+  V(I64AtomicOr, 0xfe34, l_bl, "i64.atomic.rmw.or")                           \
+  V(I32AtomicOr8U, 0xfe35, i_bi, "i32.atomic.rmw8.or_u")                      \
+  V(I32AtomicOr16U, 0xfe36, i_bi, "i32.atomic.rmw16.or_u")                    \
+  V(I64AtomicOr8U, 0xfe37, l_bl, "i64.atomic.rmw8.or_u")                      \
+  V(I64AtomicOr16U, 0xfe38, l_bl, "i64.atomic.rmw16.or_u")                    \
+  V(I64AtomicOr32U, 0xfe39, l_bl, "i64.atomic.rmw32.or_u")                    \
+  V(I32AtomicXor, 0xfe3a, i_bi, "i32.atomic.rmw.xor")                         \
+  V(I64AtomicXor, 0xfe3b, l_bl, "i64.atomic.rmw.xor")                         \
+  V(I32AtomicXor8U, 0xfe3c, i_bi, "i32.atomic.rmw8.xor_u")                    \
+  V(I32AtomicXor16U, 0xfe3d, i_bi, "i32.atomic.rmw16.xor_u")                  \
+  V(I64AtomicXor8U, 0xfe3e, l_bl, "i64.atomic.rmw8.xor_u")                    \
+  V(I64AtomicXor16U, 0xfe3f, l_bl, "i64.atomic.rmw16.xor_u")                  \
+  V(I64AtomicXor32U, 0xfe40, l_bl, "i64.atomic.rmw32.xor_u")                  \
+  V(I32AtomicExchange, 0xfe41, i_bi, "i32.atomic.rmw.xchg")                   \
+  V(I64AtomicExchange, 0xfe42, l_bl, "i64.atomic.rmw.xchg")                   \
+  V(I32AtomicExchange8U, 0xfe43, i_bi, "i32.atomic.rmw8.xchg_u")              \
+  V(I32AtomicExchange16U, 0xfe44, i_bi, "i32.atomic.rmw16.xchg_u")            \
+  V(I64AtomicExchange8U, 0xfe45, l_bl, "i64.atomic.rmw8.xchg_u")              \
+  V(I64AtomicExchange16U, 0xfe46, l_bl, "i64.atomic.rmw16.xchg_u")            \
+  V(I64AtomicExchange32U, 0xfe47, l_bl, "i64.atomic.rmw32.xchg_u")            \
+  V(I32AtomicCompareExchange, 0xfe48, i_bii, "i32.atomic.rmw.cmpxchg")        \
+  V(I64AtomicCompareExchange, 0xfe49, l_bll, "i64.atomic.rmw.cmpxchg")        \
+  V(I32AtomicCompareExchange8U, 0xfe4a, i_bii, "i32.atomic.rmw8.cmpxchg_u")   \
+  V(I32AtomicCompareExchange16U, 0xfe4b, i_bii, "i32.atomic.rmw16.cmpxchg_u") \
+  V(I64AtomicCompareExchange8U, 0xfe4c, l_bll, "i64.atomic.rmw8.cmpxchg_u")   \
+  V(I64AtomicCompareExchange16U, 0xfe4d, l_bll, "i64.atomic.rmw16.cmpxchg_u") \
+  V(I64AtomicCompareExchange32U, 0xfe4e, l_bll, "i64.atomic.rmw32.cmpxchg_u")
 
 #define FOREACH_ATOMIC_0_OPERAND_OPCODE(V)                      \
   /* AtomicFence does not target a particular linear memory. */ \
@@ -798,48 +798,58 @@ V8_EXPORT_PRIVATE bool IsJSCompatibleSignature(const FunctionSig* sig);
   FOREACH_GC_OPCODE(V)
 
 // All signatures.
-#define FOREACH_SIGNATURE(V)                        \
-  FOREACH_SIMD_SIGNATURE(V)                         \
-  V(d_d, kWasmF64, kWasmF64)                        \
-  V(d_dd, kWasmF64, kWasmF64, kWasmF64)             \
-  V(d_f, kWasmF64, kWasmF32)                        \
-  V(d_i, kWasmF64, kWasmI32)                        \
-  V(d_id, kWasmF64, kWasmI32, kWasmF64)             \
-  V(d_l, kWasmF64, kWasmI64)                        \
-  V(f_d, kWasmF32, kWasmF64)                        \
-  V(f_f, kWasmF32, kWasmF32)                        \
-  V(f_ff, kWasmF32, kWasmF32, kWasmF32)             \
-  V(f_i, kWasmF32, kWasmI32)                        \
-  V(f_if, kWasmF32, kWasmI32, kWasmF32)             \
-  V(f_l, kWasmF32, kWasmI64)                        \
-  V(i_a, kWasmI32, kWasmAnyRef)                     \
-  V(i_ci, kWasmI32, kWasmFuncRef, kWasmI32)         \
-  V(i_d, kWasmI32, kWasmF64)                        \
-  V(i_dd, kWasmI32, kWasmF64, kWasmF64)             \
-  V(i_f, kWasmI32, kWasmF32)                        \
-  V(i_ff, kWasmI32, kWasmF32, kWasmF32)             \
-  V(i_i, kWasmI32, kWasmI32)                        \
-  V(i_ii, kWasmI32, kWasmI32, kWasmI32)             \
-  V(i_iii, kWasmI32, kWasmI32, kWasmI32, kWasmI32)  \
-  V(i_iil, kWasmI32, kWasmI32, kWasmI32, kWasmI64)  \
-  V(i_ill, kWasmI32, kWasmI32, kWasmI64, kWasmI64)  \
-  V(i_l, kWasmI32, kWasmI64)                        \
-  V(i_ll, kWasmI32, kWasmI64, kWasmI64)             \
-  V(i_qq, kWasmI32, kWasmEqRef, kWasmEqRef)         \
-  V(i_v, kWasmI32)                                  \
-  V(l_d, kWasmI64, kWasmF64)                        \
-  V(l_f, kWasmI64, kWasmF32)                        \
-  V(l_i, kWasmI64, kWasmI32)                        \
-  V(l_il, kWasmI64, kWasmI32, kWasmI64)             \
-  V(l_ill, kWasmI64, kWasmI32, kWasmI64, kWasmI64)  \
-  V(l_l, kWasmI64, kWasmI64)                        \
-  V(l_ll, kWasmI64, kWasmI64, kWasmI64)             \
-  V(v_id, kWasmVoid, kWasmI32, kWasmF64)            \
-  V(v_if, kWasmVoid, kWasmI32, kWasmF32)            \
-  V(v_i, kWasmVoid, kWasmI32)                       \
-  V(v_ii, kWasmVoid, kWasmI32, kWasmI32)            \
-  V(v_iii, kWasmVoid, kWasmI32, kWasmI32, kWasmI32) \
-  V(v_il, kWasmVoid, kWasmI32, kWasmI64)            \
+#define FOREACH_SIGNATURE(V)                          \
+  FOREACH_SIMD_SIGNATURE(V)                           \
+  V(d_d, kWasmF64, kWasmF64)                          \
+  V(d_dd, kWasmF64, kWasmF64, kWasmF64)               \
+  V(d_f, kWasmF64, kWasmF32)                          \
+  V(d_i, kWasmF64, kWasmI32)                          \
+  V(d_id, kWasmF64, kWasmI32, kWasmF64)               \
+  V(d_l, kWasmF64, kWasmI64)                          \
+  V(f_d, kWasmF32, kWasmF64)                          \
+  V(f_f, kWasmF32, kWasmF32)                          \
+  V(f_ff, kWasmF32, kWasmF32, kWasmF32)               \
+  V(f_i, kWasmF32, kWasmI32)                          \
+  V(f_if, kWasmF32, kWasmI32, kWasmF32)               \
+  V(f_l, kWasmF32, kWasmI64)                          \
+  V(i_a, kWasmI32, kWasmAnyRef)                       \
+  V(i_b, kWasmI32, kWasmBottom)                       \
+  V(i_bi, kWasmI32, kWasmBottom, kWasmI32)            \
+  V(i_bii, kWasmI32, kWasmBottom, kWasmI32, kWasmI32) \
+  V(i_bil, kWasmI32, kWasmBottom, kWasmI32, kWasmI64) \
+  V(i_bll, kWasmI32, kWasmBottom, kWasmI64, kWasmI64) \
+  V(i_ci, kWasmI32, kWasmFuncRef, kWasmI32)           \
+  V(i_d, kWasmI32, kWasmF64)                          \
+  V(i_dd, kWasmI32, kWasmF64, kWasmF64)               \
+  V(i_f, kWasmI32, kWasmF32)                          \
+  V(i_ff, kWasmI32, kWasmF32, kWasmF32)               \
+  V(i_i, kWasmI32, kWasmI32)                          \
+  V(i_ii, kWasmI32, kWasmI32, kWasmI32)               \
+  V(i_iii, kWasmI32, kWasmI32, kWasmI32, kWasmI32)    \
+  V(i_iil, kWasmI32, kWasmI32, kWasmI32, kWasmI64)    \
+  V(i_ill, kWasmI32, kWasmI32, kWasmI64, kWasmI64)    \
+  V(i_l, kWasmI32, kWasmI64)                          \
+  V(i_ll, kWasmI32, kWasmI64, kWasmI64)               \
+  V(i_qq, kWasmI32, kWasmEqRef, kWasmEqRef)           \
+  V(i_v, kWasmI32)                                    \
+  V(l_b, kWasmI64, kWasmBottom)                       \
+  V(l_bl, kWasmI64, kWasmBottom, kWasmI64)            \
+  V(l_bll, kWasmI64, kWasmBottom, kWasmI64, kWasmI64) \
+  V(l_d, kWasmI64, kWasmF64)                          \
+  V(l_f, kWasmI64, kWasmF32)                          \
+  V(l_i, kWasmI64, kWasmI32)                          \
+  V(l_il, kWasmI64, kWasmI32, kWasmI64)               \
+  V(l_ill, kWasmI64, kWasmI32, kWasmI64, kWasmI64)    \
+  V(l_l, kWasmI64, kWasmI64)                          \
+  V(l_ll, kWasmI64, kWasmI64, kWasmI64)               \
+  V(v_bi, kWasmVoid, kWasmBottom, kWasmI32)           \
+  V(v_bl, kWasmVoid, kWasmBottom, kWasmI64)           \
+  V(v_id, kWasmVoid, kWasmI32, kWasmF64)              \
+  V(v_if, kWasmVoid, kWasmI32, kWasmF32)              \
+  V(v_i, kWasmVoid, kWasmI32)                         \
+  V(v_ii, kWasmVoid, kWasmI32, kWasmI32)              \
+  V(v_iii, kWasmVoid, kWasmI32, kWasmI32, kWasmI32)   \
+  V(v_il, kWasmVoid, kWasmI32, kWasmI64)              \
   V(v_v, kWasmVoid)
 
 #define FOREACH_SIMD_SIGNATURE(V)                      \
