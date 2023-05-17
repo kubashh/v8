@@ -6026,8 +6026,10 @@ void CodeGenerator::AssembleReturn(InstructionOperand* additional_pop_count) {
         g.ToConstant(additional_pop_count).ToInt32() == 0) {
       // Canonicalize JSFunction return sites for now.
       if (return_label_.is_bound()) {
-        __ jmp(&return_label_);
-        return;
+        if (drop_jsargs || is_uint8(return_label_.pos() - __ pc_offset())) {
+          __ jmp(&return_label_);
+          return;
+        }
       } else {
         __ bind(&return_label_);
       }
