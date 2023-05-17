@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "16105cdc_51849ce5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-05-17T13:28:05Z",
+      "side": 1,
+      "message": "The pkru state is kept on clone. So all threads that are spawned after we allocated the pkey (and allowed read access) will have access to the memory.\n\nThe exception are signal handlers which run with the default pkru state again, however for those we still have the function to re-enable read access.\n\nFor testing, I ran the optdebug.check tests on a machine with pkey support.",
+      "parentUuid": "51142177_911a6109",
+      "range": {
+        "startLine": 9,
+        "startChar": 46,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "3fca2d22be4f0a023e37c79e334a37f614b262c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8e460406_da656dce",
