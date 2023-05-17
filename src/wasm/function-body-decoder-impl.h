@@ -1118,7 +1118,7 @@ struct ControlBase : public PcForErrors<ValidationTag::full_validation> {
     base::Vector<Value> caught_values)                                         \
   F(Delegate, uint32_t depth, Control* block)                                  \
   F(CatchAll, Control* block)                                                  \
-  F(AtomicOp, WasmOpcode opcode, base::Vector<Value> args,                     \
+  F(AtomicOp, WasmOpcode opcode, const Value args[],                           \
     const MemoryAccessImmediate& imm, Value* result)                           \
   F(AtomicFence)                                                               \
   F(MemoryInit, const MemoryInitImmediate& imm, const Value& dst,              \
@@ -6097,37 +6097,33 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
         return 0;
     }
 
-    const FunctionSig* sig = WasmOpcodes::Signature(opcode);
-    V8_ASSUME(sig != nullptr);
-
     MemoryAccessImmediate imm = MakeMemoryAccessImmediate(
         opcode_length, ElementSizeLog2Of(memtype.representation()));
     if (!this->Validate(this->pc_ + opcode_length, imm)) return false;
 
-    int parameter_count = static_cast<int>(sig->parameter_count());
-    DCHECK_LE(1, parameter_count);
-    DCHECK_EQ(kWasmI32, sig->GetParam(0));
-    EnsureStackArguments(parameter_count);
-    ArgVector args(stack_value(parameter_count), parameter_count);
-    ValueType mem_type = this->module_->is_memory64 ? kWasmI64 : kWasmI32;
-    ValidateStackValue(0, args[0], mem_type);
-    for (int i = 1; i < parameter_count; i++) {
-      ValidateStackValue(i, args[i], sig->GetParam(i));
-    }
+    const FunctionSig* sig = WasmOpcodes::Signature(opcode);
+    V8_ASSUME(sig != nullptr);
+    size_t parameter_count = sig->parameter_count();
+    V8_ASSUME(parameter_count >= 1);
+    // The first input is the memory type, which is either i32 or i64 (depends
+    // on the memory type). So in the static signature, it's bottom.
+    ValueKind first_param = sig->GetParam(0).kind();
+    V8_ASSUME(first_param == kBottom);
 
-    base::Optional<Value> result;
-    if (sig->return_count()) {
-      DCHECK_EQ(1, sig->return_count());
-      result = CreateValue(sig->GetReturn());
-    }
+    // Validate the memory type separately, depending on the declared memory
+    // type.
+    ValueType mem_type = this->module_->is_memory64 ? kWasmI64 : kWasmI32;
+    int mem_index_depth = static_cast<int>(sig->parameter_count()) - 1;
+    Peek(mem_index_depth, 0, mem_type);
+
+    PoppedArgVector args = PopArgs(sig);
+
+    Value* result = sig->return_count() ? Push(sig->GetReturn()) : nullptr;
 
     if (V8_LIKELY(!CheckStaticallyOutOfBounds(memtype.MemSize(), imm.offset))) {
-      CALL_INTERFACE_IF_OK_AND_REACHABLE(
-          AtomicOp, opcode, base::VectorOf(args), imm,
-          result.has_value() ? &result.value() : nullptr);
+      CALL_INTERFACE_IF_OK_AND_REACHABLE(AtomicOp, opcode, args.data(), imm,
+                                         result);
     }
-    DropArgs(sig);
-    if (result.has_value()) Push(result.value());
     return opcode_length + imm.length;
   }
 
