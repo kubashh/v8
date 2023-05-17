@@ -2663,24 +2663,25 @@ void MaglevGraphBuilder::VisitStaLookupSlot() {
 }
 
 namespace {
-NodeType StaticTypeForConstant(compiler::HeapObjectRef ref) {
-  if (ref.IsString()) {
-    if (ref.IsInternalizedString()) {
-      return NodeType::kInternalizedString;
-    }
+NodeType StaticTypeForMap(compiler::MapRef map) {
+  if (map.IsHeapNumberMap()) {
+    // If this is a heap number map, the object may be a Smi, so mask away
+    // the known HeapObject bit.
+    return IntersectType(NodeType::kHeapNumber, NodeType::kSmi);
+  }
+  if (map.IsStringMap()) {
+    if (map.IsInternalizedStringMap()) return NodeType::kInternalizedString;
     return NodeType::kString;
-  } else if (ref.IsSymbol()) {
-    return NodeType::kSymbol;
-  } else if (ref.IsHeapNumber()) {
-    return NodeType::kHeapNumber;
-  } else if (ref.IsJSReceiver()) {
+  } else if (map.IsJSReceiverMap()) {
     return NodeType::kJSReceiverWithKnownMap;
   }
   return NodeType::kHeapObjectWithKnownMap;
 }
-NodeType StaticTypeForConstant(compiler::ObjectRef ref) {
+
+NodeType StaticTypeForConstant(compiler::JSHeapBroker* broker,
+                               compiler::ObjectRef ref) {
   if (ref.IsSmi()) return NodeType::kSmi;
-  return StaticTypeForConstant(ref.AsHeapObject());
+  return StaticTypeForMap(ref.AsHeapObject().map(broker));
 }
 NodeType StaticTypeForNode(compiler::JSHeapBroker* broker,
                            LocalIsolate* isolate, ValueNode* node) {
@@ -2723,7 +2724,7 @@ NodeType StaticTypeForNode(compiler::JSHeapBroker* broker,
     case Opcode::kConstant: {
       compiler::HeapObjectRef ref =
           MaglevGraphBuilder::TryGetConstant(broker, isolate, node).value();
-      return StaticTypeForConstant(ref);
+      return StaticTypeForConstant(broker, ref);
     }
     case Opcode::kLoadPolymorphicTaggedField: {
       Representation field_representation =
@@ -2816,7 +2817,7 @@ void MaglevGraphBuilder::SetKnownValue(ValueNode* node,
   DCHECK(!node->Is<Constant>());
   DCHECK(!node->Is<RootConstant>());
   NodeInfo* known_info = known_node_aspects().GetOrCreateInfoFor(node);
-  known_info->type = StaticTypeForConstant(ref);
+  known_info->type = StaticTypeForConstant(broker(), ref);
   known_info->constant_alternative = GetConstant(ref);
 }
 
@@ -2952,7 +2953,7 @@ class KnownMapsMerger {
   bool emit_check_with_migration_;
   compiler::ZoneRefSet<Map> stable_map_set_;
   compiler::ZoneRefSet<Map> unstable_map_set_;
-  NodeType node_type_ = NodeType::kJSReceiverWithKnownMap;
+  NodeType node_type_ = static_cast<NodeType>(-1);
 
   Zone* zone() const { return broker_->zone(); }
 
@@ -2978,13 +2979,7 @@ class KnownMapsMerger {
     if (map.is_migration_target()) {
       emit_check_with_migration_ = true;
     }
-    if (map.IsHeapNumberMap()) {
-      // If this is a heap number map, the object may be a Smi, so mask away
-      // the known HeapObject bit.
-      node_type_ = IntersectType(node_type_, NodeType::kObjectWithKnownMap);
-    } else if (!map.IsJSReceiverMap()) {
-      node_type_ = IntersectType(node_type_, NodeType::kHeapObjectWithKnownMap);
-    }
+    node_type_ = IntersectType(node_type_, StaticTypeForMap(map));
     if (map.is_stable()) {
       // TODO(victorgomes): Add a DCHECK_SLOW that checks if the map already
       // exists in the CompilationDependencySet for the else branch.
