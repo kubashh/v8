@@ -100,6 +100,19 @@ struct WasmTag {
   uint32_t sig_index;
 };
 
+// Static representation of a wasm memory.
+struct WasmMemory {
+  uint32_t initial_pages = 0;      // initial size of the memory in 64k pages
+  uint32_t maximum_pages = 0;      // maximum size of the memory in 64k pages
+  uintptr_t min_memory_size = 0;   // smallest size of any memory in bytes
+  uintptr_t max_memory_size = 0;   // largest size of any memory in bytes
+  bool is_shared = false;          // true if memory is a SharedArrayBuffer
+  bool has_maximum_pages = false;  // true if there is a maximum memory size
+  bool is_memory64 = false;        // true if the memory is 64 bit
+  bool imported = false;           // true if the memory is imported
+  bool exported = false;           // true if the memory is exported
+};
+
 // Static representation of a wasm literal stringref.
 struct WasmStringRefLiteral {
   explicit WasmStringRefLiteral(const WireBytesRef& source) : source(source) {}
@@ -108,16 +121,18 @@ struct WasmStringRefLiteral {
 
 // Static representation of a wasm data segment.
 struct WasmDataSegment {
-  // Construct an active segment.
-  explicit WasmDataSegment(ConstantExpression dest_addr)
-      : dest_addr(dest_addr), active(true) {}
+  explicit WasmDataSegment(bool is_active, uint32_t memory_index,
+                           ConstantExpression dest_addr)
+      : active(is_active), memory_index(memory_index), dest_addr(dest_addr) {}
 
-  // Construct a passive segment, which has no dest_addr.
-  WasmDataSegment() : active(false) {}
+  static WasmDataSegment PassiveForTesting() {
+    return WasmDataSegment{false, 0, {}};
+  }
 
-  ConstantExpression dest_addr;  // destination memory address of the data.
+  bool active = true;     // true if copied automatically during instantiation.
+  uint32_t memory_index;  // memory index (if active).
+  ConstantExpression dest_addr;  // destination memory address (if active).
   WireBytesRef source;           // start offset in the module bytes.
-  bool active = true;  // true if copied automatically during instantiation.
 };
 
 // Static representation of wasm element segment (table initializer).
@@ -524,15 +539,6 @@ struct WasmTable;
 struct V8_EXPORT_PRIVATE WasmModule {
   // ================ Fields ===================================================
   Zone signature_zone;
-  uint32_t initial_pages = 0;      // initial size of the memory in 64k pages
-  uint32_t maximum_pages = 0;      // maximum size of the memory in 64k pages
-  uintptr_t min_memory_size = 0;   // smallest size of any memory in bytes
-  uintptr_t max_memory_size = 0;   // largest size of any memory in bytes
-  bool has_shared_memory = false;  // true if memory is a SharedArrayBuffer
-  bool has_maximum_pages = false;  // true if there is a maximum memory size
-  bool is_memory64 = false;        // true if the memory is 64 bit
-  bool has_memory = false;         // true if the memory was defined or imported
-  bool mem_export = false;         // true if the memory is exported
   int start_function_index = -1;   // start function, >= 0 if any
 
   // Size of the buffer required for all globals that are not imported and
@@ -563,6 +569,7 @@ struct V8_EXPORT_PRIVATE WasmModule {
   std::vector<WasmGlobal> globals;
   std::vector<WasmDataSegment> data_segments;
   std::vector<WasmTable> tables;
+  std::vector<WasmMemory> memories;
   std::vector<WasmImport> import_table;
   std::vector<WasmExport> export_table;
   std::vector<WasmTag> tags;
