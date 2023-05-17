@@ -162,7 +162,8 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
   Handle<ByteArray> NewByteArray(
       int length, AllocationType allocation = AllocationType::kYoung);
 
-  Handle<BytecodeArray> NewBytecodeArray(int length, const byte* raw_bytecodes,
+  Handle<BytecodeArray> NewBytecodeArray(int length,
+                                         const uint8_t* raw_bytecodes,
                                          int frame_size, int parameter_count,
                                          Handle<FixedArray> constant_pool);
 

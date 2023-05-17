@@ -2511,11 +2511,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
             if (dst == src) {
               __ vpcmpeqd(kScratchSimd256Reg, kScratchSimd256Reg,
                           kScratchSimd256Reg);
-              __ vpsrld(kScratchSimd256Reg, kScratchSimd256Reg, byte{1});
+              __ vpsrld(kScratchSimd256Reg, kScratchSimd256Reg, uint8_t{1});
               __ vpand(dst, dst, kScratchSimd256Reg);
             } else {
               __ vpcmpeqd(dst, dst, dst);
-              __ vpsrld(dst, dst, byte{1});
+              __ vpsrld(dst, dst, uint8_t{1});
               __ vpand(dst, dst, src);
             }
             break;
@@ -2576,11 +2576,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
             if (dst == src) {
               __ vpcmpeqd(kScratchSimd256Reg, kScratchSimd256Reg,
                           kScratchSimd256Reg);
-              __ vpslld(kScratchSimd256Reg, kScratchSimd256Reg, byte{31});
+              __ vpslld(kScratchSimd256Reg, kScratchSimd256Reg, uint8_t{31});
               __ vpxor(dst, dst, kScratchSimd256Reg);
             } else {
               __ vpcmpeqd(dst, dst, dst);
-              __ vpslld(dst, dst, byte{31});
+              __ vpslld(dst, dst, uint8_t{31});
               __ vxorps(dst, dst, src);
             }
             break;
