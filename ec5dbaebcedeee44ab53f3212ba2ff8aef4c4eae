@@ -34,6 +34,24 @@
       "parentUuid": "b7d1c01b_e59d93f8",
       "revId": "ec5dbaebcedeee44ab53f3212ba2ff8aef4c4eae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b359a18c_01740f03",
+        "filename": "src/extensions/externalize-string-extension.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-05-17T12:53:13Z",
+      "side": 1,
+      "message": "Thanks a lot for the information and your help.",
+      "parentUuid": "6c96f167_45b0db49",
+      "revId": "ec5dbaebcedeee44ab53f3212ba2ff8aef4c4eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
