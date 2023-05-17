@@ -2981,7 +2981,14 @@ class KnownMapsMerger {
     if (map.IsHeapNumberMap()) {
       // If this is a heap number map, the object may be a Smi, so mask away
       // the known HeapObject bit.
-      node_type_ = IntersectType(node_type_, NodeType::kObjectWithKnownMap);
+      node_type_ = IntersectType(node_type_, NodeType::kSmi);
+      node_type_ = IntersectType(node_type_, NodeType::kHeapNumber);
+    } else if (map.IsStringMap()) {
+      if (map.IsInternalizedStringMap()) {
+        node_type_ = IntersectType(node_type_, NodeType::kInternalizedString);
+      } else {
+        node_type_ = IntersectType(node_type_, NodeType::kString);
+      }
     } else if (!map.IsJSReceiverMap()) {
       node_type_ = IntersectType(node_type_, NodeType::kHeapObjectWithKnownMap);
     }
