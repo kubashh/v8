@@ -1956,13 +1956,13 @@ void InstructionSelector::VisitWord64AtomicLoad(Node* node) {
       break;
 #ifdef V8_COMPRESS_POINTERS
     case MachineRepresentation::kTaggedSigned:
-      opcode = kRiscv64LdDecompressTaggedSigned;
+      opcode = kRiscvLoadDecompressTaggedSigned;
       break;
     case MachineRepresentation::kTaggedPointer:
-      opcode = kRiscv64LdDecompressTagged;
+      opcode = kRiscvLoadDecompressTagged;
       break;
     case MachineRepresentation::kTagged:
-      opcode = kRiscv64LdDecompressTagged;
+      opcode = kRiscvLoadDecompressTagged;
       break;
 #else
     case MachineRepresentation::kTaggedSigned:   // Fall through.
