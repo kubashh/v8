@@ -473,6 +473,34 @@ PackNode* SLPTree::BuildTree(const ZoneVector<Node*>& roots) {
   V(I32x4MaxU, I32x8MaxU)  \
   V(I16x8MaxU, I16x16MaxU) \
   V(I8x16MaxU, I8x32MaxU)  \
+  V(F64x2Eq, F64x4Eq)      \
+  V(F32x4Eq, F32x8Eq)      \
+  V(I64x2Eq, I64x4Eq)      \
+  V(I32x4Eq, I32x8Eq)      \
+  V(I16x8Eq, I16x16Eq)     \
+  V(I8x16Eq, I8x32Eq)      \
+  V(F64x2Ne, F64x4Ne)      \
+  V(F32x4Ne, F32x8Ne)      \
+  V(I64x2GtS, I64x4GtS)    \
+  V(I32x4GtS, I32x8GtS)    \
+  V(I16x8GtS, I16x16GtS)   \
+  V(I8x16GtS, I8x32GtS)    \
+  V(F64x2Lt, F64x4Lt)      \
+  V(F32x4Lt, F32x8Lt)      \
+  V(F64x2Le, F64x4Le)      \
+  V(F32x4Le, F32x8Le)      \
+  V(I32x4MinS, I32x8MinS)  \
+  V(I16x8MinS, I16x16MinS) \
+  V(I8x16MinS, I8x32MinS)  \
+  V(I32x4MinU, I32x8MinU)  \
+  V(I16x8MinU, I16x16MinU) \
+  V(I8x16MinU, I8x32MinU)  \
+  V(I32x4MaxS, I32x8MaxS)  \
+  V(I16x8MaxS, I16x16MaxS) \
+  V(I8x16MaxS, I8x32MaxS)  \
+  V(I32x4MaxU, I32x8MaxU)  \
+  V(I16x8MaxU, I16x16MaxU) \
+  V(I8x16MaxU, I8x32MaxU)  \
   V(F32x4Abs, F32x8Abs)    \
   V(I32x4Abs, I32x8Abs)    \
   V(I16x8Abs, I16x16Abs)   \
@@ -482,7 +510,24 @@ PackNode* SLPTree::BuildTree(const ZoneVector<Node*>& roots) {
   V(I16x8Neg, I16x16Neg)   \
   V(I8x16Neg, I8x32Neg)    \
   V(F64x2Sqrt, F64x4Sqrt)  \
-  V(F32x4Sqrt, F32x8Sqrt)
+  V(F32x4Sqrt, F32x8Sqrt)  \
+  V(F64x2Min, F64x4Min)    \
+  V(F32x4Min, F32x8Min)    \
+  V(F64x2Max, F64x4Max)    \
+  V(F32x4Max, F32x8Max)    \
+  V(I64x2Ne, I64x4Ne)      \
+  V(I32x4Ne, I32x8Ne)      \
+  V(I16x8Ne, I16x16Ne)     \
+  V(I8x16Ne, I8x32Ne)      \
+  V(I32x4GtU, I32x8GtU)    \
+  V(I16x8GtU, I16x16GtU)   \
+  V(I8x16GtU, I8x32GtU)    \
+  V(I32x4GeS, I32x8GeS)    \
+  V(I16x8GeS, I16x16GeS)   \
+  V(I8x16GeS, I8x32GeS)    \
+  V(I32x4GeU, I32x8GeU)    \
+  V(I16x8GeU, I16x16GeU)   \
+  V(I8x16GeU, I8x32GeU)
 
 PackNode* SLPTree::BuildTreeRec(const ZoneVector<Node*>& node_group,
                                 unsigned recursion_depth) {
