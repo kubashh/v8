@@ -121,6 +121,23 @@
       "message": "+nikolaos for src/heap/",
       "revId": "3fca2d22be4f0a023e37c79e334a37f614b262c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "031f81b6_9c32759d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-05-17T13:35:34Z",
+      "side": 1,
+      "message": "LGTM for src/heap and test/cctest/heap.",
+      "revId": "3fca2d22be4f0a023e37c79e334a37f614b262c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
