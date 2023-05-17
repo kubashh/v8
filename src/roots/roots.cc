@@ -70,19 +70,5 @@ Handle<HeapNumber> ReadOnlyRoots::FindHeapNumber(double value) {
   return Handle<HeapNumber>();
 }
 
-void ReadOnlyRoots::InitFromStaticRootsTable(Address cage_base) {
-  CHECK(V8_STATIC_ROOTS_BOOL);
-#if V8_STATIC_ROOTS_BOOL
-  RootIndex pos = RootIndex::kFirstReadOnlyRoot;
-  for (auto element : StaticReadOnlyRootsPointerTable) {
-    auto ptr = V8HeapCompressionScheme::DecompressTagged(cage_base, element);
-    DCHECK(!is_initialized(pos));
-    read_only_roots_[static_cast<size_t>(pos)] = ptr;
-    ++pos;
-  }
-  DCHECK_EQ(static_cast<int>(pos) - 1, RootIndex::kLastReadOnlyRoot);
-#endif  // V8_STATIC_ROOTS_BOOL
-}
-
 }  // namespace internal
 }  // namespace v8
