@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebeb829e_3319ebb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-17T15:23:37Z",
+      "side": 1,
+      "message": "Ok, let\u0027s do the rest in one go. Let me know if you would prefer to split this per owner or directory.\n\njkummerow for builtins, common, logging, numbers, strings, utils, wasm, and tools\nmarja for ast, baseline, and parsing\njgruber for compiler, debug, deoptimizer, interpreter, regexp, and snapshot\nmlippautz for base and heap\ncbruni for profiler",
+      "revId": "e0887672fd228d13e18d5e9196aa26a8a660a5c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
