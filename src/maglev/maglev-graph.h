@@ -27,6 +27,7 @@ class Graph final : public ZoneObject {
   explicit Graph(Zone* zone)
       : blocks_(zone),
         root_(zone),
+        osr_values_(zone),
         smi_(zone),
         int_(zone),
         float_(zone),
@@ -83,6 +84,7 @@ class Graph final : public ZoneObject {
   }
 
   ZoneMap<RootIndex, RootConstant*>& root() { return root_; }
+  ZoneSet<OsrValue*>& osr_values() { return osr_values_; }
   ZoneMap<int, SmiConstant*>& smi() { return smi_; }
   ZoneMap<int, Int32Constant*>& int32() { return int_; }
   ZoneMap<uint64_t, Float64Constant*>& float64() { return float_; }
@@ -101,6 +103,9 @@ class Graph final : public ZoneObject {
   bool has_recursive_calls() const { return has_recursive_calls_; }
   void set_has_recursive_calls(bool value) { has_recursive_calls_ = value; }
 
+  bool is_osr() const { return is_osr_; }
+  void set_is_osr() { is_osr_ = true; }
+
  private:
   uint32_t tagged_stack_slots_ = kMaxUInt32;
   uint32_t untagged_stack_slots_ = kMaxUInt32;
@@ -108,6 +113,7 @@ class Graph final : public ZoneObject {
   uint32_t max_deopted_stack_size_ = kMaxUInt32;
   ZoneVector<BasicBlock*> blocks_;
   ZoneMap<RootIndex, RootConstant*> root_;
+  ZoneSet<OsrValue*> osr_values_;
   ZoneMap<int, SmiConstant*> smi_;
   ZoneMap<int, Int32Constant*> int_;
   // Use the bits of the float as the key.
@@ -120,6 +126,7 @@ class Graph final : public ZoneObject {
       inlined_functions_;
   bool has_recursive_calls_ = false;
   int total_inlined_bytecode_size_ = 0;
+  bool is_osr_ = false;
 };
 
 }  // namespace maglev

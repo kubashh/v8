@@ -1477,12 +1477,9 @@ void MaglevCodeGenerator::EmitCode() {
   RecordInlinedFunctions();
 
   if (code_gen_state_.compilation_info()->is_osr()) {
-    // Do we really want to have this offset or should we set it to 0?
     masm_.Abort(AbortReason::kShouldNotDirectlyEnterOsrFunction);
     masm_.RecordComment("-- OSR entrpoint --");
     masm_.bind(code_gen_state_.osr_entry());
-    // TODO(v8:7700): Implement compilation with OSR offset.
-    masm_.Abort(AbortReason::kMaglevOsrTodo);
   }
 
   processor.ProcessGraph(graph_);
@@ -1631,6 +1628,7 @@ MaybeHandle<Code> MaglevCodeGenerator::BuildCodeObject(Isolate* isolate) {
   return Factory::CodeBuilder{isolate, desc, CodeKind::MAGLEV}
       .set_stack_slots(stack_slot_count_with_fixed_frame())
       .set_deoptimization_data(GenerateDeoptimizationData(isolate))
+      .set_osr_offset(code_gen_state_.compilation_info()->osr_offset())
       .TryBuild();
 }
 

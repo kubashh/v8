@@ -169,6 +169,7 @@ class MergePointInterpreterFrameState;
   V(GetTemplateObject)                       \
   V(HasInPrototypeChain)                     \
   V(InitialValue)                            \
+  V(OsrValue)                                \
   V(LoadPolymorphicDoubleField)              \
   V(LoadPolymorphicTaggedField)              \
   V(LoadTaggedField)                         \
@@ -3843,10 +3844,10 @@ class InitialValue : public FixedInputValueNodeT<0, InitialValue> {
   using Base = FixedInputValueNodeT<0, InitialValue>;
 
  public:
-  explicit InitialValue(uint64_t bitfield, interpreter::Register source)
-      : Base(bitfield), source_(source) {}
+  explicit InitialValue(uint64_t bitfield, interpreter::Register source);
 
   interpreter::Register source() const { return source_; }
+  uint32_t stack_slot() const { return stack_slot_; }
 
   void SetValueLocationConstraints();
   void GenerateCode(MaglevAssembler*, const ProcessingState&);
@@ -3854,6 +3855,25 @@ class InitialValue : public FixedInputValueNodeT<0, InitialValue> {
 
  private:
   const interpreter::Register source_;
+  const int stack_slot_;
+};
+
+class OsrValue : public FixedInputValueNodeT<0, OsrValue> {
+  using Base = FixedInputValueNodeT<0, OsrValue>;
+
+ public:
+  explicit OsrValue(uint64_t bitfield, interpreter::Register source);
+
+  interpreter::Register source() const { return source_; }
+  uint32_t stack_slot() const { return stack_slot_; }
+
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
+
+ private:
+  const interpreter::Register source_;
+  const int stack_slot_;
 };
 
 class RegisterInput : public FixedInputValueNodeT<0, RegisterInput> {

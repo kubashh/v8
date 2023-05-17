@@ -295,7 +295,7 @@ class V8_NODISCARD MaglevGraphBuilder::LazyDeoptFrameScope {
 MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
                                        MaglevCompilationUnit* compilation_unit,
                                        Graph* graph, float call_frequency,
-                                       BytecodeOffset bytecode_offset,
+                                       BytecodeOffset caller_bytecode_offset,
                                        MaglevGraphBuilder* parent)
     : local_isolate_(local_isolate),
       compilation_unit_(compilation_unit),
@@ -323,7 +323,8 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
           is_inline() ? parent->current_interpreter_frame_.known_node_aspects()
                       : compilation_unit_->zone()->New<KnownNodeAspects>(
                             compilation_unit_->zone())),
-      caller_bytecode_offset_(bytecode_offset),
+      caller_bytecode_offset_(caller_bytecode_offset),
+      entrypoint_(0),
       catch_block_stack_(zone()) {
   memset(merge_states_, 0,
          (bytecode().length() + 1) * sizeof(InterpreterFrameState*));
@@ -343,6 +344,24 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
     new (&jump_targets_[inline_exit_offset()]) BasicBlockRef();
   }
 
+  if (compilation_unit_->info()->osr_offset() != BytecodeOffset::None()) {
+    int osr = compilation_unit_->info()->osr_offset().ToInt();
+    CHECK(!is_inline());
+    // OSR'ing into the middle of a loop is currently not supported. There
+    // should not be any issue with OSR'ing outside of loops, just we currently
+    // dont do it...
+    iterator_.SetOffset(osr);
+    CHECK(iterator_.current_bytecode() == interpreter::Bytecode::kJumpLoop);
+    entrypoint_ = iterator_.GetJumpTargetOffset();
+    iterator_.SetOffset(entrypoint_);
+    graph_->set_is_osr();
+
+    if (v8_flags.trace_maglev_graph_building) {
+      std::cerr << "- Non-standard entrypoint @" << entrypoint_
+                << " by OSR from @" << osr << std::endl;
+    }
+  }
+
   CalculatePredecessorCounts();
 }
 
@@ -351,8 +370,8 @@ void MaglevGraphBuilder::StartPrologue() {
 }
 
 BasicBlock* MaglevGraphBuilder::EndPrologue() {
-  BasicBlock* first_block = FinishBlock<Jump>({}, &jump_targets_[0]);
-  MergeIntoFrameState(first_block, 0);
+  BasicBlock* first_block = FinishBlock<Jump>({}, &jump_targets_[entrypoint_]);
+  MergeIntoFrameState(first_block, entrypoint_);
   return first_block;
 }
 
@@ -374,29 +393,53 @@ void MaglevGraphBuilder::InitializeRegister(interpreter::Register reg,
 
 void MaglevGraphBuilder::BuildRegisterFrameInitialization(ValueNode* context,
                                                           ValueNode* closure) {
+  // if (graph_->is_osr()) {
+  //   int first = (StandardFrameConstants::kExpressionsOffset -
+  //   UnoptimizedFrameConstants::kConstantPoolOffset) / kSystemPointerSize; for
+  //   (int register_index = first; register_index < register_count();
+  //   register_index++) {
+  //     std::cout << register_index << "\n";
+  //     auto val = AddNewNode<OsrValue>({},
+  //     interpreter::Register(register_index));
+  //     InitializeRegister(interpreter::Register(register_index), val);
+  //     graph_->osr_values().insert(val);
+  //   }
+  //   return;
+  // }
   InitializeRegister(interpreter::Register::current_context(), context);
   InitializeRegister(interpreter::Register::function_closure(), closure);
 
   interpreter::Register new_target_or_generator_register =
       bytecode().incoming_new_target_or_generator_register();
 
-  int register_index = 0;
   // TODO(leszeks): Don't emit if not needed.
   ValueNode* undefined_value = GetRootConstant(RootIndex::kUndefinedValue);
-  if (new_target_or_generator_register.is_valid()) {
-    int new_target_index = new_target_or_generator_register.index();
-    for (; register_index < new_target_index; register_index++) {
-      current_interpreter_frame_.set(interpreter::Register(register_index),
-                                     undefined_value);
+  int register_index = 0;
+  if (graph_->is_osr()) {
+    CHECK(!new_target_or_generator_register.is_valid());
+  } else {
+    if (new_target_or_generator_register.is_valid()) {
+      int new_target_index = new_target_or_generator_register.index();
+      for (; register_index < new_target_index; register_index++) {
+        current_interpreter_frame_.set(interpreter::Register(register_index),
+                                       undefined_value);
+      }
+      current_interpreter_frame_.set(
+          new_target_or_generator_register,
+          GetRegisterInput(kJavaScriptCallNewTargetRegister));
+      register_index++;
     }
-    current_interpreter_frame_.set(
-        new_target_or_generator_register,
-        GetRegisterInput(kJavaScriptCallNewTargetRegister));
-    register_index++;
   }
   for (; register_index < register_count(); register_index++) {
-    current_interpreter_frame_.set(interpreter::Register(register_index),
-                                   undefined_value);
+    if (compilation_unit_->info()->is_osr()) {
+      auto val =
+          AddNewNode<OsrValue>({}, interpreter::Register(register_index));
+      InitializeRegister(interpreter::Register(register_index), val);
+      graph_->osr_values().insert(val);
+    } else {
+      InitializeRegister(interpreter::Register(register_index),
+                         undefined_value);
+    }
   }
 }
 
@@ -404,7 +447,7 @@ void MaglevGraphBuilder::BuildMergeStates() {
   for (auto& offset_and_info : bytecode_analysis().GetLoopInfos()) {
     int offset = offset_and_info.first;
     const compiler::LoopInfo& loop_info = offset_and_info.second;
-    if (loop_headers_to_peel_.Contains(offset)) {
+    if (offset < entrypoint_ || loop_headers_to_peel_.Contains(offset)) {
       // Peeled loops are treated like normal merges at first. We will construct
       // the proper loop header merge state when reaching the `JumpLoop` of the
       // peeled iteration.
@@ -424,6 +467,7 @@ void MaglevGraphBuilder::BuildMergeStates() {
     HandlerTable table(*bytecode().object());
     for (int i = 0; i < table.NumberOfRangeEntries(); i++) {
       const int offset = table.GetRangeHandler(i);
+      if (offset < entrypoint_) continue;
       const interpreter::Register context_reg(table.GetRangeData(i));
       const compiler::BytecodeLivenessState* liveness =
           GetInLivenessFor(offset);
@@ -658,13 +702,16 @@ DeoptFrame MaglevGraphBuilder::GetDeoptFrameForLazyDeoptHelper(
 }
 
 InterpretedDeoptFrame MaglevGraphBuilder::GetDeoptFrameForEntryStackCheck() {
-  DCHECK_EQ(iterator_.current_offset(), 0);
+  DCHECK_EQ(iterator_.current_offset(), entrypoint_);
   DCHECK_NULL(parent_);
   return InterpretedDeoptFrame(
       *compilation_unit_,
-      zone()->New<CompactInterpreterFrameState>(
-          *compilation_unit_, GetInLivenessFor(0), current_interpreter_frame_),
-      GetClosure(), BytecodeOffset(kFunctionEntryBytecodeOffset),
+      zone()->New<CompactInterpreterFrameState>(*compilation_unit_,
+                                                GetInLivenessFor(entrypoint_),
+                                                current_interpreter_frame_),
+      GetClosure(),
+      BytecodeOffset(entrypoint_ == 0 ? kFunctionEntryBytecodeOffset
+                                      : entrypoint_),
       current_source_position_, nullptr);
 }
 
@@ -7604,7 +7651,9 @@ void MaglevGraphBuilder::VisitJumpLoop() {
   }
 
   if (ShouldEmitInterruptBudgetChecks()) {
-    if (v8_flags.use_osr && v8_flags.osr_from_maglev) {
+    if (v8_flags.use_osr && v8_flags.osr_from_maglev &&
+        (!v8_flags.maglev_osr || v8_flags.always_osr_from_maglev ||
+         compilation_unit_->info()->is_osr())) {
       AddNewNode<TryOnStackReplacement>(
           {GetClosure()}, loop_offset, feedback_slot,
           BytecodeOffset(iterator_.current_offset()), compilation_unit_);
@@ -7623,6 +7672,7 @@ void MaglevGraphBuilder::VisitJump() {
   BasicBlock* block =
       FinishBlock<Jump>({}, &jump_targets_[iterator_.GetJumpTargetOffset()]);
   MergeIntoFrameState(block, iterator_.GetJumpTargetOffset());
+  DCHECK_EQ(current_block_, nullptr);
   DCHECK_LT(next_offset(), bytecode().length());
 }
 void MaglevGraphBuilder::VisitJumpConstant() { VisitJump(); }
@@ -7699,7 +7749,12 @@ void MaglevGraphBuilder::MergeDeadLoopIntoFrameState(int target) {
   if (V8_UNLIKELY(in_peeled_iteration_)) {
     decremented_predecessor_offsets_.push_back(target);
   }
-  if (merge_states_[target]) {
+  if (merge_states_[target]->is_unreachable_loop()) {
+    if (v8_flags.trace_maglev_graph_building) {
+      std::cout << "! Killing loop merge state at @" << target << std::endl;
+    }
+    merge_states_[target] = nullptr;
+  } else {
     // If there already is a frame state, merge.
     merge_states_[target]->MergeDeadLoop(*compilation_unit_);
   }

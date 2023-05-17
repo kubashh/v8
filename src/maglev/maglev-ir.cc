@@ -817,17 +817,39 @@ void RootConstant::SetValueLocationConstraints() { DefineAsConstant(this); }
 void RootConstant::GenerateCode(MaglevAssembler* masm,
                                 const ProcessingState& state) {}
 
+InitialValue::InitialValue(uint64_t bitfield, interpreter::Register source)
+    // TODO(leszeks): Make this nicer.
+    : Base(bitfield),
+      source_(source),
+      stack_slot_((StandardFrameConstants::kExpressionsOffset -
+                   UnoptimizedFrameConstants::kRegisterFileFromFp) /
+                      kSystemPointerSize +
+                  source.index()) {}
+
 void InitialValue::SetValueLocationConstraints() {
-  // TODO(leszeks): Make this nicer.
-  result().SetUnallocated(compiler::UnallocatedOperand::FIXED_SLOT,
-                          (StandardFrameConstants::kExpressionsOffset -
-                           UnoptimizedFrameConstants::kRegisterFileFromFp) /
-                                  kSystemPointerSize +
-                              source().index(),
+  result().SetUnallocated(compiler::UnallocatedOperand::FIXED_SLOT, stack_slot_,
                           kNoVreg);
 }
 void InitialValue::GenerateCode(MaglevAssembler* masm,
                                 const ProcessingState& state) {
+  // No-op, the value is already in the appropriate slot.
+}
+
+OsrValue::OsrValue(uint64_t bitfield, interpreter::Register source)
+    // TODO(leszeks): Make this nicer.
+    : Base(bitfield),
+      source_(source),
+      stack_slot_((StandardFrameConstants::kExpressionsOffset -
+                   UnoptimizedFrameConstants::kRegisterFileFromFp) /
+                      kSystemPointerSize +
+                  source.index()) {}
+
+void OsrValue::SetValueLocationConstraints() {
+  result().SetUnallocated(compiler::UnallocatedOperand::FIXED_SLOT, stack_slot_,
+                          kNoVreg);
+}
+void OsrValue::GenerateCode(MaglevAssembler* masm,
+                            const ProcessingState& state) {
   // No-op, the value is already in the appropriate slot.
 }
 
@@ -4218,8 +4240,8 @@ void AttemptOnStackReplacement(MaglevAssembler* masm,
   // Case 1).
   Label deopt;
   Register maybe_target_code = scratch1;
-  __ TryLoadOptimizedOsrCode(maybe_target_code, scratch0, feedback_slot, &deopt,
-                             Label::kFar);
+  __ TryLoadOptimizedOsrCode(scratch1, CodeKind::TURBOFAN, scratch0,
+                             feedback_slot, &deopt, Label::Distance::kFar);
 
   // Case 2).
   {
@@ -4570,6 +4592,11 @@ void DeleteProperty::PrintParams(std::ostream& os,
 
 void InitialValue::PrintParams(std::ostream& os,
                                MaglevGraphLabeller* graph_labeller) const {
+  os << "(" << source().ToString() << ")";
+}
+
+void OsrValue::PrintParams(std::ostream& os,
+                           MaglevGraphLabeller* graph_labeller) const {
   os << "(" << source().ToString() << ")";
 }
 

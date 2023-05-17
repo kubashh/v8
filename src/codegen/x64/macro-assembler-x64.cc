@@ -896,8 +896,10 @@ void MacroAssembler::LoadFeedbackVectorFlagsAndJumpIfNeedsProcessing(
   DCHECK(CodeKindCanTierUp(current_code_kind));
   movzxwl(flags, FieldOperand(feedback_vector, FeedbackVector::kFlagsOffset));
   uint32_t kFlagsMask = FeedbackVector::kFlagsTieringStateIsAnyRequested |
-                        FeedbackVector::kFlagsMaybeHasTurbofanCode |
                         FeedbackVector::kFlagsLogNextExecution;
+  if (current_code_kind != CodeKind::TURBOFAN) {
+    kFlagsMask |= FeedbackVector::kFlagsMaybeHasTurbofanCode;
+  }
   if (current_code_kind != CodeKind::MAGLEV) {
     kFlagsMask |= FeedbackVector::kFlagsMaybeHasMaglevCode;
   }
@@ -2628,6 +2630,11 @@ void MacroAssembler::TestCodeIsMarkedForDeoptimization(Register code) {
         Immediate(1 << Code::kMarkedForDeoptimizationBit));
 }
 
+void MacroAssembler::TestCodeIsTurbofanned(Register code) {
+  testl(FieldOperand(code, Code::kFlagsOffset),
+        Immediate(1 << Code::kIsTurbofannedBit));
+}
+
 Immediate MacroAssembler::ClearedValue() const {
   return Immediate(
       static_cast<int32_t>(HeapObjectReference::ClearedValue(isolate()).ptr()));
@@ -3248,11 +3255,13 @@ void MacroAssembler::LoadNativeContextSlot(Register dst, int index) {
 }
 
 void MacroAssembler::TryLoadOptimizedOsrCode(Register scratch_and_result,
+                                             CodeKind min_opt_level,
                                              Register feedback_vector,
                                              FeedbackSlot slot,
                                              Label* on_result,
                                              Label::Distance distance) {
-  Label fallthrough;
+  ASM_CODE_COMMENT(this);
+  Label fallthrough, on_got_code;
   LoadTaggedField(
       scratch_and_result,
       FieldOperand(feedback_vector,
@@ -3262,11 +3271,21 @@ void MacroAssembler::TryLoadOptimizedOsrCode(Register scratch_and_result,
   // Is it marked_for_deoptimization? If yes, clear the slot.
   {
     TestCodeIsMarkedForDeoptimization(scratch_and_result);
-    j(equal, on_result, distance);
+    j(equal, &on_got_code, Label::Distance::kNear);
     StoreTaggedField(
         FieldOperand(feedback_vector,
                      FeedbackVector::OffsetOfElementAt(slot.ToInt())),
         ClearedValue());
+    jmp(&fallthrough);
+
+    bind(&on_got_code);
+    if (min_opt_level == CodeKind::TURBOFAN) {
+      TestCodeIsTurbofanned(scratch_and_result);
+      j(not_zero, on_result, distance);
+    } else {
+      DCHECK_EQ(min_opt_level, CodeKind::MAGLEV);
+      jmp(on_result, distance);
+    }
   }
 
   bind(&fallthrough);

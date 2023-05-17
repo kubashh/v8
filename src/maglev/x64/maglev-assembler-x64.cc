@@ -5,6 +5,7 @@
 #include "src/base/logging.h"
 #include "src/codegen/interface-descriptors-inl.h"
 #include "src/common/globals.h"
+#include "src/compiler/backend/instruction.h"
 #include "src/interpreter/bytecode-flags.h"
 #include "src/maglev/maglev-assembler-inl.h"
 #include "src/maglev/maglev-assembler.h"
@@ -631,7 +632,9 @@ void MaglevAssembler::TryTruncateDoubleToInt32(Register dst, DoubleRegister src,
 }
 
 void MaglevAssembler::Prologue(Graph* graph) {
-  BailoutIfDeoptimized(rbx);
+  if (!graph->is_osr()) {
+    BailoutIfDeoptimized(rbx);
+  }
 
   if (graph->has_recursive_calls()) {
     bind(code_gen_state()->entry_label());
@@ -640,7 +643,7 @@ void MaglevAssembler::Prologue(Graph* graph) {
   // Tiering support.
   // TODO(jgruber): Extract to a builtin (the tiering prologue is ~230 bytes
   // per Maglev code object on x64).
-  if (v8_flags.turbofan) {
+  if (v8_flags.turbofan && !graph->is_osr()) {
     // Scratch registers. Don't clobber regs related to the calling
     // convention (e.g. kJavaScriptCallArgCountRegister). Keep up-to-date
     // with deferred flags code.
@@ -665,8 +668,39 @@ void MaglevAssembler::Prologue(Graph* graph) {
         deferred_flags_need_processing);
   }
 
-  EnterFrame(StackFrame::MAGLEV);
+  if (graph->is_osr()) {
+    int offset = (StandardFrameConstants::kExpressionsOffset -
+                  UnoptimizedFrameConstants::kRegisterFileFromFp) /
+                 kSystemPointerSize;
+    uint32_t frame_size = (uint32_t)graph->osr_values().size() + offset;
 
+    // std::cout << "INT FRAME " << frame_size << " / " << offset << "\n";
+    // std::cout << "MAG FRAME " << graph->tagged_stack_slots() << " + " <<
+    // graph->untagged_stack_slots() << "\n"; std::cout << "stack:0 at " <<
+    // GetFramePointerOffsetForStackSlot(0) << "\n"; std::cout << "r0 at " <<
+    // GetFramePointerOffsetForStackSlot(2) << "\n";
+
+    CHECK_LE(frame_size,
+             graph->tagged_stack_slots() + graph->untagged_stack_slots());
+    // DebugBreak();
+    ASM_CODE_COMMENT_STRING(this, "Growing frame for OSR");
+    Move(kScratchRegister, 0);
+    uint32_t tagged_slots = graph->tagged_stack_slots();
+    for (size_t i = frame_size; i < tagged_slots; ++i) {
+      pushq(kScratchRegister);
+    }
+    uint32_t remaining =
+        tagged_slots + graph->untagged_stack_slots() - frame_size;
+    if (remaining > 0) {
+      // Extend rsp by the size of the remaining untagged part of the frame,
+      // no need to initialise these.
+      subq(rsp, Immediate(remaining * kSystemPointerSize));
+    }
+    // DebugBreak();
+    return;
+  }
+
+  EnterFrame(StackFrame::MAGLEV);
   // Save arguments in frame.
   // TODO(leszeks): Consider eliding this frame if we don't make any calls
   // that could clobber these registers.
@@ -674,27 +708,27 @@ void MaglevAssembler::Prologue(Graph* graph) {
   Push(kJSFunctionRegister);              // Callee's JS function.
   Push(kJavaScriptCallArgCountRegister);  // Actual argument count.
 
-  // Initialize stack slots.
   if (graph->tagged_stack_slots() > 0) {
     ASM_CODE_COMMENT_STRING(this, "Initializing stack slots");
     // TODO(leszeks): Consider filling with xmm + movdqa instead.
-    Move(rax, 0);
+    Move(kScratchRegister, 0);
 
     // Magic value. Experimentally, an unroll size of 8 doesn't seem any
     // worse than fully unrolled pushes.
     const int kLoopUnrollSize = 8;
+
     int tagged_slots = graph->tagged_stack_slots();
     if (tagged_slots < 2 * kLoopUnrollSize) {
       // If the frame is small enough, just unroll the frame fill
       // completely.
       for (int i = 0; i < tagged_slots; ++i) {
-        pushq(rax);
+        pushq(kScratchRegister);
       }
     } else {
       // Extract the first few slots to round to the unroll size.
       int first_slots = tagged_slots % kLoopUnrollSize;
       for (int i = 0; i < first_slots; ++i) {
-        pushq(rax);
+        pushq(kScratchRegister);
       }
       Move(rbx, tagged_slots / kLoopUnrollSize);
       // We enter the loop unconditionally, so make sure we need to loop at
@@ -703,7 +737,7 @@ void MaglevAssembler::Prologue(Graph* graph) {
       Label loop;
       bind(&loop);
       for (int i = 0; i < kLoopUnrollSize; ++i) {
-        pushq(rax);
+        pushq(kScratchRegister);
       }
       decl(rbx);
       j(greater, &loop);
