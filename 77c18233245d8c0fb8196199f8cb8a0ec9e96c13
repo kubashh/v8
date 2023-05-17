@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d0a2138_c7a47947",
+        "filename": "test/js-perf-test/TurboFan/wasm-inlining-loop-array.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-05-17T09:39:57Z",
+      "side": 1,
+      "message": "I changed the reference to a higher number. This creates higher scores and it seems we use \"high\" absolute score values which also makes them \"round\" numbers, i.e. `2002` vs. `99.8`.",
+      "range": {
+        "startLine": 166,
+        "startChar": 26,
+        "endLine": 166,
+        "endChar": 29
+      },
+      "revId": "77c18233245d8c0fb8196199f8cb8a0ec9e96c13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
