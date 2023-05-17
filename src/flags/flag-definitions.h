@@ -1000,8 +1000,7 @@ DEFINE_EXPERIMENTAL_FEATURE(maglev_osr,
 DEFINE_BOOL(concurrent_osr, true, "enable concurrent OSR")
 
 // TODO(dmercadier): re-enable Turbofan's string builder once it's fixed.
-DEFINE_BOOL_READONLY(turbo_string_builder, false,
-                     "use TurboFan fast string builder")
+DEFINE_BOOL(turbo_string_builder, false, "use TurboFan fast string builder")
 // DEFINE_WEAK_IMPLICATION(future, turbo_string_builder)
 
 DEFINE_BOOL(trace_osr, false, "trace on-stack replacement")
