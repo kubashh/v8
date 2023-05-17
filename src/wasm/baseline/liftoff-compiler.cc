@@ -5317,8 +5317,8 @@ class LiftoffCompiler {
   V(I64AtomicCompareExchange32U, kI64Store32)
 
   void AtomicOp(FullDecoder* decoder, WasmOpcode opcode,
-                base::Vector<Value> args, const MemoryAccessImmediate& imm,
-                Value* result) {
+                const Value* /* args */, const MemoryAccessImmediate& imm,
+                Value* /* result */) {
     switch (opcode) {
 #define ATOMIC_STORE_OP(name, type)                \
   case wasm::kExpr##name:                          \
