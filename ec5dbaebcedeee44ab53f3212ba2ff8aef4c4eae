@@ -16,6 +16,24 @@
       "message": "Hi Patrick,\n\nThis is causing a number of test failures in ppc/s390 as we don\u0027t have sandbox enabled. Is it ok if we also check for `defined(V8_ENABLE_SANDBOX)` ?",
       "revId": "ec5dbaebcedeee44ab53f3212ba2ff8aef4c4eae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c96f167_45b0db49",
+        "filename": "src/extensions/externalize-string-extension.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-05-17T10:52:06Z",
+      "side": 1,
+      "message": "Hey Milad,\n\ntests that are failing with this check were broken since the introduction of pointer compression (as they didn\u0027t test what they were supposed to test).\nI will fix the tests by exposing additional global variables for minimum string lengths for externalization.\nWill CC you on the CL once it is ready.",
+      "parentUuid": "b7d1c01b_e59d93f8",
+      "revId": "ec5dbaebcedeee44ab53f3212ba2ff8aef4c4eae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
