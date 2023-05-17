@@ -127,7 +127,6 @@ class Sweeper::MajorSweeperJob final : public JobTask {
   MajorSweeperJob& operator=(const MajorSweeperJob&) = delete;
 
   void Run(JobDelegate* delegate) final {
-    RwxMemoryWriteScope::SetDefaultPermissionsForNewThread();
     RunImpl(delegate, delegate->IsJoiningThread());
   }
 
@@ -183,7 +182,6 @@ class Sweeper::MinorSweeperJob final : public JobTask {
   MinorSweeperJob& operator=(const MinorSweeperJob&) = delete;
 
   void Run(JobDelegate* delegate) final {
-    RwxMemoryWriteScope::SetDefaultPermissionsForNewThread();
     RunImpl(delegate, delegate->IsJoiningThread());
   }
 
