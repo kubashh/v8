@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b516d183_7b6cc2ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-17T13:29:49Z",
+      "side": 1,
+      "message": "Ack, makes sense, thanks!",
+      "parentUuid": "16105cdc_51849ce5",
+      "range": {
+        "startLine": 9,
+        "startChar": 46,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "3fca2d22be4f0a023e37c79e334a37f614b262c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8e460406_da656dce",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
