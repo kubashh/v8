@@ -4319,6 +4319,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       LaneSize lane_size = LaneSizeField::decode(opcode);
       VectorLength vec_len = VectorLengthField::decode(opcode);
       if (vec_len == kV128) {
+        DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
         switch (lane_size) {
           case kL8: {
             XMMRegister dst = i.OutputSimd128Register();
@@ -4344,7 +4345,6 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           }
           case kL64: {
             // I64x2Ne
-            DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
             __ Pcmpeqq(i.OutputSimd128Register(), i.InputSimd128Register(1));
             __ Pcmpeqq(kScratchDoubleReg, kScratchDoubleReg);
             __ Pxor(i.OutputSimd128Register(), kScratchDoubleReg);
@@ -4461,6 +4461,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       LaneSize lane_size = LaneSizeField::decode(opcode);
       VectorLength vec_len = VectorLengthField::decode(opcode);
       if (vec_len == kV128) {
+        DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
         switch (lane_size) {
           case kL8: {
             // I8x16GeS
