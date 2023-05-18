@@ -502,11 +502,11 @@ void Assembler::RemoveBranchFromLabelLinkChain(Instruction* branch,
   Instruction* next_link;
   bool end_of_chain = false;
 
-  while (link != branch && !end_of_chain) {
-    next_link = link->ImmPCOffsetTarget();
-    end_of_chain = (link == next_link);
-    prev_link = link;
-    link = next_link;
+  if (link != branch && !end_of_chain) {
+    int i = static_cast<int>(InstructionOffset(branch));
+    DCHECK(link_chain_back_edge_.contains(i));
+    prev_link = InstructionAt(link_chain_back_edge_.at(i));
+    link = branch;
   }
 
   DCHECK(branch == link);
@@ -517,18 +517,44 @@ void Assembler::RemoveBranchFromLabelLinkChain(Instruction* branch,
     if (branch == next_link) {
       // It is also the last instruction in the chain, so it is the only branch
       // currently referring to this label.
+      //
+      // Label -> this branch -> 0
       label->Unuse();
     } else {
+      // Label -> this branch -> 1+ branches -> 0
       label->link_to(
           static_cast<int>(reinterpret_cast<byte*>(next_link) - buffer_start_));
+      int i = static_cast<int>(InstructionOffset(next_link));
+      if (link_chain_back_edge_.contains(i)) {
+        link_chain_back_edge_.erase(i);
+      }
     }
 
   } else if (branch == next_link) {
     // The branch is the last (but not also the first) instruction in the chain.
+    //
+    // Label -> 1+ branches -> this branch -> 0
     prev_link->SetImmPCOffsetTarget(options(), prev_link);
-
+    int i = static_cast<int>(InstructionOffset(branch));
+    if (link_chain_back_edge_.contains(i)) {
+      link_chain_back_edge_.erase(i);
+    }
   } else {
     // The branch is in the middle of the chain.
+    //
+    // Label -> 1+ branches -> this branch -> 1+ branches -> 0
+    int n = static_cast<int>(InstructionOffset(next_link));
+    if (link_chain_back_edge_.count(n)) {
+      // Update back edge such that the branch after this branch points to the
+      // branch before it.
+      link_chain_back_edge_[n] = static_cast<int>(InstructionOffset(prev_link));
+
+      int i = static_cast<int>(InstructionOffset(branch));
+      if (link_chain_back_edge_.contains(i)) {
+        link_chain_back_edge_.erase(i);
+      }
+    }
+
     if (prev_link->IsTargetInImmPCOffsetRange(next_link)) {
       prev_link->SetImmPCOffsetTarget(options(), next_link);
     } else if (label_veneer != nullptr) {
@@ -614,6 +640,12 @@ void Assembler::bind(Label* label) {
     } else {
       link->SetImmPCOffsetTarget(options(),
                                  reinterpret_cast<Instruction*>(pc_));
+
+      // Discard back edge data for this link.
+      int i = static_cast<int>(InstructionOffset(link));
+      if (link_chain_back_edge_.contains(i)) {
+        link_chain_back_edge_.erase(i);
+      }
     }
 
     // Link the label to the previous link in the chain.

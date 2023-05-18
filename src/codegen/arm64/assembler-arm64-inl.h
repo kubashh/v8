@@ -827,6 +827,10 @@ int Assembler::LinkAndGetInstructionOffsetTo(Label* label) {
   DCHECK_EQ(kStartOfLabelLinkChain, 0);
   int offset = LinkAndGetByteOffsetTo(label);
   DCHECK(IsAligned(offset, kInstrSize));
+  if (!label->is_bound() && (offset != 0)) {
+    link_chain_back_edge_.emplace(
+        std::pair<int, int>(pc_offset() + offset, pc_offset()));
+  }
   return offset >> kInstrSizeLog2;
 }
 
