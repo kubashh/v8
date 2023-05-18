@@ -3331,6 +3331,11 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   // pc_offset() for convenience.
   std::multimap<int, FarBranchInfo> unresolved_branches_;
 
+  // Back edge offsets for the link chain - the forward edge is stored in the
+  // generated code. This is used to accelerate removing branches from the
+  // link chain when emitting veneers.
+  std::unordered_map<int, int> link_chain_back_edge_;
+
   // We generate a veneer for a branch if we reach within this distance of the
   // limit of the range.
   static constexpr int kVeneerDistanceMargin = 1 * KB;
