@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d85e836d_a04cca96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-19T16:52:12Z",
+      "side": 1,
+      "message": "This is a long and rather boring CL; I hope it\u0027s manageable. PTAL.",
+      "revId": "d298569fee01def7fb9dc2ee68df3e0de9067a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
