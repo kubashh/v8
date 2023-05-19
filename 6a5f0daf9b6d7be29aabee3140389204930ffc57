@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b094b33a_85c39fb5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-19T14:03:16Z",
+      "side": 1,
+      "message": "Ah, sorry, I pulled this out and landed it separately as https://crrev.com/c/4543302.",
+      "parentUuid": "75a0d658_277427a0",
+      "revId": "6a5f0daf9b6d7be29aabee3140389204930ffc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "367589cd_5092d819",
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d80b329d_52056f5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-19T14:03:16Z",
+      "side": 1,
+      "message": "My intention was to\n1) fix the misleading signature definitions, and\n2) avoid duplicated logic by using `PopArgs` for atomic operations.\n\nThe signature needs to hold the most specific super type of `i32` and `i64`, and I assumed that \u0027bottom\u0027 is the right type here. Is there anything better?\n\nEven though I don\u0027t agree that this is an ugly hack, I will abandon this CL until we find a better way to solve this.",
+      "parentUuid": "664e211b_aa0d70d9",
+      "revId": "6a5f0daf9b6d7be29aabee3140389204930ffc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aef92667_0b8bb243",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 5
@@ -65,6 +101,30 @@
       "writtenOn": "2023-05-19T12:09:54Z",
       "side": 1,
       "message": "Could you not just write\n`V8_ASSUME(sig-\u003eGetParam(0).kind() \u003d\u003d kBottom);`\n\nWhat is actually the advantage of this assumption? Could it be a CHECK_EQ instead?",
+      "range": {
+        "startLine": 6110,
+        "startChar": 14,
+        "endLine": 6110,
+        "endChar": 25
+      },
+      "revId": "6a5f0daf9b6d7be29aabee3140389204930ffc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04a57a77_8bea85c6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 6110,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-19T14:03:16Z",
+      "side": 1,
+      "message": "Assumptions are very strict in what they support. In particular, they do not support any calls.\nThe advantage over a `CHECK_EQ` is that this does not produce a branch, but still tells the compiler that the first parameter does not need any validation (which the compiler can use to eliminate code after inlining `PopArgs`).",
+      "parentUuid": "aef92667_0b8bb243",
       "range": {
         "startLine": 6110,
         "startChar": 14,
