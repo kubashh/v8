@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "75a0d658_277427a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-05-19T12:09:54Z",
+      "side": 1,
+      "message": "Where is this change?",
+      "revId": "6a5f0daf9b6d7be29aabee3140389204930ffc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "367589cd_5092d819",
@@ -14,6 +31,63 @@
       "writtenOn": "2023-05-17T12:34:35Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "6a5f0daf9b6d7be29aabee3140389204930ffc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "664e211b_aa0d70d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-05-19T12:09:54Z",
+      "side": 1,
+      "message": "This CL seems like an ugly hack to me. Using `bottom` there is the signature makes the test pass because of a coincidence, but that\u0027s not how `bottom` is supposed to be used.\n\nAs far as I can tell, the problem is that `WasmOpcodes::Signature()` returns an invalid signature in either the mem32 or mem64 case. So why don\u0027t you introduce another function like `WasmOpcodes::SignatureOfAtomicOp(ValueType)` which gives you the correct signature depending on the ValueType?",
+      "revId": "6a5f0daf9b6d7be29aabee3140389204930ffc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aef92667_0b8bb243",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 6110,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-05-19T12:09:54Z",
+      "side": 1,
+      "message": "Could you not just write\n`V8_ASSUME(sig-\u003eGetParam(0).kind() \u003d\u003d kBottom);`\n\nWhat is actually the advantage of this assumption? Could it be a CHECK_EQ instead?",
+      "range": {
+        "startLine": 6110,
+        "startChar": 14,
+        "endLine": 6110,
+        "endChar": 25
+      },
+      "revId": "6a5f0daf9b6d7be29aabee3140389204930ffc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebf2cd08_b9efb8e6",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 6117,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-05-19T12:09:54Z",
+      "side": 1,
+      "message": "The call to `Peek` is just for type checking, isn\u0027t it? If so, could you mention that in a comment?",
       "revId": "6a5f0daf9b6d7be29aabee3140389204930ffc57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
