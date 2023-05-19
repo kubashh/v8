@@ -403,6 +403,33 @@ bool Instruction::AreMovesRedundant() const {
   return true;
 }
 
+bool Instruction::ParallelMoveEquals(Instruction* other) const {
+  for (int i = Instruction::FIRST_GAP_POSITION;
+       i <= Instruction::LAST_GAP_POSITION; i++) {
+    Instruction::GapPosition pos = static_cast<Instruction::GapPosition>(i);
+    const ParallelMove* this_instr_move = this->GetParallelMove(pos);
+    const ParallelMove* other_instr_move = other->GetParallelMove(pos);
+    if (this_instr_move == nullptr && other_instr_move == nullptr) continue;
+    if (((this_instr_move == nullptr) != (other_instr_move == nullptr)) ||
+        !this_instr_move->Equals(*other_instr_move)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool Instruction::hasParallelMove() const {
+  for (int i = Instruction::FIRST_GAP_POSITION;
+       i <= Instruction::LAST_GAP_POSITION; i++) {
+    Instruction::GapPosition pos = static_cast<Instruction::GapPosition>(i);
+    const ParallelMove* instr_move = this->GetParallelMove(pos);
+    if (instr_move != nullptr && !instr_move->empty() &&
+        !instr_move->IsRedundant())
+      return true;
+  }
+  return false;
+}
+
 void Instruction::Print() const { StdoutStream{} << *this << std::endl; }
 
 std::ostream& operator<<(std::ostream& os, const ParallelMove& pm) {

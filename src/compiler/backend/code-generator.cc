@@ -92,6 +92,9 @@ CodeGenerator::CodeGenerator(
       result_(kSuccess),
       block_starts_(codegen_zone),
       instr_starts_(codegen_zone),
+#if V8_TARGET_ARCH_X64
+      gap_return_instr_(nullptr),
+#endif
       debug_name_(debug_name) {
   for (int i = 0; i < instructions->InstructionBlockCount(); ++i) {
     new (&labels_[i]) Label;
@@ -741,7 +744,15 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleInstruction(
   bool adjust_stack =
       GetSlotAboveSPBeforeTailCall(instr, &first_unused_stack_slot);
   if (adjust_stack) AssembleTailCallBeforeGap(instr, first_unused_stack_slot);
+#if V8_TARGET_ARCH_X64
+  if (ArchOpcodeField::decode(instr->opcode()) != kArchRet ||
+      (ArchOpcodeField::decode(instr->opcode()) == kArchRet &&
+       !TryMatchGapReturnLabel(instr))) {
+    AssembleGaps(instr);
+  }
+#else
   AssembleGaps(instr);
+#endif
   if (adjust_stack) AssembleTailCallAfterGap(instr, first_unused_stack_slot);
   DCHECK_IMPLIES(
       block->must_deconstruct_frame(),

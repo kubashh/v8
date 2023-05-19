@@ -1507,7 +1507,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArchRet:
-      AssembleReturn(instr->InputAt(0));
+      AssembleReturn(instr);
       break;
     case kArchFramePointer:
       __ movq(i.OutputRegister(), rbp);
@@ -5967,7 +5967,30 @@ void CodeGenerator::AssembleConstructFrame() {
   }
 }
 
-void CodeGenerator::AssembleReturn(InstructionOperand* additional_pop_count) {
+bool CodeGenerator::TryMatchGapReturnLabel(Instruction* instr) {
+  auto call_descriptor = linkage()->GetIncomingDescriptor();
+  InstructionOperand* additional_pop_count = instr->InputAt(0);
+  X64OperandConverter g(this, nullptr);
+  if (!call_descriptor->IsCFunctionCall() &&
+      frame_access_state()->has_frame() &&
+      additional_pop_count->IsImmediate() &&
+      g.ToConstant(additional_pop_count).ToInt32() == 0 &&
+      instr->hasParallelMove()) {
+    if (gap_return_label_.is_bound()) {
+      DCHECK_NE(gap_return_instr_, nullptr);
+      return gap_return_instr_->ParallelMoveEquals(instr);
+    } else {
+      DCHECK_EQ(gap_return_instr_, nullptr);
+      DCHECK(!gap_return_label_.is_bound());
+      gap_return_instr_ = instr;
+      __ bind(&gap_return_label_);
+    }
+  }
+  return false;
+}
+
+void CodeGenerator::AssembleReturn(Instruction* instr) {
+  InstructionOperand* additional_pop_count = instr->InputAt(0);
   auto call_descriptor = linkage()->GetIncomingDescriptor();
 
   // Restore registers.
@@ -6025,9 +6048,16 @@ void CodeGenerator::AssembleReturn(InstructionOperand* additional_pop_count) {
     if (additional_pop_count->IsImmediate() &&
         g.ToConstant(additional_pop_count).ToInt32() == 0) {
       // Canonicalize JSFunction return sites for now.
-      if (return_label_.is_bound()) {
-        __ jmp(&return_label_);
+      if (gap_return_instr_ != nullptr && gap_return_instr_ != instr &&
+          instr->hasParallelMove() &&
+          gap_return_instr_->ParallelMoveEquals(instr)) {
+        __ jmp(&gap_return_label_);
         return;
+      } else if (return_label_.is_bound()) {
+        if (drop_jsargs || is_int8(return_label_.pos() - __ pc_offset())) {
+          __ jmp(&return_label_);
+          return;
+        }
       } else {
         __ bind(&return_label_);
       }
