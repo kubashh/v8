@@ -825,6 +825,12 @@ UnsafeCast<RegExpMatchInfo>(implicit context: Context)(o: Object):
   return %RawDownCast<RegExpMatchInfo>(o);
 }
 
+UnsafeCast<OrderedHashSet>(implicit context: Context)(o: Object):
+    OrderedHashSet {
+  dcheck(Is<FixedArray>(o));
+  return %RawDownCast<OrderedHashSet>(o);
+}
+
 macro UnsafeCast<A : type extends WeakHeapObject>(o: A|Object): A {
   dcheck(IsWeakOrCleared(o));
   return %RawDownCast<A>(o);
