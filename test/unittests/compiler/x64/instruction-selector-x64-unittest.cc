@@ -2418,6 +2418,99 @@ INSTANTIATE_TEST_SUITE_P(InstructionSelectorTest,
                          InstructionSelectorSIMDShuffleWithZeroInputTest,
                          ::testing::ValuesIn(kShuffleWithZeroInput));
 
+TEST_F(InstructionSelectorTest, InstructionSelectorSIMDShuffleMatchPmulh) {
+  MachineType type = MachineType::Simd128();
+  uint8_t shuffle_mask[16] = {2,  3,  6,  7,  10, 11, 14, 15,
+                              18, 19, 22, 23, 26, 27, 30, 31};
+  {
+    // Tests shuffle(extmul, extmul) matching pmulhw
+    StreamBuilder m(this, type, type, type);
+    Node* extmul_low = m.AddNode(m.machine()->I32x4ExtMulLowI16x8S(),
+                                 m.Parameter(0), m.Parameter(1));
+    Node* extmul_high = m.AddNode(m.machine()->I32x4ExtMulHighI16x8S(),
+                                  m.Parameter(0), m.Parameter(1));
+    const Operator* shuffle_op = m.machine()->I8x16Shuffle(shuffle_mask);
+    Node* shuffle_node = m.AddNode(shuffle_op, extmul_low, extmul_high);
+    m.Return(shuffle_node);
+    Stream s = m.Build();
+
+    ASSERT_EQ(1U, s.size());
+    EXPECT_EQ(kX64I16x8MulHighS, s[0]->arch_opcode());
+    ASSERT_EQ(2U, s[0]->InputCount());
+    EXPECT_EQ(1U, s[0]->OutputCount());
+  }
+
+  {
+    // Tests shuffle(extmul, extmul) matching pmulhuw
+    StreamBuilder m(this, type, type, type);
+    Node* extmul_low = m.AddNode(m.machine()->I32x4ExtMulLowI16x8U(),
+                                 m.Parameter(0), m.Parameter(1));
+    Node* extmul_high = m.AddNode(m.machine()->I32x4ExtMulHighI16x8U(),
+                                  m.Parameter(0), m.Parameter(1));
+    const Operator* shuffle_op = m.machine()->I8x16Shuffle(shuffle_mask);
+    Node* shuffle_node = m.AddNode(shuffle_op, extmul_low, extmul_high);
+    m.Return(shuffle_node);
+    Stream s = m.Build();
+
+    ASSERT_EQ(1U, s.size());
+    EXPECT_EQ(kX64I16x8MulHighU, s[0]->arch_opcode());
+    ASSERT_EQ(2U, s[0]->InputCount());
+    EXPECT_EQ(1U, s[0]->OutputCount());
+  }
+
+  {
+    // Tests shuffle(i32x4.mul, i32x4.mul, mask) matching pmulhw.
+    StreamBuilder m(this, type, type);
+    uint8_t s128_const[16] = {81, 26, 0, 0, 81, 26, 0, 0,
+                              81, 26, 0, 0, 81, 26, 0, 0};
+
+    Node* sext_low =
+        m.AddNode(m.machine()->I32x4SConvertI16x8Low(), m.Parameter(0));
+    Node* sext_high =
+        m.AddNode(m.machine()->I32x4SConvertI16x8High(), m.Parameter(0));
+
+    Node* const c = m.S128Const(s128_const);
+    Node* mul_low = m.AddNode(m.machine()->I32x4Mul(), sext_low, c);
+    Node* mul_high = m.AddNode(m.machine()->I32x4Mul(), sext_high, c);
+    const Operator* shuffle_op = m.machine()->I8x16Shuffle(shuffle_mask);
+    Node* shuffle_node = m.AddNode(shuffle_op, mul_low, mul_high);
+
+    m.Return(shuffle_node);
+    Stream s = m.Build();
+
+    ASSERT_EQ(2U, s.size());
+    EXPECT_EQ(kX64I16x8MulHighS, s[1]->arch_opcode());
+    ASSERT_EQ(3U, s[1]->InputCount());
+    EXPECT_EQ(1U, s[1]->OutputCount());
+  }
+
+  {
+    // Tests shuffle(i32x4.mul, i32x4.mul, mask) matching pmulhuw.
+    StreamBuilder m(this, type, type);
+    uint8_t s128_const[16] = {81, 26, 0, 0, 81, 26, 0, 0,
+                              81, 26, 0, 0, 81, 26, 0, 0};
+
+    Node* sext_low =
+        m.AddNode(m.machine()->I32x4UConvertI16x8Low(), m.Parameter(0));
+    Node* sext_high =
+        m.AddNode(m.machine()->I32x4UConvertI16x8High(), m.Parameter(0));
+
+    Node* const c = m.S128Const(s128_const);
+    Node* mul_low = m.AddNode(m.machine()->I32x4Mul(), sext_low, c);
+    Node* mul_high = m.AddNode(m.machine()->I32x4Mul(), sext_high, c);
+    const Operator* shuffle_op = m.machine()->I8x16Shuffle(shuffle_mask);
+    Node* shuffle_node = m.AddNode(shuffle_op, mul_low, mul_high);
+
+    m.Return(shuffle_node);
+    Stream s = m.Build();
+
+    ASSERT_EQ(2U, s.size());
+    EXPECT_EQ(kX64I16x8MulHighU, s[1]->arch_opcode());
+    ASSERT_EQ(3U, s[1]->InputCount());
+    EXPECT_EQ(1U, s[1]->OutputCount());
+  }
+}
+
 struct SwizzleConstants {
   uint8_t shuffle[kSimd128Size];
   bool omit_add;

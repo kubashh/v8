@@ -4159,6 +4159,20 @@ static bool TryMatchOneInputIsZeros(Node* node, uint8_t* shuffle,
   return true;
 }
 
+template <typename T>
+static bool IsI32x4ConstantInRange(Node* node, const T& low, const T& high) {
+  if (node->opcode() == IrOpcode::kS128Zero) {
+    return base::IsInRange(0, low, high);
+  }
+  // If the node is a V128 const, check all the elements
+  if (node->opcode() == IrOpcode::kS128Const) {
+    T val[kSimd128Size / sizeof(T)];
+    memcpy(val, S128ImmediateParameterOf(node->op()).data(), kSimd128Size);
+    return std::all_of(std::begin(val), std::end(val),
+                       [=](auto i) { return base::IsInRange(i, low, high); });
+  }
+  return false;
+}
 }  // namespace
 
 void InstructionSelector::VisitI8x16Shuffle(Node* node) {
@@ -4211,6 +4225,80 @@ void InstructionSelector::VisitI8x16Shuffle(Node* node) {
                                  arraysize(arch_shuffles), is_swizzle,
                                  &arch_shuffle)) {
     opcode = arch_shuffle->opcode;
+    if (opcode == kX64S16x8UnzipHigh) {
+      // Match pmulhw/pmulhuw from following pattern
+      //   I8x16Shuffle(I32x4ExtMulLowI16x8(val1, val2),
+      //                I32x4ExtMulHighI16x8(val1, val2),
+      //                X64S16x8UnzipHighMask)
+      Node* input0 = node->InputAt(0);
+      Node* input1 = node->InputAt(1);
+      if (((input0->opcode() == IrOpcode::kI32x4ExtMulLowI16x8S &&
+            input1->opcode() == IrOpcode::kI32x4ExtMulHighI16x8S) ||
+           (input0->opcode() == IrOpcode::kI32x4ExtMulLowI16x8U &&
+            input1->opcode() == IrOpcode::kI32x4ExtMulHighI16x8U)) &&
+          CanCover(node, input0) && CanCover(node, input1) &&
+          input0->InputAt(0) == input1->InputAt(0) &&
+          input0->InputAt(1) == input1->InputAt(1)) {
+        Emit(input0->opcode() == IrOpcode::kI32x4ExtMulLowI16x8S
+                 ? kX64I16x8MulHighS
+                 : kX64I16x8MulHighU,
+             IsSupported(AVX) ? g.DefineAsRegister(node)
+                              : g.DefineSameAsFirst(node),
+             g.UseRegister(input0->InputAt(0)),
+             g.UseRegister(input0->InputAt(1)));
+        return;
+      }
+
+      // Match pmulhw/pmulhuw from following pattern
+      //   I8x16Shuffle(I32x4Mul(I32x4ConvertI16x8Low(val1), S128Const_1),
+      //                I32x4Mul(I32x4ConvertI16x8High(val1), S128Const_2))
+      //                X64S16x8UnzipHighMask)
+      if (input0->opcode() == IrOpcode::kI32x4Mul &&
+          input1->opcode() == IrOpcode::kI32x4Mul && CanCover(node, input0) &&
+          CanCover(node, input1)) {
+        Node* input0_0 = input0->InputAt(0);
+        Node* input0_1 = input0->InputAt(1);
+        Node* input1_0 = input1->InputAt(0);
+        Node* input1_1 = input1->InputAt(1);
+        bool is_matched = false;
+        bool is_signed;
+        if (input0_0->opcode() == IrOpcode::kI32x4SConvertI16x8Low &&
+            input1_0->opcode() == IrOpcode::kI32x4SConvertI16x8High &&
+            input0_0->InputAt(0) == input1_0->InputAt(0) &&
+            IsI32x4ConstantInRange(input0_1,
+                                   std::numeric_limits<int16_t>::min(),
+                                   std::numeric_limits<int16_t>::max()) &&
+            (input0_1 == input1_1 ||
+             IsI32x4ConstantInRange(input1_1,
+                                    std::numeric_limits<int16_t>::min(),
+                                    std::numeric_limits<int16_t>::max()))) {
+          is_matched = true;
+          is_signed = true;
+        } else if (input0_0->opcode() == IrOpcode::kI32x4UConvertI16x8Low &&
+                   input1_0->opcode() == IrOpcode::kI32x4UConvertI16x8High &&
+                   input0_0->InputAt(0) == input1_0->InputAt(0) &&
+                   IsI32x4ConstantInRange(
+                       input0_1, std::numeric_limits<uint16_t>::min(),
+                       std::numeric_limits<uint16_t>::max()) &&
+                   (input0_1 == input1_1 ||
+                    IsI32x4ConstantInRange(
+                        input1_1, std::numeric_limits<uint16_t>::min(),
+                        std::numeric_limits<uint16_t>::max()))) {
+          is_matched = true;
+          is_signed = false;
+        }
+
+        if (is_matched) {
+          Emit(is_signed ? kX64I16x8MulHighS : kX64I16x8MulHighU,
+               IsSupported(AVX) ? g.DefineAsRegister(node)
+                                : g.DefineSameAsFirst(node),
+               g.UseRegister(input0_0->InputAt(0)), g.UseRegister(input0_1),
+               g.UseRegister(input1_1));
+          return;
+        }
+      }
+    }
+
     src0_needs_reg = arch_shuffle->src0_needs_reg;
     // SSE can't take advantage of both operands in registers and needs
     // same-as-first.

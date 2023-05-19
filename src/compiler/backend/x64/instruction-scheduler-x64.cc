@@ -226,6 +226,8 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kX64I16x16SConvertI8x16:
     case kX64I16x8SConvertI32x4:
     case kX64I16x16SConvertI32x8:
+    case kX64I16x8MulHighS:
+    case kX64I16x8MulHighU:
     case kX64IAddSatS:
     case kX64ISubSatS:
     case kX64I16x8UConvertI8x16Low:
