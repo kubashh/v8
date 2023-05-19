@@ -283,6 +283,8 @@ namespace compiler {
   V(X64I16x16SConvertI8x16)                          \
   V(X64I16x8SConvertI32x4)                           \
   V(X64I16x16SConvertI32x8)                          \
+  V(X64I16x8MulHighS)                                \
+  V(X64I16x8MulHighU)                                \
   V(X64IAddSatS)                                     \
   V(X64ISubSatS)                                     \
   V(X64I16x8UConvertI8x16Low)                        \

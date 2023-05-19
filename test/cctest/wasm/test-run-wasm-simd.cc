@@ -2741,6 +2741,99 @@ WASM_EXEC_TEST(I8x16ShuffleWithZeroInput) {
   }
 }
 
+template <typename T, typename U>
+void RunI16x8MatchPmulhTest(TestExecutionTier execution_tier,
+                            WasmOpcode extend_low, WasmOpcode extend_high) {
+  WasmRunner<int32_t, T> r(execution_tier);
+  static const int kElems = kSimd128Size / sizeof(T);
+  T* dst = r.builder().template AddGlobal<T>(kWasmS128);
+
+  constexpr std::array<int8_t, 16> shuffle = {2,  3,  6,  7,  10, 11, 14, 15,
+                                              18, 19, 22, 23, 26, 27, 30, 31};
+  constexpr std::array<int8_t, 16> s128_const = {1, 2, 0, 0, 1, 2, 0, 0,
+                                                 1, 2, 0, 0, 1, 2, 0, 0};
+
+  uint8_t value1 = 0;
+  uint8_t temp1 = r.AllocateLocal(kWasmS128);
+  r.Build({WASM_LOCAL_SET(temp1, WASM_SIMD_I16x8_SPLAT(WASM_LOCAL_GET(value1))),
+           WASM_GLOBAL_SET(
+               0, WASM_SIMD_I8x16_SHUFFLE_OP(
+                      kExprI8x16Shuffle, shuffle,
+                      WASM_SIMD_BINOP(
+                          kExprI32x4Mul,
+                          WASM_SIMD_UNOP(extend_low, WASM_LOCAL_GET(temp1)),
+                          WASM_SIMD_CONSTANT(s128_const)),
+                      WASM_SIMD_BINOP(
+                          kExprI32x4Mul,
+                          WASM_SIMD_UNOP(extend_high, WASM_LOCAL_GET(temp1)),
+                          WASM_SIMD_CONSTANT(s128_const)))),
+           WASM_ONE});
+
+  for (T x : compiler::ValueHelper::GetVector<T>()) {
+    CHECK_EQ(1, r.Call(x));
+    T expected = (static_cast<U>(x) * static_cast<U>(513)) >> 16 & 0xFFFF;
+    for (int i = 0; i < kElems; i++) {
+      CHECK_EQ(expected, LANE(dst, i));
+    }
+  }
+}
+
+WASM_EXEC_TEST(I16x8ShuffleMatchPmulhuw) {
+  RunI16x8MatchPmulhTest<uint16_t, uint32_t>(
+      execution_tier, kExprI32x4UConvertI16x8Low, kExprI32x4UConvertI16x8High);
+}
+
+WASM_EXEC_TEST(I16x8ShuffleMatchPmulhw) {
+  RunI16x8MatchPmulhTest<int16_t, int32_t>(
+      execution_tier, kExprI32x4SConvertI16x8Low, kExprI32x4SConvertI16x8High);
+}
+
+template <typename T, typename U>
+void RunI16x8MatchPmulhFromExtMulTest(TestExecutionTier execution_tier,
+                                      WasmOpcode extmul_low,
+                                      WasmOpcode extmul_high) {
+  WasmRunner<int32_t, T, T> r(execution_tier);
+  static const int kElems = kSimd128Size / sizeof(T);
+  T* dst = r.builder().template AddGlobal<T>(kWasmS128);
+
+  constexpr std::array<int8_t, 16> shuffle = {2,  3,  6,  7,  10, 11, 14, 15,
+                                              18, 19, 22, 23, 26, 27, 30, 31};
+
+  uint8_t value1 = 0, value2 = 1;
+  uint8_t temp1 = r.AllocateLocal(kWasmS128);
+  uint8_t temp2 = r.AllocateLocal(kWasmS128);
+  r.Build({WASM_LOCAL_SET(temp1, WASM_SIMD_I16x8_SPLAT(WASM_LOCAL_GET(value1))),
+           WASM_LOCAL_SET(temp2, WASM_SIMD_I16x8_SPLAT(WASM_LOCAL_GET(value2))),
+           WASM_GLOBAL_SET(
+               0, WASM_SIMD_I8x16_SHUFFLE_OP(
+                      kExprI8x16Shuffle, shuffle,
+                      WASM_SIMD_BINOP(extmul_low, WASM_LOCAL_GET(temp1),
+                                      WASM_LOCAL_GET(temp2)),
+                      WASM_SIMD_BINOP(extmul_high, WASM_LOCAL_GET(temp1),
+                                      WASM_LOCAL_GET(temp2)))),
+           WASM_ONE});
+
+  for (T x : compiler::ValueHelper::GetVector<T>()) {
+    for (T y : compiler::ValueHelper::GetVector<T>()) {
+      CHECK_EQ(1, r.Call(x, y));
+      T expected = (static_cast<U>(x) * static_cast<U>(y)) >> 16 & 0xFFFF;
+      for (int i = 0; i < kElems; i++) {
+        CHECK_EQ(expected, LANE(dst, i));
+      }
+    }
+  }
+}
+
+WASM_EXEC_TEST(I16x8ShuffleMatchPmulhuwFromExtMul) {
+  RunI16x8MatchPmulhFromExtMulTest<uint16_t, uint32_t>(
+      execution_tier, kExprI32x4ExtMulLowI16x8U, kExprI32x4ExtMulHighI16x8U);
+}
+
+WASM_EXEC_TEST(I16x8ShuffleMatchPmulhwFromExtMul) {
+  RunI16x8MatchPmulhFromExtMulTest<int16_t, int32_t>(
+      execution_tier, kExprI32x4ExtMulLowI16x8S, kExprI32x4ExtMulHighI16x8S);
+}
+
 struct SwizzleTestArgs {
   const Shuffle input;
   const Shuffle indices;

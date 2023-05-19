@@ -5230,6 +5230,60 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       ASSEMBLE_SIMD_BINOP(packssdw);
       break;
     }
+    case kX64I16x8MulHighS: {
+      if (instr->InputCount() == 2) {
+        ASSEMBLE_SIMD_BINOP(pmulhw);
+      } else {
+        DCHECK_EQ(instr->InputCount(), 3);
+        XMMRegister dst = i.OutputSimd128Register();
+        XMMRegister src1 = i.InputSimd128Register(0);
+        XMMRegister src2 = i.InputSimd128Register(1);
+        XMMRegister src3 = i.InputSimd128Register(2);
+        if (CpuFeatures::IsSupported(AVX)) {
+          CpuFeatureScope avx_scope(masm(), AVX);
+          if (dst == src1) {
+            __ vpackssdw(kScratchDoubleReg, src2, src3);
+            __ vpmulhw(dst, src1, kScratchDoubleReg);
+          } else {
+            __ vpackssdw(dst, src2, src3);
+            __ vpmulhw(dst, dst, src1);
+          }
+        } else {
+          DCHECK_EQ(dst, src1);
+          __ movdqa(kScratchDoubleReg, src2);
+          __ packssdw(kScratchDoubleReg, src3);
+          __ pmulhw(dst, kScratchDoubleReg);
+        }
+      }
+      break;
+    }
+    case kX64I16x8MulHighU: {
+      if (instr->InputCount() == 2) {
+        ASSEMBLE_SIMD_BINOP(pmulhuw);
+      } else {
+        DCHECK_EQ(instr->InputCount(), 3);
+        XMMRegister dst = i.OutputSimd128Register();
+        XMMRegister src1 = i.InputSimd128Register(0);
+        XMMRegister src2 = i.InputSimd128Register(1);
+        XMMRegister src3 = i.InputSimd128Register(2);
+        if (CpuFeatures::IsSupported(AVX)) {
+          CpuFeatureScope avx_scope(masm(), AVX);
+          if (dst == src1) {
+            __ vpackusdw(kScratchDoubleReg, src2, src3);
+            __ vpmulhuw(dst, src1, kScratchDoubleReg);
+          } else {
+            __ vpackusdw(dst, src2, src3);
+            __ vpmulhuw(dst, dst, src1);
+          }
+        } else {
+          DCHECK_EQ(dst, src1);
+          __ movdqa(kScratchDoubleReg, src2);
+          __ packusdw(kScratchDoubleReg, src3);
+          __ pmulhw(dst, kScratchDoubleReg);
+        }
+      }
+      break;
+    }
     case kX64IAddSatS: {
       LaneSize lane_size = LaneSizeField::decode(opcode);
       VectorLength vec_len = VectorLengthField::decode(opcode);
