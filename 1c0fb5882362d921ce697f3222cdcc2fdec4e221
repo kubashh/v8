@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a17f4ae0_d91e2a3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-05-19T16:27:05Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "1c0fb5882362d921ce697f3222cdcc2fdec4e221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a045bf2_6c140f47",
+        "filename": "tools/wasm/module-inspector.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-05-19T16:27:05Z",
+      "side": 1,
+      "message": "This block is new, the rest of this function is existing code moved around.",
+      "range": {
+        "startLine": 221,
+        "startChar": 2,
+        "endLine": 221,
+        "endChar": 22
+      },
+      "revId": "1c0fb5882362d921ce697f3222cdcc2fdec4e221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
