@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ae6ff7c_755cbf56",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-19T07:44:32Z",
+      "side": 1,
+      "message": "I do not have context to as of why we want this :) I only looked at the heap/ parts.",
+      "range": {
+        "startLine": 9,
+        "startChar": 12,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "40e6041f_f0c88949",
@@ -14,6 +37,98 @@
       "writtenOn": "2023-05-17T14:50:30Z",
       "side": 1,
       "message": "Hi Michi, ptal at the heap/ parts, thanks. I\u0027ll fix the includes issue next week.",
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c78e2c5d_1dde3b7e",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-19T07:44:32Z",
+      "side": 1,
+      "message": "Shouldn\u0027t that be able to just plug in the PageObjectIterator? I think we sould able to compose them.",
+      "range": {
+        "startLine": 262,
+        "startChar": 39,
+        "endLine": 262,
+        "endChar": 43
+      },
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f0ce472_c1149876",
+        "filename": "src/heap/read-only-heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-19T07:44:32Z",
+      "side": 1,
+      "message": "nit: final",
+      "range": {
+        "startLine": 166,
+        "startChar": 50,
+        "endLine": 166,
+        "endChar": 51
+      },
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38d13554_d44c1d6f",
+        "filename": "src/heap/read-only-heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-19T07:44:32Z",
+      "side": 1,
+      "message": "nit: no explicit",
+      "range": {
+        "startLine": 172,
+        "startChar": 2,
+        "endLine": 172,
+        "endChar": 10
+      },
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "963c0ed9_d69ed464",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-19T07:44:32Z",
+      "side": 1,
+      "message": "Why do we need to split these methods and cannot do both steps in `FinalizeExternallyInitializedSpace()`?",
+      "range": {
+        "startLine": 755,
+        "startChar": 35,
+        "endLine": 755,
+        "endChar": 38
+      },
       "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
