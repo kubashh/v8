@@ -4,6 +4,8 @@
 
 #include "src/builtins/builtins-collections-gen.h"
 
+#include <iostream>
+
 #include "src/builtins/builtins-constructor-gen.h"
 #include "src/builtins/builtins-iterator-gen.h"
 #include "src/builtins/builtins-utils-gen.h"
@@ -507,174 +509,6 @@ TNode<Object> BaseCollectionsAssembler::LoadAndNormalizeFixedDoubleArrayElement(
   BIND(&next);
   return entry.value();
 }
-
-class CollectionsBuiltinsAssembler : public BaseCollectionsAssembler {
- public:
-  explicit CollectionsBuiltinsAssembler(compiler::CodeAssemblerState* state)
-      : BaseCollectionsAssembler(state) {}
-
-  // Check whether |iterable| is a JS_MAP_KEY_ITERATOR_TYPE or
-  // JS_MAP_VALUE_ITERATOR_TYPE object that is not partially consumed and still
-  // has original iteration behavior.
-  void BranchIfIterableWithOriginalKeyOrValueMapIterator(TNode<Object> iterable,
-                                                         TNode<Context> context,
-                                                         Label* if_true,
-                                                         Label* if_false);
-
-  // Check whether |iterable| is a JS_SET_TYPE or JS_SET_VALUE_ITERATOR_TYPE
-  // object that still has original iteration behavior. In case of the iterator,
-  // the iterator also must not have been partially consumed.
-  void BranchIfIterableWithOriginalValueSetIterator(TNode<Object> iterable,
-                                                    TNode<Context> context,
-                                                    Label* if_true,
-                                                    Label* if_false);
-
- protected:
-  template <typename IteratorType>
-  TNode<HeapObject> AllocateJSCollectionIterator(
-      const TNode<Context> context, int map_index,
-      const TNode<HeapObject> collection);
-  TNode<HeapObject> AllocateTable(Variant variant,
-                                  TNode<IntPtrT> at_least_space_for) override;
-  TNode<IntPtrT> GetHash(const TNode<HeapObject> key);
-  TNode<IntPtrT> CallGetHashRaw(const TNode<HeapObject> key);
-  TNode<Smi> CallGetOrCreateHashRaw(const TNode<HeapObject> key);
-
-  // Transitions the iterator to the non obsolete backing store.
-  // This is a NOP if the [table] is not obsolete.
-  template <typename TableType>
-  using UpdateInTransition = std::function<void(const TNode<TableType> table,
-                                                const TNode<IntPtrT> index)>;
-  template <typename TableType>
-  std::pair<TNode<TableType>, TNode<IntPtrT>> Transition(
-      const TNode<TableType> table, const TNode<IntPtrT> index,
-      UpdateInTransition<TableType> const& update_in_transition);
-  template <typename IteratorType, typename TableType>
-  std::pair<TNode<TableType>, TNode<IntPtrT>> TransitionAndUpdate(
-      const TNode<IteratorType> iterator);
-  template <typename TableType>
-  std::tuple<TNode<Object>, TNode<IntPtrT>, TNode<IntPtrT>> NextSkipHoles(
-      TNode<TableType> table, TNode<IntPtrT> index, Label* if_end);
-
-  // Specialization for Smi.
-  // The {result} variable will contain the entry index if the key was found,
-  // or the hash code otherwise.
-  template <typename CollectionType>
-  void FindOrderedHashTableEntryForSmiKey(TNode<CollectionType> table,
-                                          TNode<Smi> key_tagged,
-                                          TVariable<IntPtrT>* result,
-                                          Label* entry_found, Label* not_found);
-  void SameValueZeroSmi(TNode<Smi> key_smi, TNode<Object> candidate_key,
-                        Label* if_same, Label* if_not_same);
-
-  // Specialization for heap numbers.
-  // The {result} variable will contain the entry index if the key was found,
-  // or the hash code otherwise.
-  void SameValueZeroHeapNumber(TNode<Float64T> key_float,
-                               TNode<Object> candidate_key, Label* if_same,
-                               Label* if_not_same);
-  template <typename CollectionType>
-  void FindOrderedHashTableEntryForHeapNumberKey(
-      TNode<CollectionType> table, TNode<HeapNumber> key_heap_number,
-      TVariable<IntPtrT>* result, Label* entry_found, Label* not_found);
-
-  // Specialization for bigints.
-  // The {result} variable will contain the entry index if the key was found,
-  // or the hash code otherwise.
-  void SameValueZeroBigInt(TNode<BigInt> key, TNode<Object> candidate_key,
-                           Label* if_same, Label* if_not_same);
-  template <typename CollectionType>
-  void FindOrderedHashTableEntryForBigIntKey(TNode<CollectionType> table,
-                                             TNode<BigInt> key_big_int,
-                                             TVariable<IntPtrT>* result,
-                                             Label* entry_found,
-                                             Label* not_found);
-
-  // Specialization for string.
-  // The {result} variable will contain the entry index if the key was found,
-  // or the hash code otherwise.
-  template <typename CollectionType>
-  void FindOrderedHashTableEntryForStringKey(TNode<CollectionType> table,
-                                             TNode<String> key_tagged,
-                                             TVariable<IntPtrT>* result,
-                                             Label* entry_found,
-                                             Label* not_found);
-  TNode<IntPtrT> ComputeStringHash(TNode<String> string_key);
-  void SameValueZeroString(TNode<String> key_string,
-                           TNode<Object> candidate_key, Label* if_same,
-                           Label* if_not_same);
-
-  // Specialization for non-strings, non-numbers. For those we only need
-  // reference equality to compare the keys.
-  // The {result} variable will contain the entry index if the key was found,
-  // or the hash code otherwise. If the hash-code has not been computed, it
-  // should be Smi -1.
-  template <typename CollectionType>
-  void FindOrderedHashTableEntryForOtherKey(TNode<CollectionType> table,
-                                            TNode<HeapObject> key_heap_object,
-                                            TVariable<IntPtrT>* result,
-                                            Label* entry_found,
-                                            Label* not_found);
-
-  template <typename CollectionType>
-  void TryLookupOrderedHashTableIndex(const TNode<CollectionType> table,
-                                      const TNode<Object> key,
-                                      TVariable<IntPtrT>* result,
-                                      Label* if_entry_found,
-                                      Label* if_not_found);
-
-  const TNode<Object> NormalizeNumberKey(const TNode<Object> key);
-  void StoreOrderedHashMapNewEntry(const TNode<OrderedHashMap> table,
-                                   const TNode<Object> key,
-                                   const TNode<Object> value,
-                                   const TNode<IntPtrT> hash,
-                                   const TNode<IntPtrT> number_of_buckets,
-                                   const TNode<IntPtrT> occupancy);
-
-  void StoreOrderedHashSetNewEntry(const TNode<OrderedHashSet> table,
-                                   const TNode<Object> key,
-                                   const TNode<IntPtrT> hash,
-                                   const TNode<IntPtrT> number_of_buckets,
-                                   const TNode<IntPtrT> occupancy);
-
-  // Create a JSArray with PACKED_ELEMENTS kind from a Map.prototype.keys() or
-  // Map.prototype.values() iterator. The iterator is assumed to satisfy
-  // IterableWithOriginalKeyOrValueMapIterator. This function will skip the
-  // iterator and iterate directly on the underlying hash table. In the end it
-  // will update the state of the iterator to 'exhausted'.
-  TNode<JSArray> MapIteratorToList(TNode<Context> context,
-                                   TNode<JSMapIterator> iterator);
-
-  // Create a JSArray with PACKED_ELEMENTS kind from a Set.prototype.keys() or
-  // Set.prototype.values() iterator, or a Set. The |iterable| is assumed to
-  // satisfy IterableWithOriginalValueSetIterator. This function will skip the
-  // iterator and iterate directly on the underlying hash table. In the end, if
-  // |iterable| is an iterator, it will update the state of the iterator to
-  // 'exhausted'.
-  TNode<JSArray> SetOrSetIteratorToList(TNode<Context> context,
-                                        TNode<HeapObject> iterable);
-
-  void BranchIfMapIteratorProtectorValid(Label* if_true, Label* if_false);
-  void BranchIfSetIteratorProtectorValid(Label* if_true, Label* if_false);
-
-  // Builds code that finds OrderedHashTable entry for a key with hash code
-  // {hash} with using the comparison code generated by {key_compare}. The code
-  // jumps to {entry_found} if the key is found, or to {not_found} if the key
-  // was not found. In the {entry_found} branch, the variable
-  // entry_start_position will be bound to the index of the entry (relative to
-  // OrderedHashTable::kHashTableStartIndex).
-  //
-  // The {CollectionType} template parameter stands for the particular instance
-  // of OrderedHashTable, it should be OrderedHashMap or OrderedHashSet.
-  template <typename CollectionType>
-  void FindOrderedHashTableEntry(
-      const TNode<CollectionType> table, const TNode<IntPtrT> hash,
-      const std::function<void(TNode<Object>, Label*, Label*)>& key_compare,
-      TVariable<IntPtrT>* entry_start_position, Label* entry_found,
-      Label* not_found);
-
-  TNode<Word32T> ComputeUnseededHash(TNode<IntPtrT> key);
-};
 
 template <typename CollectionType>
 void CollectionsBuiltinsAssembler::FindOrderedHashTableEntry(
@@ -1748,10 +1582,21 @@ TF_BUILTIN(SetPrototypeAdd, CollectionsBuiltinsAssembler) {
 
   ThrowIfNotInstanceType(context, receiver, JS_SET_TYPE, "Set.prototype.add");
 
+  const TNode<Object> result = AddToSetTable(context, receiver, key);
+  Return(result);
+}
+// An example on how you change it
+// https://source.chromium.org/chromium/chromium/src/+/refs/heads/main:v8/src/codegen/code-stub-assembler.cc;l=6984;drc=9c68f2c46912577bf73bcf032c0f8c00379a0bca
+// and also in the chat
+TNode<Object> CollectionsBuiltinsAssembler::AddToSetTable(
+    const TNode<Object> context, TNode<Object> receiver, TNode<Object> key) {
   key = NormalizeNumberKey(key);
 
   const TNode<OrderedHashSet> table =
       LoadObjectField<OrderedHashSet>(CAST(receiver), JSMap::kTableOffset);
+
+  TVARIABLE(Object, result);
+  Label done(this);
 
   TVARIABLE(IntPtrT, entry_start_position_or_hash, IntPtrConstant(0));
   Label entry_found(this), not_found(this);
@@ -1760,8 +1605,11 @@ TF_BUILTIN(SetPrototypeAdd, CollectionsBuiltinsAssembler) {
       table, key, &entry_start_position_or_hash, &entry_found, &not_found);
 
   BIND(&entry_found);
-  // The entry was found, there is nothing to do.
-  Return(receiver);
+  {
+    // The entry was found, there is nothing to do.
+    result = receiver;
+    Goto(&done);
+  }
 
   Label no_hash(this), add_entry(this), store_new_entry(this);
   BIND(&not_found);
@@ -1809,14 +1657,21 @@ TF_BUILTIN(SetPrototypeAdd, CollectionsBuiltinsAssembler) {
         LoadAndUntagPositiveSmiObjectField(
             table_var.value(), OrderedHashSet::NumberOfDeletedElementsOffset());
     occupancy = IntPtrAdd(new_number_of_elements, new_number_of_deleted);
+
     Goto(&store_new_entry);
   }
   BIND(&store_new_entry);
-  // Store the key, value and connect the element to the bucket chain.
-  StoreOrderedHashSetNewEntry(table_var.value(), key,
-                              entry_start_position_or_hash.value(),
-                              number_of_buckets.value(), occupancy.value());
-  Return(receiver);
+  {
+    // Store the key, value and connect the element to the bucket chain.
+    StoreOrderedHashSetNewEntry(table_var.value(), key,
+                                entry_start_position_or_hash.value(),
+                                number_of_buckets.value(), occupancy.value());
+    result = receiver;
+    Goto(&done);
+  }
+
+  BIND(&done);
+  return result.value();
 }
 
 void CollectionsBuiltinsAssembler::StoreOrderedHashSetNewEntry(
