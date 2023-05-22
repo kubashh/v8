@@ -70,6 +70,30 @@
       },
       "revId": "0e052eb5e11b0cee09d7f4aa877a7d0f89055f1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cec2eb7c_581d2ebf",
+        "filename": "bazel/defs.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-22T13:06:13Z",
+      "side": 1,
+      "message": "Ah, that could be done here then. Btw, the cpu value this function gets passed is already GN-like, right? E.g. just x64 or x86?",
+      "parentUuid": "d40acd45_1053b08f",
+      "range": {
+        "startLine": 624,
+        "startChar": 0,
+        "endLine": 625,
+        "endChar": 28
+      },
+      "revId": "0e052eb5e11b0cee09d7f4aa877a7d0f89055f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
