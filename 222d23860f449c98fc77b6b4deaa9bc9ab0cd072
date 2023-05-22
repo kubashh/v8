@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb04512d_086a5f50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525732
+      },
+      "writtenOn": "2023-05-22T07:48:53Z",
+      "side": 1,
+      "message": "Hi @Tobias, this CL including two small optimizations for the code generator on x64 platform when assembling the ArchRet instruction. The first optimization is avoiding to use the far jump to forward the deconstruction frame instructions. The second optimization is merging the same gap moves for two ArchRet instuctions to decrease the code size. Please take a look, thanks!",
+      "revId": "222d23860f449c98fc77b6b4deaa9bc9ab0cd072",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
