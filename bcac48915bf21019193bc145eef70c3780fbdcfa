@@ -85,6 +85,30 @@
       },
       "revId": "bcac48915bf21019193bc145eef70c3780fbdcfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61ad36a4_17b0db3c",
+        "filename": "bazel/defs.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-22T08:57:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "912906f3_58ce24c9",
+      "range": {
+        "startLine": 636,
+        "startChar": 10,
+        "endLine": 636,
+        "endChar": 24
+      },
+      "revId": "bcac48915bf21019193bc145eef70c3780fbdcfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
