@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "083c05b8_962ed24c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-22T08:38:02Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "bcac48915bf21019193bc145eef70c3780fbdcfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20c7e40e_d8d4c991",
+        "filename": "bazel/defs.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-22T08:38:02Z",
+      "side": 1,
+      "message": "All keys are now as status file expects them and aligned with BUILD.gn. E.g. removed many is_ and v8_enable_ prefixes. A few properties are renamed.\n\nSome convenience properties are added, but they are all false here.",
+      "range": {
+        "startLine": 594,
+        "startChar": 4,
+        "endLine": 594,
+        "endChar": 24
+      },
+      "revId": "bcac48915bf21019193bc145eef70c3780fbdcfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4e80cf7_d3e558bb",
+        "filename": "bazel/defs.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-22T08:38:02Z",
+      "side": 1,
+      "message": "This is the only added non-false falue. It\u0027s ia32 or x64.",
+      "range": {
+        "startLine": 599,
+        "startChar": 17,
+        "endLine": 599,
+        "endChar": 21
+      },
+      "revId": "bcac48915bf21019193bc145eef70c3780fbdcfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "912906f3_58ce24c9",
+        "filename": "bazel/defs.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-22T08:38:02Z",
+      "side": 1,
+      "message": "Setting this to false as the gn version is:\njs_shared_memory \u003d\n      v8_enable_shared_ro_heap \u0026\u0026 (!v8_enable_pointer_compression ||\n                                   v8_enable_pointer_compression_shared_cage) \u0026\u0026\n      !v8_disable_write_barriers\n      \nand v8_enable_shared_ro_heap is false here.",
+      "range": {
+        "startLine": 636,
+        "startChar": 10,
+        "endLine": 636,
+        "endChar": 24
+      },
+      "revId": "bcac48915bf21019193bc145eef70c3780fbdcfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
