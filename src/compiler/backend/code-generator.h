@@ -286,6 +286,7 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   void AssembleArchBinarySearchSwitchRange(
       Register input, RpoNumber def_block, std::pair<int32_t, Label*>* begin,
       std::pair<int32_t, Label*>* end, base::Optional<int32_t>& last_cmp_value);
+  bool TryMatchGapReturnLabel(Instruction* instr);
 #else
   void AssembleArchBinarySearchSwitchRange(Register input, RpoNumber def_block,
                                            std::pair<int32_t, Label*>* begin,
@@ -310,7 +311,7 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
 
   // Generates an architecture-specific, descriptor-specific return sequence
   // to tear down a stack frame.
-  void AssembleReturn(InstructionOperand* pop);
+  void AssembleReturn(Instruction* instr);
 
   void AssembleDeconstructFrame();
 
@@ -510,6 +511,10 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   TurbolizerCodeOffsetsInfo offsets_info_;
   ZoneVector<TurbolizerInstructionStartInfo> instr_starts_;
   MoveCycleState move_cycle_;
+#if V8_TARGET_ARCH_X64
+  Instruction* gap_return_instr_;
+  Label gap_return_label_;
+#endif
 
   const char* debug_name_ = nullptr;
 };

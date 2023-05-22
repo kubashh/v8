@@ -1069,6 +1069,9 @@ class V8_EXPORT_PRIVATE Instruction final {
   ParallelMove* const* parallel_moves() const { return &parallel_moves_[0]; }
   ParallelMove** parallel_moves() { return &parallel_moves_[0]; }
 
+  bool ParallelMoveEquals(Instruction* other) const;
+  bool hasParallelMove() const;
+
   // The block_id may be invalidated in JumpThreading. It is only important for
   // register allocation, to avoid searching for blocks from instruction
   // indexes.
