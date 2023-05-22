@@ -22,6 +22,30 @@
       },
       "revId": "17a31492df0fa8fcb73dd59ee0a20478019689b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11fb36a5_6255d84f",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-05-22T07:18:16Z",
+      "side": 0,
+      "message": "There\u0027s a follow-up CL which does that: https://chromium-review.googlesource.com/c/v8/v8/+/4537035\n\nThis was just a quick fix.",
+      "parentUuid": "961d720b_56562e7f",
+      "range": {
+        "startLine": 1099,
+        "startChar": 27,
+        "endLine": 1099,
+        "endChar": 51
+      },
+      "revId": "17a31492df0fa8fcb73dd59ee0a20478019689b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
