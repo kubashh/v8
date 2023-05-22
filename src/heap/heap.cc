@@ -3340,6 +3340,8 @@ void Heap::OnMoveEvent(HeapObject source, HeapObject target,
     }
     PROFILE(isolate_,
             NativeContextMoveEvent(source.address(), target.address()));
+  } else if (target.IsMap(isolate_)) {
+    LOG(isolate_, MapMove(source.ptr(), target.ptr()));
   }
 }
 

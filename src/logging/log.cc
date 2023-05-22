@@ -1978,6 +1978,15 @@ void V8FileLogger::MapDetails(Map map) {
   msg.WriteToLogFile();
 }
 
+void V8FileLogger::MapMove(Address from, Address to) {
+  if (!v8_flags.log_maps) return;
+  DisallowGarbageCollection no_gc;
+  MSG_BUILDER();
+  msg << "map-move" << kNext << Time() << kNext << AsHex::Address(from) << kNext
+      << AsHex::Address(to);
+  msg.WriteToLogFile();
+}
+
 static std::vector<std::pair<Handle<SharedFunctionInfo>, Handle<AbstractCode>>>
 EnumerateCompiledFunctions(Heap* heap) {
   HeapObjectIterator iterator(heap);
