@@ -60,8 +60,15 @@ class MaglevCompilationInfo final {
     return toplevel_compilation_unit_;
   }
   Handle<JSFunction> toplevel_function() const { return toplevel_function_; }
-  BytecodeOffset osr_offset() const { return osr_offset_; }
-  bool is_osr() const { return osr_offset() != BytecodeOffset::None(); }
+  BytecodeOffset toplevel_osr_offset() const { return osr_offset_; }
+  void set_code(Handle<Code> code) {
+    DCHECK(code_.is_null());
+    code_ = code;
+  }
+  Handle<Code> get_code() {
+    DCHECK(!code_.is_null());
+    return code_;
+  }
 
   bool has_graph_labeller() const { return !!graph_labeller_; }
   void set_graph_labeller(MaglevGraphLabeller* graph_labeller);
@@ -115,6 +122,7 @@ class MaglevCompilationInfo final {
   // Must be initialized late since it requires an initialized heap broker.
   MaglevCompilationUnit* toplevel_compilation_unit_ = nullptr;
   Handle<JSFunction> toplevel_function_;
+  Handle<Code> code_;
   BytecodeOffset osr_offset_;
 
   std::unique_ptr<MaglevGraphLabeller> graph_labeller_;

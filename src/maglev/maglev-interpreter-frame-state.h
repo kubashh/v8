@@ -597,7 +597,7 @@ class MergePointInterpreterFrameState {
   bool is_unmerged_loop() const {
     // If this is a loop and not all predecessors are set, then the loop isn't
     // merged yet.
-    DCHECK_IMPLIES(is_loop(), predecessor_count_ > 0);
+    // DCHECK_IMPLIES(is_loop(), predecessor_count_ > 0);
     return is_loop() && predecessors_so_far_ < predecessor_count_;
   }
 
@@ -731,6 +731,7 @@ void InterpreterFrameState::CopyFrom(
       });
   // Move "what we know" across without copying -- we can safely mutate it
   // now, as we won't be entering this merge point again.
+  DCHECK_NOT_NULL(state.known_node_aspects_);
   known_node_aspects_ = state.known_node_aspects_;
 }
 

@@ -116,16 +116,18 @@ CompilationJob::Status MaglevCompilationJob::FinalizeJobImpl(Isolate* isolate) {
   if (!maglev::MaglevCompiler::GenerateCode(isolate, info()).ToHandle(&code)) {
     return CompilationJob::FAILED;
   }
-  info()->toplevel_function()->set_code(*code);
+  info()->set_code(code);
   return CompilationJob::SUCCEEDED;
 }
+
+Handle<Code> MaglevCompilationJob::code() const { return info_->get_code(); }
 
 Handle<JSFunction> MaglevCompilationJob::function() const {
   return info_->toplevel_function();
 }
 
 BytecodeOffset MaglevCompilationJob::osr_offset() const {
-  return info_->osr_offset();
+  return info_->toplevel_osr_offset();
 }
 
 bool MaglevCompilationJob::specialize_to_function_context() const {

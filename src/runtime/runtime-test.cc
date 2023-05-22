@@ -649,15 +649,17 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
                                                               *function);
   }
 
+  bool no_osr_from_maglev = v8_flags.maglev_osr && !v8_flags.osr_from_maglev;
   if (function->HasAvailableOptimizedCode() &&
-      !function->code().is_maglevved()) {
+      (!function->code().is_maglevved() || no_osr_from_maglev)) {
     DCHECK(function->HasAttachedOptimizedCode() ||
            function->ChecksTieringState());
     // If function is already optimized, return.
     return ReadOnlyRoots(isolate).undefined_value();
   }
 
-  if (!it.frame()->is_unoptimized() && !it.frame()->is_maglev()) {
+  if (!it.frame()->is_unoptimized() &&
+      (!it.frame()->is_maglev() || no_osr_from_maglev)) {
     // Nothing to be done.
     return ReadOnlyRoots(isolate).undefined_value();
   }
@@ -707,7 +709,8 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
     // Queue the job.
     auto unused_result = Compiler::CompileOptimizedOSR(
         isolate, function, osr_offset, ConcurrencyMode::kConcurrent,
-        v8_flags.maglev_osr ? CodeKind::MAGLEV : CodeKind::TURBOFAN);
+        (v8_flags.maglev_osr && !it.frame()->is_maglev()) ? CodeKind::MAGLEV
+                                                          : CodeKind::TURBOFAN);
     USE(unused_result);
 
     // Finalize again to finish the queued job. The next call into
