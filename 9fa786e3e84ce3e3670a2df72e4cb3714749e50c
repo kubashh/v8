@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57b57435_6c59a29b",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2734,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-22T14:33:25Z",
+      "side": 1,
+      "message": "Why not just have a single allocation with `AllowLargeObjects::kTrue`?",
+      "range": {
+        "startLine": 2724,
+        "startChar": 0,
+        "endLine": 2734,
+        "endChar": 3
+      },
+      "revId": "9fa786e3e84ce3e3670a2df72e4cb3714749e50c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
