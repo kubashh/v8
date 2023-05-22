@@ -320,6 +320,15 @@ class TestCase(object):
     shell = self.get_shell()
     if utils.IsWindows():
       shell += '.exe'
+    elif self.test_config.target_os == "ios":
+      # Rather than having to use an actual device (iPhone, iPad, etc), we use
+      # the iOS Simulator for the test runners and in order to ease the job of
+      # builders and testers that won't require a physical device.
+      # At the moment Chromium's iossim tool is being used, which is a wrapper
+      # around 'simctl' macOS command utility.
+      iossim = "iossim -d 'iPhone X' "
+      outdir = os.path.abspath(self.test_config.shell_dir)
+      shell = outdir + '/' + iossim + outdir + '/' + self.get_shell() + ".app"
     shell_flags = self._get_shell_flags()
     timeout = self._get_timeout(params)
     return self._create_cmd(ctx, shell, shell_flags + params, env, timeout)
