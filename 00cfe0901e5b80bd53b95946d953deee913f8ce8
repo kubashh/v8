@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6497ea22_c5fc616a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-22T14:19:48Z",
+      "side": 1,
+      "message": "Patchset 1: the original CL\nPatchset 2-6: debug garbage\nPatchset 7: the fix\nPatchset 8: a small improvement to have more precise types\n\nPTAL :)",
+      "revId": "00cfe0901e5b80bd53b95946d953deee913f8ce8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
