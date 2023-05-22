@@ -56,6 +56,7 @@ class MaglevCompilationJob final : public OptimizedCompilationJob {
   Status FinalizeJobImpl(Isolate* isolate) override;
 
   Handle<JSFunction> function() const;
+  Handle<Code> code() const;
   BytecodeOffset osr_offset() const;
 
   bool specialize_to_function_context() const;
