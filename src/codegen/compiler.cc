@@ -103,11 +103,12 @@ class CompilerTracer : public AllStatic {
   }
 
   static void TraceStartMaglevCompile(Isolate* isolate,
-                                      Handle<JSFunction> function,
+                                      Handle<JSFunction> function, bool osr,
                                       ConcurrencyMode mode) {
     if (!v8_flags.trace_opt) return;
     CodeTracer::Scope scope(isolate->GetCodeTracer());
     PrintTracePrefix(scope, "compiling method", function, CodeKind::MAGLEV);
+    if (osr) PrintF(scope.file(), " OSR");
     PrintF(scope.file(), ", mode: %s", ToString(mode));
     PrintTraceSuffix(scope);
   }
@@ -194,12 +195,13 @@ class CompilerTracer : public AllStatic {
   }
 
   static void TraceFinishMaglevCompile(Isolate* isolate,
-                                       Handle<JSFunction> function,
+                                       Handle<JSFunction> function, bool osr,
                                        double ms_prepare, double ms_execute,
                                        double ms_finalize) {
     if (!v8_flags.trace_opt) return;
     CodeTracer::Scope scope(isolate->GetCodeTracer());
     PrintTracePrefix(scope, "completed compiling", function, CodeKind::MAGLEV);
+    if (osr) PrintF(scope.file(), " OSR");
     PrintF(scope.file(), " - took %0.3f, %0.3f, %0.3f ms", ms_prepare,
            ms_execute, ms_finalize);
     PrintTraceSuffix(scope);
@@ -937,7 +939,18 @@ class OptimizedCodeCache : public AllStatic {
       DCHECK_EQ(it.current_bytecode(), interpreter::Bytecode::kJumpLoop);
       base::Optional<Code> maybe_code =
           feedback_vector.GetOptimizedOsrCode(isolate, it.GetSlotOperand(2));
-      if (maybe_code.has_value()) code = maybe_code.value();
+      if (maybe_code.has_value()) {
+        code = maybe_code.value();
+        if (code.kind() == CodeKind::TURBOFAN &&
+            code_kind == CodeKind::MAGLEV) {
+          // To OSR from Maglev to Turbofan is currently implemented by first
+          // deoptimizing. Once there we forget that we came from Maglev and
+          // thus request Maglev code again, even though Turbofan is now ready.
+          // TODO: Tier up without deoptimizing.
+          USE(DeoptimizeReason::kPrepareForOnStackReplacement);
+          code_kind = CodeKind::TURBOFAN;
+        }
+      }
     } else {
       feedback_vector.EvictOptimizedCodeMarkedForDeoptimization(
           isolate, shared, "OptimizedCodeCache::Get");
@@ -1171,10 +1184,9 @@ MaybeHandle<Code> CompileTurbofan(Isolate* isolate, Handle<JSFunction> function,
 #ifdef V8_ENABLE_MAGLEV
 // TODO(v8:7700): Record maglev compilations better.
 void RecordMaglevFunctionCompilation(Isolate* isolate,
-                                     Handle<JSFunction> function) {
+                                     Handle<JSFunction> function,
+                                     Handle<AbstractCode> code) {
   PtrComprCageBase cage_base(isolate);
-  Handle<AbstractCode> abstract_code(
-      AbstractCode::cast(function->code(cage_base)), isolate);
   Handle<SharedFunctionInfo> shared(function->shared(cage_base), isolate);
   Handle<Script> script(Script::cast(shared->script(cage_base)), isolate);
   Handle<FeedbackVector> feedback_vector(function->feedback_vector(cage_base),
@@ -1185,8 +1197,7 @@ void RecordMaglevFunctionCompilation(Isolate* isolate,
 
   Compiler::LogFunctionCompilation(
       isolate, LogEventListener::CodeTag::kFunction, script, shared,
-      feedback_vector, abstract_code, abstract_code->kind(cage_base),
-      time_taken_ms);
+      feedback_vector, code, code->kind(cage_base), time_taken_ms);
 }
 #endif  // V8_ENABLE_MAGLEV
 
@@ -1216,7 +1227,8 @@ MaybeHandle<Code> CompileMaglev(Isolate* isolate, Handle<JSFunction> function,
         TRACE_DISABLED_BY_DEFAULT("v8.compile"),
         IsSynchronous(mode) ? "V8.MaglevPrepare" : "V8.MaglevConcurrentPrepare",
         job.get(), TRACE_EVENT_FLAG_FLOW_OUT);
-    CompilerTracer::TraceStartMaglevCompile(isolate, function, mode);
+    CompilerTracer::TraceStartMaglevCompile(isolate, function, job->is_osr(),
+                                            mode);
     CompilationJob::Status status = job->PrepareJob(isolate);
     CHECK_EQ(status, CompilationJob::SUCCEEDED);  // TODO(v8:7700): Use status.
   }
@@ -1237,7 +1249,7 @@ MaybeHandle<Code> CompileMaglev(Isolate* isolate, Handle<JSFunction> function,
 
     { Compiler::FinalizeMaglevCompilationJob(job.get(), isolate); }
 
-    return handle(function->code(), isolate);
+    return job->code();
   }
 
   DCHECK(IsConcurrent(mode));
@@ -3867,6 +3879,16 @@ MaybeHandle<Code> Compiler::CompileOptimizedOSR(Isolate* isolate,
   // often.
   if (V8_UNLIKELY(!function->has_feedback_vector())) return {};
 
+  // Try to get existing compiled code even if some (potentially unrelated) osr
+  // compilation job exists.
+  Handle<Code> cached_code;
+  if (OptimizedCodeCache::Get(isolate, function, osr_offset, code_kind)
+          .ToHandle(&cached_code)) {
+    CompilerTracer::TraceOptimizeOSRAvailable(isolate, function, osr_offset,
+                                              mode);
+    return cached_code;
+  }
+
   // One OSR job per function at a time.
   if (IsInProgress(function->osr_tiering_state())) {
     return {};
@@ -3971,7 +3993,7 @@ void Compiler::FinalizeMaglevCompilationJob(maglev::MaglevCompilationJob* job,
   VMState<COMPILER> state(isolate);
 
   Handle<JSFunction> function = job->function();
-  if (function->ActiveTierIsTurbofan()) {
+  if (function->ActiveTierIsTurbofan() && !job->is_osr()) {
     CompilerTracer::TraceAbortedMaglevCompile(
         isolate, function, BailoutReason::kHigherTierAvailable);
     return;
@@ -3990,14 +4012,20 @@ void Compiler::FinalizeMaglevCompilationJob(maglev::MaglevCompilationJob* job,
     // Note the finalized InstructionStream object has already been installed on
     // the function by MaglevCompilationJob::FinalizeJobImpl.
 
-    OptimizedCodeCache::Insert(isolate, *function, osr_offset, function->code(),
+    if (!job->is_osr()) {
+      job->function()->set_code(*job->code());
+    }
+
+    DCHECK(job->code()->is_maglevved());
+    OptimizedCodeCache::Insert(isolate, *function, osr_offset, *job->code(),
                                job->specialize_to_function_context());
 
-    RecordMaglevFunctionCompilation(isolate, function);
+    RecordMaglevFunctionCompilation(isolate, function,
+                                    Handle<AbstractCode>::cast(job->code()));
     job->RecordCompilationStats(isolate);
     CompilerTracer::TraceFinishMaglevCompile(
-        isolate, function, job->prepare_in_ms(), job->execute_in_ms(),
-        job->finalize_in_ms());
+        isolate, function, job->is_osr(), job->prepare_in_ms(),
+        job->execute_in_ms(), job->finalize_in_ms());
   }
 #endif
 }
