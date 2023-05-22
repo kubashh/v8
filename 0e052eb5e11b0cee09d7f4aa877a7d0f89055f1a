@@ -94,6 +94,30 @@
       },
       "revId": "0e052eb5e11b0cee09d7f4aa877a7d0f89055f1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eacfa5a4_588ffcad",
+        "filename": "bazel/defs.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-05-22T13:11:10Z",
+      "side": 1,
+      "message": "Hmm... actually this is always \"x64\". I think I had plans to change that, but I didn\u0027t.\nI guess we need to create a bazel rule, see comment in line 645/655.\nWell... sorry for the noise!",
+      "parentUuid": "cec2eb7c_581d2ebf",
+      "range": {
+        "startLine": 624,
+        "startChar": 0,
+        "endLine": 625,
+        "endChar": 28
+      },
+      "revId": "0e052eb5e11b0cee09d7f4aa877a7d0f89055f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
