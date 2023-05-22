@@ -22,6 +22,30 @@
       },
       "revId": "0e052eb5e11b0cee09d7f4aa877a7d0f89055f1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5f7d603_e2c529d1",
+        "filename": "bazel/defs.bzl",
+        "patchSetId": 3
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-22T10:36:21Z",
+      "side": 1,
+      "message": "Not in BUILD.gn, since we have arm64 on Mac and similar things. In bazel, other conditions might hold...",
+      "parentUuid": "606d45f6_004e2ee3",
+      "range": {
+        "startLine": 624,
+        "startChar": 0,
+        "endLine": 625,
+        "endChar": 28
+      },
+      "revId": "0e052eb5e11b0cee09d7f4aa877a7d0f89055f1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
