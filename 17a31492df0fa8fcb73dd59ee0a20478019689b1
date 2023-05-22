@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "961d720b_56562e7f",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-05-22T07:17:03Z",
+      "side": 0,
+      "message": "Nit: we could added the distance based on the map_count \\in {1..4}.\nAlthough it is probably not worth it 😊",
+      "range": {
+        "startLine": 1099,
+        "startChar": 27,
+        "endLine": 1099,
+        "endChar": 51
+      },
+      "revId": "17a31492df0fa8fcb73dd59ee0a20478019689b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
