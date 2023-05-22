@@ -791,7 +791,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArchRet:
-      AssembleReturn(instr->InputAt(0));
+      AssembleReturn(instr);
       break;
     case kArchStackPointerGreaterThan: {
       Register lhs_register = sp;
@@ -4307,7 +4307,8 @@ void CodeGenerator::AssembleConstructFrame() {
   }
 }
 
-void CodeGenerator::AssembleReturn(InstructionOperand* additional_pop_count) {
+void CodeGenerator::AssembleReturn(Instruction* instr) {
+  InstructionOperand* additional_pop_count = instr->InputAt(0);
   auto call_descriptor = linkage()->GetIncomingDescriptor();
 
   const int returns = frame()->GetReturnSlotCount();
