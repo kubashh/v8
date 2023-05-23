@@ -33,6 +33,29 @@
       "message": "Please direct all reviews around iOS testing to Liviu, who has worked on several test-runner enhancements before. Feel free to CC me.",
       "revId": "1e108ff11add5cc38929bcdc838dccf86fc4e4f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fcef88a_1b3f9787",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2023-05-23T13:29:58Z",
+      "side": 1,
+      "message": "This needs to be delegated to the context. It should look something like: `shell \u003d ctx.platform_shell(shell)`",
+      "range": {
+        "startLine": 321,
+        "startChar": 4,
+        "endLine": 331,
+        "endChar": 78
+      },
+      "revId": "1e108ff11add5cc38929bcdc838dccf86fc4e4f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
