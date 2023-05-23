@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e840eb2a_dfe25f9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-23T15:59:09Z",
+      "side": 1,
+      "message": "ptal.\n\nSetting the max age to 4 doesn\u0027t regress anywhere on the jobs I ran today.\nSpeedometer on M1 benefits from a lower age, and on Linux from a higher age, so 4 is a compromise that doesn\u0027t regress anything but still improves somethings.",
+      "revId": "020c2e8a2ab870eb87e7b844b767390b13906ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
