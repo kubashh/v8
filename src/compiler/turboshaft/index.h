@@ -20,6 +20,9 @@ using OperationStorageSlot = std::aligned_storage_t<8, 8>;
 // Operations occupy at least 2 slots, therefore we assign one id per two slots.
 constexpr size_t kSlotsPerId = 2;
 
+template <typename T, typename C>
+class ConstOrV;
+
 // `OpIndex` is an offset from the beginning of the operations buffer.
 // Compared to `Operation*`, it is more memory efficient (32bit) and stable when
 // the operations buffer is re-allocated.
@@ -29,6 +32,14 @@ class OpIndex {
     DCHECK_EQ(offset % sizeof(OperationStorageSlot), 0);
   }
   constexpr OpIndex() : offset_(std::numeric_limits<uint32_t>::max()) {}
+  template <typename T, typename C>
+#if defined(__clang__)
+  OpIndex(const ConstOrV<T, C>&) {  // NOLINT(runtime/explicit)
+    static_assert(false,
+                  "Cannot initialize OpIndex from ConstOrV<>. Did you forget "
+                  "to resolve() it in the assembler?");
+  }
+#endif
 
   uint32_t id() const {
     // Operations are stored at an offset that's a multiple of
