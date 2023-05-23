@@ -52,6 +52,9 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
 #define HEAP_MUTABLE_IMMOVABLE_OBJECT_LIST(V)                                  \
   V(ArrayIteratorProtector, array_iterator_protector, ArrayIteratorProtector)  \
   V(ArraySpeciesProtector, array_species_protector, ArraySpeciesProtector)     \
+  V(AsyncContextWrappedFunctionSharedSFI,                                      \
+    async_context_wrapped_function_shared_sfi,                                 \
+    AsyncContextWrappedFunctionSharedSFI)                                      \
   V(AsyncFunctionAwaitRejectSharedFun, async_function_await_reject_shared_fun, \
     AsyncFunctionAwaitRejectSharedFun)                                         \
   V(AsyncFunctionAwaitResolveSharedFun,                                        \
@@ -536,16 +539,17 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<Smi> NoContextConstant();
 
-#define HEAP_CONSTANT_ACCESSOR(rootIndexName, rootAccessorName, name)  \
-  TNode<std::remove_pointer<std::remove_reference<decltype(            \
-      std::declval<ReadOnlyRoots>().rootAccessorName())>::type>::type> \
+#define HEAP_CONSTANT_ACCESSOR(rootIndexName, rootAccessorName, name)        \
+  TNode<std::remove_pointer<                                                 \
+      std::remove_reference<decltype(std::declval<ReadOnlyRoots>()           \
+                                         .rootAccessorName())>::type>::type> \
       name##Constant();
   HEAP_IMMUTABLE_IMMOVABLE_OBJECT_LIST(HEAP_CONSTANT_ACCESSOR)
 #undef HEAP_CONSTANT_ACCESSOR
 
-#define HEAP_CONSTANT_ACCESSOR(rootIndexName, rootAccessorName, name) \
-  TNode<std::remove_pointer<std::remove_reference<decltype(           \
-      std::declval<Heap>().rootAccessorName())>::type>::type>         \
+#define HEAP_CONSTANT_ACCESSOR(rootIndexName, rootAccessorName, name)  \
+  TNode<std::remove_pointer<std::remove_reference<                     \
+      decltype(std::declval<Heap>().rootAccessorName())>::type>::type> \
       name##Constant();
   HEAP_MUTABLE_IMMOVABLE_OBJECT_LIST(HEAP_CONSTANT_ACCESSOR)
 #undef HEAP_CONSTANT_ACCESSOR
@@ -2594,6 +2598,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<BoolT> IsJSArray(TNode<HeapObject> object);
   TNode<BoolT> IsJSArrayIterator(TNode<HeapObject> object);
   TNode<BoolT> IsJSAsyncGeneratorObject(TNode<HeapObject> object);
+  TNode<BoolT> IsJSAsyncLocal(TNode<HeapObject> object);
+  TNode<BoolT> IsJSAsyncSnapshot(TNode<HeapObject> object);
   TNode<BoolT> IsFunctionInstanceType(TNode<Int32T> instance_type);
   TNode<BoolT> IsJSFunctionInstanceType(TNode<Int32T> instance_type);
   TNode<BoolT> IsJSFunctionMap(TNode<Map> map);

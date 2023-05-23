@@ -271,6 +271,8 @@ class Symbol;
   /* Indirection lists for isolate-independent builtins */                     \
   V(FixedArray, builtins_constants_table, BuiltinsConstantsTable)              \
   /* Internal SharedFunctionInfos */                                           \
+  V(SharedFunctionInfo, async_context_wrapped_function_shared_sfi,             \
+    AsyncContextWrappedFunctionSharedSFI)                                      \
   V(SharedFunctionInfo, async_function_await_reject_shared_fun,                \
     AsyncFunctionAwaitRejectSharedFun)                                         \
   V(SharedFunctionInfo, async_function_await_resolve_shared_fun,               \

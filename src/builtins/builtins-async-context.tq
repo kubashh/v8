@@ -1,0 +1,65 @@
+// Copyright 2023 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// ES #sec-asynclocal-constructor
+// https://tc39.es/proposal-async-context/#sec-asynclocal-constructor
+transitioning javascript builtin AsyncLocalConstructor(
+    js-implicit context: NativeContext, receiver: JSAny, newTarget: JSAny,
+    target: JSFunction)(options: JSAny): JSAsyncLocal {
+  // 1. If NewTarget is undefined, throw a TypeError exception.
+  if (newTarget == Undefined) {
+    ThrowTypeError(MessageTemplate::kConstructorNotFunction, 'AsyncLocal');
+  }
+
+  let nameStr: String;
+  let defaultValue: JSAny;
+
+  typeswitch (options) {
+    // 2. If options is an Object, then
+    case (options: JSReceiver): {
+      // a. Let name be ? Get(options, "name").
+      const name = GetProperty(options, 'name');
+      // b. Let nameStr be ? ToString(name).
+      nameStr = ToString_Inline(name);
+      // c. Let defaultValue be ? Get(options, "defaultValue").
+      defaultValue = GetProperty(options, 'defaultValue');
+    }
+    // 3. Else,
+    case (JSAny): {
+      // a. Let nameStr be the empty String.
+      nameStr = '';
+      // b. Let defaultValue be undefined.
+      defaultValue = Undefined;
+    }
+  }
+
+  // 4. Let asyncLocal be ? OrdinaryCreateFromConstructor(NewTarget,
+  // "%AsyncLocal.prototype%", « [[AsyncLocalName]], [[AsyncLocalDefaultValue]]
+  // »).
+  const map = GetDerivedMap(target, UnsafeCast<JSReceiver>(newTarget));
+  const asyncLocal =
+      UnsafeCast<JSAsyncLocal>(AllocateFastOrSlowJSObjectFromMap(map));
+  // 5. Set asyncLocal.[[AsyncLocalName]] to nameStr.
+  asyncLocal.name = nameStr;
+  // 6. Set asyncLocal.[[AsyncLocalDefaultValue]] to defaultValue.
+  asyncLocal.defaultValue = defaultValue;
+  // 7. Return asyncLocal.
+  return asyncLocal;
+}
+
+transitioning javascript builtin AsyncLocalPrototypeNameGetter(
+    js-implicit context: NativeContext, receiver: JSAny)(): String {
+  // 1. Let asyncLocal be the this value.
+  // 2. Perform ? RequireInternalSlot(asyncLocal, [[AsyncLocalName]]).
+  typeswitch (receiver) {
+    case (asyncLocal: JSAsyncLocal): {
+      // 3. Return asyncLocal.[[AsyncLocalName]].
+      return asyncLocal.name;
+    }
+    case (JSAny): {
+      ThrowTypeError(
+          MessageTemplate::kIncompatibleMethodReceiver, 'name', 'AsyncLocal');
+    }
+  }
+}

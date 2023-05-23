@@ -1400,6 +1400,11 @@ void Hole::HolePrint(std::ostream& os) {
   os << std::endl;
 }
 
+void JSAsyncContext::JSAsyncContextPrint(std::ostream& os) {
+  JSObjectPrintHeader(os, *this, "JSAsyncContext");
+  JSObjectPrintBody(os, *this);
+}
+
 void JSAsyncFunctionObject::JSAsyncFunctionObjectPrint(std::ostream& os) {
   JSGeneratorObjectPrint(os);
 }
