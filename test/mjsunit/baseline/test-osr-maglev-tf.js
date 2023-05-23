@@ -4,7 +4,7 @@
 
 // Flags: --allow-natives-syntax --sparkplug --no-always-sparkplug --use-osr
 // Flags: --turbofan --no-always-turbofan --deopt-every-n-times=0
-// Flags: --no-maglev-osr
+// Flags: --maglev --maglev-osr --osr-from-maglev
 
 function isExecutingBaseline(func) {
   let opt_status = %GetOptimizationStatus(func);
@@ -36,12 +36,17 @@ function checkTopmostFrame(func) {
 
 function g() {
   for (var i = 0; i <= 20; i++) {
+    console.log(i)
     checkTopmostFrame(g)
     if (i == 2) {
       %BaselineOsr();
       expectedStatus = V8OptimizationStatus.kTopmostFrameIsBaseline;
     }
     if (i == 5) {
+      %OptimizeOsr();
+      expectedStatus = V8OptimizationStatus.kTopmostFrameIsMaglev;
+    }
+    if (i == 10) {
       %OptimizeOsr();
       expectedStatus = V8OptimizationStatus.kTopmostFrameIsTurboFanned;
     }
