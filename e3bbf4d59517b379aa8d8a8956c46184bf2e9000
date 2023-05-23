@@ -16,6 +16,24 @@
       "message": "PTAL. Grabbing random folks that own v8.h. I don\u0027t know if I miss something... this dates back to https://crrev.com/c/3113629\n\nIMO it should be enough that src/api/api.cc, which uses the version, includes src/utils/version.h for its use cases.",
       "revId": "e3bbf4d59517b379aa8d8a8956c46184bf2e9000",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e71694fe_007b0d61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-23T14:26:35Z",
+      "side": 1,
+      "message": "FYI, just with this change locally only 50 targets rebuild instead of 2000+ after changing the version file.",
+      "parentUuid": "484b9358_38233705",
+      "revId": "e3bbf4d59517b379aa8d8a8956c46184bf2e9000",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
