@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a8d6145a_f749cbe7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2023-05-23T14:48:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6fd47f1_d3c7eb90",
+      "revId": "0ee3a2a7daf92d50a418192f724474642dbe3582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7ec5f83c_daa9cbbc",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -48,6 +66,30 @@
       "writtenOn": "2023-05-23T07:10:25Z",
       "side": 1,
       "message": "Three remarks here:\n1. Should this be `MapMoveEvent`, to be consistent with the other move events?\n2. In the other `target.IsType()` methods, lines 3333 and 3336, we do not pass the isolate (cage base). Is there something special about maps?\n3. In the other events we\u0027re logging the `address`, not the `ptr` (i.e., without the tag).",
+      "range": {
+        "startLine": 3344,
+        "startChar": 18,
+        "endLine": 3344,
+        "endChar": 25
+      },
+      "revId": "0ee3a2a7daf92d50a418192f724474642dbe3582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb058e7c_eac895bd",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3344,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2023-05-23T14:48:55Z",
+      "side": 1,
+      "message": "Great questions, thanks!\n\n1. Yes, updated.\n2. There\u0027s nothing special about maps; I just passed the cage base because I thought it\u0027s generally a good idea. Consistency is also generally a good idea though, so I\u0027ve changed the others to match.\n3. My goal with this event is to be consistent with the values logged by MapEvent, MapCreate, and MapDetails, which all use .ptr(). However, I see now that it might be clearer to pass these values as Maps so that the .ptr() call happens within the MapMoveEvent implementation.",
+      "parentUuid": "70ca90fb_c7f87021",
       "range": {
         "startLine": 3344,
         "startChar": 18,
