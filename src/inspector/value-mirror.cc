@@ -472,6 +472,7 @@ class PrimitiveValueMirror final : public ValueMirror {
 
   std::unique_ptr<protocol::DictionaryValue> buildDeepSerializedValue(
       v8::Local<v8::Context> context, int maxDepth,
+      std::vector<std::pair<StringView, StringView>> additionalParameters,
       V8SerializationDuplicateTracker& duplicateTracker) const override {
     if (m_value->IsUndefined()) {
       std::unique_ptr<protocol::DictionaryValue> result =
@@ -568,6 +569,7 @@ class NumberMirror final : public ValueMirror {
 
   std::unique_ptr<protocol::DictionaryValue> buildDeepSerializedValue(
       v8::Local<v8::Context> context, int maxDepth,
+      std::vector<std::pair<StringView, StringView>> additionalParameters,
       V8SerializationDuplicateTracker& duplicateTracker) const override {
     std::unique_ptr<protocol::DictionaryValue> result =
         protocol::DictionaryValue::create();
@@ -648,6 +650,7 @@ class BigIntMirror final : public ValueMirror {
 
   std::unique_ptr<protocol::DictionaryValue> buildDeepSerializedValue(
       v8::Local<v8::Context> context, int maxDepth,
+      std::vector<std::pair<StringView, StringView>> additionalParameters,
       V8SerializationDuplicateTracker& duplicateTracker) const override {
     v8::Local<v8::String> stringValue =
         v8::debug::GetBigIntStringValue(context->GetIsolate(), m_value);
@@ -712,6 +715,7 @@ class SymbolMirror final : public ValueMirror {
 
   std::unique_ptr<protocol::DictionaryValue> buildDeepSerializedValue(
       v8::Local<v8::Context> context, int maxDepth,
+      std::vector<std::pair<StringView, StringView>> additionalParameters,
       V8SerializationDuplicateTracker& duplicateTracker) const override {
     bool isKnown;
     std::unique_ptr<protocol::DictionaryValue> result =
@@ -769,6 +773,7 @@ class LocationMirror final : public ValueMirror {
 
   std::unique_ptr<protocol::DictionaryValue> buildDeepSerializedValue(
       v8::Local<v8::Context> context, int maxDepth,
+      std::vector<std::pair<StringView, StringView>> additionalParameters,
       V8SerializationDuplicateTracker& duplicateTracker) const override {
     bool isKnown;
     std::unique_ptr<protocol::DictionaryValue> result =
@@ -859,6 +864,7 @@ class FunctionMirror final : public ValueMirror {
 
   std::unique_ptr<protocol::DictionaryValue> buildDeepSerializedValue(
       v8::Local<v8::Context> context, int maxDepth,
+      std::vector<std::pair<StringView, StringView>> additionalParameters,
       V8SerializationDuplicateTracker& duplicateTracker) const override {
     bool isKnown;
     std::unique_ptr<protocol::DictionaryValue> result =
@@ -1159,6 +1165,7 @@ class ObjectMirror final : public ValueMirror {
 
   std::unique_ptr<protocol::DictionaryValue> buildDeepSerializedValue(
       v8::Local<v8::Context> context, int maxDepth,
+      std::vector<std::pair<StringView, StringView>> additionalParameters,
       V8SerializationDuplicateTracker& duplicateTracker) const override {
     maxDepth = std::min(kMaxProtocolDepth, maxDepth);
     bool isKnown;
@@ -1167,9 +1174,26 @@ class ObjectMirror final : public ValueMirror {
     if (isKnown) return result;
 
     // Check if embedder implemented custom serialization.
-    // TODO(crbug.com/1420968): pass additional serialization `deepOptions`.
-    // Until then, limit depth to 0, meaning no children should be serialized.
-    // TODO(crbug.com/1420968): pass `duplicateTracker`.
+    std::unique_ptr<v8_inspector::DeepSerializedValue>
+        embedderDeepSerializedResult = clientFor(context)->deepSerialize(
+            m_value, maxDepth, additionalParameters);
+
+    if (embedderDeepSerializedResult) {
+      // Embedder-implemented serialization.
+      result->setString(
+          "type", toString16(embedderDeepSerializedResult->type->string()));
+      v8::Local<v8::Value> v8Value;
+      if (embedderDeepSerializedResult->value.ToLocal(&v8Value)) {
+        // Embedder-implemented serialization has value.
+        std::unique_ptr<protocol::Value> protocolValue;
+        Response response = toProtocolValue(context, v8Value, &protocolValue);
+        DCHECK(response.IsSuccess());
+        result->setValue("value", std::move(protocolValue));
+      }
+      return result;
+    }
+
+    // TODO(crbug.com/1420968): remove as deprtecated.
     std::unique_ptr<v8_inspector::WebDriverValue> embedderSerializedResult =
         clientFor(context)->serializeToWebDriverValue(m_value, 0);
 
@@ -1190,7 +1214,8 @@ class ObjectMirror final : public ValueMirror {
 
     // No embedder-implemented serialization. Serialize as V8 Object.
     return V8DeepSerializer::serializeV8Value(
-        m_value, context, maxDepth, duplicateTracker, std::move(result));
+        m_value, context, maxDepth, additionalParameters, duplicateTracker,
+        std::move(result));
   }
 
  private:

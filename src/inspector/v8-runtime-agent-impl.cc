@@ -32,6 +32,8 @@
 
 #include <inttypes.h>
 
+#include <memory>
+
 #include "../../third_party/inspector_protocol/crdtp/json.h"
 #include "include/v8-container.h"
 #include "include/v8-context.h"
@@ -44,6 +46,7 @@
 #include "src/inspector/protocol/Protocol.h"
 #include "src/inspector/protocol/Runtime.h"
 #include "src/inspector/remote-object-id.h"
+#include "src/inspector/string-16.h"
 #include "src/inspector/v8-console-message.h"
 #include "src/inspector/v8-debugger-agent-impl.h"
 #include "src/inspector/v8-debugger.h"
@@ -239,6 +242,20 @@ Response ensureContext(V8InspectorImpl* inspector, int contextGroupId,
   return Response::Success();
 }
 
+// TODO: check memory handling.
+std::vector<std::pair<StringView, StringView>>
+parseAdditionalSerializationParameters(
+    protocol::Array<protocol::Runtime::KeyValue>* additionalParameters) {
+  std::vector<std::pair<StringView, StringView>> result;
+  if (additionalParameters != nullptr) {
+    for (size_t i = 0; i < additionalParameters->size(); ++i) {
+      result.push_back({toStringView((*additionalParameters)[i]->getKey()),
+                        toStringView((*additionalParameters)[i]->getValue())});
+    }
+  }
+  return result;
+}
+
 WrapOptions getWrapOptions(
     Maybe<bool> returnByValue, Maybe<bool> generatePreview,
     Maybe<bool> generateWebDriverValue,
@@ -247,9 +264,12 @@ WrapOptions getWrapOptions(
     auto serializationOptions = maybeSerializationOptions.fromJust();
     if (serializationOptions->getSerialization() ==
         protocol::Runtime::SerializationOptions::SerializationEnum::Deep) {
+      auto p = parseAdditionalSerializationParameters(
+          serializationOptions->getAdditionalParameters(nullptr));
+
       return WrapOptions(
           {WrapMode::kDeep,
-           {serializationOptions->getMaxDepth(v8::internal::kMaxInt)}});
+           {serializationOptions->getMaxDepth(v8::internal::kMaxInt), p}});
     }
     if (serializationOptions->getSerialization() ==
         protocol::Runtime::SerializationOptions::SerializationEnum::Json) {
