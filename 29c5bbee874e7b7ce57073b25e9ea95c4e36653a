@@ -70,6 +70,30 @@
       },
       "revId": "29c5bbee874e7b7ce57073b25e9ea95c4e36653a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fd4c2a9_6d7406d4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4035,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-23T15:28:40Z",
+      "side": 1,
+      "message": "Turns `IsHoleInitializationForced` isn\u0027t the right thing for `THIS_VARIABLE` in derived constructors since it\u0027s special case (see the test failures), so I\u0027ve forced the flag for that case.",
+      "parentUuid": "a0ed8978_b4631a7e",
+      "range": {
+        "startLine": 4035,
+        "startChar": 11,
+        "endLine": 4035,
+        "endChar": 66
+      },
+      "revId": "29c5bbee874e7b7ce57073b25e9ea95c4e36653a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
