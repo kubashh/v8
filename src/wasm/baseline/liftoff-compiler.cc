@@ -1146,7 +1146,15 @@ class LiftoffCompiler {
       __ emit_i32_cond_jumpi(kGreaterThanEqual, &cont, max_steps.gp(), 0,
                              frozen);
       // Abort.
-      Trap(decoder, kTrapUnreachable);
+      if (trap_too_many_steps_ == nullptr) {
+        // Only generate one out of line trap to jump to as for each out of line
+        // trap an out of line debug side table entry is generated which needs a
+        // lot of memory.
+        trap_too_many_steps_ = AddOutOfLineTrap(
+            decoder, GetRuntimeStubIdForTrapReason(kTrapUnreachable));
+      }
+      __ emit_jump(trap_too_many_steps_);
+      __ AssertUnreachable(AbortReason::kUnexpectedReturnFromWasmTrap);
       __ bind(&cont);
     }
   }
@@ -8403,6 +8411,7 @@ class LiftoffCompiler {
   std::vector<uint32_t> encountered_call_instructions_;
 
   int32_t* max_steps_;
+  Label* trap_too_many_steps_ = nullptr;
   int32_t* nondeterminism_;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(LiftoffCompiler);
