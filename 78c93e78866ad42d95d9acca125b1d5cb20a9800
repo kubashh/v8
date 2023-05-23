@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a98eb39e_85e1fd98",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-23T14:49:13Z",
+      "side": 0,
+      "message": "I\u0027m weakly concerned here that this would be visible as an \"API change\", since v8.h is an embedder-visible header. Can we get away with just the v8-internal change?",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 26
+      },
+      "revId": "78c93e78866ad42d95d9acca125b1d5cb20a9800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
