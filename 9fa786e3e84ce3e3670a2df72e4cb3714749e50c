@@ -22,6 +22,30 @@
       },
       "revId": "9fa786e3e84ce3e3670a2df72e4cb3714749e50c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69e243f7_b7984aa5",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2734,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-23T07:04:15Z",
+      "side": 1,
+      "message": "I assumed that having a fast path for small sizes would be better, but actually I just realized that it shouldn\u0027t change much, and MemoryOptimizationReducer (or its TF equivalent) will still do a length-check to do bump-pointer allocation if possible. \nIn conclusion: done, thanks :D",
+      "parentUuid": "57b57435_6c59a29b",
+      "range": {
+        "startLine": 2724,
+        "startChar": 0,
+        "endLine": 2734,
+        "endChar": 3
+      },
+      "revId": "9fa786e3e84ce3e3670a2df72e4cb3714749e50c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
