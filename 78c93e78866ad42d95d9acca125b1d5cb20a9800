@@ -22,6 +22,30 @@
       },
       "revId": "78c93e78866ad42d95d9acca125b1d5cb20a9800",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f62ed5_1dd0f417",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-23T14:59:08Z",
+      "side": 0,
+      "message": "I.e. just drop in in v8-internal.h and not in v8.h. That is indeed enough. Only its presence in v8-internal.h leads to the rebuilds. I added it back to v8.h.",
+      "parentUuid": "a98eb39e_85e1fd98",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 26
+      },
+      "revId": "78c93e78866ad42d95d9acca125b1d5cb20a9800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
