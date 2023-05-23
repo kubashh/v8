@@ -16,6 +16,23 @@
       "message": "Hi, could you PTAL? I\u0027d love to hear your opinions on bringing iossim dependency to V8 tree e.g. should we add it to DEPS or should we add some command line option to change the device setting? Thank you very much for the review and have a great day!",
       "revId": "1e108ff11add5cc38929bcdc838dccf86fc4e4f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f962469_cf1813b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-23T10:58:10Z",
+      "side": 1,
+      "message": "Please direct all reviews around iOS testing to Liviu, who has worked on several test-runner enhancements before. Feel free to CC me.",
+      "revId": "1e108ff11add5cc38929bcdc838dccf86fc4e4f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
