@@ -370,7 +370,9 @@ void MaglevAssembler::Prologue(Graph* graph) {
 
   CallTarget();
 
-  BailoutIfDeoptimized();
+  if (!graph->is_osr()) {
+    BailoutIfDeoptimized();
+  }
 
   if (graph->has_recursive_calls()) {
     BindCallTarget(code_gen_state()->entry_label());
@@ -378,7 +380,7 @@ void MaglevAssembler::Prologue(Graph* graph) {
 
   // Tiering support.
   // TODO(jgruber): Extract to a builtin.
-  if (v8_flags.turbofan) {
+  if (v8_flags.turbofan && !graph->is_osr()) {
     ScratchRegisterScope temps(this);
     Register flags = temps.Acquire();
     Register feedback_vector = temps.Acquire();
@@ -398,6 +400,41 @@ void MaglevAssembler::Prologue(Graph* graph) {
     LoadFeedbackVectorFlagsAndJumpIfNeedsProcessing(
         flags, feedback_vector, CodeKind::MAGLEV,
         deferred_flags_need_processing);
+  }
+
+  if (graph->is_osr()) {
+    uint32_t source_frame_size =
+        graph->min_maglev_stackslots_for_unoptimized_frame_size();
+    if (v8_flags.maglev_assert_stack_size && v8_flags.debug_code) {
+      Register scratch = temps.Acquire();
+      Add(scratch, sp,
+          RoundUp<2 * kSystemPointerSize>(
+              source_frame_size * kSystemPointerSize +
+              StandardFrameConstants::kFixedFrameSizeFromFp));
+      Cmp(scratch, fp);
+      Assert(eq, AbortReason::kOsrUnexpectedStackSize);
+    }
+    uint32_t target_frame_size =
+        graph->tagged_stack_slots() + graph->untagged_stack_slots();
+    CHECK_LE(source_frame_size, target_frame_size);
+    if (source_frame_size < graph->tagged_stack_slots() ||
+        source_frame_size < target_frame_size) {
+      ASM_CODE_COMMENT_STRING(this, "Growing frame for OSR");
+      uint32_t additional_tagged =
+          source_frame_size < graph->tagged_stack_slots()
+              ? graph->tagged_stack_slots() - source_frame_size
+              : 0;
+      for (size_t i = 0; i < additional_tagged; ++i) {
+        Push(xzr, xzr);
+      }
+      uint32_t size_so_far = source_frame_size + additional_tagged;
+      CHECK(size_so_far <= target_frame_size);
+      if (size_so_far < target_frame_size) {
+        Sub(sp, sp,
+            Immediate((target_frame_size - size_so_far) * kSystemPointerSize));
+      }
+    }
+    return;
   }
 
   EnterFrame(StackFrame::MAGLEV);
