@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6fd47f1_d3c7eb90",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-05-23T07:10:25Z",
+      "side": 1,
+      "message": "Prefix with `[log]` to add the appropriate hashtag.",
+      "revId": "0ee3a2a7daf92d50a418192f724474642dbe3582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7ec5f83c_daa9cbbc",
@@ -14,6 +31,29 @@
       "writtenOn": "2023-05-22T17:42:47Z",
       "side": 1,
       "message": "Hello Nikolaos, would you please review this change? Thanks!",
+      "revId": "0ee3a2a7daf92d50a418192f724474642dbe3582",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70ca90fb_c7f87021",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3344,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-05-23T07:10:25Z",
+      "side": 1,
+      "message": "Three remarks here:\n1. Should this be `MapMoveEvent`, to be consistent with the other move events?\n2. In the other `target.IsType()` methods, lines 3333 and 3336, we do not pass the isolate (cage base). Is there something special about maps?\n3. In the other events we\u0027re logging the `address`, not the `ptr` (i.e., without the tag).",
+      "range": {
+        "startLine": 3344,
+        "startChar": 18,
+        "endLine": 3344,
+        "endChar": 25
+      },
       "revId": "0ee3a2a7daf92d50a418192f724474642dbe3582",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
