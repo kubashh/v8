@@ -22,6 +22,30 @@
       },
       "revId": "29c5bbee874e7b7ce57073b25e9ea95c4e36653a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbc37c89_729804ab",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4035,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-23T14:34:57Z",
+      "side": 1,
+      "message": "We can\u0027t fold this into `VariableNeedsHoleCheckInCurrentBlockForAssignment` or use `hole_check_mode` because the TDZ elision analysis is set up to refine the less precise scope analysis that assigns a `HoleCheckMode` to each `VariableProxy`. I.e. the `hole_check_mode` is about whether this particular assignment might need a hole check. An `INIT` assignment variable proxy is always going to have a `hole_check_mode \u003d\u003d HoleCheckMode::kElided`, so `VariableNeedsHoleCheckInCurrentBlockForAssignment` always returns false.\n\nWe instead want to avoid numbering `Variable`s themselves that definitely don\u0027t need hole checks among any of its uses. Reading this again I think the most precise we can be is `Variable::IsHoleInitializationForced` [1]. If that returns true, that means scope analysis in the current bytecode compilation session found some use that might need a hole check as part of [2].\n\nMakes sense?\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/ast/variables.h;l\u003d167;drc\u003dda0bcffa3d0c86cb992250f160c32302e54fb557\n[2] https://source.chromium.org/chromium/chromium/src/+/refs/heads/main:v8/src/ast/scopes.cc;l\u003d2289-2292;drc\u003d90b428dcab63b652cc91107b81d2758270e92ac0",
+      "parentUuid": "8afdd214_8a8d0b4a",
+      "range": {
+        "startLine": 4035,
+        "startChar": 11,
+        "endLine": 4035,
+        "endChar": 66
+      },
+      "revId": "29c5bbee874e7b7ce57073b25e9ea95c4e36653a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
