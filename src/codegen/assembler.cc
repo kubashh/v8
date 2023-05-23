@@ -306,6 +306,15 @@ int Assembler::WriteCodeComments() {
   return size;
 }
 
+int Assembler::WriteBuiltinJumpTableInfos() {
+  if (builtin_jump_table_info_writer_.entry_count() == 0) return 0;
+  int offset = pc_offset();
+  builtin_jump_table_info_writer_.Emit(this);
+  int size = pc_offset() - offset;
+  DCHECK_EQ(size, builtin_jump_table_info_writer_.section_size());
+  return size;
+}
+
 #ifdef V8_CODE_COMMENTS
 int Assembler::CodeComment::depth() const { return assembler_->comment_depth_; }
 void Assembler::CodeComment::Open(const std::string& comment) {
