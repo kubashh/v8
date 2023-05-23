@@ -318,6 +318,7 @@ namespace internal {
     "Incorrect RelativeDateTimeFormatter provided")                            \
   T(ResolverNotAFunction, "Promise resolver % is not a function")              \
   T(ReturnMethodNotCallable, "The iterator's 'return' method is not callable") \
+  T(SizeisNaN, "The size of the Collection (Set or Map) is NaN")               \
   T(SharedArrayBufferTooShort,                                                 \
     "Derived SharedArrayBuffer constructor created a buffer which was too "    \
     "small")                                                                   \
