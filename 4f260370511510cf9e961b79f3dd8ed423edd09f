@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af3a2ded_e8fe7ddd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-23T18:19:00Z",
+      "side": 1,
+      "message": "This is ready for review. I added one comment in `builtins-collections-gen.cc`",
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79169e5a_b640de14",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-23T18:19:00Z",
+      "side": 1,
+      "message": "receiver (input) is `JSSet`. We passed an `OrderedHashSet` and get an `OrderedHashSet` as result, so it was not working. I had a couple of options: 1) pass `JSSet` from union instead of `OrderedHashSet`, get the result as `OrderedHashSet` and update `.table` inside the `JSSet`. 2) pass `JSSet` from union instead of `OrderedHashSet`, and get the result as `JSSet`. 3) pass `OrderedHashSet` from TF builtin, and change `AddToSet` code in lines 1593, 1646, and 1647. \nI did option 1 because of the discussions we had yesterday, but I feel updating `.table` of the JSSet everytime (line 64 in `set_methods.tq`) is not optimized. I think the second option is better. We should change the `TF builtin` again and remove line 1583. What do you think about them?",
+      "range": {
+        "startLine": 1646,
+        "startChar": 3,
+        "endLine": 1646,
+        "endChar": 54
+      },
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08614d5e_56fd3c73",
+        "filename": "test/mjsunit/harmony/set-methods.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-23T18:19:00Z",
+      "side": 1,
+      "message": "Forgot to remove this one. I\u0027ll do that in the next patch.",
+      "range": {
+        "startLine": 28,
+        "startChar": 53,
+        "endLine": 28,
+        "endChar": 69
+      },
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
