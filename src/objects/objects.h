@@ -49,6 +49,7 @@
 //         - JSArrayBufferView
 //           - JSTypedArray
 //           - JSDataView
+//         - JSAsyncContext
 //         - JSCollection
 //           - JSSet
 //           - JSMap

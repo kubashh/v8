@@ -251,24 +251,25 @@ TNode<Smi> CodeStubAssembler::NoContextConstant() {
   return SmiConstant(Context::kNoContext);
 }
 
-#define HEAP_CONSTANT_ACCESSOR(rootIndexName, rootAccessorName, name)        \
-  TNode<std::remove_pointer<std::remove_reference<decltype(                  \
-      std::declval<Heap>().rootAccessorName())>::type>::type>                \
-      CodeStubAssembler::name##Constant() {                                  \
-    return UncheckedCast<std::remove_pointer<std::remove_reference<decltype( \
-        std::declval<Heap>().rootAccessorName())>::type>::type>(             \
-        LoadRoot(RootIndex::k##rootIndexName));                              \
+#define HEAP_CONSTANT_ACCESSOR(rootIndexName, rootAccessorName, name)     \
+  TNode<std::remove_pointer<std::remove_reference<                        \
+      decltype(std::declval<Heap>().rootAccessorName())>::type>::type>    \
+      CodeStubAssembler::name##Constant() {                               \
+    return UncheckedCast<std::remove_pointer<std::remove_reference<       \
+        decltype(std::declval<Heap>().rootAccessorName())>::type>::type>( \
+        LoadRoot(RootIndex::k##rootIndexName));                           \
   }
 HEAP_MUTABLE_IMMOVABLE_OBJECT_LIST(HEAP_CONSTANT_ACCESSOR)
 #undef HEAP_CONSTANT_ACCESSOR
 
 #define HEAP_CONSTANT_ACCESSOR(rootIndexName, rootAccessorName, name)        \
-  TNode<std::remove_pointer<std::remove_reference<decltype(                  \
-      std::declval<ReadOnlyRoots>().rootAccessorName())>::type>::type>       \
+  TNode<std::remove_pointer<                                                 \
+      std::remove_reference<decltype(std::declval<ReadOnlyRoots>()           \
+                                         .rootAccessorName())>::type>::type> \
       CodeStubAssembler::name##Constant() {                                  \
-    return UncheckedCast<std::remove_pointer<std::remove_reference<decltype( \
-        std::declval<ReadOnlyRoots>().rootAccessorName())>::type>::type>(    \
-        LoadRoot(RootIndex::k##rootIndexName));                              \
+    return UncheckedCast<std::remove_pointer<std::remove_reference<          \
+        decltype(std::declval<ReadOnlyRoots>().rootAccessorName())>::type>:: \
+                             type>(LoadRoot(RootIndex::k##rootIndexName));   \
   }
 HEAP_IMMUTABLE_IMMOVABLE_OBJECT_LIST(HEAP_CONSTANT_ACCESSOR)
 #undef HEAP_CONSTANT_ACCESSOR
@@ -6822,6 +6823,14 @@ TNode<BoolT> CodeStubAssembler::IsJSApiObject(TNode<HeapObject> object) {
   return IsJSApiObjectMap(LoadMap(object));
 }
 
+TNode<BoolT> CodeStubAssembler::IsJSAsyncLocal(TNode<HeapObject> object) {
+  return HasInstanceType(object, JS_ASYNC_LOCAL_TYPE);
+}
+
+TNode<BoolT> CodeStubAssembler::IsJSAsyncSnapshot(TNode<HeapObject> object) {
+  return HasInstanceType(object, JS_ASYNC_SNAPSHOT_TYPE);
+}
+
 TNode<BoolT> CodeStubAssembler::IsJSFinalizationRegistryMap(TNode<Map> map) {
   return InstanceTypeEqual(LoadMapInstanceType(map),
                            JS_FINALIZATION_REGISTRY_TYPE);
@@ -11384,21 +11393,21 @@ void CodeStubAssembler::StoreElementTypedArrayBigInt(TNode<RawPtrT> elements,
 
   MachineRepresentation rep = WordT::kMachineRepresentation;
 #if defined(V8_TARGET_BIG_ENDIAN)
-    if (!Is64()) {
-      StoreNoWriteBarrier(rep, elements, offset, var_high.value());
-      StoreNoWriteBarrier(rep, elements,
-                          IntPtrAdd(offset, IntPtrConstant(kSystemPointerSize)),
-                          var_low.value());
-    } else {
-      StoreNoWriteBarrier(rep, elements, offset, var_low.value());
-    }
-#else
+  if (!Is64()) {
+    StoreNoWriteBarrier(rep, elements, offset, var_high.value());
+    StoreNoWriteBarrier(rep, elements,
+                        IntPtrAdd(offset, IntPtrConstant(kSystemPointerSize)),
+                        var_low.value());
+  } else {
     StoreNoWriteBarrier(rep, elements, offset, var_low.value());
-    if (!Is64()) {
-      StoreNoWriteBarrier(rep, elements,
-                          IntPtrAdd(offset, IntPtrConstant(kSystemPointerSize)),
-                          var_high.value());
-    }
+  }
+#else
+  StoreNoWriteBarrier(rep, elements, offset, var_low.value());
+  if (!Is64()) {
+    StoreNoWriteBarrier(rep, elements,
+                        IntPtrAdd(offset, IntPtrConstant(kSystemPointerSize)),
+                        var_high.value());
+  }
 #endif
 }
 
@@ -15551,7 +15560,7 @@ TNode<BoolT> CodeStubAssembler::HasAsyncEventDelegate() {
 
 TNode<Uint32T> CodeStubAssembler::PromiseHookFlags() {
   return Load<Uint32T>(ExternalConstant(
-    ExternalReference::promise_hook_flags_address(isolate())));
+      ExternalReference::promise_hook_flags_address(isolate())));
 }
 
 TNode<BoolT> CodeStubAssembler::IsAnyPromiseHookEnabled(TNode<Uint32T> flags) {
@@ -15572,8 +15581,9 @@ TNode<BoolT> CodeStubAssembler::IsContextPromiseHookEnabled(
 }
 #endif
 
-TNode<BoolT> CodeStubAssembler::
-    IsIsolatePromiseHookEnabledOrHasAsyncEventDelegate(TNode<Uint32T> flags) {
+TNode<BoolT>
+CodeStubAssembler::IsIsolatePromiseHookEnabledOrHasAsyncEventDelegate(
+    TNode<Uint32T> flags) {
   uint32_t mask = Isolate::PromiseHookFields::HasIsolatePromiseHook::kMask |
                   Isolate::PromiseHookFields::HasAsyncEventDelegate::kMask;
   return IsSetWord32(flags, mask);

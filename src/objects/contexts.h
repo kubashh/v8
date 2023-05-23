@@ -53,6 +53,7 @@ enum ContextLookupFlags {
   /* it's already UBSan-fiendly and doesn't require a star... So declare */    \
   /* it as a HeapObject for now. */                                            \
   V(EMBEDDER_DATA_INDEX, HeapObject, embedder_data)                            \
+  V(ASYNC_CONTEXT_STORE_INDEX, HeapObject, async_context_store)                \
   V(CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX, HeapObject,                    \
     continuation_preserved_embedder_data)                                      \
   NATIVE_CONTEXT_INTRINSIC_FUNCTIONS(V)                                        \
