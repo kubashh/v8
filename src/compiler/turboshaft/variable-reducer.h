@@ -191,7 +191,7 @@ class VariableReducer : public Next {
           return MergeFrameState(inputs);
 
         case Opcode::kOverflowCheckedBinop:
-        case Opcode::kFloat64InsertWord32:
+        case Opcode::kBitcastWord32PairToFloat64:
         case Opcode::kStore:
         case Opcode::kRetain:
         case Opcode::kStackSlot:
