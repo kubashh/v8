@@ -58,7 +58,6 @@
 #include "v8-unwinder.h"           // NOLINT(build/include_directory)
 #include "v8-value-serializer.h"   // NOLINT(build/include_directory)
 #include "v8-value.h"              // NOLINT(build/include_directory)
-#include "v8-version.h"            // NOLINT(build/include_directory)
 #include "v8-wasm.h"               // NOLINT(build/include_directory)
 #include "v8config.h"              // NOLINT(build/include_directory)
 
