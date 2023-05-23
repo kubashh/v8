@@ -86,6 +86,7 @@
 #include "src/objects/instance-type.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
+#include "src/objects/js-async-context-inl.h"
 #include "src/objects/js-collection-inl.h"
 #include "src/objects/js-promise-inl.h"
 #include "src/objects/js-regexp-inl.h"
@@ -8621,6 +8622,142 @@ MaybeLocal<WasmModuleObject> WasmModuleObject::Compile(
                   "WebAssembly support is not enabled");
   UNREACHABLE();
 #endif  // V8_ENABLE_WEBASSEMBLY
+}
+
+Local<AsyncLocal> v8::AsyncLocal::New(Isolate* v8_isolate) {
+  Utils::ApiCheck(i::v8_flags.harmony_async_context, "v8::AsyncLocal::New",
+                  "Constructing AsyncLocals is not supported");
+
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  API_RCS_SCOPE(i_isolate, AsyncLocal, New);
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+  i::Handle<i::JSAsyncLocal> obj = i_isolate->factory()->NewJSAsyncLocal();
+  return Utils::ToLocal(obj);
+}
+
+Local<String> v8::AsyncLocal::Name() {
+  CHECK(i::v8_flags.harmony_async_context);
+  i::Handle<i::JSAsyncLocal> obj = Utils::OpenHandle(this);
+  i::Handle<i::String> name =
+      i::Handle<i::String>(obj->name(), obj->GetIsolate());
+  return Utils::ToLocal(name);
+}
+
+Local<Value> v8::AsyncLocal::DefaultValue() {
+  CHECK(i::v8_flags.harmony_async_context);
+  i::Handle<i::JSAsyncLocal> obj = Utils::OpenHandle(this);
+  i::Handle<i::Object> name =
+      i::Handle<i::Object>(obj->defaultValue(), obj->GetIsolate());
+  return Utils::ToLocal(name);
+}
+
+MaybeLocal<Value> v8::AsyncLocal::GetValue() {
+  CHECK(i::v8_flags.harmony_async_context);
+  i::Handle<i::JSAsyncLocal> obj = Utils::OpenHandle(this);
+  i::Isolate* i_isolate = obj->GetIsolate();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+
+  i::Handle<i::Object> snapshot = i::Handle<i::Object>(
+      i_isolate->native_context()->async_context_store(), i_isolate);
+  if (snapshot->IsUndefined()) {
+    return MaybeLocal<Value>();
+  }
+
+  i::Handle<i::OrderedHashMap> async_context_store =
+      i::Handle<i::OrderedHashMap>::cast(snapshot);
+  i::InternalIndex found = async_context_store->FindEntry(i_isolate, *obj);
+  if (found.is_not_found()) {
+    return MaybeLocal<Value>();
+  }
+  i::Handle<i::Object> value =
+      i::Handle<i::Object>(async_context_store->ValueAt(found), i_isolate);
+  return Utils::ToLocal(value);
+}
+
+void v8::AsyncLocal::CheckCast(Value* that) {
+  i::Handle<i::Object> obj = Utils::OpenHandle(that);
+  Utils::ApiCheck(obj->IsJSAsyncLocal(), "v8::AsyncLocal::Cast",
+                  "Value is not an AsyncLocal");
+}
+
+v8::AsyncLocal::Scope::Scope(Local<AsyncLocal> async_local,
+                             Local<Value> value) {
+  CHECK(i::v8_flags.harmony_async_context);
+  i::Handle<i::JSAsyncLocal> js_async_local = Utils::OpenHandle(*async_local);
+  i::Handle<i::Object> js_value = Utils::OpenHandle(*value);
+
+  isolate_ = js_async_local->GetIsolate();
+  // TODO(abotella): Can we check that `js_value` belongs to the same isolate?
+  i::Handle<i::NativeContext> context = isolate_->native_context();
+  i::Handle<i::HeapObject> previous_snapshot(context->async_context_store(),
+                                             isolate_);
+
+  i::Handle<i::OrderedHashMap> new_snapshot =
+      isolate_->factory()->NewOrderedHashMap();
+  if (!previous_snapshot->IsUndefined()) {
+    i::Handle<i::OrderedHashMap> previous_snapshot_map =
+        i::Handle<i::OrderedHashMap>::cast(previous_snapshot);
+    new_snapshot->CopyElements(isolate_, 0, *previous_snapshot_map, 0,
+                               previous_snapshot_map->length(),
+                               i::WriteBarrierMode::SKIP_WRITE_BARRIER);
+  }
+  i::OrderedHashMap::Add(isolate_, new_snapshot, js_async_local, js_value);
+
+  context->set_async_context_store(*new_snapshot);
+  previous_snapshot_ = Utils::ToLocal(previous_snapshot);
+}
+
+v8::AsyncLocal::Scope::~Scope() {
+  CHECK(i::v8_flags.harmony_async_context);
+  CHECK(isolate_);
+  CHECK(!previous_snapshot_.IsEmpty());
+  i::Handle<i::HeapObject> previous_snapshot =
+      i::Handle<i::HeapObject>::cast(Utils::OpenHandle(*previous_snapshot_));
+  isolate_->native_context()->set_async_context_store(*previous_snapshot);
+}
+
+Local<AsyncSnapshot> v8::AsyncSnapshot::New(Isolate* v8_isolate) {
+  Utils::ApiCheck(i::v8_flags.harmony_async_context, "v8::AsyncSnapshot::New",
+                  "Constructing AsyncSnapshots is not supported");
+
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  API_RCS_SCOPE(i_isolate, AsyncSnapshot, New);
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+
+  i::Handle<i::HeapObject> snapshot = i::Handle<i::HeapObject>(
+      i_isolate->native_context()->async_context_store(), i_isolate);
+  i::Handle<i::JSAsyncSnapshot> obj =
+      i_isolate->factory()->NewJSAsyncSnapshot(snapshot);
+  return Utils::ToLocal(obj);
+}
+
+void v8::AsyncSnapshot::CheckCast(Value* that) {
+  i::Handle<i::Object> obj = Utils::OpenHandle(that);
+  Utils::ApiCheck(obj->IsJSAsyncSnapshot(), "v8::AsyncSnapshot::Cast",
+                  "Value is not an AsyncSnapshot");
+}
+
+v8::AsyncSnapshot::Scope::Scope(Local<AsyncSnapshot> async_snapshot) {
+  CHECK(i::v8_flags.harmony_async_context);
+  i::Handle<i::JSAsyncSnapshot> js_async_snapshot =
+      Utils::OpenHandle(*async_snapshot);
+
+  isolate_ = js_async_snapshot->GetIsolate();
+  i::Handle<i::NativeContext> context = isolate_->native_context();
+  i::Handle<i::HeapObject> previous_snapshot(context->async_context_store(),
+                                             isolate_);
+
+  context->set_async_context_store(js_async_snapshot->snapshot());
+  previous_snapshot_ = Utils::ToLocal(previous_snapshot);
+}
+
+v8::AsyncSnapshot::Scope::~Scope() {
+  CHECK(i::v8_flags.harmony_async_context);
+  CHECK(isolate_);
+  CHECK(!previous_snapshot_.IsEmpty());
+  i::Handle<i::HeapObject> previous_snapshot =
+      i::Handle<i::HeapObject>::cast(Utils::OpenHandle(*previous_snapshot_));
+  isolate_->native_context()->set_async_context_store(*previous_snapshot);
 }
 
 void* v8::ArrayBuffer::Allocator::Reallocate(void* data, size_t old_length,
