@@ -22,6 +22,30 @@
       },
       "revId": "39b7eb80c30f67ba1857472a0a3bafb29ac7aeaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e808dc70_d50bd526",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-23T14:24:47Z",
+      "side": 0,
+      "message": "Sorry I don\u0027t have the rest of this paged in enough to understand the suggestion. Is the idea to canonicalize unresolved `VariableProxy`s with the same name? If so there might be some opportunities here, but merging them might also reduce precision on the TDZ hole check elision since each proxy gets a `HoleCheckMode`.",
+      "parentUuid": "1fb7b34a_798dcf11",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 232,
+        "endChar": 26
+      },
+      "revId": "39b7eb80c30f67ba1857472a0a3bafb29ac7aeaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
