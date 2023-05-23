@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8afdd214_8a8d0b4a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4035,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-23T08:39:39Z",
+      "side": 1,
+      "message": "could we instead do this as part of the `VariableNeedsHoleCheckInCurrentBlockForAssignment` check above? Or check `hole_check_mode` instead? I think this will still unnecessarily number variables that are statically known to have no TDZ.",
+      "range": {
+        "startLine": 4035,
+        "startChar": 11,
+        "endLine": 4035,
+        "endChar": 66
+      },
+      "revId": "29c5bbee874e7b7ce57073b25e9ea95c4e36653a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
