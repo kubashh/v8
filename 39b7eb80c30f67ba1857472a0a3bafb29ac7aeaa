@@ -46,6 +46,30 @@
       },
       "revId": "39b7eb80c30f67ba1857472a0a3bafb29ac7aeaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25487c62_269d32f4",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-05-23T14:59:30Z",
+      "side": 0,
+      "message": "Ah yea, that makes sense. This might be an old comment which just made it sound like the only thing preventing us from doing that is RemoveUnresolved. Thanks for checking!",
+      "parentUuid": "e808dc70_d50bd526",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 232,
+        "endChar": 26
+      },
+      "revId": "39b7eb80c30f67ba1857472a0a3bafb29ac7aeaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
