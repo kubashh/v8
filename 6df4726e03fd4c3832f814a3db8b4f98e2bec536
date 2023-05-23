@@ -50,6 +50,23 @@
       "message": "Oops, just realized Dominik is OOO this week. mlippautz@, mind taking a look?",
       "revId": "6df4726e03fd4c3832f814a3db8b4f98e2bec536",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e148963a_a6348c68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-23T11:14:25Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "6df4726e03fd4c3832f814a3db8b4f98e2bec536",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
