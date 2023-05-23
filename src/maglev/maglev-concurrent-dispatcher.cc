@@ -116,16 +116,22 @@ CompilationJob::Status MaglevCompilationJob::FinalizeJobImpl(Isolate* isolate) {
   if (!maglev::MaglevCompiler::GenerateCode(isolate, info()).ToHandle(&code)) {
     return CompilationJob::FAILED;
   }
-  info()->toplevel_function()->set_code(*code);
+  info()->set_code(code);
   return CompilationJob::SUCCEEDED;
 }
+
+Handle<Code> MaglevCompilationJob::code() const { return info_->get_code(); }
 
 Handle<JSFunction> MaglevCompilationJob::function() const {
   return info_->toplevel_function();
 }
 
 BytecodeOffset MaglevCompilationJob::osr_offset() const {
-  return info_->osr_offset();
+  return info_->toplevel_osr_offset();
+}
+
+bool MaglevCompilationJob::is_osr() const {
+  return info_->toplevel_osr_offset() != BytecodeOffset::None();
 }
 
 bool MaglevCompilationJob::specialize_to_function_context() const {
@@ -238,6 +244,22 @@ void MaglevConcurrentDispatcher::AwaitCompileJobs() {
   job_handle_ = V8::GetCurrentPlatform()->PostJob(
       TaskPriority::kUserVisible, std::make_unique<JobTask>(this));
   DCHECK(incoming_queue_.IsEmpty());
+}
+
+void MaglevConcurrentDispatcher::Flush(BlockingBehavior behavior) {
+  while (!incoming_queue_.IsEmpty()) {
+    std::unique_ptr<MaglevCompilationJob> job;
+    incoming_queue_.Dequeue(&job);
+  }
+  if (behavior == BlockingBehavior::kBlock) {
+    job_handle_->Cancel();
+    job_handle_ = V8::GetCurrentPlatform()->PostJob(
+        TaskPriority::kUserVisible, std::make_unique<JobTask>(this));
+  }
+  while (!outgoing_queue_.IsEmpty()) {
+    std::unique_ptr<MaglevCompilationJob> job;
+    outgoing_queue_.Dequeue(&job);
+  }
 }
 
 }  // namespace maglev
