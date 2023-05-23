@@ -817,18 +817,29 @@ void RootConstant::SetValueLocationConstraints() { DefineAsConstant(this); }
 void RootConstant::GenerateCode(MaglevAssembler* masm,
                                 const ProcessingState& state) {}
 
+InitialValue::InitialValue(uint64_t bitfield, interpreter::Register source)
+    : Base(bitfield), source_(source) {}
+
 void InitialValue::SetValueLocationConstraints() {
-  // TODO(leszeks): Make this nicer.
   result().SetUnallocated(compiler::UnallocatedOperand::FIXED_SLOT,
-                          (StandardFrameConstants::kExpressionsOffset -
-                           UnoptimizedFrameConstants::kRegisterFileFromFp) /
-                                  kSystemPointerSize +
-                              source().index(),
-                          kNoVreg);
+                          stack_slot(), kNoVreg);
 }
 void InitialValue::GenerateCode(MaglevAssembler* masm,
                                 const ProcessingState& state) {
   // No-op, the value is already in the appropriate slot.
+}
+
+// static
+uint32_t InitialValue::stack_slot(uint32_t register_index) {
+  // TODO(leszeks): Make this nicer.
+  return (StandardFrameConstants::kExpressionsOffset -
+          UnoptimizedFrameConstants::kRegisterFileFromFp) /
+             kSystemPointerSize +
+         register_index;
+}
+
+uint32_t InitialValue::stack_slot() const {
+  return stack_slot(source_.index());
 }
 
 void RegisterInput::SetValueLocationConstraints() {
@@ -4198,8 +4209,8 @@ void AttemptOnStackReplacement(MaglevAssembler* masm,
   // Case 1).
   Label deopt;
   Register maybe_target_code = scratch1;
-  __ TryLoadOptimizedOsrCode(maybe_target_code, scratch0, feedback_slot, &deopt,
-                             Label::kFar);
+  __ TryLoadOptimizedOsrCode(scratch1, CodeKind::TURBOFAN, scratch0,
+                             feedback_slot, &deopt, Label::Distance::kFar);
 
   // Case 2).
   {
