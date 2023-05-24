@@ -51,6 +51,23 @@
       "parentUuid": "ca42ba20_01dcbb1e",
       "revId": "020c2e8a2ab870eb87e7b844b767390b13906ca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a223cde_61fec99a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-05-24T22:29:37Z",
+      "side": 1,
+      "message": "Landing as is and will recalibrate the flag value in a new CL if needed",
+      "revId": "020c2e8a2ab870eb87e7b844b767390b13906ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
