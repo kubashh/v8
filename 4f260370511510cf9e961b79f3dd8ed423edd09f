@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2f79e85_13357083",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T21:21:49Z",
+      "side": 1,
+      "message": "As discussed please rebase this on top of https://chromium-review.googlesource.com/c/v8/v8/+/4558805 once that lands, which should simplify this CL.",
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "79169e5a_b640de14",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 11
@@ -37,6 +54,190 @@
         "endLine": 1646,
         "endChar": 54
       },
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "208c7e43_be449f8f",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T21:21:49Z",
+      "side": 1,
+      "message": "Yeah I agree, I don\u0027t think we should update `.table` at all. The right thing is to make a new runtime function, `Runtime_EnsureOrderedHashSetGrowable`, which takes an `OrderedHashSet` and returns the result returned by `OrderedHashSet::EnsureGrowable`.",
+      "parentUuid": "79169e5a_b640de14",
+      "range": {
+        "startLine": 1646,
+        "startChar": 3,
+        "endLine": 1646,
+        "endChar": 54
+      },
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b225dad7_26c692fa",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T21:21:49Z",
+      "side": 1,
+      "message": "`kCalledOnNonObject` doesn\u0027t seem like the right error message because `GetSetRecord` is an internal operation, not a method. It\u0027ll be unhelpful if a user called `set.union(42)` and sees `\"GetSetRecord called on non-object\"`.\n\nI don\u0027t see a fitting existing message template, let\u0027s make a new one that says `\"% argument must be an object\"`.",
+      "range": {
+        "startLine": 86,
+        "startChar": 68,
+        "endLine": 86,
+        "endChar": 82
+      },
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "322873c2_b15769a6",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T21:21:49Z",
+      "side": 1,
+      "message": "`ToNumber(rawSize)` could be NaN for values of `rawSize` other than undefined as well, like an object literal with a hook: `{ valueOf() { return NaN; } }`.\n\nSo you should follow the spec steps here to check for NaN after calling `ToNumber_Inline` without special casing undefined.",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 48
+      },
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "234395e6_8c4c8022",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T21:21:49Z",
+      "side": 1,
+      "message": "You can narrow this to a `Callable`.",
+      "range": {
+        "startLine": 125,
+        "startChar": 27,
+        "endLine": 125,
+        "endChar": 32
+      },
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51d09ee1_2a462d66",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T21:21:49Z",
+      "side": 1,
+      "message": "I think this also needs a new error message that\u0027s similar to `SymbolIteratorInvalid`, that says something like `\"Result of keys method is not an object\".",
+      "range": {
+        "startLine": 131,
+        "startChar": 48,
+        "endLine": 131,
+        "endChar": 66
+      },
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95938d0e_f139946a",
+        "filename": "src/builtins/set_methods.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T21:21:49Z",
+      "side": 1,
+      "message": "With Set methods, once we add the fast paths, the implementation of each method I think will be large enough that we should put each method in its own file. So this should be renamed `set-union.tq`.",
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c99c6c13_3a9f49f9",
+        "filename": "src/builtins/set_methods.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T21:21:49Z",
+      "side": 1,
+      "message": "Please a comment TODO here about making a fast path for when `other` is a `JSSet` or a `JSMap`.",
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a856487e_59a9e856",
+        "filename": "src/builtins/set_methods.tq",
+        "patchSetId": 11
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T21:21:49Z",
+      "side": 1,
+      "message": "I think you\u0027re creating this up front because of the `JSSet` comment above. If there were a separate runtime grow function for `OrderedHashSet`s you can move this allocation to the bottom, after the iteration is done.",
+      "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db831aa7_dc51282d",
+        "filename": "src/common/message-template.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T21:21:49Z",
+      "side": 1,
+      "message": "Spelling nit: `SizeIsNan`. (Please capitalize every word.)\n\nThe error message also isn\u0027t accurate because the error is thrown when the argument object\u0027s `.size` is NaN. There\u0027s no requirement that the argument object is a Set or a Map, it can be any object.\n\nMaybe `\"The .size property is NaN\"`?",
       "revId": "4f260370511510cf9e961b79f3dd8ed423edd09f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
