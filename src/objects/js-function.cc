@@ -229,9 +229,11 @@ void JSFunction::MarkForOptimization(Isolate* isolate, CodeKind target_kind,
   set_tiering_state(TieringStateFor(target_kind, mode));
 }
 
-void JSFunction::SetInterruptBudget(Isolate* isolate, bool deoptimize) {
-  raw_feedback_cell().set_interrupt_budget(
-      TieringManager::InterruptBudgetFor(isolate, *this, deoptimize));
+void JSFunction::SetInterruptBudget(Isolate* isolate,
+                                    base::Optional<CodeKind> active_tier,
+                                    bool deoptimize) {
+  raw_feedback_cell().set_interrupt_budget(TieringManager::InterruptBudgetFor(
+      isolate, *this, active_tier, deoptimize));
 }
 
 // static
