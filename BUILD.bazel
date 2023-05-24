@@ -1199,6 +1199,8 @@ filegroup(
         "src/codegen/background-merge-task.h",
         "src/codegen/bailout-reason.cc",
         "src/codegen/bailout-reason.h",
+        "src/codegen/builtins-jump-table-info.cc",
+        "src/codegen/builtins-jump-table-info.h",
         "src/codegen/callable.h",
         "src/codegen/code-comments.cc",
         "src/codegen/code-comments.h",
