@@ -1,1 +1,3 @@
 file:../../COMMON_OWNERS
+
+per-file code-memory-access*=sroettger@google.com
