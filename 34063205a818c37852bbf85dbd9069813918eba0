@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6dacb4c_01fa4416",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-05-24T17:16:31Z",
+      "side": 1,
+      "message": "Please be more specific. E.g., what is the technical meat of this refactor? This\u0027ll also make it easier for me to review the change.",
+      "revId": "34063205a818c37852bbf85dbd9069813918eba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c2837f01_02d6fe44",
