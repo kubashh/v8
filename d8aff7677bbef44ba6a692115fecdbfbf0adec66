@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9caa70d8_bd04a0f9",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-05-24T21:48:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5ba4dfde_4ca1a20e",
+      "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2730560_68ad25b9",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Yes, this is explicitly needed for the downstream features that this refactoring was done for. E.g., `Set.prototype.union` needs to add things in a loop, and we can\u0027t early return from it like `Set.prototype.add`.\n\nWe could keep the `Return(receiver)` and have the subsequent CLs change it but I don\u0027t see any advantage to that since the subsequent CLs should land soon (well, on the order of a week or two).",
       "parentUuid": "c2730560_68ad25b9",
+      "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9bc97d2_7ec88db1",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-05-24T21:48:46Z",
+      "side": 1,
+      "message": "Okay, works for me.",
+      "parentUuid": "8af790d3_26336439",
       "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

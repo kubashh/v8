@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a3964ae_9c973e31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-05-24T21:48:46Z",
+      "side": 1,
+      "message": "lgtm % comment formatting",
+      "revId": "7a8292d2b971d996f526cb0a1fb9ecdee252cee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66732ca6_545c8a11",
+        "filename": "src/builtins/builtins-collections-gen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-05-24T21:48:46Z",
+      "side": 1,
+      "message": "Nit: weird formatting",
+      "revId": "7a8292d2b971d996f526cb0a1fb9ecdee252cee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
