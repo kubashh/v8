@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1ef430d_bf2b364c",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-05-24T19:05:32Z",
+      "side": 1,
+      "message": "Why are this block (and similar ones below) necessary? Maybe there\u0027s something I need to learn about CSA?",
+      "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2730560_68ad25b9",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-05-24T19:05:32Z",
+      "side": 1,
+      "message": "Is there an advantage to this generalization rather than just keeping `Return(receiver)` unconditionally?",
+      "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf505dc5_fd929671",
+        "filename": "src/builtins/builtins-collections-gen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-05-24T19:05:32Z",
+      "side": 1,
+      "message": "Please add comments for this, StoreAtEntry, and AddToOrderedHashtable (at the least adding comments to newly-created functions).",
+      "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ffdf95d_0fc31990",
+        "filename": "src/builtins/builtins-collections-gen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-05-24T19:05:32Z",
+      "side": 1,
+      "message": "Bikeshedding:\n\nNo need for the \"Callback\" suffix, IMHO (and code search agrees it\u0027s not common for std::functions in v8). \"Callback\" makes me think of async code.\n\n\"StoreAtEntry\" seems fine by itself. Maybe \"GrowCollection\" if \"Grow\" is too short?",
+      "range": {
+        "startLine": 255,
+        "startChar": 8,
+        "endLine": 255,
+        "endChar": 28
+      },
+      "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
