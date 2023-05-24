@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ba4dfde_4ca1a20e",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T19:43:46Z",
+      "side": 1,
+      "message": "Just a style preference on my part to put branch bodies in their own scope. I find it easier to group `TNode`s and not forget which things need to be `TVariables`. In this particular method it has no advantages.",
+      "parentUuid": "b1ef430d_bf2b364c",
+      "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c2730560_68ad25b9",
         "filename": "src/builtins/builtins-collections-gen.cc",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2023-05-24T19:05:32Z",
       "side": 1,
       "message": "Is there an advantage to this generalization rather than just keeping `Return(receiver)` unconditionally?",
+      "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8af790d3_26336439",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T19:43:46Z",
+      "side": 1,
+      "message": "Yes, this is explicitly needed for the downstream features that this refactoring was done for. E.g., `Set.prototype.union` needs to add things in a loop, and we can\u0027t early return from it like `Set.prototype.add`.\n\nWe could keep the `Return(receiver)` and have the subsequent CLs change it but I don\u0027t see any advantage to that since the subsequent CLs should land soon (well, on the order of a week or two).",
+      "parentUuid": "c2730560_68ad25b9",
       "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24692143_f8ba035e",
+        "filename": "src/builtins/builtins-collections-gen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T19:43:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf505dc5_fd929671",
+      "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ffdf95d_0fc31990",
@@ -65,6 +119,30 @@
       "writtenOn": "2023-05-24T19:05:32Z",
       "side": 1,
       "message": "Bikeshedding:\n\nNo need for the \"Callback\" suffix, IMHO (and code search agrees it\u0027s not common for std::functions in v8). \"Callback\" makes me think of async code.\n\n\"StoreAtEntry\" seems fine by itself. Maybe \"GrowCollection\" if \"Grow\" is too short?",
+      "range": {
+        "startLine": 255,
+        "startChar": 8,
+        "endLine": 255,
+        "endChar": 28
+      },
+      "revId": "d8aff7677bbef44ba6a692115fecdbfbf0adec66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d56b9a80_2de89daa",
+        "filename": "src/builtins/builtins-collections-gen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T19:43:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ffdf95d_0fc31990",
       "range": {
         "startLine": 255,
         "startChar": 8,
