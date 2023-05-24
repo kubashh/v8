@@ -122,6 +122,30 @@
       },
       "revId": "34063205a818c37852bbf85dbd9069813918eba0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ebbcf21_cb837339",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-24T20:38:24Z",
+      "side": 1,
+      "message": "Makes sense. Thanks.",
+      "parentUuid": "aaec9fe3_65b34eb0",
+      "range": {
+        "startLine": 1393,
+        "startChar": 35,
+        "endLine": 1393,
+        "endChar": 56
+      },
+      "revId": "34063205a818c37852bbf85dbd9069813918eba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
