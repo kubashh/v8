@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5482128d_8d5b50c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-24T16:08:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f93d8c7_dfefb361",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 11
+      },
+      "revId": "d298569fee01def7fb9dc2ee68df3e0de9067a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d85e836d_a04cca96",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -75,6 +99,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68139b0f_1cb1f2d9",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1785,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-24T16:08:09Z",
+      "side": 1,
+      "message": "Unfortunately not. The `VALIDATE` is a `DCHECK` if validation is off, so no code at all in release builds.",
+      "parentUuid": "947ecb93_341ce6e2",
+      "revId": "d298569fee01def7fb9dc2ee68df3e0de9067a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "833cdbaf_d163e5b2",
@@ -88,6 +130,30 @@
       "writtenOn": "2023-05-24T08:22:18Z",
       "side": 1,
       "message": "`ASSERT_NE`?",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 37,
+        "endChar": 13
+      },
+      "revId": "d298569fee01def7fb9dc2ee68df3e0de9067a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0db149b7_cd430531",
+        "filename": "test/unittests/wasm/module-decoder-memory64-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-24T16:08:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "833cdbaf_d163e5b2",
       "range": {
         "startLine": 37,
         "startChar": 2,
