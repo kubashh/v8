@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d164c696_d4de1023",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-24T09:17:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d316bbf_b360f6f0",
+      "range": {
+        "startLine": 1262,
+        "startChar": 0,
+        "endLine": 1262,
+        "endChar": 44
+      },
+      "revId": "d83b0fc6ed33e761b5d265ed7289aeb7b21b5f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "175ab66f_b05f186a",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-05-24T06:44:04Z",
       "side": 1,
       "message": "That looks wrong to me: BitcastWord32PairToFloat64 has a non-empty outputs_rep, so corresponding Variables should have a non-null maybe_rep, and thus go into the 1st if of this function and not reach this point.",
+      "range": {
+        "startLine": 194,
+        "startChar": 8,
+        "endLine": 194,
+        "endChar": 49
+      },
+      "revId": "d83b0fc6ed33e761b5d265ed7289aeb7b21b5f94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e44a61ca_dd0aa765",
+        "filename": "src/compiler/turboshaft/variable-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-24T09:17:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "175ab66f_b05f186a",
       "range": {
         "startLine": 194,
         "startChar": 8,
