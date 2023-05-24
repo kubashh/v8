@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "17cdc093_bf81d0e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T17:50:46Z",
+      "side": 1,
+      "message": "Added more explanation in the commit message.",
+      "parentUuid": "a6dacb4c_01fa4416",
+      "revId": "34063205a818c37852bbf85dbd9069813918eba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c2837f01_02d6fe44",
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "If not, I think more generic name is better.",
       "parentUuid": "d07ac836_28bebea4",
+      "range": {
+        "startLine": 1393,
+        "startChar": 35,
+        "endLine": 1393,
+        "endChar": 56
+      },
+      "revId": "34063205a818c37852bbf85dbd9069813918eba0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaec9fe3_65b34eb0",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-24T17:50:46Z",
+      "side": 1,
+      "message": "Technically, any type can be passed as `CollectionType`, but the template substitution will likely fail if `CollectionType` isn\u0027t actually an `OrderedHashTable` subclass like `OrderedHashSet`. This new method (and the existing template methods) use a lot of static methods / fields from `CollectionType`, like `CollectionType::NumberOfElementsOffset()`, so if the `CollectionType` passed in doesn\u0027t have those things, the substitution will fail.",
+      "parentUuid": "d3837e86_25d9f00d",
       "range": {
         "startLine": 1393,
         "startChar": 35,
