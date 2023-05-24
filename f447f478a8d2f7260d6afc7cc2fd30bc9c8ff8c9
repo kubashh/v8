@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0315c22c_8213d53a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-24T09:54:34Z",
+      "side": 1,
+      "message": "nit: missing a closing parenthesis.",
+      "revId": "f447f478a8d2f7260d6afc7cc2fd30bc9c8ff8c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cec37fb_950c166a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-24T09:54:34Z",
+      "side": 1,
+      "message": "It\u0027s only quadratic if the value stack grows linearly. Not a super important detail, but maybe add it for clarity.",
+      "revId": "f447f478a8d2f7260d6afc7cc2fd30bc9c8ff8c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "febf569d_2520749c",
@@ -14,6 +48,23 @@
       "writtenOn": "2023-05-23T17:31:01Z",
       "side": 1,
       "message": "@clemensb@chromium.org: PTAL.\nThis should fix the fuzzer oom issues.\nIf you feel that we should continue discussing whether `array.new_fixed` should generate \"large\" arrays, I\u0027m happy to continue that offline! 😊",
+      "revId": "f447f478a8d2f7260d6afc7cc2fd30bc9c8ff8c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1b97c32_335c5946",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-24T09:54:34Z",
+      "side": 1,
+      "message": "I am afraid it\u0027s not this simple. The returned `Label` lives inside the `OutOfLineCode`, which lives in a `ZoneVector`. If the vector grows, that pointer can get stale. We can probably still access it because zone memory is not reused, but technically it\u0027s a use-after-free.\n\nSince `CheckMaxSteps` is already called in `StartFunctionBody`, right after `StackCheck`, the `OutOfLineCode` object for this trap should always be the second entry in the vector. Maybe we can `CHECK` for that and then always get the label fresh from `out_of_line_code_[1]-\u003elabel`?",
       "revId": "f447f478a8d2f7260d6afc7cc2fd30bc9c8ff8c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
