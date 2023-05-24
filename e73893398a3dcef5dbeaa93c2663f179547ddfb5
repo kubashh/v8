@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de9ad692_02875d17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-24T14:00:58Z",
+      "side": 1,
+      "message": "Interesting, you are the first one without a chromium.org account in the COMMON_OWNERS file.\nLGTM from my side, but you need Michael\u0027s review anyway.",
+      "revId": "e73893398a3dcef5dbeaa93c2663f179547ddfb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
