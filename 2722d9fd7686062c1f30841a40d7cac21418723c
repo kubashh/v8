@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac17f41b_0f212938",
+        "filename": "src/common/OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-05-24T13:56:11Z",
+      "side": 1,
+      "message": "I would suggest to just make you a common owner instead. This list typically has all V8 engineers.",
+      "revId": "2722d9fd7686062c1f30841a40d7cac21418723c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
