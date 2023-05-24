@@ -9,6 +9,7 @@
 // tier up `f` before we get a chance to enter the OSR loop.
 // Flags: --max-bytecode-size-for-early-opt=0
 // Flags: --osr-from-maglev
+// Flags: --always-osr-from-maglev
 
 let keep_going = 10000000;  // A counter to avoid test hangs on failure.
 let i;  // The loop counter for the test function.

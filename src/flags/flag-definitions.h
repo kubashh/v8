@@ -682,8 +682,13 @@ DEFINE_INT(invocation_count_for_feedback_allocation, 8,
 // Tiering: Maglev.
 DEFINE_INT(invocation_count_for_maglev, 400,
            "invocation count required for optimizing with Maglev")
+DEFINE_INT(invocation_count_for_maglev_osr, 100,
+           "invocation count required for maglev OSR")
 DEFINE_BOOL(osr_from_maglev, false,
-            "whether we try to OSR to Turbofan from Maglev")
+            "whether we try to OSR to Turbofan from OSR'd Maglev")
+DEFINE_BOOL(always_osr_from_maglev, false,
+            "whether we try to OSR to Turbofan from any Maglev")
+DEFINE_VALUE_IMPLICATION(always_osr_from_maglev, osr_from_maglev, true)
 
 // Tiering: Turbofan.
 DEFINE_INT(invocation_count_for_turbofan, 3000,
@@ -996,6 +1001,9 @@ DEFINE_BOOL(turbo_inline_array_builtins, true,
 DEFINE_BOOL(use_osr, true, "use on-stack replacement")
 DEFINE_EXPERIMENTAL_FEATURE(maglev_osr,
                             "use maglev as on-stack replacement target")
+// When using maglev as OSR target allow us to tier up further
+DEFINE_WEAK_VALUE_IMPLICATION(maglev_osr, osr_from_maglev, true)
+DEFINE_NEG_VALUE_IMPLICATION(use_osr, maglev_osr, false)
 DEFINE_BOOL(concurrent_osr, true, "enable concurrent OSR")
 
 // TODO(dmercadier): re-enable Turbofan's string builder once it's fixed.
