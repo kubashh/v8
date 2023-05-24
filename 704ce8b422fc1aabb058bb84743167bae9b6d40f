@@ -16,6 +16,52 @@
       "message": "PTAL, thanks",
       "revId": "704ce8b422fc1aabb058bb84743167bae9b6d40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef13707d_00cd81a0",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2619,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-24T06:44:04Z",
+      "side": 1,
+      "message": "Can we also rename that to JSPrimitiveKind?",
+      "range": {
+        "startLine": 2619,
+        "startChar": 13,
+        "endLine": 2619,
+        "endChar": 17
+      },
+      "revId": "704ce8b422fc1aabb058bb84743167bae9b6d40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63def4ed_f7fbe443",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-24T06:44:04Z",
+      "side": 1,
+      "message": "UntaggedKind?",
+      "range": {
+        "startLine": 2748,
+        "startChar": 13,
+        "endLine": 2748,
+        "endChar": 17
+      },
+      "revId": "704ce8b422fc1aabb058bb84743167bae9b6d40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
