@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ab4e81e_bda6113c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 7701,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 0,
+      "message": "Leszek told me that this distance should have been bumped by the size of the current_bytecode, so shouldn\u0027t be 0 even for empty loops. That would be a nice alternative fix... although it would also always make it \u003e0 I suppose.?",
+      "revId": "b25f4c0d58623135992c00b78eac42f04de5d299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

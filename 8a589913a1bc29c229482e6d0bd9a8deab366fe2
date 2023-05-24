@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cebd8697_6c0626a2",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 1509,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "If we have Turbofan code we probably always want to go there?",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38ab8d93_b4c50449",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "We should make sure we\u0027re not tiering down OSR code for some reason? E.g., what if we had deoptimized maglev OSR code, started a new maglev OSR, while we had already started Turbofan OSR that was maybe finished before finishing maglev osr (which maybe started later?). At least DCHECK/CHECK so we can find this case with fuzzing if it happens. Or check the current slot.",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "038a16b9_f46baa2d",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "I think we\u0027ll use the maglev budget if we Maglev OSR but the installed code kind is still below maglev for maglev-osr -\u003e turbofan-osr. That doesn\u0027t seem ideal :)",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "720d50c3_aff981cd",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "Only for non-OSR code as well.",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "196c6316_8198819b",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "`CHECK_EQ`",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fa606b5_93486f3a",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "`CHECK_LE` is a bit more useful to debugging",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a645d129_ebb4a064",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "`BindJumpTarget` for cfi",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2cc3f9_516f30f3",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "`CHECK_EQ`",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8660696f_5b2758fb",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "`{}` around the statement below.",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d476b68_dbf167b8",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "nested",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f2cbae5_40d9f290",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "During the prewalk of the bytecode, if we do a full function walk even for OSR, we could identify all the unreachable paths and avoid the need for these local workarounds by skipping unreachable bytecode directly.",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e934c384_98ad7f31",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-24T14:36:46Z",
+      "side": 1,
+      "message": "Not for this CL, but I believe we should process these node in a different list, similar to what we do for constants.",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
