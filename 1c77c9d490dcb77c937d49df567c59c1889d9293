@@ -35,6 +35,92 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80bf7130_90d9137c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:13:23Z",
+      "side": 1,
+      "message": "some initial comments",
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26e60a98_ab592388",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:13:23Z",
+      "side": 1,
+      "message": "this isn\u0027t very clean, what you\u0027re doing here is saying \"requesting maglev code can produce turbofan code\".\n\nIt does, however, make sense that for OSR we just want \"any code that you can give us\". This suggests to be that we actually want to get rid of `code_kind` here, and move the `code.kind() !\u003d code_kind` check to the caller.",
+      "range": {
+        "startLine": 944,
+        "startChar": 0,
+        "endLine": 952,
+        "endChar": 9
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cff99ea_e3ede41c",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:13:23Z",
+      "side": 1,
+      "message": "should you be checking IsInProgress here too, to avoid resetting osr urgency for that case?",
+      "range": {
+        "startLine": 1314,
+        "startChar": 4,
+        "endLine": 1314,
+        "endChar": 6
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "465839de_553ce9e3",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 3992,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:13:23Z",
+      "side": 1,
+      "message": "if we have active turbofan code, but still triggered maglev OSR, maybe we still want to insert that maglev OSR code into the OSR cache slot?",
+      "range": {
+        "startLine": 3992,
+        "startChar": 39,
+        "endLine": 3992,
+        "endChar": 56
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d088fb2_bbb0ae6f",
@@ -71,6 +157,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd4222cc_8645c1ec",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:13:23Z",
+      "side": 1,
+      "message": "so these slots are permanently blocked? Could we instead pre-initialise slots.top to be one past the end of the bytecode frame (or pre-populate free_slots with all the dead bytecode register slots) and get rid of initially_used?",
+      "range": {
+        "startLine": 802,
+        "startChar": 14,
+        "endLine": 802,
+        "endChar": 28
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08c572ae_dfcfd1f7",
+        "filename": "src/maglev/x64/maglev-assembler-x64.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:13:23Z",
+      "side": 1,
+      "message": "why not bail out for lazy deoptimized osr code? Do we need to add an assert here that this code isn\u0027t lazy deoptimized?",
+      "range": {
+        "startLine": 638,
+        "startChar": 2,
+        "endLine": 638,
+        "endChar": 4
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70f8e99a_4e1d2588",
+        "filename": "src/maglev/x64/maglev-assembler-x64.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:13:23Z",
+      "side": 1,
+      "message": "is this check unnecessary? Or perhaps the other one is unnecessary?",
+      "range": {
+        "startLine": 691,
+        "startChar": 8,
+        "endLine": 691,
+        "endChar": 56
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0819d6e_ec1f25b5",
         "filename": "src/maglev/x64/maglev-assembler-x64.cc",
         "patchSetId": 26
@@ -82,6 +237,52 @@
       "writtenOn": "2023-05-25T09:19:53Z",
       "side": 1,
       "message": "`CHECK_LE`",
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72206d9f_93c7546d",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:13:23Z",
+      "side": 1,
+      "message": "is this DCHECK guaranteed, with concurrent OSR? Maybe it should be an actual `if`?",
+      "range": {
+        "startLine": 398,
+        "startChar": 0,
+        "endLine": 400,
+        "endChar": 3
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f529f763_84ac674c",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:13:23Z",
+      "side": 1,
+      "message": "why check these flags and not just `v8_flags.osr_from_maglev`?",
+      "range": {
+        "startLine": 653,
+        "startChar": 6,
+        "endLine": 653,
+        "endChar": 47
+      },
       "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
