@@ -16,6 +16,29 @@
       "message": "Michael and Igor, PTAL again.\n\nThe original version broke --cache\u003dcode because that variant allocates a `v8::Context` in a client isolate before the main isolate. `Isolate::MaybeInitializeAlwaysSharedSpaceJSObjectMap` now uses a CAS so that the first `v8::Context` that a process allocates initializes the shared maps.",
       "revId": "ba0b2a846ba1f6b78ff6cbc9bcf6e3d3122395c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9836b05b_87e1033f",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4237,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-25T09:47:01Z",
+      "side": 1,
+      "message": "Ugh...",
+      "range": {
+        "startLine": 4237,
+        "startChar": 5,
+        "endLine": 4237,
+        "endChar": 57
+      },
+      "revId": "ba0b2a846ba1f6b78ff6cbc9bcf6e3d3122395c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
