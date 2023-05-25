@@ -16,6 +16,75 @@
       "message": "thanks a lot for the comments. here are some replies and also some fixes. I am still investigating the idea of marking offset 0 as dead.",
       "revId": "ecf0200cb034ee924d613748743cea76cca8ba9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "282095f5_4f049e51",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T14:11:16Z",
+      "side": 1,
+      "message": "what happens if the OSR loop header is at offset zero?",
+      "range": {
+        "startLine": 707,
+        "startChar": 21,
+        "endLine": 707,
+        "endChar": 37
+      },
+      "revId": "ecf0200cb034ee924d613748743cea76cca8ba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2263370_30ae64d0",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 7854,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T14:11:16Z",
+      "side": 1,
+      "message": "you don\u0027t need to check this since you\u0027re checking it above",
+      "range": {
+        "startLine": 7854,
+        "startChar": 6,
+        "endLine": 7854,
+        "endChar": 31
+      },
+      "revId": "ecf0200cb034ee924d613748743cea76cca8ba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d2ab22b_5b1709f9",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 7859,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T14:11:16Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to clear this, since this JumpLoop will be the last thing trying to access this merge state. You could maybe even zap it with an invalid non-zero pointer.",
+      "range": {
+        "startLine": 7859,
+        "startChar": 4,
+        "endLine": 7859,
+        "endChar": 36
+      },
+      "revId": "ecf0200cb034ee924d613748743cea76cca8ba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
