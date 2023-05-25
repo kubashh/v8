@@ -16,6 +16,74 @@
       "message": "PTAL",
       "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2c26365_b26482a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-25T09:19:53Z",
+      "side": 1,
+      "message": "Great work!\n\nWrt MarkBytecodeDead, I meant we could actually start at 0 to avoid even checking loops separately later, but I\u0027m ok with either solution. We can also refine later.",
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d088fb2_bbb0ae6f",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-25T09:19:53Z",
+      "side": 1,
+      "message": "You could have 2 loops, one that skips infos until the entry point and then one that handles all the infos afterwards... Same below. Either way.",
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10fa8649_9ff470ee",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-25T09:19:53Z",
+      "side": 1,
+      "message": "What about setting `entrypoint_` to `kFunctionEntryBytecodeOffset` instead of 0? :) That way it wouldn\u0027t lie in one case...",
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0819d6e_ec1f25b5",
+        "filename": "src/maglev/x64/maglev-assembler-x64.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-05-25T09:19:53Z",
+      "side": 1,
+      "message": "`CHECK_LE`",
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
