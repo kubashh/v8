@@ -16,6 +16,75 @@
       "message": "PTAL",
       "revId": "35354fc155fd238b3dfb0182ea57d205dc078d24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8658c2ea_37b0e37f",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:29:27Z",
+      "side": 1,
+      "message": "include the inline level in the print in case there\u0027s multiple levels of inlining",
+      "range": {
+        "startLine": 1855,
+        "startChar": 18,
+        "endLine": 1855,
+        "endChar": 30
+      },
+      "revId": "35354fc155fd238b3dfb0182ea57d205dc078d24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24f36519_8f7278e2",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5251,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:29:27Z",
+      "side": 1,
+      "message": "maybe something like `terminated_with_fused_branch_` or similar",
+      "range": {
+        "startLine": 5251,
+        "startChar": 31,
+        "endLine": 5251,
+        "endChar": 56
+      },
+      "revId": "35354fc155fd238b3dfb0182ea57d205dc078d24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2522ca5b_e1612b37",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5252,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T12:29:27Z",
+      "side": 1,
+      "message": "you should DCHECK that `current_block_` is not null",
+      "range": {
+        "startLine": 5252,
+        "startChar": 11,
+        "endLine": 5252,
+        "endChar": 17
+      },
+      "revId": "35354fc155fd238b3dfb0182ea57d205dc078d24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
