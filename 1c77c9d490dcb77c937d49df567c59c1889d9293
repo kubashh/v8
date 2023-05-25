@@ -77,6 +77,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b202af0_025bbf2d",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "I am torn. This is only used for the DCHECK later. And it seems to be useful sometimes to detect when we get unexpected code kinds here. So I would like to carve out an as small as possible exception. (e.g. if we request tf code since we know we run maglev, we better get it). Also this is just an artifact of our maglev-\u003etf osr implementation that briefly goes to the interpreter for this.",
+      "parentUuid": "26e60a98_ab592388",
+      "range": {
+        "startLine": 944,
+        "startChar": 0,
+        "endLine": 952,
+        "endChar": 9
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2cff99ea_e3ede41c",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 26
@@ -88,6 +112,30 @@
       "writtenOn": "2023-05-25T12:13:23Z",
       "side": 1,
       "message": "should you be checking IsInProgress here too, to avoid resetting osr urgency for that case?",
+      "range": {
+        "startLine": 1314,
+        "startChar": 4,
+        "endLine": 1314,
+        "endChar": 6
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c34ad3a8_194a8bcf",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cff99ea_e3ede41c",
       "range": {
         "startLine": 1314,
         "startChar": 4,
@@ -123,6 +171,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b0f857c_0ceb52b0",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 3992,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "yes, that is what I am trying to do here. don\u0027t abort maglev osr jobs, even if we have tf code. or did I misunderstand you?",
+      "parentUuid": "465839de_553ce9e3",
+      "range": {
+        "startLine": 3992,
+        "startChar": 39,
+        "endLine": 3992,
+        "endChar": 56
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4d088fb2_bbb0ae6f",
         "filename": "src/maglev/maglev-graph-builder.cc",
         "patchSetId": 26
@@ -134,6 +206,24 @@
       "writtenOn": "2023-05-25T09:19:53Z",
       "side": 1,
       "message": "You could have 2 loops, one that skips infos until the entry point and then one that handles all the infos afterwards... Same below. Either way.",
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4aec9f3_d941763d",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d088fb2_bbb0ae6f",
       "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af05fbfe_892d905b",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "Everything else gets a lot more cumbersome. whenever I want to use the entrypoint as an index I will need an if to check for the None case. It\u0027s not really lying either. Normal function entry is at offset 0.",
+      "parentUuid": "10fa8649_9ff470ee",
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd4222cc_8645c1ec",
@@ -168,6 +276,30 @@
       "writtenOn": "2023-05-25T12:13:23Z",
       "side": 1,
       "message": "so these slots are permanently blocked? Could we instead pre-initialise slots.top to be one past the end of the bytecode frame (or pre-populate free_slots with all the dead bytecode register slots) and get rid of initially_used?",
+      "range": {
+        "startLine": 802,
+        "startChar": 14,
+        "endLine": 802,
+        "endChar": 28
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3cf199e_a640e703",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "They are not permanently blocked as the regalloc puts them on the freelist when they go out of scope. They are only blocked from being used initially. see `StraightForwardRegisterAllocator::UpdateUse`",
+      "parentUuid": "fd4222cc_8645c1ec",
       "range": {
         "startLine": 802,
         "startChar": 14,
@@ -203,6 +335,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "50596729_577712ab",
+        "filename": "src/maglev/x64/maglev-assembler-x64.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "The other side of an OSR checks if the code is deoptimized before jumping to it. Or do you know of an exception to this? Also rbx is not set here.",
+      "parentUuid": "08c572ae_dfcfd1f7",
+      "range": {
+        "startLine": 638,
+        "startChar": 2,
+        "endLine": 638,
+        "endChar": 4
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "70f8e99a_4e1d2588",
         "filename": "src/maglev/x64/maglev-assembler-x64.cc",
         "patchSetId": 26
@@ -214,6 +370,30 @@
       "writtenOn": "2023-05-25T12:13:23Z",
       "side": 1,
       "message": "is this check unnecessary? Or perhaps the other one is unnecessary?",
+      "range": {
+        "startLine": 691,
+        "startChar": 8,
+        "endLine": 691,
+        "endChar": 56
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d2ca328_48e89df4",
+        "filename": "src/maglev/x64/maglev-assembler-x64.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "of course it is...",
+      "parentUuid": "70f8e99a_4e1d2588",
       "range": {
         "startLine": 691,
         "startChar": 8,
@@ -241,6 +421,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85d930f4_ec72bb90",
+        "filename": "src/maglev/x64/maglev-assembler-x64.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0819d6e_ec1f25b5",
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72206d9f_93c7546d",
@@ -264,6 +462,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6df7b79_9b889b90",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "actually yes, if maglev takes forever to compile. highly unlikely, but cannot rule out. so let\u0027s make it an if.",
+      "parentUuid": "72206d9f_93c7546d",
+      "range": {
+        "startLine": 398,
+        "startChar": 0,
+        "endLine": 400,
+        "endChar": 3
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f529f763_84ac674c",
@@ -277,6 +499,30 @@
       "writtenOn": "2023-05-25T12:13:23Z",
       "side": 1,
       "message": "why check these flags and not just `v8_flags.osr_from_maglev`?",
+      "range": {
+        "startLine": 653,
+        "startChar": 6,
+        "endLine": 653,
+        "endChar": 47
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d55c412_a428d956",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T13:34:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f529f763_84ac674c",
       "range": {
         "startLine": 653,
         "startChar": 6,
