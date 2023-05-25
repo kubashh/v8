@@ -162,6 +162,11 @@ class CollectionsBuiltinsAssembler : public BaseCollectionsAssembler {
                                                     Label* if_true,
                                                     Label* if_false);
 
+  // Adds an element to a set if the element is not already in the set.
+  TNode<OrderedHashSet> AddToSetTable(TNode<Object> context,
+                                      TNode<OrderedHashSet> table,
+                                      TNode<Object> key);
+
  protected:
   template <typename IteratorType>
   TNode<HeapObject> AllocateJSCollectionIterator(

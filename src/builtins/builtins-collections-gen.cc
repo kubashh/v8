@@ -1648,6 +1648,33 @@ TF_BUILTIN(SetPrototypeAdd, CollectionsBuiltinsAssembler) {
   Return(receiver);
 }
 
+TNode<OrderedHashSet> CollectionsBuiltinsAssembler::AddToSetTable(
+    const TNode<Object> context, TNode<OrderedHashSet> table,
+    TNode<Object> key) {
+  key = NormalizeNumberKey(key);
+
+  GrowCollection<OrderedHashSet> grow = [this, context, table]() {
+    CallRuntime(Runtime::kEnsureOrderedHashSetGrowable, context, table);
+    return table;
+  };
+
+  StoreAtEntry<OrderedHashSet> store_at_new_entry =
+      [this, key](const TNode<OrderedHashSet> table,
+                  const TNode<IntPtrT> entry_start) {
+        StoreKeyInOrderedHashSetEntry(table, key, entry_start);
+      };
+
+  StoreAtEntry<OrderedHashSet> store_at_existing_entry =
+      [](const TNode<OrderedHashSet>, const TNode<IntPtrT>) {
+        // If the entry was found, there is nothing to do.
+      };
+
+  AddToOrderedHashTable(table, key, grow, store_at_new_entry,
+                        store_at_existing_entry);
+
+  return table;
+}
+
 void CollectionsBuiltinsAssembler::StoreKeyInOrderedHashSetEntry(
     const TNode<OrderedHashSet> table, const TNode<Object> key,
     const TNode<IntPtrT> entry_start) {
