@@ -158,6 +158,7 @@ class StraightForwardRegisterAllocator {
     int top = 0;
     // Sorted from earliest freed_at_position to latest freed_at_position.
     std::vector<SpillSlotInfo> free_slots;
+    int pinned_slots_high_watermark_ = 0;
   };
 
   SpillSlots untagged_;
