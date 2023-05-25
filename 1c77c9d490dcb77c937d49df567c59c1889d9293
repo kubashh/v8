@@ -149,6 +149,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb9255de_35781f0e",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T15:41:22Z",
+      "side": 1,
+      "message": "Then I revert back to my original comment, which is that if we\u0027re doing this sort of adjustment here, then we shouldn\u0027t have this DCHECK in here at all, but should hoist out the code.kind() check to the caller (since the non-OSR caller cares about the code kind, while the OSR caller doesn\u0027t).",
+      "parentUuid": "7e2694b6_72223f1a",
+      "range": {
+        "startLine": 944,
+        "startChar": 0,
+        "endLine": 952,
+        "endChar": 9
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2cff99ea_e3ede41c",
         "filename": "src/codegen/compiler.cc",
         "patchSetId": 26
