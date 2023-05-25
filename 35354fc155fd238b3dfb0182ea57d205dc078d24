@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "851e0f8e_7d68bdad",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-05-25T13:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8658c2ea_37b0e37f",
+      "range": {
+        "startLine": 1855,
+        "startChar": 18,
+        "endLine": 1855,
+        "endChar": 30
+      },
+      "revId": "35354fc155fd238b3dfb0182ea57d205dc078d24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24f36519_8f7278e2",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20dbbf50_e45c047c",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5251,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-05-25T13:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24f36519_8f7278e2",
+      "range": {
+        "startLine": 5251,
+        "startChar": 31,
+        "endLine": 5251,
+        "endChar": 56
+      },
+      "revId": "35354fc155fd238b3dfb0182ea57d205dc078d24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2522ca5b_e1612b37",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-05-25T12:29:27Z",
       "side": 1,
       "message": "you should DCHECK that `current_block_` is not null",
+      "range": {
+        "startLine": 5252,
+        "startChar": 11,
+        "endLine": 5252,
+        "endChar": 17
+      },
+      "revId": "35354fc155fd238b3dfb0182ea57d205dc078d24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d5bdfb7_e7402cdc",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5252,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-05-25T13:07:51Z",
+      "side": 1,
+      "message": "This won\u0027t hold in general, as we can \"skip\" functions if they do nothing interesting w.r.t branch fusing.\nE.g. for\n```\nfunction test_inner() { return ...; }\nfunction test() { return test_inner(); }\nfunction foo() { if (test()) { ...\n```\nthere is no active block for `test`, as the block from `test_inner` was pushed directly to `foo`.\n\nAdded a DCHECK that the current BC is `kReturn` if we don\u0027t have a block... That should be good enough?",
+      "parentUuid": "2522ca5b_e1612b37",
       "range": {
         "startLine": 5252,
         "startChar": 11,
