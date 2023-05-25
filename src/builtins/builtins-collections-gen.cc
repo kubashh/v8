@@ -1623,29 +1623,96 @@ TF_BUILTIN(SetPrototypeAdd, CollectionsBuiltinsAssembler) {
 
   ThrowIfNotInstanceType(context, receiver, JS_SET_TYPE, "Set.prototype.add");
 
+  StoreObjectField(CAST(receiver), JSMap::kTableOffset,
+                   AddToSetTable(context, receiver, key));
+
+  Return(receiver);
+}
+
+TNode<OrderedHashSet> CollectionsBuiltinsAssembler::AddToSetTable(
+    const TNode<Object> context, TNode<Object> receiver, TNode<Object> key) {
   key = NormalizeNumberKey(key);
 
-  GrowCollection<OrderedHashSet> grow = [this, context, receiver]() {
-    CallRuntime(Runtime::kSetGrow, context, receiver);
-    return LoadObjectField<OrderedHashSet>(CAST(receiver), JSSet::kTableOffset);
-  };
-
-  StoreAtEntry<OrderedHashSet> store_at_new_entry =
-      [this, key](const TNode<OrderedHashSet> table,
-                  const TNode<IntPtrT> entry_start) {
-        StoreKeyInOrderedHashSetEntry(table, key, entry_start);
-      };
-
-  StoreAtEntry<OrderedHashSet> store_at_existing_entry =
-      [](const TNode<OrderedHashSet>, const TNode<IntPtrT>) {
-        // If the entry was found, there is nothing to do.
-      };
-
   const TNode<OrderedHashSet> table =
-      LoadObjectField<OrderedHashSet>(CAST(receiver), JSSet::kTableOffset);
-  AddToOrderedHashTable(table, key, grow, store_at_new_entry,
-                        store_at_existing_entry);
-  Return(receiver);
+      LoadObjectField<OrderedHashSet>(CAST(receiver), JSMap::kTableOffset);
+
+  TVARIABLE(OrderedHashSet, result);
+  Label done(this);
+
+  TVARIABLE(IntPtrT, entry_start_position_or_hash, IntPtrConstant(0));
+  Label entry_found(this), not_found(this);
+
+  TryLookupOrderedHashTableIndex<OrderedHashSet>(
+      table, key, &entry_start_position_or_hash, &entry_found, &not_found);
+
+  BIND(&entry_found);
+  {
+    // The entry was found, there is nothing to do.
+    result = table;
+    Goto(&done);
+  }
+
+  Label no_hash(this), add_entry(this), store_new_entry(this);
+  BIND(&not_found);
+  {
+    // If we have a hash code, we can start adding the new entry.
+    GotoIf(IntPtrGreaterThan(entry_start_position_or_hash.value(),
+                             IntPtrConstant(0)),
+           &add_entry);
+
+    // Otherwise, go to runtime to compute the hash code.
+    entry_start_position_or_hash = SmiUntag(CallGetOrCreateHashRaw(CAST(key)));
+    Goto(&add_entry);
+  }
+
+  BIND(&add_entry);
+  TVARIABLE(IntPtrT, number_of_buckets);
+  TVARIABLE(IntPtrT, occupancy);
+  TVARIABLE(OrderedHashSet, table_var, table);
+  {
+    // Check we have enough space for the entry.
+    number_of_buckets = PositiveSmiUntag(CAST(UnsafeLoadFixedArrayElement(
+        table, OrderedHashSet::NumberOfBucketsIndex())));
+
+    static_assert(OrderedHashSet::kLoadFactor == 2);
+    const TNode<WordT> capacity = WordShl(number_of_buckets.value(), 1);
+    const TNode<IntPtrT> number_of_elements =
+        LoadAndUntagPositiveSmiObjectField(
+            table, OrderedHashSet::NumberOfElementsOffset());
+    const TNode<IntPtrT> number_of_deleted = LoadAndUntagPositiveSmiObjectField(
+        table, OrderedHashSet::NumberOfDeletedElementsOffset());
+    occupancy = IntPtrAdd(number_of_elements, number_of_deleted);
+    GotoIf(IntPtrLessThan(occupancy.value(), capacity), &store_new_entry);
+
+    // We do not have enough space, grow the table and reload the relevant
+    // fields.
+    CallRuntime(Runtime::kSetGrow, context, receiver);
+    table_var =
+        LoadObjectField<OrderedHashSet>(CAST(receiver), JSMap::kTableOffset);
+    number_of_buckets = PositiveSmiUntag(CAST(UnsafeLoadFixedArrayElement(
+        table_var.value(), OrderedHashSet::NumberOfBucketsIndex())));
+    const TNode<IntPtrT> new_number_of_elements =
+        LoadAndUntagPositiveSmiObjectField(
+            table_var.value(), OrderedHashSet::NumberOfElementsOffset());
+    const TNode<IntPtrT> new_number_of_deleted =
+        LoadAndUntagPositiveSmiObjectField(
+            table_var.value(), OrderedHashSet::NumberOfDeletedElementsOffset());
+    occupancy = IntPtrAdd(new_number_of_elements, new_number_of_deleted);
+
+    Goto(&store_new_entry);
+  }
+  BIND(&store_new_entry);
+  {
+    // Store the key, value and connect the element to the bucket chain.
+    StoreOrderedHashSetNewEntry(table_var.value(), key,
+                                entry_start_position_or_hash.value(),
+                                number_of_buckets.value(), occupancy.value());
+    result = table_var.value();
+    Goto(&done);
+  }
+
+  BIND(&done);
+  return result.value();
 }
 
 void CollectionsBuiltinsAssembler::StoreKeyInOrderedHashSetEntry(
