@@ -312,6 +312,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a413bf9f_db354c22",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T13:44:18Z",
+      "side": 1,
+      "message": "It\u0027s still a messy design -- this then means that we then have free slots whose index can be greater than slots.top. The slot reuse mechanism is already only working through a carefully balanced set of maintained invariants, I don\u0027t like the idea of making it more complex since if it breaks, it can cause issues that are _very_ hard to debug; especially since the initial set of used slots is, afaict, almost entirely a dense range starting from near zero",
+      "parentUuid": "a3cf199e_a640e703",
+      "range": {
+        "startLine": 802,
+        "startChar": 14,
+        "endLine": 802,
+        "endChar": 28
+      },
+      "revId": "1c77c9d490dcb77c937d49df567c59c1889d9293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08c572ae_dfcfd1f7",
         "filename": "src/maglev/x64/maglev-assembler-x64.cc",
         "patchSetId": 26
