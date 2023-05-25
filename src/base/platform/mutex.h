@@ -381,6 +381,87 @@ class V8_NODISCARD SharedMutexGuardIf final {
   base::Optional<SharedMutexGuard<kIsShared, Behavior>> mutex_;
 };
 
+// This wrapper class provides synchronized storage for value of type T and
+// provides an operator-> which ensures that access to the value is also
+// done while holding the lock.
+// Essentially, the following code
+//   Synchronized<T> obj;
+//   ...
+//   result = obj->foo();
+//
+// is semantically equivalent to
+//
+//   base::RecursiveMutex obj_mutex;
+//   T obj;
+//   ...
+//   {
+//     base::RecursiveMutexGuard guard(&obj_mutex);
+//     result = obj.foo();
+//   }
+//
+// Note that this wrapper has to use RecursiveMutex in order to handle cases
+// when the value is accessed multiple times in the same expression.
+// So, while
+//   Synchronized<T> obj;
+//   ...
+//   result = obj->foo() + obj->bar();
+//
+// is still semantically equivalent to
+//
+//   base::RecursiveMutex obj_mutex;
+//   T obj;
+//   ...
+//   {
+//     base::RecursiveMutexGuard guard(&obj_mutex);
+//     result = obj.foo() + obj.bar();
+//   }
+// the former code will lock the mutex twice. Thus for the cases where
+// simplicity does not outweigh the costs it's worth using the "manual"
+// approach.
+template <typename T>
+class Synchronized {
+ public:
+  // {GuardedRef} is returned by {Synchronized::operator->}. It should
+  // never be stored anywhere or used in any other code; no one should ever
+  // have to spell out {GuardedRef} in code. Its only purpose is to lock the
+  // mutex and to be dereferenced immediately by "operator-> chaining".
+  // The lock will be held until end of this object's lifetime which ends
+  // at the end of the full statement.
+  class GuardedRef {
+   public:
+    T& operator->() { return owner_.value_; }
+
+   private:
+    friend class Synchronized<T>;
+    explicit GuardedRef(RecursiveMutex* mutex, Synchronized<T>& owner)
+        : guard_(mutex), owner_(owner) {}
+
+    RecursiveMutexGuard guard_;
+    Synchronized<T>& owner_;
+  };
+
+  explicit Synchronized(T&& value) : value_(value) {}
+
+  Synchronized(const Synchronized&) = delete;
+  Synchronized& operator=(const Synchronized&) = delete;
+
+  T& get() {
+    RecursiveMutexGuard guard(&mutex_);
+    return value_;
+  }
+
+  void set(T value) {
+    RecursiveMutexGuard guard(&mutex_);
+    value_ = value;
+  }
+
+  V8_INLINE GuardedRef operator->() { return GuardedRef{&mutex_, *this}; }
+
+ private:
+  RecursiveMutex mutex_;
+  T value_;
+};
+
 }  // namespace base
 }  // namespace v8
 

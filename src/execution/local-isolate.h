@@ -63,7 +63,7 @@ class V8_EXPORT_PRIVATE LocalIsolate final : private HiddenLocalFactory {
   inline Object root(RootIndex index) const;
   inline Handle<Object> root_handle(RootIndex index) const;
 
-  base::RandomNumberGenerator* fuzzer_rng() const {
+  base::Synchronized<base::RandomNumberGenerator*>& fuzzer_rng() const {
     return isolate_->fuzzer_rng();
   }
 

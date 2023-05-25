@@ -1588,7 +1588,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   base::RandomNumberGenerator* random_number_generator();
 
-  base::RandomNumberGenerator* fuzzer_rng();
+  base::Synchronized<base::RandomNumberGenerator*>& fuzzer_rng();
 
   // Generates a random number that is non-zero when masked
   // with the provided mask.
@@ -2227,7 +2227,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   std::vector<int> regexp_indices_;
   DateCache* date_cache_ = nullptr;
   base::RandomNumberGenerator* random_number_generator_ = nullptr;
-  base::RandomNumberGenerator* fuzzer_rng_ = nullptr;
+  base::Synchronized<base::RandomNumberGenerator*> fuzzer_rng_{nullptr};
   std::atomic<RAILMode> rail_mode_;
   v8::Isolate::AtomicsWaitCallback atomics_wait_callback_ = nullptr;
   void* atomics_wait_callback_data_ = nullptr;

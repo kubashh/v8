@@ -3781,8 +3781,8 @@ Isolate::~Isolate() {
   delete random_number_generator_;
   random_number_generator_ = nullptr;
 
-  delete fuzzer_rng_;
-  fuzzer_rng_ = nullptr;
+  delete fuzzer_rng_.get();
+  fuzzer_rng_.set(nullptr);
 
   delete debug_;
   debug_ = nullptr;
@@ -4975,14 +4975,14 @@ base::RandomNumberGenerator* Isolate::random_number_generator() {
   return ensure_rng_exists(&random_number_generator_, v8_flags.random_seed);
 }
 
-base::RandomNumberGenerator* Isolate::fuzzer_rng() {
-  if (fuzzer_rng_ == nullptr) {
+base::Synchronized<base::RandomNumberGenerator*>& Isolate::fuzzer_rng() {
+  if (fuzzer_rng_.get() == nullptr) {
     int64_t seed = v8_flags.fuzzer_random_seed;
     if (seed == 0) {
       seed = random_number_generator()->initial_seed();
     }
 
-    fuzzer_rng_ = new base::RandomNumberGenerator(seed);
+    fuzzer_rng_.set(new base::RandomNumberGenerator(seed));
   }
 
   return fuzzer_rng_;
