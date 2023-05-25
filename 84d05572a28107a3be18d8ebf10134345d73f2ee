@@ -16,6 +16,29 @@
       "message": "done. leszek, should I wait for more comments?",
       "revId": "84d05572a28107a3be18d8ebf10134345d73f2ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e09c963_e8342d57",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-25T15:44:44Z",
+      "side": 1,
+      "message": "why is this distinct from `top`?\n\nIn fact, I think this might be buggy -- if `top \u003e pinned_slots_high_watermark`, that means that some other node has assigned a new spill slot, one which might still be in use, but now you\u0027re adding that slot as a free slot.",
+      "range": {
+        "startLine": 804,
+        "startChar": 36,
+        "endLine": 804,
+        "endChar": 64
+      },
+      "revId": "84d05572a28107a3be18d8ebf10134345d73f2ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
