@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bd822de_bdec1f63",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 1509,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cebd8697_6c0626a2",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38ab8d93_b4c50449",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-05-24T14:36:46Z",
       "side": 1,
       "message": "We should make sure we\u0027re not tiering down OSR code for some reason? E.g., what if we had deoptimized maglev OSR code, started a new maglev OSR, while we had already started Turbofan OSR that was maybe finished before finishing maglev osr (which maybe started later?). At least DCHECK/CHECK so we can find this case with fuzzing if it happens. Or check the current slot.",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e44c20f_c67a14aa",
+        "filename": "src/codegen/compiler.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38ab8d93_b4c50449",
       "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "939f6003_fd6155b9",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "fixed by providing overrides and setting them from maglev compile",
+      "parentUuid": "038a16b9_f46baa2d",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "720d50c3_aff981cd",
@@ -65,6 +119,24 @@
       "writtenOn": "2023-05-24T14:36:46Z",
       "side": 1,
       "message": "Only for non-OSR code as well.",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2717ee84_9325de25",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "720d50c3_aff981cd",
       "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "904eb973_6fb35e66",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "196c6316_8198819b",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fa606b5_93486f3a",
@@ -99,6 +189,24 @@
       "writtenOn": "2023-05-24T14:36:46Z",
       "side": 1,
       "message": "`CHECK_LE` is a bit more useful to debugging",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efebb087_878b8e7d",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fa606b5_93486f3a",
       "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +228,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1786f83_c310efb5",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a645d129_ebb4a064",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa2cc3f9_516f30f3",
@@ -133,6 +259,24 @@
       "writtenOn": "2023-05-24T14:36:46Z",
       "side": 1,
       "message": "`CHECK_EQ`",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22c2d2e4_f9de647e",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa2cc3f9_516f30f3",
       "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -154,6 +298,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b408cca_fe971f16",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8660696f_5b2758fb",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d476b68_dbf167b8",
@@ -167,6 +329,24 @@
       "writtenOn": "2023-05-24T14:36:46Z",
       "side": 1,
       "message": "nested",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca948b83_76ae8a45",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d476b68_dbf167b8",
       "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -188,6 +368,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6deb323a_0c1678dc",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Awesome comment! Worked out nicely to get rid of a bunch of hacks.",
+      "parentUuid": "9f2cbae5_40d9f290",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e934c384_98ad7f31",
@@ -201,6 +399,24 @@
       "writtenOn": "2023-05-24T14:36:46Z",
       "side": 1,
       "message": "Not for this CL, but I believe we should process these node in a different list, similar to what we do for constants.",
+      "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "687089ef_71499037",
+        "filename": "src/maglev/maglev-regalloc.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T08:13:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e934c384_98ad7f31",
       "revId": "8a589913a1bc29c229482e6d0bd9a8deab366fe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
