@@ -1570,7 +1570,7 @@ Response V8DebuggerAgentImpl::evaluateOnCallFrame(
     wrapOptions = WrapOptions({WrapMode::kJson, {}});
   return scope.injectedScript()->wrapEvaluateResult(
       maybeResultValue, scope.tryCatch(), objectGroup.fromMaybe(""),
-      wrapOptions, throwOnSideEffect.fromMaybe(false), result,
+      &wrapOptions, throwOnSideEffect.fromMaybe(false), result,
       exceptionDetails);
 }
 
