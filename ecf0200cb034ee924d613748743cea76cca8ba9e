@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33db87d0_ce5facbe",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T14:51:17Z",
+      "side": 1,
+      "message": "ouch, right :/",
+      "parentUuid": "282095f5_4f049e51",
+      "range": {
+        "startLine": 707,
+        "startChar": 21,
+        "endLine": 707,
+        "endChar": 37
+      },
+      "revId": "ecf0200cb034ee924d613748743cea76cca8ba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2263370_30ae64d0",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "589852ee_96938e95",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 7854,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T14:51:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2263370_30ae64d0",
+      "range": {
+        "startLine": 7854,
+        "startChar": 6,
+        "endLine": 7854,
+        "endChar": 31
+      },
+      "revId": "ecf0200cb034ee924d613748743cea76cca8ba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d2ab22b_5b1709f9",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-05-25T14:11:16Z",
       "side": 1,
       "message": "I don\u0027t think you need to clear this, since this JumpLoop will be the last thing trying to access this merge state. You could maybe even zap it with an invalid non-zero pointer.",
+      "range": {
+        "startLine": 7859,
+        "startChar": 4,
+        "endLine": 7859,
+        "endChar": 36
+      },
+      "revId": "ecf0200cb034ee924d613748743cea76cca8ba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54140582_7a52cd98",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 7859,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-25T14:51:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d2ab22b_5b1709f9",
       "range": {
         "startLine": 7859,
         "startChar": 4,
