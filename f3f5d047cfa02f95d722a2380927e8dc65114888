@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f951a854_a0e5aed8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-25T23:55:27Z",
+      "side": 1,
+      "message": "This version is working. I still need to write more test cases and take care of the pointer to the new table in case of growth. Feel free to wait for them before reviewing this CL.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
