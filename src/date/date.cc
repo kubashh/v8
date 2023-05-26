@@ -551,6 +551,29 @@ DateBuffer FormatDate(const char* format, Args... args) {
   return buffer;
 }
 
+/**
+ * Writes an integer zero-padded to a length, and advances the cursor by the
+ * number of bytes written.
+ */
+inline void WriteZeroPaddedInteger(char*& s, int v, size_t padded_bytes) {
+  char* cursor = s + padded_bytes - 1;
+  while (cursor >= s) {
+    char digit = '0' + (v % 10);
+    *cursor = digit;
+    v /= 10;
+    cursor--;
+  }
+  s += padded_bytes;
+}
+
+/**
+ * Writes a character and advances the cursor.
+ */
+inline void WriteCharacter(char*& s, char c) {
+  *s = c;
+  s++;
+}
+
 }  // namespace
 
 DateBuffer ToDateString(double time_val, DateCache* date_cache,
@@ -591,18 +614,69 @@ DateBuffer ToDateString(double time_val, DateCache* date_cache,
                                    : "%s, %02d %s %04d %02d:%02d:%02d GMT",
                         kShortWeekDays[weekday], day, kShortMonths[month], year,
                         hour, min, sec);
-    case ToDateStringMode::kISODateAndTime:
-      if (year >= 0 && year <= 9999) {
-        return FormatDate("%04d-%02d-%02dT%02d:%02d:%02d.%03dZ", year,
-                          month + 1, day, hour, min, sec, ms);
-      } else if (year < 0) {
-        return FormatDate("-%06d-%02d-%02dT%02d:%02d:%02d.%03dZ", -year,
-                          month + 1, day, hour, min, sec, ms);
+    case ToDateStringMode::kISODateAndTime: {
+      // This manually coded hot path is more than 10x faster than the
+      // equivalent FormatDate.
+
+      // Size of the result string for four-digit years.
+      size_t size =
+          /* year */ 4 +
+          /* literal - */ 1 +
+          /* month */ 2 +
+          /* literal - */ 1 +
+          /* day */ 2 +
+          /* literal T */ 1 +
+          /* hour */ 2 +
+          /* literal : */ 1 +
+          /* minute */ 2 +
+          /* literal : */ 1 +
+          /* seconds */ 2 +
+          /* literal . */ 1 +
+          /* milliseconds */ 3 +
+          /* literal Z */ 1;
+
+      DateBuffer buffer;
+      char* cursor;
+
+      if (V8_LIKELY(year >= 0 && year <= 9999)) {
+        buffer.resize_no_init(size);
+        cursor = buffer.data();
+
+        WriteZeroPaddedInteger(cursor, year, 4);
       } else {
-        return FormatDate("+%06d-%02d-%02dT%02d:%02d:%02d.%03dZ", year,
-                          month + 1, day, hour, min, sec, ms);
+        // '+'/'-' followed by a six-digit year requires three additional bytes.
+        size += 3;
+        buffer.resize_no_init(size);
+        cursor = buffer.data();
+
+        if (year < 0) {
+          WriteCharacter(cursor, '-');
+          WriteZeroPaddedInteger(cursor, -year, 6);
+        } else {
+          WriteCharacter(cursor, '+');
+          WriteZeroPaddedInteger(cursor, year, 6);
+        }
       }
+
+      WriteCharacter(cursor, '-');
+      WriteZeroPaddedInteger(cursor, month + 1, 2);
+      WriteCharacter(cursor, '-');
+      WriteZeroPaddedInteger(cursor, day, 2);
+      WriteCharacter(cursor, 'T');
+      WriteZeroPaddedInteger(cursor, hour, 2);
+      WriteCharacter(cursor, ':');
+      WriteZeroPaddedInteger(cursor, min, 2);
+      WriteCharacter(cursor, ':');
+      WriteZeroPaddedInteger(cursor, sec, 2);
+      WriteCharacter(cursor, '.');
+      WriteZeroPaddedInteger(cursor, ms, 3);
+      WriteCharacter(cursor, 'Z');
+
+      DCHECK_EQ(buffer.data() + size, cursor);
+      return buffer;
+    }
   }
+
   UNREACHABLE();
 }
 
