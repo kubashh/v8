@@ -54,6 +54,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4320f3fc_15e2e815",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T23:07:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73b7202d_56ae1783",
+      "revId": "d3e72e86732bb7be77ffd10d658055c66bc3357e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "cbc70e6c_580b2f19",
         "filename": "src/builtins/set-union.tq",
         "patchSetId": 16
@@ -65,6 +83,24 @@
       "writtenOn": "2023-05-26T20:49:56Z",
       "side": 1,
       "message": "Wow I\u0027m surprised this compiles, that Torque automatically converts a `constexpr string` to `String`.",
+      "revId": "d3e72e86732bb7be77ffd10d658055c66bc3357e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2495914_1424ad5b",
+        "filename": "src/builtins/set-union.tq",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T23:07:05Z",
+      "side": 1,
+      "message": "😊 I also expected some errors related to converting, but got nothing.",
+      "parentUuid": "cbc70e6c_580b2f19",
       "revId": "d3e72e86732bb7be77ffd10d658055c66bc3357e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
