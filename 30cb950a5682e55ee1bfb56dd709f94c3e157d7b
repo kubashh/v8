@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23fac6c0_93f902dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-05-26T11:17:50Z",
+      "side": 1,
+      "message": "Looks good with two suggestions",
+      "revId": "30cb950a5682e55ee1bfb56dd709f94c3e157d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3a082ea_29d51522",
@@ -32,6 +49,24 @@
       "side": 1,
       "message": "Yes, exactly. For write access you\u0027ll need to use the trusted pkey().",
       "parentUuid": "f3a082ea_29d51522",
+      "revId": "30cb950a5682e55ee1bfb56dd709f94c3e157d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3617f49_deb3dddf",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-05-26T11:17:50Z",
+      "side": 1,
+      "message": "Alright, I guess we cannot (easily) DCHECK that requirement, so how about adding a short comment that this pkey must never be given write access or something like that?",
+      "parentUuid": "f5dee5c9_e09e3686",
       "revId": "30cb950a5682e55ee1bfb56dd709f94c3e157d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

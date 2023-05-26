@@ -34,6 +34,24 @@
       "parentUuid": "57e6b059_4569b7a2",
       "revId": "0f3425ca03372481c0aa6c7680212addd9e20c56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "938a661f_70bfcf53",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-05-26T11:17:50Z",
+      "side": 1,
+      "message": "Ok, would it make sense to only have a single `IsSupported()` that always checks the untrusted state? Or does that open the door for potential future security issues if e.g. an attacker makes it look like pkey support is not available? If so, maybe that\u0027s worth mentioning in a comment to explain why there are two versions?",
+      "parentUuid": "a7f56403_9d2e6ddd",
+      "revId": "0f3425ca03372481c0aa6c7680212addd9e20c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
