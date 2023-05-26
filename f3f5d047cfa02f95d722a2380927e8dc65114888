@@ -16,6 +16,176 @@
       "message": "This version is working. I still need to write more test cases and take care of the pointer to the new table in case of growth. Feel free to wait for them before reviewing this CL.",
       "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d81bc53_ecf28ac5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T14:58:55Z",
+      "side": 1,
+      "message": "Looks good! Mostly just tiny nits + a request for another test case.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9873323e_007b1c72",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1661,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T14:58:55Z",
+      "side": 1,
+      "message": "`TODO(v8:13556)`",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e028be2_2544223a",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T14:58:55Z",
+      "side": 1,
+      "message": "No action needed on this CL. But I filed https://github.com/tc39/proposal-set-methods/issues/98; seems like following the iterator helpers change we should also defer the callable check here.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "585a8ba0_fdd935cf",
+        "filename": "src/builtins/set-union.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T14:58:55Z",
+      "side": 1,
+      "message": "Nit: Eh, I don\u0027t think we need this comment since the method is in its own file.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b742bf55_7c071e5d",
+        "filename": "src/builtins/set-union.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T14:58:55Z",
+      "side": 1,
+      "message": "`TODO(v8:13556)`",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9057420a_79afdbfb",
+        "filename": "src/builtins/set-union.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T14:58:55Z",
+      "side": 1,
+      "message": "Nit: Weird comment format for step 8.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2e1d5ca_7a5c8c3d",
+        "filename": "src/objects/fixed-array.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T14:58:55Z",
+      "side": 1,
+      "message": "Leftover `extern macro` from a previous patchset.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ca26892_eb95e031",
+        "filename": "src/runtime/runtime-collections.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T14:58:55Z",
+      "side": 1,
+      "message": "Nit: Reading the other runtime function names, `OrderedHashSetEnsureGrowable` would be better.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8500b289_8ce485be",
+        "filename": "src/runtime/runtime-collections.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T14:58:55Z",
+      "side": 1,
+      "message": "The out-of-memory message here would be \"OrderedHashSet maximum size exceeded\", which is technically true but may be confusing to the developer since OrderedHashSet is an implementation detail.\n\nWhat I suggest is to take the method name as a `String` as the 2nd argument, and use `MessageTemplate::kOutOfMemory`, so the message would be `Set.prototype.union: Out of memory`.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c42747a_5e9fe782",
+        "filename": "test/mjsunit/harmony/set-methods.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T14:58:55Z",
+      "side": 1,
+      "message": "Please add a test for a set-like (an object with `.has`, `.size`, and `.keys`) as well.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
