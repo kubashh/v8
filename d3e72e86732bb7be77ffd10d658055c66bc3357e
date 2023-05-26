@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69701346_7799a7fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T20:49:56Z",
+      "side": 1,
+      "message": "Still lgtm.",
+      "revId": "d3e72e86732bb7be77ffd10d658055c66bc3357e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73b7202d_56ae1783",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T20:49:56Z",
+      "side": 1,
+      "message": "You captured `method_name` but didn\u0027t pass it to the runtime call.",
+      "revId": "d3e72e86732bb7be77ffd10d658055c66bc3357e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbc70e6c_580b2f19",
+        "filename": "src/builtins/set-union.tq",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T20:49:56Z",
+      "side": 1,
+      "message": "Wow I\u0027m surprised this compiles, that Torque automatically converts a `constexpr string` to `String`.",
+      "revId": "d3e72e86732bb7be77ffd10d658055c66bc3357e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
