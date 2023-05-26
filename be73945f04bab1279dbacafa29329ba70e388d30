@@ -33,6 +33,24 @@
       "message": "FYI, this won\u0027t set all of the Projections control inputs to `start`, since some Projections are created without going through GraphAssembler (in BytecodeGraphBuilder for instance, or, more generally, in most non-assembler places that do `common()-\u003eProjection(...)`). If that\u0027s fine with you, then feel free to proceed :)\n\nAlso, could you add a comment around https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/common-operator.cc;l\u003d1601, saying that the Control input of projection is not so useful, and depending on the circumstances could be just \"start\" (just so that it\u0027s a little bit less surprising for future readers).\n\nFinally, I wouldn\u0027t be surprised if the regression we observed when you first removed control inputs from Projection would come back with this CL :/ Still, I don\u0027t mind landing and seeing how it does.",
       "revId": "be73945f04bab1279dbacafa29329ba70e388d30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61dac20d_59cca975",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-05-26T09:04:34Z",
+      "side": 1,
+      "message": "Yes, the main purpose of this CL is to change the control input only of some projections, and not of all. I hope that the projection nodes with performance-critical control inputs were not created with the `GraphAssembler`, so that this CL does not have a negative performance impact.\n\nIf this CL also causes regressions, then another alternative would be to change only the control in put of the projections used in the fast api.\n\nI added more comments now.",
+      "parentUuid": "e6a9a39a_d356ff8b",
+      "revId": "be73945f04bab1279dbacafa29329ba70e388d30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
