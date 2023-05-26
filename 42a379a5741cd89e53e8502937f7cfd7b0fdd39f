@@ -16,6 +16,24 @@
       "message": "I need an other +1, because I change an additional file now.",
       "revId": "42a379a5741cd89e53e8502937f7cfd7b0fdd39f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f4e7831_0ff41050",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-26T09:07:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4da34e68_e0cbc517",
+      "revId": "42a379a5741cd89e53e8502937f7cfd7b0fdd39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
