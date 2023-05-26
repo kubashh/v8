@@ -33,6 +33,24 @@
       "message": "lgtm % https://chromium-review.googlesource.com/c/v8/v8/+/4520405/comment/8500b289_8ce485be/, perhaps just overlooked?\n\n+ Adam as OWNER stamp for the other parts.",
       "revId": "767a9f57f27b079941516cbb88c593a7ffe1f614",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d663c874_f2fdc062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T19:05:22Z",
+      "side": 1,
+      "message": "Yes I overlooked this one. It is done now.",
+      "parentUuid": "d4ab12b4_553c57ab",
+      "revId": "767a9f57f27b079941516cbb88c593a7ffe1f614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
