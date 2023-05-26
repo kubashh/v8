@@ -16,6 +16,46 @@
       "message": "PTAL :)",
       "revId": "b038156e406c7226d660c527b58ab98ef7106a2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "669e5382_922ffba9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-26T14:03:05Z",
+      "side": 1,
+      "message": "LGTM % nit",
+      "revId": "b038156e406c7226d660c527b58ab98ef7106a2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fef418ae_fa8ebda2",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2036,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-05-26T14:03:05Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 2036,
+        "startChar": 13,
+        "endLine": 2036,
+        "endChar": 20
+      },
+      "revId": "b038156e406c7226d660c527b58ab98ef7106a2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
