@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3a082ea_29d51522",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-05-26T11:09:51Z",
+      "side": 1,
+      "message": "So basically the pkey obtained from this must never be given write access since an attacker could modify it?",
+      "revId": "30cb950a5682e55ee1bfb56dd709f94c3e157d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
