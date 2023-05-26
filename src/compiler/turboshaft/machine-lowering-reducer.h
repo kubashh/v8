@@ -812,7 +812,7 @@ class MachineLoweringReducer : public Next {
           OpIndex test = __ Int32AddCheckOverflow(input, input);
           __ DeoptimizeIf(__ template Projection<Word32>(test, 1), frame_state,
                           DeoptimizeReason::kLostPrecision, feedback);
-          return __ TagSmi(input);
+          return __ template Projection<Word32>(test, 0);
         }
       } else {
         DCHECK_EQ(input_interpretation, ConvertUntaggedToJSPrimitiveOrDeoptOp::
@@ -837,7 +837,7 @@ class MachineLoweringReducer : public Next {
           OpIndex test = __ Int32AddCheckOverflow(i32, i32);
           __ DeoptimizeIf(__ template Projection<Word32>(test, 1), frame_state,
                           DeoptimizeReason::kLostPrecision, feedback);
-          return __ TagSmi(i32);
+          return __ template Projection<Word32>(test, 0);
         }
       } else {
         DCHECK_EQ(input_interpretation, ConvertUntaggedToJSPrimitiveOrDeoptOp::
@@ -2844,9 +2844,9 @@ class MachineLoweringReducer : public Next {
     // Since smi tagging shifts left by one, it's the same as adding value
     // twice.
     OpIndex add = __ Int32AddCheckOverflow(input, input);
-    V<Word32> check = __ Projection(add, 1, WordRepresentation::Word32());
+    V<Word32> check = __ template Projection<Word32>(add, 1);
     GOTO_IF(check, *overflow);
-    GOTO(*done, __ TagSmi(input));
+    GOTO(*done, V<Smi>::Cast(__ template Projection<Word32>(add, 0)));
   }
 
   // `IsNonZero` converts any non-0 value into 1.
