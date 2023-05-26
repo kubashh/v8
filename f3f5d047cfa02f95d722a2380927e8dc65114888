@@ -54,6 +54,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2eaa77a3_8e9f2c11",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-05-26T15:00:06Z",
+      "side": 1,
+      "message": "Question: is this #include needed? I never understood the rules for when Torque files should include C++ headers.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9e028be2_2544223a",
         "filename": "src/builtins/collections.tq",
         "patchSetId": 14
