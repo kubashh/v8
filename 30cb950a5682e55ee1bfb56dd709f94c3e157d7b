@@ -16,6 +16,24 @@
       "message": "So basically the pkey obtained from this must never be given write access since an attacker could modify it?",
       "revId": "30cb950a5682e55ee1bfb56dd709f94c3e157d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5dee5c9_e09e3686",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-05-26T11:14:08Z",
+      "side": 1,
+      "message": "Yes, exactly. For write access you\u0027ll need to use the trusted pkey().",
+      "parentUuid": "f3a082ea_29d51522",
+      "revId": "30cb950a5682e55ee1bfb56dd709f94c3e157d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

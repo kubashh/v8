@@ -16,6 +16,24 @@
       "message": "Can there ever be a configuration where `IsSupported() !\u003d IsSupportedUntrusted()`?",
       "revId": "0f3425ca03372481c0aa6c7680212addd9e20c56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7f56403_9d2e6ddd",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-05-26T11:14:08Z",
+      "side": 1,
+      "message": "No, it will always be the same. The only difference is that you might not be allowed to call IsSupported()",
+      "parentUuid": "57e6b059_4569b7a2",
+      "revId": "0f3425ca03372481c0aa6c7680212addd9e20c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
