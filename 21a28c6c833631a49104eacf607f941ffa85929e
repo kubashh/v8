@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6eb6ee0b_478879d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-05-26T09:12:07Z",
+      "side": 1,
+      "message": "`strengthen`",
+      "range": {
+        "startLine": 11,
+        "startChar": 12,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "21a28c6c833631a49104eacf607f941ffa85929e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8213f900_8ec9876b",
@@ -14,6 +37,23 @@
       "writtenOn": "2023-05-26T09:05:47Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "21a28c6c833631a49104eacf607f941ffa85929e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40d85179_a3a2e031",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-05-26T09:12:07Z",
+      "side": 1,
+      "message": "LGTM with nit",
       "revId": "21a28c6c833631a49104eacf607f941ffa85929e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
