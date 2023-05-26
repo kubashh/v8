@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4da34e68_e0cbc517",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-05-26T09:05:10Z",
+      "side": 1,
+      "message": "I need an other +1, because I change an additional file now.",
+      "revId": "42a379a5741cd89e53e8502937f7cfd7b0fdd39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
