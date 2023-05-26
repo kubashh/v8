@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66a5e311_e0a091ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-05-26T14:28:47Z",
+      "side": 1,
+      "message": "Thanks. I fixed the typo, but could you please +1 once again? (I mistakenly touched new files in patchset 3, which reset your +1)",
+      "revId": "eed1e316679c2bd98b5ff6c86d308f8652b4f557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
