@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "deeb463a_91513489",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1661,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T18:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9873323e_007b1c72",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2eaa77a3_8e9f2c11",
@@ -65,6 +83,24 @@
       "writtenOn": "2023-05-26T15:00:06Z",
       "side": 1,
       "message": "Question: is this #include needed? I never understood the rules for when Torque files should include C++ headers.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c7254b3_f87b0455",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T18:44:06Z",
+      "side": 1,
+      "message": "That is weird that I don\u0027t remember why/when I added this header in the first place. I just removed it and the code works fine. I will be more careful with adding headers in future.",
+      "parentUuid": "2eaa77a3_8e9f2c11",
       "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7baacf97_83e6d748",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T18:44:06Z",
+      "side": 1,
+      "message": "Great. Thanks.",
+      "parentUuid": "9e028be2_2544223a",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "585a8ba0_fdd935cf",
@@ -99,6 +153,24 @@
       "writtenOn": "2023-05-26T14:58:55Z",
       "side": 1,
       "message": "Nit: Eh, I don\u0027t think we need this comment since the method is in its own file.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf3899b6_5f0e50b8",
+        "filename": "src/builtins/set-union.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T18:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "585a8ba0_fdd935cf",
       "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79275639_1ef34195",
+        "filename": "src/builtins/set-union.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T18:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b742bf55_7c071e5d",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9057420a_79afdbfb",
@@ -133,6 +223,24 @@
       "writtenOn": "2023-05-26T14:58:55Z",
       "side": 1,
       "message": "Nit: Weird comment format for step 8.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43cad1dd_25946e54",
+        "filename": "src/builtins/set-union.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T18:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9057420a_79afdbfb",
       "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -154,6 +262,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc9fcb43_e4292543",
+        "filename": "src/objects/fixed-array.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T18:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2e1d5ca_7a5c8c3d",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ca26892_eb95e031",
@@ -167,6 +293,24 @@
       "writtenOn": "2023-05-26T14:58:55Z",
       "side": 1,
       "message": "Nit: Reading the other runtime function names, `OrderedHashSetEnsureGrowable` would be better.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f09759c_ad0b7f85",
+        "filename": "src/runtime/runtime-collections.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T18:44:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ca26892_eb95e031",
       "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -201,6 +345,24 @@
       "writtenOn": "2023-05-26T14:58:55Z",
       "side": 1,
       "message": "Please add a test for a set-like (an object with `.has`, `.size`, and `.keys`) as well.",
+      "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb46729_227ec378",
+        "filename": "test/mjsunit/harmony/set-methods.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-05-26T18:44:06Z",
+      "side": 1,
+      "message": "I have added you requested test + some other tests to check union of a set and a map, duplicate values in sets, and non-iterable/non-callable `.keys` and `.has` functions. I have also changed the name of the test file.",
+      "parentUuid": "8c42747a_5e9fe782",
       "revId": "f3f5d047cfa02f95d722a2380927e8dc65114888",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
