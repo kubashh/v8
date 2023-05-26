@@ -85,7 +85,9 @@ macro NewPromiseFulfillReactionJobTask(implicit context: Context)(
     promise_or_capability: promiseOrCapability,
     continuation_preserved_embedder_data:
         *ContextSlot(
-        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX)
+        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX),
+    async_context_store: *ContextSlot(
+        nativeContext, ContextSlot::ASYNC_CONTEXT_STORE_INDEX)
   };
 }
 
@@ -102,7 +104,9 @@ macro NewPromiseRejectReactionJobTask(implicit context: Context)(
     promise_or_capability: promiseOrCapability,
     continuation_preserved_embedder_data:
         *ContextSlot(
-        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX)
+        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX),
+    async_context_store: *ContextSlot(
+        nativeContext, ContextSlot::ASYNC_CONTEXT_STORE_INDEX)
   };
 }
 
@@ -282,7 +286,9 @@ macro NewPromiseReaction(implicit context: Context)(
     promise_or_capability: promiseOrCapability,
     continuation_preserved_embedder_data:
         *ContextSlot(
-        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX)
+        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX),
+    async_context_store: *ContextSlot(
+        nativeContext, ContextSlot::ASYNC_CONTEXT_STORE_INDEX)
   };
 }
 
