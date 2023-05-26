@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8ccfa60_e713bfe6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "https://crrev.com/c/3045338",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e9b52564_895c15ef",
@@ -14,6 +31,199 @@
       "writtenOn": "2023-05-05T12:20:00Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75449e0c_f6676825",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "first round of comments",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "394a9436_fa45a059",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "FYI, for simple cases like this there\u0027s `Select\u003cIntPtrT\u003e(condition, ...)`.",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8e2b7c3_8ef9f466",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5035,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "I think it\u0027s worth having a single fast handler for source objects without properties instead of always going through the slow handler. \n\nSince you removed `ToObject_Inline` call I guess all non-JSReceiver sources except Strings will fall into this case (only Strings can have own properties).",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b78af9ba_8b0cfa02",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5087,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "Interesting... we don\u0027t seem to expect Smi sources here but then why do we need to do `TaggedIsSmi(source)` in the slow handler?",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cc30bd3_b915bd3f",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5155,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "`#if DEBUG` or `if (DEBUG_BOOL) { ... }` to be uniform.",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44c1a2e2_4538a7fb",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3094,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "Please add comments about these modes.",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b313890_e2794cd9",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3097,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "How about calling this `CloneObjectMode GetCloneModeForMap()` and renaming `kNotSupported` to `kSlow`?\n\nAlso, instead of `static` use an anonymous `namespace { ... } // namespace`.",
+      "range": {
+        "startLine": 3097,
+        "startChar": 7,
+        "endLine": 3097,
+        "endChar": 45
+      },
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce949c0d_74bb87a9",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3127,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "Please rename parameter to `source_map` and maybe `target_map` too.",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a8ef072_28c66833",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3142,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "DCHECK_EQ(details.kind(), kData);\nDCHECK_EQ(result_details.kind(), kData);",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "328d67b1_8c91c1bb",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3145,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "I\u0027m not sure this could ever fail. Given that the result map passed through `CloneObjectSlowPath` it should already have properly generalized fields types/representations.\nI think this should rather be a DCHECK.",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c89a946_a7411f40",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3158,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-05-26T11:48:26Z",
+      "side": 1,
+      "message": "DCHECK(source_map-\u003eOnlyHasSimpleProperties());",
       "revId": "9a1795610f74961567efceb486e1976dcb77920e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
