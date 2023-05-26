@@ -5,6 +5,7 @@
 #include "src/compiler/turboshaft/dead-code-elimination-phase.h"
 
 #include "src/compiler/js-heap-broker.h"
+#include "src/compiler/turboshaft/branch-condition-duplication-reducer.h"
 #include "src/compiler/turboshaft/dead-code-elimination-reducer.h"
 #include "src/compiler/turboshaft/tag-untag-lowering-reducer.h"
 
@@ -15,7 +16,8 @@ void DeadCodeEliminationPhase::Run(Zone* temp_zone) {
 
   turboshaft::OptimizationPhase<
       turboshaft::DeadCodeEliminationReducer,
-      turboshaft::TagUntagLoweringReducer>::Run(temp_zone);
+      turboshaft::TagUntagLoweringReducer,
+      turboshaft::BranchConditionDuplicationReducer>::Run(temp_zone);
 }
 
 }  // namespace v8::internal::compiler::turboshaft
