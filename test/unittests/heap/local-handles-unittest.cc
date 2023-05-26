@@ -16,6 +16,7 @@
 #include "src/heap/local-heap.h"
 #include "src/heap/parked-scope.h"
 #include "src/objects/heap-number.h"
+#include "test/unittests/heap/heap-utils.h"
 #include "test/unittests/test-utils.h"
 
 namespace v8 {
@@ -90,7 +91,7 @@ TEST_F(LocalHandlesTest, CreateLocalHandles) {
 
   sema_started.Wait();
 
-  CollectAllGarbage();
+  CollectAllGarbage(isolate);
   sema_gc_finished.Signal();
 
   thread->Join();
