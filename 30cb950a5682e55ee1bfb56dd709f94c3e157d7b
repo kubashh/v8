@@ -69,6 +69,24 @@
       "parentUuid": "f5dee5c9_e09e3686",
       "revId": "30cb950a5682e55ee1bfb56dd709f94c3e157d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "879fce29_3cc974bc",
+        "filename": "src/common/code-memory-access.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-05-26T11:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3617f49_deb3dddf",
+      "revId": "30cb950a5682e55ee1bfb56dd709f94c3e157d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

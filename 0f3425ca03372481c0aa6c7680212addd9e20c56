@@ -52,6 +52,24 @@
       "parentUuid": "a7f56403_9d2e6ddd",
       "revId": "0f3425ca03372481c0aa6c7680212addd9e20c56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e784aa0_c68f7a04",
+        "filename": "src/common/code-memory-access-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-05-26T11:29:04Z",
+      "side": 1,
+      "message": "At the moment, the IsSupported check is also used to check if we can disable write access again. While we can get rid of that, it\u0027s probably better to keep the safe variant by default and eventually get rid of the unsafe version.\nI added a comment describing the Untrusted function.",
+      "parentUuid": "938a661f_70bfcf53",
+      "revId": "0f3425ca03372481c0aa6c7680212addd9e20c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
