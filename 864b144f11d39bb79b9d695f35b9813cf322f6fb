@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "469e6063_59f701ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1580807
+      },
+      "writtenOn": "2023-05-27T04:22:17Z",
+      "side": 1,
+      "message": "marja: based on git blame it looks like you have been the nearest to this code recently. Do you think you could TAL or nominate someone else to do so? Thanks.",
+      "revId": "864b144f11d39bb79b9d695f35b9813cf322f6fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
