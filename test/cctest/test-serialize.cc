@@ -4958,18 +4958,30 @@ TEST(CachedCompileFunction) {
       ->DisableScriptAndEval();  // Disable same-isolate code cache.
 
   v8::HandleScope scope(CcTest::isolate());
+  v8::Local<v8::Context> context = env.local();
 
-  v8::Local<v8::String> source = v8_str("return x*x;");
+  v8::Local<v8::String> source = v8_str(R"(
+    function y() { return x*x; }
+    return x ? y(x) : y;
+  )");
   v8::Local<v8::String> arg_str = v8_str("x");
   ScriptCompiler::CachedData* cache;
   {
     v8::ScriptCompiler::Source script_source(source);
     v8::Local<v8::Function> fun =
-        v8::ScriptCompiler::CompileFunction(env.local(), &script_source, 1,
+        v8::ScriptCompiler::CompileFunction(context, &script_source, 1,
                                             &arg_str, 0, nullptr,
                                             v8::ScriptCompiler::kEagerCompile)
             .ToLocalChecked();
     cache = v8::ScriptCompiler::CreateCodeCacheForFunction(fun);
+
+    v8::Local<v8::Value> arg = v8_num(0);
+    v8::Local<v8::Value> y =
+        fun->Call(context, v8::Undefined(CcTest::isolate()), 1, &arg)
+            .ToLocalChecked();
+
+    auto iy = i::Handle<i::JSFunction>::cast(Utils::OpenHandle(*y));
+    CHECK(iy->shared().is_compiled());
   }
 
   {
@@ -4977,14 +4989,15 @@ TEST(CachedCompileFunction) {
     v8::ScriptCompiler::Source script_source(source, cache);
     v8::Local<v8::Function> fun =
         v8::ScriptCompiler::CompileFunction(
-            env.local(), &script_source, 1, &arg_str, 0, nullptr,
+            context, &script_source, 1, &arg_str, 0, nullptr,
             v8::ScriptCompiler::kConsumeCodeCache)
             .ToLocalChecked();
     v8::Local<v8::Value> arg = v8_num(3);
     v8::Local<v8::Value> result =
-        fun->Call(env.local(), v8::Undefined(CcTest::isolate()), 1, &arg)
+        fun->Call(context, v8::Undefined(CcTest::isolate()), 1, &arg)
             .ToLocalChecked();
-    CHECK_EQ(9, result->Int32Value(env.local()).FromJust());
+
+    CHECK_EQ(9, result->Int32Value(context).FromJust());
   }
 }
 
