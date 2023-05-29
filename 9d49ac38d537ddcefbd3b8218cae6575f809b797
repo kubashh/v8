@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c7e18df_767bb49d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-05-29T17:30:20Z",
+      "side": 1,
+      "message": "Note, both Liviu and I are OOO atm. You can get a review from Liviu next week...",
+      "revId": "9d49ac38d537ddcefbd3b8218cae6575f809b797",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
