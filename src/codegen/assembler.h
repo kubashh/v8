@@ -44,6 +44,7 @@
 
 #include "src/base/macros.h"
 #include "src/base/memory.h"
+#include "src/codegen/builtins-jump-table-info.h"
 #include "src/codegen/code-comments.h"
 #include "src/codegen/cpu-features.h"
 #include "src/codegen/external-reference.h"
@@ -457,6 +458,7 @@ class V8_EXPORT_PRIVATE AssemblerBase : public Malloced {
   }
 
   CodeCommentsWriter code_comments_writer_;
+  BuiltinJumpTableInfoWriter builtin_jump_table_info_writer_;
 
  private:
   // Before we copy code into the code space, we sometimes cannot encode
