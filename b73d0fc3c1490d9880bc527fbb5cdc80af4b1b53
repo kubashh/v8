@@ -34,6 +34,41 @@
       "parentUuid": "e8762a64_885dd7d1",
       "revId": "b73d0fc3c1490d9880bc527fbb5cdc80af4b1b53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e7fb1eb_68403d60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-05-30T10:54:42Z",
+      "side": 1,
+      "message": "No worries, apparently no one tried empty inserts 😊 (so far -- I am about to ;-) )",
+      "parentUuid": "63b7e84a_cf97ab48",
+      "revId": "b73d0fc3c1490d9880bc527fbb5cdc80af4b1b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d692483_bcf6cc92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-05-30T10:54:42Z",
+      "side": 1,
+      "message": "Thanks for the quick review 😊",
+      "revId": "b73d0fc3c1490d9880bc527fbb5cdc80af4b1b53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
