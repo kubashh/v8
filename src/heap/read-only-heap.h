@@ -81,14 +81,6 @@ class ReadOnlyHeap {
   V8_EXPORT_PRIVATE inline static ReadOnlyRoots EarlyGetReadOnlyRoots(
       HeapObject object);
 
-  // Extends the read-only object cache with new zero smi and returns a
-  // reference to it.
-  Object* ExtendReadOnlyObjectCache();
-  // Returns a read-only cache entry at a particular index.
-  Object cached_read_only_object(size_t i) const;
-  bool read_only_object_cache_is_initialized() const;
-  size_t read_only_object_cache_size() const;
-
   ReadOnlySpace* read_only_space() const { return read_only_space_; }
 
   // Returns whether the ReadOnlySpace will actually be shared taking into
@@ -125,7 +117,6 @@ class ReadOnlyHeap {
 
   bool roots_init_complete_ = false;
   ReadOnlySpace* read_only_space_ = nullptr;
-  std::vector<Object> read_only_object_cache_;
 
   // Returns whether shared memory can be allocated and then remapped to
   // additional addresses.
@@ -164,6 +155,30 @@ class V8_EXPORT_PRIVATE ReadOnlyHeapObjectIterator {
   const ReadOnlySpace* const ro_space_;
   std::vector<ReadOnlyPage*>::const_iterator current_page_;
   Address current_addr_;
+};
+
+enum class SkipFreeSpaceOrFiller {
+  kYes,
+  kNo,
+};
+
+// Same as above but for a single page.
+class V8_EXPORT_PRIVATE ReadOnlyPageObjectIterator {
+ public:
+  explicit ReadOnlyPageObjectIterator(
+      const ReadOnlyPage* page,
+      SkipFreeSpaceOrFiller skip_free_space_or_filler =
+          SkipFreeSpaceOrFiller::kYes);
+  explicit ReadOnlyPageObjectIterator(
+      const ReadOnlyPage* page, Address current_addr,
+      SkipFreeSpaceOrFiller skip_free_space_or_filler =
+          SkipFreeSpaceOrFiller::kYes);
+  HeapObject Next();
+
+ private:
+  const ReadOnlyPage* const current_page_;
+  Address current_addr_;
+  const SkipFreeSpaceOrFiller skip_free_space_or_filler_;
 };
 
 }  // namespace internal

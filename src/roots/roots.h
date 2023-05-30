@@ -658,10 +658,6 @@ class ReadOnlyRoots {
   // heap verification.
   void Iterate(RootVisitor* visitor);
 
-  // Uncompress pointers in the static roots table and store them into the
-  // actual roots table.
-  void InitFromStaticRootsTable(Address cage_base);
-
  private:
   V8_INLINE Address first_name_for_protector() const;
   V8_INLINE Address last_name_for_protector() const;
@@ -682,6 +678,7 @@ class ReadOnlyRoots {
 
   friend class ReadOnlyHeap;
   friend class DeserializerAllocator;
+  friend class ReadOnlyHeapImageDeserializer;
 };
 
 }  // namespace internal
