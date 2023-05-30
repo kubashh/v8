@@ -3424,9 +3424,10 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   __ Add_d(property_callback_info_arg, sp, Operand(1 * kSystemPointerSize));
 
   __ RecordComment("Load api_function_address");
-  __ Ld_d(
+  __ LoadExternalPointerField(
       api_function_address,
-      FieldMemOperand(callback, AccessorInfo::kMaybeRedirectedGetterOffset));
+      FieldMemOperand(callback, AccessorInfo::kMaybeRedirectedGetterOffset),
+      kAccessorInfoGetterTag);
 
   DCHECK(
       !AreAliased(api_function_address, property_callback_info_arg, name_arg));
