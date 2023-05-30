@@ -635,7 +635,10 @@ Response InjectedScript::wrapObjectMirror(
     V8SerializationDuplicateTracker duplicateTracker{context};
 
     std::unique_ptr<protocol::DictionaryValue> deepSerializedValueDict =
-        mirror.buildDeepSerializedValue(context, maxDepth, duplicateTracker);
+        mirror.buildDeepSerializedValue(
+            context, maxDepth,
+            wrapOptions.serializationOptions.additionalParameters,
+            duplicateTracker);
 
     String16 type;
     deepSerializedValueDict->getString("type", &type);
@@ -666,6 +669,7 @@ Response InjectedScript::wrapObjectMirror(
     std::unique_ptr<protocol::DictionaryValue> deepSerializedValueDict =
         mirror.buildDeepSerializedValue(
             context, wrapOptions.serializationOptions.maxDepth,
+            wrapOptions.serializationOptions.additionalParameters,
             duplicateTracker);
 
     String16 type;

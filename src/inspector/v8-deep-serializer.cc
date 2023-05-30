@@ -19,10 +19,11 @@ namespace {
 using protocol::Response;
 std::unique_ptr<protocol::Value> SerializeRecursively(
     v8::Local<v8::Value> value, v8::Local<v8::Context> context, int maxDepth,
+    std::vector<std::pair<StringView, StringView>> additionalParameters,
     V8SerializationDuplicateTracker& duplicateTracker) {
   std::unique_ptr<ValueMirror> mirror = ValueMirror::create(context, value);
-  return mirror->buildDeepSerializedValue(context, maxDepth - 1,
-                                          duplicateTracker);
+  return mirror->buildDeepSerializedValue(
+      context, maxDepth - 1, additionalParameters, duplicateTracker);
 }
 
 std::unique_ptr<protocol::Value> DescriptionForDate(
@@ -91,6 +92,7 @@ std::unique_ptr<protocol::DictionaryValue> SerializeDate(
 
 std::unique_ptr<protocol::Value> SerializeArrayValue(
     v8::Local<v8::Array> value, v8::Local<v8::Context> context, int maxDepth,
+    std::vector<std::pair<StringView, StringView>> additionalParameters,
     V8SerializationDuplicateTracker& duplicateTracker) {
   std::unique_ptr<protocol::ListValue> result = protocol::ListValue::create();
   uint32_t length = value->Length();
@@ -102,7 +104,8 @@ std::unique_ptr<protocol::Value> SerializeArrayValue(
     USE(success);
 
     std::unique_ptr<protocol::Value> elementProtocolValue =
-        SerializeRecursively(elementValue, context, maxDepth, duplicateTracker);
+        SerializeRecursively(elementValue, context, maxDepth,
+                             additionalParameters, duplicateTracker);
 
     result->pushValue(std::move(elementProtocolValue));
   }
@@ -111,14 +114,16 @@ std::unique_ptr<protocol::Value> SerializeArrayValue(
 
 std::unique_ptr<protocol::DictionaryValue> SerializeArray(
     v8::Local<v8::Array> value, v8::Local<v8::Context> context, int maxDepth,
+    std::vector<std::pair<StringView, StringView>> additionalParameters,
     V8SerializationDuplicateTracker& duplicateTracker,
     std::unique_ptr<protocol::DictionaryValue> result) {
   result->setString("type",
                     protocol::Runtime::DeepSerializedValue::TypeEnum::Array);
 
   if (maxDepth > 0) {
-    result->setValue("value", SerializeArrayValue(value, context, maxDepth,
-                                                  duplicateTracker));
+    result->setValue(
+        "value", SerializeArrayValue(value, context, maxDepth,
+                                     additionalParameters, duplicateTracker));
   }
 
   return result;
@@ -126,6 +131,7 @@ std::unique_ptr<protocol::DictionaryValue> SerializeArray(
 
 std::unique_ptr<protocol::DictionaryValue> SerializeMap(
     v8::Local<v8::Map> value, v8::Local<v8::Context> context, int maxDepth,
+    std::vector<std::pair<StringView, StringView>> additionalParameters,
     V8SerializationDuplicateTracker& duplicateTracker,
     std::unique_ptr<protocol::DictionaryValue> result) {
   result->setString("type",
@@ -155,11 +161,13 @@ std::unique_ptr<protocol::DictionaryValue> SerializeMap(
             toProtocolString(context->GetIsolate(), keyValue.As<v8::String>()));
       } else {
         keyProtocolValue =
-            SerializeRecursively(keyValue, context, maxDepth, duplicateTracker);
+            SerializeRecursively(keyValue, context, maxDepth,
+                                 additionalParameters, duplicateTracker);
       }
 
-      propertyProtocolValue = SerializeRecursively(propertyValue, context,
-                                                   maxDepth, duplicateTracker);
+      propertyProtocolValue =
+          SerializeRecursively(propertyValue, context, maxDepth,
+                               additionalParameters, duplicateTracker);
 
       std::unique_ptr<protocol::ListValue> keyValueList =
           protocol::ListValue::create();
@@ -177,20 +185,23 @@ std::unique_ptr<protocol::DictionaryValue> SerializeMap(
 
 std::unique_ptr<protocol::DictionaryValue> SerializeSet(
     v8::Local<v8::Set> value, v8::Local<v8::Context> context, int maxDepth,
+    std::vector<std::pair<StringView, StringView>> additionalParameters,
     V8SerializationDuplicateTracker& duplicateTracker,
     std::unique_ptr<protocol::DictionaryValue> result) {
   result->setString("type",
                     protocol::Runtime::DeepSerializedValue::TypeEnum::Set);
 
   if (maxDepth > 0) {
-    result->setValue("value", SerializeArrayValue(value->AsArray(), context,
-                                                  maxDepth, duplicateTracker));
+    result->setValue(
+        "value", SerializeArrayValue(value->AsArray(), context, maxDepth,
+                                     additionalParameters, duplicateTracker));
   }
   return result;
 }
 
 std::unique_ptr<protocol::Value> SerializeObjectValue(
     v8::Local<v8::Object> value, v8::Local<v8::Context> context, int maxDepth,
+    std::vector<std::pair<StringView, StringView>> additionalParameters,
     V8SerializationDuplicateTracker& duplicateTracker) {
   std::unique_ptr<protocol::ListValue> result = protocol::ListValue::create();
   // Iterate through object's properties.
@@ -218,16 +229,17 @@ std::unique_ptr<protocol::Value> SerializeObjectValue(
       keyProtocolValue = protocol::StringValue::create(
           toProtocolString(context->GetIsolate(), keyValue.As<v8::String>()));
     } else {
-      keyProtocolValue =
-          SerializeRecursively(keyValue, context, maxDepth, duplicateTracker);
+      keyProtocolValue = SerializeRecursively(
+          keyValue, context, maxDepth, additionalParameters, duplicateTracker);
     }
 
     success = value->Get(context, keyValue).ToLocal(&propertyValue);
     DCHECK(success);
     USE(success);
 
-    propertyProtocolValue = SerializeRecursively(propertyValue, context,
-                                                 maxDepth, duplicateTracker);
+    propertyProtocolValue =
+        SerializeRecursively(propertyValue, context, maxDepth,
+                             additionalParameters, duplicateTracker);
 
     std::unique_ptr<protocol::ListValue> keyValueList =
         protocol::ListValue::create();
@@ -243,6 +255,7 @@ std::unique_ptr<protocol::Value> SerializeObjectValue(
 
 std::unique_ptr<protocol::DictionaryValue> SerializeObject(
     v8::Local<v8::Object> value, v8::Local<v8::Context> context, int maxDepth,
+    std::vector<std::pair<StringView, StringView>> additionalParameters,
     V8SerializationDuplicateTracker& duplicateTracker,
     std::unique_ptr<protocol::DictionaryValue> result) {
   result->setString("type",
@@ -251,7 +264,7 @@ std::unique_ptr<protocol::DictionaryValue> SerializeObject(
   if (maxDepth > 0) {
     result->setValue(
         "value", SerializeObjectValue(value.As<v8::Object>(), context, maxDepth,
-                                      duplicateTracker));
+                                      additionalParameters, duplicateTracker));
   }
   return result;
 }
@@ -259,11 +272,13 @@ std::unique_ptr<protocol::DictionaryValue> SerializeObject(
 
 std::unique_ptr<protocol::DictionaryValue> V8DeepSerializer::serializeV8Value(
     v8::Local<v8::Object> value, v8::Local<v8::Context> context, int maxDepth,
+    std::vector<std::pair<StringView, StringView>> additionalParameters,
     V8SerializationDuplicateTracker& duplicateTracker,
     std::unique_ptr<protocol::DictionaryValue> result) {
   if (value->IsArray()) {
     return SerializeArray(value.As<v8::Array>(), context, maxDepth,
-                          duplicateTracker, std::move(result));
+                          additionalParameters, duplicateTracker,
+                          std::move(result));
   }
   if (value->IsRegExp()) {
     return SerializeRegexp(value.As<v8::RegExp>(), context, duplicateTracker,
@@ -275,11 +290,13 @@ std::unique_ptr<protocol::DictionaryValue> V8DeepSerializer::serializeV8Value(
   }
   if (value->IsMap()) {
     return SerializeMap(value.As<v8::Map>(), context, maxDepth,
-                        duplicateTracker, std::move(result));
+                        additionalParameters, duplicateTracker,
+                        std::move(result));
   }
   if (value->IsSet()) {
     return SerializeSet(value.As<v8::Set>(), context, maxDepth,
-                        duplicateTracker, std::move(result));
+                        additionalParameters, duplicateTracker,
+                        std::move(result));
   }
   if (value->IsWeakMap()) {
     result->setString(
@@ -324,7 +341,8 @@ std::unique_ptr<protocol::DictionaryValue> V8DeepSerializer::serializeV8Value(
 
   // Serialize as an Object.
   return SerializeObject(value.As<v8::Object>(), context, maxDepth,
-                         duplicateTracker, std::move(result));
+                         additionalParameters, duplicateTracker,
+                         std::move(result));
 }
 
 }  // namespace v8_inspector

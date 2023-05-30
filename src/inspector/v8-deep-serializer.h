@@ -14,6 +14,7 @@ class V8DeepSerializer {
  public:
   static std::unique_ptr<protocol::DictionaryValue> serializeV8Value(
       v8::Local<v8::Object> value, v8::Local<v8::Context> context, int maxDepth,
+      std::vector<std::pair<StringView, StringView>> additionalParameters,
       V8SerializationDuplicateTracker& duplicateTracker,
       std::unique_ptr<protocol::DictionaryValue> result);
 

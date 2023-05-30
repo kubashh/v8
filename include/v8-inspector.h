@@ -217,6 +217,16 @@ class V8_EXPORT V8InspectorSession {
   virtual void stop() = 0;
 };
 
+class V8_EXPORT DeepSerializedValue {
+ public:
+  explicit DeepSerializedValue(std::unique_ptr<StringBuffer> type,
+                               v8::MaybeLocal<v8::Value> value = {})
+      : type(std::move(type)), value(value) {}
+  std::unique_ptr<StringBuffer> type;
+  v8::MaybeLocal<v8::Value> value;
+};
+
+// TODO(crbug.com/1420968) Remove as deprecated.
 class V8_EXPORT WebDriverValue {
  public:
   explicit WebDriverValue(std::unique_ptr<StringBuffer> type,
@@ -243,6 +253,13 @@ class V8_EXPORT V8InspectorClient {
   virtual void beginUserGesture() {}
   virtual void endUserGesture() {}
 
+  virtual std::unique_ptr<DeepSerializedValue> deepSerialize(
+      v8::Local<v8::Value> v8Value, int maxDepth,
+      std::vector<std::pair<StringView, StringView>> additionalParameters) {
+    return nullptr;
+  }
+
+  // TODO(crbug.com/1420968) Remove as deprecated.
   virtual std::unique_ptr<WebDriverValue> serializeToWebDriverValue(
       v8::Local<v8::Value> v8Value, int maxDepth) {
     return nullptr;

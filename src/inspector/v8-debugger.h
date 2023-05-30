@@ -35,6 +35,8 @@ enum class WrapMode { kJson, kIdOnly, kPreview, kWebDriver, kDeep };
 
 struct WrapSerializationOptions {
   int maxDepth = v8::internal::kMaxInt;
+  std::vector<std::pair<StringView, StringView>> additionalParameters =
+      std::vector<std::pair<StringView, StringView>>();
 };
 
 struct WrapOptions {
