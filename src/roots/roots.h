@@ -355,6 +355,7 @@ class Symbol;
   V(HeapObject, js_shared_array_map, JSSharedArrayMap)                      \
   V(HeapObject, js_atomics_mutex_map, JSAtomicsMutexMap)                    \
   V(HeapObject, js_atomics_condition_map, JSAtomicsConditionMap)            \
+  V(HeapObject, async_context_store, AsyncContextStore)                     \
   IF_WASM(V, HeapObject, active_continuation, ActiveContinuation)           \
   IF_WASM(V, HeapObject, active_suspender, ActiveSuspender)                 \
   IF_WASM(V, WeakArrayList, js_to_wasm_wrappers, JSToWasmWrappers)          \
