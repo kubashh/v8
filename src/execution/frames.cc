@@ -2485,23 +2485,25 @@ void OptimizedFrame::GetFunctions(
   // in the deoptimization translation are ordered bottom-to-top.
   while (jsframe_count != 0) {
     opcode = it.NextOpcode();
-    if (opcode == TranslationOpcode::INTERPRETED_FRAME_WITH_RETURN ||
-        opcode == TranslationOpcode::INTERPRETED_FRAME_WITHOUT_RETURN ||
-        opcode == TranslationOpcode::JAVA_SCRIPT_BUILTIN_CONTINUATION_FRAME ||
-        opcode == TranslationOpcode::
-                      JAVA_SCRIPT_BUILTIN_CONTINUATION_WITH_CATCH_FRAME) {
-      it.NextOperand();  // Skip bailout id.
-      jsframe_count--;
+    switch (opcode) {
+#define CASE(op, _) case TranslationOpcode::op:
+      TRANSLATION_FRAME_OPCODE_LIST(CASE)
+#undef CASE
+      {
+        it.NextOperand();  // Skip bailout id.
+        jsframe_count--;
 
-      // The second operand of the frame points to the function.
-      Object shared = literal_array.get(it.NextOperand());
-      functions->push_back(SharedFunctionInfo::cast(shared));
+        // The second operand of the frame points to the function.
+        Object shared = literal_array.get(it.NextOperand());
+        functions->push_back(SharedFunctionInfo::cast(shared));
 
-      // Skip over remaining operands to advance to the next opcode.
-      it.SkipOperands(TranslationOpcodeOperandCount(opcode) - 2);
-    } else {
-      // Skip over operands to advance to the next opcode.
-      it.SkipOperands(TranslationOpcodeOperandCount(opcode));
+        // Skip over remaining operands to advance to the next opcode.
+        it.SkipOperands(TranslationOpcodeOperandCount(opcode) - 2);
+        break;
+      }
+      default:
+        // Skip over operands to advance to the next opcode.
+        it.SkipOperands(TranslationOpcodeOperandCount(opcode));
     }
   }
 }
