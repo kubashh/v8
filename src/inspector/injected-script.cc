@@ -98,7 +98,7 @@ class InjectedScript::ProtocolPromiseHandler {
   static void add(V8InspectorSessionImpl* session,
                   v8::Local<v8::Context> context, v8::Local<v8::Value> value,
                   int executionContextId, const String16& objectGroup,
-                  WrapOptions wrapOptions, bool replMode,
+                  std::unique_ptr<WrapOptions> wrapOptions, bool replMode,
                   bool throwOnSideEffect,
                   std::weak_ptr<EvaluateCallback> callback) {
     InjectedScript::ContextScope scope(session, executionContextId);
@@ -110,8 +110,8 @@ class InjectedScript::ProtocolPromiseHandler {
                            : v8::MaybeLocal<v8::Promise>();
     V8InspectorImpl* inspector = session->inspector();
     ProtocolPromiseHandler* handler = new ProtocolPromiseHandler(
-        session, executionContextId, objectGroup, wrapOptions, replMode,
-        throwOnSideEffect, callback, originalPromise);
+        session, executionContextId, objectGroup, std::move(wrapOptions),
+        replMode, throwOnSideEffect, callback, originalPromise);
     v8::Local<v8::Value> wrapper = handler->m_wrapper.Get(inspector->isolate());
     v8::Local<v8::Function> thenCallbackFunction =
         v8::Function::New(context, thenCallback, wrapper, 0,
@@ -185,8 +185,8 @@ class InjectedScript::ProtocolPromiseHandler {
 
   ProtocolPromiseHandler(V8InspectorSessionImpl* session,
                          int executionContextId, const String16& objectGroup,
-                         WrapOptions wrapOptions, bool replMode,
-                         bool throwOnSideEffect,
+                         std::unique_ptr<WrapOptions> wrapOptions,
+                         bool replMode, bool throwOnSideEffect,
                          std::weak_ptr<EvaluateCallback> callback,
                          v8::MaybeLocal<v8::Promise> maybeEvaluationResult)
       : m_inspector(session->inspector()),
@@ -194,7 +194,7 @@ class InjectedScript::ProtocolPromiseHandler {
         m_contextGroupId(session->contextGroupId()),
         m_executionContextId(executionContextId),
         m_objectGroup(objectGroup),
-        m_wrapOptions(wrapOptions),
+        m_wrapOptions(std::move(wrapOptions)),
         m_replMode(replMode),
         m_throwOnSideEffect(throwOnSideEffect),
         m_callback(std::move(callback)),
@@ -253,8 +253,8 @@ class InjectedScript::ProtocolPromiseHandler {
     }
 
     std::unique_ptr<protocol::Runtime::RemoteObject> wrappedValue;
-    response = scope.injectedScript()->wrapObject(result, m_objectGroup,
-                                                  m_wrapOptions, &wrappedValue);
+    response = scope.injectedScript()->wrapObject(
+        result, m_objectGroup, m_wrapOptions.get(), &wrappedValue);
     if (!response.IsSuccess()) {
       EvaluateCallback::sendFailure(m_callback, scope.injectedScript(),
                                     response);
@@ -273,8 +273,8 @@ class InjectedScript::ProtocolPromiseHandler {
     Response response = scope.initialize();
     if (!response.IsSuccess()) return;
     std::unique_ptr<protocol::Runtime::RemoteObject> wrappedValue;
-    response = scope.injectedScript()->wrapObject(result, m_objectGroup,
-                                                  m_wrapOptions, &wrappedValue);
+    response = scope.injectedScript()->wrapObject(
+        result, m_objectGroup, m_wrapOptions.get(), &wrappedValue);
     if (!response.IsSuccess()) {
       EvaluateCallback::sendFailure(m_callback, scope.injectedScript(),
                                     response);
@@ -380,7 +380,7 @@ class InjectedScript::ProtocolPromiseHandler {
   int m_contextGroupId;
   int m_executionContextId;
   String16 m_objectGroup;
-  WrapOptions m_wrapOptions;
+  std::unique_ptr<WrapOptions> m_wrapOptions;
   bool m_replMode;
   bool m_throwOnSideEffect;
   std::weak_ptr<EvaluateCallback> m_callback;
@@ -411,7 +411,7 @@ class PropertyAccumulator : public ValueMirror::PropertyAccumulator {
 Response InjectedScript::getProperties(
     v8::Local<v8::Object> object, const String16& groupName, bool ownProperties,
     bool accessorPropertiesOnly, bool nonIndexedPropertiesOnly,
-    WrapOptions wrapOptions,
+    const WrapOptions* wrapOptions,
     std::unique_ptr<Array<PropertyDescriptor>>* properties,
     Maybe<protocol::Runtime::ExceptionDetails>* exceptionDetails) {
   v8::HandleScope handles(m_context->isolate());
@@ -508,6 +508,8 @@ Response InjectedScript::getInternalAndPrivateProperties(
   v8::Local<v8::Context> context = m_context->context();
   int sessionId = m_sessionId;
 
+  WrapOptions wrapOptions = WrapOptions({WrapMode::kIdOnly, {}});
+
   if (!accessorPropertiesOnly) {
     std::vector<InternalPropertyMirror> internalPropertiesWrappers;
     ValueMirror::getInternalProperties(m_context->context(), value_obj,
@@ -515,8 +517,7 @@ Response InjectedScript::getInternalAndPrivateProperties(
     for (const auto& internalProperty : internalPropertiesWrappers) {
       std::unique_ptr<RemoteObject> remoteObject;
       Response response = internalProperty.value->buildRemoteObject(
-          m_context->context(), WrapOptions({WrapMode::kIdOnly, {}}),
-          &remoteObject);
+          m_context->context(), &wrapOptions, &remoteObject);
       if (!response.IsSuccess()) return response;
       response = bindRemoteObjectIfNeeded(sessionId, context,
                                           internalProperty.value->v8Value(),
@@ -544,7 +545,7 @@ Response InjectedScript::getInternalAndPrivateProperties(
            (!!privateProperty.value));
     if (privateProperty.value) {
       Response response = privateProperty.value->buildRemoteObject(
-          context, WrapOptions({WrapMode::kIdOnly, {}}), &remoteObject);
+          context, &wrapOptions, &remoteObject);
       if (!response.IsSuccess()) return response;
       response = bindRemoteObjectIfNeeded(sessionId, context,
                                           privateProperty.value->v8Value(),
@@ -555,7 +556,7 @@ Response InjectedScript::getInternalAndPrivateProperties(
 
     if (privateProperty.getter) {
       Response response = privateProperty.getter->buildRemoteObject(
-          context, WrapOptions({WrapMode::kIdOnly, {}}), &remoteObject);
+          context, &wrapOptions, &remoteObject);
       if (!response.IsSuccess()) return response;
       response = bindRemoteObjectIfNeeded(sessionId, context,
                                           privateProperty.getter->v8Value(),
@@ -566,7 +567,7 @@ Response InjectedScript::getInternalAndPrivateProperties(
 
     if (privateProperty.setter) {
       Response response = privateProperty.setter->buildRemoteObject(
-          context, WrapOptions({WrapMode::kIdOnly, {}}), &remoteObject);
+          context, &wrapOptions, &remoteObject);
       if (!response.IsSuccess()) return response;
       response = bindRemoteObjectIfNeeded(sessionId, context,
                                           privateProperty.setter->v8Value(),
@@ -590,6 +591,13 @@ Response InjectedScript::wrapObject(
     v8::Local<v8::Value> value, const String16& groupName,
     WrapOptions wrapOptions,
     std::unique_ptr<protocol::Runtime::RemoteObject>* result) {
+  return wrapObject(std::move(value), groupName, &wrapOptions, result);
+}
+
+Response InjectedScript::wrapObject(
+    v8::Local<v8::Value> value, const String16& groupName,
+    const WrapOptions* wrapOptions,
+    std::unique_ptr<protocol::Runtime::RemoteObject>* result) {
   return wrapObject(value, groupName, wrapOptions, v8::MaybeLocal<v8::Value>(),
                     kMaxCustomPreviewDepth, result);
 }
@@ -598,6 +606,16 @@ Response InjectedScript::wrapObject(
     v8::Local<v8::Value> value, const String16& groupName,
     WrapOptions wrapOptions, v8::MaybeLocal<v8::Value> customPreviewConfig,
     int maxCustomPreviewDepth,
+    std::unique_ptr<protocol::Runtime::RemoteObject>* result) {
+  return InjectedScript::wrapObject(value, groupName, &wrapOptions,
+                                    customPreviewConfig, maxCustomPreviewDepth,
+                                    result);
+}
+
+Response InjectedScript::wrapObject(
+    v8::Local<v8::Value> value, const String16& groupName,
+    const WrapOptions* wrapOptions,
+    v8::MaybeLocal<v8::Value> customPreviewConfig, int maxCustomPreviewDepth,
     std::unique_ptr<protocol::Runtime::RemoteObject>* result) {
   v8::Local<v8::Context> context = m_context->context();
   v8::Context::Scope contextScope(context);
@@ -609,8 +627,8 @@ Response InjectedScript::wrapObject(
 
 Response InjectedScript::wrapObjectMirror(
     const ValueMirror& mirror, const String16& groupName,
-    WrapOptions wrapOptions, v8::MaybeLocal<v8::Value> customPreviewConfig,
-    int maxCustomPreviewDepth,
+    const WrapOptions* wrapOptions,
+    v8::MaybeLocal<v8::Value> customPreviewConfig, int maxCustomPreviewDepth,
     std::unique_ptr<protocol::Runtime::RemoteObject>* result) {
   int customPreviewEnabled = m_customPreviewEnabled;
   int sessionId = m_sessionId;
@@ -629,13 +647,16 @@ Response InjectedScript::wrapObjectMirror(
                           &customPreview);
     if (customPreview) (*result)->setCustomPreview(std::move(customPreview));
   }
-  if (wrapOptions.mode == WrapMode::kWebDriver) {
+  if (wrapOptions->mode == WrapMode::kWebDriver) {
     int maxDepth = 1;
 
     V8SerializationDuplicateTracker duplicateTracker{context};
 
     std::unique_ptr<protocol::DictionaryValue> deepSerializedValueDict =
-        mirror.buildDeepSerializedValue(context, maxDepth, duplicateTracker);
+        mirror.buildDeepSerializedValue(
+            context, maxDepth,
+            wrapOptions->serializationOptions.additionalParameters.get(),
+            duplicateTracker);
 
     String16 type;
     deepSerializedValueDict->getString("type", &type);
@@ -660,12 +681,13 @@ Response InjectedScript::wrapObjectMirror(
     if (!response.IsSuccess()) return response;
     (*result)->setWebDriverValue(std::move(deepSerializedValue));
   }
-  if (wrapOptions.mode == WrapMode::kDeep) {
+  if (wrapOptions->mode == WrapMode::kDeep) {
     V8SerializationDuplicateTracker duplicateTracker{context};
 
     std::unique_ptr<protocol::DictionaryValue> deepSerializedValueDict =
         mirror.buildDeepSerializedValue(
-            context, wrapOptions.serializationOptions.maxDepth,
+            context, wrapOptions->serializationOptions.maxDepth,
+            wrapOptions->serializationOptions.additionalParameters.get(),
             duplicateTracker);
 
     String16 type;
@@ -707,8 +729,9 @@ std::unique_ptr<protocol::Runtime::RemoteObject> InjectedScript::wrapTable(
   v8::Local<v8::Context> context = m_context->context();
 
   std::unique_ptr<RemoteObject> remoteObject;
-  Response response = wrapObject(
-      table, "console", WrapOptions({WrapMode::kIdOnly, {}}), &remoteObject);
+
+  Response response =
+      wrapObject(table, "console", {WrapMode::kIdOnly, {}}, &remoteObject);
   if (!remoteObject || !response.IsSuccess()) return nullptr;
 
   auto mirror = ValueMirror::create(context, table);
@@ -760,8 +783,9 @@ std::unique_ptr<protocol::Runtime::RemoteObject> InjectedScript::wrapTable(
 
 void InjectedScript::addPromiseCallback(
     V8InspectorSessionImpl* session, v8::MaybeLocal<v8::Value> value,
-    const String16& objectGroup, WrapOptions wrapOptions, bool replMode,
-    bool throwOnSideEffect, std::shared_ptr<EvaluateCallback> callback) {
+    const String16& objectGroup, std::unique_ptr<WrapOptions> wrapOptions,
+    bool replMode, bool throwOnSideEffect,
+    std::shared_ptr<EvaluateCallback> callback) {
   m_evaluateCallbacks.insert(callback);
   // After stashing the shared_ptr in `m_evaluateCallback`, we reset `callback`.
   // `ProtocolPromiseHandler:add` can take longer than the life time of this
@@ -780,7 +804,7 @@ void InjectedScript::addPromiseCallback(
                                       v8::MicrotasksScope::kRunMicrotasks);
   ProtocolPromiseHandler::add(session, m_context->context(),
                               value.ToLocalChecked(), m_context->contextId(),
-                              objectGroup, wrapOptions, replMode,
+                              objectGroup, std::move(wrapOptions), replMode,
                               throwOnSideEffect, weak_callback);
   // Do not add any code here! `this` might be invalid.
   // `ProtocolPromiseHandler::add` calls into JS which could kill this
@@ -959,7 +983,7 @@ Response InjectedScript::createExceptionDetails(
 
 Response InjectedScript::wrapEvaluateResult(
     v8::MaybeLocal<v8::Value> maybeResultValue, const v8::TryCatch& tryCatch,
-    const String16& objectGroup, WrapOptions wrapOptions,
+    const String16& objectGroup, const WrapOptions* wrapOptions,
     bool throwOnSideEffect,
     std::unique_ptr<protocol::Runtime::RemoteObject>* result,
     Maybe<protocol::Runtime::ExceptionDetails>* exceptionDetails) {
@@ -983,11 +1007,11 @@ Response InjectedScript::wrapEvaluateResult(
       m_context->inspector()->client()->dispatchError(
           m_context->context(), tryCatch.Message(), exception);
     }
-    Response response = wrapObject(exception, objectGroup,
-                                   exception->IsNativeError()
-                                       ? WrapOptions({WrapMode::kIdOnly, {}})
-                                       : WrapOptions({WrapMode::kPreview, {}}),
-                                   result);
+    WrapOptions wrapOptions = exception->IsNativeError()
+                                  ? WrapOptions({WrapMode::kIdOnly, {}})
+                                  : WrapOptions({WrapMode::kPreview, {}});
+    Response response =
+        wrapObject(exception, objectGroup, &wrapOptions, result);
     if (!response.IsSuccess()) return response;
     // We send exception in result for compatibility reasons, even though it's
     // accessible through exceptionDetails.exception.
