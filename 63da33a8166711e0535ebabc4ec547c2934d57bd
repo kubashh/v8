@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e508d3a4_88045b56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-05-30T18:54:39Z",
+      "side": 1,
+      "message": "ptal – this is required to pass CQ for https://crrev.com/c/4573392 which tries to run v8_win64_rel on non-existent windows bots.",
+      "revId": "63da33a8166711e0535ebabc4ec547c2934d57bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
