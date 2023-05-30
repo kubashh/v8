@@ -159,6 +159,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "032ce16d_9d27d2b0",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-30T20:48:29Z",
+      "side": 1,
+      "message": "well, it is probably faster and saves on serialized data...",
+      "parentUuid": "dd1b1b67_f9bdc1e3",
+      "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "467e688b_3b50d531",
