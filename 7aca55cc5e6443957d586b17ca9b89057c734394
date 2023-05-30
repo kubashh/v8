@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "012dcac6_8411f45c",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 10
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1440373
+      },
+      "writtenOn": "2023-05-30T14:54:18Z",
+      "side": 1,
+      "message": "Not sure if it makes sense to mention it in this `maxNodeDepth` and `includeShadowTree`.",
+      "revId": "7aca55cc5e6443957d586b17ca9b89057c734394",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
