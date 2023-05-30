@@ -123,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fead7371_cb5ca677",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-30T13:00:18Z",
+      "side": 1,
+      "message": "it\u0027s used. what I meant is you can restore it from the static roots without serializing it.",
+      "parentUuid": "c8a9e58a_0bd0a18e",
+      "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "467e688b_3b50d531",
