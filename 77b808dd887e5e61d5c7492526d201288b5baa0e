@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9e8d91fb_9ca49448",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-30T09:03:58Z",
+      "side": 1,
+      "message": "Thanks! Yeah sorry you saw the very early CL version without a desc. I\u0027ve added one now, hopefully that describes the motivation clearly. TLDR: Node uses a workflow in which they build code caches and a new custom snapshot in the same binary. This is subtly broken since code caches assume fixed RO space layout, which custom snapshot serialization doesn\u0027t provide (until this CL).",
+      "parentUuid": "9ae6ff7c_755cbf56",
+      "range": {
+        "startLine": 9,
+        "startChar": 12,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "40e6041f_f0c88949",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b568331_005399ed",
+        "filename": "src/heap/read-only-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-30T09:03:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c78e2c5d_1dde3b7e",
+      "range": {
+        "startLine": 262,
+        "startChar": 39,
+        "endLine": 262,
+        "endChar": 43
+      },
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f0ce472_c1149876",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-05-19T07:44:32Z",
       "side": 1,
       "message": "nit: final",
+      "range": {
+        "startLine": 166,
+        "startChar": 50,
+        "endLine": 166,
+        "endChar": 51
+      },
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0142874c_69fa7f70",
+        "filename": "src/heap/read-only-heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-30T09:03:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f0ce472_c1149876",
       "range": {
         "startLine": 166,
         "startChar": 50,
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "073bf01c_891f0330",
+        "filename": "src/heap/read-only-heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-30T09:03:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38d13554_d44c1d6f",
+      "range": {
+        "startLine": 172,
+        "startChar": 2,
+        "endLine": 172,
+        "endChar": 10
+      },
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "963c0ed9_d69ed464",
@@ -123,6 +219,30 @@
       "writtenOn": "2023-05-19T07:44:32Z",
       "side": 1,
       "message": "Why do we need to split these methods and cannot do both steps in `FinalizeExternallyInitializedSpace()`?",
+      "range": {
+        "startLine": 755,
+        "startChar": 35,
+        "endLine": 755,
+        "endChar": 38
+      },
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd1449c0_f4a07f64",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-30T09:03:58Z",
+      "side": 1,
+      "message": "The sequence is\n\n```\n- Deserialize page 1, FinalizeExternallyInitializedPage\n- Deserialize page i, FinalizeExternallyInitializedPage\n- ...\n- FinalizeExternallyInitializedSpace\n```\n\n`top_` changes between all the FinalizeExternallyInitializedPage calls so we have to persist it every time we finish a page.",
+      "parentUuid": "963c0ed9_d69ed464",
       "range": {
         "startLine": 755,
         "startChar": 35,
