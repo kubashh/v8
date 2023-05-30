@@ -16,6 +16,46 @@
       "message": "marja: based on git blame it looks like you have been the nearest to this code recently. Do you think you could TAL or nominate someone else to do so? Thanks.",
       "revId": "864b144f11d39bb79b9d695f35b9813cf322f6fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76992112_cb056187",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-05-30T09:18:03Z",
+      "side": 1,
+      "message": "nice catch, thanks for fixing!\n\nSuggestion related to the test below:",
+      "revId": "864b144f11d39bb79b9d695f35b9813cf322f6fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08f7e4be_4cce24be",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4953,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-05-30T09:18:03Z",
+      "side": 1,
+      "message": "You could keep this test as is and add a new test which only tests that we honour the eagerness flag.\n\nFor that you wouldn\u0027t even need to do a second compile with v8::ScriptCompiler::kConsumeCodeCache, right?",
+      "range": {
+        "startLine": 4953,
+        "startChar": 5,
+        "endLine": 4953,
+        "endChar": 26
+      },
+      "revId": "864b144f11d39bb79b9d695f35b9813cf322f6fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
