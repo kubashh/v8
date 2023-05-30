@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a946414_282ff101",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-05-30T08:08:36Z",
+      "side": 1,
+      "message": "src/codegen/ and src/roots/ LGTM, didn\u0027t look at the rest.",
+      "revId": "46be2c0fae02902155d96ef31fbef51f11129338",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
