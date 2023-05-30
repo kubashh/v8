@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4af7780d_c27b09eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-30T15:18:15Z",
+      "side": 1,
+      "message": "Sorry for the very slow review.",
+      "revId": "0ed3d4f06c6d4762cc3523ef982e984a92bdb53e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c264b59_78b56cb8",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-30T15:18:15Z",
+      "side": 1,
+      "message": "This could make the production code a bit less efficient. And it looks like this is performance critical. Is it possible to just copy the whole `InstructionSequence` including all parallel moves? Should still be faster than running the instruction selector twice.",
+      "range": {
+        "startLine": 742,
+        "startChar": 0,
+        "endLine": 752,
+        "endChar": 35
+      },
+      "revId": "0ed3d4f06c6d4762cc3523ef982e984a92bdb53e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd471b9b_3edbbcf5",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-30T15:18:15Z",
+      "side": 1,
+      "message": "Creating a new zone for each instruction seems expensive. I guess it\u0027s better to use a single zone created as part of the `CodeGenerator`.",
+      "range": {
+        "startLine": 759,
+        "startChar": 4,
+        "endLine": 759,
+        "endChar": 76
+      },
+      "revId": "0ed3d4f06c6d4762cc3523ef982e984a92bdb53e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
