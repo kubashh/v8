@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbfe46a4_e5a93462",
+        "filename": "src/snapshot/read-only-serializer-deserializer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-30T12:52:47Z",
+      "side": 1,
+      "message": "Sure I can add one.",
+      "parentUuid": "f5ed4c68_1297b0ee",
+      "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb05ff85_dd23359a",
         "filename": "src/snapshot/read-only-serializer.cc",
         "patchSetId": 6
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f23bd55_a2248325",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-30T12:52:47Z",
+      "side": 1,
+      "message": "Yeah I\u0027ve preserved that behavior. EncodeTaggedSlots is only called when !V8_STATIC_ROOTS.\n\n(SerializeReadOnlyRootsTable does encode - keeping them unencoded there doesn\u0027t help much because the table stores full pointers.)",
+      "parentUuid": "eb05ff85_dd23359a",
+      "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "43f7702a_e382c3ee",
         "filename": "src/snapshot/read-only-serializer.cc",
         "patchSetId": 6
@@ -65,6 +101,24 @@
       "writtenOn": "2023-05-30T12:32:04Z",
       "side": 1,
       "message": "I think this is unnecessary for static roots builds",
+      "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8a9e58a_0bd0a18e",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-30T12:52:47Z",
+      "side": 1,
+      "message": "If the table is there it should be initialized imo. Is it completely unused in SR builds? If yes, let\u0027s remove it (in a separate CL).",
+      "parentUuid": "43f7702a_e382c3ee",
       "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
