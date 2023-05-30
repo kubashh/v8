@@ -477,11 +477,19 @@ class WasmOutOfLineTrap : public OutOfLineCode {
       // Just encode the stub index. This will be patched when the code
       // is added to the native module and copied into wasm code space.
       __ near_call(static_cast<Address>(trap_id), RelocInfo::WASM_STUB_CALL);
+      // If we have a frame state, the offset is not 0. There is a FrameState
+      // for all wasm traps inlined into JS.
+      bool is_inlined_into_js = frame_state_offset != 0;
+      // In case of inlining into JS, the reference map is needed for correct GC
+      // information. (Pure wasm doesn't need it as it doesn't inspect the stack
+      // when throwing.)
+      DCHECK_EQ(is_inlined_into_js, instr_->HasReferenceMap());
       ReferenceMap* reference_map =
-          gen_->zone()->New<ReferenceMap>(gen_->zone());
+          instr_->HasReferenceMap()
+              ? instr_->reference_map()
+              : gen_->zone()->New<ReferenceMap>(gen_->zone());
       gen_->RecordSafepoint(reference_map);
-      // If we have a frame state, the offset is not 0.
-      if (frame_state_offset != 0) {
+      if (is_inlined_into_js) {
         gen_->BuildTranslation(instr_, masm()->pc_offset(), frame_state_offset,
                                0, OutputFrameStateCombine::Ignore());
       }

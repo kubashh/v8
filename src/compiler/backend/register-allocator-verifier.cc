@@ -347,7 +347,7 @@ void BlockAssessments::CheckReferenceMap(const ReferenceMap* reference_map) {
     if (ref_map_operand.IsStackSlot()) {
       auto pair = map().find(ref_map_operand);
       CHECK(pair != map().end());
-      stale_ref_stack_slots().erase(pair->first);
+      stale_ref_stack_slots().erase(ref_map_operand);
     }
   }
 }
