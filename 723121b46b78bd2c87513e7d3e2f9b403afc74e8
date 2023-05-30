@@ -141,6 +141,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd1b1b67_f9bdc1e3",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-30T13:03:40Z",
+      "side": 1,
+      "message": "I see. I went this way for the uniformity (https://chromium-review.googlesource.com/c/v8/v8/+/4543306/6/src/snapshot/read-only-deserializer.cc#109) but don\u0027t have a super strong opinion. Changing to restore-from-static-roots is okay for me as well. LMK.",
+      "parentUuid": "fead7371_cb5ca677",
+      "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "467e688b_3b50d531",
