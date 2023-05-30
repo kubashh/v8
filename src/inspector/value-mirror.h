@@ -12,7 +12,6 @@
 #include "src/base/macros.h"
 #include "src/inspector/protocol/Protocol.h"
 #include "src/inspector/protocol/Runtime.h"
-#include "src/inspector/string-16.h"
 #include "src/inspector/v8-debugger.h"
 #include "src/inspector/v8-deep-serializer.h"
 
@@ -54,7 +53,7 @@ class ValueMirror {
   static std::unique_ptr<ValueMirror> create(v8::Local<v8::Context> context,
                                              v8::Local<v8::Value> value);
   virtual protocol::Response buildRemoteObject(
-      v8::Local<v8::Context> context, WrapOptions wrapOptions,
+      v8::Local<v8::Context> context, const WrapOptions* wrapOptions,
       std::unique_ptr<protocol::Runtime::RemoteObject>* result) const = 0;
   virtual void buildPropertyPreview(
       v8::Local<v8::Context> context, const String16& name,
@@ -70,6 +69,9 @@ class ValueMirror {
   // https://goo.gle/browser-automation-deepserialization
   virtual std::unique_ptr<protocol::DictionaryValue> buildDeepSerializedValue(
       v8::Local<v8::Context> context, int maxDepth,
+      const std::vector<std::pair<std::unique_ptr<StringBuffer>,
+                                  std::unique_ptr<StringBuffer>>>*
+          additionalParameters,
       V8SerializationDuplicateTracker& duplicateTracker) const = 0;
 
   class PropertyAccumulator {
