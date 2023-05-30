@@ -138,8 +138,7 @@ void ReadOnlyHeap::OnCreateHeapObjectsComplete(Isolate* isolate) {
 
 // Only for compressed spaces
 ReadOnlyHeap::ReadOnlyHeap(ReadOnlyHeap* ro_heap, ReadOnlySpace* ro_space)
-    : read_only_space_(ro_space),
-      read_only_object_cache_(ro_heap->read_only_object_cache_) {
+    : read_only_space_(ro_space) {
   DCHECK(ReadOnlyHeap::IsReadOnlySpaceShared());
   DCHECK(COMPRESS_POINTERS_IN_ISOLATE_CAGE_BOOL);
 }
@@ -246,24 +245,6 @@ bool ReadOnlyHeap::Contains(HeapObject object) {
   }
 }
 
-Object* ReadOnlyHeap::ExtendReadOnlyObjectCache() {
-  read_only_object_cache_.push_back(Smi::zero());
-  return &read_only_object_cache_.back();
-}
-
-Object ReadOnlyHeap::cached_read_only_object(size_t i) const {
-  DCHECK_LE(i, read_only_object_cache_.size());
-  return read_only_object_cache_[i];
-}
-
-bool ReadOnlyHeap::read_only_object_cache_is_initialized() const {
-  return read_only_object_cache_.size() > 0;
-}
-
-size_t ReadOnlyHeap::read_only_object_cache_size() const {
-  return read_only_object_cache_.size();
-}
-
 ReadOnlyHeapObjectIterator::ReadOnlyHeapObjectIterator(
     const ReadOnlyHeap* ro_heap)
     : ReadOnlyHeapObjectIterator(ro_heap->read_only_space()) {}
@@ -289,8 +270,7 @@ HeapObject ReadOnlyHeapObjectIterator::Next() {
 
   ReadOnlyPage* current_page = *current_page_;
   for (;;) {
-    Address end = current_page->address() + current_page->area_size() +
-                  MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(RO_SPACE);
+    Address end = current_page->GetAreaStart() + current_page->area_size();
     DCHECK_LE(current_addr_, end);
     if (current_addr_ == end) {
       // Progress to the next page.
@@ -312,6 +292,47 @@ HeapObject ReadOnlyHeapObjectIterator::Next() {
     current_addr_ += ALIGN_TO_ALLOCATION_ALIGNMENT(object_size);
 
     if (object.IsFreeSpaceOrFiller()) {
+      continue;
+    }
+
+    DCHECK_OBJECT_SIZE(object_size);
+    return object;
+  }
+}
+
+ReadOnlyPageObjectIterator::ReadOnlyPageObjectIterator(
+    const ReadOnlyPage* page, SkipFreeSpaceOrFiller skip_free_space_or_filler)
+    : ReadOnlyPageObjectIterator(page, page->GetAreaStart(),
+                                 skip_free_space_or_filler) {}
+
+ReadOnlyPageObjectIterator::ReadOnlyPageObjectIterator(
+    const ReadOnlyPage* page, Address current_addr,
+    SkipFreeSpaceOrFiller skip_free_space_or_filler)
+    : current_page_(page),
+      current_addr_(current_addr),
+      skip_free_space_or_filler_(skip_free_space_or_filler) {
+  if (!V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
+    DCHECK_GE(current_addr, page->GetAreaStart());
+    DCHECK_LT(current_addr, page->GetAreaStart() + page->area_size());
+  }
+}
+
+HeapObject ReadOnlyPageObjectIterator::Next() {
+  if (V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
+    return HeapObject();  // Unsupported
+  }
+
+  Address end = current_page_->GetAreaStart() + current_page_->area_size();
+  for (;;) {
+    DCHECK_LE(current_addr_, end);
+    if (current_addr_ == end) return HeapObject();
+
+    HeapObject object = HeapObject::FromAddress(current_addr_);
+    const int object_size = object.Size();
+    current_addr_ += ALIGN_TO_ALLOCATION_ALIGNMENT(object_size);
+
+    if (skip_free_space_or_filler_ == SkipFreeSpaceOrFiller::kYes &&
+        object.IsFreeSpaceOrFiller()) {
       continue;
     }
 
