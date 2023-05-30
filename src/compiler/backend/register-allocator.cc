@@ -4623,7 +4623,7 @@ void OperandAssigner::DecideSpillingMode() {
       // If the range is spilled only in deferred blocks and starts in
       // a non-deferred block, we transition its representation here so
       // that the LiveRangeConnector processes them correctly. If,
-      // however, they start in a deferred block, we uograde them to
+      // however, they start in a deferred block, we upgrade them to
       // spill at definition, as that definition is in a deferred block
       // anyway. While this is an optimization, the code in LiveRangeConnector
       // relies on it!
@@ -4872,6 +4872,7 @@ void ReferenceMapPopulator::PopulateReferenceMaps() {
         DCHECK(!operand.IsStackSlot());
         DCHECK(CanBeTaggedOrCompressedPointer(
             AllocatedOperand::cast(operand).representation()));
+        // TODO(mliedtke): Does this actually provide any value?
         map->RecordReference(AllocatedOperand::cast(operand));
       }
     }

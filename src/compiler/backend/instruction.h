@@ -981,7 +981,10 @@ class V8_EXPORT_PRIVATE Instruction final {
     return this;
   }
   bool IsCall() const { return IsCallField::decode(bit_field_); }
-  bool NeedsReferenceMap() const { return IsCall(); }
+  bool NeedsReferenceMap() const {
+    return IsCall() ||
+           (IsTrap() && DeoptFrameStateOffsetField::decode(opcode_) != 0);
+  }
   bool HasReferenceMap() const { return reference_map_ != nullptr; }
 
   bool ClobbersRegisters() const { return IsCall(); }
