@@ -217,10 +217,20 @@ class V8_EXPORT V8InspectorSession {
   virtual void stop() = 0;
 };
 
+// Deprecated.
 class V8_EXPORT WebDriverValue {
  public:
   explicit WebDriverValue(std::unique_ptr<StringBuffer> type,
                           v8::MaybeLocal<v8::Value> value = {})
+      : type(std::move(type)), value(value) {}
+  std::unique_ptr<StringBuffer> type;
+  v8::MaybeLocal<v8::Value> value;
+};
+
+class V8_EXPORT DeepSerializedValue {
+ public:
+  explicit DeepSerializedValue(std::unique_ptr<StringBuffer> type,
+                               v8::MaybeLocal<v8::Value> value = {})
       : type(std::move(type)), value(value) {}
   std::unique_ptr<StringBuffer> type;
   v8::MaybeLocal<v8::Value> value;
@@ -243,8 +253,16 @@ class V8_EXPORT V8InspectorClient {
   virtual void beginUserGesture() {}
   virtual void endUserGesture() {}
 
+  // Deprecated. Use `deepSerialize` instead.
   virtual std::unique_ptr<WebDriverValue> serializeToWebDriverValue(
       v8::Local<v8::Value> v8Value, int maxDepth) {
+    return nullptr;
+  }
+  virtual std::unique_ptr<DeepSerializedValue> deepSerialize(
+      v8::Local<v8::Value> v8Value, int maxDepth,
+      const std::vector<std::pair<std::unique_ptr<StringBuffer>,
+                                  std::unique_ptr<StringBuffer>>>*
+          additionalParameters) {
     return nullptr;
   }
   virtual std::unique_ptr<StringBuffer> valueSubtype(v8::Local<v8::Value>) {
