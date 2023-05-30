@@ -56,6 +56,30 @@
       },
       "revId": "82be780bd1dd49d8f149a46bb2569f38d0da9662",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6f04d89_37c826bb",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-30T09:14:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "628f1034_103df93d",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 13
+      },
+      "revId": "82be780bd1dd49d8f149a46bb2569f38d0da9662",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
