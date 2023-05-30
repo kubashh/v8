@@ -53,6 +53,7 @@ enum ContextLookupFlags {
   /* it's already UBSan-fiendly and doesn't require a star... So declare */    \
   /* it as a HeapObject for now. */                                            \
   V(EMBEDDER_DATA_INDEX, HeapObject, embedder_data)                            \
+  V(ASYNC_CONTEXT_STORE_INDEX, HeapObject, async_context_store)                \
   V(CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX, HeapObject,                    \
     continuation_preserved_embedder_data)                                      \
   NATIVE_CONTEXT_INTRINSIC_FUNCTIONS(V)                                        \
@@ -130,6 +131,8 @@ enum ContextLookupFlags {
   V(INITIAL_ARRAY_ITERATOR_PROTOTYPE_INDEX, JSObject,                          \
     initial_array_iterator_prototype)                                          \
   V(INITIAL_ARRAY_PROTOTYPE_INDEX, JSObject, initial_array_prototype)          \
+  V(INITIAL_ASYNC_LOCAL_MAP_INDEX, Map, initial_async_local_map)               \
+  V(INITIAL_ASYNC_SNAPSHOT_MAP_INDEX, Map, initial_async_snapshot_map)         \
   V(INITIAL_ERROR_PROTOTYPE_INDEX, JSObject, initial_error_prototype)          \
   V(INITIAL_GENERATOR_PROTOTYPE_INDEX, JSObject, initial_generator_prototype)  \
   V(INITIAL_ASYNC_ITERATOR_PROTOTYPE_INDEX, JSObject,                          \
