@@ -2597,6 +2597,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<BoolT> IsJSArray(TNode<HeapObject> object);
   TNode<BoolT> IsJSArrayIterator(TNode<HeapObject> object);
   TNode<BoolT> IsJSAsyncGeneratorObject(TNode<HeapObject> object);
+  TNode<BoolT> IsJSAsyncLocal(TNode<HeapObject> object);
+  TNode<BoolT> IsJSAsyncSnapshot(TNode<HeapObject> object);
   TNode<BoolT> IsFunctionInstanceType(TNode<Int32T> instance_type);
   TNode<BoolT> IsJSFunctionInstanceType(TNode<Int32T> instance_type);
   TNode<BoolT> IsJSFunctionMap(TNode<Map> map);
