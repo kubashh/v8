@@ -347,7 +347,7 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
                                              Handle<HeapObject> filler,
                                              AllocationType allocation);
 
-  Handle<SharedFunctionInfo> NewSharedFunctionInfo();
+  Handle<SharedFunctionInfo> NewSharedFunctionInfo(AllocationType allocation);
   Handle<SharedFunctionInfo> NewSharedFunctionInfo(
       MaybeHandle<String> maybe_name,
       MaybeHandle<HeapObject> maybe_function_data, Builtin builtin,
