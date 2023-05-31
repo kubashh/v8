@@ -147,7 +147,6 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
                          OptimizedCompilationInfo* info, Isolate* isolate,
                          base::Optional<OsrHelper> osr_helper,
                          int start_source_position,
-                         JumpOptimizationInfo* jump_opt,
                          const AssemblerOptions& options, Builtin builtin,
                          size_t max_unoptimized_frame_height,
                          size_t max_pushed_argument_count,

@@ -352,6 +352,8 @@ void ParallelMove::Eliminate() {
   }
 }
 
+void ParallelMove::Print() { StdoutStream{} << *this << std::endl; }
+
 Instruction::Instruction(InstructionCode opcode)
     : opcode_(opcode),
       bit_field_(OutputCountField::encode(0) | InputCountField::encode(0) |
