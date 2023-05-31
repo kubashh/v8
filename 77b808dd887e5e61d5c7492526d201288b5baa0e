@@ -251,6 +251,30 @@
       },
       "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba7728a_f6087e95",
+        "filename": "src/heap/read-only-spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-31T07:46:41Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fd1449c0_f4a07f64",
+      "range": {
+        "startLine": 755,
+        "startChar": 35,
+        "endLine": 755,
+        "endChar": 38
+      },
+      "revId": "77b808dd887e5e61d5c7492526d201288b5baa0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ac1061d_b17f9c6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-31T07:46:41Z",
+      "side": 1,
+      "message": "Thanks, one question below but change looks good",
+      "revId": "d491eec0893b96a3129639c0ae5522ae0bfb0c3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45df080e_92575b0c",
+        "filename": "src/snapshot/read-only-deserializer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-31T07:46:41Z",
+      "side": 1,
+      "message": ":reindeer:?",
+      "range": {
+        "startLine": 119,
+        "startChar": 16,
+        "endLine": 119,
+        "endChar": 22
+      },
+      "revId": "d491eec0893b96a3129639c0ae5522ae0bfb0c3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06efb30e_eeb54293",
+        "filename": "src/snapshot/read-only-deserializer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-05-31T07:46:41Z",
+      "side": 1,
+      "message": "To double check: This is what you mean in the CL description with relocate pointers? Or do you mean `DecodeTaggedSlots()` as phase that fixes up pointers?",
+      "range": {
+        "startLine": 147,
+        "startChar": 30,
+        "endLine": 147,
+        "endChar": 66
+      },
+      "revId": "d491eec0893b96a3129639c0ae5522ae0bfb0c3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
