@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ebf8fb9c_65a3ed24",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-05-31T08:42:01Z",
+      "side": 1,
+      "message": "Sure, but we are comparing regressions in build time vs runtime. If you can prove that this causes no measurable regression in JIT Turbofan optimization time (scores are not enough, compile time issues are easily hidden in overall Turbofan slowness but will become more important as we move to Turboshaft), then we can also do it like this.",
+      "parentUuid": "fcf2eb89_aa476308",
+      "range": {
+        "startLine": 742,
+        "startChar": 0,
+        "endLine": 752,
+        "endChar": 35
+      },
+      "revId": "0ed3d4f06c6d4762cc3523ef982e984a92bdb53e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fd471b9b_3edbbcf5",
         "filename": "src/compiler/backend/code-generator.cc",
         "patchSetId": 6
