@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "9b0804334e3452e1ff3ac042d3d7547c151293ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5dee9cd_2dae2f5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-05-31T06:01:04Z",
+      "side": 1,
+      "message": "LGTM % nit",
+      "revId": "9b0804334e3452e1ff3ac042d3d7547c151293ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f5a315c_8a94d3aa",
+        "filename": "src/deoptimizer/translation-opcode.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-05-31T06:01:04Z",
+      "side": 1,
+      "message": "Nice idea!",
+      "range": {
+        "startLine": 14,
+        "startChar": 8,
+        "endLine": 14,
+        "endChar": 37
+      },
+      "revId": "9b0804334e3452e1ff3ac042d3d7547c151293ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d747cc2b_e6cb69b8",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2491,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-05-31T06:01:04Z",
+      "side": 1,
+      "message": "Nit: We can even do this faster by using ranges, right?\n`if (BUILTIN_CONTINUATION_FRAME \u003c opcode \u0026\u0026 opcode \u003c WASM_INLINED_INTO_JS_FRAME) ...`\n`if (base::IsInRange(opcode, BUILTIN_CONTINUATION_FRAME, WASM_INLINED_INTO_JS_FRAME)`\nWe can also check if the compiler is smart enough here...\nNit2: Maybe we can create a predicate: `IsTranslationFrameOpcode()`",
+      "range": {
+        "startLine": 2488,
+        "startChar": 0,
+        "endLine": 2491,
+        "endChar": 11
+      },
+      "revId": "9b0804334e3452e1ff3ac042d3d7547c151293ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
