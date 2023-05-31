@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ade7dafa_d121770c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8ccfa60_e713bfe6",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e9b52564_895c15ef",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 9
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "911e03e1_572e9df5",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "394a9436_fa45a059",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8e2b7c3_8ef9f466",
@@ -82,6 +118,24 @@
       "writtenOn": "2023-05-26T11:48:26Z",
       "side": 1,
       "message": "I think it\u0027s worth having a single fast handler for source objects without properties instead of always going through the slow handler. \n\nSince you removed `ToObject_Inline` call I guess all non-JSReceiver sources except Strings will fall into this case (only Strings can have own properties).",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "723e0fa0_f79f98f6",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5035,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "Actually this works with the normal fastcase. To make it work I simply extended `GetCloneModeForMap`",
+      "parentUuid": "d8e2b7c3_8ef9f466",
       "revId": "9a1795610f74961567efceb486e1976dcb77920e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -105,6 +159,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e308a0c_16a52d43",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5087,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "yeah, just checked. It works because LoadReceiverMap actually handles smis and returns heap number map in this case. since this map has 0 properties everything below is compatible... it\u0027s a bit unexpected...",
+      "parentUuid": "b78af9ba_8b0cfa02",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5cc30bd3_b915bd3f",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 9
@@ -116,6 +188,24 @@
       "writtenOn": "2023-05-26T11:48:26Z",
       "side": 1,
       "message": "`#if DEBUG` or `if (DEBUG_BOOL) { ... }` to be uniform.",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edb23596_2b690be6",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5155,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cc30bd3_b915bd3f",
       "revId": "9a1795610f74961567efceb486e1976dcb77920e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -133,6 +223,24 @@
       "writtenOn": "2023-05-26T11:48:26Z",
       "side": 1,
       "message": "Please add comments about these modes.",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e7bf0c2_665435fb",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3094,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44c1a2e2_4538a7fb",
       "revId": "9a1795610f74961567efceb486e1976dcb77920e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -160,6 +268,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e077a637_53d7f89b",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3097,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b313890_e2794cd9",
+      "range": {
+        "startLine": 3097,
+        "startChar": 7,
+        "endLine": 3097,
+        "endChar": 45
+      },
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce949c0d_74bb87a9",
@@ -177,6 +309,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7694ea9f_fd2a7727",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3127,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce949c0d_74bb87a9",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a8ef072_28c66833",
@@ -190,6 +340,24 @@
       "writtenOn": "2023-05-26T11:48:26Z",
       "side": 1,
       "message": "DCHECK_EQ(details.kind(), kData);\nDCHECK_EQ(result_details.kind(), kData);",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b13b1e43_b6cc4a87",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3142,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a8ef072_28c66833",
       "revId": "9a1795610f74961567efceb486e1976dcb77920e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -213,6 +381,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ecad9604_0b03f57b",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3145,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "We check if source can ever become more generic than target. This is stronger than \"they are currently compatible\". I think this can happen. Essentially, whenever the map has any kind of representation that is not the most generic one.",
+      "parentUuid": "328d67b1_8c91c1bb",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3c89a946_a7411f40",
         "filename": "src/ic/ic.cc",
         "patchSetId": 9
@@ -224,6 +410,24 @@
       "writtenOn": "2023-05-26T11:48:26Z",
       "side": 1,
       "message": "DCHECK(source_map-\u003eOnlyHasSimpleProperties());",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2259412c_322109b7",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3158,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-05-31T15:06:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c89a946_a7411f40",
       "revId": "9a1795610f74961567efceb486e1976dcb77920e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
