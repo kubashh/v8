@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e08474e0_e0210a22",
+        "filename": "src/snapshot/read-only-serializer-deserializer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-31T06:24:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbfe46a4_e5a93462",
+      "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb05ff85_dd23359a",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Yeah I\u0027ve preserved that behavior. EncodeTaggedSlots is only called when !V8_STATIC_ROOTS.\n\n(SerializeReadOnlyRootsTable does encode - keeping them unencoded there doesn\u0027t help much because the table stores full pointers.)",
       "parentUuid": "eb05ff85_dd23359a",
+      "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "344fb973_552a9315",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-31T06:24:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f23bd55_a2248325",
       "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -173,6 +209,24 @@
       "side": 1,
       "message": "well, it is probably faster and saves on serialized data...",
       "parentUuid": "dd1b1b67_f9bdc1e3",
+      "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d70b1ed7_ecbedd1d",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-05-31T06:24:54Z",
+      "side": 1,
+      "message": ".. and it\u0027s more code complexity, hence a higher risk of bugs and misunderstandings. IMO a tradeoff situation with good arguments in both directions. But like I say I don\u0027t have a super strong opinion here so I\u0027m happy to go with the InitFromStaticRootsTable way. Done in the latest PS.",
+      "parentUuid": "032ce16d_9d27d2b0",
       "revId": "723121b46b78bd2c87513e7d3e2f9b403afc74e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
