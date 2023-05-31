@@ -33,6 +33,46 @@
       "message": "trying out CQ",
       "revId": "a1982aa5b36eb3f10baa88b1451c8d37a4bbad2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3991d719_cefc4b1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-05-31T07:21:22Z",
+      "side": 1,
+      "message": "lgtm, thanks for fixing!",
+      "revId": "a1982aa5b36eb3f10baa88b1451c8d37a4bbad2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf38d467_d9d520a9",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5003,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-05-31T07:21:22Z",
+      "side": 1,
+      "message": "Ah, this is now testing even more than the original test (that we\u0027re not too eager). Neat!\n\nAlso the test is simpler now (no conditional \"return x ? y(x) : y\") which is also nice.",
+      "range": {
+        "startLine": 5003,
+        "startChar": 29,
+        "endLine": 5003,
+        "endChar": 34
+      },
+      "revId": "a1982aa5b36eb3f10baa88b1451c8d37a4bbad2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
