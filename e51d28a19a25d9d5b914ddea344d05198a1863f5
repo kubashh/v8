@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74d49cc4_87541203",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-31T09:22:54Z",
+      "side": 1,
+      "message": "drive-by review of BitSet",
+      "revId": "e51d28a19a25d9d5b914ddea344d05198a1863f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e0bb30b_86254cdf",
+        "filename": "src/snapshot/read-only-deserializer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-31T09:22:54Z",
+      "side": 1,
+      "message": "if the set is sparse, this iteration can be more efficient if you skip over empty bits with `base::bits::CountTrailingZeros` (see `BitVector::Iterator`). If it\u0027s _really_ sparse, you could skip over empty bitset data bytes too. Might be worth at least adding a TODO for this.",
+      "range": {
+        "startLine": 99,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 64
+      },
+      "revId": "e51d28a19a25d9d5b914ddea344d05198a1863f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9109f7f6_c0d01592",
+        "filename": "src/snapshot/read-only-serializer-deserializer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-05-31T09:22:54Z",
+      "side": 1,
+      "message": "```suggestion\n    return RoundUp(size_in_bits_, kBitsPerByte);\n```",
+      "range": {
+        "startLine": 83,
+        "startChar": 11,
+        "endLine": 83,
+        "endChar": 62
+      },
+      "revId": "e51d28a19a25d9d5b914ddea344d05198a1863f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
