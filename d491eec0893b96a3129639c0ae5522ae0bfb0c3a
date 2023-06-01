@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33c97bad_3a1fc8ab",
+        "filename": "src/snapshot/read-only-deserializer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-01T06:32:43Z",
+      "side": 1,
+      "message": ":) Acknowledged",
+      "parentUuid": "45df080e_92575b0c",
+      "range": {
+        "startLine": 119,
+        "startChar": 16,
+        "endLine": 119,
+        "endChar": 22
+      },
+      "revId": "d491eec0893b96a3129639c0ae5522ae0bfb0c3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06efb30e_eeb54293",
@@ -78,6 +102,30 @@
       "side": 1,
       "message": "The CL desc refers to `DecodeTaggedSlots`, I\u0027ll clarify there.",
       "parentUuid": "06efb30e_eeb54293",
+      "range": {
+        "startLine": 147,
+        "startChar": 30,
+        "endLine": 147,
+        "endChar": 66
+      },
+      "revId": "d491eec0893b96a3129639c0ae5522ae0bfb0c3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1435d643_cdf3503d",
+        "filename": "src/snapshot/read-only-deserializer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-01T06:32:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93de8a4b_0f343d8d",
       "range": {
         "startLine": 147,
         "startChar": 30,
