@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16bd25fa_c41cd8d4",
+        "filename": "src/inspector/v8-runtime-agent-impl.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1524704
+      },
+      "writtenOn": "2023-06-01T09:03:23Z",
+      "side": 1,
+      "message": "getKey and getValue create a copy of the string.\nThis is a temporary object destroyed immediately after the call to toStringView.\nThe created StringView therefore has a dangling pointer inside of it.",
+      "revId": "b5b42c59e80d1cdb6b1b829a75f2333d99c1f2b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
