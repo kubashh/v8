@@ -180,7 +180,7 @@ class DebugInfoListNode {
   Handle<DebugInfo> debug_info() { return Handle<DebugInfo>(debug_info_); }
 
  private:
-  // Global (weak) handle to the debug info object.
+  // Global handle to the DebugInfo object.
   Address* debug_info_;
 
   // Next pointer for linked list.
