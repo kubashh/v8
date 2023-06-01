@@ -67,6 +67,24 @@
       "message": "LGTM.\n\n\u003e JIT\u0027ed code is not generated in a way that\u0027s compatible with UBSan\u0027s -fsanitize\u003dfunction.\n\nSome JIT\u0027ed functions seem to be in a page preceded by an unmapped page. Accessing 2 words before the page (0x.....ff8) leads to SIGSEGV.\n\n```\nUndefinedBehaviorSanitizer:DEADLYSIGNAL\n\u003d\u003d4171\u003d\u003dERROR: UndefinedBehaviorSanitizer: SEGV on unknown address 0x7efdc608fff8 (pc 0x560929821b3f bp 0x7ffd7c7b8d80 sp 0x7ffd7c7b8d20 T4171)\n\u003d\u003d4171\u003d\u003dThe signal is caused by a READ memory access.\n    #0 0x560929821b3f in Call src/execution/simulator.h:154:12\n    #1 0x560929821b3f in v8::internal::test_icache::TestTestFlushICacheOfExecutable() test/cctest/test-icache.cc:170:5\n    #2 0x56092948eaf2 in CcTest::Run(char const*) test/cctest/cctest.cc:169:5\n    #3 0x5609294906ac in main test/cctest/cctest.cc:404:9\n    #4 0x7efdc4cb0c86 in __libc_start_main /build/glibc-CVJwZb/glibc-2.27/csu/../csu/libc-start.c:310\n    #5 0x560929477029 in _start (/b/s/w/ir/out/build/cctest+0x1bf9029) (BuildId: dcf1cc6d301d05e1)\n    ```",
       "revId": "1e7aa016c2f524695f3dd3f07acb065d3a47bdfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b40a2940_05d61699",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-06-01T15:15:39Z",
+      "side": 1,
+      "message": "Please file a bug for these cases, so that we can triage that properly.",
+      "parentUuid": "711a9d04_c3a49ceb",
+      "revId": "1e7aa016c2f524695f3dd3f07acb065d3a47bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
