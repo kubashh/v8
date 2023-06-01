@@ -1121,15 +1121,7 @@ void StringBuilderOptimizer::FinalizeStringBuilders() {
     // loop phi).
     for (Node* end : ends) {
       if (IsLoopPhi(end)) {
-        BasicBlock* phi_block = schedule()->block(end);
-        for (BasicBlock* block : phi_block->successors()) {
-          if (phi_block->LoopContains(block)) continue;
-          if (!blocks_to_trimmings_map_[block->id().ToInt()].has_value()) {
-            blocks_to_trimmings_map_[block->id().ToInt()] =
-                ZoneVector<Node*>(temp_zone());
-          }
-          blocks_to_trimmings_map_[block->id().ToInt()]->push_back(end);
-        }
+        ComputePostLoopTrimmings(end);
         UpdateStatus(end, State::kEndStringBuilderLoopPhi);
       } else {
         UpdateStatus(end, State::kEndStringBuilder);
@@ -1146,6 +1138,92 @@ void StringBuilderOptimizer::FinalizeStringBuilders() {
 #else
   USE(one_string_builder_or_more_valid);
 #endif
+}
+
+// Blocks following a loop where a loop phi is the last node of a string builder
+// should trim said loop phi. It's not enough to look at the loop header's
+// successors, since the loop could have multiple exists. Consider for instance:
+//
+//                    +-----------+
+//                    |Loop Header|<----------------------------+
+//                    +-----------+                             |
+//                      |       |                               |
+//                      |       |                               |
+//         +------------+       +-------------+                 |
+//         |                                  |                 |
+//         v                                  v                 |
+//   +-----------+                      +-----------+           |
+//   |out of loop|                      |  in loop  |           |
+//   +-----------+                      +-----------+           |
+//                                        |       |             |
+//                                        |       |             |
+//                             +----------+       +-------------+
+//                             |
+//                             v
+//                       +-----------+
+//                       |out of loop|
+//                       +-----------+
+//
+// We consider that a block is an "exit point" if there is no path from this
+// block to the backedge. We allow such a path to contain backedges of inner
+// loops but not of outer loops (otherwise, all of the blocks of an inner loop
+// would be considered as exit points).
+// Thanks to edge-split form, it's not possible for an exit point to be a
+// successor of another exit point (exit points are always reach by a Branch at
+// the end of a block inside the loop), which mean that we can insert the
+// trimming in each exit point without risking to trim multiple times.
+//
+// To find the exit points, we proceed in two steps:
+//   1- we iterate the loop backwards starting from the backedge, and mark all
+//     of the blocks that we found, stopping on the loop header. This is
+//     guaranteed to mark all of the blocks of the loop, since the loop header
+//     dominates all of the blocks of the loop.
+//   2- we iterate the loop forwards starting from the loop header, and whenever
+//     we reach a block that is not marked, then it is outside of the loop.
+//
+void StringBuilderOptimizer::ComputePostLoopTrimmings(Node* phi) {
+  DCHECK(IsLoopPhi(phi));
+  BasicBlock* loop_header = schedule()->block(phi);
+
+  // 1- find blocks that are inside of the loop
+  ZoneUnorderedSet<BasicBlock*> loop_blocks(temp_zone());
+  ZoneVector<BasicBlock*> queue(temp_zone());
+  loop_blocks.insert(loop_header);
+  queue.push_back(loop_header->loop_end());
+  while (!queue.empty()) {
+    BasicBlock* curr = queue.back();
+    queue.pop_back();
+    if (loop_blocks.contains(curr)) continue;
+    loop_blocks.insert(curr);
+    for (BasicBlock* pred : curr->predecessors()) {
+      queue.push_back(pred);
+    }
+  }
+
+  // 2- iterate forwards and find exit points
+  ZoneUnorderedSet<BasicBlock*> seen(temp_zone());
+  queue.clear();
+  queue.push_back(loop_header);
+  while (!queue.empty()) {
+    BasicBlock* curr = queue.back();
+    queue.pop_back();
+    if (seen.contains(curr)) continue;
+    seen.insert(curr);
+
+    if (loop_blocks.contains(curr)) {
+      // It's part of the loop
+      for (BasicBlock* succ : curr->successors()) {
+        queue.push_back(succ);
+      }
+    } else {
+      // It's an exit point
+      if (!blocks_to_trimmings_map_[curr->id().ToInt()].has_value()) {
+        blocks_to_trimmings_map_[curr->id().ToInt()] =
+            ZoneVector<Node*>(temp_zone());
+      }
+      blocks_to_trimmings_map_[curr->id().ToInt()]->push_back(phi);
+    }
+  }
 }
 
 void StringBuilderOptimizer::VisitGraph() {
