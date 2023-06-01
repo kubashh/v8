@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9362511e_7b1777ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2023-06-01T10:13:11Z",
+      "side": 1,
+      "message": "Jobs usage lgtm",
+      "revId": "503da39f702a154616cd415499e98495a50f4718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac1dd592_fe5117d5",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1218025
+      },
+      "writtenOn": "2023-06-01T10:13:11Z",
+      "side": 1,
+      "message": "Nit: CreateJob is maybe more suited, as I imagine we don\u0027t expect any compilation task at this point.",
+      "range": {
+        "startLine": 150,
+        "startChar": 42,
+        "endLine": 150,
+        "endChar": 49
+      },
+      "revId": "503da39f702a154616cd415499e98495a50f4718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
