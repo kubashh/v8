@@ -238,7 +238,7 @@ serializationOptions: {"serialization":"deep","maxDepth":2}
 }
 Runtime.evaluate
 expression: "{key_level_1: {key_level_2: {key_level_3: 'value_level_3'}}}"
-serializationOptions: {"serialization":"deep","maxDepth":999}
+serializationOptions: {"serialization":"deep","maxDepth":999,"additionalParameters":[{"key":"foo","value":"bar"},{"key":"baz","value":"qux"}]}
 {
     id : <messageId>
     result : {
@@ -280,7 +280,7 @@ serializationOptions: {"serialization":"deep","maxDepth":999}
 }
 Runtime.callFunctionOn
 expression: "{key_level_1: {key_level_2: {key_level_3: 'value_level_3'}}}"
-serializationOptions: {"serialization":"deep","maxDepth":999}
+serializationOptions: {"serialization":"deep","maxDepth":999,"additionalParameters":[{"key":"foo","value":"bar"},{"key":"baz","value":"qux"}]}
 {
     id : <messageId>
     result : {
