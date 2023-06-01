@@ -345,6 +345,7 @@ class V8_EXPORT_PRIVATE StringBuilderOptimizer final {
   int GetPhiPredecessorsCommonId(Node* node);
 
   void FinalizeStringBuilders();
+  void ComputePostLoopTrimmings(Node* phi);
   void VisitNode(Node* node, BasicBlock* block);
   void VisitGraph();
 
