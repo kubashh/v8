@@ -33,9 +33,14 @@ namespace compiler {
 class BasicBlock;
 struct CallBuffer;  // TODO(bmeurer): Remove this.
 class Linkage;
-class OperandGenerator;
+template <typename Adapter>
+class OperandGeneratorT;
 class SwitchInfo;
 class StateObjectDeduplicator;
+
+struct TurbofanAdapter {};
+
+struct TurboshaftAdapter {};
 
 // The flags continuation is a way to combine a branch or a materialization
 // of a boolean value with an instruction that sets the flags register.
@@ -266,8 +271,10 @@ struct PushParameter {
 enum class FrameStateInputKind { kAny, kStackSlot };
 
 // Instruction selection generates an InstructionSequence for a given Schedule.
-class V8_EXPORT_PRIVATE InstructionSelector final {
+template <typename Adapter>
+class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
  public:
+  using OperandGenerator = OperandGeneratorT<Adapter>;
   // Forward declarations.
   class Features;
 
@@ -283,7 +290,7 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   };
   enum EnableTraceTurboJson { kDisableTraceTurboJson, kEnableTraceTurboJson };
 
-  InstructionSelector(
+  InstructionSelectorT(
       Zone* zone, size_t node_count, Linkage* linkage,
       InstructionSequence* sequence, Schedule* schedule,
       SourcePositionTable* source_positions, Frame* frame,
@@ -474,7 +481,7 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   }
 
  private:
-  friend class OperandGenerator;
+  friend class OperandGeneratorT<Adapter>;
 
   bool UseInstructionScheduling() const {
     return (enable_scheduling_ == kEnableScheduling) &&
@@ -760,8 +767,9 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   EnableScheduling enable_scheduling_;
   EnableRootsRelativeAddressing enable_roots_relative_addressing_;
   EnableSwitchJumpTable enable_switch_jump_table_;
-  ZoneUnorderedMap<FrameStateInput, CachedStateValues*, FrameStateInput::Hash,
-                   FrameStateInput::Equal>
+  ZoneUnorderedMap<FrameStateInput, CachedStateValues*,
+                   typename FrameStateInput::Hash,
+                   typename FrameStateInput::Equal>
       state_values_cache_;
 
   Frame* frame_;
@@ -785,6 +793,13 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   ZoneVector<Upper32BitsState> phi_states_;
 #endif
 };
+
+using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
+
+extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+    InstructionSelectorT<TurbofanAdapter>;
+extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+    InstructionSelectorT<TurboshaftAdapter>;
 
 }  // namespace compiler
 }  // namespace internal
