@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df4afc69_0d14d0b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1182309
+      },
+      "writtenOn": "2023-06-01T09:06:52Z",
+      "side": 1,
+      "message": "It may be possible to go further with simplifying this structure, but I see around 1% compilation performance improvement on big and little cores, so I\u0027d like to bank this before looking at alternatives.",
+      "revId": "799a32c3c5be741f7559f50662a2b5b3de5097a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
