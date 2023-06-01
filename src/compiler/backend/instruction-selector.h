@@ -22,6 +22,10 @@
 #include "src/wasm/simd-shuffle.h"
 #endif  // V8_ENABLE_WEBASSEMBLY
 
+// TODO(nicohartmann@): Remove thonse once Adapters have their own files.
+#include "src/compiler/schedule.h"
+#include "src/compiler/turboshaft/graph.h"
+
 namespace v8 {
 namespace internal {
 
@@ -38,9 +42,105 @@ class OperandGeneratorT;
 class SwitchInfo;
 class StateObjectDeduplicator;
 
-struct TurbofanAdapter {};
+struct TurbofanAdapter {
+  using schedule_t = Schedule*;
+  using block_t = BasicBlock*;
+  using block_range_t = ZoneVector<block_t>;
+  using node_t = Node*;
+  using inputs_t = Node::Inputs;
+  using opcode_t = IrOpcode::Value;
 
-struct TurboshaftAdapter {};
+  void SetSchedule(schedule_t schedule) {}
+
+  block_t block(schedule_t schedule, node_t node) const {
+    return schedule->block(node);
+  }
+
+  RpoNumber rpo_number(block_t block) const {
+    return RpoNumber::FromInt(block->rpo_number());
+  }
+
+  const block_range_t& rpo_order(schedule_t schedule) const {
+    return *schedule->rpo_order();
+  }
+
+  bool IsLoopHeader(block_t block) const { return block->IsLoopHeader(); }
+
+  size_t PredecessorCount(block_t block) const {
+    return block->PredecessorCount();
+  }
+
+  base::iterator_range<NodeVector::iterator> nodes(block_t block) {
+    return {block->begin(), block->end()};
+  }
+
+  bool IsPhi(node_t node) const { return node->opcode() == IrOpcode::kPhi; }
+
+  inputs_t inputs(node_t node) const { return node->inputs(); }
+  opcode_t opcode(node_t node) const { return node->opcode(); }
+
+  size_t id(node_t node) const { return node->id(); }
+  bool valid(node_t node) const { return node != nullptr; }
+
+  node_t block_terminator(block_t block) const {
+    return block->control_input();
+  }
+};
+
+struct TurboshaftAdapter {
+  using schedule_t = turboshaft::Graph*;
+  using block_t = turboshaft::Block*;
+  using block_range_t = ZoneVector<block_t>;
+  using node_t = turboshaft::OpIndex;
+  using inputs_t = base::Vector<const node_t>;
+  using opcode_t = turboshaft::Opcode;
+
+  void SetSchedule(schedule_t schedule) { graph_ = schedule; }
+
+  block_t block(schedule_t schedule, node_t node) const {
+    return &schedule->Get(schedule->BlockOf(node));
+  }
+
+  RpoNumber rpo_number(block_t block) const {
+    return RpoNumber::FromInt(block->index().id());
+  }
+
+  const block_range_t& rpo_order(schedule_t schedule) {
+    return schedule->blocks_vector();
+  }
+
+  bool IsLoopHeader(block_t block) const { return block->IsLoop(); }
+
+  size_t PredecessorCount(block_t block) const {
+    return block->PredecessorCount();
+  }
+
+  base::iterator_range<turboshaft::Graph::OpIndexIterator> nodes(
+      block_t block) {
+    return graph_->OperationIndices(*block);
+  }
+
+  bool IsPhi(node_t node) const {
+    return graph_->Get(node).Is<turboshaft::PhiOp>();
+  }
+
+  inputs_t inputs(node_t node) const { return graph_->Get(node).inputs(); }
+  opcode_t opcode(node_t node) const { return graph_->Get(node).opcode; }
+
+  size_t id(node_t node) const { return node.id(); }
+  bool valid(node_t node) const { return node.valid(); }
+
+  node_t block_terminator(block_t block) const {
+    return graph_->PreviousIndex(block->end());
+  }
+
+  // Temporary stubs
+  block_t block(schedule_t, Node*) const { UNREACHABLE(); }
+  RpoNumber rpo_number(BasicBlock*) const { UNREACHABLE(); }
+
+ private:
+  turboshaft::Graph* graph_;
+};
 
 // The flags continuation is a way to combine a branch or a materialization
 // of a boolean value with an instruction that sets the flags register.
@@ -272,9 +372,15 @@ enum class FrameStateInputKind { kAny, kStackSlot };
 
 // Instruction selection generates an InstructionSequence for a given Schedule.
 template <typename Adapter>
-class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
+class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final
+    : public Adapter {
  public:
   using OperandGenerator = OperandGeneratorT<Adapter>;
+  using schedule_t = typename Adapter::schedule_t;
+  using block_t = typename Adapter::block_t;
+  using block_range_t = typename Adapter::block_range_t;
+  using node_t = typename Adapter::node_t;
+
   // Forward declarations.
   class Features;
 
@@ -292,7 +398,7 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 
   InstructionSelectorT(
       Zone* zone, size_t node_count, Linkage* linkage,
-      InstructionSequence* sequence, Schedule* schedule,
+      InstructionSequence* sequence, schedule_t schedule,
       SourcePositionTable* source_positions, Frame* frame,
       EnableSwitchJumpTable enable_switch_jump_table, TickCounter* tick_counter,
       JSHeapBroker* broker, size_t* max_unoptimized_frame_height,
@@ -510,10 +616,18 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 
   // Inform the instruction selection that {node} has at least one use and we
   // will need to generate code for it.
-  void MarkAsUsed(Node* node);
+  void MarkAsUsed(node_t node);
+  template <typename T>
+  void MarkAsUsed(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
 
   // Sets the effect level of {node}.
-  void SetEffectLevel(Node* node, int effect_level);
+  void SetEffectLevel(node_t node, int effect_level);
+  template <typename T>
+  void SetEffectLevel(T*, int) {
+    UNREACHABLE(/*REMOVE*/);
+  }
 
   // Inform the register allocation of the representation of the value produced
   // by {node}.
@@ -591,11 +705,11 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
   // ===========================================================================
 
   // Visit nodes in the given block and generate code.
-  void VisitBlock(BasicBlock* block);
+  void VisitBlock(block_t block);
 
   // Visit the node for the control flow at the end of the block, generating
   // code if necessary.
-  void VisitControl(BasicBlock* block);
+  void VisitControl(block_t block);
 
   // Visit the node and generate code, if any.
   void VisitNode(Node* node);
@@ -682,7 +796,7 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 
   // ===========================================================================
 
-  Schedule* schedule() const { return schedule_; }
+  schedule_t schedule() const { return schedule_; }
   Linkage* linkage() const { return linkage_; }
   InstructionSequence* sequence() const { return sequence_; }
   Zone* instruction_zone() const { return sequence()->zone(); }
@@ -751,8 +865,8 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
   SourcePositionTable* const source_positions_;
   SourcePositionMode const source_position_mode_;
   Features features_;
-  Schedule* const schedule_;
-  BasicBlock* current_block_;
+  schedule_t const schedule_;
+  block_t current_block_;
   ZoneVector<Instruction*> instructions_;
   InstructionOperandVector continuation_inputs_;
   InstructionOperandVector continuation_outputs_;
@@ -796,10 +910,10 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 
 using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
 
-extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
-    InstructionSelectorT<TurbofanAdapter>;
-extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
-    InstructionSelectorT<TurboshaftAdapter>;
+// extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+//     InstructionSelectorT<TurbofanAdapter>;
+// extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+//     InstructionSelectorT<TurboshaftAdapter>;
 
 }  // namespace compiler
 }  // namespace internal

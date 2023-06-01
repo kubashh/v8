@@ -38,7 +38,7 @@ Smi NumberConstantToSmi(Node* node) {
 template <typename Adapter>
 InstructionSelectorT<Adapter>::InstructionSelectorT(
     Zone* zone, size_t node_count, Linkage* linkage,
-    InstructionSequence* sequence, Schedule* schedule,
+    InstructionSequence* sequence, schedule_t schedule,
     SourcePositionTable* source_positions, Frame* frame,
     EnableSwitchJumpTable enable_switch_jump_table, TickCounter* tick_counter,
     JSHeapBroker* broker, size_t* max_unoptimized_frame_height,
@@ -96,43 +96,48 @@ InstructionSelectorT<Adapter>::InstructionSelectorT(
 template <typename Adapter>
 base::Optional<BailoutReason>
 InstructionSelectorT<Adapter>::SelectInstructions() {
+  Adapter::SetSchedule(schedule_);
+
   // Mark the inputs of all phis in loop headers as used.
-  BasicBlockVector* blocks = schedule()->rpo_order();
-  for (auto const block : *blocks) {
-    if (!block->IsLoopHeader()) continue;
-    DCHECK_LE(2u, block->PredecessorCount());
-    for (Node* const phi : *block) {
-      if (phi->opcode() != IrOpcode::kPhi) continue;
+  block_range_t blocks = this->rpo_order(schedule());
+  for (const block_t block : blocks) {
+    if (!this->IsLoopHeader(block)) continue;
+    DCHECK_LE(2u, this->PredecessorCount(block));
+    for (node_t node : this->nodes(block)) {
+      if (!this->IsPhi(node)) continue;
 
       // Mark all inputs as used.
-      for (Node* const input : phi->inputs()) {
+      for (node_t input : this->inputs(node)) {
         MarkAsUsed(input);
       }
     }
   }
 
   // Visit each basic block in post order.
-  for (auto i = blocks->rbegin(); i != blocks->rend(); ++i) {
+  for (auto i = blocks.rbegin(); i != blocks.rend(); ++i) {
     VisitBlock(*i);
     if (instruction_selection_failed())
       return BailoutReason::kCodeGenerationFailed;
   }
 
-  // Schedule the selected instructions.
-  if (UseInstructionScheduling()) {
-    scheduler_ = zone()->template New<InstructionScheduler>(zone(), sequence());
+  if constexpr (std::is_same_v<Adapter, TurbofanAdapter>) {
+    // Schedule the selected instructions.
+    if (UseInstructionScheduling()) {
+      scheduler_ =
+          zone()->template New<InstructionScheduler>(zone(), sequence());
+    }
   }
 
-  for (auto const block : *blocks) {
+  for (const block_t block : blocks) {
     InstructionBlock* instruction_block =
-        sequence()->InstructionBlockAt(RpoNumber::FromInt(block->rpo_number()));
+        sequence()->InstructionBlockAt(this->rpo_number(block));
     for (size_t i = 0; i < instruction_block->phis().size(); i++) {
       UpdateRenamesInPhi(instruction_block->PhiAt(i));
     }
     size_t end = instruction_block->code_end();
     size_t start = instruction_block->code_start();
     DCHECK_LE(end, start);
-    StartBlock(RpoNumber::FromInt(block->rpo_number()));
+    StartBlock(this->rpo_number(block));
     if (end != start) {
       while (start-- > end + 1) {
         UpdateRenames(instructions_[start]);
@@ -141,7 +146,7 @@ InstructionSelectorT<Adapter>::SelectInstructions() {
       UpdateRenames(instructions_[end]);
       AddTerminator(instructions_[end]);
     }
-    EndBlock(RpoNumber::FromInt(block->rpo_number()));
+    EndBlock(this->rpo_number(block));
   }
 #if DEBUG
   sequence()->ValidateSSA();
@@ -295,7 +300,7 @@ Instruction* InstructionSelectorT<Adapter>::Emit(Instruction* instr) {
 template <typename Adapter>
 bool InstructionSelectorT<Adapter>::CanCover(Node* user, Node* node) const {
   // 1. Both {user} and {node} must be in the same basic block.
-  if (schedule()->block(node) != current_block_) {
+  if (this->block(schedule(), node) != current_block_) {
     return false;
   }
   // 2. Pure {node}s must be owned by the {user}.
@@ -318,16 +323,20 @@ bool InstructionSelectorT<Adapter>::CanCover(Node* user, Node* node) const {
 template <typename Adapter>
 bool InstructionSelectorT<Adapter>::IsOnlyUserOfNodeInSameBlock(
     Node* user, Node* node) const {
-  BasicBlock* bb_user = schedule()->block(user);
-  BasicBlock* bb_node = schedule()->block(node);
-  if (bb_user != bb_node) return false;
-  for (Edge const edge : node->use_edges()) {
-    Node* from = edge.from();
-    if ((from != user) && (schedule()->block(from) == bb_user)) {
-      return false;
+  if constexpr (std::is_same_v<Adapter, TurbofanAdapter>) {
+    BasicBlock* bb_user = this->block(schedule(), user);
+    BasicBlock* bb_node = this->block(schedule(), node);
+    if (bb_user != bb_node) return false;
+    for (Edge const edge : node->use_edges()) {
+      Node* from = edge.from();
+      if ((from != user) && (this->block(schedule(), from) == bb_user)) {
+        return false;
+      }
     }
+    return true;
+  } else {
+    UNREACHABLE();
   }
-  return true;
 }
 
 template <typename Adapter>
@@ -433,9 +442,13 @@ bool InstructionSelectorT<Adapter>::IsUsed(Node* node) const {
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::MarkAsUsed(Node* node) {
-  DCHECK_NOT_NULL(node);
-  used_.Add(node->id());
+void InstructionSelectorT<Adapter>::MarkAsUsed(node_t node) {
+  if constexpr (std::is_same_v<Adapter, TurbofanAdapter>) {
+    DCHECK_NOT_NULL(node);
+    used_.Add(node->id());
+  } else {
+    UNREACHABLE();
+  }
 }
 
 template <typename Adapter>
@@ -456,10 +469,10 @@ int InstructionSelectorT<Adapter>::GetEffectLevel(
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::SetEffectLevel(Node* node,
+void InstructionSelectorT<Adapter>::SetEffectLevel(node_t node,
                                                    int effect_level) {
-  DCHECK_NOT_NULL(node);
-  size_t const id = node->id();
+  DCHECK(this->valid(node));
+  size_t const id = this->id(node);
   DCHECK_LT(id, effect_level_.size());
   effect_level_[id] = effect_level;
 }
@@ -1232,8 +1245,24 @@ bool InstructionSelectorT<Adapter>::IsSourcePositionUsed(Node* node) {
           node->opcode() == IrOpcode::kStoreTrapOnNull);
 }
 
+namespace {
+bool increment_effect_level_for_opcode(IrOpcode::Value opcode) {
+  return opcode == IrOpcode::kStore || opcode == IrOpcode::kUnalignedStore ||
+         opcode == IrOpcode::kCall || opcode == IrOpcode::kProtectedStore ||
+         opcode == IrOpcode::kStoreTrapOnNull ||
+#define ADD_EFFECT_FOR_ATOMIC_OP(Opcode) opcode == IrOpcode::k##Opcode ||
+         MACHINE_ATOMIC_OP_LIST(ADD_EFFECT_FOR_ATOMIC_OP)
+#undef ADD_EFFECT_FOR_ATOMIC_OP
+                 opcode == IrOpcode::kMemoryBarrier;
+}
+
+bool increment_effect_level_for_opcode(turboshaft::Opcode opcode) {
+  UNIMPLEMENTED();
+}
+}  // namespace
+
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitBlock(BasicBlock* block) {
+void InstructionSelectorT<Adapter>::VisitBlock(block_t block) {
   DCHECK(!current_block_);
   current_block_ = block;
   auto current_num_instructions = [&] {
@@ -1243,40 +1272,37 @@ void InstructionSelectorT<Adapter>::VisitBlock(BasicBlock* block) {
   int current_block_end = current_num_instructions();
 
   int effect_level = 0;
-  for (Node* const node : *block) {
+  for (node_t node : this->nodes(block)) {
     SetEffectLevel(node, effect_level);
     current_effect_level_ = effect_level;
-    if (node->opcode() == IrOpcode::kStore ||
-        node->opcode() == IrOpcode::kUnalignedStore ||
-        node->opcode() == IrOpcode::kCall ||
-        node->opcode() == IrOpcode::kProtectedStore ||
-        node->opcode() == IrOpcode::kStoreTrapOnNull ||
-#define ADD_EFFECT_FOR_ATOMIC_OP(Opcode) \
-  node->opcode() == IrOpcode::k##Opcode ||
-        MACHINE_ATOMIC_OP_LIST(ADD_EFFECT_FOR_ATOMIC_OP)
-#undef ADD_EFFECT_FOR_ATOMIC_OP
-                node->opcode() == IrOpcode::kMemoryBarrier) {
+    if (increment_effect_level_for_opcode(this->opcode(node))) {
       ++effect_level;
     }
   }
 
   // We visit the control first, then the nodes in the block, so the block's
   // control input should be on the same effect level as the last node.
-  if (block->control_input() != nullptr) {
-    SetEffectLevel(block->control_input(), effect_level);
+  if (node_t terminator = this->block_terminator(block);
+      this->valid(terminator)) {
+    SetEffectLevel(terminator, effect_level);
     current_effect_level_ = effect_level;
   }
 
-  auto FinishEmittedInstructions = [&](Node* node, int instruction_start) {
+  auto FinishEmittedInstructions = [&](node_t node, int instruction_start) {
     if (instruction_selection_failed()) return false;
     if (current_num_instructions() == instruction_start) return true;
     std::reverse(instructions_.begin() + instruction_start,
                  instructions_.end());
-    if (!node) return true;
+    if (!this->valid(node)) return true;
     if (!source_positions_) return true;
-    SourcePosition source_position = source_positions_->GetSourcePosition(node);
-    if (source_position.IsKnown() && IsSourcePositionUsed(node)) {
-      sequence()->SetSourcePosition(instructions_.back(), source_position);
+    if constexpr (std::is_same_v<Adapter, TurbofanAdapter>) {
+      SourcePosition source_position =
+          source_positions_->GetSourcePosition(node);
+      if (source_position.IsKnown() && IsSourcePositionUsed(node)) {
+        sequence()->SetSourcePosition(instructions_.back(), source_position);
+      }
+    } else {
+      UNREACHABLE();
     }
     return true;
   };
@@ -1284,41 +1310,52 @@ void InstructionSelectorT<Adapter>::VisitBlock(BasicBlock* block) {
   // Generate code for the block control "top down", but schedule the code
   // "bottom up".
   VisitControl(block);
-  if (!FinishEmittedInstructions(block->control_input(), current_block_end)) {
+  if (!FinishEmittedInstructions(this->block_terminator(block),
+                                 current_block_end)) {
     return;
   }
 
-  // Visit code in reverse control flow order, because architecture-specific
-  // matching may cover more than one node at a time.
-  for (auto node : base::Reversed(*block)) {
-    int current_node_end = current_num_instructions();
-    // Skip nodes that are unused or already defined.
-    if (IsUsed(node) && !IsDefined(node)) {
-      // Generate code for this node "top down", but schedule the code "bottom
-      // up".
-      VisitNode(node);
-      if (!FinishEmittedInstructions(node, current_node_end)) return;
+  if constexpr (std::is_same_v<Adapter, TurbofanAdapter>) {
+    // Visit code in reverse control flow order, because architecture-specific
+    // matching may cover more than one node at a time.
+    for (auto node : base::Reversed(*block)) {
+      int current_node_end = current_num_instructions();
+      // Skip nodes that are unused or already defined.
+      if (IsUsed(node) && !IsDefined(node)) {
+        // Generate code for this node "top down", but schedule the code "bottom
+        // up".
+        VisitNode(node);
+        if (!FinishEmittedInstructions(node, current_node_end)) return;
+      }
+      if (trace_turbo_ == kEnableTraceTurboJson) {
+        instr_origins_[node->id()] = {current_num_instructions(),
+                                      current_node_end};
+      }
     }
-    if (trace_turbo_ == kEnableTraceTurboJson) {
-      instr_origins_[node->id()] = {current_num_instructions(),
-                                    current_node_end};
-    }
-  }
 
-  // We're done with the block.
-  InstructionBlock* instruction_block =
-      sequence()->InstructionBlockAt(RpoNumber::FromInt(block->rpo_number()));
-  if (current_num_instructions() == current_block_end) {
-    // Avoid empty block: insert a {kArchNop} instruction.
-    Emit(Instruction::New(sequence()->zone(), kArchNop));
+    // We're done with the block.
+    InstructionBlock* instruction_block =
+        sequence()->InstructionBlockAt(this->rpo_number(block));
+    if (current_num_instructions() == current_block_end) {
+      // Avoid empty block: insert a {kArchNop} instruction.
+      Emit(Instruction::New(sequence()->zone(), kArchNop));
+    }
+    instruction_block->set_code_start(current_num_instructions());
+    instruction_block->set_code_end(current_block_end);
+    current_block_ = nullptr;
+  } else {
+    UNREACHABLE();
   }
-  instruction_block->set_code_start(current_num_instructions());
-  instruction_block->set_code_end(current_block_end);
-  current_block_ = nullptr;
 }
 
-template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitControl(BasicBlock* block) {
+template <>
+void InstructionSelectorT<TurboshaftAdapter>::VisitControl(
+    turboshaft::Block* block) {
+  UNIMPLEMENTED();
+}
+
+template <>
+void InstructionSelectorT<TurbofanAdapter>::VisitControl(BasicBlock* block) {
 #ifdef DEBUG
   // SSA deconstruction requires targets of branches not to have phis.
   // Edge split form guarantees this property, but is more strict.
@@ -1437,7 +1474,8 @@ void InstructionSelectorT<Adapter>::MarkPairProjectionsAsWord32(Node* node) {
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitNode(Node* node) {
   tick_counter_->TickAndMaybeEnterSafepoint();
-  DCHECK_NOT_NULL(schedule()->block(node));  // should only use scheduled nodes.
+  DCHECK_NOT_NULL(
+      this->block(schedule(), node));  // should only use scheduled nodes.
   switch (node->opcode()) {
     case IrOpcode::kTraceInstruction:
 #if V8_TARGET_ARCH_X64
@@ -1467,7 +1505,7 @@ void InstructionSelectorT<Adapter>::VisitNode(Node* node) {
       return MarkAsTagged(node), VisitFinishRegion(node);
     case IrOpcode::kParameter: {
       // Parameters should always be scheduled to the first block.
-      DCHECK_EQ(schedule()->block(node)->rpo_number(), 0);
+      DCHECK_EQ(this->rpo_number(this->block(schedule(), node)).ToInt(), 0);
       MachineType type =
           linkage()->GetParameterType(ParameterIndexOf(node->op()));
       MarkAsRepresentation(type.representation(), node);
@@ -3407,9 +3445,7 @@ void InstructionSelectorT<Adapter>::VisitPhi(Node* node) {
   PhiInstruction* phi = instruction_zone()->template New<PhiInstruction>(
       instruction_zone(), GetVirtualRegister(node),
       static_cast<size_t>(input_count));
-  sequence()
-      ->InstructionBlockAt(RpoNumber::FromInt(current_block_->rpo_number()))
-      ->AddPhi(phi);
+  sequence()->InstructionBlockAt(this->rpo_number(current_block_))->AddPhi(phi);
   for (int i = 0; i < input_count; ++i) {
     Node* const input = node->InputAt(i);
     MarkAsUsed(input);
@@ -3705,7 +3741,7 @@ void InstructionSelectorT<Adapter>::TryPrepareScheduleFirstProjection(
   }
 
   Node* const node = maybe_projection->InputAt(0);
-  if (schedule_->block(node) != current_block_) {
+  if (this->block(schedule_, node) != current_block_) {
     // The projection input is not in the current block, so it shouldn't be
     // emitted now, so we don't need to eagerly schedule its Projection[0].
     return;
@@ -3724,7 +3760,7 @@ void InstructionSelectorT<Adapter>::TryPrepareScheduleFirstProjection(
         return;
       }
 
-      if (schedule_->block(result) != current_block_) {
+      if (this->block(schedule_, result) != current_block_) {
         // {result} wasn't planned to be scheduled in {current_block_}. To avoid
         // adding checks to see if it can still be scheduled now, we just bail
         // out.
@@ -3738,7 +3774,7 @@ void InstructionSelectorT<Adapter>::TryPrepareScheduleFirstProjection(
       // {result} back into it through the back edge. In this case, it's normal
       // to schedule {result} before the Phi that uses it.
       for (Node* use : result->uses()) {
-        if (!IsDefined(use) && schedule_->block(use) == current_block_ &&
+        if (!IsDefined(use) && this->block(schedule_, use) == current_block_ &&
             use->opcode() != IrOpcode::kPhi) {
           // {use} is in the current block but is not defined yet. It's possible
           // that it's not actually used, but the IsUsed(x) predicate is not

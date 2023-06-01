@@ -779,6 +779,7 @@ class Graph {
             base::DerefPtrIterator<const Block>(bound_blocks_.data() +
                                                 bound_blocks_.size())};
   }
+  const ZoneVector<Block*>& blocks_vector() const { return bound_blocks_; }
 
   bool IsLoopBackedge(const GotoOp& op) const {
     DCHECK(op.destination->IsBound());
