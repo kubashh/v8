@@ -121,6 +121,24 @@
       "parentUuid": "71a83851_582622d3",
       "revId": "1e7aa016c2f524695f3dd3f07acb065d3a47bdfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "564bd34a_c6d4c5e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002927
+      },
+      "writtenOn": "2023-06-01T16:02:31Z",
+      "side": 1,
+      "message": "I don\u0027t think any further changes besides this one should be required for V8. DISABLE_CFI_ICALL should already be in the right places.\n\nIf that turns out to not be the case, I agree filing a V8 bug is a good idea.",
+      "parentUuid": "452f76b1_834419ac",
+      "revId": "1e7aa016c2f524695f3dd3f07acb065d3a47bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
