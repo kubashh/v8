@@ -16,6 +16,24 @@
       "message": "getKey and getValue create a copy of the string.\nThis is a temporary object destroyed immediately after the call to toStringView.\nThe created StringView therefore has a dangling pointer inside of it.",
       "revId": "b5b42c59e80d1cdb6b1b829a75f2333d99c1f2b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cfd28fc_c67b4cbb",
+        "filename": "src/inspector/v8-runtime-agent-impl.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1440373
+      },
+      "writtenOn": "2023-06-01T12:50:22Z",
+      "side": 1,
+      "message": "Fixed. I store `String` instead of `StringView` now, and create StringViews on demand.",
+      "parentUuid": "16bd25fa_c41cd8d4",
+      "revId": "b5b42c59e80d1cdb6b1b829a75f2333d99c1f2b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
