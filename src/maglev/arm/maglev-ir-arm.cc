@@ -495,7 +495,7 @@ enum class ReduceInterruptBudgetType { kLoop, kReturn };
 
 void GenerateReduceInterruptBudget(MaglevAssembler* masm, Node* node,
                                    ReduceInterruptBudgetType type, int amount) {
-  MAGLEV_NODE_NOT_IMPLEMENTED(GenerateReduceInterruptBudget);
+  // MAGLEV_NODE_NOT_IMPLEMENTED(GenerateReduceInterruptBudget);
 }
 
 }  // namespace
@@ -716,7 +716,43 @@ void FunctionEntryStackCheck::SetValueLocationConstraints() {
 }
 void FunctionEntryStackCheck::GenerateCode(MaglevAssembler* masm,
                                            const ProcessingState& state) {
-  MAGLEV_NODE_NOT_IMPLEMENTED(FunctionEntryStackCheck);
+  if (!masm->code_gen_state()->needs_stack_check()) return;
+  // Stack check. This folds the checks for both the interrupt stack limit
+  // check and the real stack limit into one by just checking for the
+  // interrupt limit. The interrupt limit is either equal to the real
+  // stack limit or tighter. By ensuring we have space until that limit
+  // after building the frame we can quickly precheck both at once.
+  MaglevAssembler::ScratchRegisterScope temps(masm);
+  const int stack_check_offset = masm->code_gen_state()->stack_check_offset();
+  Register stack_cmp_reg = sp;
+  if (stack_check_offset > kStackLimitSlackForDeoptimizationInBytes) {
+    stack_cmp_reg = temps.Acquire();
+    __ sub(stack_cmp_reg, sp, Operand(stack_check_offset));
+  }
+  Register interrupt_stack_limit = temps.Acquire();
+  __ LoadStackLimit(interrupt_stack_limit,
+                    StackLimitKind::kInterruptStackLimit);
+  __ cmp(stack_cmp_reg, interrupt_stack_limit);
+
+  ZoneLabelRef deferred_call_stack_guard_return(masm);
+  __ JumpToDeferredIf(
+      lo,
+      [](MaglevAssembler* masm, FunctionEntryStackCheck* node,
+         ZoneLabelRef done, int stack_check_offset) {
+        ASM_CODE_COMMENT_STRING(masm, "Stack/interrupt call");
+        {
+          SaveRegisterStateForCall save_register_state(
+              masm, node->register_snapshot());
+          // Push the frame size
+          __ Push(Smi::FromInt(stack_check_offset));
+          __ CallRuntime(Runtime::kStackGuardWithGap, 1);
+          save_register_state.DefineSafepointWithLazyDeopt(
+              node->lazy_deopt_info());
+        }
+        __ b(*done);
+      },
+      this, deferred_call_stack_guard_return, stack_check_offset);
+  __ bind(*deferred_call_stack_guard_return);
 }
 
 // ---
@@ -726,7 +762,40 @@ void Return::SetValueLocationConstraints() {
   UseFixed(value_input(), kReturnRegister0);
 }
 void Return::GenerateCode(MaglevAssembler* masm, const ProcessingState& state) {
-  MAGLEV_NODE_NOT_IMPLEMENTED(Return);
+  DCHECK_EQ(ToRegister(value_input()), kReturnRegister0);
+
+  // Read the formal number of parameters from the top level compilation unit
+  // (i.e. the outermost, non inlined function).
+  int formal_params_size =
+      masm->compilation_info()->toplevel_compilation_unit()->parameter_count();
+
+  // We're not going to continue execution, so we can use an arbitrary register
+  // here instead of relying on temporaries from the register allocator.
+  Register actual_params_size = r4;
+  Register params_size = r8;
+
+  // Compute the size of the actual parameters + receiver (in bytes).
+  // TODO(leszeks): Consider making this an input into Return to re-use the
+  // incoming argc's register (if it's still valid).
+  __ ldr(actual_params_size,
+         MemOperand(fp, StandardFrameConstants::kArgCOffset));
+
+  // Leave the frame.
+  __ LeaveFrame(StackFrame::MAGLEV);
+
+  // If actual is bigger than formal, then we should use it to free up the stack
+  // arguments.
+  Label corrected_args_count;
+  __ Move(params_size, formal_params_size);
+  __ cmp(params_size, actual_params_size);
+  __ b(kGreaterThanEqual, &corrected_args_count);
+  __ Move(params_size, actual_params_size);
+  __ bind(&corrected_args_count);
+
+  // Drop receiver + arguments according to dynamic arguments size.
+  __ DropArguments(params_size, MacroAssembler::kCountIsInteger,
+                   MacroAssembler::kCountIncludesReceiver);
+  __ Ret();
 }
 
 }  // namespace maglev
