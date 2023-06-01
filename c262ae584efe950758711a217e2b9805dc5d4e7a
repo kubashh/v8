@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b016de4_d5fd48f9",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1524899
+      },
+      "writtenOn": "2023-06-01T14:13:39Z",
+      "side": 1,
+      "message": "This method is (in success cases) called again in the `runnable.ProcessOutput` method 4 and 6 lines below. We remove it in there as the method is called here in all cases already.",
+      "range": {
+        "startLine": 1361,
+        "startChar": 29,
+        "endLine": 1361,
+        "endChar": 48
+      },
+      "revId": "c262ae584efe950758711a217e2b9805dc5d4e7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
