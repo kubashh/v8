@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f4b96f4_e8a12bd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-01T07:36:24Z",
+      "side": 1,
+      "message": "Hey Igor and Dominik, ptal - I decided to split out DebugInfo changes since those will be quite involved on their own.",
+      "revId": "eb41592ac7fd17f96ce2a939ded11b5df22149f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
