@@ -236,6 +236,8 @@ class SharedFunctionInfo
   DECL_ACQUIRE_GETTER(scope_info, ScopeInfo)
   // Deprecated, use the ACQUIRE version instead.
   DECL_GETTER(scope_info, ScopeInfo)
+  // Slow but safe:
+  inline ScopeInfo EarlyScopeInfo(AcquireLoadTag tag);
 
   // Set scope_info without moving the existing name onto the ScopeInfo.
   inline void set_raw_scope_info(ScopeInfo scope_info,
