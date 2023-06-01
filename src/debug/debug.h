@@ -168,8 +168,7 @@ class V8_EXPORT_PRIVATE BreakIterator {
   DISALLOW_GARBAGE_COLLECTION(no_gc_)
 };
 
-// Linked list holding debug info objects. The debug info objects are kept as
-// global strong handles to prevent losing previously set breakpoints.
+// Linked list holding DebugInfo objects.
 class DebugInfoListNode {
  public:
   DebugInfoListNode(Isolate* isolate, DebugInfo debug_info);
@@ -180,7 +179,7 @@ class DebugInfoListNode {
   Handle<DebugInfo> debug_info() { return Handle<DebugInfo>(debug_info_); }
 
  private:
-  // Global (weak) handle to the debug info object.
+  // Global handle to the DebugInfo object.
   Address* debug_info_;
 
   // Next pointer for linked list.
