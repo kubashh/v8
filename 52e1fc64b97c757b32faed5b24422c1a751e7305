@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "985da6c7_b93ff03f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2023-06-01T13:47:13Z",
+      "side": 1,
+      "message": "Hi Michael, I submitted this one by mistake before approval, could you add the code-owners approval for reverting it?",
+      "revId": "52e1fc64b97c757b32faed5b24422c1a751e7305",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
