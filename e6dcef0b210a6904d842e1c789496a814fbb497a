@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24347eec_a029773e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-06-02T13:05:54Z",
+      "side": 1,
+      "message": "lgtm with a comment",
+      "revId": "e6dcef0b210a6904d842e1c789496a814fbb497a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c982ddc_65253ef4",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-06-02T13:05:54Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is necessary given that `V8_SFI_HAS_UNIQUE_ID` is neither a runtime nor cpu-specific thing (unlike the presence of SSE2 on host/target which affects the layout of `SwissNameDictionary`).",
+      "revId": "e6dcef0b210a6904d842e1c789496a814fbb497a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
