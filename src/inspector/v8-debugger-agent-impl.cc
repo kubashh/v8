@@ -1564,8 +1564,8 @@ Response V8DebuggerAgentImpl::evaluateOnCallFrame(
   response = scope.initialize();
   if (!response.IsSuccess()) return response;
   WrapOptions wrapOptions = generatePreview.fromMaybe(false)
-                                ? WrapOptions({WrapMode::kPreview, {}})
-                                : WrapOptions({WrapMode::kIdOnly, {}});
+                                ? WrapOptions({WrapMode::kPreview})
+                                : WrapOptions({WrapMode::kIdOnly});
   if (returnByValue.fromMaybe(false))
     wrapOptions = WrapOptions({WrapMode::kJson, {}});
   return scope.injectedScript()->wrapEvaluateResult(
