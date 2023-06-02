@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d2249b6e_3c85af53",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 19
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1440373
+      },
+      "writtenOn": "2023-06-02T07:24:40Z",
+      "side": 1,
+      "message": "I agree it would look better, but `object` allows any kind of values, including arrays and objects. If implemented this way, we will have to pass v8 object instead of vector of strings as additional parameters in `v8_inspector::deepSerialize`. Also the pattern you mentioned is used as an output, not as an input, and we don\u0027t have (correct me if I\u0027m wrong) implemented the parsing of a generic protocol object into a v8 value. I\u0027m not sure if implementing such a parser is an overkill or not. WDYT?",
+      "parentUuid": "2ec73d43_7d0dbbd0",
+      "range": {
+        "startLine": 1043,
+        "startChar": 6,
+        "endLine": 1043,
+        "endChar": 53
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9251bb8a_4b2dd1c5",
         "filename": "src/inspector/v8-debugger.h",
         "patchSetId": 19
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94db7f91_c1613dc7",
+        "filename": "src/inspector/v8-debugger.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1440373
+      },
+      "writtenOn": "2023-06-02T07:24:40Z",
+      "side": 1,
+      "message": "Theoretically later there can be duplicated parameters like `capabilities`. And this is blocked by the decision on the protocol data format https://chromium-review.googlesource.com/c/v8/v8/+/4555602/comment/2ec73d43_7d0dbbd0/",
+      "parentUuid": "9251bb8a_4b2dd1c5",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 51
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "94e03cea_9722697a",
         "filename": "src/inspector/value-mirror.cc",
         "patchSetId": 19
@@ -60,6 +108,30 @@
       "writtenOn": "2023-06-02T06:13:26Z",
       "side": 1,
       "message": "I thought the embedder will only use `maxNodeDepth`?",
+      "range": {
+        "startLine": 1186,
+        "startChar": 21,
+        "endLine": 1186,
+        "endChar": 29
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f925da2_4f05956f",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1440373
+      },
+      "writtenOn": "2023-06-02T07:24:40Z",
+      "side": 1,
+      "message": "The array-like DOM objects [1] like HTMLCollection and NodeList should be treated as usual array. So the both `maxDepth` and `maxNodeDepth` are needed here.\nUsage example: [2]\n\n[1] http://go/chrome-devtools:dom-deep-serialization#bookmark\u003did.z3nb4isdox0h\n[2] https://chromium-review.googlesource.com/c/chromium/src/+/4570615/7/third_party/blink/renderer/core/inspector/thread_debugger_common_impl.cc#471",
+      "parentUuid": "94e03cea_9722697a",
       "range": {
         "startLine": 1186,
         "startChar": 21,
