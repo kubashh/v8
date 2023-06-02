@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ec73d43_7d0dbbd0",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 19
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-06-02T06:13:26Z",
+      "side": 1,
+      "message": "We already have a pattern in PDL for auxiliary data:\n\n`optional object additionalParameters`\n\nThis also allows you to pass maxNodeDepth as a number on the CDP level at least.",
+      "range": {
+        "startLine": 1043,
+        "startChar": 6,
+        "endLine": 1043,
+        "endChar": 53
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9251bb8a_4b2dd1c5",
+        "filename": "src/inspector/v8-debugger.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-06-02T06:13:26Z",
+      "side": 1,
+      "message": "Side note: `String16` actually implements `operator\u003c` so you can use a `std::map\u003cString16, String16\u003e` here and convert it to the vector of pairs before passing it to blink.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 51
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94e03cea_9722697a",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-06-02T06:13:26Z",
+      "side": 1,
+      "message": "I thought the embedder will only use `maxNodeDepth`?",
+      "range": {
+        "startLine": 1186,
+        "startChar": 21,
+        "endLine": 1186,
+        "endChar": 29
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

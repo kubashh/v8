@@ -16,6 +16,24 @@
       "message": "Not sure if it makes sense to mention it in this `maxNodeDepth` and `includeShadowTree`.",
       "revId": "7aca55cc5e6443957d586b17ca9b89057c734394",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ebb4c8b_f328e626",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 10
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-06-02T06:13:26Z",
+      "side": 1,
+      "message": "You can, but I\u0027d rephrase it a bit to make it more clear that these really depend on the embedder: \"Embedder-specific parameters. For example if connected to V8 in Chrome these control DOM serialization via \"maxNodeDepth\" and \"includeShadowTree\".",
+      "parentUuid": "012dcac6_8411f45c",
+      "revId": "7aca55cc5e6443957d586b17ca9b89057c734394",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
