@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7bdfb96_9124dbe8",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 19
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1440373
+      },
+      "writtenOn": "2023-06-02T09:56:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9162f6c_88cea5d1",
+      "range": {
+        "startLine": 1043,
+        "startChar": 6,
+        "endLine": 1043,
+        "endChar": 53
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9251bb8a_4b2dd1c5",
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "Then we can\u0027t name it \"key\" in the protocol if there can be duplicates with different values. It\u0027s also odd since we need to communicate how duplicates are handled (merged vs first one wins).",
       "parentUuid": "94db7f91_c1613dc7",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 51
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08734320_037237ec",
+        "filename": "src/inspector/v8-debugger.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1440373
+      },
+      "writtenOn": "2023-06-02T09:56:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a640da3a_8d82a287",
       "range": {
         "startLine": 39,
         "startChar": 0,
