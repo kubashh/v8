@@ -254,6 +254,7 @@ RUNTIME_FUNCTION(Runtime_WasmCompileLazy) {
   DisallowHeapAllocation no_gc;
   HandleScope scope(isolate);
   DCHECK_EQ(2, args.length());
+  std::cout << args[0] << std::endl;
   WasmInstanceObject instance = WasmInstanceObject::cast(args[0]);
   int func_index = args.smi_value_at(1);
 
