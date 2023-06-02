@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9162f6c_88cea5d1",
+        "filename": "include/js_protocol.pdl",
+        "patchSetId": 19
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-06-02T07:35:41Z",
+      "side": 1,
+      "message": "I mean we could restrict what we allow. Basically say here only string/value/number are allowed. I don\u0027t know how complicated it is to convert those back to String16.",
+      "parentUuid": "d2249b6e_3c85af53",
+      "range": {
+        "startLine": 1043,
+        "startChar": 6,
+        "endLine": 1043,
+        "endChar": 53
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9251bb8a_4b2dd1c5",
         "filename": "src/inspector/v8-debugger.h",
         "patchSetId": 19
@@ -97,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a640da3a_8d82a287",
+        "filename": "src/inspector/v8-debugger.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-06-02T07:35:41Z",
+      "side": 1,
+      "message": "Then we can\u0027t name it \"key\" in the protocol if there can be duplicates with different values. It\u0027s also odd since we need to communicate how duplicates are handled (merged vs first one wins).",
+      "parentUuid": "94db7f91_c1613dc7",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 51
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "94e03cea_9722697a",
         "filename": "src/inspector/value-mirror.cc",
         "patchSetId": 19
@@ -132,6 +180,30 @@
       "side": 1,
       "message": "The array-like DOM objects [1] like HTMLCollection and NodeList should be treated as usual array. So the both `maxDepth` and `maxNodeDepth` are needed here.\nUsage example: [2]\n\n[1] http://go/chrome-devtools:dom-deep-serialization#bookmark\u003did.z3nb4isdox0h\n[2] https://chromium-review.googlesource.com/c/chromium/src/+/4570615/7/third_party/blink/renderer/core/inspector/thread_debugger_common_impl.cc#471",
       "parentUuid": "94e03cea_9722697a",
+      "range": {
+        "startLine": 1186,
+        "startChar": 21,
+        "endLine": 1186,
+        "endChar": 29
+      },
+      "revId": "7e37b53d750b4fac7cca6a70ca9da27b447e3372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "333b0ba4_22c35df5",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-06-02T07:35:41Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1f925da2_4f05956f",
       "range": {
         "startLine": 1186,
         "startChar": 21,
