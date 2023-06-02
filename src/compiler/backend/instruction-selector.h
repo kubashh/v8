@@ -15,12 +15,18 @@
 #include "src/compiler/linkage.h"
 #include "src/compiler/machine-operator.h"
 #include "src/compiler/node.h"
+#include "src/compiler/turboshaft/operations.h"
+#include "src/compiler/turboshaft/utils.h"
 #include "src/utils/bit-vector.h"
 #include "src/zone/zone-containers.h"
 
 #if V8_ENABLE_WEBASSEMBLY
 #include "src/wasm/simd-shuffle.h"
 #endif  // V8_ENABLE_WEBASSEMBLY
+
+// TODO(nicohartmann@): Remove thonse once Adapters have their own files.
+#include "src/compiler/schedule.h"
+#include "src/compiler/turboshaft/graph.h"
 
 namespace v8 {
 namespace internal {
@@ -31,66 +37,280 @@ namespace compiler {
 
 // Forward declarations.
 class BasicBlock;
-struct CallBuffer;  // TODO(bmeurer): Remove this.
+template <typename Adapter>
+struct CallBufferT;  // TODO(bmeurer): Remove this.
 class Linkage;
 template <typename Adapter>
 class OperandGeneratorT;
 class SwitchInfo;
 class StateObjectDeduplicator;
 
-struct TurbofanAdapter {};
+struct TurbofanAdapter {
+  static constexpr bool IsTurbofan = true;
+  static constexpr bool IsTurboshaft = false;
+  using schedule_t = Schedule*;
+  using block_t = BasicBlock*;
+  using block_range_t = ZoneVector<block_t>;
+  using node_t = Node*;
+  using inputs_t = Node::Inputs;
+  using opcode_t = IrOpcode::Value;
+  using id_t = uint32_t;
 
-struct TurboshaftAdapter {};
+  class CallView {
+   public:
+    explicit CallView(node_t node) : node_(node) {
+      DCHECK(node_->opcode() == IrOpcode::kCall ||
+             node_->opcode() == IrOpcode::kTailCall);
+    }
+
+    int return_count() const { return node_->op()->ValueOutputCount(); }
+    node_t callee() const { return node_->InputAt(0); }
+    node_t frame_state() const {
+      const CallDescriptor* descriptor = CallDescriptorOf(node_->op());
+      return node_->InputAt(static_cast<int>(descriptor->InputCount()));
+    }
+    base::Vector<node_t> arguments() const {
+      base::Vector<node_t> inputs = node_->inputs_vector();
+      return inputs.SubVector(1, inputs.size());
+    }
+
+    operator node_t() const { return node_; }
+
+   private:
+    node_t node_;
+  };
+
+  CallView call_view(node_t node) { return CallView{node}; }
+
+  void SetSchedule(schedule_t schedule) {}
+
+  block_t block(schedule_t schedule, node_t node) const {
+    return schedule->block(node);
+  }
+
+  RpoNumber rpo_number(block_t block) const {
+    return RpoNumber::FromInt(block->rpo_number());
+  }
+
+  const block_range_t& rpo_order(schedule_t schedule) const {
+    return *schedule->rpo_order();
+  }
+
+  bool IsLoopHeader(block_t block) const { return block->IsLoopHeader(); }
+
+  size_t PredecessorCount(block_t block) const {
+    return block->PredecessorCount();
+  }
+  block_t PredecessorAt(block_t block, size_t index) const {
+    return block->PredecessorAt(index);
+  }
+
+  base::iterator_range<NodeVector::iterator> nodes(block_t block) {
+    return {block->begin(), block->end()};
+  }
+
+  bool IsPhi(node_t node) const { return node->opcode() == IrOpcode::kPhi; }
+  bool IsRetain(node_t node) const {
+    return node->opcode() == IrOpcode::kRetain;
+  }
+  bool IsHeapConstant(node_t node) const {
+    return node->opcode() == IrOpcode::kHeapConstant;
+  }
+  bool IsExternalConstant(node_t node) const {
+    return node->opcode() == IrOpcode::kExternalConstant;
+  }
+  bool IsRelocatableWasmConstant(node_t node) const {
+    return node->opcode() == IrOpcode::kRelocatableInt32Constant ||
+           node->opcode() == IrOpcode::kRelocatableInt64Constant;
+  }
+
+  inputs_t inputs(node_t node) const { return node->inputs(); }
+  opcode_t opcode(node_t node) const { return node->opcode(); }
+
+  id_t id(node_t node) const { return node->id(); }
+  bool valid(node_t node) const { return node != nullptr; }
+
+  node_t block_terminator(block_t block) const {
+    return block->control_input();
+  }
+  node_t parent_frame_state(node_t node) const {
+    DCHECK(node->opcode() == IrOpcode::kFrameState);
+    return NodeProperties::GetFrameStateInput(node);
+  }
+
+  bool IsRequiredWhenUnused(node_t node) const {
+    return !node->op()->HasProperty(Operator::kEliminatable);
+  }
+};
+
+struct TurboshaftAdapter {
+  static constexpr bool IsTurbofan = false;
+  static constexpr bool IsTurboshaft = true;
+  using schedule_t = turboshaft::Graph*;
+  using block_t = turboshaft::Block*;
+  using block_range_t = ZoneVector<block_t>;
+  using node_t = turboshaft::OpIndex;
+  using inputs_t = base::Vector<const node_t>;
+  using opcode_t = turboshaft::Opcode;
+  using id_t = uint32_t;
+
+  class CallView {
+   public:
+    explicit CallView(turboshaft::Graph* graph, node_t node) : node_(node) {
+      op_ = &graph->Get(node_).Cast<turboshaft::CallOp>();
+    }
+
+    int return_count() const {
+      return static_cast<int>(op_->outputs_rep().size());
+    }
+    node_t callee() const { return op_->callee(); }
+    node_t frame_state() const { return op_->frame_state(); }
+    base::Vector<const node_t> arguments() const { return op_->arguments(); }
+
+    operator node_t() const { return node_; }
+
+   private:
+    node_t node_;
+    const turboshaft::CallOp* op_;
+  };
+
+  CallView call_view(node_t node) { return CallView{graph_, node}; }
+
+  void SetSchedule(schedule_t schedule) { graph_ = schedule; }
+  turboshaft::Graph* turboshaft_graph() const { return graph_; }
+
+  block_t block(schedule_t schedule, node_t node) const {
+    return &schedule->Get(schedule->BlockOf(node));
+  }
+
+  RpoNumber rpo_number(block_t block) const {
+    return RpoNumber::FromInt(block->index().id());
+  }
+
+  const block_range_t& rpo_order(schedule_t schedule) {
+    return schedule->blocks_vector();
+  }
+
+  bool IsLoopHeader(block_t block) const { return block->IsLoop(); }
+
+  size_t PredecessorCount(block_t block) const {
+    return block->PredecessorCount();
+  }
+  block_t PredecessorAt(block_t block, size_t index) const {
+    return block->Predecessors()[index];
+  }
+
+  base::iterator_range<turboshaft::Graph::OpIndexIterator> nodes(
+      block_t block) {
+    return graph_->OperationIndices(*block);
+  }
+
+  bool IsPhi(node_t node) const {
+    return graph_->Get(node).Is<turboshaft::PhiOp>();
+  }
+  bool IsRetain(node_t node) const {
+    return graph_->Get(node).Is<turboshaft::RetainOp>();
+  }
+  bool IsHeapConstant(node_t node) const {
+    turboshaft::ConstantOp* constant =
+        graph_->Get(node).TryCast<turboshaft::ConstantOp>();
+    if (constant == nullptr) return false;
+    return constant->kind == turboshaft::ConstantOp::Kind::kHeapObject;
+  }
+  bool IsExternalConstant(node_t node) const {
+    turboshaft::ConstantOp* constant =
+        graph_->Get(node).TryCast<turboshaft::ConstantOp>();
+    if (constant == nullptr) return false;
+    return constant->kind == turboshaft::ConstantOp::Kind::kExternal;
+  }
+  bool IsRelocatableWasmConstant(node_t node) const {
+    using namespace turboshaft;
+    ConstantOp* constant = graph_->Get(node).TryCast<ConstantOp>();
+    if (constant == nullptr) return false;
+    return constant->kind == any_of(ConstantOp::Kind::kRelocatableWasmCall,
+                                    ConstantOp::Kind::kRelocatableWasmStubCall);
+  }
+
+  inputs_t inputs(node_t node) const { return graph_->Get(node).inputs(); }
+  opcode_t opcode(node_t node) const { return graph_->Get(node).opcode; }
+
+  id_t id(node_t node) const { return node.id(); }
+  bool valid(node_t node) const { return node.valid(); }
+
+  node_t block_terminator(block_t block) const {
+    return graph_->PreviousIndex(block->end());
+  }
+  node_t parent_frame_state(node_t node) const {
+    const turboshaft::FrameStateOp& frame_state =
+        graph_->Get(node).Cast<turboshaft::FrameStateOp>();
+    return frame_state.parent_frame_state();
+  }
+
+  bool IsRequiredWhenUnused(node_t node) const {
+    return graph_->Get(node).IsRequiredWhenUnused();
+  }
+
+  // Temporary stubs
+  block_t block(schedule_t, Node*) const { UNREACHABLE(); }
+  RpoNumber rpo_number(BasicBlock*) const { UNREACHABLE(); }
+
+ private:
+  turboshaft::Graph* graph_;
+};
 
 // The flags continuation is a way to combine a branch or a materialization
 // of a boolean value with an instruction that sets the flags register.
 // The whole instruction is treated as a unit by the register allocator, and
 // thus no spills or moves can be introduced between the flags-setting
 // instruction and the branch or set it should be combined with.
-class FlagsContinuation final {
+template <typename Adapter>
+class FlagsContinuationT final {
  public:
-  FlagsContinuation() : mode_(kFlags_none) {}
+  using block_t = typename Adapter::block_t;
+  using node_t = typename Adapter::node_t;
+  using id_t = typename Adapter::id_t;
+
+  FlagsContinuationT() : mode_(kFlags_none) {}
 
   // Creates a new flags continuation from the given condition and true/false
   // blocks.
-  static FlagsContinuation ForBranch(FlagsCondition condition,
-                                     BasicBlock* true_block,
-                                     BasicBlock* false_block) {
-    return FlagsContinuation(kFlags_branch, condition, true_block, false_block);
+  static FlagsContinuationT ForBranch(FlagsCondition condition,
+                                      block_t true_block, block_t false_block) {
+    return FlagsContinuationT(kFlags_branch, condition, true_block,
+                              false_block);
   }
 
   // Creates a new flags continuation for an eager deoptimization exit.
-  static FlagsContinuation ForDeoptimize(FlagsCondition condition,
-                                         DeoptimizeReason reason,
-                                         NodeId node_id,
-                                         FeedbackSource const& feedback,
-                                         FrameState frame_state) {
-    return FlagsContinuation(kFlags_deoptimize, condition, reason, node_id,
-                             feedback, frame_state);
+  static FlagsContinuationT ForDeoptimize(FlagsCondition condition,
+                                          DeoptimizeReason reason, id_t node_id,
+                                          FeedbackSource const& feedback,
+                                          node_t frame_state) {
+    return FlagsContinuationT(kFlags_deoptimize, condition, reason, node_id,
+                              feedback, frame_state);
   }
-  static FlagsContinuation ForDeoptimizeForTesting(
-      FlagsCondition condition, DeoptimizeReason reason, NodeId node_id,
-      FeedbackSource const& feedback, Node* frame_state) {
+  static FlagsContinuationT ForDeoptimizeForTesting(
+      FlagsCondition condition, DeoptimizeReason reason, id_t node_id,
+      FeedbackSource const& feedback, node_t frame_state) {
     // test-instruction-scheduler.cc passes a dummy Node* as frame_state.
     // Contents don't matter as long as it's not nullptr.
-    return FlagsContinuation(kFlags_deoptimize, condition, reason, node_id,
-                             feedback, frame_state);
+    return FlagsContinuationT(kFlags_deoptimize, condition, reason, node_id,
+                              feedback, frame_state);
   }
 
   // Creates a new flags continuation for a boolean value.
-  static FlagsContinuation ForSet(FlagsCondition condition, Node* result) {
-    return FlagsContinuation(condition, result);
+  static FlagsContinuationT ForSet(FlagsCondition condition, node_t result) {
+    return FlagsContinuationT(condition, result);
   }
 
   // Creates a new flags continuation for a wasm trap.
-  static FlagsContinuation ForTrap(FlagsCondition condition, TrapId trap_id,
-                                   NodeId node_id, Node* frame_state) {
-    return FlagsContinuation(condition, trap_id, node_id, frame_state);
+  static FlagsContinuationT ForTrap(FlagsCondition condition, TrapId trap_id,
+                                    id_t node_id, node_t frame_state) {
+    return FlagsContinuationT(condition, trap_id, node_id, frame_state);
   }
 
-  static FlagsContinuation ForSelect(FlagsCondition condition, Node* result,
-                                     Node* true_value, Node* false_value) {
-    return FlagsContinuation(condition, result, true_value, false_value);
+  static FlagsContinuationT ForSelect(FlagsCondition condition, node_t result,
+                                      node_t true_value, node_t false_value) {
+    return FlagsContinuationT(condition, result, true_value, false_value);
   }
 
   bool IsNone() const { return mode_ == kFlags_none; }
@@ -107,7 +327,7 @@ class FlagsContinuation final {
     DCHECK(IsDeoptimize());
     return reason_;
   }
-  NodeId node_id() const {
+  id_t node_id() const {
     DCHECK(IsDeoptimize() || IsTrap());
     return node_id_;
   }
@@ -115,11 +335,11 @@ class FlagsContinuation final {
     DCHECK(IsDeoptimize());
     return feedback_;
   }
-  Node* frame_state() const {
+  node_t frame_state() const {
     DCHECK(IsDeoptimize() || IsTrap());
     return frame_state_or_result_;
   }
-  Node* result() const {
+  node_t result() const {
     DCHECK(IsSet() || IsSelect());
     return frame_state_or_result_;
   }
@@ -127,19 +347,19 @@ class FlagsContinuation final {
     DCHECK(IsTrap());
     return trap_id_;
   }
-  BasicBlock* true_block() const {
+  block_t true_block() const {
     DCHECK(IsBranch());
     return true_block_;
   }
-  BasicBlock* false_block() const {
+  block_t false_block() const {
     DCHECK(IsBranch());
     return false_block_;
   }
-  Node* true_value() const {
+  node_t true_value() const {
     DCHECK(IsSelect());
     return true_value_;
   }
-  Node* false_value() const {
+  node_t false_value() const {
     DCHECK(IsSelect());
     return false_value_;
   }
@@ -192,8 +412,8 @@ class FlagsContinuation final {
   }
 
  private:
-  FlagsContinuation(FlagsMode mode, FlagsCondition condition,
-                    BasicBlock* true_block, BasicBlock* false_block)
+  FlagsContinuationT(FlagsMode mode, FlagsCondition condition,
+                     block_t true_block, block_t false_block)
       : mode_(mode),
         condition_(condition),
         true_block_(true_block),
@@ -203,9 +423,9 @@ class FlagsContinuation final {
     DCHECK_NOT_NULL(false_block);
   }
 
-  FlagsContinuation(FlagsMode mode, FlagsCondition condition,
-                    DeoptimizeReason reason, NodeId node_id,
-                    FeedbackSource const& feedback, Node* frame_state)
+  FlagsContinuationT(FlagsMode mode, FlagsCondition condition,
+                     DeoptimizeReason reason, id_t node_id,
+                     FeedbackSource const& feedback, node_t frame_state)
       : mode_(mode),
         condition_(condition),
         reason_(reason),
@@ -213,58 +433,60 @@ class FlagsContinuation final {
         feedback_(feedback),
         frame_state_or_result_(frame_state) {
     DCHECK(mode == kFlags_deoptimize);
-    DCHECK_NOT_NULL(frame_state);
+    //    DCHECK_NOT_NULL(frame_state);
   }
 
-  FlagsContinuation(FlagsCondition condition, Node* result)
+  FlagsContinuationT(FlagsCondition condition, node_t result)
       : mode_(kFlags_set),
         condition_(condition),
         frame_state_or_result_(result) {
-    DCHECK_NOT_NULL(result);
+    //    DCHECK_NOT_NULL(result);
   }
 
-  FlagsContinuation(FlagsCondition condition, TrapId trap_id, NodeId node_id,
-                    Node* frame_state)
+  FlagsContinuationT(FlagsCondition condition, TrapId trap_id, id_t node_id,
+                     node_t frame_state)
       : mode_(kFlags_trap),
         condition_(condition),
         node_id_(node_id),
         frame_state_or_result_(frame_state),
         trap_id_(trap_id) {}
 
-  FlagsContinuation(FlagsCondition condition, Node* result, Node* true_value,
-                    Node* false_value)
+  FlagsContinuationT(FlagsCondition condition, node_t result, node_t true_value,
+                     node_t false_value)
       : mode_(kFlags_select),
         condition_(condition),
         frame_state_or_result_(result),
         true_value_(true_value),
         false_value_(false_value) {
-    DCHECK_NOT_NULL(result);
-    DCHECK_NOT_NULL(true_value);
-    DCHECK_NOT_NULL(false_value);
+    //    DCHECK_NOT_NULL(result);
+    //    DCHECK_NOT_NULL(true_value);
+    //    DCHECK_NOT_NULL(false_value);
   }
 
   FlagsMode const mode_;
   FlagsCondition condition_;
   DeoptimizeReason reason_;         // Only valid if mode_ == kFlags_deoptimize*
-  NodeId node_id_;                  // Only valid if mode_ == kFlags_deoptimize*
+  id_t node_id_;                    // Only valid if mode_ == kFlags_deoptimize*
   FeedbackSource feedback_;         // Only valid if mode_ == kFlags_deoptimize*
-  Node* frame_state_or_result_;     // Only valid if mode_ == kFlags_deoptimize*
+  node_t frame_state_or_result_;    // Only valid if mode_ == kFlags_deoptimize*
                                     // or mode_ == kFlags_set.
   BasicBlock* true_block_;          // Only valid if mode_ == kFlags_branch*.
   BasicBlock* false_block_;         // Only valid if mode_ == kFlags_branch*.
   TrapId trap_id_;                  // Only valid if mode_ == kFlags_trap.
-  Node* true_value_;                // Only valid if mode_ == kFlags_select.
-  Node* false_value_;               // Only valid if mode_ == kFlags_select.
+  node_t true_value_;               // Only valid if mode_ == kFlags_select.
+  node_t false_value_;              // Only valid if mode_ == kFlags_select.
 };
 
 // This struct connects nodes of parameters which are going to be pushed on the
 // call stack with their parameter index in the call descriptor of the callee.
-struct PushParameter {
-  PushParameter(Node* n = nullptr,
-                LinkageLocation l = LinkageLocation::ForAnyRegister())
+template <typename Adapter>
+struct PushParameterT {
+  using node_t = typename Adapter::node_t;
+  PushParameterT(node_t n = {},
+                 LinkageLocation l = LinkageLocation::ForAnyRegister())
       : node(n), location(l) {}
 
-  Node* node;
+  node_t node;
   LinkageLocation location;
 };
 
@@ -272,9 +494,19 @@ enum class FrameStateInputKind { kAny, kStackSlot };
 
 // Instruction selection generates an InstructionSequence for a given Schedule.
 template <typename Adapter>
-class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
+class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final
+    : public Adapter {
  public:
   using OperandGenerator = OperandGeneratorT<Adapter>;
+  using PushParameter = PushParameterT<Adapter>;
+  using CallBuffer = CallBufferT<Adapter>;
+  using FlagsContinuation = FlagsContinuationT<Adapter>;
+
+  using schedule_t = typename Adapter::schedule_t;
+  using block_t = typename Adapter::block_t;
+  using block_range_t = typename Adapter::block_range_t;
+  using node_t = typename Adapter::node_t;
+
   // Forward declarations.
   class Features;
 
@@ -292,7 +524,7 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 
   InstructionSelectorT(
       Zone* zone, size_t node_count, Linkage* linkage,
-      InstructionSequence* sequence, Schedule* schedule,
+      InstructionSequence* sequence, schedule_t schedule,
       SourcePositionTable* source_positions, Frame* frame,
       EnableSwitchJumpTable enable_switch_jump_table, TickCounter* tick_counter,
       JSHeapBroker* broker, size_t* max_unoptimized_frame_height,
@@ -448,23 +680,43 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 
   // Checks if {node} was already defined, and therefore code was already
   // generated for it.
-  bool IsDefined(Node* node) const;
+  bool IsDefined(node_t node) const;
+  template <typename T>
+  bool IsDefined(T* node) const {
+    UNREACHABLE(/*REMOVE*/);
+  }
 
   // Checks if {node} has any uses, and therefore code has to be generated for
   // it.
-  bool IsUsed(Node* node) const;
+  bool IsUsed(node_t node) const;
+  template <typename T>
+  bool IsUsed(T* node) const {
+    UNREACHABLE(/*REMOVE*/);
+  }
 
   // Checks if {node} is currently live.
   bool IsLive(Node* node) const { return !IsDefined(node) && IsUsed(node); }
 
   // Gets the effect level of {node}.
-  int GetEffectLevel(Node* node) const;
+  template <typename T>
+  int GetEffectLevel(T*) const {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  int GetEffectLevel(node_t node) const;
 
   // Gets the effect level of {node}, appropriately adjusted based on
   // continuation flags if the node is a branch.
-  int GetEffectLevel(Node* node, FlagsContinuation* cont) const;
+  template <typename... Args>
+  int GetEffectLevel(Args...) const {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  int GetEffectLevel(node_t node, FlagsContinuation* cont) const;
 
-  int GetVirtualRegister(const Node* node);
+  int GetVirtualRegister(node_t node);
+  template <typename T>
+  int GetVirtualRegister(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
   const std::map<NodeId, int> GetVirtualRegistersForTesting() const;
 
   // Check if we can generate loads and stores of ExternalConstants relative
@@ -489,9 +741,9 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
   }
 
   void AppendDeoptimizeArguments(InstructionOperandVector* args,
-                                 DeoptimizeReason reason, NodeId node_id,
+                                 DeoptimizeReason reason, id_t node_id,
                                  FeedbackSource const& feedback,
-                                 FrameState frame_state,
+                                 node_t frame_state,
                                  DeoptimizeKind kind = DeoptimizeKind::kEager);
 
   void EmitTableSwitch(const SwitchInfo& sw,
@@ -501,45 +753,98 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 
   void TryRename(InstructionOperand* op);
   int GetRename(int virtual_register);
-  void SetRename(const Node* node, const Node* rename);
+  template <typename... Args>
+  void SetRename(Args...) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  void SetRename(node_t node, node_t rename);
   void UpdateRenames(Instruction* instruction);
   void UpdateRenamesInPhi(PhiInstruction* phi);
 
   // Inform the instruction selection that {node} was just defined.
-  void MarkAsDefined(Node* node);
+  void MarkAsDefined(node_t node);
+  template <typename T>
+  void MarkAsDefined(T* node) {
+    UNREACHABLE(/*REMOVE*/);
+  }
 
   // Inform the instruction selection that {node} has at least one use and we
   // will need to generate code for it.
-  void MarkAsUsed(Node* node);
+  void MarkAsUsed(node_t node);
+  template <typename T>
+  void MarkAsUsed(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
 
   // Sets the effect level of {node}.
-  void SetEffectLevel(Node* node, int effect_level);
+  void SetEffectLevel(node_t node, int effect_level);
+  template <typename T>
+  void SetEffectLevel(T*, int) {
+    UNREACHABLE(/*REMOVE*/);
+  }
 
   // Inform the register allocation of the representation of the value produced
   // by {node}.
-  void MarkAsRepresentation(MachineRepresentation rep, Node* node);
-  void MarkAsWord32(Node* node) {
+  template <typename... Args>
+  void MarkAsRepresentation(Args...) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  void MarkAsRepresentation(MachineRepresentation rep, node_t node);
+  template <typename T>
+  void MarkAsWord32(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  void MarkAsWord32(node_t node) {
     MarkAsRepresentation(MachineRepresentation::kWord32, node);
   }
-  void MarkAsWord64(Node* node) {
+  template <typename T>
+  void MarkAsWord64(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  void MarkAsWord64(node_t node) {
     MarkAsRepresentation(MachineRepresentation::kWord64, node);
   }
-  void MarkAsFloat32(Node* node) {
+  template <typename T>
+  void MarkAsFloat32(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  void MarkAsFloat32(node_t node) {
     MarkAsRepresentation(MachineRepresentation::kFloat32, node);
   }
-  void MarkAsFloat64(Node* node) {
+  template <typename T>
+  void MarkAsFloat64(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  void MarkAsFloat64(node_t node) {
     MarkAsRepresentation(MachineRepresentation::kFloat64, node);
   }
-  void MarkAsSimd128(Node* node) {
+  template <typename T>
+  void MarkAsSimd128(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  void MarkAsSimd128(node_t node) {
     MarkAsRepresentation(MachineRepresentation::kSimd128, node);
   }
-  void MarkAsSimd256(Node* node) {
+  template <typename T>
+  void MarkAsSimd256(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+
+  void MarkAsSimd256(node_t node) {
     MarkAsRepresentation(MachineRepresentation::kSimd256, node);
   }
-  void MarkAsTagged(Node* node) {
+  template <typename T>
+  void MarkAsTagged(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  void MarkAsTagged(node_t node) {
     MarkAsRepresentation(MachineRepresentation::kTagged, node);
   }
-  void MarkAsCompressed(Node* node) {
+  template <typename T>
+  void MarkAsCompressed(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+  void MarkAsCompressed(node_t node) {
     MarkAsRepresentation(MachineRepresentation::kCompressed, node);
   }
 
@@ -561,15 +866,15 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
   // to the inputs and outputs of the call.
   // {call_code_immediate} to generate immediate operands to calls of code.
   // {call_address_immediate} to generate immediate operands to address calls.
-  void InitializeCallBuffer(Node* call, CallBuffer* buffer,
+  void InitializeCallBuffer(node_t call, CallBuffer* buffer,
                             CallBufferFlags flags, int stack_slot_delta = 0);
   bool IsTailCallAddressImmediate();
 
   void UpdateMaxPushedArgumentCount(size_t count);
 
-  FrameStateDescriptor* GetFrameStateDescriptor(FrameState node);
+  FrameStateDescriptor* GetFrameStateDescriptor(node_t node);
   size_t AddInputsToFrameStateDescriptor(FrameStateDescriptor* descriptor,
-                                         FrameState state, OperandGenerator* g,
+                                         node_t state, OperandGenerator* g,
                                          StateObjectDeduplicator* deduplicator,
                                          InstructionOperandVector* inputs,
                                          FrameStateInputKind kind, Zone* zone);
@@ -577,13 +882,13 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
                                          InstructionOperandVector* inputs,
                                          OperandGenerator* g,
                                          StateObjectDeduplicator* deduplicator,
-                                         Node* node, FrameStateInputKind kind,
+                                         node_t node, FrameStateInputKind kind,
                                          Zone* zone);
   size_t AddOperandToStateValueDescriptor(StateValueList* values,
                                           InstructionOperandVector* inputs,
                                           OperandGenerator* g,
                                           StateObjectDeduplicator* deduplicator,
-                                          Node* input, MachineType type,
+                                          node_t input, MachineType type,
                                           FrameStateInputKind kind, Zone* zone);
 
   // ===========================================================================
@@ -591,14 +896,14 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
   // ===========================================================================
 
   // Visit nodes in the given block and generate code.
-  void VisitBlock(BasicBlock* block);
+  void VisitBlock(block_t block);
 
   // Visit the node for the control flow at the end of the block, generating
   // code if necessary.
-  void VisitControl(BasicBlock* block);
+  void VisitControl(block_t block);
 
   // Visit the node and generate code, if any.
-  void VisitNode(Node* node);
+  void VisitNode(node_t node);
 
   // Visit the node and generate code for IEEE 754 functions.
   void VisitFloat64Ieee754Binop(Node*, InstructionCode code);
@@ -619,21 +924,21 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
   void VisitOsrValue(Node* node);
   void VisitPhi(Node* node);
   void VisitProjection(Node* node);
-  void VisitConstant(Node* node);
-  void VisitCall(Node* call, BasicBlock* handler = nullptr);
+  void VisitConstant(node_t node);
+  void VisitCall(node_t call, block_t handler = {});
   void VisitDeoptimizeIf(Node* node);
   void VisitDeoptimizeUnless(Node* node);
   void VisitDynamicCheckMapsWithDeoptUnless(Node* node);
   void VisitTrapIf(Node* node, TrapId trap_id);
   void VisitTrapUnless(Node* node, TrapId trap_id);
   void VisitTailCall(Node* call);
-  void VisitGoto(BasicBlock* target);
+  void VisitGoto(block_t target);
   void VisitBranch(Node* input, BasicBlock* tbranch, BasicBlock* fbranch);
   void VisitSwitch(Node* node, const SwitchInfo& sw);
-  void VisitDeoptimize(DeoptimizeReason reason, NodeId node_id,
-                       FeedbackSource const& feedback, FrameState frame_state);
+  void VisitDeoptimize(DeoptimizeReason reason, id_t node_id,
+                       FeedbackSource const& feedback, node_t frame_state);
   void VisitSelect(Node* node);
-  void VisitReturn(Node* ret);
+  void VisitReturn(node_t node);
   void VisitThrow(Node* node);
   void VisitRetain(Node* node);
   void VisitUnreachable(Node* node);
@@ -646,10 +951,10 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 
   void VisitWordCompareZero(Node* user, Node* value, FlagsContinuation* cont);
 
-  void EmitPrepareArguments(ZoneVector<compiler::PushParameter>* arguments,
-                            const CallDescriptor* call_descriptor, Node* node);
-  void EmitPrepareResults(ZoneVector<compiler::PushParameter>* results,
-                          const CallDescriptor* call_descriptor, Node* node);
+  void EmitPrepareArguments(ZoneVector<PushParameter>* arguments,
+                            const CallDescriptor* call_descriptor, node_t node);
+  void EmitPrepareResults(ZoneVector<PushParameter>* results,
+                          const CallDescriptor* call_descriptor, node_t node);
 
   // In LOONG64, calling convention uses free GP param register to pass
   // floating-point arguments when no FP param register is available. But
@@ -664,7 +969,7 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
   bool CanProduceSignalingNaN(Node* node);
 
   void AddOutputToSelectContinuation(OperandGenerator* g, int first_input_index,
-                                     Node* node);
+                                     node_t node);
 
   // ===========================================================================
   // ============= Vector instruction (SIMD) helper fns. =======================
@@ -682,7 +987,7 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 
   // ===========================================================================
 
-  Schedule* schedule() const { return schedule_; }
+  schedule_t schedule() const { return schedule_; }
   Linkage* linkage() const { return linkage_; }
   InstructionSequence* sequence() const { return sequence_; }
   Zone* instruction_zone() const { return sequence()->zone(); }
@@ -719,10 +1024,10 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 #endif  // V8_TARGET_ARCH_64_BIT
 
   struct FrameStateInput {
-    FrameStateInput(Node* node_, FrameStateInputKind kind_)
+    FrameStateInput(node_t node_, FrameStateInputKind kind_)
         : node(node_), kind(kind_) {}
 
-    Node* node;
+    node_t node;
     FrameStateInputKind kind;
 
     struct Hash {
@@ -751,8 +1056,8 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
   SourcePositionTable* const source_positions_;
   SourcePositionMode const source_position_mode_;
   Features features_;
-  Schedule* const schedule_;
-  BasicBlock* current_block_;
+  schedule_t const schedule_;
+  block_t current_block_;
   ZoneVector<Instruction*> instructions_;
   InstructionOperandVector continuation_inputs_;
   InstructionOperandVector continuation_outputs_;
@@ -796,10 +1101,10 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) InstructionSelectorT final {
 
 using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
 
-extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
-    InstructionSelectorT<TurbofanAdapter>;
-extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
-    InstructionSelectorT<TurboshaftAdapter>;
+// extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+//     InstructionSelectorT<TurbofanAdapter>;
+// extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
+//     InstructionSelectorT<TurboshaftAdapter>;
 
 }  // namespace compiler
 }  // namespace internal

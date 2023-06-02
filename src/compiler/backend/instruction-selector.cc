@@ -9,15 +9,18 @@
 #include "src/base/iterator.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/interface-descriptors-inl.h"
+#include "src/codegen/machine-type.h"
 #include "src/codegen/tick-counter.h"
 #include "src/common/globals.h"
 #include "src/compiler/backend/instruction-selector-impl.h"
+#include "src/compiler/backend/instruction.h"
 #include "src/compiler/common-operator.h"
 #include "src/compiler/compiler-source-position-table.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/schedule.h"
 #include "src/compiler/state-values-utils.h"
+#include "src/compiler/turboshaft/operations.h"
 
 #if V8_ENABLE_WEBASSEMBLY
 #include "src/wasm/simd-shuffle.h"
@@ -38,7 +41,7 @@ Smi NumberConstantToSmi(Node* node) {
 template <typename Adapter>
 InstructionSelectorT<Adapter>::InstructionSelectorT(
     Zone* zone, size_t node_count, Linkage* linkage,
-    InstructionSequence* sequence, Schedule* schedule,
+    InstructionSequence* sequence, schedule_t schedule,
     SourcePositionTable* source_positions, Frame* frame,
     EnableSwitchJumpTable enable_switch_jump_table, TickCounter* tick_counter,
     JSHeapBroker* broker, size_t* max_unoptimized_frame_height,
@@ -96,43 +99,48 @@ InstructionSelectorT<Adapter>::InstructionSelectorT(
 template <typename Adapter>
 base::Optional<BailoutReason>
 InstructionSelectorT<Adapter>::SelectInstructions() {
+  Adapter::SetSchedule(schedule_);
+
   // Mark the inputs of all phis in loop headers as used.
-  BasicBlockVector* blocks = schedule()->rpo_order();
-  for (auto const block : *blocks) {
-    if (!block->IsLoopHeader()) continue;
-    DCHECK_LE(2u, block->PredecessorCount());
-    for (Node* const phi : *block) {
-      if (phi->opcode() != IrOpcode::kPhi) continue;
+  block_range_t blocks = this->rpo_order(schedule());
+  for (const block_t block : blocks) {
+    if (!this->IsLoopHeader(block)) continue;
+    DCHECK_LE(2u, this->PredecessorCount(block));
+    for (node_t node : this->nodes(block)) {
+      if (!this->IsPhi(node)) continue;
 
       // Mark all inputs as used.
-      for (Node* const input : phi->inputs()) {
+      for (node_t input : this->inputs(node)) {
         MarkAsUsed(input);
       }
     }
   }
 
   // Visit each basic block in post order.
-  for (auto i = blocks->rbegin(); i != blocks->rend(); ++i) {
+  for (auto i = blocks.rbegin(); i != blocks.rend(); ++i) {
     VisitBlock(*i);
     if (instruction_selection_failed())
       return BailoutReason::kCodeGenerationFailed;
   }
 
-  // Schedule the selected instructions.
-  if (UseInstructionScheduling()) {
-    scheduler_ = zone()->template New<InstructionScheduler>(zone(), sequence());
+  if constexpr (std::is_same_v<Adapter, TurbofanAdapter>) {
+    // Schedule the selected instructions.
+    if (UseInstructionScheduling()) {
+      scheduler_ =
+          zone()->template New<InstructionScheduler>(zone(), sequence());
+    }
   }
 
-  for (auto const block : *blocks) {
+  for (const block_t block : blocks) {
     InstructionBlock* instruction_block =
-        sequence()->InstructionBlockAt(RpoNumber::FromInt(block->rpo_number()));
+        sequence()->InstructionBlockAt(this->rpo_number(block));
     for (size_t i = 0; i < instruction_block->phis().size(); i++) {
       UpdateRenamesInPhi(instruction_block->PhiAt(i));
     }
     size_t end = instruction_block->code_end();
     size_t start = instruction_block->code_start();
     DCHECK_LE(end, start);
-    StartBlock(RpoNumber::FromInt(block->rpo_number()));
+    StartBlock(this->rpo_number(block));
     if (end != start) {
       while (start-- > end + 1) {
         UpdateRenames(instructions_[start]);
@@ -141,7 +149,7 @@ InstructionSelectorT<Adapter>::SelectInstructions() {
       UpdateRenames(instructions_[end]);
       AddTerminator(instructions_[end]);
     }
-    EndBlock(RpoNumber::FromInt(block->rpo_number()));
+    EndBlock(this->rpo_number(block));
   }
 #if DEBUG
   sequence()->ValidateSSA();
@@ -295,7 +303,7 @@ Instruction* InstructionSelectorT<Adapter>::Emit(Instruction* instr) {
 template <typename Adapter>
 bool InstructionSelectorT<Adapter>::CanCover(Node* user, Node* node) const {
   // 1. Both {user} and {node} must be in the same basic block.
-  if (schedule()->block(node) != current_block_) {
+  if (this->block(schedule(), node) != current_block_) {
     return false;
   }
   // 2. Pure {node}s must be owned by the {user}.
@@ -318,16 +326,20 @@ bool InstructionSelectorT<Adapter>::CanCover(Node* user, Node* node) const {
 template <typename Adapter>
 bool InstructionSelectorT<Adapter>::IsOnlyUserOfNodeInSameBlock(
     Node* user, Node* node) const {
-  BasicBlock* bb_user = schedule()->block(user);
-  BasicBlock* bb_node = schedule()->block(node);
-  if (bb_user != bb_node) return false;
-  for (Edge const edge : node->use_edges()) {
-    Node* from = edge.from();
-    if ((from != user) && (schedule()->block(from) == bb_user)) {
-      return false;
+  if constexpr (std::is_same_v<Adapter, TurbofanAdapter>) {
+    BasicBlock* bb_user = this->block(schedule(), user);
+    BasicBlock* bb_node = this->block(schedule(), node);
+    if (bb_user != bb_node) return false;
+    for (Edge const edge : node->use_edges()) {
+      Node* from = edge.from();
+      if ((from != user) && (this->block(schedule(), from) == bb_user)) {
+        return false;
+      }
     }
+    return true;
+  } else {
+    UNREACHABLE();
   }
-  return true;
 }
 
 template <typename Adapter>
@@ -374,8 +386,7 @@ void InstructionSelectorT<Adapter>::TryRename(InstructionOperand* op) {
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::SetRename(const Node* node,
-                                              const Node* rename) {
+void InstructionSelectorT<Adapter>::SetRename(node_t node, node_t rename) {
   int vreg = GetVirtualRegister(node);
   if (static_cast<size_t>(vreg) >= virtual_register_rename_.size()) {
     int invalid = InstructionOperand::kInvalidVirtualRegister;
@@ -385,9 +396,9 @@ void InstructionSelectorT<Adapter>::SetRename(const Node* node,
 }
 
 template <typename Adapter>
-int InstructionSelectorT<Adapter>::GetVirtualRegister(const Node* node) {
-  DCHECK_NOT_NULL(node);
-  size_t const id = node->id();
+int InstructionSelectorT<Adapter>::GetVirtualRegister(node_t node) {
+  DCHECK(this->valid(node));
+  size_t const id = this->id(node);
   DCHECK_LT(id, virtual_registers_.size());
   int virtual_register = virtual_registers_[id];
   if (virtual_register == InstructionOperand::kInvalidVirtualRegister) {
@@ -411,55 +422,54 @@ InstructionSelectorT<Adapter>::GetVirtualRegistersForTesting() const {
 }
 
 template <typename Adapter>
-bool InstructionSelectorT<Adapter>::IsDefined(Node* node) const {
-  DCHECK_NOT_NULL(node);
-  return defined_.Contains(node->id());
+bool InstructionSelectorT<Adapter>::IsDefined(node_t node) const {
+  DCHECK(this->valid(node));
+  return defined_.Contains(this->id(node));
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::MarkAsDefined(Node* node) {
-  DCHECK_NOT_NULL(node);
-  defined_.Add(node->id());
+void InstructionSelectorT<Adapter>::MarkAsDefined(node_t node) {
+  DCHECK(this->valid(node));
+  defined_.Add(this->id(node));
 }
 
 template <typename Adapter>
-bool InstructionSelectorT<Adapter>::IsUsed(Node* node) const {
-  DCHECK_NOT_NULL(node);
+bool InstructionSelectorT<Adapter>::IsUsed(node_t node) const {
+  DCHECK(this->valid(node));
   // TODO(bmeurer): This is a terrible monster hack, but we have to make sure
   // that the Retain is actually emitted, otherwise the GC will mess up.
-  if (node->opcode() == IrOpcode::kRetain) return true;
-  if (!node->op()->HasProperty(Operator::kEliminatable)) return true;
-  return used_.Contains(node->id());
+  if (this->IsRetain(node)) return true;
+  if (this->IsRequiredWhenUnused(node)) return true;
+  return used_.Contains(this->id(node));
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::MarkAsUsed(Node* node) {
-  DCHECK_NOT_NULL(node);
-  used_.Add(node->id());
+void InstructionSelectorT<Adapter>::MarkAsUsed(node_t node) {
+  DCHECK(this->valid(node));
+  used_.Add(this->id(node));
 }
 
 template <typename Adapter>
-int InstructionSelectorT<Adapter>::GetEffectLevel(Node* node) const {
-  DCHECK_NOT_NULL(node);
-  size_t const id = node->id();
+int InstructionSelectorT<Adapter>::GetEffectLevel(node_t node) const {
+  DCHECK(this->valid(node));
+  size_t const id = this->id(node);
   DCHECK_LT(id, effect_level_.size());
   return effect_level_[id];
 }
 
 template <typename Adapter>
 int InstructionSelectorT<Adapter>::GetEffectLevel(
-    Node* node, FlagsContinuation* cont) const {
-  return cont->IsBranch()
-             ? GetEffectLevel(
-                   cont->true_block()->PredecessorAt(0)->control_input())
-             : GetEffectLevel(node);
+    node_t node, FlagsContinuation* cont) const {
+  return cont->IsBranch() ? GetEffectLevel(this->block_terminator(
+                                this->PredecessorAt(cont->true_block(), 0)))
+                          : GetEffectLevel(node);
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::SetEffectLevel(Node* node,
+void InstructionSelectorT<Adapter>::SetEffectLevel(node_t node,
                                                    int effect_level) {
-  DCHECK_NOT_NULL(node);
-  size_t const id = node->id();
+  DCHECK(this->valid(node));
+  size_t const id = this->id(node);
   DCHECK_LT(id, effect_level_.size());
   effect_level_[id] = effect_level;
 }
@@ -503,16 +513,23 @@ void InstructionSelectorT<Adapter>::MarkAsRepresentation(
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::MarkAsRepresentation(
-    MachineRepresentation rep, Node* node) {
+    MachineRepresentation rep, node_t node) {
   sequence()->MarkAsRepresentation(rep, GetVirtualRegister(node));
 }
 
 namespace {
 
-template <typename Adapter>
+// InstructionOperand OperandForDeopt(Isolate* isolate,
+//                                    OperandGeneratorT<TurboshaftAdapter>* g,
+//                                    turboshaft::OpIndex input,
+//                                    FrameStateInputKind kind,
+//                                    MachineRepresentation rep) {
+//   UNREACHABLE();
+// }
+
 InstructionOperand OperandForDeopt(Isolate* isolate,
-                                   OperandGeneratorT<Adapter>* g, Node* input,
-                                   FrameStateInputKind kind,
+                                   OperandGeneratorT<TurbofanAdapter>* g,
+                                   Node* input, FrameStateInputKind kind,
                                    MachineRepresentation rep) {
   if (rep == MachineRepresentation::kNone) {
     return g->TempImmediate(FrameStateDescriptor::kImpossibleValue);
@@ -619,12 +636,23 @@ class StateObjectDeduplicator {
   ZoneVector<Node*> objects_;
 };
 
-// Returns the number of instruction operands added to inputs.
-template <typename Adapter>
-size_t InstructionSelectorT<Adapter>::AddOperandToStateValueDescriptor(
+template <>
+size_t
+InstructionSelectorT<TurboshaftAdapter>::AddOperandToStateValueDescriptor(
     StateValueList* values, InstructionOperandVector* inputs,
-    OperandGenerator* g, StateObjectDeduplicator* deduplicator, Node* input,
+    OperandGeneratorT<TurboshaftAdapter>* g,
+    StateObjectDeduplicator* deduplicator, turboshaft::OpIndex input,
     MachineType type, FrameStateInputKind kind, Zone* zone) {
+  UNREACHABLE();
+}
+
+// Returns the number of instruction operands added to inputs.
+template <>
+size_t InstructionSelectorT<TurbofanAdapter>::AddOperandToStateValueDescriptor(
+    StateValueList* values, InstructionOperandVector* inputs,
+    OperandGeneratorT<TurbofanAdapter>* g,
+    StateObjectDeduplicator* deduplicator, Node* input, MachineType type,
+    FrameStateInputKind kind, Zone* zone) {
   DCHECK_NOT_NULL(input);
   switch (input->opcode()) {
     case IrOpcode::kArgumentsElementsState: {
@@ -739,11 +767,11 @@ class InstructionSelectorT<Adapter>::CachedStateValuesBuilder {
 template <typename Adapter>
 size_t InstructionSelectorT<Adapter>::AddInputsToFrameStateDescriptor(
     StateValueList* values, InstructionOperandVector* inputs,
-    OperandGenerator* g, StateObjectDeduplicator* deduplicator, Node* node,
+    OperandGenerator* g, StateObjectDeduplicator* deduplicator, node_t node,
     FrameStateInputKind kind, Zone* zone) {
-  // StateValues are often shared across different nodes, and processing them is
-  // expensive, so cache the result of processing a StateValue so that we can
-  // quickly copy the result if we see it again.
+  // StateValues are often shared across different nodes, and processing them
+  // is expensive, so cache the result of processing a StateValue so that we
+  // can quickly copy the result if we see it again.
   FrameStateInput key(node, kind);
   auto cache_entry = state_values_cache_.find(key);
   if (cache_entry != state_values_cache_.end()) {
@@ -767,8 +795,8 @@ size_t InstructionSelectorT<Adapter>::AddInputsToFrameStateDescriptor(
       ++it;
     }
     if (cache_builder.CanCache()) {
-      // Use this->zone() to build the cache entry in the instruction selector's
-      // zone rather than the more long-lived instruction zone.
+      // Use this->zone() to build the cache entry in the instruction
+      // selector's zone rather than the more long-lived instruction zone.
       state_values_cache_.emplace(key, cache_builder.Build(this->zone()));
     }
     return entries;
@@ -778,56 +806,61 @@ size_t InstructionSelectorT<Adapter>::AddInputsToFrameStateDescriptor(
 // Returns the number of instruction operands added to inputs.
 template <typename Adapter>
 size_t InstructionSelectorT<Adapter>::AddInputsToFrameStateDescriptor(
-    FrameStateDescriptor* descriptor, FrameState state, OperandGenerator* g,
+    FrameStateDescriptor* descriptor, node_t state_node, OperandGenerator* g,
     StateObjectDeduplicator* deduplicator, InstructionOperandVector* inputs,
     FrameStateInputKind kind, Zone* zone) {
-  size_t entries = 0;
-  size_t initial_size = inputs->size();
-  USE(initial_size);  // initial_size is only used for debug.
+  if constexpr (Adapter::IsTurboshaft) {
+    UNREACHABLE();
+  } else {
+    FrameState state{state_node};
+    size_t entries = 0;
+    size_t initial_size = inputs->size();
+    USE(initial_size);  // initial_size is only used for debug.
 
-  if (descriptor->outer_state()) {
-    entries += AddInputsToFrameStateDescriptor(
-        descriptor->outer_state(), FrameState{state.outer_frame_state()}, g,
-        deduplicator, inputs, kind, zone);
-  }
+    if (descriptor->outer_state()) {
+      entries += AddInputsToFrameStateDescriptor(
+          descriptor->outer_state(), FrameState{state.outer_frame_state()}, g,
+          deduplicator, inputs, kind, zone);
+    }
 
-  Node* parameters = state.parameters();
-  Node* locals = state.locals();
-  Node* stack = state.stack();
-  Node* context = state.context();
-  Node* function = state.function();
+    Node* parameters = state.parameters();
+    Node* locals = state.locals();
+    Node* stack = state.stack();
+    Node* context = state.context();
+    Node* function = state.function();
 
-  DCHECK_EQ(descriptor->parameters_count(),
-            StateValuesAccess(parameters).size());
-  DCHECK_EQ(descriptor->locals_count(), StateValuesAccess(locals).size());
-  DCHECK_EQ(descriptor->stack_count(), StateValuesAccess(stack).size());
+    DCHECK_EQ(descriptor->parameters_count(),
+              StateValuesAccess(parameters).size());
+    DCHECK_EQ(descriptor->locals_count(), StateValuesAccess(locals).size());
+    DCHECK_EQ(descriptor->stack_count(), StateValuesAccess(stack).size());
 
-  StateValueList* values_descriptor = descriptor->GetStateValueDescriptors();
+    StateValueList* values_descriptor = descriptor->GetStateValueDescriptors();
 
-  DCHECK_EQ(values_descriptor->size(), 0u);
-  values_descriptor->ReserveSize(descriptor->GetSize());
+    DCHECK_EQ(values_descriptor->size(), 0u);
+    values_descriptor->ReserveSize(descriptor->GetSize());
 
-  DCHECK_NOT_NULL(function);
-  entries += AddOperandToStateValueDescriptor(
-      values_descriptor, inputs, g, deduplicator, function,
-      MachineType::AnyTagged(), FrameStateInputKind::kStackSlot, zone);
-
-  entries += AddInputsToFrameStateDescriptor(
-      values_descriptor, inputs, g, deduplicator, parameters, kind, zone);
-
-  if (descriptor->HasContext()) {
-    DCHECK_NOT_NULL(context);
+    DCHECK_NOT_NULL(function);
     entries += AddOperandToStateValueDescriptor(
-        values_descriptor, inputs, g, deduplicator, context,
+        values_descriptor, inputs, g, deduplicator, function,
         MachineType::AnyTagged(), FrameStateInputKind::kStackSlot, zone);
-  }
 
-  entries += AddInputsToFrameStateDescriptor(values_descriptor, inputs, g,
-                                             deduplicator, locals, kind, zone);
-  entries += AddInputsToFrameStateDescriptor(values_descriptor, inputs, g,
-                                             deduplicator, stack, kind, zone);
-  DCHECK_EQ(initial_size + entries, inputs->size());
-  return entries;
+    entries += AddInputsToFrameStateDescriptor(
+        values_descriptor, inputs, g, deduplicator, parameters, kind, zone);
+
+    if (descriptor->HasContext()) {
+      DCHECK_NOT_NULL(context);
+      entries += AddOperandToStateValueDescriptor(
+          values_descriptor, inputs, g, deduplicator, context,
+          MachineType::AnyTagged(), FrameStateInputKind::kStackSlot, zone);
+    }
+
+    entries += AddInputsToFrameStateDescriptor(
+        values_descriptor, inputs, g, deduplicator, locals, kind, zone);
+    entries += AddInputsToFrameStateDescriptor(values_descriptor, inputs, g,
+                                               deduplicator, stack, kind, zone);
+    DCHECK_EQ(initial_size + entries, inputs->size());
+    return entries;
+  }
 }
 
 template <typename Adapter>
@@ -895,7 +928,7 @@ Instruction* InstructionSelectorT<Adapter>::EmitWithContinuation(
               DeoptFrameStateOffsetField::encode(static_cast<int>(input_count));
     AppendDeoptimizeArguments(&continuation_inputs_, cont->reason(),
                               cont->node_id(), cont->feedback(),
-                              FrameState{cont->frame_state()});
+                              cont->frame_state());
   } else if (cont->IsSet()) {
     continuation_outputs_.push_back(g.DefineAsRegister(cont->result()));
   } else if (cont->IsSelect()) {
@@ -910,15 +943,14 @@ Instruction* InstructionSelectorT<Adapter>::EmitWithContinuation(
     int trap_id = static_cast<int>(cont->trap_id());
     continuation_inputs_.push_back(g.UseImmediate(trap_id));
 
-    if (cont->frame_state()) {
+    if (this->valid(cont->frame_state())) {
       int immediate_args_count = 0;
       opcode |=
           DeoptImmedArgsCountField::encode(immediate_args_count) |
           DeoptFrameStateOffsetField::encode(static_cast<int>(input_count + 1));
       AppendDeoptimizeArguments(
           &continuation_inputs_, DeoptimizeReason::kWasmTrap, cont->node_id(),
-          FeedbackSource{}, FrameState{cont->frame_state()},
-          DeoptimizeKind::kLazy);
+          FeedbackSource{}, cont->frame_state(), DeoptimizeKind::kLazy);
     }
   } else {
     DCHECK(cont->IsNone());
@@ -938,26 +970,33 @@ Instruction* InstructionSelectorT<Adapter>::EmitWithContinuation(
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::AppendDeoptimizeArguments(
-    InstructionOperandVector* args, DeoptimizeReason reason, NodeId node_id,
-    FeedbackSource const& feedback, FrameState frame_state,
-    DeoptimizeKind kind) {
-  OperandGenerator g(this);
-  FrameStateDescriptor* const descriptor = GetFrameStateDescriptor(frame_state);
-  int const state_id = sequence()->AddDeoptimizationEntry(
-      descriptor, kind, reason, node_id, feedback);
-  args->push_back(g.TempImmediate(state_id));
-  StateObjectDeduplicator deduplicator(instruction_zone());
-  AddInputsToFrameStateDescriptor(descriptor, frame_state, &g, &deduplicator,
-                                  args, FrameStateInputKind::kAny,
-                                  instruction_zone());
+    InstructionOperandVector* args, DeoptimizeReason reason, id_t node_id,
+    FeedbackSource const& feedback, node_t frame_state, DeoptimizeKind kind) {
+  if constexpr (Adapter::IsTurboshaft) {
+    // TODO(nicohartmann@): Implement this for turboshaft.
+    UNIMPLEMENTED();
+  } else {
+    OperandGenerator g(this);
+    FrameStateDescriptor* const descriptor =
+        GetFrameStateDescriptor(static_cast<Node*>(frame_state));
+    int const state_id = sequence()->AddDeoptimizationEntry(
+        descriptor, kind, reason, node_id, feedback);
+    args->push_back(g.TempImmediate(state_id));
+    StateObjectDeduplicator deduplicator(instruction_zone());
+    AddInputsToFrameStateDescriptor(descriptor, frame_state, &g, &deduplicator,
+                                    args, FrameStateInputKind::kAny,
+                                    instruction_zone());
+  }
 }
 
 // An internal helper class for generating the operands to calls.
 // TODO(bmeurer): Get rid of the CallBuffer business and make
 // InstructionSelector::VisitCall platform independent instead.
-struct CallBuffer {
-  CallBuffer(Zone* zone, const CallDescriptor* call_descriptor,
-             FrameStateDescriptor* frame_state)
+template <typename Adapter>
+struct CallBufferT {
+  using PushParameter = PushParameterT<Adapter>;
+  CallBufferT(Zone* zone, const CallDescriptor* call_descriptor,
+              FrameStateDescriptor* frame_state)
       : descriptor(call_descriptor),
         frame_state_descriptor(frame_state),
         output_nodes(zone),
@@ -993,15 +1032,19 @@ struct CallBuffer {
 // InstructionSelector::VisitCall platform independent instead.
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::InitializeCallBuffer(
-    Node* call, CallBuffer* buffer, CallBufferFlags flags,
+    node_t node, CallBuffer* buffer, CallBufferFlags flags,
     int stack_param_delta) {
   OperandGenerator g(this);
   size_t ret_count = buffer->descriptor->ReturnCount();
   bool is_tail_call = (flags & kCallTail) != 0;
-  DCHECK_LE(call->op()->ValueOutputCount(), ret_count);
-  DCHECK_EQ(
-      call->op()->ValueInputCount(),
-      static_cast<int>(buffer->input_count() + buffer->frame_state_count()));
+  auto call = this->call_view(node);
+  DCHECK_LE(call.return_count(), ret_count);
+  //  DCHECK_LE(call->op()->ValueOutputCount(), ret_count);
+  // TODO:
+  //  DCHECK_EQ(
+  //      call->op()->ValueInputCount(),
+  //      static_cast<int>(buffer->input_count() +
+  //      buffer->frame_state_count()));
 
   if (ret_count > 0) {
     // Collect the projections that represent multiple outputs from this call.
@@ -1009,24 +1052,29 @@ void InstructionSelectorT<Adapter>::InitializeCallBuffer(
       PushParameter result = {call, buffer->descriptor->GetReturnLocation(0)};
       buffer->output_nodes.push_back(result);
     } else {
-      buffer->output_nodes.resize(ret_count);
-      for (size_t i = 0; i < ret_count; ++i) {
-        LinkageLocation location = buffer->descriptor->GetReturnLocation(i);
-        buffer->output_nodes[i] = PushParameter(nullptr, location);
-      }
-      for (Edge const edge : call->use_edges()) {
-        if (!NodeProperties::IsValueEdge(edge)) continue;
-        Node* node = edge.from();
-        DCHECK_EQ(IrOpcode::kProjection, node->opcode());
-        size_t const index = ProjectionIndexOf(node->op());
+      if constexpr (Adapter::IsTurboshaft) {
+        // TODO(nicohartmann@): Support this.
+        UNIMPLEMENTED();
+      } else {
+        buffer->output_nodes.resize(ret_count);
+        for (size_t i = 0; i < ret_count; ++i) {
+          LinkageLocation location = buffer->descriptor->GetReturnLocation(i);
+          buffer->output_nodes[i] = PushParameter(nullptr, location);
+        }
+        for (Edge const edge : ((node_t)call)->use_edges()) {
+          if (!NodeProperties::IsValueEdge(edge)) continue;
+          Node* node = edge.from();
+          DCHECK_EQ(IrOpcode::kProjection, node->opcode());
+          size_t const index = ProjectionIndexOf(node->op());
 
-        DCHECK_LT(index, buffer->output_nodes.size());
-        DCHECK(!buffer->output_nodes[index].node);
-        buffer->output_nodes[index].node = node;
-      }
+          DCHECK_LT(index, buffer->output_nodes.size());
+          DCHECK(!buffer->output_nodes[index].node);
+          buffer->output_nodes[index].node = node;
+        }
 
-      frame_->EnsureReturnSlots(
-          static_cast<int>(buffer->descriptor->ReturnSlotCount()));
+        frame_->EnsureReturnSlots(
+            static_cast<int>(buffer->descriptor->ReturnSlotCount()));
+      }
     }
 
     // Filter out the outputs that aren't live because no projection uses them.
@@ -1036,61 +1084,58 @@ void InstructionSelectorT<Adapter>::InitializeCallBuffer(
             : buffer->frame_state_descriptor->state_combine()
                   .ConsumedOutputCount();
     for (size_t i = 0; i < buffer->output_nodes.size(); i++) {
-      bool output_is_live = buffer->output_nodes[i].node != nullptr ||
+      bool output_is_live = this->valid(buffer->output_nodes[i].node) ||
                             i < outputs_needed_by_framestate;
       if (output_is_live) {
         LinkageLocation location = buffer->output_nodes[i].location;
         MachineRepresentation rep = location.GetType().representation();
 
-        Node* output = buffer->output_nodes[i].node;
-        InstructionOperand op = output == nullptr
+        node_t output = buffer->output_nodes[i].node;
+        InstructionOperand op = !this->valid(output)
                                     ? g.TempLocation(location)
                                     : g.DefineAsLocation(output, location);
         MarkAsRepresentation(rep, op);
 
         if (!UnallocatedOperand::cast(op).HasFixedSlotPolicy()) {
           buffer->outputs.push_back(op);
-          buffer->output_nodes[i].node = nullptr;
+          buffer->output_nodes[i].node = {};
         }
       }
     }
   }
 
   // The first argument is always the callee code.
-  Node* callee = call->InputAt(0);
+  node_t callee = call.callee();
   bool call_code_immediate = (flags & kCallCodeImmediate) != 0;
   bool call_address_immediate = (flags & kCallAddressImmediate) != 0;
   bool call_use_fixed_target_reg = (flags & kCallFixedTargetRegister) != 0;
   switch (buffer->descriptor->kind()) {
     case CallDescriptor::kCallCodeObject:
       buffer->instruction_args.push_back(
-          (call_code_immediate && callee->opcode() == IrOpcode::kHeapConstant)
+          (call_code_immediate && this->IsHeapConstant(callee))
               ? g.UseImmediate(callee)
-              : call_use_fixed_target_reg
-                    ? g.UseFixed(callee, kJavaScriptCallCodeStartRegister)
-                    : g.UseRegister(callee));
+          : call_use_fixed_target_reg
+              ? g.UseFixed(callee, kJavaScriptCallCodeStartRegister)
+              : g.UseRegister(callee));
       break;
     case CallDescriptor::kCallAddress:
       buffer->instruction_args.push_back(
-          (call_address_immediate &&
-           callee->opcode() == IrOpcode::kExternalConstant)
+          (call_address_immediate && this->IsExternalConstant(callee))
               ? g.UseImmediate(callee)
-              : call_use_fixed_target_reg
-                    ? g.UseFixed(callee, kJavaScriptCallCodeStartRegister)
-                    : g.UseRegister(callee));
+          : call_use_fixed_target_reg
+              ? g.UseFixed(callee, kJavaScriptCallCodeStartRegister)
+              : g.UseRegister(callee));
       break;
 #if V8_ENABLE_WEBASSEMBLY
     case CallDescriptor::kCallWasmCapiFunction:
     case CallDescriptor::kCallWasmFunction:
     case CallDescriptor::kCallWasmImportWrapper:
       buffer->instruction_args.push_back(
-          (call_address_immediate &&
-           (callee->opcode() == IrOpcode::kRelocatableInt64Constant ||
-            callee->opcode() == IrOpcode::kRelocatableInt32Constant))
+          (call_address_immediate && this->IsRelocatableWasmConstant(callee))
               ? g.UseImmediate(callee)
-              : call_use_fixed_target_reg
-                    ? g.UseFixed(callee, kJavaScriptCallCodeStartRegister)
-                    : g.UseRegister(callee));
+          : call_use_fixed_target_reg
+              ? g.UseFixed(callee, kJavaScriptCallCodeStartRegister)
+              : g.UseRegister(callee));
       break;
 #endif  // V8_ENABLE_WEBASSEMBLY
     case CallDescriptor::kCallBuiltinPointer: {
@@ -1127,21 +1172,25 @@ void InstructionSelectorT<Adapter>::InitializeCallBuffer(
   size_t frame_state_entries = 0;
   USE(frame_state_entries);  // frame_state_entries is only used for debug.
   if (buffer->frame_state_descriptor != nullptr) {
-    FrameState frame_state{
-        call->InputAt(static_cast<int>(buffer->descriptor->InputCount()))};
+    node_t frame_state = call.frame_state();
+    //    FrameState frame_state{
+    //        call->InputAt(static_cast<int>(buffer->descriptor->InputCount()))};
 
     // If it was a syntactic tail call we need to drop the current frame and
     // all the frames on top of it that are either inlined extra arguments
     // or a tail caller frame.
     if (is_tail_call) {
-      frame_state = FrameState{NodeProperties::GetFrameStateInput(frame_state)};
+      frame_state = this->parent_frame_state(frame_state);
+      //      frame_state =
+      //      FrameState{NodeProperties::GetFrameStateInput(frame_state)};
       buffer->frame_state_descriptor =
           buffer->frame_state_descriptor->outer_state();
       while (buffer->frame_state_descriptor != nullptr &&
              buffer->frame_state_descriptor->type() ==
                  FrameStateType::kInlinedExtraArguments) {
-        frame_state =
-            FrameState{NodeProperties::GetFrameStateInput(frame_state)};
+        //        frame_state =
+        //            FrameState{NodeProperties::GetFrameStateInput(frame_state)};
+        frame_state = this->parent_frame_state(frame_state);
         buffer->frame_state_descriptor =
             buffer->frame_state_descriptor->outer_state();
       }
@@ -1149,7 +1198,7 @@ void InstructionSelectorT<Adapter>::InitializeCallBuffer(
 
     int const state_id = sequence()->AddDeoptimizationEntry(
         buffer->frame_state_descriptor, DeoptimizeKind::kLazy,
-        DeoptimizeReason::kUnknown, call->id(), FeedbackSource());
+        DeoptimizeReason::kUnknown, this->id(call), FeedbackSource());
     buffer->instruction_args.push_back(g.TempImmediate(state_id));
 
     StateObjectDeduplicator deduplicator(instruction_zone());
@@ -1169,12 +1218,16 @@ void InstructionSelectorT<Adapter>::InitializeCallBuffer(
   // arguments require an explicit push instruction before the call and do
   // not appear as arguments to the call. Everything else ends up
   // as an InstructionOperand argument to the call.
-  auto iter(call->inputs().begin());
+  auto arguments = call.arguments();
+  auto iter(arguments.begin());
+  // call->inputs().begin());
   size_t pushed_count = 0;
-  for (size_t index = 0; index < input_count; ++iter, ++index) {
-    DCHECK(iter != call->inputs().end());
-    DCHECK_NE(IrOpcode::kFrameState, (*iter)->op()->opcode());
-    if (index == 0) continue;  // The first argument (callee) is already done.
+  for (size_t index = 1; index < input_count; ++iter, ++index) {
+    //    DCHECK(iter != call->inputs().end());
+    DCHECK_NE(iter, arguments.end());
+    //    DCHECK_NE(IrOpcode::kFrameState, (*iter)->op()->opcode());
+    //    if (index == 0) continue;  // The first argument (callee) is already
+    //    done.
 
     LinkageLocation location = buffer->descriptor->GetInputLocation(index);
     if (is_tail_call) {
@@ -1232,8 +1285,25 @@ bool InstructionSelectorT<Adapter>::IsSourcePositionUsed(Node* node) {
           node->opcode() == IrOpcode::kStoreTrapOnNull);
 }
 
+namespace {
+bool increment_effect_level_for_opcode(IrOpcode::Value opcode) {
+  return opcode == IrOpcode::kStore || opcode == IrOpcode::kUnalignedStore ||
+         opcode == IrOpcode::kCall || opcode == IrOpcode::kProtectedStore ||
+         opcode == IrOpcode::kStoreTrapOnNull ||
+#define ADD_EFFECT_FOR_ATOMIC_OP(Opcode) opcode == IrOpcode::k##Opcode ||
+         MACHINE_ATOMIC_OP_LIST(ADD_EFFECT_FOR_ATOMIC_OP)
+#undef ADD_EFFECT_FOR_ATOMIC_OP
+                 opcode == IrOpcode::kMemoryBarrier;
+}
+
+bool increment_effect_level_for_opcode(turboshaft::Opcode opcode) {
+  // TODO: Fix this.
+  return true;
+}
+}  // namespace
+
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitBlock(BasicBlock* block) {
+void InstructionSelectorT<Adapter>::VisitBlock(block_t block) {
   DCHECK(!current_block_);
   current_block_ = block;
   auto current_num_instructions = [&] {
@@ -1243,40 +1313,37 @@ void InstructionSelectorT<Adapter>::VisitBlock(BasicBlock* block) {
   int current_block_end = current_num_instructions();
 
   int effect_level = 0;
-  for (Node* const node : *block) {
+  for (node_t node : this->nodes(block)) {
     SetEffectLevel(node, effect_level);
     current_effect_level_ = effect_level;
-    if (node->opcode() == IrOpcode::kStore ||
-        node->opcode() == IrOpcode::kUnalignedStore ||
-        node->opcode() == IrOpcode::kCall ||
-        node->opcode() == IrOpcode::kProtectedStore ||
-        node->opcode() == IrOpcode::kStoreTrapOnNull ||
-#define ADD_EFFECT_FOR_ATOMIC_OP(Opcode) \
-  node->opcode() == IrOpcode::k##Opcode ||
-        MACHINE_ATOMIC_OP_LIST(ADD_EFFECT_FOR_ATOMIC_OP)
-#undef ADD_EFFECT_FOR_ATOMIC_OP
-                node->opcode() == IrOpcode::kMemoryBarrier) {
+    if (increment_effect_level_for_opcode(this->opcode(node))) {
       ++effect_level;
     }
   }
 
   // We visit the control first, then the nodes in the block, so the block's
   // control input should be on the same effect level as the last node.
-  if (block->control_input() != nullptr) {
-    SetEffectLevel(block->control_input(), effect_level);
+  if (node_t terminator = this->block_terminator(block);
+      this->valid(terminator)) {
+    SetEffectLevel(terminator, effect_level);
     current_effect_level_ = effect_level;
   }
 
-  auto FinishEmittedInstructions = [&](Node* node, int instruction_start) {
+  auto FinishEmittedInstructions = [&](node_t node, int instruction_start) {
     if (instruction_selection_failed()) return false;
     if (current_num_instructions() == instruction_start) return true;
     std::reverse(instructions_.begin() + instruction_start,
                  instructions_.end());
-    if (!node) return true;
+    if (!this->valid(node)) return true;
     if (!source_positions_) return true;
-    SourcePosition source_position = source_positions_->GetSourcePosition(node);
-    if (source_position.IsKnown() && IsSourcePositionUsed(node)) {
-      sequence()->SetSourcePosition(instructions_.back(), source_position);
+    if constexpr (std::is_same_v<Adapter, TurbofanAdapter>) {
+      SourcePosition source_position =
+          source_positions_->GetSourcePosition(node);
+      if (source_position.IsKnown() && IsSourcePositionUsed(node)) {
+        sequence()->SetSourcePosition(instructions_.back(), source_position);
+      }
+    } else {
+      // TODO(nicohartmann@): Reconsider this.
     }
     return true;
   };
@@ -1284,13 +1351,14 @@ void InstructionSelectorT<Adapter>::VisitBlock(BasicBlock* block) {
   // Generate code for the block control "top down", but schedule the code
   // "bottom up".
   VisitControl(block);
-  if (!FinishEmittedInstructions(block->control_input(), current_block_end)) {
+  if (!FinishEmittedInstructions(this->block_terminator(block),
+                                 current_block_end)) {
     return;
   }
 
   // Visit code in reverse control flow order, because architecture-specific
   // matching may cover more than one node at a time.
-  for (auto node : base::Reversed(*block)) {
+  for (node_t node : base::Reversed(this->nodes(block))) {
     int current_node_end = current_num_instructions();
     // Skip nodes that are unused or already defined.
     if (IsUsed(node) && !IsDefined(node)) {
@@ -1300,14 +1368,14 @@ void InstructionSelectorT<Adapter>::VisitBlock(BasicBlock* block) {
       if (!FinishEmittedInstructions(node, current_node_end)) return;
     }
     if (trace_turbo_ == kEnableTraceTurboJson) {
-      instr_origins_[node->id()] = {current_num_instructions(),
-                                    current_node_end};
+      instr_origins_[this->id(node)] = {current_num_instructions(),
+                                        current_node_end};
     }
   }
 
   // We're done with the block.
   InstructionBlock* instruction_block =
-      sequence()->InstructionBlockAt(RpoNumber::FromInt(block->rpo_number()));
+      sequence()->InstructionBlockAt(this->rpo_number(block));
   if (current_num_instructions() == current_block_end) {
     // Avoid empty block: insert a {kArchNop} instruction.
     Emit(Instruction::New(sequence()->zone(), kArchNop));
@@ -1315,111 +1383,6 @@ void InstructionSelectorT<Adapter>::VisitBlock(BasicBlock* block) {
   instruction_block->set_code_start(current_num_instructions());
   instruction_block->set_code_end(current_block_end);
   current_block_ = nullptr;
-}
-
-template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitControl(BasicBlock* block) {
-#ifdef DEBUG
-  // SSA deconstruction requires targets of branches not to have phis.
-  // Edge split form guarantees this property, but is more strict.
-  if (block->SuccessorCount() > 1) {
-    for (BasicBlock* const successor : block->successors()) {
-      for (Node* const node : *successor) {
-        if (IrOpcode::IsPhiOpcode(node->opcode())) {
-          std::ostringstream str;
-          str << "You might have specified merged variables for a label with "
-              << "only one predecessor." << std::endl
-              << "# Current Block: " << *successor << std::endl
-              << "#          Node: " << *node;
-          FATAL("%s", str.str().c_str());
-        }
-      }
-    }
-  }
-#endif
-
-  Node* input = block->control_input();
-  int instruction_end = static_cast<int>(instructions_.size());
-  switch (block->control()) {
-    case BasicBlock::kGoto:
-      VisitGoto(block->SuccessorAt(0));
-      break;
-    case BasicBlock::kCall: {
-      DCHECK_EQ(IrOpcode::kCall, input->opcode());
-      BasicBlock* success = block->SuccessorAt(0);
-      BasicBlock* exception = block->SuccessorAt(1);
-      VisitCall(input, exception);
-      VisitGoto(success);
-      break;
-    }
-    case BasicBlock::kTailCall: {
-      DCHECK_EQ(IrOpcode::kTailCall, input->opcode());
-      VisitTailCall(input);
-      break;
-    }
-    case BasicBlock::kBranch: {
-      DCHECK_EQ(IrOpcode::kBranch, input->opcode());
-      // TODO(nicohartmann@): Once all branches have explicitly specified
-      // semantics, we should allow only BranchSemantics::kMachine here.
-      DCHECK_NE(BranchSemantics::kJS,
-                BranchParametersOf(input->op()).semantics());
-      BasicBlock* tbranch = block->SuccessorAt(0);
-      BasicBlock* fbranch = block->SuccessorAt(1);
-      if (tbranch == fbranch) {
-        VisitGoto(tbranch);
-      } else {
-        VisitBranch(input, tbranch, fbranch);
-      }
-      break;
-    }
-    case BasicBlock::kSwitch: {
-      DCHECK_EQ(IrOpcode::kSwitch, input->opcode());
-      // Last successor must be {IfDefault}.
-      BasicBlock* default_branch = block->successors().back();
-      DCHECK_EQ(IrOpcode::kIfDefault, default_branch->front()->opcode());
-      // All other successors must be {IfValue}s.
-      int32_t min_value = std::numeric_limits<int32_t>::max();
-      int32_t max_value = std::numeric_limits<int32_t>::min();
-      size_t case_count = block->SuccessorCount() - 1;
-      ZoneVector<CaseInfo> cases(case_count, zone());
-      for (size_t i = 0; i < case_count; ++i) {
-        BasicBlock* branch = block->SuccessorAt(i);
-        const IfValueParameters& p = IfValueParametersOf(branch->front()->op());
-        cases[i] = CaseInfo{p.value(), p.comparison_order(), branch};
-        if (min_value > p.value()) min_value = p.value();
-        if (max_value < p.value()) max_value = p.value();
-      }
-      SwitchInfo sw(cases, min_value, max_value, default_branch);
-      VisitSwitch(input, sw);
-      break;
-    }
-    case BasicBlock::kReturn: {
-      DCHECK_EQ(IrOpcode::kReturn, input->opcode());
-      VisitReturn(input);
-      break;
-    }
-    case BasicBlock::kDeoptimize: {
-      DeoptimizeParameters p = DeoptimizeParametersOf(input->op());
-      FrameState value{input->InputAt(0)};
-      VisitDeoptimize(p.reason(), input->id(), p.feedback(), value);
-      break;
-    }
-    case BasicBlock::kThrow:
-      DCHECK_EQ(IrOpcode::kThrow, input->opcode());
-      VisitThrow(input);
-      break;
-    case BasicBlock::kNone: {
-      // Exit block doesn't have control.
-      DCHECK_NULL(input);
-      break;
-    }
-    default:
-      UNREACHABLE();
-  }
-  if (trace_turbo_ == kEnableTraceTurboJson && input) {
-    int instruction_start = static_cast<int>(instructions_.size());
-    instr_origins_[input->id()] = {instruction_start, instruction_end};
-  }
 }
 
 template <typename Adapter>
@@ -1434,10 +1397,63 @@ void InstructionSelectorT<Adapter>::MarkPairProjectionsAsWord32(Node* node) {
   }
 }
 
-template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitNode(Node* node) {
+template <>
+void InstructionSelectorT<TurboshaftAdapter>::VisitNode(
+    turboshaft::OpIndex node) {
+  using namespace turboshaft;
   tick_counter_->TickAndMaybeEnterSafepoint();
-  DCHECK_NOT_NULL(schedule()->block(node));  // should only use scheduled nodes.
+  const Operation& op = schedule()->Get(node);
+  switch (op.opcode) {
+    case Opcode::kGoto:
+    case Opcode::kReturn:
+      // Those are already handled in VisitControl.
+      break;
+    case Opcode::kConstant: {
+      const ConstantOp& constant = op.Cast<ConstantOp>();
+      switch (constant.kind) {
+        case ConstantOp::Kind::kWord32:
+        case ConstantOp::Kind::kWord64:
+        case ConstantOp::Kind::kTaggedIndex:
+        case ConstantOp::Kind::kExternal:
+          break;
+        case ConstantOp::Kind::kFloat32:
+          MarkAsFloat32(node);
+          break;
+        case ConstantOp::Kind::kFloat64:
+          MarkAsFloat64(node);
+          break;
+        case ConstantOp::Kind::kHeapObject:
+          MarkAsTagged(node);
+          break;
+        case ConstantOp::Kind::kCompressedHeapObject:
+          MarkAsCompressed(node);
+          break;
+        case ConstantOp::Kind::kNumber:
+          if (!IsSmiDouble(constant.number())) MarkAsTagged(node);
+          break;
+        case ConstantOp::Kind::kRelocatableWasmCall:
+        case ConstantOp::Kind::kRelocatableWasmStubCall:
+          UNIMPLEMENTED();
+      }
+      VisitConstant(node);
+      break;
+    }
+    case Opcode::kCall:
+      VisitCall(node);
+      break;
+    default: {
+      const std::string op_string = op.ToString();
+      PrintF("\033[31mNo ISEL support for: %s\033[m\n", op_string.c_str());
+      FATAL("Unexpected operation #%d:%s", node.id(), op_string.c_str());
+    }
+  }
+}
+
+template <>
+void InstructionSelectorT<TurbofanAdapter>::VisitNode(Node* node) {
+  tick_counter_->TickAndMaybeEnterSafepoint();
+  DCHECK_NOT_NULL(
+      this->block(schedule(), node));  // should only use scheduled nodes.
   switch (node->opcode()) {
     case IrOpcode::kTraceInstruction:
 #if V8_TARGET_ARCH_X64
@@ -1467,7 +1483,7 @@ void InstructionSelectorT<Adapter>::VisitNode(Node* node) {
       return MarkAsTagged(node), VisitFinishRegion(node);
     case IrOpcode::kParameter: {
       // Parameters should always be scheduled to the first block.
-      DCHECK_EQ(schedule()->block(node)->rpo_number(), 0);
+      DCHECK_EQ(this->rpo_number(this->block(schedule(), node)).ToInt(), 0);
       MachineType type =
           linkage()->GetParameterType(ParameterIndexOf(node->op()));
       MarkAsRepresentation(type.representation(), node);
@@ -2728,9 +2744,14 @@ void InstructionSelectorT<Adapter>::VisitNode(Node* node) {
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitStackPointerGreaterThan(Node* node) {
-  FlagsContinuation cont =
-      FlagsContinuation::ForSet(kStackPointerGreaterThanCondition, node);
-  VisitStackPointerGreaterThan(node, &cont);
+  if constexpr (Adapter::IsTurboshaft) {
+    // TODO(nicohartmann@): Implement.
+    UNIMPLEMENTED();
+  } else {
+    FlagsContinuation cont =
+        FlagsContinuation::ForSet(kStackPointerGreaterThanCondition, node);
+    VisitStackPointerGreaterThan(node, &cont);
+  }
 }
 
 template <typename Adapter>
@@ -3407,9 +3428,7 @@ void InstructionSelectorT<Adapter>::VisitPhi(Node* node) {
   PhiInstruction* phi = instruction_zone()->template New<PhiInstruction>(
       instruction_zone(), GetVirtualRegister(node),
       static_cast<size_t>(input_count));
-  sequence()
-      ->InstructionBlockAt(RpoNumber::FromInt(current_block_->rpo_number()))
-      ->AddPhi(phi);
+  sequence()->InstructionBlockAt(this->rpo_number(current_block_))->AddPhi(phi);
   for (int i = 0; i < input_count; ++i) {
     Node* const input = node->InputAt(i);
     MarkAsUsed(input);
@@ -3455,7 +3474,7 @@ void InstructionSelectorT<Adapter>::VisitProjection(Node* node) {
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitConstant(Node* node) {
+void InstructionSelectorT<Adapter>::VisitConstant(node_t node) {
   // We must emit a NOP here because every live range needs a defining
   // instruction in the register allocator.
   OperandGenerator g(this);
@@ -3468,9 +3487,16 @@ void InstructionSelectorT<Adapter>::UpdateMaxPushedArgumentCount(size_t count) {
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitCall(Node* node, BasicBlock* handler) {
+void InstructionSelectorT<Adapter>::VisitCall(node_t node, block_t handler) {
   OperandGenerator g(this);
-  auto call_descriptor = CallDescriptorOf(node->op());
+  const CallDescriptor* call_descriptor;
+  if constexpr (Adapter::IsTurboshaft) {
+    const turboshaft::CallOp& call_op =
+        this->turboshaft_graph()->Get(node).template Cast<turboshaft::CallOp>();
+    call_descriptor = call_op.descriptor->descriptor;
+  } else {
+    call_descriptor = CallDescriptorOf(node->op());
+  }
   SaveFPRegsMode mode = call_descriptor->NeedsCallerSavedFPRegisters()
                             ? SaveFPRegsMode::kSave
                             : SaveFPRegsMode::kIgnore;
@@ -3482,8 +3508,16 @@ void InstructionSelectorT<Adapter>::VisitCall(Node* node, BasicBlock* handler) {
 
   FrameStateDescriptor* frame_state_descriptor = nullptr;
   if (call_descriptor->NeedsFrameState()) {
-    frame_state_descriptor = GetFrameStateDescriptor(FrameState{
-        node->InputAt(static_cast<int>(call_descriptor->InputCount()))});
+    if constexpr (Adapter::IsTurboshaft) {
+      const turboshaft::CallOp& call_op =
+          this->turboshaft_graph()
+              ->Get(node)
+              .template Cast<turboshaft::CallOp>();
+      frame_state_descriptor = GetFrameStateDescriptor(call_op.frame_state());
+    } else {
+      frame_state_descriptor = GetFrameStateDescriptor(
+          node->InputAt(static_cast<int>(call_descriptor->InputCount())));
+    }
   }
 
   CallBuffer buffer(zone(), call_descriptor, frame_state_descriptor);
@@ -3505,7 +3539,9 @@ void InstructionSelectorT<Adapter>::VisitCall(Node* node, BasicBlock* handler) {
 
   // Pass label of exception handler block.
   if (handler) {
-    DCHECK_EQ(IrOpcode::kIfException, handler->front()->opcode());
+    if constexpr (Adapter::IsTurbofan) {
+      DCHECK_EQ(IrOpcode::kIfException, handler->front()->opcode());
+    }
     flags |= CallDescriptor::kHasExceptionHandler;
     buffer.instruction_args.push_back(g.Label(handler));
   }
@@ -3568,76 +3604,111 @@ void InstructionSelectorT<Adapter>::VisitCall(Node* node, BasicBlock* handler) {
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTailCall(Node* node) {
-  OperandGenerator g(this);
+  if constexpr (Adapter::IsTurboshaft) {
+    // TODO(nicohartmann@): Implement for Turboshaft.
+    UNIMPLEMENTED();
+  } else {
+    OperandGenerator g(this);
 
-  auto caller = linkage()->GetIncomingDescriptor();
-  auto callee = CallDescriptorOf(node->op());
-  DCHECK(caller->CanTailCall(callee));
-  const int stack_param_delta = callee->GetStackParameterDelta(caller);
-  CallBuffer buffer(zone(), callee, nullptr);
+    auto caller = linkage()->GetIncomingDescriptor();
+    auto callee = CallDescriptorOf(node->op());
+    DCHECK(caller->CanTailCall(callee));
+    const int stack_param_delta = callee->GetStackParameterDelta(caller);
+    CallBuffer buffer(zone(), callee, nullptr);
 
-  // Compute InstructionOperands for inputs and outputs.
-  CallBufferFlags flags(kCallCodeImmediate | kCallTail);
-  if (IsTailCallAddressImmediate()) {
-    flags |= kCallAddressImmediate;
-  }
-  if (callee->flags() & CallDescriptor::kFixedTargetRegister) {
-    flags |= kCallFixedTargetRegister;
-  }
-  InitializeCallBuffer(node, &buffer, flags, stack_param_delta);
-  UpdateMaxPushedArgumentCount(stack_param_delta);
+    // Compute InstructionOperands for inputs and outputs.
+    CallBufferFlags flags(kCallCodeImmediate | kCallTail);
+    if (IsTailCallAddressImmediate()) {
+      flags |= kCallAddressImmediate;
+    }
+    if (callee->flags() & CallDescriptor::kFixedTargetRegister) {
+      flags |= kCallFixedTargetRegister;
+    }
+    InitializeCallBuffer(node, &buffer, flags, stack_param_delta);
+    UpdateMaxPushedArgumentCount(stack_param_delta);
 
-  // Select the appropriate opcode based on the call type.
-  InstructionCode opcode;
-  InstructionOperandVector temps(zone());
-  switch (callee->kind()) {
-    case CallDescriptor::kCallCodeObject:
-      opcode = kArchTailCallCodeObject;
-      break;
-    case CallDescriptor::kCallAddress:
-      DCHECK(!caller->IsJSFunctionCall());
-      opcode = kArchTailCallAddress;
-      break;
+    // Select the appropriate opcode based on the call type.
+    InstructionCode opcode;
+    InstructionOperandVector temps(zone());
+    switch (callee->kind()) {
+      case CallDescriptor::kCallCodeObject:
+        opcode = kArchTailCallCodeObject;
+        break;
+      case CallDescriptor::kCallAddress:
+        DCHECK(!caller->IsJSFunctionCall());
+        opcode = kArchTailCallAddress;
+        break;
 #if V8_ENABLE_WEBASSEMBLY
-    case CallDescriptor::kCallWasmFunction:
-      DCHECK(!caller->IsJSFunctionCall());
-      opcode = kArchTailCallWasm;
-      break;
+      case CallDescriptor::kCallWasmFunction:
+        DCHECK(!caller->IsJSFunctionCall());
+        opcode = kArchTailCallWasm;
+        break;
 #endif  // V8_ENABLE_WEBASSEMBLY
-    default:
-      UNREACHABLE();
+      default:
+        UNREACHABLE();
+    }
+    opcode = EncodeCallDescriptorFlags(opcode, callee->flags());
+
+    Emit(kArchPrepareTailCall, g.NoOutput());
+
+    // Add an immediate operand that represents the offset to the first slot
+    // that is unused with respect to the stack pointer that has been updated
+    // for the tail call instruction. Backends that pad arguments can write the
+    // padding value at this offset from the stack.
+    const int optional_padding_offset =
+        callee->GetOffsetToFirstUnusedStackSlot() - 1;
+    buffer.instruction_args.push_back(g.TempImmediate(optional_padding_offset));
+
+    const int first_unused_slot_offset =
+        kReturnAddressStackSlotCount + stack_param_delta;
+    buffer.instruction_args.push_back(
+        g.TempImmediate(first_unused_slot_offset));
+
+    // Emit the tailcall instruction.
+    Emit(opcode, 0, nullptr, buffer.instruction_args.size(),
+         &buffer.instruction_args.front(), temps.size(),
+         temps.empty() ? nullptr : &temps.front());
   }
-  opcode = EncodeCallDescriptorFlags(opcode, callee->flags());
-
-  Emit(kArchPrepareTailCall, g.NoOutput());
-
-  // Add an immediate operand that represents the offset to the first slot that
-  // is unused with respect to the stack pointer that has been updated for the
-  // tail call instruction. Backends that pad arguments can write the padding
-  // value at this offset from the stack.
-  const int optional_padding_offset =
-      callee->GetOffsetToFirstUnusedStackSlot() - 1;
-  buffer.instruction_args.push_back(g.TempImmediate(optional_padding_offset));
-
-  const int first_unused_slot_offset =
-      kReturnAddressStackSlotCount + stack_param_delta;
-  buffer.instruction_args.push_back(g.TempImmediate(first_unused_slot_offset));
-
-  // Emit the tailcall instruction.
-  Emit(opcode, 0, nullptr, buffer.instruction_args.size(),
-       &buffer.instruction_args.front(), temps.size(),
-       temps.empty() ? nullptr : &temps.front());
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitGoto(BasicBlock* target) {
+void InstructionSelectorT<Adapter>::VisitGoto(block_t target) {
   // jump to the next block.
   OperandGenerator g(this);
   Emit(kArchJmp, g.NoOutput(), g.Label(target));
 }
 
-template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitReturn(Node* ret) {
+template <>
+void InstructionSelectorT<TurboshaftAdapter>::VisitReturn(node_t node) {
+  using namespace turboshaft;
+  const ReturnOp& ret = schedule()->Get(node).Cast<ReturnOp>();
+
+  OperandGenerator g(this);
+  const int input_count =
+      linkage()->GetIncomingDescriptor()->ReturnCount() == 0
+          ? 1
+          : (1 + static_cast<int>(ret.return_values().size()));
+  DCHECK_GE(input_count, 1);
+
+  auto value_locations =
+      zone()->template NewArray<InstructionOperand>(input_count);
+  const Operation& pop_count = schedule()->Get(ret.pop_count());
+  if (const ConstantOp* constant = pop_count.TryCast<ConstantOp>();
+      constant != nullptr && (constant->kind == ConstantOp::Kind::kWord32 ||
+                              constant->kind == ConstantOp::Kind::kWord64)) {
+    value_locations[0] = g.UseImmediate(ret.pop_count());
+  } else {
+    value_locations[0] = g.UseRegister(ret.pop_count());
+  }
+  for (int i = 0; i < input_count - 1; ++i) {
+    value_locations[i + 1] =
+        g.UseLocation(ret.return_values()[i], linkage()->GetReturnLocation(i));
+  }
+  Emit(kArchRet, 0, nullptr, input_count, value_locations);
+}
+
+template <>
+void InstructionSelectorT<TurbofanAdapter>::VisitReturn(node_t ret) {
   OperandGenerator g(this);
   const int input_count = linkage()->GetIncomingDescriptor()->ReturnCount() == 0
                               ? 1
@@ -3661,11 +3732,16 @@ template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitBranch(Node* branch,
                                                 BasicBlock* tbranch,
                                                 BasicBlock* fbranch) {
-  TryPrepareScheduleFirstProjection(branch->InputAt(0));
+  if constexpr (Adapter::IsTurboshaft) {
+    // TODO(nicohartmann@): Implement for Turboshaft.
+    UNIMPLEMENTED();
+  } else {
+    TryPrepareScheduleFirstProjection(branch->InputAt(0));
 
-  FlagsContinuation cont =
-      FlagsContinuation::ForBranch(kNotEqual, tbranch, fbranch);
-  VisitWordCompareZero(branch, branch->InputAt(0), &cont);
+    FlagsContinuation cont =
+        FlagsContinuation::ForBranch(kNotEqual, tbranch, fbranch);
+    VisitWordCompareZero(branch, branch->InputAt(0), &cont);
+  }
 }
 
 // When a DeoptimizeIf/DeoptimizeUnless/Branch depends on a BinopOverflow, the
@@ -3705,7 +3781,7 @@ void InstructionSelectorT<Adapter>::TryPrepareScheduleFirstProjection(
   }
 
   Node* const node = maybe_projection->InputAt(0);
-  if (schedule_->block(node) != current_block_) {
+  if (this->block(schedule_, node) != current_block_) {
     // The projection input is not in the current block, so it shouldn't be
     // emitted now, so we don't need to eagerly schedule its Projection[0].
     return;
@@ -3724,7 +3800,7 @@ void InstructionSelectorT<Adapter>::TryPrepareScheduleFirstProjection(
         return;
       }
 
-      if (schedule_->block(result) != current_block_) {
+      if (this->block(schedule_, result) != current_block_) {
         // {result} wasn't planned to be scheduled in {current_block_}. To avoid
         // adding checks to see if it can still be scheduled now, we just bail
         // out.
@@ -3738,7 +3814,7 @@ void InstructionSelectorT<Adapter>::TryPrepareScheduleFirstProjection(
       // {result} back into it through the back edge. In this case, it's normal
       // to schedule {result} before the Phi that uses it.
       for (Node* use : result->uses()) {
-        if (!IsDefined(use) && schedule_->block(use) == current_block_ &&
+        if (!IsDefined(use) && this->block(schedule_, use) == current_block_ &&
             use->opcode() != IrOpcode::kPhi) {
           // {use} is in the current block but is not defined yet. It's possible
           // that it's not actually used, but the IsUsed(x) predicate is not
@@ -3767,55 +3843,79 @@ void InstructionSelectorT<Adapter>::TryPrepareScheduleFirstProjection(
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitDeoptimizeIf(Node* node) {
-  TryPrepareScheduleFirstProjection(node->InputAt(0));
+  if constexpr (Adapter::IsTurboshaft) {
+    // TODO(nicohartmann@): Implement for Turboshaft.
+    UNIMPLEMENTED();
+  } else {
+    TryPrepareScheduleFirstProjection(node->InputAt(0));
 
-  DeoptimizeParameters p = DeoptimizeParametersOf(node->op());
-  FlagsContinuation cont = FlagsContinuation::ForDeoptimize(
-      kNotEqual, p.reason(), node->id(), p.feedback(),
-      FrameState{node->InputAt(1)});
-  VisitWordCompareZero(node, node->InputAt(0), &cont);
+    DeoptimizeParameters p = DeoptimizeParametersOf(node->op());
+    FlagsContinuation cont = FlagsContinuation::ForDeoptimize(
+        kNotEqual, p.reason(), node->id(), p.feedback(),
+        FrameState{node->InputAt(1)});
+    VisitWordCompareZero(node, node->InputAt(0), &cont);
+  }
 }
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitDeoptimizeUnless(Node* node) {
-  TryPrepareScheduleFirstProjection(node->InputAt(0));
+  if constexpr (Adapter::IsTurboshaft) {
+    // TODO(nicohartmann@): Implement for Turboshaft.
+    UNIMPLEMENTED();
+  } else {
+    TryPrepareScheduleFirstProjection(node->InputAt(0));
 
-  DeoptimizeParameters p = DeoptimizeParametersOf(node->op());
-  FlagsContinuation cont = FlagsContinuation::ForDeoptimize(
-      kEqual, p.reason(), node->id(), p.feedback(),
-      FrameState{node->InputAt(1)});
-  VisitWordCompareZero(node, node->InputAt(0), &cont);
+    DeoptimizeParameters p = DeoptimizeParametersOf(node->op());
+    FlagsContinuation cont = FlagsContinuation::ForDeoptimize(
+        kEqual, p.reason(), node->id(), p.feedback(),
+        FrameState{node->InputAt(1)});
+    VisitWordCompareZero(node, node->InputAt(0), &cont);
+  }
 }
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitSelect(Node* node) {
-  FlagsContinuation cont =
-      FlagsContinuation::ForSelect(kNotEqual, node,
-                                   node->InputAt(1), node->InputAt(2));
-  VisitWordCompareZero(node, node->InputAt(0), &cont);
+  if constexpr (Adapter::IsTurboshaft) {
+    // TODO(nicohartmann@): Implement for Turboshaft.
+    UNIMPLEMENTED();
+  } else {
+    FlagsContinuation cont = FlagsContinuation::ForSelect(
+        kNotEqual, node, node->InputAt(1), node->InputAt(2));
+    VisitWordCompareZero(node, node->InputAt(0), &cont);
+  }
 }
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTrapIf(Node* node, TrapId trap_id) {
-  Node* frame_state =
-      node->op()->ValueInputCount() > 1 ? node->InputAt(1) : nullptr;
-  DCHECK_IMPLIES(frame_state != nullptr,
-                 frame_state->opcode() == IrOpcode::kFrameState);
-  FlagsContinuation cont =
-      FlagsContinuation::ForTrap(kNotEqual, trap_id, node->id(), frame_state);
-  VisitWordCompareZero(node, node->InputAt(0), &cont);
+  if constexpr (Adapter::IsTurboshaft) {
+    // TODO(nicohartmann@): Implement for Turboshaft.
+    UNIMPLEMENTED();
+  } else {
+    Node* frame_state =
+        node->op()->ValueInputCount() > 1 ? node->InputAt(1) : nullptr;
+    DCHECK_IMPLIES(frame_state != nullptr,
+                   frame_state->opcode() == IrOpcode::kFrameState);
+    FlagsContinuation cont =
+        FlagsContinuation::ForTrap(kNotEqual, trap_id, node->id(), frame_state);
+    VisitWordCompareZero(node, node->InputAt(0), &cont);
+  }
 }
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTrapUnless(Node* node,
                                                     TrapId trap_id) {
-  Node* frame_state =
-      node->op()->ValueInputCount() > 1 ? node->InputAt(1) : nullptr;
-  DCHECK_IMPLIES(frame_state != nullptr,
-                 frame_state->opcode() == IrOpcode::kFrameState);
-  FlagsContinuation cont =
-      FlagsContinuation::ForTrap(kEqual, trap_id, node->id(), frame_state);
-  VisitWordCompareZero(node, node->InputAt(0), &cont);
+  if constexpr (Adapter::IsTurboshaft) {
+    // TODO(nicohartmann@): Implement for Turboshaft.
+    UNIMPLEMENTED();
+  } else {
+    Node* frame_state =
+        node->op()->ValueInputCount() > 1 ? node->InputAt(1) : nullptr;
+    DCHECK_IMPLIES(frame_state != nullptr,
+                   frame_state->opcode() == IrOpcode::kFrameState);
+    FlagsContinuation cont =
+        FlagsContinuation::ForTrap(kEqual, trap_id, node->id(), frame_state);
+    VisitWordCompareZero(node, node->InputAt(0), &cont);
+  }
 }
 
 template <typename Adapter>
@@ -3827,8 +3927,8 @@ void InstructionSelectorT<Adapter>::EmitIdentity(Node* node) {
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitDeoptimize(
-    DeoptimizeReason reason, NodeId node_id, FeedbackSource const& feedback,
-    FrameState frame_state) {
+    DeoptimizeReason reason, id_t node_id, FeedbackSource const& feedback,
+    node_t frame_state) {
   InstructionOperandVector args(instruction_zone());
   AppendDeoptimizeArguments(&args, reason, node_id, feedback, frame_state);
   Emit(kArchDeoptimize, 0, nullptr, args.size(), &args.front(), 0, nullptr);
@@ -3881,6 +3981,150 @@ template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitRetain(Node* node) {
   OperandGenerator g(this);
   Emit(kArchNop, g.NoOutput(), g.UseAny(node->InputAt(0)));
+}
+
+template <>
+void InstructionSelectorT<TurboshaftAdapter>::VisitControl(
+    turboshaft::Block* block) {
+  using namespace turboshaft;
+#ifdef DEBUG
+  // TODO(nicohartmann@): Have a similar check of SSA form here.
+#endif  // DEBUG
+  const Operation& op = block->LastOperation(*schedule());
+  OpIndex index = schedule()->Index(op);
+  int instruction_end = static_cast<int>(instructions_.size());
+  switch (op.opcode) {
+    case Opcode::kGoto:
+      VisitGoto(op.Cast<GotoOp>().destination);
+      break;
+    case Opcode::kReturn:
+      VisitReturn(index);
+      break;
+    case Opcode::kDeoptimize: {
+      const DeoptimizeOp& deoptimize = op.Cast<DeoptimizeOp>();
+      VisitDeoptimize(deoptimize.parameters->reason(), index.id(),
+                      deoptimize.parameters->feedback(),
+                      deoptimize.frame_state());
+      break;
+    }
+
+    default: {
+      const std::string op_string = op.ToString();
+      PrintF("\033[31mNo ISEL support for: %s\033[m\n", op_string.c_str());
+      FATAL("Unexpected operation #%d:%s", index.id(), op_string.c_str());
+    }
+  }
+
+  if (trace_turbo_ == kEnableTraceTurboJson) {
+    DCHECK(index.valid());
+    int instruction_start = static_cast<int>(instructions_.size());
+    instr_origins_[this->id(index)] = {instruction_start, instruction_end};
+  }
+}
+
+template <>
+void InstructionSelectorT<TurbofanAdapter>::VisitControl(BasicBlock* block) {
+#ifdef DEBUG
+  // SSA deconstruction requires targets of branches not to have phis.
+  // Edge split form guarantees this property, but is more strict.
+  if (block->SuccessorCount() > 1) {
+    for (BasicBlock* const successor : block->successors()) {
+      for (Node* const node : *successor) {
+        if (IrOpcode::IsPhiOpcode(node->opcode())) {
+          std::ostringstream str;
+          str << "You might have specified merged variables for a label with "
+              << "only one predecessor." << std::endl
+              << "# Current Block: " << *successor << std::endl
+              << "#          Node: " << *node;
+          FATAL("%s", str.str().c_str());
+        }
+      }
+    }
+  }
+#endif
+
+  Node* input = block->control_input();
+  int instruction_end = static_cast<int>(instructions_.size());
+  switch (block->control()) {
+    case BasicBlock::kGoto:
+      VisitGoto(block->SuccessorAt(0));
+      break;
+    case BasicBlock::kCall: {
+      DCHECK_EQ(IrOpcode::kCall, input->opcode());
+      BasicBlock* success = block->SuccessorAt(0);
+      BasicBlock* exception = block->SuccessorAt(1);
+      VisitCall(input, exception);
+      VisitGoto(success);
+      break;
+    }
+    case BasicBlock::kTailCall: {
+      DCHECK_EQ(IrOpcode::kTailCall, input->opcode());
+      VisitTailCall(input);
+      break;
+    }
+    case BasicBlock::kBranch: {
+      DCHECK_EQ(IrOpcode::kBranch, input->opcode());
+      // TODO(nicohartmann@): Once all branches have explicitly specified
+      // semantics, we should allow only BranchSemantics::kMachine here.
+      DCHECK_NE(BranchSemantics::kJS,
+                BranchParametersOf(input->op()).semantics());
+      BasicBlock* tbranch = block->SuccessorAt(0);
+      BasicBlock* fbranch = block->SuccessorAt(1);
+      if (tbranch == fbranch) {
+        VisitGoto(tbranch);
+      } else {
+        VisitBranch(input, tbranch, fbranch);
+      }
+      break;
+    }
+    case BasicBlock::kSwitch: {
+      DCHECK_EQ(IrOpcode::kSwitch, input->opcode());
+      // Last successor must be {IfDefault}.
+      BasicBlock* default_branch = block->successors().back();
+      DCHECK_EQ(IrOpcode::kIfDefault, default_branch->front()->opcode());
+      // All other successors must be {IfValue}s.
+      int32_t min_value = std::numeric_limits<int32_t>::max();
+      int32_t max_value = std::numeric_limits<int32_t>::min();
+      size_t case_count = block->SuccessorCount() - 1;
+      ZoneVector<CaseInfo> cases(case_count, zone());
+      for (size_t i = 0; i < case_count; ++i) {
+        BasicBlock* branch = block->SuccessorAt(i);
+        const IfValueParameters& p = IfValueParametersOf(branch->front()->op());
+        cases[i] = CaseInfo{p.value(), p.comparison_order(), branch};
+        if (min_value > p.value()) min_value = p.value();
+        if (max_value < p.value()) max_value = p.value();
+      }
+      SwitchInfo sw(cases, min_value, max_value, default_branch);
+      VisitSwitch(input, sw);
+      break;
+    }
+    case BasicBlock::kReturn: {
+      DCHECK_EQ(IrOpcode::kReturn, input->opcode());
+      VisitReturn(input);
+      break;
+    }
+    case BasicBlock::kDeoptimize: {
+      DeoptimizeParameters p = DeoptimizeParametersOf(input->op());
+      FrameState value{input->InputAt(0)};
+      VisitDeoptimize(p.reason(), input->id(), p.feedback(), value);
+      break;
+    }
+    case BasicBlock::kThrow:
+      DCHECK_EQ(IrOpcode::kThrow, input->opcode());
+      VisitThrow(input);
+      break;
+    case BasicBlock::kNone: {
+      // Exit block doesn't have control.
+      DCHECK_NULL(input);
+      break;
+    }
+    default:
+      UNREACHABLE();
+  }
+  if (trace_turbo_ == kEnableTraceTurboJson && input) {
+    int instruction_start = static_cast<int>(instructions_.size());
+    instr_origins_[input->id()] = {instruction_start, instruction_end};
+  }
 }
 
 template <typename Adapter>
@@ -3945,6 +4189,39 @@ bool InstructionSelectorT<Adapter>::ZeroExtendsWord32ToWord64(
 
 namespace {
 
+FrameStateDescriptor* GetFrameStateDescriptorInternal(
+    Zone* zone, turboshaft::Graph* graph,
+    const turboshaft::FrameStateOp& state) {
+  const FrameStateInfo& state_info = state.data->frame_state_info;
+  int parameters = state_info.parameter_count();
+  int locals = state_info.local_count();
+  int stack = state_info.stack_count();
+
+  FrameStateDescriptor* outer_state = nullptr;
+  if (state.inlined) {
+    outer_state = GetFrameStateDescriptorInternal(
+        zone, graph,
+        graph->Get(state.parent_frame_state())
+            .template Cast<turboshaft::FrameStateOp>());
+  }
+
+#if V8_ENABLE_WEBASSEMBLY
+  if (state_info.type() == FrameStateType::kJSToWasmBuiltinContinuation) {
+    auto function_info = static_cast<const JSToWasmFrameStateFunctionInfo*>(
+        state_info.function_info());
+    return zone->New<JSToWasmFrameStateDescriptor>(
+        zone, state_info.type(), state_info.bailout_id(),
+        state_info.state_combine(), parameters, locals, stack,
+        state_info.shared_info(), outer_state, function_info->signature());
+  }
+#endif  // V8_ENABLE_WEBASSEMBLY
+
+  return zone->New<FrameStateDescriptor>(
+      zone, state_info.type(), state_info.bailout_id(),
+      state_info.state_combine(), parameters, locals, stack,
+      state_info.shared_info(), outer_state);
+}
+
 FrameStateDescriptor* GetFrameStateDescriptorInternal(Zone* zone,
                                                       FrameState state) {
   DCHECK_EQ(IrOpcode::kFrameState, state->opcode());
@@ -3979,9 +4256,25 @@ FrameStateDescriptor* GetFrameStateDescriptorInternal(Zone* zone,
 
 }  // namespace
 
-template <typename Adapter>
-FrameStateDescriptor* InstructionSelectorT<Adapter>::GetFrameStateDescriptor(
-    FrameState state) {
+template <>
+FrameStateDescriptor*
+InstructionSelectorT<TurboshaftAdapter>::GetFrameStateDescriptor(node_t node) {
+  const turboshaft::FrameStateOp& state =
+      this->turboshaft_graph()
+          ->Get(node)
+          .template Cast<turboshaft::FrameStateOp>();
+  auto* desc = GetFrameStateDescriptorInternal(instruction_zone(),
+                                               this->turboshaft_graph(), state);
+  *max_unoptimized_frame_height_ =
+      std::max(*max_unoptimized_frame_height_,
+               desc->total_conservative_frame_size_in_bytes());
+  return desc;
+}
+
+template <>
+FrameStateDescriptor*
+InstructionSelectorT<TurbofanAdapter>::GetFrameStateDescriptor(node_t node) {
+  FrameState state{node};
   auto* desc = GetFrameStateDescriptorInternal(instruction_zone(), state);
   *max_unoptimized_frame_height_ =
       std::max(*max_unoptimized_frame_height_,

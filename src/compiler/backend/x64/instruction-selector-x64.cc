@@ -56,41 +56,51 @@ class X64OperandGeneratorT final : public OperandGeneratorT<Adapter> {
   explicit X64OperandGeneratorT(InstructionSelectorT<Adapter>* selector)
       : super(selector) {}
 
-  bool CanBeImmediate(Node* node) {
-    switch (node->opcode()) {
-      case IrOpcode::kCompressedHeapConstant: {
-        if (!COMPRESS_POINTERS_BOOL) return false;
-        // For builtin code we need static roots
-        if (selector()->isolate()->bootstrapper() && !V8_STATIC_ROOTS_BOOL) {
+  template <typename T>
+  bool CanBeImmediate(T*) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+
+  bool CanBeImmediate(node_t node) {
+    if constexpr (Adapter::IsTurboshaft) {
+      // TODO(nicohartmann@): Implement this for Turobshaft.
+      return false;
+    } else {
+      switch (node->opcode()) {
+        case IrOpcode::kCompressedHeapConstant: {
+          if (!COMPRESS_POINTERS_BOOL) return false;
+          // For builtin code we need static roots
+          if (selector()->isolate()->bootstrapper() && !V8_STATIC_ROOTS_BOOL) {
+            return false;
+          }
+          const RootsTable& roots_table = selector()->isolate()->roots_table();
+          RootIndex root_index;
+          CompressedHeapObjectMatcher m(node);
+          if (m.HasResolvedValue() &&
+              roots_table.IsRootHandle(m.ResolvedValue(), &root_index)) {
+            return RootsTable::IsReadOnly(root_index);
+          }
           return false;
         }
-        const RootsTable& roots_table = selector()->isolate()->roots_table();
-        RootIndex root_index;
-        CompressedHeapObjectMatcher m(node);
-        if (m.HasResolvedValue() &&
-            roots_table.IsRootHandle(m.ResolvedValue(), &root_index)) {
-          return RootsTable::IsReadOnly(root_index);
+        case IrOpcode::kInt32Constant:
+        case IrOpcode::kRelocatableInt32Constant: {
+          const int32_t value = OpParameter<int32_t>(node->op());
+          // int32_t min will overflow if displacement mode is
+          // kNegativeDisplacement.
+          return value != std::numeric_limits<int32_t>::min();
         }
-        return false;
+        case IrOpcode::kInt64Constant: {
+          const int64_t value = OpParameter<int64_t>(node->op());
+          return std::numeric_limits<int32_t>::min() < value &&
+                 value <= std::numeric_limits<int32_t>::max();
+        }
+        case IrOpcode::kNumberConstant: {
+          const double value = OpParameter<double>(node->op());
+          return base::bit_cast<int64_t>(value) == 0;
+        }
+        default:
+          return false;
       }
-      case IrOpcode::kInt32Constant:
-      case IrOpcode::kRelocatableInt32Constant: {
-        const int32_t value = OpParameter<int32_t>(node->op());
-        // int32_t min will overflow if displacement mode is
-        // kNegativeDisplacement.
-        return value != std::numeric_limits<int32_t>::min();
-      }
-      case IrOpcode::kInt64Constant: {
-        const int64_t value = OpParameter<int64_t>(node->op());
-        return std::numeric_limits<int32_t>::min() < value &&
-               value <= std::numeric_limits<int32_t>::max();
-      }
-      case IrOpcode::kNumberConstant: {
-        const double value = OpParameter<double>(node->op());
-        return base::bit_cast<int64_t>(value) == 0;
-      }
-      default:
-        return false;
     }
   }
 
@@ -103,63 +113,73 @@ class X64OperandGeneratorT final : public OperandGeneratorT<Adapter> {
     return static_cast<int32_t>(OpParameter<int64_t>(node->op()));
   }
 
-  bool CanBeMemoryOperand(InstructionCode opcode, Node* node, Node* input,
+  template <typename T>
+  bool CanBeMemoryOperand(InstructionCode, T*, T*, int) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+
+  bool CanBeMemoryOperand(InstructionCode opcode, node_t node, node_t input,
                           int effect_level) {
-    if ((input->opcode() != IrOpcode::kLoad &&
-         input->opcode() != IrOpcode::kLoadImmutable) ||
-        !selector()->CanCover(node, input)) {
+    if constexpr (Adapter::IsTurboshaft) {
+      // TODO(nicohartmann@): Implement this for Turboshaft.
+      return false;
+    } else {
+      if ((input->opcode() != IrOpcode::kLoad &&
+           input->opcode() != IrOpcode::kLoadImmutable) ||
+          !selector()->CanCover(node, input)) {
+        return false;
+      }
+      if (effect_level != selector()->GetEffectLevel(input)) {
+        return false;
+      }
+      MachineRepresentation rep =
+          LoadRepresentationOf(input->op()).representation();
+      switch (opcode) {
+        case kX64And:
+        case kX64Or:
+        case kX64Xor:
+        case kX64Add:
+        case kX64Sub:
+        case kX64Push:
+        case kX64Cmp:
+        case kX64Test:
+          // When pointer compression is enabled 64-bit memory operands can't be
+          // used for tagged values.
+          return rep == MachineRepresentation::kWord64 ||
+                 (!COMPRESS_POINTERS_BOOL && IsAnyTagged(rep));
+        case kX64And32:
+        case kX64Or32:
+        case kX64Xor32:
+        case kX64Add32:
+        case kX64Sub32:
+        case kX64Cmp32:
+        case kX64Test32:
+          // When pointer compression is enabled 32-bit memory operands can be
+          // used for tagged values.
+          return rep == MachineRepresentation::kWord32 ||
+                 (COMPRESS_POINTERS_BOOL &&
+                  (IsAnyTagged(rep) || IsAnyCompressed(rep)));
+        case kAVXFloat64Add:
+        case kAVXFloat64Sub:
+        case kAVXFloat64Mul:
+          DCHECK_EQ(MachineRepresentation::kFloat64, rep);
+          return true;
+        case kAVXFloat32Add:
+        case kAVXFloat32Sub:
+        case kAVXFloat32Mul:
+          DCHECK_EQ(MachineRepresentation::kFloat32, rep);
+          return true;
+        case kX64Cmp16:
+        case kX64Test16:
+          return rep == MachineRepresentation::kWord16;
+        case kX64Cmp8:
+        case kX64Test8:
+          return rep == MachineRepresentation::kWord8;
+        default:
+          break;
+      }
       return false;
     }
-    if (effect_level != selector()->GetEffectLevel(input)) {
-      return false;
-    }
-    MachineRepresentation rep =
-        LoadRepresentationOf(input->op()).representation();
-    switch (opcode) {
-      case kX64And:
-      case kX64Or:
-      case kX64Xor:
-      case kX64Add:
-      case kX64Sub:
-      case kX64Push:
-      case kX64Cmp:
-      case kX64Test:
-        // When pointer compression is enabled 64-bit memory operands can't be
-        // used for tagged values.
-        return rep == MachineRepresentation::kWord64 ||
-               (!COMPRESS_POINTERS_BOOL && IsAnyTagged(rep));
-      case kX64And32:
-      case kX64Or32:
-      case kX64Xor32:
-      case kX64Add32:
-      case kX64Sub32:
-      case kX64Cmp32:
-      case kX64Test32:
-        // When pointer compression is enabled 32-bit memory operands can be
-        // used for tagged values.
-        return rep == MachineRepresentation::kWord32 ||
-               (COMPRESS_POINTERS_BOOL &&
-                (IsAnyTagged(rep) || IsAnyCompressed(rep)));
-      case kAVXFloat64Add:
-      case kAVXFloat64Sub:
-      case kAVXFloat64Mul:
-        DCHECK_EQ(MachineRepresentation::kFloat64, rep);
-        return true;
-      case kAVXFloat32Add:
-      case kAVXFloat32Sub:
-      case kAVXFloat32Mul:
-        DCHECK_EQ(MachineRepresentation::kFloat32, rep);
-        return true;
-      case kX64Cmp16:
-      case kX64Test16:
-        return rep == MachineRepresentation::kWord16;
-      case kX64Cmp8:
-      case kX64Test8:
-        return rep == MachineRepresentation::kWord8;
-      default:
-        break;
-    }
-    return false;
   }
 
   AddressingMode GenerateMemoryOperandInputs(
@@ -266,64 +286,76 @@ class X64OperandGeneratorT final : public OperandGeneratorT<Adapter> {
     return mode;
   }
 
+  template <typename... Args>
+  AddressingMode GetEffectiveAddressMemoryOperand(Args...) {
+    UNREACHABLE(/*REMOVE*/);
+  }
+
   AddressingMode GetEffectiveAddressMemoryOperand(
-      Node* operand, InstructionOperand inputs[], size_t* input_count,
+      node_t operand, InstructionOperand inputs[], size_t* input_count,
       RegisterUseKind reg_kind = RegisterUseKind::kUseRegister) {
-    {
-      LoadMatcher<ExternalReferenceMatcher> m(operand);
-      if (m.index().HasResolvedValue() && m.object().HasResolvedValue() &&
-          selector()->CanAddressRelativeToRootsRegister(
-              m.object().ResolvedValue())) {
-        ptrdiff_t const delta =
-            m.index().ResolvedValue() +
-            MacroAssemblerBase::RootRegisterOffsetForExternalReference(
-                selector()->isolate(), m.object().ResolvedValue());
-        if (is_int32(delta)) {
-          inputs[(*input_count)++] = TempImmediate(static_cast<int32_t>(delta));
-          return kMode_Root;
+    if constexpr (Adapter::IsTurboshaft) {
+      // TODO(nicohartmann@): Implement this for Turboshaft.
+      UNIMPLEMENTED();
+    } else {
+      {
+        LoadMatcher<ExternalReferenceMatcher> m(operand);
+        if (m.index().HasResolvedValue() && m.object().HasResolvedValue() &&
+            selector()->CanAddressRelativeToRootsRegister(
+                m.object().ResolvedValue())) {
+          ptrdiff_t const delta =
+              m.index().ResolvedValue() +
+              MacroAssemblerBase::RootRegisterOffsetForExternalReference(
+                  selector()->isolate(), m.object().ResolvedValue());
+          if (is_int32(delta)) {
+            inputs[(*input_count)++] =
+                TempImmediate(static_cast<int32_t>(delta));
+            return kMode_Root;
+          }
         }
       }
-    }
-    BaseWithIndexAndDisplacement64Matcher m(operand, AddressOption::kAllowAll);
-    DCHECK(m.matches());
-    // Decompress pointer by complex addressing mode.
-    if (IsCompressed(m.base())) {
-      DCHECK(m.index() == nullptr);
-      DCHECK(m.displacement() == nullptr || CanBeImmediate(m.displacement()));
-      AddressingMode mode = kMode_MCR;
-      inputs[(*input_count)++] = UseRegister(m.base(), reg_kind);
-      if (m.displacement() != nullptr) {
-        inputs[(*input_count)++] =
-            m.displacement_mode() == kNegativeDisplacement
-                ? UseNegatedImmediate(m.displacement())
-                : UseImmediate(m.displacement());
-        mode = kMode_MCRI;
+      BaseWithIndexAndDisplacement64Matcher m(operand,
+                                              AddressOption::kAllowAll);
+      DCHECK(m.matches());
+      // Decompress pointer by complex addressing mode.
+      if (IsCompressed(m.base())) {
+        DCHECK(m.index() == nullptr);
+        DCHECK(m.displacement() == nullptr || CanBeImmediate(m.displacement()));
+        AddressingMode mode = kMode_MCR;
+        inputs[(*input_count)++] = UseRegister(m.base(), reg_kind);
+        if (m.displacement() != nullptr) {
+          inputs[(*input_count)++] =
+              m.displacement_mode() == kNegativeDisplacement
+                  ? UseNegatedImmediate(m.displacement())
+                  : UseImmediate(m.displacement());
+          mode = kMode_MCRI;
+        }
+        return mode;
       }
-      return mode;
-    }
-    if (m.base() != nullptr &&
-        m.base()->opcode() == IrOpcode::kLoadRootRegister) {
-      DCHECK_EQ(m.index(), nullptr);
-      DCHECK_EQ(m.scale(), 0);
-      inputs[(*input_count)++] = UseImmediate(m.displacement());
-      return kMode_Root;
-    } else if (m.displacement() == nullptr ||
-               CanBeImmediate(m.displacement())) {
-      return GenerateMemoryOperandInputs(
-          m.index(), m.scale(), m.base(), m.displacement(),
-          m.displacement_mode(), inputs, input_count, reg_kind);
-    } else if (m.base() == nullptr &&
-               m.displacement_mode() == kPositiveDisplacement) {
-      // The displacement cannot be an immediate, but we can use the
-      // displacement as base instead and still benefit from addressing
-      // modes for the scale.
-      return GenerateMemoryOperandInputs(m.index(), m.scale(), m.displacement(),
-                                         nullptr, m.displacement_mode(), inputs,
-                                         input_count, reg_kind);
-    } else {
-      inputs[(*input_count)++] = UseRegister(operand->InputAt(0), reg_kind);
-      inputs[(*input_count)++] = UseRegister(operand->InputAt(1), reg_kind);
-      return kMode_MR1;
+      if (m.base() != nullptr &&
+          m.base()->opcode() == IrOpcode::kLoadRootRegister) {
+        DCHECK_EQ(m.index(), nullptr);
+        DCHECK_EQ(m.scale(), 0);
+        inputs[(*input_count)++] = UseImmediate(m.displacement());
+        return kMode_Root;
+      } else if (m.displacement() == nullptr ||
+                 CanBeImmediate(m.displacement())) {
+        return GenerateMemoryOperandInputs(
+            m.index(), m.scale(), m.base(), m.displacement(),
+            m.displacement_mode(), inputs, input_count, reg_kind);
+      } else if (m.base() == nullptr &&
+                 m.displacement_mode() == kPositiveDisplacement) {
+        // The displacement cannot be an immediate, but we can use the
+        // displacement as base instead and still benefit from addressing
+        // modes for the scale.
+        return GenerateMemoryOperandInputs(
+            m.index(), m.scale(), m.displacement(), nullptr,
+            m.displacement_mode(), inputs, input_count, reg_kind);
+      } else {
+        inputs[(*input_count)++] = UseRegister(operand->InputAt(0), reg_kind);
+        inputs[(*input_count)++] = UseRegister(operand->InputAt(1), reg_kind);
+        return kMode_MR1;
+      }
     }
   }
 
@@ -2270,7 +2302,7 @@ void InstructionSelectorT<Adapter>::EmitMoveFPRToParam(
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::EmitPrepareArguments(
     ZoneVector<PushParameter>* arguments, const CallDescriptor* call_descriptor,
-    Node* node) {
+    node_t node) {
   X64OperandGeneratorT<Adapter> g(this);
 
   // Prepare for C function call.
@@ -2282,7 +2314,7 @@ void InstructionSelectorT<Adapter>::EmitPrepareArguments(
     // Poke any stack arguments.
     for (size_t n = 0; n < arguments->size(); ++n) {
       PushParameter input = (*arguments)[n];
-      if (input.node) {
+      if (this->valid(input.node)) {
         int slot = static_cast<int>(n);
         InstructionOperand value = g.CanBeImmediate(input.node)
                                        ? g.UseImmediate(input.node)
@@ -2298,7 +2330,7 @@ void InstructionSelectorT<Adapter>::EmitPrepareArguments(
       stack_decrement += kSystemPointerSize;
       // Skip holes in the param array. These represent both extra slots for
       // multi-slot values and padding slots for alignment.
-      if (input.node == nullptr) continue;
+      if (!this->valid(input.node)) continue;
       InstructionOperand decrement = g.UseImmediate(stack_decrement);
       stack_decrement = 0;
       if (g.CanBeImmediate(input.node)) {
@@ -2328,12 +2360,12 @@ void InstructionSelectorT<Adapter>::EmitPrepareArguments(
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::EmitPrepareResults(
     ZoneVector<PushParameter>* results, const CallDescriptor* call_descriptor,
-    Node* node) {
+    node_t node) {
   X64OperandGeneratorT<Adapter> g(this);
   for (PushParameter output : *results) {
     if (!output.location.IsCallerFrameSlot()) continue;
     // Skip any alignment holes in nodes.
-    if (output.node != nullptr) {
+    if (this->valid(output.node)) {
       DCHECK(!call_descriptor->IsCFunctionCall());
       if (output.location.GetType() == MachineType::Float32()) {
         MarkAsFloat32(output.node);
@@ -4967,7 +4999,7 @@ void InstructionSelectorT<Adapter>::VisitI32x4DotI8x16I7x16AddS(Node* node) {
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::AddOutputToSelectContinuation(
-    OperandGenerator* g, int first_input_index, Node* node) {
+    OperandGenerator* g, int first_input_index, node_t node) {
   continuation_outputs_.push_back(
       g->DefineSameAsInput(node, first_input_index));
 }
