@@ -17,6 +17,7 @@
 #include "src/inspector/protocol/Debugger.h"
 #include "src/inspector/protocol/Forward.h"
 #include "src/inspector/protocol/Runtime.h"
+#include "src/inspector/string-16.h"
 #include "src/inspector/v8-debugger-id.h"
 #include "src/inspector/v8-debugger-script.h"
 
@@ -35,11 +36,13 @@ enum class WrapMode { kJson, kIdOnly, kPreview, kWebDriver, kDeep };
 
 struct WrapSerializationOptions {
   int maxDepth = v8::internal::kMaxInt;
+  std::vector<std::pair<String16, String16>> additionalParameters =
+      std::vector<std::pair<String16, String16>>();
 };
 
 struct WrapOptions {
   WrapMode mode;
-  WrapSerializationOptions serializationOptions;
+  WrapSerializationOptions serializationOptions = {};
 };
 
 using protocol::Response;
