@@ -9,6 +9,7 @@
 #include <stdint.h>
 
 #include <atomic>
+#include <algorithm>
 #include <vector>
 
 #include "include/cppgc/platform.h"
