@@ -243,8 +243,8 @@ class ParserBase {
   Impl* impl() { return static_cast<Impl*>(this); }
   const Impl* impl() const { return static_cast<const Impl*>(this); }
 
-  ParserBase(Zone* zone, Scanner* scanner, uintptr_t stack_limit,
-             AstValueFactory* ast_value_factory,
+  ParserBase(ParseInfo* info, Zone* zone, Scanner* scanner,
+             uintptr_t stack_limit, AstValueFactory* ast_value_factory,
              PendingCompilationErrorHandler* pending_error_handler,
              RuntimeCallStats* runtime_call_stats, V8FileLogger* v8_file_logger,
              UnoptimizedCompileFlags flags, bool parsing_on_main_thread)
@@ -259,6 +259,7 @@ class ParserBase {
         parsing_on_main_thread_(parsing_on_main_thread),
         stack_limit_(stack_limit),
         pending_error_handler_(pending_error_handler),
+        info_(info),
         zone_(zone),
         expression_scope_(nullptr),
         scanner_(scanner),
@@ -268,6 +269,12 @@ class ParserBase {
     pointer_buffer_.reserve(32);
     variable_buffer_.reserve(32);
   }
+
+  ParserBase(ParseInfo* info, Scanner* scanner, bool parsing_on_main_thread)
+      : ParserBase(info, info->zone(), scanner, info->stack_limit(),
+                   info->ast_value_factory(), info->pending_error_handler(),
+                   info->runtime_call_stats(), info->v8_file_logger(),
+                   info->flags(), parsing_on_main_thread) {}
 
   const UnoptimizedCompileFlags& flags() const { return flags_; }
 
@@ -306,6 +313,8 @@ class ParserBase {
   Zone* zone() const { return zone_; }
 
   V8_INLINE bool IsExtraordinaryPrivateNameAccessAllowed() const;
+
+  ParseInfo* info() const { return info_; }
 
  protected:
   friend class v8::internal::ExpressionScope<ParserTypes<Impl>>;
@@ -1568,6 +1577,7 @@ class ParserBase {
   bool parsing_on_main_thread_;
   uintptr_t stack_limit_;
   PendingCompilationErrorHandler* pending_error_handler_;
+  ParseInfo* info_;
 
   // Parser base's private field members.
 
@@ -4569,6 +4579,18 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
   FunctionKind kind = formal_parameters.scope->function_kind();
   FunctionLiteral::EagerCompileHint eager_compile_hint =
       default_eager_compile_hint_;
+
+  if (eager_compile_hint == FunctionLiteral::kShouldLazyCompile &&
+      info() != nullptr) {
+    // Apply compile hints from the embedder.
+    int compile_hint_position = formal_parameters.scope->start_position();
+    v8::CompileHintCallback callback = info()->compile_hint_callback();
+    if (callback != nullptr &&
+        callback(compile_hint_position, info()->compile_hint_callback_data())) {
+      eager_compile_hint = FunctionLiteral::kShouldEagerCompile;
+    }
+  }
+
   bool can_preparse = impl()->parse_lazily() &&
                       eager_compile_hint == FunctionLiteral::kShouldLazyCompile;
   // TODO(marja): consider lazy-parsing inner arrow functions too. is_this
