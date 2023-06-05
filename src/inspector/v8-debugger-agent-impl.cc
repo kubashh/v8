@@ -346,9 +346,9 @@ Response buildScopes(v8::Isolate* isolate, v8::debug::ScopeIterator* iterator,
 
   for (; !iterator->Done(); iterator->Advance()) {
     std::unique_ptr<RemoteObject> object;
-    Response result = injectedScript->wrapObject(
-        iterator->GetObject(), kBacktraceObjectGroup,
-        WrapOptions({WrapMode::kIdOnly, {}}), &object);
+    Response result =
+        injectedScript->wrapObject(iterator->GetObject(), kBacktraceObjectGroup,
+                                   {WrapMode::kIdOnly}, &object);
     if (!result.IsSuccess()) return result;
 
     auto scope = Scope::create()
@@ -1564,10 +1564,9 @@ Response V8DebuggerAgentImpl::evaluateOnCallFrame(
   response = scope.initialize();
   if (!response.IsSuccess()) return response;
   WrapOptions wrapOptions = generatePreview.fromMaybe(false)
-                                ? WrapOptions({WrapMode::kPreview, {}})
-                                : WrapOptions({WrapMode::kIdOnly, {}});
-  if (returnByValue.fromMaybe(false))
-    wrapOptions = WrapOptions({WrapMode::kJson, {}});
+                                ? WrapOptions({WrapMode::kPreview})
+                                : WrapOptions({WrapMode::kIdOnly});
+  if (returnByValue.fromMaybe(false)) wrapOptions = {WrapMode::kJson};
   return scope.injectedScript()->wrapEvaluateResult(
       maybeResultValue, scope.tryCatch(), objectGroup.fromMaybe(""),
       wrapOptions, throwOnSideEffect.fromMaybe(false), result,
@@ -1745,9 +1744,9 @@ Response V8DebuggerAgentImpl::currentCallFrames(
     if (injectedScript) {
       v8::Local<v8::Value> receiver;
       if (iterator->GetReceiver().ToLocal(&receiver)) {
-        res = injectedScript->wrapObject(receiver, kBacktraceObjectGroup,
-                                         WrapOptions({WrapMode::kIdOnly, {}}),
-                                         &protocolReceiver);
+        res =
+            injectedScript->wrapObject(receiver, kBacktraceObjectGroup,
+                                       {WrapMode::kIdOnly}, &protocolReceiver);
         if (!res.IsSuccess()) return res;
       }
     }
@@ -1791,8 +1790,7 @@ Response V8DebuggerAgentImpl::currentCallFrames(
     if (!returnValue.IsEmpty() && injectedScript) {
       std::unique_ptr<RemoteObject> value;
       res = injectedScript->wrapObject(returnValue, kBacktraceObjectGroup,
-                                       WrapOptions({WrapMode::kIdOnly, {}}),
-                                       &value);
+                                       {WrapMode::kIdOnly}, &value);
       if (!res.IsSuccess()) return res;
       frame->setReturnValue(std::move(value));
     }
@@ -2097,7 +2095,7 @@ void V8DebuggerAgentImpl::didPause(
               : protocol::Debugger::Paused::ReasonEnum::Exception;
       std::unique_ptr<protocol::Runtime::RemoteObject> obj;
       injectedScript->wrapObject(exception, kBacktraceObjectGroup,
-                                 WrapOptions({WrapMode::kIdOnly, {}}), &obj);
+                                 {WrapMode::kIdOnly}, &obj);
       std::unique_ptr<protocol::DictionaryValue> breakAuxData;
       if (obj) {
         std::vector<uint8_t> serialized;

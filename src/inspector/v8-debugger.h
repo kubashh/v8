@@ -39,7 +39,7 @@ struct WrapSerializationOptions {
 
 struct WrapOptions {
   WrapMode mode;
-  WrapSerializationOptions serializationOptions;
+  WrapSerializationOptions serializationOptions = {};
 };
 
 using protocol::Response;
