@@ -22,6 +22,30 @@
       },
       "revId": "26f21f3669de5c7145d61d6a49e2f7551a3b8941",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "394de69f_50b934da",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4558,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-06-05T12:21:55Z",
+      "side": 1,
+      "message": "The PreParser already has the \"eager vs lazy\" concepts built in, e.g., ParserBase::ParseArrowFunctionLiteral does eager vs. lazy decisions (when it\u0027s already preparsing it ofc won\u0027t turn back eager). So that wouldn\u0027t be too bad IMO - however, making this an per-impl method is otherwise elegant (allows me to undo the ParseInfo related changes) so did that.",
+      "parentUuid": "e763a258_06625ba4",
+      "range": {
+        "startLine": 4558,
+        "startChar": 52,
+        "endLine": 4558,
+        "endChar": 74
+      },
+      "revId": "26f21f3669de5c7145d61d6a49e2f7551a3b8941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
