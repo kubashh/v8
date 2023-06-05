@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "725e1149_b23f7cd6",
+        "filename": "include/v8-inspector.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-06-05T04:53:20Z",
+      "side": 1,
+      "message": "IMO it might also be worth looking into implementing `operator\u003c` for `StringBuffer`. It\u0027s implemented for the underlying String16 type. If we do that we could pass a const ref `std::map\u003cStringBuffer, StringBuffer\u003e` instead.",
+      "range": {
+        "startLine": 263,
+        "startChar": 12,
+        "endLine": 263,
+        "endChar": 58
+      },
+      "revId": "6ca67f0c8bf5009aa1cd9b2fbaef673b2cb31295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1aa7dba_5ffe7b5c",
+        "filename": "src/inspector/v8-runtime-agent-impl.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-06-05T04:53:20Z",
+      "side": 1,
+      "message": "just `std::map\u003cString16, String16\u003e result;` is enough to call the default constructor",
+      "range": {
+        "startLine": 245,
+        "startChar": 2,
+        "endLine": 245,
+        "endChar": 71
+      },
+      "revId": "6ca67f0c8bf5009aa1cd9b2fbaef673b2cb31295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54938410_c57b0f54",
+        "filename": "src/inspector/v8-runtime-agent-impl.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-06-05T04:53:20Z",
+      "side": 1,
+      "message": "The standard way of doing this is in the V8 inspector is to return a `Response` object instead, and return a `Response::ServerError`. We wanna fail the CDP call, not crash the client.\n\nThis means the map is passed via an \"out\" parameter as a std::unique_ptr. That is fine, you can then move it into the \"normal\" map in the caller. This also requires changing `getWrapOptions`.\n\nFor easier reviewability and revertabilty I suggest to split this CL into 3 changes:\n  1) Change `WrapOptions` to std::unique_ptr + const ref for clearer ownership\n  2) Change `getWrapOptions` to return a Response instead and return the result via out paramter\n  3) This CL.",
+      "range": {
+        "startLine": 265,
+        "startChar": 0,
+        "endLine": 267,
+        "endChar": 20
+      },
+      "revId": "6ca67f0c8bf5009aa1cd9b2fbaef673b2cb31295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
