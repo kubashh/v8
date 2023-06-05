@@ -307,6 +307,8 @@ class ParserBase {
 
   V8_INLINE bool IsExtraordinaryPrivateNameAccessAllowed() const;
 
+  ParseInfo* info() const { return info_; }
+
  protected:
   friend class v8::internal::ExpressionScope<ParserTypes<Impl>>;
   friend class v8::internal::ExpressionParsingScope<ParserTypes<Impl>>;
@@ -1568,6 +1570,7 @@ class ParserBase {
   bool parsing_on_main_thread_;
   uintptr_t stack_limit_;
   PendingCompilationErrorHandler* pending_error_handler_;
+  ParseInfo* info_;
 
   // Parser base's private field members.
 
@@ -4569,6 +4572,11 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
   FunctionKind kind = formal_parameters.scope->function_kind();
   FunctionLiteral::EagerCompileHint eager_compile_hint =
       default_eager_compile_hint_;
+
+  int compile_hint_position = formal_parameters.scope->start_position();
+  eager_compile_hint =
+      impl()->GetEmbedderCompileHint(eager_compile_hint, compile_hint_position);
+
   bool can_preparse = impl()->parse_lazily() &&
                       eager_compile_hint == FunctionLiteral::kShouldLazyCompile;
   // TODO(marja): consider lazy-parsing inner arrow functions too. is_this
