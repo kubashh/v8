@@ -1064,8 +1064,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   // object (used to implement the "export * as" syntax).
   const AstRawString* NextInternalNamespaceExportName();
 
-  ParseInfo* info() const { return info_; }
-
   std::vector<uint8_t>* preparse_data_buffer() {
     return &preparse_data_buffer_;
   }
@@ -1075,7 +1073,6 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   friend class PreparseDataBuilder;  // Uses preparse_data_buffer()
 
   LocalIsolate* local_isolate_;
-  ParseInfo* info_;
   Handle<Script> script_;
   Scanner scanner_;
   Zone preparser_zone_;
