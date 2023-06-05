@@ -33,6 +33,23 @@
       "message": "LGTM 🥳",
       "revId": "79c98a3f2c8ea72bab871030de20a06ac604b70d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "051f78a3_c6cf5659",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-06-05T13:56:22Z",
+      "side": 1,
+      "message": "The CL in https://crrev.com/c/4573670 that adds the necessary infra so that this mode always compiles has had some baking time. Landing this one now.",
+      "revId": "79c98a3f2c8ea72bab871030de20a06ac604b70d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
