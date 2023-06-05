@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd42f2de_e5c5b71c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-06-05T12:29:39Z",
+      "side": 1,
+      "message": "Ok, so 0.8% total score improvement and many more line items with statistically significant improvements compared to statistically significant regressions. I think it\u0027s fair to say that this has some positive effect.",
+      "parentUuid": "2e5a57f3_875abf0f",
+      "revId": "0bb42026bb7398d881401a21b7a5c507a21145bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "820e3cbe_3d42f853",
