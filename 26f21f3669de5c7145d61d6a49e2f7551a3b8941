@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e763a258_06625ba4",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4558,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-05T11:41:16Z",
+      "side": 1,
+      "message": "should this ever return \"eager\" when called by the pre-parser? Maybe this should be a per-impl method instead?",
+      "range": {
+        "startLine": 4558,
+        "startChar": 52,
+        "endLine": 4558,
+        "endChar": 74
+      },
+      "revId": "26f21f3669de5c7145d61d6a49e2f7551a3b8941",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
