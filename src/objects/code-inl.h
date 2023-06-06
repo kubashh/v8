@@ -91,6 +91,8 @@ INT_ACCESSORS(Code, instruction_size, kInstructionSizeOffset)
 INT_ACCESSORS(Code, metadata_size, kMetadataSizeOffset)
 INT_ACCESSORS(Code, handler_table_offset, kHandlerTableOffsetOffset)
 INT_ACCESSORS(Code, code_comments_offset, kCodeCommentsOffsetOffset)
+INT_ACCESSORS(Code, builtin_jump_table_info_offset,
+              kBuiltinJumpTableOffsetOffset)
 INT32_ACCESSORS(Code, unwinding_info_offset, kUnwindingInfoOffsetOffset)
 ACCESSORS_CHECKED2(Code, deoptimization_data, FixedArray,
                    kDeoptimizationDataOrInterpreterDataOffset,
@@ -438,10 +440,22 @@ Address Code::code_comments() const {
 }
 
 int Code::code_comments_size() const {
-  return unwinding_info_offset() - code_comments_offset();
+  return builtin_jump_table_info_offset() - code_comments_offset();
 }
 
 bool Code::has_code_comments() const { return code_comments_size() > 0; }
+
+Address Code::builtin_jump_table_info() const {
+  return metadata_start() + builtin_jump_table_info_offset();
+}
+
+int Code::builtin_jump_table_info_size() const {
+  return unwinding_info_offset() - builtin_jump_table_info_offset();
+}
+
+bool Code::has_builtin_jump_table() const {
+  return builtin_jump_table_info_size() > 0;
+}
 
 Address Code::unwinding_info_start() const {
   return metadata_start() + unwinding_info_offset();
