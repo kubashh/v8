@@ -68,6 +68,24 @@
       "parentUuid": "0c982ddc_65253ef4",
       "revId": "e6dcef0b210a6904d842e1c789496a814fbb497a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de252f19_bde2e0af",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-06-06T08:33:43Z",
+      "side": 1,
+      "message": "Ah, you are right. It\u0027s unfortunate that we have to waste some bytes for `V8_SFI_HAS_UNIQUE_ID` but I guess we can afford it for simplicity.\nCould you please add a DCHECK or static assert that the size you are using here is one of the two expected values.",
+      "parentUuid": "dd66aaaa_0a4c96d3",
+      "revId": "e6dcef0b210a6904d842e1c789496a814fbb497a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
