@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af1f7d25_b479369f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-06T12:46:45Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL.\n@tebbi@chromium.org: Please component-review `src/compiler` and perform full review for the turboshaft changes. 😊",
+      "revId": "c88b9fa684e55246671017fcc542f34ece442286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1efab6d7_b0890d70",
+        "filename": "src/compiler/turboshaft/wasm-js-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-06T12:46:45Z",
+      "side": 1,
+      "message": "This is surprisingly much code for basically only changing an integer (the bailout id)...",
+      "range": {
+        "startLine": 61,
+        "startChar": 10,
+        "endLine": 61,
+        "endChar": 46
+      },
+      "revId": "c88b9fa684e55246671017fcc542f34ece442286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92636baa_e2bfac6b",
+        "filename": "src/compiler/turboshaft/wasm-js-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-06T12:46:45Z",
+      "side": 1,
+      "message": "@tebbi@chromium.org: So right now the TS `SourcePositionTable` will always be created if the JS function contains wasm function calls with inlineable wrappers because it seems to be always created if the TF `SourcePositionTable` is enabled.\n\nHow do you feel? Would this be fine? Do we have any estimates on how much memory the `SourcePositionTable` needs compared to the max memory usage of the compilation?",
+      "range": {
+        "startLine": 71,
+        "startChar": 17,
+        "endLine": 71,
+        "endChar": 52
+      },
+      "revId": "c88b9fa684e55246671017fcc542f34ece442286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97b7db5d_21f28b22",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2360,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-06T12:46:45Z",
+      "side": 1,
+      "message": "Outside of removing code and reduced indentation, this is the only part that changed here.\nInstead of using the runtime `SourcePositionTable` (which will not be created thanks to the change in `isolate.cc` below) we access the position based on the translation / deopt data (which is filled based on the `FrameStateInfo` in the compiler).",
+      "range": {
+        "startLine": 2360,
+        "startChar": 43,
+        "endLine": 2360,
+        "endChar": 72
+      },
+      "revId": "c88b9fa684e55246671017fcc542f34ece442286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

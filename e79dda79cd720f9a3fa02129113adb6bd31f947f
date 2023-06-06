@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c66774d_ebc4cf3a",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2361,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-06T12:46:45Z",
+      "side": 0,
+      "message": "This was anyways never a good solution.",
+      "range": {
+        "startLine": 2358,
+        "startChar": 6,
+        "endLine": 2361,
+        "endChar": 7
+      },
+      "revId": "e79dda79cd720f9a3fa02129113adb6bd31f947f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
