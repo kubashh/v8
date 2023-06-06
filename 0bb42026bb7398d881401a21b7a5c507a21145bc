@@ -113,6 +113,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce00c80f_0390bfbc",
+        "filename": "src/codegen/builtins-jump-table-info.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-06T07:36:14Z",
+      "side": 1,
+      "message": "I thinks they are not the same, because `kEntrySize` represent the byte counts of a jump table info entry in the metadata:\n```\nassm-\u003edd(i-\u003epc_offset);\nassm-\u003edd(i-\u003etarget);\n```\n\nBut `sizeof(BuiltinJumpTableInfoEntry)` represent the byte counts of a `BuiltinJumpTableInfoEntry` object.",
+      "parentUuid": "820e3cbe_3d42f853",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 46
+      },
+      "revId": "0bb42026bb7398d881401a21b7a5c507a21145bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8e9b24ed_0c6fb055",
         "filename": "src/codegen/builtins-jump-table-info.h",
         "patchSetId": 5
@@ -124,6 +148,30 @@
       "writtenOn": "2023-06-02T15:18:47Z",
       "side": 1,
       "message": "The layout description is not self-explanatory and different from `CodeCommentsWriter`. Could you make them more similar?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 42
+      },
+      "revId": "0bb42026bb7398d881401a21b7a5c507a21145bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2e3a585_8d8dd849",
+        "filename": "src/codegen/builtins-jump-table-info.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-06T07:36:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e9b24ed_0c6fb055",
       "range": {
         "startLine": 18,
         "startChar": 0,
@@ -147,6 +195,24 @@
       "writtenOn": "2023-06-02T15:18:47Z",
       "side": 1,
       "message": "Could we add a line\n```\nint builtin_jump_table_info_offset \u003d 0;\n```\nhere and then compute the `builtin_jump_table_info_offset` as on x64? Also on the other architectures. I think it is less confusing this way.",
+      "revId": "0bb42026bb7398d881401a21b7a5c507a21145bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bf02f43_4aa6bab4",
+        "filename": "src/codegen/mips64/assembler-mips64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-06T07:36:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9db9e373_bf8fda2c",
       "revId": "0bb42026bb7398d881401a21b7a5c507a21145bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
