@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69783159_0708b92c",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-06T17:37:24Z",
+      "side": 0,
+      "message": "The modified IC code is `CodeKind::BYTECODE_HANDLER`.",
+      "range": {
+        "startLine": 1686,
+        "startChar": 25,
+        "endLine": 1686,
+        "endChar": 42
+      },
+      "revId": "93e947284e1b3730d9cdef990d36051a60d2384b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
