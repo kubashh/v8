@@ -1930,6 +1930,8 @@ void Code::CodePrint(std::ostream& os, const char* name, Address current_pc) {
     os << "\n - constant_pool_offset: " << constant_pool_offset();
   }
   os << "\n - code_comments_offset: " << code_comments_offset();
+  os << "\n - builtin_jump_table_info_offset: "
+     << builtin_jump_table_info_offset();
 
   // Then, InstructionStream:
   if (has_instruction_stream()) {
