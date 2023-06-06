@@ -145,6 +145,7 @@ void VerifyForwarding(TestCode* code, int count, int* expected) {
   v8::internal::AccountingAllocator allocator;
   Zone local_zone(&allocator, ZONE_NAME);
   ZoneVector<RpoNumber> result(&local_zone);
+  code->sequence_.RecomputeAssemblyOrderForTesting();
   JumpThreading::ComputeForwarding(&local_zone, &result, &code->sequence_,
                                    true);
 
@@ -881,6 +882,31 @@ TEST(Rewire_deferred_diamond) {
   CheckAssemblyOrder(&code, kBlockCount, assembly);
 }
 
+TEST(Rewire_deferred_diamond_2) {
+  constexpr size_t kBlockCount = 4;
+  TestCode code(kBlockCount);
+
+  // B0
+  int b1 = code.Branch(1, 2);
+  // B1
+  code.Fallthru();  // To B3
+  // B2
+  code.Defer();
+  code.Other();
+  code.Jump(3);
+  // B3
+  code.Return(0);
+
+  static int forward[] = {0, 3, 2, 3};
+  VerifyForwarding(&code, kBlockCount, forward);
+  std::cout << "verified\n";
+  ApplyForwarding(&code, kBlockCount, forward);
+  CheckBranch(&code, b1, 3, 2);
+
+  static int assembly[] = {0, 1, 2, 1};
+  CheckAssemblyOrder(&code, kBlockCount, assembly);
+}
+
 TEST(Rewire_diamond) {
   constexpr size_t kBlockCount = 5;
   for (int i = 0; i < 2; i++) {
@@ -958,7 +984,7 @@ TEST(RewireRet1) {
   // B3
   code.End();
 
-  int forward[] = {0, 1, 2, 3};
+  int forward[] = {0, 1, 2, 2};
   VerifyForwarding(&code, kBlockCount, forward);
   ApplyForwarding(&code, kBlockCount, forward);
 
@@ -979,7 +1005,7 @@ TEST(RewireRet2) {
   // B3
   code.End();
 
-  int forward[] = {0, 1, 1, 3};
+  int forward[] = {0, 1, 1, 1};
   VerifyForwarding(&code, kBlockCount, forward);
   ApplyForwarding(&code, kBlockCount, forward);
 
