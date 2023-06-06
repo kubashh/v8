@@ -135,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a18284f_7ab6d187",
+        "filename": "src/codegen/builtins-jump-table-info.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-06-06T09:54:28Z",
+      "side": 1,
+      "message": "True, we don\u0027t actually rely on the memory layout of the C++ struct.",
+      "parentUuid": "ce00c80f_0390bfbc",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 46
+      },
+      "revId": "0bb42026bb7398d881401a21b7a5c507a21145bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e9b24ed_0c6fb055",
