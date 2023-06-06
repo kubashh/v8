@@ -33,21 +33,28 @@ function CreateWasmObjects() {
 }
 
 function testThrowsRepeated(fn, ErrorType) {
-  %PrepareFunctionForOptimization(fn);
-  for (let i = 0; i < 5; i++) assertThrows(fn, ErrorType);
-  %OptimizeFunctionOnNextCall(fn);
-  assertThrows(fn, ErrorType);
-  // TODO(7748): This assertion doesn't hold true, as some cases run into
-  // deopt loops.
+  const maxRuns = 2;
+  for (let run = 0; run < maxRuns; ++run) {
+    %PrepareFunctionForOptimization(fn);
+    for (let i = 0; i < 5; i++) assertThrows(fn, ErrorType);
+    %OptimizeFunctionOnNextCall(fn);
+    assertThrows(fn, ErrorType);
+    if (%ActiveTierIsTurbofan(fn)) return; // no deopt, everything fine.
+  }
+  // After {maxRuns}, we should expect not to deopt any more!
   // assertTrue(%ActiveTierIsTurbofan(fn));
 }
 
 function repeated(fn) {
-  %PrepareFunctionForOptimization(fn);
-  for (let i = 0; i < 5; i++) fn();
-  %OptimizeFunctionOnNextCall(fn);
-  fn();
+  const maxRuns = 2;
+  for (let run = 0; run < maxRuns; ++run) {
+    %PrepareFunctionForOptimization(fn);
+    for (let i = 0; i < 5; i++) fn();
+    %OptimizeFunctionOnNextCall(fn);
+    fn();
+    if (%ActiveTierIsTurbofan(fn)) return; // no deopt, everything fine.
+  }
   // TODO(7748): This assertion doesn't hold true, as some cases run into
   // deopt loops.
-  // assertTrue(%ActiveTierIsTurbofan(fn));
+  assertTrue(%ActiveTierIsTurbofan(fn));
 }
