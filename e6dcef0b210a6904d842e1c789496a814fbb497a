@@ -33,6 +33,24 @@
       "message": "I\u0027m not sure this is necessary given that `V8_SFI_HAS_UNIQUE_ID` is neither a runtime nor cpu-specific thing (unlike the presence of SSE2 on host/target which affects the layout of `SwissNameDictionary`).",
       "revId": "e6dcef0b210a6904d842e1c789496a814fbb497a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd66aaaa_0a4c96d3",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-06T07:09:00Z",
+      "side": 1,
+      "message": "Not sure I understood your point. For static roots we must guarantee that all build configs have identical RO space layout up until the last root, this is what StaticRootsEnsureAllocatedSize does. So specifically this also needs to hold for `defined(V8_SFI_HAS_UNIQUE_ID)` and `!defined(V8_SFI_HAS_UNIQUE_ID)`.",
+      "parentUuid": "0c982ddc_65253ef4",
+      "revId": "e6dcef0b210a6904d842e1c789496a814fbb497a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
