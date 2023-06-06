@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d8b2af8_f71c5aa5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-06-06T18:25:53Z",
+      "side": 1,
+      "message": "Please mention v8 tracking bug here.",
+      "revId": "531de36718df8d7e92dc32ff2d989608ea7519b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "32e391a6_550fb671",
@@ -14,6 +31,40 @@
       "writtenOn": "2023-05-31T15:06:28Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "531de36718df8d7e92dc32ff2d989608ea7519b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94ba7d23_7ad679d9",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 4983,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-06-06T18:25:53Z",
+      "side": 1,
+      "message": "This approach works only for objects with simple properties (see `EnsureOnlyHasSimpleProperties`). It would be nice if you could move this code and allocation after the bailout point of `ForEachEnumerableOwnProperty` maybe by splitting the latter into two parts or something.",
+      "revId": "531de36718df8d7e92dc32ff2d989608ea7519b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "828b751c_29fdcb98",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 5016,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-06-06T18:25:53Z",
+      "side": 1,
+      "message": "This line seems redundant, the `ForEachEnumerableOwnProperty` handles that.",
       "revId": "531de36718df8d7e92dc32ff2d989608ea7519b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

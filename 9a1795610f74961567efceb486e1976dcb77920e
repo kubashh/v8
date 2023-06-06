@@ -175,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "017f321e_ceaa9d2f",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5087,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-06-06T18:25:53Z",
+      "side": 1,
+      "message": "Ah, right.",
+      "parentUuid": "5e308a0c_16a52d43",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cc30bd3_b915bd3f",
@@ -393,6 +411,24 @@
       "side": 1,
       "message": "We check if source can ever become more generic than target. This is stronger than \"they are currently compatible\". I think this can happen. Essentially, whenever the map has any kind of representation that is not the most generic one.",
       "parentUuid": "328d67b1_8c91c1bb",
+      "revId": "9a1795610f74961567efceb486e1976dcb77920e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "712ac4a5_373d4236",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3145,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-06-06T18:25:53Z",
+      "side": 1,
+      "message": "Ah, right.",
+      "parentUuid": "ecad9604_0b03f57b",
       "revId": "9a1795610f74961567efceb486e1976dcb77920e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
