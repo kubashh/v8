@@ -3,7 +3,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import os
 import sys
 import subprocess
 import re
@@ -15,7 +14,7 @@ INPUT_PATH = Path("src/parsing/keywords.txt")
 OUTPUT_PATH = Path("src/parsing/keywords-gen.h")
 
 # TODO(leszeks): Trimming seems to regress performance, investigate.
-TRIM_CHAR_TABLE = False
+TRIM_CHAR_TABLE : bool = False
 
 
 def next_power_of_2(x):
