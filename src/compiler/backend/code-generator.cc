@@ -1055,6 +1055,9 @@ void CodeGenerator::TranslateFrameStateDescriptorOperands(
   StateValueList* values = desc->GetStateValueDescriptors();
   for (StateValueList::iterator it = values->begin(); it != values->end();
        ++it, ++index) {
+    std::cout << "TranslateFrameStateDescriptorOperands[" << index << "]: \n  desc: ";
+    (*it).desc->Print(std::cout);
+    std::cout << "  nested: 0x" << std::hex << (*it).nested << std::dec << std::endl;
     TranslateStateValueDescriptor((*it).desc, (*it).nested, iter);
   }
   DCHECK_EQ(desc->GetSize(), index);
