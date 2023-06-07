@@ -1062,7 +1062,7 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
 
   void StoreU64(Register src, const MemOperand& mem, Register scratch = no_reg);
   void StoreU32(Register src, const MemOperand& mem, Register scratch);
-  void StoreU16(Register src, const MemOperand& mem, Register scratch);
+  void StoreU16(Register src, const MemOperand& mem, Register scratch = no_reg);
   void StoreU8(Register src, const MemOperand& mem, Register scratch);
 
   void LoadU64WithUpdate(Register dst, const MemOperand& mem,
