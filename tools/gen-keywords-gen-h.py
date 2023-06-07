@@ -21,7 +21,7 @@ def next_power_of_2(x):
   return 1 if x == 0 else 2**int(math.ceil(math.log(x, 2)))
 
 
-def call_with_input(cmd, input_string : str =""):
+def call_with_input(cmd, input_string: str = ""):
   p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
   stdout, _ = p.communicate(input_string.encode())
   retcode = p.wait()
@@ -38,17 +38,17 @@ def checked_sub(pattern, sub, out, count=1, flags=0):
   return out
 
 
-def change_sizet_to_int(out : str ) -> str :
+def change_sizet_to_int(out: str) -> str:
   # Literal buffer lengths are given as ints, not size_t
   return checked_sub(r'\bsize_t\b', 'int', out, count=4)
 
 
-def drop_line_directives(out : str ) -> str :
+def drop_line_directives(out: str) -> str:
   # #line causes gcov issue, so drop it
   return re.sub(r'^#\s*line .*$\n', '', out, flags=re.MULTILINE)
 
 
-def trim_and_dcheck_char_table(out : str ) -> str :
+def trim_and_dcheck_char_table(out: str) -> str:
   # Potential keyword strings are known to be lowercase ascii, so chop off the
   # rest of the table and mask out the char
 
