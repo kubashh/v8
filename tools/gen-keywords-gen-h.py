@@ -8,6 +8,7 @@ import sys
 import subprocess
 import re
 import math
+from pathlib import Path
 
 INPUT_PATH = "src/parsing/keywords.txt"
 OUTPUT_PATH = "src/parsing/keywords-gen.h"
@@ -22,11 +23,11 @@ def next_power_of_2(x):
 
 def call_with_input(cmd, input_string=""):
   p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-  stdout, _ = p.communicate(input_string)
+  stdout, _ = p.communicate(input_string.encode())
   retcode = p.wait()
   if retcode != 0:
     raise subprocess.CalledProcessError(retcode, cmd)
-  return stdout
+  return stdout.decode()
 
 
 def checked_sub(pattern, sub, out, count=1, flags=0):
@@ -218,10 +219,10 @@ def trim_character_set_warning(out):
 
 def main():
   try:
-    script_dir = os.path.dirname(sys.argv[0])
-    root_dir = os.path.join(script_dir, '..')
+    script_dir = Path(sys.argv[0]).parent
+    root_dir = script_dir.parent
 
-    out = subprocess.check_output(["gperf", "-m100", INPUT_PATH], cwd=root_dir)
+    out = subprocess.check_output(["gperf", "-m100", INPUT_PATH], cwd=root_dir, encoding="UTF-8")
 
     # And now some munging of the generated file.
     out = change_sizet_to_int(out)
@@ -235,11 +236,10 @@ def main():
     out = trim_character_set_warning(out)
 
     # Final formatting.
-    clang_format_path = os.path.join(root_dir,
-                                     'third_party/depot_tools/clang-format')
+    clang_format_path = root_dir / 'third_party/depot_tools/clang-format'
     out = call_with_input([clang_format_path], out)
 
-    with open(os.path.join(root_dir, OUTPUT_PATH), 'w') as f:
+    with (root_dir/OUTPUT_PATH).open('w') as f:
       f.write(out)
 
     return 0
