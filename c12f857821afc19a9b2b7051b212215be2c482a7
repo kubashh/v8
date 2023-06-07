@@ -39,6 +39,30 @@
       },
       "revId": "c12f857821afc19a9b2b7051b212215be2c482a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c0be3fa_819c3324",
+        "filename": "test/mjsunit/unary-op-throws-feedback.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-07T08:56:34Z",
+      "side": 1,
+      "message": "In general, we don\u0027t want deopt loops in maglev, though there as some known cases around loop phis. In this case, it seems avoidable to deopt loop here though? Why does TF not deopt loop but maglev does?",
+      "parentUuid": "1c5c6923_8c9728cc",
+      "range": {
+        "startLine": 6,
+        "startChar": 10,
+        "endLine": 6,
+        "endChar": 56
+      },
+      "revId": "c12f857821afc19a9b2b7051b212215be2c482a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
