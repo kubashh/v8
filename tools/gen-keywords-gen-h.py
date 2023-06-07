@@ -9,9 +9,10 @@ import subprocess
 import re
 import math
 from pathlib import Path
+from typing import List, Union
 
-INPUT_PATH = "src/parsing/keywords.txt"
-OUTPUT_PATH = "src/parsing/keywords-gen.h"
+INPUT_PATH = Path("src/parsing/keywords.txt")
+OUTPUT_PATH = Path("src/parsing/keywords-gen.h")
 
 # TODO(leszeks): Trimming seems to regress performance, investigate.
 TRIM_CHAR_TABLE = False
@@ -21,7 +22,7 @@ def next_power_of_2(x):
   return 1 if x == 0 else 2**int(math.ceil(math.log(x, 2)))
 
 
-def call_with_input(cmd, input_string: str = ""):
+def call_with_input(cmd : List[Union[str, Path]], input_string: str = "") -> str:
   p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
   stdout, _ = p.communicate(input_string.encode())
   retcode = p.wait()
@@ -30,7 +31,7 @@ def call_with_input(cmd, input_string: str = ""):
   return stdout.decode()
 
 
-def checked_sub(pattern, sub, out, count=1, flags=0):
+def checked_sub(pattern : Union[str, re.Pattern[str]], sub:str, out : str, count:int=1, flags:int=0) -> str:
   out, n = re.subn(pattern, sub, out, flags=flags)
   if n != count:
     raise Exception("Didn't get exactly %d replacement(s) for pattern: %s" %
@@ -81,7 +82,7 @@ def trim_and_dcheck_char_table(out: str) -> str:
   return out
 
 
-def use_isinrange(out):
+def use_isinrange(out : str ) -> str:
   # Our IsInRange method is more efficient than checking for min/max length
   return checked_sub(r'if \(len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH\)',
                      r'if (base::IsInRange(len, MIN_WORD_LENGTH, '
@@ -89,7 +90,7 @@ def use_isinrange(out):
                      out)
 
 
-def pad_tables(out):
+def pad_tables(out : str ) -> str :
   # We don't want to compare against the max hash value, so pad the tables up
   # to a power of two and mask the hash.
 
@@ -146,7 +147,7 @@ def pad_tables(out):
   return out
 
 
-def return_token(out):
+def return_token(out : str ) -> str :
   # We want to return the actual token rather than the table entry.
 
   # Change the return type of the function. Make it inline too.
@@ -166,7 +167,7 @@ def return_token(out):
   return out
 
 
-def memcmp_to_while(out):
+def memcmp_to_while(out : str ) -> str :
   # It's faster to loop over the keyword with a while loop than calling memcmp.
   # Careful, this replacement is quite flaky, because otherwise the regex is
   # unreadable.
@@ -208,7 +209,7 @@ namespace internal {
 """ % (out)
 
 
-def trim_character_set_warning(out):
+def trim_character_set_warning(out : str ) -> str :
   # gperf generates an error message that is too large, trim it
 
   return out.replace(
@@ -222,7 +223,7 @@ def main():
     script_dir = Path(sys.argv[0]).parent
     root_dir = script_dir.parent
 
-    out = subprocess.check_output(["gperf", "-m100", INPUT_PATH],
+    out : str = subprocess.check_output(["gperf", "-m100", INPUT_PATH],
                                   cwd=root_dir,
                                   encoding="UTF-8")
 
