@@ -16,6 +16,40 @@
       "message": "PTAL (needed to update the perfect hashing for newly added keywords)",
       "revId": "e453e1742813a3b94dafcccc5ebc0389c4fb7c18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea2d64ee_af6dbc48",
+        "filename": "tools/gen-keywords-gen-h.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-06-07T15:10:57Z",
+      "side": 1,
+      "message": "Is this available everywhere in infra? I don\u0027t know Python, just pattern matching on something named `__future__`.",
+      "revId": "e453e1742813a3b94dafcccc5ebc0389c4fb7c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc1801c4_9e63db75",
+        "filename": "tools/gen-keywords-gen-h.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-06-07T15:10:57Z",
+      "side": 1,
+      "message": "😮 Type annotations, in _my_ Python?",
+      "revId": "e453e1742813a3b94dafcccc5ebc0389c4fb7c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
