@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "69c950b8_febfb8bb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "Please add a description (what does it do, how does it work, anything interesting in the impl?). Where is the table stored? What are its contents? Relative or absolute targets? Why can\u0027t we use the \u0027normal\u0027 switch jump table impl?\n\nAnd is there a good bug you could link to?",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "87c6bab0_17e18f39",
@@ -31,6 +48,227 @@
       "writtenOn": "2023-06-07T05:33:56Z",
       "side": 1,
       "message": "Hi Jakob, do you have any other comments? Thanks!",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20a21672_a0f5125b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "Did a first pass, in general lg with main high-level comments:\n- please add more documentation, comments, an actual CL description\n- more ifdefs to avoid impact on non-x64 platforms",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f21ea89_a07ef927",
+        "filename": "src/codegen/builtins-jump-table-info.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "Since this is all x64-only, could you move this file to codegen/x64?",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1e9e014_ded017ea",
+        "filename": "src/codegen/builtins-jump-table-info.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "nit: the file is called \u0027builtins\u0027 (plural) and the class \u0027Builtin\u0027 (singular), mind unifying that?\n\nAlso, why is the class called \u0027..Info\u0027? Isn\u0027t it the jump table itself (if so, just \u0027BuiltinJumpTable\u0027 could be more fitting)?",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a172104c_14691759",
+        "filename": "src/codegen/builtins-jump-table-info.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "Some kind of top-level comment that explains what this is all about in 1-2 sentences would be nice.",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7695695f_7dfc185f",
+        "filename": "src/codegen/builtins-jump-table-info.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "What\u0027s a \u0027section\u0027?",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c61feef6_296370fc",
+        "filename": "src/codegen/x64/assembler-x64.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2181,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "The generic `dd` name doesn\u0027t fit here since it\u0027s specific to the builtin jump table. Please pick a better name. \u0027WriteBuiltinJumpTableEntry\u0027?",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e85278ae_ff677470",
+        "filename": "src/compiler/backend/code-generator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "This is left declared but undefined for non-x64. That\u0027s a bit weird, please either add an #ifdef here, or just remove the extra method and handle builtin case inside `AssembleJumpTable`.",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0abcde40_a9240379",
+        "filename": "src/compiler/backend/code-generator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "The `masm_` already knows the builtin id. Please add a `Builtin builtin() const` accessor in macro-assembler-base.h and use that instead.",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0f3b96c_b6a08f94",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 6221,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "I don\u0027t understand this and the below comment. Please describe in full sentences what\u0027s happening, and mention the BuiltinJumpTable class name.",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a461cbd_7092db6b",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 6222,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "Let\u0027s add constants in BuiltinJumpTableInfoEntry that you can static assert here to guard the `times_4`. I guess the `times_4` is the inline `emit(uint32_t)` in the method currently called `dd`?",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76589112_b48f7f61",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 7061,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "IMO this encoding is interesting enough to describe thoroughly here and in the CL message. What are we emitting inline? What is put into the out-of-line jump table? How does the actual jump instruction sequence work?",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f75ec845_539a16a2",
+        "filename": "src/diagnostics/disassembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "Also refer to a BuiltinJumpTableInfoEntry constant here.",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "258fefda_ae244e53",
+        "filename": "src/objects/code.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-07T06:50:55Z",
+      "side": 1,
+      "message": "Hmm it\u0027s unfortunate that we spend yet another Code field for builtin-specific contents. Let\u0027s at least #ifdef it for x64. In fact, I think we should #ifdef out more in this entire CL, I suggest we do that based on a derived define `V8_ENABLE_BUILTIN_JUMP_TABLE`.",
       "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
