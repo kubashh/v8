@@ -32,8 +32,9 @@ RUNTIME_FUNCTION(Runtime_AccessCheck) {
   DCHECK_EQ(1, args.length());
   Handle<JSObject> object = args.at<JSObject>(0);
   if (!isolate->MayAccess(handle(isolate->context(), isolate), object)) {
-    isolate->ReportFailedAccessCheck(object);
-    RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
+    RETURN_FAILURE_ON_EXCEPTION(isolate,
+                                isolate->ReportFailedAccessCheck(object));
+    UNREACHABLE();
   }
   return ReadOnlyRoots(isolate).undefined_value();
 }
