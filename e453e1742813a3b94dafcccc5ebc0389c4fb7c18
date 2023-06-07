@@ -37,6 +37,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "531298e2_3ed392e7",
+        "filename": "tools/gen-keywords-gen-h.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-06-07T15:14:22Z",
+      "side": 1,
+      "message": "This script is only run manually, I think.\n\nThis is just a habit to make sure the type annotations are evaluated lazily (so strictly speaking no benefits in this script).\n\nBut you might get into issues when you try self-references and import loops when python tries to resolve the annotations.",
+      "parentUuid": "ea2d64ee_af6dbc48",
+      "revId": "e453e1742813a3b94dafcccc5ebc0389c4fb7c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "dc1801c4_9e63db75",
         "filename": "tools/gen-keywords-gen-h.py",
         "patchSetId": 3
@@ -48,6 +66,24 @@
       "writtenOn": "2023-06-07T15:10:57Z",
       "side": 1,
       "message": "😮 Type annotations, in _my_ Python?",
+      "revId": "e453e1742813a3b94dafcccc5ebc0389c4fb7c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cfc43c8_507eb80a",
+        "filename": "tools/gen-keywords-gen-h.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-06-07T15:14:22Z",
+      "side": 1,
+      "message": "... if only we had proper indexing for it.",
+      "parentUuid": "dc1801c4_9e63db75",
       "revId": "e453e1742813a3b94dafcccc5ebc0389c4fb7c18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
