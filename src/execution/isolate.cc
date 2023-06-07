@@ -1522,6 +1522,9 @@ void Isolate::ReportFailedAccessCheck(Handle<JSObject> receiver) {
   VMState<EXTERNAL> state(this);
   thread_local_top()->failed_access_check_callback_(
       v8::Utils::ToLocal(receiver), v8::ACCESS_HAS, v8::Utils::ToLocal(data));
+  if (!has_scheduled_exception()) {
+    return ScheduleThrow(*factory()->NewTypeError(MessageTemplate::kNoAccess));
+  }
 }
 
 bool Isolate::MayAccess(Handle<Context> accessing_context,

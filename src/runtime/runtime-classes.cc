@@ -685,6 +685,7 @@ MaybeHandle<JSReceiver> GetSuperHolder(Isolate* isolate,
       !isolate->MayAccess(handle(isolate->context(), isolate), home_object)) {
     isolate->ReportFailedAccessCheck(home_object);
     RETURN_EXCEPTION_IF_SCHEDULED_EXCEPTION(isolate, JSReceiver);
+    UNREACHABLE();
   }
 
   PrototypeIterator iter(isolate, home_object);
