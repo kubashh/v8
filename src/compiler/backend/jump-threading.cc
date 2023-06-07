@@ -236,8 +236,10 @@ bool JumpThreading::ComputeForwarding(Zone* local_zone,
         break;
       }
       if (fallthru) {
-        int next = 1 + block->rpo_number().ToInt();
-        if (next < code->InstructionBlockCount()) fw = RpoNumber::FromInt(next);
+        // Only end blocks don't contain control-flow instructions. If a block
+        // will eventually fall through to the next block, it's currently
+        // represented as kArchJmp, which will be elided during code generation.
+        CHECK_EQ(block->SuccessorCount(), 0);
       }
       state.Forward(fw);
     }
