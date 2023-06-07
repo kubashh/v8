@@ -63,6 +63,30 @@
       },
       "revId": "c12f857821afc19a9b2b7051b212215be2c482a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9217073_2d6ec286",
+        "filename": "test/mjsunit/unary-op-throws-feedback.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-07T09:47:09Z",
+      "side": 1,
+      "message": "So, prior to this change TurboFan also had a deopt loop, that\u0027s fixed by the changes in `unary-op-assembler.cc` to also update the feedback in the exception case.\n\nThis is what maglev generates for the `++symbol`:\n```\n    [...]\n    9/9: 🐢 GenericIncrement [v7/n7:[rax|R|t]] → [rax|R|t], live range: [9-12]\n         ↳ lazy @4 (3 live vars)\n    [...]\n```\nDoes the second line result in deopt in case of an exception or only if the builtin triggers a lazy deopt? (I don\u0027t know how builtins tell their caller to deopt.)\n`GenericIncrement` seems to call the same `UnaryOpWithFeedback` that is called by the interpreter, so not sure why this would deopt in maglev?",
+      "parentUuid": "2c0be3fa_819c3324",
+      "range": {
+        "startLine": 6,
+        "startChar": 10,
+        "endLine": 6,
+        "endChar": 56
+      },
+      "revId": "c12f857821afc19a9b2b7051b212215be2c482a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
