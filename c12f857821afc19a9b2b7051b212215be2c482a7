@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a66d7a9_19589d39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-07T08:21:53Z",
+      "side": 1,
+      "message": "@ishell@chromium.org: PTAL.\n@leszeks@chromium.org: See maglev-related comment in the mjsunit test.",
+      "revId": "c12f857821afc19a9b2b7051b212215be2c482a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c5c6923_8c9728cc",
+        "filename": "test/mjsunit/unary-op-throws-feedback.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-07T08:21:53Z",
+      "side": 1,
+      "message": "@leszeks@chromium.org: What\u0027s the view on deopt loops in maglev? Is it OK as at some point in time TurboFan will take over, so eventually we will stop recompiling over and over again?",
+      "range": {
+        "startLine": 6,
+        "startChar": 10,
+        "endLine": 6,
+        "endChar": 56
+      },
+      "revId": "c12f857821afc19a9b2b7051b212215be2c482a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
