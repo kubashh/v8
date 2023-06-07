@@ -34,6 +34,7 @@ RUNTIME_FUNCTION(Runtime_AccessCheck) {
   if (!isolate->MayAccess(handle(isolate->context(), isolate), object)) {
     isolate->ReportFailedAccessCheck(object);
     RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
+    UNREACHABLE();
   }
   return ReadOnlyRoots(isolate).undefined_value();
 }

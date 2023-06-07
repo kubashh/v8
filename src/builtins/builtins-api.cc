@@ -89,7 +89,7 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> HandleApiCallHelper(
       if (!isolate->MayAccess(handle(isolate->context(), isolate), js_object)) {
         isolate->ReportFailedAccessCheck(js_object);
         RETURN_EXCEPTION_IF_SCHEDULED_EXCEPTION(isolate, Object);
-        return isolate->factory()->undefined_value();
+        UNREACHABLE();
       }
     }
 
