@@ -135,6 +135,30 @@
       },
       "revId": "c12f857821afc19a9b2b7051b212215be2c482a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b34563ef_71015a89",
+        "filename": "test/mjsunit/unary-op-throws-feedback.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-07T10:58:50Z",
+      "side": 1,
+      "message": "I didn\u0027t see anything ;)",
+      "parentUuid": "9f13a091_447cb5b2",
+      "range": {
+        "startLine": 6,
+        "startChar": 10,
+        "endLine": 6,
+        "endChar": 56
+      },
+      "revId": "c12f857821afc19a9b2b7051b212215be2c482a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
