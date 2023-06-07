@@ -200,7 +200,24 @@ inline void MaglevAssembler::DoubleToInt64Repr(Register dst,
 
 inline void MaglevAssembler::SmiTagInt32(Register obj, Label* fail) {
   addl(obj, obj);
-  JumpIf(overflow, fail);
+  if (fail != nullptr) {
+    JumpIf(overflow, fail);
+  } else if (v8_flags.debug_code) {
+    Check(no_overflow, AbortReason::kInputDoesNotFitSmi);
+  }
+}
+
+inline void MaglevAssembler::SmiTagUint32(Register obj, Label* fail) {
+  // Perform an unsigned comparison against Smi::kMaxValue.
+  if (fail != nullptr) {
+    cmpl(obj, Immediate(Smi::kMaxValue));
+    JumpIf(above, fail);
+  } else if (v8_flags.debug_code) {
+    cmpl(obj, Immediate(Smi::kMaxValue));
+    Check(below_equal, AbortReason::kInputDoesNotFitSmi);
+  }
+  addl(obj, obj);
+  Assert(no_overflow, AbortReason::kInputDoesNotFitSmi);
 }
 
 inline Condition MaglevAssembler::IsInt64Constant(Register reg,
@@ -614,6 +631,11 @@ inline void MaglevAssembler::JumpIfNotRoot(Register with, RootIndex index,
 inline void MaglevAssembler::JumpIfSmi(Register src, Label* on_smi,
                                        Label::Distance distance) {
   MacroAssembler::JumpIfSmi(src, on_smi, distance);
+}
+
+inline void MaglevAssembler::JumpIfNotSmi(Register src, Label* on_not_smi,
+                                          Label::Distance distance) {
+  MacroAssembler::JumpIfNotSmi(src, on_not_smi, distance);
 }
 
 void MaglevAssembler::JumpIfByte(Condition cc, Register value, int32_t byte,
