@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76270451_e1b5e750",
+        "filename": "src/compiler/turboshaft/wasm-js-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-07T08:46:35Z",
+      "side": 1,
+      "message": "This namespace is required (which might be a compiler bug in MSVC, I\u0027m not sure about that): https://godbolt.org/z/z47rzhTEh",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 18
+      },
+      "revId": "8ce41434cc789942c0685ec605add8b0e249a605",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
