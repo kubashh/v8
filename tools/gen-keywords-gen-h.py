@@ -222,7 +222,9 @@ def main():
     script_dir = Path(sys.argv[0]).parent
     root_dir = script_dir.parent
 
-    out = subprocess.check_output(["gperf", "-m100", INPUT_PATH], cwd=root_dir, encoding="UTF-8")
+    out = subprocess.check_output(["gperf", "-m100", INPUT_PATH],
+                                  cwd=root_dir,
+                                  encoding="UTF-8")
 
     # And now some munging of the generated file.
     out = change_sizet_to_int(out)
@@ -239,7 +241,7 @@ def main():
     clang_format_path = root_dir / 'third_party/depot_tools/clang-format'
     out = call_with_input([clang_format_path], out)
 
-    with (root_dir/OUTPUT_PATH).open('w') as f:
+    with (root_dir / OUTPUT_PATH).open('w') as f:
       f.write(out)
 
     return 0
