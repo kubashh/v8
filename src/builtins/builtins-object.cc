@@ -124,7 +124,7 @@ Object ObjectLookupAccessor(Isolate* isolate, Handle<Object> object,
         if (it.HasAccess()) continue;
         isolate->ReportFailedAccessCheck(it.GetHolder<JSObject>());
         RETURN_FAILURE_IF_SCHEDULED_EXCEPTION(isolate);
-        return ReadOnlyRoots(isolate).undefined_value();
+        UNREACHABLE();
 
       case LookupIterator::JSPROXY: {
         PropertyDescriptor desc;
