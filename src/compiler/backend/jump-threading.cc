@@ -236,8 +236,13 @@ bool JumpThreading::ComputeForwarding(Zone* local_zone,
         break;
       }
       if (fallthru) {
-        int next = 1 + block->rpo_number().ToInt();
-        if (next < code->InstructionBlockCount()) fw = RpoNumber::FromInt(next);
+        int next_ao = block->ao_number().ToInt() + 1;
+        if (next_ao < code->InstructionBlockCount()) {
+          DCHECK(code->ao_blocks().size() > static_cast<size_t>(next_ao));
+          InstructionBlock* next_block = code->ao_blocks()[next_ao];
+          DCHECK_EQ(next_block->ao_number().ToInt(), next_ao);
+          fw = next_block->rpo_number();
+        }
       }
       state.Forward(fw);
     }
