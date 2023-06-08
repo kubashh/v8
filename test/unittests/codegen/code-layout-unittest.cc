@@ -36,6 +36,8 @@ TEST_F(CodeLayoutTest, CodeLayoutWithoutUnwindingInfo) {
   code_desc.constant_pool_size = 0;
   code_desc.code_comments_offset = buffer_size;
   code_desc.code_comments_size = 0;
+  code_desc.builtin_jump_table_info_offset = buffer_size;
+  code_desc.builtin_jump_table_info_size = 0;
   code_desc.reloc_offset = buffer_size;
   code_desc.reloc_size = 0;
   code_desc.unwinding_info = nullptr;
@@ -83,6 +85,8 @@ TEST_F(CodeLayoutTest, CodeLayoutWithUnwindingInfo) {
   code_desc.constant_pool_size = 0;
   code_desc.code_comments_offset = buffer_size;
   code_desc.code_comments_size = 0;
+  code_desc.builtin_jump_table_info_offset = buffer_size;
+  code_desc.builtin_jump_table_info_size = 0;
   code_desc.reloc_offset = buffer_size;
   code_desc.reloc_size = 0;
   code_desc.unwinding_info = unwinding_info;

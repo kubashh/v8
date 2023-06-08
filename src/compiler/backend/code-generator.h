@@ -413,6 +413,8 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   // Emits a jump table.
   void AssembleJumpTable(Label** targets, size_t target_count);
 
+  void AssembleJumpTableForBuiltin(Label** targets, size_t target_count);
+
   // ===========================================================================
   // ================== Deoptimization table construction. =====================
   // ===========================================================================

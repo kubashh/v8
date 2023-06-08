@@ -408,7 +408,15 @@ void CodeGenerator::AssembleCode() {
     masm()->Align(kSystemPointerSize);
     for (JumpTable* table = jump_tables_; table; table = table->next()) {
       masm()->bind(table->label());
+#ifdef V8_TARGET_ARCH_X64
+      if (V8_UNLIKELY(Builtins::IsBuiltinId(masm_.builtin()))) {
+        AssembleJumpTableForBuiltin(table->targets(), table->target_count());
+      } else {
+        AssembleJumpTable(table->targets(), table->target_count());
+      }
+#else
       AssembleJumpTable(table->targets(), table->target_count());
+#endif  // V8_TARGET_ARCH_X64
     }
   }
 

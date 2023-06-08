@@ -44,6 +44,7 @@ enum class Builtin;
 //  |           ...            |  <-- MS + handler_table_offset()
 //  |                          |  <-- MS + constant_pool_offset()
 //  |                          |  <-- MS + code_comments_offset()
+//  |                          |  <-- MS + builtin_jump_table_info_offset()
 //  |                          |  <-- MS + unwinding_info_offset()
 //  +--------------------------+  <-- MetadataEnd()
 //
@@ -127,6 +128,8 @@ class Code : public HeapObject {
   DECL_PRIMITIVE_ACCESSORS(code_comments_offset, int)
   // [constant_pool offset]: Offset of the constant pool.
   DECL_PRIMITIVE_ACCESSORS(constant_pool_offset, int)
+  // [builtin_jump_table_info offset]: Offset of the builtin jump table info.
+  DECL_PRIMITIVE_ACCESSORS(builtin_jump_table_info_offset, int)
 
   // Unchecked accessors to be used during GC.
   inline FixedArray unchecked_deoptimization_data() const;
@@ -191,6 +194,10 @@ class Code : public HeapObject {
   inline Address code_comments() const;
   inline int code_comments_size() const;
   inline bool has_code_comments() const;
+
+  inline Address builtin_jump_table_info() const;
+  inline int builtin_jump_table_info_size() const;
+  inline bool has_builtin_jump_table() const;
 
   inline Address unwinding_info_start() const;
   inline Address unwinding_info_end() const;
@@ -328,6 +335,7 @@ class Code : public HeapObject {
   V(kUnwindingInfoOffsetOffset, kInt32Size)                                   \
   V(kConstantPoolOffsetOffset, V8_EMBEDDED_CONSTANT_POOL_BOOL ? kIntSize : 0) \
   V(kCodeCommentsOffsetOffset, kIntSize)                                      \
+  V(kBuiltinJumpTableOffsetOffset, kIntSize)                                  \
   /* TODO(jgruber): 12 bits would suffice, steal from here if needed. */      \
   V(kBuiltinIdOffset, kInt16Size)                                             \
   V(kUnalignedSize, OBJECT_POINTER_PADDING(kUnalignedSize))                   \

@@ -261,6 +261,8 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc,
 
   int code_comments_size = WriteCodeComments();
 
+  const int builtin_jump_table_info_size = 0;
+
   AllocateAndInstallRequestedHeapNumbers(isolate);
 
   // Set up code descriptor.
@@ -268,6 +270,8 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc,
   // this point to make CodeDesc initialization less fiddly.
 
   const int instruction_size = pc_offset();
+  const int builtin_jump_table_info_offset =
+      instruction_size - builtin_jump_table_info_size;
   const int code_comments_offset = instruction_size - code_comments_size;
   const int constant_pool_offset = code_comments_offset - constant_pool_size;
   const int handler_table_offset2 = (handler_table_offset == kNoHandlerTable)
@@ -281,7 +285,8 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc,
       static_cast<int>(reloc_info_writer.pos() - buffer_->start());
   CodeDesc::Initialize(desc, this, safepoint_table_offset,
                        handler_table_offset2, constant_pool_offset,
-                       code_comments_offset, reloc_info_offset);
+                       code_comments_offset, builtin_jump_table_info_offset,
+                       reloc_info_offset);
 }
 
 void Assembler::Align(int m) {

@@ -5,6 +5,7 @@
 #include "src/diagnostics/disassembler.h"
 
 #include <algorithm>
+#include <cstdint>
 #include <iomanip>
 #include <memory>
 #include <sstream>
@@ -19,6 +20,7 @@
 #include "src/codegen/code-reference.h"
 #include "src/codegen/external-reference-encoder.h"
 #include "src/codegen/macro-assembler.h"
+#include "src/codegen/x64/builtin-jump-table-info.h"
 #include "src/debug/debug.h"
 #include "src/deoptimizer/deoptimizer.h"
 #include "src/diagnostics/disasm.h"
@@ -290,6 +292,11 @@ static int DecodeIt(Isolate* isolate, ExternalReferenceEncoder* ref_encoder,
                          disasm::Disassembler::kContinueOnUnimplementedOpcode);
   RelocIterator rit(code);
   CodeCommentsIterator cit(code.code_comments(), code.code_comments_size());
+  std::unique_ptr<BuiltinJumpTableInfoIterator> table_info_it = nullptr;
+  if (code.is_code() && code.as_code()->has_builtin_jump_table()) {
+    table_info_it = std::make_unique<BuiltinJumpTableInfoIterator>(
+        code.builtin_jump_table_info(), code.builtin_jump_table_info_size());
+  }
   int constants = -1;  // no constants being decoded at the start
 
   while (pc < end) {
@@ -321,6 +328,14 @@ static int DecodeIt(Isolate* isolate, ExternalReferenceEncoder* ref_encoder,
                  reinterpret_cast<intptr_t>(ptr),
                  static_cast<size_t>(ptr - begin));
         pc += sizeof(ptr);
+      } else if (table_info_it && table_info_it->HasCurrent() &&
+                 table_info_it->GetPCOffset() ==
+                     static_cast<uint32_t>(pc - begin)) {
+        int32_t target_pc_offset = table_info_it->GetTarget();
+        SNPrintF(decode_buffer, "jump table entry %08" V8PRIxPTR,
+                 static_cast<size_t>(target_pc_offset));
+        pc += sizeof(target_pc_offset);
+        table_info_it->Next();
       } else {
         decode_buffer[0] = '\0';
         pc += d.InstructionDecode(decode_buffer, pc);
