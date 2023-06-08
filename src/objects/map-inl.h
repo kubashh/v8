@@ -196,18 +196,16 @@ bool Map::EquivalentToForNormalization(const Map other,
 bool Map::TooManyFastProperties(StoreOrigin store_origin) const {
   if (UnusedPropertyFields() != 0) return false;
   if (is_prototype_map()) return false;
+  FieldCounts counts = GetFieldCounts();
+  // Only count mutable fields so that objects with large numbers of
+  // constant functions do not go to dictionary mode. That would be bad
+  // because such objects have often been used as modules.
+  int external = counts.mutable_count() - GetInObjectProperties();
   if (store_origin == StoreOrigin::kNamed) {
     int limit = std::max({kMaxFastProperties, GetInObjectProperties()});
-    FieldCounts counts = GetFieldCounts();
-    // Only count mutable fields so that objects with large numbers of
-    // constant functions do not go to dictionary mode. That would be bad
-    // because such objects have often been used as modules.
-    int external = counts.mutable_count() - GetInObjectProperties();
     return external > limit || counts.GetTotal() > kMaxNumberOfDescriptors;
   } else {
     int limit = std::max({kFastPropertiesSoftLimit, GetInObjectProperties()});
-    int external =
-        NumberOfFields(ConcurrencyMode::kSynchronous) - GetInObjectProperties();
     return external > limit;
   }
 }
