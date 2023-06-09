@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcb7242e_d186e069",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-06-09T22:56:42Z",
+      "side": 1,
+      "message": "CC rezvan FYI, this is an example of modifying the test status files (rubber-stamper bot can review changes so no action needed).",
+      "revId": "7e35da1fefaf56cbf944bb6ef495dfcf085507d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
