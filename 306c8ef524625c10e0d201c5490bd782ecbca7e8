@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db3503a0_9796b7e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-09T09:08:15Z",
+      "side": 1,
+      "message": "Hello Darius!\n\nUnfortuneately had messed up my local gerrit configuration due which wrong things were getting uploaded! hence i abandoned the previous CL in favour of this one, have included all the tests and the general case optimisation too! \n\nSo sorry for the inconvenience!! \n\nRegards,\nDebadree",
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
