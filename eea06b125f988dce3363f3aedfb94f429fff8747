@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f560734_348079d1",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-09T14:26:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "939d085b_62072069",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef9d369c_755516f4",
@@ -89,6 +113,24 @@
       "writtenOn": "2023-06-09T13:58:26Z",
       "side": 1,
       "message": "Could you add tests for:\n  - dynamic searchString (eg, `function f(s, e) { return \"abcdef\".endsWith(s, e) }`)\n  - less trivial endPosition (eg, `\"abcdefghi\".endsWith(\"def\", 7) \u003d\u003d true`)\n    (there is already one test for this, but it\u0027s only for strings that end in `aaaaa`, which is a bit too easy to get wrong IMO)",
+      "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aca6d16d_7ea99b95",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-09T14:26:54Z",
+      "side": 1,
+      "message": "Hey! I caught some bugs it seems with the tests i added in the latest PS, could you tell how i could say track the flow of info after the function has been optimised, like running printf or Node-\u003ePrint() seems to print what the node looks like while constucting the optimisation but is there a way to see the values during execution?\n\nThank You!",
+      "parentUuid": "ef9d369c_755516f4",
       "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
