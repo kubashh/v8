@@ -216,10 +216,12 @@ Maybe<bool> JSReceiver::CheckPrivateNameStore(LookupIterator* it,
         UNREACHABLE();
       case LookupIterator::ACCESS_CHECK:
         if (!it->HasAccess()) {
-          isolate->ReportFailedAccessCheck(
-              Handle<JSObject>::cast(it->GetReceiver()));
-          RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
-          return Just(false);
+          RETURN_ON_EXCEPTION_VALUE(
+              isolate,
+              isolate->ReportFailedAccessCheck(
+                  Handle<JSObject>::cast(it->GetReceiver())),
+              Nothing<bool>());
+          UNREACHABLE();
         }
         break;
       case LookupIterator::DATA:
@@ -968,9 +970,11 @@ Maybe<bool> JSReceiver::DeleteProperty(LookupIterator* it,
                        NewTypeError(MessageTemplate::kWasmObjectsAreOpaque));
       case LookupIterator::ACCESS_CHECK:
         if (it->HasAccess()) break;
-        isolate->ReportFailedAccessCheck(it->GetHolder<JSObject>());
-        RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
-        return Just(false);
+        RETURN_ON_EXCEPTION_VALUE(
+            isolate,
+            isolate->ReportFailedAccessCheck(it->GetHolder<JSObject>()),
+            Nothing<bool>());
+        UNREACHABLE();
       case LookupIterator::INTERCEPTOR: {
         ShouldThrow should_throw =
             is_sloppy(language_mode) ? kDontThrow : kThrowOnError;
@@ -1203,9 +1207,10 @@ Maybe<bool> JSReceiver::OrdinaryDefineOwnProperty(
   // Deal with access checks first.
   if (it.state() == LookupIterator::ACCESS_CHECK) {
     if (!it.HasAccess()) {
-      isolate->ReportFailedAccessCheck(it.GetHolder<JSObject>());
-      RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
-      return Just(true);
+      RETURN_ON_EXCEPTION_VALUE(
+          isolate, isolate->ReportFailedAccessCheck(it.GetHolder<JSObject>()),
+          Nothing<bool>());
+      UNREACHABLE();
     }
     it.Next();
   }
@@ -1796,9 +1801,11 @@ Maybe<bool> JSReceiver::AddPrivateField(LookupIterator* it,
 
     case LookupIterator::ACCESS_CHECK: {
       if (!it->HasAccess()) {
-        it->isolate()->ReportFailedAccessCheck(it->GetHolder<JSObject>());
-        RETURN_VALUE_IF_SCHEDULED_EXCEPTION(it->isolate(), Nothing<bool>());
-        return Just(false);
+        RETURN_ON_EXCEPTION_VALUE(
+            isolate,
+            it->isolate()->ReportFailedAccessCheck(it->GetHolder<JSObject>()),
+            Nothing<bool>());
+        UNREACHABLE();
       }
       break;
     }
@@ -2709,9 +2716,9 @@ MaybeHandle<Object> JSObject::GetPropertyWithFailedAccessCheck(
     return it->factory()->undefined_value();
   }
 
-  isolate->ReportFailedAccessCheck(checked);
-  RETURN_EXCEPTION_IF_SCHEDULED_EXCEPTION(isolate, Object);
-  return it->factory()->undefined_value();
+  RETURN_ON_EXCEPTION(isolate, isolate->ReportFailedAccessCheck(checked),
+                      Object);
+  UNREACHABLE();
 }
 
 Maybe<PropertyAttributes> JSObject::GetPropertyAttributesWithFailedAccessCheck(
@@ -2736,9 +2743,9 @@ Maybe<PropertyAttributes> JSObject::GetPropertyAttributesWithFailedAccessCheck(
     if (isolate->has_pending_exception()) return Nothing<PropertyAttributes>();
     if (result.FromMaybe(ABSENT) != ABSENT) return result;
   }
-  isolate->ReportFailedAccessCheck(checked);
-  RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<PropertyAttributes>());
-  return Just(ABSENT);
+  RETURN_ON_EXCEPTION_VALUE(isolate, isolate->ReportFailedAccessCheck(checked),
+                            Nothing<PropertyAttributes>());
+  UNREACHABLE();
 }
 
 // static
@@ -2773,9 +2780,9 @@ Maybe<bool> JSObject::SetPropertyWithFailedAccessCheck(
     if (isolate->has_pending_exception()) return Nothing<bool>();
     if (result.IsJust()) return result;
   }
-  isolate->ReportFailedAccessCheck(checked);
-  RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
-  return Just(true);
+  RETURN_ON_EXCEPTION_VALUE(isolate, isolate->ReportFailedAccessCheck(checked),
+                            Nothing<bool>());
+  UNREACHABLE();
 }
 
 void JSObject::SetNormalizedProperty(Handle<JSObject> object, Handle<Name> name,
@@ -3664,9 +3671,12 @@ Maybe<bool> JSObject::DefineOwnPropertyIgnoreAttributes(
 
       case LookupIterator::ACCESS_CHECK:
         if (!it->HasAccess()) {
-          it->isolate()->ReportFailedAccessCheck(it->GetHolder<JSObject>());
-          RETURN_VALUE_IF_SCHEDULED_EXCEPTION(it->isolate(), Nothing<bool>());
-          return Just(true);
+          Isolate* isolate = it->isolate();
+          RETURN_ON_EXCEPTION_VALUE(
+              isolate,
+              isolate->ReportFailedAccessCheck(it->GetHolder<JSObject>()),
+              Nothing<bool>());
+          UNREACHABLE();
         }
         break;
 
@@ -4253,10 +4263,9 @@ Maybe<bool> JSObject::PreventExtensions(Isolate* isolate,
 
   if (object->IsAccessCheckNeeded() &&
       !isolate->MayAccess(handle(isolate->context(), isolate), object)) {
-    isolate->ReportFailedAccessCheck(object);
-    RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
-    RETURN_FAILURE(isolate, should_throw,
-                   NewTypeError(MessageTemplate::kNoAccess));
+    RETURN_ON_EXCEPTION_VALUE(isolate, isolate->ReportFailedAccessCheck(object),
+                              Nothing<bool>());
+    UNREACHABLE();
   }
 
   if (!object->map().is_extensible()) return Just(true);
@@ -4376,10 +4385,9 @@ Maybe<bool> JSObject::PreventExtensionsWithTransition(
 
   if (object->IsAccessCheckNeeded() &&
       !isolate->MayAccess(handle(isolate->context(), isolate), object)) {
-    isolate->ReportFailedAccessCheck(object);
-    RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
-    RETURN_FAILURE(isolate, should_throw,
-                   NewTypeError(MessageTemplate::kNoAccess));
+    RETURN_ON_EXCEPTION_VALUE(isolate, isolate->ReportFailedAccessCheck(object),
+                              Nothing<bool>());
+    UNREACHABLE();
   }
 
   if (attrs == NONE && !object->map().is_extensible()) {
@@ -4720,9 +4728,10 @@ MaybeHandle<Object> JSObject::DefineOwnAccessorIgnoreAttributes(
 
   if (it->state() == LookupIterator::ACCESS_CHECK) {
     if (!it->HasAccess()) {
-      isolate->ReportFailedAccessCheck(it->GetHolder<JSObject>());
-      RETURN_EXCEPTION_IF_SCHEDULED_EXCEPTION(isolate, Object);
-      return isolate->factory()->undefined_value();
+      RETURN_ON_EXCEPTION(
+          isolate, isolate->ReportFailedAccessCheck(it->GetHolder<JSObject>()),
+          Object);
+      UNREACHABLE();
     }
     it->Next();
   }
@@ -4753,14 +4762,11 @@ MaybeHandle<Object> JSObject::SetAccessor(Handle<JSObject> object,
 
   // Duplicate ACCESS_CHECK outside of GetPropertyAttributes for the case that
   // the FailedAccessCheckCallbackFunction doesn't throw an exception.
-  //
-  // TODO(verwaest): Force throw an exception if the callback doesn't, so we can
-  // remove reliance on default return values.
   if (it.state() == LookupIterator::ACCESS_CHECK) {
     if (!it.HasAccess()) {
-      isolate->ReportFailedAccessCheck(object);
-      RETURN_EXCEPTION_IF_SCHEDULED_EXCEPTION(isolate, Object);
-      return it.factory()->undefined_value();
+      RETURN_ON_EXCEPTION(isolate, isolate->ReportFailedAccessCheck(object),
+                          Object);
+      UNREACHABLE();
     }
     it.Next();
   }
@@ -5200,10 +5206,9 @@ Maybe<bool> JSObject::SetPrototype(Isolate* isolate, Handle<JSObject> object,
   if (from_javascript) {
     if (object->IsAccessCheckNeeded() &&
         !isolate->MayAccess(handle(isolate->context(), isolate), object)) {
-      isolate->ReportFailedAccessCheck(object);
-      RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
-      RETURN_FAILURE(isolate, should_throw,
-                     NewTypeError(MessageTemplate::kNoAccess));
+      RETURN_ON_EXCEPTION_VALUE(
+          isolate, isolate->ReportFailedAccessCheck(object), Nothing<bool>());
+      UNREACHABLE();
     }
   } else {
     DCHECK(!object->IsAccessCheckNeeded());
