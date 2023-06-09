@@ -956,7 +956,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   bool MayAccess(Handle<Context> accessing_context, Handle<JSObject> receiver);
 
   void SetFailedAccessCheckCallback(v8::FailedAccessCheckCallback callback);
-  void ReportFailedAccessCheck(Handle<JSObject> receiver);
+  V8_WARN_UNUSED_RESULT MaybeHandle<Object> ReportFailedAccessCheck(
+      Handle<JSObject> receiver);
 
   // Exception throwing support. The caller should use the result
   // of Throw() as its return value.
