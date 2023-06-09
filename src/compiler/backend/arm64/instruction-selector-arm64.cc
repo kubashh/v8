@@ -4709,8 +4709,12 @@ InstructionSelector::SupportedMachineOperatorFlags() {
          MachineOperatorBuilder::kSatConversionIsSafe |
          MachineOperatorBuilder::kFloat32Select |
          MachineOperatorBuilder::kFloat64Select |
+<<<<<<< HEAD   (3754be Version 11.4.183.22)
          MachineOperatorBuilder::kWord32Select |
          MachineOperatorBuilder::kWord64Select;
+=======
+         MachineOperatorBuilder::kLoadStorePairs;
+>>>>>>> CHANGE (51311a Revert "[arm64][turbofan] Word[32|64]Select support")
 }
 
 // static
