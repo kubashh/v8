@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd5ecff2_220094dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-09T10:22:46Z",
+      "side": 1,
+      "message": "There does seem to be a problem here, is there any print function for debugging other than `printf` similar to how there is `CodeStubAssembler::Print`",
+      "parentUuid": "4540d556_2da5a321",
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0eaa13f0_579e323f",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 1
@@ -66,6 +84,30 @@
       "writtenOn": "2023-06-09T09:30:24Z",
       "side": 1,
       "message": "nit: ForDownToZero would be a better name.",
+      "range": {
+        "startLine": 268,
+        "startChar": 14,
+        "endLine": 268,
+        "endChar": 25
+      },
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b96818de_94aa250a",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-09T10:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0eaa13f0_579e323f",
       "range": {
         "startLine": 268,
         "startChar": 14,
@@ -99,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89eb453b_549691c1",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-09T10:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab68b559_ad5a66b3",
+      "range": {
+        "startLine": 1062,
+        "startChar": 2,
+        "endLine": 1062,
+        "endChar": 8
+      },
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "856a63df_4d71060c",
@@ -122,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "805df2ed_efa22fcd",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6729,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-09T10:22:46Z",
+      "side": 1,
+      "message": "Done, so sorry for the miss hadn\u0027t compiled before uploading since compiling takes quite long",
+      "parentUuid": "856a63df_4d71060c",
+      "range": {
+        "startLine": 6729,
+        "startChar": 2,
+        "endLine": 6729,
+        "endChar": 20
+      },
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d083467_ea93162c",
@@ -135,6 +225,30 @@
       "writtenOn": "2023-06-09T09:30:24Z",
       "side": 1,
       "message": "This should say `true`. Also, please add a `assertOptimized(f)` after this line.",
+      "range": {
+        "startLine": 59,
+        "startChar": 15,
+        "endLine": 59,
+        "endChar": 20
+      },
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15e84daf_61b5e1bd",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-09T10:22:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d083467_ea93162c",
       "range": {
         "startLine": 59,
         "startChar": 15,
