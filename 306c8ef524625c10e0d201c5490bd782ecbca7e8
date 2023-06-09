@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8eb5e3f6_4229f97a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-09T13:58:26Z",
+      "side": 1,
+      "message": "Ah, it\u0027s deopting because 1073741824 is not a Smi. If you run with --trace-deopt, you\u0027ll see the reason for the deopt. I think that\u0027s reasonable, so you can remove the asserOptimized (the purpose of this test seems to be to check that non-smi 2nd arguments are properly handled).",
+      "parentUuid": "1c6f7b52_42024a83",
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0eaa13f0_579e323f",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 1

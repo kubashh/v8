@@ -16,6 +16,81 @@
       "message": "Hey I also tried to benchmark this with the following script\n\n```js\n\nlet x;\n\nconst a1 \u003d performance.now()\nfor(let i \u003d 0; i \u003c 1e6; i++) {\n  st \u003d \u0027hello\u0027;\n  x \u003d st.endsWith(\u0027o\u0027);\n}\nconst a2 \u003d performance.now()\nconst da \u003d a2 - a1\n\nconst s1 \u003d performance.now()\nfor(let i \u003d 0; i \u003c 1e6; i++) {\n  st \u003d \u0027hello\u0027;\n  x \u003d st[st.length - 1] \u003d\u003d\u003d \u0027o\u0027;\n}\nconst s2 \u003d performance.now()\nconst ds \u003d s2 - s1\n\nconsole.log(da, ds)\n// how much slower\nconsole.log((da / ds - 1) * 100 + \u0027%\u0027)\n```\n\nIt seems we are still quite a bit slower than st[st.length - 1], although dont know if this is the best way to benchmark",
       "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09671961_b4d70552",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-09T13:58:26Z",
+      "side": 1,
+      "message": "The code looks good overall. I think that if you add a few additional tests (cf my comment in the test file), we can land :)",
+      "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a57511_cbafab62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-09T13:58:26Z",
+      "side": 1,
+      "message": "Inverting the order makes both benchmark have the same performance, so I think it\u0027s fine. And I\u0027ve ran some more local benchmarks, and the endsWith version appears to be a bit faster (might be context-dependent though) :)",
+      "parentUuid": "ad616cb1_f425de61",
+      "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "939d085b_62072069",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-09T13:58:26Z",
+      "side": 1,
+      "message": "nit: 2023",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef9d369c_755516f4",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-09T13:58:26Z",
+      "side": 1,
+      "message": "Could you add tests for:\n  - dynamic searchString (eg, `function f(s, e) { return \"abcdef\".endsWith(s, e) }`)\n  - less trivial endPosition (eg, `\"abcdefghi\".endsWith(\"def\", 7) \u003d\u003d true`)\n    (there is already one test for this, but it\u0027s only for strings that end in `aaaaa`, which is a bit too easy to get wrong IMO)",
+      "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
