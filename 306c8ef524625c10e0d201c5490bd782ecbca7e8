@@ -16,6 +16,115 @@
       "message": "Hello Darius!\n\nUnfortuneately had messed up my local gerrit configuration due which wrong things were getting uploaded! hence i abandoned the previous CL in favour of this one, have included all the tests and the general case optimisation too! \n\nSo sorry for the inconvenience!! \n\nRegards,\nDebadree",
       "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d31dceb0_068fe6ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-09T09:30:24Z",
+      "side": 1,
+      "message": "The tests currently don\u0027t pass. Could you fix them and then ping me again please? (I\u0027ve left a few comments still, but I haven\u0027t looked into what\u0027s wrong).\n\nTo run the tests you wrote, you can run something like: `out/x64.debug/d8  --allow-natives-syntax --test test/mjsunit/mjsunit.js test/mjsunit/compiler/string-endswith.js`.",
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eaa13f0_579e323f",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-09T09:30:24Z",
+      "side": 1,
+      "message": "nit: ForDownToZero would be a better name.",
+      "range": {
+        "startLine": 268,
+        "startChar": 14,
+        "endLine": 268,
+        "endChar": 25
+      },
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab68b559_ad5a66b3",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-09T09:30:24Z",
+      "side": 1,
+      "message": "nit: use DCHECK_LE instead.",
+      "range": {
+        "startLine": 1062,
+        "startChar": 2,
+        "endLine": 1062,
+        "endChar": 8
+      },
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "856a63df_4d71060c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6729,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-09T09:30:24Z",
+      "side": 1,
+      "message": "nit: remove (it probably won\u0027t compile anyways because this is unreachable)",
+      "range": {
+        "startLine": 6729,
+        "startChar": 2,
+        "endLine": 6729,
+        "endChar": 20
+      },
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d083467_ea93162c",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-09T09:30:24Z",
+      "side": 1,
+      "message": "This should say `true`. Also, please add a `assertOptimized(f)` after this line.",
+      "range": {
+        "startLine": 59,
+        "startChar": 15,
+        "endLine": 59,
+        "endChar": 20
+      },
+      "revId": "306c8ef524625c10e0d201c5490bd782ecbca7e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
