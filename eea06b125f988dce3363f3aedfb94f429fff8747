@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad616cb1_f425de61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-09T11:31:06Z",
+      "side": 1,
+      "message": "Hey I also tried to benchmark this with the following script\n\n```js\n\nlet x;\n\nconst a1 \u003d performance.now()\nfor(let i \u003d 0; i \u003c 1e6; i++) {\n  st \u003d \u0027hello\u0027;\n  x \u003d st.endsWith(\u0027o\u0027);\n}\nconst a2 \u003d performance.now()\nconst da \u003d a2 - a1\n\nconst s1 \u003d performance.now()\nfor(let i \u003d 0; i \u003c 1e6; i++) {\n  st \u003d \u0027hello\u0027;\n  x \u003d st[st.length - 1] \u003d\u003d\u003d \u0027o\u0027;\n}\nconst s2 \u003d performance.now()\nconst ds \u003d s2 - s1\n\nconsole.log(da, ds)\n// how much slower\nconsole.log((da / ds - 1) * 100 + \u0027%\u0027)\n```\n\nIt seems we are still quite a bit slower than st[st.length - 1], although dont know if this is the best way to benchmark",
+      "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
