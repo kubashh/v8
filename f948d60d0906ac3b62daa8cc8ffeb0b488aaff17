@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "83cf575e_577c4372",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2023-06-10T08:07:36Z",
+      "side": 1,
+      "message": "Except for Symbols.",
+      "revId": "f948d60d0906ac3b62daa8cc8ffeb0b488aaff17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9b04337b_91ba9a80",
@@ -14,6 +31,40 @@
       "writtenOn": "2023-06-09T20:18:05Z",
       "side": 1,
       "message": "LGTM but I don\u0027t have OWNERS here",
+      "revId": "f948d60d0906ac3b62daa8cc8ffeb0b488aaff17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6010056d_eea40680",
+        "filename": "src/inspector/v8-deep-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2023-06-10T08:07:36Z",
+      "side": 1,
+      "message": "This skips Symbols entirely but we do need to support them. (It’s fine if this happens as a follow-up, but then I’d expect a TODO comment here.)",
+      "revId": "f948d60d0906ac3b62daa8cc8ffeb0b488aaff17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac99a133_49dbbe59",
+        "filename": "test/inspector/runtime/deep-serialization-value-expected.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2023-06-10T08:07:36Z",
+      "side": 1,
+      "message": "This is not the correct result. https://w3c.github.io/webdriver-bidi/#serialize-as-a-remote-value",
       "revId": "f948d60d0906ac3b62daa8cc8ffeb0b488aaff17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
