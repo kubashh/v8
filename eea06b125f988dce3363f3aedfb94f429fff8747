@@ -169,6 +169,24 @@
       "parentUuid": "7d69243a_d3332540",
       "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e690a7e4_f3207f4f",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-10T09:26:12Z",
+      "side": 1,
+      "message": "Hey! seems like I have fixed the issues, I had made the logic unnecessarily complicated everything should look better now, and i randomised and generated test cases for this too so hopefully the tests are more stronger now!",
+      "parentUuid": "dcc2d650_3355ba02",
+      "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
