@@ -33,6 +33,24 @@
       "message": "It looks like some test(s?) fails on builds without pointer compression (cf the trybots). Could you try to reproduce locally and fix the issue? (I think that adding \"v8_enable_pointer_compression \u003d false\" to the gn args of a debug build should be enough)",
       "revId": "30961ca29db19eee40f2931038bea841ef2a99ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d181ca4_c6e4dc26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-12T18:09:56Z",
+      "side": 1,
+      "message": "Sure attempting! should i so somthing like `gm x64.debug mjsunit` or there are more tests to run?",
+      "parentUuid": "a81581da_e9fef548",
+      "revId": "30961ca29db19eee40f2931038bea841ef2a99ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
