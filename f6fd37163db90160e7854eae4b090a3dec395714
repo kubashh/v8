@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "563d70c6_761e57ed",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-12T16:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1a3e982_6287b0b4",
+      "range": {
+        "startLine": 1049,
+        "startChar": 30,
+        "endLine": 1049,
+        "endChar": 73
+      },
+      "revId": "f6fd37163db90160e7854eae4b090a3dec395714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45e3cd27_539eba97",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-06-12T14:05:46Z",
       "side": 1,
       "message": "Likewise, you could move this in the .Else of the SelectIf above.",
+      "range": {
+        "startLine": 1094,
+        "startChar": 30,
+        "endLine": 1094,
+        "endChar": 74
+      },
+      "revId": "f6fd37163db90160e7854eae4b090a3dec395714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "250b1529_24bb8b55",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-12T16:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45e3cd27_539eba97",
       "range": {
         "startLine": 1094,
         "startChar": 30,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "634a973c_6c99fc9a",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-12T16:31:42Z",
+      "side": 1,
+      "message": "Done! added a assertion too",
+      "parentUuid": "8fa6cdcc_51055e0b",
+      "range": {
+        "startLine": 178,
+        "startChar": 18,
+        "endLine": 179,
+        "endChar": 10
+      },
+      "revId": "f6fd37163db90160e7854eae4b090a3dec395714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60373afc_cbc06a94",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-06-12T14:05:46Z",
       "side": 1,
       "message": "You can remove those 2; the 1st call will deopt anyways.",
+      "range": {
+        "startLine": 187,
+        "startChar": 2,
+        "endLine": 188,
+        "endChar": 36
+      },
+      "revId": "f6fd37163db90160e7854eae4b090a3dec395714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a8c19ec_e486b74e",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-12T16:31:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60373afc_cbc06a94",
       "range": {
         "startLine": 187,
         "startChar": 2,
