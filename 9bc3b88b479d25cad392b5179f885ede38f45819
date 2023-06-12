@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a081341b_49e57eea",
+        "filename": "src/inspector/v8-deep-serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2023-06-12T08:15:59Z",
+      "side": 1,
+      "message": "Non-blocking suggestion: Perhaps make this a CHECK rather than a DCHECK?",
+      "range": {
+        "startLine": 236,
+        "startChar": 4,
+        "endLine": 236,
+        "endChar": 10
+      },
+      "revId": "9bc3b88b479d25cad392b5179f885ede38f45819",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
