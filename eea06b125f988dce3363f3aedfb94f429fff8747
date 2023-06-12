@@ -187,6 +187,24 @@
       "parentUuid": "dcc2d650_3355ba02",
       "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ba0c8aa_a10b14be",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-12T14:05:46Z",
+      "side": 1,
+      "message": "The new tests look great, with a nice coverage I think. Thanks :)",
+      "parentUuid": "e690a7e4_f3207f4f",
+      "revId": "eea06b125f988dce3363f3aedfb94f429fff8747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

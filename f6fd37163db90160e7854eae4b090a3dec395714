@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5b69830_bd1e3a4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-12T14:05:46Z",
+      "side": 1,
+      "message": "Looks good overall, I just have a few minor comments and then we can land this :)",
+      "revId": "f6fd37163db90160e7854eae4b090a3dec395714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1a3e982_6287b0b4",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-12T14:05:46Z",
+      "side": 1,
+      "message": "I think that it would make sense to move this into the .Else branch of the SelectIf above, since the .Then branch doesn\u0027t need it. (and have `clamped_end \u003d SelectIf...` instead of `end_smi \u003d SelectIf...; clamped_end \u003d ...`)",
+      "range": {
+        "startLine": 1049,
+        "startChar": 30,
+        "endLine": 1049,
+        "endChar": 73
+      },
+      "revId": "f6fd37163db90160e7854eae4b090a3dec395714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45e3cd27_539eba97",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-12T14:05:46Z",
+      "side": 1,
+      "message": "Likewise, you could move this in the .Else of the SelectIf above.",
+      "range": {
+        "startLine": 1094,
+        "startChar": 30,
+        "endLine": 1094,
+        "endChar": 74
+      },
+      "revId": "f6fd37163db90160e7854eae4b090a3dec395714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fa6cdcc_51055e0b",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-12T14:05:46Z",
+      "side": 1,
+      "message": "This is not what this test does. It deopts when called with a non-smi (might be worth checking that the function isn\u0027t optimized at the end actually)",
+      "range": {
+        "startLine": 178,
+        "startChar": 18,
+        "endLine": 179,
+        "endChar": 10
+      },
+      "revId": "f6fd37163db90160e7854eae4b090a3dec395714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60373afc_cbc06a94",
+        "filename": "test/mjsunit/compiler/string-endswith.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-12T14:05:46Z",
+      "side": 1,
+      "message": "You can remove those 2; the 1st call will deopt anyways.",
+      "range": {
+        "startLine": 187,
+        "startChar": 2,
+        "endLine": 188,
+        "endChar": 36
+      },
+      "revId": "f6fd37163db90160e7854eae4b090a3dec395714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
