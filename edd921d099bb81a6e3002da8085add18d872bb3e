@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b80992d4_d346b4ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1584158
+      },
+      "writtenOn": "2023-06-12T22:04:08Z",
+      "side": 1,
+      "message": "The same bug affects roc, japanese, and buddhist calendars too. See https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1173158.\n\nIf we are fixing iso8601, would it be appropriate to fix the other calendars here too?  Or is it better, because those calendars were already broken in current ICU, to wait for an upstream fix?",
+      "revId": "edd921d099bb81a6e3002da8085add18d872bb3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
