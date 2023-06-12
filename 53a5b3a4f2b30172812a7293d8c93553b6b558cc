@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e73a7ccd_3444cfc6",
+        "filename": "src/maglev/maglev-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-12T14:50:41Z",
+      "side": 1,
+      "message": "nit: you could do this include already before JumpToDeferredIf, after the last use in CompareRoot",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 27
+      },
+      "revId": "53a5b3a4f2b30172812a7293d8c93553b6b558cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
