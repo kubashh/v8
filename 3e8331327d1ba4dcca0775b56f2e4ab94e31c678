@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bad06ed_73c27de8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-12T12:54:36Z",
+      "side": 1,
+      "message": "nit: CheckedInt32ToUint32",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 22
+      },
+      "revId": "3e8331327d1ba4dcca0775b56f2e4ab94e31c678",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3c3dd35d_2d2639bd",

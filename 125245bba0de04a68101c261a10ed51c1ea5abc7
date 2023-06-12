@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12674053_fab30b26",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-12T12:54:36Z",
+      "side": 1,
+      "message": "Yeah for x64 you\u0027re absolutely right that we should use `testl reg, reg` instead of `testl/cmpl reg, 0` (for arm I think it doesn\u0027t matter)",
+      "parentUuid": "1932723d_887133df",
+      "range": {
+        "startLine": 317,
+        "startChar": 14,
+        "endLine": 317,
+        "endChar": 33
+      },
+      "revId": "125245bba0de04a68101c261a10ed51c1ea5abc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11540f52_ba15f323",
