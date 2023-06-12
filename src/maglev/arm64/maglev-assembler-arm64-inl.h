@@ -784,6 +784,12 @@ void MaglevAssembler::JumpIfByte(Condition cc, Register value, int32_t byte,
   CompareAndBranch(value, Immediate(byte), cc, target);
 }
 
+void MaglevAssembler::JumpIfInt32Negative(Register src, Label* target,
+                                          Label::Distance distance) {
+  Tst(src.W(), src.W());
+  JumpIf(mi, target, distance);
+}
+
 inline void MaglevAssembler::CompareInt32AndJumpIf(Register r1, Register r2,
                                                    Condition cond,
                                                    Label* target,
@@ -858,8 +864,14 @@ inline void MaglevAssembler::LoadHeapNumberValue(DoubleRegister result,
   Ldr(result, FieldMemOperand(heap_number, HeapNumber::kValueOffset));
 }
 
-inline void MaglevAssembler::Int32ToDouble(DoubleRegister result, Register n) {
-  Scvtf(result, n.W());
+inline void MaglevAssembler::Int32ToDouble(DoubleRegister result,
+                                           Register src) {
+  Scvtf(result, src.W());
+}
+
+inline void MaglevAssembler::Uint32ToDouble(DoubleRegister result,
+                                            Register src) {
+  Ucvtf(result, src.W());
 }
 
 inline void MaglevAssembler::Pop(Register dst) { Pop(dst, padreg); }
