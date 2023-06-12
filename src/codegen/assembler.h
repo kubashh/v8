@@ -50,6 +50,7 @@
 #include "src/codegen/label.h"
 #include "src/codegen/reglist.h"
 #include "src/codegen/reloc-info.h"
+#include "src/codegen/x64/builtin-jump-table-info.h"
 #include "src/common/globals.h"
 #include "src/deoptimizer/deoptimize-reason.h"
 #include "src/flags/flags.h"
@@ -457,6 +458,7 @@ class V8_EXPORT_PRIVATE AssemblerBase : public Malloced {
   }
 
   CodeCommentsWriter code_comments_writer_;
+  BuiltinJumpTableInfoWriter builtin_jump_table_info_writer_;
 
  private:
   // Before we copy code into the code space, we sometimes cannot encode
