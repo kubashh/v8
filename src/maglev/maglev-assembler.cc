@@ -190,14 +190,16 @@ void MaglevAssembler::ToBoolean(Register value, CheckType check_type,
   CompareRoot(map, RootIndex::kBigIntMap);
   JumpToDeferredIf(
       kEqual,
-      [](MaglevAssembler* masm, Register value, ZoneLabelRef is_true,
-         ZoneLabelRef is_false) {
+      [](MaglevAssembler* masm, Register value, Register map,
+         ZoneLabelRef is_true, ZoneLabelRef is_false) {
+        MaglevAssembler::ScratchRegisterScope temps(masm);
+        temps.Include(map);
         __ TestInt32AndJumpIfAllClear(
             FieldMemOperand(value, BigInt::kBitfieldOffset),
             BigInt::LengthBits::kMask, *is_false);
         __ Jump(*is_true);
       },
-      value, is_true, is_false);
+      value, map, is_true, is_false);
 
   // Otherwise true.
   if (!fallthrough_when_true) {
