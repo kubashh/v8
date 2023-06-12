@@ -16,6 +16,52 @@
       "message": "PTAL!",
       "revId": "125245bba0de04a68101c261a10ed51c1ea5abc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93ad45a7_1f3ec558",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-12T11:44:32Z",
+      "side": 1,
+      "message": "why add this function and not use `CompareInt32AndJumpIf(reg, 0, kLessThan,...)`?",
+      "range": {
+        "startLine": 317,
+        "startChar": 14,
+        "endLine": 317,
+        "endChar": 33
+      },
+      "revId": "125245bba0de04a68101c261a10ed51c1ea5abc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11540f52_ba15f323",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-12T11:44:32Z",
+      "side": 1,
+      "message": "if you do change `JumpIfInt32Negative` to do `CompareInt32`, make sure to change this too, to do `Cmp(reg, imm)` -- that will emit `testl` for `imm \u003d\u003d 0`",
+      "range": {
+        "startLine": 607,
+        "startChar": 2,
+        "endLine": 607,
+        "endChar": 6
+      },
+      "revId": "125245bba0de04a68101c261a10ed51c1ea5abc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
