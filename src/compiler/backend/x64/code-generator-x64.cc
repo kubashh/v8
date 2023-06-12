@@ -7,6 +7,7 @@
 #include "src/base/logging.h"
 #include "src/base/optional.h"
 #include "src/base/overflowing-math.h"
+#include "src/builtins/builtins.h"
 #include "src/codegen/assembler.h"
 #include "src/codegen/cpu-features.h"
 #include "src/codegen/external-reference.h"
@@ -6594,7 +6595,17 @@ void CodeGenerator::AssembleArchTableSwitch(Instruction* instr) {
   __ cmpl(input, Immediate(case_count));
   __ j(above_equal, GetLabel(i.InputRpo(1)));
   __ leaq(kScratchRegister, Operand(table));
-  __ jmp(Operand(kScratchRegister, input, times_8, 0));
+
+  if (V8_UNLIKELY(Builtins::IsBuiltinId(masm_.builtin()))) {
+    // value (target-table)  store in table
+    __ movsxlq(input, Operand(kScratchRegister, input, times_4, 0));
+    // Get the address of target
+    // table + (target-table)
+    __ addq(input, kScratchRegister);
+    __ jmp(input);
+  } else {
+    __ jmp(Operand(kScratchRegister, input, times_8, 0));
+  }
 }
 
 void CodeGenerator::AssembleArchSelect(Instruction* instr,
@@ -7417,6 +7428,20 @@ void CodeGenerator::AssembleSwap(InstructionOperand* source,
 }
 
 void CodeGenerator::AssembleJumpTable(Label** targets, size_t target_count) {
+#ifdef V8_ENABLE_BUILTIN_JUMP_TABLE_SWITCH
+  // for built-in.
+  if (V8_UNLIKELY(Builtins::IsBuiltinId(masm_.builtin()))) {
+    int table_pos = __ pc_offset();
+
+    for (size_t index = 0; index < target_count; ++index) {
+      __ WirteBuiltinJumpTableEntry(targets[index], table_pos);
+    }
+    return;
+  }
+
+#endif  // V8_ENABLE_BUILTIN_JUMP_TABLE_SWITCH
+
+  // for non built-in.
   for (size_t index = 0; index < target_count; ++index) {
     __ dq(targets[index]);
   }
