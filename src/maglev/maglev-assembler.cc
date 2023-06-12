@@ -188,16 +188,18 @@ void MaglevAssembler::ToBoolean(Register value, CheckType check_type,
 
   // Check if {{value}} is a BigInt.
   CompareRoot(map, RootIndex::kBigIntMap);
+  // {{map}} is not needed from this point on.
+  temps.Include(map);
   JumpToDeferredIf(
       kEqual,
-      [](MaglevAssembler* masm, Register value, ZoneLabelRef is_true,
-         ZoneLabelRef is_false) {
+      [](MaglevAssembler* masm, Register value, Register map,
+         ZoneLabelRef is_true, ZoneLabelRef is_false) {
         __ TestInt32AndJumpIfAllClear(
             FieldMemOperand(value, BigInt::kBitfieldOffset),
             BigInt::LengthBits::kMask, *is_false);
         __ Jump(*is_true);
       },
-      value, is_true, is_false);
+      value, map, is_true, is_false);
 
   // Otherwise true.
   if (!fallthrough_when_true) {
