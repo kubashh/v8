@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f9f02d2_f3ba353e",
+        "filename": "src/inspector/v8-deep-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2023-06-12T07:36:10Z",
+      "side": 1,
+      "message": "Ack, thanks for the pointers. Let’s make this explicit in the commit description?",
+      "parentUuid": "9e7c3e36_e4cee287",
+      "revId": "f948d60d0906ac3b62daa8cc8ffeb0b488aaff17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac99a133_49dbbe59",
