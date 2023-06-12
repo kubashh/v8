@@ -69,6 +69,24 @@
       "parentUuid": "8d181ca4_c6e4dc26",
       "revId": "30961ca29db19eee40f2931038bea841ef2a99ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc35f832_28e00f04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-12T19:20:59Z",
+      "side": 1,
+      "message": "Ah, I didn\u0027t realize that this was the issue. I know that we have some platforms where SMIs are 32 bits; I guess that non-pointer-compression configuration is such a platform. I think that it\u0027s reasonable to remove the DCHECK. In practice, it doesn\u0027t matter whether the function is optimized or not. What matters is that the result is correct (for this specific case, where both deopt and not deopt are reasonable).",
+      "parentUuid": "58c320f8_b5a1159b",
+      "revId": "30961ca29db19eee40f2931038bea841ef2a99ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
