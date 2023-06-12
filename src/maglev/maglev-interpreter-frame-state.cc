@@ -161,14 +161,10 @@ MergePointInterpreterFrameState::NewForCatchBlock(
     frame_state.accumulator(unit) = state->NewExceptionPhi(
         zone, interpreter::Register::virtual_accumulator());
   }
-  frame_state.ForEachParameter(
+  frame_state.ForEachRegister(
       unit,
       [&](ValueNode*& entry, interpreter::Register reg) { entry = nullptr; });
-  // The context is always an exception phi of another register.
-  frame_state.context(unit) = state->NewExceptionPhi(zone, context_register);
-  frame_state.ForEachLocal(
-      unit,
-      [&](ValueNode*& entry, interpreter::Register reg) { entry = nullptr; });
+  state->catch_block_context_register_ = context_register;
   return state;
 }
 
@@ -309,6 +305,17 @@ void MergePointInterpreterFrameState::MergeThrow(
                        handler_builder_frame.get(reg), nullptr);
     PrintAfterMerge(*handler_unit, value);
   });
+
+  // Pick out the context value from the incoming registers -- this should be
+  // the same for all incoming states.
+  if (predecessors_so_far_ == 0) {
+    DCHECK_NULL(frame_state_.context(*handler_unit));
+    frame_state_.context(*handler_unit) =
+        unmerged.get(catch_block_context_register_);
+  } else {
+    DCHECK_EQ(frame_state_.context(*handler_unit),
+              unmerged.get(catch_block_context_register_));
+  }
 
   if (known_node_aspects_ == nullptr) {
     DCHECK_EQ(predecessors_so_far_, 0);
@@ -514,6 +521,10 @@ ValueNode* MergePointInterpreterFrameState::MergeValue(
     }
     return merged;
   }
+
+  // We should always statically know what the context is, so we should never
+  // create Phis for it.
+  DCHECK_NE(owner, interpreter::Register::current_context());
 
   // Up to this point all predecessors had the same value for this interpreter
   // frame slot. Now that we find a distinct value, insert a copy of the first

@@ -903,6 +903,9 @@ class MaglevGraphBuilder {
   }
 
   void SetContext(ValueNode* context) {
+    // We should always know what the context is, there should never be Phis
+    // here.
+    DCHECK(!context->Is<Phi>());
     current_interpreter_frame_.set(interpreter::Register::current_context(),
                                    context);
   }
