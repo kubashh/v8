@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1932723d_887133df",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-06-12T12:49:47Z",
+      "side": 1,
+      "message": "I didn\u0027t know about Cmp optimisation! Nice!\nBut basically, my idea was that for x64, `testl reg, 0` is much bigger than `testl reg, reg`\nFor eax:\na9 00 00 00 00\ninstead of\n85 c0\n\nIn any case, the Cmp would solve this issue... Thanks!",
+      "parentUuid": "93ad45a7_1f3ec558",
+      "range": {
+        "startLine": 317,
+        "startChar": 14,
+        "endLine": 317,
+        "endChar": 33
+      },
+      "revId": "125245bba0de04a68101c261a10ed51c1ea5abc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11540f52_ba15f323",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-06-12T11:44:32Z",
       "side": 1,
       "message": "if you do change `JumpIfInt32Negative` to do `CompareInt32`, make sure to change this too, to do `Cmp(reg, imm)` -- that will emit `testl` for `imm \u003d\u003d 0`",
+      "range": {
+        "startLine": 607,
+        "startChar": 2,
+        "endLine": 607,
+        "endChar": 6
+      },
+      "revId": "125245bba0de04a68101c261a10ed51c1ea5abc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dd72cdd_56085ae8",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-06-12T12:49:47Z",
+      "side": 1,
+      "message": "Thanks! This macro `Cmp` is a bit misleading imo. It works only for 32bits, we should consider renaming it.",
+      "parentUuid": "11540f52_ba15f323",
       "range": {
         "startLine": 607,
         "startChar": 2,
