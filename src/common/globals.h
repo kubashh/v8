@@ -325,6 +325,13 @@ const size_t kShortBuiltinCallsOldSpaceSizeThreshold = size_t{2} * GB;
 #define V8_ENABLE_FP_PARAMS_IN_C_LINKAGE 1
 #endif
 
+// Support for builtin-jump table switch disassemble.
+#if defined(V8_ENABLE_BUILTIN_JUMP_TABLE_SWITCH) && defined(ENABLE_DISASSEMBLER)
+#define V8_BUILTIN_JUMP_TABLE_INFO_BOOL true
+#else
+#define V8_BUILTIN_JUMP_TABLE_INFO_BOOL false
+#endif
+
 // Superclass for classes only using static method functions.
 // The subclass of AllStatic cannot be instantiated at all.
 class AllStatic {

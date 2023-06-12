@@ -4,8 +4,10 @@
 
 #include "src/codegen/x64/assembler-x64.h"
 
+#include <cstdint>
 #include <cstring>
 
+#include "src/common/globals.h"
 #include "src/utils/utils.h"
 
 #if V8_TARGET_ARCH_X64
@@ -254,6 +256,15 @@ void Assembler::AllocateAndInstallRequestedHeapNumbers(Isolate* isolate) {
   }
 }
 
+int Assembler::WriteBuiltinJumpTableInfos() {
+  if (builtin_jump_table_info_writer_.entry_count() == 0) return 0;
+  int offset = pc_offset();
+  builtin_jump_table_info_writer_.Emit(this);
+  int size = pc_offset() - offset;
+  DCHECK_EQ(size, builtin_jump_table_info_writer_.section_size());
+  return size;
+}
+
 // Partial Constant Pool.
 bool ConstPool::AddSharedEntry(uint64_t data, int offset) {
   auto existing = entries_.find(data);
@@ -384,6 +395,8 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc,
 
   const int code_comments_size = WriteCodeComments();
 
+  const int builtin_jump_table_info_size = WriteBuiltinJumpTableInfos();
+
   // At this point overflow() may be true, but the gap ensures
   // that we are still not overlapping instructions and relocation info.
   DCHECK(pc_ <= reloc_info_writer.pos());  // No overlap.
@@ -396,7 +409,10 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc,
 
   static constexpr int kConstantPoolSize = 0;
   const int instruction_size = pc_offset();
-  const int code_comments_offset = instruction_size - code_comments_size;
+  const int builtin_jump_table_info_offset =
+      instruction_size - builtin_jump_table_info_size;
+  const int code_comments_offset =
+      builtin_jump_table_info_offset - code_comments_size;
   const int constant_pool_offset = code_comments_offset - kConstantPoolSize;
   const int handler_table_offset2 = (handler_table_offset == kNoHandlerTable)
                                         ? constant_pool_offset
@@ -410,7 +426,8 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc,
       static_cast<int>(reloc_info_writer.pos() - buffer_->start());
   CodeDesc::Initialize(desc, this, safepoint_table_offset,
                        handler_table_offset2, constant_pool_offset,
-                       code_comments_offset, reloc_info_offset);
+                       code_comments_offset, builtin_jump_table_info_offset,
+                       reloc_info_offset);
 }
 
 void Assembler::FinalizeJumpOptimizationInfo() {
@@ -646,7 +663,7 @@ void Assembler::emit_operand(int code, Operand adr) {
 
   // Compute the opcode extension to be encoded in the ModR/M byte.
   V8_ASSUME(0 <= code && code <= 7);
-  DCHECK((adr.memory().buf[0] & 0x38) == 0);
+  DCHECK_EQ((adr.memory().buf[0] & 0x38), 0);
   uint8_t opcode_extension = code << 3;
 
   // Use an optimized routine for copying the 1-6 bytes into the assembler
@@ -4536,6 +4553,17 @@ void Assembler::dq(Label* label) {
       label->link_to(current);
     }
   }
+}
+
+void Assembler::WirteBuiltinJumpTableInfoEntry(Label* label,
+                                               const int table_pos) {
+  EnsureSpace ensure_space(this);
+  CHECK(label->is_bound());
+  int32_t value = label->pos() - table_pos;
+  if constexpr (V8_BUILTIN_JUMP_TABLE_INFO_BOOL) {
+    builtin_jump_table_info_writer_.Add(pc_offset(), label->pos());
+  }
+  emit(Immediate(value));
 }
 
 // Relocation information implementations.
