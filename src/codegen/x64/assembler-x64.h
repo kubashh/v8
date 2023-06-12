@@ -2196,6 +2196,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void dp(uintptr_t data) { dq(data); }
   void dq(Label* label);
 
+  void WirteBuiltinJumpTableEntry(Label* label, const int table_pos);
+
   // Patch entries for partial constant pool.
   void PatchConstPool();
 
@@ -2700,6 +2702,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void AllocateAndInstallRequestedHeapNumbers(Isolate* isolate);
 
   int WriteCodeComments();
+
+  int WriteBuiltinJumpTableInfos();
 
   void GetCode(Isolate* isolate, CodeDesc* desc, int safepoint_table_offset,
                int handler_table_offset);
