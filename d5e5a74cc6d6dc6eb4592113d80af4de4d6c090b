@@ -16,6 +16,115 @@
       "message": "Jacob, PTAL.",
       "revId": "d5e5a74cc6d6dc6eb4592113d80af4de4d6c090b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba5233b0_cbacecaf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-06-12T18:36:04Z",
+      "side": 1,
+      "message": "Thanks! LGTM with minor comments.",
+      "revId": "d5e5a74cc6d6dc6eb4592113d80af4de4d6c090b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49f67abf_43c65231",
+        "filename": "src/wasm/wasm-init-expr.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-06-12T18:36:04Z",
+      "side": 1,
+      "message": "I think this is addressed now?",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 48
+      },
+      "revId": "d5e5a74cc6d6dc6eb4592113d80af4de4d6c090b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc9fcfd4_9c2e3114",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-06-12T18:36:04Z",
+      "side": 1,
+      "message": "I don\u0027t see where this is used. Debugging leftover?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "d5e5a74cc6d6dc6eb4592113d80af4de4d6c090b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c1d14be_0e816e4c",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-06-12T18:36:04Z",
+      "side": 1,
+      "message": "Please add a comment along the lines of `The type argument is ignored by numerical expressions.`, and maybe pass `kWasmBottom` to emphasize/ensure this?\n(Alternatively, if you prefer to future-proof this, pass the correct type for `kI32...` and `kI64...`.)",
+      "range": {
+        "startLine": 552,
+        "startChar": 40,
+        "endLine": 552,
+        "endChar": 48
+      },
+      "revId": "d5e5a74cc6d6dc6eb4592113d80af4de4d6c090b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39960dec_d37b056e",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-06-12T18:36:04Z",
+      "side": 1,
+      "message": "It seems that this function and its friend above (called below in line 658) have their names mixed up? This one writes with end, the other without.\nI\u0027m fine with fixing that in a follow-up, or you can just include it in this CL.",
+      "range": {
+        "startLine": 656,
+        "startChar": 5,
+        "endLine": 656,
+        "endChar": 31
+      },
+      "revId": "d5e5a74cc6d6dc6eb4592113d80af4de4d6c090b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
