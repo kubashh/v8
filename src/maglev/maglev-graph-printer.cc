@@ -876,18 +876,8 @@ void PrintNode::Print(std::ostream& os) const {
   node_->Print(os, graph_labeller_, skip_targets_);
 }
 
-std::ostream& operator<<(std::ostream& os, const PrintNode& printer) {
-  printer.Print(os);
-  return os;
-}
-
 void PrintNodeLabel::Print(std::ostream& os) const {
   graph_labeller_->PrintNodeLabel(os, node_);
-}
-
-std::ostream& operator<<(std::ostream& os, const PrintNodeLabel& printer) {
-  printer.Print(os);
-  return os;
 }
 
 }  // namespace maglev
