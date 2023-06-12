@@ -51,6 +51,24 @@
       "parentUuid": "a81581da_e9fef548",
       "revId": "30961ca29db19eee40f2931038bea841ef2a99ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58c320f8_b5a1159b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-06-12T18:33:13Z",
+      "side": 1,
+      "message": "Hey! i am building this rn (takes some time on my slow computer 😅) I looked at the logs looks like our deoptimisation assertion fails any reason why our function would get optimised even in the non-pointer compressed build? (i dont know please do correct, just guessing) but maybe is the definition of SMI is larger when non pointer compression state?",
+      "parentUuid": "8d181ca4_c6e4dc26",
+      "revId": "30961ca29db19eee40f2931038bea841ef2a99ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
