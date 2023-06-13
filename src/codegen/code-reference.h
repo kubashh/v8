@@ -38,6 +38,8 @@ class CodeReference {
   int relocation_size() const;
   Address code_comments() const;
   int code_comments_size() const;
+  Address builtin_jump_table_info() const;
+  int builtin_jump_table_info_size() const;
 
   bool is_null() const { return kind_ == Kind::NONE; }
   bool is_code() const { return kind_ == Kind::CODE; }
