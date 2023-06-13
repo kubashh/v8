@@ -1647,10 +1647,11 @@ TEST(Regress_1171759) {
       compiler::GetWasmCallDescriptor(&zone, builder.Build());
 
   HandleAndZoneScope handles(kCompressGraphZone);
-  RawMachineAssembler m(handles.main_isolate(),
-                        handles.main_zone()->New<Graph>(handles.main_zone()),
-                        desc, MachineType::PointerRepresentation(),
-                        InstructionSelector::SupportedMachineOperatorFlags());
+  RawMachineAssembler m(
+      handles.main_isolate(),
+      handles.main_zone()->New<Graph>(handles.main_zone()), desc,
+      MachineType::PointerRepresentation(),
+      InstructionSelectorT<TurbofanAdapter>::SupportedMachineOperatorFlags());
 
   m.Return(m.Int32Constant(0));
 

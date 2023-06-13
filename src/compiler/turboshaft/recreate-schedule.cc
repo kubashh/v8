@@ -55,8 +55,8 @@ struct ScheduleBuilder {
       graph_zone->New<compiler::Graph>(graph_zone);
   compiler::MachineOperatorBuilder machine{
       graph_zone, MachineType::PointerRepresentation(),
-      InstructionSelector::SupportedMachineOperatorFlags(),
-      InstructionSelector::AlignmentRequirements()};
+      InstructionSelectorT<TurbofanAdapter>::SupportedMachineOperatorFlags(),
+      InstructionSelectorT<TurbofanAdapter>::AlignmentRequirements()};
   compiler::CommonOperatorBuilder common{graph_zone};
   compiler::SimplifiedOperatorBuilder simplified{graph_zone};
   compiler::BasicBlock* current_block = schedule->start();
