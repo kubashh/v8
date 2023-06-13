@@ -701,6 +701,9 @@ class MergePointInterpreterFrameState {
     // loop headers), when the header has already been merged and
     // {per_predecessor_alternatives_} is thus not used anymore.
     DeoptFrame* backedge_deopt_frame_;
+    // For catch blocks, store the interpreter register holding the context.
+    // This will be the same value for all incoming merges.
+    interpreter::Register catch_block_context_register_;
   };
 
   base::Optional<const compiler::LoopInfo*> loop_info_ = base::nullopt;
