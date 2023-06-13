@@ -70,8 +70,9 @@ CodeAssemblerState::CodeAssemblerState(Isolate* isolate, Zone* zone,
     : raw_assembler_(new RawMachineAssembler(
           isolate, zone->New<Graph>(zone), call_descriptor,
           MachineType::PointerRepresentation(),
-          InstructionSelector::SupportedMachineOperatorFlags(),
-          InstructionSelector::AlignmentRequirements())),
+          InstructionSelectorT<
+              TurbofanAdapter>::SupportedMachineOperatorFlags(),
+          InstructionSelectorT<TurbofanAdapter>::AlignmentRequirements())),
       kind_(kind),
       name_(name),
       builtin_(builtin),

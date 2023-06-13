@@ -1168,7 +1168,10 @@ void SupportedOperations::Initialize() {
   initialized_ = true;
 
   MachineOperatorBuilder::Flags supported =
-      InstructionSelector::SupportedMachineOperatorFlags();
+      InstructionSelectorT<TurboshaftAdapter>::SupportedMachineOperatorFlags();
+  DCHECK_EQ(
+      supported,
+      InstructionSelectorT<TurbofanAdapter>::SupportedMachineOperatorFlags());
 #define SET_SUPPORTED(name, machine_name) \
   instance_.name##_ = supported & MachineOperatorBuilder::Flag::k##machine_name;
 

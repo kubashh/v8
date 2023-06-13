@@ -20,6 +20,8 @@ namespace compiler {
 
 class InstructionSelectorTest : public TestWithNativeContextAndZone {
  public:
+  using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
+
   InstructionSelectorTest();
   ~InstructionSelectorTest() override;
 
