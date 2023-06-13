@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3236c7bb_dbdfdeea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-13T08:45:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "098cabbe_3f660a9c",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3f418cf7_87ab439e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 23
@@ -82,6 +100,24 @@
       "writtenOn": "2023-06-13T06:55:23Z",
       "side": 1,
       "message": "nit: \u0027Write\u0027",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c3d99f1_2e7ef8b9",
+        "filename": "src/codegen/x64/assembler-x64.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-13T08:45:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dde5457_d9421339",
       "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -167,6 +203,24 @@
       "writtenOn": "2023-06-13T06:55:23Z",
       "side": 1,
       "message": "You know, now that I understand BuiltinJumpTableInfo better, I wonder if you shouldn\u0027t use RelocInfo instead, similar to INTERNAL_REFERENCE. Intuitively, it fits there much more elegantly. You could dump the encoding, the new metadata section, and simply record a RelocInfo instead.\n\nCould you please give that a try and let us know how it works out?",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3da2e882_49d947ff",
+        "filename": "src/diagnostics/disassembler.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-13T08:45:29Z",
+      "side": 1,
+      "message": "Yes I will try this. \nIf we can reuse the reloc-info, then we don\u0027t need the \u0027BuiltinJumpTableInfo\u0027 any more.\nShould I add a new rmode like `BUILTIN_SWITCH_TABLE_REFERENCE`?",
+      "parentUuid": "7d4ea3c0_2a652ca3",
       "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
