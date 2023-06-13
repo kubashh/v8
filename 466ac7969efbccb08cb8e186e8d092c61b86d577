@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff91ce07_45c16b31",
+        "filename": "test/mjsunit/maglev/regress/regress-1450594.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-06-13T13:17:08Z",
+      "side": 1,
+      "message": "I wonder if turbofan has actual coverage for this. If it had, we had seen this during normal testing.\n\nI wonder if we should maybe add tests in a way that they always benefit maglev and turbofan?\n\nI.e. I think all the turbofan test cases that use OptimizeFunctionOnNextCall are automatically also turned into maglev test cases when passing in --maglev and --optimize-on-next-call-optimizes-to-maglev as a test variant.\n\nBut the reverse doesn\u0027t hold, like we currently don\u0027t use also all the maglev test cases as turbofan cases and e.g. let OptimizeMaglevOnNextCall behave like OptimizeFunctionOnNextCall. Should we?",
+      "range": {
+        "startLine": 34,
+        "startChar": 1,
+        "endLine": 34,
+        "endChar": 25
+      },
+      "revId": "466ac7969efbccb08cb8e186e8d092c61b86d577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
