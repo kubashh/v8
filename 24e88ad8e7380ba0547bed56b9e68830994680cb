@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "098cabbe_3f660a9c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "nit: line breaks according to the style guide \".. Long lines should be wrapped to 72 columns\", also please in all future CLs.",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3f418cf7_87ab439e",
@@ -14,6 +31,142 @@
       "writtenOn": "2023-06-13T06:13:09Z",
       "side": 1,
       "message": "Thanks for the review!",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f26f7a1d_45764902",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "Thanks! My remaining comment is to consider using RelocInfo instead of a new metadata section, see below.",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a2a89cb_6b242a46",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 4562,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "Suggestion: CHECK(V8_BUILTIN_JUMP_TABLE_INFO_BOOL)",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dde5457_d9421339",
+        "filename": "src/codegen/x64/assembler-x64.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 2201,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "nit: \u0027Write\u0027",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c54a2466_230a8e53",
+        "filename": "src/codegen/x64/builtin-jump-table-info.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "nit: `uint32_t`.\n\nWhy do you store the section size explicitly? If it\u0027s just for the DCHECK in the cc file, I wouldn\u0027t mind removing it (especially when the size is 0).",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1903f22a_9949ecea",
+        "filename": "src/codegen/x64/builtin-jump-table-info.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "So IIUC the `target` is not needed since you could simply look it up from `instruction_start + pc_offset`, right?",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed35c224_d4d5c209",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 6605,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "I see, you use the `table` address as a base because it\u0027s inside the current code object and as a benefit it\u0027s already loaded in a register. Clever..",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39926415_bf0b5032",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 7439,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "nit: position",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d4ea3c0_2a652ca3",
+        "filename": "src/diagnostics/disassembler.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "You know, now that I understand BuiltinJumpTableInfo better, I wonder if you shouldn\u0027t use RelocInfo instead, similar to INTERNAL_REFERENCE. Intuitively, it fits there much more elegantly. You could dump the encoding, the new metadata section, and simply record a RelocInfo instead.\n\nCould you please give that a try and let us know how it works out?",
       "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

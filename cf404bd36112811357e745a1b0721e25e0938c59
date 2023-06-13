@@ -402,6 +402,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91d1e639_19a27ab9",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 6222,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "\u003e \u003e Let\u0027s add constants in BuiltinJumpTableInfoEntry that you can static assert here to guard the times_4.\n\u003e \n\u003e I am not sure if we need this assert here, `BuiltinJumpTableInfoEntry` is different with the jump table entry, it\u0027s metadata used to record positions of jump table entry.\n\nI see, that wasn\u0027t clear to me from comments.",
+      "parentUuid": "896088b4_a9bba0b1",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76589112_b48f7f61",
@@ -503,6 +521,24 @@
       "side": 1,
       "message": "That make sense, this is only needed when the disassembler is enabled. \nI refer to the implementation of constant pool, now this field will be saved if `V8_BUILTIN_JUMP_TABLE_INFO_BOOL` [1] is false.\n\nBy the way, I notice that the code comments field can also be saved using such methods, do you think it\u0027s worth doing?\n\n\n[1] https://chromium-review.googlesource.com/c/v8/v8/+/4352114/7..18/src/common/globals.h#328",
       "parentUuid": "258fefda_ae244e53",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91d7220a_5c7044df",
+        "filename": "src/objects/code.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T06:55:23Z",
+      "side": 1,
+      "message": "\u003e By the way, I notice that the code comments field can also be saved using such methods, do you think it\u0027s worth doing?\n\nYes that sounds like a nice cleanup :)",
+      "parentUuid": "fcf0b6aa_a386a188",
       "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
