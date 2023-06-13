@@ -70,6 +70,30 @@
       },
       "revId": "466ac7969efbccb08cb8e186e8d092c61b86d577",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "499711ab_dd4518fa",
+        "filename": "test/mjsunit/maglev/regress/regress-1450594.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-13T13:22:20Z",
+      "side": 1,
+      "message": "Yes, will do.",
+      "parentUuid": "8005b89f_f6284621",
+      "range": {
+        "startLine": 34,
+        "startChar": 1,
+        "endLine": 34,
+        "endChar": 25
+      },
+      "revId": "466ac7969efbccb08cb8e186e8d092c61b86d577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
