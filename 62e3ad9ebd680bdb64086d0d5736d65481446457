@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57edf9b0_6961db3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-13T06:49:58Z",
+      "side": 1,
+      "message": "I\u0027ve +1ed the CL. You should be able to submit it, although I\u0027ve rarely worked with external contributors so far, so let me know if you can\u0027t submit and I will :)\n\nGood job and thanks for implementing this!",
+      "revId": "62e3ad9ebd680bdb64086d0d5736d65481446457",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

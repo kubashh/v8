@@ -105,6 +105,24 @@
       "parentUuid": "fc35f832_28e00f04",
       "revId": "30961ca29db19eee40f2931038bea841ef2a99ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f29462d6_f320817c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-13T06:49:58Z",
+      "side": 1,
+      "message": "All right cool, I think we can keep the assertion then.",
+      "parentUuid": "4537b330_8ba66fdc",
+      "revId": "30961ca29db19eee40f2931038bea841ef2a99ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
