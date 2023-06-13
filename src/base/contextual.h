@@ -40,20 +40,27 @@ class V8_EXPORT_PRIVATE ContextualVariable {
         : value_(std::forward<Args>(args)...), previous_(Top()) {
       Top() = this;
     }
-    ~Scope() {
-      // Ensure stack discipline.
-      DCHECK_EQ(this, Top());
-      Top() = previous_;
-    }
+    ~Scope() { Release(); }
 
     Scope(const Scope&) = delete;
     Scope& operator=(const Scope&) = delete;
 
-    VarType& Value() { return value_; }
+    VarType& Value() {
+      DCHECK(!released_);
+      return value_;
+    }
+    void Release() {
+      if (released_) return;
+      // Ensure stack discipline.
+      DCHECK_EQ(this, Top());
+      Top() = previous_;
+      released_ = true;
+    }
 
    private:
     VarType value_;
     Scope* previous_;
+    bool released_ = false;
 
     static_assert(std::is_base_of<ContextualVariable, Derived>::value,
                   "Curiously Recurring Template Pattern");
