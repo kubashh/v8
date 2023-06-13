@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4a2adb2_d696bd96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-06-13T10:03:08Z",
+      "side": 1,
+      "message": "Thanks for all the reviews!\nAfter rebasing I needed to fix two test files, which now require another review. Code ownership is still there, so CR+1 from anyone should do. Thanks!",
+      "revId": "bfb5b5e92b195b663d0ff8185aa589125fbf6f27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
