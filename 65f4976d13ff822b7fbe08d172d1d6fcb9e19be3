@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "65f4976d13ff822b7fbe08d172d1d6fcb9e19be3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c55c65a_efe61884",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-06-13T09:57:59Z",
+      "side": 1,
+      "message": "lgtm\n\nwhy do we need to avoid heap allocations here?",
+      "revId": "65f4976d13ff822b7fbe08d172d1d6fcb9e19be3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
