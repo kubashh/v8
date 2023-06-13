@@ -223,6 +223,24 @@
       "parentUuid": "7d4ea3c0_2a652ca3",
       "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09336012_7b0f0560",
+        "filename": "src/diagnostics/disassembler.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-13T08:58:56Z",
+      "side": 1,
+      "message": "I\u0027d go more generic still (and not mention \u0027builtin\u0027): what about RELATIVE_SWITCH_TABLE_ENTRY or RELATIVE_SWITCH_TABLE_TARGET? ..but if that means you have to rename everything yet again, then BUILTIN_SWITCH_TABLE_ENTRY or BUILTIN_SWITCH_TABLE_TARGET also sgtm.",
+      "parentUuid": "3da2e882_49d947ff",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
