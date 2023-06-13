@@ -52,6 +52,24 @@
       "parentUuid": "55ace831_4c353e4a",
       "revId": "62e3ad9ebd680bdb64086d0d5736d65481446457",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "857f46e9_67a3c41f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-13T07:49:15Z",
+      "side": 1,
+      "message": "I\u0027ve submitted for you :)\nMy pleasure, and thanks for contributing!\n\nRegarding the lack of comment from the CQ bot, it might be because my Code-Review +1 reset the Commit-Queue +1 (the dry run) to a +0; not sure.",
+      "parentUuid": "88b1fc7a_d988a817",
+      "revId": "62e3ad9ebd680bdb64086d0d5736d65481446457",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
