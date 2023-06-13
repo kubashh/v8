@@ -188,6 +188,7 @@ MaybeHandle<Code> Factory::CodeBuilder::BuildInternal(
         code_desc_.handler_table_offset_relative(),
         code_desc_.constant_pool_offset_relative(),
         code_desc_.code_comments_offset_relative(),
+        code_desc_.builtin_jump_table_info_offset_relative(),
         code_desc_.unwinding_info_offset_relative(),
         /*bytecode_or_deoptimization_data=*/kind_ == CodeKind::BASELINE
             ? interpreter_data_
@@ -2569,6 +2570,7 @@ Handle<Code> Factory::NewCodeObjectForEmbeddedBuiltin(Handle<Code> code,
       code->handler_table_offset(),
       code->constant_pool_offset(),
       code->code_comments_offset(),
+      code->builtin_jump_table_info_offset(),
       code->unwinding_info_offset(),
       handle(code->raw_deoptimization_data_or_interpreter_data(), isolate()),
       /*bytecode_offsets_or_source_position_table=*/empty_byte_array(),
