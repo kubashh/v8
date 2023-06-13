@@ -7,6 +7,7 @@
 
 #include "src/baseline/bytecode-offset-iterator.h"
 #include "src/codegen/code-desc.h"
+#include "src/common/globals.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/objects/code.h"
 #include "src/objects/deoptimization-data-inl.h"
@@ -438,10 +439,45 @@ Address Code::code_comments() const {
 }
 
 int Code::code_comments_size() const {
-  return unwinding_info_offset() - code_comments_offset();
+  return builtin_jump_table_info_offset() - code_comments_offset();
 }
 
 bool Code::has_code_comments() const { return code_comments_size() > 0; }
+
+int Code::builtin_jump_table_info_offset() const {
+  if constexpr (V8_BUILTIN_JUMP_TABLE_INFO_BOOL) {
+    return ReadField<int>(kBuiltinJumpTableInfoOffsetOffset);
+  } else {
+    // Redirection needed since the field doesn't exist in this case.
+    return unwinding_info_offset();
+  }
+}
+
+void Code::set_builtin_jump_table_info_offset(int value) {
+  if (V8_BUILTIN_JUMP_TABLE_INFO_BOOL) {
+    DCHECK_LE(value, metadata_size());
+    WriteField<int>(kBuiltinJumpTableInfoOffsetOffset, value);
+  }
+}
+
+Address Code::builtin_jump_table_info() const {
+  DCHECK(V8_BUILTIN_JUMP_TABLE_INFO_BOOL);
+  return metadata_start() + builtin_jump_table_info_offset();
+}
+
+int Code::builtin_jump_table_info_size() const {
+  const int size = unwinding_info_offset() - builtin_jump_table_info_offset();
+  if (!V8_BUILTIN_JUMP_TABLE_INFO_BOOL) {
+    DCHECK_EQ(size, 0);
+    return 0;
+  }
+  DCHECK_GE(size, 0);
+  return size;
+}
+
+bool Code::has_builtin_jump_table_info() const {
+  return builtin_jump_table_info_size() > 0;
+}
 
 Address Code::unwinding_info_start() const {
   return metadata_start() + unwinding_info_offset();

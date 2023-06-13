@@ -116,5 +116,15 @@ DISPATCH(int, code_comments_size)
 #undef DISPATCH
 #undef HANDLE_WASM
 
+Address CodeReference::builtin_jump_table_info() const {
+  DCHECK_EQ(kind_, Kind::CODE);
+  return code_->builtin_jump_table_info();
+}
+
+int CodeReference::builtin_jump_table_info_size() const {
+  DCHECK_EQ(kind_, Kind::CODE);
+  return code_->builtin_jump_table_info_size();
+}
+
 }  // namespace internal
 }  // namespace v8
