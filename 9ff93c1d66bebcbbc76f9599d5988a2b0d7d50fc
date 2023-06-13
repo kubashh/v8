@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b46149de_235c2339",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-06-13T10:10:20Z",
+      "side": 1,
+      "message": "I think this should be \"Bug: chromium:1452076\"? At least now it seems to be an invalid url",
+      "revId": "9ff93c1d66bebcbbc76f9599d5988a2b0d7d50fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4922e80a_66e43c16",
@@ -14,6 +31,23 @@
       "writtenOn": "2023-06-13T10:00:27Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "9ff93c1d66bebcbbc76f9599d5988a2b0d7d50fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdd3f325_547dec79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-06-13T10:10:20Z",
+      "side": 1,
+      "message": "LGTM!",
       "revId": "9ff93c1d66bebcbbc76f9599d5988a2b0d7d50fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
