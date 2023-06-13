@@ -46,11 +46,13 @@
 #include "src/codegen/assembler.h"
 #include "src/codegen/cpu-features.h"
 #include "src/codegen/label.h"
+#include "src/codegen/x64/builtin-jump-table-info.h"
 #include "src/codegen/x64/constants-x64.h"
 #include "src/codegen/x64/fma-instr.h"
 #include "src/codegen/x64/register-x64.h"
 #include "src/codegen/x64/sse-instr.h"
 #include "src/objects/smi.h"
+
 #if defined(V8_OS_WIN_X64)
 #include "src/diagnostics/unwinding-info-win64.h"
 #endif
@@ -2196,6 +2198,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void dp(uintptr_t data) { dq(data); }
   void dq(Label* label);
 
+  void WirteBuiltinJumpTableEntry(Label* label, const int table_pos);
+
   // Patch entries for partial constant pool.
   void PatchConstPool();
 
@@ -2701,6 +2705,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   int WriteCodeComments();
 
+  int WriteBuiltinJumpTableInfos();
+
   void GetCode(Isolate* isolate, CodeDesc* desc, int safepoint_table_offset,
                int handler_table_offset);
 
@@ -2718,6 +2724,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   ConstPool constpool_;
 
   friend class ConstPool;
+
+  BuiltinJumpTableInfoWriter builtin_jump_table_info_writer_;
 
 #if defined(V8_OS_WIN_X64)
   std::unique_ptr<win64_unwindinfo::XdataEncoder> xdata_encoder_;
