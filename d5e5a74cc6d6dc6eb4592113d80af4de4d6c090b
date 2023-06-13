@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de0bf85f_54915c5e",
+        "filename": "src/wasm/wasm-init-expr.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-06-13T01:08:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49f67abf_43c65231",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 48
+      },
+      "revId": "d5e5a74cc6d6dc6eb4592113d80af4de4d6c090b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc9fcfd4_9c2e3114",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-06-12T18:36:04Z",
       "side": 1,
       "message": "I don\u0027t see where this is used. Debugging leftover?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "d5e5a74cc6d6dc6eb4592113d80af4de4d6c090b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1278383c_bae67618",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-06-13T01:08:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc9fcfd4_9c2e3114",
       "range": {
         "startLine": 7,
         "startChar": 0,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c8b6803_5660e25f",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-06-13T01:08:45Z",
+      "side": 1,
+      "message": "Passing the correct type sounds best.",
+      "parentUuid": "2c1d14be_0e816e4c",
+      "range": {
+        "startLine": 552,
+        "startChar": 40,
+        "endLine": 552,
+        "endChar": 48
+      },
+      "revId": "d5e5a74cc6d6dc6eb4592113d80af4de4d6c090b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39960dec_d37b056e",
@@ -117,6 +189,30 @@
       "writtenOn": "2023-06-12T18:36:04Z",
       "side": 1,
       "message": "It seems that this function and its friend above (called below in line 658) have their names mixed up? This one writes with end, the other without.\nI\u0027m fine with fixing that in a follow-up, or you can just include it in this CL.",
+      "range": {
+        "startLine": 656,
+        "startChar": 5,
+        "endLine": 656,
+        "endChar": 31
+      },
+      "revId": "d5e5a74cc6d6dc6eb4592113d80af4de4d6c090b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ad8cb12_a9effefb",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-06-13T01:08:45Z",
+      "side": 1,
+      "message": "Renaming the helper to \"without\".",
+      "parentUuid": "39960dec_d37b056e",
       "range": {
         "startLine": 656,
         "startChar": 5,
