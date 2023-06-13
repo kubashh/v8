@@ -206,7 +206,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   RawMachineAssembler callee(
       i_isolate, zone.New<Graph>(&zone), desc,
       MachineType::PointerRepresentation(),
-      InstructionSelector::SupportedMachineOperatorFlags());
+      InstructionSelectorT<TurbofanAdapter>::SupportedMachineOperatorFlags());
 
   // Generate callee, returning random picks of its parameters.
   std::unique_ptr<Node* []> params(new Node*[desc->ParameterCount() + 2]);
@@ -260,7 +260,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   RawMachineAssembler caller(
       i_isolate, zone.New<Graph>(&zone), wrapper_desc,
       MachineType::PointerRepresentation(),
-      InstructionSelector::SupportedMachineOperatorFlags());
+      InstructionSelectorT<TurbofanAdapter>::SupportedMachineOperatorFlags());
 
   params[0] = caller.PointerConstant(code_start);
   // WasmContext dummy.

@@ -21,6 +21,7 @@ template <typename ReturnType>
 class RawMachineAssemblerTester : public CallHelper<ReturnType>,
                                   public RawMachineAssembler {
  public:
+  using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
   template <typename... ParamMachTypes>
   explicit RawMachineAssemblerTester(Isolate* isolate, Zone* zone,
                                      ParamMachTypes... p)

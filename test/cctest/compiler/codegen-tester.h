@@ -23,6 +23,7 @@ class RawMachineAssemblerTester : public HandleAndZoneScope,
                                   public CallHelper<ReturnType>,
                                   public RawMachineAssembler {
  public:
+  using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
   template <typename... ParamMachTypes>
   explicit RawMachineAssemblerTester(ParamMachTypes... p)
       : HandleAndZoneScope(kCompressGraphZone),
