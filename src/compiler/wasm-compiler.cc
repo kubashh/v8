@@ -65,6 +65,8 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
+
 namespace {
 
 constexpr MachineType kMaybeSandboxedPointer =

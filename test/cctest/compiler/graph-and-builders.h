@@ -14,6 +14,7 @@ namespace compiler {
 
 class GraphAndBuilders {
  public:
+  using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
   explicit GraphAndBuilders(Zone* zone)
       : main_graph_(zone->New<Graph>(zone)),
         main_common_(zone),
