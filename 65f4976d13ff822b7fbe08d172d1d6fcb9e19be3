@@ -51,6 +51,24 @@
       "parentUuid": "1c55c65a_efe61884",
       "revId": "65f4976d13ff822b7fbe08d172d1d6fcb9e19be3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e14e7645_72f75d53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-06-13T10:28:23Z",
+      "side": 1,
+      "message": "ack. still lgtm.",
+      "parentUuid": "9f0bd0e5_11b420a5",
+      "revId": "65f4976d13ff822b7fbe08d172d1d6fcb9e19be3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
