@@ -1650,7 +1650,7 @@ TEST(Regress_1171759) {
   RawMachineAssembler m(handles.main_isolate(),
                         handles.main_zone()->New<Graph>(handles.main_zone()),
                         desc, MachineType::PointerRepresentation(),
-                        InstructionSelector::SupportedMachineOperatorFlags());
+                        SupportedMachineOperatorFlags());
 
   m.Return(m.Int32Constant(0));
 

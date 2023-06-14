@@ -23,6 +23,7 @@ class RawMachineAssemblerTester : public HandleAndZoneScope,
                                   public CallHelper<ReturnType>,
                                   public RawMachineAssembler {
  public:
+  using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
   template <typename... ParamMachTypes>
   explicit RawMachineAssemblerTester(ParamMachTypes... p)
       : HandleAndZoneScope(kCompressGraphZone),
@@ -37,8 +38,7 @@ class RawMachineAssemblerTester : public HandleAndZoneScope,
                                 p...),
                 CallDescriptor::kInitializeRootRegister),
             MachineType::PointerRepresentation(),
-            InstructionSelector::SupportedMachineOperatorFlags(),
-            InstructionSelector::AlignmentRequirements()) {}
+            SupportedMachineOperatorFlags(), AlignmentRequirements()) {}
 
   template <typename... ParamMachTypes>
   RawMachineAssemblerTester(CodeKind kind, ParamMachTypes... p)
@@ -54,8 +54,7 @@ class RawMachineAssemblerTester : public HandleAndZoneScope,
                                 p...),
                 CallDescriptor::kInitializeRootRegister),
             MachineType::PointerRepresentation(),
-            InstructionSelector::SupportedMachineOperatorFlags(),
-            InstructionSelector::AlignmentRequirements()),
+            SupportedMachineOperatorFlags(), AlignmentRequirements()),
         kind_(kind) {}
 
   ~RawMachineAssemblerTester() override = default;
