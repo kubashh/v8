@@ -16,6 +16,23 @@
       "message": "Hi @Tobias, thanks for your advice! I spited these optimizations into two CLs and this CL is for the far jump optimization. About the performance impact, this CL can eliminate ~1000 far jump instructions for CAS codes. I picked one of the influenced builtin(`StringIndexOf`) and created a micro case like this: `let s1 \u003d \"Hello world!\"; let s2 \u003d \"\"; s1.indexOf(s2, 5);`, and I observed ~2% performance improvement on i7-9700.\n\n------------------\n\nAbout the gap move optimization, it can eliminate ~500 instructions for CSA codes. Do you think is it worth to add it into V8? If so, I will upload another CL to implement it.",
       "revId": "01571f43968a546d26c7a296ac56e72e2951d6f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c44a0a15_e8cd99db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-06-14T14:36:17Z",
+      "side": 1,
+      "message": "Sorry for the very slow review.",
+      "revId": "01571f43968a546d26c7a296ac56e72e2951d6f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
