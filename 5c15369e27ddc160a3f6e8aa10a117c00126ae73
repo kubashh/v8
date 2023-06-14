@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7736c4c4_d8a7422a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 27
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-14T09:24:00Z",
+      "side": 1,
+      "message": "Please describe the new RelocInfo mode here.",
+      "revId": "5c15369e27ddc160a3f6e8aa10a117c00126ae73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7b4f8a16_146151fc",
@@ -14,6 +31,57 @@
       "writtenOn": "2023-06-14T07:37:32Z",
       "side": 1,
       "message": "Thanks for the review!",
+      "revId": "5c15369e27ddc160a3f6e8aa10a117c00126ae73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92663c72_d7fa9490",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-14T09:24:00Z",
+      "side": 1,
+      "message": "Thanks! LG from my side.",
+      "revId": "5c15369e27ddc160a3f6e8aa10a117c00126ae73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17db802e_c5bd5448",
+        "filename": "src/codegen/macro-assembler-base.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-14T09:24:00Z",
+      "side": 1,
+      "message": "nit: const",
+      "revId": "5c15369e27ddc160a3f6e8aa10a117c00126ae73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b42942b6_bb3a8dc7",
+        "filename": "src/codegen/reloc-info.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-06-14T09:24:00Z",
+      "side": 1,
+      "message": "nit: typo",
       "revId": "5c15369e27ddc160a3f6e8aa10a117c00126ae73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
