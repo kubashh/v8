@@ -1167,8 +1167,8 @@ void SupportedOperations::Initialize() {
   if (initialized_) return;
   initialized_ = true;
 
-  MachineOperatorBuilder::Flags supported =
-      InstructionSelector::SupportedMachineOperatorFlags();
+  MachineOperatorBuilder::Flags supported = SupportedMachineOperatorFlags();
+  DCHECK_EQ(supported, SupportedMachineOperatorFlags());
 #define SET_SUPPORTED(name, machine_name) \
   instance_.name##_ = supported & MachineOperatorBuilder::Flag::k##machine_name;
 

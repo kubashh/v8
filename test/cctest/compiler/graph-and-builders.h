@@ -14,12 +14,12 @@ namespace compiler {
 
 class GraphAndBuilders {
  public:
+  using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
   explicit GraphAndBuilders(Zone* zone)
       : main_graph_(zone->New<Graph>(zone)),
         main_common_(zone),
         main_machine_(zone, MachineType::PointerRepresentation(),
-                      InstructionSelector::SupportedMachineOperatorFlags(),
-                      InstructionSelector::AlignmentRequirements()),
+                      SupportedMachineOperatorFlags(), AlignmentRequirements()),
         main_simplified_(zone) {}
 
   Graph* graph() const { return main_graph_; }

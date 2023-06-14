@@ -3188,10 +3188,7 @@ void InstructionSelectorT<Adapter>::AddOutputToSelectContinuation(
   UNREACHABLE();
 }
 
-// static
-template <typename Adapter>
-MachineOperatorBuilder::Flags
-InstructionSelectorT<Adapter>::SupportedMachineOperatorFlags() {
+MachineOperatorBuilder::Flags SupportedMachineOperatorFlags() {
   return MachineOperatorBuilder::kFloat32RoundDown |
          MachineOperatorBuilder::kFloat64RoundDown |
          MachineOperatorBuilder::kFloat32RoundUp |
@@ -3207,10 +3204,7 @@ InstructionSelectorT<Adapter>::SupportedMachineOperatorFlags() {
          MachineOperatorBuilder::kWord64Popcnt;
 }
 
-// static
-template <typename Adapter>
-MachineOperatorBuilder::AlignmentRequirements
-InstructionSelectorT<Adapter>::AlignmentRequirements() {
+MachineOperatorBuilder::AlignmentRequirements AlignmentRequirements() {
   return MachineOperatorBuilder::AlignmentRequirements::
       FullUnalignedAccessSupport();
 }
