@@ -88,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecc8da4d_46fcbdf8",
+        "filename": "src/compiler/turboshaft/wasm-js-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-14T13:22:54Z",
+      "side": 1,
+      "message": "With \"reasonable\" effort, yes. Although the effort would be to also store the information somewhere whether the `SourcePositionTable` exists because of the wasm inlining or because it is needed anyways (due to `--trace-turbo`, profiling, ...)\nAlso, there aren\u0027t really many turbsohaft phases left after the `WasmJSLoweringReducer`, so I\u0027m not sure if it would actually save us much?",
+      "parentUuid": "e0cd2846_df95dc45",
+      "range": {
+        "startLine": 71,
+        "startChar": 17,
+        "endLine": 71,
+        "endChar": 52
+      },
+      "revId": "c88b9fa684e55246671017fcc542f34ece442286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97b7db5d_21f28b22",
