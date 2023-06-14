@@ -20,6 +20,8 @@ namespace compiler {
 
 class InstructionSelectorTest : public TestWithNativeContextAndZone {
  public:
+  using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
+
   InstructionSelectorTest();
   ~InstructionSelectorTest() override;
 
@@ -48,8 +50,7 @@ class InstructionSelectorTest : public TestWithNativeContextAndZone {
               test->isolate(), test->zone()->New<Graph>(test->zone()),
               MakeCallDescriptor(test->zone(), return_type, parameter0_type),
               MachineType::PointerRepresentation(),
-              MachineOperatorBuilder::kAllOptionalOps,
-              InstructionSelector::AlignmentRequirements()),
+              MachineOperatorBuilder::kAllOptionalOps, AlignmentRequirements()),
           test_(test) {}
     StreamBuilder(InstructionSelectorTest* test, MachineType return_type,
                   MachineType parameter0_type, MachineType parameter1_type)

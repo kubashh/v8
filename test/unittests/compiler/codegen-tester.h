@@ -21,6 +21,7 @@ template <typename ReturnType>
 class RawMachineAssemblerTester : public CallHelper<ReturnType>,
                                   public RawMachineAssembler {
  public:
+  using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
   template <typename... ParamMachTypes>
   explicit RawMachineAssemblerTester(Isolate* isolate, Zone* zone,
                                      ParamMachTypes... p)
@@ -34,8 +35,7 @@ class RawMachineAssemblerTester : public CallHelper<ReturnType>,
                 CSignature::New(zone, MachineTypeForC<ReturnType>(), p...),
                 CallDescriptor::kInitializeRootRegister),
             MachineType::PointerRepresentation(),
-            InstructionSelector::SupportedMachineOperatorFlags(),
-            InstructionSelector::AlignmentRequirements()),
+            SupportedMachineOperatorFlags(), AlignmentRequirements()),
         isolate_(isolate),
         zone_(zone) {}
 
@@ -52,8 +52,7 @@ class RawMachineAssemblerTester : public CallHelper<ReturnType>,
                 CSignature::New(zone, MachineTypeForC<ReturnType>(), p...),
                 CallDescriptor::kInitializeRootRegister),
             MachineType::PointerRepresentation(),
-            InstructionSelector::SupportedMachineOperatorFlags(),
-            InstructionSelector::AlignmentRequirements()),
+            SupportedMachineOperatorFlags(), AlignmentRequirements()),
         isolate_(isolate),
         zone_(zone),
         kind_(kind) {}

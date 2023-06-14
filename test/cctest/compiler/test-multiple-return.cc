@@ -146,7 +146,7 @@ void TestReturnMultipleValues(MachineType type, int min_count, int max_count) {
           handles.main_isolate(),
           handles.main_zone()->New<Graph>(handles.main_zone()), desc,
           MachineType::PointerRepresentation(),
-          InstructionSelector::SupportedMachineOperatorFlags());
+          SupportedMachineOperatorFlags());
 
       // m.Parameter(0) is the WasmContext.
       Node* p0 = m.Parameter(1);
@@ -263,7 +263,7 @@ void ReturnLastValue(MachineType type) {
     RawMachineAssembler m(handles.main_isolate(),
                           handles.main_zone()->New<Graph>(handles.main_zone()),
                           desc, MachineType::PointerRepresentation(),
-                          InstructionSelector::SupportedMachineOperatorFlags());
+                          SupportedMachineOperatorFlags());
 
     std::unique_ptr<Node* []> returns(new Node*[return_count]);
 
@@ -327,7 +327,7 @@ void ReturnSumOfReturns(MachineType type) {
     RawMachineAssembler m(handles.main_isolate(),
                           handles.main_zone()->New<Graph>(handles.main_zone()),
                           desc, MachineType::PointerRepresentation(),
-                          InstructionSelector::SupportedMachineOperatorFlags());
+                          SupportedMachineOperatorFlags());
 
     std::unique_ptr<Node* []> returns(new Node*[return_count]);
 

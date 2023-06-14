@@ -58,7 +58,8 @@ InstructionSelectorTest::Stream InstructionSelectorTest::StreamBuilder::Build(
                    << sequence;
   }
   Stream s;
-  s.virtual_registers_ = selector.GetVirtualRegistersForTesting();
+  //  s.virtual_registers_ = selector.GetVirtualRegistersForTesting();
+  s.virtual_registers_ = GetVirtualRegistersForTesting(&selector);
   // Map virtual registers.
   for (Instruction* const instr : sequence) {
     if (instr->opcode() < 0) continue;
