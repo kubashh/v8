@@ -65,6 +65,8 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+using InstructionSelector = InstructionSelectorT<TurbofanAdapter>;
+
 namespace {
 
 constexpr MachineType kMaybeSandboxedPointer =
@@ -8391,8 +8393,7 @@ std::unique_ptr<TurbofanCompilationJob> NewJSToWasmCompilationJob(
   CommonOperatorBuilder* common = zone->New<CommonOperatorBuilder>(zone.get());
   MachineOperatorBuilder* machine = zone->New<MachineOperatorBuilder>(
       zone.get(), MachineType::PointerRepresentation(),
-      InstructionSelector::SupportedMachineOperatorFlags(),
-      InstructionSelector::AlignmentRequirements());
+      SupportedMachineOperatorFlags(), AlignmentRequirements());
   MachineGraph* mcgraph = zone->New<MachineGraph>(graph, common, machine);
 
   WasmWrapperGraphBuilder builder(
@@ -8469,8 +8470,7 @@ wasm::WasmCompilationResult CompileWasmMathIntrinsic(
       zone.New<Graph>(&zone), zone.New<CommonOperatorBuilder>(&zone),
       zone.New<MachineOperatorBuilder>(
           &zone, MachineType::PointerRepresentation(),
-          InstructionSelector::SupportedMachineOperatorFlags(),
-          InstructionSelector::AlignmentRequirements()));
+          SupportedMachineOperatorFlags(), AlignmentRequirements()));
 
   wasm::CompilationEnv env(
       nullptr, wasm::kNoBoundsChecks,
@@ -8546,8 +8546,7 @@ wasm::WasmCompilationResult CompileWasmImportCallWrapper(
   CommonOperatorBuilder* common = zone.New<CommonOperatorBuilder>(&zone);
   MachineOperatorBuilder* machine = zone.New<MachineOperatorBuilder>(
       &zone, MachineType::PointerRepresentation(),
-      InstructionSelector::SupportedMachineOperatorFlags(),
-      InstructionSelector::AlignmentRequirements());
+      SupportedMachineOperatorFlags(), AlignmentRequirements());
   MachineGraph* mcgraph = zone.New<MachineGraph>(graph, common, machine);
 
   SourcePositionTable* source_position_table =
@@ -8601,8 +8600,7 @@ wasm::WasmCode* CompileWasmCapiCallWrapper(wasm::NativeModule* native_module,
       zone.New<Graph>(&zone), zone.New<CommonOperatorBuilder>(&zone),
       zone.New<MachineOperatorBuilder>(
           &zone, MachineType::PointerRepresentation(),
-          InstructionSelector::SupportedMachineOperatorFlags(),
-          InstructionSelector::AlignmentRequirements()));
+          SupportedMachineOperatorFlags(), AlignmentRequirements()));
 
   WasmWrapperGraphBuilder builder(
       &zone, mcgraph, sig, native_module->module(),
@@ -8653,8 +8651,7 @@ wasm::WasmCode* CompileWasmJSFastCallWrapper(wasm::NativeModule* native_module,
       zone.New<Graph>(&zone), zone.New<CommonOperatorBuilder>(&zone),
       zone.New<MachineOperatorBuilder>(
           &zone, MachineType::PointerRepresentation(),
-          InstructionSelector::SupportedMachineOperatorFlags(),
-          InstructionSelector::AlignmentRequirements()));
+          SupportedMachineOperatorFlags(), AlignmentRequirements()));
 
   WasmWrapperGraphBuilder builder(
       &zone, mcgraph, sig, native_module->module(),
@@ -8703,8 +8700,7 @@ MaybeHandle<Code> CompileWasmToJSWrapper(Isolate* isolate,
   CommonOperatorBuilder* common = zone->New<CommonOperatorBuilder>(zone.get());
   MachineOperatorBuilder* machine = zone->New<MachineOperatorBuilder>(
       zone.get(), MachineType::PointerRepresentation(),
-      InstructionSelector::SupportedMachineOperatorFlags(),
-      InstructionSelector::AlignmentRequirements());
+      SupportedMachineOperatorFlags(), AlignmentRequirements());
   MachineGraph* mcgraph = zone->New<MachineGraph>(graph, common, machine);
 
   WasmWrapperGraphBuilder builder(zone.get(), mcgraph, sig, nullptr,
@@ -8751,8 +8747,7 @@ MaybeHandle<Code> CompileJSToJSWrapper(Isolate* isolate,
   CommonOperatorBuilder* common = zone->New<CommonOperatorBuilder>(zone.get());
   MachineOperatorBuilder* machine = zone->New<MachineOperatorBuilder>(
       zone.get(), MachineType::PointerRepresentation(),
-      InstructionSelector::SupportedMachineOperatorFlags(),
-      InstructionSelector::AlignmentRequirements());
+      SupportedMachineOperatorFlags(), AlignmentRequirements());
   MachineGraph* mcgraph = zone->New<MachineGraph>(graph, common, machine);
 
   WasmWrapperGraphBuilder builder(zone.get(), mcgraph, sig, module,
@@ -8797,8 +8792,7 @@ Handle<Code> CompileCWasmEntry(Isolate* isolate, const wasm::FunctionSig* sig,
   CommonOperatorBuilder* common = zone->New<CommonOperatorBuilder>(zone.get());
   MachineOperatorBuilder* machine = zone->New<MachineOperatorBuilder>(
       zone.get(), MachineType::PointerRepresentation(),
-      InstructionSelector::SupportedMachineOperatorFlags(),
-      InstructionSelector::AlignmentRequirements());
+      SupportedMachineOperatorFlags(), AlignmentRequirements());
   MachineGraph* mcgraph = zone->New<MachineGraph>(graph, common, machine);
 
   WasmWrapperGraphBuilder builder(zone.get(), mcgraph, sig, module,
@@ -8911,8 +8905,7 @@ wasm::WasmCompilationResult ExecuteTurbofanWasmCompilation(
       zone.New<Graph>(&zone), zone.New<CommonOperatorBuilder>(&zone),
       zone.New<MachineOperatorBuilder>(
           &zone, MachineType::PointerRepresentation(),
-          InstructionSelector::SupportedMachineOperatorFlags(),
-          InstructionSelector::AlignmentRequirements()));
+          SupportedMachineOperatorFlags(), AlignmentRequirements()));
 
   OptimizedCompilationInfo info(
       GetDebugName(&zone, env->module, data.wire_bytes_storage,

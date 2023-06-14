@@ -2781,8 +2781,7 @@ void InstructionSelector::VisitF64x2NearestInt(Node* node) { UNREACHABLE(); }
 void InstructionSelector::VisitF32x4NearestInt(Node* node) { UNREACHABLE(); }
 
 // static
-MachineOperatorBuilder::Flags
-InstructionSelector::SupportedMachineOperatorFlags() {
+MachineOperatorBuilder::Flags SupportedMachineOperatorFlags() {
   return MachineOperatorBuilder::kFloat32RoundDown |
          MachineOperatorBuilder::kFloat64RoundDown |
          MachineOperatorBuilder::kFloat32RoundUp |
@@ -2796,8 +2795,7 @@ InstructionSelector::SupportedMachineOperatorFlags() {
 }
 
 // static
-MachineOperatorBuilder::AlignmentRequirements
-InstructionSelector::AlignmentRequirements() {
+MachineOperatorBuilder::AlignmentRequirements AlignmentRequirements() {
   return MachineOperatorBuilder::AlignmentRequirements::
       FullUnalignedAccessSupport();
 }

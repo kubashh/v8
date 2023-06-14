@@ -1335,8 +1335,7 @@ void InstructionSelector::VisitWord32AtomicPairCompareExchange(Node* node) {
        temps);
 }
 // static
-MachineOperatorBuilder::Flags
-InstructionSelector::SupportedMachineOperatorFlags() {
+MachineOperatorBuilder::Flags SupportedMachineOperatorFlags() {
   MachineOperatorBuilder::Flags flags = MachineOperatorBuilder::kNoFlags;
   return flags | MachineOperatorBuilder::kWord32Ctz |
          MachineOperatorBuilder::kWord32Ctz |
