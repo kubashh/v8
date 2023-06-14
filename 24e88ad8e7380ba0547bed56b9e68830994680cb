@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae92dfa3_cb5f5f21",
+        "filename": "src/codegen/x64/assembler-x64.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 4562,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-14T07:37:32Z",
+      "side": 1,
+      "message": "We don\u0027t need this flag anymore. \nThe check is here [1] now\n\n[1]. https://chromium-review.googlesource.com/c/v8/v8/+/4352114/27/src/codegen/assembler.h#456",
+      "parentUuid": "1a2a89cb_6b242a46",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1dde5457_d9421339",
@@ -139,6 +157,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7216a33_2cb7abe0",
+        "filename": "src/codegen/x64/builtin-jump-table-info.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-14T07:37:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c54a2466_230a8e53",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1903f22a_9949ecea",
@@ -152,6 +188,24 @@
       "writtenOn": "2023-06-13T06:55:23Z",
       "side": 1,
       "message": "So IIUC the `target` is not needed since you could simply look it up from `instruction_start + pc_offset`, right?",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44ae7719_53d0eb94",
+        "filename": "src/codegen/x64/builtin-jump-table-info.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-14T07:37:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1903f22a_9949ecea",
       "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -186,6 +240,24 @@
       "writtenOn": "2023-06-13T06:55:23Z",
       "side": 1,
       "message": "nit: position",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30106b08_b72884d6",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 7439,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-14T07:37:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39926415_bf0b5032",
       "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -239,6 +311,24 @@
       "side": 1,
       "message": "I\u0027d go more generic still (and not mention \u0027builtin\u0027): what about RELATIVE_SWITCH_TABLE_ENTRY or RELATIVE_SWITCH_TABLE_TARGET? ..but if that means you have to rename everything yet again, then BUILTIN_SWITCH_TABLE_ENTRY or BUILTIN_SWITCH_TABLE_TARGET also sgtm.",
       "parentUuid": "3da2e882_49d947ff",
+      "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e2d80f_dc480f85",
+        "filename": "src/diagnostics/disassembler.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-14T07:37:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09336012_7b0f0560",
       "revId": "24e88ad8e7380ba0547bed56b9e68830994680cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

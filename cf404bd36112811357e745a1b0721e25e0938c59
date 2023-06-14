@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bda1110_b1cb4ee0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-14T07:37:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c88968ff_3d08169c",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f21ea89_a07ef927",
@@ -539,6 +557,24 @@
       "side": 1,
       "message": "\u003e By the way, I notice that the code comments field can also be saved using such methods, do you think it\u0027s worth doing?\n\nYes that sounds like a nice cleanup :)",
       "parentUuid": "fcf0b6aa_a386a188",
+      "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e3cd4e6_7db6b1bb",
+        "filename": "src/objects/code.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1513087
+      },
+      "writtenOn": "2023-06-14T07:37:32Z",
+      "side": 1,
+      "message": "I will try to do the cleanup for \u0027code comments\u0027 in another CL.",
+      "parentUuid": "91d7220a_5c7044df",
       "revId": "cf404bd36112811357e745a1b0721e25e0938c59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
