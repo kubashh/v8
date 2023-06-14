@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e0cd2846_df95dc45",
+        "filename": "src/compiler/turboshaft/wasm-js-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-06-14T12:14:24Z",
+      "side": 1,
+      "message": "It does consume some memory (8 bytes per Turboshaft operation), but given that Wasm inlining is a rare case, I think the overall overhead is fine. But I guess you could empty the source position table after the phase with `WasmJSLoweringReducer` with reasonable effort.",
+      "parentUuid": "92636baa_e2bfac6b",
+      "range": {
+        "startLine": 71,
+        "startChar": 17,
+        "endLine": 71,
+        "endChar": 52
+      },
+      "revId": "c88b9fa684e55246671017fcc542f34ece442286",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "97b7db5d_21f28b22",
         "filename": "src/execution/frames.cc",
         "patchSetId": 1
