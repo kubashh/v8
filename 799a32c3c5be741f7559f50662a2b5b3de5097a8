@@ -33,6 +33,23 @@
       "message": "Nice, LGTM.",
       "revId": "799a32c3c5be741f7559f50662a2b5b3de5097a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36f5ff9d_ee9ad604",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-06-15T09:44:59Z",
+      "side": 1,
+      "message": "And sorry for the long delay, I was on vacation until Tuesday.",
+      "revId": "799a32c3c5be741f7559f50662a2b5b3de5097a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
