@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "3b1be80b823bc270526044d61c7fa8fb50a0adc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b60a2d89_10b4a955",
+        "filename": "src/objects/shared-function-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-06-15T08:09:51Z",
+      "side": 1,
+      "message": "Add `// TODO(jgruber): Merge with literal_id by storing the base id on Script`",
+      "revId": "3b1be80b823bc270526044d61c7fa8fb50a0adc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
