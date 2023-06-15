@@ -3467,8 +3467,7 @@ InstructionSelector::SupportedMachineOperatorFlags() {
 }
 
 // static
-MachineOperatorBuilder::AlignmentRequirements
-InstructionSelector::AlignmentRequirements() {
+MachineOperatorBuilder::AlignmentRequirements AlignmentRequirements() {
   if (kArchVariant == kMips64r6) {
     return MachineOperatorBuilder::AlignmentRequirements::
         FullUnalignedAccessSupport();

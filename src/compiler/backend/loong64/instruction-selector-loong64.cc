@@ -3351,8 +3351,7 @@ InstructionSelector::SupportedMachineOperatorFlags() {
 }
 
 // static
-MachineOperatorBuilder::AlignmentRequirements
-InstructionSelector::AlignmentRequirements() {
+MachineOperatorBuilder::AlignmentRequirements AlignmentRequirements() {
   return MachineOperatorBuilder::AlignmentRequirements::
       FullUnalignedAccessSupport();
 }

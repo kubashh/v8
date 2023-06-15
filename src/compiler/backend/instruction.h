@@ -31,6 +31,10 @@ namespace compiler {
 class Schedule;
 class SourcePositionTable;
 
+namespace turboshaft {
+class Graph;
+}
+
 #if defined(V8_CC_MSVC) && defined(V8_TARGET_ARCH_IA32)
 // MSVC on x86 has issues with ALIGNAS(8) on InstructionOperand, but does
 // align the object to 8 bytes anyway (covered by a static assert below).
@@ -1254,6 +1258,23 @@ enum class StateValueKind : uint8_t {
   kDuplicate
 };
 
+inline std::ostream& operator<<(std::ostream& os, StateValueKind kind) {
+  switch (kind) {
+    case StateValueKind::kArgumentsElements:
+      return os << "ArgumentsElements";
+    case StateValueKind::kArgumentsLength:
+      return os << "ArgumentsLength";
+    case StateValueKind::kPlain:
+      return os << "Plain";
+    case StateValueKind::kOptimizedOut:
+      return os << "OptimizedOut";
+    case StateValueKind::kNested:
+      return os << "Nested";
+    case StateValueKind::kDuplicate:
+      return os << "Duplicate";
+  }
+}
+
 class StateValueDescriptor {
  public:
   StateValueDescriptor()
@@ -1308,6 +1329,16 @@ class StateValueDescriptor {
   ArgumentsStateType arguments_type() const {
     DCHECK(kind_ == StateValueKind::kArgumentsElements);
     return args_type_;
+  }
+
+  void Print(std::ostream& os) const {
+    os << "kind=" << kind_ << ", type=" << type_;
+    if (kind_ == StateValueKind::kDuplicate ||
+        kind_ == StateValueKind::kNested) {
+      os << ", id=" << id_;
+    } else if (kind_ == StateValueKind::kArgumentsElements) {
+      os << ", args_type=" << args_type_;
+    }
   }
 
  private:
@@ -1711,6 +1742,8 @@ class V8_EXPORT_PRIVATE InstructionSequence final
  public:
   static InstructionBlocks* InstructionBlocksFor(Zone* zone,
                                                  const Schedule* schedule);
+  static InstructionBlocks* InstructionBlocksFor(
+      Zone* zone, const turboshaft::Graph& graph);
   InstructionSequence(Isolate* isolate, Zone* zone,
                       InstructionBlocks* instruction_blocks);
   InstructionSequence(const InstructionSequence&) = delete;
