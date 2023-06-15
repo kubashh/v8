@@ -22,6 +22,7 @@
 
 #include "cppgc/common.h"
 #include "v8-array-buffer.h"       // NOLINT(build/include_directory)
+#include "v8-async-context.h"      // NOLINT(build/include_directory)
 #include "v8-container.h"          // NOLINT(build/include_directory)
 #include "v8-context.h"            // NOLINT(build/include_directory)
 #include "v8-data.h"               // NOLINT(build/include_directory)
