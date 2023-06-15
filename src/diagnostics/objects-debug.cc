@@ -1920,12 +1920,18 @@ void WasmInstanceObject::WasmInstanceObjectVerify(Isolate* isolate) {
   JSObjectVerify(isolate);
   CHECK(IsWasmInstanceObject());
 
-  // Just generically check all tagged fields. Don't check the untagged fields,
-  // as some of them might still contain the "undefined" value if the
-  // WasmInstanceObject is not fully set up yet.
+  // Check all tagged fields generally. More specific checks follow below.
   for (int offset = kHeaderSize; offset < kEndOfStrongFieldsOffset;
        offset += kTaggedSize) {
     VerifyObjectField(isolate, offset);
+  }
+
+  const wasm::WasmModule* module = this->module();
+
+  FixedArray mem_objects = memory_objects();
+  CHECK_EQ(module->memories.size(), mem_objects.length());
+  for (int mem_index = 0; mem_index < mem_objects.length(); ++mem_index) {
+    CHECK(mem_objects.get(mem_index).IsWasmMemoryObject());
   }
 }
 
