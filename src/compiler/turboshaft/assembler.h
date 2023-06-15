@@ -43,6 +43,17 @@ enum class Builtin : int32_t;
 
 namespace v8::internal::compiler::turboshaft {
 
+enum ConditionalGotoStatus {
+  kGotoDestination = 1,  // The conditional Goto became an unconditional Goto to
+                         // the destination.
+  kGotoNotDestination = 2,  // The conditional Goto became an unconditional Goto
+                            // to something that isn't the destination.
+  kBranch = 3               // The conditional Goto became a branch.
+};
+static_assert((ConditionalGotoStatus::kGotoDestination |
+               ConditionalGotoStatus::kGotoNotDestination) ==
+              ConditionalGotoStatus::kBranch);
+
 class ConditionWithHint final {
  public:
   ConditionWithHint(
@@ -124,15 +135,19 @@ class LabelBase {
   template <typename A>
   void GotoIf(A& assembler, OpIndex condition, BranchHint hint,
               const values_t& values) {
-    RecordValues(assembler, data_, values);
-    assembler.GotoIf(condition, data_.block, hint);
+    if (assembler.GotoIf(condition, data_.block, hint) !=
+        ConditionalGotoStatus::kGotoNotDestination) {
+      RecordValues(assembler, data_, values);
+    }
   }
 
   template <typename A>
   void GotoIfNot(A& assembler, OpIndex condition, BranchHint hint,
                  const values_t& values) {
-    RecordValues(assembler, data_, values);
-    assembler.GotoIfNot(condition, data_.block, hint);
+    if (assembler.GotoIfNot(condition, data_.block, hint) !=
+        ConditionalGotoStatus::kGotoNotDestination) {
+      RecordValues(assembler, data_, values);
+    }
   }
 
   template <typename A>
@@ -2338,29 +2353,29 @@ class AssemblerOpInterface {
   }
 
   // Return `true` if the control flow after the conditional jump is reachable.
-  bool GotoIf(OpIndex condition, Block* if_true,
-              BranchHint hint = BranchHint::kNone) {
+  ConditionalGotoStatus GotoIf(OpIndex condition, Block* if_true,
+                               BranchHint hint = BranchHint::kNone) {
     if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
-      return false;
+      return ConditionalGotoStatus::kBranch;
     }
     Block* if_false = stack().NewBlock();
-    stack().Branch(condition, if_true, if_false, hint);
-    return stack().Bind(if_false);
+    return BranchAndBind(condition, if_true, if_false, hint, if_false);
   }
-  bool GotoIf(ConditionWithHint condition, Block* if_true) {
+  ConditionalGotoStatus GotoIf(ConditionWithHint condition, Block* if_true) {
     return GotoIf(condition.condition(), if_true, condition.hint());
   }
   // Return `true` if the control flow after the conditional jump is reachable.
-  bool GotoIfNot(OpIndex condition, Block* if_false,
-                 BranchHint hint = BranchHint::kNone) {
+  ConditionalGotoStatus GotoIfNot(OpIndex condition, Block* if_false,
+                                  BranchHint hint = BranchHint::kNone) {
     if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
-      return false;
+      return ConditionalGotoStatus::kBranch;
     }
     Block* if_true = stack().NewBlock();
-    stack().Branch(condition, if_true, if_false, hint);
-    return stack().Bind(if_true);
+    return BranchAndBind(condition, if_true, if_false, hint, if_true);
   }
-  bool GotoIfNot(ConditionWithHint condition, Block* if_false) {
+
+  ConditionalGotoStatus GotoIfNot(ConditionWithHint condition,
+                                  Block* if_false) {
     return GotoIfNot(condition.condition(), if_false, condition.hint());
   }
 
@@ -2931,6 +2946,28 @@ class AssemblerOpInterface {
   }
 
  private:
+  // BranchAndBind should be called from GotoIf/GotoIfNot. It will insert a
+  // Branch, bind {to_bind} (which should correspond to the implicit new block
+  // following the GotoIf/GotoIfNot) and return a ConditionalGotoStatus
+  // representing whether the destinations of the Branch are reachable or not.
+  ConditionalGotoStatus BranchAndBind(OpIndex condition, Block* if_true,
+                                      Block* if_false, BranchHint hint,
+                                      Block* to_bind) {
+    DCHECK_EQ(to_bind, any_of(if_true, if_false));
+    Block* other = to_bind == if_true ? if_false : if_true;
+    Block* to_bind_last_pred = to_bind->LastPredecessor();
+    Block* other_last_pred = other->LastPredecessor();
+    stack().Branch(condition, if_true, if_false, hint);
+    bool to_bind_reachable = to_bind_last_pred != to_bind->LastPredecessor();
+    bool other_reachable = other_last_pred != other->LastPredecessor();
+    ConditionalGotoStatus status = static_cast<ConditionalGotoStatus>(
+        (other_reachable) | ((to_bind_reachable) << 1));
+    bool bind_status = stack().Bind(to_bind);
+    DCHECK_EQ(bind_status, to_bind_reachable);
+    USE(bind_status);
+    return status;
+  }
+
   Assembler& stack() { return *static_cast<Assembler*>(this); }
   struct IfScopeInfo {
     Block* else_block;
