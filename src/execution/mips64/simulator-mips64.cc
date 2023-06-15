@@ -2563,8 +2563,16 @@ void Simulator::SoftwareInterrupt() {
       ObjectPair result = target(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7,
                                  arg8, arg9, arg10, arg11, arg12, arg13, arg14,
                                  arg15, arg16, arg17, arg18, arg19);
-      set_register(v0, (int64_t)(result.x));
-      set_register(v1, (int64_t)(result.y));
+      if (is_uint32(result.x)) {
+        set_register(v0, static_cast<int32_t>(result.x));
+      } else {
+        set_register(v0, (int64_t)(result.x));
+      }
+      if (is_uint32(result.y)) {
+        set_register(v1, static_cast<int32_t>(result.y));
+      } else {
+        set_register(v1, (int64_t)(result.y));
+      }
     }
     if (v8_flags.trace_sim) {
       PrintF("Returned %08" PRIx64 "  : %08" PRIx64 " \n", get_register(v1),
@@ -4109,8 +4117,15 @@ void Simulator::DecodeTypeRegisterSPECIAL() {
             set_register(LO, int_min_value);
             set_register(HI, 0);
           } else if (rt() != 0) {
-            set_register(LO, rs() / rt());
-            set_register(HI, rs() % rt());
+            if (instr_.FunctionFieldRaw() == DIV) {
+              int32_t rs_i32 = static_cast<int32_t>(rs());
+              int32_t rt_i32 = static_cast<int32_t>(rt());
+              set_register(LO, rs_i32 / rt_i32);
+              set_register(HI, rs_i32 % rt_i32);
+            } else {
+              set_register(LO, rs() / rt());
+              set_register(HI, rs() % rt());
+            }
           }
           break;
         case kMips64r6:
@@ -4147,12 +4162,12 @@ void Simulator::DecodeTypeRegisterSPECIAL() {
           switch (sa()) {
             case DIV_OP:
               if (rt_u_32 != 0) {
-                SetResult(rd_reg(), rs_u_32 / rt_u_32);
+                SetResult(rd_reg(), static_cast<int32_t>(rs_u_32 / rt_u_32));
               }
               break;
             case MOD_OP:
               if (rt_u() != 0) {
-                SetResult(rd_reg(), rs_u_32 % rt_u_32);
+                SetResult(rd_reg(), static_cast<int32_t>(rs_u_32 % rt_u_32));
               }
               break;
             default:
@@ -4164,8 +4179,8 @@ void Simulator::DecodeTypeRegisterSPECIAL() {
           if (rt_u() != 0) {
             uint32_t rt_u_32 = static_cast<uint32_t>(rt_u());
             uint32_t rs_u_32 = static_cast<uint32_t>(rs_u());
-            set_register(LO, rs_u_32 / rt_u_32);
-            set_register(HI, rs_u_32 % rt_u_32);
+            set_register(LO, static_cast<int32_t>(rs_u_32 / rt_u_32));
+            set_register(HI, static_cast<int32_t>(rs_u_32 % rt_u_32));
           }
         }
       }

@@ -2380,8 +2380,16 @@ void Simulator::SoftwareInterrupt() {
       ObjectPair result = target(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7,
                                  arg8, arg9, arg10, arg11, arg12, arg13, arg14,
                                  arg15, arg16, arg17, arg18, arg19);
-      set_register(v0, (int64_t)(result.x));
-      set_register(v1, (int64_t)(result.y));
+      if (is_uint32(result.x)) {
+        set_register(v0, static_cast<int32_t>(result.x));
+      } else {
+        set_register(v0, (int64_t)(result.x));
+      }
+      if (is_uint32(result.y)) {
+        set_register(v1, static_cast<int32_t>(result.y));
+      } else {
+        set_register(v1, (int64_t)(result.y));
+      }
     }
     if (v8_flags.trace_sim) {
       PrintF("Returned %08" PRIx64 "  : %08" PRIx64 " \n", get_register(v1),
