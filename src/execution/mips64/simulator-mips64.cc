@@ -4164,8 +4164,8 @@ void Simulator::DecodeTypeRegisterSPECIAL() {
           if (rt_u() != 0) {
             uint32_t rt_u_32 = static_cast<uint32_t>(rt_u());
             uint32_t rs_u_32 = static_cast<uint32_t>(rs_u());
-            set_register(LO, rs_u_32 / rt_u_32);
-            set_register(HI, rs_u_32 % rt_u_32);
+            set_register(LO, static_cast<int32_t>(rs_u_32 / rt_u_32));
+            set_register(HI, static_cast<int32_t>(rs_u_32 % rt_u_32));
           }
         }
       }
