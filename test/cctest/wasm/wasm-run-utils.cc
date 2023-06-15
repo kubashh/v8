@@ -113,7 +113,7 @@ uint8_t* TestingModuleBuilder::AddMemory(uint32_t size, SharedFlag shared,
   CHECK_EQ(0, test_module_->memories.size());
   CHECK_NULL(mem0_start_);
   CHECK_EQ(0, mem0_size_);
-  CHECK(!instance_object_->has_memory_object());
+  CHECK_EQ(0, instance_object_->memory_objects().length());
   uint32_t initial_pages = RoundUp(size, kWasmPageSize) / kWasmPageSize;
   uint32_t maximum_pages = initial_pages;
   test_module_->memories.resize(1);
@@ -127,7 +127,9 @@ uint8_t* TestingModuleBuilder::AddMemory(uint32_t size, SharedFlag shared,
   Handle<WasmMemoryObject> memory_object =
       WasmMemoryObject::New(isolate_, initial_pages, maximum_pages, shared)
           .ToHandleChecked();
-  instance_object_->set_memory_object(*memory_object);
+  Handle<FixedArray> memory_objects = isolate_->factory()->NewFixedArray(1);
+  memory_objects->set(0, *memory_object);
+  instance_object_->set_memory_objects(*memory_objects);
 
   mem0_start_ =
       reinterpret_cast<uint8_t*>(memory_object->array_buffer().backing_store());

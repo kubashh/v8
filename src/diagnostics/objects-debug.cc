@@ -1927,6 +1927,11 @@ void WasmInstanceObject::WasmInstanceObjectVerify(Isolate* isolate) {
        offset += kTaggedSize) {
     VerifyObjectField(isolate, offset);
   }
+
+  FixedArray mem_objects = memory_objects();
+  for (int mem_index = 0; mem_index < mem_objects.length(); ++mem_index) {
+    CHECK(mem_objects.get(mem_index).IsWasmMemoryObject());
+  }
 }
 
 void WasmValueObject::WasmValueObjectVerify(Isolate* isolate) {

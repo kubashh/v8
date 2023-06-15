@@ -851,8 +851,16 @@ void WasmMemoryObject::SetNewBuffer(JSArrayBuffer new_buffer) {
           WasmInstanceObject::cast(elem->GetHeapObjectAssumeWeak());
       // TODO(13918): Avoid the iteration if we ever see larger numbers of
       // memories.
-      DCHECK_EQ(instance.memory_object(), *this);
-      SetInstanceMemory(instance, new_buffer);
+      FixedArray memory_objects = instance.memory_objects();
+      int num_memories = memory_objects.length();
+      for (int mem_idx = 0; mem_idx < num_memories; ++mem_idx) {
+        if (memory_objects.get(mem_idx) == *this) {
+          // TODO(13918): Store multiple memory starts and sizes in the
+          // instance.
+          CHECK_EQ(0, mem_idx);
+          SetInstanceMemory(instance, new_buffer);
+        }
+      }
     }
   }
 }
