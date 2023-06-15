@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ec071d3_2a28a483",
+        "filename": "src/maglev/maglev-assembler-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-06-15T07:23:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b806c7cf_41314de9",
+      "range": {
+        "startLine": 674,
+        "startChar": 2,
+        "endLine": 674,
+        "endChar": 7
+      },
+      "revId": "c8e0a14d88a93212902fcc197146ac3bdf8d84c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8ff49ab_4819e514",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "921eeac1_5890a4c7",
+        "filename": "src/maglev/maglev-assembler-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-06-15T07:23:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8ff49ab_4819e514",
+      "range": {
+        "startLine": 711,
+        "startChar": 2,
+        "endLine": 711,
+        "endChar": 14
+      },
+      "revId": "c8e0a14d88a93212902fcc197146ac3bdf8d84c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80546f20_e4726338",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-06-14T16:11:26Z",
       "side": 1,
       "message": "this should be private, to encourage using the JumpIf versions.",
+      "range": {
+        "startLine": 212,
+        "startChar": 14,
+        "endLine": 212,
+        "endChar": 36
+      },
+      "revId": "c8e0a14d88a93212902fcc197146ac3bdf8d84c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "728cfe08_03ddbae4",
+        "filename": "src/maglev/maglev-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-06-15T07:23:05Z",
+      "side": 1,
+      "message": "Nice idea! I wonder if there are other functions here that should also be private... Anyways, future cleanup!",
+      "parentUuid": "80546f20_e4726338",
       "range": {
         "startLine": 212,
         "startChar": 14,
