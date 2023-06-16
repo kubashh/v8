@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2a8d4c4_f47dec75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-06-16T07:46:16Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "1507fc6c67993a0d935c25235118e38ec4e219de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e120a6a2_43b8baf5",
+        "filename": "tools/clusterfuzz/foozzie/v8_commands.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-06-16T07:46:16Z",
+      "side": 1,
+      "message": "This logic is now used in two places... but that didn\u0027t warrant yet the creation of a new util.py file to put it there. I\u0027ll consider creating one as soon as we have a bit more shared stuff.",
+      "revId": "1507fc6c67993a0d935c25235118e38ec4e219de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
