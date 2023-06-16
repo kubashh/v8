@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcbddbf2_43da3826",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-16T16:31:24Z",
+      "side": 1,
+      "message": "Just realised that my loop rotation CL wouldn\u0027t actually have an effect unless we also update the known maps at the loop entry...",
+      "revId": "7ad6453aa4ee3144028d1e0bed0ff333561a438a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
