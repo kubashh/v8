@@ -546,8 +546,7 @@ class V8_EXPORT_PRIVATE WasmInstanceObject : public JSObject {
   OBJECT_CONSTRUCTORS(WasmInstanceObject, JSObject);
 
  private:
-  static void InitDataSegmentArrays(Handle<WasmInstanceObject>,
-                                    Handle<WasmModuleObject>);
+  void InitDataSegmentArrays(WasmModuleObject);
 };
 
 // Representation of WebAssembly.Exception JavaScript-level object.
