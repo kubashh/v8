@@ -17,8 +17,10 @@
 namespace v8::internal::compiler::turboshaft {
 
 void OptimizePhase::Run(Zone* temp_zone) {
-  UnparkedScopeIfNeeded scope(PipelineData::Get().broker(),
-                              v8_flags.turboshaft_trace_reduction);
+  // MachineOptimizationReducer can dereference handles.
+  UnparkedScopeIfNeeded scope(PipelineData::Get().broker());
+  AllowHandleDereference allow_handle_dereference;
+
   turboshaft::OptimizationPhase<
       turboshaft::StructuralOptimizationReducer, turboshaft::VariableReducer,
       turboshaft::LateEscapeAnalysisReducer,

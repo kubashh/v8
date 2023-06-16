@@ -6,15 +6,23 @@
 
 #include "src/compiler/turboshaft/fast-api-call-reducer.h"
 #include "src/compiler/turboshaft/machine-lowering-reducer.h"
+#include "src/compiler/turboshaft/machine-optimization-reducer.h"
 #include "src/compiler/turboshaft/select-lowering-reducer.h"
+#include "src/compiler/turboshaft/variable-reducer.h"
 #include "src/heap/factory-inl.h"
 
 namespace v8::internal::compiler::turboshaft {
 
 void MachineLoweringPhase::Run(Zone* temp_zone) {
+  // MachineOptimizationReducer can dereference handles.
+  UnparkedScopeIfNeeded scope(PipelineData::Get().broker());
+  AllowHandleDereference allow_handle_dereference;
+
   turboshaft::OptimizationPhase<
-      turboshaft::MachineLoweringReducer, turboshaft::FastApiCallReducer,
-      turboshaft::SelectLoweringReducer>::Run(temp_zone);
+      turboshaft::VariableReducer, turboshaft::MachineLoweringReducer,
+      turboshaft::FastApiCallReducer, turboshaft::SelectLoweringReducer,
+      turboshaft::MachineOptimizationReducerSignallingNanImpossible>::
+      Run(temp_zone);
 }
 
 }  // namespace v8::internal::compiler::turboshaft

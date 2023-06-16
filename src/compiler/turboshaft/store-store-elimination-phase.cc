@@ -14,6 +14,10 @@
 namespace v8::internal::compiler::turboshaft {
 
 void StoreStoreEliminationPhase::Run(Zone* temp_zone) {
+  // MachineOptimizationReducer can dereference handles.
+  UnparkedScopeIfNeeded scope(PipelineData::Get().broker());
+  AllowHandleDereference allow_handle_dereference;
+
   turboshaft::OptimizationPhase<
       turboshaft::StoreStoreEliminationReducer, turboshaft::VariableReducer,
       turboshaft::MachineOptimizationReducerSignallingNanImpossible,
