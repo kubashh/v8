@@ -33,6 +33,24 @@
       "message": "lgtm! Kinda annoying the way you have to write that DCHECK now but CSA is always annoying...",
       "revId": "2a17634da92c5d01a9ac91bb6edcaf39a47ce9e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b5306e7_32c7664f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2023-06-16T08:05:31Z",
+      "side": 1,
+      "message": "It\u0027s a bit awkward, yea. I didn\u0027t want to add a length getting function that returns 0 for OOB/detached, to force the caller to always handle OOB explicitly.\n\nI *could* add a helper for getting the length and asserting the TA is not OOB/detached, that would simplify the code here.",
+      "parentUuid": "31644e8e_45d46dc5",
+      "revId": "2a17634da92c5d01a9ac91bb6edcaf39a47ce9e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
