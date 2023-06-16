@@ -3642,6 +3642,7 @@ void MacroAssembler::CheckPageFlag(Register object, Register scratch, int mask,
     movq(scratch, Immediate(~kPageAlignmentMask));
     andq(scratch, object);
   }
+  movq(scratch, Operand(scratch, 0));
   if (mask < (1 << kBitsPerByte)) {
     testb(Operand(scratch, BasicMemoryChunk::kFlagsOffset),
           Immediate(static_cast<uint8_t>(mask)));

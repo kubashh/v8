@@ -524,7 +524,8 @@ void PagedSpaceBase::ReleasePageImpl(Page* page,
 
   free_list_->EvictFreeListItems(page);
 
-  if (Page::FromAllocationAreaAddress(allocation_info_.top()) == page) {
+  if (allocation_info_.top() != kNullAddress &&
+      Page::FromAllocationAreaAddress(allocation_info_.top()) == page) {
     SetTopAndLimit(kNullAddress, kNullAddress, kNullAddress);
   }
 
@@ -680,7 +681,8 @@ void PagedSpaceBase::Verify(Isolate* isolate,
       external_page_bytes[static_cast<ExternalBackingStoreType>(i)] = 0;
     }
 
-    if (page == Page::FromAllocationAreaAddress(allocation_info_.top())) {
+    if (allocation_info_.top() != kNullAddress &&
+        page == Page::FromAllocationAreaAddress(allocation_info_.top())) {
       allocation_pointer_found_in_space = true;
     }
     CHECK(page->SweepingDone());

@@ -22,6 +22,17 @@ namespace internal {
 
 class BaseSpace;
 
+class BasicMemoryChunk;
+
+class MemoryChunkReference {
+ public:
+  explicit MemoryChunkReference(BasicMemoryChunk* ref) : reference_(ref) {}
+  BasicMemoryChunk* get() { return reference_; }
+
+ private:
+  BasicMemoryChunk* reference_;
+};
+
 class BasicMemoryChunk {
  public:
   // Use with std data structures.
@@ -148,13 +159,13 @@ class BasicMemoryChunk {
   // Only works if the pointer is in the first kPageSize of the MemoryChunk.
   static BasicMemoryChunk* FromAddress(Address a) {
     DCHECK(!V8_ENABLE_THIRD_PARTY_HEAP_BOOL);
-    return reinterpret_cast<BasicMemoryChunk*>(BaseAddress(a));
+    return reinterpret_cast<MemoryChunkReference*>(BaseAddress(a))->get();
   }
 
   // Only works if the object is in the first kPageSize of the MemoryChunk.
   static BasicMemoryChunk* FromHeapObject(Tagged<HeapObject> o) {
     DCHECK(!V8_ENABLE_THIRD_PARTY_HEAP_BOOL);
-    return reinterpret_cast<BasicMemoryChunk*>(BaseAddress(o.ptr()));
+    return reinterpret_cast<MemoryChunkReference*>(BaseAddress(o.ptr()))->get();
   }
 
   static inline void UpdateHighWaterMark(Address mark) {
@@ -171,11 +182,13 @@ class BasicMemoryChunk {
     }
   }
 
-  BasicMemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
-                   Address area_start, Address area_end,
+  BasicMemoryChunk(Address addr, Heap* heap, BaseSpace* space,
+                   size_t chunk_size, Address area_start, Address area_end,
                    VirtualMemory reservation);
 
-  Address address() const { return reinterpret_cast<Address>(this); }
+  Address address() const { return addr_; }
+
+  bool IsMalloced() const { return addr_ != reinterpret_cast<Address>(this); }
 
   // Returns the offset of a given address to this page.
   inline size_t Offset(Address a) const {
@@ -316,6 +329,10 @@ class BasicMemoryChunk {
 #endif
 
  protected:
+  MemoryChunkReference self_;
+
+  Address addr_;
+
   // Overall size of the chunk, including the header and guards.
   size_t size_;
 

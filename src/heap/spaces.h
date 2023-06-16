@@ -227,19 +227,21 @@ class Page : public MemoryChunk {
       MainThreadFlags(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING) |
       MainThreadFlags(MemoryChunk::INCREMENTAL_MARKING);
 
-  Page(Heap* heap, BaseSpace* space, size_t size, Address area_start,
-       Address area_end, VirtualMemory reservation, Executability executable);
+  Page(Address addr, Heap* heap, BaseSpace* space, size_t size,
+       Address area_start, Address area_end, VirtualMemory reservation,
+       Executability executable);
 
   // Returns the page containing a given address. The address ranges
   // from [page_addr .. page_addr + kPageSize]. This only works if the object
   // is in fact in a page.
   static Page* FromAddress(Address addr) {
     DCHECK(!V8_ENABLE_THIRD_PARTY_HEAP_BOOL);
-    return reinterpret_cast<Page*>(addr & ~kPageAlignmentMask);
+    return static_cast<Page*>(BasicMemoryChunk::FromAddress(addr));
   }
+
   static Page* FromHeapObject(HeapObject o) {
     DCHECK(!V8_ENABLE_THIRD_PARTY_HEAP_BOOL);
-    return reinterpret_cast<Page*>(o.ptr() & ~kAlignmentMask);
+    return static_cast<Page*>(BasicMemoryChunk::FromHeapObject(o));
   }
 
   static Page* cast(BasicMemoryChunk* chunk) {
@@ -262,7 +264,8 @@ class Page : public MemoryChunk {
 
   // Checks if address1 and address2 are on the same new space page.
   static bool OnSamePage(Address address1, Address address2) {
-    return Page::FromAddress(address1) == Page::FromAddress(address2);
+    return BasicMemoryChunk::BaseAddress(address1) ==
+           BasicMemoryChunk::BaseAddress(address2);
   }
 
   // Checks whether an address is page aligned.

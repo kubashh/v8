@@ -317,8 +317,8 @@ void ReadOnlySpace::DetachPagesAndAddToArtifacts(
 ReadOnlyPage::ReadOnlyPage(Heap* heap, BaseSpace* space, size_t chunk_size,
                            Address area_start, Address area_end,
                            VirtualMemory reservation)
-    : BasicMemoryChunk(heap, space, chunk_size, area_start, area_end,
-                       std::move(reservation)) {
+    : BasicMemoryChunk(reinterpret_cast<Address>(this), heap, space, chunk_size,
+                       area_start, area_end, std::move(reservation)) {
   allocated_bytes_ = 0;
   SetFlags(Flag::NEVER_EVACUATE | Flag::READ_ONLY_HEAP);
 }
@@ -451,7 +451,7 @@ void ReadOnlySpace::Verify(Isolate* isolate,
 
     visitor->VerifyPage(page);
 
-    if (page == Page::FromAllocationAreaAddress(top_)) {
+    if (top_ && page == Page::FromAllocationAreaAddress(top_)) {
       allocation_pointer_found_in_space = true;
     }
     ReadOnlySpaceObjectIterator it(isolate->heap(), this, page);
