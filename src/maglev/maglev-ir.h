@@ -1072,7 +1072,9 @@ class InterpretedDeoptFrame : public DeoptFrame {
                         SourcePosition source_position, DeoptFrame* parent)
       : DeoptFrame(InterpretedFrameData{unit, frame_state, closure,
                                         bytecode_position, source_position},
-                   parent) {}
+                   parent) {
+    DCHECK(source_position.IsKnown());
+  }
 
   const MaglevCompilationUnit& unit() const { return data().unit; }
   const CompactInterpreterFrameState* frame_state() const {
