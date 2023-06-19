@@ -4696,16 +4696,15 @@ void AttemptOnStackReplacement(MaglevAssembler* masm,
       RegisterSnapshot snapshot = node->register_snapshot();
       AddDeoptRegistersToSnapshot(&snapshot, node->eager_deopt_info());
       DCHECK(!snapshot.live_registers.has(maybe_target_code));
+      DCHECK(!snapshot.live_registers.has(kContextRegister));
       SaveRegisterStateForCall save_register_state(masm, snapshot);
       if (node->unit()->is_inline()) {
         __ Push(Smi::FromInt(osr_offset.ToInt()), node->closure());
-      } else {
-        __ Push(Smi::FromInt(osr_offset.ToInt()));
-      }
-      __ Move(kContextRegister, masm->native_context().object());
-      if (node->unit()->is_inline()) {
+        __ Move(kContextRegister, masm->native_context().object());
         __ CallRuntime(Runtime::kCompileOptimizedOSRFromMaglevInlined, 2);
       } else {
+        __ Push(Smi::FromInt(osr_offset.ToInt()));
+        __ Move(kContextRegister, masm->native_context().object());
         __ CallRuntime(Runtime::kCompileOptimizedOSRFromMaglev, 1);
       }
       save_register_state.DefineSafepoint();
