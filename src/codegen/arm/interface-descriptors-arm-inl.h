@@ -28,6 +28,21 @@ constexpr auto CallInterfaceDescriptor::DefaultDoubleRegisterArray() {
   return registers;
 }
 
+constexpr auto CallInterfaceDescriptor::DefaultReturnRegisterArray() {
+  auto registers =
+      RegisterArray(kReturnRegister0, kReturnRegister1, kReturnRegister2);
+  return registers;
+}
+
+constexpr auto CallInterfaceDescriptor::DefaultReturnDoubleRegisterArray() {
+  // Construct the std::array explicitly here because on arm, the registers d0,
+  // d1, ... are not of type DoubleRegister but only support implicit casting to
+  // DoubleRegister. For template resolution, however, implicit casting is not
+  // sufficient.
+  std::array<DoubleRegister, 3> registers{kFPReturnRegister0, no_dreg, no_dreg};
+  return registers;
+}
+
 #if DEBUG
 template <typename DerivedDescriptor>
 void StaticCallInterfaceDescriptor<DerivedDescriptor>::

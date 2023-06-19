@@ -25,6 +25,17 @@ constexpr auto CallInterfaceDescriptor::DefaultDoubleRegisterArray() {
   return registers;
 }
 
+constexpr auto CallInterfaceDescriptor::DefaultReturnRegisterArray() {
+  auto registers =
+      RegisterArray(kReturnRegister0, kReturnRegister1, kReturnRegister2);
+  return registers;
+}
+
+constexpr auto CallInterfaceDescriptor::DefaultReturnDoubleRegisterArray() {
+  auto registers = DoubleRegisterArray(kFPReturnRegister0, no_dreg, no_dreg);
+  return registers;
+}
+
 #if DEBUG
 template <typename DerivedDescriptor>
 void StaticCallInterfaceDescriptor<DerivedDescriptor>::
