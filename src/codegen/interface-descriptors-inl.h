@@ -160,30 +160,63 @@ struct IsRegisterArray<std::array<Register, N>> : public std::true_type {};
 template <>
 struct IsRegisterArray<EmptyRegisterArray> : public std::true_type {};
 
+// Helper trait for statically checking if a type is a std::array<Register,N>.
+template <typename T>
+struct IsDoubleRegisterArray : public std::false_type {};
+template <size_t N>
+struct IsDoubleRegisterArray<std::array<DoubleRegister, N>>
+    : public std::true_type {};
+template <>
+struct IsDoubleRegisterArray<EmptyDoubleRegisterArray> : public std::true_type {
+};
+
 // Helper for finding the index of the first invalid register in a register
 // array.
-template <size_t N, size_t Index>
+template <size_t N, size_t M, size_t Index>
 struct FirstInvalidRegisterHelper {
-  static constexpr int Call(std::array<Register, N> regs) {
-    if (!std::get<Index>(regs).is_valid()) {
+  static constexpr int Call(std::array<Register, N> regs,
+                            std::array<DoubleRegister, M> dregs) {
+    if (!std::get<Index>(regs).is_valid() &&
+        !std::get<Index>(dregs).is_valid()) {
       // All registers after the first invalid one have to also be invalid (this
-      // DCHECK will be checked recursively).
-      DCHECK_EQ((FirstInvalidRegisterHelper<N, Index + 1>::Call(regs)),
-                Index + 1);
+      // DCHECK will be checked recursively)df.
+      DCHECK_EQ(
+          (FirstInvalidRegisterHelper<N, M, Index + 1>::Call(regs, dregs)),
+          Index + 1);
       return Index;
     }
-    return FirstInvalidRegisterHelper<N, Index + 1>::Call(regs);
+    return FirstInvalidRegisterHelper<N, M, Index + 1>::Call(regs, dregs);
   }
 };
-template <size_t N>
-struct FirstInvalidRegisterHelper<N, N> {
-  static constexpr int Call(std::array<Register, N> regs) { return N; }
+template <size_t N, size_t M>
+struct FirstInvalidRegisterHelper<N, M, N> {
+  static constexpr int Call(std::array<Register, N> regs,
+                            std::array<DoubleRegister, M> dregs) {
+    return N;
+  }
 };
-template <size_t N, size_t Index = 0>
-constexpr size_t FirstInvalidRegister(std::array<Register, N> regs) {
-  return FirstInvalidRegisterHelper<N, 0>::Call(regs);
+template <size_t N, size_t M, size_t Index = 0>
+constexpr size_t FirstInvalidRegister(std::array<Register, N> regs,
+                                      std::array<DoubleRegister, M> dregs) {
+  static_assert(N <= M,
+                "This assert checks the assumption of the template code of "
+                "`FirstInvalidRegister` that the size of the double register "
+                "array is greater than the size of the GP register array. If "
+                "this assert fails, then it can be fixed by extending the "
+                "double register array with `no_dreg`.");
+  return FirstInvalidRegisterHelper<N, M, 0>::Call(regs, dregs);
 }
-constexpr size_t FirstInvalidRegister(EmptyRegisterArray regs) { return 0; }
+
+template <size_t M>
+constexpr size_t FirstInvalidRegister(EmptyRegisterArray regs,
+                                      std::array<DoubleRegister, M> dregs) {
+  return 0;
+}
+
+constexpr size_t FirstInvalidRegister(EmptyRegisterArray regs,
+                                      EmptyDoubleRegisterArray dregs) {
+  return 0;
+}
 
 }  // namespace detail
 
@@ -196,6 +229,12 @@ StaticCallInterfaceDescriptor<DerivedDescriptor>::GetRegisterParameterCount() {
       "DerivedDescriptor subclass should define a registers() function "
       "returning a std::array<Register>");
 
+  static_assert(
+      detail::IsDoubleRegisterArray<
+          decltype(DerivedDescriptor::double_registers())>::value,
+      "DerivedDescriptor subclass should define a double_registers() function "
+      "returning a std::array<DoubleRegister>");
+
   // The register parameter count is the minimum of:
   //   1. The number of named parameters in the descriptor, and
   //   2. The number of valid registers the descriptor provides with its
@@ -206,7 +245,8 @@ StaticCallInterfaceDescriptor<DerivedDescriptor>::GetRegisterParameterCount() {
   //      subclass otherwise).
   return std::min<int>({DerivedDescriptor::GetParameterCount(),
                         static_cast<int>(detail::FirstInvalidRegister(
-                            DerivedDescriptor::registers())),
+                            DerivedDescriptor::registers(),
+                            DerivedDescriptor::double_registers())),
                         DerivedDescriptor::kMaxRegisterParams});
 }
 

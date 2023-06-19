@@ -20,11 +20,17 @@ constexpr auto CallInterfaceDescriptor::DefaultRegisterArray() {
 }
 
 constexpr auto CallInterfaceDescriptor::DefaultDoubleRegisterArray() {
+  // The double_registers()-array defined by CallInterfaceDescriptors should be
+  // longer than registers()-array, see the static assert at
+  // FirstInvalidRegister. We achieve this in the default case by padding the
+  // DefaultDoubleRegisterArray with `no_dreg`.
+  //
   // Construct the std::array explicitly here because on arm, the registers d0,
   // d1, ... are not of type DoubleRegister but only support implicit casting to
   // DoubleRegister. For template resolution, however, implicit casting is not
   // sufficient.
-  std::array<DoubleRegister, 7> registers{d0, d1, d2, d3, d4, d5, d6};
+  std::array<DoubleRegister, 7> registers{d0,      no_dreg, no_dreg, no_dreg,
+                                          no_dreg, no_dreg, no_dreg};
   return registers;
 }
 

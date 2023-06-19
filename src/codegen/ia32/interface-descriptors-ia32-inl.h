@@ -19,8 +19,14 @@ constexpr auto CallInterfaceDescriptor::DefaultRegisterArray() {
 }
 
 constexpr auto CallInterfaceDescriptor::DefaultDoubleRegisterArray() {
+  // The double_registers()-array defined by CallInterfaceDescriptors should be
+  // longer than registers()-array, see the static assert at
+  // FirstInvalidRegister. We achieve this in the default case by padding the
+  // DefaultDoubleRegisterArray with `no_dreg`.
+  //
   // xmm0 isn't allocatable.
-  auto registers = DoubleRegisterArray(xmm1, xmm2, xmm3, xmm4, xmm5, xmm6);
+  auto registers =
+      DoubleRegisterArray(xmm1, no_dreg, no_dreg, no_dreg, no_dreg, no_dreg);
   return registers;
 }
 
