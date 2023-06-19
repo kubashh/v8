@@ -632,6 +632,13 @@ MaglevGraphBuilder::MaglevGraphBuilder(LocalIsolate* local_isolate,
   CHECK_IMPLIES(!compilation_unit_->is_osr(), entrypoint_ == 0);
 
   CalculatePredecessorCounts();
+
+  while (!source_position_iterator_.done() &&
+         source_position_iterator_.code_offset() < entrypoint_) {
+    source_position_iterator_.Advance();
+    UpdateSourceAndBytecodePosition(source_position_iterator_.code_offset());
+  }
+  UpdateSourceAndBytecodePosition(entrypoint_);
 }
 
 void MaglevGraphBuilder::StartPrologue() {
