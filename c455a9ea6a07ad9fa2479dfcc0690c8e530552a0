@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccf6ad74_1305b23e",
+        "filename": "test/mjsunit/wasm/gc-js-interop-helpers.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-19T15:19:29Z",
+      "side": 1,
+      "message": "For some reason with `v8_disable_write_barriers \u003d true` we encounter some deopts for tests for which we didn\u0027t encounter deopts before.\n\nGiven:\n```\nlet obj \u003d {}; // wasm_obj in real test case\n\nrepeated(() \u003d\u003e {\n  let res \u003d [];\n  [1, 2].forEach(function(x) {\n    res.push(this);\n  }, obj);\n  assertEquals([obj, obj], res);\n});\n```\n\nWith `v8_disable_write_barriers \u003d true`:\n```\n[bailout (kind: deopt-eager, reason: wrong map)\n[bailout (kind: deopt-eager, reason: not a Smi)\n```\n(No deopt otherwise.)\nI\u0027ll forward this to the GC team and ask if single generational debug is known to sometimes cause more deopts.",
+      "range": {
+        "startLine": 52,
+        "startChar": 18,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "c455a9ea6a07ad9fa2479dfcc0690c8e530552a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
