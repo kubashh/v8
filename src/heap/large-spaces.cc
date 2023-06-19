@@ -36,8 +36,9 @@ static_assert(kClearedWeakHeapObjectLower32 < LargePage::kHeaderSize);
 LargePage::LargePage(Heap* heap, BaseSpace* space, size_t chunk_size,
                      Address area_start, Address area_end,
                      VirtualMemory reservation, Executability executable)
-    : MemoryChunk(heap, space, chunk_size, area_start, area_end,
-                  std::move(reservation), executable, PageSize::kLarge) {
+    : MemoryChunk(reinterpret_cast<Address>(this), heap, space, chunk_size,
+                  area_start, area_end, std::move(reservation), executable,
+                  PageSize::kLarge) {
   static_assert(LargePage::kMaxCodePageSize <= TypedSlotSet::kMaxOffset);
 
   if (executable && chunk_size > LargePage::kMaxCodePageSize) {
@@ -237,7 +238,7 @@ size_t LargeObjectSpace::CommittedPhysicalMemory() const {
 
 LargePage* CodeLargeObjectSpace::FindPage(Address a) {
   base::RecursiveMutexGuard guard(&allocation_mutex_);
-  const Address key = BasicMemoryChunk::FromAddress(a)->address();
+  const Address key = BasicMemoryChunk::BaseAddress(a);
   auto it = chunk_map_.find(key);
   if (it != chunk_map_.end()) {
     LargePage* page = it->second;

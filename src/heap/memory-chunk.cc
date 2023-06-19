@@ -101,11 +101,11 @@ void MemoryChunk::SetDefaultCodePermissions() {
   }
 }
 
-MemoryChunk::MemoryChunk(Heap* heap, BaseSpace* space, size_t chunk_size,
-                         Address area_start, Address area_end,
-                         VirtualMemory reservation, Executability executable,
-                         PageSize page_size)
-    : BasicMemoryChunk(heap, space, chunk_size, area_start, area_end,
+MemoryChunk::MemoryChunk(Address addr, Heap* heap, BaseSpace* space,
+                         size_t chunk_size, Address area_start,
+                         Address area_end, VirtualMemory reservation,
+                         Executability executable, PageSize page_size)
+    : BasicMemoryChunk(addr, heap, space, chunk_size, area_start, area_end,
                        std::move(reservation)),
       mutex_(new base::Mutex()),
       shared_mutex_(new base::SharedMutex()),
@@ -273,48 +273,48 @@ bool MemoryChunk::ContainsAnySlots() const {
 
 #ifdef DEBUG
 void MemoryChunk::ValidateOffsets(MemoryChunk* chunk) {
+  Address header_address = reinterpret_cast<Address>(chunk);
   // Note that we cannot use offsetof because MemoryChunk is not a POD.
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->slot_set_) - chunk->address(),
+  DCHECK_EQ(reinterpret_cast<Address>(&chunk->slot_set_) - header_address,
             MemoryChunkLayout::kSlotSetOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->progress_bar_) - chunk->address(),
+  DCHECK_EQ(reinterpret_cast<Address>(&chunk->progress_bar_) - header_address,
             MemoryChunkLayout::kProgressBarOffset);
   DCHECK_EQ(
-      reinterpret_cast<Address>(&chunk->live_byte_count_) - chunk->address(),
+      reinterpret_cast<Address>(&chunk->live_byte_count_) - header_address,
       MemoryChunkLayout::kLiveByteCountOffset);
-  DCHECK_EQ(
-      reinterpret_cast<Address>(&chunk->typed_slot_set_) - chunk->address(),
-      MemoryChunkLayout::kTypedSlotSetOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->mutex_) - chunk->address(),
+  DCHECK_EQ(reinterpret_cast<Address>(&chunk->typed_slot_set_) - header_address,
+            MemoryChunkLayout::kTypedSlotSetOffset);
+  DCHECK_EQ(reinterpret_cast<Address>(&chunk->mutex_) - header_address,
             MemoryChunkLayout::kMutexOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->shared_mutex_) - chunk->address(),
+  DCHECK_EQ(reinterpret_cast<Address>(&chunk->shared_mutex_) - header_address,
             MemoryChunkLayout::kSharedMutexOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->concurrent_sweeping_) -
-                chunk->address(),
-            MemoryChunkLayout::kConcurrentSweepingOffset);
+  DCHECK_EQ(
+      reinterpret_cast<Address>(&chunk->concurrent_sweeping_) - header_address,
+      MemoryChunkLayout::kConcurrentSweepingOffset);
   DCHECK_EQ(reinterpret_cast<Address>(&chunk->page_protection_change_mutex_) -
-                chunk->address(),
+                header_address,
             MemoryChunkLayout::kPageProtectionChangeMutexOffset);
   DCHECK_EQ(reinterpret_cast<Address>(&chunk->external_backing_store_bytes_) -
-                chunk->address(),
+                header_address,
             MemoryChunkLayout::kExternalBackingStoreBytesOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->list_node_) - chunk->address(),
+  DCHECK_EQ(reinterpret_cast<Address>(&chunk->list_node_) - header_address,
             MemoryChunkLayout::kListNodeOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->categories_) - chunk->address(),
+  DCHECK_EQ(reinterpret_cast<Address>(&chunk->categories_) - header_address,
             MemoryChunkLayout::kCategoriesOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->code_object_registry_) -
-                chunk->address(),
-            MemoryChunkLayout::kCodeObjectRegistryOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->possibly_empty_buckets_) -
-                chunk->address(),
-            MemoryChunkLayout::kPossiblyEmptyBucketsOffset);
-  DCHECK_EQ(reinterpret_cast<Address>(&chunk->active_system_pages_) -
-                chunk->address(),
-            MemoryChunkLayout::kActiveSystemPagesOffset);
   DCHECK_EQ(
-      reinterpret_cast<Address>(&chunk->allocated_lab_size_) - chunk->address(),
+      reinterpret_cast<Address>(&chunk->code_object_registry_) - header_address,
+      MemoryChunkLayout::kCodeObjectRegistryOffset);
+  DCHECK_EQ(reinterpret_cast<Address>(&chunk->possibly_empty_buckets_) -
+                header_address,
+            MemoryChunkLayout::kPossiblyEmptyBucketsOffset);
+  DCHECK_EQ(
+      reinterpret_cast<Address>(&chunk->active_system_pages_) - header_address,
+      MemoryChunkLayout::kActiveSystemPagesOffset);
+  DCHECK_EQ(
+      reinterpret_cast<Address>(&chunk->allocated_lab_size_) - header_address,
       MemoryChunkLayout::kAllocatedLabSizeOffset);
   DCHECK_EQ(
-      reinterpret_cast<Address>(&chunk->age_in_new_space_) - chunk->address(),
+      reinterpret_cast<Address>(&chunk->age_in_new_space_) - header_address,
       MemoryChunkLayout::kAgeInNewSpaceOffset);
 }
 #endif

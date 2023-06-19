@@ -146,7 +146,12 @@ void MemoryAllocator::Unmapper::PerformFreeMemoryOnQueuedNonRegularChunks(
     JobDelegate* delegate) {
   MemoryChunk* chunk = nullptr;
   while ((chunk = GetMemoryChunkSafe(ChunkQueueType::kNonRegular)) != nullptr) {
+    bool chunk_is_malloced = chunk->IsMalloced();
     allocator_->PerformFreeMemory(chunk);
+    if (chunk_is_malloced) {
+      delete reinterpret_cast<Page*>(chunk);
+    }
+
     if (delegate && delegate->ShouldYield()) return;
   }
 }
@@ -163,8 +168,12 @@ void MemoryAllocator::Unmapper::PerformFreeMemoryOnQueuedChunks(
   // Regular chunks.
   while ((chunk = GetMemoryChunkSafe(ChunkQueueType::kRegular)) != nullptr) {
     bool pooled = chunk->IsFlagSet(MemoryChunk::POOLED);
+    bool chunk_is_malloced = chunk->IsMalloced();
     allocator_->PerformFreeMemory(chunk);
     if (pooled) AddMemoryChunkSafe(ChunkQueueType::kPooled, chunk);
+    else if (chunk_is_malloced)
+      delete reinterpret_cast<Page*>(chunk);
+
     if (delegate && delegate->ShouldYield()) return;
   }
   if (mode == MemoryAllocator::Unmapper::FreeMode::kFreePooled) {
@@ -535,7 +544,14 @@ void MemoryAllocator::PerformFreeMemory(MemoryChunk* chunk) {
 
   VirtualMemory* reservation = chunk->reserved_memory();
   if (chunk->IsFlagSet(MemoryChunk::POOLED)) {
-    UncommitMemory(reservation);
+    size_t size = reservation->size();
+    Address address = reservation->address();
+    size_t page_size = reservation->page_allocator()->CommitPageSize();
+    CHECK_GT(size, page_size);
+    address += page_size;
+    size -= page_size;
+    (void)reservation->SetPermissions(address, size, PageAllocator::kNoAccess);
+    // UncommitMemory(reservation);
   } else {
     DCHECK(reservation->IsReserved());
     reservation->Free();
@@ -549,10 +565,15 @@ void MemoryAllocator::Free(MemoryAllocator::FreeMode mode, MemoryChunk* chunk) {
     RecordNormalPageDestroyed(*Page::cast(chunk));
   }
   switch (mode) {
-    case FreeMode::kImmediately:
+    case FreeMode::kImmediately: {
+      bool chunk_is_malloced = chunk->IsMalloced();
       PreFreeMemory(chunk);
       PerformFreeMemory(chunk);
+      if (chunk_is_malloced) {
+        delete reinterpret_cast<Page*>(chunk);
+      }
       break;
+    }
     case FreeMode::kConcurrentlyAndPool:
       DCHECK_EQ(chunk->size(), static_cast<size_t>(MemoryChunk::kPageSize));
       DCHECK_EQ(chunk->executable(), NOT_EXECUTABLE);
@@ -593,9 +614,19 @@ Page* MemoryAllocator::AllocatePage(MemoryAllocator::AllocationMode alloc_mode,
 
   if (!chunk_info) return nullptr;
 
-  Page* page = new (chunk_info->start) Page(
-      isolate_->heap(), space, chunk_info->size, chunk_info->area_start,
-      chunk_info->area_end, std::move(chunk_info->reservation), executable);
+  Page* page;
+  if (executable == Executability::EXECUTABLE) {
+    page = new Page(reinterpret_cast<Address>(chunk_info->start),
+                    isolate_->heap(), space, chunk_info->size,
+                    chunk_info->area_start, chunk_info->area_end,
+                    std::move(chunk_info->reservation), executable);
+    new (chunk_info->start) MemoryChunkReference(page);
+  } else {
+    page = new (chunk_info->start) Page(
+        reinterpret_cast<Address>(chunk_info->start), isolate_->heap(), space,
+        chunk_info->size, chunk_info->area_start, chunk_info->area_end,
+        std::move(chunk_info->reservation), executable);
+  }
 
 #ifdef DEBUG
   if (page->executable()) RegisterExecutableMemoryChunk(page);
@@ -648,10 +679,10 @@ LargePage* MemoryAllocator::AllocateLargePage(LargeObjectSpace* space,
 
 base::Optional<MemoryAllocator::MemoryChunkAllocationResult>
 MemoryAllocator::AllocateUninitializedPageFromPool(Space* space) {
-  void* chunk = unmapper()->TryGetPooledMemoryChunkSafe();
+  MemoryChunk* chunk = unmapper()->TryGetPooledMemoryChunkSafe();
   if (chunk == nullptr) return {};
   const int size = MemoryChunk::kPageSize;
-  const Address start = reinterpret_cast<Address>(chunk);
+  const Address start = chunk->address();
   const Address area_start =
       start +
       MemoryChunkLayout::ObjectStartOffsetInMemoryChunk(space->identity());
@@ -666,7 +697,8 @@ MemoryAllocator::AllocateUninitializedPageFromPool(Space* space) {
 
   size_ += size;
   return MemoryChunkAllocationResult{
-      chunk, size, area_start, area_end, std::move(reservation),
+      reinterpret_cast<void*>(start), size, area_start, area_end,
+      std::move(reservation),
   };
 }
 

@@ -190,10 +190,11 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
   void InsertIntoRememberedSet(TNode<IntPtrT> object, TNode<IntPtrT> slot,
                                SaveFPRegsMode fp_mode) {
     Label slow_path(this), next(this);
-    TNode<IntPtrT> page = PageFromAddress(object);
+    TNode<IntPtrT> page_header = PageFromAddress(object);
 
     // Load address of SlotSet
-    TNode<IntPtrT> slot_set = LoadSlotSet(page, &slow_path);
+    TNode<IntPtrT> slot_set = LoadSlotSet(page_header, &slow_path);
+    TNode<IntPtrT> page = WordAnd(object, IntPtrConstant(~kPageAlignmentMask));
     TNode<IntPtrT> slot_offset = IntPtrSub(slot, page);
 
     // Load bucket
@@ -209,7 +210,7 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
           ExternalConstant(ExternalReference::insert_remembered_set_function());
       CallCFunctionWithCallerSavedRegisters(
           function, MachineTypeOf<Int32T>::value, fp_mode,
-          std::make_pair(MachineTypeOf<IntPtrT>::value, page),
+          std::make_pair(MachineTypeOf<IntPtrT>::value, page_header),
           std::make_pair(MachineTypeOf<IntPtrT>::value, slot));
       Goto(&next);
     }

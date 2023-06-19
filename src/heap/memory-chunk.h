@@ -49,8 +49,8 @@ class MemoryChunk : public BasicMemoryChunk {
   // Page size in bytes.  This must be a multiple of the OS page size.
   static const int kPageSize = 1 << kPageSizeBits;
 
-  MemoryChunk(Heap* heap, BaseSpace* space, size_t size, Address area_start,
-              Address area_end, VirtualMemory reservation,
+  MemoryChunk(Address addr, Heap* heap, BaseSpace* space, size_t size,
+              Address area_start, Address area_end, VirtualMemory reservation,
               Executability executable, PageSize page_size);
 
   // Only works if the pointer is in the first kPageSize of the MemoryChunk.

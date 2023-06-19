@@ -44,8 +44,9 @@ inline bool IsCodeSpaceObject(HeapObject object);
 namespace heap_internals {
 
 struct MemoryChunk {
-  static constexpr uintptr_t kFlagsOffset = kSizetSize;
-  static constexpr uintptr_t kHeapOffset = kSizetSize + kUIntptrSize;
+  static constexpr uintptr_t kFlagsOffset =
+      kUIntptrSize + kUIntptrSize + kSizetSize;
+  static constexpr uintptr_t kHeapOffset = kFlagsOffset + kUIntptrSize;
   static constexpr uintptr_t kInWritableSharedSpaceBit = uintptr_t{1} << 0;
   static constexpr uintptr_t kFromPageBit = uintptr_t{1} << 3;
   static constexpr uintptr_t kToPageBit = uintptr_t{1} << 4;
@@ -56,7 +57,7 @@ struct MemoryChunk {
   V8_INLINE static heap_internals::MemoryChunk* FromHeapObject(
       HeapObject object) {
     DCHECK(!V8_ENABLE_THIRD_PARTY_HEAP_BOOL);
-    return reinterpret_cast<MemoryChunk*>(object.ptr() & ~kPageAlignmentMask);
+    return *reinterpret_cast<MemoryChunk**>(object.ptr() & ~kPageAlignmentMask);
   }
 
   V8_INLINE bool IsMarking() const { return GetFlags() & kMarkingBit; }

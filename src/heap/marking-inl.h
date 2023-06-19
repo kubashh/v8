@@ -149,7 +149,8 @@ inline void MarkingBitmap::ClearRange(MarkBitIndex start_index,
 // static
 MarkingBitmap* MarkingBitmap::FromAddress(Address address) {
   Address page_address = address & ~kPageAlignmentMask;
-  return Cast(page_address + MemoryChunkLayout::kMarkingBitmapOffset);
+  Address header_address = *reinterpret_cast<Address*>(page_address);
+  return Cast(header_address + MemoryChunkLayout::kMarkingBitmapOffset);
 }
 
 // static

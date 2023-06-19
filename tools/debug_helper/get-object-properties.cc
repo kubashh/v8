@@ -376,7 +376,7 @@ class ReadStringVisitor : public TqObjectVisitor {
           GetOrFinish(object->GetResourceDataValue(accessor_));
 #ifdef V8_ENABLE_SANDBOX
       Address memory_chunk =
-          BasicMemoryChunk::BaseAddress(object->GetMapAddress());
+          BasicMemoryChunk::FromAddress(object->GetMapAddress())->address();
       Address heap = GetOrFinish(
           ReadValue<Address>(memory_chunk + BasicMemoryChunk::kHeapOffset));
       Isolate* isolate = Isolate::FromHeap(reinterpret_cast<Heap*>(heap));

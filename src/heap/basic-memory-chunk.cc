@@ -53,15 +53,17 @@ constexpr BasicMemoryChunk::MainThreadFlags BasicMemoryChunk::kIsLargePageMask;
 constexpr BasicMemoryChunk::MainThreadFlags
     BasicMemoryChunk::kSkipEvacuationSlotsRecordingMask;
 
-BasicMemoryChunk::BasicMemoryChunk(Heap* heap, BaseSpace* space,
+BasicMemoryChunk::BasicMemoryChunk(Address addr, Heap* heap, BaseSpace* space,
                                    size_t chunk_size, Address area_start,
                                    Address area_end, VirtualMemory reservation)
-    : size_(chunk_size),
+    : self_(MemoryChunkReference(this)),
+      addr_(addr),
+      size_(chunk_size),
       heap_(heap),
       area_start_(area_start),
       area_end_(area_end),
       allocated_bytes_(area_end - area_start),
-      high_water_mark_(area_start - reinterpret_cast<Address>(this)),
+      high_water_mark_(area_start - addr),
       owner_(space),
       reservation_(std::move(reservation)) {}
 
