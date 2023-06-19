@@ -1,0 +1,750 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ea4c98b_f2503972",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "missing [compiler] tag ;)",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d01b68c9_c215e572",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "Looking great overall! :)",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7ebd2da_cf4e4cd3",
+        "filename": "src/compiler/backend/frame-elider.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "Could you add a comment saying something like \"All Turbofan blocks are succeeded by the End block, and thus, the only Turbofan block without a successor is this end block. On the other hand, more or less any Turboshaft block could have no successors (and Turboshaft has no \u0027end\u0027 block)\"?",
+      "range": {
+        "startLine": 110,
+        "startChar": 2,
+        "endLine": 110,
+        "endChar": 51
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edd492cf_4ce519af",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "DCHEK_EQ",
+      "range": {
+        "startLine": 84,
+        "startChar": 5,
+        "endLine": 84,
+        "endChar": 12
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41012d67_190688d8",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "I\u0027d remove the name (ie, just keep `void InitializeAdapter(schedule_t) {}`) to avoid \"unused variable\" warnings, but maybe we don\u0027t trigger those warnings for parameters and you can keep the name.",
+      "range": {
+        "startLine": 140,
+        "startChar": 36,
+        "endLine": 140,
+        "endChar": 44
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bed55242_df01e461",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "Is this the same as `outer_frame_state`? If so, could you DCHECK_EQ that it is indeed the same? (I think that it should be, but I\u0027m not sure)",
+      "range": {
+        "startLine": 211,
+        "startChar": 11,
+        "endLine": 211,
+        "endChar": 52
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a72cc19c_50d65e72",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "Could you add a TODO to rename this once we\u0027ve removed Turbofan? (the whole \"schedule\" concept is a bit weird for Turboshaft)",
+      "range": {
+        "startLine": 225,
+        "startChar": 8,
+        "endLine": 225,
+        "endChar": 18
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae0a5aef_560eec64",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "This will fail for TailCall; maybe add a \"TODO: support TailCall\" or a `if (.Is\u003cTailCallOp\u003e()) UNIMPLEMENTED()` ?\n(it\u0027s probably fine if you don\u0027t though, since the .Cast will crash with a DCHECK failure on a DCHECK_EQ(opcode, Opcode::Call) which shouldn\u0027t be too hard to debug...)",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18fae4c2_63117480",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "I think that you shouldn\u0027t negate this here.",
+      "range": {
+        "startLine": 282,
+        "startChar": 10,
+        "endLine": 282,
+        "endChar": 11
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab98fe50_3f6fbb57",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "What about always swapping left_ and right_ when this can_put_constant_right_ is true? This way you don\u0027t have to store can_put_constant_right_, and you won\u0027t need EnsureConstantIsRightIfCommutative anymore.",
+      "range": {
+        "startLine": 275,
+        "startChar": 6,
+        "endLine": 286,
+        "endChar": 5
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "595494cb_6118e5b5",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "I don\u0027t think that you need to store this",
+      "range": {
+        "startLine": 318,
+        "startChar": 4,
+        "endLine": 318,
+        "endChar": 36
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50b45ac8_bf85665b",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "This is fairly slow for Turboshaft. Maybe add a \"TODO: this has log(n) complexity; we should consider precomputing OpIndex-\u003eBlockId mappings or something like that to speed this up\"?",
+      "range": {
+        "startLine": 334,
+        "startChar": 11,
+        "endLine": 334,
+        "endChar": 51
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5828786_814b729c",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "`value`",
+      "range": {
+        "startLine": 403,
+        "startChar": 60,
+        "endLine": 403,
+        "endChar": 64
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "189a6dc9_7de7e591",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "It\u0027s probably never going to happen, but it might be safe to add a `\u0026\u0026 graph_-\u003eGet(value).saturated_use_count.Get().IsSaturated()` (you\u0027ll have to add the IsSaturated method :p).\n(because a PhiOp or a CallOp could have 255 times the same input, and said input could also have other uses, but your current return will return true instead of false for this case)",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ebf10d4_ca1f6b68",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "Missing EqualOp",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da00c8e7_e15d8591",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "I don\u0027t think that the InstructionScheduler is Turbofan-specific, so this could probably work for both Turbofan and Turboshaft. That being said, the InstructionScheduler is disabled by default (and has been disabled for 8 years as far as I can tell xD), so it\u0027s probably fairly out-dated, and thus it probably doesn\u0027t matter what you do or don\u0027t here.",
+      "range": {
+        "startLine": 128,
+        "startChar": 2,
+        "endLine": 128,
+        "endChar": 59
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "311b104b_f88da5e2",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "With Turboshaft, I think that this could fail for pure nodes, which is suboptimal. For instance, in this operation sequence:\n```\n1: WordBinop(...)\n2: Store(...)\n3: WordBinop(...)\n```\noperations 1 and 3 have different effect levels, even though CanCover(3, 1) should clearly return true (if 1 isn\u0027t used in the Store). \n\nI think that it\u0027s fine to have this flaw in this first version, but we should add a TODO to fix this (because it\u0027s going to impact performance).",
+      "range": {
+        "startLine": 319,
+        "startChar": 2,
+        "endLine": 319,
+        "endChar": 54
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d068b846_85613d4f",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "side-node: I think that this can be fixed by removing the kNoWrite property of Retain in Turbofan (in Turboshaft, it already has the CanWrite property): then, Retain becomes RequiredWhenUnused, and we don\u0027t need this special case anymore. \n(no need to do that in this CL though)",
+      "range": {
+        "startLine": 449,
+        "startChar": 2,
+        "endLine": 451,
+        "endChar": 40
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c77a7265_3fffceed",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "It this really UNIMPLEMENTED, or should it be UNREACHABLE? (actually, I\u0027m not even sure that you need to define this, since your BuildDeoptInput and BuildStateValues lambda kinda replace this function).",
+      "range": {
+        "startLine": 843,
+        "startChar": 2,
+        "endLine": 843,
+        "endChar": 15
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaf476cd_ab496c80",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "You\u0027re not really inserting a conversion; maybe you could add \"TODO\" in front of this comment.",
+      "range": {
+        "startLine": 919,
+        "startChar": 26,
+        "endLine": 919,
+        "endChar": 54
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4a6fb02_6e497bdd",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "Around here, the Turbofan version of this does:\n```\n  if (descriptor-\u003eouter_state()) {\n    entries +\u003d AddInputsToFrameStateDescriptor(\n        descriptor-\u003eouter_state(), FrameState{state.outer_frame_state()}, g,\n        deduplicator, inputs, kind, zone);\n  }\n```\nIs it not necessary for Turboshaft? If it\u0027s just not implemented yet, you could add a `if (descriptor-\u003eouter_state()) { UNIMPLEMENTED(); }`.",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca82cc88_e816cedb",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1548,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "TurbofanAdapter, no?",
+      "range": {
+        "startLine": 1548,
+        "startChar": 26,
+        "endLine": 1548,
+        "endChar": 33
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e35f115f_3115b607",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2286,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "What about a ParameterIndexOf function in the Adapter?",
+      "range": {
+        "startLine": 2279,
+        "startChar": 2,
+        "endLine": 2286,
+        "endChar": 3
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e709b23_db902d07",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "I think that this can be TurbofanAdapter. (Turboshaft doesn\u0027t have IfException)",
+      "range": {
+        "startLine": 2320,
+        "startChar": 26,
+        "endLine": 2320,
+        "endChar": 33
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31162ef6_fa42f080",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2409,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "What about a CallDescriptorOf method in the Adapter?",
+      "range": {
+        "startLine": 2403,
+        "startChar": 2,
+        "endLine": 2409,
+        "endChar": 3
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f1a95b4_33b3955d",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2762,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be reachable since the input is a `Node` rather than a `node_t`. Maybe you could replace this function should be for InstructionSelectorT\u003cTurbofanAdapter\u003e rather than \u003cAdapter\u003e. (actually, I think that all Visit methods that take Node* as input should probably be \u003cTurbofanAdapter\u003e rather than \u003cAdapter\u003e (there are a few further down))",
+      "range": {
+        "startLine": 2759,
+        "startChar": 2,
+        "endLine": 2762,
+        "endChar": 3
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b24edfe4_f2c6851e",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2891,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "FYI, turboshaft::Block has a `HasPhis` methods that should make this check fairly easy to implement ;)\n(no need to do it in this CL though)",
+      "range": {
+        "startLine": 2891,
+        "startChar": 26,
+        "endLine": 2891,
+        "endChar": 64
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05f3679e_74c2a4f4",
+        "filename": "src/compiler/backend/instruction-selector.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "Any reason to not use `MACHINE_BINOP_32_LIST(DECLARE_GENERATOR)`? If you can indeed use this, then you could replace the whole list with `MACHINE_OP_LIST(DECLARE_GENERATOR)` (as it was done before). I\u0027m probably missing something, but I don\u0027t see it :D",
+      "range": {
+        "startLine": 719,
+        "startChar": 0,
+        "endLine": 738,
+        "endChar": 34
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b04124e_87c37baa",
+        "filename": "src/compiler/backend/instruction.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "You could write this as `DCHECK_EQ(RpoNumber::FromInt(block.index().id()).ToSize(), rpo_number)`, in order to remove the `USE`, and to be sure that nothing gets computed in non-debug builds (I\u0027m guessing that everything gets inlined, so it should be fine either way, but better be on the safe side :) )",
+      "range": {
+        "startLine": 818,
+        "startChar": 4,
+        "endLine": 820,
+        "endChar": 13
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a90f1c0_c6d45bd7",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "I think that you could move this to the .cc file.",
+      "range": {
+        "startLine": 1262,
+        "startChar": 0,
+        "endLine": 1276,
+        "endChar": 1
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c83f4f98_0322a993",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "This as well could be moved to the .cc file.",
+      "range": {
+        "startLine": 1335,
+        "startChar": 0,
+        "endLine": 1342,
+        "endChar": 3
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43d143fc_ddff4fc4",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "Please add brackets when the body is not on the same line as the if/else :)",
+      "range": {
+        "startLine": 2927,
+        "startChar": 6,
+        "endLine": 2935,
+        "endChar": 28
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71a4a585_fa68635d",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "Left-over from some debugging? Otherwise it would require a comment to explain why this DCHECK is here ;)",
+      "range": {
+        "startLine": 1172,
+        "startChar": 2,
+        "endLine": 1172,
+        "endChar": 77
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa06a99c_2e8853c6",
+        "filename": "src/compiler/turboshaft/phase.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-19T12:39:57Z",
+      "side": 1,
+      "message": "This is exactly the same function as PipelineData::InitializeInstructionSequence defined in pipeline.cc, no? If so, it could be nice to merge them (like, extract it from PipelineData and make it take the zone, graph, isolate and a ref to sequence as argument)",
+      "range": {
+        "startLine": 84,
+        "startChar": 2,
+        "endLine": 96,
+        "endChar": 0
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
