@@ -231,6 +231,7 @@ HeapNumberRequest::HeapNumberRequest(double heap_number, int offset)
 void Assembler::RecordDeoptReason(DeoptimizeReason reason, uint32_t node_id,
                                   SourcePosition position, int id) {
   EnsureSpace ensure_space(this);
+  DCHECK(position.IsKnown());
   RecordRelocInfo(RelocInfo::DEOPT_SCRIPT_OFFSET, position.ScriptOffset());
   RecordRelocInfo(RelocInfo::DEOPT_INLINING_ID, position.InliningId());
   RecordRelocInfo(RelocInfo::DEOPT_REASON, static_cast<int>(reason));
