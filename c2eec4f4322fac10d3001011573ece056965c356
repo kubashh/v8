@@ -417,6 +417,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa2c6563_86110b02",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-20T09:33:47Z",
+      "side": 1,
+      "message": "Ah I see, that\u0027s a good point... I think that we can keep the explicit EnsureConstantIsRightIfCommutative for now, and if after porting a few more things we realize that we always use it, we could remove it and automatically swap.",
+      "parentUuid": "0a2f7b39_dc2e4ac7",
+      "range": {
+        "startLine": 275,
+        "startChar": 6,
+        "endLine": 286,
+        "endChar": 5
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "595494cb_6118e5b5",
@@ -675,6 +699,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb4686b9_ce34e6ac",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-20T09:33:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1c5c1c8c_6bb20b9f",
+      "range": {
+        "startLine": 128,
+        "startChar": 2,
+        "endLine": 128,
+        "endChar": 59
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "311b104b_f88da5e2",
@@ -853,6 +901,30 @@
       "side": 1,
       "message": "Yeah I think this is just left over from copy\u0026pasting. I think I can remove this branch entirely, no?",
       "parentUuid": "aaf476cd_ab496c80",
+      "range": {
+        "startLine": 919,
+        "startChar": 26,
+        "endLine": 919,
+        "endChar": 54
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1f9c4a5_5a1fde62",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-20T09:33:47Z",
+      "side": 1,
+      "message": "I think that we can _try_ to remove this entire branch, but I wouldn\u0027t be surprised if some later part of the pipeline complains about a 64-bit value being used somewhere where a 32-bit is expected. That being said, we might want to fix this over there when it happens, rather than here :)",
+      "parentUuid": "e63ac610_a3f91d0f",
       "range": {
         "startLine": 919,
         "startChar": 26,
@@ -1203,6 +1275,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63d7b443_663348a6",
+        "filename": "src/compiler/backend/instruction-selector.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-20T09:33:47Z",
+      "side": 1,
+      "message": "Sounds good :)",
+      "parentUuid": "85bebb12_963cf9a8",
+      "range": {
+        "startLine": 719,
+        "startChar": 0,
+        "endLine": 738,
+        "endChar": 34
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b04124e_87c37baa",
@@ -1381,6 +1477,30 @@
       "side": 1,
       "message": "I\u0027m surprised they are not on the same line.",
       "parentUuid": "43d143fc_ddff4fc4",
+      "range": {
+        "startLine": 2927,
+        "startChar": 6,
+        "endLine": 2935,
+        "endChar": 28
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4949cb5_027501b9",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-20T09:33:47Z",
+      "side": 1,
+      "message": "So am I 😄",
+      "parentUuid": "d028d879_5ba4d333",
       "range": {
         "startLine": 2927,
         "startChar": 6,
