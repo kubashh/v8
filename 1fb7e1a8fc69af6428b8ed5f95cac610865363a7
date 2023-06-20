@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "491ca1c2_dfd00e0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-06-20T11:34:54Z",
+      "side": 1,
+      "message": "ptal.\n\nI\u0027ll run browsing stories later today (without this CL), but I think this makes sense regardless.",
+      "revId": "1fb7e1a8fc69af6428b8ed5f95cac610865363a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
