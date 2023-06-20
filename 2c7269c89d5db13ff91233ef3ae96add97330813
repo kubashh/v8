@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c241cf4_6eb0e6a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-06-20T11:35:04Z",
+      "side": 1,
+      "message": "I don\u0027t see any regressions with scavenger, so I assume old space sweeping can remain lower priority.",
+      "range": {
+        "startLine": 10,
+        "startChar": 33,
+        "endLine": 10,
+        "endChar": 42
+      },
+      "revId": "2c7269c89d5db13ff91233ef3ae96add97330813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b30a9d89_ee034ad0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-06-20T11:35:04Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "2c7269c89d5db13ff91233ef3ae96add97330813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
