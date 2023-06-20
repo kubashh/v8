@@ -33,6 +33,24 @@
       "message": "Unrelated to the change, but curious non-power-of-two size: it\u0027s 16 * 4095.",
       "revId": "5290b9b59a57c6e0424dd328de635798d407dd7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "675ba9ea_70da2a85",
+        "filename": "src/wasm/wasm-limits.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-06-20T12:35:40Z",
+      "side": 1,
+      "message": "Ack, the reason seems to be an implementation detail of TurboFan: https://crrev.com/c/1821457\n\nMaybe that should have been documented, but thankfully we have `git blame` :)",
+      "parentUuid": "93f1fb60_f996e7dc",
+      "revId": "5290b9b59a57c6e0424dd328de635798d407dd7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
