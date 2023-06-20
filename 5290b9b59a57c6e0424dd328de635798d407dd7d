@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "5290b9b59a57c6e0424dd328de635798d407dd7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93f1fb60_f996e7dc",
+        "filename": "src/wasm/wasm-limits.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-20T12:09:31Z",
+      "side": 1,
+      "message": "Unrelated to the change, but curious non-power-of-two size: it\u0027s 16 * 4095.",
+      "revId": "5290b9b59a57c6e0424dd328de635798d407dd7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
