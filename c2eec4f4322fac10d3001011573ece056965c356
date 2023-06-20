@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6bc83c01_f746c846",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ea4c98b_f2503972",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d01b68c9_c215e572",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 16
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d3967eb_91586ed4",
+        "filename": "src/compiler/backend/frame-elider.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7ebd2da_cf4e4cd3",
+      "range": {
+        "startLine": 110,
+        "startChar": 2,
+        "endLine": 110,
+        "endChar": 51
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edd492cf_4ce519af",
@@ -71,6 +113,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "DCHEK_EQ",
+      "range": {
+        "startLine": 84,
+        "startChar": 5,
+        "endLine": 84,
+        "endChar": 12
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edee7269_f5fc9a2d",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edd492cf_4ce519af",
       "range": {
         "startLine": 84,
         "startChar": 5,
@@ -104,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a12bf9a_66e4efde",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41012d67_190688d8",
+      "range": {
+        "startLine": 140,
+        "startChar": 36,
+        "endLine": 140,
+        "endChar": 44
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bed55242_df01e461",
@@ -117,6 +207,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "Is this the same as `outer_frame_state`? If so, could you DCHECK_EQ that it is indeed the same? (I think that it should be, but I\u0027m not sure)",
+      "range": {
+        "startLine": 211,
+        "startChar": 11,
+        "endLine": 211,
+        "endChar": 52
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "790d92d0_8a067863",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bed55242_df01e461",
       "range": {
         "startLine": 211,
         "startChar": 11,
@@ -150,6 +264,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7244ccee_44acd89a",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a72cc19c_50d65e72",
+      "range": {
+        "startLine": 225,
+        "startChar": 8,
+        "endLine": 225,
+        "endChar": 18
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae0a5aef_560eec64",
@@ -167,6 +305,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed65aaa_e65a230d",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae0a5aef_560eec64",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18fae4c2_63117480",
@@ -180,6 +336,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "I think that you shouldn\u0027t negate this here.",
+      "range": {
+        "startLine": 282,
+        "startChar": 10,
+        "endLine": 282,
+        "endChar": 11
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a34d2e7_827bcd86",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18fae4c2_63117480",
       "range": {
         "startLine": 282,
         "startChar": 10,
@@ -215,6 +395,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a2f7b39_dc2e4ac7",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Yeah the thing here is that the Turbofan implementation access everything using the `NodeMatcher` so they always get a consistent view. If you use the `WordBinopView` and still use the input operation directly (which I think we need to do in some cases) you might get different results for what `left` and `right` are, so I felt better to make this swap explicit. I don\u0027t have a very strong opinion, though.",
+      "parentUuid": "ab98fe50_3f6fbb57",
+      "range": {
+        "startLine": 275,
+        "startChar": 6,
+        "endLine": 286,
+        "endChar": 5
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "595494cb_6118e5b5",
         "filename": "src/compiler/backend/instruction-selector-adapter.h",
         "patchSetId": 16
@@ -226,6 +430,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "I don\u0027t think that you need to store this",
+      "range": {
+        "startLine": 318,
+        "startChar": 4,
+        "endLine": 318,
+        "endChar": 36
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f22daa06_1c6f6788",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "595494cb_6118e5b5",
       "range": {
         "startLine": 318,
         "startChar": 4,
@@ -259,6 +487,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5875275_5b9ab8b9",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50b45ac8_bf85665b",
+      "range": {
+        "startLine": 334,
+        "startChar": 11,
+        "endLine": 334,
+        "endChar": 51
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5828786_814b729c",
@@ -272,6 +524,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "`value`",
+      "range": {
+        "startLine": 403,
+        "startChar": 60,
+        "endLine": 403,
+        "endChar": 64
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cd8bff7_3247027b",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5828786_814b729c",
       "range": {
         "startLine": 403,
         "startChar": 60,
@@ -299,6 +575,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94fbc220_20833c40",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "189a6dc9_7de7e591",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ebf10d4_ca1f6b68",
@@ -316,6 +610,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9b5cabd_dac96be4",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ebf10d4_ca1f6b68",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da00c8e7_e15d8591",
@@ -329,6 +641,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "I don\u0027t think that the InstructionScheduler is Turbofan-specific, so this could probably work for both Turbofan and Turboshaft. That being said, the InstructionScheduler is disabled by default (and has been disabled for 8 years as far as I can tell xD), so it\u0027s probably fairly out-dated, and thus it probably doesn\u0027t matter what you do or don\u0027t here.",
+      "range": {
+        "startLine": 128,
+        "startChar": 2,
+        "endLine": 128,
+        "endChar": 59
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c5c1c8c_6bb20b9f",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "I don\u0027t remember exactly, but I thought we discussed this (or me and Tobias?) and said that this is not used for Turboshaft. But if this works either way, I will just keep it for Turboshaft.",
+      "parentUuid": "da00c8e7_e15d8591",
       "range": {
         "startLine": 128,
         "startChar": 2,
@@ -362,6 +698,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "79dc7da0_7d88aea3",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Yes, the entire effect level is pretty messed up right now. Will add TODO.",
+      "parentUuid": "311b104b_f88da5e2",
+      "range": {
+        "startLine": 319,
+        "startChar": 2,
+        "endLine": 319,
+        "endChar": 54
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d068b846_85613d4f",
@@ -385,6 +745,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e63230d_7417d16e",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "I wrap it in an `if constexpr(Adapter::IsTurbofan) { ... }`. This way we will automatically remove it when we rip out the entire Turbofan implementation.",
+      "parentUuid": "d068b846_85613d4f",
+      "range": {
+        "startLine": 449,
+        "startChar": 2,
+        "endLine": 451,
+        "endChar": 40
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c77a7265_3fffceed",
@@ -398,6 +782,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "It this really UNIMPLEMENTED, or should it be UNREACHABLE? (actually, I\u0027m not even sure that you need to define this, since your BuildDeoptInput and BuildStateValues lambda kinda replace this function).",
+      "range": {
+        "startLine": 843,
+        "startChar": 2,
+        "endLine": 843,
+        "endChar": 15
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1e67b3a_a0c6fd76",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c77a7265_3fffceed",
       "range": {
         "startLine": 843,
         "startChar": 2,
@@ -433,6 +841,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e63ac610_a3f91d0f",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Yeah I think this is just left over from copy\u0026pasting. I think I can remove this branch entirely, no?",
+      "parentUuid": "aaf476cd_ab496c80",
+      "range": {
+        "startLine": 919,
+        "startChar": 26,
+        "endLine": 919,
+        "endChar": 54
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a4a6fb02_6e497bdd",
         "filename": "src/compiler/backend/instruction-selector.cc",
         "patchSetId": 16
@@ -444,6 +876,24 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "Around here, the Turbofan version of this does:\n```\n  if (descriptor-\u003eouter_state()) {\n    entries +\u003d AddInputsToFrameStateDescriptor(\n        descriptor-\u003eouter_state(), FrameState{state.outer_frame_state()}, g,\n        deduplicator, inputs, kind, zone);\n  }\n```\nIs it not necessary for Turboshaft? If it\u0027s just not implemented yet, you could add a `if (descriptor-\u003eouter_state()) { UNIMPLEMENTED(); }`.",
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25905abf_4ba323a8",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4a6fb02_6e497bdd",
       "revId": "c2eec4f4322fac10d3001011573ece056965c356",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -461,6 +911,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "TurbofanAdapter, no?",
+      "range": {
+        "startLine": 1548,
+        "startChar": 26,
+        "endLine": 1548,
+        "endChar": 33
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d07eab9_f7c57430",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1548,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ca82cc88_e816cedb",
       "range": {
         "startLine": 1548,
         "startChar": 26,
@@ -494,6 +968,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "843a93d4_cc5b64a4",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2286,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e35f115f_3115b607",
+      "range": {
+        "startLine": 2279,
+        "startChar": 2,
+        "endLine": 2286,
+        "endChar": 3
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e709b23_db902d07",
@@ -517,6 +1015,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e551aef6_44766a3f",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e709b23_db902d07",
+      "range": {
+        "startLine": 2320,
+        "startChar": 26,
+        "endLine": 2320,
+        "endChar": 33
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31162ef6_fa42f080",
@@ -530,6 +1052,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "What about a CallDescriptorOf method in the Adapter?",
+      "range": {
+        "startLine": 2403,
+        "startChar": 2,
+        "endLine": 2409,
+        "endChar": 3
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd448c76_2442a57d",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2409,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31162ef6_fa42f080",
       "range": {
         "startLine": 2403,
         "startChar": 2,
@@ -586,6 +1132,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5c03543_0fafbaa1",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2891,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b24edfe4_f2c6851e",
+      "range": {
+        "startLine": 2891,
+        "startChar": 26,
+        "endLine": 2891,
+        "endChar": 64
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05f3679e_74c2a4f4",
@@ -599,6 +1169,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "Any reason to not use `MACHINE_BINOP_32_LIST(DECLARE_GENERATOR)`? If you can indeed use this, then you could replace the whole list with `MACHINE_OP_LIST(DECLARE_GENERATOR)` (as it was done before). I\u0027m probably missing something, but I don\u0027t see it :D",
+      "range": {
+        "startLine": 719,
+        "startChar": 0,
+        "endLine": 738,
+        "endChar": 34
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85bebb12_963cf9a8",
+        "filename": "src/compiler/backend/instruction-selector.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "I thought that I moved some of those to the new implementation (using `DECLARE_GENERATOR_T` above), but I can\u0027t see it either. I can revert it for now, but with the next CL we have to expand it again. I cannot use `MACHINE_OP_LIST` because some of the `MACHINE_COMPARE_BINOP_LIST` entries have been ported.",
+      "parentUuid": "05f3679e_74c2a4f4",
       "range": {
         "startLine": 719,
         "startChar": 0,
@@ -632,6 +1226,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20e4b3b2_5c471ade",
+        "filename": "src/compiler/backend/instruction.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b04124e_87c37baa",
+      "range": {
+        "startLine": 818,
+        "startChar": 4,
+        "endLine": 820,
+        "endChar": 13
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a90f1c0_c6d45bd7",
@@ -645,6 +1263,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "I think that you could move this to the .cc file.",
+      "range": {
+        "startLine": 1262,
+        "startChar": 0,
+        "endLine": 1276,
+        "endChar": 1
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59962ba7_49b89187",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a90f1c0_c6d45bd7",
       "range": {
         "startLine": 1262,
         "startChar": 0,
@@ -678,6 +1320,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4e9306b_5b6e5cec",
+        "filename": "src/compiler/backend/instruction.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c83f4f98_0322a993",
+      "range": {
+        "startLine": 1335,
+        "startChar": 0,
+        "endLine": 1342,
+        "endChar": 3
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43d143fc_ddff4fc4",
@@ -691,6 +1357,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "Please add brackets when the body is not on the same line as the if/else :)",
+      "range": {
+        "startLine": 2927,
+        "startChar": 6,
+        "endLine": 2935,
+        "endChar": 28
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d028d879_5ba4d333",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "I\u0027m surprised they are not on the same line.",
+      "parentUuid": "43d143fc_ddff4fc4",
       "range": {
         "startLine": 2927,
         "startChar": 6,
@@ -724,6 +1414,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d0feae0_3bccd332",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71a4a585_fa68635d",
+      "range": {
+        "startLine": 1172,
+        "startChar": 2,
+        "endLine": 1172,
+        "endChar": 77
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa06a99c_2e8853c6",
@@ -737,6 +1451,30 @@
       "writtenOn": "2023-06-19T12:39:57Z",
       "side": 1,
       "message": "This is exactly the same function as PipelineData::InitializeInstructionSequence defined in pipeline.cc, no? If so, it could be nice to merge them (like, extract it from PipelineData and make it take the zone, graph, isolate and a ref to sequence as argument)",
+      "range": {
+        "startLine": 84,
+        "startChar": 2,
+        "endLine": 96,
+        "endChar": 0
+      },
+      "revId": "c2eec4f4322fac10d3001011573ece056965c356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be71f414_a9eeb4ee",
+        "filename": "src/compiler/turboshaft/phase.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-20T08:18:15Z",
+      "side": 1,
+      "message": "Looked into this. I think there is no super simple way to unify this without leaking stuff from the turboshaft pipeline data (e.g. the graph) into the Turbofan one. I think we should just keep it for now and eventually we will remove Turbofan\u0027s anyway. Wdyt?",
+      "parentUuid": "fa06a99c_2e8853c6",
       "range": {
         "startLine": 84,
         "startChar": 2,
