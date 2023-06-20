@@ -995,7 +995,8 @@ bool PagedSpaceForNewSpace::AddPageBeyondCapacity(int size_in_bytes,
   DCHECK(heap()->sweeper()->IsSweepingDoneForSpace(NEW_SPACE));
   if (!force_allocation_success_ &&
       ((UsableCapacity() >= TotalCapacity()) ||
-       (TotalCapacity() - UsableCapacity() < Page::kPageSize)))
+       (TotalCapacity() - UsableCapacity() < Page::kPageSize)) &&
+      !heap_->ShouldOptimizeForLoadTime())
     return false;
   if (!heap()->CanExpandOldGeneration(Size() + heap()->new_lo_space()->Size() +
                                       Page::kPageSize)) {
