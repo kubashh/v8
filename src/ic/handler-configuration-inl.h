@@ -29,8 +29,9 @@ LoadHandler::Kind LoadHandler::GetHandlerKind(Smi smi_handler) {
   return KindBits::decode(smi_handler.value());
 }
 
-Handle<Smi> LoadHandler::LoadNormal(Isolate* isolate) {
-  int config = KindBits::encode(Kind::kNormal);
+Handle<Smi> LoadHandler::LoadNormal(Isolate* isolate, uint32_t entry_index) {
+  int config = KindBits::encode(Kind::kNormal) |
+               NameDictionaryEntryIndexBits::encode(entry_index);
   return handle(Smi::FromInt(config), isolate);
 }
 

@@ -80,6 +80,16 @@ class LoadHandler final : public DataHandler {
       DoAccessCheckOnLookupStartObjectBits::Next<bool, 1>;
 
   //
+  // Encoding when KindBits contains kNormal.
+  //
+
+  // Index of entry in NameDcitionary
+  // is it possible that the capacity exceed this limit?
+  using NameDictionaryEntryIndexBits =
+      LookupOnLookupStartObjectBits::Next<unsigned, 25>;
+  static_assert(NameDictionaryEntryIndexBits::kLastUsedBit < kSmiValueSize);
+
+  //
   // Encoding when KindBits contains kNativeDataProperty.
   //
 
@@ -151,7 +161,8 @@ class LoadHandler final : public DataHandler {
   static inline Kind GetHandlerKind(Smi smi_handler);
 
   // Creates a Smi-handler for loading a property from a slow object.
-  static inline Handle<Smi> LoadNormal(Isolate* isolate);
+  static inline Handle<Smi> LoadNormal(Isolate* isolate,
+                                       uint32_t entry_index = 0);
 
   // Creates a Smi-handler for loading a property from a global object.
   static inline Handle<Smi> LoadGlobal(Isolate* isolate);

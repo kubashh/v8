@@ -3254,10 +3254,22 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   template <typename Dictionary>
   void NameDictionaryLookup(TNode<Dictionary> dictionary,
+                            TNode<IntPtrT> capacity, TNode<Name> unique_name,
+                            Label* if_found, TVariable<IntPtrT>* var_name_index,
+                            Label* if_not_found,
+                            LookupMode mode = kFindExisting);
+  template <typename Dictionary>
+  void NameDictionaryLookup(TNode<Dictionary> dictionary,
                             TNode<Name> unique_name, Label* if_found,
                             TVariable<IntPtrT>* var_name_index,
                             Label* if_not_found,
-                            LookupMode mode = kFindExisting);
+                            LookupMode mode = kFindExisting) {
+    TNode<IntPtrT> capacity =
+        PositiveSmiUntag(GetCapacity<Dictionary>(dictionary));
+    NameDictionaryLookup<Dictionary>(dictionary, capacity, unique_name,
+                                     if_found, var_name_index, if_not_found,
+                                     mode);
+  }
 
   TNode<Word32T> ComputeSeededHash(TNode<IntPtrT> key);
 

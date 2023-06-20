@@ -709,10 +709,24 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
     Comment("load_normal");
     TNode<PropertyDictionary> properties =
         CAST(LoadSlowProperties(CAST(holder)));
+    TNode<IntPtrT> capacity =
+        PositiveSmiUntag(GetCapacity<PropertyDictionary>(properties));
     TVARIABLE(IntPtrT, var_name_index);
     Label found(this, &var_name_index);
-    NameDictionaryLookup<PropertyDictionary>(properties, CAST(p->name()),
-                                             &found, &var_name_index, miss);
+    // NameDictionaryLookup<PropertyDictionary>(properties, CAST(p->name()),
+    //                                          &found, &var_name_index, miss);
+    Label dictionary_lookup(this);
+    TNode<IntPtrT> entry =
+        Signed(DecodeWordFromWord32<LoadHandler::NameDictionaryEntryIndexBits>(
+            handler_word));
+    GotoIfNot(IntPtrLessThan(entry, capacity), &dictionary_lookup);
+    TNode<IntPtrT> index = EntryToIndex<PropertyDictionary>(entry);
+    var_name_index = index;
+    TNode<HeapObject> current =
+        CAST(UnsafeLoadFixedArrayElement(properties, index));
+    current = LoadName<PropertyDictionary>(current);
+    Branch(TaggedNotEqual(current, p->name()), &dictionary_lookup, &found);
+
     BIND(&found);
     {
       TVARIABLE(Uint32T, var_details);
@@ -724,6 +738,15 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
           p->receiver(), p->name(), miss);
       exit_point->Return(value);
     }
+
+    BIND(&dictionary_lookup);
+    Goto(miss);
+    // exit_point->ReturnCallRuntime(Runtime::kLoadIC_Miss, p->context(),
+    //                             p->receiver_and_lookup_start_object(),
+    //                             p->name(), p->slot(), p->vector());
+    // NameDictionaryLookup<PropertyDictionary>(
+    //     properties, capacity, CAST(p->name()), &found, &var_name_index,
+    //     miss);
   }
 
   BIND(&accessor);

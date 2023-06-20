@@ -8937,7 +8937,8 @@ TNode<UintPtrT> CodeStubAssembler::UintPtrMin(TNode<UintPtrT> left,
 template <>
 TNode<HeapObject> CodeStubAssembler::LoadName<NameDictionary>(
     TNode<HeapObject> key) {
-  CSA_DCHECK(this, Word32Or(IsTheHole(key), IsName(key)));
+  CSA_DCHECK(this,
+             Word32Or(IsUndefined(key), Word32Or(IsTheHole(key), IsName(key))));
   return key;
 }
 
@@ -8971,7 +8972,8 @@ TNode<IntPtrT> CodeStubAssembler::NameToIndexHashTableLookup(
 
 template <typename Dictionary>
 void CodeStubAssembler::NameDictionaryLookup(
-    TNode<Dictionary> dictionary, TNode<Name> unique_name, Label* if_found,
+    TNode<Dictionary> dictionary, TNode<IntPtrT> capacity,
+    TNode<Name> unique_name, Label* if_found,
     TVariable<IntPtrT>* var_name_index, Label* if_not_found, LookupMode mode) {
   static_assert(std::is_same<Dictionary, NameDictionary>::value ||
                     std::is_same<Dictionary, GlobalDictionary>::value ||
@@ -8985,8 +8987,6 @@ void CodeStubAssembler::NameDictionaryLookup(
 
   Label if_not_computed(this, Label::kDeferred);
 
-  TNode<IntPtrT> capacity =
-      PositiveSmiUntag(GetCapacity<Dictionary>(dictionary));
   TNode<IntPtrT> mask = IntPtrSub(capacity, IntPtrConstant(1));
   TNode<UintPtrT> hash =
       ChangeUint32ToWord(LoadNameHash(unique_name, &if_not_computed));
@@ -9009,7 +9009,7 @@ void CodeStubAssembler::NameDictionaryLookup(
   {
     Label next_probe(this);
     TNode<IntPtrT> entry = var_entry.value();
-
+    // Print(SmiTag(entry));
     TNode<IntPtrT> index = EntryToIndex<Dictionary>(entry);
     if (var_name_index) *var_name_index = index;
 

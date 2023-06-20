@@ -118,6 +118,10 @@ class V8_EXPORT_PRIVATE LookupIterator final {
     DCHECK_LE(index_, JSArray::kMaxArrayIndex);
     return static_cast<uint32_t>(index_);
   }
+  uint32_t entry_index() const {
+    // DCHECK max capacity?
+    return number_.as_uint32();
+  }
 
   // Helper method for creating a copy of of the iterator.
   inline PropertyKey GetKey() const;
