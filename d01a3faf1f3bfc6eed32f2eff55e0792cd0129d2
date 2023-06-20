@@ -16,6 +16,23 @@
       "message": "Hi Deepti, Could you please help take a look at this change? Thanks!",
       "revId": "d01a3faf1f3bfc6eed32f2eff55e0792cd0129d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae367f96_d54f2264",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2023-06-20T01:45:55Z",
+      "side": 1,
+      "message": "Ping.",
+      "revId": "d01a3faf1f3bfc6eed32f2eff55e0792cd0129d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
