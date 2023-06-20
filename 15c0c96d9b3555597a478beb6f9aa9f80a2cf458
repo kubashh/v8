@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86a0728b_82423b10",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2023-06-20T03:27:00Z",
+      "side": 1,
+      "message": "Does \"it may not be properly sign-extended, so we need to sign extend it in liftoff compiler.\" sound better to you?",
+      "revId": "15c0c96d9b3555597a478beb6f9aa9f80a2cf458",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3f6033a_c3dbc957",
+        "filename": "src/wasm/baseline/loong64/liftoff-assembler-loong64.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 3155,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2023-06-20T03:27:00Z",
+      "side": 1,
+      "message": "Some suggestions here:\n\n- \"a int32 value\" -\u003e \"an int32 value\"\n\n- \"do not sign-extended\" -\u003e \"does not sign-extend it\"\n\n- \"do not know the function whether return a int32 or int64\" -\u003e \"do not know whether the function returns an int32 or int64 value\"\n\n- \"we need to sign extend it\" -\u003e \"we need to sign extend it here\"",
+      "revId": "15c0c96d9b3555597a478beb6f9aa9f80a2cf458",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
