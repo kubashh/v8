@@ -624,6 +624,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void Return(TNode<Object> value);
   void Return(TNode<Object> value1, TNode<Object> value2);
   void Return(TNode<Object> value1, TNode<Object> value2, TNode<Object> value3);
+  void Return(TNode<IntPtrT> value1, TNode<IntPtrT> value2,
+              TNode<Float64T> value3, TNode<Float64T> value4);
   void Return(TNode<Int32T> value);
   void Return(TNode<Uint32T> value);
   void Return(TNode<WordT> value);

@@ -432,6 +432,11 @@ void CodeAssembler::Return(TNode<Object> value1, TNode<Object> value2,
   return raw_assembler()->Return(value1, value2, value3);
 }
 
+void CodeAssembler::Return(TNode<IntPtrT> value1, TNode<IntPtrT> value2,
+                           TNode<Float64T> value3, TNode<Float64T> value4) {
+  return raw_assembler()->Return(value1, value2, value3, value4);
+}
+
 void CodeAssembler::Return(TNode<Int32T> value) {
   DCHECK_EQ(1, raw_assembler()->call_descriptor()->ReturnCount());
   DCHECK_EQ(MachineType::Int32(),

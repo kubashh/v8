@@ -87,6 +87,23 @@ TF_BUILTIN(WasmFloat32ToNumber, WasmBuiltinsAssembler) {
   Return(ChangeFloat32ToTagged(val));
 }
 
+TF_BUILTIN(WasmToJSWrapperCSA, WasmBuiltinsAssembler) {
+  TorqueStructWasmToJSResult result = WasmToJSWrapper(
+      UncheckedParameter<WasmApiFunctionRef>(Descriptor::kWasmApiFunctionRef),
+      UncheckedParameter<IntPtrT>(Descriptor::kGPParam0),
+      UncheckedParameter<IntPtrT>(Descriptor::kGPParam1),
+      UncheckedParameter<IntPtrT>(Descriptor::kGPParam2),
+      UncheckedParameter<IntPtrT>(Descriptor::kGPParam3),
+      UncheckedParameter<IntPtrT>(Descriptor::kGPParam4),
+      UncheckedParameter<Float64T>(Descriptor::kFPParam0),
+      UncheckedParameter<Float64T>(Descriptor::kFPParam1),
+      UncheckedParameter<Float64T>(Descriptor::kFPParam2),
+      UncheckedParameter<Float64T>(Descriptor::kFPParam3),
+      UncheckedParameter<Float64T>(Descriptor::kFPParam4),
+      UncheckedParameter<Float64T>(Descriptor::kFPParam5));
+  Return(result.result0, result.result1, result.result2, result.result3);
+}
+
 TF_BUILTIN(WasmFloat64ToNumber, WasmBuiltinsAssembler) {
   auto val = UncheckedParameter<Float64T>(Descriptor::kValue);
   Return(ChangeFloat64ToTagged(val));

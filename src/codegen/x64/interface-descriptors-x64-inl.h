@@ -369,6 +369,28 @@ constexpr auto WasmNewJSToWasmWrapperDescriptor::registers() {
   // Arbitrarily picked register.
   return RegisterArray(rdi);
 }
+
+constexpr auto WasmToJSWrapperDescriptor::registers() {
+  // Pick registers according to the definition in wasm-linkage.h.
+  return RegisterArray(rsi, rax, rdx, rcx, rbx, r9, no_reg, no_reg, no_reg,
+                       no_reg, no_reg, no_reg);
+}
+
+constexpr auto WasmToJSWrapperDescriptor::double_registers() {
+  // Pick registers according to the definition in wasm-linkage.h.
+  return DoubleRegisterArray(no_dreg, no_dreg, no_dreg, no_dreg, no_dreg,
+                             no_dreg, xmm1, xmm2, xmm3, xmm4, xmm5, xmm6);
+}
+
+constexpr auto WasmToJSWrapperDescriptor::return_registers() {
+  // Pick registers according to the definition in wasm-linkage.h.
+  return RegisterArray(rax, rdx, no_reg, no_reg);
+}
+
+constexpr auto WasmToJSWrapperDescriptor::return_double_registers() {
+  // Pick registers according to the definition in wasm-linkage.h.
+  return DoubleRegisterArray(no_dreg, no_dreg, xmm1, xmm2);
+}
 }  // namespace internal
 }  // namespace v8
 

@@ -1497,6 +1497,18 @@ bool InstanceBuilder::FindImportedMemory() {
   return false;
 }
 
+namespace {
+bool UseGenericWrapper(const wasm::FunctionSig* sig) {
+#if !V8_TARGET_ARCH_X64
+  return false;
+#endif
+  if (sig->return_count() > 0) return false;
+  if (sig->parameter_count() > 0) return false;
+
+  return v8_flags.wasm_to_js_generic_wrapper;
+}
+}  // namespace
+
 bool InstanceBuilder::ProcessImportedFunction(
     Handle<WasmInstanceObject> instance, int import_index, int func_index,
     Handle<String> module_name, Handle<String> import_name,
@@ -1611,7 +1623,12 @@ bool InstanceBuilder::ProcessImportedFunction(
       ImportedFunctionEntry entry(instance, func_index);
       if (wasm_code->kind() == WasmCode::kWasmToJsWrapper) {
         // Wasm to JS wrappers are treated specially in the import table.
-        entry.SetWasmToJs(isolate_, js_receiver, wasm_code, resolved.suspend());
+        if (UseGenericWrapper(expected_sig)) {
+          entry.SetWasmToJs(isolate_, js_receiver, resolved.suspend());
+        } else {
+          entry.SetWasmToJs(isolate_, js_receiver, wasm_code,
+                            resolved.suspend());
+        }
       } else {
         // Wasm math intrinsics are compiled as regular Wasm functions.
         DCHECK(kind >= ImportCallKind::kFirstMathIntrinsic &&
