@@ -549,28 +549,35 @@ class MachineLoweringReducer : public Next {
         GOTO_IF(__ Word64Equal(input, int64_t{0}), done,
                 AllocateBigInt(OpIndex::Invalid(), OpIndex::Invalid()));
 
-        if (input_interpretation ==
-            ConvertUntaggedToJSPrimitiveOp::InputInterpretation::kSigned) {
-          // Shift sign bit into BigInt's sign bit position.
-          V<Word32> bitfield = __ Word32BitwiseOr(
-              BigInt::LengthBits::encode(1),
-              __ Word64ShiftRightLogical(
-                  input, static_cast<int64_t>(63 - BigInt::SignBits::kShift)));
+        // The GOTO_IF above could have been changed to an unconditional GOTO,
+        // in which case we are now in unreachable code, so we can skip the
+        // following step and return.
+        if (!Asm().generating_unreachable_operations()) {
+          if (input_interpretation ==
+              ConvertUntaggedToJSPrimitiveOp::InputInterpretation::kSigned) {
+            // Shift sign bit into BigInt's sign bit position.
+            V<Word32> bitfield = __ Word32BitwiseOr(
+                BigInt::LengthBits::encode(1),
+                __ Word64ShiftRightLogical(
+                    input,
+                    static_cast<int64_t>(63 - BigInt::SignBits::kShift)));
 
-          // We use (value XOR (value >> 63)) - (value >> 63) to compute the
-          // absolute value, in a branchless fashion.
-          V<Word64> sign_mask =
-              __ Word64ShiftRightArithmetic(input, int64_t{63});
-          V<Word64> absolute_value =
-              __ Word64Sub(__ Word64BitwiseXor(input, sign_mask), sign_mask);
-          GOTO(done, AllocateBigInt(bitfield, absolute_value));
-        } else {
-          DCHECK_EQ(
-              input_interpretation,
-              ConvertUntaggedToJSPrimitiveOp::InputInterpretation::kUnsigned);
-          const auto bitfield = BigInt::LengthBits::encode(1);
-          GOTO(done, AllocateBigInt(__ Word32Constant(bitfield), input));
+            // We use (value XOR (value >> 63)) - (value >> 63) to compute the
+            // absolute value, in a branchless fashion.
+            V<Word64> sign_mask =
+                __ Word64ShiftRightArithmetic(input, int64_t{63});
+            V<Word64> absolute_value =
+                __ Word64Sub(__ Word64BitwiseXor(input, sign_mask), sign_mask);
+            GOTO(done, AllocateBigInt(bitfield, absolute_value));
+          } else {
+            DCHECK_EQ(
+                input_interpretation,
+                ConvertUntaggedToJSPrimitiveOp::InputInterpretation::kUnsigned);
+            const auto bitfield = BigInt::LengthBits::encode(1);
+            GOTO(done, AllocateBigInt(__ Word32Constant(bitfield), input));
+          }
         }
+
         BIND(done, result);
         return result;
       }
@@ -1966,37 +1973,29 @@ class MachineLoweringReducer : public Next {
         __ Load(storage, index, LoadOp::Kind::RawUnaligned(),
                 MemoryRepresentation::FromMachineType(machine_type));
 
-    Block* done = __ NewBlock();
-    OpIndex little_value, big_value;
+    Variable result = Asm().NewFreshVariable(
+        RegisterRepresentationForArrayType(element_type));
     IF(is_little_endian) {
 #if V8_TARGET_LITTLE_ENDIAN
-      little_value = value;
-      __ Goto(done);
+      Asm().Set(result, value);
 #else
-      little_value = BuildReverseBytes(element_type, value);
-      __ Goto(done);
+      Asm().Set(result, BuildReverseBytes(element_type, value));
 #endif  // V8_TARGET_LITTLE_ENDIAN
     }
     ELSE {
 #if V8_TARGET_LITTLE_ENDIAN
-      big_value = BuildReverseBytes(element_type, value);
-      __ Goto(done);
+      Asm().Set(result, BuildReverseBytes(element_type, value));
 #else
-      big_value = value;
-      __ Goto(done);
+      Asm().Set(result, value);
 #endif  // V8_TARGET_LITTLE_ENDIAN
     }
     END_IF
-
-    __ Bind(done);
-    OpIndex result = __ Phi({little_value, big_value},
-                            RegisterRepresentationForArrayType(element_type));
 
     // We need to keep the {object} (either the JSArrayBuffer or the JSDataView)
     // alive so that the GC will not release the JSArrayBuffer (if there's any)
     // as long as we are still operating on it.
     __ Retain(object);
-    return result;
+    return Asm().Get(result);
   }
 
   V<Object> REDUCE(LoadStackArgument)(V<WordPtr> base, V<WordPtr> index) {
@@ -2029,33 +2028,26 @@ class MachineLoweringReducer : public Next {
     const MachineType machine_type =
         AccessBuilder::ForTypedArrayElement(element_type, true).machine_type;
 
-    Block* done = __ NewBlock();
-    OpIndex little_value, big_value;
+    Variable value_to_store = Asm().NewFreshVariable(
+        RegisterRepresentationForArrayType(element_type));
     IF(is_little_endian) {
 #if V8_TARGET_LITTLE_ENDIAN
-      little_value = value;
-      __ Goto(done);
+      Asm().Set(value_to_store, value);
 #else
-      little_value = BuildReverseBytes(element_type, value);
-      __ Goto(done);
+      Asm().Set(value_to_store, BuildReverseBytes(element_type, value));
 #endif  // V8_TARGET_LITTLE_ENDIAN
     }
     ELSE {
 #if V8_TARGET_LITTLE_ENDIAN
-      big_value = BuildReverseBytes(element_type, value);
-      __ Goto(done);
+      Asm().Set(value_to_store, BuildReverseBytes(element_type, value));
 #else
-      big_value = value;
-      __ Goto(done);
+      Asm().Set(value_to_store, value);
 #endif  // V8_TARGET_LITTLE_ENDIAN
     }
     END_IF
 
-    __ Bind(done);
-    OpIndex value_to_store =
-        __ Phi({little_value, big_value},
-               RegisterRepresentationForArrayType(element_type));
-    __ Store(storage, index, value_to_store, StoreOp::Kind::RawUnaligned(),
+    __ Store(storage, index, Asm().Get(value_to_store),
+             StoreOp::Kind::RawUnaligned(),
              MemoryRepresentation::FromMachineType(machine_type),
              WriteBarrierKind::kNoWriteBarrier);
 
