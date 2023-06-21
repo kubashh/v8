@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f56454f_a3ffa3ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-06-21T07:24:28Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "2765a60c27291436d5bdd3872c6304b363db4643",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "315e8120_b268b596",
@@ -14,6 +31,30 @@
       "writtenOn": "2023-06-20T20:20:27Z",
       "side": 1,
       "message": "I restructured this method and specifically the condition to make clearer when we can allocate another page.",
+      "range": {
+        "startLine": 999,
+        "startChar": 2,
+        "endLine": 999,
+        "endChar": 4
+      },
+      "revId": "2765a60c27291436d5bdd3872c6304b363db4643",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c624922_45aa674b",
+        "filename": "src/heap/new-spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-06-21T07:24:28Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "315e8120_b268b596",
       "range": {
         "startLine": 999,
         "startChar": 2,
