@@ -173,6 +173,10 @@ class LocalBase : public DirectHandleBase {
   V8_INLINE static LocalBase<T> FromSlot(internal::Address* slot) {
     return LocalBase<T>(*slot);
   }
+
+  V8_INLINE static LocalBase<T> FromValue(internal::Address value) {
+    return LocalBase<T>(value);
+  }
 };
 
 #else  // !V8_ENABLE_DIRECT_LOCAL
@@ -380,6 +384,10 @@ class Local : public LocalBase<T> {
 
   V8_INLINE static Local<T> FromSlot(internal::Address* slot) {
     return Local<T>(LocalBase<T>::FromSlot(slot));
+  }
+
+  V8_INLINE static Local<T> FromValue(internal::Address slot) {
+    return Local<T>(LocalBase<T>::FromValue(slot));
   }
 
   V8_INLINE static Local<T> New(Isolate* isolate, internal::Address value) {

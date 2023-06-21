@@ -19,5 +19,16 @@ TEST_F(DirectHandlesTest, CreateDirectHandleFromLocal) {
   CHECK_EQ(*direct, *handle);
 }
 
+TEST_F(DirectHandlesTest, CreateLocalFromDirectHandle) {
+  i::DirectHandle<i::String> direct =
+      i_isolate()->factory()->NewStringFromAsciiChecked("foo");
+  i::Handle<i::String> handle(*direct, i_isolate());
+
+  Local<String> l1 = Utils::ToLocal(direct, i_isolate());
+  Local<String> l2 = Utils::ToLocal(handle);
+
+  CHECK_EQ(l1, l2);
+}
+
 }  // namespace
 }  // namespace v8

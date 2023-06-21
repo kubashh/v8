@@ -59,6 +59,20 @@ inline Local<To> Utils::Convert(v8::internal::Handle<From> obj) {
   return Local<To>::FromSlot(obj.location());
 }
 
+template <class From, class To>
+inline Local<To> Utils::Convert(v8::internal::DirectHandle<From> obj,
+                                v8::internal::Isolate* isolate) {
+  DCHECK(obj.is_null() || (obj->IsSmi() || !obj->IsTheHole()));
+#ifdef V8_ENABLE_DIRECT_LOCAL
+  return Local<To>::FromValue(obj.address());
+#elif V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  v8::internal::Handle<From> handle(*obj, isolate);
+  return Local<To>::FromSlot(handle.location());
+#else
+  return Utils::Convert(obj);
+#endif
+}
+
 // Implementations of ToLocal
 
 #define MAKE_TO_LOCAL(Name, From, To)                                       \
@@ -66,7 +80,28 @@ inline Local<To> Utils::Convert(v8::internal::Handle<From> obj) {
     return Convert<v8::internal::From, v8::To>(obj);                        \
   }
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+
+#define MAKE_TO_LOCAL_DIRECT_HANDLE(Name, From, To)           \
+  Local<v8::To> Utils::Name(                                  \
+      v8::internal::DirectHandle<v8::internal::From> obj,     \
+      i::Isolate* isolate) {                                  \
+    return Convert<v8::internal::From, v8::To>(obj, isolate); \
+  }
+
+#else
+
+#define MAKE_TO_LOCAL_DIRECT_HANDLE(Name, From, To)       \
+  Local<v8::To> Utils::Name(                              \
+      v8::internal::DirectHandle<v8::internal::From> obj, \
+      i::Isolate* isolate) {                              \
+    return Convert<v8::internal::From, v8::To>(obj);      \
+  }
+
+#endif
+
 TO_LOCAL_LIST(MAKE_TO_LOCAL)
+TO_LOCAL_LIST(MAKE_TO_LOCAL_DIRECT_HANDLE)
 
 #define MAKE_TO_LOCAL_TYPED_ARRAY(Type, typeName, TYPE, ctype)        \
   Local<v8::Type##Array> Utils::ToLocal##Type##Array(                 \
@@ -79,6 +114,7 @@ TYPED_ARRAYS(MAKE_TO_LOCAL_TYPED_ARRAY)
 
 #undef MAKE_TO_LOCAL_TYPED_ARRAY
 #undef MAKE_TO_LOCAL
+#undef MAKE_TO_LOCAL_DIRECT_HANDLE
 #undef TO_LOCAL_LIST
 
 // Implementations of OpenHandle
