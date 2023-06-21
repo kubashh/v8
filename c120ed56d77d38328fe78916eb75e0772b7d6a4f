@@ -16,6 +16,23 @@
       "message": "Victor, this cl is pending on node-ci to roll ICU into 73-1.",
       "revId": "c120ed56d77d38328fe78916eb75e0772b7d6a4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b660d01_7a8fe526",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-06-21T08:02:04Z",
+      "side": 1,
+      "message": "lgtm\n\nLooking back the commit history, at the time `alt_calendar` was meant as a workaround. Was it known at the time if ICU was going to fix it in an upcoming version? Would be good to put a `TODO` note for workarounds that are likely to be removed when ICU updates.",
+      "revId": "c120ed56d77d38328fe78916eb75e0772b7d6a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
