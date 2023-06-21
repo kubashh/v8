@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afe0c7c6_861e7fd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-06-21T01:50:53Z",
+      "side": 1,
+      "message": "Victor, this cl is pending on node-ci to roll ICU into 73-1.",
+      "revId": "c120ed56d77d38328fe78916eb75e0772b7d6a4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
