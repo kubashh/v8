@@ -4624,7 +4624,14 @@ void Simulator::VisitNEON3Same(Instruction* instr) {
         addp(vf, rd, rn, rm);
         break;
       case NEON_CMEQ:
-        cmp(vf, rd, rn, rm, eq);
+        if (instr->Rd() == instr->Rn() && instr->Rn() == instr->Rm()) {
+          movi(vf, rd, 0xffff'ffff'ffff'ffff);
+          // for (int i = 0; i < LaneCountFromFormat(vf); i++) {
+          //   LogicVRegister(rd).SetUint(vf, i, MaxUintFromFormat(vf));
+          // }
+        } else {
+          cmp(vf, rd, rn, rm, eq);
+        }
         break;
       case NEON_CMGE:
         cmp(vf, rd, rn, rm, ge);
