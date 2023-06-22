@@ -51,6 +51,24 @@
       "parentUuid": "768eac86_f2fc1045",
       "revId": "1386a964c3f58ee35bf785c0e793c6c0009e46ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdca411f_f2f25c63",
+        "filename": "src/execution/arm64/simulator-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4627,
+      "author": {
+        "id": 1182309
+      },
+      "writtenOn": "2023-06-22T16:53:36Z",
+      "side": 1,
+      "message": "Sorry, I wasn\u0027t very clear with my suggestion. We thought this was happening due to a control flow dependency (the ternary operator) relying on apparently uninitialised data (src1/2 and therefore result), so the multiply change might make it go away. I guess this analysis is wrong.\n\nIf the fix has to be wider than just the dst assignment line, how about adding a method to LogicVRegister,\n  bool Is(const LogicVRegister\u0026 r) { return \u0026register_ \u003d\u003d \u0026r.register_ }\n  \nThen modify the existing cases in cmp, such that eq-like (eq, ge, hs) become\n  src1.Is(src2) || (ua \u003d\u003d ub), or similar\n\nand ne-like (gt, hi, lt) become\n  !src1.Is(src2) \u0026\u0026 (sa \u003e sb), or similar\n  \nI\u0027ve a patch for this, if you want to try it out with the failing test.",
+      "parentUuid": "ad9c804b_9dc99428",
+      "revId": "1386a964c3f58ee35bf785c0e793c6c0009e46ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
