@@ -1574,10 +1574,15 @@ class WasmModuleBuilder {
     return this;
   }
 
-  // TODO(manoskouk): Refactor this to use initializer expression for {addr}.
-  addDataSegment(addr, data, is_global = false) {
-    this.data_segments.push(
-        {addr: addr, data: data, is_global: is_global, is_active: true});
+  // TODO(manoskouk): Refactor this to use initializer expression for {offset}.
+  addDataSegment(offset, data, is_global = false, memory_index = 0) {
+    this.data_segments.push({
+      offset: offset,
+      data: data,
+      is_global: is_global,
+      is_active: true,
+      mem_index: memory_index
+    });
     return this.data_segments.length - 1;
   }
 
