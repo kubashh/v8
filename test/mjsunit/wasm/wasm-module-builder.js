@@ -1586,8 +1586,8 @@ class WasmModuleBuilder {
     return this.data_segments.length - 1;
   }
 
-  exportMemoryAs(name) {
-    this.exports.push({name: name, kind: kExternalMemory, index: 0});
+  exportMemoryAs(name, memory_index = 0) {
+    this.exports.push({name: name, kind: kExternalMemory, index: memory_index});
   }
 
   // {offset} is a constant expression.
@@ -2034,18 +2034,23 @@ class WasmModuleBuilder {
         section.emit_u32v(wasm.data_segments.length);
         for (let seg of wasm.data_segments) {
           if (seg.is_active) {
-            section.emit_u8(0);  // linear memory index 0 / flags
-            if (seg.is_global) {
-              // Initializer is a global variable.
-              section.emit_u8(kExprGlobalGet);
-              section.emit_u32v(seg.addr);
+            if (seg.mem_index == 0) {
+              section.emit_u8(kActiveNoIndex);
             } else {
-              // Initializer is a constant.
-              section.emit_bytes(wasmI32Const(seg.addr));
+              section.emit_u8(kActiveWithIndex);
+              section.emit_u32v(seg.mem_index);
+            }
+            if (seg.is_global) {
+              // Offset is taken from a global.
+              section.emit_u8(kExprGlobalGet);
+              section.emit_u32v(seg.offset);
+            } else {
+              // Offset is a constant.
+              section.emit_bytes(wasmI32Const(seg.offset));
             }
             section.emit_u8(kExprEnd);
           } else {
-            section.emit_u8(kPassive);  // flags
+            section.emit_u8(kPassive);
           }
           section.emit_u32v(seg.data.length);
           section.emit_bytes(seg.data);
