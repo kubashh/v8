@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6acd714_803faddf",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2104,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-06-22T13:20:52Z",
+      "side": 1,
+      "message": "This is unrelated to your problem, but if map_it is a HeapNumber, wouldn\u0027t all maps be HeapNumber? Should we have a special branch:\n```\n} else if (AnyMapisHeapNumber(access_info)) {\n```",
+      "range": {
+        "startLine": 2104,
+        "startChar": 12,
+        "endLine": 2104,
+        "endChar": 47
+      },
+      "revId": "641bf3cb5d2cd4c2e8642d1996b2b902b053041e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
