@@ -4616,6 +4616,8 @@ void Simulator::VisitNEON3Same(Instruction* instr) {
     }
   } else {
     VectorFormat vf = nfd.GetVectorFormat();
+    InputEquality inputs_are_eq =
+        instr->Rn() == instr->Rm() ? kInputsAreEqual : kInputsAreDifferent;
     switch (instr->Mask(NEON3SameMask)) {
       case NEON_ADD:
         add(vf, rd, rn, rm);
@@ -4624,19 +4626,19 @@ void Simulator::VisitNEON3Same(Instruction* instr) {
         addp(vf, rd, rn, rm);
         break;
       case NEON_CMEQ:
-        cmp(vf, rd, rn, rm, eq);
+        cmp(vf, rd, rn, rm, inputs_are_eq, eq);
         break;
       case NEON_CMGE:
-        cmp(vf, rd, rn, rm, ge);
+        cmp(vf, rd, rn, rm, inputs_are_eq, ge);
         break;
       case NEON_CMGT:
-        cmp(vf, rd, rn, rm, gt);
+        cmp(vf, rd, rn, rm, inputs_are_eq, gt);
         break;
       case NEON_CMHI:
-        cmp(vf, rd, rn, rm, hi);
+        cmp(vf, rd, rn, rm, inputs_are_eq, hi);
         break;
       case NEON_CMHS:
-        cmp(vf, rd, rn, rm, hs);
+        cmp(vf, rd, rn, rm, inputs_are_eq, hs);
         break;
       case NEON_CMTST:
         cmptst(vf, rd, rn, rm);
@@ -5864,6 +5866,8 @@ void Simulator::VisitNEONScalar3Same(Instruction* instr) {
         UNIMPLEMENTED();
     }
   } else {
+    InputEquality inputs_are_eq =
+        instr->Rn() == instr->Rm() ? kInputsAreEqual : kInputsAreDifferent;
     switch (instr->Mask(NEONScalar3SameMask)) {
       case NEON_ADD_scalar:
         add(vf, rd, rn, rm);
@@ -5872,19 +5876,19 @@ void Simulator::VisitNEONScalar3Same(Instruction* instr) {
         sub(vf, rd, rn, rm);
         break;
       case NEON_CMEQ_scalar:
-        cmp(vf, rd, rn, rm, eq);
+        cmp(vf, rd, rn, rm, inputs_are_eq, eq);
         break;
       case NEON_CMGE_scalar:
-        cmp(vf, rd, rn, rm, ge);
+        cmp(vf, rd, rn, rm, inputs_are_eq, ge);
         break;
       case NEON_CMGT_scalar:
-        cmp(vf, rd, rn, rm, gt);
+        cmp(vf, rd, rn, rm, inputs_are_eq, gt);
         break;
       case NEON_CMHI_scalar:
-        cmp(vf, rd, rn, rm, hi);
+        cmp(vf, rd, rn, rm, inputs_are_eq, hi);
         break;
       case NEON_CMHS_scalar:
-        cmp(vf, rd, rn, rm, hs);
+        cmp(vf, rd, rn, rm, inputs_are_eq, hs);
         break;
       case NEON_CMTST_scalar:
         cmptst(vf, rd, rn, rm);

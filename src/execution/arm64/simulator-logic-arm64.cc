@@ -583,40 +583,59 @@ void Simulator::st4(VectorFormat vform, LogicVRegister dst, LogicVRegister dst2,
 
 LogicVRegister Simulator::cmp(VectorFormat vform, LogicVRegister dst,
                               const LogicVRegister& src1,
-                              const LogicVRegister& src2, Condition cond) {
+                              const LogicVRegister& src2,
+                              InputEquality inputs_are_eq, Condition cond) {
   dst.ClearForWrite(vform);
   for (int i = 0; i < LaneCountFromFormat(vform); i++) {
-    int64_t sa = src1.Int(vform, i);
-    int64_t sb = src2.Int(vform, i);
-    uint64_t ua = src1.Uint(vform, i);
-    uint64_t ub = src2.Uint(vform, i);
     bool result = false;
-    switch (cond) {
-      case eq:
-        result = (ua == ub);
-        break;
-      case ge:
-        result = (sa >= sb);
-        break;
-      case gt:
-        result = (sa > sb);
-        break;
-      case hi:
-        result = (ua > ub);
-        break;
-      case hs:
-        result = (ua >= ub);
-        break;
-      case lt:
-        result = (sa < sb);
-        break;
-      case le:
-        result = (sa <= sb);
-        break;
-      default:
-        UNREACHABLE();
+    if (inputs_are_eq) {
+      switch (cond) {
+        case eq:
+        case ge:
+        case le:
+        case hs:
+          result = true;
+          break;
+        case gt:
+        case hi:
+        case lt:
+          result = false;
+          break;
+        default:
+          UNREACHABLE();
+      }
+    } else {
+      int64_t sa = src1.Int(vform, i);
+      int64_t sb = src2.Int(vform, i);
+      uint64_t ua = src1.Uint(vform, i);
+      uint64_t ub = src2.Uint(vform, i);
+      switch (cond) {
+        case eq:
+          result = (ua == ub);
+          break;
+        case ge:
+          result = (sa >= sb);
+          break;
+        case gt:
+          result = (sa > sb);
+          break;
+        case hi:
+          result = (ua > ub);
+          break;
+        case hs:
+          result = (ua >= ub);
+          break;
+        case lt:
+          result = (sa < sb);
+          break;
+        case le:
+          result = (sa <= sb);
+          break;
+        default:
+          UNREACHABLE();
+      }
     }
-    dst.SetUint(vform, i, result ? MaxUintFromFormat(vform) : 0);
+    dst.SetUint(vform, i, result * MaxUintFromFormat(vform));
   }
   return dst;
 }
@@ -626,7 +645,7 @@ LogicVRegister Simulator::cmp(VectorFormat vform, LogicVRegister dst,
                               Condition cond) {
   SimVRegister temp;
   LogicVRegister imm_reg = dup_immediate(vform, temp, imm);
-  return cmp(vform, dst, src1, imm_reg, cond);
+  return cmp(vform, dst, src1, imm_reg, kInputsAreDifferent, cond);
 }
 
 LogicVRegister Simulator::cmptst(VectorFormat vform, LogicVRegister dst,

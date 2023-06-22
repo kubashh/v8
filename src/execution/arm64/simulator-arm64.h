@@ -1588,9 +1588,13 @@ class Simulator : public DecoderVisitor, public SimulatorBase {
            LogicVRegister src3, LogicVRegister src4, uint64_t addr);
   void st4(VectorFormat vform, LogicVRegister src, LogicVRegister src2,
            LogicVRegister src3, LogicVRegister src4, int index, uint64_t addr);
+  enum InputEquality : bool {
+    kInputsAreEqual = true,
+    kInputsAreDifferent = false
+  };
   LogicVRegister cmp(VectorFormat vform, LogicVRegister dst,
                      const LogicVRegister& src1, const LogicVRegister& src2,
-                     Condition cond);
+                     InputEquality inputs_are_eq, Condition cond);
   LogicVRegister cmp(VectorFormat vform, LogicVRegister dst,
                      const LogicVRegister& src1, int imm, Condition cond);
   LogicVRegister cmptst(VectorFormat vform, LogicVRegister dst,
