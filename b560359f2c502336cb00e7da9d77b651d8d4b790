@@ -16,6 +16,142 @@
       "message": "I fixed this locally and forgot to push the fix for it. Oops!",
       "revId": "b560359f2c502336cb00e7da9d77b651d8d4b790",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1ac40a2_67d844fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-22T10:50:45Z",
+      "side": 1,
+      "message": "It looks good, I\u0027m adding a few comments and Michi who owns the files.",
+      "revId": "b560359f2c502336cb00e7da9d77b651d8d4b790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea6cd619_0ca91247",
+        "filename": "include/v8-local-handle.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-22T10:50:45Z",
+      "side": 1,
+      "message": "Why do you need this? There\u0027s the constructor in line 159.",
+      "revId": "b560359f2c502336cb00e7da9d77b651d8d4b790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5e6ca4d_18de7a0c",
+        "filename": "include/v8-local-handle.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-22T10:50:45Z",
+      "side": 1,
+      "message": "I find this very confusing. As it\u0027s only used with DL, I suggest:\n```\n#ifdef V8_ENABLE_DIRECT_LOCAL\n  V8_INLINE static Local\u003cT\u003e FromAddress(internal::Address ptr) {\n    return Local\u003cT\u003e(LocalBase\u003cT\u003e(ptr));\n  }\n#endif  // V8_ENABLE_DIRECT_LOCAL\n```",
+      "revId": "b560359f2c502336cb00e7da9d77b651d8d4b790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6747717d_d98cc7bd",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-22T10:50:45Z",
+      "side": 1,
+      "message": "The `#elif` should check whether `V8_ENABLE_CONSERVATIVE_STACK_SCANNING` is defined, not its value. Also, the `DCHECK` in line 65 is duplicated in line 55. I suggest:\n```\n#if defined(V8_ENABLE_DIRECT_LOCAL)\n  DCHECK(obj.is_null() || (obj-\u003eIsSmi() || !obj-\u003eIsTheHole()));\n  return Local\u003cTo\u003e::FromAddress(obj.address());\n#elif defined(V8_ENABLE_CONSERVATIVE_STACK_SCANNING)\n  return Utils::Convert\u003cFrom, To\u003e(v8::internal::Handle\u003cFrom\u003e(*obj, isolate));\n#else\n  return Utils::Convert\u003cFrom, To\u003e(obj);\n#endif\n```",
+      "revId": "b560359f2c502336cb00e7da9d77b651d8d4b790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a28ec315_6e730b44",
+        "filename": "src/api/api-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-22T10:50:45Z",
+      "side": 1,
+      "message": "There\u0027s no reason to differentiate this for !CSS.\nThe CSS version is equivalent, after inlining.",
+      "revId": "b560359f2c502336cb00e7da9d77b651d8d4b790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f11328c_c925e58f",
+        "filename": "test/unittests/heap/direct-handles-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-22T10:50:45Z",
+      "side": 1,
+      "message": "Add handle scope.",
+      "revId": "b560359f2c502336cb00e7da9d77b651d8d4b790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fccd5681_33d6ea46",
+        "filename": "test/unittests/heap/direct-handles-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-22T10:50:45Z",
+      "side": 1,
+      "message": "I am a bit confused with what we\u0027re trying to test here.\nWe\u0027re going from a handle to a direct handle and then to a new handle.\nDo we want to test that?\n\nIf not, I suggest the simpler:\n```\n  i::Handle\u003ci::String\u003e handle \u003d\n      i_isolate()-\u003efactory()-\u003eNewStringFromAsciiChecked(\"foo\");\n  i::DirectHandle\u003ci::String\u003e direct \u003d handle;\n```",
+      "revId": "b560359f2c502336cb00e7da9d77b651d8d4b790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db93cdb0_767de9a9",
+        "filename": "test/unittests/heap/direct-handles-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-22T10:50:45Z",
+      "side": 1,
+      "message": "Use `EXPECT_EQ`, both here and in line 19.",
+      "revId": "b560359f2c502336cb00e7da9d77b651d8d4b790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
