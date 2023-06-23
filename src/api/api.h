@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "include/v8-async-context.h"
 #include "include/v8-container.h"
 #include "include/v8-external.h"
 #include "include/v8-function-callback.h"
@@ -17,6 +18,7 @@
 #include "src/objects/bigint.h"
 #include "src/objects/contexts.h"
 #include "src/objects/js-array-buffer.h"
+#include "src/objects/js-async-context.h"
 #include "src/objects/js-collection.h"
 #include "src/objects/js-generator.h"
 #include "src/objects/js-promise.h"
@@ -110,6 +112,8 @@ class RegisteredExtension {
   V(ToLocal, JSMap, Map)                               \
   V(ToLocal, JSSet, Set)                               \
   V(ToLocal, JSProxy, Proxy)                           \
+  V(ToLocal, JSAsyncLocal, AsyncContext::Variable)     \
+  V(ToLocal, JSAsyncSnapshot, AsyncContext::Snapshot)  \
   V(ToLocal, JSArrayBuffer, ArrayBuffer)               \
   V(ToLocal, JSArrayBufferView, ArrayBufferView)       \
   V(ToLocal, JSDataView, DataView)                     \
@@ -145,6 +149,8 @@ class RegisteredExtension {
   V(Array, JSArray)                            \
   V(Map, JSMap)                                \
   V(Set, JSSet)                                \
+  V(AsyncContext::Variable, JSAsyncLocal)      \
+  V(AsyncContext::Snapshot, JSAsyncSnapshot)   \
   V(ArrayBuffer, JSArrayBuffer)                \
   V(ArrayBufferView, JSArrayBufferView)        \
   V(TypedArray, JSTypedArray)                  \

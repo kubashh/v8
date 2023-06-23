@@ -24,7 +24,9 @@
 #include "src/logging/runtime-call-stats-scope.h"
 #include "src/objects/instance-type.h"
 #include "src/objects/js-array.h"
+#include "src/objects/js-async-context.h"
 #include "src/objects/objects.h"
+#include "src/objects/property-details.h"
 #include "src/sandbox/testing.h"
 #ifdef ENABLE_VTUNE_TRACEMARK
 #include "src/extensions/vtunedomain-support-extension.h"
@@ -42,6 +44,7 @@
 #endif  // V8_INTL_SUPPORT
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
+#include "src/objects/js-async-context-inl.h"
 #include "src/objects/js-atomics-synchronization.h"
 #include "src/objects/js-iterator-helpers.h"
 #ifdef V8_INTL_SUPPORT
@@ -5024,6 +5027,66 @@ void Genesis::InitializeGlobal_harmony_rab_gsab() {
                       Builtin::kSharedArrayBufferPrototypeGetGrowable, false);
   SimpleInstallFunction(isolate(), shared_array_buffer_prototype, "grow",
                         Builtin::kSharedArrayBufferPrototypeGrow, 1, true);
+}
+
+void Genesis::InitializeGlobal_harmony_async_context() {
+  if (!v8_flags.harmony_async_context) return;
+  Factory* factory = isolate()->factory();
+  Handle<JSObject> global(native_context()->global_object(), isolate());
+
+  // -- A s y n c C o n t e x t
+  // #sec-asynccontext-object
+  Handle<JSObject> async_context =
+      factory->NewJSObject(isolate_->object_function(), AllocationType::kOld);
+  JSObject::AddProperty(isolate_, global, "AsyncContext", async_context,
+                        DONT_ENUM);
+
+  // NOTE: Not in the spec, should be added after the AsyncContext.Variable PR
+  // is merged.
+  InstallToStringTag(isolate_, async_context, "AsyncContext");
+
+  // #sec-asynccontext-objects
+  Handle<JSFunction> variable_fun =
+      InstallFunction(isolate_, async_context, "Variable", JS_ASYNC_LOCAL_TYPE,
+                      JSAsyncLocal::kHeaderSize, 0, factory->the_hole_value(),
+                      Builtin::kAsyncLocalConstructor);
+  variable_fun->shared().set_length(1);
+  variable_fun->shared().DontAdaptArguments();
+  native_context()->set_initial_async_local_map(variable_fun->initial_map());
+
+  // Setup %AsyncLocalPrototype%.
+  Handle<JSObject> async_local_prototype(
+      JSObject::cast(variable_fun->instance_prototype()), isolate());
+
+  // NOTE: Not in the spec, should be added after the AsyncContext.Variable PR
+  // is merged.
+  InstallToStringTag(isolate_, async_local_prototype,
+                     factory->AsyncLocal_string());
+
+  SimpleInstallFunction(isolate_, async_local_prototype, "run",
+                        Builtin::kAsyncLocalPrototypeRun, 0, false);
+  SimpleInstallGetter(isolate_, async_local_prototype,
+                      factory->InternalizeUtf8String("name"),
+                      Builtin::kAsyncLocalPrototypeNameGetter, false);
+  SimpleInstallFunction(isolate_, async_local_prototype, "get",
+                        Builtin::kAsyncLocalPrototypeGet, 0, true);
+
+  Handle<JSFunction> snapshot_fun = InstallFunction(
+      isolate_, async_context, "Snapshot", JS_ASYNC_SNAPSHOT_TYPE,
+      JSAsyncSnapshot::kHeaderSize, 0, factory->the_hole_value(),
+      Builtin::kAsyncSnapshotConstructor);
+  snapshot_fun->shared().set_length(0);
+  snapshot_fun->shared().DontAdaptArguments();
+  native_context()->set_initial_async_snapshot_map(snapshot_fun->initial_map());
+
+  Handle<JSObject> snapshot_prototype(
+      JSObject::cast(snapshot_fun->instance_prototype()), isolate());
+
+  InstallToStringTag(isolate_, snapshot_prototype,
+                     factory->AsyncSnapshot_string());
+
+  SimpleInstallFunction(isolate_, snapshot_prototype, "restore",
+                        Builtin::kAsyncSnapshotPrototypeRestore, 1, true);
 }
 
 void Genesis::InitializeGlobal_harmony_string_is_well_formed() {

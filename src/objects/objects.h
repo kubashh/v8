@@ -49,6 +49,8 @@
 //         - JSArrayBufferView
 //           - JSTypedArray
 //           - JSDataView
+//         - JSAsyncLocal
+//         - JSAsyncSnapshot
 //         - JSCollection
 //           - JSSet
 //           - JSMap

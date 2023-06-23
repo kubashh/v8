@@ -925,6 +925,9 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   Handle<JSAtomicsCondition> NewJSAtomicsCondition();
 
+  Handle<JSAsyncLocal> NewJSAsyncLocal();
+  Handle<JSAsyncSnapshot> NewJSAsyncSnapshot(Handle<HeapObject>);
+
   // Helper class for creating JSFunction objects.
   class V8_EXPORT_PRIVATE JSFunctionBuilder final {
    public:

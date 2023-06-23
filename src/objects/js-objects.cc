@@ -42,6 +42,7 @@
 #include "src/objects/js-break-iterator.h"
 #include "src/objects/js-collator.h"
 #endif  // V8_INTL_SUPPORT
+#include "src/objects/js-async-context.h"
 #include "src/objects/js-collection.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-date-time-format.h"
@@ -2505,6 +2506,10 @@ int JSObject::GetHeaderSize(InstanceType type,
       return JSArrayBuffer::kHeaderSize;
     case JS_ARRAY_ITERATOR_TYPE:
       return JSArrayIterator::kHeaderSize;
+    case JS_ASYNC_LOCAL_TYPE:
+      return JSAsyncLocal::kHeaderSize;
+    case JS_ASYNC_SNAPSHOT_TYPE:
+      return JSAsyncSnapshot::kHeaderSize;
     case JS_TYPED_ARRAY_TYPE:
       return JSTypedArray::kHeaderSize;
     case JS_DATA_VIEW_TYPE:

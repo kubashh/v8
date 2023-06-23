@@ -356,6 +356,7 @@ class Symbol;
   V(WeakArrayList, shared_wasm_memories, SharedWasmMemories)                \
   /* EphemeronHashTable for debug scopes (local debug evaluate) */          \
   V(HeapObject, locals_block_list_cache, DebugLocalsBlockListCache)         \
+  V(HeapObject, async_context_store, AsyncContextStore)                     \
   IF_WASM(V, HeapObject, active_continuation, ActiveContinuation)           \
   IF_WASM(V, HeapObject, active_suspender, ActiveSuspender)                 \
   IF_WASM(V, WeakArrayList, js_to_wasm_wrappers, JSToWasmWrappers)          \
@@ -420,9 +421,9 @@ class Symbol;
   NAME_FOR_PROTECTOR_ROOT_LIST(V)  \
   DATA_HANDLER_MAPS_LIST(V)
 
-#define MUTABLE_ROOT_LIST(V)                \
-  STRONG_MUTABLE_IMMOVABLE_ROOT_LIST(V)     \
-  STRONG_MUTABLE_MOVABLE_ROOT_LIST(V)       \
+#define MUTABLE_ROOT_LIST(V)            \
+  STRONG_MUTABLE_IMMOVABLE_ROOT_LIST(V) \
+  STRONG_MUTABLE_MOVABLE_ROOT_LIST(V)   \
   SMI_ROOT_LIST(V)
 
 #define ROOT_LIST(V)     \

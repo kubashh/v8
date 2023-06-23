@@ -439,6 +439,14 @@ namespace internal {
   CPP(ArrayBufferPrototypeTransfer)                                            \
   CPP(ArrayBufferPrototypeTransferToFixedLength)                               \
                                                                                \
+  /* AsyncLocal */                                                             \
+  CPP(AsyncLocalPrototypeRun)                                                  \
+  CPP(AsyncLocalPrototypeGet)                                                  \
+                                                                               \
+  /* AsyncSnapshot */                                                          \
+  CPP(AsyncSnapshotConstructor)                                                \
+  CPP(AsyncSnapshotPrototypeRestore)                                           \
+                                                                               \
   /* AsyncFunction */                                                          \
   TFS(AsyncFunctionEnter, NeedsContext::kYes, kClosure, kReceiver)             \
   TFS(AsyncFunctionReject, NeedsContext::kYes, kAsyncFunctionObject, kReason)  \
