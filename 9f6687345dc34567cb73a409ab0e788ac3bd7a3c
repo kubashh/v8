@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6a04e90_1f9b4943",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-23T14:29:38Z",
+      "side": 1,
+      "message": "This is basically extracted from `LiveRange::SplitAt` (+ some `DCHECK`s).",
+      "revId": "9f6687345dc34567cb73a409ab0e788ac3bd7a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "632f76af_9703d31c",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-23T14:29:38Z",
+      "side": 1,
+      "message": "And this from `LiveRange::AttachToNext`.",
+      "revId": "9f6687345dc34567cb73a409ab0e788ac3bd7a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fc3cc6e_935de8cc",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-23T14:29:38Z",
+      "side": 1,
+      "message": "Renamed for consistency with the type name.",
+      "revId": "9f6687345dc34567cb73a409ab0e788ac3bd7a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
