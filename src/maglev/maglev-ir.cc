@@ -2070,7 +2070,12 @@ void EmitPolymorphicAccesses(MaglevAssembler* masm, NodeT* node,
   __ JumpIf(is_smi, &is_number);
   __ LoadMap(object_map, object);
 
-  for (const PolymorphicAccessInfo& access_info : node->access_infos()) {
+  __ LoadMap(object_map, object);
+  const ZoneVector<PolymorphicAccessInfo>& access_infos = node->access_infos();
+  for (auto access_info_it = access_infos.begin();
+       access_info_it != access_infos.end(); ++access_info_it) {
+    const PolymorphicAccessInfo& access_info = *access_info_it;
+    bool is_last_access_info = access_info_it == access_infos.end() - 1;
     Label next;
     Label map_found;
     auto& maps = access_info.maps();
@@ -2081,19 +2086,31 @@ void EmitPolymorphicAccesses(MaglevAssembler* masm, NodeT* node,
       Register scratch = temps.GetDefaultScratchRegister();
       __ CompareInstanceTypeRange(object_map, scratch, FIRST_STRING_TYPE,
                                   LAST_STRING_TYPE);
-      __ JumpIf(kUnsignedGreaterThan, &next);
+      if (is_last_access_info) {
+        __ EmitEagerDeoptIf(kUnsignedGreaterThan, DeoptimizeReason::kWrongMap,
+                            node);
+      } else {
+        __ JumpIf(kUnsignedGreaterThan, &next);
+      }
       // Fallthrough... to map_found.
     } else {
-      for (auto it = maps.begin(); it != maps.end(); ++it) {
-        if (it->object()->IsHeapNumberMap()) {
+      for (auto map_it = maps.begin(); map_it != maps.end(); ++map_it) {
+        if (map_it->object()->IsHeapNumberMap()) {
           __ CompareRoot(object_map, RootIndex::kHeapNumberMap);
           has_number_map = true;
         } else {
-          __ CompareTagged(object_map, it->object());
+          __ CompareTagged(object_map, map_it->object());
         }
-        if (it == maps.end() - 1) {
-          __ JumpIf(kNotEqual, &next);
-          // Fallthrough... to map_found.
+        bool is_last_map = map_it == maps.end() - 1;
+        if (is_last_map) {
+          // If this is the last map of the last accessinfo, emit a deopt if not
+          // equal.
+          if (is_last_access_info) {
+            __ EmitEagerDeoptIfNotEqual(DeoptimizeReason::kWrongMap, node);
+          } else {
+            __ JumpIf(kNotEqual, &next);
+            // Fallthrough... to map_found.
+          }
         } else {
           __ JumpIf(kEqual, &map_found);
         }
@@ -2115,10 +2132,8 @@ void EmitPolymorphicAccesses(MaglevAssembler* masm, NodeT* node,
   // number.
   if (!is_number.is_bound()) {
     __ bind(&is_number);
+    __ EmitEagerDeopt(node, DeoptimizeReason::kWrongMap);
   }
-
-  // No map matched!
-  __ EmitEagerDeopt(node, DeoptimizeReason::kWrongMap);
   __ bind(&done);
 }
 
