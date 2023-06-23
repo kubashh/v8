@@ -439,6 +439,14 @@ namespace internal {
   CPP(ArrayBufferPrototypeTransfer)                                            \
   CPP(ArrayBufferPrototypeTransferToFixedLength)                               \
                                                                                \
+  /* AsyncContext.Variable */                                                  \
+  CPP(AsyncContextVariablePrototypeRun)                                        \
+  CPP(AsyncContextVariablePrototypeGet)                                        \
+                                                                               \
+  /* AsyncContext.Snapshot */                                                  \
+  CPP(AsyncContextSnapshotConstructor)                                         \
+  CPP(AsyncContextSnapshotPrototypeRun)                                        \
+                                                                               \
   /* AsyncFunction */                                                          \
   TFS(AsyncFunctionEnter, NeedsContext::kYes, kClosure, kReceiver)             \
   TFS(AsyncFunctionReject, NeedsContext::kYes, kAsyncFunctionObject, kReason)  \
