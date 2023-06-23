@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16670896_ab5e0783",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-23T13:50:56Z",
+      "side": 0,
+      "message": "I just realized that the `current_hint_position_index_` cache is anyway updated when calling `RegisterFromFirstHint` for the first time, so there is no need to update it on every insert.",
+      "revId": "f799ca5edc1e2d076fe03131c69e2743e0bfafb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

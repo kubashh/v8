@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29b69d04_b1e20702",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-23T13:50:56Z",
+      "side": 1,
+      "message": "That\u0027s it then for today. Thanks a lot so far!",
+      "revId": "b8cc45b40bfb0339b2b677667b0bf8c55a1cc1ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
