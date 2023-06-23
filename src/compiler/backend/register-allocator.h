@@ -519,6 +519,41 @@ class TopTierRegisterAllocationData;
 class TopLevelLiveRange;
 class LiveRangeBundle;
 
+// A non-owning view into an underlying *reversed* vector of `UsePosition`s.
+// This class has three goals:
+// - Abstract away the implementation detail that the backing vector stores
+//   the `UsePosition` in reverse order (which is to make insertion in
+//   `LiveRangeBuilder` cheap, but plays no role afterwards).
+// - Disallow accidentally inserting/removing positions (this is just a view).
+// - Allow efficient splitting and merging into/from adjacent views (which
+//   makes splitting of `LiveRange`s cheap).
+class UsePositionView {
+ public:
+  explicit UsePositionView() : reversed_view_() {}
+  explicit UsePositionView(const ZoneVector<UsePosition*>& reversed_vector_)
+      : reversed_view_(base::VectorOf(reversed_vector_)) {}
+
+  size_t size() const { return reversed_view_.size(); }
+  bool empty() const { return size() == 0; }
+
+  using iterator = std::reverse_iterator<UsePosition* const*>;
+  iterator begin() const { return reversed_view_.rbegin(); }
+  iterator end() const { return reversed_view_.rend(); }
+
+  UsePosition* first() const {
+    DCHECK(!empty());
+    return *begin();
+  }
+
+  UsePosition* operator[](size_t pos) const { return *(begin() + pos); }
+
+  UsePositionView SplitAt(iterator split_position_it);
+  void MergeWith(UsePositionView adjacent);
+
+ private:
+  base::Vector<UsePosition* const> reversed_view_;
+};
+
 // Representation of SSA values' live ranges as a collection of (continuous)
 // intervals over the instruction ordering.
 class V8_EXPORT_PRIVATE LiveRange : public NON_EXPORTED_BASE(ZoneObject) {
@@ -527,7 +562,7 @@ class V8_EXPORT_PRIVATE LiveRange : public NON_EXPORTED_BASE(ZoneObject) {
   LiveRange& operator=(const LiveRange&) = delete;
 
   UseInterval* first_interval() const { return first_interval_; }
-  base::Vector<UsePosition*> positions() const { return positions_span_; }
+  UsePositionView positions() const { return positions_view_; }
   TopLevelLiveRange* TopLevel() { return top_level_; }
   const TopLevelLiveRange* TopLevel() const { return top_level_; }
 
@@ -578,7 +613,7 @@ class V8_EXPORT_PRIVATE LiveRange : public NON_EXPORTED_BASE(ZoneObject) {
 
   // Returns use position in this live range that follows both start
   // and last processed use position.
-  UsePosition* const* NextUsePosition(LifetimePosition start) const;
+  UsePositionView::iterator NextUsePosition(LifetimePosition start) const;
 
   // Returns use position for which register is required in this live
   // range and which follows both start and last processed use position
@@ -614,7 +649,7 @@ class V8_EXPORT_PRIVATE LiveRange : public NON_EXPORTED_BASE(ZoneObject) {
   bool RegisterFromFirstHint(int* register_index);
 
   UsePosition* current_hint_position() const {
-    return positions_span_[current_hint_position_index_];
+    return positions_view_[current_hint_position_index_];
   }
 
   LifetimePosition Start() const {
@@ -685,7 +720,7 @@ class V8_EXPORT_PRIVATE LiveRange : public NON_EXPORTED_BASE(ZoneObject) {
   UseInterval* first_interval_;
   // This is a view into the `positions_` owned by the `TopLevelLiveRange`.
   // This allows cheap splitting and merging of `LiveRange`s.
-  base::Vector<UsePosition*> positions_span_;
+  UsePositionView positions_view_;
   TopLevelLiveRange* top_level_;
   LiveRange* next_;
   // This is used as a cache, it doesn't affect correctness.
@@ -1045,6 +1080,9 @@ class V8_EXPORT_PRIVATE TopLevelLiveRange final : public LiveRange {
   int spill_start_index_;
   LiveRange* last_child_covers_;
 
+  // Ordered descending by their position, since they are added
+  // (mostly) by iterating over instructions backwards.
+  // This way most inserts happen at the end, which avoids copies.
   ZoneVector<UsePosition*> positions_;
 };
 

@@ -100,8 +100,8 @@ class LiveRangeUnitTest : public TestWithZone {
     }
     if (i1 != nullptr || i2 != nullptr) return false;
 
-    UsePosition* const* p1 = first->positions().begin();
-    UsePosition* const* p2 = second->positions().begin();
+    UsePositionView::iterator p1 = first->positions().begin();
+    UsePositionView::iterator p2 = second->positions().begin();
 
     while (p1 != first->positions().end() && p2 != second->positions().end()) {
       if ((*p1)->pos() != (*p2)->pos()) return false;
