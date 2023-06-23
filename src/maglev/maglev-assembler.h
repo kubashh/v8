@@ -715,6 +715,25 @@ inline bool AnyMapIsHeapNumber(
   });
 }
 
+inline bool AnyMapIsHeapNumber(ZoneVector<PolymorphicAccessInfo> access_infos) {
+  return std::any_of(
+      access_infos.begin(), access_infos.end(),
+      [](const PolymorphicAccessInfo& access_info) {
+        return AnyMapIsHeapNumber(base::VectorOf(access_info.maps()));
+      });
+}
+
+inline bool AnyMapIsHeapNumberSimple(ZoneVector<PolymorphicAccessInfo> access_infos) {
+  for (const PolymorphicAccessInfo& access_info : access_infos) {
+    for (const compiler::MapRef& map : access_info.maps()) {
+      if (map.IsHeapNumberMap()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 inline Condition ToCondition(AssertCondition cond) {
   switch (cond) {
 #define CASE(Name)               \
