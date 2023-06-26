@@ -22,7 +22,7 @@ class Value;
 
 using async_id_t = double;
 
-struct AsyncContext {
+struct D8AsyncContext {
   async_id_t execution_async_id;
   async_id_t trigger_async_id;
 };
@@ -81,7 +81,7 @@ class AsyncHooks {
                                   const AsyncHooksWrap& wrap,
                                   AsyncHooks* hooks);
 
-  std::stack<AsyncContext> asyncContexts;
+  std::stack<D8AsyncContext> asyncContexts;
   async_id_t current_async_id;
   // We might end up in an invalid state after skipping steps due to
   // terminations.
