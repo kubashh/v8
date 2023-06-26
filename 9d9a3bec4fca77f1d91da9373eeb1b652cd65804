@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a64af38_cd07b6b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-06-26T14:53:27Z",
+      "side": 1,
+      "message": "Thanks for the review. I addressed all of your comments except for the ConditionalGotoStatus naming one. Any chance you have ideas there? :)",
+      "revId": "9d9a3bec4fca77f1d91da9373eeb1b652cd65804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
