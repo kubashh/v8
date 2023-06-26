@@ -86,19 +86,21 @@ class LiveRangeUnitTest : public TestWithZone {
   }
 
   // Ranges first and second match structurally.
-  bool RangesMatch(LiveRange* first, LiveRange* second) {
+  bool RangesMatch(const LiveRange* first, const LiveRange* second) {
     if (first->Start() != second->Start() || first->End() != second->End()) {
       return false;
     }
-    UseInterval* i1 = first->first_interval();
-    UseInterval* i2 = second->first_interval();
+    auto i1 = first->intervals().begin();
+    auto i2 = second->intervals().begin();
 
-    while (i1 != nullptr && i2 != nullptr) {
+    while (i1 != first->intervals().end() && i2 != second->intervals().end()) {
       if (i1->start() != i2->start() || i1->end() != i2->end()) return false;
-      i1 = i1->next();
-      i2 = i2->next();
+      ++i1;
+      ++i2;
     }
-    if (i1 != nullptr || i2 != nullptr) return false;
+    if (i1 != first->intervals().end() || i2 != second->intervals().end()) {
+      return false;
+    }
 
     UsePosition* const* p1 = first->positions().begin();
     UsePosition* const* p2 = second->positions().begin();
@@ -114,6 +116,16 @@ class LiveRangeUnitTest : public TestWithZone {
     return true;
   }
 };
+
+TEST_F(LiveRangeUnitTest, FrontSplitVector) {
+  FrontSplitVector<int> vec(zone());
+  vec.push_front(0);
+  vec.push_front(1);
+  EXPECT_EQ(vec.front(), 1);
+  EXPECT_EQ(vec.back(), 0);
+}
+
+// TODO(dlehmann): Add more tests for `FrontSplitVector`.
 
 TEST_F(LiveRangeUnitTest, InvalidConstruction) {
   // Build a range manually, because the builder guards against empty cases.

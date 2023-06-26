@@ -263,27 +263,28 @@ void UsePosition::set_type(UsePositionType type, bool register_beneficial) {
            AssignedRegisterField::encode(kUnassignedRegister);
 }
 
-UseInterval* UseInterval::SplitAt(LifetimePosition pos, Zone* zone) {
+UseInterval UseInterval::SplitAt(LifetimePosition pos) {
   DCHECK(Contains(pos) && pos != start());
-  UseInterval* after = zone->New<UseInterval>(pos, end_);
-  after->next_ = next_;
-  next_ = nullptr;
+  UseInterval after(pos, end_);
   end_ = pos;
   return after;
+}
+
+std::ostream& operator<<(std::ostream& os, const UseInterval& interval) {
+  return os << "[" << interval.start() << ", " << interval.end() << ')';
 }
 
 void LifetimePosition::Print() const { StdoutStream{} << *this << std::endl; }
 
 LiveRange::LiveRange(int relative_id, MachineRepresentation rep,
-                     TopLevelLiveRange* top_level)
+                     TopLevelLiveRange* top_level, Zone* zone)
     : relative_id_(relative_id),
       bits_(0),
-      last_interval_(nullptr),
-      first_interval_(nullptr),
+      intervals_(zone),
       positions_span_(),
       top_level_(top_level),
       next_(nullptr),
-      current_interval_(nullptr) {
+      current_interval_(intervals_.begin()) {
   DCHECK(AllocatedOperand::IsSupportedRepresentation(rep));
   bits_ = AssignedRegisterField::encode(kUnassignedRegister) |
           RepresentationField::encode(rep) |
@@ -301,26 +302,28 @@ void LiveRange::VerifyPositions() const {
   USE(positions_are_sorted);
 
   // Verify that each `UsePosition` is covered by a `UseInterval`.
-  UseInterval* interval = first_interval_;
+  UseIntervalVector::const_iterator interval = intervals().begin();
   for (UsePosition* pos : positions_span_) {
     DCHECK_LE(Start(), pos->pos());
     DCHECK_LE(pos->pos(), End());
-    DCHECK_NOT_NULL(interval);
+    DCHECK_NE(interval, intervals().end());
     // NOTE: Even though `UseInterval`s are conceptually half-open (e.g., when
     // splitting), we still regard the `UsePosition` that coincides with
     // the end of an interval as covered by that interval.
     while (!interval->Contains(pos->pos()) && interval->end() != pos->pos()) {
-      interval = interval->next();
-      DCHECK_NOT_NULL(interval);
+      ++interval;
+      DCHECK_NE(interval, intervals().end());
     }
   }
 }
 
 void LiveRange::VerifyIntervals() const {
-  DCHECK_EQ(first_interval()->start(), Start());
-  LifetimePosition last_end = first_interval()->end();
-  for (UseInterval* interval = first_interval()->next(); interval != nullptr;
-       interval = interval->next()) {
+  DCHECK(!intervals().empty());
+  DCHECK_EQ(intervals().front().start(), Start());
+  // The `UseInterval`s must be sorted and disjoint.
+  LifetimePosition last_end = intervals().front().end();
+  for (UseIntervalVector::const_iterator interval = intervals().begin() + 1;
+       interval != intervals().end(); ++interval) {
     DCHECK_LE(last_end, interval->start());
     last_end = interval->end();
   }
@@ -342,11 +345,8 @@ void LiveRange::AttachToNext() {
   DCHECK_NOT_NULL(next_);
   DCHECK_NE(TopLevel()->last_child_covers_, next_);
 
-  // Join linked lists of use intervals.
-  last_interval_->set_next(next_->first_interval());
-  next_->first_interval_ = nullptr;
-  last_interval_ = next_->last_interval_;
-  next_->last_interval_ = nullptr;
+  // Merge use intervals.
+  intervals_.Append(next_->intervals_);
 
   // `start_` doesn't change.
   end_ = next_->end_;
@@ -489,24 +489,26 @@ InstructionOperand LiveRange::GetAssignedOperand() const {
   return TopLevel()->GetSpillRangeOperand();
 }
 
-UseInterval* LiveRange::FirstSearchIntervalForPosition(
-    LifetimePosition position) const {
-  if (current_interval_ == nullptr) return first_interval_;
+UseIntervalVector::iterator LiveRange::FirstSearchIntervalForPosition(
+    LifetimePosition position) {
+  DCHECK_NE(current_interval_, intervals_.end());
   if (current_interval_->start() > position) {
-    current_interval_ = nullptr;
-    return first_interval_;
+    UseIntervalVector::iterator it = intervals_.begin();
+    while (it != intervals_.end() && it->end() < position) {
+      ++it;
+    }
+    current_interval_ = it;
   }
   return current_interval_;
 }
 
 void LiveRange::AdvanceLastProcessedMarker(
-    UseInterval* to_start_of, LifetimePosition but_not_past) const {
-  if (to_start_of == nullptr) return;
+    UseIntervalVector::iterator to_start_of, LifetimePosition but_not_past) {
+  DCHECK_LE(intervals_.begin(), to_start_of);
+  DCHECK_LT(to_start_of, intervals_.end());
+  DCHECK_NE(current_interval_, intervals_.end());
   if (to_start_of->start() > but_not_past) return;
-  LifetimePosition start = current_interval_ == nullptr
-                               ? LifetimePosition::Invalid()
-                               : current_interval_->start();
-  if (to_start_of->start() > start) {
+  if (to_start_of->start() > current_interval_->start()) {
     current_interval_ = to_start_of;
   }
 }
@@ -517,52 +519,82 @@ LiveRange* LiveRange::SplitAt(LifetimePosition position, Zone* zone) {
 
   int new_id = TopLevel()->GetNextChildId();
   LiveRange* result =
-      zone->New<LiveRange>(new_id, representation(), TopLevel());
+      zone->New<LiveRange>(new_id, representation(), TopLevel(), zone);
   result->set_bundle(bundle_);
+
+  // Partition original use intervals to the two live ranges.
 
   // Find the last interval that ends before the position. If the
   // position is contained in one of the intervals in the chain, we
   // split that interval and use the first part.
-  UseInterval* current = FirstSearchIntervalForPosition(position);
+  UseIntervalVector::iterator split_interval =
+      FirstSearchIntervalForPosition(position);
+  DCHECK_NE(split_interval, intervals_.end());
+
+  // std::cout << "SplitAt";
+  // std::cout << "UseIntervals before:" << std::endl;
+  // for (auto interval : intervals_) {
+  //   std::cout << "  " << interval << std::endl;
+  // }
+  // std::cout << "position: " << position << std::endl;
+
+  // Find first interval that ends after the position. (This either needs to
+  // be split or completely belongs to the splitted-off LiveRange.)
+  split_interval = std::upper_bound(
+      split_interval, intervals_.end(), position,
+      [](LifetimePosition position, const UseInterval& interval) {
+        return position < interval.end();
+      });
+  DCHECK_NE(split_interval, intervals_.end());
+
+  // std::cout << "split_interval: " << *split_interval << std::endl;
 
   // If the split position coincides with the beginning of a use interval
   // we need to split use positons in a special way.
   bool split_at_start = false;
 
-  if (current->start() == position) {
-    // When splitting at start we need to locate the previous use interval.
-    current = first_interval_;
+  if (split_interval->start() == position) {
+    split_at_start = true;
+    // std::cout << "no interval inserted" << std::endl;
+
+  } else if (split_interval->Contains(position)) {
+    UseInterval new_interval = split_interval->SplitAt(position);
+
+    size_t mem_before = zone->allocation_size();
+    split_interval = intervals_.insert(split_interval + 1, new_interval);
+    // std::cout << "interval inserted" << std::endl;
+    size_t mem_used = zone->allocation_size() - mem_before;
+    USE(mem_used);
+    // std::cout << "mem used: " << mem_used << std::endl;
+  } else {
+    // std::cout << "no interval inserted" << std::endl;
   }
 
-  UseInterval* after = nullptr;
-  while (current != nullptr) {
-    if (current->Contains(position)) {
-      after = current->SplitAt(position, zone);
-      break;
-    }
-    UseInterval* next = current->next();
-    if (next->start() >= position) {
-      split_at_start = (next->start() == position);
-      after = next;
-      current->set_next(nullptr);
-      break;
-    }
-    current = next;
-  }
-  DCHECK_NOT_NULL(after);
+  // std::cout << "UseIntervals just before SplitAt:" << std::endl;
+  // for (auto interval : intervals_) {
+  //   std::cout << "  " << interval << std::endl;
+  // }
 
-  // Partition original use intervals to the two live ranges.
-  UseInterval* before = current;
-  result->last_interval_ =
-      (last_interval_ == before)
-          ? after            // Only interval in the range after split.
-          : last_interval_;  // Last interval of the original range.
-  result->first_interval_ = after;
-  last_interval_ = before;
+  DCHECK_NE(split_interval, intervals_.end());
+  result->intervals_ = intervals_.SplitAt(split_interval);
 
-  result->start_ = result->first_interval_->start();
-  result->end_ = end_;
-  end_ = last_interval_->end();
+  start_ = intervals_.front().start();
+  result->start_ = result->intervals_.front().start();
+
+  end_ = intervals_.back().end();
+  result->end_ = result->intervals_.back().end();
+
+  current_interval_ = intervals_.begin();
+  result->current_interval_ = result->intervals_.begin();
+
+  // std::cout << "UseIntervals after, this:" << std::endl;
+  // for (auto interval : intervals_) {
+  //   std::cout << "  " << interval << std::endl;
+  // }
+  // std::cout << "UseIntervals after, result:" << std::endl;
+  // for (auto interval : result->intervals_) {
+  //   std::cout << "  " << interval << std::endl;
+  // }
 
   // Partition use positions.
   UsePosition** split_position_it;
@@ -583,9 +615,11 @@ LiveRange* LiveRange::SplitAt(LifetimePosition position, Zone* zone) {
         });
   }
 
-  size_t result_size = std::distance(split_position_it, positions_span_.end());
-  result->positions_span_ = base::VectorOf(split_position_it, result_size);
-  positions_span_.Truncate(positions_span_.size() - result_size);
+  size_t result_positions_size =
+      std::distance(split_position_it, positions_span_.end());
+  result->positions_span_ =
+      base::VectorOf(split_position_it, result_positions_size);
+  positions_span_.Truncate(positions_span_.size() - result_positions_size);
 
   // Update or discard cached iteration state to make sure it does not point
   // to use positions and intervals that no longer belong to this live range.
@@ -594,7 +628,6 @@ LiveRange* LiveRange::SplitAt(LifetimePosition position, Zone* zone) {
         current_hint_position_index_ - positions_span_.size();
     current_hint_position_index_ = 0;
   }
-  current_interval_ = nullptr;
 
 #ifdef DEBUG
   VerifyChildStructure();
@@ -684,13 +717,13 @@ bool LiveRange::CanCover(LifetimePosition position) const {
   return Start() <= position && position < End();
 }
 
-bool LiveRange::Covers(LifetimePosition position) const {
+bool LiveRange::Covers(LifetimePosition position) {
   if (!CanCover(position)) return false;
-  UseInterval* start_search = FirstSearchIntervalForPosition(position);
-  for (UseInterval* interval = start_search; interval != nullptr;
-       interval = interval->next()) {
-    DCHECK(interval->next() == nullptr ||
-           interval->next()->start() >= interval->start());
+  for (UseIntervalVector::iterator interval =
+           FirstSearchIntervalForPosition(position);
+       interval != intervals().end(); ++interval) {
+    DCHECK(interval + 1 == intervals().end() ||
+           interval[1].start() >= interval->start());
     AdvanceLastProcessedMarker(interval, position);
     if (interval->Contains(position)) return true;
     if (interval->start() > position) return false;
@@ -698,41 +731,48 @@ bool LiveRange::Covers(LifetimePosition position) const {
   return false;
 }
 
-LifetimePosition LiveRange::NextEndAfter(LifetimePosition position) const {
-  UseInterval* start_search = FirstSearchIntervalForPosition(position);
+LifetimePosition LiveRange::NextEndAfter(LifetimePosition position) {
+  UseIntervalVector::iterator start_search =
+      FirstSearchIntervalForPosition(position);
   while (start_search->end() < position) {
-    start_search = start_search->next();
+    ++start_search;
+    DCHECK_NE(start_search, intervals().end());
   }
   return start_search->end();
 }
 
 LifetimePosition LiveRange::NextStartAfter(LifetimePosition position) {
-  UseInterval* start_search = FirstSearchIntervalForPosition(position);
+  UseIntervalVector::iterator start_search =
+      FirstSearchIntervalForPosition(position);
   while (start_search->start() < position) {
-    start_search = start_search->next();
+    ++start_search;
+    DCHECK_NE(start_search, intervals().end());
   }
   next_start_ = start_search->start();
   return next_start_;
 }
 
-LifetimePosition LiveRange::FirstIntersection(LiveRange* other) const {
-  UseInterval* b = other->first_interval();
-  if (b == nullptr) return LifetimePosition::Invalid();
+LifetimePosition LiveRange::FirstIntersection(LiveRange* other) {
+  if (IsEmpty() || other->IsEmpty() || other->Start() > End() ||
+      Start() > other->End())
+    return LifetimePosition::Invalid();
+
+  UseIntervalVector::iterator b = other->intervals().begin();
   LifetimePosition advance_last_processed_up_to = b->start();
-  UseInterval* a = FirstSearchIntervalForPosition(b->start());
-  while (a != nullptr && b != nullptr) {
+  UseIntervalVector::iterator a = FirstSearchIntervalForPosition(b->start());
+  while (a != intervals().end() && b != other->intervals().end()) {
     if (a->start() > other->End()) break;
     if (b->start() > End()) break;
-    LifetimePosition cur_intersection = a->Intersect(b);
+    LifetimePosition cur_intersection = a->Intersect(*b);
     if (cur_intersection.IsValid()) {
       return cur_intersection;
     }
     if (a->start() < b->start()) {
-      a = a->next();
-      if (a == nullptr || a->start() > other->End()) break;
+      ++a;
+      if (a == intervals().end() || a->start() > other->End()) break;
       AdvanceLastProcessedMarker(a, advance_last_processed_up_to);
     } else {
-      b = b->next();
+      ++b;
     }
   }
   return LifetimePosition::Invalid();
@@ -776,7 +816,7 @@ struct TopLevelLiveRange::SpillMoveInsertionList : ZoneObject {
 
 TopLevelLiveRange::TopLevelLiveRange(int vreg, MachineRepresentation rep,
                                      Zone* zone)
-    : LiveRange(0, rep, this),
+    : LiveRange(0, rep, this, zone),
       vreg_(vreg),
       last_child_id_(0),
       spill_operand_(nullptr),
@@ -903,6 +943,10 @@ void TopLevelLiveRange::Verify() const {
   VerifyChildrenInOrder();
   for (const LiveRange* child = this; child != nullptr; child = child->next()) {
     VerifyChildStructure();
+    // The spans of `UseInterval`s must be touching each other.
+    if (child->next() != nullptr) {
+      CHECK_EQ(child->intervals().end(), child->next()->intervals().begin());
+    }
   }
 }
 
@@ -919,10 +963,9 @@ void TopLevelLiveRange::VerifyChildrenInOrder() const {
 void TopLevelLiveRange::ShortenTo(LifetimePosition start, bool trace_alloc) {
   TRACE_COND(trace_alloc, "Shorten live range %d to [%d\n", vreg(),
              start.value());
-  DCHECK_NOT_NULL(first_interval_);
-  DCHECK(first_interval_->start() <= start);
-  DCHECK(start < first_interval_->end());
-  first_interval_->set_start(start);
+  DCHECK(!IsEmpty());
+  DCHECK_LE(intervals_.front().start(), start);
+  intervals_.front().set_start(start);
   start_ = start;
 }
 
@@ -931,26 +974,24 @@ void TopLevelLiveRange::EnsureInterval(LifetimePosition start,
                                        bool trace_alloc) {
   TRACE_COND(trace_alloc, "Ensure live range %d in interval [%d %d[\n", vreg(),
              start.value(), end.value());
-  LifetimePosition new_end = end;
-  while (first_interval_ != nullptr && first_interval_->start() <= end) {
-    if (first_interval_->end() > end) {
-      new_end = first_interval_->end();
-    }
-    first_interval_ = first_interval_->next();
-  }
+  DCHECK(!IsEmpty());
 
-  UseInterval* new_interval = zone->New<UseInterval>(start, new_end);
-  new_interval->set_next(first_interval_);
-  first_interval_ = new_interval;
-  if (new_interval->next() == nullptr) {
-    last_interval_ = new_interval;
+  // Drop front intervals until intervals_.front().start() > end.
+  LifetimePosition new_end = end;
+  while (!intervals_.empty() && intervals_.front().start() <= end) {
+    if (intervals_.front().end() > end) {
+      new_end = intervals_.front().end();
+    }
+    intervals_.pop_front();
   }
+  intervals_.push_front(UseInterval(start, new_end));
   if (end_ < new_end) {
     end_ = new_end;
   }
   if (start_ > start) {
     start_ = start;
   }
+  current_interval_ = intervals_.begin();
 }
 
 void TopLevelLiveRange::AddUseInterval(LifetimePosition start,
@@ -958,29 +999,26 @@ void TopLevelLiveRange::AddUseInterval(LifetimePosition start,
                                        bool trace_alloc) {
   TRACE_COND(trace_alloc, "Add to live range %d interval [%d %d[\n", vreg(),
              start.value(), end.value());
-  if (first_interval_ == nullptr) {
-    UseInterval* interval = zone->New<UseInterval>(start, end);
-    first_interval_ = interval;
-    last_interval_ = interval;
+  if (intervals_.empty()) {
+    intervals_.push_front(UseInterval(start, end));
     start_ = start;
     end_ = end;
   } else {
-    if (end == first_interval_->start()) {
+    UseInterval& first_interval = intervals_.front();
+    if (end == first_interval.start()) {
       // Coalesce directly adjacent intervals.
-      first_interval_->set_start(start);
+      first_interval.set_start(start);
       start_ = start;
-    } else if (end < first_interval_->start()) {
-      UseInterval* interval = zone->New<UseInterval>(start, end);
-      interval->set_next(first_interval_);
-      first_interval_ = interval;
+    } else if (end < first_interval.start()) {
+      intervals_.push_front(UseInterval(start, end));
       start_ = start;
     } else {
       // Order of instruction's processing (see ProcessInstructions) guarantees
       // that each new use interval either precedes, intersects with or touches
       // the last added interval.
-      DCHECK_LE(start, first_interval_->end());
-      first_interval_->set_start(std::min(start, first_interval_->start()));
-      first_interval_->set_end(std::max(end, first_interval_->end()));
+      DCHECK(intervals_.size() == 1 || end <= intervals_.begin()[1].start());
+      first_interval.set_start(std::min(start, first_interval.start()));
+      first_interval.set_end(std::max(end, first_interval.end()));
       if (start_ > start) {
         start_ = start;
       }
@@ -989,6 +1027,9 @@ void TopLevelLiveRange::AddUseInterval(LifetimePosition start,
       }
     }
   }
+  DCHECK_EQ(Start(), intervals_.front().start());
+  DCHECK_EQ(End(), intervals_.back().end());
+  current_interval_ = intervals_.begin();
 }
 
 void TopLevelLiveRange::AddUsePosition(UsePosition* use_pos, bool trace_alloc) {
@@ -1017,19 +1058,24 @@ void TopLevelLiveRange::AddUsePosition(UsePosition* use_pos, bool trace_alloc) {
   DCHECK_LT(current_hint_position_index_, positions_.size());
 }
 
-static bool AreUseIntervalsIntersecting(UseInterval* interval1,
-                                        UseInterval* interval2) {
-  while (interval1 != nullptr && interval2 != nullptr) {
+// TODO(dlehmann): Use `std::set_intersection`, but with a dummy back_inserter.
+// Something like `boost::make_function_output_iterator`.
+static bool AreUseIntervalsIntersecting(
+    const ZoneVector<UseInterval>& intervals1,
+    const ZoneVector<UseInterval>& intervals2) {
+  UseIntervalVector::const_iterator interval1 = intervals1.begin();
+  UseIntervalVector::const_iterator interval2 = intervals2.begin();
+  while (interval1 != intervals1.end() && interval2 != intervals2.end()) {
     if (interval1->start() < interval2->start()) {
       if (interval1->end() > interval2->start()) {
         return true;
       }
-      interval1 = interval1->next();
+      ++interval1;
     } else {
       if (interval2->end() > interval1->start()) {
         return true;
       }
-      interval2 = interval2->next();
+      ++interval2;
     }
   }
   return false;
@@ -1044,7 +1090,6 @@ std::ostream& operator<<(std::ostream& os,
   if (range->TopLevel()->is_non_loop_phi()) os << "nlphi ";
 
   os << "{" << std::endl;
-  UseInterval* interval = range->first_interval();
   for (UsePosition* use_pos : range->positions()) {
     if (use_pos->HasOperand()) {
       os << *use_pos->operand() << use_pos->pos() << " ";
@@ -1052,10 +1097,8 @@ std::ostream& operator<<(std::ostream& os,
   }
   os << std::endl;
 
-  while (interval != nullptr) {
-    os << '[' << interval->start() << ", " << interval->end() << ')'
-       << std::endl;
-    interval = interval->next();
+  for (const UseInterval& interval : range->intervals()) {
+    os << interval << std::endl;
   }
   os << "}";
   return os;
@@ -1109,10 +1152,9 @@ void LinearScanAllocator::PrintRangeRow(std::ostream& os,
 
   for (const LiveRange* range = toplevel; range != nullptr;
        range = range->next()) {
-    for (UseInterval* interval = range->first_interval(); interval != nullptr;
-         interval = interval->next()) {
-      LifetimePosition start = interval->start();
-      LifetimePosition end = interval->end();
+    for (const UseInterval& interval : range->intervals()) {
+      LifetimePosition start = interval.start();
+      LifetimePosition end = interval.end();
       CHECK_GE(start.value(), position);
       for (; start.value() > position; position++) {
         os << ' ';
@@ -1158,40 +1200,32 @@ void LinearScanAllocator::PrintRangeOverview() {
 
 SpillRange::SpillRange(TopLevelLiveRange* parent, Zone* zone)
     : live_ranges_(zone),
+      use_intervals_(zone),
       assigned_slot_(kUnassignedSlot),
       byte_width_(ByteWidthForStackSlot(parent->representation())) {
+  DCHECK(!parent->IsEmpty());
+
   // Spill ranges are created for top level. This is so that, when merging
   // decisions are made, we consider the full extent of the virtual register,
   // and avoid clobbering it.
-  UseInterval* result = nullptr;
-  UseInterval* node = nullptr;
-  // Copy the intervals for all ranges.
-  for (LiveRange* range = parent; range != nullptr; range = range->next()) {
-    UseInterval* src = range->first_interval();
-    while (src != nullptr) {
-      UseInterval* new_node = zone->New<UseInterval>(src->start(), src->end());
-      if (result == nullptr) {
-        result = new_node;
-      } else {
-        node->set_next(new_node);
-      }
-      node = new_node;
-      src = src->next();
+  for (const LiveRange* range = parent; range != nullptr;
+       range = range->next()) {
+    // Deep copy the `UseInterval`s, since the `LiveRange`s are subsequently
+    // modified, so just storing those has correctness issues.
+    for (UseInterval interval : range->intervals()) {
+      use_intervals_.push_back(interval);
     }
   }
-  use_interval_ = result;
-  live_ranges().push_back(parent);
-  end_position_ = node->end();
+  live_ranges_.push_back(parent);
   parent->SetSpillRange(this);
 }
 
 bool SpillRange::IsIntersectingWith(SpillRange* other) const {
-  if (this->use_interval_ == nullptr || other->use_interval_ == nullptr ||
-      this->End() <= other->use_interval_->start() ||
-      other->End() <= this->use_interval_->start()) {
+  if (this->use_intervals_.empty() || other->use_intervals_.empty() ||
+      this->End() <= other->Start() || other->End() <= this->Start()) {
     return false;
   }
-  return AreUseIntervalsIntersecting(use_interval_, other->use_interval_);
+  return AreUseIntervalsIntersecting(use_intervals_, other->use_intervals_);
 }
 
 bool SpillRange::TryMerge(SpillRange* other) {
@@ -1199,20 +1233,20 @@ bool SpillRange::TryMerge(SpillRange* other) {
   if (byte_width() != other->byte_width() || IsIntersectingWith(other))
     return false;
 
-  LifetimePosition max = LifetimePosition::MaxPosition();
-  if (End() < other->End() && other->End() != max) {
-    end_position_ = other->End();
+  // Merge vectors of `UseInterval`s.
+  use_intervals_.reserve(use_intervals_.size() + other->use_intervals_.size());
+  for (UseInterval interval : other->use_intervals_) {
+    use_intervals_.insert(std::upper_bound(use_intervals_.begin(),
+                                           use_intervals_.end(), interval),
+                          1, interval);
   }
-  other->end_position_ = max;
+  other->use_intervals_.clear();
 
-  MergeDisjointIntervals(other->use_interval_);
-  other->use_interval_ = nullptr;
-
-  for (TopLevelLiveRange* range : other->live_ranges()) {
+  // Merge vectors of `TopLevelLiveRange`s.
+  for (TopLevelLiveRange* range : other->live_ranges_) {
     DCHECK(range->GetSpillRange() == other);
     range->SetSpillRange(this);
   }
-
   live_ranges().insert(live_ranges().end(), other->live_ranges().begin(),
                        other->live_ranges().end());
   other->live_ranges().clear();
@@ -1220,38 +1254,17 @@ bool SpillRange::TryMerge(SpillRange* other) {
   return true;
 }
 
-void SpillRange::MergeDisjointIntervals(UseInterval* other) {
-  UseInterval* tail = nullptr;
-  UseInterval* current = use_interval_;
-  while (other != nullptr) {
-    // Make sure the 'current' list starts first
-    if (current == nullptr || current->start() > other->start()) {
-      std::swap(current, other);
-    }
-    // Check disjointness
-    DCHECK(other == nullptr || current->end() <= other->start());
-    // Append the 'current' node to the result accumulator and move forward
-    if (tail == nullptr) {
-      use_interval_ = current;
-    } else {
-      tail->set_next(current);
-    }
-    tail = current;
-    current = current->next();
-  }
-  // Other list is empty => we are done
-}
-
 void SpillRange::Print() const {
   StdoutStream os;
   os << "{" << std::endl;
-  for (TopLevelLiveRange* range : live_ranges()) {
+  for (const TopLevelLiveRange* range : live_ranges_) {
     os << range->vreg() << " ";
   }
   os << std::endl;
 
-  for (UseInterval* i = interval(); i != nullptr; i = i->next()) {
-    os << '[' << i->start() << ", " << i->end() << ')' << std::endl;
+  for (const UseInterval& interval : use_intervals_) {
+    os << "  [" << interval.start() << ", " << interval.end() << ')'
+       << std::endl;
   }
   os << "}" << std::endl;
 }
@@ -1441,10 +1454,9 @@ bool TopTierRegisterAllocationData::RangesDefinedInDeferredStayInDeferred() {
              ->IsDeferred()) {
       continue;
     }
-    for (const UseInterval* i = range->first_interval(); i != nullptr;
-         i = i->next()) {
-      int first = i->FirstGapIndex();
-      int last = i->LastGapIndex();
+    for (const UseInterval& interval : range->intervals()) {
+      int first = interval.FirstGapIndex();
+      int last = interval.LastGapIndex();
       for (int instr = first; instr <= last;) {
         const InstructionBlock* block = code()->GetInstructionBlock(instr);
         if (!block->IsDeferred()) return false;
@@ -2575,35 +2587,38 @@ void LiveRangeBuilder::ResolvePhiHint(InstructionOperand* operand,
 #ifdef DEBUG
 void LiveRangeBuilder::Verify() const {
   for (auto& hint : phi_hints_) {
-    CHECK(hint.second->IsResolved());
+    DCHECK(hint.second->IsResolved());
   }
-  for (const TopLevelLiveRange* current : data()->live_ranges()) {
+  for (TopLevelLiveRange* current : data()->live_ranges()) {
     if (current != nullptr && !current->IsEmpty()) {
       // New LiveRanges should not be split.
-      CHECK_NULL(current->next());
+      DCHECK_NULL(current->next());
       // General integrity check.
       current->Verify();
-      const UseInterval* first = current->first_interval();
-      if (first->next() == nullptr) continue;
+      if (current->intervals().size() < 2) continue;
 
       // Consecutive intervals should not end and start in the same block,
       // otherwise the intervals should have been joined, because the
       // variable is live throughout that block.
-      CHECK(NextIntervalStartsInDifferentBlocks(first));
+      UseIntervalVector::const_iterator interval = current->intervals().begin();
+      UseIntervalVector::const_iterator next_interval = interval + 1;
+      DCHECK(NextIntervalStartsInDifferentBlocks(*interval, *next_interval));
 
-      for (const UseInterval* i = first->next(); i != nullptr; i = i->next()) {
+      for (++interval; interval != current->intervals().end(); ++interval) {
         // Except for the first interval, the other intevals must start at
         // a block boundary, otherwise data wouldn't flow to them.
         // You might trigger this CHECK if your SSA is not valid. For instance,
         // if the inputs of a Phi node are in the wrong order.
-        CHECK(IntervalStartsAtBlockBoundary(i));
+        DCHECK(IntervalStartsAtBlockBoundary(*interval));
         // The last instruction of the predecessors of the block the interval
         // starts must be covered by the range.
-        CHECK(IntervalPredecessorsCoveredByRange(i, current));
-        if (i->next() != nullptr) {
+        DCHECK(IntervalPredecessorsCoveredByRange(*interval, current));
+        next_interval = interval + 1;
+        if (next_interval != current->intervals().end()) {
           // Check the consecutive intervals property, except for the last
           // interval, where it doesn't apply.
-          CHECK(NextIntervalStartsInDifferentBlocks(i));
+          DCHECK(
+              NextIntervalStartsInDifferentBlocks(*interval, *next_interval));
         }
       }
     }
@@ -2612,8 +2627,8 @@ void LiveRangeBuilder::Verify() const {
 #endif
 
 bool LiveRangeBuilder::IntervalStartsAtBlockBoundary(
-    const UseInterval* interval) const {
-  LifetimePosition start = interval->start();
+    UseInterval interval) const {
+  LifetimePosition start = interval.start();
   if (!start.IsFullStart()) return false;
   int instruction_index = start.ToInstructionIndex();
   const InstructionBlock* block =
@@ -2622,8 +2637,8 @@ bool LiveRangeBuilder::IntervalStartsAtBlockBoundary(
 }
 
 bool LiveRangeBuilder::IntervalPredecessorsCoveredByRange(
-    const UseInterval* interval, const TopLevelLiveRange* range) const {
-  LifetimePosition start = interval->start();
+    UseInterval interval, TopLevelLiveRange* range) const {
+  LifetimePosition start = interval.start();
   int instruction_index = start.ToInstructionIndex();
   const InstructionBlock* block =
       data()->code()->GetInstructionBlock(instruction_index);
@@ -2639,10 +2654,9 @@ bool LiveRangeBuilder::IntervalPredecessorsCoveredByRange(
 }
 
 bool LiveRangeBuilder::NextIntervalStartsInDifferentBlocks(
-    const UseInterval* interval) const {
-  DCHECK_NOT_NULL(interval->next());
-  LifetimePosition end = interval->end();
-  LifetimePosition next_start = interval->next()->start();
+    UseInterval interval, UseInterval next) const {
+  LifetimePosition end = interval.end();
+  LifetimePosition next_start = next.start();
   // Since end is not covered, but the previous position is, move back a
   // position
   end = end.IsStart() ? end.PrevStart().End() : end.Start();
@@ -2721,10 +2735,10 @@ bool LiveRangeBundle::TryAddRange(LiveRange* range) {
   DCHECK_NULL(range->get_bundle());
   // We may only add a new live range if its use intervals do not
   // overlap with existing intervals in the bundle.
-  if (UsesOverlap(range->first_interval())) return false;
+  if (UseIntervalsOverlap(range)) return false;
   ranges_.insert(range);
   range->set_bundle(this);
-  InsertUses(range->first_interval());
+  InsertUseIntervals(range);
   return true;
 }
 
@@ -2737,13 +2751,14 @@ LiveRangeBundle* LiveRangeBundle::TryMerge(LiveRangeBundle* lhs,
   auto iter2 = rhs->uses_.begin();
 
   while (iter1 != lhs->uses_.end() && iter2 != rhs->uses_.end()) {
-    if (iter1->start >= iter2->end) {
+    if (iter1->start() >= iter2->end()) {
       ++iter2;
-    } else if (iter2->start >= iter1->end) {
+    } else if (iter2->start() >= iter1->end()) {
       ++iter1;
     } else {
-      TRACE_COND(trace_alloc, "No merge %d:%d %d:%d\n", iter1->start,
-                 iter1->end, iter2->start, iter2->end);
+      TRACE_COND(trace_alloc, "No merge %d:%d %d:%d\n", iter1->start().value(),
+                 iter1->end().value(), iter2->start().value(),
+                 iter2->end().value());
       return nullptr;
     }
   }
@@ -2752,12 +2767,12 @@ LiveRangeBundle* LiveRangeBundle::TryMerge(LiveRangeBundle* lhs,
     // Merge the smallest bundle into the biggest.
     std::swap(lhs, rhs);
   }
-  for (auto it = rhs->ranges_.begin(); it != rhs->ranges_.end(); ++it) {
-    (*it)->set_bundle(lhs);
+  for (LiveRange* range : rhs->ranges_) {
+    range->set_bundle(lhs);
     // We also tried `std::merge`ing the sorted vectors of `uses_` directly,
     // but it turns out the (always happening) copies are more expensive
     // than the (apparently seldom) copies due to insertion in the middle.
-    lhs->InsertUses((*it)->first_interval());
+    lhs->InsertUseIntervals(range);
   }
   lhs->ranges_.insert(rhs->ranges_.begin(), rhs->ranges_.end());
   rhs->ranges_.clear();
@@ -3166,7 +3181,7 @@ LiveRange* LinearScanAllocator::AssignRegisterOnReload(LiveRange* range,
       continue;
     }
     SlowDCheckInactiveLiveRangesIsSorted(cur_reg);
-    for (const LiveRange* cur_inactive : inactive_live_ranges(cur_reg)) {
+    for (LiveRange* cur_inactive : inactive_live_ranges(cur_reg)) {
       if (kFPAliasing == AliasingKind::kCombine && check_fp_aliasing() &&
           !data()->config()->AreAliases(cur_inactive->representation(), cur_reg,
                                         range->representation(), reg)) {
