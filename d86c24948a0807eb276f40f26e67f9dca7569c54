@@ -22,6 +22,30 @@
       },
       "revId": "d86c24948a0807eb276f40f26e67f9dca7569c54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a10a844b_0e1c6af1",
+        "filename": "src/maglev/arm/maglev-ir-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-06-27T15:20:46Z",
+      "side": 1,
+      "message": "Nice, you\u0027re right! I\u0027ve also changed arm64 and x64 to follow this pattern.",
+      "parentUuid": "0ff34677_0213889e",
+      "range": {
+        "startLine": 473,
+        "startChar": 11,
+        "endLine": 473,
+        "endChar": 27
+      },
+      "revId": "d86c24948a0807eb276f40f26e67f9dca7569c54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
