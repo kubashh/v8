@@ -16,6 +16,23 @@
       "message": "ECMA402 change slightly (in term of option reading order) between Stage 3 and Stage 4. In this CL, I didn\u0027t change that but only do a mechanical change to remove the flag and remove old code for v2. The sync to the Stage 4 work will be done AFTER the landing of this CL to make it easier to review (that will be shifting some option reading code to AO which the spec changes or moving the order of the option reading order per spec changes (DONE by the editor right before Stage 4)",
       "revId": "9cd2ee57d266ff0ec62e09ac28222ceb3e9c7e32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8344b9f_70a8ba21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-06-27T19:44:56Z",
+      "side": 1,
+      "message": "friendly ping",
+      "revId": "9cd2ee57d266ff0ec62e09ac28222ceb3e9c7e32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
