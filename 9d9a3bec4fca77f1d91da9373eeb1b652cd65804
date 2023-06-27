@@ -16,6 +16,23 @@
       "message": "Thanks for the review. I addressed all of your comments except for the ConditionalGotoStatus naming one. Any chance you have ideas there? :)",
       "revId": "9d9a3bec4fca77f1d91da9373eeb1b652cd65804",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe350049_4aca7716",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-06-27T06:32:33Z",
+      "side": 1,
+      "message": "LGTM % comment, thanks",
+      "revId": "9d9a3bec4fca77f1d91da9373eeb1b652cd65804",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
