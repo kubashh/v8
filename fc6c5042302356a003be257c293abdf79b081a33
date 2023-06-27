@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69674a17_f036fafe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1182309
+      },
+      "writtenOn": "2023-06-27T09:56:50Z",
+      "side": 1,
+      "message": "Almost identical to my patch, so LGTM. Thanks!\n\nSorry for the delay - I\u0027m out on Mondays.",
+      "revId": "fc6c5042302356a003be257c293abdf79b081a33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
