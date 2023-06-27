@@ -16,6 +16,24 @@
       "message": "Almost identical to my patch, so LGTM. Thanks!\n\nSorry for the delay - I\u0027m out on Mondays.",
       "revId": "fc6c5042302356a003be257c293abdf79b081a33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de4e721d_68158663",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-06-27T10:09:30Z",
+      "side": 1,
+      "message": "I didn\u0027t read your comment properly at first, and missed that you have a CL already. I only realized it when I had most of the changes done already.\nThanks!",
+      "parentUuid": "69674a17_f036fafe",
+      "revId": "fc6c5042302356a003be257c293abdf79b081a33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
