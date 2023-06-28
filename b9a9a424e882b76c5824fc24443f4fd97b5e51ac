@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27ba4461_91fce1e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-28T07:52:22Z",
+      "side": 1,
+      "message": "Looks good, just a couple of comments.",
+      "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cda0559c_a3599f02",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2358,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-28T07:52:22Z",
+      "side": 1,
+      "message": "These could both be direct handles, right?",
+      "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17bb4296_755acc43",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2462,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-28T07:52:22Z",
+      "side": 1,
+      "message": "If this is a recurring pattern in the refactoring, maybe introduce a `i::direct_handle` or `i::direct`, similar to `i::handle`?",
+      "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d56bcc5_c2bb4863",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2474,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-28T07:52:22Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6853bcf6_6baec91e",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2505,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-28T07:52:22Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
