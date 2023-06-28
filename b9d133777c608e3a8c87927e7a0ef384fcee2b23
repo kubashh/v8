@@ -16,6 +16,23 @@
       "message": "Tests passing locally:\n\n$ tools/dev/gm.py x64.release.check\n# autoninja -C out/x64.release cctest inspector-test unittests wasm_api_tests bigint_shell d8\nninja: Entering directory `out/x64.release\u0027\n[400/400] LINK ./unittests\n# \"/usr/bin/python3\" tools/run-tests.py --outdir\u003dout/x64.release cctest debugger intl unittests message mjsunit \nBuild found: /usr/local/google/home/rzanoni/projects/v8/out/x64.release\n\u003e\u003e\u003e Autodetected:\npointer_compression\npointer_compression_shared_cage\nsandbox\nwebassembly\n\u003e\u003e\u003e Running tests for x64.release\n\u003e\u003e\u003e Running with test processors\n12:35:30 No LUCI_CONTEXT found. No results will be sent to ResutDB.\n[00:25|%  97|+ 18748|-   0]: Done                                             \n\u003e\u003e\u003e 19308 base tests produced 18748 (97%) non-filtered tests\n\u003e\u003e\u003e 18748 tests ran",
       "revId": "b9d133777c608e3a8c87927e7a0ef384fcee2b23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42d8c14e_f25d3d51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2023-06-28T07:39:31Z",
+      "side": 1,
+      "message": "Hi Toon Verwaest, We are backmerging this CL to the LTS branch for https://crbug.com/1432470 in the same context of other CL that you reviewed (https://crrev.com/c/4577217), could you review this one as well?",
+      "revId": "b9d133777c608e3a8c87927e7a0ef384fcee2b23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
