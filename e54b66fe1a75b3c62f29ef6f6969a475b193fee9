@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "030bd076_a470ee19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-28T07:17:42Z",
+      "side": 1,
+      "message": "Just one issue and some test suggestions (which would have caught it).",
+      "revId": "e54b66fe1a75b3c62f29ef6f6969a475b193fee9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "235c97b7_8a1d37b8",
+        "filename": "src/handles/handles-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-28T07:17:42Z",
+      "side": 1,
+      "message": "`Handle\u003cT\u003e::is_identical_to` returns `true` if they are both null.\nI think this should do the same.\n\nProbably the easiest way to fix this is to remove this `if`, as I believe that the comparison in line 264 will not fail and return the right thing, if any of the pointers is null.",
+      "revId": "e54b66fe1a75b3c62f29ef6f6969a475b193fee9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b86a47ce_42d32cd9",
+        "filename": "test/unittests/heap/direct-handles-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-28T07:17:42Z",
+      "side": 1,
+      "message": "Let\u0027s add two more special cases: `d4 !\u003d\u003d d1` and `d4 \u003d\u003d\u003d d4` (or some other null handle). Also, let\u0027s repeat the test for `MaybeDirectHandle`s.",
+      "revId": "e54b66fe1a75b3c62f29ef6f6969a475b193fee9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
