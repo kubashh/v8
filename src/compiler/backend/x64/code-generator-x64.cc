@@ -6594,7 +6594,7 @@ void CodeGenerator::AssembleArchTableSwitch(Instruction* instr) {
   __ cmpl(input, Immediate(case_count));
   __ j(above_equal, GetLabel(i.InputRpo(1)));
   __ leaq(kScratchRegister, Operand(table));
-  __ jmp(Operand(kScratchRegister, input, times_8, 0));
+  __ jmp(Operand(kScratchRegister, input, times_8, 0), /*notrack=*/true);
 }
 
 void CodeGenerator::AssembleArchSelect(Instruction* instr,

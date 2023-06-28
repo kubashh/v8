@@ -561,6 +561,7 @@ class ExceptionHandlerTrampolineBuilder {
                 &direct_moves, &materialising_moves, &save_accumulator);
     __ BindJumpTarget(&handler_info->trampoline_entry);
     __ RecordComment("-- Exception handler trampoline START");
+    __ ExceptionHandler();
     EmitMaterialisationsAndPushResults(materialising_moves, save_accumulator);
 
     __ RecordComment("EmitMoves");
@@ -1461,6 +1462,8 @@ void MaglevCodeGenerator::EmitCode() {
     masm_.RecordComment("-- OSR entrpoint --");
     masm_.BindJumpTarget(code_gen_state_.osr_entry());
   }
+
+  masm_.CodeEntry();
 
   processor.ProcessGraph(graph_);
   EmitDeferredCode();
