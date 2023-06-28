@@ -33,6 +33,40 @@
       "message": "There seem to be a couple of timeout failure on the CSS bot.\nI\u0027m getting back to this.",
       "revId": "3494ed7c438708f74a54618d82b04e78f0fd0c24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "466ba764_adf517d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-28T16:19:45Z",
+      "side": 1,
+      "message": "The timeouts in the tests on the CSS bot are because the checks that `DirectHandle`s are only allocated on the stack and from the main thread (introduced in https://crrev.com/c/4632878) are too slow. In particular, it\u0027s `Stack::ObtainCurrentThreadStackStart` that is too slow.\n\nI got one more comment, while investigating the timeouts.\n\nLGTM, but please let\u0027s delay landing this until the issue with the timeouts is resolved in a separate CL, otherwise the CSS bot will block the CI.",
+      "revId": "3494ed7c438708f74a54618d82b04e78f0fd0c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4a22593_b842fa76",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-28T16:19:45Z",
+      "side": 1,
+      "message": "This seems to be creating a copy of the original handle, in the CSS configuration.\nI believe this could become just:\n```\nreturn Local\u003cSignature\u003e::Cast(receiver);\n```\nand that `Utils::SignatureToLocal` can be removed.",
+      "revId": "3494ed7c438708f74a54618d82b04e78f0fd0c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
