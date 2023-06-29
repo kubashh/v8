@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbc74b82_00bba2cf",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-29T16:54:18Z",
+      "side": 0,
+      "message": "Note how this was almost exactly the same code as `UsesOverlap` in `regster-allocator.h`, so I merged this for `LiveRangeBundle` and `SpillRange`.",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6e260ad_7edb6237",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-29T16:54:18Z",
+      "side": 0,
+      "message": "Merged into the function above.",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3084cae2_96945d43",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-29T16:54:18Z",
+      "side": 0,
+      "message": "Those functions were never actually `const` due to the `mutable current_interval_`, which I found quite confusing.",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c285f036_8cb49c5c",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-29T16:54:18Z",
+      "side": 0,
+      "message": "This is now superfluous since `UseInterval` contains exactly the same information and is also a value class.",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fef5542_d0d8dc6a",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-29T16:54:18Z",
+      "side": 0,
+      "message": "This cache is no longer necessary, since we can access the end position in `O(1)` in a vector.",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -16,6 +16,40 @@
       "message": "This is the last (and unfortunately the largest) one.",
       "revId": "7689cdd0b26f2ea88422c0736cd69212f158445d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab0f33a6_9bc12de0",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-29T16:54:18Z",
+      "side": 1,
+      "message": "Ultimately, this is still a `O(n+m)` algorithm, just with better locality for vectors instead of linked lists. Is there some way to get this to `O(log n)`?",
+      "revId": "7689cdd0b26f2ea88422c0736cd69212f158445d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "604db826_b41d43c6",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-06-29T16:54:18Z",
+      "side": 1,
+      "message": "Saw some memory improvements by going from `ZoneSet` to a sorted vector, but I didn\u0027t record how much for this individually.",
+      "revId": "7689cdd0b26f2ea88422c0736cd69212f158445d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
