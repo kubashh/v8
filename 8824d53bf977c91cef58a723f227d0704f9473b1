@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a83a204_c92def18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-06-29T11:16:50Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "8824d53bf977c91cef58a723f227d0704f9473b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad4644fa_8bbc0d69",
@@ -31,6 +48,30 @@
       "writtenOn": "2023-06-29T09:49:19Z",
       "side": 1,
       "message": "I assume this can be sorted as it seemed random in first place",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 20
+      },
+      "revId": "8824d53bf977c91cef58a723f227d0704f9473b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba1d5454_e5c52b14",
+        "filename": "src/objects/visitors.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-06-29T11:16:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ad4644fa_8bbc0d69",
       "range": {
         "startLine": 20,
         "startChar": 8,
