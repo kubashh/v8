@@ -67,6 +67,10 @@ class MemoryChunkDataMap final {
     return it->second;
   }
 
+  void erase(MemoryChunk* key) {
+    map_.erase(key);
+  }
+
   // No iterator is cached in this class so an actual find() has to be executed
   // everytime.
   MemoryChunkDataMapT::iterator find(const MemoryChunkDataMapT::key_type& key) {
