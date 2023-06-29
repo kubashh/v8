@@ -668,7 +668,7 @@ class Graph {
 
     explicit OpIndexIterator(OpIndex index, const Graph* graph)
         : index_(index), graph_(graph) {}
-    value_type& operator*() { return index_; }
+    value_type operator*() const { return index_; }
     OpIndexIterator& operator++() {
       index_ = graph_->operations_.Next(index_);
       return *this;
