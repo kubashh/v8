@@ -70,6 +70,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e21cffb2_f077b9a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-29T10:35:08Z",
+      "side": 1,
+      "message": "The fix has landed. Just one comment remaining, Michael PTAL.",
+      "revId": "3494ed7c438708f74a54618d82b04e78f0fd0c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4a22593_b842fa76",
@@ -83,6 +100,24 @@
       "writtenOn": "2023-06-28T16:19:45Z",
       "side": 1,
       "message": "This seems to be creating a copy of the original handle, in the CSS configuration.\nI believe this could become just:\n```\nreturn Local\u003cSignature\u003e::Cast(receiver);\n```\nand that `Utils::SignatureToLocal` can be removed.",
+      "revId": "3494ed7c438708f74a54618d82b04e78f0fd0c24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2240ea83_fde60380",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-06-29T10:35:08Z",
+      "side": 1,
+      "message": "The name of this method probably suggests that a new `Local` should be constructed. If that\u0027s the case, I believe the existing implementation was wrong. What I suggest above assumes that using the same handle is OK.",
+      "parentUuid": "e4a22593_b842fa76",
       "revId": "3494ed7c438708f74a54618d82b04e78f0fd0c24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
