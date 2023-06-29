@@ -342,6 +342,7 @@ class JsonParser final {
   MessageTemplate LookUpErrorMessageForJsonToken(JsonToken token,
                                                  Handle<Object>& arg,
                                                  Handle<Object>& arg2, int pos);
+  void CalculateFileLocation(Handle<Object>& line, Handle<Object>& column);
   // Mark that a parsing error has happened at the current token.
   void ReportUnexpectedToken(
       JsonToken token,
@@ -399,6 +400,7 @@ class JsonParser final {
   // in which we cache chars has to be guarded by a DisallowGarbageCollection
   // scope.
   const Char* cursor_;
+  const Char* start_;
   const Char* end_;
   const Char* chars_;
 };
