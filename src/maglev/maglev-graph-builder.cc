@@ -5488,8 +5488,15 @@ ReduceResult MaglevGraphBuilder::BuildInlined(ValueNode* context,
 bool MaglevGraphBuilder::ShouldInlineCall(
     compiler::SharedFunctionInfoRef shared,
     compiler::OptionalFeedbackVectorRef feedback_vector, float call_frequency) {
-  if (graph()->total_inlined_bytecode_size() >
-      v8_flags.max_maglev_inlined_bytecode_size_cumulative) {
+  bool force_inline = false;
+  if (V8_UNLIKELY(*v8_flags.maglev_force_inline_filter != 0)) {
+    if (shared.object()->PassesFilter(v8_flags.maglev_force_inline_filter)) {
+      force_inline = true;
+    }
+  }
+  if (!force_inline &&
+      graph()->total_inlined_bytecode_size() >
+          v8_flags.max_maglev_inlined_bytecode_size_cumulative) {
     TRACE_CANNOT_INLINE("maximum inlined bytecode size");
     return false;
   }
@@ -5532,23 +5539,26 @@ bool MaglevGraphBuilder::ShouldInlineCall(
         break;
     }
   }
-  if (call_frequency < v8_flags.min_maglev_inlining_frequency) {
+  if (!force_inline &&
+      call_frequency < v8_flags.min_maglev_inlining_frequency) {
     TRACE_CANNOT_INLINE("call frequency ("
                         << call_frequency << ") < minimum threshold ("
                         << v8_flags.min_maglev_inlining_frequency << ")");
     return false;
   }
-  if (bytecode.length() < v8_flags.max_maglev_inlined_bytecode_size_small) {
+  if (!force_inline &&
+      bytecode.length() < v8_flags.max_maglev_inlined_bytecode_size_small) {
     TRACE_INLINING("  inlining " << shared << ": small function");
     return true;
   }
-  if (bytecode.length() > v8_flags.max_maglev_inlined_bytecode_size) {
+  if (!force_inline &&
+      bytecode.length() > v8_flags.max_maglev_inlined_bytecode_size) {
     TRACE_CANNOT_INLINE("big function, size ("
                         << bytecode.length() << ") >= max-size ("
                         << v8_flags.max_maglev_inlined_bytecode_size << ")");
     return false;
   }
-  if (inlining_depth() > v8_flags.max_maglev_inline_depth) {
+  if (!force_inline && inlining_depth() > v8_flags.max_maglev_inline_depth) {
     TRACE_CANNOT_INLINE("inlining depth ("
                         << inlining_depth() << ") >= max-depth ("
                         << v8_flags.max_maglev_inline_depth << ")");
