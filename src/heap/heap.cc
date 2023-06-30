@@ -76,6 +76,7 @@
 #include "src/heap/memory-measurement.h"
 #include "src/heap/memory-reducer.h"
 #include "src/heap/minor-gc-job.h"
+#include "src/heap/minor-mark-compact.h"
 #include "src/heap/new-spaces.h"
 #include "src/heap/object-lock.h"
 #include "src/heap/object-stats.h"
@@ -5533,11 +5534,6 @@ void Heap::SetUpSpaces(LinearAllocationArea& new_allocation_info,
 
   LOG(isolate_, IntPtrTEvent("heap-capacity", Capacity()));
   LOG(isolate_, IntPtrTEvent("heap-available", Available()));
-
-  mark_compact_collector()->SetUp();
-  if (minor_mark_compact_collector_) {
-    minor_mark_compact_collector_->SetUp();
-  }
 
   if (new_space()) {
     minor_gc_job_.reset(new MinorGCJob());

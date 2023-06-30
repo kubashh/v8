@@ -15,6 +15,7 @@
 #include "src/heap/marking-barrier-inl.h"
 #include "src/heap/marking-worklist-inl.h"
 #include "src/heap/marking-worklist.h"
+#include "src/heap/minor-mark-compact.h"
 #include "src/heap/safepoint.h"
 #include "src/objects/heap-object.h"
 #include "src/objects/js-array-buffer.h"
