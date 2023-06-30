@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fa3e8ce_fa5eb828",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-30T10:09:43Z",
+      "side": 1,
+      "message": "Toon, PTAL\nCamillo, FYI",
+      "revId": "d6bfc7bcfde388fd0888c8c88981dd40afedbe77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
