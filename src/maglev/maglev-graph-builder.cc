@@ -5488,11 +5488,41 @@ ReduceResult MaglevGraphBuilder::BuildInlined(ValueNode* context,
 bool MaglevGraphBuilder::ShouldInlineCall(
     compiler::SharedFunctionInfoRef shared,
     compiler::OptionalFeedbackVectorRef feedback_vector, float call_frequency) {
-  if (graph()->total_inlined_bytecode_size() >
-      v8_flags.max_maglev_inlined_bytecode_size_cumulative) {
-    TRACE_CANNOT_INLINE("maximum inlined bytecode size");
-    return false;
+  // First, check heuristics --- do we want to inline.
+  compiler::BytecodeArrayRef bytecode = shared.GetBytecodeArray(broker());
+  if (V8_LIKELY(*v8_flags.maglev_force_inline_filter == 0 ||
+                !shared.object()->PassesFilter(
+                    v8_flags.maglev_force_inline_filter))) {
+    if (graph()->total_inlined_bytecode_size() >
+        v8_flags.max_maglev_inlined_bytecode_size_cumulative) {
+      TRACE_CANNOT_INLINE("maximum inlined bytecode size");
+      return false;
+    }
+
+    if (call_frequency < v8_flags.min_maglev_inlining_frequency) {
+      TRACE_CANNOT_INLINE("call frequency ("
+                          << call_frequency << ") < minimum threshold ("
+                          << v8_flags.min_maglev_inlining_frequency << ")");
+      return false;
+    }
+    if (bytecode.length() >= v8_flags.max_maglev_inlined_bytecode_size_small) {
+      if (bytecode.length() > v8_flags.max_maglev_inlined_bytecode_size) {
+        TRACE_CANNOT_INLINE("big function, size ("
+                            << bytecode.length() << ") >= max-size ("
+                            << v8_flags.max_maglev_inlined_bytecode_size
+                            << ")");
+        return false;
+      }
+      if (inlining_depth() > v8_flags.max_maglev_inline_depth) {
+        TRACE_CANNOT_INLINE("inlining depth ("
+                            << inlining_depth() << ") >= max-depth ("
+                            << v8_flags.max_maglev_inline_depth << ")");
+        return false;
+      }
+    }
   }
+
+  // Second, check requirements --- can we inline.
   if (!feedback_vector) {
     // TODO(verwaest): Soft deopt instead?
     TRACE_CANNOT_INLINE("it has not been compiled/run with feedback yet");
@@ -5509,7 +5539,6 @@ bool MaglevGraphBuilder::ShouldInlineCall(
     return false;
   }
   // TODO(victorgomes): Support NewTarget/RegisterInput in inlined functions.
-  compiler::BytecodeArrayRef bytecode = shared.GetBytecodeArray(broker());
   if (bytecode.incoming_new_target_or_generator_register().is_valid()) {
     TRACE_CANNOT_INLINE("use unsupported NewTargetOrGenerator register");
     return false;
@@ -5532,28 +5561,7 @@ bool MaglevGraphBuilder::ShouldInlineCall(
         break;
     }
   }
-  if (call_frequency < v8_flags.min_maglev_inlining_frequency) {
-    TRACE_CANNOT_INLINE("call frequency ("
-                        << call_frequency << ") < minimum threshold ("
-                        << v8_flags.min_maglev_inlining_frequency << ")");
-    return false;
-  }
-  if (bytecode.length() < v8_flags.max_maglev_inlined_bytecode_size_small) {
-    TRACE_INLINING("  inlining " << shared << ": small function");
-    return true;
-  }
-  if (bytecode.length() > v8_flags.max_maglev_inlined_bytecode_size) {
-    TRACE_CANNOT_INLINE("big function, size ("
-                        << bytecode.length() << ") >= max-size ("
-                        << v8_flags.max_maglev_inlined_bytecode_size << ")");
-    return false;
-  }
-  if (inlining_depth() > v8_flags.max_maglev_inline_depth) {
-    TRACE_CANNOT_INLINE("inlining depth ("
-                        << inlining_depth() << ") >= max-depth ("
-                        << v8_flags.max_maglev_inline_depth << ")");
-    return false;
-  }
+
   TRACE_INLINING("  inlining " << shared);
   if (v8_flags.trace_maglev_inlining_verbose) {
     BytecodeArray::Disassemble(bytecode.object(), std::cout);

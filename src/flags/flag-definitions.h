@@ -503,6 +503,8 @@ DEFINE_INT(max_maglev_inlined_bytecode_size_small, 27,
            "maximum size of bytecode considered for small function inlining")
 DEFINE_FLOAT(min_maglev_inlining_frequency, 0.10,
              "minimum frequency for inlining")
+DEFINE_STRING(maglev_force_inline_filter, "",
+              "filter to force inline in maglev")
 DEFINE_WEAK_VALUE_IMPLICATION(turbofan, max_maglev_inline_depth, 1)
 DEFINE_WEAK_VALUE_IMPLICATION(turbofan, max_maglev_inlined_bytecode_size, 100)
 DEFINE_WEAK_VALUE_IMPLICATION(turbofan,
