@@ -2,10 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "src/heap/mark-compact-base.h"
+#include "src/heap/mark-compact-utilities.h"
 
+#include "src/common/globals.h"
 #include "src/heap/cppgc-js/cpp-heap.h"
 #include "src/heap/large-spaces.h"
+#include "src/heap/marking-worklist.h"
 #include "src/heap/new-spaces.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/string-forwarding-table-inl.h"
@@ -18,25 +20,22 @@ namespace internal {
 // produce invalid {kImpossibleBitPattern} in the marking bitmap by overlapping.
 static_assert(Heap::kMinObjectSizeInTaggedWords >= 2);
 
-// =============================================================================
-// Verifiers
-// =============================================================================
-
 #ifdef VERIFY_HEAP
-MarkingVerifier::MarkingVerifier(Heap* heap)
+MarkCompactUtilities::MarkingVerifierBase::MarkingVerifierBase(Heap* heap)
     : ObjectVisitorWithCageBases(heap), heap_(heap) {}
 
-void MarkingVerifier::VisitMapPointer(HeapObject object) {
+void MarkCompactUtilities::MarkingVerifierBase::VisitMapPointer(
+    HeapObject object) {
   VerifyMap(object.map(cage_base()));
 }
 
-void MarkingVerifier::VerifyRoots() {
+void MarkCompactUtilities::MarkingVerifierBase::VerifyRoots() {
   heap_->IterateRootsIncludingClients(
       this, base::EnumSet<SkipRoot>{SkipRoot::kWeak, SkipRoot::kTopOfStack});
 }
 
-void MarkingVerifier::VerifyMarkingOnPage(const Page* page, Address start,
-                                          Address end) {
+void MarkCompactUtilities::MarkingVerifierBase::VerifyMarkingOnPage(
+    const Page* page, Address start, Address end) {
   Address next_object_must_be_here_or_later = start;
 
   for (auto [object, size] : LiveObjectRange(page)) {
@@ -61,7 +60,7 @@ void MarkingVerifier::VerifyMarkingOnPage(const Page* page, Address start,
   }
 }
 
-void MarkingVerifier::VerifyMarking(NewSpace* space) {
+void MarkCompactUtilities::MarkingVerifierBase::VerifyMarking(NewSpace* space) {
   if (!space) return;
   if (v8_flags.minor_mc) {
     VerifyMarking(PagedNewSpace::From(space)->paged_space());
@@ -82,13 +81,15 @@ void MarkingVerifier::VerifyMarking(NewSpace* space) {
   }
 }
 
-void MarkingVerifier::VerifyMarking(PagedSpaceBase* space) {
+void MarkCompactUtilities::MarkingVerifierBase::VerifyMarking(
+    PagedSpaceBase* space) {
   for (Page* p : *space) {
     VerifyMarkingOnPage(p, p->area_start(), p->area_end());
   }
 }
 
-void MarkingVerifier::VerifyMarking(LargeObjectSpace* lo_space) {
+void MarkCompactUtilities::MarkingVerifierBase::VerifyMarking(
+    LargeObjectSpace* lo_space) {
   if (!lo_space) return;
   LargeObjectSpaceObjectIterator it(lo_space);
   for (HeapObject obj = it.Next(); !obj.is_null(); obj = it.Next()) {
@@ -99,16 +100,13 @@ void MarkingVerifier::VerifyMarking(LargeObjectSpace* lo_space) {
 }
 #endif  // VERIFY_HEAP
 
-// =============================================================================
-// MarkCompactCollectorBase
-// =============================================================================
-
-StringForwardingTableCleanerBase::StringForwardingTableCleanerBase(Heap* heap)
+MarkCompactUtilities::StringForwardingTableCleanerBase::
+    StringForwardingTableCleanerBase(Heap* heap)
     : isolate_(heap->isolate()),
       marking_state_(heap->non_atomic_marking_state()) {}
 
-void StringForwardingTableCleanerBase::DisposeExternalResource(
-    StringForwardingTable::Record* record) {
+void MarkCompactUtilities::StringForwardingTableCleanerBase::
+    DisposeExternalResource(StringForwardingTable::Record* record) {
   Address resource = record->ExternalResourceAddress();
   if (resource != kNullAddress && disposed_resources_.count(resource) == 0) {
     record->DisposeExternalResource();
@@ -116,32 +114,26 @@ void StringForwardingTableCleanerBase::DisposeExternalResource(
   }
 }
 
-MarkCompactCollectorBase::MarkCompactCollectorBase(Heap* heap,
-                                                   GarbageCollector collector)
-    : heap_(heap),
-      marking_state_(heap_->marking_state()),
-      non_atomic_marking_state_(heap_->non_atomic_marking_state()),
-      garbage_collector_(collector) {
-  DCHECK_NE(GarbageCollector::SCAVENGER, garbage_collector_);
-}
-
-bool MarkCompactCollectorBase::IsCppHeapMarkingFinished() const {
-  const auto* cpp_heap = CppHeap::From(heap_->cpp_heap());
+// static
+bool MarkCompactUtilities::IsCppHeapMarkingFinished(
+    Heap* heap, MarkingWorklists::Local* local_marking_worklists) {
+  const auto* cpp_heap = CppHeap::From(heap->cpp_heap());
   if (!cpp_heap) return true;
 
-  return cpp_heap->IsTracingDone() &&
-         local_marking_worklists()->IsWrapperEmpty();
+  return cpp_heap->IsTracingDone() && local_marking_worklists->IsWrapperEmpty();
 }
 
 #if DEBUG
-void MarkCompactCollectorBase::VerifyRememberedSetsAfterEvacuation() {
+// static
+void MarkCompactUtilities::VerifyRememberedSetsAfterEvacuation(
+    Heap* heap, GarbageCollector garbage_collector) {
   // Old-to-old slot sets must be empty after evacuation.
   bool new_space_is_empty =
-      !heap_->new_space() || heap_->new_space()->Size() == 0;
-  DCHECK_IMPLIES(garbage_collector_ == GarbageCollector::MARK_COMPACTOR,
+      !heap->new_space() || heap->new_space()->Size() == 0;
+  DCHECK_IMPLIES(garbage_collector == GarbageCollector::MARK_COMPACTOR,
                  new_space_is_empty);
 
-  MemoryChunkIterator chunk_iterator(heap_);
+  MemoryChunkIterator chunk_iterator(heap);
 
   while (chunk_iterator.HasNext()) {
     MemoryChunk* chunk = chunk_iterator.Next();
@@ -151,7 +143,7 @@ void MarkCompactCollectorBase::VerifyRememberedSetsAfterEvacuation() {
     DCHECK_NULL((chunk->typed_slot_set<OLD_TO_OLD, AccessMode::ATOMIC>()));
 
     if (new_space_is_empty &&
-        (garbage_collector_ == GarbageCollector::MARK_COMPACTOR)) {
+        (garbage_collector == GarbageCollector::MARK_COMPACTOR)) {
       // Old-to-new slot sets must be empty after evacuation.
       DCHECK_NULL((chunk->slot_set<OLD_TO_NEW, AccessMode::ATOMIC>()));
       DCHECK_NULL((chunk->typed_slot_set<OLD_TO_NEW, AccessMode::ATOMIC>()));
