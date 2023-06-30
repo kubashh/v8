@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21da7b52_b4071941",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-06-30T13:48:32Z",
+      "side": 1,
+      "message": "FYI, filed https://crbug.com/1459603 to figure out the sdk version problem.\n\nYou could also once bump this manually to get this fix in.",
+      "revId": "65981138396f62b0c9b6114e7055fa87f1a7b129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
