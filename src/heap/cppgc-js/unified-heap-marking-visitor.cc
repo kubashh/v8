@@ -10,6 +10,7 @@
 #include "src/heap/cppgc/visitor.h"
 #include "src/heap/heap.h"
 #include "src/heap/mark-compact.h"
+#include "src/heap/minor-mark-compact.h"
 
 namespace v8 {
 namespace internal {
