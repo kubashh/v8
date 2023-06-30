@@ -4,6 +4,8 @@
 
 #include "src/heap/mark-compact.h"
 
+#include <algorithm>
+#include <atomic>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -2015,7 +2017,7 @@ void MarkCompactCollector::MarkObjectsFromClientHeap(Isolate* client) {
 
   for (MemoryChunk* chunk = chunk_iterator.next(); chunk;
        chunk = chunk_iterator.next()) {
-    RememberedSet<OLD_TO_SHARED>::Iterate(
+    const auto slot_count = RememberedSet<OLD_TO_SHARED>::Iterate(
         chunk,
         [collector = this, cage_base](MaybeObjectSlot slot) {
           MaybeObject obj = slot.Relaxed_Load(cage_base);
@@ -2030,8 +2032,11 @@ void MarkCompactCollector::MarkObjectsFromClientHeap(Isolate* client) {
           }
         },
         SlotSet::FREE_EMPTY_BUCKETS);
+    if (slot_count == 0) {
+      chunk->ReleaseSlotSet(OLD_TO_SHARED);
+    }
 
-    RememberedSet<OLD_TO_SHARED>::IterateTyped(
+    const auto typed_slot_count = RememberedSet<OLD_TO_SHARED>::IterateTyped(
         chunk, [collector = this, heap](SlotType slot_type, Address slot) {
           HeapObject heap_object =
               UpdateTypedSlotHelper::GetTargetObject(heap, slot_type, slot);
@@ -2042,6 +2047,9 @@ void MarkCompactCollector::MarkObjectsFromClientHeap(Isolate* client) {
             return REMOVE_SLOT;
           }
         });
+    if (typed_slot_count == 0) {
+      chunk->ReleaseTypedSlotSet(OLD_TO_SHARED);
+    }
   }
 
   MarkWaiterQueueNode(client);
@@ -2134,7 +2142,8 @@ bool MarkCompactCollector::ProcessEphemerons() {
   // Drain marking worklist and push discovered ephemerons into
   // discovered_ephemerons.
   size_t objects_processed;
-  std::tie(std::ignore, objects_processed) = ProcessMarkingWorklist(0);
+  std::tie(std::ignore, objects_processed) =
+      ProcessMarkingWorklist(0, MarkingWorklistProcessingMode::kDefault);
 
   // As soon as a single object was processed and potentially marked another
   // object we need another iteration. Otherwise we might miss to apply
@@ -2255,12 +2264,6 @@ void MarkCompactCollector::PerformWrapperTracing() {
 
   TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK_EMBEDDER_TRACING);
   cpp_heap->AdvanceTracing(std::numeric_limits<double>::infinity());
-}
-
-std::pair<size_t, size_t> MarkCompactCollector::ProcessMarkingWorklist(
-    size_t bytes_to_process) {
-  return ProcessMarkingWorklist(bytes_to_process,
-                                MarkingWorklistProcessingMode::kDefault);
 }
 
 std::pair<size_t, size_t> MarkCompactCollector::ProcessMarkingWorklist(
@@ -5078,16 +5081,17 @@ void MarkCompactCollector::UpdatePointersInClientHeap(Isolate* client) {
     MemoryChunk* chunk = chunk_iterator.Next();
     CodePageMemoryModificationScope unprotect_code_page(chunk);
 
-    RememberedSet<OLD_TO_SHARED>::Iterate(
+    const auto slot_count = RememberedSet<OLD_TO_SHARED>::Iterate(
         chunk,
         [cage_base](MaybeObjectSlot slot) {
           return UpdateOldToSharedSlot(cage_base, slot);
         },
         SlotSet::FREE_EMPTY_BUCKETS);
 
-    if (chunk->InYoungGeneration()) chunk->ReleaseSlotSet(OLD_TO_SHARED);
+    if (slot_count == 0 || chunk->InYoungGeneration())
+      chunk->ReleaseSlotSet(OLD_TO_SHARED);
 
-    RememberedSet<OLD_TO_SHARED>::IterateTyped(
+    const auto typed_slot_count = RememberedSet<OLD_TO_SHARED>::IterateTyped(
         chunk, [this](SlotType slot_type, Address slot) {
           // Using UpdateStrongSlot is OK here, because there are no weak
           // typed slots.
@@ -5097,7 +5101,8 @@ void MarkCompactCollector::UpdatePointersInClientHeap(Isolate* client) {
                 return UpdateStrongOldToSharedSlot(cage_base, slot);
               });
         });
-    if (chunk->InYoungGeneration()) chunk->ReleaseTypedSlotSet(OLD_TO_SHARED);
+    if (typed_slot_count == 0 || chunk->InYoungGeneration())
+      chunk->ReleaseTypedSlotSet(OLD_TO_SHARED);
   }
 }
 
@@ -5451,13 +5456,6 @@ MinorMarkCompactCollector::MinorMarkCompactCollector(Heap* heap)
     : CollectorBase(heap, GarbageCollector::MINOR_MARK_COMPACTOR),
       sweeper_(heap_->sweeper()) {}
 
-std::pair<size_t, size_t> MinorMarkCompactCollector::ProcessMarkingWorklist(
-    size_t bytes_to_process) {
-  // TODO(v8:13012): Implement this later. It should be similar to
-  // MinorMarkCompactCollector::DrainMarkingWorklist.
-  UNREACHABLE();
-}
-
 void MinorMarkCompactCollector::PerformWrapperTracing() {
   auto* cpp_heap = CppHeap::From(heap_->cpp_heap());
   if (!cpp_heap) return;
@@ -5536,6 +5534,9 @@ void MinorMarkCompactCollector::StartMarking() {
       marking_worklists(),
       cpp_heap ? cpp_heap->CreateCppMarkingStateForMutatorThread()
                : MarkingWorklists::Local::kNoCppMarkingState);
+  DCHECK_NULL(remembered_sets_marking_handler_);
+  remembered_sets_marking_handler_ =
+      std::make_unique<YoungGenerationRememberedSetsMarkingWorklist>(heap());
   if (cpp_heap && cpp_heap->generational_gc_supported()) {
     TRACE_GC(heap()->tracer(),
              GCTracer::Scope::MINOR_MC_MARK_EMBEDDER_PROLOGUE);
@@ -5731,8 +5732,6 @@ void MinorMarkCompactCollector::ClearNonLiveReferences() {
   }
 }
 
-class PageMarkingItem;
-
 YoungGenerationMarkingTask::YoungGenerationMarkingTask(
     Isolate* isolate, Heap* heap, MarkingWorklists* global_worklists,
     EphemeronRememberedSet::TableList* ephemeron_table_list)
@@ -5773,110 +5772,64 @@ void YoungGenerationMarkingTask::DrainMarkingWorklist() {
   marking_worklists_local_.PublishWrapper();
 }
 
-void YoungGenerationMarkingTask::PublishMarkingWorklist() {
-  marking_worklists_local_.Publish();
-}
-
 void YoungGenerationMarkingTask::Finalize() { visitor_.Finalize(); }
 
-void PageMarkingItem::Process(YoungGenerationMarkingTask* task) {
-  CodePageHeaderModificationScope header_modification_scope(
-      "Marking modifies the remembered sets in the page header");
-  if (slots_type_ == SlotsType::kRegularSlots) {
-    MarkUntypedPointers<OLD_TO_NEW>(task);
-    MarkUntypedPointers<OLD_TO_NEW_BACKGROUND>(task);
-  } else {
-    MarkTypedPointers(task);
-  }
-}
-
 namespace {
-
-template <typename TSlot>
-void CheckOldToNewSlotForSharedUntyped(MemoryChunk* chunk, TSlot slot) {
-  MaybeObject object = *slot;
-  HeapObject heap_object;
-  if (object.GetHeapObject(&heap_object) &&
-      heap_object.InWritableSharedSpace()) {
-    RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::ATOMIC>(chunk,
-                                                             slot.address());
-  }
+int EstimateMaxNumberOfRemeberedSets(Heap* heap) {
+  return 2 * (heap->old_space()->CountTotalPages() +
+              heap->lo_space()->PageCount()) +
+         3 * (heap->code_space()->CountTotalPages() +
+              heap->code_lo_space()->PageCount());
 }
-
-void CheckOldToNewSlotForSharedTyped(MemoryChunk* chunk, SlotType slot_type,
-                                     Address slot_address,
-                                     MaybeObject new_target) {
-  HeapObject heap_object;
-
-  if (new_target.GetHeapObject(&heap_object) &&
-      heap_object.InWritableSharedSpace()) {
-    const uintptr_t offset = slot_address - chunk->address();
-    DCHECK_LT(offset, static_cast<uintptr_t>(TypedSlotSet::kMaxOffset));
-    RememberedSet<OLD_TO_SHARED>::InsertTyped(chunk, slot_type,
-                                              static_cast<uint32_t>(offset));
-  }
-}
-
 }  // namespace
 
-template <RememberedSetType old_to_new_type>
-void PageMarkingItem::MarkUntypedPointers(YoungGenerationMarkingTask* task) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
-               "PageMarkingItem::MarkUntypedPointers");
-  const bool record_old_to_shared_slots =
-      chunk_->heap()->isolate()->has_shared_space();
-  const auto slot_count =
-      RememberedSet<old_to_new_type>::template Iterate<AccessMode::NON_ATOMIC>(
-          chunk_,
-          [this, task, record_old_to_shared_slots](MaybeObjectSlot slot) {
-            SlotCallbackResult result = CheckAndMarkObject(task, slot);
-            if (result == REMOVE_SLOT && record_old_to_shared_slots) {
-              CheckOldToNewSlotForSharedUntyped(chunk_, slot);
-            }
-            return result;
-          },
-          SlotSet::FREE_EMPTY_BUCKETS);
-  if (slot_count == 0) {
-    chunk_->ReleaseSlotSet(old_to_new_type);
+// static
+std::vector<RememberedSetsMarkingItem> RememberedSetsMarkingItem::CollectItems(
+    Heap* heap) {
+  std::vector<RememberedSetsMarkingItem> items;
+  int max_remembered_set_count = EstimateMaxNumberOfRemeberedSets(heap);
+  items.reserve(max_remembered_set_count);
+  CodePageHeaderModificationScope rwx_write_scope(
+      "Extracting of slot sets requires write access to Code page "
+      "header");
+  OldGenerationMemoryChunkIterator::ForAll(heap, [&items](MemoryChunk* chunk) {
+    SlotSet* slot_set = chunk->ExtractSlotSet<OLD_TO_NEW>();
+    SlotSet* background_slot_set =
+        chunk->ExtractSlotSet<OLD_TO_NEW_BACKGROUND>();
+    if (slot_set || background_slot_set) {
+      items.emplace_back(chunk,
+                         RememberedSetsMarkingItem::SlotsType::kRegularSlots,
+                         slot_set, background_slot_set);
+    }
+    if (TypedSlotSet* typed_slot_set =
+            chunk->ExtractTypedSlotSet<OLD_TO_NEW>()) {
+      DCHECK(chunk->owner_identity() == CODE_SPACE ||
+             chunk->owner_identity() == CODE_LO_SPACE);
+      items.emplace_back(chunk,
+                         RememberedSetsMarkingItem::SlotsType::kTypedSlots,
+                         typed_slot_set);
+    }
+  });
+  DCHECK_LE(items.size(), max_remembered_set_count);
+  return items;
+}
+
+void RememberedSetsMarkingItem::MergeBackAndDeleteRememberedSets() {
+  DCHECK(IsAcquired());
+  if (slots_type_ == RememberedSetsMarkingItem::SlotsType::kRegularSlots) {
+    if (slot_set_)
+      RememberedSet<OLD_TO_NEW>::MergeAndDelete(
+          chunk_, reinterpret_cast<SlotSet*>(slot_set_));
+    if (background_slot_set_)
+      RememberedSet<OLD_TO_NEW_BACKGROUND>::MergeAndDelete(
+          chunk_, reinterpret_cast<SlotSet*>(background_slot_set_));
+  } else {
+    DCHECK_EQ(slots_type_, RememberedSetsMarkingItem::SlotsType::kTypedSlots);
+    DCHECK_NULL(background_slot_set_);
+    if (slot_set_)
+      RememberedSet<OLD_TO_NEW>::MergeAndDeleteTyped(
+          chunk_, reinterpret_cast<TypedSlotSet*>(slot_set_));
   }
-}
-
-void PageMarkingItem::MarkTypedPointers(YoungGenerationMarkingTask* task) {
-  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
-               "PageMarkingItem::MarkTypedPointers");
-  const bool record_old_to_shared_slots =
-      chunk_->heap()->isolate()->has_shared_space();
-  RememberedSet<OLD_TO_NEW>::IterateTyped(
-      chunk_, [this, task, record_old_to_shared_slots](SlotType slot_type,
-                                                       Address slot_address) {
-        return UpdateTypedSlotHelper::UpdateTypedSlot(
-            heap(), slot_type, slot_address,
-            [this, task, record_old_to_shared_slots, slot_address,
-             slot_type](FullMaybeObjectSlot slot) {
-              SlotCallbackResult result = CheckAndMarkObject(task, slot);
-              if (result == REMOVE_SLOT && record_old_to_shared_slots) {
-                CheckOldToNewSlotForSharedTyped(chunk_, slot_type, slot_address,
-                                                *slot);
-              }
-              return result;
-            });
-      });
-}
-
-template <typename TSlot>
-V8_INLINE SlotCallbackResult PageMarkingItem::CheckAndMarkObject(
-    YoungGenerationMarkingTask* task, TSlot slot) {
-  static_assert(
-      std::is_same<TSlot, FullMaybeObjectSlot>::value ||
-          std::is_same<TSlot, MaybeObjectSlot>::value,
-      "Only FullMaybeObjectSlot and MaybeObjectSlot are expected here");
-  return task->visitor()
-                 ->VisitObjectViaSlot<YoungGenerationMainMarkingVisitor::
-                                          ObjectVisitationMode::kVisitDirectly,
-                                      YoungGenerationMainMarkingVisitor::
-                                          SlotTreatmentMode::kReadWrite>(slot)
-             ? KEEP_SLOT
-             : REMOVE_SLOT;
 }
 
 void YoungGenerationMarkingJob::Run(JobDelegate* delegate) {
@@ -5895,18 +5848,14 @@ size_t YoungGenerationMarkingJob::GetMaxConcurrency(size_t worker_count) const {
   // Pages are not private to markers but we can still use them to estimate
   // the amount of marking that is required.
   const int kPagesPerTask = 2;
-  size_t items = remaining_marking_items_.load(std::memory_order_relaxed);
-  size_t num_tasks;
-  if (ShouldDrainMarkingWorklist()) {
-    num_tasks = std::max(
-        (items + 1) / kPagesPerTask,
-        global_worklists_->shared()->Size() +
-            global_worklists_->on_hold()
-                ->Size());  // TODO(v8:13012): If this is used with concurrent
-                            // marking, we need to remove on_hold() here.
-  } else {
-    num_tasks = (items + 1) / kPagesPerTask;
-  }
+  size_t items =
+      remembered_sets_marking_handler_->RemainingRememberedSetsMarkingIteams();
+  size_t num_tasks = std::max(
+      (items + 1) / kPagesPerTask,
+      global_worklists_->shared()->Size() +
+          global_worklists_->on_hold()
+              ->Size());  // TODO(v8:13012): If this is used with concurrent
+                          // marking, we need to remove on_hold() here.
 
   if (!v8_flags.parallel_marking) {
     num_tasks = std::min<size_t>(1, num_tasks);
@@ -5922,12 +5871,12 @@ void YoungGenerationMarkingJob::ProcessItems(JobDelegate* delegate) {
     const int task_id = delegate->GetTaskId();
     DCHECK_LT(task_id, tasks_.size());
     YoungGenerationMarkingTask* task = tasks_[task_id].get();
-    ProcessMarkingItems(task);
-    if (ShouldDrainMarkingWorklist()) {
+    YoungGenerationRememberedSetsMarkingWorklist::Local remembered_sets(
+        remembered_sets_marking_handler_);
+    while (remembered_sets.ProcessNextItem(task->visitor())) {
       task->DrainMarkingWorklist();
-    } else {
-      task->PublishMarkingWorklist();
     }
+    task->DrainMarkingWorklist();
   }
   if (v8_flags.trace_minor_mc_parallel_marking) {
     PrintIsolate(isolate_, "marking[%p]: time=%f\n", static_cast<void*>(this),
@@ -5935,35 +5884,8 @@ void YoungGenerationMarkingJob::ProcessItems(JobDelegate* delegate) {
   }
 }
 
-void YoungGenerationMarkingJob::ProcessMarkingItems(
-    YoungGenerationMarkingTask* task) {
-  // TODO(v8:13012): YoungGenerationMarkingJob is generally used to compute the
-  // transitive closure. In the context of concurrent MinorMC, it currently only
-  // seeds the worklists from the old-to-new remembered set, but does not empty
-  // them (this is done concurrently). The class should be refactored to make
-  // this clearer.
-  while (remaining_marking_items_.load(std::memory_order_relaxed) > 0) {
-    base::Optional<size_t> index = generator_.GetNext();
-    if (!index) return;
-    for (size_t i = *index; i < marking_items_.size(); ++i) {
-      auto& work_item = marking_items_[i];
-      if (!work_item.TryAcquire()) break;
-      work_item.Process(task);
-      if (ShouldDrainMarkingWorklist()) {
-        task->DrainMarkingWorklist();
-      }
-      if (remaining_marking_items_.fetch_sub(1, std::memory_order_relaxed) <=
-          1) {
-        return;
-      }
-    }
-  }
-}
-
 void MinorMarkCompactCollector::MarkLiveObjectsInParallel(
     RootMarkingVisitor* root_visitor, bool was_marked_incrementally) {
-  std::vector<PageMarkingItem> marking_items;
-
   // Seed the root set (roots + old->new set).
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MINOR_MC_MARK_SEED);
@@ -5993,22 +5915,6 @@ void MinorMarkCompactCollector::MarkLiveObjectsInParallel(
       // Otherwise, visit all young roots.
       isolate()->traced_handles()->IterateYoungRoots(root_visitor);
     }
-
-    if (!was_marked_incrementally) {
-      // Create items for each page.
-      OldGenerationMemoryChunkIterator::ForAll(heap(), [&marking_items](
-                                                           MemoryChunk* chunk) {
-        if (chunk->slot_set<OLD_TO_NEW, AccessMode::NON_ATOMIC>() ||
-            chunk->slot_set<OLD_TO_NEW_BACKGROUND, AccessMode::NON_ATOMIC>()) {
-          marking_items.emplace_back(chunk,
-                                     PageMarkingItem::SlotsType::kRegularSlots);
-        }
-        if (chunk->typed_slot_set<OLD_TO_NEW, AccessMode::NON_ATOMIC>()) {
-          marking_items.emplace_back(chunk,
-                                     PageMarkingItem::SlotsType::kTypedSlots);
-        }
-      });
-    }
   }
 
   // Add tasks and run in parallel.
@@ -6033,11 +5939,9 @@ void MinorMarkCompactCollector::MarkLiveObjectsInParallel(
           isolate(), heap(), marking_worklists(), ephemeron_table_list_.get()));
     }
     V8::GetCurrentPlatform()
-        ->CreateJob(
-            v8::TaskPriority::kUserBlocking,
-            std::make_unique<YoungGenerationMarkingJob>(
-                isolate(), heap(), marking_worklists(),
-                std::move(marking_items), YoungMarkingJobType::kAtomic, tasks))
+        ->CreateJob(v8::TaskPriority::kUserBlocking,
+                    std::make_unique<YoungGenerationMarkingJob>(
+                        isolate(), heap(), marking_worklists(), tasks))
         ->Join();
     for (auto& task : tasks) {
       task->Finalize();
@@ -6094,6 +5998,7 @@ void MinorMarkCompactCollector::MarkLiveObjects() {
 
   main_marking_visitor.Finalize();
   local_marking_worklists_.reset();
+  remembered_sets_marking_handler_.reset();
 
   if (v8_flags.minor_mc_trace_fragmentation) {
     TraceFragmentation();
@@ -6301,6 +6206,25 @@ void MinorMarkCompactCollector::Sweep() {
         (heap_->new_space()->Size() == 0)
             ? ArrayBufferSweeper::TreatAllYoungAsPromoted::kYes
             : ArrayBufferSweeper::TreatAllYoungAsPromoted::kNo);
+  }
+}
+
+YoungGenerationRememberedSetsMarkingWorklist::
+    YoungGenerationRememberedSetsMarkingWorklist(Heap* heap)
+    : remembered_sets_marking_items_(
+          RememberedSetsMarkingItem::CollectItems(heap)),
+      remaining_remembered_sets_marking_items_(
+          remembered_sets_marking_items_.size()),
+      remembered_sets_marking_index_generator_(
+          remembered_sets_marking_items_.size()) {}
+
+YoungGenerationRememberedSetsMarkingWorklist::
+    ~YoungGenerationRememberedSetsMarkingWorklist() {
+  CodePageHeaderModificationScope rwx_write_scope(
+      "Merging slot sets back to pages requires write access to Code page "
+      "header");
+  for (RememberedSetsMarkingItem item : remembered_sets_marking_items_) {
+    item.MergeBackAndDeleteRememberedSets();
   }
 }
 

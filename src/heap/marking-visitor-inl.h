@@ -805,6 +805,64 @@ int YoungGenerationMarkingVisitorBase<
   return result;
 }
 
+template <typename ConcreteVisitor, typename MarkingState>
+template <
+    typename YoungGenerationMarkingVisitorBase<
+        ConcreteVisitor, MarkingState>::ObjectVisitationMode visitation_mode,
+    typename YoungGenerationMarkingVisitorBase<
+        ConcreteVisitor, MarkingState>::SlotTreatmentMode slot_treatment_mode,
+    typename TSlot>
+bool YoungGenerationMarkingVisitorBase<
+    ConcreteVisitor, MarkingState>::VisitObjectViaSlot(TSlot slot) {
+  typename TSlot::TObject target;
+  if constexpr (ConcreteVisitor::EnableConcurrentVisitation()) {
+    target = slot.Relaxed_Load(ObjectVisitorWithCageBases::cage_base());
+  } else {
+    target = *slot;
+  }
+  HeapObject heap_object;
+  // Treat weak references as strong.
+  if (!target.GetHeapObject(&heap_object) ||
+      !Heap::InYoungGeneration(heap_object)) {
+    return false;
+  }
+
+  if (slot_treatment_mode == SlotTreatmentMode::kReadWrite &&
+      !concrete_visitor()->ShortCutStrings(
+          reinterpret_cast<HeapObjectSlot&>(slot), &heap_object)) {
+    return false;
+  }
+
+  if (!concrete_visitor()->marking_state()->TryMark(heap_object)) return true;
+
+  // Maps won't change in the atomic pause, so the map can be read without
+  // atomics.
+  Map map = Map::cast(*heap_object.map_slot());
+  const VisitorId visitor_id = map.visitor_id();
+  // Data-only objects don't require any body descriptor visitation at all and
+  // are always visited directly.
+  if (Map::ObjectFieldsFrom(visitor_id) == ObjectFields::kDataOnly) {
+    const int visited_size = heap_object.SizeFromMap(map);
+    concrete_visitor()->marking_state()->IncrementLiveBytes(
+        MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(heap_object)),
+        ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
+    return true;
+  }
+  if constexpr (visitation_mode == ObjectVisitationMode::kVisitDirectly) {
+    const int visited_size = concrete_visitor()->Visit(map, heap_object);
+    if (visited_size) {
+      concrete_visitor()->marking_state()->IncrementLiveBytes(
+          MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(heap_object)),
+          ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
+    }
+    return true;
+  }
+  // Default case: Visit via worklist.
+  worklists_local()->Push(heap_object);
+
+  return true;
+}
+
 }  // namespace internal
 }  // namespace v8
 
