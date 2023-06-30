@@ -1501,6 +1501,19 @@ MaybeHandle<WasmMemoryObject> InstanceBuilder::FindImportedMemory(
   return {};
 }
 
+namespace {
+bool UseGenericWrapper(const wasm::FunctionSig* sig) {
+#if !V8_TARGET_ARCH_X64
+  return false;
+#else
+  if (sig->return_count() > 0) return false;
+  if (sig->parameter_count() > 0) return false;
+
+  return v8_flags.wasm_to_js_generic_wrapper;
+#endif
+}
+}  // namespace
+
 bool InstanceBuilder::ProcessImportedFunction(
     Handle<WasmInstanceObject> instance, int import_index, int func_index,
     Handle<String> module_name, Handle<String> import_name,
@@ -1596,7 +1609,13 @@ bool InstanceBuilder::ProcessImportedFunction(
     }
     default: {
       // The imported function is a callable.
-
+      if (UseGenericWrapper(expected_sig) &&
+          (kind == ImportCallKind::kJSFunctionArityMatch ||
+           kind == ImportCallKind::kJSFunctionArityMismatch)) {
+        ImportedFunctionEntry entry(instance, func_index);
+        entry.SetWasmToJs(isolate_, js_receiver, resolved.suspend());
+        break;
+      }
       int expected_arity = static_cast<int>(expected_sig->parameter_count());
       if (kind == ImportCallKind::kJSFunctionArityMismatch) {
         Handle<JSFunction> function = Handle<JSFunction>::cast(js_receiver);
