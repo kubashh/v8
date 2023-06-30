@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30786850_8981f803",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 7248,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-30T09:56:46Z",
+      "side": 1,
+      "message": "can you `DCHECK_EQ(CheckType(implicit_receiver, NodeType::kJSReceiver), implicit_receiver_is_js_receiver)`",
+      "range": {
+        "startLine": 7248,
+        "startChar": 16,
+        "endLine": 7248,
+        "endChar": 48
+      },
+      "revId": "89357fb2c7ff857c382d8837c61d954cb995d782",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
