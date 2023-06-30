@@ -63,6 +63,30 @@
       },
       "revId": "5a647a87549ba266d9264752bc2f586ce33d1e2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c72057d_f412670b",
+        "filename": "src/compiler/wasm-escape-analysis.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-06-30T09:17:56Z",
+      "side": 1,
+      "message": "Thanks. Let\u0027s tackle the generic version in Turboshaft then. 😊",
+      "parentUuid": "14274399_7ffe3177",
+      "range": {
+        "startLine": 53,
+        "startChar": 6,
+        "endLine": 53,
+        "endChar": 30
+      },
+      "revId": "5a647a87549ba266d9264752bc2f586ce33d1e2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
