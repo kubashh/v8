@@ -16,6 +16,24 @@
       "message": "thanks, makes sense. though, by doing this refactoring it becomes obvious that maybe our max_maglev_inlined_bytecode_size_small condition is a bit strange?",
       "revId": "f9cb0bdb8176ee754f8f7e0a44b83fe5fa80701c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "337fad6e_1680495e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-30T14:26:22Z",
+      "side": 1,
+      "message": "Maybe it just looks strange because of the condition nesting -- would helper methods (WantToInline vs CanInline) help here?",
+      "parentUuid": "59ccc796_6df2798f",
+      "revId": "f9cb0bdb8176ee754f8f7e0a44b83fe5fa80701c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
