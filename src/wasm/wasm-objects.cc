@@ -1044,6 +1044,21 @@ FunctionTargetAndRef::FunctionTargetAndRef(
   }
 }
 
+void ImportedFunctionEntry::SetWasmToJs(Isolate* isolate,
+                                        Handle<JSReceiver> callable,
+                                        wasm::Suspend suspend) {
+  Code wrapper = isolate->builtins()->code(Builtin::kWasmToJsWrapperAsm);
+  TRACE_IFT("Import callable 0x%" PRIxPTR "[%d] = {callable=0x%" PRIxPTR
+            ", target=0x%" PRIxPTR "}\n",
+            instance_->ptr(), index_, callable->ptr(),
+            wrapper.instruction_start());
+  Handle<WasmApiFunctionRef> ref =
+      isolate->factory()->NewWasmApiFunctionRef(callable, suspend, instance_);
+  instance_->imported_function_refs().set(index_, *ref);
+  instance_->imported_function_targets().set(index_,
+                                             wrapper.instruction_start());
+}
+
 void ImportedFunctionEntry::SetWasmToJs(
     Isolate* isolate, Handle<JSReceiver> callable,
     const wasm::WasmCode* wasm_to_js_wrapper, wasm::Suspend suspend) {
