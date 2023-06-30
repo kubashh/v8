@@ -452,7 +452,7 @@ void LoadElimination::AbstractState::FieldsMerge(
     AbstractField const*& this_field = (*this_fields)[i];
     if (this_field) {
       if (that_fields[i]) {
-        this_field = this_field->Merge(that_fields[i], zone);
+        this_field = this_field->Merge(that_fields[i], zone, &fields_count_);
       } else {
         this_field = nullptr;
       }
@@ -470,8 +470,10 @@ void LoadElimination::AbstractState::Merge(AbstractState const* that,
   }
 
   // Merge the information we have about the fields.
-  FieldsMerge(&this->fields_, that->fields_, zone);
+  fields_count_ = 0;
   FieldsMerge(&this->const_fields_, that->const_fields_, zone);
+  const_fields_count_ = fields_count_;
+  FieldsMerge(&this->fields_, that->fields_, zone);
 
   // Merge the information we have about the maps.
   if (this->maps_) {
@@ -557,14 +559,19 @@ LoadElimination::AbstractState const* LoadElimination::AbstractState::AddField(
     Node* object, IndexRange index_range, LoadElimination::FieldInfo info,
     Zone* zone) const {
   AbstractState* that = zone->New<AbstractState>(*this);
-  AbstractFields& fields =
-      info.const_field_info.IsConst() ? that->const_fields_ : that->fields_;
+  bool is_const = info.const_field_info.IsConst();
+  AbstractFields& fields = is_const ? that->const_fields_ : that->fields_;
   for (int index : index_range) {
     if (fields[index]) {
-      fields[index] = fields[index]->Extend(object, info, zone);
+      fields[index] =
+          fields[index]->Extend(object, info, zone, that->fields_count_);
     } else {
       fields[index] = zone->New<AbstractField>(object, info, zone);
     }
+    if (is_const) {
+      that->const_fields_count_ += fields[index]->count();
+    }
+    that->fields_count_ += fields[index]->count();
   }
   return that;
 }
@@ -581,9 +588,11 @@ LoadElimination::AbstractState::KillConstField(Node* object,
       if (this->const_fields_[index] != this_field) {
         if (!that) that = zone->New<AbstractState>(*this);
         that->const_fields_[index] = this_field;
+        that->const_fields_count_ += that->const_fields_[index]->count();
       }
     }
   }
+  if (that) that->fields_count_ = that->const_fields_count_;
   return that ? that : this;
 }
 
@@ -604,6 +613,7 @@ LoadElimination::AbstractState const* LoadElimination::AbstractState::KillField(
       if (this->fields_[index] != this_field) {
         if (!that) that = zone->New<AbstractState>(*this);
         that->fields_[index] = this_field;
+        that->fields_count_ += that->fields_[index]->count();
       }
     }
   }
@@ -615,16 +625,20 @@ LoadElimination::AbstractState::KillFields(Node* object, MaybeHandle<Name> name,
                                            Zone* zone) const {
   AliasStateInfo alias_info(this, object);
   for (size_t i = 0;; ++i) {
-    if (i == fields_.size()) return this;
+    if (i == fields_.size()) {
+      return this;
+    }
     if (AbstractField const* this_field = this->fields_[i]) {
       AbstractField const* that_field =
           this_field->Kill(alias_info, name, zone);
       if (that_field != this_field) {
         AbstractState* that = zone->New<AbstractState>(*this);
         that->fields_[i] = that_field;
+        that->fields_count_ = that_field->count();
         while (++i < fields_.size()) {
           if (this->fields_[i] != nullptr) {
             that->fields_[i] = this->fields_[i]->Kill(alias_info, name, zone);
+            that->fields_count_ += that->fields_[i]->count();
           }
         }
         return that;
@@ -640,6 +654,8 @@ LoadElimination::AbstractState const* LoadElimination::AbstractState::KillAll(
     if (const_fields_[i]) {
       AbstractState* that = zone->New<AbstractState>();
       that->const_fields_ = const_fields_;
+      that->const_fields_count_ = const_fields_count_;
+      that->fields_count_ = const_fields_count_;
       return that;
     }
   }
