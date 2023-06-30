@@ -55,8 +55,6 @@ class ConcurrentMarkingState final
     return chunk->marking_bitmap();
   }
 
-  void IncrementLiveBytes(MemoryChunk* chunk, intptr_t by) { UNREACHABLE(); }
-
   // The live_bytes and SetLiveBytes methods of the marking state are
   // not used by the concurrent marker.
 };
