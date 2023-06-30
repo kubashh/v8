@@ -16,6 +16,29 @@
       "message": "ptal",
       "revId": "563a40db8aa65be67400120dfaf065a94670a0aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "950dacc7_3ab9e5d1",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5494,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-06-30T09:51:12Z",
+      "side": 1,
+      "message": "it\u0027s a bit unfortunate to have this set a boolean rather than `return true` -- I guess you\u0027re doing this to be able to do the cheap `total size` check earlier? If yes, then\n\n a) Move the other cheap heuristic checks up to here, and\n b) Skip them all if we pass the filter (instead of checking `force_inline` for each one)",
+      "range": {
+        "startLine": 5494,
+        "startChar": 6,
+        "endLine": 5494,
+        "endChar": 18
+      },
+      "revId": "563a40db8aa65be67400120dfaf065a94670a0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
