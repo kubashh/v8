@@ -2,17 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_HEAP_MARK_COMPACT_BASE_INL_H_
-#define V8_HEAP_MARK_COMPACT_BASE_INL_H_
+#ifndef V8_HEAP_MARK_COMPACT_UTILITIES_INL_H_
+#define V8_HEAP_MARK_COMPACT_UTILITIES_INL_H_
 
 #include "src/heap/heap-inl.h"
-#include "src/heap/mark-compact-base.h"
+#include "src/heap/mark-compact-utilities.h"
 
 namespace v8 {
 namespace internal {
 
-template <ExternalStringTableCleaningMode mode>
-void ExternalStringTableCleaner<mode>::VisitRootPointers(
+template <MarkCompactUtilities::ExternalStringTableCleaningMode mode>
+void MarkCompactUtilities::ExternalStringTableCleaner<mode>::VisitRootPointers(
     Root root, const char* description, FullObjectSlot start,
     FullObjectSlot end) {
   // Visit all HeapObject pointers in [start, end).
@@ -41,9 +41,7 @@ void ExternalStringTableCleaner<mode>::VisitRootPointers(
   }
 }
 
-Isolate* MarkCompactCollectorBase::isolate() const { return heap()->isolate(); }
-
 }  // namespace internal
 }  // namespace v8
 
-#endif  // V8_HEAP_MARK_COMPACT_BASE_INL_H_
+#endif  // V8_HEAP_MARK_COMPACT_UTILITIES_INL_H_
