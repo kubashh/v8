@@ -16,6 +16,46 @@
       "message": "@jkummerow@chromium.org: PTAL.",
       "revId": "b41b1e6125865cce6c18b193bbd861e80f657fcf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81d4454d_b90349cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-06-30T12:28:35Z",
+      "side": 1,
+      "message": "LGTM with comments.",
+      "revId": "b41b1e6125865cce6c18b193bbd861e80f657fcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64883d87_989ef737",
+        "filename": "src/json/json-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-06-30T12:28:35Z",
+      "side": 1,
+      "message": "ES section numbers aren\u0027t stable over time (example: in the current spec, this one is 12.3), so it\u0027s better to use a reference like `https://tc39.es/ecma262/#sec-line-terminators`.\n\nThat said, ECMA-262 isn\u0027t really the relevant spec here, as indicated by the next two lines of comment. So maybe refer to ECMA-404 instead, or equivalently `https://json.org`.",
+      "range": {
+        "startLine": 441,
+        "startChar": 40,
+        "endLine": 441,
+        "endChar": 72
+      },
+      "revId": "b41b1e6125865cce6c18b193bbd861e80f657fcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

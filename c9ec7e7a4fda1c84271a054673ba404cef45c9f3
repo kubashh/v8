@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ead6a65_87ed791d",
+        "filename": "src/common/message-template.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-06-30T12:28:35Z",
+      "side": 1,
+      "message": "There\u0027s no particular process, but yeah, it looks like you\u0027ll need to do a 3-step dance with Blink tests.",
+      "parentUuid": "10c62ad8_f8044249",
+      "range": {
+        "startLine": 509,
+        "startChar": 45,
+        "endLine": 509,
+        "endChar": 62
+      },
+      "revId": "c9ec7e7a4fda1c84271a054673ba404cef45c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f69527a_89f81bef",
         "filename": "src/json/json-parser.h",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2023-06-30T11:11:52Z",
       "side": 1,
       "message": "This could be recalculated from `chars_` by something like:\n```\nconst Char* start \u003d chars_;\nif (original_source_-\u003eIsSlicedString()) {\n  chars_ +\u003d SlicedString::cast(*original_source_).offset();\n}\n```\nGiven that there shouldn\u0027t be more than one JSONParser alive at any point in time per JS isolate, I\u0027d feel inclined to prefer wasting `sizeof(Char*)` bytes in non-error cases over writing string-type specific handling in the error case.\n\nI don\u0027t mind either way though.",
+      "range": {
+        "startLine": 406,
+        "startChar": 14,
+        "endLine": 406,
+        "endChar": 20
+      },
+      "revId": "c9ec7e7a4fda1c84271a054673ba404cef45c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea69e3fd_6ec7ea78",
+        "filename": "src/json/json-parser.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-06-30T12:28:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9f69527a_89f81bef",
       "range": {
         "startLine": 406,
         "startChar": 14,
