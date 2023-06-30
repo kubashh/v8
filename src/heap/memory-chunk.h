@@ -224,6 +224,10 @@ class MemoryChunk : public BasicMemoryChunk {
     return &marking_bitmap_;
   }
 
+  void IncrementLiveBytesAtomically(intptr_t diff) {
+    live_byte_count_.fetch_add(diff, std::memory_order_relaxed);
+  }
+
  protected:
   // Release all memory allocated by the chunk. Should be called when memory
   // chunk is about to be freed.

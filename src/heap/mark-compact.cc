@@ -2313,8 +2313,7 @@ std::pair<size_t, size_t> MarkCompactCollector::ProcessMarkingWorklist(
     }
     const auto visited_size = marking_visitor_->Visit(map, object);
     if (visited_size) {
-      marking_state_->IncrementLiveBytes(
-          MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(object)),
+      MemoryChunk::FromHeapObject(object)->IncrementLiveBytesAtomically(
           ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
     }
     if (is_per_context_mode) {
@@ -5764,9 +5763,9 @@ void YoungGenerationMarkingTask::DrainMarkingWorklist() {
     //           ObjectFields::kMaybePointers);
     const auto visited_size = visitor_.Visit(map, heap_object);
     if (visited_size) {
-      visitor_.marking_state()->IncrementLiveBytes(
-          MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(heap_object)),
-          ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
+      MemoryChunk::FromHeapObject(heap_object)
+          ->IncrementLiveBytesAtomically(
+              ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
     }
   }
   // Publish wrapper objects to the cppgc marking state, if registered.
@@ -6121,9 +6120,8 @@ void MinorMarkCompactCollector::DrainMarkingWorklist(
       //           ObjectFields::kMaybePointers);
       const auto visited_size = visitor.Visit(map, heap_object);
       if (visited_size) {
-        marking_state_->IncrementLiveBytes(
-            MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(heap_object)),
-            visited_size);
+        MemoryChunk::FromHeapObject(heap_object)
+            ->IncrementLiveBytesAtomically(visited_size);
       }
     }
   } while (!IsCppHeapMarkingFinished());
