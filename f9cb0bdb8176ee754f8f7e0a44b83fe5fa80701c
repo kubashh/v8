@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59ccc796_6df2798f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-06-30T13:57:11Z",
+      "side": 1,
+      "message": "thanks, makes sense. though, by doing this refactoring it becomes obvious that maybe our max_maglev_inlined_bytecode_size_small condition is a bit strange?",
+      "revId": "f9cb0bdb8176ee754f8f7e0a44b83fe5fa80701c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
