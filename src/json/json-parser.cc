@@ -338,7 +338,7 @@ JsonParser<Char>::JsonParser(Isolate* isolate, Handle<String> source)
     chars_ = SeqString::cast(*source_).GetChars(no_gc);
     chars_may_relocate_ = true;
   }
-  cursor_ = chars_ + start;
+  start_ = cursor_ = chars_ + start;
   end_ = cursor_ + length;
 }
 
@@ -436,6 +436,31 @@ MessageTemplate JsonParser<Char>::LookUpErrorMessageForJsonToken(
 }
 
 template <typename Char>
+void JsonParser<Char>::CalculateFileLocation(Handle<Object>& line,
+                                             Handle<Object>& column) {
+  // New line characters are defined in ECMA-262 11.3 "Line Terminators".
+  // While it also lists \u2028 (line separator) and \u2029 (paragraph
+  // separator), these may not occur unescaped within JSON.
+  int line_number = 1;
+  const Char* last_line_break = start_;
+  const Char* cursor = start_;
+  const Char* end = cursor_;  // cursor_ points to the position of the error.
+  for (; cursor < end; ++cursor) {
+    if (*cursor == '\r' && cursor < end - 1 && cursor[1] == '\n') {
+      // \r\n counts as a single line terminator. (ECMA-262 11.3)
+      ++cursor;
+    }
+    if (*cursor == '\r' || *cursor == '\n') {
+      ++line_number;
+      last_line_break = cursor + 1;
+    }
+  }
+  int column_number = 1 + static_cast<int>(cursor - last_line_break);
+  line = handle(Smi::FromInt(line_number), isolate());
+  column = handle(Smi::FromInt(column_number), isolate());
+}
+
+template <typename Char>
 void JsonParser<Char>::ReportUnexpectedToken(
     JsonToken token, base::Optional<MessageTemplate> errorMessage) {
   // Some exception (for example stack overflow) is already pending.
@@ -449,6 +474,8 @@ void JsonParser<Char>::ReportUnexpectedToken(
   int pos = position() - offset;
   Handle<Object> arg(Smi::FromInt(pos), isolate());
   Handle<Object> arg2;
+  Handle<Object> arg3;
+  CalculateFileLocation(arg2, arg3);
 
   MessageTemplate message =
       errorMessage ? errorMessage.value()
@@ -470,7 +497,8 @@ void JsonParser<Char>::ReportUnexpectedToken(
   // separated source file.
   isolate()->debug()->OnCompileError(script);
   MessageLocation location(script, pos, pos + 1);
-  isolate()->ThrowAt(factory->NewSyntaxError(message, arg, arg2), &location);
+  isolate()->ThrowAt(factory->NewSyntaxError(message, arg, arg2, arg3),
+                     &location);
 
   // Move the cursor to the end so we won't be able to proceed parsing.
   cursor_ = end_;
