@@ -81,6 +81,9 @@ class V8_EXPORT_PRIVATE LocalIsolate final : private HiddenLocalFactory {
   LazyCompileDispatcher* lazy_compile_dispatcher() {
     return isolate_->lazy_compile_dispatcher();
   }
+  bool concurrent_recompilation_enabled() {
+    return isolate_->concurrent_recompilation_enabled();
+  }
   V8FileLogger* main_thread_logger() {
     // TODO(leszeks): This is needed for logging in ParseInfo. Figure out a way
     // to use the LocalLogger for this instead.
