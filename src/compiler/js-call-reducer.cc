@@ -639,10 +639,11 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
         c_candidate_functions_(c_candidate_functions),
         function_template_info_(function_template_info),
         receiver_(receiver),
-        holder_(holder),
+        // holder_(holder),
         shared_(shared),
-        target_(target),
-        arity_(arity) {
+        target_(target)  //,
+  // arity_(arity)
+  {
     DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
     CHECK_GT(c_candidate_functions.size(), 0);
     InitializeEffectControl(effect, NodeProperties::GetControlInput(node));
@@ -650,6 +651,8 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
 
   TNode<Object> ReduceFastApiCall() {
     JSCallNode n(node_ptr());
+
+    GraphAssemblerLabel<0> fallback = MakeLabel();
 
     // C arguments include the receiver at index 0. Thus C index 1 corresponds
     // to the JS argument 0, etc.
@@ -660,13 +663,13 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
     CHECK_GE(c_argument_count, kReceiver);
 
     int cursor = 0;
-    base::SmallVector<Node*, kInlineSize> inputs(c_argument_count + arity_ +
+    base::SmallVector<Node*, kInlineSize> inputs(c_argument_count +
                                                  kExtraInputsCount);
     inputs[cursor++] = n.receiver();
 
     // TODO(turbofan): Consider refactoring CFunctionInfo to distinguish
     // between receiver and arguments, simplifying this (and related) spots.
-    int js_args_count = c_argument_count - kReceiver;
+    int js_args_count = c_argument_count - 1;
     for (int i = 0; i < js_args_count; ++i) {
       if (i < n.ArgumentCount()) {
         inputs[cursor++] = n.Argument(i);
@@ -684,71 +687,73 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
     // [fast callee, receiver, ... C arguments,
     // call code, external constant for function, argc, call handler info data,
     // holder, receiver, ... JS arguments, context, new frame state]
-    CallHandlerInfoRef call_handler_info =
-        *function_template_info_.call_code(broker());
-    Callable call_api_callback =
-        Builtins::CallableFor(isolate(), Builtin::kCallApiCallbackOptimized);
-    CallInterfaceDescriptor cid = call_api_callback.descriptor();
-    CallDescriptor* call_descriptor =
-        Linkage::GetStubCallDescriptor(graph()->zone(), cid, arity_ + kReceiver,
-                                       CallDescriptor::kNeedsFrameState);
-    ApiFunction api_function(call_handler_info.callback());
-    ExternalReference function_reference = ExternalReference::Create(
-        isolate(), &api_function, ExternalReference::DIRECT_API_CALL,
-        function_template_info_.c_functions(broker()).data(),
-        function_template_info_.c_signatures(broker()).data(),
-        static_cast<unsigned>(
-            function_template_info_.c_functions(broker()).size()));
+    // CallHandlerInfoRef call_handler_info =
+    //     *function_template_info_.call_code(broker());
+    // Callable call_api_callback =
+    //     Builtins::CallableFor(isolate(), Builtin::kCallApiCallbackOptimized);
+    // CallInterfaceDescriptor cid = call_api_callback.descriptor();
+    // CallDescriptor* call_descriptor =
+    //     Linkage::GetStubCallDescriptor(graph()->zone(), cid, arity_ +
+    //     kReceiver,
+    //                                    CallDescriptor::kNeedsFrameState);
+    // ApiFunction api_function(call_handler_info.callback());
+    // ExternalReference function_reference = ExternalReference::Create(
+    //     isolate(), &api_function, ExternalReference::DIRECT_API_CALL,
+    //     function_template_info_.c_functions(broker()).data(),
+    //     function_template_info_.c_signatures(broker()).data(),
+    //     static_cast<unsigned>(
+    //         function_template_info_.c_functions(broker()).size()));
 
     Node* continuation_frame_state = CreateInlinedApiFunctionFrameState(
         jsgraph(), shared_, target_, ContextInput(), receiver_,
         FrameStateInput());
 
-    inputs[cursor++] = HeapConstant(call_api_callback.code());
-    inputs[cursor++] = ExternalConstant(function_reference);
-    inputs[cursor++] = NumberConstant(arity_);
-    inputs[cursor++] = Constant(call_handler_info.data(broker()));
-    inputs[cursor++] = holder_;
-    inputs[cursor++] = receiver_;
-    for (int i = 0; i < arity_; ++i) {
-      inputs[cursor++] = Argument(i);
-    }
+    // inputs[cursor++] = HeapConstant(call_api_callback.code());
+    // inputs[cursor++] = ExternalConstant(function_reference);
+    // inputs[cursor++] = NumberConstant(arity_);
+    // inputs[cursor++] = Constant(call_handler_info.data(broker()));
+    // inputs[cursor++] = holder_;
+    // inputs[cursor++] = receiver_;
+    // for (int i = 0; i < arity_; ++i) {
+    //   inputs[cursor++] = Argument(i);
+    // }
     inputs[cursor++] = ContextInput();
     inputs[cursor++] = continuation_frame_state;
     inputs[cursor++] = effect();
     inputs[cursor++] = control();
 
-    DCHECK_EQ(cursor, c_argument_count + arity_ + kExtraInputsCount);
+    DCHECK_EQ(cursor, c_argument_count + kExtraInputsCount);
 
-    return FastApiCall(call_descriptor, inputs.begin(), inputs.size());
+    // Bind(&fallback);
+
+    return FastApiCall(inputs.begin(), inputs.size(), &fallback);
   }
 
  private:
-  static constexpr int kSlowTarget = 1;
+  static constexpr int kSlowTarget = 0;
   static constexpr int kEffectAndControl = 2;
   static constexpr int kContextAndFrameState = 2;
-  static constexpr int kCallCodeDataAndArgc = 3;
-  static constexpr int kHolder = 1, kReceiver = 1;
+  static constexpr int kCallCodeDataAndArgc = 0;
+  static constexpr int kHolder = 0, kReceiver = 0;
   static constexpr int kExtraInputsCount =
       kSlowTarget + kEffectAndControl + kContextAndFrameState +
       kCallCodeDataAndArgc + kHolder + kReceiver;
   static constexpr int kInlineSize = 12;
 
-  TNode<Object> FastApiCall(CallDescriptor* descriptor, Node** inputs,
-                            size_t inputs_size) {
-    return AddNode<Object>(
-        graph()->NewNode(simplified()->FastApiCall(c_candidate_functions_,
-                                                   feedback(), descriptor),
-                         static_cast<int>(inputs_size), inputs));
+  TNode<Object> FastApiCall(Node** inputs, size_t inputs_size,
+                            GraphAssemblerLabel<0>* fallback) {
+    return AddNode<Object>(graph()->NewNode(
+        simplified()->FastApiCall(c_candidate_functions_, feedback(), fallback),
+        static_cast<int>(inputs_size), inputs));
   }
 
   const FastApiCallFunctionVector c_candidate_functions_;
   const FunctionTemplateInfoRef function_template_info_;
   Node* const receiver_;
-  Node* const holder_;
+  // Node* const holder_;
   const SharedFunctionInfoRef shared_;
   Node* const target_;
-  const int arity_;
+  // const int arity_;
 };
 
 TNode<Number> JSCallReducerAssembler::SpeculativeToNumber(
@@ -3816,6 +3821,56 @@ FastApiCallFunctionVector CanOptimizeFastCall(
   return result;
 }
 
+fast_api_call::OverloadsResolutionResult ResolveOverloads(
+    const FastApiCallFunctionVector& candidates, unsigned int arg_count) {
+  DCHECK_GT(arg_count, 0);
+
+  static constexpr int kReceiver = 1;
+
+  // Only the case of the overload resolution of two functions, one with a
+  // JSArray param and the other with a typed array param is currently
+  // supported.
+  DCHECK_EQ(candidates.size(), 2);
+
+  for (unsigned int arg_index = kReceiver; arg_index < arg_count; arg_index++) {
+    int index_of_func_with_js_array_arg = -1;
+    int index_of_func_with_typed_array_arg = -1;
+    CTypeInfo::Type element_type = CTypeInfo::Type::kVoid;
+
+    for (size_t i = 0; i < candidates.size(); i++) {
+      const CTypeInfo& type_info =
+          candidates[i].signature->ArgumentInfo(arg_index);
+      CTypeInfo::SequenceType sequence_type = type_info.GetSequenceType();
+
+      if (sequence_type == CTypeInfo::SequenceType::kIsSequence) {
+        DCHECK_LT(index_of_func_with_js_array_arg, 0);
+        index_of_func_with_js_array_arg = static_cast<int>(i);
+      } else if (sequence_type == CTypeInfo::SequenceType::kIsTypedArray) {
+        DCHECK_LT(index_of_func_with_typed_array_arg, 0);
+        index_of_func_with_typed_array_arg = static_cast<int>(i);
+        element_type = type_info.GetType();
+      } else {
+        DCHECK_LT(index_of_func_with_js_array_arg, 0);
+        DCHECK_LT(index_of_func_with_typed_array_arg, 0);
+      }
+    }
+
+    if (index_of_func_with_js_array_arg >= 0 &&
+        index_of_func_with_typed_array_arg >= 0) {
+      return {static_cast<int>(arg_index), element_type};
+    }
+  }
+
+  // No overload found with a JSArray and a typed array as i-th argument.
+  return fast_api_call::OverloadsResolutionResult::Invalid();
+}
+
+bool MayFallback(FastApiCallFunctionVector c_candidate_functions) {
+  // TODO: Check single overload parameter types.
+  return c_candidate_functions.size() == 2 ||
+         c_candidate_functions[0].signature->HasOptions();
+}
+
 Reduction JSCallReducer::ReduceCallApiFunction(Node* node,
                                                SharedFunctionInfoRef shared) {
   JSCallNode n(node);
@@ -3993,16 +4048,24 @@ Reduction JSCallReducer::ReduceCallApiFunction(Node* node,
       broker(), graph()->zone(), function_template_info, argc);
   DCHECK_LE(c_candidate_functions.size(), 2);
 
-  // TODO(v8:13600): Support exception handling for FastApiCall nodes.
+  Node* fast_node = nullptr;
+  // auto if_success = MakeLabel();
+  // auto if_error = MakeDeferredLabel();
   if (!c_candidate_functions.empty() &&
-      !NodeProperties::IsExceptionalCall(node)) {
+      (c_candidate_functions.size() == 1 ||
+       ResolveOverloads(c_candidate_functions, argc).is_valid())) {
     FastApiCallReducerAssembler a(this, node, function_template_info,
                                   c_candidate_functions, receiver, holder,
                                   shared, target, argc, effect);
     Node* fast_call_subgraph = a.ReduceFastApiCall();
     ReplaceWithSubgraph(&a, fast_call_subgraph);
 
-    return Replace(fast_call_subgraph);
+    fast_node = fast_call_subgraph;
+
+    if (!MayFallback(c_candidate_functions)) {
+      // When fast call is infallible we can skip generating the slow call.
+      return Replace(fast_node);
+    }
   }
 
   // Slow call
@@ -4036,6 +4099,12 @@ Reduction JSCallReducer::ReduceCallApiFunction(Node* node,
   node->ReplaceInput(6 + argc + 1, continuation_frame_state);
   node->ReplaceInput(6 + argc + 2, effect);
   NodeProperties::ChangeOp(node, common()->Call(call_descriptor));
+
+  if (fast_node) {
+    // Need to handle jumping from a fast call to
+    // fallback slow call on errors and when fallback is requested.
+  }
+
   return Changed(node);
 }
 

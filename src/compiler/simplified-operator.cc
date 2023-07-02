@@ -2248,7 +2248,7 @@ const Operator* SimplifiedOperatorBuilder::TransitionAndStoreNonNumberElement(
 
 const Operator* SimplifiedOperatorBuilder::FastApiCall(
     const FastApiCallFunctionVector& c_functions,
-    FeedbackSource const& feedback, CallDescriptor* descriptor) {
+    FeedbackSource const& feedback, GraphAssemblerLabel<0>* fallback) {
   DCHECK(!c_functions.empty());
 
   // All function overloads have the same number of arguments and options.
@@ -2263,12 +2263,12 @@ const Operator* SimplifiedOperatorBuilder::FastApiCall(
 
   int value_input_count =
       argument_count +
-      static_cast<int>(descriptor->ParameterCount()) +  // slow call
+      // static_cast<int>(descriptor->ParameterCount()) +  // slow call
       FastApiCallNode::kEffectAndControlInputCount;
   return zone()->New<Operator1<FastApiCallParameters>>(
       IrOpcode::kFastApiCall, Operator::kNoThrow, "FastApiCall",
       value_input_count, 1, 1, 1, 1, 0,
-      FastApiCallParameters(c_functions, feedback, descriptor));
+      FastApiCallParameters(c_functions, feedback));
 }
 
 int FastApiCallNode::FastCallArgumentCount() const {
