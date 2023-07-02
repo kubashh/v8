@@ -639,10 +639,11 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
         c_candidate_functions_(c_candidate_functions),
         function_template_info_(function_template_info),
         receiver_(receiver),
-        holder_(holder),
+        // holder_(holder),
         shared_(shared),
-        target_(target),
-        arity_(arity) {
+        target_(target)  //,
+  // arity_(arity)
+  {
     DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
     CHECK_GT(c_candidate_functions.size(), 0);
     InitializeEffectControl(effect, NodeProperties::GetControlInput(node));
@@ -650,6 +651,8 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
 
   TNode<Object> ReduceFastApiCall() {
     JSCallNode n(node_ptr());
+
+    GraphAssemblerLabel<0> fallback = MakeLabel();
 
     // C arguments include the receiver at index 0. Thus C index 1 corresponds
     // to the JS argument 0, etc.
@@ -660,13 +663,13 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
     CHECK_GE(c_argument_count, kReceiver);
 
     int cursor = 0;
-    base::SmallVector<Node*, kInlineSize> inputs(c_argument_count + arity_ +
+    base::SmallVector<Node*, kInlineSize> inputs(c_argument_count +
                                                  kExtraInputsCount);
     inputs[cursor++] = n.receiver();
 
     // TODO(turbofan): Consider refactoring CFunctionInfo to distinguish
     // between receiver and arguments, simplifying this (and related) spots.
-    int js_args_count = c_argument_count - kReceiver;
+    int js_args_count = c_argument_count - 1;
     for (int i = 0; i < js_args_count; ++i) {
       if (i < n.ArgumentCount()) {
         inputs[cursor++] = n.Argument(i);
@@ -684,71 +687,73 @@ class FastApiCallReducerAssembler : public JSCallReducerAssembler {
     // [fast callee, receiver, ... C arguments,
     // call code, external constant for function, argc, call handler info data,
     // holder, receiver, ... JS arguments, context, new frame state]
-    CallHandlerInfoRef call_handler_info =
-        *function_template_info_.call_code(broker());
-    Callable call_api_callback =
-        Builtins::CallableFor(isolate(), Builtin::kCallApiCallbackOptimized);
-    CallInterfaceDescriptor cid = call_api_callback.descriptor();
-    CallDescriptor* call_descriptor =
-        Linkage::GetStubCallDescriptor(graph()->zone(), cid, arity_ + kReceiver,
-                                       CallDescriptor::kNeedsFrameState);
-    ApiFunction api_function(call_handler_info.callback());
-    ExternalReference function_reference = ExternalReference::Create(
-        isolate(), &api_function, ExternalReference::DIRECT_API_CALL,
-        function_template_info_.c_functions(broker()).data(),
-        function_template_info_.c_signatures(broker()).data(),
-        static_cast<unsigned>(
-            function_template_info_.c_functions(broker()).size()));
+    // CallHandlerInfoRef call_handler_info =
+    //     *function_template_info_.call_code(broker());
+    // Callable call_api_callback =
+    //     Builtins::CallableFor(isolate(), Builtin::kCallApiCallbackOptimized);
+    // CallInterfaceDescriptor cid = call_api_callback.descriptor();
+    // CallDescriptor* call_descriptor =
+    //     Linkage::GetStubCallDescriptor(graph()->zone(), cid, arity_ +
+    //     kReceiver,
+    //                                    CallDescriptor::kNeedsFrameState);
+    // ApiFunction api_function(call_handler_info.callback());
+    // ExternalReference function_reference = ExternalReference::Create(
+    //     isolate(), &api_function, ExternalReference::DIRECT_API_CALL,
+    //     function_template_info_.c_functions(broker()).data(),
+    //     function_template_info_.c_signatures(broker()).data(),
+    //     static_cast<unsigned>(
+    //         function_template_info_.c_functions(broker()).size()));
 
     Node* continuation_frame_state = CreateInlinedApiFunctionFrameState(
         jsgraph(), shared_, target_, ContextInput(), receiver_,
         FrameStateInput());
 
-    inputs[cursor++] = HeapConstant(call_api_callback.code());
-    inputs[cursor++] = ExternalConstant(function_reference);
-    inputs[cursor++] = NumberConstant(arity_);
-    inputs[cursor++] = Constant(call_handler_info.data(broker()));
-    inputs[cursor++] = holder_;
-    inputs[cursor++] = receiver_;
-    for (int i = 0; i < arity_; ++i) {
-      inputs[cursor++] = Argument(i);
-    }
+    // inputs[cursor++] = HeapConstant(call_api_callback.code());
+    // inputs[cursor++] = ExternalConstant(function_reference);
+    // inputs[cursor++] = NumberConstant(arity_);
+    // inputs[cursor++] = Constant(call_handler_info.data(broker()));
+    // inputs[cursor++] = holder_;
+    // inputs[cursor++] = receiver_;
+    // for (int i = 0; i < arity_; ++i) {
+    //   inputs[cursor++] = Argument(i);
+    // }
     inputs[cursor++] = ContextInput();
     inputs[cursor++] = continuation_frame_state;
     inputs[cursor++] = effect();
     inputs[cursor++] = control();
 
-    DCHECK_EQ(cursor, c_argument_count + arity_ + kExtraInputsCount);
+    DCHECK_EQ(cursor, c_argument_count + kExtraInputsCount);
 
-    return FastApiCall(call_descriptor, inputs.begin(), inputs.size());
+    // Bind(&fallback);
+
+    return FastApiCall(inputs.begin(), inputs.size(), &fallback);
   }
 
  private:
-  static constexpr int kSlowTarget = 1;
+  static constexpr int kSlowTarget = 0;
   static constexpr int kEffectAndControl = 2;
   static constexpr int kContextAndFrameState = 2;
-  static constexpr int kCallCodeDataAndArgc = 3;
-  static constexpr int kHolder = 1, kReceiver = 1;
+  static constexpr int kCallCodeDataAndArgc = 0;
+  static constexpr int kHolder = 0, kReceiver = 0;
   static constexpr int kExtraInputsCount =
       kSlowTarget + kEffectAndControl + kContextAndFrameState +
       kCallCodeDataAndArgc + kHolder + kReceiver;
   static constexpr int kInlineSize = 12;
 
-  TNode<Object> FastApiCall(CallDescriptor* descriptor, Node** inputs,
-                            size_t inputs_size) {
-    return AddNode<Object>(
-        graph()->NewNode(simplified()->FastApiCall(c_candidate_functions_,
-                                                   feedback(), descriptor),
-                         static_cast<int>(inputs_size), inputs));
+  TNode<Object> FastApiCall(Node** inputs, size_t inputs_size,
+                            GraphAssemblerLabel<0>* fallback) {
+    return AddNode<Object>(graph()->NewNode(
+        simplified()->FastApiCall(c_candidate_functions_, feedback(), fallback),
+        static_cast<int>(inputs_size), inputs));
   }
 
   const FastApiCallFunctionVector c_candidate_functions_;
   const FunctionTemplateInfoRef function_template_info_;
   Node* const receiver_;
-  Node* const holder_;
+  // Node* const holder_;
   const SharedFunctionInfoRef shared_;
   Node* const target_;
-  const int arity_;
+  // const int arity_;
 };
 
 TNode<Number> JSCallReducerAssembler::SpeculativeToNumber(

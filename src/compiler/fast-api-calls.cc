@@ -5,6 +5,7 @@
 #include "src/compiler/fast-api-calls.h"
 
 #include "src/codegen/cpu-features.h"
+#include "src/codegen/machine-type.h"
 #include "src/compiler/globals.h"
 
 namespace v8 {
@@ -144,15 +145,13 @@ class FastApiCallBuilder {
                      GraphAssembler* graph_assembler,
                      const GetParameter& get_parameter,
                      const ConvertReturnValue& convert_return_value,
-                     const InitializeOptions& initialize_options,
-                     const GenerateSlowApiCall& generate_slow_api_call)
+                     const InitializeOptions& initialize_options)
       : isolate_(isolate),
         graph_(graph),
         graph_assembler_(graph_assembler),
         get_parameter_(get_parameter),
         convert_return_value_(convert_return_value),
-        initialize_options_(initialize_options),
-        generate_slow_api_call_(generate_slow_api_call) {}
+        initialize_options_(initialize_options) {}
 
   Node* Build(const FastApiCallFunctionVector& c_functions,
               const CFunctionInfo* c_signature, Node* data_argument);
@@ -172,7 +171,6 @@ class FastApiCallBuilder {
   const GetParameter& get_parameter_;
   const ConvertReturnValue& convert_return_value_;
   const InitializeOptions& initialize_options_;
-  const GenerateSlowApiCall& generate_slow_api_call_;
 };
 
 Node* FastApiCallBuilder::WrapFastCall(const CallDescriptor* call_descriptor,
@@ -255,8 +253,7 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
   }
 
   if (!generate_fast_call) {
-    // Only generate the slow call.
-    return generate_slow_api_call_();
+    return data_argument;
   }
 
   // Generate fast call.
@@ -351,7 +348,8 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
 
   Node* fast_call_result = convert_return_value_(c_signature, c_call_result);
 
-  auto merge = __ MakeLabel(MachineRepresentation::kTagged);
+  auto merge =
+      __ MakeLabel(MachineRepresentation::kWord64, MachineRepresentation::kBit);
   if (c_signature->HasOptions()) {
     DCHECK_NOT_NULL(stack_slot);
     Node* load = __ Load(
@@ -374,14 +372,11 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
   if (if_error.IsUsed()) {
     // Generate direct slow call.
     __ Bind(&if_error);
-    {
-      Node* slow_call_result = generate_slow_api_call_();
-      __ Goto(&merge, slow_call_result);
-    }
+    __ Goto(&merge, __ IntPtrConstant(0), __ IntPtrConstant(0));
   }
 
   __ Bind(&if_success);
-  __ Goto(&merge, fast_call_result);
+  __ Goto(&merge, fast_call_result, __ IntPtrConstant(1));
 
   __ Bind(&merge);
   return merge.PhiAt(0);
@@ -395,11 +390,9 @@ Node* BuildFastApiCall(Isolate* isolate, Graph* graph,
                        const CFunctionInfo* c_signature, Node* data_argument,
                        const GetParameter& get_parameter,
                        const ConvertReturnValue& convert_return_value,
-                       const InitializeOptions& initialize_options,
-                       const GenerateSlowApiCall& generate_slow_api_call) {
+                       const InitializeOptions& initialize_options) {
   FastApiCallBuilder builder(isolate, graph, graph_assembler, get_parameter,
-                             convert_return_value, initialize_options,
-                             generate_slow_api_call);
+                             convert_return_value, initialize_options);
   return builder.Build(c_functions, c_signature, data_argument);
 }
 

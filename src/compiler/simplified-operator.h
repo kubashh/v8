@@ -45,6 +45,9 @@ class Operator;
 struct SimplifiedOperatorGlobalCache;
 struct WasmTypeCheckConfig;
 
+template <size_t VarCount>
+class GraphAssemblerLabel;
+
 size_t hash_value(BaseTaggedness);
 
 std::ostream& operator<<(std::ostream&, BaseTaggedness);
@@ -720,11 +723,8 @@ typedef ZoneVector<FastApiCallFunction> FastApiCallFunctionVector;
 class FastApiCallParameters {
  public:
   explicit FastApiCallParameters(const FastApiCallFunctionVector& c_functions,
-                                 FeedbackSource const& feedback,
-                                 CallDescriptor* descriptor)
-      : c_functions_(c_functions),
-        feedback_(feedback),
-        descriptor_(descriptor) {}
+                                 FeedbackSource const& feedback)
+      : c_functions_(c_functions), feedback_(feedback) {}
 
   const FastApiCallFunctionVector& c_functions() const { return c_functions_; }
   FeedbackSource const& feedback() const { return feedback_; }
@@ -1214,7 +1214,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   // Represents the inputs necessary to construct a fast and a slow API call.
   const Operator* FastApiCall(
       const FastApiCallFunctionVector& c_candidate_functions,
-      FeedbackSource const& feedback, CallDescriptor* descriptor);
+      FeedbackSource const& feedback, GraphAssemblerLabel<0>* fallback);
 
  private:
   Zone* zone() const { return zone_; }
@@ -1294,7 +1294,7 @@ class FastApiCallNode final : public SimplifiedNodeWrapperBase {
       kSlowReceiverInputCount + kHolderInputCount +
       kContextAndFrameStateInputCount + kEffectAndControlInputCount;
 
-  static constexpr int kSlowCallDataArgumentIndex = 3;
+  static constexpr int kSlowCallDataArgumentIndex = 0;
 
   // This is the arity fed into FastApiCallArguments.
   static constexpr int ArityForArgc(int c_arg_count, int js_arg_count) {
