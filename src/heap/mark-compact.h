@@ -95,10 +95,6 @@ class YoungGenerationMarkingState final
  public:
   explicit YoungGenerationMarkingState(PtrComprCageBase cage_base)
       : MarkingStateBase(cage_base) {}
-
-  const MarkingBitmap* bitmap(const MemoryChunk* chunk) const {
-    return chunk->marking_bitmap();
-  }
 };
 
 class YoungGenerationMainMarkingVisitor final
