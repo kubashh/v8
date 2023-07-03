@@ -410,6 +410,80 @@ inline Register CalculateActualAddress(LiftoffAssembler* lasm,
 }
 
 enum class Binop { kAdd, kSub, kAnd, kOr, kXor, kExchange };
+inline void AtomicBinop64(LiftoffAssembler* lasm, Register dst_addr,
+                          Register offset_reg, uintptr_t offset_imm,
+                          LiftoffRegister value, LiftoffRegister result,
+                          StoreType type, Binop op) {
+  LiftoffRegList pinned{dst_addr, offset_reg, value, result};
+  LiftoffRegister new_value =
+      pinned.set(__ GetUnusedRegister(kGpRegPair, pinned));
+
+  Register result_reg_low = result.low_gp();
+  Register result_reg_high = result.high_gp();
+  Register value_reg_low = value.low_gp();
+  Register value_reg_high = value.high_gp();
+
+  bool change_result = false;
+  if (result == value) {
+    LiftoffRegister new_result = __ GetUnusedRegister(kGpRegPair, pinned);
+    result_reg_low = new_result.low_gp();
+    result_reg_high = new_result.high_gp();
+    change_result = true;
+  }
+
+  UseScratchRegisterScope temps(lasm);
+  Register actual_addr = liftoff::CalculateActualAddress(
+      lasm, dst_addr, offset_reg, offset_imm, temps.Acquire());
+
+  Label retry;
+  __ bind(&retry);
+  __ fence(PSR | PSW, PSR | PSW);
+  __ lw(result_reg_low, actual_addr, liftoff::kLowWordOffset);
+  __ lw(result_reg_high, actual_addr, liftoff::kHighWordOffset);
+  __ fence(PSR, PSR | PSW);
+
+  switch (op) {
+    case Binop::kAdd: {
+      __ add(new_value.low_gp(), result_reg_low, value_reg_low);
+      Register temp = temps.Acquire();
+      __ Sltu(temp, new_value.low_gp(), Operand(value_reg_low));
+      __ add(new_value.high_gp(), result_reg_high, value_reg_high);
+      __ add(new_value.high_gp(), temp, new_value.high_gp());
+    } break;
+    case Binop::kSub: {
+      __ sub(new_value.low_gp(), result_reg_low, value_reg_low);
+      Register temp = temps.Acquire();
+      __ Sgtu(temp, new_value.low_gp(), Operand(value_reg_low));
+      __ sub(new_value.high_gp(), result_reg_high, value_reg_high);
+      __ sub(new_value.high_gp(), temp, new_value.high_gp());
+    } break;
+    case Binop::kAnd:
+      __ and_(new_value.low_gp(), result_reg_low, value_reg_low);
+      __ and_(new_value.high_gp(), result_reg_high, value_reg_high);
+      break;
+    case Binop::kOr:
+      __ or_(new_value.low_gp(), result_reg_low, value_reg_low);
+      __ or_(new_value.high_gp(), result_reg_high, value_reg_high);
+      break;
+    case Binop::kXor:
+      __ xor_(new_value.low_gp(), result_reg_low, value_reg_low);
+      __ xor_(new_value.high_gp(), result_reg_high, value_reg_high);
+      break;
+    case Binop::kExchange: {
+      __ mv(new_value.low_gp(), value_reg_low);
+      __ mv(new_value.high_gp(), value_reg_high);
+    } break;
+    default:
+      UNREACHABLE();
+  }
+  __ fence(PSR | PSW, PSW);
+  __ sw(new_value.low_gp(), actual_addr, liftoff::kLowWordOffset);
+  __ sw(new_value.high_gp(), actual_addr, liftoff::kHighWordOffset);
+  if (change_result) {
+    __ mov(result.low_gp(), result_reg_low);
+    __ mov(result.high_gp(), result_reg_high);
+  }
+}
 
 inline void AtomicBinop(LiftoffAssembler* lasm, Register dst_addr,
                         Register offset_reg, uintptr_t offset_imm,
@@ -646,7 +720,9 @@ void LiftoffAssembler::AtomicAdd(Register dst_addr, Register offset_reg,
                                  LiftoffRegister result, StoreType type,
                                  bool i64_offset) {
   if (type.value() == StoreType::kI64Store) {
-    bailout(kAtomics, "Atomic64");
+    liftoff::AtomicBinop64(this, dst_addr, offset_reg, offset_imm, value,
+                           result, type, liftoff::Binop::kAdd);
+    return;
   }
   if (type.value() == StoreType::kI32Store ||
       type.value() == StoreType::kI64Store32) {
