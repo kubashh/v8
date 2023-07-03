@@ -124,6 +124,17 @@ V8_INLINE const DirectHandle<T> DirectHandle<T>::cast(Handle<S> that) {
   return DirectHandle<T>(*that.location());
 }
 
+template <typename T>
+V8_INLINE DirectHandle<T> direct_handle(Tagged<T> object, Isolate* isolate) {
+  return DirectHandle<T>(object, isolate);
+}
+
+template <typename T>
+V8_INLINE DirectHandle<T> direct_handle(T object, Isolate* isolate) {
+  static_assert(kTaggedCanConvertToRawObjects);
+  return direct_handle(Tagged<T>(object), isolate);
+}
+
 #endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 
 HandleScope::HandleScope(Isolate* isolate) {
