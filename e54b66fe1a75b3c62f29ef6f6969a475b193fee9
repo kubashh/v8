@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d5c53cb_1c054f4e",
+        "filename": "src/handles/handles-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-07-03T14:11:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "235c97b7_8a1d37b8",
+      "revId": "e54b66fe1a75b3c62f29ef6f6969a475b193fee9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b86a47ce_42d32cd9",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-06-28T07:17:42Z",
       "side": 1,
       "message": "Let\u0027s add two more special cases: `d4 !\u003d\u003d d1` and `d4 \u003d\u003d\u003d d4` (or some other null handle). Also, let\u0027s repeat the test for `MaybeDirectHandle`s.",
+      "revId": "e54b66fe1a75b3c62f29ef6f6969a475b193fee9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de3a7011_e17ff5ea",
+        "filename": "test/unittests/heap/direct-handles-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-07-03T14:11:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b86a47ce_42d32cd9",
       "revId": "e54b66fe1a75b3c62f29ef6f6969a475b193fee9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
