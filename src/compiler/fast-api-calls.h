@@ -49,16 +49,17 @@ using GetParameter = std::function<Node*(int, OverloadsResolutionResult&,
                                          GraphAssemblerLabel<0>*)>;
 using ConvertReturnValue = std::function<Node*(const CFunctionInfo*, Node*)>;
 using InitializeOptions = std::function<void(Node*)>;
-using GenerateSlowApiCall = std::function<Node*()>;
+// using GenerateSlowApiCall = std::function<Node*()>;
 
 Node* BuildFastApiCall(Isolate* isolate, Graph* graph,
                        GraphAssembler* graph_assembler,
                        const FastApiCallFunctionVector& c_functions,
-                       const CFunctionInfo* c_signature, Node* data_argument,
+                       const CFunctionInfo* c_signature,
+                       GraphAssemblerLabel<0>* if_success,
+                       GraphAssemblerLabel<0>* if_error, Node* data_argument,
                        const GetParameter& get_parameter,
                        const ConvertReturnValue& convert_return_value,
-                       const InitializeOptions& initialize_options,
-                       const GenerateSlowApiCall& generate_slow_api_call);
+                       const InitializeOptions& initialize_options);
 
 }  // namespace fast_api_call
 }  // namespace compiler

@@ -242,7 +242,7 @@ class EffectControlLinearizer {
                      Node** inputs, Node* target,
                      const CFunctionInfo* c_signature, int c_arg_count,
                      Node* stack_slot);
-  Node* GenerateSlowApiCall(Node* node);
+  // Node* GenerateSlowApiCall(Node* node);
   Node* LowerFastApiCall(Node* node);
   Node* LowerLoadTypedElement(Node* node);
   Node* LowerLoadDataViewElement(Node* node);
@@ -7029,30 +7029,31 @@ EffectControlLinearizer::AdaptOverloadedFastCallArgument(
   return {merge.PhiAt(0), merge.PhiAt(1)};
 }
 
-Node* EffectControlLinearizer::GenerateSlowApiCall(Node* node) {
-  FastApiCallNode n(node);
-  FastApiCallParameters const& params = n.Parameters();
-  const CFunctionInfo* c_signature = params.c_functions()[0].signature;
-  const int c_arg_count = c_signature->ArgumentCount();
+// Node* EffectControlLinearizer::GenerateSlowApiCall(Node* node) {
+//   FastApiCallNode n(node);
+//   FastApiCallParameters const& params = n.Parameters();
+//   const CFunctionInfo* c_signature = params.c_functions()[0].signature;
+//   const int c_arg_count = c_signature->ArgumentCount();
 
-  Node** const slow_inputs = graph()->zone()->NewArray<Node*>(
-      n.SlowCallArgumentCount() + FastApiCallNode::kEffectAndControlInputCount);
+//   Node** const slow_inputs = graph()->zone()->NewArray<Node*>(
+//       n.SlowCallArgumentCount() +
+//       FastApiCallNode::kEffectAndControlInputCount);
 
-  int fast_call_params = c_arg_count;
-  CHECK_EQ(node->op()->ValueInputCount() - fast_call_params,
-           n.SlowCallArgumentCount());
-  int index = 0;
-  for (; index < n.SlowCallArgumentCount(); ++index) {
-    slow_inputs[index] = n.SlowCallArgument(index);
-  }
+//   int fast_call_params = c_arg_count;
+//   CHECK_EQ(node->op()->ValueInputCount() - fast_call_params,
+//            n.SlowCallArgumentCount());
+//   int index = 0;
+//   for (; index < n.SlowCallArgumentCount(); ++index) {
+//     slow_inputs[index] = n.SlowCallArgument(index);
+//   }
 
-  slow_inputs[index] = __ effect();
-  slow_inputs[index + 1] = __ control();
-  Node* slow_call_result = __ Call(
-      params.descriptor(), index + FastApiCallNode::kEffectAndControlInputCount,
-      slow_inputs);
-  return slow_call_result;
-}
+//   slow_inputs[index] = __ effect();
+//   slow_inputs[index + 1] = __ control();
+//   Node* slow_call_result = __ Call(
+//       params.descriptor(), index +
+//       FastApiCallNode::kEffectAndControlInputCount, slow_inputs);
+//   return slow_call_result;
+// }
 
 Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
   DCHECK(!v8_flags.turboshaft);
@@ -7063,14 +7064,16 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
   const CFunctionInfo* c_signature = params.c_functions()[0].signature;
   const int c_arg_count = c_signature->ArgumentCount();
   CallDescriptor* js_call_descriptor = params.descriptor();
+  GraphAssemblerLabel<0>* if_success = params.if_success();
+  GraphAssemblerLabel<0>* if_error = params.if_error();
   int js_arg_count = static_cast<int>(js_call_descriptor->ParameterCount());
   const int value_input_count = node->op()->ValueInputCount();
   CHECK_EQ(FastApiCallNode::ArityForArgc(c_arg_count, js_arg_count),
            value_input_count);
 
   return fast_api_call::BuildFastApiCall(
-      isolate(), graph(), gasm(), c_functions, c_signature,
-      n.SlowCallArgument(FastApiCallNode::kSlowCallDataArgumentIndex),
+      isolate(), graph(), gasm(), c_functions, c_signature, if_success,
+      if_error, n.SlowCallArgument(FastApiCallNode::kSlowCallDataArgumentIndex),
       // Load and convert parameters to be passed to C function
       [this, node, c_signature, c_functions](
           int param_index,
@@ -7159,9 +7162,7 @@ Node* EffectControlLinearizer::LowerFastApiCall(Node* node) {
             options_stack_slot,
             static_cast<int>(offsetof(v8::FastApiCallbackOptions, wasm_memory)),
             __ IntPtrConstant(0));
-      },
-      // Generate slow fallback if fast call fails
-      [this, node]() -> Node* { return GenerateSlowApiCall(node); });
+      });
 }
 
 Node* EffectControlLinearizer::LowerLoadFieldByIndex(Node* node) {

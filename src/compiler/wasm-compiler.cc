@@ -7999,9 +7999,12 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
     FastApiCallFunctionVector fast_api_call_function_vector(mcgraph()->zone());
     fast_api_call_function_vector.push_back({c_address, c_signature});
+    auto if_success = gasm_->MakeLabel();
+    auto if_error = gasm_->MakeDeferredLabel();
     Node* call = fast_api_call::BuildFastApiCall(
         target->GetIsolate(), graph(), gasm_.get(),
-        fast_api_call_function_vector, c_signature, api_data_argument,
+        fast_api_call_function_vector, c_signature, &if_success, &if_error,
+        api_data_argument,
         // Load and convert parameters passed to C function
         [this, c_signature, receiver_node](
             int param_index,
@@ -8062,44 +8065,48 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                        static_cast<int>(
                            offsetof(v8::FastApiCallbackOptions, wasm_memory)),
                        stack_slot);
-        },
+        }
         // Generate fallback slow call if fast call fails
-        [this, callable_node, native_context, receiver_node]() -> Node* {
-          int wasm_count = static_cast<int>(sig_->parameter_count());
-          base::SmallVector<Node*, 16> args(wasm_count + 7);
-          int pos = 0;
-          args[pos++] =
-              gasm_->GetBuiltinPointerTarget(Builtin::kCall_ReceiverIsAny);
-          args[pos++] = callable_node;
-          args[pos++] =
-              Int32Constant(JSParameterCount(wasm_count));  // argument count
-          args[pos++] = receiver_node;                      // receiver
+        // [this, callable_node, native_context, receiver_node]() -> Node* {
+        //   int wasm_count = static_cast<int>(sig_->parameter_count());
+        //   base::SmallVector<Node*, 16> args(wasm_count + 7);
+        //   int pos = 0;
+        //   args[pos++] =
+        //       gasm_->GetBuiltinPointerTarget(Builtin::kCall_ReceiverIsAny);
+        //   args[pos++] = callable_node;
+        //   args[pos++] =
+        //       Int32Constant(JSParameterCount(wasm_count));  // argument count
+        //   args[pos++] = receiver_node;                      // receiver
 
-          auto call_descriptor = Linkage::GetStubCallDescriptor(
-              graph()->zone(), CallTrampolineDescriptor{}, wasm_count + 1,
-              CallDescriptor::kNoFlags, Operator::kNoProperties,
-              StubCallMode::kCallBuiltinPointer);
+        //   auto call_descriptor = Linkage::GetStubCallDescriptor(
+        //       graph()->zone(), CallTrampolineDescriptor{}, wasm_count + 1,
+        //       CallDescriptor::kNoFlags, Operator::kNoProperties,
+        //       StubCallMode::kCallBuiltinPointer);
 
-          // Convert wasm numbers to JS values.
-          pos = AddArgumentNodes(base::VectorOf(args), pos, wasm_count, sig_,
-                                 native_context, wasm::kNoSuspend);
+        //   // Convert wasm numbers to JS values.
+        //   pos = AddArgumentNodes(base::VectorOf(args), pos, wasm_count, sig_,
+        //                          native_context, wasm::kNoSuspend);
 
-          // The native_context is sufficient here, because all kind of
-          // callables which depend on the context provide their own context.
-          // The context here is only needed if the target is a constructor to
-          // throw a TypeError, if the target is a native function, or if the
-          // target is a callable JSObject, which can only be constructed by the
-          // runtime.
-          args[pos++] = native_context;
-          args[pos++] = effect();
-          args[pos++] = control();
+        //   // The native_context is sufficient here, because all kind of
+        //   // callables which depend on the context provide their own context.
+        //   // The context here is only needed if the target is a constructor
+        //   to
+        //   // throw a TypeError, if the target is a native function, or if the
+        //   // target is a callable JSObject, which can only be constructed by
+        //   the
+        //   // runtime.
+        //   args[pos++] = native_context;
+        //   args[pos++] = effect();
+        //   args[pos++] = control();
 
-          DCHECK_EQ(pos, args.size());
-          Node* call = gasm_->Call(call_descriptor, pos, args.begin());
-          return sig_->return_count() == 0
-                     ? Int32Constant(0)
-                     : FromJS(call, native_context, sig_->GetReturn(), nullptr);
-        });
+        //   DCHECK_EQ(pos, args.size());
+        //   Node* call = gasm_->Call(call_descriptor, pos, args.begin());
+        //   return sig_->return_count() == 0
+        //              ? Int32Constant(0)
+        //              : FromJS(call, native_context, sig_->GetReturn(),
+        //              nullptr);
+        // }
+    );
 
     BuildModifyThreadInWasmFlag(true);
 

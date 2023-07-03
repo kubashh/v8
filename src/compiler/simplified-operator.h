@@ -45,6 +45,9 @@ class Operator;
 struct SimplifiedOperatorGlobalCache;
 struct WasmTypeCheckConfig;
 
+template <size_t VarCount>
+class GraphAssemblerLabel;
+
 size_t hash_value(BaseTaggedness);
 
 std::ostream& operator<<(std::ostream&, BaseTaggedness);
@@ -721,10 +724,12 @@ class FastApiCallParameters {
  public:
   explicit FastApiCallParameters(const FastApiCallFunctionVector& c_functions,
                                  FeedbackSource const& feedback,
-                                 CallDescriptor* descriptor)
+                                 GraphAssemblerLabel<0>* if_success,
+                                 GraphAssemblerLabel<0>* if_error)
       : c_functions_(c_functions),
         feedback_(feedback),
-        descriptor_(descriptor) {}
+        if_success_(if_success),
+        if_error_(if_error) {}
 
   const FastApiCallFunctionVector& c_functions() const { return c_functions_; }
   FeedbackSource const& feedback() const { return feedback_; }
@@ -740,12 +745,16 @@ class FastApiCallParameters {
     }));
     return count;
   }
+  GraphAssemblerLabel<0>* if_success() const { return if_success_; }
+  GraphAssemblerLabel<0>* if_error() const { return if_error_; }
 
  private:
   // A single FastApiCall node can represent multiple overloaded functions.
   const FastApiCallFunctionVector c_functions_;
 
   const FeedbackSource feedback_;
+  GraphAssemblerLabel<0>* if_success_;
+  GraphAssemblerLabel<0>* if_error_;
   CallDescriptor* descriptor_;
 };
 
@@ -1214,7 +1223,8 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   // Represents the inputs necessary to construct a fast and a slow API call.
   const Operator* FastApiCall(
       const FastApiCallFunctionVector& c_candidate_functions,
-      FeedbackSource const& feedback, CallDescriptor* descriptor);
+      FeedbackSource const& feedback, GraphAssemblerLabel<0>* if_success,
+      GraphAssemblerLabel<0>* if_error);
 
  private:
   Zone* zone() const { return zone_; }
@@ -1294,7 +1304,7 @@ class FastApiCallNode final : public SimplifiedNodeWrapperBase {
       kSlowReceiverInputCount + kHolderInputCount +
       kContextAndFrameStateInputCount + kEffectAndControlInputCount;
 
-  static constexpr int kSlowCallDataArgumentIndex = 3;
+  static constexpr int kSlowCallDataArgumentIndex = 0;
 
   // This is the arity fed into FastApiCallArguments.
   static constexpr int ArityForArgc(int c_arg_count, int js_arg_count) {

@@ -4,7 +4,9 @@
 
 #include "src/compiler/fast-api-calls.h"
 
+#include "src/base/logging.h"
 #include "src/codegen/cpu-features.h"
+#include "src/codegen/machine-type.h"
 #include "src/compiler/globals.h"
 
 namespace v8 {
@@ -144,18 +146,18 @@ class FastApiCallBuilder {
                      GraphAssembler* graph_assembler,
                      const GetParameter& get_parameter,
                      const ConvertReturnValue& convert_return_value,
-                     const InitializeOptions& initialize_options,
-                     const GenerateSlowApiCall& generate_slow_api_call)
+                     const InitializeOptions& initialize_options)
       : isolate_(isolate),
         graph_(graph),
         graph_assembler_(graph_assembler),
         get_parameter_(get_parameter),
         convert_return_value_(convert_return_value),
-        initialize_options_(initialize_options),
-        generate_slow_api_call_(generate_slow_api_call) {}
+        initialize_options_(initialize_options) {}
 
   Node* Build(const FastApiCallFunctionVector& c_functions,
-              const CFunctionInfo* c_signature, Node* data_argument);
+              const CFunctionInfo* c_signature,
+              GraphAssemblerLabel<0>* if_success,
+              GraphAssemblerLabel<0>* if_error, Node* data_argument);
 
  private:
   Node* WrapFastCall(const CallDescriptor* call_descriptor, int inputs_size,
@@ -172,7 +174,6 @@ class FastApiCallBuilder {
   const GetParameter& get_parameter_;
   const ConvertReturnValue& convert_return_value_;
   const InitializeOptions& initialize_options_;
-  const GenerateSlowApiCall& generate_slow_api_call_;
 };
 
 Node* FastApiCallBuilder::WrapFastCall(const CallDescriptor* call_descriptor,
@@ -232,31 +233,19 @@ Node* FastApiCallBuilder::WrapFastCall(const CallDescriptor* call_descriptor,
 
 Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
                                 const CFunctionInfo* c_signature,
+                                GraphAssemblerLabel<0>* if_success,
+                                GraphAssemblerLabel<0>* if_error,
                                 Node* data_argument) {
   const int c_arg_count = c_signature->ArgumentCount();
 
-  // Hint to fast path.
-  auto if_success = __ MakeLabel();
-  auto if_error = __ MakeDeferredLabel();
-
   // Overload resolution
-  bool generate_fast_call = false;
   OverloadsResolutionResult overloads_resolution_result =
       OverloadsResolutionResult::Invalid();
 
-  if (c_functions.size() == 1) {
-    generate_fast_call = true;
-  } else {
+  if (c_functions.size() != 1) {
     DCHECK_EQ(c_functions.size(), 2);
     overloads_resolution_result = ResolveOverloads(c_functions, c_arg_count);
-    if (overloads_resolution_result.is_valid()) {
-      generate_fast_call = true;
-    }
-  }
-
-  if (!generate_fast_call) {
-    // Only generate the slow call.
-    return generate_slow_api_call_();
+    DCHECK(overloads_resolution_result.is_valid());
   }
 
   // Generate fast call.
@@ -288,7 +277,7 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
 
   for (int i = 0; i < c_arg_count; ++i) {
     inputs[i + kFastTargetAddressInputCount] =
-        get_parameter_(i, overloads_resolution_result, &if_error);
+        get_parameter_(i, overloads_resolution_result, if_error);
     if (overloads_resolution_result.target_address) {
       inputs[kFastTargetAddressInputIndex] =
           overloads_resolution_result.target_address;
@@ -351,7 +340,8 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
 
   Node* fast_call_result = convert_return_value_(c_signature, c_call_result);
 
-  auto merge = __ MakeLabel(MachineRepresentation::kTagged);
+  auto merge =
+      __ MakeLabel(MachineRepresentation::kTagged, MachineRepresentation::kBit);
   if (c_signature->HasOptions()) {
     DCHECK_NOT_NULL(stack_slot);
     Node* load = __ Load(
@@ -359,9 +349,9 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
         static_cast<int>(offsetof(v8::FastApiCallbackOptions, fallback)));
 
     Node* is_zero = __ Word32Equal(load, __ Int32Constant(0));
-    __ Branch(is_zero, &if_success, &if_error);
+    __ Branch(is_zero, if_success, if_error);
   } else {
-    __ Goto(&if_success);
+    __ Goto(if_success);
   }
 
   // We need to generate a fallback (both fast and slow call) in case:
@@ -370,18 +360,15 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
   // 2) the embedder requested fallback possibility via providing options arg.
   // None of the above usually holds true for Wasm functions with primitive
   // types only, so we avoid generating an extra branch here.
-  DCHECK_IMPLIES(c_signature->HasOptions(), if_error.IsUsed());
-  if (if_error.IsUsed()) {
+  DCHECK_IMPLIES(c_signature->HasOptions(), if_error->IsUsed());
+  if (if_error->IsUsed()) {
     // Generate direct slow call.
-    __ Bind(&if_error);
-    {
-      Node* slow_call_result = generate_slow_api_call_();
-      __ Goto(&merge, slow_call_result);
-    }
+    __ Bind(if_error);
+    __ Goto(&merge, __ IntPtrConstant(0), __ IntPtrConstant(0));
   }
 
-  __ Bind(&if_success);
-  __ Goto(&merge, fast_call_result);
+  __ Bind(if_success);
+  __ Goto(&merge, fast_call_result, __ IntPtrConstant(1));
 
   __ Bind(&merge);
   return merge.PhiAt(0);
@@ -392,15 +379,16 @@ Node* FastApiCallBuilder::Build(const FastApiCallFunctionVector& c_functions,
 Node* BuildFastApiCall(Isolate* isolate, Graph* graph,
                        GraphAssembler* graph_assembler,
                        const FastApiCallFunctionVector& c_functions,
-                       const CFunctionInfo* c_signature, Node* data_argument,
+                       const CFunctionInfo* c_signature,
+                       GraphAssemblerLabel<0>* if_success,
+                       GraphAssemblerLabel<0>* if_error, Node* data_argument,
                        const GetParameter& get_parameter,
                        const ConvertReturnValue& convert_return_value,
-                       const InitializeOptions& initialize_options,
-                       const GenerateSlowApiCall& generate_slow_api_call) {
+                       const InitializeOptions& initialize_options) {
   FastApiCallBuilder builder(isolate, graph, graph_assembler, get_parameter,
-                             convert_return_value, initialize_options,
-                             generate_slow_api_call);
-  return builder.Build(c_functions, c_signature, data_argument);
+                             convert_return_value, initialize_options);
+  return builder.Build(c_functions, c_signature, if_success, if_error,
+                       data_argument);
 }
 
 }  // namespace fast_api_call
