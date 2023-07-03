@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "425b5611_69f70e71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-03T15:21:40Z",
+      "side": 1,
+      "message": "Still LGTM, but you\u0027ll also need an src/codegen owner approval.",
+      "revId": "fffe9af60c832dbf6304cdd037881cee492e20b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
