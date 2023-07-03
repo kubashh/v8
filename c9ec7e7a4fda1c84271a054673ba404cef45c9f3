@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b38b9611_97f0dfc6",
+        "filename": "src/common/message-template.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-03T12:58:59Z",
+      "side": 1,
+      "message": "Done at https://chromium-review.googlesource.com/c/chromium/src/+/4660292/1.",
+      "parentUuid": "5ead6a65_87ed791d",
+      "range": {
+        "startLine": 509,
+        "startChar": 45,
+        "endLine": 509,
+        "endChar": 62
+      },
+      "revId": "c9ec7e7a4fda1c84271a054673ba404cef45c9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f69527a_89f81bef",
