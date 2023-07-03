@@ -16,6 +16,23 @@
       "message": "bazel/ LGTM!",
       "revId": "88945c23750f8bef28588528977e528b09be087a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3402fe50_c7370307",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-03T10:02:26Z",
+      "side": 1,
+      "message": "src/wasm and BUILD.gn LGTM.",
+      "revId": "88945c23750f8bef28588528977e528b09be087a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
