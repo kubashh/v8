@@ -55,6 +55,12 @@ class YoungGenerationRememberedSetsMarkingWorklist {
         std::memory_order_relaxed);
   }
 
+  void Clear() {
+    remembered_sets_marking_items_.clear();
+    remaining_remembered_sets_marking_items_.store(0,
+                                                   std::memory_order_relaxed);
+  }
+
  private:
   class MarkingItem : public ParallelWorkItem {
    public:
@@ -149,9 +155,11 @@ class MinorMarkCompactCollector final {
   Sweeper* sweeper() { return sweeper_; }
 
   void MarkLiveObjects();
-  void MarkLiveObjectsInParallel(RootMarkingVisitor* root_visitor,
-                                 bool was_marked_incrementally);
+  void MarkRoots(RootMarkingVisitor* root_visitor);
+  void DoParallelMarking();
   void DrainMarkingWorklist(YoungGenerationMainMarkingVisitor& visitor);
+  void MarkRootsFromConservativeStack(RootVisitor* root_visitor);
+
   void TraceFragmentation();
   void ClearNonLiveReferences();
   void FinishConcurrentMarking();

@@ -665,8 +665,9 @@
   F(MINOR_MC_COMPLETE_SWEEPING)                      \
   F(MINOR_MC_MARK_FINISH_INCREMENTAL)                \
   F(MINOR_MC_MARK_PARALLEL)                          \
+  F(MINOR_MC_MARK_INCREMENTAL_SEED)                  \
   F(MINOR_MC_MARK_SEED)                              \
-  F(MINOR_MC_MARK_ROOTS)                             \
+  F(MINOR_MC_MARK_CONSERVATIVE_STACK)                \
   F(MINOR_MC_MARK_CLOSURE_PARALLEL)                  \
   F(MINOR_MC_MARK_CLOSURE)                           \
   F(MINOR_MC_MARK_EMBEDDER_PROLOGUE)                 \

@@ -924,11 +924,12 @@ void GCTracer::PrintNVP() const {
           "minor_mc=%.2f "
           "time_to_safepoint=%.2f "
           "mark=%.2f "
-          "mark.incremental_roots=%.2f "
+          "mark.incremental_seed=%.2f "
           "mark.finish_incremental=%.2f "
           "mark.seed=%.2f "
           "mark.closure_parallel=%.2f "
           "mark.closure=%.2f "
+          "mark.conservative_stack=%.2f "
           "clear=%.2f "
           "clear.string_forwarding_table=%.2f "
           "clear.string_table=%.2f "
@@ -967,11 +968,12 @@ void GCTracer::PrintNVP() const {
           current_scope(Scope::MINOR_MC),
           current_scope(Scope::TIME_TO_SAFEPOINT),
           current_scope(Scope::MINOR_MC_MARK),
-          current_scope(Scope::MINOR_MC_MARK_ROOTS),
+          current_scope(Scope::MINOR_MC_MARK_INCREMENTAL_SEED),
           current_scope(Scope::MINOR_MC_MARK_FINISH_INCREMENTAL),
           current_scope(Scope::MINOR_MC_MARK_SEED),
           current_scope(Scope::MINOR_MC_MARK_CLOSURE_PARALLEL),
           current_scope(Scope::MINOR_MC_MARK_CLOSURE),
+          current_scope(Scope::MINOR_MC_MARK_CONSERVATIVE_STACK),
           current_scope(Scope::MINOR_MC_CLEAR),
           current_scope(Scope::MINOR_MC_CLEAR_STRING_FORWARDING_TABLE),
           current_scope(Scope::MINOR_MC_CLEAR_STRING_TABLE),
