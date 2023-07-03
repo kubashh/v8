@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "94dbad9b_e2f35b95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-03T16:02:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d8b2af8_f71c5aa5",
+      "revId": "531de36718df8d7e92dc32ff2d989608ea7519b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "32e391a6_550fb671",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 17
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d0a1d59c_15fd1d12",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 4983,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-03T16:02:58Z",
+      "side": 1,
+      "message": "I tried to refactor this (see previous patchset) but I don\u0027t manage to get it as compact as this version. Since this is used in a bytecode the size matters. I was not able to make it as fast as this version. I improved the comments.",
+      "parentUuid": "94ba7d23_7ad679d9",
+      "revId": "531de36718df8d7e92dc32ff2d989608ea7519b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "828b751c_29fdcb98",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 17
@@ -65,6 +101,24 @@
       "writtenOn": "2023-06-06T18:25:53Z",
       "side": 1,
       "message": "This line seems redundant, the `ForEachEnumerableOwnProperty` handles that.",
+      "revId": "531de36718df8d7e92dc32ff2d989608ea7519b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbc1d3cf_30a10da1",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 5016,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-03T16:02:58Z",
+      "side": 1,
+      "message": "true, but the CAST below might break.",
+      "parentUuid": "828b751c_29fdcb98",
       "revId": "531de36718df8d7e92dc32ff2d989608ea7519b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
