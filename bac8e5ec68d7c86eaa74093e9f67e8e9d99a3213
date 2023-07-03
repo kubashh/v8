@@ -16,6 +16,23 @@
       "message": "PTAL!",
       "revId": "bac8e5ec68d7c86eaa74093e9f67e8e9d99a3213",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f06e83b3_e6f87bcc",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 15480,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-03T15:23:37Z",
+      "side": 1,
+      "message": "We wanted an unsigned comparison here.",
+      "revId": "bac8e5ec68d7c86eaa74093e9f67e8e9d99a3213",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
