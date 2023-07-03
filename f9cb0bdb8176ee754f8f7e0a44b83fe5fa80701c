@@ -34,6 +34,24 @@
       "parentUuid": "59ccc796_6df2798f",
       "revId": "f9cb0bdb8176ee754f8f7e0a44b83fe5fa80701c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7c75a99_ffea34c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-07-03T07:06:11Z",
+      "side": 1,
+      "message": "+1 to divide the function in WantToInline and CanInline.\nAdditionally, I would also separate the filter with the body of want to inline (like in the current patchset).\nSomething like that:\n```\nif (UNLIKELY(pass_filter)) {\n  CHECK(CanInline); // Do we want to fail if we\u0027re forcing inlining and we cannot do it?\n  return true \n}\nreturn WantToInline() \u0026\u0026 CanInline();\n```",
+      "parentUuid": "337fad6e_1680495e",
+      "revId": "f9cb0bdb8176ee754f8f7e0a44b83fe5fa80701c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
