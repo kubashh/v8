@@ -47,7 +47,7 @@
 #include "src/heap/gc-tracer.h"
 #include "src/heap/heap.h"
 #include "src/heap/marking-worklist.h"
-#include "src/heap/sweeper.h"
+#include "src/heap/minor-mark-compact.h"
 #include "src/heap/traced-handles-marking-visitor.h"
 #include "src/init/v8.h"
 #include "src/profiler/heap-profiler.h"
