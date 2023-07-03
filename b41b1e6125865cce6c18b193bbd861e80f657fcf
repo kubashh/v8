@@ -56,6 +56,30 @@
       },
       "revId": "b41b1e6125865cce6c18b193bbd861e80f657fcf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "679b05f3_8a2c7cc6",
+        "filename": "src/json/json-parser.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-03T12:11:09Z",
+      "side": 1,
+      "message": "Yes, right, I have rewritten it.",
+      "parentUuid": "64883d87_989ef737",
+      "range": {
+        "startLine": 441,
+        "startChar": 40,
+        "endLine": 441,
+        "endChar": 72
+      },
+      "revId": "b41b1e6125865cce6c18b193bbd861e80f657fcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
