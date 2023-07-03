@@ -258,6 +258,12 @@ bool DirectHandle<T>::is_identical_to(const DirectHandle<T> that) const {
   SLOW_DCHECK(
       (this->address() == kTaggedNullAddress || this->IsDereferenceAllowed()) &&
       (that.address() == kTaggedNullAddress || that.IsDereferenceAllowed()));
+  if (this->address() == kTaggedNullAddress &&
+      that.address() == kTaggedNullAddress)
+    return true;
+  if (this->address() == kTaggedNullAddress ||
+      that.address() == kTaggedNullAddress)
+    return false;
   return Object(this->address()) == Object(that.address());
 }
 
