@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34ab49a9_9d5bb135",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-03T09:50:56Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "cbc74b82_00bba2cf",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6e260ad_7edb6237",
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5c622a52_fa646b3f",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-03T09:50:56Z",
+      "side": 0,
+      "message": "Ack. Related question: do we still need the `current_interval_` cache at all? I would imagine that we can remove it without impacting performance, for the same reason that we were able to remove the `last_processed_use_` cache for use positions after you changed them to a vector.\nEDIT: I think I answered my question below.",
+      "parentUuid": "3084cae2_96945d43",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c285f036_8cb49c5c",
         "filename": "src/compiler/backend/register-allocator.h",
         "patchSetId": 1
@@ -65,6 +101,24 @@
       "writtenOn": "2023-06-29T16:54:18Z",
       "side": 0,
       "message": "This is now superfluous since `UseInterval` contains exactly the same information and is also a value class.",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "283f974d_4eaff76a",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-03T09:50:56Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "c285f036_8cb49c5c",
       "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +136,24 @@
       "writtenOn": "2023-06-29T16:54:18Z",
       "side": 0,
       "message": "This cache is no longer necessary, since we can access the end position in `O(1)` in a vector.",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db91a33d_820efb85",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-03T09:50:56Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "7fef5542_d0d8dc6a",
       "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

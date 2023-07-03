@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cca53db_2c955473",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-03T09:50:56Z",
+      "side": 1,
+      "message": "LGTM with nits. Great to see that this also simplifies the code a bit with the range-based for loops and std algorithms!",
+      "revId": "06befc4d0a21134b597c9d784733bd1615519480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4631a4cb_847d2aa4",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-03T09:50:56Z",
+      "side": 1,
+      "message": "I guess this answers my question above: removing the cache would have a measurable negative impact here...",
+      "range": {
+        "startLine": 678,
+        "startChar": 0,
+        "endLine": 679,
+        "endChar": 31
+      },
+      "revId": "06befc4d0a21134b597c9d784733bd1615519480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfa52cf4_e51f7f52",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-03T09:50:56Z",
+      "side": 1,
+      "message": "This should stay a class according to the style guide:\nhttps://google.github.io/styleguide/cppguide.html#Structs_vs._Classes\n\nIn particular: \"All fields must be public\".",
+      "range": {
+        "startLine": 403,
+        "startChar": 0,
+        "endLine": 404,
+        "endChar": 26
+      },
+      "revId": "06befc4d0a21134b597c9d784733bd1615519480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82b1d59b_18520e60",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-03T09:50:56Z",
+      "side": 1,
+      "message": "nit: `DCHECK_LT(start, end_);` (same below)",
+      "revId": "06befc4d0a21134b597c9d784733bd1615519480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "752f9d7b_0d35974f",
+        "filename": "test/unittests/compiler/regalloc/live-range-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-03T09:50:56Z",
+      "side": 1,
+      "message": "`if (*i1 !\u003d *i2)`?",
+      "revId": "06befc4d0a21134b597c9d784733bd1615519480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
