@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "73ee5da2_badaa9e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-03T08:00:17Z",
+      "side": 1,
+      "message": "Is the plan to remove the MarkingState completely? We only need it for getting the bitmap?\n\nIf we don\u0027t remove the whole MarkingState, I think this makes it worse and we should keep the IncrementLiveBytes. Callers right now don\u0027t care which method to call and setting the marking state is a \"global\" decision per visitor.",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "5d38585385bedcb2c2f82fead592d83a2825e436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11cf0264_4b333a7e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-03T08:00:17Z",
+      "side": 1,
+      "message": "Tracking bug",
+      "revId": "5d38585385bedcb2c2f82fead592d83a2825e436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "54e209bd_6d70f100",

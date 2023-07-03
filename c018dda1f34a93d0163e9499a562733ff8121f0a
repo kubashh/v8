@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9783d70_9d4901cb",
+        "filename": "src/heap/marking-state-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-03T08:00:17Z",
+      "side": 0,
+      "message": "I agree that this version is confusing.",
+      "range": {
+        "startLine": 89,
+        "startChar": 28,
+        "endLine": 89,
+        "endChar": 46
+      },
+      "revId": "c018dda1f34a93d0163e9499a562733ff8121f0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67e0a96f_861e49b3",
+        "filename": "src/heap/marking-state-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-03T08:00:17Z",
+      "side": 0,
+      "message": "Also here: Why would we care about the memory model?",
+      "range": {
+        "startLine": 113,
+        "startChar": 36,
+        "endLine": 113,
+        "endChar": 38
+      },
+      "revId": "c018dda1f34a93d0163e9499a562733ff8121f0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
