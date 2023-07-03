@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b15b4592_18071206",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2358,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-07-03T14:41:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cda0559c_a3599f02",
+      "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17bb4296_755acc43",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-06-28T07:52:22Z",
       "side": 1,
       "message": "If this is a recurring pattern in the refactoring, maybe introduce a `i::direct_handle` or `i::direct`, similar to `i::handle`?",
+      "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30f4a4b7_996aa30d",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2462,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-07-03T14:41:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17bb4296_755acc43",
       "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdb3943c_823b5e7a",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2474,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-07-03T14:41:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d56bcc5_c2bb4863",
+      "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6853bcf6_6baec91e",
@@ -82,6 +136,24 @@
       "writtenOn": "2023-06-28T07:52:22Z",
       "side": 1,
       "message": "See above.",
+      "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f2532cd_5b7e4f30",
+        "filename": "src/api/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2505,
+      "author": {
+        "id": 1461302
+      },
+      "writtenOn": "2023-07-03T14:41:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6853bcf6_6baec91e",
       "revId": "b9a9a424e882b76c5824fc24443f4fd97b5e51ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
