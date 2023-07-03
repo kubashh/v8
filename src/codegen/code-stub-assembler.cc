@@ -3477,7 +3477,7 @@ void CodeStubAssembler::PossiblyGrowElementsCapacity(
       TaggedToParameter<BInt>(LoadFixedArrayBaseLength(var_elements->value()));
 
   TNode<BInt> new_length = IntPtrOrSmiAdd(growth, length);
-  GotoIfNot(IntPtrOrSmiGreaterThan(new_length, capacity), &fits);
+  GotoIfNot(TypedGreaterThan(new_length, capacity), &fits);
   TNode<BInt> new_capacity = CalculateNewElementsCapacity(new_length);
   *var_elements = GrowElementsCapacity(array, var_elements->value(), kind, kind,
                                        capacity, new_capacity, bailout);
@@ -4585,8 +4585,7 @@ TNode<FixedArrayBase> CodeStubAssembler::AllocateFixedArray(
       std::is_same<TIndex, Smi>::value || std::is_same<TIndex, IntPtrT>::value,
       "Only Smi or IntPtrT capacity is allowed");
   Comment("AllocateFixedArray");
-  CSA_DCHECK(this,
-             IntPtrOrSmiGreaterThan(capacity, IntPtrOrSmiConstant<TIndex>(0)));
+  CSA_DCHECK(this, TypedGreaterThan(capacity, IntPtrOrSmiConstant<TIndex>(0)));
 
   const intptr_t kMaxLength = IsDoubleElementsKind(kind)
                                   ? FixedDoubleArray::kMaxLength
@@ -4596,8 +4595,8 @@ TNode<FixedArrayBase> CodeStubAssembler::AllocateFixedArray(
     CHECK_LE(capacity_constant, kMaxLength);
   } else {
     Label if_out_of_memory(this, Label::kDeferred), next(this);
-    Branch(IntPtrOrSmiGreaterThan(capacity, IntPtrOrSmiConstant<TIndex>(
-                                                static_cast<int>(kMaxLength))),
+    Branch(TypedGreaterThan(capacity, IntPtrOrSmiConstant<TIndex>(
+                                          static_cast<int>(kMaxLength))),
            &if_out_of_memory, &next);
 
     BIND(&if_out_of_memory);
@@ -4656,8 +4655,7 @@ TNode<FixedArray> CodeStubAssembler::ExtractToFixedArray(
       "Only Smi or IntPtrT first, count, and capacity are allowed");
 
   DCHECK(extract_flags & ExtractFixedArrayFlag::kFixedArrays);
-  CSA_DCHECK(this,
-             IntPtrOrSmiNotEqual(IntPtrOrSmiConstant<TIndex>(0), capacity));
+  CSA_DCHECK(this, TypedNotEqual(IntPtrOrSmiConstant<TIndex>(0), capacity));
   CSA_DCHECK(this, TaggedEqual(source_map, LoadMap(source)));
 
   TVARIABLE(FixedArrayBase, var_result);
@@ -4685,7 +4683,7 @@ TNode<FixedArray> CodeStubAssembler::ExtractToFixedArray(
       // 1) |extract_flags| forces us to, or
       // 2) we're asked to extract only part of the |source| (|first| != 0).
       if (extract_flags & ExtractFixedArrayFlag::kDontCopyCOW) {
-        Branch(IntPtrOrSmiNotEqual(IntPtrOrSmiConstant<TIndex>(0), first),
+        Branch(TypedNotEqual(IntPtrOrSmiConstant<TIndex>(0), first),
                &new_space_handler, [&] {
                  var_result = source;
                  Goto(&done);
@@ -4857,19 +4855,19 @@ TNode<FixedArrayBase> CodeStubAssembler::ExtractFixedArray(
     count = IntPtrOrSmiSub(
         TaggedToParameter<TIndex>(LoadFixedArrayBaseLength(source)), *first);
 
-    CSA_DCHECK(this, IntPtrOrSmiLessThanOrEqual(IntPtrOrSmiConstant<TIndex>(0),
-                                                *count));
+    CSA_DCHECK(this,
+               TypedLessThanOrEqual(IntPtrOrSmiConstant<TIndex>(0), *count));
   }
   if (!capacity) {
     capacity = *count;
   } else {
-    CSA_DCHECK(this, Word32BinaryNot(IntPtrOrSmiGreaterThan(
+    CSA_DCHECK(this, Word32BinaryNot(TypedGreaterThan(
                          IntPtrOrSmiAdd(*first, *count), *capacity)));
   }
 
   Label if_fixed_double_array(this), empty(this), done(this, &var_result);
   TNode<Map> source_map = LoadMap(source);
-  GotoIf(IntPtrOrSmiEqual(IntPtrOrSmiConstant<TIndex>(0), *capacity), &empty);
+  GotoIf(TypedEqual(IntPtrOrSmiConstant<TIndex>(0), *capacity), &empty);
 
   if (extract_flags & ExtractFixedArrayFlag::kFixedDoubleArrays) {
     if (extract_flags & ExtractFixedArrayFlag::kFixedArrays) {
@@ -5630,7 +5628,7 @@ TNode<FixedArrayBase> CodeStubAssembler::TryGrowElementsCapacity(
   // If the gap growth is too big, fall back to the runtime.
   TNode<TIndex> max_gap = IntPtrOrSmiConstant<TIndex>(JSObject::kMaxGap);
   TNode<TIndex> max_capacity = IntPtrOrSmiAdd(capacity, max_gap);
-  GotoIf(UintPtrOrSmiGreaterThanOrEqual(key, max_capacity), bailout);
+  GotoIf(TypedGreaterThanOrEqual(key, max_capacity), bailout);
 
   // Calculate the capacity of the new backing store.
   TNode<TIndex> new_capacity = CalculateNewElementsCapacity(
@@ -5654,8 +5652,8 @@ TNode<FixedArrayBase> CodeStubAssembler::GrowElementsCapacity(
   // If size of the allocation for the new capacity doesn't fit in a page
   // that we can bump-pointer allocate from, fall back to the runtime.
   int max_size = FixedArrayBase::GetMaxLengthForNewSpaceAllocation(to_kind);
-  GotoIf(UintPtrOrSmiGreaterThanOrEqual(new_capacity,
-                                        IntPtrOrSmiConstant<TIndex>(max_size)),
+  GotoIf(TypedGreaterThanOrEqual(new_capacity,
+                                 IntPtrOrSmiConstant<TIndex>(max_size)),
          bailout);
 
   // Allocate the new backing store.
@@ -7453,8 +7451,8 @@ TNode<BoolT> CodeStubAssembler::FixedArraySizeDoesntFitInNewSpace(
       "Only Smi or IntPtrT element_count is allowed");
   int max_newspace_elements =
       (kMaxRegularHeapObjectSize - base_size) / kTaggedSize;
-  return IntPtrOrSmiGreaterThan(
-      element_count, IntPtrOrSmiConstant<TIndex>(max_newspace_elements));
+  return TypedGreaterThan(element_count,
+                          IntPtrOrSmiConstant<TIndex>(max_newspace_elements));
 }
 
 TNode<Uint16T> CodeStubAssembler::StringCharCodeAt(TNode<String> string,
@@ -12496,7 +12494,7 @@ TNode<TIndex> CodeStubAssembler::BuildFastLoop(
   // forward to it from the pre-header). The extra branch is slower in the
   // case that the loop actually iterates.
   if (unrolling_mode == LoopUnrollingMode::kNo) {
-    TNode<BoolT> first_check = IntPtrOrSmiEqual(var_index.value(), end_index);
+    TNode<BoolT> first_check = TypedEqual(var_index.value(), end_index);
     int32_t first_check_val;
     if (TryToInt32Constant(first_check, &first_check_val)) {
       if (first_check_val) return var_index.value();
@@ -12508,11 +12506,11 @@ TNode<TIndex> CodeStubAssembler::BuildFastLoop(
     BIND(&loop);
     {
       loop_body();
-      CSA_DCHECK(
-          this, increment > 0
-                    ? IntPtrOrSmiLessThanOrEqual(var_index.value(), end_index)
-                    : IntPtrOrSmiLessThanOrEqual(end_index, var_index.value()));
-      Branch(IntPtrOrSmiNotEqual(var_index.value(), end_index), &loop, &done);
+      CSA_DCHECK(this,
+                 increment > 0
+                     ? TypedLessThanOrEqual(var_index.value(), end_index)
+                     : TypedLessThanOrEqual(end_index, var_index.value()));
+      Branch(TypedNotEqual(var_index.value(), end_index), &loop, &done);
     }
     BIND(&done);
   } else {
@@ -12520,13 +12518,13 @@ TNode<TIndex> CodeStubAssembler::BuildFastLoop(
     // end_index.
     DCHECK_EQ(unrolling_mode, LoopUnrollingMode::kYes);
     CSA_DCHECK(this, increment > 0
-                         ? IntPtrOrSmiLessThanOrEqual(start_index, end_index)
-                         : IntPtrOrSmiLessThanOrEqual(end_index, start_index));
+                         ? TypedLessThanOrEqual(start_index, end_index)
+                         : TypedLessThanOrEqual(end_index, start_index));
     TNode<TIndex> last_index =
         IntPtrOrSmiSub(end_index, IntPtrOrSmiConstant<TIndex>(increment));
-    TNode<BoolT> first_check =
-        increment > 0 ? IntPtrOrSmiLessThan(start_index, last_index)
-                      : IntPtrOrSmiGreaterThan(start_index, last_index);
+    TNode<BoolT> first_check = increment > 0
+                                   ? TypedLessThan(start_index, last_index)
+                                   : TypedGreaterThan(start_index, last_index);
     int32_t first_check_val;
     if (TryToInt32Constant(first_check, &first_check_val)) {
       if (first_check_val) {
@@ -12544,13 +12542,13 @@ TNode<TIndex> CodeStubAssembler::BuildFastLoop(
       loop_body();
       loop_body();
       TNode<BoolT> loop_check =
-          increment > 0 ? IntPtrOrSmiLessThan(var_index.value(), last_index)
-                        : IntPtrOrSmiGreaterThan(var_index.value(), last_index);
+          increment > 0 ? TypedLessThan(var_index.value(), last_index)
+                        : TypedGreaterThan(var_index.value(), last_index);
       Branch(loop_check, &loop, &after_loop);
     }
     BIND(&after_loop);
     {
-      GotoIfNot(IntPtrOrSmiEqual(var_index.value(), last_index), &done);
+      GotoIfNot(TypedEqual(var_index.value(), last_index), &done);
       // Iteration count is odd.
       loop_body();
       Goto(&done);
