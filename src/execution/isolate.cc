@@ -2983,6 +2983,17 @@ void Isolate::InstallConditionalFeatures(Handle<Context> context) {
                             shared_array_buffer_fun(), DONT_ENUM);
     }
   }
+
+  // Cache the "compile hints magic enabled" information so that it's available
+  // during script streaming (when we don't have an entered NativeContext and
+  // cannot query it). This will enable the feature for an Isolate if any
+  // NativeContext enables it. But this overapproximation is fine, since the
+  // site also has to enable the feature by inserting the magic comment - so an
+  // experiment can guard against accidental enabling by not adding the magic
+  // comment.
+  if (!allow_compile_hints_magic_) {
+    allow_compile_hints_magic_ = IsCompileHintsMagicEnabled(context);
+  }
 }
 
 bool Isolate::IsSharedArrayBufferConstructorEnabled(Handle<Context> context) {
@@ -3008,7 +3019,23 @@ bool Isolate::IsWasmGCEnabled(Handle<Context> context) {
 #endif
 }
 
+<<<<<<< HEAD   (5315f0 Version 11.5.150.16)
 bool Isolate::IsWasmStringRefEnabled(Handle<Context> context) {
+=======
+bool Isolate::IsCompileHintsMagicEnabled(Handle<NativeContext> context) {
+  v8::JavaScriptCompileHintsMagicEnabledCallback callback =
+      compile_hints_magic_enabled_callback();
+  if (callback) {
+    v8::Local<v8::Context> api_context = v8::Utils::ToLocal(context);
+    if (callback(api_context)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Isolate::IsWasmStringRefEnabled(Handle<NativeContext> context) {
+>>>>>>> CHANGE (030e14 [compile hints magic] Add callback API required for origin t)
   // If Wasm GC is explicitly enabled via a callback, also enable stringref.
 #ifdef V8_ENABLE_WEBASSEMBLY
   v8::WasmGCEnabledCallback callback = wasm_gc_enabled_callback();
