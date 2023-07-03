@@ -348,7 +348,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     kAllowLargeObjectAllocation = 1 << 2,
   };
 
-  enum SlackTrackingMode { kWithSlackTracking, kNoSlackTracking };
+  enum SlackTrackingMode {
+    kWithSlackTracking,
+    kNoSlackTracking,
+    kIgnoreSlackTracking
+  };
 
   using AllocationFlags = base::Flags<AllocationFlag>;
 
@@ -1429,6 +1433,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<WordT> LoadMapEnumLength(TNode<Map> map);
   // Load the back-pointer of a Map.
   TNode<Object> LoadMapBackPointer(TNode<Map> map);
+  // Compute the used instance size in words of a map.
+  TNode<IntPtrT> MapUsedInstanceSizeInWords(TNode<Map> map);
+  // Compute the number of used inobject properties on a map.
+  TNode<IntPtrT> MapUsedInObjectProperties(TNode<Map> map);
   // Checks that |map| has only simple properties, returns bitfield3.
   TNode<Uint32T> EnsureOnlyHasSimpleProperties(TNode<Map> map,
                                                TNode<Int32T> instance_type,
@@ -1661,6 +1669,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Map> LoadObjectFunctionInitialMap(TNode<NativeContext> native_context);
   TNode<Map> LoadSlowObjectWithNullPrototypeMap(
       TNode<NativeContext> native_context);
+  TNode<Map> LoadCachedMap(TNode<NativeContext> native_context,
+                           TNode<IntPtrT> number_of_properties, Label* runtime);
 
   TNode<Map> LoadJSArrayElementsMap(ElementsKind kind,
                                     TNode<NativeContext> native_context);
@@ -1963,6 +1973,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                                TNode<Map> map,
                                                TNode<IntPtrT> instance_size);
   void InitializeJSObjectBodyNoSlackTracking(
+      TNode<HeapObject> object, TNode<Map> map, TNode<IntPtrT> instance_size,
+      int start_offset = JSObject::kHeaderSize);
+  void InitializeJSObjectBodyIgnoreSlackTracking(
       TNode<HeapObject> object, TNode<Map> map, TNode<IntPtrT> instance_size,
       int start_offset = JSObject::kHeaderSize);
 
@@ -4192,6 +4205,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // enumerable, and if so, load the value from the receiver and evaluate the
   // closure.
   void ForEachEnumerableOwnProperty(TNode<Context> context, TNode<Map> map,
+                                    TNode<JSObject> object,
+                                    PropertiesEnumerationMode mode,
+                                    const ForEachKeyValueFunction& body,
+                                    Label* bailout);
+  void ForEachEnumerableOwnProperty(TNode<Context> context, TNode<Map> map,
+                                    TNode<Uint32T> bit_field3,
                                     TNode<JSObject> object,
                                     PropertiesEnumerationMode mode,
                                     const ForEachKeyValueFunction& body,

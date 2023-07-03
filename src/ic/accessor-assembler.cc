@@ -4974,47 +4974,87 @@ void AccessorAssembler::GenerateCloneObjectIC_Slow() {
   // can be tail called from it. However, the feedback slot and vector are not
   // used.
 
-  TNode<NativeContext> native_context = LoadNativeContext(context);
-  TNode<Map> initial_map = LoadObjectFunctionInitialMap(native_context);
-  TNode<JSObject> result = AllocateJSObjectFromMap(initial_map);
+  TNode<BoolT> is_null_proto =
+      SmiNotEqual(SmiAnd(flags, SmiConstant(ObjectLiteral::kHasNullPrototype)),
+                  SmiConstant(Smi::zero()));
 
-  {
+  auto SetProtoToNullIfNeeded = [this, is_null_proto,
+                                 context](TNode<JSObject> obj) {
     Label did_set_proto_if_needed(this);
-    TNode<BoolT> is_null_proto = SmiNotEqual(
-        SmiAnd(flags, SmiConstant(ObjectLiteral::kHasNullPrototype)),
-        SmiConstant(Smi::zero()));
     GotoIfNot(is_null_proto, &did_set_proto_if_needed);
-
-    CallRuntime(Runtime::kInternalSetPrototype, context, result,
-                NullConstant());
-
+    CallRuntime(Runtime::kInternalSetPrototype, context, obj, NullConstant());
     Goto(&did_set_proto_if_needed);
     BIND(&did_set_proto_if_needed);
+  };
+
+  TNode<NativeContext> native_context = LoadNativeContext(context);
+
+  Label source_is_not_simple_js_obj(this), ic_slow_case(this, Label::kDeferred);
+  auto source_is_smi = TaggedIsSmi(source);
+
+  // The fast version handles simple JS objects for which we try to copy the
+  // values with an inlined loop.
+  GotoIf(source_is_smi, &source_is_not_simple_js_obj);
+  {
+    TNode<Map> source_map = LoadMap(CAST(source));
+
+    TNode<Uint16T> type = LoadMapInstanceType(source_map);
+    GotoIfNot(IsJSObjectInstanceType(type), &source_is_not_simple_js_obj);
+
+    TNode<Uint32T> bit_field3 = EnsureOnlyHasSimpleProperties(
+        source_map, type, &source_is_not_simple_js_obj);
+
+    TNode<IntPtrT> number_of_properties = MapUsedInObjectProperties(source_map);
+    GotoIf(IntPtrGreaterThanOrEqual(number_of_properties,
+                                    IntPtrConstant(JSObject::kMapCacheSize)),
+           &ic_slow_case);
+    TNode<Map> initial_map =
+        LoadCachedMap(native_context, number_of_properties, &ic_slow_case);
+    {
+      TNode<JSObject> result = AllocateJSObjectFromMap(initial_map);
+      SetProtoToNullIfNeeded(result);
+
+      Label runtime_copy(this, Label::kDeferred);
+      GotoIfNot(IsEmptyFixedArray(LoadElements(CAST(source))), &runtime_copy);
+
+      // Fast case, loop over properties in CSA.
+      // TODO(olivf, chrome:1204540) This can still be several times slower than
+      // the Babel translation. TF uses FastGetOwnValuesOrEntries -- should we
+      // do sth similar here?
+      ForEachEnumerableOwnProperty(
+          context, source_map, bit_field3, CAST(source), kPropertyAdditionOrder,
+          [=](TNode<Name> key, TNode<Object> value) {
+            CreateDataProperty(context, result, key, value);
+          },
+          &runtime_copy);
+      Return(result);
+
+      // Slow case, copy properties with runtime function.
+      BIND(&runtime_copy);
+      CallRuntime(Runtime::kCopyDataProperties, context, result, source);
+      Return(result);
+    }
   }
 
-  ReturnIf(IsNullOrUndefined(source), result);
-  source = ToObject_Inline(context, source);
+  // This version handles SMIs, things which are not JS objects and JS objects
+  // with properties which are not simple.
+  {
+    BIND(&source_is_not_simple_js_obj);
+    TNode<Map> initial_map =
+        LoadCachedMap(native_context, IntPtrConstant(0), &ic_slow_case);
+    TNode<JSObject> result = AllocateJSObjectFromMap(initial_map);
+    SetProtoToNullIfNeeded(result);
+    Label skip_copy(this);
+    GotoIf(source_is_smi, &skip_copy);
+    CallRuntime(Runtime::kCopyDataProperties, context, result, source);
+    Goto(&skip_copy);
+    Bind(&skip_copy);
+    Return(result);
+  }
 
-  Label call_runtime(this, Label::kDeferred), done(this);
-
-  TNode<Map> source_map = LoadMap(CAST(source));
-  GotoIfNot(IsJSObjectMap(source_map), &call_runtime);
-  GotoIfNot(IsEmptyFixedArray(LoadElements(CAST(source))), &call_runtime);
-
-  ForEachEnumerableOwnProperty(
-      context, source_map, CAST(source), kPropertyAdditionOrder,
-      [=](TNode<Name> key, TNode<Object> value) {
-        CreateDataProperty(context, result, key, value);
-      },
-      &call_runtime);
-  Goto(&done);
-
-  BIND(&call_runtime);
-  CallRuntime(Runtime::kCopyDataProperties, context, result, source);
-
-  Goto(&done);
-  BIND(&done);
-  Return(result);
+  // Fallback runtime version
+  BIND(&ic_slow_case);
+  Return(CallRuntime(Runtime::kCloneObjectIC_Slow, context, source, flags));
 }
 
 void AccessorAssembler::GenerateCloneObjectICBaseline() {
@@ -5065,8 +5105,9 @@ void AccessorAssembler::GenerateCloneObjectIC() {
 
     Label allocate_object(this);
     GotoIf(IsNullOrUndefined(source), &allocate_object);
-    CSA_SLOW_DCHECK(this, IsJSObjectMap(source_map));
-    CSA_SLOW_DCHECK(this, IsJSObjectMap(result_map));
+    CSA_DCHECK(this, IsJSObjectMap(source_map));
+    CSA_DCHECK(this, InstanceTypeEqual(LoadMapInstanceType(result_map),
+                                       JS_OBJECT_TYPE));
 
     // The IC fast case should only be taken if the result map a compatible
     // elements kind with the source object.
@@ -5100,22 +5141,27 @@ void AccessorAssembler::GenerateCloneObjectIC() {
     Goto(&allocate_object);
     BIND(&allocate_object);
     TNode<JSObject> object = UncheckedCast<JSObject>(AllocateJSObjectFromMap(
-        result_map, var_properties.value(), var_elements.value()));
+        result_map, var_properties.value(), var_elements.value(),
+        AllocationFlag::kNone, SlackTrackingMode::kIgnoreSlackTracking));
     ReturnIf(IsNullOrUndefined(source), object);
 
     // Lastly, clone any in-object properties.
     TNode<IntPtrT> source_start =
         LoadMapInobjectPropertiesStartInWords(source_map);
-    TNode<IntPtrT> source_size = LoadMapInstanceSizeInWords(source_map);
     TNode<IntPtrT> result_start =
         LoadMapInobjectPropertiesStartInWords(result_map);
+    TNode<IntPtrT> result_size = LoadMapInstanceSizeInWords(result_map);
+#ifdef DEBUG
+    TNode<IntPtrT> source_size = LoadMapInstanceSizeInWords(source_map);
+    CSA_DCHECK(this, IntPtrGreaterThanOrEqual(source_size, result_size));
+#endif
     TNode<IntPtrT> field_offset_difference =
         TimesTaggedSize(IntPtrSub(result_start, source_start));
 
     // Just copy the fields as raw data (pretending that there are no mutable
     // HeapNumbers). This doesn't need write barriers.
     BuildFastLoop<IntPtrT>(
-        source_start, source_size,
+        source_start, result_size,
         [=](TNode<IntPtrT> field_index) {
           TNode<IntPtrT> field_offset = TimesTaggedSize(field_index);
           TNode<TaggedT> field =
@@ -5132,7 +5178,7 @@ void AccessorAssembler::GenerateCloneObjectIC() {
     // double fields.
     TNode<IntPtrT> start_offset = TimesTaggedSize(result_start);
     TNode<IntPtrT> end_offset =
-        IntPtrAdd(TimesTaggedSize(source_size), field_offset_difference);
+        IntPtrAdd(TimesTaggedSize(result_size), field_offset_difference);
     ConstructorBuiltinsAssembler(state()).CopyMutableHeapNumbersInObject(
         object, start_offset, end_offset);
 
