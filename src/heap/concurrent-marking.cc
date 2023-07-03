@@ -87,17 +87,17 @@ class YoungGenerationConcurrentMarkingVisitor final
         marking_state_(heap->isolate(), memory_chunk_data),
         local_ephemeron_table_list_(
             *heap->minor_mark_compact_collector()->ephemeron_table_list()),
-        local_marking_worklists_(marking_worklists,
-                                 MarkingWorklists::Local::kNoCppMarkingState) {}
+        local_marking_worklists_(
+            marking_worklists,
+            heap->cpp_heap()
+                ? CppHeap::From(heap->cpp_heap())->CreateCppMarkingState()
+                : MarkingWorklists::Local::kNoCppMarkingState) {}
 
   using YoungGenerationMarkingVisitorBase<
       YoungGenerationConcurrentMarkingVisitor,
       ConcurrentMarkingState>::VisitMapPointerIfNeeded;
 
   static constexpr bool EnableConcurrentVisitation() { return true; }
-
-  template <typename TSlot>
-  void RecordSlot(HeapObject object, TSlot slot, HeapObject target) {}
 
   ConcurrentMarkingState* marking_state() { return &marking_state_; }
 
@@ -139,14 +139,14 @@ class YoungGenerationConcurrentMarkingVisitor final
     // Treat weak references as strong.
     if (!object.GetHeapObject(&heap_object) ||
         !Heap::InYoungGeneration(heap_object) ||
-        !concrete_visitor()->marking_state()->TryMark(heap_object)) {
+        !marking_state_.TryMark(heap_object)) {
       return;
     }
 
     Map map = heap_object.map(ObjectVisitorWithCageBases::cage_base());
     if (Map::ObjectFieldsFrom(map.visitor_id()) == ObjectFields::kDataOnly) {
       const int visited_size = heap_object.SizeFromMap(map);
-      concrete_visitor()->marking_state()->IncrementLiveBytes(
+      marking_state_.IncrementLiveBytes(
           MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(heap_object)),
           ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
     } else {
@@ -491,6 +491,7 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
                                 task_id);
   }
 
+  bool should_defer_on_hold = !delegate->IsJoiningThread();
   {
     TimedScope scope(&time_ms);
     CodePageHeaderModificationScope rwx_write_scope(
@@ -500,9 +501,13 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
     int objects_processed = 0;
     while (true) {
       HeapObject object;
-      if (!local_marking_worklists.Pop(&object)) {
+      if (!local_marking_worklists.Pop(&object) &&
+          (should_defer_on_hold ||
+           !local_marking_worklists.PopOnHold(&object))) {
         if (!remembered_sets.ProcessNextItem(&visitor) ||
-            !local_marking_worklists.Pop(&object)) {
+            (!local_marking_worklists.Pop(&object) &&
+             (should_defer_on_hold ||
+              !local_marking_worklists.PopOnHold(&object)))) {
           break;
         }
       }
@@ -515,8 +520,9 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
 
       Address addr = object.address();
 
-      if ((new_space_top <= addr && addr < new_space_limit) ||
-          addr == new_large_object) {
+      if (should_defer_on_hold &&
+          ((new_space_top <= addr && addr < new_space_limit) ||
+           addr == new_large_object)) {
         local_marking_worklists.PushOnHold(object);
       } else {
         Map map = object.map(isolate, kAcquireLoad);
