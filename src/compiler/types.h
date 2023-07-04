@@ -128,7 +128,7 @@ namespace compiler {
   V(CallableFunction,         uint64_t{1} << 20)  \
   V(ClassConstructor,         uint64_t{1} << 21)  \
   V(BoundFunction,            uint64_t{1} << 22)  \
-  V(Hole,                     uint64_t{1} << 23)  \
+  V(TheHole,                  uint64_t{1} << 23)  \
   V(OtherInternal,            uint64_t{1} << 24)  \
   V(ExternalPointer,          uint64_t{1} << 25)  \
   V(Array,                    uint64_t{1} << 26)  \
@@ -140,9 +140,12 @@ namespace compiler {
 
 // We split the macro list into two parts because the Torque equivalent in
 // turbofan-types.tq uses two 32bit bitfield structs.
-#define PROPER_ATOMIC_BITSET_TYPE_HIGH_LIST(V) \
-  V(SandboxedPointer,         uint64_t{1} << 32) \
-  V(Machine,                  uint64_t{1} << 33)
+#define PROPER_ATOMIC_BITSET_TYPE_HIGH_LIST(V)                             \
+  V(SandboxedPointer,         uint64_t{1} << 32)                           \
+  V(Machine,                  uint64_t{1} << 33)                           \
+  /* Add a second hole type as a placeholder so that we can distinguish */ \
+  /* between TheHole and any Hole */                                       \
+  V(HolePlaceholder,                  uint64_t{1} << 34)
 
 #define PROPER_BITSET_TYPE_LIST(V) \
   V(None,                     uint64_t{0}) \
@@ -178,17 +181,14 @@ namespace compiler {
   V(BooleanOrNumber,              kBoolean | kNumber) \
   V(BooleanOrNullOrNumber,        kBooleanOrNumber | kNull) \
   V(BooleanOrNullOrUndefined,     kBoolean | kNull | kUndefined) \
-  V(Oddball,                      kBooleanOrNullOrUndefined | kHole) \
+  V(Hole,                         kTheHole | kHolePlaceholder) \
   V(NullOrNumber,                 kNull | kNumber) \
   V(NullOrUndefined,              kNull | kUndefined) \
   V(Undetectable,                 kNullOrUndefined | kOtherUndetectable) \
-  V(NumberOrHole,                 kNumber | kHole) \
-  V(NumberOrOddball,              kNumber | kNullOrUndefined | kBoolean | \
-                                  kHole) \
+  V(NumberOrTheHole,              kNumber | kTheHole) \
+  V(NumberOrOddball,              kNumber | kBooleanOrNullOrUndefined ) \
   V(NumericOrString,              kNumeric | kString) \
   V(NumberOrUndefined,            kNumber | kUndefined) \
-  V(NumberOrUndefinedOrNullOrBoolean,  \
-                                  kNumber | kNullOrUndefined | kBoolean) \
   V(PlainPrimitive,               kNumber | kString | kBoolean | \
                                   kNullOrUndefined) \
   V(NonBigIntPrimitive,           kSymbol | kPlainPrimitive) \
