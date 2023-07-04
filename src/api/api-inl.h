@@ -52,7 +52,7 @@ inline v8::internal::Handle<v8::internal::Object> FromCData(
 
 template <class From, class To>
 inline Local<To> Utils::Convert(v8::internal::Handle<From> obj) {
-  DCHECK(obj.is_null() || (obj->IsSmi() || !obj->IsTheHole()));
+  DCHECK(obj.is_null() || (obj->IsSmi() || !obj->IsHole()));
 #ifdef V8_ENABLE_DIRECT_LOCAL
   if (obj.is_null()) return Local<To>();
 #endif
@@ -63,7 +63,7 @@ template <class From, class To>
 inline Local<To> Utils::Convert(v8::internal::DirectHandle<From> obj,
                                 v8::internal::Isolate* isolate) {
 #if defined(V8_ENABLE_DIRECT_LOCAL)
-  DCHECK(obj.is_null() || (obj->IsSmi() || !obj->IsTheHole()));
+  DCHECK(obj.is_null() || (obj->IsSmi() || !obj->IsHole()));
   return Local<To>::FromAddress(obj.address());
 #elif defined(V8_ENABLE_CONSERVATIVE_STACK_SCANNING)
   return Utils::Convert<From, To>(v8::internal::Handle<From>(*obj, isolate));
