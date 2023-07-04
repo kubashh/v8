@@ -12496,7 +12496,7 @@ TNode<TIndex> CodeStubAssembler::BuildFastLoop(
   // forward to it from the pre-header). The extra branch is slower in the
   // case that the loop actually iterates.
   if (unrolling_mode == LoopUnrollingMode::kNo) {
-    TNode<BoolT> first_check = IntPtrOrSmiEqual(var_index.value(), end_index);
+    TNode<BoolT> first_check = UintPtrOrSmiEqual(var_index.value(), end_index);
     int32_t first_check_val;
     if (TryToInt32Constant(first_check, &first_check_val)) {
       if (first_check_val) return var_index.value();
@@ -12508,11 +12508,11 @@ TNode<TIndex> CodeStubAssembler::BuildFastLoop(
     BIND(&loop);
     {
       loop_body();
-      CSA_DCHECK(
-          this, increment > 0
-                    ? IntPtrOrSmiLessThanOrEqual(var_index.value(), end_index)
-                    : IntPtrOrSmiLessThanOrEqual(end_index, var_index.value()));
-      Branch(IntPtrOrSmiNotEqual(var_index.value(), end_index), &loop, &done);
+      CSA_DCHECK(this, increment > 0 ? UintPtrOrSmiLessThanOrEqual(
+                                           var_index.value(), end_index)
+                                     : UintPtrOrSmiLessThanOrEqual(
+                                           end_index, var_index.value()));
+      Branch(UintPtrOrSmiNotEqual(var_index.value(), end_index), &loop, &done);
     }
     BIND(&done);
   } else {
@@ -12520,13 +12520,13 @@ TNode<TIndex> CodeStubAssembler::BuildFastLoop(
     // end_index.
     DCHECK_EQ(unrolling_mode, LoopUnrollingMode::kYes);
     CSA_DCHECK(this, increment > 0
-                         ? IntPtrOrSmiLessThanOrEqual(start_index, end_index)
-                         : IntPtrOrSmiLessThanOrEqual(end_index, start_index));
+                         ? UintPtrOrSmiLessThanOrEqual(start_index, end_index)
+                         : UintPtrOrSmiLessThanOrEqual(end_index, start_index));
     TNode<TIndex> last_index =
         IntPtrOrSmiSub(end_index, IntPtrOrSmiConstant<TIndex>(increment));
     TNode<BoolT> first_check =
-        increment > 0 ? IntPtrOrSmiLessThan(start_index, last_index)
-                      : IntPtrOrSmiGreaterThan(start_index, last_index);
+        increment > 0 ? UintPtrOrSmiLessThan(start_index, last_index)
+                      : UintPtrOrSmiGreaterThan(start_index, last_index);
     int32_t first_check_val;
     if (TryToInt32Constant(first_check, &first_check_val)) {
       if (first_check_val) {
@@ -12544,13 +12544,14 @@ TNode<TIndex> CodeStubAssembler::BuildFastLoop(
       loop_body();
       loop_body();
       TNode<BoolT> loop_check =
-          increment > 0 ? IntPtrOrSmiLessThan(var_index.value(), last_index)
-                        : IntPtrOrSmiGreaterThan(var_index.value(), last_index);
+          increment > 0
+              ? UintPtrOrSmiLessThan(var_index.value(), last_index)
+              : UintPtrOrSmiGreaterThan(var_index.value(), last_index);
       Branch(loop_check, &loop, &after_loop);
     }
     BIND(&after_loop);
     {
-      GotoIfNot(IntPtrOrSmiEqual(var_index.value(), last_index), &done);
+      GotoIfNot(UintPtrOrSmiEqual(var_index.value(), last_index), &done);
       // Iteration count is odd.
       loop_body();
       Goto(&done);
