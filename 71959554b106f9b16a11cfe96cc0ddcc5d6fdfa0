@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f8c100b_79bd1265",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-04T10:06:42Z",
+      "side": 1,
+      "message": "LGTM.\nThe failure on the CSS bot was unrelated to this CL and has been fixed.\nThanks Jake!",
+      "revId": "71959554b106f9b16a11cfe96cc0ddcc5d6fdfa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
