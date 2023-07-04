@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b366e145_f4e4f3e5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-04T06:34:18Z",
+      "side": 1,
+      "message": "\u003e Yes, the goal is to remove MarkingState completely. I have a few CLs lined up, up to removing the AtomicMarkingState (although I haven\u0027t removed MarkingState yet).\n\u003e \n\u003e \u003e Callers right now don\u0027t care which method to call and setting the marking state is a \"global\" decision per visitor.\n\u003e \n\u003e Right, that\u0027s why I believe we can move the remaining methods to the visitors instead.\n\nJust to be clear: Right now it\u0027s a benefit that we don\u0027t have to care in the visitor. Calling directly only makes sense if we get rid of the MarkingState :)",
+      "parentUuid": "23bed288_e2c0dd82",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "5d38585385bedcb2c2f82fead592d83a2825e436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11cf0264_4b333a7e",
