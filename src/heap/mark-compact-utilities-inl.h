@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_HEAP_MARK_COMPACT_BASE_H_
-#define V8_HEAP_MARK_COMPACT_BASE_H_
+#ifndef V8_HEAP_MARK_COMPACT_UTILITIES_INL_H_
+#define V8_HEAP_MARK_COMPACT_UTILITIES_INL_H_
 
 #include <memory>
 #include <vector>
 
 #include "src/common/globals.h"
+#include "src/heap/heap-inl.h"
 #include "src/heap/heap.h"
 #include "src/heap/marking-state.h"
 #include "src/heap/marking-worklist.h"
@@ -20,12 +21,13 @@ namespace v8 {
 namespace internal {
 
 #ifdef VERIFY_HEAP
-class MarkingVerifier : public ObjectVisitorWithCageBases, public RootVisitor {
+class MarkingVerifierBase : public ObjectVisitorWithCageBases,
+                            public RootVisitor {
  public:
   virtual void Run() = 0;
 
  protected:
-  explicit MarkingVerifier(Heap* heap);
+  explicit MarkingVerifierBase(Heap* heap);
 
   virtual const MarkingBitmap* bitmap(const MemoryChunk* chunk) = 0;
 
@@ -70,7 +72,6 @@ class MarkingVerifier : public ObjectVisitorWithCageBases, public RootVisitor {
 #endif  // VERIFY_HEAP
 
 enum class ExternalStringTableCleaningMode { kAll, kYoungOnly };
-
 template <ExternalStringTableCleaningMode mode>
 class ExternalStringTableCleaner final : public RootVisitor {
  public:
@@ -89,9 +90,9 @@ class StringForwardingTableCleanerBase {
 
   // Dispose external resource, if it wasn't disposed already.
   // We can have multiple entries of the same external resource in the string
-  // forwarding table (i.e. concurrent externalization of a string with the same
-  // resource), therefore we keep track of already disposed resources to not
-  // dispose a resource more than once.
+  // forwarding table (i.e. concurrent externalization of a string with the
+  // same resource), therefore we keep track of already disposed resources to
+  // not dispose a resource more than once.
   void DisposeExternalResource(StringForwardingTable::Record* record);
 
   Isolate* const isolate_;
@@ -99,55 +100,45 @@ class StringForwardingTableCleanerBase {
   std::unordered_set<Address> disposed_resources_;
 };
 
-class MarkCompactCollectorBase {
- public:
-  virtual void TearDown() = 0;
-  virtual void CollectGarbage() = 0;
-  virtual void StartMarking() = 0;
-  virtual void Finish() = 0;
-
-  MarkingWorklists* marking_worklists() { return &marking_worklists_; }
-
-  MarkingWorklists::Local* local_marking_worklists() const {
-    return local_marking_worklists_.get();
-  }
-
- protected:
-  using ResizeNewSpaceMode = Heap::ResizeNewSpaceMode;
-
-  inline Heap* heap() const { return heap_; }
-  inline Isolate* isolate() const;
-
-  MarkingState* marking_state() { return marking_state_; }
-
-  NonAtomicMarkingState* non_atomic_marking_state() {
-    return non_atomic_marking_state_;
-  }
-
-  bool IsCppHeapMarkingFinished() const;
+bool IsCppHeapMarkingFinished(Heap* heap,
+                              MarkingWorklists::Local* local_marking_worklists);
 
 #if DEBUG
-  void VerifyRememberedSetsAfterEvacuation();
+void VerifyRememberedSetsAfterEvacuation(Heap* heap,
+                                         GarbageCollector garbage_collector);
 #endif  // DEBUG
 
-  Heap* heap_;
-  MarkingWorklists marking_worklists_;
-
-  std::unique_ptr<MarkingWorklists::Local> local_marking_worklists_;
-
-  MarkingState* const marking_state_;
-  NonAtomicMarkingState* const non_atomic_marking_state_;
-
-  ResizeNewSpaceMode resize_new_space_ = ResizeNewSpaceMode::kNone;
-
-  explicit MarkCompactCollectorBase(Heap* heap, GarbageCollector collector);
-  virtual ~MarkCompactCollectorBase() = default;
-
- private:
-  GarbageCollector garbage_collector_;
-};
+template <ExternalStringTableCleaningMode mode>
+void ExternalStringTableCleaner<mode>::VisitRootPointers(
+    Root root, const char* description, FullObjectSlot start,
+    FullObjectSlot end) {
+  // Visit all HeapObject pointers in [start, end).
+  DCHECK_EQ(static_cast<int>(root),
+            static_cast<int>(Root::kExternalStringsTable));
+  NonAtomicMarkingState* marking_state = heap_->non_atomic_marking_state();
+  Object the_hole = ReadOnlyRoots(heap_).the_hole_value();
+  for (FullObjectSlot p = start; p < end; ++p) {
+    Object o = *p;
+    if (!o.IsHeapObject()) continue;
+    HeapObject heap_object = HeapObject::cast(o);
+    // MinorMC doesn't update the young strings set and so it may contain
+    // strings that are already in old space.
+    if (!marking_state->IsUnmarked(heap_object)) continue;
+    if ((mode == ExternalStringTableCleaningMode::kYoungOnly) &&
+        !Heap::InYoungGeneration(heap_object))
+      continue;
+    if (o.IsExternalString()) {
+      heap_->FinalizeExternalString(String::cast(o));
+    } else {
+      // The original external string may have been internalized.
+      DCHECK(o.IsThinString());
+    }
+    // Set the entry to the_hole_value (as deleted).
+    p.store(the_hole);
+  }
+}
 
 }  // namespace internal
 }  // namespace v8
 
-#endif  // V8_HEAP_MARK_COMPACT_BASE_H_
+#endif  // V8_HEAP_MARK_COMPACT_UTILITIES_INL_H_
