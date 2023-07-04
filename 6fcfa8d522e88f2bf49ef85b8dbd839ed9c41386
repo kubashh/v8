@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cdc4802_b013fbf5",
+        "filename": "src/codegen/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2023-07-04T07:38:37Z",
+      "side": 1,
+      "message": "Maybe we need to ensure that all the comparisons of RawPtrT are unsigned. Is this correct?",
+      "revId": "6fcfa8d522e88f2bf49ef85b8dbd839ed9c41386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
