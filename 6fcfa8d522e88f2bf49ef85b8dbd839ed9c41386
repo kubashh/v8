@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5858014a_fbb2fa7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2023-07-04T08:16:47Z",
+      "side": 1,
+      "message": "No problem. I will discard this CL 😊",
+      "parentUuid": "b8258446_13268baa",
+      "revId": "6fcfa8d522e88f2bf49ef85b8dbd839ed9c41386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cdc4802_b013fbf5",
