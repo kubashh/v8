@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23bed288_e2c0dd82",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-04T05:53:13Z",
+      "side": 1,
+      "message": "Yes, the goal is to remove MarkingState completely. I have a few CLs lined up, up to removing the AtomicMarkingState (although I haven\u0027t removed MarkingState yet).\n\n\u003e Callers right now don\u0027t care which method to call and setting the marking state is a \"global\" decision per visitor.\n\nRight, that\u0027s why I believe we can move the remaining methods to the visitors instead.",
+      "parentUuid": "73ee5da2_badaa9e2",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 13
+      },
+      "revId": "5d38585385bedcb2c2f82fead592d83a2825e436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "11cf0264_4b333a7e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 12
@@ -37,6 +61,24 @@
       "writtenOn": "2023-07-03T08:00:17Z",
       "side": 1,
       "message": "Tracking bug",
+      "revId": "5d38585385bedcb2c2f82fead592d83a2825e436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9dcfcd6_811b3e3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-04T05:53:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11cf0264_4b333a7e",
       "revId": "5d38585385bedcb2c2f82fead592d83a2825e436",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
