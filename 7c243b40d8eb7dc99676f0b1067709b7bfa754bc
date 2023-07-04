@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e92d7755_a36e4d89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-04T13:56:35Z",
+      "side": 1,
+      "message": "Just\nBug: chromium:1204540, v8:9343",
+      "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5d815ea_f937fd12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-04T13:56:35Z",
+      "side": 1,
+      "message": "overall looks good modulo `kIgnoreSlackTracking`",
+      "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c4ac2cd_d440747c",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 5139,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-04T13:56:35Z",
+      "side": 1,
+      "message": "I\u0027m afraid there might be a window when the slack tracking is not over yet and thus not filling the object slack with one-pointer fillers might confuse GC once the slack tracking will be finished (GC will not expect to see undefined values after this object shrinks).\n\nWe should either use `kWithSlackTracking` version or ensure that the `result_map` is guaranteed to have a completed slack tracking (presumably during handler creation) and use `kNoSlackTracking`.\n\nWhile we are here... note that `Factory::ObjectLiteralMapFromCache()` currently \"inherits\" slack tracking state from `object_function()-\u003einitial_map()` even when it creates new maps. We might want to explicitly finish slack tracking for them or start it for newly created maps.",
+      "range": {
+        "startLine": 5139,
+        "startChar": 31,
+        "endLine": 5139,
+        "endChar": 70
+      },
+      "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
