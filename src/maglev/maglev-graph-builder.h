@@ -1696,7 +1696,7 @@ class MaglevGraphBuilder {
   }
   ValueNode* GetUint32ElementIndex(ValueNode* index_object);
 
-  bool CanTreatHoleAsUndefined(
+  bool CanTreatTheHoleAsUndefined(
       base::Vector<const compiler::MapRef> const& receiver_maps);
 
   compiler::OptionalObjectRef TryFoldLoadDictPrototypeConstant(

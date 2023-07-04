@@ -3595,7 +3595,7 @@ void MaglevGraphBuilder::BuildStoreFixedArrayElement(ValueNode* elements,
   }
 }
 
-bool MaglevGraphBuilder::CanTreatHoleAsUndefined(
+bool MaglevGraphBuilder::CanTreatTheHoleAsUndefined(
     base::Vector<const compiler::MapRef> const& receiver_maps) {
   // Check if all {receiver_maps} have one of the initial Array.prototype
   // or Object.prototype objects as their prototype (in any of the current
@@ -4386,7 +4386,7 @@ ReduceResult MaglevGraphBuilder::TryBuildElementLoadOnJSArrayOrJSObject(
 
   base::Vector<const compiler::MapRef> maps =
       base::VectorOf(access_info.lookup_start_object_maps());
-  if (IsHoleyElementsKind(elements_kind) && !CanTreatHoleAsUndefined(maps)) {
+  if (IsHoleyElementsKind(elements_kind) && !CanTreatTheHoleAsUndefined(maps)) {
     return ReduceResult::Fail();
   }
 

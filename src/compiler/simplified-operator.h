@@ -1000,7 +1000,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* CheckInternalizedString();
   const Operator* CheckMaps(CheckMapsFlags, ZoneRefSet<Map>,
                             const FeedbackSource& = FeedbackSource());
-  const Operator* CheckNotTaggedHole();
+  const Operator* CheckNotTaggedTheHole();
   const Operator* CheckNumber(const FeedbackSource& feedback);
   const Operator* CheckReceiver();
   const Operator* CheckReceiverOrNullOrUndefined();
@@ -1049,7 +1049,7 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
 
   const Operator* ConvertReceiver(ConvertReceiverMode);
 
-  const Operator* ConvertTaggedHoleToUndefined();
+  const Operator* ConvertTaggedTheHoleToUndefined();
 
   const Operator* ObjectIsArrayBufferView();
   const Operator* ObjectIsBigInt();

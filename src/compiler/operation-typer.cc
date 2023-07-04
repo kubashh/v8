@@ -1337,7 +1337,7 @@ Type OperationTyper::TypeTypeGuard(const Operator* sigma_op, Type input) {
   return Type::Intersect(input, TypeGuardTypeOf(sigma_op), zone());
 }
 
-Type OperationTyper::ConvertTaggedHoleToUndefined(Type input) {
+Type OperationTyper::ConvertTaggedTheHoleToUndefined(Type input) {
   if (input.Maybe(Type::TheHole())) {
     // Turn "the hole" into undefined.
     Type type = Type::Intersect(input, Type::NonInternal(), zone());

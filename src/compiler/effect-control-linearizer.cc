@@ -207,8 +207,8 @@ class EffectControlLinearizer {
   Node* LowerBigIntLessThanOrEqual(Node* node);
   Node* LowerBigIntNegate(Node* node);
   Node* LowerCheckFloat64Hole(Node* node, Node* frame_state);
-  Node* LowerCheckNotTaggedHole(Node* node, Node* frame_state);
-  Node* LowerConvertTaggedHoleToUndefined(Node* node);
+  Node* LowerCheckNotTaggedTheHole(Node* node, Node* frame_state);
+  Node* LowerConvertTaggedTheHoleToUndefined(Node* node);
   void LowerCheckEqualsInternalizedString(Node* node, Node* frame_state);
   void LowerCheckEqualsSymbol(Node* node, Node* frame_state);
   Node* LowerTypeOf(Node* node);
@@ -1759,16 +1759,16 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
       }
       result = LowerCheckFloat64Hole(node, frame_state);
       break;
-    case IrOpcode::kCheckNotTaggedHole:
+    case IrOpcode::kCheckNotTaggedTheHole:
       if (v8_flags.turboshaft) {
         gasm()->Checkpoint(FrameState{frame_state});
         return false;
       }
-      result = LowerCheckNotTaggedHole(node, frame_state);
+      result = LowerCheckNotTaggedTheHole(node, frame_state);
       break;
-    case IrOpcode::kConvertTaggedHoleToUndefined:
+    case IrOpcode::kConvertTaggedTheHoleToUndefined:
       if (v8_flags.turboshaft) return false;
-      result = LowerConvertTaggedHoleToUndefined(node);
+      result = LowerConvertTaggedTheHoleToUndefined(node);
       break;
     case IrOpcode::kCheckEqualsInternalizedString:
       if (v8_flags.turboshaft) {
@@ -6075,8 +6075,8 @@ Node* EffectControlLinearizer::LowerCheckFloat64Hole(Node* node,
   return value;
 }
 
-Node* EffectControlLinearizer::LowerCheckNotTaggedHole(Node* node,
-                                                       Node* frame_state) {
+Node* EffectControlLinearizer::LowerCheckNotTaggedTheHole(Node* node,
+                                                          Node* frame_state) {
   DCHECK(!v8_flags.turboshaft);
   Node* value = node->InputAt(0);
   Node* check = __ TaggedEqual(value, __ TheHoleConstant());
@@ -6085,7 +6085,8 @@ Node* EffectControlLinearizer::LowerCheckNotTaggedHole(Node* node,
   return value;
 }
 
-Node* EffectControlLinearizer::LowerConvertTaggedHoleToUndefined(Node* node) {
+Node* EffectControlLinearizer::LowerConvertTaggedTheHoleToUndefined(
+    Node* node) {
   DCHECK(!v8_flags.turboshaft);
   Node* value = node->InputAt(0);
 

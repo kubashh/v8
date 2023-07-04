@@ -448,10 +448,10 @@ TNode<Boolean> JSGraphAssembler::ToBoolean(TNode<Object> value) {
   return AddNode<Boolean>(graph()->NewNode(simplified()->ToBoolean(), value));
 }
 
-TNode<Object> JSGraphAssembler::ConvertTaggedHoleToUndefined(
+TNode<Object> JSGraphAssembler::ConvertTaggedTheHoleToUndefined(
     TNode<Object> value) {
   return AddNode<Object>(
-      graph()->NewNode(simplified()->ConvertTaggedHoleToUndefined(), value));
+      graph()->NewNode(simplified()->ConvertTaggedTheHoleToUndefined(), value));
 }
 
 TNode<FixedArrayBase> JSGraphAssembler::MaybeGrowFastElements(

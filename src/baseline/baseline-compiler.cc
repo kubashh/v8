@@ -2149,6 +2149,8 @@ void BaselineCompiler::VisitReturn() {
 }
 
 void BaselineCompiler::VisitThrowReferenceErrorIfHole() {
+  // TODO(sroettger): is this used for one hole type or any hole type? same
+  // below
   Label done;
   __ JumpIfNotRoot(kInterpreterAccumulatorRegister, RootIndex::kTheHoleValue,
                    &done);
