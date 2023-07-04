@@ -33,6 +33,46 @@
       "message": "PTAL",
       "revId": "fcf2a2e223de5699b3094a846ca5ddb6ea2350c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c67e966d_abf740e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-07-04T08:37:11Z",
+      "side": 1,
+      "message": "LGTM % nit",
+      "revId": "fcf2a2e223de5699b3094a846ca5ddb6ea2350c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "952a89b4_65f8f204",
+        "filename": "src/maglev/maglev-concurrent-dispatcher.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-07-04T08:37:11Z",
+      "side": 1,
+      "message": "Nit: we could also have a flag, so that we can play with: --maglev-request-install-after-n-compilation",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 255,
+        "endChar": 9
+      },
+      "revId": "fcf2a2e223de5699b3094a846ca5ddb6ea2350c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
