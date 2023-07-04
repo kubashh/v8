@@ -496,7 +496,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   PARAMETER_BINOP(IntPtrOrSmiSub, IntPtrSub, SmiSub)
 #undef PARAMETER_BINOP
 
-#define PARAMETER_BINOP(OpName, IntPtrOpName, SmiOpName)                      \
+#define PARAMETER_BINOP(OpName, IntPtrOpName, RawPtrOpName, SmiOpName)        \
   TNode<BoolT> OpName(TNode<Smi> a, TNode<Smi> b) { return SmiOpName(a, b); } \
   TNode<BoolT> OpName(TNode<IntPtrT> a, TNode<IntPtrT> b) {                   \
     return IntPtrOpName(a, b);                                                \
@@ -505,18 +505,21 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return IntPtrOpName(Signed(a), Signed(b));                                \
   }                                                                           \
   TNode<BoolT> OpName(TNode<RawPtrT> a, TNode<RawPtrT> b) {                   \
-    return IntPtrOpName(a, b);                                                \
+    return RawPtrOpName(a, b);                                                \
   }
   // TODO(v8:9708): Define BInt operations once all uses are ported.
-  PARAMETER_BINOP(IntPtrOrSmiEqual, WordEqual, SmiEqual)
-  PARAMETER_BINOP(IntPtrOrSmiNotEqual, WordNotEqual, SmiNotEqual)
-  PARAMETER_BINOP(IntPtrOrSmiLessThan, IntPtrLessThan, SmiLessThan)
+  PARAMETER_BINOP(IntPtrOrSmiEqual, WordEqual, WordEqual, SmiEqual)
+  PARAMETER_BINOP(IntPtrOrSmiNotEqual, WordNotEqual, WordNotEqual, SmiNotEqual)
+  PARAMETER_BINOP(IntPtrOrSmiLessThan, IntPtrLessThan, UintPtrLessThan,
+                  SmiLessThan)
   PARAMETER_BINOP(IntPtrOrSmiLessThanOrEqual, IntPtrLessThanOrEqual,
-                  SmiLessThanOrEqual)
-  PARAMETER_BINOP(IntPtrOrSmiGreaterThan, IntPtrGreaterThan, SmiGreaterThan)
-  PARAMETER_BINOP(UintPtrOrSmiLessThan, UintPtrLessThan, SmiBelow)
+                  UintPtrLessThanOrEqual, SmiLessThanOrEqual)
+  PARAMETER_BINOP(IntPtrOrSmiGreaterThan, IntPtrGreaterThan, UintPtrGreaterThan,
+                  SmiGreaterThan)
+  PARAMETER_BINOP(UintPtrOrSmiLessThan, UintPtrLessThan, UintPtrLessThan,
+                  SmiBelow)
   PARAMETER_BINOP(UintPtrOrSmiGreaterThanOrEqual, UintPtrGreaterThanOrEqual,
-                  SmiAboveOrEqual)
+                  UintPtrGreaterThanOrEqual, SmiAboveOrEqual)
 #undef PARAMETER_BINOP
 
   uintptr_t ConstexprUintPtrShl(uintptr_t a, int32_t b) { return a << b; }
