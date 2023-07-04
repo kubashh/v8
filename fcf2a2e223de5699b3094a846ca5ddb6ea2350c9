@@ -73,6 +73,30 @@
       },
       "revId": "fcf2a2e223de5699b3094a846ca5ddb6ea2350c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab2e0cb8_bf16b8e4",
+        "filename": "src/maglev/maglev-concurrent-dispatcher.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-07-04T09:36:19Z",
+      "side": 1,
+      "message": "I\u0027ll consider this in a followup, since it slightly complicates the logic.",
+      "parentUuid": "952a89b4_65f8f204",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 255,
+        "endChar": 9
+      },
+      "revId": "fcf2a2e223de5699b3094a846ca5ddb6ea2350c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
