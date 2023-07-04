@@ -12508,6 +12508,7 @@ TNode<TIndex> CodeStubAssembler::BuildFastLoop(
     BIND(&loop);
     {
       loop_body();
+      // Fix bound check.
       CSA_DCHECK(
           this, increment > 0
                     ? IntPtrOrSmiLessThanOrEqual(var_index.value(), end_index)
