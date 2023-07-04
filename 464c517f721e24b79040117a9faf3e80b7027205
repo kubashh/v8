@@ -16,6 +16,57 @@
       "message": "Dominik, PTAL.",
       "revId": "464c517f721e24b79040117a9faf3e80b7027205",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73cd29db_c0267dcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-04T07:41:38Z",
+      "side": 1,
+      "message": "Thanks, LGTM",
+      "revId": "464c517f721e24b79040117a9faf3e80b7027205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75d9cfbc_c60d4af6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6452,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-04T07:41:38Z",
+      "side": 1,
+      "message": "FWIW there is a method Isolate::CurrentLocalHeap() as well, which gives you the main thread LocalHeap if LocalHeap::Current() is null. I think that way you could remove the first DCHECK.",
+      "revId": "464c517f721e24b79040117a9faf3e80b7027205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "592cfa30_627ccb98",
+        "filename": "src/maglev/maglev-concurrent-dispatcher.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-04T07:41:38Z",
+      "side": 1,
+      "message": "Nit: Should we DCHECK here that we are actually on the main thread?",
+      "revId": "464c517f721e24b79040117a9faf3e80b7027205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
