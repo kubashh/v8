@@ -145,6 +145,18 @@ void TieringManager::MarkForTurboFanOptimization(JSFunction function) {
 
 namespace {
 
+bool TiersUpToSparkplug(Isolate* isolate, JSFunction function) {
+  return !function.has_feedback_vector() ||
+         // We request sparkplug even in the presence of a fbv, if we are
+         // running ignition and haven't enqueued the function for sparkplug
+         // batch compilation yet. This ensures we tier-up to sparkplug when the
+         // feedback vector is allocated eagerly (e.g. for logging function
+         // events; see JSFunction::InitializeFeedbackCell()).
+         (function.ActiveTierIsIgnition() &&
+          CanCompileWithBaseline(isolate, function.shared()) &&
+          !function.shared().sparkplug_compiled());
+}
+
 bool TiersUpToMaglev(CodeKind code_kind) {
   // TODO(v8:7700): Flip the UNLIKELY when appropriate.
   return V8_UNLIKELY(maglev::IsMaglevEnabled()) &&
@@ -181,20 +193,21 @@ int TieringManager::InterruptBudgetFor(
   DCHECK(function.shared().is_compiled());
   const int bytecode_length =
       function.shared().GetBytecodeArray(isolate).length();
-  if (function.has_feedback_vector()) {
-    if (bytecode_length > v8_flags.max_optimized_bytecode_size) {
-      // Decrease times of interrupt budget underflow, the reason of not setting
-      // to INT_MAX is the interrupt budget may overflow when doing add
-      // operation for forward jump.
-      return INT_MAX / 2;
-    }
-    return ::i::InterruptBudgetFor(
-        override_active_tier ? override_active_tier : function.GetActiveTier(),
-        function.tiering_state(), bytecode_length);
+
+  if (TiersUpToSparkplug(isolate, function)) {
+    return bytecode_length * v8_flags.invocation_count_for_feedback_allocation;
   }
 
-  DCHECK(!function.has_feedback_vector());
-  return bytecode_length * v8_flags.invocation_count_for_feedback_allocation;
+  DCHECK(function.has_feedback_vector());
+  if (bytecode_length > v8_flags.max_optimized_bytecode_size) {
+    // Decrease times of interrupt budget underflow, the reason of not setting
+    // to INT_MAX is the interrupt budget may overflow when doing add
+    // operation for forward jump.
+    return INT_MAX / 2;
+  }
+  return ::i::InterruptBudgetFor(
+      override_active_tier ? override_active_tier : function.GetActiveTier(),
+      function.tiering_state(), bytecode_length);
 }
 
 namespace {
@@ -371,6 +384,7 @@ void TieringManager::OnInterruptTick(Handle<JSFunction> function,
   // considered a tier on its own. We begin tiering up to tiers higher than
   // Sparkplug only when reaching this point *with* a feedback vector.
   const bool had_feedback_vector = function->has_feedback_vector();
+  const bool tiered_up_to_sparkplug = TiersUpToSparkplug(isolate_, *function);
 
   // Ensure that the feedback vector has been allocated.
   if (!had_feedback_vector) {
@@ -409,9 +423,13 @@ void TieringManager::OnInterruptTick(Handle<JSFunction> function,
   }
 
   // We only tier up beyond sparkplug if we already had a feedback vector.
-  if (!had_feedback_vector) {
-    // The interrupt budget has already been set by
-    // JSFunction::CreateAndAttachFeedbackVector.
+  if (tiered_up_to_sparkplug) {
+    // If we didn't have a feedback vector, the interrupt budget has already
+    // been set by JSFunction::CreateAndAttachFeedbackVector, so no need to
+    // set it again.
+    if (had_feedback_vector) {
+      function->SetInterruptBudget(isolate_);
+    }
     return;
   }
 
