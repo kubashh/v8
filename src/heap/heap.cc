@@ -6447,6 +6447,10 @@ size_t Heap::OldArrayBufferBytes() {
 StrongRootsEntry* Heap::RegisterStrongRoots(const char* label,
                                             FullObjectSlot start,
                                             FullObjectSlot end) {
+  // We're either on the main thread, or in a background thread with an active
+  // local heap.
+  DCHECK(isolate()->CurrentLocalHeap()->IsRunning());
+
   base::MutexGuard guard(&strong_roots_mutex_);
 
   StrongRootsEntry* entry = new StrongRootsEntry(label);
@@ -6471,6 +6475,10 @@ void Heap::UpdateStrongRoots(StrongRootsEntry* entry, FullObjectSlot start,
 }
 
 void Heap::UnregisterStrongRoots(StrongRootsEntry* entry) {
+  // We're either on the main thread, or in a background thread with an active
+  // local heap.
+  DCHECK(isolate()->CurrentLocalHeap()->IsRunning());
+
   base::MutexGuard guard(&strong_roots_mutex_);
 
   StrongRootsEntry* prev = entry->prev;
