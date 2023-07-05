@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84c232aa_15ab38f7",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-07-05T08:35:24Z",
+      "side": 0,
+      "message": "(just marking resolved)",
+      "parentUuid": "a6e260ad_7edb6237",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3084cae2_96945d43",
@@ -84,6 +102,24 @@
       "side": 0,
       "message": "Ack. Related question: do we still need the `current_interval_` cache at all? I would imagine that we can remove it without impacting performance, for the same reason that we were able to remove the `last_processed_use_` cache for use positions after you changed them to a vector.\nEDIT: I think I answered my question below.",
       "parentUuid": "3084cae2_96945d43",
+      "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "288fabf8_8b6f7dea",
+        "filename": "src/compiler/backend/register-allocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-07-05T08:35:24Z",
+      "side": 0,
+      "message": "Correct: I also wanted to get rid of this, but through `ForwardStateTo`, `Covers` is called apparently very often with directly ascending positions, for which the `current_interval_` cache helps quite a bit.",
+      "parentUuid": "5c622a52_fa646b3f",
       "revId": "632be5db36e30aff8f96ceb1e3da47cf499ec767",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

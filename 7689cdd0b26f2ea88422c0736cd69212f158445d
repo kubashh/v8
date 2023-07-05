@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c803089a_7934df73",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-07-05T08:35:24Z",
+      "side": 1,
+      "message": "Great proof; so at least with the simple linear data structure of intervals, this cannot be sped up. One potential alternative (I didn\u0027t think too hard about it) are interval trees, for which at least a single intersection query is `O(log n)`.",
+      "parentUuid": "467cf6c9_0cc73141",
+      "revId": "7689cdd0b26f2ea88422c0736cd69212f158445d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "604db826_b41d43c6",
         "filename": "src/compiler/backend/register-allocator.h",
         "patchSetId": 1
