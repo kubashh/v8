@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0430e1aa_2e9c5033",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-07-05T12:14:28Z",
+      "side": 1,
+      "message": "LGTM, just a few remarks",
+      "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19e9a110_0115672d",
@@ -53,6 +70,75 @@
         "startChar": 18,
         "endLine": 923,
         "endChar": 19
+      },
+      "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc563275_f61325c9",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-07-05T12:14:28Z",
+      "side": 1,
+      "message": "In general we have nicer way to do this, but I think you do not know the `RegisterRepresentation` here statically, which is currently not supported by some of those options.",
+      "range": {
+        "startLine": 456,
+        "startChar": 2,
+        "endLine": 466,
+        "endChar": 78
+      },
+      "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb9b0f1b_1354a190",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-07-05T12:14:28Z",
+      "side": 1,
+      "message": "Keep in mind that you can use type-tagged indices (e.g. `V\u003cWord32\u003e`). This is not necessary here, but when writing more complex logic it can prevent some issues due to the static checking of proper types.",
+      "range": {
+        "startLine": 1320,
+        "startChar": 8,
+        "endLine": 1320,
+        "endChar": 15
+      },
+      "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e38ab92f_e876feeb",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-07-05T12:14:28Z",
+      "side": 1,
+      "message": "You can also write those using the assembler macros, e.g.\n```\nLabel\u003cWord32\u003e done(this);\nIF(condition) { GOTO(done, 0);}\nELSE { GOTO(done, asm_.Int32Mod(lhs, rhs)); }\nEND_IF\n\nBIND(done, result);\nreturn result;\n```\nThis will generate blocks, labels and merge phis automatically. The limitation here is that `Label\u003c\u003e` needs the static type, but this should be possible here.",
+      "range": {
+        "startLine": 1338,
+        "startChar": 0,
+        "endLine": 1346,
+        "endChar": 75
       },
       "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
