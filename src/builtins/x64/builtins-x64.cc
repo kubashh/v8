@@ -2729,14 +2729,6 @@ void Builtins::Generate_BaselineOnStackReplacement(MacroAssembler* masm) {
                      D::MaybeTargetCodeRegister());
 }
 
-void Builtins::Generate_MaglevOnStackReplacement(MacroAssembler* masm) {
-  using D =
-      i::CallInterfaceDescriptorFor<Builtin::kMaglevOnStackReplacement>::type;
-  static_assert(D::kParameterCount == 1);
-  OnStackReplacement(masm, OsrSourceTier::kMaglev,
-                     D::MaybeTargetCodeRegister());
-}
-
 #ifdef V8_ENABLE_MAGLEV
 
 // static

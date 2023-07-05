@@ -1357,17 +1357,6 @@ void Builtins::Generate_BaselineOnStackReplacement(MacroAssembler* masm) {
 }
 #endif
 
-// TODO(v8:11421): Remove #if once the Maglev compiler is ported to other
-// architectures.
-#ifndef V8_TARGET_ARCH_X64
-void Builtins::Generate_MaglevOnStackReplacement(MacroAssembler* masm) {
-  using D =
-      i::CallInterfaceDescriptorFor<Builtin::kMaglevOnStackReplacement>::type;
-  static_assert(D::kParameterCount == 1);
-  masm->Trap();
-}
-#endif  // V8_TARGET_ARCH_X64
-
 #ifndef V8_ENABLE_MAGLEV
 // static
 void Builtins::Generate_MaglevFunctionEntryStackCheck(MacroAssembler* masm,
