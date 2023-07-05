@@ -16,6 +16,46 @@
       "message": "Nico, PTAL at src/compiler.\nMatthias, PTAL overall.",
       "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d33f4fb_734105d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-05T08:35:00Z",
+      "side": 1,
+      "message": "LGTM. I have to admit I weren\u0027t away of a lot of the subtleties about the arithmetic operations in wasm.",
+      "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19e9a110_0115672d",
+        "filename": "src/compiler/turboshaft/recreate-schedule.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-05T08:35:00Z",
+      "side": 1,
+      "message": "Nit and not introduced in this change: Could we rename it to `operator`?",
+      "range": {
+        "startLine": 923,
+        "startChar": 18,
+        "endLine": 923,
+        "endChar": 19
+      },
+      "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
