@@ -3606,22 +3606,15 @@ void Pipeline::GenerateCodeForWasmFunction(
     pipeline.Run<MachineOperatorOptimizationPhase>(signalling_nan_propagation);
     pipeline.RunPrintAndVerify(MachineOperatorOptimizationPhase::phase_name(),
                                true);
-    if (!v8_flags.turboshaft_wasm) {
-      pipeline.Run<DecompressionOptimizationPhase>();
-      pipeline.RunPrintAndVerify(DecompressionOptimizationPhase::phase_name(),
-                                 true);
-    }
+    pipeline.Run<DecompressionOptimizationPhase>();
+    pipeline.RunPrintAndVerify(DecompressionOptimizationPhase::phase_name(),
+                               true);
   }
 
   if (v8_flags.wasm_opt) {
     pipeline.Run<BranchConditionDuplicationPhase>();
     pipeline.RunPrintAndVerify(BranchConditionDuplicationPhase::phase_name(),
                                true);
-  }
-
-  if (v8_flags.turboshaft_wasm) {
-    pipeline.Run<SimplifyLoopsPhase>();
-    pipeline.RunPrintAndVerify(SimplifyLoopsPhase::phase_name(), true);
   }
 
   if (v8_flags.turbo_splitting && !is_asm_js) {
@@ -3636,30 +3629,6 @@ void Pipeline::GenerateCodeForWasmFunction(
   pipeline.ComputeScheduledGraph();
 
   Linkage linkage(call_descriptor);
-
-  if (v8_flags.turboshaft_wasm) {
-    turboshaft::PipelineData::Scope turboshaft_pipeline(
-        pipeline.CreateTurboshaftPipeline());
-
-    if (base::Optional<BailoutReason> bailout =
-            pipeline.Run<turboshaft::BuildGraphPhase>(&linkage)) {
-      pipeline.info()->AbortOptimization(*bailout);
-      data.EndPhaseKind();
-      info->SetWasmCompilationResult({});
-      return;
-    }
-
-    pipeline.Run<turboshaft::OptimizePhase>();
-
-    pipeline.Run<turboshaft::DecompressionOptimizationPhase>();
-
-    auto [new_graph, new_schedule] =
-        pipeline.Run<turboshaft::RecreateSchedulePhase>(&linkage);
-    data.set_graph(new_graph);
-    data.set_schedule(new_schedule);
-    TraceSchedule(data.info(), &data, data.schedule(),
-                  turboshaft::RecreateSchedulePhase::phase_name());
-  }
 
   if (!pipeline.SelectInstructions(&linkage)) return;
   pipeline.AssembleCode(&linkage);
