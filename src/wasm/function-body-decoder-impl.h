@@ -455,13 +455,14 @@ struct ImmF64Immediate {
 };
 
 struct MemoryIndexImmediate {
-  uint8_t index = 0;
-  uint32_t length = 1;
+  uint32_t index = 0;
+  uint32_t length;
 
   template <typename ValidationTag>
   MemoryIndexImmediate(Decoder* decoder, const uint8_t* pc,
                        ValidationTag = {}) {
-    index = decoder->read_u8<ValidationTag>(pc, "memory index");
+    std::tie(index, length) =
+        decoder->read_u32v<ValidationTag>(pc, "memory index");
   }
 };
 

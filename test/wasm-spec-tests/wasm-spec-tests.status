@@ -53,6 +53,13 @@
   'proposals/multi-memory/binary': [FAIL],
   'proposals/tail-call/binary': [FAIL],
   'proposals/tail-call/binary-leb128': [FAIL],
+
+  # The 'binary' test does not allow for LEB-encoded memory indexes which will
+  # be allowed with multi-memory.
+  # TODO(clemensb): Fix this, similar to
+  # https://github.com/WebAssembly/spec/pull/1650.
+  'proposals/memory64/binary': [FAIL],
+  'binary': [FAIL],
 }],  # ALWAYS
 
 ['arch == arm and not simulator_run', {
