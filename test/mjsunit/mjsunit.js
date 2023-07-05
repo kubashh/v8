@@ -433,13 +433,19 @@ var prettyPrinted;
     // Functions are only identical to themselves.
     if (objectClass === "Function") return false;
     if (objectClass === "Array") {
-      var elementCount = 0;
       if (a.length !== b.length) {
         return false;
       }
       for (var i = 0; i < a.length; i++) {
         if ((i in a) !== (i in b)) return false;
         if (!deepEquals(a[i], b[i])) return false;
+      }
+      return true;
+    }
+    if (ArrayBuffer.isView(a)) {
+      if (a.length != b.length) return false;
+      for (let i = 0; i < a.length; i++) {
+        if (a[i] != b[i]) return false;
       }
       return true;
     }
