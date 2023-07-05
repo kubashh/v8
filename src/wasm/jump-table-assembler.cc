@@ -47,20 +47,46 @@ void JumpTableAssembler::InitializeJumpsToLazyCompileTable(
   FlushInstructionCache(base, jump_table_size);
 }
 
+// static
+void JumpTableAssembler::PatchJumpTableSlot(Address jump_table_slot,
+                                            Address far_jump_table_slot,
+                                            Address target) {
+  // First, try to patch the jump table slot.
+  JumpTableAssembler jtasm(jump_table_slot);
+  if (!jtasm.EmitJumpSlot(target)) {
+    // If that fails, we need to patch the far jump table slot, and then
+    // update the jump table slot to jump to this far jump table slot.
+    DCHECK_NE(kNullAddress, far_jump_table_slot);
+    JumpTableAssembler::PatchFarJumpSlot(far_jump_table_slot, target);
+    CHECK(jtasm.EmitJumpSlot(far_jump_table_slot));
+  }
+  // We write nops here instead of skipping to avoid partial instructions in
+  // the jump table. Partial instructions can cause problems for the
+  // disassembler.
+  jtasm.NopBytes(kJumpTableSlotSize - jtasm.pc_offset());
+  FlushInstructionCache(jump_table_slot, kJumpTableSlotSize);
+}
+
 // The implementation is compact enough to implement it inline here. If it gets
 // much bigger, we might want to split it in a separate file per architecture.
 #if V8_TARGET_ARCH_X64
 void JumpTableAssembler::EmitLazyCompileJumpSlot(uint32_t func_index,
                                                  Address lazy_compile_target) {
+  intptr_t displacement =
+      static_cast<intptr_t>(reinterpret_cast<uint8_t*>(lazy_compile_target) -
+                            (pc_ + 9) - kNearJmpInstrSize);
+  if (!is_int32(displacement)) return;
+  CodeEntry();  // 4 bytes
   // Use a push, because mov to an extended register takes 6 bytes.
-  pushq_imm32(func_index);            // 5 bytes
-  EmitJumpSlot(lazy_compile_target);  // 5 bytes
+  pushq_imm32(func_index);                     // 5 bytes
+  near_jmp(displacement, RelocInfo::NO_INFO);  // 5 bytes
 }
 
 bool JumpTableAssembler::EmitJumpSlot(Address target) {
   intptr_t displacement = static_cast<intptr_t>(
-      reinterpret_cast<uint8_t*>(target) - pc_ - kNearJmpInstrSize);
+      reinterpret_cast<uint8_t*>(target) - (pc_ + 4) - kNearJmpInstrSize);
   if (!is_int32(displacement)) return false;
+  CodeEntry();                                 // 4 bytes
   near_jmp(displacement, RelocInfo::NO_INFO);  // 5 bytes
   return true;
 }
@@ -68,11 +94,12 @@ bool JumpTableAssembler::EmitJumpSlot(Address target) {
 void JumpTableAssembler::EmitFarJumpSlot(Address target) {
   Label data;
   int start_offset = pc_offset();
+  CodeEntry();          // 4 bytes
   jmp(Operand(&data));  // 6 bytes
-  Nop(2);               // 2 bytes
+  Nop(6);               // 6 bytes
   // The data must be properly aligned, so it can be patched atomically (see
   // {PatchFarJumpSlot}).
-  DCHECK_EQ(start_offset + kSystemPointerSize, pc_offset());
+  DCHECK_EQ(start_offset + kFarJumpTableSlotOffset, pc_offset());
   USE(start_offset);
   bind(&data);
   dq(target);  // 8 bytes
@@ -83,7 +110,7 @@ void JumpTableAssembler::PatchFarJumpSlot(Address slot, Address target) {
   // The slot needs to be pointer-size aligned so we can atomically update it.
   DCHECK(IsAligned(slot, kSystemPointerSize));
   // Offset of the target is at 8 bytes, see {EmitFarJumpSlot}.
-  reinterpret_cast<std::atomic<Address>*>(slot + kSystemPointerSize)
+  reinterpret_cast<std::atomic<Address>*>(slot + kFarJumpTableSlotOffset)
       ->store(target, std::memory_order_relaxed);
   // The update is atomic because the address is properly aligned.
   // Because of cache coherence, the data update will eventually be seen by all
