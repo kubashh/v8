@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5a63f06_da512ff6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-05T06:47:06Z",
+      "side": 1,
+      "message": "Andreas, PTAL.\nNico, please approve pipeline.cc.",
+      "revId": "2ea759f7ffa4cfe79d675ec34f5c8f296649b38e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
