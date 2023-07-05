@@ -16,6 +16,52 @@
       "message": "Andreas, PTAL.\nNico, please approve pipeline.cc.",
       "revId": "2ea759f7ffa4cfe79d675ec34f5c8f296649b38e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3024b45_47739bf8",
+        "filename": "test/message/message.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-07-05T08:03:51Z",
+      "side": 1,
+      "message": "Should we mark the test as failing or crashing for now, so that we notice and enable them when the implementation is done?\nIt is so easy to forget about skipped tests, it\u0027s better to set them to FAIL or CRASH instead.",
+      "range": {
+        "startLine": 133,
+        "startChar": 26,
+        "endLine": 133,
+        "endChar": 30
+      },
+      "revId": "2ea759f7ffa4cfe79d675ec34f5c8f296649b38e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dfe15f6_691cab72",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-07-05T08:03:51Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 1379,
+        "startChar": 25,
+        "endLine": 1379,
+        "endChar": 29
+      },
+      "revId": "2ea759f7ffa4cfe79d675ec34f5c8f296649b38e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
