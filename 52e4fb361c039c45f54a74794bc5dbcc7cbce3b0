@@ -50,6 +50,24 @@
       "message": "Is there a particular kind of failure that you are hoping to catch by checking the entire content of the memory? I would think that if we decode the wrong memory index, one of the checks above would already fail.",
       "revId": "52e4fb361c039c45f54a74794bc5dbcc7cbce3b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dd62724_06819f44",
+        "filename": "test/mjsunit/wasm/multi-memory.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-07-06T14:34:35Z",
+      "side": 1,
+      "message": "No, nothing particular. I just thought this is the strongest check we can add, and it does not cost too much.",
+      "parentUuid": "df96e246_1e56ab33",
+      "revId": "52e4fb361c039c45f54a74794bc5dbcc7cbce3b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
