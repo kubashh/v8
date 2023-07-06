@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7a62ee4_3ace928b",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-06T09:28:50Z",
+      "side": 1,
+      "message": "This method and its dependencies would go away once we enable --concurrent-minor-ms-marking by default.",
+      "range": {
+        "startLine": 759,
+        "startChar": 30,
+        "endLine": 759,
+        "endChar": 47
+      },
+      "revId": "0e37eef1def376467994ea5744d2a7dfbb723560",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
