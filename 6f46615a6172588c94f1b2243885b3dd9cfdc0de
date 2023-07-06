@@ -160,6 +160,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "518cfe9b_acd8fdc0",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-06T14:47:20Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ba8ca90a_0a7ec3cb",
+      "range": {
+        "startLine": 415,
+        "startChar": 4,
+        "endLine": 415,
+        "endChar": 10
+      },
+      "revId": "6f46615a6172588c94f1b2243885b3dd9cfdc0de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71d90e11_64d48d1d",
