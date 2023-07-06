@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "217034fd_b9636c8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-06T14:40:40Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "d7658b94d3c4e3caa22404e07534394ee6a79f47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ed65b9d_be916421",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-06T14:40:40Z",
+      "side": 1,
+      "message": "Here and elsewhere: Can we just do bitmap()-\u003eClear(). Ideally MemoryChunk would just hold data and not deal with logic.",
+      "range": {
+        "startLine": 512,
+        "startChar": 13,
+        "endLine": 512,
+        "endChar": 26
+      },
+      "revId": "d7658b94d3c4e3caa22404e07534394ee6a79f47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
