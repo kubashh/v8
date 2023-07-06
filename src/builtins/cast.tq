@@ -306,6 +306,20 @@ Cast<JSAny>(o: Object): JSAny labels CastError {
   }
 }
 
+Cast<JSAny|Hole>(o: Object): JSAny|Hole labels CastError {
+  typeswitch (o) {
+    case (o: JSAny): {
+      return o;
+    }
+    case (o: Hole): {
+      return o;
+    }
+    case (Object): {
+      goto CastError;
+    }
+  }
+}
+
 Cast<JSAny|TheHole>(o: Object): JSAny|TheHole labels CastError {
   typeswitch (o) {
     case (o: JSAny): {
