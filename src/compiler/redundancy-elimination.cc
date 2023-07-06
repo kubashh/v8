@@ -34,7 +34,7 @@ Reduction RedundancyElimination::Reduce(Node* node) {
     case IrOpcode::kCheckHeapObject:
     case IrOpcode::kCheckIf:
     case IrOpcode::kCheckInternalizedString:
-    case IrOpcode::kCheckNotTaggedHole:
+    case IrOpcode::kCheckNotTaggedTheHole:
     case IrOpcode::kCheckNumber:
     case IrOpcode::kCheckReceiver:
     case IrOpcode::kCheckReceiverOrNullOrUndefined:

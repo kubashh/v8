@@ -2365,7 +2365,7 @@ Type Typer::Visitor::TypeCheckFloat64Hole(Node* node) {
   return typer_->operation_typer_.CheckFloat64Hole(Operand(node, 0));
 }
 
-Type Typer::Visitor::TypeCheckNotTaggedHole(Node* node) {
+Type Typer::Visitor::TypeCheckNotTaggedTheHole(Node* node) {
   Type type = Operand(node, 0);
   type = Type::Intersect(type, Type::NonInternal(), zone());
   return type;
@@ -2388,9 +2388,9 @@ Type Typer::Visitor::TypeConvertReceiver(Node* node) {
   return typer_->operation_typer_.ConvertReceiver(arg);
 }
 
-Type Typer::Visitor::TypeConvertTaggedHoleToUndefined(Node* node) {
+Type Typer::Visitor::TypeConvertTaggedTheHoleToUndefined(Node* node) {
   Type type = Operand(node, 0);
-  return typer_->operation_typer()->ConvertTaggedHoleToUndefined(type);
+  return typer_->operation_typer()->ConvertTaggedTheHoleToUndefined(type);
 }
 
 Type Typer::Visitor::TypeCheckEqualsInternalizedString(Node* node) {

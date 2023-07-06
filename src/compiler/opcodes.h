@@ -441,7 +441,7 @@
   V(CheckIf)                            \
   V(CheckInternalizedString)            \
   V(CheckMaps)                          \
-  V(CheckNotTaggedHole)                 \
+  V(CheckNotTaggedTheHole)              \
   V(CheckNumber)                        \
   V(CheckReceiver)                      \
   V(CheckReceiverOrNullOrUndefined)     \
@@ -451,7 +451,7 @@
   V(CheckTurboshaftTypeOf)              \
   V(CompareMaps)                        \
   V(ConvertReceiver)                    \
-  V(ConvertTaggedHoleToUndefined)       \
+  V(ConvertTaggedTheHoleToUndefined)    \
   V(DateNow)                            \
   V(DoubleArrayMax)                     \
   V(DoubleArrayMin)                     \

@@ -815,7 +815,7 @@ OpIndex GraphBuilder::Process(
           ConvertJSPrimitiveToUntaggedOp::UntaggedKind::kFloat64,
           ConvertJSPrimitiveToUntaggedOp::InputAssumptions::kPlainPrimitive);
 
-    case IrOpcode::kConvertTaggedHoleToUndefined: {
+    case IrOpcode::kConvertTaggedTheHoleToUndefined: {
       V<Object> input = Map(node->InputAt(0));
       V<Word32> is_the_hole = __ TaggedEqual(
           input, __ HeapConstant(isolate->factory()->the_hole_value()));
@@ -2036,7 +2036,7 @@ OpIndex GraphBuilder::Process(
           CheckFloat64HoleParametersOf(node->op()).feedback());
     }
 
-    case IrOpcode::kCheckNotTaggedHole: {
+    case IrOpcode::kCheckNotTaggedTheHole: {
       DCHECK(dominating_frame_state.valid());
       V<Object> value = Map(node->InputAt(0));
       __ DeoptimizeIf(
