@@ -34,6 +34,24 @@
       "parentUuid": "1f25968d_d8669bb9",
       "revId": "cb00db4dba6c4a1900700d134e2293c59155db28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25013e37_d46f0cbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1580807
+      },
+      "writtenOn": "2023-07-06T07:50:10Z",
+      "side": 1,
+      "message": "Thanks for the lead, I\u0027ll take a look. In the meantime I put up a PR on the Node.js side to switch us off kEagerCompile, since it wasn\u0027t working anyway: https://github.com/nodejs/node/pull/48671\n\n(I think reverting this CL is also a fine option, I slightly prefer just landing the Node.js PR rather than putting the broken behavior back in V8.)",
+      "parentUuid": "74db97c1_f4ac3e5b",
+      "revId": "cb00db4dba6c4a1900700d134e2293c59155db28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
