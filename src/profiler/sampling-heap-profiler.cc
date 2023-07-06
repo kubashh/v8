@@ -85,7 +85,7 @@ void SamplingHeapProfiler::SampleObject(Address soon_object, size_t size) {
   DCHECK(obj.is_null() ||
          (obj->IsSmi() ||
           (V8_EXTERNAL_CODE_SPACE_BOOL && IsCodeSpaceObject(heap_object)) ||
-          !obj->IsTheHole()));
+          !obj->IsHole()));
   auto loc = Local<v8::Value>::FromSlot(obj.location());
 
   AllocationNode* node = AddStack();

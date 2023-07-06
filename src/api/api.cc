@@ -1179,7 +1179,7 @@ bool Data::IsValue() const {
   i::Object self = *Utils::OpenDirectHandle(this);
   if (self.IsSmi()) return true;
   i::HeapObject heap_object = i::HeapObject::cast(self);
-  DCHECK(!heap_object.IsTheHole());
+  DCHECK(!heap_object.IsHole());
   if (heap_object.IsSymbol()) {
     return !i::Symbol::cast(heap_object).is_private();
   }
