@@ -146,6 +146,30 @@
       },
       "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a18664d0_14277f33",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 5139,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-06T13:43:52Z",
+      "side": 1,
+      "message": "ok, as discussed offline this goes with your approach (b) and the maps from the cache are already finished slack tracking.",
+      "parentUuid": "4dad7760_82fdc55e",
+      "range": {
+        "startLine": 5139,
+        "startChar": 31,
+        "endLine": 5139,
+        "endChar": 70
+      },
+      "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
