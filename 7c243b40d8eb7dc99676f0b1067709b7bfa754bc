@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a9340654_dbbde579",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 20
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-06T09:56:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e92d7755_a36e4d89",
+      "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c5d815ea_f937fd12",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 20
@@ -48,6 +66,30 @@
       "writtenOn": "2023-07-04T13:56:35Z",
       "side": 1,
       "message": "I\u0027m afraid there might be a window when the slack tracking is not over yet and thus not filling the object slack with one-pointer fillers might confuse GC once the slack tracking will be finished (GC will not expect to see undefined values after this object shrinks).\n\nWe should either use `kWithSlackTracking` version or ensure that the `result_map` is guaranteed to have a completed slack tracking (presumably during handler creation) and use `kNoSlackTracking`.\n\nWhile we are here... note that `Factory::ObjectLiteralMapFromCache()` currently \"inherits\" slack tracking state from `object_function()-\u003einitial_map()` even when it creates new maps. We might want to explicitly finish slack tracking for them or start it for newly created maps.",
+      "range": {
+        "startLine": 5139,
+        "startChar": 31,
+        "endLine": 5139,
+        "endChar": 70
+      },
+      "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d3ab0b8_d49453e7",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 5139,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-06T09:56:10Z",
+      "side": 1,
+      "message": "uhm, awesome comment! Agreed, the whole approach here was kinda questionable.\n\nI think there are two cases:\n\n1. we clone objects and the clones have a root map. -\u003e we can just normally participate in the slack tracking.\n2. we clone objects and reuse the source map 1:1. this mostly (only?) happens for constructors. -\u003e here we can\u0027t do slack tracking as we don\u0027t start with a root map. probably the best approach is to eagerly finish slack tracking and decide on a final size. if not, we would have to pick a different (root) map...\n\nI now switched to this approach, wdyt?",
+      "parentUuid": "6c4ac2cd_d440747c",
       "range": {
         "startLine": 5139,
         "startChar": 31,
