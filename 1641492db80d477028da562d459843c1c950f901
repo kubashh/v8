@@ -50,6 +50,24 @@
       "message": "lgtm - does this fix have anything to do with the v8.log probe not working or is it orthogonal?",
       "revId": "1641492db80d477028da562d459843c1c950f901",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de6be46a_717ec859",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-07-06T07:40:07Z",
+      "side": 1,
+      "message": "Yes this is to fix v8.log. In the meantime you can manually add `--prof` as js-flags in cb to workaround until this CL lands/rolls.",
+      "parentUuid": "02d0d067_b252a48c",
+      "revId": "1641492db80d477028da562d459843c1c950f901",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
