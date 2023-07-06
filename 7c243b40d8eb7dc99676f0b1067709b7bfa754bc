@@ -98,6 +98,30 @@
       },
       "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4033fce7_cf19b83d",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 5139,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-06T10:01:08Z",
+      "side": 1,
+      "message": "I guess the non-root case can also happen for object literals (and not just constructors). it might be bad to prematurely end slack tracking. maybe it would be better to not re-use the source map if it is still slack tracking and instead use one from the map cache?",
+      "parentUuid": "1d3ab0b8_d49453e7",
+      "range": {
+        "startLine": 5139,
+        "startChar": 31,
+        "endLine": 5139,
+        "endChar": 70
+      },
+      "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
