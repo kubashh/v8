@@ -109,6 +109,28 @@ class JSAtomicsMutex
     bool locked_;
   };
 
+  // A non-copyable wrapper class that provides an RAII-style mechanism for
+  // Owning the JSAtomicsMutex potentially asynchronously via its asyncLock
+  // method.
+  //
+  // The mutex is attempted to be locked via TryLock when a TryLockGuard object
+  // is created. If the mutex was acquired, then it is released when the
+  // TryLockGuard object is destructed.
+  class V8_NODISCARD AsyncLockGuard final {
+   public:
+    inline AsyncLockGuard(Isolate* isolate, Handle<JSAtomicsMutex> mutex);
+    AsyncLockGuard(const AsyncLockGuard&) = delete;
+    AsyncLockGuard& operator=(const AsyncLockGuard&) = delete;
+    inline ~AsyncLockGuard();
+    bool locked() const { return locked_; }
+    void Enqueue();
+
+   private:
+    Isolate* isolate_;
+    Handle<JSAtomicsMutex> mutex_;
+    bool locked_;
+  };
+
   DECL_CAST(JSAtomicsMutex)
   DECL_PRINTER(JSAtomicsMutex)
   EXPORT_DECL_VERIFIER(JSAtomicsMutex)

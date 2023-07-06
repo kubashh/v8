@@ -49,6 +49,14 @@ JSAtomicsMutex::TryLockGuard::~TryLockGuard() {
   if (locked_) mutex_->Unlock(isolate_);
 }
 
+JSAtomicsMutex::AsyncLockGuard::AsyncLockGuard(Isolate* isolate,
+                                               Handle<JSAtomicsMutex> mutex)
+    : isolate_(isolate), mutex_(mutex), locked_(mutex->TryLock()) {}
+
+JSAtomicsMutex::AsyncLockGuard::~AsyncLockGuard() {
+  if (locked_) mutex_->Unlock(isolate_);
+}
+
 // static
 void JSAtomicsMutex::Lock(Isolate* requester, Handle<JSAtomicsMutex> mutex) {
   DisallowGarbageCollection no_gc;

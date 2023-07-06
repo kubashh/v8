@@ -56,6 +56,40 @@ BUILTIN(AtomicsMutexLock) {
   return *result;
 }
 
+BUILTIN(AtomicsMutexLockAsync) {
+  DCHECK(v8_flags.harmony_struct);
+  constexpr char method_name[] = "Atomics.Mutex.lockAsync";
+  HandleScope scope(isolate);
+
+  Handle<Object> js_mutex_obj = args.atOrUndefined(isolate, 1);
+  if (!js_mutex_obj->IsJSAtomicsMutex()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kMethodInvokedOnWrongType,
+                              isolate->factory()->NewStringFromAsciiChecked(
+                                  method_name)));
+  }
+  Handle<JSAtomicsMutex> js_mutex = Handle<JSAtomicsMutex>::cast(js_mutex_obj);
+  Handle<Object> run_under_lock = args.atOrUndefined(isolate, 2);
+  if (!run_under_lock->IsCallable()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kNotCallable, run_under_lock));
+  }
+
+  Handle<Object> result;
+
+  JSAtomicsMutex::AsyncLockGuard lock_guard(isolate, js_mutex);
+  if (lock_guard.locked()) {
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+        isolate, result,
+        Execution::Call(isolate, run_under_lock,
+                        isolate->factory()->undefined_value(), 0, nullptr));
+  } else {
+    lock_guard.Enqueue(run_under_lock);
+  }
+
+  return *result;
+}
+
 BUILTIN(AtomicsMutexTryLock) {
   DCHECK(v8_flags.harmony_struct);
   constexpr char method_name[] = "Atomics.Mutex.tryLock";

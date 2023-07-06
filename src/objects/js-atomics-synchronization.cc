@@ -303,6 +303,44 @@ class V8_NODISCARD WaiterQueueNode final {
 
 }  // namespace detail
 
+JSAtomicsMutex::AsyncLockGuard::Enqueue() {
+  Isolate* requester = isolate_;
+  std::atomic<StateT>* state = mutex_->AtomicStatePtr();
+
+  WaiterQueueNode this_waiter(requester);
+
+  {
+    // Try to acquire the queue lock, which is itself a spinlock.
+    current_state = state->load(std::memory_order_relaxed);
+    for (;;) {
+      if ((current_state & kIsLockedBit) &&
+          TryLockWaiterQueueExplicit(state, current_state)) {
+        break;
+      }
+      YIELD_PROCESSOR;
+    }
+
+    // With the queue lock held, enqueue the requester onto the waiter queue.
+    this_waiter.should_wait = true;
+    WaiterQueueNode* waiter_head =
+        WaiterQueueNode::DestructivelyDecodeHead<JSAtomicsMutex>(requester,
+                                                                 current_state);
+    WaiterQueueNode::Enqueue(&waiter_head, &this_waiter);
+
+    // Release the queue lock and install the new waiter queue head by
+    // creating a new state.
+    DCHECK_EQ(state->load(), current_state | kIsWaiterQueueLockedBit);
+    StateT new_state =
+        WaiterQueueNode::EncodeHead<JSAtomicsMutex>(requester, waiter_head);
+    // The lock is held, just not by us, so don't set the current thread id as
+    // the owner.
+    DCHECK(current_state & kIsLockedBit);
+    DCHECK(!mutex_->IsCurrentThreadOwner());
+    new_state |= kIsLockedBit;
+    state->store(new_state, std::memory_order_release);
+  }
+}
+
 using detail::WaiterQueueNode;
 
 // static
