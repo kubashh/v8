@@ -125,6 +125,8 @@ namespace internal {
                                                                                \
   /* Construct */                                                              \
   /* ES6 section 9.2.2 [[Construct]] ( argumentsList, newTarget) */            \
+  ASM(FastConstructFunction, Void)                                             \
+  ASM(FastConstructBuiltin, Void)                                              \
   ASM(ConstructFunction, JSTrampoline)                                         \
   /* ES6 section 9.4.1.2 [[Construct]] (argumentsList, newTarget) */           \
   ASM(ConstructBoundFunction, JSTrampoline)                                    \

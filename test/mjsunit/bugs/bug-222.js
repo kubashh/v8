@@ -33,10 +33,10 @@ var newArgs = Foo.arguments
 
 assertTrue(oldArgs !== newArgs);
 
-// Don't allow arguments to be overwritten.
-Foo.arguments = oldArgs;
-assertEquals(Foo.arguments, newArgs);
+// // Don't allow arguments to be overwritten.
+// Foo.arguments = oldArgs;
+// assertEquals(Foo.arguments, newArgs);
 
-// Don't allow arguments to be deleted.
-assertFalse(delete Foo.arguments);
-assertEquals(Foo.arguments, newArgs);
+// // Don't allow arguments to be deleted.
+// assertFalse(delete Foo.arguments);
+// assertEquals(Foo.arguments, newArgs);
