@@ -39,6 +39,30 @@
       },
       "revId": "d7658b94d3c4e3caa22404e07534394ee6a79f47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbde9454_8aa4f244",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-06T16:01:03Z",
+      "side": 1,
+      "message": "As discussed offline, this would mean we would also need to duplicate the `SetLiveBytes(0)` invocation everywhere. Letting it as-is for now.",
+      "parentUuid": "6ed65b9d_be916421",
+      "range": {
+        "startLine": 512,
+        "startChar": 13,
+        "endLine": 512,
+        "endChar": 26
+      },
+      "revId": "d7658b94d3c4e3caa22404e07534394ee6a79f47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
