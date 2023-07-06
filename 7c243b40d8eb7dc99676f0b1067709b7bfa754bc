@@ -122,6 +122,30 @@
       },
       "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dad7760_82fdc55e",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 5139,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-06T11:41:55Z",
+      "side": 1,
+      "message": "Ah, right! It\u0027s even more complicated than I thought.\n\nThere are the following options to address issues with (2):\na) ensure that the `result_map` has completed slack tracking (and then you can use `kNoSlackTracking` mode here),\nb) respect the slack tracking state of `result_map` but don\u0027t perform a slack tracking step,\nc) respect the slack tracking state of `result_map` and perform a slack tracking step on the `result_map`\u0027s root map which is either\n  c.1) found dynamically by walking back the `result_map`\u0027s transition tree or\n  c.2) cached in the CloneIC handler in addition to `result_map`.\n\nFor the case (1) where the `result_map` is the root map any of the options above should work fine.\n\n\n(a) is the easiest approach, but I agree that it seems like an overkill which will affect things outside CloneIC.\n(b) easy enough to support, the only drawback is that there might be nobody to complete slack tracking for maps taken from the MapCache. But in this case we can ensure that the all the maps created in `Factory::ObjectLiteralMapFromCache()` has a finished slack tracking.\n(c) most precise option but messy.\n\nI\u0027m leaning towards (b) + `Factory::ObjectLiteralMapFromCache()` fix for this CL as it\u0027s easy enough and doesn\u0027t affect things outside CloneIC. And later we can consider (c) based on CloneIC usage stats on the benchmarks.",
+      "parentUuid": "1d3ab0b8_d49453e7",
+      "range": {
+        "startLine": 5139,
+        "startChar": 31,
+        "endLine": 5139,
+        "endChar": 70
+      },
+      "revId": "7c243b40d8eb7dc99676f0b1067709b7bfa754bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
