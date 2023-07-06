@@ -1081,17 +1081,8 @@ class WasmGenerator {
           builder_->EmitU32V(index);
           break;
         case kExprArrayNewFixed: {
-          uint32_t element_count;
-          uint8_t diceroll = data->get<uint8_t>();
-          if (diceroll < 250 || element_type.is_non_nullable()) {
-            // Most generated arrays will be small and fast...
-            element_count = diceroll % 25;
-          } else {
-            // ...but we also want to test some huge arrays.
-            element_count =
-                data->get<uint16_t>() % kV8MaxWasmArrayNewFixedLength;
-          }
-          for (uint32_t i = 0; i < element_count; ++i) {
+          int element_count = data->get<uint8_t>() % 25;
+          for (int i = 0; i < element_count; ++i) {
             Generate(element_type.Unpacked(), data);
           }
           builder_->EmitWithPrefix(kExprArrayNewFixed);
