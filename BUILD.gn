@@ -578,8 +578,8 @@ if (v8_builtins_profiling_log_file == "default") {
   #   are accessed,
   # * v8_enable_webassembly because it changes the set of opcodes which affects
   #   graphs hashes,
-  if (v8_enable_builtins_optimization && !v8_enable_builtins_profiling &&
-      !is_debug && !dcheck_always_on && v8_enable_webassembly) {
+  if (!v8_enable_builtins_profiling && !is_debug && !dcheck_always_on &&
+      v8_enable_webassembly) {
     # This is about function arguments evaluation order, which makes node IDs
     # not predictable for subgraphs like Op1(Op2(), Op3()) and as a result
     # different graph hashes.
