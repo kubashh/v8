@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef94271_09bccec8",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-06T13:06:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b2aed28_e7af636e",
+      "range": {
+        "startLine": 525,
+        "startChar": 26,
+        "endLine": 525,
+        "endChar": 41
+      },
+      "revId": "6f46615a6172588c94f1b2243885b3dd9cfdc0de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cece6c73_17e8db68",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-07-06T12:50:34Z",
       "side": 1,
       "message": "How do we guarantee this?",
+      "range": {
+        "startLine": 415,
+        "startChar": 4,
+        "endLine": 415,
+        "endChar": 10
+      },
+      "revId": "6f46615a6172588c94f1b2243885b3dd9cfdc0de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e99a6816_2d602582",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-06T13:06:57Z",
+      "side": 1,
+      "message": "I was relying on a similar DCHECK in `Heap::TearDown` [1], assumed that it\u0027s guaranteed to hold (since we never see it crashing) and copied it here for documentation (we would get races if we clear the remembered set marking handler if concurrent marking is running in the background).\n\n[1] https://source.chromium.org/chromium/chromium/src/+/refs/heads/main:v8/src/heap/heap.cc;drc\u003d89758767fb0fae96a59967eb47e7921ce49fafcb;l\u003d5807",
+      "parentUuid": "cece6c73_17e8db68",
       "range": {
         "startLine": 415,
         "startChar": 4,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1777b7c_9a6d41fd",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-06T13:06:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71d90e11_64d48d1d",
+      "range": {
+        "startLine": 825,
+        "startChar": 7,
+        "endLine": 825,
+        "endChar": 8
+      },
+      "revId": "6f46615a6172588c94f1b2243885b3dd9cfdc0de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e08dca0e_c5b40bd2",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-07-06T12:50:34Z",
       "side": 1,
       "message": "Why do we need this call? I think it\u0027s covered by L849 as well which would also show that it\u0027s not running in parallel anymore.",
+      "range": {
+        "startLine": 837,
+        "startChar": 6,
+        "endLine": 837,
+        "endChar": 26
+      },
+      "revId": "6f46615a6172588c94f1b2243885b3dd9cfdc0de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5db80b72_f04c0423",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-06T13:06:57Z",
+      "side": 1,
+      "message": "This one is in case we\u0027re running with concurrent_minor_ms_marking enabled (which should be the default \"soon\") but with concurrent_marking and parallel_marking disabled.\nIn that case we would not have marked anything so far.\nCSS relies on having a populated mark bitmap, so this call to DrainMarkingWorklist is a fallback to guarantee the bitmap is as populated as we can before we call into MarkRootsFromConservativeStack.",
+      "parentUuid": "e08dca0e_c5b40bd2",
       "range": {
         "startLine": 837,
         "startChar": 6,
