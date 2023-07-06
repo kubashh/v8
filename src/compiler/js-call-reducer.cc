@@ -485,7 +485,7 @@ class IteratingArrayBuiltinReducerAssembler : public JSCallReducerAssembler {
     if (!IsHoleyElementsKind(kind)) return o;
 
     auto if_not_hole = MakeLabel(MachineRepresentationOf<Vars>::value...);
-    BranchWithHint(HoleCheck(kind, o), continue_label, &if_not_hole,
+    BranchWithHint(TheHoleCheck(kind, o), continue_label, &if_not_hole,
                    BranchHint::kFalse, vars...);
 
     // The contract is that we don't leak "the hole" into "user JavaScript",
@@ -514,7 +514,7 @@ class IteratingArrayBuiltinReducerAssembler : public JSCallReducerAssembler {
     return LoadField<Smi>(AccessBuilder::ForFixedArrayLength(), o);
   }
 
-  TNode<Boolean> HoleCheck(ElementsKind kind, TNode<Object> v) {
+  TNode<Boolean> TheHoleCheck(ElementsKind kind, TNode<Object> v) {
     return IsDoubleElementsKind(kind)
                ? NumberIsFloat64Hole(TNode<Number>::UncheckedCast(v))
                : IsTheHole(v);
@@ -537,7 +537,7 @@ class IteratingArrayBuiltinReducerAssembler : public JSCallReducerAssembler {
       return CheckFloat64Hole(number, CheckFloat64HoleMode::kAllowReturnHole);
     }
 
-    return ConvertTaggedHoleToUndefined(value);
+    return ConvertTaggedTheHoleToUndefined(value);
   }
 };
 
@@ -1684,7 +1684,7 @@ TNode<Object> IteratingArrayBuiltinReducerAssembler::ReduceArrayPrototypeReduce(
       std::tie(k, element) = SafeLoadElement(kind, receiver, k);
 
       auto continue_label = MakeLabel();
-      GotoIf(HoleCheck(kind, element), &continue_label);
+      GotoIf(TheHoleCheck(kind, element), &continue_label);
       Goto(&found_initial_element, k, TypeGuardNonInternal(element));
 
       Bind(&continue_label);
@@ -4516,7 +4516,7 @@ Reduction JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpread(
                 CheckFloat64HoleMode::kAllowReturnHole, feedback_source),
             load, effect, control);
       } else {
-        load = graph()->NewNode(simplified()->ConvertTaggedHoleToUndefined(),
+        load = graph()->NewNode(simplified()->ConvertTaggedTheHoleToUndefined(),
                                 load);
       }
     }
@@ -5964,8 +5964,8 @@ Reduction JSCallReducer::ReduceArrayPrototypePop(Node* node) {
     // Convert the hole to undefined. Do this last, so that we can optimize
     // conversion operator via some smart strength reduction in many cases.
     if (IsHoleyElementsKind(kind)) {
-      value =
-          graph()->NewNode(simplified()->ConvertTaggedHoleToUndefined(), value);
+      value = graph()->NewNode(simplified()->ConvertTaggedTheHoleToUndefined(),
+                               value);
     }
 
     controls_to_merge.push_back(control);
@@ -6206,8 +6206,8 @@ Reduction JSCallReducer::ReduceArrayPrototypeShift(Node* node) {
     // Convert the hole to undefined. Do this last, so that we can optimize
     // conversion operator via some smart strength reduction in many cases.
     if (IsHoleyElementsKind(kind)) {
-      value =
-          graph()->NewNode(simplified()->ConvertTaggedHoleToUndefined(), value);
+      value = graph()->NewNode(simplified()->ConvertTaggedTheHoleToUndefined(),
+                               value);
     }
 
     controls_to_merge.push_back(control);
@@ -6572,7 +6572,7 @@ Reduction JSCallReducer::ReduceArrayIteratorPrototypeNext(Node* node) {
         if (elements_kind == HOLEY_ELEMENTS ||
             elements_kind == HOLEY_SMI_ELEMENTS) {
           value_true = graph()->NewNode(
-              simplified()->ConvertTaggedHoleToUndefined(), value_true);
+              simplified()->ConvertTaggedTheHoleToUndefined(), value_true);
         } else if (elements_kind == HOLEY_DOUBLE_ELEMENTS) {
           // TODO(6587): avoid deopt if not all uses of value are truncated.
           CheckFloat64HoleMode mode = CheckFloat64HoleMode::kAllowReturnHole;

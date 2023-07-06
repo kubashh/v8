@@ -42,8 +42,8 @@ Reduction TypedOptimization::Reduce(Node* node) {
       return ReduceCheckHeapObject(node);
     case IrOpcode::kCheckBounds:
       return ReduceCheckBounds(node);
-    case IrOpcode::kCheckNotTaggedHole:
-      return ReduceCheckNotTaggedHole(node);
+    case IrOpcode::kCheckNotTaggedTheHole:
+      return ReduceCheckNotTaggedTheHole(node);
     case IrOpcode::kCheckMaps:
       return ReduceCheckMaps(node);
     case IrOpcode::kCheckNumber:
@@ -209,7 +209,7 @@ Reduction TypedOptimization::ReduceCheckBounds(Node* node) {
   return NoChange();
 }
 
-Reduction TypedOptimization::ReduceCheckNotTaggedHole(Node* node) {
+Reduction TypedOptimization::ReduceCheckNotTaggedTheHole(Node* node) {
   Node* const input = NodeProperties::GetValueInput(node, 0);
   Type const input_type = NodeProperties::GetType(input);
   if (!input_type.Maybe(Type::TheHole())) {

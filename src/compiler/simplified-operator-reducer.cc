@@ -157,7 +157,7 @@ Reduction SimplifiedOperatorReducer::Reduce(Node* node) {
     case IrOpcode::kCheckedTaggedToInt32:
     case IrOpcode::kCheckedTaggedSignedToInt32: {
       NodeMatcher m(node->InputAt(0));
-      if (m.IsConvertTaggedHoleToUndefined()) {
+      if (m.IsConvertTaggedTheHoleToUndefined()) {
         node->ReplaceInput(0, m.InputAt(0));
         return Changed(node);
       }
@@ -173,7 +173,7 @@ Reduction SimplifiedOperatorReducer::Reduce(Node* node) {
     }
     case IrOpcode::kCheckNumber: {
       NodeMatcher m(node->InputAt(0));
-      if (m.IsConvertTaggedHoleToUndefined()) {
+      if (m.IsConvertTaggedTheHoleToUndefined()) {
         node->ReplaceInput(0, m.InputAt(0));
         return Changed(node);
       }
@@ -202,7 +202,7 @@ Reduction SimplifiedOperatorReducer::Reduce(Node* node) {
       if (m.IsCheckSmi()) {
         ReplaceWithValue(node, input);
         return Replace(input);
-      } else if (m.IsConvertTaggedHoleToUndefined()) {
+      } else if (m.IsConvertTaggedTheHoleToUndefined()) {
         node->ReplaceInput(0, m.InputAt(0));
         return Changed(node);
       }

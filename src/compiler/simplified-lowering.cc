@@ -497,8 +497,8 @@ class RepresentationSelector {
         break;
       }
 
-      case IrOpcode::kConvertTaggedHoleToUndefined:
-        new_type = op_typer_.ConvertTaggedHoleToUndefined(
+      case IrOpcode::kConvertTaggedTheHoleToUndefined:
+        new_type = op_typer_.ConvertTaggedTheHoleToUndefined(
             FeedbackTypeOf(node->InputAt(0)));
         break;
 
@@ -4264,7 +4264,7 @@ class RepresentationSelector {
         }
         return;
       }
-      case IrOpcode::kCheckNotTaggedHole: {
+      case IrOpcode::kCheckNotTaggedTheHole: {
         VisitUnop<T>(node, UseInfo::AnyTagged(),
                      MachineRepresentation::kTagged);
         return;
@@ -4275,7 +4275,7 @@ class RepresentationSelector {
             MachineRepresentation::kTaggedPointer);
         return;
       }
-      case IrOpcode::kConvertTaggedHoleToUndefined: {
+      case IrOpcode::kConvertTaggedTheHoleToUndefined: {
         if (InputIs(node, Type::NumberOrOddball()) &&
             truncation.IsUsedAsWord32()) {
           // Propagate the Word32 truncation.

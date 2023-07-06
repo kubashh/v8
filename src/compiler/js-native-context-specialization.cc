@@ -3213,7 +3213,7 @@ JSNativeContextSpecialization::BuildElementAccess(
     // For growing stores we validate the {index} below.
   } else if (keyed_mode.IsLoad() &&
              keyed_mode.load_mode() == LOAD_IGNORE_OUT_OF_BOUNDS &&
-             CanTreatHoleAsUndefined(receiver_maps)) {
+             CanTreatTheHoleAsUndefined(receiver_maps)) {
     // Check that the {index} is a valid array index, we do the actual
     // bounds check below and just skip the store below if it's out of
     // bounds for the {receiver}.
@@ -3258,7 +3258,7 @@ JSNativeContextSpecialization::BuildElementAccess(
 
     // Check if we can return undefined for out-of-bounds loads.
     if (keyed_mode.load_mode() == LOAD_IGNORE_OUT_OF_BOUNDS &&
-        CanTreatHoleAsUndefined(receiver_maps)) {
+        CanTreatTheHoleAsUndefined(receiver_maps)) {
       Node* check =
           graph()->NewNode(simplified()->NumberLessThan(), index, length);
       Node* branch =
@@ -3291,8 +3291,8 @@ JSNativeContextSpecialization::BuildElementAccess(
         if (elements_kind == HOLEY_ELEMENTS ||
             elements_kind == HOLEY_SMI_ELEMENTS) {
           // Turn the hole into undefined.
-          vtrue = graph()->NewNode(simplified()->ConvertTaggedHoleToUndefined(),
-                                   vtrue);
+          vtrue = graph()->NewNode(
+              simplified()->ConvertTaggedTheHoleToUndefined(), vtrue);
         } else if (elements_kind == HOLEY_DOUBLE_ELEMENTS) {
           // Return the signaling NaN hole directly if all uses are
           // truncating.
@@ -3326,20 +3326,20 @@ JSNativeContextSpecialization::BuildElementAccess(
       if (elements_kind == HOLEY_ELEMENTS ||
           elements_kind == HOLEY_SMI_ELEMENTS) {
         // Check if we are allowed to turn the hole into undefined.
-        if (CanTreatHoleAsUndefined(receiver_maps)) {
+        if (CanTreatTheHoleAsUndefined(receiver_maps)) {
           // Turn the hole into undefined.
-          value = graph()->NewNode(simplified()->ConvertTaggedHoleToUndefined(),
-                                   value);
+          value = graph()->NewNode(
+              simplified()->ConvertTaggedTheHoleToUndefined(), value);
         } else {
           // Bailout if we see the hole.
-          value = effect = graph()->NewNode(simplified()->CheckNotTaggedHole(),
-                                            value, effect, control);
+          value = effect = graph()->NewNode(
+              simplified()->CheckNotTaggedTheHole(), value, effect, control);
         }
       } else if (elements_kind == HOLEY_DOUBLE_ELEMENTS) {
         // Perform the hole check on the result.
         CheckFloat64HoleMode mode = CheckFloat64HoleMode::kNeverReturnHole;
         // Check if we are allowed to return the hole directly.
-        if (CanTreatHoleAsUndefined(receiver_maps)) {
+        if (CanTreatTheHoleAsUndefined(receiver_maps)) {
           // Return the signaling NaN hole directly if all uses are
           // truncating.
           mode = CheckFloat64HoleMode::kAllowReturnHole;
@@ -3385,7 +3385,7 @@ JSNativeContextSpecialization::BuildElementAccess(
                            checked, etrue, if_true);
 
       Node* vtrue;
-      if (CanTreatHoleAsUndefined(receiver_maps)) {
+      if (CanTreatTheHoleAsUndefined(receiver_maps)) {
         if (elements_kind == HOLEY_ELEMENTS ||
             elements_kind == HOLEY_SMI_ELEMENTS) {
           // Check if we are allowed to turn the hole into undefined.
@@ -3403,8 +3403,8 @@ JSNativeContextSpecialization::BuildElementAccess(
         if (elements_kind == HOLEY_ELEMENTS ||
             elements_kind == HOLEY_SMI_ELEMENTS) {
           // Bailout if we see the hole.
-          etrue = graph()->NewNode(simplified()->CheckNotTaggedHole(), element,
-                                   etrue, if_true);
+          etrue = graph()->NewNode(simplified()->CheckNotTaggedTheHole(),
+                                   element, etrue, if_true);
         } else {
           etrue = graph()->NewNode(
               simplified()->CheckFloat64Hole(
@@ -3971,7 +3971,7 @@ Node* JSNativeContextSpecialization::BuildCheckEqualsName(NameRef name,
                           effect, control);
 }
 
-bool JSNativeContextSpecialization::CanTreatHoleAsUndefined(
+bool JSNativeContextSpecialization::CanTreatTheHoleAsUndefined(
     ZoneVector<MapRef> const& receiver_maps) {
   // Check if all {receiver_maps} have one of the initial Array.prototype
   // or Object.prototype objects as their prototype (in any of the current

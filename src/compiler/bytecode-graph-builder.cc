@@ -1529,6 +1529,7 @@ void BytecodeGraphBuilder::VisitLdaNull() {
 }
 
 void BytecodeGraphBuilder::VisitLdaTheHole() {
+  // TODO(sroettger): should this be any hole or the generic hole? And below
   Node* node = jsgraph()->TheHoleConstant();
   environment()->BindAccumulator(node);
 }
