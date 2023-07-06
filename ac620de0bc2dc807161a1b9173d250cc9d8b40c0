@@ -16,6 +16,23 @@
       "message": "@clemensb@chromium.org: This would be the change to not get reproducers with huge arrays from the fuzzer. Feel free to +1 and merge it if you think the cost of the large reproducers are higher than the benefit of having coverage for this special case.\nI\u0027m fine either way.",
       "revId": "ac620de0bc2dc807161a1b9173d250cc9d8b40c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deeec91f_dc4bd7f5",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-07-06T12:18:39Z",
+      "side": 1,
+      "message": "What about doing a `std::min(data-\u003eget\u003cuint8_t\u003e(), data-\u003esize())`?",
+      "revId": "ac620de0bc2dc807161a1b9173d250cc9d8b40c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
