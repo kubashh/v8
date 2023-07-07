@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f3cc1a4_6f51dede",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-07-07T18:07:35Z",
+      "side": 1,
+      "message": "PTAL. Patch 1-5 are rebased onto https://crrev.com/c/4665581 which showed these failures deterministically. Patch 1 is just whitespace to show the bot fail.\nPatch 3 extends the test case (shown in a presubmit run). On patch 5 we run the trybot again to show that it passes (hopefully... running while I write.)\n\nI\u0027m going to rebase it back to main if the bot passes...",
+      "revId": "04fad35824fd97ab31a07d28587233899449be79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
