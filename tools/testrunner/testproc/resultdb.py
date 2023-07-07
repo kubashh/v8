@@ -42,6 +42,7 @@ class ResultDBIndicator(ProgressIndicator):
     }
 
     if result.output and result.output.duration:
+      # Bug?
       rdb_result.update(duration=f'{result.output.duration}s')
 
     if result.has_unexpected_output:
