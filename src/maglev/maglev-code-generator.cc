@@ -1522,6 +1522,7 @@ void MaglevCodeGenerator::EmitDeopts() {
       code_gen_state_.eager_deopts().size(), &eager_deopt_entry,
       code_gen_state_.lazy_deopts().size(), &lazy_deopt_entry);
 
+  masm()->Align(8);
   deopt_exit_start_offset_ = __ pc_offset();
 
   int deopt_index = 0;

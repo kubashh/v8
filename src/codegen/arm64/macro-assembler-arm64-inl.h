@@ -422,17 +422,20 @@ void MacroAssembler::BindJumpOrCallTarget(Label* label) {
 }
 
 void MacroAssembler::Bl(Label* label) {
+  EnsureModuloOffset(8, 4);
   DCHECK(allow_macro_instructions());
   bl(label);
 }
 
 void MacroAssembler::Blr(const Register& xn) {
+  EnsureModuloOffset(8, 4);
   DCHECK(allow_macro_instructions());
   DCHECK(!xn.IsZero());
   blr(xn);
 }
 
 void MacroAssembler::Br(const Register& xn) {
+  EnsureModuloOffset(8, 4);
   DCHECK(allow_macro_instructions());
   DCHECK(!xn.IsZero());
   br(xn);
