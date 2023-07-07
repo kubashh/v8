@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97fa7de1_0a09b8c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2023-07-07T12:56:53Z",
+      "side": 1,
+      "message": "This is an experiment for enforcing a certain offset for calls and indirect branches. As I mention in the description, it doesn\u0027t pass all tests, but should be enough to do some benchmarking.\n\nIn the benchmarking I did locally, the performance impact was minimal (for Octane and Jetstream2). Jetstream2 was even ~0.5% faster on a little core, but some of that could be noise.",
+      "revId": "f528416f1a8293383d43c9e3354741568939b4c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
