@@ -207,6 +207,12 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   // possible to align the pc offset to a multiple
   // of m. m must be a power of 2 (>= 4).
   void Align(int m);
+  // Make sure that the PC offset modulo `m` equals `offset`.
+  // For example, calling `EnsureModuloOffset(8, 4)` ensures that the PC
+  // modulo 8 equals 4 (and therefore the instruction after the
+  // next one will be _aligned_ to 8 bytes).
+  void EnsureModuloOffset(int m, int offset);
+  bool CheckModuloOffset(int m, int offset);
   // Insert the smallest number of zero bytes possible to align the pc offset
   // to a mulitple of m. m must be a power of 2 (>= 2).
   void DataAlign(int m);

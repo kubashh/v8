@@ -229,10 +229,10 @@ void JumpTableAssembler::EmitFarJumpSlot(Address target) {
   int kOffset = ENABLE_CONTROL_FLOW_INTEGRITY_BOOL ? 3 : 2;
   // Load from [pc + kOffset * kInstrSize] to {kTmpReg}, then branch there.
   ldr_pcrel(kTmpReg, kOffset);  // 1 instruction
-  br(kTmpReg);                  // 1 instruction
 #ifdef V8_ENABLE_CONTROL_FLOW_INTEGRITY
   nop();       // To keep the target below aligned to kSystemPointerSize.
 #endif
+  br(kTmpReg);  // 1 instruction
   dq(target);  // 8 bytes (== 2 instructions)
   static_assert(2 * kInstrSize == kSystemPointerSize);
   const int kSlotCount = ENABLE_CONTROL_FLOW_INTEGRITY_BOOL ? 6 : 4;

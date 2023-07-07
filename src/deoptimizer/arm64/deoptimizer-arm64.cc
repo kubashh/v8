@@ -9,11 +9,11 @@
 namespace v8 {
 namespace internal {
 
-const int Deoptimizer::kEagerDeoptExitSize = kInstrSize;
+const int Deoptimizer::kEagerDeoptExitSize = 2 * kInstrSize;
 #ifdef V8_ENABLE_CONTROL_FLOW_INTEGRITY
 const int Deoptimizer::kLazyDeoptExitSize = 2 * kInstrSize;
 #else
-const int Deoptimizer::kLazyDeoptExitSize = 1 * kInstrSize;
+const int Deoptimizer::kLazyDeoptExitSize = 2 * kInstrSize;
 #endif
 
 Float32 RegisterValues::GetFloatRegister(unsigned n) const {

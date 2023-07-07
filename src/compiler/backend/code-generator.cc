@@ -351,6 +351,7 @@ void CodeGenerator::AssembleCode() {
   // emitted before emitting the deoptimization exits.
   PrepareForDeoptimizationExits(&deoptimization_exits_);
 
+  masm()->Align(8);
   deopt_exit_start_offset_ = masm()->pc_offset();
 
   // Assemble deoptimization exits.

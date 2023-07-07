@@ -469,6 +469,26 @@ void Assembler::Align(int m) {
   }
 }
 
+void Assembler::EnsureModuloOffset(int m, int offset) {
+  // If not, the loop below won't terminate.
+  DCHECK(IsAligned(pc_offset(), kInstrSize));
+  DCHECK(m >= kInstrSize && base::bits::IsPowerOfTwo(m));
+  DCHECK(offset >= kInstrSize && base::bits::IsPowerOfTwo(offset));
+  DCHECK(offset <= m);
+  while ((pc_offset() & (m - 1)) != offset) {
+    nop();
+  }
+}
+
+bool Assembler::CheckModuloOffset(int m, int offset) {
+  // If not, the loop below won't terminate.
+  DCHECK(IsAligned(pc_offset(), kInstrSize));
+  DCHECK(m >= kInstrSize && base::bits::IsPowerOfTwo(m));
+  DCHECK(offset >= kInstrSize && base::bits::IsPowerOfTwo(offset));
+  DCHECK(offset <= m);
+  return ((pc_offset() & (m - 1)) == offset);
+}
+
 void Assembler::CodeTargetAlign() {
   // Preferred alignment of jump targets on some ARM chips.
   Align(8);
@@ -787,11 +807,13 @@ void Assembler::EndBlockVeneerPool() {
 }
 
 void Assembler::br(const Register& xn) {
+  DCHECK(CheckModuloOffset(8, 4));
   DCHECK(xn.Is64Bits());
   Emit(BR | Rn(xn));
 }
 
 void Assembler::blr(const Register& xn) {
+  DCHECK(CheckModuloOffset(8, 4));
   DCHECK(xn.Is64Bits());
   // The pattern 'blr xzr' is used as a guard to detect when execution falls
   // through the constant pool. It should not be emitted.
@@ -816,9 +838,15 @@ void Assembler::b(Label* label, Condition cond) {
   b(LinkAndGetInstructionOffsetTo(label), cond);
 }
 
-void Assembler::bl(int imm26) { Emit(BL | ImmUncondBranch(imm26)); }
+void Assembler::bl(int imm26) {
+  DCHECK(CheckModuloOffset(8, 4));
+  Emit(BL | ImmUncondBranch(imm26));
+}
 
-void Assembler::bl(Label* label) { bl(LinkAndGetInstructionOffsetTo(label)); }
+void Assembler::bl(Label* label) {
+  DCHECK(CheckModuloOffset(8, 4));
+  bl(LinkAndGetInstructionOffsetTo(label));
+}
 
 void Assembler::cbz(const Register& rt, int imm19) {
   Emit(SF(rt) | CBZ | ImmCmpBranch(imm19) | Rt(rt));
@@ -4521,6 +4549,7 @@ void Assembler::RecordRelocInfo(RelocInfo::Mode rmode, intptr_t data,
 }
 
 void Assembler::near_jump(int offset, RelocInfo::Mode rmode) {
+  EnsureModuloOffset(8, 4);
   BlockPoolsScope no_pool_before_b_instr(this);
   if (!RelocInfo::IsNoInfo(rmode))
     RecordRelocInfo(rmode, offset, NO_POOL_ENTRY);
@@ -4529,12 +4558,14 @@ void Assembler::near_jump(int offset, RelocInfo::Mode rmode) {
 
 void Assembler::near_call(int offset, RelocInfo::Mode rmode) {
   BlockPoolsScope no_pool_before_bl_instr(this);
+  EnsureModuloOffset(8, 4);
   if (!RelocInfo::IsNoInfo(rmode))
     RecordRelocInfo(rmode, offset, NO_POOL_ENTRY);
   bl(offset);
 }
 
 void Assembler::near_call(HeapNumberRequest request) {
+  EnsureModuloOffset(8, 4);
   BlockPoolsScope no_pool_before_bl_instr(this);
   RequestHeapNumber(request);
   EmbeddedObjectIndex index = AddEmbeddedObject(Handle<Code>());
