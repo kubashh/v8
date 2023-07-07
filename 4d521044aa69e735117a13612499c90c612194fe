@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a8a8390_d11c8c5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-07-07T18:44:20Z",
+      "side": 1,
+      "message": "The mac bot was green on patch 5. Patch 7 rebases on main to land in separation.\n\nPTAL",
+      "revId": "4d521044aa69e735117a13612499c90c612194fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
