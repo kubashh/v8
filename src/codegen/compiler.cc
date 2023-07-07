@@ -1324,6 +1324,8 @@ MaybeHandle<Code> GetOrCompileOptimized(
           .ToHandle(&cached_code)) {
     if (IsOSR(osr_offset)) {
       if (!IsInProgress(function->osr_tiering_state())) {
+        function->feedback_vector().set_maybe_has_optimized_osr_code(
+            true, cached_code->kind());
         function->feedback_vector().reset_osr_urgency();
       }
     } else {
