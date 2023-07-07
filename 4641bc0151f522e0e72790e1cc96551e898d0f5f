@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8c9c64c_1bb7ee86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-07T15:55:33Z",
+      "side": 1,
+      "message": "ptal.\n\nOriginal CL accidentally used DCHECK_EQ instead of DCHECK_IMPLIES.\nFix is in https://chromium-review.googlesource.com/c/v8/v8/+/4672618/1..2",
+      "revId": "4641bc0151f522e0e72790e1cc96551e898d0f5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
