@@ -12,6 +12,7 @@
 #include "src/objects/descriptor-array-inl.h"
 #include "src/objects/field-type.h"
 #include "src/objects/instance-type-inl.h"
+#include "src/objects/instance-type.h"
 #include "src/objects/js-function-inl.h"
 #include "src/objects/map-updater.h"
 #include "src/objects/map.h"
@@ -716,7 +717,13 @@ void Map::NotifyLeafMapLayoutChange(Isolate* isolate) {
 
 bool Map::CanTransition() const {
   // Only JSObject and subtypes have map transitions and back pointers.
-  return InstanceTypeChecker::IsJSObject(*this);
+  const InstanceType type = instance_type();
+  // Shared JS objects have fixed shapes and do not transition. Their maps are
+  // either in shared space or RO space.
+  DCHECK_IMPLIES(InstanceTypeChecker::IsAlwaysSharedSpaceJSObject(type),
+                 InAnySharedSpace());
+  return InstanceTypeChecker::IsJSObject(type) &&
+         !InstanceTypeChecker::IsAlwaysSharedSpaceJSObject(type);
 }
 
 #define DEF_TESTER(Type, ...)                    \
