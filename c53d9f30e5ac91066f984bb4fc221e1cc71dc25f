@@ -16,6 +16,92 @@
       "message": "PTAL",
       "revId": "c53d9f30e5ac91066f984bb4fc221e1cc71dc25f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e74dd564_40e0399e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-07T09:25:53Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "c53d9f30e5ac91066f984bb4fc221e1cc71dc25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "823ff537_36ffef8d",
+        "filename": "src/heap/marking-visitor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-07T09:25:53Z",
+      "side": 1,
+      "message": "\", and weak references\" ?",
+      "range": {
+        "startLine": 30,
+        "startChar": 51,
+        "endLine": 30,
+        "endChar": 55
+      },
+      "revId": "c53d9f30e5ac91066f984bb4fc221e1cc71dc25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92edf49c_0086759b",
+        "filename": "src/heap/marking-visitor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-07T09:25:53Z",
+      "side": 1,
+      "message": "for",
+      "range": {
+        "startLine": 30,
+        "startChar": 11,
+        "endLine": 30,
+        "endChar": 13
+      },
+      "revId": "c53d9f30e5ac91066f984bb4fc221e1cc71dc25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8324374_28858001",
+        "filename": "src/heap/marking-visitor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-07T09:25:53Z",
+      "side": 1,
+      "message": "following methods:\n... and then remove \"method\" from the items below",
+      "range": {
+        "startLine": 32,
+        "startChar": 56,
+        "endLine": 32,
+        "endChar": 57
+      },
+      "revId": "c53d9f30e5ac91066f984bb4fc221e1cc71dc25f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
