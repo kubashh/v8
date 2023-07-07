@@ -2269,6 +2269,72 @@ AsyncCompileJob::~AsyncCompileJob() {
   }
 }
 
+void AsyncCompileJob::FinisherFinished(ExecutionContext execution_context,
+                                       FinishingComponent component,
+                                       bool cache_hit) && {
+  {
+    base::MutexGuard guard(&check_finisher_mutex_);
+    DCHECK_LT(0, outstanding_finishers_);
+    if (outstanding_finishers_-- == 2) {
+      // The first component finished, we just start a timer for a histogram.
+      streaming_until_finished_timer_.Start();
+      return;
+    }
+    // The timer has only been started above in the case of streaming
+    // compilation.
+    if (streaming_until_finished_timer_.IsStarted()) {
+      // We measure the time delta from when the StreamingDecoder finishes until
+      // when module compilation finishes. Depending on whether streaming or
+      // compilation finishes first we add the delta to the according histogram.
+      int elapsed = static_cast<int>(
+          streaming_until_finished_timer_.Elapsed().InMilliseconds());
+      if (component == kStreamingDecoder) {
+        isolate_->counters()
+            ->wasm_compilation_until_streaming_finished()
+            ->AddSample(elapsed);
+      } else {
+        isolate_->counters()
+            ->wasm_streaming_until_compilation_finished()
+            ->AddSample(elapsed);
+      }
+    }
+    DCHECK_EQ(0, outstanding_finishers_);
+  }
+
+  const bool failed = native_module_->compilation_state()->failed();
+  // As an optimization the caller can tell us to skip the cache update if we
+  // know that the module is already coming from the cache.
+  std::shared_ptr<NativeModule> cached_native_module;
+  if (!cache_hit) {
+    // Install the native module in the cache, or reuse a conflicting one.
+    // If we get a conflicting module, wait until we are back in the
+    // main thread to update {job_->native_module_} to avoid a data race.
+    cached_native_module = GetWasmEngine()->UpdateNativeModuleCache(
+        failed, native_module_, isolate_);
+    cache_hit = cached_native_module != native_module_;
+    if (!cache_hit) cached_native_module.reset();
+  }
+  // We finally call {Failed} or {FinishCompile}, which will invalidate the
+  // {AsyncCompileJob} and delete {this}.
+  if (execution_context == kInForeground) {
+    if (failed) {
+      std::move(*this).Failed();
+      return;
+    }
+    if (cached_native_module) {
+      native_module_ = std::move(cached_native_module);
+    }
+    std::move(*this).FinishCompile(cache_hit);
+    return;
+  }
+
+  if (failed) {
+    DoSync<Fail>();
+  } else {
+    DoSync<FinishCompilation>(std::move(cached_native_module));
+  }
+}
+
 void AsyncCompileJob::CreateNativeModule(
     std::shared_ptr<const WasmModule> module, size_t code_size_estimate) {
   // Embedder usage count for declared shared memories.
@@ -2439,19 +2505,7 @@ class AsyncCompileJob::CompilationStateCallback
         break;
       case CompilationEvent::kFinishedBaselineCompilation:
         DCHECK_EQ(CompilationEvent::kFinishedExportWrappers, last_event_);
-        if (job_->DecrementAndCheckFinisherCount(kCompilation)) {
-          // Install the native module in the cache, or reuse a conflicting one.
-          // If we get a conflicting module, wait until we are back in the
-          // main thread to update {job_->native_module_} to avoid a data race.
-          std::shared_ptr<NativeModule> cached_native_module =
-              GetWasmEngine()->UpdateNativeModuleCache(
-                  false, job_->native_module_, job_->isolate_);
-          if (cached_native_module == job_->native_module_) {
-            // There was no cached module.
-            cached_native_module = nullptr;
-          }
-          job_->DoSync<FinishCompilation>(std::move(cached_native_module));
-        }
+        std::move(*job_).FinisherFinished(kInBackground, kCompilation, false);
         break;
       case CompilationEvent::kFinishedCompilationChunk:
         DCHECK(CompilationEvent::kFinishedBaselineCompilation == last_event_ ||
@@ -2460,13 +2514,8 @@ class AsyncCompileJob::CompilationStateCallback
       case CompilationEvent::kFailedCompilation:
         DCHECK(!last_event_.has_value() ||
                last_event_ == CompilationEvent::kFinishedExportWrappers);
-        if (job_->DecrementAndCheckFinisherCount(kCompilation)) {
-          // Don't update {job_->native_module_} to avoid data races with other
-          // compilation threads. Use a copy of the shared pointer instead.
-          GetWasmEngine()->UpdateNativeModuleCache(true, job_->native_module_,
-                                                   job_->isolate_);
-          job_->DoSync<Fail>();
-        }
+        DCHECK(job_->native_module_->compilation_state()->failed());
+        std::move(*job_).FinisherFinished(kInBackground, kCompilation, false);
         break;
     }
 #ifdef DEBUG
@@ -3037,25 +3086,9 @@ void AsyncStreamingProcessor::OnFinishedStream(
   } else {
     job_->native_module_->SetWireBytes(std::move(job_->bytes_copy_));
   }
-  const bool needs_finish =
-      job_->DecrementAndCheckFinisherCount(AsyncCompileJob::kStreamingDecoder);
-  DCHECK_IMPLIES(!has_code_section, needs_finish);
-  if (needs_finish) {
-    const bool failed = job_->native_module_->compilation_state()->failed();
-    if (!cache_hit) {
-      auto* prev_native_module = job_->native_module_.get();
-      job_->native_module_ = GetWasmEngine()->UpdateNativeModuleCache(
-          failed, std::move(job_->native_module_), job_->isolate_);
-      cache_hit = prev_native_module != job_->native_module_.get();
-    }
-    // We finally call {Failed} or {FinishCompile}, which will invalidate the
-    // {AsyncCompileJob} and delete {this}.
-    if (failed) {
-      std::move(*job_).Failed();
-    } else {
-      std::move(*job_).FinishCompile(cache_hit);
-    }
-  }
+  std::move(*job_).FinisherFinished(AsyncCompileJob::kInForeground,
+                                    AsyncCompileJob::kStreamingDecoder,
+                                    cache_hit);
 }
 
 void AsyncStreamingProcessor::OnAbort() {
