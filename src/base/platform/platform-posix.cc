@@ -1089,12 +1089,12 @@ class Thread::PlatformData {
 Thread::Thread(const Options& options)
     : data_(new PlatformData),
       stack_size_(options.stack_size()),
+      priority_(options.priority()),
       start_semaphore_(nullptr) {
   const int min_stack_size = static_cast<int>(PTHREAD_STACK_MIN);
   if (stack_size_ > 0) stack_size_ = std::max(stack_size_, min_stack_size);
   set_name(options.name());
 }
-
 
 Thread::~Thread() {
   delete data_;
@@ -1126,6 +1126,9 @@ static void SetThreadName(const char* name) {
 #endif
 }
 
+#ifdef V8_OS_ANDROID
+extern "C" __attribute__((weak)) int pthread_setschedprio(pthread_t, int);
+#endif
 
 static void* ThreadEntry(void* arg) {
   Thread* thread = reinterpret_cast<Thread*>(arg);
@@ -1134,6 +1137,27 @@ static void* ThreadEntry(void* arg) {
   // one).
   { MutexGuard lock_guard(&thread->data()->thread_creation_mutex_); }
   SetThreadName(thread->name());
+#if V8_OS_LINUX
+#ifdef V8_OS_ANDROID
+  if (pthread_setschedprio) {
+#endif
+    switch (thread->priority()) {
+      case Thread::Priority::kBestEffort:
+        pthread_setschedprio(pthread_self(), 10);
+        break;
+      case Thread::Priority::kUserVisible:
+        pthread_setschedprio(pthread_self(), 1);
+        break;
+      case Thread::Priority::kUserBlocking:
+        pthread_setschedprio(pthread_self(), 0);
+        break;
+      case Thread::Priority::kDefault:
+        break;
+#ifdef V8_OS_ANDROID
+    }
+#endif
+  }
+#endif
   DCHECK_NE(thread->data()->thread_, kNoThread);
   thread->NotifyStartedAndRun();
   return nullptr;
@@ -1165,6 +1189,23 @@ bool Thread::Start() {
     result = pthread_attr_setstacksize(&attr, stack_size);
     if (result != 0) return pthread_attr_destroy(&attr), false;
   }
+#if V8_OS_DARWIN
+  switch (priority_) {
+    case Priority::kBestEffort:
+      result = pthread_attr_set_qos_class_np(&attr, QOS_CLASS_BACKGROUND, 0);
+      break;
+    case Priority::kUserVisible:
+      result = pthread_attr_set_qos_class_np(&attr, QOS_CLASS_UTILITY, 0);
+      break;
+    case Priority::kUserBlocking:
+      result =
+          pthread_attr_set_qos_class_np(&attr, QOS_CLASS_USER_INITIATED, 0);
+      break;
+    case Priority::kDefault:
+      break;
+  }
+  if (result != 0) return pthread_attr_destroy(&attr), false;
+#endif
   {
     MutexGuard lock_guard(&data_->thread_creation_mutex_);
     result = pthread_create(&data_->thread_, &attr, ThreadEntry, this);

@@ -23,6 +23,8 @@ enum class MessageLoopBehavior : bool {
   kWaitForWork = true
 };
 
+enum class PriorityMode : bool { kDontApply, kApply };
+
 /**
  * Returns a new instance of the default v8::Platform implementation.
  *
@@ -41,7 +43,8 @@ V8_PLATFORM_EXPORT std::unique_ptr<v8::Platform> NewDefaultPlatform(
     IdleTaskSupport idle_task_support = IdleTaskSupport::kDisabled,
     InProcessStackDumping in_process_stack_dumping =
         InProcessStackDumping::kDisabled,
-    std::unique_ptr<v8::TracingController> tracing_controller = {});
+    std::unique_ptr<v8::TracingController> tracing_controller = {},
+    PriorityMode priority_mode = PriorityMode::kDontApply);
 
 /**
  * The same as NewDefaultPlatform but disables the worker thread pool.
