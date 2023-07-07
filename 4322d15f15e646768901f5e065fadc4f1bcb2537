@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc82aa99_b3c4ff68",
+        "filename": "src/compiler/turboshaft/recreate-schedule.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-07T08:43:51Z",
+      "side": 1,
+      "message": "I think this would be best done in another CL, as it is widespread in this file.",
+      "parentUuid": "19e9a110_0115672d",
+      "range": {
+        "startLine": 923,
+        "startChar": 18,
+        "endLine": 923,
+        "endChar": 19
+      },
+      "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc563275_f61325c9",
@@ -88,6 +112,30 @@
       "writtenOn": "2023-07-05T12:14:28Z",
       "side": 1,
       "message": "In general we have nicer way to do this, but I think you do not know the `RegisterRepresentation` here statically, which is currently not supported by some of those options.",
+      "range": {
+        "startLine": 456,
+        "startChar": 2,
+        "endLine": 466,
+        "endChar": 78
+      },
+      "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e225c10_c17d561f",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-07T08:43:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc563275_f61325c9",
       "range": {
         "startLine": 456,
         "startChar": 2,
@@ -121,6 +169,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db9dbe47_35e97c01",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1320,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-07T08:43:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb9b0f1b_1354a190",
+      "range": {
+        "startLine": 1320,
+        "startChar": 8,
+        "endLine": 1320,
+        "endChar": 15
+      },
+      "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e38ab92f_e876feeb",
@@ -134,6 +206,30 @@
       "writtenOn": "2023-07-05T12:14:28Z",
       "side": 1,
       "message": "You can also write those using the assembler macros, e.g.\n```\nLabel\u003cWord32\u003e done(this);\nIF(condition) { GOTO(done, 0);}\nELSE { GOTO(done, asm_.Int32Mod(lhs, rhs)); }\nEND_IF\n\nBIND(done, result);\nreturn result;\n```\nThis will generate blocks, labels and merge phis automatically. The limitation here is that `Label\u003c\u003e` needs the static type, but this should be possible here.",
+      "range": {
+        "startLine": 1338,
+        "startChar": 0,
+        "endLine": 1346,
+        "endChar": 75
+      },
+      "revId": "4322d15f15e646768901f5e065fadc4f1bcb2537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eee65a71_d04af9cf",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-07T08:43:51Z",
+      "side": 1,
+      "message": "I will fix this later once I have introduced these macros to the interface.",
+      "parentUuid": "e38ab92f_e876feeb",
       "range": {
         "startLine": 1338,
         "startChar": 0,
