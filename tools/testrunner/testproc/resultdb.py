@@ -40,8 +40,8 @@ class ResultDBIndicator(ProgressIndicator):
         'status': 'PASS' if run_passed else 'FAIL',
         'expected': result_expected,
     }
-
     if result.output and result.output.duration:
+      # Bug?
       rdb_result.update(duration=f'{result.output.duration}s')
 
     if result.has_unexpected_output:
