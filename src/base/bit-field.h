@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 
+#include <algorithm>
+
 #include "src/base/macros.h"
 
 namespace v8 {
@@ -29,6 +31,7 @@ class BitField final {
   static_assert(size > 0);
 
   using FieldType = T;
+  using BaseType = U;
 
   // A type U mask of bit field.  To use all bits of a type U of x bits
   // in a bitfield without compiler warnings we have to compute 2^x
@@ -70,6 +73,15 @@ class BitField final {
   static constexpr T decode(U value) {
     return static_cast<T>((value & kMask) >> kShift);
   }
+};
+
+template <typename A, typename B>
+class BitFieldUnion final {
+ public:
+  static_assert(
+      std::is_same<typename A::BaseType, typename B::BaseType>::value);
+  static constexpr int kShift = std::min(A::kShift, B::kShift);
+  static constexpr int kMask = A::kMask | B::kMask;
 };
 
 template <class T, int shift, int size>

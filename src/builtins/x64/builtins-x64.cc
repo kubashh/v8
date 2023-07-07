@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/base/bit-field.h"
 #if V8_TARGET_ARCH_X64
 
 #include "src/api/api-arguments.h"
@@ -1012,7 +1013,9 @@ void ResetFeedbackVectorOsrUrgency(MacroAssembler* masm,
   __ movb(scratch,
           FieldOperand(feedback_vector, FeedbackVector::kOsrStateOffset));
   __ andb(scratch,
-          Immediate(FeedbackVector::MaybeHasOptimizedOsrCodeBit::kMask));
+          Immediate(base::BitFieldUnion<
+                    FeedbackVector::MaybeHasMaglevOsrCodeBit,
+                    FeedbackVector::MaybeHasTurbofanOsrCodeBit>::kMask));
   __ movb(FieldOperand(feedback_vector, FeedbackVector::kOsrStateOffset),
           scratch);
 }
