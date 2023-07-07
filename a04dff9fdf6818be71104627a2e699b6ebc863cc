@@ -39,6 +39,30 @@
       },
       "revId": "a04dff9fdf6818be71104627a2e699b6ebc863cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c46f2917_78ea57ed",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-07T11:52:19Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "74191473_6c99dc9c",
+      "range": {
+        "startLine": 533,
+        "startChar": 8,
+        "endLine": 533,
+        "endChar": 17
+      },
+      "revId": "a04dff9fdf6818be71104627a2e699b6ebc863cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
