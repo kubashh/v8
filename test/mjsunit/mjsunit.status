@@ -1378,8 +1378,6 @@
 ['variant == turboshaft', {
   'wasm/code-flushing': [FAIL],
   'wasm/enter-and-leave-debug-state': [FAIL],
-  # TODO(v8:14108): Enable once we have stack checks.
-  'wasm/worker-running-empty-loop-interruptible': [SKIP],
 }],  # variant == turboshaft
 
 ##############################################################################
