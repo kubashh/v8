@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "f18e798727d56dc5e0b2e9c73211a5afca76d93a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1564a853_372a9b2e",
+        "filename": "src/heap/reference-summarizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-07T07:25:49Z",
+      "side": 1,
+      "message": "super nit: Just leave out the comment :)",
+      "range": {
+        "startLine": 108,
+        "startChar": 7,
+        "endLine": 108,
+        "endChar": 14
+      },
+      "revId": "f18e798727d56dc5e0b2e9c73211a5afca76d93a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
