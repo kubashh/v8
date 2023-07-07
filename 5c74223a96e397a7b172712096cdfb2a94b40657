@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f93651dd_1a5c0ebe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-07-07T19:01:54Z",
+      "side": 1,
+      "message": "Reverted since there are already ~20 cases on Clusterfuzz and I\u0027m worried that it might grow over the weekend. I didn\u0027t assign the bug yet or dedupe the issues because I\u0027m also monitoring https://crbug.com/1450802 to see if clusterfuzz does it.",
+      "revId": "5c74223a96e397a7b172712096cdfb2a94b40657",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
