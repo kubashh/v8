@@ -2318,25 +2318,28 @@ class AssemblerOpInterface {
     Deoptimize(frame_state, params);
   }
 
-  void TrapIf(OpIndex condition, OpIndex frame_state, TrapId trap_id) {
+  OpIndex TrapIf(OpIndex condition, OpIndex frame_state, TrapId trap_id) {
     if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
-      return;
+      return OpIndex::Invalid();
     }
-    stack().ReduceTrapIf(condition, frame_state, false, trap_id);
+    OpIndex trap = stack().ReduceTrapIf(condition, frame_state, false, trap_id);
     if (stack().current_block() == nullptr) {
       // The TrapIf was transformed into an inconditional trap
       stack().SetGeneratingUnreachableOperations();
     }
+    return trap;
   }
-  void TrapIfNot(OpIndex condition, OpIndex frame_state, TrapId trap_id) {
+
+  OpIndex TrapIfNot(OpIndex condition, OpIndex frame_state, TrapId trap_id) {
     if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
-      return;
+      return OpIndex::Invalid();
     }
-    stack().ReduceTrapIf(condition, frame_state, true, trap_id);
+    OpIndex trap = stack().ReduceTrapIf(condition, frame_state, true, trap_id);
     if (stack().current_block() == nullptr) {
       // The TrapIfNot was transformed into an inconditional trap
       stack().SetGeneratingUnreachableOperations();
     }
+    return trap;
   }
 
   void StaticAssert(OpIndex condition, const char* source) {
