@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f30b6034_8797e4b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-07T10:32:24Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "a04dff9fdf6818be71104627a2e699b6ebc863cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74191473_6c99dc9c",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-07T10:32:24Z",
+      "side": 1,
+      "message": "This DCHECK should hold for now and would give us guarantee that we don\u0027t break the kDataOnly optimization.\nIf MinorMS starts using incremental steps to merge the on hold worklist, this DCHECK will break.",
+      "range": {
+        "startLine": 533,
+        "startChar": 8,
+        "endLine": 533,
+        "endChar": 17
+      },
+      "revId": "a04dff9fdf6818be71104627a2e699b6ebc863cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
