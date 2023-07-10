@@ -154,6 +154,8 @@ class MarkCompactCollector final {
     ephemeron_marking_.newly_discovered.clear();
   }
 
+  void EnsureBlackAllocated(HeapObject object);
+
   explicit MarkCompactCollector(Heap* heap);
   ~MarkCompactCollector();
 

@@ -697,8 +697,7 @@ TEST_F(InnerPointerResolutionHeapTest, UnusedRegularYoungPages) {
       marking->Start(GarbageCollector::MARK_COMPACTOR,
                      i::GarbageCollectionReason::kTesting);
     }
-    MarkingState* marking_state = heap()->marking_state();
-    marking_state->TryMarkAndAccountLiveBytes(obj3);
+    marking->EnsureBlackAllocated(obj3);
   }
 
   // Garbage collection should reclaim the two large objects with the weak

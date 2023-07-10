@@ -48,6 +48,10 @@ class MarkBit final {
   }
 #endif
 
+  inline static bool TryMark(HeapObject object);
+  inline static bool TryMarkNonAtomic(HeapObject object);
+  inline static bool IsMarked(HeapObject object);
+
  private:
   inline MarkBit(CellType* cell, CellType mask) : cell_(cell), mask_(mask) {}
 

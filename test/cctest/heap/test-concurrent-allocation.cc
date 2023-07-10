@@ -460,7 +460,7 @@ UNINITIALIZED_TEST(ConcurrentWriteBarrier) {
   CHECK(heap->marking_state()->IsUnmarked(value));
 
   // Mark host |fixed_array| to trigger the barrier.
-  heap->marking_state()->TryMarkAndAccountLiveBytes(fixed_array);
+  heap->incremental_marking()->EnsureBlackAllocated(fixed_array);
 
   auto thread =
       std::make_unique<ConcurrentWriteBarrierThread>(heap, fixed_array, value);

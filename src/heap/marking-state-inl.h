@@ -29,17 +29,6 @@ bool MarkingStateBase<ConcreteState, access_mode>::TryMark(HeapObject obj) {
   return MarkBit::From(obj).template Set<access_mode>();
 }
 
-template <typename ConcreteState, AccessMode access_mode>
-bool MarkingStateBase<ConcreteState, access_mode>::TryMarkAndAccountLiveBytes(
-    HeapObject obj) {
-  if (TryMark(obj)) {
-    MemoryChunk::FromHeapObject(obj)->IncrementLiveBytesAtomically(
-        ALIGN_TO_ALLOCATION_ALIGNMENT(obj.Size(cage_base())));
-    return true;
-  }
-  return false;
-}
-
 }  // namespace internal
 }  // namespace v8
 

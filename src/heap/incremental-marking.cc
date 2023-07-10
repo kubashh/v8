@@ -152,6 +152,8 @@ void IncrementalMarking::Start(GarbageCollector garbage_collector,
     // Allocation observers are not currently used by MinorMS because we don't
     // do incremental marking.
     StartMarkingMinor();
+    // TODO(v8:13012): Add allocation observers for rescheduling concurrent
+    // marking.
   }
 }
 
@@ -219,17 +221,20 @@ void IncrementalMarking::MarkRoots() {
                                 SkipRoot::kTracedHandles, SkipRoot::kWeak,
                                 SkipRoot::kReadOnlyBuiltins});
   } else {
-    YoungGenerationRootMarkingVisitor visitor(
+    YoungGenerationRootMarkingVisitor root_visitor(
         heap_->minor_mark_sweep_collector()->main_marking_visitor());
     heap_->IterateRoots(
-        &visitor, base::EnumSet<SkipRoot>{
-                      SkipRoot::kStack, SkipRoot::kMainThreadHandles,
-                      SkipRoot::kWeak, SkipRoot::kExternalStringTable,
-                      SkipRoot::kGlobalHandles, SkipRoot::kTracedHandles,
-                      SkipRoot::kOldGeneration, SkipRoot::kReadOnlyBuiltins});
+        &root_visitor,
+        base::EnumSet<SkipRoot>{
+            SkipRoot::kStack, SkipRoot::kMainThreadHandles, SkipRoot::kWeak,
+            SkipRoot::kExternalStringTable, SkipRoot::kGlobalHandles,
+            SkipRoot::kTracedHandles, SkipRoot::kOldGeneration,
+            SkipRoot::kReadOnlyBuiltins});
 
-    isolate()->global_handles()->IterateYoungStrongAndDependentRoots(&visitor);
-    isolate()->traced_handles()->IterateYoungRoots(&visitor);
+    isolate()->global_handles()->IterateYoungStrongAndDependentRoots(
+        &root_visitor);
+    heap_->minor_mark_sweep_collector()->MarkRootsFromTracedHandles(
+        root_visitor);
   }
 }
 
@@ -332,6 +337,7 @@ void IncrementalMarking::StartMarkingMinor() {
   }
 
   if (v8_flags.concurrent_minor_ms_marking && !heap_->IsTearingDown()) {
+    heap_->minor_mark_sweep_collector()->local_marking_worklists()->ShareWork();
     heap_->concurrent_marking()->ScheduleJob(
         GarbageCollector::MINOR_MARK_SWEEPER);
   }
@@ -400,6 +406,15 @@ void IncrementalMarking::FinishBlackAllocation() {
       isolate()->PrintWithTimestamp(
           "[IncrementalMarking] Black allocation finished\n");
     }
+  }
+}
+
+void IncrementalMarking::EnsureBlackAllocated(HeapObject object) {
+  DCHECK(black_allocation_);
+  DCHECK_EQ(heap()->gc_state(), Heap::NOT_IN_GC);
+  if (MarkBit::TryMark(object)) {
+    MemoryChunk::FromHeapObject(object)->IncrementLiveBytesAtomically(
+        ALIGN_TO_ALLOCATION_ALIGNMENT(object.Size(isolate())));
   }
 }
 

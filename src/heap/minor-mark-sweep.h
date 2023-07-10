@@ -11,6 +11,7 @@
 
 #include "src/common/globals.h"
 #include "src/heap/ephemeron-remembered-set.h"
+#include "src/heap/heap.h"
 #include "src/heap/index-generator.h"
 #include "src/heap/marking-state.h"
 #include "src/heap/marking-visitor.h"
@@ -94,11 +95,7 @@ class YoungGenerationRememberedSetsMarkingWorklist {
         std::memory_order_relaxed);
   }
 
-  void Clear() {
-    remembered_sets_marking_items_.clear();
-    remaining_remembered_sets_marking_items_.store(0,
-                                                   std::memory_order_relaxed);
-  }
+  void TearDown();
 
  private:
   class MarkingItem : public ParallelWorkItem {
@@ -121,6 +118,8 @@ class YoungGenerationRememberedSetsMarkingWorklist {
     template <typename Visitor>
     void Process(Visitor* visitor);
     void MergeAndDeleteRememberedSets();
+
+    void DeleteSetsOnTearDown();
 
    private:
     inline Heap* heap() { return chunk_->heap(); }
@@ -222,9 +221,12 @@ class MinorMarkSweepCollector final {
   Sweeper* sweeper() { return sweeper_; }
 
   void MarkLiveObjects();
-  void MarkRoots(YoungGenerationRootMarkingVisitor& root_visitor);
+  void MarkRoots(YoungGenerationRootMarkingVisitor& root_visitor,
+                 bool was_marked_incrementally);
   void DoParallelMarking();
   void DrainMarkingWorklist();
+  void MarkRootsFromTracedHandles(
+      YoungGenerationRootMarkingVisitor& root_visitor);
   void MarkRootsFromConservativeStack(
       YoungGenerationRootMarkingVisitor& root_visitor);
 
@@ -260,6 +262,8 @@ class MinorMarkSweepCollector final {
       remembered_sets_marking_handler_;
 
   ResizeNewSpaceMode resize_new_space_ = ResizeNewSpaceMode::kNone;
+
+  friend class IncrementalMarking;
 };
 
 }  // namespace internal

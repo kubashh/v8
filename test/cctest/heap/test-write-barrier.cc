@@ -46,7 +46,7 @@ HEAP_TEST(WriteBarrier_Marking) {
   // Trigger the barrier for the unmarked host and expect the bail out.
   WriteBarrier::Marking(host, host.RawFieldOfElementAt(0), value1);
   CHECK(!heap->marking_state()->IsMarked(value1));
-  heap->marking_state()->TryMarkAndAccountLiveBytes(host);
+  heap->incremental_marking()->EnsureBlackAllocated(host);
   // Trigger the barrier for the marked host.
   WriteBarrier::Marking(host, host.RawFieldOfElementAt(0), value1);
   CHECK(heap->marking_state()->IsMarked(value1));
@@ -84,7 +84,7 @@ HEAP_TEST(WriteBarrier_MarkingExtension) {
   WriteBarrier::Marking(host, extension);
   // Concurrent marking barrier should bail out for unmarked host.
   CHECK(!extension->IsMarked());
-  heap->marking_state()->TryMarkAndAccountLiveBytes(host);
+  heap->incremental_marking()->EnsureBlackAllocated(host);
   WriteBarrier::Marking(host, extension);
   // Concurrent marking barrier should mark the value now.
   CHECK(extension->IsMarked());

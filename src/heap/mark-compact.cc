@@ -1153,12 +1153,12 @@ class MarkExternalPointerFromExternalStringTable : public RootVisitor {
 // are retained.
 class MarkCompactWeakObjectRetainer : public WeakObjectRetainer {
  public:
-  explicit MarkCompactWeakObjectRetainer(MarkingState* marking_state)
-      : marking_state_(marking_state) {}
+  explicit MarkCompactWeakObjectRetainer(MarkCompactCollector* collector)
+      : collector_(collector) {}
 
   Object RetainAs(Object object) override {
     HeapObject heap_object = HeapObject::cast(object);
-    if (marking_state_->IsMarked(heap_object)) {
+    if (MarkBit::IsMarked(heap_object)) {
       return object;
     } else if (object.IsAllocationSite() &&
                !(AllocationSite::cast(object).IsZombie())) {
@@ -1172,7 +1172,7 @@ class MarkCompactWeakObjectRetainer : public WeakObjectRetainer {
         // marking
         nested = current_site.nested_site();
         current_site.MarkZombie();
-        marking_state_->TryMarkAndAccountLiveBytes(current_site);
+        collector_->EnsureBlackAllocated(current_site);
       }
 
       return object;
@@ -1182,7 +1182,7 @@ class MarkCompactWeakObjectRetainer : public WeakObjectRetainer {
   }
 
  private:
-  MarkingState* const marking_state_;
+  MarkCompactCollector* const collector_;
 };
 
 class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
@@ -2547,7 +2547,8 @@ class FullStringForwardingTableCleaner final
           HeapObject::cast(forward).InReadOnlySpace()) {
         return;
       }
-      marking_state_->TryMarkAndAccountLiveBytes(HeapObject::cast(forward));
+      heap_->mark_compact_collector()->EnsureBlackAllocated(
+          HeapObject::cast(forward));
     } else {
       DisposeExternalResource(record);
       record->set_original_string(StringForwardingTable::deleted_element());
@@ -2609,7 +2610,7 @@ class FullStringForwardingTableCleaner final
 
     // Mark the forwarded string to keep it alive.
     if (!forward_string.InReadOnlySpace()) {
-      marking_state_->TryMarkAndAccountLiveBytes(forward_string);
+      heap_->mark_compact_collector()->EnsureBlackAllocated(forward_string);
     }
     // Transition the original string to a ThinString and override the
     // forwarding index with the correct hash.
@@ -2697,7 +2698,7 @@ void MarkCompactCollector::ClearNonLiveReferences() {
   {
     TRACE_GC(heap_->tracer(), GCTracer::Scope::MC_CLEAR_WEAK_LISTS);
     // Process the weak references.
-    MarkCompactWeakObjectRetainer mark_compact_object_retainer(marking_state_);
+    MarkCompactWeakObjectRetainer mark_compact_object_retainer(this);
     heap_->ProcessAllWeakReferences(&mark_compact_object_retainer);
   }
 
@@ -2864,12 +2865,22 @@ void MarkCompactCollector::FlushBytecodeFromSFI(
   // marked.
   DCHECK(!ShouldMarkObject(inferred_name) ||
          marking_state_->IsMarked(inferred_name));
-  marking_state_->TryMarkAndAccountLiveBytes(uncompiled_data);
+  EnsureBlackAllocated(uncompiled_data);
 
   // Use the raw function data setter to avoid validity checks, since we're
   // performing the unusual task of decompiling.
   shared_info.set_function_data(uncompiled_data, kReleaseStore);
   DCHECK(!shared_info.is_compiled());
+}
+
+void MarkCompactCollector::EnsureBlackAllocated(HeapObject object) {
+  DCHECK_EQ(heap_->gc_state(), Heap::MARK_COMPACT);
+  // This only happens in the non-atomic pause after marking is finished. So we
+  // can mark non-atomically here.
+  if (MarkBit::TryMarkNonAtomic(object)) {
+    MemoryChunk::FromHeapObject(object)->IncrementLiveBytesAtomically(
+        ALIGN_TO_ALLOCATION_ALIGNMENT(object.Size(heap_->isolate())));
+  }
 }
 
 void MarkCompactCollector::ProcessOldCodeCandidates() {
