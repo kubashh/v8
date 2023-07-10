@@ -3594,8 +3594,8 @@ void AccessorAssembler::KeyedLoadICGeneric(const LoadICParameters* p) {
   {
     TVARIABLE(IntPtrT, var_index);
     TVARIABLE(Name, var_unique);
-    Label if_index(this), if_unique_name(this, &var_name), if_notunique(this),
-        if_other(this, Label::kDeferred);
+    Label if_index(this), if_unique_name(this, {&var_name, &var_unique}),
+        if_notunique(this), if_other(this, Label::kDeferred);
 
     TryToName(var_name.value(), &if_index, &var_index, &if_unique_name,
               &var_unique, &if_other, &if_notunique);
@@ -3635,13 +3635,14 @@ void AccessorAssembler::KeyedLoadICGeneric(const LoadICParameters* p) {
           // after successfully internalizing the incoming string. Past
           // experiments with this have shown that it causes too much traffic
           // on the stub cache. We may want to re-evaluate that in the future.
-          LoadICParameters pp(p, var_unique.value());
-          TNode<Map> lookup_start_object_map =
-              LoadMap(CAST(lookup_start_object));
-          GenericPropertyLoad(CAST(lookup_start_object),
-                              lookup_start_object_map,
-                              LoadMapInstanceType(lookup_start_object_map), &pp,
-                              &if_runtime, kDontUseStubCache);
+          // LoadICParameters pp(p, var_unique.value());
+          // TNode<Map> lookup_start_object_map =
+          //     LoadMap(CAST(lookup_start_object));
+          // GenericPropertyLoad(CAST(lookup_start_object),
+          //                     lookup_start_object_map,
+          //                     LoadMapInstanceType(lookup_start_object_map),
+          //                     &pp, &if_runtime, kDontUseStubCache);
+          Goto(&if_unique_name);
         }
       } else {
         Goto(&if_runtime);
