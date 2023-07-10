@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37a670ce_4dd57ddc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-10T19:29:24Z",
+      "side": 1,
+      "message": "Thank you. This is pretty much a similar untangling that I had locally with my cast prototype.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 4
+      },
+      "revId": "e36ef246d26546b164b7c065661ce9d47a406c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eabe42d_8ee82e51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-10T19:29:24Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "e36ef246d26546b164b7c065661ce9d47a406c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00210044_2fb14085",
+        "filename": "src/objects/tagged.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-10T19:29:24Z",
+      "side": 1,
+      "message": "Can this be a free function as well?",
+      "range": {
+        "startLine": 77,
+        "startChar": 17,
+        "endLine": 77,
+        "endChar": 25
+      },
+      "revId": "e36ef246d26546b164b7c065661ce9d47a406c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
