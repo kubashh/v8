@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "166e2ce8_f59ec335",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-10T08:54:16Z",
+      "side": 1,
+      "message": "I think we can start counting on existing tests running with the \u0027turboshaft\u0027 variant.",
+      "parentUuid": "64c96b46_2a25b38e",
+      "revId": "0e6abfadd6dbf5a6c1b13adb49010c201d52d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fb2ac30_9365897c",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "44ca76a9_63e623e6",
+        "filename": "src/compiler/wasm-compiler-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-10T08:54:16Z",
+      "side": 1,
+      "message": "Correct.",
+      "parentUuid": "2fb2ac30_9365897c",
+      "range": {
+        "startLine": 70,
+        "startChar": 5,
+        "endLine": 70,
+        "endChar": 17
+      },
+      "revId": "0e6abfadd6dbf5a6c1b13adb49010c201d52d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66258c36_7038098f",
@@ -71,6 +113,30 @@
       "writtenOn": "2023-07-07T09:29:55Z",
       "side": 1,
       "message": "Can we factor this out into a `CallRuntimeStub` as we\u0027ll need it many times?",
+      "range": {
+        "startLine": 1652,
+        "startChar": 4,
+        "endLine": 1662,
+        "endChar": 47
+      },
+      "revId": "0e6abfadd6dbf5a6c1b13adb49010c201d52d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92e17442_ee071db9",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-10T08:54:16Z",
+      "side": 1,
+      "message": "I think all other uses are in wrappers code. Let\u0027s factor it out once we need to.",
+      "parentUuid": "66258c36_7038098f",
       "range": {
         "startLine": 1652,
         "startChar": 4,
