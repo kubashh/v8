@@ -16,6 +16,23 @@
       "message": "@manoskouk@chromium.org: PTAL.\n@dmercadier@chromium.org: Please provide component-review.",
       "revId": "322535dc41031bb24bb7ff64fcb9ebc32a85c1c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ba182ea_bd97bd96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-10T13:26:59Z",
+      "side": 1,
+      "message": "src/compiler LGTM :)",
+      "revId": "322535dc41031bb24bb7ff64fcb9ebc32a85c1c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
