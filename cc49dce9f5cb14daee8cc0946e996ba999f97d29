@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14504e23_77697d59",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2971,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2023-07-10T07:17:40Z",
+      "side": 0,
+      "message": "In `LoadReceiverMap` the `CAST` would be an `UncheckedCast`. Do we need a checked one there?",
+      "revId": "cc49dce9f5cb14daee8cc0946e996ba999f97d29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
