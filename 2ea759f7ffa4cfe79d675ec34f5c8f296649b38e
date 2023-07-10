@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2c8b876_14bb8623",
+        "filename": "test/message/message.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-10T08:41:39Z",
+      "side": 1,
+      "message": "Done for the two tests which do not already have fixes down the pipeline.",
+      "parentUuid": "d3024b45_47739bf8",
+      "range": {
+        "startLine": 133,
+        "startChar": 26,
+        "endLine": 133,
+        "endChar": 30
+      },
+      "revId": "2ea759f7ffa4cfe79d675ec34f5c8f296649b38e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3dfe15f6_691cab72",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-07-05T08:03:51Z",
       "side": 1,
       "message": "Same here.",
+      "range": {
+        "startLine": 1379,
+        "startChar": 25,
+        "endLine": 1379,
+        "endChar": 29
+      },
+      "revId": "2ea759f7ffa4cfe79d675ec34f5c8f296649b38e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d59c2add_07cfb72b",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-10T08:41:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dfe15f6_691cab72",
       "range": {
         "startLine": 1379,
         "startChar": 25,
