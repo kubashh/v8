@@ -33,6 +33,23 @@
       "message": "assembler.h LGTM :)",
       "revId": "fed298264ae6c4688dc30c0fb9c020cabd5a5c64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "239c1f90_6fe86991",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-10T14:27:20Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "fed298264ae6c4688dc30c0fb9c020cabd5a5c64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
