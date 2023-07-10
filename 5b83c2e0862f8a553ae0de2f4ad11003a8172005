@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4302bf2a_0be991d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-07-10T22:02:43Z",
+      "side": 1,
+      "message": "Need to revert, because https://ci.chromium.org/p/v8/builders/ci/V8%20Linux64%20TSAN/48313?",
+      "revId": "5b83c2e0862f8a553ae0de2f4ad11003a8172005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
