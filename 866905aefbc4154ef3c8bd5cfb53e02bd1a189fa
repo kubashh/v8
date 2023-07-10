@@ -16,6 +16,23 @@
       "message": "PTAL. One small fix that avoid some unnecessary branches. \nThis also seems to bring some performance improvement to Speedometer2\nhttps://pinpoint-dot-chromeperf.appspot.com/job/15c39a52e60000",
       "revId": "866905aefbc4154ef3c8bd5cfb53e02bd1a189fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb2ca1fe_733067b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-10T09:19:27Z",
+      "side": 1,
+      "message": "nice! lgtm",
+      "revId": "866905aefbc4154ef3c8bd5cfb53e02bd1a189fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
