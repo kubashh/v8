@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a82e20f8_182a816e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-07-10T13:38:55Z",
+      "side": 1,
+      "message": "PTAL, this is some pre-work for making heap.cc use Tagged",
+      "revId": "45dbba339de5943850446baaf6c6b9b8b0f78f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
