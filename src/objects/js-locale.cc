@@ -54,10 +54,13 @@ Maybe<bool> InsertOptionsIntoLocale(Isolate* isolate,
                                                       "h24"};
   const std::vector<const char*> case_first_values = {"upper", "lower",
                                                       "false"};
+  const std::vector<const char*> first_day_of_week_values = {
+      "mon", "tue", "wed", "thu", "fri", "sat", "sun"};
   const std::vector<const char*> empty_values = {};
-  const std::array<OptionData, 6> kOptionToUnicodeTagMap = {
+  const std::array<OptionData, 7> kOptionToUnicodeTagMap = {
       {{"calendar", "ca", &empty_values, false},
        {"collation", "co", &empty_values, false},
+       {"firstDayOfWeek", "fw", &first_day_of_week_values, false},
        {"hourCycle", "hc", &hour_cycle_values, false},
        {"caseFirst", "kf", &case_first_values, false},
        {"numeric", "kn", &empty_values, true},
@@ -800,6 +803,11 @@ Handle<Object> JSLocale::CaseFirst(Isolate* isolate, Handle<JSLocale> locale) {
 
 Handle<Object> JSLocale::Collation(Isolate* isolate, Handle<JSLocale> locale) {
   return UnicodeKeywordValue(isolate, locale, "co");
+}
+
+Handle<Object> JSLocale::FirstDayOfWeek(Isolate* isolate,
+                                        Handle<JSLocale> locale) {
+  return UnicodeKeywordValue(isolate, locale, "fw");
 }
 
 Handle<Object> JSLocale::HourCycle(Isolate* isolate, Handle<JSLocale> locale) {
