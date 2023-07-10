@@ -159,6 +159,9 @@ class V8_EXPORT_PRIVATE IncrementalMarking final {
   // Performs incremental marking step for unit tests.
   void AdvanceForTesting(v8::base::TimeDelta max_duration);
 
+  // Ensures a freshly allocated object is marked black and accounted.
+  void EnsureBlackAllocated(HeapObject object);
+
  private:
   MarkingState* marking_state() { return marking_state_; }
 

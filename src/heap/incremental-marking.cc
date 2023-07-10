@@ -409,6 +409,15 @@ void IncrementalMarking::FinishBlackAllocation() {
   }
 }
 
+void IncrementalMarking::EnsureBlackAllocated(HeapObject object) {
+  DCHECK(black_allocation_);
+  DCHECK_EQ(heap()->gc_state(), Heap::NOT_IN_GC);
+  if (MarkBit::TryMark(object)) {
+    MemoryChunk::FromHeapObject(object)->IncrementLiveBytesAtomically(
+        ALIGN_TO_ALLOCATION_ALIGNMENT(object.Size(isolate())));
+  }
+}
+
 void IncrementalMarking::UpdateMarkingWorklistAfterScavenge() {
   if (!IsMarking()) return;
   DCHECK(!v8_flags.separate_gc_phases);

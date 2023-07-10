@@ -259,6 +259,21 @@ MarkBit MarkBit::From(HeapObject heap_object) {
   return MarkingBitmap::MarkBitFromAddress(heap_object.ptr());
 }
 
+// static
+bool MarkBit::TryMark(HeapObject object) {
+  return MarkBit::From(object).Set<AccessMode::ATOMIC>();
+}
+
+// static
+bool MarkBit::TryMarkNonAtomic(HeapObject object) {
+  return MarkBit::From(object).Set<AccessMode::NON_ATOMIC>();
+}
+
+// static
+bool MarkBit::IsMarked(HeapObject object) {
+  return MarkBit::From(object).Get<AccessMode::ATOMIC>();
+}
+
 LiveObjectRange::iterator::iterator() : cage_base_(kNullAddress) {}
 
 LiveObjectRange::iterator::iterator(const Page* page)

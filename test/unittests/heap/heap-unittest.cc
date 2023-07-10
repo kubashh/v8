@@ -484,7 +484,7 @@ TEST_F(HeapTest, Regress978156) {
   }
   // 6. Mark the filler black to access its two markbits. This triggers
   // an out-of-bounds access of the marking bitmap in a bad case.
-  heap->marking_state()->TryMarkAndAccountLiveBytes(filler);
+  marking->EnsureBlackAllocated(filler);
 }
 
 }  // namespace internal
