@@ -44,8 +44,9 @@ enum RobustnessFlag { ROBUST_STRING_TRAVERSAL, FAST_STRING_TRAVERSAL };
 // concrete performance benefit at that particular point in the code.
 class StringShape {
  public:
-  V8_INLINE explicit StringShape(const String s);
-  V8_INLINE explicit StringShape(const String s, PtrComprCageBase cage_base);
+  V8_INLINE explicit StringShape(const Tagged<String> s);
+  V8_INLINE explicit StringShape(const Tagged<String> s,
+                                 PtrComprCageBase cage_base);
   V8_INLINE explicit StringShape(Tagged<Map> s);
   V8_INLINE explicit StringShape(InstanceType t);
   V8_INLINE bool IsSequential() const;

@@ -11,6 +11,7 @@
 #include "src/handles/handles-inl.h"
 #include "src/heap/factory.h"
 #include "src/numbers/hash-seed-inl.h"
+#include "src/objects/instance-type-inl.h"
 #include "src/objects/name-inl.h"
 #include "src/objects/smi-inl.h"
 #include "src/objects/string-table-inl.h"
@@ -19,6 +20,8 @@
 #include "src/sandbox/external-pointer.h"
 #include "src/strings/string-hasher-inl.h"
 #include "src/strings/unicode-inl.h"
+#include "src/torque/runtime-macro-shims.h"
+#include "src/torque/runtime-support.h"
 #include "src/utils/utils.h"
 
 // Has to be the last include (doesn't have include guards):
@@ -128,14 +131,14 @@ TQ_OBJECT_CONSTRUCTORS_IMPL(ExternalString)
 TQ_OBJECT_CONSTRUCTORS_IMPL(ExternalOneByteString)
 TQ_OBJECT_CONSTRUCTORS_IMPL(ExternalTwoByteString)
 
-StringShape::StringShape(const String str)
-    : type_(str.map(kAcquireLoad).instance_type()) {
+StringShape::StringShape(const Tagged<String> str)
+    : type_(str->map(kAcquireLoad).instance_type()) {
   set_valid();
   DCHECK_EQ(type_ & kIsNotStringMask, kStringTag);
 }
 
-StringShape::StringShape(const String str, PtrComprCageBase cage_base)
-    : type_(str.map(cage_base, kAcquireLoad).instance_type()) {
+StringShape::StringShape(const Tagged<String> str, PtrComprCageBase cage_base)
+    : type_(str->map(cage_base, kAcquireLoad).instance_type()) {
   set_valid();
   DCHECK_EQ(type_ & kIsNotStringMask, kStringTag);
 }
