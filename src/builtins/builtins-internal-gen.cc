@@ -1390,6 +1390,15 @@ void Builtins::Generate_MaglevOptimizeCodeOrTailCallOptimizedCodeSlot(
 }
 #endif  // V8_ENABLE_MAGLEV
 
+#ifndef V8_TARGET_ARCH_X64
+void Builtins::Generate_FastConstructBuiltin(MacroAssembler* masm) {
+  masm->Trap();
+}
+void Builtins::Generate_FastConstructFunction(MacroAssembler* masm) {
+  masm->Trap();
+}
+#endif  // V8_TARGET_ARCH_X64
+
 void Builtins::Generate_MaglevFunctionEntryStackCheck_WithoutNewTarget(
     MacroAssembler* masm) {
   Generate_MaglevFunctionEntryStackCheck(masm, false);

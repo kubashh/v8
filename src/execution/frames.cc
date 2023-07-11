@@ -678,6 +678,8 @@ StackFrame::Type SafeStackFrameType(StackFrame::Type candidate) {
     case StackFrame::BUILTIN_CONTINUATION:
     case StackFrame::BUILTIN_EXIT:
     case StackFrame::CONSTRUCT:
+    case StackFrame::FAST_CONSTRUCT:
+    case StackFrame::FAST_CONSTRUCT_BUILTIN:
     case StackFrame::CONSTRUCT_ENTRY:
     case StackFrame::ENTRY:
     case StackFrame::EXIT:
