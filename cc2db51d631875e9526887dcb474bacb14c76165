@@ -128,6 +128,30 @@
       },
       "revId": "cc2db51d631875e9526887dcb474bacb14c76165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6d44c2d_3a0b31eb",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-11T10:50:03Z",
+      "side": 1,
+      "message": "Nah nah, please share it and let\u0027s try to have conventions that everybody likes :D\n\nI don\u0027t think that we have a strict rule w.r.t to what happens when it causes the the line to be more than 80 chars... Maybe we should agree on a rule then :)",
+      "parentUuid": "8eef9c0b_ed6e0e50",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 16
+      },
+      "revId": "cc2db51d631875e9526887dcb474bacb14c76165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
