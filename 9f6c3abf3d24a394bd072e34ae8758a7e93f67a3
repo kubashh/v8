@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a3e96cb_cae77f59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-11T09:52:11Z",
+      "side": 1,
+      "message": "ptal,\n\nmeasuring with cb in chrome this is about +0.5% on speedometer. I have no clue why pinpoint does not see it and I am not in the mood to figure out 😊 It\u0027s anyway the right thing to do (tm).",
+      "revId": "9f6c3abf3d24a394bd072e34ae8758a7e93f67a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
