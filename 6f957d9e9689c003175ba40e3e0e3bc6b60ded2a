@@ -22,6 +22,30 @@
       },
       "revId": "6f957d9e9689c003175ba40e3e0e3bc6b60ded2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "018c1687_f9f066d3",
+        "filename": "src/objects/tagged.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-07-11T09:16:37Z",
+      "side": 1,
+      "message": "I want to, in the future, add a Union type that I can use to define JSValue",
+      "parentUuid": "fe62ed8e_6d5145eb",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 28
+      },
+      "revId": "6f957d9e9689c003175ba40e3e0e3bc6b60ded2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
