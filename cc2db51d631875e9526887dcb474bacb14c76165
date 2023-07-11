@@ -56,6 +56,30 @@
       },
       "revId": "cc2db51d631875e9526887dcb474bacb14c76165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "079da145_28d731b3",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-11T08:05:41Z",
+      "side": 1,
+      "message": "Honestly, I\u0027m not a huge fan of defining variables within ifs, so I rarely do that.\nIf people prefer that though, anybody should feel free to provide a CL and I can also +1 it. 😊",
+      "parentUuid": "08620f1a_c198acec",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 16
+      },
+      "revId": "cc2db51d631875e9526887dcb474bacb14c76165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
