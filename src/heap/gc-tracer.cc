@@ -328,6 +328,10 @@ void GCTracer::StartCycle(GarbageCollector collector,
   } else {
     epoch_full_ = next_epoch();
   }
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  CHECK(heap_->css_stats()->IsClear());
+#endif
 }
 
 void GCTracer::StartAtomicPause() {
@@ -444,6 +448,17 @@ void GCTracer::UpdateStatistics(GarbageCollector collector) {
   if (v8_flags.trace_gc) {
     heap_->PrintShortHeapStatistics();
   }
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  if (v8_flags.trace_css_nvp) {
+    std::stringstream json;
+    json << *heap_->css_stats();
+    heap_->isolate()->PrintWithTimestamp("CSS statistics GC: %s\n",
+                                         json.str().c_str());
+    fflush(stdout);
+  }
+  heap_->css_stats()->Clear();
+#endif
 
   if (V8_UNLIKELY(TracingFlags::gc.load(std::memory_order_relaxed) &
                   v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {

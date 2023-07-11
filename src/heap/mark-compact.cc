@@ -801,10 +801,23 @@ void MarkCompactCollector::SweepArrayBufferExtensions() {
 void MarkCompactCollector::MarkRootObject(Root root, HeapObject obj) {
   DCHECK(ReadOnlyHeap::Contains(obj) || heap_->Contains(obj));
   if (marking_state_->TryMark(obj)) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (root == Root::kConservativeStackRoots) {
+      heap_->css_stats()->AddPointer(
+          obj.address(), measure_css::Stats::FULL_NOT_ALREADY_MARKED);
+    }
+#endif
     local_marking_worklists_->Push(obj);
     if (V8_UNLIKELY(v8_flags.track_retaining_path)) {
       heap_->AddRetainingRoot(root, obj);
     }
+  } else {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (root == Root::kConservativeStackRoots) {
+      heap_->css_stats()->AddPointer(obj.address(),
+                                     measure_css::Stats::FULL_ALREADY_MARKED);
+    }
+#endif
   }
 }
 
@@ -860,7 +873,15 @@ class MarkCompactCollector::RootMarkingVisitor final : public RootVisitor {
     Object object = *p;
     if (!object.IsHeapObject()) return;
     HeapObject heap_object = HeapObject::cast(object);
-    if (!collector_->ShouldMarkObject(heap_object)) return;
+    if (!collector_->ShouldMarkObject(heap_object)) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+      if (root == Root::kConservativeStackRoots) {
+        collector_->heap_->css_stats()->AddPointer(
+            heap_object.address(), measure_css::Stats::FULL_SHOULD_NOT_MARK);
+      }
+#endif
+      return;
+    }
     collector_->MarkRootObject(root, heap_object);
   }
 

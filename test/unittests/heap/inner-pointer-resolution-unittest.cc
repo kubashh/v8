@@ -18,9 +18,10 @@ template <typename TMixin>
 class WithInnerPointerResolutionMixin : public TMixin {
  public:
   Address ResolveInnerPointer(Address maybe_inner_ptr) {
+    static measure_css::Stats dummy;
     return ConservativeStackVisitor::FindBasePtrForMarking(
         maybe_inner_ptr, this->isolate()->heap()->memory_allocator(),
-        GarbageCollector::MARK_COMPACTOR);
+        GarbageCollector::MARK_COMPACTOR, &dummy);
   }
 };
 
