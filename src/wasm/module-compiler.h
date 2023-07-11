@@ -183,41 +183,16 @@ class AsyncCompileJob {
 
   friend class AsyncStreamingProcessor;
 
+  // TODO(clemensb): Add {kValidation} to {FinishingComponent}.
   enum FinishingComponent { kStreamingDecoder, kCompilation };
+  enum ExecutionContext { kInForeground, kInBackground };
 
-  // Decrements the number of outstanding finishers. The last caller of this
-  // function should finish the asynchronous compilation, see the comment on
-  // {outstanding_finishers_}.
-  V8_WARN_UNUSED_RESULT bool DecrementAndCheckFinisherCount(
-      FinishingComponent component) {
-    base::MutexGuard guard(&check_finisher_mutex_);
-    DCHECK_LT(0, outstanding_finishers_);
-    if (outstanding_finishers_-- == 2) {
-      // The first component finished, we just start a timer for a histogram.
-      streaming_until_finished_timer_.Start();
-      return false;
-    }
-    // The timer has only been started above in the case of streaming
-    // compilation.
-    if (streaming_until_finished_timer_.IsStarted()) {
-      // We measure the time delta from when the StreamingDecoder finishes until
-      // when module compilation finishes. Depending on whether streaming or
-      // compilation finishes first we add the delta to the according histogram.
-      int elapsed = static_cast<int>(
-          streaming_until_finished_timer_.Elapsed().InMilliseconds());
-      if (component == kStreamingDecoder) {
-        isolate_->counters()
-            ->wasm_compilation_until_streaming_finished()
-            ->AddSample(elapsed);
-      } else {
-        isolate_->counters()
-            ->wasm_streaming_until_compilation_finished()
-            ->AddSample(elapsed);
-      }
-    }
-    DCHECK_EQ(0, outstanding_finishers_);
-    return true;
-  }
+  // Note that this method invalidates the {AsyncCompileJob} if this is the last
+  // finisher, thus the rvalue qualifier (use {std::move} on call sites).
+  void FinisherFinished(ExecutionContext execution_context,
+                        FinishingComponent component) &&;
+
+  void IncrementFinisherCount();
 
   void CreateNativeModule(std::shared_ptr<const WasmModule> module,
                           size_t code_size_estimate);
