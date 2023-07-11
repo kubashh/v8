@@ -282,7 +282,7 @@ void Sweeper::SweepingState<scope>::FinishSweeping() {
 }
 
 void Sweeper::LocalSweeper::ContributeAndWaitForPromotedPagesIteration() {
-  if (!sweeper_->sweeping_in_progress()) return;
+  if (!sweeper_->minor_sweeping_in_progress()) return;
   if (!sweeper_->IsIteratingPromotedPages()) return;
   ParallelIterateAndSweepPromotedPages();
   base::MutexGuard guard(

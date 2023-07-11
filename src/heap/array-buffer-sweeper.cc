@@ -213,6 +213,7 @@ void ArrayBufferSweeper::Prepare(
       old_ = ArrayBufferList();
     } break;
   }
+  in_progress_.store(true, std::memory_order_release);
   DCHECK(sweeping_in_progress());
 }
 
@@ -223,6 +224,7 @@ void ArrayBufferSweeper::Finalize() {
   old_.Append(&job_->old_);
   DecrementExternalMemoryCounters(job_->freed_bytes_);
   job_.reset();
+  in_progress_.store(false, std::memory_order_release);
   DCHECK(!sweeping_in_progress());
 }
 

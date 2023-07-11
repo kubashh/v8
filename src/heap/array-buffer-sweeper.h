@@ -5,6 +5,7 @@
 #ifndef V8_HEAP_ARRAY_BUFFER_SWEEPER_H_
 #define V8_HEAP_ARRAY_BUFFER_SWEEPER_H_
 
+#include <atomic>
 #include <memory>
 
 #include "src/base/logging.h"
@@ -70,7 +71,9 @@ class ArrayBufferSweeper final {
   // Bytes accounted in the old generation. Rebuilt during sweeping.
   size_t OldBytes() const { return old().ApproximateBytes(); }
 
-  bool sweeping_in_progress() const { return job_.get(); }
+  bool sweeping_in_progress() const {
+    return in_progress_.load(std::memory_order_acquire);
+  }
 
  private:
   struct SweepingJob;
@@ -100,6 +103,8 @@ class ArrayBufferSweeper final {
   ArrayBufferList young_;
   ArrayBufferList old_;
   Sweeper::LocalSweeper local_sweeper_;
+  // Use atomic bool for syncronization.
+  std::atomic<bool> in_progress_{false};
 };
 
 }  // namespace internal
