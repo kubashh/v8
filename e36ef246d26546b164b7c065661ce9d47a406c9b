@@ -62,6 +62,30 @@
       },
       "revId": "e36ef246d26546b164b7c065661ce9d47a406c9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c10aa92_85e1a7e3",
+        "filename": "src/objects/tagged.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-07-11T09:06:51Z",
+      "side": 1,
+      "message": "I\u0027ll leave as a member function for now, for consistency with the above, but probably it could yeah.",
+      "parentUuid": "00210044_2fb14085",
+      "range": {
+        "startLine": 77,
+        "startChar": 17,
+        "endLine": 77,
+        "endChar": 25
+      },
+      "revId": "e36ef246d26546b164b7c065661ce9d47a406c9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
