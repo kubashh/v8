@@ -104,6 +104,30 @@
       },
       "revId": "cc2db51d631875e9526887dcb474bacb14c76165",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eef9c0b_ed6e0e50",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-11T08:31:26Z",
+      "side": 1,
+      "message": "I see, I should be careful then to share not too many of my (apparently unpopular) opinions. 😊\nI\u0027ll change this in my next lowering CL.\nNow, if it would cause the `if (...) {` to be longer than 80 chars, would you move it out of the condition?",
+      "parentUuid": "38625528_b4c7274f",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 16
+      },
+      "revId": "cc2db51d631875e9526887dcb474bacb14c76165",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
