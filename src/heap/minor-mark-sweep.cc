@@ -87,6 +87,11 @@ class YoungGenerationMarkingVerifier : public MarkingVerifierBase {
   }
 
  protected:
+  void VerifyRoots() {
+    heap_->IterateRoots(
+        this, base::EnumSet<SkipRoot>{SkipRoot::kWeak, SkipRoot::kTopOfStack});
+  }
+
   void VerifyMap(Map map) override { VerifyHeapObjectImpl(map); }
 
   void VerifyPointers(ObjectSlot start, ObjectSlot end) override {

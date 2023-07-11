@@ -70,27 +70,6 @@ PagedSpaceObjectIterator::PagedSpaceObjectIterator(Heap* heap,
   heap->MakeHeapIterable();
 }
 
-PagedSpaceObjectIterator::PagedSpaceObjectIterator(Heap* heap,
-                                                   const PagedSpace* space,
-                                                   const Page* page,
-                                                   Address start_address)
-    : cur_addr_(start_address),
-      cur_end_(page->area_end()),
-      space_(space),
-      page_range_(page, page),
-      current_page_(page_range_.begin())
-#if V8_COMPRESS_POINTERS
-      ,
-      cage_base_(heap->isolate())
-#endif  // V8_COMPRESS_POINTERS
-{
-  heap->MakeHeapIterable();
-  DCHECK_IMPLIES(!heap->IsInlineAllocationEnabled(),
-                 !page->Contains(space->top()));
-  DCHECK(page->Contains(start_address));
-  DCHECK(page->SweepingDone());
-}
-
 // We have hit the end of the page and should advance to the next block of
 // objects.  This happens at the end of the page.
 bool PagedSpaceObjectIterator::AdvanceToNextPage() {

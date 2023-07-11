@@ -30,8 +30,6 @@ class V8_EXPORT_PRIVATE PagedSpaceObjectIterator : public ObjectIterator {
   PagedSpaceObjectIterator(Heap* heap, const PagedSpaceBase* space);
   PagedSpaceObjectIterator(Heap* heap, const PagedSpaceBase* space,
                            const Page* page);
-  PagedSpaceObjectIterator(Heap* heap, const PagedSpace* space,
-                           const Page* page, Address start_address);
 
   // Advance to the next object, skipping free spaces and other fillers and
   // skipping the special garbage section of which there is one per space.

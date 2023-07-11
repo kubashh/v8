@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "src/base/logging.h"
+#include "src/common/globals.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/heap-write-barrier.h"
 #include "src/heap/heap.h"
@@ -272,7 +273,11 @@ void MarkingBarrier::ActivateAll(Heap* heap, bool is_compacting,
                                                 marking_barrier_type);
       });
 
-  if (heap->isolate()->is_shared_space_isolate()) {
+  DCHECK_EQ(heap->tracer()->GetCurrentCollector() !=
+                GarbageCollector::MINOR_MARK_SWEEPER,
+            marking_barrier_type == MarkingBarrierType::kMajor);
+  if (heap->isolate()->is_shared_space_isolate() &&
+      marking_barrier_type == MarkingBarrierType::kMajor) {
     heap->isolate()
         ->shared_space_isolate()
         ->global_safepoint()
@@ -316,7 +321,9 @@ void MarkingBarrier::DeactivateAll(Heap* heap) {
     local_heap->marking_barrier()->Deactivate();
   });
 
-  if (heap->isolate()->is_shared_space_isolate()) {
+  if (heap->isolate()->is_shared_space_isolate() &&
+      heap->tracer()->GetCurrentCollector() !=
+          GarbageCollector::MINOR_MARK_SWEEPER) {
     heap->isolate()
         ->shared_space_isolate()
         ->global_safepoint()
@@ -354,7 +361,9 @@ void MarkingBarrier::PublishAll(Heap* heap) {
     local_heap->marking_barrier()->PublishIfNeeded();
   });
 
-  if (heap->isolate()->is_shared_space_isolate()) {
+  if (heap->isolate()->is_shared_space_isolate() &&
+      heap->tracer()->GetCurrentCollector() !=
+          GarbageCollector::MINOR_MARK_SWEEPER) {
     heap->isolate()
         ->shared_space_isolate()
         ->global_safepoint()

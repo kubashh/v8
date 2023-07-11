@@ -1340,7 +1340,8 @@ void Heap::GarbageCollectionEpilogueInSafepoint(GarbageCollector collector) {
           GetGCTypeFromGarbageCollector(collector), current_gc_callback_flags_);
     });
 
-    if (isolate()->is_shared_space_isolate()) {
+    if (isolate()->is_shared_space_isolate() &&
+        collector != GarbageCollector::MINOR_MARK_SWEEPER) {
       isolate()->global_safepoint()->IterateClientIsolates(
           [this, collector](Isolate* client) {
             client->heap()->safepoint()->IterateLocalHeaps(
@@ -1624,6 +1625,9 @@ void Heap::CollectAllAvailableGarbage(GarbageCollectionReason gc_reason) {
   EagerlyFreeExternalMemory();
 
   if (v8_flags.trace_duplicate_threshold_kb) {
+    base::Optional<GlobalSafepointScope> safepoint_scope;
+    if (isolate()->is_shared_space_isolate())
+      safepoint_scope.emplace(isolate());
     std::map<int, std::vector<HeapObject>> objects_by_size;
     PagedSpaceIterator spaces(this);
     for (PagedSpace* space = spaces.Next(); space != nullptr;
@@ -1973,21 +1977,26 @@ void Heap::StartIncrementalMarking(GCFlags gc_flags,
 
   base::Optional<SafepointScope> safepoint_scope;
 
+  bool requires_global_safepoint =
+      isolate()->is_shared_space_isolate() &&
+      (collector != GarbageCollector::MINOR_MARK_SWEEPER);
+
   {
     AllowGarbageCollection allow_shared_gc;
     IgnoreLocalGCRequests ignore_gc_requests(this);
 
-    SafepointKind safepoint_kind = isolate()->is_shared_space_isolate()
+    SafepointKind safepoint_kind = requires_global_safepoint
                                        ? SafepointKind::kGlobal
                                        : SafepointKind::kIsolate;
     safepoint_scope.emplace(isolate(), safepoint_kind);
   }
 
 #ifdef DEBUG
-  VerifyCountersAfterSweeping();
+  if (collector != GarbageCollector::MINOR_MARK_SWEEPER)
+    VerifyCountersAfterSweeping();
 #endif
 
-  if (isolate()->is_shared_space_isolate()) {
+  if (requires_global_safepoint) {
     isolate()->global_safepoint()->IterateClientIsolates([](Isolate* client) {
       if (v8_flags.concurrent_marking) {
         client->heap()->concurrent_marking()->Pause();
@@ -2004,7 +2013,7 @@ void Heap::StartIncrementalMarking(GCFlags gc_flags,
 
   incremental_marking()->Start(collector, gc_reason);
 
-  if (isolate()->is_shared_space_isolate()) {
+  if (requires_global_safepoint) {
     isolate()->global_safepoint()->IterateClientIsolates([](Isolate* client) {
       if (v8_flags.concurrent_marking &&
           client->heap()->incremental_marking()->IsMarking()) {
@@ -2291,12 +2300,16 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
     memory_allocator()->unmapper()->EnsureUnmappingCompleted();
   }
 
+  bool requires_global_safepoint =
+      isolate()->is_shared_space_isolate() &&
+      (collector != GarbageCollector::MINOR_MARK_SWEEPER);
+
   base::Optional<SafepointScope> safepoint_scope;
   {
     AllowGarbageCollection allow_shared_gc;
     IgnoreLocalGCRequests ignore_gc_requests(this);
 
-    SafepointKind safepoint_kind = isolate()->is_shared_space_isolate()
+    SafepointKind safepoint_kind = requires_global_safepoint
                                        ? SafepointKind::kGlobal
                                        : SafepointKind::kIsolate;
     safepoint_scope.emplace(isolate(), safepoint_kind);
@@ -2323,7 +2336,7 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
 
   HeapVerifier::VerifyHeapIfEnabled(this);
 
-  if (isolate()->is_shared_space_isolate()) {
+  if (requires_global_safepoint) {
     isolate()->global_safepoint()->IterateClientIsolates(
         [collector](Isolate* client) {
           CHECK(client->heap()->deserialization_complete());
@@ -2383,7 +2396,7 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
   // Update relocatables.
   Relocatable::PostGarbageCollectionProcessing(isolate_);
 
-  if (isolate_->is_shared_space_isolate()) {
+  if (requires_global_safepoint) {
     // Allows handle derefs for all threads/isolates from this thread.
     AllowHandleDereferenceAllThreads allow_all_handle_derefs;
     isolate()->global_safepoint()->IterateClientIsolates([](Isolate* client) {
@@ -2422,7 +2435,7 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
 
   HeapVerifier::VerifyHeapIfEnabled(this);
 
-  if (isolate()->is_shared_space_isolate()) {
+  if (requires_global_safepoint) {
     isolate()->global_safepoint()->IterateClientIsolates([](Isolate* client) {
       HeapVerifier::VerifyHeapIfEnabled(client->heap());
 
@@ -4246,7 +4259,7 @@ std::unique_ptr<v8::MeasureMemoryDelegate> Heap::MeasureMemoryDelegate(
 void Heap::CollectCodeStatistics() {
   TRACE_EVENT0("v8", "Heap::CollectCodeStatistics");
   IgnoreLocalGCRequests ignore_gc_requests(this);
-  IsolateSafepointScope safepoint_scope(this);
+  GlobalSafepointScope safepoint_scope(isolate());
   MakeHeapIterable();
   CodeStatistics::ResetCodeAndMetadataStatistics(isolate());
   // We do not look for code in new space, or map space.  If code

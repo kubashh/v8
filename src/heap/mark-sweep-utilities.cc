@@ -28,11 +28,6 @@ void MarkingVerifierBase::VisitMapPointer(HeapObject object) {
   VerifyMap(object.map(cage_base()));
 }
 
-void MarkingVerifierBase::VerifyRoots() {
-  heap_->IterateRootsIncludingClients(
-      this, base::EnumSet<SkipRoot>{SkipRoot::kWeak, SkipRoot::kTopOfStack});
-}
-
 void MarkingVerifierBase::VerifyMarkingOnPage(const Page* page, Address start,
                                               Address end) {
   Address next_object_must_be_here_or_later = start;

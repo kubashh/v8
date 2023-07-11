@@ -117,6 +117,11 @@ class FullMarkingVerifier : public MarkingVerifierBase {
   }
 
  protected:
+  void VerifyRoots() {
+    heap_->IterateRootsIncludingClients(
+        this, base::EnumSet<SkipRoot>{SkipRoot::kWeak, SkipRoot::kTopOfStack});
+  }
+
   const MarkingBitmap* bitmap(const MemoryChunk* chunk) override {
     return chunk->marking_bitmap();
   }
