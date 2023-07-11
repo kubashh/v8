@@ -205,7 +205,10 @@ inline Address CommonFrame::caller_pc() const {
 inline bool CommonFrameWithJSLinkage::IsConstructFrame(Address fp) {
   intptr_t frame_type =
       base::Memory<intptr_t>(fp + TypedFrameConstants::kFrameTypeOffset);
-  return frame_type == StackFrame::TypeToMarker(StackFrame::CONSTRUCT);
+  return frame_type == StackFrame::TypeToMarker(StackFrame::CONSTRUCT) ||
+         frame_type == StackFrame::TypeToMarker(StackFrame::FAST_CONSTRUCT) ||
+         frame_type ==
+             StackFrame::TypeToMarker(StackFrame::FAST_CONSTRUCT_BUILTIN);
 }
 
 inline JavaScriptFrame::JavaScriptFrame(StackFrameIteratorBase* iterator)
@@ -296,6 +299,13 @@ inline InternalFrame::InternalFrame(StackFrameIteratorBase* iterator)
     : TypedFrame(iterator) {}
 
 inline ConstructFrame::ConstructFrame(StackFrameIteratorBase* iterator)
+    : InternalFrame(iterator) {}
+
+inline FastConstructFrame::FastConstructFrame(StackFrameIteratorBase* iterator)
+    : InternalFrame(iterator) {}
+
+inline FastConstructBuiltinFrame::FastConstructBuiltinFrame(
+    StackFrameIteratorBase* iterator)
     : InternalFrame(iterator) {}
 
 inline BuiltinContinuationFrame::BuiltinContinuationFrame(
