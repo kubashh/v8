@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe62ed8e_6d5145eb",
+        "filename": "src/objects/tagged.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-07-11T09:13:08Z",
+      "side": 1,
+      "message": "Suggestion: `using JSValue \u003d Tagged\u003cObject\u003e` ?",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 28
+      },
+      "revId": "6f957d9e9689c003175ba40e3e0e3bc6b60ded2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
