@@ -14,6 +14,7 @@
 #include "src/compiler/backend/instruction.h"
 #include "src/compiler/common-operator.h"
 #include "src/compiler/compiler-source-position-table.h"
+#include "src/compiler/frame-states.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/node-properties.h"
 #include "src/compiler/schedule.h"
@@ -1042,9 +1043,11 @@ size_t InstructionSelectorT<TurbofanAdapter>::AddInputsToFrameStateDescriptor(
   values_descriptor->ReserveSize(descriptor->GetSize());
 
   DCHECK_NOT_NULL(function);
-  entries += AddOperandToStateValueDescriptor(
-      values_descriptor, inputs, g, deduplicator, function,
-      MachineType::AnyTagged(), FrameStateInputKind::kStackSlot, zone);
+  if (descriptor->type() != FrameStateType::kConstructStub) {
+    entries += AddOperandToStateValueDescriptor(
+        values_descriptor, inputs, g, deduplicator, function,
+        MachineType::AnyTagged(), FrameStateInputKind::kStackSlot, zone);
+  }
 
   entries += AddInputsToFrameStateDescriptor(
       values_descriptor, inputs, g, deduplicator, parameters, kind, zone);

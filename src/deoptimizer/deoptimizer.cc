@@ -1356,15 +1356,16 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   CHECK(!is_topmost || deopt_kind_ == DeoptimizeKind::kLazy);
 
   Builtins* builtins = isolate_->builtins();
-  Code construct_stub = builtins->code(Builtin::kJSConstructStubGeneric);
+  Code construct_stub = builtins->code(Builtin::kFastConstructFunction);
   BytecodeOffset bytecode_offset = translated_frame->bytecode_offset();
 
-  const int parameters_count = translated_frame->height();
+  const int parameters_count = 0;  // translated_frame->height();
   ConstructStubFrameInfo frame_info =
       ConstructStubFrameInfo::Precise(parameters_count, is_topmost);
-  const uint32_t output_frame_size = frame_info.frame_size_in_bytes();
+  const uint32_t output_frame_size =
+      frame_info.frame_size_in_bytes() + (is_topmost ? kSystemPointerSize : 0);
 
-  TranslatedFrame::iterator function_iterator = value_iterator++;
+  // TranslatedFrame::iterator function_iterator = value_iterator++;
   if (verbose_tracing_enabled()) {
     PrintF(trace_scope()->file(),
            "  translating construct stub => bytecode_offset=%d (%s), "
@@ -1392,17 +1393,17 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   output_frame->SetTop(top_address);
 
   ReadOnlyRoots roots(isolate());
-  for (int i = 0; i < ArgumentPaddingSlots(parameters_count); ++i) {
-    frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
-  }
+  // for (int i = 0; i < ArgumentPaddingSlots(parameters_count); ++i) {
+  //   frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
+  // }
 
   // The allocated receiver of a construct stub frame is passed as the
   // receiver parameter through the translation. It might be encoding
   // a captured object, so we need save it for later.
-  TranslatedFrame::iterator receiver_iterator = value_iterator;
+  // TranslatedFrame::iterator receiver_iterator = value_iterator;
 
-  // Compute the incoming parameter translation.
-  frame_writer.PushStackJSArguments(value_iterator, parameters_count);
+  // // Compute the incoming parameter translation.
+  // frame_writer.PushStackJSArguments(value_iterator, parameters_count);
 
   DCHECK_EQ(output_frame->GetLastArgumentSlotOffset(),
             frame_writer.top_offset());
@@ -1429,37 +1430,41 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   }
 
   // A marker value is used to mark the frame.
-  intptr_t marker = StackFrame::TypeToMarker(StackFrame::CONSTRUCT);
+  intptr_t marker = StackFrame::TypeToMarker(StackFrame::FAST_CONSTRUCT);
   frame_writer.PushRawValue(marker, "context (construct stub sentinel)\n");
 
+  auto implicit_receiver = value_iterator++;
   frame_writer.PushTranslatedValue(value_iterator++, "context");
 
+  frame_writer.PushTranslatedValue(implicit_receiver, "implicit receiver");
+
   // Number of incoming arguments.
-  const uint32_t argc = parameters_count;
-  frame_writer.PushRawObject(Smi::FromInt(argc), "argc\n");
+  // const uint32_t argc = parameters_count;
+  // frame_writer.PushRawObject(Smi::FromInt(argc), "argc\n");
 
   // The constructor function was mentioned explicitly in the
   // CONSTRUCT_STUB_FRAME.
-  frame_writer.PushTranslatedValue(function_iterator, "constructor function\n");
+  // frame_writer.PushTranslatedValue(function_iterator, "constructor
+  // function\n");
 
   // The deopt info contains the implicit receiver or the new target at the
   // position of the receiver. Copy it to the top of stack, with the hole value
   // as padding to maintain alignment.
 
-  frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
+  // frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
 
-  CHECK(bytecode_offset == BytecodeOffset::ConstructStubCreate() ||
-        bytecode_offset == BytecodeOffset::ConstructStubInvoke());
-  const char* debug_hint =
-      bytecode_offset == BytecodeOffset::ConstructStubCreate()
-          ? "new target\n"
-          : "allocated receiver\n";
-  frame_writer.PushTranslatedValue(receiver_iterator, debug_hint);
+  // CHECK(bytecode_offset == BytecodeOffset::ConstructStubCreate() ||
+  //       bytecode_offset == BytecodeOffset::ConstructStubInvoke());
+  // const char* debug_hint =
+  //     bytecode_offset == BytecodeOffset::ConstructStubCreate()
+  //         ? "new target\n"
+  //         : "allocated receiver\n";
+  // frame_writer.PushTranslatedValue(receiver_iterator, debug_hint);
 
   if (is_topmost) {
-    for (int i = 0; i < ArgumentPaddingSlots(1); ++i) {
-      frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
-    }
+    // for (int i = 0; i < ArgumentPaddingSlots(1); ++i) {
+    //   frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
+    // }
     // Ensure the result is restored back when we return to the stub.
     Register result_reg = kReturnRegister0;
     intptr_t result = input_->GetRegister(result_reg.code());

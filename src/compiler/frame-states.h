@@ -64,7 +64,6 @@ class OutputFrameStateCombine {
   size_t const parameter_;
 };
 
-
 // The type of stack frame that a FrameState node represents.
 enum class FrameStateType {
   kUnoptimizedFunction,            // Represents an UnoptimizedFrame.
@@ -95,7 +94,12 @@ class FrameStateFunctionInfo {
         shared_info_(shared_info) {}
 
   int local_count() const { return local_count_; }
-  int parameter_count() const { return parameter_count_; }
+  int parameter_count() const {
+    if (type_ == FrameStateType::kConstructStub) {
+      return 1;
+    }
+    return parameter_count_;
+  }
   Handle<SharedFunctionInfo> shared_info() const { return shared_info_; }
   FrameStateType type() const { return type_; }
 

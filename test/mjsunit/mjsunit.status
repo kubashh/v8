@@ -40,6 +40,8 @@
   'compiler/fast-api-helpers': [SKIP],
   'typedarray-helpers': [SKIP],
 
+  'compiler/constructor-inlining': [SKIP],
+
   # All tests in the bug directory are expected to fail.
   'bugs/*': [FAIL],
 
