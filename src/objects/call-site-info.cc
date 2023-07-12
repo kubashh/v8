@@ -344,15 +344,14 @@ Handle<String> CallSiteInfo::GetFunctionDebugName(Handle<CallSiteInfo> info) {
 
 namespace {
 
-PrimitiveHeapObject InferMethodNameFromFastObject(Isolate* isolate,
-                                                  JSObject receiver,
-                                                  JSFunction fun,
-                                                  PrimitiveHeapObject name) {
+Tagged<PrimitiveHeapObject> InferMethodNameFromFastObject(
+    Isolate* isolate, Tagged<JSObject> receiver, Tagged<JSFunction> fun,
+    Tagged<PrimitiveHeapObject> name) {
   ReadOnlyRoots roots(isolate);
-  Map map = receiver.map();
+  Map map = receiver->map();
   DescriptorArray descriptors = map.instance_descriptors(isolate);
   for (auto i : map.IterateOwnDescriptors()) {
-    PrimitiveHeapObject key = descriptors.GetKey(i);
+    Tagged<PrimitiveHeapObject> key = descriptors.GetKey(i);
     if (key.IsSymbol()) continue;
     auto details = descriptors.GetDetails(i);
     if (details.IsDontEnum()) continue;
@@ -361,7 +360,7 @@ PrimitiveHeapObject InferMethodNameFromFastObject(Isolate* isolate,
       auto field_index = FieldIndex::ForPropertyIndex(
           map, details.field_index(), details.representation());
       if (field_index.is_double()) continue;
-      value = receiver.RawFastPropertyAt(isolate, field_index);
+      value = receiver->RawFastPropertyAt(isolate, field_index);
     } else {
       value = descriptors.GetStrongValue(i);
     }
