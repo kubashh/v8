@@ -1203,17 +1203,17 @@ class MaglevTranslationArrayBuilder {
     // we generalise that?
     translation_array_builder_->BeginConstructStubFrame(
         frame.bytecode_position(),
-        GetDeoptLiteral(GetSharedFunctionInfo(frame)),
-        frame.arguments_without_receiver().length() + 1);
+        GetDeoptLiteral(GetSharedFunctionInfo(frame)), 1);
+    // frame.arguments_without_receiver().length() + 1);
 
-    // Closure
-    BuildDeoptFrameSingleValue(frame.closure(), current_input_location);
+    // // Closure
+    // BuildDeoptFrameSingleValue(frame.closure(), current_input_location);
 
-    // Arguments
+    // // Arguments
     BuildDeoptFrameSingleValue(frame.receiver(), current_input_location);
-    for (ValueNode* value : frame.arguments_without_receiver()) {
-      BuildDeoptFrameSingleValue(value, current_input_location);
-    }
+    // for (ValueNode* value : frame.arguments_without_receiver()) {
+    //   BuildDeoptFrameSingleValue(value, current_input_location);
+    // }
 
     // Context
     ValueNode* value = frame.context();

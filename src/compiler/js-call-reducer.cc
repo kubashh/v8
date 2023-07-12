@@ -2330,9 +2330,14 @@ FrameState CreateArtificialFrameState(
   static constexpr int kReceiverInputIndex = 1;
   const int parameter_count_with_receiver = parameter_count + 1;
   std::vector<Node*> params;
-  params.reserve(parameter_count_with_receiver);
-  for (int i = 0; i < parameter_count_with_receiver; i++) {
-    params.push_back(node->InputAt(kReceiverInputIndex + i));
+  if (frame_state_type == FrameStateType::kConstructStub) {
+    params.reserve(1);
+    params.push_back(node->InputAt(kReceiverInputIndex));
+  } else {
+    params.reserve(parameter_count_with_receiver);
+    for (int i = 0; i < parameter_count_with_receiver; i++) {
+      params.push_back(node->InputAt(kReceiverInputIndex + i));
+    }
   }
   const Operator* op_param = common->StateValues(
       static_cast<int>(params.size()), SparseInputMask::Dense());

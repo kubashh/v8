@@ -678,6 +678,8 @@ StackFrame::Type SafeStackFrameType(StackFrame::Type candidate) {
     case StackFrame::BUILTIN_CONTINUATION:
     case StackFrame::BUILTIN_EXIT:
     case StackFrame::CONSTRUCT:
+    case StackFrame::FAST_CONSTRUCT:
+    case StackFrame::FAST_CONSTRUCT_BUILTIN:
     case StackFrame::CONSTRUCT_ENTRY:
     case StackFrame::ENTRY:
     case StackFrame::EXIT:
@@ -3354,28 +3356,30 @@ uint32_t UnoptimizedFrameInfo::GetStackSizeForAdditionalArguments(
 ConstructStubFrameInfo::ConstructStubFrameInfo(int translation_height,
                                                bool is_topmost,
                                                FrameInfoKind frame_info_kind) {
+  frame_size_in_bytes_without_fixed_ = 0;
+  frame_size_in_bytes_ = 5 * kSystemPointerSize;
   // Note: This is according to the Translation's notion of 'parameters' which
   // differs to that of the SharedFunctionInfo, e.g. by including the receiver.
-  const int parameters_count = translation_height;
+  // const int parameters_count = translation_height;
 
-  // If the construct frame appears to be topmost we should ensure that the
-  // value of result register is preserved during continuation execution.
-  // We do this here by "pushing" the result of the constructor function to
-  // the top of the reconstructed stack and popping it in
-  // {Builtin::kNotifyDeoptimized}.
+  // // If the construct frame appears to be topmost we should ensure that the
+  // // value of result register is preserved during continuation execution.
+  // // We do this here by "pushing" the result of the constructor function to
+  // // the top of the reconstructed stack and popping it in
+  // // {Builtin::kNotifyDeoptimized}.
 
-  static constexpr int kTopOfStackPadding = TopOfStackRegisterPaddingSlots();
-  static constexpr int kTheResult = 1;
-  const int argument_padding = ArgumentPaddingSlots(parameters_count);
+  // static constexpr int kTopOfStackPadding = TopOfStackRegisterPaddingSlots();
+  // static constexpr int kTheResult = 1;
+  // const int argument_padding = ArgumentPaddingSlots(parameters_count);
 
-  const int adjusted_height =
-      (is_topmost || frame_info_kind == FrameInfoKind::kConservative)
-          ? parameters_count + argument_padding + kTheResult +
-                kTopOfStackPadding
-          : parameters_count + argument_padding;
-  frame_size_in_bytes_without_fixed_ = adjusted_height * kSystemPointerSize;
-  frame_size_in_bytes_ = frame_size_in_bytes_without_fixed_ +
-                         ConstructFrameConstants::kFixedFrameSize;
+  // const int adjusted_height =
+  //     (is_topmost || frame_info_kind == FrameInfoKind::kConservative)
+  //         ? parameters_count + argument_padding + kTheResult +
+  //               kTopOfStackPadding
+  //         : parameters_count + argument_padding;
+  // frame_size_in_bytes_without_fixed_ = adjusted_height * kSystemPointerSize;
+  // frame_size_in_bytes_ = frame_size_in_bytes_without_fixed_ +
+  //  ConstructFrameConstants::kFixedFrameSize;
 }
 
 BuiltinContinuationFrameInfo::BuiltinContinuationFrameInfo(

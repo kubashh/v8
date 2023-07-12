@@ -1248,13 +1248,13 @@ class ConstructStubDeoptFrame : public DeoptFrame {
 
   const MaglevCompilationUnit& unit() const { return data().unit; }
   BytecodeOffset bytecode_position() const { return data().bytecode_position; }
-  ValueNode*& closure() { return data().closure; }
-  ValueNode* closure() const { return data().closure; }
+  // ValueNode*& closure() { return data().closure; }
+  // ValueNode* closure() const { return data().closure; }
   ValueNode*& receiver() { return data().receiver; }
   ValueNode* receiver() const { return data().receiver; }
-  base::Vector<ValueNode*> arguments_without_receiver() const {
-    return data().arguments_without_receiver;
-  }
+  // base::Vector<ValueNode*> arguments_without_receiver() const {
+  // return data().arguments_without_receiver;
+  // }
   ValueNode*& context() { return data().context; }
   ValueNode* context() const { return data().context; }
   SourcePosition source_position() const { return data().source_position; }

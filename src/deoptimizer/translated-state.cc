@@ -849,6 +849,7 @@ int TranslatedFrame::GetValueCount() {
       return height() + kTheFunction;
 
     case kConstructStub:
+      return 2;
     case kBuiltinContinuation:
 #if V8_ENABLE_WEBASSEMBLY
     case kJSToWasmBuiltinContinuation:

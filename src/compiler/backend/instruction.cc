@@ -1230,6 +1230,9 @@ size_t FrameStateDescriptor::GetHeight() const {
 }
 
 size_t FrameStateDescriptor::GetSize() const {
+  if (type_ == FrameStateType::kConstructStub) {
+    return 2;
+  }
   return 1 + parameters_count() + locals_count() + stack_count() +
          (HasContext() ? 1 : 0);
 }

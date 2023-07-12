@@ -59,12 +59,12 @@ void DeepForEachInputImpl(
       break;
     }
     case DeoptFrame::FrameType::kConstructStubFrame: {
-      f(frame.as_construct_stub().closure(), &input_locations[index++]);
+      // f(frame.as_construct_stub().closure(), &input_locations[index++]);
       f(frame.as_construct_stub().receiver(), &input_locations[index++]);
-      for (first_argument<Function> node :
-           frame.as_construct_stub().arguments_without_receiver()) {
-        f(node, &input_locations[index++]);
-      }
+      // for (first_argument<Function> node :
+      //      frame.as_construct_stub().arguments_without_receiver()) {
+      //   f(node, &input_locations[index++]);
+      // }
       f(frame.as_construct_stub().context(), &input_locations[index++]);
       break;
     }
@@ -112,12 +112,12 @@ void DeepForEachInput(const_if_function_first_arg_not_reference<
           });
       break;
     case DeoptFrame::FrameType::kConstructStubFrame: {
-      f(top_frame.as_construct_stub().closure(), &input_locations[index++]);
+      // f(top_frame.as_construct_stub().closure(), &input_locations[index++]);
       f(top_frame.as_construct_stub().receiver(), &input_locations[index++]);
-      for (first_argument<Function> node :
-           top_frame.as_construct_stub().arguments_without_receiver()) {
-        f(node, &input_locations[index++]);
-      }
+      // for (first_argument<Function> node :
+      //      top_frame.as_construct_stub().arguments_without_receiver()) {
+      //   f(node, &input_locations[index++]);
+      // }
       f(top_frame.as_construct_stub().context(), &input_locations[index++]);
       break;
     }

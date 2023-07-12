@@ -216,8 +216,8 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   //  -- Slot 0 / sp[4*kSystemPointerSize]  context
   // -----------------------------------
   // Deoptimizer enters here.
-  masm->isolate()->heap()->SetConstructStubCreateDeoptPCOffset(
-      masm->pc_offset());
+  // masm->isolate()->heap()->SetConstructStubCreateDeoptPCOffset(
+  //     masm->pc_offset());
   __ bind(&post_instantiation_deopt_entry);
 
   // Restore new target.
@@ -273,8 +273,8 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   // -----------------------------------
 
   // Store offset of return address for deoptimizer.
-  masm->isolate()->heap()->SetConstructStubInvokeDeoptPCOffset(
-      masm->pc_offset());
+  // masm->isolate()->heap()->SetConstructStubInvokeDeoptPCOffset(
+  //     masm->pc_offset());
 
   // If the result is an object (in the ECMA sense), we should get rid
   // of the receiver and use the result; see ECMA-262 section 13.2.2-7
@@ -1349,6 +1349,231 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
     __ Jump(masm->isolate()->builtins()->Call(receiver_mode),
             RelocInfo::CODE_TARGET);
   }
+
+  // Throw stack overflow exception.
+  __ bind(&stack_overflow);
+  {
+    __ TailCallRuntime(Runtime::kThrowStackOverflow);
+    // This should be unreachable.
+    __ int3();
+  }
+}
+
+namespace {
+
+void NewImplicitReceiver(MacroAssembler* masm) {
+  // ----------- S t a t e -------------
+  //  -- rax : the number of arguments
+  //  -- rdx : the new target (either the same as the constructor or
+  //           the JSFunction on which new was invoked initially)
+  //  -- rdi : the constructor to call (can be any Object)
+  //  -- rsi : the context
+  //
+  //  Stack:
+  //  -- Implicit Receiver
+  //  -- [arguments]
+  //  -- Implicit Receiver
+  //  -- Context
+  //  -- FastConstructMarker
+  //  -- FramePointer
+  // -----------------------------------
+
+  // Save live registers.
+  __ SmiTag(rcx, rax);
+  __ Push(rcx);
+  __ Push(rdx);
+  __ Push(rdi);
+  __ Call(BUILTIN_CODE(masm->isolate(), FastNewObject), RelocInfo::CODE_TARGET);
+  // Save result.
+  __ movq(rcx, rax);
+  // Restore live registers.
+  __ Pop(rdi);
+  __ Pop(rdx);
+  __ Pop(rax);
+  __ SmiUntagUnsigned(rax);
+
+  // Patch implicit receiver (in arguments)
+  __ movq(Operand(rsp, 0 /* first argument */), rcx);
+  // Patch second implicit (in construct frame)
+  __ movq(Operand(rbp, FastConstructFrameConstants::kImplicitReceiverOffset),
+          rcx);
+
+  masm->isolate()->heap()->SetConstructStubCreateDeoptPCOffset(
+      masm->pc_offset());
+
+  // Restore context.
+  __ movq(rsi, Operand(rbp, FastConstructFrameConstants::kContextOffset));
+}
+
+}  // namespace
+
+void Builtins::Generate_FastConstructBuiltin(MacroAssembler* masm) {
+  // ----------- S t a t e -------------
+  //  -- rax : the number of arguments
+  //  -- rdx : the new target (either the same as the constructor or
+  //           the JSFunction on which new was invoked initially)
+  //  -- rdi : the constructor to call (can be any Object)
+  //  -- rsi : the context
+  //  -- rbx : the allocation site feedback if available, undefined otherwise
+  //  -- rcx : the address of the first argument to be pushed. Subsequent
+  //           arguments should be consecutive above this, in the same order as
+  //           they are to be pushed onto the stack.
+  // -----------------------------------
+
+  // Push arguments + implicit receiver.
+  Register argc_without_receiver = r11;
+  {
+    FrameScope scope(masm, StackFrame::FAST_CONSTRUCT_BUILTIN);
+    __ leaq(argc_without_receiver, Operand(rax, -kJSArgcReceiverSlots));
+    GenerateInterpreterPushArgs(masm, argc_without_receiver, rcx, r12);
+    __ PushRoot(RootIndex::kTheHoleValue);
+    __ InvokeFunction(rdi, rdx, rax, InvokeType::kCall);
+  }
+  __ ret(0);
+}
+
+void Builtins::Generate_FastConstructFunction(MacroAssembler* masm) {
+  // ----------- S t a t e -------------
+  //  -- rax : the number of arguments
+  //  -- rdx : the new target (either the same as the constructor or
+  //           the JSFunction on which new was invoked initially)
+  //  -- rdi : the constructor to call (can be any Object)
+  //  -- rsi : the context
+  //  -- rbx : the allocation site feedback if available, undefined otherwise
+  //  -- rcx : the address of the first argument to be pushed. Subsequent
+  //           arguments should be consecutive above this, in the same order as
+  //           they are to be pushed onto the stack.
+  // -----------------------------------
+  __ AssertConstructor(rdi);
+  __ AssertFunction(rdi);
+
+  // Jump to JSBuiltinsConstructStub or JSConstructStubGeneric.
+  const TaggedRegister shared_function_info(r8);
+  __ LoadTaggedField(shared_function_info,
+                     FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
+  __ testl(FieldOperand(shared_function_info, SharedFunctionInfo::kFlagsOffset),
+           Immediate(SharedFunctionInfo::ConstructAsBuiltinBit::kMask));
+  __ Jump(BUILTIN_CODE(masm->isolate(), FastConstructBuiltin),
+          RelocInfo::CODE_TARGET, not_zero);
+
+  // Enter a construct frame.
+  FrameScope scope(masm, StackFrame::MANUAL);
+  __ EnterFrame(StackFrame::FAST_CONSTRUCT);
+  __ Push(rsi);
+  __ PushRoot(RootIndex::kTheHoleValue);
+
+  // Push arguments + implicit receiver.
+  Register argc_without_receiver = r11;
+  __ leaq(argc_without_receiver, Operand(rax, -kJSArgcReceiverSlots));
+  GenerateInterpreterPushArgs(masm, argc_without_receiver, rcx, r12);
+  __ PushRoot(
+      RootIndex::kTheHoleValue);  // Implicit receiver (patch later if needed)
+  __ AssertUndefinedOrAllocationSite(rbx);
+
+  Label not_create_implicit_receiver;
+  Register scratch = r8;
+  __ movl(scratch,
+          FieldOperand(shared_function_info, SharedFunctionInfo::kFlagsOffset));
+  __ DecodeField<SharedFunctionInfo::FunctionKindBits>(scratch);
+  __ JumpIfIsInRange(
+      scratch, static_cast<uint32_t>(FunctionKind::kDefaultDerivedConstructor),
+      static_cast<uint32_t>(FunctionKind::kDerivedConstructor),
+      &not_create_implicit_receiver, Label::kNear);
+  NewImplicitReceiver(masm);
+
+  // Else: use TheHoleValue as receiver for constructor call (already in the
+  // stack)
+  __ bind(&not_create_implicit_receiver);
+
+  // Call the function.
+  __ InvokeFunction(rdi, rdx, rax, InvokeType::kCall);
+
+  // Store offset of return address for deoptimizer.
+  masm->isolate()->heap()->SetConstructStubInvokeDeoptPCOffset(
+      masm->pc_offset());
+
+  // If the result is an object (in the ECMA sense), we should get rid
+  // of the receiver and use the result; see ECMA-262 section 13.2.2-7
+  // on page 74.
+  Label use_receiver, do_throw, leave_and_return, check_result;
+
+  // If the result is undefined, we'll use the implicit receiver. Otherwise we
+  // do a smi check and fall through to check if the return value is a valid
+  // receiver.
+  __ JumpIfNotRoot(rax, RootIndex::kUndefinedValue, &check_result,
+                   Label::kNear);
+
+  // Throw away the result of the constructor invocation and use the
+  // on-stack receiver as the result.
+  __ bind(&use_receiver);
+  __ movq(rax, Operand(rsp, 0 * kSystemPointerSize));
+  __ JumpIfRoot(rax, RootIndex::kTheHoleValue, &do_throw, Label::kNear);
+
+  __ bind(&leave_and_return);
+  __ LeaveFrame(StackFrame::FAST_CONSTRUCT);
+  __ ret(0);
+
+  // If the result is a smi, it is *not* an object in the ECMA sense.
+  __ bind(&check_result);
+  __ JumpIfSmi(rax, &use_receiver, Label::kNear);
+
+  // Check if the type of the result is not an object in the ECMA sense.
+  __ JumpIfJSAnyIsNotPrimitive(rax, rcx, &leave_and_return, Label::kNear);
+  __ jmp(&use_receiver);
+
+  __ bind(&do_throw);
+  __ movq(rsi, Operand(rbp, FastConstructFrameConstants::kContextOffset));
+  __ CallRuntime(Runtime::kThrowConstructorReturnedNonObject);
+  // We don't return here.
+  __ int3();
+}
+
+void Builtins::Generate_InterpreterPushArgsThenFastConstruct(
+    MacroAssembler* masm) {
+  // ----------- S t a t e -------------
+  //  -- rax : the number of arguments
+  //  -- rdx : the new target (either the same as the constructor or
+  //           the JSFunction on which new was invoked initially)
+  //  -- rdi : the constructor to call (can be any Object)
+  //  -- rbx : the allocation site feedback if available, undefined otherwise
+  //  -- rcx : the address of the first argument to be pushed. Subsequent
+  //           arguments should be consecutive above this, in the same order as
+  //           they are to be pushed onto the stack.
+  // -----------------------------------
+  Label stack_overflow;
+
+  // Add a stack check before pushing arguments.
+  __ StackOverflowCheck(rax, &stack_overflow);
+
+  Register target = rdi;
+  Register map = kScratchRegister;
+  Register instance_type = r8;
+
+  // Check if target is a Smi.
+  Label non_constructor;
+  __ JumpIfSmi(target, &non_constructor);
+
+  // Check if target has a [[Construct]] internal method.
+  __ LoadMap(map, target);
+  __ testb(FieldOperand(map, Map::kBitFieldOffset),
+           Immediate(Map::Bits1::IsConstructorBit::kMask));
+  __ j(zero, &non_constructor);
+
+  // Dispatch based on instance type.
+  __ CmpInstanceTypeRange(map, instance_type, FIRST_JS_FUNCTION_TYPE,
+                          LAST_JS_FUNCTION_TYPE);
+  __ Jump(BUILTIN_CODE(masm->isolate(), FastConstructFunction),
+          RelocInfo::CODE_TARGET, below_equal);
+
+  // Fallback to slow construct
+  __ Jump(BUILTIN_CODE(masm->isolate(), InterpreterPushArgsThenConstruct),
+          RelocInfo::CODE_TARGET);
+
+  // Called Construct on an Object that doesn't have a [[Construct]] internal
+  // method.
+  __ bind(&non_constructor);
+  __ Jump(BUILTIN_CODE(masm->isolate(), ConstructedNonConstructable),
+          RelocInfo::CODE_TARGET);
 
   // Throw stack overflow exception.
   __ bind(&stack_overflow);
