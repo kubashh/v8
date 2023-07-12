@@ -66,6 +66,10 @@ class PipelineData : public base::ContextualClass<PipelineData> {
   Zone* graph_zone() const { return graph_zone_; }
   JSHeapBroker* broker() const { return broker_; }
   Isolate* isolate() const { return isolate_; }
+  const wasm::WasmModule* wasm_module() const { return wasm_module_; }
+  void set_wasm_module(const wasm::WasmModule* module) {
+    wasm_module_ = module;
+  }
   SourcePositionTable* source_positions() const { return source_positions_; }
   NodeOriginTable* node_origins() const { return node_origins_; }
   InstructionSequence* sequence() const { return sequence_; }
@@ -112,6 +116,7 @@ class PipelineData : public base::ContextualClass<PipelineData> {
   Zone*& graph_zone_;
   JSHeapBroker*& broker_;
   Isolate* const& isolate_;
+  const wasm::WasmModule* wasm_module_ = nullptr;
   SourcePositionTable*& source_positions_;
   NodeOriginTable*& node_origins_;
   InstructionSequence*& sequence_;
