@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "304e95ee_6b2ce7d6",
+        "filename": "src/base/bit-field.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-07-12T06:40:08Z",
+      "side": 1,
+      "message": "A short usage example would be great here as a comment.",
+      "revId": "31aa87eeb08893f93e1d60355a255e11ba4e04c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35f4765a_26d3b6a1",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-07-12T06:40:08Z",
+      "side": 1,
+      "message": "Hmm now that I look at this again, perhaps we should do `osr_state \u003d osr_state \u0026 ~urgency::kMask`. Otherwise it\u0027s easy to miss this spot if we add more things to the OsrState. Wdyt?",
+      "revId": "31aa87eeb08893f93e1d60355a255e11ba4e04c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0743725d_7c1381da",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-07-12T06:40:08Z",
+      "side": 1,
+      "message": "Is this valid? Another slot could still have `current-\u003ekind` code, so I think this goes against the invariant described in the .h.",
+      "revId": "31aa87eeb08893f93e1d60355a255e11ba4e04c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
