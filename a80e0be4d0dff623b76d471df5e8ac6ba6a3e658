@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60e2bde2_ef1e9a89",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-12T10:19:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cad06fb9_d1c3eaf4",
+      "range": {
+        "startLine": 1353,
+        "startChar": 8,
+        "endLine": 1353,
+        "endChar": 12
+      },
+      "revId": "a80e0be4d0dff623b76d471df5e8ac6ba6a3e658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9eaebb12_80646c1a",
@@ -95,6 +119,30 @@
       "writtenOn": "2023-07-12T08:52:28Z",
       "side": 1,
       "message": "What does it depend on when to use which of these variants?",
+      "range": {
+        "startLine": 2221,
+        "startChar": 10,
+        "endLine": 2221,
+        "endChar": 35
+      },
+      "revId": "a80e0be4d0dff623b76d471df5e8ac6ba6a3e658",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "427051fa_d62e7cae",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2221,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-12T10:19:13Z",
+      "side": 1,
+      "message": "I guess it depends on how the builtins return the value.",
+      "parentUuid": "9eaebb12_80646c1a",
       "range": {
         "startLine": 2221,
         "startChar": 10,
