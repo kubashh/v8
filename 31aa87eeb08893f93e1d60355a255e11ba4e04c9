@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5825483_0cf3bbe6",
+        "filename": "src/base/bit-field.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-12T07:42:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "304e95ee_6b2ce7d6",
+      "revId": "31aa87eeb08893f93e1d60355a255e11ba4e04c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35f4765a_26d3b6a1",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "064fab43_8178545e",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-12T07:42:14Z",
+      "side": 1,
+      "message": "depends on what we add 😊 but yeah, probably more robust.",
+      "parentUuid": "35f4765a_26d3b6a1",
+      "revId": "31aa87eeb08893f93e1d60355a255e11ba4e04c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0743725d_7c1381da",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-07-12T06:40:08Z",
       "side": 1,
       "message": "Is this valid? Another slot could still have `current-\u003ekind` code, so I think this goes against the invariant described in the .h.",
+      "revId": "31aa87eeb08893f93e1d60355a255e11ba4e04c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "794caaad_75c00ac5",
+        "filename": "src/objects/feedback-vector.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-12T07:42:14Z",
+      "side": 1,
+      "message": "good point. I don\u0027t even think it\u0027s necessary.",
+      "parentUuid": "0743725d_7c1381da",
       "revId": "31aa87eeb08893f93e1d60355a255e11ba4e04c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
