@@ -87,6 +87,11 @@ class OpIndex {
   uint32_t offset_;
 
   static constexpr uint32_t kTurbofanNodeIdFlag = 1;
+
+  template <typename H>
+  friend H AbslHashValue(H h, const OpIndex& idx) {
+    return H::combine(std::move(h), idx.offset_);
+  }
 };
 
 std::ostream& operator<<(std::ostream& os, OpIndex idx);

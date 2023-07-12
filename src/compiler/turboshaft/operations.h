@@ -2269,6 +2269,11 @@ struct AllocateOp : FixedArityOperationT<1, AllocateOp> {
   }
   void PrintOptions(std::ostream& os) const;
   auto options() const { return std::tuple{type, allow_large_objects}; }
+
+  template <typename H>
+  friend H AbslHashValue(H h, const AllocateOp& op) {
+    return H::combine(std::move(h), op.size(), op.type, op.allow_large_objects);
+  }
 };
 
 struct DecodeExternalPointerOp
