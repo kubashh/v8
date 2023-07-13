@@ -16,6 +16,92 @@
       "message": "Matthias, PTAL overall.\nDarius, please approve src/compiler.",
       "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f4e59b6_46464c1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-13T09:44:06Z",
+      "side": 1,
+      "message": "src/compiler LGTM :)",
+      "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76a1fde9_04cb5668",
+        "filename": "src/compiler/turboshaft/phase.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-13T09:44:06Z",
+      "side": 1,
+      "message": "I think that you need a `#ifdef V8_ENABLE_WEBASSEMBLY` around that.",
+      "range": {
+        "startLine": 69,
+        "startChar": 2,
+        "endLine": 72,
+        "endChar": 3
+      },
+      "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ac6034d_4ce71b84",
+        "filename": "src/compiler/turboshaft/phase.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-13T09:44:06Z",
+      "side": 1,
+      "message": "And around this as well.",
+      "range": {
+        "startLine": 119,
+        "startChar": 2,
+        "endLine": 119,
+        "endChar": 49
+      },
+      "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd4f4a17_12007650",
+        "filename": "src/compiler/turboshaft/recreate-schedule.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-13T09:44:06Z",
+      "side": 1,
+      "message": "Thanks for updating this! I wasn\u0027t sure if all of the WASM-specific operations were lowered or not so I wanted to ask you before changing it but I forgot :/",
+      "range": {
+        "startLine": 189,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 30
+      },
+      "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
