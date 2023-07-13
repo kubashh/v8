@@ -5815,6 +5815,7 @@ void Isolate::SetRAILMode(RAILMode rail_mode) {
   }
   rail_mode_.store(rail_mode);
   if (old_rail_mode == PERFORMANCE_LOAD && rail_mode != PERFORMANCE_LOAD) {
+    // Schedule a task to start incremental marking.
     heap()->incremental_marking()->incremental_marking_job()->ScheduleTask();
   }
   if (v8_flags.trace_rail) {

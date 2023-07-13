@@ -12,6 +12,7 @@
 #include "src/heap/heap-inl.h"
 #include "src/heap/heap.h"
 #include "src/heap/incremental-marking.h"
+#include "src/heap/minor-gc-job.h"
 #include "src/init/v8.h"
 
 namespace v8 {
@@ -84,6 +85,12 @@ void IncrementalMarkingJob::Task::RunInternal() {
       heap->StartIncrementalMarking(heap->GCFlagsForIncrementalMarking(),
                                     GarbageCollectionReason::kTask,
                                     kGCCallbackScheduleIdleGarbageCollection);
+    } else {
+      if (v8_flags.minor_ms && v8_flags.concurrent_minor_ms_marking &&
+          heap->new_space()->Size() >=
+              MinorGCJob::YoungGenerationTaskTriggerSize(heap)) {
+        heap->StartMinorMSIncrementalMarkingIfPossible();
+      }
     }
   }
 
