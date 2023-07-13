@@ -50,6 +50,24 @@
       "message": "The order looks wrong to me, in `copy0_1` the source is 0 and the destination is 1, right? So the sizes should be in the same order?\nI would suggest using the spec order (dst first) everywhere for less confusion.",
       "revId": "52ce36eff4e8983c06898ffb1877037d30780a20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6e4a0ef_f55bf6ff",
+        "filename": "test/mjsunit/wasm/multi-memory.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-07-13T11:53:08Z",
+      "side": 1,
+      "message": "Oh, yes, this was all messed up (but in a way that it worked in the end, so only the names were confusing). I fixed it.",
+      "parentUuid": "326e759b_8ac9783f",
+      "revId": "52ce36eff4e8983c06898ffb1877037d30780a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
