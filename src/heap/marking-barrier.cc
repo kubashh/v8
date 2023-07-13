@@ -32,10 +32,16 @@ MarkingBarrier::MarkingBarrier(LocalHeap* local_heap)
       major_collector_(heap_->mark_compact_collector()),
       minor_collector_(heap_->minor_mark_sweep_collector()),
       incremental_marking_(heap_->incremental_marking()),
-      marking_state_(isolate()),
+      marking_state_(isolate()
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+                         ,
+                     heap_->css_stats()->marked_objects()
+#endif
+                         ),
       is_main_thread_barrier_(local_heap->is_main_thread()),
       uses_shared_heap_(isolate()->has_shared_space()),
-      is_shared_space_isolate_(isolate()->is_shared_space_isolate()) {}
+      is_shared_space_isolate_(isolate()->is_shared_space_isolate()) {
+}
 
 MarkingBarrier::~MarkingBarrier() { DCHECK(typed_slots_map_.empty()); }
 

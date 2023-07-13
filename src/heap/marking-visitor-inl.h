@@ -714,7 +714,13 @@ YoungGenerationMarkingVisitorBase<ConcreteVisitor, MarkingState>::
       worklists_local_(worklists_local),
       ephemeron_tables_local_(ephemeron_tables_local),
       pretenuring_handler_(isolate->heap()->pretenuring_handler()),
-      local_pretenuring_feedback_(local_pretenuring_feedback) {}
+      local_pretenuring_feedback_(local_pretenuring_feedback)
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+      ,
+      stats_(isolate->heap()->css_stats()->marked_objects())
+#endif
+{
+}
 
 template <typename ConcreteVisitor, typename MarkingState>
 YoungGenerationMarkingVisitorBase<

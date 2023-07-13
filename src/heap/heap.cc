@@ -279,9 +279,24 @@ Heap::Heap()
       allocation_type_for_in_place_internalizable_strings_(
           isolate()->OwnsStringTables() ? AllocationType::kOld
                                         : AllocationType::kSharedOld),
-      marking_state_(isolate_),
-      non_atomic_marking_state_(isolate_),
-      pretenuring_handler_(this) {
+      marking_state_(isolate_
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+                     ,
+                     css_stats()->marked_objects()
+#endif
+                         ),
+      non_atomic_marking_state_(isolate_
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+                                ,
+                                css_stats()->marked_objects()
+#endif
+                                    ),
+      pretenuring_handler_(this)
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+      ,
+      css_stats_(this)
+#endif
+{
   // Ensure old_generation_size_ is a multiple of kPageSize.
   DCHECK_EQ(0, max_old_generation_size() & (Page::kPageSize - 1));
 

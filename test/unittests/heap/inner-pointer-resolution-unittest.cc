@@ -18,9 +18,10 @@ template <typename TMixin>
 class WithInnerPointerResolutionMixin : public TMixin {
  public:
   Address ResolveInnerPointer(Address maybe_inner_ptr) {
+    measure_css::Stats* stats = this->isolate()->heap()->css_stats();
     return ConservativeStackVisitor::FindBasePtrForMarking(
         maybe_inner_ptr, this->isolate()->heap()->memory_allocator(),
-        GarbageCollector::MARK_COMPACTOR);
+        GarbageCollector::MARK_COMPACTOR, stats);
   }
 };
 
@@ -687,6 +688,8 @@ TEST_F(InnerPointerResolutionHeapTest, UnusedRegularYoungPages) {
     EXPECT_EQ(kNullAddress, ResolveInnerPointer(outside_ptr1));
     EXPECT_EQ(kNullAddress, ResolveInnerPointer(outside_ptr2));
 
+    heap()->css_stats()->Clear();
+
     // Start incremental marking and mark the third object.
     i::IncrementalMarking* marking = heap()->incremental_marking();
     if (marking->IsStopped()) {
@@ -723,6 +726,8 @@ TEST_F(InnerPointerResolutionHeapTest, UnusedRegularYoungPages) {
   EXPECT_EQ(kNullAddress, ResolveInnerPointer(inner_ptr3));
   EXPECT_EQ(kNullAddress, ResolveInnerPointer(outside_ptr1));
   EXPECT_EQ(kNullAddress, ResolveInnerPointer(outside_ptr2));
+
+  heap()->css_stats()->Clear();
 
   // Garbage collection once more.
   InvokeAtomicMinorGC();
@@ -774,6 +779,8 @@ TEST_F(InnerPointerResolutionHeapTest, UnusedLargeYoungPage) {
 
     // Inner pointer resolution should work now, finding the object.
     EXPECT_EQ(obj.address(), ResolveInnerPointer(inner_ptr));
+
+    heap()->css_stats()->Clear();
   }
 
   // Garbage collection should reclaim the object.

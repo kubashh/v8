@@ -2863,6 +2863,10 @@ bool HeapSnapshotGenerator::GenerateSnapshot() {
 
   NullContextForSnapshotScope null_context_scope(isolate);
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  CHECK(heap_->css_stats()->IsClear());
+#endif
+
   v8_heap_explorer_.MakeGlobalObjectTagMap(
       std::move(temporary_global_object_tags));
 
@@ -2870,7 +2874,20 @@ bool HeapSnapshotGenerator::GenerateSnapshot() {
 
   snapshot_->AddSyntheticRootEntries();
 
-  if (!FillReferences()) return false;
+  bool filled_references = FillReferences();
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  if (v8_flags.trace_css_nvp) {
+    std::stringstream json;
+    json << *heap_->css_stats();
+    heap_->isolate()->PrintWithTimestamp("CSS statistics SN: %s\n",
+                                         json.str().c_str());
+    fflush(stdout);
+  }
+  heap_->css_stats()->Clear();
+#endif
+
+  if (!filled_references) return false;
 
   snapshot_->FillChildren();
   snapshot_->RememberLastJSObjectId();
