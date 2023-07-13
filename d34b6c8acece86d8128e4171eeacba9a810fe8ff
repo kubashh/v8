@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc092e9b_0afc1e78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2023-07-13T08:44:49Z",
+      "side": 1,
+      "message": "PTAL! Fixes the issues described here: https://chromium-review.googlesource.com/c/v8/v8/+/4648358/comments/dbc5a352_9f4bf21f\n\nI added a release and a debug mac arm64 simulator tryjobs, which pass now: https://ci.chromium.org/ui/p/v8/builders/try/v8_mac_arm64_sim_rel/b8775756368344458513/overview\nhttps://ci.chromium.org/ui/p/v8/builders/try/v8_mac_arm64_sim_dbg/b8775753057773565057/overview",
+      "revId": "d34b6c8acece86d8128e4171eeacba9a810fe8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
