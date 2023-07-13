@@ -16,6 +16,23 @@
       "message": "ptal +toon to approve baseline-compiler.cc and bit-field.h",
       "revId": "a4bdddb8f0c4e2af678cff1e1bbe4528dd6d4ee7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2508882_1b717ab0",
+        "filename": "src/base/bit-field.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-07-13T07:47:44Z",
+      "side": 1,
+      "message": "`static_assert((A::kMask \u0026 B::kMask) \u003d\u003d 0);` basically I guess?",
+      "revId": "a4bdddb8f0c4e2af678cff1e1bbe4528dd6d4ee7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
