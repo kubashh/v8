@@ -16,6 +16,40 @@
       "message": "PTAL",
       "revId": "52ce36eff4e8983c06898ffb1877037d30780a20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e537a784_0faf26c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-13T11:26:27Z",
+      "side": 1,
+      "message": "LGTM with one comment",
+      "revId": "52ce36eff4e8983c06898ffb1877037d30780a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "326e759b_8ac9783f",
+        "filename": "test/mjsunit/wasm/multi-memory.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-13T11:26:27Z",
+      "side": 1,
+      "message": "The order looks wrong to me, in `copy0_1` the source is 0 and the destination is 1, right? So the sizes should be in the same order?\nI would suggest using the spec order (dst first) everywhere for less confusion.",
+      "revId": "52ce36eff4e8983c06898ffb1877037d30780a20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
