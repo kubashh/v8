@@ -9,6 +9,10 @@
 #include "src/heap/marking-state.h"
 #include "src/heap/memory-chunk.h"
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#include "src/heap/conservative-stack-visitor.h"
+#endif
+
 namespace v8 {
 namespace internal {
 
@@ -26,7 +30,11 @@ bool MarkingStateBase<ConcreteState, access_mode>::IsUnmarked(
 
 template <typename ConcreteState, AccessMode access_mode>
 bool MarkingStateBase<ConcreteState, access_mode>::TryMark(HeapObject obj) {
-  return MarkBit::From(obj).template Set<access_mode>();
+  bool result = MarkBit::From(obj).template Set<access_mode>();
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  if (result && object_stats_) object_stats_->AddObject(obj.address());
+#endif
+  return result;
 }
 
 template <typename ConcreteState, AccessMode access_mode>

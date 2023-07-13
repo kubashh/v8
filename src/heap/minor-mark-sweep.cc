@@ -151,10 +151,16 @@ YoungGenerationMainMarkingVisitor::YoungGenerationMainMarkingVisitor(
                                         MarkingState>(
           isolate, worklists_local, ephemeron_table_list_local,
           &local_pretenuring_feedback_),
-      marking_state_(PtrComprCageBase(isolate)),
+      marking_state_(PtrComprCageBase(isolate)
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+                         ,
+                     isolate->heap()->css_stats()->marked_objects()
+#endif
+                         ),
       local_pretenuring_feedback_(PretenuringHandler::kInitialFeedbackCapacity),
       shortcut_strings_(isolate->heap()->CanShortcutStringsDuringGC(
-          GarbageCollector::MINOR_MARK_SWEEPER)) {}
+          GarbageCollector::MINOR_MARK_SWEEPER)) {
+}
 
 YoungGenerationMainMarkingVisitor::~YoungGenerationMainMarkingVisitor() {
   DCHECK(local_pretenuring_feedback_.empty());
@@ -388,9 +394,16 @@ YoungGenerationRememberedSetsMarkingWorklist::
   }
 }
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+YoungGenerationRootMarkingVisitor::YoungGenerationRootMarkingVisitor(
+    YoungGenerationMainMarkingVisitor* main_marking_visitor,
+    measure_css::Stats* stats)
+    : main_marking_visitor_(main_marking_visitor), stats_(stats) {}
+#else
 YoungGenerationRootMarkingVisitor::YoungGenerationRootMarkingVisitor(
     YoungGenerationMainMarkingVisitor* main_marking_visitor)
     : main_marking_visitor_(main_marking_visitor) {}
+#endif
 
 YoungGenerationRootMarkingVisitor::~YoungGenerationRootMarkingVisitor() =
     default;
@@ -777,7 +790,12 @@ void MinorMarkSweepCollector::MarkLiveObjects() {
 
   DCHECK_NOT_NULL(local_marking_worklists_);
 
-  YoungGenerationRootMarkingVisitor root_visitor(main_marking_visitor_.get());
+  YoungGenerationRootMarkingVisitor root_visitor(main_marking_visitor_.get()
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+                                                     ,
+                                                 heap_->css_stats()
+#endif
+  );
 
   MarkRoots(root_visitor);
 

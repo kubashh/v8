@@ -109,11 +109,16 @@ template <typename TSlot>
 void YoungGenerationRootMarkingVisitor::VisitPointersImpl(Root root,
                                                           TSlot start,
                                                           TSlot end) {
-  if (root == Root::kStackRoots) {
+  if (root == Root::kStackRoots || root == Root::kConservativeStackRoots) {
     for (TSlot slot = start; slot < end; ++slot) {
       VisitYoungObjectViaSlot<ObjectVisitationMode::kPushToWorklist,
                               SlotTreatmentMode::kReadOnly>(
-          main_marking_visitor_, slot);
+          main_marking_visitor_, slot
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+          ,
+          root == Root::kConservativeStackRoots ? stats_ : nullptr
+#endif
+      );
     }
   } else {
     for (TSlot slot = start; slot < end; ++slot) {

@@ -13,6 +13,10 @@
 #include "src/heap/memory-chunk-layout.h"
 #include "src/heap/spaces.h"
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#include "src/heap/conservative-stack-visitor.h"
+#endif
+
 namespace v8::internal {
 
 template <>
@@ -167,9 +171,10 @@ constexpr MarkingBitmap::MarkBitIndex MarkingBitmap::LimitAddressToIndex(
   return AddressToIndex(address);
 }
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 // static
 inline Address MarkingBitmap::FindPreviousObjectForConservativeMarking(
-    const Page* page, Address maybe_inner_ptr) {
+    const Page* page, Address maybe_inner_ptr, measure_css::Stats* stats) {
   const auto* bitmap = page->marking_bitmap();
   const MarkBit::CellType* cells = bitmap->cells();
 
@@ -200,7 +205,11 @@ inline Address MarkingBitmap::FindPreviousObjectForConservativeMarking(
   // Traverse the bitmap backwards, until we find a markbit that is set and
   // whose previous markbit (if it exists) is unset.
   // First, iterate backwards to find a cell with any set markbit.
-  while (cell == 0 && cell_index > start_cell_index) cell = cells[--cell_index];
+  int iterations;
+  for (iterations = 0; cell == 0 && cell_index > start_cell_index; ++iterations)
+    cell = cells[--cell_index];
+  stats->AddValue(maybe_inner_ptr, measure_css::Stats::ITER_BACKWARD_1,
+                  iterations);
   if (cell == 0) {
     DCHECK_EQ(start_cell_index, cell_index);
     // We have reached the start of the page.
@@ -230,9 +239,13 @@ inline Address MarkingBitmap::FindPreviousObjectForConservativeMarking(
   }
 
   // Iterate backwards to find a cell with any unset markbit.
+  iterations = 0;
   do {
     cell = cells[--cell_index];
+    ++iterations;
   } while (~cell == 0 && cell_index > start_cell_index);
+  stats->AddValue(maybe_inner_ptr, measure_css::Stats::ITER_BACKWARD_2,
+                  iterations);
   if (~cell == 0) {
     DCHECK_EQ(start_cell_index, cell_index);
     // We have reached the start of the page.
@@ -248,6 +261,7 @@ inline Address MarkingBitmap::FindPreviousObjectForConservativeMarking(
                                cell_index * MarkingBitmap::kBitsPerCell +
                                index_of_last_leading_one);
 }
+#endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 
 // static
 MarkBit MarkBit::From(Address address) {

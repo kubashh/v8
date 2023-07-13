@@ -20,6 +20,10 @@
 #include "src/heap/slot-set.h"
 #include "src/heap/sweeper.h"
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#include "src/heap/conservative-stack-visitor.h"
+#endif
+
 namespace v8 {
 namespace internal {
 
@@ -28,8 +32,14 @@ namespace internal {
 class YoungGenerationMarkingState final
     : public MarkingStateBase<YoungGenerationMarkingState, AccessMode::ATOMIC> {
  public:
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  explicit YoungGenerationMarkingState(PtrComprCageBase cage_base,
+                                       measure_css::ObjectStats* stats)
+      : MarkingStateBase(cage_base, stats) {}
+#else
   explicit YoungGenerationMarkingState(PtrComprCageBase cage_base)
       : MarkingStateBase(cage_base) {}
+#endif
 
   const MarkingBitmap* bitmap(const MemoryChunk* chunk) const {
     return chunk->marking_bitmap();
@@ -176,8 +186,14 @@ class YoungGenerationRememberedSetsMarkingWorklist {
 
 class YoungGenerationRootMarkingVisitor final : public RootVisitor {
  public:
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  YoungGenerationRootMarkingVisitor(
+      YoungGenerationMainMarkingVisitor* main_marking_visitor,
+      measure_css::Stats* stats);
+#else
   explicit YoungGenerationRootMarkingVisitor(
       YoungGenerationMainMarkingVisitor* main_marking_visitor);
+#endif
   ~YoungGenerationRootMarkingVisitor();
 
   V8_INLINE void VisitRootPointer(Root root, const char* description,
@@ -196,6 +212,9 @@ class YoungGenerationRootMarkingVisitor final : public RootVisitor {
   void VisitPointersImpl(Root root, TSlot start, TSlot end);
 
   YoungGenerationMainMarkingVisitor* const main_marking_visitor_;
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  measure_css::Stats* stats_;
+#endif
 };
 
 // Collector for young-generation only.
