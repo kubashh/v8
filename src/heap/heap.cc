@@ -1496,14 +1496,18 @@ void Heap::ScheduleMinorGCTaskIfNeeded() {
 
 void Heap::StartMinorMSIncrementalMarkingIfPossible() {
   if (v8_flags.concurrent_minor_ms_marking && !IsTearingDown() &&
-      !incremental_marking()->IsMarking() &&
+      !ShouldOptimizeForLoadTime() && !incremental_marking()->IsMarking() &&
       incremental_marking()->CanBeStarted() && V8_LIKELY(!v8_flags.gc_global) &&
       (new_space()->TotalCapacity() >=
        v8_flags.minor_ms_min_new_space_capacity_for_concurrent_marking_mb *
-           MB)) {
+           MB) &&
+      heap->new_space()->Size() >=
+          MinorGCJob::YoungGenerationTaskTriggerSize(heap)) {
     StartIncrementalMarking(GCFlag::kNoFlags, GarbageCollectionReason::kTask,
                             kNoGCCallbackFlags,
                             GarbageCollector::MINOR_MARK_SWEEPER);
+    // Schedule a task for finalizing the GC if needed.
+    ScheduleMinorGCTaskIfNeeded();
   }
 }
 
