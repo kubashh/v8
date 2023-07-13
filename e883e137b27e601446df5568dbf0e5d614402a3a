@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd3ebf2_27bec501",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-13T10:04:13Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76a1fde9_04cb5668",
@@ -81,6 +98,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b64d6cd9_14d69776",
+        "filename": "src/compiler/turboshaft/phase.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-13T10:04:13Z",
+      "side": 1,
+      "message": "Please move it to line 133.\nthen it also is next to the TODO in case we add a bunch of other members. 😊",
+      "parentUuid": "1ac6034d_4ce71b84",
+      "range": {
+        "startLine": 119,
+        "startChar": 2,
+        "endLine": 119,
+        "endChar": 49
+      },
+      "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "fd4f4a17_12007650",
@@ -99,6 +140,29 @@
         "startChar": 0,
         "endLine": 189,
         "endChar": 30
+      },
+      "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7904d0f8_235e6cb2",
+        "filename": "src/compiler/turboshaft/wasm-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-13T10:04:13Z",
+      "side": 1,
+      "message": "This can be optimized for pointer-compressed builds with static roots, right?\nCan we add a TODO for it?",
+      "range": {
+        "startLine": 140,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 57
       },
       "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
