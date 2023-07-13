@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "217ce0f6_d4d36561",
+        "filename": "src/compiler/turboshaft/phase.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-13T10:11:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76a1fde9_04cb5668",
+      "range": {
+        "startLine": 69,
+        "startChar": 2,
+        "endLine": 72,
+        "endChar": 3
+      },
+      "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ac6034d_4ce71b84",
@@ -124,6 +148,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f5d8ee7c_18289ecc",
+        "filename": "src/compiler/turboshaft/phase.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-13T10:11:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ac6034d_4ce71b84",
+      "range": {
+        "startLine": 119,
+        "startChar": 2,
+        "endLine": 119,
+        "endChar": 49
+      },
+      "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fd4f4a17_12007650",
         "filename": "src/compiler/turboshaft/recreate-schedule.cc",
         "patchSetId": 2
@@ -158,6 +206,30 @@
       "writtenOn": "2023-07-13T10:04:13Z",
       "side": 1,
       "message": "This can be optimized for pointer-compressed builds with static roots, right?\nCan we add a TODO for it?",
+      "range": {
+        "startLine": 140,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 57
+      },
+      "revId": "e883e137b27e601446df5568dbf0e5d614402a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "429ed7df_11ca4581",
+        "filename": "src/compiler/turboshaft/wasm-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-13T10:11:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7904d0f8_235e6cb2",
       "range": {
         "startLine": 140,
         "startChar": 4,
