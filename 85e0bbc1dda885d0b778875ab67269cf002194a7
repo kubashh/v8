@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2edb9056_13bceef1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-13T15:25:43Z",
+      "side": 1,
+      "message": "@Victor: PTAL BUILD.bazel and .bazelrc\n@Toon: PTAL src/zone, *.gn, DEPS\n@Nico: PTAL src/compiler",
+      "revId": "85e0bbc1dda885d0b778875ab67269cf002194a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
