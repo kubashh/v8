@@ -16,6 +16,75 @@
       "message": "ptal",
       "revId": "ca2c6084a6676a5d5374a4b84001c408f61c4f16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ccbfbe6_63c73a8d",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5820,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-13T14:01:11Z",
+      "side": 1,
+      "message": "What value does that comment add? :D",
+      "range": {
+        "startLine": 5820,
+        "startChar": 7,
+        "endLine": 5820,
+        "endChar": 15
+      },
+      "revId": "ca2c6084a6676a5d5374a4b84001c408f61c4f16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3a68799_5a5aec86",
+        "filename": "src/heap/incremental-marking-job.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-13T14:01:11Z",
+      "side": 1,
+      "message": "else if",
+      "range": {
+        "startLine": 118,
+        "startChar": 7,
+        "endLine": 119,
+        "endChar": 6
+      },
+      "revId": "ca2c6084a6676a5d5374a4b84001c408f61c4f16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c057a95c_09d1fcf8",
+        "filename": "src/heap/incremental-marking-job.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-13T14:01:11Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this condition be part of `StartMinorMSIncrementalMarkingIfPossible()`?",
+      "range": {
+        "startLine": 120,
+        "startChar": 10,
+        "endLine": 121,
+        "endChar": 62
+      },
+      "revId": "ca2c6084a6676a5d5374a4b84001c408f61c4f16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
