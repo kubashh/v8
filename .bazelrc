@@ -12,6 +12,9 @@ build:clang --action_env=BAZEL_COMPILER=clang
 build:clang --action_env=CC=clang
 build:clang --action_env=CXX=clang++
 
+# Use C++ 14
+build --action_env=BAZEL_CXXOPTS="-std=c++14"
+
 # V8 debug config
 build:debug --compilation_mode=dbg
 build:debug --config=v8_enable_debugging_features
