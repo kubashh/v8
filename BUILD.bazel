@@ -3874,6 +3874,8 @@ v8_library(
     deps = [
         ":v8_libbase",
         "//external:base_trace_event_common",
+        "@com_google_absl//absl/container:flat_hash_map",
+        "@com_google_absl//absl/container:flat_hash_set",
     ],
 )
 

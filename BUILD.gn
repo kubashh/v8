@@ -4465,6 +4465,7 @@ v8_header_set("v8_internal_headers") {
     ":cppgc_headers",
     ":generate_bytecode_builtins_list",
     ":run_torque",
+    ":v8_abseil",
     ":v8_heap_base_headers",
     ":v8_libbase",
   ]

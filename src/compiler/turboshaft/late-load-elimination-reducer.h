@@ -166,7 +166,7 @@ inline bool CouldHaveSameMap(MapMaskAndOr a, MapMaskAndOr b) {
 }
 
 // A Wrapper around a SnapshotTable, which takes care of mapping OpIndex to Key.
-// It uses a ZoneUnorderedMap to store this mapping, and is thus more
+// It uses a ZoneAbslFlatHashMap to store this mapping, and is thus more
 // appropriate for cases where not many OpIndex have a corresponding key.
 template <class Value, class KeyData = NoKeyData>
 class SparseOpIndexSnapshotTable : public SnapshotTable<Value, KeyData> {
@@ -216,7 +216,7 @@ class SparseOpIndexSnapshotTable : public SnapshotTable<Value, KeyData> {
     indices_to_keys_.insert({idx, key});
     return key;
   }
-  ZoneUnorderedMap<OpIndex, Key> indices_to_keys_;
+  ZoneAbslFlatHashMap<OpIndex, Key> indices_to_keys_;
 };
 
 struct MemoryAddress {
@@ -230,6 +230,12 @@ struct MemoryAddress {
     return base == other.base && index == other.index &&
            offset == other.offset &&
            element_size_log2 == other.element_size_log2 && size == other.size;
+  }
+
+  template <typename H>
+  friend H AbslHashValue(H h, const MemoryAddress& mem) {
+    return H::combine(std::move(h), mem.base, mem.index, mem.offset,
+                      mem.element_size_log2, mem.size);
   }
 };
 
@@ -545,16 +551,14 @@ class MemoryContentTable
   SparseOpIndexSnapshotTable<MapMaskAndOr>& object_maps_;
   FixedSidetable<OpIndex>& replacements_;
 
-  // TODO(dmercadier): consider using a faster datastructure than
-  // ZoneUnorderedMap for {all_keys_}, {base_keys_} and {offset_keys_}.
-
   // A map containing all of the keys, for fast lookup of a specific
   // MemoryAddress.
-  ZoneUnorderedMap<MemoryAddress, Key> all_keys_;
+  ZoneAbslFlatHashMap<MemoryAddress, Key> all_keys_;
   // Map from base OpIndex to keys associated with this base.
-  ZoneUnorderedMap<OpIndex, BaseData> base_keys_;
+  ZoneAbslFlatHashMap<OpIndex, BaseData> base_keys_;
   // Map from offsets to keys associated with this offset.
-  ZoneUnorderedMap<int, DoublyThreadedList<Key, OffsetListTraits>> offset_keys_;
+  ZoneAbslFlatHashMap<int, DoublyThreadedList<Key, OffsetListTraits>>
+      offset_keys_;
 
   // List of all of the keys that have a valid index.
   DoublyThreadedList<Key, OffsetListTraits> index_keys_;
