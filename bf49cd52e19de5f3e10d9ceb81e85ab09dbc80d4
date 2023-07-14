@@ -33,6 +33,29 @@
       "message": "src/compiler LGTM.\nHave fun with your half of the review Andreas 😂",
       "revId": "bf49cd52e19de5f3e10d9ceb81e85ab09dbc80d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d956a9b8_f041278a",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-07-14T05:36:05Z",
+      "side": 1,
+      "message": "I wonder if we could use TruncateFloat32ToInt32OverflowUndefined here, although there may be problems on arm64 with trapping for `MAX_INT32 + 1`...",
+      "range": {
+        "startLine": 1287,
+        "startChar": 30,
+        "endLine": 1287,
+        "endChar": 65
+      },
+      "revId": "bf49cd52e19de5f3e10d9ceb81e85ab09dbc80d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
