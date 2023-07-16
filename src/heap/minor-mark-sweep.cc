@@ -404,9 +404,16 @@ void YoungGenerationRememberedSetsMarkingWorklist::TearDown() {
   remaining_remembered_sets_marking_items_.store(0, std::memory_order_relaxed);
 }
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+YoungGenerationRootMarkingVisitor::YoungGenerationRootMarkingVisitor(
+    YoungGenerationMainMarkingVisitor* main_marking_visitor,
+    measure_css::Stats* stats)
+    : main_marking_visitor_(main_marking_visitor), stats_(stats) {}
+#else
 YoungGenerationRootMarkingVisitor::YoungGenerationRootMarkingVisitor(
     YoungGenerationMainMarkingVisitor* main_marking_visitor)
     : main_marking_visitor_(main_marking_visitor) {}
+#endif
 
 YoungGenerationRootMarkingVisitor::~YoungGenerationRootMarkingVisitor() =
     default;
@@ -807,7 +814,12 @@ void MinorMarkSweepCollector::MarkLiveObjects() {
   DCHECK_NOT_NULL(local_marking_worklists_);
   DCHECK_NOT_NULL(main_marking_visitor_);
 
-  YoungGenerationRootMarkingVisitor root_visitor(main_marking_visitor_.get());
+  YoungGenerationRootMarkingVisitor root_visitor(main_marking_visitor_.get()
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+                                                     ,
+                                                 heap_->css_stats()
+#endif
+  );
 
   MarkRoots(root_visitor, was_marked_incrementally);
 

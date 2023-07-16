@@ -52,8 +52,14 @@ namespace internal {
 class ConcurrentMarkingState final
     : public MarkingStateBase<ConcurrentMarkingState, AccessMode::ATOMIC> {
  public:
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  ConcurrentMarkingState(PtrComprCageBase cage_base,
+                         measure_css::ObjectStats* stats)
+      : MarkingStateBase(cage_base, stats) {}
+#else
   explicit ConcurrentMarkingState(PtrComprCageBase cage_base)
       : MarkingStateBase(cage_base) {}
+#endif
 
   MarkingBitmap* bitmap(MemoryChunk* chunk) const {
     return chunk->marking_bitmap();
@@ -75,7 +81,12 @@ class YoungGenerationConcurrentMarkingVisitor final
             YoungGenerationConcurrentMarkingVisitor, ConcurrentMarkingState>(
             heap->isolate(), &local_marking_worklists_,
             &local_ephemeron_table_list_, local_pretenuring_feedback),
-        marking_state_(heap->isolate()),
+        marking_state_(heap->isolate()
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+                           ,
+                       heap->css_stats()->marked_objects()
+#endif
+                           ),
         memory_chunk_data_(memory_chunk_data),
         local_ephemeron_table_list_(
             *heap->minor_mark_sweep_collector()->ephemeron_table_list()),
@@ -83,7 +94,8 @@ class YoungGenerationConcurrentMarkingVisitor final
             marking_worklists,
             heap->cpp_heap()
                 ? CppHeap::From(heap->cpp_heap())->CreateCppMarkingState()
-                : MarkingWorklists::Local::kNoCppMarkingState) {}
+                : MarkingWorklists::Local::kNoCppMarkingState) {
+  }
 
   using YoungGenerationMarkingVisitorBase<
       YoungGenerationConcurrentMarkingVisitor,

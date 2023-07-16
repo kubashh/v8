@@ -1516,6 +1516,11 @@ DEFINE_BOOL(
     "Combine with --no-inline-new to track allocations from generated code")
 DEFINE_NEG_IMPLICATION(trace_allocations_origins, inline_new)
 
+DEFINE_BOOL(trace_css_nvp, false,
+            "report CSS statistics in machine-readable form")
+DEFINE_INT(trace_css_histograms, 0,
+           "number of buckets for pointer histograms in CSS statistics")
+
 DEFINE_BOOL(trace_pending_allocations, false,
             "trace calls to Heap::IsAllocationPending that return true")
 

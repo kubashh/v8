@@ -9,6 +9,10 @@
 #include "src/heap/marking-worklist-inl.h"
 #include "src/objects/objects.h"
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#include "src/heap/conservative-stack-visitor.h"
+#endif
+
 namespace v8 {
 namespace internal {
 
@@ -25,7 +29,12 @@ enum class SlotTreatmentMode {
 template <ObjectVisitationMode visitation_mode,
           SlotTreatmentMode slot_treatment_mode, typename Visitor,
           typename TSlot>
-bool VisitYoungObjectViaSlot(Visitor* visitor, TSlot slot) {
+bool VisitYoungObjectViaSlot(Visitor* visitor, TSlot slot
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+                             ,
+                             measure_css::Stats* stats = nullptr
+#endif
+) {
   typename TSlot::TObject target;
   if constexpr (Visitor::EnableConcurrentVisitation()) {
     target = slot.Relaxed_Load(visitor->cage_base());
@@ -35,6 +44,12 @@ bool VisitYoungObjectViaSlot(Visitor* visitor, TSlot slot) {
   HeapObject heap_object;
   // Treat weak references as strong.
   if (!target.GetHeapObject(&heap_object)) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (stats) {
+      stats->AddPointer(target.ptr(),
+                        measure_css::Stats::YOUNG_SHOULD_NOT_MARK);
+    }
+#endif
     return false;
   }
 
@@ -45,16 +60,43 @@ bool VisitYoungObjectViaSlot(Visitor* visitor, TSlot slot) {
 #endif  // THREAD_SANITIZER
 
   if (!Heap::InYoungGeneration(heap_object)) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (stats) {
+      stats->AddPointer(target.ptr(),
+                        measure_css::Stats::YOUNG_SHOULD_NOT_MARK);
+    }
+#endif
     return false;
   }
 
   if (slot_treatment_mode == SlotTreatmentMode::kReadWrite &&
       !visitor->ShortCutStrings(reinterpret_cast<HeapObjectSlot&>(slot),
                                 &heap_object)) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (stats) {
+      stats->AddPointer(heap_object.ptr(),
+                        measure_css::Stats::YOUNG_SHOULD_NOT_MARK);
+    }
+#endif
     return false;
   }
 
-  if (!visitor->TryMark(heap_object)) return true;
+  if (!visitor->TryMark(heap_object)) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (stats) {
+      stats->AddPointer(heap_object.address(),
+                        measure_css::Stats::YOUNG_ALREADY_MARKED);
+    }
+#endif
+    return true;
+  } else {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (stats) {
+      stats->AddPointer(heap_object.address(),
+                        measure_css::Stats::YOUNG_NOT_ALREADY_MARKED);
+    }
+#endif
+  }
 
   // Maps won't change in the atomic pause, so the map can be read without
   // atomics.

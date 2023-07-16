@@ -219,7 +219,12 @@ void IncrementalMarking::MarkRoots() {
                                 SkipRoot::kReadOnlyBuiltins});
   } else {
     YoungGenerationRootMarkingVisitor root_visitor(
-        heap_->minor_mark_sweep_collector()->main_marking_visitor());
+        heap_->minor_mark_sweep_collector()->main_marking_visitor()
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+            ,
+        heap_->css_stats()
+#endif
+    );
     heap_->IterateRoots(
         &root_visitor,
         base::EnumSet<SkipRoot>{
