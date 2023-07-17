@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4b3cec9_80bdeeee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-17T14:16:47Z",
+      "side": 1,
+      "message": "Why can\u0027t we check on the page allocation slow path which marking is running?",
+      "range": {
+        "startLine": 20,
+        "startChar": 60,
+        "endLine": 21,
+        "endChar": 56
+      },
+      "revId": "75d232ff8cf16f24c229943ac6f9e4fff9637f19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d29ebb6a_c474d995",
@@ -14,6 +37,29 @@
       "writtenOn": "2023-07-17T14:00:19Z",
       "side": 1,
       "message": "ptal",
+      "revId": "75d232ff8cf16f24c229943ac6f9e4fff9637f19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c9dad3e_e32fd35a",
+        "filename": "src/heap/marking-barrier-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-17T14:16:47Z",
+      "side": 1,
+      "message": "stale prints",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 11
+      },
       "revId": "75d232ff8cf16f24c229943ac6f9e4fff9637f19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
