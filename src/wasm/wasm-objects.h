@@ -349,7 +349,8 @@ class V8_EXPORT_PRIVATE WasmInstanceObject : public JSObject {
   DECL_ACCESSORS(imported_function_targets, FixedAddressArray)
   DECL_OPTIONAL_ACCESSORS(indirect_function_table_refs, FixedArray)
   DECL_ACCESSORS(indirect_function_table_sig_ids, FixedUInt32Array)
-  DECL_ACCESSORS(indirect_function_table_targets, FixedAddressArray)
+  DECL_ACCESSORS(indirect_function_table_targets,
+                 FixedExternalPointerArray<kWasmIndirectFunctionTargetTag>)
   DECL_OPTIONAL_ACCESSORS(tags_table, FixedArray)
   DECL_ACCESSORS(wasm_internal_functions, FixedArray)
   DECL_ACCESSORS(managed_object_maps, FixedArray)
@@ -703,11 +704,17 @@ class WasmIndirectFunctionTable
     : public TorqueGeneratedWasmIndirectFunctionTable<WasmIndirectFunctionTable,
                                                       Struct> {
  public:
-  // TODO(saelo): holding raw addresses isn't sandbox-compatible, so we should
-  // probably turn these into indices into some pointer table instead (or make
-  // this entire class a pointer table).
   DECL_ACCESSORS(sig_ids, FixedUInt32Array)
-  DECL_ACCESSORS(targets, FixedAddressArray)
+  // When the sandbox is enabled, this array holds indices into the external
+  // pointer table that contain the function entrypoint. Otherwise, this array
+  // directly contains the entrypoint pointers.
+  // TODO(chromium:1395058): consider instead turning this entire structure into
+  // a pointer table entry. For example, we could create a WasmCodePointerTable
+  // or so where each entry contains the signature, the target, and the ref
+  // object. Then the WasmIndirectFunctionTable object would simply contain an
+  // array of indices into a WasmCodePointerTable.
+  DECL_ACCESSORS(targets,
+                 FixedExternalPointerArray<kWasmIndirectFunctionTargetTag>)
 
   V8_EXPORT_PRIVATE static Handle<WasmIndirectFunctionTable> New(
       Isolate* isolate, uint32_t size);
@@ -719,9 +726,7 @@ class WasmIndirectFunctionTable
 
   DECL_PRINTER(WasmIndirectFunctionTable)
 
-  using BodyDescriptor =
-      FixedBodyDescriptor<kStartOfStrongFieldsOffset, kEndOfStrongFieldsOffset,
-                          kHeaderSize>;
+  class BodyDescriptor;
 
   TQ_OBJECT_CONSTRUCTORS(WasmIndirectFunctionTable)
 };

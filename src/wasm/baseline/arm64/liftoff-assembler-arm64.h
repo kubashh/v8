@@ -448,6 +448,16 @@ void LiftoffAssembler::LoadExternalPointer(Register dst, Register instance,
                            kRootRegister);
 }
 
+void LiftoffAssembler::LoadExternalPointer(Register dst, Register instance,
+                                           int offset, Register index,
+                                           ExternalPointerTag tag,
+                                           Register scratch) {
+  LoadExternalPointerField(
+      dst,
+      FieldMemOperand(instance, index, times_external_pointer_size, offset),
+      tag, scratch, IsolateRootLocation::kInRootRegister);
+}
+
 void LiftoffAssembler::SpillInstance(Register instance) {
   Str(instance, liftoff::GetInstanceOperand());
 }
