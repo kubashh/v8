@@ -917,6 +917,34 @@ class WasmNull::BodyDescriptor final : public BodyDescriptorBase {
   static inline int SizeOf(Map map, HeapObject obj) { return WasmNull::kSize; }
 };
 
+class WasmIndirectFunctionTable::BodyDescriptor final
+    : public BodyDescriptorBase {
+ public:
+  static inline int SizeOf(Map map, HeapObject object) { return kSize; }
+
+  static bool IsValidSlot(Map map, HeapObject obj, int offset) {
+    return offset >= kStartOfStrongFieldsOffset &&
+           offset < kEndOfStrongFieldsOffset;
+  }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Map map, HeapObject obj, int object_size,
+                                 ObjectVisitor* v) {
+    IteratePointers(obj, kStartOfStrongFieldsOffset, kEndOfStrongFieldsOffset,
+                    v);
+    // We have to visit the external pointers stored in the targets array as
+    // this is currently the responsibility of the object owning that array. See
+    // the FixedExternalPointerArray class for more details.
+    FixedExternalPointerArray<kWasmIndirectFunctionTargetTag> targets =
+        WasmIndirectFunctionTable::cast(obj).targets();
+    for (int i = 0; i < targets.length(); i++) {
+      v->VisitExternalPointer(
+          targets,
+          targets.RawExternalPointerField(targets.OffsetOfElementAt(i)),
+          kWasmIndirectFunctionTargetTag);
+    }
+  }
+};
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 class ExternalString::BodyDescriptor final : public BodyDescriptorBase {
