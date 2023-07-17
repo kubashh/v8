@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "c560845d71c02f6a7377c0eac88ff041101d8d5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf47b296_9e27d89f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-17T21:44:45Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "c560845d71c02f6a7377c0eac88ff041101d8d5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "734d64ad_27048f28",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1548,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-17T21:44:45Z",
+      "side": 1,
+      "message": "one redundant \u0027out\u0027?",
+      "range": {
+        "startLine": 1548,
+        "startChar": 32,
+        "endLine": 1548,
+        "endChar": 43
+      },
+      "revId": "c560845d71c02f6a7377c0eac88ff041101d8d5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
