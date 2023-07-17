@@ -7066,8 +7066,10 @@ bool Heap::PageFlagsAreConsistent(Tagged<HeapObject> object) {
 
   // Slim chunk flags consistency.
   CHECK_EQ(chunk->InYoungGeneration(), slim_chunk->InYoungGeneration());
-  CHECK_EQ(chunk->IsFlagSet(MemoryChunk::INCREMENTAL_MARKING),
-           slim_chunk->IsMarking());
+  CHECK_EQ(chunk->IsFlagSet(MemoryChunk::MAJOR_INCREMENTAL_MARKING),
+           slim_chunk->IsMajorMarking());
+  CHECK_EQ(chunk->IsFlagSet(MemoryChunk::MINOR_INCREMENTAL_MARKING),
+           slim_chunk->IsMinorMarking());
 
   AllocationSpace identity = chunk->owner()->identity();
 

@@ -82,13 +82,13 @@ TEST_F(SpacesTest, WriteBarrierIsMarking) {
   MemoryChunk* chunk = reinterpret_cast<MemoryChunk*>(&memory);
   heap_internals::MemoryChunk* slim_chunk =
       reinterpret_cast<heap_internals::MemoryChunk*>(&memory);
-  EXPECT_FALSE(chunk->IsFlagSet(MemoryChunk::INCREMENTAL_MARKING));
+  EXPECT_FALSE(chunk->IsFlagSet(MemoryChunk::MAJOR_INCREMENTAL_MARKING));
   EXPECT_FALSE(slim_chunk->IsMarking());
-  chunk->SetFlag(MemoryChunk::INCREMENTAL_MARKING);
-  EXPECT_TRUE(chunk->IsFlagSet(MemoryChunk::INCREMENTAL_MARKING));
+  chunk->SetFlag(MemoryChunk::MAJOR_INCREMENTAL_MARKING);
+  EXPECT_TRUE(chunk->IsFlagSet(MemoryChunk::MAJOR_INCREMENTAL_MARKING));
   EXPECT_TRUE(slim_chunk->IsMarking());
-  chunk->ClearFlag(MemoryChunk::INCREMENTAL_MARKING);
-  EXPECT_FALSE(chunk->IsFlagSet(MemoryChunk::INCREMENTAL_MARKING));
+  chunk->ClearFlag(MemoryChunk::MAJOR_INCREMENTAL_MARKING);
+  EXPECT_FALSE(chunk->IsFlagSet(MemoryChunk::MAJOR_INCREMENTAL_MARKING));
   EXPECT_FALSE(slim_chunk->IsMarking());
 }
 

@@ -146,34 +146,43 @@ void MemoryChunk::SetOldGenerationPageFlags(MarkingMode marking_mode) {
   if (marking_mode == MarkingMode::kMajorMarking) {
     SetFlag(MemoryChunk::POINTERS_TO_HERE_ARE_INTERESTING);
     SetFlag(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING);
+    SetFlag(MemoryChunk::MAJOR_INCREMENTAL_MARKING);
+    DCHECK(!IsFlagSet(MemoryChunk::MINOR_INCREMENTAL_MARKING));
+  } else if (owner_identity() == SHARED_SPACE ||
+             owner_identity() == SHARED_LO_SPACE) {
+    // We need to track pointers into the SHARED_SPACE for OLD_TO_SHARED.
+    SetFlag(MemoryChunk::POINTERS_TO_HERE_ARE_INTERESTING);
+    // No need to track OLD_TO_NEW or OLD_TO_SHARED within the shared space.
+    ClearFlag(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING);
+    ClearFlag(MemoryChunk::MAJOR_INCREMENTAL_MARKING);
+    DCHECK(!IsFlagSet(MemoryChunk::MINOR_INCREMENTAL_MARKING));
   } else {
-    if (owner_identity() == SHARED_SPACE ||
-        owner_identity() == SHARED_LO_SPACE) {
-      // We need to track pointers into the SHARED_SPACE for OLD_TO_SHARED.
-      SetFlag(MemoryChunk::POINTERS_TO_HERE_ARE_INTERESTING);
-      // No need to track OLD_TO_NEW or OLD_TO_SHARED within the shared space.
-      ClearFlag(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING);
+    ClearFlag(MemoryChunk::POINTERS_TO_HERE_ARE_INTERESTING);
+    SetFlag(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING);
+    if (marking_mode == MarkingMode::kMinorMarking) {
+      SetFlag(MemoryChunk::MINOR_INCREMENTAL_MARKING);
+      DCHECK(!IsFlagSet(MemoryChunk::MAJOR_INCREMENTAL_MARKING));
     } else {
-      ClearFlag(MemoryChunk::POINTERS_TO_HERE_ARE_INTERESTING);
-      SetFlag(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING);
+      ClearFlags(MemoryChunk::MAJOR_INCREMENTAL_MARKING |
+                 MemoryChunk::MINOR_INCREMENTAL_MARKING);
     }
-  }
-
-  if (marking_mode != MarkingMode::kNoMarking) {
-    SetFlag(MemoryChunk::INCREMENTAL_MARKING);
-  } else {
-    ClearFlag(MemoryChunk::INCREMENTAL_MARKING);
   }
 }
 
 void MemoryChunk::SetYoungGenerationPageFlags(MarkingMode marking_mode) {
   SetFlag(MemoryChunk::POINTERS_TO_HERE_ARE_INTERESTING);
-  if (marking_mode != MarkingMode::kNoMarking) {
-    SetFlag(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING);
-    SetFlag(MemoryChunk::INCREMENTAL_MARKING);
-  } else {
+  if (marking_mode == MarkingMode::kNoMarking) {
     ClearFlag(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING);
-    ClearFlag(MemoryChunk::INCREMENTAL_MARKING);
+    ClearFlags(MemoryChunk::MAJOR_INCREMENTAL_MARKING |
+               MemoryChunk::MINOR_INCREMENTAL_MARKING);
+  } else {
+    SetFlag(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING);
+    SetFlag(marking_mode == MarkingMode::kMinorMarking
+                ? MemoryChunk::MINOR_INCREMENTAL_MARKING
+                : MemoryChunk::MAJOR_INCREMENTAL_MARKING);
+    DCHECK(!IsFlagSet(marking_mode == MarkingMode::kMinorMarking
+                          ? MemoryChunk::MAJOR_INCREMENTAL_MARKING
+                          : MemoryChunk::MINOR_INCREMENTAL_MARKING));
   }
 }
 // -----------------------------------------------------------------------------
