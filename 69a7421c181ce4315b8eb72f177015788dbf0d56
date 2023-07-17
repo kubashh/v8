@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d6a3341_ac29a458",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-07-17T14:03:05Z",
+      "side": 1,
+      "message": "Note this fails also on another commit here:\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux64%20-%20debug/46598/overview\n\nSo reverting this was probably wrong, sorry for the disruption. Please just reland...",
+      "revId": "69a7421c181ce4315b8eb72f177015788dbf0d56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
