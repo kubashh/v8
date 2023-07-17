@@ -7,6 +7,7 @@
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/turboshaft/machine-optimization-reducer.h"
 #include "src/compiler/turboshaft/value-numbering-reducer.h"
+#include "src/compiler/turboshaft/variable-reducer.h"
 #include "src/compiler/turboshaft/wasm-lowering-reducer.h"
 #include "src/numbers/conversions-inl.h"
 
