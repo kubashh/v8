@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bf2246d_cf2dde99",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-17T21:49:06Z",
+      "side": 1,
+      "message": "For page initialization we can and this CL does.\n\nThis second paragraph was not about page initialization but about the marking barrier and a bailout in the shared space path.\nBoth bugs applied to the issue attached to this CL so it makes sense to me to fix both in the same CL.",
+      "parentUuid": "f4b3cec9_80bdeeee",
+      "range": {
+        "startLine": 20,
+        "startChar": 60,
+        "endLine": 21,
+        "endChar": 56
+      },
+      "revId": "75d232ff8cf16f24c229943ac6f9e4fff9637f19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d29ebb6a_c474d995",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-07-17T14:16:47Z",
       "side": 1,
       "message": "stale prints",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 11
+      },
+      "revId": "75d232ff8cf16f24c229943ac6f9e4fff9637f19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de792dad_3ae4a0d3",
+        "filename": "src/heap/marking-barrier-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-17T21:49:06Z",
+      "side": 1,
+      "message": "Sorry",
+      "parentUuid": "3c9dad3e_e32fd35a",
       "range": {
         "startLine": 45,
         "startChar": 4,
