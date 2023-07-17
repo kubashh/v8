@@ -20,8 +20,10 @@ static_assert(BasicMemoryChunk::Flag::IS_EXECUTABLE ==
               heap_internals::MemoryChunk::kIsExecutableBit);
 static_assert(BasicMemoryChunk::Flag::IN_WRITABLE_SHARED_SPACE ==
               heap_internals::MemoryChunk::kInWritableSharedSpaceBit);
-static_assert(BasicMemoryChunk::Flag::INCREMENTAL_MARKING ==
-              heap_internals::MemoryChunk::kMarkingBit);
+static_assert(BasicMemoryChunk::Flag::MAJOR_INCREMENTAL_MARKING ==
+              heap_internals::MemoryChunk::kMajorMarkingBit);
+static_assert(BasicMemoryChunk::Flag::MINOR_INCREMENTAL_MARKING ==
+              heap_internals::MemoryChunk::kMinorMarkingBit);
 static_assert(BasicMemoryChunk::Flag::FROM_PAGE ==
               heap_internals::MemoryChunk::kFromPageBit);
 static_assert(BasicMemoryChunk::Flag::TO_PAGE ==

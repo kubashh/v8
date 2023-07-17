@@ -50,9 +50,10 @@ struct MemoryChunk {
   static constexpr uintptr_t kInWritableSharedSpaceBit = uintptr_t{1} << 0;
   static constexpr uintptr_t kFromPageBit = uintptr_t{1} << 3;
   static constexpr uintptr_t kToPageBit = uintptr_t{1} << 4;
-  static constexpr uintptr_t kMarkingBit = uintptr_t{1} << 5;
-  static constexpr uintptr_t kReadOnlySpaceBit = uintptr_t{1} << 6;
-  static constexpr uintptr_t kIsExecutableBit = uintptr_t{1} << 19;
+  static constexpr uintptr_t kMajorMarkingBit = uintptr_t{1} << 5;
+  static constexpr uintptr_t kMinorMarkingBit = uintptr_t{1} << 6;
+  static constexpr uintptr_t kReadOnlySpaceBit = uintptr_t{1} << 7;
+  static constexpr uintptr_t kIsExecutableBit = uintptr_t{1} << 20;
 
   V8_INLINE static heap_internals::MemoryChunk* FromHeapObject(
       HeapObject object) {
@@ -60,7 +61,15 @@ struct MemoryChunk {
     return reinterpret_cast<MemoryChunk*>(object.ptr() & ~kPageAlignmentMask);
   }
 
-  V8_INLINE bool IsMarking() const { return GetFlags() & kMarkingBit; }
+  V8_INLINE bool IsMarking() const {
+    return GetFlags() & (kMajorMarkingBit | kMinorMarkingBit);
+  }
+  V8_INLINE bool IsMajorMarking() const {
+    return GetFlags() & kMajorMarkingBit;
+  }
+  V8_INLINE bool IsMinorMarking() const {
+    return GetFlags() & kMinorMarkingBit;
+  }
 
   V8_INLINE bool InWritableSharedSpace() const {
     return GetFlags() & kInWritableSharedSpaceBit;
