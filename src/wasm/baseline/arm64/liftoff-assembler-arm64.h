@@ -448,6 +448,16 @@ void LiftoffAssembler::LoadExternalPointer(Register dst, Register instance,
                            kRootRegister);
 }
 
+void LiftoffAssembler::LoadExternalPointer(Register dst, Register instance,
+                                           int offset, Register index,
+                                           ExternalPointerTag tag,
+                                           Register /* scratch */) {
+  UseScratchRegisterScope temps(this);
+  MemOperand src_op = liftoff::GetMemOp(this, &temps, instance, index, offset,
+                                        false, V8_ENABLE_SANDBOX ? 2 : 3);
+  LoadExternalPointerField(dst, src_op, tag, kRootRegister);
+}
+
 void LiftoffAssembler::SpillInstance(Register instance) {
   Str(instance, liftoff::GetInstanceOperand());
 }

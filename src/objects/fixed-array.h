@@ -636,6 +636,33 @@ class FixedAddressArray : public FixedIntegerArray<Address> {
   OBJECT_CONSTRUCTORS(FixedAddressArray, FixedIntegerArray<Address>);
 };
 
+template <ExternalPointerTag tag>
+class FixedExternalPointerArray : public FixedIntegerArray<ExternalPointer_t> {
+ public:
+  // Currently, this class does NOT mark its external pointer table entries as
+  // alive during GC. Instead, that is the responsibility of the owning object
+  // (currently there is always exactly one owning object). This is necessary
+  // because (1) only the owning object knows the ExternalPointerTag, and (2)
+  // this object uses the generic ByteArray Map, so the visitor does not know
+  // that it is a special array.
+  // TODO(saelo) if we ever use this array type more broadly, we should allocate
+  // a custom Map for it and store the expected ExternalPointerTag in it as
+  // well, then make its BodyDescriptor iterate over the external pointers.
+
+  inline void init(int index, Isolate* isolate, Address initial_value);
+  inline Address get(int index, Isolate* isolate);
+  inline void set(int index, Isolate* isolate, Address value);
+
+  static inline Handle<FixedExternalPointerArray> New(
+      Isolate* isolate, int length,
+      AllocationType allocation = AllocationType::kYoung);
+
+  DECL_CAST(FixedExternalPointerArray)
+
+  OBJECT_CONSTRUCTORS(FixedExternalPointerArray,
+                      FixedIntegerArray<ExternalPointer_t>);
+};
+
 // Wrapper class for ByteArray which can store arbitrary C++ classes, as long
 // as they can be copied with memcpy.
 template <class T>

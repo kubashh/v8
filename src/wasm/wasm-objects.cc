@@ -630,7 +630,11 @@ Handle<WasmIndirectFunctionTable> WasmIndirectFunctionTable::New(
     Isolate* isolate, uint32_t size) {
   auto refs = isolate->factory()->NewFixedArray(static_cast<int>(size));
   auto sig_ids = FixedUInt32Array::New(isolate, size);
-  auto targets = FixedAddressArray::New(isolate, size);
+  auto targets = FixedExternalPointerArray<kWasmIndirectFunctionTargetTag>::New(
+      isolate, size);
+  for (uint32_t i = 0; i < size; i++) {
+    targets->init(i, isolate, kNullAddress);
+  }
 
   auto table = Handle<WasmIndirectFunctionTable>::cast(
       isolate->factory()->NewStruct(WASM_INDIRECT_FUNCTION_TABLE_TYPE));
@@ -651,17 +655,17 @@ Handle<WasmIndirectFunctionTable> WasmIndirectFunctionTable::New(
 
 void WasmIndirectFunctionTable::Set(uint32_t index, int sig_id,
                                     Address call_target, Object ref) {
+  Isolate* isolate = GetIsolateFromWritableObject(*this);
   sig_ids().set(index, sig_id);
-  targets().set(index, call_target);
+  targets().set(index, isolate, call_target);
   refs().set(index, ref);
 }
 
 void WasmIndirectFunctionTable::Clear(uint32_t index) {
+  Isolate* isolate = GetIsolateFromWritableObject(*this);
   sig_ids().set(index, -1);
-  targets().set(index, 0);
-  refs().set(
-      index,
-      ReadOnlyRoots(GetIsolateFromWritableObject(*this)).undefined_value());
+  targets().set(index, isolate, 0);
+  refs().set(index, ReadOnlyRoots(isolate).undefined_value());
 }
 
 void WasmIndirectFunctionTable::Resize(Isolate* isolate,
@@ -676,7 +680,8 @@ void WasmIndirectFunctionTable::Resize(Isolate* isolate,
   // time.
   Handle<FixedArray> old_refs(table->refs(), isolate);
   Handle<FixedUInt32Array> old_sig_ids(table->sig_ids(), isolate);
-  Handle<FixedAddressArray> old_targets(table->targets(), isolate);
+  Handle<FixedExternalPointerArray<kWasmIndirectFunctionTargetTag>> old_targets(
+      table->targets(), isolate);
 
   // Since we might have overallocated, {old_capacity} might be different than
   // {old_size}.
@@ -691,10 +696,12 @@ void WasmIndirectFunctionTable::Resize(Isolate* isolate,
                        old_capacity * kUInt32Size);
   table->set_sig_ids(*new_sig_ids);
 
-  Handle<FixedAddressArray> new_targets =
-      FixedAddressArray::New(isolate, new_capacity);
+  Handle<FixedExternalPointerArray<kWasmIndirectFunctionTargetTag>>
+      new_targets =
+          FixedExternalPointerArray<kWasmIndirectFunctionTargetTag>::New(
+              isolate, new_capacity);
   new_targets->copy_in(0, old_targets->GetDataStartAddress(),
-                       old_capacity * kSystemPointerSize);
+                       old_capacity * kExternalPointerSlotSize);
   table->set_targets(*new_targets);
 
   Handle<FixedArray> new_refs = isolate->factory()->CopyFixedArrayAndGrow(
@@ -702,6 +709,7 @@ void WasmIndirectFunctionTable::Resize(Isolate* isolate,
   table->set_refs(*new_refs);
 
   for (uint32_t i = old_capacity; i < new_capacity; ++i) {
+    new_targets->init(i, isolate, kNullAddress);
     table->Clear(i);
   }
 }
@@ -1229,7 +1237,8 @@ Handle<WasmInstanceObject> WasmInstanceObject::New(
     instance.set_indirect_function_table_sig_ids(
         FixedUInt32Array::cast(empty_byte_array));
     instance.set_indirect_function_table_targets(
-        FixedAddressArray::cast(empty_byte_array));
+        FixedExternalPointerArray<kWasmIndirectFunctionTargetTag>::cast(
+            empty_byte_array));
     instance.set_native_context(*isolate->native_context());
     instance.set_module_object(*module_object);
     instance.set_jump_table_start(
