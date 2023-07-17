@@ -724,6 +724,42 @@ int FixedIntegerArray<T>::length() const {
   return ByteArray::length() / sizeof(T);
 }
 
+template <ExternalPointerTag tag>
+inline void FixedExternalPointerArray<tag>::init(int index, Isolate* isolate,
+                                                 Address initial_value) {
+  InitExternalPointerField<tag>(kHeaderSize + index * kExternalPointerSlotSize,
+                                isolate, initial_value);
+}
+
+template <ExternalPointerTag tag>
+inline Address FixedExternalPointerArray<tag>::get(int index,
+                                                   Isolate* isolate) {
+  return ReadExternalPointerField<tag>(
+      kHeaderSize + index * kExternalPointerSlotSize, isolate);
+}
+
+template <ExternalPointerTag tag>
+inline void FixedExternalPointerArray<tag>::set(int index, Isolate* isolate,
+                                                Address value) {
+  WriteExternalPointerField<tag>(kHeaderSize + index * kExternalPointerSlotSize,
+                                 isolate, value);
+}
+
+// static
+template <ExternalPointerTag tag>
+Handle<FixedExternalPointerArray<tag>> FixedExternalPointerArray<tag>::New(
+    Isolate* isolate, int length, AllocationType allocation) {
+  return Handle<FixedExternalPointerArray<tag>>::cast(
+      FixedIntegerArray<ExternalPointer_t>::New(isolate, length, allocation));
+}
+
+template <ExternalPointerTag tag>
+FixedExternalPointerArray<tag>::FixedExternalPointerArray(Address ptr)
+    : FixedIntegerArray<ExternalPointer_t>(ptr) {}
+
+template <ExternalPointerTag tag>
+CAST_ACCESSOR(FixedExternalPointerArray<tag>)
+
 template <class T>
 PodArray<T>::PodArray(Address ptr) : ByteArray(ptr) {}
 
