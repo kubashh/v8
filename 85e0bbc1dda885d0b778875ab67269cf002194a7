@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9279d1d5_f100cb74",
+        "filename": ".bazelrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-07-17T10:34:01Z",
+      "side": 1,
+      "message": "Why do we need this? We are already using c++17!\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/bazel/defs.bzl;drc\u003d466e0818aa56569b761932c2dff4390d5553a780;l\u003d124",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 45
+      },
+      "revId": "85e0bbc1dda885d0b778875ab67269cf002194a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2edb9056_13bceef1",
@@ -14,6 +37,29 @@
       "writtenOn": "2023-07-13T15:25:43Z",
       "side": 1,
       "message": "@Victor: PTAL BUILD.bazel and .bazelrc\n@Toon: PTAL src/zone, *.gn, DEPS\n@Nico: PTAL src/compiler",
+      "revId": "85e0bbc1dda885d0b778875ab67269cf002194a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd6983d1_6d950907",
+        "filename": "BUILD.bazel",
+        "patchSetId": 6
+      },
+      "lineNbr": 3878,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-07-17T10:34:01Z",
+      "side": 1,
+      "message": "Can we bind these to //external?\nSee https://chromium-review.googlesource.com/c/v8/v8/+/4678629",
+      "range": {
+        "startLine": 3877,
+        "startChar": 0,
+        "endLine": 3878,
+        "endChar": 57
+      },
       "revId": "85e0bbc1dda885d0b778875ab67269cf002194a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
