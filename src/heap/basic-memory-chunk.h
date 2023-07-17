@@ -51,61 +51,64 @@ class BasicMemoryChunk {
     // A page in the to-space or a young large page that was scavenged.
     TO_PAGE = 1u << 4,
 
-    // |INCREMENTAL_MARKING|: Indicates whether incremental marking is currently
-    // enabled.
-    INCREMENTAL_MARKING = 1u << 5,
+    // |MAJOR_INCREMENTAL_MARKING|: Indicates whether major incremental marking
+    // is currently enabled.
+    MAJOR_INCREMENTAL_MARKING = 1u << 5,
+    // |MINOR_INCREMENTAL_MARKING|: Indicates whether minor incremental marking
+    // is currently enabled.
+    MINOR_INCREMENTAL_MARKING = 1u << 6,
 
     // The memory chunk belongs to the read-only heap and does not participate
     // in garbage collection. This is used instead of owner for identity
     // checking since read-only chunks have no owner once they are detached.
-    READ_ONLY_HEAP = 1u << 6,
+    READ_ONLY_HEAP = 1u << 7,
 
     // ----------------------------------------------------------------
     // Values below here are not critical for the heap write barrier.
 
-    LARGE_PAGE = 1u << 7,
-    EVACUATION_CANDIDATE = 1u << 8,
-    NEVER_EVACUATE = 1u << 9,
+    LARGE_PAGE = 1u << 8,
+    EVACUATION_CANDIDATE = 1u << 9,
+    NEVER_EVACUATE = 1u << 10,
 
     // |PAGE_NEW_OLD_PROMOTION|: A page tagged with this flag has been promoted
     // from new to old space during evacuation.
-    PAGE_NEW_OLD_PROMOTION = 1u << 10,
+    PAGE_NEW_OLD_PROMOTION = 1u << 11,
 
     // This flag is intended to be used for testing. Works only when both
     // v8_flags.stress_compaction and
     // v8_flags.manual_evacuation_candidates_selection are set. It forces the
     // page to become an evacuation candidate at next candidates selection
     // cycle.
-    FORCE_EVACUATION_CANDIDATE_FOR_TESTING = 1u << 11,
+    FORCE_EVACUATION_CANDIDATE_FOR_TESTING = 1u << 12,
 
     // This flag is intended to be used for testing.
-    NEVER_ALLOCATE_ON_PAGE = 1u << 12,
+    NEVER_ALLOCATE_ON_PAGE = 1u << 13,
 
     // The memory chunk is already logically freed, however the actual freeing
     // still has to be performed.
-    PRE_FREED = 1u << 13,
+    PRE_FREED = 1u << 14,
 
     // |POOLED|: When actually freeing this chunk, only uncommit and do not
     // give up the reservation as we still reuse the chunk at some point.
-    POOLED = 1u << 14,
+    POOLED = 1u << 15,
 
     // |COMPACTION_WAS_ABORTED|: Indicates that the compaction in this page
     //   has been aborted and needs special handling by the sweeper.
-    COMPACTION_WAS_ABORTED = 1u << 15,
+    COMPACTION_WAS_ABORTED = 1u << 16,
 
-    NEW_SPACE_BELOW_AGE_MARK = 1u << 16,
+    NEW_SPACE_BELOW_AGE_MARK = 1u << 17,
 
     // The memory chunk freeing bookkeeping has been performed but the chunk has
     // not yet been freed.
-    UNREGISTERED = 1u << 17,
+    UNREGISTERED = 1u << 18,
 
     // The memory chunk is pinned in memory and can't be moved. This is likely
     // because there exists a potential pointer to somewhere in the chunk which
     // can't be updated.
-    PINNED = 1u << 18,
+    PINNED = 1u << 19,
 
     // A Page with code objects.
-    IS_EXECUTABLE = 1u << 19,
+    IS_EXECUTABLE = 1u << 20,
   };
 
   using MainThreadFlags = base::Flags<Flag, uintptr_t>;
@@ -121,7 +124,12 @@ class BasicMemoryChunk {
       MainThreadFlags(FROM_PAGE) | MainThreadFlags(TO_PAGE);
   static constexpr MainThreadFlags kIsLargePageMask = LARGE_PAGE;
   static constexpr MainThreadFlags kInSharedHeap = IN_WRITABLE_SHARED_SPACE;
-  static constexpr MainThreadFlags kIncrementalMarking = INCREMENTAL_MARKING;
+  static constexpr MainThreadFlags kMajorIncrementalMarking =
+      MAJOR_INCREMENTAL_MARKING;
+  static constexpr MainThreadFlags kMinorIncrementalMarking =
+      MINOR_INCREMENTAL_MARKING;
+  static constexpr MainThreadFlags kIncrementalMarking =
+      kMajorIncrementalMarking | kMinorIncrementalMarking;
   static constexpr MainThreadFlags kSkipEvacuationSlotsRecordingMask =
       MainThreadFlags(kEvacuationCandidateMask) |
       MainThreadFlags(kIsInYoungGenerationMask);
@@ -207,6 +215,9 @@ class BasicMemoryChunk {
   MainThreadFlags GetFlags() const { return main_thread_flags_; }
   void SetFlag(Flag flag) { main_thread_flags_ |= flag; }
   bool IsFlagSet(Flag flag) const { return main_thread_flags_ & flag; }
+  bool IsAnyFlagSet(MainThreadFlags flags) const {
+    return main_thread_flags_ & flags;
+  }
   void ClearFlag(Flag flag) {
     main_thread_flags_ = main_thread_flags_.without(flag);
   }
@@ -248,7 +259,9 @@ class BasicMemoryChunk {
     return IsFlagSet(IS_EXECUTABLE) ? EXECUTABLE : NOT_EXECUTABLE;
   }
 
-  bool IsMarking() const { return IsFlagSet(INCREMENTAL_MARKING); }
+  bool IsMarking() const { return IsAnyFlagSet(kIncrementalMarking); }
+  bool IsMajorMarking() const { return IsFlagSet(MAJOR_INCREMENTAL_MARKING); }
+  bool IsMinorMarking() const { return IsFlagSet(MINOR_INCREMENTAL_MARKING); }
   bool IsFromPage() const { return IsFlagSet(FROM_PAGE); }
   bool IsToPage() const { return IsFlagSet(TO_PAGE); }
   bool IsLargePage() const { return IsFlagSet(LARGE_PAGE); }

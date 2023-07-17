@@ -17,17 +17,17 @@ void MarkingBarrier::MarkValue(HeapObject host, HeapObject value) {
   if (value.InReadOnlySpace()) return;
 
   DCHECK(IsCurrentMarkingBarrier(host));
-  DCHECK(is_activated_ || shared_heap_worklist_.has_value());
 
   // When shared heap isn't enabled all objects are local, we can just run the
   // local marking barrier. Also from the point-of-view of the shared space
   // isolate (= main isolate) also shared objects are considered local.
   if (V8_UNLIKELY(uses_shared_heap_) && !is_shared_space_isolate_) {
     // Check whether incremental marking is enabled for that object's space.
-    if (!MemoryChunk::FromHeapObject(host)->IsMarking()) {
+    if (!MemoryChunk::FromHeapObject(host)->IsMajorMarking()) {
       return;
     }
 
+    DCHECK(shared_heap_worklist_.has_value());
     if (host.InWritableSharedSpace()) {
       // Invoking shared marking barrier when storing into shared objects.
       MarkValueShared(value);
@@ -41,6 +41,14 @@ void MarkingBarrier::MarkValue(HeapObject host, HeapObject value) {
   DCHECK_IMPLIES(host.InWritableSharedSpace(), is_shared_space_isolate_);
   DCHECK_IMPLIES(value.InWritableSharedSpace(), is_shared_space_isolate_);
 
+  if (!is_activated_) {
+    fprintf(
+        stderr, "MemoryChunk::FromHeapObject(host)->IsMajorMarking() = %s\n",
+        MemoryChunk::FromHeapObject(host)->IsMajorMarking() ? "true" : "false");
+    fprintf(
+        stderr, "MemoryChunk::FromHeapObject(host)->IsMinorMarking() = %s\n",
+        MemoryChunk::FromHeapObject(host)->IsMinorMarking() ? "true" : "false");
+  }
   DCHECK(is_activated_);
   MarkValueLocal(value);
 }

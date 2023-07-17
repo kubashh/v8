@@ -42,7 +42,6 @@ MarkingBarrier::~MarkingBarrier() { DCHECK(typed_slots_map_.empty()); }
 void MarkingBarrier::Write(HeapObject host, HeapObjectSlot slot,
                            HeapObject value) {
   DCHECK(IsCurrentMarkingBarrier(host));
-  DCHECK(is_activated_ || shared_heap_worklist_.has_value());
   DCHECK(MemoryChunk::FromHeapObject(host)->IsMarking());
 
   if ((is_major() || Heap::InYoungGeneration(host)) &&
@@ -358,6 +357,7 @@ void MarkingBarrier::DeactivateYoung(Heap* heap) {
 }
 
 void MarkingBarrier::Deactivate() {
+  DCHECK(is_activated_);
   is_activated_ = false;
   is_compacting_ = false;
   marking_mode_ = MarkingMode::kNoMarking;

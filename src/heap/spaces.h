@@ -225,7 +225,7 @@ class Page : public MemoryChunk {
   static constexpr MainThreadFlags kCopyOnFlipFlagsMask =
       MainThreadFlags(MemoryChunk::POINTERS_TO_HERE_ARE_INTERESTING) |
       MainThreadFlags(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING) |
-      MainThreadFlags(MemoryChunk::INCREMENTAL_MARKING);
+      MainThreadFlags(MemoryChunk::MAJOR_INCREMENTAL_MARKING);
 
   Page(Heap* heap, BaseSpace* space, size_t size, Address area_start,
        Address area_end, VirtualMemory reservation, Executability executable);
