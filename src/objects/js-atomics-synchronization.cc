@@ -12,6 +12,7 @@
 #include "src/execution/isolate-inl.h"
 #include "src/heap/parked-scope-inl.h"
 #include "src/objects/js-atomics-synchronization-inl.h"
+#include "src/objects/js-promise-inl.h"
 #include "src/sandbox/external-pointer-inl.h"
 
 namespace v8 {
@@ -48,7 +49,7 @@ namespace detail {
 //    and that main thread is the head of the waiter list), the Isolate's
 //    external pointer points to that WaiterQueueNode. Otherwise the external
 //    pointer points to null.
-class V8_NODISCARD WaiterQueueNode final {
+class V8_NODISCARD WaiterQueueNode {
  public:
   explicit WaiterQueueNode(Isolate* requester)
       : requester_(requester)
@@ -253,12 +254,7 @@ class V8_NODISCARD WaiterQueueNode final {
     return result;
   }
 
-  void Notify() {
-    base::MutexGuard guard(&wait_lock_);
-    should_wait = false;
-    wait_cond_var_.NotifyOne();
-    SetNotInListForVerification();
-  }
+  virtual void Notify() = 0;
 
   uint32_t NotifyAllInList() {
     WaiterQueueNode* cur = this;
@@ -299,11 +295,195 @@ class V8_NODISCARD WaiterQueueNode final {
 
   base::Mutex wait_lock_;
   base::ConditionVariable wait_cond_var_;
+
+ protected:
+  base::Mutex* GetWaitLock() { return &wait_lock_; }
+  base::ConditionVariable* GetWaitConditionVariable() {
+    return &wait_cond_var_;
+  }
+  Isolate* GetRequester() { return requester_; }
+  void SetNotInListForVerificationWrapper() { SetNotInListForVerification(); }
 };
+
+class AsyncWaiterQueueNode;
+
+class AsyncWaiterQueueTask : public CancelableTask {
+ public:
+  AsyncWaiterQueueTask(CancelableTaskManager* cancelable_task_manager,
+                       AsyncWaiterQueueNode* node)
+      : CancelableTask(cancelable_task_manager), node_(node) {}
+
+  void RunInternal() override;
+
+ private:
+  AsyncWaiterQueueNode* node_;
+};
+
+class AsyncWaiterNotifyTask : public CancelableTask {
+ public:
+  AsyncWaiterNotifyTask(CancelableTaskManager* cancelable_task_manager,
+                        AsyncWaiterQueueNode* node)
+      : CancelableTask(cancelable_task_manager), node_(node) {}
+
+  void RunInternal() override;
+
+ private:
+  AsyncWaiterQueueNode* node_;
+};
+
+class V8_NODISCARD AsyncWaiterQueueNode final : public WaiterQueueNode {
+#ifdef V8_COMPRESS_POINTERS
+  using StateT = uint32_t;
+  static_assert(sizeof(StateT) == sizeof(ExternalPointerHandle));
+#else
+  using StateT = uintptr_t;
+#endif  // V8_COMPRESS_POINTERS
+
+ public:
+  explicit AsyncWaiterQueueNode(Isolate* requester,
+                                std::atomic<StateT>* mutex_state)
+      : WaiterQueueNode(requester), mutex_state_ptr_(mutex_state) {
+    v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(requester);
+    task_runner_ =
+        V8::GetCurrentPlatform()->GetForegroundTaskRunner(v8_isolate);
+  }
+
+  void StoreCallback(Handle<Object> callback) {
+    callback_ = std::move(callback);
+  }
+  void StorePromise(Handle<JSObject> promise) {
+    auto v8_isolate = reinterpret_cast<v8::Isolate*>(GetRequester());
+
+    v8::Local<v8::Promise> local_promise = Utils::PromiseToLocal(promise);
+    promise_.Reset(v8_isolate, local_promise);
+    promise_.SetWeak();
+  }
+  void UnlockMutex() { mutex_lock_->Unlock(GetRequester()); }
+  void ResolvePromise() {
+    auto v8_isolate = reinterpret_cast<v8::Isolate*>(GetRequester());
+
+    Handle<NativeContext> native_context(GetRequester()->native_context());
+    v8::Local<v8::Context> local_native_context =
+        Utils::ToLocal(Handle<Context>::cast(native_context));
+    v8::Context::Scope contextScope(local_native_context);
+
+    Handle<String> result_string = GetRequester()->factory()->ok_string();
+    Handle<JSPromise> promise =
+        Handle<JSPromise>::cast(Utils::OpenHandle(*promise_.Get(v8_isolate)));
+    MaybeHandle<Object> resolve_result =
+        JSPromise::Resolve(promise, result_string);
+    USE(resolve_result);
+  }
+  void Call() {
+    // I believe this is the promise returned by the user's function
+    result_ = Execution::Call(GetRequester(), callback_,
+                              GetRequester()->factory()->undefined_value(), 0,
+                              nullptr);
+  }
+
+  void HandleNotify() {
+    // If the mutex is available, then we can run the callback immediately.
+    // We won't assume that the mutex is available, so we'll try to lock it.
+    // if (mutex_lock_->TryLock()) {
+    StateT current_state = mutex_state_ptr_->load(std::memory_order_relaxed);
+    if (JSAtomicsMutex::TryLockExplicit(mutex_state_ptr_, current_state)) {
+      auto task = std::make_unique<AsyncWaiterQueueTask>(
+          GetRequester()->cancelable_task_manager(), this);
+      task_runner_->PostTask(std::move(task));
+      return;
+    }
+    // The mutex is not available, so re-enqueue this node.
+    JSAtomicsMutex::AsyncLockGuard::EnqueueNode(
+        GetRequester(), mutex_lock_->AtomicStatePtr(), this);
+  }
+
+  virtual void Notify() {
+    // auto task = std::make_unique<AsyncWaiterNotifyTask>(
+    //     GetRequester()->cancelable_task_manager(), this);
+    // task_runner_->PostTask(std::move(task));
+    HandleNotify();
+  }
+
+ private:
+  std::atomic<StateT>* mutex_state_ptr_;
+  Handle<JSAtomicsMutex> mutex_lock_;
+  std::shared_ptr<TaskRunner> task_runner_;
+  Handle<Object> callback_;
+  v8::Global<v8::Promise> promise_;
+  MaybeHandle<Object> result_;
+};
+
+class V8_NODISCARD SyncWaiterQueueNode final : public WaiterQueueNode {
+ public:
+  explicit SyncWaiterQueueNode(Isolate* requester)
+      : WaiterQueueNode(requester) {}
+  virtual void Notify() {
+    base::MutexGuard guard(GetWaitLock());
+    should_wait = false;
+    GetWaitConditionVariable()->NotifyOne();
+    SetNotInListForVerificationWrapper();
+  }
+};
+
+void AsyncWaiterQueueTask::RunInternal() {
+  node_->Call();
+  node_->UnlockMutex();
+  node_->ResolvePromise();
+  delete node_;
+}
+
+void AsyncWaiterNotifyTask::RunInternal() { node_->HandleNotify(); }
 
 }  // namespace detail
 
+using detail::AsyncWaiterQueueNode;
+using detail::SyncWaiterQueueNode;
 using detail::WaiterQueueNode;
+
+void JSAtomicsMutex::AsyncLockGuard::EnqueueNode(Isolate* isolate,
+                                                 std::atomic<StateT>* state,
+                                                 AsyncWaiterQueueNode* node) {
+  // Try to acquire the queue lock, which is a spinlock.
+  StateT current_state = state->load(std::memory_order_relaxed);
+  for (;;) {
+    if ((current_state & kIsLockedBit) &&
+        TryLockWaiterQueueExplicit(state, current_state)) {
+      break;
+    }
+    YIELD_PROCESSOR;
+  }
+
+  // With the queue lock held, enqueue the requester onto the waiter queue.
+  WaiterQueueNode* waiter_head =
+      WaiterQueueNode::DestructivelyDecodeHead<JSAtomicsMutex>(isolate,
+                                                               current_state);
+  WaiterQueueNode::Enqueue(&waiter_head, node);
+
+  // Release the queue lock and install the new waiter queue head by
+  // creating a new state.
+  DCHECK_EQ(state->load(), current_state | kIsWaiterQueueLockedBit);
+  StateT new_state =
+      WaiterQueueNode::EncodeHead<JSAtomicsMutex>(isolate, waiter_head);
+  // The lock is held, just not by us, so don't set the current thread id as
+  // the owner.
+  DCHECK(current_state & kIsLockedBit);
+  new_state |= kIsLockedBit;
+  state->store(new_state, std::memory_order_release);
+}
+
+void JSAtomicsMutex::AsyncLockGuard::Enqueue(Isolate* isolate,
+                                             Handle<JSAtomicsMutex> mutex,
+                                             Handle<Object> callable,
+                                             Handle<JSObject> promise) {
+  std::atomic<StateT>* state = mutex->AtomicStatePtr();
+  // Since this is asynchronous, this needs to live on the heap and beyond this
+  // function's scope.
+  AsyncWaiterQueueNode* this_waiter = new AsyncWaiterQueueNode(isolate, state);
+  this_waiter->StoreCallback(std::move(callable));
+  this_waiter->StorePromise(
+      promise);  // Consider putting these in the constructor
+  EnqueueNode(isolate, state, this_waiter);
+}
 
 // static
 bool JSAtomicsMutex::TryLockExplicit(std::atomic<StateT>* state,
@@ -358,7 +538,7 @@ void JSAtomicsMutex::LockSlowPath(Isolate* requester,
 
     // Allocate a waiter queue node on-stack, since this thread is going to
     // sleep and will be blocked anyway.
-    WaiterQueueNode this_waiter(requester);
+    SyncWaiterQueueNode this_waiter(requester);
 
     {
       // Try to acquire the queue lock, which is itself a spinlock.
@@ -456,7 +636,7 @@ bool JSAtomicsCondition::WaitFor(Isolate* requester,
 
   // Allocate a waiter queue node on-stack, since this thread is going to sleep
   // and will be blocked anyway.
-  WaiterQueueNode this_waiter(requester);
+  SyncWaiterQueueNode this_waiter(requester);
 
   {
     // The state pointer should not be used outside of this block as a shared GC

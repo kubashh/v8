@@ -22,6 +22,8 @@ namespace internal {
 
 namespace detail {
 class WaiterQueueNode;
+class AsyncWaiterQueueNode;
+class SyncWaiterQueueNode;
 }  // namespace detail
 
 // Base class for JSAtomicsMutex and JSAtomicsCondition
@@ -109,6 +111,31 @@ class JSAtomicsMutex
     bool locked_;
   };
 
+  // A non-copyable wrapper class that provides an RAII-style mechanism for
+  // Owning the JSAtomicsMutex potentially asynchronously via its asyncLock
+  // method.
+  //
+  // The mutex is attempted to be locked via TryLock when a TryLockGuard object
+  // is created. If the mutex was acquired, then it is released when the
+  // TryLockGuard object is destructed.
+  class V8_NODISCARD AsyncLockGuard final {
+   public:
+    inline AsyncLockGuard(Isolate* isolate, Handle<JSAtomicsMutex> mutex);
+    AsyncLockGuard(const AsyncLockGuard&) = delete;
+    AsyncLockGuard& operator=(const AsyncLockGuard&) = delete;
+    inline ~AsyncLockGuard();
+    bool locked() const { return locked_; }
+    static void Enqueue(Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+                        Handle<Object> callable, Handle<JSObject> promise);
+    static void EnqueueNode(Isolate* isolate, std::atomic<StateT>* state,
+                            detail::AsyncWaiterQueueNode* node);
+
+   private:
+    Isolate* isolate_;
+    Handle<JSAtomicsMutex> mutex_;
+    bool locked_;
+  };
+
   DECL_CAST(JSAtomicsMutex)
   DECL_PRINTER(JSAtomicsMutex)
   EXPORT_DECL_VERIFIER(JSAtomicsMutex)
@@ -128,6 +155,8 @@ class JSAtomicsMutex
  private:
   friend class Factory;
   friend class detail::WaiterQueueNode;
+  friend class detail::SyncWaiterQueueNode;
+  friend class detail::AsyncWaiterQueueNode;
 
   // There are 2 lock bits: whether the lock itself is locked, and whether the
   // associated waiter queue is locked.
