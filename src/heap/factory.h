@@ -549,6 +549,10 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   Handle<FixedDoubleArray> CopyFixedDoubleArray(Handle<FixedDoubleArray> array);
 
+  Handle<ExternalPointerArray> CopyExternalPointerArrayAndGrow(
+      Handle<ExternalPointerArray> src, int grow_by,
+      AllocationType allocation = AllocationType::kYoung);
+
   // Creates a new HeapNumber in read-only space if possible otherwise old
   // space.
   Handle<HeapNumber> NewHeapNumberForCodeAssembler(double value);
