@@ -2403,6 +2403,22 @@ Handle<FixedDoubleArray> Factory::CopyFixedDoubleArray(
   return result;
 }
 
+Handle<ExternalPointerArray> Factory::CopyExternalPointerArrayAndGrow(
+    Handle<ExternalPointerArray> src, int grow_by, AllocationType alloction) {
+  int old_len = src->length();
+  int new_len = old_len + grow_by;
+  Handle<ExternalPointerArray> result = NewExternalPointerArray(new_len);
+
+  // Copy the pointers one-by-one. We can't just do a memcpy here since when the
+  // sandbox is enabled, this array will contain external pointer handles which
+  // must not be copied/moved between objects.
+  for (int i = 0; i < old_len; i++) {
+    result->set(i, isolate(), src->get(i, isolate()));
+  }
+
+  return result;
+}
+
 Handle<HeapNumber> Factory::NewHeapNumberForCodeAssembler(double value) {
   ReadOnlyRoots roots(isolate());
   auto num = roots.FindHeapNumber(value);

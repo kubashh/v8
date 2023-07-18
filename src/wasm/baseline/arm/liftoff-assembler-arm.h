@@ -634,6 +634,20 @@ void LiftoffAssembler::LoadTaggedPointerFromInstance(Register dst,
   ldr(dst, MemOperand{instance, offset});
 }
 
+void LiftoffAssembler::LoadExternalPointer(Register dst, Register instance,
+                                           int offset, ExternalPointerTag tag,
+                                           Register scratch) {
+  LoadFullPointer(dst, instance, offset - kHeapObjectTag);
+}
+
+void LiftoffAssembler::LoadExternalPointer(Register dst, Register instance,
+                                           int offset, Register index,
+                                           ExternalPointerTag tag,
+                                           Register scratch) {
+  Load(LiftoffRegister(dst), instance, index, offset - kHeapObjectTag,
+       LoadType::kI32Load, nullptr, false, false, true);
+}
+
 void LiftoffAssembler::SpillInstance(Register instance) {
   str(instance, liftoff::GetInstanceOperand());
 }
