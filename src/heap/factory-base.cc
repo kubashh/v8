@@ -258,6 +258,28 @@ Handle<ByteArray> FactoryBase<Impl>::NewByteArray(int length,
 }
 
 template <typename Impl>
+Handle<ExternalPointerArray> FactoryBase<Impl>::NewExternalPointerArray(
+    int length, AllocationType allocation) {
+  if (length < 0 || length > ExternalPointerArray::kMaxLength) {
+    FATAL("Fatal JavaScript invalid size error %d", length);
+    UNREACHABLE();
+  }
+  if (length == 0) return impl()->empty_external_pointer_array();
+  int size =
+      ALIGN_TO_ALLOCATION_ALIGNMENT(ExternalPointerArray::SizeFor(length));
+  HeapObject result = AllocateRawWithImmortalMap(
+      size, allocation, read_only_roots().external_pointer_array_map());
+  DisallowGarbageCollection no_gc;
+  ExternalPointerArray array = ExternalPointerArray::cast(result);
+  // TODO need to clear the contents here, more efficiently, just memset?
+  array.set_length(length);
+  for (int i = 0; i < length; i++) {
+    array.clear(i);
+  }
+  return handle(array, isolate());
+}
+
+template <typename Impl>
 Handle<DeoptimizationLiteralArray>
 FactoryBase<Impl>::NewDeoptimizationLiteralArray(int length) {
   return Handle<DeoptimizationLiteralArray>::cast(

@@ -788,6 +788,9 @@ class LiftoffAssembler : public MacroAssembler {
                                             int offset);
   inline void LoadExternalPointer(Register dst, Register instance, int offset,
                                   ExternalPointerTag tag, Register scratch);
+  inline void LoadExternalPointer(Register dst, Register instance, int offset,
+                                  Register index, ExternalPointerTag tag,
+                                  Register scratch);
   inline void SpillInstance(Register instance);
   inline void ResetOSRTarget();
   inline void LoadTaggedPointer(Register dst, Register src_addr,
