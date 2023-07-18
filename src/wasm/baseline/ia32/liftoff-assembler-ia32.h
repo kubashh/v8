@@ -10,6 +10,7 @@
 #include "src/heap/memory-chunk.h"
 #include "src/wasm/baseline/liftoff-assembler.h"
 #include "src/wasm/baseline/liftoff-register.h"
+#include "src/wasm/object-access.h"
 #include "src/wasm/simd-shuffle.h"
 #include "src/wasm/value-type.h"
 #include "src/wasm/wasm-objects.h"
@@ -314,6 +315,36 @@ int LiftoffAssembler::SlotSizeForType(ValueKind kind) {
 
 bool LiftoffAssembler::NeedsAlignment(ValueKind kind) {
   return is_reference(kind);
+}
+
+void LiftoffAssembler::CheckTierUp(int declared_func_index, int budget_used,
+                                   Label* ool_label) {
+  // Be careful not to cause caching of the instance.
+  Register instance = cache_state_.cached_instance;
+  Register scratch = no_reg;
+  Register pop_back = no_reg;
+  if (cache_state_.has_unused_register(kGpReg)) {
+    scratch = cache_state_.unused_register(kGpReg).gp();
+  } else {
+    pop_back = instance == eax ? ebx : eax;
+    push(pop_back);
+    scratch = pop_back;
+  }
+
+  if (instance == no_reg) {
+    instance = scratch;
+    LoadInstanceFromFrame(instance);
+  }
+
+  Register budget_array = scratch;  // Potentially overwriting {instance}.
+  constexpr int kArrayOffset = wasm::ObjectAccess::ToTagged(
+      WasmInstanceObject::kTieringBudgetArrayOffset);
+  mov(budget_array, Operand{instance, kArrayOffset});
+
+  int offset = kInt32Size * declared_func_index;
+  sub(Operand{budget_array, offset}, Immediate(budget_used));
+  if (pop_back != no_reg) pop(pop_back);
+  j(negative, ool_label);
 }
 
 void LiftoffAssembler::LoadConstant(LiftoffRegister reg, WasmValue value) {
@@ -2503,13 +2534,6 @@ void LiftoffAssembler::emit_i32_cond_jumpi(Condition cond, Label* label,
                                            const FreezeCacheState& frozen) {
   cmp(lhs, Immediate(imm));
   j(cond, label);
-}
-
-void LiftoffAssembler::emit_i32_subi_jump_negative(
-    Register value, int subtrahend, Label* result_negative,
-    const FreezeCacheState& frozen) {
-  sub(value, Immediate(subtrahend));
-  j(negative, result_negative);
 }
 
 namespace liftoff {
