@@ -17,6 +17,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "absl/container/flat_hash_map.h"
+#include "absl/container/flat_hash_set.h"
 #include "src/base/functional.h"
 #include "src/base/intrusive-set.h"
 #include "src/base/small-vector.h"
@@ -753,6 +755,41 @@ class SmallZoneVector : public base::SmallVector<T, kSize, ZoneAllocator<T>> {
   explicit SmallZoneVector(size_t size, Zone* zone)
       : base::SmallVector<T, kSize, ZoneAllocator<T>>(
             size, ZoneAllocator<T>(ZoneAllocator<T>(zone))) {}
+};
+
+// A wrapper subclass for absl::flat_hash_map to make it easy to construct one
+// that uses a zone allocator. If you want to use a user-defined type as key
+// (K), you'll need to define a AbslHashValue function for it (see
+// https://abseil.io/docs/cpp/guides/hash).
+template <typename K, typename V,
+          typename Hash = typename absl::flat_hash_map<K, V>::hasher,
+          typename KeyEqual =
+              typename absl::flat_hash_map<K, V, Hash>::key_equal>
+class ZoneAbslFlatHashMap
+    : public absl::flat_hash_map<K, V, Hash, KeyEqual,
+                                 ZoneAllocator<std::pair<const K, V>>> {
+ public:
+  // Constructs an empty map.
+  explicit ZoneAbslFlatHashMap(Zone* zone, size_t bucket_count = 100)
+      : absl::flat_hash_map<K, V, Hash, KeyEqual,
+                            ZoneAllocator<std::pair<const K, V>>>(
+            bucket_count, Hash(), KeyEqual(),
+            ZoneAllocator<std::pair<const K, V>>(zone)) {}
+};
+
+// A wrapper subclass for absl::flat_hash_set to make it easy to construct one
+// that uses a zone allocator. If you want to use a user-defined type as key
+// (K), you'll need to define a AbslHashValue function for it (see
+// https://abseil.io/docs/cpp/guides/hash).
+template <typename K, typename Hash = typename absl::flat_hash_set<K>::hasher,
+          typename KeyEqual = typename absl::flat_hash_set<K, Hash>::key_equal>
+class ZoneAbslFlatHashSet
+    : public absl::flat_hash_set<K, Hash, KeyEqual, ZoneAllocator<K>> {
+ public:
+  // Constructs an empty map.
+  explicit ZoneAbslFlatHashSet(Zone* zone, size_t bucket_count = 100)
+      : absl::flat_hash_set<K, Hash, KeyEqual, ZoneAllocator<K>>(
+            bucket_count, Hash(), KeyEqual(), ZoneAllocator<K>(zone)) {}
 };
 
 // Typedefs to shorten commonly used vectors.
