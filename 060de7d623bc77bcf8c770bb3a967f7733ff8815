@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4e2af8f_4fd05a56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-07-18T12:00:45Z",
+      "side": 1,
+      "message": "PTAL.\nThis adds some lines of code overall, but I think it\u0027s worth it for the reduced complexity in the compiler. It might even improve compilation performance, but I didn\u0027t check.",
+      "revId": "060de7d623bc77bcf8c770bb3a967f7733ff8815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
