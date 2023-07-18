@@ -15,15 +15,31 @@ namespace internal {
 class BasicMemoryChunk;
 class MemoryChunk;
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+namespace measure_css {
+class ObjectStats;
+}
+#endif
+
 template <typename ConcreteState, AccessMode access_mode>
 class MarkingStateBase {
  public:
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  MarkingStateBase(PtrComprCageBase cage_base, measure_css::ObjectStats* stats)
+      :
+#if V8_COMPRESS_POINTERS
+        cage_base_(cage_base),
+#endif
+        object_stats_(stats) {
+  }
+#else
   explicit MarkingStateBase(PtrComprCageBase cage_base)
 #if V8_COMPRESS_POINTERS
       : cage_base_(cage_base)
 #endif
   {
   }
+#endif
 
   // The pointer compression cage base value used for decompression of all
   // tagged values except references to InstructionStream objects.
@@ -46,21 +62,36 @@ class MarkingStateBase {
 #if V8_COMPRESS_POINTERS
   const PtrComprCageBase cage_base_;
 #endif  // V8_COMPRESS_POINTERS
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  measure_css::ObjectStats* object_stats_;
+#endif
 };
 
 // This is used by marking visitors.
 class MarkingState final
     : public MarkingStateBase<MarkingState, AccessMode::ATOMIC> {
  public:
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  explicit MarkingState(PtrComprCageBase cage_base,
+                        measure_css::ObjectStats* stats = nullptr)
+      : MarkingStateBase(cage_base, stats) {}
+#else
   explicit MarkingState(PtrComprCageBase cage_base)
       : MarkingStateBase(cage_base) {}
+#endif
 };
 
 class NonAtomicMarkingState final
     : public MarkingStateBase<NonAtomicMarkingState, AccessMode::NON_ATOMIC> {
  public:
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  NonAtomicMarkingState(PtrComprCageBase cage_base,
+                        measure_css::ObjectStats* stats)
+      : MarkingStateBase(cage_base, stats) {}
+#else
   explicit NonAtomicMarkingState(PtrComprCageBase cage_base)
       : MarkingStateBase(cage_base) {}
+#endif
 };
 
 }  // namespace internal

@@ -48,6 +48,10 @@
 #include "src/utils/allocation.h"
 #include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#include "src/heap/conservative-stack-visitor.h"
+#endif
+
 namespace cppgc::internal {
 enum class HeapObjectNameForUnnamedObject : uint8_t;
 class ClassNameAsHeapObjectNameScope;
@@ -1600,6 +1604,10 @@ class Heap final {
   // Returns the amount of external memory registered since last global gc.
   V8_EXPORT_PRIVATE uint64_t AllocatedExternalMemorySinceMarkCompact() const;
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  measure_css::Stats* css_stats() { return &css_stats_; }
+#endif
+
  private:
   class AllocationTrackerForDebugging;
 
@@ -2328,6 +2336,11 @@ class Heap final {
   ResizeNewSpaceMode resize_new_space_mode_ = ResizeNewSpaceMode::kNone;
 
   std::unique_ptr<MemoryBalancer> mb_;
+
+  // Metrics for conservative stack scanning.
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  measure_css::Stats css_stats_;
+#endif
 
   // Classes in "heap" can be friends.
   friend class AlwaysAllocateScope;

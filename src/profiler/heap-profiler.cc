@@ -227,8 +227,24 @@ void HeapProfiler::UpdateObjectSizeEvent(Address addr, int size) {
 
 Handle<HeapObject> HeapProfiler::FindHeapObjectById(SnapshotObjectId id) {
   HeapObject object;
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  CHECK(heap()->css_stats()->IsClear());
+#endif
+
   CombinedHeapObjectIterator iterator(heap(),
                                       HeapObjectIterator::kFilterUnreachable);
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  if (v8_flags.trace_css_nvp) {
+    std::stringstream json;
+    json << *heap()->css_stats();
+    heap()->isolate()->PrintWithTimestamp("CSS statistics FO: %s\n",
+                                          json.str().c_str());
+    fflush(stdout);
+  }
+  heap()->css_stats()->Clear();
+#endif
+
   // Make sure that object with the given id is still reachable.
   for (HeapObject obj = iterator.Next(); !obj.is_null();
        obj = iterator.Next()) {
@@ -266,8 +282,25 @@ void HeapProfiler::QueryObjects(Handle<Context> context,
   {
     HandleScope handle_scope(isolate());
     std::vector<Handle<JSTypedArray>> on_heap_typed_arrays;
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    CHECK(heap()->css_stats()->IsClear());
+#endif
+
     CombinedHeapObjectIterator heap_iterator(
         heap(), HeapObjectIterator::kFilterUnreachable);
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (v8_flags.trace_css_nvp) {
+      std::stringstream json;
+      json << *heap()->css_stats();
+      heap()->isolate()->PrintWithTimestamp("CSS statistics QO1: %s\n",
+                                            json.str().c_str());
+      fflush(stdout);
+    }
+    heap()->css_stats()->Clear();
+#endif
+
     for (HeapObject heap_obj = heap_iterator.Next(); !heap_obj.is_null();
          heap_obj = heap_iterator.Next()) {
       if (heap_obj.IsFeedbackVector()) {
@@ -289,8 +322,25 @@ void HeapProfiler::QueryObjects(Handle<Context> context,
   // We should return accurate information about live objects, so we need to
   // collect all garbage first.
   heap()->CollectAllAvailableGarbage(GarbageCollectionReason::kHeapProfiler);
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  CHECK(heap()->css_stats()->IsClear());
+#endif
+
   CombinedHeapObjectIterator heap_iterator(
       heap(), HeapObjectIterator::kFilterUnreachable);
+
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  if (v8_flags.trace_css_nvp) {
+    std::stringstream json;
+    json << *heap()->css_stats();
+    heap()->isolate()->PrintWithTimestamp("CSS statistics QO2: %s\n",
+                                          json.str().c_str());
+    fflush(stdout);
+  }
+  heap()->css_stats()->Clear();
+#endif
+
   PtrComprCageBase cage_base(isolate());
   for (HeapObject heap_obj = heap_iterator.Next(); !heap_obj.is_null();
        heap_obj = heap_iterator.Next()) {
