@@ -16,6 +16,29 @@
       "message": "There\u0027s some linux-rel tests failing - I\u0027ll confirm tomorrow, til then back to WIP.",
       "revId": "5a390cc2a09a07d38d128eadd3b105b078735efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed620306_f9aeb8eb",
+        "filename": "src/snapshot/snapshot.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-07-18T13:52:33Z",
+      "side": 1,
+      "message": "why not `Handle\u003cNativeContext\u003e` explicitly?",
+      "range": {
+        "startLine": 170,
+        "startChar": 3,
+        "endLine": 170,
+        "endChar": 59
+      },
+      "revId": "5a390cc2a09a07d38d128eadd3b105b078735efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
