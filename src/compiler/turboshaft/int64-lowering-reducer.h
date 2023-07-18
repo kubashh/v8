@@ -123,9 +123,10 @@ class Int64LoweringReducer : public Next {
                             low_comparison));
   }
 
-  OpIndex REDUCE(Call)(OpIndex callee, OpIndex frame_state,
-                       base::Vector<const OpIndex> arguments,
-                       const TSCallDescriptor* descriptor, OpEffects effects) {
+  OpIndex ReduceCall(OpIndex callee, OpIndex frame_state,
+                     base::Vector<const OpIndex> arguments,
+                     const TSCallDescriptor* descriptor, OpEffects effects,
+                     bool is_tail_call) {
     // Iterate over the call descriptor to skip lowering if the signature does
     // not contain an i64.
     const CallDescriptor* call_descriptor = descriptor->descriptor;
@@ -143,8 +144,9 @@ class Int64LoweringReducer : public Next {
     }
     if (i64_params + i64_returns == 0) {
       // No lowering required.
-      return Next::ReduceCall(callee, frame_state, arguments, descriptor,
-                              effects);
+      return is_tail_call ? Next::ReduceTailCall(callee, arguments, descriptor)
+                          : Next::ReduceCall(callee, frame_state, arguments,
+                                             descriptor, effects);
     }
 
     // Create descriptor with 2 i32s for every i64.
@@ -168,9 +170,15 @@ class Int64LoweringReducer : public Next {
       }
     }
 
-    OpIndex call = Next::ReduceCall(
-        callee, frame_state, base::VectorOf(lowered_args),
-        TSCallDescriptor::Create(lowered_descriptor, __ graph_zone()), effects);
+    auto lowered_ts_descriptor =
+        TSCallDescriptor::Create(lowered_descriptor, __ graph_zone());
+    OpIndex call =
+        is_tail_call
+            ? Next::ReduceTailCall(callee, base::VectorOf(lowered_args),
+                                   lowered_ts_descriptor)
+            : Next::ReduceCall(callee, frame_state,
+                               base::VectorOf(lowered_args),
+                               lowered_ts_descriptor, effects);
     // If it only returns one value, there isn't any projection for the
     // different returns, so we don't need to update them. Similarly we don't
     // need to update projections if there isn't any i64 in the result types.
@@ -193,6 +201,23 @@ class Int64LoweringReducer : public Next {
     lowered_calls_[call] = result_map;
     DCHECK_EQ(lowered_index, return_count + i64_returns);
     return call;
+  }
+
+  OpIndex REDUCE(Call)(OpIndex callee, OpIndex frame_state,
+                       base::Vector<const OpIndex> arguments,
+                       const TSCallDescriptor* descriptor, OpEffects effects) {
+    const bool is_tail_call = false;
+    return ReduceCall(callee, frame_state, arguments, descriptor, effects,
+                      is_tail_call);
+  }
+
+  OpIndex REDUCE(TailCall)(OpIndex callee,
+                           base::Vector<const OpIndex> arguments,
+                           const TSCallDescriptor* descriptor) {
+    const bool is_tail_call = true;
+    OpIndex frame_state = OpIndex::Invalid();
+    return ReduceCall(callee, frame_state, arguments, descriptor, OpEffects(),
+                      is_tail_call);
   }
 
   OpIndex REDUCE(Projection)(OpIndex input, uint16_t idx,
