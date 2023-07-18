@@ -73,6 +73,30 @@
       },
       "revId": "3323cfa76a4959230ee30b57f890cb6e35142128",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cac6855_64554580",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-18T11:53:51Z",
+      "side": 1,
+      "message": "Assume the memory has size 10 and we want to check that an access on index 6 with length 4 is valid. The last byte of the access will be 6 + 4 - 1 \u003d 9, and we need to check that 9 \u003c 10.",
+      "parentUuid": "3c7ebb3e_f6f1668a",
+      "range": {
+        "startLine": 2278,
+        "startChar": 55,
+        "endLine": 2278,
+        "endChar": 59
+      },
+      "revId": "3323cfa76a4959230ee30b57f890cb6e35142128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
