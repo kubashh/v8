@@ -9020,7 +9020,7 @@ void CodeStubAssembler::NameDictionaryLookup(
   {
     Label next_probe(this);
     TNode<IntPtrT> entry = var_entry.value();
-
+    // Print(SmiTag(entry));
     TNode<IntPtrT> index = EntryToIndex<Dictionary>(entry);
     if (var_name_index) *var_name_index = index;
 
