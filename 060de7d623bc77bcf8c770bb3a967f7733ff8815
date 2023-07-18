@@ -16,6 +16,69 @@
       "message": "PTAL.\nThis adds some lines of code overall, but I think it\u0027s worth it for the reduced complexity in the compiler. It might even improve compilation performance, but I didn\u0027t check.",
       "revId": "060de7d623bc77bcf8c770bb3a967f7733ff8815",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da4e7ea9_8e90b218",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-18T13:58:07Z",
+      "side": 1,
+      "message": "The compiler simplification is nice. LGTM with a suggestion.",
+      "revId": "060de7d623bc77bcf8c770bb3a967f7733ff8815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "520f93cd_97ab025c",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6431,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-18T13:58:07Z",
+      "side": 1,
+      "message": "nit: please drop this leftover.",
+      "range": {
+        "startLine": 6431,
+        "startChar": 4,
+        "endLine": 6431,
+        "endChar": 74
+      },
+      "revId": "060de7d623bc77bcf8c770bb3a967f7733ff8815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b831de2d_9e576eda",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-18T13:58:07Z",
+      "side": 1,
+      "message": "I think `CheckTierUp` should (on all platforms) consume a `const FreezeCacheState\u0026 frozen` parameter, which would effectively turn this comment into a DCHECK: if someone modified this code (or one of the helper functions called by it) in an unsafe way in the future, that guard would catch it, which is more reliable than trusting that reviewers would see this comment and connect the dots correctly.",
+      "range": {
+        "startLine": 304,
+        "startChar": 2,
+        "endLine": 304,
+        "endChar": 53
+      },
+      "revId": "060de7d623bc77bcf8c770bb3a967f7733ff8815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
