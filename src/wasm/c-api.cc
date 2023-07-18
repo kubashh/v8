@@ -1386,12 +1386,8 @@ struct FuncData {
 
 namespace {
 
-// TODO(jkummerow): Generalize for WasmExportedFunction and WasmCapiFunction.
 class SignatureHelper : public i::AllStatic {
  public:
-  // Use an invalid type as a marker separating params and results.
-  static constexpr i::wasm::ValueType kMarker = i::wasm::kWasmVoid;
-
   static i::Handle<i::PodArray<i::wasm::ValueType>> Serialize(
       i::Isolate* isolate, FuncType* type) {
     int sig_size =
@@ -1399,15 +1395,14 @@ class SignatureHelper : public i::AllStatic {
     i::Handle<i::PodArray<i::wasm::ValueType>> sig =
         i::PodArray<i::wasm::ValueType>::New(isolate, sig_size,
                                              i::AllocationType::kOld);
+
     int index = 0;
+    sig->set(index++, i::wasm::ValueType::FromRawBitField(
+                          static_cast<uint32_t>(type->results().size())));
     // TODO(jkummerow): Consider making vec<> range-based for-iterable.
     for (size_t i = 0; i < type->results().size(); i++) {
       sig->set(index++, WasmValKindToV8(type->results()[i]->kind()));
     }
-    // {sig->set} needs to take the address of its second parameter,
-    // so we can't pass in the static const kMarker directly.
-    i::wasm::ValueType marker = kMarker;
-    sig->set(index++, marker);
     for (size_t i = 0; i < type->params().size(); i++) {
       sig->set(index++, WasmValKindToV8(type->params()[i]->kind()));
     }
@@ -1420,23 +1415,18 @@ class SignatureHelper : public i::AllStatic {
     ownvec<ValType> results = ownvec<ValType>::make_uninitialized(result_arity);
     ownvec<ValType> params = ownvec<ValType>::make_uninitialized(param_arity);
 
-    int i = 0;
-    for (; i < result_arity; ++i) {
-      results[i] = ValType::make(V8ValueTypeToWasm(sig.get(i)));
+    int i = 1;
+    for (int p = 0; i < result_arity; ++i, ++p) {
+      results[p] = ValType::make(V8ValueTypeToWasm(sig.get(i)));
     }
-    i++;  // Skip marker.
-    for (int p = 0; i < sig.length(); ++i, ++p) {
+    for (int p = 0; i < param_arity; ++i, ++p) {
       params[p] = ValType::make(V8ValueTypeToWasm(sig.get(i)));
     }
     return FuncType::make(std::move(params), std::move(results));
   }
 
   static int ResultArity(i::PodArray<i::wasm::ValueType> sig) {
-    int count = 0;
-    for (; count < sig.length(); count++) {
-      if (sig.get(count) == kMarker) return count;
-    }
-    UNREACHABLE();
+    return sig.get(0).raw_bit_field();
   }
 
   static int ParamArity(i::PodArray<i::wasm::ValueType> sig) {
@@ -1448,10 +1438,6 @@ class SignatureHelper : public i::AllStatic {
     return i::WasmCapiFunction::cast(*function).GetSerializedSignature();
   }
 };
-
-// Explicit instantiation makes the linker happy for component builds of
-// wasm_api_tests.
-constexpr i::wasm::ValueType SignatureHelper::kMarker;
 
 auto make_func(Store* store_abs, FuncData* data) -> own<Func> {
   auto store = impl(store_abs);

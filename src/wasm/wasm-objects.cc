@@ -502,16 +502,9 @@ void WasmTableObject::UpdateDispatchTables(
       capi_function->GetSerializedSignature();
   int total_count = serialized_sig.length() - 1;
   std::unique_ptr<wasm::ValueType[]> reps(new wasm::ValueType[total_count]);
-  int result_count;
-  static const wasm::ValueType kMarker = wasm::kWasmVoid;
-  for (int i = 0, j = 0; i <= total_count; i++) {
-    if (serialized_sig.get(i) == kMarker) {
-      result_count = i;
-      continue;
-    }
-    reps[j++] = serialized_sig.get(i);
-  }
+  int result_count = serialized_sig.get(0).raw_bit_field();
   int param_count = total_count - result_count;
+  serialized_sig.copy_out(1, reps.get(), total_count);
   wasm::FunctionSig sig(result_count, param_count, reps.get());
 
   for (int i = 0; i < dispatch_tables->length();
@@ -1750,17 +1743,8 @@ const wasm::FunctionSig* WasmCapiFunction::GetSignature(Zone* zone) const {
       function_data.serialized_signature();
   int sig_size = serialized_sig.length() - 1;
   wasm::ValueType* types = zone->AllocateArray<wasm::ValueType>(sig_size);
-  int returns_size = 0;
-  int index = 0;
-  while (serialized_sig.get(index) != wasm::kWasmVoid) {
-    types[index] = serialized_sig.get(index);
-    index++;
-  }
-  returns_size = index;
-  while (index < sig_size) {
-    types[index] = serialized_sig.get(index + 1);
-    index++;
-  }
+  int returns_size = serialized_sig.get(0).raw_bit_field();
+  serialized_sig.copy_out(1, types, sig_size);
 
   return zone->New<wasm::FunctionSig>(returns_size, sig_size - returns_size,
                                       types);
@@ -2164,9 +2148,11 @@ Handle<WasmJSFunction> WasmJSFunction::New(Isolate* isolate,
   int return_count = static_cast<int>(sig->return_count());
   int parameter_count = static_cast<int>(sig->parameter_count());
   Handle<PodArray<wasm::ValueType>> serialized_sig =
-      PodArray<wasm::ValueType>::New(isolate, sig_size, AllocationType::kOld);
+      PodArray<wasm::ValueType>::New(isolate, sig_size + 1,
+                                     AllocationType::kOld);
+  serialized_sig->set(0, wasm::ValueType::FromRawBitField(return_count));
   if (sig_size > 0) {
-    serialized_sig->copy_in(0, sig->all().begin(), sig_size);
+    serialized_sig->copy_in(1, sig->all().begin(), sig_size);
   }
   // TODO(wasm): Think about caching and sharing the JS-to-JS wrappers per
   // signature instead of compiling a new one for every instantiation.
@@ -2184,8 +2170,8 @@ Handle<WasmJSFunction> WasmJSFunction::New(Isolate* isolate,
   Factory* factory = isolate->factory();
   Handle<Map> rtt = factory->wasm_internal_function_map();
   Handle<WasmJSFunctionData> function_data = factory->NewWasmJSFunctionData(
-      call_target, callable, return_count, parameter_count, serialized_sig,
-      wrapper_code, rtt, suspend, wasm::kNoPromise);
+      call_target, callable, serialized_sig, wrapper_code, rtt, suspend,
+      wasm::kNoPromise);
 
   if (wasm::WasmFeatures::FromIsolate(isolate).has_typed_funcref()) {
     using CK = wasm::ImportCallKind;
@@ -2241,13 +2227,16 @@ wasm::Suspend WasmJSFunction::GetSuspend() const {
 
 const wasm::FunctionSig* WasmJSFunction::GetSignature(Zone* zone) const {
   WasmJSFunctionData function_data = shared().wasm_js_function_data();
-  int sig_size = function_data.serialized_signature().length();
+  PodArray<wasm::ValueType> serialized_signature =
+      function_data.serialized_signature();
+  // Subtract the field for the return count;
+  int sig_size = serialized_signature.length() - 1;
+  int return_count = serialized_signature.get(0).raw_bit_field();
+  int parameter_count = sig_size - return_count;
   wasm::ValueType* types = zone->AllocateArray<wasm::ValueType>(sig_size);
   if (sig_size > 0) {
-    function_data.serialized_signature().copy_out(0, types, sig_size);
+    function_data.serialized_signature().copy_out(1, types, sig_size);
   }
-  int return_count = function_data.serialized_return_count();
-  int parameter_count = function_data.serialized_parameter_count();
   return zone->New<wasm::FunctionSig>(return_count, parameter_count, types);
 }
 
