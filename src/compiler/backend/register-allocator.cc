@@ -5,6 +5,7 @@
 #include "src/compiler/backend/register-allocator.h"
 
 #include <iomanip>
+#include <random>
 
 #include "src/base/iterator.h"
 #include "src/base/small-vector.h"
@@ -4649,12 +4650,29 @@ void OperandAssigner::AssignSpillSlots() {
       spill_ranges.end());
 
   // Now merge *all* disjoint `SpillRange`s.
+  // In principle this merging is O(n^2) in the number of `SpillRange`s.
+  // However it then dominates compile time (>40%) for some pathological cases,
+  // e.g., https://crbug.com/v8/14133.
+  // The following is a probabilistic solution to the problem.
+  // We do the full quadratic merging below a certain number of `SpillRange`s.
+  // If there are more `SpillRange`s, the inner loop below tries at most
+  // `retries` times to merge the next `SpillRange` into the current one.
+  // This limits merging to O(n), at the cost of giving up if too many merges
+  // were unsuccessful.
+  // However, we can increase the probability of merges being successful
+  // by (pseudo-)randomly shuffling the `SpillRange`s, such that it is more
+  // likely that two adjacent `SpillRange`s are not intersecting.
+  constexpr size_t kMaxQuadraticMergeSize = 10000;
+  if (spill_ranges.size() > kMaxQuadraticMergeSize) {
+    std::shuffle(spill_ranges.begin(), spill_ranges.end(), std::minstd_rand());
+  }
   SpillRange** end_nonempty = spill_ranges.end();
   for (SpillRange** range_it = spill_ranges.begin(); range_it < end_nonempty;
        ++range_it) {
     data()->tick_counter()->TickAndMaybeEnterSafepoint();
     SpillRange* range = *range_it;
     DCHECK(!range->IsEmpty());
+    size_t retries = kMaxQuadraticMergeSize;
     for (SpillRange** other_it = range_it + 1; other_it < end_nonempty;
          ++other_it) {
       SpillRange* other = *other_it;
@@ -4662,6 +4680,8 @@ void OperandAssigner::AssignSpillSlots() {
       if (range->TryMerge(other)) {
         DCHECK(other->IsEmpty());
         std::iter_swap(other_it, --end_nonempty);
+      } else if (--retries == 0) {
+        break;
       }
     }
   }
