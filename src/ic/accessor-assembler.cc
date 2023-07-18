@@ -630,7 +630,7 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
     TNode<MaybeObject> handler, Label* miss, ExitPoint* exit_point,
     ICMode ic_mode, OnNonExistent on_nonexistent,
     ElementSupport support_elements) {
-  Label constant(this), field(this), normal(this, Label::kDeferred),
+  Label constant(this), field(this), normal_fast(this), normal_slow(this),
       slow(this, Label::kDeferred), interceptor(this, Label::kDeferred),
       nonexistent(this), accessor(this, Label::kDeferred),
       global(this, Label::kDeferred), module_export(this, Label::kDeferred),
@@ -645,7 +645,9 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
 
   GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNonExistent)), &nonexistent);
 
-  GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNormal)), &normal);
+  GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNormal_Fast)), &normal_fast);
+
+  GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNormal_Slow)), &normal_slow);
 
   GotoIf(Word32Equal(handler_kind, LOAD_KIND(kAccessorFromPrototype)),
          &accessor);
@@ -704,9 +706,44 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
     exit_point->Return(holder);
   }
 
-  BIND(&normal);
+  BIND(&normal_fast);
   {
-    Comment("load_normal");
+    Comment("load_normal_fast");
+    TNode<PropertyDictionary> properties =
+        CAST(LoadSlowProperties(CAST(holder)));
+    TNode<IntPtrT> capacity =
+        PositiveSmiUntag(GetCapacity<PropertyDictionary>(properties));
+    Label found(this), normal_fast_miss(this, Label::kDeferred);
+    TNode<IntPtrT> entry =
+        Signed(DecodeWordFromWord32<LoadHandler::NameDictionaryEntryIndexBits>(
+            handler_word));
+    TNode<IntPtrT> mask = IntPtrSub(capacity, IntPtrConstant(1));
+    entry = Signed(WordAnd(entry, mask));
+    // GotoIfNot(IntPtrLessThan(entry, capacity), &normal_fast_miss);
+    TNode<IntPtrT> index = EntryToIndex<PropertyDictionary>(entry);
+    TNode<HeapObject> current =
+        CAST(UnsafeLoadFixedArrayElement(properties, index));
+    Branch(TaggedNotEqual(current, p->name()), &normal_fast_miss, &found);
+
+    BIND(&found);
+    {
+      TVARIABLE(Uint32T, var_details);
+      TVARIABLE(Object, var_value);
+      LoadPropertyFromDictionary<PropertyDictionary>(properties, index,
+                                                     &var_details, &var_value);
+      TNode<Object> value = CallGetterIfAccessor(
+          var_value.value(), CAST(holder), var_details.value(), p->context(),
+          p->receiver(), p->name(), miss);
+      exit_point->Return(value);
+    }
+
+    BIND(&normal_fast_miss);
+    Goto(miss);
+  }
+
+  BIND(&normal_slow);
+  {
+    Comment("load_normal_slow");
     TNode<PropertyDictionary> properties =
         CAST(LoadSlowProperties(CAST(holder)));
     TVARIABLE(IntPtrT, var_name_index);
@@ -877,7 +914,9 @@ void AccessorAssembler::HandleLoadICSmiHandlerHasNamedCase(
 
   GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNonExistent)), &return_false);
 
-  GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNormal)), &normal);
+  GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNormal_Fast)), &normal);
+
+  GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNormal_Slow)), &normal);
 
   GotoIf(Word32Equal(handler_kind, LOAD_KIND(kAccessorFromPrototype)),
          &return_true);
