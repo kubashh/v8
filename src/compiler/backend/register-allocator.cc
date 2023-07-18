@@ -4649,19 +4649,32 @@ void OperandAssigner::AssignSpillSlots() {
       spill_ranges.end());
 
   // Now merge *all* disjoint `SpillRange`s.
+  // Formerly, this merging was O(n^2) in the number of `SpillRange`s, which
+  // then dominated compile time (>40%) for some pathological cases,
+  // e.g., https://crbug.com/v8/14133.
+  // Now, we allow only `kMaxRetries` unsuccessful merges with directly
+  // following `SpillRange`s. After each `kMaxRetries`, we exponentially
+  // increase the stride, which limits the inner loop to O(log n) and thus
+  // the overall merging to O(n * log n).
   SpillRange** end_nonempty = spill_ranges.end();
   for (SpillRange** range_it = spill_ranges.begin(); range_it < end_nonempty;
        ++range_it) {
     data()->tick_counter()->TickAndMaybeEnterSafepoint();
     SpillRange* range = *range_it;
     DCHECK(!range->IsEmpty());
+    constexpr size_t kMaxRetries = 1000;
+    size_t retries = kMaxRetries;
+    size_t stride = 1;
     for (SpillRange** other_it = range_it + 1; other_it < end_nonempty;
-         ++other_it) {
+         other_it += stride) {
       SpillRange* other = *other_it;
       DCHECK(!other->IsEmpty());
       if (range->TryMerge(other)) {
         DCHECK(other->IsEmpty());
         std::iter_swap(other_it, --end_nonempty);
+      } else if (--retries == 0) {
+        retries = kMaxRetries;
+        stride *= 2;
       }
     }
   }
