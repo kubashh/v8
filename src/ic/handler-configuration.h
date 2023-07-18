@@ -10,6 +10,7 @@
 #include "src/heap/heap.h"
 #include "src/objects/data-handler.h"
 #include "src/objects/elements-kind.h"
+#include "src/objects/feedback-vector.h"
 #include "src/objects/field-index.h"
 #include "src/objects/objects.h"
 #include "src/utils/utils.h"
@@ -51,7 +52,8 @@ class LoadHandler final : public DataHandler {
   enum class Kind {
     kElement,
     kIndexedString,
-    kNormal,
+    kNormal_Slow,
+    kNormal_Fast,
     kGlobal,
     kField,
     kConstantFromPrototype,
@@ -78,6 +80,16 @@ class LoadHandler final : public DataHandler {
   // start object.
   using LookupOnLookupStartObjectBits =
       DoAccessCheckOnLookupStartObjectBits::Next<bool, 1>;
+
+  //
+  // Encoding when KindBits contains kNormal.
+  //
+
+  // Index of entry in NameDcitionary
+  // is it possible that the capacity exceed this limit?
+  using NameDictionaryEntryIndexBits =
+      LookupOnLookupStartObjectBits::Next<unsigned, 25>;
+  static_assert(NameDictionaryEntryIndexBits::kLastUsedBit < kSmiValueSize);
 
   //
   // Encoding when KindBits contains kNativeDataProperty.
@@ -150,8 +162,12 @@ class LoadHandler final : public DataHandler {
   // Decodes kind from Smi-handler.
   static inline Kind GetHandlerKind(Smi smi_handler);
 
-  // Creates a Smi-handler for loading a property from a slow object.
-  static inline Handle<Smi> LoadNormal(Isolate* isolate);
+  // Creates a Smi-handler for loading a property from a slow object. If no
+  // handler is found for this map in IC, we also encode the dictionary's entry
+  // index to the Smi-handler.
+  static inline Handle<Smi> LoadNormal(Isolate* isolate, FeedbackNexus* nexus,
+                                       Handle<Map> lookup_start_object_map,
+                                       uint32_t entry_index);
 
   // Creates a Smi-handler for loading a property from a global object.
   static inline Handle<Smi> LoadGlobal(Isolate* isolate);
