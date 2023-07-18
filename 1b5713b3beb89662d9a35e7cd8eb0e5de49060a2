@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "523001c4_f93e9d20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-18T06:16:09Z",
+      "side": 1,
+      "message": "Let\u0027s land this now to hopefully get the stability issues fixed quickly; we\u0027ll re-enable these 2 things in a few days, one by one :)",
+      "revId": "1b5713b3beb89662d9a35e7cd8eb0e5de49060a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
