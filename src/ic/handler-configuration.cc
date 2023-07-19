@@ -381,6 +381,11 @@ void PrintSmiLoadHandler(int raw_handler, std::ostream& os) {
       os << "kIndexedString, allow out of bounds = "
          << LoadHandler::AllowOutOfBoundsBits::decode(raw_handler);
       break;
+#ifndef V8_ENABLE_SWISS_NAME_DICTIONARY
+    case LoadHandler::Kind::kNormal_Fast:
+      os << "kNormal_Fast";
+      break;
+#endif
     case LoadHandler::Kind::kNormal:
       os << "kNormal";
       break;

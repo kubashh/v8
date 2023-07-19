@@ -29,8 +29,22 @@ LoadHandler::Kind LoadHandler::GetHandlerKind(Smi smi_handler) {
   return KindBits::decode(smi_handler.value());
 }
 
-Handle<Smi> LoadHandler::LoadNormal(Isolate* isolate) {
+Handle<Smi> LoadHandler::LoadNormal(Isolate* isolate, FeedbackNexus* nexus,
+                                    Handle<Map> lookup_start_object_map,
+                                    uint32_t entry_index) {
+#ifndef V8_ENABLE_SWISS_NAME_DICTIONARY
+  MaybeObjectHandle maybe_handler =
+      nexus->FindHandlerForMap(lookup_start_object_map);
+  int config;
+  if (maybe_handler.is_null()) {
+    config = KindBits::encode(Kind::kNormal_Fast) |
+             NameDictionaryEntryIndexBits::encode(entry_index);
+  } else {
+    config = KindBits::encode(Kind::kNormal);
+  }
+#else
   int config = KindBits::encode(Kind::kNormal);
+#endif
   return handle(Smi::FromInt(config), isolate);
 }
 
