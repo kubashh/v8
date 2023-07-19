@@ -33,6 +33,24 @@
       "message": "Thanks! Our test coverage is okay for these cases?",
       "revId": "9f490e8df49f1a828efc405dbdaac0ead927ba8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3708abf6_476a1584",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-07-19T07:48:25Z",
+      "side": 1,
+      "message": "Yes, I added https://crsrc.org/c/v8/test/mjsunit/es6/unicode-regexp-ignore-case.js;l\u003d64 when I initially introduced the special handling.",
+      "parentUuid": "15987a04_225a45c9",
+      "revId": "9f490e8df49f1a828efc405dbdaac0ead927ba8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
