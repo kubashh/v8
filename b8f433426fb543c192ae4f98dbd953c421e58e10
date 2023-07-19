@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e06e8e17_44baa338",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2023-07-19T15:47:57Z",
+      "side": 1,
+      "message": "Here is the CL for the first optimization proposal for slow properties in this design doc:\nhttps://docs.google.com/document/d/1EYFTi9sJVgoaMTevRE6DW1awEOuYLdefAZW4aHqvKPY/edit#heading\u003dh.lath4zqat4f\n\nThis CL can bring +20% gain to some microbench, but for speedometer2 it brings both progression and regression under different configs on the condition to do this optimization (for example, whether only do this for named load):\nhttps://pinpoint-dot-chromeperf.appspot.com/job/102a8e2be60000\nhttps://pinpoint-dot-chromeperf.appspot.com/job/15dd9e0be60000\n\nCould you please take a look at the design doc and give some comments on whether we can proceed with these experiments? Thank you!",
+      "revId": "b8f433426fb543c192ae4f98dbd953c421e58e10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e88c7db9_8c1b8635",
+        "filename": "src/ic/handler-configuration-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1420650
+      },
+      "writtenOn": "2023-07-19T15:47:57Z",
+      "side": 1,
+      "message": "We only go to the `Normal_Fast` state when no handler was found for dictionary properties. Otherwise we might encounter a miss in this state and need to transit the state back to `Normal`\n\nDoes this make sense? Is there any other situation that we should not go to `Normal_Fast` state?",
+      "revId": "b8f433426fb543c192ae4f98dbd953c421e58e10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
