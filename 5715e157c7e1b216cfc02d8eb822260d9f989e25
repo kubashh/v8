@@ -34,6 +34,24 @@
       "parentUuid": "e5a71251_8b75bda1",
       "revId": "5715e157c7e1b216cfc02d8eb822260d9f989e25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "924fdf93_5f936edd",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4665,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-07-19T13:02:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bbbc2548_9c920b13",
+      "revId": "5715e157c7e1b216cfc02d8eb822260d9f989e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
