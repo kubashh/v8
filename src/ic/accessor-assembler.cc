@@ -645,6 +645,15 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
 
   GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNonExistent)), &nonexistent);
 
+#ifndef V8_ENABLE_SWISS_NAME_DICTIONARY
+  Label normal_fast(this);
+  if (support_elements == ElementSupport::kOnlyProperties) {
+    GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNormal_Fast)), &normal_fast);
+  } else {
+    CSA_DCHECK(this, Word32NotEqual(handler_kind, LOAD_KIND(kNormal_Fast)));
+  }
+#endif
+
   GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNormal)), &normal);
 
   GotoIf(Word32Equal(handler_kind, LOAD_KIND(kAccessorFromPrototype)),
@@ -703,6 +712,45 @@ void AccessorAssembler::HandleLoadICSmiHandlerLoadNamedCase(
     Comment("constant_load");
     exit_point->Return(holder);
   }
+
+#ifndef V8_ENABLE_SWISS_NAME_DICTIONARY
+  if (support_elements == ElementSupport::kOnlyProperties) {
+    BIND(&normal_fast);
+    {
+      Comment("load_normal_fast");
+      TNode<PropertyDictionary> properties =
+          CAST(LoadSlowProperties(CAST(holder)));
+      TNode<IntPtrT> capacity =
+          PositiveSmiUntag(GetCapacity<PropertyDictionary>(properties));
+      Label found(this), normal_fast_miss(this, Label::kDeferred);
+      TNode<IntPtrT> entry = Signed(
+          DecodeWordFromWord32<LoadHandler::NameDictionaryEntryIndexBits>(
+              handler_word));
+      TNode<IntPtrT> mask = IntPtrSub(capacity, IntPtrConstant(1));
+      entry = Signed(WordAnd(entry, mask));
+      // GotoIfNot(IntPtrLessThan(entry, capacity), &normal_fast_miss);
+      TNode<IntPtrT> index = EntryToIndex<PropertyDictionary>(entry);
+      TNode<HeapObject> current =
+          CAST(UnsafeLoadFixedArrayElement(properties, index));
+      Branch(TaggedNotEqual(current, p->name()), &normal_fast_miss, &found);
+
+      BIND(&found);
+      {
+        TVARIABLE(Uint32T, var_details);
+        TVARIABLE(Object, var_value);
+        LoadPropertyFromDictionary<PropertyDictionary>(
+            properties, index, &var_details, &var_value);
+        TNode<Object> value = CallGetterIfAccessor(
+            var_value.value(), CAST(holder), var_details.value(), p->context(),
+            p->receiver(), p->name(), miss);
+        exit_point->Return(value);
+      }
+
+      BIND(&normal_fast_miss);
+      Goto(miss);
+    }
+  }
+#endif
 
   BIND(&normal);
   {
@@ -876,6 +924,10 @@ void AccessorAssembler::HandleLoadICSmiHandlerHasNamedCase(
          &return_true);
 
   GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNonExistent)), &return_false);
+
+#ifndef V8_ENABLE_SWISS_NAME_DICTIONARY
+  CSA_DCHECK(this, Word32NotEqual(handler_kind, LOAD_KIND(kNormal_Fast)));
+#endif
 
   GotoIf(Word32Equal(handler_kind, LOAD_KIND(kNormal)), &normal);
 

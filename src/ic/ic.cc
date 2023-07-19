@@ -1025,7 +1025,9 @@ MaybeObjectHandle LoadIC::ComputeHandler(LookupIterator* lookup) {
               isolate(), map, holder, smi_handler,
               MaybeObjectHandle::Weak(lookup->GetPropertyCell())));
         } else {
-          smi_handler = LoadHandler::LoadNormal(isolate());
+          smi_handler = LoadHandler::LoadNormal(isolate(), nexus(), map,
+                                                lookup->entry_index(),
+                                                IsLoadGlobalIC() || IsLoadIC());
           TRACE_HANDLER_STATS(isolate(), LoadIC_LoadNormalDH);
           if (holder_is_lookup_start_object)
             return MaybeObjectHandle(smi_handler);
@@ -1075,7 +1077,9 @@ MaybeObjectHandle LoadIC::ComputeHandler(LookupIterator* lookup) {
               isolate(), map, holder, smi_handler,
               MaybeObjectHandle::Weak(lookup->GetPropertyCell())));
         }
-        smi_handler = LoadHandler::LoadNormal(isolate());
+        smi_handler = LoadHandler::LoadNormal(isolate(), nexus(), map,
+                                              lookup->entry_index(),
+                                              IsLoadGlobalIC() || IsLoadIC());
         TRACE_HANDLER_STATS(isolate(), LoadIC_LoadNormalDH);
         if (holder_is_lookup_start_object)
           return MaybeObjectHandle(smi_handler);
