@@ -16,6 +16,24 @@
       "message": "I just picked the lowest power of 10 that still gave the same merge result for v8:14133, so this is not an exact science. For reference, other choices:\n- `kMaxRetries \u003d 100` gives `1101` merged spill ranges (instead of the optimal 989, so it degrades somewhat gracefully, not like a hard threshold) and `V8.TFAssignSpillSlots` takes ~50ms. I think this is too aggressive, as `kMaxRetries \u003d 1000` is fast enough and doesn\u0027t degrade code quality.\n- `kMaxRetries \u003d 10000` gives `989` merged spill ranges (so optimal) and `V8.TFAssignSpillSlots` takes ~470ms. This could be a more conservative choice.\n\nWDYT?",
       "revId": "5715e157c7e1b216cfc02d8eb822260d9f989e25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbbc2548_9c920b13",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4665,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-19T12:27:53Z",
+      "side": 1,
+      "message": "1000 sounds good to me then. I don\u0027t expect that we notice any regression, but we can always bump this threshold if we do.",
+      "parentUuid": "e5a71251_8b75bda1",
+      "revId": "5715e157c7e1b216cfc02d8eb822260d9f989e25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
