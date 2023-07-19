@@ -2925,8 +2925,8 @@ void MacroAssembler::EnterFrame(StackFrame::Type type) {
       Register type_reg = temps.AcquireX();
       Mov(type_reg, StackFrame::TypeToMarker(type));
       Register fourth_reg = no_reg;
-      if (type == StackFrame::CONSTRUCT) {
-        fourth_reg = cp;
+      if (type == StackFrame::CONSTRUCT || type == StackFrame::FAST_CONSTRUCT) {
+      fourth_reg = cp;
 #if V8_ENABLE_WEBASSEMBLY
       } else if (type == StackFrame::WASM ||
                  type == StackFrame::WASM_LIFTOFF_SETUP ||
