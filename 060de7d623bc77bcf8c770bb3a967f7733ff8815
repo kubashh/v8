@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38532ba7_b8205c82",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6431,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-07-19T10:31:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "520f93cd_97ab025c",
+      "range": {
+        "startLine": 6431,
+        "startChar": 4,
+        "endLine": 6431,
+        "endChar": 74
+      },
+      "revId": "060de7d623bc77bcf8c770bb3a967f7733ff8815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b831de2d_9e576eda",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-07-18T13:58:07Z",
       "side": 1,
       "message": "I think `CheckTierUp` should (on all platforms) consume a `const FreezeCacheState\u0026 frozen` parameter, which would effectively turn this comment into a DCHECK: if someone modified this code (or one of the helper functions called by it) in an unsafe way in the future, that guard would catch it, which is more reliable than trusting that reviewers would see this comment and connect the dots correctly.",
+      "range": {
+        "startLine": 304,
+        "startChar": 2,
+        "endLine": 304,
+        "endChar": 53
+      },
+      "revId": "060de7d623bc77bcf8c770bb3a967f7733ff8815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e76276c5_3da808d4",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-07-19T10:31:19Z",
+      "side": 1,
+      "message": "That partly solves it, but someone could still decide to store the instance register in `cache_state_.cached_instance` and no check could ever catch this.\n\nAs you know, I am not really happy with the concept of `FreezeCacheState`. I think long-term it might be better to validate at the right places that the cache state did not change (via some debug-only scope object) instead of verifying in the low-level functions that the caller thought about freezing the state. This creates many situations in which we need to freeze the state for no reason.\nBut I\u0027ll have to think about a better design some more.\n\nFor now, I added the `FreezeCacheState` parameter.",
+      "parentUuid": "b831de2d_9e576eda",
       "range": {
         "startLine": 304,
         "startChar": 2,
