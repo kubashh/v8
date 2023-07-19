@@ -16,6 +16,23 @@
       "message": "three\u0027s the charm...",
       "revId": "cc6c15d13900f934ef46f0ef34f0ca33599d7248",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70744d74_83b4e974",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-19T15:05:51Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "cc6c15d13900f934ef46f0ef34f0ca33599d7248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
