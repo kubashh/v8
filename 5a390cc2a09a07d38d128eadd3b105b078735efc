@@ -39,6 +39,30 @@
       },
       "revId": "5a390cc2a09a07d38d128eadd3b105b078735efc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88fb77ae_5ff4581a",
+        "filename": "src/snapshot/snapshot.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-07-19T05:39:51Z",
+      "side": 1,
+      "message": "I repeated the pattern used in debug.cc for DebugInfo global handles. I like how the `Address*` type clarifies there\u0027s something special going (\u003d manual memory lifetime management) on here, which `Handle\u003cNativeContext\u003e` would hide.",
+      "parentUuid": "ed620306_f9aeb8eb",
+      "range": {
+        "startLine": 170,
+        "startChar": 3,
+        "endLine": 170,
+        "endChar": 59
+      },
+      "revId": "5a390cc2a09a07d38d128eadd3b105b078735efc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
