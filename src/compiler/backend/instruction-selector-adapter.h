@@ -16,6 +16,7 @@
 #include "src/compiler/turboshaft/graph.h"
 #include "src/compiler/turboshaft/operation-matching.h"
 #include "src/compiler/turboshaft/operations.h"
+#include "src/compiler/turboshaft/use-map.h"
 
 // TODO(nicohartmann@):
 // During the transition period to a generic instruction selector, some
@@ -427,8 +428,11 @@ struct TurbofanAdapter {
     DCHECK_EQ(node->opcode(), IrOpcode::kParameter);
     return ParameterIndexOf(node->op());
   }
+  bool is_projection(node_t node) const {
+    return node->opcode() == IrOpcode::kProjection;
+  }
   size_t projection_index_of(node_t node) const {
-    DCHECK_EQ(node->opcode(), IrOpcode::kProjection);
+    DCHECK(is_projection(node));
     return ProjectionIndexOf(node->op());
   }
   int osr_value_index_of(node_t node) const {
@@ -774,8 +778,12 @@ struct TurboshaftAdapter
     return DeoptimizeView(graph_, node);
   }
 
-  void InitializeAdapter(schedule_t schedule) { graph_ = schedule; }
+  void InitializeAdapter(schedule_t schedule) {
+    graph_ = schedule;
+    use_map_.emplace(*graph_, graph_->graph_zone());  // TODO: use proper zone.
+  }
   turboshaft::Graph* turboshaft_graph() const { return graph_; }
+  const turboshaft::UseMap& use_map() const { return *use_map_; }
 
   block_t block(schedule_t schedule, node_t node) const {
     // TODO(nicohartmann@): This might be too slow and we should consider
@@ -878,7 +886,11 @@ struct TurboshaftAdapter
         graph_->Get(node).Cast<turboshaft::ParameterOp>();
     return parameter.parameter_index;
   }
+  bool is_projection(node_t node) const {
+    return graph_->Get(node).Is<turboshaft::ProjectionOp>();
+  }
   size_t projection_index_of(node_t node) const {
+    DCHECK(is_projection(node));
     const turboshaft::ProjectionOp& projection =
         graph_->Get(node).Cast<turboshaft::ProjectionOp>();
     return projection.index;
@@ -927,6 +939,7 @@ struct TurboshaftAdapter
   const turboshaft::Graph& output_graph() const { return *graph_; }
 
   turboshaft::Graph* graph_;
+  base::Optional<turboshaft::UseMap> use_map_;
 };
 
 }  // namespace v8::internal::compiler
