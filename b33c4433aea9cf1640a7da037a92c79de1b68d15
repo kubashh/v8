@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e21d778_205c9354",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-19T08:24:01Z",
+      "side": 1,
+      "message": "Yes done.\n@manoskouk@chromium.org: Please review patchset 1 to see the difference, patchset 2 is then only moving the code without any further changes.",
+      "parentUuid": "9634b39b_1cf67dba",
+      "range": {
+        "startLine": 126,
+        "startChar": 2,
+        "endLine": 129,
+        "endChar": 39
+      },
+      "revId": "b33c4433aea9cf1640a7da037a92c79de1b68d15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4cc4e0e2_38651ed5",
         "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
         "patchSetId": 1
@@ -71,6 +95,30 @@
       "writtenOn": "2023-07-19T08:15:34Z",
       "side": 1,
       "message": "OpEffects().CanCallAnything() would be a little bit safer I think.",
+      "range": {
+        "startLine": 219,
+        "startChar": 66,
+        "endLine": 219,
+        "endChar": 77
+      },
+      "revId": "b33c4433aea9cf1640a7da037a92c79de1b68d15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34701667_2cf2c802",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-19T08:24:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cc4e0e2_38651ed5",
       "range": {
         "startLine": 219,
         "startChar": 66,
