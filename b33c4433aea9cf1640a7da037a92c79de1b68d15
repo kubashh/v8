@@ -16,6 +16,69 @@
       "message": "@manoskouk@chromium.org: PTAL.\n@dmercadier@chromium.org: Please component-review.",
       "revId": "b33c4433aea9cf1640a7da037a92c79de1b68d15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c5506b_c28c60ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-19T08:15:34Z",
+      "side": 1,
+      "message": "src/compiler LGTM :)",
+      "revId": "b33c4433aea9cf1640a7da037a92c79de1b68d15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9634b39b_1cf67dba",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-19T08:15:34Z",
+      "side": 1,
+      "message": "Can you move it to the private section?",
+      "range": {
+        "startLine": 126,
+        "startChar": 2,
+        "endLine": 129,
+        "endChar": 39
+      },
+      "revId": "b33c4433aea9cf1640a7da037a92c79de1b68d15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cc4e0e2_38651ed5",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-19T08:15:34Z",
+      "side": 1,
+      "message": "OpEffects().CanCallAnything() would be a little bit safer I think.",
+      "range": {
+        "startLine": 219,
+        "startChar": 66,
+        "endLine": 219,
+        "endChar": 77
+      },
+      "revId": "b33c4433aea9cf1640a7da037a92c79de1b68d15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
