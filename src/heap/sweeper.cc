@@ -111,13 +111,15 @@ class Sweeper::MajorSweeperJob final : public JobTask {
  public:
   static constexpr int kMaxTasks = kNumberOfMajorSweepingSpaces;
 
-  MajorSweeperJob(Isolate* isolate, Sweeper* sweeper)
+  MajorSweeperJob(Isolate* isolate, Sweeper* sweeper, uint64_t trace_id = 0)
       : sweeper_(sweeper),
         concurrent_sweepers(
             sweeper_->major_sweeping_state_.concurrent_sweepers()),
         tracer_(isolate->heap()->tracer()),
-        trace_id_(reinterpret_cast<uint64_t>(this) ^
-                  tracer_->CurrentEpoch(GCTracer::Scope::MC_SWEEP)) {
+        trace_id_(trace_id != 0
+                      ? trace_id
+                      : reinterpret_cast<uint64_t>(this) ^
+                            tracer_->CurrentEpoch(GCTracer::Scope::MC_SWEEP)) {
     DCHECK_LE(concurrent_sweepers.size(), kMaxTasks);
   }
 
@@ -172,13 +174,15 @@ class Sweeper::MinorSweeperJob final : public JobTask {
  public:
   static constexpr int kMaxTasks = 1;
 
-  MinorSweeperJob(Isolate* isolate, Sweeper* sweeper)
+  MinorSweeperJob(Isolate* isolate, Sweeper* sweeper, uint64_t trace_id = 0)
       : sweeper_(sweeper),
         concurrent_sweepers(
             sweeper_->minor_sweeping_state_.concurrent_sweepers()),
         tracer_(isolate->heap()->tracer()),
-        trace_id_(reinterpret_cast<uint64_t>(this) ^
-                  tracer_->CurrentEpoch(GCTracer::Scope::MINOR_MS_SWEEP)) {
+        trace_id_(trace_id != 0 ? trace_id
+                                : reinterpret_cast<uint64_t>(this) ^
+                                      tracer_->CurrentEpoch(
+                                          GCTracer::Scope::MINOR_MS_SWEEP)) {
     DCHECK_LE(concurrent_sweepers.size(), kMaxTasks);
   }
 
@@ -285,12 +289,13 @@ void Sweeper::SweepingState<scope>::StartConcurrentSweeping() {
       !sweeper_->heap_->delay_sweeper_tasks_for_testing_) {
     auto job =
         std::make_unique<SweeperJob>(sweeper_->heap_->isolate(), sweeper_);
+    concurrent_trace_id_ = job->trace_id();
     GCTracer::Scope::ScopeId scope_id =
         scope == SweepingScope::kMinor
             ? GCTracer::Scope::MINOR_MS_SWEEP_START_JOBS
             : GCTracer::Scope::MC_SWEEP_START_JOBS;
-    TRACE_GC_WITH_FLOW(sweeper_->heap_->tracer(), scope_id, job->trace_id(),
-                       TRACE_EVENT_FLAG_FLOW_OUT);
+    TRACE_GC_WITH_FLOW(sweeper_->heap_->tracer(), scope_id,
+                       concurrent_trace_id_, TRACE_EVENT_FLAG_FLOW_OUT);
     DCHECK_IMPLIES(v8_flags.minor_ms, concurrent_sweepers_.empty());
     int max_concurrent_sweeper_count =
         std::min(SweeperJob::kMaxTasks,
@@ -313,23 +318,32 @@ void Sweeper::SweepingState<scope>::FinishSweeping() {
   if (HasValidJob()) job_handle_->Join();
 
   concurrent_sweepers_.clear();
+  concurrent_trace_id_ = 0;
+  trace_id_ = 0;
   in_progress_ = false;
 }
 
 template <Sweeper::SweepingScope scope>
 void Sweeper::SweepingState<scope>::Pause() {
   if (!job_handle_ || !job_handle_->IsValid()) return;
+  DCHECK_EQ(SweepingScope::kMajor, scope);
 
   DCHECK(v8_flags.concurrent_sweeping);
   job_handle_->Cancel();
+  TRACE_GC_NOTE_WITH_FLOW("Major sweeping paused", concurrent_trace_id_,
+                          TRACE_EVENT_FLAG_FLOW_IN | TRACE_EVENT_FLAG_FLOW_OUT);
 }
 
 template <Sweeper::SweepingScope scope>
 void Sweeper::SweepingState<scope>::Resume() {
   DCHECK(in_progress_);
-  job_handle_ = V8::GetCurrentPlatform()->PostJob(
-      TaskPriority::kUserVisible,
-      std::make_unique<SweeperJob>(sweeper_->heap_->isolate(), sweeper_));
+  DCHECK_EQ(SweepingScope::kMajor, scope);
+  auto job = std::make_unique<SweeperJob>(sweeper_->heap_->isolate(), sweeper_,
+                                          concurrent_trace_id_);
+  TRACE_GC_NOTE_WITH_FLOW("Major sweeping resumed", concurrent_trace_id_,
+                          TRACE_EVENT_FLAG_FLOW_IN | TRACE_EVENT_FLAG_FLOW_OUT);
+  job_handle_ = V8::GetCurrentPlatform()->PostJob(TaskPriority::kUserVisible,
+                                                  std::move(job));
 }
 
 void Sweeper::LocalSweeper::ContributeAndWaitForPromotedPagesIteration() {
