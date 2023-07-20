@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a436f13_3a11c43b",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-07-20T13:34:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2873e3c_b5062a99",
+      "range": {
+        "startLine": 647,
+        "startChar": 0,
+        "endLine": 648,
+        "endChar": 56
+      },
+      "revId": "5a2732ddd5d0690c043b5eac2965d3a2b6f5f538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95376dad_d27491d7",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7371aa2_6afed85a",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-07-20T13:34:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95376dad_d27491d7",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 56
+      },
+      "revId": "5a2732ddd5d0690c043b5eac2965d3a2b6f5f538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05408390_57f1afc4",
@@ -94,6 +142,30 @@
       "writtenOn": "2023-07-20T12:14:50Z",
       "side": 1,
       "message": "This register contains the array, not the instance, right? (same for the method above).",
+      "range": {
+        "startLine": 791,
+        "startChar": 48,
+        "endLine": 791,
+        "endChar": 66
+      },
+      "revId": "5a2732ddd5d0690c043b5eac2965d3a2b6f5f538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea9ef1d4_d4e5c01a",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-07-20T13:34:15Z",
+      "side": 1,
+      "message": "Ah yes, I\u0027ve changed it to `src_addr` now for both, which seems to be consistent with the nearby methods. I\u0027ve also switched the caller to use the `wasm::ObjectAccess` helper class so that manually subtracting `kHeapObjectTag` is no longer necessary here.",
+      "parentUuid": "05408390_57f1afc4",
       "range": {
         "startLine": 791,
         "startChar": 48,
