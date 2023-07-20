@@ -974,8 +974,11 @@
 [ 'arch == riscv32' , {
 'wasm/compare-exchange64-stress':[SKIP],
 'regress/regress-crbug-781583':[SKIP],
-'regress/wasm/regress-14171':[SKIP],
 }], # 'arch == riscv32'
+
+[ 'arch == riscv64' , {
+'regress/wasm/regress-14113':[SKIP],
+}], # 'arch == riscv64'
 
 ##############################################################################
 ['system == macos', {
