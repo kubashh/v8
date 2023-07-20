@@ -16,6 +16,46 @@
       "message": "Thanks!",
       "revId": "5e14f886f0d94d34c2aa0c4a7f3a464768773111",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f5b161c_fcfba664",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-20T13:45:25Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5e14f886f0d94d34c2aa0c4a7f3a464768773111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39e01eb1_12bbc34e",
+        "filename": "src/heap/factory-base.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-20T13:45:25Z",
+      "side": 1,
+      "message": "Can you write something that depends on kNullExternalPointerHandle or introduce a static_assert?",
+      "range": {
+        "startLine": 279,
+        "startChar": 49,
+        "endLine": 279,
+        "endChar": 50
+      },
+      "revId": "5e14f886f0d94d34c2aa0c4a7f3a464768773111",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
