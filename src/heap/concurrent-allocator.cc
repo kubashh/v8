@@ -199,10 +199,11 @@ ConcurrentAllocator::AllocateFromSpaceFreeList(size_t min_size_in_bytes,
                                                   max_size_in_bytes, origin);
   if (result) return result;
 
-  uint64_t trace_flow_id = owning_heap()->sweeper()->GetTraceIdForFlowEvent(
-      GCTracer::Scope::MC_BACKGROUND_SWEEPING);
+  uint64_t trace_flow_id;
   // Sweeping is still in progress.
   if (owning_heap()->sweeping_in_progress()) {
+    trace_flow_id = owning_heap()->sweeper()->GetTraceIdForFlowEvent(
+        GCTracer::Scope::MC_BACKGROUND_SWEEPING);
     // First try to refill the free-list, concurrent sweeper threads
     // may have freed some objects in the meantime.
     {
