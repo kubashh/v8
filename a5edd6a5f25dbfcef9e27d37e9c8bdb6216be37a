@@ -16,6 +16,80 @@
       "message": "everything seems fixed now. ptal again.",
       "revId": "a5edd6a5f25dbfcef9e27d37e9c8bdb6216be37a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "051e9536_2b2f01ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-20T18:19:20Z",
+      "side": 1,
+      "message": "LGTM again, with three new comments.",
+      "revId": "a5edd6a5f25dbfcef9e27d37e9c8bdb6216be37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "437cd12d_1076b02c",
+        "filename": "src/heap/concurrent-allocator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-20T18:19:20Z",
+      "side": 1,
+      "message": "Can this be uninitialized here?\nI suppose `major_sweeping_in_progress()` in line 260 implies `sweeping_in_progess()`in line 204? Or can a major sweeping have started in the meantime?",
+      "range": {
+        "startLine": 264,
+        "startChar": 33,
+        "endLine": 264,
+        "endChar": 46
+      },
+      "revId": "a5edd6a5f25dbfcef9e27d37e9c8bdb6216be37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9bc743e_02fb668d",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-20T18:19:20Z",
+      "side": 1,
+      "message": "Below you\u0027re setting the `trace_id_`. Should that also be empty?\nIf I read correctly the comment in line 321, you\u0027re not resetting it; just checking.",
+      "revId": "a5edd6a5f25dbfcef9e27d37e9c8bdb6216be37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48218a8e_cc9e9a62",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-20T18:19:20Z",
+      "side": 1,
+      "message": "`DCHECK` that it\u0027s empty before?",
+      "revId": "a5edd6a5f25dbfcef9e27d37e9c8bdb6216be37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
