@@ -2207,7 +2207,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
       __ LoadGlobalProxy(a3);
     } else {
       Label convert_to_object, convert_receiver;
-      __ LoadReceiver(a3, a0);
+      __ LoadReceiver(a3);
       __ JumpIfSmi(a3, &convert_to_object);
       static_assert(LAST_JS_RECEIVER_TYPE == LAST_TYPE);
       __ GetObjectType(a3, a4, a4);
@@ -2270,7 +2270,7 @@ void Builtins::Generate_CallBoundFunctionImpl(MacroAssembler* masm) {
   // Patch the receiver to [[BoundThis]].
   {
     __ Ld(t0, FieldMemOperand(a1, JSBoundFunction::kBoundThisOffset));
-    __ StoreReceiver(t0, a0, kScratchReg);
+    __ StoreReceiver(t0);
   }
 
   // Load [[BoundArguments]] into a2 and length of that into a4.
@@ -2382,7 +2382,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   // 2. Call to something else, which might have a [[Call]] internal method (if
   // not we raise an exception).
   // Overwrite the original receiver with the (original) target.
-  __ StoreReceiver(target, argc, kScratchReg);
+  __ StoreReceiver(target);
   // Let the "call_as_function_delegate" take care of the rest.
   __ LoadNativeContextSlot(target, Context::CALL_AS_FUNCTION_DELEGATE_INDEX);
   __ Jump(masm->isolate()->builtins()->CallFunction(
@@ -2560,7 +2560,7 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
   __ bind(&non_proxy);
   {
     // Overwrite the original receiver with the (original) target.
-    __ StoreReceiver(target, argc, kScratchReg);
+    __ StoreReceiver(target);
     // Let the "call_as_constructor_delegate" take care of the rest.
     __ LoadNativeContextSlot(target,
                              Context::CALL_AS_CONSTRUCTOR_DELEGATE_INDEX);

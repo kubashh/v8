@@ -2438,7 +2438,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
       __ LoadGlobalProxy(r5);
     } else {
       Label convert_to_object, convert_receiver;
-      __ LoadReceiver(r5, r2);
+      __ LoadReceiver(r5);
       __ JumpIfSmi(r5, &convert_to_object);
       static_assert(LAST_JS_RECEIVER_TYPE == LAST_TYPE);
       __ CompareObjectType(r5, r6, r6, FIRST_JS_RECEIVER_TYPE);
@@ -2475,7 +2475,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
           r4, FieldMemOperand(r3, JSFunction::kSharedFunctionInfoOffset));
       __ bind(&convert_receiver);
     }
-    __ StoreReceiver(r5, r2, r6);
+    __ StoreReceiver(r5);
   }
   __ bind(&done_convert);
 
@@ -2574,7 +2574,7 @@ void Builtins::Generate_CallBoundFunctionImpl(MacroAssembler* masm) {
   // Patch the receiver to [[BoundThis]].
   __ LoadTaggedField(r5,
                      FieldMemOperand(r3, JSBoundFunction::kBoundThisOffset));
-  __ StoreReceiver(r5, r2, r1);
+  __ StoreReceiver(r5);
 
   // Push the [[BoundArguments]] onto the stack.
   Generate_PushBoundArguments(masm);
@@ -2637,7 +2637,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   // 2. Call to something else, which might have a [[Call]] internal method (if
   // not we raise an exception).
   // Overwrite the original receiver the (original) target.
-  __ StoreReceiver(target, argc, r7);
+  __ StoreReceiver(target);
   // Let the "call_as_function_delegate" take care of the rest.
   __ LoadNativeContextSlot(target, Context::CALL_AS_FUNCTION_DELEGATE_INDEX);
   __ Jump(masm->isolate()->builtins()->CallFunction(
@@ -2771,7 +2771,7 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
   __ bind(&non_proxy);
   {
     // Overwrite the original receiver with the (original) target.
-    __ StoreReceiver(target, argc, r7);
+    __ StoreReceiver(target);
     // Let the "call_as_constructor_delegate" take care of the rest.
     __ LoadNativeContextSlot(target,
                              Context::CALL_AS_CONSTRUCTOR_DELEGATE_INDEX);

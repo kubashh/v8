@@ -2319,7 +2319,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
       __ LoadGlobalProxy(a3);
     } else {
       Label convert_to_object, convert_receiver;
-      __ LoadReceiver(a3, a0);
+      __ LoadReceiver(a3);
       __ JumpIfSmi(a3, &convert_to_object);
       __ JumpIfJSAnyIsNotPrimitive(a3, a4, &done_convert);
       if (mode != ConvertReceiverMode::kNotNullOrUndefined) {
@@ -2354,7 +2354,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
           a2, FieldMemOperand(a1, JSFunction::kSharedFunctionInfoOffset));
       __ bind(&convert_receiver);
     }
-    __ StoreReceiver(a3, a0, kScratchReg);
+    __ StoreReceiver(a3);
   }
   __ bind(&done_convert);
 
@@ -2456,7 +2456,7 @@ void Builtins::Generate_CallBoundFunctionImpl(MacroAssembler* masm) {
     Register scratch = temps.Acquire();
     __ LoadTaggedField(scratch,
                        FieldMemOperand(a1, JSBoundFunction::kBoundThisOffset));
-    __ StoreReceiver(scratch, a0, kScratchReg);
+    __ StoreReceiver(scratch);
   }
 
   // Push the [[BoundArguments]] onto the stack.
@@ -2522,7 +2522,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   // 2. Call to something else, which might have a [[Call]] internal method (if
   // not we raise an exception).
   // Overwrite the original receiver with the (original) target.
-  __ StoreReceiver(target, argc, kScratchReg);
+  __ StoreReceiver(target);
   // Let the "call_as_function_delegate" take care of the rest.
   __ LoadNativeContextSlot(target, Context::CALL_AS_FUNCTION_DELEGATE_INDEX);
   __ Jump(masm->isolate()->builtins()->CallFunction(
@@ -2651,7 +2651,7 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
   __ bind(&non_proxy);
   {
     // Overwrite the original receiver with the (original) target.
-    __ StoreReceiver(target, argc, kScratchReg);
+    __ StoreReceiver(target);
     // Let the "call_as_constructor_delegate" take care of the rest.
     __ LoadNativeContextSlot(target,
                              Context::CALL_AS_CONSTRUCTOR_DELEGATE_INDEX);

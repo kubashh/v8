@@ -503,7 +503,7 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
   // Poke receiver into highest claimed slot.
   __ LoadTaggedField(x5,
                      FieldMemOperand(x1, JSGeneratorObject::kReceiverOffset));
-  __ Poke(x5, __ ReceiverOperand(x10));
+  __ Poke(x5, __ ReceiverOperand());
 
   // ----------- S t a t e -------------
   //  -- x1                       : the JSGeneratorObject to resume
@@ -2159,7 +2159,7 @@ void Builtins::Generate_FunctionPrototypeCall(MacroAssembler* masm) {
   ASM_LOCATION("Builtins::Generate_FunctionPrototypeCall");
 
   // 1. Get the callable to call (passed as receiver) from the stack.
-  __ Peek(function, __ ReceiverOperand(argc));
+  __ Peek(function, __ ReceiverOperand());
 
   // 2. Handle case with no arguments.
   {
@@ -2568,7 +2568,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
       __ LoadGlobalProxy(x3);
     } else {
       Label convert_to_object, convert_receiver;
-      __ Peek(x3, __ ReceiverOperand(x0));
+      __ Peek(x3, __ ReceiverOperand());
       __ JumpIfSmi(x3, &convert_to_object);
       __ JumpIfJSAnyIsNotPrimitive(x3, x4, &done_convert);
       if (mode != ConvertReceiverMode::kNotNullOrUndefined) {
@@ -2601,7 +2601,7 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
           x2, FieldMemOperand(x1, JSFunction::kSharedFunctionInfoOffset));
       __ Bind(&convert_receiver);
     }
-    __ Poke(x3, __ ReceiverOperand(x0));
+    __ Poke(x3, __ ReceiverOperand());
   }
   __ Bind(&done_convert);
 
@@ -2757,7 +2757,7 @@ void Builtins::Generate_CallBoundFunctionImpl(MacroAssembler* masm) {
   // Patch the receiver to [[BoundThis]].
   __ LoadTaggedField(x10,
                      FieldMemOperand(x1, JSBoundFunction::kBoundThisOffset));
-  __ Poke(x10, __ ReceiverOperand(x0));
+  __ Poke(x10, __ ReceiverOperand());
 
   // Push the [[BoundArguments]] onto the stack.
   Generate_PushBoundArguments(masm);
@@ -2820,7 +2820,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   // 2. Call to something else, which might have a [[Call]] internal method (if
   // not we raise an exception).
   // Overwrite the original receiver with the (original) target.
-  __ Poke(target, __ ReceiverOperand(argc));
+  __ Poke(target, __ ReceiverOperand());
 
   // Let the "call_as_function_delegate" take care of the rest.
   __ LoadNativeContextSlot(target, Context::CALL_AS_FUNCTION_DELEGATE_INDEX);
@@ -2957,7 +2957,7 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
   __ bind(&non_proxy);
   {
     // Overwrite the original receiver with the (original) target.
-    __ Poke(target, __ ReceiverOperand(argc));
+    __ Poke(target, __ ReceiverOperand());
 
     // Let the "call_as_constructor_delegate" take care of the rest.
     __ LoadNativeContextSlot(target,
