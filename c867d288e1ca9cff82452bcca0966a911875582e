@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11cf3657_28e2fdc1",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-20T15:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e59707b_ae2bc9b2",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "980bda9d_b7f5cee7",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e28e705_410a2e8d",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-20T15:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "980bda9d_b7f5cee7",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13f693af_fef9d96e",
@@ -82,6 +118,24 @@
       "writtenOn": "2023-07-20T15:00:21Z",
       "side": 1,
       "message": "Same.",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f2b4e2e_adac237d",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-20T15:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13f693af_fef9d96e",
       "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -105,6 +159,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "fb1c5dda_bd99dc36",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-20T15:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01cb83f7_8b23fcc9",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "85a39713_01d400c0",
         "filename": "src/heap/sweeper.h",
         "patchSetId": 4
@@ -116,6 +188,24 @@
       "writtenOn": "2023-07-20T15:00:21Z",
       "side": 1,
       "message": "You\u0027re using an `Optional\u003cuint64_t\u003e` for marking. We discussed it offline, so I\u0027m marking this as resolved.",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9b4b3be_5f2a1ae5",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-20T15:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85a39713_01d400c0",
       "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
