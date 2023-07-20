@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d293f6c_74bdcb4f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-07-20T12:56:45Z",
+      "side": 1,
+      "message": "nit: what about something more expressive (e.g. \"[cleanup][masm] Remove argc from ReceiverOperand()` as the title and move this to the description.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "79646ad3ef313ebe3e32c3a9f7d010d5f5bbf82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f750f84_df2eb89e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-07-20T12:56:45Z",
+      "side": 1,
+      "message": "Thanks, LGTM with nit",
+      "revId": "79646ad3ef313ebe3e32c3a9f7d010d5f5bbf82f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
