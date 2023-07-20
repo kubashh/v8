@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b0026aa_5fe6f2c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-20T15:21:39Z",
+      "side": 1,
+      "message": "PTAL. See x64 version for detailed comments. On the other platforms, the change is exactly the same.\n\nThe included regression test is the smallest I could make it. To trigger the bug, there must be a fairly large number of values on the stack.",
+      "revId": "c38492f71214d77eb02fe2d354ecbe94102e5f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2118dd38_5eccf262",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7094,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-20T15:21:39Z",
+      "side": 1,
+      "message": "This variable was just renamed for clarity.",
+      "range": {
+        "startLine": 7094,
+        "startChar": 6,
+        "endLine": 7094,
+        "endChar": 19
+      },
+      "revId": "c38492f71214d77eb02fe2d354ecbe94102e5f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cc922de_f0745f7c",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7096,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-20T15:21:39Z",
+      "side": 1,
+      "message": "Line 7076 does this after pushing, so here we do it before popping. (In this case it doesn\u0027t actually matter, but let\u0027s be consistent.)",
+      "range": {
+        "startLine": 7096,
+        "startChar": 4,
+        "endLine": 7096,
+        "endChar": 58
+      },
+      "revId": "c38492f71214d77eb02fe2d354ecbe94102e5f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8db7de7_8be96e71",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7100,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-20T15:21:39Z",
+      "side": 1,
+      "message": "Line 7080 does this after pushing, so here we do it before popping. This is unchanged in this patch, and does matter: we\u0027d generate broken code otherwise.",
+      "range": {
+        "startLine": 7100,
+        "startChar": 4,
+        "endLine": 7100,
+        "endChar": 58
+      },
+      "revId": "c38492f71214d77eb02fe2d354ecbe94102e5f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9834523e_34785acf",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7109,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-20T15:21:39Z",
+      "side": 1,
+      "message": "Line 7085 does this after decrementing `rsp` and before calling `AssembleMove`, so here we do it after calling `AssembleMove` and before incrementing `rsp`.",
+      "range": {
+        "startLine": 7109,
+        "startChar": 4,
+        "endLine": 7109,
+        "endChar": 58
+      },
+      "revId": "c38492f71214d77eb02fe2d354ecbe94102e5f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b83dbbec_f8187b19",
+        "filename": "src/wasm/module-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-20T15:21:39Z",
+      "side": 1,
+      "message": "Changes in this file: minor drive-by improvements to `wami --full-hexdump` output (which were helpful for making sense of the regression test provided on the linked bug).",
+      "range": {
+        "startLine": 909,
+        "startChar": 26,
+        "endLine": 909,
+        "endChar": 43
+      },
+      "revId": "c38492f71214d77eb02fe2d354ecbe94102e5f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

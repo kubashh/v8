@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4efd1457_287c9d08",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7105,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-20T15:21:39Z",
+      "side": 0,
+      "message": "This addition was used to offset the fact that `IncreaseSPDelta` was called too early. It is no longer needed.",
+      "range": {
+        "startLine": 7105,
+        "startChar": 47,
+        "endLine": 7105,
+        "endChar": 59
+      },
+      "revId": "0246e9e20b0d4ffd5e6b98e9f88be3f6d25cd351",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
