@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b543790e_ceb7654d",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T15:04:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "91a9747d_de32f4d7",
+      "range": {
+        "startLine": 783,
+        "startChar": 57,
+        "endLine": 783,
+        "endChar": 62
+      },
+      "revId": "6fc4d619fef7454686dc197cc9f0a7faad37be78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9cfb8d68_73cedcb5",
@@ -166,6 +190,30 @@
       "side": 1,
       "message": "I think this is the cleaner way as we don\u0027t have to check for all the conditions to identify the back edge (operation is Goto, destination is loop, destination index is \u003c\u003d current index). But I don\u0027t have a strong opinion against changing it.",
       "parentUuid": "731ff176_9b9011fc",
+      "range": {
+        "startLine": 29,
+        "startChar": 2,
+        "endLine": 29,
+        "endChar": 60
+      },
+      "revId": "6fc4d619fef7454686dc197cc9f0a7faad37be78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73bb9189_8e767c25",
+        "filename": "src/compiler/turboshaft/use-map.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T15:04:53Z",
+      "side": 1,
+      "message": "It was just to get rid of this std::vector, no strong opinion either way. Using a vector does look indeed a bit simpler I\u0027d say. Actually, maybe a base::SmallVector\u003c64\u003e could be already a bit better?",
+      "parentUuid": "81931a11_5e254143",
       "range": {
         "startLine": 29,
         "startChar": 2,
