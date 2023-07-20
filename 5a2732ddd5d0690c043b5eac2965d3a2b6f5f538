@@ -16,6 +16,92 @@
       "message": "Hi! Last week we enabled code pointer sandboxing (https://chromium.googlesource.com/v8/v8.git/+/7df23d5163a10a12e4b4262dd4e78cfb7ec97be0), and I think these here should now be the last raw code pointers stored in the V8 heap (but please correct me if I\u0027m wrong!). I expect that attackers would abuse these to break out of the sandbox now, so I made this CL to preempt that.\n\nWhile this adds one indirection, benchmarks suggest that this doesn\u0027t matter too much in practice. At some point we\u0027ll need to redesign the WasmIndirectFunctionTable object again (as well as some other Wasm objects) to make sure that e.g. the signatures stay consistent with the function targets (see comment), but this isn\u0027t too urgent I think. Then we can see if we can remove an(other) indirection if we deem it important enough.\n\n+Clemens for the Wasm-specific parts (basically src/wasm, src/compiler)\n+Michael for the rest (mostly changes related to the new ExternalPointerArray class)\n\nCC Manos since I see you\u0027ve added some wasm-turboshaft code recently and may need the new `BuildDecodeExternalPointer` routine as well soon.",
       "revId": "5a2732ddd5d0690c043b5eac2965d3a2b6f5f538",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd76a504_0b0d46fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-07-20T12:14:50Z",
+      "side": 1,
+      "message": "Thanks, LGTM with minor comments.\nLet\u0027s see if we see performance regressions for the additional decoding.",
+      "revId": "5a2732ddd5d0690c043b5eac2965d3a2b6f5f538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2873e3c_b5062a99",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-07-20T12:14:50Z",
+      "side": 1,
+      "message": "I would propose to inline this method manually instead of calling this super-high-level method here. It should not be more than a few lines.",
+      "range": {
+        "startLine": 647,
+        "startChar": 0,
+        "endLine": 648,
+        "endChar": 56
+      },
+      "revId": "5a2732ddd5d0690c043b5eac2965d3a2b6f5f538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95376dad_d27491d7",
+        "filename": "src/wasm/baseline/ia32/liftoff-assembler-ia32.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-07-20T12:14:50Z",
+      "side": 1,
+      "message": "I would propose to inline this method manually instead of calling this super-high-level method here. It should not be more than a few lines.",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 56
+      },
+      "revId": "5a2732ddd5d0690c043b5eac2965d3a2b6f5f538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05408390_57f1afc4",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-07-20T12:14:50Z",
+      "side": 1,
+      "message": "This register contains the array, not the instance, right? (same for the method above).",
+      "range": {
+        "startLine": 791,
+        "startChar": 48,
+        "endLine": 791,
+        "endChar": 66
+      },
+      "revId": "5a2732ddd5d0690c043b5eac2965d3a2b6f5f538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
