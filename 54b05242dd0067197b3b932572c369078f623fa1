@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "75729f87_aca1e9b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T07:47:30Z",
+      "side": 1,
+      "message": "I see, thanks.",
+      "parentUuid": "f6e4be1b_62ac3eb6",
+      "range": {
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 50
+      },
+      "revId": "54b05242dd0067197b3b932572c369078f623fa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "982c3521_ca4e0a7e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -61,6 +85,115 @@
       "writtenOn": "2023-07-19T13:07:58Z",
       "side": 1,
       "message": "Darius ptal or pass on to a good TF reviewer, thanks!",
+      "revId": "54b05242dd0067197b3b932572c369078f623fa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "742c6ca5_a25a90e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T07:47:30Z",
+      "side": 1,
+      "message": "Thanks for the fix and the extensive tests! LGTM % nits :)",
+      "revId": "54b05242dd0067197b3b932572c369078f623fa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb39bca9_4e4562d8",
+        "filename": "test/cctest/compiler/test-select-combine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T07:47:30Z",
+      "side": 1,
+      "message": "nit: Could you use `T` or `Type` instead of `Ty`? (here and throughout this file)",
+      "range": {
+        "startLine": 45,
+        "startChar": 19,
+        "endLine": 45,
+        "endChar": 42
+      },
+      "revId": "54b05242dd0067197b3b932572c369078f623fa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b05dffd_728c4be5",
+        "filename": "test/cctest/compiler/test-select-combine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T07:47:30Z",
+      "side": 1,
+      "message": "nit: DCHECK_NOT_NULL",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 10
+      },
+      "revId": "54b05242dd0067197b3b932572c369078f623fa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe881f72_e271a3eb",
+        "filename": "test/cctest/compiler/test-select-combine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T07:47:30Z",
+      "side": 1,
+      "message": "nit: initialize to nullptr if you want to later check that it\u0027s not null.",
+      "range": {
+        "startLine": 196,
+        "startChar": 20,
+        "endLine": 196,
+        "endChar": 27
+      },
+      "revId": "54b05242dd0067197b3b932572c369078f623fa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6730cefd_5ddf1a7a",
+        "filename": "test/cctest/compiler/test-select-combine.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T07:47:30Z",
+      "side": 1,
+      "message": "nit: DCHECK_NOT_NULL",
+      "range": {
+        "startLine": 217,
+        "startChar": 4,
+        "endLine": 218,
+        "endChar": 10
+      },
       "revId": "54b05242dd0067197b3b932572c369078f623fa1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
