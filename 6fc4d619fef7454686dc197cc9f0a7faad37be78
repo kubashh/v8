@@ -16,6 +16,109 @@
       "message": "PTAL, thanks",
       "revId": "6fc4d619fef7454686dc197cc9f0a7faad37be78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7ffd942_932a237b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T08:11:24Z",
+      "side": 1,
+      "message": "LGTM :)",
+      "revId": "6fc4d619fef7454686dc197cc9f0a7faad37be78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc81b3bd_d1ee86a6",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T08:11:24Z",
+      "side": 1,
+      "message": "TODO(name) maybe?",
+      "range": {
+        "startLine": 783,
+        "startChar": 57,
+        "endLine": 783,
+        "endChar": 62
+      },
+      "revId": "6fc4d619fef7454686dc197cc9f0a7faad37be78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cfb8d68_73cedcb5",
+        "filename": "src/compiler/turboshaft/use-map.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T08:11:24Z",
+      "side": 1,
+      "message": "Could you make this a private function in UseMap rather than a lambda?",
+      "range": {
+        "startLine": 13,
+        "startChar": 2,
+        "endLine": 27,
+        "endChar": 4
+      },
+      "revId": "6fc4d619fef7454686dc197cc9f0a7faad37be78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "731ff176_9b9011fc",
+        "filename": "src/compiler/turboshaft/use-map.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T08:11:24Z",
+      "side": 1,
+      "message": "Alternatively, you could get rid of this vector by revisiting the Phis of the loop header when you see the backedge (ie, when you see a GotoOp(dst) where dst.last_predecessor \u003d\u003d current_block). (we have the properties that Phis are always at the beginning of a block, so this should be cheap)",
+      "range": {
+        "startLine": 29,
+        "startChar": 2,
+        "endLine": 29,
+        "endChar": 60
+      },
+      "revId": "6fc4d619fef7454686dc197cc9f0a7faad37be78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8482cb8f_f119c29e",
+        "filename": "src/compiler/turboshaft/use-map.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-20T08:11:24Z",
+      "side": 1,
+      "message": "Please add a comment explaining what a UseMap is. (well, sounds kinda obvious what it is, but still, a short comment can\u0027t hurt! :) )",
+      "revId": "6fc4d619fef7454686dc197cc9f0a7faad37be78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
