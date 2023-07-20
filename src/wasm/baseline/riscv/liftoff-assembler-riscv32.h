@@ -471,14 +471,12 @@ inline void AtomicBinop(LiftoffAssembler* lasm, Register dst_addr,
   switch (type.value()) {
     case StoreType::kI64Store8:
     case StoreType::kI64Store16:
-    case StoreType::kI64Store32:
       __ LoadConstant(result.high(), WasmValue(0));
       result_reg = result.low_gp();
       value_reg = value.low_gp();
       break;
     case StoreType::kI32Store8:
     case StoreType::kI32Store16:
-    case StoreType::kI32Store:
       result_reg = result.gp();
       value_reg = value.gp();
       break;
@@ -702,6 +700,7 @@ void LiftoffAssembler::AtomicAdd(Register dst_addr, Register offset_reg,
     Register actual_addr = liftoff::CalculateActualAddress(
         this, dst_addr, offset_reg, offset_imm, temps.Acquire());
     if (type.value() == StoreType::kI64Store32) {
+      mv(result.high_gp(), zero_reg);  // High word of result is always 0.
       result = result.low();
       value = value.low();
     }
@@ -728,6 +727,7 @@ void LiftoffAssembler::AtomicSub(Register dst_addr, Register offset_reg,
     Register actual_addr = liftoff::CalculateActualAddress(
         this, dst_addr, offset_reg, offset_imm, temps.Acquire());
     if (type.value() == StoreType::kI64Store32) {
+      mv(result.high_gp(), zero_reg);
       result = result.low();
       value = value.low();
     }
@@ -754,6 +754,7 @@ void LiftoffAssembler::AtomicAnd(Register dst_addr, Register offset_reg,
     Register actual_addr = liftoff::CalculateActualAddress(
         this, dst_addr, offset_reg, offset_imm, temps.Acquire());
     if (type.value() == StoreType::kI64Store32) {
+      mv(result.high_gp(), zero_reg);
       result = result.low();
       value = value.low();
     }
@@ -779,6 +780,7 @@ void LiftoffAssembler::AtomicOr(Register dst_addr, Register offset_reg,
     Register actual_addr = liftoff::CalculateActualAddress(
         this, dst_addr, offset_reg, offset_imm, temps.Acquire());
     if (type.value() == StoreType::kI64Store32) {
+      mv(result.high_gp(), zero_reg);
       result = result.low();
       value = value.low();
     }
@@ -804,6 +806,7 @@ void LiftoffAssembler::AtomicXor(Register dst_addr, Register offset_reg,
     Register actual_addr = liftoff::CalculateActualAddress(
         this, dst_addr, offset_reg, offset_imm, temps.Acquire());
     if (type.value() == StoreType::kI64Store32) {
+      mv(result.high_gp(), zero_reg);
       result = result.low();
       value = value.low();
     }
@@ -830,6 +833,7 @@ void LiftoffAssembler::AtomicExchange(Register dst_addr, Register offset_reg,
     Register actual_addr = liftoff::CalculateActualAddress(
         this, dst_addr, offset_reg, offset_imm, temps.Acquire());
     if (type.value() == StoreType::kI64Store32) {
+      mv(result.high_gp(), zero_reg);
       result = result.low();
       value = value.low();
     }
