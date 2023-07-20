@@ -16,6 +16,108 @@
       "message": "ptal",
       "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa7cbcd2_aaf0089e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-20T15:00:21Z",
+      "side": 1,
+      "message": "LGTM with a few comments that you can ignore.",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e59707b_ae2bc9b2",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-20T15:00:21Z",
+      "side": 1,
+      "message": "Here IIUC you expect to find `current_job_trace_id` already populated from ` ConcurrentMarking::ScheduleJob`, so maybe add a `DCHECK` about that.",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "980bda9d_b7f5cee7",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-20T15:00:21Z",
+      "side": 1,
+      "message": "Same.",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13f693af_fef9d96e",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-20T15:00:21Z",
+      "side": 1,
+      "message": "Same.",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01cb83f7_8b23fcc9",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-20T15:00:21Z",
+      "side": 1,
+      "message": "Here and in `MinorSweeperJob`: Theoretically, the `concurrent_trace_id_` (that is sometimes passed as a third parameter here) may be equal to zero, if we\u0027re so unlucky that the value of the pointer (as a 64-bit number) coincides with the value of the epoch. In that case, we\u0027ll ignore the parameter and compute a different value here.",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85a39713_01d400c0",
+        "filename": "src/heap/sweeper.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-20T15:00:21Z",
+      "side": 1,
+      "message": "You\u0027re using an `Optional\u003cuint64_t\u003e` for marking. We discussed it offline, so I\u0027m marking this as resolved.",
+      "revId": "c867d288e1ca9cff82452bcca0966a911875582e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
