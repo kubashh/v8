@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80005688_cba85336",
+        "filename": "src/heap/concurrent-allocator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-20T21:08:52Z",
+      "side": 1,
+      "message": "Yes, 260 implies 204. Sweeping cannot start in the meantime since it will require a safepoint.",
+      "parentUuid": "437cd12d_1076b02c",
+      "range": {
+        "startLine": 264,
+        "startChar": 33,
+        "endLine": 264,
+        "endChar": 46
+      },
+      "revId": "a5edd6a5f25dbfcef9e27d37e9c8bdb6216be37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9bc743e_02fb668d",
@@ -75,6 +99,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8df79302_e5857b1c",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-20T21:08:52Z",
+      "side": 1,
+      "message": "It will not be empty.",
+      "parentUuid": "f9bc743e_02fb668d",
+      "revId": "a5edd6a5f25dbfcef9e27d37e9c8bdb6216be37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48218a8e_cc9e9a62",
@@ -88,6 +130,24 @@
       "writtenOn": "2023-07-20T18:19:20Z",
       "side": 1,
       "message": "`DCHECK` that it\u0027s empty before?",
+      "revId": "a5edd6a5f25dbfcef9e27d37e9c8bdb6216be37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef6b3541_0a80d27d",
+        "filename": "src/heap/sweeper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-20T21:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48218a8e_cc9e9a62",
       "revId": "a5edd6a5f25dbfcef9e27d37e9c8bdb6216be37a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
