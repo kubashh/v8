@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d494078_460cd6d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-21T12:02:42Z",
+      "side": 1,
+      "message": "Thanks for the review! I\u0027ll need a fresh LGTM for mjsunit.status (skipping the test when SIMD is not available).",
+      "revId": "2ce0df584f70e2bc5ac345108be3bc22cf90450f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
