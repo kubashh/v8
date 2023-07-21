@@ -1928,7 +1928,7 @@ class Heap final {
   // ===========================================================================
 
   void ScheduleMinorGCTaskIfNeeded();
-  void StartMinorMSIncrementalMarkingIfPossible();
+  void StartMinorMSIncrementalMarkingIfNeeded();
   bool MinorMSSizeTaskTriggerReached() const;
 
   // ===========================================================================
