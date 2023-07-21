@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d7f903a_6d4265b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-21T14:32:36Z",
+      "side": 1,
+      "message": "lgtm with nits",
+      "revId": "84982c1b9e99e1858f1f1389d8577469d7702f1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edd8a80e_9b1e61a2",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-21T14:32:36Z",
+      "side": 1,
+      "message": "kJSArgcReceiverSlots",
+      "range": {
+        "startLine": 1512,
+        "startChar": 28,
+        "endLine": 1512,
+        "endChar": 29
+      },
+      "revId": "84982c1b9e99e1858f1f1389d8577469d7702f1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09e56206_c19b8b16",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1514,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-21T14:32:36Z",
+      "side": 1,
+      "message": "Can\u0027t this be made a part of the previous instruction\u0027s Operand?",
+      "revId": "84982c1b9e99e1858f1f1389d8577469d7702f1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4cf6f56_a3df172b",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-21T14:32:36Z",
+      "side": 1,
+      "message": "Please fix indentation.",
+      "revId": "84982c1b9e99e1858f1f1389d8577469d7702f1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb9c9d45_9cfd67a0",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1326,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-07-21T14:32:36Z",
+      "side": 1,
+      "message": "FAST_CONSTRUCT",
+      "range": {
+        "startLine": 1326,
+        "startChar": 38,
+        "endLine": 1326,
+        "endChar": 47
+      },
+      "revId": "84982c1b9e99e1858f1f1389d8577469d7702f1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
