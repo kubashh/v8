@@ -8,6 +8,7 @@
 #include "src/heap/memory-chunk.h"
 #include "src/wasm/baseline/liftoff-assembler.h"
 #include "src/wasm/baseline/riscv/liftoff-assembler-riscv.h"
+#include "src/wasm/object-access.h"
 #include "src/wasm/wasm-objects.h"
 
 namespace v8 {
@@ -177,6 +178,33 @@ inline Register EnsureNoAlias(Assembler* assm, Register reg,
   return tmp;
 }
 }  // namespace liftoff
+
+void LiftoffAssembler::CheckTierUp(int declared_func_index, int budget_used,
+                                   Label* ool_label,
+                                   const FreezeCacheState& frozen) {
+  UseScratchRegisterScope temps(this);
+  Register budget_array = temps.Acquire();
+  Register instance = cache_state_.cached_instance;
+
+  if (instance == no_reg) {
+    instance = budget_array;  // Reuse the temp register.
+    LoadInstanceFromFrame(instance);
+  }
+
+  constexpr int kArrayOffset = wasm::ObjectAccess::ToTagged(
+      WasmInstanceObject::kTieringBudgetArrayOffset);
+  LoadWord(budget_array, MemOperand(instance, kArrayOffset));
+
+  int budget_arr_offset = kInt32Size * declared_func_index;
+  // Pick a random register from kLiftoffAssemblerGpCacheRegs.
+  // TODO(miladfarca): Use ScratchRegisterScope when available.
+  Register budget = temps.Acquire();
+  MemOperand budget_addr(budget_array, budget_arr_offset);
+  Lw(budget, budget_addr);
+  Sub32(budget, budget, Operand{budget_used});
+  Sw(budget, budget_addr);
+  Branch(ool_label, lt, budget, Operand{0});
+}
 
 void LiftoffAssembler::LoadConstant(LiftoffRegister reg, WasmValue value) {
   switch (value.type().kind()) {
@@ -1690,13 +1718,6 @@ void LiftoffAssembler::emit_i32_cond_jumpi(Condition cond, Label* label,
                                            Register lhs, int32_t imm,
                                            const FreezeCacheState& frozen) {
   MacroAssembler::Branch(label, cond, lhs, Operand(imm));
-}
-
-void LiftoffAssembler::emit_i32_subi_jump_negative(
-    Register value, int subtrahend, Label* result_negative,
-    const FreezeCacheState& frozen) {
-  SubWord(value, value, Operand(subtrahend));
-  MacroAssembler::Branch(result_negative, lt, value, Operand(zero_reg));
 }
 
 void LiftoffAssembler::emit_i32_eqz(Register dst, Register src) {
