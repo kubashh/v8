@@ -16,6 +16,40 @@
       "message": "ptal",
       "revId": "86a3ce8c3e876c394b6330bfa843526b58ddfdee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f7ae812_61624fae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-21T08:06:38Z",
+      "side": 1,
+      "message": "LGTM, one minor comment.",
+      "revId": "86a3ce8c3e876c394b6330bfa843526b58ddfdee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fff0cf8d_829c0e37",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-07-21T08:06:38Z",
+      "side": 1,
+      "message": "`DCHECK` that it\u0027s not empty?\nIIUC, this is reset in line 604.",
+      "revId": "86a3ce8c3e876c394b6330bfa843526b58ddfdee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
