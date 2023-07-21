@@ -1692,13 +1692,6 @@ void LiftoffAssembler::emit_i32_cond_jumpi(Condition cond, Label* label,
   MacroAssembler::Branch(label, cond, lhs, Operand(imm));
 }
 
-void LiftoffAssembler::emit_i32_subi_jump_negative(
-    Register value, int subtrahend, Label* result_negative,
-    const FreezeCacheState& frozen) {
-  SubWord(value, value, Operand(subtrahend));
-  MacroAssembler::Branch(result_negative, lt, value, Operand(zero_reg));
-}
-
 void LiftoffAssembler::emit_i32_eqz(Register dst, Register src) {
   MacroAssembler::Sltu(dst, src, 1);
 }
