@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b5e096d_e1de487c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-07-21T12:49:46Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "3e600ecb86c75c8e9a4e33c1b5424115d8a711b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21893efd_9c8adffa",
+        "filename": "generated/luci-notify.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 2412,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-07-21T12:49:46Z",
+      "side": 1,
+      "message": "This one has simply not worked. For the latest breakage:\nhttps://ci.chromium.org/ui/p/v8/builders/ci-hp/PGO%20Builder/b8775062694904205649/overview\n\nThere was no email in v8-infra@.\n\nThis now uses the same config as the branch monitor, for which we have some more evidence that it works.",
+      "range": {
+        "startLine": 2406,
+        "startChar": 2,
+        "endLine": 2412,
+        "endChar": 3
+      },
+      "revId": "3e600ecb86c75c8e9a4e33c1b5424115d8a711b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
