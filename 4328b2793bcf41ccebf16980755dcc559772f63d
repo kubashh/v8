@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4a12bbf_863ea9eb",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-24T15:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7a132e4_8c2f427a",
+      "revId": "4328b2793bcf41ccebf16980755dcc559772f63d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0463d99_3d08af67",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a2c19ce_3d8c4ebe",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-24T15:37:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0463d99_3d08af67",
+      "revId": "4328b2793bcf41ccebf16980755dcc559772f63d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f0382b3_57d066ed",
@@ -65,6 +101,24 @@
       "writtenOn": "2023-07-24T15:07:22Z",
       "side": 1,
       "message": "Nit: I suppose we could make those fields `Optional\u003cTimeTicks\u003e` for which we check `IsNull` as well. This would require us to handle those \"not filled\" cases.",
+      "revId": "4328b2793bcf41ccebf16980755dcc559772f63d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebb0bf85_2a98357a",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-24T15:37:56Z",
+      "side": 1,
+      "message": "\u003e Nit: I suppose we could make those fields `Optional\u003cTimeTicks\u003e` for which we check `IsNull` as well. This would require us to handle those \"not filled\" cases.\n\nI replaced the usages that had an explicit `IsNull()` check.",
+      "parentUuid": "3f0382b3_57d066ed",
       "revId": "4328b2793bcf41ccebf16980755dcc559772f63d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
