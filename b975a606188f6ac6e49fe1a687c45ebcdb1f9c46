@@ -33,6 +33,46 @@
       "message": "LGTM",
       "revId": "b975a606188f6ac6e49fe1a687c45ebcdb1f9c46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1229ed53_e35b03a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-24T09:49:08Z",
+      "side": 1,
+      "message": "src/compiler LGTM :)",
+      "revId": "b975a606188f6ac6e49fe1a687c45ebcdb1f9c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5fb755f_4ed3a8fc",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4945,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-24T09:49:08Z",
+      "side": 1,
+      "message": "I\u0027m a bit surprised to see that an operation named \"AssertNotNull\" returns something. If it does indeed return a Tagged value, could you please add a comment explaining what is returned exactly?",
+      "range": {
+        "startLine": 4945,
+        "startChar": 4,
+        "endLine": 4945,
+        "endChar": 57
+      },
+      "revId": "b975a606188f6ac6e49fe1a687c45ebcdb1f9c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
