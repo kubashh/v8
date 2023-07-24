@@ -64,6 +64,11 @@ class MaglevAssembler::ScratchRegisterScope {
 
   ~ScratchRegisterScope() { masm_->scratch_register_scope_ = prev_scope_; }
 
+  void ResetToDefault() {
+    wrapped_scope_.SetAvailable(masm_->DefaultTmpList());
+    wrapped_scope_.SetAvailableFP(masm_->DefaultFPTmpList());
+  }
+
   Register Acquire() { return wrapped_scope_.AcquireX(); }
   void Include(Register reg) { wrapped_scope_.Include(reg); }
   void Include(const RegList list) {
@@ -765,7 +770,7 @@ inline void MaglevAssembler::CompareSmiAndJumpIf(Register r1, Smi value,
                                                  Condition cond, Label* target,
                                                  Label::Distance distance) {
   AssertSmi(r1);
-  CompareAndBranch(r1, Immediate(value), cond, target);
+  CompareTaggedAndBranch(r1, Immediate(value), cond, target);
 }
 
 inline void MaglevAssembler::TestInt32AndJumpIfAnySet(
