@@ -333,11 +333,29 @@ class V8_EXPORT_PRIVATE MacroAssembler
   SmiIndex SmiToIndex(Register dst, Register src, int shift);
 
   void JumpIfEqual(Register a, int32_t b, Label* dest) {
+    constexpr int kJccErratumAlignment = 32;
+    bool before_is_32b_aligned = pc_offset() % kJccErratumAlignment == 0;
+    bool backwards = dest->is_bound();
+    if (backwards && !before_is_32b_aligned) {
+      int padding = -pc_offset() & (kJccErratumAlignment - 1);
+      DCHECK_GT(padding, 0);
+      Nop(padding);
+      DCHECK_EQ(pc_offset() % kJccErratumAlignment, 0);
+    }
     cmpl(a, Immediate(b));
     j(equal, dest);
   }
 
   void JumpIfLessThan(Register a, int32_t b, Label* dest) {
+    constexpr int kJccErratumAlignment = 32;
+    bool before_is_32b_aligned = pc_offset() % kJccErratumAlignment == 0;
+    bool backwards = dest->is_bound();
+    if (backwards && !before_is_32b_aligned) {
+      int padding = -pc_offset() & (kJccErratumAlignment - 1);
+      DCHECK_GT(padding, 0);
+      Nop(padding);
+      DCHECK_EQ(pc_offset() % kJccErratumAlignment, 0);
+    }
     cmpl(a, Immediate(b));
     j(less, dest);
   }
