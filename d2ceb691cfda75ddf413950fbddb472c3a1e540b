@@ -33,6 +33,24 @@
       "message": "Looks like there\u0027s a merge conflict. Could you please rebase and do the honors of shipping it, Rezvan? :)",
       "revId": "d2ceb691cfda75ddf413950fbddb472c3a1e540b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e652797_0cae3857",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-07-24T18:34:25Z",
+      "side": 1,
+      "message": "Sure!",
+      "parentUuid": "4c15af9c_822bc1ea",
+      "revId": "d2ceb691cfda75ddf413950fbddb472c3a1e540b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
