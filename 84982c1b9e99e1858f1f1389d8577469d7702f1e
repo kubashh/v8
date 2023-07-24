@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c49cfc0_1d7731d0",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-07-24T08:17:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edd8a80e_9b1e61a2",
+      "range": {
+        "startLine": 1512,
+        "startChar": 28,
+        "endLine": 1512,
+        "endChar": 29
+      },
+      "revId": "84982c1b9e99e1858f1f1389d8577469d7702f1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09e56206_c19b8b16",
@@ -54,6 +78,24 @@
       "writtenOn": "2023-07-21T14:32:36Z",
       "side": 1,
       "message": "Can\u0027t this be made a part of the previous instruction\u0027s Operand?",
+      "revId": "84982c1b9e99e1858f1f1389d8577469d7702f1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "663477ec_78e0257e",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1514,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-07-24T08:17:09Z",
+      "side": 1,
+      "message": "Indeed! Thanks!",
+      "parentUuid": "09e56206_c19b8b16",
       "revId": "84982c1b9e99e1858f1f1389d8577469d7702f1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dee27d14_9729c290",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-07-24T08:17:09Z",
+      "side": 1,
+      "message": "It is a bit annoying that clang-format does not understand the #if conditional underneath and formats this in a wrong way.\nAnyway, I skipped presubmit check for this.",
+      "parentUuid": "c4cf6f56_a3df172b",
+      "revId": "84982c1b9e99e1858f1f1389d8577469d7702f1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb9c9d45_9cfd67a0",
@@ -88,6 +148,30 @@
       "writtenOn": "2023-07-21T14:32:36Z",
       "side": 1,
       "message": "FAST_CONSTRUCT",
+      "range": {
+        "startLine": 1326,
+        "startChar": 38,
+        "endLine": 1326,
+        "endChar": 47
+      },
+      "revId": "84982c1b9e99e1858f1f1389d8577469d7702f1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aef4170a_c8adbb91",
+        "filename": "src/execution/frames.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1326,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-07-24T08:17:09Z",
+      "side": 1,
+      "message": "Oops... funny that there was no dcheck failing here! 😊",
+      "parentUuid": "fb9c9d45_9cfd67a0",
       "range": {
         "startLine": 1326,
         "startChar": 38,
