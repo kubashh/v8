@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1055a80a_af3535c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-07-24T11:38:20Z",
+      "side": 1,
+      "message": "PTAL at merge (which is a re-application of the CL to per-arch x64/arm64 impls)",
+      "revId": "4788d0086994a04ac5916e78891cd8f37342e84e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
