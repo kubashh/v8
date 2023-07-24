@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85d57cfa_6ffc2686",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-24T15:15:59Z",
+      "side": 1,
+      "message": "Note that this is already rebased onto your most recent change, so excluding potential in-flight changes, it shouldn\u0027t conflict.",
+      "revId": "51ca916acf0fb98808bccaa0f8678f4edf8fa95b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
