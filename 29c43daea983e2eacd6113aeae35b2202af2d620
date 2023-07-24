@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99162a3d_220e6334",
+        "filename": "src/builtins/wasm-to-js.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-07-24T11:00:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5540891e_8773bc48",
+      "range": {
+        "startLine": 49,
+        "startChar": 44,
+        "endLine": 49,
+        "endChar": 45
+      },
+      "revId": "29c43daea983e2eacd6113aeae35b2202af2d620",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02406f4b_317e9e76",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-07-24T10:22:43Z",
       "side": 1,
       "message": "`TruncateBigIntToI64` (typo in the definition?)",
+      "range": {
+        "startLine": 146,
+        "startChar": 18,
+        "endLine": 146,
+        "endChar": 36
+      },
+      "revId": "29c43daea983e2eacd6113aeae35b2202af2d620",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27551b7d_db651bb7",
+        "filename": "src/builtins/wasm-to-js.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-07-24T11:00:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02406f4b_317e9e76",
       "range": {
         "startLine": 146,
         "startChar": 18,
