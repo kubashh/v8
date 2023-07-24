@@ -4728,6 +4728,7 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitNode(
             return VisitWord64Equal(node);
           }
           return VisitWord32Equal(node);
+        case Rep::Simd128():
         case Rep::Compressed():
           UNIMPLEMENTED();
       }

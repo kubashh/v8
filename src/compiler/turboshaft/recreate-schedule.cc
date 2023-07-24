@@ -881,6 +881,7 @@ Node* ScheduleBuilder::ProcessOperation(const SelectOp& op) {
       break;
     case RegisterRepresentation::Enum::kTagged:
     case RegisterRepresentation::Enum::kCompressed:
+    case RegisterRepresentation::Enum::kSimd128:
       UNREACHABLE();
   }
 
@@ -1472,6 +1473,10 @@ Node* ScheduleBuilder::ProcessOperation(const Word32PairBinopOp& op) {
   return AddNode(pair_operator,
                  {GetNode(op.left_low()), GetNode(op.left_high()),
                   GetNode(op.right_low()), GetNode(op.right_high())});
+}
+
+Node* ScheduleBuilder::ProcessOperation(const Simd128ConstantOp& op) {
+  return AddNode(machine.S128Const(op.value), {});
 }
 
 }  // namespace
