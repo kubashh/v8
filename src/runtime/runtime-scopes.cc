@@ -345,6 +345,7 @@ namespace {
 
 // Find the arguments of the JavaScript function invocation that called
 // into C++ code. Collect these in a newly allocated array of handles.
+// TODO(victorgomes): Unify this code with ArgumentsFromDeoptInfo.
 std::unique_ptr<Handle<Object>[]> GetCallerArguments(Isolate* isolate,
                                                      int* total_argc) {
   // Find frame containing arguments passed to the caller.
@@ -357,35 +358,48 @@ std::unique_ptr<Handle<Object>[]> GetCallerArguments(Isolate* isolate,
     TranslatedState translated_values(frame);
     translated_values.Prepare(frame->fp());
 
-    int argument_count = 0;
-    TranslatedFrame* translated_frame =
+    TranslatedState::ArgumentsInfo arguments_info =
         translated_values.GetArgumentsInfoFromJSFrameIndex(
-            inlined_jsframe_index, &argument_count);
-    TranslatedFrame::iterator iter = translated_frame->begin();
+            inlined_jsframe_index);
 
-    // Skip the function.
-    iter++;
+    // int argument_count = arguments_info.argument_count;
+    TranslatedFrame::iterator iter = arguments_info.function_frame->begin();
+    iter++;  // Skip the function.
+    iter++;  // Skip the receiver.
 
-    // Skip the receiver.
-    iter++;
-    argument_count--;
-
-    *total_argc = argument_count;
     std::unique_ptr<Handle<Object>[]> param_data(
-        NewArray<Handle<Object>>(*total_argc));
+        NewArray<Handle<Object>>(arguments_info.arguments_count()));
     bool should_deoptimize = false;
-    for (int i = 0; i < argument_count; i++) {
+    int arg_index = 0;
+    for (; arg_index < arguments_info.parameter_count_without_receiver;
+         arg_index++) {
       // If we materialize any object, we should deoptimize the frame because we
       // might alias an object that was eliminated by escape analysis.
       should_deoptimize = should_deoptimize || iter->IsMaterializedObject();
       Handle<Object> value = iter->GetValue();
-      param_data[i] = value;
+      param_data[arg_index] = value;
       iter++;
+    }
+
+    if (arguments_info.extra_args_frame) {
+      TranslatedFrame::iterator iter_extra =
+          arguments_info.extra_args_frame->begin();
+      for (; arg_index < arguments_info.arguments_count(); arg_index++) {
+        // If we materialize any object, we should deoptimize the frame because
+        // we might alias an object that was eliminated by escape analysis.
+        should_deoptimize =
+            should_deoptimize || iter_extra->IsMaterializedObject();
+        Handle<Object> value = iter_extra->GetValue();
+        param_data[arg_index] = value;
+        iter_extra++;
+      }
     }
 
     if (should_deoptimize) {
       translated_values.StoreMaterializedValuesAndDeopt(frame);
     }
+
+    *total_argc = arguments_info.arguments_count();
 
     return param_data;
   } else {

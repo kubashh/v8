@@ -1151,9 +1151,10 @@ void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
   } else {
     TranslatedFrame::Kind previous_frame_kind =
         (translated_state_.frames()[frame_index - 1]).kind();
-    argc = previous_frame_kind == TranslatedFrame::kInlinedExtraArguments
-               ? output_[frame_index - 1]->parameter_count()
-               : parameters_count;
+    argc = parameters_count;
+    if (previous_frame_kind == TranslatedFrame::kInlinedExtraArguments) {
+      argc += output_[frame_index - 1]->parameter_count();
+    }
   }
   frame_writer.PushRawValue(argc, "actual argument count\n");
 
@@ -1298,12 +1299,13 @@ void Deoptimizer::DoComputeInlinedExtraArguments(
   // https://docs.google.com/document/d/150wGaUREaZI6YWqOQFD5l2mWQXaPbbZjcAIJLOFrzMs
 
   TranslatedFrame::iterator value_iterator = translated_frame->begin();
-  const int argument_count_without_receiver = translated_frame->height() - 1;
+  const int extra_argument_count = translated_frame->height();
   const int formal_parameter_count =
       translated_frame->raw_shared_info()
           ->internal_formal_parameter_count_without_receiver();
-  const int extra_argument_count =
-      argument_count_without_receiver - formal_parameter_count;
+
+  const int argument_count_without_receiver =
+      extra_argument_count + formal_parameter_count;
   // The number of pushed arguments is the maximum of the actual argument count
   // and the formal parameter count + the receiver.
   const int padding = ArgumentPaddingSlots(
@@ -1312,8 +1314,9 @@ void Deoptimizer::DoComputeInlinedExtraArguments(
       (std::max(0, extra_argument_count) + padding) * kSystemPointerSize;
   if (verbose_tracing_enabled()) {
     PrintF(trace_scope_->file(),
-           "  translating inlined arguments frame => variable_size=%d\n",
-           output_frame_size);
+           "  translating inlined extra arguments frame => "
+           "extra_arguments_count=%d, variable_size=%d\n",
+           extra_argument_count, output_frame_size);
   }
 
   // Allocate and store the output frame description.
@@ -1337,16 +1340,8 @@ void Deoptimizer::DoComputeInlinedExtraArguments(
     frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
   }
 
-  if (extra_argument_count > 0) {
-    // The receiver and arguments with index below the formal parameter
-    // count are in the fake adaptor frame, because they are used to create the
-    // arguments object. We should however not push them, since the interpreter
-    // frame with do that.
-    value_iterator++;  // Skip function.
-    value_iterator++;  // Skip receiver.
-    for (int i = 0; i < formal_parameter_count; i++) value_iterator++;
-    frame_writer.PushStackJSArguments(value_iterator, extra_argument_count);
-  }
+  DCHECK_GE(extra_argument_count, 0);
+  frame_writer.PushStackJSArguments(value_iterator, extra_argument_count);
 }
 
 void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,

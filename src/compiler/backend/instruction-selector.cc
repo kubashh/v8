@@ -1082,13 +1082,17 @@ size_t InstructionSelectorT<TurbofanAdapter>::AddInputsToFrameStateDescriptor(
   DCHECK_EQ(values_descriptor->size(), 0u);
   values_descriptor->ReserveSize(descriptor->GetSize());
 
-  DCHECK_NOT_NULL(function);
-  entries += AddOperandToStateValueDescriptor(
-      values_descriptor, inputs, g, deduplicator, function,
-      MachineType::AnyTagged(), FrameStateInputKind::kStackSlot, zone);
+  if (descriptor->HasClosure()) {
+    DCHECK_NOT_NULL(function);
+    entries += AddOperandToStateValueDescriptor(
+        values_descriptor, inputs, g, deduplicator, function,
+        MachineType::AnyTagged(), FrameStateInputKind::kStackSlot, zone);
+  }
 
-  entries += AddInputsToFrameStateDescriptor(
-      values_descriptor, inputs, g, deduplicator, parameters, kind, zone);
+  if (descriptor->parameters_count() != 0) {
+    entries += AddInputsToFrameStateDescriptor(
+        values_descriptor, inputs, g, deduplicator, parameters, kind, zone);
+  }
 
   if (descriptor->HasContext()) {
     DCHECK_NOT_NULL(context);

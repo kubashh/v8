@@ -244,14 +244,19 @@ Reduction JSInliner::InlineCall(Node* call, Node* new_target, Node* context,
 }
 
 FrameState JSInliner::CreateArtificialFrameState(
-    Node* node, FrameState outer_frame_state, int parameter_count,
+    Node* node, FrameState outer_frame_state, int argument_count,
     FrameStateType frame_state_type, SharedFunctionInfoRef shared,
     Node* context, Node* callee) {
-  const int parameter_count_with_receiver =
-      parameter_count + JSCallOrConstructNode::kReceiverOrNewTargetInputCount;
+  int frame_arguments_count =
+      argument_count + JSCallOrConstructNode::kReceiverOrNewTargetInputCount;
+  if (frame_state_type == FrameStateType::kInlinedExtraArguments) {
+    frame_arguments_count =
+        std::max(0, frame_arguments_count -
+                        shared.internal_formal_parameter_count_with_receiver());
+  }
   const FrameStateFunctionInfo* state_info =
       common()->CreateFrameStateFunctionInfo(
-          frame_state_type, parameter_count_with_receiver, 0, shared.object());
+          frame_state_type, frame_arguments_count, 0, shared.object());
 
   const Operator* op = common()->FrameState(
       BytecodeOffset::None(), OutputFrameStateCombine::Ignore(), state_info);
@@ -276,11 +281,28 @@ FrameState JSInliner::CreateArtificialFrameState(
     const Operator* op_param =
         common()->StateValues(1, SparseInputMask::Dense());
     params_node = graph()->NewNode(op_param, jsgraph()->UndefinedConstant());
+  } else if (frame_state_type == FrameStateType::kInlinedExtraArguments) {
+    // We just allocated the extra arguments.
+    int parameter_count =
+        shared.internal_formal_parameter_count_without_receiver();
+    // int extra_arguments_count = argument_count - parameter_count;
+    NodeVector params(local_zone_);
+    for (int i = parameter_count; i < argument_count; i++) {
+      params.push_back(node->InputAt(JSCallOrConstructNode::ArgumentIndex(i)));
+    }
+    const Operator* op_param = common()->StateValues(
+        static_cast<int>(params.size()), SparseInputMask::Dense());
+    if (frame_arguments_count > 0) {
+      params_node = graph()->NewNode(op_param, static_cast<int>(params.size()),
+                                     &params.front());
+    } else {
+      params_node = node0;
+    }
   } else {
     NodeVector params(local_zone_);
     params.push_back(
         node->InputAt(JSCallOrConstructNode::ReceiverOrNewTargetIndex()));
-    for (int i = 0; i < parameter_count; i++) {
+    for (int i = 0; i < argument_count; i++) {
       params.push_back(node->InputAt(JSCallOrConstructNode::ArgumentIndex(i)));
     }
     const Operator* op_param = common()->StateValues(
