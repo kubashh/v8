@@ -16,6 +16,46 @@
       "message": "Hi Thibaud, would you please help take a look at this change? Thanks!",
       "revId": "98c5e832fb5056fb668849ad07e80f2b1c62e09f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "277626a8_22f62e77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-25T12:26:08Z",
+      "side": 1,
+      "message": "LGTM with one question",
+      "revId": "98c5e832fb5056fb668849ad07e80f2b1c62e09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "533ea773_7048569b",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5019,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-25T12:26:08Z",
+      "side": 1,
+      "message": "Can we not use the three-operand format here when AVX is supported, like in the AND case above?",
+      "range": {
+        "startLine": 5019,
+        "startChar": 9,
+        "endLine": 5019,
+        "endChar": 34
+      },
+      "revId": "98c5e832fb5056fb668849ad07e80f2b1c62e09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
