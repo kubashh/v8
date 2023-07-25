@@ -12,6 +12,7 @@
 #include "src/execution/local-isolate-inl.h"
 #include "src/handles/global-handles-inl.h"
 #include "src/heap/local-heap-inl.h"
+#include "src/heap/read-only-promotion.h"
 #include "src/heap/safepoint.h"
 #include "src/init/bootstrapper.h"
 #include "src/logging/runtime-call-stats-scope.h"
@@ -396,6 +397,8 @@ v8::StartupData Snapshot::Create(
   HandleScope scope(isolate);
 
   if ((flags & Snapshot::kAllowActiveIsolateForTesting) == 0) {
+    // TODO. Comment.
+    ReadOnlyPromotion::Promote(isolate, safepoint_scope);
     // When creating the snapshot from scratch, we are responsible for sealing
     // the RO heap here. Note we cannot delegate the responsibility e.g. to
     // Isolate::Init since it should still be possible to allocate into RO

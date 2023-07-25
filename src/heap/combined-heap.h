@@ -23,6 +23,11 @@ class V8_EXPORT_PRIVATE CombinedHeapObjectIterator final {
   CombinedHeapObjectIterator(
       Heap* heap, HeapObjectIterator::HeapObjectsFiltering filtering =
                       HeapObjectIterator::HeapObjectsFiltering::kNoFiltering);
+  // .. when already in a SafepointScope:
+  CombinedHeapObjectIterator(
+      Heap* heap, const SafepointScope& safepoint_scope,
+      HeapObjectIterator::HeapObjectsFiltering filtering =
+          HeapObjectIterator::HeapObjectsFiltering::kNoFiltering);
   Tagged<HeapObject> Next();
 
  private:

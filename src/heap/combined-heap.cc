@@ -13,6 +13,12 @@ CombinedHeapObjectIterator::CombinedHeapObjectIterator(
     : heap_iterator_(heap, filtering),
       ro_heap_iterator_(heap->isolate()->read_only_heap()) {}
 
+CombinedHeapObjectIterator::CombinedHeapObjectIterator(
+    Heap* heap, const SafepointScope& safepoint_scope,
+    HeapObjectIterator::HeapObjectsFiltering filtering)
+    : heap_iterator_(heap, safepoint_scope, filtering),
+      ro_heap_iterator_(heap->isolate()->read_only_heap()) {}
+
 Tagged<HeapObject> CombinedHeapObjectIterator::Next() {
   Tagged<HeapObject> object = ro_heap_iterator_.Next();
   if (!object.is_null()) {
