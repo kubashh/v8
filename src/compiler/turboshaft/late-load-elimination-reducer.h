@@ -714,9 +714,25 @@ class LateLoadEliminationReducer : public Next {
 
   OpIndex REDUCE_INPUT_GRAPH(Load)(OpIndex ig_index, const LoadOp& load) {
     if (v8_flags.turboshaft_load_elimination) {
-      OpIndex replacement = analyzer_.Replacement(ig_index);
-      if (replacement.valid()) {
-        return Asm().MapToNewGraph(replacement);
+      OpIndex ig_replacement_index = analyzer_.Replacement(ig_index);
+      if (ig_replacement_index.valid()) {
+        OpIndex replacement = Asm().MapToNewGraph(ig_replacement_index);
+        const Operation& replacement_op = Asm().output_graph().Get(replacement);
+        RegisterRepresentation output_repr = load.outputs_rep()[0];
+        RegisterRepresentation replacement_repr =
+            replacement_op.outputs_rep()[0];
+        if ((output_repr == RegisterRepresentation::Tagged() &&
+             replacement_repr != RegisterRepresentation::Tagged()) ||
+            (output_repr != RegisterRepresentation::Tagged() &&
+             replacement_repr == RegisterRepresentation::Tagged())) {
+          // Replacing a Tagged value with an untagged value, or an untagged
+          // value with an tagged value -> inserting a tagged bitcast.
+          return Asm().TaggedBitcast(replacement,
+                                     replacement_op.outputs_rep()[0],
+                                     load.outputs_rep()[0]);
+        } else {
+          return replacement;
+        }
       }
     }
     return Next::ReduceInputGraphLoad(ig_index, load);
