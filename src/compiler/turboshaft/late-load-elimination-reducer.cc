@@ -81,7 +81,10 @@ bool RepIsCompatible(RegisterRepresentation expected,
 
 void LateLoadEliminationAnalyzer::ProcessLoad(OpIndex op_idx,
                                               const LoadOp& load) {
-  if (OpIndex existing = memory_content_.Find(load); existing.valid()) {
+  auto& memory =
+      load.kind.can_overlap ? overlapping_memory_ : non_overlapping_memory_;
+
+  if (OpIndex existing = memory.Find(load); existing.valid()) {
     const Operation& replacement = graph_.Get(existing);
     // We need to make sure that {load} and {replacement} have the same output
     // representation. In particular, in unreachable code, it's possible that
@@ -111,16 +114,19 @@ void LateLoadEliminationAnalyzer::ProcessLoad(OpIndex op_idx,
     return;
   }
 
-  memory_content_.Insert(load, op_idx);
+  memory.Insert(load, op_idx);
 }
 
 void LateLoadEliminationAnalyzer::ProcessStore(OpIndex op_idx,
                                                const StoreOp& store) {
+  auto& memory =
+      store.kind.can_overlap ? overlapping_memory_ : non_overlapping_memory_;
+
   OpIndex value = store.value();
 
   // Updating the known stored values
-  memory_content_.Invalidate(store);
-  memory_content_.Insert(store);
+  memory.Invalidate(store);
+  memory.Insert(store);
 
   // Updating aliases if the value stored was known as non-aliasing.
   if (non_aliasing_objects_.HasKeyFor(value)) {
@@ -170,8 +176,12 @@ void LateLoadEliminationAnalyzer::ProcessCall(OpIndex op_idx,
           // This function just replaces the Elements array of an object.
           // It doesn't invalidate any alias or any other memory than this
           // Elements array.
-          memory_content_.Invalidate(call->arguments()[0], OpIndex::Invalid(),
-                                     JSObject::kElementsOffset);
+          // Note that TypedArrays have a fixed size, so this builtin should
+          // never be called on the backing store of a TypedArray, which means
+          // that we only need to invalidate in `tagged_base_memory` here.
+          non_overlapping_memory_.Invalidate(call->arguments()[0],
+                                             OpIndex::Invalid(),
+                                             JSObject::kElementsOffset);
           return;
         case Builtin::kCEntry_Return1_ArgvOnStack_NoBuiltinExit: {
           DCHECK_GE(op.input_count, 3);
@@ -201,7 +211,8 @@ void LateLoadEliminationAnalyzer::ProcessCall(OpIndex op_idx,
 
   // The call could modify arbitrary memory, so we invalidate every
   // potentially-aliasing object.
-  memory_content_.InvalidateMaybeAliasing();
+  non_overlapping_memory_.InvalidateMaybeAliasing();
+  overlapping_memory_.InvalidateMaybeAliasing();
 }
 
 void LateLoadEliminationAnalyzer::InvalidateIfAlias(OpIndex op_idx) {
@@ -241,13 +252,14 @@ void LateLoadEliminationAnalyzer::ProcessAssumeMap(
 void LateLoadEliminationAnalyzer::FinishBlock(const Block* block) {
   block_to_snapshot_mapping_[block->index()] =
       std::tuple{non_aliasing_objects_.Seal(), object_maps_.Seal(),
-                 memory_content_.Seal()};
+                 non_overlapping_memory_.Seal(), overlapping_memory_.Seal()};
 }
 
 void LateLoadEliminationAnalyzer::SealAndDiscard() {
   non_aliasing_objects_.Seal();
   object_maps_.Seal();
-  memory_content_.Seal();
+  non_overlapping_memory_.Seal();
+  overlapping_memory_.Seal();
 }
 
 template <bool for_loop_revisit>
@@ -262,7 +274,8 @@ bool LateLoadEliminationAnalyzer::BeginBlock(const Block* block) {
   {
     predecessor_alias_snapshots_.clear();
     predecessor_maps_snapshots_.clear();
-    predecessor_memory_snapshots_.clear();
+    predecessor_non_overlapping_memory_snapshots_.clear();
+    predecessor_overlapping_memory_snapshots_.clear();
     for (const Block* p = block->LastPredecessor(); p != nullptr;
          p = p->NeighboringPredecessor()) {
       auto pred_snapshots = block_to_snapshot_mapping_[p->index()];
@@ -280,14 +293,19 @@ bool LateLoadEliminationAnalyzer::BeginBlock(const Block* block) {
       // is, then it's fine: if the backedge of the outer-loop was more
       // restrictive than its forward incoming edge, then the forward incoming
       // edge of the inner loop should reflect this restriction.
-      predecessor_alias_snapshots_.push_back(std::get<0>(*pred_snapshots));
-      predecessor_memory_snapshots_.push_back(std::get<2>(*pred_snapshots));
+      predecessor_alias_snapshots_.push_back(
+          std::get<kAliasSnapshotOffset>(*pred_snapshots));
+      predecessor_non_overlapping_memory_snapshots_.push_back(
+          std::get<kNonOverlappingMemorySnapshotOffset>(*pred_snapshots));
+      predecessor_overlapping_memory_snapshots_.push_back(
+          std::get<kOverlappingMemorySnapshotOffset>(*pred_snapshots));
       if (p->NeighboringPredecessor() != nullptr || !block->IsLoop() ||
           block->LastPredecessor() != p) {
         // We only add a MapSnapshot predecessor for non-backedge predecessor.
         // This is because maps coming from inside of the loop may be wrong
         // until a specific check has been executed.
-        predecessor_maps_snapshots_.push_back(std::get<1>(*pred_snapshots));
+        predecessor_maps_snapshots_.push_back(
+            std::get<kMapSnapshotOffset>(*pred_snapshots));
       }
     }
   }
@@ -347,8 +365,11 @@ bool LateLoadEliminationAnalyzer::BeginBlock(const Block* block) {
     }
     return base::all_equal(predecessors) ? predecessors[0] : OpIndex::Invalid();
   };
-  memory_content_.StartNewSnapshot(
-      base::VectorOf(predecessor_memory_snapshots_), merge_memory);
+  non_overlapping_memory_.StartNewSnapshot(
+      base::VectorOf(predecessor_non_overlapping_memory_snapshots_),
+      merge_memory);
+  overlapping_memory_.StartNewSnapshot(
+      base::VectorOf(predecessor_overlapping_memory_snapshots_), merge_memory);
 
   if (block->IsLoop()) return loop_needs_revisit;
   return false;

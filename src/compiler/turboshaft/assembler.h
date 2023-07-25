@@ -1776,7 +1776,8 @@ class AssemblerOpInterface {
       static_assert(std::is_same_v<Base, WordPtr>);
       DCHECK_EQ(access.base_is_tagged, BaseTaggedness::kUntaggedBase);
     }
-    LoadOp::Kind kind = LoadOp::Kind::Aligned(access.base_is_tagged);
+    LoadOp::Kind kind =
+        LoadOp::Kind::Aligned(access.base_is_tagged).CanOverlap();
     MemoryRepresentation rep =
         MemoryRepresentation::FromMachineType(access.machine_type);
     return Load(object, index, kind, rep, access.header_size,
@@ -1792,7 +1793,8 @@ class AssemblerOpInterface {
       static_assert(std::is_same_v<Base, WordPtr>);
       DCHECK_EQ(access.base_is_tagged, BaseTaggedness::kUntaggedBase);
     }
-    LoadOp::Kind kind = LoadOp::Kind::Aligned(access.base_is_tagged);
+    LoadOp::Kind kind =
+        LoadOp::Kind::Aligned(access.base_is_tagged).CanOverlap();
     MemoryRepresentation rep =
         MemoryRepresentation::FromMachineType(access.machine_type);
     Store(object, index, value, kind, rep, access.write_barrier_kind,
