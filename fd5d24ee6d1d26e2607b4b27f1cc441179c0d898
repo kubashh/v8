@@ -34,6 +34,24 @@
       "parentUuid": "99f4632b_d5e24353",
       "revId": "fd5d24ee6d1d26e2607b4b27f1cc441179c0d898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc7db1c1_cbfc751d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1352700
+      },
+      "writtenOn": "2023-07-25T16:11:23Z",
+      "side": 1,
+      "message": "The fuzzer only runs twice, which does sounds pretty low. It might make sense to either increase the number of runs, or add some manual tests to ensure some coverage, similar to `mjsunit/wasm/generic-wrapper.js`.",
+      "parentUuid": "05ce2acb_ad9b53ee",
+      "revId": "fd5d24ee6d1d26e2607b4b27f1cc441179c0d898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
