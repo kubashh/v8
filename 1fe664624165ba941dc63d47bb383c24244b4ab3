@@ -33,6 +33,24 @@
       "message": "I wonder if we should have an additional flag for that. It feels that this is subsumed by the other flags already and we will now have mutliple combinations of flags that express the same thing.",
       "revId": "1fe664624165ba941dc63d47bb383c24244b4ab3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92fc1d0c_ba3b17d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-07-25T12:13:04Z",
+      "side": 1,
+      "message": "I think the motivating example is valid, there are cases where we don\u0027t have a proper effect but still don\u0027t want to remove the operation. So having a separate bit is maybe less confusing than to assign somewhat wrong effects.",
+      "parentUuid": "b417fa97_5b91c306",
+      "revId": "1fe664624165ba941dc63d47bb383c24244b4ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
