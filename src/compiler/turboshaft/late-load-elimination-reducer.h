@@ -274,17 +274,33 @@ struct BaseData {
 class MemoryContentTable
     : public ChangeTrackingSnapshotTable<MemoryContentTable, OpIndex, KeyData> {
  public:
+  // With untagged bases, loads/stores of variable sizes could overlap (because
+  // of aliasing). For instance, consider this example:
+  //
+  //     function f(u32s, u8s) {
+  //        u32s[0] = 0xffffffff;
+  //        u8s[1] = 0;
+  //        return u32s[0];
+  //     }
+  //
+  // The second store overlap with the 1st one, despite being at a different
+  // offset. To keep being correct in such cases, when invalidating something at
+  // offset `x`, we invalidate everything in range [x-3, x+3] (or [x-7, x+7] if
+  // pointer compression is enabled).
+  enum class BaseTagging { kUntagged, kTagged };
+
   explicit MemoryContentTable(
       Zone* zone, SparseOpIndexSnapshotTable<bool>& non_aliasing_objects,
       SparseOpIndexSnapshotTable<MapMaskAndOr>& object_maps,
-      FixedSidetable<OpIndex>& replacements)
+      FixedSidetable<OpIndex>& replacements, BaseTagging base_tagging)
       : ChangeTrackingSnapshotTable(zone),
         non_aliasing_objects_(non_aliasing_objects),
         object_maps_(object_maps),
         replacements_(replacements),
         all_keys_(zone),
         base_keys_(zone),
-        offset_keys_(zone) {}
+        offset_keys_(zone),
+        base_tagging_(base_tagging) {}
 
   void OnNewKey(Key key, OpIndex value) {
     if (value.valid()) {
@@ -365,29 +381,40 @@ class MemoryContentTable
         Set(key, OpIndex::Invalid());
       }
 
-      MapMaskAndOr base_maps = object_maps_.Get(base);
-      auto offset_keys = offset_keys_.find(offset);
-      if (offset_keys == offset_keys_.end()) return;
-      for (auto it = offset_keys->second.begin();
-           it != offset_keys->second.end();) {
-        Key key = *it;
-        DCHECK_EQ(offset, key.data().mem.offset);
-        // It can overwrite previous stores to any base (except non-aliasing
-        // ones).
-        if (non_aliasing_objects_.Get(key.data().mem.base)) {
-          ++it;
-          continue;
+      if (base_tagging_ == BaseTagging::kTagged) {
+        InvalidateAtOffset(offset, base);
+      } else {
+        DCHECK_EQ(base_tagging_, BaseTagging::kUntagged);
+        // The largest kind of TypedArray element kind is BigInt64/BigUint64,
+        // which are represented as a raw int64_t/uint64_t, which takes 8 bytes,
+        // and could thus overlap with stores/loads that are 7 bytes away at
+        // most.
+        constexpr int max_overlap_distance = 7;
+#ifdef DEBUG
+        // Making sure that {max_overlap_distance} is large enough for all array
+        // type, and that it's not larger that it has to be.
+        size_t max_required_size = 0;
+#define CHECK_ELEMENT_KIND(Type, type, TYPE, C_type)         \
+  static_assert(sizeof(C_type) <= max_overlap_distance + 1); \
+  max_required_size = std::max<size_t>(max_required_size, sizeof(C_type));
+        TYPED_ARRAYS(CHECK_ELEMENT_KIND)
+        DCHECK_EQ(max_overlap_distance, max_required_size);
+#undef CHECK_ELEMENT_KIND
+#endif
+        // TODO(dmercadier): we probably don't always need to invalidate at
+        // everyone of these offsets. For instance, when storing a Int64, it can
+        // only overlap with addresses that are further (so, range
+        // [offset,offset+7] would be enough, rather than [offset-7,offset+7]).
+        // For a Int32, we'd just need to invalidate at offsets
+        // {offset-4}U[offset,offset+3] (since in the "minus" direction, it can
+        // only invalidate a Int64 store/load, but no other Int32/Int16/Int8
+        // stores/loads).
+        for (int potentially_overlapping_offset =
+                 std::max<int32_t>(offset - max_overlap_distance, 0);
+             potentially_overlapping_offset <= offset + max_overlap_distance;
+             potentially_overlapping_offset++) {
+          InvalidateAtOffset(potentially_overlapping_offset, base);
         }
-        MapMaskAndOr this_maps = key.data().mem.base == base
-                                     ? base_maps
-                                     : object_maps_.Get(key.data().mem.base);
-        if (!is_empty(base_maps) && !is_empty(this_maps) &&
-            !CouldHaveSameMap(base_maps, this_maps)) {
-          ++it;
-          continue;
-        }
-        it = offset_keys->second.RemoveAt(it);
-        Set(key, OpIndex::Invalid());
       }
     }
   }
@@ -491,6 +518,33 @@ class MemoryContentTable
     Set(key, value);
   }
 
+  void InvalidateAtOffset(int32_t offset, OpIndex base) {
+    MapMaskAndOr base_maps = object_maps_.Get(base);
+    auto offset_keys = offset_keys_.find(offset);
+    if (offset_keys == offset_keys_.end()) return;
+    for (auto it = offset_keys->second.begin();
+         it != offset_keys->second.end();) {
+      Key key = *it;
+      DCHECK_EQ(offset, key.data().mem.offset);
+      // It can overwrite previous stores to any base (except non-aliasing
+      // ones).
+      if (non_aliasing_objects_.Get(key.data().mem.base)) {
+        ++it;
+        continue;
+      }
+      MapMaskAndOr this_maps = key.data().mem.base == base
+                                   ? base_maps
+                                   : object_maps_.Get(key.data().mem.base);
+      if (!is_empty(base_maps) && !is_empty(this_maps) &&
+          !CouldHaveSameMap(base_maps, this_maps)) {
+        ++it;
+        continue;
+      }
+      it = offset_keys->second.RemoveAt(it);
+      Set(key, OpIndex::Invalid());
+    }
+  }
+
   OpIndex ResolveBase(OpIndex base) {
     while (replacements_[base] != OpIndex::Invalid()) {
       base = replacements_[base];
@@ -558,6 +612,9 @@ class MemoryContentTable
 
   // List of all of the keys that have a valid index.
   DoublyThreadedList<Key, OffsetListTraits> index_keys_;
+
+  // See comment at the begining of this class about BaseTagging.
+  BaseTagging base_tagging_;
 };
 
 class LateLoadEliminationAnalyzer {
@@ -580,13 +637,17 @@ class LateLoadEliminationAnalyzer {
         replacements_(graph.op_id_count(), phase_zone),
         non_aliasing_objects_(graph, phase_zone),
         object_maps_(graph, phase_zone),
-        memory_content_(phase_zone, non_aliasing_objects_, object_maps_,
-                        replacements_),
-        opindex_to_memory_key_(graph.op_id_count(), phase_zone),
+        tagged_base_memory_(phase_zone, non_aliasing_objects_, object_maps_,
+                            replacements_,
+                            MemoryContentTable::BaseTagging::kTagged),
+        untagged_base_memory_(phase_zone, non_aliasing_objects_, object_maps_,
+                              replacements_,
+                              MemoryContentTable::BaseTagging::kUntagged),
         block_to_snapshot_mapping_(graph.block_count(), phase_zone),
         predecessor_alias_snapshots_(phase_zone),
         predecessor_maps_snapshots_(phase_zone),
-        predecessor_memory_snapshots_(phase_zone) {}
+        predecessor_tagged_base_memory_snapshots_(phase_zone),
+        predecessor_untagged_base_memory_snapshots_(phase_zone) {}
 
   void Run() {
     bool compute_start_snapshot = true;
@@ -623,9 +684,13 @@ class LateLoadEliminationAnalyzer {
             auto pred_snapshots =
                 block_to_snapshot_mapping_[loop_1st_pred->index()];
             non_aliasing_objects_.StartNewSnapshot(
-                std::get<0>(*pred_snapshots));
-            object_maps_.StartNewSnapshot(std::get<1>(*pred_snapshots));
-            memory_content_.StartNewSnapshot(std::get<2>(*pred_snapshots));
+                std::get<kAliasSnapshotOffset>(*pred_snapshots));
+            object_maps_.StartNewSnapshot(
+                std::get<kMapSnapshotOffset>(*pred_snapshots));
+            tagged_base_memory_.StartNewSnapshot(
+                std::get<kTaggedBaseSnapshotOffset>(*pred_snapshots));
+            untagged_base_memory_.StartNewSnapshot(
+                std::get<kUntaggedBaseSnapshotOffset>(*pred_snapshots));
 
             block_index = loop_header->index().id() - 1;
             compute_start_snapshot = false;
@@ -685,18 +750,23 @@ class LateLoadEliminationAnalyzer {
   // should be reasonably not-too-hard to track.
   AliasTable non_aliasing_objects_;
   MapTable object_maps_;
-  MemoryContentTable memory_content_;
-  FixedSidetable<base::Optional<MemoryKey>> opindex_to_memory_key_;
-  FixedSidetable<
-      base::Optional<std::tuple<AliasSnapshot, MapSnapshot, MemorySnapshot>>,
-      BlockIndex>
+  MemoryContentTable tagged_base_memory_;
+  MemoryContentTable untagged_base_memory_;
+  static constexpr uint32_t kAliasSnapshotOffset = 0;
+  static constexpr uint32_t kMapSnapshotOffset = 1;
+  static constexpr uint32_t kTaggedBaseSnapshotOffset = 2;
+  static constexpr uint32_t kUntaggedBaseSnapshotOffset = 3;
+  FixedSidetable<base::Optional<std::tuple<AliasSnapshot, MapSnapshot,
+                                           MemorySnapshot, MemorySnapshot>>,
+                 BlockIndex>
       block_to_snapshot_mapping_;
   // {predecessor_alias_napshots_}, {predecessor_maps_snapshots_} and
   // {predecessor_memory_snapshots_} are used as temporary vectors when starting
   // to process a block. We store them as members to avoid reallocation.
   ZoneVector<AliasSnapshot> predecessor_alias_snapshots_;
   ZoneVector<MapSnapshot> predecessor_maps_snapshots_;
-  ZoneVector<MemorySnapshot> predecessor_memory_snapshots_;
+  ZoneVector<MemorySnapshot> predecessor_tagged_base_memory_snapshots_;
+  ZoneVector<MemorySnapshot> predecessor_untagged_base_memory_snapshots_;
 };
 
 template <class Next>
