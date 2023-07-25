@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fe2c268_75c4d041",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-07-25T15:44:27Z",
+      "side": 1,
+      "message": "As discussed offline, instead of checking base taggness, I added a `can_overlap` field to LoadOp::Kind, which is set to true for LoadElement/StoreElement, but not for regular loads, which should allow to know if loads/stores can overlap or not. PTAL",
+      "revId": "a69e57232d67694eacd585ef27016e655f36c2fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
