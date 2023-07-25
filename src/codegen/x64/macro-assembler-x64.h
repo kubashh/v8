@@ -333,13 +333,59 @@ class V8_EXPORT_PRIVATE MacroAssembler
   SmiIndex SmiToIndex(Register dst, Register src, int shift);
 
   void JumpIfEqual(Register a, int32_t b, Label* dest) {
+    constexpr int kJccErratumAlignment = 32;
+    // `cmp` can have up to 10 bytes, `jmp` up to 6.
+    constexpr int kMaxCmpJmpLength = 16;
+
+    int pc_before = pc_offset();
+    int next_32b_boundary =
+        pc_before + (-pc_before & (kJccErratumAlignment - 1));
+    DCHECK_LE(pc_before, next_32b_boundary);
+
+    // Heuristic to reduce code-size increase: Align only backwards branches.
+    bool backwards = dest->is_bound();
+    bool fused_jump_may_cross_or_end_at_32b_boundary =
+        pc_before + kMaxCmpJmpLength >= next_32b_boundary;
+    if (backwards && fused_jump_may_cross_or_end_at_32b_boundary) {
+      Align(kJccErratumAlignment);
+      DCHECK_EQ(pc_offset(), next_32b_boundary);
+      pc_before = next_32b_boundary;
+      next_32b_boundary += kJccErratumAlignment;
+    }
+
     cmpl(a, Immediate(b));
     j(equal, dest);
+
+    DCHECK_LE(pc_offset() - pc_before, kMaxCmpJmpLength);
+    if (backwards) DCHECK_LT(pc_offset(), next_32b_boundary);
   }
 
   void JumpIfLessThan(Register a, int32_t b, Label* dest) {
+    constexpr int kJccErratumAlignment = 32;
+    // `cmp` can have up to 10 bytes, `jmp` up to 6.
+    constexpr int kMaxCmpJmpLength = 16;
+
+    int pc_before = pc_offset();
+    int next_32b_boundary =
+        pc_before + (-pc_before & (kJccErratumAlignment - 1));
+    DCHECK_LE(pc_before, next_32b_boundary);
+
+    // Heuristic to reduce code-size increase: Align only backwards branches.
+    bool backwards = dest->is_bound();
+    bool fused_jump_may_cross_or_end_at_32b_boundary =
+        pc_before + kMaxCmpJmpLength >= next_32b_boundary;
+    if (backwards && fused_jump_may_cross_or_end_at_32b_boundary) {
+      Align(kJccErratumAlignment);
+      DCHECK_EQ(pc_offset(), next_32b_boundary);
+      pc_before = next_32b_boundary;
+      next_32b_boundary += kJccErratumAlignment;
+    }
+
     cmpl(a, Immediate(b));
     j(less, dest);
+
+    DCHECK_LE(pc_offset() - pc_before, kMaxCmpJmpLength);
+    if (backwards) DCHECK_LT(pc_offset(), next_32b_boundary);
   }
 
   // Caution: if {reg} is a 32-bit negative int, it should be sign-extended to
