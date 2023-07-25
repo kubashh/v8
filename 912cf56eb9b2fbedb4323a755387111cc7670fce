@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a77a70c_3393ba29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-07-25T19:27:03Z",
+      "side": 1,
+      "message": "Shu, this CL is ready for review. Thanks!",
+      "revId": "912cf56eb9b2fbedb4323a755387111cc7670fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c98f03_5e51cbe3",
+        "filename": "src/builtins/set-is-subset-of.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-07-25T19:27:03Z",
+      "side": 1,
+      "message": "The only different line between slow path and fast path is this line (checking the existence of next value in the other table). I think it is not worth separating them. Let me know if you think differently.",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 69
+      },
+      "revId": "912cf56eb9b2fbedb4323a755387111cc7670fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
