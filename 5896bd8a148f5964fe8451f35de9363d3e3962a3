@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1d820b4_7d6e9e8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-07-25T11:42:15Z",
+      "side": 1,
+      "message": "LGTM \u0026 nits",
+      "revId": "5896bd8a148f5964fe8451f35de9363d3e3962a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10243c6c_2c0fa557",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-07-25T11:42:15Z",
+      "side": 1,
+      "message": "nit: What about `output_rep`? I think `rep` is almost always used as the abbreviation for representation.",
+      "range": {
+        "startLine": 721,
+        "startChar": 38,
+        "endLine": 721,
+        "endChar": 42
+      },
+      "revId": "5896bd8a148f5964fe8451f35de9363d3e3962a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d79c1d54_a8ff91ae",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-07-25T11:42:15Z",
+      "side": 1,
+      "message": "nit: `replacement_repr` and `output_repr`?",
+      "range": {
+        "startLine": 731,
+        "startChar": 37,
+        "endLine": 732,
+        "endChar": 60
+      },
+      "revId": "5896bd8a148f5964fe8451f35de9363d3e3962a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
