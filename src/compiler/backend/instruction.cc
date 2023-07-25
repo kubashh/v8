@@ -1234,8 +1234,8 @@ size_t FrameStateDescriptor::GetHeight() const {
 }
 
 size_t FrameStateDescriptor::GetSize() const {
-  return 1 + parameters_count() + locals_count() + stack_count() +
-         (HasContext() ? 1 : 0);
+  return (HasClosure() ? 1 : 0) + parameters_count() + locals_count() +
+         stack_count() + (HasContext() ? 1 : 0);
 }
 
 size_t FrameStateDescriptor::GetTotalSize() const {

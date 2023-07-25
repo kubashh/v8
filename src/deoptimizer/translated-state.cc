@@ -6,6 +6,7 @@
 
 #include <iomanip>
 
+#include "src/base/logging.h"
 #include "src/base/memory.h"
 #include "src/base/v8-fallthrough.h"
 #include "src/common/assert-scope.h"
@@ -854,10 +855,7 @@ TranslatedFrame TranslatedFrame::JavaScriptBuiltinContinuationWithCatchFrame(
 }
 
 int TranslatedFrame::GetValueCount() {
-  // The function is added to all frame state descriptors in
-  // InstructionSelector::AddInputsToFrameStateDescriptor.
   static constexpr int kTheFunction = 1;
-
   switch (kind()) {
     case kUnoptimizedFunction: {
       int parameter_count =
@@ -867,10 +865,8 @@ int TranslatedFrame::GetValueCount() {
       return height() + parameter_count + kTheContext + kTheFunction +
              kTheAccumulator;
     }
-
     case kInlinedExtraArguments:
-      return height() + kTheFunction;
-
+      return height();
     case kConstructCreateStub:
     case kConstructInvokeStub:
     case kBuiltinContinuation:
@@ -2375,6 +2371,58 @@ TranslatedFrame* TranslatedState::GetArgumentsInfoFromJSFrameIndex(
     }
   }
   return nullptr;
+}
+
+TranslatedState::ArgumentsInfo
+TranslatedState::GetArgumentsInfoFromJSFrameIndex(int jsframe_index) {
+  for (size_t i = 0; i < frames_.size(); i++) {
+    if (frames_[i].kind() == TranslatedFrame::kUnoptimizedFunction ||
+        frames_[i].kind() == TranslatedFrame::kJavaScriptBuiltinContinuation ||
+        frames_[i].kind() ==
+            TranslatedFrame::kJavaScriptBuiltinContinuationWithCatch) {
+      if (jsframe_index > 0) {
+        jsframe_index--;
+      } else {
+        int parameter_count = 0;
+        int extra_args_count = 0;
+        TranslatedFrame* extra_args_frame = nullptr;
+        // Check if it have extra arguments (over application).
+        if (i > 0 &&
+            frames_[i - 1].kind() == TranslatedFrame::kInlinedExtraArguments) {
+          extra_args_count = frames_[i - 1].height();
+          extra_args_frame = &(frames_[i - 1]);
+        }
+
+        // JavaScriptBuiltinContinuation frames that are not preceeded by
+        // a arguments adapter frame are currently only used by C++ API calls
+        // from TurboFan. Calls to C++ API functions from TurboFan need
+        // a special marker frame state, otherwise the API call wouldn't
+        // be shown in a stack trace.
+        if (frames_[i].kind() ==
+                TranslatedFrame::kJavaScriptBuiltinContinuation &&
+            frames_[i].shared_info()->IsDontAdaptArguments()) {
+          DCHECK(frames_[i].shared_info()->IsApiFunction());
+
+          // The argument count for this special case is always the second
+          // to last value in the TranslatedFrame. It should also always be
+          // {1}, as the GenericLazyDeoptContinuation builtin has one explicit
+          // argument (the result).
+          static constexpr int kTheContext = 1;
+          const int height = frames_[i].height() + kTheContext;
+          parameter_count = frames_[i].ValueAt(height - 1)->GetSmiValue();
+          DCHECK_EQ(parameter_count, JSParameterCount(1));
+        } else {
+          parameter_count =
+              frames_[i]
+                  .shared_info()
+                  ->internal_formal_parameter_count_without_receiver();
+        }
+        return ArgumentsInfo{&(frames_[i]), extra_args_frame, parameter_count,
+                             extra_args_count};
+      }
+    }
+  }
+  UNREACHABLE();
 }
 
 void TranslatedState::StoreMaterializedValuesAndDeopt(JavaScriptFrame* frame) {
