@@ -119,7 +119,7 @@ void MapCompare::Generate(Handle<Map> map) {
   }
 }
 
-Register MapCompare::GetMap() {
+Register MapCompare::RetrieveMap() {
   if (map_count_ == 1) {
     DCHECK_EQ(map_, Register::no_reg());
     // Load the map; the object is in register_for_map_compare_. This

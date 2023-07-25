@@ -94,7 +94,7 @@ inline MapCompare::MapCompare(MaglevAssembler* masm, Register object,
                               size_t map_count)
     : masm_(masm), object_(object), map_count_(map_count) {
   map_ = masm_->scratch_register_scope()->Acquire();
-  masm_->LoadMap(map_, object_);
+  masm_->LoadCompressedMap(map_, object_);
   USE(map_count_);
 }
 
@@ -105,7 +105,11 @@ void MapCompare::Generate(Handle<Map> map) {
   masm_->CmpTagged(map_, temp);
 }
 
-Register MapCompare::GetMap() { return map_; }
+Register MapCompare::RetrieveMap() {
+  Register temp = masm_->scratch_register_scope()->Acquire();
+  masm_->DecompressTagged(temp, map_);
+  return temp;
+}
 
 int MapCompare::TemporaryCount(size_t map_count) { return 1; }
 

@@ -125,7 +125,7 @@ void MapCompare::Generate(Handle<Map> map) {
   masm_->cmp(map_, temp);
 }
 
-Register MapCompare::GetMap() { return map_; }
+Register MapCompare::RetrieveMap() { return map_; }
 
 int MapCompare::TemporaryCount(size_t map_count) { return 1; }
 

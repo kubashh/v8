@@ -54,12 +54,14 @@ class MapCompare {
 
   inline void Generate(Handle<Map> map);
   inline Register GetObject() const { return object_; }
-  inline Register GetMap();
+  inline void JumpIfNotDeprecated(Label* out);
 
   // For counting the temporaries needed by the above operations:
   static inline int TemporaryCount(size_t map_count);
 
  private:
+  inline Register RetrieveMap();
+
   MaglevAssembler* masm_;
   const Register object_;
   const size_t map_count_;

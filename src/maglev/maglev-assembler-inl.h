@@ -209,6 +209,13 @@ class DeferredCodeInfoImpl final : public DeferredCodeInfo {
 
 }  // namespace detail
 
+inline void MapCompare::JumpIfNotDeprecated(Label* out) {
+  MaglevAssembler::ScratchRegisterScope scratch_scope(masm_);
+  Register map = RetrieveMap();
+  masm_->TestInt32AndJumpIfAllClear(FieldMemOperand(map, Map::kBitField3Offset),
+                                    Map::Bits3::IsDeprecatedBit::kMask, out);
+}
+
 template <typename Function, typename... Args>
 inline Label* MaglevAssembler::MakeDeferredCode(Function&& deferred_code_gen,
                                                 Args&&... args) {

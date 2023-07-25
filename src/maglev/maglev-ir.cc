@@ -1553,9 +1553,7 @@ void CheckMapsWithMigration::GenerateCode(MaglevAssembler* masm,
            CheckMapsWithMigration* node) {
           Label* deopt = __ GetDeoptLabel(node, DeoptimizeReason::kWrongMap);
           // If the map is not deprecated, we fail the map check.
-          __ TestInt32AndJumpIfAllClear(
-              FieldMemOperand(map_compare.GetMap(), Map::kBitField3Offset),
-              Map::Bits3::IsDeprecatedBit::kMask, deopt);
+          map_compare.JumpIfNotDeprecated(deopt);
 
           // Otherwise, try migrating the object.
           Register return_val = Register::no_reg();
