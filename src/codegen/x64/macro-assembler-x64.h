@@ -333,13 +333,11 @@ class V8_EXPORT_PRIVATE MacroAssembler
   SmiIndex SmiToIndex(Register dst, Register src, int shift);
 
   void JumpIfEqual(Register a, int32_t b, Label* dest) {
-    cmpl(a, Immediate(b));
-    j(equal, dest);
+    AlignedJumpIfForJccErratum(equal, a, b, dest);
   }
 
   void JumpIfLessThan(Register a, int32_t b, Label* dest) {
-    cmpl(a, Immediate(b));
-    j(less, dest);
+    AlignedJumpIfForJccErratum(less, a, b, dest);
   }
 
   // Caution: if {reg} is a 32-bit negative int, it should be sign-extended to
@@ -998,6 +996,51 @@ class V8_EXPORT_PRIVATE MacroAssembler
                      ArgumentsCountMode mode = kCountExcludesReceiver);
 
  private:
+  // Helper function to mitigate performance regression due to microcode update
+  // against Intel Skylake JCC Erratum.
+  void AlignedJumpIfForJccErratum(Condition cc, Register a, int32_t b,
+                                  Label* dest) {
+    // Intel CPUs based on the Skylake microarchitecture (many models from 2015
+    // to 2019) suffered from an erratum that got patched with a microcode
+    // update. Unfortunately, that introduced a potential performance regression
+    // of up to 35% in microbenchmarks and up to ~15% in JetStream 2 line items.
+    // The regression appears when (potentially macro-op fused) jump
+    // instructions cross or end at 32-byte boundaries.
+    // The recommended mitigation by Intel is to insert nops such that neither
+    // the compare nor jump cross this boundary.
+    // See https://www.intel.com/content/dam/support/us/en/documents/processors/
+    // mitigations-jump-conditional-code-erratum.pdf for details.
+
+    // TODO(dlehmann): Only enable if the CPU needs this mitigation.
+
+    constexpr int kJccErratumAlignment = 32;
+    int pc_before = pc_offset();
+    int next_32b_boundary = RoundUp(pc_before, kJccErratumAlignment);
+
+    // Heuristics to reduce code-size increase:
+    // - Align only backwards branches.
+    // - Align only jumps to small (likely inner) loops.
+    constexpr int kTenKb = 10 * 1024;
+    bool small_loop = dest->is_bound() && (pc_offset() - dest->pos()) < kTenKb;
+
+    constexpr int kMaxCmpImmJmpLength = /* cmpl */ 7 + /* j */ 6;
+    bool fused_jump_could_cross_or_end_at_32b_boundary =
+        pc_offset() + kMaxCmpImmJmpLength >= next_32b_boundary;
+
+    if (small_loop && fused_jump_could_cross_or_end_at_32b_boundary) {
+      Align(kJccErratumAlignment);
+      DCHECK_EQ(pc_offset(), next_32b_boundary);
+      pc_before = next_32b_boundary;
+      next_32b_boundary += kJccErratumAlignment;
+    }
+
+    cmpl(a, Immediate(b));
+    j(cc, dest);
+
+    DCHECK_LE(pc_offset() - pc_before, kMaxCmpImmJmpLength);
+    DCHECK_IMPLIES(small_loop, pc_offset() < next_32b_boundary);
+  }
+
   // Helper functions for generating invokes.
   void InvokePrologue(Register expected_parameter_count,
                       Register actual_parameter_count, InvokeType type);
