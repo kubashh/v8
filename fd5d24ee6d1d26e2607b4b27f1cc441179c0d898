@@ -16,6 +16,24 @@
       "message": "Could we get also a more stable test of this?",
       "revId": "fd5d24ee6d1d26e2607b4b27f1cc441179c0d898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05ce2acb_ad9b53ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-07-25T15:54:33Z",
+      "side": 1,
+      "message": "The test is kind of a fuzzer. If it runs long enough then it will fail consistently, but it will also use lots of resources. The idea was to run it only shortly each time, but with all bots together it gets good coverage.\n\nAre there better ways to test such a setup?",
+      "parentUuid": "99f4632b_d5e24353",
+      "revId": "fd5d24ee6d1d26e2607b4b27f1cc441179c0d898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
