@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac8ace6d_16d75465",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-07-25T12:44:02Z",
+      "side": 1,
+      "message": "Tobias, PTAL at PS2-4. PS1 is the original change already reviewed by Andreas.",
+      "revId": "926aaf4d518dff8f2f01b9cecb3d9a5d167d6ac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
