@@ -56,6 +56,30 @@
       },
       "revId": "84d81705369f6f11ea67507fe4d9c28faada0644",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c6ee4f4_fa2dee60",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4962,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-07-26T12:40:32Z",
+      "side": 1,
+      "message": "I think it would be slightly better, but it\u0027s not worth being incompatible with both the wasm decoder and the Turbofan IR.",
+      "parentUuid": "927e7264_d27b93b8",
+      "range": {
+        "startLine": 4962,
+        "startChar": 2,
+        "endLine": 4962,
+        "endChar": 9
+      },
+      "revId": "84d81705369f6f11ea67507fe4d9c28faada0644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
