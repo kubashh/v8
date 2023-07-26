@@ -52,6 +52,24 @@
       "parentUuid": "05ce2acb_ad9b53ee",
       "revId": "fd5d24ee6d1d26e2607b4b27f1cc441179c0d898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0eeddbb_afa57b97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-07-26T06:57:24Z",
+      "side": 1,
+      "message": "The reason why it\u0027s picked so low is that there are so many test runs on the bots anyways. So over all bots and over time there is good test coverage.\n\nThe problem is probably that the test may not fail at the correct CL, even though it will fail eventually. Would it be enough to extend the comment at the top?\n\nIt is not clear to me what a good number of runs would be, if we consider 2 too low. The problem this time was that the crash only happened with TurboFan, not with Liftoff. That\u0027s why I didn\u0027t find it locally. However, it took quite some runs to find a repro, and on debug mode the test is not fast at all...",
+      "parentUuid": "fc7db1c1_cbfc751d",
+      "revId": "fd5d24ee6d1d26e2607b4b27f1cc441179c0d898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
