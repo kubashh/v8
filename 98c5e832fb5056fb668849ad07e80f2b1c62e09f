@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e6a8cd3_81cc7da8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2023-07-26T02:02:56Z",
+      "side": 1,
+      "message": "Thanks Thibaud for reviewing this change!",
+      "revId": "98c5e832fb5056fb668849ad07e80f2b1c62e09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "533ea773_7048569b",
@@ -48,6 +65,30 @@
       "writtenOn": "2023-07-25T12:26:08Z",
       "side": 1,
       "message": "Can we not use the three-operand format here when AVX is supported, like in the AND case above?",
+      "range": {
+        "startLine": 5019,
+        "startChar": 9,
+        "endLine": 5019,
+        "endChar": 34
+      },
+      "revId": "98c5e832fb5056fb668849ad07e80f2b1c62e09f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fa9a678_c399ed12",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5019,
+      "author": {
+        "id": 1349169
+      },
+      "writtenOn": "2023-07-26T02:02:56Z",
+      "side": 1,
+      "message": "Does it mean using distinct dst and src1 at X64SAndNot? We probably can. I will change it in a follow-up CL.",
+      "parentUuid": "533ea773_7048569b",
       "range": {
         "startLine": 5019,
         "startChar": 9,
