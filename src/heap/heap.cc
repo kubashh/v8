@@ -6340,15 +6340,25 @@ class UnreachableObjectsFilter : public HeapObjectsFilter {
 
 HeapObjectIterator::HeapObjectIterator(
     Heap* heap, HeapObjectIterator::HeapObjectsFiltering filtering)
+    : HeapObjectIterator(
+          heap,
+          new SafepointScope(heap->isolate(),
+                             heap->isolate()->is_shared_space_isolate()
+                                 ? SafepointKind::kGlobal
+                                 : SafepointKind::kIsolate),
+          filtering) {}
+
+HeapObjectIterator::HeapObjectIterator(Heap* heap,
+                                       const SafepointScope& safepoint_scope,
+                                       HeapObjectsFiltering filtering)
+    : HeapObjectIterator(heap, nullptr, filtering) {}
+
+HeapObjectIterator::HeapObjectIterator(
+    Heap* heap, SafepointScope* safepoint_scope_or_nullptr,
+    HeapObjectsFiltering filtering)
     : heap_(heap),
-      safepoint_scope_(std::make_unique<SafepointScope>(
-          heap->isolate(), heap->isolate()->is_shared_space_isolate()
-                               ? SafepointKind::kGlobal
-                               : SafepointKind::kIsolate)),
-      filtering_(filtering),
-      filter_(nullptr),
-      space_iterator_(nullptr),
-      object_iterator_(nullptr) {
+      safepoint_scope_(safepoint_scope_or_nullptr),
+      filtering_(filtering) {
   heap_->MakeHeapIterable();
   // Start the iteration.
   space_iterator_ = new SpaceIterator(heap_);
