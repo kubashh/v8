@@ -16,6 +16,46 @@
       "message": "Nico, PTAL.",
       "revId": "84d81705369f6f11ea67507fe4d9c28faada0644",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64aa6719_25b47bec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-07-26T08:29:58Z",
+      "side": 1,
+      "message": "LGTM % minor comment",
+      "revId": "84d81705369f6f11ea67507fe4d9c28faada0644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "927e7264_d27b93b8",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4962,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-07-26T08:29:58Z",
+      "side": 1,
+      "message": "What\u0027s your opinion about using a `std::array\u003cuint8_t, kSimd128Size\u003e` here (and in all related places) instead? We could also make this a type alias.",
+      "range": {
+        "startLine": 4962,
+        "startChar": 2,
+        "endLine": 4962,
+        "endChar": 9
+      },
+      "revId": "84d81705369f6f11ea67507fe4d9c28faada0644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
