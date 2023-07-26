@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9142c26_3c6d6ede",
+        "filename": "src/builtins/set-is-subset-of.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-07-26T23:15:53Z",
+      "side": 1,
+      "message": "Don\u0027t think this include is necessary.",
+      "revId": "912cf56eb9b2fbedb4323a755387111cc7670fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8c98f03_5e51cbe3",
         "filename": "src/builtins/set-is-subset-of.tq",
         "patchSetId": 2
@@ -31,6 +48,30 @@
       "writtenOn": "2023-07-25T19:27:03Z",
       "side": 1,
       "message": "The only different line between slow path and fast path is this line (checking the existence of next value in the other table). I think it is not worth separating them. Let me know if you think differently.",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 69
+      },
+      "revId": "912cf56eb9b2fbedb4323a755387111cc7670fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efa40c56_d7cc1962",
+        "filename": "src/builtins/set-is-subset-of.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-07-26T23:15:53Z",
+      "side": 1,
+      "message": "Not sure what you mean by \"not worth separating them\", do you mean not worth having the fast path because only this line differs?\n\nThere are two differences:\n\n1. You can use the `Unmodified` versions of the iterators, which are faster.\n2. Instead of calling the `has` function, you can directly check for membership in the other `OrderedHashSet` or `OrderedHashMap`.\n\nMy intuition is the fast path is worth having for (2) alone. Calling a JS function is much slower than directly checking for membership in a table.",
+      "parentUuid": "f8c98f03_5e51cbe3",
       "range": {
         "startLine": 52,
         "startChar": 4,
