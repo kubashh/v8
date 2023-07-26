@@ -280,6 +280,7 @@ class V8_NODISCARD ShouldBeZeroOnReturnScope final {
 
 Object StackGuard::HandleInterrupts(InterruptLevel level) {
   TRACE_EVENT0("v8.execute", "V8.HandleInterrupts");
+  DisallowJavascriptExecution no_js(isolate_);
 
 #if DEBUG
   isolate_->heap()->VerifyNewSpaceTop();
