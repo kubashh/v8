@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc05f608_caf68818",
+        "filename": "src/builtins/set-is-subset-of.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-07-26T23:32:13Z",
+      "side": 1,
+      "message": "Done. I also noticed this #include in intersection method, so I removed it from there as well.",
+      "parentUuid": "a9142c26_3c6d6ede",
+      "revId": "912cf56eb9b2fbedb4323a755387111cc7670fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8c98f03_5e51cbe3",
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "Not sure what you mean by \"not worth separating them\", do you mean not worth having the fast path because only this line differs?\n\nThere are two differences:\n\n1. You can use the `Unmodified` versions of the iterators, which are faster.\n2. Instead of calling the `has` function, you can directly check for membership in the other `OrderedHashSet` or `OrderedHashMap`.\n\nMy intuition is the fast path is worth having for (2) alone. Calling a JS function is much slower than directly checking for membership in a table.",
       "parentUuid": "f8c98f03_5e51cbe3",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 69
+      },
+      "revId": "912cf56eb9b2fbedb4323a755387111cc7670fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b51dae15_cf238b1e",
+        "filename": "src/builtins/set-is-subset-of.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-07-26T23:32:13Z",
+      "side": 1,
+      "message": "Yes, I meant \"not worth having the fast path\". \nYour point makes sense. I changed the commit message and removed the fast path from it. Like other set methods, I will add the fast path in a separate CL after landing this one.",
+      "parentUuid": "efa40c56_d7cc1962",
       "range": {
         "startLine": 52,
         "startChar": 4,
