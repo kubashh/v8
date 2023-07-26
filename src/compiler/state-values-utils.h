@@ -99,10 +99,10 @@ class V8_EXPORT_PRIVATE StateValuesAccess {
     // Returns the number of empty nodes that were skipped over.
     size_t AdvanceTillNotEmpty();
 
+    iterator() : current_depth_(-1) {}
+
    private:
     friend class StateValuesAccess;
-
-    iterator() : current_depth_(-1) {}
     explicit iterator(Node* node);
 
     MachineType type();

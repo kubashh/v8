@@ -1082,13 +1082,17 @@ size_t InstructionSelectorT<TurbofanAdapter>::AddInputsToFrameStateDescriptor(
   DCHECK_EQ(values_descriptor->size(), 0u);
   values_descriptor->ReserveSize(descriptor->GetSize());
 
-  DCHECK_NOT_NULL(function);
-  entries += AddOperandToStateValueDescriptor(
-      values_descriptor, inputs, g, deduplicator, function,
-      MachineType::AnyTagged(), FrameStateInputKind::kStackSlot, zone);
+  if (descriptor->HasClosure()) {
+    DCHECK_NOT_NULL(function);
+    entries += AddOperandToStateValueDescriptor(
+        values_descriptor, inputs, g, deduplicator, function,
+        MachineType::AnyTagged(), FrameStateInputKind::kStackSlot, zone);
+  }
 
-  entries += AddInputsToFrameStateDescriptor(
-      values_descriptor, inputs, g, deduplicator, parameters, kind, zone);
+  if (descriptor->parameters_count() != 0) {
+    entries += AddInputsToFrameStateDescriptor(
+        values_descriptor, inputs, g, deduplicator, parameters, kind, zone);
+  }
 
   if (descriptor->HasContext()) {
     DCHECK_NOT_NULL(context);
@@ -4925,6 +4929,10 @@ FrameStateDescriptor* GetFrameStateDescriptorInternal(Zone* zone,
   DCHECK_EQ(FrameState::kFrameStateInputCount, state->InputCount());
   const FrameStateInfo& state_info = FrameStateInfoOf(state->op());
   int parameters = state_info.parameter_count();
+  if (parameters < 0) {
+    DCHECK_EQ(state_info.type(), FrameStateType::kInlinedExtraArguments);
+    parameters = 0;
+  }
   int locals = state_info.local_count();
   int stack = state_info.stack_count();
 

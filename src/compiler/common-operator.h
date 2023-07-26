@@ -710,6 +710,8 @@ class FrameState : public CommonNodeWrapperBase {
            result->opcode() == IrOpcode::kDeadValue);
     return result;
   }
+
+  Node* as_node() const { return node(); }
 };
 
 class StartNode final : public CommonNodeWrapperBase {

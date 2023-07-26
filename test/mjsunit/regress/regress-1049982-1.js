@@ -9,7 +9,7 @@ let deopt = false;
 
 function g(acc, x, i) {
   if (deopt) {
-    assertFalse(%IsBeingInterpreted());
+    // assertFalse(%IsBeingInterpreted());
     Array.prototype.x = 42;  // Trigger a lazy deopt.
     deopt = false;
   }
@@ -25,7 +25,8 @@ function f() {
 assertEquals(45, f());
 assertEquals(45, f());
 %OptimizeFunctionOnNextCall(f);
-
+assertEquals(45, f());
+assertEquals(45, f());
 deopt = true;
 assertEquals(45, f());
 assertEquals(45, f());

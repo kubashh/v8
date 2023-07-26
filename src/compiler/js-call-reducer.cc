@@ -4214,6 +4214,92 @@ Node* JSCallReducer::CheckArrayLength(Node* array, ElementsKind elements_kind,
       check, effect, control);
 }
 
+namespace {
+
+// int GetArgumentCount(FrameState frame_state) {
+//   int argc = 0;
+//   FrameState function_frame = frame_state;
+//   if (frame_state.frame_state_info().type() ==
+//       FrameStateType::kInlinedExtraArguments) {
+//     argc += frame_state.frame_state_info().parameter_count();
+//     function_frame = FrameState{frame_state.outer_frame_state()};
+//   }
+//   argc += function_frame.frame_state_info().parameter_count() - 1;
+//   return argc;
+// }
+
+class ArgumentsIterator {
+ public:
+  explicit ArgumentsIterator(FrameState frame_state) {
+    parameter_count_without_receiver_ =
+        frame_state.frame_state_info().parameter_count() - 1;
+    if (parameter_count_without_receiver_ > 0) {
+      StateValuesAccess parameters_access(frame_state.parameters());
+      args_it_ = parameters_access.begin_without_receiver();
+    }
+    FrameState outer_state{frame_state.outer_frame_state()};
+    FrameStateInfo outer_info = outer_state.frame_state_info();
+    if (outer_info.type() == FrameStateType::kInlinedExtraArguments) {
+      extra_argument_count_ = outer_state.frame_state_info().parameter_count();
+      StateValuesAccess extra_arguments_access(outer_state.parameters());
+      extra_args_it_ = extra_arguments_access.begin();
+    }
+
+    // Get to the actual frame state from which to extract the arguments;
+    // we can only optimize this in case the {node} was already inlined into
+    // some other function (and same for the {arg_array}).
+    // FrameState outer_state{frame_state.outer_frame_state()};
+    // FrameStateInfo outer_info = outer_state.frame_state_info();
+    // if (outer_info.type() == FrameStateType::kInlinedExtraArguments) {
+    //   // Need to take the parameters from the inlined extra arguments frame
+    //   state. frame_state = outer_state;
+    // }
+    // Add the actual parameters to the {node}, skipping the receiver.
+    // StateValuesAccess parameters_access(frame_state.parameters());
+
+    // extra_argument_count_ = extra_state.frame_state_info().parameter_count();
+
+    // StateValuesAccess extra_arguments_access(extra_state.parameters());
+    // extra_args_it_ = extra_arguments_access.begin();
+  }
+
+  ArgumentsIterator& operator++() {
+    Advance();
+    return *this;
+  }
+
+  bool done() { return args_it_.done() && extra_args_it_.done(); }
+
+  Node* node() {
+    if (!args_it_.done()) {
+      return args_it_.node();
+    }
+    return extra_args_it_.node();
+  }
+
+  int argument_count() const {
+    return parameter_count_without_receiver_ + extra_argument_count_;
+  }
+
+ private:
+  StateValuesAccess::iterator args_it_;
+  StateValuesAccess::iterator extra_args_it_;
+  int parameter_count_without_receiver_ = 0;
+  int extra_argument_count_ = 0;
+
+  void Advance() {
+    if (!args_it_.done()) {
+      ++args_it_;
+      return;
+    }
+    DCHECK(args_it_.done());
+    DCHECK(!extra_args_it_.done());
+    ++extra_args_it_;
+  }
+};
+
+}  // namespace
+
 Reduction
 JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpreadOfCreateArguments(
     Node* node, Node* arguments_list, int arraylike_or_spread_index,
@@ -4357,15 +4443,20 @@ JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpreadOfCreateArguments(
   // Get to the actual frame state from which to extract the arguments;
   // we can only optimize this in case the {node} was already inlined into
   // some other function (and same for the {arg_array}).
-  FrameState outer_state{frame_state.outer_frame_state()};
-  FrameStateInfo outer_info = outer_state.frame_state_info();
-  if (outer_info.type() == FrameStateType::kInlinedExtraArguments) {
-    // Need to take the parameters from the inlined extra arguments frame state.
-    frame_state = outer_state;
-  }
+  // FrameState outer_state{frame_state.outer_frame_state()};
+  // FrameStateInfo outer_info = outer_state.frame_state_info();
+  // if (outer_info.type() == FrameStateType::kInlinedExtraArguments) {
+  //   // Need to take the parameters from the inlined extra arguments frame
+  //   state. frame_state = outer_state;
+  // }
   // Add the actual parameters to the {node}, skipping the receiver.
-  StateValuesAccess parameters_access(frame_state.parameters());
-  for (auto it = parameters_access.begin_without_receiver_and_skip(start_index);
+  // StateValuesAccess parameters_access(frame_state.parameters());
+  ArgumentsIterator it(frame_state);
+  for (int i = 0; i < start_index && !it.done(); i++) {
+    ++it;
+  }
+  for (;  // auto it =
+          // parameters_access.begin_without_receiver_and_skip(start_index);
        !it.done(); ++it) {
     DCHECK_NOT_NULL(it.node());
     node->InsertInput(graph()->zone(),
