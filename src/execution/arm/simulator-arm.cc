@@ -758,6 +758,10 @@ void Simulator::set_register(int reg, int32_t value) {
     pc_modified_ = true;
   }
   registers_[reg] = value;
+  if (v8_flags.trace_sim) {
+    PrintF("\tset_register %s: 0x%08x %d\n", Registers::Name(reg), value,
+           value);
+  }
 }
 
 // Get the register from the architecture state. This function does handle
@@ -768,6 +772,10 @@ int32_t Simulator::get_register(int reg) const {
   // See: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43949
   if (reg >= num_registers) return 0;
   // End stupid code.
+  if (v8_flags.trace_sim && reg != pc) {
+    PrintF("\tget_register %s: 0x%08x %d\n", Registers::Name(reg),
+           registers_[reg], registers_[reg]);
+  }
   return registers_[reg] + ((reg == pc) ? Instruction::kPcLoadDelta : 0);
 }
 
@@ -968,7 +976,11 @@ int Simulator::ReadW(int32_t addr) {
   // check the alignment here.
   base::MutexGuard lock_guard(&GlobalMonitor::Get()->mutex);
   local_monitor_.NotifyLoad(addr);
-  return base::ReadUnalignedValue<intptr_t>(addr);
+  auto value = base::ReadUnalignedValue<intptr_t>(addr);
+  if (v8_flags.trace_sim) {
+    PrintF("\tReadW: value:%x <- addr: %x\n", value, addr);
+  }
+  return value;
 }
 
 int Simulator::ReadExW(int32_t addr) {
@@ -985,6 +997,9 @@ void Simulator::WriteW(int32_t addr, int value) {
   local_monitor_.NotifyStore(addr);
   GlobalMonitor::Get()->NotifyStore_Locked(addr, &global_monitor_processor_);
   base::WriteUnalignedValue<intptr_t>(addr, value);
+  if (v8_flags.trace_sim) {
+    PrintF("\tWriteW: value: %x -> addr: %x\n", addr, value);
+  }
 }
 
 int Simulator::WriteExW(int32_t addr, int value) {
