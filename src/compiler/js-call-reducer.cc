@@ -4348,24 +4348,15 @@ JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpreadOfCreateArguments(
     NodeProperties::ChangeOp(node, op);
     return Changed(node);
   }
-  // Get to the actual frame state from which to extract the arguments;
-  // we can only optimize this in case the {node} was already inlined into
-  // some other function (and same for the {arg_array}).
-  FrameState outer_state{frame_state.outer_frame_state()};
-  FrameStateInfo outer_info = outer_state.frame_state_info();
-  if (outer_info.type() == FrameStateType::kInlinedExtraArguments) {
-    // Need to take the parameters from the inlined extra arguments frame state.
-    frame_state = outer_state;
+  ArgumentsIterator it(frame_state);
+  for (int i = 0; i < start_index && !it.done(); i++) {
+    ++it;
   }
-  // Add the actual parameters to the {node}, skipping the receiver.
-  StateValuesAccess parameters_access(frame_state.parameters());
-  for (auto it = parameters_access.begin_without_receiver_and_skip(start_index);
-       !it.done(); ++it) {
+  for (; !it.done(); ++it) {
     DCHECK_NOT_NULL(it.node());
     node->InsertInput(graph()->zone(),
                       JSCallOrConstructNode::ArgumentIndex(argc++), it.node());
   }
-
   if (IsCallWithArrayLikeOrSpread(node)) {
     NodeProperties::ChangeOp(
         node, javascript()->Call(JSCallNode::ArityForArgc(argc), frequency,

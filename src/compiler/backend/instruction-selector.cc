@@ -1024,9 +1024,11 @@ size_t InstructionSelectorT<TurboshaftAdapter>::AddInputsToFrameStateDescriptor(
   }
 
   // Parameters
-  for (size_t i = 0; i < descriptor->parameters_count(); ++i) {
-    entries += v8::internal::compiler::AddOperandToStateValueDescriptor(
-        this, values_descriptor, inputs, g, deduplicator, &it, kind, zone);
+  if (descriptor->parameters_count() != 0) {
+    for (size_t i = 0; i < descriptor->parameters_count(); ++i) {
+      entries += v8::internal::compiler::AddOperandToStateValueDescriptor(
+          this, values_descriptor, inputs, g, deduplicator, &it, kind, zone);
+    }
   }
 
   // Context
@@ -1091,8 +1093,10 @@ size_t InstructionSelectorT<TurbofanAdapter>::AddInputsToFrameStateDescriptor(
         MachineType::AnyTagged(), FrameStateInputKind::kStackSlot, zone);
   }
 
-  entries += AddInputsToFrameStateDescriptor(
-      values_descriptor, inputs, g, deduplicator, parameters, kind, zone);
+  if (descriptor->parameters_count() != 0) {
+    entries += AddInputsToFrameStateDescriptor(
+        values_descriptor, inputs, g, deduplicator, parameters, kind, zone);
+  }
 
   if (descriptor->HasContext()) {
     DCHECK_NOT_NULL(context);
@@ -4935,6 +4939,10 @@ FrameStateDescriptor* GetFrameStateDescriptorInternal(Zone* zone,
   DCHECK_EQ(FrameState::kFrameStateInputCount, state->InputCount());
   const FrameStateInfo& state_info = FrameStateInfoOf(state->op());
   int parameters = state_info.parameter_count();
+  if (parameters < 0) {
+    DCHECK_EQ(state_info.type(), FrameStateType::kInlinedExtraArguments);
+    parameters = 0;
+  }
   int locals = state_info.local_count();
   int stack = state_info.stack_count();
 
