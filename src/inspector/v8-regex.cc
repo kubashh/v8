@@ -79,10 +79,13 @@ int V8Regex::match(const String16& string, int startFrom,
   v8::Local<v8::Value> argv[] = {
       toV8String(isolate, string.substring(startFrom))};
   v8::Local<v8::Value> returnValue;
-  if (!exec.As<v8::Function>()
-           ->Call(context, regex, arraysize(argv), argv)
-           .ToLocal(&returnValue))
-    return -1;
+  {
+    v8::Isolate::AllowJavascriptExecutionScope allow_js(isolate);
+    if (!exec.As<v8::Function>()
+             ->Call(context, regex, arraysize(argv), argv)
+             .ToLocal(&returnValue))
+      return -1;
+  }
 
   // RegExp#exec returns null if there's no match, otherwise it returns an
   // Array of strings with the first being the whole match string and others

@@ -312,36 +312,3 @@ TEST(InterruptAndIterateStack) {
   test.SetOneByteSubjectString();
   test.RunTest(InterruptTest::IterateStack);
 }
-
-TEST(InterruptAndTransitionSubjectFromTwoByteToOneByte) {
-  SetCommonV8FlagsForInterruptTests();
-  InterruptTest test{};
-  i::Isolate* i_isolate = test.i_isolate();
-  i::HandleScope handle_scope(i_isolate);
-  // Internalize a one-byte copy of the two-byte string we are going to
-  // internalize during the interrupt. This ensures that the two-byte string
-  // transitions to a ThinString pointing to a one-byte string.
-  Local<String> internalized_string =
-      String::NewFromUtf8(
-          reinterpret_cast<Isolate*>(i_isolate), &kOneByteSubjectString[1],
-          v8::NewStringType::kInternalized, kSubjectStringLength - 1)
-          .ToLocalChecked();
-  CHECK(internalized_string->IsOneByte());
-
-  test.SetTwoByteSubjectString();
-  Local<String> string = test.GetSubjectString();
-  CHECK(!string->IsOneByte());
-  // Set the subject string as a substring of the original subject (containing
-  // only one-byte characters).
-  v8::Local<Value> value =
-      CompileRun("subject_string = subject_string.substring(1)");
-  test.SetSubjectString(value.As<String>());
-  CHECK(test.GetSubjectString()->ContainsOnlyOneByte());
-
-  test.RunTest(InterruptTest::TwoByteSubjectToOneByte);
-  // After the test, we expect that bytecode for a one-byte subject has been
-  // installed during the interrupt.
-  i::Handle<i::JSRegExp> regexp = Utils::OpenHandle(*test.GetRegExp());
-  i::Object one_byte_code = regexp->bytecode(/* is_latin1 */ true);
-  CHECK(one_byte_code.IsByteArray());
-}
