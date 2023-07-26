@@ -5,6 +5,9 @@
 #ifndef V8_MAGLEV_MAGLEV_INTERPRETER_FRAME_STATE_H_
 #define V8_MAGLEV_MAGLEV_INTERPRETER_FRAME_STATE_H_
 
+#include <initializer_list>
+#include <memory>
+
 #include "src/base/logging.h"
 #include "src/base/threaded-list.h"
 #include "src/compiler/bytecode-analysis.h"
@@ -64,63 +67,201 @@ void DestructivelyIntersect(ZoneMap<Key, Value>& lhs_map,
   }
 }
 
-struct NodeInfo {
-  NodeType type = NodeType::kUnknown;
+class NodeInfo {
+ public:
+  NodeInfo() = default;
+
+  NodeInfo& operator=(const NodeInfo& other) = delete;
+  NodeInfo(NodeInfo&& other) = delete;
+  NodeInfo& operator=(NodeInfo&& other) = delete;
+
+  NodeType type() const { return type_; }
+  NodeType set_type(NodeType new_type) { return type_ = new_type; }
+  NodeType CombineType(NodeType other) {
+    return type_ = maglev::CombineType(type_, other);
+  }
+  NodeType IntersectType(NodeType other) {
+    return type_ = maglev::IntersectType(type_, other);
+  }
 
   // Optional alternative nodes with the equivalent value but a different
   // representation.
   // TODO(leszeks): At least one of these is redundant for every node, consider
   // a more compressed form or even linked list.
-  ValueNode* tagged_alternative = nullptr;
-  ValueNode* int32_alternative = nullptr;
-  ValueNode* float64_alternative = nullptr;
-  ValueNode* constant_alternative = nullptr;
-  // Alternative nodes with a value equivalent to the ToNumber of this node.
-  ValueNode* truncated_int32_to_number = nullptr;
+  class Alternative {
+   public:
+    enum Kind {
+      kTagged,
+      kInt32,
+      kTruncatedInt32ToNumber,
+      kFloat64,
+      kConstant,
+      kNumberOfAlternativeKinds,
+    };
+
+    template <Kind kind>
+    bool has() const {
+      static_assert(kind < Kind::kNumberOfAlternativeKinds);
+      return values_[static_cast<int>(kind)];
+    }
+
+    template <Kind kind>
+    ValueNode* get() const {
+      static_assert(kind < Kind::kNumberOfAlternativeKinds);
+      CHECK(has<kind>());
+      return values_[static_cast<int>(kind)];
+    }
+
+    template <Kind... kinds>
+    base::Optional<ValueNode*> try_get() const {
+      return GetAnyImpl<kinds...>::result(*this);
+    }
+
+    template <Kind kind>
+    ValueNode* set(ValueNode* t) {
+      static_assert(kind < Kind::kNumberOfAlternativeKinds);
+      DCHECK(!has<kind>());
+      values_[static_cast<int>(kind)] = t;
+      return t;
+    }
+
+    template <Kind kind>
+    ValueNode* get_or_set(const std::function<ValueNode*()>& create) {
+      static_assert(kind < Kind::kNumberOfAlternativeKinds);
+      if (has<kind>()) {
+        return get<kind>();
+      }
+      return set<kind>(create());
+    }
+
+    Alternative() { values_.fill(nullptr); }
+
+    bool is_empty() const { return values_ == Alternative().values_; }
+
+    void MergeWith(const Alternative& other) {
+      for (int i = 0; i < static_cast<int>(Kind::kNumberOfAlternativeKinds);
+           ++i) {
+        if (values_[i] != other.values_[i]) {
+          values_[i] = nullptr;
+        }
+      }
+    }
+
+   private:
+    template <Kind... kinds>
+    struct GetAnyImpl;
+    template <>
+    struct GetAnyImpl<> {
+      static base::Optional<ValueNode*> result(const Alternative& a) {
+        return {};
+      }
+    };
+    template <Kind kind, Kind... kinds>
+    struct GetAnyImpl<kind, kinds...> {
+      static base::Optional<ValueNode*> result(const Alternative& a) {
+        return a.has<kind>() ? a.get<kind>() : GetAnyImpl<kinds...>::result(a);
+      }
+    };
+
+    std::array<ValueNode*, static_cast<int>(Kind::kNumberOfAlternativeKinds)>
+        values_;
+  };
+
+  const Alternative& alternative() const { return alternative_; }
+  Alternative& alternative() { return alternative_; }
 
   bool is_empty() const {
-    return type == NodeType::kUnknown && tagged_alternative == nullptr &&
-           int32_alternative == nullptr && float64_alternative == nullptr &&
-           truncated_int32_to_number == nullptr &&
-           constant_alternative == nullptr;
+    return type_ == NodeType::kUnknown && alternative_.is_empty() &&
+           !possible_maps_;
   }
 
-  bool is_smi() const { return NodeTypeIsSmi(type); }
-  bool is_any_heap_object() const { return NodeTypeIsAnyHeapObject(type); }
-  bool is_string() const { return NodeTypeIsString(type); }
+  bool is_smi() const { return NodeTypeIsSmi(type_); }
+  bool is_any_heap_object() const { return NodeTypeIsAnyHeapObject(type_); }
+  bool is_string() const { return NodeTypeIsString(type_); }
   bool is_internalized_string() const {
-    return NodeTypeIsInternalizedString(type);
+    return NodeTypeIsInternalizedString(type_);
   }
-  bool is_symbol() const { return NodeTypeIsSymbol(type); }
-  bool is_constant() const { return constant_alternative != nullptr; }
+  bool is_symbol() const { return NodeTypeIsSymbol(type_); }
 
   // Mutate this node info by merging in another node info, with the result
   // being a node info that is the subset of information valid in both inputs.
-  void MergeWith(const NodeInfo& other) {
-    type = IntersectType(type, other.type);
-    tagged_alternative = tagged_alternative == other.tagged_alternative
-                             ? tagged_alternative
-                             : nullptr;
-    int32_alternative = int32_alternative == other.int32_alternative
-                            ? int32_alternative
-                            : nullptr;
-    float64_alternative = float64_alternative == other.float64_alternative
-                              ? float64_alternative
-                              : nullptr;
-    constant_alternative = constant_alternative == other.constant_alternative
-                               ? constant_alternative
-                               : nullptr;
-    truncated_int32_to_number =
-        truncated_int32_to_number == other.truncated_int32_to_number
-            ? truncated_int32_to_number
-            : nullptr;
+  void MergeWith(const NodeInfo& other, bool& any_merged_map_is_unstable,
+                 Zone* zone) {
+    IntersectType(other.type_);
+    alternative_.MergeWith(other.alternative_);
+    if (other.possible_maps_) {
+      if (!possible_maps_) {
+        possible_maps_.reset(new PossibleMaps());
+      }
+      // Map sets are the set of _possible_ maps, so on a merge we need to
+      // _union_ them together (i.e. intersect the set of impossible maps).
+      // Remember whether _any_ of these merges observed unstable maps.
+      possible_maps_->Union(*other.possible_maps_, zone);
+    }
+
+    any_map_is_unstable_ = any_map_is_unstable_ || other.any_map_is_unstable_;
+    any_merged_map_is_unstable =
+        any_merged_map_is_unstable || any_map_is_unstable_;
   }
+
+  using PossibleMaps = compiler::ZoneRefSet<Map>;
+  NodeInfo(const NodeInfo& other) V8_NOEXCEPT {
+    type_ = other.type_;
+    alternative_ = other.alternative_;
+    // A side effect could change existing objects' maps. For stable maps we
+    // know this hasn't happened (because we added a dependency on the maps
+    // staying stable and therefore not possible to transition away from), but
+    // we can no longer assume that objects with unstable maps still have the
+    // same map. Unstable maps can also transition to stable ones, so we have to
+    // clear _all_ maps for a node if it had _any_ unstable map.
+    if (other.possible_maps_ && !other.any_map_is_unstable_) {
+      possible_maps_.reset(new PossibleMaps());
+      *possible_maps_ = *other.possible_maps_;
+    }
+  }
+
+  void ClearUnstableMaps() {
+    if (any_map_is_unstable_) {
+      possible_maps_.reset();
+    }
+    any_map_is_unstable_ = false;
+  }
+
+  bool possible_maps_are_unstable() const { return any_map_is_unstable_; }
+
+  bool possible_maps_are_known() const { return !!possible_maps_; }
+
+  const PossibleMaps& possible_maps() const {
+    CHECK(possible_maps_);
+    return *possible_maps_;
+  }
+
+  void set_possible_maps(std::unique_ptr<PossibleMaps> possible_maps,
+                         bool any_map_is_unstable) {
+    possible_maps_ = std::move(possible_maps);
+    any_map_is_unstable_ = any_map_is_unstable;
+  }
+
+  void set_possible_maps(compiler::MapRef map, bool any_map_is_unstable) {
+    set_possible_maps(std::make_unique<PossibleMaps>(map), any_map_is_unstable);
+  }
+
+ private:
+  NodeType type_ = NodeType::kUnknown;
+
+  // Maps for a node. Sets of maps that only contain stable maps are valid
+  // across side-effecting calls, as long as we install a dependency, otherwise
+  // they are cleared on side-effects.
+  // TODO(v8:7700): Investigate a better data structure to use than ZoneMap.
+  std::unique_ptr<PossibleMaps> possible_maps_;
+  bool any_map_is_unstable_ = false;
+
+  Alternative alternative_;
 };
 
 struct KnownNodeAspects {
   explicit KnownNodeAspects(Zone* zone)
       : node_infos(zone),
-        possible_maps(zone),
         any_map_for_any_node_is_unstable(false),
         loaded_constant_properties(zone),
         loaded_properties(zone),
@@ -143,12 +284,8 @@ struct KnownNodeAspects {
   // calls, and we don't know about these until it's too late.
   KnownNodeAspects* CloneForLoopHeader(Zone* zone) const {
     KnownNodeAspects* clone = zone->New<KnownNodeAspects>(zone);
-    clone->node_infos = node_infos;
-    clone->possible_maps = possible_maps;
-    if (any_map_for_any_node_is_unstable) {
-      clone->any_map_for_any_node_is_unstable = true;
-      clone->ClearUnstableMaps();
-      DCHECK(!clone->any_map_for_any_node_is_unstable);
+    for (const auto& it : node_infos) {
+      clone->node_infos.emplace(it.first, it.second);
     }
     clone->loaded_constant_properties = loaded_constant_properties;
     clone->loaded_context_constants = loaded_context_constants;
@@ -163,12 +300,8 @@ struct KnownNodeAspects {
     // same map. Unstable maps can also transition to stable ones, so we have to
     // clear _all_ maps for a node if it had _any_ unstable map.
     if (!any_map_for_any_node_is_unstable) return;
-    for (auto it = possible_maps.begin(); it != possible_maps.end();) {
-      if (it->second.any_map_is_unstable) {
-        it = possible_maps.erase(it);
-      } else {
-        ++it;
-      }
+    for (auto it : node_infos) {
+      it.second.ClearUnstableMaps();
     }
     any_map_for_any_node_is_unstable = false;
   }
@@ -194,6 +327,13 @@ struct KnownNodeAspects {
   }
   NodeInfo* GetOrCreateInfoFor(ValueNode* node) { return &node_infos[node]; }
 
+  NodeType NodeTypeFor(ValueNode* node) const {
+    if (auto info = TryGetInfoFor(node)) {
+      return info->type();
+    }
+    return NodeType::kUnknown;
+  }
+
   void Merge(const KnownNodeAspects& other, Zone* zone);
 
   // TODO(leszeks): Store these more efficiently than with std::map -- in
@@ -201,20 +341,9 @@ struct KnownNodeAspects {
   // allow lookup by interpreter register rather than by node pointer.
 
   // Permanently valid if checked in a dominator.
-  ZoneMap<ValueNode*, NodeInfo> node_infos;
+  using NodeInfos = ZoneMap<ValueNode*, NodeInfo>;
+  NodeInfos node_infos;
 
-  struct PossibleMaps {
-    // TODO(v8:7700): Investigate a better data structure to use than
-    // compiler::ZoneRefSet.
-    compiler::ZoneRefSet<Map> possible_maps;
-    // TODO(leszeks): Consider storing this in a more compact way.
-    bool any_map_is_unstable;
-  };
-  // Maps for a node. Sets of maps that only contain stable maps are valid
-  // across side-effecting calls, as long as we install a dependency, otherwise
-  // they are cleared on side-effects.
-  // TODO(v8:7700): Investigate a better data structure to use than ZoneMap.
-  ZoneMap<ValueNode*, PossibleMaps> possible_maps;
   bool any_map_for_any_node_is_unstable;
 
   // Cached property loads.
@@ -644,9 +773,12 @@ class MergePointInterpreterFrameState {
     using List = base::ThreadedList<Alternatives>;
 
     explicit Alternatives(const NodeInfo* node_info)
-        : node_type_(node_info ? node_info->type : NodeType::kUnknown),
-          tagged_alternative_(node_info ? node_info->tagged_alternative
-                                        : nullptr) {}
+        : node_type_(node_info ? node_info->type() : NodeType::kUnknown),
+          tagged_alternative_(
+              node_info ? node_info->alternative()
+                              .try_get<NodeInfo::Alternative::kTagged>()
+                              .value_or(nullptr)
+                        : nullptr) {}
 
     NodeType node_type() const { return node_type_; }
     ValueNode* tagged_alternative() const { return tagged_alternative_; }
