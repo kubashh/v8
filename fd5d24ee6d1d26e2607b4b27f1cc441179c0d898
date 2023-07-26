@@ -70,6 +70,24 @@
       "parentUuid": "fc7db1c1_cbfc751d",
       "revId": "fd5d24ee6d1d26e2607b4b27f1cc441179c0d898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "414afbce_0cb1fdc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-07-26T07:27:37Z",
+      "side": 1,
+      "message": "@Liviu, could you run a query to get the slowest runs of this test from the data of e.g. one day and see how slow it is?\n\n@Andreas: If there\u0027s room (depends on the query results) we could maybe increase the amounts of testing. Or we could have a parameterized version of this test that only runs on a particular bot with a lot of repetitions?\n\nDoes it make sense to add stable regression tests for the bugs this random testing finds?",
+      "parentUuid": "a0eeddbb_afa57b97",
+      "revId": "fd5d24ee6d1d26e2607b4b27f1cc441179c0d898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
