@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86ed9802_c8dd88c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-26T13:14:55Z",
+      "side": 1,
+      "message": "LGTM. Now I think I could potentially do a similar CL for the int64 lowering reducer as that also uses a large amount of Opindex nodes for which we know that they are / should be `V\u003cWord32\u003e`. I\u0027ll add a TODO with a question mark to my reducer. 😊",
+      "revId": "ba477454c57b8f5aa55295c0e7af222f806aff94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
