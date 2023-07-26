@@ -71,6 +71,9 @@ void AssemblerRISCVI::lh(Register rd, Register rs1, int16_t imm12) {
 }
 
 void AssemblerRISCVI::lw(Register rd, Register rs1, int16_t imm12) {
+  if (rd == s3 && rs1 == fp && imm12 == -204) {
+    std::cout << "lw        s3, -204(fp)" << std::endl;
+  }
   GenInstrLoad_ri(0b010, rd, rs1, imm12);
 }
 
