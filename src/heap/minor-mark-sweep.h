@@ -23,8 +23,8 @@
 namespace v8 {
 namespace internal {
 
-using YoungGenerationMainMarkingVisitor =
-    YoungGenerationMarkingVisitor<YoungGenerationMarkingVisitorMode::kParallel>;
+using YoungGenerationMainMarkingVisitor = YoungGenerationMarkingVisitor<
+    YoungGenerationMarkingVisitorMode::kConcurrent>;
 
 class YoungGenerationRememberedSetsMarkingWorklist {
  private:
