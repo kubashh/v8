@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a61c34fd_a4aeabd7",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-07-27T19:31:33Z",
+      "side": 0,
+      "message": "In order to use this getter we would need to split up marking initialization even further which seems less readable then querying the value from Heap here.",
+      "range": {
+        "startLine": 650,
+        "startChar": 14,
+        "endLine": 650,
+        "endChar": 36
+      },
+      "revId": "a45cfcf8253dc7cc16301bbff2baafadbed715fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
