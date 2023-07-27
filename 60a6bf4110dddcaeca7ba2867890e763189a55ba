@@ -16,6 +16,40 @@
       "message": "This CL is ready for review. Thanks!",
       "revId": "60a6bf4110dddcaeca7ba2867890e763189a55ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b61e5d56_37936ea1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-07-27T23:30:00Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "60a6bf4110dddcaeca7ba2867890e763189a55ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fc39e6a_7ed0843e",
+        "filename": "src/builtins/set-is-superset-of.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-07-27T23:30:00Z",
+      "side": 1,
+      "message": "Are these auto-inserted? I\u0027ve been noticing auto-insertions for `#include`s myself after I switched to VSCode... should track down that configuration option.",
+      "revId": "60a6bf4110dddcaeca7ba2867890e763189a55ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
