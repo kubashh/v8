@@ -29,7 +29,6 @@ transitioning javascript builtin SetPrototypeIsSubsetOf(
   if (thisSize > Convert<int32>(otherRec.size)) {
     return False;
   }
-
   // 6. Let index be 0.
   let thisIter = collections::NewOrderedHashSetIterator(table);
   let key: JSAny;
