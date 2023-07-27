@@ -228,7 +228,7 @@ ConcurrentMarking::ConcurrentMarking(Heap* heap, WeakObjects* weak_objects)
     major_task_state_.emplace_back(std::make_unique<MajorTaskState>());
   }
 
-  if (v8_flags.minor_ms && v8_flags.concurrent_minor_ms_marking) {
+  if (v8_flags.minor_ms) {
     minor_task_state_.reserve(max_tasks + 1);
     for (int i = 0; i <= max_tasks; ++i) {
       minor_task_state_.emplace_back(std::make_unique<MinorTaskState>());
@@ -519,8 +519,13 @@ void ConcurrentMarking::TryScheduleJob(GarbageCollector garbage_collector,
                        }));
     marking_worklists_ =
         heap_->minor_mark_sweep_collector()->marking_worklists();
-    job_handle_ = V8::GetCurrentPlatform()->PostJob(
-        priority, std::make_unique<JobTaskMinor>(this));
+    auto job = std::make_unique<JobTaskMinor>(this);
+    if (heap_->tracer()->IsInAtomicPause()) {
+      job_handle_ =
+          V8::GetCurrentPlatform()->CreateJob(priority, std::move(job));
+    } else {
+      job_handle_ = V8::GetCurrentPlatform()->PostJob(priority, std::move(job));
+    }
   }
   DCHECK(job_handle_->IsValid());
 }
@@ -556,7 +561,8 @@ void ConcurrentMarking::RescheduleJobIfNeeded(
                    garbage_collector == garbage_collector_);
     TryScheduleJob(garbage_collector, priority);
   } else {
-    DCHECK_EQ(garbage_collector, garbage_collector_);
+    DCHECK(garbage_collector_.has_value());
+    DCHECK_EQ(garbage_collector, garbage_collector_.value());
     if (!IsWorkLeft()) return;
     if (priority != TaskPriority::kUserVisible)
       job_handle_->UpdatePriority(priority);
