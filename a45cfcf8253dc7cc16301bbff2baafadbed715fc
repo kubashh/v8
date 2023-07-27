@@ -22,6 +22,30 @@
       },
       "revId": "a45cfcf8253dc7cc16301bbff2baafadbed715fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c1e4723_0e98b555",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-07-27T20:17:48Z",
+      "side": 0,
+      "message": "Aslo, this method is used for both full and young gen GCs so querying the full collector is not ideal.",
+      "parentUuid": "a61c34fd_a4aeabd7",
+      "range": {
+        "startLine": 650,
+        "startChar": 14,
+        "endLine": 650,
+        "endChar": 36
+      },
+      "revId": "a45cfcf8253dc7cc16301bbff2baafadbed715fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
