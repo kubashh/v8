@@ -162,7 +162,8 @@ class V8_EXPORT_PRIVATE ConcurrentMarking {
   bool IsWorkLeft() const;
 
  private:
-  struct TaskState;
+  struct MajorTaskState;
+  struct MinorTaskState;
   class JobTaskMinor;
   class JobTaskMajor;
   void RunMinor(JobDelegate* delegate);
@@ -178,7 +179,8 @@ class V8_EXPORT_PRIVATE ConcurrentMarking {
   base::Optional<GarbageCollector> garbage_collector_;
   MarkingWorklists* marking_worklists_;
   WeakObjects* const weak_objects_;
-  std::vector<std::unique_ptr<TaskState>> task_state_;
+  std::vector<std::unique_ptr<MajorTaskState>> major_task_state_;
+  std::vector<std::unique_ptr<MinorTaskState>> minor_task_state_;
   std::atomic<size_t> total_marked_bytes_{0};
   std::atomic<bool> another_ephemeron_iteration_{false};
 

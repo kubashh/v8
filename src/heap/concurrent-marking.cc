@@ -125,10 +125,14 @@ class ConcurrentMarkingVisitor final
   friend class MarkingVisitorBase<ConcurrentMarkingVisitor>;
 };
 
-struct ConcurrentMarking::TaskState {
+struct ConcurrentMarking::MajorTaskState {
   size_t marked_bytes = 0;
   MemoryChunkDataMap memory_chunk_data;
   NativeContextStats native_context_stats;
+};
+
+struct ConcurrentMarking::MinorTaskState {
+  size_t marked_bytes = 0;
   PretenuringHandler::PretenuringFeedbackMap local_pretenuring_feedback{
       PretenuringHandler::kInitialFeedbackCapacity};
 };
@@ -219,9 +223,16 @@ ConcurrentMarking::ConcurrentMarking(Heap* heap, WeakObjects* weak_objects)
     max_tasks = v8_flags.concurrent_marking_max_worker_num;
   }
 
-  task_state_.reserve(max_tasks + 1);
+  major_task_state_.reserve(max_tasks + 1);
   for (int i = 0; i <= max_tasks; ++i) {
-    task_state_.emplace_back(std::make_unique<TaskState>());
+    major_task_state_.emplace_back(std::make_unique<MajorTaskState>());
+  }
+
+  if (v8_flags.minor_ms && v8_flags.concurrent_minor_ms_marking) {
+    minor_task_state_.reserve(max_tasks + 1);
+    for (int i = 0; i <= max_tasks; ++i) {
+      minor_task_state_.emplace_back(std::make_unique<MinorTaskState>());
+    }
   }
 }
 
@@ -234,7 +245,7 @@ void ConcurrentMarking::RunMajor(JobDelegate* delegate,
   size_t kBytesUntilInterruptCheck = 64 * KB;
   int kObjectsUntilInterruptCheck = 1000;
   uint8_t task_id = delegate->GetTaskId() + 1;
-  TaskState* task_state = task_state_[task_id].get();
+  MajorTaskState* task_state = major_task_state_[task_id].get();
   auto* cpp_heap = CppHeap::From(heap_->cpp_heap());
   MarkingWorklists::Local local_marking_worklists(
       marking_worklists_, cpp_heap
@@ -365,8 +376,8 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
   size_t kBytesUntilInterruptCheck = 64 * KB;
   int kObjectsUntilInterruptCheck = 1000;
   uint8_t task_id = delegate->GetTaskId() + 1;
-  DCHECK_LT(task_id, task_state_.size());
-  TaskState* task_state = task_state_[task_id].get();
+  DCHECK_LT(task_id, minor_task_state_.size());
+  MinorTaskState* task_state = minor_task_state_[task_id].get();
   YoungGenerationConcurrentMarkingVisitor visitor(
       heap_, &task_state->local_pretenuring_feedback);
   MarkingWorklists::Local& local_marking_worklists =
@@ -457,7 +468,7 @@ size_t ConcurrentMarking::GetMajorMaxConcurrency(size_t worker_count) {
   for (auto& worklist : marking_worklists_->context_worklists())
     marking_items += worklist.worklist->Size();
   return std::min<size_t>(
-      task_state_.size() - 1,
+      major_task_state_.size() - 1,
       worker_count +
           std::max<size_t>({marking_items,
                             weak_objects_->discovered_ephemerons.Size(),
@@ -471,7 +482,8 @@ size_t ConcurrentMarking::GetMinorMaxConcurrency(size_t worker_count) {
                        ->remembered_sets_marking_handler()
                        ->RemainingRememberedSetsMarkingIteams();
   DCHECK(!marking_worklists_->IsUsingContextWorklists());
-  return std::min<size_t>(task_state_.size() - 1, worker_count + marking_items);
+  return std::min<size_t>(minor_task_state_.size() - 1,
+                          worker_count + marking_items);
 }
 
 void ConcurrentMarking::TryScheduleJob(GarbageCollector garbage_collector,
@@ -479,6 +491,8 @@ void ConcurrentMarking::TryScheduleJob(GarbageCollector garbage_collector,
   DCHECK(v8_flags.parallel_marking || v8_flags.concurrent_marking);
   DCHECK(!heap_->IsTearingDown());
   DCHECK(IsStopped());
+
+  total_marked_bytes_ = 0;
 
   if (garbage_collector == GarbageCollector::MARK_COMPACTOR &&
       !heap_->mark_compact_collector()->UseBackgroundThreadsInCycle()) {
@@ -489,10 +503,6 @@ void ConcurrentMarking::TryScheduleJob(GarbageCollector garbage_collector,
     priority = TaskPriority::kUserBlocking;
   }
 
-  DCHECK(
-      std::all_of(task_state_.begin(), task_state_.end(), [](auto& task_state) {
-        return task_state->local_pretenuring_feedback.empty();
-      }));
   garbage_collector_ = garbage_collector;
   if (garbage_collector == GarbageCollector::MARK_COMPACTOR) {
     marking_worklists_ = heap_->mark_compact_collector()->marking_worklists();
@@ -503,6 +513,10 @@ void ConcurrentMarking::TryScheduleJob(GarbageCollector garbage_collector,
                       heap_->ShouldCurrentGCKeepAgesUnchanged()));
   } else {
     DCHECK(garbage_collector == GarbageCollector::MINOR_MARK_SWEEPER);
+    DCHECK(std::all_of(minor_task_state_.begin(), minor_task_state_.end(),
+                       [](auto& task_state) {
+                         return task_state->local_pretenuring_feedback.empty();
+                       }));
     marking_worklists_ =
         heap_->minor_mark_sweep_collector()->marking_worklists();
     job_handle_ = V8::GetCurrentPlatform()->PostJob(
@@ -552,7 +566,7 @@ void ConcurrentMarking::RescheduleJobIfNeeded(
 
 void ConcurrentMarking::FlushPretenuringFeedback() {
   PretenuringHandler* pretenuring_handler = heap_->pretenuring_handler();
-  for (auto& task_state : task_state_) {
+  for (auto& task_state : minor_task_state_) {
     pretenuring_handler->MergeAllocationSitePretenuringFeedback(
         task_state->local_pretenuring_feedback);
     task_state->local_pretenuring_feedback.clear();
@@ -590,16 +604,17 @@ void ConcurrentMarking::Resume() {
 
 void ConcurrentMarking::FlushNativeContexts(NativeContextStats* main_stats) {
   DCHECK(!job_handle_ || !job_handle_->IsValid());
-  for (size_t i = 1; i < task_state_.size(); i++) {
-    main_stats->Merge(task_state_[i]->native_context_stats);
-    task_state_[i]->native_context_stats.Clear();
+  for (size_t i = 1; i < major_task_state_.size(); i++) {
+    main_stats->Merge(major_task_state_[i]->native_context_stats);
+    major_task_state_[i]->native_context_stats.Clear();
   }
 }
 
 void ConcurrentMarking::FlushMemoryChunkData() {
   DCHECK(!job_handle_ || !job_handle_->IsValid());
-  for (size_t i = 1; i < task_state_.size(); i++) {
-    MemoryChunkDataMap& memory_chunk_data = task_state_[i]->memory_chunk_data;
+  for (size_t i = 1; i < major_task_state_.size(); i++) {
+    MemoryChunkDataMap& memory_chunk_data =
+        major_task_state_[i]->memory_chunk_data;
     for (auto& pair : memory_chunk_data) {
       // ClearLiveness sets the live bytes to zero.
       // Pages with zero live bytes might be already unmapped.
@@ -614,23 +629,26 @@ void ConcurrentMarking::FlushMemoryChunkData() {
       }
     }
     memory_chunk_data.clear();
-    task_state_[i]->marked_bytes = 0;
+    major_task_state_[i]->marked_bytes = 0;
   }
-  total_marked_bytes_ = 0;
 }
 
 void ConcurrentMarking::ClearMemoryChunkData(MemoryChunk* chunk) {
   DCHECK(!job_handle_ || !job_handle_->IsValid());
-  for (size_t i = 1; i < task_state_.size(); i++) {
-    task_state_[i]->memory_chunk_data.erase(chunk);
+  for (size_t i = 1; i < major_task_state_.size(); i++) {
+    major_task_state_[i]->memory_chunk_data.erase(chunk);
   }
 }
 
 size_t ConcurrentMarking::TotalMarkedBytes() {
   size_t result = 0;
-  for (size_t i = 1; i < task_state_.size(); i++) {
-    result +=
-        base::AsAtomicWord::Relaxed_Load<size_t>(&task_state_[i]->marked_bytes);
+  for (size_t i = 1; i < major_task_state_.size(); i++) {
+    result += base::AsAtomicWord::Relaxed_Load<size_t>(
+        &major_task_state_[i]->marked_bytes);
+  }
+  for (size_t i = 1; i < minor_task_state_.size(); i++) {
+    result += base::AsAtomicWord::Relaxed_Load<size_t>(
+        &minor_task_state_[i]->marked_bytes);
   }
   result += total_marked_bytes_;
   return result;
