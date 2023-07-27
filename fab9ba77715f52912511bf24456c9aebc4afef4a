@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6034a300_61ce8847",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1587762
+      },
+      "writtenOn": "2023-07-27T14:16:52Z",
+      "side": 1,
+      "message": "ping, this should be a relatively easy to change to review",
+      "revId": "fab9ba77715f52912511bf24456c9aebc4afef4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd6bb1fd_4887bd52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1587762
+      },
+      "writtenOn": "2023-07-27T14:16:52Z",
+      "side": 1,
+      "message": "ping, this should be a relatively easy change to review",
+      "revId": "fab9ba77715f52912511bf24456c9aebc4afef4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
