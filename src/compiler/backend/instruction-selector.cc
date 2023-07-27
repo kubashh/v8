@@ -1855,6 +1855,7 @@ VISIT_UNSUPPORTED_OP(ChangeUint32ToUint64)
 VISIT_UNSUPPORTED_OP(ChangeFloat64ToInt64)
 VISIT_UNSUPPORTED_OP(ChangeFloat64ToUint64)
 VISIT_UNSUPPORTED_OP(TruncateFloat64ToInt64)
+VISIT_UNSUPPORTED_OP(TruncateInt64ToInt32)
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTryTruncateFloat32ToInt64(Node* node) {
@@ -1886,11 +1887,6 @@ void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToInt32(Node* node) {
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToUint32(
     Node* node) {
-  UNIMPLEMENTED();
-}
-
-template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitTruncateInt64ToInt32(Node* node) {
   UNIMPLEMENTED();
 }
 
@@ -4335,7 +4331,7 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitNode(
         case ChangeOp::Kind::kTruncate:
           DCHECK_EQ(change.from, Rep::Word64());
           DCHECK_EQ(change.to, Rep::Word32());
-          return;  // implicit operation.
+          return MarkAsWord32(node), VisitTruncateInt64ToInt32(node);
         case ChangeOp::Kind::kBitcast:
           switch (multi(change.from, change.to)) {
             case multi(Rep::Word32(), Rep::Word64()):

@@ -2979,6 +2979,7 @@ filegroup(
         "src/compiler/turboshaft/define-assembler-macros.inc",
         "src/compiler/turboshaft/deopt-data.h",
         "src/compiler/turboshaft/doubly-threaded-list.h",
+        "src/compiler/turboshaft/explicit-truncation-reducer.h",
         "src/compiler/turboshaft/fast-api-call-reducer.h",
         "src/compiler/turboshaft/fast-hash.h",
         "src/compiler/turboshaft/graph.cc",
