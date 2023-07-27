@@ -50,6 +50,24 @@
       "message": "Are these auto-inserted? I\u0027ve been noticing auto-insertions for `#include`s myself after I switched to VSCode... should track down that configuration option.",
       "revId": "60a6bf4110dddcaeca7ba2867890e763189a55ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5118313c_f3b2a89d",
+        "filename": "src/builtins/set-is-superset-of.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-07-27T23:38:46Z",
+      "side": 1,
+      "message": "Maybe! I will pay attention from now to make sure no #include is auto-inserted.",
+      "parentUuid": "3fc39e6a_7ed0843e",
+      "revId": "60a6bf4110dddcaeca7ba2867890e763189a55ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
