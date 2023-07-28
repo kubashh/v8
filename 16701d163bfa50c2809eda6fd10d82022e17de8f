@@ -34,6 +34,24 @@
       "parentUuid": "ed121cee_ffd0d17b",
       "revId": "16701d163bfa50c2809eda6fd10d82022e17de8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d6a15e0_7774cdef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-07-28T17:05:27Z",
+      "side": 1,
+      "message": "Of course it is better. I feel stupid now that I did not do that! \nIt is fixed now, but the Code-Review vote is gone. I self-approved it but it does not accept my vote. Please vote when you have time.",
+      "parentUuid": "b1baa833_88ca6b7e",
+      "revId": "16701d163bfa50c2809eda6fd10d82022e17de8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
