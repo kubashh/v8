@@ -69,6 +69,24 @@ bool IsCompressed(InstructionSelectorT<Adapter>* selector,
   return false;
 }
 
+const turboshaft::ChangeOp* MatchTruncateWord64ToWord32(
+    const turboshaft::Operation& op) {
+  using namespace turboshaft;  // NOLINT(build/namespaces)
+  if (auto change_op = op.TryCast<ChangeOp>()) {
+    if (change_op->kind == ChangeOp::Kind::kTruncate) {
+      return change_op;
+    }
+  }
+  return nullptr;
+}
+
+template <typename Adapter>
+const turboshaft::ChangeOp* MatchTruncateWord64ToWord32(
+    InstructionSelectorT<Adapter>* selector, turboshaft::OpIndex op_index) {
+  const turboshaft::Operation& op = selector->turboshaft_graph()->Get(op_index);
+  return MatchTruncateWord64ToWord32(op);
+}
+
 }  // namespace
 
 template <typename Adapter>
@@ -1057,11 +1075,18 @@ void VisitStoreCommon(InstructionSelectorT<Adapter>* selector,
       opcode = GetSeqCstStoreOpcode(store_rep);
     } else {
       if constexpr (Adapter::IsTurbofan) {
-        // TODO(nicohartmann@): Turboshaft.
         if ((ElementSizeLog2Of(store_rep.representation()) <
              kSystemPointerSizeLog2) &&
             value->opcode() == IrOpcode::kTruncateInt64ToInt32) {
           value = value->InputAt(0);
+        }
+      } else {
+        static_assert(Adapter::IsTurboshaft);
+        if (ElementSizeLog2Of(store_rep.representation()) <
+            kSystemPointerSizeLog2) {
+          if (auto change_op = MatchTruncateWord64ToWord32(selector, value)) {
+            value = change_op->input();
+          }
         }
       }
 
@@ -1451,8 +1476,11 @@ void VisitWord32Shift(InstructionSelectorT<Adapter>* selector,
   auto right = selector->input_at(node, 1);
 
   if constexpr (Adapter::IsTurboshaft) {
-    // Word64 to Word32 truncation is implicit in Turboshaft.
+    if (auto change_op = MatchTruncateWord64ToWord32(selector, left)) {
+      left = change_op->input();
+    }
   } else {
+    static_assert(Adapter::IsTurbofan);
     if (left->opcode() == IrOpcode::kTruncateInt64ToInt32) {
       left = left->InputAt(0);
     }
@@ -1817,8 +1845,8 @@ template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitInt32Add(node_t node) {
   X64OperandGeneratorT<Adapter> g(this);
 
+  // No need to truncate the values before Int32Add.
   if constexpr (Adapter::IsTurbofan) {
-    // No need to truncate the values before Int32Add.
     DCHECK_EQ(node->InputCount(), 2);
     Node* left = node->InputAt(0);
     Node* right = node->InputAt(1);
@@ -1827,6 +1855,16 @@ void InstructionSelectorT<Adapter>::VisitInt32Add(node_t node) {
     }
     if (right->opcode() == IrOpcode::kTruncateInt64ToInt32) {
       node->ReplaceInput(1, right->InputAt(0));
+    }
+  } else {
+    using namespace turboshaft;  // NOLINT(build/namespaces)
+    static_assert(Adapter::IsTurboshaft);
+    const WordBinopOp& op = this->Get(node).template Cast<WordBinopOp>();
+    if (auto change_op = MatchTruncateWord64ToWord32(this, op.left())) {
+      // TODO(mliedtke): Replace left with change_op.input().
+    }
+    if (auto change_op = MatchTruncateWord64ToWord32(this, op.right())) {
+      // TODO(mliedtke): Replace right with change_op.input().
     }
   }
 
@@ -1872,6 +1910,7 @@ void InstructionSelectorT<Adapter>::VisitInt64AddWithOverflow(node_t node) {
 
 template <>
 void InstructionSelectorT<TurboshaftAdapter>::VisitInt32Sub(node_t node) {
+  // TODO(mliedtke): Handle truncate consistently with Turbofan.
   X64OperandGeneratorT<TurboshaftAdapter> g(this);
   auto binop = this->word_binop_view(node);
   auto left = binop.left();
@@ -2431,6 +2470,8 @@ bool InstructionSelectorT<TurboshaftAdapter>::ZeroExtendsWord32ToWord64NoPhis(
       }
       return false;
     }
+    case Opcode::kChange:
+      return MatchTruncateWord64ToWord32(op);
     default:
       return false;
   }
@@ -2744,45 +2785,49 @@ void InstructionSelectorT<Adapter>::VisitTruncateFloat64ToWord32(node_t node) {
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitTruncateInt64ToInt32(Node* node) {
+void InstructionSelectorT<Adapter>::VisitTruncateInt64ToInt32(node_t node) {
   // We rely on the fact that TruncateInt64ToInt32 zero extends the
   // value (see ZeroExtendsWord32ToWord64). So all code paths here
   // have to satisfy that condition.
   X64OperandGeneratorT<Adapter> g(this);
-  Node* value = node->InputAt(0);
-  bool can_cover = false;
-  if (value->opcode() == IrOpcode::kBitcastTaggedToWordForTagAndSmiBits) {
-    can_cover = CanCover(node, value) && CanCover(value, value->InputAt(0));
-    value = value->InputAt(0);
-  } else {
-    can_cover = CanCover(node, value);
-  }
-  if (can_cover) {
-    switch (value->opcode()) {
-      case IrOpcode::kWord64Sar:
-      case IrOpcode::kWord64Shr: {
-        Int64BinopMatcher m(value);
-        if (m.right().Is(32)) {
-          if (CanCover(value, value->InputAt(0)) &&
-              TryMatchLoadWord64AndShiftRight(this, value, kX64Movl)) {
-            return EmitIdentity(node);
+
+  // TODO(nicohartmann): Port this to Turboshaft.
+  if constexpr (Adapter::IsTurbofan) {
+    Node* value = node->InputAt(0);
+    bool can_cover = false;
+    if (value->opcode() == IrOpcode::kBitcastTaggedToWordForTagAndSmiBits) {
+      can_cover = CanCover(node, value) && CanCover(value, value->InputAt(0));
+      value = value->InputAt(0);
+    } else {
+      can_cover = CanCover(node, value);
+    }
+    if (can_cover) {
+      switch (value->opcode()) {
+        case IrOpcode::kWord64Sar:
+        case IrOpcode::kWord64Shr: {
+          Int64BinopMatcher m(value);
+          if (m.right().Is(32)) {
+            if (CanCover(value, value->InputAt(0)) &&
+                TryMatchLoadWord64AndShiftRight(this, value, kX64Movl)) {
+              return EmitIdentity(node);
+            }
+            Emit(kX64Shr, g.DefineSameAsFirst(node),
+                 g.UseRegister(m.left().node()), g.TempImmediate(32));
+            return;
           }
-          Emit(kX64Shr, g.DefineSameAsFirst(node),
-               g.UseRegister(m.left().node()), g.TempImmediate(32));
+          break;
+        }
+        case IrOpcode::kLoad:
+        case IrOpcode::kLoadImmutable: {
+          TryMergeTruncateInt64ToInt32IntoLoad(this, node, value);
           return;
         }
-        break;
+        default:
+          break;
       }
-      case IrOpcode::kLoad:
-      case IrOpcode::kLoadImmutable: {
-        TryMergeTruncateInt64ToInt32IntoLoad(this, node, value);
-        return;
-      }
-      default:
-        break;
     }
+    Emit(kX64Movl, g.DefineAsRegister(node), g.Use(value));
   }
-  Emit(kX64Movl, g.DefineAsRegister(node), g.Use(value));
 }
 
 template <typename Adapter>
@@ -3307,16 +3352,25 @@ void VisitWordCompare(InstructionSelectorT<Adapter>* selector,
   auto left = selector->input_at(node, 0);
   auto right = selector->input_at(node, 1);
 
-  if constexpr (Adapter::IsTurbofan) {
-    // The 32-bit comparisons automatically truncate Word64
-    // values to Word32 range, no need to do that explicitly.
-    if (opcode == kX64Cmp32 || opcode == kX64Test32) {
+  // The 32-bit comparisons automatically truncate Word64
+  // values to Word32 range, no need to do that explicitly.
+  if (opcode == kX64Cmp32 || opcode == kX64Test32) {
+    if constexpr (Adapter::IsTurbofan) {
       if (left->opcode() == IrOpcode::kTruncateInt64ToInt32) {
         left = left->InputAt(0);
       }
 
       if (right->opcode() == IrOpcode::kTruncateInt64ToInt32) {
         right = right->InputAt(0);
+      }
+    } else {
+      static_assert(Adapter::IsTurboshaft);
+      using namespace turboshaft;  // NOLINT(build/namespaces)
+      if (auto change_op = MatchTruncateWord64ToWord32(selector, left)) {
+        left = change_op->input();
+      }
+      if (auto change_op = MatchTruncateWord64ToWord32(selector, right)) {
+        right = change_op->input();
       }
     }
   }
