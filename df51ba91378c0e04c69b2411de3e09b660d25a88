@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f886326_4f060412",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-28T14:53:51Z",
+      "side": 1,
+      "message": "Thanks this looks cool. I left some comments and questions.\n\nAnother open question I have is how do we notice if the promotion does not work? E.g. it seems like there is no test that would ensure that the objects we expect to be r/o given some particular build config actually do end up on r/o space. This seems really easy to accidentally break and then nothing gets promoted anymore.",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e030e73f_0b35b792",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4637,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-28T14:53:51Z",
+      "side": 1,
+      "message": "Should we remove SkipRoot::kReadOnlyBuiltins? Is it a problem that the GC needs to visit them? Is it the case that either all builtins are RO or none? If so, maybe we could use that to restore this feature?",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f79227cc_b155ce96",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-28T14:53:51Z",
+      "side": 1,
+      "message": "Why is that? If we find a subgraph that can be promoted, why not promote it right away and instead wait for the outer iterator to reach it?\n\nIt seems that we could also use promo_accepted_ directly here and this would save us a whole bunch of work? Or am I missing sth?\n\nActually, a global map: `Object -\u003e enum {none, visited, accepted}` could be the only state needed here (instead of promo_*, visited, accepted_subgraph)?",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba25ab26_cb80690e",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-28T14:53:51Z",
+      "side": 1,
+      "message": "Committee is funny but also overloaded. I would prefer Candidate and CandidateVisitor to avoid confusion. (i.e., at first I thought that a \"Committee\" is responsible to determine if a candidate is to be promoted)",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b09255c_5a270df1",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-07-28T14:53:51Z",
+      "side": 1,
+      "message": "maybe a comment on what this object visitor is doing. roughly this turns the EvaluateSubgraph predicate into \"for all\" for the graph, right?",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
