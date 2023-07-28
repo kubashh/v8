@@ -167,7 +167,7 @@ class V8_EXPORT_PRIVATE ConcurrentMarking {
   struct TaskState;
   class JobTaskMinor;
   class JobTaskMajor;
-  void RunMinor(JobDelegate* delegate);
+  void RunMinor(JobDelegate* delegate, bool in_atomic_pause);
   void RunMajor(JobDelegate* delegate,
                 base::EnumSet<CodeFlushMode> code_flush_mode,
                 unsigned mark_compact_epoch, bool should_keep_ages_unchanged);
