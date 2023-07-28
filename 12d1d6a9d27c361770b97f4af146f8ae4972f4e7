@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04d15a4a_ea35ec98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-28T09:26:44Z",
+      "side": 1,
+      "message": "@tebbi@chromium.org: PTAL.\n@nicohartmann@chromium.org: Please take a look at the instruction-selector changes.",
+      "revId": "12d1d6a9d27c361770b97f4af146f8ae4972f4e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40892b89_1780de16",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1864,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-28T09:26:44Z",
+      "side": 1,
+      "message": "How should I do this? Shouldn\u0027t this be ideally done on a reducer level?\nThat would mean some architecture specific optimizations but I think that is fine in general and not more maintenance issues than having it in multiple instruction selectors?",
+      "range": {
+        "startLine": 1864,
+        "startChar": 6,
+        "endLine": 1864,
+        "endChar": 61
+      },
+      "revId": "12d1d6a9d27c361770b97f4af146f8ae4972f4e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
