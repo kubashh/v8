@@ -265,6 +265,13 @@ class ZoneCompactSet final {
   inline const_iterator begin() const;
   inline const_iterator end() const;
 
+  bool contains(const_iterator const& begin, const_iterator const& end) const {
+    for (const_iterator it = begin; it != end; ++it) {
+      if (!contains(*it)) return false;
+    }
+    return true;
+  }
+
  private:
   enum Tag { kSingletonTag = 0, kEmptyTag = 1, kListTag = 2 };
 
@@ -325,6 +332,9 @@ class ZoneCompactSet<T>::const_iterator {
   }
   bool operator!=(const const_iterator& other) const {
     return !(*this == other);
+  }
+  size_t operator-(const const_iterator& other) const {
+    return current_ - other.current_;
   }
   const_iterator& operator++() {
     DCHECK(current_ < set_->size());
