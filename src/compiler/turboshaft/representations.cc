@@ -60,4 +60,9 @@ std::ostream& operator<<(std::ostream& os, MemoryRepresentation rep) {
   }
 }
 
+// All enum values in RegisterRepresentation need to be mirrored in
+// MaybeRegisterRepresentation.
+static_assert(static_cast<size_t>(RegisterRepresentation::Enum::kMax) <
+              static_cast<size_t>(MaybeRegisterRepresentation::Enum::kNone));
+
 }  // namespace v8::internal::compiler::turboshaft

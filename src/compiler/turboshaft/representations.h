@@ -26,7 +26,8 @@ class RegisterRepresentation {
     kFloat64,
     kTagged,
     kCompressed,
-    kSimd128
+    kSimd128,
+    kMax = kSimd128,
   };
 
   explicit constexpr RegisterRepresentation(Enum value) : value_(value) {}
@@ -685,6 +686,70 @@ V8_INLINE size_t hash_value(MemoryRepresentation rep) {
 }
 
 std::ostream& operator<<(std::ostream& os, MemoryRepresentation rep);
+
+// Optional register representation.
+class MaybeRegisterRepresentation : public RegisterRepresentation {
+ public:
+  enum class Enum : uint8_t {
+    kWord32 = static_cast<int>(RegisterRepresentation::Enum::kWord32),
+    kWord64 = static_cast<int>(RegisterRepresentation::Enum::kWord64),
+    kFloat32 = static_cast<int>(RegisterRepresentation::Enum::kFloat32),
+    kFloat64 = static_cast<int>(RegisterRepresentation::Enum::kFloat64),
+    kTagged = static_cast<int>(RegisterRepresentation::Enum::kTagged),
+    kCompressed = static_cast<int>(RegisterRepresentation::Enum::kCompressed),
+    kSimd128 = static_cast<int>(RegisterRepresentation::Enum::kSimd128),
+    kNone,  // No register representation.
+  };
+
+  explicit constexpr MaybeRegisterRepresentation(Enum value)
+      : RegisterRepresentation(
+            static_cast<RegisterRepresentation::Enum>(value)) {}
+  MaybeRegisterRepresentation() = default;
+
+  explicit constexpr MaybeRegisterRepresentation(RegisterRepresentation rep)
+      : MaybeRegisterRepresentation(static_cast<Enum>(rep.value())) {}
+
+  constexpr Enum value() const {
+    return static_cast<Enum>(RegisterRepresentation::value());
+  }
+  constexpr operator Enum() const { return value(); }
+
+  static constexpr MaybeRegisterRepresentation Word32() {
+    return MaybeRegisterRepresentation(Enum::kWord32);
+  }
+
+  static constexpr MaybeRegisterRepresentation Word64() {
+    return MaybeRegisterRepresentation(Enum::kWord64);
+  }
+
+  static constexpr MaybeRegisterRepresentation Float32() {
+    return MaybeRegisterRepresentation(Enum::kFloat32);
+  }
+
+  static constexpr MaybeRegisterRepresentation Float64() {
+    return MaybeRegisterRepresentation(Enum::kFloat64);
+  }
+
+  static constexpr MaybeRegisterRepresentation Tagged() {
+    return MaybeRegisterRepresentation(Enum::kTagged);
+  }
+
+  static constexpr MaybeRegisterRepresentation Compressed() {
+    return MaybeRegisterRepresentation(Enum::kCompressed);
+  }
+
+  static constexpr MaybeRegisterRepresentation Simd128() {
+    return MaybeRegisterRepresentation(Enum::kSimd128);
+  }
+
+  static constexpr MaybeRegisterRepresentation None() {
+    return MaybeRegisterRepresentation(Enum::kNone);
+  }
+
+  static constexpr MaybeRegisterRepresentation PointerSized() {
+    return MaybeRegisterRepresentation(RegisterRepresentation::PointerSized());
+  }
+};
 
 }  // namespace v8::internal::compiler::turboshaft
 
