@@ -49,7 +49,7 @@ namespace v8 {
 namespace internal {
 
 using YoungGenerationConcurrentMarkingVisitor = YoungGenerationMarkingVisitor<
-    YoungGenerationMarkingVisitorMode::kConcurrent>;
+    YoungGenerationMarkingVisitorMode::kParallel>;
 
 class ConcurrentMarkingVisitor final
     : public FullMarkingVisitorBase<ConcurrentMarkingVisitor> {
@@ -388,8 +388,8 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
     CodePageHeaderModificationScope rwx_write_scope(
         "Marking a InstructionStream object requires write access to the "
         "Code page header");
-    size_t current_marked_bytes = 0;
-    int objects_processed = 0;
+    // size_t current_marked_bytes = 0;
+    // int objects_processed = 0;
     while (true) {
       HeapObject object;
       if (!local_marking_worklists.Pop(&object)) {
@@ -404,47 +404,47 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
           break;
         }
       }
-      objects_processed++;
+      // objects_processed++;
 
-      // The order of the two loads is important.
-      Address new_space_top = heap_->new_space()->original_top_acquire();
-      Address new_space_limit = heap_->new_space()->original_limit_relaxed();
-      Address new_large_object = heap_->new_lo_space()->pending_object();
+      // // The order of the two loads is important.
+      // Address new_space_top = heap_->new_space()->original_top_acquire();
+      // Address new_space_limit = heap_->new_space()->original_limit_relaxed();
+      // Address new_large_object = heap_->new_lo_space()->pending_object();
 
-      Address addr = object.address();
+      // Address addr = object.address();
 
-      if ((new_space_top <= addr && addr < new_space_limit) ||
-          addr == new_large_object) {
-        // We should not find objects in LABs when joining the tasks in the
-        // atomic pause.
-        DCHECK(!delegate->IsJoiningThread());
-        local_marking_worklists.PushOnHold(object);
-      } else {
+      // if ((new_space_top <= addr && addr < new_space_limit) ||
+      //     addr == new_large_object) {
+      //   // We should not find objects in LABs when joining the tasks in the
+      //   // atomic pause.
+      //   DCHECK(!delegate->IsJoiningThread());
+      //   local_marking_worklists.PushOnHold(object);
+      // } else {
         Map map = object->map(isolate);
         const auto visited_size = visitor.Visit(map, object);
-        current_marked_bytes += visited_size;
+        // current_marked_bytes += visited_size;
         if (visited_size) {
           visitor.IncrementLiveBytesCached(
               MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(object)),
               ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
         }
-      }
+      // }
 
-      if (current_marked_bytes >= kBytesUntilInterruptCheck ||
-          objects_processed >= kObjectsUntilInterruptCheck) {
-        marked_bytes += current_marked_bytes;
-        base::AsAtomicWord::Relaxed_Store<size_t>(&task_state->marked_bytes,
-                                                  marked_bytes);
-        if (delegate->ShouldYield()) {
-          TRACE_GC_NOTE("ConcurrentMarking::RunMinor Preempted");
-          break;
-        }
-      }
+      // if (current_marked_bytes >= kBytesUntilInterruptCheck ||
+      //     objects_processed >= kObjectsUntilInterruptCheck) {
+      //   marked_bytes += current_marked_bytes;
+      //   base::AsAtomicWord::Relaxed_Store<size_t>(&task_state->marked_bytes,
+      //                                             marked_bytes);
+      //   if (delegate->ShouldYield()) {
+      //     TRACE_GC_NOTE("ConcurrentMarking::RunMinor Preempted");
+      //     break;
+      //   }
+      // }
     }
 
     visitor.PublishWorklists();
-    base::AsAtomicWord::Relaxed_Store<size_t>(&task_state->marked_bytes, 0);
-    total_marked_bytes_ += marked_bytes;
+    // base::AsAtomicWord::Relaxed_Store<size_t>(&task_state->marked_bytes, 0);
+    // total_marked_bytes_ += marked_bytes;
   }
   if (v8_flags.trace_concurrent_marking) {
     heap_->isolate()->PrintWithTimestamp(
@@ -454,6 +454,7 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
 
   DCHECK(task_state->memory_chunk_data.empty());
   DCHECK(task_state->native_context_stats.Empty());
+  DCHECK_EQ(0, task_state->marked_bytes);
 }
 
 size_t ConcurrentMarking::GetMajorMaxConcurrency(size_t worker_count) {
@@ -510,8 +511,13 @@ void ConcurrentMarking::TryScheduleJob(GarbageCollector garbage_collector,
     DCHECK(garbage_collector == GarbageCollector::MINOR_MARK_SWEEPER);
     marking_worklists_ =
         heap_->minor_mark_sweep_collector()->marking_worklists();
-    job_handle_ = V8::GetCurrentPlatform()->PostJob(
-        priority, std::make_unique<JobTaskMinor>(this));
+    auto job = std::make_unique<JobTaskMinor>(this);
+    // if (heap_->tracer()->IsInAtomicPause()) {
+    //   job_handle_ =
+    //       V8::GetCurrentPlatform()->CreateJob(priority, std::move(job));
+    // } else {
+      job_handle_ = V8::GetCurrentPlatform()->PostJob(priority, std::move(job));
+    // }
   }
   DCHECK(job_handle_->IsValid());
 }
@@ -547,7 +553,8 @@ void ConcurrentMarking::RescheduleJobIfNeeded(
                    garbage_collector == garbage_collector_);
     TryScheduleJob(garbage_collector, priority);
   } else {
-    DCHECK_EQ(garbage_collector, garbage_collector_);
+    DCHECK(garbage_collector_.has_value());
+    DCHECK_EQ(garbage_collector, garbage_collector_.value());
     if (!IsWorkLeft()) return;
     if (priority != TaskPriority::kUserVisible)
       job_handle_->UpdatePriority(priority);
