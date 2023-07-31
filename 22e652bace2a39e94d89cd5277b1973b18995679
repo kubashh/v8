@@ -16,6 +16,23 @@
       "message": "Shu, This CL is ready to review. Thanks!",
       "revId": "22e652bace2a39e94d89cd5277b1973b18995679",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8570dfd6_4a992cda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-07-31T23:06:59Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "22e652bace2a39e94d89cd5277b1973b18995679",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
