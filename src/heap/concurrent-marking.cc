@@ -34,6 +34,7 @@
 #include "src/heap/objects-visiting.h"
 #include "src/heap/pretenuring-handler.h"
 #include "src/heap/weak-object-worklists.h"
+#include "src/heap/young-generation-marking-visitor.h"
 #include "src/init/v8.h"
 #include "src/objects/data-handler-inl.h"
 #include "src/objects/embedder-data-array-inl.h"
@@ -48,8 +49,8 @@
 namespace v8 {
 namespace internal {
 
-using YoungGenerationConcurrentMarkingVisitor = YoungGenerationMarkingVisitor<
-    YoungGenerationMarkingVisitorMode::kConcurrent>;
+using YoungGenerationConcurrentMarkingVisitor =
+    YoungGenerationMarkingVisitor<YoungGenerationMarkingVisitorMode::kParallel>;
 
 class ConcurrentMarkingVisitor final
     : public FullMarkingVisitorBase<ConcurrentMarkingVisitor> {
@@ -361,21 +362,35 @@ void ConcurrentMarking::RunMajor(JobDelegate* delegate,
   DCHECK(task_state->local_pretenuring_feedback.empty());
 }
 
+namespace {
+V8_INLINE bool IsYoungObjectInLab(Heap* heap, HeapObject heap_object) {
+  // The order of the two loads is important.
+  Address new_space_top = heap->new_space()->original_top_acquire();
+  Address new_space_limit = heap->new_space()->original_limit_relaxed();
+  Address new_large_object = heap->new_lo_space()->pending_object();
+
+  Address addr = heap_object.address();
+
+  return ((new_space_top <= addr && addr < new_space_limit) ||
+          addr == new_large_object);
+}
+}  // namespace
+
 void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
+  static constexpr size_t kBytesUntilInterruptCheck = 64 * KB;
+  static constexpr int kObjectsUntilInterruptCheck = 1000;
   DCHECK_NOT_NULL(heap_->new_space());
   DCHECK_NOT_NULL(heap_->new_lo_space());
-  size_t kBytesUntilInterruptCheck = 64 * KB;
-  int kObjectsUntilInterruptCheck = 1000;
   uint8_t task_id = delegate->GetTaskId() + 1;
   DCHECK_LT(task_id, task_state_.size());
   TaskState* task_state = task_state_[task_id].get();
   YoungGenerationConcurrentMarkingVisitor visitor(
       heap_, &task_state->local_pretenuring_feedback);
-  MarkingWorklists::Local& local_marking_worklists =
-      visitor.marking_worklists_local();
+  // MarkingWorklists::Local& local_marking_worklists =
+  //     visitor.marking_worklists_local();
   YoungGenerationRememberedSetsMarkingWorklist::Local remembered_sets(
       heap_->minor_mark_sweep_collector()->remembered_sets_marking_handler());
-  double time_ms;
+  double time_ms = 0;
   size_t marked_bytes = 0;
   Isolate* isolate = heap_->isolate();
   if (v8_flags.trace_concurrent_marking) {
@@ -388,64 +403,51 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
     CodePageHeaderModificationScope rwx_write_scope(
         "Marking a InstructionStream object requires write access to the "
         "Code page header");
+    bool is_in_atomic_pause = heap_->tracer()->IsInAtomicPause();
     size_t current_marked_bytes = 0;
     int objects_processed = 0;
-    while (true) {
-      HeapObject object;
-      if (!local_marking_worklists.Pop(&object)) {
-        bool process_remembered_set = true;
-        if (delegate->IsJoiningThread()) {
-          local_marking_worklists.MergeOnHold();
-          process_remembered_set = !local_marking_worklists.Pop(&object);
+    auto& marking_worklists_local = visitor.marking_worklists_local();
+    bool should_yield = false;
+    do {
+      HeapObject heap_object;
+      while (marking_worklists_local.Pop(&heap_object)) {
+        if (!is_in_atomic_pause && IsYoungObjectInLab(heap_, heap_object)) {
+          DCHECK(!delegate->IsJoiningThread());
+          visitor.marking_worklists_local().PushOnHold(heap_object);
+        } else {
+          Map map;
+          if (!is_in_atomic_pause) {
+            map = heap_object->map(isolate);
+          } else {
+            map = Map::cast(*heap_object->map_slot());
+          }
+          const auto visited_size = visitor.Visit(map, heap_object);
+          if (visited_size) {
+            current_marked_bytes += visited_size;
+            visitor.IncrementLiveBytesCached(
+                MemoryChunk::FromHeapObject(heap_object),
+                ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
+          }
         }
-        if (process_remembered_set &&
-            (!remembered_sets.ProcessNextItem(&visitor) ||
-             !local_marking_worklists.Pop(&object))) {
-          break;
-        }
-      }
-      objects_processed++;
 
-      // The order of the two loads is important.
-      Address new_space_top = heap_->new_space()->original_top_acquire();
-      Address new_space_limit = heap_->new_space()->original_limit_relaxed();
-      Address new_large_object = heap_->new_lo_space()->pending_object();
-
-      Address addr = object.address();
-
-      if ((new_space_top <= addr && addr < new_space_limit) ||
-          addr == new_large_object) {
-        // We should not find objects in LABs when joining the tasks in the
-        // atomic pause.
-        DCHECK(!delegate->IsJoiningThread());
-        local_marking_worklists.PushOnHold(object);
-      } else {
-        Map map = object->map(isolate);
-        const auto visited_size = visitor.Visit(map, object);
-        current_marked_bytes += visited_size;
-        if (visited_size) {
-          visitor.IncrementLiveBytesCached(
-              MemoryChunk::cast(BasicMemoryChunk::FromHeapObject(object)),
-              ALIGN_TO_ALLOCATION_ALIGNMENT(visited_size));
-        }
-      }
-
-      if (current_marked_bytes >= kBytesUntilInterruptCheck ||
-          objects_processed >= kObjectsUntilInterruptCheck) {
-        marked_bytes += current_marked_bytes;
-        base::AsAtomicWord::Relaxed_Store<size_t>(&task_state->marked_bytes,
-                                                  marked_bytes);
-        if (delegate->ShouldYield()) {
-          TRACE_GC_NOTE("ConcurrentMarking::RunMinor Preempted");
-          break;
+        if (!is_in_atomic_pause) {
+          if (current_marked_bytes >= kBytesUntilInterruptCheck ||
+              ++objects_processed >= kObjectsUntilInterruptCheck) {
+            marked_bytes += current_marked_bytes;
+            if (delegate->ShouldYield()) {
+              TRACE_GC_NOTE("ConcurrentMarking::RunMinor Preempted");
+              should_yield = true;
+              break;
+            }
+            objects_processed = 0;
+            current_marked_bytes = 0;
+          }
         }
       }
-    }
-
-    visitor.PublishWorklists();
-    base::AsAtomicWord::Relaxed_Store<size_t>(&task_state->marked_bytes, 0);
-    total_marked_bytes_ += marked_bytes;
+    } while (!should_yield && remembered_sets.ProcessNextItem(&visitor));
+    marked_bytes += current_marked_bytes;
   }
+
   if (v8_flags.trace_concurrent_marking) {
     heap_->isolate()->PrintWithTimestamp(
         "Minor task %d concurrently marked %dKB in %.2fms\n", task_id,
@@ -454,6 +456,7 @@ void ConcurrentMarking::RunMinor(JobDelegate* delegate) {
 
   DCHECK(task_state->memory_chunk_data.empty());
   DCHECK(task_state->native_context_stats.Empty());
+  DCHECK_EQ(0, task_state->marked_bytes);
 }
 
 size_t ConcurrentMarking::GetMajorMaxConcurrency(size_t worker_count) {
@@ -510,8 +513,13 @@ void ConcurrentMarking::TryScheduleJob(GarbageCollector garbage_collector,
     DCHECK(garbage_collector == GarbageCollector::MINOR_MARK_SWEEPER);
     marking_worklists_ =
         heap_->minor_mark_sweep_collector()->marking_worklists();
-    job_handle_ = V8::GetCurrentPlatform()->PostJob(
-        priority, std::make_unique<JobTaskMinor>(this));
+    auto job = std::make_unique<JobTaskMinor>(this);
+    // if (heap_->tracer()->IsInAtomicPause()) {
+    //   job_handle_ =
+    //       V8::GetCurrentPlatform()->CreateJob(priority, std::move(job));
+    // } else {
+    job_handle_ = V8::GetCurrentPlatform()->PostJob(priority, std::move(job));
+    // }
   }
   DCHECK(job_handle_->IsValid());
 }
@@ -547,7 +555,8 @@ void ConcurrentMarking::RescheduleJobIfNeeded(
                    garbage_collector == garbage_collector_);
     TryScheduleJob(garbage_collector, priority);
   } else {
-    DCHECK_EQ(garbage_collector, garbage_collector_);
+    DCHECK(garbage_collector_.has_value());
+    DCHECK_EQ(garbage_collector, garbage_collector_.value());
     if (!IsWorkLeft()) return;
     if (priority != TaskPriority::kUserVisible)
       job_handle_->UpdatePriority(priority);
