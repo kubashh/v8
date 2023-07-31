@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14967d3c_59236a89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-07-31T10:57:52Z",
+      "side": 1,
+      "message": "PTAL. Nothing especially interesting here, just mechanical changes.\n\nI\u0027m considering whether Print/ShortPrint should be a static or a free function, since Object::ShortPrint looks a bit unwieldy. Thoughts?",
+      "revId": "849d7318a39395956b4db5e3edcdaa2eda2e0fca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
