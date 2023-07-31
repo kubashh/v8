@@ -24,6 +24,7 @@ extern builtin IterableToFixedArrayForWasm(Context, JSAny, Smi): FixedArray;
 
 @export
 transitioning macro WasmToJSWrapper(ref: WasmApiFunctionRef): WasmToJSResult {
+  ModifyWasmToJSCounter(1);
   ModifyThreadInWasmFlag(0);
   const signaturePod = &ref.sig.bytes;
   const serializedSig = torque_internal::unsafe::NewConstSlice<int32>(
@@ -162,6 +163,7 @@ transitioning macro WasmToJSWrapper(ref: WasmApiFunctionRef): WasmToJSResult {
   }
 
   ModifyThreadInWasmFlag(1);
+  ModifyWasmToJSCounter(-1);
   return WasmToJSResult{
     popCount: numGPParamRegs + numFPParamRegs,
     result0: *GetRefAt<intptr>(gpRegSlots, 0),
