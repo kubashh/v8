@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c75f605_504bc10c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-31T12:39:28Z",
+      "side": 1,
+      "message": "@nicohartmann@chromium.org: PTAL @src/compiler/*. The main change is that we now orchestrate the \"wasm-js-inlining\" enablement via the PipelineData and fetch its original value from the `Isolate` (as it can be set via the wasm-gc OT callback).",
+      "revId": "b33d6a941614389b979b4416e8e23e46e0d27a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
