@@ -37,6 +37,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba3aec3b_4914b6a2",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4637,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-31T13:16:59Z",
+      "side": 1,
+      "message": "Agreed, we should drop the SkipRoot value if possible. I guess it\u0027s not too much of a problem if most of the entries are in RO space and we still iterate all of them. Alternatively we could split builtins into ro-ones and those in old space?",
+      "parentUuid": "e030e73f_0b35b792",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef3d8e5f_92339ebc",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2605,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-31T13:16:59Z",
+      "side": 1,
+      "message": "Nit: Maybe mention here that this is only supposed to be null if the caller already opened a SafepointScope.",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f79227cc_b155ce96",
         "filename": "src/heap/read-only-promotion.cc",
         "patchSetId": 6
@@ -48,6 +83,24 @@
       "writtenOn": "2023-07-28T14:53:51Z",
       "side": 1,
       "message": "Why is that? If we find a subgraph that can be promoted, why not promote it right away and instead wait for the outer iterator to reach it?\n\nIt seems that we could also use promo_accepted_ directly here and this would save us a whole bunch of work? Or am I missing sth?\n\nActually, a global map: `Object -\u003e enum {none, visited, accepted}` could be the only state needed here (instead of promo_*, visited, accepted_subgraph)?",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c437f09_09ac5a7a",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-31T13:16:59Z",
+      "side": 1,
+      "message": "+1. I might be missing something but if possible that should help simplify things. I suppose the meaning of \"none\" is just \"unvisited\", right? I suspect the enum would need \"rejected\" as well?\n\nI guess an issue could be `accepted_subgraph` but that one we could build up at the end by iterating all \"accepted\" nodes in that map.",
+      "parentUuid": "f79227cc_b155ce96",
       "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +135,40 @@
       "writtenOn": "2023-07-28T14:53:51Z",
       "side": 1,
       "message": "maybe a comment on what this object visitor is doing. roughly this turns the EvaluateSubgraph predicate into \"for all\" for the graph, right?",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9b0998e_9dcc4b4d",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-31T13:16:59Z",
+      "side": 1,
+      "message": "Nit: Should we add comments here, e.g. `Phase 1: Copy objects into RO SPACE` and `Phase 2: Update pointers`?",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68dbfd23_1de810f6",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-07-31T13:16:59Z",
+      "side": 1,
+      "message": "Nit: Not sure the name `ReadOnlyPromotionImpl` is super descriptive. Could we get rid of the class and just invoke the two methods `CopyToReadOnlyHeap` and `UpdatePointers` here directly? It feels `moves_` could be passed as an argument to `UpdatePointers` as well. IMHO that would make the two phases involved here more prominent.",
       "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
