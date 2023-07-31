@@ -39,6 +39,30 @@
       },
       "revId": "e41b72c5eb8ccd0dacd8d558876d0c290d63522d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cce46f7a_f2e14641",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3058,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-31T12:17:03Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "afda5779_b6e491ce",
+      "range": {
+        "startLine": 3058,
+        "startChar": 4,
+        "endLine": 3058,
+        "endChar": 43
+      },
+      "revId": "e41b72c5eb8ccd0dacd8d558876d0c290d63522d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

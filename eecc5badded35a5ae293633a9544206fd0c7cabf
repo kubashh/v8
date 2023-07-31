@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81bc5653_b508945a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-07-31T12:17:03Z",
+      "side": 1,
+      "message": "LGTM with comment. You\u0027ll also need compiler/OWNERS.",
+      "revId": "eecc5badded35a5ae293633a9544206fd0c7cabf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
