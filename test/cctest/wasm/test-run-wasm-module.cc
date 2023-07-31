@@ -830,7 +830,7 @@ TEST(InitDataAtTheUpperLimit) {
     CompileAndInstantiateForTesting(
         isolate, &thrower, ModuleWireBytes(data, data + arraysize(data)));
     if (thrower.error()) {
-      thrower.Reify()->Print();
+      Object::Print(*thrower.Reify());
       FATAL("compile or instantiate error");
     }
   }
