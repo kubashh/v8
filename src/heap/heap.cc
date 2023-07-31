@@ -1719,8 +1719,8 @@ namespace {
 
 template <typename Callback>
 void InvokeExternalCallbacks(Isolate* isolate, Callback callback) {
+  DCHECK(!AllowJavascriptExecution::IsAllowed(isolate));
   AllowGarbageCollection allow_gc;
-  AllowJavascriptExecution allow_js(isolate);
   // Temporary override any embedder stack state as callbacks may create
   // their own state on the stack and recursively trigger GC.
   EmbedderStackStateScope embedder_scope(
