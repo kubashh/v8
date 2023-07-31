@@ -552,7 +552,7 @@ void LoadHandler::PrintHandler(Object handler, std::ostream& os) {
       load_handler->data3().ShortPrint(os);
     }
     os << ", validity cell = ";
-    load_handler->validity_cell().ShortPrint(os);
+    Object::ShortPrint(load_handler->validity_cell(), os);
     os << ")";
   } else {
     os << "LoadHandler(<unexpected>)(" << Brief(handler) << ")";
@@ -572,7 +572,7 @@ void StoreHandler::PrintHandler(Object handler, std::ostream& os) {
     if (IsCode(store_handler->smi_handler())) {
       Code code = Code::cast(store_handler->smi_handler());
       os << "builtin = ";
-      code.ShortPrint(os);
+      Object::ShortPrint(code, os);
     } else {
       int raw_handler = store_handler->smi_handler().ToSmi().value();
       os << "do access check on lookup start object = "
@@ -594,7 +594,7 @@ void StoreHandler::PrintHandler(Object handler, std::ostream& os) {
       store_handler->data3().ShortPrint(os);
     }
     os << ", validity cell = ";
-    store_handler->validity_cell().ShortPrint(os);
+    Object::ShortPrint(store_handler->validity_cell(), os);
     os << ")" << std::endl;
   } else if (IsMap(handler)) {
     os << "StoreHandler(field transition to " << Brief(handler) << ")"
