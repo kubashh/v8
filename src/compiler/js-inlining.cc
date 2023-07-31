@@ -468,9 +468,7 @@ Reduction JSInliner::ReduceJSWasmCall(Node* node) {
 
   // Try "full" inlining of very simple WasmGC functions.
   WasmInlineResult inline_result;
-  if (native_module->enabled_features().has_gc() &&
-      v8_flags.experimental_wasm_js_inlining && fct_index != -1 &&
-      native_module) {
+  if (full_wasm_inlining_ && fct_index != -1 && native_module) {
     inline_result = TryWasmInlining(call_node);
   }
 

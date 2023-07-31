@@ -27,7 +27,8 @@ class JSInliner final : public AdvancedReducer {
   JSInliner(Editor* editor, Zone* local_zone, OptimizedCompilationInfo* info,
             JSGraph* jsgraph, JSHeapBroker* broker,
             SourcePositionTable* source_positions,
-            NodeOriginTable* node_origins, const wasm::WasmModule* wasm_module)
+            NodeOriginTable* node_origins, const wasm::WasmModule* wasm_module,
+            bool full_wasm_inlinling)
       : AdvancedReducer(editor),
         local_zone_(local_zone),
         info_(info),
@@ -35,7 +36,8 @@ class JSInliner final : public AdvancedReducer {
         broker_(broker),
         source_positions_(source_positions),
         node_origins_(node_origins),
-        wasm_module_(wasm_module) {
+        wasm_module_(wasm_module),
+        full_wasm_inlining_(full_wasm_inlinling) {
     // In case WebAssembly is disabled.
     USE(wasm_module_);
   }
@@ -74,6 +76,7 @@ class JSInliner final : public AdvancedReducer {
   SourcePositionTable* const source_positions_;
   NodeOriginTable* const node_origins_;
   const wasm::WasmModule* wasm_module_;
+  bool full_wasm_inlining_;
 
   OptionalSharedFunctionInfoRef DetermineCallTarget(Node* node);
   FeedbackCellRef DetermineCallContext(Node* node, Node** context_out);
