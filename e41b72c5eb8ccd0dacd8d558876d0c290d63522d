@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f13f16d4_f7e0f19f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-31T10:52:16Z",
+      "side": 1,
+      "message": "@jkummerow@chromium.org: PTAL.",
+      "revId": "e41b72c5eb8ccd0dacd8d558876d0c290d63522d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afda5779_b6e491ce",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3058,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-07-31T10:52:16Z",
+      "side": 1,
+      "message": "Besides orchestrating information to the reducers, this is the real change:\nAfterwards we will always enable the inlining for the origin trial.\nOutside of the origin trial it is still flag-driven (e.g. for tests).\n\nQuestion: As tests don\u0027t use callbacks, should we add a flag implication from experimental-wasm-gc to experimental-wasm-js-inlining?",
+      "range": {
+        "startLine": 3058,
+        "startChar": 4,
+        "endLine": 3058,
+        "endChar": 43
+      },
+      "revId": "e41b72c5eb8ccd0dacd8d558876d0c290d63522d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
