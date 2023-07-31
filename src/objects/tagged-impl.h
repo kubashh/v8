@@ -210,28 +210,40 @@ class TaggedImpl {
     return T::cast(Object(ptr_));
   }
 
-  // Prints this object without details.
-  void ShortPrint(FILE* out = stdout);
-
-  // Prints this object without details to a message accumulator.
-  void ShortPrint(StringStream* accumulator);
-
-  void ShortPrint(std::ostream& os);
-
-#ifdef OBJECT_PRINT
-  void Print();
-  void Print(std::ostream& os);
-#else
-  void Print() { ShortPrint(); }
-  void Print(std::ostream& os) { ShortPrint(os); }
-#endif
-
  private:
   friend class CompressedObjectSlot;
   friend class FullObjectSlot;
 
   StorageType ptr_;
 };
+
+// Prints this object without details.
+template <HeapObjectReferenceType kRefType, typename StorageType>
+void ShortPrint(TaggedImpl<kRefType, StorageType> ptr, FILE* out = stdout);
+
+// Prints this object without details to a message accumulator.
+template <HeapObjectReferenceType kRefType, typename StorageType>
+void ShortPrint(TaggedImpl<kRefType, StorageType> ptr,
+                StringStream* accumulator);
+
+template <HeapObjectReferenceType kRefType, typename StorageType>
+void ShortPrint(TaggedImpl<kRefType, StorageType> ptr, std::ostream& os);
+
+#ifdef OBJECT_PRINT
+template <HeapObjectReferenceType kRefType, typename StorageType>
+void Print(TaggedImpl<kRefType, StorageType> ptr);
+template <HeapObjectReferenceType kRefType, typename StorageType>
+void Print(TaggedImpl<kRefType, StorageType> ptr, std::ostream& os);
+#else
+template <HeapObjectReferenceType kRefType, typename StorageType>
+void Print(TaggedImpl<kRefType, StorageType> ptr) {
+  ShortPrint(ptr);
+}
+template <HeapObjectReferenceType kRefType, typename StorageType>
+void Print(TaggedImpl<kRefType, StorageType> ptr, std::ostream& os) {
+  ShortPrint(ptr, os);
+}
+#endif
 
 }  // namespace internal
 }  // namespace v8
