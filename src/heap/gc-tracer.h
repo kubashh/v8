@@ -6,6 +6,7 @@
 #define V8_HEAP_GC_TRACER_H_
 
 #include "include/v8-metrics.h"
+#include "src/base/atomic-utils.h"
 #include "src/base/compiler-specific.h"
 #include "src/base/macros.h"
 #include "src/base/optional.h"
@@ -166,9 +167,6 @@ class V8_EXPORT_PRIVATE GCTracer {
     // Type of the event.
     Type type;
 
-    // State of the cycle corresponding to the event.
-    State state;
-
     GarbageCollectionReason gc_reason;
     const char* collector_reason;
 
@@ -219,6 +217,17 @@ class V8_EXPORT_PRIVATE GCTracer {
 
     // Holds details for incremental marking scopes.
     IncrementalInfos incremental_scopes[Scope::NUMBER_OF_INCREMENTAL_SCOPES];
+
+    State state() const {
+      return base::AsAtomicPtr(&state_)->load(std::memory_order_relaxed);
+    }
+    void SetState(State state) {
+      base::AsAtomicPtr(&state_)->store(state, std::memory_order_relaxed);
+    }
+
+   private:
+    // State of the cycle corresponding to the event.
+    State state_;
   };
 
   class RecordGCPhasesInfo final {
@@ -291,9 +300,10 @@ class V8_EXPORT_PRIVATE GCTracer {
   void NotifyYoungCppGCRunning();
   void NotifyYoungCppGCCompleted();
 
+  bool IsInAtomicPause() const;
+
 #ifdef DEBUG
   bool IsInObservablePause() const;
-  bool IsInAtomicPause() const;
 
   // Checks if the current event is consistent with a collector.
   bool IsConsistentWithCollector(GarbageCollector collector) const;

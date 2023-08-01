@@ -71,10 +71,9 @@ double BoundedAverageSpeed(const base::RingBuffer<BytesAndDuration>& buffer) {
 GCTracer::Event::Event(Type type, State state,
                        GarbageCollectionReason gc_reason,
                        const char* collector_reason)
-    : type(type),
-      state(state),
-      gc_reason(gc_reason),
-      collector_reason(collector_reason) {}
+    : type(type), gc_reason(gc_reason), collector_reason(collector_reason) {
+  SetState(state);
+}
 
 const char* ToString(GCTracer::Event::Type type, bool short_name) {
   switch (type) {
@@ -202,7 +201,7 @@ void GCTracer::UpdateCurrentEvent(GarbageCollectionReason gc_reason,
   // need to update a few fields.
   DCHECK(current_.type == Event::Type::INCREMENTAL_MARK_COMPACTOR ||
          current_.type == Event::Type::INCREMENTAL_MINOR_MARK_SWEEPER);
-  DCHECK_EQ(Event::State::ATOMIC, current_.state);
+  DCHECK_EQ(Event::State::ATOMIC, current_.state());
   DCHECK(IsInObservablePause());
   current_.gc_reason = gc_reason;
   current_.collector_reason = collector_reason;
@@ -217,12 +216,12 @@ void GCTracer::StartCycle(GarbageCollector collector,
                           GarbageCollectionReason gc_reason,
                           const char* collector_reason, MarkingType marking) {
   // We cannot start a new cycle while there's another one in its atomic pause.
-  DCHECK_NE(Event::State::ATOMIC, current_.state);
+  DCHECK_NE(Event::State::ATOMIC, current_.state());
   // We cannot start a new cycle while a young generation GC cycle has
   // already interrupted a full GC cycle.
   DCHECK(!young_gc_while_full_gc_);
 
-  young_gc_while_full_gc_ = current_.state != Event::State::NOT_RUNNING;
+  young_gc_while_full_gc_ = current_.state() != Event::State::NOT_RUNNING;
   if (young_gc_while_full_gc_) {
     // The cases for interruption are: Scavenger, MinorMS interrupting sweeping.
     // In both cases we are fine with fetching background counters now and
@@ -253,8 +252,8 @@ void GCTracer::StartCycle(GarbageCollector collector,
   }
 
   DCHECK_IMPLIES(!young_gc_while_full_gc_,
-                 current_.state == Event::State::NOT_RUNNING);
-  DCHECK_EQ(Event::State::NOT_RUNNING, previous_.state);
+                 current_.state() == Event::State::NOT_RUNNING);
+  DCHECK_EQ(Event::State::NOT_RUNNING, previous_.state());
 
   previous_ = current_;
   current_ = Event(type, Event::State::MARKING, gc_reason, collector_reason);
@@ -285,8 +284,8 @@ void GCTracer::StartCycle(GarbageCollector collector,
 }
 
 void GCTracer::StartAtomicPause() {
-  DCHECK_EQ(Event::State::MARKING, current_.state);
-  current_.state = Event::State::ATOMIC;
+  DCHECK_EQ(Event::State::MARKING, current_.state());
+  current_.SetState(Event::State::ATOMIC);
 }
 
 void GCTracer::StartInSafepoint() {
@@ -412,13 +411,13 @@ void GCTracer::StopObservablePause(GarbageCollector collector) {
 }
 
 void GCTracer::StopAtomicPause() {
-  DCHECK_EQ(Event::State::ATOMIC, current_.state);
-  current_.state = Event::State::SWEEPING;
+  DCHECK_EQ(Event::State::ATOMIC, current_.state());
+  current_.SetState(Event::State::SWEEPING);
 }
 
 void GCTracer::StopCycle(GarbageCollector collector) {
-  DCHECK_EQ(Event::State::SWEEPING, current_.state);
-  current_.state = Event::State::NOT_RUNNING;
+  DCHECK_EQ(Event::State::SWEEPING, current_.state());
+  current_.SetState(Event::State::NOT_RUNNING);
 
   DCHECK(IsConsistentWithCollector(collector));
 
@@ -454,7 +453,7 @@ void GCTracer::StopCycle(GarbageCollector collector) {
 }
 
 void GCTracer::StopFullCycleIfNeeded() {
-  if (current_.state != Event::State::SWEEPING) return;
+  if (current_.state() != Event::State::SWEEPING) return;
   if (!notified_full_sweeping_completed_) return;
   if (heap_->cpp_heap() && !notified_full_cppgc_completed_) return;
   StopCycle(GarbageCollector::MARK_COMPACTOR);
@@ -464,7 +463,7 @@ void GCTracer::StopFullCycleIfNeeded() {
 
 void GCTracer::StopYoungCycleIfNeeded() {
   DCHECK(Event::IsYoungGenerationEvent(current_.type));
-  if (current_.state != Event::State::SWEEPING) return;
+  if (current_.state() != Event::State::SWEEPING) return;
   if ((current_.type == Event::Type::MINOR_MARK_SWEEPER ||
        current_.type == Event::Type::INCREMENTAL_MINOR_MARK_SWEEPER) &&
       !notified_young_sweeping_completed_)
@@ -505,8 +504,8 @@ void GCTracer::NotifyFullSweepingCompleted() {
   DCHECK(!Event::IsYoungGenerationEvent(current_.type));
   // Sweeping finalization can also be triggered from inside a full GC cycle's
   // atomic pause.
-  DCHECK(current_.state == Event::State::SWEEPING ||
-         current_.state == Event::State::ATOMIC);
+  DCHECK(current_.state() == Event::State::SWEEPING ||
+         current_.state() == Event::State::ATOMIC);
 
   // Stop a full GC cycle only when both v8 and cppgc (if available) GCs have
   // finished sweeping. This method is invoked by v8.
@@ -531,8 +530,8 @@ void GCTracer::NotifyYoungSweepingCompleted() {
     // triggered from inside a full GC cycle's atomic pause.
     DCHECK(current_.type == Event::Type::MINOR_MARK_SWEEPER ||
            current_.type == Event::Type::INCREMENTAL_MINOR_MARK_SWEEPER);
-    DCHECK(current_.state == Event::State::SWEEPING ||
-           current_.state == Event::State::ATOMIC);
+    DCHECK(current_.state() == Event::State::SWEEPING ||
+           current_.state() == Event::State::ATOMIC);
   } else {
     DCHECK(IsSweepingInProgress());
   }
@@ -1519,7 +1518,7 @@ void FlushBatchedEvents(
 
 void GCTracer::ReportFullCycleToRecorder() {
   DCHECK(!Event::IsYoungGenerationEvent(current_.type));
-  DCHECK_EQ(Event::State::NOT_RUNNING, current_.state);
+  DCHECK_EQ(Event::State::NOT_RUNNING, current_.state());
   auto* cpp_heap = v8::internal::CppHeap::From(heap_->cpp_heap());
   DCHECK_IMPLIES(cpp_heap,
                  cpp_heap->GetMetricRecorder()->FullGCMetricsReportPending());
@@ -1707,7 +1706,7 @@ void GCTracer::ReportIncrementalSweepingStepToRecorder(double v8_duration) {
 
 void GCTracer::ReportYoungCycleToRecorder() {
   DCHECK(Event::IsYoungGenerationEvent(current_.type));
-  DCHECK_EQ(Event::State::NOT_RUNNING, current_.state);
+  DCHECK_EQ(Event::State::NOT_RUNNING, current_.state());
   const std::shared_ptr<metrics::Recorder>& recorder =
       heap_->isolate()->metrics_recorder();
   DCHECK_NOT_NULL(recorder);
@@ -1804,13 +1803,13 @@ GarbageCollector GCTracer::GetCurrentCollector() const {
   }
 }
 
+bool GCTracer::IsInAtomicPause() const {
+  return current_.state() == Event::State::ATOMIC;
+}
+
 #ifdef DEBUG
 bool GCTracer::IsInObservablePause() const {
   return start_of_observable_pause_.has_value();
-}
-
-bool GCTracer::IsInAtomicPause() const {
-  return current_.state == Event::State::ATOMIC;
 }
 
 bool GCTracer::IsConsistentWithCollector(GarbageCollector collector) const {
@@ -1831,7 +1830,7 @@ bool GCTracer::IsSweepingInProgress() const {
           current_.type == Event::Type::INCREMENTAL_MARK_COMPACTOR ||
           current_.type == Event::Type::MINOR_MARK_SWEEPER ||
           current_.type == Event::Type::INCREMENTAL_MINOR_MARK_SWEEPER) &&
-         current_.state == Event::State::SWEEPING;
+         current_.state() == Event::State::SWEEPING;
 }
 #endif
 
