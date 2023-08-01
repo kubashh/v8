@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34747006_1ab43489",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4845,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-08-01T14:22:51Z",
+      "side": 1,
+      "message": "Changed to range-based for.",
+      "revId": "7538b7b22c7d109df16108dec20f173db1744e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5175a39f_47a6481b",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4852,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-08-01T14:22:51Z",
+      "side": 1,
+      "message": "Pulled out from the middle of `FindConnectableSubranges`.",
+      "revId": "7538b7b22c7d109df16108dec20f173db1744e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f111c433_64202505",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4872,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-08-01T14:22:51Z",
+      "side": 1,
+      "message": "These lines above are essentially the rest of `FindConnectableSubranges`.",
+      "revId": "7538b7b22c7d109df16108dec20f173db1744e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
