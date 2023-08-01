@@ -313,6 +313,7 @@ void IncrementalMarking::StartMarkingMajor() {
   }
 
   heap_->InvokeIncrementalMarkingPrologueCallbacks();
+  heap_->FreeLinearAllocationAreas();
 
   is_compacting_ = major_collector_->StartCompaction(
       MarkCompactCollector::StartCompactionMode::kIncremental);

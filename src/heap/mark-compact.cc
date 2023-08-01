@@ -525,14 +525,8 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
       "access");
 
   DCHECK(!sweeper_->sweeping_in_progress());
-  Page* owner_of_linear_allocation_area =
-      space->top() == space->limit()
-          ? nullptr
-          : Page::FromAllocationAreaAddress(space->top());
   for (Page* p : *space) {
-    if (p->NeverEvacuate() || (p == owner_of_linear_allocation_area) ||
-        !p->CanAllocate())
-      continue;
+    if (p->NeverEvacuate() || !p->CanAllocate()) continue;
 
     if (p->IsPinned()) {
       DCHECK(
@@ -655,6 +649,7 @@ void MarkCompactCollector::Prepare() {
 #endif
 
   DCHECK(!sweeper_->sweeping_in_progress());
+  heap_->FreeLinearAllocationAreas();
 
   // Unmapper tasks needs to be stopped during the GC, otherwise pages queued
   // for freeing might get unmapped during the GC.
@@ -682,8 +677,6 @@ void MarkCompactCollector::Prepare() {
     heap_->external_pointer_space()->StartCompactingIfNeeded();
 #endif  // V8_COMPRESS_POINTERS
   }
-
-  heap_->FreeLinearAllocationAreas();
 
   NewSpace* new_space = heap_->new_space();
   if (new_space) {
