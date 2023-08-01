@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac309b54_c003c7d1",
+        "filename": "src/objects/tagged-impl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-01T10:09:12Z",
+      "side": 1,
+      "message": "this is now slightly interesting because we need to materialize the template specialization for each function separately.",
+      "range": {
+        "startLine": 45,
+        "startChar": 14,
+        "endLine": 45,
+        "endChar": 24
+      },
+      "revId": "0cf5bd5a7b3b381e2c9ee2491b00942eec9d8e49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
