@@ -97,11 +97,11 @@ void MacroAssembler::LoadRoot(Register destination, RootIndex index) {
 
   if (RootsTable::IsImmortalImmovable(index)) {
     Handle<Object> object = isolate()->root_handle(index);
-    if (object->IsSmi()) {
+    if (IsSmi(*object)) {
       mov(destination, Immediate(Smi::cast(*object)));
       return;
     } else {
-      DCHECK(object->IsHeapObject());
+      DCHECK(IsHeapObject(*object));
       mov(destination, Handle<HeapObject>::cast(object));
       return;
     }
@@ -135,7 +135,7 @@ void MacroAssembler::CompareRoot(Register with, RootIndex index) {
 
   DCHECK(RootsTable::IsImmortalImmovable(index));
   Handle<Object> object = isolate()->root_handle(index);
-  if (object->IsHeapObject()) {
+  if (IsHeapObject(*object)) {
     cmp(with, Handle<HeapObject>::cast(object));
   } else {
     cmp(with, Immediate(Smi::cast(*object)));
@@ -153,7 +153,7 @@ void MacroAssembler::PushRoot(RootIndex index) {
   // TODO(v8:6666): Add a scratch register or remove all uses.
   DCHECK(RootsTable::IsImmortalImmovable(index));
   Handle<Object> object = isolate()->root_handle(index);
-  if (object->IsHeapObject()) {
+  if (IsHeapObject(*object)) {
     Push(Handle<HeapObject>::cast(object));
   } else {
     Push(Smi::cast(*object));
@@ -1515,14 +1515,12 @@ void MacroAssembler::InvokeFunctionCode(Register function, Register new_target,
   // We call indirectly through the code field in the function to
   // allow recompilation to take effect without changing any of the
   // call sites.
-  static_assert(kJavaScriptCallCodeStartRegister == ecx, "ABI mismatch");
-  mov(ecx, FieldOperand(function, JSFunction::kCodeOffset));
   switch (type) {
     case InvokeType::kCall:
-      CallCodeObject(ecx);
+      CallJSFunction(function);
       break;
     case InvokeType::kJump:
-      JumpCodeObject(ecx);
+      JumpJSFunction(function);
       break;
   }
   jmp(&done, Label::kNear);
@@ -2081,6 +2079,19 @@ void MacroAssembler::JumpCodeObject(Register code_object, JumpMode jump_mode) {
       ret(0);
       return;
   }
+}
+
+void MacroAssembler::CallJSFunction(Register function_object) {
+  static_assert(kJavaScriptCallCodeStartRegister == ecx, "ABI mismatch");
+  mov(ecx, FieldOperand(function_object, JSFunction::kCodeOffset));
+  CallCodeObject(ecx);
+}
+
+void MacroAssembler::JumpJSFunction(Register function_object,
+                                    JumpMode jump_mode) {
+  static_assert(kJavaScriptCallCodeStartRegister == ecx, "ABI mismatch");
+  mov(ecx, FieldOperand(function_object, JSFunction::kCodeOffset));
+  JumpCodeObject(ecx, jump_mode);
 }
 
 void MacroAssembler::Jump(const ExternalReference& reference) {

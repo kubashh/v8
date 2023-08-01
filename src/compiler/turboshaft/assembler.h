@@ -536,7 +536,9 @@ template <class T, class Assembler>
 class ScopedVariable : Variable {
  public:
   explicit ScopedVariable(Assembler& assembler)
-      : Variable(assembler.NewVariable(V<T>::rep)), assembler_(assembler) {}
+      : Variable(assembler.NewVariable(
+            static_cast<const RegisterRepresentation&>(V<T>::rep))),
+        assembler_(assembler) {}
   ScopedVariable(Assembler& assembler, V<T> initial_value)
       : ScopedVariable(assembler) {
     assembler.SetVariable(*this, initial_value);
@@ -3061,6 +3063,21 @@ class AssemblerOpInterface {
       return OpIndex::Invalid();
     }
     return stack().ReduceSimd128Constant(value);
+  }
+
+  V<Simd128> Simd128Binop(V<Simd128> left, V<Simd128> right,
+                          Simd128BinopOp::Kind kind) {
+    if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
+      return OpIndex::Invalid();
+    }
+    return stack().ReduceSimd128Binop(left, right, kind);
+  }
+
+  V<Simd128> Simd128Unary(V<Simd128> input, Simd128UnaryOp::Kind kind) {
+    if (V8_UNLIKELY(stack().generating_unreachable_operations())) {
+      return OpIndex::Invalid();
+    }
+    return stack().ReduceSimd128Unary(input, kind);
   }
 #endif
 

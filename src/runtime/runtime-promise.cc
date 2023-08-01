@@ -119,7 +119,7 @@ RUNTIME_FUNCTION(Runtime_PromiseHookBefore) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
   Handle<JSReceiver> promise = args.at<JSReceiver>(0);
-  if (promise->IsJSPromise()) {
+  if (IsJSPromise(*promise)) {
     isolate->OnPromiseBefore(Handle<JSPromise>::cast(promise));
   }
   return ReadOnlyRoots(isolate).undefined_value();
@@ -129,7 +129,7 @@ RUNTIME_FUNCTION(Runtime_PromiseHookAfter) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
   Handle<JSReceiver> promise = args.at<JSReceiver>(0);
-  if (promise->IsJSPromise()) {
+  if (IsJSPromise(*promise)) {
     isolate->OnPromiseAfter(Handle<JSPromise>::cast(promise));
   }
   return ReadOnlyRoots(isolate).undefined_value();
@@ -142,7 +142,7 @@ RUNTIME_FUNCTION(Runtime_RejectPromise) {
   Handle<Object> reason = args.at(1);
   Handle<Boolean> debug_event = args.at<Boolean>(2);
   return *JSPromise::Reject(promise, reason,
-                            debug_event->BooleanValue(isolate));
+                            Object::BooleanValue(*debug_event, isolate));
 }
 
 RUNTIME_FUNCTION(Runtime_ResolvePromise) {

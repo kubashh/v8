@@ -3948,7 +3948,7 @@ bool Simulator::ExecDebugCommand(ArrayUniquePtr<char> line_ptr) {
         Object obj(value);
         os << arg1 << ": \n";
 #ifdef DEBUG
-        obj.Print(os);
+        Print(obj, os);
         os << "\n";
 #else
         os << Brief(obj) << "\n";
@@ -4005,13 +4005,13 @@ bool Simulator::ExecDebugCommand(ArrayUniquePtr<char> line_ptr) {
       if (!skip_obj_print) {
         Object obj(*cur);
         Heap* current_heap = isolate_->heap();
-        if (obj.IsSmi() ||
+        if (IsSmi(obj) ||
             IsValidHeapObject(current_heap, HeapObject::cast(obj))) {
           PrintF(" (");
-          if (obj.IsSmi()) {
+          if (IsSmi(obj)) {
             PrintF("smi %" PRId32, Smi::ToInt(obj));
           } else {
-            obj.ShortPrint();
+            ShortPrint(obj);
           }
           PrintF(")");
         }

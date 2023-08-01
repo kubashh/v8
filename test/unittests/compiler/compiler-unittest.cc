@@ -72,7 +72,7 @@ static double Inc(Isolate* isolate, int x) {
   Execution::CallScript(isolate, fun, global,
                         isolate->factory()->empty_fixed_array())
       .Check();
-  return GetGlobalProperty("result")->Number();
+  return Object::Number(*GetGlobalProperty("result"));
 }
 
 TEST_F(CompilerTest, Inc) {
@@ -90,7 +90,7 @@ static double Add(Isolate* isolate, int x, int y) {
   Execution::CallScript(isolate, fun, global,
                         isolate->factory()->empty_fixed_array())
       .Check();
-  return GetGlobalProperty("result")->Number();
+  return Object::Number(*GetGlobalProperty("result"));
 }
 
 TEST_F(CompilerTest, Add) {
@@ -107,7 +107,7 @@ static double Abs(Isolate* isolate, int x) {
   Execution::CallScript(isolate, fun, global,
                         isolate->factory()->empty_fixed_array())
       .Check();
-  return GetGlobalProperty("result")->Number();
+  return Object::Number(*GetGlobalProperty("result"));
 }
 
 TEST_F(CompilerTest, Abs) {
@@ -125,7 +125,7 @@ static double Sum(Isolate* isolate, int n) {
   Execution::CallScript(isolate, fun, global,
                         isolate->factory()->empty_fixed_array())
       .Check();
-  return GetGlobalProperty("result")->Number();
+  return Object::Number(*GetGlobalProperty("result"));
 }
 
 TEST_F(CompilerTest, Sum) {
@@ -180,7 +180,7 @@ TEST_F(CompilerTest, Stuff) {
   Execution::CallScript(i_isolate(), fun, global,
                         i_isolate()->factory()->empty_fixed_array())
       .Check();
-  EXPECT_EQ(511.0, GetGlobalProperty("r")->Number());
+  EXPECT_EQ(511.0, Object::Number(*GetGlobalProperty("r")));
 }
 
 TEST_F(CompilerTest, UncaughtThrow) {
@@ -194,7 +194,7 @@ TEST_F(CompilerTest, UncaughtThrow) {
   EXPECT_TRUE(Execution::CallScript(isolate, fun, global,
                                     isolate->factory()->empty_fixed_array())
                   .is_null());
-  EXPECT_EQ(42.0, isolate->pending_exception().Number());
+  EXPECT_EQ(42.0, Object::Number(isolate->pending_exception()));
 }
 
 using CompilerC2JSFramesTest = WithPrintExtensionMixin<v8::TestWithIsolate>;
@@ -229,7 +229,7 @@ TEST_F(CompilerC2JSFramesTest, C2JSFrames) {
   Handle<Object> fun1 =
       JSReceiver::GetProperty(isolate, isolate->global_object(), "foo")
           .ToHandleChecked();
-  EXPECT_TRUE(fun1->IsJSFunction());
+  EXPECT_TRUE(IsJSFunction(*fun1));
 
   Handle<Object> argv[] = {
       isolate->factory()->InternalizeString(base::StaticCharVector("hello"))};
@@ -301,7 +301,7 @@ TEST_F(CompilerTest, FeedbackVectorPreservedAcrossRecompiles) {
   {
     HeapObject heap_object;
     EXPECT_TRUE(object->GetHeapObjectIfWeak(&heap_object));
-    EXPECT_TRUE(heap_object.IsJSFunction());
+    EXPECT_TRUE(IsJSFunction(heap_object));
   }
 
   RunJS("%OptimizeFunctionOnNextCall(f); f(fun1);");
@@ -313,7 +313,7 @@ TEST_F(CompilerTest, FeedbackVectorPreservedAcrossRecompiles) {
   {
     HeapObject heap_object;
     EXPECT_TRUE(object->GetHeapObjectIfWeak(&heap_object));
-    EXPECT_TRUE(heap_object.IsJSFunction());
+    EXPECT_TRUE(IsJSFunction(heap_object));
   }
 }
 
@@ -613,7 +613,7 @@ TEST_F(CompilerTest, CompileFunctionScriptOrigin) {
           .ToLocalChecked();
   EXPECT_TRUE(!fun.IsEmpty());
   auto fun_i = i::Handle<i::JSFunction>::cast(Utils::OpenHandle(*fun));
-  EXPECT_TRUE(fun_i->shared().IsSharedFunctionInfo());
+  EXPECT_TRUE(IsSharedFunctionInfo(fun_i->shared()));
   EXPECT_TRUE(Utils::ToLocal(
                   i::handle(i::Script::cast(fun_i->shared()->script())->name(),
                             i_isolate()))

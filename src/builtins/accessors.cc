@@ -166,8 +166,8 @@ void Accessors::ArrayLengthSetter(
   RCS_SCOPE(isolate, RuntimeCallCounterId::kArrayLengthSetter);
   HandleScope scope(isolate);
 
-  DCHECK(Utils::OpenHandle(*name)->SameValue(
-      ReadOnlyRoots(isolate).length_string()));
+  DCHECK(Object::SameValue(*Utils::OpenHandle(*name),
+                           ReadOnlyRoots(isolate).length_string()));
 
   Handle<JSReceiver> object = Utils::OpenHandle(*info.Holder());
   Handle<JSArray> array = Handle<JSArray>::cast(object);
@@ -186,7 +186,7 @@ void Accessors::ArrayLengthSetter(
     // its property descriptor. Don't perform this check if "length" was
     // previously readonly, as this may have been called during
     // DefineOwnPropertyIgnoreAttributes().
-    if (length == array->length().Number()) {
+    if (length == Object::Number(array->length())) {
       info.GetReturnValue().Set(true);
     } else if (info.ShouldThrowOnError()) {
       Factory* factory = isolate->factory();
@@ -208,7 +208,7 @@ void Accessors::ArrayLengthSetter(
   }
 
   uint32_t actual_new_len = 0;
-  CHECK(array->length().ToArrayLength(&actual_new_len));
+  CHECK(Object::ToArrayLength(array->length(), &actual_new_len));
   // Fail if there were non-deletable elements.
   if (actual_new_len != length) {
     if (info.ShouldThrowOnError()) {
@@ -292,7 +292,7 @@ void Accessors::StringLengthGetter(
   // in the hierarchy, in this case for String values.
 
   Object value = *Utils::OpenHandle(*v8::Local<v8::Value>(info.This()));
-  if (!value.IsString()) {
+  if (!IsString(value)) {
     // Not a string value. That means that we either got a String wrapper or
     // a Value with a String wrapper in its prototype chain.
     value =
@@ -483,7 +483,7 @@ Handle<JSObject> GetFrameArguments(Isolate* isolate,
   DCHECK(array->length() == length);
   for (int i = 0; i < length; i++) {
     Object value = frame->GetParameter(i);
-    if (value.IsTheHole(isolate)) {
+    if (IsTheHole(value, isolate)) {
       // Generators currently use holes as dummy arguments when resuming.  We
       // must not leak those.
       DCHECK(IsResumableFunction(function->shared()->kind()));
@@ -856,7 +856,7 @@ void Accessors::ErrorStackGetter(
   HandleScope scope(isolate);
   Handle<Object> formatted_stack = isolate->factory()->undefined_value();
   Handle<JSReceiver> maybe_error_object = Utils::OpenHandle(*info.This());
-  if (maybe_error_object->IsJSObject()) {
+  if (IsJSObject(*maybe_error_object)) {
     if (!ErrorUtils::GetFormattedStack(
              isolate, Handle<JSObject>::cast(maybe_error_object))
              .ToHandle(&formatted_stack)) {
@@ -874,7 +874,7 @@ void Accessors::ErrorStackSetter(
   Isolate* isolate = reinterpret_cast<Isolate*>(info.GetIsolate());
   HandleScope scope(isolate);
   Handle<JSReceiver> maybe_error_object = Utils::OpenHandle(*info.This());
-  if (maybe_error_object->IsJSObject()) {
+  if (IsJSObject(*maybe_error_object)) {
     v8::Local<v8::Value> value = info[0];
     ErrorUtils::SetFormattedStack(isolate,
                                   Handle<JSObject>::cast(maybe_error_object),

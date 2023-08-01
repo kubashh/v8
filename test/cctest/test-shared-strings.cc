@@ -108,32 +108,32 @@ UNINITIALIZED_TEST(InPlaceInternalizableStringsAreShared) {
   // Old generation 1- and 2-byte seq strings are in-place internalizable.
   Handle<String> old_one_byte_seq =
       factory1->NewStringFromAsciiChecked(raw_one_byte, AllocationType::kOld);
-  CHECK(old_one_byte_seq->InSharedHeap());
+  CHECK(Object::InSharedHeap(*old_one_byte_seq));
   Handle<String> old_two_byte_seq =
       factory1->NewStringFromTwoByte(two_byte, AllocationType::kOld)
           .ToHandleChecked();
-  CHECK(old_two_byte_seq->InSharedHeap());
+  CHECK(Object::InSharedHeap(*old_two_byte_seq));
 
   // Young generation are not internalizable and not shared when sharing the
   // string table.
   Handle<String> young_one_byte_seq =
       factory1->NewStringFromAsciiChecked(raw_one_byte, AllocationType::kYoung);
-  CHECK(!young_one_byte_seq->InSharedHeap());
+  CHECK(!Object::InSharedHeap(*young_one_byte_seq));
   Handle<String> young_two_byte_seq =
       factory1->NewStringFromTwoByte(two_byte, AllocationType::kYoung)
           .ToHandleChecked();
-  CHECK(!young_two_byte_seq->InSharedHeap());
+  CHECK(!Object::InSharedHeap(*young_two_byte_seq));
 
   // Internalized strings are shared.
   uint64_t seed = HashSeed(i_isolate1);
   Handle<String> one_byte_intern = factory1->NewOneByteInternalizedString(
       base::OneByteVector(raw_one_byte),
       StringHasher::HashSequentialString<char>(raw_one_byte, 3, seed));
-  CHECK(one_byte_intern->InSharedHeap());
+  CHECK(Object::InSharedHeap(*one_byte_intern));
   Handle<String> two_byte_intern = factory1->NewTwoByteInternalizedString(
       two_byte,
       StringHasher::HashSequentialString<uint16_t>(raw_two_byte, 3, seed));
-  CHECK(two_byte_intern->InSharedHeap());
+  CHECK(Object::InSharedHeap(*two_byte_intern));
 }
 
 UNINITIALIZED_TEST(InPlaceInternalization) {
@@ -167,10 +167,10 @@ UNINITIALIZED_TEST(InPlaceInternalization) {
       factory1->InternalizeString(old_one_byte_seq1);
   Handle<String> two_byte_intern1 =
       factory1->InternalizeString(old_two_byte_seq1);
-  CHECK(old_one_byte_seq1->InSharedHeap());
-  CHECK(old_two_byte_seq1->InSharedHeap());
-  CHECK(one_byte_intern1->InSharedHeap());
-  CHECK(two_byte_intern1->InSharedHeap());
+  CHECK(Object::InSharedHeap(*old_one_byte_seq1));
+  CHECK(Object::InSharedHeap(*old_two_byte_seq1));
+  CHECK(Object::InSharedHeap(*one_byte_intern1));
+  CHECK(Object::InSharedHeap(*two_byte_intern1));
   CHECK(old_one_byte_seq1.equals(one_byte_intern1));
   CHECK(old_two_byte_seq1.equals(two_byte_intern1));
   CHECK_EQ(*old_one_byte_seq1, *one_byte_intern1);
@@ -188,10 +188,10 @@ UNINITIALIZED_TEST(InPlaceInternalization) {
       factory2->InternalizeString(old_one_byte_seq2);
   Handle<String> two_byte_intern2 =
       factory2->InternalizeString(old_two_byte_seq2);
-  CHECK(old_one_byte_seq2->InSharedHeap());
-  CHECK(old_two_byte_seq2->InSharedHeap());
-  CHECK(one_byte_intern2->InSharedHeap());
-  CHECK(two_byte_intern2->InSharedHeap());
+  CHECK(Object::InSharedHeap(*old_one_byte_seq2));
+  CHECK(Object::InSharedHeap(*old_two_byte_seq2));
+  CHECK(Object::InSharedHeap(*one_byte_intern2));
+  CHECK(Object::InSharedHeap(*two_byte_intern2));
   CHECK(!old_one_byte_seq2.equals(one_byte_intern2));
   CHECK(!old_two_byte_seq2.equals(two_byte_intern2));
   CHECK_NE(*old_one_byte_seq2, *one_byte_intern2);
@@ -235,10 +235,10 @@ UNINITIALIZED_TEST(YoungInternalization) {
             .ToHandleChecked();
     one_byte_intern1 = factory1->InternalizeString(young_one_byte_seq1);
     two_byte_intern1 = factory1->InternalizeString(young_two_byte_seq1);
-    CHECK(!young_one_byte_seq1->InSharedHeap());
-    CHECK(!young_two_byte_seq1->InSharedHeap());
-    CHECK(one_byte_intern1->InSharedHeap());
-    CHECK(two_byte_intern1->InSharedHeap());
+    CHECK(!Object::InSharedHeap(*young_one_byte_seq1));
+    CHECK(!Object::InSharedHeap(*young_two_byte_seq1));
+    CHECK(Object::InSharedHeap(*one_byte_intern1));
+    CHECK(Object::InSharedHeap(*two_byte_intern1));
     CHECK(!young_one_byte_seq1.equals(one_byte_intern1));
     CHECK(!young_two_byte_seq1.equals(two_byte_intern1));
     CHECK_NE(*young_one_byte_seq1, *one_byte_intern1);
@@ -342,7 +342,7 @@ class ConcurrentInternalizationThread final
     CHECK(input_string->IsShared());
     Handle<String> interned = factory->InternalizeString(input_string);
     CHECK(interned->IsShared());
-    CHECK(interned->IsInternalizedString());
+    CHECK(IsInternalizedString(*interned));
     if (hit_or_miss_ == kTestMiss) {
       CHECK_EQ(*input_string, *interned);
     } else {
@@ -476,10 +476,10 @@ class ConcurrentStringTableLookupThread final
     CHECK(input_string->IsShared());
     Object result = Object(StringTable::TryStringToIndexOrLookupExisting(
         i_isolate, input_string->ptr()));
-    if (result.IsString()) {
+    if (IsString(result)) {
       String internalized = String::cast(result);
-      CHECK(internalized.IsInternalizedString());
-      CHECK_IMPLIES(input_string->IsInternalizedString(),
+      CHECK(IsInternalizedString(internalized));
+      CHECK_IMPLIES(IsInternalizedString(*input_string),
                     *input_string == internalized);
     } else {
       CHECK_EQ(Smi::cast(result).value(), ResultSentinel::kNotFound);
@@ -552,8 +552,8 @@ Handle<String> ShareAndVerify(Isolate* isolate, Handle<String> string) {
   Handle<String> shared = String::Share(isolate, string);
   CHECK(shared->IsShared());
 #ifdef VERIFY_HEAP
-  shared->ObjectVerify(isolate);
-  string->ObjectVerify(isolate);
+  Object::ObjectVerify(*shared, isolate);
+  Object::ObjectVerify(*string, isolate);
 #endif  // VERIFY_HEAP
   return shared;
 }
@@ -708,8 +708,8 @@ UNINITIALIZED_TEST(StringShare) {
           i_isolate->main_thread_local_heap(),
           GarbageCollectionReason::kTesting);
     }
-    CHECK(one_byte_ext->IsExternalString());
-    CHECK(two_byte_ext->IsExternalString());
+    CHECK(IsExternalString(*one_byte_ext));
+    CHECK(IsExternalString(*two_byte_ext));
     CHECK(!one_byte_ext->IsShared());
     CHECK(!two_byte_ext->IsShared());
     Handle<String> shared_one_byte = ShareAndVerify(i_isolate, one_byte_ext);
@@ -766,7 +766,7 @@ UNINITIALIZED_TEST(StringShare) {
     Handle<String> cons =
         factory->NewConsString(one_byte_seq1, one_byte_seq2).ToHandleChecked();
     CHECK(!cons->IsShared());
-    CHECK(cons->IsConsString());
+    CHECK(IsConsString(*cons));
     Handle<String> shared = ShareAndVerify(i_isolate, cons);
     CheckSharedStringIsEqualCopy(shared, cons);
   }
@@ -779,7 +779,7 @@ UNINITIALIZED_TEST(StringShare) {
     Handle<String> sliced =
         factory->NewSubString(one_byte_seq, 1, one_byte_seq->length());
     CHECK(!sliced->IsShared());
-    CHECK(sliced->IsSlicedString());
+    CHECK(IsSlicedString(*sliced));
     Handle<String> shared = ShareAndVerify(i_isolate, sliced);
     CheckSharedStringIsEqualCopy(shared, sliced);
   }
@@ -1113,7 +1113,7 @@ UNINITIALIZED_TEST(InternalizedSharedStringsTransitionDuringGC) {
                                   i_isolate);
       Handle<String> interned = factory->InternalizeString(input_string);
       CHECK(input_string->IsShared());
-      CHECK(!input_string->IsThinString());
+      CHECK(!IsThinString(*input_string));
       CHECK(input_string->HasForwardingIndex(kAcquireLoad));
       CHECK(String::Equals(i_isolate, input_string, interned));
     }
@@ -1128,7 +1128,7 @@ UNINITIALIZED_TEST(InternalizedSharedStringsTransitionDuringGC) {
     for (int i = 0; i < shared_strings->length(); i++) {
       Handle<String> input_string(String::cast(shared_strings->get(i)),
                                   i_isolate);
-      CHECK(input_string->IsThinString());
+      CHECK(IsThinString(*input_string));
     }
   }
 }
@@ -1160,7 +1160,7 @@ UNINITIALIZED_TEST(ShareExternalString) {
         i_isolate1->main_thread_local_heap(),
         GarbageCollectionReason::kTesting);
   }
-  CHECK(one_byte->IsExternalString());
+  CHECK(IsExternalString(*one_byte));
   Handle<ExternalOneByteString> one_byte_external =
       Handle<ExternalOneByteString>::cast(one_byte);
   Handle<String> shared_one_byte =
@@ -1222,8 +1222,8 @@ UNINITIALIZED_TEST(ExternalizeSharedString) {
   TwoByteResource* two_byte_res = resource_factory.CreateTwoByte(two_byte_vec);
   shared_one_byte->MakeExternal(one_byte_res);
   shared_two_byte->MakeExternal(two_byte_res);
-  CHECK(!shared_one_byte->IsExternalString());
-  CHECK(!shared_two_byte->IsExternalString());
+  CHECK(!IsExternalString(*shared_one_byte));
+  CHECK(!IsExternalString(*shared_two_byte));
   CHECK(shared_one_byte->HasExternalForwardingIndex(kAcquireLoad));
   CHECK(shared_two_byte->HasExternalForwardingIndex(kAcquireLoad));
 
@@ -1267,7 +1267,7 @@ UNINITIALIZED_TEST(ExternalizedSharedStringsTransitionDuringGC) {
           resource_factory.CreateOneByte(buffer, length, false);
       CHECK(input_string->MakeExternal(resource));
       CHECK(input_string->IsShared());
-      CHECK(!input_string->IsExternalString());
+      CHECK(!IsExternalString(*input_string));
       CHECK(input_string->HasExternalForwardingIndex(kAcquireLoad));
     }
 
@@ -1282,7 +1282,7 @@ UNINITIALIZED_TEST(ExternalizedSharedStringsTransitionDuringGC) {
     for (int i = 0; i < shared_strings->length(); i++) {
       Handle<String> input_string(String::cast(shared_strings->get(i)),
                                   i_isolate);
-      CHECK(input_string->IsExternalString());
+      CHECK(IsExternalString(*input_string));
     }
   }
 }
@@ -1322,8 +1322,8 @@ UNINITIALIZED_TEST(ExternalizeInternalizedString) {
         i_isolate1->main_thread_local_heap(),
         GarbageCollectionReason::kTesting);
   }
-  CHECK(one_byte->IsThinString());
-  CHECK(two_byte->IsThinString());
+  CHECK(IsThinString(*one_byte));
+  CHECK(IsThinString(*two_byte));
   CHECK(one_byte_intern->IsOneByteRepresentation());
   CHECK(two_byte_intern->IsTwoByteRepresentation());
   CHECK(one_byte_intern->IsShared());
@@ -1336,8 +1336,8 @@ UNINITIALIZED_TEST(ExternalizeInternalizedString) {
   TwoByteResource* two_byte_res = resource_factory.CreateTwoByte(two_byte_vec);
   CHECK(one_byte_intern->MakeExternal(one_byte_res));
   CHECK(two_byte_intern->MakeExternal(two_byte_res));
-  CHECK(!one_byte_intern->IsExternalString());
-  CHECK(!two_byte_intern->IsExternalString());
+  CHECK(!IsExternalString(*one_byte_intern));
+  CHECK(!IsExternalString(*two_byte_intern));
   CHECK(one_byte_intern->HasExternalForwardingIndex(kAcquireLoad));
   CHECK(two_byte_intern->HasExternalForwardingIndex(kAcquireLoad));
   // The hash of internalized strings is stored in the forwarding table.
@@ -1387,15 +1387,15 @@ UNINITIALIZED_TEST(InternalizeSharedExternalString) {
   i_isolate1->heap()->CollectGarbageShared(i_isolate1->main_thread_local_heap(),
                                            GarbageCollectionReason::kTesting);
   CHECK(shared_one_byte->IsShared());
-  CHECK(shared_one_byte->IsExternalString());
+  CHECK(IsExternalString(*shared_one_byte));
   CHECK(shared_two_byte->IsShared());
-  CHECK(shared_two_byte->IsExternalString());
+  CHECK(IsExternalString(*shared_two_byte));
 
   // Shared cached external strings are in-place internalizable.
   Handle<String> one_byte_intern = factory1->InternalizeString(shared_one_byte);
   CHECK_EQ(*one_byte_intern, *shared_one_byte);
-  CHECK(shared_one_byte->IsExternalString());
-  CHECK(shared_one_byte->IsInternalizedString());
+  CHECK(IsExternalString(*shared_one_byte));
+  CHECK(IsInternalizedString(*shared_one_byte));
 
   // Depending on the architecture/build options the two byte string might be
   // cached or uncached.
@@ -1408,13 +1408,13 @@ UNINITIALIZED_TEST(InternalizeSharedExternalString) {
     Handle<String> two_byte_intern = factory1->InternalizeString(two_byte);
     CHECK_NE(*two_byte_intern, *shared_two_byte);
     CHECK(shared_two_byte->HasInternalizedForwardingIndex(kAcquireLoad));
-    CHECK(two_byte_intern->IsInternalizedString());
-    CHECK(!two_byte_intern->IsExternalString());
+    CHECK(IsInternalizedString(*two_byte_intern));
+    CHECK(!IsExternalString(*two_byte_intern));
   } else {
     Handle<String> two_byte_intern = factory1->InternalizeString(two_byte);
     CHECK_EQ(*two_byte_intern, *shared_two_byte);
-    CHECK(shared_two_byte->IsExternalString());
-    CHECK(shared_two_byte->IsInternalizedString());
+    CHECK(IsExternalString(*shared_two_byte));
+    CHECK(IsInternalizedString(*shared_two_byte));
   }
 
   // Another GC should create an externalized internalized string of the cached
@@ -1425,7 +1425,7 @@ UNINITIALIZED_TEST(InternalizeSharedExternalString) {
   CHECK_EQ(shared_one_byte->map()->instance_type(),
            InstanceType::EXTERNAL_INTERNALIZED_ONE_BYTE_STRING_TYPE);
   if (is_uncached) {
-    CHECK(shared_two_byte->IsThinString());
+    CHECK(IsThinString(*shared_two_byte));
     CHECK(two_byte_res->IsDisposed());
   } else {
     CHECK_EQ(shared_two_byte->map()->instance_type(),
@@ -1461,7 +1461,7 @@ UNINITIALIZED_TEST(ExternalizeAndInternalizeMissSharedString) {
 
   Handle<String> one_byte_intern = factory1->InternalizeString(shared_one_byte);
   CHECK_EQ(*one_byte_intern, *shared_one_byte);
-  CHECK(shared_one_byte->IsInternalizedString());
+  CHECK(IsInternalizedString(*shared_one_byte));
   // Check that we have both, a forwarding index and an accessible hash.
   CHECK(shared_one_byte->HasExternalForwardingIndex(kAcquireLoad));
   CHECK(shared_one_byte->HasHashCode());
@@ -1624,7 +1624,7 @@ void CheckStringAndResource(
         threads) {
   if (check_transition) {
     if (should_be_alive) {
-      CHECK(string.IsExternalString());
+      CHECK(IsExternalString(string));
     } else {
       CHECK_EQ(string, deleted_string);
     }
@@ -1934,7 +1934,7 @@ void TestConcurrentExternalizationAndInternalization(
                                 i_isolate);
     String string = *input_string;
     if (hit_or_miss == kTestHit) {
-      CHECK(string.IsThinString());
+      CHECK(IsThinString(string));
       string = ThinString::cast(string)->actual();
     }
     int alive_resources = 0;
@@ -2558,7 +2558,7 @@ class ProtectExternalStringTableAddStringClientIsolateThread
         CHECK(string->InWritableSharedSpace());
         CHECK(!string->IsShared());
         CHECK(string->MakeExternal(new StaticOneByteResource(text)));
-        CHECK(string->IsExternalOneByteString());
+        CHECK(IsExternalOneByteString(*string));
       }
     }
 

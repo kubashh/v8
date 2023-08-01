@@ -267,7 +267,7 @@ class CompilerTracer : public AllStatic {
     if (!v8_flags.trace_opt) return;
     CodeTracer::Scope scope(isolate->GetCodeTracer());
     PrintF(scope.file(), "[marking ");
-    function->ShortPrint(scope.file());
+    ShortPrint(*function, scope.file());
     PrintF(scope.file(),
            " for optimized recompilation because --always-turbofan");
     PrintF(scope.file(), "]\n");
@@ -284,7 +284,7 @@ class CompilerTracer : public AllStatic {
                                const char* header, Handle<JSFunction> function,
                                CodeKind code_kind) {
     PrintF(scope.file(), "[%s ", header);
-    function->ShortPrint(scope.file());
+    ShortPrint(*function, scope.file());
     PrintF(scope.file(), " (target %s)", CodeKindToString(code_kind));
   }
 
@@ -293,7 +293,7 @@ class CompilerTracer : public AllStatic {
                                Handle<SharedFunctionInfo> shared,
                                CodeKind code_kind) {
     PrintF(scope.file(), "[%s ", header);
-    shared->ShortPrint(scope.file());
+    ShortPrint(*shared, scope.file());
     PrintF(scope.file(), " (target %s)", CodeKindToString(code_kind));
   }
 
@@ -324,7 +324,7 @@ void Compiler::LogFunctionCompilation(Isolate* isolate,
   Script::GetPositionInfo(script, shared->StartPosition(), &info);
   int line_num = info.line + 1;
   int column_num = info.column + 1;
-  Handle<String> script_name(script->name().IsString()
+  Handle<String> script_name(IsString(script->name())
                                  ? Tagged<String>::cast(script->name())
                                  : ReadOnlyRoots(isolate).empty_string(),
                              isolate);
@@ -392,7 +392,7 @@ ScriptOriginOptions OriginOptionsForEval(
   bool is_shared_cross_origin =
       parsing_while_debugging == ParsingWhileDebugging::kYes;
   bool is_opaque = false;
-  if (script.IsScript()) {
+  if (IsScript(script)) {
     auto script_origin_options = Script::cast(script)->origin_options();
     if (script_origin_options.IsSharedCrossOrigin()) {
       is_shared_cross_origin = true;
@@ -646,7 +646,7 @@ void InstallInterpreterTrampolineCopy(Isolate* isolate,
                                       Handle<SharedFunctionInfo> shared_info,
                                       LogEventListener::CodeTag log_tag) {
   DCHECK(v8_flags.interpreted_frames_native_stack);
-  if (!shared_info->function_data(kAcquireLoad).IsBytecodeArray()) {
+  if (!IsBytecodeArray(shared_info->function_data(kAcquireLoad))) {
     DCHECK(!shared_info->HasBytecodeArray());
     return;
   }
@@ -672,8 +672,8 @@ void InstallInterpreterTrampolineCopy(Isolate* isolate,
   int line_num = info.line + 1;
   int column_num = info.column + 1;
   Handle<String> script_name =
-      handle(script->name().IsString() ? Tagged<String>::cast(script->name())
-                                       : ReadOnlyRoots(isolate).empty_string(),
+      handle(IsString(script->name()) ? Tagged<String>::cast(script->name())
+                                      : ReadOnlyRoots(isolate).empty_string(),
              isolate);
   PROFILE(isolate, CodeCreateEvent(log_tag, abstract_code, shared_info,
                                    script_name, line_num, column_num));
@@ -1093,7 +1093,7 @@ bool CompileTurbofan_Concurrent(Isolate* isolate,
   if (!isolate->optimizing_compile_dispatcher()->IsQueueAvailable()) {
     if (v8_flags.trace_concurrent_recompilation) {
       PrintF("  ** Compilation queue full, will retry optimizing ");
-      function->ShortPrint();
+      ShortPrint(*function);
       PrintF(" later.\n");
     }
     return false;
@@ -1102,7 +1102,7 @@ bool CompileTurbofan_Concurrent(Isolate* isolate,
   if (isolate->heap()->HighMemoryPressure()) {
     if (v8_flags.trace_concurrent_recompilation) {
       PrintF("  ** High memory pressure, will retry optimizing ");
-      function->ShortPrint();
+      ShortPrint(*function);
       PrintF(" later.\n");
     }
     return false;
@@ -1124,7 +1124,7 @@ bool CompileTurbofan_Concurrent(Isolate* isolate,
 
   if (v8_flags.trace_concurrent_recompilation) {
     PrintF("  ** Queued ");
-    function->ShortPrint();
+    ShortPrint(*function);
     PrintF(" for concurrent optimization.\n");
   }
 
@@ -1168,8 +1168,8 @@ MaybeHandle<Code> CompileTurbofan(Isolate* isolate, Handle<JSFunction> function,
   DCHECK(!isolate->has_pending_exception());
   PostponeInterruptsScope postpone(isolate);
   const compiler::IsScriptAvailable has_script =
-      shared->script().IsScript() ? compiler::IsScriptAvailable::kYes
-                                  : compiler::IsScriptAvailable::kNo;
+      IsScript(shared->script()) ? compiler::IsScriptAvailable::kYes
+                                 : compiler::IsScriptAvailable::kNo;
   // BUG(5946): This DCHECK is necessary to make certain that we won't
   // tolerate the lack of a script without bytecode.
   DCHECK_IMPLIES(has_script == compiler::IsScriptAvailable::kNo,
@@ -1701,14 +1701,14 @@ void SetScriptFieldsFromDetails(Isolate* isolate, Script script,
   // takes precedence (as long as it is a non-empty string).
   Handle<Object> source_map_url;
   if (script_details.source_map_url.ToHandle(&source_map_url) &&
-      source_map_url->IsString() &&
+      IsString(*source_map_url) &&
       String::cast(*source_map_url)->length() > 0) {
     script->set_source_mapping_url(*source_map_url);
   }
   Handle<Object> host_defined_options;
   if (script_details.host_defined_options.ToHandle(&host_defined_options)) {
     // TODO(cbruni, chromium:1244145): Remove once migrated to the context.
-    if (host_defined_options->IsFixedArray()) {
+    if (IsFixedArray(*host_defined_options)) {
       script->set_host_defined_options(FixedArray::cast(*host_defined_options));
     }
   }
@@ -1736,10 +1736,10 @@ class MergeAssumptionChecker final : public ObjectVisitor {
       // However, the type of those objects (FixedArray or WeakFixedArray)
       // doesn't have enough information to indicate their usage, so we enqueue
       // those objects here rather than during VisitPointers.
-      if (current.IsScript()) {
+      if (IsScript(current)) {
         HeapObject sfis = Script::cast(current).shared_function_infos();
         QueueVisit(sfis, kScriptSfiList);
-      } else if (current.IsBytecodeArray()) {
+      } else if (IsBytecodeArray(current)) {
         HeapObject constants = BytecodeArray::cast(current).constant_pool();
         QueueVisit(constants, kConstantPool);
       }
@@ -1763,15 +1763,14 @@ class MergeAssumptionChecker final : public ObjectVisitor {
       HeapObject obj;
       bool is_weak = maybe_obj.IsWeak();
       if (maybe_obj.GetHeapObject(&obj)) {
-        if (obj.IsSharedFunctionInfo()) {
+        if (IsSharedFunctionInfo(obj)) {
           CHECK((current_object_kind_ == kConstantPool && !is_weak) ||
                 (current_object_kind_ == kScriptSfiList && is_weak));
-        } else if (obj.IsScript()) {
-          CHECK(host.IsSharedFunctionInfo() &&
+        } else if (IsScript(obj)) {
+          CHECK(IsSharedFunctionInfo(host) &&
                 current == MaybeObjectSlot(host.address() +
                                            SharedFunctionInfo::kScriptOffset));
-        } else if (obj.IsFixedArray() &&
-                   current_object_kind_ == kConstantPool) {
+        } else if (IsFixedArray(obj) && current_object_kind_ == kConstantPool) {
           // Constant pools can contain nested fixed arrays, which in turn can
           // point to SFIs.
           QueueVisit(obj, kConstantPool);
@@ -1976,7 +1975,7 @@ class ConstantPoolPointerForwarder {
       : cage_base_(cage_base), local_heap_(local_heap) {}
 
   void AddBytecodeArray(BytecodeArray bytecode_array) {
-    CHECK(bytecode_array.IsBytecodeArray());
+    CHECK(IsBytecodeArray(bytecode_array));
     bytecode_arrays_to_update_.push_back(handle(bytecode_array, local_heap_));
   }
 
@@ -2001,14 +2000,14 @@ class ConstantPoolPointerForwarder {
   void IterateConstantPool(FixedArray constant_pool) {
     for (int i = 0, length = constant_pool->length(); i < length; ++i) {
       Object obj = constant_pool->get(i);
-      if (obj.IsSmi()) continue;
+      if (IsSmi(obj)) continue;
       HeapObject heap_obj = HeapObject::cast(obj);
-      if (heap_obj.IsFixedArray(cage_base_)) {
+      if (IsFixedArray(heap_obj, cage_base_)) {
         // Constant pools can have nested fixed arrays, but such relationships
         // are acyclic and never more than a few layers deep, so recursion is
         // fine here.
         IterateConstantPool(FixedArray::cast(heap_obj));
-      } else if (heap_obj.IsSharedFunctionInfo(cage_base_)) {
+      } else if (IsSharedFunctionInfo(heap_obj, cage_base_)) {
         auto it = forwarding_table_.find(
             SharedFunctionInfo::cast(heap_obj)->function_literal_id());
         if (it != forwarding_table_.end()) {
@@ -2255,7 +2254,7 @@ MaybeHandle<SharedFunctionInfo> BackgroundCompileTask::FinalizeScript(
         merge.CompleteMergeInForeground(isolate, script);
     maybe_result = result;
     script = handle(Script::cast(result->script()), isolate);
-    DCHECK(script->source().StrictEquals(*source));
+    DCHECK(Object::StrictEquals(script->source(), *source));
     DCHECK(isolate->factory()->script_list()->Contains(
         MaybeObject::MakeWeak(MaybeObject::FromObject(*script))));
   } else {
@@ -2599,7 +2598,7 @@ bool Compiler::Compile(Isolate* isolate, Handle<SharedFunctionInfo> shared_info,
   if (script->produce_compile_hints()) {
     // Log lazy funtion compilation.
     Handle<ArrayList> list;
-    if (script->compiled_lazy_function_positions().IsUndefined()) {
+    if (IsUndefined(script->compiled_lazy_function_positions())) {
       constexpr int kInitialLazyFunctionPositionListSize = 100;
       list = ArrayList::New(isolate, kInitialLazyFunctionPositionListSize);
     } else {
@@ -2731,7 +2730,7 @@ bool Compiler::CompileSharedWithBaseline(Isolate* isolate,
 
   CompilerTracer::TraceFinishBaselineCompile(isolate, shared, time_taken_ms);
 
-  if (shared->script().IsScript()) {
+  if (IsScript(shared->script())) {
     LogFunctionCompilation(isolate, LogEventListener::CodeTag::kFunction,
                            handle(Script::cast(shared->script()), isolate),
                            shared, Handle<FeedbackVector>(),
@@ -2879,7 +2878,7 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromEval(
     parse_info.set_parameters_end_pos(parameters_end_pos);
 
     MaybeHandle<ScopeInfo> maybe_outer_scope_info;
-    if (!context->IsNativeContext()) {
+    if (!IsNativeContext(*context)) {
       maybe_outer_scope_info = handle(context->scope_info(), isolate);
     }
     script = parse_info.CreateScript(
@@ -2965,7 +2964,7 @@ bool CodeGenerationFromStringsAllowed(Isolate* isolate,
                                       Handle<NativeContext> context,
                                       Handle<String> source) {
   RCS_SCOPE(isolate, RuntimeCallCounterId::kCodeGenerationFromStringsCallbacks);
-  DCHECK(context->allow_code_gen_from_strings().IsFalse(isolate));
+  DCHECK(IsFalse(context->allow_code_gen_from_strings(), isolate));
   DCHECK(isolate->allow_code_gen_callback());
   AllowCodeGenerationFromStringsCallback callback =
       isolate->allow_code_gen_callback();
@@ -3027,8 +3026,8 @@ std::pair<MaybeHandle<String>, bool> Compiler::ValidateDynamicCompilationSource(
   // allow_code_gen_from_strings can be many things, so we'll always check
   // against the 'false' literal, so that e.g. undefined and 'true' are treated
   // the same.
-  if (!context->allow_code_gen_from_strings().IsFalse(isolate) &&
-      original_source->IsString()) {
+  if (!IsFalse(context->allow_code_gen_from_strings(), isolate) &&
+      IsString(*original_source)) {
     return {Handle<String>::cast(original_source), false};
   }
 
@@ -3039,9 +3038,9 @@ std::pair<MaybeHandle<String>, bool> Compiler::ValidateDynamicCompilationSource(
     // If we run into this condition, the embedder has marked some object
     // templates as "code like", but has given us a callback that only accepts
     // strings. That makes no sense.
-    DCHECK(!original_source->IsCodeLike(isolate));
+    DCHECK(!Object::IsCodeLike(*original_source, isolate));
 
-    if (!original_source->IsString()) {
+    if (!IsString(*original_source)) {
       return {MaybeHandle<String>(), true};
     }
     Handle<String> string_source = Handle<String>::cast(original_source);
@@ -3061,14 +3060,14 @@ std::pair<MaybeHandle<String>, bool> Compiler::ValidateDynamicCompilationSource(
                                          is_code_like)) {
       return {MaybeHandle<String>(), false};
     }
-    if (!modified_source->IsString()) {
+    if (!IsString(*modified_source)) {
       return {MaybeHandle<String>(), true};
     }
     return {Handle<String>::cast(modified_source), false};
   }
 
-  if (!context->allow_code_gen_from_strings().IsFalse(isolate) &&
-      original_source->IsCodeLike(isolate)) {
+  if (!IsFalse(context->allow_code_gen_from_strings(), isolate) &&
+      Object::IsCodeLike(*original_source, isolate)) {
     // Codegen is unconditionally allowed, and we're been given a CodeLike
     // object. Stringify.
     MaybeHandle<String> stringified_source =
@@ -3078,7 +3077,7 @@ std::pair<MaybeHandle<String>, bool> Compiler::ValidateDynamicCompilationSource(
 
   // If unconditional codegen was disabled, and no callback defined, we block
   // strings and allow all other objects.
-  return {MaybeHandle<String>(), !original_source->IsString()};
+  return {MaybeHandle<String>(), !IsString(*original_source)};
 }
 
 // static
@@ -3425,7 +3424,7 @@ bool CanBackgroundCompile(const ScriptDetails& script_details,
 }
 
 bool CompilationExceptionIsRangeError(Isolate* isolate, Handle<Object> obj) {
-  if (!obj->IsJSError(isolate)) return false;
+  if (!IsJSError(*obj, isolate)) return false;
   Handle<JSReceiver> js_obj = Handle<JSReceiver>::cast(obj);
   Handle<JSReceiver> constructor;
   if (!JSReceiver::GetConstructor(isolate, js_obj).ToHandle(&constructor)) {
@@ -3765,7 +3764,7 @@ MaybeHandle<JSFunction> Compiler::GetWrappedFunction(
     ParseInfo parse_info(isolate, flags, &compile_state, &reusable_state);
 
     MaybeHandle<ScopeInfo> maybe_outer_scope_info;
-    if (!context->IsNativeContext()) {
+    if (!IsNativeContext(*context)) {
       maybe_outer_scope_info = handle(context->scope_info(), isolate);
     }
 

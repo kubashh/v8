@@ -351,6 +351,9 @@ struct IsValidExternalReferenceType<Result (Class::*)(Args...)> {
 FUNCTION_REFERENCE(write_barrier_marking_from_code_function,
                    WriteBarrier::MarkingFromCode)
 
+FUNCTION_REFERENCE(write_barrier_indirect_pointer_marking_from_code_function,
+                   WriteBarrier::IndirectPointerMarkingFromCode)
+
 FUNCTION_REFERENCE(write_barrier_shared_marking_from_code_function,
                    WriteBarrier::SharedMarkingFromCode)
 
@@ -1103,7 +1106,7 @@ const uint8_t* ExternalOneByteStringGetChars(Address string) {
   // merged by the linker, resulting in one of the input type's vtable address
   // failing the address range check.
   // TODO(chromium:1160961): Consider removing the CHECK when CFI is fixed.
-  CHECK(Object(string).IsExternalOneByteString(cage_base));
+  CHECK(IsExternalOneByteString(Object(string), cage_base));
   return ExternalOneByteString::cast(Object(string))->GetChars(cage_base);
 }
 const uint16_t* ExternalTwoByteStringGetChars(Address string) {
@@ -1113,7 +1116,7 @@ const uint16_t* ExternalTwoByteStringGetChars(Address string) {
   // merged by the linker, resulting in one of the input type's vtable address
   // failing the address range check.
   // TODO(chromium:1160961): Consider removing the CHECK when CFI is fixed.
-  CHECK(Object(string).IsExternalTwoByteString(cage_base));
+  CHECK(IsExternalTwoByteString(Object(string), cage_base));
   return ExternalTwoByteString::cast(Object(string))->GetChars(cage_base);
 }
 
@@ -1147,7 +1150,7 @@ FUNCTION_REFERENCE(orderedhashmap_gethash_raw, OrderedHashMap::GetHash)
 
 Address GetOrCreateHash(Isolate* isolate, Address raw_key) {
   DisallowGarbageCollection no_gc;
-  return Object(raw_key).GetOrCreateHash(isolate).ptr();
+  return Object::GetOrCreateHash(Object(raw_key), isolate).ptr();
 }
 
 FUNCTION_REFERENCE(get_or_create_hash_raw, GetOrCreateHash)

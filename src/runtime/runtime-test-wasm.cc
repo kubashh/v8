@@ -197,7 +197,7 @@ RUNTIME_FUNCTION(Runtime_WasmTraceExit) {
 
   size_t num_returns = sig->return_count();
   // If we have no returns, we should have passed {Smi::zero()}.
-  DCHECK_IMPLIES(num_returns == 0, return_addr_smi.IsZero());
+  DCHECK_IMPLIES(num_returns == 0, IsZero(return_addr_smi));
   if (num_returns == 1) {
     wasm::ValueType return_type = sig->GetReturn(0);
     switch (return_type.kind()) {
@@ -313,7 +313,7 @@ RUNTIME_FUNCTION(Runtime_GetWasmExceptionTagId) {
   Handle<WasmInstanceObject> instance = args.at<WasmInstanceObject>(1);
   Handle<Object> tag =
       WasmExceptionPackage::GetExceptionTag(isolate, exception);
-  CHECK(tag->IsWasmExceptionTag());
+  CHECK(IsWasmExceptionTag(*tag));
   Handle<FixedArray> tags_table(instance->tags_table(), isolate);
   for (int index = 0; index < tags_table->length(); ++index) {
     if (tags_table->get(index) == *tag) return Smi::FromInt(index);
@@ -327,13 +327,13 @@ RUNTIME_FUNCTION(Runtime_GetWasmExceptionValues) {
   Handle<WasmExceptionPackage> exception = args.at<WasmExceptionPackage>(0);
   Handle<Object> values_obj =
       WasmExceptionPackage::GetExceptionValues(isolate, exception);
-  CHECK(values_obj->IsFixedArray());  // Only called with correct input.
+  CHECK(IsFixedArray(*values_obj));  // Only called with correct input.
   Handle<FixedArray> values = Handle<FixedArray>::cast(values_obj);
   Handle<FixedArray> externalized_values =
       isolate->factory()->NewFixedArray(values->length());
   for (int i = 0; i < values->length(); i++) {
     Handle<Object> value = handle(values->get(i), isolate);
-    if (!value->IsSmi()) {
+    if (!IsSmi(*value)) {
       // Note: This will leak string views to JS. This should be fine for a
       // debugging function.
       value = wasm::WasmToJSObject(isolate, value);
@@ -413,10 +413,10 @@ RUNTIME_FUNCTION(Runtime_WasmNumCodeSpaces) {
   HandleScope scope(isolate);
   Handle<JSObject> argument = args.at<JSObject>(0);
   Handle<WasmModuleObject> module;
-  if (argument->IsWasmInstanceObject()) {
+  if (IsWasmInstanceObject(*argument)) {
     module = handle(Handle<WasmInstanceObject>::cast(argument)->module_object(),
                     isolate);
-  } else if (argument->IsWasmModuleObject()) {
+  } else if (IsWasmModuleObject(*argument)) {
     module = Handle<WasmModuleObject>::cast(argument);
   }
   size_t num_spaces =
@@ -552,7 +552,7 @@ RUNTIME_FUNCTION(Runtime_FreezeWasmLazyCompilation) {
 // callback and thereby bypasses the value in v8_flags.
 RUNTIME_FUNCTION(Runtime_SetWasmGCEnabled) {
   DCHECK_EQ(1, args.length());
-  bool enable = args.at(0)->BooleanValue(isolate);
+  bool enable = Object::BooleanValue(*args.at(0), isolate);
   v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
   WasmGCEnabledCallback enabled = [](v8::Local<v8::Context>) { return true; };
   WasmGCEnabledCallback disabled = [](v8::Local<v8::Context>) { return false; };

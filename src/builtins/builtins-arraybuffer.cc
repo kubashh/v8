@@ -118,7 +118,7 @@ BUILTIN(ArrayBufferConstructor) {
   Handle<JSFunction> target = args.target();
   DCHECK(*target == target->native_context()->array_buffer_fun() ||
          *target == target->native_context()->shared_array_buffer_fun());
-  if (args.new_target()->IsUndefined(isolate)) {  // [[Call]]
+  if (IsUndefined(*args.new_target(), isolate)) {  // [[Call]]
     THROW_NEW_ERROR_RETURN_FAILURE(
         isolate, NewTypeError(MessageTemplate::kConstructorNotFunction,
                               handle(target->shared()->Name(), isolate)));
@@ -130,7 +130,7 @@ BUILTIN(ArrayBufferConstructor) {
   Handle<Object> number_length;
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, number_length,
                                      Object::ToInteger(isolate, length));
-  if (number_length->Number() < 0.0) {
+  if (Object::Number(*number_length) < 0.0) {
     THROW_NEW_ERROR_RETURN_FAILURE(
         isolate, NewRangeError(MessageTemplate::kInvalidArrayBufferLength));
   }
@@ -144,7 +144,7 @@ BUILTIN(ArrayBufferConstructor) {
         JSObject::ReadFromOptionsBag(
             options, isolate->factory()->max_byte_length_string(), isolate));
 
-    if (!max_length->IsUndefined(isolate)) {
+    if (!IsUndefined(*max_length, isolate)) {
       ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
           isolate, number_max_length, Object::ToInteger(isolate, max_length));
     }
@@ -198,20 +198,21 @@ static Object SliceHelper(BuiltinArguments args, Isolate* isolate,
 
   // * If relativeStart < 0, let first be max((len + relativeStart), 0); else
   //   let first be min(relativeStart, len).
-  double const first = (relative_start->Number() < 0)
-                           ? std::max(len + relative_start->Number(), 0.0)
-                           : std::min(relative_start->Number(), len);
+  double const first =
+      (Object::Number(*relative_start) < 0)
+          ? std::max(len + Object::Number(*relative_start), 0.0)
+          : std::min(Object::Number(*relative_start), len);
 
   // * If end is undefined, let relativeEnd be len; else let relativeEnd be ?
   //   ToInteger(end).
   double relative_end;
-  if (end->IsUndefined(isolate)) {
+  if (IsUndefined(*end, isolate)) {
     relative_end = len;
   } else {
     Handle<Object> relative_end_obj;
     ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, relative_end_obj,
                                        Object::ToInteger(isolate, end));
-    relative_end = relative_end_obj->Number();
+    relative_end = Object::Number(*relative_end_obj);
   }
 
   // * If relativeEnd < 0, let final be max((len + relativeEnd), 0); else let
@@ -251,7 +252,7 @@ static Object SliceHelper(BuiltinArguments args, Isolate* isolate,
 
   // * If new does not have an [[ArrayBufferData]] internal slot, throw a
   //   TypeError exception.
-  if (!new_->IsJSArrayBuffer()) {
+  if (!IsJSArrayBuffer(*new_)) {
     THROW_NEW_ERROR_RETURN_FAILURE(
         isolate,
         NewTypeError(MessageTemplate::kIncompatibleMethodReceiver,
@@ -276,7 +277,7 @@ static Object SliceHelper(BuiltinArguments args, Isolate* isolate,
   }
 
   // * [AB] If SameValue(new, O) is true, throw a TypeError exception.
-  if (!is_shared && new_->SameValue(*args.receiver())) {
+  if (!is_shared && Object::SameValue(*new_, *args.receiver())) {
     THROW_NEW_ERROR_RETURN_FAILURE(
         isolate, NewTypeError(MessageTemplate::kArrayBufferSpeciesThis));
   }
@@ -502,7 +503,7 @@ Object ArrayBufferTransfer(Isolate* isolate, Handle<JSArrayBuffer> array_buffer,
   CHECK_SHARED(false, array_buffer, method_name);
 
   size_t new_byte_length;
-  if (new_length->IsUndefined(isolate)) {
+  if (IsUndefined(*new_length, isolate)) {
     // 3. If newLength is undefined, then
     //   a. Let newByteLength be arrayBuffer.[[ArrayBufferByteLength]].
     new_byte_length = array_buffer->GetByteLength();
@@ -512,7 +513,7 @@ Object ArrayBufferTransfer(Isolate* isolate, Handle<JSArrayBuffer> array_buffer,
     Handle<Object> number_new_byte_length;
     ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, number_new_byte_length,
                                        Object::ToInteger(isolate, new_length));
-    if (number_new_byte_length->Number() < 0.0) {
+    if (Object::Number(*number_new_byte_length) < 0.0) {
       THROW_NEW_ERROR_RETURN_FAILURE(
           isolate, NewRangeError(MessageTemplate::kInvalidArrayBufferLength));
     }

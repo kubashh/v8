@@ -39,7 +39,7 @@
   explicit inline Type(Address ptr)
 
 #define OBJECT_CONSTRUCTORS_IMPL(Type, Super) \
-  inline Type::Type(Address ptr) : Super(ptr) { SLOW_DCHECK(Is##Type()); }
+  inline Type::Type(Address ptr) : Super(ptr) { SLOW_DCHECK(Is##Type(*this)); }
 
 #define NEVER_READ_ONLY_SPACE   \
   inline Heap* GetHeap() const; \
@@ -117,6 +117,13 @@
     return holder::name(cage_base, tag);                     \
   }                                                          \
   type holder::name(PtrComprCageBase cage_base, AcquireLoadTag) const
+
+#define DEF_HEAP_OBJECT_PREDICATE(holder, name)            \
+  bool name(Tagged<holder> obj) {                          \
+    PtrComprCageBase cage_base = GetPtrComprCageBase(obj); \
+    return name(obj, cage_base);                           \
+  }                                                        \
+  bool name(Tagged<holder> obj, PtrComprCageBase cage_base)
 
 #define TQ_FIELD_TYPE(name, tq_type) \
   static constexpr const char* k##name##TqFieldType = tq_type;
@@ -554,6 +561,18 @@
 #endif
 
 #ifdef V8_DISABLE_WRITE_BARRIERS
+#define INDIRECT_POINTER_WRITE_BARRIER(object, offset, value)
+#else
+#define INDIRECT_POINTER_WRITE_BARRIER(object, offset, value)           \
+  do {                                                                  \
+    DCHECK_NOT_NULL(GetHeapFromWritableObject(object));                 \
+    IndirectPointerWriteBarrier(                                        \
+        object, Tagged(object)->RawIndirectPointerField(offset), value, \
+        UPDATE_WRITE_BARRIER);                                          \
+  } while (false)
+#endif
+
+#ifdef V8_DISABLE_WRITE_BARRIERS
 #define CONDITIONAL_WRITE_BARRIER(object, offset, value, mode)
 #elif V8_ENABLE_UNCONDITIONAL_WRITE_BARRIERS
 #define CONDITIONAL_WRITE_BARRIER(object, offset, value, mode) \
@@ -588,6 +607,18 @@
     DCHECK_NOT_NULL(GetHeapFromWritableObject(object));                      \
     CombinedEphemeronWriteBarrier(EphemeronHashTable::cast(object),          \
                                   (object)->RawField(offset), value, mode);  \
+  } while (false)
+#endif
+
+#ifdef V8_DISABLE_WRITE_BARRIERS
+#define CONDITIONAL_INDIRECT_POINTER_WRITE_BARRIER(object, offset, value, mode)
+#else
+#define CONDITIONAL_INDIRECT_POINTER_WRITE_BARRIER(object, offset, value, \
+                                                   mode)                  \
+  do {                                                                    \
+    DCHECK_NOT_NULL(GetHeapFromWritableObject(object));                   \
+    IndirectPointerWriteBarrier(                                          \
+        object, (object).RawIndirectPointerField(offset), value, mode);   \
   } while (false)
 #endif
 
@@ -708,9 +739,16 @@ static_assert(sizeof(unsigned) == sizeof(uint32_t),
 #define DECL_VERIFIER(Name) void Name##Verify(Isolate* isolate);
 #define EXPORT_DECL_VERIFIER(Name) \
   V8_EXPORT_PRIVATE void Name##Verify(Isolate* isolate);
+#define DECL_STATIC_VERIFIER(Name) \
+  static void Name##Verify(Tagged<Name> obj, Isolate* isolate);
+#define EXPORT_DECL_STATIC_VERIFIER(Name)                      \
+  V8_EXPORT_PRIVATE static void Name##Verify(Tagged<Name> obj, \
+                                             Isolate* isolate);
 #else
 #define DECL_VERIFIER(Name)
 #define EXPORT_DECL_VERIFIER(Name)
+#define DECL_STATIC_VERIFIER(Name)
+#define EXPORT_DECL_STATIC_VERIFIER(Name)
 #endif
 
 #define DEFINE_DEOPT_ELEMENT_ACCESSORS(name, type) \

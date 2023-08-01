@@ -427,11 +427,11 @@ void S390Debugger::Debug() {
           Object obj(*cur);
           Heap* current_heap = sim_->isolate_->heap();
           if (!skip_obj_print) {
-            if (obj.IsSmi()) {
+            if (IsSmi(obj)) {
               PrintF(" (smi %d)", Smi::ToInt(obj));
             } else if (IsValidHeapObject(current_heap, HeapObject::cast(obj))) {
               PrintF(" (");
-              obj.ShortPrint();
+              ShortPrint(obj);
               PrintF(")");
             }
             PrintF("\n");

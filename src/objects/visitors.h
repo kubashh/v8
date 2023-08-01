@@ -178,11 +178,11 @@ class ObjectVisitor {
   virtual void VisitExternalPointer(HeapObject host, ExternalPointerSlot slot,
                                     ExternalPointerTag tag) {}
 
-#ifdef V8_CODE_POINTER_SANDBOXING
-  // TODO(saelo): do we want to add a CodePointerSlot struct as well?
-  virtual void VisitCodePointerHandle(HeapObject host,
-                                      CodePointerHandle handle) {}
-#endif
+  virtual void VisitIndirectPointer(HeapObject host, IndirectPointerSlot slot,
+                                    IndirectPointerMode mode) {}
+
+  virtual void VisitIndirectPointerTableEntry(HeapObject host,
+                                              IndirectPointerSlot slot) {}
 
   virtual void VisitMapPointer(HeapObject host) { UNREACHABLE(); }
 };
@@ -258,7 +258,7 @@ class ClientRootVisitor final : public RootVisitor {
 
  private:
   V8_INLINE static bool IsSharedHeapObject(Object object) {
-    return object.IsHeapObject() &&
+    return IsHeapObject(object) &&
            HeapObject::cast(object).InWritableSharedSpace();
   }
 
@@ -318,7 +318,7 @@ class ClientObjectVisitor final : public ObjectVisitorWithCageBases {
 
  private:
   V8_INLINE static bool IsSharedHeapObject(Object object) {
-    return object.IsHeapObject() &&
+    return IsHeapObject(object) &&
            HeapObject::cast(object).InWritableSharedSpace();
   }
 

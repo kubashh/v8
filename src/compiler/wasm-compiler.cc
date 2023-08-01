@@ -3056,7 +3056,7 @@ Node* WasmGraphBuilder::BuildLoadCodePointerFromObject(Node* object,
       gasm_->LoadFromObject(MachineType::Uint32(), object,
                             wasm::ObjectAccess::ToTagged(field_offset));
   Node* index =
-      gasm_->Word32Shr(handle, gasm_->Int32Constant(kCodePointerIndexShift));
+      gasm_->Word32Shr(handle, gasm_->Int32Constant(kCodePointerHandleShift));
   Node* offset = gasm_->ChangeUint32ToUint64(gasm_->Word32Shl(
       index, gasm_->Int32Constant(kCodePointerTableEntrySizeLog2)));
   Node* table =
@@ -8088,7 +8088,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     Handle<JSFunction> target;
     Node* target_node;
     Node* receiver_node;
-    if (callable->IsJSBoundFunction()) {
+    if (IsJSBoundFunction(*callable)) {
       target = handle(
           JSFunction::cast(
               Handle<JSBoundFunction>::cast(callable)->bound_target_function()),
@@ -8101,7 +8101,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
           MachineType::TaggedPointer(), callable_node,
           wasm::ObjectAccess::ToTagged(JSBoundFunction::kBoundThisOffset));
     } else {
-      DCHECK(callable->IsJSFunction());
+      DCHECK(IsJSFunction(*callable));
       target = Handle<JSFunction>::cast(callable);
       target_node = callable_node;
       receiver_node =

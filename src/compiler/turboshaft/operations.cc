@@ -37,6 +37,8 @@ namespace v8::internal::compiler::turboshaft {
 
 void Print(const Operation& op) { std::cout << op << "\n"; }
 
+Zone* get_zone(Graph* graph) { return graph->graph_zone(); }
+
 bool AllowImplicitRepresentationChange(RegisterRepresentation actual_rep,
                                        RegisterRepresentation expected_rep) {
   if (actual_rep == expected_rep) {
@@ -1266,6 +1268,26 @@ const RegisterRepresentation& RepresentationFor(wasm::ValueType type) {
   }
 }
 
+std::ostream& operator<<(std::ostream& os, Simd128BinopOp::Kind kind) {
+  switch (kind) {
+#define PRINT_KIND(kind)              \
+  case Simd128BinopOp::Kind::k##kind: \
+    return os << #kind;
+    FOREACH_SIMD_128_BINARY_OPCODE(PRINT_KIND)
+  }
+#undef PRINT_KIND
+}
+
+std::ostream& operator<<(std::ostream& os, Simd128UnaryOp::Kind kind) {
+  switch (kind) {
+#define PRINT_KIND(kind)              \
+  case Simd128UnaryOp::Kind::k##kind: \
+    return os << #kind;
+    FOREACH_SIMD_128_UNARY_OPCODE(PRINT_KIND)
+  }
+#undef PRINT_KIND
+}
+
 #endif  // V8_ENABLE_WEBASSEBMLY
 
 std::string Operation::ToString() const {
@@ -1314,5 +1336,25 @@ void CheckExceptionOp::Validate(const Graph& graph) const {
   // `CheckException` should follow right after the throwing operation.
   DCHECK_EQ(throwing_operation(), graph.PreviousIndex(graph.Index(*this)));
 }
+
+namespace {
+// Ensures basic consistency of representation mapping.
+class InputsRepFactoryCheck : InputsRepFactory {
+  static_assert(*ToMaybeRepPointer(RegisterRepresentation::Word32()) ==
+                MaybeRegisterRepresentation::Word32());
+  static_assert(*ToMaybeRepPointer(RegisterRepresentation::Word64()) ==
+                MaybeRegisterRepresentation::Word64());
+  static_assert(*ToMaybeRepPointer(RegisterRepresentation::Float32()) ==
+                MaybeRegisterRepresentation::Float32());
+  static_assert(*ToMaybeRepPointer(RegisterRepresentation::Float64()) ==
+                MaybeRegisterRepresentation::Float64());
+  static_assert(*ToMaybeRepPointer(RegisterRepresentation::Tagged()) ==
+                MaybeRegisterRepresentation::Tagged());
+  static_assert(*ToMaybeRepPointer(RegisterRepresentation::Compressed()) ==
+                MaybeRegisterRepresentation::Compressed());
+  static_assert(*ToMaybeRepPointer(RegisterRepresentation::Simd128()) ==
+                MaybeRegisterRepresentation::Simd128());
+};
+}  // namespace
 
 }  // namespace v8::internal::compiler::turboshaft

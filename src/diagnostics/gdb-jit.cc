@@ -937,7 +937,7 @@ class CodeDescription {
   uintptr_t CodeSize() const { return code_region_.size(); }
 
   bool has_script() {
-    return !shared_info_.is_null() && shared_info_->script().IsScript();
+    return !shared_info_.is_null() && IsScript(shared_info_->script());
   }
 
   Script script() { return Script::cast(shared_info_->script()); }
@@ -959,7 +959,7 @@ class CodeDescription {
 #endif
 
   std::unique_ptr<char[]> GetFilename() {
-    if (!shared_info_.is_null() && script()->name().IsString()) {
+    if (!shared_info_.is_null() && IsString(script()->name())) {
       return String::cast(script()->name())->ToCString();
     } else {
       std::unique_ptr<char[]> result(new char[1]);
@@ -1749,7 +1749,7 @@ JITDescriptor __jit_debug_descriptor = {1, 0, nullptr, nullptr};
 #ifdef OBJECT_PRINT
 void __gdb_print_v8_object(Object object) {
   StdoutStream os;
-  object.Print(os);
+  Print(object, os);
   os << std::flush;
 }
 #endif

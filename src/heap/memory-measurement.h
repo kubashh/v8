@@ -43,6 +43,8 @@ class MemoryMeasurement {
     Handle<WeakFixedArray> contexts;
     std::vector<size_t> sizes;
     size_t shared;
+    size_t wasm_code;
+    size_t wasm_metadata;
     base::ElapsedTimer timer;
   };
   void ScheduleReportingTask();
@@ -96,6 +98,8 @@ class V8_EXPORT_PRIVATE NativeContextStats {
   }
   void Clear();
   void Merge(const NativeContextStats& other);
+
+  bool Empty() const { return size_by_context_.empty(); }
 
  private:
   V8_INLINE bool HasExternalBytes(Map map);

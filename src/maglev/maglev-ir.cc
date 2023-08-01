@@ -272,7 +272,7 @@ bool CheckToBooleanOnAllRoots(LocalIsolate* local_isolate) {
   /* Ignore 'undefined' roots that are not the undefined value itself. */ \
   if (roots.name() != roots.undefined_value() ||                          \
       RootIndex::k##CamelName == RootIndex::kUndefinedValue) {            \
-    DCHECK_EQ(roots.name()->BooleanValue(local_isolate),                  \
+    DCHECK_EQ(Object::BooleanValue(roots.name(), local_isolate),          \
               RootToBoolean(RootIndex::k##CamelName));                    \
   }
   READ_ONLY_ROOT_LIST(DO_CHECK)
@@ -2386,7 +2386,7 @@ void EmitPolymorphicAccesses(MaglevAssembler* masm, NodeT* node,
       // Fallthrough... to map_found.
     } else {
       for (auto it = maps.begin(); it != maps.end(); ++it) {
-        if (it->object()->IsHeapNumberMap()) {
+        if (IsHeapNumberMap(*it->object())) {
           __ CompareRoot(object_map, RootIndex::kHeapNumberMap);
           has_number_map = true;
         } else {
@@ -2445,10 +2445,10 @@ void LoadPolymorphicTaggedField::GenerateCode(MaglevAssembler* masm,
             break;
           case PolymorphicAccessInfo::kConstant: {
             Handle<Object> constant = access_info.constant();
-            if (constant->IsSmi()) {
+            if (IsSmi(*constant)) {
               __ Move(result, Smi::cast(*constant));
             } else {
-              DCHECK(access_info.constant()->IsHeapObject());
+              DCHECK(IsHeapObject(*access_info.constant()));
               __ Move(result, Handle<HeapObject>::cast(constant));
             }
             break;
@@ -2511,11 +2511,11 @@ void LoadPolymorphicDoubleField::GenerateCode(MaglevAssembler* masm,
             break;
           case PolymorphicAccessInfo::kConstant: {
             Handle<Object> constant = access_info.constant();
-            if (constant->IsSmi()) {
+            if (IsSmi(*constant)) {
               __ Move(scratch, Smi::cast(*constant));
               __ SmiToDouble(result, scratch);
             } else {
-              DCHECK(constant->IsHeapNumber());
+              DCHECK(IsHeapNumber(*constant));
               __ Move(result, Handle<HeapNumber>::cast(constant)->value());
             }
             break;
@@ -4765,10 +4765,7 @@ void CallKnownJSFunction::GenerateCode(MaglevAssembler* masm,
   if (shared_function_info().HasBuiltinId()) {
     __ CallBuiltin(shared_function_info().builtin_id());
   } else {
-    __ LoadTaggedField(kJavaScriptCallCodeStartRegister,
-                       FieldMemOperand(kJavaScriptCallTargetRegister,
-                                       JSFunction::kCodeOffset));
-    __ CallCodeObject(kJavaScriptCallCodeStartRegister);
+    __ CallJSFunction(kJavaScriptCallTargetRegister);
   }
   masm->DefineExceptionHandlerAndLazyDeoptPoint(this);
 }
@@ -5157,7 +5154,7 @@ void TransitionElementsKindOrCheckMap::GenerateCode(
   ZoneLabelRef done(masm);
 
   DCHECK(!AnyMapIsHeapNumber(transition_sources_));
-  DCHECK(!transition_target_.object()->IsHeapNumberMap());
+  DCHECK(!IsHeapNumberMap(*transition_target_.object()));
 
   if (check_type() == CheckType::kOmitHeapObjectCheck) {
     __ AssertNotSmi(object);

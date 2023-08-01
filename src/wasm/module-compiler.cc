@@ -15,6 +15,7 @@
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/semaphore.h"
 #include "src/base/platform/time.h"
+#include "src/codegen/compiler.h"
 #include "src/compiler/wasm-compiler.h"
 #include "src/debug/debug.h"
 #include "src/handles/global-handles-inl.h"
@@ -24,6 +25,7 @@
 #include "src/wasm/code-space-access.h"
 #include "src/wasm/module-decoder.h"
 #include "src/wasm/pgo.h"
+#include "src/wasm/std-object-sizes.h"
 #include "src/wasm/streaming-decoder.h"
 #include "src/wasm/wasm-code-manager.h"
 #include "src/wasm/wasm-engine.h"
@@ -272,6 +274,8 @@ class CompilationUnitQueues {
     }
   }
 
+  size_t EstimateCurrentMemoryConsumption() const;
+
  private:
   // Functions bigger than {kBigUnitsLimit} will be compiled first, in ascending
   // order of their function body size.
@@ -309,7 +313,7 @@ class CompilationUnitQueues {
 #endif
     }
 
-    base::Mutex mutex;
+    mutable base::Mutex mutex;
 
     // Can be read concurrently to check whether any elements are in the queue.
     std::atomic<bool> has_units[CompilationTier::kNumTiers];
@@ -505,7 +509,7 @@ class CompilationUnitQueues {
   }
 
   // {queues_mutex_} protectes {queues_};
-  base::SharedMutex queues_mutex_;
+  mutable base::SharedMutex queues_mutex_;
   std::vector<std::unique_ptr<QueueImpl>> queues_;
 
   const int num_declared_functions_;
@@ -517,6 +521,31 @@ class CompilationUnitQueues {
   std::unique_ptr<std::atomic<bool>[]> top_tier_compiled_;
   std::atomic<int> next_queue_to_add{0};
 };
+
+size_t CompilationUnitQueues::EstimateCurrentMemoryConsumption() const {
+  UPDATE_WHEN_CLASS_CHANGES(CompilationUnitQueues, 248);
+  UPDATE_WHEN_CLASS_CHANGES(QueueImpl, 144);
+  UPDATE_WHEN_CLASS_CHANGES(BigUnitsQueue, 120);
+  // Not including sizeof(CompilationUnitQueues) because that's included in
+  // sizeof(CompilationStateImpl).
+  size_t result = 0;
+  {
+    base::SharedMutexGuard<base::kShared> lock(&queues_mutex_);
+    result += ContentSize(queues_) + queues_.size() * sizeof(QueueImpl);
+    for (const auto& q : queues_) {
+      result += ContentSize(*q->units);
+      result += q->top_tier_priority_units.size() * sizeof(TopTierPriorityUnit);
+    }
+  }
+  {
+    base::MutexGuard lock(&big_units_queue_.mutex);
+    result += big_units_queue_.units[0].size() * sizeof(BigUnit);
+    result += big_units_queue_.units[1].size() * sizeof(BigUnit);
+  }
+  // For {top_tier_compiled_}.
+  result += sizeof(std::atomic<bool>) * num_declared_functions_;
+  return result;
+}
 
 bool CompilationUnitQueues::Queue::ShouldPublish(
     int num_processed_units) const {
@@ -673,6 +702,8 @@ class CompilationStateImpl {
     return native_module_weak_;
   }
 
+  size_t EstimateCurrentMemoryConsumption() const;
+
  private:
   void AddCompilationUnitInternal(CompilationUnitBuilder* builder,
                                   int function_index,
@@ -789,6 +820,34 @@ CompilationStateImpl* BackgroundCompileScope::compilation_state() const {
   return Impl(native_module_->compilation_state());
 }
 
+size_t CompilationStateImpl::EstimateCurrentMemoryConsumption() const {
+  UPDATE_WHEN_CLASS_CHANGES(CompilationStateImpl, 704);
+  UPDATE_WHEN_CLASS_CHANGES(JSToWasmWrapperCompilationUnit, 40);
+  size_t result = sizeof(CompilationStateImpl);
+
+  result += compilation_unit_queues_.EstimateCurrentMemoryConsumption();
+
+  result += ContentSize(js_to_wasm_wrapper_units_);
+  result +=
+      js_to_wasm_wrapper_units_.size() *
+      (sizeof(JSToWasmWrapperCompilationUnit) + sizeof(TurbofanCompilationJob));
+
+  {
+    base::MutexGuard lock(&callbacks_mutex_);
+    result += ContentSize(callbacks_);
+    // Concrete subclasses of CompilationEventCallback will be bigger, but we
+    // can't know that here.
+    result += callbacks_.size() * sizeof(CompilationEventCallback);
+
+    result += ContentSize(compilation_progress_);
+  }
+
+  if (v8_flags.trace_wasm_offheap_memory) {
+    PrintF("CompilationStateImpl: %zu\n", result);
+  }
+  return result;
+}
+
 bool BackgroundCompileScope::cancelled() const {
   return native_module_ == nullptr ||
          Impl(native_module_->compilation_state())->cancelled();
@@ -873,6 +932,10 @@ void CompilationState::set_compilation_id(int compilation_id) {
 
 DynamicTiering CompilationState::dynamic_tiering() const {
   return Impl(this)->dynamic_tiering();
+}
+
+size_t CompilationState::EstimateCurrentMemoryConsumption() const {
+  return Impl(this)->EstimateCurrentMemoryConsumption();
 }
 
 // static
@@ -1160,9 +1223,9 @@ bool CompileLazy(Isolate* isolate, WasmInstanceObject instance,
 
   if (WasmCode::ShouldBeLogged(isolate)) {
     Object url_obj = module_object->script()->name();
-    DCHECK(url_obj.IsString() || url_obj.IsUndefined());
+    DCHECK(IsString(url_obj) || IsUndefined(url_obj));
     std::unique_ptr<char[]> url =
-        url_obj.IsString() ? String::cast(url_obj)->ToCString() : nullptr;
+        IsString(url_obj) ? String::cast(url_obj)->ToCString() : nullptr;
     code->LogCode(isolate, url.get(), module_object->script()->id());
   }
 
@@ -1268,7 +1331,7 @@ class FeedbackMaker {
   }
 
   void AddCandidate(Object maybe_function, int count) {
-    if (!maybe_function.IsWasmInternalFunction()) return;
+    if (!IsWasmInternalFunction(maybe_function)) return;
     WasmInternalFunction function = WasmInternalFunction::cast(maybe_function);
     if (function->ref() != instance_) {
       // Not a wasm function, or not a function declared in this instance.
@@ -1337,7 +1400,7 @@ class FeedbackMaker {
 void TransitiveTypeFeedbackProcessor::ProcessFunction(int func_index) {
   int which_vector = declared_function_index(module_, func_index);
   Object maybe_feedback = instance_->feedback_vectors()->get(which_vector);
-  if (!maybe_feedback.IsFixedArray()) return;
+  if (!IsFixedArray(maybe_feedback)) return;
   FixedArray feedback = FixedArray::cast(maybe_feedback);
   base::Vector<uint32_t> call_direct_targets =
       module_->type_feedback.feedback_for_function[func_index]
@@ -1346,11 +1409,11 @@ void TransitiveTypeFeedbackProcessor::ProcessFunction(int func_index) {
   FeedbackMaker fm(instance_, func_index, feedback->length() / 2);
   for (int i = 0; i < feedback->length(); i += 2) {
     Object value = feedback->get(i);
-    if (value.IsWasmInternalFunction()) {
+    if (IsWasmInternalFunction(value)) {
       // Monomorphic.
       int count = Smi::cast(feedback->get(i + 1)).value();
       fm.AddCandidate(value, count);
-    } else if (value.IsFixedArray()) {
+    } else if (IsFixedArray(value)) {
       // Polymorphic.
       FixedArray polymorphic = FixedArray::cast(value);
       for (int j = 0; j < polymorphic->length(); j += 2) {
@@ -1358,7 +1421,7 @@ void TransitiveTypeFeedbackProcessor::ProcessFunction(int func_index) {
         int count = Smi::cast(polymorphic->get(j + 1)).value();
         fm.AddCandidate(function, count);
       }
-    } else if (value.IsSmi()) {
+    } else if (IsSmi(value)) {
       // Uninitialized, or a direct call collecting call count.
       uint32_t target = call_direct_targets[i / 2];
       if (target != FunctionTypeFeedback::kNonDirectCall) {
@@ -1583,7 +1646,7 @@ int AddExportWrapperUnits(Isolate* isolate, NativeModule* native_module,
       MaybeObject existing_wrapper =
           isolate->heap()->js_to_wasm_wrappers()->Get(wrapper_index);
       if (existing_wrapper.IsStrongOrWeak() &&
-          !existing_wrapper.GetHeapObject().IsUndefined()) {
+          !IsUndefined(existing_wrapper.GetHeapObject())) {
         // Skip wrapper compilation as the wrapper is already cached.
         // Note that this does not guarantee that the wrapper is still cached
         // at the moment at which the WasmInternalFunction is instantiated.
@@ -2067,7 +2130,7 @@ AsyncCompileJob::AsyncCompileJob(
   native_context_ =
       isolate->global_handles()->Create(context->native_context());
   incumbent_context_ = isolate->global_handles()->Create(*incumbent_context);
-  DCHECK(native_context_->IsNativeContext());
+  DCHECK(IsNativeContext(*native_context_));
   context_id_ = isolate->GetOrRegisterRecorderContextId(native_context_);
   metrics_event_.async = true;
 }
@@ -3913,7 +3976,7 @@ void CompileJsToWasmWrappers(Isolate* isolate, const WasmModule* module) {
     MaybeObject existing_wrapper =
         isolate->heap()->js_to_wasm_wrappers()->Get(wrapper_index);
     if (existing_wrapper.IsStrongOrWeak() &&
-        !existing_wrapper.GetHeapObject().IsUndefined()) {
+        !IsUndefined(existing_wrapper.GetHeapObject())) {
       continue;
     }
 

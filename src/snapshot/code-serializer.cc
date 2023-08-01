@@ -60,7 +60,7 @@ ScriptCompiler::CachedData* CodeSerializer::Serialize(
   Handle<Script> script(Script::cast(info->script()), isolate);
   if (v8_flags.trace_serializer) {
     PrintF("[Serializing from");
-    script->name().ShortPrint();
+    ShortPrint(script->name());
     PrintF("]\n");
   }
 #if V8_ENABLE_WEBASSEMBLY
@@ -208,7 +208,7 @@ void CodeSerializer::SerializeObjectImpl(Handle<HeapObject> obj,
   // information. On deserialization we'll create our code objects again, if
   // --interpreted-frames-native-stack is on. See v8:9122 for more context
   if (V8_UNLIKELY(v8_flags.interpreted_frames_native_stack) &&
-      obj->IsInterpreterData()) {
+      IsInterpreterData(*obj)) {
     obj = handle(InterpreterData::cast(*obj)->bytecode_array(), isolate());
   }
 
@@ -249,7 +249,7 @@ void CreateInterpreterDataForDeserializedCode(
   if (log_code_creation) Script::InitLineEnds(isolate, script);
 
   String name = ReadOnlyRoots(isolate).empty_string();
-  if (script->name().IsString()) name = String::cast(script->name());
+  if (IsString(script->name())) name = String::cast(script->name());
   Handle<String> name_handle(name, isolate);
 
   SharedFunctionInfo::ScriptIterator iter(isolate, *script);
@@ -344,7 +344,7 @@ void FinalizeDeserialization(Isolate* isolate,
     Script::InitLineEnds(isolate, script);
   }
 
-  Handle<String> name(script->name().IsString()
+  Handle<String> name(IsString(script->name())
                           ? Tagged<String>::cast(script->name())
                           : ReadOnlyRoots(isolate).empty_string(),
                       isolate);
@@ -573,7 +573,8 @@ MaybeHandle<SharedFunctionInfo> CodeSerializer::FinishOffThreadDeserialize(
       background_merge_task->HasPendingForegroundWork()) {
     Handle<Script> script = handle(Script::cast(result->script()), isolate);
     result = background_merge_task->CompleteMergeInForeground(isolate, script);
-    DCHECK(Script::cast(result->script())->source().StrictEquals(*source));
+    DCHECK(Object::StrictEquals(Script::cast(result->script())->source(),
+                                *source));
     DCHECK(isolate->factory()->script_list()->Contains(
         MaybeObject::MakeWeak(MaybeObject::FromObject(result->script()))));
   } else {

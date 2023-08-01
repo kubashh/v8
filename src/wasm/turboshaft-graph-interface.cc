@@ -768,7 +768,87 @@ class TurboshaftGraphBuildingInterface {
 
   void SimdOp(FullDecoder* decoder, WasmOpcode opcode, const Value* args,
               Value* result) {
-    Bailout(decoder);
+    switch (opcode) {
+#define HANDLE_BINARY_OPCODE(kind)                            \
+  case kExpr##kind:                                           \
+    result->op = asm_.Simd128Binop(                           \
+        args[0].op, args[1].op,                               \
+        compiler::turboshaft::Simd128BinopOp::Kind::k##kind); \
+    break;
+      FOREACH_SIMD_128_BINARY_OPCODE(HANDLE_BINARY_OPCODE)
+#undef HANDLE_BINARY_OPCODE
+
+#define HANDLE_INVERSE_COMPARISON(wasm_kind, ts_kind)            \
+  case kExpr##wasm_kind:                                         \
+    result->op = asm_.Simd128Binop(                              \
+        args[1].op, args[0].op,                                  \
+        compiler::turboshaft::Simd128BinopOp::Kind::k##ts_kind); \
+    break;
+
+      HANDLE_INVERSE_COMPARISON(I8x16LtS, I8x16GtS)
+      HANDLE_INVERSE_COMPARISON(I8x16LtU, I8x16GtU)
+      HANDLE_INVERSE_COMPARISON(I8x16LeS, I8x16GeS)
+      HANDLE_INVERSE_COMPARISON(I8x16LeU, I8x16GeU)
+
+      HANDLE_INVERSE_COMPARISON(I16x8LtS, I16x8GtS)
+      HANDLE_INVERSE_COMPARISON(I16x8LtU, I16x8GtU)
+      HANDLE_INVERSE_COMPARISON(I16x8LeS, I16x8GeS)
+      HANDLE_INVERSE_COMPARISON(I16x8LeU, I16x8GeU)
+
+      HANDLE_INVERSE_COMPARISON(I32x4LtS, I32x4GtS)
+      HANDLE_INVERSE_COMPARISON(I32x4LtU, I32x4GtU)
+      HANDLE_INVERSE_COMPARISON(I32x4LeS, I32x4GeS)
+      HANDLE_INVERSE_COMPARISON(I32x4LeU, I32x4GeU)
+
+      HANDLE_INVERSE_COMPARISON(I64x2LtS, I64x2GtS)
+      HANDLE_INVERSE_COMPARISON(I64x2LeS, I64x2GeS)
+
+      HANDLE_INVERSE_COMPARISON(F32x4Gt, F32x4Lt)
+      HANDLE_INVERSE_COMPARISON(F32x4Ge, F32x4Le)
+      HANDLE_INVERSE_COMPARISON(F64x2Gt, F64x2Lt)
+      HANDLE_INVERSE_COMPARISON(F64x2Ge, F64x2Le)
+
+#undef HANDLE_INVERSE_COMPARISON
+
+#define HANDLE_UNARY_NON_OPTIONAL_OPCODE(kind)                            \
+  case kExpr##kind:                                                       \
+    result->op = asm_.Simd128Unary(                                       \
+        args[0].op, compiler::turboshaft::Simd128UnaryOp::Kind::k##kind); \
+    break;
+      FOREACH_SIMD_128_UNARY_NON_OPTIONAL_OPCODE(
+          HANDLE_UNARY_NON_OPTIONAL_OPCODE)
+#undef HANDLE_UNARY_NON_OPTIONAL_OPCODE
+
+#define HANDLE_UNARY_OPTIONAL_OPCODE(kind, feature, external_ref)           \
+  case kExpr##kind:                                                         \
+    if (SupportedOperations::feature()) {                                   \
+      result->op = asm_.Simd128Unary(                                       \
+          args[0].op, compiler::turboshaft::Simd128UnaryOp::Kind::k##kind); \
+    } else {                                                                \
+      result->op = CallCStackSlotToStackSlot(                               \
+          args[0].op, ExternalReference::external_ref(),                    \
+          MemoryRepresentation::Simd128());                                 \
+    }                                                                       \
+    break;
+      HANDLE_UNARY_OPTIONAL_OPCODE(F32x4Ceil, float32_round_up, wasm_f32x4_ceil)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F32x4Floor, float32_round_down,
+                                   wasm_f32x4_floor)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F32x4Trunc, float32_round_to_zero,
+                                   wasm_f32x4_trunc)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F32x4NearestInt, float32_round_ties_even,
+                                   wasm_f32x4_nearest_int)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F64x2Ceil, float64_round_up, wasm_f64x2_ceil)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F64x2Floor, float64_round_down,
+                                   wasm_f64x2_floor)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F64x2Trunc, float64_round_to_zero,
+                                   wasm_f64x2_trunc)
+      HANDLE_UNARY_OPTIONAL_OPCODE(F64x2NearestInt, float64_round_ties_even,
+                                   wasm_f64x2_nearest_int)
+#undef HANDLE_UNARY_OPTIONAL_OPCODE
+      default:
+        Bailout(decoder);
+        break;
+    }
   }
 
   void SimdLaneOp(FullDecoder* decoder, WasmOpcode opcode,
@@ -3293,7 +3373,7 @@ class TurboshaftGraphBuildingInterface {
   V<WordPtr> BuildDecodeExternalCodePointer(V<Word32> handle) {
 #ifdef V8_CODE_POINTER_SANDBOXING
     V<Word32> index =
-        asm_.Word32ShiftRightLogical(handle, kCodePointerIndexShift);
+        asm_.Word32ShiftRightLogical(handle, kCodePointerHandleShift);
     V<WordPtr> offset = asm_.ChangeUint32ToUintPtr(
         asm_.Word32ShiftLeft(index, kCodePointerTableEntrySizeLog2));
     V<WordPtr> table =

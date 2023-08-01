@@ -287,7 +287,7 @@ AllocationResult Heap::AllocatePartialMap(InstanceType instance_type,
   map->set_instance_size(instance_size);
   map->set_visitor_id(Map::GetVisitorId(map));
   map->set_inobject_properties_start_or_constructor_function_index(0);
-  DCHECK(!map->IsJSObjectMap());
+  DCHECK(!IsJSObjectMap(map));
   map->set_prototype_validity_cell(Smi::FromInt(Map::kPrototypeChainValid),
                                    kRelaxedStore);
   map->SetInObjectUnusedPropertyFields(0);
@@ -850,7 +850,7 @@ bool Heap::CreateImportantReadOnlyObjects() {
   // The -0 value must be set before NewNumber works.
   set_minus_zero_value(
       *factory->NewHeapNumber<AllocationType::kReadOnly>(-0.0));
-  DCHECK(std::signbit(roots.minus_zero_value()->Number()));
+  DCHECK(std::signbit(Object::Number(*roots.minus_zero_value())));
 
   set_nan_value(*factory->NewHeapNumber<AllocationType::kReadOnly>(
       std::numeric_limits<double>::quiet_NaN()));

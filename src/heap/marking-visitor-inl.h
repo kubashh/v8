@@ -166,15 +166,42 @@ void MarkingVisitorBase<ConcreteVisitor>::VisitExternalPointer(
 #endif  // V8_ENABLE_SANDBOX
 }
 
-#ifdef V8_CODE_POINTER_SANDBOXING
 template <typename ConcreteVisitor>
-void MarkingVisitorBase<ConcreteVisitor>::VisitCodePointerHandle(
-    HeapObject host, CodePointerHandle handle) {
+void MarkingVisitorBase<ConcreteVisitor>::VisitIndirectPointer(
+    HeapObject host, IndirectPointerSlot slot, IndirectPointerMode mode) {
+#ifdef V8_CODE_POINTER_SANDBOXING
+  if (mode == IndirectPointerMode::kStrong) {
+    // Load the referenced object (if the slot is initialized) and mark it as
+    // alive if necessary. Indirect pointers never have to be added to a
+    // remembered set because the referenced object will update the pointer
+    // table entry when it is relocated.
+    Object value = slot.Relaxed_Load();
+    if (IsHeapObject(value)) {
+      HeapObject obj = HeapObject::cast(value);
+      SynchronizePageAccess(obj);
+      if (ShouldMarkObject(obj)) {
+        MarkObject(host, obj);
+      }
+    }
+  }
+#else
+  UNREACHABLE();
+#endif
+}
+
+template <typename ConcreteVisitor>
+void MarkingVisitorBase<ConcreteVisitor>::VisitIndirectPointerTableEntry(
+    HeapObject host, IndirectPointerSlot slot) {
+#ifdef V8_CODE_POINTER_SANDBOXING
+  static_assert(kAllIndirectPointerObjectsAreCode);
   CodePointerTable* table = GetProcessWideCodePointerTable();
   CodePointerTable::Space* space = heap_->code_pointer_space();
+  IndirectPointerHandle handle = slot.Relaxed_LoadHandle();
   table->Mark(space, handle);
+#else
+  UNREACHABLE();
+#endif
 }
-#endif  // V8_CODE_POINTER_SANDBOXING
 
 // ===========================================================================
 // Object participating in bytecode flushing =================================
@@ -197,7 +224,14 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitJSFunction(
     DCHECK(IsBaselineCodeFlushingEnabled(code_flush_mode_));
     local_weak_objects_->baseline_flushing_candidates_local.Push(js_function);
   } else {
+#ifdef V8_CODE_POINTER_SANDBOXING
+    VisitIndirectPointer(
+        js_function,
+        js_function->RawIndirectPointerField(JSFunction::kCodeOffset),
+        IndirectPointerMode::kStrong);
+#else
     VisitPointer(js_function, js_function->RawField(JSFunction::kCodeOffset));
+#endif  // V8_CODE_POINTER_SANDBOXING
     // TODO(mythria): Consider updating the check for ShouldFlushBaselineCode to
     // also include cases where there is old bytecode even when there is no
     // baseline code and remove this check here.
@@ -260,7 +294,7 @@ bool MarkingVisitorBase<ConcreteVisitor>::HasBytecodeArrayForFlushing(
   // check if it is old. Note, this is done this way since this function can be
   // called by the concurrent marker.
   Object data = sfi->function_data(kAcquireLoad);
-  if (data.IsCode()) {
+  if (IsCode(data)) {
     Code baseline_code = Code::cast(data);
     DCHECK_EQ(baseline_code->kind(), CodeKind::BASELINE);
     // If baseline code flushing isn't enabled and we have baseline data on SFI
@@ -273,7 +307,7 @@ bool MarkingVisitorBase<ConcreteVisitor>::HasBytecodeArrayForFlushing(
     return false;
   }
 
-  return data.IsBytecodeArray();
+  return IsBytecodeArray(data);
 }
 
 template <typename ConcreteVisitor>
@@ -335,18 +369,19 @@ bool MarkingVisitorBase<ConcreteVisitor>::ShouldFlushBaselineCode(
   // not be initialized. We read using acquire loads to defend against that.
   Object maybe_shared =
       ACQUIRE_READ_FIELD(js_function, JSFunction::kSharedFunctionInfoOffset);
-  if (!maybe_shared.IsSharedFunctionInfo()) return false;
+  if (!IsSharedFunctionInfo(maybe_shared)) return false;
 
   // See crbug.com/v8/11972 for more details on acquire / release semantics for
   // code field. We don't use release stores when copying code pointers from
   // SFI / FV to JSFunction but it is safe in practice.
-  Object maybe_code = ACQUIRE_READ_FIELD(js_function, JSFunction::kCodeOffset);
+  Object maybe_code = js_function.raw_code(kAcquireLoad);
+
 #ifdef THREAD_SANITIZER
   // This is needed because TSAN does not process the memory fence
   // emitted after page initialization.
   BasicMemoryChunk::FromAddress(maybe_code.ptr())->SynchronizedHeapLoad();
 #endif
-  if (!maybe_code.IsCode()) return false;
+  if (!IsCode(maybe_code)) return false;
   Code code = Code::cast(maybe_code);
   if (code->kind() != CodeKind::BASELINE) return false;
 
@@ -502,7 +537,7 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitEphemeronHashTable(
     } else {
       Object value_obj = table->ValueAt(i);
 
-      if (value_obj.IsHeapObject()) {
+      if (IsHeapObject(value_obj)) {
         HeapObject value = HeapObject::cast(value_obj);
         SynchronizePageAccess(value);
         concrete_visitor()->RecordSlot(table, value_slot, value);
@@ -528,7 +563,7 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitJSWeakRef(Map map,
                                                         JSWeakRef weak_ref) {
   int size = concrete_visitor()->VisitJSObjectSubclass(map, weak_ref);
   if (size == 0) return 0;
-  if (weak_ref->target().IsHeapObject()) {
+  if (IsHeapObject(weak_ref->target())) {
     HeapObject target = HeapObject::cast(weak_ref->target());
     SynchronizePageAccess(target);
     if (target.InReadOnlySpace() || concrete_visitor()->IsMarked(target)) {
@@ -649,7 +684,7 @@ void MarkingVisitorBase<ConcreteVisitor>::VisitDescriptorsForMap(Map map) {
 
   // If the descriptors are a Smi, then this Map is in the process of being
   // deserialized, and doesn't yet have an initialized descriptor field.
-  if (maybe_descriptors.IsSmi()) {
+  if (IsSmi(maybe_descriptors)) {
     DCHECK_EQ(maybe_descriptors, Smi::uninitialized_deserialization_value());
     return;
   }
@@ -661,7 +696,7 @@ void MarkingVisitorBase<ConcreteVisitor>::VisitDescriptorsForMap(Map map) {
   // follows this call:
   // - Array in read only space;
   // - StrongDescriptor array;
-  if (descriptors.InReadOnlySpace() || descriptors.IsStrongDescriptorArray()) {
+  if (descriptors.InReadOnlySpace() || IsStrongDescriptorArray(descriptors)) {
     return;
   }
 
@@ -703,111 +738,6 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitTransitionArray(
   TransitionArray::BodyDescriptor::IterateBody(map, array, size, this);
   local_weak_objects_->transition_arrays_local.Push(array);
   return size;
-}
-
-template <typename ConcreteVisitor>
-YoungGenerationMarkingVisitorBase<ConcreteVisitor>::
-    YoungGenerationMarkingVisitorBase(
-        Isolate* isolate, MarkingWorklists::Local* worklists_local,
-        EphemeronRememberedSet::TableList::Local* ephemeron_tables_local,
-        PretenuringHandler::PretenuringFeedbackMap* local_pretenuring_feedback)
-    : NewSpaceVisitor<ConcreteVisitor>(isolate),
-      worklists_local_(worklists_local),
-      ephemeron_tables_local_(ephemeron_tables_local),
-      pretenuring_handler_(isolate->heap()->pretenuring_handler()),
-      local_pretenuring_feedback_(local_pretenuring_feedback) {}
-
-template <typename ConcreteVisitor>
-YoungGenerationMarkingVisitorBase<
-    ConcreteVisitor>::~YoungGenerationMarkingVisitorBase() = default;
-
-template <typename ConcreteVisitor>
-template <typename T>
-int YoungGenerationMarkingVisitorBase<ConcreteVisitor>::
-    VisitEmbedderTracingSubClassWithEmbedderTracing(Map map, T object) {
-  const int size = concrete_visitor()->VisitJSObjectSubclass(map, object);
-  if (!worklists_local_->SupportsExtractWrapper()) return size;
-  MarkingWorklists::Local::WrapperSnapshot wrapper_snapshot;
-  const bool valid_snapshot =
-      worklists_local_->ExtractWrapper(map, object, wrapper_snapshot);
-  if (size && valid_snapshot) {
-    // Success: The object needs to be processed for embedder references.
-    worklists_local_->PushExtractedWrapper(wrapper_snapshot);
-  }
-  return size;
-}
-
-template <typename ConcreteVisitor>
-int YoungGenerationMarkingVisitorBase<ConcreteVisitor>::VisitJSArrayBuffer(
-    Map map, JSArrayBuffer object) {
-  object->YoungMarkExtension();
-  return VisitEmbedderTracingSubClassWithEmbedderTracing(map, object);
-}
-
-template <typename ConcreteVisitor>
-int YoungGenerationMarkingVisitorBase<ConcreteVisitor>::VisitJSApiObject(
-    Map map, JSObject object) {
-  return VisitEmbedderTracingSubClassWithEmbedderTracing(map, object);
-}
-
-template <typename ConcreteVisitor>
-int YoungGenerationMarkingVisitorBase<ConcreteVisitor>::
-    VisitJSDataViewOrRabGsabDataView(Map map,
-                                     JSDataViewOrRabGsabDataView object) {
-  return VisitEmbedderTracingSubClassWithEmbedderTracing(map, object);
-}
-
-template <typename ConcreteVisitor>
-int YoungGenerationMarkingVisitorBase<ConcreteVisitor>::VisitJSTypedArray(
-    Map map, JSTypedArray object) {
-  return VisitEmbedderTracingSubClassWithEmbedderTracing(map, object);
-}
-
-template <typename ConcreteVisitor>
-int YoungGenerationMarkingVisitorBase<ConcreteVisitor>::VisitEphemeronHashTable(
-    Map map, EphemeronHashTable table) {
-  // Register table with Minor MC, so it can take care of the weak keys later.
-  // This allows to only iterate the tables' values, which are treated as strong
-  // independently of whether the key is live.
-  ephemeron_tables_local_->Push(table);
-  for (InternalIndex i : table->IterateEntries()) {
-    ObjectSlot value_slot =
-        table->RawFieldOfElementAt(EphemeronHashTable::EntryToValueIndex(i));
-    VisitPointer(table, value_slot);
-  }
-  return EphemeronHashTable::BodyDescriptor::SizeOf(map, table);
-}
-
-template <typename ConcreteVisitor>
-int YoungGenerationMarkingVisitorBase<ConcreteVisitor>::VisitJSObject(
-    Map map, JSObject object) {
-  int result = NewSpaceVisitor<ConcreteVisitor>::VisitJSObject(map, object);
-  DCHECK_LT(0, result);
-  pretenuring_handler_->UpdateAllocationSite(map, object,
-                                             local_pretenuring_feedback_);
-  return result;
-}
-
-template <typename ConcreteVisitor>
-int YoungGenerationMarkingVisitorBase<ConcreteVisitor>::VisitJSObjectFast(
-    Map map, JSObject object) {
-  int result = NewSpaceVisitor<ConcreteVisitor>::VisitJSObjectFast(map, object);
-  DCHECK_LT(0, result);
-  pretenuring_handler_->UpdateAllocationSite(map, object,
-                                             local_pretenuring_feedback_);
-  return result;
-}
-
-template <typename ConcreteVisitor>
-template <typename T, typename TBodyDescriptor>
-int YoungGenerationMarkingVisitorBase<ConcreteVisitor>::VisitJSObjectSubclass(
-    Map map, T object) {
-  int result = NewSpaceVisitor<ConcreteVisitor>::template VisitJSObjectSubclass<
-      T, TBodyDescriptor>(map, object);
-  DCHECK_LT(0, result);
-  pretenuring_handler_->UpdateAllocationSite(map, object,
-                                             local_pretenuring_feedback_);
-  return result;
 }
 
 }  // namespace internal

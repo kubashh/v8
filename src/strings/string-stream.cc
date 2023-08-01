@@ -192,15 +192,15 @@ void StringStream::Add(base::Vector<const char> format,
 }
 
 void StringStream::PrintObject(Object o) {
-  o.ShortPrint(this);
-  if (o.IsString()) {
+  ShortPrint(o, this);
+  if (IsString(o)) {
     if (String::cast(o)->length() <= String::kMaxShortPrintLength) {
       return;
     }
-  } else if (o.IsNumber() || o.IsOddball()) {
+  } else if (IsNumber(o) || IsOddball(o)) {
     return;
   }
-  if (o.IsHeapObject() && object_print_mode_ == kPrintObjectVerbose) {
+  if (IsHeapObject(o) && object_print_mode_ == kPrintObjectVerbose) {
     // TODO(delphick): Consider whether we can get the isolate without using
     // TLS.
     Isolate* isolate = Isolate::Current();
@@ -285,7 +285,7 @@ bool StringStream::Put(String str, int start, int end) {
 }
 
 void StringStream::PrintName(Object name) {
-  if (name.IsString()) {
+  if (IsString(name)) {
     String str = String::cast(name);
     if (str->length() > 0) {
       Put(str);
@@ -305,16 +305,16 @@ void StringStream::PrintUsingMap(JSObject js_object) {
     if (details.location() == PropertyLocation::kField) {
       DCHECK_EQ(PropertyKind::kData, details.kind());
       Object key = descs->GetKey(i);
-      if (key.IsString() || key.IsNumber()) {
+      if (IsString(key) || IsNumber(key)) {
         int len = 3;
-        if (key.IsString()) {
+        if (IsString(key)) {
           len = String::cast(key)->length();
         }
         for (; len < 18; len++) Put(' ');
-        if (key.IsString()) {
+        if (IsString(key)) {
           Put(String::cast(key));
         } else {
-          key.ShortPrint();
+          ShortPrint(key);
         }
         Add(": ");
         FieldIndex index = FieldIndex::ForDescriptor(map, i);
@@ -329,7 +329,7 @@ void StringStream::PrintFixedArray(FixedArray array, unsigned int limit) {
   ReadOnlyRoots roots = array->GetReadOnlyRoots();
   for (unsigned int i = 0; i < 10 && i < limit; i++) {
     Object element = array->get(i);
-    if (element.IsTheHole(roots)) continue;
+    if (IsTheHole(element, roots)) continue;
     for (int len = 1; len < 18; len++) {
       Put(' ');
     }
@@ -370,27 +370,27 @@ void StringStream::PrintMentionedObjectCache(Isolate* isolate) {
     HeapObject printee = *(*debug_object_cache)[i];
     Add(" #%d# %p: ", static_cast<int>(i),
         reinterpret_cast<void*>(printee.ptr()));
-    printee.ShortPrint(this);
+    ShortPrint(printee, this);
     Add("\n");
-    if (printee.IsJSObject()) {
-      if (printee.IsJSPrimitiveWrapper()) {
+    if (IsJSObject(printee)) {
+      if (IsJSPrimitiveWrapper(printee)) {
         Add("           value(): %o\n",
             JSPrimitiveWrapper::cast(printee)->value());
       }
       PrintUsingMap(JSObject::cast(printee));
-      if (printee.IsJSArray()) {
+      if (IsJSArray(printee)) {
         JSArray array = JSArray::cast(printee);
         if (array->HasObjectElements()) {
           unsigned int limit = FixedArray::cast(array->elements())->length();
-          unsigned int length =
-              static_cast<uint32_t>(JSArray::cast(array)->length().Number());
+          unsigned int length = static_cast<uint32_t>(
+              Object::Number(JSArray::cast(array)->length()));
           if (length < limit) limit = length;
           PrintFixedArray(FixedArray::cast(array->elements()), limit);
         }
       }
-    } else if (printee.IsByteArray()) {
+    } else if (IsByteArray(printee)) {
       PrintByteArray(ByteArray::cast(printee));
-    } else if (printee.IsFixedArray()) {
+    } else if (IsFixedArray(printee)) {
       unsigned int limit = FixedArray::cast(printee)->length();
       PrintFixedArray(FixedArray::cast(printee), limit);
     }
@@ -415,25 +415,26 @@ void StringStream::PrintPrototype(JSFunction fun, Object receiver) {
   Object name = fun->shared()->Name();
   bool print_name = false;
   Isolate* isolate = fun->GetIsolate();
-  if (receiver.IsNullOrUndefined(isolate) || receiver.IsTheHole(isolate) ||
-      receiver.IsJSProxy()) {
+  if (IsNullOrUndefined(receiver, isolate) || IsTheHole(receiver, isolate) ||
+      IsJSProxy(receiver)) {
     print_name = true;
   } else if (!isolate->context().is_null()) {
-    if (!receiver.IsJSObject()) {
-      receiver = receiver.GetPrototypeChainRootMap(isolate)->prototype();
+    if (!IsJSObject(receiver)) {
+      receiver =
+          Object::GetPrototypeChainRootMap(receiver, isolate)->prototype();
     }
 
     for (PrototypeIterator iter(isolate, JSObject::cast(receiver),
                                 kStartAtReceiver);
          !iter.IsAtEnd(); iter.Advance()) {
-      if (iter.GetCurrent().IsJSProxy()) break;
+      if (IsJSProxy(iter.GetCurrent())) break;
       Object key = iter.GetCurrent<JSObject>()->SlowReverseLookup(fun);
-      if (!key.IsUndefined(isolate)) {
-        if (!name.IsString() || !key.IsString() ||
+      if (!IsUndefined(key, isolate)) {
+        if (!IsString(name) || !IsString(key) ||
             !String::cast(name)->Equals(String::cast(key))) {
           print_name = true;
         }
-        if (name.IsString() && String::cast(name)->length() == 0) {
+        if (IsString(name) && String::cast(name)->length() == 0) {
           print_name = false;
         }
         name = key;

@@ -284,6 +284,9 @@ std::ostream& operator<<(std::ostream& os, const InstructionOperand& op) {
         case MachineRepresentation::kCompressed:
           os << "|c";
           break;
+        case MachineRepresentation::kIndirectPointer:
+          os << "|ip";
+          break;
         case MachineRepresentation::kSandboxedPointer:
           os << "|sb";
           break;
@@ -593,7 +596,7 @@ Handle<HeapObject> Constant::ToHeapObject() const {
 Handle<Code> Constant::ToCode() const {
   DCHECK_EQ(kHeapObject, type());
   Handle<Code> value(reinterpret_cast<Address*>(static_cast<intptr_t>(value_)));
-  DCHECK(value->IsCode());
+  DCHECK(IsCode(*value));
   return value;
 }
 
@@ -1031,6 +1034,7 @@ static MachineRepresentation FilterRepresentation(MachineRepresentation rep) {
       return rep;
     case MachineRepresentation::kNone:
     case MachineRepresentation::kMapWord:
+    case MachineRepresentation::kIndirectPointer:
       break;
   }
 

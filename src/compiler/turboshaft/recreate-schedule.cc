@@ -549,7 +549,7 @@ Node* ScheduleBuilder::ProcessOperation(const ShiftOp& op) {
 }
 Node* ScheduleBuilder::ProcessOperation(const EqualOp& op) {
   const Operator* o;
-  switch (op.rep) {
+  switch (op.rep.value()) {
     case RegisterRepresentation::Word32():
       o = machine.Word32Equal();
       break;
@@ -572,7 +572,7 @@ Node* ScheduleBuilder::ProcessOperation(const EqualOp& op) {
 }
 Node* ScheduleBuilder::ProcessOperation(const ComparisonOp& op) {
   const Operator* o;
-  switch (op.rep) {
+  switch (op.rep.value()) {
     case RegisterRepresentation::Word32():
       switch (op.kind) {
         case ComparisonOp::Kind::kSignedLessThan:
@@ -873,7 +873,7 @@ Node* ScheduleBuilder::ProcessOperation(const SelectOp& op) {
          (op.rep == RegisterRepresentation::Float64() &&
           SupportedOperations::float64_select()));
   const Operator* o = nullptr;
-  switch (op.rep) {
+  switch (op.rep.value()) {
     case RegisterRepresentation::Enum::kWord32:
       o = machine.Word32Select().op();
       break;
@@ -1416,7 +1416,7 @@ Node* ScheduleBuilder::ProcessOperation(const DebugPrintOp& op) {
   Node* input = GetNode(op.input());
 
   base::Optional<Callable> callable;
-  switch (op.rep) {
+  switch (op.rep.value()) {
     case RegisterRepresentation::PointerSized():
       callable.emplace(Builtins::CallableFor(PipelineData::Get().isolate(),
                                              Builtin::kDebugPrintWordPtr));
@@ -1478,6 +1478,26 @@ Node* ScheduleBuilder::ProcessOperation(const Word32PairBinopOp& op) {
 #ifdef V8_ENABLE_WEBASSEMBLY
 Node* ScheduleBuilder::ProcessOperation(const Simd128ConstantOp& op) {
   return AddNode(machine.S128Const(op.value), {});
+}
+
+Node* ScheduleBuilder::ProcessOperation(const Simd128BinopOp& op) {
+  switch (op.kind) {
+#define HANDLE_KIND(kind)             \
+  case Simd128BinopOp::Kind::k##kind: \
+    return AddNode(machine.kind(), {GetNode(op.left()), GetNode(op.right())});
+    FOREACH_SIMD_128_BINARY_OPCODE(HANDLE_KIND);
+#undef HANDLE_KIND
+  }
+}
+
+Node* ScheduleBuilder::ProcessOperation(const Simd128UnaryOp& op) {
+  switch (op.kind) {
+#define HANDLE_KIND(kind)             \
+  case Simd128UnaryOp::Kind::k##kind: \
+    return AddNode(machine.kind(), {GetNode(op.input())});
+    FOREACH_SIMD_128_UNARY_OPCODE(HANDLE_KIND);
+#undef HANDLE_KIND
+  }
 }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
