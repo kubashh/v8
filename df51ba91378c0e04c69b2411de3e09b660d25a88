@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ba98a70_ae6982a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-01T09:23:58Z",
+      "side": 1,
+      "message": "Yes that\u0027s a good point - added a verification pass that runs right after promotion.",
+      "parentUuid": "5f886326_4f060412",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e030e73f_0b35b792",
@@ -55,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "516e3572_fa04be42",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4637,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-01T09:23:58Z",
+      "side": 1,
+      "message": "Yep this is something I still wanted to fix before landing. The complication is time - after builtin generation but prior to serialization, builtin Code objs are in old space and need to be iterated. After promotion they are in RO space.\n\nThe same applies to all other RO-promoted objs. That\u0027s the reason they can no longer be RO roots :|\n\nI changed this site to skip iteration unless we\u0027re currently creating a snapshot.",
+      "parentUuid": "ba3aec3b_4914b6a2",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ef3d8e5f_92339ebc",
         "filename": "src/heap/heap.h",
         "patchSetId": 6
@@ -66,6 +102,24 @@
       "writtenOn": "2023-07-31T13:16:59Z",
       "side": 1,
       "message": "Nit: Maybe mention here that this is only supposed to be null if the caller already opened a SafepointScope.",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc9ad441_a7fe4bfa",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2605,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-01T09:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef3d8e5f_92339ebc",
       "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -107,6 +161,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8224d05a_332b9b27",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-01T09:23:58Z",
+      "side": 1,
+      "message": "I\u0027m not sure I got your point correctly, do you mean: for an obj graph \n\n```\n o0 -\u003e o1 -\u003e o2\n    ↘ o3 -\u003e o4\n```\n \nwhere {o1,o2} are \u0027promote\u0027 but {o0,o3,o4} are \u0027no-promote\u0027, we could still immediately promote the {o1,o2} subgraph? The problem is cycles:\n\n```\ngraph1:\n o0 -\u003e o1 -\u003e o2\n        ↖----↲\ngraph2:\n o0 -\u003e o1 -\u003e o2\n  ↖----------↲\n```\n\nFor graph1 the {o1,o2} decision is \u0027promote\u0027, for graph2 it is \u0027no-promote\u0027 but locally we cannot distinguish between the two states.\n\nWe\u0027d have to know whether all cycles seen in the current subgraph have been resolved. Alternatively, assuming cycles are rare, we could track whether any cycle has been seen in the current set and promote subgraphs immediately if not..\n\nWdyt?\n\nAnyways, in the real world, I don\u0027t expect this to be a problem. Most objects are not IsPromoCandidate and are rejected immediately.",
+      "parentUuid": "9c437f09_09ac5a7a",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba25ab26_cb80690e",
         "filename": "src/heap/read-only-promotion.cc",
         "patchSetId": 6
@@ -124,6 +196,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9f5442a_8a5a992d",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-01T09:23:58Z",
+      "side": 1,
+      "message": "\u003e  at first I thought that a \"Committee\" is responsible to determine if a candidate is to be promoted\n\nYes that is basically what they do - the Committee makes promo decisions for all objects on the heap, and the CommitteeVisitor recurses into subgraphs (-\u003e it is the Visitor implementation for the Committee class).\n\nDo you mean to rename \u0027Committee\u0027 to \u0027Candidate\u0027?",
+      "parentUuid": "ba25ab26_cb80690e",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6b09255c_5a270df1",
         "filename": "src/heap/read-only-promotion.cc",
         "patchSetId": 6
@@ -135,6 +225,24 @@
       "writtenOn": "2023-07-28T14:53:51Z",
       "side": 1,
       "message": "maybe a comment on what this object visitor is doing. roughly this turns the EvaluateSubgraph predicate into \"for all\" for the graph, right?",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9391cf62_2ef56274",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-01T09:23:58Z",
+      "side": 1,
+      "message": "Yes exactly, done.",
+      "parentUuid": "6b09255c_5a270df1",
       "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -158,6 +266,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d9d1aa9_61b71413",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-01T09:23:58Z",
+      "side": 1,
+      "message": "Do you feel that helps? Those comments are so close to the method names (which I tried to name descriptively) that personally I wouldn\u0027t/didn\u0027t add them.",
+      "parentUuid": "c9b0998e_9dcc4b4d",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68dbfd23_1de810f6",
         "filename": "src/heap/read-only-promotion.cc",
         "patchSetId": 6
@@ -169,6 +295,24 @@
       "writtenOn": "2023-07-31T13:16:59Z",
       "side": 1,
       "message": "Nit: Not sure the name `ReadOnlyPromotionImpl` is super descriptive. Could we get rid of the class and just invoke the two methods `CopyToReadOnlyHeap` and `UpdatePointers` here directly? It feels `moves_` could be passed as an argument to `UpdatePointers` as well. IMHO that would make the two phases involved here more prominent.",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "664e9e63_cdfa53c2",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-01T09:23:58Z",
+      "side": 1,
+      "message": "I\u0027d like to keep the class just to bundle related code together, but I agree that it\u0027s clearer to call the 2 phases explicitly here. Did that, wdyt?",
+      "parentUuid": "68dbfd23_1de810f6",
       "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
