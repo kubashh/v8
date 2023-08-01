@@ -245,7 +245,12 @@ class FullMarkingVisitorBase : public MarkingVisitorBase<ConcreteVisitor> {
   constexpr bool CanUpdateValuesInHeap() { return true; }
 
   bool TryMark(HeapObject obj) {
-    return MarkBit::From(obj).Set<AccessMode::ATOMIC>();
+    bool result = MarkBit::From(obj).Set<AccessMode::ATOMIC>();
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (result)
+      this->heap_->css_stats()->marked_objects()->AddObject(obj.address());
+#endif
+    return result;
   }
   bool IsMarked(HeapObject obj) const {
     return MarkBit::From(obj).Get<AccessMode::ATOMIC>();
@@ -297,7 +302,11 @@ class YoungGenerationMarkingVisitorBase
   MarkingWorklists::Local* worklists_local() const { return worklists_local_; }
 
   bool TryMark(HeapObject obj) {
-    return MarkBit::From(obj).Set<AccessMode::ATOMIC>();
+    bool result = MarkBit::From(obj).Set<AccessMode::ATOMIC>();
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (result) stats_->AddObject(obj.address());
+#endif
+    return result;
   }
 
  protected:
@@ -313,6 +322,9 @@ class YoungGenerationMarkingVisitorBase
   EphemeronRememberedSet::TableList::Local* ephemeron_tables_local_;
   PretenuringHandler* const pretenuring_handler_;
   PretenuringHandler::PretenuringFeedbackMap* const local_pretenuring_feedback_;
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  measure_css::ObjectStats* stats_;
+#endif
 };
 
 }  // namespace internal

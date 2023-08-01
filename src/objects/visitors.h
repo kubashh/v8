@@ -17,31 +17,32 @@ namespace internal {
 
 class Code;
 
-#define ROOT_ID_LIST(V)                                 \
-  V(kBootstrapper, "(Bootstrapper)")                    \
-  V(kBuiltins, "(Builtins)")                            \
-  V(kClientHeap, "(Client heap)")                       \
-  V(kCodeFlusher, "(Code flusher)")                     \
-  V(kCompilationCache, "(Compilation cache)")           \
-  V(kDebug, "(Debugger)")                               \
-  V(kExtensions, "(Extensions)")                        \
-  V(kEternalHandles, "(Eternal handles)")               \
-  V(kExternalStringsTable, "(External strings)")        \
-  V(kGlobalHandles, "(Global handles)")                 \
-  V(kHandleScope, "(Handle scope)")                     \
-  V(kMicroTasks, "(Micro tasks)")                       \
-  V(kReadOnlyRootList, "(Read-only roots)")             \
-  V(kRelocatable, "(Relocatable)")                      \
-  V(kRetainMaps, "(Retain maps)")                       \
-  V(kSharedHeapObjectCache, "(Shareable object cache)") \
-  V(kSmiRootList, "(Smi roots)")                        \
-  V(kStackRoots, "(Stack roots)")                       \
-  V(kStartupObjectCache, "(Startup object cache)")      \
-  V(kStringTable, "(Internalized strings)")             \
-  V(kStrongRootList, "(Strong root list)")              \
-  V(kStrongRoots, "(Strong roots)")                     \
-  V(kThreadManager, "(Thread manager)")                 \
-  V(kTracedHandles, "(Traced handles)")                 \
+#define ROOT_ID_LIST(V)                                    \
+  V(kBootstrapper, "(Bootstrapper)")                       \
+  V(kBuiltins, "(Builtins)")                               \
+  V(kClientHeap, "(Client heap)")                          \
+  V(kCodeFlusher, "(Code flusher)")                        \
+  V(kCompilationCache, "(Compilation cache)")              \
+  V(kConservativeStackRoots, "(Conservative stack roots)") \
+  V(kDebug, "(Debugger)")                                  \
+  V(kExtensions, "(Extensions)")                           \
+  V(kEternalHandles, "(Eternal handles)")                  \
+  V(kExternalStringsTable, "(External strings)")           \
+  V(kGlobalHandles, "(Global handles)")                    \
+  V(kHandleScope, "(Handle scope)")                        \
+  V(kMicroTasks, "(Micro tasks)")                          \
+  V(kReadOnlyRootList, "(Read-only roots)")                \
+  V(kRelocatable, "(Relocatable)")                         \
+  V(kRetainMaps, "(Retain maps)")                          \
+  V(kSharedHeapObjectCache, "(Shareable object cache)")    \
+  V(kSmiRootList, "(Smi roots)")                           \
+  V(kStackRoots, "(Stack roots)")                          \
+  V(kStartupObjectCache, "(Startup object cache)")         \
+  V(kStringTable, "(Internalized strings)")                \
+  V(kStrongRootList, "(Strong root list)")                 \
+  V(kStrongRoots, "(Strong roots)")                        \
+  V(kThreadManager, "(Thread manager)")                    \
+  V(kTracedHandles, "(Traced handles)")                    \
   V(kWriteBarrier, "(Write barrier)")
 
 class VisitorSynchronization : public AllStatic {
