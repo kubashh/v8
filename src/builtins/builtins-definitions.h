@@ -250,9 +250,7 @@ namespace internal {
                                                                                \
   /* Adapters for Turbofan into runtime */                                     \
   TFC(AllocateInYoungGeneration, Allocate)                                     \
-  TFC(AllocateRegularInYoungGeneration, Allocate)                              \
   TFC(AllocateInOldGeneration, Allocate)                                       \
-  TFC(AllocateRegularInOldGeneration, Allocate)                                \
                                                                                \
   TFC(NewHeapNumber, NewHeapNumber)                                            \
                                                                                \
