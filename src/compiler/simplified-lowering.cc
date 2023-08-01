@@ -3735,7 +3735,7 @@ class RepresentationSelector {
       }
       case IrOpcode::kLoadFieldByIndex: {
         if (truncation.IsUnused()) return VisitUnused<T>(node);
-        VisitBinop<T>(node, UseInfo::AnyTagged(), UseInfo::TruncatingWord32(),
+        VisitBinop<T>(node, UseInfo::AnyTagged(), UseInfo::TaggedSigned(),
                       MachineRepresentation::kTagged);
         return;
       }

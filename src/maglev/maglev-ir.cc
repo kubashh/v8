@@ -272,7 +272,7 @@ bool CheckToBooleanOnAllRoots(LocalIsolate* local_isolate) {
   /* Ignore 'undefined' roots that are not the undefined value itself. */ \
   if (roots.name() != roots.undefined_value() ||                          \
       RootIndex::k##CamelName == RootIndex::kUndefinedValue) {            \
-    DCHECK_EQ(roots.name()->BooleanValue(local_isolate),                  \
+    DCHECK_EQ(Object::BooleanValue(roots.name(), local_isolate),          \
               RootToBoolean(RootIndex::k##CamelName));                    \
   }
   READ_ONLY_ROOT_LIST(DO_CHECK)
@@ -1867,6 +1867,20 @@ void LoadTaggedFieldByFieldIndex::GenerateCode(MaglevAssembler* masm,
   //    [Fold together the constants, and collapse definition of index]
   //    = index + (JSObject::kHeaderSize - (is_double_bit << 1))
   //
+  // Without pointer compression, we instead have:
+  //
+  //      ((index >> 2) << kTaggedSizeLog2 + JSObject::kHeaderSize
+  //
+  //    [Expand definitions of index and kTaggedSizeLog2]
+  //    = (((actual_index << 2 | is_double_bit << 1) >> 2) << 3)
+  //           + JSObject::kHeaderSize
+  //
+  //    [Cancel out shift down and shift up, clear is_double bit by subtracting]
+  //    = (actual_index << 3 | is_double_bit << 2) - (is_double_bit << 2)
+  //           + JSObject::kHeaderSize
+  //
+  //    [Fold together the constants, and collapse definition of index]
+  //    = (index << 1) + (JSObject::kHeaderSize - (is_double_bit << 3))
   //
   // For out-of-object properties, the encoding is:
   //
@@ -1877,6 +1891,19 @@ void LoadTaggedFieldByFieldIndex::GenerateCode(MaglevAssembler* masm,
   //           = -(actual_index << 2) + (is_double_bit ? 2 : 0) - 4
   //
   // The value we want is in the property array at offset:
+  //
+  //      (actual_index << kTaggedSizeLog2) + FixedArray::kHeaderSize
+  //
+  //    [Expand definition of kTaggedSizeLog2]
+  //    = (actual_index << 2) + FixedArray::kHeaderSize
+  //
+  //    [Substitute in index]
+  //    = (-index + (is_double_bit ? 2 : 0) - 4) + FixedArray::kHeaderSize
+  //
+  //    [Fold together the constants]
+  //    = -index + (FixedArray::kHeaderSize + (is_double_bit ? 2 : 0) - 4))
+  //
+  // Or without pointer compression:
   //
   //      (actual_index << kTaggedSizeLog2) + FixedArray::kHeaderSize
   //

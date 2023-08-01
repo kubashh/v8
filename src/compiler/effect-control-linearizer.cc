@@ -39,6 +39,7 @@
 #include "src/objects/ordered-hash-table.h"
 #include "src/objects/string.h"
 #include "src/objects/turbofan-types.h"
+#include "v8-internal.h"
 
 namespace v8 {
 namespace internal {
@@ -7172,7 +7173,9 @@ Node* EffectControlLinearizer::LowerLoadFieldByIndex(Node* node) {
   Node* object = node->InputAt(0);
   Node* index = node->InputAt(1);
   Node* zero = __ IntPtrConstant(0);
-  Node* one = __ IntPtrConstant(1);
+  static_assert(kTaggedSizeLog2 > (kSmiTagSize + kSmiShiftSize));
+  Node* index_shift = __ IntPtrConstant(kTaggedSizeLog2);
+  Node* double_bit = __ IntPtrConstant(1 << (kTaggedSizeLog2 - 1));
 
   // Sign-extend the {index} on 64-bit architectures.
   if (machine()->Is64()) {
@@ -7183,7 +7186,7 @@ Node* EffectControlLinearizer::LowerLoadFieldByIndex(Node* node) {
   auto done = __ MakeLabel(MachineRepresentation::kTagged);
 
   // Check if field is a mutable double field.
-  __ GotoIfNot(__ IntPtrEqual(__ WordAnd(index, one), zero), &if_double);
+  __ GotoIfNot(__ IntPtrEqual(__ WordAnd(index, double_bit), zero), &if_double);
 
   // The field is a proper Tagged field on {object}. The {index} is shifted
   // to the left by one in the code below.
@@ -7224,7 +7227,7 @@ Node* EffectControlLinearizer::LowerLoadFieldByIndex(Node* node) {
     auto loaded_field = __ MakeLabel(MachineRepresentation::kTagged);
     auto done_double = __ MakeLabel(MachineRepresentation::kFloat64);
 
-    index = __ WordSar(index, one);
+    index = __ WordSar(index, shift_away_double_bit);
 
     // Check if field is in-object or out-of-object.
     auto if_outofobject = __ MakeLabel();
