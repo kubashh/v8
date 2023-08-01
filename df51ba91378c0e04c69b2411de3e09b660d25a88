@@ -179,6 +179,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b8eb27d_ef9ac84b",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-01T12:34:36Z",
+      "side": 1,
+      "message": "Ah good point. I guess it is easier to keep it as-is and maybe add a comment for this?",
+      "parentUuid": "8224d05a_332b9b27",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba25ab26_cb80690e",
         "filename": "src/heap/read-only-promotion.cc",
         "patchSetId": 6
@@ -282,6 +300,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f1bc43d_535014a8",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-01T12:34:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d9d1aa9_61b71413",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68dbfd23_1de810f6",
@@ -313,6 +349,24 @@
       "side": 1,
       "message": "I\u0027d like to keep the class just to bundle related code together, but I agree that it\u0027s clearer to call the 2 phases explicitly here. Did that, wdyt?",
       "parentUuid": "68dbfd23_1de810f6",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6348d83_df785ef3",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-01T12:34:36Z",
+      "side": 1,
+      "message": "Thanks, that works for me as well!",
+      "parentUuid": "664e9e63_cdfa53c2",
       "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
