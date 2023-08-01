@@ -23,8 +23,8 @@
 namespace v8 {
 namespace internal {
 
-using YoungGenerationMainMarkingVisitor =
-    YoungGenerationMarkingVisitor<YoungGenerationMarkingVisitorMode::kParallel>;
+using YoungGenerationMainMarkingVisitor = YoungGenerationMarkingVisitor<
+    YoungGenerationMarkingVisitationMode::kParallel>;
 
 class YoungGenerationRememberedSetsMarkingWorklist {
  private:
@@ -184,7 +184,6 @@ class MinorMarkSweepCollector final {
   void MarkLiveObjects();
   void MarkRoots(YoungGenerationRootMarkingVisitor& root_visitor,
                  bool was_marked_incrementally);
-  void DoParallelMarking();
   void DrainMarkingWorklist();
   void MarkRootsFromTracedHandles(
       YoungGenerationRootMarkingVisitor& root_visitor);
