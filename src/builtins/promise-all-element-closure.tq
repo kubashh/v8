@@ -180,6 +180,11 @@ transitioning macro PromiseAllResolveElementClosure<F: type>(
     // letting it escape to user code.
     if (hasResolveAndRejectClosures) MakeFixedArrayCOW(values);
 
+    // Clear the reference to values now that it's escaping to user code.
+    *ContextSlot(
+        promiseContext,
+        PromiseAllResolveElementContextSlots::
+            kPromiseAllResolveElementValuesSlot) = kEmptyFixedArray;
     const valuesArray = NewJSArray(arrayMap, values);
     Call(promiseContext, resolve, Undefined, valuesArray);
   }

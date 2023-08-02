@@ -313,10 +313,10 @@ Reject(JSAny) {
 
       // We may already have elements in "errors" - this happens when the
       // Thenable calls the reject callback immediately.
-      const errors: FixedArray = *ContextSlot(
+      const errors: FixedArray = EscapeFixedArrayToUserCode(ContextSlot(
           rejectElementContext,
           PromiseAnyRejectElementContextSlots::
-              kPromiseAnyRejectElementErrorsSlot);
+              kPromiseAnyRejectElementErrorsSlot));
 
       check(errors.length == index - 1);
       const error = ConstructAggregateError(errors);

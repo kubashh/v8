@@ -172,3 +172,9 @@ macro NewFixedDoubleArray<Iterator: type>(
     floats: ...it
   };
 }
+
+macro EscapeFixedArrayToUserCode(slot: &FixedArray): FixedArray {
+  const array = *slot;
+  *slot = kEmptyFixedArray;
+  return array;
+}

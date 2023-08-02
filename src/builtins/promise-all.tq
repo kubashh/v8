@@ -302,10 +302,10 @@ Reject(JSAny) {
       //     Perform ? Call(resultCapability.[[Resolve]], undefined,
       //                    « valuesArray »).
 
-      const values: FixedArray = *ContextSlot(
+      const values: FixedArray = EscapeFixedArrayToUserCode(ContextSlot(
           resolveElementContext,
           PromiseAllResolveElementContextSlots::
-              kPromiseAllResolveElementValuesSlot);
+              kPromiseAllResolveElementValuesSlot));
       const arrayMap =
           *NativeContextSlot(
           nativeContext, ContextSlot::JS_ARRAY_PACKED_ELEMENTS_MAP_INDEX);
