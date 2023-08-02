@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f457d81_a93cec09",
+        "filename": "src/compiler/js-inlining-heuristic.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T09:59:10Z",
+      "side": 1,
+      "message": "The global scope is what puts me off, also as the `JsInliner::ReduceJSWasmCall` should only be called with `mode !\u003d kJSOnly`, so then we\u0027d also want to start dchecking things there.\n\nI guess, there is a somewhat not fully clean design because for JS the `js-inlining-heuristic.h` does all the analysis and decision making and `js-inlining.h` is then fully mechanic and just inlines without any decision taking happening any more.\nFor the wasm-into-js inlining this isn\u0027t true as it tries to inline the wasm function body but might have to give that up when encountering unsupported constructs (operations, locals, types, ...)",
+      "parentUuid": "dc9d335b_93384116",
+      "range": {
+        "startLine": 31,
+        "startChar": 44,
+        "endLine": 31,
+        "endChar": 69
+      },
+      "revId": "b33d6a941614389b979b4416e8e23e46e0d27a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03f00da5_73502f48",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-08-02T08:39:16Z",
       "side": 1,
       "message": "nit: Can we find a better name for `full` or at least put a one line comment what `full` means. Maybe move it completely or is there any other type of wasm inlining?",
+      "range": {
+        "startLine": 80,
+        "startChar": 7,
+        "endLine": 80,
+        "endChar": 26
+      },
+      "revId": "b33d6a941614389b979b4416e8e23e46e0d27a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5923ecf1_540afe10",
+        "filename": "src/compiler/js-inlining.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T09:59:10Z",
+      "side": 1,
+      "message": "I changed the name and added a comment.\nThe complexity is that we have multiple levels of inlining:\n1) Inline the js-to-wasm wrapper.\n2) Inline the js-to-wasm wrapper and the actual wasm function body.",
+      "parentUuid": "03f00da5_73502f48",
       "range": {
         "startLine": 80,
         "startChar": 7,
