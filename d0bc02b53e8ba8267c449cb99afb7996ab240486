@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf5f298d_59bf2dad",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4334,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T10:35:53Z",
+      "side": 1,
+      "message": "nit: Please put into two statements. For Turboshaft I have generally avoided using comma operator for such cases.",
+      "range": {
+        "startLine": 4334,
+        "startChar": 17,
+        "endLine": 4334,
+        "endChar": 69
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51fc0763_c4305637",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T10:35:53Z",
+      "side": 1,
+      "message": "I think this function is not neccessary and in fact you can only call it with the TurboshaftAdapter anyway. Maybe call the above function directly. Since it\u0027s called in `if constexpr (Adapter::IsTurboshaft)` branches anyway, you can directly get the operation there.\n\nEdit: In fact, this check for int64-\u003eint32 truncation is used in quite a few places and always requires the branching on the Adapter. Maybe use another mechanism:\nPut an `is_truncate_word64_to_word32` on the Adapters and then you can just call\n\n```\nif (this-\u003eis_truncate_word64_to_word32(node)) {\n   ... this-\u003einput_at(node, 0) ...\n}\n```\n\neverywhere and don\u0027t need to check for the Adapter. (See `Adapter::is_integer_constant` for example).",
+      "range": {
+        "startLine": 84,
+        "startChar": 28,
+        "endLine": 84,
+        "endChar": 55
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa9acbb7_04545679",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T10:35:53Z",
+      "side": 1,
+      "message": "nit: Can you turn the branch around and put the `if constexpr (Adapter::IsTurboshaft)` first for consistency (because it\u0027s like that in all of InstructionSelector).\n\nMaybe you can also put the Adapter check inside the other if branch that we have in both cases.",
+      "range": {
+        "startLine": 1086,
+        "startChar": 6,
+        "endLine": 1086,
+        "endChar": 42
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ec7fc72_3f3fee22",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T10:35:53Z",
+      "side": 1,
+      "message": "This is a strange check. Not sure why we do it like that... (but we can leave it for now).",
+      "range": {
+        "startLine": 1094,
+        "startChar": 8,
+        "endLine": 1095,
+        "endChar": 34
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cb267e1_c5a83866",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T10:35:53Z",
+      "side": 1,
+      "message": "nit: This returns a pointer to the operation, I would recomment to use a comparison with `nullptr` here to convert to a bool result.",
+      "range": {
+        "startLine": 2483,
+        "startChar": 13,
+        "endLine": 2483,
+        "endChar": 44
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ec8649c_8204e151",
+        "filename": "src/compiler/turboshaft/explicit-truncation-reducer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T10:35:53Z",
+      "side": 1,
+      "message": "nit: Maybe `actual_input_reps`?",
+      "range": {
+        "startLine": 40,
+        "startChar": 51,
+        "endLine": 40,
+        "endChar": 67
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26101d95_df203a7b",
+        "filename": "src/compiler/turboshaft/explicit-truncation-reducer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T10:35:53Z",
+      "side": 1,
+      "message": "nit: We only do need to handle this case because for multi-output ops there would have to be a `ProjectionOp` right? Maybe add a small comment here.",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 40
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -39,6 +39,30 @@
       },
       "revId": "12d1d6a9d27c361770b97f4af146f8ae4972f4e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5da9b7b_80e8e8b5",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1864,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T10:35:53Z",
+      "side": 1,
+      "message": "Yeah this probably has to happen inside the `TryMatchBaseWithScaledIndexAndDisplacement32`. You can also leave some of this follow up work to me.",
+      "parentUuid": "40892b89_1780de16",
+      "range": {
+        "startLine": 1864,
+        "startChar": 6,
+        "endLine": 1864,
+        "endChar": 61
+      },
+      "revId": "12d1d6a9d27c361770b97f4af146f8ae4972f4e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
