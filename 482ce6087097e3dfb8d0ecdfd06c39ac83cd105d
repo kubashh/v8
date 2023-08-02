@@ -34,6 +34,75 @@
       "parentUuid": "c0da7860_f79760f3",
       "revId": "482ce6087097e3dfb8d0ecdfd06c39ac83cd105d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5e877c3_4c2d5a70",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-08-02T11:59:58Z",
+      "side": 1,
+      "message": "`InstructionStream` objects cannot exist in the young generation.",
+      "range": {
+        "startLine": 405,
+        "startChar": 19,
+        "endLine": 405,
+        "endChar": 36
+      },
+      "revId": "482ce6087097e3dfb8d0ecdfd06c39ac83cd105d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4785bbc3_e05c061b",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-08-02T11:59:58Z",
+      "side": 1,
+      "message": "Are all of the `kConcurrent` branches actually necessary? Once this is used, it will be hard to see why we need it if no benchmarks regresses. That should also guide us here.",
+      "range": {
+        "startLine": 410,
+        "startChar": 62,
+        "endLine": 410,
+        "endChar": 73
+      },
+      "revId": "482ce6087097e3dfb8d0ecdfd06c39ac83cd105d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cdac43c_b5d1d7d1",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 33
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-08-02T11:59:58Z",
+      "side": 1,
+      "message": "I don\u0027t think we should use GCTracer state in conditionals that branch actual code. (Other than statistics). Can we move the atomic state to e.g. MinorMS? (It\u0027s probably even equivalent to `incremental_marking()-\u003eIsStopped()` during MinorMS marking (which again is non-atomic).",
+      "range": {
+        "startLine": 303,
+        "startChar": 7,
+        "endLine": 303,
+        "endChar": 22
+      },
+      "revId": "482ce6087097e3dfb8d0ecdfd06c39ac83cd105d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
