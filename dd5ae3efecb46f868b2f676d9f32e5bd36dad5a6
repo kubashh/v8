@@ -33,6 +33,24 @@
       "message": "LGTM. It would have been nice to also guard this with `v8_flags.experimental_wasm_stack_switching` but maybe that\u0027s not trivial to do in torque? If so that\u0027s fine.",
       "revId": "dd5ae3efecb46f868b2f676d9f32e5bd36dad5a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f44f941b_1830bf00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-08-02T07:56:14Z",
+      "side": 1,
+      "message": "I think it\u0027s actually quite hard. The torque code gets compiled when V8 gets compiled, so flags are not set yet at that moment. So we would have to read the flag in generated code, which I guess we don\u0027t want to do as it would probably be slower than just incrementing the counter.",
+      "parentUuid": "022e2750_fb025479",
+      "revId": "dd5ae3efecb46f868b2f676d9f32e5bd36dad5a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
