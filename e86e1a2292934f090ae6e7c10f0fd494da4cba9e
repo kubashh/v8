@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5de4cc20_81cf7830",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-02T08:25:09Z",
+      "side": 1,
+      "message": "awesome, this API is a strict improvement over the old one in every way. Just some nits, lgtm otherwise.",
+      "revId": "e86e1a2292934f090ae6e7c10f0fd494da4cba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31079ebb_ce54dd3f",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-02T08:25:09Z",
+      "side": 1,
+      "message": "nice trick! You could pass this by value since it\u0027s just a struct wrapping a reference.",
+      "range": {
+        "startLine": 76,
+        "startChar": 26,
+        "endLine": 76,
+        "endChar": 49
+      },
+      "revId": "e86e1a2292934f090ae6e7c10f0fd494da4cba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f188dd7_eb92a5d3",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-02T08:25:09Z",
+      "side": 1,
+      "message": "you can do a nice macro trick here:\n```\n#define ADD_ONE(...) + 1\nstatic constexpr size_t number_of_alternatives \u003d 0 ALTERNATIVES(ADD_ONE);\n#undef ADD_ONE\n```",
+      "range": {
+        "startLine": 100,
+        "startChar": 28,
+        "endLine": 100,
+        "endChar": 50
+      },
+      "revId": "e86e1a2292934f090ae6e7c10f0fd494da4cba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8264a82_cbdfb95d",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-02T08:25:09Z",
+      "side": 1,
+      "message": "you could create an enum from the alternatives, to avoid having to encode these ids.",
+      "range": {
+        "startLine": 102,
+        "startChar": 10,
+        "endLine": 102,
+        "endChar": 13
+      },
+      "revId": "e86e1a2292934f090ae6e7c10f0fd494da4cba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85840df9_a5814b2b",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-02T08:25:09Z",
+      "side": 1,
+      "message": "don\u0027t use `std::function`, it\u0027s quite heavyweight (mallocs and virtual calls). Instead, use a `template\u003ctypename Function\u003e`",
+      "range": {
+        "startLine": 111,
+        "startChar": 37,
+        "endLine": 111,
+        "endChar": 64
+      },
+      "revId": "e86e1a2292934f090ae6e7c10f0fd494da4cba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9172d69_190a4531",
+        "filename": "src/maglev/maglev-interpreter-frame-state.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-02T08:25:09Z",
+      "side": 1,
+      "message": "style nit: put output parameters at the end.",
+      "range": {
+        "startLine": 159,
+        "startChar": 46,
+        "endLine": 159,
+        "endChar": 72
+      },
+      "revId": "e86e1a2292934f090ae6e7c10f0fd494da4cba9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
