@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9bbe9f1e_8ec7ab97",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T12:55:33Z",
+      "side": 1,
+      "message": "I added some `DCHECK`s. When introducing `kTruncate` I weren\u0027t aware of the naming in Turbofan and thought \"well, there should only be one kind of truncate which is cutting of bits from the left\".\nGiven that there might be some confusion, I can also change the naming of `kTruncate` to `kTruncateWord64ToWord32` as a follow-up-change if desired?",
+      "parentUuid": "42af3fc2_98f5edcd",
+      "range": {
+        "startLine": 895,
+        "startChar": 12,
+        "endLine": 895,
+        "endChar": 70
+      },
+      "revId": "3776fbc5cd31c90aa0161803591f048cca613e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf7080de_ecb74d16",
         "filename": "src/compiler/backend/instruction-selector.cc",
         "patchSetId": 7
@@ -71,6 +95,30 @@
       "writtenOn": "2023-08-02T12:47:06Z",
       "side": 1,
       "message": "nit: Two statements please.",
+      "range": {
+        "startLine": 4335,
+        "startChar": 17,
+        "endLine": 4335,
+        "endChar": 37
+      },
+      "revId": "3776fbc5cd31c90aa0161803591f048cca613e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0560c07d_47af4489",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4335,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T12:55:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf7080de_ecb74d16",
       "range": {
         "startLine": 4335,
         "startChar": 17,
