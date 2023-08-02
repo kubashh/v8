@@ -77,9 +77,9 @@ class AssertTypesReducer
           // Add expected type and operation id.
           Handle<TurboshaftType> expected_type = type.AllocateOnHeap(factory());
           actual_value_indices.push_back(Asm().HeapConstant(expected_type));
-          actual_value_indices.push_back(Asm().Word32Constant(op_id));
+          actual_value_indices.push_back(Asm().TaggedIndexConstant(op_id));
           actual_value_indices.push_back(
-              Asm().Word32Constant(NoContextConstant()));
+              Asm().TaggedIndexConstant(NoContextConstant()));
           Asm().CallBuiltin(
               builtin, OpIndex::Invalid(),
               {actual_value_indices.data(), actual_value_indices.size()},
