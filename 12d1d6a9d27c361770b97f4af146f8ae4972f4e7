@@ -63,6 +63,30 @@
       },
       "revId": "12d1d6a9d27c361770b97f4af146f8ae4972f4e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc420add_5e193dbe",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1864,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T12:42:26Z",
+      "side": 1,
+      "message": "Thanks, I removed the new code here now completely as also the matching is done differently now and added a `TODO(nicohartmann)`.",
+      "parentUuid": "c5da9b7b_80e8e8b5",
+      "range": {
+        "startLine": 1864,
+        "startChar": 6,
+        "endLine": 1864,
+        "endChar": 61
+      },
+      "revId": "12d1d6a9d27c361770b97f4af146f8ae4972f4e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

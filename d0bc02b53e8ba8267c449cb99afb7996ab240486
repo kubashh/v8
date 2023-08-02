@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dfa01fd_529e9076",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4334,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T12:42:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf5f298d_59bf2dad",
+      "range": {
+        "startLine": 4334,
+        "startChar": 17,
+        "endLine": 4334,
+        "endChar": 69
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51fc0763_c4305637",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb5f402e_e266f5d6",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T12:42:26Z",
+      "side": 1,
+      "message": "Nice, I didn\u0027t agree on your first comment as I added this only for convenience / readability at the call site. Your `Edit` however is a very neat solution! 😊\nDone",
+      "parentUuid": "51fc0763_c4305637",
+      "range": {
+        "startLine": 84,
+        "startChar": 28,
+        "endLine": 84,
+        "endChar": 55
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa9acbb7_04545679",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-08-02T10:35:53Z",
       "side": 1,
       "message": "nit: Can you turn the branch around and put the `if constexpr (Adapter::IsTurboshaft)` first for consistency (because it\u0027s like that in all of InstructionSelector).\n\nMaybe you can also put the Adapter check inside the other if branch that we have in both cases.",
+      "range": {
+        "startLine": 1086,
+        "startChar": 6,
+        "endLine": 1086,
+        "endChar": 42
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "849d269c_5753e47c",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T12:42:26Z",
+      "side": 1,
+      "message": "Obsolete as we don\u0027t need the turboshaft / turbofan if anymore.",
+      "parentUuid": "fa9acbb7_04545679",
       "range": {
         "startLine": 1086,
         "startChar": 6,
@@ -116,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86e70a48_60a56903",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T12:42:26Z",
+      "side": 1,
+      "message": "I used the `is_truncate_word64_to_word32` now. IIUC an OpIndex is super cheap, so this would be fine even if the C++ compiler decided not to deduplicate the lookup?",
+      "parentUuid": "8cb267e1_c5a83866",
+      "range": {
+        "startLine": 2483,
+        "startChar": 13,
+        "endLine": 2483,
+        "endChar": 44
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ec8649c_8204e151",
@@ -139,6 +235,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66eb5b66_d231da99",
+        "filename": "src/compiler/turboshaft/explicit-truncation-reducer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T12:42:26Z",
+      "side": 1,
+      "message": "Changed it to `actual_inputs_rep`. This is a weird name but it\u0027s consistent with `outputs_rep` / `inputs_rep` where we assume this is basically a single representation that describes the output / input as a tuple.",
+      "parentUuid": "4ec8649c_8204e151",
+      "range": {
+        "startLine": 40,
+        "startChar": 51,
+        "endLine": 40,
+        "endChar": 67
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26101d95_df203a7b",
@@ -152,6 +272,30 @@
       "writtenOn": "2023-08-02T10:35:53Z",
       "side": 1,
       "message": "nit: We only do need to handle this case because for multi-output ops there would have to be a `ProjectionOp` right? Maybe add a small comment here.",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 42,
+        "endChar": 40
+      },
+      "revId": "d0bc02b53e8ba8267c449cb99afb7996ab240486",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "079171b1_5731d6c2",
+        "filename": "src/compiler/turboshaft/explicit-truncation-reducer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T12:42:26Z",
+      "side": 1,
+      "message": "Right, I added a comment and also commented that this only works if projections don\u0027t perform an implicit truncation because we wouldn\u0027t match it here.\nMy assumption is that we don\u0027t need to care about that as anyone creating a projection should be using it with the exact type of the projected value.\nIf this assumption is wrong, we should notice it when trying to `DCHECK` that we don\u0027t have any implicit conversions in any (intermediate) output graph which we can\u0027t assert yet.",
+      "parentUuid": "26101d95_df203a7b",
       "range": {
         "startLine": 42,
         "startChar": 8,
