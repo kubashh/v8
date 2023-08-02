@@ -1380,6 +1380,38 @@ void V8HeapExplorer::ExtractStringReferences(HeapEntry* entry, String string) {
     SlicedString ss = SlicedString::cast(string);
     SetInternalReference(entry, "parent", ss->parent(),
                          SlicedString::kParentOffset);
+
+    const char* internalized_name = names_->GetCopy("debug / Internals");
+    HeapEntry* debug_internals_entry =
+        snapshot_->AddEntry(HeapEntry::kObject, internalized_name,
+                            heap_object_map_->get_next_id(), 0, 0);
+    entry->SetNamedReference(HeapGraphEdge::kInternal, "virtual",
+                             debug_internals_entry, generator_);
+
+    const char* internalized_substring;
+    int actual_length = 0;
+    {
+      std::unique_ptr<char[]> substring =
+          ss->parent()->ToCString(DISALLOW_NULLS, ROBUST_STRING_TRAVERSAL,
+                                  ss->offset(), ss->length(), &actual_length);
+      internalized_substring = names_->GetCopy(substring.get());
+    }
+
+    HeapEntry* value_entry =
+        snapshot_->AddEntry(HeapEntry::kString, internalized_substring,
+                            heap_object_map_->get_next_id(), 0, 0);
+    debug_internals_entry->SetNamedReference(HeapGraphEdge::kInternal, "value",
+                                             value_entry, generator_);
+
+    char arr[32];
+    base::Vector<char> buffer(arr, arraysize(arr));
+    const char* length_as_string = IntToCString(ss->length(), buffer);
+    const char* internalized_length = names_->GetCopy(length_as_string);
+    HeapEntry* length_entry =
+        snapshot_->AddEntry(HeapEntry::kString, internalized_length,
+                            heap_object_map_->get_next_id(), 0, 0);
+    debug_internals_entry->SetNamedReference(HeapGraphEdge::kInternal, "length",
+                                             length_entry, generator_);
   } else if (IsThinString(string)) {
     ThinString ts = ThinString::cast(string);
     SetInternalReference(entry, "actual", ts->actual(),
