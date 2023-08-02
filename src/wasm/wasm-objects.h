@@ -455,7 +455,7 @@ class V8_EXPORT_PRIVATE WasmInstanceObject : public JSObject {
 #undef ASSERT_FIELD_ALIGNED
 #undef WASM_INSTANCE_OBJECT_FIELDS
 
-  static constexpr uint16_t kTaggedFieldOffsets[] = {
+  static constexpr std::array<uint16_t, 24> kTaggedFieldOffsets = {
       kImportedFunctionRefsOffset,
       kIndirectFunctionTableRefsOffset,
       kIndirectFunctionTableTargetsOffset,
@@ -480,6 +480,35 @@ class V8_EXPORT_PRIVATE WasmInstanceObject : public JSObject {
       kDataSegmentStartsOffset,
       kDataSegmentSizesOffset,
       kElementSegmentsOffset};
+
+  static constexpr std::array<const char*, 24> kTaggedFieldNames = {
+      "imported_function_refs",
+      "indirect_function_table_refs",
+      "indirect_function_table_targets",
+      "indirect_function_table_sig_ids",
+      "module_object",
+      "exports_object",
+      "native_context",
+      "memory_objects",
+      "untagged_globals_buffer",
+      "tagged_globals_buffer",
+      "imported_mutable_globals_buffers",
+      "tables",
+      "indirect_function_tables",
+      "tags_table",
+      "wasmInternal_functions",
+      "managed_object_maps",
+      "feedback_vectors",
+      "well_known_imports",
+      "imported_mutable_globals",
+      "imported_function_targets",
+      "memory_bases_and_sizes",
+      "data_segment_starts",
+      "data_segment_sizes",
+      "element_segments"};
+
+  static_assert(kTaggedFieldOffsets.size() == kTaggedFieldNames.size(),
+                "every field offset needs a name");
 
   const wasm::WasmModule* module();
 

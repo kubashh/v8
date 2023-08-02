@@ -1107,7 +1107,9 @@ Address ImportedFunctionEntry::target() {
 }
 
 // static
-constexpr uint16_t WasmInstanceObject::kTaggedFieldOffsets[];
+constexpr std::array<uint16_t, 24> WasmInstanceObject::kTaggedFieldOffsets;
+// static
+constexpr const char* WasmInstanceObject::kTaggedFieldNames[];
 
 // static
 bool WasmInstanceObject::EnsureIndirectFunctionTableWithMinimumSize(

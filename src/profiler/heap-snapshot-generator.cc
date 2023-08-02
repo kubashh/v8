@@ -42,7 +42,7 @@
 #include "src/profiler/heap-profiler.h"
 #include "src/profiler/heap-snapshot-generator-inl.h"
 #include "src/profiler/output-stream-writer.h"
-#include "v8-persistent-handle.h"
+#include "src/roots/roots-inl.h"
 
 #if V8_ENABLE_WEBASSEMBLY
 #include "src/wasm/names-provider.h"
@@ -1280,6 +1280,8 @@ void V8HeapExplorer::ExtractReferences(HeapEntry* entry, HeapObject obj) {
     ExtractWasmStructReferences(WasmStruct::cast(obj), entry);
   } else if (IsWasmArray(obj)) {
     ExtractWasmArrayReferences(WasmArray::cast(obj), entry);
+  } else if (IsWasmInstanceObject(obj)) {
+    ExtractWasmInstanceObjectReference(WasmInstanceObject::cast(obj), entry);
 #endif  // V8_ENABLE_WEBASSEMBLY
   }
 }
@@ -2070,12 +2072,24 @@ void V8HeapExplorer::ExtractWasmStructReferences(WasmStruct obj,
     MarkVisitedField(WasmStruct::kHeaderSize + field_offset);
   }
 }
+
 void V8HeapExplorer::ExtractWasmArrayReferences(WasmArray obj,
                                                 HeapEntry* entry) {
   if (!obj->type()->element_type().is_reference()) return;
   for (uint32_t i = 0; i < obj->length(); i++) {
     SetElementReference(entry, i, obj->ElementSlot(i).load(entry->isolate()));
     MarkVisitedField(obj->element_offset(i));
+  }
+}
+
+void V8HeapExplorer::ExtractWasmInstanceObjectReference(WasmInstanceObject obj,
+                                                        HeapEntry* entry) {
+  PtrComprCageBase cage_base(heap_->isolate());
+  for (size_t i = 0; i < WasmInstanceObject::kTaggedFieldOffsets.size(); i++) {
+    const uint16_t offset = WasmInstanceObject::kTaggedFieldOffsets[i];
+    SetInternalReference(entry, WasmInstanceObject::kTaggedFieldNames[i],
+                         TaggedField<Object>::load(cage_base, obj, offset),
+                         offset);
   }
 }
 
