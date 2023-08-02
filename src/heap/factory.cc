@@ -1673,14 +1673,12 @@ Handle<WasmApiFunctionRef> Factory::NewWasmApiFunctionRef(
   DisallowGarbageCollection no_gc;
   result->set_native_context(*isolate()->native_context());
   if (!callable.is_null() && *callable != *undefined_value()) {
-    CHECK(IsJSReceiver(*callable));
     result->set_callable(*callable);
   } else {
     result->set_callable(*undefined_value());
   }
   result->set_suspend(suspend);
   if (!instance.is_null() && *instance != *undefined_value()) {
-    CHECK(IsWasmInstanceObject(*instance));
     result->set_instance(*instance);
   } else {
     result->set_instance(*undefined_value());

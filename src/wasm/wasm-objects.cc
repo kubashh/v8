@@ -1452,7 +1452,7 @@ WasmInstanceObject::GetOrCreateWasmInternalFunction(
                        instance->imported_function_refs()->get(function_index)),
                    isolate);
 
-  if (IsWasmApiFunctionRef(*ref)) {
+  if (v8_flags.wasm_to_js_generic_wrapper && IsWasmApiFunctionRef(*ref)) {
     Handle<WasmApiFunctionRef> wafr = Handle<WasmApiFunctionRef>::cast(ref);
     ref = isolate->factory()->NewWasmApiFunctionRef(
         handle(wafr->callable(), isolate),
