@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c3e942d_19817c87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-02T08:41:04Z",
+      "side": 1,
+      "message": "@nicohartmann@chromium.org: PTAL.",
+      "revId": "7fbfad2e7da56ec5960ff4819eef79e8801c6a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
