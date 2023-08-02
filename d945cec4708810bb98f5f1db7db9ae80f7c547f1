@@ -33,6 +33,24 @@
       "message": "We usually do not have commented out code in comments in our code base. I see why you added this but I guess we can add this code later when adding those object types to RO promotion as well.",
       "revId": "d945cec4708810bb98f5f1db7db9ae80f7c547f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c96739d4_2b2ac4f6",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-02T05:20:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "057241c5_f98f4161",
+      "revId": "d945cec4708810bb98f5f1db7db9ae80f7c547f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
