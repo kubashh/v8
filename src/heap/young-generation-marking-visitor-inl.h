@@ -32,7 +32,13 @@ YoungGenerationMarkingVisitor<marking_mode>::YoungGenerationMarkingVisitor(
       pretenuring_handler_(heap->pretenuring_handler()),
       local_pretenuring_feedback_(local_pretenuring_feedback),
       shortcut_strings_(heap->CanShortcutStringsDuringGC(
-          GarbageCollector::MINOR_MARK_SWEEPER)) {}
+          GarbageCollector::MINOR_MARK_SWEEPER))
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+      ,
+      stats_(heap->css_stats()->marked_objects())
+#endif
+{
+}
 
 template <YoungGenerationMarkingVisitorMode marking_mode>
 YoungGenerationMarkingVisitor<marking_mode>::~YoungGenerationMarkingVisitor() {
@@ -175,7 +181,12 @@ template <typename YoungGenerationMarkingVisitor<
               marking_mode>::SlotTreatmentMode slot_treatment_mode,
           typename TSlot>
 V8_INLINE bool YoungGenerationMarkingVisitor<marking_mode>::VisitObjectViaSlot(
-    TSlot slot) {
+    TSlot slot
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    ,
+    measure_css::Stats* stats
+#endif
+) {
   typename TSlot::TObject target;
   if constexpr (EnableConcurrentVisitation()) {
     target = slot.Relaxed_Load(ObjectVisitorWithCageBases::cage_base());
@@ -185,9 +196,13 @@ V8_INLINE bool YoungGenerationMarkingVisitor<marking_mode>::VisitObjectViaSlot(
   HeapObject heap_object;
   // Treat weak references as strong.
   if (!target.GetHeapObject(&heap_object)) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (stats)
+      stats->AddPointer(target.ptr(),
+                        measure_css::Stats::YOUNG_SHOULD_NOT_MARK);
+#endif
     return false;
   }
-
 #ifdef THREAD_SANITIZER
   if constexpr (EnableConcurrentVisitation()) {
     BasicMemoryChunk::FromHeapObject(heap_object)->SynchronizedHeapLoad();
@@ -195,17 +210,40 @@ V8_INLINE bool YoungGenerationMarkingVisitor<marking_mode>::VisitObjectViaSlot(
 #endif  // THREAD_SANITIZER
 
   if (!Heap::InYoungGeneration(heap_object)) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (stats)
+      stats->AddPointer(target.ptr(),
+                        measure_css::Stats::YOUNG_SHOULD_NOT_MARK);
+#endif
     return false;
   }
 
 #ifdef V8_MINORMS_STRING_SHORTCUTTING
   if (slot_treatment_mode == SlotTreatmentMode::kReadWrite &&
       !ShortCutStrings(reinterpret_cast<HeapObjectSlot&>(slot), &heap_object)) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (stats)
+      stats->AddPointer(target.ptr(),
+                        measure_css::Stats::YOUNG_SHOULD_NOT_MARK);
+#endif
     return false;
   }
 #endif  // V8_MINORMS_STRING_SHORTCUTTING
 
-  if (!TryMark(heap_object)) return true;
+  if (!TryMark(heap_object)) {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (stats)
+      stats->AddPointer(heap_object.address(),
+                        measure_css::Stats::YOUNG_ALREADY_MARKED);
+#endif
+    return true;
+  } else {
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (stats)
+      stats->AddPointer(heap_object.address(),
+                        measure_css::Stats::YOUNG_NOT_ALREADY_MARKED);
+#endif
+  }
 
   if constexpr (EnableConcurrentVisitation()) {
     static_assert(visitation_mode != ObjectVisitationMode::kVisitDirectly);

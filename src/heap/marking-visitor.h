@@ -246,7 +246,12 @@ class FullMarkingVisitorBase : public MarkingVisitorBase<ConcreteVisitor> {
   constexpr bool CanUpdateValuesInHeap() { return true; }
 
   bool TryMark(HeapObject obj) {
-    return MarkBit::From(obj).Set<AccessMode::ATOMIC>();
+    bool result = MarkBit::From(obj).Set<AccessMode::ATOMIC>();
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (result)
+      this->heap_->css_stats()->marked_objects()->AddObject(obj.address());
+#endif
+    return result;
   }
   bool IsMarked(HeapObject obj) const {
     return MarkBit::From(obj).Get<AccessMode::ATOMIC>();

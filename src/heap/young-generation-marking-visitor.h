@@ -78,7 +78,12 @@ class YoungGenerationMarkingVisitor final
 
   template <ObjectVisitationMode visitation_mode,
             SlotTreatmentMode slot_treatment_mode, typename TSlot>
-  V8_INLINE bool VisitObjectViaSlot(TSlot slot);
+  V8_INLINE bool VisitObjectViaSlot(TSlot slot
+#if V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+                                    ,
+                                    measure_css::Stats* stats = nullptr
+#endif
+  );
 
   template <typename TSlot>
   V8_INLINE bool VisitObjectViaSlotInRemeberedSet(TSlot slot);
@@ -98,7 +103,11 @@ class YoungGenerationMarkingVisitor final
   using Parent = NewSpaceVisitor<YoungGenerationMarkingVisitor<marking_mode>>;
 
   bool TryMark(HeapObject obj) {
-    return MarkBit::From(obj).Set<AccessMode::ATOMIC>();
+    bool result = MarkBit::From(obj).Set<AccessMode::ATOMIC>();
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+    if (result) stats_->AddObject(obj.address());
+#endif
+    return result;
   }
 
   template <typename TSlot>
@@ -122,6 +131,9 @@ class YoungGenerationMarkingVisitor final
   PretenuringHandler* const pretenuring_handler_;
   PretenuringHandler::PretenuringFeedbackMap* const local_pretenuring_feedback_;
   const bool shortcut_strings_;
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  measure_css::ObjectStats* stats_;
+#endif
 };
 
 }  // namespace internal

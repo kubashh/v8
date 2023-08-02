@@ -20,6 +20,10 @@
 #include "src/heap/sweeper.h"
 #include "src/heap/young-generation-marking-visitor.h"
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+#include "src/heap/conservative-stack-visitor.h"
+#endif
+
 namespace v8 {
 namespace internal {
 
@@ -120,8 +124,14 @@ class YoungGenerationRememberedSetsMarkingWorklist {
 
 class YoungGenerationRootMarkingVisitor final : public RootVisitor {
  public:
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  YoungGenerationRootMarkingVisitor(
+      YoungGenerationMainMarkingVisitor* main_marking_visitor,
+      measure_css::Stats* stats);
+#else
   explicit YoungGenerationRootMarkingVisitor(
       YoungGenerationMainMarkingVisitor* main_marking_visitor);
+#endif
   ~YoungGenerationRootMarkingVisitor();
 
   V8_INLINE void VisitRootPointer(Root root, const char* description,
@@ -140,6 +150,9 @@ class YoungGenerationRootMarkingVisitor final : public RootVisitor {
   void VisitPointersImpl(Root root, TSlot start, TSlot end);
 
   YoungGenerationMainMarkingVisitor* const main_marking_visitor_;
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  measure_css::Stats* stats_;
+#endif
 };
 
 // Collector for young-generation only.

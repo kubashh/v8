@@ -687,6 +687,8 @@ TEST_F(InnerPointerResolutionHeapTest, UnusedRegularYoungPages) {
     EXPECT_EQ(kNullAddress, ResolveInnerPointer(outside_ptr1));
     EXPECT_EQ(kNullAddress, ResolveInnerPointer(outside_ptr2));
 
+    heap()->css_stats()->Clear();
+
     // Start incremental marking and mark the third object.
     i::IncrementalMarking* marking = heap()->incremental_marking();
     if (marking->IsStopped()) {
@@ -723,6 +725,8 @@ TEST_F(InnerPointerResolutionHeapTest, UnusedRegularYoungPages) {
   EXPECT_EQ(kNullAddress, ResolveInnerPointer(inner_ptr3));
   EXPECT_EQ(kNullAddress, ResolveInnerPointer(outside_ptr1));
   EXPECT_EQ(kNullAddress, ResolveInnerPointer(outside_ptr2));
+
+  heap()->css_stats()->Clear();
 
   // Garbage collection once more.
   InvokeAtomicMinorGC();
@@ -774,6 +778,8 @@ TEST_F(InnerPointerResolutionHeapTest, UnusedLargeYoungPage) {
 
     // Inner pointer resolution should work now, finding the object.
     EXPECT_EQ(obj.address(), ResolveInnerPointer(inner_ptr));
+
+    heap()->css_stats()->Clear();
   }
 
   // Garbage collection should reclaim the object.
