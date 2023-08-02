@@ -33,6 +33,24 @@
       "message": "There is already a similar check l.4862 which looks equivalent to me, could this just be a DCHECK?",
       "revId": "e7fc47256ada53756b362031d386c2847924a00f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65e20172_54a9e051",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4872,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-08-02T13:05:46Z",
+      "side": 1,
+      "message": "Oh, good point! I made this a `DCHECK_NE` and removed the `DCHECK_EQ` above since that is then redundant.",
+      "parentUuid": "39a3352a_e0f81285",
+      "revId": "e7fc47256ada53756b362031d386c2847924a00f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
