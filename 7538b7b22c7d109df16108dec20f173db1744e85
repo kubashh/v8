@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22325178_fa72ce3a",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4845,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-08-02T12:09:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "34747006_1ab43489",
+      "revId": "7538b7b22c7d109df16108dec20f173db1744e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5175a39f_47a6481b",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdf0ada9_1a4c99c6",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4852,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-08-02T12:09:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5175a39f_47a6481b",
+      "revId": "7538b7b22c7d109df16108dec20f173db1744e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f111c433_64202505",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-08-01T14:22:51Z",
       "side": 1,
       "message": "These lines above are essentially the rest of `FindConnectableSubranges`.",
+      "revId": "7538b7b22c7d109df16108dec20f173db1744e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81a78a44_218d4dc8",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4872,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-08-02T12:09:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f111c433_64202505",
       "revId": "7538b7b22c7d109df16108dec20f173db1744e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
