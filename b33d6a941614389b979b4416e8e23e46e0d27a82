@@ -16,6 +16,69 @@
       "message": "@nicohartmann@chromium.org: PTAL @src/compiler/*. The main change is that we now orchestrate the \"wasm-js-inlining\" enablement via the PipelineData and fetch its original value from the `Isolate` (as it can be set via the wasm-gc OT callback).",
       "revId": "b33d6a941614389b979b4416e8e23e46e0d27a82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a4edcc3_b0868c86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T08:39:16Z",
+      "side": 1,
+      "message": "LGTM % nits",
+      "revId": "b33d6a941614389b979b4416e8e23e46e0d27a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc9d335b_93384116",
+        "filename": "src/compiler/js-inlining-heuristic.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T08:39:16Z",
+      "side": 1,
+      "message": "nit: What about just passing the `Mode` here as an argument (need to put it into some global scope then)?",
+      "range": {
+        "startLine": 31,
+        "startChar": 44,
+        "endLine": 31,
+        "endChar": 69
+      },
+      "revId": "b33d6a941614389b979b4416e8e23e46e0d27a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03f00da5_73502f48",
+        "filename": "src/compiler/js-inlining.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T08:39:16Z",
+      "side": 1,
+      "message": "nit: Can we find a better name for `full` or at least put a one line comment what `full` means. Maybe move it completely or is there any other type of wasm inlining?",
+      "range": {
+        "startLine": 80,
+        "startChar": 7,
+        "endLine": 80,
+        "endChar": 26
+      },
+      "revId": "b33d6a941614389b979b4416e8e23e46e0d27a82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
