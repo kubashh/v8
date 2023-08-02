@@ -16,6 +16,69 @@
       "message": "@nicohartmann@chromium.org: I initially asked you to review the instruction selector only. As you did the full review, I\u0027m removing @tebbi@chromium.org as reviewer.\nThanks a lot for the thorough review!",
       "revId": "3776fbc5cd31c90aa0161803591f048cca613e05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abce38ee_eef52b30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T12:47:06Z",
+      "side": 1,
+      "message": "LGTM % comments",
+      "revId": "3776fbc5cd31c90aa0161803591f048cca613e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42af3fc2_98f5edcd",
+        "filename": "src/compiler/backend/instruction-selector-adapter.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T12:47:06Z",
+      "side": 1,
+      "message": "We don\u0027t check `from` and `to` here at all? Is this the only case for `kTruncate`? If so, we should at least add some `DCHECKS`",
+      "range": {
+        "startLine": 895,
+        "startChar": 12,
+        "endLine": 895,
+        "endChar": 70
+      },
+      "revId": "3776fbc5cd31c90aa0161803591f048cca613e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf7080de_ecb74d16",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4335,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-02T12:47:06Z",
+      "side": 1,
+      "message": "nit: Two statements please.",
+      "range": {
+        "startLine": 4335,
+        "startChar": 17,
+        "endLine": 4335,
+        "endChar": 37
+      },
+      "revId": "3776fbc5cd31c90aa0161803591f048cca613e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
