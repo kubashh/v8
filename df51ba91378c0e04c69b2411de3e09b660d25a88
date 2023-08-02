@@ -231,6 +231,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bf381c7_0ce757be",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-02T09:40:33Z",
+      "side": 1,
+      "message": "Yep, done.",
+      "parentUuid": "e5d168c4_ab159edb",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba25ab26_cb80690e",
@@ -280,6 +298,24 @@
       "side": 1,
       "message": "What I meant is that when I read FooVisitor, then I expect Foo being visited. But here the candidate is visited and not the committee.",
       "parentUuid": "d9f5442a_8a5a992d",
+      "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27f322e7_fb2cbbf7",
+        "filename": "src/heap/read-only-promotion.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-02T09:40:33Z",
+      "side": 1,
+      "message": "I see, sure. Done.",
+      "parentUuid": "c55e6c43_2b1add11",
       "revId": "df51ba91378c0e04c69b2411de3e09b660d25a88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
