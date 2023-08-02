@@ -16,6 +16,69 @@
       "message": "I verified that this CL is working in Chrome.",
       "revId": "ac14cd103a823296458a2291d0d1a9be5cfdc0c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d8e9a2b_02785524",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-02T12:36:23Z",
+      "side": 1,
+      "message": "LGTM with comments. Thanks for improving this!",
+      "revId": "ac14cd103a823296458a2291d0d1a9be5cfdc0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94497b68_3cf80f7a",
+        "filename": "src/objects/objects-body-descriptors-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-02T12:36:23Z",
+      "side": 1,
+      "message": "Please either use `uint16_t` here, or `decltype(kTaggedFieldOffsets)::value_type` also in line 872. This branch guards the cast below, so the two should be in sync.",
+      "range": {
+        "startLine": 869,
+        "startChar": 21,
+        "endLine": 869,
+        "endChar": 62
+      },
+      "revId": "ac14cd103a823296458a2291d0d1a9be5cfdc0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a98b756_a0cd5700",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-02T12:36:23Z",
+      "side": 1,
+      "message": "nit: could move this into the existing `#if`-block starting in line 1281.",
+      "range": {
+        "startLine": 1212,
+        "startChar": 4,
+        "endLine": 1213,
+        "endChar": 79
+      },
+      "revId": "ac14cd103a823296458a2291d0d1a9be5cfdc0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
