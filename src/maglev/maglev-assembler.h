@@ -321,7 +321,7 @@ class MaglevAssembler : public MacroAssembler {
   inline void Move(MemOperand dst, Register src);
   inline void Move(Register dst, MemOperand src);
   inline void Move(DoubleRegister dst, DoubleRegister src);
-  inline void Move(Register dst, Smi src);
+  inline void Move(Register dst, Tagged<Smi> src);
   inline void Move(Register dst, ExternalReference src);
   inline void Move(Register dst, Register src);
   inline void Move(Register dst, TaggedIndex i);

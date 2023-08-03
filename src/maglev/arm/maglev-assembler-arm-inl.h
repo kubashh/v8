@@ -495,7 +495,7 @@ inline void MaglevAssembler::Move(DoubleRegister dst, DoubleRegister src) {
     vmov(dst, src);
   }
 }
-inline void MaglevAssembler::Move(Register dst, Smi src) {
+inline void MaglevAssembler::Move(Register dst, Tagged<Smi> src) {
   MacroAssembler::Move(dst, src);
 }
 inline void MaglevAssembler::Move(Register dst, ExternalReference src) {
