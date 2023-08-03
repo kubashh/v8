@@ -22,6 +22,30 @@
       },
       "revId": "4caa8a9485de6b293cc2b8bc1156b10dce881aca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24aa8bc1_5736d6a9",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-03T14:29:58Z",
+      "side": 1,
+      "message": "Yes, thanks, addressed in the reland: https://crrev.com/c/4748183.",
+      "parentUuid": "94cb97a6_44348168",
+      "range": {
+        "startLine": 1381,
+        "startChar": 46,
+        "endLine": 1381,
+        "endChar": 51
+      },
+      "revId": "4caa8a9485de6b293cc2b8bc1156b10dce881aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
