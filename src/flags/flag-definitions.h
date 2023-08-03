@@ -1848,7 +1848,7 @@ DEFINE_STRING(arm_arch, ARM_ARCH_DEFAULT,
 DEFINE_BOOL(force_long_branches, false,
             "force all emitted branches to be in long mode (MIPS/PPC only)")
 DEFINE_STRING(mcpu, "auto", "enable optimization for specific cpu")
-DEFINE_BOOL(partial_constant_pool, true,
+DEFINE_BOOL(partial_constant_pool, false,
             "enable use of partial constant pools (X64 only)")
 DEFINE_STRING(sim_arm64_optional_features, "none",
               "enable optional features on the simulator for testing: none or "
