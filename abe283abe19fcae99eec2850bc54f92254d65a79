@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a73e93c2_0832acaf",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-03T08:25:31Z",
+      "side": 1,
+      "message": "Changed it to `V\u003cObject\u003e` which requires however to cast via `OpIndex()`, so this is still somewhat inconsistent?",
+      "parentUuid": "c9a35349_3775aa3c",
+      "range": {
+        "startLine": 1379,
+        "startChar": 2,
+        "endLine": 1379,
+        "endChar": 12
+      },
+      "revId": "abe283abe19fcae99eec2850bc54f92254d65a79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "21506c89_0adb2f5d",
         "filename": "test/mjsunit/regress/regress-1469485.js",
         "patchSetId": 5
@@ -54,6 +78,30 @@
       "writtenOn": "2023-08-03T06:54:52Z",
       "side": 1,
       "message": "I think we should not have all those flags. I think in general we try to only provide the flags to make this test run (not the exact configuration to reproduce the issue).",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 6,
+        "endChar": 63
+      },
+      "revId": "abe283abe19fcae99eec2850bc54f92254d65a79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8d05ac2_5bc4d84c",
+        "filename": "test/mjsunit/regress/regress-1469485.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-03T08:25:31Z",
+      "side": 1,
+      "message": "Well, we need `--turboshaft-assert-types`, otherwise this repro doesn\u0027t repro in any of the existing test configurations. That flag doesn\u0027t make sense without `--turboshaft`. Now, if `--turboshaft` is set, we need to set `--no-always-sparkplug` and `--no-stress-concurrent-inlining` as otherwise some test configs will fail, see https://ci.chromium.org/ui/p/v8/builders/try/v8_linux64_dbg/b8773882696017638449/test-results?q\u003dExactID%3A%2F%2Fmjsunit%2Fregress%2Fregress-1469485%2F%2Fstress_concurrent_inlining+VHash%3Ab4ffa3536a737651\u0026clean\u003d\u0026sortby\u003d\u0026groupby\u003d .\nSo I don\u0027t feel eager to remove any of these flags because otherwise this test case doesn\u0027t ensure that the bug is indeed fixed...",
+      "parentUuid": "21506c89_0adb2f5d",
       "range": {
         "startLine": 5,
         "startChar": 10,
