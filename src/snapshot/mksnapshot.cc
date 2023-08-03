@@ -222,9 +222,11 @@ void MaybeSetCounterFunction(v8::Isolate* isolate) {
 
 int main(int argc, char** argv) {
   v8::base::EnsureConsoleOutput();
+  i::v8_flags.turbo_rewrite_far_jumps = false;
 
   // Make mksnapshot runs predictable to create reproducible snapshots.
   i::v8_flags.predictable = true;
+  i::v8_flags.turbo_rewrite_far_jumps = false;
 
   // Print the usage if an error occurs when parsing the command line
   // flags or if the help flag is set.
