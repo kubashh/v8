@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86cdb088_9df9b63a",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-03T12:23:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73e2c11b_391e425a",
+      "range": {
+        "startLine": 1379,
+        "startChar": 2,
+        "endLine": 1379,
+        "endChar": 12
+      },
+      "revId": "abe283abe19fcae99eec2850bc54f92254d65a79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21506c89_0adb2f5d",
