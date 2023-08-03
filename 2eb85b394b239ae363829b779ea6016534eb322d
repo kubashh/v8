@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b51d5e6c_008c8615",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-03T18:26:37Z",
+      "side": 1,
+      "message": "Matthias: PTAL.\n\nAndy: FYI. We saw the previous implementation being particularly wasteful for userspace JSON decoders, where slices mean that the JSON source is kept around after parsing is complete. (I\u0027ll also report this observation to the proposal repo.)",
+      "revId": "2eb85b394b239ae363829b779ea6016534eb322d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
