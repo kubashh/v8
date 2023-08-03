@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d134b637_45421d4d",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-03T09:29:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5e877c3_4c2d5a70",
+      "range": {
+        "startLine": 405,
+        "startChar": 19,
+        "endLine": 405,
+        "endChar": 36
+      },
+      "revId": "482ce6087097e3dfb8d0ecdfd06c39ac83cd105d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4785bbc3_e05c061b",
@@ -84,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9de6c35_ef8fb266",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-03T09:29:18Z",
+      "side": 1,
+      "message": "I need to evaluate dropping each of them individually.\nThis will take some time.\nI will update once I have the results.",
+      "parentUuid": "4785bbc3_e05c061b",
+      "range": {
+        "startLine": 410,
+        "startChar": 62,
+        "endLine": 410,
+        "endChar": 73
+      },
+      "revId": "482ce6087097e3dfb8d0ecdfd06c39ac83cd105d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2cdac43c_b5d1d7d1",
         "filename": "src/heap/gc-tracer.h",
         "patchSetId": 33
@@ -95,6 +143,30 @@
       "writtenOn": "2023-08-02T11:59:58Z",
       "side": 1,
       "message": "I don\u0027t think we should use GCTracer state in conditionals that branch actual code. (Other than statistics). Can we move the atomic state to e.g. MinorMS? (It\u0027s probably even equivalent to `incremental_marking()-\u003eIsStopped()` during MinorMS marking (which again is non-atomic).",
+      "range": {
+        "startLine": 303,
+        "startChar": 7,
+        "endLine": 303,
+        "endChar": 22
+      },
+      "revId": "482ce6087097e3dfb8d0ecdfd06c39ac83cd105d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67bbd3aa_601121b4",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 33
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-03T09:29:18Z",
+      "side": 1,
+      "message": "Done\n(atomics are still needed imo since the concurrent marker is reading it and we don\u0027t know when it will run)",
+      "parentUuid": "2cdac43c_b5d1d7d1",
       "range": {
         "startLine": 303,
         "startChar": 7,
