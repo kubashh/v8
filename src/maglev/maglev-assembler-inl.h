@@ -335,7 +335,9 @@ inline bool ClobberedBy(RegList written_registers, DoubleRegister reg) {
 inline bool ClobberedBy(RegList written_registers, Handle<Object> handle) {
   return false;
 }
-inline bool ClobberedBy(RegList written_registers, Smi smi) { return false; }
+inline bool ClobberedBy(RegList written_registers, Tagged<Smi> smi) {
+  return false;
+}
 inline bool ClobberedBy(RegList written_registers, TaggedIndex index) {
   return false;
 }
@@ -360,7 +362,7 @@ inline bool ClobberedBy(DoubleRegList written_registers,
                         Handle<Object> handle) {
   return false;
 }
-inline bool ClobberedBy(DoubleRegList written_registers, Smi smi) {
+inline bool ClobberedBy(DoubleRegList written_registers, Tagged<Smi> smi) {
   return false;
 }
 inline bool ClobberedBy(DoubleRegList written_registers, TaggedIndex index) {
@@ -391,10 +393,10 @@ inline bool MachineTypeMatches(MachineType type, MemOperand reg) {
 inline bool MachineTypeMatches(MachineType type, Handle<HeapObject> handle) {
   return type.IsTagged() && !type.IsTaggedSigned();
 }
-inline bool MachineTypeMatches(MachineType type, Smi handle) {
+inline bool MachineTypeMatches(MachineType type, Tagged<Smi> smi) {
   return type.IsTagged() && !type.IsTaggedPointer();
 }
-inline bool MachineTypeMatches(MachineType type, TaggedIndex handle) {
+inline bool MachineTypeMatches(MachineType type, TaggedIndex index) {
   // TaggedIndex doesn't have a separate type, so check for the same type as for
   // Smis.
   return type.IsTagged() && !type.IsTaggedPointer();

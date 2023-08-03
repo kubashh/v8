@@ -584,7 +584,7 @@ inline void MaglevAssembler::StoreTaggedSignedField(Register object, int offset,
 }
 
 inline void MaglevAssembler::StoreTaggedSignedField(Register object, int offset,
-                                                    Smi value) {
+                                                    Tagged<Smi> value) {
   ScratchRegisterScope temps(this);
   Register scratch = temps.Acquire();
   Mov(scratch, value);
@@ -652,7 +652,7 @@ inline void MaglevAssembler::Move(Register dst, MemOperand src) {
 inline void MaglevAssembler::Move(DoubleRegister dst, DoubleRegister src) {
   Fmov(dst, src);
 }
-inline void MaglevAssembler::Move(Register dst, Smi src) {
+inline void MaglevAssembler::Move(Register dst, Tagged<Smi> src) {
   MacroAssembler::Move(dst, src);
 }
 inline void MaglevAssembler::Move(Register dst, ExternalReference src) {
