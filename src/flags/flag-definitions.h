@@ -1135,7 +1135,7 @@ DEFINE_STRING(
     turbo_profiling_output, nullptr,
     "emit data about basic block usage in builtins to this file "
     "(requires that V8 was built with v8_enable_builtins_profiling=true)")
-DEFINE_BOOL(reorder_builtins, false,
+DEFINE_BOOL(reorder_builtins, true,
             "enable builtin reordering when run mksnapshot.")
 
 DEFINE_BOOL(abort_on_bad_builtin_profile_data, false,
