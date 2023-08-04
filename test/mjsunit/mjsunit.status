@@ -46,6 +46,9 @@
   ##############################################################################
   # Open bugs.
 
+  # https://crbug.com/v8/14238
+  'wasm/wasm-to-js-tierup': [SKIP],
+
   # Issue 3784: setters-on-elements is flaky
   'setters-on-elements': [PASS, FAIL],
 
