@@ -69,6 +69,24 @@
       "parentUuid": "15d17cc6_f588fb89",
       "revId": "305b7e54d1ee4bbc217fda6cf00e34fd263f172f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15ff607e_8748ebf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-04T14:10:48Z",
+      "side": 1,
+      "message": "You\u0027re not -- made both arm and x64 use the same helpers.",
+      "parentUuid": "270b6e2e_e76431c0",
+      "revId": "305b7e54d1ee4bbc217fda6cf00e34fd263f172f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
