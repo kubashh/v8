@@ -43,14 +43,32 @@ V8_WARN_UNUSED_RESULT Handle<FieldType> GeneralizeFieldType(
   return FieldType::Any(isolate);
 }
 
-void PrintGeneralization(
-    Isolate* isolate, Handle<Map> map, FILE* file, const char* reason,
-    InternalIndex modify_index, int split, int descriptors,
-    bool descriptor_to_field, Representation old_representation,
-    Representation new_representation, PropertyConstness old_constness,
-    PropertyConstness new_constness, MaybeHandle<FieldType> old_field_type,
-    MaybeHandle<Object> old_value, MaybeHandle<FieldType> new_field_type,
-    MaybeHandle<Object> new_value) {
+V8_WARN_UNUSED_RESULT DirectHandle<FieldType> GeneralizeFieldType_Direct(
+    Representation rep1, DirectHandle<FieldType> type1, Representation rep2,
+    DirectHandle<FieldType> type2, Isolate* isolate) {
+  // Cleared field types need special treatment. They represent lost knowledge,
+  // so we must be conservative, so their generalization with any other type
+  // is "Any".
+  if (Map::FieldTypeIsCleared(rep1, *type1) ||
+      Map::FieldTypeIsCleared(rep2, *type2)) {
+    return FieldType::Any_Direct(isolate);
+  }
+  if (type1->NowIs(type2)) return type2;
+  if (type2->NowIs(type1)) return type1;
+  return FieldType::Any_Direct(isolate);
+}
+
+void PrintGeneralization(Isolate* isolate, DirectHandle<Map> map, FILE* file,
+                         const char* reason, InternalIndex modify_index,
+                         int split, int descriptors, bool descriptor_to_field,
+                         Representation old_representation,
+                         Representation new_representation,
+                         PropertyConstness old_constness,
+                         PropertyConstness new_constness,
+                         MaybeDirectHandle<FieldType> old_field_type,
+                         MaybeDirectHandle<Object> old_value,
+                         MaybeDirectHandle<FieldType> new_field_type,
+                         MaybeDirectHandle<Object> new_value) {
   OFStream os(file);
   os << "[generalizing]";
   Name name = map->instance_descriptors(isolate).GetKey(modify_index);
@@ -407,6 +425,18 @@ void MapUpdater::GeneralizeField(Handle<Map> map, InternalIndex modify_index,
                                  Handle<FieldType> new_field_type) {
   GeneralizeField(isolate_, map, modify_index, new_constness,
                   new_representation, new_field_type);
+
+  DCHECK(*old_descriptors_ == old_map_->instance_descriptors(isolate_) ||
+         *old_descriptors_ ==
+             integrity_source_map_->instance_descriptors(isolate_));
+}
+
+void MapUpdater::GeneralizeField_Direct(
+    DirectHandle<Map> map, InternalIndex modify_index,
+    PropertyConstness new_constness, Representation new_representation,
+    DirectHandle<FieldType> new_field_type) {
+  GeneralizeField_Direct(isolate_, map, modify_index, new_constness,
+                         new_representation, new_field_type);
 
   DCHECK(*old_descriptors_ == old_map_->instance_descriptors(isolate_) ||
          *old_descriptors_ ==
@@ -1067,7 +1097,7 @@ MapUpdater::State MapUpdater::ConstructNewMapWithIntegrityLevelTransition() {
 
 namespace {
 
-void PrintReconfiguration(Isolate* isolate, Handle<Map> map, FILE* file,
+void PrintReconfiguration(Isolate* isolate, DirectHandle<Map> map, FILE* file,
                           InternalIndex modify_index, PropertyKind kind,
                           PropertyAttributes attributes) {
   OFStream os(file);
@@ -1113,11 +1143,87 @@ Handle<Map> MapUpdater::ReconfigureExistingProperty(
 }
 
 // static
+DirectHandle<Map> MapUpdater::ReconfigureExistingProperty_Direct(
+    Isolate* isolate, DirectHandle<Map> map, InternalIndex descriptor,
+    PropertyKind kind, PropertyAttributes attributes,
+    PropertyConstness constness) {
+  // Dictionaries have to be reconfigured in-place.
+  DCHECK(!map->is_dictionary_map());
+  DCHECK_EQ(PropertyKind::kData, kind);  // Only kData case is supported so far.
+
+  if (!map->GetBackPointer().IsMap()) {
+    // There is no benefit from reconstructing transition tree for maps without
+    // back pointers, normalize and try to hit the map cache instead.
+    return Map::Normalize_Direct(isolate, map, CLEAR_INOBJECT_PROPERTIES,
+                                 "Normalize_AttributesMismatchProtoMap");
+  }
+
+  if (v8_flags.trace_generalization) {
+    PrintReconfiguration(isolate, map, stdout, descriptor, kind, attributes);
+  }
+
+  // TODO(CSS)
+  return MapUpdater{isolate, handle(*map, isolate)}.ReconfigureToDataField(
+      descriptor, attributes, constness, Representation::None(),
+      FieldType::None(isolate));
+}
+
+// static
 void MapUpdater::UpdateFieldType(Isolate* isolate, Handle<Map> map,
                                  InternalIndex descriptor, Handle<Name> name,
                                  PropertyConstness new_constness,
                                  Representation new_representation,
                                  const MaybeObjectHandle& new_wrapped_type) {
+  DCHECK(new_wrapped_type->IsSmi() || new_wrapped_type->IsWeak());
+  // We store raw pointers in the queue, so no allocations are allowed.
+  PropertyDetails details =
+      map->instance_descriptors(isolate).GetDetails(descriptor);
+  if (details.location() != PropertyLocation::kField) return;
+  DCHECK_EQ(PropertyKind::kData, details.kind());
+
+  if (new_constness != details.constness() && map->is_prototype_map()) {
+    JSObject::InvalidatePrototypeChains(*map);
+  }
+
+  std::queue<Map> backlog;
+  backlog.push(*map);
+
+  while (!backlog.empty()) {
+    Map current = backlog.front();
+    backlog.pop();
+
+    TransitionsAccessor transitions(isolate, current);
+    int num_transitions = transitions.NumberOfTransitions();
+    for (int i = 0; i < num_transitions; ++i) {
+      Map target = transitions.GetTarget(i);
+      backlog.push(target);
+    }
+    DescriptorArray descriptors = current.instance_descriptors(isolate);
+    details = descriptors.GetDetails(descriptor);
+
+    // It is allowed to change representation here only from None
+    // to something or from Smi or HeapObject to Tagged.
+    DCHECK(details.representation().Equals(new_representation) ||
+           details.representation().CanBeInPlaceChangedTo(new_representation));
+
+    // Skip if already updated the shared descriptor.
+    if (new_constness != details.constness() ||
+        !new_representation.Equals(details.representation()) ||
+        descriptors.GetFieldType(descriptor) != *new_wrapped_type.object()) {
+      Descriptor d = Descriptor::DataField(
+          name, descriptors.GetFieldIndex(descriptor), details.attributes(),
+          new_constness, new_representation, new_wrapped_type);
+      descriptors.Replace(descriptor, &d);
+    }
+  }
+}
+
+// static
+void MapUpdater::UpdateFieldType_Direct(
+    Isolate* isolate, DirectHandle<Map> map, InternalIndex descriptor,
+    DirectHandle<Name> name, PropertyConstness new_constness,
+    Representation new_representation,
+    const MaybeObjectDirectHandle& new_wrapped_type) {
   DCHECK(new_wrapped_type->IsSmi() || new_wrapped_type->IsWeak());
   // We store raw pointers in the queue, so no allocations are allowed.
   PropertyDetails details =
@@ -1212,6 +1318,82 @@ void MapUpdater::GeneralizeField(Isolate* isolate, Handle<Map> map,
   MaybeObjectHandle wrapped_type(Map::WrapFieldType(isolate, new_field_type));
   UpdateFieldType(isolate, field_owner, modify_index, name, new_constness,
                   new_representation, wrapped_type);
+
+  DependentCode::DependencyGroups dep_groups;
+  if (new_constness != old_constness) {
+    dep_groups |= DependentCode::kFieldConstGroup;
+  }
+  if (!new_field_type->Equals(*old_field_type)) {
+    dep_groups |= DependentCode::kFieldTypeGroup;
+  }
+  if (!new_representation.Equals(old_representation)) {
+    dep_groups |= DependentCode::kFieldRepresentationGroup;
+  }
+
+  DependentCode::DeoptimizeDependencyGroups(isolate, *field_owner, dep_groups);
+
+  if (v8_flags.trace_generalization) {
+    PrintGeneralization(
+        isolate, map, stdout, "field type generalization", modify_index,
+        map->NumberOfOwnDescriptors(), map->NumberOfOwnDescriptors(), false,
+        details.representation(),
+        descriptors->GetDetails(modify_index).representation(), old_constness,
+        new_constness, old_field_type, MaybeHandle<Object>(), new_field_type,
+        MaybeHandle<Object>());
+  }
+}
+
+// static
+void MapUpdater::GeneralizeField_Direct(
+    Isolate* isolate, DirectHandle<Map> map, InternalIndex modify_index,
+    PropertyConstness new_constness, Representation new_representation,
+    DirectHandle<FieldType> new_field_type) {
+  DCHECK(!map->is_deprecated());
+
+  // Check if we actually need to generalize the field type at all.
+  DirectHandle<DescriptorArray> old_descriptors(
+      map->instance_descriptors(isolate), isolate);
+  PropertyDetails old_details = old_descriptors->GetDetails(modify_index);
+  PropertyConstness old_constness = old_details.constness();
+  Representation old_representation = old_details.representation();
+  DirectHandle<FieldType> old_field_type(
+      old_descriptors->GetFieldType(modify_index), isolate);
+
+  // Return if the current map is general enough to hold requested constness and
+  // representation/field type.
+  if (IsGeneralizableTo(new_constness, old_constness) &&
+      old_representation.Equals(new_representation) &&
+      !Map::FieldTypeIsCleared(new_representation, *new_field_type) &&
+      // Checking old_field_type for being cleared is not necessary because
+      // the NowIs check below would fail anyway in that case.
+      new_field_type->NowIs(old_field_type)) {
+    DCHECK(GeneralizeFieldType_Direct(old_representation, old_field_type,
+                                      new_representation, new_field_type,
+                                      isolate)
+               ->NowIs(old_field_type));
+    return;
+  }
+
+  // Determine the field owner.
+  DirectHandle<Map> field_owner(map->FindFieldOwner(isolate, modify_index),
+                                isolate);
+  DirectHandle<DescriptorArray> descriptors(
+      field_owner->instance_descriptors(isolate), isolate);
+  DCHECK_EQ(*old_field_type, descriptors->GetFieldType(modify_index));
+
+  new_field_type =
+      GeneralizeFieldType_Direct(old_representation, old_field_type,
+                                 new_representation, new_field_type, isolate);
+
+  new_constness = GeneralizeConstness(old_constness, new_constness);
+
+  PropertyDetails details = descriptors->GetDetails(modify_index);
+  DirectHandle<Name> name(descriptors->GetKey(modify_index), isolate);
+
+  MaybeObjectDirectHandle wrapped_type(
+      Map::WrapFieldType_Direct(isolate, new_field_type));
+  UpdateFieldType_Direct(isolate, field_owner, modify_index, name,
+                         new_constness, new_representation, wrapped_type);
 
   DependentCode::DependencyGroups dep_groups;
   if (new_constness != old_constness) {

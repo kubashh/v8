@@ -24,8 +24,18 @@ Handle<FieldType> FieldType::None(Isolate* isolate) {
 }
 
 // static
+DirectHandle<FieldType> FieldType::None_Direct(Isolate* isolate) {
+  return direct_handle(None(), isolate);
+}
+
+// static
 Handle<FieldType> FieldType::Any(Isolate* isolate) {
   return handle(Any(), isolate);
+}
+
+// static
+DirectHandle<FieldType> FieldType::Any_Direct(Isolate* isolate) {
+  return direct_handle(Any(), isolate);
 }
 
 // static
@@ -34,6 +44,12 @@ FieldType FieldType::Class(Map map) { return FieldType::cast(map); }
 // static
 Handle<FieldType> FieldType::Class(Handle<Map> map, Isolate* isolate) {
   return handle(Class(*map), isolate);
+}
+
+// static
+DirectHandle<FieldType> FieldType::Class_Direct(DirectHandle<Map> map,
+                                                Isolate* isolate) {
+  return direct_handle(Class(*map), isolate);
 }
 
 // static
@@ -72,7 +88,9 @@ bool FieldType::Equals(FieldType other) const {
   return false;
 }
 
-bool FieldType::NowIs(Handle<FieldType> other) const { return NowIs(*other); }
+bool FieldType::NowIs(DirectHandle<FieldType> other) const {
+  return NowIs(*other);
+}
 
 void FieldType::PrintTo(std::ostream& os) const {
   if (IsAny()) {

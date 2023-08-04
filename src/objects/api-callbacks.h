@@ -95,7 +95,7 @@ class AccessorInfo
 class AccessCheckInfo
     : public TorqueGeneratedAccessCheckInfo<AccessCheckInfo, Struct> {
  public:
-  static AccessCheckInfo Get(Isolate* isolate, Handle<JSObject> receiver);
+  static AccessCheckInfo Get(Isolate* isolate, DirectHandle<JSObject> receiver);
 
   using BodyDescriptor = StructBodyDescriptor;
 

@@ -16,10 +16,14 @@
 namespace v8 {
 namespace internal {
 
-#define ROOT_ACCESSOR(Type, name, CamelName)  \
-  template <typename Impl>                    \
-  Handle<Type> FactoryBase<Impl>::name() {    \
-    return read_only_roots().name##_handle(); \
+#define ROOT_ACCESSOR(Type, name, CamelName)              \
+  template <typename Impl>                                \
+  Handle<Type> FactoryBase<Impl>::name() {                \
+    return read_only_roots().name##_handle();             \
+  }                                                       \
+  template <typename Impl>                                \
+  DirectHandle<Type> FactoryBase<Impl>::name##_direct() { \
+    return read_only_roots().name##_direct_handle();      \
   }
 READ_ONLY_ROOT_LIST(ROOT_ACCESSOR)
 #undef ROOT_ACCESSOR
@@ -27,6 +31,10 @@ READ_ONLY_ROOT_LIST(ROOT_ACCESSOR)
 template <typename Impl>
 Handle<Oddball> FactoryBase<Impl>::ToBoolean(bool value) {
   return value ? impl()->true_value() : impl()->false_value();
+}
+template <typename Impl>
+DirectHandle<Oddball> FactoryBase<Impl>::ToBoolean_Direct(bool value) {
+  return value ? impl()->true_value_direct() : impl()->false_value_direct();
 }
 
 template <typename Impl>
@@ -42,10 +50,29 @@ Handle<Object> FactoryBase<Impl>::NewNumber(double value) {
 
 template <typename Impl>
 template <AllocationType allocation>
+DirectHandle<Object> FactoryBase<Impl>::NewNumber_Direct(double value) {
+  // Materialize as a SMI if possible.
+  int32_t int_value;
+  if (DoubleToSmiInteger(value, &int_value)) {
+    return direct_handle(Smi::FromInt(int_value), isolate());
+  }
+  return NewHeapNumber_Direct<allocation>(value);
+}
+
+template <typename Impl>
+template <AllocationType allocation>
 Handle<Object> FactoryBase<Impl>::NewNumberFromInt(int32_t value) {
   if (Smi::IsValid(value)) return handle(Smi::FromInt(value), isolate());
   // Bypass NewNumber to avoid various redundant checks.
   return NewHeapNumber<allocation>(FastI2D(value));
+}
+
+template <typename Impl>
+template <AllocationType allocation>
+DirectHandle<Object> FactoryBase<Impl>::NewNumberFromInt_Direct(int32_t value) {
+  if (Smi::IsValid(value)) return direct_handle(Smi::FromInt(value), isolate());
+  // Bypass NewNumber to avoid various redundant checks.
+  return NewHeapNumber_Direct<allocation>(FastI2D(value));
 }
 
 template <typename Impl>
@@ -56,6 +83,17 @@ Handle<Object> FactoryBase<Impl>::NewNumberFromUint(uint32_t value) {
     return handle(Smi::FromInt(int32v), isolate());
   }
   return NewHeapNumber<allocation>(FastUI2D(value));
+}
+
+template <typename Impl>
+template <AllocationType allocation>
+DirectHandle<Object> FactoryBase<Impl>::NewNumberFromUint_Direct(
+    uint32_t value) {
+  int32_t int32v = static_cast<int32_t>(value);
+  if (int32v >= 0 && Smi::IsValid(int32v)) {
+    return direct_handle(Smi::FromInt(int32v), isolate());
+  }
+  return NewHeapNumber_Direct<allocation>(FastUI2D(value));
 }
 
 template <typename Impl>
@@ -82,8 +120,28 @@ Handle<Object> FactoryBase<Impl>::NewNumberFromInt64(int64_t value) {
 
 template <typename Impl>
 template <AllocationType allocation>
+DirectHandle<Object> FactoryBase<Impl>::NewNumberFromInt64_Direct(
+    int64_t value) {
+  if (value <= std::numeric_limits<int32_t>::max() &&
+      value >= std::numeric_limits<int32_t>::min() &&
+      Smi::IsValid(static_cast<int32_t>(value))) {
+    return direct_handle(Smi::FromInt(static_cast<int32_t>(value)), isolate());
+  }
+  return NewHeapNumber_Direct<allocation>(static_cast<double>(value));
+}
+
+template <typename Impl>
+template <AllocationType allocation>
 Handle<HeapNumber> FactoryBase<Impl>::NewHeapNumber(double value) {
   Handle<HeapNumber> heap_number = NewHeapNumber<allocation>();
+  heap_number->set_value(value, kRelaxedStore);
+  return heap_number;
+}
+
+template <typename Impl>
+template <AllocationType allocation>
+DirectHandle<HeapNumber> FactoryBase<Impl>::NewHeapNumber_Direct(double value) {
+  DirectHandle<HeapNumber> heap_number = NewHeapNumber_Direct<allocation>();
   heap_number->set_value(value, kRelaxedStore);
   return heap_number;
 }
@@ -98,8 +156,23 @@ Handle<HeapNumber> FactoryBase<Impl>::NewHeapNumberFromBits(uint64_t bits) {
 
 template <typename Impl>
 template <AllocationType allocation>
+DirectHandle<HeapNumber> FactoryBase<Impl>::NewHeapNumberFromBits_Direct(
+    uint64_t bits) {
+  DirectHandle<HeapNumber> heap_number = NewHeapNumber_Direct<allocation>();
+  heap_number->set_value_as_bits(bits, kRelaxedStore);
+  return heap_number;
+}
+
+template <typename Impl>
+template <AllocationType allocation>
 Handle<HeapNumber> FactoryBase<Impl>::NewHeapNumberWithHoleNaN() {
   return NewHeapNumberFromBits<allocation>(kHoleNanInt64);
+}
+
+template <typename Impl>
+template <AllocationType allocation>
+DirectHandle<HeapNumber> FactoryBase<Impl>::NewHeapNumberWithHoleNaN_Direct() {
+  return NewHeapNumberFromBits_Direct<allocation>(kHoleNanInt64);
 }
 
 template <typename Impl>

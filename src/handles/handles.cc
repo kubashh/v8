@@ -43,6 +43,13 @@ ASSERT_TRIVIALLY_COPYABLE(MaybeDirectHandle<Object>);
 
 #ifdef DEBUG
 
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+void HandleBase::RecordDeref() const {
+  if (!Isolate::TryGetCurrent()) return;
+  Isolate::GlobalCurrent()->IncrementHandlesDeref();
+}
+#endif
+
 bool HandleBase::IsDereferenceAllowed() const {
   DCHECK_NOT_NULL(location_);
   Object object(*location_);

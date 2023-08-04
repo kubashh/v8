@@ -624,7 +624,8 @@ RUNTIME_FUNCTION(Runtime_AtomicsLoadSharedStructOrArray) {
                                      Object::ToName(isolate, args.at(1)));
   // Shared structs are prototypeless.
   LookupIterator it(isolate, shared_struct_or_shared_array,
-                    PropertyKey(isolate, field_name), LookupIterator::OWN);
+                    PropertyKey(isolate, DirectHandle<Name>(field_name)),
+                    LookupIterator::OWN);
   if (it.IsFound()) return *it.GetDataValue(kSeqCstAccess);
   return ReadOnlyRoots(isolate).undefined_value();
 }
@@ -641,7 +642,8 @@ RUNTIME_FUNCTION(Runtime_AtomicsStoreSharedStructOrArray) {
       isolate, shared_value, Object::Share(isolate, args.at(2), kThrowOnError));
   // Shared structs are prototypeless.
   LookupIterator it(isolate, shared_struct_or_shared_array,
-                    PropertyKey(isolate, field_name), LookupIterator::OWN);
+                    PropertyKey(isolate, DirectHandle<Name>(field_name)),
+                    LookupIterator::OWN);
 
   Maybe<bool> result = Nothing<bool>();
   if (it.IsFound()) {
@@ -679,7 +681,8 @@ RUNTIME_FUNCTION(Runtime_AtomicsExchangeSharedStructOrArray) {
       isolate, shared_value, Object::Share(isolate, args.at(2), kThrowOnError));
   // Shared structs are prototypeless.
   LookupIterator it(isolate, shared_struct_or_shared_array,
-                    PropertyKey(isolate, field_name), LookupIterator::OWN);
+                    PropertyKey(isolate, DirectHandle<Name>(field_name)),
+                    LookupIterator::OWN);
   Maybe<bool> result = Nothing<bool>();
   if (it.IsFound()) {
     if (!it.IsReadOnly()) {

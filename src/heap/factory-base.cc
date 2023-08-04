@@ -42,6 +42,16 @@ Handle<HeapNumber> FactoryBase<Impl>::NewHeapNumber() {
   return handle(HeapNumber::cast(result), isolate());
 }
 
+template <typename Impl>
+template <AllocationType allocation>
+DirectHandle<HeapNumber> FactoryBase<Impl>::NewHeapNumber_Direct() {
+  static_assert(HeapNumber::kSize <= kMaxRegularHeapObjectSize);
+  Map map = read_only_roots().heap_number_map();
+  HeapObject result = AllocateRawWithImmortalMap(HeapNumber::kSize, allocation,
+                                                 map, kDoubleUnaligned);
+  return direct_handle(HeapNumber::cast(result), isolate());
+}
+
 template V8_EXPORT_PRIVATE Handle<HeapNumber>
 FactoryBase<Factory>::NewHeapNumber<AllocationType::kYoung>();
 template V8_EXPORT_PRIVATE Handle<HeapNumber>
@@ -51,8 +61,19 @@ FactoryBase<Factory>::NewHeapNumber<AllocationType::kReadOnly>();
 template V8_EXPORT_PRIVATE Handle<HeapNumber>
 FactoryBase<Factory>::NewHeapNumber<AllocationType::kSharedOld>();
 
+template V8_EXPORT_PRIVATE DirectHandle<HeapNumber>
+FactoryBase<Factory>::NewHeapNumber_Direct<AllocationType::kYoung>();
+template V8_EXPORT_PRIVATE DirectHandle<HeapNumber>
+FactoryBase<Factory>::NewHeapNumber_Direct<AllocationType::kOld>();
+template V8_EXPORT_PRIVATE DirectHandle<HeapNumber>
+FactoryBase<Factory>::NewHeapNumber_Direct<AllocationType::kReadOnly>();
+template V8_EXPORT_PRIVATE DirectHandle<HeapNumber>
+FactoryBase<Factory>::NewHeapNumber_Direct<AllocationType::kSharedOld>();
+
 template V8_EXPORT_PRIVATE Handle<HeapNumber>
 FactoryBase<LocalFactory>::NewHeapNumber<AllocationType::kOld>();
+template V8_EXPORT_PRIVATE DirectHandle<HeapNumber>
+FactoryBase<LocalFactory>::NewHeapNumber_Direct<AllocationType::kOld>();
 
 template <typename Impl>
 Handle<Struct> FactoryBase<Impl>::NewStruct(InstanceType type,
@@ -138,6 +159,19 @@ Handle<FixedArray> FactoryBase<Impl>::NewFixedArray(int length,
       read_only_roots().fixed_array_map_handle(), length,
       read_only_roots().undefined_value_handle(), allocation);
 }
+template <typename Impl>
+DirectHandle<FixedArray> FactoryBase<Impl>::NewFixedArray_Direct(
+    int length, AllocationType allocation) {
+  if (length == 0) return impl()->empty_fixed_array_direct();
+  if (length < 0 || length > FixedArray::kMaxLength) {
+    FATAL("Fatal JavaScript invalid size error %d (see crbug.com/1201626)",
+          length);
+    UNREACHABLE();
+  }
+  return NewFixedArrayWithFiller_Direct(
+      read_only_roots().fixed_array_map_direct_handle(), length,
+      read_only_roots().undefined_value_direct_handle(), allocation);
+}
 
 template <typename Impl>
 Handle<FixedArray> FactoryBase<Impl>::NewFixedArrayWithMap(
@@ -150,6 +184,17 @@ Handle<FixedArray> FactoryBase<Impl>::NewFixedArrayWithMap(
 }
 
 template <typename Impl>
+DirectHandle<FixedArray> FactoryBase<Impl>::NewFixedArrayWithMap_Direct(
+    DirectHandle<Map> map, int length, AllocationType allocation) {
+  // Zero-length case must be handled outside, where the knowledge about
+  // the map is.
+  DCHECK_LT(0, length);
+  return NewFixedArrayWithFiller_Direct(
+      map, length, read_only_roots().undefined_value_direct_handle(),
+      allocation);
+}
+
+template <typename Impl>
 Handle<FixedArray> FactoryBase<Impl>::NewFixedArrayWithHoles(
     int length, AllocationType allocation) {
   DCHECK_LE(0, length);
@@ -157,6 +202,15 @@ Handle<FixedArray> FactoryBase<Impl>::NewFixedArrayWithHoles(
   return NewFixedArrayWithFiller(
       read_only_roots().fixed_array_map_handle(), length,
       read_only_roots().the_hole_value_handle(), allocation);
+}
+template <typename Impl>
+DirectHandle<FixedArray> FactoryBase<Impl>::NewFixedArrayWithHoles_Direct(
+    int length, AllocationType allocation) {
+  DCHECK_LE(0, length);
+  if (length == 0) return impl()->empty_fixed_array_direct();
+  return NewFixedArrayWithFiller_Direct(
+      read_only_roots().fixed_array_map_direct_handle(), length,
+      read_only_roots().the_hole_value_direct_handle(), allocation);
 }
 
 template <typename Impl>
@@ -172,6 +226,20 @@ Handle<FixedArray> FactoryBase<Impl>::NewFixedArrayWithFiller(
   array.set_length(length);
   MemsetTagged(array.data_start(), *filler, length);
   return handle(array, isolate());
+}
+template <typename Impl>
+DirectHandle<FixedArray> FactoryBase<Impl>::NewFixedArrayWithFiller_Direct(
+    DirectHandle<Map> map, int length, DirectHandle<HeapObject> filler,
+    AllocationType allocation) {
+  HeapObject result = AllocateRawFixedArray(length, allocation);
+  DisallowGarbageCollection no_gc;
+  DCHECK(ReadOnlyHeap::Contains(*map));
+  DCHECK(ReadOnlyHeap::Contains(*filler));
+  result.set_map_after_allocation(*map, SKIP_WRITE_BARRIER);
+  FixedArray array = FixedArray::cast(result);
+  array.set_length(length);
+  MemsetTagged(array.data_start(), *filler, length);
+  return direct_handle(array, isolate());
 }
 
 template <typename Impl>
@@ -210,6 +278,24 @@ Handle<FixedArrayBase> FactoryBase<Impl>::NewFixedDoubleArray(
   array.set_length(length);
   return handle(array, isolate());
 }
+template <typename Impl>
+DirectHandle<FixedArrayBase> FactoryBase<Impl>::NewFixedDoubleArray_Direct(
+    int length, AllocationType allocation) {
+  if (length == 0) return impl()->empty_fixed_array_direct();
+  if (length < 0 || length > FixedDoubleArray::kMaxLength) {
+    FATAL("Fatal JavaScript invalid size error %d (see crbug.com/1201626)",
+          length);
+    UNREACHABLE();
+  }
+  int size = FixedDoubleArray::SizeFor(length);
+  Map map = read_only_roots().fixed_double_array_map();
+  HeapObject result =
+      AllocateRawWithImmortalMap(size, allocation, map, kDoubleAligned);
+  DisallowGarbageCollection no_gc;
+  FixedDoubleArray array = FixedDoubleArray::cast(result);
+  array.set_length(length);
+  return direct_handle(array, isolate());
+}
 
 template <typename Impl>
 Handle<WeakFixedArray> FactoryBase<Impl>::NewWeakFixedArrayWithMap(
@@ -228,6 +314,25 @@ Handle<WeakFixedArray> FactoryBase<Impl>::NewWeakFixedArrayWithMap(
                read_only_roots().undefined_value(), length);
 
   return handle(array, isolate());
+}
+
+template <typename Impl>
+DirectHandle<WeakFixedArray> FactoryBase<Impl>::NewWeakFixedArrayWithMap_Direct(
+    Map map, int length, AllocationType allocation) {
+  // Zero-length case must be handled outside.
+  DCHECK_LT(0, length);
+  DCHECK(ReadOnlyHeap::Contains(map));
+
+  HeapObject result =
+      AllocateRawArray(WeakFixedArray::SizeFor(length), allocation);
+  result.set_map_after_allocation(map, SKIP_WRITE_BARRIER);
+  DisallowGarbageCollection no_gc;
+  WeakFixedArray array = WeakFixedArray::cast(result);
+  array.set_length(length);
+  MemsetTagged(ObjectSlot(array.data_start()),
+               read_only_roots().undefined_value(), length);
+
+  return direct_handle(array, isolate());
 }
 
 template <typename Impl>
@@ -255,6 +360,24 @@ Handle<ByteArray> FactoryBase<Impl>::NewByteArray(int length,
   array.set_length(length);
   array.clear_padding();
   return handle(array, isolate());
+}
+
+template <typename Impl>
+DirectHandle<ByteArray> FactoryBase<Impl>::NewByteArray_Direct(
+    int length, AllocationType allocation) {
+  if (length < 0 || length > ByteArray::kMaxLength) {
+    FATAL("Fatal JavaScript invalid size error %d", length);
+    UNREACHABLE();
+  }
+  if (length == 0) return impl()->empty_byte_array_direct();
+  int size = ALIGN_TO_ALLOCATION_ALIGNMENT(ByteArray::SizeFor(length));
+  HeapObject result = AllocateRawWithImmortalMap(
+      size, allocation, read_only_roots().byte_array_map());
+  DisallowGarbageCollection no_gc;
+  ByteArray array = ByteArray::cast(result);
+  array.set_length(length);
+  array.clear_padding();
+  return direct_handle(array, isolate());
 }
 
 template <typename Impl>
@@ -654,6 +777,13 @@ Handle<String> FactoryBase<Impl>::InternalizeStringWithKey(
   return isolate()->string_table()->LookupKey(isolate(), key);
 }
 
+template <typename Impl>
+template <class StringTableKey>
+DirectHandle<String> FactoryBase<Impl>::InternalizeStringWithKey_Direct(
+    StringTableKey* key) {
+  return isolate()->string_table()->LookupKey_Direct(isolate(), key);
+}
+
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
     Handle<String> FactoryBase<Factory>::InternalizeStringWithKey(
         OneByteStringKey* key);
@@ -673,6 +803,26 @@ template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
 template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
     Handle<String> FactoryBase<LocalFactory>::InternalizeStringWithKey(
         TwoByteStringKey* key);
+
+template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    DirectHandle<String> FactoryBase<Factory>::InternalizeStringWithKey_Direct(
+        OneByteStringKey* key);
+template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    DirectHandle<String> FactoryBase<Factory>::InternalizeStringWithKey_Direct(
+        TwoByteStringKey* key);
+template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    DirectHandle<String> FactoryBase<Factory>::InternalizeStringWithKey_Direct(
+        SeqOneByteSubStringKey* key);
+template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    DirectHandle<String> FactoryBase<Factory>::InternalizeStringWithKey_Direct(
+        SeqTwoByteSubStringKey* key);
+
+template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    DirectHandle<String> FactoryBase<
+        LocalFactory>::InternalizeStringWithKey_Direct(OneByteStringKey* key);
+template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE)
+    DirectHandle<String> FactoryBase<
+        LocalFactory>::InternalizeStringWithKey_Direct(TwoByteStringKey* key);
 
 template <typename Impl>
 Handle<String> FactoryBase<Impl>::InternalizeString(
@@ -755,6 +905,31 @@ MaybeHandle<SeqStringT> FactoryBase<Impl>::NewRawStringWithMap(
 }
 
 template <typename Impl>
+template <typename SeqStringT>
+MaybeDirectHandle<SeqStringT> FactoryBase<Impl>::NewRawStringWithMap_Direct(
+    int length, Map map, AllocationType allocation) {
+  DCHECK(SeqStringT::IsCompatibleMap(map, read_only_roots()));
+  DCHECK_IMPLIES(!StringShape(map).IsShared(),
+                 RefineAllocationTypeForInPlaceInternalizableString(
+                     allocation, map) == allocation);
+  if (length > String::kMaxLength || length < 0) {
+    THROW_NEW_ERROR(isolate(), NewInvalidStringLengthError(), SeqStringT);
+  }
+  DCHECK_GT(length, 0);  // Use Factory::empty_string() instead.
+  int size = SeqStringT::SizeFor(length);
+  DCHECK_GE(SeqStringT::kMaxSize, size);
+
+  SeqStringT string =
+      SeqStringT::cast(AllocateRawWithImmortalMap(size, allocation, map));
+  DisallowGarbageCollection no_gc;
+  string.clear_padding_destructively(length);
+  string.set_length(length);
+  string.set_raw_hash_field(String::kEmptyHashField);
+  DCHECK_EQ(size, string.Size());
+  return direct_handle(string, isolate());
+}
+
+template <typename Impl>
 MaybeHandle<SeqOneByteString> FactoryBase<Impl>::NewRawOneByteString(
     int length, AllocationType allocation) {
   Map map = read_only_roots().one_byte_string_map();
@@ -768,6 +943,26 @@ MaybeHandle<SeqTwoByteString> FactoryBase<Impl>::NewRawTwoByteString(
     int length, AllocationType allocation) {
   Map map = read_only_roots().string_map();
   return NewRawStringWithMap<SeqTwoByteString>(
+      length, map,
+      RefineAllocationTypeForInPlaceInternalizableString(allocation, map));
+}
+
+template <typename Impl>
+MaybeDirectHandle<SeqOneByteString>
+FactoryBase<Impl>::NewRawOneByteString_Direct(int length,
+                                              AllocationType allocation) {
+  Map map = read_only_roots().one_byte_string_map();
+  return NewRawStringWithMap_Direct<SeqOneByteString>(
+      length, map,
+      RefineAllocationTypeForInPlaceInternalizableString(allocation, map));
+}
+
+template <typename Impl>
+MaybeDirectHandle<SeqTwoByteString>
+FactoryBase<Impl>::NewRawTwoByteString_Direct(int length,
+                                              AllocationType allocation) {
+  Map map = read_only_roots().string_map();
+  return NewRawStringWithMap_Direct<SeqTwoByteString>(
       length, map,
       RefineAllocationTypeForInPlaceInternalizableString(allocation, map));
 }
@@ -904,6 +1099,20 @@ Handle<String> FactoryBase<Impl>::LookupSingleCharacterStringFromCode(
 }
 
 template <typename Impl>
+DirectHandle<String>
+FactoryBase<Impl>::LookupSingleCharacterStringFromCode_Direct(uint16_t code) {
+  if (code <= unibrow::Latin1::kMaxChar) {
+    DisallowGarbageCollection no_gc;
+    Object value = single_character_string_table()->get(code);
+    DCHECK_NE(value, *undefined_value());
+    return direct_handle(String::cast(value), isolate());
+  }
+  uint16_t buffer[] = {code};
+  // TODO(CSS)
+  return InternalizeString(base::Vector<const uint16_t>(buffer, 1));
+}
+
+template <typename Impl>
 MaybeHandle<String> FactoryBase<Impl>::NewStringFromOneByte(
     base::Vector<const uint8_t> string, AllocationType allocation) {
   DCHECK_NE(allocation, AllocationType::kReadOnly);
@@ -914,6 +1123,28 @@ MaybeHandle<String> FactoryBase<Impl>::NewStringFromOneByte(
   ASSIGN_RETURN_ON_EXCEPTION(isolate(), result,
                              NewRawOneByteString(string.length(), allocation),
                              String);
+
+  DisallowGarbageCollection no_gc;
+  // Copy the characters into the new object.
+  // SharedStringAccessGuardIfNeeded is NotNeeded because {result} is freshly
+  // allocated and hasn't escaped the factory yet, so it can't be concurrently
+  // accessed.
+  CopyChars(SeqOneByteString::cast(*result).GetChars(
+                no_gc, SharedStringAccessGuardIfNeeded::NotNeeded()),
+            string.begin(), length);
+  return result;
+}
+template <typename Impl>
+MaybeDirectHandle<String> FactoryBase<Impl>::NewStringFromOneByte_Direct(
+    base::Vector<const uint8_t> string, AllocationType allocation) {
+  DCHECK_NE(allocation, AllocationType::kReadOnly);
+  int length = string.length();
+  if (length == 0) return empty_string_direct();
+  if (length == 1) return LookupSingleCharacterStringFromCode_Direct(string[0]);
+  DirectHandle<SeqOneByteString> result;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate(), result,
+      NewRawOneByteString_Direct(string.length(), allocation), String);
 
   DisallowGarbageCollection no_gc;
   // Copy the characters into the new object.
@@ -937,6 +1168,18 @@ V8_INLINE Handle<String> CharToString(FactoryBase<Impl>* factory,
                             ? AllocationType::kYoung
                             : AllocationType::kOld;
   return factory->NewStringFromAsciiChecked(string, type);
+}
+
+template <typename Impl>
+V8_INLINE DirectHandle<String> CharToString_Direct(FactoryBase<Impl>* factory,
+                                                   const char* string,
+                                                   NumberCacheMode mode) {
+  // We tenure the allocated string since it is referenced from the
+  // number-string cache which lives in the old space.
+  AllocationType type = mode == NumberCacheMode::kIgnore
+                            ? AllocationType::kYoung
+                            : AllocationType::kOld;
+  return factory->NewStringFromAsciiChecked_Direct(string, type);
 }
 
 }  // namespace
@@ -988,6 +1231,37 @@ Handle<String> FactoryBase<Impl>::HeapNumberToString(Handle<HeapNumber> number,
 }
 
 template <typename Impl>
+DirectHandle<String> FactoryBase<Impl>::HeapNumberToString_Direct(
+    DirectHandle<HeapNumber> number, double value, NumberCacheMode mode) {
+  int hash = mode == NumberCacheMode::kIgnore
+                 ? 0
+                 : impl()->NumberToStringCacheHash(value);
+
+  if (mode == NumberCacheMode::kBoth) {
+    DirectHandle<Object> cached =
+        impl()->NumberToStringCacheGet_Direct(*number, hash);
+    if (!cached->IsUndefined(isolate()))
+      return DirectHandle<String>::cast(cached);
+  }
+
+  DirectHandle<String> result;
+  if (value == 0) {
+    result = zero_string_direct();
+  } else if (std::isnan(value)) {
+    result = NaN_string_direct();
+  } else {
+    char arr[kNumberToStringBufferSize];
+    base::Vector<char> buffer(arr, arraysize(arr));
+    const char* string = DoubleToCString(value, buffer);
+    result = CharToString_Direct(this, string, mode);
+  }
+  if (mode != NumberCacheMode::kIgnore) {
+    impl()->NumberToStringCacheSet_Direct(number, hash, result);
+  }
+  return result;
+}
+
+template <typename Impl>
 inline Handle<String> FactoryBase<Impl>::SmiToString(Smi number,
                                                      NumberCacheMode mode) {
   int hash = mode == NumberCacheMode::kIgnore
@@ -1010,6 +1284,50 @@ inline Handle<String> FactoryBase<Impl>::SmiToString(Smi number,
   }
   if (mode != NumberCacheMode::kIgnore) {
     impl()->NumberToStringCacheSet(handle(number, isolate()), hash, result);
+  }
+
+  // Compute the hash here (rather than letting the caller take care of it) so
+  // that the "cache hit" case above doesn't have to bother with it.
+  static_assert(Smi::kMaxValue <= std::numeric_limits<uint32_t>::max());
+  {
+    DisallowGarbageCollection no_gc;
+    String raw = *result;
+    if (raw.raw_hash_field() == String::kEmptyHashField &&
+        number.value() >= 0) {
+      uint32_t raw_hash_field = StringHasher::MakeArrayIndexHash(
+          static_cast<uint32_t>(number.value()), raw.length());
+      raw.set_raw_hash_field(raw_hash_field);
+    }
+  }
+  return result;
+}
+
+template <typename Impl>
+inline DirectHandle<String> FactoryBase<Impl>::SmiToString_Direct(
+    Smi number, NumberCacheMode mode) {
+  int hash = mode == NumberCacheMode::kIgnore
+                 ? 0
+                 : impl()->NumberToStringCacheHash(number);
+
+  if (mode == NumberCacheMode::kBoth) {
+    DirectHandle<Object> cached =
+        impl()->NumberToStringCacheGet_Direct(number, hash);
+    if (!cached->IsUndefined(isolate()))
+      return DirectHandle<String>::cast(cached);
+  }
+
+  DirectHandle<String> result;
+  if (number == Smi::zero()) {
+    result = zero_string_direct();
+  } else {
+    char arr[kNumberToStringBufferSize];
+    base::Vector<char> buffer(arr, arraysize(arr));
+    const char* string = IntToCString(number.value(), buffer);
+    result = CharToString_Direct(this, string, mode);
+  }
+  if (mode != NumberCacheMode::kIgnore) {
+    impl()->NumberToStringCacheSet_Direct(direct_handle(number, isolate()),
+                                          hash, result);
   }
 
   // Compute the hash here (rather than letting the caller take care of it) so
@@ -1109,6 +1427,35 @@ Handle<DescriptorArray> FactoryBase<Impl>::NewDescriptorArray(
 }
 
 template <typename Impl>
+DirectHandle<DescriptorArray> FactoryBase<Impl>::NewDescriptorArray_Direct(
+    int number_of_descriptors, int slack, AllocationType allocation) {
+  int number_of_all_descriptors = number_of_descriptors + slack;
+  // Zero-length case must be handled outside.
+  DCHECK_LT(0, number_of_all_descriptors);
+  int size = DescriptorArray::SizeFor(number_of_all_descriptors);
+  HeapObject obj = AllocateRawWithImmortalMap(
+      size, allocation, read_only_roots().descriptor_array_map());
+  DescriptorArray array = DescriptorArray::cast(obj);
+
+  auto raw_gc_state = DescriptorArrayMarkingState::kInitialGCState;
+  if (allocation != AllocationType::kYoung &&
+      allocation != AllocationType::kReadOnly) {
+    auto* heap = allocation == AllocationType::kSharedOld
+                     ? isolate()->AsIsolate()->shared_space_isolate()->heap()
+                     : isolate()->heap()->AsHeap();
+    if (heap->incremental_marking()->IsMajorMarking()) {
+      // Black allocation: We must create a full marked state.
+      raw_gc_state = DescriptorArrayMarkingState::GetFullyMarkedState(
+          heap->mark_compact_collector()->epoch(), number_of_descriptors);
+    }
+  }
+  array.Initialize(read_only_roots().empty_enum_cache(),
+                   read_only_roots().undefined_value(), number_of_descriptors,
+                   slack, raw_gc_state);
+  return direct_handle(array, isolate());
+}
+
+template <typename Impl>
 Handle<ClassPositions> FactoryBase<Impl>::NewClassPositions(int start,
                                                             int end) {
   auto result = NewStructInternal<ClassPositions>(CLASS_POSITIONS_TYPE,
@@ -1144,6 +1491,31 @@ FactoryBase<Impl>::AllocateRawOneByteInternalizedString(
 }
 
 template <typename Impl>
+DirectHandle<SeqOneByteString>
+FactoryBase<Impl>::AllocateRawOneByteInternalizedString_Direct(
+    int length, uint32_t raw_hash_field) {
+  CHECK_GE(String::kMaxLength, length);
+  // The canonical empty_string is the only zero-length string we allow.
+  DCHECK_IMPLIES(length == 0, !impl()->EmptyStringRootIsInitialized());
+
+  Map map = read_only_roots().one_byte_internalized_string_map();
+  const int size = SeqOneByteString::SizeFor(length);
+  const AllocationType allocation =
+      RefineAllocationTypeForInPlaceInternalizableString(
+          impl()->CanAllocateInReadOnlySpace() ? AllocationType::kReadOnly
+                                               : AllocationType::kOld,
+          map);
+  HeapObject result = AllocateRawWithImmortalMap(size, allocation, map);
+  SeqOneByteString answer = SeqOneByteString::cast(result);
+  DisallowGarbageCollection no_gc;
+  answer.clear_padding_destructively(length);
+  answer.set_length(length);
+  answer.set_raw_hash_field(raw_hash_field);
+  DCHECK_EQ(size, answer.Size());
+  return direct_handle(answer, isolate());
+}
+
+template <typename Impl>
 Handle<SeqTwoByteString>
 FactoryBase<Impl>::AllocateRawTwoByteInternalizedString(
     int length, uint32_t raw_hash_field) {
@@ -1163,6 +1535,28 @@ FactoryBase<Impl>::AllocateRawTwoByteInternalizedString(
   answer.set_raw_hash_field(raw_hash_field);
   DCHECK_EQ(size, answer.Size());
   return handle(answer, isolate());
+}
+
+template <typename Impl>
+DirectHandle<SeqTwoByteString>
+FactoryBase<Impl>::AllocateRawTwoByteInternalizedString_Direct(
+    int length, uint32_t raw_hash_field) {
+  CHECK_GE(String::kMaxLength, length);
+  DCHECK_NE(0, length);  // Use Heap::empty_string() instead.
+
+  Map map = read_only_roots().internalized_string_map();
+  int size = SeqTwoByteString::SizeFor(length);
+  SeqTwoByteString answer = SeqTwoByteString::cast(AllocateRawWithImmortalMap(
+      size,
+      RefineAllocationTypeForInPlaceInternalizableString(AllocationType::kOld,
+                                                         map),
+      map));
+  DisallowGarbageCollection no_gc;
+  answer.clear_padding_destructively(length);
+  answer.set_length(length);
+  answer.set_raw_hash_field(raw_hash_field);
+  DCHECK_EQ(size, answer.Size());
+  return direct_handle(answer, isolate());
 }
 
 template <typename Impl>
@@ -1257,9 +1651,48 @@ FactoryBase<Impl>::NewSwissNameDictionaryWithCapacity(
 }
 
 template <typename Impl>
+DirectHandle<SwissNameDictionary>
+FactoryBase<Impl>::NewSwissNameDictionaryWithCapacity_Direct(
+    int capacity, AllocationType allocation) {
+  DCHECK(SwissNameDictionary::IsValidCapacity(capacity));
+
+  if (capacity == 0) {
+    DCHECK_NE(
+        read_only_roots().address_at(RootIndex::kEmptySwissPropertyDictionary),
+        kNullAddress);
+
+    return read_only_roots().empty_swiss_property_dictionary_direct_handle();
+  }
+
+  if (capacity < 0 || capacity > SwissNameDictionary::MaxCapacity()) {
+    FATAL("Fatal JavaScript invalid size error %d", capacity);
+    UNREACHABLE();
+  }
+
+  int meta_table_length = SwissNameDictionary::MetaTableSizeFor(capacity);
+  DirectHandle<ByteArray> meta_table =
+      impl()->NewByteArray_Direct(meta_table_length, allocation);
+
+  Map map = read_only_roots().swiss_name_dictionary_map();
+  int size = SwissNameDictionary::SizeFor(capacity);
+  SwissNameDictionary table = SwissNameDictionary::cast(
+      AllocateRawWithImmortalMap(size, allocation, map));
+  DisallowGarbageCollection no_gc;
+  table.Initialize(isolate(), *meta_table, capacity);
+  return direct_handle(table, isolate());
+}
+
+template <typename Impl>
 Handle<SwissNameDictionary> FactoryBase<Impl>::NewSwissNameDictionary(
     int at_least_space_for, AllocationType allocation) {
   return NewSwissNameDictionaryWithCapacity(
+      SwissNameDictionary::CapacityFor(at_least_space_for), allocation);
+}
+template <typename Impl>
+DirectHandle<SwissNameDictionary>
+FactoryBase<Impl>::NewSwissNameDictionary_Direct(int at_least_space_for,
+                                                 AllocationType allocation) {
+  return NewSwissNameDictionaryWithCapacity_Direct(
       SwissNameDictionary::CapacityFor(at_least_space_for), allocation);
 }
 
@@ -1297,6 +1730,36 @@ MaybeHandle<Map> FactoryBase<Impl>::GetInPlaceInternalizedStringMap(
     case EXTERNAL_ONE_BYTE_STRING_TYPE:
       map =
           read_only_roots().external_one_byte_internalized_string_map_handle();
+      break;
+    default:
+      break;
+  }
+  DCHECK_EQ(!map.is_null(), String::IsInPlaceInternalizable(instance_type));
+  return map;
+}
+
+template <typename Impl>
+MaybeDirectHandle<Map>
+FactoryBase<Impl>::GetInPlaceInternalizedStringMap_Direct(Map from_string_map) {
+  InstanceType instance_type = from_string_map.instance_type();
+  MaybeDirectHandle<Map> map;
+  switch (instance_type) {
+    case STRING_TYPE:
+    case SHARED_STRING_TYPE:
+      map = read_only_roots().internalized_string_map_direct_handle();
+      break;
+    case ONE_BYTE_STRING_TYPE:
+    case SHARED_ONE_BYTE_STRING_TYPE:
+      map = read_only_roots().one_byte_internalized_string_map_direct_handle();
+      break;
+    case SHARED_EXTERNAL_STRING_TYPE:
+    case EXTERNAL_STRING_TYPE:
+      map = read_only_roots().external_internalized_string_map_direct_handle();
+      break;
+    case SHARED_EXTERNAL_ONE_BYTE_STRING_TYPE:
+    case EXTERNAL_ONE_BYTE_STRING_TYPE:
+      map = read_only_roots()
+                .external_one_byte_internalized_string_map_direct_handle();
       break;
     default:
       break;

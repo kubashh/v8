@@ -192,9 +192,12 @@ class IncrementalStringBuilder {
     return CurrentPartCanFit(worst_case_length) ? worst_case_length : 0;
   }
 
-  void AppendString(Handle<String> string);
+  void AppendString(DirectHandle<String> string);
 
   MaybeHandle<String> Finish();
+  MaybeDirectHandle<String> Finish_Direct() { /* TODO(CSS) */
+    return Finish();
+  }
 
   V8_INLINE bool HasOverflowed() const { return overflowed_; }
 
@@ -312,8 +315,8 @@ class IncrementalStringBuilder {
         isolate_, Handle<SeqString>::cast(current_part()), current_index_));
   }
 
-  void AppendStringByCopy(Handle<String> string);
-  bool CanAppendByCopy(Handle<String> string);
+  void AppendStringByCopy(DirectHandle<String> string);
+  bool CanAppendByCopy(DirectHandle<String> string);
 
   static const int kInitialPartLength = 32;
   static const int kMaxPartLength = 16 * 1024;

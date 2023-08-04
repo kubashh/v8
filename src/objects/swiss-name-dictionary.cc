@@ -77,6 +77,47 @@ Handle<SwissNameDictionary> SwissNameDictionary::Rehash(
   return new_table;
 }
 
+// static
+template <typename IsolateT>
+DirectHandle<SwissNameDictionary> SwissNameDictionary::Rehash_Direct(
+    IsolateT* isolate, DirectHandle<SwissNameDictionary> table,
+    int new_capacity) {
+  DCHECK(IsValidCapacity(new_capacity));
+  DCHECK_LE(table->NumberOfElements(), MaxUsableCapacity(new_capacity));
+  ReadOnlyRoots roots(isolate);
+
+  DirectHandle<SwissNameDictionary> new_table =
+      isolate->factory()->NewSwissNameDictionaryWithCapacity_Direct(
+          new_capacity, Heap::InYoungGeneration(*table) ? AllocationType::kYoung
+                                                        : AllocationType::kOld);
+
+  DisallowHeapAllocation no_gc;
+
+  int new_enum_index = 0;
+  new_table->SetNumberOfElements(table->NumberOfElements());
+  for (int enum_index = 0; enum_index < table->UsedCapacity(); ++enum_index) {
+    int entry = table->EntryForEnumerationIndex(enum_index);
+
+    Object key;
+
+    if (table->ToKey(roots, entry, &key)) {
+      Object value = table->ValueAtRaw(entry);
+      PropertyDetails details = table->DetailsAt(entry);
+
+      int new_entry = new_table->AddInternal(Name::cast(key), value, details);
+
+      // TODO(v8::11388) Investigate ways of hoisting the branching needed to
+      // select the correct meta table entry size (based on the capacity of the
+      // table) out of the loop.
+      new_table->SetEntryForEnumerationIndex(new_enum_index, new_entry);
+      ++new_enum_index;
+    }
+  }
+
+  new_table->SetHash(table->Hash());
+  return new_table;
+}
+
 bool SwissNameDictionary::EqualsForTesting(SwissNameDictionary other) {
   if (Capacity() != other.Capacity() ||
       NumberOfElements() != other.NumberOfElements() ||

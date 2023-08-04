@@ -1204,9 +1204,47 @@ void Heap::GarbageCollectionPrologue(
   memory_allocator()->unmapper()->PrepareForGC();
 }
 
-void Heap::GarbageCollectionPrologueInSafepoint() {
+namespace {
+
+GCType GetGCTypeFromGarbageCollector(GarbageCollector collector) {
+  switch (collector) {
+    case GarbageCollector::MARK_COMPACTOR:
+      return kGCTypeMarkSweepCompact;
+    case GarbageCollector::SCAVENGER:
+      return kGCTypeScavenge;
+    case GarbageCollector::MINOR_MARK_COMPACTOR:
+      return kGCTypeMinorMarkCompact;
+    default:
+      UNREACHABLE();
+  }
+}
+
+}  // namespace
+
+void Heap::GarbageCollectionPrologueInSafepoint(GarbageCollector collector) {
   TRACE_GC(tracer(), GCTracer::Scope::HEAP_PROLOGUE_SAFEPOINT);
   gc_count_++;
+
+  {
+    // Allows handle derefs for all threads/isolates from this thread.
+    AllowHandleDereferenceAllThreads allow_all_handle_derefs;
+    safepoint()->IterateLocalHeaps([this, collector](LocalHeap* local_heap) {
+      local_heap->InvokeGCPrologueCallbacksInSafepoint(
+          GetGCTypeFromGarbageCollector(collector), current_gc_callback_flags_);
+    });
+
+    if (isolate()->is_shared_space_isolate()) {
+      isolate()->global_safepoint()->IterateClientIsolates(
+          [this, collector](Isolate* client) {
+            client->heap()->safepoint()->IterateLocalHeaps(
+                [this, collector](LocalHeap* local_heap) {
+                  local_heap->InvokeGCPrologueCallbacksInSafepoint(
+                      GetGCTypeFromGarbageCollector(collector),
+                      current_gc_callback_flags_);
+                });
+          });
+    }
+  }
 
   DCHECK_EQ(ResizeNewSpaceMode::kNone, resize_new_space_mode_);
   if (new_space_) {
@@ -1305,19 +1343,6 @@ void Heap::DeoptMarkedAllocationSites() {
   });
 
   Deoptimizer::DeoptimizeMarkedCode(isolate_);
-}
-
-static GCType GetGCTypeFromGarbageCollector(GarbageCollector collector) {
-  switch (collector) {
-    case GarbageCollector::MARK_COMPACTOR:
-      return kGCTypeMarkSweepCompact;
-    case GarbageCollector::SCAVENGER:
-      return kGCTypeScavenge;
-    case GarbageCollector::MINOR_MARK_COMPACTOR:
-      return kGCTypeMinorMarkCompact;
-    default:
-      UNREACHABLE();
-  }
 }
 
 void Heap::GarbageCollectionEpilogueInSafepoint(GarbageCollector collector) {
@@ -2342,7 +2367,7 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
 
   tracer()->StartInSafepoint();
 
-  GarbageCollectionPrologueInSafepoint();
+  GarbageCollectionPrologueInSafepoint(collector);
 
   if (new_space()) new_space()->Prologue();
 
@@ -2605,6 +2630,16 @@ void Heap::CallGCEpilogueCallbacks(GCType gc_type, GCCallbackFlags flags,
     TRACE_GC(tracer(), scope_id);
     HandleScope handle_scope(isolate());
     gc_epilogue_callbacks_.Invoke(gc_type, flags);
+  }
+}
+
+void Heap::CallCustomRootsIterators(RootVisitor* v) {
+  if (strong_root_iterators_.empty()) return;
+  GCCallbacksScope scope(this);
+  if (scope.CheckReenter()) {
+    for (RootsIterator it : strong_root_iterators_) {
+      it(v);
+    }
   }
 }
 
@@ -4669,6 +4704,7 @@ void Heap::IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options,
       v->VisitRootPointers(Root::kStrongRoots, current->label, current->start,
                            current->end);
     }
+    CallCustomRootsIterators(v);
     v->Synchronize(VisitorSynchronization::kStrongRoots);
 
     // Iterate over the startup and shared heap object caches unless
@@ -5916,6 +5952,20 @@ void Heap::AddGCEpilogueCallback(v8::Isolate::GCCallbackWithData callback,
 void Heap::RemoveGCEpilogueCallback(v8::Isolate::GCCallbackWithData callback,
                                     void* data) {
   gc_epilogue_callbacks_.Remove(callback, data);
+}
+
+void Heap::RegisterStrongRootsIterator(const RootsIterator& iterator) {
+  strong_root_iterators_.emplace_back(iterator);
+}
+
+void Heap::UnregisterStrongRootsIterator(const RootsIterator& iterator) {
+  // TODO
+  /*
+  auto it = std::find(strong_root_iterators_.begin(),
+  strong_root_iterators_.end(), iterator); DCHECK_NE(it,
+  strong_root_iterators_.end()); *it = strong_root_iterators_.back();
+  strong_root_iterators_.pop_back();
+  */
 }
 
 namespace {

@@ -1932,9 +1932,9 @@ void V8FileLogger::ICEvent(const char* type, bool keyed, Handle<Map> map,
   msg.WriteToLogFile();
 }
 
-void V8FileLogger::MapEvent(const char* type, Handle<Map> from, Handle<Map> to,
-                            const char* reason,
-                            Handle<HeapObject> name_or_sfi) {
+void V8FileLogger::MapEvent(const char* type, DirectHandle<Map> from,
+                            DirectHandle<Map> to, const char* reason,
+                            DirectHandle<HeapObject> name_or_sfi) {
   if (!v8_flags.log_maps) return;
   if (!to.is_null()) MapDetails(*to);
   int line = -1;

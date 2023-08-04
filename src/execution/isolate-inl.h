@@ -39,6 +39,13 @@ V8_INLINE Isolate* Isolate::Current() {
   return isolate;
 }
 
+// static
+V8_INLINE Isolate* Isolate::GlobalCurrent() {
+  Isolate* isolate = g_global_main_isolate_;
+  DCHECK_NOT_NULL(isolate);
+  return isolate;
+}
+
 bool Isolate::IsCurrent() const { return this == TryGetCurrent(); }
 
 void Isolate::set_context(Context context) {
@@ -49,6 +56,10 @@ void Isolate::set_context(Context context) {
 Handle<NativeContext> Isolate::native_context() {
   DCHECK(!context().is_null());
   return handle(context().native_context(), this);
+}
+DirectHandle<NativeContext> Isolate::native_context_direct() {
+  DCHECK(!context().is_null());
+  return direct_handle(context().native_context(), this);
 }
 
 NativeContext Isolate::raw_native_context() {
@@ -173,7 +184,7 @@ bool Isolate::is_catchable_by_wasm(Object exception) {
   DisallowGarbageCollection no_gc;
   HandleScope handle_scope(this);
   LookupIterator it(this, handle(JSReceiver::cast(exception), this),
-                    factory()->wasm_uncatchable_symbol(),
+                    factory()->wasm_uncatchable_symbol_direct(),
                     LookupIterator::OWN_SKIP_INTERCEPTOR);
   return !JSReceiver::HasProperty(&it).FromJust();
 }
@@ -186,6 +197,9 @@ void Isolate::FireBeforeCallEnteredCallback() {
 
 Handle<JSGlobalObject> Isolate::global_object() {
   return handle(context().global_object(), this);
+}
+DirectHandle<JSGlobalObject> Isolate::global_object_direct() {
+  return direct_handle(context().global_object(), this);
 }
 
 Handle<JSGlobalProxy> Isolate::global_proxy() {
@@ -235,12 +249,15 @@ void Isolate::DidFinishModuleAsyncEvaluation(unsigned ordinal) {
   }
 }
 
-#define NATIVE_CONTEXT_FIELD_ACCESSOR(index, type, name)    \
-  Handle<type> Isolate::name() {                            \
-    return Handle<type>(raw_native_context().name(), this); \
-  }                                                         \
-  bool Isolate::is_##name(type value) {                     \
-    return raw_native_context().is_##name(value);           \
+#define NATIVE_CONTEXT_FIELD_ACCESSOR(index, type, name)          \
+  Handle<type> Isolate::name() {                                  \
+    return Handle<type>(raw_native_context().name(), this);       \
+  }                                                               \
+  DirectHandle<type> Isolate::name##_direct() {                   \
+    return DirectHandle<type>(raw_native_context().name(), this); \
+  }                                                               \
+  bool Isolate::is_##name(type value) {                           \
+    return raw_native_context().is_##name(value);                 \
   }
 NATIVE_CONTEXT_FIELDS(NATIVE_CONTEXT_FIELD_ACCESSOR)
 #undef NATIVE_CONTEXT_FIELD_ACCESSOR

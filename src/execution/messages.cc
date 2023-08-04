@@ -487,6 +487,38 @@ MaybeHandle<String> MessageFormatter::TryFormat(Isolate* isolate,
   return builder.Finish();
 }
 
+MaybeDirectHandle<String> MessageFormatter::TryFormat_Direct(
+    Isolate* isolate, MessageTemplate index, DirectHandle<String> arg0,
+    DirectHandle<String> arg1, DirectHandle<String> arg2) {
+  const char* template_string = TemplateString(index);
+  if (template_string == nullptr) {
+    isolate->ThrowIllegalOperation();
+    return MaybeHandle<String>();
+  }
+
+  IncrementalStringBuilder builder(isolate);
+
+  unsigned int i = 0;
+  DirectHandle<String> args[] = {arg0, arg1, arg2};
+  for (const char* c = template_string; *c != '\0'; c++) {
+    if (*c == '%') {
+      // %% results in verbatim %.
+      if (*(c + 1) == '%') {
+        c++;
+        builder.AppendCharacter('%');
+      } else {
+        DCHECK(i < arraysize(args));
+        DirectHandle<String> arg = args[i++];
+        builder.AppendString(arg);
+      }
+    } else {
+      builder.AppendCharacter(*c);
+    }
+  }
+
+  return builder.Finish_Direct();
+}
+
 MaybeHandle<JSObject> ErrorUtils::Construct(Isolate* isolate,
                                             Handle<JSFunction> target,
                                             Handle<Object> new_target,
@@ -593,6 +625,18 @@ MaybeHandle<JSObject> ErrorUtils::Construct(
   return err;
 }
 
+MaybeDirectHandle<JSObject> ErrorUtils::Construct_Direct(
+    Isolate* isolate, DirectHandle<JSFunction> target,
+    DirectHandle<Object> new_target, DirectHandle<Object> message,
+    DirectHandle<Object> options, FrameSkipMode mode,
+    DirectHandle<Object> caller, StackTraceCollection stack_trace_collection) {
+  // TODO(CSS)
+  return Construct(isolate, handle(*target, isolate),
+                   handle(*new_target, isolate), handle(*message, isolate),
+                   handle(*options, isolate), mode, handle(*caller, isolate),
+                   stack_trace_collection);
+}
+
 namespace {
 
 MaybeHandle<String> GetStringPropertyOrDefault(Isolate* isolate,
@@ -691,6 +735,33 @@ Handle<String> DoFormatMessage(Isolate* isolate, MessageTemplate index,
   return msg;
 }
 
+DirectHandle<String> DoFormatMessage_Direct(Isolate* isolate,
+                                            MessageTemplate index,
+                                            DirectHandle<Object> arg0,
+                                            DirectHandle<Object> arg1,
+                                            DirectHandle<Object> arg2) {
+  DirectHandle<String> arg0_str =
+      Object::NoSideEffectsToString_Direct(isolate, arg0);
+  DirectHandle<String> arg1_str =
+      Object::NoSideEffectsToString_Direct(isolate, arg1);
+  DirectHandle<String> arg2_str =
+      Object::NoSideEffectsToString_Direct(isolate, arg2);
+
+  isolate->native_context()->IncrementErrorsThrown();
+
+  DirectHandle<String> msg;
+  if (!MessageFormatter::TryFormat_Direct(isolate, index, arg0_str, arg1_str,
+                                          arg2_str)
+           .ToHandle(&msg)) {
+    DCHECK(isolate->has_pending_exception());
+    isolate->clear_pending_exception();
+    isolate->set_external_caught_exception(false);
+    return isolate->factory()->NewStringFromAsciiChecked_Direct("<error>");
+  }
+
+  return msg;
+}
+
 }  // namespace
 
 // static
@@ -714,6 +785,32 @@ Handle<JSObject> ErrorUtils::MakeGenericError(
   DCHECK(constructor->shared().HasBuiltinId());
   return ErrorUtils::Construct(isolate, constructor, constructor, msg, options,
                                mode, no_caller, StackTraceCollection::kEnabled)
+      .ToHandleChecked();
+}
+
+// static
+DirectHandle<JSObject> ErrorUtils::MakeGenericError_Direct(
+    Isolate* isolate, DirectHandle<JSFunction> constructor,
+    MessageTemplate index, DirectHandle<Object> arg0, DirectHandle<Object> arg1,
+    DirectHandle<Object> arg2, FrameSkipMode mode) {
+  if (v8_flags.clear_exceptions_on_js_entry) {
+    // This function used to be implemented in JavaScript, and JSEntry
+    // clears any pending exceptions - so whenever we'd call this from C++,
+    // pending exceptions would be cleared. Preserve this behavior.
+    isolate->clear_pending_exception();
+  }
+  DirectHandle<String> msg =
+      DoFormatMessage_Direct(isolate, index, arg0, arg1, arg2);
+  DirectHandle<Object> options = isolate->factory()->undefined_value_direct();
+
+  DCHECK(mode != SKIP_UNTIL_SEEN);
+
+  DirectHandle<Object> no_caller;
+  // The call below can't fail because constructor is a builtin.
+  DCHECK(constructor->shared().HasBuiltinId());
+  return ErrorUtils::Construct_Direct(isolate, constructor, constructor, msg,
+                                      options, mode, no_caller,
+                                      StackTraceCollection::kEnabled)
       .ToHandleChecked();
 }
 

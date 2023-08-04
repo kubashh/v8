@@ -255,6 +255,8 @@ class String : public TorqueGeneratedString<String, Name> {
 
   // ES6 section 7.1.3.1 ToNumber Applied to the String Type
   static Handle<Object> ToNumber(Isolate* isolate, Handle<String> subject);
+  static DirectHandle<Object> ToNumber_Direct(Isolate* isolate,
+                                              DirectHandle<String> subject);
 
   // Flattens the string.  Checks first inline to see if it is
   // necessary.  Does nothing if the string is not a cons string.
@@ -274,6 +276,12 @@ class String : public TorqueGeneratedString<String, Name> {
       AllocationType allocation = AllocationType::kYoung);
   static V8_INLINE Handle<String> Flatten(
       LocalIsolate* isolate, Handle<String> string,
+      AllocationType allocation = AllocationType::kYoung);
+  static V8_INLINE DirectHandle<String> Flatten_Direct(
+      Isolate* isolate, DirectHandle<String> string,
+      AllocationType allocation = AllocationType::kYoung);
+  static V8_INLINE DirectHandle<String> Flatten_Direct(
+      LocalIsolate* isolate, DirectHandle<String> string,
       AllocationType allocation = AllocationType::kYoung);
 
   // Tries to return the content of a flat string as a structure holding either
@@ -631,6 +639,9 @@ class String : public TorqueGeneratedString<String, Name> {
 
   V8_EXPORT_PRIVATE static Handle<String> SlowFlatten(
       Isolate* isolate, Handle<ConsString> cons, AllocationType allocation);
+  V8_EXPORT_PRIVATE static DirectHandle<String> SlowFlatten_Direct(
+      Isolate* isolate, DirectHandle<ConsString> cons,
+      AllocationType allocation);
 
   V8_EXPORT_PRIVATE V8_INLINE static base::Optional<FlatContent>
   TryGetFlatContentFromDirectString(PtrComprCageBase cage_base,

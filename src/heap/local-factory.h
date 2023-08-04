@@ -55,7 +55,10 @@ class V8_EXPORT_PRIVATE LocalFactory : public FactoryBase<LocalFactory> {
   int NumberToStringCacheHash(double number);
   void NumberToStringCacheSet(Handle<Object> number, int hash,
                               Handle<String> js_string);
+  void NumberToStringCacheSet_Direct(DirectHandle<Object> number, int hash,
+                                     DirectHandle<String> js_string);
   Handle<Object> NumberToStringCacheGet(Object number, int hash);
+  DirectHandle<Object> NumberToStringCacheGet_Direct(Object number, int hash);
 
  private:
   friend class FactoryBase<LocalFactory>;

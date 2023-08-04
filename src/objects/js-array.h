@@ -42,8 +42,9 @@ class JSArray : public TorqueGeneratedJSArray<JSArray, JSObject> {
   inline void set_length(Smi length);
 
   static bool MayHaveReadOnlyLength(Map js_array_map);
-  static bool HasReadOnlyLength(Handle<JSArray> array);
-  static bool WouldChangeReadOnlyLength(Handle<JSArray> array, uint32_t index);
+  static bool HasReadOnlyLength(DirectHandle<JSArray> array);
+  static bool WouldChangeReadOnlyLength(DirectHandle<JSArray> array,
+                                        uint32_t index);
 
   // Initialize the array with the given capacity. The function may
   // fail due to out-of-memory situations, but only if the requested

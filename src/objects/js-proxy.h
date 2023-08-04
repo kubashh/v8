@@ -28,6 +28,8 @@ class JSProxy : public TorqueGeneratedJSProxy<JSProxy, JSReceiver> {
 
   // ES6 9.5.1
   static MaybeHandle<HeapObject> GetPrototype(Handle<JSProxy> receiver);
+  static MaybeDirectHandle<HeapObject> GetPrototype_Direct(
+      DirectHandle<JSProxy> receiver);
 
   // ES6 9.5.2
   V8_WARN_UNUSED_RESULT static Maybe<bool> SetPrototype(
@@ -35,6 +37,8 @@ class JSProxy : public TorqueGeneratedJSProxy<JSProxy, JSReceiver> {
       bool from_javascript, ShouldThrow should_throw);
   // ES6 9.5.3
   V8_WARN_UNUSED_RESULT static Maybe<bool> IsExtensible(Handle<JSProxy> proxy);
+  V8_WARN_UNUSED_RESULT static Maybe<bool> IsExtensible_Direct(
+      DirectHandle<JSProxy> proxy);
 
   // ES6, #sec-isarray.  NOT to be confused with %_IsArray.
   V8_WARN_UNUSED_RESULT static Maybe<bool> IsArray(Handle<JSProxy> proxy);
@@ -57,6 +61,8 @@ class JSProxy : public TorqueGeneratedJSProxy<JSProxy, JSReceiver> {
   V8_WARN_UNUSED_RESULT static Maybe<bool> HasProperty(Isolate* isolate,
                                                        Handle<JSProxy> proxy,
                                                        Handle<Name> name);
+  V8_WARN_UNUSED_RESULT static Maybe<bool> HasProperty_Direct(
+      Isolate* isolate, DirectHandle<JSProxy> proxy, DirectHandle<Name> name);
 
   // This function never returns false.
   // It returns either true or throws.
@@ -71,6 +77,9 @@ class JSProxy : public TorqueGeneratedJSProxy<JSProxy, JSReceiver> {
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> GetProperty(
       Isolate* isolate, Handle<JSProxy> proxy, Handle<Name> name,
       Handle<Object> receiver, bool* was_found);
+  V8_WARN_UNUSED_RESULT static MaybeDirectHandle<Object> GetProperty_Direct(
+      Isolate* isolate, DirectHandle<JSProxy> proxy, DirectHandle<Name> name,
+      DirectHandle<Object> receiver, bool* was_found);
 
   enum AccessKind { kGet, kSet };
 

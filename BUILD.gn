@@ -1195,6 +1195,9 @@ config("features") {
   if (v8_enable_builtin_jump_table_switch) {
     defines += [ "V8_ENABLE_BUILTIN_JUMP_TABLE_SWITCH" ]
   }
+  if (v8_enable_handle_statistics) {
+    defines += [ "V8_ENABLE_HANDLE_STATISTICS" ]
+  }
 }
 
 config("toolchain") {

@@ -78,6 +78,11 @@ class V8_EXPORT_PRIVATE SwissNameDictionary : public HeapObject {
       IsolateT* isolate, Handle<SwissNameDictionary> table, Handle<Name> key,
       Handle<Object> value, PropertyDetails details,
       InternalIndex* entry_out = nullptr);
+  template <typename IsolateT>
+  inline static DirectHandle<SwissNameDictionary> Add_Direct(
+      IsolateT* isolate, DirectHandle<SwissNameDictionary> table,
+      DirectHandle<Name> key, DirectHandle<Object> value,
+      PropertyDetails details, InternalIndex* entry_out = nullptr);
 
   static Handle<SwissNameDictionary> Shrink(Isolate* isolate,
                                             Handle<SwissNameDictionary> table);
@@ -137,6 +142,10 @@ class V8_EXPORT_PRIVATE SwissNameDictionary : public HeapObject {
   static Handle<SwissNameDictionary> Rehash(IsolateT* isolate,
                                             Handle<SwissNameDictionary> table,
                                             int new_capacity);
+  template <typename IsolateT>
+  static DirectHandle<SwissNameDictionary> Rehash_Direct(
+      IsolateT* isolate, DirectHandle<SwissNameDictionary> table,
+      int new_capacity);
   template <typename IsolateT>
   void Rehash(IsolateT* isolate);
 
@@ -273,6 +282,9 @@ class V8_EXPORT_PRIVATE SwissNameDictionary : public HeapObject {
   template <typename IsolateT>
   inline static Handle<SwissNameDictionary> EnsureGrowable(
       IsolateT* isolate, Handle<SwissNameDictionary> table);
+  template <typename IsolateT>
+  inline static DirectHandle<SwissNameDictionary> EnsureGrowable_Direct(
+      IsolateT* isolate, DirectHandle<SwissNameDictionary> table);
 
   // Returns table of byte-encoded PropertyDetails (without enumeration index
   // stored in PropertyDetails).

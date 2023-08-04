@@ -639,7 +639,8 @@ class ReadOnlyRoots {
 #define ROOT_ACCESSOR(Type, name, CamelName)       \
   V8_INLINE Tagged<Type> name() const;             \
   V8_INLINE Tagged<Type> unchecked_##name() const; \
-  V8_INLINE Handle<Type> name##_handle() const;
+  V8_INLINE Handle<Type> name##_handle() const;    \
+  V8_INLINE DirectHandle<Type> name##_direct_handle() const;
 
   READ_ONLY_ROOT_LIST(ROOT_ACCESSOR)
 #undef ROOT_ACCESSOR

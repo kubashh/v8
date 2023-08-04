@@ -1376,6 +1376,12 @@ class Heap final {
   void RemoveGCEpilogueCallback(v8::Isolate::GCCallbackWithData callback,
                                 void* data);
 
+  // using RootsIterator = void(*)(RootVisitor*);
+  using RootsIterator = std::function<void(RootVisitor*)>;
+  void RegisterStrongRootsIterator(const RootsIterator& iterator);
+  void UnregisterStrongRootsIterator(const RootsIterator& iterator);
+  void CallCustomRootsIterators(RootVisitor* v);
+
   void CallGCPrologueCallbacks(GCType gc_type, GCCallbackFlags flags,
                                GCTracer::Scope::ScopeId scope_id);
   void CallGCEpilogueCallbacks(GCType gc_type, GCCallbackFlags flags,
@@ -1789,7 +1795,7 @@ class Heap final {
   // some reporting/verification activities when compiled with DEBUG set.
   void GarbageCollectionPrologue(GarbageCollectionReason gc_reason,
                                  const v8::GCCallbackFlags gc_callback_flags);
-  void GarbageCollectionPrologueInSafepoint();
+  void GarbageCollectionPrologueInSafepoint(GarbageCollector collector);
   void GarbageCollectionEpilogue(GarbageCollector collector);
   void GarbageCollectionEpilogueInSafepoint(GarbageCollector collector);
 
@@ -2136,6 +2142,7 @@ class Heap final {
 
   GCCallbacks<v8::Isolate, AllowGarbageCollection> gc_prologue_callbacks_;
   GCCallbacks<v8::Isolate, AllowGarbageCollection> gc_epilogue_callbacks_;
+  std::vector<RootsIterator> strong_root_iterators_;
 
   GetExternallyAllocatedMemoryInBytesCallback external_memory_callback_;
 

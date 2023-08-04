@@ -8,6 +8,7 @@
 #include "include/v8-local-handle.h"
 #include "src/base/bit-field.h"
 #include "src/common/globals.h"
+#include "src/handles/maybe-handles.h"
 #include "src/objects/property-details.h"
 #include "src/utils/allocation.h"
 
@@ -125,6 +126,10 @@ class Accessors : public AllStatic {
   static MaybeHandle<Object> ReplaceAccessorWithDataProperty(
       Isolate* isolate, Handle<Object> receiver, Handle<JSObject> holder,
       Handle<Name> name, Handle<Object> value);
+  static MaybeDirectHandle<Object> ReplaceAccessorWithDataProperty_Direct(
+      Isolate* isolate, DirectHandle<Object> receiver,
+      DirectHandle<JSObject> holder, DirectHandle<Name> name,
+      DirectHandle<Object> value);
 
   // Create an AccessorInfo. The setter is optional (can be nullptr).
   //

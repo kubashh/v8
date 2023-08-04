@@ -93,6 +93,11 @@ ReadOnlyRoots::ReadOnlyRoots(LocalIsolate* isolate)
     DCHECK(CheckType_##name());                                              \
     Address* location = GetLocation(RootIndex::k##CamelName);                \
     return Handle<Type>(location);                                           \
+  }                                                                          \
+  DirectHandle<Type> ReadOnlyRoots::name##_direct_handle() const {           \
+    DCHECK(CheckType_##name());                                              \
+    Address* location = GetLocation(RootIndex::k##CamelName);                \
+    return DirectHandle<Type>(location);                                     \
   }
 
 READ_ONLY_ROOT_LIST(ROOT_ACCESSOR)

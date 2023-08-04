@@ -223,9 +223,10 @@ class V8FileLogger : public LogEventListener {
                Handle<Object> key, char old_state, char new_state,
                const char* modifier, const char* slow_stub_reason);
 
-  void MapEvent(const char* type, Handle<Map> from, Handle<Map> to,
-                const char* reason = nullptr,
-                Handle<HeapObject> name_or_sfi = Handle<HeapObject>());
+  void MapEvent(
+      const char* type, DirectHandle<Map> from, DirectHandle<Map> to,
+      const char* reason = nullptr,
+      DirectHandle<HeapObject> name_or_sfi = DirectHandle<HeapObject>());
   void MapCreate(Map map);
   void MapDetails(Map map);
   void MapMoveEvent(Map from, Map to);
