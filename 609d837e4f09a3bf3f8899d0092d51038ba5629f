@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cc74c64_40309114",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-04T13:25:59Z",
+      "side": 1,
+      "message": "lgtm % nits",
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36e4ddd2_02f32389",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-04T13:25:59Z",
+      "side": 1,
+      "message": "nit: A struct would have been a reasonable option here. But I\u0027m fine with `std::tuple\u003c\u003e` either.",
+      "range": {
+        "startLine": 756,
+        "startChar": 1,
+        "endLine": 761,
+        "endChar": 76
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac9a6402_8b3563a9",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-04T13:25:59Z",
+      "side": 1,
+      "message": "Fancy!",
+      "range": {
+        "startLine": 2144,
+        "startChar": 14,
+        "endLine": 2147,
+        "endChar": 34
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79533663_524e22ad",
+        "filename": "test/mjsunit/compiler/load-elimination-typed-arrays.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-04T13:25:59Z",
+      "side": 1,
+      "message": "nit: Maybe provide this in hex as well so that it\u0027s more obvious what it is?",
+      "range": {
+        "startLine": 20,
+        "startChar": 28,
+        "endLine": 20,
+        "endChar": 37
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
