@@ -33,6 +33,24 @@
       "message": "lgtm, but for consistency it might be nice to apply the same to arm?",
       "revId": "305b7e54d1ee4bbc217fda6cf00e34fd263f172f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15d17cc6_f588fb89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-04T13:44:23Z",
+      "side": 1,
+      "message": "arm doesn\u0027t have 64-bit registers -- or do you mean using the more generic methods?",
+      "parentUuid": "dbad5996_65ba49e6",
+      "revId": "305b7e54d1ee4bbc217fda6cf00e34fd263f172f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
