@@ -252,6 +252,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b664f063_7a17b27c",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-08-04T09:00:54Z",
+      "side": 1,
+      "message": "We should not land branches when we don\u0027t have data to back up the specializations. This is the wrong direction.\n\nBranches should be motivated by performance cases (pinpoint, flamegraph) and not the other way round.\n\nIf anything, we should land a minimal version, observe a regression, then fix that up with adding a specialization.",
+      "parentUuid": "32e69f79_d47b4147",
+      "range": {
+        "startLine": 410,
+        "startChar": 62,
+        "endLine": 410,
+        "endChar": 73
+      },
+      "revId": "482ce6087097e3dfb8d0ecdfd06c39ac83cd105d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2cdac43c_b5d1d7d1",
         "filename": "src/heap/gc-tracer.h",
         "patchSetId": 33
