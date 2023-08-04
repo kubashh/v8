@@ -143,6 +143,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   // Allocates a property array initialized with undefined values.
   Handle<PropertyArray> NewPropertyArray(
       int length, AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<PropertyArray> NewPropertyArray_Direct(
+      int length, AllocationType allocation = AllocationType::kYoung);
   // Tries allocating a fixed array initialized with undefined values.
   // In case of an allocation failure (OOM) an empty handle is returned.
   // The caller has to manually signal an
@@ -168,10 +170,12 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   // Allocate a new fixed double array with hole values.
   Handle<FixedArrayBase> NewFixedDoubleArrayWithHoles(int size);
+  DirectHandle<FixedArrayBase> NewFixedDoubleArrayWithHoles_Direct(int size);
 
   // Allocates a NameDictionary with an internal capacity calculated such that
   // |at_least_space_for| entries can be added without reallocating.
   Handle<NameDictionary> NewNameDictionary(int at_least_space_for);
+  DirectHandle<NameDictionary> NewNameDictionary_Direct(int at_least_space_for);
 
   // Allocates an OrderedNameDictionary of the given capacity. This guarantees
   // that |capacity| entries can be added without reallocating.
@@ -194,6 +198,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   // Create a new PrototypeInfo struct.
   Handle<PrototypeInfo> NewPrototypeInfo();
+  DirectHandle<PrototypeInfo> NewPrototypeInfo_Direct();
 
   // Create a new EnumCache struct.
   Handle<EnumCache> NewEnumCache(
@@ -231,11 +236,16 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   template <typename SeqString>
   Handle<String> InternalizeString(Handle<SeqString>, int from, int length,
                                    bool convert_encoding = false);
+  template <typename SeqString>
+  DirectHandle<String> InternalizeString_Direct(DirectHandle<SeqString>,
+                                                int from, int length,
+                                                bool convert_encoding = false);
 
   // Internalized strings are created in the old generation (data space).
   inline Handle<String> InternalizeString(Handle<String> string);
 
   inline Handle<Name> InternalizeName(Handle<Name> name);
+  inline DirectHandle<Name> InternalizeName_Direct(DirectHandle<Name> name);
 
   // String creation functions.  Most of the string creation functions take
   // an AllocationType argument to optionally request that they be
@@ -321,6 +331,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   Handle<String> NewInternalizedStringImpl(Handle<String> string, int len,
                                            uint32_t hash_field);
+  DirectHandle<String> NewInternalizedStringImpl_Direct(
+      DirectHandle<String> string, int len, uint32_t hash_field);
 
   // Compute the internalization strategy for the input string.
   //
@@ -335,11 +347,17 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   V8_WARN_UNUSED_RESULT StringTransitionStrategy
   ComputeInternalizationStrategyForString(Handle<String> string,
                                           MaybeHandle<Map>* internalized_map);
+  V8_WARN_UNUSED_RESULT StringTransitionStrategy
+  ComputeInternalizationStrategyForString_Direct(
+      DirectHandle<String> string, MaybeDirectHandle<Map>* internalized_map);
 
   // Creates an internalized copy of an external string. |string| must be
   // of type StringClass.
   template <class StringClass>
   Handle<StringClass> InternalizeExternalString(Handle<String> string);
+  template <class StringClass>
+  DirectHandle<StringClass> InternalizeExternalString_Direct(
+      DirectHandle<String> string);
 
   // Compute the sharing strategy for the input string.
   //
@@ -429,6 +447,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   Handle<AliasedArgumentsEntry> NewAliasedArgumentsEntry(
       int aliased_context_slot);
+  DirectHandle<AliasedArgumentsEntry> NewAliasedArgumentsEntry_Direct(
+      int aliased_context_slot);
 
   Handle<AccessorInfo> NewAccessorInfo();
 
@@ -469,10 +489,16 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       Address addr, AllocationType allocation_type = AllocationType::kYoung);
 
   Handle<Cell> NewCell(Smi value);
+  DirectHandle<Cell> NewCell_Direct(Smi value);
   Handle<Cell> NewCell();
+  DirectHandle<Cell> NewCell_Direct();
 
   Handle<PropertyCell> NewPropertyCell(
       Handle<Name> name, PropertyDetails details, Handle<Object> value,
+      AllocationType allocation = AllocationType::kOld);
+  DirectHandle<PropertyCell> NewPropertyCell_Direct(
+      DirectHandle<Name> name, PropertyDetails details,
+      DirectHandle<Object> value,
       AllocationType allocation = AllocationType::kOld);
   Handle<PropertyCell> NewProtector();
 
@@ -482,6 +508,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   Handle<TransitionArray> NewTransitionArray(int number_of_transitions,
                                              int slack = 0);
+  DirectHandle<TransitionArray> NewTransitionArray_Direct(
+      int number_of_transitions, int slack = 0);
 
   // Allocate a tenured AllocationSite. Its payload is null.
   Handle<AllocationSite> NewAllocationSite(bool with_weak_next);
@@ -491,6 +519,11 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
                      ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND,
                      int inobject_properties = 0,
                      AllocationType allocation_type = AllocationType::kMap);
+  DirectHandle<Map> NewMap_Direct(
+      InstanceType type, int instance_size,
+      ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND,
+      int inobject_properties = 0,
+      AllocationType allocation_type = AllocationType::kMap);
   // Initializes the fields of a newly created Map using roots from the
   // passed-in Heap. Exposed for tests and heap setup; other code should just
   // call NewMap which takes care of it.
@@ -505,6 +538,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       AllocationOrigin origin = AllocationOrigin::kRuntime);
 
   Handle<JSObject> NewFunctionPrototype(Handle<JSFunction> function);
+  DirectHandle<JSObject> NewFunctionPrototype_Direct(
+      DirectHandle<JSFunction> function);
 
   // Returns a deep copy of the JavaScript object.
   // Properties and elements are copied too.
@@ -516,6 +551,9 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   Handle<FixedArray> CopyFixedArrayWithMap(
       Handle<FixedArray> array, Handle<Map> map,
+      AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<FixedArray> CopyFixedArrayWithMap_Direct(
+      DirectHandle<FixedArray> array, DirectHandle<Map> map,
       AllocationType allocation = AllocationType::kYoung);
 
   Handle<FixedArray> CopyFixedArrayAndGrow(
@@ -531,6 +569,9 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   Handle<WeakArrayList> CopyWeakArrayListAndGrow(
       Handle<WeakArrayList> array, int grow_by,
       AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<WeakArrayList> CopyWeakArrayListAndGrow_Direct(
+      DirectHandle<WeakArrayList> array, int grow_by,
+      AllocationType allocation = AllocationType::kYoung);
 
   Handle<WeakArrayList> CompactWeakArrayList(
       Handle<WeakArrayList> array, int new_capacity,
@@ -538,6 +579,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   Handle<PropertyArray> CopyPropertyArrayAndGrow(Handle<PropertyArray> array,
                                                  int grow_by);
+  DirectHandle<PropertyArray> CopyPropertyArrayAndGrow_Direct(
+      DirectHandle<PropertyArray> array, int grow_by);
 
   Handle<FixedArray> CopyFixedArrayUpTo(
       Handle<FixedArray> array, int new_len,
@@ -560,6 +603,9 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   Handle<JSObject> NewJSObject(
       Handle<JSFunction> constructor,
       AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<JSObject> NewJSObject_Direct(
+      DirectHandle<JSFunction> constructor,
+      AllocationType allocation = AllocationType::kYoung);
   // JSObject without a prototype.
   Handle<JSObject> NewJSObjectWithNullProto();
   // JSObject without a prototype, in dictionary mode.
@@ -576,12 +622,22 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   Handle<JSObject> NewJSObjectFromMap(
       Handle<Map> map, AllocationType allocation = AllocationType::kYoung,
       Handle<AllocationSite> allocation_site = Handle<AllocationSite>::null());
+  DirectHandle<JSObject> NewJSObjectFromMap_Direct(
+      DirectHandle<Map> map, AllocationType allocation = AllocationType::kYoung,
+      DirectHandle<AllocationSite> allocation_site =
+          DirectHandle<AllocationSite>::null());
   // Like NewJSObjectFromMap, but includes allocating a properties dictionary.
   Handle<JSObject> NewSlowJSObjectFromMap(
       Handle<Map> map,
       int number_of_slow_properties = NameDictionary::kInitialCapacity,
       AllocationType allocation = AllocationType::kYoung,
       Handle<AllocationSite> allocation_site = Handle<AllocationSite>::null());
+  DirectHandle<JSObject> NewSlowJSObjectFromMap_Direct(
+      DirectHandle<Map> map,
+      int number_of_slow_properties = NameDictionary::kInitialCapacity,
+      AllocationType allocation = AllocationType::kYoung,
+      DirectHandle<AllocationSite> allocation_site =
+          DirectHandle<AllocationSite>::null());
   // Calls NewJSObjectFromMap or NewSlowJSObjectFromMap depending on whether the
   // map is a dictionary map.
   inline Handle<JSObject> NewFastOrSlowJSObjectFromMap(
@@ -608,6 +664,11 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       ArrayStorageAllocationMode mode =
           ArrayStorageAllocationMode::DONT_INITIALIZE_ARRAY_ELEMENTS,
       AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<JSArray> NewJSArray_Direct(
+      ElementsKind elements_kind, int length, int capacity,
+      ArrayStorageAllocationMode mode =
+          ArrayStorageAllocationMode::DONT_INITIALIZE_ARRAY_ELEMENTS,
+      AllocationType allocation = AllocationType::kYoung);
 
   Handle<JSArray> NewJSArray(
       int capacity, ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND,
@@ -620,11 +681,25 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
         ArrayStorageAllocationMode::INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE,
         allocation);
   }
+  DirectHandle<JSArray> NewJSArray_Direct(
+      int capacity, ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND,
+      AllocationType allocation = AllocationType::kYoung) {
+    if (capacity != 0) {
+      elements_kind = GetHoleyElementsKind(elements_kind);
+    }
+    return NewJSArray_Direct(
+        elements_kind, 0, capacity,
+        ArrayStorageAllocationMode::INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE,
+        allocation);
+  }
 
   // Create a JSArray with the given elements.
   Handle<JSArray> NewJSArrayWithElements(
       Handle<FixedArrayBase> elements, ElementsKind elements_kind, int length,
       AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<JSArray> NewJSArrayWithElements_Direct(
+      DirectHandle<FixedArrayBase> elements, ElementsKind elements_kind,
+      int length, AllocationType allocation = AllocationType::kYoung);
 
   inline Handle<JSArray> NewJSArrayWithElements(
       Handle<FixedArrayBase> elements,
@@ -637,6 +712,10 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 
   void NewJSArrayStorage(
       Handle<JSArray> array, int length, int capacity,
+      ArrayStorageAllocationMode mode =
+          ArrayStorageAllocationMode::DONT_INITIALIZE_ARRAY_ELEMENTS);
+  void NewJSArrayStorage_Direct(
+      DirectHandle<JSArray> array, int length, int capacity,
       ArrayStorageAllocationMode mode =
           ArrayStorageAllocationMode::DONT_INITIALIZE_ARRAY_ELEMENTS);
 
@@ -805,12 +884,22 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
                             Handle<Object> arg0 = Handle<Object>(),
                             Handle<Object> arg1 = Handle<Object>(),
                             Handle<Object> arg2 = Handle<Object>());
+  DirectHandle<JSObject> NewError_Direct(
+      DirectHandle<JSFunction> constructor, MessageTemplate template_index,
+      DirectHandle<Object> arg0 = DirectHandle<Object>(),
+      DirectHandle<Object> arg1 = DirectHandle<Object>(),
+      DirectHandle<Object> arg2 = DirectHandle<Object>());
 
-#define DECLARE_ERROR(NAME)                                          \
-  Handle<JSObject> New##NAME(MessageTemplate template_index,         \
-                             Handle<Object> arg0 = Handle<Object>(), \
-                             Handle<Object> arg1 = Handle<Object>(), \
-                             Handle<Object> arg2 = Handle<Object>());
+#define DECLARE_ERROR(NAME)                                           \
+  Handle<JSObject> New##NAME(MessageTemplate template_index,          \
+                             Handle<Object> arg0 = Handle<Object>(),  \
+                             Handle<Object> arg1 = Handle<Object>(),  \
+                             Handle<Object> arg2 = Handle<Object>()); \
+  DirectHandle<JSObject> New##NAME##_Direct(                          \
+      MessageTemplate template_index,                                 \
+      DirectHandle<Object> arg0 = DirectHandle<Object>(),             \
+      DirectHandle<Object> arg1 = DirectHandle<Object>(),             \
+      DirectHandle<Object> arg2 = DirectHandle<Object>());
   DECLARE_ERROR(Error)
   DECLARE_ERROR(EvalError)
   DECLARE_ERROR(RangeError)
@@ -824,6 +913,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
 #undef DECLARE_ERROR
 
   Handle<String> SizeToString(size_t value, bool check_cache = true);
+  DirectHandle<String> SizeToString_Direct(size_t value,
+                                           bool check_cache = true);
   inline Handle<String> Uint32ToString(uint32_t value,
                                        bool check_cache = true) {
     return SizeToString(value, check_cache);
@@ -874,6 +965,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   // native context.
   Handle<Map> ObjectLiteralMapFromCache(Handle<NativeContext> native_context,
                                         int number_of_properties);
+  DirectHandle<Map> ObjectLiteralMapFromCache_Direct(
+      DirectHandle<NativeContext> native_context, int number_of_properties);
 
   Handle<LoadHandler> NewLoadHandler(
       int data_count, AllocationType allocation = AllocationType::kOld);
@@ -1053,6 +1146,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
     MaybeHandle<Code> BuildInternal(bool retry_allocation_or_fail);
 
     Handle<ByteArray> NewByteArray(int length, AllocationType allocation);
+    DirectHandle<ByteArray> NewByteArray_Direct(int length,
+                                                AllocationType allocation);
     MaybeHandle<InstructionStream> NewInstructionStream(
         bool retry_allocation_or_fail);
     MaybeHandle<InstructionStream> AllocateInstructionStream(
@@ -1117,6 +1212,9 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   HeapObject AllocateRawWithAllocationSite(
       Handle<Map> map, AllocationType allocation,
       Handle<AllocationSite> allocation_site);
+  HeapObject AllocateRawWithAllocationSite_Direct(
+      DirectHandle<Map> map, AllocationType allocation,
+      DirectHandle<AllocationSite> allocation_site);
 
   Handle<JSArrayBufferView> NewJSArrayBufferView(
       Handle<Map> map, Handle<FixedArrayBase> elements,
@@ -1138,14 +1236,22 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   // Creates a heap object based on the map. The fields of the heap object are
   // not initialized, it's the responsibility of the caller to do that.
   HeapObject New(Handle<Map> map, AllocationType allocation);
+  HeapObject New_Direct(DirectHandle<Map> map, AllocationType allocation);
 
   template <typename T>
   Handle<T> CopyArrayWithMap(
       Handle<T> src, Handle<Map> map,
       AllocationType allocation = AllocationType::kYoung);
   template <typename T>
+  DirectHandle<T> CopyArrayWithMap_Direct(
+      DirectHandle<T> src, DirectHandle<Map> map,
+      AllocationType allocation = AllocationType::kYoung);
+  template <typename T>
   Handle<T> CopyArrayAndGrow(Handle<T> src, int grow_by,
                              AllocationType allocation);
+  template <typename T>
+  DirectHandle<T> CopyArrayAndGrow_Direct(DirectHandle<T> src, int grow_by,
+                                          AllocationType allocation);
 
   MaybeHandle<String> NewStringFromTwoByte(const base::uc16* string, int length,
                                            AllocationType allocation);
@@ -1157,10 +1263,15 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   // Attempt to find the number in a small cache.  If we finds it, return
   // the string representation of the number.  Otherwise return undefined.
   V8_INLINE Handle<Object> NumberToStringCacheGet(Object number, int hash);
+  V8_INLINE DirectHandle<Object> NumberToStringCacheGet_Direct(Object number,
+                                                               int hash);
 
   // Update the cache with a new number-string pair.
   V8_INLINE void NumberToStringCacheSet(Handle<Object> number, int hash,
                                         Handle<String> js_string);
+  V8_INLINE void NumberToStringCacheSet_Direct(DirectHandle<Object> number,
+                                               int hash,
+                                               DirectHandle<String> js_string);
 
   // Creates a new JSArray with the given backing storage. Performs no
   // verification of the backing storage because it may not yet be filled.
@@ -1170,12 +1281,22 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   Handle<JSArray> NewJSArrayWithUnverifiedElements(
       Handle<Map> map, Handle<FixedArrayBase> elements, int length,
       AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<JSArray> NewJSArrayWithUnverifiedElements_Direct(
+      DirectHandle<FixedArrayBase> elements, ElementsKind elements_kind,
+      int length, AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<JSArray> NewJSArrayWithUnverifiedElements_Direct(
+      DirectHandle<Map> map, DirectHandle<FixedArrayBase> elements, int length,
+      AllocationType allocation = AllocationType::kYoung);
 
   // Creates the backing storage for a JSArray. This handle must be discarded
   // before returning the JSArray reference to code outside Factory, which might
   // decide to left-trim the backing store. To avoid unnecessary HandleScopes,
   // this method requires capacity greater than zero.
   Handle<FixedArrayBase> NewJSArrayStorage(
+      ElementsKind elements_kind, int capacity,
+      ArrayStorageAllocationMode mode =
+          ArrayStorageAllocationMode::DONT_INITIALIZE_ARRAY_ELEMENTS);
+  DirectHandle<FixedArrayBase> NewJSArrayStorage_Direct(
       ElementsKind elements_kind, int capacity,
       ArrayStorageAllocationMode mode =
           ArrayStorageAllocationMode::DONT_INITIALIZE_ARRAY_ELEMENTS);
@@ -1189,6 +1310,8 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   void InitializeJSObjectBody(JSObject obj, Map map, int start_offset);
 
   Handle<WeakArrayList> NewUninitializedWeakArrayList(
+      int capacity, AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<WeakArrayList> NewUninitializedWeakArrayList_Direct(
       int capacity, AllocationType allocation = AllocationType::kYoung);
 
 #if V8_ENABLE_WEBASSEMBLY

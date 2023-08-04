@@ -774,6 +774,31 @@ void JSFunction::SetInitialMap(Isolate* isolate, Handle<JSFunction> function,
   }
 }
 
+void JSFunction::SetInitialMap_Direct(Isolate* isolate,
+                                      DirectHandle<JSFunction> function,
+                                      DirectHandle<Map> map,
+                                      DirectHandle<HeapObject> prototype) {
+  SetInitialMap_Direct(isolate, function, map, prototype, function);
+}
+
+void JSFunction::SetInitialMap_Direct(Isolate* isolate,
+                                      DirectHandle<JSFunction> function,
+                                      DirectHandle<Map> map,
+                                      DirectHandle<HeapObject> prototype,
+                                      DirectHandle<JSFunction> constructor) {
+  if (map->prototype() != *prototype) {
+    Map::SetPrototype_Direct(isolate, map, prototype);
+  }
+  map->SetConstructor(*constructor);
+  function->set_prototype_or_initial_map(*map, kReleaseStore);
+  if (v8_flags.log_maps) {
+    LOG(isolate,
+        MapEvent("InitialMap", Handle<Map>(), handle(*map, isolate), "",
+                 SharedFunctionInfo::DebugName(
+                     isolate, handle(function->shared(), isolate))));
+  }
+}
+
 void JSFunction::EnsureHasInitialMap(Handle<JSFunction> function) {
   DCHECK(function->has_prototype_slot());
   DCHECK(function->IsConstructor() ||
@@ -823,6 +848,59 @@ void JSFunction::EnsureHasInitialMap(Handle<JSFunction> function) {
   // Finally link initial map and constructor function.
   DCHECK(prototype->IsJSReceiver());
   JSFunction::SetInitialMap(isolate, function, map, prototype);
+  map->StartInobjectSlackTracking();
+}
+
+void JSFunction::EnsureHasInitialMap_Direct(DirectHandle<JSFunction> function) {
+  DCHECK(function->has_prototype_slot());
+  DCHECK(function->IsConstructor() ||
+         IsResumableFunction(function->shared().kind()));
+  if (function->has_initial_map()) return;
+  Isolate* isolate = function->GetIsolate();
+
+  int expected_nof_properties =
+      // TOOD
+      CalculateExpectedNofProperties(isolate, handle(*function, isolate));
+
+  // {CalculateExpectedNofProperties} can have had the side effect of creating
+  // the initial map (e.g. it could have triggered an optimized compilation
+  // whose dependency installation reentered {EnsureHasInitialMap}).
+  if (function->has_initial_map()) return;
+
+  // Create a new map with the size and number of in-object properties suggested
+  // by the function.
+  InstanceType instance_type;
+  if (IsResumableFunction(function->shared().kind())) {
+    instance_type = IsAsyncGeneratorFunction(function->shared().kind())
+                        ? JS_ASYNC_GENERATOR_OBJECT_TYPE
+                        : JS_GENERATOR_OBJECT_TYPE;
+  } else {
+    instance_type = JS_OBJECT_TYPE;
+  }
+
+  int instance_size;
+  int inobject_properties;
+  CalculateInstanceSizeHelper(instance_type, false, 0, expected_nof_properties,
+                              &instance_size, &inobject_properties);
+
+  DirectHandle<Map> map = isolate->factory()->NewMap_Direct(
+      instance_type, instance_size, TERMINAL_FAST_ELEMENTS_KIND,
+      inobject_properties);
+
+  // Fetch or allocate prototype.
+  DirectHandle<HeapObject> prototype;
+  if (function->has_instance_prototype()) {
+    prototype = direct_handle(function->instance_prototype(), isolate);
+    map->set_prototype(*prototype);
+  } else {
+    prototype = isolate->factory()->NewFunctionPrototype_Direct(function);
+    Map::SetPrototype_Direct(isolate, map, prototype);
+  }
+  DCHECK(map->has_fast_object_elements());
+
+  // Finally link initial map and constructor function.
+  DCHECK(prototype->IsJSReceiver());
+  JSFunction::SetInitialMap_Direct(isolate, function, map, prototype);
   map->StartInobjectSlackTracking();
 }
 

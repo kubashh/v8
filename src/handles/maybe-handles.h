@@ -110,6 +110,11 @@ class MaybeObjectHandle {
   inline MaybeObject operator*() const;
   inline MaybeObject operator->() const;
   inline Handle<Object> object() const;
+  // TODO(CSS): friend class MaybeObjectDirectHandle
+  inline HeapObjectReferenceType reference_type() const {
+    return reference_type_;
+  }
+  inline MaybeHandle<Object> handle_tmp_css() const { return handle_; }
 
   inline bool is_identical_to(const MaybeObjectHandle& other) const;
   bool is_null() const { return handle_.is_null(); }
@@ -141,6 +146,16 @@ class MaybeDirectHandle final {
                             std::is_convertible<S*, T*>::value>::type>
   V8_INLINE MaybeDirectHandle(DirectHandle<S> handle)
       : location_(handle.address()) {}
+  template <typename S, typename = typename std::enable_if<
+                            std::is_convertible<S*, T*>::value>::type>
+  V8_INLINE MaybeDirectHandle(MaybeHandle<S> handle)
+      : location_(handle.is_null()
+                      ? kTaggedNullAddress
+                      : *reinterpret_cast<Address*>(handle.address())) {}
+  template <typename S, typename = typename std::enable_if<
+                            std::is_convertible<S*, T*>::value>::type>
+  V8_INLINE MaybeDirectHandle(Handle<S> handle)
+      : MaybeDirectHandle(DirectHandle<S>(handle)) {}
 
   // Constructor for handling automatic up casting.
   // Ex. MaybeDirectHandle<JSArray> can be passed when DirectHandle<Object> is
@@ -193,6 +208,7 @@ class MaybeObjectDirectHandle {
   inline MaybeObjectDirectHandle(MaybeObject object, Isolate* isolate);
   inline MaybeObjectDirectHandle(Object object, Isolate* isolate);
   inline explicit MaybeObjectDirectHandle(DirectHandle<Object> object);
+  inline MaybeObjectDirectHandle(MaybeObjectHandle object);
 
   static inline MaybeObjectDirectHandle Weak(Object object, Isolate* isolate);
   static inline MaybeObjectDirectHandle Weak(DirectHandle<Object> object);

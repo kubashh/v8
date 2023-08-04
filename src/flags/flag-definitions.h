@@ -447,6 +447,10 @@ DEFINE_BOOL_READONLY(conservative_stack_scanning,
 DEFINE_IMPLICATION(conservative_stack_scanning, minor_mc)
 DEFINE_NEG_IMPLICATION(conservative_stack_scanning, compact_with_stack)
 
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+DEFINE_BOOL(handle_statistics, false, "print stats about created handles")
+#endif
+
 #ifdef V8_ENABLE_DIRECT_LOCAL
 #define V8_ENABLE_DIRECT_LOCAL_BOOL true
 #else

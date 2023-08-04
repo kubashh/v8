@@ -27,7 +27,7 @@ class PrototypeIterator {
  public:
   enum WhereToEnd { END_AT_NULL, END_AT_NON_HIDDEN };
 
-  inline PrototypeIterator(Isolate* isolate, Handle<JSReceiver> receiver,
+  inline PrototypeIterator(Isolate* isolate, DirectHandle<JSReceiver> receiver,
                            WhereToStart where_to_start = kStartAtPrototype,
                            WhereToEnd where_to_end = END_AT_NULL);
 
@@ -38,7 +38,8 @@ class PrototypeIterator {
   inline explicit PrototypeIterator(Isolate* isolate, Map receiver_map,
                                     WhereToEnd where_to_end = END_AT_NULL);
 
-  inline explicit PrototypeIterator(Isolate* isolate, Handle<Map> receiver_map,
+  inline explicit PrototypeIterator(Isolate* isolate,
+                                    DirectHandle<Map> receiver_map,
                                     WhereToEnd where_to_end = END_AT_NULL);
 
   ~PrototypeIterator() = default;
@@ -57,7 +58,16 @@ class PrototypeIterator {
   static Handle<T> GetCurrent(const PrototypeIterator& iterator) {
     DCHECK(!iterator.handle_.is_null());
     DCHECK_EQ(iterator.object_, Object());
-    return Handle<T>::cast(iterator.handle_);
+    // TODO(CSS)
+    return Handle<T>(Tagged<T>::cast(*iterator.handle_), iterator.isolate());
+  }
+
+  template <typename T = HeapObject>
+  static DirectHandle<T> GetCurrent_Direct(const PrototypeIterator& iterator) {
+    DCHECK(!iterator.handle_.is_null());
+    DCHECK_EQ(iterator.object_, Object());
+    return DirectHandle<T>(Tagged<T>::cast(*iterator.handle_),
+                           iterator.isolate());
   }
 
   inline void Advance();
@@ -76,7 +86,7 @@ class PrototypeIterator {
  private:
   Isolate* isolate_;
   Object object_;
-  Handle<HeapObject> handle_;
+  DirectHandle<HeapObject> handle_;
   WhereToEnd where_to_end_;
   bool is_at_end_;
   int seen_proxies_;

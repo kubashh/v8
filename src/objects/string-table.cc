@@ -344,7 +344,7 @@ int StringTable::NumberOfElements() const {
 // InternalizedStringKey carries a string/internalized-string object as key.
 class InternalizedStringKey final : public StringTableKey {
  public:
-  explicit InternalizedStringKey(Handle<String> string, uint32_t hash)
+  explicit InternalizedStringKey(DirectHandle<String> string, uint32_t hash)
       : StringTableKey(hash, string->length()), string_(string) {
     // When sharing the string table, it's possible that another thread already
     // internalized the key, in which case StringTable::LookupKey will perform a
@@ -362,7 +362,7 @@ class InternalizedStringKey final : public StringTableKey {
 
   void PrepareForInsertion(Isolate* isolate) {
     StringTransitionStrategy strategy =
-        isolate->factory()->ComputeInternalizationStrategyForString(
+        isolate->factory()->ComputeInternalizationStrategyForString_Direct(
             string_, &maybe_internalized_map_);
     switch (strategy) {
       case StringTransitionStrategy::kCopy:
@@ -398,8 +398,9 @@ class InternalizedStringKey final : public StringTableKey {
       // resource) immediately.
       DCHECK(!shape.IsShared());
       internalized_string_ =
-          isolate->factory()->InternalizeExternalString<ExternalOneByteString>(
-              string_);
+          isolate->factory()
+              ->InternalizeExternalString_Direct<ExternalOneByteString>(
+                  string_);
     } else if (can_avoid_copy && shape.IsExternalTwoByte()) {
       // Shared external strings are always in-place internalizable.
       // If this assumption is invalidated in the future, make sure that we
@@ -408,17 +409,19 @@ class InternalizedStringKey final : public StringTableKey {
       // resource) immediately.
       DCHECK(!shape.IsShared());
       internalized_string_ =
-          isolate->factory()->InternalizeExternalString<ExternalTwoByteString>(
-              string_);
+          isolate->factory()
+              ->InternalizeExternalString_Direct<ExternalTwoByteString>(
+                  string_);
     } else {
       // Otherwise allocate a new internalized string.
-      internalized_string_ = isolate->factory()->NewInternalizedStringImpl(
-          string_, length(), raw_hash_field());
+      internalized_string_ =
+          isolate->factory()->NewInternalizedStringImpl_Direct(
+              string_, length(), raw_hash_field());
     }
   }
 
-  Handle<String> GetHandleForInsertion() {
-    Handle<Map> internalized_map;
+  DirectHandle<String> GetHandleForInsertion() {
+    DirectHandle<Map> internalized_map;
     // When preparing the string, the strategy was to in-place migrate it.
     if (maybe_internalized_map_.ToHandle(&internalized_map)) {
       // It is always safe to overwrite the map. The only transition possible
@@ -440,14 +443,14 @@ class InternalizedStringKey final : public StringTableKey {
   }
 
  private:
-  Handle<String> string_;
+  DirectHandle<String> string_;
   // Copy of the string to be internalized (only set if the string is not
   // in-place internalizable). We can't override the original string, as
   // internalized external strings don't set the resource directly (deferred to
   // MakeThin to ensure unique ownership of the resource), and thus would break
   // equality checks in case of hash collisions.
-  MaybeHandle<String> internalized_string_;
-  MaybeHandle<Map> maybe_internalized_map_;
+  MaybeDirectHandle<String> internalized_string_;
+  MaybeDirectHandle<Map> maybe_internalized_map_;
 };
 
 namespace {
@@ -550,6 +553,60 @@ Handle<String> StringTable::LookupString(Isolate* isolate,
   return result;
 }
 
+DirectHandle<String> StringTable::LookupString_Direct(
+    Isolate* isolate, DirectHandle<String> string) {
+  // When sharing the string table, internalization is allowed to be concurrent
+  // from multiple Isolates, assuming that:
+  //
+  //  - All in-place internalizable strings (i.e. old-generation flat strings)
+  //    and internalized strings are in the shared heap.
+  //  - LookupKey supports concurrent access (see comment below).
+  //
+  // These assumptions guarantee the following properties:
+  //
+  //  - String::Flatten is not threadsafe but is only called on non-shared
+  //    strings, since non-flat strings are not shared.
+  //
+  //  - String::ComputeAndSetRawHash is threadsafe on flat strings. This is safe
+  //    because the characters are immutable and the same hash will be
+  //    computed. The hash field is set with relaxed memory order. A thread that
+  //    doesn't see the hash may do redundant work but will not be incorrect.
+  //
+  //  - In-place internalizable strings do not incur a copy regardless of string
+  //    table sharing. The map mutation is threadsafe even with relaxed memory
+  //    order, because for concurrent table lookups, the "losing" thread will be
+  //    correctly ordered by LookupKey's write mutex and see the updated map
+  //    during the re-lookup.
+  //
+  // For lookup misses, the internalized string map is the same map in RO space
+  // regardless of which thread is doing the lookup.
+  //
+  // For lookup hits, we use the StringForwardingTable for shared strings to
+  // delay the transition into a ThinString to the next stop-the-world GC.
+  DirectHandle<String> result = String::Flatten_Direct(isolate, string);
+  if (!result->IsInternalizedString()) {
+    uint32_t raw_hash_field = result->raw_hash_field(kAcquireLoad);
+
+    if (String::IsInternalizedForwardingIndex(raw_hash_field)) {
+      const int index =
+          String::ForwardingIndexValueBits::decode(raw_hash_field);
+      result = direct_handle(
+          isolate->string_forwarding_table()->GetForwardString(isolate, index),
+          isolate);
+    } else {
+      if (!Name::IsHashFieldComputed(raw_hash_field)) {
+        raw_hash_field = result->EnsureRawHash();
+      }
+      InternalizedStringKey key(result, raw_hash_field);
+      result = LookupKey_Direct(isolate, &key);
+    }
+  }
+  if (*string != *result && !string->IsThinString()) {
+    SetInternalizedReference(isolate, *string, *result);
+  }
+  return result;
+}
+
 template <typename StringTableKey, typename IsolateT>
 Handle<String> StringTable::LookupKey(IsolateT* isolate, StringTableKey* key) {
   // String table lookups are allowed to be concurrent, assuming that:
@@ -618,7 +675,96 @@ Handle<String> StringTable::LookupKey(IsolateT* isolate, StringTableKey* key) {
     if (element == empty_element()) {
       // This entry is empty, so write it and register that we added an
       // element.
-      Handle<String> new_string = key->GetHandleForInsertion();
+      DirectHandle<String> new_string = key->GetHandleForInsertion();
+      DCHECK_IMPLIES(v8_flags.shared_string_table, new_string->IsShared());
+      data->Set(entry, *new_string);
+      data->ElementAdded();
+      return handle(*new_string, isolate);
+    } else if (element == deleted_element()) {
+      // This entry was deleted, so overwrite it and register that we
+      // overwrote a deleted element.
+      DirectHandle<String> new_string = key->GetHandleForInsertion();
+      DCHECK_IMPLIES(v8_flags.shared_string_table, new_string->IsShared());
+      data->Set(entry, *new_string);
+      data->DeletedElementOverwritten();
+      return handle(*new_string, isolate);
+    } else {
+      // Return the existing string as a handle.
+      return handle(String::cast(element), isolate);
+    }
+  }
+}
+
+template <typename StringTableKey, typename IsolateT>
+DirectHandle<String> StringTable::LookupKey_Direct(IsolateT* isolate,
+                                                   StringTableKey* key) {
+  // String table lookups are allowed to be concurrent, assuming that:
+  //
+  //   - The Heap access is allowed to be concurrent (using LocalHeap or
+  //     similar),
+  //   - All writes to the string table are guarded by the Isolate string table
+  //     mutex,
+  //   - Resizes of the string table first copies the old contents to the new
+  //     table, and only then sets the new string table pointer to the new
+  //     table,
+  //   - Only GCs can remove elements from the string table.
+  //
+  // These assumptions allow us to make the following statement:
+  //
+  //   "Reads are allowed when not holding the lock, as long as false negatives
+  //    (misses) are ok. We will never get a false positive (hit of an entry no
+  //    longer in the table)"
+  //
+  // This is because we _know_ that if we find an entry in the string table, any
+  // entry will also be in all reallocations of that tables. This is required
+  // for strong consistency of internalized string equality implying reference
+  // equality.
+  //
+  // We therefore try to optimistically read from the string table without
+  // taking the lock (both here and in the NoAllocate version of the lookup),
+  // and on a miss we take the lock and try to write the entry, with a second
+  // read lookup in case the non-locked read missed a write.
+  //
+  // One complication is allocation -- we don't want to allocate while holding
+  // the string table lock. This applies to both allocation of new strings, and
+  // re-allocation of the string table on resize. So, we optimistically allocate
+  // (without copying values) outside the lock, and potentially discard the
+  // allocation if another write also did an allocation. This assumes that
+  // writes are rarer than reads.
+
+  // Load the current string table data, in case another thread updates the
+  // data while we're reading.
+  const Data* current_data = data_.load(std::memory_order_acquire);
+
+  // First try to find the string in the table. This is safe to do even if the
+  // table is now reallocated; we won't find a stale entry in the old table
+  // because the new table won't delete it's corresponding entry until the
+  // string is dead, in which case it will die in this table too and worst
+  // case we'll have a false miss.
+  InternalIndex entry = current_data->FindEntry(isolate, key, key->hash());
+  if (entry.is_found()) {
+    DirectHandle<String> result(String::cast(current_data->Get(isolate, entry)),
+                                isolate);
+    DCHECK_IMPLIES(v8_flags.shared_string_table, result->InSharedHeap());
+    return result;
+  }
+
+  // No entry found, so adding new string.
+  key->PrepareForInsertion(isolate);
+  {
+    base::MutexGuard table_write_guard(&write_mutex_);
+
+    Data* data = EnsureCapacity(isolate, 1);
+
+    // Check one last time if the key is present in the table, in case it was
+    // added after the check.
+    entry = data->FindEntryOrInsertionEntry(isolate, key, key->hash());
+
+    Object element = data->Get(isolate, entry);
+    if (element == empty_element()) {
+      // This entry is empty, so write it and register that we added an
+      // element.
+      DirectHandle<String> new_string = key->GetHandleForInsertion();
       DCHECK_IMPLIES(v8_flags.shared_string_table, new_string->IsShared());
       data->Set(entry, *new_string);
       data->ElementAdded();
@@ -626,14 +772,14 @@ Handle<String> StringTable::LookupKey(IsolateT* isolate, StringTableKey* key) {
     } else if (element == deleted_element()) {
       // This entry was deleted, so overwrite it and register that we
       // overwrote a deleted element.
-      Handle<String> new_string = key->GetHandleForInsertion();
+      DirectHandle<String> new_string = key->GetHandleForInsertion();
       DCHECK_IMPLIES(v8_flags.shared_string_table, new_string->IsShared());
       data->Set(entry, *new_string);
       data->DeletedElementOverwritten();
       return new_string;
     } else {
       // Return the existing string as a handle.
-      return handle(String::cast(element), isolate);
+      return direct_handle(String::cast(element), isolate);
     }
   }
 }
@@ -656,6 +802,25 @@ template Handle<String> StringTable::LookupKey(Isolate* isolate,
                                                StringTableInsertionKey* key);
 template Handle<String> StringTable::LookupKey(LocalIsolate* isolate,
                                                StringTableInsertionKey* key);
+
+template DirectHandle<String> StringTable::LookupKey_Direct(
+    Isolate* isolate, OneByteStringKey* key);
+template DirectHandle<String> StringTable::LookupKey_Direct(
+    Isolate* isolate, TwoByteStringKey* key);
+template DirectHandle<String> StringTable::LookupKey_Direct(
+    Isolate* isolate, SeqOneByteSubStringKey* key);
+template DirectHandle<String> StringTable::LookupKey_Direct(
+    Isolate* isolate, SeqTwoByteSubStringKey* key);
+
+template DirectHandle<String> StringTable::LookupKey_Direct(
+    LocalIsolate* isolate, OneByteStringKey* key);
+template DirectHandle<String> StringTable::LookupKey_Direct(
+    LocalIsolate* isolate, TwoByteStringKey* key);
+
+template DirectHandle<String> StringTable::LookupKey_Direct(
+    Isolate* isolate, StringTableInsertionKey* key);
+template DirectHandle<String> StringTable::LookupKey_Direct(
+    LocalIsolate* isolate, StringTableInsertionKey* key);
 
 StringTable::Data* StringTable::EnsureCapacity(PtrComprCageBase cage_base,
                                                int additional_elements) {

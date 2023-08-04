@@ -20,10 +20,15 @@ class FieldType : public Object {
   static FieldType None();
   static FieldType Any();
   V8_EXPORT_PRIVATE static Handle<FieldType> None(Isolate* isolate);
+  V8_EXPORT_PRIVATE static DirectHandle<FieldType> None_Direct(
+      Isolate* isolate);
   V8_EXPORT_PRIVATE static Handle<FieldType> Any(Isolate* isolate);
+  V8_EXPORT_PRIVATE static DirectHandle<FieldType> Any_Direct(Isolate* isolate);
   V8_EXPORT_PRIVATE static FieldType Class(Map map);
   V8_EXPORT_PRIVATE static Handle<FieldType> Class(Handle<Map> map,
                                                    Isolate* isolate);
+  V8_EXPORT_PRIVATE static DirectHandle<FieldType> Class_Direct(
+      DirectHandle<Map> map, Isolate* isolate);
   V8_EXPORT_PRIVATE static FieldType cast(Object object);
   static FieldType unchecked_cast(Object object) {
     return FieldType(object.ptr());
@@ -39,7 +44,7 @@ class FieldType : public Object {
   bool IsAny() const { return *this == Any(); }
   bool NowStable() const;
   bool NowIs(FieldType other) const;
-  bool NowIs(Handle<FieldType> other) const;
+  bool NowIs(DirectHandle<FieldType> other) const;
 
   V8_EXPORT_PRIVATE bool Equals(FieldType other) const;
   V8_EXPORT_PRIVATE void PrintTo(std::ostream& os) const;

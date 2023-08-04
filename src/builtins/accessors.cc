@@ -89,7 +89,8 @@ Accessors::ReplaceAccessorWithDataProperty(Isolate* isolate,
                                            Handle<JSObject> holder,
                                            Handle<Name> name,
                                            Handle<Object> value) {
-  LookupIterator it(isolate, receiver, PropertyKey(isolate, name), holder,
+  LookupIterator it(isolate, receiver,
+                    PropertyKey(isolate, DirectHandle<Name>(name)), holder,
                     LookupIterator::OWN_SKIP_INTERCEPTOR);
   // Skip any access checks we might hit. This accessor should never hit in a
   // situation where the caller does not have access.
@@ -100,6 +101,26 @@ Accessors::ReplaceAccessorWithDataProperty(Isolate* isolate,
   DCHECK(holder.is_identical_to(it.GetHolder<JSObject>()));
   CHECK_EQ(LookupIterator::ACCESSOR, it.state());
   it.ReconfigureDataProperty(value, it.property_attributes());
+  return value;
+}
+
+V8_WARN_UNUSED_RESULT MaybeDirectHandle<Object>
+Accessors::ReplaceAccessorWithDataProperty_Direct(Isolate* isolate,
+                                                  DirectHandle<Object> receiver,
+                                                  DirectHandle<JSObject> holder,
+                                                  DirectHandle<Name> name,
+                                                  DirectHandle<Object> value) {
+  LookupIterator it(isolate, receiver, PropertyKey(isolate, name), holder,
+                    LookupIterator::OWN_SKIP_INTERCEPTOR);
+  // Skip any access checks we might hit. This accessor should never hit in a
+  // situation where the caller does not have access.
+  if (it.state() == LookupIterator::ACCESS_CHECK) {
+    CHECK(it.HasAccess());
+    it.Next();
+  }
+  DCHECK(holder.is_identical_to(it.GetHolder_Direct<JSObject>()));
+  CHECK_EQ(LookupIterator::ACCESSOR, it.state());
+  it.ReconfigureDataProperty_Direct(value, it.property_attributes());
   return value;
 }
 

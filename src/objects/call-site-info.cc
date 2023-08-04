@@ -479,7 +479,7 @@ Handle<Object> CallSiteInfo::GetMethodName(Handle<CallSiteInfo> info) {
   }
 
   if (name->length() != 0) {
-    PropertyKey key(isolate, Handle<Name>::cast(name));
+    PropertyKey key(isolate, DirectHandle<Name>::cast(name));
     LookupIterator it(isolate, receiver, key,
                       LookupIterator::PROTOTYPE_CHAIN_SKIP_INTERCEPTOR);
     if (it.state() == LookupIterator::DATA) {

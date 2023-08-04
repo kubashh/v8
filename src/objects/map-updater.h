@@ -79,12 +79,21 @@ class V8_EXPORT_PRIVATE MapUpdater {
                                                  PropertyKind kind,
                                                  PropertyAttributes attributes,
                                                  PropertyConstness constness);
+  static DirectHandle<Map> ReconfigureExistingProperty_Direct(
+      Isolate* isolate, DirectHandle<Map> map, InternalIndex descriptor,
+      PropertyKind kind, PropertyAttributes attributes,
+      PropertyConstness constness);
 
   static void GeneralizeField(Isolate* isolate, Handle<Map> map,
                               InternalIndex modify_index,
                               PropertyConstness new_constness,
                               Representation new_representation,
                               Handle<FieldType> new_field_type);
+  static void GeneralizeField_Direct(Isolate* isolate, DirectHandle<Map> map,
+                                     InternalIndex modify_index,
+                                     PropertyConstness new_constness,
+                                     Representation new_representation,
+                                     DirectHandle<FieldType> new_field_type);
 
   // Completes inobject slack tracking for the transition tree starting at the
   // initial map.
@@ -199,11 +208,20 @@ class V8_EXPORT_PRIVATE MapUpdater {
                               PropertyConstness new_constness,
                               Representation new_representation,
                               const MaybeObjectHandle& new_wrapped_type);
+  static void UpdateFieldType_Direct(
+      Isolate* isolate, DirectHandle<Map> map, InternalIndex descriptor_number,
+      DirectHandle<Name> name, PropertyConstness new_constness,
+      Representation new_representation,
+      const MaybeObjectDirectHandle& new_wrapped_type);
 
   void GeneralizeField(Handle<Map> map, InternalIndex modify_index,
                        PropertyConstness new_constness,
                        Representation new_representation,
                        Handle<FieldType> new_field_type);
+  void GeneralizeField_Direct(DirectHandle<Map> map, InternalIndex modify_index,
+                              PropertyConstness new_constness,
+                              Representation new_representation,
+                              DirectHandle<FieldType> new_field_type);
 
   bool TrySaveIntegrityLevelTransitions();
 

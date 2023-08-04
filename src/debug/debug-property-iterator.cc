@@ -174,7 +174,7 @@ bool DebugPropertyIterator::is_own() { return is_own_; }
 
 bool DebugPropertyIterator::is_array_index() {
   if (stage_ == kExoticIndices) return true;
-  PropertyKey key(isolate_, raw_name());
+  PropertyKey key(isolate_, DirectHandle<Name>(raw_name()));
   return key.is_element();
 }
 
@@ -213,7 +213,7 @@ namespace {
 base::Flags<debug::NativeAccessorType, int> GetNativeAccessorDescriptorInternal(
     Handle<JSReceiver> object, Handle<Name> name) {
   Isolate* isolate = object->GetIsolate();
-  PropertyKey key(isolate, name);
+  PropertyKey key(isolate, DirectHandle<Name>(name));
   if (key.is_element()) return debug::NativeAccessorType::None;
   LookupIterator it(isolate, object, key, LookupIterator::OWN);
   if (!it.IsFound()) return debug::NativeAccessorType::None;

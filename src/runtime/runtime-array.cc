@@ -325,16 +325,22 @@ RUNTIME_FUNCTION(Runtime_ArrayIncludes_Slow) {
 }
 
 RUNTIME_FUNCTION(Runtime_ArrayIndexOf) {
+  // HandlesCountScope count(isolate, "Runtime_ArrayIndexOf");
+<<<<<<< HEAD
   HandleScope hs(isolate);
+=======
+  // HandleScope hs(isolate);
+>>>>>>> task/css-runtime-array-indexof-no-handlescopes
   DCHECK_EQ(3, args.length());
-  Handle<Object> search_element = args.at(1);
-  Handle<Object> from_index = args.at(2);
+  DirectHandle<Object> search_element = args.at_direct(1);
+  DirectHandle<Object> from_index = args.at_direct(2);
 
   // Let O be ? ToObject(this value).
-  Handle<JSReceiver> object;
+  DirectHandle<JSReceiver> object;
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
       isolate, object,
-      Object::ToObject(isolate, args.at(0), "Array.prototype.indexOf"));
+      Object::ToObject_Direct(isolate, args.at_direct(0),
+                              "Array.prototype.indexOf"));
 
   // Let len be ? ToLength(? Get(O, "length")).
   int64_t len;
@@ -346,14 +352,14 @@ RUNTIME_FUNCTION(Runtime_ArrayIndexOf) {
       USE(success);
       len = len32;
     } else {
-      Handle<Object> len_;
+      DirectHandle<Object> len_;
       ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
           isolate, len_,
-          Object::GetProperty(isolate, object,
-                              isolate->factory()->length_string()));
+          Object::GetProperty_Direct(
+              isolate, object, isolate->factory()->length_string_direct()));
 
-      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, len_,
-                                         Object::ToLength(isolate, len_));
+      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+          isolate, len_, Object::ToLength_Direct(isolate, len_));
       len = static_cast<int64_t>(len_->Number());
       DCHECK_EQ(len, len_->Number());
     }
@@ -365,8 +371,8 @@ RUNTIME_FUNCTION(Runtime_ArrayIndexOf) {
   // produces the value 0.)
   int64_t start_from;
   {
-    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, from_index,
-                                       Object::ToInteger(isolate, from_index));
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+        isolate, from_index, Object::ToInteger_Direct(isolate, from_index));
     double fp = from_index->Number();
     if (fp > len) return Smi::FromInt(-1);
     if (V8_LIKELY(fp >=
@@ -392,30 +398,31 @@ RUNTIME_FUNCTION(Runtime_ArrayIndexOf) {
   // uint32_t, perform fast operation tailored to specific ElementsKinds.
   if (!object->map().IsSpecialReceiverMap() && len <= kMaxUInt32 &&
       JSObject::PrototypeHasNoElements(isolate, JSObject::cast(*object))) {
-    Handle<JSObject> obj = Handle<JSObject>::cast(object);
+    // TODO(CSS)
+    DirectHandle<JSObject> obj = DirectHandle<JSObject>::cast(object);
     ElementsAccessor* elements = obj->GetElementsAccessor();
-    Maybe<int64_t> result = elements->IndexOfValue(isolate, obj, search_element,
-                                                   static_cast<uint32_t>(index),
-                                                   static_cast<uint32_t>(len));
+    Maybe<int64_t> result = elements->IndexOfValue_Direct(
+        isolate, obj, search_element, static_cast<uint32_t>(index),
+        static_cast<uint32_t>(len));
     MAYBE_RETURN(result, ReadOnlyRoots(isolate).exception());
-    return *isolate->factory()->NewNumberFromInt64(result.FromJust());
+    return *isolate->factory()->NewNumberFromInt64_Direct(result.FromJust());
   }
 
   // Otherwise, perform slow lookups for special receiver types.
   for (; index < len; ++index) {
     HandleScope iteration_hs(isolate);
     // Let elementK be the result of ? Get(O, ! ToString(k)).
-    Handle<Object> element_k;
+    DirectHandle<Object> element_k;
     {
       PropertyKey key(isolate, static_cast<double>(index));
       LookupIterator it(isolate, object, key);
-      Maybe<bool> present = JSReceiver::HasProperty(&it);
+      Maybe<bool> present = JSReceiver::HasProperty_Direct(&it);
       MAYBE_RETURN(present, ReadOnlyRoots(isolate).exception());
       if (!present.FromJust()) continue;
       ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, element_k,
-                                         Object::GetProperty(&it));
+                                         Object::GetProperty_Direct(&it));
       if (search_element->StrictEquals(*element_k)) {
-        return *isolate->factory()->NewNumberFromInt64(index);
+        return *isolate->factory()->NewNumberFromInt64_Direct(index);
       }
     }
   }

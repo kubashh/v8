@@ -583,6 +583,13 @@ MaybeHandle<JSReceiver> Object::ToObject(Isolate* isolate,
 }
 
 // static
+MaybeDirectHandle<JSReceiver> Object::ToObject_Direct(
+    Isolate* isolate, DirectHandle<Object> object, const char* method_name) {
+  if (object->IsJSReceiver()) return DirectHandle<JSReceiver>::cast(object);
+  return ToObjectImpl_Direct(isolate, object, method_name);
+}
+
+// static
 MaybeHandle<Name> Object::ToName(Isolate* isolate, Handle<Object> input) {
   if (input->IsName()) return Handle<Name>::cast(input);
   return ConvertToName(isolate, input);
@@ -610,6 +617,12 @@ MaybeHandle<Object> Object::ToNumber(Isolate* isolate, Handle<Object> input) {
 }
 
 // static
+MaybeDirectHandle<Object> Object::ToNumber_Direct(Isolate* isolate,
+                                                  DirectHandle<Object> input) {
+  if (input->IsNumber()) return input;  // Shortcut.
+  return ConvertToNumberOrNumeric_Direct(isolate, input, Conversion::kToNumber);
+}
+// static
 MaybeHandle<Object> Object::ToNumeric(Isolate* isolate, Handle<Object> input) {
   if (input->IsNumber() || input->IsBigInt()) return input;  // Shortcut.
   return ConvertToNumberOrNumeric(isolate, input, Conversion::kToNumeric);
@@ -619,6 +632,13 @@ MaybeHandle<Object> Object::ToNumeric(Isolate* isolate, Handle<Object> input) {
 MaybeHandle<Object> Object::ToInteger(Isolate* isolate, Handle<Object> input) {
   if (input->IsSmi()) return input;
   return ConvertToInteger(isolate, input);
+}
+
+// static
+MaybeDirectHandle<Object> Object::ToInteger_Direct(Isolate* isolate,
+                                                   DirectHandle<Object> input) {
+  if (input->IsSmi()) return input;
+  return ConvertToInteger_Direct(isolate, input);
 }
 
 // static
@@ -649,6 +669,16 @@ MaybeHandle<Object> Object::ToLength(Isolate* isolate, Handle<Object> input) {
 }
 
 // static
+MaybeDirectHandle<Object> Object::ToLength_Direct(Isolate* isolate,
+                                                  DirectHandle<Object> input) {
+  if (input->IsSmi()) {
+    int value = std::max(Smi::ToInt(*input), 0);
+    return direct_handle(Smi::FromInt(value), isolate);
+  }
+  return ConvertToLength_Direct(isolate, input);
+}
+
+// static
 MaybeHandle<Object> Object::ToIndex(Isolate* isolate, Handle<Object> input,
                                     MessageTemplate error_index) {
   if (input->IsSmi() && Smi::ToInt(*input) >= 0) return input;
@@ -660,6 +690,13 @@ MaybeHandle<Object> Object::GetProperty(Isolate* isolate, Handle<Object> object,
   LookupIterator it(isolate, object, name);
   if (!it.IsFound()) return it.factory()->undefined_value();
   return GetProperty(&it);
+}
+
+MaybeDirectHandle<Object> Object::GetProperty_Direct(
+    Isolate* isolate, DirectHandle<Object> object, DirectHandle<Name> name) {
+  LookupIterator it(isolate, object, name);
+  if (!it.IsFound()) return it.factory()->undefined_value_direct();
+  return GetProperty_Direct(&it);
 }
 
 MaybeHandle<Object> Object::GetElement(Isolate* isolate, Handle<Object> object,
@@ -1169,7 +1206,7 @@ Maybe<bool> Object::LessThanOrEqual(Isolate* isolate, Handle<Object> x,
 MaybeHandle<Object> Object::GetPropertyOrElement(Isolate* isolate,
                                                  Handle<Object> object,
                                                  Handle<Name> name) {
-  PropertyKey key(isolate, name);
+  PropertyKey key(isolate, DirectHandle<Name>(name));
   LookupIterator it(isolate, object, key);
   return GetProperty(&it);
 }
@@ -1178,7 +1215,7 @@ MaybeHandle<Object> Object::SetPropertyOrElement(
     Isolate* isolate, Handle<Object> object, Handle<Name> name,
     Handle<Object> value, Maybe<ShouldThrow> should_throw,
     StoreOrigin store_origin) {
-  PropertyKey key(isolate, name);
+  PropertyKey key(isolate, DirectHandle<Name>(name));
   LookupIterator it(isolate, object, key);
   MAYBE_RETURN_NULL(SetProperty(&it, value, store_origin, should_throw));
   return value;
@@ -1188,7 +1225,7 @@ MaybeHandle<Object> Object::GetPropertyOrElement(Handle<Object> receiver,
                                                  Handle<Name> name,
                                                  Handle<JSReceiver> holder) {
   Isolate* isolate = holder->GetIsolate();
-  PropertyKey key(isolate, name);
+  PropertyKey key(isolate, DirectHandle<Name>(name));
   LookupIterator it(isolate, receiver, key, holder);
   return GetProperty(&it);
 }

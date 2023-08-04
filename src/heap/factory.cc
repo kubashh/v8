@@ -112,6 +112,11 @@ Handle<ByteArray> Factory::CodeBuilder::NewByteArray(
   return local_isolate_->factory()->NewByteArray(length, allocation);
 }
 
+DirectHandle<ByteArray> Factory::CodeBuilder::NewByteArray_Direct(
+    int length, AllocationType allocation) {
+  return local_isolate_->factory()->NewByteArray_Direct(length, allocation);
+}
+
 MaybeHandle<InstructionStream> Factory::CodeBuilder::NewInstructionStream(
     bool retry_allocation_or_fail) {
   return AllocateInstructionStream(retry_allocation_or_fail);
@@ -350,6 +355,30 @@ HeapObject Factory::AllocateRawWithAllocationSite(
   return result;
 }
 
+HeapObject Factory::AllocateRawWithAllocationSite_Direct(
+    DirectHandle<Map> map, AllocationType allocation,
+    DirectHandle<AllocationSite> allocation_site) {
+  DCHECK(map->instance_type() != MAP_TYPE);
+  int size = map->instance_size();
+  if (!allocation_site.is_null()) {
+    DCHECK(V8_ALLOCATION_SITE_TRACKING_BOOL);
+    size += ALIGN_TO_ALLOCATION_ALIGNMENT(AllocationMemento::kSize);
+  }
+  HeapObject result = allocator()->AllocateRawWith<HeapAllocator::kRetryOrFail>(
+      size, allocation);
+  WriteBarrierMode write_barrier_mode = allocation == AllocationType::kYoung
+                                            ? SKIP_WRITE_BARRIER
+                                            : UPDATE_WRITE_BARRIER;
+  result.set_map_after_allocation(*map, write_barrier_mode);
+  if (!allocation_site.is_null()) {
+    int aligned_size = ALIGN_TO_ALLOCATION_ALIGNMENT(map->instance_size());
+    AllocationMemento alloc_memento =
+        AllocationMemento::unchecked_cast(Object(result.ptr() + aligned_size));
+    InitializeAllocationMemento(alloc_memento, *allocation_site);
+  }
+  return result;
+}
+
 void Factory::InitializeAllocationMemento(AllocationMemento memento,
                                           AllocationSite allocation_site) {
   DCHECK(V8_ALLOCATION_SITE_TRACKING_BOOL);
@@ -362,6 +391,20 @@ void Factory::InitializeAllocationMemento(AllocationMemento memento,
 }
 
 HeapObject Factory::New(Handle<Map> map, AllocationType allocation) {
+  DCHECK(map->instance_type() != MAP_TYPE);
+  int size = map->instance_size();
+  HeapObject result = allocator()->AllocateRawWith<HeapAllocator::kRetryOrFail>(
+      size, allocation);
+  // New space objects are allocated white.
+  WriteBarrierMode write_barrier_mode = allocation == AllocationType::kYoung
+                                            ? SKIP_WRITE_BARRIER
+                                            : UPDATE_WRITE_BARRIER;
+  result.set_map_after_allocation(*map, write_barrier_mode);
+  return result;
+}
+
+HeapObject Factory::New_Direct(DirectHandle<Map> map,
+                               AllocationType allocation) {
   DCHECK(map->instance_type() != MAP_TYPE);
   int size = map->instance_size();
   HeapObject result = allocator()->AllocateRawWith<HeapAllocator::kRetryOrFail>(
@@ -394,6 +437,17 @@ Handle<PrototypeInfo> Factory::NewPrototypeInfo() {
   result.set_bit_field(0);
   result.set_module_namespace(*undefined_value(), SKIP_WRITE_BARRIER);
   return handle(result, isolate());
+}
+
+DirectHandle<PrototypeInfo> Factory::NewPrototypeInfo_Direct() {
+  auto result = NewStructInternal<PrototypeInfo>(PROTOTYPE_INFO_TYPE,
+                                                 AllocationType::kOld);
+  DisallowGarbageCollection no_gc;
+  result.set_prototype_users(Smi::zero());
+  result.set_registry_slot(PrototypeInfo::UNREGISTERED);
+  result.set_bit_field(0);
+  result.set_module_namespace(*undefined_value(), SKIP_WRITE_BARRIER);
+  return direct_handle(result, isolate());
 }
 
 Handle<EnumCache> Factory::NewEnumCache(Handle<FixedArray> keys,
@@ -457,6 +511,19 @@ Handle<PropertyArray> Factory::NewPropertyArray(int length,
   array.initialize_length(length);
   MemsetTagged(array.data_start(), read_only_roots().undefined_value(), length);
   return handle(array, isolate());
+}
+
+DirectHandle<PropertyArray> Factory::NewPropertyArray_Direct(
+    int length, AllocationType allocation) {
+  DCHECK_LE(0, length);
+  if (length == 0) return empty_property_array();
+  HeapObject result = AllocateRawFixedArray(length, allocation);
+  DisallowGarbageCollection no_gc;
+  result.set_map_after_allocation(*property_array_map(), SKIP_WRITE_BARRIER);
+  PropertyArray array = PropertyArray::cast(result);
+  array.initialize_length(length);
+  MemsetTagged(array.data_start(), read_only_roots().undefined_value(), length);
+  return direct_handle(array, isolate());
 }
 
 MaybeHandle<FixedArray> Factory::TryNewFixedArray(
@@ -546,6 +613,16 @@ Handle<FixedArrayBase> Factory::NewFixedDoubleArrayWithHoles(int length) {
   return array;
 }
 
+DirectHandle<FixedArrayBase> Factory::NewFixedDoubleArrayWithHoles_Direct(
+    int length) {
+  DCHECK_LE(0, length);
+  DirectHandle<FixedArrayBase> array = NewFixedDoubleArray_Direct(length);
+  if (length > 0) {
+    DirectHandle<FixedDoubleArray>::cast(array)->FillWithHoles(0, length);
+  }
+  return array;
+}
+
 template <typename T>
 Handle<T> Factory::AllocateSmallOrderedHashTable(Handle<Map> map, int capacity,
                                                  AllocationType allocation) {
@@ -611,6 +688,10 @@ Handle<OrderedNameDictionary> Factory::NewOrderedNameDictionary(int capacity) {
 Handle<NameDictionary> Factory::NewNameDictionary(int at_least_space_for) {
   return NameDictionary::New(isolate(), at_least_space_for);
 }
+DirectHandle<NameDictionary> Factory::NewNameDictionary_Direct(
+    int at_least_space_for) {
+  return NameDictionary::New_Direct(isolate(), at_least_space_for);
+}
 
 Handle<PropertyDescriptorObject> Factory::NewPropertyDescriptorObject() {
   auto object = NewStructInternal<PropertyDescriptorObject>(
@@ -670,12 +751,26 @@ Handle<String> Factory::InternalizeString(Handle<SeqString> string, int from,
                                  convert_encoding);
   return InternalizeStringWithKey(&key);
 }
+template <typename SeqString>
+DirectHandle<String> Factory::InternalizeString_Direct(
+    DirectHandle<SeqString> string, int from, int length,
+    bool convert_encoding) {
+  SeqSubStringKey<SeqString> key(isolate(), string, from, length,
+                                 convert_encoding);
+  return InternalizeStringWithKey_Direct(&key);
+}
 
 template Handle<String> Factory::InternalizeString(
     Handle<SeqOneByteString> string, int from, int length,
     bool convert_encoding);
 template Handle<String> Factory::InternalizeString(
     Handle<SeqTwoByteString> string, int from, int length,
+    bool convert_encoding);
+template DirectHandle<String> Factory::InternalizeString_Direct(
+    DirectHandle<SeqOneByteString> string, int from, int length,
+    bool convert_encoding);
+template DirectHandle<String> Factory::InternalizeString_Direct(
+    DirectHandle<SeqTwoByteString> string, int from, int length,
     bool convert_encoding);
 
 namespace {
@@ -977,6 +1072,23 @@ Handle<String> Factory::NewInternalizedStringImpl(Handle<String> string,
   return result;
 }
 
+DirectHandle<String> Factory::NewInternalizedStringImpl_Direct(
+    DirectHandle<String> string, int len, uint32_t hash_field) {
+  if (string->IsOneByteRepresentation()) {
+    DirectHandle<SeqOneByteString> result =
+        AllocateRawOneByteInternalizedString_Direct(len, hash_field);
+    DisallowGarbageCollection no_gc;
+    String::WriteToFlat(*string, result->GetChars(no_gc), 0, len);
+    return result;
+  }
+
+  DirectHandle<SeqTwoByteString> result =
+      AllocateRawTwoByteInternalizedString_Direct(len, hash_field);
+  DisallowGarbageCollection no_gc;
+  String::WriteToFlat(*string, result->GetChars(no_gc), 0, len);
+  return result;
+}
+
 StringTransitionStrategy Factory::ComputeInternalizationStrategyForString(
     Handle<String> string, MaybeHandle<Map>* internalized_map) {
   // Do not internalize young strings in-place: This allows us to ignore both
@@ -1005,6 +1117,35 @@ StringTransitionStrategy Factory::ComputeInternalizationStrategyForString(
   return StringTransitionStrategy::kCopy;
 }
 
+StringTransitionStrategy
+Factory::ComputeInternalizationStrategyForString_Direct(
+    DirectHandle<String> string, MaybeDirectHandle<Map>* internalized_map) {
+  // Do not internalize young strings in-place: This allows us to ignore both
+  // string table and stub cache on scavenges.
+  if (Heap::InYoungGeneration(*string)) {
+    return StringTransitionStrategy::kCopy;
+  }
+  // If the string table is shared, we need to copy if the string is not already
+  // in the shared heap.
+  if (v8_flags.shared_string_table && !string->InSharedHeap()) {
+    return StringTransitionStrategy::kCopy;
+  }
+  DCHECK_NOT_NULL(internalized_map);
+  DisallowGarbageCollection no_gc;
+  // This method may be called concurrently, so snapshot the map from the input
+  // string instead of the calling IsType methods on HeapObject, which would
+  // reload the map each time.
+  Map map = string->map();
+  *internalized_map = GetInPlaceInternalizedStringMap_Direct(map);
+  if (!internalized_map->is_null()) {
+    return StringTransitionStrategy::kInPlace;
+  }
+  if (InstanceTypeChecker::IsInternalizedString(map)) {
+    return StringTransitionStrategy::kAlreadyTransitioned;
+  }
+  return StringTransitionStrategy::kCopy;
+}
+
 template <class StringClass>
 Handle<StringClass> Factory::InternalizeExternalString(Handle<String> string) {
   Handle<Map> map =
@@ -1021,10 +1162,33 @@ Handle<StringClass> Factory::InternalizeExternalString(Handle<String> string) {
   return handle(external_string, isolate());
 }
 
+template <class StringClass>
+DirectHandle<StringClass> Factory::InternalizeExternalString_Direct(
+    DirectHandle<String> string) {
+  DirectHandle<Map> map =
+      GetInPlaceInternalizedStringMap_Direct(string->map()).ToHandleChecked();
+  StringClass external_string =
+      StringClass::cast(New_Direct(map, AllocationType::kOld));
+  DisallowGarbageCollection no_gc;
+  external_string.InitExternalPointerFields(isolate());
+  StringClass cast_string = StringClass::cast(*string);
+  external_string.set_length(cast_string.length());
+  external_string.set_raw_hash_field(cast_string.raw_hash_field());
+  external_string.SetResource(isolate(), nullptr);
+  isolate()->heap()->RegisterExternalString(external_string);
+  return direct_handle(external_string, isolate());
+}
+
 template Handle<ExternalOneByteString>
     Factory::InternalizeExternalString<ExternalOneByteString>(Handle<String>);
 template Handle<ExternalTwoByteString>
     Factory::InternalizeExternalString<ExternalTwoByteString>(Handle<String>);
+template DirectHandle<ExternalOneByteString>
+    Factory::InternalizeExternalString_Direct<ExternalOneByteString>(
+        DirectHandle<String>);
+template DirectHandle<ExternalTwoByteString>
+    Factory::InternalizeExternalString_Direct<ExternalTwoByteString>(
+        DirectHandle<String>);
 
 StringTransitionStrategy Factory::ComputeSharingStrategyForString(
     Handle<String> string, MaybeHandle<Map>* shared_map) {
@@ -1457,6 +1621,14 @@ Handle<AliasedArgumentsEntry> Factory::NewAliasedArgumentsEntry(
       ALIASED_ARGUMENTS_ENTRY_TYPE, AllocationType::kYoung);
   entry.set_aliased_context_slot(aliased_context_slot);
   return handle(entry, isolate());
+}
+
+DirectHandle<AliasedArgumentsEntry> Factory::NewAliasedArgumentsEntry_Direct(
+    int aliased_context_slot) {
+  auto entry = NewStructInternal<AliasedArgumentsEntry>(
+      ALIASED_ARGUMENTS_ENTRY_TYPE, AllocationType::kYoung);
+  entry.set_aliased_context_slot(aliased_context_slot);
+  return direct_handle(entry, isolate());
 }
 
 Handle<AccessorInfo> Factory::NewAccessorInfo() {
@@ -1930,6 +2102,15 @@ Handle<Cell> Factory::NewCell(Smi value) {
   return handle(result, isolate());
 }
 
+DirectHandle<Cell> Factory::NewCell_Direct(Smi value) {
+  static_assert(Cell::kSize <= kMaxRegularHeapObjectSize);
+  Cell result = Cell::cast(AllocateRawWithImmortalMap(
+      Cell::kSize, AllocationType::kOld, *cell_map()));
+  DisallowGarbageCollection no_gc;
+  result.set_value(value, WriteBarrierMode::SKIP_WRITE_BARRIER);
+  return direct_handle(result, isolate());
+}
+
 Handle<Cell> Factory::NewCell() {
   static_assert(Cell::kSize <= kMaxRegularHeapObjectSize);
   Cell result = Cell::cast(AllocateRawWithImmortalMap(
@@ -1937,6 +2118,15 @@ Handle<Cell> Factory::NewCell() {
   result.set_value(read_only_roots().undefined_value(),
                    WriteBarrierMode::SKIP_WRITE_BARRIER);
   return handle(result, isolate());
+}
+
+DirectHandle<Cell> Factory::NewCell_Direct() {
+  static_assert(Cell::kSize <= kMaxRegularHeapObjectSize);
+  Cell result = Cell::cast(AllocateRawWithImmortalMap(
+      Cell::kSize, AllocationType::kOld, *cell_map()));
+  result.set_value(read_only_roots().undefined_value(),
+                   WriteBarrierMode::SKIP_WRITE_BARRIER);
+  return direct_handle(result, isolate());
 }
 
 Handle<FeedbackCell> Factory::NewNoClosuresCell(Handle<HeapObject> value) {
@@ -1993,6 +2183,26 @@ Handle<PropertyCell> Factory::NewPropertyCell(Handle<Name> name,
   return handle(cell, isolate());
 }
 
+DirectHandle<PropertyCell> Factory::NewPropertyCell_Direct(
+    DirectHandle<Name> name, PropertyDetails details,
+    DirectHandle<Object> value, AllocationType allocation) {
+  DCHECK(name->IsUniqueName());
+  static_assert(PropertyCell::kSize <= kMaxRegularHeapObjectSize);
+  PropertyCell cell = PropertyCell::cast(AllocateRawWithImmortalMap(
+      PropertyCell::kSize, allocation, *global_property_cell_map()));
+  DisallowGarbageCollection no_gc;
+  cell.set_dependent_code(
+      DependentCode::empty_dependent_code(ReadOnlyRoots(isolate())),
+      SKIP_WRITE_BARRIER);
+  WriteBarrierMode mode = allocation == AllocationType::kYoung
+                              ? SKIP_WRITE_BARRIER
+                              : UPDATE_WRITE_BARRIER;
+  cell.set_name(*name, mode);
+  cell.set_value(*value, mode);
+  cell.set_property_details_raw(details.AsSmi(), SKIP_WRITE_BARRIER);
+  return direct_handle(cell, isolate());
+}
+
 Handle<PropertyCell> Factory::NewProtector() {
   return NewPropertyCell(
       empty_string(), PropertyDetails::Empty(PropertyCellType::kConstantType),
@@ -2005,6 +2215,27 @@ Handle<TransitionArray> Factory::NewTransitionArray(int number_of_transitions,
   Handle<TransitionArray> array = Handle<TransitionArray>::cast(
       NewWeakFixedArrayWithMap(read_only_roots().transition_array_map(),
                                capacity, AllocationType::kOld));
+  // Transition arrays are AllocationType::kOld. When black allocation is on we
+  // have to add the transition array to the list of
+  // encountered_transition_arrays.
+  Heap* heap = isolate()->heap();
+  if (heap->incremental_marking()->black_allocation()) {
+    heap->mark_compact_collector()->AddTransitionArray(*array);
+  }
+  array->WeakFixedArray::Set(TransitionArray::kPrototypeTransitionsIndex,
+                             MaybeObject::FromObject(Smi::zero()));
+  array->WeakFixedArray::Set(
+      TransitionArray::kTransitionLengthIndex,
+      MaybeObject::FromObject(Smi::FromInt(number_of_transitions)));
+  return array;
+}
+
+DirectHandle<TransitionArray> Factory::NewTransitionArray_Direct(
+    int number_of_transitions, int slack) {
+  int capacity = TransitionArray::LengthFor(number_of_transitions + slack);
+  DirectHandle<TransitionArray> array = DirectHandle<TransitionArray>::cast(
+      NewWeakFixedArrayWithMap_Direct(read_only_roots().transition_array_map(),
+                                      capacity, AllocationType::kOld));
   // Transition arrays are AllocationType::kOld. When black allocation is on we
   // have to add the transition array to the list of
   // encountered_transition_arrays.
@@ -2064,6 +2295,38 @@ Handle<Map> Factory::NewMap(InstanceType type, int instance_size,
   return handle(InitializeMap(Map::cast(result), type, instance_size,
                               elements_kind, inobject_properties, roots),
                 isolate());
+}
+
+DirectHandle<Map> Factory::NewMap_Direct(InstanceType type, int instance_size,
+                                         ElementsKind elements_kind,
+                                         int inobject_properties,
+                                         AllocationType allocation_type) {
+  static_assert(LAST_JS_OBJECT_TYPE == LAST_TYPE);
+  DCHECK(!InstanceTypeChecker::MayHaveMapCheckFastCase(type));
+  DCHECK_IMPLIES(InstanceTypeChecker::IsJSObject(type) &&
+                     !Map::CanHaveFastTransitionableElementsKind(type),
+                 IsDictionaryElementsKind(elements_kind) ||
+                     IsTerminalElementsKind(elements_kind) ||
+                     IsSharedArrayElementsKind(elements_kind));
+  DCHECK(allocation_type == AllocationType::kMap ||
+         allocation_type == AllocationType::kSharedMap);
+  HeapObject result = allocator()->AllocateRawWith<HeapAllocator::kRetryOrFail>(
+      Map::kSize, allocation_type);
+  DisallowGarbageCollection no_gc;
+  Heap* roots = allocation_type == AllocationType::kMap
+                    ? isolate()->heap()
+                    : isolate()->shared_space_isolate()->heap();
+  result.set_map_after_allocation(ReadOnlyRoots(roots).meta_map(),
+                                  SKIP_WRITE_BARRIER);
+#if V8_STATIC_ROOTS_BOOL
+  CHECK_IMPLIES(InstanceTypeChecker::IsJSReceiver(type),
+                V8HeapCompressionScheme::CompressObject(result.ptr()) >
+                    InstanceTypeChecker::kNonJsReceiverMapLimit);
+#endif
+  isolate()->counters()->maps_created()->Increment();
+  return direct_handle(InitializeMap(Map::cast(result), type, instance_size,
+                                     elements_kind, inobject_properties, roots),
+                       isolate());
 }
 
 Map Factory::InitializeMap(Map map, InstanceType type, int instance_size,
@@ -2245,6 +2508,22 @@ Handle<T> Factory::CopyArrayWithMap(Handle<T> src, Handle<Map> map,
 }
 
 template <typename T>
+DirectHandle<T> Factory::CopyArrayWithMap_Direct(DirectHandle<T> src,
+                                                 DirectHandle<Map> map,
+                                                 AllocationType allocation) {
+  int len = src->length();
+  HeapObject new_object = AllocateRawFixedArray(len, allocation);
+  DisallowGarbageCollection no_gc;
+  new_object.set_map_after_allocation(*map, SKIP_WRITE_BARRIER);
+  T result = T::cast(new_object);
+  initialize_length(result, len);
+  // Copy the content.
+  WriteBarrierMode mode = result.GetWriteBarrierMode(no_gc);
+  result.CopyElements(isolate(), 0, *src, 0, len, mode);
+  return direct_handle(result, isolate());
+}
+
+template <typename T>
 Handle<T> Factory::CopyArrayAndGrow(Handle<T> src, int grow_by,
                                     AllocationType allocation) {
   DCHECK_LT(0, grow_by);
@@ -2264,10 +2543,37 @@ Handle<T> Factory::CopyArrayAndGrow(Handle<T> src, int grow_by,
   return handle(result, isolate());
 }
 
+template <typename T>
+DirectHandle<T> Factory::CopyArrayAndGrow_Direct(DirectHandle<T> src,
+                                                 int grow_by,
+                                                 AllocationType allocation) {
+  DCHECK_LT(0, grow_by);
+  DCHECK_LE(grow_by, kMaxInt - src->length());
+  int old_len = src->length();
+  int new_len = old_len + grow_by;
+  HeapObject new_object = AllocateRawFixedArray(new_len, allocation);
+  DisallowGarbageCollection no_gc;
+  new_object.set_map_after_allocation(src->map(), SKIP_WRITE_BARRIER);
+  T result = T::cast(new_object);
+  initialize_length(result, new_len);
+  // Copy the content.
+  WriteBarrierMode mode = result.GetWriteBarrierMode(no_gc);
+  result.CopyElements(isolate(), 0, *src, 0, old_len, mode);
+  MemsetTagged(ObjectSlot(result.data_start() + old_len),
+               read_only_roots().undefined_value(), grow_by);
+  return direct_handle(result, isolate());
+}
+
 Handle<FixedArray> Factory::CopyFixedArrayWithMap(Handle<FixedArray> array,
                                                   Handle<Map> map,
                                                   AllocationType allocation) {
   return CopyArrayWithMap(array, map, allocation);
+}
+
+DirectHandle<FixedArray> Factory::CopyFixedArrayWithMap_Direct(
+    DirectHandle<FixedArray> array, DirectHandle<Map> map,
+    AllocationType allocation) {
+  return CopyArrayWithMap_Direct(array, map, allocation);
 }
 
 Handle<WeakArrayList> Factory::NewUninitializedWeakArrayList(
@@ -2283,6 +2589,21 @@ Handle<WeakArrayList> Factory::NewUninitializedWeakArrayList(
   result.set_length(0);
   result.set_capacity(capacity);
   return handle(result, isolate());
+}
+
+DirectHandle<WeakArrayList> Factory::NewUninitializedWeakArrayList_Direct(
+    int capacity, AllocationType allocation) {
+  DCHECK_LE(0, capacity);
+  if (capacity == 0) return empty_weak_array_list_direct();
+
+  HeapObject heap_object = AllocateRawWeakArrayList(capacity, allocation);
+  DisallowGarbageCollection no_gc;
+  heap_object.set_map_after_allocation(*weak_array_list_map(),
+                                       SKIP_WRITE_BARRIER);
+  WeakArrayList result = WeakArrayList::cast(heap_object);
+  result.set_length(0);
+  result.set_capacity(capacity);
+  return direct_handle(result, isolate());
 }
 
 Handle<WeakArrayList> Factory::NewWeakArrayList(int capacity,
@@ -2325,6 +2646,25 @@ Handle<WeakArrayList> Factory::CopyWeakArrayListAndGrow(
   return result;
 }
 
+DirectHandle<WeakArrayList> Factory::CopyWeakArrayListAndGrow_Direct(
+    DirectHandle<WeakArrayList> src, int grow_by, AllocationType allocation) {
+  int old_capacity = src->capacity();
+  int new_capacity = old_capacity + grow_by;
+  DCHECK_GE(new_capacity, old_capacity);
+  DirectHandle<WeakArrayList> result =
+      NewUninitializedWeakArrayList_Direct(new_capacity, allocation);
+  DisallowGarbageCollection no_gc;
+  WeakArrayList raw = *result;
+  int old_len = src->length();
+  raw.set_length(old_len);
+  // Copy the content.
+  WriteBarrierMode mode = raw.GetWriteBarrierMode(no_gc);
+  raw.CopyElements(isolate(), 0, *src, 0, old_len, mode);
+  MemsetTagged(ObjectSlot(raw.data_start() + old_len),
+               read_only_roots().undefined_value(), new_capacity - old_len);
+  return result;
+}
+
 Handle<WeakArrayList> Factory::CompactWeakArrayList(Handle<WeakArrayList> src,
                                                     int new_capacity,
                                                     AllocationType allocation) {
@@ -2352,6 +2692,10 @@ Handle<WeakArrayList> Factory::CompactWeakArrayList(Handle<WeakArrayList> src,
 Handle<PropertyArray> Factory::CopyPropertyArrayAndGrow(
     Handle<PropertyArray> array, int grow_by) {
   return CopyArrayAndGrow(array, grow_by, AllocationType::kYoung);
+}
+DirectHandle<PropertyArray> Factory::CopyPropertyArrayAndGrow_Direct(
+    DirectHandle<PropertyArray> array, int grow_by) {
+  return CopyArrayAndGrow_Direct(array, grow_by, AllocationType::kYoung);
 }
 
 Handle<FixedArray> Factory::CopyFixedArrayUpTo(Handle<FixedArray> array,
@@ -2413,6 +2757,18 @@ Handle<JSObject> Factory::NewError(Handle<JSFunction> constructor,
       isolate(), constructor, template_index, arg0, arg1, arg2, SKIP_NONE));
 }
 
+DirectHandle<JSObject> Factory::NewError_Direct(
+    DirectHandle<JSFunction> constructor, MessageTemplate template_index,
+    DirectHandle<Object> arg0, DirectHandle<Object> arg1,
+    DirectHandle<Object> arg2) {
+  if (arg0.is_null()) arg0 = undefined_value_direct();
+  if (arg1.is_null()) arg1 = undefined_value_direct();
+  if (arg2.is_null()) arg2 = undefined_value_direct();
+
+  return ErrorUtils::MakeGenericError_Direct(
+      isolate(), constructor, template_index, arg0, arg1, arg2, SKIP_NONE);
+}
+
 Handle<JSObject> Factory::NewError(Handle<JSFunction> constructor,
                                    Handle<String> message) {
   // Construct a new error object. If an exception is thrown, use the exception
@@ -2436,12 +2792,18 @@ Handle<Object> Factory::NewInvalidStringLengthError() {
   return NewRangeError(MessageTemplate::kInvalidStringLength);
 }
 
-#define DEFINE_ERROR(NAME, name)                                              \
-  Handle<JSObject> Factory::New##NAME(                                        \
-      MessageTemplate template_index, Handle<Object> arg0,                    \
-      Handle<Object> arg1, Handle<Object> arg2) {                             \
-    return NewError(isolate()->name##_function(), template_index, arg0, arg1, \
-                    arg2);                                                    \
+#define DEFINE_ERROR(NAME, name)                                               \
+  Handle<JSObject> Factory::New##NAME(                                         \
+      MessageTemplate template_index, Handle<Object> arg0,                     \
+      Handle<Object> arg1, Handle<Object> arg2) {                              \
+    return NewError(isolate()->name##_function(), template_index, arg0, arg1,  \
+                    arg2);                                                     \
+  }                                                                            \
+  DirectHandle<JSObject> Factory::New##NAME##_Direct(                          \
+      MessageTemplate template_index, DirectHandle<Object> arg0,               \
+      DirectHandle<Object> arg1, DirectHandle<Object> arg2) {                  \
+    return NewError_Direct(isolate()->name##_function(), template_index, arg0, \
+                           arg1, arg2);                                        \
   }
 DEFINE_ERROR(Error, error)
 DEFINE_ERROR(EvalError, eval_error)
@@ -2482,6 +2844,41 @@ Handle<JSObject> Factory::NewFunctionPrototype(Handle<JSFunction> function) {
   if (!IsResumableFunction(function->shared().kind())) {
     JSObject::AddProperty(isolate(), prototype, constructor_string(), function,
                           DONT_ENUM);
+  }
+
+  return prototype;
+}
+
+DirectHandle<JSObject> Factory::NewFunctionPrototype_Direct(
+    DirectHandle<JSFunction> function) {
+  // Make sure to use globals from the function's context, since the function
+  // can be from a different context.
+  DirectHandle<NativeContext> native_context(function->native_context(),
+                                             isolate());
+  DirectHandle<Map> new_map;
+  if (V8_UNLIKELY(IsAsyncGeneratorFunction(function->shared().kind()))) {
+    new_map = direct_handle(
+        native_context->async_generator_object_prototype_map(), isolate());
+  } else if (IsResumableFunction(function->shared().kind())) {
+    // Generator and async function prototypes can share maps since they
+    // don't have "constructor" properties.
+    new_map = direct_handle(native_context->generator_object_prototype_map(),
+                            isolate());
+  } else {
+    // Each function prototype gets a fresh map to avoid unwanted sharing of
+    // maps between prototypes of different constructors.
+    DirectHandle<JSFunction> object_function(native_context->object_function(),
+                                             isolate());
+    DCHECK(object_function->has_initial_map());
+    new_map = direct_handle(object_function->initial_map(), isolate());
+  }
+
+  DCHECK(!new_map->is_prototype_map());
+  DirectHandle<JSObject> prototype = NewJSObjectFromMap_Direct(new_map);
+
+  if (!IsResumableFunction(function->shared().kind())) {
+    JSObject::AddProperty_Direct(
+        isolate(), prototype, constructor_string_direct(), function, DONT_ENUM);
   }
 
   return prototype;
@@ -2578,6 +2975,13 @@ Handle<JSObject> Factory::NewJSObject(Handle<JSFunction> constructor,
   JSFunction::EnsureHasInitialMap(constructor);
   Handle<Map> map(constructor->initial_map(), isolate());
   return NewJSObjectFromMap(map, allocation);
+}
+
+DirectHandle<JSObject> Factory::NewJSObject_Direct(
+    DirectHandle<JSFunction> constructor, AllocationType allocation) {
+  JSFunction::EnsureHasInitialMap_Direct(constructor);
+  DirectHandle<Map> map(constructor->initial_map(), isolate());
+  return NewJSObjectFromMap_Direct(map, allocation);
 }
 
 Handle<JSObject> Factory::NewSlowJSObjectWithNullProto() {
@@ -2689,7 +3093,7 @@ void Factory::InitializeJSObjectBody(JSObject obj, Map map, int start_offset) {
   bool in_progress = map.IsInobjectSlackTrackingInProgress();
   obj.InitializeBody(map, start_offset, in_progress,
                      ReadOnlyRoots(isolate()).one_pointer_filler_map_word(),
-                     *undefined_value());
+                     *undefined_value_direct());
   if (in_progress) {
     map.FindRootMap(isolate()).InobjectSlackTrackingStep(isolate());
   }
@@ -2723,6 +3127,34 @@ Handle<JSObject> Factory::NewJSObjectFromMap(
   return handle(js_obj, isolate());
 }
 
+DirectHandle<JSObject> Factory::NewJSObjectFromMap_Direct(
+    DirectHandle<Map> map, AllocationType allocation,
+    DirectHandle<AllocationSite> allocation_site) {
+  // JSFunctions should be allocated using AllocateFunction to be
+  // properly initialized.
+  DCHECK(!InstanceTypeChecker::IsJSFunction(*map));
+
+  // Both types of global objects should be allocated using
+  // AllocateGlobalObject to be properly initialized.
+  DCHECK(map->instance_type() != JS_GLOBAL_OBJECT_TYPE);
+
+  JSObject js_obj = JSObject::cast(
+      AllocateRawWithAllocationSite_Direct(map, allocation, allocation_site));
+
+  InitializeJSObjectFromMap(js_obj, *empty_fixed_array_direct(), *map);
+
+  DCHECK(js_obj.HasFastElements() ||
+         (isolate()->bootstrapper()->IsActive() ||
+          *map == isolate()
+                      ->raw_native_context()
+                      .js_array_template_literal_object_map()) ||
+         js_obj.HasTypedArrayOrRabGsabTypedArrayElements() ||
+         js_obj.HasFastStringWrapperElements() ||
+         js_obj.HasFastArgumentsElements() || js_obj.HasDictionaryElements() ||
+         js_obj.HasSharedArrayElements());
+  return direct_handle(js_obj, isolate());
+}
+
 Handle<JSObject> Factory::NewSlowJSObjectFromMap(
     Handle<Map> map, int capacity, AllocationType allocation,
     Handle<AllocationSite> allocation_site) {
@@ -2735,6 +3167,23 @@ Handle<JSObject> Factory::NewSlowJSObjectFromMap(
   }
   Handle<JSObject> js_object =
       NewJSObjectFromMap(map, allocation, allocation_site);
+  js_object->set_raw_properties_or_hash(*object_properties, kRelaxedStore);
+  return js_object;
+}
+
+DirectHandle<JSObject> Factory::NewSlowJSObjectFromMap_Direct(
+    DirectHandle<Map> map, int capacity, AllocationType allocation,
+    DirectHandle<AllocationSite> allocation_site) {
+  DCHECK(map->is_dictionary_map());
+  // TODO(CSS)
+  Handle<HeapObject> object_properties;
+  if (V8_ENABLE_SWISS_NAME_DICTIONARY_BOOL) {
+    object_properties = NewSwissNameDictionary(capacity, allocation);
+  } else {
+    object_properties = NameDictionary::New(isolate(), capacity);
+  }
+  DirectHandle<JSObject> js_object =
+      NewJSObjectFromMap_Direct(map, allocation, allocation_site);
   js_object->set_raw_properties_or_hash(*object_properties, kRelaxedStore);
   return js_object;
 }
@@ -2782,11 +3231,36 @@ Handle<JSArray> Factory::NewJSArray(ElementsKind elements_kind, int length,
       elms, elements_kind, length, allocation));
 }
 
+DirectHandle<JSArray> Factory::NewJSArray_Direct(
+    ElementsKind elements_kind, int length, int capacity,
+    ArrayStorageAllocationMode mode, AllocationType allocation) {
+  DCHECK(capacity >= length);
+  if (capacity == 0) {
+    return NewJSArrayWithElements_Direct(empty_fixed_array_direct(),
+                                         elements_kind, length, allocation);
+  }
+
+  DirectHandle<FixedArrayBase> elms =
+      NewJSArrayStorage_Direct(elements_kind, capacity, mode);
+  return NewJSArrayWithUnverifiedElements_Direct(elms, elements_kind, length,
+                                                 allocation);
+}
+
 Handle<JSArray> Factory::NewJSArrayWithElements(Handle<FixedArrayBase> elements,
                                                 ElementsKind elements_kind,
                                                 int length,
                                                 AllocationType allocation) {
   Handle<JSArray> array = NewJSArrayWithUnverifiedElements(
+      elements, elements_kind, length, allocation);
+#ifdef ENABLE_SLOW_DCHECKS
+  JSObject::ValidateElements(*array);
+#endif
+  return array;
+}
+DirectHandle<JSArray> Factory::NewJSArrayWithElements_Direct(
+    DirectHandle<FixedArrayBase> elements, ElementsKind elements_kind,
+    int length, AllocationType allocation) {
+  DirectHandle<JSArray> array = NewJSArrayWithUnverifiedElements_Direct(
       elements, elements_kind, length, allocation);
 #ifdef ENABLE_SLOW_DCHECKS
   JSObject::ValidateElements(*array);
@@ -2808,10 +3282,35 @@ Handle<JSArray> Factory::NewJSArrayWithUnverifiedElements(
                                           length, allocation);
 }
 
+DirectHandle<JSArray> Factory::NewJSArrayWithUnverifiedElements_Direct(
+    DirectHandle<FixedArrayBase> elements, ElementsKind elements_kind,
+    int length, AllocationType allocation) {
+  DCHECK(length <= elements->length());
+  NativeContext native_context = isolate()->raw_native_context();
+  Map map = native_context.GetInitialJSArrayMap(elements_kind);
+  if (map.is_null()) {
+    JSFunction array_function = native_context.array_function();
+    map = array_function.initial_map();
+  }
+  return NewJSArrayWithUnverifiedElements_Direct(direct_handle(map, isolate()),
+                                                 elements, length, allocation);
+}
+
 Handle<JSArray> Factory::NewJSArrayWithUnverifiedElements(
     Handle<Map> map, Handle<FixedArrayBase> elements, int length,
     AllocationType allocation) {
   auto array = Handle<JSArray>::cast(NewJSObjectFromMap(map, allocation));
+  DisallowGarbageCollection no_gc;
+  JSArray raw = *array;
+  raw.set_elements(*elements);
+  raw.set_length(Smi::FromInt(length));
+  return array;
+}
+DirectHandle<JSArray> Factory::NewJSArrayWithUnverifiedElements_Direct(
+    DirectHandle<Map> map, DirectHandle<FixedArrayBase> elements, int length,
+    AllocationType allocation) {
+  auto array =
+      DirectHandle<JSArray>::cast(NewJSObjectFromMap_Direct(map, allocation));
   DisallowGarbageCollection no_gc;
   JSArray raw = *array;
   raw.set_elements(*elements);
@@ -2887,6 +3386,54 @@ Handle<FixedArrayBase> Factory::NewJSArrayStorage(
           mode,
           ArrayStorageAllocationMode::INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE);
       elms = NewFixedArrayWithHoles(capacity);
+    }
+  }
+  return elms;
+}
+
+void Factory::NewJSArrayStorage_Direct(DirectHandle<JSArray> array, int length,
+                                       int capacity,
+                                       ArrayStorageAllocationMode mode) {
+  DCHECK(capacity >= length);
+
+  if (capacity == 0) {
+    JSArray raw = *array;
+    DisallowGarbageCollection no_gc;
+    raw.set_length(Smi::zero());
+    raw.set_elements(*empty_fixed_array_direct());
+    return;
+  }
+
+  DirectHandle<FixedArrayBase> elms =
+      NewJSArrayStorage_Direct(array->GetElementsKind(), capacity, mode);
+  DisallowGarbageCollection no_gc;
+  JSArray raw = *array;
+  raw.set_elements(*elms);
+  raw.set_length(Smi::FromInt(length));
+}
+
+DirectHandle<FixedArrayBase> Factory::NewJSArrayStorage_Direct(
+    ElementsKind elements_kind, int capacity, ArrayStorageAllocationMode mode) {
+  DCHECK_GT(capacity, 0);
+  DirectHandle<FixedArrayBase> elms;
+  if (IsDoubleElementsKind(elements_kind)) {
+    if (mode == ArrayStorageAllocationMode::DONT_INITIALIZE_ARRAY_ELEMENTS) {
+      elms = NewFixedDoubleArray_Direct(capacity);
+    } else {
+      DCHECK_EQ(
+          mode,
+          ArrayStorageAllocationMode::INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE);
+      elms = NewFixedDoubleArrayWithHoles_Direct(capacity);
+    }
+  } else {
+    DCHECK(IsSmiOrObjectElementsKind(elements_kind));
+    if (mode == ArrayStorageAllocationMode::DONT_INITIALIZE_ARRAY_ELEMENTS) {
+      elms = NewFixedArray_Direct(capacity);
+    } else {
+      DCHECK_EQ(
+          mode,
+          ArrayStorageAllocationMode::INITIALIZE_ARRAY_ELEMENTS_WITH_HOLE);
+      elms = NewFixedArrayWithHoles_Direct(capacity);
     }
   }
   return elms;
@@ -3478,6 +4025,48 @@ Handle<String> Factory::SizeToString(size_t value, bool check_cache) {
   return result;
 }
 
+DirectHandle<String> Factory::SizeToString_Direct(size_t value,
+                                                  bool check_cache) {
+  DirectHandle<String> result;
+  NumberCacheMode cache_mode =
+      check_cache ? NumberCacheMode::kBoth : NumberCacheMode::kIgnore;
+  if (value <= Smi::kMaxValue) {
+    int32_t int32v = static_cast<int32_t>(static_cast<uint32_t>(value));
+    // SmiToString sets the hash when needed, we can return immediately.
+    return SmiToString_Direct(Smi::FromInt(int32v), cache_mode);
+  } else if (value <= kMaxSafeInteger) {
+    // TODO(jkummerow): Refactor the cache to not require Objects as keys.
+    double double_value = static_cast<double>(value);
+    result = HeapNumberToString_Direct(NewHeapNumber_Direct(double_value),
+                                       value, cache_mode);
+  } else {
+    char arr[kNumberToStringBufferSize];
+    base::Vector<char> buffer(arr, arraysize(arr));
+    // Build the string backwards from the least significant digit.
+    int i = buffer.length();
+    size_t value_copy = value;
+    buffer[--i] = '\0';
+    do {
+      buffer[--i] = '0' + (value_copy % 10);
+      value_copy /= 10;
+    } while (value_copy > 0);
+    char* string = buffer.begin() + i;
+    // No way to cache this; we'd need an {Object} to use as key.
+    result = NewStringFromAsciiChecked_Direct(string);
+  }
+  {
+    DisallowGarbageCollection no_gc;
+    String raw = *result;
+    if (value <= JSArray::kMaxArrayIndex &&
+        raw.raw_hash_field() == String::kEmptyHashField) {
+      uint32_t raw_hash_field = StringHasher::MakeArrayIndexHash(
+          static_cast<uint32_t>(value), raw.length());
+      raw.set_raw_hash_field(raw_hash_field);
+    }
+  }
+  return result;
+}
+
 Handle<DebugInfo> Factory::NewDebugInfo(Handle<SharedFunctionInfo> shared) {
   DCHECK(!shared->HasDebugInfo(isolate()));
 
@@ -3605,6 +4194,33 @@ Handle<Map> Factory::ObjectLiteralMapFromCache(Handle<NativeContext> context,
 
   // Create a new map and add it to the cache.
   Handle<Map> map = Map::Create(isolate(), number_of_properties);
+  DCHECK(!map->is_dictionary_map());
+  cache->Set(number_of_properties, HeapObjectReference::Weak(*map));
+  return map;
+}
+
+DirectHandle<Map> Factory::ObjectLiteralMapFromCache_Direct(
+    DirectHandle<NativeContext> context, int number_of_properties) {
+  // Use initial slow object proto map for too many properties.
+  if (number_of_properties >= JSObject::kMapCacheSize) {
+    return direct_handle(context->slow_object_with_object_prototype_map(),
+                         isolate());
+  }
+
+  DirectHandle<WeakFixedArray> cache(WeakFixedArray::cast(context->map_cache()),
+                                     isolate());
+
+  // Check to see whether there is a matching element in the cache.
+  MaybeObject result = cache->Get(number_of_properties);
+  HeapObject heap_object;
+  if (result->GetHeapObjectIfWeak(&heap_object)) {
+    Map map = Map::cast(heap_object);
+    DCHECK(!map.is_dictionary_map());
+    return direct_handle(map, isolate());
+  }
+
+  // Create a new map and add it to the cache.
+  DirectHandle<Map> map = Map::Create_Direct(isolate(), number_of_properties);
   DCHECK(!map->is_dictionary_map());
   cache->Set(number_of_properties, HeapObjectReference::Weak(*map));
   return map;

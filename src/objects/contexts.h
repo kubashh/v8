@@ -654,6 +654,7 @@ class Context : public TorqueGeneratedContext<Context, HeapObject> {
   inline void set_##name(type value);                     \
   inline bool is_##name(type value) const;                \
   inline type name() const;                               \
+  inline type name##_direct() const;                      \
   inline type name(AcquireLoadTag) const;
   NATIVE_CONTEXT_FIELDS(NATIVE_CONTEXT_FIELD_ACCESSORS)
 #undef NATIVE_CONTEXT_FIELD_ACCESSORS

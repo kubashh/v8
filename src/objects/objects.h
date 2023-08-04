@@ -22,6 +22,7 @@
 #include "src/common/operation.h"
 #include "src/common/ptr-compr.h"
 #include "src/flags/flags.h"
+#include "src/handles/maybe-handles.h"
 #include "src/objects/elements-kind.h"
 #include "src/objects/field-index.h"
 #include "src/objects/object-list-macros.h"
@@ -377,14 +378,24 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
 
   Handle<FieldType> OptimalType(Isolate* isolate,
                                 Representation representation);
+  DirectHandle<FieldType> OptimalType_Direct(Isolate* isolate,
+                                             Representation representation);
 
   V8_EXPORT_PRIVATE static Handle<Object> NewStorageFor(
       Isolate* isolate, Handle<Object> object, Representation representation);
+  V8_EXPORT_PRIVATE static DirectHandle<Object> NewStorageFor_Direct(
+      Isolate* isolate, DirectHandle<Object> object,
+      Representation representation);
 
   template <AllocationType allocation_type = AllocationType::kYoung,
             typename IsolateT>
   static Handle<Object> WrapForRead(IsolateT* isolate, Handle<Object> object,
                                     Representation representation);
+  template <AllocationType allocation_type = AllocationType::kYoung,
+            typename IsolateT>
+  static DirectHandle<Object> WrapForRead_Direct(IsolateT* isolate,
+                                                 DirectHandle<Object> object,
+                                                 Representation representation);
 
   // Returns true if the object is of the correct type to be used as a
   // implementation of a JSObject's elements.
@@ -416,13 +427,21 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<JSReceiver> ToObject(
       Isolate* isolate, Handle<Object> object,
       const char* method_name = nullptr);
+  V8_WARN_UNUSED_RESULT static inline MaybeDirectHandle<JSReceiver>
+  ToObject_Direct(Isolate* isolate, DirectHandle<Object> object,
+                  const char* method_name = nullptr);
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> ToObjectImpl(
       Isolate* isolate, Handle<Object> object,
       const char* method_name = nullptr);
+  V8_WARN_UNUSED_RESULT static MaybeDirectHandle<JSReceiver>
+  ToObjectImpl_Direct(Isolate* isolate, DirectHandle<Object> object,
+                      const char* method_name = nullptr);
 
   // ES6 section 9.2.1.2, OrdinaryCallBindThis for sloppy callee.
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> ConvertReceiver(
       Isolate* isolate, Handle<Object> object);
+  V8_WARN_UNUSED_RESULT static MaybeDirectHandle<JSReceiver>
+  ConvertReceiver_Direct(Isolate* isolate, DirectHandle<Object> object);
 
   // ES6 section 7.1.14 ToPropertyKey
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<Name> ToName(
@@ -436,6 +455,8 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   // ES6 section 7.1.3 ToNumber
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> ToNumber(
       Isolate* isolate, Handle<Object> input);
+  V8_WARN_UNUSED_RESULT static inline MaybeDirectHandle<Object> ToNumber_Direct(
+      Isolate* isolate, DirectHandle<Object> input);
 
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> ToNumeric(
       Isolate* isolate, Handle<Object> input);
@@ -443,6 +464,8 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   // ES6 section 7.1.4 ToInteger
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> ToInteger(
       Isolate* isolate, Handle<Object> input);
+  V8_WARN_UNUSED_RESULT static inline MaybeDirectHandle<Object>
+  ToInteger_Direct(Isolate* isolate, DirectHandle<Object> input);
 
   // ES6 section 7.1.5 ToInt32
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> ToInt32(
@@ -458,9 +481,14 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
 
   V8_EXPORT_PRIVATE static MaybeHandle<String> NoSideEffectsToMaybeString(
       Isolate* isolate, Handle<Object> input);
+  V8_EXPORT_PRIVATE static MaybeDirectHandle<String>
+  NoSideEffectsToMaybeString_Direct(Isolate* isolate,
+                                    DirectHandle<Object> input);
 
   V8_EXPORT_PRIVATE static Handle<String> NoSideEffectsToString(
       Isolate* isolate, Handle<Object> input);
+  V8_EXPORT_PRIVATE static DirectHandle<String> NoSideEffectsToString_Direct(
+      Isolate* isolate, DirectHandle<Object> input);
 
   // ES6 section 7.1.14 ToPropertyKey
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> ToPropertyKey(
@@ -469,6 +497,8 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   // ES6 section 7.1.15 ToLength
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> ToLength(
       Isolate* isolate, Handle<Object> input);
+  V8_WARN_UNUSED_RESULT static inline MaybeDirectHandle<Object> ToLength_Direct(
+      Isolate* isolate, DirectHandle<Object> input);
 
   // ES6 section 7.1.17 ToIndex
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> ToIndex(
@@ -477,6 +507,8 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   // ES6 section 7.3.9 GetMethod
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> GetMethod(
       Handle<JSReceiver> receiver, Handle<Name> name);
+  V8_WARN_UNUSED_RESULT static MaybeDirectHandle<Object> GetMethod_Direct(
+      DirectHandle<JSReceiver> receiver, DirectHandle<Name> name);
 
   // ES6 section 7.3.17 CreateListFromArrayLike
   V8_WARN_UNUSED_RESULT static MaybeHandle<FixedArray> CreateListFromArrayLike(
@@ -488,6 +520,8 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
 
   // ES6 section 12.5.6 The typeof Operator
   static Handle<String> TypeOf(Isolate* isolate, Handle<Object> object);
+  static DirectHandle<String> TypeOf_Direct(Isolate* isolate,
+                                            DirectHandle<Object> object);
 
   // ES6 section 12.7 Additive Operators
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> Add(Isolate* isolate,
@@ -516,6 +550,8 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
 
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
   GetProperty(LookupIterator* it, bool is_global_reference = false);
+  V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeDirectHandle<Object>
+  GetProperty_Direct(LookupIterator* it, bool is_global_reference = false);
 
   // ES6 [[Set]] (when passed kDontThrow)
   // Invariants for this and related functions (unless stated otherwise):
@@ -545,6 +581,10 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   V8_WARN_UNUSED_RESULT static Maybe<bool> CannotCreateProperty(
       Isolate* isolate, Handle<Object> receiver, Handle<Object> name,
       Handle<Object> value, Maybe<ShouldThrow> should_throw);
+  V8_WARN_UNUSED_RESULT static Maybe<bool> CannotCreateProperty_Direct(
+      Isolate* isolate, DirectHandle<Object> receiver,
+      DirectHandle<Object> name, DirectHandle<Object> value,
+      Maybe<ShouldThrow> should_throw);
   V8_WARN_UNUSED_RESULT static Maybe<bool> WriteToReadOnlyProperty(
       LookupIterator* it, Handle<Object> value,
       Maybe<ShouldThrow> should_throw);
@@ -554,16 +594,33 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   V8_WARN_UNUSED_RESULT static Maybe<bool> RedefineIncompatibleProperty(
       Isolate* isolate, Handle<Object> name, Handle<Object> value,
       Maybe<ShouldThrow> should_throw);
+  V8_WARN_UNUSED_RESULT static Maybe<bool> RedefineIncompatibleProperty_Direct(
+      Isolate* isolate, DirectHandle<Object> name, DirectHandle<Object> value,
+      Maybe<ShouldThrow> should_throw);
   V8_WARN_UNUSED_RESULT static Maybe<bool> SetDataProperty(
       LookupIterator* it, Handle<Object> value);
+  V8_WARN_UNUSED_RESULT static Maybe<bool> SetDataProperty_Direct(
+      LookupIterator* it, DirectHandle<Object> value);
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static Maybe<bool> AddDataProperty(
       LookupIterator* it, Handle<Object> value, PropertyAttributes attributes,
       Maybe<ShouldThrow> should_throw, StoreOrigin store_origin,
+      EnforceDefineSemantics semantics = EnforceDefineSemantics::kSet);
+  V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static Maybe<bool>
+  AddDataProperty_Direct(
+      LookupIterator* it, DirectHandle<Object> value,
+      PropertyAttributes attributes, Maybe<ShouldThrow> should_throw,
+      StoreOrigin store_origin,
       EnforceDefineSemantics semantics = EnforceDefineSemantics::kSet);
 
   V8_WARN_UNUSED_RESULT static Maybe<bool> TransitionAndWriteDataProperty(
       LookupIterator* it, Handle<Object> value, PropertyAttributes attributes,
       Maybe<ShouldThrow> should_throw, StoreOrigin store_origin);
+  V8_WARN_UNUSED_RESULT static Maybe<bool>
+  TransitionAndWriteDataProperty_Direct(LookupIterator* it,
+                                        DirectHandle<Object> value,
+                                        PropertyAttributes attributes,
+                                        Maybe<ShouldThrow> should_throw,
+                                        StoreOrigin store_origin);
 
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> GetPropertyOrElement(
       Isolate* isolate, Handle<Object> object, Handle<Name> name);
@@ -571,9 +628,14 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
       Handle<Object> receiver, Handle<Name> name, Handle<JSReceiver> holder);
   V8_WARN_UNUSED_RESULT static inline MaybeHandle<Object> GetProperty(
       Isolate* isolate, Handle<Object> object, Handle<Name> name);
+  V8_WARN_UNUSED_RESULT static inline MaybeDirectHandle<Object>
+  GetProperty_Direct(Isolate* isolate, DirectHandle<Object> object,
+                     DirectHandle<Name> name);
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> GetPropertyWithAccessor(
       LookupIterator* it);
+  V8_WARN_UNUSED_RESULT static MaybeDirectHandle<Object>
+  GetPropertyWithAccessor_Direct(LookupIterator* it);
   V8_WARN_UNUSED_RESULT static Maybe<bool> SetPropertyWithAccessor(
       LookupIterator* it, Handle<Object> value,
       Maybe<ShouldThrow> should_throw);
@@ -848,14 +910,21 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   ConvertToString(Isolate* isolate, Handle<Object> input);
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> ConvertToNumberOrNumeric(
       Isolate* isolate, Handle<Object> input, Conversion mode);
+  V8_WARN_UNUSED_RESULT static MaybeDirectHandle<Object>
+  ConvertToNumberOrNumeric_Direct(Isolate* isolate, DirectHandle<Object> input,
+                                  Conversion mode);
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
   ConvertToInteger(Isolate* isolate, Handle<Object> input);
+  V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeDirectHandle<Object>
+  ConvertToInteger_Direct(Isolate* isolate, DirectHandle<Object> input);
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> ConvertToInt32(
       Isolate* isolate, Handle<Object> input);
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> ConvertToUint32(
       Isolate* isolate, Handle<Object> input);
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
   ConvertToLength(Isolate* isolate, Handle<Object> input);
+  V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeDirectHandle<Object>
+  ConvertToLength_Direct(Isolate* isolate, DirectHandle<Object> input);
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
   ConvertToIndex(Isolate* isolate, Handle<Object> input,
                  MessageTemplate error_index);

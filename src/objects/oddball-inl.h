@@ -46,6 +46,10 @@ void Oddball::set_kind(uint8_t value) {
 Handle<Object> Oddball::ToNumber(Isolate* isolate, Handle<Oddball> input) {
   return Handle<Object>(input->to_number(), isolate);
 }
+DirectHandle<Object> Oddball::ToNumber_Direct(Isolate* isolate,
+                                              DirectHandle<Oddball> input) {
+  return DirectHandle<Object>(input->to_number(), isolate);
+}
 
 DEF_GETTER(HeapObject, IsBoolean, bool) {
   return IsOddball(cage_base) &&

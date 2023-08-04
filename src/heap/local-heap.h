@@ -39,8 +39,9 @@ class Safepoint;
 //            some time or for blocking operations like locking a mutex.
 class V8_EXPORT_PRIVATE LocalHeap {
  public:
-  using GCEpilogueCallback = void(LocalIsolate*, GCType, GCCallbackFlags,
-                                  void*);
+  using GCCallback = void(LocalIsolate*, GCType, GCCallbackFlags, void*);
+  // using RootsIterator = void(RootVisitor*);
+  using RootsIterator = Heap::RootsIterator;
 
   explicit LocalHeap(
       Heap* heap, ThreadKind kind,
@@ -179,17 +180,25 @@ class V8_EXPORT_PRIVATE LocalHeap {
   }
   ReadOnlySpace* read_only_space() { return heap_->read_only_space(); }
 
-  // Adds a callback that is invoked with the given |data| after each GC.
-  // The callback is invoked on the main thread before any background thread
-  // resumes. The callback must not allocate or make any other calls that
-  // can trigger GC.
-  void AddGCEpilogueCallback(GCEpilogueCallback* callback, void* data,
+  void AddGCPrologueCallback(GCCallback* callback, void* data,
                              GCType gc_type = static_cast<v8::GCType>(
                                  GCType::kGCTypeMarkSweepCompact |
                                  GCType::kGCTypeScavenge |
                                  GCType::kGCTypeMinorMarkCompact));
-  void RemoveGCEpilogueCallback(GCEpilogueCallback* callback, void* data);
+  void RemoveGCPrologueCallback(GCCallback* callback, void* data);
+  // Adds a callback that is invoked with the given |data| after each GC.
+  // The callback is invoked on the main thread before any background thread
+  // resumes. The callback must not allocate or make any other calls that
+  // can trigger GC.
+  void AddGCEpilogueCallback(GCCallback* callback, void* data,
+                             GCType gc_type = static_cast<v8::GCType>(
+                                 GCType::kGCTypeMarkSweepCompact |
+                                 GCType::kGCTypeScavenge |
+                                 GCType::kGCTypeMinorMarkCompact));
+  void RemoveGCEpilogueCallback(GCCallback* callback, void* data);
 
+  void RegisterStrongRootsIterator(const RootsIterator& iterator);
+  void UnregisterStrongRootsIterator(const RootsIterator& iterator);
   // Weakens StrongDescriptorArray objects into regular DescriptorArray objects.
   void WeakenDescriptorArrays(
       GlobalHandleVector<DescriptorArray> strong_descriptor_arrays);
@@ -344,6 +353,8 @@ class V8_EXPORT_PRIVATE LocalHeap {
 
   void EnsurePersistentHandles();
 
+  void InvokeGCPrologueCallbacksInSafepoint(GCType gc_type,
+                                            GCCallbackFlags flags);
   void InvokeGCEpilogueCallbacksInSafepoint(GCType gc_type,
                                             GCCallbackFlags flags);
 
@@ -367,6 +378,7 @@ class V8_EXPORT_PRIVATE LocalHeap {
   std::unique_ptr<PersistentHandles> persistent_handles_;
   std::unique_ptr<MarkingBarrier> marking_barrier_;
 
+  GCCallbacks<LocalIsolate, DisallowGarbageCollection> gc_prologue_callbacks_;
   GCCallbacks<LocalIsolate, DisallowGarbageCollection> gc_epilogue_callbacks_;
 
   std::unique_ptr<ConcurrentAllocator> old_space_allocator_;

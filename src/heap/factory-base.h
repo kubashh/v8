@@ -91,8 +91,11 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
 
   // Converts the given boolean condition to JavaScript boolean value.
   inline Handle<Oddball> ToBoolean(bool value);
+  inline DirectHandle<Oddball> ToBoolean_Direct(bool value);
 
-#define ROOT_ACCESSOR(Type, name, CamelName) inline Handle<Type> name();
+#define ROOT_ACCESSOR(Type, name, CamelName) \
+  inline Handle<Type> name();                \
+  inline DirectHandle<Type> name##_direct();
   READ_ONLY_ROOT_LIST(ROOT_ACCESSOR)
 #undef ROOT_ACCESSOR
 
@@ -101,22 +104,38 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
   template <AllocationType allocation = AllocationType::kYoung>
   inline Handle<Object> NewNumber(double value);
   template <AllocationType allocation = AllocationType::kYoung>
+  inline DirectHandle<Object> NewNumber_Direct(double value);
+  template <AllocationType allocation = AllocationType::kYoung>
   inline Handle<Object> NewNumberFromInt(int32_t value);
   template <AllocationType allocation = AllocationType::kYoung>
+  inline DirectHandle<Object> NewNumberFromInt_Direct(int32_t value);
+  template <AllocationType allocation = AllocationType::kYoung>
   inline Handle<Object> NewNumberFromUint(uint32_t value);
+  template <AllocationType allocation = AllocationType::kYoung>
+  inline DirectHandle<Object> NewNumberFromUint_Direct(uint32_t value);
   template <AllocationType allocation = AllocationType::kYoung>
   inline Handle<Object> NewNumberFromSize(size_t value);
   template <AllocationType allocation = AllocationType::kYoung>
   inline Handle<Object> NewNumberFromInt64(int64_t value);
   template <AllocationType allocation = AllocationType::kYoung>
+  inline DirectHandle<Object> NewNumberFromInt64_Direct(int64_t value);
+  template <AllocationType allocation = AllocationType::kYoung>
   inline Handle<HeapNumber> NewHeapNumber(double value);
+  template <AllocationType allocation = AllocationType::kYoung>
+  inline DirectHandle<HeapNumber> NewHeapNumber_Direct(double value);
   template <AllocationType allocation = AllocationType::kYoung>
   inline Handle<HeapNumber> NewHeapNumberFromBits(uint64_t bits);
   template <AllocationType allocation = AllocationType::kYoung>
+  inline DirectHandle<HeapNumber> NewHeapNumberFromBits_Direct(uint64_t bits);
+  template <AllocationType allocation = AllocationType::kYoung>
   inline Handle<HeapNumber> NewHeapNumberWithHoleNaN();
+  template <AllocationType allocation = AllocationType::kYoung>
+  inline DirectHandle<HeapNumber> NewHeapNumberWithHoleNaN_Direct();
 
   template <AllocationType allocation>
   Handle<HeapNumber> NewHeapNumber();
+  template <AllocationType allocation>
+  DirectHandle<HeapNumber> NewHeapNumber_Direct();
 
   Handle<Struct> NewStruct(InstanceType type,
                            AllocationType allocation = AllocationType::kYoung);
@@ -127,15 +146,22 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
   // Allocates a fixed array initialized with undefined values.
   Handle<FixedArray> NewFixedArray(
       int length, AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<FixedArray> NewFixedArray_Direct(
+      int length, AllocationType allocation = AllocationType::kYoung);
 
   // Allocates a fixed array-like object with given map and initialized with
   // undefined values.
   Handle<FixedArray> NewFixedArrayWithMap(
       Handle<Map> map, int length,
       AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<FixedArray> NewFixedArrayWithMap_Direct(
+      DirectHandle<Map> map, int length,
+      AllocationType allocation = AllocationType::kYoung);
 
   // Allocate a new fixed array with non-existing entries (the hole).
   Handle<FixedArray> NewFixedArrayWithHoles(
+      int length, AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<FixedArray> NewFixedArrayWithHoles_Direct(
       int length, AllocationType allocation = AllocationType::kYoung);
 
   // Allocate a new fixed array with Smi(0) entries.
@@ -147,10 +173,14 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
   // so the return type must be the general fixed array class.
   Handle<FixedArrayBase> NewFixedDoubleArray(
       int length, AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<FixedArrayBase> NewFixedDoubleArray_Direct(
+      int length, AllocationType allocation = AllocationType::kYoung);
 
   // Allocates a weak fixed array-like object with given map and initialized
   // with undefined values. Length must be > 0.
   Handle<WeakFixedArray> NewWeakFixedArrayWithMap(
+      Map map, int length, AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<WeakFixedArray> NewWeakFixedArrayWithMap_Direct(
       Map map, int length, AllocationType allocation = AllocationType::kYoung);
 
   // Allocates a fixed array which may contain in-place weak references. The
@@ -161,6 +191,8 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
 
   // The function returns a pre-allocated empty byte array for length = 0.
   Handle<ByteArray> NewByteArray(
+      int length, AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<ByteArray> NewByteArray_Direct(
       int length, AllocationType allocation = AllocationType::kYoung);
 
   Handle<DeoptimizationLiteralArray> NewDeoptimizationLiteralArray(int length);
@@ -240,6 +272,8 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
 
   template <class StringTableKey>
   Handle<String> InternalizeStringWithKey(StringTableKey* key);
+  template <class StringTableKey>
+  DirectHandle<String> InternalizeStringWithKey_Direct(StringTableKey* key);
 
   Handle<SeqOneByteString> NewOneByteInternalizedString(
       base::Vector<const uint8_t> str, uint32_t raw_hash_field);
@@ -250,20 +284,34 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
 
   Handle<SeqOneByteString> AllocateRawOneByteInternalizedString(
       int length, uint32_t raw_hash_field);
+  DirectHandle<SeqOneByteString> AllocateRawOneByteInternalizedString_Direct(
+      int length, uint32_t raw_hash_field);
   Handle<SeqTwoByteString> AllocateRawTwoByteInternalizedString(
+      int length, uint32_t raw_hash_field);
+  DirectHandle<SeqTwoByteString> AllocateRawTwoByteInternalizedString_Direct(
       int length, uint32_t raw_hash_field);
 
   // Creates a single character string where the character has given code.
   // A cache is used for Latin1 codes.
   Handle<String> LookupSingleCharacterStringFromCode(uint16_t code);
+  DirectHandle<String> LookupSingleCharacterStringFromCode_Direct(
+      uint16_t code);
 
   MaybeHandle<String> NewStringFromOneByte(
+      base::Vector<const uint8_t> string,
+      AllocationType allocation = AllocationType::kYoung);
+  MaybeDirectHandle<String> NewStringFromOneByte_Direct(
       base::Vector<const uint8_t> string,
       AllocationType allocation = AllocationType::kYoung);
 
   inline Handle<String> NewStringFromAsciiChecked(
       const char* str, AllocationType allocation = AllocationType::kYoung) {
     return NewStringFromOneByte(base::OneByteVector(str), allocation)
+        .ToHandleChecked();
+  }
+  inline DirectHandle<String> NewStringFromAsciiChecked_Direct(
+      const char* str, AllocationType allocation = AllocationType::kYoung) {
+    return NewStringFromOneByte_Direct(base::OneByteVector(str), allocation)
         .ToHandleChecked();
   }
 
@@ -273,6 +321,12 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
   V8_WARN_UNUSED_RESULT MaybeHandle<SeqOneByteString> NewRawOneByteString(
       int length, AllocationType allocation = AllocationType::kYoung);
   V8_WARN_UNUSED_RESULT MaybeHandle<SeqTwoByteString> NewRawTwoByteString(
+      int length, AllocationType allocation = AllocationType::kYoung);
+  V8_WARN_UNUSED_RESULT MaybeDirectHandle<SeqOneByteString>
+  NewRawOneByteString_Direct(
+      int length, AllocationType allocation = AllocationType::kYoung);
+  V8_WARN_UNUSED_RESULT MaybeDirectHandle<SeqTwoByteString>
+  NewRawTwoByteString_Direct(
       int length, AllocationType allocation = AllocationType::kYoung);
   // Create a new cons string object which consists of a pair of strings.
   V8_WARN_UNUSED_RESULT MaybeHandle<String> NewConsString(
@@ -288,7 +342,12 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
   V8_WARN_UNUSED_RESULT Handle<String> HeapNumberToString(
       Handle<HeapNumber> number, double value,
       NumberCacheMode mode = NumberCacheMode::kBoth);
+  V8_WARN_UNUSED_RESULT DirectHandle<String> HeapNumberToString_Direct(
+      DirectHandle<HeapNumber> number, double value,
+      NumberCacheMode mode = NumberCacheMode::kBoth);
   V8_WARN_UNUSED_RESULT Handle<String> SmiToString(
+      Smi number, NumberCacheMode mode = NumberCacheMode::kBoth);
+  V8_WARN_UNUSED_RESULT DirectHandle<String> SmiToString_Direct(
       Smi number, NumberCacheMode mode = NumberCacheMode::kBoth);
 
   V8_WARN_UNUSED_RESULT MaybeHandle<SeqOneByteString> NewRawSharedOneByteString(
@@ -310,19 +369,29 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
   Handle<DescriptorArray> NewDescriptorArray(
       int number_of_descriptors, int slack = 0,
       AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<DescriptorArray> NewDescriptorArray_Direct(
+      int number_of_descriptors, int slack = 0,
+      AllocationType allocation = AllocationType::kYoung);
 
   Handle<ClassPositions> NewClassPositions(int start, int end);
 
   Handle<SwissNameDictionary> NewSwissNameDictionary(
       int at_least_space_for = kSwissNameDictionaryInitialCapacity,
       AllocationType allocation = AllocationType::kYoung);
+  DirectHandle<SwissNameDictionary> NewSwissNameDictionary_Direct(
+      int at_least_space_for = kSwissNameDictionaryInitialCapacity,
+      AllocationType allocation = AllocationType::kYoung);
 
   Handle<SwissNameDictionary> NewSwissNameDictionaryWithCapacity(
+      int capacity, AllocationType allocation);
+  DirectHandle<SwissNameDictionary> NewSwissNameDictionaryWithCapacity_Direct(
       int capacity, AllocationType allocation);
 
   Handle<FunctionTemplateRareData> NewFunctionTemplateRareData();
 
   MaybeHandle<Map> GetInPlaceInternalizedStringMap(Map from_string_map);
+  MaybeDirectHandle<Map> GetInPlaceInternalizedStringMap_Direct(
+      Map from_string_map);
 
   AllocationType RefineAllocationTypeForInPlaceInternalizableString(
       AllocationType allocation, Map string_map);
@@ -350,6 +419,9 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
   Handle<FixedArray> NewFixedArrayWithFiller(Handle<Map> map, int length,
                                              Handle<HeapObject> filler,
                                              AllocationType allocation);
+  DirectHandle<FixedArray> NewFixedArrayWithFiller_Direct(
+      DirectHandle<Map> map, int length, DirectHandle<HeapObject> filler,
+      AllocationType allocation);
 
   Handle<SharedFunctionInfo> NewSharedFunctionInfo(AllocationType allocation);
   Handle<SharedFunctionInfo> NewSharedFunctionInfo(
@@ -362,6 +434,9 @@ class FactoryBase : public TorqueGeneratedFactory<Impl> {
   template <typename SeqStringT>
   MaybeHandle<SeqStringT> NewRawStringWithMap(int length, Map map,
                                               AllocationType allocation);
+  template <typename SeqStringT>
+  MaybeDirectHandle<SeqStringT> NewRawStringWithMap_Direct(
+      int length, Map map, AllocationType allocation);
 
  private:
   Impl* impl() { return static_cast<Impl*>(this); }

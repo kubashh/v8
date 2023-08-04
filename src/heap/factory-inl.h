@@ -42,6 +42,11 @@ Handle<Name> Factory::InternalizeName(Handle<Name> name) {
   return isolate()->string_table()->LookupString(isolate(),
                                                  Handle<String>::cast(name));
 }
+DirectHandle<Name> Factory::InternalizeName_Direct(DirectHandle<Name> name) {
+  if (name->IsUniqueName()) return name;
+  return isolate()->string_table()->LookupString_Direct(
+      isolate(), DirectHandle<String>::cast(name));
+}
 
 Handle<String> Factory::NewSubString(Handle<String> str, int begin, int end) {
   if (begin == 0 && end == str->length()) return str;
@@ -104,6 +109,25 @@ void Factory::NumberToStringCacheSet(Handle<Object> number, int hash,
   cache.set(hash * 2 + 1, *js_string);
 }
 
+void Factory::NumberToStringCacheSet_Direct(DirectHandle<Object> number,
+                                            int hash,
+                                            DirectHandle<String> js_string) {
+  if (!number_string_cache()->get(hash * 2).IsUndefined(isolate()) &&
+      !v8_flags.optimize_for_size) {
+    int full_size = isolate()->heap()->MaxNumberToStringCacheSize();
+    if (number_string_cache()->length() != full_size) {
+      DirectHandle<FixedArray> new_cache =
+          NewFixedArray_Direct(full_size, AllocationType::kOld);
+      isolate()->heap()->set_number_string_cache(*new_cache);
+      return;
+    }
+  }
+  DisallowGarbageCollection no_gc;
+  FixedArray cache = *number_string_cache();
+  cache.set(hash * 2, *number);
+  cache.set(hash * 2 + 1, *js_string);
+}
+
 Handle<Object> Factory::NumberToStringCacheGet(Object number, int hash) {
   DisallowGarbageCollection no_gc;
   FixedArray cache = *number_string_cache();
@@ -113,6 +137,19 @@ Handle<Object> Factory::NumberToStringCacheGet(Object number, int hash) {
     return Handle<String>(String::cast(cache.get(hash * 2 + 1)), isolate());
   }
   return undefined_value();
+}
+
+DirectHandle<Object> Factory::NumberToStringCacheGet_Direct(Object number,
+                                                            int hash) {
+  DisallowGarbageCollection no_gc;
+  FixedArray cache = *number_string_cache();
+  Object key = cache.get(hash * 2);
+  if (key == number || (key.IsHeapNumber() && number.IsHeapNumber() &&
+                        key.Number() == number.Number())) {
+    return DirectHandle<String>(String::cast(cache.get(hash * 2 + 1)),
+                                isolate());
+  }
+  return undefined_value_direct();
 }
 
 }  // namespace internal

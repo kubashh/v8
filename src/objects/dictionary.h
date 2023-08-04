@@ -93,6 +93,14 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Dictionary
       IsolateT* isolate, Handle<Derived> dictionary, Key key,
       Handle<Object> value, PropertyDetails details,
       InternalIndex* entry_out = nullptr);
+  template <typename IsolateT, AllocationType key_allocation =
+                                   std::is_same<IsolateT, Isolate>::value
+                                       ? AllocationType::kYoung
+                                       : AllocationType::kOld>
+  V8_WARN_UNUSED_RESULT static DirectHandle<Derived> Add_Direct(
+      IsolateT* isolate, DirectHandle<Derived> dictionary, Key key,
+      DirectHandle<Object> value, PropertyDetails details,
+      InternalIndex* entry_out = nullptr);
 
   // This method is only safe to use when it is guaranteed that the dictionary
   // doesn't need to grow.
@@ -105,6 +113,14 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Dictionary
   static void UncheckedAdd(IsolateT* isolate, Handle<Derived> dictionary,
                            Key key, Handle<Object> value,
                            PropertyDetails details);
+  template <typename IsolateT, AllocationType key_allocation =
+                                   std::is_same<IsolateT, Isolate>::value
+                                       ? AllocationType::kYoung
+                                       : AllocationType::kOld>
+  static void UncheckedAdd_Direct(IsolateT* isolate,
+                                  DirectHandle<Derived> dictionary, Key key,
+                                  DirectHandle<Object> value,
+                                  PropertyDetails details);
 
   static Handle<Derived> ShallowCopy(
       Isolate* isolate, Handle<Derived> dictionary,
@@ -120,6 +136,10 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Dictionary
   static void UncheckedAtPut(Isolate* isolate, Handle<Derived> dictionary,
                              Key key, Handle<Object> value,
                              PropertyDetails details);
+  static void UncheckedAtPut_Direct(Isolate* isolate,
+                                    DirectHandle<Derived> dictionary, Key key,
+                                    DirectHandle<Object> value,
+                                    PropertyDetails details);
 
   OBJECT_CONSTRUCTORS(Dictionary, HashTable<Derived, Shape>);
 };
@@ -141,16 +161,24 @@ class BaseDictionaryShape : public BaseShape<Key> {
                                   PropertyDetails value);
 };
 
-class BaseNameDictionaryShape : public BaseDictionaryShape<Handle<Name>> {
+// TODO(CSS): DirectHandle version
+class BaseNameDictionaryShape : public BaseDictionaryShape<DirectHandle<Name>> {
  public:
-  static inline bool IsMatch(Handle<Name> key, Object other);
-  static inline uint32_t Hash(ReadOnlyRoots roots, Handle<Name> key);
+  static inline bool IsMatch(DirectHandle<Name> key, Object other);
+  static inline uint32_t Hash(ReadOnlyRoots roots, DirectHandle<Name> key);
   static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
   template <AllocationType allocation = AllocationType::kYoung>
-  static inline Handle<Object> AsHandle(Isolate* isolate, Handle<Name> key);
+  static inline Handle<Object> AsHandle(Isolate* isolate,
+                                        DirectHandle<Name> key);
   template <AllocationType allocation = AllocationType::kOld>
   static inline Handle<Object> AsHandle(LocalIsolate* isolate,
-                                        Handle<Name> key);
+                                        DirectHandle<Name> key);
+  template <AllocationType allocation = AllocationType::kYoung>
+  static inline DirectHandle<Object> AsDirectHandle(Isolate* isolate,
+                                                    DirectHandle<Name> key);
+  template <AllocationType allocation = AllocationType::kOld>
+  static inline DirectHandle<Object> AsDirectHandle(LocalIsolate* isolate,
+                                                    DirectHandle<Name> key);
   static const int kEntryValueIndex = 1;
 };
 
@@ -181,10 +209,17 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) BaseNameDictionary
       IsolateT* isolate, int at_least_space_for,
       AllocationType allocation = AllocationType::kYoung,
       MinimumCapacity capacity_option = USE_DEFAULT_MINIMUM_CAPACITY);
+  template <typename IsolateT>
+  V8_WARN_UNUSED_RESULT static DirectHandle<Derived> New_Direct(
+      IsolateT* isolate, int at_least_space_for,
+      AllocationType allocation = AllocationType::kYoung,
+      MinimumCapacity capacity_option = USE_DEFAULT_MINIMUM_CAPACITY);
 
   // Allocate the next enumeration index. Possibly updates all enumeration
   // indices in the table.
   static int NextEnumerationIndex(Isolate* isolate, Handle<Derived> dictionary);
+  static int NextEnumerationIndex_Direct(Isolate* isolate,
+                                         DirectHandle<Derived> dictionary);
   // Accessors for next enumeration index.
   inline int next_enumeration_index();
   inline void set_next_enumeration_index(int index);
@@ -192,16 +227,29 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) BaseNameDictionary
   // Return the key indices sorted by its enumeration index.
   static Handle<FixedArray> IterationIndices(Isolate* isolate,
                                              Handle<Derived> dictionary);
+  static DirectHandle<FixedArray> IterationIndices_Direct(
+      Isolate* isolate, DirectHandle<Derived> dictionary);
 
   template <typename IsolateT>
   V8_WARN_UNUSED_RESULT static Handle<Derived> AddNoUpdateNextEnumerationIndex(
       IsolateT* isolate, Handle<Derived> dictionary, Key key,
       Handle<Object> value, PropertyDetails details,
       InternalIndex* entry_out = nullptr);
+  template <typename IsolateT>
+  V8_WARN_UNUSED_RESULT static DirectHandle<Derived>
+  AddNoUpdateNextEnumerationIndex_Direct(IsolateT* isolate,
+                                         DirectHandle<Derived> dictionary,
+                                         Key key, DirectHandle<Object> value,
+                                         PropertyDetails details,
+                                         InternalIndex* entry_out = nullptr);
 
   V8_WARN_UNUSED_RESULT static Handle<Derived> Add(
       Isolate* isolate, Handle<Derived> dictionary, Key key,
       Handle<Object> value, PropertyDetails details,
+      InternalIndex* entry_out = nullptr);
+  V8_WARN_UNUSED_RESULT static DirectHandle<Derived> Add_Direct(
+      Isolate* isolate, DirectHandle<Derived> dictionary, Key key,
+      DirectHandle<Object> value, PropertyDetails details,
       InternalIndex* entry_out = nullptr);
 
   // Exposed for NameDictionaryLookupForwardedString slow path for forwarded
@@ -252,6 +300,11 @@ class V8_EXPORT_PRIVATE NameDictionary
       IsolateT* isolate, int at_least_space_for,
       AllocationType allocation = AllocationType::kYoung,
       MinimumCapacity capacity_option = USE_DEFAULT_MINIMUM_CAPACITY);
+  template <typename IsolateT>
+  V8_WARN_UNUSED_RESULT static DirectHandle<NameDictionary> New_Direct(
+      IsolateT* isolate, int at_least_space_for,
+      AllocationType allocation = AllocationType::kYoung,
+      MinimumCapacity capacity_option = USE_DEFAULT_MINIMUM_CAPACITY);
 
   OBJECT_CONSTRUCTORS(NameDictionary,
                       BaseNameDictionary<NameDictionary, NameDictionaryShape>);
@@ -259,7 +312,7 @@ class V8_EXPORT_PRIVATE NameDictionary
 
 class V8_EXPORT_PRIVATE GlobalDictionaryShape : public BaseNameDictionaryShape {
  public:
-  static inline bool IsMatch(Handle<Name> key, Object other);
+  static inline bool IsMatch(DirectHandle<Name> key, Object other);
   static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
 
   static const bool kMatchNeedsHoleCheck = true;
@@ -312,6 +365,12 @@ class NumberDictionaryBaseShape : public BaseDictionaryShape<uint32_t> {
   static inline Handle<Object> AsHandle(Isolate* isolate, uint32_t key);
   template <AllocationType allocation = AllocationType::kOld>
   static inline Handle<Object> AsHandle(LocalIsolate* isolate, uint32_t key);
+  template <AllocationType allocation = AllocationType::kYoung>
+  static inline DirectHandle<Object> AsDirectHandle(Isolate* isolate,
+                                                    uint32_t key);
+  template <AllocationType allocation = AllocationType::kOld>
+  static inline DirectHandle<Object> AsDirectHandle(LocalIsolate* isolate,
+                                                    uint32_t key);
 
   static inline uint32_t Hash(ReadOnlyRoots roots, uint32_t key);
   static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
@@ -391,9 +450,13 @@ class NumberDictionary
   static void UncheckedSet(Isolate* isolate,
                            Handle<NumberDictionary> dictionary, uint32_t key,
                            Handle<Object> value);
+  static void UncheckedSet_Direct(Isolate* isolate,
+                                  DirectHandle<NumberDictionary> dictionary,
+                                  uint32_t key, DirectHandle<Object> value);
 
   static const int kMaxNumberKeyIndex = kPrefixStartIndex;
-  void UpdateMaxNumberKey(uint32_t key, Handle<JSObject> dictionary_holder);
+  void UpdateMaxNumberKey(uint32_t key,
+                          DirectHandle<JSObject> dictionary_holder);
 
   // Sorting support
   void CopyValuesTo(FixedArray elements);

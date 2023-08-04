@@ -26,6 +26,8 @@ namespace internal {
 
 FullObjectSlot::FullObjectSlot(Object* object)
     : SlotBase(reinterpret_cast<Address>(&object->ptr_)) {}
+FullObjectSlot::FullObjectSlot(Tagged<Object>* object)
+    : SlotBase(reinterpret_cast<Address>(&object->ptr_)) {}
 
 bool FullObjectSlot::contains_map_value(Address raw_value) const {
   return load_map().ptr() == raw_value;

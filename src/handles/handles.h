@@ -69,9 +69,15 @@ class HandleBase {
  protected:
 #ifdef DEBUG
   bool V8_EXPORT_PRIVATE IsDereferenceAllowed() const;
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+  void RecordDeref() const;
+#endif
 #else
   V8_INLINE
   bool V8_EXPORT_PRIVATE IsDereferenceAllowed() const { return true; }
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+  void RecordDeref() const {}
+#endif
 #endif  // DEBUG
 
   // This uses type Address* as opposed to a pointer type to a typed
@@ -127,6 +133,9 @@ class Handle final : public HandleBase {
     // we rather trust Handle<T> to contain a T than include all the respective
     // -inl.h headers for SLOW_DCHECKs.
     SLOW_DCHECK(IsDereferenceAllowed());
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+    RecordDeref();
+#endif
     return Tagged<T>(*location());
   }
 
@@ -417,10 +426,41 @@ class DirectHandle final {
 template <typename T>
 std::ostream& operator<<(std::ostream& os, DirectHandle<T> handle);
 
+class DirectHandleScope {
+ public:
+  explicit V8_INLINE DirectHandleScope(Isolate* isolate) {}
+  inline DirectHandleScope(DirectHandleScope&& other) V8_NOEXCEPT {}
+  DirectHandleScope(const DirectHandleScope&) = delete;
+  DirectHandleScope& operator=(const DirectHandleScope&) = delete;
+
+  // Allow placement new.
+  void* operator new(size_t size, void* storage) {
+    return ::operator new(size, storage);
+  }
+
+  // Prevent heap allocation or illegal handle scopes.
+  void* operator new(size_t size) = delete;
+  void operator delete(void* size_t) = delete;
+
+  V8_INLINE ~DirectHandleScope() {}
+
+  inline DirectHandleScope& operator=(DirectHandleScope&& other) V8_NOEXCEPT {
+    return other;
+  }
+
+  // Counts the number of allocated handles.
+  V8_EXPORT_PRIVATE static int NumberOfHandles(Isolate* isolate) { return 0; }
+
+  template <typename T>
+  DirectHandle<T> CloseAndEscape(DirectHandle<T> handle_value) {
+    return handle_value;
+  }
+};
 #else  // !V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 
 template <typename T>
 using DirectHandle = Handle<T>;
+using DirectHandleScope = HandleScope;
 
 #endif  // V8_ENABLE_CONSERVATIVE_STACK_SCANNING
 

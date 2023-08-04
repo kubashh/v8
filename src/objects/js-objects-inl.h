@@ -80,6 +80,14 @@ MaybeHandle<Object> JSReceiver::GetProperty(Isolate* isolate,
   return Object::GetProperty(&it);
 }
 
+MaybeDirectHandle<Object> JSReceiver::GetProperty_Direct(
+    Isolate* isolate, DirectHandle<JSReceiver> receiver,
+    DirectHandle<Name> name) {
+  LookupIterator it(isolate, receiver, name, receiver);
+  if (!it.IsFound()) return it.factory()->undefined_value_direct();
+  return Object::GetProperty_Direct(&it);
+}
+
 MaybeHandle<Object> JSReceiver::GetElement(Isolate* isolate,
                                            Handle<JSReceiver> receiver,
                                            uint32_t index) {
@@ -97,6 +105,15 @@ Handle<Object> JSReceiver::GetDataProperty(Isolate* isolate,
   return GetDataProperty(&it);
 }
 
+DirectHandle<Object> JSReceiver::GetDataProperty_Direct(
+    Isolate* isolate, DirectHandle<JSReceiver> object,
+    DirectHandle<Name> name) {
+  LookupIterator it(isolate, object, name, object,
+                    LookupIterator::PROTOTYPE_CHAIN_SKIP_INTERCEPTOR);
+  if (!it.IsFound()) return it.factory()->undefined_value_direct();
+  return GetDataProperty_Direct(&it);
+}
+
 MaybeHandle<HeapObject> JSReceiver::GetPrototype(Isolate* isolate,
                                                  Handle<JSReceiver> receiver) {
   // We don't expect access checks to be needed on JSProxy objects.
@@ -108,6 +125,19 @@ MaybeHandle<HeapObject> JSReceiver::GetPrototype(Isolate* isolate,
     if (!iter.AdvanceFollowingProxies()) return MaybeHandle<HeapObject>();
   } while (!iter.IsAtEnd());
   return PrototypeIterator::GetCurrent(iter);
+}
+
+MaybeDirectHandle<HeapObject> JSReceiver::GetPrototype_Direct(
+    Isolate* isolate, DirectHandle<JSReceiver> receiver) {
+  // We don't expect access checks to be needed on JSProxy objects.
+  DCHECK(!receiver->IsAccessCheckNeeded() || receiver->IsJSObject());
+
+  PrototypeIterator iter(isolate, receiver, kStartAtReceiver,
+                         PrototypeIterator::END_AT_NON_HIDDEN);
+  do {
+    if (!iter.AdvanceFollowingProxies()) return MaybeDirectHandle<HeapObject>();
+  } while (!iter.IsAtEnd());
+  return PrototypeIterator::GetCurrent_Direct(iter);
 }
 
 MaybeHandle<Object> JSReceiver::GetProperty(Isolate* isolate,
@@ -242,6 +272,22 @@ void JSObject::SetMapAndElements(Handle<JSObject> object, Handle<Map> new_map,
                                  Handle<FixedArrayBase> value) {
   Isolate* isolate = object->GetIsolate();
   JSObject::MigrateToMap(isolate, object, new_map);
+  DCHECK((object->map().has_fast_smi_or_object_elements() ||
+          (*value == ReadOnlyRoots(isolate).empty_fixed_array()) ||
+          object->map().has_fast_string_wrapper_elements()) ==
+         (value->map() == ReadOnlyRoots(isolate).fixed_array_map() ||
+          value->map() == ReadOnlyRoots(isolate).fixed_cow_array_map()));
+  DCHECK((*value == ReadOnlyRoots(isolate).empty_fixed_array()) ||
+         (object->map().has_fast_double_elements() ==
+          value->IsFixedDoubleArray()));
+  object->set_elements(*value);
+}
+
+void JSObject::SetMapAndElements_Direct(DirectHandle<JSObject> object,
+                                        DirectHandle<Map> new_map,
+                                        DirectHandle<FixedArrayBase> value) {
+  Isolate* isolate = object->GetIsolate();
+  JSObject::MigrateToMap_Direct(isolate, object, new_map);
   DCHECK((object->map().has_fast_smi_or_object_elements() ||
           (*value == ReadOnlyRoots(isolate).empty_fixed_array()) ||
           object->map().has_fast_string_wrapper_elements()) ==
@@ -828,9 +874,17 @@ DEF_GETTER(JSReceiver, property_array, PropertyArray) {
 
 Maybe<bool> JSReceiver::HasProperty(Isolate* isolate, Handle<JSReceiver> object,
                                     Handle<Name> name) {
-  PropertyKey key(isolate, name);
+  PropertyKey key(isolate, DirectHandle<Name>(name));
   LookupIterator it(isolate, object, key, object);
   return HasProperty(&it);
+}
+
+Maybe<bool> JSReceiver::HasProperty_Direct(Isolate* isolate,
+                                           DirectHandle<JSReceiver> object,
+                                           DirectHandle<Name> name) {
+  PropertyKey key(isolate, name);
+  LookupIterator it(isolate, object, key, object);
+  return HasProperty_Direct(&it);
 }
 
 Maybe<bool> JSReceiver::HasOwnProperty(Isolate* isolate,
@@ -850,7 +904,7 @@ Maybe<bool> JSReceiver::HasOwnProperty(Isolate* isolate,
 Maybe<PropertyAttributes> JSReceiver::GetPropertyAttributes(
     Handle<JSReceiver> object, Handle<Name> name) {
   Isolate* isolate = object->GetIsolate();
-  PropertyKey key(isolate, name);
+  PropertyKey key(isolate, DirectHandle<Name>(name));
   LookupIterator it(isolate, object, key, object);
   return GetPropertyAttributes(&it);
 }
@@ -858,7 +912,7 @@ Maybe<PropertyAttributes> JSReceiver::GetPropertyAttributes(
 Maybe<PropertyAttributes> JSReceiver::GetOwnPropertyAttributes(
     Handle<JSReceiver> object, Handle<Name> name) {
   Isolate* isolate = object->GetIsolate();
-  PropertyKey key(isolate, name);
+  PropertyKey key(isolate, DirectHandle<Name>(name));
   LookupIterator it(isolate, object, key, object, LookupIterator::OWN);
   return GetPropertyAttributes(&it);
 }

@@ -269,10 +269,21 @@ class JSFunction : public TorqueGeneratedJSFunction<
   static void SetInitialMap(Isolate* isolate, Handle<JSFunction> function,
                             Handle<Map> map, Handle<HeapObject> prototype,
                             Handle<JSFunction> constructor);
+  static void SetInitialMap_Direct(Isolate* isolate,
+                                   DirectHandle<JSFunction> function,
+                                   DirectHandle<Map> map,
+                                   DirectHandle<HeapObject> prototype);
+  static void SetInitialMap_Direct(Isolate* isolate,
+                                   DirectHandle<JSFunction> function,
+                                   DirectHandle<Map> map,
+                                   DirectHandle<HeapObject> prototype,
+                                   DirectHandle<JSFunction> constructor);
 
   DECL_GETTER(has_initial_map, bool)
   V8_EXPORT_PRIVATE static void EnsureHasInitialMap(
       Handle<JSFunction> function);
+  V8_EXPORT_PRIVATE static void EnsureHasInitialMap_Direct(
+      DirectHandle<JSFunction> function);
 
   // Creates a map that matches the constructor's initial map, but with
   // [[prototype]] being new.target.prototype. Because new.target can be a

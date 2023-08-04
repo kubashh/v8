@@ -14,7 +14,7 @@ namespace internal {
 
 // static
 Map TransitionsAccessor::GetSimpleTransition(Isolate* isolate,
-                                             Handle<Map> map) {
+                                             DirectHandle<Map> map) {
   MaybeObject raw_transitions = map->raw_transitions(isolate, kAcquireLoad);
   switch (GetEncoding(isolate, raw_transitions)) {
     case kWeakRef:
@@ -221,6 +221,194 @@ void TransitionsAccessor::Insert(Isolate* isolate, Handle<Map> map,
   ReplaceTransitions(isolate, map, result);
 }
 
+// static
+void TransitionsAccessor::Insert_Direct(Isolate* isolate, DirectHandle<Map> map,
+                                        DirectHandle<Name> name,
+                                        DirectHandle<Map> target,
+                                        SimpleTransitionFlag flag) {
+  Encoding encoding = GetEncoding(isolate, map);
+  DCHECK_NE(kPrototypeInfo, encoding);
+  target->SetBackPointer(*map);
+
+  // If the map doesn't have any transitions at all yet, install the new one.
+  if (encoding == kUninitialized || encoding == kMigrationTarget) {
+    if (flag == SIMPLE_PROPERTY_TRANSITION) {
+      ReplaceTransitions_Direct(isolate, map,
+                                HeapObjectReference::Weak(*target));
+      return;
+    }
+    // If the flag requires a full TransitionArray, allocate one.
+    DirectHandle<TransitionArray> result =
+        isolate->factory()->NewTransitionArray_Direct(1, 0);
+    result->Set(0, *name, HeapObjectReference::Weak(*target));
+    ReplaceTransitions_Direct(isolate, map, result);
+    DCHECK_EQ(kFullTransitionArray, GetEncoding(isolate, *result));
+    return;
+  }
+
+  if (encoding == kWeakRef) {
+    Map simple_transition = GetSimpleTransition(isolate, map);
+    DCHECK(!simple_transition.is_null());
+
+    if (flag == SIMPLE_PROPERTY_TRANSITION) {
+      Name key = GetSimpleTransitionKey(simple_transition);
+      PropertyDetails old_details =
+          simple_transition.GetLastDescriptorDetails(isolate);
+      PropertyDetails new_details = GetTargetDetails(*name, *target);
+      if (key.Equals(*name) && old_details.kind() == new_details.kind() &&
+          old_details.attributes() == new_details.attributes()) {
+        ReplaceTransitions_Direct(isolate, map,
+                                  HeapObjectReference::Weak(*target));
+        return;
+      }
+    }
+
+    // Otherwise allocate a full TransitionArray with slack for a new entry.
+    DirectHandle<TransitionArray> result =
+        isolate->factory()->NewTransitionArray_Direct(1, 1);
+
+    // Reload `simple_transition`. Allocations might have caused it to be
+    // cleared.
+    simple_transition = GetSimpleTransition(isolate, map);
+    if (simple_transition.is_null()) {
+      result->Set(0, *name, HeapObjectReference::Weak(*target));
+      ReplaceTransitions_Direct(isolate, map, result);
+      DCHECK_EQ(kFullTransitionArray, GetEncoding(isolate, *result));
+      return;
+    }
+
+    // Insert the original transition in index 0.
+    result->Set(0, GetSimpleTransitionKey(simple_transition),
+                HeapObjectReference::Weak(simple_transition));
+
+    // Search for the correct index to insert the new transition.
+    int insertion_index;
+    int index;
+    if (flag == SPECIAL_TRANSITION) {
+      index =
+          result->SearchSpecial(Symbol::cast(*name), false, &insertion_index);
+    } else {
+      PropertyDetails details = GetTargetDetails(*name, *target);
+      index = result->Search(details.kind(), *name, details.attributes(),
+                             &insertion_index);
+    }
+    DCHECK_EQ(index, kNotFound);
+    USE(index);
+
+    result->SetNumberOfTransitions(2);
+    if (insertion_index == 0) {
+      // If the new transition will be inserted in index 0, move the original
+      // transition to index 1.
+      result->Set(1, GetSimpleTransitionKey(simple_transition),
+                  HeapObjectReference::Weak(simple_transition));
+    }
+    result->SetKey(insertion_index, *name);
+    result->SetRawTarget(insertion_index, HeapObjectReference::Weak(*target));
+
+    SLOW_DCHECK(result->IsSortedNoDuplicates());
+    ReplaceTransitions_Direct(isolate, map, result);
+    DCHECK_EQ(kFullTransitionArray, GetEncoding(isolate, *result));
+    return;
+  }
+
+  // At this point, we know that the map has a full TransitionArray.
+  DCHECK_EQ(kFullTransitionArray, encoding);
+
+  int number_of_transitions = 0;
+  int new_nof = 0;
+  int insertion_index = kNotFound;
+  const bool is_special_transition = flag == SPECIAL_TRANSITION;
+  DCHECK_EQ(is_special_transition,
+            IsSpecialTransition(ReadOnlyRoots(isolate), *name));
+  PropertyDetails details = is_special_transition
+                                ? PropertyDetails::Empty()
+                                : GetTargetDetails(*name, *target);
+
+  {
+    DisallowGarbageCollection no_gc;
+    TransitionArray array = GetTransitionArray(isolate, map);
+    number_of_transitions = array.number_of_transitions();
+
+    int index =
+        is_special_transition
+            ? array.SearchSpecial(Symbol::cast(*name), false, &insertion_index)
+            : array.Search(details.kind(), *name, details.attributes(),
+                           &insertion_index);
+    // If an existing entry was found, overwrite it and return.
+    if (index != kNotFound) {
+      base::SharedMutexGuard<base::kExclusive> shared_mutex_guard(
+          isolate->full_transition_array_access());
+      array.SetRawTarget(index, HeapObjectReference::Weak(*target));
+      return;
+    }
+
+    new_nof = number_of_transitions + 1;
+    CHECK_LE(new_nof, kMaxNumberOfTransitions);
+    DCHECK_GE(insertion_index, 0);
+    DCHECK_LE(insertion_index, number_of_transitions);
+
+    // If there is enough capacity, insert new entry into the existing array.
+    if (new_nof <= array.Capacity()) {
+      base::SharedMutexGuard<base::kExclusive> shared_mutex_guard(
+          isolate->full_transition_array_access());
+      array.SetNumberOfTransitions(new_nof);
+      for (int i = number_of_transitions; i > insertion_index; --i) {
+        array.SetKey(i, array.GetKey(i - 1));
+        array.SetRawTarget(i, array.GetRawTarget(i - 1));
+      }
+      array.SetKey(insertion_index, *name);
+      array.SetRawTarget(insertion_index, HeapObjectReference::Weak(*target));
+      SLOW_DCHECK(array.IsSortedNoDuplicates());
+      return;
+    }
+  }
+
+  // We're gonna need a bigger TransitionArray.
+  DirectHandle<TransitionArray> result =
+      isolate->factory()->NewTransitionArray_Direct(
+          new_nof, Map::SlackForArraySize(number_of_transitions,
+                                          kMaxNumberOfTransitions));
+
+  // The map's transition array may have shrunk during the allocation above as
+  // it was weakly traversed, though it is guaranteed not to disappear. Trim the
+  // result copy if needed, and recompute variables.
+  DisallowGarbageCollection no_gc;
+  TransitionArray array = GetTransitionArray(isolate, map);
+  if (array.number_of_transitions() != number_of_transitions) {
+    DCHECK_LT(array.number_of_transitions(), number_of_transitions);
+
+    int index =
+        is_special_transition
+            ? array.SearchSpecial(Symbol::cast(*name), false, &insertion_index)
+            : array.Search(details.kind(), *name, details.attributes(),
+                           &insertion_index);
+    CHECK_EQ(index, kNotFound);
+    USE(index);
+    DCHECK_GE(insertion_index, 0);
+    DCHECK_LE(insertion_index, number_of_transitions);
+
+    number_of_transitions = array.number_of_transitions();
+    new_nof = number_of_transitions + 1;
+    result->SetNumberOfTransitions(new_nof);
+  }
+
+  if (array.HasPrototypeTransitions()) {
+    result->SetPrototypeTransitions(array.GetPrototypeTransitions());
+  }
+
+  DCHECK_NE(kNotFound, insertion_index);
+  for (int i = 0; i < insertion_index; ++i) {
+    result->Set(i, array.GetKey(i), array.GetRawTarget(i));
+  }
+  result->Set(insertion_index, *name, HeapObjectReference::Weak(*target));
+  for (int i = insertion_index; i < number_of_transitions; ++i) {
+    result->Set(i + 1, array.GetKey(i), array.GetRawTarget(i));
+  }
+
+  SLOW_DCHECK(result->IsSortedNoDuplicates());
+  ReplaceTransitions_Direct(isolate, map, result);
+}
+
 Map TransitionsAccessor::SearchTransition(Name name, PropertyKind kind,
                                           PropertyAttributes attributes) {
   DCHECK(name.IsUniqueName());
@@ -278,6 +466,23 @@ MaybeHandle<Map> TransitionsAccessor::FindTransitionToDataProperty(
   return Handle<Map>(target, isolate_);
 }
 
+MaybeDirectHandle<Map> TransitionsAccessor::FindTransitionToDataProperty_Direct(
+    DirectHandle<Name> name, RequestedLocation requested_location) {
+  DCHECK(name->IsUniqueName());
+  DisallowGarbageCollection no_gc;
+  PropertyAttributes attributes = name->IsPrivate() ? DONT_ENUM : NONE;
+  Map target = SearchTransition(*name, PropertyKind::kData, attributes);
+  if (target.is_null()) return MaybeDirectHandle<Map>();
+  PropertyDetails details = target.GetLastDescriptorDetails(isolate_);
+  DCHECK_EQ(attributes, details.attributes());
+  DCHECK_EQ(PropertyKind::kData, details.kind());
+  if (requested_location == kFieldOnly &&
+      details.location() != PropertyLocation::kField) {
+    return MaybeDirectHandle<Map>();
+  }
+  return DirectHandle<Map>(target, isolate_);
+}
+
 void TransitionsAccessor::ForEachTransitionTo(
     Name name, const ForEachTransitionCallback& callback,
     DisallowGarbageCollection* no_gc) {
@@ -309,6 +514,18 @@ void TransitionsAccessor::ForEachTransitionTo(
 // static
 bool TransitionsAccessor::CanHaveMoreTransitions(Isolate* isolate,
                                                  Handle<Map> map) {
+  if (map->is_dictionary_map()) return false;
+  MaybeObject raw_transitions = map->raw_transitions(isolate, kAcquireLoad);
+  if (GetEncoding(isolate, raw_transitions) == kFullTransitionArray) {
+    return GetTransitionArray(isolate, raw_transitions)
+               .number_of_transitions() < kMaxNumberOfTransitions;
+  }
+  return true;
+}
+
+// static
+bool TransitionsAccessor::CanHaveMoreTransitions_Direct(Isolate* isolate,
+                                                        DirectHandle<Map> map) {
   if (map->is_dictionary_map()) return false;
   MaybeObject raw_transitions = map->raw_transitions(isolate, kAcquireLoad);
   if (GetEncoding(isolate, raw_transitions) == kFullTransitionArray) {
@@ -531,10 +748,33 @@ void TransitionsAccessor::ReplaceTransitions(Isolate* isolate, Handle<Map> map,
 }
 
 // static
+void TransitionsAccessor::ReplaceTransitions_Direct(
+    Isolate* isolate, DirectHandle<Map> map, MaybeObject new_transitions) {
+#if DEBUG
+  if (GetEncoding(isolate, map) == kFullTransitionArray) {
+    CheckNewTransitionsAreConsistent(
+        isolate, map, new_transitions->GetHeapObjectAssumeStrong());
+    DCHECK_NE(GetTransitionArray(isolate, map),
+              new_transitions->GetHeapObjectAssumeStrong());
+  }
+#endif
+  map->set_raw_transitions(new_transitions, kReleaseStore);
+  USE(isolate);
+}
+
+// static
 void TransitionsAccessor::ReplaceTransitions(
     Isolate* isolate, Handle<Map> map,
     Handle<TransitionArray> new_transitions) {
   ReplaceTransitions(isolate, map, MaybeObject::FromObject(*new_transitions));
+}
+
+// static
+void TransitionsAccessor::ReplaceTransitions_Direct(
+    Isolate* isolate, DirectHandle<Map> map,
+    DirectHandle<TransitionArray> new_transitions) {
+  ReplaceTransitions_Direct(isolate, map,
+                            MaybeObject::FromObject(*new_transitions));
 }
 
 // static
@@ -629,9 +869,8 @@ void TransitionsAccessor::TraverseTransitionTreeInternal(
 
 #ifdef DEBUG
 // static
-void TransitionsAccessor::CheckNewTransitionsAreConsistent(Isolate* isolate,
-                                                           Handle<Map> map,
-                                                           Object transitions) {
+void TransitionsAccessor::CheckNewTransitionsAreConsistent(
+    Isolate* isolate, DirectHandle<Map> map, Object transitions) {
   // This function only handles full transition arrays.
   TransitionArray old_transitions = GetTransitionArray(isolate, map);
   DCHECK_EQ(kFullTransitionArray, GetEncoding(isolate, old_transitions));

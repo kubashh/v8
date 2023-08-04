@@ -4622,7 +4622,7 @@ Maybe<bool> v8::Object::CreateDataProperty(v8::Local<v8::Context> context,
   i::Handle<i::Name> key_obj = Utils::OpenHandle(*key);
   i::Handle<i::Object> value_obj = Utils::OpenHandle(*value);
 
-  i::PropertyKey lookup_key(i_isolate, key_obj);
+  i::PropertyKey lookup_key(i_isolate, i::DirectHandle<i::Object>(key_obj));
   i::LookupIterator it(i_isolate, self, lookup_key, i::LookupIterator::OWN);
   if (self->IsJSProxy()) {
     ENTER_V8(i_isolate, context, Object, CreateDataProperty, Nothing<bool>(),
@@ -5320,7 +5320,7 @@ MaybeLocal<Value> v8::Object::GetRealNamedPropertyInPrototypeChain(
   if (iter.IsAtEnd()) return MaybeLocal<Value>();
   i::Handle<i::JSReceiver> proto =
       i::PrototypeIterator::GetCurrent<i::JSReceiver>(iter);
-  i::PropertyKey lookup_key(i_isolate, key_obj);
+  i::PropertyKey lookup_key(i_isolate, i::DirectHandle<i::Object>(key_obj));
   i::LookupIterator it(i_isolate, self, lookup_key, proto,
                        i::LookupIterator::PROTOTYPE_CHAIN_SKIP_INTERCEPTOR);
   Local<Value> result;
@@ -5344,7 +5344,7 @@ v8::Object::GetRealNamedPropertyAttributesInPrototypeChain(
   if (iter.IsAtEnd()) return Nothing<PropertyAttribute>();
   i::Handle<i::JSReceiver> proto =
       i::PrototypeIterator::GetCurrent<i::JSReceiver>(iter);
-  i::PropertyKey lookup_key(i_isolate, key_obj);
+  i::PropertyKey lookup_key(i_isolate, i::DirectHandle<i::Name>(key_obj));
   i::LookupIterator it(i_isolate, self, lookup_key, proto,
                        i::LookupIterator::PROTOTYPE_CHAIN_SKIP_INTERCEPTOR);
   Maybe<i::PropertyAttributes> result =
@@ -5361,7 +5361,7 @@ MaybeLocal<Value> v8::Object::GetRealNamedProperty(Local<Context> context,
   PREPARE_FOR_EXECUTION(context, Object, GetRealNamedProperty, Value);
   i::Handle<i::JSReceiver> self = Utils::OpenHandle(this);
   i::Handle<i::Name> key_obj = Utils::OpenHandle(*key);
-  i::PropertyKey lookup_key(i_isolate, key_obj);
+  i::PropertyKey lookup_key(i_isolate, i::DirectHandle<i::Name>(key_obj));
   i::LookupIterator it(i_isolate, self, lookup_key, self,
                        i::LookupIterator::PROTOTYPE_CHAIN_SKIP_INTERCEPTOR);
   Local<Value> result;
@@ -5378,7 +5378,7 @@ Maybe<PropertyAttribute> v8::Object::GetRealNamedPropertyAttributes(
            Nothing<PropertyAttribute>(), i::HandleScope);
   i::Handle<i::JSReceiver> self = Utils::OpenHandle(this);
   i::Handle<i::Name> key_obj = Utils::OpenHandle(*key);
-  i::PropertyKey lookup_key(i_isolate, key_obj);
+  i::PropertyKey lookup_key(i_isolate, i::DirectHandle<i::Name>(key_obj));
   i::LookupIterator it(i_isolate, self, lookup_key, self,
                        i::LookupIterator::PROTOTYPE_CHAIN_SKIP_INTERCEPTOR);
   auto result = i::JSReceiver::GetPropertyAttributes(&it);

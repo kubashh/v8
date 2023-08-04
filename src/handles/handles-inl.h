@@ -132,6 +132,11 @@ template <typename T>
 V8_INLINE DirectHandle<T> direct_handle(Tagged<T> object, Isolate* isolate) {
   return DirectHandle<T>(object, isolate);
 }
+template <typename T>
+V8_INLINE DirectHandle<T> direct_handle(Tagged<T> object,
+                                        LocalIsolate* isolate) {
+  return DirectHandle<T>(object, isolate);
+}
 
 template <typename T>
 V8_INLINE DirectHandle<T> direct_handle(T object, Isolate* isolate) {
@@ -139,6 +144,11 @@ V8_INLINE DirectHandle<T> direct_handle(T object, Isolate* isolate) {
   return direct_handle(Tagged<T>(object), isolate);
 }
 
+template <typename T>
+V8_INLINE DirectHandle<T> direct_handle(T object, LocalIsolate* isolate) {
+  static_assert(kTaggedCanConvertToRawObjects);
+  return direct_handle(Tagged<T>(object), isolate);
+}
 HandleScope::HandleScope(Isolate* isolate) {
   HandleScopeData* data = isolate->handle_scope_data();
   isolate_ = isolate;
@@ -236,6 +246,9 @@ Address* HandleScope::CreateHandle(Isolate* isolate, Address value) {
   data->next = reinterpret_cast<Address*>(reinterpret_cast<Address>(result) +
                                           sizeof(Address));
   *result = value;
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+  isolate->IncrementHandlesCreated();
+#endif
   return result;
 }
 
