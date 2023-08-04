@@ -51,6 +51,24 @@
       "parentUuid": "dbad5996_65ba49e6",
       "revId": "305b7e54d1ee4bbc217fda6cf00e34fd263f172f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "270b6e2e_e76431c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-08-04T13:51:33Z",
+      "side": 1,
+      "message": "yes, using the more generic methods. Since it seems in PS1 you did convert them and in PS2 not. Or am I missing something?",
+      "parentUuid": "15d17cc6_f588fb89",
+      "revId": "305b7e54d1ee4bbc217fda6cf00e34fd263f172f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
