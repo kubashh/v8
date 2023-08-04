@@ -465,17 +465,49 @@ AllocationResult LocalHeap::PerformCollectionAndAllocateAgain(
   return AllocationResult::Failure();
 }
 
-void LocalHeap::AddGCEpilogueCallback(GCEpilogueCallback* callback, void* data,
+void LocalHeap::AddGCPrologueCallback(GCCallback* callback, void* data,
+                                      GCType gc_type) {
+  DCHECK(IsRunning());
+  gc_prologue_callbacks_.Add(callback, LocalIsolate::FromHeap(this), gc_type,
+                             data);
+}
+
+void LocalHeap::RemoveGCPrologueCallback(GCCallback* callback, void* data) {
+  DCHECK(IsRunning());
+  gc_prologue_callbacks_.Remove(callback, data);
+}
+
+void LocalHeap::AddGCEpilogueCallback(GCCallback* callback, void* data,
                                       GCType gc_type) {
   DCHECK(IsRunning());
   gc_epilogue_callbacks_.Add(callback, LocalIsolate::FromHeap(this), gc_type,
                              data);
 }
 
-void LocalHeap::RemoveGCEpilogueCallback(GCEpilogueCallback* callback,
-                                         void* data) {
+void LocalHeap::RemoveGCEpilogueCallback(GCCallback* callback, void* data) {
   DCHECK(IsRunning());
   gc_epilogue_callbacks_.Remove(callback, data);
+}
+
+void LocalHeap::RegisterStrongRootsIterator(const RootsIterator& iterator) {
+  DCHECK(IsRunning());
+  // strong_root_iterators_.emplace_back(iterator);
+  heap()->RegisterStrongRootsIterator(iterator);
+}
+
+void LocalHeap::UnregisterStrongRootsIterator(const RootsIterator& iterator) {
+  /*
+  auto it = std::find(strong_root_iterators_.begin(),
+  strong_root_iterators_.end(), iterator); DCHECK_NE(it,
+  strong_root_iterators_.end()); *it = strong_root_iterators_.back();
+  strong_root_iterators_.pop_back();
+  */
+  heap()->UnregisterStrongRootsIterator(iterator);
+}
+
+void LocalHeap::InvokeGCPrologueCallbacksInSafepoint(GCType gc_type,
+                                                     GCCallbackFlags flags) {
+  gc_prologue_callbacks_.Invoke(gc_type, flags);
 }
 
 void LocalHeap::InvokeGCEpilogueCallbacksInSafepoint(GCType gc_type,

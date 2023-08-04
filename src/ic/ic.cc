@@ -443,7 +443,7 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name,
   JSObject::MakePrototypesFast(object, kStartAtReceiver, isolate());
   update_lookup_start_object_map(object);
 
-  PropertyKey key(isolate(), name);
+  PropertyKey key(isolate(), DirectHandle<Name>(name));
   LookupIterator it = LookupIterator(isolate(), receiver, key, object);
 
   // Named lookup in the object.
@@ -1743,7 +1743,7 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
     DCHECK(!IsDefineKeyedOwnIC());
     DCHECK(!name->IsPrivateName());
 
-    PropertyKey key(isolate(), name);
+    PropertyKey key(isolate(), DirectHandle<Name>(name));
     LookupIterator it(
         isolate(), object, key,
         IsDefineNamedOwnIC() ? LookupIterator::OWN : LookupIterator::DEFAULT);
@@ -1774,7 +1774,7 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
   }
 
   JSObject::MakePrototypesFast(object, kStartAtPrototype, isolate());
-  PropertyKey key(isolate(), name);
+  PropertyKey key(isolate(), DirectHandle<Name>(name));
   LookupIterator it(
       isolate(), object, key,
       IsAnyDefineOwn() ? LookupIterator::OWN : LookupIterator::DEFAULT);

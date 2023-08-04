@@ -329,6 +329,20 @@ Handle<Object> NumberDictionaryBaseShape::AsHandle(LocalIsolate* isolate,
   return isolate->factory()->NewNumberFromUint<allocation>(key);
 }
 
+template <AllocationType allocation>
+DirectHandle<Object> NumberDictionaryBaseShape::AsDirectHandle(Isolate* isolate,
+                                                               uint32_t key) {
+  // TODO(CSS)
+  return isolate->factory()->NewNumberFromUint<allocation>(key);
+}
+
+template <AllocationType allocation>
+DirectHandle<Object> NumberDictionaryBaseShape::AsDirectHandle(
+    LocalIsolate* isolate, uint32_t key) {
+  // TODO(CSS)
+  return isolate->factory()->NewNumberFromUint<allocation>(key);
+}
+
 Handle<Map> NumberDictionary::GetMap(ReadOnlyRoots roots) {
   return roots.number_dictionary_map_handle();
 }
@@ -337,13 +351,14 @@ Handle<Map> SimpleNumberDictionary::GetMap(ReadOnlyRoots roots) {
   return roots.simple_number_dictionary_map_handle();
 }
 
-bool BaseNameDictionaryShape::IsMatch(Handle<Name> key, Object other) {
+bool BaseNameDictionaryShape::IsMatch(DirectHandle<Name> key, Object other) {
   DCHECK(other.IsTheHole() || Name::cast(other).IsUniqueName());
   DCHECK(key->IsUniqueName());
   return *key == other;
 }
 
-uint32_t BaseNameDictionaryShape::Hash(ReadOnlyRoots roots, Handle<Name> key) {
+uint32_t BaseNameDictionaryShape::Hash(ReadOnlyRoots roots,
+                                       DirectHandle<Name> key) {
   DCHECK(key->IsUniqueName());
   return key->hash();
 }
@@ -354,7 +369,7 @@ uint32_t BaseNameDictionaryShape::HashForObject(ReadOnlyRoots roots,
   return Name::cast(other).hash();
 }
 
-bool GlobalDictionaryShape::IsMatch(Handle<Name> key, Object other) {
+bool GlobalDictionaryShape::IsMatch(DirectHandle<Name> key, Object other) {
   DCHECK(key->IsUniqueName());
   DCHECK(PropertyCell::cast(other).name().IsUniqueName());
   return *key == PropertyCell::cast(other).name();
@@ -367,14 +382,28 @@ uint32_t GlobalDictionaryShape::HashForObject(ReadOnlyRoots roots,
 
 template <AllocationType allocation>
 Handle<Object> BaseNameDictionaryShape::AsHandle(Isolate* isolate,
-                                                 Handle<Name> key) {
+                                                 DirectHandle<Name> key) {
+  DCHECK(key->IsUniqueName());
+  return handle(*key, isolate);
+}
+
+template <AllocationType allocation>
+Handle<Object> BaseNameDictionaryShape::AsHandle(LocalIsolate* isolate,
+                                                 DirectHandle<Name> key) {
+  DCHECK(key->IsUniqueName());
+  return handle(*key, isolate);
+}
+
+template <AllocationType allocation>
+DirectHandle<Object> BaseNameDictionaryShape::AsDirectHandle(
+    Isolate* isolate, DirectHandle<Name> key) {
   DCHECK(key->IsUniqueName());
   return key;
 }
 
 template <AllocationType allocation>
-Handle<Object> BaseNameDictionaryShape::AsHandle(LocalIsolate* isolate,
-                                                 Handle<Name> key) {
+DirectHandle<Object> BaseNameDictionaryShape::AsDirectHandle(
+    LocalIsolate* isolate, DirectHandle<Name> key) {
   DCHECK(key->IsUniqueName());
   return key;
 }

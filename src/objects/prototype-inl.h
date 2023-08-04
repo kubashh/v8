@@ -15,7 +15,7 @@ namespace v8 {
 namespace internal {
 
 PrototypeIterator::PrototypeIterator(Isolate* isolate,
-                                     Handle<JSReceiver> receiver,
+                                     DirectHandle<JSReceiver> receiver,
                                      WhereToStart where_to_start,
                                      WhereToEnd where_to_end)
     : isolate_(isolate),
@@ -52,7 +52,8 @@ PrototypeIterator::PrototypeIterator(Isolate* isolate, Map receiver_map,
   }
 }
 
-PrototypeIterator::PrototypeIterator(Isolate* isolate, Handle<Map> receiver_map,
+PrototypeIterator::PrototypeIterator(Isolate* isolate,
+                                     DirectHandle<Map> receiver_map,
                                      WhereToEnd where_to_end)
     : isolate_(isolate),
       handle_(receiver_map->GetPrototypeChainRootMap(isolate_).prototype(),
@@ -72,8 +73,8 @@ bool PrototypeIterator::HasAccess() const {
   // PrototypeIterator.
   DCHECK(!handle_.is_null());
   if (handle_->IsAccessCheckNeeded()) {
-    return isolate_->MayAccess(isolate_->native_context(),
-                               Handle<JSObject>::cast(handle_));
+    return isolate_->MayAccess_Direct(isolate_->native_context(),
+                                      DirectHandle<JSObject>::cast(handle_));
   }
   return true;
 }
@@ -132,8 +133,8 @@ PrototypeIterator::AdvanceFollowingProxiesIgnoringAccessChecks() {
     isolate_->StackOverflow();
     return false;
   }
-  MaybeHandle<HeapObject> proto =
-      JSProxy::GetPrototype(Handle<JSProxy>::cast(handle_));
+  MaybeDirectHandle<HeapObject> proto =
+      JSProxy::GetPrototype_Direct(DirectHandle<JSProxy>::cast(handle_));
   if (!proto.ToHandle(&handle_)) return false;
   is_at_end_ = where_to_end_ == END_AT_NON_HIDDEN || handle_->IsNull(isolate_);
   return true;

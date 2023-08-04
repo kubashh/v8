@@ -67,6 +67,8 @@ class TaggedBase {
     return static_cast<Tagged_t>(ptr()) != static_cast<Tagged_t>(other.ptr());
   }
 
+  friend class FullObjectSlot;
+
  protected:
   constexpr explicit TaggedBase(Address ptr) : ptr_(ptr) {}
   // TODO(leszeks): Consider a different default value, e.g. a tagged null.

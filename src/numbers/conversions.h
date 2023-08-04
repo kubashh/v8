@@ -11,6 +11,7 @@
 #include "src/base/strings.h"
 #include "src/base/vector.h"
 #include "src/common/globals.h"
+#include "src/handles/handles.h"
 
 namespace v8 {
 namespace internal {
@@ -170,6 +171,8 @@ inline uint64_t PositiveNumberToUint64(Object number);
 
 double StringToDouble(Isolate* isolate, Handle<String> string, int flags,
                       double empty_string_val = 0.0);
+double StringToDouble_Direct(Isolate* isolate, DirectHandle<String> string,
+                             int flags, double empty_string_val = 0.0);
 double FlatStringToDouble(String string, int flags, double empty_string_val);
 
 // String to double helper without heap allocation.

@@ -10,6 +10,7 @@
 #include "src/base/strings.h"
 #include "src/common/high-allocation-throughput-scope.h"
 #include "src/execution/isolate.h"
+#include "src/execution/local-isolate.h"
 #include "src/heap/factory.h"
 #include "src/objects/objects.h"
 #include "src/roots/roots.h"
@@ -94,11 +95,14 @@ class JsonString final {
 };
 
 struct JsonProperty {
-  JsonProperty() { UNREACHABLE(); }
-  explicit JsonProperty(const JsonString& string) : string(string) {}
+  JsonProperty() : value(kTaggedNullAddress) { UNREACHABLE(); }
+  explicit JsonProperty(const JsonString& string)
+      : string(string), value(kTaggedNullAddress) {}
+  JsonProperty(const JsonString& string, Tagged<Object> value)
+      : string(string), value(value) {}
 
   JsonString string;
-  Handle<Object> value;
+  Tagged<Object> value;
 };
 
 class JsonParseInternalizer {
@@ -165,7 +169,7 @@ class JsonParser final {
     HighAllocationThroughputScope high_throughput_scope(
         V8::GetCurrentPlatform());
     Handle<Object> result;
-    MaybeHandle<Object> val_node;
+    MaybeDirectHandle<Object> val_node;
     {
       JsonParser parser(isolate, source);
       ASSIGN_RETURN_ON_EXCEPTION(isolate, result, parser.ParseJson(reviver),
@@ -173,8 +177,9 @@ class JsonParser final {
       val_node = parser.parsed_val_node_;
     }
     if (reviver->IsCallable()) {
-      return JsonParseInternalizer::Internalize(isolate, result, reviver,
-                                                source, val_node);
+      // TODO(CSS): Internalizer DirectHandle
+      // return JsonParseInternalizer::Internalize(isolate, result, reviver,
+      //                                          source, val_node);
     }
     return result;
   }
@@ -189,7 +194,7 @@ class JsonParser final {
   struct JsonContinuation {
     enum Type : uint8_t { kReturn, kObjectProperty, kArrayElement };
     JsonContinuation(Isolate* isolate, Type type, size_t index)
-        : scope(isolate),
+        :  // scope(isolate),
           type_(type),
           index(static_cast<uint32_t>(index)),
           max_index(0),
@@ -198,7 +203,8 @@ class JsonParser final {
     Type type() const { return static_cast<Type>(type_); }
     void set_type(Type type) { type_ = static_cast<uint8_t>(type); }
 
-    HandleScope scope;
+    // TODO(CSS): Without HandleScopes non-css regresses by ~2x.
+    // DirectHandleScope scope;
     // Unfortunately GCC doesn't like packing Type in two bits.
     uint32_t type_ : 2;
     uint32_t index : 30;
@@ -298,16 +304,17 @@ class JsonParser final {
   JsonString ScanJsonString(bool needs_internalization);
   JsonString ScanJsonPropertyKey(JsonContinuation* cont);
   base::uc32 ScanUnicodeCharacter();
-  Handle<String> MakeString(const JsonString& string,
-                            Handle<String> hint = Handle<String>());
+  DirectHandle<String> MakeString(
+      const JsonString& string,
+      DirectHandle<String> hint = DirectHandle<String>());
 
   template <typename SinkChar>
   void DecodeString(SinkChar* sink, int start, int length);
 
   template <typename SinkSeqString>
-  Handle<String> DecodeString(const JsonString& string,
-                              Handle<SinkSeqString> intermediate,
-                              Handle<String> hint);
+  DirectHandle<String> DecodeString(const JsonString& string,
+                                    DirectHandle<SinkSeqString> intermediate,
+                                    DirectHandle<String> hint);
 
   // A JSON number (production JSONNumber) is a subset of the valid JavaScript
   // decimal number literals.
@@ -315,7 +322,7 @@ class JsonParser final {
   // digit before and after a decimal point, may not have prefixed zeros (unless
   // the integer part is zero), and may include an exponent part (e.g., "e-10").
   // Hexadecimal and octal numbers are not allowed.
-  Handle<Object> ParseJsonNumber();
+  DirectHandle<Object> ParseJsonNumber();
 
   // Parse a single JSON value from input (grammar production JSONValue).
   // A JSON value is either a (double-quoted) string literal, a number literal,
@@ -323,12 +330,14 @@ class JsonParser final {
   template <bool should_track_json_source>
   MaybeHandle<Object> ParseJsonValue(Handle<Object> reviver);
 
-  Handle<Object> BuildJsonObject(
-      const JsonContinuation& cont,
-      const SmallVector<JsonProperty>& property_stack, Handle<Map> feedback);
-  Handle<Object> BuildJsonArray(
-      const JsonContinuation& cont,
-      const SmallVector<Handle<Object>>& element_stack);
+  class PropertyStack;
+
+  DirectHandle<Object> BuildJsonObject(const JsonContinuation& cont,
+                                       const PropertyStack& property_stack,
+                                       DirectHandle<Map> feedback);
+  using ElementStack = SmallVector<Tagged<Object>>;
+  DirectHandle<Object> BuildJsonArray(const JsonContinuation& cont,
+                                      ElementStack& element_stack);
 
   static const int kMaxContextCharacters = 10;
   static const int kMinOriginalSourceLengthForContext =
@@ -351,6 +360,17 @@ class JsonParser final {
       JsonToken token,
       base::Optional<MessageTemplate> errorMessage = base::nullopt);
 
+#ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
+  template <typename T>
+  Handle<T> DirectToIndirectTMP(DirectHandle<T> direct) {
+    return handle(*direct, isolate());
+  }
+#else
+  template <typename T>
+  Handle<T> DirectToIndirectTMP(DirectHandle<T> direct) {
+    return direct;
+  }
+#endif
   inline Isolate* isolate() { return isolate_; }
   inline Factory* factory() { return isolate_->factory(); }
   inline ReadOnlyRoots roots() { return ReadOnlyRoots(isolate_); }
@@ -358,20 +378,49 @@ class JsonParser final {
 
   static const int kInitialSpecialStringLength = 32;
 
-  static void UpdatePointersCallback(LocalIsolate*, GCType, GCCallbackFlags,
-                                     void* parser) {
-    reinterpret_cast<JsonParser<Char>*>(parser)->UpdatePointers();
+  static void GCEpilogueCallback(LocalIsolate* isolate, GCType, GCCallbackFlags,
+                                 void* parser) {
+    JsonParser* json_parser = reinterpret_cast<JsonParser<Char>*>(parser);
+    json_parser->UpdatePointers();
+    if (json_parser->property_stack_ != nullptr) {
+      json_parser->property_stack_->UnregisterStrongRoots(
+          isolate->heap()->AsHeap());
+    }
+    if (json_parser->element_stack_ != nullptr) {
+      DCHECK_NOT_NULL(json_parser->element_strong_roots_entry_);
+      isolate->heap()->AsHeap()->UnregisterStrongRoots(
+          json_parser->element_strong_roots_entry_);
+      json_parser->element_strong_roots_entry_ = nullptr;
+    }
   }
 
   void UpdatePointers() {
+    if (!chars_may_relocate_) return;
     DisallowGarbageCollection no_gc;
-    const Char* chars = Handle<SeqString>::cast(source_)->GetChars(no_gc);
+    const Char* chars = DirectHandle<SeqString>::cast(source_)->GetChars(no_gc);
     if (chars_ != chars) {
       size_t position = cursor_ - chars_;
       size_t length = end_ - chars_;
       chars_ = chars;
       cursor_ = chars_ + position;
       end_ = chars_ + length;
+    }
+  }
+
+  static void GCPrologueCallback(LocalIsolate* isolate, GCType, GCCallbackFlags,
+                                 void* parser) {
+    JsonParser<Char>* json_parser = reinterpret_cast<JsonParser<Char>*>(parser);
+    if (json_parser->property_stack_ != nullptr) {
+      json_parser->property_stack_->RegisterStrongRoots(
+          isolate->heap()->AsHeap());
+    }
+    if (json_parser->element_stack_ != nullptr) {
+      DCHECK_NULL(json_parser->element_strong_roots_entry_);
+      json_parser->element_strong_roots_entry_ =
+          isolate->heap()->AsHeap()->RegisterStrongRoots(
+              "Json Parser",
+              FullObjectSlot(json_parser->element_stack_->begin()),
+              FullObjectSlot(json_parser->element_stack_->end()));
     }
   }
 
@@ -395,8 +444,72 @@ class JsonParser final {
   Handle<String> source_;
   // The parsed value's source to be passed to the reviver, if the reviver is
   // callable.
-  MaybeHandle<Object> parsed_val_node_;
+  MaybeDirectHandle<Object> parsed_val_node_;
+  class PropertyStack {
+   public:
+    size_t size() const {
+      DCHECK_EQ(keys_.size(), values_.size());
+      return keys_.size();
+    }
+    JsonProperty operator[](size_t index) const {
+      return JsonProperty(keys_[index], values_[index]);
+    }
+    void emplace_back(JsonString&& string) {
+      keys_.emplace_back(string);
+      // values_.emplace_back(kTaggedNullAddress);
+      values_.emplace_back(kNullAddress);
+    }
+    void set_value(DirectHandle<Object> value) { values_.back() = *value; }
+    void resize_no_init(size_t new_size) {
+      keys_.resize_no_init(new_size);
+      values_.resize_no_init(new_size);
+    }
+    void RegisterStrongRoots(Heap* heap) {
+      DCHECK_NULL(strong_roots_entry_);
+      strong_roots_entry_ = heap->RegisterStrongRoots(
+          "Json Parser", FullObjectSlot(values_.begin()),
+          FullObjectSlot(values_.end()));
+    }
 
+    void UnregisterStrongRoots(Heap* heap) {
+      DCHECK_NOT_NULL(strong_roots_entry_);
+      heap->UnregisterStrongRoots(strong_roots_entry_);
+      strong_roots_entry_ = nullptr;
+    }
+
+   private:
+    SmallVector<JsonString> keys_;
+    SmallVector<Tagged<Object>> values_;
+    StrongRootsEntry* strong_roots_entry_ = nullptr;
+  };
+  // SmallVector<JsonProperty> property_stack_;
+  PropertyStack* property_stack_ = nullptr;
+  ElementStack* element_stack_ = nullptr;
+  class V8_NODISCARD PropertyStackScope {
+   public:
+    PropertyStackScope(JsonParser<Char>* parser, PropertyStack* stack)
+        : parser_(parser) {
+      DCHECK_NULL(parser_->property_stack_);
+      parser_->property_stack_ = stack;
+    }
+    ~PropertyStackScope() { parser_->property_stack_ = nullptr; }
+
+   private:
+    JsonParser<Char>* parser_;
+  };
+  class V8_NODISCARD ElementStackScope {
+   public:
+    ElementStackScope(JsonParser<Char>* parser, ElementStack* stack)
+        : parser_(parser) {
+      DCHECK_NULL(parser_->element_stack_);
+      parser_->element_stack_ = stack;
+    }
+    ~ElementStackScope() { parser_->element_stack_ = nullptr; }
+
+   private:
+    JsonParser<Char>* parser_;
+  };
+  StrongRootsEntry* element_strong_roots_entry_ = nullptr;
   // Cached pointer to the raw chars in source. In case source is on-heap, we
   // register an UpdatePointers callback. For this reason, chars_, cursor_ and
   // end_ should never be locally cached across a possible allocation. The scope

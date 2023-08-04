@@ -145,6 +145,10 @@ MaybeObjectDirectHandle::MaybeObjectDirectHandle(MaybeObject object,
 MaybeObjectDirectHandle::MaybeObjectDirectHandle(DirectHandle<Object> object)
     : reference_type_(HeapObjectReferenceType::STRONG), handle_(object) {}
 
+MaybeObjectDirectHandle::MaybeObjectDirectHandle(MaybeObjectHandle object)
+    : reference_type_(object.reference_type()),
+      handle_(object.handle_tmp_css()) {}
+
 MaybeObjectDirectHandle::MaybeObjectDirectHandle(Object object,
                                                  Isolate* isolate)
     : reference_type_(HeapObjectReferenceType::STRONG),

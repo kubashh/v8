@@ -1447,6 +1447,11 @@ double StringToDouble(Isolate* isolate, Handle<String> string, int flags,
   Handle<String> flattened = String::Flatten(isolate, string);
   return FlatStringToDouble(*flattened, flags, empty_string_val);
 }
+double StringToDouble_Direct(Isolate* isolate, DirectHandle<String> string,
+                             int flags, double empty_string_val) {
+  DirectHandle<String> flattened = String::Flatten_Direct(isolate, string);
+  return FlatStringToDouble(*flattened, flags, empty_string_val);
+}
 
 double FlatStringToDouble(String string, int flags, double empty_string_val) {
   DisallowGarbageCollection no_gc;

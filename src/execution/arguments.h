@@ -57,6 +57,8 @@ class Arguments {
 
   template <class S = Object>
   V8_INLINE Handle<S> at(int index) const;
+  template <class S = Object>
+  V8_INLINE DirectHandle<S> at_direct(int index) const;
 
   V8_INLINE int smi_value_at(int index) const;
   V8_INLINE uint32_t positive_smi_value_at(int index) const;
@@ -90,6 +92,13 @@ template <class S>
 Handle<S> Arguments<T>::at(int index) const {
   Handle<Object> obj = Handle<Object>(address_of_arg_at(index));
   return Handle<S>::cast(obj);
+}
+
+template <ArgumentsType T>
+template <class S>
+DirectHandle<S> Arguments<T>::at_direct(int index) const {
+  DirectHandle<Object> obj = DirectHandle<Object>(address_of_arg_at(index));
+  return DirectHandle<S>::cast(obj);
 }
 
 #ifdef DEBUG

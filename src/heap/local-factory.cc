@@ -66,8 +66,15 @@ int LocalFactory::NumberToStringCacheHash(double) { return 0; }
 void LocalFactory::NumberToStringCacheSet(Handle<Object>, int, Handle<String>) {
 }
 
+void LocalFactory::NumberToStringCacheSet_Direct(DirectHandle<Object>, int,
+                                                 DirectHandle<String>) {}
+
 Handle<Object> LocalFactory::NumberToStringCacheGet(Object, int) {
   return undefined_value();
+}
+
+DirectHandle<Object> LocalFactory::NumberToStringCacheGet_Direct(Object, int) {
+  return undefined_value_direct();
 }
 
 }  // namespace internal

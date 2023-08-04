@@ -1525,6 +1525,35 @@ void Isolate::ReportFailedAccessCheck(Handle<JSObject> receiver) {
       v8::Utils::ToLocal(receiver), v8::ACCESS_HAS, v8::Utils::ToLocal(data));
 }
 
+void Isolate::ReportFailedAccessCheck_Direct(DirectHandle<JSObject> receiver) {
+  if (!thread_local_top()->failed_access_check_callback_) {
+    return ScheduleThrow(
+        *factory()->NewTypeError_Direct(MessageTemplate::kNoAccess));
+  }
+
+  DCHECK(receiver->IsAccessCheckNeeded());
+  DCHECK(!context().is_null());
+
+  // Get the data object from access check info.
+  DirectHandle<Object> data;
+  {
+    DisallowGarbageCollection no_gc;
+    AccessCheckInfo access_check_info = AccessCheckInfo::Get(this, receiver);
+    if (access_check_info.is_null()) {
+      no_gc.Release();
+      return ScheduleThrow(
+          *factory()->NewTypeError_Direct(MessageTemplate::kNoAccess));
+    }
+    data = direct_handle(access_check_info.data(), this);
+  }
+
+  // Leaving JavaScript.
+  VMState<EXTERNAL> state(this);
+  thread_local_top()->failed_access_check_callback_(
+      v8::Utils::ToLocal(receiver, this), v8::ACCESS_HAS,
+      v8::Utils::ToLocal(data, this));
+}
+
 bool Isolate::MayAccess(Handle<NativeContext> accessing_context,
                         Handle<JSObject> receiver) {
   DCHECK(receiver->IsJSGlobalProxy() || receiver->IsAccessCheckNeeded());
@@ -1566,6 +1595,50 @@ bool Isolate::MayAccess(Handle<NativeContext> accessing_context,
     VMState<EXTERNAL> state(this);
     return callback(v8::Utils::ToLocal(accessing_context),
                     v8::Utils::ToLocal(receiver), v8::Utils::ToLocal(data));
+  }
+}
+
+bool Isolate::MayAccess_Direct(DirectHandle<NativeContext> accessing_context,
+                               DirectHandle<JSObject> receiver) {
+  DCHECK(receiver->IsJSGlobalProxy() || receiver->IsAccessCheckNeeded());
+
+  // Check for compatibility between the security tokens in the
+  // current lexical context and the accessed object.
+
+  // During bootstrapping, callback functions are not enabled yet.
+  if (bootstrapper()->IsActive()) return true;
+  {
+    DisallowGarbageCollection no_gc;
+
+    if (receiver->IsJSGlobalProxy()) {
+      Object receiver_context = JSGlobalProxy::cast(*receiver).native_context();
+      if (!receiver_context.IsContext()) return false;
+
+      if (receiver_context == *accessing_context) return true;
+
+      if (Context::cast(receiver_context).security_token() ==
+          accessing_context->security_token())
+        return true;
+    }
+  }
+
+  DirectHandle<Object> data;
+  v8::AccessCheckCallback callback = nullptr;
+  {
+    DisallowGarbageCollection no_gc;
+    AccessCheckInfo access_check_info = AccessCheckInfo::Get(this, receiver);
+    if (access_check_info.is_null()) return false;
+    Object fun_obj = access_check_info.callback();
+    callback = v8::ToCData<v8::AccessCheckCallback>(fun_obj);
+    data = direct_handle(access_check_info.data(), this);
+  }
+
+  {
+    // Leaving JavaScript.
+    VMState<EXTERNAL> state(this);
+    return callback(v8::Utils::ToLocal(accessing_context, this),
+                    v8::Utils::ToLocal(receiver, this),
+                    v8::Utils::ToLocal(data, this));
   }
 }
 
@@ -3427,6 +3500,10 @@ Isolate::Isolate(std::unique_ptr<i::IsolateAllocator> isolate_allocator)
       next_unique_sfi_id_(0),
       next_module_async_evaluating_ordinal_(
           SourceTextModule::kFirstAsyncEvaluatingOrdinal),
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+      handles_created_(0),
+      handles_deref_(0),
+#endif
       cancelable_task_manager_(new CancelableTaskManager()) {
   TRACE_ISOLATE(constructor);
   CheckIsolateLayout();
@@ -3726,6 +3803,9 @@ void Isolate::Deinit() {
 void Isolate::SetIsolateThreadLocals(Isolate* isolate,
                                      PerIsolateThreadData* data) {
   g_current_isolate_ = isolate;
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+  if (isolate) isolate->active_handles_count_scope_ = nullptr;
+#endif
   g_current_per_isolate_thread_data_ = data;
 
 #ifdef V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
@@ -4720,6 +4800,19 @@ std::unique_ptr<PersistentHandles> Isolate::NewPersistentHandles() {
   return std::make_unique<PersistentHandles>(this);
 }
 
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+HandlesCountScope::HandlesCountScope(Isolate* isolate, const std::string& desc)
+    : isolate_(isolate), desc_(std::string(desc)) {
+  parent_ = isolate->active_handles_count_scope_;
+  isolate->active_handles_count_scope_ = this;
+  isolate->handles_count_.try_emplace(std::string(desc), 0);
+  isolate->handles_deref_map_.try_emplace(std::string(desc), 0);
+}
+
+HandlesCountScope::~HandlesCountScope() {
+  isolate_->active_handles_count_scope_ = parent_;
+}
+#endif
 void Isolate::DumpAndResetStats() {
   if (v8_flags.trace_turbo_stack_accesses) {
     StdoutStream os;
@@ -4811,6 +4904,19 @@ void Isolate::DumpAndResetStats() {
     // v8_enable_builtins_profiling=true
     CHECK_NULL(v8_flags.turbo_profiling_output);
   }
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+  if (v8_flags.handle_statistics) {
+    StdoutStream os;
+    os << "Handles created: " << handles_created_ << std::endl;
+    for (auto h : handles_count_) {
+      os << "  " << h.first << ": " << h.second << std::endl;
+    }
+    os << "Handles deref: " << handles_deref_ << std::endl;
+    for (auto h : handles_deref_map_) {
+      os << "  " << h.first << ": " << h.second << std::endl;
+    }
+  }
+#endif
 }
 
 void Isolate::AbortConcurrentOptimization(BlockingBehavior behavior) {
@@ -4963,7 +5069,8 @@ bool Isolate::IsInAnyContext(Object object, uint32_t index) {
   return false;
 }
 
-void Isolate::UpdateNoElementsProtectorOnSetElement(Handle<JSObject> object) {
+void Isolate::UpdateNoElementsProtectorOnSetElement(
+    DirectHandle<JSObject> object) {
   DisallowGarbageCollection no_gc;
   if (!object->map().is_prototype_map()) return;
   if (!Protectors::IsNoElementsIntact(this)) return;

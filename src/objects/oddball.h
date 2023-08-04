@@ -37,6 +37,8 @@ class Oddball : public PrimitiveHeapObject {
   // ES6 section 7.1.3 ToNumber for Boolean, Null, Undefined.
   V8_WARN_UNUSED_RESULT static inline Handle<Object> ToNumber(
       Isolate* isolate, Handle<Oddball> input);
+  V8_WARN_UNUSED_RESULT static inline DirectHandle<Object> ToNumber_Direct(
+      Isolate* isolate, DirectHandle<Oddball> input);
 
   V8_INLINE bool ToBool(Isolate* isolate) const;
 

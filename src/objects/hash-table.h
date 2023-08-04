@@ -138,6 +138,11 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) HashTable
       IsolateT* isolate, int at_least_space_for,
       AllocationType allocation = AllocationType::kYoung,
       MinimumCapacity capacity_option = USE_DEFAULT_MINIMUM_CAPACITY);
+  template <typename IsolateT>
+  V8_WARN_UNUSED_RESULT static DirectHandle<Derived> New_Direct(
+      IsolateT* isolate, int at_least_space_for,
+      AllocationType allocation = AllocationType::kYoung,
+      MinimumCapacity capacity_option = USE_DEFAULT_MINIMUM_CAPACITY);
 
   static inline Handle<Map> GetMap(ReadOnlyRoots roots);
 
@@ -212,6 +217,10 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) HashTable
   V8_WARN_UNUSED_RESULT static Handle<Derived> EnsureCapacity(
       IsolateT* isolate, Handle<Derived> table, int n = 1,
       AllocationType allocation = AllocationType::kYoung);
+  template <typename IsolateT>
+  V8_WARN_UNUSED_RESULT static DirectHandle<Derived> EnsureCapacity_Direct(
+      IsolateT* isolate, DirectHandle<Derived> table, int n = 1,
+      AllocationType allocation = AllocationType::kYoung);
 
   // Returns true if this table has sufficient capacity for adding n elements.
   bool HasSufficientCapacityToAdd(int number_of_additional_elements);
@@ -228,6 +237,9 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) HashTable
 
   template <typename IsolateT>
   V8_WARN_UNUSED_RESULT static Handle<Derived> NewInternal(
+      IsolateT* isolate, int capacity, AllocationType allocation);
+  template <typename IsolateT>
+  V8_WARN_UNUSED_RESULT static DirectHandle<Derived> NewInternal_Direct(
       IsolateT* isolate, int capacity, AllocationType allocation);
 
   // Find the entry at which to insert element with the given key that
@@ -277,23 +289,39 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) HashTable
   OBJECT_CONSTRUCTORS(HashTable, HashTableBase);
 };
 
-#define EXTERN_DECLARE_HASH_TABLE(DERIVED, SHAPE)                            \
-  extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)           \
-      HashTable<class DERIVED, SHAPE>;                                       \
-                                                                             \
-  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Handle<DERIVED> \
-  HashTable<DERIVED, SHAPE>::New(Isolate*, int, AllocationType,              \
-                                 MinimumCapacity);                           \
-  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Handle<DERIVED> \
-  HashTable<DERIVED, SHAPE>::New(LocalIsolate*, int, AllocationType,         \
-                                 MinimumCapacity);                           \
-                                                                             \
-  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Handle<DERIVED> \
-  HashTable<DERIVED, SHAPE>::EnsureCapacity(Isolate*, Handle<DERIVED>, int,  \
-                                            AllocationType);                 \
-  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Handle<DERIVED> \
-  HashTable<DERIVED, SHAPE>::EnsureCapacity(LocalIsolate*, Handle<DERIVED>,  \
-                                            int, AllocationType);
+#define EXTERN_DECLARE_HASH_TABLE(DERIVED, SHAPE)                             \
+  extern template class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)            \
+      HashTable<class DERIVED, SHAPE>;                                        \
+                                                                              \
+  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Handle<DERIVED>  \
+  HashTable<DERIVED, SHAPE>::New(Isolate*, int, AllocationType,               \
+                                 MinimumCapacity);                            \
+  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Handle<DERIVED>  \
+  HashTable<DERIVED, SHAPE>::New(LocalIsolate*, int, AllocationType,          \
+                                 MinimumCapacity);                            \
+  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)                  \
+      DirectHandle<DERIVED>                                                   \
+      HashTable<DERIVED, SHAPE>::New_Direct(Isolate*, int, AllocationType,    \
+                                            MinimumCapacity);                 \
+  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)                  \
+      DirectHandle<DERIVED>                                                   \
+      HashTable<DERIVED, SHAPE>::New_Direct(LocalIsolate*, int,               \
+                                            AllocationType, MinimumCapacity); \
+                                                                              \
+  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Handle<DERIVED>  \
+  HashTable<DERIVED, SHAPE>::EnsureCapacity(Isolate*, Handle<DERIVED>, int,   \
+                                            AllocationType);                  \
+  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Handle<DERIVED>  \
+  HashTable<DERIVED, SHAPE>::EnsureCapacity(LocalIsolate*, Handle<DERIVED>,   \
+                                            int, AllocationType);             \
+  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)                  \
+      DirectHandle<DERIVED>                                                   \
+      HashTable<DERIVED, SHAPE>::EnsureCapacity_Direct(                       \
+          Isolate*, DirectHandle<DERIVED>, int, AllocationType);              \
+  extern template EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)                  \
+      DirectHandle<DERIVED>                                                   \
+      HashTable<DERIVED, SHAPE>::EnsureCapacity_Direct(                       \
+          LocalIsolate*, DirectHandle<DERIVED>, int, AllocationType);
 
 // HashTableKey is an abstract superclass for virtual key behavior.
 class HashTableKey {
@@ -324,6 +352,7 @@ class ObjectHashTableShape : public BaseShape<Handle<Object>> {
   static inline uint32_t Hash(ReadOnlyRoots roots, Handle<Object> key);
   static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
   static inline Handle<Object> AsHandle(Handle<Object> key);
+  static inline DirectHandle<Object> AsDirectHandle(DirectHandle<Object> key);
   static const int kPrefixSize = 0;
   static const int kEntryValueIndex = 1;
   static const int kEntrySize = 2;
@@ -502,6 +531,7 @@ class NameToIndexShape : public BaseShape<Handle<Name>> {
   static inline uint32_t Hash(ReadOnlyRoots roots, Handle<Name> key);
   static inline uint32_t HashForObject(ReadOnlyRoots roots, Object object);
   static inline Handle<Object> AsHandle(Handle<Name> key);
+  static inline DirectHandle<Object> AsDirectHandle(DirectHandle<Name> key);
   static const int kPrefixSize = 0;
   static const int kEntryValueIndex = 1;
   static const int kEntrySize = 2;

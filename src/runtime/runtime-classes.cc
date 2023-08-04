@@ -727,7 +727,7 @@ RUNTIME_FUNCTION(Runtime_LoadFromSuper) {
   Handle<JSObject> home_object = args.at<JSObject>(1);
   Handle<Name> name = args.at<Name>(2);
 
-  PropertyKey key(isolate, name);
+  PropertyKey key(isolate, DirectHandle<Name>(name));
 
   RETURN_RESULT_OR_FAILURE(isolate,
                            LoadFromSuper(isolate, receiver, home_object, &key));
@@ -744,7 +744,7 @@ RUNTIME_FUNCTION(Runtime_LoadKeyedFromSuper) {
   Handle<Object> key = args.at(2);
 
   bool success;
-  PropertyKey lookup_key(isolate, key, &success);
+  PropertyKey lookup_key(isolate, DirectHandle<Object>(key), &success);
   if (!success) return ReadOnlyRoots(isolate).exception();
 
   RETURN_RESULT_OR_FAILURE(
@@ -777,7 +777,7 @@ RUNTIME_FUNCTION(Runtime_StoreToSuper) {
   Handle<Name> name = args.at<Name>(2);
   Handle<Object> value = args.at(3);
 
-  PropertyKey key(isolate, name);
+  PropertyKey key(isolate, DirectHandle<Name>(name));
 
   RETURN_RESULT_OR_FAILURE(
       isolate, StoreToSuper(isolate, home_object, receiver, &key, value,

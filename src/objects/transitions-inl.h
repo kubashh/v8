@@ -27,7 +27,7 @@ TransitionArray TransitionsAccessor::GetTransitionArray(
 
 // static
 TransitionArray TransitionsAccessor::GetTransitionArray(Isolate* isolate,
-                                                        Handle<Map> map) {
+                                                        DirectHandle<Map> map) {
   MaybeObject raw_transitions = map->raw_transitions(isolate, kAcquireLoad);
   return GetTransitionArray(isolate, raw_transitions);
 }
@@ -248,7 +248,7 @@ TransitionsAccessor::Encoding TransitionsAccessor::GetEncoding(
 
 // static
 TransitionsAccessor::Encoding TransitionsAccessor::GetEncoding(
-    Isolate* isolate, Handle<Map> map) {
+    Isolate* isolate, DirectHandle<Map> map) {
   MaybeObject raw_transitions = map->raw_transitions(isolate, kAcquireLoad);
   return GetEncoding(isolate, raw_transitions);
 }
@@ -261,6 +261,16 @@ MaybeHandle<Map> TransitionsAccessor::SearchTransition(
                    .SearchTransition(name, kind, attributes);
   if (result.is_null()) return MaybeHandle<Map>();
   return MaybeHandle<Map>(result, isolate);
+}
+
+// static
+MaybeDirectHandle<Map> TransitionsAccessor::SearchTransition_Direct(
+    Isolate* isolate, DirectHandle<Map> map, Name name, PropertyKind kind,
+    PropertyAttributes attributes) {
+  Map result = TransitionsAccessor(isolate, *map)
+                   .SearchTransition(name, kind, attributes);
+  if (result.is_null()) return MaybeDirectHandle<Map>();
+  return MaybeDirectHandle<Map>(result, isolate);
 }
 
 // static
@@ -362,9 +372,37 @@ Handle<String> TransitionsAccessor::ExpectedTransitionKey() {
   UNREACHABLE();
 }
 
+DirectHandle<String> TransitionsAccessor::ExpectedTransitionKey_Direct() {
+  DisallowGarbageCollection no_gc;
+  switch (encoding()) {
+    case kPrototypeInfo:
+    case kUninitialized:
+    case kMigrationTarget:
+    case kFullTransitionArray:
+      return DirectHandle<String>::null();
+    case kWeakRef: {
+      Map target = Map::cast(raw_transitions_->GetHeapObjectAssumeWeak());
+      PropertyDetails details = GetSimpleTargetDetails(target);
+      if (details.location() != PropertyLocation::kField)
+        return DirectHandle<String>::null();
+      DCHECK_EQ(PropertyKind::kData, details.kind());
+      if (details.attributes() != NONE) return DirectHandle<String>::null();
+      Name name = GetSimpleTransitionKey(target);
+      if (!name.IsString()) return DirectHandle<String>::null();
+      return direct_handle(String::cast(name), isolate_);
+    }
+  }
+  UNREACHABLE();
+}
+
 Handle<Map> TransitionsAccessor::ExpectedTransitionTarget() {
   DCHECK(!ExpectedTransitionKey().is_null());
   return handle(GetTarget(0), isolate_);
+}
+
+DirectHandle<Map> TransitionsAccessor::ExpectedTransitionTarget_Direct() {
+  DCHECK(!ExpectedTransitionKey_Direct().is_null());
+  return direct_handle(GetTarget(0), isolate_);
 }
 
 }  // namespace internal

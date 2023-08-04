@@ -411,8 +411,8 @@ class SeqSubStringKey final : public StringTableKey {
 #pragma warning(push)
 #pragma warning(disable : 4789)
 #endif
-  SeqSubStringKey(Isolate* isolate, Handle<SeqString> string, int from, int len,
-                  bool convert = false)
+  SeqSubStringKey(Isolate* isolate, DirectHandle<SeqString> string, int from,
+                  int len, bool convert = false)
       : StringTableKey(0, len),
         string_(string),
         from_(from),
@@ -443,16 +443,16 @@ class SeqSubStringKey final : public StringTableKey {
 
   void PrepareForInsertion(Isolate* isolate) {
     if (sizeof(Char) == 1 || (sizeof(Char) == 2 && convert_)) {
-      Handle<SeqOneByteString> result =
-          isolate->factory()->AllocateRawOneByteInternalizedString(
+      DirectHandle<SeqOneByteString> result =
+          isolate->factory()->AllocateRawOneByteInternalizedString_Direct(
               length(), raw_hash_field());
       DisallowGarbageCollection no_gc;
       CopyChars(result->GetChars(no_gc), string_->GetChars(no_gc) + from_,
                 length());
       internalized_string_ = result;
     } else {
-      Handle<SeqTwoByteString> result =
-          isolate->factory()->AllocateRawTwoByteInternalizedString(
+      DirectHandle<SeqTwoByteString> result =
+          isolate->factory()->AllocateRawTwoByteInternalizedString_Direct(
               length(), raw_hash_field());
       DisallowGarbageCollection no_gc;
       CopyChars(result->GetChars(no_gc), string_->GetChars(no_gc) + from_,
@@ -461,16 +461,16 @@ class SeqSubStringKey final : public StringTableKey {
     }
   }
 
-  Handle<String> GetHandleForInsertion() {
+  DirectHandle<String> GetHandleForInsertion() {
     DCHECK(!internalized_string_.is_null());
     return internalized_string_;
   }
 
  private:
-  Handle<typename CharTraits<Char>::String> string_;
+  DirectHandle<typename CharTraits<Char>::String> string_;
   int from_;
   bool convert_;
-  Handle<String> internalized_string_;
+  DirectHandle<String> internalized_string_;
 };
 
 using SeqOneByteSubStringKey = SeqSubStringKey<SeqOneByteString>;
@@ -678,8 +678,49 @@ Handle<String> String::Flatten(Isolate* isolate, Handle<String> string,
 }
 
 // static
+DirectHandle<String> String::Flatten_Direct(Isolate* isolate,
+                                            DirectHandle<String> string,
+                                            AllocationType allocation) {
+  DisallowGarbageCollection no_gc;  // Unhandlified code.
+  PtrComprCageBase cage_base(isolate);
+  String s = *string;
+  StringShape shape(s, cage_base);
+
+  // Shortcut already-flat strings.
+  if (V8_LIKELY(shape.IsDirect())) return string;
+
+  if (shape.IsCons()) {
+    DCHECK(!s.InSharedHeap());
+    ConsString cons = ConsString::cast(s);
+    if (!cons.IsFlat(isolate)) {
+      AllowGarbageCollection yes_gc;
+      return SlowFlatten_Direct(isolate, direct_handle(cons, isolate),
+                                allocation);
+    }
+    s = cons.first(cage_base);
+    shape = StringShape(s, cage_base);
+  }
+
+  if (shape.IsThin()) {
+    s = ThinString::cast(s).actual(cage_base);
+    DCHECK(!s.IsConsString());
+  }
+
+  return direct_handle(s, isolate);
+}
+
+// static
 Handle<String> String::Flatten(LocalIsolate* isolate, Handle<String> string,
                                AllocationType allocation) {
+  // We should never pass non-flat strings to String::Flatten when off-thread.
+  DCHECK(string->IsFlat());
+  return string;
+}
+
+// static
+DirectHandle<String> String::Flatten_Direct(LocalIsolate* isolate,
+                                            DirectHandle<String> string,
+                                            AllocationType allocation) {
   // We should never pass non-flat strings to String::Flatten when off-thread.
   DCHECK(string->IsFlat());
   return string;

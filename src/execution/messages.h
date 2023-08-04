@@ -84,6 +84,11 @@ class ErrorUtils : public AllStatic {
       Isolate* isolate, Handle<JSFunction> target, Handle<Object> new_target,
       Handle<Object> message, Handle<Object> options, FrameSkipMode mode,
       Handle<Object> caller, StackTraceCollection stack_trace_collection);
+  static MaybeDirectHandle<JSObject> Construct_Direct(
+      Isolate* isolate, DirectHandle<JSFunction> target,
+      DirectHandle<Object> new_target, DirectHandle<Object> message,
+      DirectHandle<Object> options, FrameSkipMode mode,
+      DirectHandle<Object> caller, StackTraceCollection stack_trace_collection);
 
   V8_EXPORT_PRIVATE static MaybeHandle<String> ToString(Isolate* isolate,
                                                         Handle<Object> recv);
@@ -92,6 +97,10 @@ class ErrorUtils : public AllStatic {
       Isolate* isolate, Handle<JSFunction> constructor, MessageTemplate index,
       Handle<Object> arg0, Handle<Object> arg1, Handle<Object> arg2,
       FrameSkipMode mode);
+  static DirectHandle<JSObject> MakeGenericError_Direct(
+      Isolate* isolate, DirectHandle<JSFunction> constructor,
+      MessageTemplate index, DirectHandle<Object> arg0,
+      DirectHandle<Object> arg1, DirectHandle<Object> arg2, FrameSkipMode mode);
 
   // Formats a textual stack trace from the given structured stack trace.
   // Note that this can call arbitrary JS code through Error.prepareStackTrace.
@@ -149,6 +158,9 @@ class MessageFormatter {
                                                          Handle<String> arg0,
                                                          Handle<String> arg1,
                                                          Handle<String> arg2);
+  V8_EXPORT_PRIVATE static MaybeDirectHandle<String> TryFormat_Direct(
+      Isolate* isolate, MessageTemplate index, DirectHandle<String> arg0,
+      DirectHandle<String> arg1, DirectHandle<String> arg2);
 
   static Handle<String> Format(Isolate* isolate, MessageTemplate index,
                                Handle<Object> arg0,

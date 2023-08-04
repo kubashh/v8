@@ -269,6 +269,67 @@ bool AllocationSite::DigestTransitionFeedback(Handle<AllocationSite> site,
   return result;
 }
 
+template <AllocationSiteUpdateMode update_or_check>
+bool AllocationSite::DigestTransitionFeedback_Direct(
+    DirectHandle<AllocationSite> site, ElementsKind to_kind) {
+  Isolate* isolate = site->GetIsolate();
+  bool result = false;
+
+  if (site->PointsToLiteral() && site->boilerplate().IsJSArray()) {
+    DirectHandle<JSArray> boilerplate(JSArray::cast(site->boilerplate()),
+                                      isolate);
+    ElementsKind kind = boilerplate->GetElementsKind();
+    // if kind is holey ensure that to_kind is as well.
+    if (IsHoleyElementsKind(kind)) {
+      to_kind = GetHoleyElementsKind(to_kind);
+    }
+    if (IsMoreGeneralElementsKindTransition(kind, to_kind)) {
+      // If the array is huge, it's not likely to be defined in a local
+      // function, so we shouldn't make new instances of it very often.
+      uint32_t length = 0;
+      CHECK(boilerplate->length().ToArrayLength(&length));
+      if (length <= kMaximumArrayBytesToPretransition) {
+        if (update_or_check == AllocationSiteUpdateMode::kCheckOnly) {
+          return true;
+        }
+        if (v8_flags.trace_track_allocation_sites) {
+          bool is_nested = site->IsNested();
+          PrintF("AllocationSite: JSArray %p boilerplate %supdated %s->%s\n",
+                 reinterpret_cast<void*>(site->ptr()),
+                 is_nested ? "(nested)" : " ", ElementsKindToString(kind),
+                 ElementsKindToString(to_kind));
+        }
+        CHECK_NE(to_kind, DICTIONARY_ELEMENTS);
+        JSObject::TransitionElementsKind_Direct(boilerplate, to_kind);
+        DependentCode::DeoptimizeDependencyGroups(
+            isolate, *site,
+            DependentCode::kAllocationSiteTransitionChangedGroup);
+        result = true;
+      }
+    }
+  } else {
+    // The AllocationSite is for a constructed Array.
+    ElementsKind kind = site->GetElementsKind();
+    // if kind is holey ensure that to_kind is as well.
+    if (IsHoleyElementsKind(kind)) {
+      to_kind = GetHoleyElementsKind(to_kind);
+    }
+    if (IsMoreGeneralElementsKindTransition(kind, to_kind)) {
+      if (update_or_check == AllocationSiteUpdateMode::kCheckOnly) return true;
+      if (v8_flags.trace_track_allocation_sites) {
+        PrintF("AllocationSite: JSArray %p site updated %s->%s\n",
+               reinterpret_cast<void*>(site->ptr()), ElementsKindToString(kind),
+               ElementsKindToString(to_kind));
+      }
+      site->SetElementsKind(to_kind);
+      DependentCode::DeoptimizeDependencyGroups(
+          isolate, *site, DependentCode::kAllocationSiteTransitionChangedGroup);
+      result = true;
+    }
+  }
+  return result;
+}
+
 }  // namespace internal
 }  // namespace v8
 

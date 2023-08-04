@@ -107,10 +107,16 @@ class DescriptorArray
   static Handle<DescriptorArray> CopyUpTo(Isolate* isolate,
                                           Handle<DescriptorArray> desc,
                                           int enumeration_index, int slack = 0);
+  static DirectHandle<DescriptorArray> CopyUpTo_Direct(
+      Isolate* isolate, DirectHandle<DescriptorArray> desc,
+      int enumeration_index, int slack = 0);
 
   static Handle<DescriptorArray> CopyUpToAddAttributes(
       Isolate* isolate, Handle<DescriptorArray> desc, int enumeration_index,
       PropertyAttributes attributes, int slack = 0);
+  static DirectHandle<DescriptorArray> CopyUpToAddAttributes_Direct(
+      Isolate* isolate, DirectHandle<DescriptorArray> desc,
+      int enumeration_index, PropertyAttributes attributes, int slack = 0);
 
   static Handle<DescriptorArray> CopyForFastObjectClone(
       Isolate* isolate, Handle<DescriptorArray> desc, int enumeration_index,
@@ -150,6 +156,10 @@ class DescriptorArray
   // empty descriptor array object if number_of_descriptors is 0.
   template <typename IsolateT>
   V8_EXPORT_PRIVATE static Handle<DescriptorArray> Allocate(
+      IsolateT* isolate, int nof_descriptors, int slack,
+      AllocationType allocation = AllocationType::kYoung);
+  template <typename IsolateT>
+  V8_EXPORT_PRIVATE static DirectHandle<DescriptorArray> Allocate_Direct(
       IsolateT* isolate, int nof_descriptors, int slack,
       AllocationType allocation = AllocationType::kYoung);
 

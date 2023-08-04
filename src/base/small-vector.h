@@ -249,8 +249,10 @@ class SmallVector {
     end_of_storage_ = begin_ + kInlineSize;
   }
 
+ public:
   bool is_big() const { return begin_ != inline_storage_begin(); }
 
+ private:
   T* inline_storage_begin() { return reinterpret_cast<T*>(&inline_storage_); }
   const T* inline_storage_begin() const {
     return reinterpret_cast<const T*>(&inline_storage_);

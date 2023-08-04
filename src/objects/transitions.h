@@ -56,11 +56,17 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
   // as necessary. This can trigger GC.
   static void Insert(Isolate* isolate, Handle<Map> map, Handle<Name> name,
                      Handle<Map> target, SimpleTransitionFlag flag);
+  static void Insert_Direct(Isolate* isolate, DirectHandle<Map> map,
+                            DirectHandle<Name> name, DirectHandle<Map> target,
+                            SimpleTransitionFlag flag);
 
   Map SearchTransition(Name name, PropertyKind kind,
                        PropertyAttributes attributes);
   static inline MaybeHandle<Map> SearchTransition(
       Isolate* isolate, Handle<Map> map, Name name, PropertyKind kind,
+      PropertyAttributes attributes);
+  static inline MaybeDirectHandle<Map> SearchTransition_Direct(
+      Isolate* isolate, DirectHandle<Map> map, Name name, PropertyKind kind,
       PropertyAttributes attributes);
 
   Map SearchSpecial(Symbol name);
@@ -74,9 +80,15 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
   enum RequestedLocation { kAnyLocation, kFieldOnly };
   MaybeHandle<Map> FindTransitionToDataProperty(
       Handle<Name> name, RequestedLocation requested_location = kAnyLocation);
+  MaybeDirectHandle<Map> FindTransitionToDataProperty_Direct(
+      DirectHandle<Name> name,
+      RequestedLocation requested_location = kAnyLocation);
 
   MaybeHandle<Map> FindTransitionToField(Handle<Name> name) {
     return FindTransitionToDataProperty(name, kFieldOnly);
+  }
+  MaybeDirectHandle<Map> FindTransitionToField_Direct(DirectHandle<Name> name) {
+    return FindTransitionToDataProperty_Direct(name, kFieldOnly);
   }
 
   // Find all transitions with given name and calls the callback.
@@ -88,7 +100,9 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
                            DisallowGarbageCollection* no_gc);
 
   inline Handle<String> ExpectedTransitionKey();
+  inline DirectHandle<String> ExpectedTransitionKey_Direct();
   inline Handle<Map> ExpectedTransitionTarget();
+  inline DirectHandle<Map> ExpectedTransitionTarget_Direct();
 
   int NumberOfTransitions();
   // The size of transition arrays are limited so they do not end up in large
@@ -100,6 +114,8 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
   static inline PropertyDetails GetTargetDetails(Name name, Map target);
 
   static bool CanHaveMoreTransitions(Isolate* isolate, Handle<Map> map);
+  static bool CanHaveMoreTransitions_Direct(Isolate* isolate,
+                                            DirectHandle<Map> map);
 
   static bool IsMatchingMap(Map target, Name name, PropertyKind kind,
                             PropertyAttributes attributes);
@@ -153,7 +169,7 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
 #endif
 #if DEBUG
   static void CheckNewTransitionsAreConsistent(Isolate* isolate,
-                                               Handle<Map> map,
+                                               DirectHandle<Map> map,
                                                Object transitions);
   bool IsConsistentWithBackPointers();
   bool IsSortedNoDuplicates();
@@ -185,14 +201,15 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
   static inline Encoding GetEncoding(Isolate* isolate,
                                      MaybeObject raw_transitions);
   static inline Encoding GetEncoding(Isolate* isolate, TransitionArray array);
-  static inline Encoding GetEncoding(Isolate* isolate, Handle<Map> map);
+  static inline Encoding GetEncoding(Isolate* isolate, DirectHandle<Map> map);
 
   static inline TransitionArray GetTransitionArray(Isolate* isolate,
                                                    MaybeObject raw_transitions);
   static inline TransitionArray GetTransitionArray(Isolate* isolate,
-                                                   Handle<Map> map);
+                                                   DirectHandle<Map> map);
 
-  static inline Map GetSimpleTransition(Isolate* isolate, Handle<Map> map);
+  static inline Map GetSimpleTransition(Isolate* isolate,
+                                        DirectHandle<Map> map);
   static inline Name GetSimpleTransitionKey(Map transition);
   inline PropertyDetails GetSimpleTargetDetails(Map transition);
 
@@ -206,9 +223,15 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
 
   static inline void ReplaceTransitions(Isolate* isolate, Handle<Map> map,
                                         MaybeObject new_transitions);
+  static inline void ReplaceTransitions_Direct(Isolate* isolate,
+                                               DirectHandle<Map> map,
+                                               MaybeObject new_transitions);
   static inline void ReplaceTransitions(
       Isolate* isolate, Handle<Map> map,
       Handle<TransitionArray> new_transitions);
+  static inline void ReplaceTransitions_Direct(
+      Isolate* isolate, DirectHandle<Map> map,
+      DirectHandle<TransitionArray> new_transitions);
 
   bool HasSimpleTransitionTo(Map map);
 

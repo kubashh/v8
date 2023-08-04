@@ -100,6 +100,75 @@ Handle<String> String::SlowFlatten(Isolate* isolate, Handle<ConsString> cons,
   return result;
 }
 
+DirectHandle<String> String::SlowFlatten_Direct(Isolate* isolate,
+                                                DirectHandle<ConsString> cons,
+                                                AllocationType allocation) {
+  DCHECK_NE(cons->second().length(), 0);
+  DCHECK(!cons->InSharedHeap());
+
+  // TurboFan can create cons strings with empty first parts.
+  while (cons->first().length() == 0) {
+    // We do not want to call this function recursively. Therefore we call
+    // String::Flatten only in those cases where String::SlowFlatten is not
+    // called again.
+    if (cons->second().IsConsString() && !cons->second().IsFlat()) {
+      cons = direct_handle(ConsString::cast(cons->second()), isolate);
+    } else {
+      return String::Flatten_Direct(
+          isolate, direct_handle(cons->second(), isolate), allocation);
+    }
+  }
+
+  DCHECK(AllowGarbageCollection::IsAllowed());
+  int length = cons->length();
+  if (allocation != AllocationType::kSharedOld) {
+    allocation =
+        ObjectInYoungGeneration(*cons) ? allocation : AllocationType::kOld;
+  }
+  DirectHandle<SeqString> result;
+  if (cons->IsOneByteRepresentation()) {
+    DirectHandle<SeqOneByteString> flat =
+        isolate->factory()
+            ->NewRawOneByteString_Direct(length, allocation)
+            .ToHandleChecked();
+    // When the ConsString had a forwarding index, it is possible that it was
+    // transitioned to a ThinString (and eventually shortcutted to
+    // InternalizedString) during GC.
+    if (V8_UNLIKELY(v8_flags.always_use_string_forwarding_table &&
+                    !cons->IsConsString())) {
+      DCHECK(cons->IsInternalizedString() || cons->IsThinString());
+      return String::Flatten_Direct(isolate, cons, allocation);
+    }
+    DisallowGarbageCollection no_gc;
+    WriteToFlat(*cons, flat->GetChars(no_gc), 0, length);
+    result = flat;
+  } else {
+    DirectHandle<SeqTwoByteString> flat =
+        isolate->factory()
+            ->NewRawTwoByteString_Direct(length, allocation)
+            .ToHandleChecked();
+    // When the ConsString had a forwarding index, it is possible that it was
+    // transitioned to a ThinString (and eventually shortcutted to
+    // InternalizedString) during GC.
+    if (V8_UNLIKELY(v8_flags.always_use_string_forwarding_table &&
+                    !cons->IsConsString())) {
+      DCHECK(cons->IsInternalizedString() || cons->IsThinString());
+      return String::Flatten_Direct(isolate, cons, allocation);
+    }
+    DisallowGarbageCollection no_gc;
+    WriteToFlat(*cons, flat->GetChars(no_gc), 0, length);
+    result = flat;
+  }
+  {
+    DisallowGarbageCollection no_gc;
+    Tagged<ConsString> raw_cons = *cons;
+    raw_cons->set_first(*result);
+    raw_cons->set_second(ReadOnlyRoots(isolate).empty_string());
+  }
+  DCHECK(result->IsFlat());
+  return result;
+}
+
 Handle<String> String::SlowShare(Isolate* isolate, Handle<String> source) {
   DCHECK(v8_flags.shared_string_table);
   Handle<String> flat = Flatten(isolate, source, AllocationType::kSharedOld);
@@ -784,6 +853,67 @@ Handle<Object> String::ToNumber(Isolate* isolate, Handle<String> subject) {
   // Slower case.
   int flags = ALLOW_HEX | ALLOW_OCTAL | ALLOW_BINARY;
   return isolate->factory()->NewNumber(StringToDouble(isolate, subject, flags));
+}
+
+// static
+DirectHandle<Object> String::ToNumber_Direct(Isolate* isolate,
+                                             DirectHandle<String> subject) {
+  // Flatten {subject} string first.
+  subject = String::Flatten_Direct(isolate, subject);
+
+  // Fast array index case.
+  uint32_t index;
+  if (subject->AsArrayIndex(&index)) {
+    return isolate->factory()->NewNumberFromUint_Direct(index);
+  }
+
+  // Fast case: short integer or some sorts of junk values.
+  if (subject->IsSeqOneByteString()) {
+    int len = subject->length();
+    if (len == 0) return direct_handle(Smi::zero(), isolate);
+
+    DisallowGarbageCollection no_gc;
+    uint8_t const* data =
+        DirectHandle<SeqOneByteString>::cast(subject)->GetChars(no_gc);
+    bool minus = (data[0] == '-');
+    int start_pos = (minus ? 1 : 0);
+
+    if (start_pos == len) {
+      return isolate->factory()->nan_value_direct();
+    } else if (data[start_pos] > '9') {
+      // Fast check for a junk value. A valid string may start from a
+      // whitespace, a sign ('+' or '-'), the decimal point, a decimal digit
+      // or the 'I' character ('Infinity'). All of that have codes not greater
+      // than '9' except 'I' and &nbsp;.
+      if (data[start_pos] != 'I' && data[start_pos] != 0xA0) {
+        return isolate->factory()->nan_value_direct();
+      }
+    } else if (len - start_pos < 10 && AreDigits(data, start_pos, len)) {
+      // The maximal/minimal smi has 10 digits. If the string has less digits
+      // we know it will fit into the smi-data type.
+      int d = ParseDecimalInteger(data, start_pos, len);
+      if (minus) {
+        if (d == 0) return isolate->factory()->minus_zero_value_direct();
+        d = -d;
+      } else if (!subject->HasHashCode() && len <= String::kMaxArrayIndexSize &&
+                 (len == 1 || data[0] != '0')) {
+        // String hash is not calculated yet but all the data are present.
+        // Update the hash field to speed up sequential convertions.
+        uint32_t raw_hash_field = StringHasher::MakeArrayIndexHash(d, len);
+#ifdef DEBUG
+        subject->EnsureHash();  // Force hash calculation.
+        DCHECK_EQ(subject->raw_hash_field(), raw_hash_field);
+#endif
+        subject->set_raw_hash_field_if_empty(raw_hash_field);
+      }
+      return direct_handle(Smi::FromInt(d), isolate);
+    }
+  }
+
+  // Slower case.
+  int flags = ALLOW_HEX | ALLOW_OCTAL | ALLOW_BINARY;
+  return isolate->factory()->NewNumber_Direct(
+      StringToDouble_Direct(isolate, subject, flags));
 }
 
 String::FlatContent String::SlowGetFlatContent(

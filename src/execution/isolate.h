@@ -291,6 +291,13 @@ class StackMemory;
     return __isolate__->template Throw<T>(__isolate__->factory()->call); \
   } while (false)
 
+#define THROW_NEW_ERROR_DIRECT(isolate, call, T)  \
+  do {                                            \
+    auto* __isolate__ = (isolate);                \
+    return __isolate__->template Throw_Direct<T>( \
+        __isolate__->factory()->call);            \
+  } while (false)
+
 #define THROW_NEW_ERROR_RETURN_FAILURE(isolate, call)         \
   do {                                                        \
     auto* __isolate__ = (isolate);                            \
@@ -559,6 +566,22 @@ using DebugObjectCache = std::vector<Handle<HeapObject>>;
 // Factory's members available to Isolate directly.
 class V8_EXPORT_PRIVATE HiddenFactory : private Factory {};
 
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+class V8_NODISCARD HandlesCountScope {
+ public:
+  explicit HandlesCountScope(Isolate* isolate, const std::string& desc);
+  ~HandlesCountScope();
+  Isolate* isolate_;
+  const std::string desc_;
+  HandlesCountScope* parent_;
+};
+#else
+class HandlesCountScope {
+ public:
+  explicit HandlesCountScope(Isolate* isolate, const std::string& desc) {}
+};
+
+#endif
 class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // These forward declarations are required to make the friend declarations in
   // PerIsolateThreadData work on some older versions of gcc.
@@ -881,6 +904,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // Returns the global object of the current context. It could be
   // a builtin object, or a JS global object.
   inline Handle<JSGlobalObject> global_object();
+  inline DirectHandle<JSGlobalObject> global_object_direct();
 
   // Returns the global proxy object of the current context.
   inline Handle<JSGlobalProxy> global_proxy();
@@ -960,9 +984,12 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // set.
   bool MayAccess(Handle<NativeContext> accessing_context,
                  Handle<JSObject> receiver);
+  bool MayAccess_Direct(DirectHandle<NativeContext> accessing_context,
+                        DirectHandle<JSObject> receiver);
 
   void SetFailedAccessCheckCallback(v8::FailedAccessCheckCallback callback);
   void ReportFailedAccessCheck(Handle<JSObject> receiver);
+  void ReportFailedAccessCheck_Direct(DirectHandle<JSObject> receiver);
 
   // Exception throwing support. The caller should use the result
   // of Throw() as its return value.
@@ -976,6 +1003,12 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   V8_WARN_UNUSED_RESULT MaybeHandle<T> Throw(Handle<Object> exception) {
     Throw(*exception);
     return MaybeHandle<T>();
+  }
+  template <typename T>
+  V8_WARN_UNUSED_RESULT MaybeDirectHandle<T> Throw_Direct(
+      DirectHandle<Object> exception) {
+    Throw(*exception);
+    return MaybeDirectHandle<T>();
   }
 
   template <typename T>
@@ -1078,6 +1111,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   // Returns the current native context.
   inline Handle<NativeContext> native_context();
+  inline DirectHandle<NativeContext> native_context_direct();
   inline NativeContext raw_native_context();
 
   Handle<NativeContext> GetIncumbentContext();
@@ -1125,6 +1159,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
 #define NATIVE_CONTEXT_FIELD_ACCESSOR(index, type, name) \
   inline Handle<type> name();                            \
+  inline DirectHandle<type> name##_direct();             \
   inline bool is_##name(type value);
   NATIVE_CONTEXT_FIELDS(NATIVE_CONTEXT_FIELD_ACCESSOR)
 #undef NATIVE_CONTEXT_FIELD_ACCESSOR
@@ -1518,18 +1553,19 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // notifications occur if the set is on the elements of the array or
   // object prototype. Also ensure that changes to prototype chain between
   // Array and Object fire notifications.
-  void UpdateNoElementsProtectorOnSetElement(Handle<JSObject> object);
-  void UpdateNoElementsProtectorOnSetLength(Handle<JSObject> object) {
+  void UpdateNoElementsProtectorOnSetElement(DirectHandle<JSObject> object);
+  void UpdateNoElementsProtectorOnSetLength(DirectHandle<JSObject> object) {
     UpdateNoElementsProtectorOnSetElement(object);
   }
-  void UpdateNoElementsProtectorOnSetPrototype(Handle<JSObject> object) {
+  void UpdateNoElementsProtectorOnSetPrototype(DirectHandle<JSObject> object) {
     UpdateNoElementsProtectorOnSetElement(object);
   }
   void UpdateTypedArraySpeciesLookupChainProtectorOnSetPrototype(
       Handle<JSObject> object);
   void UpdateNumberStringNotRegexpLikeProtectorOnSetPrototype(
       Handle<JSObject> object);
-  void UpdateNoElementsProtectorOnNormalizeElements(Handle<JSObject> object) {
+  void UpdateNoElementsProtectorOnNormalizeElements(
+      DirectHandle<JSObject> object) {
     UpdateNoElementsProtectorOnSetElement(object);
   }
 
@@ -1667,6 +1703,23 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   uint32_t GetAndIncNextUniqueSfiId() {
     return next_unique_sfi_id_.fetch_add(1, std::memory_order_relaxed);
   }
+
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+  void IncrementHandlesCreated() {
+    handles_created_++;
+    std::string desc = active_handles_count_scope_ != nullptr
+                           ? active_handles_count_scope_->desc_
+                           : "unknown";
+    handles_count_[desc]++;
+  }
+  void IncrementHandlesDeref() {
+    handles_deref_++;
+    std::string desc = std::string(active_handles_count_scope_ != nullptr
+                                       ? active_handles_count_scope_->desc_
+                                       : "unknown");
+    handles_deref_map_[desc]++;
+  }
+#endif
 
 #ifdef V8_ENABLE_JAVASCRIPT_PROMISE_HOOKS
   void SetHasContextPromiseHooks(bool context_promise_hook) {
@@ -2405,6 +2458,16 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   std::shared_ptr<CompilationStatistics> turbo_statistics_;
 #ifdef V8_ENABLE_MAGLEV
   std::shared_ptr<CompilationStatistics> maglev_statistics_;
+#endif
+#ifdef V8_ENABLE_HANDLE_STATISTICS
+ public:
+  HandlesCountScope* active_handles_count_scope_ = nullptr;
+  std::map<std::string, uint64_t> handles_count_;
+  std::map<std::string, uint64_t> handles_deref_map_;
+  std::atomic<uint64_t> handles_created_;
+  std::atomic<uint64_t> handles_deref_;
+
+ private:
 #endif
   std::shared_ptr<metrics::Recorder> metrics_recorder_;
   uintptr_t last_recorder_context_id_ = 0;

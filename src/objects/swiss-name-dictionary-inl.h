@@ -348,6 +348,21 @@ Handle<SwissNameDictionary> SwissNameDictionary::EnsureGrowable(
   return Rehash(isolate, table, new_capacity);
 }
 
+// static
+template <typename IsolateT>
+DirectHandle<SwissNameDictionary> SwissNameDictionary::EnsureGrowable_Direct(
+    IsolateT* isolate, DirectHandle<SwissNameDictionary> table) {
+  int capacity = table->Capacity();
+
+  if (table->UsedCapacity() < MaxUsableCapacity(capacity)) {
+    // We have room for at least one more entry, nothing to do.
+    return table;
+  }
+
+  int new_capacity = capacity == 0 ? kInitialCapacity : capacity * 2;
+  return Rehash_Direct(isolate, table, new_capacity);
+}
+
 swiss_table::ctrl_t SwissNameDictionary::GetCtrl(int entry) {
   DCHECK_LT(static_cast<unsigned>(entry), static_cast<unsigned>(Capacity()));
 
@@ -512,6 +527,34 @@ Handle<SwissNameDictionary> SwissNameDictionary::Add(
   DCHECK(original_table->FindEntry(isolate, *key).is_not_found());
 
   Handle<SwissNameDictionary> table = EnsureGrowable(isolate, original_table);
+  DisallowGarbageCollection no_gc;
+  Tagged<SwissNameDictionary> raw_table = *table;
+  int nof = raw_table->NumberOfElements();
+  int nod = raw_table->NumberOfDeletedElements();
+  int new_enum_index = nof + nod;
+
+  int new_entry = raw_table->AddInternal(*key, *value, details);
+
+  raw_table->SetNumberOfElements(nof + 1);
+  raw_table->SetEntryForEnumerationIndex(new_enum_index, new_entry);
+
+  if (entry_out) {
+    *entry_out = InternalIndex(new_entry);
+  }
+
+  return table;
+}
+
+// static
+template <typename IsolateT>
+DirectHandle<SwissNameDictionary> SwissNameDictionary::Add_Direct(
+    IsolateT* isolate, DirectHandle<SwissNameDictionary> original_table,
+    DirectHandle<Name> key, DirectHandle<Object> value, PropertyDetails details,
+    InternalIndex* entry_out) {
+  DCHECK(original_table->FindEntry(isolate, *key).is_not_found());
+
+  DirectHandle<SwissNameDictionary> table =
+      EnsureGrowable_Direct(isolate, original_table);
   DisallowGarbageCollection no_gc;
   Tagged<SwissNameDictionary> raw_table = *table;
   int nof = raw_table->NumberOfElements();

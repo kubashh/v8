@@ -56,6 +56,9 @@ class V8_EXPORT_PRIVATE PrototypeUsers : public WeakArrayList {
   static Handle<WeakArrayList> Add(Isolate* isolate,
                                    Handle<WeakArrayList> array,
                                    Handle<Map> value, int* assigned_index);
+  static DirectHandle<WeakArrayList> Add_Direct(
+      Isolate* isolate, DirectHandle<WeakArrayList> array,
+      DirectHandle<Map> value, int* assigned_index);
 
   static inline void MarkSlotEmpty(WeakArrayList array, int index);
 

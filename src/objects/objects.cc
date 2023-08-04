@@ -227,10 +227,43 @@ Handle<FieldType> Object::OptimalType(Isolate* isolate,
   return FieldType::Any(isolate);
 }
 
+DirectHandle<FieldType> Object::OptimalType_Direct(
+    Isolate* isolate, Representation representation) {
+  if (representation.IsNone()) return FieldType::None_Direct(isolate);
+  if (v8_flags.track_field_types) {
+    if (representation.IsHeapObject() && IsHeapObject()) {
+      // We can track only JavaScript objects with stable maps.
+      DirectHandle<Map> map(HeapObject::cast(*this).map(), isolate);
+      if (map->is_stable() && map->IsJSReceiverMap()) {
+        return FieldType::Class_Direct(map, isolate);
+      }
+    }
+  }
+  return FieldType::Any_Direct(isolate);
+}
+
 Handle<Object> Object::NewStorageFor(Isolate* isolate, Handle<Object> object,
                                      Representation representation) {
   if (!representation.IsDouble()) return object;
   Handle<HeapNumber> result = isolate->factory()->NewHeapNumberWithHoleNaN();
+  if (object->IsUninitialized(isolate)) {
+    result->set_value_as_bits(kHoleNanInt64, kRelaxedStore);
+  } else if (object->IsHeapNumber()) {
+    // Ensure that all bits of the double value are preserved.
+    result->set_value_as_bits(
+        HeapNumber::cast(*object).value_as_bits(kRelaxedLoad), kRelaxedStore);
+  } else {
+    result->set_value(object->Number(), kRelaxedStore);
+  }
+  return result;
+}
+
+DirectHandle<Object> Object::NewStorageFor_Direct(
+    Isolate* isolate, DirectHandle<Object> object,
+    Representation representation) {
+  if (!representation.IsDouble()) return object;
+  DirectHandle<HeapNumber> result =
+      isolate->factory()->NewHeapNumberWithHoleNaN_Direct();
   if (object->IsUninitialized(isolate)) {
     result->set_value_as_bits(kHoleNanInt64, kRelaxedStore);
   } else if (object->IsHeapNumber()) {
@@ -255,10 +288,30 @@ Handle<Object> Object::WrapForRead(IsolateT* isolate, Handle<Object> object,
       HeapNumber::cast(*object).value_as_bits(kRelaxedLoad));
 }
 
+template <AllocationType allocation_type, typename IsolateT>
+DirectHandle<Object> Object::WrapForRead_Direct(IsolateT* isolate,
+                                                DirectHandle<Object> object,
+                                                Representation representation) {
+  DCHECK(!object->IsUninitialized(isolate));
+  if (!representation.IsDouble()) {
+    DCHECK(object->FitsRepresentation(representation));
+    return object;
+  }
+  return isolate->factory()
+      ->template NewHeapNumberFromBits_Direct<allocation_type>(
+          HeapNumber::cast(*object).value_as_bits(kRelaxedLoad));
+}
+
 template Handle<Object> Object::WrapForRead<AllocationType::kYoung>(
     Isolate* isolate, Handle<Object> object, Representation representation);
 template Handle<Object> Object::WrapForRead<AllocationType::kOld>(
     LocalIsolate* isolate, Handle<Object> object,
+    Representation representation);
+template DirectHandle<Object> Object::WrapForRead_Direct<
+    AllocationType::kYoung>(Isolate* isolate, DirectHandle<Object> object,
+                            Representation representation);
+template DirectHandle<Object> Object::WrapForRead_Direct<AllocationType::kOld>(
+    LocalIsolate* isolate, DirectHandle<Object> object,
     Representation representation);
 
 MaybeHandle<JSReceiver> Object::ToObjectImpl(Isolate* isolate,
@@ -294,6 +347,42 @@ MaybeHandle<JSReceiver> Object::ToObjectImpl(Isolate* isolate,
   return result;
 }
 
+MaybeDirectHandle<JSReceiver> Object::ToObjectImpl_Direct(
+    Isolate* isolate, DirectHandle<Object> object, const char* method_name) {
+  DCHECK(!object->IsJSReceiver());  // Use ToObject() for fast path.
+  DirectHandle<Context> native_context = isolate->native_context();
+  DirectHandle<JSFunction> constructor;
+  if (object->IsSmi()) {
+    constructor = direct_handle(native_context->number_function(), isolate);
+  } else {
+    int constructor_function_index = DirectHandle<HeapObject>::cast(object)
+                                         ->map()
+                                         .GetConstructorFunctionIndex();
+    if (constructor_function_index == Map::kNoConstructorFunctionIndex) {
+      if (method_name != nullptr) {
+        THROW_NEW_ERROR_DIRECT(
+            isolate,
+            NewTypeError_Direct(
+                MessageTemplate::kCalledOnNullOrUndefined,
+                isolate->factory()->NewStringFromAsciiChecked_Direct(
+                    method_name)),
+            JSReceiver);
+      }
+      THROW_NEW_ERROR_DIRECT(
+          isolate,
+          NewTypeError_Direct(MessageTemplate::kUndefinedOrNullToObject),
+          JSReceiver);
+    }
+    constructor = direct_handle(
+        JSFunction::cast(native_context->get(constructor_function_index)),
+        isolate);
+  }
+  DirectHandle<JSObject> result =
+      isolate->factory()->NewJSObject_Direct(constructor);
+  DirectHandle<JSPrimitiveWrapper>::cast(result)->set_value(*object);
+  return result;
+}
+
 // ES6 section 9.2.1.2, OrdinaryCallBindThis for sloppy callee.
 // static
 MaybeHandle<JSReceiver> Object::ConvertReceiver(Isolate* isolate,
@@ -303,6 +392,16 @@ MaybeHandle<JSReceiver> Object::ConvertReceiver(Isolate* isolate,
     return isolate->global_proxy();
   }
   return Object::ToObject(isolate, object);
+}
+MaybeDirectHandle<JSReceiver> Object::ConvertReceiver_Direct(
+    Isolate* isolate, DirectHandle<Object> object) {
+  if (object->IsJSReceiver()) return DirectHandle<JSReceiver>::cast(object);
+  if (object->IsNullOrUndefined(isolate)) {
+    // TODO(CSS)
+    return isolate->global_proxy();
+  }
+  // TOOD(CSS)
+  return Object::ToObject(isolate, handle(*object, isolate));
 }
 
 // static
@@ -338,6 +437,43 @@ MaybeHandle<Object> Object::ConvertToNumberOrNumeric(Isolate* isolate,
 }
 
 // static
+MaybeDirectHandle<Object> Object::ConvertToNumberOrNumeric_Direct(
+    Isolate* isolate, DirectHandle<Object> input, Conversion mode) {
+  while (true) {
+    if (input->IsNumber()) {
+      return input;
+    }
+    if (input->IsString()) {
+      return String::ToNumber_Direct(isolate,
+                                     DirectHandle<String>::cast(input));
+    }
+    if (input->IsOddball()) {
+      return Oddball::ToNumber_Direct(isolate,
+                                      DirectHandle<Oddball>::cast(input));
+    }
+    if (input->IsSymbol()) {
+      THROW_NEW_ERROR_DIRECT(
+          isolate, NewTypeError_Direct(MessageTemplate::kSymbolToNumber),
+          Object);
+    }
+    if (input->IsBigInt()) {
+      if (mode == Conversion::kToNumeric) return input;
+      DCHECK_EQ(mode, Conversion::kToNumber);
+      THROW_NEW_ERROR_DIRECT(
+          isolate, NewTypeError_Direct(MessageTemplate::kBigIntToNumber),
+          Object);
+    }
+    // TODO(CSS)
+    Handle<Object> input_handle = handle(*input, isolate);
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, input_handle,
+        JSReceiver::ToPrimitive(isolate, Handle<JSReceiver>::cast(input_handle),
+                                ToPrimitiveHint::kNumber),
+        Object);
+  }
+}
+
+// static
 MaybeHandle<Object> Object::ConvertToInteger(Isolate* isolate,
                                              Handle<Object> input) {
   ASSIGN_RETURN_ON_EXCEPTION(
@@ -345,6 +481,17 @@ MaybeHandle<Object> Object::ConvertToInteger(Isolate* isolate,
       ConvertToNumberOrNumeric(isolate, input, Conversion::kToNumber), Object);
   if (input->IsSmi()) return input;
   return isolate->factory()->NewNumber(DoubleToInteger(input->Number()));
+}
+
+// static
+MaybeDirectHandle<Object> Object::ConvertToInteger_Direct(
+    Isolate* isolate, DirectHandle<Object> input) {
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, input,
+      ConvertToNumberOrNumeric_Direct(isolate, input, Conversion::kToNumber),
+      Object);
+  if (input->IsSmi()) return input;
+  return isolate->factory()->NewNumber_Direct(DoubleToInteger(input->Number()));
 }
 
 // static
@@ -587,6 +734,128 @@ MaybeHandle<String> Object::NoSideEffectsToMaybeString(Isolate* isolate,
 }
 
 // static
+MaybeDirectHandle<String> Object::NoSideEffectsToMaybeString_Direct(
+    Isolate* isolate, DirectHandle<Object> input) {
+  DisallowJavascriptExecution no_js(isolate);
+
+  if (input->IsString() || input->IsNumber() || input->IsOddball()) {
+    // TODO(CSS)
+    return Object::ToString(isolate, handle(*input, isolate)).ToHandleChecked();
+  } else if (input->IsJSProxy()) {
+    DirectHandle<Object> currInput = input;
+    do {
+      HeapObject target =
+          DirectHandle<JSProxy>::cast(currInput)->target(isolate);
+      currInput = DirectHandle<Object>(target, isolate);
+    } while (currInput->IsJSProxy());
+    return NoSideEffectsToString_Direct(isolate, currInput);
+  } else if (input->IsBigInt()) {
+    // TODO(CSS)
+    return BigInt::NoSideEffectsToString(
+        isolate, Handle<BigInt>::cast(handle(*input, isolate)));
+  } else if (input->IsFunction()) {
+    // -- F u n c t i o n
+    DirectHandle<String> fun_str;
+    // TODO(CSS)
+    if (input->IsJSBoundFunction()) {
+      fun_str = JSBoundFunction::ToString(
+          Handle<JSBoundFunction>::cast(handle(*input, isolate)));
+    } else if (input->IsJSWrappedFunction()) {
+      fun_str = JSWrappedFunction::ToString(
+          Handle<JSWrappedFunction>::cast(handle(*input, isolate)));
+    } else {
+      DCHECK(input->IsJSFunction());
+      fun_str = JSFunction::ToString(
+          Handle<JSFunction>::cast(handle(*input, isolate)));
+    }
+
+    if (fun_str->length() > 128) {
+      IncrementalStringBuilder builder(isolate);
+      // TODO(CSS)
+      builder.AppendString(
+          isolate->factory()->NewSubString(handle(*fun_str, isolate), 0, 111));
+      builder.AppendCStringLiteral("...<omitted>...");
+      // TODO(CSS)
+      builder.AppendString(isolate->factory()->NewSubString(
+          handle(*fun_str, isolate), fun_str->length() - 2, fun_str->length()));
+
+      return builder.Finish().ToHandleChecked();
+    }
+    return fun_str;
+  } else if (input->IsSymbol()) {
+    // -- S y m b o l
+    DirectHandle<Symbol> symbol = DirectHandle<Symbol>::cast(input);
+
+    if (symbol->is_private_name()) {
+      return DirectHandle<String>(String::cast(symbol->description()), isolate);
+    }
+
+    IncrementalStringBuilder builder(isolate);
+    builder.AppendCStringLiteral("Symbol(");
+    if (symbol->description().IsString()) {
+      DirectHandle<String> description =
+          handle(String::cast(symbol->description()), isolate);
+      if (description->length() > 128) {
+        // TODO(CSS)
+        builder.AppendString(isolate->factory()->NewSubString(
+            handle(*description, isolate), 0, 56));
+        builder.AppendCStringLiteral("...<omitted>...");
+        // TODO(CSS)
+        builder.AppendString(isolate->factory()->NewSubString(
+            handle(*description, isolate), description->length() - 56,
+            description->length()));
+      } else {
+        builder.AppendString(description);
+      }
+    }
+    builder.AppendCharacter(')');
+
+    return builder.Finish().ToHandleChecked();
+  } else if (input->IsJSReceiver()) {
+    // -- J S R e c e i v e r
+    DirectHandle<JSReceiver> receiver = DirectHandle<JSReceiver>::cast(input);
+    DirectHandle<Object> to_string = JSReceiver::GetDataProperty_Direct(
+        isolate, receiver, isolate->factory()->toString_string_direct());
+
+    // TODO(CSS)
+    if (IsErrorObject(isolate, handle(*input, isolate)) ||
+        *to_string == *isolate->error_to_string()) {
+      // When internally formatting error objects, use a side-effects-free
+      // version of Error.prototype.toString independent of the actually
+      // installed toString method.
+      return NoSideEffectsErrorToString(
+          isolate, Handle<JSReceiver>::cast(handle(*input, isolate)));
+    } else if (*to_string == *isolate->object_to_string()) {
+      DirectHandle<Object> ctor = JSReceiver::GetDataProperty_Direct(
+          isolate, receiver, isolate->factory()->constructor_string_direct());
+      if (ctor->IsFunction()) {
+        // TODO(CSS)
+        Handle<String> ctor_name;
+        if (ctor->IsJSBoundFunction()) {
+          ctor_name = JSBoundFunction::GetName(
+                          isolate,
+                          Handle<JSBoundFunction>::cast(handle(*ctor, isolate)))
+                          .ToHandleChecked();
+        } else if (ctor->IsJSFunction()) {
+          ctor_name = JSFunction::GetName(
+              isolate, Handle<JSFunction>::cast(handle(*ctor, isolate)));
+        }
+
+        if (ctor_name->length() != 0) {
+          IncrementalStringBuilder builder(isolate);
+          builder.AppendCStringLiteral("#<");
+          builder.AppendString(ctor_name);
+          builder.AppendCharacter('>');
+
+          return builder.Finish().ToHandleChecked();
+        }
+      }
+    }
+  }
+  return MaybeDirectHandle<String>(kNullMaybeHandle);
+}
+
+// static
 Handle<String> Object::NoSideEffectsToString(Isolate* isolate,
                                              Handle<Object> input) {
   DisallowJavascriptExecution no_js(isolate);
@@ -630,6 +899,53 @@ Handle<String> Object::NoSideEffectsToString(Isolate* isolate,
 }
 
 // static
+DirectHandle<String> Object::NoSideEffectsToString_Direct(
+    Isolate* isolate, DirectHandle<Object> input) {
+  DisallowJavascriptExecution no_js(isolate);
+
+  // Try to convert input to a meaningful string.
+  MaybeDirectHandle<String> maybe_string =
+      NoSideEffectsToMaybeString_Direct(isolate, input);
+  DirectHandle<String> string_handle;
+  if (maybe_string.ToHandle(&string_handle)) {
+    return string_handle;
+  }
+
+  // At this point, input is either none of the above or a JSReceiver.
+
+  DirectHandle<JSReceiver> receiver;
+  if (input->IsJSReceiver()) {
+    receiver = DirectHandle<JSReceiver>::cast(input);
+  } else {
+    // This is the only case where Object::ToObject throws.
+    DCHECK(!input->IsSmi());
+    int constructor_function_index = DirectHandle<HeapObject>::cast(input)
+                                         ->map()
+                                         .GetConstructorFunctionIndex();
+    if (constructor_function_index == Map::kNoConstructorFunctionIndex) {
+      return isolate->factory()->NewStringFromAsciiChecked_Direct(
+          "[object Unknown]");
+    }
+
+    receiver = Object::ToObjectImpl_Direct(isolate, input).ToHandleChecked();
+  }
+
+  DirectHandle<String> builtin_tag =
+      direct_handle(receiver->class_name(), isolate);
+  DirectHandle<Object> tag_obj = JSReceiver::GetDataProperty_Direct(
+      isolate, receiver, isolate->factory()->to_string_tag_symbol_direct());
+  DirectHandle<String> tag =
+      tag_obj->IsString() ? DirectHandle<String>::cast(tag_obj) : builtin_tag;
+
+  IncrementalStringBuilder builder(isolate);
+  builder.AppendCStringLiteral("[object ");
+  builder.AppendString(tag);
+  builder.AppendCharacter(']');
+
+  return builder.Finish_Direct().ToHandleChecked();
+}
+
+// static
 MaybeHandle<Object> Object::ConvertToLength(Isolate* isolate,
                                             Handle<Object> input) {
   ASSIGN_RETURN_ON_EXCEPTION(isolate, input, ToNumber(isolate, input), Object);
@@ -644,6 +960,24 @@ MaybeHandle<Object> Object::ConvertToLength(Isolate* isolate,
     len = kMaxSafeInteger;
   }
   return isolate->factory()->NewNumber(len);
+}
+
+// static
+MaybeDirectHandle<Object> Object::ConvertToLength_Direct(
+    Isolate* isolate, DirectHandle<Object> input) {
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, input, ToNumber_Direct(isolate, input),
+                             Object);
+  if (input->IsSmi()) {
+    int value = std::max(Smi::ToInt(*input), 0);
+    return direct_handle(Smi::FromInt(value), isolate);
+  }
+  double len = DoubleToInteger(input->Number());
+  if (len <= 0.0) {
+    return direct_handle(Smi::zero(), isolate);
+  } else if (len >= kMaxSafeInteger) {
+    len = kMaxSafeInteger;
+  }
+  return isolate->factory()->NewNumber_Direct(len);
 }
 
 // static
@@ -907,6 +1241,22 @@ Handle<String> Object::TypeOf(Isolate* isolate, Handle<Object> object) {
 }
 
 // static
+DirectHandle<String> Object::TypeOf_Direct(Isolate* isolate,
+                                           DirectHandle<Object> object) {
+  if (object->IsNumber()) return isolate->factory()->number_string_direct();
+  if (object->IsOddball())
+    return direct_handle(Oddball::cast(*object).type_of(), isolate);
+  if (object->IsUndetectable()) {
+    return isolate->factory()->undefined_string_direct();
+  }
+  if (object->IsString()) return isolate->factory()->string_string_direct();
+  if (object->IsSymbol()) return isolate->factory()->symbol_string_direct();
+  if (object->IsBigInt()) return isolate->factory()->bigint_string_direct();
+  if (object->IsCallable()) return isolate->factory()->function_string_direct();
+  return isolate->factory()->object_string_direct();
+}
+
+// static
 MaybeHandle<Object> Object::Add(Isolate* isolate, Handle<Object> lhs,
                                 Handle<Object> rhs) {
   if (lhs->IsNumber() && rhs->IsNumber()) {
@@ -1034,6 +1384,27 @@ MaybeHandle<Object> Object::GetMethod(Handle<JSReceiver> receiver,
                     NewTypeError(MessageTemplate::kPropertyNotFunction, func,
                                  name, receiver),
                     Object);
+  }
+  return func;
+}
+
+// static
+MaybeDirectHandle<Object> Object::GetMethod_Direct(
+    DirectHandle<JSReceiver> receiver, DirectHandle<Name> name) {
+  DirectHandle<Object> func;
+  Isolate* isolate = receiver->GetIsolate();
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, func, JSReceiver::GetProperty_Direct(isolate, receiver, name),
+      Object);
+  if (func->IsNullOrUndefined(isolate)) {
+    return isolate->factory()->undefined_value_direct();
+  }
+  if (!func->IsCallable()) {
+    THROW_NEW_ERROR_DIRECT(
+        isolate,
+        NewTypeError_Direct(MessageTemplate::kPropertyNotFunction, func, name,
+                            receiver),
+        Object);
   }
   return func;
 }
@@ -1228,6 +1599,92 @@ MaybeHandle<Object> Object::GetProperty(LookupIterator* it,
 }
 
 // static
+MaybeDirectHandle<Object> Object::GetProperty_Direct(LookupIterator* it,
+                                                     bool is_global_reference) {
+  for (; it->IsFound(); it->Next()) {
+    switch (it->state()) {
+      case LookupIterator::NOT_FOUND:
+      case LookupIterator::TRANSITION:
+        UNREACHABLE();
+      case LookupIterator::JSPROXY: {
+        bool was_found;
+        DirectHandle<Object> receiver = it->GetReceiver_Direct();
+        // In case of global IC, the receiver is the global object. Replace by
+        // the global proxy.
+        if (receiver->IsJSGlobalObject()) {
+          receiver = direct_handle(
+              JSGlobalObject::cast(*receiver).global_proxy(), it->isolate());
+        }
+        if (is_global_reference) {
+          Maybe<bool> maybe = JSProxy::HasProperty_Direct(
+              it->isolate(), it->GetHolder_Direct<JSProxy>(),
+              it->GetName_Direct());
+          if (maybe.IsNothing()) return MaybeDirectHandle<Object>();
+          if (!maybe.FromJust()) {
+            it->NotFound();
+            return it->isolate()->factory()->undefined_value_direct();
+          }
+        }
+        MaybeDirectHandle<Object> result = JSProxy::GetProperty_Direct(
+            it->isolate(), it->GetHolder_Direct<JSProxy>(),
+            it->GetName_Direct(), receiver, &was_found);
+        if (!was_found && !is_global_reference) it->NotFound();
+        return result;
+      }
+      case LookupIterator::WASM_OBJECT:
+        return it->isolate()->factory()->undefined_value_direct();
+      case LookupIterator::INTERCEPTOR: {
+        bool done;
+        DirectHandle<Object> result;
+        ASSIGN_RETURN_ON_EXCEPTION(
+            it->isolate(), result,
+            JSObject::GetPropertyWithInterceptor_Direct(it, &done), Object);
+        if (done) return result;
+        break;
+      }
+      case LookupIterator::ACCESS_CHECK: {
+        if (it->HasAccess()) break;
+        return JSObject::GetPropertyWithFailedAccessCheck_Direct(it);
+      }
+      case LookupIterator::ACCESSOR: {
+        return GetPropertyWithAccessor_Direct(it);
+      }
+      case LookupIterator::INTEGER_INDEXED_EXOTIC: {
+        return it->isolate()->factory()->undefined_value_direct();
+      }
+      case LookupIterator::DATA: {
+        return it->GetDataValue_Direct();
+      }
+    }
+  }
+
+  if (it->IsPrivateName()) {
+    DirectHandle<Symbol> private_symbol =
+        DirectHandle<Symbol>::cast(it->name_direct());
+    Handle<String> name_string(String::cast(private_symbol->description()),
+                               it->isolate());
+    if (private_symbol->is_private_brand()) {
+      DirectHandle<String> class_name =
+          (name_string->length() == 0)
+              ? it->isolate()->factory()->anonymous_string_direct()
+              : name_string;
+      THROW_NEW_ERROR_DIRECT(
+          it->isolate(),
+          NewTypeError_Direct(MessageTemplate::kInvalidPrivateBrandInstance,
+                              class_name),
+          Object);
+    }
+    THROW_NEW_ERROR_DIRECT(
+        it->isolate(),
+        NewTypeError_Direct(MessageTemplate::kInvalidPrivateMemberRead,
+                            name_string),
+        Object);
+  }
+
+  return it->isolate()->factory()->undefined_value_direct();
+}
+
+// static
 MaybeHandle<Object> JSProxy::GetProperty(Isolate* isolate,
                                          Handle<JSProxy> proxy,
                                          Handle<Name> name,
@@ -1258,7 +1715,7 @@ MaybeHandle<Object> JSProxy::GetProperty(Isolate* isolate,
   // 7. If trap is undefined, then
   if (trap->IsUndefined(isolate)) {
     // 7.a Return target.[[Get]](P, Receiver).
-    PropertyKey key(isolate, name);
+    PropertyKey key(isolate, DirectHandle<Name>(name));
     LookupIterator it(isolate, receiver, key, target);
     MaybeHandle<Object> result = Object::GetProperty(&it);
     *was_found = it.IsFound();
@@ -1273,6 +1730,66 @@ MaybeHandle<Object> JSProxy::GetProperty(Isolate* isolate,
 
   MaybeHandle<Object> result =
       JSProxy::CheckGetSetTrapResult(isolate, name, target, trap_result, kGet);
+  if (result.is_null()) {
+    return result;
+  }
+
+  // 11. Return trap_result
+  return trap_result;
+}
+
+// static
+MaybeDirectHandle<Object> JSProxy::GetProperty_Direct(
+    Isolate* isolate, DirectHandle<JSProxy> proxy, DirectHandle<Name> name,
+    DirectHandle<Object> receiver, bool* was_found) {
+  *was_found = true;
+
+  DCHECK(!name->IsPrivate());
+  STACK_CHECK(isolate, MaybeHandle<Object>());
+  DirectHandle<Name> trap_name = isolate->factory()->get_string_direct();
+  // 1. Assert: IsPropertyKey(P) is true.
+  // 2. Let handler be the value of the [[ProxyHandler]] internal slot of O.
+  DirectHandle<Object> handler(proxy->handler(), isolate);
+  // 3. If handler is null, throw a TypeError exception.
+  // 4. Assert: Type(handler) is Object.
+  if (proxy->IsRevoked()) {
+    THROW_NEW_ERROR_DIRECT(
+        isolate, NewTypeError_Direct(MessageTemplate::kProxyRevoked, trap_name),
+        Object);
+  }
+  // 5. Let target be the value of the [[ProxyTarget]] internal slot of O.
+  DirectHandle<JSReceiver> target(JSReceiver::cast(proxy->target()), isolate);
+  // 6. Let trap be ? GetMethod(handler, "get").
+  DirectHandle<Object> trap;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, trap,
+      Object::GetMethod_Direct(DirectHandle<JSReceiver>::cast(handler),
+                               trap_name),
+      Object);
+  // 7. If trap is undefined, then
+  if (trap->IsUndefined(isolate)) {
+    // 7.a Return target.[[Get]](P, Receiver).
+    PropertyKey key(isolate, name);
+    LookupIterator it(isolate, receiver, key, target);
+    MaybeDirectHandle<Object> result = Object::GetProperty_Direct(&it);
+    *was_found = it.IsFound();
+    return result;
+  }
+  // 8. Let trapResult be ? Call(trap, handler, «target, P, Receiver»).
+  // TODO(CSS)
+  Handle<Object> trap_result;
+  Handle<Object> args[] = {handle(*target, isolate), handle(*name, isolate),
+                           handle(*receiver, isolate)};
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, trap_result,
+      Execution::Call(isolate, handle(*trap, isolate),
+                      handle(*handler, isolate), arraysize(args), args),
+      Object);
+
+  // TODO(CSS)
+  MaybeHandle<Object> result = JSProxy::CheckGetSetTrapResult(
+      isolate, handle(*name, isolate), handle(*target, isolate), trap_result,
+      kGet);
   if (result.is_null()) {
     return result;
   }
@@ -1443,6 +1960,74 @@ MaybeHandle<HeapObject> JSProxy::GetPrototype(Handle<JSProxy> proxy) {
   return Handle<HeapObject>::cast(handler_proto);
 }
 
+// static
+MaybeDirectHandle<HeapObject> JSProxy::GetPrototype_Direct(
+    DirectHandle<JSProxy> proxy) {
+  Isolate* isolate = proxy->GetIsolate();
+  DirectHandle<String> trap_name =
+      isolate->factory()->getPrototypeOf_string_direct();
+
+  STACK_CHECK(isolate, MaybeHandle<HeapObject>());
+
+  // 1. Let handler be the value of the [[ProxyHandler]] internal slot.
+  // 2. If handler is null, throw a TypeError exception.
+  // 3. Assert: Type(handler) is Object.
+  // 4. Let target be the value of the [[ProxyTarget]] internal slot.
+  if (proxy->IsRevoked()) {
+    THROW_NEW_ERROR_DIRECT(
+        isolate, NewTypeError_Direct(MessageTemplate::kProxyRevoked, trap_name),
+        HeapObject);
+  }
+  DirectHandle<JSReceiver> target(JSReceiver::cast(proxy->target()), isolate);
+  DirectHandle<JSReceiver> handler(JSReceiver::cast(proxy->handler()), isolate);
+
+  // 5. Let trap be ? GetMethod(handler, "getPrototypeOf").
+  DirectHandle<Object> trap;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, trap, Object::GetMethod_Direct(handler, trap_name), HeapObject);
+  // 6. If trap is undefined, then return target.[[GetPrototypeOf]]().
+  if (trap->IsUndefined(isolate)) {
+    return JSReceiver::GetPrototype_Direct(isolate, target);
+  }
+  // 7. Let handlerProto be ? Call(trap, handler, «target»).
+  // TODO(CSS)
+  Handle<Object> argv[] = {handle(*target, isolate)};
+  DirectHandle<Object> handler_proto;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, handler_proto,
+      MaybeDirectHandle<Object>(Execution::Call(isolate, handle(*trap, isolate),
+                                                handle(*handler, isolate),
+                                                arraysize(argv), argv)),
+      HeapObject);
+  // 8. If Type(handlerProto) is neither Object nor Null, throw a TypeError.
+  if (!(handler_proto->IsJSReceiver() || handler_proto->IsNull(isolate))) {
+    THROW_NEW_ERROR_DIRECT(
+        isolate,
+        NewTypeError_Direct(MessageTemplate::kProxyGetPrototypeOfInvalid),
+        HeapObject);
+  }
+  // 9. Let extensibleTarget be ? IsExtensible(target).
+  Maybe<bool> is_extensible = JSReceiver::IsExtensible_Direct(isolate, target);
+  MAYBE_RETURN(is_extensible, MaybeHandle<HeapObject>());
+  // 10. If extensibleTarget is true, return handlerProto.
+  if (is_extensible.FromJust())
+    return DirectHandle<HeapObject>::cast(handler_proto);
+  // 11. Let targetProto be ? target.[[GetPrototypeOf]]().
+  DirectHandle<HeapObject> target_proto;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, target_proto,
+                             JSReceiver::GetPrototype_Direct(isolate, target),
+                             HeapObject);
+  // 12. If SameValue(handlerProto, targetProto) is false, throw a TypeError.
+  if (!handler_proto->SameValue(*target_proto)) {
+    THROW_NEW_ERROR_DIRECT(
+        isolate,
+        NewTypeError_Direct(MessageTemplate::kProxyGetPrototypeOfNonExtensible),
+        HeapObject);
+  }
+  // 13. Return handlerProto.
+  return DirectHandle<HeapObject>::cast(handler_proto);
+}
+
 MaybeHandle<Object> Object::GetPropertyWithAccessor(LookupIterator* it) {
   Isolate* isolate = it->isolate();
   Handle<Object> structure = it->GetAccessors();
@@ -1507,6 +2092,86 @@ MaybeHandle<Object> Object::GetPropertyWithAccessor(LookupIterator* it) {
   }
   // Getter is not a function.
   return isolate->factory()->undefined_value();
+}
+
+MaybeDirectHandle<Object> Object::GetPropertyWithAccessor_Direct(
+    LookupIterator* it) {
+  Isolate* isolate = it->isolate();
+  // TODO(CSS)
+  DirectHandle<Object> structure = it->GetAccessors();
+  DirectHandle<Object> receiver = it->GetReceiver_Direct();
+  // In case of global IC, the receiver is the global object. Replace by the
+  // global proxy.
+  if (receiver->IsJSGlobalObject()) {
+    receiver =
+        direct_handle(JSGlobalObject::cast(*receiver).global_proxy(), isolate);
+  }
+
+  // We should never get here to initialize a const with the hole value since a
+  // const declaration would conflict with the getter.
+  DCHECK(!structure->IsForeign());
+
+  // API style callbacks.
+  DirectHandle<JSObject> holder = it->GetHolder_Direct<JSObject>();
+  if (structure->IsAccessorInfo()) {
+    DirectHandle<Name> name = it->GetName_Direct();
+    DirectHandle<AccessorInfo> info =
+        DirectHandle<AccessorInfo>::cast(structure);
+
+    if (!info->has_getter())
+      return isolate->factory()->undefined_value_direct();
+
+    if (info->is_sloppy() && !receiver->IsJSReceiver()) {
+      ASSIGN_RETURN_ON_EXCEPTION(
+          isolate, receiver, Object::ConvertReceiver_Direct(isolate, receiver),
+          Object);
+    }
+
+    PropertyCallbackArguments args(isolate, info->data(), *receiver, *holder,
+                                   Just(kDontThrow));
+    // TODO(CSS)
+    Handle<Object> result =
+        args.CallAccessorGetter(handle(*info, isolate), handle(*name, isolate));
+    RETURN_EXCEPTION_IF_SCHEDULED_EXCEPTION(isolate, Object);
+    if (result.is_null()) return isolate->factory()->undefined_value_direct();
+    DirectHandle<Object> reboxed_result = direct_handle(*result, isolate);
+    if (info->replace_on_access() && receiver->IsJSReceiver()) {
+      RETURN_ON_EXCEPTION(isolate,
+                          Accessors::ReplaceAccessorWithDataProperty_Direct(
+                              isolate, receiver, holder, name, result),
+                          Object);
+    }
+    return reboxed_result;
+  }
+
+  DirectHandle<AccessorPair> accessor_pair =
+      DirectHandle<AccessorPair>::cast(structure);
+  // AccessorPair with 'cached' private property.
+  // TODO(CSS)
+  if (it->TryLookupCachedProperty(handle(*accessor_pair, isolate))) {
+    return Object::GetProperty_Direct(it);
+  }
+
+  // Regular accessor.
+  DirectHandle<Object> getter(accessor_pair->getter(), isolate);
+  if (getter->IsFunctionTemplateInfo()) {
+    SaveAndSwitchContext save(isolate,
+                              *holder->GetCreationContext().ToHandleChecked());
+    // TODO(CSS)
+    return Builtins::InvokeApiFunction(
+        isolate, false,
+        Handle<FunctionTemplateInfo>::cast(handle(*getter, isolate)),
+        handle(*receiver, isolate), 0, nullptr,
+        isolate->factory()->undefined_value());
+  } else if (getter->IsCallable()) {
+    // TODO(rossberg): nicer would be to cast to some JSCallable here...
+    // TODO(CSS)
+    return Object::GetPropertyWithDefinedGetter(
+        handle(*receiver, isolate),
+        Handle<JSReceiver>::cast(handle(*getter, isolate)));
+  }
+  // Getter is not a function.
+  return isolate->factory()->undefined_value_direct();
 }
 
 Maybe<bool> Object::SetPropertyWithAccessor(
@@ -2784,6 +3449,15 @@ Maybe<bool> Object::CannotCreateProperty(Isolate* isolate,
                    Object::TypeOf(isolate, receiver), receiver));
 }
 
+Maybe<bool> Object::CannotCreateProperty_Direct(
+    Isolate* isolate, DirectHandle<Object> receiver, DirectHandle<Object> name,
+    DirectHandle<Object> value, Maybe<ShouldThrow> should_throw) {
+  RETURN_FAILURE(
+      isolate, GetShouldThrow(isolate, should_throw),
+      NewTypeError_Direct(MessageTemplate::kStrictCannotCreateProperty, name,
+                          Object::TypeOf_Direct(isolate, receiver), receiver));
+}
+
 Maybe<bool> Object::WriteToReadOnlyProperty(
     LookupIterator* it, Handle<Object> value,
     Maybe<ShouldThrow> maybe_should_throw) {
@@ -2816,6 +3490,14 @@ Maybe<bool> Object::RedefineIncompatibleProperty(
     Maybe<ShouldThrow> should_throw) {
   RETURN_FAILURE(isolate, GetShouldThrow(isolate, should_throw),
                  NewTypeError(MessageTemplate::kRedefineDisallowed, name));
+}
+
+Maybe<bool> Object::RedefineIncompatibleProperty_Direct(
+    Isolate* isolate, DirectHandle<Object> name, DirectHandle<Object> value,
+    Maybe<ShouldThrow> should_throw) {
+  RETURN_FAILURE(
+      isolate, GetShouldThrow(isolate, should_throw),
+      NewTypeError_Direct(MessageTemplate::kRedefineDisallowed, name));
 }
 
 Maybe<bool> Object::SetDataProperty(LookupIterator* it, Handle<Object> value) {
@@ -2870,6 +3552,84 @@ Maybe<bool> Object::SetDataProperty(LookupIterator* it, Handle<Object> value) {
 
     // Write the property value.
     it->WriteDataValue(to_assign, false);
+  }
+
+#if VERIFY_HEAP
+  if (v8_flags.verify_heap) {
+    receiver->HeapObjectVerify(isolate);
+  }
+#endif
+  return Just(true);
+}
+
+Maybe<bool> Object::SetDataProperty_Direct(LookupIterator* it,
+                                           DirectHandle<Object> value) {
+  Isolate* isolate = it->isolate();
+  DCHECK_IMPLIES(it->GetReceiver_Direct()->IsJSProxy(isolate),
+                 it->GetName_Direct()->IsPrivateName(isolate));
+  DCHECK_IMPLIES(
+      !it->IsElement() && it->GetName_Direct()->IsPrivateName(isolate),
+      it->state() == LookupIterator::DATA);
+  DirectHandle<JSReceiver> receiver =
+      DirectHandle<JSReceiver>::cast(it->GetReceiver_Direct());
+
+  // Store on the holder which may be hidden behind the receiver.
+  DCHECK(it->HolderIsReceiverOrHiddenPrototype());
+
+  DirectHandle<Object> to_assign = value;
+  // Convert the incoming value to a number for storing into typed arrays.
+  if (it->IsElement() && receiver->IsJSObject(isolate) &&
+      JSObject::cast(*receiver).HasTypedArrayOrRabGsabTypedArrayElements(
+          isolate)) {
+    DirectHandle<JSTypedArray> receiver_ta =
+        DirectHandle<JSTypedArray>::cast(receiver);
+    ElementsKind elements_kind = JSObject::cast(*receiver).GetElementsKind();
+    if (IsBigIntTypedArrayElementsKind(elements_kind)) {
+      // TODO(CSS)
+      Handle<Object> to_assign_handle;
+      ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+          isolate, to_assign_handle,
+          BigInt::FromObject(isolate, handle(*value, isolate)),
+          Nothing<bool>());
+      to_assign = to_assign_handle;
+      if (V8_UNLIKELY(receiver_ta->IsDetachedOrOutOfBounds() ||
+                      it->index() >= receiver_ta->GetLength())) {
+        return Just(true);
+      }
+    } else if (!value->IsNumber() && !value->IsUndefined(isolate)) {
+      // TODO(CSS)
+      Handle<Object> to_assign_handle;
+      ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+          isolate, to_assign_handle,
+          Object::ToNumber(isolate, handle(*value, isolate)), Nothing<bool>());
+      to_assign = to_assign_handle;
+      if (V8_UNLIKELY(receiver_ta->IsDetachedOrOutOfBounds() ||
+                      it->index() >= receiver_ta->GetLength())) {
+        return Just(true);
+      }
+    }
+  }
+
+  DCHECK(!receiver->IsWasmObject(isolate));
+  if (V8_UNLIKELY(receiver->IsJSSharedStruct(isolate) ||
+                  receiver->IsJSSharedArray(isolate))) {
+    // Shared structs can only point to primitives or shared values.
+    // TODO(CSS)
+    Handle<Object> to_assign_handle;
+    ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+        isolate, to_assign_handle,
+        Object::Share(isolate, handle(*to_assign, isolate), kThrowOnError),
+        Nothing<bool>());
+    to_assign = to_assign_handle;
+    it->WriteDataValue_Direct(to_assign, false);
+  } else {
+    // Possibly migrate to the most up-to-date map that will be able to store
+    // |value| under it->name().
+    // TODO(CSS)
+    it->PrepareForDataProperty(handle(*to_assign, isolate));
+
+    // Write the property value.
+    it->WriteDataValue_Direct(to_assign, false);
   }
 
 #if VERIFY_HEAP
@@ -2948,6 +3708,79 @@ Maybe<bool> Object::AddDataProperty(LookupIterator* it, Handle<Object> value,
                                                 should_throw, store_origin);
 }
 
+Maybe<bool> Object::AddDataProperty_Direct(LookupIterator* it,
+                                           DirectHandle<Object> value,
+                                           PropertyAttributes attributes,
+                                           Maybe<ShouldThrow> should_throw,
+                                           StoreOrigin store_origin,
+                                           EnforceDefineSemantics semantics) {
+  if (!it->GetReceiver_Direct()->IsJSReceiver()) {
+    return CannotCreateProperty_Direct(it->isolate(), it->GetReceiver_Direct(),
+                                       it->GetName_Direct(), value,
+                                       should_throw);
+  }
+
+  // Private symbols should be installed on JSProxy using
+  // JSProxy::SetPrivateSymbol.
+  if (it->GetReceiver_Direct()->IsJSProxy() &&
+      it->GetName_Direct()->IsPrivate() &&
+      !it->GetName_Direct()->IsPrivateName()) {
+    RETURN_FAILURE(it->isolate(), GetShouldThrow(it->isolate(), should_throw),
+                   NewTypeError_Direct(MessageTemplate::kProxyPrivate));
+  }
+
+  DCHECK_NE(LookupIterator::INTEGER_INDEXED_EXOTIC, it->state());
+
+  DirectHandle<JSReceiver> receiver = it->GetStoreTarget_Direct<JSReceiver>();
+  DCHECK_IMPLIES(receiver->IsJSProxy(), it->GetName_Direct()->IsPrivateName());
+  DCHECK_IMPLIES(receiver->IsJSProxy(),
+                 it->state() == LookupIterator::NOT_FOUND);
+
+  // If the receiver is a JSGlobalProxy, store on the prototype (JSGlobalObject)
+  // instead. If the prototype is Null, the proxy is detached.
+  if (receiver->IsJSGlobalProxy()) return Just(true);
+
+  Isolate* isolate = it->isolate();
+
+  if (it->ExtendingNonExtensible_Direct(receiver)) {
+    bool is_shared_object = receiver->IsAlwaysSharedSpaceJSObject();
+    RETURN_FAILURE(
+        isolate, GetShouldThrow(it->isolate(), should_throw),
+        NewTypeError_Direct(
+            semantics == EnforceDefineSemantics::kDefine
+                ? (is_shared_object
+                       ? MessageTemplate::kDefineDisallowedFixedLayout
+                       : MessageTemplate::kDefineDisallowed)
+                : (is_shared_object ? MessageTemplate::kObjectFixedLayout
+                                    : MessageTemplate::kObjectNotExtensible),
+            it->GetName_Direct()));
+  }
+
+  if (it->IsElement(*receiver)) {
+    if (receiver->IsJSArray()) {
+      DirectHandle<JSArray> array = DirectHandle<JSArray>::cast(receiver);
+      if (JSArray::WouldChangeReadOnlyLength(array, it->array_index())) {
+        RETURN_FAILURE(
+            isolate, GetShouldThrow(it->isolate(), should_throw),
+            NewTypeError_Direct(MessageTemplate::kStrictReadOnlyProperty,
+                                isolate->factory()->length_string_direct(),
+                                Object::TypeOf_Direct(isolate, array), array));
+      }
+    }
+
+    DirectHandle<JSObject> receiver_obj =
+        DirectHandle<JSObject>::cast(receiver);
+    MAYBE_RETURN(JSObject::AddDataElement_Direct(
+                     receiver_obj, it->array_index(), value, attributes),
+                 Nothing<bool>());
+    JSObject::ValidateElements(*receiver_obj);
+    return Just(true);
+  }
+
+  return Object::TransitionAndWriteDataProperty_Direct(
+      it, value, attributes, should_throw, store_origin);
+}
+
 // static
 Maybe<bool> Object::TransitionAndWriteDataProperty(
     LookupIterator* it, Handle<Object> value, PropertyAttributes attributes,
@@ -2972,6 +3805,33 @@ Maybe<bool> Object::TransitionAndWriteDataProperty(
 
     return Just(true);
 }
+
+// static
+Maybe<bool> Object::TransitionAndWriteDataProperty_Direct(
+    LookupIterator* it, DirectHandle<Object> value,
+    PropertyAttributes attributes, Maybe<ShouldThrow> should_throw,
+    StoreOrigin store_origin) {
+    DirectHandle<JSReceiver> receiver = it->GetStoreTarget_Direct<JSReceiver>();
+    it->UpdateProtector();
+    // Migrate to the most up-to-date map that will be able to store |value|
+    // under it->name() with |attributes|.
+    it->PrepareTransitionToDataProperty_Direct(receiver, value, attributes,
+                                               store_origin);
+    DCHECK_EQ(LookupIterator::TRANSITION, it->state());
+    it->ApplyTransitionToDataProperty_Direct(receiver);
+
+    // Write the property value.
+    it->WriteDataValue_Direct(value, true);
+
+#if VERIFY_HEAP
+    if (v8_flags.verify_heap) {
+    receiver->HeapObjectVerify(it->isolate());
+    }
+#endif
+
+    return Just(true);
+}
+
 // static
 MaybeHandle<Object> Object::ShareSlow(Isolate* isolate,
                                       Handle<HeapObject> value,
@@ -3125,6 +3985,57 @@ Maybe<bool> JSProxy::HasProperty(Isolate* isolate, Handle<JSProxy> proxy,
   return Just(boolean_trap_result);
 }
 
+Maybe<bool> JSProxy::HasProperty_Direct(Isolate* isolate,
+                                        DirectHandle<JSProxy> proxy,
+                                        DirectHandle<Name> name) {
+  DCHECK(!name->IsPrivate());
+  STACK_CHECK(isolate, Nothing<bool>());
+  // 1. (Assert)
+  // 2. Let handler be the value of the [[ProxyHandler]] internal slot of O.
+  DirectHandle<Object> handler(proxy->handler(), isolate);
+  // 3. If handler is null, throw a TypeError exception.
+  // 4. Assert: Type(handler) is Object.
+  if (proxy->IsRevoked()) {
+    isolate->Throw(*isolate->factory()->NewTypeError_Direct(
+        MessageTemplate::kProxyRevoked,
+        isolate->factory()->has_string_direct()));
+    return Nothing<bool>();
+  }
+  // 5. Let target be the value of the [[ProxyTarget]] internal slot of O.
+  DirectHandle<JSReceiver> target(JSReceiver::cast(proxy->target()), isolate);
+  // 6. Let trap be ? GetMethod(handler, "has").
+  DirectHandle<Object> trap;
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, trap,
+      Object::GetMethod_Direct(DirectHandle<JSReceiver>::cast(handler),
+                               isolate->factory()->has_string_direct()),
+      Nothing<bool>());
+  // 7. If trap is undefined, then
+  if (trap->IsUndefined(isolate)) {
+    // 7a. Return target.[[HasProperty]](P).
+    return JSReceiver::HasProperty_Direct(isolate, target, name);
+  }
+  // 8. Let booleanTrapResult be ToBoolean(? Call(trap, handler, «target, P»)).
+  // TODO(CSS)
+  Handle<Object> trap_result_obj;
+  Handle<Object> args[] = {handle(*target, isolate), handle(*name, isolate)};
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, trap_result_obj,
+      Execution::Call(isolate, handle(*trap, isolate),
+                      handle(*handler, isolate), arraysize(args), args),
+      Nothing<bool>());
+  bool boolean_trap_result = trap_result_obj->BooleanValue(isolate);
+  // 9. If booleanTrapResult is false, then:
+  if (!boolean_trap_result) {
+    // TODO(CSS)
+    MAYBE_RETURN(JSProxy::CheckHasTrap(isolate, handle(*name, isolate),
+                                       handle(*target, isolate)),
+                 Nothing<bool>());
+  }
+  // 10. Return booleanTrapResult.
+  return Just(boolean_trap_result);
+}
+
 Maybe<bool> JSProxy::CheckHasTrap(Isolate* isolate, Handle<Name> name,
                                   Handle<JSReceiver> target) {
   // 9a. Let targetDesc be ? target.[[GetOwnProperty]](P).
@@ -3175,7 +4086,7 @@ Maybe<bool> JSProxy::SetProperty(Handle<JSProxy> proxy, Handle<Name> name,
   ASSIGN_RETURN_ON_EXCEPTION_VALUE(
       isolate, trap, Object::GetMethod(handler, trap_name), Nothing<bool>());
   if (trap->IsUndefined(isolate)) {
-    PropertyKey key(isolate, name);
+    PropertyKey key(isolate, DirectHandle<Name>(name));
     LookupIterator it(isolate, receiver, key, target);
 
     return Object::SetSuperProperty(&it, value, StoreOrigin::kMaybeKeyed,
@@ -3889,12 +4800,62 @@ Maybe<bool> JSProxy::IsExtensible(Handle<JSProxy> proxy) {
   return target_result;
 }
 
+Maybe<bool> JSProxy::IsExtensible_Direct(DirectHandle<JSProxy> proxy) {
+  Isolate* isolate = proxy->GetIsolate();
+  STACK_CHECK(isolate, Nothing<bool>());
+  Factory* factory = isolate->factory();
+  DirectHandle<String> trap_name = factory->isExtensible_string_direct();
+
+  if (proxy->IsRevoked()) {
+    isolate->Throw(*factory->NewTypeError_Direct(MessageTemplate::kProxyRevoked,
+                                                 trap_name));
+    return Nothing<bool>();
+  }
+  DirectHandle<JSReceiver> target(JSReceiver::cast(proxy->target()), isolate);
+  DirectHandle<JSReceiver> handler(JSReceiver::cast(proxy->handler()), isolate);
+
+  DirectHandle<Object> trap;
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(isolate, trap,
+                                   Object::GetMethod_Direct(handler, trap_name),
+                                   Nothing<bool>());
+  if (trap->IsUndefined(isolate)) {
+    return JSReceiver::IsExtensible_Direct(isolate, target);
+  }
+
+  // TODO(CSS)
+  Handle<Object> trap_result;
+  Handle<Object> args[] = {handle(*target, isolate)};
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+      isolate, trap_result,
+      Execution::Call(isolate, handle(*trap, isolate),
+                      handle(*handler, isolate), arraysize(args), args),
+      Nothing<bool>());
+
+  // Enforce the invariant.
+  Maybe<bool> target_result = JSReceiver::IsExtensible_Direct(isolate, target);
+  MAYBE_RETURN(target_result, Nothing<bool>());
+  if (target_result.FromJust() != trap_result->BooleanValue(isolate)) {
+    isolate->Throw(*factory->NewTypeError_Direct(
+        MessageTemplate::kProxyIsExtensibleInconsistent,
+        factory->ToBoolean_Direct(target_result.FromJust())));
+    return Nothing<bool>();
+  }
+  return target_result;
+}
+
 Handle<DescriptorArray> DescriptorArray::CopyUpTo(Isolate* isolate,
                                                   Handle<DescriptorArray> desc,
                                                   int enumeration_index,
                                                   int slack) {
   return DescriptorArray::CopyUpToAddAttributes(isolate, desc,
                                                 enumeration_index, NONE, slack);
+}
+
+DirectHandle<DescriptorArray> DescriptorArray::CopyUpTo_Direct(
+    Isolate* isolate, DirectHandle<DescriptorArray> desc, int enumeration_index,
+    int slack) {
+  return DescriptorArray::CopyUpToAddAttributes_Direct(
+      isolate, desc, enumeration_index, NONE, slack);
 }
 
 Handle<DescriptorArray> DescriptorArray::CopyUpToAddAttributes(
@@ -3907,6 +4868,52 @@ Handle<DescriptorArray> DescriptorArray::CopyUpToAddAttributes(
   int size = enumeration_index;
   Handle<DescriptorArray> copy_handle =
       DescriptorArray::Allocate(isolate, size, slack);
+
+  DisallowGarbageCollection no_gc;
+  Tagged<DescriptorArray> source = *source_handle;
+  Tagged<DescriptorArray> copy = *copy_handle;
+
+  if (attributes != NONE) {
+    for (InternalIndex i : InternalIndex::Range(size)) {
+      MaybeObject value_or_field_type = source->GetValue(i);
+      Name key = source->GetKey(i);
+      PropertyDetails details = source->GetDetails(i);
+      // Bulk attribute changes never affect private properties.
+      if (!key.IsPrivate()) {
+        int mask = DONT_DELETE | DONT_ENUM;
+        // READ_ONLY is an invalid attribute for JS setters/getters.
+        HeapObject heap_object;
+        if (details.kind() != PropertyKind::kAccessor ||
+            !(value_or_field_type->GetHeapObjectIfStrong(&heap_object) &&
+              heap_object.IsAccessorPair())) {
+          mask |= READ_ONLY;
+        }
+        details = details.CopyAddAttributes(
+            static_cast<PropertyAttributes>(attributes & mask));
+      }
+      copy->Set(i, key, value_or_field_type, details);
+    }
+  } else {
+    for (InternalIndex i : InternalIndex::Range(size)) {
+      copy->CopyFrom(i, source);
+    }
+  }
+
+  if (source->number_of_descriptors() != enumeration_index) copy->Sort();
+
+  return copy_handle;
+}
+
+DirectHandle<DescriptorArray> DescriptorArray::CopyUpToAddAttributes_Direct(
+    Isolate* isolate, DirectHandle<DescriptorArray> source_handle,
+    int enumeration_index, PropertyAttributes attributes, int slack) {
+  if (enumeration_index + slack == 0) {
+    return isolate->factory()->empty_descriptor_array_direct();
+  }
+
+  int size = enumeration_index;
+  DirectHandle<DescriptorArray> copy_handle =
+      DescriptorArray::Allocate_Direct(isolate, size, slack);
 
   DisallowGarbageCollection no_gc;
   Tagged<DescriptorArray> source = *source_handle;
@@ -4042,6 +5049,16 @@ Handle<FixedArray> FixedArray::ShrinkOrEmpty(Isolate* isolate,
                                              int new_length) {
   if (new_length == 0) {
     return array->GetReadOnlyRoots().empty_fixed_array_handle();
+  } else {
+    array->Shrink(isolate, new_length);
+    return array;
+  }
+}
+
+DirectHandle<FixedArray> FixedArray::ShrinkOrEmpty_Direct(
+    Isolate* isolate, DirectHandle<FixedArray> array, int new_length) {
+  if (new_length == 0) {
+    return array->GetReadOnlyRoots().empty_fixed_array_direct_handle();
   } else {
     array->Shrink(isolate, new_length);
     return array;
@@ -4299,6 +5316,19 @@ Handle<WeakArrayList> WeakArrayList::EnsureSpace(Isolate* isolate,
   return array;
 }
 
+// static
+DirectHandle<WeakArrayList> WeakArrayList::EnsureSpace_Direct(
+    Isolate* isolate, DirectHandle<WeakArrayList> array, int length,
+    AllocationType allocation) {
+  int capacity = array->capacity();
+  if (capacity < length) {
+    int grow_by = CapacityForLength(length) - capacity;
+    array = isolate->factory()->CopyWeakArrayListAndGrow_Direct(array, grow_by,
+                                                                allocation);
+  }
+  return array;
+}
+
 int WeakArrayList::CountLiveWeakReferences() const {
   int live_weak_references = 0;
   for (int i = 0; i < length(); i++) {
@@ -4401,6 +5431,60 @@ Handle<WeakArrayList> PrototypeUsers::Add(Isolate* isolate,
 }
 
 // static
+DirectHandle<WeakArrayList> PrototypeUsers::Add_Direct(
+    Isolate* isolate, DirectHandle<WeakArrayList> array,
+    DirectHandle<Map> value, int* assigned_index) {
+  int length = array->length();
+  if (length == 0) {
+    // Uninitialized WeakArrayList; need to initialize empty_slot_index.
+    array = WeakArrayList::EnsureSpace_Direct(isolate, array, kFirstIndex + 1);
+    set_empty_slot_index(*array, kNoEmptySlotsMarker);
+    array->Set(kFirstIndex, HeapObjectReference::Weak(*value));
+    array->set_length(kFirstIndex + 1);
+    if (assigned_index != nullptr) *assigned_index = kFirstIndex;
+    return array;
+  }
+
+  // If the array has unfilled space at the end, use it.
+  if (!array->IsFull()) {
+    array->Set(length, HeapObjectReference::Weak(*value));
+    array->set_length(length + 1);
+    if (assigned_index != nullptr) *assigned_index = length;
+    return array;
+  }
+
+  // If there are empty slots, use one of them.
+  int empty_slot = Smi::ToInt(empty_slot_index(*array));
+
+  if (empty_slot == kNoEmptySlotsMarker) {
+    // GCs might have cleared some references, rescan the array for empty slots.
+    PrototypeUsers::ScanForEmptySlots(*array);
+    empty_slot = Smi::ToInt(empty_slot_index(*array));
+  }
+
+  if (empty_slot != kNoEmptySlotsMarker) {
+    DCHECK_GE(empty_slot, kFirstIndex);
+    CHECK_LT(empty_slot, array->length());
+    int next_empty_slot = array->Get(empty_slot).ToSmi().value();
+
+    array->Set(empty_slot, HeapObjectReference::Weak(*value));
+    if (assigned_index != nullptr) *assigned_index = empty_slot;
+
+    set_empty_slot_index(*array, next_empty_slot);
+    return array;
+  } else {
+    DCHECK_EQ(empty_slot, kNoEmptySlotsMarker);
+  }
+
+  // Array full and no empty slots. Grow the array.
+  array = WeakArrayList::EnsureSpace_Direct(isolate, array, length + 1);
+  array->Set(length, HeapObjectReference::Weak(*value));
+  array->set_length(length + 1);
+  if (assigned_index != nullptr) *assigned_index = length;
+  return array;
+}
+
+// static
 void PrototypeUsers::ScanForEmptySlots(WeakArrayList array) {
   for (int i = kFirstIndex; i < array.length(); i++) {
     if (array.Get(i)->IsCleared()) {
@@ -4472,10 +5556,25 @@ Handle<DescriptorArray> DescriptorArray::Allocate(IsolateT* isolate,
              : isolate->factory()->NewDescriptorArray(nof_descriptors, slack,
                                                       allocation);
 }
+template <typename IsolateT>
+DirectHandle<DescriptorArray> DescriptorArray::Allocate_Direct(
+    IsolateT* isolate, int nof_descriptors, int slack,
+    AllocationType allocation) {
+  return nof_descriptors + slack == 0
+             ? isolate->factory()->empty_descriptor_array_direct()
+             : isolate->factory()->NewDescriptorArray_Direct(nof_descriptors,
+                                                             slack, allocation);
+}
 template Handle<DescriptorArray> DescriptorArray::Allocate(
     Isolate* isolate, int nof_descriptors, int slack,
     AllocationType allocation);
 template Handle<DescriptorArray> DescriptorArray::Allocate(
+    LocalIsolate* isolate, int nof_descriptors, int slack,
+    AllocationType allocation);
+template DirectHandle<DescriptorArray> DescriptorArray::Allocate_Direct(
+    Isolate* isolate, int nof_descriptors, int slack,
+    AllocationType allocation);
+template DirectHandle<DescriptorArray> DescriptorArray::Allocate_Direct(
     LocalIsolate* isolate, int nof_descriptors, int slack,
     AllocationType allocation);
 
@@ -5400,7 +6499,7 @@ bool JSArray::MayHaveReadOnlyLength(Map js_array_map) {
   return js_array_map.instance_descriptors().GetDetails(first).IsReadOnly();
 }
 
-bool JSArray::HasReadOnlyLength(Handle<JSArray> array) {
+bool JSArray::HasReadOnlyLength(DirectHandle<JSArray> array) {
   Map map = array->map();
 
   // If map guarantees that there can't be a read-only length, we are done.
@@ -5408,13 +6507,14 @@ bool JSArray::HasReadOnlyLength(Handle<JSArray> array) {
 
   // Look at the object.
   Isolate* isolate = array->GetIsolate();
-  LookupIterator it(isolate, array, isolate->factory()->length_string(), array,
-                    LookupIterator::OWN_SKIP_INTERCEPTOR);
+  LookupIterator it(isolate, array, isolate->factory()->length_string_direct(),
+                    array, LookupIterator::OWN_SKIP_INTERCEPTOR);
   CHECK_EQ(LookupIterator::ACCESSOR, it.state());
   return it.IsReadOnly();
 }
 
-bool JSArray::WouldChangeReadOnlyLength(Handle<JSArray> array, uint32_t index) {
+bool JSArray::WouldChangeReadOnlyLength(DirectHandle<JSArray> array,
+                                        uint32_t index) {
   uint32_t length = 0;
   CHECK(array->length().ToArrayLength(&length));
   if (length <= index) return HasReadOnlyLength(array);
@@ -5809,6 +6909,24 @@ Handle<Derived> HashTable<Derived, Shape>::New(
 
 template <typename Derived, typename Shape>
 template <typename IsolateT>
+DirectHandle<Derived> HashTable<Derived, Shape>::New_Direct(
+    IsolateT* isolate, int at_least_space_for, AllocationType allocation,
+    MinimumCapacity capacity_option) {
+  DCHECK_LE(0, at_least_space_for);
+  DCHECK_IMPLIES(capacity_option == USE_CUSTOM_MINIMUM_CAPACITY,
+                 base::bits::IsPowerOfTwo(at_least_space_for));
+
+  int capacity = (capacity_option == USE_CUSTOM_MINIMUM_CAPACITY)
+                     ? at_least_space_for
+                     : ComputeCapacity(at_least_space_for);
+  if (capacity > HashTable::kMaxCapacity) {
+    isolate->FatalProcessOutOfHeapMemory("invalid table size");
+  }
+  return NewInternal_Direct(isolate, capacity, allocation);
+}
+
+template <typename Derived, typename Shape>
+template <typename IsolateT>
 Handle<Derived> HashTable<Derived, Shape>::NewInternal(
     IsolateT* isolate, int capacity, AllocationType allocation) {
   auto* factory = isolate->factory();
@@ -5816,6 +6934,23 @@ Handle<Derived> HashTable<Derived, Shape>::NewInternal(
   Handle<FixedArray> array = factory->NewFixedArrayWithMap(
       Derived::GetMap(ReadOnlyRoots(isolate)), length, allocation);
   Handle<Derived> table = Handle<Derived>::cast(array);
+  DisallowGarbageCollection no_gc;
+  Tagged<Derived> raw_table = *table;
+  raw_table->SetNumberOfElements(0);
+  raw_table->SetNumberOfDeletedElements(0);
+  raw_table->SetCapacity(capacity);
+  return table;
+}
+
+template <typename Derived, typename Shape>
+template <typename IsolateT>
+DirectHandle<Derived> HashTable<Derived, Shape>::NewInternal_Direct(
+    IsolateT* isolate, int capacity, AllocationType allocation) {
+  auto* factory = isolate->factory();
+  int length = EntryToIndex(InternalIndex(capacity));
+  DirectHandle<FixedArray> array = factory->NewFixedArrayWithMap_Direct(
+      Derived::GetMap(ReadOnlyRoots(isolate)), length, allocation);
+  DirectHandle<Derived> table = DirectHandle<Derived>::cast(array);
   DisallowGarbageCollection no_gc;
   Tagged<Derived> raw_table = *table;
   raw_table->SetNumberOfElements(0);
@@ -5954,6 +7089,27 @@ Handle<Derived> HashTable<Derived, Shape>::EnsureCapacity(
                           ((capacity > kMinCapacityForPretenure) &&
                            !Heap::InYoungGeneration(*table));
   Handle<Derived> new_table = HashTable::New(
+      isolate, new_nof,
+      should_pretenure ? AllocationType::kOld : AllocationType::kYoung);
+
+  table->Rehash(isolate, *new_table);
+  return new_table;
+}
+
+template <typename Derived, typename Shape>
+template <typename IsolateT>
+DirectHandle<Derived> HashTable<Derived, Shape>::EnsureCapacity_Direct(
+    IsolateT* isolate, DirectHandle<Derived> table, int n,
+    AllocationType allocation) {
+  if (table->HasSufficientCapacityToAdd(n)) return table;
+
+  int capacity = table->Capacity();
+  int new_nof = table->NumberOfElements() + n;
+
+  bool should_pretenure = allocation == AllocationType::kOld ||
+                          ((capacity > kMinCapacityForPretenure) &&
+                           !Heap::InYoungGeneration(*table));
+  DirectHandle<Derived> new_table = HashTable::New_Direct(
       isolate, new_nof,
       should_pretenure ? AllocationType::kOld : AllocationType::kYoung);
 
@@ -6112,6 +7268,19 @@ Handle<Derived> BaseNameDictionary<Derived, Shape>::New(
   return dict;
 }
 
+template <typename Derived, typename Shape>
+template <typename IsolateT>
+DirectHandle<Derived> BaseNameDictionary<Derived, Shape>::New_Direct(
+    IsolateT* isolate, int at_least_space_for, AllocationType allocation,
+    MinimumCapacity capacity_option) {
+  DCHECK_LE(0, at_least_space_for);
+  DirectHandle<Derived> dict = Dictionary<Derived, Shape>::New_Direct(
+      isolate, at_least_space_for, allocation, capacity_option);
+  dict->SetHash(PropertyArray::kNoHashSentinel);
+  dict->set_next_enumeration_index(PropertyDetails::kInitialIndex);
+  return dict;
+}
+
 template <typename IsolateT>
 Handle<NameDictionary> NameDictionary::New(IsolateT* isolate,
                                            int at_least_space_for,
@@ -6119,6 +7288,17 @@ Handle<NameDictionary> NameDictionary::New(IsolateT* isolate,
                                            MinimumCapacity capacity_option) {
   Handle<NameDictionary> dict =
       BaseNameDictionary<NameDictionary, NameDictionaryShape>::New(
+          isolate, at_least_space_for, allocation, capacity_option);
+  dict->set_flags(kFlagsDefault);
+  return dict;
+}
+
+template <typename IsolateT>
+DirectHandle<NameDictionary> NameDictionary::New_Direct(
+    IsolateT* isolate, int at_least_space_for, AllocationType allocation,
+    MinimumCapacity capacity_option) {
+  DirectHandle<NameDictionary> dict =
+      BaseNameDictionary<NameDictionary, NameDictionaryShape>::New_Direct(
           isolate, at_least_space_for, allocation, capacity_option);
   dict->set_flags(kFlagsDefault);
   return dict;
@@ -6132,6 +7312,40 @@ int BaseNameDictionary<Derived, Shape>::NextEnumerationIndex(
   if (!PropertyDetails::IsValidIndex(index)) {
     // If not, we generate new indices for the properties.
     Handle<FixedArray> iteration_order = IterationIndices(isolate, dictionary);
+    int length = iteration_order->length();
+    DCHECK_LE(length, dictionary->NumberOfElements());
+
+    // Iterate over the dictionary using the enumeration order and update
+    // the dictionary with new enumeration indices.
+    for (int i = 0; i < length; i++) {
+      InternalIndex internal_index(Smi::ToInt(iteration_order->get(i)));
+      DCHECK(dictionary->IsKey(dictionary->GetReadOnlyRoots(),
+                               dictionary->KeyAt(isolate, internal_index)));
+
+      int enum_index = PropertyDetails::kInitialIndex + i;
+
+      PropertyDetails details = dictionary->DetailsAt(internal_index);
+      PropertyDetails new_details = details.set_index(enum_index);
+      dictionary->DetailsAtPut(internal_index, new_details);
+    }
+
+    index = PropertyDetails::kInitialIndex + length;
+  }
+
+  // Don't update the next enumeration index here, since we might be looking at
+  // an immutable empty dictionary.
+  return index;
+}
+
+template <typename Derived, typename Shape>
+int BaseNameDictionary<Derived, Shape>::NextEnumerationIndex_Direct(
+    Isolate* isolate, DirectHandle<Derived> dictionary) {
+  int index = dictionary->next_enumeration_index();
+  // Check whether the next enumeration index is valid.
+  if (!PropertyDetails::IsValidIndex(index)) {
+    // If not, we generate new indices for the properties.
+    DirectHandle<FixedArray> iteration_order =
+        IterationIndices_Direct(isolate, dictionary);
     int length = iteration_order->length();
     DCHECK_LE(length, dictionary->NumberOfElements());
 
@@ -6201,6 +7415,21 @@ void Dictionary<Derived, Shape>::UncheckedAtPut(Isolate* isolate,
     if (Shape::kEntrySize == 3) dictionary->DetailsAtPut(entry, details);
   }
 }
+template <typename Derived, typename Shape>
+void Dictionary<Derived, Shape>::UncheckedAtPut_Direct(
+    Isolate* isolate, DirectHandle<Derived> dictionary, Key key,
+    DirectHandle<Object> value, PropertyDetails details) {
+  InternalIndex entry = dictionary->FindEntry(isolate, key);
+
+  // If the entry is present set the value;
+  if (entry.is_not_found()) {
+    Derived::UncheckedAdd_Direct(isolate, dictionary, key, value, details);
+  } else {
+    // We don't need to copy over the enumeration index.
+    dictionary->ValueAtPut(entry, *value);
+    if (Shape::kEntrySize == 3) dictionary->DetailsAtPut(entry, details);
+  }
+}
 
 template <typename Derived, typename Shape>
 template <typename IsolateT>
@@ -6211,6 +7440,17 @@ BaseNameDictionary<Derived, Shape>::AddNoUpdateNextEnumerationIndex(
   // Insert element at empty or deleted entry.
   return Dictionary<Derived, Shape>::Add(isolate, dictionary, key, value,
                                          details, entry_out);
+}
+template <typename Derived, typename Shape>
+template <typename IsolateT>
+DirectHandle<Derived>
+BaseNameDictionary<Derived, Shape>::AddNoUpdateNextEnumerationIndex_Direct(
+    IsolateT* isolate, DirectHandle<Derived> dictionary, Key key,
+    DirectHandle<Object> value, PropertyDetails details,
+    InternalIndex* entry_out) {
+  // Insert element at empty or deleted entry.
+  return Dictionary<Derived, Shape>::Add_Direct(isolate, dictionary, key, value,
+                                                details, entry_out);
 }
 
 template <typename Derived, typename Shape>
@@ -6225,6 +7465,25 @@ Handle<Derived> BaseNameDictionary<Derived, Shape>::Add(
   details = details.set_index(index);
   dictionary = AddNoUpdateNextEnumerationIndex(isolate, dictionary, key, value,
                                                details, entry_out);
+  // Update enumeration index here in order to avoid potential modification of
+  // the canonical empty dictionary which lives in read only space.
+  dictionary->set_next_enumeration_index(index + 1);
+  return dictionary;
+}
+
+template <typename Derived, typename Shape>
+DirectHandle<Derived> BaseNameDictionary<Derived, Shape>::Add_Direct(
+    Isolate* isolate, DirectHandle<Derived> dictionary, Key key,
+    DirectHandle<Object> value, PropertyDetails details,
+    InternalIndex* entry_out) {
+  // Insert element at empty or deleted entry
+  DCHECK_EQ(0, details.dictionary_index());
+  // Assign an enumeration index to the property and update
+  // SetNextEnumerationIndex.
+  int index = Derived::NextEnumerationIndex_Direct(isolate, dictionary);
+  details = details.set_index(index);
+  dictionary = AddNoUpdateNextEnumerationIndex_Direct(
+      isolate, dictionary, key, value, details, entry_out);
   // Update enumeration index here in order to avoid potential modification of
   // the canonical empty dictionary which lives in read only space.
   dictionary->set_next_enumeration_index(index + 1);
@@ -6259,6 +7518,32 @@ Handle<Derived> Dictionary<Derived, Shape>::Add(IsolateT* isolate,
 
 template <typename Derived, typename Shape>
 template <typename IsolateT, AllocationType key_allocation>
+DirectHandle<Derived> Dictionary<Derived, Shape>::Add_Direct(
+    IsolateT* isolate, DirectHandle<Derived> dictionary, Key key,
+    DirectHandle<Object> value, PropertyDetails details,
+    InternalIndex* entry_out) {
+  ReadOnlyRoots roots(isolate);
+  uint32_t hash = Shape::Hash(roots, key);
+  // Validate that the key is absent.
+  SLOW_DCHECK(dictionary->FindEntry(isolate, key).is_not_found());
+  // Check whether the dictionary should be extended.
+  dictionary = Derived::EnsureCapacity_Direct(isolate, dictionary);
+
+  // Compute the key object.
+  DirectHandle<Object> k =
+      Shape::template AsDirectHandle<key_allocation>(isolate, key);
+
+  InternalIndex entry = dictionary->FindInsertionEntry(isolate, roots, hash);
+  dictionary->SetEntry(entry, *k, *value, details);
+  DCHECK(dictionary->KeyAt(isolate, entry).IsNumber() ||
+         Shape::Unwrap(dictionary->KeyAt(isolate, entry)).IsUniqueName());
+  dictionary->ElementAdded();
+  if (entry_out) *entry_out = entry;
+  return dictionary;
+}
+
+template <typename Derived, typename Shape>
+template <typename IsolateT, AllocationType key_allocation>
 void Dictionary<Derived, Shape>::UncheckedAdd(IsolateT* isolate,
                                               Handle<Derived> dictionary,
                                               Key key, Handle<Object> value,
@@ -6271,6 +7556,27 @@ void Dictionary<Derived, Shape>::UncheckedAdd(IsolateT* isolate,
 
   // Compute the key object.
   Handle<Object> k = Shape::template AsHandle<key_allocation>(isolate, key);
+
+  InternalIndex entry = dictionary->FindInsertionEntry(isolate, roots, hash);
+  dictionary->SetEntry(entry, *k, *value, details);
+  DCHECK(dictionary->KeyAt(isolate, entry).IsNumber() ||
+         Shape::Unwrap(dictionary->KeyAt(isolate, entry)).IsUniqueName());
+}
+
+template <typename Derived, typename Shape>
+template <typename IsolateT, AllocationType key_allocation>
+void Dictionary<Derived, Shape>::UncheckedAdd_Direct(
+    IsolateT* isolate, DirectHandle<Derived> dictionary, Key key,
+    DirectHandle<Object> value, PropertyDetails details) {
+  ReadOnlyRoots roots(isolate);
+  uint32_t hash = Shape::Hash(roots, key);
+  // Validate that the key is absent and we capacity is sufficient.
+  SLOW_DCHECK(dictionary->FindEntry(isolate, key).is_not_found());
+  DCHECK(dictionary->HasSufficientCapacityToAdd(1));
+
+  // Compute the key object.
+  DirectHandle<Object> k =
+      Shape::template AsDirectHandle<key_allocation>(isolate, key);
 
   InternalIndex entry = dictionary->FindInsertionEntry(isolate, roots, hash);
   dictionary->SetEntry(entry, *k, *value, details);
@@ -6292,8 +7598,8 @@ Handle<SimpleNumberDictionary> SimpleNumberDictionary::Set(
   return AtPut(isolate, dictionary, key, value, PropertyDetails::Empty());
 }
 
-void NumberDictionary::UpdateMaxNumberKey(uint32_t key,
-                                          Handle<JSObject> dictionary_holder) {
+void NumberDictionary::UpdateMaxNumberKey(
+    uint32_t key, DirectHandle<JSObject> dictionary_holder) {
   DisallowGarbageCollection no_gc;
   // If the dictionary requires slow elements an element has already
   // been added at a high index.
@@ -6333,6 +7639,13 @@ void NumberDictionary::UncheckedSet(Isolate* isolate,
                                     Handle<NumberDictionary> dictionary,
                                     uint32_t key, Handle<Object> value) {
   UncheckedAtPut(isolate, dictionary, key, value, PropertyDetails::Empty());
+}
+// static
+void NumberDictionary::UncheckedSet_Direct(
+    Isolate* isolate, DirectHandle<NumberDictionary> dictionary, uint32_t key,
+    DirectHandle<Object> value) {
+  UncheckedAtPut_Direct(isolate, dictionary, key, value,
+                        PropertyDetails::Empty());
 }
 
 void NumberDictionary::CopyValuesTo(FixedArray elements) {
@@ -6395,6 +7708,40 @@ Handle<FixedArray> BaseNameDictionary<Derived, Shape>::IterationIndices(
     std::sort(start, start + array_size, cmp);
   }
   return FixedArray::ShrinkOrEmpty(isolate, array, array_size);
+}
+
+template <typename Derived, typename Shape>
+DirectHandle<FixedArray>
+BaseNameDictionary<Derived, Shape>::IterationIndices_Direct(
+    Isolate* isolate, DirectHandle<Derived> dictionary) {
+  DirectHandle<FixedArray> array =
+      isolate->factory()->NewFixedArray_Direct(dictionary->NumberOfElements());
+  ReadOnlyRoots roots(isolate);
+  int array_size = 0;
+  {
+    DisallowGarbageCollection no_gc;
+    Tagged<Derived> raw_dictionary = *dictionary;
+    for (InternalIndex i : dictionary->IterateEntries()) {
+      Object k;
+      if (!raw_dictionary->ToKey(roots, i, &k)) continue;
+      array->set(array_size++, Smi::FromInt(i.as_int()));
+    }
+
+    // The global dictionary doesn't track its deletion count, so we may iterate
+    // fewer entries than the count of elements claimed by the dictionary.
+    if (std::is_same<Derived, GlobalDictionary>::value) {
+      DCHECK_LE(array_size, dictionary->NumberOfElements());
+    } else {
+      DCHECK_EQ(array_size, dictionary->NumberOfElements());
+    }
+
+    EnumIndexComparator<Derived> cmp(raw_dictionary);
+    // Use AtomicSlot wrapper to ensure that std::sort uses atomic load and
+    // store operations that are safe for concurrent marking.
+    AtomicSlot start(array->GetFirstElementAddress());
+    std::sort(start, start + array_size, cmp);
+  }
+  return FixedArray::ShrinkOrEmpty_Direct(isolate, array, array_size);
 }
 
 // Backwards lookup (slow).
@@ -6994,7 +8341,7 @@ int JSGeneratorObject::source_position() const {
 
 // static
 AccessCheckInfo AccessCheckInfo::Get(Isolate* isolate,
-                                     Handle<JSObject> receiver) {
+                                     DirectHandle<JSObject> receiver) {
   DisallowGarbageCollection no_gc;
   DCHECK(receiver->map().is_access_check_needed());
   Object maybe_constructor = receiver->map().GetConstructor();
@@ -7176,13 +8523,25 @@ bool MapWord::IsMapOrForwarded(Map map) {
   template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) Handle<DERIVED>        \
   HashTable<DERIVED, SHAPE>::New(LocalIsolate*, int, AllocationType,        \
                                  MinimumCapacity);                          \
+  template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) DirectHandle<DERIVED>  \
+  HashTable<DERIVED, SHAPE>::New_Direct(Isolate*, int, AllocationType,      \
+                                        MinimumCapacity);                   \
+  template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) DirectHandle<DERIVED>  \
+  HashTable<DERIVED, SHAPE>::New_Direct(LocalIsolate*, int, AllocationType, \
+                                        MinimumCapacity);                   \
                                                                             \
   template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) Handle<DERIVED>        \
   HashTable<DERIVED, SHAPE>::EnsureCapacity(Isolate*, Handle<DERIVED>, int, \
                                             AllocationType);                \
   template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) Handle<DERIVED>        \
   HashTable<DERIVED, SHAPE>::EnsureCapacity(LocalIsolate*, Handle<DERIVED>, \
-                                            int, AllocationType);
+                                            int, AllocationType);           \
+  template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) DirectHandle<DERIVED>  \
+  HashTable<DERIVED, SHAPE>::EnsureCapacity_Direct(                         \
+      Isolate*, DirectHandle<DERIVED>, int, AllocationType);                \
+  template EXPORT_TEMPLATE_DEFINE(V8_EXPORT_PRIVATE) DirectHandle<DERIVED>  \
+  HashTable<DERIVED, SHAPE>::EnsureCapacity_Direct(                         \
+      LocalIsolate*, DirectHandle<DERIVED>, int, AllocationType);
 
 #define EXTERN_DEFINE_OBJECT_BASE_HASH_TABLE(DERIVED, SHAPE) \
   EXTERN_DEFINE_HASH_TABLE(DERIVED, SHAPE)                   \
@@ -7204,6 +8563,14 @@ bool MapWord::IsMapOrForwarded(Map map) {
       InternalIndex*);                                                         \
   template V8_EXPORT_PRIVATE Handle<DERIVED> Dictionary<DERIVED, SHAPE>::Add(  \
       LocalIsolate* isolate, Handle<DERIVED>, Key, Handle<Object>,             \
+      PropertyDetails, InternalIndex*);                                        \
+  template V8_EXPORT_PRIVATE DirectHandle<DERIVED>                             \
+  Dictionary<DERIVED, SHAPE>::Add_Direct(                                      \
+      Isolate* isolate, DirectHandle<DERIVED>, Key, DirectHandle<Object>,      \
+      PropertyDetails, InternalIndex*);                                        \
+  template V8_EXPORT_PRIVATE DirectHandle<DERIVED>                             \
+  Dictionary<DERIVED, SHAPE>::Add_Direct(                                      \
+      LocalIsolate* isolate, DirectHandle<DERIVED>, Key, DirectHandle<Object>, \
       PropertyDetails, InternalIndex*);
 
 #define EXTERN_DEFINE_BASE_NAME_DICTIONARY(DERIVED, SHAPE)                     \
@@ -7217,6 +8584,12 @@ bool MapWord::IsMapOrForwarded(Map map) {
   template V8_EXPORT_PRIVATE Handle<DERIVED>                                   \
   BaseNameDictionary<DERIVED, SHAPE>::New(LocalIsolate*, int, AllocationType,  \
                                           MinimumCapacity);                    \
+  template V8_EXPORT_PRIVATE DirectHandle<DERIVED>                             \
+  BaseNameDictionary<DERIVED, SHAPE>::New_Direct(                              \
+      Isolate*, int, AllocationType, MinimumCapacity);                         \
+  template V8_EXPORT_PRIVATE DirectHandle<DERIVED>                             \
+  BaseNameDictionary<DERIVED, SHAPE>::New_Direct(                              \
+      LocalIsolate*, int, AllocationType, MinimumCapacity);                    \
                                                                                \
   template Handle<DERIVED>                                                     \
   BaseNameDictionary<DERIVED, SHAPE>::AddNoUpdateNextEnumerationIndex(         \
@@ -7252,6 +8625,10 @@ template V8_EXPORT_PRIVATE Handle<NameDictionary> NameDictionary::New(
     Isolate*, int, AllocationType, MinimumCapacity);
 template V8_EXPORT_PRIVATE Handle<NameDictionary> NameDictionary::New(
     LocalIsolate*, int, AllocationType, MinimumCapacity);
+template V8_EXPORT_PRIVATE DirectHandle<NameDictionary>
+NameDictionary::New_Direct(Isolate*, int, AllocationType, MinimumCapacity);
+template V8_EXPORT_PRIVATE DirectHandle<NameDictionary>
+NameDictionary::New_Direct(LocalIsolate*, int, AllocationType, MinimumCapacity);
 
 EXTERN_DEFINE_BASE_NAME_DICTIONARY(GlobalDictionary, GlobalDictionaryShape)
 

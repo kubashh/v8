@@ -59,12 +59,16 @@ class V8_EXPORT_PRIVATE StringTable {
   // Find string in the string table. If it is not there yet, it is
   // added. The return value is the string found.
   Handle<String> LookupString(Isolate* isolate, Handle<String> key);
+  DirectHandle<String> LookupString_Direct(Isolate* isolate,
+                                           DirectHandle<String> key);
 
   // Find string in the string table, using the given key. If the string is not
   // there yet, it is created (by the key) and added. The return value is the
   // string found.
   template <typename StringTableKey, typename IsolateT>
   Handle<String> LookupKey(IsolateT* isolate, StringTableKey* key);
+  template <typename StringTableKey, typename IsolateT>
+  DirectHandle<String> LookupKey_Direct(IsolateT* isolate, StringTableKey* key);
 
   // {raw_string} must be a tagged String pointer.
   // Returns a tagged pointer: either a Smi if the string is an array index, an

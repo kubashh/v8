@@ -58,6 +58,9 @@ class ElementsAccessor {
 
   virtual Handle<Object> Get(Isolate* isolate, Handle<JSObject> holder,
                              InternalIndex entry) = 0;
+  virtual DirectHandle<Object> Get_Direct(Isolate* isolate,
+                                          DirectHandle<JSObject> holder,
+                                          InternalIndex entry) = 0;
 
   // Currently only shared array elements support sequentially consistent
   // access.
@@ -108,6 +111,8 @@ class ElementsAccessor {
       Handle<JSObject> object, Handle<Map> map) = 0;
   V8_WARN_UNUSED_RESULT virtual Maybe<bool> GrowCapacityAndConvert(
       Handle<JSObject> object, uint32_t capacity) = 0;
+  V8_WARN_UNUSED_RESULT virtual Maybe<bool> GrowCapacityAndConvert_Direct(
+      DirectHandle<JSObject> object, uint32_t capacity) = 0;
   // Unlike GrowCapacityAndConvert do not attempt to convert the backing store
   // and simply return false in this case.
   V8_WARN_UNUSED_RESULT virtual Maybe<bool> GrowCapacity(
@@ -118,6 +123,8 @@ class ElementsAccessor {
 
   virtual void Set(Handle<JSObject> holder, InternalIndex entry,
                    Object value) = 0;
+  virtual void Set_Direct(DirectHandle<JSObject> holder, InternalIndex entry,
+                          Object value) = 0;
 
   // Currently only shared array elements support sequentially consistent
   // access.
@@ -135,6 +142,9 @@ class ElementsAccessor {
                                                 Handle<Object> value,
                                                 PropertyAttributes attributes,
                                                 uint32_t new_capacity) = 0;
+  V8_WARN_UNUSED_RESULT virtual Maybe<bool> Add_Direct(
+      DirectHandle<JSObject> object, uint32_t index, DirectHandle<Object> value,
+      PropertyAttributes attributes, uint32_t new_capacity) = 0;
 
   static Handle<JSArray> Concat(Isolate* isolate, BuiltinArguments* args,
                                 uint32_t concat_size, uint32_t result_length);
@@ -154,6 +164,8 @@ class ElementsAccessor {
       Handle<JSArray> receiver) = 0;
 
   virtual Handle<NumberDictionary> Normalize(Handle<JSObject> object) = 0;
+  virtual DirectHandle<NumberDictionary> Normalize_Direct(
+      DirectHandle<JSObject> object) = 0;
 
   virtual size_t GetCapacity(JSObject holder, FixedArrayBase backing_store) = 0;
 
@@ -173,6 +185,10 @@ class ElementsAccessor {
                                       Handle<JSObject> receiver,
                                       Handle<Object> value, size_t start,
                                       size_t length) = 0;
+  virtual Maybe<int64_t> IndexOfValue_Direct(Isolate* isolate,
+                                             DirectHandle<JSObject> receiver,
+                                             DirectHandle<Object> value,
+                                             size_t start, size_t length) = 0;
 
   virtual Maybe<int64_t> LastIndexOfValue(Handle<JSObject> receiver,
                                           Handle<Object> value,
@@ -216,6 +232,11 @@ class ElementsAccessor {
                            Handle<FixedArrayBase> backing_store,
                            InternalIndex entry, Handle<Object> value,
                            PropertyAttributes attributes) = 0;
+  virtual void Reconfigure_Direct(DirectHandle<JSObject> object,
+                                  DirectHandle<FixedArrayBase> backing_store,
+                                  InternalIndex entry,
+                                  DirectHandle<Object> value,
+                                  PropertyAttributes attributes) = 0;
 
   // Deletes an element in an object.
   virtual void Delete(Handle<JSObject> holder, InternalIndex entry) = 0;

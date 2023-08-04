@@ -183,6 +183,8 @@ class FixedArray
   static Handle<FixedArray> ShrinkOrEmpty(Isolate* isolate,
                                           Handle<FixedArray> array,
                                           int new_length);
+  static DirectHandle<FixedArray> ShrinkOrEmpty_Direct(
+      Isolate* isolate, DirectHandle<FixedArray> array, int new_length);
 
   // Copy a sub array from the receiver to dest.
   V8_EXPORT_PRIVATE void CopyTo(int pos, FixedArray dest, int dest_pos,
@@ -407,6 +409,9 @@ class WeakArrayList
 
   static Handle<WeakArrayList> EnsureSpace(
       Isolate* isolate, Handle<WeakArrayList> array, int length,
+      AllocationType allocation = AllocationType::kYoung);
+  static DirectHandle<WeakArrayList> EnsureSpace_Direct(
+      Isolate* isolate, DirectHandle<WeakArrayList> array, int length,
       AllocationType allocation = AllocationType::kYoung);
 
   // Returns the number of non-cleaned weak references in the array.

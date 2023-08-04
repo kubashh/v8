@@ -181,11 +181,34 @@ void Map::GeneralizeIfCanHaveTransitionableFastElementsKind(
   }
 }
 
+void Map::GeneralizeIfCanHaveTransitionableFastElementsKind_Direct(
+    Isolate* isolate, InstanceType instance_type,
+    Representation* representation, DirectHandle<FieldType>* field_type) {
+  if (CanHaveFastTransitionableElementsKind(instance_type)) {
+    // We don't support propagation of field generalization through elements
+    // kind transitions because they are inserted into the transition tree
+    // before field transitions. In order to avoid complexity of handling
+    // such a case we ensure that all maps with transitionable elements kinds
+    // have the most general field representation and type.
+    *field_type = FieldType::Any_Direct(isolate);
+    *representation = Representation::Tagged();
+  }
+}
+
 Handle<Map> Map::Normalize(Isolate* isolate, Handle<Map> fast_map,
                            PropertyNormalizationMode mode, const char* reason) {
   const bool kUseCache = true;
   return Normalize(isolate, fast_map, fast_map->elements_kind(), mode,
                    kUseCache, reason);
+}
+
+DirectHandle<Map> Map::Normalize_Direct(Isolate* isolate,
+                                        DirectHandle<Map> fast_map,
+                                        PropertyNormalizationMode mode,
+                                        const char* reason) {
+  const bool kUseCache = true;
+  return Normalize_Direct(isolate, fast_map, fast_map->elements_kind(), mode,
+                          kUseCache, reason);
 }
 
 bool Map::EquivalentToForNormalization(const Map other,
@@ -971,7 +994,7 @@ OBJECT_CONSTRUCTORS_IMPL(NormalizedMapCache, WeakFixedArray)
 CAST_ACCESSOR(NormalizedMapCache)
 NEVER_READ_ONLY_SPACE_IMPL(NormalizedMapCache)
 
-int NormalizedMapCache::GetIndex(Handle<Map> map) {
+int NormalizedMapCache::GetIndex(DirectHandle<Map> map) {
   return map->Hash() % NormalizedMapCache::kEntries;
 }
 
