@@ -16,6 +16,23 @@
       "message": "Oli, PTAL this reland (original in PS1, reland changes in PS2)",
       "revId": "305b7e54d1ee4bbc217fda6cf00e34fd263f172f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbad5996_65ba49e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-08-04T13:42:44Z",
+      "side": 1,
+      "message": "lgtm, but for consistency it might be nice to apply the same to arm?",
+      "revId": "305b7e54d1ee4bbc217fda6cf00e34fd263f172f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
