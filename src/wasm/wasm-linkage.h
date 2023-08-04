@@ -112,6 +112,8 @@ constexpr DoubleRegister kFpReturnRegisters[] = {d0, d2};
 // ===========================================================================
 // Note that kGpParamRegisters and kFpParamRegisters are used in
 // Builtins::Generate_WasmCompileLazy (builtins-riscv.cc)
+// Note that if these following lists changed, make {kNumberOfSavedGpParamRegs}
+// and {kNumberOfSavedFpParamRegs} (frame-constants-riscv.h) compatible.
 constexpr Register kGpParamRegisters[] = {a0, a2, a3, a4, a5, a6, a7};
 constexpr Register kGpReturnRegisters[] = {a0, a1};
 constexpr DoubleRegister kFpParamRegisters[] = {fa0, fa1, fa2, fa3,
