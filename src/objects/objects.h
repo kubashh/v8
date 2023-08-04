@@ -738,29 +738,6 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
                  MessageTemplate error_index);
 };
 
-// Implicit comparisons with raw pointers
-// TODO(leszeks): Remove once we're using Tagged everywhere.
-inline constexpr bool operator==(TaggedBase tagged_ptr, Object obj) {
-  static_assert(kTaggedCanConvertToRawObjects);
-  return static_cast<Tagged_t>(tagged_ptr.ptr()) ==
-         static_cast<Tagged_t>(obj.ptr());
-}
-inline constexpr bool operator==(Object obj, TaggedBase tagged_ptr) {
-  static_assert(kTaggedCanConvertToRawObjects);
-  return static_cast<Tagged_t>(obj.ptr()) ==
-         static_cast<Tagged_t>(tagged_ptr.ptr());
-}
-inline constexpr bool operator!=(TaggedBase tagged_ptr, Object obj) {
-  static_assert(kTaggedCanConvertToRawObjects);
-  return static_cast<Tagged_t>(tagged_ptr.ptr()) !=
-         static_cast<Tagged_t>(obj.ptr());
-}
-inline constexpr bool operator!=(Object obj, TaggedBase tagged_ptr) {
-  static_assert(kTaggedCanConvertToRawObjects);
-  return static_cast<Tagged_t>(obj.ptr()) !=
-         static_cast<Tagged_t>(tagged_ptr.ptr());
-}
-
 // TODO(leszeks): Tagged<Object> is not known to be a pointer, so it shouldn't
 // have an operator* or operator->. Remove once all Object member functions
 // are free/static functions.
