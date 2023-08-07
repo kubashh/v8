@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10fa0db0_e5767323",
+        "filename": "src/wasm/wasm-linkage.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-08-07T08:41:28Z",
+      "side": 1,
+      "message": "Other platforms have static asserts in place, in some file that include both headers. E.g. https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/x64/builtins-x64.cc;l\u003d2922;drc\u003dddbab5996c54d1d300e63482696b660feba3c84c\n\nYou could do the same for riscv.",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 72
+      },
+      "revId": "10bd334efb8c9b72a7cd005ae9487be638a9e52b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
