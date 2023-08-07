@@ -85,6 +85,7 @@
 #include "src/objects/instance-type.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
+#include "src/objects/js-async-context-inl.h"
 #include "src/objects/js-collection-inl.h"
 #include "src/objects/js-promise-inl.h"
 #include "src/objects/js-regexp-inl.h"
@@ -8491,6 +8492,157 @@ MaybeLocal<WasmModuleObject> WasmModuleObject::Compile(
                   "WebAssembly support is not enabled");
   UNREACHABLE();
 #endif  // V8_ENABLE_WEBASSEMBLY
+}
+
+Local<AsyncContext::Variable> v8::AsyncContext::Variable::New(
+    Isolate* v8_isolate) {
+  Utils::ApiCheck(i::v8_flags.harmony_async_context,
+                  "v8::AsyncContext::Variable::New",
+                  "Constructing AsyncContext::Variables is not supported");
+
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  API_RCS_SCOPE(i_isolate, AsyncContext_Variable, New);
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+  i::Handle<i::JSAsyncContextVariable> obj =
+      i_isolate->factory()->NewJSAsyncContextVariable();
+  return Utils::ToLocal(obj);
+}
+
+Local<String> v8::AsyncContext::Variable::Name() {
+  CHECK(i::v8_flags.harmony_async_context);
+  i::Handle<i::JSAsyncContextVariable> obj = Utils::OpenHandle(this);
+  i::Handle<i::String> name =
+      i::Handle<i::String>(obj->name(), obj->GetIsolate());
+  return Utils::ToLocal(name);
+}
+
+Local<Value> v8::AsyncContext::Variable::DefaultValue() {
+  CHECK(i::v8_flags.harmony_async_context);
+  i::Handle<i::JSAsyncContextVariable> obj = Utils::OpenHandle(this);
+  i::Handle<i::Object> name =
+      i::Handle<i::Object>(obj->defaultValue(), obj->GetIsolate());
+  return Utils::ToLocal(name);
+}
+
+MaybeLocal<Value> v8::AsyncContext::Variable::GetValue() {
+  CHECK(i::v8_flags.harmony_async_context);
+  i::Handle<i::JSAsyncContextVariable> obj = Utils::OpenHandle(this);
+  i::Isolate* i_isolate = obj->GetIsolate();
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+
+  i::Handle<i::Object> snapshot =
+      i::Handle<i::Object>(i_isolate->heap()->async_context_store(), i_isolate);
+  if (i::IsUndefined(*snapshot)) {
+    return MaybeLocal<Value>();
+  }
+
+  i::Handle<i::OrderedHashMap> async_context_store =
+      i::Handle<i::OrderedHashMap>::cast(snapshot);
+  i::InternalIndex found = async_context_store->FindEntry(i_isolate, *obj);
+  if (found.is_not_found()) {
+    return MaybeLocal<Value>();
+  }
+  i::Handle<i::Object> value =
+      i::Handle<i::Object>(async_context_store->ValueAt(found), i_isolate);
+  return Utils::ToLocal(value);
+}
+
+void v8::AsyncContext::Variable::CheckCast(Value* that) {
+  i::Handle<i::Object> obj = Utils::OpenHandle(that);
+  Utils::ApiCheck(i::IsJSAsyncContextVariable(*obj),
+                  "v8::AsyncContext::Variable::Cast",
+                  "Value is not an AsyncContext::Variable");
+}
+
+v8::AsyncContext::VariableScope::VariableScope(
+    Local<AsyncContext::Variable> async_variable, Local<Value> value) {
+  CHECK(i::v8_flags.harmony_async_context);
+  i::Handle<i::JSAsyncContextVariable> js_async_variable =
+      Utils::OpenHandle(*async_variable);
+  i::Handle<i::Object> js_value = Utils::OpenHandle(*value);
+
+  isolate_ = js_async_variable->GetIsolate();
+  // TODO(abotella): Can we check that `js_value` belongs to the same isolate?
+  i::Handle<i::HeapObject> previous_snapshot(
+      isolate_->heap()->async_context_store(), isolate_);
+
+  i::Handle<i::OrderedHashMap> new_snapshot =
+      isolate_->factory()->NewOrderedHashMap();
+  if (!i::IsUndefined(*previous_snapshot)) {
+    i::Handle<i::OrderedHashMap> previous_snapshot_map =
+        i::Handle<i::OrderedHashMap>::cast(previous_snapshot);
+    new_snapshot->CopyElements(isolate_, 0, *previous_snapshot_map, 0,
+                               previous_snapshot_map->length(),
+                               i::WriteBarrierMode::SKIP_WRITE_BARRIER);
+  }
+  i::OrderedHashMap::Add(isolate_, new_snapshot, js_async_variable, js_value);
+
+  isolate_->roots_table()
+      .slot(i::RootIndex::kAsyncContextStore)
+      .store(*new_snapshot);
+  previous_snapshot_ = Utils::ToLocal(previous_snapshot);
+}
+
+v8::AsyncContext::VariableScope::~VariableScope() {
+  CHECK(i::v8_flags.harmony_async_context);
+  CHECK(isolate_);
+  CHECK(!previous_snapshot_.IsEmpty());
+  i::Handle<i::HeapObject> previous_snapshot =
+      i::Handle<i::HeapObject>::cast(Utils::OpenHandle(*previous_snapshot_));
+  isolate_->roots_table()
+      .slot(i::RootIndex::kAsyncContextStore)
+      .store(*previous_snapshot);
+}
+
+Local<AsyncContext::Snapshot> v8::AsyncContext::Snapshot::New(
+    Isolate* v8_isolate) {
+  Utils::ApiCheck(i::v8_flags.harmony_async_context,
+                  "v8::AsyncContext::Snapshot::New",
+                  "Constructing AsyncContext::Snapshots is not supported");
+
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
+  API_RCS_SCOPE(i_isolate, AsyncContext_Snapshot, New);
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+
+  i::Handle<i::HeapObject> snapshot = i::Handle<i::HeapObject>(
+      i_isolate->heap()->async_context_store(), i_isolate);
+  i::Handle<i::JSAsyncContextSnapshot> obj =
+      i_isolate->factory()->NewJSAsyncContextSnapshot(snapshot);
+  return Utils::ToLocal(obj);
+}
+
+void v8::AsyncContext::Snapshot::CheckCast(Value* that) {
+  i::Handle<i::Object> obj = Utils::OpenHandle(that);
+  Utils::ApiCheck(i::IsJSAsyncContextSnapshot(*obj),
+                  "v8::AsyncContext::Snapshot::Cast",
+                  "Value is not an AsyncContext::Snapshot");
+}
+
+v8::AsyncContext::SnapshotScope::SnapshotScope(
+    Local<AsyncContext::Snapshot> async_snapshot) {
+  CHECK(i::v8_flags.harmony_async_context);
+  i::Handle<i::JSAsyncContextSnapshot> js_async_snapshot =
+      Utils::OpenHandle(*async_snapshot);
+
+  isolate_ = js_async_snapshot->GetIsolate();
+  i::Handle<i::HeapObject> previous_snapshot(
+      isolate_->heap()->async_context_store(), isolate_);
+
+  isolate_->roots_table()
+      .slot(i::RootIndex::kAsyncContextStore)
+      .store(js_async_snapshot->snapshot());
+  previous_snapshot_ = Utils::ToLocal(previous_snapshot);
+}
+
+v8::AsyncContext::SnapshotScope::~SnapshotScope() {
+  CHECK(i::v8_flags.harmony_async_context);
+  CHECK(isolate_);
+  CHECK(!previous_snapshot_.IsEmpty());
+  i::Handle<i::HeapObject> previous_snapshot =
+      i::Handle<i::HeapObject>::cast(Utils::OpenHandle(*previous_snapshot_));
+  isolate_->roots_table()
+      .slot(i::RootIndex::kAsyncContextStore)
+      .store(*previous_snapshot);
 }
 
 void* v8::ArrayBuffer::Allocator::Reallocate(void* data, size_t old_length,

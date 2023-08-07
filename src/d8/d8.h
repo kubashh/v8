@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "include/v8-array-buffer.h"
+#include "include/v8-async-context.h"
 #include "include/v8-isolate.h"
 #include "include/v8-script.h"
 #include "include/v8-value-serializer.h"
@@ -302,9 +303,11 @@ class PerIsolateData {
     int previous_index_;
   };
 
-  inline void SetTimeout(Local<Function> callback, Local<Context> context);
+  inline void SetTimeout(Local<Function> callback, Local<Context> context,
+                         MaybeLocal<AsyncContext::Snapshot> async_snapshot);
   inline MaybeLocal<Function> GetTimeoutCallback();
   inline MaybeLocal<Context> GetTimeoutContext();
+  inline MaybeLocal<AsyncContext::Snapshot> GetTimeoutAsyncSnapshot();
 
   AsyncHooks* GetAsyncHooks() { return async_hooks_wrapper_; }
 
@@ -335,6 +338,7 @@ class PerIsolateData {
   Global<Value> realm_shared_;
   std::queue<Global<Function>> set_timeout_callbacks_;
   std::queue<Global<Context>> set_timeout_contexts_;
+  std::queue<Global<AsyncContext::Snapshot>> set_timeout_async_snapshots_;
   bool ignore_unhandled_promises_;
   std::vector<std::tuple<Global<Promise>, Global<Message>, Global<Value>>>
       unhandled_promises_;

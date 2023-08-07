@@ -31,6 +31,8 @@ PromiseBuiltinsAssembler::IsIsolatePromiseHookEnabled(uint32): bool;
 extern macro
 PromiseBuiltinsAssembler::PromiseHookFlags(): uint32;
 
+extern macro PromiseBuiltinsAssembler::GetAsyncContextStore(): HeapObject;
+
 namespace promise {
 extern macro IsFunctionWithPrototypeSlotMap(Map): bool;
 
@@ -85,7 +87,8 @@ macro NewPromiseFulfillReactionJobTask(implicit context: Context)(
     promise_or_capability: promiseOrCapability,
     continuation_preserved_embedder_data:
         *ContextSlot(
-        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX)
+        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX),
+    async_context_store: GetAsyncContextStore()
   };
 }
 
@@ -102,7 +105,8 @@ macro NewPromiseRejectReactionJobTask(implicit context: Context)(
     promise_or_capability: promiseOrCapability,
     continuation_preserved_embedder_data:
         *ContextSlot(
-        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX)
+        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX),
+    async_context_store: GetAsyncContextStore()
   };
 }
 
@@ -282,7 +286,8 @@ macro NewPromiseReaction(implicit context: Context)(
     promise_or_capability: promiseOrCapability,
     continuation_preserved_embedder_data:
         *ContextSlot(
-        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX)
+        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX),
+    async_context_store: GetAsyncContextStore()
   };
 }
 
@@ -312,7 +317,11 @@ macro NewPromiseResolveThenableJobTask(implicit context: Context)(
     context: nativeContext,
     promise_to_resolve: promiseToResolve,
     thenable,
-    then
+    then,
+    continuation_preserved_embedder_data:
+        *ContextSlot(
+        nativeContext, ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX),
+    async_context_store: GetAsyncContextStore()
   };
 }
 
