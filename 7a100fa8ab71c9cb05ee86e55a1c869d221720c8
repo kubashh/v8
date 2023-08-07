@@ -16,6 +16,24 @@
       "message": "PTAL at patchset 3, I made the check a bit stronger to avoid more missmatchs / missing truncations.",
       "revId": "7a100fa8ab71c9cb05ee86e55a1c869d221720c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "065d4247_946f915f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-07T10:05:30Z",
+      "side": 1,
+      "message": "lgtm",
+      "parentUuid": "32ee76ac_b2671558",
+      "revId": "7a100fa8ab71c9cb05ee86e55a1c869d221720c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
