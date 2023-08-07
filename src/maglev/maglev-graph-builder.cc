@@ -5753,7 +5753,6 @@ ReduceResult MaglevGraphBuilder::TryReduceArrayForEach(
   // Remember the receiver map set before entering the loop the call.
   bool receiver_maps_were_unstable = node_info->possible_maps_are_unstable();
   PossibleMaps receiver_maps_before_loop(node_info->possible_maps());
-  NodeType receiver_type_before_loop = node_info->type();
 
   // Create a sub graph builder with one variable (for the index)
   MaglevSubGraphBuilder sub_builder(this, 1);
@@ -5774,9 +5773,10 @@ ReduceResult MaglevGraphBuilder::TryReduceArrayForEach(
 
   // Reset the known receiver maps if necessary.
   if (receiver_maps_were_unstable) {
-    node_info->SetPossibleMaps(receiver_maps_before_loop,
-                               receiver_maps_were_unstable,
-                               receiver_type_before_loop);
+    node_info->SetPossibleMaps(
+        receiver_maps_before_loop, receiver_maps_were_unstable,
+        // Node type is not monotonic, no need to reset it.
+        NodeType::kUnknown);
     known_node_aspects().any_map_for_any_node_is_unstable = true;
   } else {
     DCHECK_EQ(node_info->possible_maps().size(),
