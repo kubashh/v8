@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32ee76ac_b2671558",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-08-07T09:24:45Z",
+      "side": 1,
+      "message": "PTAL at patchset 3, I made the check a bit stronger to avoid more missmatchs / missing truncations.",
+      "revId": "7a100fa8ab71c9cb05ee86e55a1c869d221720c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
