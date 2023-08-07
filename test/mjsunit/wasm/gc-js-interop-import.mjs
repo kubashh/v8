@@ -16,7 +16,6 @@ builder.addFunction('readStruct', makeSig([kWasmExternRef], [kWasmI32]))
     .addBody([
       kExprLocalGet, 0,                           // --
       kGCPrefix, kExprExternInternalize,          // --
-      kGCPrefix, kExprRefAsStruct,                // --
       kGCPrefix, kExprRefCast, struct_type,       // --
       kGCPrefix, kExprStructGet, struct_type, 0,  // --
     ]);
@@ -25,7 +24,7 @@ builder.addFunction('readArrayLength', makeSig([kWasmExternRef], [kWasmI32]))
     .addBody([
       kExprLocalGet, 0,                           // --
       kGCPrefix, kExprExternInternalize,          // --
-      kGCPrefix, kExprRefAsArray,                 // --
+      kGCPrefix, kExprRefCast, kArrayRefCode,     // --
       kGCPrefix, kExprArrayLen,
     ]);
 

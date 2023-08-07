@@ -20,9 +20,10 @@ builder.addFunction('getHelloArray', makeSig([], [kWasmArrayRef]))
 
 builder.addFunction('getChar', makeSig([kWasmArrayRef, kWasmI32], [kWasmI32]))
     .addBody([
-      kExprLocalGet, 0, kGCPrefix, kExprRefAsArray, kGCPrefix,
-      kExprRefCast, i16Array, kExprLocalGet, 1, kGCPrefix, kExprArrayGetS,
-      i16Array
+      kExprLocalGet, 0,
+      kGCPrefix, kExprRefCast, i16Array,
+      kExprLocalGet, 1,
+      kGCPrefix, kExprArrayGetS, i16Array
     ])
     .exportFunc();
 

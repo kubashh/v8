@@ -1422,54 +1422,6 @@ WASM_COMPILED_EXEC_TEST(RefTrivialCastsStatic) {
   tester.CheckResult(kBrOnCastFailUnrelatedNonNullable, 1);
 }
 
-WASM_COMPILED_EXEC_TEST(TrivialAbstractCasts) {
-  WasmGCTester tester(execution_tier);
-  uint8_t type_index = tester.DefineArray(wasm::kWasmI32, true);
-  uint8_t struct_type_index = tester.DefineStruct({F(wasm::kWasmI32, true)});
-  ValueType sig_types[] = {kWasmS128, kWasmI32, kWasmF64};
-  FunctionSig sig(1, 2, sig_types);
-
-  const uint8_t kAsArrayNull = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_NULL(WASM_REF_AS_ARRAY(WASM_REF_NULL(kAnyRefCode))),
-       kExprEnd});
-  const uint8_t kAsArrayUpcast = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_NULL(WASM_REF_AS_ARRAY(
-           WASM_ARRAY_NEW_DEFAULT(type_index, WASM_I32V(10)))),
-       kExprEnd});
-  const uint8_t kAsArrayUpcastNullable = tester.DefineFunction(
-      tester.sigs.i_v(), {ValueType::RefNull(type_index)},
-      {WASM_LOCAL_SET(0, WASM_ARRAY_NEW_DEFAULT(type_index, WASM_I32V(10))),
-       WASM_REF_IS_NULL(WASM_REF_AS_ARRAY(WASM_LOCAL_GET(0))), kExprEnd});
-  const uint8_t kAsArrayUpcastNull = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_NULL(WASM_REF_AS_ARRAY(WASM_REF_NULL(type_index))),
-       kExprEnd});
-  const uint8_t kAsArrayUnrelated = tester.DefineFunction(
-      tester.sigs.i_v(), {ValueType::RefNull(struct_type_index)},
-      {WASM_LOCAL_SET(0, WASM_STRUCT_NEW_DEFAULT(struct_type_index)),
-       WASM_REF_IS_NULL(WASM_REF_AS_ARRAY(WASM_LOCAL_GET(0))), kExprEnd});
-  const uint8_t kAsArrayUnrelatedNull = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_NULL(WASM_REF_AS_ARRAY(WASM_REF_NULL(kI31RefCode))),
-       kExprEnd});
-  const uint8_t kAsArrayUnrelatedNonNullable = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_NULL(WASM_REF_AS_ARRAY(WASM_I31_NEW(WASM_I32V(10)))),
-       kExprEnd});
-
-  tester.CompileModule();
-
-  tester.CheckHasThrown(kAsArrayNull);
-  tester.CheckResult(kAsArrayUpcast, 0);
-  tester.CheckResult(kAsArrayUpcastNullable, 0);
-  tester.CheckHasThrown(kAsArrayUpcastNull);
-  tester.CheckHasThrown(kAsArrayUnrelated);
-  tester.CheckHasThrown(kAsArrayUnrelatedNull);
-  tester.CheckHasThrown(kAsArrayUnrelatedNonNullable);
-}
-
 WASM_COMPILED_EXEC_TEST(ArrayNewMap) {
   WasmGCTester tester(execution_tier);
 
@@ -1624,17 +1576,6 @@ WASM_COMPILED_EXEC_TEST(CastNullRef) {
       tester.sigs.i_v(), {},
       {WASM_REF_IS_NULL(WASM_REF_AS_NON_NULL(WASM_REF_NULL(kNoneCode))),
        kExprEnd});
-  uint8_t to_array = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_NULL(WASM_REF_AS_ARRAY(WASM_REF_NULL(kNoneCode))),
-       kExprEnd});
-  uint8_t to_struct = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_NULL(WASM_REF_AS_STRUCT(WASM_REF_NULL(kNoneCode))),
-       kExprEnd});
-  uint8_t to_i31 = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_NULL(WASM_REF_AS_I31(WASM_REF_NULL(kNoneCode))), kExprEnd});
   uint8_t struct_idx = tester.DefineStruct({F(wasm::kWasmI32, true)});
   uint8_t to_struct_idx = tester.DefineFunction(
       tester.sigs.i_v(), {},
@@ -1643,9 +1584,6 @@ WASM_COMPILED_EXEC_TEST(CastNullRef) {
   tester.CompileModule();
   // Generic casts trap on null.
   tester.CheckHasThrown(to_non_null);
-  tester.CheckHasThrown(to_array);
-  tester.CheckHasThrown(to_struct);
-  tester.CheckHasThrown(to_i31);
   // ref.cast traps on null.
   tester.CheckHasThrown(to_struct_idx);
 }
@@ -1685,64 +1623,6 @@ WASM_COMPILED_EXEC_TEST(CallReftypeParameters) {
 
   tester.CompileModule();
   tester.CheckResult(caller, 510);
-}
-
-WASM_COMPILED_EXEC_TEST(AbstractTypeChecks) {
-  WasmGCTester tester(execution_tier);
-
-  uint8_t array_index = tester.DefineArray(kWasmI32, true);
-  uint8_t struct_index = tester.DefineStruct({F(kWasmI32, true)});
-  uint8_t function_index =
-      tester.DefineFunction(tester.sigs.v_v(), {}, {kExprEnd});
-  uint8_t sig_index = 2;
-
-  // This is just so func_index counts as "declared".
-  tester.AddGlobal(ValueType::RefNull(sig_index), false,
-                   WasmInitExpr::RefFuncConst(function_index));
-
-  uint8_t kStructCastNull =
-      tester.DefineFunction(tester.sigs.i_v(), {},
-                            {WASM_REF_AS_STRUCT(WASM_REF_NULL(kAnyRefCode)),
-                             WASM_DROP, WASM_I32V(1), kExprEnd});
-  uint8_t kArrayCastNull =
-      tester.DefineFunction(tester.sigs.i_v(), {},
-                            {WASM_REF_AS_ARRAY(WASM_REF_NULL(kAnyRefCode)),
-                             WASM_DROP, WASM_I32V(1), kExprEnd});
-  uint8_t kI31CastNull =
-      tester.DefineFunction(tester.sigs.i_v(), {},
-                            {WASM_REF_AS_I31(WASM_REF_NULL(kAnyRefCode)),
-                             WASM_DROP, WASM_I32V(1), kExprEnd});
-
-#define TYPE_CAST(type, value)                                             \
-  tester.DefineFunction(tester.sigs.i_v(), {kWasmAnyRef},                  \
-                        {WASM_LOCAL_SET(0, WASM_SEQ(value)),               \
-                         WASM_REF_AS_##type(WASM_LOCAL_GET(0)), WASM_DROP, \
-                         WASM_I32V(1), kExprEnd})
-
-  uint8_t kStructCastSuccess =
-      TYPE_CAST(STRUCT, WASM_STRUCT_NEW_DEFAULT(struct_index));
-  uint8_t kStructCastFailure = TYPE_CAST(STRUCT, WASM_I31_NEW(WASM_I32V(42)));
-  uint8_t kArrayCastSuccess =
-      TYPE_CAST(ARRAY, WASM_ARRAY_NEW_DEFAULT(array_index, WASM_I32V(10)));
-  uint8_t kArrayCastFailure = TYPE_CAST(ARRAY, WASM_I31_NEW(WASM_I32V(42)));
-  uint8_t kI31CastSuccess = TYPE_CAST(I31, WASM_I31_NEW(WASM_I32V(42)));
-  uint8_t kI31CastFailure =
-      TYPE_CAST(I31, WASM_ARRAY_NEW_DEFAULT(array_index, WASM_I32V(10)));
-#undef TYPE_CAST
-
-  tester.CompileModule();
-
-  tester.CheckHasThrown(kStructCastNull);
-  tester.CheckHasThrown(kArrayCastNull);
-  tester.CheckHasThrown(kI31CastNull);
-
-  tester.CheckResult(kStructCastSuccess, 1);
-  tester.CheckResult(kArrayCastSuccess, 1);
-  tester.CheckResult(kI31CastSuccess, 1);
-
-  tester.CheckHasThrown(kStructCastFailure);
-  tester.CheckHasThrown(kArrayCastFailure);
-  tester.CheckHasThrown(kI31CastFailure);
 }
 
 // This flushed out a few bugs, so it serves as a regression test. It can also
