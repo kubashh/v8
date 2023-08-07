@@ -6535,7 +6535,7 @@ class LiftoffCompiler {
   }
 
   void RefIsStruct(FullDecoder* /* decoder */, const Value& object,
-                   Value* /* result_val */, bool null_succeeds = false) {
+                   Value* /* result_val */, bool null_succeeds) {
     AbstractTypeCheck<&LiftoffCompiler::StructCheck>(object, null_succeeds);
   }
 
@@ -6546,12 +6546,12 @@ class LiftoffCompiler {
   }
 
   void RefIsArray(FullDecoder* /* decoder */, const Value& object,
-                  Value* /* result_val */, bool null_succeeds = false) {
+                  Value* /* result_val */, bool null_succeeds) {
     AbstractTypeCheck<&LiftoffCompiler::ArrayCheck>(object, null_succeeds);
   }
 
   void RefIsI31(FullDecoder* decoder, const Value& object, Value* /* result */,
-                bool null_succeeds = false) {
+                bool null_succeeds) {
     AbstractTypeCheck<&LiftoffCompiler::I31Check>(object, null_succeeds);
   }
 

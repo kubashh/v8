@@ -1429,31 +1429,6 @@ WASM_COMPILED_EXEC_TEST(TrivialAbstractCasts) {
   ValueType sig_types[] = {kWasmS128, kWasmI32, kWasmF64};
   FunctionSig sig(1, 2, sig_types);
 
-  const uint8_t kIsArrayNull = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_ARRAY(WASM_REF_NULL(kAnyRefCode)), kExprEnd});
-  const uint8_t kIsArrayUpcast = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_ARRAY(WASM_ARRAY_NEW_DEFAULT(type_index, WASM_I32V(10))),
-       kExprEnd});
-  const uint8_t kIsArrayUpcastNullable = tester.DefineFunction(
-      tester.sigs.i_v(), {ValueType::RefNull(type_index)},
-      {WASM_LOCAL_SET(0, WASM_ARRAY_NEW_DEFAULT(type_index, WASM_I32V(10))),
-       WASM_REF_IS_ARRAY(WASM_LOCAL_GET(0)), kExprEnd});
-  const uint8_t kIsArrayUpcastNull = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_ARRAY(WASM_REF_NULL(type_index)), kExprEnd});
-  const uint8_t kIsArrayUnrelated = tester.DefineFunction(
-      tester.sigs.i_v(), {ValueType::RefNull(struct_type_index)},
-      {WASM_LOCAL_SET(0, WASM_STRUCT_NEW_DEFAULT(struct_type_index)),
-       WASM_REF_IS_ARRAY(WASM_LOCAL_GET(0)), kExprEnd});
-  const uint8_t kIsArrayUnrelatedNull = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_ARRAY(WASM_REF_NULL(kI31RefCode)), kExprEnd});
-  const uint8_t kIsArrayUnrelatedNonNullable = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_ARRAY(WASM_I31_NEW(WASM_I32V(10))), kExprEnd});
-
   const uint8_t kAsArrayNull = tester.DefineFunction(
       tester.sigs.i_v(), {},
       {WASM_REF_IS_NULL(WASM_REF_AS_ARRAY(WASM_REF_NULL(kAnyRefCode))),
@@ -1485,14 +1460,6 @@ WASM_COMPILED_EXEC_TEST(TrivialAbstractCasts) {
        kExprEnd});
 
   tester.CompileModule();
-
-  tester.CheckResult(kIsArrayNull, 0);
-  tester.CheckResult(kIsArrayUpcast, 1);
-  tester.CheckResult(kIsArrayUpcastNullable, 1);
-  tester.CheckResult(kIsArrayUpcastNull, 0);
-  tester.CheckResult(kIsArrayUnrelated, 0);
-  tester.CheckResult(kIsArrayUnrelatedNull, 0);
-  tester.CheckResult(kIsArrayUnrelatedNonNullable, 0);
 
   tester.CheckHasThrown(kAsArrayNull);
   tester.CheckResult(kAsArrayUpcast, 0);
@@ -1733,16 +1700,6 @@ WASM_COMPILED_EXEC_TEST(AbstractTypeChecks) {
   tester.AddGlobal(ValueType::RefNull(sig_index), false,
                    WasmInitExpr::RefFuncConst(function_index));
 
-  uint8_t kStructCheckNull = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_STRUCT(WASM_REF_NULL(kAnyRefCode)), kExprEnd});
-  uint8_t kArrayCheckNull = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_ARRAY(WASM_REF_NULL(kAnyRefCode)), kExprEnd});
-  uint8_t kI31CheckNull = tester.DefineFunction(
-      tester.sigs.i_v(), {},
-      {WASM_REF_IS_I31(WASM_REF_NULL(kAnyRefCode)), kExprEnd});
-
   uint8_t kStructCastNull =
       tester.DefineFunction(tester.sigs.i_v(), {},
                             {WASM_REF_AS_STRUCT(WASM_REF_NULL(kAnyRefCode)),
@@ -1755,23 +1712,6 @@ WASM_COMPILED_EXEC_TEST(AbstractTypeChecks) {
       tester.DefineFunction(tester.sigs.i_v(), {},
                             {WASM_REF_AS_I31(WASM_REF_NULL(kAnyRefCode)),
                              WASM_DROP, WASM_I32V(1), kExprEnd});
-
-#define TYPE_CHECK(type, value)                              \
-  tester.DefineFunction(tester.sigs.i_v(), {kWasmAnyRef},    \
-                        {WASM_LOCAL_SET(0, WASM_SEQ(value)), \
-                         WASM_REF_IS_##type(WASM_LOCAL_GET(0)), kExprEnd})
-
-  uint8_t kStructCheckSuccess =
-      TYPE_CHECK(STRUCT, WASM_STRUCT_NEW_DEFAULT(struct_index));
-  uint8_t kStructCheckFailure = TYPE_CHECK(STRUCT, WASM_I31_NEW(WASM_I32V(42)));
-  uint8_t kArrayCheckSuccess =
-      TYPE_CHECK(ARRAY, WASM_ARRAY_NEW_DEFAULT(array_index, WASM_I32V(10)));
-  uint8_t kArrayCheckFailure =
-      TYPE_CHECK(ARRAY, WASM_STRUCT_NEW_DEFAULT(struct_index));
-  uint8_t kI31CheckSuccess = TYPE_CHECK(I31, WASM_I31_NEW(WASM_I32V(42)));
-  uint8_t kI31CheckFailure =
-      TYPE_CHECK(I31, WASM_ARRAY_NEW_DEFAULT(array_index, WASM_I32V(10)));
-#undef TYPE_CHECK
 
 #define TYPE_CAST(type, value)                                             \
   tester.DefineFunction(tester.sigs.i_v(), {kWasmAnyRef},                  \
@@ -1790,70 +1730,11 @@ WASM_COMPILED_EXEC_TEST(AbstractTypeChecks) {
       TYPE_CAST(I31, WASM_ARRAY_NEW_DEFAULT(array_index, WASM_I32V(10)));
 #undef TYPE_CAST
 
-// If the branch is not taken, we return 0. If it is taken, then the respective
-// type check should succeed, and we return 1.
-#define BR_ON(TYPE, type, value)                                            \
-  tester.DefineFunction(                                                    \
-      tester.sigs.i_v(), {kWasmAnyRef},                                     \
-      {WASM_LOCAL_SET(0, WASM_SEQ(value)),                                  \
-       WASM_REF_IS_##TYPE(WASM_BLOCK_R(kWasm##type##Ref, WASM_LOCAL_GET(0), \
-                                       WASM_BR_ON_##TYPE(0),                \
-                                       WASM_RETURN(WASM_I32V(0)))),         \
-       kExprEnd})
-
-  uint8_t kBrOnStructTaken =
-      BR_ON(STRUCT, Struct, WASM_STRUCT_NEW_DEFAULT(struct_index));
-  uint8_t kBrOnStructNotTaken = BR_ON(STRUCT, Struct, WASM_REF_NULL(kNoneCode));
-  uint8_t kBrOnArrayTaken =
-      BR_ON(ARRAY, Array, WASM_ARRAY_NEW_DEFAULT(array_index, WASM_I32V(10)));
-  uint8_t kBrOnArrayNotTaken = BR_ON(ARRAY, Array, WASM_I31_NEW(WASM_I32V(42)));
-  uint8_t kBrOnI31Taken = BR_ON(I31, I31, WASM_I31_NEW(WASM_I32V(42)));
-  uint8_t kBrOnI31NotTaken =
-      BR_ON(I31, I31, WASM_ARRAY_NEW_DEFAULT(array_index, WASM_I32V(10)));
-#undef BR_ON
-
-// If the branch is not taken, we return 1. If it is taken, then the respective
-// type check should fail, and we return 0.
-#define BR_ON_NON(TYPE, type, value)                                   \
-  tester.DefineFunction(                                               \
-      tester.sigs.i_v(), {kWasmAnyRef},                                \
-      {WASM_LOCAL_SET(0, WASM_SEQ(value)),                             \
-       WASM_REF_IS_##TYPE(WASM_BLOCK_R(kWasmAnyRef, WASM_LOCAL_GET(0), \
-                                       WASM_BR_ON_NON_##TYPE(0),       \
-                                       WASM_RETURN(WASM_I32V(1)))),    \
-       kExprEnd})
-
-  uint8_t kBrOnNonStructNotTaken =
-      BR_ON_NON(STRUCT, Struct, WASM_STRUCT_NEW_DEFAULT(struct_index));
-  uint8_t kBrOnNonStructTaken =
-      BR_ON_NON(STRUCT, Struct, WASM_REF_NULL(kNoneCode));
-  uint8_t kBrOnNonArrayNotTaken = BR_ON_NON(
-      ARRAY, Array, WASM_ARRAY_NEW_DEFAULT(array_index, WASM_I32V(10)));
-  uint8_t kBrOnNonArrayTaken =
-      BR_ON_NON(ARRAY, Array, WASM_I31_NEW(WASM_I32V(42)));
-  uint8_t kBrOnNonI31NotTaken =
-      BR_ON_NON(I31, I31, WASM_I31_NEW(WASM_I32V(42)));
-  uint8_t kBrOnNonI31Taken =
-      BR_ON_NON(I31, I31, WASM_ARRAY_NEW_DEFAULT(array_index, WASM_I32V(10)));
-#undef BR_ON_NON
-
   tester.CompileModule();
-
-  tester.CheckResult(kStructCheckNull, 0);
-  tester.CheckResult(kArrayCheckNull, 0);
-  tester.CheckResult(kI31CheckNull, 0);
 
   tester.CheckHasThrown(kStructCastNull);
   tester.CheckHasThrown(kArrayCastNull);
   tester.CheckHasThrown(kI31CastNull);
-
-  tester.CheckResult(kStructCheckSuccess, 1);
-  tester.CheckResult(kArrayCheckSuccess, 1);
-  tester.CheckResult(kI31CheckSuccess, 1);
-
-  tester.CheckResult(kStructCheckFailure, 0);
-  tester.CheckResult(kArrayCheckFailure, 0);
-  tester.CheckResult(kI31CheckFailure, 0);
 
   tester.CheckResult(kStructCastSuccess, 1);
   tester.CheckResult(kArrayCastSuccess, 1);
@@ -1862,20 +1743,6 @@ WASM_COMPILED_EXEC_TEST(AbstractTypeChecks) {
   tester.CheckHasThrown(kStructCastFailure);
   tester.CheckHasThrown(kArrayCastFailure);
   tester.CheckHasThrown(kI31CastFailure);
-
-  tester.CheckResult(kBrOnStructTaken, 1);
-  tester.CheckResult(kBrOnStructNotTaken, 0);
-  tester.CheckResult(kBrOnArrayTaken, 1);
-  tester.CheckResult(kBrOnArrayNotTaken, 0);
-  tester.CheckResult(kBrOnI31Taken, 1);
-  tester.CheckResult(kBrOnI31NotTaken, 0);
-
-  tester.CheckResult(kBrOnNonStructTaken, 0);
-  tester.CheckResult(kBrOnNonStructNotTaken, 1);
-  tester.CheckResult(kBrOnNonArrayTaken, 0);
-  tester.CheckResult(kBrOnNonArrayNotTaken, 1);
-  tester.CheckResult(kBrOnNonI31Taken, 0);
-  tester.CheckResult(kBrOnNonI31NotTaken, 1);
 }
 
 // This flushed out a few bugs, so it serves as a regression test. It can also
