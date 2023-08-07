@@ -20,6 +20,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d9ea9da_f3ae7bdb",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-08-07T15:04:05Z",
+      "side": 1,
+      "message": "I don\u0027t understand how pointer compression makes a difference in this example.",
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65b4c946_b0140338",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-08-07T15:04:05Z",
+      "side": 1,
+      "message": "The current computation causes two neighboring 32bit stores that don\u0027t overlap to invalidate each other. How about adding a minimal size parameter to `InvalidateAtOffset` and only remove entries whose stored size is at least this parameter?\n```suggestion\n          InvalidateAtOffset(potentially_overlapping_offset, base,\n              1 + std::max(0, offset - potentially_overlapping_offset));\n```",
+      "range": {
+        "startLine": 417,
+        "startChar": 10,
+        "endLine": 417,
+        "endChar": 67
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "36e4ddd2_02f32389",
         "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
         "patchSetId": 7
@@ -36,6 +76,53 @@
         "startChar": 1,
         "endLine": 761,
         "endChar": 76
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79e521d7_36b674c3",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-08-07T15:04:05Z",
+      "side": 1,
+      "message": "Yeah, please use a `struct`, also to make the accesses less obscure.",
+      "parentUuid": "36e4ddd2_02f32389",
+      "range": {
+        "startLine": 756,
+        "startChar": 1,
+        "endLine": 761,
+        "endChar": 76
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9ac8d43_22df9827",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2132,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-08-07T15:04:05Z",
+      "side": 1,
+      "message": "Wasm memory accesses also need this, how about just specifying the semantic difference: that stores might partially overlap and we might load values that that consist of bytes from multiple stores.",
+      "range": {
+        "startLine": 2132,
+        "startChar": 4,
+        "endLine": 2132,
+        "endChar": 39
       },
       "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
