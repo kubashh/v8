@@ -16,9 +16,9 @@
 namespace v8 {
 namespace internal {
 
-enum class YoungGenerationMarkingVisitorMode { kParallel, kConcurrent };
+enum class YoungGenerationMarkingVisitationMode { kParallel, kConcurrent };
 
-template <YoungGenerationMarkingVisitorMode marking_mode>
+template <YoungGenerationMarkingVisitationMode marking_mode>
 class YoungGenerationMarkingVisitor final
     : public NewSpaceVisitor<YoungGenerationMarkingVisitor<marking_mode>> {
  public:
@@ -43,7 +43,7 @@ class YoungGenerationMarkingVisitor final
       const YoungGenerationMarkingVisitor&) = delete;
 
   static constexpr bool EnableConcurrentVisitation() {
-    return marking_mode == YoungGenerationMarkingVisitorMode::kConcurrent;
+    return marking_mode == YoungGenerationMarkingVisitationMode::kConcurrent;
   }
 
   V8_INLINE void VisitPointers(HeapObject host, ObjectSlot start,
