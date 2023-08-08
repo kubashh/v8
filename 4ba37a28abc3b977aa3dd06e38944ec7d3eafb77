@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6be6818c_a272b400",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 44
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-08T17:28:36Z",
+      "side": 1,
+      "message": "Nit: Add some commit message here",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "6a0a370c_31841d76",
@@ -14,6 +31,91 @@
       "writtenOn": "2023-08-08T16:26:29Z",
       "side": 1,
       "message": "Dominik, ptal.\n\nA bit of history:\nMichael already looked at the code before going on vacation and his concern was that it introduced branches (between concurrent and parallel marking) that may be redundant (in the sense that dropping them won\u0027t regress parallel marking).\nAt the time, I had concerns about the reliability of pinpoint on Linux for determining which branches have an impact and which don\u0027t. The jobs I ran last week appeared to be noisier than usual.\nRunning on M1 instead seems a lot more stable and based on those results I removed most of the branches.",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f72513aa_6461a4fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-08T17:28:36Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae4e82f4_61879fd4",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-08T17:28:36Z",
+      "side": 1,
+      "message": "I suppose we only need this check for concurrent marking? I am curious, did you check whether you see perf regressions caused by this and decided to leave this in?",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5833450f_68752c0d",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-08T17:28:36Z",
+      "side": 1,
+      "message": "Doesn\u0027t this potentially race with a concurrent marking thread which reads this flag as well? Or are we joining concurrent markers somewhere before?",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe76315b_e5aed511",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-08T17:28:36Z",
+      "side": 1,
+      "message": "Nit: In the full GC these are actually CHECKs because of security issues. So if you ask me, we could make this a CHECK here as well. Although I guess minor ms is likely less prone to such failures. Anyways, up to you to decide.",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb3ad8d6_ea6b378c",
+        "filename": "src/heap/young-generation-marking-visitor-inl.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-08T17:28:36Z",
+      "side": 1,
+      "message": "Typo: *RememberedSet",
       "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
