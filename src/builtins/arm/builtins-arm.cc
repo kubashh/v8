@@ -2905,7 +2905,23 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
   __ Trap();
 }
 
-void Builtins::Generate_WasmToJsWrapperAsm(MacroAssembler* masm) { __ Trap(); }
+void Builtins::Generate_WasmToJsWrapperAsm(MacroAssembler* masm) {
+  // Push registers in reverse order so that they are on the stack like
+  // in an array, with the first item being at the lowest address.
+  for (int i = static_cast<int>(arraysize(wasm::kFpParamRegisters)) - 1; i >= 0;
+       --i) {
+    __ vpush(wasm::kFpParamRegisters[i]);
+  }
+
+  // r6 is for alignment, so that the pushed register parameters and stack
+  // parameters look the same as the layout produced by the js-to-wasm wrapper
+  // for out-going parameters.
+  __ Push(r6, wasm::kGpParamRegisters[3], wasm::kGpParamRegisters[2],
+          wasm::kGpParamRegisters[1]);
+  // One slot for the signature.
+  __ Push(r0);
+  __ TailCallBuiltin(Builtin::kWasmToJsWrapperCSA);
+}
 
 void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
   // TODO(v8:12191): Implement for this platform.
