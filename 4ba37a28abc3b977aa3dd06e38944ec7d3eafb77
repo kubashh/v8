@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a0a370c_31841d76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-08T16:26:29Z",
+      "side": 1,
+      "message": "Dominik, ptal.\n\nA bit of history:\nMichael already looked at the code before going on vacation and his concern was that it introduced branches (between concurrent and parallel marking) that may be redundant (in the sense that dropping them won\u0027t regress parallel marking).\nAt the time, I had concerns about the reliability of pinpoint on Linux for determining which branches have an impact and which don\u0027t. The jobs I ran last week appeared to be noisier than usual.\nRunning on M1 instead seems a lot more stable and based on those results I removed most of the branches.",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

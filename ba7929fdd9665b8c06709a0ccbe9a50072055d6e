@@ -46,6 +46,30 @@
       },
       "revId": "ba7929fdd9665b8c06709a0ccbe9a50072055d6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "078d5fe4_64d8789d",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 38
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-08T16:26:29Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "91ffb1d5_840a534a",
+      "range": {
+        "startLine": 434,
+        "startChar": 10,
+        "endLine": 439,
+        "endChar": 67
+      },
+      "revId": "ba7929fdd9665b8c06709a0ccbe9a50072055d6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
