@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "923483c3_64ad2531",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 44
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-08T21:22:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6be6818c_a272b400",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "6a0a370c_31841d76",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 44
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3906d77_974eebb5",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-08T21:22:47Z",
+      "side": 1,
+      "message": "Yes. This lab check, the `ShouldYield` call below and the atomic map load are only needed for concurrent marking. All of them were behind a branch in a previous revision such that they only applied to concurrent marking and were compiled away for parallel marking. These were the branches that I mentioned in a previous comment (on patchset 44) that Michael wanted to get rid of.\nJetstream on M1 on pinpoint showed no regression. Jetstream on Linux on pinpoint was noisier but I believe there is no regression there either. We will need to check the graphs and if a regression appears we will need to reintroduce the branches.",
+      "parentUuid": "ae4e82f4_61879fd4",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5833450f_68752c0d",
@@ -82,6 +118,24 @@
       "writtenOn": "2023-08-08T17:28:36Z",
       "side": 1,
       "message": "Doesn\u0027t this potentially race with a concurrent marking thread which reads this flag as well? Or are we joining concurrent markers somewhere before?",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b0d618f_666c511c",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-08T21:22:47Z",
+      "side": 1,
+      "message": "You\u0027re right. I made it atomic.",
+      "parentUuid": "5833450f_68752c0d",
       "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +157,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7a4ad9a_124bbb8f",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-08T21:22:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe76315b_e5aed511",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb3ad8d6_ea6b378c",
@@ -116,6 +188,24 @@
       "writtenOn": "2023-08-08T17:28:36Z",
       "side": 1,
       "message": "Typo: *RememberedSet",
+      "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a61bc7f_781ac5a3",
+        "filename": "src/heap/young-generation-marking-visitor-inl.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-08T21:22:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb3ad8d6_ea6b378c",
       "revId": "4ba37a28abc3b977aa3dd06e38944ec7d3eafb77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
