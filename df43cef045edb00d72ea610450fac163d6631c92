@@ -16,6 +16,23 @@
       "message": "Dominik, ptal again. +1 was reset.",
       "revId": "df43cef045edb00d72ea610450fac163d6631c92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ffc9b87_497d91e8",
+        "filename": "src/heap/minor-mark-sweep.cc",
+        "patchSetId": 47
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-09T07:16:11Z",
+      "side": 1,
+      "message": "I am not sure why we use acquire/release here? Is this publishing data? If not we could use relaxed here as well. If we don\u0027t want to bother about memory ordering here we could simply use the default seqcst as well imho as we probably don\u0027t need to be concerned about performance for this.",
+      "revId": "df43cef045edb00d72ea610450fac163d6631c92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
