@@ -1706,7 +1706,7 @@ class MachineOptimizationReducer : public Next {
           // Only few loads should be loading the map from a ConstantOp
           // HeapObject, so unparking the JSHeapBroker here rather than before
           // the optimization pass itself it probably more efficient.
-          UnparkedScopeIfNeeded scope(PipelineData::Get().broker());
+          UnparkedScopeIfNeeded scope(broker);
           AllowHandleDereference allow_handle_dereference;
 
           OptionalMapRef map = TryMakeRef(broker, base.handle()->map());
