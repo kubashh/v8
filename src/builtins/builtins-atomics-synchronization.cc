@@ -2,8 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "include/v8-function.h"
 #include "src/builtins/builtins-utils-inl.h"
 #include "src/objects/js-atomics-synchronization-inl.h"
+#include "src/objects/js-generator-inl.h"
+#include "src/objects/promise-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -54,6 +57,84 @@ BUILTIN(AtomicsMutexLock) {
   }
 
   return *result;
+}
+
+BUILTIN(AtomicsMutexAsyncUnlock) {
+  DCHECK(v8_flags.harmony_struct);
+  HandleScope scope(isolate);
+  Handle<Object> mutex;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, mutex, JSReceiver::GetProperty(isolate, args.target(), "Lock"));
+  Handle<JSAtomicsMutex> js_mutex = Handle<JSAtomicsMutex>::cast(mutex);
+  js_mutex->Unlock(isolate);
+  return *mutex;
+}
+
+BUILTIN(AtomicsMutexLockAsync) {
+  DCHECK(v8_flags.harmony_struct);
+  constexpr char method_name[] = "Atomics.Mutex.lockAsync";
+  HandleScope scope(isolate);
+
+  Handle<Object> js_mutex_obj = args.atOrUndefined(isolate, 1);
+  if (!js_mutex_obj->IsJSAtomicsMutex()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kMethodInvokedOnWrongType,
+                              isolate->factory()->NewStringFromAsciiChecked(
+                                  method_name)));
+  }
+  Handle<JSAtomicsMutex> js_mutex = Handle<JSAtomicsMutex>::cast(js_mutex_obj);
+  Handle<JSObject> run_under_lock =
+      Handle<JSObject>::cast(args.atOrUndefined(isolate, 2));
+  if (!run_under_lock->IsCallable()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kNotCallable, run_under_lock));
+  }
+
+  Handle<Object> result;
+  Handle<JSObject> promise = isolate->factory()->NewJSPromise();
+
+  JSAtomicsMutex::AsyncLockGuard lock_guard(js_mutex);
+  if (lock_guard.locked()) {
+    Tagged<Oddball> junk = JSAtomicsMutex::RunOrQueueCallable(
+        js_mutex, isolate, run_under_lock, promise);
+    USE(junk);
+    // ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+    //     isolate, result,
+    //     Execution::Call(isolate, run_under_lock,
+    //                     isolate->factory()->undefined_value(), 0, nullptr));
+    // Local<v8::Context> native_context =
+    //     Utils::ToLocal(Handle<Context>::cast(isolate->native_context()));
+    // // If result is a promise, create a JS Function that will resolve the
+    // // promise and unlock the mutex through result->then
+    // if (result->IsJSPromise()) {
+    //   Handle<JSFunction> resolver_callback =
+    //       JSAtomicsMutex::AsyncLockGuard::CreateResolveUnlockCallback(isolate,
+    //                                                                   js_mutex);
+
+    //   Local<Function> local_resolver_callback =
+    //       Utils::ToLocal(resolver_callback);
+    //   Handle<JSObject> objectPromise = Handle<JSObject>::cast(result);
+    //   v8::Local<v8::Promise> local_promise =
+    //       Utils::PromiseToLocal(objectPromise);
+
+    //   MaybeLocal<Promise> junk_promise = local_promise->Then(
+    //       native_context, local_resolver_callback, local_resolver_callback);
+    //   USE(junk_promise);
+    // }
+
+    // v8::Context::Scope contextScope(native_context);
+    // Handle<JSPromise> HandlePromise = Handle<JSPromise>::cast(promise);
+
+    // if (!result->IsJSPromise()) js_mutex->Unlock(isolate);
+    // MaybeHandle<Object> resolve_result =
+    //     JSPromise::Resolve(HandlePromise, result);
+    // USE(resolve_result);
+  } else {
+    JSAtomicsMutex::AsyncLockGuard::Enqueue(isolate, js_mutex, run_under_lock,
+                                            promise);
+  }
+
+  return *promise;
 }
 
 BUILTIN(AtomicsMutexTryLock) {
