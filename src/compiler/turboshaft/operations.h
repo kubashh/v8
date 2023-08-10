@@ -2444,6 +2444,8 @@ struct LoadOp : OperationT<LoadOp> {
     bool maybe_unaligned : 1;
     // There is a Wasm trap handler for out-of-bounds accesses.
     bool with_trap_handler : 1;
+    // This is an ArrayBuffer load/store
+    bool is_array_buffer : 1;
 
     static constexpr Kind Aligned(BaseTaggedness base_is_tagged) {
       switch (base_is_tagged) {
@@ -2453,16 +2455,48 @@ struct LoadOp : OperationT<LoadOp> {
           return RawAligned();
       }
     }
-    static constexpr Kind TaggedBase() { return Kind{true, false, false}; }
-    static constexpr Kind RawAligned() { return Kind{false, false, false}; }
-    static constexpr Kind RawUnaligned() { return Kind{false, true, false}; }
-    static constexpr Kind Protected() { return Kind{false, false, true}; }
-    static constexpr Kind TrapOnNull() { return Kind{true, false, true}; }
+    static constexpr Kind TaggedBase() {
+      return {.tagged_base = true,
+              .maybe_unaligned = false,
+              .with_trap_handler = false,
+              .is_array_buffer = false};
+    }
+    static constexpr Kind RawAligned() {
+      return {.tagged_base = false,
+              .maybe_unaligned = false,
+              .with_trap_handler = false,
+              .is_array_buffer = false};
+    }
+    static constexpr Kind RawUnaligned() {
+      return {.tagged_base = false,
+              .maybe_unaligned = true,
+              .with_trap_handler = false,
+              .is_array_buffer = false};
+    }
+    static constexpr Kind Protected() {
+      return {.tagged_base = false,
+              .maybe_unaligned = false,
+              .with_trap_handler = true,
+              .is_array_buffer = false};
+    }
+    static constexpr Kind TrapOnNull() {
+      return {.tagged_base = true,
+              .maybe_unaligned = false,
+              .with_trap_handler = true,
+              .is_array_buffer = false};
+    }
+
+    constexpr Kind IsArrayBuffer() {
+      Kind kind = *this;
+      kind.is_array_buffer = true;
+      return kind;
+    }
 
     bool operator==(const Kind& other) const {
       return tagged_base == other.tagged_base &&
              maybe_unaligned == other.maybe_unaligned &&
-             with_trap_handler == other.with_trap_handler;
+             with_trap_handler == other.with_trap_handler &&
+             is_array_buffer == other.is_array_buffer;
     }
   };
   Kind kind;
