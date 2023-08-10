@@ -2444,6 +2444,31 @@ struct LoadOp : OperationT<LoadOp> {
     bool maybe_unaligned : 1;
     // There is a Wasm trap handler for out-of-bounds accesses.
     bool with_trap_handler : 1;
+    // If {cannot_have_noncanonical_access} is true, then:
+    //   - Stores/Loads at this address cannot overlap. Concretely, it means
+    //     that something like this cannot happen:
+    //
+    //         const u32s = Uint32Array.of(3, 8);
+    //         const u8s = new Uint8Array(u32s.buffer);
+    //         u32s[0] = 0xffffffff;
+    //         u8s[1] = 0; // Overlaps with previous store!
+    //
+    //   - Stores/Loads at this address have a canonical base. Concretely, it
+    //     means that something like this cannot happen:
+    //
+    //         let buffer = new ArrayBuffer(10000);
+    //         let ta1 = new Int32Array(buffer, 0/*offset*/);
+    //         let ta2 = new Int32Array(buffer, 100*4/*offset*/);
+    //         ta2[0] = 0xff;
+    //         ta1[100] = 42; // Same destination as the previous store!
+    //
+    // This is mainly used for load elimination: when stores/loads don't have
+    // the {cannot_have_noncanonical_access} bit set to true, more things need
+    // to be invalidated.
+    // In the main JS pipeline, only ArrayBuffers (= TypedArray/DataView)
+    // loads/stores have this {cannot_have_noncanonical_access} set to false,
+    // and all other loads have it to true.
+    bool cannot_have_noncanonical_access : 1;
 
     static constexpr Kind Aligned(BaseTaggedness base_is_tagged) {
       switch (base_is_tagged) {
@@ -2453,16 +2478,49 @@ struct LoadOp : OperationT<LoadOp> {
           return RawAligned();
       }
     }
-    static constexpr Kind TaggedBase() { return Kind{true, false, false}; }
-    static constexpr Kind RawAligned() { return Kind{false, false, false}; }
-    static constexpr Kind RawUnaligned() { return Kind{false, true, false}; }
-    static constexpr Kind Protected() { return Kind{false, false, true}; }
-    static constexpr Kind TrapOnNull() { return Kind{true, false, true}; }
+    static constexpr Kind TaggedBase() {
+      return {.tagged_base = true,
+              .maybe_unaligned = false,
+              .with_trap_handler = false,
+              .cannot_have_noncanonical_access = true};
+    }
+    static constexpr Kind RawAligned() {
+      return {.tagged_base = false,
+              .maybe_unaligned = false,
+              .with_trap_handler = false,
+              .cannot_have_noncanonical_access = true};
+    }
+    static constexpr Kind RawUnaligned() {
+      return {.tagged_base = false,
+              .maybe_unaligned = true,
+              .with_trap_handler = false,
+              .cannot_have_noncanonical_access = true};
+    }
+    static constexpr Kind Protected() {
+      return {.tagged_base = false,
+              .maybe_unaligned = false,
+              .with_trap_handler = true,
+              .cannot_have_noncanonical_access = true};
+    }
+    static constexpr Kind TrapOnNull() {
+      return {.tagged_base = true,
+              .maybe_unaligned = false,
+              .with_trap_handler = true,
+              .cannot_have_noncanonical_access = true};
+    }
+
+    constexpr Kind CanHaveNonCanonicalAccesses() {
+      Kind kind = *this;
+      kind.cannot_have_noncanonical_access = false;
+      return kind;
+    }
 
     bool operator==(const Kind& other) const {
       return tagged_base == other.tagged_base &&
              maybe_unaligned == other.maybe_unaligned &&
-             with_trap_handler == other.with_trap_handler;
+             with_trap_handler == other.with_trap_handler &&
+             cannot_have_noncanonical_access ==
+                 other.cannot_have_noncanonical_access;
     }
   };
   Kind kind;
