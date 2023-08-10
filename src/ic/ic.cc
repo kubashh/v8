@@ -1083,6 +1083,10 @@ MaybeObjectHandle LoadIC::ComputeHandler(LookupIterator* lookup) {
       } else if (lookup->IsElement(*holder)) {
         TRACE_HANDLER_STATS(isolate(), LoadIC_SlowStub);
         return MaybeObjectHandle(LoadHandler::LoadSlow(isolate()));
+      } else if (lookup->property_details().location() ==
+                 PropertyLocation::kAgentLocal) {
+        TRACE_HANDLER_STATS(isolate(), LoadIC_SlowStub);
+        return MaybeObjectHandle(LoadHandler::LoadSlow(isolate()));
       } else {
         DCHECK_EQ(PropertyLocation::kField,
                   lookup->property_details().location());
@@ -2100,10 +2104,12 @@ MaybeObjectHandle StoreIC::ComputeHandler(LookupIterator* lookup) {
             isolate(), descriptor, index, constness, lookup->representation()));
       }
 
-      // -------------- Constant properties --------------
-      DCHECK_EQ(PropertyLocation::kDescriptor,
-                lookup->property_details().location());
-      set_slow_stub_reason("constant property");
+      // -------------- Constant or agent-local properties --------------
+      DCHECK(PropertyLocation::kDescriptor ==
+                 lookup->property_details().location() ||
+             PropertyLocation::kAgentLocal ==
+                 lookup->property_details().location());
+      set_slow_stub_reason("constant or agent-local property");
       TRACE_HANDLER_STATS(isolate(), StoreIC_SlowStub);
       return MaybeObjectHandle(StoreHandler::StoreSlow(isolate()));
     }

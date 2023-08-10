@@ -45,6 +45,8 @@ class JSSharedStruct
     : public TorqueGeneratedJSSharedStruct<JSSharedStruct,
                                            AlwaysSharedSpaceJSObject> {
  public:
+  static int NumberOfAgentLocalFields(Isolate* isolate, Map map);
+
   DECL_CAST(JSSharedStruct)
   DECL_PRINTER(JSSharedStruct)
   EXPORT_DECL_VERIFIER(JSSharedStruct)

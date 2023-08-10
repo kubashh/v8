@@ -418,6 +418,13 @@ void LookupIterator::PrepareForDataProperty(Handle<Object> value) {
 
   if (!holder->HasFastProperties(isolate_)) return;
 
+  // We are not interested in tracking constness of agent-local fields of shared
+  // structs.
+  if (location() == PropertyLocation::kAgentLocal) {
+    DCHECK(IsJSSharedStruct(*holder, isolate_));
+    return;
+  }
+
   Handle<JSObject> holder_obj = Handle<JSObject>::cast(holder);
   Handle<Map> old_map(holder->map(isolate_), isolate_);
 
@@ -900,21 +907,30 @@ Handle<Object> LookupIterator::FetchValue(
       result = holder_->property_dictionary(isolate_)->ValueAt(
           isolate_, dictionary_entry());
     }
-  } else if (property_details_.location() == PropertyLocation::kField) {
-    DCHECK_EQ(PropertyKind::kData, property_details_.kind());
-    Handle<JSObject> holder = GetHolder<JSObject>();
-    FieldIndex field_index =
-        FieldIndex::ForDetails(holder->map(isolate_), property_details_);
-    if (allocation_policy == AllocationPolicy::kAllocationDisallowed &&
-        field_index.is_inobject() && field_index.is_double()) {
-      return isolate_->factory()->undefined_value();
-    }
-    return JSObject::FastPropertyAt(
-        isolate_, holder, property_details_.representation(), field_index);
   } else {
-    result =
-        holder_->map(isolate_)->instance_descriptors(isolate_)->GetStrongValue(
-            isolate_, descriptor_number());
+    switch (property_details_.location()) {
+      case PropertyLocation::kField: {
+        DCHECK_EQ(PropertyKind::kData, property_details_.kind());
+        Handle<JSObject> holder = GetHolder<JSObject>();
+        FieldIndex field_index =
+            FieldIndex::ForDetails(holder->map(isolate_), property_details_);
+        if (allocation_policy == AllocationPolicy::kAllocationDisallowed &&
+            field_index.is_inobject() && field_index.is_double()) {
+          return isolate_->factory()->undefined_value();
+        }
+        return JSObject::FastPropertyAt(
+            isolate_, holder, property_details_.representation(), field_index);
+      }
+      case PropertyLocation::kDescriptor:
+        result = holder_->map(isolate_)
+                     ->instance_descriptors(isolate_)
+                     ->GetStrongValue(isolate_, descriptor_number());
+        break;
+      case PropertyLocation::kAgentLocal:
+        result = isolate_->GetAgentLocalFieldAt(
+            GetHolder<JSSharedStruct>(), property_details_.field_index());
+        break;
+    }
   }
   return handle(result, isolate_);
 }
@@ -1072,6 +1088,8 @@ void LookupIterator::WriteDataValue(Handle<Object> value,
       JSObject::cast(*holder)->WriteToField(descriptor_number(),
                                             property_details_, *value);
     } else {
+      // WriteAgentLocalValue must be used for properties with
+      // PropertyLocation::kAgentLocal.
       DCHECK_EQ(PropertyLocation::kDescriptor, property_details_.location());
       DCHECK_EQ(PropertyConstness::kConst, property_details_.constness());
     }
@@ -1124,6 +1142,16 @@ void LookupIterator::WriteDataValue(Handle<Object> value, SeqCstAccessTag tag) {
   FieldIndex field_index =
       FieldIndex::ForDescriptor(holder->map(isolate_), descriptor_number());
   holder->FastPropertyAtPut(field_index, *value, tag);
+}
+
+void LookupIterator::WriteAgentLocalValue(Handle<Object> value) {
+  DCHECK_EQ(DATA, state_);
+  Handle<JSSharedStruct> holder = GetHolder<JSSharedStruct>();
+  DCHECK(!IsElement(*holder));
+  // The field index for agent-local fields is the array index in the backing
+  // store.
+  Handle<FixedArray> storage = isolate_->EnsureAgentLocalFieldsStorage(holder);
+  storage->set(property_details_.field_index(), *value);
 }
 
 Handle<Object> LookupIterator::SwapDataValue(Handle<Object> value,

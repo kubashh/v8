@@ -41,6 +41,7 @@ namespace internal {
     "Derived ArrayBuffer constructor created a buffer which was too small")    \
   T(ArrayBufferSpeciesThis,                                                    \
     "ArrayBuffer subclass returned this from species constructor")             \
+  T(ArrayIndicesCannotBeAgentLocal, "array indices cannot be agent-local")     \
   T(AwaitNotInAsyncContext,                                                    \
     "await is only valid in async functions and the top level bodies of "      \
     "modules")                                                                 \

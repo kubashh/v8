@@ -101,5 +101,24 @@ Maybe<bool> AlwaysSharedSpaceJSObject::HasInstance(
   }
 }
 
+// static
+int JSSharedStruct::NumberOfAgentLocalFields(Isolate* isolate, Map map) {
+  DCHECK_EQ(JS_SHARED_STRUCT_TYPE, map.instance_type());
+  DisallowGarbageCollection no_gc;
+  // TODO(v8:12547): Cache the number somewhere instead of computing it every
+  // time.
+  DescriptorArray descriptors = map->instance_descriptors(isolate);
+  int count = 0;
+  for (InternalIndex i :
+       InternalIndex::Range(descriptors->number_of_descriptors())) {
+    PropertyDetails details = descriptors->GetDetails(i);
+    DCHECK_EQ(PropertyKind::kData, details.kind());
+    if (details.location() == PropertyLocation::kAgentLocal) {
+      count = std::max(count, details.field_index() + 1);
+    }
+  }
+  return count;
+}
+
 }  // namespace internal
 }  // namespace v8

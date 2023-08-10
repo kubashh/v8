@@ -308,7 +308,8 @@ class V8_EXPORT_PRIVATE AccessorAssembler : public CodeStubAssembler {
                                 TNode<Map> shared_struct_map,
                                 TNode<DescriptorArray> descriptors,
                                 TNode<IntPtrT> descriptor_name_index,
-                                TNode<Uint32T> details, TNode<Object> value);
+                                TNode<Uint32T> details, TNode<Object> value,
+                                Label* if_agent_local);
 
   TNode<BoolT> IsPropertyDetailsConst(TNode<Uint32T> details);
 

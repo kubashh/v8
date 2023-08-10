@@ -1267,6 +1267,8 @@ void Heap::CreateInitialMutableObjects() {
 
   set_materialized_objects(*factory->NewFixedArray(0, AllocationType::kOld));
 
+  set_agent_local_fields(roots.undefined_value());
+
   // Handling of script id generation is in Heap::NextScriptId().
   set_last_script_id(Smi::FromInt(v8::UnboundScript::kNoScriptId));
   set_last_debugging_id(Smi::FromInt(DebugInfo::kNoDebuggingId));
