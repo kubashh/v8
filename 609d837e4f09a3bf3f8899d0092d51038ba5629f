@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "317860fc_a37c4b44",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-08-10T08:46:21Z",
+      "side": 1,
+      "message": "Yea the comment was outdated. I initially didn\u0027t realize that Bigint64Array were storing 64-bit raw integers, and I just assumed that with pointer compression, the max size of an element was 4 bytes. Anyways, this is outdated now that we don\u0027t track ArrayBuffers.",
+      "parentUuid": "2d9ea9da_f3ae7bdb",
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65b4c946_b0140338",
@@ -48,6 +66,30 @@
       "writtenOn": "2023-08-07T15:04:05Z",
       "side": 1,
       "message": "The current computation causes two neighboring 32bit stores that don\u0027t overlap to invalidate each other. How about adding a minimal size parameter to `InvalidateAtOffset` and only remove entries whose stored size is at least this parameter?\n```suggestion\n          InvalidateAtOffset(potentially_overlapping_offset, base,\n              1 + std::max(0, offset - potentially_overlapping_offset));\n```",
+      "range": {
+        "startLine": 417,
+        "startChar": 10,
+        "endLine": 417,
+        "endChar": 67
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fbc8305_e849825f",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-08-10T08:46:21Z",
+      "side": 1,
+      "message": "Outdated with the new version that doesn\u0027t track ArrayBuffers.\n(I didn\u0027t know that it was possible to suggest edits in code reviews btw :o )",
+      "parentUuid": "65b4c946_b0140338",
       "range": {
         "startLine": 417,
         "startChar": 10,
@@ -105,6 +147,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aedacd3d_0b7e5e47",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 761,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-08-10T08:46:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79e521d7_36b674c3",
+      "range": {
+        "startLine": 756,
+        "startChar": 1,
+        "endLine": 761,
+        "endChar": 76
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9ac8d43_22df9827",
@@ -118,6 +184,30 @@
       "writtenOn": "2023-08-07T15:04:05Z",
       "side": 1,
       "message": "Wasm memory accesses also need this, how about just specifying the semantic difference: that stores might partially overlap and we might load values that that consist of bytes from multiple stores.",
+      "range": {
+        "startLine": 2132,
+        "startChar": 4,
+        "endLine": 2132,
+        "endChar": 39
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81c2584a_dab2e547",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2132,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-08-10T08:46:21Z",
+      "side": 1,
+      "message": "I think that it would be safer to re-evaluate all load kinds when we later try to enable LateLoadElimination for WASM, rather than preemptively mark some loads as \"can_overlap\" and risk missing some, which might give a false sense of security. \nI\u0027ve currently just kept the is_array_buffer bit.\nLet me know what you think.",
+      "parentUuid": "e9ac8d43_22df9827",
       "range": {
         "startLine": 2132,
         "startChar": 4,
@@ -164,6 +254,30 @@
       "writtenOn": "2023-08-04T13:25:59Z",
       "side": 1,
       "message": "nit: Maybe provide this in hex as well so that it\u0027s more obvious what it is?",
+      "range": {
+        "startLine": 20,
+        "startChar": 28,
+        "endLine": 20,
+        "endChar": 37
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae1ecb84_a05ad833",
+        "filename": "test/mjsunit/compiler/load-elimination-typed-arrays.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-08-10T08:46:21Z",
+      "side": 1,
+      "message": "Yea definitely, done.",
+      "parentUuid": "79533663_524e22ad",
       "range": {
         "startLine": 20,
         "startChar": 28,
