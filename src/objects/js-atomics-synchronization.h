@@ -22,6 +22,8 @@ namespace internal {
 
 namespace detail {
 class WaiterQueueNode;
+class AsyncWaiterQueueNode;
+class SyncWaiterQueueNode;
 }  // namespace detail
 
 // Base class for JSAtomicsMutex and JSAtomicsCondition
@@ -109,6 +111,33 @@ class JSAtomicsMutex
     bool locked_;
   };
 
+  // A non-copyable wrapper class that provides an RAII-style mechanism for
+  // Owning the JSAtomicsMutex potentially asynchronously via its asyncLock
+  // method.
+  //
+  // The mutex is attempted to be locked via TryLock when a TryLockGuard object
+  // is created. If the mutex was acquired, then it is released when the
+  // TryLockGuard object is destructed.
+  class V8_NODISCARD AsyncLockGuard final {
+   public:
+    inline AsyncLockGuard(Handle<JSAtomicsMutex> mutex);
+    AsyncLockGuard(const AsyncLockGuard&) = delete;
+    AsyncLockGuard& operator=(const AsyncLockGuard&) = delete;
+    bool locked() const { return locked_; }
+    static void Enqueue(Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+                        Handle<JSObject> callable, Handle<JSObject> promise);
+    // The mutex may be taken in this function, return true if this occurs.
+    // Return false if the lock isn't taken.
+    static bool EnqueueNode(Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+                            detail::AsyncWaiterQueueNode* node);
+    static Handle<JSFunction> CreateResolveUnlockCallback(
+        Isolate* isolate, Handle<JSAtomicsMutex> mutex);
+
+   private:
+    Handle<JSAtomicsMutex> mutex_;
+    bool locked_;
+  };
+
   DECL_CAST(JSAtomicsMutex)
   DECL_PRINTER(JSAtomicsMutex)
   EXPORT_DECL_VERIFIER(JSAtomicsMutex)
@@ -117,6 +146,11 @@ class JSAtomicsMutex
   static inline void Lock(Isolate* requester, Handle<JSAtomicsMutex> mutex);
 
   V8_WARN_UNUSED_RESULT inline bool TryLock();
+  bool AsyncLock();
+  static Tagged<Oddball> RunOrQueueCallable(Handle<JSAtomicsMutex> mutex,
+                                            Isolate* isolate,
+                                            Handle<JSObject> run_under_lock,
+                                            Handle<JSObject> promise);
 
   inline void Unlock(Isolate* requester);
 
@@ -128,6 +162,8 @@ class JSAtomicsMutex
  private:
   friend class Factory;
   friend class detail::WaiterQueueNode;
+  friend class detail::SyncWaiterQueueNode;
+  friend class detail::AsyncWaiterQueueNode;
 
   // There are 2 lock bits: whether the lock itself is locked, and whether the
   // associated waiter queue is locked.
