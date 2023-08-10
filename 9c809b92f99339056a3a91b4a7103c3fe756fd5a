@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51e33eac_b8791eba",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2023-08-10T14:21:02Z",
+      "side": 1,
+      "message": "As dicussed, how about `always_canonically_accessed`.",
+      "range": {
+        "startLine": 99,
+        "startChar": 17,
+        "endLine": 99,
+        "endChar": 48
+      },
+      "revId": "9c809b92f99339056a3a91b4a7103c3fe756fd5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
