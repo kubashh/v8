@@ -791,7 +791,7 @@ class MachineLoweringReducer : public Next {
             // Load the string for the {code} from the single character string
             // table.
             OpIndex entry = __ LoadElement(
-                table, AccessBuilder::ForFixedArrayElement(), index);
+                table, AccessBuilder::ForFixedArrayElement(), index, false);
 
             // Use the {entry} from the {table}.
             GOTO(done, entry);
@@ -1485,7 +1485,7 @@ class MachineLoweringReducer : public Next {
     LOOP(loop, index) {
       GOTO_IF_NOT(LIKELY(__ UintPtrLessThan(index, length)), done, array);
 
-      __ StoreElement(array, access, index, the_hole_value);
+      __ StoreElement(array, access, index, the_hole_value, false);
 
       // Advance the {index}.
       GOTO(loop, __ WordPtrAdd(index, 1));
@@ -1521,7 +1521,7 @@ class MachineLoweringReducer : public Next {
       GOTO_IF_NOT(LIKELY(__ UintPtrLessThan(index, array_length)), done);
 
       V<Float64> element = __ template LoadElement<Float64>(
-          elements, AccessBuilder::ForFixedDoubleArrayElement(), index);
+          elements, AccessBuilder::ForFixedDoubleArrayElement(), index, false);
 
       result = is_max ? __ Float64Max(*result, element)
                       : __ Float64Min(*result, element);
@@ -1962,7 +1962,8 @@ class MachineLoweringReducer : public Next {
 
     // Perform the actual typed element access.
     OpIndex result = __ LoadElement(
-        data_ptr, AccessBuilder::ForTypedArrayElement(array_type, true), index);
+        data_ptr, AccessBuilder::ForTypedArrayElement(array_type, true), index,
+        true);
 
     // We need to keep the {buffer} alive so that the GC will not release the
     // ArrayBuffer (if there's any) as long as we are still operating on it.
@@ -1978,7 +1979,8 @@ class MachineLoweringReducer : public Next {
         AccessBuilder::ForTypedArrayElement(element_type, true).machine_type;
 
     OpIndex value =
-        __ Load(storage, index, LoadOp::Kind::RawUnaligned(),
+        __ Load(storage, index,
+                LoadOp::Kind::RawUnaligned().CanHaveNonCanonicalAccesses(),
                 MemoryRepresentation::FromMachineType(machine_type));
 
     Variable result = Asm().NewLoopInvariantVariable(
@@ -2008,7 +2010,7 @@ class MachineLoweringReducer : public Next {
 
   V<Object> REDUCE(LoadStackArgument)(V<WordPtr> base, V<WordPtr> index) {
     V<WordPtr> argument = __ template LoadElement<WordPtr>(
-        base, AccessBuilder::ForStackArgument(), index);
+        base, AccessBuilder::ForStackArgument(), index, false);
     return __ BitcastWordPtrToTagged(argument);
   }
 
@@ -2021,7 +2023,7 @@ class MachineLoweringReducer : public Next {
     // Perform the actual typed element access.
     __ StoreElement(data_ptr,
                     AccessBuilder::ForTypedArrayElement(array_type, true),
-                    index, value);
+                    index, value, true);
 
     // We need to keep the {buffer} alive so that the GC will not release the
     // ArrayBuffer (if there's any) as long as we are still operating on it.
@@ -2055,7 +2057,7 @@ class MachineLoweringReducer : public Next {
     END_IF
 
     __ Store(storage, index, Asm().GetVariable(value_to_store),
-             StoreOp::Kind::RawUnaligned(),
+             StoreOp::Kind::RawUnaligned().CanHaveNonCanonicalAccesses(),
              MemoryRepresentation::FromMachineType(machine_type),
              WriteBarrierKind::kNoWriteBarrier);
 
@@ -2167,7 +2169,7 @@ class MachineLoweringReducer : public Next {
                 __ ChangeInt32ToFloat64(__ UntagSmi(value));
             __ StoreElement(elements,
                             AccessBuilder::ForFixedDoubleArrayElement(), index,
-                            float_value);
+                            float_value, false);
           }
           ELSE {
             V<Float64> float_value = __ template LoadField<Float64>(
@@ -2175,7 +2177,7 @@ class MachineLoweringReducer : public Next {
                 AccessBuilder::ForHeapNumberValue());
             __ StoreElement(elements,
                             AccessBuilder::ForFixedDoubleArrayElement(), index,
-                            __ Float64SilenceNaN(float_value));
+                            __ Float64SilenceNaN(float_value), false);
           }
           END_IF
         }
@@ -2183,7 +2185,7 @@ class MachineLoweringReducer : public Next {
           // Our ElementsKind is HOLEY_SMI_ELEMENTS or HOLEY_ELEMENTS.
           __ StoreElement(elements,
                           AccessBuilder::ForFixedArrayElement(HOLEY_ELEMENTS),
-                          index, value);
+                          index, value, false);
         }
         END_IF
         break;
@@ -2225,7 +2227,7 @@ class MachineLoweringReducer : public Next {
         V<Object> elements = __ template LoadField<Object>(
             array, AccessBuilder::ForJSObjectElements());
         __ StoreElement(elements, AccessBuilder::ForFixedDoubleArrayElement(),
-                        index, __ Float64SilenceNaN(value));
+                        index, __ Float64SilenceNaN(value), false);
         break;
       }
       case TransitionAndStoreArrayElementOp::Kind::kOddballElement:
@@ -2263,7 +2265,7 @@ class MachineLoweringReducer : public Next {
           access.type = compiler::Type::BooleanOrNullOrUndefined();
           access.write_barrier_kind = kNoWriteBarrier;
         }
-        __ StoreElement(elements, access, index, value);
+        __ StoreElement(elements, access, index, value, false);
         break;
       }
       case TransitionAndStoreArrayElementOp::Kind::kSignedSmallElement: {
@@ -2287,7 +2289,7 @@ class MachineLoweringReducer : public Next {
           // Our ElementsKind is HOLEY_DOUBLE_ELEMENTS.
           V<Float64> f64 = __ ChangeInt32ToFloat64(value);
           __ StoreElement(elements, AccessBuilder::ForFixedDoubleArrayElement(),
-                          index, f64);
+                          index, f64, false);
         }
         ELSE {
           // Our ElementsKind is HOLEY_SMI_ELEMENTS or HOLEY_ELEMENTS.
@@ -2297,7 +2299,7 @@ class MachineLoweringReducer : public Next {
           access.type = compiler::Type::SignedSmall();
           access.machine_type = MachineType::TaggedSigned();
           access.write_barrier_kind = kNoWriteBarrier;
-          __ StoreElement(elements, access, index, __ TagSmi(value));
+          __ StoreElement(elements, access, index, __ TagSmi(value), false);
         }
         END_IF
         break;
@@ -2960,12 +2962,12 @@ class MachineLoweringReducer : public Next {
     IF(onebyte) {
       GOTO(done, __ template LoadElement<Word32>(
                      receiver, AccessBuilder::ForSeqOneByteStringCharacter(),
-                     position));
+                     position, false));
     }
     ELSE {
       GOTO(done, __ template LoadElement<Word32>(
                      receiver, AccessBuilder::ForSeqTwoByteStringCharacter(),
-                     position));
+                     position, false));
     }
     END_IF
 
