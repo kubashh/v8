@@ -1955,6 +1955,8 @@ void V8HeapExplorer::ExtractPropertyReferences(JSObject js_obj,
                                              descs->GetKey(i),
                                              descs->GetStrongValue(i));
           break;
+        case PropertyLocation::kAgentLocal:
+          UNIMPLEMENTED();
       }
     }
   } else if (IsJSGlobalObject(js_obj)) {

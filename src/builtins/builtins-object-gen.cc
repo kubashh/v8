@@ -271,9 +271,10 @@ TNode<JSArray> ObjectEntriesValuesBuiltinsAssembler::FastGetOwnValuesOrEntries(
           Unsigned(TruncateIntPtrToInt32(var_descriptor_number.value())));
 
       // Let value be ? Get(O, key).
-      LoadPropertyFromFastObject(object, map, descriptors,
-                                 descriptor_name_index, details,
-                                 &var_property_value);
+      LoadPropertyFromFastObject(
+          object, map, descriptors, descriptor_name_index, details,
+          /* if_agent_local */ if_call_runtime_with_fast_path,
+          &var_property_value);
 
       // If kind is "value", append value to properties.
       TNode<Object> value = var_property_value.value();

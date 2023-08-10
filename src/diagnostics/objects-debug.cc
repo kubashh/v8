@@ -1342,10 +1342,13 @@ void JSSharedStruct::JSSharedStructVerify(Isolate* isolate) {
   for (InternalIndex i : struct_map->IterateOwnDescriptors()) {
     PropertyDetails details = descriptors->GetDetails(i);
     CHECK_EQ(PropertyKind::kData, details.kind());
-    CHECK_EQ(PropertyLocation::kField, details.location());
-    CHECK(details.representation().IsTagged());
-    FieldIndex field_index = FieldIndex::ForDetails(struct_map, details);
-    VerifyElementIsShared(RawFastPropertyAt(field_index));
+    if (PropertyLocation::kField == details.location()) {
+      CHECK(details.representation().IsTagged());
+      FieldIndex field_index = FieldIndex::ForDetails(struct_map, details);
+      VerifyElementIsShared(RawFastPropertyAt(field_index));
+    } else {
+      CHECK_EQ(PropertyLocation::kAgentLocal, details.location());
+    }
   }
 }
 

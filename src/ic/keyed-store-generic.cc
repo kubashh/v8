@@ -712,8 +712,9 @@ void KeyedStoreGenericAssembler::LookupPropertyOnPrototypeChain(
         // Accessor case.
         // TODO(jkummerow): Implement a trimmed-down
         // LoadAccessorFromFastObject.
-        LoadPropertyFromFastObject(holder, holder_map, descriptors, name_index,
-                                   details, var_accessor_pair);
+        LoadNonAgentLocalPropertyFromFastObject(holder, holder_map, descriptors,
+                                                name_index, details,
+                                                var_accessor_pair);
         *var_accessor_holder = holder;
         Goto(accessor);
       }
@@ -878,8 +879,9 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
           // Accessor case.
           // TODO(jkummerow): Implement a trimmed-down
           // LoadAccessorFromFastObject.
-          LoadPropertyFromFastObject(receiver, receiver_map, descriptors,
-                                     name_index, details, &var_accessor_pair);
+          LoadNonAgentLocalPropertyFromFastObject(receiver, receiver_map,
+                                                  descriptors, name_index,
+                                                  details, &var_accessor_pair);
           var_accessor_holder = receiver;
           Goto(&accessor);
         } else {
@@ -902,7 +904,7 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
           {
             StoreJSSharedStructField(p->context(), receiver, receiver_map,
                                      descriptors, name_index, details,
-                                     p->value());
+                                     p->value(), slow);
             exit_point->Return(p->value());
           }
         }

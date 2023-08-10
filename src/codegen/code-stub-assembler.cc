@@ -9853,9 +9853,9 @@ void CodeStubAssembler::ForEachEnumerableOwnProperty(
                                PropertyDetails::kAttributesDontEnumMask),
                    &next_iteration);
 
-            LoadPropertyFromFastObject(object, var_map.value(), descriptors,
-                                       name_index, var_details.value(),
-                                       &var_value);
+            LoadPropertyFromFastObject(
+                object, var_map.value(), descriptors, name_index,
+                var_details.value(), /* if_agent_local */ bailout, &var_value);
             Goto(&if_found);
           }
           BIND(&if_found_dict);
@@ -10259,27 +10259,30 @@ TNode<JSObject> CodeStubAssembler::CreateAsyncFromSyncIterator(
 void CodeStubAssembler::LoadPropertyFromFastObject(
     TNode<HeapObject> object, TNode<Map> map,
     TNode<DescriptorArray> descriptors, TNode<IntPtrT> name_index,
-    TVariable<Uint32T>* var_details, TVariable<Object>* var_value) {
+    Label* if_agent_local, TVariable<Uint32T>* var_details,
+    TVariable<Object>* var_value) {
   TNode<Uint32T> details = LoadDetailsByKeyIndex(descriptors, name_index);
-  *var_details = details;
-
   LoadPropertyFromFastObject(object, map, descriptors, name_index, details,
-                             var_value);
+                             if_agent_local, var_value);
+  // Assign to var_details after the LoadPropertyFromFastObject ensures there're
+  // no unmerged paths for the variable if the call jumps to if_agent_local.
+  *var_details = details;
 }
 
 void CodeStubAssembler::LoadPropertyFromFastObject(
     TNode<HeapObject> object, TNode<Map> map,
     TNode<DescriptorArray> descriptors, TNode<IntPtrT> name_index,
-    TNode<Uint32T> details, TVariable<Object>* var_value) {
+    TNode<Uint32T> details, Label* if_agent_local,
+    TVariable<Object>* var_value) {
   Comment("[ LoadPropertyFromFastObject");
 
   TNode<Uint32T> location =
       DecodeWord32<PropertyDetails::LocationField>(details);
 
-  Label if_in_field(this), if_in_descriptor(this), done(this);
+  Label if_in_field(this), if_in_descriptor_or_agent_local(this), done(this);
   Branch(Word32Equal(location, Int32Constant(static_cast<int32_t>(
                                    PropertyLocation::kField))),
-         &if_in_field, &if_in_descriptor);
+         &if_in_field, &if_in_descriptor_or_agent_local);
   BIND(&if_in_field);
   {
     TNode<IntPtrT> field_index =
@@ -10353,8 +10356,18 @@ void CodeStubAssembler::LoadPropertyFromFastObject(
       Goto(&done);
     }
   }
-  BIND(&if_in_descriptor);
+  BIND(&if_in_descriptor_or_agent_local);
   {
+    if (if_agent_local == nullptr) {
+      CSA_DCHECK(this,
+                 Word32Equal(location, Int32Constant(static_cast<int32_t>(
+                                           PropertyLocation::kDescriptor))));
+    } else {
+      GotoIf(Word32Equal(location, Int32Constant(static_cast<int32_t>(
+                                       PropertyLocation::kAgentLocal))),
+             if_agent_local);
+    }
+
     *var_value = LoadValueByKeyIndex(descriptors, name_index);
     Goto(&done);
   }
@@ -10604,7 +10617,8 @@ void CodeStubAssembler::TryGetOwnProperty(
     TNode<IntPtrT> name_index = var_entry.value();
 
     LoadPropertyFromFastObject(object, map, descriptors, name_index,
-                               var_details, var_value);
+                               /* if_agent_local */ if_bailout, var_details,
+                               var_value);
     Goto(&if_found);
   }
   BIND(&if_found_dict);
@@ -16584,9 +16598,9 @@ void PrototypeCheckAssembler::CheckAndBranch(TNode<HeapObject> prototype,
       TVARIABLE(Object, var_value);
 
       const int key_index = DescriptorArray::ToKeyIndex(descriptor);
-      LoadPropertyFromFastObject(prototype, prototype_map, descriptors,
-                                 IntPtrConstant(key_index), &var_details,
-                                 &var_value);
+      LoadNonAgentLocalPropertyFromFastObject(
+          prototype, prototype_map, descriptors, IntPtrConstant(key_index),
+          &var_details, &var_value);
 
       TNode<Object> actual_value = var_value.value();
       TNode<Object> expected_value =

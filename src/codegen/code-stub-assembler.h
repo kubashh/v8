@@ -3497,13 +3497,31 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   void LoadPropertyFromFastObject(TNode<HeapObject> object, TNode<Map> map,
                                   TNode<DescriptorArray> descriptors,
                                   TNode<IntPtrT> name_index,
+                                  Label* if_agent_local,
                                   TVariable<Uint32T>* var_details,
                                   TVariable<Object>* var_value);
 
   void LoadPropertyFromFastObject(TNode<HeapObject> object, TNode<Map> map,
                                   TNode<DescriptorArray> descriptors,
-                                  TNode<IntPtrT> name_index, TNode<Uint32T>,
+                                  TNode<IntPtrT> name_index,
+                                  TNode<Uint32T> details, Label* if_agent_local,
                                   TVariable<Object>* var_value);
+
+  void LoadNonAgentLocalPropertyFromFastObject(
+      TNode<HeapObject> object, TNode<Map> map,
+      TNode<DescriptorArray> descriptors, TNode<IntPtrT> name_index,
+      TVariable<Uint32T>* var_details, TVariable<Object>* var_value) {
+    return LoadPropertyFromFastObject(object, map, descriptors, name_index,
+                                      nullptr, var_details, var_value);
+  }
+
+  void LoadNonAgentLocalPropertyFromFastObject(
+      TNode<HeapObject> object, TNode<Map> map,
+      TNode<DescriptorArray> descriptors, TNode<IntPtrT> name_index,
+      TNode<Uint32T> details, TVariable<Object>* var_value) {
+    return LoadPropertyFromFastObject(object, map, descriptors, name_index,
+                                      details, nullptr, var_value);
+  }
 
   template <typename Dictionary>
   void LoadPropertyFromDictionary(TNode<Dictionary> dictionary,
