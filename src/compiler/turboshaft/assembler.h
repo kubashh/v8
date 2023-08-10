@@ -1837,7 +1837,7 @@ class AssemblerOpInterface {
 
   template <typename T = Any, typename Base>
   V<T> LoadElement(V<Base> object, const ElementAccess& access,
-                   V<WordPtr> index) {
+                   V<WordPtr> index, bool is_array_buffer) {
     if constexpr (std::is_base_of_v<Object, Base>) {
       DCHECK_EQ(access.base_is_tagged, BaseTaggedness::kTaggedBase);
     } else {
@@ -1845,6 +1845,7 @@ class AssemblerOpInterface {
       DCHECK_EQ(access.base_is_tagged, BaseTaggedness::kUntaggedBase);
     }
     LoadOp::Kind kind = LoadOp::Kind::Aligned(access.base_is_tagged);
+    if (is_array_buffer) kind = kind.IsArrayBuffer();
     MemoryRepresentation rep =
         MemoryRepresentation::FromMachineType(access.machine_type);
     return Load(object, index, kind, rep, access.header_size,
@@ -1853,7 +1854,7 @@ class AssemblerOpInterface {
 
   template <typename Base>
   void StoreElement(V<Base> object, const ElementAccess& access,
-                    V<WordPtr> index, V<Any> value) {
+                    V<WordPtr> index, V<Any> value, bool is_array_buffer) {
     if constexpr (std::is_base_of_v<Object, Base>) {
       DCHECK_EQ(access.base_is_tagged, BaseTaggedness::kTaggedBase);
     } else {
@@ -1861,6 +1862,7 @@ class AssemblerOpInterface {
       DCHECK_EQ(access.base_is_tagged, BaseTaggedness::kUntaggedBase);
     }
     LoadOp::Kind kind = LoadOp::Kind::Aligned(access.base_is_tagged);
+    if (is_array_buffer) kind = kind.IsArrayBuffer();
     MemoryRepresentation rep =
         MemoryRepresentation::FromMachineType(access.machine_type);
     Store(object, index, value, kind, rep, access.write_barrier_kind,
