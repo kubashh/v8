@@ -218,6 +218,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "03bddebf_e6d8d018",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2132,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-08-10T13:02:39Z",
+      "side": 1,
+      "message": "As discussed offline, I renamed it to cannot_have_noncanonical_access and added a comment explaining what this is.",
+      "parentUuid": "81c2584a_dab2e547",
+      "range": {
+        "startLine": 2132,
+        "startChar": 4,
+        "endLine": 2132,
+        "endChar": 39
+      },
+      "revId": "609d837e4f09a3bf3f8899d0092d51038ba5629f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ac9a6402_8b3563a9",
