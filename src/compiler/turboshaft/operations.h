@@ -107,9 +107,15 @@ using Variable = SnapshotTable<OpIndex, VariableData>::Key;
   V(Simd128Constant)                      \
   V(Simd128Binop)                         \
   V(Simd128Unary)
+
+#define TURBOSHAFT_WASM_GC_OPERATION_LIST(V) \
+  V(RttCanon)                                \
+  V(WasmTypeCheck)
+
 #else
 #define TURBOSHAFT_WASM_OPERATION_LIST(V)
 #define TURBOSHAFT_SIMD_OPERATION_LIST(V)
+#define TURBOSHAFT_WASM_GC_OPERATION_LIST(V)
 #endif
 
 #define TURBOSHAFT_OPERATION_LIST_BLOCK_TERMINATOR(V) \
@@ -230,6 +236,7 @@ using Variable = SnapshotTable<OpIndex, VariableData>::Key;
 #define TURBOSHAFT_OPERATION_LIST_NOT_BLOCK_TERMINATOR(V) \
   TURBOSHAFT_WASM_OPERATION_LIST(V)                       \
   TURBOSHAFT_SIMD_OPERATION_LIST(V)                       \
+  TURBOSHAFT_WASM_GC_OPERATION_LIST(V)                    \
   TURBOSHAFT_MACHINE_OPERATION_LIST(V)                    \
   TURBOSHAFT_SIMPLIFIED_OPERATION_LIST(V)                 \
   TURBOSHAFT_OTHER_OPERATION_LIST(V)
@@ -2444,6 +2451,8 @@ struct LoadOp : OperationT<LoadOp> {
     bool maybe_unaligned : 1;
     // There is a Wasm trap handler for out-of-bounds accesses.
     bool with_trap_handler : 1;
+    // The loaded value may not change.
+    bool is_immutable : 1;
 
     static constexpr Kind Aligned(BaseTaggedness base_is_tagged) {
       switch (base_is_tagged) {
@@ -2453,16 +2462,34 @@ struct LoadOp : OperationT<LoadOp> {
           return RawAligned();
       }
     }
-    static constexpr Kind TaggedBase() { return Kind{true, false, false}; }
-    static constexpr Kind RawAligned() { return Kind{false, false, false}; }
-    static constexpr Kind RawUnaligned() { return Kind{false, true, false}; }
-    static constexpr Kind Protected() { return Kind{false, false, true}; }
-    static constexpr Kind TrapOnNull() { return Kind{true, false, true}; }
+
+    constexpr Kind Immutable() const {
+      Kind kind(*this);
+      kind.is_immutable = true;
+      return kind;
+    }
+
+    static constexpr Kind TaggedBase() {
+      return Kind{true, false, false, false};
+    }
+    static constexpr Kind RawAligned() {
+      return Kind{false, false, false, false};
+    }
+    static constexpr Kind RawUnaligned() {
+      return Kind{false, true, false, false};
+    }
+    static constexpr Kind Protected() {
+      return Kind{false, false, true, false};
+    }
+    static constexpr Kind TrapOnNull() {
+      return Kind{true, false, true, false};
+    }
 
     bool operator==(const Kind& other) const {
       return tagged_base == other.tagged_base &&
              maybe_unaligned == other.maybe_unaligned &&
-             with_trap_handler == other.with_trap_handler;
+             with_trap_handler == other.with_trap_handler &&
+             is_immutable == other.is_immutable;
     }
   };
   Kind kind;
@@ -5849,6 +5876,57 @@ struct AssertNotNullOp : FixedArityOperationT<1, AssertNotNullOp> {
   auto options() const { return std::tuple{type, trap_id}; }
 };
 
+struct RttCanonOp : FixedArityOperationT<1, RttCanonOp> {
+  uint32_t type_index;
+
+  static constexpr OpEffects effects = OpEffects();
+
+  explicit RttCanonOp(OpIndex instance, uint32_t type_index)
+      : Base(instance), type_index(type_index) {}
+
+  OpIndex instance() const { return Base::input(0); }
+
+  base::Vector<const RegisterRepresentation> outputs_rep() const {
+    return RepVector<RegisterRepresentation::Tagged()>();
+  }
+
+  base::Vector<const MaybeRegisterRepresentation> inputs_rep(
+      ZoneVector<MaybeRegisterRepresentation>& storage) const {
+    return MaybeRepVector<MaybeRegisterRepresentation::Tagged()>();
+  }
+
+  void Validate(const Graph& graph) const {}
+
+  auto options() const { return std::tuple{type_index}; }
+};
+
+struct WasmTypeCheckOp : FixedArityOperationT<2, WasmTypeCheckOp> {
+  WasmTypeCheckConfig config;
+
+  static constexpr OpEffects effects = OpEffects().AssumesConsistentHeap();
+
+  explicit WasmTypeCheckOp(V<Tagged> object, V<Tagged> rtt,
+                           WasmTypeCheckConfig config)
+      : Base(object, rtt), config(config) {}
+
+  V<Tagged> object() const { return Base::input(0); }
+  V<Tagged> rtt() const { return Base::input(1); }
+
+  base::Vector<const RegisterRepresentation> outputs_rep() const {
+    return RepVector<RegisterRepresentation::Word32()>();
+  }
+
+  base::Vector<const MaybeRegisterRepresentation> inputs_rep(
+      ZoneVector<MaybeRegisterRepresentation>& storage) const {
+    return MaybeRepVector<MaybeRegisterRepresentation::Tagged(),
+                          MaybeRegisterRepresentation::Tagged()>();
+  }
+
+  void Validate(const Graph& graph) const {}
+
+  auto options() const { return std::tuple{config}; }
+};
+
 struct Simd128ConstantOp : FixedArityOperationT<0, Simd128ConstantOp> {
   uint8_t value[kSimd128Size];
 
@@ -5998,7 +6076,6 @@ struct Simd128BinopOp : FixedArityOperationT<2, Simd128BinopOp> {
       ZoneVector<MaybeRegisterRepresentation>& storage) const {
     return MaybeRepVector<RegisterRepresentation::Simd128(),
                           RegisterRepresentation::Simd128()>();
-    ;
   }
 
   Simd128BinopOp(OpIndex left, OpIndex right, Kind kind)
