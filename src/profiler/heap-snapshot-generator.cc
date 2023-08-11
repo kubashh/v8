@@ -900,7 +900,17 @@ HeapEntry* V8HeapExplorer::AddEntry(HeapObject object) {
     return AddEntry(object, HeapEntry::kHeapNumber, "heap number");
   }
 #if V8_ENABLE_WEBASSEMBLY
-  if (InstanceTypeChecker::IsWasmObject(instance_type)) {
+  if (v8_flags.wasm_hprof) {
+    if (InstanceTypeChecker::IsWasmStruct(instance_type)) {
+      hprof_writer_.AddWasmStruct(WasmStruct::cast(object));
+    } else if (InstanceTypeChecker::IsWasmArray(instance_type)) {
+      hprof_writer_.AddWasmArray(WasmArray::cast(object));
+    } else if (InstanceTypeChecker::IsMap(instance_type) &&
+               InstanceTypeChecker::IsWasmObject(
+                   Map::cast(object)->instance_type())) {
+      hprof_writer_.AddWasmMap(Map::cast(object));
+    }
+  } else if (InstanceTypeChecker::IsWasmObject(instance_type)) {
     WasmTypeInfo info = object->map()->wasm_type_info();
     // The cast is safe; structs and arrays always have their instance defined.
     wasm::NamesProvider* names = WasmInstanceObject::cast(info->instance())
@@ -2052,6 +2062,7 @@ void V8HeapExplorer::ExtractInternalReferences(JSObject js_obj,
 
 void V8HeapExplorer::ExtractWasmStructReferences(WasmStruct obj,
                                                  HeapEntry* entry) {
+  if (v8_flags.wasm_hprof) return;
   wasm::StructType* type = obj->type();
   WasmTypeInfo info = obj->map()->wasm_type_info();
   // The cast is safe; structs always have their instance defined.
@@ -2076,6 +2087,7 @@ void V8HeapExplorer::ExtractWasmStructReferences(WasmStruct obj,
 
 void V8HeapExplorer::ExtractWasmArrayReferences(WasmArray obj,
                                                 HeapEntry* entry) {
+  if (v8_flags.wasm_hprof) return;
   if (!obj->type()->element_type().is_reference()) return;
   for (uint32_t i = 0; i < obj->length(); i++) {
     SetElementReference(entry, i, obj->ElementSlot(i).load(entry->isolate()));
@@ -2183,6 +2195,7 @@ class RootsReferencesExtractor : public RootVisitor {
 bool V8HeapExplorer::IterateAndExtractReferences(
     HeapSnapshotGenerator* generator) {
   generator_ = generator;
+  if (v8_flags.wasm_hprof) hprof_writer_.Start();
 
   // Create references to the synthetic roots.
   SetRootGcRootsReference();
@@ -2256,7 +2269,10 @@ bool V8HeapExplorer::IterateAndExtractReferences(
   }
 
   generator_ = nullptr;
-  return interrupted ? false : progress_->ProgressReport(true);
+  if (interrupted) return false;
+
+  if (v8_flags.wasm_hprof) hprof_writer_.Finish();
+  return progress_->ProgressReport(true);
 }
 
 bool V8HeapExplorer::IsEssentialObject(Object object) {

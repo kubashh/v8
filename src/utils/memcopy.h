@@ -93,7 +93,7 @@ inline void MemCopy(void* dest, const void* src, size_t size) {
       return;
   }
 }
-#if V8_TARGET_BIG_ENDIAN
+
 inline void MemCopyAndSwitchEndianness(void* dst, void* src,
                                        size_t num_elements,
                                        size_t element_size) {
@@ -125,7 +125,7 @@ inline void MemCopyAndSwitchEndianness(void* dst, void* src,
   }
 #undef COPY_LOOP
 }
-#endif
+
 V8_EXPORT_PRIVATE inline void MemMove(void* dest, const void* src,
                                       size_t size) {
   // Fast path for small sizes. The compiler will expand the {memmove} for small
