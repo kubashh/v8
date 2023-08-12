@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bfdfe1f_73d05394",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5691,
+      "author": {
+        "id": 1161152
+      },
+      "writtenOn": "2023-08-12T15:10:44Z",
+      "side": 1,
+      "message": "The else branch is missing here, this can crash with a nullptr deref, I\u0027ve submitted a bugreport: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1472509",
+      "revId": "47329acddee2a48ccf9bf592fd709052548307ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
