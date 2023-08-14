@@ -24,7 +24,8 @@ TQ_OBJECT_CONSTRUCTORS_IMPL(JSSynchronizationPrimitive)
 
 std::atomic<JSSynchronizationPrimitive::StateT>*
 JSSynchronizationPrimitive::AtomicStatePtr() {
-  StateT* state_ptr = reinterpret_cast<StateT*>(field_address(kStateOffset));
+  int stateoffset = kStateOffset;
+  StateT* state_ptr = reinterpret_cast<StateT*>(field_address(stateoffset));
   DCHECK(IsAligned(reinterpret_cast<uintptr_t>(state_ptr), sizeof(StateT)));
   return base::AsAtomicPtr(state_ptr);
 }
@@ -66,6 +67,16 @@ void JSAtomicsMutex::Lock(Isolate* requester, Handle<JSAtomicsMutex> mutex) {
     LockSlowPath(requester, mutex, state);
   }
   mutex->SetCurrentThreadAsOwner();
+}
+
+bool JSAtomicsMutex::AsyncLock() {
+  std::atomic<StateT>* state = AtomicStatePtr();
+  StateT current_state = state->load(std::memory_order_relaxed);
+  if (TryLockExplicit(state, current_state)) {
+    SetCurrentThreadAsOwner();
+    return true;
+  }
+  return false;
 }
 
 bool JSAtomicsMutex::TryLock() {
