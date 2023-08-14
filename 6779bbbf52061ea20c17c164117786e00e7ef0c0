@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19aa8c10_f132b4ec",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T17:26:55Z",
+      "side": 1,
+      "message": "I believe this is an include I needed at some point when I was investigating promise reactions. However the code I used that required this include has since been removed. This include is no longer needed.",
+      "parentUuid": "ce4976a4_7026283b",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 41
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ef8e71a_fe601d4e",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-08-10T21:18:11Z",
       "side": 1,
       "message": "rename `AtomicsMutexAsyncUnlock`",
+      "range": {
+        "startLine": 62,
+        "startChar": 8,
+        "endLine": 62,
+        "endChar": 29
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50bff408_a75ba4fa",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T17:26:55Z",
+      "side": 1,
+      "message": "This is has now been renamed.",
+      "parentUuid": "3ef8e71a_fe601d4e",
       "range": {
         "startLine": 62,
         "startChar": 8,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d34e3e31_37e96aec",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T17:26:55Z",
+      "side": 1,
+      "message": "Yes, I see there was quite a bit of duplication. This static function has been created.",
+      "parentUuid": "ba6ad274_534f4cb1",
+      "range": {
+        "startLine": 96,
+        "startChar": 1,
+        "endLine": 96,
+        "endChar": 54
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a23b66d_8496282b",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-08-10T21:18:11Z",
       "side": 1,
       "message": "You should be able to do the cast inline `Utils::PromiseToLocal(Handle\u003cJSPromise\u003e::cast(result))`.",
+      "range": {
+        "startLine": 115,
+        "startChar": 32,
+        "endLine": 115,
+        "endChar": 45
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1ab03ed_0888bdc4",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T17:26:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a23b66d_8496282b",
       "range": {
         "startLine": 115,
         "startChar": 32,
@@ -386,6 +482,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e8193f5_bb35957e",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T17:26:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dd475c7_91db8568",
+      "range": {
+        "startLine": 120,
+        "startChar": 5,
+        "endLine": 120,
+        "endChar": 18
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da5c43ba_881c32db",
@@ -399,6 +519,30 @@
       "writtenOn": "2023-08-10T21:18:11Z",
       "side": 1,
       "message": "All the methods present here and not in `AsyncLockGuard` are static. We can move them to `AsyncWaiterQueueNode` and remove this class.",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 64
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "303f752f_b1a35e87",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T17:26:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da5c43ba_881c32db",
       "range": {
         "startLine": 127,
         "startChar": 0,
