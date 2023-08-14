@@ -252,6 +252,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1cf7a18_f87f271d",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "695596ea_63526eb4",
+      "range": {
+        "startLine": 125,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 58
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a492d1e4_c0518dca",
@@ -265,6 +289,30 @@
       "writtenOn": "2023-08-10T21:18:11Z",
       "side": 1,
       "message": "Was this for debugging?",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 76
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57523aeb_0399cba3",
+        "filename": "src/objects/js-atomics-synchronization-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "Yes it was. This change will be reverted.",
+      "parentUuid": "a492d1e4_c0518dca",
       "range": {
         "startLine": 27,
         "startChar": 0,
@@ -321,6 +369,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29f058ca_3c910751",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "Yes, now this member variable has been removed.",
+      "parentUuid": "6aaf3478_6b696a9c",
+      "range": {
+        "startLine": 459,
+        "startChar": 2,
+        "endLine": 459,
+        "endChar": 34
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "711ef70d_cb034ff3",
@@ -334,6 +406,30 @@
       "writtenOn": "2023-08-10T21:18:11Z",
       "side": 1,
       "message": "You should be able to get this from the `callback_` object.",
+      "range": {
+        "startLine": 461,
+        "startChar": 2,
+        "endLine": 461,
+        "endChar": 42
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1caa9c6d_d6ebe319",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "Yes this seems to be the case. native_context_ has been removed",
+      "parentUuid": "711ef70d_cb034ff3",
       "range": {
         "startLine": 461,
         "startChar": 2,
@@ -367,6 +463,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3be3a3f3_bd01071d",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "We do not. This has been removed",
+      "parentUuid": "0996dc80_66bd8aa4",
+      "range": {
+        "startLine": 463,
+        "startChar": 25,
+        "endLine": 463,
+        "endChar": 50
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "501720b0_79b96562",
@@ -380,6 +500,30 @@
       "writtenOn": "2023-08-10T21:18:11Z",
       "side": 1,
       "message": "This is just a small part of `LockSlowPath`, is there an argument to not include the first part of the logic in `LockSlowPath`?. Can we write functions `RunOrQueueCallable` and `RunOrQueueCallableSlowPath` with similar logic to `Lock` and `LockSlowPath`?",
+      "range": {
+        "startLine": 496,
+        "startChar": 0,
+        "endLine": 506,
+        "endChar": 3
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79b2249a_c586aaa3",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "It is indeed a good idea to implement the spinlock algorithm for the attempt to take the lock. RunOrQueueCallableSlowPath has been created.",
+      "parentUuid": "501720b0_79b96562",
       "range": {
         "startLine": 496,
         "startChar": 0,
@@ -413,6 +557,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a35b0ac0_9f6e0bc8",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "I saw this in other code, but now see this specifically isn\u0027t needed. In my case I don\u0027t need a specific name, so now I pass in an empty string as the name.",
+      "parentUuid": "ecad2dd8_049a25b5",
+      "range": {
+        "startLine": 544,
+        "startChar": 2,
+        "endLine": 544,
+        "endChar": 48
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "447d3c9e_94cdd49a",
@@ -436,6 +604,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19d4074e_823315da",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "Similar to the name situation. I now pass in a strict_function_without_prototype_map(). As far as I can tell, setting a map is somewhat necessary to call .Build to give the Handle\u003cFunction\u003e.",
+      "parentUuid": "447d3c9e_94cdd49a",
+      "range": {
+        "startLine": 548,
+        "startChar": 0,
+        "endLine": 549,
+        "endChar": 74
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "853b193f_488761b1",
@@ -449,6 +641,30 @@
       "writtenOn": "2023-08-10T21:18:11Z",
       "side": 1,
       "message": "You can drop `v8::internal`",
+      "range": {
+        "startLine": 556,
+        "startChar": 24,
+        "endLine": 556,
+        "endChar": 36
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "330c82ef_2776f18c",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "853b193f_488761b1",
       "range": {
         "startLine": 556,
         "startChar": 24,
@@ -576,6 +792,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f03d1c86_9ee8b860",
+        "filename": "src/objects/js-atomics-synchronization.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8347e3f9_3e2ae9b7",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 3
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60679f15_d18d9b5c",
@@ -589,6 +829,30 @@
       "writtenOn": "2023-08-10T21:18:11Z",
       "side": 1,
       "message": "Choose a name that describes what you are testing in this function.",
+      "range": {
+        "startLine": 7,
+        "startChar": 10,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efc9a1da_a6e14fda",
+        "filename": "test/mjsunit/shared-memory/mutex-async-lock.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60679f15_d18d9b5c",
       "range": {
         "startLine": 7,
         "startChar": 10,
@@ -622,6 +886,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4aa36d3f_b708fa8c",
+        "filename": "test/mjsunit/shared-memory/mutex-async-lock.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9da5838e_997c2522",
+      "range": {
+        "startLine": 21,
+        "startChar": 6,
+        "endLine": 21,
+        "endChar": 18
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21fefa45_299b48fe",
@@ -635,6 +923,30 @@
       "writtenOn": "2023-08-10T21:18:11Z",
       "side": 1,
       "message": "Remove extra space",
+      "range": {
+        "startLine": 52,
+        "startChar": 47,
+        "endLine": 52,
+        "endChar": 48
+      },
+      "revId": "6779bbbf52061ea20c17c164117786e00e7ef0c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "440ec83f_1e774a61",
+        "filename": "test/mjsunit/shared-memory/mutex-async-lock.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1584673
+      },
+      "writtenOn": "2023-08-14T21:38:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21fefa45_299b48fe",
       "range": {
         "startLine": 52,
         "startChar": 47,
