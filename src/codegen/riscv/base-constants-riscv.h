@@ -550,7 +550,7 @@ enum FPURoundingMode {
   RDN = 0b010,  // Round Down (towards -infinity)
   RUP = 0b011,  // Round Up (towards +infinity)
   RMM = 0b100,  // Round to Nearest, tiest to Max Magnitude
-  DYN = 0b111   // In instruction's rm field, selects dynamic rounding mode;
+  DYN = 0b111,  // In instruction's rm field, selects dynamic rounding mode;
                 // In Rounding Mode register, Invalid
 };
 
