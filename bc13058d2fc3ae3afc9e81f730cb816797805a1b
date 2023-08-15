@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abdcb274_e1ef4b45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-08-15T21:36:57Z",
+      "side": 1,
+      "message": "Hi Liviu. Can you please take a look at this CL? We are getting a failure related to the infrastructure on `v8_full_presubmit` (and it is probably also making exceptions on Fuchsia debug builder https://ci.chromium.org/ui/p/v8/builders/luci.v8.ci/V8%20Fuchsia%20-%20debug%20builder). We have tried to figure the issue out, but we had no success. I would appreciate it if you take a look.",
+      "revId": "bc13058d2fc3ae3afc9e81f730cb816797805a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
