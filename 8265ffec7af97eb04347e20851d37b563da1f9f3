@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7055a87b_c7463123",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1231371
+      },
+      "writtenOn": "2023-08-15T15:03:38Z",
+      "side": 1,
+      "message": "Electron side change for reference https://github.com/electron/electron/pull/39253",
+      "revId": "8265ffec7af97eb04347e20851d37b563da1f9f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
