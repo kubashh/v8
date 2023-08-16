@@ -16,6 +16,23 @@
       "message": "Hi Liviu. Can you please take a look at this CL? We are getting a failure related to the infrastructure on `v8_full_presubmit` (and it is probably also making exceptions on Fuchsia debug builder https://ci.chromium.org/ui/p/v8/builders/luci.v8.ci/V8%20Fuchsia%20-%20debug%20builder). We have tried to figure the issue out, but we had no success. I would appreciate it if you take a look.",
       "revId": "bc13058d2fc3ae3afc9e81f730cb816797805a1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdd7c236_0a120be9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2023-08-16T15:52:58Z",
+      "side": 1,
+      "message": "I compared with some successful runs and I see `Total Torque files found that require formatting: 61` and `Total JavaScript files found that require formatting: 2` in your CL.\n\nWe need to work on the readability of presubmit errors...",
+      "revId": "bc13058d2fc3ae3afc9e81f730cb816797805a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
