@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c60eca39_4111f8a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-16T06:22:54Z",
+      "side": 1,
+      "message": "Nice :) Some minor comments.",
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57e249a2_6b467e51",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-16T06:22:54Z",
+      "side": 1,
+      "message": "Please mention a concrete pattern example, that\u0027d make the comment easier to follow. \u0027... is allowed to match the empty string (e.g. /(.??)+/) ...\u0027",
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bcc9a53_bbd2a7c5",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-16T06:22:54Z",
+      "side": 1,
+      "message": "nit: It\u0027s not clear what the bug reference here means. Also this whole paragraph isn\u0027t really clear to me.",
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c59b2bcb_78049574",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-16T06:22:54Z",
+      "side": 1,
+      "message": "nit: having `body` and `\u003cbody\u003e` refer to 2 different things is a bit confusing. Just use `begin` like elsewhere?",
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc2872dc_90ce9508",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-16T06:22:54Z",
+      "side": 1,
+      "message": "`begin`",
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20f34019_7222bd3c",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-16T06:22:54Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "080bbf57_ce0c6d0f",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-16T06:22:54Z",
+      "side": 1,
+      "message": "`begin`",
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07fab84b_5beb88f9",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-16T06:22:54Z",
+      "side": 1,
+      "message": "Let\u0027s split the non-nullable handling out entirely, I think that\u0027ll simplify the code.\n\n```if (can_be_reduced_to_non_nullable_plus) { ... } else { ... }```",
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ed7ed5a_5aa28c80",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-08-16T06:22:54Z",
+      "side": 1,
+      "message": "For non-oneliner for loops, don\u0027t forget {}",
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
