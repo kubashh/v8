@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0e93a4d_af08c545",
+        "filename": "src/sandbox/external-entity-table.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-08-16T09:27:59Z",
+      "side": 1,
+      "message": "We wouldn\u0027t do it like this if we decide to land this CL.\nEither we could let the child class determine if it needs the zeroth segment, or we could do this change as part of https://chromium-review.googlesource.com/c/v8/v8/+/4758268",
+      "revId": "157c8851e613dd2585fe3b009f6edcdf0f56b3c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
