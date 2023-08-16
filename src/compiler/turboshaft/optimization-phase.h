@@ -418,9 +418,10 @@ class GraphVisitor {
     DCHECK_IMPLIES(new_pred == nullptr, old_pred == nullptr);
 
     if (new_pred != nullptr) {
-      // If {new_pred} is nullptr, then the order of the predecessors changed.
-      // This should only happen with blocks that were introduced in the
-      // previous graph. For instance, consider this (partial) dominator tree:
+      // If {new_pred} is not nullptr, then the order of the predecessors
+      // changed. This should only happen with blocks that were introduced in
+      // the previous graph. For instance, consider this (partial) dominator
+      // tree:
       //
       //     ╠ 7
       //     ║ ╠ 8
@@ -1002,13 +1003,11 @@ class GraphVisitor {
       if (current_block_needs_variables_) {
         MaybeVariable var = GetVariableFor(old_index);
         if (!var.has_value()) {
-          base::Optional<RegisterRepresentation> rep =
+          MaybeRegisterRepresentation rep =
               input_graph().Get(old_index).outputs_rep().size() == 1
-                  ? base::Optional<
-                        RegisterRepresentation>{input_graph()
-                                                    .Get(old_index)
-                                                    .outputs_rep()[0]}
-                  : base::nullopt;
+                  ? static_cast<const MaybeRegisterRepresentation&>(
+                        input_graph().Get(old_index).outputs_rep()[0])
+                  : MaybeRegisterRepresentation::None();
           var = assembler().NewLoopInvariantVariable(rep);
           SetVariableFor(old_index, *var);
         }

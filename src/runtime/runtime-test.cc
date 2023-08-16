@@ -741,14 +741,9 @@ RUNTIME_FUNCTION(Runtime_OptimizeOsr) {
       Handle<BytecodeArray> bytecode_array(
           function->shared()->GetBytecodeArray(isolate), isolate);
       const BytecodeOffset current_offset = frame->GetBytecodeOffsetForOSR();
-      // TODO(olivf) It's possible that a valid osr_offset happens to be the
-      // construct stub range but. We should use OptimizedFrame::Summarize here
-      // instead.
-      if (!IsConstructor(*function) ||
-          current_offset != BytecodeOffset::None()) {
-        osr_offset = OffsetOfNextJumpLoop(isolate, bytecode_array,
-                                          current_offset.ToInt());
-      }
+      osr_offset = OffsetOfNextJumpLoop(
+          isolate, bytecode_array,
+          current_offset.IsNone() ? 0 : current_offset.ToInt());
       is_maglev = true;
     }
 
@@ -1145,12 +1140,22 @@ void FillUpOneNewSpacePage(Isolate* isolate, Heap* heap) {
 RUNTIME_FUNCTION(Runtime_SimulateNewspaceFull) {
   HandleScope scope(isolate);
   Heap* heap = isolate->heap();
-  NewSpace* space = heap->new_space();
   AlwaysAllocateScopeForTesting always_allocate(heap);
-  do {
-    FillUpOneNewSpacePage(isolate, heap);
-  } while (space->AddFreshPage());
-
+  if (v8_flags.minor_ms) {
+    if (heap->minor_sweeping_in_progress()) {
+      heap->EnsureYoungSweepingCompleted();
+    }
+    auto* space = heap->paged_new_space()->paged_space();
+    while (space->AddFreshPage()) {
+    }
+    space->FreeLinearAllocationArea();
+    space->ResetFreeList();
+  } else {
+    NewSpace* space = heap->new_space();
+    do {
+      FillUpOneNewSpacePage(isolate, heap);
+    } while (space->AddFreshPage());
+  }
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
@@ -1857,7 +1862,7 @@ RUNTIME_FUNCTION(Runtime_HeapObjectVerify) {
 #else
   CHECK(IsObject(**object));
   if (IsHeapObject(*object)) {
-    CHECK(IsMap(HeapObject::cast(*object).map()));
+    CHECK(IsMap(HeapObject::cast(*object)->map()));
   } else {
     CHECK(IsSmi(*object));
   }

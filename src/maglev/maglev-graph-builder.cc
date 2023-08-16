@@ -51,6 +51,10 @@
 #include "src/roots/roots.h"
 #include "src/utils/utils.h"
 
+#ifdef V8_INTL_SUPPORT
+#include "src/objects/intl-objects.h"
+#endif
+
 namespace v8::internal::maglev {
 
 namespace {
@@ -4067,7 +4071,9 @@ ReduceResult MaglevGraphBuilder::TryBuildElementLoadOnJSArrayOrJSObject(
 
   base::Vector<const compiler::MapRef> maps =
       base::VectorOf(access_info.lookup_start_object_maps());
-  if (IsHoleyElementsKind(elements_kind) && !CanTreatHoleAsUndefined(maps)) {
+  // TODO(v8:7700): Add non-deopting bounds check (has to support undefined
+  // values).
+  if (load_mode != STANDARD_LOAD) {
     return ReduceResult::Fail();
   }
 
@@ -4089,22 +4095,27 @@ ReduceResult MaglevGraphBuilder::TryBuildElementLoadOnJSArrayOrJSObject(
                                   AssertCondition::kUnsignedLessThan,
                                   DeoptimizeReason::kOutOfBounds);
 
-  // TODO(v8:7700): Add non-deopting bounds check (has to support undefined
-  // values).
-  DCHECK_EQ(load_mode, STANDARD_LOAD);
-
   // 3. Do the load.
   ValueNode* result;
   if (elements_kind == HOLEY_DOUBLE_ELEMENTS) {
-    result =
-        AddNewNode<LoadHoleyFixedDoubleArrayElement>({elements_array, index});
+    if (CanTreatHoleAsUndefined(maps)) {
+      result =
+          AddNewNode<LoadHoleyFixedDoubleArrayElement>({elements_array, index});
+    } else {
+      result = AddNewNode<LoadHoleyFixedDoubleArrayElementCheckedNotHole>(
+          {elements_array, index});
+    }
   } else if (elements_kind == PACKED_DOUBLE_ELEMENTS) {
     result = AddNewNode<LoadFixedDoubleArrayElement>({elements_array, index});
   } else {
     DCHECK(!IsDoubleElementsKind(elements_kind));
     result = AddNewNode<LoadFixedArrayElement>({elements_array, index});
     if (IsHoleyElementsKind(elements_kind)) {
-      result = AddNewNode<ConvertHoleToUndefined>({result});
+      if (CanTreatHoleAsUndefined(maps)) {
+        result = AddNewNode<ConvertHoleToUndefined>({result});
+      } else {
+        result = AddNewNode<CheckNotHole>({result});
+      }
     }
   }
   return result;
@@ -4606,7 +4617,7 @@ void MaglevGraphBuilder::VisitGetKeyedProperty() {
       break;
   }
 
-  // Create a generic store in the fallthrough.
+  // Create a generic load in the fallthrough.
   ValueNode* context = GetContext();
   ValueNode* key = GetAccumulatorTagged();
   SetAccumulator(
@@ -4963,7 +4974,7 @@ void MaglevGraphBuilder::VisitBitwiseNot() {
 }
 
 void MaglevGraphBuilder::VisitToBooleanLogicalNot() {
-  SetAccumulator(BuildToBoolean</* flip */ true>(GetAccumulatorTagged()));
+  SetAccumulator(BuildToBoolean</* flip */ true>(GetRawAccumulator()));
 }
 
 void MaglevGraphBuilder::VisitLogicalNot() {
@@ -5664,6 +5675,58 @@ ReduceResult MaglevGraphBuilder::TryReduceStringPrototypeCodePointAt(
   return AddNewNode<BuiltinStringPrototypeCharCodeOrCodePointAt>(
       {receiver, index},
       BuiltinStringPrototypeCharCodeOrCodePointAt::kCodePointAt);
+}
+
+ReduceResult MaglevGraphBuilder::TryReduceStringPrototypeLocaleCompare(
+    compiler::JSFunctionRef target, CallArguments& args) {
+#ifdef V8_INTL_SUPPORT
+  if (args.count() < 1 || args.count() > 3) return ReduceResult::Fail();
+
+  LocalFactory* factory = local_isolate()->factory();
+  compiler::ObjectRef undefined_ref = broker()->undefined_value();
+
+  Handle<Object> locales_handle;
+  ValueNode* locales_node;
+  if (args.count() > 1) {
+    if (compiler::OptionalHeapObjectRef maybe_locales =
+            TryGetConstant(args[1])) {
+      compiler::HeapObjectRef locales = maybe_locales.value();
+      if (locales.equals(undefined_ref)) {
+        locales_handle = factory->undefined_value();
+        locales_node = GetRootConstant(RootIndex::kUndefinedValue);
+      } else {
+        if (!locales.IsString()) return ReduceResult::Fail();
+        compiler::StringRef sref = locales.AsString();
+        if (base::Optional<Handle<String>> maybe_locales_handle =
+                sref.ObjectIfContentAccessible(broker())) {
+          locales_handle = *maybe_locales_handle;
+          locales_node = GetTaggedValue(args[1]);
+        }
+      }
+    }
+  } else {
+    locales_handle = factory->undefined_value();
+    locales_node = GetRootConstant(RootIndex::kUndefinedValue);
+  }
+
+  if (args.count() > 2) {
+    compiler::OptionalHeapObjectRef maybe_options = TryGetConstant(args[2]);
+    if (!maybe_options) return ReduceResult::Fail();
+    if (!maybe_options.value().equals(undefined_ref))
+      return ReduceResult::Fail();
+  }
+
+  if (Intl::CompareStringsOptionsFor(local_isolate(), locales_handle,
+                                     factory->undefined_value()) !=
+      Intl::CompareStringsOptions::kTryFastPath) {
+    return ReduceResult::Fail();
+  }
+  return BuildCallBuiltin<Builtin::kStringFastLocaleCompare>(
+      {GetConstant(target), GetTaggedOrUndefined(args.receiver()),
+       GetTaggedValue(args[0]), locales_node});
+#else
+  return ReduceResult::Fail();
+#endif
 }
 
 template <typename LoadNode>
@@ -7444,7 +7507,7 @@ ReduceResult MaglevGraphBuilder::TryBuildFastInstanceOf(
       // TODO(victorgomes): Propagate the case if we need to soft deopt.
     }
 
-    return BuildToBoolean(GetTaggedValue(call_result));
+    return BuildToBoolean(call_result);
   }
 
   return ReduceResult::Fail();
@@ -7456,6 +7519,39 @@ ValueNode* MaglevGraphBuilder::BuildToBoolean(ValueNode* value) {
     return GetBooleanConstant(FromConstantToBool(local_isolate(), value) ^
                               flip);
   }
+
+  switch (value->value_representation()) {
+    case ValueRepresentation::kFloat64:
+    case ValueRepresentation::kHoleyFloat64:
+      // The ToBoolean of both the_hole and NaN is false, so we can use the
+      // same operation for HoleyFloat64 and Float64.
+      return AddNewNode<Float64ToBoolean>({value}, flip);
+
+    case ValueRepresentation::kUint32:
+      // Uint32 has the same logic as Int32 when converting ToBoolean, namely
+      // comparison against zero, so we can cast it and ignore the signedness.
+      value = AddNewNode<TruncateUint32ToInt32>({value});
+      V8_FALLTHROUGH;
+    case ValueRepresentation::kInt32:
+      return AddNewNode<Int32ToBoolean>({value}, flip);
+
+    case ValueRepresentation::kWord64:
+      UNREACHABLE();
+
+    case ValueRepresentation::kTagged:
+      break;
+  }
+
+  NodeInfo* node_info = known_node_aspects().TryGetInfoFor(value);
+  if (node_info) {
+    if (ValueNode* as_int32 = node_info->alternative().int32()) {
+      return AddNewNode<Int32ToBoolean>({as_int32}, flip);
+    }
+    if (ValueNode* as_float64 = node_info->alternative().float64()) {
+      return AddNewNode<Float64ToBoolean>({as_float64}, flip);
+    }
+  }
+
   NodeType value_type;
   if (CheckType(value, NodeType::kJSReceiver, &value_type)) {
     return GetBooleanConstant(!flip);
@@ -7637,7 +7733,7 @@ void MaglevGraphBuilder::VisitToString() {
 }
 
 void MaglevGraphBuilder::VisitToBoolean() {
-  SetAccumulator(BuildToBoolean(GetAccumulatorTagged()));
+  SetAccumulator(BuildToBoolean(GetRawAccumulator()));
 }
 
 void FastObject::ClearFields() {
@@ -8596,6 +8692,22 @@ void MaglevGraphBuilder::BuildBranchIfRootConstant(
             {node->Cast<Float64Compare>()->left_input().node(),
              node->Cast<Float64Compare>()->right_input().node()},
             node->Cast<Float64Compare>()->operation(), true_target,
+            false_target);
+        break;
+      case Opcode::kInt32ToBoolean:
+        if (node->Cast<Int32ToBoolean>()->flip()) {
+          std::swap(true_target, false_target);
+        }
+        block = FinishBlock<BranchIfInt32ToBooleanTrue>(
+            {node->Cast<Int32ToBoolean>()->value().node()}, true_target,
+            false_target);
+        break;
+      case Opcode::kFloat64ToBoolean:
+        if (node->Cast<Float64ToBoolean>()->flip()) {
+          std::swap(true_target, false_target);
+        }
+        block = FinishBlock<BranchIfFloat64ToBooleanTrue>(
+            {node->Cast<Float64ToBoolean>()->value().node()}, true_target,
             false_target);
         break;
       case Opcode::kTestUndetectable:

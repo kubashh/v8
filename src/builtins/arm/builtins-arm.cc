@@ -943,7 +943,8 @@ void Builtins::Generate_BaselineOutOfLinePrologue(MacroAssembler* masm) {
   Register feedback_vector = temps.Acquire();
   __ ldr(feedback_vector,
          FieldMemOperand(closure, JSFunction::kFeedbackCellOffset));
-  __ ldr(feedback_vector, FieldMemOperand(feedback_vector, Cell::kValueOffset));
+  __ ldr(feedback_vector,
+         FieldMemOperand(feedback_vector, FeedbackCell::kValueOffset));
   __ AssertFeedbackVector(feedback_vector);
 
   // Check the tiering state.
@@ -1131,7 +1132,8 @@ void Builtins::Generate_InterpreterEntryTrampoline(
   Register feedback_vector = r2;
   __ ldr(feedback_vector,
          FieldMemOperand(closure, JSFunction::kFeedbackCellOffset));
-  __ ldr(feedback_vector, FieldMemOperand(feedback_vector, Cell::kValueOffset));
+  __ ldr(feedback_vector,
+         FieldMemOperand(feedback_vector, FeedbackCell::kValueOffset));
 
   Label push_stack_frame;
   // Check if feedback vector is valid. If valid, check for optimized code
@@ -1313,7 +1315,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     __ ldr(feedback_vector,
            FieldMemOperand(closure, JSFunction::kFeedbackCellOffset));
     __ ldr(feedback_vector,
-           FieldMemOperand(feedback_vector, Cell::kValueOffset));
+           FieldMemOperand(feedback_vector, FeedbackCell::kValueOffset));
 
     Label install_baseline_code;
     // Check if feedback vector is valid. If not, call prepare for baseline to
@@ -2905,7 +2907,26 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
   __ Trap();
 }
 
-void Builtins::Generate_WasmToJsWrapperAsm(MacroAssembler* masm) { __ Trap(); }
+void Builtins::Generate_WasmToJsWrapperAsm(MacroAssembler* masm) {
+  // Push registers in reverse order so that they are on the stack like
+  // in an array, with the first item being at the lowest address.
+  for (int i = static_cast<int>(arraysize(wasm::kFpParamRegisters)) - 1; i >= 0;
+       --i) {
+    __ vpush(wasm::kFpParamRegisters[i]);
+  }
+
+  // r6 is pushed for alignment, so that the pushed register parameters and
+  // stack parameters look the same as the layout produced by the js-to-wasm
+  // wrapper for out-going parameters. Having the same layout allows to share
+  // code in Torque, especially the `LocationAllocator`. r6 has been picked
+  // arbitrarily.
+  __ Push(r6, wasm::kGpParamRegisters[3], wasm::kGpParamRegisters[2],
+          wasm::kGpParamRegisters[1]);
+  // Push an arbitrary register to reserve stack space for the signature which
+  // will be spilled on the stack in Torque.
+  __ Push(r0);
+  __ TailCallBuiltin(Builtin::kWasmToJsWrapperCSA);
+}
 
 void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
   // TODO(v8:12191): Implement for this platform.
@@ -3945,7 +3966,8 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
   Register feedback_vector = r2;
   __ ldr(feedback_vector,
          FieldMemOperand(closure, JSFunction::kFeedbackCellOffset));
-  __ ldr(feedback_vector, FieldMemOperand(feedback_vector, Cell::kValueOffset));
+  __ ldr(feedback_vector,
+         FieldMemOperand(feedback_vector, FeedbackCell::kValueOffset));
 
   Label install_baseline_code;
   // Check if feedback vector is valid. If not, call prepare for baseline to

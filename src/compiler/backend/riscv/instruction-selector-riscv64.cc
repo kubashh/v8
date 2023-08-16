@@ -1210,36 +1210,45 @@ void InstructionSelectorT<Adapter>::VisitChangeFloat64ToInt32(node_t node) {
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToInt32(Node* node) {
-  RiscvOperandGeneratorT<Adapter> g(this);
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToInt32(
+    node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    RiscvOperandGeneratorT<Adapter> g(this);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
+
+    this->Emit(kRiscvTruncWD, output_count, outputs, 1, inputs);
   }
-
-  this->Emit(kRiscvTruncWD, output_count, outputs, 1, inputs);
 }
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToUint32(
-    Node* node) {
-  RiscvOperandGeneratorT<Adapter> g(this);
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+    node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    RiscvOperandGeneratorT<Adapter> g(this);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
+
+    Emit(kRiscvTruncUwD, output_count, outputs, 1, inputs);
   }
-
-  Emit(kRiscvTruncUwD, output_count, outputs, 1, inputs);
 }
 
 template <typename Adapter>
@@ -1290,70 +1299,88 @@ void InstructionSelectorT<Adapter>::VisitTruncateFloat64ToInt64(node_t node) {
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitTryTruncateFloat32ToInt64(Node* node) {
-  RiscvOperandGeneratorT<Adapter> g(this);
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+void InstructionSelectorT<Adapter>::VisitTryTruncateFloat32ToInt64(
+    node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    RiscvOperandGeneratorT<Adapter> g(this);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
+
+    this->Emit(kRiscvTruncLS, output_count, outputs, 1, inputs);
   }
-
-  this->Emit(kRiscvTruncLS, output_count, outputs, 1, inputs);
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToInt64(Node* node) {
-  RiscvOperandGeneratorT<Adapter> g(this);
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToInt64(
+    node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    RiscvOperandGeneratorT<Adapter> g(this);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
+
+    Emit(kRiscvTruncLD, output_count, outputs, 1, inputs);
   }
-
-  Emit(kRiscvTruncLD, output_count, outputs, 1, inputs);
 }
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTryTruncateFloat32ToUint64(
-    Node* node) {
-  RiscvOperandGeneratorT<Adapter> g(this);
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+    node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    RiscvOperandGeneratorT<Adapter> g(this);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
+
+    Emit(kRiscvTruncUlS, output_count, outputs, 1, inputs);
   }
-
-  Emit(kRiscvTruncUlS, output_count, outputs, 1, inputs);
 }
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToUint64(
-    Node* node) {
-  RiscvOperandGeneratorT<Adapter> g(this);
+    node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    RiscvOperandGeneratorT<Adapter> g(this);
 
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
+
+    Emit(kRiscvTruncUlD, output_count, outputs, 1, inputs);
   }
-
-  Emit(kRiscvTruncUlD, output_count, outputs, 1, inputs);
 }
 
 template <typename Adapter>
@@ -2810,6 +2837,57 @@ void InstructionSelectorT<Adapter>::VisitSignExtendWord32ToInt64(Node* node) {
   }
 }
 
+template <typename Adapter>
+void InstructionSelectorT<Adapter>::VisitF64x2Min(Node* node) {
+  RiscvOperandGeneratorT<Adapter> g(this);
+  InstructionOperand temp1 = g.TempFpRegister(v0);
+  InstructionOperand temp2 = g.TempFpRegister(kSimd128ScratchReg);
+  InstructionOperand mask_reg = g.TempFpRegister(v0);
+  this->Emit(kRiscvVmfeqVv, temp1, g.UseRegister(node->InputAt(0)),
+             g.UseRegister(node->InputAt(0)), g.UseImmediate(E64),
+             g.UseImmediate(m1));
+  this->Emit(kRiscvVmfeqVv, temp2, g.UseRegister(node->InputAt(1)),
+             g.UseRegister(node->InputAt(1)), g.UseImmediate(E64),
+             g.UseImmediate(m1));
+  this->Emit(kRiscvVandVv, mask_reg, temp2, temp1, g.UseImmediate(E64),
+             g.UseImmediate(m1));
+
+  InstructionOperand NaN = g.TempFpRegister(kSimd128ScratchReg);
+  InstructionOperand result = g.TempFpRegister(kSimd128ScratchReg);
+  this->Emit(kRiscvVmvVi, NaN, g.UseImmediate64(0x7ff8000000000000L),
+             g.UseImmediate(E64), g.UseImmediate(m1));
+  this->Emit(kRiscvVfminVv, result, g.UseRegister(node->InputAt(1)),
+             g.UseRegister(node->InputAt(0)), g.UseImmediate(E64),
+             g.UseImmediate(m1), g.UseImmediate(MaskType::Mask));
+  this->Emit(kRiscvVmvVv, g.DefineAsRegister(node), result, g.UseImmediate(E64),
+             g.UseImmediate(m1));
+}
+
+template <typename Adapter>
+void InstructionSelectorT<Adapter>::VisitF64x2Max(Node* node) {
+  RiscvOperandGeneratorT<Adapter> g(this);
+  InstructionOperand temp1 = g.TempFpRegister(v0);
+  InstructionOperand temp2 = g.TempFpRegister(kSimd128ScratchReg);
+  InstructionOperand mask_reg = g.TempFpRegister(v0);
+  this->Emit(kRiscvVmfeqVv, temp1, g.UseRegister(node->InputAt(0)),
+             g.UseRegister(node->InputAt(0)), g.UseImmediate(E64),
+             g.UseImmediate(m1));
+  this->Emit(kRiscvVmfeqVv, temp2, g.UseRegister(node->InputAt(1)),
+             g.UseRegister(node->InputAt(1)), g.UseImmediate(E64),
+             g.UseImmediate(m1));
+  this->Emit(kRiscvVandVv, mask_reg, temp2, temp1, g.UseImmediate(E64),
+             g.UseImmediate(m1));
+
+  InstructionOperand NaN = g.TempFpRegister(kSimd128ScratchReg);
+  InstructionOperand result = g.TempFpRegister(kSimd128ScratchReg);
+  this->Emit(kRiscvVmvVi, NaN, g.UseImmediate64(0x7ff8000000000000L),
+             g.UseImmediate(E64), g.UseImmediate(m1));
+  this->Emit(kRiscvVfmaxVv, result, g.UseRegister(node->InputAt(1)),
+             g.UseRegister(node->InputAt(0)), g.UseImmediate(E64),
+             g.UseImmediate(m1), g.UseImmediate(MaskType::Mask));
+  this->Emit(kRiscvVmvVv, g.DefineAsRegister(node), result, g.UseImmediate(E64),
+             g.UseImmediate(m1));
+}
 // static
 MachineOperatorBuilder::Flags
 InstructionSelector::SupportedMachineOperatorFlags() {

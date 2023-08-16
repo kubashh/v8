@@ -371,8 +371,6 @@
   'test-gc/RunWasmTurbofan_RefTrivialCasts': [SKIP],
 
   # Some wasm functionality is not implemented yet.
-  'test-run-wasm-atomics64/*': [SKIP],
-  'test-run-wasm-atomics/*': [SKIP],
   'test-run-wasm-64/*': [SKIP],
   'test-run-wasm/RunWasmTurbofan_Select_s128_parameters': [SKIP],
   'test-run-wasm/RunWasmLiftoff_Select_s128_parameters': [SKIP],
@@ -1115,6 +1113,14 @@
   'test-run-wasm-simd/RunWasmTurbofan_I32x8Abs': [FAIL],
   'test-run-wasm-simd/RunWasmTurbofan_I8x32Neg': [FAIL],
   'test-run-wasm-simd/RunWasmTurbofan_I8x32Abs': [FAIL],
+  'test-run-wasm-simd/RunWasmTurbofan_I16x16AddSatS': [FAIL],
+  'test-run-wasm-simd/RunWasmTurbofan_I16x16AddSatU': [FAIL],
+  'test-run-wasm-simd/RunWasmTurbofan_I16x16SubSatS': [FAIL],
+  'test-run-wasm-simd/RunWasmTurbofan_I16x16SubSatU': [FAIL],
+  'test-run-wasm-simd/RunWasmTurbofan_I8x32AddSatS': [FAIL],
+  'test-run-wasm-simd/RunWasmTurbofan_I8x32AddSatU': [FAIL],
+  'test-run-wasm-simd/RunWasmTurbofan_I8x32SubSatS': [FAIL],
+  'test-run-wasm-simd/RunWasmTurbofan_I8x32SubSatU': [FAIL],
 }],  # variant == turboshaft
 
 ##############################################################################

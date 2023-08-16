@@ -701,13 +701,17 @@ void VisitBinOp(InstructionSelectorT<Adapter>* selector, Node* node,
 }  // namespace
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitStackSlot(Node* node) {
-  StackSlotRepresentation rep = StackSlotRepresentationOf(node->op());
-  int slot = frame_->AllocateSpillSlot(rep.size(), rep.alignment());
-  OperandGenerator g(this);
+void InstructionSelectorT<Adapter>::VisitStackSlot(node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    StackSlotRepresentation rep = StackSlotRepresentationOf(node->op());
+    int slot = frame_->AllocateSpillSlot(rep.size(), rep.alignment());
+    OperandGenerator g(this);
 
-  Emit(kArchStackSlot, g.DefineAsRegister(node),
-       sequence()->AddImmediate(Constant(slot)), 0, nullptr);
+    Emit(kArchStackSlot, g.DefineAsRegister(node),
+         sequence()->AddImmediate(Constant(slot)), 0, nullptr);
+  }
 }
 
 template <typename Adapter>
@@ -1711,37 +1715,56 @@ WORD64_BIN_OP_LIST(DECLARE_BIN_OP)
 
 #if V8_TARGET_ARCH_S390X
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitTryTruncateFloat32ToInt64(Node* node) {
-  VisitTryTruncateDouble(this, kS390_Float32ToInt64, node);
+void InstructionSelectorT<Adapter>::VisitTryTruncateFloat32ToInt64(
+    node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    VisitTryTruncateDouble(this, kS390_Float32ToInt64, node);
+  }
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToInt64(Node* node) {
-  VisitTryTruncateDouble(this, kS390_DoubleToInt64, node);
+void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToInt64(
+    node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    VisitTryTruncateDouble(this, kS390_DoubleToInt64, node);
+  }
 }
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTryTruncateFloat32ToUint64(
-    Node* node) {
-  VisitTryTruncateDouble(this, kS390_Float32ToUint64, node);
+    node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    VisitTryTruncateDouble(this, kS390_Float32ToUint64, node);
+  }
 }
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToUint64(
-    Node* node) {
-  VisitTryTruncateDouble(this, kS390_DoubleToUint64, node);
+    node_t node) {
+  if constexpr (Adapter::IsTurboshaft) {
+    UNIMPLEMENTED();
+  } else {
+    VisitTryTruncateDouble(this, kS390_DoubleToUint64, node);
+  }
 }
 
 #endif
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToInt32(Node* node) {
+void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToInt32(
+    node_t node) {
   UNIMPLEMENTED();
 }
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToUint32(
-    Node* node) {
+    node_t node) {
   UNIMPLEMENTED();
 }
 

@@ -17,6 +17,7 @@
 #include "src/base/platform/wrappers.h"
 #include "src/builtins/profile-data-reader.h"
 #include "src/codegen/bailout-reason.h"
+#include "src/codegen/compiler.h"
 #include "src/codegen/macro-assembler.h"
 #include "src/codegen/source-position-table.h"
 #include "src/common/assert-scope.h"
@@ -2054,6 +2055,50 @@ EnumerateCompiledFunctions(Heap* heap) {
   return compiled_funcs;
 }
 
+#if defined(V8_OS_WIN) && defined(V8_ENABLE_ETW_STACK_WALKING)
+static std::vector<Handle<SharedFunctionInfo>> EnumerateInterpretedFunctions(
+    Heap* heap) {
+  HeapObjectIterator iterator(heap);
+  DisallowGarbageCollection no_gc;
+  std::vector<Handle<SharedFunctionInfo>> interpreted_funcs;
+  Isolate* isolate = heap->isolate();
+
+  for (HeapObject obj = iterator.Next(); !obj.is_null();
+       obj = iterator.Next()) {
+    if (IsSharedFunctionInfo(obj)) {
+      SharedFunctionInfo sfi = SharedFunctionInfo::cast(obj);
+      if (sfi.HasBytecodeArray()) {
+        interpreted_funcs.push_back(handle(sfi, isolate));
+      }
+    }
+  }
+
+  return interpreted_funcs;
+}
+
+void V8FileLogger::LogInterpretedFunctions() {
+  existing_code_logger_.LogInterpretedFunctions();
+}
+
+void ExistingCodeLogger::LogInterpretedFunctions() {
+  DCHECK(isolate_->logger()->is_listening_to_code_events());
+  Heap* heap = isolate_->heap();
+  HandleScope scope(isolate_);
+  std::vector<Handle<SharedFunctionInfo>> interpreted_funcs =
+      EnumerateInterpretedFunctions(heap);
+  for (Handle<SharedFunctionInfo> sfi : interpreted_funcs) {
+    if (sfi->HasInterpreterData() || !sfi->HasSourceCode() ||
+        !sfi->HasBytecodeArray()) {
+      continue;
+    }
+    LogEventListener::CodeTag log_tag =
+        sfi->is_toplevel() ? LogEventListener::CodeTag::kScript
+                           : LogEventListener::CodeTag::kFunction;
+    Compiler::InstallInterpreterTrampolineCopy(isolate_, sfi, log_tag);
+  }
+}
+#endif  // V8_OS_WIN && V8_ENABLE_ETW_STACK_WALKING
+
 void V8FileLogger::LogCodeObjects() { existing_code_logger_.LogCodeObjects(); }
 
 void V8FileLogger::LogExistingFunction(Handle<SharedFunctionInfo> shared,
@@ -2077,7 +2122,7 @@ void V8FileLogger::LogAccessorCallbacks() {
     if (!IsAccessorInfo(obj)) continue;
     AccessorInfo ai = AccessorInfo::cast(obj);
     if (!IsName(ai->name())) continue;
-    Address getter_entry = ai->getter();
+    Address getter_entry = ai->getter(isolate_);
     HandleScope scope(isolate_);
     Handle<Name> name(Name::cast(ai->name()), isolate_);
     if (getter_entry != kNullAddress) {
@@ -2086,7 +2131,7 @@ void V8FileLogger::LogAccessorCallbacks() {
 #endif
       PROFILE(isolate_, GetterCallbackEvent(name, getter_entry));
     }
-    Address setter_entry = ai->setter();
+    Address setter_entry = ai->setter(isolate_);
     if (setter_entry != kNullAddress) {
 #if USES_FUNCTION_DESCRIPTORS
       setter_entry = *FUNCTION_ENTRYPOINT_ADDRESS(setter_entry);
@@ -2246,6 +2291,9 @@ void V8FileLogger::SetEtwCodeEventHandler(uint32_t options) {
     LogBuiltins();
     LogCodeObjects();
     LogCompiledFunctions(false);
+    if (v8_flags.interpreted_frames_native_stack) {
+      LogInterpretedFunctions();
+    }
   }
 }
 
@@ -2516,7 +2564,7 @@ void ExistingCodeLogger::LogExistingFunction(Handle<SharedFunctionInfo> shared,
     Object raw_call_data = fun_data->call_code(kAcquireLoad);
     if (!IsUndefined(raw_call_data, isolate_)) {
       CallHandlerInfo call_data = CallHandlerInfo::cast(raw_call_data);
-      Address entry_point = call_data->callback();
+      Address entry_point = call_data->callback(isolate_);
 #if USES_FUNCTION_DESCRIPTORS
       entry_point = *FUNCTION_ENTRYPOINT_ADDRESS(entry_point);
 #endif

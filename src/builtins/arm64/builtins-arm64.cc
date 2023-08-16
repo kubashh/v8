@@ -1111,8 +1111,9 @@ void Builtins::Generate_BaselineOutOfLinePrologue(MacroAssembler* masm) {
   Register feedback_vector = temps.AcquireX();
   __ LoadTaggedField(feedback_vector,
                      FieldMemOperand(closure, JSFunction::kFeedbackCellOffset));
-  __ LoadTaggedField(feedback_vector,
-                     FieldMemOperand(feedback_vector, Cell::kValueOffset));
+  __ LoadTaggedField(
+      feedback_vector,
+      FieldMemOperand(feedback_vector, FeedbackCell::kValueOffset));
   __ AssertFeedbackVector(feedback_vector, x4);
 
   // Check the tiering state.
@@ -1295,8 +1296,9 @@ void Builtins::Generate_InterpreterEntryTrampoline(
   Register feedback_vector = x2;
   __ LoadTaggedField(feedback_vector,
                      FieldMemOperand(closure, JSFunction::kFeedbackCellOffset));
-  __ LoadTaggedField(feedback_vector,
-                     FieldMemOperand(feedback_vector, Cell::kValueOffset));
+  __ LoadTaggedField(
+      feedback_vector,
+      FieldMemOperand(feedback_vector, FeedbackCell::kValueOffset));
 
   Label push_stack_frame;
   // Check if feedback vector is valid. If valid, check for optimized code
@@ -1492,8 +1494,9 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     __ LoadTaggedField(
         feedback_vector,
         FieldMemOperand(closure, JSFunction::kFeedbackCellOffset));
-    __ LoadTaggedField(feedback_vector,
-                       FieldMemOperand(feedback_vector, Cell::kValueOffset));
+    __ LoadTaggedField(
+        feedback_vector,
+        FieldMemOperand(feedback_vector, FeedbackCell::kValueOffset));
 
     Label install_baseline_code;
     // Check if feedback vector is valid. If not, call prepare for baseline to
@@ -2557,6 +2560,15 @@ void Generate_PrepareForCopyingVarargs(MacroAssembler* masm, Register argc,
     // GC. If `len` is even, then the write is unnecessary, but faster than a
     // check + jump.
     __ Str(xzr, MemOperand(sp, len, LSL, kSystemPointerSizeLog2));
+  }
+  // Fill a possible alignment slot with a meaningful value.
+  {
+    Register total_num_args = x10;
+    __ Add(total_num_args, argc, len);
+    // If the sum is even, then there are no alignment slots that need
+    // initialization.
+    __ Tbz(total_num_args, 0, &exit);
+    __ Str(xzr, MemOperand(sp, total_num_args, LSL, kSystemPointerSizeLog2));
   }
   __ Bind(&exit);
 }
@@ -4802,7 +4814,22 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
   GenericJSToWasmWrapperHelper(masm, true);
 }
 
-void Builtins::Generate_WasmToJsWrapperAsm(MacroAssembler* masm) { __ Trap(); }
+void Builtins::Generate_WasmToJsWrapperAsm(MacroAssembler* masm) {
+  // Push registers in reverse order so that they are on the stack like
+  // in an array, with the first item being at the lowest address.
+  __ Push(wasm::kFpParamRegisters[7], wasm::kFpParamRegisters[6],
+          wasm::kFpParamRegisters[5], wasm::kFpParamRegisters[4]);
+  __ Push(wasm::kFpParamRegisters[3], wasm::kFpParamRegisters[2],
+          wasm::kFpParamRegisters[1], wasm::kFpParamRegisters[0]);
+
+  __ Push(wasm::kGpParamRegisters[6], wasm::kGpParamRegisters[5],
+          wasm::kGpParamRegisters[4], wasm::kGpParamRegisters[3]);
+  __ Push(wasm::kGpParamRegisters[2], wasm::kGpParamRegisters[1],
+          // Spill two more slots, one to allocate space for the signature,
+          // which will get spilled in Torque, and one for stack alignment.
+          xzr, xzr);
+  __ TailCallBuiltin(Builtin::kWasmToJsWrapperCSA);
+}
 
 void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
   auto regs = RegisterAllocator::WithAllocatableGeneralRegisters();
@@ -6302,8 +6329,9 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
   Register feedback_vector = x2;
   __ LoadTaggedField(feedback_vector,
                      FieldMemOperand(closure, JSFunction::kFeedbackCellOffset));
-  __ LoadTaggedField(feedback_vector,
-                     FieldMemOperand(feedback_vector, Cell::kValueOffset));
+  __ LoadTaggedField(
+      feedback_vector,
+      FieldMemOperand(feedback_vector, FeedbackCell::kValueOffset));
 
   Label install_baseline_code;
   // Check if feedback vector is valid. If not, call prepare for baseline to

@@ -3822,6 +3822,8 @@ Node* WasmGraphBuilder::LoadLane(const wasm::WasmMemory* memory,
     SetSourcePosition(load, position);
   }
   if (v8_flags.trace_wasm_memory) {
+    // TODO(14259): Implement memory tracing for multiple memories.
+    CHECK_EQ(0, memory->index);
     TraceMemoryOperation(false, memtype.representation(), index, offset,
                          position);
   }
@@ -3862,6 +3864,8 @@ Node* WasmGraphBuilder::LoadTransform(const wasm::WasmMemory* memory,
   }
 
   if (v8_flags.trace_wasm_memory) {
+    // TODO(14259): Implement memory tracing for multiple memories.
+    CHECK_EQ(0, memory->index);
     TraceMemoryOperation(false, memtype.representation(), index, offset,
                          position);
   }
@@ -3913,6 +3917,8 @@ Node* WasmGraphBuilder::LoadMem(const wasm::WasmMemory* memory,
   }
 
   if (v8_flags.trace_wasm_memory) {
+    // TODO(14259): Implement memory tracing for multiple memories.
+    CHECK_EQ(0, memory->index);
     TraceMemoryOperation(false, memtype.representation(), index, offset,
                          position);
   }
@@ -3943,6 +3949,8 @@ void WasmGraphBuilder::StoreLane(const wasm::WasmMemory* memory,
     SetSourcePosition(store, position);
   }
   if (v8_flags.trace_wasm_memory) {
+    // TODO(14259): Implement memory tracing for multiple memories.
+    CHECK_EQ(0, memory->index);
     TraceMemoryOperation(true, mem_rep, index, offset, position);
   }
 }
@@ -3991,6 +3999,8 @@ void WasmGraphBuilder::StoreMem(const wasm::WasmMemory* memory,
   }
 
   if (v8_flags.trace_wasm_memory) {
+    // TODO(14259): Implement memory tracing for multiple memories.
+    CHECK_EQ(0, memory->index);
     TraceMemoryOperation(true, mem_rep, index, offset, position);
   }
 }
@@ -7001,6 +7011,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                                    target, value, context, frame_state)
                      : gasm_->Call(tagged_non_smi_to_int32_operator_.get(),
                                    target, value, context);
+    // The source position here is needed for asm.js, see the comment on the
+    // source position of the call to JavaScript in the wasm-to-js wrapper.
     SetSourcePosition(call, 1);
     gasm_->Goto(&done, call);
     gasm_->Bind(&done);
@@ -7052,6 +7064,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                                    value, context, frame_state)
                      : gasm_->Call(tagged_to_float64_operator_.get(), target,
                                    value, context);
+    // The source position here is needed for asm.js, see the comment on the
+    // source position of the call to JavaScript in the wasm-to-js wrapper.
     SetSourcePosition(call, 1);
     return call;
   }
@@ -7914,6 +7928,12 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     }
     DCHECK_NOT_NULL(call);
 
+    // For asm.js the error location can differ depending on whether an
+    // exception was thrown in imported JS code or an exception was thrown in
+    // the ToNumber builtin that converts the result of the JS code a
+    // WebAssembly value. The source position allows asm.js to determine the
+    // correct error location. Source position 1 encodes the call to ToNumber,
+    // source position 0 encodes the call to the imported JS code.
     SetSourcePosition(call, 0);
 
     if (v8_flags.experimental_wasm_stack_switching) {
@@ -8170,7 +8190,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         },
         // Initialize wasm-specific callback options fields
         [this](Node* options_stack_slot) {
-          // TODO(13918): Do we need to support multiple memories for the fast
+          // TODO(14260): Do we need to support multiple memories for the fast
           // API?
           Node* mem_start = LOAD_INSTANCE_FIELD_NO_ELIMINATION(
               Memory0Start, kMaybeSandboxedPointer);

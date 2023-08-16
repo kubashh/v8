@@ -2148,21 +2148,8 @@ std::pair<size_t, size_t> MarkCompactCollector::ProcessMarkingWorklist(
 
   while (local_marking_worklists_->Pop(&object) ||
          local_marking_worklists_->PopOnHold(&object)) {
-    // Left trimming may result in grey or black filler objects on the marking
-    // worklist. Ignore these objects.
-    if (IsFreeSpaceOrFiller(object, cage_base)) {
-      // Due to copying mark bits and the fact that grey and black have their
-      // first bit set, one word fillers are always black.
-      DCHECK_IMPLIES(object->map(cage_base) ==
-                         ReadOnlyRoots(isolate).one_pointer_filler_map(),
-                     marking_state_->IsMarked(object));
-      // Other fillers may be black or grey depending on the color of the object
-      // that was trimmed.
-      DCHECK_IMPLIES(object->map(cage_base) !=
-                         ReadOnlyRoots(isolate).one_pointer_filler_map(),
-                     marking_state_->IsMarked(object));
-      continue;
-    }
+    // The marking worklist should never contain filler objects.
+    CHECK(!IsFreeSpaceOrFiller(object, cage_base));
     DCHECK(IsHeapObject(object));
     DCHECK(!object.InReadOnlySpace());
     DCHECK_EQ(GetIsolateFromWritableObject(object), isolate);
@@ -2370,7 +2357,8 @@ void MarkCompactCollector::RetainMaps() {
 }
 
 void MarkCompactCollector::MarkLiveObjects() {
-  TRACE_GC(heap_->tracer(), GCTracer::Scope::MC_MARK);
+  TRACE_GC_ARG1(heap_->tracer(), GCTracer::Scope::MC_MARK,
+                "UseBackgroundThreads", UseBackgroundThreadsInCycle());
 
   const bool was_marked_incrementally =
       !heap_->incremental_marking()->IsStopped();

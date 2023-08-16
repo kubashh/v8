@@ -188,7 +188,7 @@ class MachineLoweringReducer : public Next {
         if (input_assumptions != ObjectIsOp::InputAssumptions::kBigInt) {
           if (NeedsHeapObjectCheck(input_assumptions)) {
             // Check for Smi.
-            GOTO_IF(IsSmi(input), done, 0);
+            GOTO_IF(__ IsSmi(input), done, 0);
           }
 
           // Check for BigInt.
@@ -249,7 +249,7 @@ class MachineLoweringReducer : public Next {
 
         // Check for Smi if necessary.
         if (NeedsHeapObjectCheck(input_assumptions)) {
-          GOTO_IF(UNLIKELY(IsSmi(input)), done, 0);
+          GOTO_IF(UNLIKELY(__ IsSmi(input)), done, 0);
         }
 
         // Load bitfield from map.
@@ -332,14 +332,14 @@ class MachineLoweringReducer : public Next {
         if (!NeedsHeapObjectCheck(input_assumptions)) {
           return __ Word32Constant(0);
         }
-        return IsSmi(input);
+        return __ IsSmi(input);
       }
       case ObjectIsOp::Kind::kNumber: {
         Label<Word32> done(this);
 
         // Check for Smi if necessary.
         if (NeedsHeapObjectCheck(input_assumptions)) {
-          GOTO_IF(IsSmi(input), done, 1);
+          GOTO_IF(__ IsSmi(input), done, 1);
         }
 
         V<Map> map = __ LoadMapField(input);
@@ -356,7 +356,7 @@ class MachineLoweringReducer : public Next {
 
         // Check for Smi if necessary.
         if (NeedsHeapObjectCheck(input_assumptions)) {
-          GOTO_IF(IsSmi(input), done, 0);
+          GOTO_IF(__ IsSmi(input), done, 0);
         }
 
         // Load instance type from map.
@@ -470,11 +470,11 @@ class MachineLoweringReducer : public Next {
       case NumericKind::kFinite:
       case NumericKind::kInteger:
       case NumericKind::kSafeInteger:
-        GOTO_IF(IsSmi(input), done, 1);
+        GOTO_IF(__ IsSmi(input), done, 1);
         break;
       case NumericKind::kMinusZero:
       case NumericKind::kNaN:
-        GOTO_IF(IsSmi(input), done, 0);
+        GOTO_IF(__ IsSmi(input), done, 0);
         break;
       case NumericKind::kFloat64Hole:
         // ObjectIsFloat64Hole is not used, but can be implemented when needed.
@@ -790,7 +790,7 @@ class MachineLoweringReducer : public Next {
 
             // Load the string for the {code} from the single character string
             // table.
-            OpIndex entry = __ LoadElement(
+            OpIndex entry = __ LoadNonArrayBufferElement(
                 table, AccessBuilder::ForFixedArrayElement(), index);
 
             // Use the {entry} from the {table}.
@@ -1485,7 +1485,7 @@ class MachineLoweringReducer : public Next {
     LOOP(loop, index) {
       GOTO_IF_NOT(LIKELY(__ UintPtrLessThan(index, length)), done, array);
 
-      __ StoreElement(array, access, index, the_hole_value);
+      __ StoreNonArrayBufferElement(array, access, index, the_hole_value);
 
       // Advance the {index}.
       GOTO(loop, __ WordPtrAdd(index, 1));
@@ -1520,7 +1520,7 @@ class MachineLoweringReducer : public Next {
     LOOP(loop, index) {
       GOTO_IF_NOT(LIKELY(__ UintPtrLessThan(index, array_length)), done);
 
-      V<Float64> element = __ template LoadElement<Float64>(
+      V<Float64> element = __ template LoadNonArrayBufferElement<Float64>(
           elements, AccessBuilder::ForFixedDoubleArrayElement(), index);
 
       result = is_max ? __ Float64Max(*result, element)
@@ -1961,7 +1961,7 @@ class MachineLoweringReducer : public Next {
     V<WordPtr> data_ptr = BuildTypedArrayDataPointer(base, external);
 
     // Perform the actual typed element access.
-    OpIndex result = __ LoadElement(
+    OpIndex result = __ LoadArrayBufferElement(
         data_ptr, AccessBuilder::ForTypedArrayElement(array_type, true), index);
 
     // We need to keep the {buffer} alive so that the GC will not release the
@@ -1978,7 +1978,8 @@ class MachineLoweringReducer : public Next {
         AccessBuilder::ForTypedArrayElement(element_type, true).machine_type;
 
     OpIndex value =
-        __ Load(storage, index, LoadOp::Kind::RawUnaligned(),
+        __ Load(storage, index,
+                LoadOp::Kind::RawUnaligned().NotAlwaysCanonicallyAccessed(),
                 MemoryRepresentation::FromMachineType(machine_type));
 
     Variable result = Asm().NewLoopInvariantVariable(
@@ -2007,7 +2008,7 @@ class MachineLoweringReducer : public Next {
   }
 
   V<Object> REDUCE(LoadStackArgument)(V<WordPtr> base, V<WordPtr> index) {
-    V<WordPtr> argument = __ template LoadElement<WordPtr>(
+    V<WordPtr> argument = __ template LoadNonArrayBufferElement<WordPtr>(
         base, AccessBuilder::ForStackArgument(), index);
     return __ BitcastWordPtrToTagged(argument);
   }
@@ -2019,9 +2020,9 @@ class MachineLoweringReducer : public Next {
     V<WordPtr> data_ptr = BuildTypedArrayDataPointer(base, external);
 
     // Perform the actual typed element access.
-    __ StoreElement(data_ptr,
-                    AccessBuilder::ForTypedArrayElement(array_type, true),
-                    index, value);
+    __ StoreArrayBufferElement(
+        data_ptr, AccessBuilder::ForTypedArrayElement(array_type, true), index,
+        value);
 
     // We need to keep the {buffer} alive so that the GC will not release the
     // ArrayBuffer (if there's any) as long as we are still operating on it.
@@ -2055,7 +2056,7 @@ class MachineLoweringReducer : public Next {
     END_IF
 
     __ Store(storage, index, Asm().GetVariable(value_to_store),
-             StoreOp::Kind::RawUnaligned(),
+             StoreOp::Kind::RawUnaligned().NotAlwaysCanonicallyAccessed(),
              MemoryRepresentation::FromMachineType(machine_type),
              WriteBarrierKind::kNoWriteBarrier);
 
@@ -2165,25 +2166,25 @@ class MachineLoweringReducer : public Next {
           IF (__ ObjectIsSmi(value)) {
             V<Float64> float_value =
                 __ ChangeInt32ToFloat64(__ UntagSmi(value));
-            __ StoreElement(elements,
-                            AccessBuilder::ForFixedDoubleArrayElement(), index,
-                            float_value);
+            __ StoreNonArrayBufferElement(
+                elements, AccessBuilder::ForFixedDoubleArrayElement(), index,
+                float_value);
           }
           ELSE {
             V<Float64> float_value = __ template LoadField<Float64>(
                 V<HeapObject>::Cast(value),
                 AccessBuilder::ForHeapNumberValue());
-            __ StoreElement(elements,
-                            AccessBuilder::ForFixedDoubleArrayElement(), index,
-                            __ Float64SilenceNaN(float_value));
+            __ StoreNonArrayBufferElement(
+                elements, AccessBuilder::ForFixedDoubleArrayElement(), index,
+                __ Float64SilenceNaN(float_value));
           }
           END_IF
         }
         ELSE {
           // Our ElementsKind is HOLEY_SMI_ELEMENTS or HOLEY_ELEMENTS.
-          __ StoreElement(elements,
-                          AccessBuilder::ForFixedArrayElement(HOLEY_ELEMENTS),
-                          index, value);
+          __ StoreNonArrayBufferElement(
+              elements, AccessBuilder::ForFixedArrayElement(HOLEY_ELEMENTS),
+              index, value);
         }
         END_IF
         break;
@@ -2224,8 +2225,9 @@ class MachineLoweringReducer : public Next {
 
         V<Object> elements = __ template LoadField<Object>(
             array, AccessBuilder::ForJSObjectElements());
-        __ StoreElement(elements, AccessBuilder::ForFixedDoubleArrayElement(),
-                        index, __ Float64SilenceNaN(value));
+        __ StoreNonArrayBufferElement(
+            elements, AccessBuilder::ForFixedDoubleArrayElement(), index,
+            __ Float64SilenceNaN(value));
         break;
       }
       case TransitionAndStoreArrayElementOp::Kind::kOddballElement:
@@ -2263,7 +2265,7 @@ class MachineLoweringReducer : public Next {
           access.type = compiler::Type::BooleanOrNullOrUndefined();
           access.write_barrier_kind = kNoWriteBarrier;
         }
-        __ StoreElement(elements, access, index, value);
+        __ StoreNonArrayBufferElement(elements, access, index, value);
         break;
       }
       case TransitionAndStoreArrayElementOp::Kind::kSignedSmallElement: {
@@ -2286,8 +2288,9 @@ class MachineLoweringReducer : public Next {
         IF (__ Int32LessThan(HOLEY_ELEMENTS, elements_kind)) {
           // Our ElementsKind is HOLEY_DOUBLE_ELEMENTS.
           V<Float64> f64 = __ ChangeInt32ToFloat64(value);
-          __ StoreElement(elements, AccessBuilder::ForFixedDoubleArrayElement(),
-                          index, f64);
+          __ StoreNonArrayBufferElement(
+              elements, AccessBuilder::ForFixedDoubleArrayElement(), index,
+              f64);
         }
         ELSE {
           // Our ElementsKind is HOLEY_SMI_ELEMENTS or HOLEY_ELEMENTS.
@@ -2297,7 +2300,8 @@ class MachineLoweringReducer : public Next {
           access.type = compiler::Type::SignedSmall();
           access.machine_type = MachineType::TaggedSigned();
           access.write_barrier_kind = kNoWriteBarrier;
-          __ StoreElement(elements, access, index, __ TagSmi(value));
+          __ StoreNonArrayBufferElement(elements, access, index,
+                                        __ TagSmi(value));
         }
         END_IF
         break;
@@ -2867,15 +2871,6 @@ class MachineLoweringReducer : public Next {
     return V<BigInt>::Cast(__ FinishInitialization(std::move(bigint)));
   }
 
-  // TODO(nicohartmann@): Should also make this an operation and lower in
-  // TagUntagLoweringReducer.
-  V<Word32> IsSmi(V<Tagged> input) {
-    return __ Word32Equal(
-        __ Word32BitwiseAnd(V<Word32>::Cast(input),
-                            static_cast<uint32_t>(kSmiTagMask)),
-        static_cast<uint32_t>(kSmiTag));
-  }
-
   void TagSmiOrOverflow(V<Word32> input, Label<>* overflow,
                         Label<Tagged>* done) {
     DCHECK(SmiValuesAre31Bits());
@@ -2958,12 +2953,12 @@ class MachineLoweringReducer : public Next {
     Label<Word32> done(this);
 
     IF(onebyte) {
-      GOTO(done, __ template LoadElement<Word32>(
+      GOTO(done, __ template LoadNonArrayBufferElement<Word32>(
                      receiver, AccessBuilder::ForSeqOneByteStringCharacter(),
                      position));
     }
     ELSE {
-      GOTO(done, __ template LoadElement<Word32>(
+      GOTO(done, __ template LoadNonArrayBufferElement<Word32>(
                      receiver, AccessBuilder::ForSeqTwoByteStringCharacter(),
                      position));
     }

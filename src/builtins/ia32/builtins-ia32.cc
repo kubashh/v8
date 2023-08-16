@@ -911,7 +911,8 @@ void Builtins::Generate_InterpreterEntryTrampoline(
   // frame.
   __ mov(feedback_vector,
          FieldOperand(closure, JSFunction::kFeedbackCellOffset));
-  __ mov(feedback_vector, FieldOperand(feedback_vector, Cell::kValueOffset));
+  __ mov(feedback_vector,
+         FieldOperand(feedback_vector, FeedbackCell::kValueOffset));
   __ mov(eax, FieldOperand(feedback_vector, HeapObject::kMapOffset));
   __ CmpInstanceType(eax, FEEDBACK_VECTOR_TYPE);
   __ j(not_equal, &push_stack_frame);
@@ -927,7 +928,8 @@ void Builtins::Generate_InterpreterEntryTrampoline(
   // TODO(jgruber): Don't clobber it above.
   __ mov(feedback_vector,
          FieldOperand(closure, JSFunction::kFeedbackCellOffset));
-  __ mov(feedback_vector, FieldOperand(feedback_vector, Cell::kValueOffset));
+  __ mov(feedback_vector,
+         FieldOperand(feedback_vector, FeedbackCell::kValueOffset));
 
   {
     static constexpr Register scratch = eax;
@@ -1126,7 +1128,8 @@ void Builtins::Generate_InterpreterEntryTrampoline(
     // Load the feedback vector from the closure.
     __ mov(feedback_vector,
            FieldOperand(closure, JSFunction::kFeedbackCellOffset));
-    __ mov(feedback_vector, FieldOperand(feedback_vector, Cell::kValueOffset));
+    __ mov(feedback_vector,
+           FieldOperand(feedback_vector, FeedbackCell::kValueOffset));
 
     Label install_baseline_code;
     // Check if feedback vector is valid. If not, call prepare for baseline to
@@ -1753,7 +1756,8 @@ void Builtins::Generate_BaselineOutOfLinePrologue(MacroAssembler* masm) {
       BaselineOutOfLinePrologueDescriptor::kClosure);
   __ mov(feedback_vector,
          FieldOperand(closure, JSFunction::kFeedbackCellOffset));
-  __ mov(feedback_vector, FieldOperand(feedback_vector, Cell::kValueOffset));
+  __ mov(feedback_vector,
+         FieldOperand(feedback_vector, FeedbackCell::kValueOffset));
   __ AssertFeedbackVector(feedback_vector, scratch);
 
   // Load the optimization state from the feedback vector and re-use the
@@ -3310,7 +3314,37 @@ void Builtins::Generate_WasmReturnPromiseOnSuspend(MacroAssembler* masm) {
   __ Trap();
 }
 
-void Builtins::Generate_WasmToJsWrapperAsm(MacroAssembler* masm) { __ Trap(); }
+void Builtins::Generate_WasmToJsWrapperAsm(MacroAssembler* masm) {
+  // Pop the return address into a scratch register and push it later again. The
+  // return address has to be on top of the stack after all registers have been
+  // pushed, so that the return instruction can find it.
+  Register scratch = edi;
+  __ pop(scratch);
+
+  int required_stack_space = arraysize(wasm::kFpParamRegisters) * kDoubleSize;
+  __ sub(esp, Immediate(required_stack_space));
+  for (int i = 0; i < static_cast<int>(arraysize(wasm::kFpParamRegisters));
+       ++i) {
+    __ Movsd(MemOperand(esp, i * kDoubleSize), wasm::kFpParamRegisters[i]);
+  }
+  // eax is pushed for alignment, so that the pushed register parameters and
+  // stack parameters look the same as the layout produced by the js-to-wasm
+  // wrapper for out-going parameters. Having the same layout allows to share
+  // code in Torque, especially the `LocationAllocator`. eax has been picked
+  // arbitrarily.
+  __ push(eax);
+  // Push the GP registers in reverse order so that they are on the stack like
+  // in an array, with the first item being at the lowest address.
+  for (size_t i = arraysize(wasm::kGpParamRegisters) - 1; i > 0; --i) {
+    __ push(wasm::kGpParamRegisters[i]);
+  }
+  // Decrement the stack to allocate a stack slot. The signature gets written
+  // into the slot in Torque.
+  __ push(eax);
+  // Push the return address again.
+  __ push(scratch);
+  __ TailCallBuiltin(Builtin::kWasmToJsWrapperCSA);
+}
 
 void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
   // TODO(v8:12191): Implement for this platform.
@@ -4536,7 +4570,8 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
   Register feedback_vector = ecx;
   __ mov(feedback_vector,
          FieldOperand(closure, JSFunction::kFeedbackCellOffset));
-  __ mov(feedback_vector, FieldOperand(feedback_vector, Cell::kValueOffset));
+  __ mov(feedback_vector,
+         FieldOperand(feedback_vector, FeedbackCell::kValueOffset));
 
   Label install_baseline_code;
   // Check if feedback vector is valid. If not, call prepare for baseline to
