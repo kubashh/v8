@@ -11,7 +11,7 @@ const sharedCtors = [
 for (let ctor of sharedCtors) {
   (function TestSharedConstructors(C) {
     function f(a) {
-      a.stack = "boom";
+      a.stack = 'boom';
     }
     %PrepareFunctionForOptimization(f);
     Error.captureStackTrace(f);
