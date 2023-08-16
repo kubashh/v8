@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eeafd1a_ed76720b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-08-16T12:37:21Z",
+      "side": 1,
+      "message": "Did you use some analysis tool to create these changes? If yes, consider mention it in the CL description.",
+      "revId": "d71aa39bccbcdb7c6b4a2f08a4fcad44b6d6ca8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
