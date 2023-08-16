@@ -258,7 +258,7 @@ void V8::Initialize() {
   CHECK_EQ(kSandboxSize, GetProcessWideSandbox()->size());
 
 #if defined(V8_CODE_POINTER_SANDBOXING)
-  GetProcessWideCodePointerTable()->Initialize();
+  GetProcessWideCodePointerTable()->Initialize(false);
 #endif
 #endif
 

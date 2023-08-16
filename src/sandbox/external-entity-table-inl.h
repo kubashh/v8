@@ -80,7 +80,7 @@ Address ExternalEntityTable<Entry, size>::base() const {
 }
 
 template <typename Entry, size_t size>
-void ExternalEntityTable<Entry, size>::Initialize() {
+void ExternalEntityTable<Entry, size>::Initialize(bool allocate_first_segment) {
   DCHECK(!is_initialized());
   DCHECK_EQ(vas_, nullptr);
 
@@ -110,23 +110,27 @@ void ExternalEntityTable<Entry, size>::Initialize() {
   }
   base_ = reinterpret_cast<Entry*>(vas_->base());
 
-  // Allocate the first segment of the table as read-only memory. This segment
-  // will contain the null entry, which should always contain nullptr.
-  auto first_segment = vas_->AllocatePages(
-      vas_->base(), kSegmentSize, kSegmentSize, PagePermissions::kRead);
-  if (first_segment != vas_->base()) {
-    V8::FatalProcessOutOfMemory(
-        nullptr,
-        "ExternalEntityTable::InitializeTable (first segment allocation)");
+  if (allocate_first_segment) {
+    // Allocate the first segment of the table as read-only memory. This segment
+    // will contain the null entry, which should always contain nullptr.
+    auto first_segment = vas_->AllocatePages(
+        vas_->base(), kSegmentSize, kSegmentSize, PagePermissions::kRead);
+    if (first_segment != vas_->base()) {
+      V8::FatalProcessOutOfMemory(
+          nullptr,
+          "ExternalEntityTable::InitializeTable (first segment allocation)");
+    }
   }
 }
 
 template <typename Entry, size_t size>
-void ExternalEntityTable<Entry, size>::TearDown() {
+void ExternalEntityTable<Entry, size>::TearDown(bool free_first_segment) {
   DCHECK(is_initialized());
 
-  // Deallocate the (read-only) first segment.
-  vas_->FreePages(vas_->base(), kSegmentSize);
+  if (free_first_segment) {
+    // Deallocate the (read-only) first segment.
+    vas_->FreePages(vas_->base(), kSegmentSize);
+  }
 
   base_ = nullptr;
   delete vas_;
@@ -193,7 +197,6 @@ uint32_t ExternalEntityTable<Entry, size>::AllocateEntry(Space* space) {
 
   uint32_t allocated_entry = freelist.next();
   DCHECK(space->Contains(allocated_entry));
-  DCHECK_NE(allocated_entry, 0);
   return allocated_entry;
 }
 
@@ -252,7 +255,6 @@ ExternalEntityTable<Entry, size>::Extend(Space* space) {
   // Allocate the new segment.
   Segment segment = AllocateTableSegment();
   space->segments_.insert(segment);
-  DCHECK_NE(segment.number(), 0);
 
   // Refill the freelist with the entries in the newly allocated segment.
   uint32_t first = segment.first_entry();
@@ -288,8 +290,6 @@ ExternalEntityTable<Entry, size>::AllocateTableSegment() {
 
 template <typename Entry, size_t size>
 void ExternalEntityTable<Entry, size>::FreeTableSegment(Segment segment) {
-  // Segment zero is reserved.
-  DCHECK_NE(segment.number(), 0);
   Address segment_start = vas_->base() + segment.offset();
   vas_->FreePages(segment_start, kSegmentSize);
 }

@@ -95,13 +95,11 @@ Address CodePointerTable::GetCodeObject(CodePointerHandle handle) const {
 }
 
 void CodePointerTable::SetEntrypoint(CodePointerHandle handle, Address value) {
-  DCHECK_NE(kNullCodePointerHandle, handle);
   uint32_t index = HandleToIndex(handle);
   at(index).SetEntrypoint(value);
 }
 
 void CodePointerTable::SetCodeObject(CodePointerHandle handle, Address value) {
-  DCHECK_NE(kNullCodePointerHandle, handle);
   uint32_t index = HandleToIndex(handle);
   at(index).SetCodeObject(value);
 }

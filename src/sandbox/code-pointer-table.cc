@@ -43,15 +43,19 @@ uint32_t CodePointerTable::Sweep(Space* space, Counters* counters) {
     uint32_t previous_freelist_length = current_freelist_length;
 
     // Process every entry in this segment, again going top to bottom.
-    for (uint32_t i = segment.last_entry(); i >= segment.first_entry(); i--) {
-      if (!at(i).IsMarked()) {
-        at(i).MakeFreelistEntry(current_freelist_head);
-        current_freelist_head = i;
+    // We use a do-while loop here because we have an unsigned index and may
+    // need to count down to zero. The do-while loop avoids issues due to
+    // integer wraparound.
+    uint32_t current_index = segment.last_entry();
+    do {
+      if (!at(current_index).IsMarked()) {
+        at(current_index).MakeFreelistEntry(current_freelist_head);
+        current_freelist_head = current_index;
         current_freelist_length++;
       } else {
-        at(i).Unmark();
+        at(current_index).Unmark();
       }
-    }
+    } while (current_index-- > segment.first_entry());
 
     // If a segment is completely empty, free it.
     uint32_t free_entries = current_freelist_length - previous_freelist_length;

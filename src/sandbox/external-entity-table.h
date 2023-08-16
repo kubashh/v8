@@ -107,14 +107,7 @@ class V8_EXPORT_PRIVATE ExternalEntityTable {
     // Returns the total length of the freelist.
     uint32_t length() const { return length_; }
 
-    bool is_empty() const {
-      // It would be enough to just check that the size is zero. However, when
-      // the size is zero, the next entry must also be zero, and checking that
-      // both values are zero allows the compiler to insert a single 64-bit
-      // comparison against zero.
-      DCHECK_EQ(next_ == 0, length_ == 0);
-      return next_ == 0 && length_ == 0;
-    }
+    bool is_empty() const { return length_ == 0; }
 
    private:
     uint32_t next_;
@@ -260,10 +253,10 @@ class V8_EXPORT_PRIVATE ExternalEntityTable {
  public:
   // Initializes the table by reserving the backing memory, allocating an
   // initial segment, and populating the freelist.
-  void Initialize();
+  void Initialize(bool allocate_first_segment);
 
   // Deallocates all memory associated with this table.
-  void TearDown();
+  void TearDown(bool free_first_segment);
 
   // Initializes the given space for use with this table.
   void InitializeSpace(Space* space);
