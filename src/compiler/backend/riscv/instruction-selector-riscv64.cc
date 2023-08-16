@@ -1236,18 +1236,18 @@ void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToUint32(
   if constexpr (Adapter::IsTurboshaft) {
     UNIMPLEMENTED();
   } else {
-  RiscvOperandGeneratorT<Adapter> g(this);
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+    RiscvOperandGeneratorT<Adapter> g(this);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
-  }
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
 
-  Emit(kRiscvTruncUwD, output_count, outputs, 1, inputs);
+    Emit(kRiscvTruncUwD, output_count, outputs, 1, inputs);
   }
 }
 
@@ -1304,18 +1304,18 @@ void InstructionSelectorT<Adapter>::VisitTryTruncateFloat32ToInt64(
   if constexpr (Adapter::IsTurboshaft) {
     UNIMPLEMENTED();
   } else {
-  RiscvOperandGeneratorT<Adapter> g(this);
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+    RiscvOperandGeneratorT<Adapter> g(this);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
-  }
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
 
-  this->Emit(kRiscvTruncLS, output_count, outputs, 1, inputs);
+    this->Emit(kRiscvTruncLS, output_count, outputs, 1, inputs);
   }
 }
 
@@ -1325,18 +1325,18 @@ void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToInt64(
   if constexpr (Adapter::IsTurboshaft) {
     UNIMPLEMENTED();
   } else {
-  RiscvOperandGeneratorT<Adapter> g(this);
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+    RiscvOperandGeneratorT<Adapter> g(this);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
-  }
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
 
-  Emit(kRiscvTruncLD, output_count, outputs, 1, inputs);
+    Emit(kRiscvTruncLD, output_count, outputs, 1, inputs);
   }
 }
 
@@ -1346,18 +1346,18 @@ void InstructionSelectorT<Adapter>::VisitTryTruncateFloat32ToUint64(
   if constexpr (Adapter::IsTurboshaft) {
     UNIMPLEMENTED();
   } else {
-  RiscvOperandGeneratorT<Adapter> g(this);
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+    RiscvOperandGeneratorT<Adapter> g(this);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
-  }
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
 
-  Emit(kRiscvTruncUlS, output_count, outputs, 1, inputs);
+    Emit(kRiscvTruncUlS, output_count, outputs, 1, inputs);
   }
 }
 
@@ -1367,19 +1367,19 @@ void InstructionSelectorT<Adapter>::VisitTryTruncateFloat64ToUint64(
   if constexpr (Adapter::IsTurboshaft) {
     UNIMPLEMENTED();
   } else {
-  RiscvOperandGeneratorT<Adapter> g(this);
+    RiscvOperandGeneratorT<Adapter> g(this);
 
-  InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
-  InstructionOperand outputs[2];
-  size_t output_count = 0;
-  outputs[output_count++] = g.DefineAsRegister(node);
+    InstructionOperand inputs[] = {g.UseRegister(node->InputAt(0))};
+    InstructionOperand outputs[2];
+    size_t output_count = 0;
+    outputs[output_count++] = g.DefineAsRegister(node);
 
-  Node* success_output = NodeProperties::FindProjection(node, 1);
-  if (success_output) {
-    outputs[output_count++] = g.DefineAsRegister(success_output);
-  }
+    Node* success_output = NodeProperties::FindProjection(node, 1);
+    if (success_output) {
+      outputs[output_count++] = g.DefineAsRegister(success_output);
+    }
 
-  Emit(kRiscvTruncUlD, output_count, outputs, 1, inputs);
+    Emit(kRiscvTruncUlD, output_count, outputs, 1, inputs);
   }
 }
 

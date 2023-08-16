@@ -5,7 +5,6 @@
 // Flags: --allow-natives-syntax --turbofan --no-stress-flush-code
 // Flags: --no-lazy-feedback-allocation
 
-
 // Test CloneFastJSArray inserted by JSCallReducer for Array.prototype.slice.
 // CloneFastJSArray produces COW arrays if the original array is COW.
 

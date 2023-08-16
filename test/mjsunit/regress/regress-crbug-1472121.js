@@ -7,12 +7,12 @@ a.p9 = 1;
 function throwaway() {
   return {...a, __proto__: null};
 }
-  for (let j = 0; j < 100; ++j)  // IC
-    throwaway();
-  for (let key in a) a[key] = {};
+for (let j = 0; j < 100; ++j)  // IC
+  throwaway();
+for (let key in a) a[key] = {};
 function func() {
   return {...a, __proto__: null};
 }
 for (let j = 0; j < 100; ++j)  // IC
-corrupted = func();
+  corrupted = func();
 corrupted.p9 = 0x42424242 >> 1;

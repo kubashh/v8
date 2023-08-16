@@ -30,7 +30,6 @@ assertEquals(f(u32s, u8s), r);
 %OptimizeFunctionOnNextCall(f);
 assertEquals(f(u32s, u8s), r);
 
-
 // Test with 2 arrays aliasing because their bases have different offsets.
 function g(ta1, ta2) {
   ta2[0] = 0xff;
@@ -39,8 +38,8 @@ function g(ta1, ta2) {
 }
 
 let buffer = new ArrayBuffer(10000);
-let ta1 = new Int32Array(buffer, 0/*offset*/);
-let ta2 = new Int32Array(buffer, 100*4/*offset*/);
+let ta1 = new Int32Array(buffer, 0 /*offset*/);
+let ta2 = new Int32Array(buffer, 100 * 4 /*offset*/);
 
 %PrepareFunctionForOptimization(g);
 assertEquals(g(ta1, ta2), 42);
