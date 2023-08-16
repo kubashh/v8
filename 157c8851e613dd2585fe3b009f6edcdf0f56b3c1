@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ac6a25a_6854cacd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-08-16T09:35:56Z",
+      "side": 1,
+      "message": "Thinking about it again, I think the change will need a little more work because we still shouldn\u0027t allocate the zeroth entry, as the handle to it has special meaning (basically, see XREFs of https://source.chromium.org/chromium/chromium/src/+/main:v8/include/v8-internal.h;l\u003d529;drc\u003dfbb9df7218ae348b56104ff8fdd82b578e42d189). So we might just want to allocate the zeroth entry when the table is initialized or something like that (and then we can put some of the DCHECKs back).",
+      "revId": "157c8851e613dd2585fe3b009f6edcdf0f56b3c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0e93a4d_af08c545",
