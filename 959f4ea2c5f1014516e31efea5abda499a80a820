@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5096cbd6_04d04c42",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-08-16T10:41:21Z",
+      "side": 1,
+      "message": "This change is only correct for non-nullable bodies if I am not mistaken.",
+      "range": {
+        "startLine": 125,
+        "startChar": 6,
+        "endLine": 125,
+        "endChar": 51
+      },
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "57e249a2_6b467e51",
         "filename": "src/regexp/experimental/experimental-compiler.cc",
         "patchSetId": 2
@@ -48,6 +71,29 @@
       "writtenOn": "2023-08-16T06:22:54Z",
       "side": 1,
       "message": "nit: It\u0027s not clear what the bug reference here means. Also this whole paragraph isn\u0027t really clear to me.",
+      "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7e23f11_e637206c",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-08-16T10:41:21Z",
+      "side": 1,
+      "message": "Please highlight somewhere that this operation is required for linear execution in nested cases (as described in the bug). Otherwise it is not clear why we simply can\u0027t use `/\u003cbody\u003e\u003cbody\u003e*/` to model this behaviour.",
+      "range": {
+        "startLine": 584,
+        "startChar": 7,
+        "endLine": 584,
+        "endChar": 35
+      },
       "revId": "959f4ea2c5f1014516e31efea5abda499a80a820",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
