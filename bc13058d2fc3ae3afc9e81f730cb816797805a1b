@@ -33,6 +33,24 @@
       "message": "I compared with some successful runs and I see `Total Torque files found that require formatting: 61` and `Total JavaScript files found that require formatting: 2` in your CL.\n\nWe need to work on the readability of presubmit errors...",
       "revId": "bc13058d2fc3ae3afc9e81f730cb816797805a1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15ce64e5_3e891a5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-08-16T17:35:55Z",
+      "side": 1,
+      "message": "I checked the formatting and uploaded a new Patchset (Some .cc and .js files updated, on my side no torque files need formatting). The presubmit check failed again. the error I am seeing now (and I saw yesterday) is at the end of the stdout:\n \n```\nRunning /b/s/w/ir/cache/builder/v8/tools/testrunner/local/pool_test.py\n.ERROR:root:Unhandled error during worker execution.\nTraceback (most recent call last):\n  File \"/b/s/w/ir/cache/builder/v8/tools/testrunner/local/pool.py\", line 87, in Worker\n    done_queue.put(NormalResult(fn(*args, **kwargs)))\n  File \"/b/s/w/ir/cache/builder/v8/tools/testrunner/local/pool_test.py\", line 22, in Run\n    raise Exception(\"Expected exception triggered by test.\")\nException: Expected exception triggered by test.\nERROR:root:Internal error in a worker process.\nTraceback (most recent call last):\n  File \"/b/s/w/ir/cache/builder/v8/tools/testrunner/local/pool.py\", line 269, in imap_unordered\n    result \u003d self._get_result_from_queue()\n  File \"/b/s/w/ir/cache/builder/v8/tools/testrunner/local/pool.py\", line 377, in _get_result_from_queue\n    raise result.exception\nException: Expected exception triggered by test.\n```\nI think this is related to infrastructure and I have no idea how to solve it.",
+      "parentUuid": "fdd7c236_0a120be9",
+      "revId": "bc13058d2fc3ae3afc9e81f730cb816797805a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
