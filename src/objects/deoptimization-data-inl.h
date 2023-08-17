@@ -15,9 +15,10 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(DeoptimizationData, FixedArray)
+#include "torque-generated/src/objects/deoptimization-data-tq-inl.inc"
 
-CAST_ACCESSOR(DeoptimizationData)
+TQ_OBJECT_CONSTRUCTORS_IMPL(DeoptimizationData)
+
 CAST_ACCESSOR(DeoptimizationLiteralArray)
 CAST_ACCESSOR(DeoptimizationFrameTranslation)
 

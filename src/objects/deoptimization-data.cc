@@ -63,7 +63,7 @@ void print_pc(std::ostream& os, int pc) {
 }
 }  // namespace
 
-void DeoptimizationData::PrintDeoptimizationData(std::ostream& os) const {
+void DeoptimizationData::DeoptimizationDataPrint(std::ostream& os) const {
   if (length() == 0) {
     os << "Deoptimization Input Data invalidated by lazy deoptimization\n";
     return;

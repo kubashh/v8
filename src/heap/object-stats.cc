@@ -1052,10 +1052,11 @@ void ObjectStatsCollectorImpl::RecordVirtualCodeDetails(
                                      HeapObject::cast(source_position_table),
                                      ObjectStats::SOURCE_POSITION_TABLE_TYPE);
     }
-    RecordSimpleVirtualObjectStats(istream, code->deoptimization_data(),
-                                   ObjectStats::DEOPTIMIZATION_DATA_TYPE);
+
     DeoptimizationData input_data =
         DeoptimizationData::cast(code->deoptimization_data());
+    RecordObjectStats(input_data, InstanceType::DEOPTIMIZATION_DATA_TYPE,
+                      input_data->Size());
     if (input_data->length() > 0) {
       RecordSimpleVirtualObjectStats(code->deoptimization_data(),
                                      input_data->LiteralArray(),

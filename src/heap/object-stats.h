@@ -25,7 +25,6 @@
   V(BYTECODE_ARRAY_CONSTANT_POOL_TYPE)           \
   V(BYTECODE_ARRAY_HANDLER_TABLE_TYPE)           \
   V(COW_ARRAY_TYPE)                              \
-  V(DEOPTIMIZATION_DATA_TYPE)                    \
   V(DEPENDENT_CODE_TYPE)                         \
   V(DEPRECATED_DESCRIPTOR_ARRAY_TYPE)            \
   V(EMBEDDED_OBJECT_TYPE)                        \
