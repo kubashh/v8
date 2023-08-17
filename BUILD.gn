@@ -1982,6 +1982,7 @@ torque_files = [
   "src/objects/contexts.tq",
   "src/objects/data-handler.tq",
   "src/objects/debug-objects.tq",
+  "src/objects/deoptimization-data.tq",
   "src/objects/descriptor-array.tq",
   "src/objects/embedder-data-array.tq",
   "src/objects/feedback-cell.tq",
