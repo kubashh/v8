@@ -202,6 +202,9 @@ class DeoptimizationData : public FixedArray {
 
   DECL_CAST(DeoptimizationData)
 
+#ifdef DEBUG
+  void Verify(Handle<BytecodeArray> bc) const;
+#endif
 #ifdef ENABLE_DISASSEMBLER
   void PrintDeoptimizationData(std::ostream& os) const;
 #endif
