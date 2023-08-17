@@ -241,6 +241,45 @@ TranslationOpcode DeoptimizationFrameTranslation::Iterator::NextOpcode() {
   return opcode;
 }
 
+DeoptimizationFrameTranslation::FrameCount
+DeoptimizationFrameTranslation::Iterator::EnterBeginOpcode() {
+  TranslationOpcode opcode = NextOpcode();
+  DCHECK(TranslationOpcodeIsBegin(opcode));
+  USE(opcode);
+  NextOperand();  // Skip lookback distance.
+  int frame_count = NextOperand();
+  int jsframe_count = NextOperand();
+  return {frame_count, jsframe_count};
+}
+
+TranslationOpcode DeoptimizationFrameTranslation::Iterator::NextJSFrame() {
+  while (HasNextOpcode()) {
+    TranslationOpcode opcode = NextOpcode();
+    DCHECK(!TranslationOpcodeIsBegin(opcode));
+    if (IsTranslationJsFrameOpcode(opcode)) {
+      return opcode;
+    } else {
+      // Skip over operands to advance to the next opcode.
+      SkipOperands(TranslationOpcodeOperandCount(opcode));
+    }
+  }
+  UNREACHABLE();
+}
+
+TranslationOpcode DeoptimizationFrameTranslation::Iterator::NextFrame() {
+  while (HasNextOpcode()) {
+    TranslationOpcode opcode = NextOpcode();
+    DCHECK(!TranslationOpcodeIsBegin(opcode));
+    if (IsTranslationFrameOpcode(opcode)) {
+      return opcode;
+    } else {
+      // Skip over operands to advance to the next opcode.
+      SkipOperands(TranslationOpcodeOperandCount(opcode));
+    }
+  }
+  UNREACHABLE();
+}
+
 bool DeoptimizationFrameTranslation::Iterator::HasNextOpcode() const {
   if (V8_UNLIKELY(v8_flags.turbo_compress_translation_arrays)) {
     return index_ < static_cast<int>(uncompressed_contents_.size());
