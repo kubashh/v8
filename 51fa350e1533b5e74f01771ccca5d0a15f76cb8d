@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a12d9374_5e6e34dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-08-17T14:12:19Z",
+      "side": 1,
+      "message": "after a lot of monkeying around I am back to where we were the last time you looked at the cl. integrating it into sfi verification didn\u0027t work either, because the bytecode array iterator is handlified and I don\u0027t have a handle available there.",
+      "revId": "51fa350e1533b5e74f01771ccca5d0a15f76cb8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
