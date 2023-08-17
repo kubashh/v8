@@ -105,6 +105,24 @@
       "parentUuid": "38244adb_7b76b093",
       "revId": "5f855810810bd7c35621de1c95453ffc7d1cbd6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05a8fff8_75c71de1",
+        "filename": "src/objects/deoptimization-data.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-08-17T13:26:42Z",
+      "side": 1,
+      "message": "Ok, after spending a lot of time refactoring code and dealing with the fallout of changing the type of deoptimization data I declare it is not worth it...\n\nI implemented half your suggestion and do the verification when verifying the shared function info.",
+      "parentUuid": "23b00994_a6cd81eb",
+      "revId": "5f855810810bd7c35621de1c95453ffc7d1cbd6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
