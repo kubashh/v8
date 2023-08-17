@@ -16,6 +16,23 @@
       "message": "lgtm!",
       "revId": "db1a54702c590c9389d6b32b706701a1e02fe2dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "021c0ead_8a53b3e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-08-17T13:53:31Z",
+      "side": 1,
+      "message": "Tobias, are you OK with dropping some symbols from torque initializers?",
+      "revId": "db1a54702c590c9389d6b32b706701a1e02fe2dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
