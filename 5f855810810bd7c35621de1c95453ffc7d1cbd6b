@@ -33,6 +33,24 @@
       "message": "Suggestion: integrate all this with the heap verifier. We\u0027d have to assign a dedicated instance type, grab the BytecodeArray through the SFI (which is accessible from this object), and move Verify to DeoptimizationDataVerify in objects-debug.cc. Wdyt?",
       "revId": "5f855810810bd7c35621de1c95453ffc7d1cbd6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06738996_75cec3a6",
+        "filename": "src/objects/deoptimization-data.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-08-17T09:19:38Z",
+      "side": 1,
+      "message": "since we never mutate these frame translation I am not sure I understand the advantage of that approach. en contraire, isn\u0027t it easier to debug issues if we get the error right at the point where we create the translation?",
+      "parentUuid": "8b89eb53_ff7323d4",
+      "revId": "5f855810810bd7c35621de1c95453ffc7d1cbd6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
