@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2333692e_6140fa5c",
+        "filename": "src/objects/deoptimization-data.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-08-17T12:29:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5597855_8d0070e0",
+      "revId": "5f855810810bd7c35621de1c95453ffc7d1cbd6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b89eb53_ff7323d4",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Yeah I wasn\u0027t suggesting to replace the verify-after-creation approach, but instead I meant to use your improved verification both in (automated) heap-verification and explicitly after creation. \n\nIs there an advantage to not plugging into our standard obj verifier methods?",
       "parentUuid": "06738996_75cec3a6",
+      "revId": "5f855810810bd7c35621de1c95453ffc7d1cbd6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23b00994_a6cd81eb",
+        "filename": "src/objects/deoptimization-data.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-08-17T12:29:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38244adb_7b76b093",
       "revId": "5f855810810bd7c35621de1c95453ffc7d1cbd6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
