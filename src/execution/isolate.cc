@@ -85,6 +85,7 @@
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
 #include "src/objects/js-generator-inl.h"
+#include "src/objects/js-struct-inl.h"
 #include "src/objects/js-weak-refs-inl.h"
 #include "src/objects/managed-inl.h"
 #include "src/objects/module-inl.h"
@@ -2503,9 +2504,9 @@ void Isolate::PrintCurrentStackTrace(std::ostream& out) {
 bool Isolate::ComputeLocation(MessageLocation* target) {
   DebuggableStackFrameIterator it(this);
   if (it.done()) return false;
-  // Compute the location from the function and the relocation info of the
-  // baseline code. For optimized code this will use the deoptimization
-  // information to get canonical location information.
+    // Compute the location from the function and the relocation info of the
+    // baseline code. For optimized code this will use the deoptimization
+    // information to get canonical location information.
 #if V8_ENABLE_WEBASSEMBLY
   wasm::WasmCodeRefScope code_ref_scope;
 #endif  // V8_ENABLE_WEBASSEMBLY
@@ -5238,10 +5239,10 @@ void Isolate::UpdatePromiseHookProtector() {
 
 void Isolate::PromiseHookStateUpdated() {
   promise_hook_flags_ =
-    (promise_hook_flags_ & PromiseHookFields::HasContextPromiseHook::kMask) |
-    PromiseHookFields::HasIsolatePromiseHook::encode(promise_hook_) |
-    PromiseHookFields::HasAsyncEventDelegate::encode(async_event_delegate_) |
-    PromiseHookFields::IsDebugActive::encode(debug()->is_active());
+      (promise_hook_flags_ & PromiseHookFields::HasContextPromiseHook::kMask) |
+      PromiseHookFields::HasIsolatePromiseHook::encode(promise_hook_) |
+      PromiseHookFields::HasAsyncEventDelegate::encode(async_event_delegate_) |
+      PromiseHookFields::IsDebugActive::encode(debug()->is_active());
 
   if (promise_hook_flags_ != 0) {
     UpdatePromiseHookProtector();
@@ -5885,6 +5886,42 @@ void Isolate::DetachGlobal(Handle<Context> env) {
   DCHECK(global_proxy->IsDetached());
 
   env->native_context()->set_microtask_queue(this, nullptr);
+}
+
+Object Isolate::GetAgentLocalFieldAt(Handle<JSSharedStruct> holder, int index) {
+  DisallowGarbageCollection no_gc;
+  ReadOnlyRoots roots(this);
+  if (!IsUndefined(heap()->agent_local_fields())) {
+    ObjectHashTable fields_table =
+        ObjectHashTable::cast(heap()->agent_local_fields());
+    Object value = fields_table->Lookup(holder);
+    if (IsFixedArray(value)) {
+      return FixedArray::cast(value)->get(index);
+    }
+  }
+  return roots.undefined_value();
+}
+
+Handle<FixedArray> Isolate::EnsureAgentLocalFieldsStorage(
+    Handle<JSSharedStruct> holder) {
+  Handle<EphemeronHashTable> fields_table;
+  if (IsUndefined(heap()->agent_local_fields())) {
+    fields_table = EphemeronHashTable::New(this, 1, AllocationType::kOld);
+    heap()->set_agent_local_fields(*fields_table);
+  } else {
+    fields_table =
+        Handle<EphemeronHashTable>::cast(factory()->agent_local_fields());
+  }
+
+  Handle<Object> value = handle(fields_table->Lookup(holder), this);
+  if (IsFixedArray(*value)) return Handle<FixedArray>::cast(value);
+
+  Handle<FixedArray> storage = factory()->NewFixedArray(
+      JSSharedStruct::NumberOfAgentLocalFields(this, holder->map()),
+      AllocationType::kOld);
+  fields_table = EphemeronHashTable::Put(fields_table, holder, storage);
+  heap()->set_agent_local_fields(*fields_table);
+  return storage;
 }
 
 double Isolate::LoadStartTimeMs() {

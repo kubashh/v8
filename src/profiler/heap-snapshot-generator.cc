@@ -30,6 +30,7 @@
 #include "src/objects/js-objects.h"
 #include "src/objects/js-promise-inl.h"
 #include "src/objects/js-regexp-inl.h"
+#include "src/objects/js-struct-inl.h"
 #include "src/objects/js-weak-refs-inl.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/objects-inl.h"
@@ -1927,7 +1928,7 @@ void V8HeapExplorer::ExtractWeakArrayReferences(int header_size,
 
 void V8HeapExplorer::ExtractPropertyReferences(JSObject js_obj,
                                                HeapEntry* entry) {
-  Isolate* isolate = js_obj->GetIsolate();
+  Isolate* isolate = this->isolate();
   if (js_obj->HasFastProperties()) {
     DescriptorArray descs = js_obj->map()->instance_descriptors(isolate);
     for (InternalIndex i : js_obj->map()->IterateOwnDescriptors()) {
@@ -1955,6 +1956,15 @@ void V8HeapExplorer::ExtractPropertyReferences(JSObject js_obj,
                                              descs->GetKey(i),
                                              descs->GetStrongValue(i));
           break;
+        case PropertyLocation::kAgentLocal: {
+          HandleScope scope(isolate);
+          Handle<JSSharedStruct> js_struct(JSSharedStruct::cast(js_obj),
+                                           isolate);
+          SetDataOrAccessorPropertyReference(
+              details.kind(), entry, descs->GetKey(i),
+              isolate->GetAgentLocalFieldAt(js_struct, details.field_index()));
+          break;
+        }
       }
     }
   } else if (IsJSGlobalObject(js_obj)) {

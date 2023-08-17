@@ -1737,6 +1737,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // Detach the environment from its outer global object.
   void DetachGlobal(Handle<Context> env);
 
+  Object GetAgentLocalFieldAt(Handle<JSSharedStruct> holder, int index);
+  Handle<FixedArray> EnsureAgentLocalFieldsStorage(
+      Handle<JSSharedStruct> holder);
+
   std::vector<Object>* startup_object_cache() { return &startup_object_cache_; }
 
   // When there is a shared space (i.e. when this is a client Isolate), the

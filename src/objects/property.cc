@@ -136,16 +136,25 @@ void PropertyDetails::PrintAsFastTo(std::ostream& os, PrintMode mode) {
   os << "(";
   if (constness() == PropertyConstness::kConst) os << "const ";
   os << (kind() == PropertyKind::kData ? "data" : "accessor");
-  if (location() == PropertyLocation::kField) {
-    os << " field";
-    if (mode & kPrintFieldIndex) {
-      os << " " << field_index();
-    }
-    if (mode & kPrintRepresentation) {
-      os << ":" << representation().Mnemonic();
-    }
-  } else {
-    os << " descriptor";
+  switch (location()) {
+    case PropertyLocation::kField:
+      os << " field";
+      if (mode & kPrintFieldIndex) {
+        os << " " << field_index();
+      }
+      if (mode & kPrintRepresentation) {
+        os << ":" << representation().Mnemonic();
+      }
+      break;
+    case PropertyLocation::kDescriptor:
+      os << " descriptor";
+      break;
+    case PropertyLocation::kAgentLocal:
+      os << " agent-local";
+      if (mode & kPrintFieldIndex) {
+        os << " " << field_index();
+      }
+      break;
   }
   if (mode & kPrintPointer) {
     os << ", p: " << pointer();

@@ -2879,11 +2879,15 @@ Maybe<bool> Object::SetDataProperty(LookupIterator* it, Handle<Object> value) {
   DCHECK(!IsWasmObject(*receiver, isolate));
   if (V8_UNLIKELY(IsJSSharedStruct(*receiver, isolate) ||
                   IsJSSharedArray(*receiver, isolate))) {
-    // Shared structs can only point to primitives or shared values.
-    ASSIGN_RETURN_ON_EXCEPTION_VALUE(
-        isolate, to_assign, Object::Share(isolate, to_assign, kThrowOnError),
-        Nothing<bool>());
-    it->WriteDataValue(to_assign, false);
+    if (it->location() != PropertyLocation::kAgentLocal) {
+      // Objects in shared space can only point to primitives or shared values.
+      ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+          isolate, to_assign, Object::Share(isolate, to_assign, kThrowOnError),
+          Nothing<bool>());
+      it->WriteDataValue(to_assign, false);
+    } else {
+      it->WriteAgentLocalValue(to_assign);
+    }
   } else {
     // Possibly migrate to the most up-to-date map that will be able to store
     // |value| under it->name().

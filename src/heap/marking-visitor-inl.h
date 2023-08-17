@@ -531,6 +531,8 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitEphemeronHashTable(
     // Objects in the shared heap are prohibited from being used as keys in
     // WeakMaps and WeakSets and therefore cannot be ephemeron keys. See also
     // MarkCompactCollector::ProcessEphemeron.
+    //
+    // TODO(syg): HERE need to implement ephemeron marking for shared things.
     DCHECK(!key.InWritableSharedSpace());
     if (key.InReadOnlySpace() || concrete_visitor()->IsMarked(key)) {
       VisitPointer(table, value_slot);

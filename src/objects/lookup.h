@@ -207,6 +207,7 @@ class V8_EXPORT_PRIVATE LookupIterator final {
   void WriteDataValue(Handle<Object> value, bool initializing_store);
   Handle<Object> GetDataValue(SeqCstAccessTag tag) const;
   void WriteDataValue(Handle<Object> value, SeqCstAccessTag tag);
+  void WriteAgentLocalValue(Handle<Object> value);
   Handle<Object> SwapDataValue(Handle<Object> value, SeqCstAccessTag tag);
   Handle<Object> CompareAndSwapDataValue(Handle<Object> expected,
                                          Handle<Object> value,

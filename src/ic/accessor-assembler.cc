@@ -1701,14 +1701,20 @@ void AccessorAssembler::StoreJSSharedStructField(
     TNode<Context> context, TNode<HeapObject> shared_struct,
     TNode<Map> shared_struct_map, TNode<DescriptorArray> descriptors,
     TNode<IntPtrT> descriptor_name_index, TNode<Uint32T> details,
-    TNode<Object> maybe_local_value) {
+    TNode<Object> maybe_local_value, Label* if_agent_local) {
   CSA_DCHECK(this, IsJSSharedStruct(shared_struct));
 
   Label done(this);
 
   TNode<UintPtrT> field_index =
       DecodeWordFromWord32<PropertyDetails::FieldIndexField>(details);
-  field_index = Unsigned(IntPtrAdd(
+
+  GotoIf(Word32Equal(DecodeWord32<PropertyDetails::LocationField>(details),
+                     Int32Constant(
+                         static_cast<int32_t>(PropertyLocation::kAgentLocal))),
+         if_agent_local);
+
+  TNode<UintPtrT> instance_field_index = Unsigned(IntPtrAdd(
       field_index,
       Unsigned(LoadMapInobjectPropertiesStartInWords(shared_struct_map))));
 
@@ -1719,12 +1725,12 @@ void AccessorAssembler::StoreJSSharedStructField(
   SharedValueBarrier(context, &shared_value);
 
   Label inobject(this), backing_store(this);
-  Branch(UintPtrLessThan(field_index, instance_size_in_words), &inobject,
-         &backing_store);
+  Branch(UintPtrLessThan(instance_field_index, instance_size_in_words),
+         &inobject, &backing_store);
 
   BIND(&inobject);
   {
-    TNode<IntPtrT> field_offset = Signed(TimesTaggedSize(field_index));
+    TNode<IntPtrT> field_offset = Signed(TimesTaggedSize(instance_field_index));
     StoreSharedObjectField(shared_struct, field_offset, shared_value.value());
     Goto(&done);
   }
@@ -1732,7 +1738,7 @@ void AccessorAssembler::StoreJSSharedStructField(
   BIND(&backing_store);
   {
     TNode<IntPtrT> backing_store_index =
-        Signed(IntPtrSub(field_index, instance_size_in_words));
+        Signed(IntPtrSub(instance_field_index, instance_size_in_words));
 
     CSA_DCHECK(
         this,
@@ -2717,7 +2723,8 @@ void AccessorAssembler::GenericPropertyLoad(
     {
       LoadPropertyFromFastObject(lookup_start_object, lookup_start_object_map,
                                  descriptors, var_name_index.value(),
-                                 &var_details, &var_value);
+                                 /* if_agent_local */ slow, &var_details,
+                                 &var_value);
       Goto(&if_found_on_lookup_start_object);
     }
 

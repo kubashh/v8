@@ -88,7 +88,7 @@ enum class PropertyKind { kData = 0, kAccessor = 1 };
 
 // Order of modes is significant.
 // Must fit in the BitField PropertyDetails::LocationField.
-enum class PropertyLocation { kField = 0, kDescriptor = 1 };
+enum class PropertyLocation { kField = 0, kDescriptor = 1, kAgentLocal = 2 };
 
 // Order of modes is significant.
 // Must fit in the BitField PropertyDetails::ConstnessField.
@@ -410,7 +410,7 @@ class PropertyDetails {
   using DictionaryStorageField = PropertyCellTypeField::Next<uint32_t, 23>;
 
   // Bit fields for fast objects.
-  using LocationField = AttributesField::Next<PropertyLocation, 1>;
+  using LocationField = AttributesField::Next<PropertyLocation, 2>;
   using RepresentationField = LocationField::Next<uint32_t, 3>;
   using DescriptorPointer =
       RepresentationField::Next<uint32_t, kDescriptorIndexBitCount>;

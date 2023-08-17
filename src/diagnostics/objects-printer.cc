@@ -326,19 +326,39 @@ bool JSObject::PrintProperties(std::ostream& os) {
         case PropertyLocation::kDescriptor:
           os << Brief(descs->GetStrongValue(i));
           break;
+        case PropertyLocation::kAgentLocal: {
+          Isolate* current_running_isolate = Isolate::TryGetCurrent();
+          if (current_running_isolate != nullptr) {
+            // TODO(syg): This HandleScope feels cursed.
+            HandleScope scope(current_running_isolate);
+            os << Brief(current_running_isolate->GetAgentLocalFieldAt(
+                handle(JSSharedStruct::cast(*this), current_running_isolate),
+                details.field_index()));
+          } else {
+            os << "??? no current isolate ???";
+          }
+          break;
+        }
       }
       os << " ";
       details.PrintAsFastTo(os, PropertyDetails::kForProperties);
-      if (details.location() == PropertyLocation::kField) {
-        int field_index = details.field_index();
-        if (field_index < nof_inobject_properties) {
-          os << ", location: in-object";
-        } else {
-          field_index -= nof_inobject_properties;
-          os << ", location: properties[" << field_index << "]";
+      switch (details.location()) {
+        case PropertyLocation::kField: {
+          int field_index = details.field_index();
+          if (field_index < nof_inobject_properties) {
+            os << ", location: in-object";
+          } else {
+            field_index -= nof_inobject_properties;
+            os << ", location: properties[" << field_index << "]";
+          }
+          break;
         }
-      } else {
-        os << ", location: descriptor";
+        case PropertyLocation::kDescriptor:
+          os << ", location: descriptor";
+          break;
+        case PropertyLocation::kAgentLocal:
+          os << ", location: agent-local";
+          break;
       }
     }
     return map()->NumberOfOwnDescriptors() > 0;
@@ -2946,7 +2966,7 @@ void DescriptorArray::PrintDescriptorDetails(std::ostream& os,
       field_type.PrintTo(os);
       break;
     }
-    case PropertyLocation::kDescriptor:
+    case PropertyLocation::kDescriptor: {
       Object value = GetStrongValue(descriptor);
       os << Brief(value);
       if (IsAccessorPair(value)) {
@@ -2954,6 +2974,10 @@ void DescriptorArray::PrintDescriptorDetails(std::ostream& os,
         os << "(get: " << Brief(pair->getter())
            << ", set: " << Brief(pair->setter()) << ")";
       }
+      break;
+    }
+    case PropertyLocation::kAgentLocal:
+      os << "agent-local";
       break;
   }
 }
