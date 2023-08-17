@@ -79,6 +79,9 @@ class DeoptimizationFrameTranslation::Iterator {
 
   TranslationOpcode NextOpcode();
 
+  TranslationOpcode NextJSFrame();
+  TranslationOpcode NextFrame();
+
   bool HasNextOpcode() const;
 
   void SkipOperands(int n) {
@@ -173,7 +176,7 @@ class DeoptimizationData : public FixedArray {
 
 #undef DECL_ENTRY_ACCESSORS
 
-  inline BytecodeOffset GetBytecodeOffset(int i) const;
+  inline BytecodeOffset GetBytecodeOffsetOrBuiltinContinuationId(int i) const;
 
   inline void SetBytecodeOffset(int i, BytecodeOffset value);
 
