@@ -14,6 +14,8 @@
 namespace v8 {
 namespace internal {
 
+#include "torque-generated/src/objects/deoptimization-data-tq.inc"
+
 // This class holds data required during deoptimization. It does not have its
 // own instance type.
 class DeoptimizationLiteralArray : public WeakFixedArray {
@@ -207,8 +209,12 @@ class DeoptimizationData : public FixedArray {
 
   DECL_CAST(DeoptimizationData)
 
+#if VERIFY_HEAP
+  void DeoptimizationDataVerify(BytecodeArray bytecode) const;
+#endif
+
 #ifdef ENABLE_DISASSEMBLER
-  void PrintDeoptimizationData(std::ostream& os) const;
+  void DeoptimizationDataPrint(std::ostream& os) const;
 #endif
 
  private:
