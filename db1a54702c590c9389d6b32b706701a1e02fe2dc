@@ -33,6 +33,23 @@
       "message": "Tobias, are you OK with dropping some symbols from torque initializers?",
       "revId": "db1a54702c590c9389d6b32b706701a1e02fe2dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b70f6c60_976d70fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-08-17T13:55:51Z",
+      "side": 1,
+      "message": "Oh, wait, the \"V8 Arm - debug builder\" does not set v8_enable_fast_mksnapshot. So we would have to disable symbols for all configurations. Is that acceptable? Do we ever need to debug torque initializers?",
+      "revId": "db1a54702c590c9389d6b32b706701a1e02fe2dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
