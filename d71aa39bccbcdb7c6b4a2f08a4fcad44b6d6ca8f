@@ -16,6 +16,23 @@
       "message": "Did you use some analysis tool to create these changes? If yes, consider mention it in the CL description.",
       "revId": "d71aa39bccbcdb7c6b4a2f08a4fcad44b6d6ca8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f193cf3_fbad2377",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516354
+      },
+      "writtenOn": "2023-08-17T10:04:05Z",
+      "side": 1,
+      "message": "I\u0027ve signed the CLA yet it still raises an error",
+      "revId": "d71aa39bccbcdb7c6b4a2f08a4fcad44b6d6ca8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
