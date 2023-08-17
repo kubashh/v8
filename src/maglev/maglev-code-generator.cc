@@ -1728,6 +1728,14 @@ Handle<DeoptimizationData> MaglevCodeGenerator::GenerateDeoptimizationData(
     i++;
   }
 
+#ifdef VERIFY_HEAP
+  raw_data->DeoptimizationDataVerify(nullptr,
+                                     *code_gen_state_.compilation_info()
+                                          ->toplevel_compilation_unit()
+                                          ->bytecode()
+                                          .object());
+#endif
+
   return data;
 }
 

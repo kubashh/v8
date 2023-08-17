@@ -14,6 +14,8 @@
 namespace v8 {
 namespace internal {
 
+#include "torque-generated/src/objects/deoptimization-data-tq.inc"
+
 // This class holds data required during deoptimization. It does not have its
 // own instance type.
 class DeoptimizationLiteralArray : public WeakFixedArray {
@@ -116,7 +118,8 @@ class DeoptimizationFrameTranslation::Iterator {
 // the literal array will contain these functions.
 //
 // It can be empty.
-class DeoptimizationData : public FixedArray {
+class DeoptimizationData
+    : public TorqueGeneratedDeoptimizationData<DeoptimizationData, FixedArray> {
  public:
   // Layout description.  Indices in the array.
   static const int kFrameTranslationIndex = 0;
@@ -205,10 +208,14 @@ class DeoptimizationData : public FixedArray {
   V8_EXPORT_PRIVATE static Handle<DeoptimizationData> Empty(
       LocalIsolate* isolate);
 
-  DECL_CAST(DeoptimizationData)
+#if VERIFY_HEAP
+  void DeoptimizationDataVerify(
+      Isolate* isolate = nullptr,
+      base::Optional<BytecodeArray> bytecode = {}) const;
+#endif
 
 #ifdef ENABLE_DISASSEMBLER
-  void PrintDeoptimizationData(std::ostream& os) const;
+  void DeoptimizationDataPrint(std::ostream& os) const;
 #endif
 
  private:
@@ -218,7 +225,7 @@ class DeoptimizationData : public FixedArray {
 
   static int LengthFor(int entry_count) { return IndexForEntry(entry_count); }
 
-  OBJECT_CONSTRUCTORS(DeoptimizationData, FixedArray);
+  TQ_OBJECT_CONSTRUCTORS(DeoptimizationData)
 };
 
 }  // namespace internal

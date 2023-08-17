@@ -857,6 +857,7 @@ filegroup(
         "src/builtins/conversion.tq",
         "src/builtins/convert.tq",
         "src/builtins/data-view.tq",
+        "src/builtins/deoptimization-data.tq",
         "src/builtins/finalization-registry.tq",
         "src/builtins/frame-arguments.tq",
         "src/builtins/frames.tq",
