@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c697b50_3d3c5460",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-08-18T20:08:00Z",
+      "side": 0,
+      "message": "I don\u0027t see how this was ever needed. It looks plain wrong. I\u0027ll keep an eye on the UMA metrics for Wasm code GC when this shipped, but if anything this should collect more code than before.",
+      "range": {
+        "startLine": 1122,
+        "startChar": 0,
+        "endLine": 1124,
+        "endChar": 7
+      },
+      "revId": "98e50db63b82c8d1a4233a9021a99f9434a4d7d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
