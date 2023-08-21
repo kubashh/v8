@@ -756,11 +756,16 @@ class SmallZoneVector : public base::SmallVector<T, kSize, ZoneAllocator<T>> {
             size, ZoneAllocator<T>(ZoneAllocator<T>(zone))) {}
 };
 
-// Used by SmallZoneMap below.
+// Used by SmallZoneMap below. Essentially a closure around placement-new of
+// the "full" fallback ZoneMap. Called once SmallMap grows beyond kArraySize.
 template <typename ZoneMap>
-struct ZoneMapInit {
-  Zone* zone;
-  void operator()(ZoneMap* map) const { new (map) ZoneMap(zone); }
+class ZoneMapInit {
+ public:
+  explicit ZoneMapInit(Zone* zone) : zone_(zone) {}
+  void operator()(ZoneMap* map) const { new (map) ZoneMap(zone_); }
+
+ private:
+  Zone* zone_;
 };
 
 // A wrapper subclass for base::SmallMap to make it easy to construct one that
