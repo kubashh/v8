@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4cdb78c_bda9193b",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 6067,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-08-21T08:56:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3729f1f_645a7400",
+      "range": {
+        "startLine": 6066,
+        "startChar": 3,
+        "endLine": 6067,
+        "endChar": 78
+      },
+      "revId": "4afe4a25d6039c7020dbeb56a4f30cd27c070768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "313c2a18_a928b7f2",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-08-07T13:19:58Z",
       "side": 1,
       "message": "same here and below",
+      "range": {
+        "startLine": 6161,
+        "startChar": 0,
+        "endLine": 6180,
+        "endChar": 6
+      },
+      "revId": "4afe4a25d6039c7020dbeb56a4f30cd27c070768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c76ed1c4_6aa52ef2",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 6180,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-08-21T08:56:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "313c2a18_a928b7f2",
       "range": {
         "startLine": 6161,
         "startChar": 0,
