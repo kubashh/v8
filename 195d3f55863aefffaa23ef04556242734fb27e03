@@ -56,6 +56,30 @@
       },
       "revId": "195d3f55863aefffaa23ef04556242734fb27e03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80d5bbd2_fc93f781",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5101,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-08-22T13:52:30Z",
+      "side": 1,
+      "message": "yeah, exactly. I was surprised too. And I tried to add an assert to catch this only to find that we use TVARIABLE as mutable variables in this style, where we first use the first assignment and then later mutate (i.e. convert it to a phi). so making this more robust seems to be a larger and separate change.",
+      "parentUuid": "232890ce_9dfb4b0c",
+      "range": {
+        "startLine": 5101,
+        "startChar": 23,
+        "endLine": 5101,
+        "endChar": 34
+      },
+      "revId": "195d3f55863aefffaa23ef04556242734fb27e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
