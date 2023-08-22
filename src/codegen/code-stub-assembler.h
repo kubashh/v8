@@ -2736,6 +2736,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<BoolT> IsJSArray(TNode<HeapObject> object);
   TNode<BoolT> IsJSArrayIterator(TNode<HeapObject> object);
   TNode<BoolT> IsJSAsyncGeneratorObject(TNode<HeapObject> object);
+  TNode<BoolT> IsJSAsyncContextVariable(TNode<HeapObject> object);
+  TNode<BoolT> IsJSAsyncContextSnapshot(TNode<HeapObject> object);
   TNode<BoolT> IsFunctionInstanceType(TNode<Int32T> instance_type);
   TNode<BoolT> IsJSFunctionInstanceType(TNode<Int32T> instance_type);
   TNode<BoolT> IsJSFunctionMap(TNode<Map> map);
@@ -4072,6 +4074,18 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<JSFunction> AllocateFunctionWithMapAndContext(
       TNode<Map> map, TNode<SharedFunctionInfo> shared_info,
       TNode<Context> context);
+
+  TNode<HeapObject> GetAsyncContextStore() {
+    return UncheckedCast<HeapObject>(LoadRoot(RootIndex::kAsyncContextStore));
+  }
+  TNode<HeapObject> AsyncContextSwap(TNode<HeapObject> snapshot) {
+    CSA_DCHECK(this,
+               Word32Or(IsUndefined(snapshot),
+                        HasInstanceType(snapshot, ORDERED_HASH_MAP_TYPE)));
+    TNode<HeapObject> current_snapshot = GetAsyncContextStore();
+    StoreRoot(RootIndex::kAsyncContextStore, snapshot);
+    return current_snapshot;
+  }
 
   // Promise helpers
   TNode<Uint32T> PromiseHookFlags();

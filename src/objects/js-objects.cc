@@ -43,6 +43,7 @@
 #include "src/objects/js-break-iterator.h"
 #include "src/objects/js-collator.h"
 #endif  // V8_INTL_SUPPORT
+#include "src/objects/js-async-context.h"
 #include "src/objects/js-collection.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-date-time-format.h"
@@ -88,8 +89,8 @@
 #include "src/utils/ostreams.h"
 
 #if V8_ENABLE_WEBASSEMBLY
-#include "src/wasm/wasm-objects.h"
 #include "src/debug/debug-wasm-objects.h"
+#include "src/wasm/wasm-objects.h"
 #endif  // V8_ENABLE_WEBASSEMBLY
 
 namespace v8 {
@@ -1708,10 +1709,9 @@ Maybe<bool> JSReceiver::ValidateAndApplyPropertyDescriptor(
       }
       Handle<Object> value(
           desc->has_value() ? desc->value()
-                            : current->has_value()
-                                  ? current->value()
-                                  : Handle<Object>::cast(
-                                        isolate->factory()->undefined_value()));
+          : current->has_value()
+              ? current->value()
+              : Handle<Object>::cast(isolate->factory()->undefined_value()));
       return JSObject::DefineOwnPropertyIgnoreAttributes(it, value, attrs,
                                                          should_throw);
     } else {
@@ -1719,17 +1719,15 @@ Maybe<bool> JSReceiver::ValidateAndApplyPropertyDescriptor(
              (desc_is_generic_descriptor &&
               PropertyDescriptor::IsAccessorDescriptor(current)));
       Handle<Object> getter(
-          desc->has_get()
-              ? desc->get()
-              : current->has_get()
-                    ? current->get()
-                    : Handle<Object>::cast(isolate->factory()->null_value()));
+          desc->has_get() ? desc->get()
+          : current->has_get()
+              ? current->get()
+              : Handle<Object>::cast(isolate->factory()->null_value()));
       Handle<Object> setter(
-          desc->has_set()
-              ? desc->set()
-              : current->has_set()
-                    ? current->set()
-                    : Handle<Object>::cast(isolate->factory()->null_value()));
+          desc->has_set() ? desc->set()
+          : current->has_set()
+              ? current->set()
+              : Handle<Object>::cast(isolate->factory()->null_value()));
       MaybeHandle<Object> result = JSObject::DefineOwnAccessorIgnoreAttributes(
           it, getter, setter, attrs);
       if (result.is_null()) return Nothing<bool>();
@@ -2513,6 +2511,10 @@ int JSObject::GetHeaderSize(InstanceType type,
       return JSArrayBuffer::kHeaderSize;
     case JS_ARRAY_ITERATOR_TYPE:
       return JSArrayIterator::kHeaderSize;
+    case JS_ASYNC_CONTEXT_VARIABLE_TYPE:
+      return JSAsyncContextVariable::kHeaderSize;
+    case JS_ASYNC_CONTEXT_SNAPSHOT_TYPE:
+      return JSAsyncContextSnapshot::kHeaderSize;
     case JS_TYPED_ARRAY_TYPE:
       return JSTypedArray::kHeaderSize;
     case JS_DATA_VIEW_TYPE:
@@ -4065,11 +4067,10 @@ Handle<NumberDictionary> JSObject::NormalizeElements(Handle<JSObject> object) {
       object->GetElementsAccessor()->Normalize(object);
 
   // Switch to using the dictionary as the backing storage for elements.
-  ElementsKind target_kind = is_sloppy_arguments
-                                 ? SLOW_SLOPPY_ARGUMENTS_ELEMENTS
-                                 : object->HasFastStringWrapperElements()
-                                       ? SLOW_STRING_WRAPPER_ELEMENTS
-                                       : DICTIONARY_ELEMENTS;
+  ElementsKind target_kind =
+      is_sloppy_arguments                      ? SLOW_SLOPPY_ARGUMENTS_ELEMENTS
+      : object->HasFastStringWrapperElements() ? SLOW_STRING_WRAPPER_ELEMENTS
+                                               : DICTIONARY_ELEMENTS;
   Handle<Map> new_map = JSObject::GetElementsTransitionMap(object, target_kind);
   // Set the new map first to satify the elements type assert in set_elements().
   JSObject::MigrateToMap(isolate, object, new_map);

@@ -250,6 +250,8 @@ Type::bitset BitsetType::Lub(MapRefLike map, JSHeapBroker* broker) {
 #endif  // V8_INTL_SUPPORT
     case JS_CONTEXT_EXTENSION_OBJECT_TYPE:
     case JS_GENERATOR_OBJECT_TYPE:
+    case JS_ASYNC_CONTEXT_VARIABLE_TYPE:
+    case JS_ASYNC_CONTEXT_SNAPSHOT_TYPE:
     case JS_ASYNC_FUNCTION_OBJECT_TYPE:
     case JS_ASYNC_GENERATOR_OBJECT_TYPE:
     case JS_MODULE_NAMESPACE_TYPE:
@@ -682,8 +684,8 @@ bool UnionType::Wellformed() const {
   // 5. No element (except the bitset) is a subtype of any other.
   // 6. If there is a range, then the bitset type does not contain
   //    plain number bits.
-  DCHECK_LE(2, this->Length());      // (1)
-  DCHECK(this->Get(0).IsBitset());   // (2a)
+  DCHECK_LE(2, this->Length());     // (1)
+  DCHECK(this->Get(0).IsBitset());  // (2a)
 
   for (int i = 0; i < this->Length(); ++i) {
     if (i != 0) DCHECK(!this->Get(i).IsBitset());  // (2b)
