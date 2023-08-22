@@ -166,47 +166,48 @@ void Heap::FinalizeGarbageCollection(StackState stack_state) {
   DCHECK(!in_no_gc_scope());
   CHECK(!in_disallow_gc_scope());
   config_.stack_state = stack_state;
-  stack()->SetMarkerToCurrentStackPosition();
-  in_atomic_pause_ = true;
+  stack()->SetMarkerIfNeededAndCallback([this]() {
+    in_atomic_pause_ = true;
 
 #if defined(CPPGC_YOUNG_GENERATION)
-  // Check if the young generation was enabled. We must enable young generation
-  // before calling the custom weak callbacks to make sure that the callbacks
-  // for old objects are registered in the remembered set.
-  if (generational_gc_enabled_) {
-    HeapBase::EnableGenerationalGC();
-  }
+    // Check if the young generation was enabled. We must enable young
+    // generation before calling the custom weak callbacks to make sure that the
+    // callbacks for old objects are registered in the remembered set.
+    if (generational_gc_enabled_) {
+      HeapBase::EnableGenerationalGC();
+    }
 #endif  // defined(CPPGC_YOUNG_GENERATION)
-  {
-    // This guards atomic pause marking, meaning that no internal method or
-    // external callbacks are allowed to allocate new objects.
-    cppgc::subtle::DisallowGarbageCollectionScope no_gc_scope(*this);
-    marker_->FinishMarking(config_.stack_state);
-  }
-  marker_.reset();
-  const size_t bytes_allocated_in_prefinalizers = ExecutePreFinalizers();
+    {
+      // This guards atomic pause marking, meaning that no internal method or
+      // external callbacks are allowed to allocate new objects.
+      cppgc::subtle::DisallowGarbageCollectionScope no_gc_scope(*this);
+      marker_->FinishMarking(config_.stack_state);
+    }
+    marker_.reset();
+    const size_t bytes_allocated_in_prefinalizers = ExecutePreFinalizers();
 #if CPPGC_VERIFY_HEAP
-  MarkingVerifier verifier(*this, config_.collection_type);
-  verifier.Run(config_.stack_state,
-               stats_collector()->marked_bytes_on_current_cycle() +
-                   bytes_allocated_in_prefinalizers);
+    MarkingVerifier verifier(*this, config_.collection_type);
+    verifier.Run(config_.stack_state,
+                 stats_collector()->marked_bytes_on_current_cycle() +
+                     bytes_allocated_in_prefinalizers);
 #endif  // CPPGC_VERIFY_HEAP
 #ifndef CPPGC_ALLOW_ALLOCATIONS_IN_PREFINALIZERS
-  DCHECK_EQ(0u, bytes_allocated_in_prefinalizers);
+    DCHECK_EQ(0u, bytes_allocated_in_prefinalizers);
 #endif
-  USE(bytes_allocated_in_prefinalizers);
+    USE(bytes_allocated_in_prefinalizers);
 
 #if defined(CPPGC_YOUNG_GENERATION)
-  ResetRememberedSet();
+    ResetRememberedSet();
 #endif  // defined(CPPGC_YOUNG_GENERATION)
 
-  subtle::NoGarbageCollectionScope no_gc(*this);
-  const SweepingConfig sweeping_config{
-      config_.sweeping_type, SweepingConfig::CompactableSpaceHandling::kSweep,
-      config_.free_memory_handling};
-  sweeper_.Start(sweeping_config);
-  in_atomic_pause_ = false;
-  sweeper_.NotifyDoneIfNeeded();
+    subtle::NoGarbageCollectionScope no_gc(*this);
+    const SweepingConfig sweeping_config{
+        config_.sweeping_type, SweepingConfig::CompactableSpaceHandling::kSweep,
+        config_.free_memory_handling};
+    sweeper_.Start(sweeping_config);
+    in_atomic_pause_ = false;
+    sweeper_.NotifyDoneIfNeeded();
+  });
 }
 
 void Heap::EnableGenerationalGC() {

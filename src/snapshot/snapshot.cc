@@ -1007,44 +1007,55 @@ StartupData SnapshotCreatorImpl::CreateBlob(
     isolate_->heap()->SetSerializedGlobalProxySizes(*global_proxy_sizes);
   }
 
-  // We might rehash strings and re-sort descriptors. Clear the lookup cache.
-  isolate_->descriptor_lookup_cache()->Clear();
+  base::Optional<SafepointScope> safepoint_scope;
+  base::Optional<DisallowGarbageCollection> no_gc_from_here_on;
 
-  // If we don't do this then we end up with a stray root pointing at the
-  // context even after we have disposed of the context.
-  isolate_->heap()->CollectAllAvailableGarbage(
-      GarbageCollectionReason::kSnapshotCreator);
-  {
-    HandleScope scope(isolate_);
-    isolate_->heap()->CompactWeakArrayLists();
-  }
+  // We need a stack marker here to allow deterministic passes over the stack.
+  // The garbage collection and read-only promotion should scan the same part
+  // of the stack.
+  isolate_->stack().SetMarkerIfNeededAndCallback(
+      [this, function_code_handling, &safepoint_scope, &no_gc_from_here_on]() {
+        // We might rehash strings and re-sort descriptors. Clear the lookup
+        // cache.
+        isolate_->descriptor_lookup_cache()->Clear();
 
-  Snapshot::ClearReconstructableDataForSerialization(
-      isolate_,
-      function_code_handling == SnapshotCreator::FunctionCodeHandling::kClear);
+        // If we don't do this then we end up with a stray root pointing at the
+        // context even after we have disposed of the context.
+        isolate_->heap()->CollectAllAvailableGarbage(
+            GarbageCollectionReason::kSnapshotCreator);
+        {
+          HandleScope scope(isolate_);
+          isolate_->heap()->CompactWeakArrayLists();
+        }
 
-  SafepointKind safepoint_kind = isolate_->has_shared_space()
-                                     ? SafepointKind::kGlobal
-                                     : SafepointKind::kIsolate;
-  SafepointScope safepoint_scope(isolate_, safepoint_kind);
-  DisallowGarbageCollection no_gc_from_here_on;
+        Snapshot::ClearReconstructableDataForSerialization(
+            isolate_, function_code_handling ==
+                          SnapshotCreator::FunctionCodeHandling::kClear);
 
-  // RO space is usually writable when serializing a snapshot s.t. preceding
-  // heap initialization can also extend RO space. There are notable exceptions
-  // though, including --stress-snapshot and serializer cctests.
-  if (isolate_->heap()->read_only_space()->writable()) {
-    // Promote objects from mutable heap spaces to read-only space prior to
-    // serialization. Objects can be promoted if a) they are themselves
-    // immutable-after-deserialization and b) all objects in the transitive
-    // object graph also satisfy condition a).
-    ReadOnlyPromotion::Promote(isolate_, safepoint_scope);
-    // When creating the snapshot from scratch, we are responsible for sealing
-    // the RO heap here. Note we cannot delegate the responsibility e.g. to
-    // Isolate::Init since it should still be possible to allocate into RO
-    // space after the Isolate has been initialized, for example as part of
-    // Context creation.
-    isolate_->read_only_heap()->OnCreateHeapObjectsComplete(isolate_);
-  }
+        SafepointKind safepoint_kind = isolate_->has_shared_space()
+                                           ? SafepointKind::kGlobal
+                                           : SafepointKind::kIsolate;
+        safepoint_scope.emplace(isolate_, safepoint_kind);
+        no_gc_from_here_on.emplace();
+
+        // RO space is usually writable when serializing a snapshot s.t.
+        // preceding heap initialization can also extend RO space. There are
+        // notable exceptions though, including --stress-snapshot and serializer
+        // cctests.
+        if (isolate_->heap()->read_only_space()->writable()) {
+          // Promote objects from mutable heap spaces to read-only space prior
+          // to serialization. Objects can be promoted if a) they are themselves
+          // immutable-after-deserialization and b) all objects in the
+          // transitive object graph also satisfy condition a).
+          ReadOnlyPromotion::Promote(isolate_, safepoint_scope.value());
+          // When creating the snapshot from scratch, we are responsible for
+          // sealing the RO heap here. Note we cannot delegate the
+          // responsibility e.g. to Isolate::Init since it should still be
+          // possible to allocate into RO space after the Isolate has been
+          // initialized, for example as part of Context creation.
+          isolate_->read_only_heap()->OnCreateHeapObjectsComplete(isolate_);
+        }
+      });
 
   // Create a vector with all contexts and destroy associated global handles.
   // This is important because serialization visits active global handles as
@@ -1079,7 +1090,7 @@ StartupData SnapshotCreatorImpl::CreateBlob(
 
   contexts_.clear();
   return Snapshot::Create(isolate_, &raw_contexts, raw_callbacks,
-                          safepoint_scope, no_gc_from_here_on,
+                          safepoint_scope.value(), no_gc_from_here_on.value(),
                           serializer_flags);
 }
 
