@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "195d3f55863aefffaa23ef04556242734fb27e03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc988544_7783265e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-22T13:35:16Z",
+      "side": 1,
+      "message": "LGTM given that this fixes a bug, but it\u0027s not 100% clear to me why it does.\n\nTobias, is it expected that ordering like this is affects CSA codegen correctness?",
+      "revId": "195d3f55863aefffaa23ef04556242734fb27e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "232890ce_9dfb4b0c",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5101,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-22T13:35:16Z",
+      "side": 1,
+      "message": "this is because the `if_handler` jump in `HandlePolymorphicCase` was a \"backwards\" jump, and so `var_handler` wasn\u0027t a phi? I\u0027m surprised this didn\u0027t cause CSA to fail any DCHECKs, +tebbi",
+      "range": {
+        "startLine": 5101,
+        "startChar": 23,
+        "endLine": 5101,
+        "endChar": 34
+      },
+      "revId": "195d3f55863aefffaa23ef04556242734fb27e03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
