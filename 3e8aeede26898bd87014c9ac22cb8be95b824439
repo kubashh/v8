@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cb07569_3099392a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-22T07:44:16Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL.\n@tebbi@chromium.org: Please component-review",
+      "revId": "3e8aeede26898bd87014c9ac22cb8be95b824439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6921e42e_277d134d",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 5945,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-22T07:44:16Z",
+      "side": 1,
+      "message": "I decided to reuse the same op as semantically there really isn\u0027t a big difference in what they express and the RTT is more or less an artifact of the `canon rtt`.\nFor optimizations they should be pretty much handled the same, so I guess, it makes sense to consolidate them until lowering where they generate very distinct code.",
+      "range": {
+        "startLine": 5945,
+        "startChar": 11,
+        "endLine": 5945,
+        "endChar": 26
+      },
+      "revId": "3e8aeede26898bd87014c9ac22cb8be95b824439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
