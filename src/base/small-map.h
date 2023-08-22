@@ -11,8 +11,7 @@
 
 #include "src/base/macros.h"
 
-namespace v8 {
-namespace base {
+namespace v8::base {
 
 // SmallMap is a container with a std::map-like interface. It starts out backed
 // by an unsorted array but switches to some other container type if it grows
@@ -43,7 +42,7 @@ namespace base {
 // for your map and supply your own version of == to the SmallMap. You can use
 // regular operator== by just doing:
 //
-//   SmallMap<std::map<MyKey, MyValue>, 4, std::equal_to<KyKey>>
+//   SmallMap<std::map<MyKey, MyValue>, 4, std::equal_to<MyKey>>
 //
 //
 // USAGE
@@ -625,7 +624,6 @@ class SmallMap {
   }
 };
 
-}  // namespace base
-}  // namespace v8
+}  // namespace v8::base
 
 #endif  // V8_BASE_SMALL_MAP_H_
