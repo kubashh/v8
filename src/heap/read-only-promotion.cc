@@ -509,18 +509,23 @@ class ReadOnlyPromotionImpl final : public AllStatic {
 // static
 void ReadOnlyPromotion::Promote(Isolate* isolate,
                                 const SafepointScope& safepoint_scope) {
-  DisallowGarbageCollection no_gc;
-  // Visit the mutable heap and determine the set of objects that can be
-  // promoted to RO space.
-  std::vector<HeapObject> promotees =
-      Committee::DeterminePromotees(isolate, no_gc, safepoint_scope);
-  // Physically copy promotee objects to RO space and track all object moves.
-  HeapObjectMap moves;
-  ReadOnlyPromotionImpl::CopyToReadOnlyHeap(isolate, promotees, &moves);
-  // Update all references to moved objects to point at their new location in
-  // RO space.
-  ReadOnlyPromotionImpl::UpdatePointers(isolate, safepoint_scope, moves);
-  ReadOnlyPromotionImpl::Verify(isolate, safepoint_scope);
+  // We need a stack marker here to allow deterministic passes over the stack.
+  // Determining the promotees and updating the pointers should scan the same
+  // part of the stack.
+  isolate->stack().SetMarkerIfNeededAndCallback([isolate, &safepoint_scope]() {
+    DisallowGarbageCollection no_gc;
+    // Visit the mutable heap and determine the set of objects that can be
+    // promoted to RO space.
+    std::vector<HeapObject> promotees =
+        Committee::DeterminePromotees(isolate, no_gc, safepoint_scope);
+    // Physically copy promotee objects to RO space and track all object moves.
+    HeapObjectMap moves;
+    ReadOnlyPromotionImpl::CopyToReadOnlyHeap(isolate, promotees, &moves);
+    // Update all references to moved objects to point at their new location in
+    // RO space.
+    ReadOnlyPromotionImpl::UpdatePointers(isolate, safepoint_scope, moves);
+    ReadOnlyPromotionImpl::Verify(isolate, safepoint_scope);
+  });
 }
 
 }  // namespace internal
