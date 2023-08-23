@@ -69,6 +69,24 @@
       "parentUuid": "15ce64e5_3e891a5c",
       "revId": "bc13058d2fc3ae3afc9e81f730cb816797805a1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b74dab88_437005df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368998
+      },
+      "writtenOn": "2023-08-23T18:43:42Z",
+      "side": 1,
+      "message": "As mentioned before the output of v8_presubmit is confusing. The stacktrace is nothing more that too much output coming from a successful test. After rebasing on top of a small \u0027improvement\u0027 of v8_presubmit you can see that the checks that are failing are indeed:\n```\nChecks failed:\nTorqueLintProcessor\nJSLintProcessor\n```\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8771954324942520705/+/u/Presubmit/stdout\nUnfortunately the \u0027improvement\u0027 was imperfect and the failure of the check does not yield a non zero exit code. Reverted with a reland in flight.\n\nPls note that if you run locally `./tools/v8_presubmit.py` you will see the same failure AND a bunch of tq and mjs files reformated. I do not understand the mechanics of your updates impacting the formatting of those files, but the effect is there.\n```\n        modified:   src/builtins/array-join.tq\n        modified:   src/builtins/object-groupby.tq\n        modified:   src/builtins/object.tq\n        modified:   src/builtins/promise-misc.tq\n        modified:   src/builtins/typed-array-set.tq\n        modified:   src/builtins/typed-array-slice.tq\n        modified:   src/objects/js-objects.tq\n        modified:   tools/system-analyzer/app-model.mjs\n        modified:   tools/system-analyzer/view/script-panel.mjs\n```",
+      "parentUuid": "98ae8ba8_91bcd7e1",
+      "revId": "bc13058d2fc3ae3afc9e81f730cb816797805a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
