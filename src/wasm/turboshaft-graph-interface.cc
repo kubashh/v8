@@ -1375,10 +1375,19 @@ class TurboshaftGraphBuildingInterface {
     result->op = asm_.WasmTypeCast(object.op, rtt, config);
   }
 
-  // TODO(jkummerow): {type} is redundant.
   void RefCastAbstract(FullDecoder* decoder, const Value& object, HeapType type,
                        Value* result, bool null_succeeds) {
-    Bailout(decoder);
+    if (v8_flags.experimental_wasm_assume_ref_cast_succeeds) {
+      Bailout(decoder);  // TODO(14108): Implement type guards.
+    }
+    // TODO(jkummerow): {type} is redundant.
+    DCHECK_IMPLIES(null_succeeds, result->type.is_nullable());
+    DCHECK_EQ(type, result->type.heap_type());
+    compiler::WasmTypeCheckConfig config{
+        object.type, ValueType::RefMaybeNull(
+                         type, null_succeeds ? kNullable : kNonNullable)};
+    V<Map> rtt = OpIndex::Invalid();
+    result->op = asm_.WasmTypeCast(object.op, rtt, config);
   }
 
   void BrOnCast(FullDecoder* decoder, uint32_t ref_index, const Value& object,
