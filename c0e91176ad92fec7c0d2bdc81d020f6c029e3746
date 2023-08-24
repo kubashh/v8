@@ -120,6 +120,24 @@
       "parentUuid": "83437662_f76f5bc8",
       "revId": "c0e91176ad92fec7c0d2bdc81d020f6c029e3746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dd615af_99f7807a",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2888,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-08-24T10:38:35Z",
+      "side": 1,
+      "message": "I changed this following solution #2 above for now, using a `std::unique_ptr\u003cbool\u003e`. Let us revisit this in a sequel CL to make sure the other instances of the pattern do not bite us.",
+      "parentUuid": "6df5dbad_ef5a5a1c",
+      "revId": "c0e91176ad92fec7c0d2bdc81d020f6c029e3746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
