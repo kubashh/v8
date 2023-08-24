@@ -35,6 +35,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e51e87c_1789e9b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-08-24T07:56:02Z",
+      "side": 1,
+      "message": "lgtm\n\nI am a bit worried about large blocks of code in the callbacks. I don\u0027t have a good guideline on when something should be factored out though as this is subjective.",
+      "revId": "c0e91176ad92fec7c0d2bdc81d020f6c029e3746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07ed89ee_90fbfc19",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-08-24T07:56:02Z",
+      "side": 1,
+      "message": "nit: There\u0027s a ton going on in the callback. Should we factor that into a separate method? (`FinalizeGarbageCollectionImpl`?)",
+      "revId": "c0e91176ad92fec7c0d2bdc81d020f6c029e3746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83437662_f76f5bc8",
