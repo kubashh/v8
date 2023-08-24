@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59035952_6f738533",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-08-24T13:31:31Z",
+      "side": 1,
+      "message": "Thanks! LGTM with one nit.",
+      "revId": "0aeab3cebedd38e68866932da88c3fbc68385667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f08c880_06b3bb6a",
+        "filename": "src/compiler/turboshaft/wasm-lowering-reducer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-08-24T13:31:31Z",
+      "side": 1,
+      "message": "nit: This is always 1.",
+      "range": {
+        "startLine": 284,
+        "startChar": 18,
+        "endLine": 284,
+        "endChar": 25
+      },
+      "revId": "0aeab3cebedd38e68866932da88c3fbc68385667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
