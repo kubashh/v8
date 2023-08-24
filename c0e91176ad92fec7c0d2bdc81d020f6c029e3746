@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a10d6bca_5e7d0de0",
+        "filename": "src/heap/cppgc/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-08-24T09:38:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07ed89ee_90fbfc19",
+      "revId": "c0e91176ad92fec7c0d2bdc81d020f6c029e3746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83437662_f76f5bc8",
@@ -82,6 +100,24 @@
       "writtenOn": "2023-08-24T07:23:03Z",
       "side": 1,
       "message": "I guess this is a pattern we need to be careful with. IIUC this can violate our assumption that the stack content above the marker is read-only. I think in this case it\u0027s fine because we only set it after iterating the stack. At least C++ makes such patterns quite obvious.",
+      "revId": "c0e91176ad92fec7c0d2bdc81d020f6c029e3746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6df5dbad_ef5a5a1c",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2888,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-08-24T09:38:32Z",
+      "side": 1,
+      "message": "I absolutely agree.\n\nThe required invariant would indeed be that the callback is not allowed to modify the stack above the marker. We should probably write it in a comments in the headers of the relevant methods. I agree that what we\u0027re doing here cannot bite us, but it\u0027s quite hard to reason about correctness.\n\nThis pattern has already been used in a few places, see list below. They all look innocent enough (except [6] and [7]) but in general even setting a `bool` to `true` could be problematic, if we are really unlucky.\n\nTo remove this pattern, we have two possible solutions:\n\n1. Store the result (i.e., everything the callback needs to modify) in a heap-allocated variable.\n2. Modify the trampoline so that the callback returns one word. This should be enough for all existing cases. This requires touching a lot of assembly code.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/d8/d8.cc;drc\u003d54885fe912c9b158cb2f8aaad3e7041677de3d3d;l\u003d6003\n[2] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/collection-barrier.cc;drc\u003dd988a2902f4a9f7b9fff270d4e300325e9345961;l\u003d112\n[3] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/parked-scope-inl.h;l\u003d86\n[4] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/parked-scope-inl.h;drc\u003d2bda55d0ca118ce56ede3a25c097a1929c3672fd;l\u003d110\n[5] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/objects/js-atomics-synchronization.cc;drc\u003dc59777f33c57f483222e50a64cf2fbe4a5abaad1;l\u003d232\n[6] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/snapshot/snapshot.cc;drc\u003d222325395b6cf4f0880cd1c6b2d985d495dc8a43;l\u003d367\n[7] https://source.chromium.org/chromium/chromium/src/+/main:v8/test/cctest/test-shared-strings.cc;drc\u003d8ec52940d2ba2857953f655f4d64e7f7afd79ffa;l\u003d233\n[8] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/heap/parked-scope-inl.h;drc\u003d2bda55d0ca118ce56ede3a25c097a1929c3672fd;l\u003d137",
+      "parentUuid": "83437662_f76f5bc8",
       "revId": "c0e91176ad92fec7c0d2bdc81d020f6c029e3746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
