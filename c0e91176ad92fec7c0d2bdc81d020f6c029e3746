@@ -16,6 +16,40 @@
       "message": "I reverted the changes that were related to snapshot serialization and read-only promotion. After our offline discussion with Jakob Linke, this CL is no more relevant to these. See https://crrev.com/c/4807483.",
       "revId": "c0e91176ad92fec7c0d2bdc81d020f6c029e3746",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7de57e6_473d26e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-24T07:23:03Z",
+      "side": 1,
+      "message": "Very cool! It\u0027s indeed much simpler to understand now. LGTM",
+      "revId": "c0e91176ad92fec7c0d2bdc81d020f6c029e3746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83437662_f76f5bc8",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2888,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-08-24T07:23:03Z",
+      "side": 1,
+      "message": "I guess this is a pattern we need to be careful with. IIUC this can violate our assumption that the stack content above the marker is read-only. I think in this case it\u0027s fine because we only set it after iterating the stack. At least C++ makes such patterns quite obvious.",
+      "revId": "c0e91176ad92fec7c0d2bdc81d020f6c029e3746",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
