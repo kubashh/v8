@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c6866c5_b46087de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-08-24T13:35:32Z",
+      "side": 1,
+      "message": "Thanks! LGTM with a couple of comments.",
+      "revId": "426a151a1a30de9f5d87b7bef9f9dd4aaab5b3d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4219c46f_905bd86a",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-08-24T13:35:32Z",
+      "side": 1,
+      "message": "We can return the object unchanged here.",
+      "range": {
+        "startLine": 1381,
+        "startChar": 6,
+        "endLine": 1381,
+        "endChar": 63
+      },
+      "revId": "426a151a1a30de9f5d87b7bef9f9dd4aaab5b3d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

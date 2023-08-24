@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f55c2095_852f5b3c",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-08-24T13:35:32Z",
+      "side": 0,
+      "message": "Does this not apply anymore?",
+      "range": {
+        "startLine": 1378,
+        "startChar": 0,
+        "endLine": 1378,
+        "endChar": 42
+      },
+      "revId": "0aeab3cebedd38e68866932da88c3fbc68385667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
