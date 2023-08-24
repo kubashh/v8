@@ -2052,7 +2052,11 @@ TEST(CodeSerializerLargeCodeObject) {
       CompileScriptAndProduceCache(isolate, source_str, ScriptDetails(), &cache,
                                    v8::ScriptCompiler::kNoCompileOptions);
 
-  CHECK(isolate->heap()->InSpace(orig->abstract_code(isolate), LO_SPACE));
+  // The object may end up in LO_SPACE or TRUSTED_LO_SPACE depending on whether
+  // the sandbox is enabled.
+  CHECK(
+      isolate->heap()->InSpace(orig->abstract_code(isolate), LO_SPACE) ||
+      isolate->heap()->InSpace(orig->abstract_code(isolate), TRUSTED_LO_SPACE));
 
   Handle<SharedFunctionInfo> copy;
   {
@@ -2122,7 +2126,10 @@ TEST(CodeSerializerLargeCodeObjectWithIncrementalMarking) {
       CompileScriptAndProduceCache(isolate, source_str, ScriptDetails(), &cache,
                                    v8::ScriptCompiler::kNoCompileOptions);
 
-  CHECK(heap->InSpace(orig->abstract_code(isolate), LO_SPACE));
+  // The object may end up in LO_SPACE or TRUSTED_LO_SPACE depending on whether
+  // the sandbox is enabled.
+  CHECK(heap->InSpace(orig->abstract_code(isolate), LO_SPACE) ||
+        heap->InSpace(orig->abstract_code(isolate), TRUSTED_LO_SPACE));
 
   // Pretend that incremental marking is on when deserialization begins.
   heap::ForceEvacuationCandidate(ec_page);
