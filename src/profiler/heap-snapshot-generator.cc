@@ -774,7 +774,8 @@ V8HeapExplorer::V8HeapExplorer(HeapSnapshot* snapshot,
       heap_object_map_(snapshot_->profiler()->heap_object_map()),
       progress_(progress),
       generator_(nullptr),
-      global_object_name_resolver_(resolver) {}
+      global_object_name_resolver_(resolver),
+      hprof_writer_(snapshot->profiler()->isolate()) {}
 
 HeapEntry* V8HeapExplorer::AllocateEntry(HeapThing ptr) {
   return AddEntry(HeapObject::cast(Object(reinterpret_cast<Address>(ptr))));
@@ -831,6 +832,9 @@ void V8HeapExplorer::ExtractLocationForJSFunction(HeapEntry* entry,
 HeapEntry* V8HeapExplorer::AddEntry(HeapObject object) {
   PtrComprCageBase cage_base(isolate());
   InstanceType instance_type = object->map(cage_base)->instance_type();
+  if (v8_flags.wasm_hprof) {
+    hprof_writer_.AddHeapObject(object, instance_type);
+  }
   if (InstanceTypeChecker::IsJSObject(instance_type)) {
     if (InstanceTypeChecker::IsJSFunction(instance_type)) {
       JSFunction func = JSFunction::cast(object);
@@ -869,10 +873,11 @@ HeapEntry* V8HeapExplorer::AddEntry(HeapObject object) {
                       names_->GetName(String::cast(object)));
     }
   } else if (InstanceTypeChecker::IsSymbol(instance_type)) {
-    if (Symbol::cast(object)->is_private())
+    if (Symbol::cast(object)->is_private()) {
       return AddEntry(object, HeapEntry::kHidden, "private symbol");
-    else
+    } else {
       return AddEntry(object, HeapEntry::kSymbol, "symbol");
+    }
 
   } else if (InstanceTypeChecker::IsBigInt(instance_type)) {
     return AddEntry(object, HeapEntry::kBigInt, "bigint");
@@ -900,7 +905,11 @@ HeapEntry* V8HeapExplorer::AddEntry(HeapObject object) {
     return AddEntry(object, HeapEntry::kHeapNumber, "heap number");
   }
 #if V8_ENABLE_WEBASSEMBLY
-  if (InstanceTypeChecker::IsWasmObject(instance_type)) {
+  // Only provide detailed information about Wasm objects when the --wasm-hprof
+  // flag is off, so that when running *with* the flag, heaps can still be
+  // snapshotted that are so big that they would crash DevTools otherwise.
+  if (!v8_flags.wasm_hprof &&
+      InstanceTypeChecker::IsWasmObject(instance_type)) {
     WasmTypeInfo info = object->map()->wasm_type_info();
     // The cast is safe; structs and arrays always have their instance defined.
     wasm::NamesProvider* names = WasmInstanceObject::cast(info->instance())
@@ -2052,6 +2061,7 @@ void V8HeapExplorer::ExtractInternalReferences(JSObject js_obj,
 
 void V8HeapExplorer::ExtractWasmStructReferences(WasmStruct obj,
                                                  HeapEntry* entry) {
+  if (v8_flags.wasm_hprof) return;
   wasm::StructType* type = obj->type();
   WasmTypeInfo info = obj->map()->wasm_type_info();
   // The cast is safe; structs always have their instance defined.
@@ -2076,6 +2086,7 @@ void V8HeapExplorer::ExtractWasmStructReferences(WasmStruct obj,
 
 void V8HeapExplorer::ExtractWasmArrayReferences(WasmArray obj,
                                                 HeapEntry* entry) {
+  if (v8_flags.wasm_hprof) return;
   if (!obj->type()->element_type().is_reference()) return;
   for (uint32_t i = 0; i < obj->length(); i++) {
     SetElementReference(entry, i, obj->ElementSlot(i).load(entry->isolate()));
@@ -2183,6 +2194,7 @@ class RootsReferencesExtractor : public RootVisitor {
 bool V8HeapExplorer::IterateAndExtractReferences(
     HeapSnapshotGenerator* generator) {
   generator_ = generator;
+  if (v8_flags.wasm_hprof) hprof_writer_.Start();
 
   // Create references to the synthetic roots.
   SetRootGcRootsReference();
@@ -2255,7 +2267,10 @@ bool V8HeapExplorer::IterateAndExtractReferences(
   }
 
   generator_ = nullptr;
-  return interrupted ? false : progress_->ProgressReport(true);
+  if (interrupted) return false;
+
+  if (v8_flags.wasm_hprof) hprof_writer_.Finish();
+  return progress_->ProgressReport(true);
 }
 
 bool V8HeapExplorer::IsEssentialObject(Object object) {
@@ -2460,6 +2475,9 @@ void V8HeapExplorer::SetGcSubrootReference(Root root, const char* description,
     // happens in TemplateHashMapImpl::Probe method, when tyring to get
     // names->GetFormatted("%d / %s", index, description)
     return;
+  }
+  if (v8_flags.wasm_hprof) {
+    hprof_writer_.AddRoot(HeapObject::cast(child_obj), root);
   }
   HeapEntry* child_entry = GetEntry(child_obj);
   if (child_entry == nullptr) return;

@@ -1491,6 +1491,9 @@ DEFINE_BOOL(trace_wasm, false, "trace wasm function calls")
 // Inlining breaks --trace-wasm, hence disable that if --trace-wasm is enabled.
 DEFINE_NEG_IMPLICATION(trace_wasm, experimental_wasm_inlining)
 
+DEFINE_BOOL(wasm_hprof, false,
+            "redirect Wasm contents of heap snapshots to hprof file")
+
 // Flags for Wasm GDB remote debugging.
 #ifdef V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING
 #define DEFAULT_WASM_GDB_REMOTE_PORT 8765

@@ -2087,6 +2087,8 @@ filegroup(
         "src/profiler/heap-snapshot-generator.cc",
         "src/profiler/heap-snapshot-generator.h",
         "src/profiler/heap-snapshot-generator-inl.h",
+        "src/profiler/hprof-writer.cc",
+        "src/profiler/hprof-writer.h",
         "src/profiler/output-stream-writer.h",
         "src/profiler/profile-generator.cc",
         "src/profiler/profile-generator.h",
