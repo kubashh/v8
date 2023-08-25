@@ -141,6 +141,24 @@
       "parentUuid": "5005e6ef_e2d74ba4",
       "revId": "bc13058d2fc3ae3afc9e81f730cb816797805a1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "601e3de2_9e371283",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-08-25T12:18:33Z",
+      "side": 1,
+      "message": "Btw, I think this CL is obsolete. The fuchsia problem is resolved by an auto-roller fix. The formatting is a different bug... though someone still needs to fix that.",
+      "parentUuid": "db69cb93_5b67bdb5",
+      "revId": "bc13058d2fc3ae3afc9e81f730cb816797805a1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
