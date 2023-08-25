@@ -2,8 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "include/v8-function.h"
 #include "src/builtins/builtins-utils-inl.h"
 #include "src/objects/js-atomics-synchronization-inl.h"
+#include "src/objects/promise-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -54,6 +56,45 @@ BUILTIN(AtomicsMutexLock) {
   }
 
   return *result;
+}
+
+BUILTIN(AtomicsMutexAsyncUnlock) {
+  DCHECK(v8_flags.harmony_struct);
+  HandleScope scope(isolate);
+
+  Handle<Object> mutex;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, mutex, JSReceiver::GetProperty(isolate, args.target(), "Lock"));
+  Handle<JSAtomicsMutex> js_mutex = Handle<JSAtomicsMutex>::cast(mutex);
+
+  js_mutex->Unlock(isolate);
+  return *mutex;
+}
+
+BUILTIN(AtomicsMutexLockAsync) {
+  DCHECK(v8_flags.harmony_struct);
+  constexpr char method_name[] = "Atomics.Mutex.lockAsync";
+  HandleScope scope(isolate);
+
+  Handle<Object> js_mutex_obj = args.atOrUndefined(isolate, 1);
+  if (!js_mutex_obj->IsJSAtomicsMutex()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kMethodInvokedOnWrongType,
+                              isolate->factory()->NewStringFromAsciiChecked(
+                                  method_name)));
+  }
+  Handle<JSAtomicsMutex> js_mutex = Handle<JSAtomicsMutex>::cast(js_mutex_obj);
+  Handle<JSObject> run_under_lock =
+      Handle<JSObject>::cast(args.atOrUndefined(isolate, 2));
+  if (!run_under_lock->IsCallable()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kNotCallable, run_under_lock));
+  }
+
+  Handle<JSObject> promise =
+      JSAtomicsMutex::RunOrQueueCallable(js_mutex, isolate, run_under_lock);
+
+  return *promise;
 }
 
 BUILTIN(AtomicsMutexTryLock) {
