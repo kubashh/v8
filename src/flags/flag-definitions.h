@@ -1246,6 +1246,9 @@ DEFINE_WEAK_IMPLICATION(turboshaft_future, turboshaft_machine_lowering_opt)
 DEFINE_WEAK_IMPLICATION(turboshaft_future, turboshaft_instruction_selection)
 #endif
 
+DEFINE_BOOL(turboshaft_loop_unrolling, false,
+            "SWITCH TO EXPERIMENTAL BEFORE LANDING")
+
 #ifdef DEBUG
 DEFINE_UINT64(turboshaft_opt_bisect_limit, std::numeric_limits<uint64_t>::max(),
               "stop applying optional optimizations after a specified number "
