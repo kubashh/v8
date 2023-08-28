@@ -450,12 +450,10 @@ size_t Isolate::HashIsolateForEmbeddedBlob() {
     // These static asserts ensure we don't miss relevant fields. We don't hash
     // instruction_start, but other data fields must remain the same.
     static_assert(Code::kEndOfStrongFieldsOffset ==
-                  Code::kInstructionStartOffset);
-#ifdef V8_CODE_POINTER_SANDBOXING
-    static_assert(Code::kCodePointerTableEntryOffsetEnd + 1 ==
+                  Code::kRawInstructionStartOffset);
+#ifndef V8_CODE_POINTER_SANDBOXING
+    static_assert(Code::kRawInstructionStartOffsetEnd + 1 ==
                   Code::kFlagsOffset);
-#else
-    static_assert(Code::kInstructionStartOffsetEnd + 1 == Code::kFlagsOffset);
 #endif
     static_assert(Code::kFlagsOffsetEnd + 1 == Code::kInstructionSizeOffset);
     static_assert(Code::kInstructionSizeOffsetEnd + 1 ==

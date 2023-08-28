@@ -14,6 +14,7 @@ namespace v8 {
 namespace internal {
 
 class Object;
+class IndirectlyReferenceableObject;
 using TaggedBase = TaggedImpl<HeapObjectReferenceType::STRONG, Address>;
 
 template <typename Subclass, typename Data,
@@ -347,8 +348,6 @@ class ExternalPointerSlot
 // contains the "real" pointer to the referenced HeapObject. These slots are
 // used when the sandbox is enabled to securely reference HeapObjects outside
 // of the sandbox.
-// If we ever have multiple tables for indirect pointers, this class would
-// probably also contain a reference to the pointer table.
 class IndirectPointerSlot
     : public SlotBase<IndirectPointerSlot, IndirectPointerHandle,
                       kTaggedSize /* slot alignment */> {
@@ -356,20 +355,16 @@ class IndirectPointerSlot
   IndirectPointerSlot() : SlotBase(kNullAddress) {}
   explicit IndirectPointerSlot(Address ptr) : SlotBase(ptr) {}
 
-  // Even though only HeapObjects (TODO(saelo) or some ExternalObject class,
-  // see below) can be stored into an IndirectPointerSlot, these slots can be
-  // empty (containing kNullIndirectPointerHandle), in which case load() will
-  // return Smi::zero().
+  // Even though only HeapObjects can be stored into an IndirectPointerSlot,
+  // these slots can be empty (containing kNullIndirectPointerHandle), in which
+  // case load() will return Smi::zero().
   inline Object load() const;
-  // TODO(saelo) currently, Code objects are the only objects that can be
-  // referenced through an indirect pointer. Once we have more, we should
-  // generalize this to take ExternalObject or another appropriate base class.
-  inline void store(Code value) const;
+  inline void store(IndirectlyReferenceableObject value) const;
 
   inline Object Relaxed_Load() const;
   inline Object Acquire_Load() const;
-  inline void Relaxed_Store(Code value) const;
-  inline void Release_Store(Code value) const;
+  inline void Relaxed_Store(IndirectlyReferenceableObject value) const;
+  inline void Release_Store(IndirectlyReferenceableObject value) const;
 
   inline IndirectPointerHandle Relaxed_LoadHandle() const;
   inline IndirectPointerHandle Acquire_LoadHandle() const;

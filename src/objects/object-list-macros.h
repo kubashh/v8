@@ -255,6 +255,7 @@ class ZoneForwardList;
   V(TemplateLiteralObject)                      \
   V(ThinString)                                 \
   V(TransitionArray)                            \
+  V(IndirectlyReferenceableObject)              \
   V(TurboshaftFloat64RangeType)                 \
   V(TurboshaftFloat64SetType)                   \
   V(TurboshaftFloat64Type)                      \

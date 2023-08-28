@@ -637,10 +637,11 @@ Register GetTSANValueRegister(MacroAssembler* masm, Register value,
   } else if (rep == MachineRepresentation::kIndirectPointer) {
     // Indirect pointer fields contain an index to a pointer table entry, which
     // is obtained from the referenced object.
-    static_assert(kAllIndirectPointerObjectsAreCode);
     Register value_reg = i.TempRegister(1);
-    masm->movl(value_reg,
-               FieldOperand(value, Code::kCodePointerTableEntryOffset));
+    masm->movl(
+        value_reg,
+        FieldOperand(
+            value, IndirectlyReferenceableObject::kSelfIndirectPointerOffset));
     return value_reg;
   }
   return value;
@@ -663,9 +664,10 @@ Register GetTSANValueRegister<std::memory_order_relaxed>(
   } else if (rep == MachineRepresentation::kIndirectPointer) {
     // Indirect pointer fields contain an index to a pointer table entry, which
     // is obtained from the referenced object.
-    static_assert(kAllIndirectPointerObjectsAreCode);
     masm->movl(value_reg,
-               FieldOperand(value_reg, Code::kCodePointerTableEntryOffset));
+               FieldOperand(
+                   value_reg,
+                   IndirectlyReferenceableObject::kSelfIndirectPointerOffset));
   }
   return value_reg;
 }
