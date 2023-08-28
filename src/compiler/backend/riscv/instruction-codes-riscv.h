@@ -221,10 +221,6 @@ namespace compiler {
   V(RiscvF32x4ReplaceLane)                \
   V(RiscvF32x4SConvertI32x4)              \
   V(RiscvF32x4UConvertI32x4)              \
-  V(RiscvI64x2SConvertI32x4Low)           \
-  V(RiscvI64x2SConvertI32x4High)          \
-  V(RiscvI64x2UConvertI32x4Low)           \
-  V(RiscvI64x2UConvertI32x4High)          \
   V(RiscvI32x4Shl)                        \
   V(RiscvI32x4ShrS)                       \
   V(RiscvI32x4ShrU)                       \
