@@ -247,10 +247,17 @@ class V8_EXPORT_PRIVATE Operand {
   explicit Operand(Register base, int32_t disp,
                    RelocInfo::Mode rmode = RelocInfo::NO_INFO);
 
-  // [rip + disp/r]
+  // [disp/r]
   explicit Operand(Label* label) {
     set_modrm(0, ebp);
     set_dispr(reinterpret_cast<intptr_t>(label), RelocInfo::INTERNAL_REFERENCE);
+  }
+
+  // Emit a displacement computed from a label.
+  explicit Operand(Register dst, Label* label) {
+    set_modrm(2, dst);
+    // We don't record reloc info for a relative displacement
+    set_dispr(reinterpret_cast<intptr_t>(label), RelocInfo::NO_INFO);
   }
 
   // [base + index*scale + disp/r]
@@ -642,6 +649,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void inc(Operand dst);
 
   void lea(Register dst, Operand src);
+  void lea(Register dst, Label* lbl);
+  void lea(Register dst, Register src, Label* lbl);
 
   // Unsigned multiply instruction.
   void mul(Register src);  // edx:eax = eax * reg.
@@ -1729,6 +1738,7 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void emit_operand(XMMRegister reg, Operand adr);
 
   void emit_label(Label* label);
+  void emit_relative_label(Label* label);
 
   void emit_farith(int b1, int b2, int i);
 

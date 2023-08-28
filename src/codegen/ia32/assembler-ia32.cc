@@ -1070,6 +1070,21 @@ void Assembler::lea(Register dst, Operand src) {
   emit_operand(dst, src);
 }
 
+void Assembler::lea(Register dst, Register src, Label* lbl) {
+  EnsureSpace ensure_space(this);
+  EMIT(0x8D);
+  EMIT(((0x2) << 6) | (dst.code() << 3) | src.code());
+
+  if (lbl->is_bound()) {
+    const int long_size = 6;  // opcode + modr/m + 32bit disp
+    int offs = lbl->pos() - pc_offset();
+    DCHECK_LE(offs, 0);
+    emit(offs - long_size);
+  } else {
+    emit_disp(lbl, Displacement::OTHER);
+  }
+}
+
 void Assembler::mul(Register src) {
   EnsureSpace ensure_space(this);
   EMIT(0xF7);
@@ -3405,6 +3420,16 @@ void Assembler::emit_operand(int code, Operand adr) {
     } else {
       pc_ += sizeof(int32_t);
     }
+  }
+}
+
+void Assembler::emit_relative_label(Label* label) {
+  if (label->is_bound()) {
+    internal_reference_positions_.push_back(pc_offset());
+    emit(reinterpret_cast<uint32_t>(buffer_start_ + label->pos() -
+                                    (pc_offset() + sizeof(int32_t))));
+  } else {
+    emit_disp(label, Displacement::OTHER);
   }
 }
 

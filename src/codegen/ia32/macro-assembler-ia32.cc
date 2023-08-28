@@ -2112,6 +2112,26 @@ void MacroAssembler::Jump(Handle<Code> code_object, RelocInfo::Mode rmode) {
   jmp(code_object, rmode);
 }
 
+void MacroAssembler::Lea(Register dst, Label* lbl) {
+  // An lea of a label becomes the following:
+  //     call $0
+  //     pop dst
+  // $1: add dst,#10
+  //     lea dst, dst[Label]
+  // The use of the special call allows us to read
+  // the ip from the stack. We have a call/ret to avoid
+  // polluting the RAS.
+  // The magic number 10 is the difference between the
+  // value of PC we obtain, from that what we need
+  // which is actually inside the the lea instruction itself
+  Label zero;
+  call(&zero);  // should be 0xe8, 0, 0, 0, 0
+  bind(&zero);
+  pop(dst);                 // should be 58 (depending on the dst reg)
+  add(dst, Immediate(10));  // distance to displacement in next instruction
+  lea(dst, dst, lbl);       // should be 8d, 80, uu zz yy xx (if dst=eax)
+}
+
 void MacroAssembler::CheckPageFlag(Register object, Register scratch, int mask,
                                    Condition cc, Label* condition_met,
                                    Label::Distance condition_met_distance) {
