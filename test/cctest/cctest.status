@@ -380,8 +380,8 @@
   'test-liftoff-for-fuzzing/NondeterminismUnopF32x4OneNaN': [SKIP],
 
   # riscv64 sign extend on uint32.
-  'test-run-load-store/RunUnalignedLoadStoreZeroExtend64': [SKIP],
-  'test-run-load-store/RunLoadStoreZeroExtend64': [SKIP],
+  #'test-run-load-store/RunUnalignedLoadStoreZeroExtend64': [SKIP],
+  #'test-run-load-store/RunLoadStoreZeroExtend64': [SKIP],
 
   # According to riscv's NaN generation and propagation scheme, the payload
   # is not guaranteed. So the test fails when src bits has payload.
