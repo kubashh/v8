@@ -565,9 +565,7 @@ class ReducerBaseForwarder : public Next {
  public:
 #define EMIT_OP(Name)                                                    \
   OpIndex ReduceInputGraph##Name(OpIndex ig_index, const Name##Op& op) { \
-    return MayThrow(Opcode::k##Name)                                     \
-               ? OpIndex::Invalid()                                      \
-               : this->Asm().AssembleOutputGraph##Name(op);              \
+    return this->Asm().AssembleOutputGraph##Name(op);                    \
   }                                                                      \
   template <class... Args>                                               \
   OpIndex Reduce##Name(Args... args) {                                   \
@@ -3403,8 +3401,7 @@ class Assembler : public GraphVisitor<Assembler<Reducers>>,
   // Every loop should be finalized once, after it is certain that no backedge
   // can be added anymore.
   void FinalizeLoop(Block* loop_header) {
-    DCHECK(loop_header->IsLoop());
-    if (loop_header->HasExactlyNPredecessors(1)) {
+    if (loop_header->IsLoop() && loop_header->HasExactlyNPredecessors(1)) {
       this->output_graph().TurnLoopIntoMerge(loop_header);
     }
   }
