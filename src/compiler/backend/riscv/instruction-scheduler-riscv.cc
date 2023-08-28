@@ -152,10 +152,6 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kRiscvFloat64SilenceNaN:
     case kRiscvFloorWD:
     case kRiscvFloorWS:
-    case kRiscvI64x2SConvertI32x4Low:
-    case kRiscvI64x2SConvertI32x4High:
-    case kRiscvI64x2UConvertI32x4Low:
-    case kRiscvI64x2UConvertI32x4High:
     case kRiscvI16x8ExtractLaneU:
     case kRiscvI16x8ExtractLaneS:
     case kRiscvI16x8ReplaceLane:
