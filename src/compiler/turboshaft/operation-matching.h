@@ -771,6 +771,21 @@ class OperationMatching {
       });
     }
 
+    // TODO: generalize to n-ary Phi with template.
+    // static MatchOrBind<OpIndex> BinaryPhi(
+    //     const MatchOrBind<OpIndex>& left, const MatchOrBind<OpIndex>& right,
+    //     const MatchOrBind<RegisterRepresentation>& rep) {
+    //   return MatchOrBind<OpIndex>([=](const Graph* graph, const OpIndex& idx)
+    //   {
+    //     if (const PhiOp* phi = graph->Get(idx).TryCast<PhiOp>()) {
+    //       return phi->input_count == 2 && left.resolve(graph, phi->input(0))
+    //       &&
+    //              right.resolve(graph, phi->input(1)) &&
+    //              rep.resolve(graph, phi->rep);
+    //     }
+    //   });
+    // }
+
     static MatchOrBind<OpIndex> Comparison(
         const MatchOrBind<OpIndex>& left, const MatchOrBind<OpIndex>& right,
         const MatchOrBind<ComparisonOp::Kind>& kind,
