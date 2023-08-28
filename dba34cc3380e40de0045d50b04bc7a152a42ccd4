@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69335f71_b0f53f00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-28T20:29:41Z",
+      "side": 1,
+      "message": "Small CL to add a new form of lea instruction for ia32. ia32 does not have pic mode addressing, and label references are not permitted in the code stream",
+      "revId": "dba34cc3380e40de0045d50b04bc7a152a42ccd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
