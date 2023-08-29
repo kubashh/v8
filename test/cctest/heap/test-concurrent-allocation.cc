@@ -34,17 +34,6 @@ namespace v8 {
 namespace internal {
 
 namespace {
-void CreateFixedArray(Heap* heap, Address start, int size) {
-  HeapObject object = HeapObject::FromAddress(start);
-  object->set_map_after_allocation(ReadOnlyRoots(heap).fixed_array_map(),
-                                   SKIP_WRITE_BARRIER);
-  FixedArray array = FixedArray::cast(object);
-  int length = (size - FixedArray::kHeaderSize) / kTaggedSize;
-  array->set_length(length);
-  MemsetTagged(array->data_start(), ReadOnlyRoots(heap).undefined_value(),
-               length);
-}
-
 const int kNumIterations = 2000;
 const int kSmallObjectSize = 10 * kTaggedSize;
 const int kMediumObjectSize = 8 * KB;
@@ -54,11 +43,12 @@ void AllocateSomeObjects(LocalHeap* local_heap) {
     Address address = local_heap->AllocateRawOrFail(
         kSmallObjectSize, AllocationType::kOld, AllocationOrigin::kRuntime,
         AllocationAlignment::kTaggedAligned);
-    CreateFixedArray(local_heap->heap(), address, kSmallObjectSize);
+    local_heap->heap()->CreateFixedArrayForTestingAt(address, kSmallObjectSize);
     address = local_heap->AllocateRawOrFail(
         kMediumObjectSize, AllocationType::kOld, AllocationOrigin::kRuntime,
         AllocationAlignment::kTaggedAligned);
-    CreateFixedArray(local_heap->heap(), address, kMediumObjectSize);
+    local_heap->heap()->CreateFixedArrayForTestingAt(address,
+                                                     kMediumObjectSize);
     if (i % 10 == 0) {
       local_heap->Safepoint();
     }
@@ -283,7 +273,7 @@ class LargeObjectConcurrentAllocationThread final : public v8::base::Thread {
         heap_->CollectGarbageFromAnyThread(&local_heap);
       } else {
         Address address = result.ToAddress();
-        CreateFixedArray(heap_, address, kLargeObjectSize);
+        heap_->CreateFixedArrayForTestingAt(address, kLargeObjectSize);
       }
       local_heap.Safepoint();
     }
@@ -355,12 +345,12 @@ class ConcurrentBlackAllocationThread final : public v8::base::Thread {
           kSmallObjectSize, AllocationType::kOld, AllocationOrigin::kRuntime,
           AllocationAlignment::kTaggedAligned);
       objects_->push_back(address);
-      CreateFixedArray(heap_, address, kSmallObjectSize);
+      heap_->CreateFixedArrayForTestingAt(address, kSmallObjectSize);
       address = local_heap.AllocateRawOrFail(
           kMediumObjectSize, AllocationType::kOld, AllocationOrigin::kRuntime,
           AllocationAlignment::kTaggedAligned);
       objects_->push_back(address);
-      CreateFixedArray(heap_, address, kMediumObjectSize);
+      heap_->CreateFixedArrayForTestingAt(address, kMediumObjectSize);
     }
   }
 

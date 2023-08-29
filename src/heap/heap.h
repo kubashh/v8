@@ -453,6 +453,8 @@ class Heap final {
   void CreateFillerForArray(Tagged<T> object, int elements_to_trim,
                             int bytes_to_trim);
 
+  void CreateFixedArrayForTestingAt(Address start, int size);
+
   bool CanMoveObjectStart(Tagged<HeapObject> object);
 
   bool IsImmovable(Tagged<HeapObject> object);

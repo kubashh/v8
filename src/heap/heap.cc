@@ -3323,6 +3323,17 @@ void Heap::CreateFillerObjectAtRaw(
   }
 }
 
+void Heap::CreateFixedArrayForTestingAt(Address start, int size) {
+  HeapObject object = HeapObject::FromAddress(start);
+  object->set_map_after_allocation(ReadOnlyRoots(this).fixed_array_map(),
+                                   SKIP_WRITE_BARRIER);
+  FixedArray array = FixedArray::cast(object);
+  int length = (size - FixedArray::kHeaderSize) / kTaggedSize;
+  array->set_length(length);
+  MemsetTagged(array->data_start(), ReadOnlyRoots(this).undefined_value(),
+               length);
+}
+
 bool Heap::CanMoveObjectStart(Tagged<HeapObject> object) {
   if (!v8_flags.move_object_start) return false;
 
