@@ -584,6 +584,16 @@ void ConcurrentMarking::Join() {
   garbage_collector_.reset();
 }
 
+void ConcurrentMarking::Cancel() {
+  DCHECK(v8_flags.parallel_marking || v8_flags.concurrent_marking);
+  DCHECK_IMPLIES(
+      garbage_collector_ == GarbageCollector::MARK_COMPACTOR,
+      heap_->mark_compact_collector()->UseBackgroundThreadsInCycle());
+  if (!job_handle_ || !job_handle_->IsValid()) return;
+  job_handle_->Cancel();
+  garbage_collector_.reset();
+}
+
 bool ConcurrentMarking::Pause() {
   DCHECK(v8_flags.parallel_marking || v8_flags.concurrent_marking);
   if (!job_handle_ || !job_handle_->IsValid()) return false;
