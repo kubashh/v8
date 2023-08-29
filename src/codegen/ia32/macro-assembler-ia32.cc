@@ -1969,6 +1969,8 @@ void MacroAssembler::CallCFunction(Register function, int num_arguments,
 void MacroAssembler::PushPC() {
   // Push the current PC onto the stack as "return address" via calling
   // the next instruction.
+  // This does not pollute the RAS:
+  // see https://blog.stuffedcow.net/2018/04/ras-microbenchmarks/#call0.
   Label get_pc;
   call(&get_pc);
   bind(&get_pc);
@@ -2110,6 +2112,23 @@ void MacroAssembler::Jump(Handle<Code> code_object, RelocInfo::Mode rmode) {
   }
   DCHECK(RelocInfo::IsCodeTarget(rmode));
   jmp(code_object, rmode);
+}
+
+void MacroAssembler::LoadRelativeLabel(Register dst, Label* lbl) {
+  // An lea of a label becomes the following:
+  //     call $0
+  // $0: pop dst
+  //     add dst,#10
+  //     lea dst, dst[Label]
+  // The use of the special call allows us to read
+  // the ip from the stack.
+  // The magic number 10 is the difference between the
+  // value of PC we obtain, from that what we need
+  // which is actually inside the the lea instruction itself.
+  PushPC();
+  pop(dst);                 // should be 58 (depending on the dst reg)
+  add(dst, Immediate(10));  // distance to displacement in next instruction
+  lea(dst, dst, lbl);       // should be 8d, 80, uu zz yy xx (if dst=eax)
 }
 
 void MacroAssembler::CheckPageFlag(Register object, Register scratch, int mask,
