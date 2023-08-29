@@ -689,7 +689,9 @@ int GetDeoptimizationHelperOffset(Heap* heap, Builtin builtin,
     case Builtin::kInterpreterEntryTrampoline:
       return entry_trampoline_deopt_offset;
     case Builtin::kJSConstructStubGeneric:
-      return kind == kConstructStubCreate ? create_offset : invoke_offset;
+      return create_offset;
+    case Builtin::kInterpreterPushArgsThenFastConstructFunction:
+      return invoke_offset;
     default:
       return standard_offset;
   }
@@ -1460,6 +1462,7 @@ void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
     output_frame->SetPc(entry_address);
   }
 
+#if V8_TARGET_ARCH_X64
   // Since the dispatch builtin manually installs the interpreter
   // entry trampoline as the return address when the bytecode is
   // finished, we need to push the deopt helper for the entry trampoline
@@ -1468,6 +1471,7 @@ void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
   PushShadowStackHelper(
       shadow_stack,
       DeoptimizationHelperIndex(Builtin::kInterpreterEntryTrampoline));
+#endif
 
   // If there is a hardware shadow stack, we can only "return" to
   // {entry_address} computed above if that location was pushed onto the stack

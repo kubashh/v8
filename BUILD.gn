@@ -388,7 +388,7 @@ declare_args() {
 
   # Change code emission and runtime features to be CET shadow-stack compliant
   # (incomplete and experimental).
-  v8_enable_cet_shadow_stack = false
+  v8_enable_shadow_stack = false
 
   # Enables pointer compression for 8GB heaps.
   # Sets -DV8_COMPRESS_POINTERS_8GB.
@@ -1115,8 +1115,8 @@ config("features") {
   if (v8_control_flow_integrity) {
     defines += [ "V8_ENABLE_CONTROL_FLOW_INTEGRITY" ]
   }
-  if (v8_enable_cet_shadow_stack) {
-    defines += [ "V8_ENABLE_CET_SHADOW_STACK" ]
+  if (v8_enable_shadow_stack) {
+    defines += [ "V8_ENABLE_SHADOW_STACK" ]
   }
   if (v8_enable_wasm_gdb_remote_debugging) {
     defines += [ "V8_ENABLE_WASM_GDB_REMOTE_DEBUGGING" ]
@@ -2584,7 +2584,6 @@ action("v8_dump_build_config") {
     "arch=\"$arch\"",
     "asan=$is_asan",
     "atomic_object_field_writes=$v8_enable_atomic_object_field_writes",
-    "cet_shadow_stack=$v8_enable_cet_shadow_stack",
     "cfi=$is_cfi",
     "clang=$is_clang",
     "clang_coverage=$use_clang_coverage",
@@ -2620,6 +2619,7 @@ action("v8_dump_build_config") {
     "pointer_compression_shared_cage=$v8_enable_pointer_compression_shared_cage",
     "runtime_call_stats=$v8_enable_runtime_call_stats",
     "sandbox=$v8_enable_sandbox",
+    "shadow_stack=$v8_enable_shadow_stack",
     "shared_ro_heap=$v8_enable_shared_ro_heap",
     "simd_mips=$simd_mips",
     "simulator_run=$simulator_run",
@@ -2636,7 +2636,6 @@ action("v8_dump_build_config") {
     "verify_csa=$v8_enable_verify_csa",
     "verify_heap=$v8_enable_verify_heap",
     "verify_predictable=$v8_enable_verify_predictable",
-    "enable_cet_shadow_stack=$enable_cet_shadow_stack",
   ]
 }
 
@@ -7209,7 +7208,7 @@ if (want_v8_shell) {
       ":internal_config_base",
     ]
 
-    if (is_win && !v8_enable_cet_shadow_stack) {
+    if (is_win && !v8_enable_shadow_stack) {
       v8_remove_configs += [ "//build/config/compiler:cet_shadow_stack" ]
     }
 

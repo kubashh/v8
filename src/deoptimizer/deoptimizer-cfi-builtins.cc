@@ -27,6 +27,7 @@ namespace internal {
 extern "C" const uint8_t v8_Default_embedded_blob_code_[];
 extern "C" uint32_t v8_Default_embedded_blob_code_size_;
 
+#ifndef V8_ENABLE_SHADOW_STACK
 // List of allowed builtin addresses that we can return to in the deoptimizer.
 constexpr function_ptr builtins[] = {
     &Builtins_InterpreterEnterAtBytecode,
@@ -41,8 +42,15 @@ constexpr function_ptr builtins[] = {
     &Builtins_BaselineOrInterpreterEnterAtNextBytecode,
     &Builtins_RestartFrameTrampoline,
 };
+#endif
 
 bool Deoptimizer::IsValidReturnAddress(Address address, Isolate* isolate) {
+#ifdef V8_ENABLE_SHADOW_STACK
+  // TODO(arm64): consider whether these checks are still meaningful
+  // when using the GCS. If so, update them to point to the updated
+  // return addresses (see `DeoptimizationEntryAddress`).
+  return true;
+#else
   EmbeddedData d = EmbeddedData::FromBlobForPc(isolate, address);
   Address code_start = reinterpret_cast<Address>(d.code());
   Address offset = address - code_start;
@@ -56,6 +64,7 @@ bool Deoptimizer::IsValidReturnAddress(Address address, Isolate* isolate) {
     }
   }
   return false;
+#endif
 }
 
 }  // namespace internal

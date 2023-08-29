@@ -151,7 +151,7 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
 // shadow stack will be found to match perfectly.
 void Generate_CallToAdaptShadowStackForDeopt(MacroAssembler* masm) {
   // TODO(clemensb): Enable this unconditionally for uniformity.
-#ifdef V8_ENABLE_CET_SHADOW_STACK
+#ifdef V8_ENABLE_SHADOW_STACK
   ASM_CODE_COMMENT(masm);
   Label post_adapt_shadow_stack;
   __ jmp(&post_adapt_shadow_stack, Label::kNear);
@@ -161,7 +161,7 @@ void Generate_CallToAdaptShadowStackForDeopt(MacroAssembler* masm) {
   CHECK_EQ(Deoptimizer::kAdaptShadowStackOffsetToSubtract,
            masm->pc_offset() - saved_pc_offset);
   __ bind(&post_adapt_shadow_stack);
-#endif  // V8_ENABLE_CET_SHADOW_STACK
+#endif  // V8_ENABLE_SHADOW_STACK
 }
 
 }  // namespace
@@ -3030,7 +3030,7 @@ void Builtins::Generate_MaglevFunctionEntryStackCheck(MacroAssembler* masm,
 // that is why those registers are additionaly saved on the stack, to be
 // restored at the end of the process.
 
-#ifdef V8_ENABLE_CET_SHADOW_STACK
+#ifdef V8_ENABLE_SHADOW_STACK
 // kAdaptShadowStackDispatchPCOffset marks the "kick-off" location in
 // AdaptShadowStackForDeopt for the process.
 constexpr int kAdaptShadowStackDispatchPCOffset = 5;
@@ -3038,16 +3038,17 @@ constexpr int kAdaptShadowStackDispatchPCOffset = 5;
 // kAdaptShadowStackCountRegister contains the number of identifiers on
 // the stack to be consumed via repeated calls into AdaptShadowStackForDeopt.
 constexpr Register kAdaptShadowStackCountRegister = r11;
-#endif  // V8_ENABLE_CET_SHADOW_STACK
+#endif  // V8_ENABLE_SHADOW_STACK
 
 void Builtins::Generate_AdaptShadowStackForDeopt(MacroAssembler* masm) {
-#ifdef V8_ENABLE_CET_SHADOW_STACK
+#ifdef V8_ENABLE_SHADOW_STACK
   Register count_reg = kAdaptShadowStackCountRegister;
   Label keep_going;
 
   // Retrieve the next identifier from the stack for the code we want to jump
   // to.
-  __ popq(kScratchRegister);
+  __ popq(
+      kScratchRegister);  // NOTE: this just pops the return address, I think.
   __ decl(count_reg);
 
   // DeoptimizationEntry enters here.
@@ -3094,7 +3095,7 @@ void Builtins::Generate_AdaptShadowStackForDeopt(MacroAssembler* masm) {
     __ jmp(jmp_address);
     __ bind(&next);
   }
-#endif        // V8_ENABLE_CET_SHADOW_STACK
+#endif        // V8_ENABLE_SHADOW_STACK
   __ int3();  // Should not reach this point.
 }
 
@@ -5172,14 +5173,14 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
     __ CallCFunction(find_handler, 3);
   }
 
-#ifdef V8_ENABLE_CET_SHADOW_STACK
+#ifdef V8_ENABLE_SHADOW_STACK
   // Drop frames from the shadow stack.
   ER num_frames_above_pending_handler_address = ER::Create(
       IsolateAddressId::kNumFramesAbovePendingHandlerAddress, masm->isolate());
   __ movq(rcx, masm->ExternalReferenceAsOperand(
                    num_frames_above_pending_handler_address));
   __ IncsspqIfSupported(rcx, kScratchRegister);
-#endif  // V8_ENABLE_CET_SHADOW_STACK
+#endif  // V8_ENABLE_SHADOW_STACK
 
   // Retrieve the handler context, SP and FP.
   __ movq(rsi,
@@ -5795,7 +5796,7 @@ void Generate_DeoptimizationEntry(MacroAssembler* masm,
   // TODO(clemensb): Enable the CET-compatible routine everywhere to avoid
   // different code paths depending on the hardware configuration (which makes
   // understanding and reproducing crashes harder).
-#ifndef V8_ENABLE_CET_SHADOW_STACK
+#ifndef V8_ENABLE_SHADOW_STACK
   __ movb(__ ExternalReferenceAsOperand(
               ExternalReference::stack_is_iterable_address(isolate)),
           Immediate(1));
@@ -5849,7 +5850,7 @@ void Generate_DeoptimizationEntry(MacroAssembler* masm,
   __ jmp(kScratchRegister);
 
   __ int3();
-#endif  // !V8_ENABLE_CET_SHADOW_STACK
+#endif  // !V8_ENABLE_SHADOW_STACK
 }
 
 }  // namespace

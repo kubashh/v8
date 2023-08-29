@@ -14,7 +14,7 @@
 namespace v8 {
 namespace internal {
 
-#ifdef V8_ENABLE_CET_SHADOW_STACK
+#ifdef V8_ENABLE_SHADOW_STACK
 
 void* return_address;
 
@@ -45,7 +45,7 @@ UNINITIALIZED_TEST(CETShadowStack) {
   }
 }
 
-#endif  // V8_ENABLE_CET_SHADOW_STACK
+#endif  // V8_ENABLE_SHADOW_STACK
 
 }  // namespace internal
 }  // namespace v8
