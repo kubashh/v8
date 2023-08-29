@@ -54,6 +54,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5c7251c_c00650a7",
+        "filename": "src/codegen/ia32/assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-29T14:02:37Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to be used; is it a leftover from an earlier version of this patch? If so, please drop it.",
+      "range": {
+        "startLine": 257,
+        "startChar": 11,
+        "endLine": 257,
+        "endChar": 18
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b641251_36d7f5e8",
+        "filename": "src/codegen/ia32/assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-29T14:02:37Z",
+      "side": 1,
+      "message": "nit: Please end comments with appropriate punctuation.",
+      "range": {
+        "startLine": 259,
+        "startChar": 49,
+        "endLine": 259,
+        "endChar": 61
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3cc24c56_5b00eed8",
         "filename": "src/codegen/ia32/assembler-ia32.h",
         "patchSetId": 3
@@ -65,6 +111,144 @@
       "writtenOn": "2023-08-29T09:56:28Z",
       "side": 1,
       "message": "Maybe I am overlooking it, but is this defined somewhere? I only see the `Assembler::lea(Register, Register, Label*)` in `assembler-ia32.cc`.",
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e11b220_5fe4a0be",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2115,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-29T14:02:37Z",
+      "side": 1,
+      "message": "Since this doesn\u0027t map to an LEA instruction, please give it some other name. Perhaps \"LoadLabelAddress\"?",
+      "range": {
+        "startLine": 2115,
+        "startChar": 21,
+        "endLine": 2115,
+        "endChar": 24
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17cd33b8_1eeb916c",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2119,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-29T14:02:37Z",
+      "side": 1,
+      "message": "What is `$1`? Per the actual code below, should this be `$0` and be one line higher, before `pop dst`?",
+      "range": {
+        "startLine": 2119,
+        "startChar": 5,
+        "endLine": 2119,
+        "endChar": 7
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34e0a44e_cd3a9146",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2122,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-29T14:02:37Z",
+      "side": 1,
+      "message": "I don\u0027t see a `ret` below, only a `call`. Doesn\u0027t this actually pollute the RAS in its current form? That may well be fine, but the comment should accurately reflect the code.",
+      "range": {
+        "startLine": 2122,
+        "startChar": 43,
+        "endLine": 2122,
+        "endChar": 46
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50859254_6ac3dad1",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-29T14:02:37Z",
+      "side": 1,
+      "message": "nit: Please end comments with appropriate punctuation.",
+      "range": {
+        "startLine": 2126,
+        "startChar": 54,
+        "endLine": 2126,
+        "endChar": 60
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bdcb27f_e872bd95",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-29T14:02:37Z",
+      "side": 1,
+      "message": "This could use the existing `PushPC()` helper (see line 1969).",
+      "range": {
+        "startLine": 2127,
+        "startChar": 2,
+        "endLine": 2129,
+        "endChar": 14
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "118cab55_f444a6a6",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2131,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-29T14:02:37Z",
+      "side": 1,
+      "message": "See `src/compiler/backend/ia32/code-generator-ia32.cc` around line 830 for a very similar sequence that needs no magic number and no new `lea` overload. Is this meant as a replacement for that? Or is this, perhaps, not needed in light of the existence of the older solution?",
+      "range": {
+        "startLine": 2131,
+        "startChar": 21,
+        "endLine": 2131,
+        "endChar": 23
+      },
       "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
