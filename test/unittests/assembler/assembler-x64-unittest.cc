@@ -120,6 +120,65 @@ TEST_F(AssemblerX64Test, AssemblerX64StackOperations) {
   CHECK_EQ(2, result);
 }
 
+TEST_F(AssemblerX64Test, AssemblerX64CETShadowStack) {
+  auto tampering_function = AllocateAssemblerBuffer();
+  {
+    Assembler masm(AssemblerOptions{}, tampering_function->CreateView());
+
+    // Assemble a function that returns its return address if 0 is passed,
+    // or sets its return address to the argument passed otherwise.
+    Label write_mode, end;
+    __ cmpq(arg1, Immediate(0));
+    __ j(not_equal, &write_mode);
+    __ movq(rax, Operand(rsp, 0));  // read and return the return addr.
+    __ jmp(&end);
+    __ bind(&write_mode);
+    __ movq(Operand(rsp, 0), arg1);  // write the passed addr to return.
+    __ movq(rax, Immediate(0));  // and return 0 to signal we modified stack.
+    __ bind(&end);
+    __ ret(0);
+
+    CodeDesc desc;
+    masm.GetCode(i_isolate(), &desc);
+    tampering_function->MakeExecutable();
+  }
+
+  auto buffer2 = AllocateAssemblerBuffer();
+  {
+    Assembler masm(AssemblerOptions{}, buffer2->CreateView());
+
+    // Generate a function that calls the function above twice.
+    Label tampering_occurred;
+
+    // Put the tampering function in arg2 (otherwise unused).
+    __ movq(arg2, reinterpret_cast<uint64_t>(tampering_function->start()));
+
+    __ movq(arg1, Immediate(0));
+    __ call(arg2);
+    __ cmpq(rax, Immediate(0));
+    __ j(equal, &tampering_occurred);
+    __ movq(arg1, rax);  // We read the return address. Call again with it.
+    __ call(arg2);
+    // We shouldn't get here. Either we emerged above, or crashed.
+    __ int3();
+
+    __ bind(&tampering_occurred);
+    __ movq(rax, Immediate(1));
+    __ ret(0);
+
+    CodeDesc desc;
+    masm.GetCode(i_isolate(), &desc);
+    buffer2->MakeExecutable();
+  }
+
+  // Call the function from C++.
+  auto f = GeneratedCode<F0>::FromBuffer(i_isolate(), buffer2->start());
+  int result = f.Call();
+  // Without CET, we should succeed in our tampering.
+  // If CET is on, then the test crashed in f.Call() above.
+  CHECK_EQ(1, result);
+}
+
 TEST_F(AssemblerX64Test, AssemblerX64ArithmeticOperations) {
   auto buffer = AllocateAssemblerBuffer();
   Assembler masm(AssemblerOptions{}, buffer->CreateView());

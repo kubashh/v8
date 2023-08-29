@@ -386,6 +386,7 @@ class Tagged;
     ConstructStubCreateDeoptPCOffset)                                          \
   V(Smi, construct_stub_invoke_deopt_pc_offset,                                \
     ConstructStubInvokeDeoptPCOffset)                                          \
+  V(Smi, deopt_helper_deopt_pc_offset, DeoptHelperDeoptPCOffset)               \
   V(Smi, interpreter_entry_return_pc_offset, InterpreterEntryReturnPCOffset)
 
 // Produces (String, name, CamelCase) entries

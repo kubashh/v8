@@ -9,6 +9,9 @@
 namespace v8 {
 namespace internal {
 
+const int Deoptimizer::kInterpreterEntryAdaptShadowStackOffsetToSubtract = 0;
+const int Deoptimizer::kAdaptShadowStackOffsetToSubtract = 0;
+
 const int Deoptimizer::kEagerDeoptExitSize = kInstrSize;
 #ifdef V8_ENABLE_CONTROL_FLOW_INTEGRITY
 const int Deoptimizer::kLazyDeoptExitSize = 2 * kInstrSize;

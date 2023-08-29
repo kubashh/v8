@@ -23,6 +23,9 @@ ASSERT_OFFSET(Builtin::kDeoptimizationEntry_Lazy);
 const int Deoptimizer::kEagerDeoptExitSize = 4;
 const int Deoptimizer::kLazyDeoptExitSize = 4;
 
+const int Deoptimizer::kAdaptShadowStackOffsetToSubtract = 7;
+const int Deoptimizer::kInterpreterEntryAdaptShadowStackOffsetToSubtract = 9;
+
 Float32 RegisterValues::GetFloatRegister(unsigned n) const {
   return Float32::FromBits(
       static_cast<uint32_t>(double_registers_[n].get_bits()));

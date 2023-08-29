@@ -294,6 +294,12 @@
 
 }],  # 'system == windows and arch == x64 and mode == debug'
 
+['system == windows and arch == x64 and enable_cet_shadow_stack == True', {
+  # These tests provoke a shadow stack violation.
+  'test-assembler-x64/AssemblerX64CETShadowStack': [FAIL],
+  'test-cet-shadow-stack/CETShadowStack': [FAIL],
+}],  # 'system == windows and arch == x64 and enable_cet_shadow_stack'
+
 ##############################################################################
 ['arch == arm and simulator_run', {
   # Pass but take too long with the simulator.

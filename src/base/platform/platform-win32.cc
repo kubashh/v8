@@ -19,10 +19,11 @@
 
 // This has to come after windows.h.
 #include <VersionHelpers.h>
-#include <dbghelp.h>  // For SymLoadModule64 and al.
-#include <malloc.h>   // For _msize()
-#include <mmsystem.h>  // For timeGetTime().
-#include <tlhelp32.h>  // For Module32First and al.
+#include <dbghelp.h>            // For SymLoadModule64 and al.
+#include <malloc.h>             // For _msize()
+#include <mmsystem.h>           // For timeGetTime().
+#include <processthreadsapi.h>  // For GetProcessMitigationPolicy().
+#include <tlhelp32.h>           // For Module32First and al.
 
 #include <limits>
 
@@ -138,6 +139,10 @@ namespace base {
 namespace {
 
 bool g_hard_abort = false;
+// g_cet gets set to kEnabled on platform initialization if the Intel CET shadow
+// stack is found to be enabled for this process.
+enum PlatformCETStatus { kNotSet, kEnabled, kDisabled };
+PlatformCETStatus g_cet = kNotSet;
 
 }  // namespace
 
@@ -636,6 +641,136 @@ bool OS::isDirectorySeparator(const char ch) {
   return ch == '/' || ch == '\\';
 }
 
+// The running version of Windows. This is declared outside OSInfo for syntactic
+// sugar reasons; see the declaration of GetVersion() below.
+// NOTE: Keep these in order so callers can do things like
+// "if (base::win::GetVersion() >= base::win::Version::VISTA) ...".
+// (copied from chromium/src/base/win/windows-version.h)
+enum class Version {
+  PRE_XP = 0,  // Not supported.
+  XP = 1,
+  SERVER_2003 = 2,  // Also includes XP Pro x64 and Server 2003 R2.
+  VISTA = 3,        // Also includes Windows Server 2008.
+  WIN7 = 4,         // Also includes Windows Server 2008 R2.
+  WIN8 = 5,         // Also includes Windows Server 2012.
+  WIN8_1 = 6,       // Also includes Windows Server 2012 R2.
+  WIN10 = 7,        // Threshold 1: Version 1507, Build 10240.
+  WIN10_TH2 = 8,    // Threshold 2: Version 1511, Build 10586.
+  WIN10_RS1 = 9,    // Redstone 1: Version 1607, Build 14393.
+  WIN10_RS2 = 10,   // Redstone 2: Version 1703, Build 15063.
+  WIN10_RS3 = 11,   // Redstone 3: Version 1709, Build 16299.
+  WIN10_RS4 = 12,   // Redstone 4: Version 1803, Build 17134.
+  WIN10_RS5 = 13,   // Redstone 5: Version 1809, Build 17763.
+  WIN10_19H1 = 14,  // 19H1: Version 1903, Build 18362.
+  WIN10_19H2 = 15,  // 19H2: Version 1909, Build 18363.
+  WIN10_20H1 = 16,  // 20H1: Build 19041.
+  WIN10_20H2 = 17,  // 20H2: Build 19042.
+  WIN10_21H1 = 18,  // 21H1: Build 19043.
+  WIN_LAST,         // Indicates error condition.
+};
+
+Version MajorMinorBuildToVersion(uint32_t major, uint32_t minor,
+                                 uint32_t build) {
+  if (major == 10) {
+    if (build >= 19043) return Version::WIN10_21H1;
+    if (build >= 19042) return Version::WIN10_20H2;
+    if (build >= 19041) return Version::WIN10_20H1;
+    if (build >= 18363) return Version::WIN10_19H2;
+    if (build >= 18362) return Version::WIN10_19H1;
+    if (build >= 17763) return Version::WIN10_RS5;
+    if (build >= 17134) return Version::WIN10_RS4;
+    if (build >= 16299) return Version::WIN10_RS3;
+    if (build >= 15063) return Version::WIN10_RS2;
+    if (build >= 14393) return Version::WIN10_RS1;
+    if (build >= 10586) return Version::WIN10_TH2;
+    return Version::WIN10;
+  }
+
+  if (major > 6) {
+    // Hitting this likely means that it's time for a >10 block above.
+    DCHECK(false);
+    return Version::WIN_LAST;
+  }
+
+  if (major == 6) {
+    switch (minor) {
+      case 0:
+        return Version::VISTA;
+      case 1:
+        return Version::WIN7;
+      case 2:
+        return Version::WIN8;
+      default:
+        DCHECK_EQ(minor, 3u);
+        return Version::WIN8_1;
+    }
+  }
+
+  if (major == 5 && minor != 0) {
+    // Treat XP Pro x64, Home Server, and Server 2003 R2 as Server 2003.
+    return minor == 1 ? Version::XP : Version::SERVER_2003;
+  }
+
+  // Win 2000 or older.
+  return Version::PRE_XP;
+}
+
+Version GetVersion() {
+  OSVERSIONINFO version_info;
+  ZeroMemory(&version_info, sizeof(OSVERSIONINFO));
+  version_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+  // GetVersionEx() is deprecated, and the suggested replacement are
+  // the IsWindows*OrGreater() functions in VersionHelpers.h. We can't
+  // use that because:
+  // - For Windows 10, there's IsWindows10OrGreater(), but nothing more
+  //   granular. We need to be able to detect different Windows 10 releases
+  //   since they sometimes change behavior in ways that matter.
+  // - There is no IsWindows11OrGreater() function yet.
+  ::GetVersionEx(&version_info);
+#pragma clang diagnostic pop
+  return MajorMinorBuildToVersion(version_info.dwMajorVersion,
+                                  version_info.dwMinorVersion,
+                                  version_info.dwBuildNumber);
+}
+
+// CET Strict Mode means that dynamically allocated code regions will
+// be checked for shadow stack violations. Without this mode, dynamic
+// addresses on the stack won't be checked when a return instruction
+// executes.
+bool SetCETStrictMode() {
+  auto get_process_mitigation_policy =
+      reinterpret_cast<decltype(&GetProcessMitigationPolicy)>(::GetProcAddress(
+          ::GetModuleHandle(L"Kernel32.dll"), "GetProcessMitigationPolicy"));
+  PROCESS_MITIGATION_USER_SHADOW_STACK_POLICY shadow_stack_policy;
+  ZeroMemory(&shadow_stack_policy,
+             sizeof(PROCESS_MITIGATION_USER_SHADOW_STACK_POLICY));
+  if (!get_process_mitigation_policy(
+          GetCurrentProcess(), ProcessUserShadowStackPolicy,
+          &shadow_stack_policy,
+          sizeof(PROCESS_MITIGATION_USER_SHADOW_STACK_POLICY))) {
+    return false;
+  }
+  if (shadow_stack_policy.EnableUserShadowStackStrictMode) return false;
+  shadow_stack_policy.EnableUserShadowStackStrictMode = true;
+  auto set_process_mitigation_policy =
+      reinterpret_cast<decltype(&SetProcessMitigationPolicy)>(::GetProcAddress(
+          ::GetModuleHandle(L"Kernel32.dll"), "SetProcessMitigationPolicy"));
+  if (!set_process_mitigation_policy(
+          ProcessUserShadowStackPolicy, &shadow_stack_policy,
+          sizeof(PROCESS_MITIGATION_USER_SHADOW_STACK_POLICY))) {
+    return false;
+  }
+  // Successfully enabled CET strict mode.
+  return true;
+}
+
+bool OS::IsHardwareEnforcedShadowStacksEnabled() {
+  DCHECK_NE(kNotSet, g_cet);
+
+  return g_cet == kEnabled;
+}
 
 FILE* OS::OpenTemporaryFile() {
   // tmpfile_s tries to use the root dir, don't use it.
@@ -736,12 +871,37 @@ void OS::StrNCpy(char* dest, int length, const char* src, size_t n) {
 #undef _TRUNCATE
 #undef STRUNCATE
 
+namespace {
 DEFINE_LAZY_LEAKY_OBJECT_GETTER(RandomNumberGenerator,
                                 GetPlatformRandomNumberGenerator)
 static LazyMutex rng_mutex = LAZY_MUTEX_INITIALIZER;
 
+void GetCETStatus() {
+  DCHECK_NE(kNotSet, g_cet);
+  // Only supported post Win 10 2004.
+  if (GetVersion() >= Version::WIN10_20H1) {
+    auto get_process_mitigation_policy =
+        reinterpret_cast<decltype(&GetProcessMitigationPolicy)>(
+            ::GetProcAddress(::GetModuleHandle(L"Kernel32.dll"),
+                             "GetProcessMitigationPolicy"));
+
+    PROCESS_MITIGATION_USER_SHADOW_STACK_POLICY uss_policy;
+    if (get_process_mitigation_policy(GetCurrentProcess(),
+                                      ProcessUserShadowStackPolicy, &uss_policy,
+                                      sizeof(uss_policy)) &&
+        uss_policy.EnableUserShadowStack && SetCETStrictMode()) {
+      g_cet = kEnabled;
+      return;
+    }
+  }
+  g_cet = kDisabled;
+}
+}  // namespace
+
 void OS::Initialize(bool hard_abort, const char* const gc_fake_mmap) {
   g_hard_abort = hard_abort;
+  DCHECK_NE(kNotSet, g_cet);
+  g_cet = GetCETStatus();
 }
 
 typedef PVOID(__stdcall* VirtualAlloc2_t)(HANDLE, PVOID, SIZE_T, ULONG, ULONG,

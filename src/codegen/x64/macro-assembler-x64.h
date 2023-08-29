@@ -69,6 +69,7 @@ class V8_EXPORT_PRIVATE MacroAssembler
   // Call incsspq with {number_of_words} only if the cpu supports it.
   // NOTE: This shouldn't be embedded in optimized code, since the check
   // for CPU support would be redundant (we could check at compiler time).
+  void IncsspqIfSupported(int number_of_words, Register scratch);
   void IncsspqIfSupported(Register number_of_words, Register scratch);
 
   // Return and drop arguments from stack, where the number of arguments

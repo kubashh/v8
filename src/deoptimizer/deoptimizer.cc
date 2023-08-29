@@ -102,6 +102,24 @@ Code DeoptimizableCodeIterator::Next() {
 
 }  // namespace
 
+#if V8_TARGET_ARCH_X64
+// These static asserts are to guard against a potential offset mismatch
+// on cross-compilation.
+static constexpr int kInputOffset = 9 * kSystemPointerSize;
+static constexpr int kOutputCountOffset = 10 * kSystemPointerSize;
+static constexpr int kOutputOffset = 11 * kSystemPointerSize;
+static constexpr int kShadowStackIdsOffset = 12 * kSystemPointerSize;
+static constexpr int kShadowStackCountOffset = 13 * kSystemPointerSize;
+static constexpr int kCallFrameTopOffset = 14 * kSystemPointerSize;
+static_assert(kInputOffset == Deoptimizer::input_offset());
+static_assert(kOutputCountOffset == Deoptimizer::output_count_offset());
+static_assert(kOutputOffset == Deoptimizer::output_offset());
+static_assert(kShadowStackIdsOffset == Deoptimizer::shadow_stack_ids_offset());
+static_assert(kShadowStackCountOffset ==
+              Deoptimizer::shadow_stack_count_offset());
+static_assert(kCallFrameTopOffset == Deoptimizer::caller_frame_top_offset());
+#endif
+
 // {FrameWriter} offers a stack writer abstraction for writing
 // FrameDescriptions. The main service the class provides is managing
 // {top_offset_}, i.e. the offset of the next slot to write to.
@@ -492,6 +510,8 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction function,
       input_(nullptr),
       output_count_(0),
       output_(nullptr),
+      shadow_stack_ids_(nullptr),
+      shadow_stack_count_(0),
       caller_frame_top_(0),
       caller_fp_(0),
       caller_pc_(0),
@@ -576,7 +596,8 @@ Handle<Code> Deoptimizer::compiled_code() const {
 }
 
 Deoptimizer::~Deoptimizer() {
-  DCHECK(input_ == nullptr && output_ == nullptr);
+  DCHECK(input_ == nullptr && output_ == nullptr &&
+         shadow_stack_ids_ == nullptr);
   DCHECK_NULL(disallow_garbage_collection_);
   delete trace_scope_;
 }
@@ -587,8 +608,10 @@ void Deoptimizer::DeleteFrameDescriptions() {
     if (output_[i] != input_) delete output_[i];
   }
   delete[] output_;
+  delete[] shadow_stack_ids_;
   input_ = nullptr;
   output_ = nullptr;
+  shadow_stack_ids_ = nullptr;
 #ifdef DEBUG
   DCHECK(!AllowGarbageCollection::IsAllowed());
   DCHECK_NOT_NULL(disallow_garbage_collection_);
@@ -604,6 +627,164 @@ Builtin Deoptimizer::GetDeoptimizationEntry(DeoptimizeKind kind) {
     case DeoptimizeKind::kLazy:
       return Builtin::kDeoptimizationEntry_Lazy;
   }
+}
+
+namespace {
+
+// Describes the point within a builtin that a continuation handler begins.
+enum DeoptimizationHelperKind {
+  kConstructStubCreate,
+  kConstructStubInvoke,
+  kAny
+};
+
+// This is the list of builtins installed as continuations in the
+// deoptimization process. Most of these have only one deoptimization
+// entry point, and are specified with DeoptimizationHelperKind::kAny.
+#define DEOPTIMIZATION_HELPERS(V)                                \
+  V(0, Builtin::kInterpreterEnterAtNextBytecode, kAny)           \
+  V(1, Builtin::kInterpreterEnterAtBytecode, kAny)               \
+  V(2, Builtin::kBaselineOrInterpreterEnterAtNextBytecode, kAny) \
+  V(3, Builtin::kBaselineOrInterpreterEnterAtBytecode, kAny)     \
+  V(4, Builtin::kInterpreterEntryTrampoline, kAny)               \
+  V(5, Builtin::kJSConstructStubGeneric, kConstructStubCreate)   \
+  V(6, Builtin::kInterpreterPushArgsThenFastConstructFunction,   \
+    kConstructStubInvoke)                                        \
+  V(7, Builtin::kContinueToCodeStubBuiltinWithResult, kAny)      \
+  V(8, Builtin::kContinueToCodeStubBuiltin, kAny)                \
+  V(9, Builtin::kContinueToJavaScriptBuiltinWithResult, kAny)    \
+  V(10, Builtin::kContinueToJavaScriptBuiltin, kAny)             \
+  V(11, Builtin::kRestartFrameTrampoline, kAny)
+
+unsigned DeoptimizationHelperIndex(
+    Builtin builtin, DeoptimizationHelperKind helper_kind = kAny) {
+  DCHECK(helper_kind == kAny || builtin == Builtin::kJSConstructStubGeneric ||
+         builtin == Builtin::kInterpreterPushArgsThenFastConstructFunction);
+
+#define ENTRY_FINDER(Index, b, kind) \
+  if (b == builtin && kind == helper_kind) return Index;
+
+  DEOPTIMIZATION_HELPERS(ENTRY_FINDER)
+#undef ENTRY_FINDER
+  UNREACHABLE();
+}
+
+// Returns the offset within {builtin} and {kind} which
+// Builtins::kAdaptShadowStackForDeopt can call in order to get the
+// deopt continuation address onto the shadow stack.
+int GetDeoptimizationHelperOffset(Heap* heap, Builtin builtin,
+                                  DeoptimizationHelperKind kind) {
+  const int create_offset =
+      heap->construct_stub_create_deopt_pc_offset().value() -
+      Deoptimizer::kAdaptShadowStackOffsetToSubtract;
+  const int invoke_offset =
+      heap->construct_stub_invoke_deopt_pc_offset().value() -
+      Deoptimizer::kAdaptShadowStackOffsetToSubtract;
+  const int standard_offset = heap->deopt_helper_deopt_pc_offset().value() -
+                              Deoptimizer::kAdaptShadowStackOffsetToSubtract;
+  const int entry_trampoline_deopt_offset =
+      heap->interpreter_entry_return_pc_offset().value() -
+      Deoptimizer::kInterpreterEntryAdaptShadowStackOffsetToSubtract;
+  switch (builtin) {
+    case Builtin::kInterpreterEntryTrampoline:
+      return entry_trampoline_deopt_offset;
+    case Builtin::kJSConstructStubGeneric:
+      return kind == kConstructStubCreate ? create_offset : invoke_offset;
+    default:
+      return standard_offset;
+  }
+}
+
+// Continuations installed by the deoptimizer are entered
+// when their entry address found on the stack is "returned" into.
+// Because of hardware shadow stacks, we can only return to these addresses
+// if they come from a prior call. For this reason, the entry address is
+// always going to be at some non-zero offset into the builtin continuation,
+// and the deoptimization process has the task of making a call to get
+// into that address. This function serves as a bottleneck to compute
+// that entry point.
+intptr_t DeoptimizationEntryAddress(Isolate* isolate, Builtin builtin,
+                                    DeoptimizationHelperKind kind = kAny) {
+  int pc_offset;
+  switch (kind) {
+    case kAny:
+      pc_offset = isolate->heap()->deopt_helper_deopt_pc_offset().value();
+      break;
+    case kConstructStubCreate:
+      pc_offset =
+          isolate->heap()->construct_stub_create_deopt_pc_offset().value();
+      break;
+    case kConstructStubInvoke:
+      pc_offset =
+          isolate->heap()->construct_stub_invoke_deopt_pc_offset().value();
+      break;
+  }
+  Code builtin_code = isolate->builtins()->code(builtin);
+  return builtin_code.instruction_start() + pc_offset;
+}
+
+}  // namespace
+
+// static
+int Deoptimizer::DeoptimizationHelperOffset(Heap* heap, unsigned int index) {
+#define ENTRY_FINDER(Index, b, kind) \
+  case Index:                        \
+    return GetDeoptimizationHelperOffset(heap, b, kind);
+
+  switch (index) { DEOPTIMIZATION_HELPERS(ENTRY_FINDER) }
+#undef ENTRY_FINDER
+  UNREACHABLE();
+}
+
+// static
+unsigned int Deoptimizer::DeoptimizationHelperEntryCount() {
+  unsigned int count = 0;
+#define ENTRY_FINDER(Index, b, kind) count++;
+  DEOPTIMIZATION_HELPERS(ENTRY_FINDER)
+#undef ENTRY_FINDER
+  return count;
+}
+
+// static
+Builtin Deoptimizer::DeoptimizationHelperBuiltin(unsigned int index) {
+#define ENTRY_FINDER(Index, b, kind) \
+  case Index:                        \
+    return b;
+
+  switch (index) { DEOPTIMIZATION_HELPERS(ENTRY_FINDER) }
+#undef ENTRY_FINDER
+  UNREACHABLE();
+}
+
+// These ids are ultimately consumed by Builtin::kAdaptShadowStackForDeopt.
+void Deoptimizer::PushShadowStackHelper(ShadowStack& shadow_stack,
+                                        unsigned int deopt_helper_id) {
+  shadow_stack.push(deopt_helper_id);
+  if (verbose_tracing_enabled()) {
+    PrintF(trace_scope()->file(), "Shadow stack: %u  %s + %d\n",
+           deopt_helper_id,
+           Builtins::name(DeoptimizationHelperBuiltin(deopt_helper_id)),
+           DeoptimizationHelperOffset(isolate_->heap(), deopt_helper_id));
+  }
+}
+
+bool Deoptimizer::IsDeoptimizationEntry(Isolate* isolate, Address addr,
+                                        DeoptimizeKind* type_out) {
+  Builtin builtin = OffHeapInstructionStream::TryLookupCode(isolate, addr);
+  if (!Builtins::IsBuiltinId(builtin)) return false;
+
+  switch (builtin) {
+    case Builtin::kDeoptimizationEntry_Eager:
+      *type_out = DeoptimizeKind::kEager;
+      return true;
+    case Builtin::kDeoptimizationEntry_Lazy:
+      *type_out = DeoptimizeKind::kLazy;
+      return true;
+    default:
+      return false;
+  }
+
+  UNREACHABLE();
 }
 
 namespace {
@@ -831,6 +1012,8 @@ void Deoptimizer::DoComputeOutputFrames() {
   }
   output_count_ = static_cast<int>(count);
 
+  ShadowStack shadow_stack;
+
   // Translate each output frame.
   int frame_index = 0;
   size_t total_output_frame_size = 0;
@@ -840,34 +1023,39 @@ void Deoptimizer::DoComputeOutputFrames() {
     switch (translated_frame->kind()) {
       case TranslatedFrame::kUnoptimizedFunction:
         DoComputeUnoptimizedFrame(translated_frame, frame_index,
-                                  handle_exception);
+                                  handle_exception, shadow_stack);
         break;
       case TranslatedFrame::kInlinedExtraArguments:
         DoComputeInlinedExtraArguments(translated_frame, frame_index);
         break;
       case TranslatedFrame::kConstructCreateStub:
-        DoComputeConstructCreateStubFrame(translated_frame, frame_index);
+        DoComputeConstructCreateStubFrame(translated_frame, frame_index,
+                                          shadow_stack);
         break;
       case TranslatedFrame::kConstructInvokeStub:
-        DoComputeConstructInvokeStubFrame(translated_frame, frame_index);
+        DoComputeConstructInvokeStubFrame(translated_frame, frame_index,
+                                          shadow_stack);
         break;
       case TranslatedFrame::kBuiltinContinuation:
 #if V8_ENABLE_WEBASSEMBLY
       case TranslatedFrame::kJSToWasmBuiltinContinuation:
 #endif  // V8_ENABLE_WEBASSEMBLY
         DoComputeBuiltinContinuation(translated_frame, frame_index,
-                                     BuiltinContinuationMode::STUB);
+                                     BuiltinContinuationMode::STUB,
+                                     shadow_stack);
         break;
       case TranslatedFrame::kJavaScriptBuiltinContinuation:
         DoComputeBuiltinContinuation(translated_frame, frame_index,
-                                     BuiltinContinuationMode::JAVASCRIPT);
+                                     BuiltinContinuationMode::JAVASCRIPT,
+                                     shadow_stack);
         break;
       case TranslatedFrame::kJavaScriptBuiltinContinuationWithCatch:
         DoComputeBuiltinContinuation(
             translated_frame, frame_index,
             handle_exception
                 ? BuiltinContinuationMode::JAVASCRIPT_HANDLE_EXCEPTION
-                : BuiltinContinuationMode::JAVASCRIPT_WITH_CATCH);
+                : BuiltinContinuationMode::JAVASCRIPT_WITH_CATCH,
+            shadow_stack);
         break;
 #if V8_ENABLE_WEBASSEMBLY
       case TranslatedFrame::kWasmInlinedIntoJS:
@@ -901,6 +1089,16 @@ void Deoptimizer::DoComputeOutputFrames() {
                                        compiled_code_->osr_offset())))) {
     function_->reset_tiering_state();
     function_->SetInterruptBudget(isolate_, CodeKind::INTERPRETED_FUNCTION);
+  }
+
+  shadow_stack_count_ = shadow_stack.size();
+  shadow_stack_ids_ = new uintptr_t[shadow_stack_count_];
+  {
+    size_t i = 0;
+    while (!shadow_stack.empty()) {
+      shadow_stack_ids_[i++] = shadow_stack.top();
+      shadow_stack.pop();
+    }
   }
 
   // Print some helpful diagnostic information.
@@ -980,7 +1178,8 @@ Builtin DispatchBuiltinFor(bool deopt_to_baseline, bool advance_bc,
 
 void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
                                             int frame_index,
-                                            bool goto_catch_handler) {
+                                            bool goto_catch_handler,
+                                            ShadowStack& shadow_stack) {
   SharedFunctionInfo shared = translated_frame->raw_shared_info();
   TranslatedFrame::iterator value_iterator = translated_frame->begin();
   const bool is_bottommost = (0 == frame_index);
@@ -1040,8 +1239,8 @@ void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
   const bool deopt_to_baseline =
       shared->HasBaselineCode() && v8_flags.deopt_to_baseline;
   const bool restart_frame = goto_catch_handler && is_restart_frame();
-  Code dispatch_builtin = builtins->code(
-      DispatchBuiltinFor(deopt_to_baseline, advance_bc, restart_frame));
+  Builtin dispatch_builtin_id =
+      DispatchBuiltinFor(deopt_to_baseline, advance_bc, restart_frame);
 
   if (verbose_tracing_enabled()) {
     PrintF(trace_scope()->file(), "  translating %s frame ",
@@ -1249,20 +1448,36 @@ void Deoptimizer::DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
   CHECK_EQ(translated_frame->end(), value_iterator);
   CHECK_EQ(0u, frame_writer.top_offset());
 
-  const intptr_t pc =
-      static_cast<intptr_t>(dispatch_builtin->instruction_start());
+  intptr_t entry_address =
+      DeoptimizationEntryAddress(isolate_, dispatch_builtin_id);
   if (is_topmost) {
     // Only the pc of the topmost frame needs to be signed since it is
     // authenticated at the end of the DeoptimizationEntry builtin.
     const intptr_t top_most_pc = PointerAuthentication::SignAndCheckPC(
-        isolate(), pc, frame_writer.frame()->GetTop());
+        isolate(), entry_address, frame_writer.frame()->GetTop());
     output_frame->SetPc(top_most_pc);
   } else {
-    output_frame->SetPc(pc);
+    output_frame->SetPc(entry_address);
   }
+
+  // Since the dispatch builtin manually installs the interpreter
+  // entry trampoline as the return address when the bytecode is
+  // finished, we need to push the deopt helper for the entry trampoline
+  // onto the shadow stack to ensure the user stack and shadow stack
+  // match up.
+  PushShadowStackHelper(
+      shadow_stack,
+      DeoptimizationHelperIndex(Builtin::kInterpreterEntryTrampoline));
+
+  // If there is a hardware shadow stack, we can only "return" to
+  // {entry_address} computed above if that location was pushed onto the stack
+  // via a call instruction, which is done later in the deoptimization process.
+  PushShadowStackHelper(shadow_stack,
+                        DeoptimizationHelperIndex(dispatch_builtin_id));
 
   // Update constant pool.
   if (V8_EMBEDDED_CONSTANT_POOL_BOOL) {
+    Code dispatch_builtin = builtins->code(dispatch_builtin_id);
     intptr_t constant_pool_value =
         static_cast<intptr_t>(dispatch_builtin->constant_pool());
     output_frame->SetConstantPool(constant_pool_value);
@@ -1352,7 +1567,8 @@ void Deoptimizer::DoComputeInlinedExtraArguments(
 }
 
 void Deoptimizer::DoComputeConstructCreateStubFrame(
-    TranslatedFrame* translated_frame, int frame_index) {
+    TranslatedFrame* translated_frame, int frame_index,
+    ShadowStack& shadow_stack) {
   TranslatedFrame::iterator value_iterator = translated_frame->begin();
   const bool is_topmost = (output_count_ - 1 == frame_index);
   // The construct frame could become topmost only if we inlined a constructor
@@ -1360,6 +1576,9 @@ void Deoptimizer::DoComputeConstructCreateStubFrame(
   // the topmost one). So it could only be the DeoptimizeKind::kLazy case.
   CHECK(!is_topmost || deopt_kind_ == DeoptimizeKind::kLazy);
   DCHECK_EQ(translated_frame->kind(), TranslatedFrame::kConstructCreateStub);
+
+  Builtins* builtins = isolate_->builtins();
+  Builtin construct_stub_id = Builtin::kJSConstructStubGeneric;
 
   const int parameters_count = translated_frame->height();
   ConstructStubFrameInfo frame_info =
@@ -1382,8 +1601,8 @@ void Deoptimizer::DoComputeConstructCreateStubFrame(
   DCHECK_NULL(output_[frame_index]);
   output_[frame_index] = output_frame;
 
-  // The top address of the frame is computed from the previous frame's top and
-  // this frame's size.
+  // The top address of the frame is computed from the previous frame's top
+  // and this frame's size.
   const intptr_t top_address =
       output_[frame_index - 1]->GetTop() - output_frame_size;
   output_frame->SetTop(top_address);
@@ -1440,8 +1659,8 @@ void Deoptimizer::DoComputeConstructCreateStubFrame(
   frame_writer.PushTranslatedValue(function_iterator, "constructor function\n");
 
   // The deopt info contains the implicit receiver or the new target at the
-  // position of the receiver. Copy it to the top of stack, with the hole value
-  // as padding to maintain alignment.
+  // position of the receiver. Copy it to the top of stack, with the hole
+  // value as padding to maintain alignment.
   frame_writer.PushRawObject(roots.the_hole_value(), "padding\n");
   frame_writer.PushTranslatedValue(receiver_iterator, "new target\n");
 
@@ -1459,23 +1678,28 @@ void Deoptimizer::DoComputeConstructCreateStubFrame(
   CHECK_EQ(0u, frame_writer.top_offset());
 
   // Compute this frame's PC.
-  Code construct_stub =
-      isolate_->builtins()->code(Builtin::kJSConstructStubGeneric);
-  Address start = construct_stub->instruction_start();
-  const int pc_offset =
-      isolate_->heap()->construct_stub_create_deopt_pc_offset().value();
-  intptr_t pc_value = static_cast<intptr_t>(start + pc_offset);
+  intptr_t entry_address = DeoptimizationEntryAddress(
+      isolate_, construct_stub_id, kConstructStubCreate);
   if (is_topmost) {
     // Only the pc of the topmost frame needs to be signed since it is
     // authenticated at the end of the DeoptimizationEntry builtin.
     output_frame->SetPc(PointerAuthentication::SignAndCheckPC(
-        isolate(), pc_value, frame_writer.frame()->GetTop()));
+        isolate(), entry_address, frame_writer.frame()->GetTop()));
   } else {
-    output_frame->SetPc(pc_value);
+    output_frame->SetPc(entry_address);
   }
+
+  // If there is a hardware shadow stack, we can only "return" to
+  // {entry_address} computed above if that location was pushed onto the stack
+  // via a call instruction, which is done later in the deoptimization
+  // process.
+  PushShadowStackHelper(
+      shadow_stack,
+      DeoptimizationHelperIndex(construct_stub_id, kConstructStubCreate));
 
   // Update constant pool.
   if (V8_EMBEDDED_CONSTANT_POOL_BOOL) {
+    Code construct_stub = builtins->code(construct_stub_id);
     intptr_t constant_pool_value =
         static_cast<intptr_t>(construct_stub->constant_pool());
     output_frame->SetConstantPool(constant_pool_value);
@@ -1503,7 +1727,8 @@ void Deoptimizer::DoComputeConstructCreateStubFrame(
 }
 
 void Deoptimizer::DoComputeConstructInvokeStubFrame(
-    TranslatedFrame* translated_frame, int frame_index) {
+    TranslatedFrame* translated_frame, int frame_index,
+    ShadowStack& shadow_stack) {
   TranslatedFrame::iterator value_iterator = translated_frame->begin();
   const bool is_topmost = (output_count_ - 1 == frame_index);
   // The construct frame could become topmost only if we inlined a constructor
@@ -1512,6 +1737,10 @@ void Deoptimizer::DoComputeConstructInvokeStubFrame(
   CHECK(!is_topmost || deopt_kind_ == DeoptimizeKind::kLazy);
   DCHECK_EQ(translated_frame->kind(), TranslatedFrame::kConstructInvokeStub);
   DCHECK_EQ(translated_frame->height(), 0);
+
+  Builtins* builtins = isolate_->builtins();
+  Builtin construct_stub_id =
+      Builtin::kInterpreterPushArgsThenFastConstructFunction;
 
   FastConstructStubFrameInfo frame_info =
       FastConstructStubFrameInfo::Precise(is_topmost);
@@ -1531,8 +1760,8 @@ void Deoptimizer::DoComputeConstructInvokeStubFrame(
   DCHECK_NULL(output_[frame_index]);
   output_[frame_index] = output_frame;
 
-  // The top address of the frame is computed from the previous frame's top and
-  // this frame's size.
+  // The top address of the frame is computed from the previous frame's top
+  // and this frame's size.
   const intptr_t top_address =
       output_[frame_index - 1]->GetTop() - output_frame_size;
   output_frame->SetTop(top_address);
@@ -1588,23 +1817,28 @@ void Deoptimizer::DoComputeConstructInvokeStubFrame(
   CHECK_EQ(0u, frame_writer.top_offset());
 
   // Compute this frame's PC.
-  Code construct_stub = isolate_->builtins()->code(
-      Builtin::kInterpreterPushArgsThenFastConstructFunction);
-  Address start = construct_stub->instruction_start();
-  const int pc_offset =
-      isolate_->heap()->construct_stub_invoke_deopt_pc_offset().value();
-  intptr_t pc_value = static_cast<intptr_t>(start + pc_offset);
+  intptr_t entry_address = DeoptimizationEntryAddress(
+      isolate_, construct_stub_id, kConstructStubInvoke);
   if (is_topmost) {
     // Only the pc of the topmost frame needs to be signed since it is
     // authenticated at the end of the DeoptimizationEntry builtin.
     output_frame->SetPc(PointerAuthentication::SignAndCheckPC(
-        isolate(), pc_value, frame_writer.frame()->GetTop()));
+        isolate(), entry_address, frame_writer.frame()->GetTop()));
   } else {
-    output_frame->SetPc(pc_value);
+    output_frame->SetPc(entry_address);
   }
+
+  // If there is a hardware shadow stack, we can only "return" to
+  // {entry_address} computed above if that location was pushed onto the stack
+  // via a call instruction, which is done later in the deoptimization
+  // process.
+  PushShadowStackHelper(
+      shadow_stack,
+      DeoptimizationHelperIndex(construct_stub_id, kConstructStubInvoke));
 
   // Update constant pool.
   if (V8_EMBEDDED_CONSTANT_POOL_BOOL) {
+    Code construct_stub = builtins->code(construct_stub_id);
     intptr_t constant_pool_value =
         static_cast<intptr_t>(construct_stub->constant_pool());
     output_frame->SetConstantPool(constant_pool_value);
@@ -1770,7 +2004,7 @@ TranslatedValue Deoptimizer::TranslatedValueForWasmReturnKind(
 //
 void Deoptimizer::DoComputeBuiltinContinuation(
     TranslatedFrame* translated_frame, int frame_index,
-    BuiltinContinuationMode mode) {
+    BuiltinContinuationMode mode, ShadowStack& shadow_stack) {
   TranslatedFrame::iterator result_iterator = translated_frame->end();
 
   bool is_js_to_wasm_builtin_continuation = false;
@@ -2049,22 +2283,26 @@ void Deoptimizer::DoComputeBuiltinContinuation(
   // For JSToWasmBuiltinContinuations use ContinueToCodeStubBuiltin, and not
   // ContinueToCodeStubBuiltinWithResult because we don't want to overwrite the
   // return value that we have already set.
-  Code continue_to_builtin =
-      isolate()->builtins()->code(TrampolineForBuiltinContinuation(
-          mode, frame_info.frame_has_result_stack_slot() &&
-                    !is_js_to_wasm_builtin_continuation));
+  Builtin trampoline_builtin = TrampolineForBuiltinContinuation(
+      mode, frame_info.frame_has_result_stack_slot() &&
+                !is_js_to_wasm_builtin_continuation);
+  intptr_t entry_address =
+      DeoptimizationEntryAddress(isolate_, trampoline_builtin);
   if (is_topmost) {
     // Only the pc of the topmost frame needs to be signed since it is
     // authenticated at the end of the DeoptimizationEntry builtin.
     const intptr_t top_most_pc = PointerAuthentication::SignAndCheckPC(
-        isolate(),
-        static_cast<intptr_t>(continue_to_builtin->instruction_start()),
-        frame_writer.frame()->GetTop());
+        isolate(), entry_address, frame_writer.frame()->GetTop());
     output_frame->SetPc(top_most_pc);
   } else {
-    output_frame->SetPc(
-        static_cast<intptr_t>(continue_to_builtin->instruction_start()));
+    output_frame->SetPc(entry_address);
   }
+
+  // If there is a hardware shadow stack, we can only "return" to
+  // {entry_address} computed above if that location was pushed onto the stack
+  // via a call instruction, which is done later in the deoptimization process.
+  PushShadowStackHelper(shadow_stack,
+                        DeoptimizationHelperIndex(trampoline_builtin));
 
   Code continuation = isolate()->builtins()->code(Builtin::kNotifyDeoptimized);
   output_frame->SetContinuation(

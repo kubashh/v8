@@ -897,6 +897,7 @@ bool OS::isDirectorySeparator(const char ch) {
   return ch == DirectorySeparator();
 }
 
+bool OS::IsHardwareEnforcedShadowStacksEnabled() { return false; }
 
 FILE* OS::OpenTemporaryFile() {
   return tmpfile();

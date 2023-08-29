@@ -2805,6 +2805,21 @@ void MacroAssembler::Ret(int bytes_dropped, Register scratch) {
   }
 }
 
+void MacroAssembler::IncsspqIfSupported(int number_of_words, Register scratch) {
+  // Optimized code can validate at runtime whether the cpu supports the
+  // incsspq instruction, so it shouldn't use this method.
+  CHECK(isolate()->IsGeneratingEmbeddedBuiltins());
+  DCHECK_NE(0, number_of_words);
+  Label not_supported;
+  Operand supports_cetss_operand = ExternalReferenceAsOperand(
+      ExternalReference::supports_cetss_address(), scratch);
+  cmpb(supports_cetss_operand, Immediate(0));
+  j(equal, &not_supported, Label::kNear);
+  Move(scratch, number_of_words);
+  incsspq(scratch);
+  bind(&not_supported);
+}
+
 void MacroAssembler::IncsspqIfSupported(Register number_of_words,
                                         Register scratch) {
   // Optimized code can validate at runtime whether the cpu supports the
@@ -2812,10 +2827,8 @@ void MacroAssembler::IncsspqIfSupported(Register number_of_words,
   CHECK(isolate()->IsGeneratingEmbeddedBuiltins());
   DCHECK_NE(number_of_words, scratch);
   Label not_supported;
-  ExternalReference supports_cetss =
-      ExternalReference::supports_cetss_address();
-  Operand supports_cetss_operand =
-      ExternalReferenceAsOperand(supports_cetss, scratch);
+  Operand supports_cetss_operand = ExternalReferenceAsOperand(
+      ExternalReference::supports_cetss_address(), scratch);
   cmpb(supports_cetss_operand, Immediate(0));
   j(equal, &not_supported, Label::kNear);
   incsspq(number_of_words);

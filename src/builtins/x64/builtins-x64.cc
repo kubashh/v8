@@ -140,6 +140,30 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
   }
 }
 
+// This code needs to be present in all continuations pushed onto the
+// stack during the deoptimization process. It is part of a scheme to ensure
+// that the return address immediately after the call to
+// Builtin::kAdaptShadowStackForDeopt is present on the hardware shadow stack.
+// Below, you'll see that this call is unconditionally jumped over. However,
+// during deoptimization, the address of the call is jumped to directly
+// and executed. The end result being that later, returning to that address
+// after the call will be successful because the user stack and the
+// shadow stack will be found to match perfectly.
+void Generate_CallToAdaptShadowStackForDeopt(MacroAssembler* masm) {
+  // TODO(clemensb): Enable this unconditionally for uniformity.
+#ifdef V8_ENABLE_CET_SHADOW_STACK
+  ASM_CODE_COMMENT(masm);
+  Label post_adapt_shadow_stack;
+  __ jmp(&post_adapt_shadow_stack, Label::kNear);
+  const auto saved_pc_offset = masm->pc_offset();
+  __ Call(Operand(kRootRegister, IsolateData::BuiltinEntrySlotOffset(
+                                     Builtin::kAdaptShadowStackForDeopt)));
+  CHECK_EQ(Deoptimizer::kAdaptShadowStackOffsetToSubtract,
+           masm->pc_offset() - saved_pc_offset);
+  __ bind(&post_adapt_shadow_stack);
+#endif  // V8_ENABLE_CET_SHADOW_STACK
+}
+
 }  // namespace
 
 // The construct stub for ES5 constructor functions and ES6 class constructors.
@@ -200,6 +224,11 @@ void Builtins::Generate_JSConstructStubGeneric(MacroAssembler* masm) {
   //  -- Slot 1 / sp[3*kSystemPointerSize]  number of arguments (tagged)
   //  -- Slot 0 / sp[4*kSystemPointerSize]  context
   // -----------------------------------
+
+  // Since the address below (at label {post_instantiation_deopt_entry}) is
+  // returned into instead of being called directly, special code to get that
+  // address on the shadow stack is necessary to avoid a security exception.
+  Generate_CallToAdaptShadowStackForDeopt(masm);
   // Deoptimizer enters here.
   masm->isolate()->heap()->SetConstructStubCreateDeoptPCOffset(
       masm->pc_offset());
@@ -1143,10 +1172,30 @@ void Builtins::Generate_InterpreterEntryTrampoline(
   __ movq(kJavaScriptCallCodeStartRegister,
           Operand(kInterpreterDispatchTableRegister, kScratchRegister,
                   times_system_pointer_size, 0));
+
+  // The code below looks strange because it is embedding the means by which
+  // the deoptimization process gets the interpreter entry return pc offset
+  // on the shadow stack, so when we "return" to that location, the shadow
+  // stack also contains this address (and a security violation is thereby
+  // avoided). In normal operation, we unconditionally jump over the loading
+  // of the code start register with the address of
+  // Builtin::kAdaptShadowStackForDeopt.
+  Label time_for_call;
+  __ jmp(&time_for_call, Label::kNear);
+  const auto saved_pc_offset = masm->pc_offset();
+  __ movq(kJavaScriptCallCodeStartRegister,
+          Operand(kRootRegister, IsolateData::BuiltinEntrySlotOffset(
+                                     Builtin::kAdaptShadowStackForDeopt)));
+  __ bind(&time_for_call);
   __ call(kJavaScriptCallCodeStartRegister);
 
   __ RecordComment("--- InterpreterEntryReturnPC point ---");
   if (mode == InterpreterEntryTrampolineMode::kDefault) {
+    // The deoptimizer calls to the {saved_pc_offset} above, based on the
+    // {interpreter_entry_return_pc_offset} (stored below), and
+    // {Deoptimizer::kInterpreterEntryAdaptShadowStackOffsetToSubtract}.
+    CHECK_EQ(masm->pc_offset() - saved_pc_offset,
+             Deoptimizer::kInterpreterEntryAdaptShadowStackOffsetToSubtract);
     masm->isolate()->heap()->SetInterpreterEntryReturnPCOffset(
         masm->pc_offset());
   } else {
@@ -1517,6 +1566,12 @@ void Builtins::Generate_InterpreterPushArgsThenFastConstructFunction(
   //  -- FramePointer
   // -----------------------------------
 
+  // Since the address below (at the offset recorded as
+  // ConstructStubInvokeDeoptPCOffset) is returned into instead of being called
+  // directly, special code to get that address on the shadow stack is necessary
+  // to avoid a security exception.
+  Generate_CallToAdaptShadowStackForDeopt(masm);
+
   // Store offset of return address for deoptimizer.
   masm->isolate()->heap()->SetConstructStubInvokeDeoptPCOffset(
       masm->pc_offset());
@@ -1660,6 +1715,12 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_InterpreterEnterAtNextBytecode(MacroAssembler* masm) {
+  // Since this function is returned into instead of being called directly,
+  // special code to get the true start address on the shadow stack is
+  // necessary to avoid a security exception.
+  Generate_CallToAdaptShadowStackForDeopt(masm);
+  masm->isolate()->heap()->SetDeoptHelperDeoptPCOffset(masm->pc_offset());
+
   // Get bytecode array and bytecode offset from the stack frame.
   __ movq(kInterpreterBytecodeArrayRegister,
           Operand(rbp, InterpreterFrameConstants::kBytecodeArrayFromFp));
@@ -1706,6 +1767,12 @@ void Builtins::Generate_InterpreterEnterAtNextBytecode(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_InterpreterEnterAtBytecode(MacroAssembler* masm) {
+  // Since this function is returned into instead of being called directly,
+  // special code to get the true start address on the shadow stack is
+  // necessary to avoid a security exception.
+  Generate_CallToAdaptShadowStackForDeopt(masm);
+  masm->isolate()->heap()->SetDeoptHelperDeoptPCOffset(masm->pc_offset());
+
   Generate_InterpreterEnterBytecode(masm);
 }
 
@@ -1809,11 +1876,16 @@ void Builtins::Generate_BaselineOutOfLinePrologue(MacroAssembler* masm) {
   __ bind(&flags_need_processing);
   {
     ASM_CODE_COMMENT_STRING(masm, "Optimized marker check");
-    // Drop the return address, rebalancing the return stack buffer by using
-    // JumpMode::kPushAndReturn. We can't leave the slot and overwrite it on
+    // Drop the return address, and jump to optimized code with
+    // JumpMode::kJump. We can't leave the slot and overwrite it on
     // return since we may do a runtime call along the way that requires the
     // stack to only contain valid frames.
+    //
+    // Drop the return address from the shadow stack as well (if the hardware
+    // supports it).
     __ Drop(1);
+    __ movq(r11, Immediate(1));
+    __ IncsspqIfSupported(r11, kScratchRegister);
     __ OptimizeCodeOrTailCallOptimizedCodeSlot(feedback_vector, closure,
                                                JumpMode::kPushAndReturn);
     __ Trap();
@@ -1870,7 +1942,12 @@ namespace {
 void Generate_ContinueToBuiltinHelper(MacroAssembler* masm,
                                       bool java_script_builtin,
                                       bool with_result) {
-  ASM_CODE_COMMENT(masm);
+  // Since this function is returned into instead of being called directly,
+  // special code to get the true start address on the shadow stack is
+  // necessary to avoid a security exception.
+  Generate_CallToAdaptShadowStackForDeopt(masm);
+  masm->isolate()->heap()->SetDeoptHelperDeoptPCOffset(masm->pc_offset());
+
   const RegisterConfiguration* config(RegisterConfiguration::Default());
   int allocatable_register_count = config->num_allocatable_general_registers();
   if (with_result) {
@@ -2769,11 +2846,14 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
 
 namespace {
 
-void Generate_OSREntry(MacroAssembler* masm, Register entry_address) {
-  // Overwrite the return address on the stack and "return" to the OSR entry
-  // point of the function.
-  __ movq(Operand(rsp, 0), entry_address);
-  __ ret(0);
+void Generate_OSREntry(MacroAssembler* masm, Register entry_address,
+                       Register scratch1, Register scratch2) {
+  // We drop the return address from the user stack and the shadow stack (if we
+  // have the hardware).
+  __ Drop(1);
+  __ movq(scratch1, Immediate(1));
+  __ IncsspqIfSupported(scratch1, scratch2);
+  __ jmp(entry_address);
 }
 
 enum class OsrSourceTier {
@@ -2856,7 +2936,7 @@ void OnStackReplacement(MacroAssembler* masm, OsrSourceTier source,
   // Compute the target address = code_entry + osr_offset
   __ addq(rax, rbx);
 
-  Generate_OSREntry(masm, rax);
+  Generate_OSREntry(masm, rax, rbx, kScratchRegister);
 }
 
 }  // namespace
@@ -2912,6 +2992,111 @@ void Builtins::Generate_MaglevFunctionEntryStackCheck(MacroAssembler* masm,
 }
 
 #endif  // V8_ENABLE_MAGLEV
+
+// AdaptShadowStackForDeopt assists the deoptimizer in getting continuation
+// addresses placed on the shadow stack. This can only be done with a call
+// instruction. Earlier in the deoptimization process, the user stack was
+// seeded with return addresses into the continuations. At this stage, we
+// make calls into the continuations such that the shadow stack contains
+// precisely those necessary return addresses back into those continuations,
+// and in the appropriate order that the shadow stack and the user stack
+// perfectly match up at the points where return instructions are executed.
+//
+// The stack layout on entry to AdaptShadowStackForDeopt is as follows:
+//
+// Identifier_1
+// Identifier_2
+// ...
+// Identifier_N
+// saved kAdaptShadowStackCountRegister
+// saved kScratchRegister
+//
+// Identifier_1, Identifier_2 and so on are synthetic IDs that map to
+// addresses in builtin code that represent the point at which we need to
+// call that code, with the goal, as mentioned above, of getting the
+// necessary return address onto the shadow stack.
+//
+// kAdaptShadowStackCountRegister, on entry, has the value N, matching the
+// number of identifiers to pop from the stack above. It is decremented each
+// time AdaptShadowStackForDeopt pops an identifier from the stack. This
+// happens once per invocation of AdaptShadowStackForDeopt. When the value
+// is 0, the function calls NotifyDeoptimized and will not be called again
+// for this deoptimization process.
+//
+// The other cpu registers have already been populated with the required values
+// to kick off execution running the builtin continuation associated with
+// Identifier_N on the stack above. AdaptShadowStackForDeopt uses
+// kScratchRegister and kAdaptShadowStackRegister for its own work, and
+// that is why those registers are additionaly saved on the stack, to be
+// restored at the end of the process.
+
+#ifdef V8_ENABLE_CET_SHADOW_STACK
+// kAdaptShadowStackDispatchPCOffset marks the "kick-off" location in
+// AdaptShadowStackForDeopt for the process.
+constexpr int kAdaptShadowStackDispatchPCOffset = 5;
+
+// kAdaptShadowStackCountRegister contains the number of identifiers on
+// the stack to be consumed via repeated calls into AdaptShadowStackForDeopt.
+constexpr Register kAdaptShadowStackCountRegister = r11;
+#endif  // V8_ENABLE_CET_SHADOW_STACK
+
+void Builtins::Generate_AdaptShadowStackForDeopt(MacroAssembler* masm) {
+#ifdef V8_ENABLE_CET_SHADOW_STACK
+  Register count_reg = kAdaptShadowStackCountRegister;
+  Label keep_going;
+
+  // Retrieve the next identifier from the stack for the code we want to jump
+  // to.
+  __ popq(kScratchRegister);
+  __ decl(count_reg);
+
+  // DeoptimizationEntry enters here.
+  CHECK_EQ(masm->pc_offset(), kAdaptShadowStackDispatchPCOffset);
+  __ cmpl(count_reg, Immediate(0));
+  __ j(not_equal, &keep_going);
+
+  // All identifiers have been popped from the stack and handled. Cleanup
+  // and proceed to call NotifyDeoptimized.
+  __ popq(kAdaptShadowStackCountRegister);
+  __ popq(kScratchRegister);
+
+  // Eliminate the NotifyDeoptimized address sitting on top of
+  // the stack.
+  __ addq(rsp, Immediate(kPCOnStackSize));
+
+  // TODO(mvstanton): Is the stack really iterable at this point?
+  __ movb(__ ExternalReferenceAsOperand(
+              ExternalReference::stack_is_iterable_address(masm->isolate())),
+          Immediate(1));
+
+  __ jmp(Operand(kRootRegister, IsolateData::BuiltinEntrySlotOffset(
+                                    Builtin::kNotifyDeoptimized)));
+  __ int3();  // Should never reach here.
+
+  __ bind(&keep_going);
+  Register id = kScratchRegister;
+  __ popq(id);
+  // we jump to different builtins based on the identifier found.
+  unsigned int entry_count = Deoptimizer::DeoptimizationHelperEntryCount();
+  // If the number of builtins gets too big, our approach is a poor one.
+  CHECK_LT(entry_count, 25);
+  for (unsigned int i = 0; i < entry_count; i++) {
+    Label next;
+    __ cmpl(id, Immediate(static_cast<int>(i)));
+    __ j(not_equal, &next);
+    Builtin entry_builtin = Deoptimizer::DeoptimizationHelperBuiltin(i);
+    int offset = IsolateData::BuiltinEntrySlotOffset(entry_builtin);
+    Register jmp_address = id;
+    __ movq(jmp_address, Operand(kRootRegister, offset));
+    int offset_within_builtin =
+        Deoptimizer::DeoptimizationHelperOffset(masm->isolate()->heap(), i);
+    __ addq(jmp_address, Immediate(offset_within_builtin));
+    __ jmp(jmp_address);
+    __ bind(&next);
+  }
+#endif        // V8_ENABLE_CET_SHADOW_STACK
+  __ int3();  // Should not reach this point.
+}
 
 #if V8_ENABLE_WEBASSEMBLY
 
@@ -5545,6 +5730,7 @@ void Generate_DeoptimizationEntry(MacroAssembler* masm,
   }
   __ popq(rax);
 
+  __ movq(r8, rax);
   __ movq(rsp, Operand(rax, Deoptimizer::caller_frame_top_offset()));
 
   // Replace the current (input) frame with the output frames.
@@ -5582,6 +5768,9 @@ void Generate_DeoptimizationEntry(MacroAssembler* masm,
   __ PushQuad(Operand(rbx, FrameDescription::pc_offset()));
   __ PushQuad(Operand(rbx, FrameDescription::continuation_offset()));
 
+  // Push the deoptimizer for later use by the shadow stack routine.
+  __ pushq(r8);
+
   // Push the registers from the last output frame.
   for (int i = 0; i < kNumberOfRegisters; i++) {
     int offset =
@@ -5601,12 +5790,66 @@ void Generate_DeoptimizationEntry(MacroAssembler* masm,
     __ popq(r);
   }
 
+  __ popq(rax);  // Pop the deoptimizer into rax.
+
+  // TODO(clemensb): Enable the CET-compatible routine everywhere to avoid
+  // different code paths depending on the hardware configuration (which makes
+  // understanding and reproducing crashes harder).
+#ifndef V8_ENABLE_CET_SHADOW_STACK
   __ movb(__ ExternalReferenceAsOperand(
               ExternalReference::stack_is_iterable_address(isolate)),
           Immediate(1));
 
   // Return to the continuation point.
   __ ret(0);
+#else
+  // Now, we need to push the IDs onto the stack for the
+  // AdaptShadowStackForDeopt gadget to transform into valid return addresses
+  // brought into alignment with the return addresses as copied to the stack in
+  // the output frames above.
+
+  // Save things that will be restored at the end.
+  __ pushq(kScratchRegister);
+  __ pushq(kAdaptShadowStackCountRegister);
+
+  __ movl(kAdaptShadowStackCountRegister,
+          Operand(rax, Deoptimizer::shadow_stack_count_offset()));
+  __ movq(rax, Operand(rax, Deoptimizer::shadow_stack_ids_offset()));
+
+  Label check_more_pushes, next_push;
+  __ Move(kScratchRegister, 0);
+  __ jmp(&check_more_pushes, Label::kNear);
+  __ bind(&next_push);
+  // rax points to the start of the stack ids array.
+  __ pushq(Operand(rax, kScratchRegister, times_system_pointer_size, 0));
+  __ incl(kScratchRegister);
+  __ bind(&check_more_pushes);
+  __ cmpl(kScratchRegister, kAdaptShadowStackCountRegister);
+  __ j(not_equal, &next_push);
+
+  // We drop 1 word from the shadow stack. It contains the return address from
+  // DeoptimizationEntry.
+  __ Move(rax, 1);
+  __ IncsspqIfSupported(rax, kScratchRegister);
+
+  // Now, kick off the process of getting our continuations onto the shadow
+  // stack. Note that the stack has 3 extra words to be popped at the end
+  // of the process:
+  // 1) the kAdaptShadowStackCountRegister
+  // 2) kScratchRegister
+  // 3) the NotifyDeoptimized builtin code start address.
+  __ movq(kScratchRegister,
+          Operand(kRootRegister, IsolateData::BuiltinEntrySlotOffset(
+                                     Builtin::kAdaptShadowStackForDeopt)));
+  // We don't enter at the start of AdaptShadowStackForDeopt, because that
+  // is designed to be called by builtin continuations in order to get
+  // return addresses into those continuations on the stack. Therefore, we
+  // have to make a special entry at kAdaptShadowStackDispatchPCOffset.
+  __ addq(kScratchRegister, Immediate(kAdaptShadowStackDispatchPCOffset));
+  __ jmp(kScratchRegister);
+
+  __ int3();
+#endif  // !V8_ENABLE_CET_SHADOW_STACK
 }
 
 }  // namespace
@@ -5745,7 +5988,7 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
   __ popq(kInterpreterAccumulatorRegister);
 
   if (is_osr) {
-    Generate_OSREntry(masm, code_obj);
+    Generate_OSREntry(masm, code_obj, r11, kScratchRegister);
   } else {
     __ jmp(code_obj);
   }
@@ -5779,11 +6022,23 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
 
 void Builtins::Generate_BaselineOrInterpreterEnterAtBytecode(
     MacroAssembler* masm) {
+  // Since this function is returned into instead of being called directly,
+  // special code to get the true start address on the shadow stack is
+  // necessary to avoid a security exception.
+  Generate_CallToAdaptShadowStackForDeopt(masm);
+  masm->isolate()->heap()->SetDeoptHelperDeoptPCOffset(masm->pc_offset());
+
   Generate_BaselineOrInterpreterEntry(masm, false);
 }
 
 void Builtins::Generate_BaselineOrInterpreterEnterAtNextBytecode(
     MacroAssembler* masm) {
+  // Since this function is returned into instead of being called directly,
+  // special code to get the true start address on the shadow stack is
+  // necessary to avoid a security exception.
+  Generate_CallToAdaptShadowStackForDeopt(masm);
+  masm->isolate()->heap()->SetDeoptHelperDeoptPCOffset(masm->pc_offset());
+
   Generate_BaselineOrInterpreterEntry(masm, true);
 }
 
@@ -5793,6 +6048,12 @@ void Builtins::Generate_InterpreterOnStackReplacement_ToBaseline(
 }
 
 void Builtins::Generate_RestartFrameTrampoline(MacroAssembler* masm) {
+  // Since this function is returned into instead of being called directly,
+  // special code to get the true start address on the shadow stack is
+  // necessary to avoid a security exception.
+  Generate_CallToAdaptShadowStackForDeopt(masm);
+  masm->isolate()->heap()->SetDeoptHelperDeoptPCOffset(masm->pc_offset());
+
   // Restart the current frame:
   // - Look up current function on the frame.
   // - Leave the frame.

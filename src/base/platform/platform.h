@@ -177,6 +177,8 @@ class V8_BASE_EXPORT OS {
   static char DirectorySeparator();
   static bool isDirectorySeparator(const char ch);
 
+  static bool IsHardwareEnforcedShadowStacksEnabled();
+
   // Opens a temporary file, the file is auto removed on close.
   static FILE* OpenTemporaryFile();
 

@@ -162,18 +162,28 @@ void Heap_GenerationalBarrierForCodeSlow(Tagged<InstructionStream> host,
   Heap::GenerationalBarrierForCodeSlow(host, rinfo, object);
 }
 
+void Heap::SetDeoptHelperDeoptPCOffset(int pc_offset) {
+  if (deopt_helper_deopt_pc_offset().value() > 0) {
+    // Once the helper offset has been set to a non-zero value,
+    // ensure that any subsequent sets are to the same value.
+    CHECK_EQ(pc_offset, deopt_helper_deopt_pc_offset().value());
+    return;
+  }
+  set_deopt_helper_deopt_pc_offset(Smi::FromInt(pc_offset));
+}
+
 void Heap::SetConstructStubCreateDeoptPCOffset(int pc_offset) {
-  DCHECK_EQ(Smi::zero(), construct_stub_create_deopt_pc_offset());
+  CHECK_EQ(Smi::zero(), construct_stub_create_deopt_pc_offset());
   set_construct_stub_create_deopt_pc_offset(Smi::FromInt(pc_offset));
 }
 
 void Heap::SetConstructStubInvokeDeoptPCOffset(int pc_offset) {
-  DCHECK_EQ(Smi::zero(), construct_stub_invoke_deopt_pc_offset());
+  CHECK_EQ(Smi::zero(), construct_stub_invoke_deopt_pc_offset());
   set_construct_stub_invoke_deopt_pc_offset(Smi::FromInt(pc_offset));
 }
 
 void Heap::SetInterpreterEntryReturnPCOffset(int pc_offset) {
-  DCHECK_EQ(Smi::zero(), interpreter_entry_return_pc_offset());
+  CHECK_EQ(Smi::zero(), interpreter_entry_return_pc_offset());
   set_interpreter_entry_return_pc_offset(Smi::FromInt(pc_offset));
 }
 

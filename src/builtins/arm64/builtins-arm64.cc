@@ -6412,6 +6412,10 @@ void Builtins::Generate_RestartFrameTrampoline(MacroAssembler* masm) {
   __ InvokeFunction(x1, x2, x0, InvokeType::kJump);
 }
 
+void Builtins::Generate_AdaptShadowStackForDeopt(MacroAssembler* masm) {
+  __ Unreachable();
+}
+
 #undef __
 
 }  // namespace internal

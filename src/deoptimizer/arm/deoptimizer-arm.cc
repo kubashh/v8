@@ -8,6 +8,9 @@
 namespace v8 {
 namespace internal {
 
+const int Deoptimizer::kInterpreterEntryAdaptShadowStackOffsetToSubtract = 0;
+const int Deoptimizer::kAdaptShadowStackOffsetToSubtract = 0;
+
 // The deopt exit sizes below depend on the following IsolateData layout
 // guarantees:
 #define ASSERT_OFFSET(BuiltinName)                                       \

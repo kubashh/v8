@@ -115,14 +115,36 @@ class Deoptimizer : public Malloced {
 
   V8_EXPORT_PRIVATE static Builtin GetDeoptimizationEntry(DeoptimizeKind kind);
 
+  // Helpers for constructing the jump target in AdaptShadowStack
+  static unsigned int DeoptimizationHelperEntryCount();
+  static Builtin DeoptimizationHelperBuiltin(unsigned int index);
+  static int DeoptimizationHelperOffset(Heap* heap, unsigned int index);
+
+  // Returns true if {addr} is a deoptimization entry and stores its type in
+  // {type_out}. Returns false if {addr} is not a deoptimization entry.
+  static bool IsDeoptimizationEntry(Isolate* isolate, Address addr,
+                                    DeoptimizeKind* type_out);
+
   // InstructionStream generation support.
-  static int input_offset() { return offsetof(Deoptimizer, input_); }
-  static int output_count_offset() {
+  static constexpr int input_offset() { return offsetof(Deoptimizer, input_); }
+
+  static constexpr int output_count_offset() {
     return offsetof(Deoptimizer, output_count_);
   }
-  static int output_offset() { return offsetof(Deoptimizer, output_); }
 
-  static int caller_frame_top_offset() {
+  static constexpr int output_offset() {
+    return offsetof(Deoptimizer, output_);
+  }
+
+  static constexpr int shadow_stack_ids_offset() {
+    return offsetof(Deoptimizer, shadow_stack_ids_);
+  }
+
+  static constexpr int shadow_stack_count_offset() {
+    return offsetof(Deoptimizer, shadow_stack_count_);
+  }
+
+  static constexpr int caller_frame_top_offset() {
     return offsetof(Deoptimizer, caller_frame_top_);
   }
 
@@ -138,6 +160,11 @@ class Deoptimizer : public Malloced {
   // Size of deoptimization exit sequence.
   V8_EXPORT_PRIVATE static const int kEagerDeoptExitSize;
   V8_EXPORT_PRIVATE static const int kLazyDeoptExitSize;
+
+  // The size of the call instruction to Builtins::kAdaptShadowStackForDeopt.
+  V8_EXPORT_PRIVATE static const int kAdaptShadowStackOffsetToSubtract;
+  V8_EXPORT_PRIVATE static const int
+      kInterpreterEntryAdaptShadowStackOffsetToSubtract;
 
   // Tracing.
   static void TraceMarkForDeoptimization(Isolate* isolate, Code code,
@@ -155,15 +182,18 @@ class Deoptimizer : public Malloced {
   void DeleteFrameDescriptions();
 
   void DoComputeOutputFrames();
+  using ShadowStack = std::stack<unsigned int>;
   void DoComputeUnoptimizedFrame(TranslatedFrame* translated_frame,
-                                 int frame_index, bool goto_catch_handler);
+                                 int frame_index, bool goto_catch_handler,
+                                 ShadowStack& shadow_stack);
   void DoComputeInlinedExtraArguments(TranslatedFrame* translated_frame,
                                       int frame_index);
   void DoComputeConstructCreateStubFrame(TranslatedFrame* translated_frame,
-                                         int frame_index);
+                                         int frame_index,
+                                         ShadowStack& shadow_stack);
   void DoComputeConstructInvokeStubFrame(TranslatedFrame* translated_frame,
-                                         int frame_index);
-
+                                         int frame_index,
+                                         ShadowStack& shadow_stack);
   static Builtin TrampolineForBuiltinContinuation(BuiltinContinuationMode mode,
                                                   bool must_handle_result);
 
@@ -174,12 +204,23 @@ class Deoptimizer : public Malloced {
 
   void DoComputeBuiltinContinuation(TranslatedFrame* translated_frame,
                                     int frame_index,
-                                    BuiltinContinuationMode mode);
+                                    BuiltinContinuationMode mode,
+                                    ShadowStack& shadow_stack);
 
   unsigned ComputeInputFrameAboveFpFixedSize() const;
   unsigned ComputeInputFrameSize() const;
 
   static unsigned ComputeIncomingArgumentSize(SharedFunctionInfo shared);
+
+  static void MarkAllCodeForContext(NativeContext native_context);
+  static void DeoptimizeMarkedCodeForContext(NativeContext native_context);
+  // Searches the list of known deoptimizing code for a InstructionStream object
+  // containing the given address (which is supposedly faster than
+  // searching all code objects).
+  InstructionStream FindDeoptimizingCode(Address addr);
+
+  void PushShadowStackHelper(ShadowStack& shadow_stack,
+                             unsigned int deopt_helper_id);
 
   // Tracing.
   bool tracing_enabled() const { return trace_scope_ != nullptr; }
@@ -218,6 +259,11 @@ class Deoptimizer : public Malloced {
   int output_count_;
   // Array of output frame descriptions.
   FrameDescription** output_;
+
+  // We expect to find {output_count_} ids at this location mapping to
+  // the output frame pc addresses.
+  uintptr_t* shadow_stack_ids_;
+  size_t shadow_stack_count_;
 
   // Caller frame details computed from input frame.
   intptr_t caller_frame_top_;
