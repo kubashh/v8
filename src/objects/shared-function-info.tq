@@ -122,8 +122,7 @@ extern class UncompiledData extends HeapObject {
 @generateBodyDescriptor
 @generateUniqueMap
 @generateFactoryFunction
-extern class UncompiledDataWithoutPreparseData extends UncompiledData {
-}
+extern class UncompiledDataWithoutPreparseData extends UncompiledData {}
 
 @generateBodyDescriptor
 @generateUniqueMap
@@ -152,7 +151,7 @@ extern class UncompiledDataWithPreparseDataAndJob extends
 
 @useParentTypeChecker
 type PodArrayOfIntegerPairs extends ByteArray
-    constexpr 'PodArray<std::pair<int32_t, int32_t>>';
+constexpr 'PodArray<std::pair<int32_t, int32_t>>';
 
 @useParentTypeChecker
 type FixedInt32Array extends ByteArray constexpr 'FixedInt32Array';
