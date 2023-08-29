@@ -307,6 +307,8 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   // from the JS functions referring it.
   void BailoutIfDeoptimized();
 
+  void AssembleLazyToEagerBailout(DeoptimizationExit* deopt_exit);
+
   // Generates an architecture-specific, descriptor-specific prologue
   // to set up a stack frame.
   void AssembleConstructFrame();
@@ -413,7 +415,7 @@ class V8_EXPORT_PRIVATE CodeGenerator final : public GapResolver::Assembler {
   // ================== Deoptimization table construction. =====================
   // ===========================================================================
 
-  void RecordCallPosition(Instruction* instr);
+  DeoptimizationExit* RecordCallPosition(Instruction* instr);
   Handle<DeoptimizationData> GenerateDeoptimizationData();
   int DefineDeoptimizationLiteral(DeoptimizationLiteral literal);
   DeoptimizationEntry const& GetDeoptimizationEntry(Instruction* instr,

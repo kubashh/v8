@@ -331,7 +331,9 @@ class ActivationsFinder : public ThreadVisitor {
       if (it.frame()->is_optimized()) {
         GcSafeCode code = it.frame()->GcSafeLookupCode();
         if (CodeKindCanDeoptimize(code->kind()) &&
-            code->marked_for_deoptimization()) {
+            code->marked_for_deoptimization() &&
+            v8_flags.patch_stack_for_deopt &&
+            !base::OS::IsHardwareEnforcedShadowStacksEnabled()) {
           // Obtain the trampoline to the deoptimizer call.
           int trampoline_pc;
           if (code->is_maglevved()) {

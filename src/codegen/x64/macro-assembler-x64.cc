@@ -3724,8 +3724,13 @@ void MacroAssembler::ComputeCodeStartAddress(Register dst) {
   Label current;
   bind(&current);
   int pc = pc_offset();
-  // Load effective address to get the address of the current instruction.
-  leaq(dst, Operand(&current, -pc));
+  if (is_int8(pc)) {
+    // Load effective address to get the address of the current instruction.
+    leaq(dst, Operand(&current, -pc));
+  } else {
+    leaq(dst, Operand(&current, 0));
+    subq(dst, Immediate(pc));
+  }
 }
 
 // Check if the code object is marked for deoptimization. If it is, then it

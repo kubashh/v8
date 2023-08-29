@@ -1282,6 +1282,21 @@ bool ShouldClearOutputRegisterBeforeInstruction(CodeGenerator* g,
   return false;
 }
 
+void CodeGenerator::AssembleLazyToEagerBailout(DeoptimizationExit* deopt_exit) {
+  // We only need the codegen below if we aren't patching the stack to
+  // effect lazy deoptimization.
+  if (info()->shadow_stack_compliant_lazy_deopt()) {
+    static_assert(kJavaScriptCallCodeStartRegister == rcx, "ABI mismatch");
+    int offset =
+        InstructionStream::kCodeOffset - InstructionStream::kHeaderSize;
+    __ ComputeCodeStartAddress(rcx);
+    __ LoadTaggedField(rcx, Operand(kJavaScriptCallCodeStartRegister, offset));
+    __ testl(FieldOperand(rcx, Code::kFlagsOffset),
+             Immediate(1 << Code::kMarkedForDeoptimizationBit));
+    __ j(not_zero, deopt_exit->label());
+  }
+}
+
 // Assembles an instruction after register allocation, producing machine code.
 CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     Instruction* instr) {
@@ -1311,7 +1326,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         __ LoadCodeInstructionStart(reg, reg);
         __ call(reg);
       }
-      RecordCallPosition(instr);
+      DeoptimizationExit* deopt_exit = RecordCallPosition(instr);
+      if (deopt_exit != nullptr) {
+        AssembleLazyToEagerBailout(deopt_exit);
+      }
       frame_access_state()->ClearSPDelta();
       break;
     }
@@ -1319,7 +1337,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       DCHECK(!HasImmediateInput(instr, 0));
       Register builtin_index = i.InputRegister(0);
       __ CallBuiltinByIndex(builtin_index);
-      RecordCallPosition(instr);
+      DeoptimizationExit* deopt_exit = RecordCallPosition(instr);
+      if (deopt_exit != nullptr) {
+        AssembleLazyToEagerBailout(deopt_exit);
+      }
       frame_access_state()->ClearSPDelta();
       break;
     }
@@ -1336,7 +1357,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       } else {
         __ call(i.InputRegister(0));
       }
-      RecordCallPosition(instr);
+      DeoptimizationExit* deopt_exit = RecordCallPosition(instr);
+      if (deopt_exit != nullptr) {
+        AssembleLazyToEagerBailout(deopt_exit);
+      }
       frame_access_state()->ClearSPDelta();
       break;
     }
@@ -1399,7 +1423,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ LoadTaggedField(rcx, FieldOperand(func, JSFunction::kCodeOffset));
       __ CallCodeObject(rcx);
       frame_access_state()->ClearSPDelta();
-      RecordCallPosition(instr);
+      DeoptimizationExit* deopt_exit = RecordCallPosition(instr);
+      if (deopt_exit != nullptr) {
+        AssembleLazyToEagerBailout(deopt_exit);
+      }
       break;
     }
     case kArchPrepareCallCFunction: {

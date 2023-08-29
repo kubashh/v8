@@ -986,7 +986,7 @@ Label* CodeGenerator::AddJumpTable(Label** targets, size_t target_count) {
   return jump_tables_->label();
 }
 
-void CodeGenerator::RecordCallPosition(Instruction* instr) {
+DeoptimizationExit* CodeGenerator::RecordCallPosition(Instruction* instr) {
   const bool needs_frame_state =
       instr->HasCallDescriptorFlag(CallDescriptor::kNeedsFrameState);
   RecordSafepoint(instr->reference_map());
@@ -1006,9 +1006,10 @@ void CodeGenerator::RecordCallPosition(Instruction* instr) {
     FrameStateDescriptor* descriptor =
         GetDeoptimizationEntry(instr, frame_state_offset).descriptor();
     int pc_offset = masm()->pc_offset_for_safepoint();
-    BuildTranslation(instr, pc_offset, frame_state_offset, 0,
-                     descriptor->state_combine());
+    return BuildTranslation(instr, pc_offset, frame_state_offset, 0,
+                            descriptor->state_combine());
   }
+  return nullptr;
 }
 
 int CodeGenerator::DefineDeoptimizationLiteral(DeoptimizationLiteral literal) {

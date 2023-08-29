@@ -72,7 +72,8 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
   V(WasmRuntimeExceptionSupport, wasm_runtime_exception_support, 16) \
   V(DiscardResultForTesting, discard_result_for_testing, 17)         \
   V(InlineJSWasmCalls, inline_js_wasm_calls, 18)                     \
-  V(TurboshaftTraceReduction, turboshaft_trace_reduction, 19)
+  V(TurboshaftTraceReduction, turboshaft_trace_reduction, 19)        \
+  V(ShadowStackCompliantLazyDeopt, shadow_stack_compliant_lazy_deopt, 20)
 
   enum Flag {
 #define DEF_ENUM(Camel, Lower, Bit) k##Camel = 1 << Bit,

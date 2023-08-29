@@ -68,6 +68,11 @@ OptimizedCompilationInfo::OptimizedCompilationInfo(
 void OptimizedCompilationInfo::ConfigureFlags() {
   if (v8_flags.turbo_inline_js_wasm_calls) set_inline_js_wasm_calls();
 
+  if (!v8_flags.patch_stack_for_deopt ||
+      base::OS::IsHardwareEnforcedShadowStacksEnabled()) {
+    set_shadow_stack_compliant_lazy_deopt();
+  }
+
   switch (code_kind_) {
     case CodeKind::TURBOFAN:
       set_called_with_code_start_register();
