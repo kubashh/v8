@@ -71,6 +71,10 @@ UnoptimizedCompileFlags UnoptimizedCompileFlags::ForScriptCompile(
   UnoptimizedCompileFlags flags(isolate, script->id());
 
   flags.SetFlagsForFunctionFromScript(script);
+  if (flags.is_eval()) {
+    DCHECK(script->has_eval_from_shared());
+    flags.set_outer_language_mode(script.eval_from_shared().language_mode());
+  }
   flags.SetFlagsForToplevelCompile(
       script->IsUserJavaScript(), flags.outer_language_mode(),
       construct_repl_mode(script->is_repl_mode()),
