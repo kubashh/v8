@@ -33,6 +33,24 @@
       "message": "Can you add a comment here why the `CanWriteMemory` effect is added here?\n\nAlso, since a Load naturally does not write, maybe it would be worth adding an alias to `CanWriteMemory` which would make more sense?",
       "revId": "a89b8f766c6b3cc1768d867bbcac0f1549925861",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e20baef9_71b4ceb6",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2555,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-08-29T09:19:11Z",
+      "side": 1,
+      "message": "I added a comment.\nI think that CanWriteMemory is the right name. For a subsequent Loads, an atomic Load can have a similar effect as a Store, as they can change the memory that they see.",
+      "parentUuid": "c7e18928_5e12915e",
+      "revId": "a89b8f766c6b3cc1768d867bbcac0f1549925861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
