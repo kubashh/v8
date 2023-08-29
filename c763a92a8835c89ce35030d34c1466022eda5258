@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ee0db37_a5c43edb",
+        "filename": "src/builtins/array-join.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Ah, this is because `len(\"function\") \u003c len(\"extern macro\") \u003c len(\"function /**/\")`, and it\u0027s formatting `function ArrayBuiltinsAssembler...` instead of `function /**/ ArrayBuiltinsAssembler...`  -- let me switch that around to be pessimistic about the line length.",
+      "parentUuid": "041ff243_47319179",
+      "range": {
+        "startLine": 14,
+        "startChar": 80,
+        "endLine": 14,
+        "endChar": 82
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72c5df45_d465c55e",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-08-29T12:55:00Z",
       "side": 1,
       "message": "another long line",
+      "range": {
+        "startLine": 80,
+        "startChar": 80,
+        "endLine": 80,
+        "endChar": 82
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8aa88809_3f3e791f",
+        "filename": "src/builtins/array-splice.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72c5df45_d465c55e",
       "range": {
         "startLine": 80,
         "startChar": 80,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65e3ea67_ce8ed480",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e186fc3e_e692f1d5",
+      "range": {
+        "startLine": 902,
+        "startChar": 80,
+        "endLine": 902,
+        "endChar": 83
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4400f30_24851a96",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-08-29T12:55:00Z",
       "side": 1,
       "message": "another long line",
+      "range": {
+        "startLine": 1373,
+        "startChar": 80,
+        "endLine": 1373,
+        "endChar": 82
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b76c9ca_48c0f521",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 1373,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4400f30_24851a96",
       "range": {
         "startLine": 1373,
         "startChar": 80,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6d35593_f66aee0b",
+        "filename": "src/builtins/builtins-bigint.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a2dae34_79a11782",
+      "range": {
+        "startLine": 50,
+        "startChar": 80,
+        "endLine": 50,
+        "endChar": 81
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc212478_40f4960d",
@@ -146,6 +266,30 @@
       "writtenOn": "2023-08-29T12:55:00Z",
       "side": 1,
       "message": "another long line, 68 too.",
+      "range": {
+        "startLine": 50,
+        "startChar": 80,
+        "endLine": 50,
+        "endChar": 82
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d753f55_85b995f4",
+        "filename": "src/builtins/builtins-string.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc212478_40f4960d",
       "range": {
         "startLine": 50,
         "startChar": 80,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59f27a50_29b424b7",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2303ef26_855d3f7d",
+      "range": {
+        "startLine": 84,
+        "startChar": 80,
+        "endLine": 84,
+        "endChar": 84
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0705900f_39a01162",
@@ -192,6 +360,30 @@
       "writtenOn": "2023-08-29T12:55:00Z",
       "side": 1,
       "message": "another long line",
+      "range": {
+        "startLine": 113,
+        "startChar": 80,
+        "endLine": 113,
+        "endChar": 82
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36bcde09_7848536f",
+        "filename": "src/objects/fixed-array.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0705900f_39a01162",
       "range": {
         "startLine": 113,
         "startChar": 80,
@@ -225,6 +417,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b426ee2a_6a6b805f",
+        "filename": "src/objects/shared-function-info.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffd82e6b_08f6c88e",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 9
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94c6b935_6c78bf6a",
@@ -238,6 +454,30 @@
       "writtenOn": "2023-08-29T12:55:00Z",
       "side": 1,
       "message": "another long line, 99 and 210/211 too.",
+      "range": {
+        "startLine": 98,
+        "startChar": 80,
+        "endLine": 98,
+        "endChar": 81
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9912d794_855c8182",
+        "filename": "src/objects/string.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94c6b935_6c78bf6a",
       "range": {
         "startLine": 98,
         "startChar": 80,
@@ -271,6 +511,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c7e3ccf_1a727db7",
+        "filename": "src/objects/swiss-name-dictionary.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19ec68b2_00bf5307",
+      "range": {
+        "startLine": 36,
+        "startChar": 80,
+        "endLine": 36,
+        "endChar": 84
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3520a60_6f2cfb3a",
@@ -284,6 +548,30 @@
       "writtenOn": "2023-08-29T12:55:00Z",
       "side": 1,
       "message": "Is it possible to keep the indentation here?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "c763a92a8835c89ce35030d34c1466022eda5258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1abbb56_68833d7f",
+        "filename": "src/wasm/wasm-objects.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T13:22:02Z",
+      "side": 1,
+      "message": "Hacked in, same as `generates`, to special case `constexpr` on a new line.",
+      "parentUuid": "e3520a60_6f2cfb3a",
       "range": {
         "startLine": 7,
         "startChar": 0,
