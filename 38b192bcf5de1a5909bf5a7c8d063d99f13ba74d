@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cf02be3_93eb7dbe",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-08-29T12:10:29Z",
+      "side": 1,
+      "message": "Could you please add a comment to explain this change?",
+      "range": {
+        "startLine": 275,
+        "startChar": 22,
+        "endLine": 275,
+        "endChar": 41
+      },
+      "revId": "38b192bcf5de1a5909bf5a7c8d063d99f13ba74d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5020153e_769dde49",
+        "filename": "src/compiler/revectorizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-08-29T12:10:29Z",
+      "side": 1,
+      "message": "Should be indented inside the block. There are many similar indentation issues below (l.1064, l.1068, l.1080, ...). Did `git cl format` not take care of them?",
+      "range": {
+        "startLine": 1060,
+        "startChar": 0,
+        "endLine": 1062,
+        "endChar": 27
+      },
+      "revId": "38b192bcf5de1a5909bf5a7c8d063d99f13ba74d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
