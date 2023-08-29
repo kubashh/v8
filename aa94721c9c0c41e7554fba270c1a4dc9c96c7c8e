@@ -22,6 +22,30 @@
       },
       "revId": "aa94721c9c0c41e7554fba270c1a4dc9c96c7c8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6af432f8_afd4466f",
+        "filename": "src/parsing/parse-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T12:55:25Z",
+      "side": 1,
+      "message": "probably those failures are because `ForFunctionCompile` does `SetFlagsFromFunction` first and `SetFlagsForFunctionFromScript` second -- maybe try swapping those around, so that `SetFlagsFromFunction` overwrites the language mode?",
+      "parentUuid": "2d7131fe_78eba863",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 3
+      },
+      "revId": "aa94721c9c0c41e7554fba270c1a4dc9c96c7c8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
