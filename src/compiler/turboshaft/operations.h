@@ -2552,6 +2552,7 @@ struct LoadOp : OperationT<LoadOp> {
     // TODO(tebbi): Distinguish between on-heap and off-heap loads.
     OpEffects effects = OpEffects().CanReadMemory().CanDependOnChecks();
     if (kind.with_trap_handler) effects = effects.CanLeaveCurrentFunction();
+    if (kind.is_atomic) effects = effects.CanWrite();
     return effects;
   }
   base::Vector<const RegisterRepresentation> outputs_rep() const {
