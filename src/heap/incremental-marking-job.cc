@@ -106,15 +106,17 @@ void IncrementalMarkingJob::Task::RunInternal() {
       heap, EmbedderStackStateScope::kImplicitThroughTask, stack_state_);
 
   IncrementalMarking* incremental_marking = heap->incremental_marking();
-  if (incremental_marking->IsStopped()) {
+  if (!incremental_marking->IsMajorMarking()) {
     if (heap->IncrementalMarkingLimitReached() !=
         Heap::IncrementalMarkingLimit::kNoLimit) {
       heap->StartIncrementalMarking(heap->GCFlagsForIncrementalMarking(),
                                     GarbageCollectionReason::kTask,
                                     kGCCallbackScheduleIdleGarbageCollection);
-    } else if (v8_flags.minor_ms && v8_flags.concurrent_minor_ms_marking) {
-      heap->StartMinorMSIncrementalMarkingIfNeeded();
     }
+  }
+  if (v8_flags.minor_ms && incremental_marking->IsStopped() &&
+      v8_flags.concurrent_minor_ms_marking) {
+    heap->StartMinorMSIncrementalMarkingIfNeeded();
   }
 
   // Clear this flag after StartIncrementalMarking() call to avoid scheduling a

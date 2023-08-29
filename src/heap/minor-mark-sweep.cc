@@ -329,6 +329,20 @@ void MinorMarkSweepCollector::StartMarking() {
   }
 }
 
+void MinorMarkSweepCollector::CancelMarking() {
+  auto* cpp_heap = CppHeap::From(heap_->cpp_heap_);
+  // TODO(chromium:1029379): Cancel Oilpan young gen marking as well.
+  DCHECK(!cpp_heap || !cpp_heap->generational_gc_supported());
+  remembered_sets_marking_handler_.reset();
+  main_marking_visitor_.reset();
+  pretenuring_feedback_.reset();
+  marking_worklists_.reset();
+  ephemeron_table_list_.reset();
+  for (Page* page : *heap_->paged_new_space()) {
+    page->marking_bitmap()->Clear<AccessMode::NON_ATOMIC>();
+  }
+}
+
 void MinorMarkSweepCollector::Finish() {
   TRACE_GC(heap_->tracer(), GCTracer::Scope::MINOR_MS_FINISH);
 

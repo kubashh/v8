@@ -124,6 +124,8 @@ class V8_EXPORT_PRIVATE ConcurrentMarking {
 
   // Waits for scheduled job to complete.
   void Join();
+  // Stop scheduled job without waiting for it to complete.
+  void Cancel();
   // Preempts ongoing job ASAP. Returns true if concurrent marking was in
   // progress, false otherwise.
   bool Pause();

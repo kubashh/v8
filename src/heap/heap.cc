@@ -1682,7 +1682,7 @@ void Heap::ReportExternalMemoryPressure() {
                                      kGCCallbackFlagsForExternalMemory));
     return;
   }
-  if (incremental_marking()->IsStopped()) {
+  if (!incremental_marking()->IsMajorMarking()) {
     if (incremental_marking()->CanBeStarted()) {
       StartIncrementalMarking(GCFlagsForIncrementalMarking(),
                               GarbageCollectionReason::kExternalMemoryPressure,
@@ -1962,8 +1962,6 @@ void Heap::StartIncrementalMarking(GCFlags gc_flags,
                                    GarbageCollectionReason gc_reason,
                                    GCCallbackFlags gc_callback_flags,
                                    GarbageCollector collector) {
-  DCHECK(incremental_marking()->IsStopped());
-
   // Delay incremental marking start while concurrent sweeping still has work.
   // This helps avoid large CompleteSweep blocks on the main thread when major
   // incremental marking should be scheduled following a minor GC.
@@ -1978,6 +1976,13 @@ void Heap::StartIncrementalMarking(GCFlags gc_flags,
   }
 
   base::Optional<SafepointScope> safepoint_scope;
+
+  if (incremental_marking()->IsMinorMarking()) {
+    DCHECK_EQ(GarbageCollector::MARK_COMPACTOR, collector);
+    incremental_marking()->CancelMinorMarking();
+  }
+
+  DCHECK(incremental_marking()->IsStopped());
 
   {
     AllowGarbageCollection allow_shared_gc;
@@ -2076,7 +2081,7 @@ void Heap::StartIncrementalMarkingIfAllocationLimitIsReached(
     // callbacks would break the separate GC phases guarantee.
     return;
   }
-  if (incremental_marking()->IsStopped()) {
+  if (!incremental_marking()->IsMajorMarking()) {
     switch (IncrementalMarkingLimitReached()) {
       case IncrementalMarkingLimit::kHardLimit:
         StartIncrementalMarking(
@@ -4153,7 +4158,8 @@ void Heap::CheckMemoryPressure() {
     TRACE_EVENT0("devtools.timeline,v8", "V8.CheckMemoryPressure");
     CollectGarbageOnMemoryPressure();
   } else if (memory_pressure_level == MemoryPressureLevel::kModerate) {
-    if (v8_flags.incremental_marking && incremental_marking()->IsStopped()) {
+    if (v8_flags.incremental_marking &&
+        !incremental_marking()->IsMajorMarking()) {
       TRACE_EVENT0("devtools.timeline,v8", "V8.CheckMemoryPressure");
       StartIncrementalMarking(GCFlag::kReduceMemoryFootprint,
                               GarbageCollectionReason::kMemoryPressure);
@@ -4189,7 +4195,8 @@ void Heap::CollectGarbageOnMemoryPressure() {
                         GarbageCollectionReason::kMemoryPressure,
                         kGCCallbackFlagCollectAllAvailableGarbage);
     } else {
-      if (v8_flags.incremental_marking && incremental_marking()->IsStopped()) {
+      if (v8_flags.incremental_marking &&
+          !incremental_marking()->IsMajorMarking()) {
         StartIncrementalMarking(GCFlag::kReduceMemoryFootprint,
                                 GarbageCollectionReason::kMemoryPressure);
       }
