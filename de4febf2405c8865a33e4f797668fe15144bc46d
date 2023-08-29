@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae9be76f_ac7eb7c8",
+        "filename": "src/heap/new-spaces-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-29T10:28:56Z",
+      "side": 0,
+      "message": "This comment doesn\u0027t hold when dealing with a client isolate.\nIn case of allocation failure, the client isolate will try to GC, at which point it may enter a safepoint for a shared GC without creating a filler prior to that. The main isolate will iterate the client new space and observe random/garbage memory.",
+      "range": {
+        "startLine": 125,
+        "startChar": 4,
+        "endLine": 126,
+        "endChar": 65
+      },
+      "revId": "de4febf2405c8865a33e4f797668fe15144bc46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
