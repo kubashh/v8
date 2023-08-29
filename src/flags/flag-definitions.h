@@ -1714,7 +1714,7 @@ DEFINE_BOOL(compact_on_every_full_gc, false,
 DEFINE_BOOL(compact_with_stack, true,
             "Perform compaction when finalizing a full GC with stack")
 DEFINE_BOOL(
-    compact_code_space_with_stack, true,
+    compact_code_space_with_stack, !V8_ENABLE_SHADOW_STACK_BOOL,
     "Perform code space compaction when finalizing a full GC with stack")
 DEFINE_BOOL(shortcut_strings_with_stack, true,
             "Shortcut Strings during GC with stack")
