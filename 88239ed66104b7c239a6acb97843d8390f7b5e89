@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9670295c_277fa29c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-29T12:49:50Z",
+      "side": 1,
+      "message": "PTAL again, I forgot to run over non-src directories (incl. third_party)",
+      "revId": "88239ed66104b7c239a6acb97843d8390f7b5e89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
