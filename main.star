@@ -170,6 +170,18 @@ luci.realm(
     ],
 )
 
+# Allow ci/try runs and infra team to spawn test tasks in the testing pool.
+luci.realm(
+    name = "pools/tests",
+    bindings = [
+        luci.binding(
+            roles = "role/swarming.poolUser",
+            groups = V8_SERVICE_ACCOUNTS,
+            users = ["mdb/v8-infra"],
+        ),
+    ],
+)
+
 def grantInvocationCreator(realms, users):
     for realm in realms:
         luci.realm(name = realm, bindings = [
