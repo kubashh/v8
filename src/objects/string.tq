@@ -95,10 +95,8 @@ extern operator '.resource_data_ptr' macro LoadExternalStringResourceDataPtr(
 extern operator '.resource_data_ptr' macro LoadExternalStringResourceDataPtr(
     ExternalTwoByteString): RawPtr<char16>;
 
-extern macro ExternalOneByteStringGetChars(ExternalOneByteString):
-    RawPtr<char8>;
-extern macro ExternalTwoByteStringGetChars(ExternalTwoByteString):
-    RawPtr<char16>;
+extern macro ExternalOneByteStringGetChars(ExternalOneByteString): RawPtr<char8>;
+extern macro ExternalTwoByteStringGetChars(ExternalTwoByteString): RawPtr<char16>;
 
 @doNotGenerateCast
 extern class ExternalOneByteString extends ExternalString {
@@ -123,13 +121,11 @@ extern class ExternalTwoByteString extends ExternalString {
 }
 
 @doNotGenerateCast
-extern class InternalizedString extends String {
-}
+extern class InternalizedString extends String {}
 
 @abstract
 @doNotGenerateCast
-extern class SeqString extends String {
-}
+extern class SeqString extends String {}
 @generateBodyDescriptor
 @doNotGenerateCast
 extern class SeqOneByteString extends SeqString {
@@ -200,19 +196,19 @@ macro AllocateSeqTwoByteString<Iterator: type>(
 }
 
 @export
-macro AllocateSeqOneByteString(length: uint32): SeqOneByteString|EmptyString {
+macro AllocateSeqOneByteString(length: uint32): SeqOneByteString|
+    EmptyString {
   return AllocateSeqOneByteString(length, UninitializedIterator{});
 }
 
 @export
-macro AllocateSeqTwoByteString(length: uint32): SeqTwoByteString|EmptyString {
+macro AllocateSeqTwoByteString(length: uint32): SeqTwoByteString|
+    EmptyString {
   return AllocateSeqTwoByteString(length, UninitializedIterator{});
 }
 
-extern macro StringWriteToFlatOneByte(
-    String, RawPtr<char8>, int32, int32): void;
-extern macro StringWriteToFlatTwoByte(
-    String, RawPtr<char16>, int32, int32): void;
+extern macro StringWriteToFlatOneByte(String, RawPtr<char8>, int32, int32): void;
+extern macro StringWriteToFlatTwoByte(String, RawPtr<char16>, int32, int32): void;
 
 // Corresponds to String::SlowFlatten in the C++ runtime.
 builtin StringSlowFlatten(cons: ConsString): String {
@@ -394,8 +390,9 @@ macro Call<A: type, B: type>(
       Convert<intptr>(self.fromIndex)));
 }
 
-macro AbstractStringIndexOf(implicit context: Context)(
-    string: String, searchString: String, fromIndex: Smi): Smi {
+macro AbstractStringIndexOf(
+    implicit context: Context)(string: String, searchString: String,
+    fromIndex: Smi): Smi {
   // Special case the empty string.
   const searchStringLength = searchString.length_intptr;
   const stringLength = string.length_intptr;
