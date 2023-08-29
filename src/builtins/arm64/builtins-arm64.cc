@@ -5554,6 +5554,28 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
     __ CallCFunction(ER::Create(Runtime::kUnwindAndFindExceptionHandler), 3);
   }
 
+  // Drop frames from the shadow stack.
+  {
+    Label end;
+    __ JumpIfNoGCS(&end);
+
+    UseScratchRegisterScope temps(masm);
+    Register scratch = temps.AcquireX();
+    ER num_frames_above_pending_handler_address =
+        ER::Create(IsolateAddressId::kNumFramesAbovePendingHandlerAddress,
+                   masm->isolate());
+    __ Mov(scratch, num_frames_above_pending_handler_address);
+    __ Ldr(scratch, MemOperand(scratch));
+
+    Label loop;
+    __ Bind(&loop);
+    __ Cbz(scratch, &end);
+    __ Gcspopm();
+    __ Sub(scratch, scratch, 1);
+    __ B(&loop);
+    __ Bind(&end);
+  }
+
   // Retrieve the handler context, SP and FP.
   __ Mov(cp, ER::Create(IsolateAddressId::kPendingHandlerContextAddress,
                         masm->isolate()));

@@ -1986,6 +1986,9 @@ Object Isolate::UnwindAndFindHandler() {
   // Compute handler and stack unwinding information by performing a full walk
   // over the stack and dispatching according to the frame type.
   for (StackFrameIterator iter(this);; iter.Advance(), visited_frames++) {
+    // TODO(arm64): Pop GCS entries one by one here, and check them against
+    // iter.frame()->pc()
+
 #if V8_ENABLE_WEBASSEMBLY
     if (v8_flags.experimental_wasm_stack_switching &&
         iter.frame()->type() == StackFrame::STACK_SWITCH) {
@@ -2236,6 +2239,7 @@ Object Isolate::UnwindAndFindHandler() {
               static_cast<int>(offset));
 
           Code code = *BUILTIN_CODE(this, InterpreterEnterAtBytecode);
+#if V8_TARGET_ARCH_X64
           // We subtract a frame from visited_frames because otherwise the
           // shadow stack will drop the underlying interpreter entry trampoline
           // in which the handler runs.
@@ -2244,9 +2248,11 @@ Object Isolate::UnwindAndFindHandler() {
           // because at a minimum, an exit frame into C++ has to separate
           // it and the context in which this C++ code runs.
           CHECK_GE(visited_frames, 1);
+          visited_frames -= 1;
+#endif
           return FoundHandler(context, code->instruction_start(), 0,
                               code->constant_pool(), return_sp, frame->fp(),
-                              visited_frames - 1);
+                              visited_frames);
         }
       }
 
