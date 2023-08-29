@@ -897,7 +897,14 @@ bool OS::isDirectorySeparator(const char ch) {
   return ch == DirectorySeparator();
 }
 
-bool OS::IsHardwareEnforcedShadowStacksEnabled() { return false; }
+bool OS::IsHardwareEnforcedShadowStacksEnabled() {
+#if defined(V8_ENABLE_SHADOW_STACK) and defined(V8_TARGET_ARCH_ARM64) and \
+    defined(USE_SIMULATOR)
+  return true;
+#else
+  return false;
+#endif
+}
 
 FILE* OS::OpenTemporaryFile() {
   return tmpfile();

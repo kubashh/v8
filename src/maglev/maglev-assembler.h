@@ -285,6 +285,8 @@ class MaglevAssembler : public MacroAssembler {
                                Label* success, Label* fail);
 
   inline void DefineLazyDeoptPoint(LazyDeoptInfo* info);
+  // TODO: make inline
+  void EmitLazyToEagerBailout(LazyDeoptInfo* lazy_deopt_info);
   inline void DefineExceptionHandlerPoint(NodeBase* node);
   inline void DefineExceptionHandlerAndLazyDeoptPoint(NodeBase* node);
 
@@ -604,7 +606,11 @@ class SaveRegisterStateForCall {
     lazy_deopt_info->set_deopting_call_return_pc(
         masm->pc_offset_for_safepoint());
     masm->code_gen_state()->PushLazyDeopt(lazy_deopt_info);
-    return DefineSafepoint();
+    auto safepoint = DefineSafepoint();
+    if (masm->compilation_info()->shadow_stack_compliant_lazy_deopt()) {
+      masm->EmitLazyToEagerBailout(lazy_deopt_info);
+    }
+    return safepoint;
   }
 
  private:
@@ -653,6 +659,9 @@ inline void MaglevAssembler::DefineLazyDeoptPoint(LazyDeoptInfo* info) {
   info->set_deopting_call_return_pc(pc_offset_for_safepoint());
   code_gen_state()->PushLazyDeopt(info);
   safepoint_table_builder()->DefineSafepoint(this);
+  if (compilation_info()->shadow_stack_compliant_lazy_deopt()) {
+    EmitLazyToEagerBailout(info);
+  }
 }
 
 inline void MaglevAssembler::DefineExceptionHandlerPoint(NodeBase* node) {

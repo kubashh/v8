@@ -1094,6 +1094,11 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
                              DeoptimizeKind kind, Label* ret,
                              Label* jump_deoptimization_entry_label);
 
+  // Generates an explicit check of whether the function has been lazily
+  // marked for deoptimization, and if so, branches to the appropriate
+  // deopt exit.
+  void LazyToEagerBailout(Label* deopt_label);
+
   // Calls a C function.
   // The called function is not allowed to trigger a
   // garbage collection, since that might move the code and invalidate the

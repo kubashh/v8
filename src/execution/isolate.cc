@@ -2154,10 +2154,26 @@ Object Isolate::UnwindAndFindHandler() {
         // but do not have a code kind of TURBOFAN.
         if (CodeKindCanDeoptimize(code->kind()) &&
             code->marked_for_deoptimization()) {
-          // If the target code is lazy deoptimized, we jump to the original
-          // return address, but we make a note that we are throwing, so
-          // that the deoptimizer can do the right thing.
-          offset = static_cast<int>(frame->pc() - code->instruction_start());
+          if (v8_flags.patch_stack_for_deopt &&
+              !base::OS::IsHardwareEnforcedShadowStacksEnabled()) {
+            // If the target code is lazy deoptimized, we jump to the original
+            // return address.
+            offset = static_cast<int>(frame->pc() - code->instruction_start());
+          } else {
+            // Obtain the trampoline to the deoptimizer call.
+            GcSafeCode gcs_code = frame->GcSafeLookupCode();
+            if (code->is_maglevved()) {
+              MaglevSafepointEntry safepoint =
+                  MaglevSafepointTable::FindEntry(this, gcs_code, frame->pc());
+              offset = safepoint.trampoline_pc();
+            } else {
+              SafepointEntry safepoint =
+                  SafepointTable::FindEntry(this, gcs_code, frame->pc());
+              offset = safepoint.trampoline_pc();
+            }
+          }
+          // Make a note that we are throwing, so that the deoptimizer can do
+          // the right thing.
           set_deoptimizer_lazy_throw(true);
         }
 

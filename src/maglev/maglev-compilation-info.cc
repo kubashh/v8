@@ -60,7 +60,10 @@ MaglevCompilationInfo::MaglevCompilationInfo(Isolate* isolate,
           osr_offset == BytecodeOffset::None() &&
           v8_flags.maglev_function_context_specialization &&
           function->raw_feedback_cell()->map() ==
-              ReadOnlyRoots(isolate).one_closure_cell_map()) {
+              ReadOnlyRoots(isolate).one_closure_cell_map()),
+      shadow_stack_compliant_lazy_deopt_(
+          !v8_flags.patch_stack_for_deopt ||
+          base::OS::IsHardwareEnforcedShadowStacksEnabled()) {
   DCHECK(maglev::IsMaglevEnabled());
   DCHECK_IMPLIES(osr_offset != BytecodeOffset::None(),
                  maglev::IsMaglevOsrEnabled());

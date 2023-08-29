@@ -69,6 +69,12 @@ namespace internal {
 #define USE_SIMULATOR_BOOL false
 #endif
 
+#ifdef V8_ENABLE_SHADOW_STACK
+#define V8_ENABLE_SHADOW_STACK_BOOL true
+#else
+#define V8_ENABLE_SHADOW_STACK_BOOL false
+#endif
+
 // Determine whether the architecture uses an embedded constant pool
 // (contiguous constant pool embedded in code object).
 #if V8_TARGET_ARCH_PPC || V8_TARGET_ARCH_PPC64

@@ -90,6 +90,10 @@ class MaglevCompilationInfo final {
     return specialize_to_function_context_;
   }
 
+  bool shadow_stack_compliant_lazy_deopt() const {
+    return shadow_stack_compliant_lazy_deopt_;
+  }
+
   // Must be called from within a MaglevCompilationHandleScope. Transfers owned
   // handles (e.g. shared_, function_) to the new scope.
   void ReopenAndCanonicalizeHandlesInNewScope(Isolate* isolate);
@@ -140,6 +144,8 @@ class MaglevCompilationInfo final {
   // opportunities, but prevents code sharing between different function
   // contexts.
   const bool specialize_to_function_context_;
+
+  const bool shadow_stack_compliant_lazy_deopt_;
 
   // 1) PersistentHandles created via PersistentHandlesScope inside of
   //    CompilationHandleScope.

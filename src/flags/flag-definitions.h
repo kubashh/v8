@@ -1970,7 +1970,7 @@ DEFINE_BOOL(trace_deopt, false, "trace deoptimization")
 DEFINE_BOOL(log_deopt, false, "log deoptimization")
 DEFINE_BOOL(trace_deopt_verbose, false, "extra verbose deoptimization tracing")
 DEFINE_IMPLICATION(trace_deopt_verbose, trace_deopt)
-DEFINE_BOOL(patch_stack_for_deopt, true,
+DEFINE_BOOL(patch_stack_for_deopt, !V8_ENABLE_SHADOW_STACK_BOOL,
             "patch stack addresses for lazy deoptimization")
 DEFINE_BOOL(trace_file_names, false,
             "include file names in trace-opt/trace-deopt output")

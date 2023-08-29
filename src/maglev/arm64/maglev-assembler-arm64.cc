@@ -221,6 +221,10 @@ void MaglevAssembler::Prologue(Graph* graph) {
   }
 }
 
+void MaglevAssembler::EmitLazyToEagerBailout(LazyDeoptInfo* lazy_deopt_info) {
+  LazyToEagerBailout(lazy_deopt_info->deopt_entry_label());
+}
+
 void MaglevAssembler::MaybeEmitDeoptBuiltinsCall(size_t eager_deopt_count,
                                                  Label* eager_deopt_entry,
                                                  size_t lazy_deopt_count,

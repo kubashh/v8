@@ -746,6 +746,14 @@ void CodeGenerator::AssembleCodeStartRegisterCheck() {
 
 void CodeGenerator::BailoutIfDeoptimized() { __ BailoutIfDeoptimized(); }
 
+void CodeGenerator::AssembleLazyToEagerBailout(DeoptimizationExit* deopt_exit) {
+  // We only need the codegen below if we aren't patching the stack to
+  // effect lazy deoptimization.
+  if (info()->shadow_stack_compliant_lazy_deopt()) {
+    __ LazyToEagerBailout(deopt_exit->label());
+  }
+}
+
 // Assembles an instruction after register allocation, producing machine code.
 CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     Instruction* instr) {
@@ -763,7 +771,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
             reg == kJavaScriptCallCodeStartRegister);
         __ CallCodeObject(reg);
       }
-      RecordCallPosition(instr);
+      DeoptimizationExit* deopt_exit = RecordCallPosition(instr);
+      if (deopt_exit != nullptr) {
+        AssembleLazyToEagerBailout(deopt_exit);
+      }
       frame_access_state()->ClearSPDelta();
       break;
     }
@@ -775,7 +786,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
               ? kJavaScriptCallCodeStartRegister
               : builtin_index;
       __ CallBuiltinByIndex(builtin_index, target);
-      RecordCallPosition(instr);
+      DeoptimizationExit* deopt_exit = RecordCallPosition(instr);
+      if (deopt_exit != nullptr) {
+        AssembleLazyToEagerBailout(deopt_exit);
+      }
       frame_access_state()->ClearSPDelta();
       break;
     }
@@ -789,7 +803,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         Register target = i.InputRegister(0);
         __ Call(target);
       }
-      RecordCallPosition(instr);
+      DeoptimizationExit* deopt_exit = RecordCallPosition(instr);
+      if (deopt_exit != nullptr) {
+        AssembleLazyToEagerBailout(deopt_exit);
+      }
       frame_access_state()->ClearSPDelta();
       break;
     }
@@ -855,7 +872,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       static_assert(kJavaScriptCallCodeStartRegister == x2, "ABI mismatch");
       __ LoadTaggedField(x2, FieldMemOperand(func, JSFunction::kCodeOffset));
       __ CallCodeObject(x2);
-      RecordCallPosition(instr);
+      DeoptimizationExit* deopt_exit = RecordCallPosition(instr);
+      if (deopt_exit != nullptr) {
+        AssembleLazyToEagerBailout(deopt_exit);
+      }
       frame_access_state()->ClearSPDelta();
       break;
     }

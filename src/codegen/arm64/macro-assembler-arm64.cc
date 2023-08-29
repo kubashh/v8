@@ -2547,6 +2547,16 @@ void MacroAssembler::CallForDeoptimization(
                                             : Deoptimizer::kEagerDeoptExitSize);
 }
 
+void MacroAssembler::LazyToEagerBailout(Label* deopt_label) {
+  UseScratchRegisterScope scope(this);
+  Register scratch = scope.AcquireX();
+  static_assert(kJavaScriptCallCodeStartRegister == x2, "ABI mismatch");
+  int offset = InstructionStream::kCodeOffset - InstructionStream::kHeaderSize;
+  ComputeCodeStartAddress(x2);
+  LoadTaggedField(x2, MemOperand(x2, offset));
+  JumpIfCodeIsMarkedForDeoptimization(x2, scratch, deopt_label);
+}
+
 void MacroAssembler::LoadStackLimit(Register destination, StackLimitKind kind) {
   ASM_CODE_COMMENT(this);
   DCHECK(root_array_available());
