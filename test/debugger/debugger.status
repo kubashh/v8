@@ -139,6 +139,12 @@
 }],
 
 ################################################################################
+['shadow_stack', {
+  # Debug not supported yet.
+  '*': [SKIP],
+}],
+
+################################################################################
 ['third_party_heap', {
   # Requires --concurrent_recompilation
   'debug/regress/regress-opt-after-debug-deopt': [SKIP],

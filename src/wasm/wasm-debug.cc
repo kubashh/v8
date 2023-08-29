@@ -661,6 +661,10 @@ class DebugInfoImpl {
     PointerAuthentication::ReplacePC(frame->pc_address(), new_pc,
                                      kSystemPointerSize);
 #endif
+#ifdef V8_ENABLE_SHADOW_STACK
+    // This is unsupported.
+    FATAL("Debug is unsupported for GCS");
+#endif
     // The frame position should still be the same after OSR.
     DCHECK_EQ(old_position, frame->position());
   }

@@ -149,6 +149,13 @@
 }],
 
 ##############################################################################
+['shadow_stack', {
+  # Debug not supported yet.
+  'test-wasm-breakpoints/*': [SKIP],
+  'test-debug/*': [SKIP],
+}],
+
+##############################################################################
 ['arch == arm64', {
   # BUG(v8:3385).
   'test-serialize/StartupSerializerOnceRunScript': [PASS, FAIL],

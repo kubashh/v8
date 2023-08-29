@@ -138,6 +138,15 @@
 }],
 
 ##############################################################################
+['shadow_stack', {
+  # Debug not supported yet.
+  'debugger/*': [SKIP],
+  'regress/*': [SKIP],
+  'runtime/*': [SKIP],
+  'sessions/*': [SKIP],
+}],
+
+##############################################################################
 ['tsan == True', {
   # TSan handles SIGPROF incorrectly (https://crbug.com/v8/9869).
   'cpu-profiler/console-profile-wasm': [SKIP],

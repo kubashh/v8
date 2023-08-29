@@ -1573,6 +1573,10 @@ class DiscardBaselineCodeVisitor : public ThreadVisitor {
         PointerAuthentication::ReplacePC(pc_addr, advance, kSystemPointerSize);
         InterpretedFrame::cast(it.Reframe())
             ->PatchBytecodeOffset(bytecode_offset);
+#ifdef V8_ENABLE_SHADOW_STACK
+        // This is unsupported.
+        FATAL("Debug is unsupported for GCS");
+#endif
       } else if (it.frame()->type() == StackFrame::INTERPRETED) {
         // Check if the PC is a baseline entry trampoline. If it is, replace it
         // with the corresponding interpreter entry trampoline.
@@ -1592,6 +1596,10 @@ class DiscardBaselineCodeVisitor : public ThreadVisitor {
               isolate->builtins()->code(advance)->instruction_start();
           PointerAuthentication::ReplacePC(pc_addr, advance_pc,
                                            kSystemPointerSize);
+#ifdef V8_ENABLE_SHADOW_STACK
+          // This is unsupported.
+          FATAL("Debug is unsupported for GCS");
+#endif
         }
       }
     }
