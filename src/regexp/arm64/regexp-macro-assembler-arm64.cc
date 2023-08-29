@@ -1146,7 +1146,12 @@ Handle<HeapObject> RegExpMacroAssemblerARM64::GetCode(Handle<String> source) {
     CallCheckStackGuardState(x10);
     // Returning from the regexp code restores the stack (sp <- fp)
     // so we don't need to drop the link register from it before exiting.
-    __ Cbnz(w0, &return_w0);
+    Label cont;
+    __ Cbz(w0, &cont);
+    __ DropTopGCSEntryIfGCS();
+    __ B(&return_w0);
+
+    __ Bind(&cont);
     // Reset the cached registers.
     PopCachedRegisters();
 
@@ -1172,7 +1177,12 @@ Handle<HeapObject> RegExpMacroAssemblerARM64::GetCode(Handle<String> source) {
     // a stack-overflow exception.  Returning from the regexp code restores the
     // stack (sp <- fp) so we don't need to drop the link register from it
     // before exiting.
-    __ Cbz(w0, &exit_with_exception);
+    Label cont;
+    __ Cbnz(w0, &cont);
+    __ DropTopGCSEntryIfGCS();
+    __ B(&exit_with_exception);
+
+    __ Bind(&cont);
     // Otherwise use return value as new stack pointer.
     __ Mov(backtrack_stackpointer(), x0);
     PopCachedRegisters();
