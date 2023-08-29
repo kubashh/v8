@@ -1924,13 +1924,14 @@ Handle<WasmStruct> Factory::NewWasmStruct(const wasm::StructType* type,
 
 Handle<WasmContinuationObject> Factory::NewWasmContinuationObject(
     Address jmpbuf, Handle<Foreign> managed_stack, Handle<HeapObject> parent,
-    AllocationType allocation) {
+    Address shadow_stack, AllocationType allocation) {
   Tagged<Map> map = *wasm_continuation_object_map();
   auto result = Tagged<WasmContinuationObject>::cast(
       AllocateRawWithImmortalMap(map->instance_size(), allocation, map));
   result->init_jmpbuf(isolate(), jmpbuf);
   result->set_stack(*managed_stack);
   result->set_parent(*parent);
+  result->set_shadow_stack(shadow_stack);
   return handle(result, isolate());
 }
 

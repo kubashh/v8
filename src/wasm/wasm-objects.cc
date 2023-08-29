@@ -1862,12 +1862,13 @@ Handle<WasmContinuationObject> WasmContinuationObject::New(
   stack->jmpbuf()->state = state;
   wasm::JumpBuffer* jmpbuf = stack->jmpbuf();
   size_t external_size = stack->owned_size();
+  Address shadow_stack = stack->initial_shadow_stack();
   Handle<Foreign> managed_stack = Managed<wasm::StackMemory>::FromUniquePtr(
       isolate, external_size, std::move(stack), allocation_type);
   Handle<WasmContinuationObject> result =
       isolate->factory()->NewWasmContinuationObject(
           reinterpret_cast<Address>(jmpbuf), managed_stack, parent,
-          allocation_type);
+          shadow_stack, allocation_type);
   return result;
 }
 

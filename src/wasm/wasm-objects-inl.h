@@ -648,6 +648,9 @@ int WasmArray::DecodeElementSizeFromMap(Map map) { return map->WasmByte1(); }
 EXTERNAL_POINTER_ACCESSORS(WasmContinuationObject, jmpbuf, Address,
                            kJmpbufOffset, kWasmContinuationJmpbufTag)
 
+DEF_PRIMITIVE_ACCESSORS(WasmContinuationObject, shadow_stack,
+                        kShadowStackOffset, Address)
+
 #include "src/objects/object-macros-undef.h"
 
 }  // namespace internal

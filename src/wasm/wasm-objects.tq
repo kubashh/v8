@@ -105,6 +105,8 @@ extern class WasmContinuationObject extends HeapObject {
   stack: Foreign;
   parent: WasmContinuationObject|Undefined;
   jmpbuf: ExternalPointer;  // Direct access to the stack's jump buffer.
+  shadow_stack:
+      RawPtr;  // We need to be able to set this from within the sandbox.
 }
 
 extern class WasmSuspenderObject extends JSObject {

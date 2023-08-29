@@ -42,6 +42,7 @@ class StackMemory {
   void* jslimit() const { return limit_ + kJSLimitOffsetKB * KB; }
   Address base() const { return reinterpret_cast<Address>(limit_ + size_); }
   JumpBuffer* jmpbuf() { return &jmpbuf_; }
+  Address initial_shadow_stack() { return initial_shadow_stack_; }
   int id() { return id_; }
 
   // Insert a stack in the linked list after this stack.
@@ -71,6 +72,7 @@ class StackMemory {
   size_t size_;
   bool owned_;
   JumpBuffer jmpbuf_;
+  Address initial_shadow_stack_;
   int id_;
   // Stacks form a circular doubly linked list per isolate.
   StackMemory* next_ = this;

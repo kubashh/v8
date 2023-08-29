@@ -700,7 +700,7 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
       uint32_t start_offset, uint32_t length, Handle<Map> map);
   Handle<WasmContinuationObject> NewWasmContinuationObject(
       Address jmpbuf, Handle<Foreign> managed_stack, Handle<HeapObject> parent,
-      AllocationType allocation = AllocationType::kYoung);
+      Address shadow_stack, AllocationType allocation = AllocationType::kYoung);
 
   Handle<SharedFunctionInfo> NewSharedFunctionInfoForWasmExportedFunction(
       Handle<String> name, Handle<WasmExportedFunctionData> data);

@@ -1069,6 +1069,7 @@ class WasmContinuationObject
       Handle<WasmContinuationObject> parent);
 
   DECL_EXTERNAL_POINTER_ACCESSORS(jmpbuf, Address)
+  DECL_PRIMITIVE_ACCESSORS(shadow_stack, Address)
 
   DECL_PRINTER(WasmContinuationObject)
 

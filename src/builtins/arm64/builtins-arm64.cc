@@ -3537,8 +3537,8 @@ void AllocateSuspender(MacroAssembler* masm, Register function_data,
 }
 
 void LoadTargetJumpBuffer(MacroAssembler* masm, Register target_continuation,
-                          Register tmp) {
-  Register target_jmpbuf = target_continuation;
+                          Register tmp, Register tmp2) {
+  Register target_jmpbuf = tmp2;
   __ LoadExternalPointerField(
       target_jmpbuf,
       FieldMemOperand(target_continuation,
@@ -3550,22 +3550,29 @@ void LoadTargetJumpBuffer(MacroAssembler* masm, Register target_continuation,
   LoadJumpBuffer(masm, target_jmpbuf, false, tmp);
 }
 
-void SyncStackLimit(MacroAssembler* masm, const CPURegister& keep1 = NoReg,
-                    const CPURegister& keep2 = padreg) {
+void SyncStackLimit(MacroAssembler* masm, const CPURegister& keep1,
+                    const CPURegister& keep2 = padreg,
+                    const CPURegister& keep3 = padreg) {
   using ER = ExternalReference;
 #if V8_ENABLE_WEBASSEMBLY
   __ Push(keep1, keep2);
+  if (keep3 != padreg) {
+    __ Push(keep3, padreg);
+  }
   {
     FrameScope scope(masm, StackFrame::MANUAL);
     __ Mov(arg_reg_1, ER::isolate_address(masm->isolate()));
     __ CallCFunction(ER::wasm_sync_stack_limit(), 1);
+  }
+  if (keep3 != padreg) {
+    __ Pop(padreg, keep3);
   }
   __ Pop(keep2, keep1);
 #endif  // V8_ENABLE_WEBASSEMBLY
 }
 
 void ReloadParentContinuation(MacroAssembler* masm, Register return_reg,
-                              Register tmp1, Register tmp2) {
+                              Register tmp1, Register tmp2, Register tmp3) {
   Register active_continuation = tmp1;
   __ LoadRoot(active_continuation, RootIndex::kActiveContinuation);
 
@@ -3584,7 +3591,7 @@ void ReloadParentContinuation(MacroAssembler* masm, Register return_reg,
     SwitchStackState(masm, jmpbuf, scratch, wasm::JumpBuffer::Active,
                      wasm::JumpBuffer::Retired);
   }
-  Register parent = tmp2;
+  Register parent = tmp3;
   __ LoadTaggedField(parent,
                      FieldMemOperand(active_continuation,
                                      WasmContinuationObject::kParentOffset));
@@ -3594,7 +3601,6 @@ void ReloadParentContinuation(MacroAssembler* masm, Register return_reg,
       MacroAssembler::RootRegisterOffsetForRootIndex(
           RootIndex::kActiveContinuation);
   __ Str(parent, MemOperand(kRootRegister, active_continuation_offset));
-  jmpbuf = parent;
   __ LoadExternalPointerField(
       jmpbuf, FieldMemOperand(parent, WasmContinuationObject::kJmpbufOffset),
       kWasmContinuationJmpbufTag);
@@ -3602,7 +3608,16 @@ void ReloadParentContinuation(MacroAssembler* masm, Register return_reg,
   // Switch stack!
   LoadJumpBuffer(masm, jmpbuf, false, tmp1);
 
-  SyncStackLimit(masm, return_reg);
+  SyncStackLimit(masm, return_reg, parent);
+
+  // GCS switching here. Forget about the old stack, we don't need it anymore.
+  Label skip_gcs_switching;
+  __ JumpIfNoGCS(&skip_gcs_switching);
+  Register new_gcs = parent;
+  __ Ldr(new_gcs,
+         FieldMemOperand(parent, WasmContinuationObject::kShadowStackOffset));
+  __ GcsStackSwitch(new_gcs);
+  __ Bind(&skip_gcs_switching);
 }
 
 void RestoreParentSuspender(MacroAssembler* masm, Register tmp1,
@@ -3948,7 +3963,25 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
     // To prevent aliasing assign higher register here.
     regs.Pinned(x9, &original_fp);
     __ Mov(original_fp, fp);
-    LoadTargetJumpBuffer(masm, target_continuation, scratch);
+    DEFINE_REG(scratch2);
+    LoadTargetJumpBuffer(masm, target_continuation, scratch, scratch2);
+    // GCS switching.
+    Label skip_gcs_switching;
+    __ JumpIfNoGCS(&skip_gcs_switching);
+    DEFINE_REG(gcs);
+    __ Ldr(gcs, FieldMemOperand(target_continuation,
+                                WasmContinuationObject::kShadowStackOffset));
+    __ GcsStackSwitch(gcs, gcs);
+    // Store old gcs to active continuation.
+    DEFINE_REG(old_continuation);
+    __ LoadTaggedField(old_continuation,
+                       FieldMemOperand(target_continuation,
+                                       WasmContinuationObject::kParentOffset));
+    __ Str(gcs, FieldMemOperand(old_continuation,
+                                WasmContinuationObject::kShadowStackOffset));
+    FREE_REG(gcs);
+    __ Bind(&skip_gcs_switching);
+    FREE_REG(old_continuation);
     // Push the loaded rbp. We know it is null, because there is no frame yet,
     // so we could also push 0 directly. In any case we need to push it,
     // because this marks the base of the stack segment for
@@ -4639,7 +4672,8 @@ void GenericJSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
     __ Pop(promise, padreg);
 
     __ bind(&return_promise);
-    ReloadParentContinuation(masm, promise, tmp, tmp2);
+    DEFINE_SCOPED(tmp3);
+    ReloadParentContinuation(masm, promise, tmp, tmp2, tmp3);
     RestoreParentSuspender(masm, tmp, tmp2);
     FREE_REG(return_value);
   }
@@ -4951,12 +4985,13 @@ void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
       MacroAssembler::RootRegisterOffsetForRootIndex(
           RootIndex::kActiveSuspender);
   __ Str(parent, MemOperand(kRootRegister, active_suspender_offset));
-  regs.ResetExcept(suspender, caller);
+  regs.ResetExcept(caller, suspender, suspender_continuation);
 
   // -------------------------------------------
   // Load jump buffer.
   // -------------------------------------------
-  SyncStackLimit(masm, caller, suspender);
+  SyncStackLimit(masm, caller, suspender, suspender_continuation);
+
   ASSIGN_REG(jmpbuf);
   __ LoadExternalPointerField(
       jmpbuf, FieldMemOperand(caller, WasmContinuationObject::kJmpbufOffset),
@@ -4967,7 +5002,21 @@ void Builtins::Generate_WasmSuspend(MacroAssembler* masm) {
   MemOperand GCScanSlotPlace =
       MemOperand(fp, BuiltinWasmWrapperConstants::kGCScanSlotCountOffset);
   __ Str(xzr, GCScanSlotPlace);
-  ASSIGN_REG(scratch)
+
+  // GCS switching.
+  Label skip_gcs_switching;
+  __ JumpIfNoGCS(&skip_gcs_switching);
+  DEFINE_REG(gcs);
+  __ Ldr(gcs,
+         FieldMemOperand(caller, WasmContinuationObject::kShadowStackOffset));
+  __ GcsStackSwitch(gcs, gcs);
+  // Store old gcs to old continuation.
+  __ Str(gcs, FieldMemOperand(suspender_continuation,
+                              WasmContinuationObject::kShadowStackOffset));
+  FREE_REG(gcs);
+  __ Bind(&skip_gcs_switching);
+
+  ASSIGN_REG(scratch);
   LoadJumpBuffer(masm, jmpbuf, true, scratch);
   __ Trap();
   __ Bind(&resume, BranchTargetIdentifier::kBtiJump);
@@ -5125,12 +5174,29 @@ void Generate_WasmResumeHelper(MacroAssembler* masm, wasm::OnResume on_resume) {
   MemOperand GCScanSlotPlace =
       MemOperand(fp, BuiltinWasmWrapperConstants::kGCScanSlotCountOffset);
   __ Str(xzr, GCScanSlotPlace);
+  // GCS switching.
+  Label skip_gcs_switching;
+  __ JumpIfNoGCS(&skip_gcs_switching);
+  DEFINE_REG(gcs);
+  __ Ldr(gcs, FieldMemOperand(target_continuation,
+                              WasmContinuationObject::kShadowStackOffset));
+  __ GcsStackSwitch(gcs, gcs);
+  // Store old gcs to old continuation.
+  __ LoadTaggedField(scratch,
+                     FieldMemOperand(target_continuation,
+                                     WasmContinuationObject::kParentOffset));
+  __ Str(gcs,
+         FieldMemOperand(scratch, WasmContinuationObject::kShadowStackOffset));
+  FREE_REG(gcs);
+  __ Bind(&skip_gcs_switching);
+
   if (on_resume == wasm::OnResume::kThrow) {
     // Switch to the continuation's stack without restoring the PC.
     LoadJumpBuffer(masm, target_jmpbuf, false, scratch);
     // Pop this frame now. The unwinder expects that the first STACK_SWITCH
     // frame is the outermost one.
     __ LeaveFrame(StackFrame::STACK_SWITCH);
+    __ DropTopGCSEntryIfGCS();
     // Forward the onRejected value to kThrow.
     __ Push(xzr, kReturnRegister0);
     __ CallRuntime(Runtime::kThrow);
