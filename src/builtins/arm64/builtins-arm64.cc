@@ -1258,6 +1258,7 @@ void Builtins::Generate_BaselineOutOfLinePrologue(MacroAssembler* masm) {
     ASM_CODE_COMMENT_STRING(masm, "Optimized marker check");
     // Drop the frame created by the baseline call.
     __ Pop<MacroAssembler::kAuthLR>(fp, lr);
+    __ DropTopGCSEntryIfGCS();
     __ OptimizeCodeOrTailCallOptimizedCodeSlot(flags, feedback_vector);
     __ Trap();
   }
@@ -2187,9 +2188,14 @@ namespace {
 
 void Generate_OSREntry(MacroAssembler* masm, Register entry_address,
                        Operand offset = Operand(0)) {
+  Label jump, dont_drop_return_address_shadow_stack;
+  __ JumpIfNoGCS(&dont_drop_return_address_shadow_stack);
+  __ Gcspopm();
+  __ B(&jump);
+  __ Bind(&dont_drop_return_address_shadow_stack);
+
   // Pop the return address to this function's caller from the return stack
   // buffer, since we'll never return to it.
-  Label jump;
   __ Adr(lr, &jump);
   __ Ret();
 
@@ -2252,6 +2258,8 @@ void OnStackReplacement(MacroAssembler* masm, OsrSourceTier source,
   }
 
   if (source == OsrSourceTier::kInterpreter) {
+    __ DropTopGCSEntryIfGCS();
+
     // Drop the handler frame that is be sitting on top of the actual
     // JavaScript frame. This is the case then OSR is triggered from bytecode.
     __ LeaveFrame(StackFrame::STUB);
