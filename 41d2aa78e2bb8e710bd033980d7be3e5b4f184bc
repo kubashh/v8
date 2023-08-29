@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c35bdf5c_ee33fb24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-08-29T13:58:29Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "41d2aa78e2bb8e710bd033980d7be3e5b4f184bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9594f45_517e979b",
+        "filename": "builders/experiments.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-08-29T13:58:29Z",
+      "side": 1,
+      "message": "sroettger, is it ok to add you initially as an owner here? We can also add some more names...",
+      "range": {
+        "startLine": 162,
+        "startChar": 25,
+        "endLine": 162,
+        "endChar": 49
+      },
+      "revId": "41d2aa78e2bb8e710bd033980d7be3e5b4f184bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
