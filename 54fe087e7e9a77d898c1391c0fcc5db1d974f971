@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccc19056_dc0d140d",
+        "filename": "src/codegen/ia32/assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "The main issue is that Operand(src,lbl) results in relocation information being generated. In fact, we don\u0027t want relocation information being generated.\nI would be ok with removing the Operand(src,lbl) variant because it probably has very limited utlity.",
+      "parentUuid": "e311831b_48b545d7",
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4f14670_23d354c4",
@@ -65,6 +83,30 @@
       "writtenOn": "2023-08-29T18:04:04Z",
       "side": 1,
       "message": "I think there\u0027s a missing test case for the first branch.",
+      "range": {
+        "startLine": 1080,
+        "startChar": 0,
+        "endLine": 1080,
+        "endChar": 24
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2abdb36c_7c66c86b",
+        "filename": "src/codegen/ia32/assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1080,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "Yes. I have now added another test case .. which found a bug!",
+      "parentUuid": "a4f14670_23d354c4",
       "range": {
         "startLine": 1080,
         "startChar": 0,
@@ -98,6 +140,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1ebd445_eb6f0ccf",
+        "filename": "src/codegen/ia32/assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "Oops. You are correct, I will drop.",
+      "parentUuid": "e5c7251c_c00650a7",
+      "range": {
+        "startLine": 257,
+        "startChar": 11,
+        "endLine": 257,
+        "endChar": 18
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b641251_36d7f5e8",
@@ -111,6 +177,30 @@
       "writtenOn": "2023-08-29T14:02:37Z",
       "side": 1,
       "message": "nit: Please end comments with appropriate punctuation.",
+      "range": {
+        "startLine": 259,
+        "startChar": 49,
+        "endLine": 259,
+        "endChar": 61
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af38efeb_48766e7b",
+        "filename": "src/codegen/ia32/assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "ack",
+      "parentUuid": "9b641251_36d7f5e8",
       "range": {
         "startLine": 259,
         "startChar": 49,
@@ -138,6 +228,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0d03e88_914e6761",
+        "filename": "src/codegen/ia32/assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "Should be removed, yes.",
+      "parentUuid": "3cc24c56_5b00eed8",
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e11b220_5fe4a0be",
@@ -151,6 +259,30 @@
       "writtenOn": "2023-08-29T14:02:37Z",
       "side": 1,
       "message": "Since this doesn\u0027t map to an LEA instruction, please give it some other name. Perhaps \"LoadLabelAddress\"?",
+      "range": {
+        "startLine": 2115,
+        "startChar": 21,
+        "endLine": 2115,
+        "endChar": 24
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e00aaf29_1e10896b",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2115,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "LoadRelativeLabel is the new name",
+      "parentUuid": "7e11b220_5fe4a0be",
       "range": {
         "startLine": 2115,
         "startChar": 21,
@@ -184,6 +316,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b685a80_717752b7",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2119,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "17cd33b8_1eeb916c",
+      "range": {
+        "startLine": 2119,
+        "startChar": 5,
+        "endLine": 2119,
+        "endChar": 7
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34e0a44e_cd3a9146",
@@ -197,6 +353,30 @@
       "writtenOn": "2023-08-29T14:02:37Z",
       "side": 1,
       "message": "I don\u0027t see a `ret` below, only a `call`. Doesn\u0027t this actually pollute the RAS in its current form? That may well be fine, but the comment should accurately reflect the code.",
+      "range": {
+        "startLine": 2122,
+        "startChar": 43,
+        "endLine": 2122,
+        "endChar": 46
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b405ca41_ccbb7078",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2122,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "It does not pollute the RAS. (See https://blog.stuffedcow.net/2018/04/ras-microbenchmarks/#call0). Apparently there is special hardware optimization post Pentium for the sequence.",
+      "parentUuid": "34e0a44e_cd3a9146",
       "range": {
         "startLine": 2122,
         "startChar": 43,
@@ -230,6 +410,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54eab28c_1ca5fb23",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "50859254_6ac3dad1",
+      "range": {
+        "startLine": 2126,
+        "startChar": 54,
+        "endLine": 2126,
+        "endChar": 60
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bdcb27f_e872bd95",
@@ -253,6 +457,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19c47b04_e0aba90f",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1bdcb27f_e872bd95",
+      "range": {
+        "startLine": 2127,
+        "startChar": 2,
+        "endLine": 2129,
+        "endChar": 14
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "118cab55_f444a6a6",
@@ -266,6 +494,30 @@
       "writtenOn": "2023-08-29T14:02:37Z",
       "side": 1,
       "message": "See `src/compiler/backend/ia32/code-generator-ia32.cc` around line 830 for a very similar sequence that needs no magic number and no new `lea` overload. Is this meant as a replacement for that? Or is this, perhaps, not needed in light of the existence of the older solution?",
+      "range": {
+        "startLine": 2131,
+        "startChar": 21,
+        "endLine": 2131,
+        "endChar": 23
+      },
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00abbf45_3398851d",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2131,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-29T21:15:38Z",
+      "side": 1,
+      "message": "Looking at this code, it appears to violate a requirement necessary for isolate independent code: as far as I can figure out, it leaves the absolute address of a label in the code stream. No relocation info is generated, so the validation code looking for it will miss it.\nFor now, I propose sticking with my existing plan.",
+      "parentUuid": "118cab55_f444a6a6",
       "range": {
         "startLine": 2131,
         "startChar": 21,
