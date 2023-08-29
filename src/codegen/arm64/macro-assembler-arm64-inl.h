@@ -587,6 +587,21 @@ void MacroAssembler::Csneg(const Register& rd, const Register& rn,
   csneg(rd, rn, rm, cond);
 }
 
+void MacroAssembler::JumpIfNoGCS(Label* label) {
+  UseScratchRegisterScope temps(this);
+  temps.Exclude(x16);
+  Mov(x16, 1);
+  Chkfeat();
+  Cbnz(x16, label);
+}
+
+void MacroAssembler::DropTopGCSEntryIfGCS() {
+  Label dont_drop_return_address;
+  JumpIfNoGCS(&dont_drop_return_address);
+  Gcspopm();
+  Bind(&dont_drop_return_address);
+}
+
 void MacroAssembler::Dmb(BarrierDomain domain, BarrierType type) {
   DCHECK(allow_macro_instructions());
   dmb(domain, type);

@@ -599,6 +599,30 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
     autib1716();
   }
 
+  void Chkfeat() {
+    DCHECK(allow_macro_instructions_);
+    chkfeat();
+  }
+  void Gcspopm(const Register& rt = xzr) {
+    DCHECK(allow_macro_instructions_);
+    gcspopm(rt);
+  }
+  void Gcsss1(const Register& rt) {
+    DCHECK(allow_macro_instructions_);
+    gcsss1(rt);
+  }
+  void Gcsss2(const Register& rt) {
+    DCHECK(allow_macro_instructions_);
+    gcsss2(rt);
+  }
+  void GcsStackSwitch(const Register& new_stack,
+                      const Register& old_stack = xzr) {
+    Gcsss1(new_stack);
+    Gcsss2(old_stack);
+  }
+  inline void JumpIfNoGCS(Label* label);
+  inline void DropTopGCSEntryIfGCS();
+
   inline void Dmb(BarrierDomain domain, BarrierType type);
   inline void Dsb(BarrierDomain domain, BarrierType type);
   inline void Isb();

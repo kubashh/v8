@@ -1553,6 +1553,12 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   // System hint.
   void hint(SystemHint code);
 
+  // System instruction with pre-encoded op (op1:crn:crm:op2).
+  void sys(int op, const Register& xt = xzr);
+
+  // System instruction with result.
+  void sysl(int op, const Register& xt = xzr);
+
   // Data memory barrier
   void dmb(BarrierDomain domain, BarrierType type);
 
@@ -1582,6 +1588,18 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   };
 
   void nop(NopMarkerTypes n);
+
+  // Check features are enabled.
+  void chkfeat();
+
+  // Pop an entry from the Guarded Control Stack.
+  void gcspopm(const Register& rt);
+
+  // Guarded Control Stack switch stage 1.
+  void gcsss1(const Register& rt);
+
+  // Guarded Control Stack switch stage 2.
+  void gcsss2(const Register& rt);
 
   // Add.
   void add(const VRegister& vd, const VRegister& vn, const VRegister& vm);
@@ -2818,6 +2836,12 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   inline static Instr ImmException(int imm16);
   inline static Instr ImmSystemRegister(int imm15);
   inline static Instr ImmHint(int imm7);
+  inline static Instr CRm(int imm4);
+  inline static Instr CRn(int imm4);
+  inline static Instr SysOp(int imm14);
+  inline static Instr ImmSysOp1(int imm3);
+  inline static Instr ImmSysOp2(int imm3);
+
   inline static Instr ImmBarrierDomain(int imm2);
   inline static Instr ImmBarrierType(int imm2);
   inline static unsigned CalcLSDataSizeLog2(LoadStoreOp op);

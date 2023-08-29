@@ -1591,6 +1591,10 @@ TEST(label) {
   INIT_V8();
   SETUP();
 
+#ifdef USE_SIMULATOR
+  simulator.DisableGCSCheck();
+#endif  // USE_SIMULATOR
+
   Label label_1, label_2, label_3, label_4;
 
   START();
@@ -1848,6 +1852,10 @@ TEST(branch_to_reg) {
   INIT_V8();
   SETUP();
 
+#ifdef USE_SIMULATOR
+  simulator.DisableGCSCheck();
+#endif  // USE_SIMULATOR
+
   // Test br.
   Label fn1, after_fn1, after_bl1;
 
@@ -1895,6 +1903,10 @@ TEST(branch_to_reg) {
 static void BtiHelper(Register ipreg) {
   SETUP();
 
+#ifdef USE_SIMULATOR
+  simulator.DisableGCSCheck();
+#endif  // USE_SIMULATOR
+
   Label jump_target, jump_call_target, call_target, test_pacibsp,
       pacibsp_target, done;
   START();
@@ -1917,13 +1929,14 @@ static void BtiHelper(Register ipreg) {
   __ Bind(&test_pacibsp, BranchTargetIdentifier::kNone);
   __ Adr(ipreg, &pacibsp_target);
   __ Blr(ipreg);
-  __ Adr(lr, &done);  // Make Ret return to done label.
+  __ Mov(lr, 0);  // Zero lr so we branch to done.
   __ Br(ipreg);
 
   __ Bind(&call_target, BranchTargetIdentifier::kBtiCall);
   __ Ret();
 
   __ Bind(&jump_call_target, BranchTargetIdentifier::kBtiJumpCall);
+  __ Cbz(lr, &done);
   __ Ret();
 
   __ Bind(&pacibsp_target, BranchTargetIdentifier::kPacibsp);
@@ -1948,34 +1961,149 @@ TEST(unguarded_bti_is_nop) {
   SETUP();
 
   Label start, none, c, j, jc;
+  Label jump_to_c, call_to_j;
   START();
   __ B(&start);
   __ Bind(&none, BranchTargetIdentifier::kBti);
   __ Bind(&c, BranchTargetIdentifier::kBtiCall);
   __ Bind(&j, BranchTargetIdentifier::kBtiJump);
   __ Bind(&jc, BranchTargetIdentifier::kBtiJumpCall);
-  CHECK(__ SizeOfCodeGeneratedSince(&none) == 4 * kInstrSize);
+  __ Hint(BTI);
+  __ Hint(BTI_c);
+  __ Hint(BTI_j);
+  __ Hint(BTI_jc);
+  CHECK(__ SizeOfCodeGeneratedSince(&none) == 8 * kInstrSize);
+  __ Cmp(x1, 1);
+  __ B(lt, &jump_to_c);
+  __ B(eq, &call_to_j);
   __ Ret();
 
-  Label jump_to_c, call_to_j;
   __ Bind(&start);
   __ Adr(x0, &none);
   __ Adr(lr, &jump_to_c);
+  __ Mov(x1, 0);
   __ Br(x0);
 
   __ Bind(&jump_to_c);
   __ Adr(x0, &c);
-  __ Adr(lr, &call_to_j);
+  __ Mov(x1, 1);
   __ Br(x0);
 
   __ Bind(&call_to_j);
   __ Adr(x0, &j);
+  __ Mov(x1, 2);
   __ Blr(x0);
   END();
 
 #ifdef USE_SIMULATOR
   simulator.SetGuardedPages(false);
   RUN();
+#endif  // USE_SIMULATOR
+}
+
+TEST(gcs_chkfeat) {
+  SETUP();
+
+  START();
+  __ Mov(x16, 0x0123'4567'89ab'cdef);
+  __ Chkfeat();
+  END();
+
+#ifdef USE_SIMULATOR
+  RUN();
+#ifdef V8_ENABLE_SHADOW_STACK
+  CHECK_EQUAL_64(0x0123'4567'89ab'cdee, x16);
+#else
+  CHECK_EQUAL_64(0x0123'4567'89ab'cdef, x16);
+#endif
+#endif  // USE_SIMULATOR
+}
+
+TEST(gcs_gcspopm) {
+  SETUP();
+
+  Label lab, ret;
+  START();
+  __ Adr(x0, &ret);
+  __ Bl(&lab);
+  __ Bind(&ret);
+  __ Nop();
+  __ Bind(&lab);
+  __ Gcspopm(x1);
+  END();
+
+#ifdef USE_SIMULATOR
+  RUN();
+  CHECK_EQUAL_64(x0, x1);
+#endif  // USE_SIMULATOR
+}
+
+TEST(gcs_gcsss1) {
+  SETUP();
+
+  START();
+#ifdef USE_SIMULATOR
+  uint64_t new_gcs = simulator.GetGCSManager().AllocateGuardedControlStack();
+  __ Mov(x0, new_gcs);
+#else
+// TODO(arm64): Request new GCS from the operating system.
+#endif
+
+  // Partial stack swap to check GCS has changed, and a token is at the top
+  // of the new stack.
+  __ Gcsss1(x0);
+  __ Gcspopm(x1);
+
+  __ Bic(x0, x0, 7);  // Clear LSB of new GCS.
+  __ Bic(x2, x1, 7);  // Clear LSB of old GCS.
+  __ Cmp(x0, x2);
+  __ Cset(x0, eq);
+  __ And(x1, x1, 7);  // In progress token.
+  END();
+
+#ifdef USE_SIMULATOR
+  RUN();
+  CHECK_EQUAL_64(0, x0);  // GCS must not be equal.
+  CHECK_EQUAL_64(5, x1);  // In progress token must be present.
+#endif                    // USE_SIMULATOR
+}
+
+// TODO(arm64): Add extra tests for combinations of PAC and GCS enabled, and use
+// negative tests to detect expected failures.
+TEST(gcs_stack_swap) {
+  SETUP();
+
+  START();
+  Label stack_swap, sub_fn, end;
+#ifdef USE_SIMULATOR
+  uint64_t new_gcs = simulator.GetGCSManager().AllocateGuardedControlStack();
+  __ Mov(x0, new_gcs);
+#else
+// TODO(arm64): Request new GCS from the operating system.
+#endif
+  __ Bl(&stack_swap);
+  __ B(&end);
+
+  __ Bind(&stack_swap);
+  __ Gcsss1(x0);  // x0 = new GCS.
+  __ Gcsss2(x1);  // x1 = old GCS.
+  __ Mov(x29, lr);
+  __ Bl(&sub_fn);
+  __ Mov(lr, x29);
+  __ Gcsss1(x1);  // Restore old GCS.
+  __ Gcsss2(x0);
+  __ Ret();
+
+  __ Bind(&sub_fn);
+  __ Mov(x2, 42);
+  __ Ret();
+
+  __ Bind(&end);
+  END();
+
+#ifdef USE_SIMULATOR
+  RUN();
+  CHECK_EQUAL_64(42, x2);
 #endif  // USE_SIMULATOR
 }
 
@@ -14164,6 +14292,10 @@ TEST(blr_lr) {
   // A simple test to check that the simulator correcty handle "blr lr".
   INIT_V8();
   SETUP();
+
+#ifdef USE_SIMULATOR
+  simulator.DisableGCSCheck();
+#endif  // USE_SIMULATOR
 
   START();
   Label target;

@@ -1041,6 +1041,31 @@ Instr Assembler::ImmHint(int imm7) {
   return imm7 << ImmHint_offset;
 }
 
+Instr Assembler::CRm(int imm4) {
+  DCHECK(is_uint4(imm4));
+  return imm4 << CRm_offset;
+}
+
+Instr Assembler::CRn(int imm4) {
+  DCHECK(is_uint4(imm4));
+  return imm4 << CRn_offset;
+}
+
+Instr Assembler::SysOp(int imm14) {
+  DCHECK(is_uint14(imm14));
+  return imm14 << SysOp_offset;
+}
+
+Instr Assembler::ImmSysOp1(int imm3) {
+  DCHECK(is_uint3(imm3));
+  return imm3 << SysOp1_offset;
+}
+
+Instr Assembler::ImmSysOp2(int imm3) {
+  DCHECK(is_uint3(imm3));
+  return imm3 << SysOp2_offset;
+}
+
 Instr Assembler::ImmBarrierDomain(int imm2) {
   DCHECK(is_uint2(imm2));
   return imm2 << ImmBarrierDomain_offset;

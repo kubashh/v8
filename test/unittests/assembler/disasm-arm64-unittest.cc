@@ -5104,6 +5104,19 @@ TEST_F(DisasmArm64Test, neon_shift_immediate) {
   CLEANUP();
 }
 
+TEST_F(DisasmArm64Test, gcs) {
+  SET_UP_MASM();
+
+  COMPARE(Chkfeat(), "chkfeat");
+  COMPARE(Gcspopm(x0), "gcspopm x0");
+  COMPARE(Gcspopm(), "gcspopm");
+  COMPARE(Gcspopm(xzr), "gcspopm");
+  COMPARE(Gcsss1(x4), "gcsss1 x4");
+  COMPARE(Gcsss2(x2), "gcsss2 x2");
+
+  CLEANUP();
+}
+
 #undef TEST_
 #undef EXP_SIZE
 #undef INSTR_SIZE

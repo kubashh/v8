@@ -241,6 +241,7 @@ using float16 = uint16_t;
   /* System (MRS, MSR) */                               \
   V_(ImmSystemRegister, 19, 5, Bits)                    \
   V_(SysO0, 19, 19, Bits)                               \
+  V_(SysOp, 18, 5, Bits)                                \
   V_(SysOp1, 18, 16, Bits)                              \
   V_(SysOp2, 7, 5, Bits)                                \
   V_(CRn, 15, 12, Bits)                                 \
@@ -405,7 +406,8 @@ enum SystemHint {
   BTI = 32,
   BTI_c = 34,
   BTI_j = 36,
-  BTI_jc = 38
+  BTI_jc = 38,
+  CHKFEAT = 40
 };
 
 // In a guarded page, only BTI and PACI[AB]SP instructions are allowed to be
@@ -431,6 +433,21 @@ enum class BranchTargetIdentifier {
   // Emit a PACIBSP instruction, which acts like a "BTI c" or a "BTI jc",
   // based on the value of SCTLR_EL1.BT0.
   kPacibsp
+};
+
+template <int op1, int crn, int crm, int op2>
+class GCSOpEncoder {
+ public:
+  static const uint32_t value =
+      ((op1 << SysOp1_offset) | (crn << CRn_offset) | (crm << CRm_offset) |
+       (op2 << SysOp2_offset)) >>
+      SysOp_offset;
+};
+
+enum GCSOp {
+  GCSPOPM = GCSOpEncoder<3, 7, 7, 1>::value,
+  GCSSS1 = GCSOpEncoder<3, 7, 7, 2>::value,
+  GCSSS2 = GCSOpEncoder<3, 7, 7, 3>::value
 };
 
 enum BarrierDomain {
@@ -776,6 +793,13 @@ constexpr SystemHintOp SystemHintFixed = 0xD503201F;
 constexpr SystemHintOp SystemHintFMask = 0xFFFFF01F;
 constexpr SystemHintOp SystemHintMask = 0xFFFFF01F;
 constexpr SystemHintOp HINT = SystemHintFixed | 0x00000000;
+
+using SystemSysOp = uint32_t;
+constexpr SystemSysOp SystemSysFixed = 0xD5080000;
+constexpr SystemSysOp SystemSysFMask = 0xFFF80000;
+constexpr SystemSysOp SystemSysMask = 0xFFF80000;
+constexpr SystemSysOp SYS = SystemSysFixed | 0x00000000;
+constexpr SystemSysOp SYSL = SystemSysFixed | 0x00200000;
 
 // Exception.
 using ExceptionOp = uint32_t;

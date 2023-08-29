@@ -1647,6 +1647,9 @@ void DisassemblingDecoder::VisitSystem(Instruction* instr) {
       case BTI_jc:
         mnemonic = "bti jc";
         break;
+      case CHKFEAT:
+        mnemonic = "chkfeat";
+        break;
       default:
         // Fall back to 'hint #<imm7>'.
         form = "'IH";
@@ -1669,6 +1672,19 @@ void DisassemblingDecoder::VisitSystem(Instruction* instr) {
         form = nullptr;
         break;
       }
+    }
+  } else if (instr->Mask(SystemSysFMask) == SYSL) {
+    if (instr->SysOp() == GCSPOPM) {
+      mnemonic = "gcspopm";
+      form = (instr->Rt() == 31) ? nullptr : "'Xt";
+    } else if (instr->SysOp() == GCSSS2) {
+      mnemonic = "gcsss2";
+      form = "'Xt";
+    }
+  } else if (instr->Mask(SystemSysFMask) == SystemSysFixed) {
+    if (instr->SysOp() == GCSSS1) {
+      mnemonic = "gcsss1";
+      form = "'Xt";
     }
   }
 

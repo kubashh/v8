@@ -12,6 +12,7 @@
 
 #include <stdarg.h>
 
+#include <mutex>
 #include <vector>
 
 #include "src/base/compiler-specific.h"
@@ -1336,6 +1337,11 @@ class Simulator : public DecoderVisitor, public SimulatorBase {
     if (log_parameters() & LOG_SYS_REGS) PrintSystemRegister(id);
   }
 
+  void PrintGCS(uint32_t direction, uintptr_t addr, size_t entry);
+  void LogGCS(uint32_t direction, uintptr_t addr, size_t entry) {
+    if (log_parameters() & LOG_SYS_REGS) PrintGCS(direction, addr, entry);
+  }
+
   // Print memory accesses.
   void PrintRead(uintptr_t address, unsigned reg_code,
                  PrintRegisterFormat format);
@@ -2539,6 +2545,152 @@ class Simulator : public DecoderVisitor, public SimulatorBase {
   // Instruction counter only valid if v8_flags.stop_sim_at isn't 0.
   int icount_for_stop_sim_at_;
   Isolate* isolate_;
+
+  // Count how many times we've re-entered the simulator, so we can check
+  // that the GCS is balanced when we finally leave it.
+  int reentrance_count_;
+
+  // The Guarded Control Stack is represented using a vector, where the more
+  // recently stored addresses are at higher-numbered indices.
+  using GuardedControlStack = std::vector<const Instruction*>;
+
+  // The GCSManager handles the synchronisation of GCS across multiple
+  // Simulator instances. Each Simulator has its own stack, but all share
+  // a GCSManager instance. This allows exchanging stacks between Simulators
+  // in a threaded application.
+  class GCSManager {
+   public:
+    // Allocate a new Guarded Control Stack and add it to the vector of stacks.
+    uint64_t AllocateGuardedControlStack() {
+      const std::lock_guard<std::mutex> lock(stacks_mtx_);
+
+      GuardedControlStack* new_stack = new GuardedControlStack;
+      uint64_t result;
+
+      // Put the new stack into the first available slot.
+      for (result = 0; result < stacks_.size(); result++) {
+        if (stacks_[result] == nullptr) {
+          stacks_[result] = new_stack;
+          break;
+        }
+      }
+
+      // If there were no slots, create a new one.
+      if (result == stacks_.size()) {
+        stacks_.push_back(new_stack);
+      }
+
+      // Shift the index to look like a stack pointer aligned to a page.
+      result <<= 12;
+
+      // Push the tagged index onto the new stack as a seal.
+      new_stack->push_back(reinterpret_cast<Instruction*>(result + 1));
+      return result;
+    }
+
+    // Free a Guarded Control Stack and set the stacks_ slot to null.
+    void FreeGuardedControlStack(uint64_t gcs) {
+      const std::lock_guard<std::mutex> lock(stacks_mtx_);
+      uint64_t gcs_index = GetGCSIndex(gcs);
+      GuardedControlStack* gcsptr = stacks_[gcs_index];
+      if (gcsptr == nullptr) {
+        FATAL("Tried to free unallocated GCS ");
+      } else {
+        delete gcsptr;
+        stacks_[gcs_index] = nullptr;
+      }
+    }
+
+    // Get a pointer to the GCS vector using a GCS id.
+    GuardedControlStack* GetGCSPtr(uint64_t gcs) const {
+      return stacks_[GetGCSIndex(gcs)];
+    }
+
+   private:
+    uint64_t GetGCSIndex(uint64_t gcs) const { return gcs >> 12; }
+
+    std::vector<GuardedControlStack*> stacks_;
+    std::mutex stacks_mtx_;
+  };
+
+  // A GCS id indicating no GCS has been allocated.
+  static const uint64_t kGCSNoStack = 0x3ff;
+  uint64_t gcs_;
+  bool gcs_enabled_;
+
+ public:
+  GCSManager& GetGCSManager() {
+    [[clang::no_destroy]] static GCSManager manager;
+    return manager;
+  }
+
+  void EnableGCSCheck() { gcs_enabled_ = true; }
+  void DisableGCSCheck() { gcs_enabled_ = false; }
+  bool IsGCSCheckEnabled() const { return gcs_enabled_; }
+
+ private:
+  bool IsAllocatedGCS(uint64_t gcs) const { return gcs != kGCSNoStack; }
+  void ResetGCSState() {
+    GCSManager& m = GetGCSManager();
+    if (IsAllocatedGCS(gcs_)) {
+      m.FreeGuardedControlStack(gcs_);
+    }
+    ActivateGCS(m.AllocateGuardedControlStack());
+    GCSPop();  // Remove seal.
+  }
+
+  GuardedControlStack* GetGCSPtr(uint64_t gcs) {
+    GCSManager& m = GetGCSManager();
+    GuardedControlStack* result = m.GetGCSPtr(gcs);
+    return result;
+  }
+  GuardedControlStack* GetActiveGCSPtr() { return GetGCSPtr(gcs_); }
+
+  uint64_t ActivateGCS(uint64_t gcs) {
+    uint64_t outgoing_gcs = gcs_;
+    gcs_ = gcs;
+    return outgoing_gcs;
+  }
+
+  void GCSPush(const Instruction* instr) {
+    GetActiveGCSPtr()->push_back(instr);
+    size_t entry = GetActiveGCSPtr()->size() - 1;
+    LogGCS(0, reinterpret_cast<uintptr_t>(instr), entry);
+  }
+
+  const Instruction* GCSPop() {
+    GuardedControlStack* gcs = GetActiveGCSPtr();
+    if (gcs->empty()) {
+      return nullptr;
+    }
+    const Instruction* return_addr = gcs->back();
+    size_t entry = gcs->size() - 1;
+    gcs->pop_back();
+    LogGCS(1, reinterpret_cast<uintptr_t>(return_addr), entry);
+    return return_addr;
+  }
+
+  void ReportGCSFailure(const char* msg) {
+    if (IsGCSCheckEnabled()) {
+      GuardedControlStack* gcs = GetActiveGCSPtr();
+      printf("%s", msg);
+      if (gcs == nullptr) {
+        printf("GCS pointer is null\n");
+      } else {
+        printf("GCS records, most recent first:\n");
+        size_t i = gcs->size() - 1;
+        int count = 0;
+        while (!gcs->empty() && count++ <= 20) {
+          uint64_t entry = reinterpret_cast<uint64_t>(gcs->back());
+          gcs->pop_back();
+          printf(" gcs%" PRIu64 "[%" PRIu64 "]: 0x%016" PRIx64 "\n", gcs_, i--,
+                 entry);
+        }
+        printf("End of GCS records.\n");
+      }
+      FATAL("GCS failed ");
+    }
+  }
 };
 
 template <>

@@ -2405,6 +2405,37 @@ void Assembler::msr(SystemRegister sysreg, const Register& rt) {
 
 void Assembler::hint(SystemHint code) { Emit(HINT | ImmHint(code) | Rt(xzr)); }
 
+void Assembler::sys(int op, const Register& xt) {
+  DCHECK(xt.Is64Bits());
+  Emit(SYS | SysOp(op) | Rt(xt));
+}
+
+void Assembler::sysl(int op, const Register& xt) {
+  DCHECK(xt.Is64Bits());
+  Emit(SYSL | SysOp(op) | Rt(xt));
+}
+
+void Assembler::gcspopm(const Register& rt) {
+  // DCHECK(CPUHas(CPUFeatures::kGCS));
+  sysl(GCSPOPM, rt);
+}
+
+void Assembler::gcsss1(const Register& rt) {
+  // DCHECK(CPUHas(CPUFeatures::kGCS));
+  sys(GCSSS1, rt);
+}
+
+void Assembler::gcsss2(const Register& rt) {
+  // DCHECK(CPUHas(CPUFeatures::kGCS));
+  sysl(GCSSS2, rt);
+}
+
+void Assembler::chkfeat() {
+  // DCHECK(CPUHas(CPUFeatures::kGCS));
+  //  Argument register is implicitly x16.
+  hint(CHKFEAT);
+}
+
 // NEON structure loads and stores.
 Instr Assembler::LoadStoreStructAddrModeField(const MemOperand& addr) {
   Instr addr_field = RnSP(addr.base());

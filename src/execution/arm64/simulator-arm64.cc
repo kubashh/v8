@@ -177,6 +177,9 @@ void Simulator::CallImpl(Address entry, CallArgument* args) {
   // Call the generated code.
   set_pc(entry);
   set_lr(kEndOfSimAddress);
+  GCSPush(kEndOfSimAddress);
+  ++reentrance_count_;
+
   CheckPCSComplianceAndRun();
 
   set_sp(original_stack);
@@ -339,7 +342,10 @@ Simulator::Simulator(Decoder<DispatchingDecoderVisitor>* decoder,
       last_debugger_input_(nullptr),
       log_parameters_(NO_PARAM),
       icount_for_stop_sim_at_(0),
-      isolate_(isolate) {
+      isolate_(isolate),
+      reentrance_count_(0),
+      gcs_(kGCSNoStack),
+      gcs_enabled_(false) {
   // Setup the decoder.
   decoder_->AppendVisitor(this);
 
@@ -349,6 +355,9 @@ Simulator::Simulator(Decoder<DispatchingDecoderVisitor>* decoder,
     decoder_->InsertVisitorBefore(print_disasm_, this);
     log_parameters_ = LOG_ALL;
   }
+#ifdef V8_ENABLE_SHADOW_STACK
+  EnableGCSCheck();
+#endif
 }
 
 Simulator::Simulator()
@@ -356,9 +365,15 @@ Simulator::Simulator()
       guard_pages_(ENABLE_CONTROL_FLOW_INTEGRITY_BOOL),
       last_debugger_input_(nullptr),
       log_parameters_(NO_PARAM),
-      isolate_(nullptr) {
+      isolate_(nullptr),
+      reentrance_count_(0),
+      gcs_(kGCSNoStack),
+      gcs_enabled_(false) {
   Init(stdout);
   CHECK(!v8_flags.trace_sim);
+#ifdef V8_ENABLE_SHADOW_STACK
+  EnableGCSCheck();
+#endif
 }
 
 void Simulator::Init(FILE* stream) {
@@ -404,6 +419,8 @@ void Simulator::ResetState() {
   break_on_next_ = false;
 
   btype_ = DefaultBType;
+
+  ResetGCSState();
 }
 
 Simulator::~Simulator() {
@@ -412,6 +429,9 @@ Simulator::~Simulator() {
   delete disassembler_decoder_;
   delete print_disasm_;
   delete decoder_;
+  if (IsAllocatedGCS(gcs_)) {
+    GetGCSManager().FreeGuardedControlStack(gcs_);
+  }
 }
 
 void Simulator::Run() {
@@ -438,6 +458,12 @@ void Simulator::Run() {
       }
       ExecuteInstruction();
     }
+  }
+
+  if (--reentrance_count_ == 0) {
+    GuardedControlStack* gcs = GetActiveGCSPtr();
+    if (!gcs->empty())
+      ReportGCSFailure("GCS not empty when leaving simulator\n");
   }
 }
 
@@ -647,6 +673,22 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
   if (signature.IsValid()) {
     CHECK(redirection->type() == ExternalReference::FAST_C_CALL);
     CallAnyCTypeFunction(external, signature);
+
+    uint64_t expected_lr = reinterpret_cast<uint64_t>(GCSPop());
+    uint64_t addr = reinterpret_cast<uint64_t>(return_address);
+
+    char msg[128];
+    if ((addr & 0x3) != 0) {
+      snprintf(msg, sizeof(msg),
+               "GCS contains misaligned return address: 0x%016lx\n",
+               expected_lr);
+      ReportGCSFailure(msg);
+    } else if (addr != expected_lr) {
+      snprintf(msg, sizeof(msg),
+               "GCS mismatch: lr = 0x%016lx, gcs = 0x%016lx\n", addr,
+               expected_lr);
+      ReportGCSFailure(msg);
+    }
     set_lr(return_address);
     set_pc(return_address);
     return;
@@ -887,6 +929,19 @@ void Simulator::DoRuntimeCall(Instruction* instr) {
     }
   }
 
+  uint64_t expected_lr = reinterpret_cast<uint64_t>(GCSPop());
+  uint64_t addr = reinterpret_cast<uint64_t>(return_address);
+
+  char msg[128];
+  if ((addr & 0x3) != 0) {
+    snprintf(msg, sizeof(msg),
+             "GCS contains misaligned return address: 0x%016lx\n", expected_lr);
+    ReportGCSFailure(msg);
+  } else if (addr != expected_lr) {
+    snprintf(msg, sizeof(msg), "GCS mismatch: lr = 0x%016lx, gcs = 0x%016lx\n",
+             addr, expected_lr);
+    ReportGCSFailure(msg);
+  }
   set_lr(return_address);
   set_pc(return_address);
 }
@@ -1596,6 +1651,14 @@ void Simulator::PrintSystemRegister(SystemRegister id) {
   }
 }
 
+void Simulator::PrintGCS(uint32_t direction, uintptr_t addr, size_t entry) {
+  DCHECK((direction == 0) || (direction == 1));
+  const char* arrow = (direction == 0) ? "<-" : "->";
+  fprintf(stream_,
+          "# %sgcs0x%04" PRIx64 "[%" PRIu64 "]: %s %s 0x%016" PRIxPTR "\n",
+          clr_flag_name, gcs_, entry, clr_normal, arrow, addr);
+}
+
 void Simulator::PrintRead(uintptr_t address, unsigned reg_code,
                           PrintRegisterFormat format) {
   registers_[reg_code].NotifyRegisterLogged();
@@ -1685,6 +1748,7 @@ void Simulator::VisitUnconditionalBranch(Instruction* instr) {
   switch (instr->Mask(UnconditionalBranchMask)) {
     case BL:
       set_lr(instr->following());
+      GCSPush(instr->following());
       V8_FALLTHROUGH;
     case B:
       set_pc(instr->ImmPCOffsetTarget());
@@ -1720,6 +1784,7 @@ void Simulator::VisitUnconditionalBranchToRegister(Instruction* instr) {
   switch (instr->Mask(UnconditionalBranchToRegisterMask)) {
     case BLR: {
       set_lr(instr->following());
+      GCSPush(instr->following());
       if (instr->Rn() == 31) {
         // BLR XZR is used as a guard for the constant pool. We should never hit
         // this, but if we do trap to allow debugging.
@@ -1728,9 +1793,26 @@ void Simulator::VisitUnconditionalBranchToRegister(Instruction* instr) {
       V8_FALLTHROUGH;
     }
     case BR:
-    case RET:
       set_pc(target);
       break;
+    case RET: {
+      uint64_t addr = reinterpret_cast<uint64_t>(target);
+      uint64_t expected_lr = reinterpret_cast<uint64_t>(GCSPop());
+      char msg[128];
+      if ((addr & 0x3) != 0) {
+        snprintf(msg, sizeof(msg),
+                 "GCS contains misaligned return address: 0x%016lx\n",
+                 expected_lr);
+        ReportGCSFailure(msg);
+      } else if (addr != expected_lr) {
+        snprintf(msg, sizeof(msg),
+                 "GCS (normal RET) mismatch: lr = 0x%016lx, gcs = 0x%016lx\n",
+                 addr, expected_lr);
+        ReportGCSFailure(msg);
+      }
+      set_pc(target);
+      break;
+    }
     default:
       UNIMPLEMENTED();
   }
@@ -3721,11 +3803,66 @@ void Simulator::VisitSystem(Instruction* instr) {
       case BTI_j:
         // The BType checks happen in CheckBType().
         break;
+      case CHKFEAT: {
+        uint64_t feat_select = xreg(16);
+        if (IsGCSCheckEnabled()) {
+          feat_select &= ~UINT64_C(1);
+        }
+        set_xreg(16, feat_select);
+        break;
+      }
       default:
         UNIMPLEMENTED();
     }
   } else if (instr->Mask(MemBarrierFMask) == MemBarrierFixed) {
     std::atomic_thread_fence(std::memory_order_seq_cst);
+  } else if (instr->Mask(SystemSysFMask) == SYSL) {
+    if (instr->SysOp() == GCSSS2) {
+      uint64_t outgoing_gcs = reinterpret_cast<uint64_t>(GCSPop());
+      // Check for token inserted by gcsss1.
+      if ((outgoing_gcs & 7) != 5) {
+        char msg[128];
+        snprintf(msg, sizeof(msg),
+                 "GCS: outgoing stack has no token: 0x%016" PRIx64 "\n",
+                 outgoing_gcs);
+        ReportGCSFailure(msg);
+      }
+      uint64_t incoming_gcs = ActivateGCS(outgoing_gcs);
+      outgoing_gcs &= ~UINT64_C(0x3ff);
+      uint64_t size = GetActiveGCSPtr()->size();
+      // FIXME: this size encoding is a horrible hack.
+      DCHECK(is_uint32(outgoing_gcs + 1));
+      uint64_t outgoing_seal = outgoing_gcs + 1 + (size << 32);
+      GCSPush(reinterpret_cast<Instruction*>(outgoing_seal));
+      ActivateGCS(incoming_gcs);
+      set_xreg(instr->Rt(), outgoing_gcs + (size << 32));
+    } else if (instr->SysOp() == GCSPOPM) {
+      uint64_t addr = reinterpret_cast<uint64_t>(GCSPop());
+      set_xreg(instr->Rt(), addr);
+    } else {
+      UNIMPLEMENTED();
+    }
+  } else if (instr->Mask(SystemSysFMask) == SystemSysFixed) {
+    if (instr->SysOp() == GCSSS1) {
+      uint64_t rt = xreg(instr->Rt());
+      // TODO: GCSSS1/2 may need lock_guard.
+      uint64_t incoming_size = rt >> 32;
+      // Drop top half for GCS index.
+      uint64_t incoming_gcs = static_cast<uint32_t>(rt);
+      uint64_t outgoing_gcs = ActivateGCS(incoming_gcs);
+      uint64_t incoming_seal = reinterpret_cast<uint64_t>(GCSPop());
+      if ((incoming_seal ^ rt) != 1 ||
+          GetActiveGCSPtr()->size() != incoming_size) {
+        char msg[128];
+        snprintf(msg, sizeof(msg),
+                 "GCS: invalid incoming stack: 0x%016" PRIx64 "\n",
+                 incoming_seal);
+        ReportGCSFailure(msg);
+      }
+      GCSPush(reinterpret_cast<Instruction*>(outgoing_gcs + 5));
+    } else {
+      UNIMPLEMENTED();
+    }
   } else {
     UNIMPLEMENTED();
   }
