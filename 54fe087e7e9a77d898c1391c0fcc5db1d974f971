@@ -16,6 +16,57 @@
       "message": "I am not an expert in the (macro-) assembler, hence moving from reviewer to CC (please indicate if there was a particular part I should have reviewed).\n\nAt a high level this looks fine, essentially this is to give us rip-relative addressing in `ia32`, right?",
       "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba4333ba_3a83834d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-08-29T09:56:28Z",
+      "side": 1,
+      "message": "added two questions (mostly to help my own understanding of the (macro-)assembler).",
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e311831b_48b545d7",
+        "filename": "src/codegen/ia32/assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-08-29T09:56:28Z",
+      "side": 1,
+      "message": "Is there a reason this doesn\u0027t use the new `Operand(Register, Label*)` from `assembler-ia32.h`? In other words, what is the difference between calling this overload `Assembler::lea(dst, src, lbl)` vs. calling `Assembler::lea(dst, Operand(src, lbl))`?",
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cc24c56_5b00eed8",
+        "filename": "src/codegen/ia32/assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-08-29T09:56:28Z",
+      "side": 1,
+      "message": "Maybe I am overlooking it, but is this defined somewhere? I only see the `Assembler::lea(Register, Register, Label*)` in `assembler-ia32.cc`.",
+      "revId": "54fe087e7e9a77d898c1391c0fcc5db1d974f971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
