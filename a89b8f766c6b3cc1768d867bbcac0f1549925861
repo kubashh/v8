@@ -51,6 +51,24 @@
       "parentUuid": "c7e18928_5e12915e",
       "revId": "a89b8f766c6b3cc1768d867bbcac0f1549925861",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fdd73a5_c4467c56",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2555,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-08-29T09:31:43Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e20baef9_71b4ceb6",
+      "revId": "a89b8f766c6b3cc1768d867bbcac0f1549925861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
