@@ -53,31 +53,30 @@ struct TypedArrayElementsInfo {
   sizeLog2: uintptr;
   kind: ElementsKind;
 }
-extern runtime TypedArrayCopyElements(
-    Context, JSTypedArray, Object, Number): void;
+extern runtime TypedArrayCopyElements(Context, JSTypedArray, Object, Number):
+    void;
 extern macro TypedArrayBuiltinsAssembler::ValidateTypedArray(
     Context, JSAny, constexpr string): JSTypedArray;
 extern macro TypedArrayBuiltinsAssembler::ValidateTypedArrayAndGetLength(
     Context, JSAny, constexpr string): uintptr;
 
-extern macro TypedArrayBuiltinsAssembler::CallCMemcpy(
-    RawPtr, RawPtr, uintptr): void;
-extern macro TypedArrayBuiltinsAssembler::CallCMemmove(
-    RawPtr, RawPtr, uintptr): void;
-extern macro TypedArrayBuiltinsAssembler::CallCMemset(
-    RawPtr, intptr, uintptr): void;
+extern macro TypedArrayBuiltinsAssembler::CallCMemcpy(RawPtr, RawPtr, uintptr):
+    void;
+extern macro TypedArrayBuiltinsAssembler::CallCMemmove(RawPtr, RawPtr, uintptr):
+    void;
+extern macro TypedArrayBuiltinsAssembler::CallCMemset(RawPtr, intptr, uintptr):
+    void;
 extern macro TypedArrayBuiltinsAssembler::CallCRelaxedMemcpy(
     RawPtr, RawPtr, uintptr): void;
 extern macro TypedArrayBuiltinsAssembler::CallCRelaxedMemmove(
     RawPtr, RawPtr, uintptr): void;
 extern macro GetTypedArrayBuffer(implicit context: Context)(JSTypedArray):
     JSArrayBuffer;
-extern macro TypedArrayBuiltinsAssembler::GetTypedArrayElementsInfo(
-    JSTypedArray): TypedArrayElementsInfo;
+extern macro TypedArrayBuiltinsAssembler::GetTypedArrayElementsInfo(JSTypedArray):
+    TypedArrayElementsInfo;
 extern macro TypedArrayBuiltinsAssembler::GetTypedArrayElementsInfo(Map):
     TypedArrayElementsInfo;
-extern macro TypedArrayBuiltinsAssembler::IsUint8ElementsKind(ElementsKind):
-    bool;
+extern macro TypedArrayBuiltinsAssembler::IsUint8ElementsKind(ElementsKind): bool;
 extern macro TypedArrayBuiltinsAssembler::IsBigInt64ElementsKind(ElementsKind):
     bool;
 extern macro LoadFixedTypedArrayElementAsTagged(
@@ -249,7 +248,8 @@ macro NewAttachedJSTypedArrayWitness(array: AttachedJSTypedArray):
   };
 }
 
-macro KindForArrayType<T : type extends ElementsKind>(): constexpr ElementsKind;
+macro KindForArrayType<T : type extends ElementsKind>():
+    constexpr ElementsKind;
 KindForArrayType<Uint8Elements>(): constexpr ElementsKind {
   return ElementsKind::UINT8_ELEMENTS;
 }
