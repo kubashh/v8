@@ -39,9 +39,9 @@ LargeObjectSpaceObjectIterator::LargeObjectSpaceObjectIterator(
 
 Tagged<HeapObject> LargeObjectSpaceObjectIterator::Next() {
   if (current_ == nullptr) return Tagged<HeapObject>();
-
   Tagged<HeapObject> object = current_->GetObject();
   current_ = current_->next_page();
+  DCHECK(!IsFreeSpaceOrFiller(object));
   return object;
 }
 

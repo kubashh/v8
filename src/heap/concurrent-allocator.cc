@@ -40,8 +40,7 @@ void StressConcurrentAllocatorTask::RunInternal() {
         kSmallObjectSize, AllocationType::kOld, AllocationOrigin::kRuntime,
         AllocationAlignment::kTaggedAligned);
     if (!result.IsFailure()) {
-      heap->CreateFillerObjectAtBackground(result.ToAddress(),
-                                           kSmallObjectSize);
+      heap->CreateFixedArrayForTestingAt(result.ToAddress(), kSmallObjectSize);
     } else {
       heap->CollectGarbageFromAnyThread(&local_heap);
     }
@@ -50,8 +49,7 @@ void StressConcurrentAllocatorTask::RunInternal() {
                                     AllocationOrigin::kRuntime,
                                     AllocationAlignment::kTaggedAligned);
     if (!result.IsFailure()) {
-      heap->CreateFillerObjectAtBackground(result.ToAddress(),
-                                           kMediumObjectSize);
+      heap->CreateFixedArrayForTestingAt(result.ToAddress(), kMediumObjectSize);
     } else {
       heap->CollectGarbageFromAnyThread(&local_heap);
     }
@@ -60,8 +58,7 @@ void StressConcurrentAllocatorTask::RunInternal() {
                                     AllocationOrigin::kRuntime,
                                     AllocationAlignment::kTaggedAligned);
     if (!result.IsFailure()) {
-      heap->CreateFillerObjectAtBackground(result.ToAddress(),
-                                           kLargeObjectSize);
+      heap->CreateFixedArrayForTestingAt(result.ToAddress(), kLargeObjectSize);
     } else {
       heap->CollectGarbageFromAnyThread(&local_heap);
     }
