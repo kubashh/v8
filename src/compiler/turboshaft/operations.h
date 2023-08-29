@@ -3235,6 +3235,10 @@ struct TSCallDescriptor : public NON_EXPORTED_BASE(ZoneObject) {
   }
 };
 
+// If {target} is a HeapObject representing a builtin, return that builtin's ID.
+base::Optional<Builtin> TryGetBuiltinId(const ConstantOp* target,
+                                        JSHeapBroker* broker);
+
 struct CallOp : OperationT<CallOp> {
   const TSCallDescriptor* descriptor;
   OpEffects callee_effects;
@@ -3280,6 +3284,9 @@ struct CallOp : OperationT<CallOp> {
   base::Vector<const OpIndex> arguments() const {
     return inputs().SubVector(1 + HasFrameState(), input_count);
   }
+  // Returns true if this call is a stack check.
+  bool IsStackCheck(const Graph& graph, JSHeapBroker* broker,
+                    StackCheckKind kind) const;
 
   CallOp(OpIndex callee, OpIndex frame_state,
          base::Vector<const OpIndex> arguments,
@@ -3566,7 +3573,7 @@ struct SwitchOp : FixedArityOperationT<1, SwitchOp> {
              hint == other.hint;
     }
   };
-  base::Vector<const Case> cases;
+  base::Vector<Case> cases;
   Block* default_case;
   BranchHint default_hint;
 
@@ -3580,7 +3587,7 @@ struct SwitchOp : FixedArityOperationT<1, SwitchOp> {
 
   OpIndex input() const { return Base::input(0); }
 
-  SwitchOp(OpIndex input, base::Vector<const Case> cases, Block* default_case,
+  SwitchOp(OpIndex input, base::Vector<Case> cases, Block* default_case,
            BranchHint default_hint)
       : Base(input),
         cases(cases),
