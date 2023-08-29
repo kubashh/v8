@@ -296,7 +296,7 @@ class V8_EXPORT_PRIVATE ExternalEntityTable {
     ExternalEntityTable<Entry, size>* const table_;
   };
 
- private:
+ protected:
   // Required for Isolate::CheckIsolateLayout().
   friend class Isolate;
 
