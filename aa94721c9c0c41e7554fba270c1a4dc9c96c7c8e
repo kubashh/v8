@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d7131fe_78eba863",
+        "filename": "src/parsing/parse-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-08-29T05:27:16Z",
+      "side": 1,
+      "message": "@leszeks@chromium.org: I\u0027m not sure where the right place to put this is.\nInitially I had it in \"flags.SetFlagsForFunctionFromScript\", but that causes tons of tests to fail as it overwrites the language mode from other functions.",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 3
+      },
+      "revId": "aa94721c9c0c41e7554fba270c1a4dc9c96c7c8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
