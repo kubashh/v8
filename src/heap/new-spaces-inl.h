@@ -120,10 +120,12 @@ V8_INLINE bool PagedSpaceForNewSpace::EnsureAllocation(
     int size_in_bytes, AllocationAlignment alignment, AllocationOrigin origin,
     int* out_max_aligned_size) {
   if (last_lab_page_) {
-    last_lab_page_->DecreaseAllocatedLabSize(limit() - top());
-    SetLimit(top());
-    // No need to write a filler to the remaining lab because it will either be
-    // reallocated if the lab can be extended or freed otherwise.
+    auto current_top = top();
+    auto current_limit = limit();
+    last_lab_page_->DecreaseAllocatedLabSize(current_limit - current_top);
+    SetLimit(current_top);
+    heap_->CreateFillerObjectAt(
+        current_top, static_cast<int>(original_limit_relaxed() - current_top));
   }
 
   if (!PagedSpaceBase::EnsureAllocation(size_in_bytes, alignment, origin,
