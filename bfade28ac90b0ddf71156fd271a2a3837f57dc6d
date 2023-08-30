@@ -1,0 +1,222 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c948625_2c048daa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T13:14:48Z",
+      "side": 1,
+      "message": "Most of the comments are suggestions, so feel free to reject them.\nIt\u0027s also fine / a good idea to move the refactoring of the explicit truncation / extension for loads and stores to a follow-up if you agree with the plan to add explicit nodes there to make handling of the instruction easier.",
+      "revId": "bfade28ac90b0ddf71156fd271a2a3837f57dc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b52a65f7_6f7aec92",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T13:14:48Z",
+      "side": 1,
+      "message": "I\u0027m somewhat unhappy with this design as it isn\u0027t consistent with the non-atomic store.\nFor the regular store, the input representation is derivable from the store\u0027s `MemoryRepresentation`.\n\nThe logic is somewhat simple:\nIf the input is 8 Bytes and the memory representation is \u003c\u003d 4, we perform an explicit truncation:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/turboshaft-graph-interface.cc;l\u003d745\nThis way the register representation for the input is known.\nAnd then we know that only for `int64` and `uint64` (see below) we need to do anything special.\nSo ideally we\u0027d do the same for atomic stores. Would there be any issue with that?\n\nNote that the same applies to `Load` where the operation also knows the representation of the input because the load won\u0027t do the extension from 32 to 64 bits. (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/turboshaft-graph-interface.cc;l\u003d587)\n\nI also particularly dislike the \"if the input is a tuple\" in line 280 as that\u0027s more of an implementation detail and that would also disappear if we refactor this.",
+      "range": {
+        "startLine": 289,
+        "startChar": 8,
+        "endLine": 290,
+        "endChar": 78
+      },
+      "revId": "bfade28ac90b0ddf71156fd271a2a3837f57dc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4de5d92_1b5c1907",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2758,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T13:14:48Z",
+      "side": 1,
+      "message": "`has_index`.",
+      "range": {
+        "startLine": 2758,
+        "startChar": 7,
+        "endLine": 2758,
+        "endChar": 17
+      },
+      "revId": "bfade28ac90b0ddf71156fd271a2a3837f57dc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fecda0c_3cec8a25",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2807,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T13:14:48Z",
+      "side": 1,
+      "message": "Would something like this do the same and maybe be better readable?\n```\nstorage.resize(input_count);\nint idx \u003d 0;\nstorage[idx++] \u003d RegisterRepresentation::PointerSized(); // base\nif (has_index) {\n  storage[idx++] \u003d RegisterRepresentation::PointerSized(); // index\n}\nif (op_kind !\u003d OpKind::kLoad) {\n  storage[idx++] \u003d RegisterRepresentation::Word32(); // value_low\n  storage[idx++] \u003d RegisterRepresentation::Word32(); // value_high\n}\nif (op_kind \u003d\u003d OpKind::kCompareExchange) {\n  storage[idx++] \u003d RegisterRepresentation::Word32(); // expected_low\n  storage[idx++] \u003d RegisterRepresentation::Word32(); // expected_high\n}\nDCHECK_EQ(idx, input_count);\nreturn storage;\n```",
+      "range": {
+        "startLine": 2777,
+        "startChar": 4,
+        "endLine": 2807,
+        "endChar": 69
+      },
+      "revId": "bfade28ac90b0ddf71156fd271a2a3837f57dc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "468fe9ea_9e6f0d3b",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T13:14:48Z",
+      "side": 1,
+      "message": "I\u0027d still count up here to `3`, so that this logic doesn\u0027t encode the implicit dependency of `DCHECK_EQ(value_low().valid(), value_high().valid());`.",
+      "range": {
+        "startLine": 2818,
+        "startChar": 26,
+        "endLine": 2818,
+        "endChar": 27
+      },
+      "revId": "bfade28ac90b0ddf71156fd271a2a3837f57dc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f446730_3a32b83c",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2824,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T13:14:48Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 2824,
+        "startChar": 26,
+        "endLine": 2824,
+        "endChar": 27
+      },
+      "revId": "bfade28ac90b0ddf71156fd271a2a3837f57dc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7c7fac8_3d229eae",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2844,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T13:14:48Z",
+      "side": 1,
+      "message": "Maybe add sth. like:\n```\nDCHECK_EQ(value_low.valid(), value_high.valid());\nDCHECK_EQ(expected_low.valid(), expected_high.valid()));\n```\nThis is not enforced by the `Validate`.\nI\u0027m not sure what would happen if one provided valid lows for value and expected but invalid highs and set the kind to `load`. I guess, the count would fit and the `Validate` would be happy but it wouldn\u0027t be valid at all.",
+      "revId": "bfade28ac90b0ddf71156fd271a2a3837f57dc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a2c36b5_ecb00e33",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2967,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T13:14:48Z",
+      "side": 1,
+      "message": "Temporary debug code?",
+      "range": {
+        "startLine": 2966,
+        "startChar": 6,
+        "endLine": 2967,
+        "endChar": 20
+      },
+      "revId": "bfade28ac90b0ddf71156fd271a2a3837f57dc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9f8a2b1_59f2013d",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T13:14:48Z",
+      "side": 1,
+      "message": "Should\u0027nt this be `MapToNewGraphIfValid` as we even have a `has_index` flag in `AtomicWord32PairOp`?",
+      "range": {
+        "startLine": 691,
+        "startChar": 34,
+        "endLine": 691,
+        "endChar": 59
+      },
+      "revId": "bfade28ac90b0ddf71156fd271a2a3837f57dc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a3fac27_36efde8b",
+        "filename": "src/compiler/turboshaft/recreate-schedule.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T13:14:48Z",
+      "side": 1,
+      "message": "I\u0027m not sure if that makes sense. We should only end up here on 32 bit platforms, so I think we shouldn\u0027t emit a 64 bit addition as that shouldn\u0027t be supported on that platform and we already performed the int64 lowering.",
+      "range": {
+        "startLine": 906,
+        "startChar": 28,
+        "endLine": 906,
+        "endChar": 36
+      },
+      "revId": "bfade28ac90b0ddf71156fd271a2a3837f57dc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
