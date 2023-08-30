@@ -120,8 +120,8 @@ class TaggedImpl {
 
   // Returns true if this tagged value is a Smi.
   constexpr bool IsSmi() const { return HAS_SMI_TAG(ptr_); }
-  inline bool ToSmi(Smi* value) const;
-  inline Smi ToSmi() const;
+  inline bool ToSmi(Tagged<Smi>* value) const;
+  inline Tagged<Smi> ToSmi() const;
 
   // Returns true if this tagged value is a strong pointer to a HeapObject.
   constexpr inline bool IsHeapObject() const { return IsStrong(); }
@@ -165,43 +165,45 @@ class TaggedImpl {
 
   // If this tagged value is a strong pointer to a HeapObject, returns true and
   // sets *result. Otherwise returns false.
-  inline bool GetHeapObjectIfStrong(HeapObject* result) const;
-  inline bool GetHeapObjectIfStrong(Isolate* isolate, HeapObject* result) const;
+  inline bool GetHeapObjectIfStrong(Tagged<HeapObject>* result) const;
+  inline bool GetHeapObjectIfStrong(Isolate* isolate,
+                                    Tagged<HeapObject>* result) const;
 
   // DCHECKs that this tagged value is a strong pointer to a HeapObject and
   // returns the HeapObject.
-  inline HeapObject GetHeapObjectAssumeStrong() const;
-  inline HeapObject GetHeapObjectAssumeStrong(Isolate* isolate) const;
+  inline Tagged<HeapObject> GetHeapObjectAssumeStrong() const;
+  inline Tagged<HeapObject> GetHeapObjectAssumeStrong(Isolate* isolate) const;
 
   // If this tagged value is a weak pointer to a HeapObject, returns true and
   // sets *result. Otherwise returns false.
-  inline bool GetHeapObjectIfWeak(HeapObject* result) const;
-  inline bool GetHeapObjectIfWeak(Isolate* isolate, HeapObject* result) const;
+  inline bool GetHeapObjectIfWeak(Tagged<HeapObject>* result) const;
+  inline bool GetHeapObjectIfWeak(Isolate* isolate,
+                                  Tagged<HeapObject>* result) const;
 
   // DCHECKs that this tagged value is a weak pointer to a HeapObject and
   // returns the HeapObject.
-  inline HeapObject GetHeapObjectAssumeWeak() const;
-  inline HeapObject GetHeapObjectAssumeWeak(Isolate* isolate) const;
+  inline Tagged<HeapObject> GetHeapObjectAssumeWeak() const;
+  inline Tagged<HeapObject> GetHeapObjectAssumeWeak(Isolate* isolate) const;
 
   // If this tagged value is a strong or weak pointer to a HeapObject, returns
   // true and sets *result. Otherwise returns false.
-  inline bool GetHeapObject(HeapObject* result) const;
-  inline bool GetHeapObject(Isolate* isolate, HeapObject* result) const;
+  inline bool GetHeapObject(Tagged<HeapObject>* result) const;
+  inline bool GetHeapObject(Isolate* isolate, Tagged<HeapObject>* result) const;
 
-  inline bool GetHeapObject(HeapObject* result,
+  inline bool GetHeapObject(Tagged<HeapObject>* result,
                             HeapObjectReferenceType* reference_type) const;
-  inline bool GetHeapObject(Isolate* isolate, HeapObject* result,
+  inline bool GetHeapObject(Isolate* isolate, Tagged<HeapObject>* result,
                             HeapObjectReferenceType* reference_type) const;
 
   // DCHECKs that this tagged value is a strong or a weak pointer to a
   // HeapObject and returns the HeapObject.
-  inline HeapObject GetHeapObject() const;
-  inline HeapObject GetHeapObject(Isolate* isolate) const;
+  inline Tagged<HeapObject> GetHeapObject() const;
+  inline Tagged<HeapObject> GetHeapObject(Isolate* isolate) const;
 
   // DCHECKs that this tagged value is a strong or a weak pointer to a
   // HeapObject or a Smi and returns the HeapObject or Smi.
-  inline Object GetHeapObjectOrSmi() const;
-  inline Object GetHeapObjectOrSmi(Isolate* isolate) const;
+  inline Tagged<Object> GetHeapObjectOrSmi() const;
+  inline Tagged<Object> GetHeapObjectOrSmi(Isolate* isolate) const;
 
   // Cast operation is available only for full non-weak tagged values.
   template <typename T>

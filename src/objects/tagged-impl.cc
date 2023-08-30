@@ -81,8 +81,8 @@ template void Print(TaggedImpl<HeapObjectReferenceType::WEAK, Address> ptr);
 
 template <HeapObjectReferenceType kRefType, typename StorageType>
 void Print(TaggedImpl<kRefType, StorageType> ptr, std::ostream& os) {
-  Smi smi(0);
-  HeapObject heap_object;
+  Tagged<Smi> smi;
+  Tagged<HeapObject> heap_object;
   if (ptr.ToSmi(&smi)) {
     os << "Smi: " << std::hex << "0x" << smi.value();
     os << std::dec << " (" << smi.value() << ")\n";

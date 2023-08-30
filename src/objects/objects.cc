@@ -495,7 +495,8 @@ MaybeHandle<String> Object::NoSideEffectsToMaybeString(Isolate* isolate,
   } else if (IsJSProxy(*input)) {
     Handle<Object> currInput = input;
     do {
-      HeapObject target = Handle<JSProxy>::cast(currInput)->target(isolate);
+      Tagged<HeapObject> target =
+          Handle<JSProxy>::cast(currInput)->target(isolate);
       currInput = Handle<Object>(target, isolate);
     } while (IsJSProxy(*currInput));
     return NoSideEffectsToString(isolate, currInput);
@@ -686,7 +687,7 @@ template bool Object::BooleanValue(Tagged<Object>, Isolate*);
 template bool Object::BooleanValue(Tagged<Object>, LocalIsolate*);
 
 // static
-Object Object::ToBoolean(Tagged<Object> obj, Isolate* isolate) {
+Tagged<Object> Object::ToBoolean(Tagged<Object> obj, Isolate* isolate) {
   if (IsBoolean(obj)) return obj;
   return isolate->heap()->ToBoolean(Object::BooleanValue(obj, isolate));
 }
@@ -715,7 +716,7 @@ bool StrictNumberEquals(double x, double y) {
   return x == y;
 }
 
-bool StrictNumberEquals(const Object x, const Object y) {
+bool StrictNumberEquals(const Tagged<Object> x, const Tagged<Object> y) {
   return StrictNumberEquals(Object::Number(x), Object::Number(y));
 }
 
@@ -885,7 +886,7 @@ Maybe<bool> Object::Equals(Isolate* isolate, Handle<Object> x,
 }
 
 // static
-bool Object::StrictEquals(Tagged<Object> obj, Object that) {
+bool Object::StrictEquals(Tagged<Object> obj, Tagged<Object> that) {
   if (IsNumber(obj)) {
     if (!IsNumber(that)) return false;
     return StrictNumberEquals(obj, that);
@@ -1639,21 +1640,22 @@ Maybe<bool> Object::SetPropertyWithDefinedSetter(
 }
 
 // static
-Map Object::GetPrototypeChainRootMap(Tagged<Object> obj, Isolate* isolate) {
+Tagged<Map> Object::GetPrototypeChainRootMap(Tagged<Object> obj,
+                                             Isolate* isolate) {
   DisallowGarbageCollection no_alloc;
   if (IsSmi(obj)) {
-    Context native_context = isolate->context()->native_context();
+    Tagged<Context> native_context = isolate->context()->native_context();
     return native_context->number_function()->initial_map();
   }
 
-  const HeapObject heap_object = HeapObject::cast(obj);
+  const Tagged<HeapObject> heap_object = HeapObject::cast(obj);
   return heap_object->map()->GetPrototypeChainRootMap(isolate);
 }
 
 // static
-Smi Object::GetOrCreateHash(Tagged<Object> obj, Isolate* isolate) {
+Tagged<Smi> Object::GetOrCreateHash(Tagged<Object> obj, Isolate* isolate) {
   DisallowGarbageCollection no_gc;
-  Object hash = Object::GetSimpleHash(obj);
+  Tagged<Object> hash = Object::GetSimpleHash(obj);
   if (IsSmi(hash)) return Smi::cast(hash);
 
   DCHECK(IsJSReceiver(obj));
@@ -1661,7 +1663,7 @@ Smi Object::GetOrCreateHash(Tagged<Object> obj, Isolate* isolate) {
 }
 
 // static
-bool Object::SameValue(Tagged<Object> obj, Object other) {
+bool Object::SameValue(Tagged<Object> obj, Tagged<Object> other) {
   if (other == obj) return true;
 
   if (IsNumber(obj) && IsNumber(other)) {
@@ -1677,7 +1679,7 @@ bool Object::SameValue(Tagged<Object> obj, Object other) {
 }
 
 // static
-bool Object::SameValueZero(Tagged<Object> obj, Object other) {
+bool Object::SameValueZero(Tagged<Object> obj, Tagged<Object> other) {
   if (other == obj) return true;
 
   if (IsNumber(obj) && IsNumber(other)) {
@@ -1791,7 +1793,7 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> Object::SpeciesConstructor(
 bool Object::IterationHasObservableEffects(Tagged<Object> obj) {
   // Check that this object is an array.
   if (!IsJSArray(obj)) return true;
-  JSArray array = JSArray::cast(obj);
+  Tagged<JSArray> array = JSArray::cast(obj);
   Isolate* isolate = array->GetIsolate();
 
   // Check that we have the original ArrayPrototype.
@@ -1799,7 +1801,7 @@ bool Object::IterationHasObservableEffects(Tagged<Object> obj) {
   i::Handle<i::Context> context;
   if (!array->GetCreationContext().ToHandle(&context)) return false;
   if (!IsJSObject(array->map()->prototype())) return true;
-  JSObject array_proto = JSObject::cast(array->map()->prototype());
+  Tagged<JSObject> array_proto = JSObject::cast(array->map()->prototype());
   auto initial_array_prototype =
       context->native_context()->initial_array_prototype();
   if (initial_array_prototype != array_proto) return true;
@@ -1829,18 +1831,18 @@ bool Object::IsCodeLike(Tagged<Object> obj, Isolate* isolate) {
   return IsJSReceiver(obj) && JSReceiver::cast(obj)->IsCodeLike(isolate);
 }
 
-void ShortPrint(Object obj, FILE* out) {
+void ShortPrint(Tagged<Object> obj, FILE* out) {
   OFStream os(out);
   os << Brief(obj);
 }
 
-void ShortPrint(Object obj, StringStream* accumulator) {
+void ShortPrint(Tagged<Object> obj, StringStream* accumulator) {
   std::ostringstream os;
   os << Brief(obj);
   accumulator->Add(os.str().c_str());
 }
 
-void ShortPrint(Object obj, std::ostream& os) { os << Brief(obj); }
+void ShortPrint(Tagged<Object> obj, std::ostream& os) { os << Brief(obj); }
 
 std::ostream& operator<<(std::ostream& os, const Object& obj) {
   ShortPrint(obj, os);
@@ -1849,8 +1851,8 @@ std::ostream& operator<<(std::ostream& os, const Object& obj) {
 
 std::ostream& operator<<(std::ostream& os, const Brief& v) {
   MaybeObject maybe_object(v.value);
-  Smi smi;
-  HeapObject heap_object;
+  Tagged<Smi> smi;
+  Tagged<HeapObject> heap_object;
   if (maybe_object->ToSmi(&smi)) {
     Smi::SmiPrint(smi, os);
   } else if (maybe_object->IsCleared()) {
@@ -1892,15 +1894,16 @@ void HeapObject::Iterate(PtrComprCageBase cage_base, ObjectVisitor* v) {
 }
 
 void HeapObject::IterateBody(PtrComprCageBase cage_base, ObjectVisitor* v) {
-  Map m = map(cage_base);
+  Tagged<Map> m = map(cage_base);
   IterateBodyFast<ObjectVisitor>(m, SizeFromMap(m), v);
 }
 
-void HeapObject::IterateBody(Map map, int object_size, ObjectVisitor* v) {
+void HeapObject::IterateBody(Tagged<Map> map, int object_size,
+                             ObjectVisitor* v) {
   IterateBodyFast<ObjectVisitor>(map, object_size, v);
 }
 
-int HeapObject::SizeFromMap(Map map) const {
+int HeapObject::SizeFromMap(Tagged<Map> map) const {
   int instance_size = map->instance_size();
   if (instance_size != kVariableSizeSentinel) return instance_size;
   // Only inline the most frequent cases.
@@ -1995,7 +1998,7 @@ int HeapObject::SizeFromMap(Map map) const {
     return BigInt::SizeFor(BigInt::unchecked_cast(*this)->length());
   }
   if (instance_type == PREPARSE_DATA_TYPE) {
-    PreparseData data = PreparseData::unchecked_cast(*this);
+    Tagged<PreparseData> data = PreparseData::unchecked_cast(*this);
     return PreparseData::SizeFor(data->data_length(), data->children_length());
   }
 #define MAKE_TORQUE_SIZE_FOR(TYPE, TypeName)                 \
@@ -3605,13 +3608,13 @@ Handle<DescriptorArray> DescriptorArray::CopyUpToAddAttributes(
   if (attributes != NONE) {
     for (InternalIndex i : InternalIndex::Range(size)) {
       MaybeObject value_or_field_type = source->GetValue(i);
-      Name key = source->GetKey(i);
+      Tagged<Name> key = source->GetKey(i);
       PropertyDetails details = source->GetDetails(i);
       // Bulk attribute changes never affect private properties.
       if (!key->IsPrivate()) {
         int mask = DONT_DELETE | DONT_ENUM;
         // READ_ONLY is an invalid attribute for JS setters/getters.
-        HeapObject heap_object;
+        Tagged<HeapObject> heap_object;
         if (details.kind() != PropertyKind::kAccessor ||
             !(value_or_field_type->GetHeapObjectIfStrong(&heap_object) &&
               IsAccessorPair(heap_object))) {
@@ -3633,7 +3636,8 @@ Handle<DescriptorArray> DescriptorArray::CopyUpToAddAttributes(
   return copy_handle;
 }
 
-bool DescriptorArray::IsEqualUpTo(DescriptorArray desc, int nof_descriptors) {
+bool DescriptorArray::IsEqualUpTo(Tagged<DescriptorArray> desc,
+                                  int nof_descriptors) {
   for (InternalIndex i : InternalIndex::Range(nof_descriptors)) {
     if (GetKey(i) != desc->GetKey(i) || GetValue(i) != desc->GetValue(i)) {
       return false;
@@ -3824,7 +3828,7 @@ Handle<WeakArrayList> WeakArrayList::AddToEnd(Isolate* isolate,
   array = EnsureSpace(isolate, array, length + 1);
   {
     DisallowGarbageCollection no_gc;
-    WeakArrayList raw = *array;
+    Tagged<WeakArrayList> raw = *array;
     // Reload length; GC might have removed elements from the array.
     length = raw->length();
     raw->Set(length, *value);
@@ -3841,7 +3845,7 @@ Handle<WeakArrayList> WeakArrayList::AddToEnd(Isolate* isolate,
   array = EnsureSpace(isolate, array, length + 2);
   {
     DisallowGarbageCollection no_gc;
-    WeakArrayList raw = *array;
+    Tagged<WeakArrayList> raw = *array;
     // Reload length; GC might have removed elements from the array.
     length = array->length();
     raw->Set(length, *value1);
@@ -3860,7 +3864,7 @@ Handle<WeakArrayList> WeakArrayList::Append(Isolate* isolate,
   int new_length = 0;
   {
     DisallowGarbageCollection no_gc;
-    WeakArrayList raw = *array;
+    Tagged<WeakArrayList> raw = *array;
     length = raw->length();
 
     if (length < raw->capacity()) {
@@ -3893,7 +3897,7 @@ Handle<WeakArrayList> WeakArrayList::Append(Isolate* isolate,
 
   {
     DisallowGarbageCollection no_gc;
-    WeakArrayList raw = *array;
+    Tagged<WeakArrayList> raw = *array;
     // Reload length, allocation might have killed some weak refs.
     int index = raw->length();
     raw->Set(index, *value);
@@ -4035,7 +4039,7 @@ Handle<WeakArrayList> PrototypeUsers::Add(Isolate* isolate,
 }
 
 // static
-void PrototypeUsers::ScanForEmptySlots(WeakArrayList array) {
+void PrototypeUsers::ScanForEmptySlots(Tagged<WeakArrayList> array) {
   for (int i = kFirstIndex; i < array->length(); i++) {
     if (array->Get(i)->IsCleared()) {
       PrototypeUsers::MarkSlotEmpty(array, i);
@@ -4043,9 +4047,10 @@ void PrototypeUsers::ScanForEmptySlots(WeakArrayList array) {
   }
 }
 
-WeakArrayList PrototypeUsers::Compact(Handle<WeakArrayList> array, Heap* heap,
-                                      CompactionCallback callback,
-                                      AllocationType allocation) {
+Tagged<WeakArrayList> PrototypeUsers::Compact(Handle<WeakArrayList> array,
+                                              Heap* heap,
+                                              CompactionCallback callback,
+                                              AllocationType allocation) {
   if (array->length() == 0) {
     return *array;
   }
@@ -4063,7 +4068,7 @@ WeakArrayList PrototypeUsers::Compact(Handle<WeakArrayList> array, Heap* heap,
   int copy_to = kFirstIndex;
   for (int i = kFirstIndex; i < array->length(); i++) {
     MaybeObject element = array->Get(i);
-    HeapObject value;
+    Tagged<HeapObject> value;
     if (element->GetHeapObjectIfWeak(&value)) {
       callback(value, i, copy_to);
       new_array->Set(copy_to++, element);
@@ -4113,8 +4118,8 @@ template Handle<DescriptorArray> DescriptorArray::Allocate(
     LocalIsolate* isolate, int nof_descriptors, int slack,
     AllocationType allocation);
 
-void DescriptorArray::Initialize(EnumCache empty_enum_cache,
-                                 HeapObject undefined_value,
+void DescriptorArray::Initialize(Tagged<EnumCache> empty_enum_cache,
+                                 Tagged<HeapObject> undefined_value,
                                  int nof_descriptors, int slack,
                                  uint32_t raw_gc_state) {
   DCHECK_GE(nof_descriptors, 0);
@@ -4142,7 +4147,7 @@ void DescriptorArray::InitializeOrChangeEnumCache(
     Handle<DescriptorArray> descriptors, Isolate* isolate,
     Handle<FixedArray> keys, Handle<FixedArray> indices,
     AllocationType allocation_if_initialize) {
-  EnumCache enum_cache = descriptors->enum_cache();
+  Tagged<EnumCache> enum_cache = descriptors->enum_cache();
   if (enum_cache == ReadOnlyRoots(isolate).empty_enum_cache()) {
     enum_cache = *isolate->factory()->NewEnumCache(keys, indices,
                                                    allocation_if_initialize);
@@ -4153,7 +4158,8 @@ void DescriptorArray::InitializeOrChangeEnumCache(
   }
 }
 
-void DescriptorArray::CopyFrom(InternalIndex index, DescriptorArray src) {
+void DescriptorArray::CopyFrom(InternalIndex index,
+                               Tagged<DescriptorArray> src) {
   PropertyDetails details = src->GetDetails(index);
   Set(index, src->GetKey(index), src->GetValue(index), details);
 }
@@ -4221,7 +4227,7 @@ void DescriptorArray::CheckNameCollisionDuringInsertion(Descriptor* desc,
   if (insertion_index <= 0) return;
 
   for (int i = insertion_index; i > 0; --i) {
-    Name current_key = GetSortedKey(i - 1);
+    Tagged<Name> current_key = GetSortedKey(i - 1);
     if (current_key->hash() != desc_hash) return;
     CHECK(current_key != *desc->GetKey());
   }
@@ -4260,7 +4266,7 @@ Handle<Object> AccessorPair::GetComponent(Isolate* isolate,
 }
 
 #ifdef DEBUG
-bool DescriptorArray::IsEqualTo(DescriptorArray other) {
+bool DescriptorArray::IsEqualTo(Tagged<DescriptorArray> other) {
   if (number_of_all_descriptors() != other->number_of_all_descriptors()) {
     return false;
   }
@@ -4347,8 +4353,9 @@ void Relocatable::Iterate(RootVisitor* v, Relocatable* top) {
 namespace {
 
 template <typename sinkchar>
-void WriteFixedArrayToFlat(FixedArray fixed_array, int length, String separator,
-                           sinkchar* sink, int sink_length) {
+void WriteFixedArrayToFlat(Tagged<FixedArray> fixed_array, int length,
+                           Tagged<String> separator, sinkchar* sink,
+                           int sink_length) {
   DisallowGarbageCollection no_gc;
   CHECK_GT(length, 0);
   CHECK_LE(length, fixed_array->length());
@@ -4370,7 +4377,7 @@ void WriteFixedArrayToFlat(FixedArray fixed_array, int length, String separator,
   uint32_t num_separators = 0;
   uint32_t repeat_last = 0;
   for (int i = 0; i < length; i++) {
-    Object element = fixed_array->get(i);
+    Tagged<Object> element = fixed_array->get(i);
     const bool element_is_special = IsSmi(element);
 
     // If element is a positive Smi, it represents the number of separators to
@@ -4420,7 +4427,7 @@ void WriteFixedArrayToFlat(FixedArray fixed_array, int length, String separator,
     // Repeat the last written string |repeat_last| times (including
     // separators).
     if (V8_UNLIKELY(repeat_last > 0)) {
-      Object last_element = fixed_array->get(i - 1);
+      Tagged<Object> last_element = fixed_array->get(i - 1);
       int string_length = String::cast(last_element)->length();
       // The implemented logic requires that string length is > 0. Empty strings
       // are handled by repeating the separator (positive smi in the fixed
@@ -4450,7 +4457,7 @@ void WriteFixedArrayToFlat(FixedArray fixed_array, int length, String separator,
 
     if (V8_LIKELY(!element_is_special)) {
       DCHECK(IsString(element));
-      String string = String::cast(element);
+      Tagged<String> string = String::cast(element);
       const int string_length = string->length();
 
       DCHECK(string_length == 0 || sink < sink_end);
@@ -4476,9 +4483,9 @@ Address JSArray::ArrayJoinConcatToSequentialString(Isolate* isolate,
                                                    Address raw_dest) {
   DisallowGarbageCollection no_gc;
   DisallowJavascriptExecution no_js(isolate);
-  FixedArray fixed_array = FixedArray::cast(Object(raw_fixed_array));
-  String separator = String::cast(Object(raw_separator));
-  String dest = String::cast(Object(raw_dest));
+  Tagged<FixedArray> fixed_array = FixedArray::cast(Object(raw_fixed_array));
+  Tagged<String> separator = String::cast(Object(raw_separator));
+  Tagged<String> dest = String::cast(Object(raw_dest));
   DCHECK(IsFixedArray(fixed_array));
   DCHECK(StringShape(dest).IsSequentialOneByte() ||
          StringShape(dest).IsSequentialTwoByte());
@@ -4563,7 +4570,7 @@ template <typename IsolateT>
 void Script::InitLineEndsInternal(IsolateT* isolate, Handle<Script> script) {
   DCHECK(!script->has_line_ends());
   DCHECK(script->CanHaveLineEnds());
-  Object src_obj = script->source();
+  Tagged<Object> src_obj = script->source();
   if (!IsString(src_obj)) {
     DCHECK(IsUndefined(src_obj, isolate));
     script->set_line_ends(ReadOnlyRoots(isolate).empty_fixed_array());
@@ -4629,7 +4636,7 @@ bool Script::IsUserJavaScript() const {
 bool Script::ContainsAsmModule() {
   DisallowGarbageCollection no_gc;
   SharedFunctionInfo::ScriptIterator iter(this->GetIsolate(), *this);
-  for (SharedFunctionInfo sfi = iter.Next(); !sfi.is_null();
+  for (Tagged<SharedFunctionInfo> sfi = iter.Next(); !sfi.is_null();
        sfi = iter.Next()) {
     if (sfi->HasAsmWasmData()) return true;
   }
@@ -4662,7 +4669,7 @@ bool GetPositionInfoSlowImpl(base::Vector<Char> source, int position,
   }
   return false;
 }
-bool GetPositionInfoSlow(const Script script, int position,
+bool GetPositionInfoSlow(const Tagged<Script> script, int position,
                          const DisallowGarbageCollection& no_gc,
                          Script::PositionInfo* info) {
   if (!IsString(script->source())) {
@@ -4703,7 +4710,7 @@ bool Script::GetPositionInfo(int position, PositionInfo* info,
     }
   } else {
     DCHECK(has_line_ends());
-    FixedArray ends = FixedArray::cast(line_ends());
+    Tagged<FixedArray> ends = FixedArray::cast(line_ends());
 
     const int ends_len = ends->length();
     if (ends_len == 0) return false;
@@ -4747,7 +4754,7 @@ bool Script::GetPositionInfo(int position, PositionInfo* info,
     info->line_end = Smi::ToInt(ends->get(info->line));
     if (info->line_end > 0) {
       DCHECK(IsString(source()));
-      String src = String::cast(source());
+      Tagged<String> src = String::cast(source());
       if (src->length() >= info->line_end &&
           src->Get(info->line_end - 1) == '\r') {
         info->line_end--;
@@ -4792,7 +4799,7 @@ int Script::GetLineNumber(int code_pos) const {
   return info.line;
 }
 
-Object Script::GetNameOrSourceURL() {
+Tagged<Object> Script::GetNameOrSourceURL() {
   // Keep in sync with ScriptNameOrSourceURL in messages.js.
   if (!IsUndefined(source_url())) return source_url();
   return name();
@@ -4807,7 +4814,7 @@ Handle<String> Script::GetScriptHash(Isolate* isolate, Handle<Script> script,
 
   PtrComprCageBase cage_base(isolate);
   {
-    Object maybe_source_hash = script->source_hash(cage_base);
+    Tagged<Object> maybe_source_hash = script->source_hash(cage_base);
     if (IsString(maybe_source_hash, cage_base)) {
       Handle<String> precomputed(String::cast(maybe_source_hash), isolate);
       if (precomputed->length() > 0) {
@@ -4818,7 +4825,7 @@ Handle<String> Script::GetScriptHash(Isolate* isolate, Handle<Script> script,
 
   Handle<String> src_text;
   {
-    Object maybe_script_source = script->source(cage_base);
+    Tagged<Object> maybe_script_source = script->source(cage_base);
 
     if (!IsString(maybe_script_source, cage_base)) {
       return isolate->factory()->empty_string();
@@ -4856,7 +4863,7 @@ MaybeHandle<SharedFunctionInfo> Script::FindSharedFunctionInfo(
   CHECK_LT(function_literal_id, script->shared_function_info_count());
   MaybeObject shared =
       script->shared_function_infos()->Get(function_literal_id);
-  HeapObject heap_object;
+  Tagged<HeapObject> heap_object;
   if (!shared->GetHeapObject(&heap_object) ||
       IsUndefined(heap_object, isolate)) {
     return MaybeHandle<SharedFunctionInfo>();
@@ -4872,8 +4879,8 @@ template MaybeHandle<SharedFunctionInfo> Script::FindSharedFunctionInfo(
 Script::Iterator::Iterator(Isolate* isolate)
     : iterator_(isolate->heap()->script_list()) {}
 
-Script Script::Iterator::Next() {
-  Object o = iterator_.Next();
+Tagged<Script> Script::Iterator::Next() {
+  Tagged<Object> o = iterator_.Next();
   if (o != Object()) {
     return Script::cast(o);
   }
@@ -4988,9 +4995,9 @@ AllocationType AllocationSite::GetAllocationType() const {
 
 bool AllocationSite::IsNested() {
   DCHECK(v8_flags.trace_track_allocation_sites);
-  Object current = boilerplate()->GetHeap()->allocation_sites_list();
+  Tagged<Object> current = boilerplate()->GetHeap()->allocation_sites_list();
   while (IsAllocationSite(current)) {
-    AllocationSite current_site = AllocationSite::cast(current);
+    Tagged<AllocationSite> current_site = AllocationSite::cast(current);
     if (current_site->nested_site() == *this) {
       return true;
     }
@@ -5036,7 +5043,7 @@ bool JSArray::MayHaveReadOnlyLength(Tagged<Map> js_array_map) {
 }
 
 bool JSArray::HasReadOnlyLength(Handle<JSArray> array) {
-  Map map = array->map();
+  Tagged<Map> map = array->map();
 
   // If map guarantees that there can't be a read-only length, we are done.
   if (!MayHaveReadOnlyLength(map)) return false;
@@ -5300,10 +5307,10 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
   // on the JSPromise in the reverse order.
   {
     DisallowGarbageCollection no_gc;
-    Object current = *reactions;
-    Object reversed = Smi::zero();
+    Tagged<Object> current = *reactions;
+    Tagged<Object> reversed = Smi::zero();
     while (!IsSmi(current)) {
-      Object next = PromiseReaction::cast(current)->next();
+      Tagged<Object> next = PromiseReaction::cast(current)->next();
       PromiseReaction::cast(current)->set_next(reversed);
       reversed = current;
       current = next;
@@ -5464,7 +5471,7 @@ void HashTable<Derived, Shape>::Rehash(PtrComprCageBase cage_base,
   ReadOnlyRoots roots = GetReadOnlyRoots(cage_base);
   for (InternalIndex i : this->IterateEntries()) {
     uint32_t from_index = EntryToIndex(i);
-    Object k = this->get(cage_base, from_index);
+    Tagged<Object> k = this->get(cage_base, from_index);
     if (!IsKey(roots, k)) continue;
     uint32_t hash = Shape::HashForObject(roots, k);
     uint32_t insertion_index =
@@ -5480,7 +5487,8 @@ void HashTable<Derived, Shape>::Rehash(PtrComprCageBase cage_base,
 
 template <typename Derived, typename Shape>
 InternalIndex HashTable<Derived, Shape>::EntryForProbe(ReadOnlyRoots roots,
-                                                       Object k, int probe,
+                                                       Tagged<Object> k,
+                                                       int probe,
                                                        InternalIndex expected) {
   uint32_t hash = Shape::HashForObject(roots, k);
   uint32_t capacity = this->Capacity();
@@ -5525,7 +5533,7 @@ void HashTable<Derived, Shape>::Rehash(PtrComprCageBase cage_base) {
     done = true;
     for (InternalIndex current(0); current.raw_value() < capacity;
          /* {current} is advanced manually below, when appropriate.*/) {
-      Object current_key = KeyAt(cage_base, current);
+      Tagged<Object> current_key = KeyAt(cage_base, current);
       if (!IsKey(roots, current_key)) {
         ++current;  // Advance to next entry.
         continue;
@@ -5535,7 +5543,7 @@ void HashTable<Derived, Shape>::Rehash(PtrComprCageBase cage_base) {
         ++current;  // Advance to next entry.
         continue;
       }
-      Object target_key = KeyAt(cage_base, target);
+      Tagged<Object> target_key = KeyAt(cage_base, target);
       if (!IsKey(roots, target_key) ||
           EntryForProbe(roots, target_key, probe, target) != target) {
         // Put the current element into the correct position.
@@ -5551,8 +5559,8 @@ void HashTable<Derived, Shape>::Rehash(PtrComprCageBase cage_base) {
     }
   }
   // Wipe deleted entries.
-  Object the_hole = roots.the_hole_value();
-  HeapObject undefined = roots.undefined_value();
+  Tagged<Object> the_hole = roots.the_hole_value();
+  Tagged<HeapObject> undefined = roots.undefined_value();
   Derived* self = static_cast<Derived*>(this);
   for (InternalIndex current : InternalIndex::Range(capacity)) {
     if (KeyAt(cage_base, current) == the_hole) {
@@ -5657,7 +5665,7 @@ InternalIndex HashTable<Derived, Shape>::FindInsertionEntry(
   }
 }
 
-base::Optional<PropertyCell>
+base::Optional<Tagged<PropertyCell>>
 GlobalDictionary::TryFindPropertyCellForConcurrentLookupIterator(
     Isolate* isolate, Handle<Name> name, RelaxedLoadTag tag) {
   // This reimplements HashTable::FindEntry for use in a concurrent setting.
@@ -5672,12 +5680,12 @@ GlobalDictionary::TryFindPropertyCellForConcurrentLookupIterator(
   const int32_t hash = ShapeT::Hash(roots, name);
   const uint32_t capacity = Capacity();
   uint32_t count = 1;
-  Object undefined = roots.undefined_value();
-  Object the_hole = roots.the_hole_value();
+  Tagged<Object> undefined = roots.undefined_value();
+  Tagged<Object> the_hole = roots.the_hole_value();
   // EnsureCapacity will guarantee the hash table is never full.
   for (InternalIndex entry = FirstProbe(hash, capacity);;
        entry = NextProbe(entry, count++, capacity)) {
-    Object element = KeyAt(cage_base, entry, kRelaxedLoad);
+    Tagged<Object> element = KeyAt(cage_base, entry, kRelaxedLoad);
     if (isolate->heap()->IsPendingAllocation(element)) return {};
     if (element == undefined) return {};
     if (ShapeT::kMatchNeedsHoleCheck && element == the_hole) continue;
@@ -5931,7 +5939,7 @@ void NumberDictionary::UpdateMaxNumberKey(uint32_t key,
     return;
   }
   // Update max key value.
-  Object max_index_object = get(kMaxNumberKeyIndex);
+  Tagged<Object> max_index_object = get(kMaxNumberKeyIndex);
   if (!IsSmi(max_index_object) || max_number_key() < key) {
     FixedArray::set(kMaxNumberKeyIndex,
                     Smi::FromInt(key << kRequiresSlowElementsTagSize));
@@ -5958,13 +5966,13 @@ void NumberDictionary::UncheckedSet(Isolate* isolate,
   UncheckedAtPut(isolate, dictionary, key, value, PropertyDetails::Empty());
 }
 
-void NumberDictionary::CopyValuesTo(FixedArray elements) {
+void NumberDictionary::CopyValuesTo(Tagged<FixedArray> elements) {
   ReadOnlyRoots roots = GetReadOnlyRoots();
   int pos = 0;
   DisallowGarbageCollection no_gc;
   WriteBarrierMode mode = elements->GetWriteBarrierMode(no_gc);
   for (InternalIndex i : this->IterateEntries()) {
-    Object k;
+    Tagged<Object> k;
     if (this->ToKey(roots, i, &k)) {
       elements->set(pos++, this->ValueAt(i), mode);
     }
@@ -5977,7 +5985,7 @@ int Dictionary<Derived, Shape>::NumberOfEnumerableProperties() {
   ReadOnlyRoots roots = this->GetReadOnlyRoots();
   int result = 0;
   for (InternalIndex i : this->IterateEntries()) {
-    Object k;
+    Tagged<Object> k;
     if (!this->ToKey(roots, i, &k)) continue;
     if (Object::FilterKey(k, ENUMERABLE_STRINGS)) continue;
     PropertyDetails details = this->DetailsAt(i);
@@ -5998,7 +6006,7 @@ Handle<FixedArray> BaseNameDictionary<Derived, Shape>::IterationIndices(
     DisallowGarbageCollection no_gc;
     Tagged<Derived> raw_dictionary = *dictionary;
     for (InternalIndex i : dictionary->IterateEntries()) {
-      Object k;
+      Tagged<Object> k;
       if (!raw_dictionary->ToKey(roots, i, &k)) continue;
       array->set(array_size++, Smi::FromInt(i.as_int()));
     }
@@ -6022,13 +6030,14 @@ Handle<FixedArray> BaseNameDictionary<Derived, Shape>::IterationIndices(
 
 // Backwards lookup (slow).
 template <typename Derived, typename Shape>
-Object Dictionary<Derived, Shape>::SlowReverseLookup(Object value) {
+Tagged<Object> Dictionary<Derived, Shape>::SlowReverseLookup(
+    Tagged<Object> value) {
   Derived dictionary = Derived::cast(*this);
   ReadOnlyRoots roots = dictionary.GetReadOnlyRoots();
   for (InternalIndex i : dictionary.IterateEntries()) {
-    Object k;
+    Tagged<Object> k;
     if (!dictionary.ToKey(roots, i, &k)) continue;
-    Object e = dictionary.ValueAt(i);
+    Tagged<Object> e = dictionary.ValueAt(i);
     if (e == value) return k;
   }
   return roots.undefined_value();
@@ -6044,9 +6053,8 @@ void ObjectHashTableBase<Derived, Shape>::FillEntriesWithHoles(
 }
 
 template <typename Derived, typename Shape>
-Object ObjectHashTableBase<Derived, Shape>::Lookup(PtrComprCageBase cage_base,
-                                                   Handle<Object> key,
-                                                   int32_t hash) {
+Tagged<Object> ObjectHashTableBase<Derived, Shape>::Lookup(
+    PtrComprCageBase cage_base, Handle<Object> key, int32_t hash) {
   DisallowGarbageCollection no_gc;
   ReadOnlyRoots roots = this->GetReadOnlyRoots(cage_base);
   DCHECK(this->IsKey(roots, *key));
@@ -6069,7 +6077,7 @@ int NameToIndexHashTable::Lookup(Handle<Name> key) {
 }
 
 template <typename Derived, typename Shape>
-Object ObjectHashTableBase<Derived, Shape>::Lookup(Handle<Object> key) {
+Tagged<Object> ObjectHashTableBase<Derived, Shape>::Lookup(Handle<Object> key) {
   DisallowGarbageCollection no_gc;
 
   PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
@@ -6077,7 +6085,7 @@ Object ObjectHashTableBase<Derived, Shape>::Lookup(Handle<Object> key) {
   DCHECK(this->IsKey(roots, *key));
 
   // If the object does not have an identity hash, it was never used as a key.
-  Object hash = Object::GetHash(*key);
+  Tagged<Object> hash = Object::GetHash(*key);
   if (IsUndefined(hash, roots)) {
     return roots.the_hole_value();
   }
@@ -6085,26 +6093,27 @@ Object ObjectHashTableBase<Derived, Shape>::Lookup(Handle<Object> key) {
 }
 
 template <typename Derived, typename Shape>
-Object ObjectHashTableBase<Derived, Shape>::Lookup(Handle<Object> key,
-                                                   int32_t hash) {
+Tagged<Object> ObjectHashTableBase<Derived, Shape>::Lookup(Handle<Object> key,
+                                                           int32_t hash) {
   return Lookup(GetPtrComprCageBase(*this), key, hash);
 }
 
 template <typename Derived, typename Shape>
-Object ObjectHashTableBase<Derived, Shape>::ValueAt(InternalIndex entry) {
+Tagged<Object> ObjectHashTableBase<Derived, Shape>::ValueAt(
+    InternalIndex entry) {
   return this->get(EntryToValueIndex(entry));
 }
 
-Object RegisteredSymbolTable::ValueAt(InternalIndex entry) {
+Tagged<Object> RegisteredSymbolTable::ValueAt(InternalIndex entry) {
   return this->get(EntryToValueIndex(entry));
 }
 
-Object NameToIndexHashTable::ValueAt(InternalIndex entry) {
+Tagged<Object> NameToIndexHashTable::ValueAt(InternalIndex entry) {
   return this->get(EntryToValueIndex(entry));
 }
 
 int NameToIndexHashTable::IndexAt(InternalIndex entry) {
-  Object value = ValueAt(entry);
+  Tagged<Object> value = ValueAt(entry);
   if (IsSmi(value)) {
     int index = Smi::ToInt(value);
     DCHECK_LE(0, index);
@@ -6186,7 +6195,7 @@ Handle<Derived> ObjectHashTableBase<Derived, Shape>::Remove(
     bool* was_present) {
   DCHECK(table->IsKey(table->GetReadOnlyRoots(), *key));
 
-  Object hash = Object::GetHash(*key);
+  Tagged<Object> hash = Object::GetHash(*key);
   if (IsUndefined(hash)) {
     *was_present = false;
     return table;
@@ -6215,7 +6224,8 @@ Handle<Derived> ObjectHashTableBase<Derived, Shape>::Remove(
 
 template <typename Derived, typename Shape>
 void ObjectHashTableBase<Derived, Shape>::AddEntry(InternalIndex entry,
-                                                   Object key, Object value) {
+                                                   Tagged<Object> key,
+                                                   Tagged<Object> value) {
   Derived* self = static_cast<Derived*>(this);
   self->set_key(Derived::EntryToIndex(entry), key);
   self->set(Derived::EntryToValueIndex(entry), value);
@@ -6243,7 +6253,7 @@ std::array<Object, N> ObjectMultiHashTableBase<Derived, N>::Lookup(
   ReadOnlyRoots roots = this->GetReadOnlyRoots(cage_base);
   DCHECK(this->IsKey(roots, *key));
 
-  Object hash_obj = Object::GetHash(*key);
+  Tagged<Object> hash_obj = Object::GetHash(*key);
   if (IsUndefined(hash_obj, roots)) {
     return {roots.the_hole_value(), roots.the_hole_value()};
   }
@@ -6412,11 +6422,11 @@ Handle<JSArray> JSWeakCollection::GetEntries(Handle<JSWeakCollection> holder,
     int count = 0;
     for (int i = 0;
          count / values_per_entry < max_entries && i < table->Capacity(); i++) {
-      Object key;
+      Tagged<Object> key;
       if (table->ToKey(roots, InternalIndex(i), &key)) {
         entries->set(count++, key);
         if (values_per_entry > 1) {
-          Object value = table->Lookup(handle(key, isolate));
+          Tagged<Object> value = table->Lookup(handle(key, isolate));
           entries->set(count++, value);
         }
       }
@@ -6455,27 +6465,30 @@ Handle<PropertyCell> PropertyCell::InvalidateAndReplaceEntry(
   return new_cell;
 }
 
-static bool RemainsConstantType(PropertyCell cell, Object value) {
+static bool RemainsConstantType(Tagged<PropertyCell> cell,
+                                Tagged<Object> value) {
   DisallowGarbageCollection no_gc;
   // TODO(dcarney): double->smi and smi->double transition from kConstant
   if (IsSmi(cell->value()) && IsSmi(value)) {
     return true;
   } else if (IsHeapObject(cell->value()) && IsHeapObject(value)) {
-    Map map = HeapObject::cast(value)->map();
+    Tagged<Map> map = HeapObject::cast(value)->map();
     return HeapObject::cast(cell->value())->map() == map && map->is_stable();
   }
   return false;
 }
 
 // static
-PropertyCellType PropertyCell::InitialType(Isolate* isolate, Object value) {
+PropertyCellType PropertyCell::InitialType(Isolate* isolate,
+                                           Tagged<Object> value) {
   return IsUndefined(value, isolate) ? PropertyCellType::kUndefined
                                      : PropertyCellType::kConstant;
 }
 
 // static
-PropertyCellType PropertyCell::UpdatedType(Isolate* isolate, PropertyCell cell,
-                                           Object value,
+PropertyCellType PropertyCell::UpdatedType(Isolate* isolate,
+                                           Tagged<PropertyCell> cell,
+                                           Tagged<Object> value,
                                            PropertyDetails details) {
   DisallowGarbageCollection no_gc;
   DCHECK(!IsAnyHole(value, isolate));
@@ -6502,7 +6515,7 @@ Handle<PropertyCell> PropertyCell::PrepareForAndSetValue(
     Isolate* isolate, Handle<GlobalDictionary> dictionary, InternalIndex entry,
     Handle<Object> value, PropertyDetails details) {
   DCHECK(!IsAnyHole(*value, isolate));
-  PropertyCell raw_cell = dictionary->CellAt(entry);
+  Tagged<PropertyCell> raw_cell = dictionary->CellAt(entry);
   CHECK(!IsAnyHole(raw_cell->value(), isolate));
   const PropertyDetails original_details = raw_cell->property_details();
   // Data accesses could be cached in ics or optimized code.
@@ -6551,7 +6564,7 @@ void PropertyCell::InvalidateProtector() {
 
 // static
 bool PropertyCell::CheckDataIsCompatible(PropertyDetails details,
-                                         Object value) {
+                                         Tagged<Object> value) {
   DisallowGarbageCollection no_gc;
   PropertyCellType cell_type = details.cell_type();
   CHECK_NE(cell_type, PropertyCellType::kInTransition);
@@ -6568,7 +6581,7 @@ bool PropertyCell::CheckDataIsCompatible(PropertyDetails details,
 
 #ifdef DEBUG
 bool PropertyCell::CanTransitionTo(PropertyDetails new_details,
-                                   Object new_value) const {
+                                   Tagged<Object> new_value) const {
   // Extending the implementation of PropertyCells with additional states
   // and/or transitions likely requires changes to PropertyCellData::Serialize.
   DisallowGarbageCollection no_gc;
@@ -6612,30 +6625,30 @@ int JSGeneratorObject::source_position() const {
              ->shared()
              ->GetBytecodeArray(isolate)
              ->HasSourcePositionTable());
-  AbstractCode code =
+  Tagged<AbstractCode> code =
       AbstractCode::cast(function()->shared()->GetBytecodeArray(isolate));
   return code->SourcePosition(isolate, code_offset());
 }
 
 // static
-AccessCheckInfo AccessCheckInfo::Get(Isolate* isolate,
-                                     Handle<JSObject> receiver) {
+Tagged<AccessCheckInfo> AccessCheckInfo::Get(Isolate* isolate,
+                                             Handle<JSObject> receiver) {
   DisallowGarbageCollection no_gc;
   DCHECK(receiver->map()->is_access_check_needed());
-  Object maybe_constructor = receiver->map()->GetConstructor();
+  Tagged<Object> maybe_constructor = receiver->map()->GetConstructor();
   if (IsFunctionTemplateInfo(maybe_constructor)) {
-    Object data_obj =
+    Tagged<Object> data_obj =
         FunctionTemplateInfo::cast(maybe_constructor)->GetAccessCheckInfo();
     if (IsUndefined(data_obj, isolate)) return AccessCheckInfo();
     return AccessCheckInfo::cast(data_obj);
   }
   // Might happen for a detached context.
   if (!IsJSFunction(maybe_constructor)) return AccessCheckInfo();
-  JSFunction constructor = JSFunction::cast(maybe_constructor);
+  Tagged<JSFunction> constructor = JSFunction::cast(maybe_constructor);
   // Might happen for the debug context.
   if (!constructor->shared()->IsApiFunction()) return AccessCheckInfo();
 
-  Object data_obj =
+  Tagged<Object> data_obj =
       constructor->shared()->api_func_data()->GetAccessCheckInfo();
   if (IsUndefined(data_obj, isolate)) return AccessCheckInfo();
 
@@ -6728,20 +6741,20 @@ void JSFinalizationRegistry::RemoveCellFromUnregisterTokenMap(
     Isolate* isolate, Address raw_finalization_registry,
     Address raw_weak_cell) {
   DisallowGarbageCollection no_gc;
-  JSFinalizationRegistry finalization_registry =
+  Tagged<JSFinalizationRegistry> finalization_registry =
       JSFinalizationRegistry::cast(Object(raw_finalization_registry));
-  WeakCell weak_cell = WeakCell::cast(Object(raw_weak_cell));
+  Tagged<WeakCell> weak_cell = WeakCell::cast(Object(raw_weak_cell));
   DCHECK(!IsUndefined(weak_cell->unregister_token(), isolate));
-  HeapObject undefined = ReadOnlyRoots(isolate).undefined_value();
+  Tagged<HeapObject> undefined = ReadOnlyRoots(isolate).undefined_value();
 
   // Remove weak_cell from the linked list of other WeakCells with the same
   // unregister token and remove its unregister token from key_map if necessary
   // without shrinking it. Since shrinking may allocate, it is performed by the
   // caller after looping, or on exception.
   if (IsUndefined(weak_cell->key_list_prev(), isolate)) {
-    SimpleNumberDictionary key_map =
+    Tagged<SimpleNumberDictionary> key_map =
         SimpleNumberDictionary::cast(finalization_registry->key_map());
-    HeapObject unregister_token = weak_cell->unregister_token();
+    Tagged<HeapObject> unregister_token = weak_cell->unregister_token();
     uint32_t key = Smi::ToInt(Object::GetHash(unregister_token));
     InternalIndex entry = key_map->FindEntry(isolate, key);
     DCHECK(entry.is_found());
@@ -6754,17 +6767,17 @@ void JSFinalizationRegistry::RemoveCellFromUnregisterTokenMap(
     } else {
       // weak_cell is the list head for its key; we need to change the value
       // of the key in the hash table.
-      WeakCell next = WeakCell::cast(weak_cell->key_list_next());
+      Tagged<WeakCell> next = WeakCell::cast(weak_cell->key_list_next());
       DCHECK_EQ(next->key_list_prev(), weak_cell);
       next->set_key_list_prev(undefined);
       key_map->ValueAtPut(entry, next);
     }
   } else {
     // weak_cell is somewhere in the middle of its key list.
-    WeakCell prev = WeakCell::cast(weak_cell->key_list_prev());
+    Tagged<WeakCell> prev = WeakCell::cast(weak_cell->key_list_prev());
     prev->set_key_list_next(weak_cell->key_list_next());
     if (!IsUndefined(weak_cell->key_list_next())) {
-      WeakCell next = WeakCell::cast(weak_cell->key_list_next());
+      Tagged<WeakCell> next = WeakCell::cast(weak_cell->key_list_next());
       next->set_key_list_prev(weak_cell->key_list_prev());
     }
   }
@@ -6777,7 +6790,7 @@ void JSFinalizationRegistry::RemoveCellFromUnregisterTokenMap(
 }
 
 // static
-bool MapWord::IsMapOrForwarded(Map map) {
+bool MapWord::IsMapOrForwarded(Tagged<Map> map) {
   MapWord map_word = map->map_word(kRelaxedLoad);
 
   if (map_word.IsForwardingAddress()) {
