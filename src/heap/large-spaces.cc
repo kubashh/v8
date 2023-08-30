@@ -39,9 +39,9 @@ LargeObjectSpaceObjectIterator::LargeObjectSpaceObjectIterator(
 
 Tagged<HeapObject> LargeObjectSpaceObjectIterator::Next() {
   if (current_ == nullptr) return Tagged<HeapObject>();
-
   Tagged<HeapObject> object = current_->GetObject();
   current_ = current_->next_page();
+  DCHECK(!IsFreeSpaceOrFiller(object));
   return object;
 }
 
@@ -102,15 +102,16 @@ AllocationResult OldLargeObjectSpace::AllocateRaw(int object_size,
     return AllocationResult::Failure();
   }
 
+  heap()->StartIncrementalMarkingIfAllocationLimitIsReached(
+      heap()->GCFlagsForIncrementalMarking(),
+      kGCCallbackScheduleIdleGarbageCollection);
+
   LargePage* page = AllocateLargePage(object_size, executable);
   if (page == nullptr) return AllocationResult::Failure();
   page->SetOldGenerationPageFlags(
       heap()->incremental_marking()->marking_mode());
   HeapObject object = page->GetObject();
   UpdatePendingObject(object);
-  heap()->StartIncrementalMarkingIfAllocationLimitIsReached(
-      heap()->GCFlagsForIncrementalMarking(),
-      kGCCallbackScheduleIdleGarbageCollection);
   if (heap()->incremental_marking()->black_allocation()) {
     heap()->marking_state()->TryMarkAndAccountLiveBytes(object);
   }

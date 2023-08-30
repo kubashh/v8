@@ -62,20 +62,20 @@ Handle<Object> HeapTester::TestAllocateAfterFailures() {
   heap->CreateFillerObjectAt(obj.address(), size);
 
   // Large object space.
-  static const size_t kLargeObjectSpaceFillerLength =
-      3 * (Page::kPageSize / 10);
-  static const size_t kLargeObjectSpaceFillerSize =
-      FixedArray::SizeFor(kLargeObjectSpaceFillerLength);
-  CHECK_GT(kLargeObjectSpaceFillerSize,
+  // Large pages should contain no filler objects: mark this as a fixed array.
+  static const size_t kLargeObjectLength = 3 * (Page::kPageSize / 10);
+  static const size_t kLargeObjectSize =
+      FixedArray::SizeFor(kLargeObjectLength);
+  CHECK_GT(kLargeObjectSize,
            static_cast<size_t>(heap->old_space()->AreaSize()));
-  while (heap->OldGenerationSpaceAvailable() > kLargeObjectSpaceFillerSize) {
-    obj = heap->AllocateRaw(kLargeObjectSpaceFillerSize, AllocationType::kOld)
+  while (heap->OldGenerationSpaceAvailable() > kLargeObjectSize) {
+    obj = heap->AllocateRaw(kLargeObjectSize, AllocationType::kOld)
               .ToObjectChecked();
-    heap->CreateFillerObjectAt(obj.address(), size);
+    heap->CreateFixedArrayForTestingAt(obj.address(), size);
   }
-  obj = heap->AllocateRaw(kLargeObjectSpaceFillerSize, AllocationType::kOld)
+  obj = heap->AllocateRaw(kLargeObjectSize, AllocationType::kOld)
             .ToObjectChecked();
-  heap->CreateFillerObjectAt(obj.address(), size);
+  heap->CreateFixedArrayForTestingAt(obj.address(), size);
 
   // Map space.
   heap::SimulateFullSpace(heap->old_space());

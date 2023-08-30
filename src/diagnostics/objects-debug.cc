@@ -657,7 +657,7 @@ void EmbedderDataArray::EmbedderDataArrayVerify(Isolate* isolate) {
 
 void FixedArray::FixedArrayVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::FixedArrayVerify(*this, isolate);
-  if (*this == ReadOnlyRoots(isolate).empty_fixed_array()) {
+  if (SafeEquals(ReadOnlyRoots(isolate).empty_fixed_array())) {
     CHECK_EQ(length(), 0);
     CHECK_EQ(map(), ReadOnlyRoots(isolate).fixed_array_map());
   } else if (IsArrayList(*this)) {
