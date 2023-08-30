@@ -485,7 +485,12 @@ size_t ConcurrentMarking::GetMinorMaxConcurrency(size_t worker_count) {
                        ->remembered_sets_marking_handler()
                        ->RemainingRememberedSetsMarkingIteams();
   DCHECK(!marking_worklists_->IsUsingContextWorklists());
-  return std::min<size_t>(task_state_.size() - 1, worker_count + marking_items);
+  size_t desired_workers = worker_count + marking_items;
+  if (!heap_->minor_mark_sweep_collector()->is_in_atomic_pause()) {
+    static constexpr size_t kMaxConcurrentMarkers = 4;
+    desired_workers = std::min(desired_workers, kMaxConcurrentMarkers);
+  }
+  return std::min<size_t>(task_state_.size() - 1, desired_workers);
 }
 
 void ConcurrentMarking::TryScheduleJob(GarbageCollector garbage_collector,
