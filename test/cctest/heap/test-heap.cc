@@ -7045,7 +7045,8 @@ HEAP_TEST(CodeLargeObjectSpace) {
     ThreadIsolation::RegisterInstructionStreamAllocation(obj.address(),
                                                          size_in_bytes);
 
-    heap->CreateFillerObjectAt(obj.address(), size_in_bytes);
+    // Large pages should contain no filler objects: mark this as a fixed array.
+    heap->CreateFixedArrayForTestingAt(obj.address(), size_in_bytes);
   }
 
   CHECK(Heap::IsLargeObject(obj));
@@ -7103,7 +7104,9 @@ UNINITIALIZED_HEAP_TEST(CodeLargeObjectSpace64k) {
       ThreadIsolation::RegisterInstructionStreamAllocation(obj.address(),
                                                            size_in_bytes);
 
-      heap->CreateFillerObjectAt(obj.address(), size_in_bytes);
+      // Large pages should contain no filler objects: mark this as a fixed
+      // array.
+      heap->CreateFixedArrayForTestingAt(obj.address(), size_in_bytes);
     }
 
     CHECK(Heap::IsLargeObject(obj));
