@@ -270,7 +270,7 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
     BIND(&next);
   }
 
-  void PointerTableWriteBarrier(SaveFPRegsMode fp_mode) {
+  void IndirectPointerWriteBarrier(SaveFPRegsMode fp_mode) {
     // Currently, only objects living in (local) old space are referenced
     // through a pointer table indirection and we have DCHECKs in the CPP write
     // barrier code to check that. This simplifies the write barrier code for
@@ -286,6 +286,8 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
         UncheckedParameter<IntPtrT>(WriteBarrierDescriptor::kSlotAddress);
     TNode<IntPtrT> object = BitcastTaggedToWord(
         UncheckedParameter<Object>(WriteBarrierDescriptor::kObject));
+    TNode<IntPtrT> tag = UncheckedParameter<IntPtrT>(
+        WriteBarrierDescriptor::kIndirectPointerTag);
 
     TNode<ExternalReference> function = ExternalConstant(
         ExternalReference::
@@ -293,7 +295,8 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
     CallCFunctionWithCallerSavedRegisters(
         function, MachineTypeOf<Int32T>::value, fp_mode,
         std::make_pair(MachineTypeOf<IntPtrT>::value, object),
-        std::make_pair(MachineTypeOf<IntPtrT>::value, slot));
+        std::make_pair(MachineTypeOf<IntPtrT>::value, slot),
+        std::make_pair(MachineTypeOf<IntPtrT>::value, tag));
     Goto(&next);
 
     BIND(&next);
@@ -561,7 +564,7 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
       return;
     }
 
-    PointerTableWriteBarrier(fp_mode);
+    IndirectPointerWriteBarrier(fp_mode);
     IncrementCounter(isolate()->counters()->write_barriers(), 1);
     Return(TrueConstant());
   }

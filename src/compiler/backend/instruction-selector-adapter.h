@@ -256,6 +256,7 @@ struct TurbofanAdapter {
     node_t base() const { return node_->InputAt(0); }
     node_t index() const { return node_->InputAt(1); }
     node_t value() const { return node_->InputAt(2); }
+    node_t indirect_pointer_tag() const { return node_->InputAt(3); }
     int32_t displacement() const { return 0; }
     uint8_t element_size_log2() const { return 0; }
 
@@ -689,6 +690,7 @@ struct TurboshaftAdapter
     node_t base() const { return op_->base(); }
     node_t index() const { return op_->index(); }
     node_t value() const { return op_->value(); }
+    node_t indirect_pointer_tag() const { UNREACHABLE(); }
     int32_t displacement() const {
       static_assert(
           std::is_same_v<decltype(turboshaft::StoreOp::offset), int32_t>);
