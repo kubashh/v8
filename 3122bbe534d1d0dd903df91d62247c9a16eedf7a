@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0daf9ce4_e584bba9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-08-30T10:29:09Z",
+      "side": 1,
+      "message": "Reverted to patchset #1. PTAL.",
+      "revId": "3122bbe534d1d0dd903df91d62247c9a16eedf7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
