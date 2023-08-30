@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53895fd7_ff107f66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-30T12:41:15Z",
+      "side": 1,
+      "message": "Pinpoint (system_health.common_desktop:cnn:2021) indicates that this CL doesn\u0027t fix the LCP regression but it does improve it a bit.\nPinpoint also shows that the regression is gone with concurrent marking (and LCP even improves).",
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ce29c35_7554ac5a",
