@@ -21,6 +21,9 @@ class MinorGCJob {
   MinorGCJob() V8_NOEXCEPT = default;
 
   void ScheduleTask(Heap* heap);
+  void ScheduleTaskIfRequested(Heap* heap);
+
+  void CancelTask();
 
   static size_t YoungGenerationTaskTriggerSize(Heap* heap);
 
@@ -30,6 +33,7 @@ class MinorGCJob {
   static bool YoungGenerationSizeTaskTriggerReached(Heap* heap);
 
   bool task_pending_ = false;
+  bool task_requested_ = false;
 };
 }  // namespace internal
 }  // namespace v8

@@ -1170,7 +1170,11 @@ void Heap::GarbageCollectionPrologue(
   // evacuation of a non-full new space (or if we are on the last page) there
   // may be uninitialized memory behind top. We fill the remainder of the page
   // with a filler.
-  if (new_space()) new_space()->MakeLinearAllocationAreaIterable();
+  if (new_space()) {
+    new_space()->MakeLinearAllocationAreaIterable();
+    DCHECK_NOT_NULL(minor_gc_job());
+    minor_gc_job()->CancelTask();
+  }
 
   // Reset GC statistics.
   promoted_objects_size_ = 0;

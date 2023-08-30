@@ -50,6 +50,11 @@ void MinorGCJob::ScheduleTask(Heap* heap) {
   // due to refining allocated bytes after sweeping (allocated bytes after
   // sweeping may be less than live bytes during marking), new space size may
   // decrease while the observer step size remains the same.
+  if (v8_flags.minor_ms && heap->ShouldOptimizeForLoadTime()) {
+    task_requested_ = true;
+    return;
+  }
+  task_requested_ = false;
   std::shared_ptr<v8::TaskRunner> taskrunner = heap->GetForegroundTaskRunner();
   if (taskrunner->NonNestableTasksEnabled()) {
     taskrunner->PostNonNestableTask(
@@ -58,26 +63,27 @@ void MinorGCJob::ScheduleTask(Heap* heap) {
   }
 }
 
+void MinorGCJob::ScheduleTaskIfRequested(Heap* heap) {
+  if (!task_requested_) return;
+  ScheduleTask(heap);
+}
+
+void MinorGCJob::CancelTask() { task_pending_ = false; }
+
 void MinorGCJob::Task::RunInternal() {
+  if (!job_->task_pending_) return;
+
   VMState<GC> state(isolate());
-  TRACE_EVENT_CALL_STATS_SCOPED(isolate(), "v8", "V8.Task");
+  TRACE_EVENT_CALL_STATS_SCOPED(isolate(), "v8", "V8.MinorGCJob.Task");
 
   job_->task_pending_ = false;
 
   Heap* heap = isolate()->heap();
+  DCHECK_IMPLIES(v8_flags.minor_ms, !heap->ShouldOptimizeForLoadTime());
+
   if (v8_flags.minor_ms &&
       isolate()->heap()->incremental_marking()->IsMajorMarking()) {
     // Don't trigger a MinorMS cycle while major incremental marking is active.
-    return;
-  }
-  if (!MinorGCJob::YoungGenerationSizeTaskTriggerReached(isolate()->heap()))
-    return;
-
-  if (v8_flags.minor_ms && heap->ShouldOptimizeForLoadTime()) {
-    // GC is not possible right now. Reschedule the task so that it runs again
-    // later (hopefuly after loading is done) to avoid reaching an allocation
-    // failure if possible.
-    heap->ScheduleMinorGCTaskIfNeeded();
     return;
   }
 
