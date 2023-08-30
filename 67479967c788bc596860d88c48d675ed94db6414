@@ -84,6 +84,53 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7789dbdc_c2c34ff8",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5938,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-08-30T13:29:11Z",
+      "side": 1,
+      "message": "For that reason, the comment is actually not correct if you use only the information in here. If for some other reason we started already, then the task would perform a step. Just from this callsite here you cannot tell.",
+      "parentUuid": "c11b222f_c8209e50",
+      "range": {
+        "startLine": 5938,
+        "startChar": 9,
+        "endLine": 5938,
+        "endChar": 17
+      },
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c834adc8_fb300c49",
+        "filename": "src/heap/minor-gc-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-08-30T13:29:11Z",
+      "side": 1,
+      "message": "This name is confusing me, even after reading it multiple times.\n\nHow about `SchedulePreviouslyRequestedTask()`?",
+      "range": {
+        "startLine": 66,
+        "startChar": 17,
+        "endLine": 66,
+        "endChar": 40
+      },
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5a91e56_1c981d70",
         "filename": "src/heap/minor-gc-job.cc",
         "patchSetId": 1
@@ -119,6 +166,30 @@
       "side": 1,
       "message": "We can\u0027t technically cancel the task since it\u0027s not a cancellable task.\nThis would tell the task to immediately bailout which is as close as we can get to cancelling it.",
       "parentUuid": "c5a91e56_1c981d70",
+      "range": {
+        "startLine": 71,
+        "startChar": 17,
+        "endLine": 71,
+        "endChar": 27
+      },
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec3fdf0_4dc86e86",
+        "filename": "src/heap/minor-gc-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-08-30T13:29:11Z",
+      "side": 1,
+      "message": "It\u0027s a cancelable task (L18). In order to properly cancel you would record the task id instead of a bool in `task_pending_` and cancel with that id.",
+      "parentUuid": "63a90d3c_4954014d",
       "range": {
         "startLine": 71,
         "startChar": 17,
