@@ -5670,8 +5670,16 @@ void BranchIfInt32ToBooleanTrue::SetValueLocationConstraints() {
 }
 void BranchIfInt32ToBooleanTrue::GenerateCode(MaglevAssembler* masm,
                                               const ProcessingState& state) {
-  __ CompareInt32(ToRegister(condition_input()), 0);
-  __ Branch(kNotEqual, if_true(), if_false(), state.next_block());
+  if (if_true() == state.next_block()) {
+    __ CompareAndBranch(ToRegister(condition_input()).W(), 0, kEqual,
+                        if_false()->label());
+  } else {
+    __ CompareAndBranch(ToRegister(condition_input()).W(), 0, kNotEqual,
+                        if_true()->label());
+    if (if_false() != state.next_block()) {
+      __ Jump(if_false()->label());
+    }
+  }
 }
 
 void BranchIfFloat64ToBooleanTrue::SetValueLocationConstraints() {
@@ -5747,15 +5755,33 @@ void BranchIfReferenceEqual::GenerateCode(MaglevAssembler* masm,
 
 void BranchIfInt32Compare::SetValueLocationConstraints() {
   UseRegister(left_input());
-  UseRegister(right_input());
+  if (right_input().node()->Is<Int32Constant>()) {
+    UseAny(right_input());
+  } else {
+    UseRegister(right_input());
+  }
 }
 void BranchIfInt32Compare::GenerateCode(MaglevAssembler* masm,
                                         const ProcessingState& state) {
   Register left = ToRegister(left_input());
-  Register right = ToRegister(right_input());
-  __ CompareInt32(left, right);
-  __ Branch(ConditionFor(operation_), if_true(), if_false(),
-            state.next_block());
+  Condition cond = ConditionFor(operation_);
+  if (auto constant = right_input().node()->TryCast<Int32Constant>()) {
+    if (if_true() == state.next_block()) {
+      __ CompareAndBranch(left.W(), constant->value(), NegateCondition(cond),
+                          if_false()->label());
+    } else {
+      __ CompareAndBranch(left.W(), constant->value(), cond,
+                          if_true()->label());
+      if (if_false() != state.next_block()) {
+        __ Jump(if_false()->label());
+      }
+    }
+  } else {
+    Register right = ToRegister(right_input());
+    __ CompareInt32(left, right);
+    __ Branch(ConditionFor(operation_), if_true(), if_false(),
+              state.next_block());
+  }
 }
 
 void BranchIfUndefinedOrNull::SetValueLocationConstraints() {
