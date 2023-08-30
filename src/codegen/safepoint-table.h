@@ -114,7 +114,7 @@ class SafepointTable {
   }
 
   // Returns the entry for the given pc.
-  SafepointEntry FindEntry(Address pc) const;
+  SafepointEntry FindEntry(Address pc, int hot_size = 0) const;
   static SafepointEntry FindEntry(Isolate* isolate, GcSafeCode code,
                                   Address pc);
 

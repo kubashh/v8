@@ -455,8 +455,9 @@ InstructionBlock* InstructionSequenceTest::NewBlock(bool deferred) {
     }
   }
   // Construct instruction block.
-  auto instruction_block = zone()->New<InstructionBlock>(
-      zone(), rpo, loop_header, loop_end, Rpo::Invalid(), deferred, false);
+  auto instruction_block =
+      zone()->New<InstructionBlock>(zone(), rpo, loop_header, loop_end,
+                                    Rpo::Invalid(), deferred, false, false);
   instruction_blocks_.push_back(instruction_block);
   current_block_ = instruction_block;
   sequence()->StartBlock(rpo);

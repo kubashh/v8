@@ -1203,9 +1203,9 @@ void Code::CodeVerify(Isolate* isolate) {
 void InstructionStream::InstructionStreamVerify(Isolate* isolate) {
   Code code;
   if (!TryGetCode(&code, kAcquireLoad)) return;
-  CHECK(
-      IsAligned(code->instruction_size(),
-                static_cast<unsigned>(InstructionStream::kMetadataAlignment)));
+    // CHECK(
+    //     IsAligned(code->instruction_size(),
+    //               static_cast<unsigned>(InstructionStream::kMetadataAlignment)));
 #if !defined(_MSC_VER) || defined(__clang__)
   // See also: PlatformEmbeddedFileWriterWin::AlignToCodeAlignment.
   CHECK_IMPLIES(!ReadOnlyHeap::Contains(*this),

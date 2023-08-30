@@ -106,7 +106,9 @@ void OffHeapInstructionStream::CreateOffHeapOffHeapInstructionStream(
     Isolate* isolate, uint8_t** code, uint32_t* code_size, uint8_t** data,
     uint32_t* data_size) {
   // Create the embedded blob from scratch using the current Isolate's heap.
-  EmbeddedData d = EmbeddedData::NewFromIsolate(isolate);
+  EmbeddedData::PrepareDataAndCode(isolate);
+  EmbeddedData d = EmbeddedData::NewFromIsolateWithPatch(isolate);
+  // EmbeddedData d = EmbeddedData::NewFromIsolate(isolate);
 
   // Allocate the backing store that will contain the embedded blob in this
   // Isolate. The backing store is on the native heap, *not* on V8's garbage-
@@ -143,6 +145,7 @@ void OffHeapInstructionStream::CreateOffHeapOffHeapInstructionStream(
   if (v8_flags.experimental_flush_embedded_blob_icache) {
     FlushInstructionCache(allocated_code_bytes, d.code_size());
   }
+
   CHECK(SetPermissions(page_allocator, allocated_code_bytes,
                        allocation_code_size, PageAllocator::kReadExecute));
 
@@ -190,6 +193,8 @@ void FinalizeEmbeddedCodeTargets(Isolate* isolate, EmbeddedData* blob) {
     // jumps for isolate independent builtins in the snapshot. This fixes up the
     // relative jumps to the right offsets in the snapshot.
     // See also: InstructionStream::IsIsolateIndependent.
+    PrintF("finalize cross builtin jump in builtin %s\n",
+           Builtins::name(builtin));
     while (!on_heap_it.done()) {
       DCHECK(!off_heap_it.done());
 
@@ -200,7 +205,9 @@ void FinalizeEmbeddedCodeTargets(Isolate* isolate, EmbeddedData* blob) {
 
       // Do not emit write-barrier for off-heap writes.
       off_heap_it.rinfo()->set_off_heap_target_address(
-          blob->InstructionStartOf(target_code->builtin_id()));
+          blob->InstructionStartOf(target_code.builtin_id()));
+      PrintF("pc is 0x%lx, offset is 0x%lx\n", off_heap_it.rinfo()->pc(),
+             on_heap_it.rinfo()->pc() - code.instruction_start());
 
       on_heap_it.next();
       off_heap_it.next();
@@ -415,6 +422,569 @@ EmbeddedData EmbeddedData::NewFromIsolate(Isolate* isolate) {
   if (v8_flags.serialization_statistics) d.PrintStatistics();
 
   return d;
+}
+
+// static
+EmbeddedData EmbeddedData::NewFromIsolateWithPatch(Isolate* isolate) {
+  // Patch data and code here, needs to modify hash inside the embedded data
+  // We should also patch the Code object in isolate->builtin_table()
+  Builtins* builtins = isolate->builtins();
+  // Address* builtins_code_object_pointers = isolate->builtin_table();
+
+  // Store instruction stream lengths and offsets.
+  std::vector<struct LayoutDescription> layout_descriptions(kTableSize);
+  std::vector<struct BuiltinLookupEntry> offset_descriptions(kTableSize);
+
+  bool saw_unsafe_builtin = false;
+  uint32_t raw_code_size = 0;
+  uint32_t raw_data_size = 0;
+  static_assert(Builtins::kAllBuiltinsAreIsolateIndependent);
+
+  std::vector<Builtin> reordered_builtins;
+  if (v8_flags.reorder_builtins &&
+      BuiltinsCallGraph::Get()->all_hash_matched()) {
+    DCHECK(v8_flags.turbo_profiling_input.value());
+    // TODO(ishell, v8:13938): avoid the binary size overhead for non-mksnapshot
+    // binaries.
+    BuiltinsSorter sorter;
+    std::vector<uint32_t> builtin_sizes;
+    for (Builtin i = Builtins::kFirst; i <= Builtins::kLast; ++i) {
+      Code code = builtins->code(i);
+      uint32_t instruction_size =
+          static_cast<uint32_t>(code->instruction_size());
+      uint32_t padding_size = PadAndAlignCode(instruction_size);
+      builtin_sizes.push_back(padding_size);
+    }
+    reordered_builtins = sorter.SortBuiltins(
+        v8_flags.turbo_profiling_input.value(), builtin_sizes);
+    CHECK_EQ(reordered_builtins.size(), Builtins::kBuiltinCount);
+    for (uint32_t i = 0; i < reordered_builtins.size(); i++) {
+      PrintF("the %d th builtin is %s\n", i,
+             Builtins::name(reordered_builtins.at(i)));
+    }
+  }
+
+  // We will traversal builtins in embedded snapshot order instead of builtin id
+  // order.
+  // Hot first
+  for (ReorderedBuiltinIndex embedded_index = 0;
+       embedded_index < Builtins::kBuiltinCount; embedded_index++) {
+    // TODO(v8:13938): Update the static_cast later when we introduce reordering
+    // builtins. At current stage builtin id equals to i in the loop, if we
+    // introduce reordering builtin, we may have to map them in another method.
+    Builtin builtin;
+    if (reordered_builtins.empty()) {
+      builtin = static_cast<Builtin>(embedded_index);
+    } else {
+      builtin = reordered_builtins[embedded_index];
+    }
+    int hot_id = static_cast<int>(builtin);
+    Code hot_code = builtins->code(builtin);
+
+    // Sanity-check that the given builtin is isolate-independent.
+    if (!hot_code.IsIsolateIndependent(isolate)) {
+      saw_unsafe_builtin = true;
+      fprintf(stderr, "%s is not isolate-independent.\n",
+              Builtins::name(builtin));
+    }
+
+    if (builtin_deffered_offset_->count(hot_id) != 0) {
+      hot_code.set_instruction_size(builtin_deffered_offset_->at(hot_id));
+    }
+
+    uint32_t instruction_size =
+        static_cast<uint32_t>(hot_code.instruction_size());
+    DCHECK_EQ(0, raw_code_size % kCodeAlignment);
+    {
+      // We use builtin id as index in layout_descriptions.
+      const int builtin_id = static_cast<int>(builtin);
+      struct LayoutDescription& layout_desc = layout_descriptions[builtin_id];
+      layout_desc.instruction_offset = raw_code_size;
+      layout_desc.instruction_length = instruction_size;
+      layout_desc.metadata_offset = raw_data_size;
+    }
+    // Align the start of each section.
+    raw_code_size += PadAndAlignCode(instruction_size);
+    raw_data_size += PadAndAlignData(hot_code.metadata_size());
+
+    {
+      // We use embedded index as index in offset_descriptions.
+      struct BuiltinLookupEntry& offset_desc =
+          offset_descriptions[embedded_index];
+      offset_desc.end_offset = raw_code_size;
+      offset_desc.builtin_id = static_cast<uint32_t>(builtin);
+    }
+  }
+
+  // For cold parts, it includes the real cold part of deferred blocks, and
+  // dummy cold part with empty inst stream
+
+  int last_cold_end_offset = 0;
+  int last_cold_builtin_id = 0;
+
+  for (ReorderedBuiltinIndex embedded_index = 0;
+       embedded_index < Builtins::kBuiltinCount; embedded_index++) {
+    Builtin hot_builtin;
+    if (reordered_builtins.empty()) {
+      hot_builtin = static_cast<Builtin>(embedded_index);
+    } else {
+      hot_builtin = reordered_builtins[embedded_index];
+    }
+    int hot_id = static_cast<int>(hot_builtin);
+    Code hot_code = builtins->code(hot_builtin);
+
+    bool is_splitted = false;
+    if (builtin_deffered_offset_->count(hot_id) != 0) {
+      is_splitted = true;
+    }
+
+    Builtin cold_builtin =
+        static_cast<Builtin>(hot_id + Builtins::kBuiltinCount);
+    const int cold_builtin_id = static_cast<int>(cold_builtin);
+    const int cold_embeded_index =
+        static_cast<int>(embedded_index + Builtins::kBuiltinCount);
+
+    uint32_t instruction_size = static_cast<uint32_t>(
+        builtin_original_size_->at(hot_id) - hot_code.instruction_size());
+    DCHECK_EQ(0, raw_code_size % kCodeAlignment);
+    if (is_splitted) {
+      // We use builtin id as index in layout_descriptions.
+      struct LayoutDescription& layout_desc =
+          layout_descriptions[cold_builtin_id];
+      layout_desc.instruction_offset = raw_code_size;
+      layout_desc.instruction_length = instruction_size;
+      layout_desc.metadata_offset = layout_descriptions[hot_id].metadata_offset;
+    } else {
+      struct LayoutDescription& layout_desc =
+          layout_descriptions[cold_builtin_id];
+      layout_desc.instruction_offset = 0xffffffff;
+      layout_desc.instruction_length = 0;
+      layout_desc.metadata_offset = layout_descriptions[hot_id].metadata_offset;
+
+      struct i::EmbeddedData::BuiltinLookupEntry& dummy_lookup_entry =
+          offset_descriptions[cold_embeded_index];
+
+      dummy_lookup_entry.end_offset = 0xffffffff;
+      dummy_lookup_entry.builtin_id = 0xffffffff;
+    }
+    // Align the start of each section.
+    if (instruction_size > 0)
+      raw_code_size += PadAndAlignCode(instruction_size);
+
+    if (is_splitted) {
+      struct BuiltinLookupEntry& offset_desc =
+          offset_descriptions[cold_embeded_index];
+      offset_desc.end_offset = raw_code_size;
+      offset_desc.builtin_id = static_cast<uint32_t>(cold_builtin_id);
+
+      last_cold_builtin_id = cold_builtin_id;
+      last_cold_end_offset = raw_code_size;
+    }
+  }
+
+  for (int builtin_id = Builtins::kBuiltinCount - 1; builtin_id >= 0;
+       builtin_id--) {
+    // Builtin builtin = Builtins::FromInt(builtin_id);
+    int dummy_id = builtin_id + Builtins::kBuiltinCount;
+
+    // struct i::EmbeddedData::LayoutDescription& dummy_layout_desc =
+    //     layout_descriptions[dummy_id];
+    struct i::EmbeddedData::BuiltinLookupEntry& dummy_lookup_entry =
+        offset_descriptions[dummy_id];
+
+    if (dummy_lookup_entry.end_offset != 0xffffffff) {
+      last_cold_end_offset = dummy_lookup_entry.end_offset;
+      last_cold_builtin_id = dummy_lookup_entry.builtin_id;
+      continue;
+    }
+    dummy_lookup_entry.end_offset = last_cold_end_offset;
+    dummy_lookup_entry.builtin_id = last_cold_builtin_id;
+
+    /*printf("%s_cold desc in snapshot size is 0x%x, offset is 0x%x\n",
+           Builtins::name(builtin), dummy_layout_desc.instruction_length,
+           dummy_lookup_entry.end_offset);*/
+  }
+
+  CHECK_WITH_MSG(
+      !saw_unsafe_builtin,
+      "One or more builtins marked as isolate-independent either contains "
+      "isolate-dependent code or aliases the off-heap trampoline register. "
+      "If in doubt, ask jgruber@");
+
+  // Allocate space for the code section, value-initialized to 0.
+  static_assert(RawCodeOffset() == 0);
+  const uint32_t blob_code_size = RawCodeOffset() + raw_code_size;
+  uint8_t* const blob_code = new uint8_t[blob_code_size]();
+
+  // Allocate space for the data section, value-initialized to 0.
+  static_assert(
+      IsAligned(FixedDataSize(), InstructionStream::kMetadataAlignment));
+  const uint32_t blob_data_size = FixedDataSize() + raw_data_size;
+  uint8_t* const blob_data = new uint8_t[blob_data_size]();
+
+  // Initially zap the entire blob, effectively padding the alignment area
+  // between two builtins with int3's (on x64/ia32).
+  ZapCode(reinterpret_cast<Address>(blob_code), blob_code_size);
+
+  // Hash relevant parts of the Isolate's heap and store the result.
+  {
+    static_assert(IsolateHashSize() == kSizetSize);
+    const size_t hash = isolate->HashIsolateForEmbeddedBlob();
+    std::memcpy(blob_data + IsolateHashOffset(), &hash, IsolateHashSize());
+  }
+
+  // Write the layout_descriptions tables.
+  DCHECK_EQ(LayoutDescriptionTableSize(),
+            sizeof(layout_descriptions[0]) * layout_descriptions.size());
+  std::memcpy(blob_data + LayoutDescriptionTableOffset(),
+              layout_descriptions.data(), LayoutDescriptionTableSize());
+
+  // Write the builtin_offset_descriptions tables.
+  DCHECK_EQ(BuiltinLookupEntryTableSize(),
+            sizeof(offset_descriptions[0]) * offset_descriptions.size());
+  std::memcpy(blob_data + BuiltinLookupEntryTableOffset(),
+              offset_descriptions.data(), BuiltinLookupEntryTableSize());
+
+  // .. and the variable-size data section.
+  uint8_t* const raw_metadata_start = blob_data + RawMetadataOffset();
+  static_assert(Builtins::kAllBuiltinsAreIsolateIndependent);
+  for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
+       ++builtin) {
+    Code code = builtins->code(builtin);
+    uint32_t offset =
+        layout_descriptions[static_cast<int>(builtin)].metadata_offset;
+    uint8_t* dst = raw_metadata_start + offset;
+    DCHECK_LE(RawMetadataOffset() + offset + code.metadata_size(),
+              blob_data_size);
+    std::memcpy(dst,
+                reinterpret_cast<uint8_t*>(
+                    code.instruction_start() +
+                    builtin_original_size_->at(static_cast<int>(builtin))),
+                code.metadata_size());
+  }
+  CHECK_IMPLIES(
+      kMaxPCRelativeCodeRangeInMB,
+      static_cast<size_t>(raw_code_size) <= kMaxPCRelativeCodeRangeInMB * MB);
+
+  // .. and the variable-size code section.
+  uint8_t* const raw_code_start = blob_code + RawCodeOffset();
+  static_assert(Builtins::kAllBuiltinsAreIsolateIndependent);
+
+  // Copy heap code(hot part) into offheap snapshot
+  for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
+       ++builtin) {
+    Code code = builtins->code(builtin);
+    uint32_t offset =
+        layout_descriptions[static_cast<int>(builtin)].instruction_offset;
+    uint8_t* dst = raw_code_start + offset;
+    PrintF("builtin: %s, offset is 0x%x, in snapshot is 0x%x\n",
+           Builtins::name(builtin), offset,
+           builtin_offset_in_snapshot_->at(static_cast<int>(builtin)));
+    CHECK_EQ(offset,
+             builtin_offset_in_snapshot_->at(static_cast<int>(builtin)));
+    DCHECK_LE(RawCodeOffset() + offset + code.instruction_size(),
+              blob_code_size);
+
+    // Print the copy process from on heap code to off heap embedded.s
+    // print end
+
+    std::memcpy(dst, reinterpret_cast<uint8_t*>(code.instruction_start()),
+                code.instruction_size());
+    /*printf("Copying hot part\n");
+    printf("0x0000 ");
+    for(int32_t i = 0; i < code.instruction_size(); i ++){
+      printf("%02x ", *(dst + i));
+      if((i + 1) % 8 == 0){
+        printf("\n0x%04x ", (i + 1));
+      }
+    }*/
+  }
+
+  // Copy heap code(cold part) into offheap snapshot
+  for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
+       ++builtin) {
+    // We don't have cold code object here, it's hot cold object
+    if (builtin_deffered_offset_->count(static_cast<int>(builtin)) == 0)
+      continue;
+    Code code = builtins->code(builtin);
+    int cold_id = static_cast<int>(builtin) + Builtins::kBuiltinCount;
+    uint32_t cold_offset = layout_descriptions[cold_id].instruction_offset;
+    uint32_t cold_size = layout_descriptions[cold_id].instruction_length;
+    int deferred_offset =
+        builtin_deffered_offset_->at(static_cast<int>(builtin));
+    if (cold_offset == 0xffffffff) {
+      // For dummy, we skip to copy
+      continue;
+    }
+    CHECK_EQ(cold_offset, builtin_offset_in_snapshot_->at(cold_id));
+    uint8_t* dst = raw_code_start + cold_offset;
+
+    std::memcpy(
+        dst,
+        reinterpret_cast<uint8_t*>(code.instruction_start()) + deferred_offset,
+        cold_size);
+    printf("Copying cold part for builtin %s\n", Builtins::name(builtin));
+    printf("0x0000 ");
+    for (uint32_t i = 0; i < cold_size; i++) {
+      printf("%02x ", *(dst + i));
+      if ((i + 1) % 8 == 0) {
+        printf("\n0x%04x ", (i + 1));
+      }
+    }
+    printf("\n");
+  }
+
+  EmbeddedData d(blob_code, blob_code_size, blob_data, blob_data_size);
+
+  // Fix up call targets that point to other embedded builtins.
+  // FinalizeEmbeddedCodeTargets(isolate, &d);
+
+  // Hash the blob and store the result.
+  {
+    static_assert(EmbeddedBlobDataHashSize() == kSizetSize);
+    const size_t data_hash = d.CreateEmbeddedBlobDataHash();
+    std::memcpy(blob_data + EmbeddedBlobDataHashOffset(), &data_hash,
+                EmbeddedBlobDataHashSize());
+
+    static_assert(EmbeddedBlobCodeHashSize() == kSizetSize);
+    const size_t code_hash = d.CreateEmbeddedBlobCodeHash();
+    std::memcpy(blob_data + EmbeddedBlobCodeHashOffset(), &code_hash,
+                EmbeddedBlobCodeHashSize());
+
+    DCHECK_EQ(data_hash, d.CreateEmbeddedBlobDataHash());
+    DCHECK_EQ(data_hash, d.EmbeddedBlobDataHash());
+    DCHECK_EQ(code_hash, d.CreateEmbeddedBlobCodeHash());
+    DCHECK_EQ(code_hash, d.EmbeddedBlobCodeHash());
+  }
+
+  if (DEBUG_BOOL) {
+    for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
+         ++builtin) {
+      Code code = builtins->code(builtin);
+      CHECK_EQ(d.InstructionSizeOf(builtin), code.instruction_size());
+    }
+  }
+
+  // Ensure that InterpreterEntryTrampolineForProfiling is relocatable.
+  // See v8_flags.interpreted_frames_native_stack for details.
+  EnsureRelocatable(
+      builtins->code(Builtin::kInterpreterEntryTrampolineForProfiling));
+
+  if (v8_flags.serialization_statistics) d.PrintStatistics();
+
+  return d;
+}
+
+// static
+void EmbeddedData::PrepareDataAndCode(Isolate* isolate) {
+  // Filter jumps with cross hot/cold part, because if both jump inst and jump
+  // target are in same part, we don't need to modify code(ip-related offset).
+  for (Builtin builtin_ix = Builtins::kFirst; builtin_ix <= Builtins::kLast;
+       ++builtin_ix) {
+    if (builtin_jumps_->count(static_cast<int32_t>(builtin_ix)) == 0) continue;
+    if (builtin_deffered_offset_->count(static_cast<int32_t>(builtin_ix)) !=
+        0) {
+      printf("deffered offset for %s is 0x%x\n", Builtins::name(builtin_ix),
+             builtin_deffered_offset_->at(static_cast<int32_t>(builtin_ix)));
+    } else {
+      // printf("non deffered offset for %s\n", Builtins::name(builtin_ix));
+      continue;
+    }
+    printf("Jumps for %s:\n", Builtins::name(builtin_ix));
+    int deffered_offset =
+        builtin_deffered_offset_->at(static_cast<int32_t>(builtin_ix));
+    Jumps jumps = builtin_jumps_->at(static_cast<int32_t>(builtin_ix));
+    Jumps fliter_jumps = Jumps();
+    for (uint32_t i = 0; i < jumps.size(); i++) {
+      Jump jump = jumps[i];
+      if (jump.first < deffered_offset && jump.second >= deffered_offset) {
+        fliter_jumps.push_back(std::make_pair(jump.first, jump.second));
+        printf("forward jump from 0x%x to 0x%x.\n", jump.first, jump.second);
+      }
+      if (jump.first >= deffered_offset && jump.second < deffered_offset) {
+        fliter_jumps.push_back(std::make_pair(jump.first, jump.second));
+        printf("backward jump from 0x%x to 0x%x.\n", jump.first, jump.second);
+      }
+    }
+    builtin_jumps_->erase(static_cast<int32_t>(builtin_ix));
+    builtin_jumps_->emplace(static_cast<int32_t>(builtin_ix), fliter_jumps);
+  }
+
+  for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
+       ++builtin) {
+    int builtin_id = static_cast<int32_t>(builtin);
+    if (cross_builtin_table_->count(builtin_id) == 0) continue;
+    CrossBuiltinJumps cross_jumps = cross_builtin_table_->at(builtin_id);
+    printf("builtin %s has cross builtin jumps:\n", Builtins::name(builtin));
+    for (uint32_t i = 0; i < cross_jumps.size(); i++) {
+      CrossBuiltinJump cross_jump = cross_jumps[i];
+      int offset = cross_jump.first;
+      // int target = cross_jump.second;
+      // Builtin target_builtin = static_cast<Builtin>(target);
+      // printf("cross jump from 0x%x to builtin %s\n", offset,
+      // Builtins::name(target_builtin));
+      printf("cross jump at 0x%x\n", offset);
+    }
+  }
+
+  std::vector<Builtin> reordered_builtins;
+  if (v8_flags.reorder_builtins &&
+      BuiltinsCallGraph::Get()->all_hash_matched()) {
+    DCHECK(v8_flags.turbo_profiling_input.value());
+    // TODO(ishell, v8:13938): avoid the binary size overhead for non-mksnapshot
+    // binaries.
+    BuiltinsSorter sorter;
+    std::vector<uint32_t> builtin_sizes;
+    for (Builtin i = Builtins::kFirst; i <= Builtins::kLast; ++i) {
+      Code code = isolate->builtins()->code(i);
+      uint32_t instruction_size =
+          static_cast<uint32_t>(code->instruction_size());
+      uint32_t padding_size = PadAndAlignCode(instruction_size);
+      builtin_sizes.push_back(padding_size);
+    }
+    reordered_builtins = sorter.SortBuiltins(
+        v8_flags.turbo_profiling_input.value(), builtin_sizes);
+    CHECK_EQ(reordered_builtins.size(), Builtins::kBuiltinCount);
+  }
+
+  // perpare for offset info
+  // hot part
+  int32_t snapshot_offset = 0;
+  for (int32_t embeded_index = 0; embeded_index < Builtins::kBuiltinCount;
+       embeded_index++) {
+    Builtin builtin;
+    if (reordered_builtins.empty()) {
+      builtin = static_cast<Builtin>(embeded_index);
+    } else {
+      builtin = reordered_builtins[embeded_index];
+    }
+    int builtin_id = static_cast<int>(builtin);
+    Code original_code = isolate->builtins()->code(builtin);
+    int original_size = original_code.instruction_size();
+    // PrintF("builtin_offset_in_snapshot_ is %p\n",
+    // builtin_offset_in_snapshot_); PrintF("builtin_offset_in_snapshot_ size is
+    // %zu\n", builtin_offset_in_snapshot_->size());
+    builtin_offset_in_snapshot_->emplace(builtin_id, snapshot_offset);
+    PrintF("Original size of %s is 0x%x\n", Builtins::name(builtin),
+           original_size);
+
+    builtin_original_size_->emplace(builtin_id, original_size);
+    int padded_size = 0;
+    if (builtin_deffered_offset_->count(builtin_id) == 0) {
+      padded_size = RoundUp<kCodeAlignment>(original_size + 1);
+    } else {
+      int hot_size = builtin_deffered_offset_->at(builtin_id);
+      padded_size = RoundUp<kCodeAlignment>(hot_size + 1);
+    }
+    snapshot_offset += padded_size;
+  }
+  printf("hot builtin offset is %zu\n", builtin_offset_in_snapshot_->size());
+  printf("hot builtin defferred offset size is %zu\n",
+         builtin_deffered_offset_->size());
+
+  // Cold part
+  for (int32_t embeded_index = 0; embeded_index < Builtins::kBuiltinCount;
+       embeded_index++) {
+    Builtin hot_builtin;
+    if (reordered_builtins.empty()) {
+      hot_builtin = static_cast<Builtin>(embeded_index);
+    } else {
+      hot_builtin = reordered_builtins[embeded_index];
+    }
+    int hot_id = static_cast<int>(hot_builtin);
+    Code original_code = isolate->builtins()->code(hot_builtin);
+    int original_size = original_code.instruction_size();
+
+    int32_t cold_id = hot_id + Builtins::kBuiltinCount;
+    if (builtin_deffered_offset_->count(hot_id) == 0) continue;
+    int builtin_deferred_offset = builtin_deffered_offset_->at(hot_id);
+    int cold_size = original_size - builtin_deferred_offset;
+    printf(
+        "%s original size is 0x%x, deferred offset is 0x%x, cold size is "
+        "0x%x\n",
+        Builtins::name(hot_builtin), original_size, builtin_deferred_offset,
+        cold_size);
+    int padded_size = RoundUp<kCodeAlignment>(cold_size + 1);
+    builtin_offset_in_snapshot_->emplace(cold_id, snapshot_offset);
+    snapshot_offset += padded_size;
+  }
+  printf("hot + cold builtin offset size is %zu\n",
+         builtin_offset_in_snapshot_->size());
+  printf("hot builtin defferred offset size is %zu\n",
+         builtin_deffered_offset_->size());
+
+  // Log offset in snapshot for hot part
+  for (int32_t hot_index = 0; hot_index < Builtins::kBuiltinCount;
+       hot_index++) {
+    printf("builtin %s", Builtins::name(static_cast<Builtin>(hot_index)));
+    if (builtin_deffered_offset_->count(hot_index) != 0) {
+      printf("_hot");
+    }
+    printf(" snapshot offset: 0x%x\n",
+           builtin_offset_in_snapshot_->at(hot_index));
+  }
+
+  // Log offset in snapshot for cold part
+  for (int32_t hot_index = 0; hot_index < Builtins::kBuiltinCount;
+       hot_index++) {
+    if (builtin_deffered_offset_->count(hot_index) == 0) continue;
+    printf("builtin %s_cold", Builtins::name(static_cast<Builtin>(hot_index)));
+    printf(
+        " snapshot offset: 0x%x\n",
+        builtin_offset_in_snapshot_->at(hot_index + Builtins::kBuiltinCount));
+  }
+
+  printf("builtin offset size is %zu\n", builtin_offset_in_snapshot_->size());
+  printf("builtin defferred offset size is %zu\n",
+         builtin_deffered_offset_->size());
+  printf("builtin count is %d\n", Builtins::kBuiltinCount);
+
+  static const int kRelocMask =
+      RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
+      RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET);
+
+  static_assert(Builtins::kAllBuiltinsAreIsolateIndependent);
+
+  for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
+       ++builtin) {
+    Code code = isolate->builtins()->code(builtin);
+    RelocIterator on_heap_it(code, kRelocMask);
+
+#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64) ||    \
+    defined(V8_TARGET_ARCH_ARM) || defined(V8_TARGET_ARCH_IA32) ||     \
+    defined(V8_TARGET_ARCH_S390) || defined(V8_TARGET_ARCH_RISCV64) || \
+    defined(V8_TARGET_ARCH_LOONG64) || defined(V8_TARGET_ARCH_RISCV32)
+    // On these platforms we emit relative builtin-to-builtin
+    // jumps for isolate independent builtins in the snapshot. This fixes up the
+    // relative jumps to the right offsets in the snapshot.
+    // See also: InstructionStream::IsIsolateIndependent.
+    while (!on_heap_it.done()) {
+      RelocInfo* rinfo = on_heap_it.rinfo();
+      Code target_code = Code::FromTargetAddress(rinfo->target_address());
+      CHECK(Builtins::IsIsolateIndependentBuiltin(target_code));
+
+      int caller_builtin_id = static_cast<int>(builtin);
+      int callee_builtin_id = static_cast<int>(target_code.builtin_id());
+      int jump_offset =
+          static_cast<int>(on_heap_it.rinfo()->pc() - code.instruction_start());
+      if (cross_builtin_table_->count(caller_builtin_id) == 0) {
+        cross_builtin_table_->emplace(caller_builtin_id, CrossBuiltinJumps());
+      }
+      cross_builtin_table_->at(caller_builtin_id)
+          .push_back(std::make_pair(jump_offset, callee_builtin_id));
+      // printf("%s calls %s at 0x%x\n", Builtins::name(builtin),
+      // Builtins::name(target_code.builtin_id()), jump_offset);
+
+      on_heap_it.next();
+    }
+#else
+    // Architectures other than x64 and arm/arm64 do not use pc-relative calls
+    // and thus must not contain embedded code targets. Instead, we use an
+    // indirection through the root register.
+    CHECK(on_heap_it.done());
+#endif
+  }
+  // perpare ending
 }
 
 size_t EmbeddedData::CreateEmbeddedBlobDataHash() const {

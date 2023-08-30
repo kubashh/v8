@@ -50,6 +50,10 @@ inline BranchHint NegateBranchHint(BranchHint hint) {
       return BranchHint::kFalse;
     case BranchHint::kFalse:
       return BranchHint::kTrue;
+    case BranchHint::kStrongTrue:
+      return BranchHint::kStrongFalse;
+    case BranchHint::kStrongFalse:
+      return BranchHint::kStrongTrue;
   }
   UNREACHABLE();
 }

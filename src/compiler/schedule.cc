@@ -16,6 +16,7 @@ BasicBlock::BasicBlock(Zone* zone, Id id)
     : loop_number_(-1),
       rpo_number_(-1),
       deferred_(false),
+      splitted_(false),
       dominator_depth_(-1),
       dominator_(nullptr),
       rpo_next_(nullptr),
@@ -425,6 +426,18 @@ void Schedule::PropagateDeferredMark() {
         }
         if (deferred) {
           block->set_deferred(true);
+          done = false;
+        }
+      }
+      if (!block->splitted()) {
+        bool splitted = block->PredecessorCount() > 0;
+        for (auto pred : block->predecessors()) {
+          if (!pred->splitted() && (pred->rpo_number() < block->rpo_number())) {
+            splitted = false;
+          }
+        }
+        if (splitted) {
+          block->set_splitted(true);
           done = false;
         }
       }

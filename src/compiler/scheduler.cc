@@ -485,6 +485,8 @@ class CFGBuilder : public ZoneObject {
           case BranchHint::kFalse:
             successor_blocks[0]->set_deferred(true);
             break;
+          default:
+            break;
         }
         break;
       case BranchHint::kTrue:
@@ -492,6 +494,18 @@ class CFGBuilder : public ZoneObject {
         break;
       case BranchHint::kFalse:
         successor_blocks[0]->set_deferred(true);
+        break;
+      case BranchHint::kStrongTrue:
+        // PrintF("Set block id: %d as splitted by profiling file:\n",
+        // successor_blocks[1]->id().ToInt());
+        successor_blocks[1]->set_deferred(true);
+        successor_blocks[1]->set_splitted(true);
+        break;
+      case BranchHint::kStrongFalse:
+        // PrintF("Set block id: %d as splitted by profiling file:\n",
+        // successor_blocks[0]->id().ToInt());
+        successor_blocks[0]->set_deferred(true);
+        successor_blocks[0]->set_splitted(true);
         break;
     }
 
@@ -1248,6 +1262,7 @@ void Scheduler::PropagateImmediateDominators(BasicBlock* block) {
     DCHECK(pred != end);  // All blocks except start have predecessors.
     BasicBlock* dominator = *pred;
     bool deferred = dominator->deferred();
+    bool splitted = dominator->splitted();
     // For multiple predecessors, walk up the dominator tree until a common
     // dominator is found. Visitation order guarantees that all predecessors
     // except for backwards edges have been visited.
@@ -1268,10 +1283,12 @@ void Scheduler::PropagateImmediateDominators(BasicBlock* block) {
       }
       cache = (*pred)->dominator();
       deferred = deferred & (*pred)->deferred();
+      splitted = splitted & (*pred)->splitted();
     }
     block->set_dominator(dominator);
     block->set_dominator_depth(dominator->dominator_depth() + 1);
     block->set_deferred(deferred | block->deferred());
+    block->set_splitted(splitted | block->splitted());
     TRACE("Block id:%d's idom is id:%d, depth = %d\n", block->id().ToInt(),
           dominator->id().ToInt(), block->dominator_depth());
   }

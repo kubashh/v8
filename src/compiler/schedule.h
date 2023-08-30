@@ -132,6 +132,15 @@ class V8_EXPORT_PRIVATE BasicBlock final
   bool deferred() const { return deferred_; }
   void set_deferred(bool deferred) { deferred_ = deferred; }
 
+  bool splitted() const {
+    DCHECK_IMPLIES(splitted_, deferred_);
+    return splitted_;
+  }
+  void set_splitted(bool splitted) {
+    splitted_ = splitted;
+    DCHECK_IMPLIES(splitted_, deferred_);
+  }
+
   int32_t dominator_depth() const { return dominator_depth_; }
   void set_dominator_depth(int32_t depth) { dominator_depth_ = depth; }
 
@@ -175,6 +184,8 @@ class V8_EXPORT_PRIVATE BasicBlock final
   int32_t loop_number_;      // loop number of the block.
   int32_t rpo_number_;       // special RPO number of the block.
   bool deferred_;            // true if the block contains deferred code.
+  bool
+      splitted_;  // true if the block could be splitted (for builtin only now).
   int32_t dominator_depth_;  // Depth within the dominator tree.
   BasicBlock* dominator_;    // Immediate dominator of the block.
   BasicBlock* rpo_next_;     // Link to next block in special RPO order.

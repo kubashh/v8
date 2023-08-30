@@ -4797,6 +4797,15 @@ void Heap::IterateBuiltins(RootVisitor* v) {
     v->VisitRootPointer(Root::kBuiltins, name, builtins->builtin_slot(builtin));
   }
 
+  for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLast;
+       ++builtin) {
+    Builtin cold_builtin =
+        Builtins::FromInt(static_cast<int>(builtin) + Builtins::kBuiltinCount);
+    const char* name = Builtins::name(builtin);
+    v->VisitRootPointer(Root::kBuiltins, name,
+                        builtins->builtin_slot(cold_builtin));
+  }
+
   for (Builtin builtin = Builtins::kFirst; builtin <= Builtins::kLastTier0;
        ++builtin) {
     v->VisitRootPointer(Root::kBuiltins, Builtins::name(builtin),

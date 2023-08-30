@@ -1137,7 +1137,7 @@ DEFINE_STRING(
     turbo_profiling_output, nullptr,
     "emit data about basic block usage in builtins to this file "
     "(requires that V8 was built with v8_enable_builtins_profiling=true)")
-DEFINE_BOOL(reorder_builtins, false,
+DEFINE_BOOL(reorder_builtins, true,
             "enable builtin reordering when run mksnapshot.")
 
 DEFINE_BOOL(abort_on_bad_builtin_profile_data, false,
@@ -1179,6 +1179,7 @@ DEFINE_BOOL(turbo_rewrite_far_jumps, true,
 DEFINE_BOOL_READONLY(turbo_rewrite_far_jumps, false,
                      "rewrite far to near jumps (ia32,x64)")
 #endif
+DEFINE_BOOL(is_mksnapshot, false, "rewrite far to near jumps (ia32,x64)")
 
 DEFINE_BOOL(
     turbo_rab_gsab, true,
@@ -1844,7 +1845,7 @@ DEFINE_STRING(arm_arch, ARM_ARCH_DEFAULT,
 DEFINE_BOOL(force_long_branches, false,
             "force all emitted branches to be in long mode (MIPS/PPC only)")
 DEFINE_STRING(mcpu, "auto", "enable optimization for specific cpu")
-DEFINE_BOOL(partial_constant_pool, true,
+DEFINE_BOOL(partial_constant_pool, false,
             "enable use of partial constant pools (X64 only)")
 DEFINE_STRING(sim_arm64_optional_features, "none",
               "enable optional features on the simulator for testing: none or "

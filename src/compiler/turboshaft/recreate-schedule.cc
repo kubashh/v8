@@ -1374,6 +1374,9 @@ Node* ScheduleBuilder::ProcessOperation(const BranchOp& op) {
     case BranchHint::kFalse:
       true_block->set_deferred(true);
       break;
+    default:
+      // Don't do anything for turboshaft.
+      break;
   }
   current_block = nullptr;
   return nullptr;

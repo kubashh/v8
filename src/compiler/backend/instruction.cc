@@ -638,7 +638,7 @@ void PhiInstruction::RenameInput(size_t offset, int virtual_register) {
 InstructionBlock::InstructionBlock(Zone* zone, RpoNumber rpo_number,
                                    RpoNumber loop_header, RpoNumber loop_end,
                                    RpoNumber dominator, bool deferred,
-                                   bool handler)
+                                   bool handler, bool splitted)
     : successors_(zone),
       predecessors_(zone),
       phis_(zone),
@@ -648,6 +648,7 @@ InstructionBlock::InstructionBlock(Zone* zone, RpoNumber rpo_number,
       loop_end_(loop_end),
       dominator_(dominator),
       deferred_(deferred),
+      splitted_(splitted),
       handler_(handler),
       switch_target_(false),
       code_target_alignment_(false),
@@ -655,7 +656,12 @@ InstructionBlock::InstructionBlock(Zone* zone, RpoNumber rpo_number,
       needs_frame_(false),
       must_construct_frame_(false),
       must_deconstruct_frame_(false),
-      omitted_by_jump_threading_(false) {}
+      omitted_by_jump_threading_(false) {
+  DCHECK_IMPLIES(splitted_, deferred_);
+  /*if(splitted_ && !deferred_){
+    PrintF("block rpo: %d is splitted but not deferred!\n", rpo_number.ToInt());
+  }*/
+}
 
 size_t InstructionBlock::PredecessorIndexOf(RpoNumber rpo_number) const {
   size_t j = 0;
@@ -696,7 +702,8 @@ static InstructionBlock* InstructionBlockFor(Zone* zone,
       !block->empty() && block->front()->opcode() == IrOpcode::kIfException;
   InstructionBlock* instr_block = zone->New<InstructionBlock>(
       zone, GetRpo(block), GetRpo(block->loop_header()), GetLoopEndRpo(block),
-      GetRpo(block->dominator()), block->deferred(), is_handler);
+      GetRpo(block->dominator()), block->deferred(), is_handler,
+      block->splitted());
   // Map successors and precessors
   instr_block->successors().reserve(block->SuccessorCount());
   for (BasicBlock* successor : block->successors()) {
@@ -724,7 +731,7 @@ static InstructionBlock* InstructionBlockFor(Zone* zone,
   bool deferred = false;
   InstructionBlock* instr_block = zone->New<InstructionBlock>(
       zone, GetRpo(block), GetRpo(loop_header), GetLoopEndRpo(block),
-      GetRpo(block->GetDominator()), deferred, is_handler);
+      GetRpo(block->GetDominator()), deferred, is_handler, false);
   // Map successors and predecessors.
   base::SmallVector<turboshaft::Block*, 4> succs =
       turboshaft::SuccessorBlocks(block->LastOperation(graph));
@@ -895,6 +902,7 @@ void InstructionSequence::ComputeAssemblyOrder() {
   for (InstructionBlock* const block : *instruction_blocks_) {
     DCHECK_NOT_NULL(block);
     if (block->IsDeferred()) continue;            // skip deferred blocks.
+    if (block->IsSplitted()) continue;            // skip splitted blocks.
     if (block->ao_number() != invalid) continue;  // loop rotated.
     if (block->IsLoopHeader()) {
       bool header_align = true;
@@ -922,12 +930,27 @@ void InstructionSequence::ComputeAssemblyOrder() {
     }
     block->set_ao_number(RpoNumber::FromInt(ao++));
     ao_blocks_->push_back(block);
+    // PrintF("push rpo block %d as non deferred and splitted\n",
+    // block->rpo_number().ToInt());
   }
-  // Add all leftover (deferred) blocks.
+  // Add all deferred blocks.
   for (InstructionBlock* const block : *instruction_blocks_) {
+    if (block->IsSplitted()) continue;  // skip splitted blocks.
     if (block->ao_number() == invalid) {
+      DCHECK(block->IsDeferred());
       block->set_ao_number(RpoNumber::FromInt(ao++));
       ao_blocks_->push_back(block);
+      // PrintF("push rpo block %d as deferred\n", block->rpo_number().ToInt());
+    }
+  }
+  // Add all splitted blocks.
+  for (InstructionBlock* const block : *instruction_blocks_) {
+    if (block->ao_number() == invalid) {
+      DCHECK(block->IsDeferred());
+      DCHECK(block->IsSplitted());
+      block->set_ao_number(RpoNumber::FromInt(ao++));
+      ao_blocks_->push_back(block);
+      // PrintF("push rpo block %d as splitted\n", block->rpo_number().ToInt());
     }
   }
   DCHECK_EQ(instruction_blocks_->size(), ao);
