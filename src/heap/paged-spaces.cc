@@ -325,9 +325,18 @@ void PagedSpaceBase::ShrinkImmortalImmovablePages() {
 
 Page* PagedSpaceBase::TryExpandImpl(
     MemoryAllocator::AllocationMode allocation_mode) {
+  base::MutexGuard expansion_guard(heap_->heap_expansion_mutex());
+  if (identity() != NEW_SPACE && !is_compaction_space() &&
+      heap()->OldGenerationCapacity() +
+              MemoryChunkLayout::AllocatableMemoryInMemoryChunk(identity()) >
+          heap()->max_old_generation_size()) {
+    return nullptr;
+  }
   Page* page = heap()->memory_allocator()->AllocatePage(allocation_mode, this,
                                                         executable());
   if (page == nullptr) return nullptr;
+  DCHECK_EQ(page->area_size(),
+            MemoryChunkLayout::AllocatableMemoryInMemoryChunk(identity()));
   ConcurrentAllocationMutex guard(this);
   AddPage(page);
   Free(page->area_start(), page->area_size(),
@@ -338,9 +347,17 @@ Page* PagedSpaceBase::TryExpandImpl(
 base::Optional<std::pair<Address, size_t>> PagedSpaceBase::TryExpandBackground(
     size_t size_in_bytes) {
   DCHECK_NE(NEW_SPACE, identity());
+  base::MutexGuard expansion_guard(heap_->heap_expansion_mutex());
+  if (heap()->OldGenerationCapacity() +
+          MemoryChunkLayout::AllocatableMemoryInMemoryChunk(identity()) >
+      heap()->max_old_generation_size()) {
+    return {};
+  }
   Page* page = heap()->memory_allocator()->AllocatePage(
       MemoryAllocator::AllocationMode::kRegular, this, executable());
   if (page == nullptr) return {};
+  DCHECK_EQ(page->area_size(),
+            MemoryChunkLayout::AllocatableMemoryInMemoryChunk(identity()));
   base::MutexGuard lock(&space_mutex_);
   AddPage(page);
   heap()->NotifyOldGenerationExpansionBackground(identity(), page);
