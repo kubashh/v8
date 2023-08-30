@@ -1292,22 +1292,29 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
                                    ExternalPointerTag tag) final {}
 
   inline void VisitIndirectPointer(HeapObject host, IndirectPointerSlot slot,
-                                   IndirectPointerMode mode) final {}
+                                   IndirectPointerMode mode,
+                                   IndirectPointerTag tag) final {}
 
   inline void VisitIndirectPointerTableEntry(HeapObject host,
-                                             IndirectPointerSlot slot) final {
-#ifdef V8_CODE_POINTER_SANDBOXING
-    // When an object owning an indirect pointer table entry is relocated, it
-    // needs to update the entry to point to its new location. Currently, only
-    // Code objects are referenced through indirect pointers, and they use the
-    // code pointer table.
-    DCHECK(IsCode(host));
-    static_assert(kAllIndirectPointerObjectsAreCode);
+                                             IndirectPointerSlot slot,
+                                             IndirectPointerTag tag) final {
     IndirectPointerHandle handle = slot.Relaxed_LoadHandle();
-    GetProcessWideCodePointerTable()->SetCodeObject(handle, host.ptr());
+    if (tag == kCodeIndirectPointerTag) {
+#ifdef V8_CODE_POINTER_SANDBOXING
+      // When an object owning an indirect pointer table entry is relocated, it
+      // needs to update the entry to point to its new location. Currently, only
+      // Code objects are referenced through indirect pointers, and they use the
+      // code pointer table.
+      DCHECK(IsCode(host));
+      GetProcessWideCodePointerTable()->SetCodeObject(handle, host.ptr());
 #else
-    UNREACHABLE();
+      UNREACHABLE();
 #endif
+      return;
+    }
+
+    IndirectPointerTable& table = heap_->isolate()->indirect_pointer_table();
+    table.Set(handle, host.ptr());
   }
 
  protected:

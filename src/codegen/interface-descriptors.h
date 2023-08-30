@@ -1265,9 +1265,12 @@ class FastNewObjectDescriptor
 class WriteBarrierDescriptor final
     : public StaticCallInterfaceDescriptor<WriteBarrierDescriptor> {
  public:
-  DEFINE_PARAMETERS_NO_CONTEXT(kObject, kSlotAddress)
+  // The kIndirectPointerTag parameter is only used when calling into one of the
+  // indirect pointer write barriers.
+  DEFINE_PARAMETERS_NO_CONTEXT(kObject, kSlotAddress, kIndirectPointerTag)
   DEFINE_PARAMETER_TYPES(MachineType::TaggedPointer(),  // kObject
-                         MachineType::Pointer())        // kSlotAddress
+                         MachineType::Pointer(),        // kSlotAddress
+                         MachineType::Uint64())         // kIndirectPointerTag
 
   DECLARE_DESCRIPTOR(WriteBarrierDescriptor)
   static constexpr auto registers();
@@ -1275,10 +1278,12 @@ class WriteBarrierDescriptor final
   static constexpr bool kCalleeSaveRegisters = true;
   static constexpr inline Register ObjectRegister();
   static constexpr inline Register SlotAddressRegister();
+  static constexpr inline Register IndirectPointerTagRegister();
   // A temporary register used in helpers.
   static constexpr inline Register ValueRegister();
   static constexpr inline RegList ComputeSavedRegisters(
-      Register object, Register slot_address = no_reg);
+      Register object, Register slot_address = no_reg,
+      Register indirect_pointer_tag = no_reg);
 #if DEBUG
   static void Verify(CallInterfaceDescriptorData* data);
 #endif

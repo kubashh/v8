@@ -286,15 +286,19 @@ constexpr Register WriteBarrierDescriptor::ObjectRegister() {
 constexpr Register WriteBarrierDescriptor::SlotAddressRegister() {
   return std::get<kSlotAddress>(registers());
 }
+// static
+constexpr Register WriteBarrierDescriptor::IndirectPointerTagRegister() {
+  return std::get<kIndirectPointerTag>(registers());
+}
 
 // static
 constexpr Register WriteBarrierDescriptor::ValueRegister() {
-  return std::get<kSlotAddress + 1>(registers());
+  return std::get<kIndirectPointerTag + 1>(registers());
 }
 
 // static
 constexpr RegList WriteBarrierDescriptor::ComputeSavedRegisters(
-    Register object, Register slot_address) {
+    Register object, Register slot_address, Register indirect_pointer_tag) {
   DCHECK(!AreAliased(object, slot_address));
   RegList saved_registers;
 #if V8_TARGET_ARCH_X64
@@ -303,11 +307,16 @@ constexpr RegList WriteBarrierDescriptor::ComputeSavedRegisters(
   if (slot_address != no_reg && slot_address != SlotAddressRegister()) {
     saved_registers.set(SlotAddressRegister());
   }
+  if (indirect_pointer_tag != no_reg &&
+      indirect_pointer_tag != IndirectPointerTagRegister()) {
+    saved_registers.set(IndirectPointerTagRegister());
+  }
 #elif V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_ARM || V8_TARGET_ARCH_LOONG64 || \
     V8_TARGET_ARCH_MIPS64
   if (object != ObjectRegister()) saved_registers.set(ObjectRegister());
   // The slot address is always clobbered.
   saved_registers.set(SlotAddressRegister());
+  // TODO what about the indirec pointer tag register?
 #else
   // TODO(cbruni): Enable callee-saved registers for other platforms.
   // This is a temporary workaround to prepare code for callee-saved registers.

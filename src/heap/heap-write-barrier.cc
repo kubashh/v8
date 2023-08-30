@@ -90,9 +90,10 @@ void WriteBarrier::MarkingSlow(DescriptorArray descriptor_array,
   marking_barrier->Write(descriptor_array, number_of_own_descriptors);
 }
 
-void WriteBarrier::MarkingSlow(HeapObject host, IndirectPointerSlot slot) {
+void WriteBarrier::MarkingSlow(HeapObject host, IndirectPointerSlot slot,
+                               IndirectPointerTag tag) {
   MarkingBarrier* marking_barrier = CurrentMarkingBarrier(host);
-  marking_barrier->Write(host, slot);
+  marking_barrier->Write(host, slot, tag);
 }
 
 int WriteBarrier::MarkingFromCode(Address raw_host, Address raw_slot) {
@@ -128,7 +129,8 @@ int WriteBarrier::MarkingFromCode(Address raw_host, Address raw_slot) {
 }
 
 int WriteBarrier::IndirectPointerMarkingFromCode(Address raw_host,
-                                                 Address raw_slot) {
+                                                 Address raw_slot,
+                                                 Address raw_tag) {
   HeapObject host = HeapObject::cast(Object(raw_host));
   IndirectPointerSlot slot(raw_slot);
 
@@ -145,7 +147,9 @@ int WriteBarrier::IndirectPointerMarkingFromCode(Address raw_host,
   barrier->AssertMarkingIsActivated();
 #endif  // DEBUG
 
-  WriteBarrier::Marking(host, slot);
+  IndirectPointerTag tag = static_cast<IndirectPointerTag>(raw_tag);
+  DCHECK(IsValidIndirectPointerTag(tag));
+  WriteBarrier::Marking(host, slot, tag);
   // Called by WriteBarrierCodeStubAssembler, which doesn't accept void type
   return 0;
 }

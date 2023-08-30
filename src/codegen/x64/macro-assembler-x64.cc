@@ -362,7 +362,7 @@ void MacroAssembler::DecompressTagged(Register destination,
 void MacroAssembler::RecordWriteField(Register object, int offset,
                                       Register value, Register slot_address,
                                       SaveFPRegsMode save_fp,
-                                      SmiCheck smi_check, PointerType type) {
+                                      SmiCheck smi_check, SlotDescriptor slot) {
   ASM_CODE_COMMENT(this);
   DCHECK(!AreAliased(object, value, slot_address));
   // First, check if a write barrier is even needed. The tests below
@@ -388,7 +388,7 @@ void MacroAssembler::RecordWriteField(Register object, int offset,
     bind(&ok);
   }
 
-  RecordWrite(object, slot_address, value, save_fp, SmiCheck::kOmit, type);
+  RecordWrite(object, slot_address, value, save_fp, SmiCheck::kOmit, slot);
 
   bind(&done);
 
@@ -472,23 +472,38 @@ void MacroAssembler::LoadExternalPointerField(
 
 void MacroAssembler::LoadIndirectPointerField(Register destination,
                                               Operand field_operand,
+                                              IndirectPointerTag tag,
                                               Register scratch) {
   DCHECK(!AreAliased(destination, scratch));
-#ifdef V8_CODE_POINTER_SANDBOXING
   DCHECK(!field_operand.AddressUsesRegister(scratch));
-  static_assert(kAllIndirectPointerObjectsAreCode);
-  LoadAddress(scratch, ExternalReference::code_pointer_table_address());
+
+  // Move the IndirectPointerHandle into destination
   movl(destination, field_operand);
-  shrl(destination, Immediate(kCodePointerHandleShift));
-  shll(destination, Immediate(kCodePointerTableEntrySizeLog2));
-  movq(destination, Operand(scratch, destination, times_1,
-                            kCodePointerTableEntryCodeObjectOffset));
+
+  if (tag == kCodeIndirectPointerTag) {
+#ifdef V8_CODE_POINTER_SANDBOXING
+    LoadAddress(scratch, ExternalReference::code_pointer_table_address());
+    shrl(destination, Immediate(kCodePointerHandleShift));
+    shll(destination, Immediate(kCodePointerTableEntrySizeLog2));
+    movq(destination, Operand(scratch, destination, times_1,
+                              kCodePointerTableEntryCodeObjectOffset));
+#else
+    UNREACHABLE();
+#endif  // V8_CODE_POINTER_SANDBOXING
+  } else {
+    DCHECK(root_array_available_);
+    movq(scratch,
+         Operand(kRootRegister,
+                 IsolateData::indirect_pointer_table_offset() +
+                     Internals::kIndirectPointerTableBasePointerOffset));
+    shrl(destination, Immediate(kIndirectPointerHandleShift));
+    static_assert(kIndirectPointerTableEntrySize == 8);
+    movq(destination, Operand(scratch, destination, times_8, 0));
+  }
+
   // The LSB is used as marking bit by the code pointer table, so here we have
   // to set it using a bitwise OR as it may or may not be set.
   orq(destination, Immediate(kHeapObjectTag));
-#else
-  movq(destination, field_operand);
-#endif  // V8_CODE_POINTER_SANDBOXING
 }
 
 void MacroAssembler::StoreIndirectPointerField(Operand dst_field_operand,
@@ -549,7 +564,7 @@ void MacroAssembler::CallRecordWriteStubSaveRegisters(Register object,
                                                       Register slot_address,
                                                       SaveFPRegsMode fp_mode,
                                                       StubCallMode mode,
-                                                      PointerType type) {
+                                                      SlotDescriptor slot) {
   ASM_CODE_COMMENT(this);
   DCHECK(!AreAliased(object, slot_address));
   RegList registers =
@@ -561,13 +576,14 @@ void MacroAssembler::CallRecordWriteStubSaveRegisters(Register object,
   MovePair(object_parameter, object, slot_address_parameter, slot_address);
 
   CallRecordWriteStub(object_parameter, slot_address_parameter, fp_mode, mode,
-                      type);
+                      slot);
   PopAll(registers);
 }
 
 void MacroAssembler::CallRecordWriteStub(Register object, Register slot_address,
                                          SaveFPRegsMode fp_mode,
-                                         StubCallMode mode, PointerType type) {
+                                         StubCallMode mode,
+                                         SlotDescriptor slot) {
   ASM_CODE_COMMENT(this);
   // Use CallRecordWriteStubSaveRegisters if the object and slot registers
   // need to be caller saved.
@@ -575,7 +591,7 @@ void MacroAssembler::CallRecordWriteStub(Register object, Register slot_address,
   DCHECK_EQ(WriteBarrierDescriptor::SlotAddressRegister(), slot_address);
 #if V8_ENABLE_WEBASSEMBLY
   if (mode == StubCallMode::kCallWasmRuntimeStub) {
-    DCHECK_EQ(type, PointerType::kDirect);
+    DCHECK(slot.contains_direct_pointer());
     // Use {near_call} for direct Wasm call within a module.
     auto wasm_target = wasm::WasmCode::GetRecordWriteStub(fp_mode);
     near_call(wasm_target, RelocInfo::WASM_STUB_CALL);
@@ -583,8 +599,17 @@ void MacroAssembler::CallRecordWriteStub(Register object, Register slot_address,
   if (false) {
 #endif
   } else {
-    Builtin builtin = Builtins::GetRecordWriteStub(fp_mode, type);
-    CallBuiltin(builtin);
+    if (slot.contains_direct_pointer()) {
+      CallBuiltin(Builtins::GetRecordWriteStub(fp_mode));
+    } else {
+      DCHECK(slot.contains_indirect_pointer());
+      // TODO(saelo) this is almost certainly wrong? Can we just push the
+      // previous content of that register onto the stack and pop afterwards?
+      Register tag_parameter =
+          WriteBarrierDescriptor::IndirectPointerTagRegister();
+      Move(tag_parameter, slot.indirect_pointer_tag());
+      CallBuiltin(Builtins::GetIndirectPointerBarrierStub(fp_mode));
+    }
   }
 }
 
@@ -679,7 +704,7 @@ void MacroAssembler::CallTSANRelaxedLoadStub(Register address,
 
 void MacroAssembler::RecordWrite(Register object, Register slot_address,
                                  Register value, SaveFPRegsMode fp_mode,
-                                 SmiCheck smi_check, PointerType type) {
+                                 SmiCheck smi_check, SlotDescriptor slot) {
   ASM_CODE_COMMENT(this);
   DCHECK(!AreAliased(object, slot_address, value));
   AssertNotSmi(object);
@@ -691,13 +716,13 @@ void MacroAssembler::RecordWrite(Register object, Register slot_address,
   if (v8_flags.debug_code) {
     ASM_CODE_COMMENT_STRING(this, "Debug check slot_address");
     Label ok;
-    if (type == PointerType::kIndirect) {
+    if (slot.contains_indirect_pointer()) {
       Push(object);  // Use object register as scratch
       Register scratch = object;
       Push(slot_address);  // Use slot address register to load the value into
       Register value_in_slot = slot_address;
       LoadIndirectPointerField(value_in_slot, Operand(slot_address, 0),
-                               scratch);
+                               slot.indirect_pointer_tag(), scratch);
       cmp_tagged(value, value_in_slot);
       // These pops don't affect the flag registers, so we can do them before
       // the conditional jump below.
@@ -731,7 +756,7 @@ void MacroAssembler::RecordWrite(Register object, Register slot_address,
                 Label::kNear);
 
   CallRecordWriteStub(object, slot_address, fp_mode,
-                      StubCallMode::kCallBuiltinPointer, type);
+                      StubCallMode::kCallBuiltinPointer, slot);
 
   bind(&done);
 
@@ -973,8 +998,10 @@ void MacroAssembler::ReplaceClosureCodeWithOptimizedCode(
   Register value = scratch1;
   movq(value, optimized_code);
 
-  RecordWriteField(closure, JSFunction::kCodeOffset, value, slot_address,
-                   SaveFPRegsMode::kIgnore, SmiCheck::kOmit, kCodePointerType);
+  RecordWriteField(
+      closure, JSFunction::kCodeOffset, value, slot_address,
+      SaveFPRegsMode::kIgnore, SmiCheck::kOmit,
+      SlotDescriptor::ForMaybeIndirectPointerSlot(kCodeIndirectPointerTag));
 }
 
 // Read off the flags in the feedback vector and check if there
