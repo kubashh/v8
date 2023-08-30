@@ -3718,6 +3718,7 @@ ReduceResult MaglevGraphBuilder::TryBuildElementStoreOnJSArrayOrJSObject(
               {elements_array}, FixedArray::kLengthOffset)});
     }
 
+<<<<<<< HEAD   (a8a503 Version 11.4.183.30)
     // Validate the {index} depending on holeyness:
     //
     // For HOLEY_*_ELEMENTS the {index} must not exceed the {elements}
@@ -3734,6 +3735,33 @@ ReduceResult MaglevGraphBuilder::TryBuildElementStoreOnJSArrayOrJSObject(
                   {elements_array_length, GetInt32Constant(JSObject::kMaxGap)})
             : AddNewNode<Int32AddWithOverflow>({length, GetInt32Constant(1)});
     AddNewNode<CheckBounds>({index, limit});
+=======
+      // Validate the {index} depending on holeyness:
+      //
+      // For HOLEY_*_ELEMENTS the {index} must not exceed the {elements}
+      // backing store capacity plus the maximum allowed gap, as otherwise
+      // the (potential) backing store growth would normalize and thus
+      // the elements kind of the {receiver} would change to slow mode.
+      //
+      // For JSArray PACKED_*_ELEMENTS the {index} must be within the range
+      // [0,length+1[ to be valid. In case {index} equals {length},
+      // the {receiver} will be extended, but kept packed.
+      //
+      // Non-JSArray PACKED_*_ELEMENTS always grow by adding holes because they
+      // lack the magical length property, which requires a map transition.
+      // So we can assume that this did not happen if we did not see this map.
+      ValueNode* limit =
+          IsHoleyElementsKind(elements_kind)
+              ? AddNewNode<Int32AddWithOverflow>(
+                    {elements_array_length,
+                     GetInt32Constant(JSObject::kMaxGap)})
+          : is_jsarray
+              ? AddNewNode<Int32AddWithOverflow>({length, GetInt32Constant(1)})
+              : elements_array_length;
+      AddNewNode<CheckInt32Condition>({index, limit},
+                                      AssertCondition::kUnsignedLessThan,
+                                      DeoptimizeReason::kOutOfBounds);
+>>>>>>> CHANGE (ae7dc6 [turbofan] Growing a non-JSArray packed elements kind makes )
 
     // Grow backing store if necessary and handle COW.
     elements_array = AddNewNode<MaybeGrowAndEnsureWritableFastElements>(
