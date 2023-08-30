@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b03fc73b_e6c3902c",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-08-30T14:44:16Z",
+      "side": 0,
+      "message": "If this means that the default case is unreachable, let\u0027s change the `default:` to `UNREACHABLE()`. 😊",
+      "range": {
+        "startLine": 1545,
+        "startChar": 4,
+        "endLine": 1545,
+        "endChar": 42
+      },
+      "revId": "471524c4535ee3436ac5c7464f06b5a6e0f28aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
