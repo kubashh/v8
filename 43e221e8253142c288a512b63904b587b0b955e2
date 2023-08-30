@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fa70d0c_10176252",
+        "filename": "src/heap/minor-gc-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-30T11:01:20Z",
+      "side": 0,
+      "message": "Drive-by: This bailout was intended for the case where a GC happens between scheduling the task and actually running it. It assumed the task is scheduled on when the trigger is reached. We saw yesterday that this is not really the case (see lines 46-52 above), in which case the task would bailout without doing a GC even though it\u0027s still needed. I\u0027m replacing this bailout with a more explicit `CancelTask` method called on GC and the matching bailout in line 74.",
+      "range": {
+        "startLine": 73,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 11
+      },
+      "revId": "43e221e8253142c288a512b63904b587b0b955e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

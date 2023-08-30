@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67a640c3_d5afb53a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-30T11:01:20Z",
+      "side": 1,
+      "message": "ptal",
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ce29c35_7554ac5a",
+        "filename": "src/heap/minor-gc-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-30T11:01:20Z",
+      "side": 1,
+      "message": "Renaming the scope so it\u0027s easier to know where it comes from next time I see it on a trace.",
+      "range": {
+        "startLine": 77,
+        "startChar": 53,
+        "endLine": 77,
+        "endChar": 63
+      },
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
