@@ -3229,6 +3229,11 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
 
   PipelineImpl pipeline(&data);
 
+  if (v8_flags.is_mksnapshot) {
+    current_builtin_ = static_cast<int32_t>(builtin);
+    PrintF("modify current_builtin_ as %d\n", current_builtin_);
+  }
+
   if (info.trace_turbo_json() || info.trace_turbo_graph()) {
     CodeTracer::StreamScope tracing_scope(data.GetCodeTracer());
     tracing_scope.stream()
@@ -4329,6 +4334,10 @@ MaybeHandle<Code> PipelineImpl::FinalizeCode(bool retire_broker) {
         << " using TurboFan" << std::endl;
   }
   data->EndPhaseKind();
+  if (v8_flags.is_mksnapshot) {
+    current_builtin_ = static_cast<int32_t>(-1);
+    // PrintF("modify current_builtin_ as %d\n", current_builtin_);
+  }
   return code;
 }
 

@@ -90,6 +90,7 @@ class Builtins {
   static constexpr Builtin kLast = static_cast<Builtin>(kBuiltinCount - 1);
   static constexpr Builtin kLastTier0 =
       static_cast<Builtin>(kBuiltinTier0Count - 1);
+  static constexpr int kDoubleBuiltinCount = 2 * kBuiltinCount;
 
   static constexpr int kFirstWideBytecodeHandler =
       static_cast<int>(Builtin::kFirstBytecodeHandler) +
@@ -108,7 +109,7 @@ class Builtins {
   static constexpr bool IsBuiltinId(int maybe_id) {
     static_assert(static_cast<int>(Builtin::kNoBuiltinId) == -1);
     return static_cast<uint32_t>(maybe_id) <
-           static_cast<uint32_t>(kBuiltinCount);
+           static_cast<uint32_t>(kDoubleBuiltinCount);
   }
   static constexpr bool IsTier0(Builtin builtin) {
     return builtin <= kLastTier0 && IsBuiltinId(builtin);

@@ -28,9 +28,9 @@ class ProfileDataFromFileInternal : public ProfileDataFromFile {
 
   void AddHintToBlock(size_t true_block_id, size_t false_block_id,
                       uint64_t hint) {
-    CHECK_LT(hint, 2);
-    block_hints_by_id.insert(std::make_pair(
-        std::make_pair(true_block_id, false_block_id), hint != 0));
+    CHECK_LT(hint, 4);
+    block_hints_by_id.insert(
+        std::make_pair(std::make_pair(true_block_id, false_block_id), hint));
   }
 
 #ifdef LOG_BUILTIN_BLOCK_COUNT

@@ -6,6 +6,7 @@
 
 #include <cstring>
 
+#include "src/common/globals.h"
 #include "src/utils/utils.h"
 
 #if V8_TARGET_ARCH_X64
@@ -494,6 +495,16 @@ void Assembler::bind_to(Label* L, int pos) {
         // Relative address, relative to point after address.
         int imm32 = pos - (current + sizeof(int32_t));
         long_at_put(current, imm32);
+        if (v8_flags.is_mksnapshot && current_builtin_ != -1 &&
+            builtin_jumps_) {
+          if (builtin_jumps_->count(current_builtin_) == 0) {
+            builtin_jumps_->emplace(current_builtin_, Jumps());
+          }
+          // PrintF("Add a forward jump from 0x%x to 0x%x\n", current, pos);
+          // PrintF("Write 0x%x in 0x%x\n", imm32, current);
+          builtin_jumps_->at(current_builtin_)
+              .push_back(std::make_pair(current, pos));
+        }
       }
       current = next;
       next = long_at(next);
@@ -508,6 +519,15 @@ void Assembler::bind_to(Label* L, int pos) {
       // Relative address, relative to point after address.
       int imm32 = pos - (current + sizeof(int32_t));
       long_at_put(current, imm32);
+      if (v8_flags.is_mksnapshot && current_builtin_ != -1 && builtin_jumps_) {
+        if (builtin_jumps_->count(current_builtin_) == 0) {
+          builtin_jumps_->emplace(current_builtin_, Jumps());
+        }
+        // PrintF("Add a forward jump from 0x%x to 0x%x\n", current, pos);
+        // PrintF("Write 0x%08x in 0x%x\n", imm32, current);
+        builtin_jumps_->at(current_builtin_)
+            .push_back(std::make_pair(current, pos));
+      }
     }
   }
   while (L->is_near_linked()) {
@@ -1409,6 +1429,14 @@ void Assembler::int3() {
 
 void Assembler::j(Condition cc, Label* L, Label::Distance distance) {
   EnsureSpace ensure_space(this);
+
+  if (v8_flags.is_mksnapshot) {
+    if (distance == Label::kNear) {
+      // printf("jcc near found at 0x%x!\n", pc_offset());
+    }
+    distance = Label::kFar;
+  }
+
   DCHECK(is_uint4(cc));
   if (L->is_bound()) {
     const int short_size = 2;
@@ -1424,11 +1452,27 @@ void Assembler::j(Condition cc, Label* L, Label::Distance distance) {
     // how often it did this so that it can adjust return addresses on the
     // stack, but if the size of jump instructions can also change, that's not
     // enough and the calculated offsets would be incorrect.
-    if (is_int8(offs - short_size) && !predictable_code_size()) {
+
+    // Enforce to disable near jump here!
+    if (v8_flags.is_mksnapshot && current_builtin_ == -1 &&
+        is_int8(offs - short_size) && !predictable_code_size()) {
       // 0111 tttn #8-bit disp.
       emit(0x70 | cc);
       emit((offs - short_size) & 0xFF);
     } else {
+      if (v8_flags.is_mksnapshot) {
+        int start = pc_offset();
+        if (current_builtin_ != -1 && builtin_jumps_) {
+          // PrintF("add once!\n");
+          // PrintF("add backward jump from 0x%x to 0x%x\n", start + 1,
+          // L->pos());
+          if (builtin_jumps_->count(current_builtin_) == 0) {
+            builtin_jumps_->emplace(current_builtin_, Jumps());
+          }
+          builtin_jumps_->at(current_builtin_)
+              .push_back(std::make_pair(start + 2, L->pos()));
+        }
+      }
       // 0000 1111 1000 tttn #32-bit disp.
       emit(0x0F);
       emit(0x80 | cc);
@@ -1461,7 +1505,8 @@ void Assembler::j(Condition cc, Label* L, Label::Distance distance) {
       }
     }
     if (L->is_linked()) {
-      // 0000 1111 1000 tttn #32-bit disp.
+      // printf("Assembler::j missed 1 at 0x%x!\n", pc_offset());
+      //  0000 1111 1000 tttn #32-bit disp.
       emit(0x0F);
       emit(0x80 | cc);
       emitl(L->pos());
@@ -1469,6 +1514,7 @@ void Assembler::j(Condition cc, Label* L, Label::Distance distance) {
     } else {
       // If this fires a near label is reused for a far jump, missing an
       // optimization opportunity.
+      // printf("Assembler::j missed 2 at 0x%x!\n", pc_offset());
       DCHECK(!L->is_near_linked());
       DCHECK(L->is_unused());
       emit(0x0F);
@@ -1508,10 +1554,12 @@ void Assembler::jmp_rel(int32_t offset) {
   constexpr int32_t kShortJmpDisplacement = 1 + sizeof(int8_t);
   constexpr int32_t kNearJmpDisplacement = 1 + sizeof(int32_t);
   DCHECK_LE(std::numeric_limits<int32_t>::min() + kNearJmpDisplacement, offset);
-  if (is_int8(offset - kShortJmpDisplacement) && !predictable_code_size()) {
+  if (v8_flags.is_mksnapshot && current_builtin_ == -1 &&
+      is_int8(offset - kShortJmpDisplacement) && !predictable_code_size()) {
     // 0xEB #8-bit disp.
     emit(0xEB);
     emit(offset - kShortJmpDisplacement);
+    // printf("Assembler::jmp_rel is error at 0x%x!\n", pc_offset());
   } else {
     // 0xE9 #32-bit disp.
     emit(0xE9);
@@ -1522,10 +1570,28 @@ void Assembler::jmp_rel(int32_t offset) {
 void Assembler::jmp(Label* L, Label::Distance distance) {
   const int long_size = sizeof(int32_t);
 
+  if (v8_flags.is_mksnapshot) {
+    if (distance == Label::kNear) {
+      // printf("near found at 0x%x!\n", pc_offset());
+    }
+    distance = Label::kFar;
+    // PrintF("jmp Label, offset: 0x%x!\n", start);
+  }
+  int start = pc_offset();
   if (L->is_bound()) {
     int offset = L->pos() - pc_offset();
     DCHECK_LE(offset, 0);  // backward jump.
     jmp_rel(offset);
+    // PrintF("current_builtin_ is %d now\n", current_builtin_);
+    if (v8_flags.is_mksnapshot && current_builtin_ != -1 && builtin_jumps_) {
+      // PrintF("add once!\n");
+      // PrintF("add backward jump from 0x%x to 0x%x\n", start + 1, L->pos());
+      if (builtin_jumps_->count(current_builtin_) == 0) {
+        builtin_jumps_->emplace(current_builtin_, Jumps());
+      }
+      builtin_jumps_->at(current_builtin_)
+          .push_back(std::make_pair(start + 1, L->pos()));
+    }
     return;
   }
 
@@ -1571,6 +1637,12 @@ void Assembler::jmp(Label* L, Label::Distance distance) {
       L->link_to(current);
     }
   }
+  /*int end = pc_offset();
+  PrintF("new code:\n0x");
+  for(int i = start; i < end; i++){
+    PrintF("%x", *(buffer_start() + i));
+  }
+  PrintF("\n");*/
 }
 
 void Assembler::jmp(Handle<Code> target, RelocInfo::Mode rmode) {

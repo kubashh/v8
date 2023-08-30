@@ -61,6 +61,8 @@ PARSER.add_argument(
     'output_file',
     help="The file which the hints and builtin hashes are written to")
 
+split_ratio = 1000
+
 ARGS = vars(PARSER.parse_args())
 
 BLOCK_COUNT_MARKER = "block"
@@ -115,6 +117,9 @@ def parse_log_file(log_file):
 
 def get_branch_hints(block_counts, branches, min_count, threshold_ratio):
   branch_hints = {}
+  defer_count = 0
+  split_count = 0
+  other_cout = 0
   for (builtin_name, true_block_id, false_block_id) in branches:
     if builtin_name in block_counts:
       true_block_count = 0
@@ -124,14 +129,31 @@ def get_branch_hints(block_counts, branches, min_count, threshold_ratio):
       if false_block_id < len(block_counts[builtin_name]):
         false_block_count = block_counts[builtin_name][false_block_id]
       hint = -1
-      if (true_block_count >= min_count) and (true_block_count / threshold_ratio
-                                              >= false_block_count):
+      if (true_block_count >= min_count) and (true_block_count / split_ratio >=
+                                              false_block_count):
+        # kStrongTrue
+        hint = 3
+        split_count += 1
+      elif (false_block_count >= min_count) and (false_block_count / split_ratio
+                                                 >= true_block_count):
+        # kStrongFalse
+        hint = 2
+        split_count += 1
+      elif (true_block_count >= min_count) and (
+          true_block_count / threshold_ratio >= false_block_count):
         hint = 1
+        defer_count += 1
       elif (false_block_count >= min_count) and (
           false_block_count / threshold_ratio >= true_block_count):
         hint = 0
+        defer_count += 1
+      else:
+        other_cout += 1
+        pass
       if hint >= 0:
         branch_hints[(builtin_name, true_block_id, false_block_id)] = hint
+  print("defer {} split {} other {}".format(defer_count, split_count,
+                                            other_cout))
   return branch_hints
 
 

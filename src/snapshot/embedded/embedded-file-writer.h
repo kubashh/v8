@@ -149,11 +149,30 @@ class EmbeddedFileWriter : public EmbeddedFileWriterInterface {
     w->DeclareSymbolGlobal(EmbeddedBlobDataSymbol().c_str());
     w->DeclareLabel(EmbeddedBlobDataSymbol().c_str());
 
+    // We have patched data section(like layout desc and lookup entries)
+    // in NewFromIsolateWithPatch, hence we could directly write it instead of
+    // using WriteDataBinary here.
+    // WriteDataBinary(w, blob);
     WriteBinaryContentsAsInlineAssembly(w, blob->data(), blob->data_size());
   }
 
+  void WriteDataBinary(PlatformEmbeddedFileWriterBase* w,
+                       const i::EmbeddedData* blob) const;
+
   void WriteBuiltin(PlatformEmbeddedFileWriterBase* w,
                     const i::EmbeddedData* blob, const Builtin builtin) const;
+
+  void WriteHotBuiltin(PlatformEmbeddedFileWriterBase* w,
+                       const i::EmbeddedData* blob,
+                       const Builtin builtin) const;
+
+  void WriteColdBuiltin(PlatformEmbeddedFileWriterBase* w,
+                        const i::EmbeddedData* blob,
+                        const Builtin builtin) const;
+
+  void WriteNonDeferredBuiltin(PlatformEmbeddedFileWriterBase* w,
+                               const i::EmbeddedData* blob,
+                               const Builtin builtin) const;
 
   void WriteBuiltinLabels(PlatformEmbeddedFileWriterBase* w,
                           std::string name) const;
@@ -169,8 +188,10 @@ class EmbeddedFileWriter : public EmbeddedFileWriterInterface {
                             uint64_t rva_start, uint64_t rva_end) const;
 #endif
 
+  // the last parameter start_offset just works for print log!
   static void WriteBinaryContentsAsInlineAssembly(
-      PlatformEmbeddedFileWriterBase* w, const uint8_t* data, uint32_t size);
+      PlatformEmbeddedFileWriterBase* w, const uint8_t* data, uint32_t size,
+      uint32_t start_offset = 0);
 
   // In assembly directives, filename ids need to begin with 1.
   static constexpr int kFirstExternalFilenameId = 1;

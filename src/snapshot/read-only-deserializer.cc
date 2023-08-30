@@ -181,10 +181,12 @@ void ReadOnlyDeserializer::PostProcessNewObjects() {
         PushObjectToRehash(handle(o, isolate()));
       }
     }
+    // static int builtin_code_object_count = 0;
 
     if (InstanceTypeChecker::IsCode(instance_type)) {
+      // printf("builtin_code_object_count: %d\n", builtin_code_object_count++);
       Code code = Code::cast(o);
-      code->init_instruction_start(main_thread_isolate(), kNullAddress);
+      code.init_instruction_start(main_thread_isolate(), kNullAddress);
       // RO space only contains builtin Code objects which don't have an
       // attached InstructionStream.
       DCHECK(code->is_builtin());

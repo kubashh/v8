@@ -26,7 +26,20 @@ class ProfileDataFromFile {
     auto it =
         block_hints_by_id.find(std::make_pair(true_block_id, false_block_id));
     if (it != block_hints_by_id.end()) {
-      return it->second ? BranchHint::kTrue : BranchHint::kFalse;
+      switch (it->second) {
+        case 0:
+          return BranchHint::kFalse;
+          break;
+        case 1:
+          return BranchHint::kTrue;
+          break;
+        case 2:
+          return BranchHint::kStrongFalse;
+          break;
+        case 3:
+          return BranchHint::kStrongTrue;
+          break;
+      }
     }
     return BranchHint::kNone;
   }
@@ -49,7 +62,7 @@ class ProfileDataFromFile {
   // Branch hints, indicated by true or false to reflect the hinted result of
   // the branch condition. The vector is indexed by the basic block ids of
   // the two destinations of the branch.
-  std::map<std::pair<size_t, size_t>, bool> block_hints_by_id;
+  std::map<std::pair<size_t, size_t>, uint8_t> block_hints_by_id;
 
 #ifdef LOG_BUILTIN_BLOCK_COUNT
   std::unordered_map<size_t, uint64_t> executed_count_;

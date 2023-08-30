@@ -63,7 +63,7 @@ class Isolate;
     external_reference_table)                                                 \
   V(kBuiltinEntryTableOffset, Builtins::kBuiltinCount* kSystemPointerSize,    \
     builtin_entry_table)                                                      \
-  V(kBuiltinTableOffset, Builtins::kBuiltinCount* kSystemPointerSize,         \
+  V(kBuiltinTableOffset, Builtins::kDoubleBuiltinCount* kSystemPointerSize,   \
     builtin_table)
 
 #ifdef V8_COMPRESS_POINTERS
@@ -265,10 +265,13 @@ class IsolateData final {
   // InstructionStream::InstructionStart() for each InstructionStream object in
   // the builtins table below. The entry table is in IsolateData for easy access
   // through kRootRegister.
+  // We just entry hot builtins, hence there is just kBuiltinCount
   Address builtin_entry_table_[Builtins::kBuiltinCount] = {};
 
   // The entries in this array are tagged pointers to Code objects.
-  Address builtin_table_[Builtins::kBuiltinCount] = {};
+  // We will add placehold for each builtin with a cold part, hence there is 2 *
+  // kBuiltinCount
+  Address builtin_table_[Builtins::kDoubleBuiltinCount] = {};
 
   // Ensure the size is 8-byte aligned in order to make alignment of the field
   // following the IsolateData field predictable. This solves the issue with

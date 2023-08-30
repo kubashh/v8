@@ -607,8 +607,8 @@ if (v8_builtins_profiling_log_file == "default") {
   #   are accessed,
   # * v8_enable_webassembly because it changes the set of opcodes which affects
   #   graphs hashes,
-  if (v8_enable_builtins_optimization && !v8_enable_builtins_profiling &&
-      !is_debug && !dcheck_always_on && v8_enable_webassembly) {
+  if (!v8_enable_builtins_profiling && !is_debug && !dcheck_always_on &&
+      v8_enable_webassembly) {
     # This is about function arguments evaluation order, which makes node IDs
     # not predictable for subgraphs like Op1(Op2(), Op3()) and as a result
     # different graph hashes.
@@ -626,11 +626,11 @@ if (v8_builtins_profiling_log_file == "default") {
       # Note, currently x64 profile can be applied to arm64 but not the other
       # way round.
       v8_builtins_profiling_log_file =
-          "tools/builtins-pgo/profiles/x64" + pgo_profile_suffix + ".profile"
+          "tools/builtins-pgo/profiles/x64" + pgo_profile_suffix + ".profiles"
     } else if (v8_current_cpu == "x86" || v8_current_cpu == "arm") {
       # Note, x86 profile can be applied to arm but not the other way round.
       v8_builtins_profiling_log_file =
-          "tools/builtins-pgo/profiles/x86" + pgo_profile_suffix + ".profile"
+          "tools/builtins-pgo/profiles/x86" + pgo_profile_suffix + ".profiles"
     }
   }
 }
@@ -1206,7 +1206,7 @@ config("features") {
     defines += [ "V8_ENABLE_MAGLEV_GRAPH_PRINTER" ]
   }
   if (v8_enable_builtin_jump_table_switch) {
-    defines += [ "V8_ENABLE_BUILTIN_JUMP_TABLE_SWITCH" ]
+    # defines += [ "V8_ENABLE_BUILTIN_JUMP_TABLE_SWITCH" ]
   }
   if (v8_enable_direct_handle) {
     defines += [ "V8_ENABLE_DIRECT_HANDLE" ]
@@ -2322,6 +2322,7 @@ template("run_mksnapshot") {
       # but the target OS is really |current_os|.
       "--target_os=$current_os",
       "--target_arch=$current_cpu",
+      "--trace_turbo",
 
       "--embedded_src",
       rebase_path("$target_gen_dir/embedded${suffix}.S", root_build_dir),
