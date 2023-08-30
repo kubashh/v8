@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf41f4e8_a1d10926",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-08-30T14:55:17Z",
+      "side": 1,
+      "message": "Hi Tobias, Nico! I\u0027d like some early feedback on this CL, in particular about the best way to implement the compiler pipeline part.\nEssentially, I need to pass a 64-bit IndirectPointerTag all the way from CSA and compiler frontends down into the macro assembler. Initially I store it in a `FieldAccess`, which seems in line with e.g. the ExternalPointerTag. Then, in memory-lowering.cc (where ExternalPointers are handled, but IndirectPointers cannot be handled), I append the tag as 4th value input to the `Store` machine operation. This is probably the weirdest part. I also tried adding the tag to the `StoreOperation` struct, but that\u0027s also weird because we keep a cache of these, and this will break because now the `StoreOperation` is no longer really cacheable.\nThen, in the instruction-selector, I append the tag as an immediate input to the instruction, and finally retrieve it again in code-generator where it\u0027s ultimately needed. This part feels ok to me again.\n\nSo my main two questions for now are:\n1. How do you feel about the part between memory lowering and instruction selection, i.e. the fact that the tag becomes an additional value input? Is there a better alternative\n2. What would be the best way to implement this part in Turboshaft?",
+      "revId": "9a00824f2d87a2c3f67dcb87f7b63e205531ed16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
