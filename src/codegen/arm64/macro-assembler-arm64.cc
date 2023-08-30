@@ -1463,9 +1463,10 @@ void MacroAssembler::ReplaceClosureCodeWithOptimizedCode(
   AssertCode(optimized_code);
   StoreMaybeIndirectPointerField(
       optimized_code, FieldMemOperand(closure, JSFunction::kCodeOffset));
-  RecordWriteField(closure, JSFunction::kCodeOffset, optimized_code,
-                   kLRHasNotBeenSaved, SaveFPRegsMode::kIgnore, SmiCheck::kOmit,
-                   kCodePointerType);
+  RecordWriteField(
+      closure, JSFunction::kCodeOffset, optimized_code, kLRHasNotBeenSaved,
+      SaveFPRegsMode::kIgnore, SmiCheck::kOmit,
+      SlotDescriptor::ForMaybeIndirectPointerSlot(kCodeIndirectPointerTag));
 }
 
 void MacroAssembler::GenerateTailCallToReturnedCode(
@@ -3412,7 +3413,7 @@ void MacroAssembler::RecordWriteField(Register object, int offset,
                                       Register value,
                                       LinkRegisterStatus lr_status,
                                       SaveFPRegsMode save_fp,
-                                      SmiCheck smi_check, PointerType type) {
+                                      SmiCheck smi_check, SlotDescriptor slot) {
   ASM_CODE_COMMENT(this);
   DCHECK(!AreAliased(object, value));
   // First, check if a write barrier is even needed. The tests below
@@ -3442,7 +3443,7 @@ void MacroAssembler::RecordWriteField(Register object, int offset,
   }
 
   RecordWrite(object, Operand(offset - kHeapObjectTag), value, lr_status,
-              save_fp, SmiCheck::kOmit, type);
+              save_fp, SmiCheck::kOmit, slot);
 
   Bind(&done);
 }
@@ -3614,7 +3615,7 @@ void MacroAssembler::CallRecordWriteStubSaveRegisters(Register object,
                                                       Operand offset,
                                                       SaveFPRegsMode fp_mode,
                                                       StubCallMode mode,
-                                                      PointerType type) {
+                                                      SlotDescriptor slot) {
     ASM_CODE_COMMENT(this);
     RegList registers = WriteBarrierDescriptor::ComputeSavedRegisters(object);
     MaybeSaveRegisters(registers);
@@ -3625,27 +3626,36 @@ void MacroAssembler::CallRecordWriteStubSaveRegisters(Register object,
     MoveObjectAndSlot(object_parameter, slot_address_parameter, object, offset);
 
     CallRecordWriteStub(object_parameter, slot_address_parameter, fp_mode, mode,
-                        type);
+                        slot);
 
     MaybeRestoreRegisters(registers);
 }
 
 void MacroAssembler::CallRecordWriteStub(Register object, Register slot_address,
                                          SaveFPRegsMode fp_mode,
-                                         StubCallMode mode, PointerType type) {
+                                         StubCallMode mode,
+                                         SlotDescriptor slot) {
     ASM_CODE_COMMENT(this);
     DCHECK_EQ(WriteBarrierDescriptor::ObjectRegister(), object);
     DCHECK_EQ(WriteBarrierDescriptor::SlotAddressRegister(), slot_address);
 #if V8_ENABLE_WEBASSEMBLY
   if (mode == StubCallMode::kCallWasmRuntimeStub) {
+    DCHECK(slot.contains_direct_pointer());
     auto wasm_target = wasm::WasmCode::GetRecordWriteStub(fp_mode);
     Call(wasm_target, RelocInfo::WASM_STUB_CALL);
 #else
   if (false) {
 #endif
   } else {
-    Builtin builtin = Builtins::GetRecordWriteStub(fp_mode, type);
-    CallBuiltin(builtin);
+    if (slot.contains_direct_pointer()) {
+      CallBuiltin(Builtins::GetRecordWriteStub(fp_mode));
+    } else {
+      DCHECK(slot.contains_indirect_pointer());
+      Register tag_parameter =
+          WriteBarrierDescriptor::IndirectPointerTagRegister();
+      Move(tag_parameter, slot.indirect_pointer_tag());
+      CallBuiltin(Builtins::GetIndirectPointerBarrierStub(fp_mode));
+    }
   }
 }
 
@@ -3690,7 +3700,7 @@ void MacroAssembler::MoveObjectAndSlot(Register dst_object, Register dst_slot,
 void MacroAssembler::RecordWrite(Register object, Operand offset,
                                  Register value, LinkRegisterStatus lr_status,
                                  SaveFPRegsMode fp_mode, SmiCheck smi_check,
-                                 PointerType type) {
+                                 SlotDescriptor slot) {
   ASM_CODE_COMMENT(this);
   ASM_LOCATION_IN_ASSEMBLER("MacroAssembler::RecordWrite");
   DCHECK(!AreAliased(object, value));
@@ -3701,9 +3711,10 @@ void MacroAssembler::RecordWrite(Register object, Operand offset,
     Register temp = temps.AcquireX();
     DCHECK(!AreAliased(object, value, temp));
     Add(temp, object, offset);
-    if (type == PointerType::kIndirect) {
+    if (slot.contains_indirect_pointer()) {
       LoadIndirectPointerField(temp, MemOperand(temp));
     } else {
+      DCHECK(slot.contains_direct_pointer());
       LoadTaggedField(temp, MemOperand(temp));
     }
     Cmp(temp, value);
@@ -3738,7 +3749,7 @@ void MacroAssembler::RecordWrite(Register object, Operand offset,
   DCHECK(offset.IsImmediate());
   Add(slot_address, object, offset);
   CallRecordWriteStub(object, slot_address, fp_mode,
-                      StubCallMode::kCallBuiltinPointer, type);
+                      StubCallMode::kCallBuiltinPointer, slot);
   if (lr_status == kLRHasNotBeenSaved) {
     Pop<MacroAssembler::kAuthLR>(lr, padreg);
   }
