@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d833bca0_f7b4c242",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-30T11:15:19Z",
+      "side": 1,
+      "message": "LGTM with nits. Thanks for your patience.",
+      "revId": "ebe356b4835956336417294aebe3ef92ee1e5c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b93c205_2606e575",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2124,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-30T11:15:19Z",
+      "side": 1,
+      "message": "I think now that the code has been simplified, you could just drop this part of the comment.",
+      "range": {
+        "startLine": 2118,
+        "startChar": 2,
+        "endLine": 2124,
+        "endChar": 27
+      },
+      "revId": "ebe356b4835956336417294aebe3ef92ee1e5c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2069c6a7_3e1a0da2",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2127,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-30T11:15:19Z",
+      "side": 1,
+      "message": "nit: duplicate word",
+      "range": {
+        "startLine": 2127,
+        "startChar": 30,
+        "endLine": 2127,
+        "endChar": 37
+      },
+      "revId": "ebe356b4835956336417294aebe3ef92ee1e5c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b11ef2d_8970e834",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-30T11:15:19Z",
+      "side": 1,
+      "message": "nit: I\u0027m not very happy with this name: it sounds like it\u0027s loading the distance to the label as a relative offset, but that\u0027s only one part of what it does under the hood, and the overall effect is that `dst` will contain the absolute address of `lbl`, just loaded in a position-independent manner.\nSo a fully descriptive name might be \"LoadLabelAddressPositionIndependently\" or \"LoadLabelAddressWithoutEmbeddingAbsoluteAddresses\" or \"DeriveLabelAddressFromPC\", all of which are unwieldy. Maybe \"LoadLabel_PIC\" as an abbreviation, and a brief comment to give a fuller explanation (e.g. \"Loads the absolute address of {lbl} in a position-independent manner, i.e. without embedding it as a relocatable constant.\")?",
+      "range": {
+        "startLine": 175,
+        "startChar": 7,
+        "endLine": 175,
+        "endChar": 24
+      },
+      "revId": "ebe356b4835956336417294aebe3ef92ee1e5c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04f3f82c_fd8b3ccc",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-08-30T11:15:19Z",
+      "side": 1,
+      "message": "Using the new infrastructure here is fine for simplicity alone, but for the record, the old code was in fact correct. After inserting an `int3` before the `push` on line 826, this is what I see in GDB:\n```\n0x31c9a361    41  cc           int3\n0x31c9a362    42  50           push eax\n0x31c9a363    43  e800000000   call 0x31c9a368  \u003c+0x48\u003e\n0x31c9a368    48  58           pop eax\n0x31c9a369    49  83e857       sub eax,0x57\n0x31c9a36c    4c  0588000000   add eax,0x88\n0x31c9a371    51  8945f4       mov [ebp-0xc],eax\n0x31c9a374    54  58           pop eax\n```\nClearly both the `sub` and the `add` end up having relative immediates.\n\nSo you could, if you wanted, drop the changes to `assembler-ia32.{h,cc}`, and instead use the sequence here (from `PushPC` until `add`, lines 827-832 in the old code) as the body of the new MacroAssembler function.\n\n(And I\u0027m relieved to have confirmed that `Immediate::CodeRelativeOffset(...)` does indeed do what it says.)",
+      "range": {
+        "startLine": 827,
+        "startChar": 11,
+        "endLine": 827,
+        "endChar": 28
+      },
+      "revId": "ebe356b4835956336417294aebe3ef92ee1e5c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
