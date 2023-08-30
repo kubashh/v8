@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b5eb79a_1e61f176",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2124,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-30T16:58:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8b93c205_2606e575",
+      "range": {
+        "startLine": 2118,
+        "startChar": 2,
+        "endLine": 2124,
+        "endChar": 27
+      },
+      "revId": "ebe356b4835956336417294aebe3ef92ee1e5c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2069c6a7_3e1a0da2",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-08-30T11:15:19Z",
       "side": 1,
       "message": "nit: duplicate word",
+      "range": {
+        "startLine": 2127,
+        "startChar": 30,
+        "endLine": 2127,
+        "endChar": 37
+      },
+      "revId": "ebe356b4835956336417294aebe3ef92ee1e5c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3101e9a6_e422050d",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2127,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-30T16:58:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2069c6a7_3e1a0da2",
       "range": {
         "startLine": 2127,
         "startChar": 30,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efed2a2c_55bc53eb",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-30T16:58:22Z",
+      "side": 1,
+      "message": "Agreed; the name is not great.\nHow about LoadAddressOfLabel?",
+      "parentUuid": "1b11ef2d_8970e834",
+      "range": {
+        "startLine": 175,
+        "startChar": 7,
+        "endLine": 175,
+        "endChar": 24
+      },
+      "revId": "ebe356b4835956336417294aebe3ef92ee1e5c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04f3f82c_fd8b3ccc",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-08-30T11:15:19Z",
       "side": 1,
       "message": "Using the new infrastructure here is fine for simplicity alone, but for the record, the old code was in fact correct. After inserting an `int3` before the `push` on line 826, this is what I see in GDB:\n```\n0x31c9a361    41  cc           int3\n0x31c9a362    42  50           push eax\n0x31c9a363    43  e800000000   call 0x31c9a368  \u003c+0x48\u003e\n0x31c9a368    48  58           pop eax\n0x31c9a369    49  83e857       sub eax,0x57\n0x31c9a36c    4c  0588000000   add eax,0x88\n0x31c9a371    51  8945f4       mov [ebp-0xc],eax\n0x31c9a374    54  58           pop eax\n```\nClearly both the `sub` and the `add` end up having relative immediates.\n\nSo you could, if you wanted, drop the changes to `assembler-ia32.{h,cc}`, and instead use the sequence here (from `PushPC` until `add`, lines 827-832 in the old code) as the body of the new MacroAssembler function.\n\n(And I\u0027m relieved to have confirmed that `Immediate::CodeRelativeOffset(...)` does indeed do what it says.)",
+      "range": {
+        "startLine": 827,
+        "startChar": 11,
+        "endLine": 827,
+        "endChar": 28
+      },
+      "revId": "ebe356b4835956336417294aebe3ef92ee1e5c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c60864c2_7bed76f6",
+        "filename": "src/compiler/backend/ia32/code-generator-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-30T16:58:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "04f3f82c_fd8b3ccc",
       "range": {
         "startLine": 827,
         "startChar": 11,
