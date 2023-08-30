@@ -5310,6 +5310,10 @@ bool MaglevGraphBuilder::ShouldInlineCall(
     TRACE_INLINING("  inlining " << shared << ": small function");
     return true;
   }
+  if (compilation_unit_->is_osr()) {
+    TRACE_CANNOT_INLINE("osr");
+    return false;
+  }
   if (bytecode.length() > v8_flags.max_maglev_inlined_bytecode_size) {
     TRACE_CANNOT_INLINE("big function, size ("
                         << bytecode.length() << ") >= max-size ("
