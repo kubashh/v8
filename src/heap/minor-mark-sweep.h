@@ -153,6 +153,7 @@ class MinorMarkSweepCollector final {
   void TearDown();
   void CollectGarbage();
   void StartMarking();
+  void CancelMarking();
 
   EphemeronRememberedSet::TableList* ephemeron_table_list() const {
     return ephemeron_table_list_.get();

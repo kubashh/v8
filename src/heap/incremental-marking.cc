@@ -645,6 +645,42 @@ bool IncrementalMarking::Stop() {
   return true;
 }
 
+void IncrementalMarking::CancelMinorMarking() {
+  DCHECK(IsMinorMarking());
+
+  if (v8_flags.trace_incremental_marking) {
+    isolate()->PrintWithTimestamp(
+        "[IncrementalMarking] Minor incremental marking cancelled\n");
+  }
+
+  heap_->new_space()->RemoveAllocationObserver(&minor_gc_observer_);
+
+  heap_->concurrent_marking()->Cancel();
+
+  MarkingBarrier::DeactivateYoung(heap_);
+
+  marking_mode_ = MarkingMode::kNoMarking;
+  current_local_marking_worklists_ = nullptr;
+  current_trace_id_.reset();
+
+  if (isolate()->has_shared_space() && !isolate()->is_shared_space_isolate()) {
+    // When disabling local incremental marking in a client isolate (= worker
+    // isolate), the marking barrier needs to stay enabled when incremental
+    // marking in the shared heap is running.
+    const bool is_marking = isolate()
+                                ->shared_space_isolate()
+                                ->heap()
+                                ->incremental_marking()
+                                ->IsMajorMarking();
+    heap_->SetIsMarkingFlag(is_marking);
+  } else {
+    heap_->SetIsMarkingFlag(false);
+  }
+  heap_->SetIsMinorMarkingFlag(false);
+
+  heap_->minor_mark_sweep_collector()->CancelMarking();
+}
+
 size_t IncrementalMarking::OldGenerationSizeOfObjects() const {
   // TODO(v8:14140): This is different to Heap::OldGenerationSizeOfObjects() in
   // that it only considers shared space for the shared space isolate. Consider
