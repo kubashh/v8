@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c11b222f_c8209e50",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5938,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-30T13:17:00Z",
+      "side": 1,
+      "message": "I would still find this confusing without the comment since I would still intuitively expect incremental marking job to be used for actual marking after it was started. I would prefer to keep the comment.",
+      "parentUuid": "cd1da7f9_37dac991",
+      "range": {
+        "startLine": 5938,
+        "startChar": 9,
+        "endLine": 5938,
+        "endChar": 17
+      },
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5a91e56_1c981d70",
         "filename": "src/heap/minor-gc-job.cc",
         "patchSetId": 1
@@ -71,6 +95,30 @@
       "writtenOn": "2023-08-30T12:56:45Z",
       "side": 1,
       "message": "This doesn\u0027t actually cancel a task.",
+      "range": {
+        "startLine": 71,
+        "startChar": 17,
+        "endLine": 71,
+        "endChar": 27
+      },
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63a90d3c_4954014d",
+        "filename": "src/heap/minor-gc-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-30T13:17:00Z",
+      "side": 1,
+      "message": "We can\u0027t technically cancel the task since it\u0027s not a cancellable task.\nThis would tell the task to immediately bailout which is as close as we can get to cancelling it.",
+      "parentUuid": "c5a91e56_1c981d70",
       "range": {
         "startLine": 71,
         "startChar": 17,
