@@ -1436,12 +1436,9 @@ class TurboshaftGraphBuildingInterface {
             result_rep(result_rep),
             input_rep(input_rep) {}
 
-      constexpr AtomicOpInfo(RegisterRepresentation result_rep,
+      constexpr AtomicOpInfo(OpType op_type, RegisterRepresentation result_rep,
                              MemoryRepresentation input_rep)
-          : op_type(kLoad), result_rep(result_rep), input_rep(input_rep) {}
-
-      constexpr explicit AtomicOpInfo(MemoryRepresentation input_rep)
-          : op_type(kStore), input_rep(input_rep) {}
+          : op_type(op_type), result_rep(result_rep), input_rep(input_rep) {}
 
       constexpr AtomicOpInfo() : op_type(kNotImplemented) {}
 
@@ -1505,9 +1502,9 @@ class TurboshaftGraphBuildingInterface {
           RMW_OPERATION(CASE_BINOP)
 #undef RMW_OPERATION
 #undef CASE
-#define CASE_LOAD(OPCODE, RESULT, INPUT)                  \
-  case WasmOpcode::kExpr##OPCODE:                         \
-    return AtomicOpInfo(RegisterRepresentation::RESULT(), \
+#define CASE_LOAD(OPCODE, RESULT, INPUT)                         \
+  case WasmOpcode::kExpr##OPCODE:                                \
+    return AtomicOpInfo(kLoad, RegisterRepresentation::RESULT(), \
                         MemoryRepresentation::INPUT());
 #define LOAD_OPERATION(V)             \
   V(I32AtomicLoad, Word32, Uint32)    \
@@ -1520,33 +1517,28 @@ class TurboshaftGraphBuildingInterface {
           LOAD_OPERATION(CASE_LOAD)
 #undef LOAD_OPERATION
 #undef CASE_LOAD
-#define CASE_STORE(OPCODE, OUTPUT) \
-  case WasmOpcode::kExpr##OPCODE:  \
-    return AtomicOpInfo(MemoryRepresentation::OUTPUT());
-#define STORE_OPERATION(V)     \
-  V(I32AtomicStore, Uint32)    \
-  V(I32AtomicStore16U, Uint16) \
-  V(I32AtomicStore8U, Uint8)   \
-  V(I64AtomicStore, Uint64)    \
-  V(I64AtomicStore32U, Uint32) \
-  V(I64AtomicStore16U, Uint16) \
-  V(I64AtomicStore8U, Uint8)
+#define CASE_STORE(OPCODE, INPUT, OUTPUT)                        \
+  case WasmOpcode::kExpr##OPCODE:                                \
+    return AtomicOpInfo(kStore, RegisterRepresentation::INPUT(), \
+                        MemoryRepresentation::OUTPUT());
+#define STORE_OPERATION(V)             \
+  V(I32AtomicStore, Word32, Uint32)    \
+  V(I32AtomicStore16U, Word32, Uint16) \
+  V(I32AtomicStore8U, Word32, Uint8)   \
+  V(I64AtomicStore, Word64, Uint64)    \
+  V(I64AtomicStore32U, Word64, Uint32) \
+  V(I64AtomicStore16U, Word64, Uint16) \
+  V(I64AtomicStore8U, Word64, Uint8)
           STORE_OPERATION(CASE_STORE)
 #undef STORE_OPERATION_OPERATION
 #undef CASE_STORE
           default:
-            return {};
+            UNREACHABLE();
         }
       }
     };
 
     AtomicOpInfo info = AtomicOpInfo::Get(opcode);
-
-    if (info.op_type == kNotImplemented) {
-      Bailout(decoder);
-      return;
-    }
-
     if (!Is64() && info.result_rep.is_valid() &&
         info.result_rep == RegisterRepresentation::Word64()) {
       // The int64 lowering for atomic instructions is not yet finished.
@@ -1586,7 +1578,12 @@ class TurboshaftGraphBuildingInterface {
       return;
     }
     if (info.op_type == kStore) {
-      asm_.Store(MemBuffer(imm.memory->index, imm.offset), index, args[1].op,
+      OpIndex value = args[1].op;
+      if (info.result_rep == RegisterRepresentation::Word64() &&
+          info.input_rep != MemoryRepresentation::Uint64()) {
+        value = asm_.TruncateWord64ToWord32(value);
+      }
+      asm_.Store(MemBuffer(imm.memory->index, imm.offset), index, value,
                  access_kind == MemoryAccessKind::kProtected
                      ? LoadOp::Kind::Protected().Atomic()
                      : LoadOp::Kind::RawAligned().Atomic(),
