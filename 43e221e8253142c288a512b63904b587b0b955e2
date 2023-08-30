@@ -22,6 +22,30 @@
       },
       "revId": "43e221e8253142c288a512b63904b587b0b955e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "320d0e9e_cde52eab",
+        "filename": "src/heap/minor-gc-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-08-30T12:56:45Z",
+      "side": 0,
+      "message": "I would prefer if we could keep this similar to IncrementalMarkingJob in that we don\u0027t cancel the task but merely bail out when it runs.",
+      "parentUuid": "2fa70d0c_10176252",
+      "range": {
+        "startLine": 73,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 11
+      },
+      "revId": "43e221e8253142c288a512b63904b587b0b955e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
