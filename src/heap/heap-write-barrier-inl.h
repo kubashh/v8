@@ -225,6 +225,7 @@ inline void CombinedEphemeronWriteBarrier(EphemeronHashTable host,
 
 inline void IndirectPointerWriteBarrier(HeapObject host,
                                         IndirectPointerSlot slot,
+                                        IndirectPointerTag tag,
                                         HeapObject value,
                                         WriteBarrierMode mode) {
   // Indirect pointers are only used when the sandbox is enabled.
@@ -241,7 +242,7 @@ inline void IndirectPointerWriteBarrier(HeapObject host,
   DCHECK(!heap_internals::MemoryChunk::FromHeapObject(value)
               ->IsYoungOrSharedChunk());
 
-  WriteBarrier::Marking(host, slot);
+  WriteBarrier::Marking(host, slot, tag);
 }
 
 inline void GenerationalBarrierForCode(InstructionStream host, RelocInfo* rinfo,
@@ -351,9 +352,10 @@ void WriteBarrier::Marking(DescriptorArray descriptor_array,
   MarkingSlow(descriptor_array, number_of_own_descriptors);
 }
 
-void WriteBarrier::Marking(HeapObject host, IndirectPointerSlot slot) {
+void WriteBarrier::Marking(HeapObject host, IndirectPointerSlot slot,
+                           IndirectPointerTag tag) {
   if (!IsMarking(host)) return;
-  MarkingSlow(host, slot);
+  MarkingSlow(host, slot, tag);
 }
 
 // static
