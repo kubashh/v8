@@ -620,6 +620,7 @@ class Internals {
   static const int kExternalPointerTableBasePointerOffset = 0;
   static const int kExternalPointerTableSize = 2 * kApiSystemPointerSize;
   static const int kIndirectPointerTableSize = 2 * kApiSystemPointerSize;
+  static const int kIndirectPointerTableBasePointerOffset = 0;
 
   // IsolateData layout guarantees.
   static const int kIsolateCageBaseOffset = 0;
