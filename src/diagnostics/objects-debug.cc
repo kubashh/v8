@@ -1173,7 +1173,13 @@ void IndirectlyReferenceableObject::IndirectlyReferenceableObjectVerify(
 #if defined(V8_CODE_POINTER_SANDBOXING)
   // Check that the self indirect pointer is consistent, i.e. points back to
   // this object.
-  CHECK_EQ(ReadIndirectPointerField(kSelfIndirectPointerOffset), *this);
+  InstanceType instance_type = map()->instance_type();
+  IndirectPointerTag tag = IndirectPointerTagFromInstanceType(instance_type);
+  // We can't use ReadIndirectPointerField here because the tag is not a
+  // compile-time constant.
+  Object self =
+      RawIndirectPointerField(kSelfIndirectPointerOffset).load(isolate, tag);
+  CHECK_EQ(self, *this);
 #endif
 }
 

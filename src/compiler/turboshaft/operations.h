@@ -2888,6 +2888,11 @@ struct StoreOp : OperationT<StoreOp> {
   uint8_t element_size_log2;  // multiply index with 2^element_size_log2
   int32_t offset;             // add offset to scaled index
   bool maybe_initializing_or_transitioning;
+  uint16_t
+      shifted_indirect_pointer_tag;  // for indirect pointer stores, the
+                                     // IndirectPointerTag of the store shifted
+                                     // to the right by kIndirectPointerTagShift
+                                     // (so it fits into 16 bits).
 
   OpEffects Effects() const {
     // Stores might depend on checks for pointer validity, object layout, bounds
@@ -2928,10 +2933,17 @@ struct StoreOp : OperationT<StoreOp> {
     return input_count == 3 ? input(2) : OpIndex::Invalid();
   }
 
-  StoreOp(OpIndex base, OpIndex index, OpIndex value, Kind kind,
-          MemoryRepresentation stored_rep, WriteBarrierKind write_barrier,
-          int32_t offset, uint8_t element_size_log2,
-          bool maybe_initializing_or_transitioning)
+  IndirectPointerTag indirect_pointer_tag() const {
+    uint64_t shifted = shifted_indirect_pointer_tag;
+    return static_cast<IndirectPointerTag>(shifted << kIndirectPointerTagShift);
+  }
+
+  StoreOp(
+      OpIndex base, OpIndex index, OpIndex value, Kind kind,
+      MemoryRepresentation stored_rep, WriteBarrierKind write_barrier,
+      int32_t offset, uint8_t element_size_log2,
+      bool maybe_initializing_or_transitioning,
+      IndirectPointerTag maybe_indirect_pointer_tag = kIndirectPointerNullTag)
       : Base(2 + index.valid()),
         kind(kind),
         stored_rep(stored_rep),
@@ -2939,7 +2951,9 @@ struct StoreOp : OperationT<StoreOp> {
         element_size_log2(element_size_log2),
         offset(offset),
         maybe_initializing_or_transitioning(
-            maybe_initializing_or_transitioning) {
+            maybe_initializing_or_transitioning),
+        shifted_indirect_pointer_tag(maybe_indirect_pointer_tag >>
+                                     kIndirectPointerTagShift) {
     input(0) = base;
     input(1) = value;
     if (index.valid()) {
@@ -2962,14 +2976,16 @@ struct StoreOp : OperationT<StoreOp> {
                              RegisterRepresentation::PointerSized()));
     }
   }
-  static StoreOp& New(Graph* graph, OpIndex base, OpIndex index, OpIndex value,
-                      Kind kind, MemoryRepresentation stored_rep,
-                      WriteBarrierKind write_barrier, int32_t offset,
-                      uint8_t element_size_log2,
-                      bool maybe_initializing_or_transitioning) {
+  static StoreOp& New(
+      Graph* graph, OpIndex base, OpIndex index, OpIndex value, Kind kind,
+      MemoryRepresentation stored_rep, WriteBarrierKind write_barrier,
+      int32_t offset, uint8_t element_size_log2,
+      bool maybe_initializing_or_transitioning,
+      IndirectPointerTag maybe_indirect_pointer_tag = kIndirectPointerNullTag) {
     return Base::New(graph, 2 + index.valid(), base, index, value, kind,
                      stored_rep, write_barrier, offset, element_size_log2,
-                     maybe_initializing_or_transitioning);
+                     maybe_initializing_or_transitioning,
+                     maybe_indirect_pointer_tag);
   }
 
   void PrintInputs(std::ostream& os, const std::string& op_index_prefix) const;
