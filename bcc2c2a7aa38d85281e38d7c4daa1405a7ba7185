@@ -33,6 +33,24 @@
       "message": "did you run luci generate?",
       "revId": "bcc2c2a7aa38d85281e38d7c4daa1405a7ba7185",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c51ab19e_c53a4ee7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-08-31T08:23:58Z",
+      "side": 1,
+      "message": "now...",
+      "parentUuid": "6c0bc77c_84dad6cd",
+      "revId": "bcc2c2a7aa38d85281e38d7c4daa1405a7ba7185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
