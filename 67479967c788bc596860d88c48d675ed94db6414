@@ -106,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2199370c_a936bd80",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5938,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-31T08:57:54Z",
+      "side": 1,
+      "message": "Fair point. I rephrased it to make it more accurate.",
+      "parentUuid": "7789dbdc_c2c34ff8",
+      "range": {
+        "startLine": 5938,
+        "startChar": 9,
+        "endLine": 5938,
+        "endChar": 17
+      },
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c834adc8_fb300c49",
@@ -119,6 +143,30 @@
       "writtenOn": "2023-08-30T13:29:11Z",
       "side": 1,
       "message": "This name is confusing me, even after reading it multiple times.\n\nHow about `SchedulePreviouslyRequestedTask()`?",
+      "range": {
+        "startLine": 66,
+        "startChar": 17,
+        "endLine": 66,
+        "endChar": 40
+      },
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f7e2b78_19e2d134",
+        "filename": "src/heap/minor-gc-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-31T08:57:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c834adc8_fb300c49",
       "range": {
         "startLine": 66,
         "startChar": 17,
@@ -190,6 +238,30 @@
       "side": 1,
       "message": "It\u0027s a cancelable task (L18). In order to properly cancel you would record the task id instead of a bool in `task_pending_` and cancel with that id.",
       "parentUuid": "63a90d3c_4954014d",
+      "range": {
+        "startLine": 71,
+        "startChar": 17,
+        "endLine": 71,
+        "endChar": 27
+      },
+      "revId": "67479967c788bc596860d88c48d675ed94db6414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12f3be9c_b567944a",
+        "filename": "src/heap/minor-gc-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-31T08:57:54Z",
+      "side": 1,
+      "message": "😂 I can\u0027t believe I missed it. Thanks",
+      "parentUuid": "cec3fdf0_4dc86e86",
       "range": {
         "startLine": 71,
         "startChar": 17,

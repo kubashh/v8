@@ -94,6 +94,30 @@
       },
       "revId": "43e221e8253142c288a512b63904b587b0b955e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40fe868b_4892ac84",
+        "filename": "src/heap/minor-gc-job.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-08-31T08:57:54Z",
+      "side": 0,
+      "message": "The issue with the IncrementalMarkingJob approach is the reposting. It\u0027s essentially what we had before, and we ended up with long reposting and bailing out cycles. A delayed task could have helped but I don\u0027t like that as a solution here. Perhaps a low priority task could have been appropriate, but even that would have problems.",
+      "parentUuid": "f14dc0d8_610324f6",
+      "range": {
+        "startLine": 73,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 11
+      },
+      "revId": "43e221e8253142c288a512b63904b587b0b955e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
