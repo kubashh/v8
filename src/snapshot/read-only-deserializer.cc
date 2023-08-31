@@ -197,6 +197,7 @@ class ObjectPostProcessor final {
   V(AccessorInfo)                 \
   V(CallHandlerInfo)              \
   V(Code)                         \
+  V(Foreign)                      \
   V(SharedFunctionInfo)
 
   void PostProcessIfNeeded(Tagged<HeapObject> o) {
@@ -273,6 +274,11 @@ class ObjectPostProcessor final {
     o->SetInstructionStartForOffHeapBuiltin(
         isolate_,
         EmbeddedData::FromBlob(isolate_).InstructionStartOf(o->builtin_id()));
+  }
+  void PostProcessForeign(Tagged<Foreign> o) {
+    DecodeExternalPointerSlot(
+        o->RawExternalPointerField(Foreign::kForeignAddressOffset),
+        kForeignForeignAddressTag);
   }
   void PostProcessSharedFunctionInfo(Tagged<SharedFunctionInfo> o) {
     // Reset the id to avoid collisions - it must be unique in this isolate.
