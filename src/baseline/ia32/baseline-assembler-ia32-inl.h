@@ -158,7 +158,7 @@ void BaselineAssembler::JumpIfPointer(Condition cc, Register value,
                                       Label::Distance distance) {
   JumpIf(cc, value, operand, target, distance);
 }
-void BaselineAssembler::JumpIfSmi(Condition cc, Register value, Smi smi,
+void BaselineAssembler::JumpIfSmi(Condition cc, Register value, Tagged<Smi> smi,
                                   Label* target, Label::Distance distance) {
   if (smi.value() == 0) {
     __ test(value, value);
@@ -224,7 +224,9 @@ inline void PushSingle(MacroAssembler* masm, Register reg) { masm->Push(reg); }
 inline void PushSingle(MacroAssembler* masm, TaggedIndex value) {
   masm->Push(Immediate(value.ptr()));
 }
-inline void PushSingle(MacroAssembler* masm, Smi value) { masm->Push(value); }
+inline void PushSingle(MacroAssembler* masm, Tagged<Smi> value) {
+  masm->Push(value);
+}
 inline void PushSingle(MacroAssembler* masm, Handle<HeapObject> object) {
   masm->Push(object);
 }
@@ -331,7 +333,7 @@ void BaselineAssembler::LoadWord8Field(Register output, Register source,
 }
 
 void BaselineAssembler::StoreTaggedSignedField(Register target, int offset,
-                                               Smi value) {
+                                               Tagged<Smi> value) {
   __ mov(FieldOperand(target, offset), Immediate(value));
 }
 
@@ -458,7 +460,7 @@ void BaselineAssembler::StaModuleVariable(Register context, Register value,
   StoreTaggedFieldWithWriteBarrier(context, Cell::kValueOffset, value);
 }
 
-void BaselineAssembler::AddSmi(Register lhs, Smi rhs) {
+void BaselineAssembler::AddSmi(Register lhs, Tagged<Smi> rhs) {
   if (rhs.value() == 0) return;
   __ add(lhs, Immediate(rhs));
 }
