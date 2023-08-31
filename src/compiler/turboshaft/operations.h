@@ -6939,6 +6939,9 @@ inline base::Vector<const MaybeRegisterRepresentation> Operation::inputs_rep(
   }
 }
 
+bool IsSuccessorDeferred(const Block* block, const Block* successor,
+                         const Graph& graph);
+
 #undef FIELD
 
 }  // namespace v8::internal::compiler::turboshaft
