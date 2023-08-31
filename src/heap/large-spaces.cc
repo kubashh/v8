@@ -135,7 +135,7 @@ AllocationResult OldLargeObjectSpace::AllocateRawBackground(
   DCHECK(!v8_flags.enable_third_party_heap);
   // Check if we want to force a GC before growing the old space further.
   // If so, fail the allocation.
-  if (!heap()->CanExpandOldGenerationBackground(local_heap, object_size) ||
+  if (!heap()->CanExpandOldGeneration(object_size) ||
       !heap()->ShouldExpandOldGenerationOnSlowAllocation(
           local_heap, AllocationOrigin::kRuntime)) {
     return AllocationResult::Failure();
