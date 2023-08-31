@@ -36,7 +36,7 @@ class CodeGenTest : public TestWithIsolateAndZone {
     if (IsSmi(*number)) return;
 #endif
     m.Return(m.NumberConstant(v));
-    Object result = m.Call();
+    Tagged<Object> result = m.Call();
     m.CheckNumber(v, result);
   }
 };
@@ -381,7 +381,7 @@ TEST_F(CodeGenTest, RunHeapNumberConstant) {
   RawMachineAssemblerTester<void*> m(i_isolate(), zone());
   Handle<HeapObject> number = m.isolate()->factory()->NewHeapNumber(100.5);
   m.Return(m.HeapConstant(number));
-  HeapObject result =
+  Tagged<HeapObject> result =
       HeapObject::cast(Object(reinterpret_cast<Address>(m.Call())));
   CHECK_EQ(result, *number);
 }
