@@ -2232,7 +2232,8 @@ void TranslatedState::InitializeJSObjectAt(
       CHECK(IsCode(*field_value));
       Code value = Code::cast(*field_value);
       object_storage->RawIndirectPointerField(offset).Relaxed_Store(value);
-      INDIRECT_POINTER_WRITE_BARRIER(*object_storage, offset, value);
+      INDIRECT_POINTER_WRITE_BARRIER(*object_storage, offset,
+                                     kCodeIndirectPointerTag, value);
     } else if (marker == kStoreHeapObject) {
 #else
     if (marker == kStoreHeapObject) {
