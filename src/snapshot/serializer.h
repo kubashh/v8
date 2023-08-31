@@ -482,7 +482,8 @@ class Serializer::ObjectSerializer : public ObjectVisitor {
   void VisitExternalPointer(HeapObject host, ExternalPointerSlot slot,
                             ExternalPointerTag tag) override;
   void VisitIndirectPointer(HeapObject host, IndirectPointerSlot slot,
-                            IndirectPointerMode mode) override;
+                            IndirectPointerMode mode,
+                            IndirectPointerTag tag) override;
 
   Isolate* isolate() { return isolate_; }
 
