@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79059758_f45ccfb7",
+        "filename": "src/base/macros.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-08-31T15:26:30Z",
+      "side": 1,
+      "message": "had to add this to be able to export an `enum class` (required for exporting the ShortPrint(TaggedImpl) methods`",
+      "range": {
+        "startLine": 405,
+        "startChar": 8,
+        "endLine": 405,
+        "endChar": 22
+      },
+      "revId": "4f63987a6caa5d125867d77db6bb1b080f7a66cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
