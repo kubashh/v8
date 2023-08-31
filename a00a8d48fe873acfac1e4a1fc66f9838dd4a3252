@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26b22db1_d032f557",
+        "filename": "src/compiler/backend/instruction.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-31T13:22:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20fa1e8a_f401399a",
+      "range": {
+        "startLine": 728,
+        "startChar": 2,
+        "endLine": 728,
+        "endChar": 40
+      },
+      "revId": "a00a8d48fe873acfac1e4a1fc66f9838dd4a3252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cbee6af_3ab13aa3",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-08-31T08:34:00Z",
       "side": 1,
       "message": "I think that this is weaker than what Turbofan does: in TF, a block is also deferred if all of its predecessors are deferred. This would be a bit expensive to compute for every block at this point though, so I think that we\u0027d have to either compute it during the special RPO order computation, or have a \"deferred\" bit on the blocks of the graph.\nMaybe just add a TODO?",
+      "range": {
+        "startLine": 730,
+        "startChar": 4,
+        "endLine": 730,
+        "endChar": 74
+      },
+      "revId": "a00a8d48fe873acfac1e4a1fc66f9838dd4a3252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abe1e454_0943f81f",
+        "filename": "src/compiler/backend/instruction.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-31T13:22:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cbee6af_3ab13aa3",
       "range": {
         "startLine": 730,
         "startChar": 4,
