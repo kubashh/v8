@@ -1246,6 +1246,8 @@ class Heap final {
   // Returns the capacity of the old generation.
   V8_EXPORT_PRIVATE size_t OldGenerationCapacity() const;
 
+  base::Mutex* heap_expansion_mutex() { return &heap_expansion_mutex_; }
+
   // Returns the amount of memory currently held alive by the unmapper.
   size_t CommittedMemoryOfUnmapper();
 
@@ -2247,6 +2249,8 @@ class Heap final {
 
   StrongRootsEntry* strong_roots_head_ = nullptr;
   base::Mutex strong_roots_mutex_;
+
+  base::Mutex heap_expansion_mutex_;
 
   bool need_to_remove_stress_concurrent_allocation_observer_ = false;
 
