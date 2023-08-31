@@ -1170,7 +1170,11 @@ void Heap::GarbageCollectionPrologue(
   // evacuation of a non-full new space (or if we are on the last page) there
   // may be uninitialized memory behind top. We fill the remainder of the page
   // with a filler.
-  if (new_space()) new_space()->MakeLinearAllocationAreaIterable();
+  if (new_space()) {
+    new_space()->MakeLinearAllocationAreaIterable();
+    DCHECK_NOT_NULL(minor_gc_job());
+    minor_gc_job()->CancelTask();
+  }
 
   // Reset GC statistics.
   promoted_objects_size_ = 0;
@@ -1484,7 +1488,7 @@ void Heap::HandleGCRequest() {
 
 void Heap::ScheduleMinorGCTaskIfNeeded() {
   DCHECK_NOT_NULL(minor_gc_job_);
-  minor_gc_job_->ScheduleTask(this);
+  minor_gc_job_->ScheduleTask();
 }
 
 namespace {
@@ -5598,7 +5602,7 @@ void Heap::SetUpSpaces(LinearAllocationArea& new_allocation_info,
   LOG(isolate_, IntPtrTEvent("heap-available", Available()));
 
   if (new_space()) {
-    minor_gc_job_.reset(new MinorGCJob());
+    minor_gc_job_.reset(new MinorGCJob(this));
     minor_gc_task_observer_.reset(new ScheduleMinorGCTaskObserver(this));
   }
 
