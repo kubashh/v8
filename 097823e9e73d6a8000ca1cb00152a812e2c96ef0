@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "76a603a4_c0fd5365",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-31T16:24:56Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "0a8ba0d8_fcf0fe19",
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f582dde5_3e57f326",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -110,6 +128,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a5e8945_a993edf0",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2124,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-31T16:24:56Z",
+      "side": 1,
+      "message": "Agreed.",
+      "parentUuid": "790b1c3c_9305f2c6",
+      "range": {
+        "startLine": 2124,
+        "startChar": 28,
+        "endLine": 2124,
+        "endChar": 70
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2383a7c1_7a947870",
@@ -123,6 +165,30 @@
       "writtenOn": "2023-08-31T11:38:49Z",
       "side": 1,
       "message": "nit: How about a local `const int kSomethingSomethingPCOffset \u003d 10` and add the comment above.",
+      "range": {
+        "startLine": 2125,
+        "startChar": 21,
+        "endLine": 2125,
+        "endChar": 23
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f5f5d6_bd47740d",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2125,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-31T16:24:56Z",
+      "side": 1,
+      "message": "Done. Also added a DHECK which I hope will also add some clarity as to where the magic number comes from",
+      "parentUuid": "2383a7c1_7a947870",
       "range": {
         "startLine": 2125,
         "startChar": 21,
@@ -156,6 +222,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70001184_5d4accce",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-31T16:24:56Z",
+      "side": 1,
+      "message": "Agreed. Removed.",
+      "parentUuid": "746190b7_edd8589a",
+      "range": {
+        "startLine": 2126,
+        "startChar": 21,
+        "endLine": 2126,
+        "endChar": 73
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74175295_a9546362",
@@ -179,6 +269,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01f337a6_2c5c4e34",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-31T16:24:56Z",
+      "side": 1,
+      "message": "LoadLabelAddress and LoadAddressOfLabel are equivalent -- in the sense that \"The toy\u0027s colour\" and \"The colour of the toy\" are. However, I will use this name -- since it is two characters shorter.",
+      "parentUuid": "74175295_a9546362",
+      "range": {
+        "startLine": 175,
+        "startChar": 7,
+        "endLine": 175,
+        "endChar": 25
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5ad3d19_4620302d",
@@ -192,6 +306,30 @@
       "writtenOn": "2023-08-31T11:38:49Z",
       "side": 1,
       "message": "Can you add a version with an larger offset that ideally \u003e 1 byte.",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 0
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "267ce8c7_e0359a92",
+        "filename": "test/unittests/assembler/macro-assembler-ia32-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-08-31T16:24:56Z",
+      "side": 1,
+      "message": "All \u0027forward references\u0027 end up with the same size of offset in the code stream, regardless of the actual value. This is intrinsic to how the assembler works.",
+      "parentUuid": "a5ad3d19_4620302d",
       "range": {
         "startLine": 70,
         "startChar": 0,
