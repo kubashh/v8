@@ -270,7 +270,7 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
     BIND(&next);
   }
 
-  void PointerTableWriteBarrier(SaveFPRegsMode fp_mode) {
+  void IndirectPointerWriteBarrier(SaveFPRegsMode fp_mode) {
     // Currently, only objects living in (local) old space are referenced
     // through a pointer table indirection and we have DCHECKs in the CPP write
     // barrier code to check that. This simplifies the write barrier code for
@@ -281,7 +281,9 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
     BIND(&marking_is_on);
 
     // For this barrier, the slot contains an index into a pointer table and not
-    // directly a pointer to a HeapObject.
+    // directly a pointer to a HeapObject. Further, the slot address is tagged
+    // with the indirect pointer tag of the slot, so it cannot directly be
+    // dereferenced but needs to be decoded first.
     TNode<IntPtrT> slot =
         UncheckedParameter<IntPtrT>(WriteBarrierDescriptor::kSlotAddress);
     TNode<IntPtrT> object = BitcastTaggedToWord(
@@ -561,7 +563,7 @@ class WriteBarrierCodeStubAssembler : public CodeStubAssembler {
       return;
     }
 
-    PointerTableWriteBarrier(fp_mode);
+    IndirectPointerWriteBarrier(fp_mode);
     IncrementCounter(isolate()->counters()->write_barriers(), 1);
     Return(TrueConstant());
   }
