@@ -33,6 +33,24 @@
       "message": "LGTM, but are you sure this is worth doing? My earlier suggestion was to reduce the size of `JsonEscapeTable`, which has the potential to save 8 times as many bytes, with zero performance cost.\nI\u0027m fine with this patch, but the extra condition will undo part of the performance improvement you achieved with your previous CL that introduced the `JsonDoNotEscapeFlagTable`, so I\u0027m not convinced that we should do this.",
       "revId": "73d53293b565c8d0042b1b782e04ce0e381a7932",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f583fbe_b75b4260",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2023-08-31T04:55:06Z",
+      "side": 1,
+      "message": "Very sorry for my misunderstanding.\nI changed to reduce the size of JsonEscapeTable. Could you please help to review again?",
+      "parentUuid": "0f2d1829_3cc24833",
+      "revId": "73d53293b565c8d0042b1b782e04ce0e381a7932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
