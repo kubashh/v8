@@ -16,6 +16,161 @@
       "message": "Changed the name to LoadAddressOfLabel",
       "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d1d3490_8e256881",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-08-31T11:38:49Z",
+      "side": 1,
+      "message": "LGTM with some nits.",
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "790b1c3c_9305f2c6",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2124,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-08-31T11:38:49Z",
+      "side": 1,
+      "message": "I\u0027m sure these details instruction comments add much detail.",
+      "range": {
+        "startLine": 2124,
+        "startChar": 28,
+        "endLine": 2124,
+        "endChar": 70
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2383a7c1_7a947870",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2125,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-08-31T11:38:49Z",
+      "side": 1,
+      "message": "nit: How about a local `const int kSomethingSomethingPCOffset \u003d 10` and add the comment above.",
+      "range": {
+        "startLine": 2125,
+        "startChar": 21,
+        "endLine": 2125,
+        "endChar": 23
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "746190b7_edd8589a",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-08-31T11:38:49Z",
+      "side": 1,
+      "message": "same here, not sure what these comments would add, plus we don\u0027t have them anywhere else here.",
+      "range": {
+        "startLine": 2126,
+        "startChar": 21,
+        "endLine": 2126,
+        "endChar": 73
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74175295_a9546362",
+        "filename": "src/codegen/ia32/macro-assembler-ia32.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-08-31T11:38:49Z",
+      "side": 1,
+      "message": "Not very important nit: Would `LoadLabelAddress` be a bit better?",
+      "range": {
+        "startLine": 175,
+        "startChar": 7,
+        "endLine": 175,
+        "endChar": 25
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5ad3d19_4620302d",
+        "filename": "test/unittests/assembler/macro-assembler-ia32-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-08-31T11:38:49Z",
+      "side": 1,
+      "message": "Can you add a version with an larger offset that ideally \u003e 1 byte.",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 0
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bc00f91_e7f1d445",
+        "filename": "test/unittests/assembler/macro-assembler-ia32-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-08-31T11:38:49Z",
+      "side": 1,
+      "message": "- Let\u0027s maybe use different numbers than 0 everywhere (in the arg and the retrn value)\n- I don\u0027t think you use the argument to f.Call in any way, right?\n- Maybe also check the return values, something like:  `CHECK_EQ(0x11, f.Call());`",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 12
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
