@@ -624,6 +624,16 @@ Reduction MemoryLowering::ReduceStoreField(Node* node,
     node->ReplaceInput(2, mapword);
 #endif
   }
+  // TODO maybe generalize to all indirect pointer stores?
+  if (write_barrier_kind == kIndirectPointerWriteBarrier) {
+    // Indirect pointer stores with write barriers require knowledge of the
+    // indirect pointer tag of the field.
+    DCHECK_EQ(machine_type.representation(),
+              MachineRepresentation::kIndirectPointer);
+    DCHECK_NE(access.indirect_pointer_tag, kIndirectPointerNullTag);
+    Node* tag = __ IntPtrConstant(access.indirect_pointer_tag);
+    node->InsertInput(graph_zone(), 3, tag);
+  }
   NodeProperties::ChangeOp(
       node, machine()->Store(StoreRepresentation(machine_type.representation(),
                                                  write_barrier_kind)));
