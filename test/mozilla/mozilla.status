@@ -216,6 +216,7 @@
   # More slow tests.
   'ecma/Date/15.9.5.9': [PASS, SLOW],
   'ecma/Expressions/11.7.2': [PASS, SLOW],
+  'js1_5/Array/regress-350256-03': [PASS, SLOW],
 
   ##################### FLAKY TESTS #####################
 
