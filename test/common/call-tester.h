@@ -42,7 +42,7 @@ class CallHelper {
 
 template <>
 template <typename... Params>
-Object CallHelper<Object>::Call(Params... args) {
+Tagged<Object> CallHelper<Tagged<Object>>::Call(Params... args) {
   CSignature::VerifyParams<Params...>(csig_);
   Address entry = Generate();
   auto fn = GeneratedCode<Address, Params...>::FromAddress(isolate_, entry);
