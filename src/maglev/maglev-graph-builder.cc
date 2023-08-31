@@ -5256,8 +5256,9 @@ ReduceResult MaglevGraphBuilder::BuildInlined(ValueNode* context,
 bool MaglevGraphBuilder::ShouldInlineCall(
     compiler::SharedFunctionInfoRef shared,
     compiler::OptionalFeedbackVectorRef feedback_vector, float call_frequency) {
-  if (graph()->total_inlined_bytecode_size() >
-      v8_flags.max_maglev_inlined_bytecode_size_cumulative) {
+  if (graph()->total_inlined_bytecode_size() > compilation_unit_->is_osr()
+          ? v8_flags.max_maglev_osr_inlined_bytecode_size_cumulative
+          : v8_flags.max_maglev_inlined_bytecode_size_cumulative) {
     TRACE_CANNOT_INLINE("maximum inlined bytecode size");
     return false;
   }
@@ -5310,10 +5311,13 @@ bool MaglevGraphBuilder::ShouldInlineCall(
     TRACE_INLINING("  inlining " << shared << ": small function");
     return true;
   }
-  if (bytecode.length() > v8_flags.max_maglev_inlined_bytecode_size) {
-    TRACE_CANNOT_INLINE("big function, size ("
-                        << bytecode.length() << ") >= max-size ("
-                        << v8_flags.max_maglev_inlined_bytecode_size << ")");
+  int max = compilation_unit_->is_osr()
+                ? v8_flags.max_maglev_osr_inlined_bytecode_size
+                : v8_flags.max_maglev_inlined_bytecode_size;
+  if (bytecode.length() > max) {
+    TRACE_CANNOT_INLINE("big function, size (" << bytecode.length()
+                                               << ") >= max-size (" << max
+                                               << ")");
     return false;
   }
   if (inlining_depth() > v8_flags.max_maglev_inline_depth) {

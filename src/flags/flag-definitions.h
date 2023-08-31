@@ -550,6 +550,11 @@ DEFINE_INT(max_maglev_inlined_bytecode_size, 460,
            "maximum size of bytecode for a single inlining")
 DEFINE_INT(max_maglev_inlined_bytecode_size_cumulative, 920,
            "maximum cumulative size of bytecode considered for inlining")
+DEFINE_INT(max_maglev_osr_inlined_bytecode_size, 200,
+           "maximum size of bytecode for a single inlining during osr")
+DEFINE_INT(
+    max_maglev_osr_inlined_bytecode_size_cumulative, 500,
+    "maximum cumulative size of bytecode considered for inlining during osr")
 DEFINE_INT(max_maglev_inlined_bytecode_size_small, 27,
            "maximum size of bytecode considered for small function inlining")
 DEFINE_FLOAT(min_maglev_inlining_frequency, 0.10,
