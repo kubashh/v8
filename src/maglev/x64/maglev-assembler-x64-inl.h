@@ -257,6 +257,22 @@ inline void MaglevAssembler::CheckInt32IsSmi(Register obj, Label* fail,
   JumpIf(kOverflow, fail);
 }
 
+inline void MaglevAssembler::SmiAddConstant(Register dst, Register src,
+                                            int value, Label* fail,
+                                            Label::Distance distance) {
+  AssertSmi(src);
+  Move(dst, src);
+  if (value != 0) {
+    if (SmiValuesAre31Bits()) {
+      addl(dst, Immediate(Smi::FromInt(value)));
+      JumpIf(kOverflow, fail);
+    } else {
+      addq(dst, Immediate(Smi::FromInt(value)));
+      JumpIfNotSmi(dst, fail);
+    }
+  }
+}
+
 inline void MaglevAssembler::MoveHeapNumber(Register dst, double value) {
   movq_heap_number(dst, value);
 }
