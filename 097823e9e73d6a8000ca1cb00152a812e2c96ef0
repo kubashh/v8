@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb37755e_3f622c36",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-08-31T13:39:59Z",
+      "side": 1,
+      "message": "nit: prefix the commit title with some tags, suggestion: `[assembler][x64]`.",
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f582dde5_3e57f326",
@@ -31,6 +48,23 @@
       "writtenOn": "2023-08-31T11:38:49Z",
       "side": 1,
       "message": "LGTM with some nits.",
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cfea3c5_0a59cafe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-08-31T13:39:59Z",
+      "side": 1,
+      "message": "LGTM",
       "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -163,6 +197,30 @@
       "writtenOn": "2023-08-31T11:38:49Z",
       "side": 1,
       "message": "- Let\u0027s maybe use different numbers than 0 everywhere (in the arg and the retrn value)\n- I don\u0027t think you use the argument to f.Call in any way, right?\n- Maybe also check the return values, something like:  `CHECK_EQ(0x11, f.Call());`",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 12
+      },
+      "revId": "097823e9e73d6a8000ca1cb00152a812e2c96ef0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83d17ede_840b93c3",
+        "filename": "test/unittests/assembler/macro-assembler-ia32-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-08-31T13:39:59Z",
+      "side": 1,
+      "message": "I feel like there might be some confusion: the 0 in `ret(0)` is the pop size, it should definitely be 0. There is no return value currently, and adding one wouldn\u0027t add much value to the unit test imo.\nRegarding the arg: I think we must pass something even if unused, the parameter type cannot be void afaik.",
+      "parentUuid": "6bc00f91_e7f1d445",
       "range": {
         "startLine": 85,
         "startChar": 0,
