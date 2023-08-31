@@ -78,6 +78,7 @@ struct DerefPtrIterator : base::iterator<std::bidirectional_iterator_tag, T> {
     return *this;
   }
   bool operator!=(DerefPtrIterator other) { return ptr != other.ptr; }
+  bool operator==(DerefPtrIterator other) { return ptr == other.ptr; }
 };
 
 // {Reversed} returns a container adapter usable in a range-based "for"
