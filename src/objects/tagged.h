@@ -127,6 +127,17 @@ class Tagged<Object> : public TaggedBase {
   // Allow Tagged<Object> to be created from any address.
   constexpr explicit Tagged(Address o) : TaggedBase(o) {}
 
+  // Allow explicit uninitialized initialization. In debug mode this is zapped.
+  // TODO(leszeks): Mark this somehow as uninitialized, so that we get some
+  // warning if it is used before initialization.
+  constexpr Tagged()
+      : TaggedBase(
+#ifdef DEBUG
+            kZapValue
+#endif
+        ) {
+  }
+
   // Implicit conversion for subclasses -- all classes are subclasses of Object,
   // so allow all tagged pointers.
   // NOLINTNEXTLINE
