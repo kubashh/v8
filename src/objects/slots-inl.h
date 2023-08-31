@@ -277,9 +277,10 @@ ExternalPointerTable& ExternalPointerSlot::GetExternalPointerTableForTag(
 namespace {
 constexpr bool IsMaybeReadOnlyExternalPointerType(ExternalPointerTag tag) {
   switch (tag) {
-    case kCallHandlerInfoCallbackTag:
     case kAccessorInfoGetterTag:
     case kAccessorInfoSetterTag:
+    case kCallHandlerInfoCallbackTag:
+    case kForeignForeignAddressTag:
       return true;
     default:
       return false;
