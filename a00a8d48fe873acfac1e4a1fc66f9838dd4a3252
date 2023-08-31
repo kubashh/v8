@@ -150,6 +150,30 @@
       },
       "revId": "a00a8d48fe873acfac1e4a1fc66f9838dd4a3252",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06c3b5d1_5b29b03f",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-08-31T14:15:52Z",
+      "side": 1,
+      "message": "When does it need to be cleared? It\u0027s not copied with the graph I think so it should be fresh in every new phase.",
+      "parentUuid": "45d4c1dd_d1dd93d9",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 452,
+        "endChar": 6
+      },
+      "revId": "a00a8d48fe873acfac1e4a1fc66f9838dd4a3252",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
