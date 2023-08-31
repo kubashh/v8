@@ -485,11 +485,15 @@ size_t Heap::Available() {
 
 bool Heap::CanExpandOldGeneration(size_t size) const {
   if (force_oom_ || force_gc_on_next_allocation_) return false;
-  if (OldGenerationCapacity() + size > max_old_generation_size()) return false;
+  if (!IsOldGenerationExpansionAllowed(size)) return false;
   // The OldGenerationCapacity does not account compaction spaces used
   // during evacuation. Ensure that expanding the old generation does push
   // the total allocated memory size over the maximum heap size.
   return memory_allocator()->Size() + size <= MaxReserved();
+}
+
+bool Heap::IsOldGenerationExpansionAllowed(size_t size) const {
+  return OldGenerationCapacity() + size <= max_old_generation_size();
 }
 
 namespace {
