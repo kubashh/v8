@@ -493,11 +493,14 @@ void MacroAssembler::LoadIndirectPointerField(Register destination,
 
 void MacroAssembler::StoreIndirectPointerField(Operand dst_field_operand,
                                                Register value) {
-  DCHECK(V8_CODE_POINTER_SANDBOXING_BOOL);
-  static_assert(kAllIndirectPointerObjectsAreCode);
+#ifdef V8_CODE_POINTER_SANDBOXING
   movl(kScratchRegister,
-       FieldOperand(value, Code::kCodePointerTableEntryOffset));
+       FieldOperand(value,
+                    IndirectlyReferenceableObject::kSelfIndirectPointerOffset));
   movl(dst_field_operand, kScratchRegister);
+#else
+  UNREACHABLE();
+#endif
 }
 
 void MacroAssembler::StoreMaybeIndirectPointerField(Operand dst_field_operand,

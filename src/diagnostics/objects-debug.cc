@@ -31,6 +31,7 @@
 #include "src/objects/free-space-inl.h"
 #include "src/objects/function-kind.h"
 #include "src/objects/hash-table-inl.h"
+#include "src/objects/indirectly-referenceable-object.h"
 #include "src/objects/instance-type.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
@@ -1167,7 +1168,17 @@ void PropertyCell::PropertyCellVerify(Isolate* isolate) {
   CheckDataIsCompatible(property_details(), value());
 }
 
+void IndirectlyReferenceableObject::IndirectlyReferenceableObjectVerify(
+    Isolate* isolate) {
+#if defined(V8_CODE_POINTER_SANDBOXING)
+  // Check that the self indirect pointer is consistent, i.e. points back to
+  // this object.
+  CHECK_EQ(ReadIndirectPointerField(kSelfIndirectPointerOffset), *this);
+#endif
+}
+
 void Code::CodeVerify(Isolate* isolate) {
+  IndirectlyReferenceableObjectVerify(isolate);
   CHECK(IsCode(*this));
   if (has_instruction_stream()) {
     InstructionStream istream = instruction_stream();
@@ -1201,12 +1212,6 @@ void Code::CodeVerify(Isolate* isolate) {
     CHECK_EQ(istream.instruction_start(), instruction_start());
 #endif  // V8_COMPRESS_POINTERS && V8_SHORT_BUILTIN_CALLS
   }
-
-#if defined(V8_CODE_POINTER_SANDBOXING)
-  // Check that the code pointer table entry is consistent, i.e. points back to
-  // this Code object.
-  CHECK_EQ(ReadIndirectPointerField(kCodePointerTableEntryOffset), *this);
-#endif
 }
 
 void InstructionStream::InstructionStreamVerify(Isolate* isolate) {

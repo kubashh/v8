@@ -305,7 +305,9 @@ ExternalPointerSlot::GetDefaultExternalPointerSpace(Isolate* isolate,
 
 Object IndirectPointerSlot::load() const { return Relaxed_Load(); }
 
-void IndirectPointerSlot::store(Code code) const { return Relaxed_Store(code); }
+void IndirectPointerSlot::store(IndirectlyReferenceableObject value) const {
+  return Relaxed_Store(value);
+}
 
 Object IndirectPointerSlot::Relaxed_Load() const {
 #ifdef V8_CODE_POINTER_SANDBOXING
@@ -333,22 +335,22 @@ Object IndirectPointerSlot::Acquire_Load() const {
 #endif  // V8_CODE_POINTER_SANDBOXING
 }
 
-void IndirectPointerSlot::Relaxed_Store(Code value) const {
+void IndirectPointerSlot::Relaxed_Store(
+    IndirectlyReferenceableObject value) const {
 #ifdef V8_CODE_POINTER_SANDBOXING
-  // The Code objects owns its entry in the CodePointerTable, so here we only
-  // need to copy the handle.
-  IndirectPointerHandle handle =
-      value.ReadField<IndirectPointerHandle>(Code::kInstructionStartOffset);
+  IndirectPointerHandle handle = value.ReadField<IndirectPointerHandle>(
+      IndirectlyReferenceableObject::kSelfIndirectPointerOffset);
   Relaxed_StoreHandle(handle);
 #else
   UNREACHABLE();
 #endif  // V8_CODE_POINTER_SANDBOXING
 }
 
-void IndirectPointerSlot::Release_Store(Code value) const {
+void IndirectPointerSlot::Release_Store(
+    IndirectlyReferenceableObject value) const {
 #ifdef V8_CODE_POINTER_SANDBOXING
-  IndirectPointerHandle handle =
-      value.ReadField<IndirectPointerHandle>(Code::kInstructionStartOffset);
+  IndirectPointerHandle handle = value.ReadField<IndirectPointerHandle>(
+      IndirectlyReferenceableObject::kSelfIndirectPointerOffset);
   Release_StoreHandle(handle);
 #else
   UNREACHABLE();
