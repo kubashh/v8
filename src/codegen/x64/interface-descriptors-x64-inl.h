@@ -59,6 +59,11 @@ constexpr auto WriteBarrierDescriptor::registers() {
 #endif  // V8_TARGET_OS_WIN
 }
 
+// static
+constexpr auto IndirectPointerWriteBarrierDescriptor::registers() {
+  return WriteBarrierDescriptor::registers();
+}
+
 #ifdef V8_IS_TSAN
 // static
 constexpr auto TSANStoreDescriptor::registers() {
