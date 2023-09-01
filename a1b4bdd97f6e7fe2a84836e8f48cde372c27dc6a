@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99655db9_3e0a7ab2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-01T07:36:38Z",
+      "side": 1,
+      "message": "LGTM, I am here for you",
+      "revId": "a1b4bdd97f6e7fe2a84836e8f48cde372c27dc6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
