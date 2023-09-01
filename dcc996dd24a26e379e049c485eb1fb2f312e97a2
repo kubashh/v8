@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d676568_26ee1b45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-09-01T00:17:43Z",
+      "side": 1,
+      "message": "Saw this cleanup opportunity while hacking on the ephemeron stuff.",
+      "revId": "dcc996dd24a26e379e049c485eb1fb2f312e97a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
