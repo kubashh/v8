@@ -366,9 +366,9 @@ std::unique_ptr<v8::MeasureMemoryDelegate> MemoryMeasurement::DefaultDelegate(
                                                  mode);
 }
 
-bool NativeContextInferrer::InferForContext(Isolate* isolate, Context context,
+bool NativeContextInferrer::InferForContext(PtrComprCageBase cage_base,
+                                            Context context,
                                             Address* native_context) {
-  PtrComprCageBase cage_base(isolate);
   Map context_map = context->map(cage_base, kAcquireLoad);
   Object maybe_native_context =
       TaggedField<Object, Map::kConstructorOrBackPointerOrNativeContextOffset>::
@@ -380,11 +380,11 @@ bool NativeContextInferrer::InferForContext(Isolate* isolate, Context context,
   return false;
 }
 
-bool NativeContextInferrer::InferForJSFunction(Isolate* isolate,
+bool NativeContextInferrer::InferForJSFunction(PtrComprCageBase cage_base,
                                                JSFunction function,
                                                Address* native_context) {
   Object maybe_context =
-      TaggedField<Object, JSFunction::kContextOffset>::Acquire_Load(isolate,
+      TaggedField<Object, JSFunction::kContextOffset>::Acquire_Load(cage_base,
                                                                     function);
   // The context may be a smi during deserialization.
   if (IsSmi(maybe_context)) {
@@ -395,15 +395,16 @@ bool NativeContextInferrer::InferForJSFunction(Isolate* isolate,
     // The function does not have a context.
     return false;
   }
-  return InferForContext(isolate, Context::cast(maybe_context), native_context);
+  return InferForContext(cage_base, Context::cast(maybe_context),
+                         native_context);
 }
 
-bool NativeContextInferrer::InferForJSObject(Isolate* isolate, Map map,
-                                             JSObject object,
+bool NativeContextInferrer::InferForJSObject(PtrComprCageBase cage_base,
+                                             Map map, JSObject object,
                                              Address* native_context) {
   if (map->instance_type() == JS_GLOBAL_OBJECT_TYPE) {
     Object maybe_context =
-        JSGlobalObject::cast(object)->native_context_unchecked(isolate);
+        JSGlobalObject::cast(object)->native_context_unchecked(cage_base);
     if (IsNativeContext(maybe_context)) {
       *native_context = maybe_context.ptr();
       return true;
@@ -411,9 +412,9 @@ bool NativeContextInferrer::InferForJSObject(Isolate* isolate, Map map,
   }
   // The maximum number of steps to perform when looking for the context.
   const int kMaxSteps = 3;
-  Object maybe_constructor = map->TryGetConstructor(isolate, kMaxSteps);
+  Object maybe_constructor = map->TryGetConstructor(cage_base, kMaxSteps);
   if (IsJSFunction(maybe_constructor)) {
-    return InferForJSFunction(isolate, JSFunction::cast(maybe_constructor),
+    return InferForJSFunction(cage_base, JSFunction::cast(maybe_constructor),
                               native_context);
   }
   return false;

@@ -899,13 +899,13 @@ DEF_GETTER(Map, GetConstructor, Tagged<Object>) {
   return maybe_constructor;
 }
 
-Object Map::TryGetConstructor(Isolate* isolate, int max_steps) {
-  Object maybe_constructor = constructor_or_back_pointer(isolate);
+Object Map::TryGetConstructor(PtrComprCageBase cage_base, int max_steps) {
+  Object maybe_constructor = constructor_or_back_pointer(cage_base);
   // Follow any back pointers.
-  while (IsMap(maybe_constructor, isolate)) {
+  while (IsMap(maybe_constructor, cage_base)) {
     if (max_steps-- == 0) return Smi::FromInt(0);
     maybe_constructor =
-        Map::cast(maybe_constructor)->constructor_or_back_pointer(isolate);
+        Map::cast(maybe_constructor)->constructor_or_back_pointer(cage_base);
   }
   if (IsTuple2(maybe_constructor)) {
     // Get constructor from the {constructor, non-instance_prototype} tuple.

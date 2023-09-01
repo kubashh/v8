@@ -614,7 +614,7 @@ class Map : public TorqueGeneratedMap<Map, HeapObject> {
   // Constructor getter that performs at most the given number of steps
   // in the transition tree. Returns either the constructor or the map at
   // which the walk has stopped.
-  inline Object TryGetConstructor(Isolate* isolate, int max_steps);
+  inline Object TryGetConstructor(PtrComprCageBase cage_base, int max_steps);
 
   // Gets non-instance prototype value which is stored in Tuple2 in a
   // root map's |constructor_or_back_pointer| field.

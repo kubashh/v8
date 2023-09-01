@@ -73,15 +73,15 @@ class V8_EXPORT_PRIVATE NativeContextInferrer {
   // It should be initialized to the context that will be used for the object
   // if the inference is not successful. The function performs more work if the
   // context is the shared context.
-  V8_INLINE bool Infer(Isolate* isolate, Map map, HeapObject object,
+  V8_INLINE bool Infer(PtrComprCageBase cage_base, Map map, HeapObject object,
                        Address* native_context);
 
  private:
-  bool InferForContext(Isolate* isolate, Context context,
+  bool InferForContext(PtrComprCageBase cage_base, Context context,
                        Address* native_context);
-  bool InferForJSFunction(Isolate* isolate, JSFunction function,
+  bool InferForJSFunction(PtrComprCageBase cage_base, JSFunction function,
                           Address* native_context);
-  bool InferForJSObject(Isolate* isolate, Map map, JSObject object,
+  bool InferForJSObject(PtrComprCageBase cage_base, Map map, JSObject object,
                         Address* native_context);
 };
 
