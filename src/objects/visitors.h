@@ -179,10 +179,12 @@ class ObjectVisitor {
                                     ExternalPointerTag tag) {}
 
   virtual void VisitIndirectPointer(HeapObject host, IndirectPointerSlot slot,
-                                    IndirectPointerMode mode) {}
+                                    IndirectPointerMode mode,
+                                    IndirectPointerTag tag) {}
 
   virtual void VisitIndirectPointerTableEntry(HeapObject host,
-                                              IndirectPointerSlot slot) {}
+                                              IndirectPointerSlot slot,
+                                              IndirectPointerTag tag) {}
 
   virtual void VisitMapPointer(HeapObject host) { UNREACHABLE(); }
 };
