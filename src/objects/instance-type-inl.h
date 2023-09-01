@@ -341,7 +341,6 @@ V8_INLINE bool IsFreeSpaceOrFiller(Map map_object) {
 // the INSTANCE_TYPE_CHECKERS_CUSTOM list.
 V8_INLINE constexpr bool IsIndirectlyReferenceableObject(
     InstanceType instance_type) {
-  static_assert(kAllIndirectPointerObjectsAreCode);
   return IsCode(instance_type);
 }
 
