@@ -39,6 +39,30 @@
       },
       "revId": "2869eb00cab48e5259fabeea0d34537d46fc9507",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c51e7d1_c10f2136",
+        "filename": "src/heap/minor-gc-job.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-09-01T08:14:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ec3a675_d4c9f484",
+      "range": {
+        "startLine": 78,
+        "startChar": 2,
+        "endLine": 78,
+        "endChar": 11
+      },
+      "revId": "2869eb00cab48e5259fabeea0d34537d46fc9507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
