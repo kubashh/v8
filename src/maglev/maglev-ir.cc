@@ -1252,6 +1252,17 @@ void UnsafeSmiTag::GenerateCode(MaglevAssembler* masm,
   }
 }
 
+void CheckedSmiIncrement::SetValueLocationConstraints() {
+  UseRegister(value_input());
+  DefineSameAsFirst(this);
+}
+
+void CheckedSmiIncrement::GenerateCode(MaglevAssembler* masm,
+                                       const ProcessingState& state) {
+  Label* deopt_label = __ GetDeoptLabel(this, DeoptimizeReason::kOverflow);
+  __ SmiAddConstant(ToRegister(value_input()), 1, deopt_label);
+}
+
 namespace {
 
 void JumpToFailIfNotHeapNumberOrOddball(
@@ -3450,6 +3461,18 @@ void LoadNamedFromSuperGeneric::GenerateCode(MaglevAssembler* masm,
       feedback().vector                             // feedback vector
   );
   masm->DefineExceptionHandlerAndLazyDeoptPoint(this);
+}
+
+void LoadElementsKindFromReceiver::SetValueLocationConstraints() {
+  UseRegister(receiver());
+  DefineAsRegister(this);
+}
+void LoadElementsKindFromReceiver::GenerateCode(MaglevAssembler* masm,
+                                                const ProcessingState& state) {
+  Register result_reg = ToRegister(result());
+  __ LoadMap(result_reg, ToRegister(receiver()));
+  __ LoadBitField<Map::Bits2::ElementsKindBits>(
+      result_reg, FieldMemOperand(result_reg, Map::kBitField2Offset));
 }
 
 int SetNamedGeneric::MaxCallStackArgs() const {

@@ -118,6 +118,8 @@ class MergePointInterpreterFrameState;
   V(Float64ToBoolean)                   \
   V(Float64Ieee754Unary)
 
+#define SMI_OPERATIONS_NODE_LIST(V) V(CheckedSmiIncrement)
+
 #define CONSTANT_VALUE_NODE_LIST(V) \
   V(Constant)                       \
   V(ExternalConstant)               \
@@ -189,6 +191,7 @@ class MergePointInterpreterFrameState;
   V(LoadGlobal)                                     \
   V(LoadNamedGeneric)                               \
   V(LoadNamedFromSuperGeneric)                      \
+  V(LoadElementsKindFromReceiver)                   \
   V(MaybeGrowAndEnsureWritableFastElements)         \
   V(SetNamedGeneric)                                \
   V(DefineNamedOwnGeneric)                          \
@@ -252,6 +255,7 @@ class MergePointInterpreterFrameState;
   CONSTANT_VALUE_NODE_LIST(V)                       \
   INT32_OPERATIONS_NODE_LIST(V)                     \
   FLOAT64_OPERATIONS_NODE_LIST(V)                   \
+  SMI_OPERATIONS_NODE_LIST(V)                       \
   GENERIC_OPERATIONS_NODE_LIST(V)                   \
   INLINE_BUILTIN_NODE_LIST(V)
 
@@ -2625,6 +2629,25 @@ class Int32ToBoolean : public FixedInputValueNodeT<1, Int32ToBoolean> {
 
  private:
   using FlipBitField = NextBitField<bool, 1>;
+};
+
+class CheckedSmiIncrement
+    : public FixedInputValueNodeT<1, CheckedSmiIncrement> {
+  using Base = FixedInputValueNodeT<1, CheckedSmiIncrement>;
+
+ public:
+  explicit CheckedSmiIncrement(uint64_t bitfield) : Base(bitfield) {}
+
+  static constexpr OpProperties kProperties = OpProperties::EagerDeopt();
+  static constexpr
+      typename Base::InputTypes kInputTypes{ValueRepresentation::kTagged};
+
+  static constexpr int kValueIndex = 0;
+  Input& value_input() { return Node::input(kValueIndex); }
+
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
 };
 
 template <class Derived, Operation kOperation>
@@ -6382,6 +6405,26 @@ class LoadNamedFromSuperGeneric
  private:
   const compiler::NameRef name_;
   const compiler::FeedbackSource feedback_;
+};
+
+class LoadElementsKindFromReceiver
+    : public FixedInputValueNodeT<1, LoadElementsKindFromReceiver> {
+  using Base = FixedInputValueNodeT<1, LoadElementsKindFromReceiver>;
+
+ public:
+  explicit LoadElementsKindFromReceiver(uint64_t bitfield) : Base(bitfield) {}
+
+  static constexpr OpProperties kProperties =
+      OpProperties::CanRead() | OpProperties::Int32();
+  static constexpr
+      typename Base::InputTypes kInputTypes{ValueRepresentation::kTagged};
+
+  static constexpr int kReceiverIndex = 0;
+  Input& receiver() { return input(kReceiverIndex); }
+
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
 };
 
 class SetNamedGeneric : public FixedInputValueNodeT<3, SetNamedGeneric> {
