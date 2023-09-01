@@ -425,7 +425,8 @@ size_t Heap::CommittedOldGenerationMemory() {
   if (shared_lo_space_) {
     total += shared_lo_space_->Size();
   }
-  return total + lo_space_->Size() + code_lo_space_->Size();
+  return total + lo_space_->Size() + code_lo_space_->Size() +
+         trusted_lo_space_->Size();
 }
 
 size_t Heap::CommittedMemoryOfUnmapper() {
@@ -687,6 +688,21 @@ void Heap::PrintShortHeapStatistics() {
                code_lo_space_->SizeOfObjects() / KB,
                code_lo_space_->Available() / KB,
                code_lo_space_->CommittedMemory() / KB);
+  PrintIsolate(isolate_,
+               "Trusted space,              used: %6zu KB"
+               ", available: %6zu KB%s"
+               ", committed: %6zu KB\n",
+               trusted_space_->SizeOfObjects() / KB,
+               trusted_space_->Available() / KB,
+               sweeping_in_progress() ? "*" : "",
+               trusted_space_->CommittedMemory() / KB);
+  PrintIsolate(isolate_,
+               "Trusted large object space,     used: %6zu KB"
+               ", available: %6zu KB"
+               ", committed: %6zu KB\n",
+               trusted_lo_space_->SizeOfObjects() / KB,
+               trusted_lo_space_->Available() / KB,
+               trusted_lo_space_->CommittedMemory() / KB);
   ReadOnlySpace* const ro_space = read_only_space_;
   PrintIsolate(isolate_,
                "All spaces,             used: %6zu KB"
@@ -837,7 +853,9 @@ void Heap::DumpJSONHeapStatistics(std::stringstream& stream) {
       SpaceStatistics(CODE_SPACE)    << "," <<
       SpaceStatistics(LO_SPACE)      << "," <<
       SpaceStatistics(CODE_LO_SPACE) << "," <<
-      SpaceStatistics(NEW_LO_SPACE)));
+      SpaceStatistics(NEW_LO_SPACE)  << "," <<
+      SpaceStatistics(TRUSTED_SPACE) << "," <<
+      SpaceStatistics(TRUSTED_LO_SPACE)));
 
 #undef DICT
 #undef LIST
@@ -1287,6 +1305,7 @@ void Heap::PublishPendingAllocations() {
   lo_space_->ResetPendingObject();
   if (new_lo_space_) new_lo_space_->ResetPendingObject();
   code_lo_space_->ResetPendingObject();
+  trusted_lo_space_->ResetPendingObject();
 }
 
 void Heap::DeoptMarkedAllocationSites() {
@@ -4319,6 +4338,8 @@ void Heap::CollectCodeStatistics() {
   CodeStatistics::CollectCodeStatistics(code_space_, isolate());
   CodeStatistics::CollectCodeStatistics(old_space_, isolate());
   CodeStatistics::CollectCodeStatistics(code_lo_space_, isolate());
+  CodeStatistics::CollectCodeStatistics(trusted_space_, isolate());
+  CodeStatistics::CollectCodeStatistics(trusted_lo_space_, isolate());
 }
 
 #ifdef DEBUG
@@ -4358,6 +4379,8 @@ bool Heap::Contains(Tagged<HeapObject> value) const {
          (shared_space_ && shared_space_->Contains(value)) ||
          lo_space_->Contains(value) || code_lo_space_->Contains(value) ||
          (new_lo_space_ && new_lo_space_->Contains(value)) ||
+         trusted_space_->Contains(value) ||
+         trusted_lo_space_->Contains(value) ||
          (shared_lo_space_ && shared_lo_space_->Contains(value));
 }
 
@@ -4411,6 +4434,8 @@ bool Heap::InSpace(Tagged<HeapObject> value, AllocationSpace space) const {
       return code_space_->Contains(value);
     case SHARED_SPACE:
       return shared_space_->Contains(value);
+    case TRUSTED_SPACE:
+      return trusted_space_->Contains(value);
     case LO_SPACE:
       return lo_space_->Contains(value);
     case CODE_LO_SPACE:
@@ -4419,6 +4444,8 @@ bool Heap::InSpace(Tagged<HeapObject> value, AllocationSpace space) const {
       return new_lo_space_->Contains(value);
     case SHARED_LO_SPACE:
       return shared_lo_space_->Contains(value);
+    case TRUSTED_LO_SPACE:
+      return trusted_lo_space_->Contains(value);
     case RO_SPACE:
       return ReadOnlyHeap::Contains(value);
   }
@@ -4441,6 +4468,8 @@ bool Heap::InSpaceSlow(Address addr, AllocationSpace space) const {
       return code_space_->ContainsSlow(addr);
     case SHARED_SPACE:
       return shared_space_->ContainsSlow(addr);
+    case TRUSTED_SPACE:
+      return trusted_space_->ContainsSlow(addr);
     case LO_SPACE:
       return lo_space_->ContainsSlow(addr);
     case CODE_LO_SPACE:
@@ -4449,6 +4478,8 @@ bool Heap::InSpaceSlow(Address addr, AllocationSpace space) const {
       return new_lo_space_->ContainsSlow(addr);
     case SHARED_LO_SPACE:
       return shared_lo_space_->ContainsSlow(addr);
+    case TRUSTED_LO_SPACE:
+      return trusted_lo_space_->ContainsSlow(addr);
     case RO_SPACE:
       return read_only_space_->ContainsSlow(addr);
   }
@@ -4465,6 +4496,8 @@ bool Heap::IsValidAllocationSpace(AllocationSpace space) {
     case NEW_LO_SPACE:
     case CODE_LO_SPACE:
     case SHARED_LO_SPACE:
+    case TRUSTED_SPACE:
+    case TRUSTED_LO_SPACE:
     case RO_SPACE:
       return true;
     default:
@@ -5583,6 +5616,13 @@ void Heap::SetUpSpaces(LinearAllocationArea& new_allocation_info,
     shared_lo_space_ =
         static_cast<SharedLargeObjectSpace*>(space_[SHARED_LO_SPACE].get());
   }
+
+  space_[TRUSTED_SPACE] = std::make_unique<TrustedSpace>(this);
+  trusted_space_ = static_cast<TrustedSpace*>(space_[TRUSTED_SPACE].get());
+
+  space_[TRUSTED_LO_SPACE] = std::make_unique<TrustedLargeObjectSpace>(this);
+  trusted_lo_space_ =
+      static_cast<TrustedLargeObjectSpace*>(space_[TRUSTED_LO_SPACE].get());
 
   for (int i = 0; i < static_cast<int>(v8::Isolate::kUseCounterFeatureCount);
        i++) {
@@ -6769,10 +6809,13 @@ bool Heap::AllowedToBeMigrated(Tagged<Map> map, Tagged<HeapObject> obj,
       return dst == CODE_SPACE && type == INSTRUCTION_STREAM_TYPE;
     case SHARED_SPACE:
       return dst == SHARED_SPACE;
+    case TRUSTED_SPACE:
+      return dst == TRUSTED_SPACE;
     case LO_SPACE:
     case CODE_LO_SPACE:
     case NEW_LO_SPACE:
     case SHARED_LO_SPACE:
+    case TRUSTED_LO_SPACE:
     case RO_SPACE:
       return false;
   }
@@ -7219,6 +7262,8 @@ void Heap::EnsureSweepingCompleted(SweepingForcedFinalizationMode mode) {
     if (shared_space()) {
       shared_space()->RefillFreeList();
     }
+
+    trusted_space()->RefillFreeList();
 
     tracer()->NotifyFullSweepingCompleted();
 

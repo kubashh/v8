@@ -89,6 +89,8 @@ const char* ToString(SnapshotSpace space) {
       return "Old";
     case SnapshotSpace::kCode:
       return "Code";
+    case SnapshotSpace::kTrusted:
+      return "Trusted";
   }
 }
 
@@ -850,6 +852,9 @@ SnapshotSpace GetSnapshotSpace(Tagged<HeapObject> object) {
         return SnapshotSpace::kOld;
       case CODE_SPACE:
         return SnapshotSpace::kCode;
+      case TRUSTED_SPACE:
+      case TRUSTED_LO_SPACE:
+        return SnapshotSpace::kTrusted;
       case CODE_LO_SPACE:
       case RO_SPACE:
         UNREACHABLE();
