@@ -57,6 +57,13 @@ class EmbeddedData final {
   // Create the embedded blob from the given Isolate's heap state.
   static EmbeddedData NewFromIsolate(Isolate* isolate);
 
+  // Create the embedded blob from the given Isolate's heap state.
+  // and patch it for splitting builtins
+  static EmbeddedData NewFromIsolateWithPatch(Isolate* isolate);
+
+  // Prepare for data structure will be used in later patching
+  static void PrepareDataAndCode(Isolate* isolate);
+
   // Returns the global embedded blob (usually physically located in .text and
   // .rodata).
   static EmbeddedData FromBlob() {
@@ -226,7 +233,9 @@ class EmbeddedData final {
   // [0] instruction section of builtin 0
   // ... instruction sections (embedded snapshot order)
 
-  static constexpr uint32_t kTableSize = Builtins::kBuiltinCount;
+  // We will split builtins, hence there is double table entry for kBuiltinCount
+  // remove 2 * when set mksnapshot_with_spiliting as false
+  static constexpr uint32_t kTableSize = 2 * Builtins::kBuiltinCount;
   static constexpr uint32_t EmbeddedBlobDataHashOffset() { return 0; }
   static constexpr uint32_t EmbeddedBlobDataHashSize() { return kSizetSize; }
   static constexpr uint32_t EmbeddedBlobCodeHashOffset() {

@@ -2600,6 +2600,133 @@ Handle<Code> Factory::NewCodeObjectForEmbeddedBuiltin(Handle<Code> code,
   return NewCode(new_code_options);
 }
 
+Handle<Code> Factory::NewCodeObjectForEmbeddedBuiltinColdPart(
+    Handle<Code> code, int32_t hot_size) {
+  CHECK_NOT_NULL(isolate()->embedded_blob_code());
+  CHECK_NE(0, isolate()->embedded_blob_code_size());
+  CHECK(Builtins::IsIsolateIndependentBuiltin(*code));
+
+#if !defined(V8_SHORT_BUILTIN_CALLS) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
+  // Builtins have a single unique shared entry point per process. The
+  // embedded builtins region may be remapped into the process-wide code
+  // range, but that happens before RO space is deserialized. Their Code
+  // objects can be shared in RO space.
+  static_assert(Builtins::kCodeObjectsAreInROSpace);
+  const AllocationType allocation_type = AllocationType::kReadOnly;
+#else
+  // Builtins may be remapped more than once per process and thus their
+  // Code objects cannot be shared.
+  static_assert(!Builtins::kCodeObjectsAreInROSpace);
+  const AllocationType allocation_type = AllocationType::kOld;
+#endif
+
+  // DCHECK(code->has_instruction_stream());  // Just generated as on-heap code.
+  DCHECK(Builtins::IsBuiltinId(code->builtin_id()));
+  DCHECK_EQ(code->inlined_bytecode_size(), 0);
+  DCHECK_EQ(code->osr_offset(), BytecodeOffset::None());
+  DCHECK_EQ(code->raw_deoptimization_data_or_interpreter_data(),
+            read_only_roots().empty_fixed_array());
+  // .. because we don't explicitly initialize these flags:
+  DCHECK(!code->marked_for_deoptimization());
+  DCHECK(!code->can_have_weak_objects());
+  DCHECK(!code->embedded_objects_cleared());
+  // This check would fail. We explicitly replace any existing position tables
+  // with the empty byte array below. Note this isn't strictly necessary - we
+  // could keep the position tables if we'd properly allocate them into RO
+  // space when needed.
+  // DCHECK_EQ(code->raw_position_table(), *empty_byte_array());
+
+  Address cold_start = reinterpret_cast<Address>(
+      reinterpret_cast<uint8_t*>(code->instruction_start()) + hot_size);
+  Builtin cold_builtin_id = Builtins::FromInt(
+      static_cast<int>(code->builtin_id()) + Builtins::kBuiltinCount);
+  NewCodeOptions new_code_options = {
+      code->kind(),
+      cold_builtin_id,
+      code->is_turbofanned(),
+      code->stack_slots(),
+      allocation_type,
+      builtin_original_size_->at(static_cast<int>(code->builtin_id())) -
+          hot_size,
+      code->metadata_size(),
+      code->inlined_bytecode_size(),
+      code->osr_offset(),
+      code->handler_table_offset(),
+      code->constant_pool_offset(),
+      code->code_comments_offset(),
+      code->unwinding_info_offset(),
+      handle(code->raw_deoptimization_data_or_interpreter_data(), isolate()),
+      /*bytecode_offsets_or_source_position_table=*/empty_byte_array(),
+      /*instruction_stream=*/MaybeHandle<InstructionStream>{},
+      cold_start,
+  };
+
+  return NewCode(new_code_options);
+}
+
+Handle<Code> Factory::NewCodeObjectForEmbeddedBuiltinDummyColdPart(
+    Handle<Code> code) {
+  CHECK_NOT_NULL(isolate()->embedded_blob_code());
+  CHECK_NE(0, isolate()->embedded_blob_code_size());
+  CHECK(Builtins::IsIsolateIndependentBuiltin(*code));
+
+#if !defined(V8_SHORT_BUILTIN_CALLS) || \
+    defined(V8_COMPRESS_POINTERS_IN_SHARED_CAGE)
+  // Builtins have a single unique shared entry point per process. The
+  // embedded builtins region may be remapped into the process-wide code
+  // range, but that happens before RO space is deserialized. Their Code
+  // objects can be shared in RO space.
+  static_assert(Builtins::kCodeObjectsAreInROSpace);
+  const AllocationType allocation_type = AllocationType::kReadOnly;
+#else
+  // Builtins may be remapped more than once per process and thus their
+  // Code objects cannot be shared.
+  static_assert(!Builtins::kCodeObjectsAreInROSpace);
+  const AllocationType allocation_type = AllocationType::kOld;
+#endif
+
+  // DCHECK(code->has_instruction_stream());  // Just generated as on-heap code.
+  DCHECK(Builtins::IsBuiltinId(code->builtin_id()));
+  DCHECK_EQ(code->inlined_bytecode_size(), 0);
+  DCHECK_EQ(code->osr_offset(), BytecodeOffset::None());
+  DCHECK_EQ(code->raw_deoptimization_data_or_interpreter_data(),
+            read_only_roots().empty_fixed_array());
+  // .. because we don't explicitly initialize these flags:
+  DCHECK(!code->marked_for_deoptimization());
+  DCHECK(!code->can_have_weak_objects());
+  DCHECK(!code->embedded_objects_cleared());
+  // This check would fail. We explicitly replace any existing position tables
+  // with the empty byte array below. Note this isn't strictly necessary - we
+  // could keep the position tables if we'd properly allocate them into RO
+  // space when needed.
+  // DCHECK_EQ(code->raw_position_table(), *empty_byte_array());
+
+  Builtin dummy_builtin_id = Builtins::FromInt(
+      static_cast<int>(code->builtin_id()) + Builtins::kBuiltinCount);
+  NewCodeOptions new_code_options = {
+      code->kind(),
+      dummy_builtin_id,
+      code->is_turbofanned(),
+      code->stack_slots(),
+      allocation_type,
+      0,
+      code->metadata_size(),
+      code->inlined_bytecode_size(),
+      code->osr_offset(),
+      code->handler_table_offset(),
+      code->constant_pool_offset(),
+      code->code_comments_offset(),
+      code->unwinding_info_offset(),
+      handle(code->raw_deoptimization_data_or_interpreter_data(), isolate()),
+      /*bytecode_offsets_or_source_position_table=*/empty_byte_array(),
+      /*instruction_stream=*/MaybeHandle<InstructionStream>{},
+      code->instruction_start(),
+  };
+
+  return NewCode(new_code_options);
+}
+
 Handle<BytecodeArray> Factory::CopyBytecodeArray(Handle<BytecodeArray> source) {
   int size = BytecodeArray::SizeFor(source->length());
   Tagged<BytecodeArray> copy = BytecodeArray::cast(AllocateRawWithImmortalMap(

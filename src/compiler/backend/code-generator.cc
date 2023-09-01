@@ -269,7 +269,58 @@ void CodeGenerator::AssembleCode() {
   }
   // Assemble instructions in assembly order.
   offsets_info_.blocks_start = masm()->pc_offset();
+
+  bool is_splitted = false;
+
   for (const InstructionBlock* block : instructions()->ao_blocks()) {
+    if (v8_flags.is_mksnapshot && is_splitted) {
+      // if(block->IsDeferred() != true){
+      //   PrintF("block %d is not deffered!\n", block->rpo_number().ToInt());
+      // }
+      //  To check all block after a deferred block is deferred
+      CHECK_EQ(block->IsDeferred(), true);
+    } else {
+      if (block->IsDeferred() && !block->IsLoopHeaderInAssemblyOrder()) {
+        // if(block->IsLoopHeaderInAssemblyOrder()){
+        //   PrintF("it's loop header in ao!\n");
+        // }
+        if (current_builtin_ != -1 && builtin_deffered_offset_ &&
+            builtin_deffered_offset_->count(current_builtin_) == 0) {
+          printf("set %s with deferred offset 0x%x\n",
+                 Builtins::name(static_cast<Builtin>(current_builtin_)),
+                 masm()->pc_offset());
+          builtin_deffered_offset_->emplace(current_builtin_,
+                                            masm()->pc_offset());
+          RpoNumber current_ao = instructions()
+                                     ->InstructionBlockAt(block->rpo_number())
+                                     ->ao_number();
+          for (RpoNumber predecessor_rpo : block->predecessors()) {
+            RpoNumber predecessor_ao = instructions()
+                                           ->InstructionBlockAt(predecessor_rpo)
+                                           ->ao_number();
+            if (current_ao.IsNext(predecessor_ao)) {
+              PrintF("Fallthrough 1 found!\n");
+              PrintF("current rpo is %d, next rpo is %d\n",
+                     block->rpo_number().ToInt(), predecessor_ao.ToInt());
+              abort();
+            }
+            if (predecessor_ao.IsNext(current_ao)) {
+              PrintF("Fallthrough 2 found!\n");
+              PrintF("current rpo is %d, next rpo is %d\n",
+                     block->rpo_number().ToInt(), predecessor_ao.ToInt());
+              // PrintF("ao order:\n");
+              /*for (const InstructionBlock* ab : instructions()->ao_blocks()) {
+                PrintF("rpo number: %d\n", ab->rpo_number().ToInt());
+              }*/
+              abort();
+            }
+          }
+        }
+        // PrintF("Deffered block start at 0x%x, which is block %d\n",
+        // masm()->pc_offset(), block->rpo_number().ToInt());
+        is_splitted = true;
+      }
+    }
     // Align loop headers on vendor recommended boundaries.
     if (block->ShouldAlignLoopHeader()) {
       masm()->LoopHeaderAlign();

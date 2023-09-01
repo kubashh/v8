@@ -403,8 +403,28 @@ int main(int argc, char* argv[]) {
   }
 
   CcTest* test = it->second;
-  test->Run(argv[0]);
 
+  // For some cctest test case will also compile builtins
+  i::builtin_jumps_ = new i::BuiltinsJumps();
+  i::builtin_deffered_offset_ = new i::BuiltinsDeferredOffset();
+  i::builtin_original_size_ = new i::BuiltinsOriginalSize();
+  i::builtin_offset_in_snapshot_ = new i::BuiltinsOffsetInSnapshot();
+  i::cross_builtin_table_ = new i::CrossBuiltinTable();
+  test->Run(argv[0]);
+  delete i::builtin_jumps_;
+  i::builtin_jumps_ = nullptr;
+
+  delete i::builtin_deffered_offset_;
+  i::builtin_deffered_offset_ = nullptr;
+
+  delete i::builtin_original_size_;
+  i::builtin_original_size_ = nullptr;
+
+  delete i::builtin_offset_in_snapshot_;
+  i::builtin_offset_in_snapshot_ = nullptr;
+
+  delete i::cross_builtin_table_;
+  i::cross_builtin_table_ = nullptr;
   return 0;
 }
 

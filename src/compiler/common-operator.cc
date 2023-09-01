@@ -23,6 +23,10 @@ std::ostream& operator<<(std::ostream& os, BranchHint hint) {
       return os << "True";
     case BranchHint::kFalse:
       return os << "False";
+    case BranchHint::kStrongTrue:
+      return os << "StrongTrue";
+    case BranchHint::kStrongFalse:
+      return os << "StrongFalse";
   }
   UNREACHABLE();
 }

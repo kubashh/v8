@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include <initializer_list>
 #include <limits>
 #include <ostream>
 
@@ -29,6 +30,47 @@ class RecursiveMutex;
 }  // namespace base
 
 namespace internal {
+
+// format: jump offset star, jump end inst offset
+// for example:
+// 0x2c     0x0f80(jo) "0x00000008" ---- start inst at 0x2e, but jump offset at
+// 0x34 0x32     xxx ------------------------ next inst after jump
+// .......
+// 0x40     "xxx" ---------------------- end inst at 0x40
+// the two parts in the qutations is the offset in the below data struct
+using Jump = std::pair<int32_t, int32_t>;
+using Jumps = std::vector<Jump>;
+using BuiltinsJumps = std::unordered_map<int32_t, Jumps>;
+extern BuiltinsJumps* builtin_jumps_;
+extern int32_t current_builtin_;
+
+// builtin id(hot only), deferred offset in the builtin
+using BuiltinsDeferredOffset = std::unordered_map<int32_t, int32_t>;
+extern BuiltinsDeferredOffset* builtin_deffered_offset_;
+
+// builtin id(hot only for original), deferred offset in the builtin
+using BuiltinsOriginalSize = std::unordered_map<int32_t, int32_t>;
+extern BuiltinsOriginalSize* builtin_original_size_;
+
+// builtin id (hot and cold), offset inside snapshot
+using BuiltinsOffsetInSnapshot = std::unordered_map<int32_t, int32_t>;
+extern BuiltinsOffsetInSnapshot* builtin_offset_in_snapshot_;
+
+// builtin id, cold part id of the builtin (behind all original builtins)
+using BuiltinsHot2ColdMap = std::unordered_map<int32_t, int32_t>;
+extern BuiltinsHot2ColdMap* builtin_hot2cold_map_;
+
+// cold part id of the builtin (behind all original builtins), builtin id
+using BuiltinsCold2HotMap = std::unordered_map<int32_t, int32_t>;
+extern BuiltinsCold2HotMap* builtin_cold2hot_map_;
+
+// offset from caller(the real offset of jump offset, like Jump above), callee
+// builtin id
+using CrossBuiltinJump = std::pair<int32_t, int32_t>;
+using CrossBuiltinJumps = std::vector<CrossBuiltinJump>;
+using CrossBuiltinTable = std::unordered_map<int32_t, CrossBuiltinJumps>;
+
+extern CrossBuiltinTable* cross_builtin_table_;
 
 // Determine whether we are running in a simulated environment.
 // Setting USE_SIMULATOR explicitly from the build script will force
@@ -1509,7 +1551,13 @@ constexpr int kIeeeDoubleExponentWordOffset = 0;
   (((value) + ::i::kDoubleAlignmentMask) & ~::i::kDoubleAlignmentMask)
 
 // Prediction hint for branches.
-enum class BranchHint : uint8_t { kNone, kTrue, kFalse };
+enum class BranchHint : uint8_t {
+  kNone,
+  kTrue,
+  kFalse,
+  kStrongTrue,
+  kStrongFalse
+};
 
 // Defines hints about receiver values based on structural knowledge.
 enum class ConvertReceiverMode : unsigned {

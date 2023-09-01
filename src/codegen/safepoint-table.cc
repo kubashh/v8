@@ -53,8 +53,8 @@ int SafepointTable::find_return_pc(int pc_offset) {
   UNREACHABLE();
 }
 
-SafepointEntry SafepointTable::FindEntry(Address pc) const {
-  int pc_offset = static_cast<int>(pc - instruction_start_);
+SafepointEntry SafepointTable::FindEntry(Address pc, int hot_size) const {
+  int pc_offset = static_cast<int>(pc - instruction_start_) + hot_size;
 
   // Check if the PC is pointing at a trampoline.
   if (has_deopt_data()) {
@@ -81,7 +81,14 @@ SafepointEntry SafepointTable::FindEntry(Address pc) const {
 SafepointEntry SafepointTable::FindEntry(Isolate* isolate, GcSafeCode code,
                                          Address pc) {
   SafepointTable table(isolate, pc, code);
-  return table.FindEntry(pc);
+  int hot_inst_size = 0;
+  if (V8_UNLIKELY(static_cast<int>(code.builtin_id()) >=
+                  Builtins::kBuiltinCount)) {
+    Builtin hot_builtin = Builtins::FromInt(
+        static_cast<int>(code.builtin_id()) - Builtins::kBuiltinCount);
+    hot_inst_size = isolate->builtins()->code(hot_builtin).instruction_size();
+  }
+  return table.FindEntry(pc, hot_inst_size);
 }
 
 void SafepointTable::Print(std::ostream& os) const {
