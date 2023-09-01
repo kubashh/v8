@@ -3542,8 +3542,9 @@ void MacroAssembler::StoreIndirectPointerField(Register value,
   DCHECK(V8_CODE_POINTER_SANDBOXING_BOOL);
   UseScratchRegisterScope temps(this);
   Register scratch = temps.AcquireX();
-  static_assert(kAllIndirectPointerObjectsAreCode);
-  Ldr(scratch.W(), FieldMemOperand(value, Code::kCodePointerTableEntryOffset));
+  Ldr(scratch.W(),
+      FieldMemOperand(
+          value, IndirectlyReferenceableObject::kSelfIndirectPointerOffset));
   Str(scratch.W(), dst_field_operand);
 }
 
