@@ -295,10 +295,12 @@ class ExternalPointerSlot
     : public SlotBase<ExternalPointerSlot, ExternalPointer_t,
                       kTaggedSize /* slot alignment */> {
  public:
-  ExternalPointerSlot() : SlotBase(kNullAddress) {}
-  explicit ExternalPointerSlot(Address ptr) : SlotBase(ptr) {}
+  ExternalPointerSlot()
+      : SlotBase(kNullAddress), tag_(kExternalPointerNullTag) {}
+  explicit ExternalPointerSlot(Address ptr, ExternalPointerTag tag)
+      : SlotBase(ptr), tag_(tag) {}
 
-  inline void init(Isolate* isolate, Address value, ExternalPointerTag tag);
+  inline void init(Isolate* isolate, Address value);
 
 #ifdef V8_ENABLE_SANDBOX
   // When the external pointer is sandboxed, its slot stores a handle to an
@@ -312,8 +314,8 @@ class ExternalPointerSlot
   inline void Release_StoreHandle(ExternalPointerHandle handle) const;
 #endif  // V8_ENABLE_SANDBOX
 
-  inline Address load(const Isolate* isolate, ExternalPointerTag tag);
-  inline void store(Isolate* isolate, Address value, ExternalPointerTag tag);
+  inline Address load(const Isolate* isolate);
+  inline void store(Isolate* isolate, Address value);
 
   // ExternalPointerSlot serialization support.
   // These methods can be used to clear an external pointer slot prior to
@@ -334,8 +336,14 @@ class ExternalPointerSlot
   inline uint32_t GetContentAsIndexAfterDeserialization(
       const DisallowGarbageCollection& no_gc);
 
+  ExternalPointerTag tag() const { return tag_; }
+
  private:
+  // The tag associated with this slot.
+  ExternalPointerTag tag_;
+
 #ifdef V8_ENABLE_SANDBOX
+  // TODO could simplify these as well?
   inline const ExternalPointerTable& GetExternalPointerTableForTag(
       const Isolate* isolate, ExternalPointerTag tag);
   inline ExternalPointerTable& GetExternalPointerTableForTag(
@@ -354,25 +362,22 @@ class IndirectPointerSlot
     : public SlotBase<IndirectPointerSlot, IndirectPointerHandle,
                       kTaggedSize /* slot alignment */> {
  public:
-  IndirectPointerSlot() : SlotBase(kNullAddress) {}
-  explicit IndirectPointerSlot(Address ptr) : SlotBase(ptr) {}
+  IndirectPointerSlot()
+      : SlotBase(kNullAddress), tag_(kIndirectPointerNullTag) {}
+  explicit IndirectPointerSlot(Address ptr, IndirectPointerTag tag)
+      : SlotBase(ptr), tag_(tag) {}
 
   // Even though only HeapObjects can be stored into an IndirectPointerSlot,
   // these slots can be empty (containing kNullIndirectPointerHandle), in which
   // case load() will return Smi::zero().
-  // TODO(saelo): consider storing the tag as field of this slot, both here and
-  // in the ExternalPointerSlot class to keep them consistent.
-  inline Tagged<Object> load(const Isolate* isolate,
-                             IndirectPointerTag tag) const;
+  inline Tagged<Object> load(const Isolate* isolate) const;
   inline void store(Tagged<IndirectlyReferenceableObject> value) const;
 
   // Load the value of this slot.
   // The isolate parameter is required unless using the kCodeTag tag, as these
   // object use a different pointer table.
-  inline Tagged<Object> Relaxed_Load(const Isolate* isolate,
-                                     IndirectPointerTag tag) const;
-  inline Tagged<Object> Acquire_Load(const Isolate* isolate,
-                                     IndirectPointerTag tag) const;
+  inline Tagged<Object> Relaxed_Load(const Isolate* isolate) const;
+  inline Tagged<Object> Acquire_Load(const Isolate* isolate) const;
 
   // Store a reference to the given object into this slot. The object must be
   // indirectly refereceable.
@@ -384,10 +389,14 @@ class IndirectPointerSlot
   inline void Relaxed_StoreHandle(IndirectPointerHandle handle) const;
   inline void Release_StoreHandle(IndirectPointerHandle handle) const;
 
+  IndirectPointerTag tag() const { return tag_; }
+
  private:
+  // The tag associated with this slot.
+  IndirectPointerTag tag_;
+
   inline Object ResolveHandle(IndirectPointerHandle handle,
-                              const Isolate* isolate,
-                              IndirectPointerTag tag) const;
+                              const Isolate* isolate) const;
 };
 
 }  // namespace internal

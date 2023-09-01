@@ -1134,10 +1134,10 @@ class MarkExternalPointerFromExternalStringTable : public RootVisitor {
     explicit MarkExternalPointerTableVisitor(ExternalPointerTable* table,
                                              ExternalPointerTable::Space* space)
         : table_(table), space_(space) {}
-    void VisitExternalPointer(Tagged<HeapObject> host, ExternalPointerSlot slot,
-                              ExternalPointerTag tag) override {
-      DCHECK_NE(tag, kExternalPointerNullTag);
-      DCHECK(IsSharedExternalPointerType(tag));
+    void VisitExternalPointer(Tagged<HeapObject> host,
+                              ExternalPointerSlot slot) override {
+      DCHECK_NE(slot.tag(), kExternalPointerNullTag);
+      DCHECK(IsSharedExternalPointerType(slot.tag()));
       ExternalPointerHandle handle = slot.Relaxed_LoadHandle();
       table_->Mark(space_, handle, slot.address());
     }
@@ -1299,20 +1299,17 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
   inline void VisitInternalReference(Tagged<InstructionStream> host,
                                      RelocInfo* rinfo) final {}
   inline void VisitExternalPointer(Tagged<HeapObject> host,
-                                   ExternalPointerSlot slot,
-                                   ExternalPointerTag tag) final {}
+                                   ExternalPointerSlot slot) final {}
 
   inline void VisitIndirectPointer(Tagged<HeapObject> host,
                                    IndirectPointerSlot slot,
-                                   IndirectPointerMode mode,
-                                   IndirectPointerTag tag) final {}
+                                   IndirectPointerMode mode) final {}
 
   inline void VisitIndirectPointerTableEntry(Tagged<HeapObject> host,
-                                             IndirectPointerSlot slot,
-                                             IndirectPointerTag tag) final {
+                                             IndirectPointerSlot slot) final {
 #ifdef V8_CODE_POINTER_SANDBOXING
     IndirectPointerHandle handle = slot.Relaxed_LoadHandle();
-    if (tag == kCodeIndirectPointerTag) {
+    if (slot.tag() == kCodeIndirectPointerTag) {
       // When an object owning an indirect pointer table entry is relocated, it
       // needs to update the entry to point to its new location. Currently, only
       // Code objects are referenced through indirect pointers, and they use the
