@@ -1626,6 +1626,10 @@
   'wasm/shared-memory-worker-gc-stress': [SKIP],
   # BUG(v8:12607): flaky test.
   'harmony/sharedarraybuffer-worker-gc-stress': [SKIP],
+  # These tests run pretty close to the cage limit and
+  # stress-concurrent-allocation sometimes pushes it above that limit.
+  'regress/regress-779407': [SKIP],
+  'regress/regress-1447343': [SKIP],
 }],  # variant == stress_concurrent_allocation
 
 ##############################################################################
