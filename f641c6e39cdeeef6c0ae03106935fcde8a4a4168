@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fca3e8e1_ce87fa42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001168
+      },
+      "writtenOn": "2023-09-03T09:06:43Z",
+      "side": 1,
+      "message": "Looks like https://chromium-review.googlesource.com/c/chromium/src/+/4610141 will stick, so we can probably land this now?",
+      "revId": "f641c6e39cdeeef6c0ae03106935fcde8a4a4168",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
