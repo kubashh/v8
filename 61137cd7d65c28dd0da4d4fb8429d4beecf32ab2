@@ -33,6 +33,24 @@
       "message": "Thanks, lgtm!",
       "revId": "61137cd7d65c28dd0da4d4fb8429d4beecf32ab2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c69156da_36e16c40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1574803
+      },
+      "writtenOn": "2023-09-03T18:18:23Z",
+      "side": 1,
+      "message": "Thanks Andrey, how can I proceed with this fix?",
+      "parentUuid": "ce3bfad7_aded7a64",
+      "revId": "61137cd7d65c28dd0da4d4fb8429d4beecf32ab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
