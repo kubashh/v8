@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbf57beb_ee716239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-04T09:16:39Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5c803ff021de7ae86b31c1b59054a55c6c538a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1fa0d239_0ac0ac5b",
@@ -31,6 +48,24 @@
       "writtenOn": "2023-09-01T14:30:07Z",
       "side": 1,
       "message": "Alternatively we could lower `max_old_generation_size` in pointer compression builds in a follow-up such that this is always valid. This should have the same effect as this condition.",
+      "revId": "5c803ff021de7ae86b31c1b59054a55c6c538a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64d825a6_a65c6356",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-04T09:16:39Z",
+      "side": 1,
+      "message": "I think this is okay for now.",
+      "parentUuid": "1fa0d239_0ac0ac5b",
       "revId": "5c803ff021de7ae86b31c1b59054a55c6c538a87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
