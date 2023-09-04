@@ -1850,7 +1850,13 @@ class TurboshaftGraphBuildingInterface {
                        const ArrayIndexImmediate& array_imm,
                        const IndexImmediate& segment_imm, const Value& offset,
                        const Value& length, Value* result) {
-    Bailout(decoder);
+    V<Map> rtt = asm_.RttCanon(instance_node_, array_imm.index);
+    V<Object> is_element = __ SmiConstant(Smi::FromInt(
+        array_imm.array_type->element_type().is_reference() ? 1 : 0));
+    result->op =
+        CallBuiltinFromRuntimeStub(decoder, WasmCode::kWasmArrayNewSegment,
+                                   {__ Word32Constant(segment_imm.index),
+                                    offset.op, length.op, is_element, rtt});
   }
 
   void ArrayInitSegment(FullDecoder* decoder,
@@ -1858,7 +1864,12 @@ class TurboshaftGraphBuildingInterface {
                         const IndexImmediate& segment_imm, const Value& array,
                         const Value& array_index, const Value& segment_offset,
                         const Value& length) {
-    Bailout(decoder);
+    V<Object> is_element = __ SmiConstant(Smi::FromInt(
+        array_imm.array_type->element_type().is_reference() ? 1 : 0));
+    CallBuiltinFromRuntimeStub(decoder, WasmCode::kWasmArrayInitSegment,
+                               {array_index.op, segment_offset.op, length.op,
+                                __ SmiConstant(Smi::FromInt(segment_imm.index)),
+                                is_element, array.op});
   }
 
   void I31New(FullDecoder* decoder, const Value& input, Value* result) {
