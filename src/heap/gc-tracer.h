@@ -223,6 +223,9 @@ class V8_EXPORT_PRIVATE GCTracer {
     // INCREMENTAL_MARK_COMPACTOR.
     base::TimeDelta incremental_marking_duration;
 
+    base::TimeTicks atomic_pause_start_time;
+    base::TimeTicks atomic_pause_end_time;
+
     // Amounts of time spent in different scopes during GC.
     base::TimeDelta scopes[Scope::NUMBER_OF_SCOPES];
 
@@ -262,8 +265,9 @@ class V8_EXPORT_PRIVATE GCTracer {
   V8_INLINE static RuntimeCallCounterId RCSCounterFromScope(Scope::ScopeId id);
 #endif  // defined(V8_RUNTIME_CALL_STATS)
 
-  explicit GCTracer(Heap* heap, GarbageCollectionReason initial_gc_reason =
-                                    GarbageCollectionReason::kUnknown);
+  explicit GCTracer(Heap* heap, base::TimeTicks startup_time,
+                    GarbageCollectionReason initial_gc_reason =
+                        GarbageCollectionReason::kUnknown);
 
   GCTracer(const GCTracer&) = delete;
   GCTracer& operator=(const GCTracer&) = delete;
@@ -286,12 +290,14 @@ class V8_EXPORT_PRIVATE GCTracer {
   void StopYoungCycleIfNeeded();
   void StopFullCycleIfNeeded();
 
+  void NotifyMemoryBalancer();
+
   // Start and stop a cycle's atomic pause.
   void StartAtomicPause();
   void StopAtomicPause();
 
-  void StartInSafepoint();
-  void StopInSafepoint();
+  void StartInSafepoint(base::TimeTicks time);
+  void StopInSafepoint(base::TimeTicks time);
 
   void NotifyFullSweepingCompleted();
   void NotifyYoungSweepingCompleted();
@@ -499,6 +505,9 @@ class V8_EXPORT_PRIVATE GCTracer {
 
   // The starting time of the observable pause if set.
   base::Optional<base::TimeTicks> start_of_observable_pause_;
+
+  // The starting time of the atomic pause if set.
+  base::Optional<base::TimeTicks> start_of_atomic_pause_;
 
   // We need two epochs, since there can be scavenges during incremental
   // marking.
