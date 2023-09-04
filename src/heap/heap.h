@@ -1924,7 +1924,7 @@ class Heap final {
 
   base::Optional<size_t> GlobalMemoryAvailable();
 
-  void RecomputeLimits(GarbageCollector collector);
+  void RecomputeLimits(GarbageCollector collector, base::TimeTicks time);
 
   // ===========================================================================
   // GC Tasks. =================================================================
