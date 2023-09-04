@@ -413,7 +413,11 @@ class MemoryContentTable
     OpIndex value = store.value();
     uint8_t size = store.stored_rep.SizeInBytes();
 
-    Insert(base, index, offset, element_size_log2, size, value);
+    if (store.kind.is_immutable) {
+      InsertImmutable(base, index, offset, element_size_log2, size, value);
+    } else {
+      Insert(base, index, offset, element_size_log2, size, value);
+    }
   }
 
   void Insert(const LoadOp& load, OpIndex load_idx) {
@@ -423,7 +427,11 @@ class MemoryContentTable
     uint8_t element_size_log2 = index.valid() ? load.element_size_log2 : 0;
     uint8_t size = load.loaded_rep.SizeInBytes();
 
-    Insert(base, index, offset, element_size_log2, size, load_idx);
+    if (load.kind.is_immutable) {
+      InsertImmutable(base, index, offset, element_size_log2, size, load_idx);
+    } else {
+      Insert(base, index, offset, element_size_log2, size, load_idx);
+    }
   }
 
 #ifdef DEBUG
@@ -462,6 +470,22 @@ class MemoryContentTable
     Key key = NewKey({mem});
     all_keys_.insert({mem, key});
     Set(key, value);
+  }
+
+  void InsertImmutable(OpIndex base, OpIndex index, int32_t offset,
+                       uint8_t element_size_log2, uint8_t size, OpIndex value) {
+    DCHECK_EQ(base, ResolveBase(base));
+
+    MemoryAddress mem{base, index, offset, element_size_log2, size};
+    auto existing_key = all_keys_.find(mem);
+    DCHECK_EQ(existing_key, all_keys_.end());
+
+    // Creating a new key.
+    Key key = NewKey({mem});
+    all_keys_.insert({mem, key});
+    // Call the `Set` function directly on the `SnapshotTable` to avoid the call
+    // to `OnNewKey` and `OnValueChanged`.
+    SnapshotTable<OpIndex, KeyData>::Set(key, value);
   }
 
   void InvalidateAtOffset(int32_t offset, OpIndex base) {
