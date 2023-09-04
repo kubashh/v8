@@ -34,6 +34,23 @@
       "parentUuid": "fca3e8e1_ce87fa42",
       "revId": "f641c6e39cdeeef6c0ae03106935fcde8a4a4168",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0ca25ff_09a27bce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-09-04T08:59:19Z",
+      "side": 1,
+      "message": "Leszek, PTAL\nThe Chromium part sticked so we can land the V8 cleanup.\nThe CL hasn\u0027t changed since Toon\u0027s +1.",
+      "revId": "f641c6e39cdeeef6c0ae03106935fcde8a4a4168",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
