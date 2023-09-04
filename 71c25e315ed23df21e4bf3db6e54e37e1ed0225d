@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "71c25e315ed23df21e4bf3db6e54e37e1ed0225d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "655a82b5_a960d928",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-09-04T13:20:35Z",
+      "side": 1,
+      "message": "LGTM, that\u0027s pleasantly simple :)",
+      "revId": "71c25e315ed23df21e4bf3db6e54e37e1ed0225d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06fadd73_89a602b8",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-09-04T13:20:35Z",
+      "side": 1,
+      "message": "Maybe you could instead add a `SetNoNotify` method to `ChangeTrackingSnapshotTable` and call it here? (so that it\u0027s a bit less reliant on implementation details, like the inheritance of SnapshotTable by ChangeTrackingSnapshotTable)",
+      "range": {
+        "startLine": 487,
+        "startChar": 4,
+        "endLine": 487,
+        "endChar": 40
+      },
+      "revId": "71c25e315ed23df21e4bf3db6e54e37e1ed0225d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
