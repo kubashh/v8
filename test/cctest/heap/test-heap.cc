@@ -6373,6 +6373,7 @@ TEST(RememberedSetRemoveRange) {
 }
 
 HEAP_TEST(Regress670675) {
+  if (v8_flags.memory_balancer) return;
   if (!v8_flags.incremental_marking) return;
   ManualGCScope manual_gc_scope;
   CcTest::InitializeVM();
@@ -6397,7 +6398,7 @@ HEAP_TEST(Regress670675) {
   }
   size_t array_length = 128 * KB;
   size_t n = heap->OldGenerationSpaceAvailable() / array_length;
-  for (size_t i = 0; i < n + 40; i++) {
+  for (size_t i = 0; i < n + 60; i++) {
     {
       HandleScope inner_scope(isolate);
       isolate->factory()->NewFixedArray(static_cast<int>(array_length),
