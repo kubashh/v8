@@ -356,6 +356,9 @@ ZoneBuffer GetValidCompiledModuleBytes(v8::Isolate* isolate, Zone* zone,
 // Test that all bytes arrive before doing any compilation. FinishStream is
 // called immediately.
 STREAM_TEST(TestAllBytesArriveImmediatelyStreamFinishesFirst) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   ZoneBuffer buffer = GetValidModuleBytes(tester.zone());
 
@@ -370,6 +373,9 @@ STREAM_TEST(TestAllBytesArriveImmediatelyStreamFinishesFirst) {
 // Test that all bytes arrive before doing any compilation. FinishStream is
 // called after the compilation is done.
 STREAM_TEST(TestAllBytesArriveAOTCompilerFinishesFirst) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   ZoneBuffer buffer = GetValidModuleBytes(tester.zone());
 
@@ -412,6 +418,9 @@ STREAM_TEST(TestCutAfterOneFunctionStreamFinishesFirst) {
 // functions already got compiled. Call FinishStream after the compilation is
 // done.
 STREAM_TEST(TestCutAfterOneFunctionCompilerFinishesFirst) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   ZoneBuffer buffer = GetValidModuleBytes(tester.zone());
 
@@ -734,6 +743,9 @@ STREAM_TEST(TestErrorInCodeSectionDetectedByCompiler) {
 
 // Test Abort before any bytes arrive.
 STREAM_TEST(TestAbortImmediately) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   tester.stream()->Abort();
   tester.RunCompilerTasks();
@@ -741,6 +753,9 @@ STREAM_TEST(TestAbortImmediately) {
 
 // Test Abort within a section.
 STREAM_TEST(TestAbortWithinSection1) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   const uint8_t bytes[] = {
       WASM_MODULE_HEADER,                // module header
@@ -757,6 +772,9 @@ STREAM_TEST(TestAbortWithinSection1) {
 
 // Test Abort within a section.
 STREAM_TEST(TestAbortWithinSection2) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   const uint8_t bytes[] = {
       WASM_MODULE_HEADER,                 // module header
@@ -777,6 +795,9 @@ STREAM_TEST(TestAbortWithinSection2) {
 
 // Test Abort just before the code section.
 STREAM_TEST(TestAbortAfterSection) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   const uint8_t bytes[] = {
       WASM_MODULE_HEADER,                 // module header
@@ -794,6 +815,9 @@ STREAM_TEST(TestAbortAfterSection) {
 // Test Abort after the function count in the code section. The compiler tasks
 // execute before the abort.
 STREAM_TEST(TestAbortAfterFunctionsCount1) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   const uint8_t bytes[] = {
       WASM_MODULE_HEADER,                 // module header
@@ -820,6 +844,9 @@ STREAM_TEST(TestAbortAfterFunctionsCount1) {
 // Test Abort after the function count in the code section. The compiler tasks
 // do not execute before the abort.
 STREAM_TEST(TestAbortAfterFunctionsCount2) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   const uint8_t bytes[] = {
       WASM_MODULE_HEADER,                 // module header
@@ -845,6 +872,9 @@ STREAM_TEST(TestAbortAfterFunctionsCount2) {
 // Test Abort after some functions got compiled. The compiler tasks execute
 // before the abort.
 STREAM_TEST(TestAbortAfterFunctionGotCompiled1) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
 
   uint8_t code[] = {
@@ -879,6 +909,9 @@ STREAM_TEST(TestAbortAfterFunctionGotCompiled1) {
 // Test Abort after some functions got compiled. The compiler tasks execute
 // before the abort.
 STREAM_TEST(TestAbortAfterFunctionGotCompiled2) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
 
   uint8_t code[] = {
@@ -911,6 +944,9 @@ STREAM_TEST(TestAbortAfterFunctionGotCompiled2) {
 
 // Test Abort after all functions got compiled.
 STREAM_TEST(TestAbortAfterCodeSection1) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
 
   uint8_t code[] = {
@@ -947,6 +983,9 @@ STREAM_TEST(TestAbortAfterCodeSection1) {
 
 // Test Abort after all functions got compiled.
 STREAM_TEST(TestAbortAfterCodeSection2) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
 
   uint8_t code[] = {
@@ -981,6 +1020,9 @@ STREAM_TEST(TestAbortAfterCodeSection2) {
 }
 
 STREAM_TEST(TestAbortAfterCompilationError1) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
 
   uint8_t code[] = {
@@ -1023,6 +1065,9 @@ STREAM_TEST(TestAbortAfterCompilationError1) {
 }
 
 STREAM_TEST(TestAbortAfterCompilationError2) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
 
   uint8_t code[] = {
@@ -1325,6 +1370,9 @@ STREAM_TEST(TestModuleWithErrorAfterDataSection) {
 
 // Test that cached bytes work.
 STREAM_TEST(TestDeserializationBypassesCompilation) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   ZoneBuffer wire_bytes = GetValidModuleBytes(tester.zone());
   ZoneBuffer module_bytes =
@@ -1340,6 +1388,9 @@ STREAM_TEST(TestDeserializationBypassesCompilation) {
 
 // Test that bad cached bytes don't cause compilation of wire bytes to fail.
 STREAM_TEST(TestDeserializationFails) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
   ZoneBuffer wire_bytes = GetValidModuleBytes(tester.zone());
   ZoneBuffer module_bytes =
@@ -1460,6 +1511,9 @@ STREAM_TEST(TestMoreFunctionsCanBeSerializedCallback) {
 // Test that a compile error contains the name of the function, even if the name
 // section is not present at the time the error is detected.
 STREAM_TEST(TestCompileErrorFunctionName) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   const uint8_t bytes_module_with_code[] = {
       WASM_MODULE_HEADER,                 // module header
       kTypeSectionCode,                   // section code
@@ -1610,6 +1664,9 @@ STREAM_TEST(TierDownWithError) {
 }
 
 STREAM_TEST(Regress1334651) {
+  // MemoryBalancer schedules delayed periodioc maintainance tasks. This leads
+  // to an infinite loop in the mock task runner.
+  if (v8_flags.memory_balancer) return;
   StreamTester tester(isolate);
 
   const uint8_t bytes[] = {WASM_MODULE_HEADER, SECTION(Code, ENTRY_COUNT(0)),
