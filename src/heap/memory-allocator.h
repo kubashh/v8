@@ -184,6 +184,7 @@ class MemoryAllocator {
 
   V8_EXPORT_PRIVATE MemoryAllocator(Isolate* isolate,
                                     v8::PageAllocator* code_page_allocator,
+                                    v8::PageAllocator* trusted_page_allocator,
                                     size_t max_capacity);
 
   V8_EXPORT_PRIVATE void TearDown();

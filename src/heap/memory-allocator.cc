@@ -33,11 +33,12 @@ size_t MemoryAllocator::commit_page_size_bits_ = 0;
 
 MemoryAllocator::MemoryAllocator(Isolate* isolate,
                                  v8::PageAllocator* code_page_allocator,
+                                 v8::PageAllocator* trusted_page_allocator,
                                  size_t capacity)
     : isolate_(isolate),
       data_page_allocator_(isolate->page_allocator()),
       code_page_allocator_(code_page_allocator),
-      trusted_page_allocator_(isolate->page_allocator()),
+      trusted_page_allocator_(trusted_page_allocator),
       capacity_(RoundUp(capacity, Page::kPageSize)),
       unmapper_(isolate->heap(), this) {
   DCHECK_NOT_NULL(data_page_allocator_);
