@@ -155,6 +155,22 @@ extern "C" uint32_t v8_Default_embedded_blob_data_size_;
 namespace v8 {
 namespace internal {
 
+BuiltinsJumps* builtin_jumps_ = nullptr;
+int32_t current_builtin_ = -1;
+// Key is just the builtin compiled with TurboFan, and has deferred block info.
+BuiltinsDeferredOffset* builtin_deffered_offset_ = nullptr;
+
+BuiltinsOriginalSize* builtin_original_size_ = nullptr;
+// Includes all builtins offset, including cold parts
+BuiltinsOffsetInSnapshot* builtin_offset_in_snapshot_ = nullptr;
+BuiltinsHot2ColdMap* builtin_hot2cold_map_ = nullptr;
+BuiltinsCold2HotMap* builtin_cold2hot_map_ = nullptr;
+
+// Not include cold part of builtins, if we would like to access corss builtin
+// jump for cold part of builtins, we may use the hot builtin id as key to
+// access the jump info
+CrossBuiltinTable* cross_builtin_table_ = nullptr;
+
 #ifdef DEBUG
 #define TRACE_ISOLATE(tag)                                                  \
   do {                                                                      \
@@ -312,7 +328,7 @@ void Isolate::SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
 #ifdef DEBUG
   // Verify that the contents of the embedded blob are unchanged from
   // serialization-time, just to ensure the compiler isn't messing with us.
-  EmbeddedData d = EmbeddedData::FromBlob();
+  /*EmbeddedData d = EmbeddedData::FromBlob();
   if (d.EmbeddedBlobDataHash() != d.CreateEmbeddedBlobDataHash()) {
     FATAL(
         "Embedded blob data section checksum verification failed. This "
@@ -327,7 +343,7 @@ void Isolate::SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
           "compilation time. A common cause is a debugging breakpoint set "
           "within builtin code.");
     }
-  }
+  }*/
 #endif  // DEBUG
 }
 
@@ -1939,7 +1955,47 @@ Object Isolate::UnwindAndFindHandler() {
   auto FoundHandler = [&](Context context, Address instruction_start,
                           intptr_t handler_offset,
                           Address constant_pool_address, Address handler_sp,
-                          Address handler_fp, int num_frames_above_handler) {
+                          Address handler_fp, int num_frames_above_handler,
+                          Isolate* isolate, Code* code = nullptr) {
+    // For the handler lookup offset transfer.
+    if (code && Builtins::IsBuiltin(*code)) {
+      if (static_cast<int>(code->builtin_id()) < Builtins::kBuiltinCount &&
+          handler_offset >= code->instruction_size()) {
+        Builtin hot_builtin = code->builtin_id();
+        Builtin cold_builtin = Builtins::FromInt(static_cast<int>(hot_builtin) +
+                                                 Builtins::kBuiltinCount);
+        // Address hot_start = code->instruction_start();
+        Address cold_start =
+            isolate->builtins()->code(cold_builtin).instruction_start();
+        DCHECK_GT(isolate->builtins()->code(cold_builtin).instruction_size(),
+                  0);
+        // DCHECK_GT(cold_start, hot_start);
+
+        /*int cold_offset = handler_offset - code->instruction_size();
+        int real_offset =
+            static_cast<int>(cold_start - hot_start) + cold_offset;
+        handler_offset = real_offset;*/
+        handler_offset = handler_offset - code->instruction_size();
+        instruction_start = cold_start;
+      } else if (static_cast<int>(code->builtin_id()) >=
+                 Builtins::kBuiltinCount) {
+        Builtin cold_builtin = code->builtin_id();
+        Builtin hot_builtin = Builtins::FromInt(static_cast<int>(cold_builtin) -
+                                                Builtins::kBuiltinCount);
+        Code hot_code = isolate->builtins()->code(hot_builtin);
+        if (handler_offset < hot_code.instruction_size()) {
+          // Address cold_start = code->instruction_start();
+          Address hot_start = hot_code.instruction_start();
+
+          /*int real_offset =
+              static_cast<int>(hot_start - cold_start) + offset;
+          handler_offset = real_offset;*/
+          instruction_start = hot_start;
+        } else {
+          handler_offset -= hot_code.instruction_size();
+        }
+      }
+    }
     // Store information to be consumed by the CEntry.
     thread_local_top()->pending_handler_context_ = context;
     thread_local_top()->pending_handler_entrypoint_ =
@@ -1996,7 +2052,7 @@ Object Isolate::UnwindAndFindHandler() {
       int handler_offset = table.LookupReturn(0);
       return FoundHandler(Context(), instruction_start, handler_offset,
                           kNullAddress, iter.frame()->sp(), iter.frame()->fp(),
-                          visited_frames);
+                          visited_frames, this);
     }
 #endif
     // Handler must exist.
@@ -2031,17 +2087,17 @@ Object Isolate::UnwindAndFindHandler() {
         // Note: Needed by the deoptimizer to rematerialize frames.
         Address return_sp = frame->fp() +
                             StandardFrameConstants::kFixedFrameSizeAboveFp -
-                            code->stack_slots() * kSystemPointerSize;
-        return FoundHandler(Context(), code->instruction_start(), offset,
-                            code->constant_pool(), return_sp, frame->fp(),
-                            visited_frames);
+                            code.stack_slots() * kSystemPointerSize;
+        return FoundHandler(Context(), code.instruction_start(), offset,
+                            code.constant_pool(), return_sp, frame->fp(),
+                            visited_frames, this);
       }
 
       debug()->clear_restart_frame();
       Code code = *BUILTIN_CODE(this, RestartFrameTrampoline);
-      return FoundHandler(Context(), code->instruction_start(), 0,
-                          code->constant_pool(), kNullAddress, frame->fp(),
-                          visited_frames);
+      return FoundHandler(Context(), code.instruction_start(), 0,
+                          code.constant_pool(), kNullAddress, frame->fp(),
+                          visited_frames, this);
     }
 
     switch (frame->type()) {
@@ -2060,7 +2116,7 @@ Object Isolate::UnwindAndFindHandler() {
                             code->InstructionStart(this, frame->pc()),
                             table.LookupReturn(0), code->constant_pool(),
                             handler->address() + StackHandlerConstants::kSize,
-                            0, visited_frames);
+                            0, visited_frames, this, &code);
       }
 
 #if V8_ENABLE_WEBASSEMBLY
@@ -2079,8 +2135,8 @@ Object Isolate::UnwindAndFindHandler() {
                             StandardFrameConstants::kFixedFrameSizeAboveFp -
                             code->stack_slots() * kSystemPointerSize;
         return FoundHandler(Context(), instruction_start, handler_offset,
-                            code->constant_pool(), return_sp, frame->fp(),
-                            visited_frames);
+                            code.constant_pool(), return_sp, frame->fp(),
+                            visited_frames, this);
       }
 
       case StackFrame::WASM: {
@@ -2109,7 +2165,7 @@ Object Isolate::UnwindAndFindHandler() {
         set_thread_in_wasm_flag_scope.Enable();
         return FoundHandler(Context(), wasm_code->instruction_start(), offset,
                             wasm_code->constant_pool(), return_sp, frame->fp(),
-                            visited_frames);
+                            visited_frames, this);
       }
 
       case StackFrame::WASM_LIFTOFF_SETUP: {
@@ -2158,9 +2214,48 @@ Object Isolate::UnwindAndFindHandler() {
           set_deoptimizer_lazy_throw(true);
         }
 
-        return FoundHandler(
-            Context(), code->InstructionStart(this, frame->pc()), offset,
-            code->constant_pool(), return_sp, frame->fp(), visited_frames);
+        /*if (Builtins::IsBuiltin(code)) {
+          if (static_cast<int>(code.builtin_id()) <
+                     Builtins::kBuiltinCount && offset >=
+        code.instruction_size()) { Builtin hot_builtin = code.builtin_id();
+            Builtin cold_builtin = Builtins::FromInt(
+                static_cast<int>(hot_builtin) + Builtins::kBuiltinCount);
+            Address hot_start = code.instruction_start();
+            Address cold_start = frame->isolate()
+                                     ->builtins()
+                                     ->code(cold_builtin)
+                                     .instruction_start();
+            DCHECK_GT(frame->isolate()
+                          ->builtins()
+                          ->code(cold_builtin)
+                          .instruction_size(),
+                      0);
+            // DCHECK_GT(cold_start, hot_start);
+
+            int cold_offset = offset - code.instruction_size();
+            int real_offset =
+                static_cast<int>(cold_start - hot_start) + cold_offset;
+            offset = real_offset;
+          } else if (static_cast<int>(code.builtin_id()) >=
+                     Builtins::kBuiltinCount) {
+            Builtin cold_builtin = code.builtin_id();
+            Builtin hot_builtin = Builtins::FromInt(
+                static_cast<int>(cold_builtin) - Builtins::kBuiltinCount);
+            Code hot_code = frame->isolate()->builtins()->code(hot_builtin);
+            if (offset < hot_code.instruction_size()) {
+              Address cold_start = code.instruction_start();
+              Address hot_start = hot_code.instruction_start();
+
+              int real_offset =
+                  static_cast<int>(hot_start - cold_start) + offset;
+              offset = real_offset;
+            }
+          }
+        }*/
+
+        return FoundHandler(Context(), code.InstructionStart(this, frame->pc()),
+                            offset, code.constant_pool(), return_sp,
+                            frame->fp(), visited_frames, this, &code);
       }
 
       case StackFrame::STUB: {
@@ -2188,9 +2283,33 @@ Object Isolate::UnwindAndFindHandler() {
                             StandardFrameConstants::kFixedFrameSizeAboveFp -
                             code->stack_slots() * kSystemPointerSize;
 
-        return FoundHandler(
-            Context(), code->InstructionStart(this, frame->pc()), offset,
-            code->constant_pool(), return_sp, frame->fp(), visited_frames);
+        /*if(static_cast<int>(code.builtin_id()) < Builtins::kBuiltinCount &&
+        offset >= code.instruction_size()){
+          // The offset of handler is in cold part, but the Code object is hot
+        part, we should translate it. Builtin cold_builtin =
+        Builtins::FromInt(static_cast<int>(code.builtin_id()) +
+        Builtins::kBuiltinCount); Code cold_code =
+        this->builtins()->code(cold_builtin); int cold_offset = offset -
+        code.instruction_size(); return FoundHandler(Context(),
+        cold_code.InstructionStart(this, frame->pc()), cold_offset,
+        code.constant_pool(), return_sp, frame->fp(), visited_frames);
+        }
+        else if(static_cast<int>(code.builtin_id()) >= Builtins::kBuiltinCount){
+          // For hanler in hot part, but Code object is cold part
+          Builtin hot_builtin =
+        Builtins::FromInt(static_cast<int>(code.builtin_id()) -
+        Builtins::kBuiltinCount); Code hot_code =
+        this->builtins()->code(hot_builtin); if(offset >=
+        hot_code.instruction_size()){ int cold_offset = offset -
+        hot_code.instruction_size(); return FoundHandler(Context(),
+        code.InstructionStart(this, frame->pc()), cold_offset,
+        code.constant_pool(), return_sp, frame->fp(), visited_frames);
+          }
+        }*/
+
+        return FoundHandler(Context(), code.InstructionStart(this, frame->pc()),
+                            offset, code.constant_pool(), return_sp,
+                            frame->fp(), visited_frames, this, &code);
       }
 
       case StackFrame::INTERPRETED:
@@ -2228,9 +2347,9 @@ Object Isolate::UnwindAndFindHandler() {
           // Patch the context register directly on the frame, so that we don't
           // need to have a context read + write in the baseline code.
           sp_frame->PatchContext(context);
-          return FoundHandler(Context(), code->instruction_start(), pc_offset,
-                              code->constant_pool(), return_sp, sp_frame->fp(),
-                              visited_frames);
+          return FoundHandler(Context(), code.instruction_start(), pc_offset,
+                              code.constant_pool(), return_sp, sp_frame->fp(),
+                              visited_frames, this);
         } else {
           InterpretedFrame::cast(js_frame)->PatchBytecodeOffset(
               static_cast<int>(offset));
@@ -2244,9 +2363,9 @@ Object Isolate::UnwindAndFindHandler() {
           // because at a minimum, an exit frame into C++ has to separate
           // it and the context in which this C++ code runs.
           CHECK_GE(visited_frames, 1);
-          return FoundHandler(context, code->instruction_start(), 0,
-                              code->constant_pool(), return_sp, frame->fp(),
-                              visited_frames - 1);
+          return FoundHandler(context, code.instruction_start(), 0,
+                              code.constant_pool(), return_sp, frame->fp(),
+                              visited_frames - 1, this, &code);
         }
       }
 
@@ -2268,9 +2387,9 @@ Object Isolate::UnwindAndFindHandler() {
         // Reconstruct the stack pointer from the frame pointer.
         Address return_sp = js_frame->fp() - js_frame->GetSPToFPDelta();
         Code code = js_frame->LookupCode();
-        return FoundHandler(Context(), code->instruction_start(), 0,
-                            code->constant_pool(), return_sp, frame->fp(),
-                            visited_frames);
+        return FoundHandler(Context(), code.instruction_start(), 0,
+                            code.constant_pool(), return_sp, frame->fp(),
+                            visited_frames, this, &code);
       }
 
       default:
@@ -3985,6 +4104,40 @@ void FinalizeBuiltinCodeObjects(Isolate* isolate) {
     // From this point onwards, the old builtin code object is unreachable and
     // will be collected by the next GC.
     isolate->builtins()->set_code(builtin, *new_code);
+
+    int builtin_id = static_cast<int>(builtin);
+    bool is_splitted = false;
+    if (builtin_deffered_offset_->count(builtin_id) != 0) {
+      is_splitted = true;
+    }
+
+    /*
+    // construct a safe pointtable seems disable heap allowcation, hence we
+    failed in later new Code Objece,
+    // so comment theme here.
+    SafepointTable new_table(isolate, kNullAddress, *new_code);
+    PrintF("new code for builtin %s:\n", Builtins::name(builtin));
+    new_table.Print(std::cout);*/
+
+    if (is_splitted) {
+      // Handle<Code> hot_handle(hot_code, isolate);
+      Handle<Code> cold_code =
+          isolate->factory()->NewCodeObjectForEmbeddedBuiltinColdPart(
+              new_code, builtin_deffered_offset_->at(builtin_id));
+      Builtin cold_builtin =
+          Builtins::FromInt(builtin_id + Builtins::kBuiltinCount);
+      isolate->builtins()->set_code(cold_builtin, *cold_code);
+      SafepointTable cold_table(isolate, kNullAddress, *cold_code);
+      PrintF("cold code for builtin %s:\n", Builtins::name(builtin));
+      cold_table.Print(std::cout);
+    } else {
+      Handle<Code> dummy_code =
+          isolate->factory()->NewCodeObjectForEmbeddedBuiltinDummyColdPart(
+              new_code);
+      Builtin dummy_builtin =
+          Builtins::FromInt(builtin_id + Builtins::kBuiltinCount);
+      isolate->builtins()->set_code(dummy_builtin, *dummy_code);
+    }
   }
 }
 

@@ -13,6 +13,16 @@ namespace internal {
 Address EmbeddedData::InstructionStartOf(Builtin builtin) const {
   DCHECK(Builtins::IsBuiltinId(builtin));
   const struct LayoutDescription& desc = LayoutDescription(builtin);
+  if (desc.instruction_offset == 0xffffffff &&
+      static_cast<int>(builtin) >= Builtins::kBuiltinCount) {
+    // For dummy builtins
+    Builtin hot_builtin =
+        Builtins::FromInt(static_cast<int>(builtin) - Builtins::kBuiltinCount);
+    const struct LayoutDescription& hot_desc = LayoutDescription(hot_builtin);
+    const uint8_t* hot_result = RawCode() + hot_desc.instruction_offset;
+    DCHECK_LT(hot_result, code_ + code_size_);
+    return reinterpret_cast<Address>(hot_result);
+  }
   const uint8_t* result = RawCode() + desc.instruction_offset;
   DCHECK_LT(result, code_ + code_size_);
   return reinterpret_cast<Address>(result);
@@ -21,6 +31,17 @@ Address EmbeddedData::InstructionStartOf(Builtin builtin) const {
 Address EmbeddedData::InstructionEndOf(Builtin builtin) const {
   DCHECK(Builtins::IsBuiltinId(builtin));
   const struct LayoutDescription& desc = LayoutDescription(builtin);
+  if (desc.instruction_offset == 0xffffffff &&
+      static_cast<int>(builtin) >= Builtins::kBuiltinCount) {
+    // For dummy builtins
+    Builtin hot_builtin =
+        Builtins::FromInt(static_cast<int>(builtin) - Builtins::kBuiltinCount);
+    const struct LayoutDescription& hot_desc = LayoutDescription(hot_builtin);
+    const uint8_t* hot_result =
+        RawCode() + hot_desc.instruction_offset + hot_desc.instruction_length;
+    DCHECK_LT(hot_result, code_ + code_size_);
+    return reinterpret_cast<Address>(hot_result);
+  }
   const uint8_t* result =
       RawCode() + desc.instruction_offset + desc.instruction_length;
   DCHECK_LT(result, code_ + code_size_);

@@ -121,7 +121,7 @@ class TestCode : public HandleAndZoneScope {
     if (current_ == nullptr) {
       current_ = main_zone()->New<InstructionBlock>(
           main_zone(), rpo_number_, RpoNumber::Invalid(), RpoNumber::Invalid(),
-          RpoNumber::Invalid(), deferred, false);
+          RpoNumber::Invalid(), deferred, false, false);
       if (deconstruct_frame) {
         current_->mark_must_deconstruct_frame();
       }

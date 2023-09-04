@@ -1505,9 +1505,9 @@ CodeAssemblerLabel::CodeAssemblerLabel(CodeAssembler* assembler,
       merge_count_(0),
       state_(assembler->state()),
       label_(nullptr) {
-  label_ = assembler->zone()->New<RawMachineLabel>(
-      type == kDeferred ? RawMachineLabel::kDeferred
-                        : RawMachineLabel::kNonDeferred);
+  // Disable defer in CSA code now.
+  label_ =
+      assembler->zone()->New<RawMachineLabel>(RawMachineLabel::kNonDeferred);
   for (size_t i = 0; i < vars_count; ++i) {
     variable_phis_[vars[i]->impl_] = nullptr;
   }

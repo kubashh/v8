@@ -1595,7 +1595,7 @@ class V8_EXPORT_PRIVATE InstructionBlock final
  public:
   InstructionBlock(Zone* zone, RpoNumber rpo_number, RpoNumber loop_header,
                    RpoNumber loop_end, RpoNumber dominator, bool deferred,
-                   bool handler);
+                   bool handler, bool splitted);
 
   // Instruction indexes (used by the register allocator).
   int first_instruction_index() const {
@@ -1618,6 +1618,7 @@ class V8_EXPORT_PRIVATE InstructionBlock final
   void set_code_end(int32_t end) { code_end_ = end; }
 
   bool IsDeferred() const { return deferred_; }
+  bool IsSplitted() const { return splitted_; }
   bool IsHandler() const { return handler_; }
   void MarkHandler() { handler_ = true; }
   void UnmarkHandler() { handler_ = false; }
@@ -1687,6 +1688,8 @@ class V8_EXPORT_PRIVATE InstructionBlock final
   int32_t code_start_;       // start index of arch-specific code.
   int32_t code_end_ = -1;    // end index of arch-specific code.
   const bool deferred_ : 1;  // Block contains deferred code.
+  const bool splitted_ : 1;  // true if the block could be splitted (for builtin
+                             // only now).
   bool handler_ : 1;         // Block is a handler entry point.
   bool switch_target_ : 1;
   bool code_target_alignment_ : 1;  // insert code target alignment before this

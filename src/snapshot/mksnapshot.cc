@@ -223,6 +223,17 @@ void MaybeSetCounterFunction(v8::Isolate* isolate) {
 int main(int argc, char** argv) {
   v8::base::EnsureConsoleOutput();
 
+  i::v8_flags.is_mksnapshot = true;
+  i::v8_flags.turbo_rewrite_far_jumps = false;
+
+  i::builtin_jumps_ = new i::BuiltinsJumps();
+  i::builtin_deffered_offset_ = new i::BuiltinsDeferredOffset();
+  i::builtin_original_size_ = new i::BuiltinsOriginalSize();
+  i::builtin_offset_in_snapshot_ = new i::BuiltinsOffsetInSnapshot();
+  i::builtin_hot2cold_map_ = new i::BuiltinsHot2ColdMap();
+  i::builtin_cold2hot_map_ = new i::BuiltinsCold2HotMap();
+  i::cross_builtin_table_ = new i::CrossBuiltinTable();
+
   // Make mksnapshot runs predictable to create reproducible snapshots.
   i::v8_flags.predictable = true;
 
@@ -311,5 +322,26 @@ int main(int argc, char** argv) {
 
   v8::V8::Dispose();
   v8::V8::DisposePlatform();
+
+  delete i::builtin_jumps_;
+  i::builtin_jumps_ = nullptr;
+
+  delete i::builtin_deffered_offset_;
+  i::builtin_deffered_offset_ = nullptr;
+
+  delete i::builtin_original_size_;
+  i::builtin_original_size_ = nullptr;
+
+  delete i::builtin_offset_in_snapshot_;
+  i::builtin_offset_in_snapshot_ = nullptr;
+
+  delete i::builtin_hot2cold_map_;
+  i::builtin_hot2cold_map_ = nullptr;
+
+  delete i::builtin_cold2hot_map_;
+  i::builtin_cold2hot_map_ = nullptr;
+
+  delete i::cross_builtin_table_;
+  i::cross_builtin_table_ = nullptr;
   return 0;
 }

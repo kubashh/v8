@@ -2529,6 +2529,16 @@ int OptimizedFrame::LookupExceptionHandlerInTable(
       code->marked_for_deoptimization()) {
     pc_offset = FindReturnPCForTrampoline(code, pc_offset);
   }
+  if (code.is_builtin() &&
+      static_cast<int>(code.builtin_id()) >= Builtins::kBuiltinCount) {
+    // For code part lookup handler with a offset from itself, the offset should
+    // be transfered with offset from hot part, because the offset stored in
+    // handlers table was start from hot part
+    Builtin hot_builtin = Builtins::FromInt(
+        static_cast<int>(code.builtin_id()) - Builtins::kBuiltinCount);
+    Code hot_code = isolate()->builtins()->code(hot_builtin);
+    pc_offset += hot_code.instruction_size();
+  }
   return table.LookupReturn(pc_offset);
 }
 

@@ -793,6 +793,11 @@ class V8_EXPORT_PRIVATE Factory : public FactoryBase<Factory> {
   Handle<Code> NewCodeObjectForEmbeddedBuiltin(Handle<Code> code,
                                                Address off_heap_entry);
 
+  Handle<Code> NewCodeObjectForEmbeddedBuiltinColdPart(Handle<Code> code,
+                                                       int32_t hot_size);
+
+  Handle<Code> NewCodeObjectForEmbeddedBuiltinDummyColdPart(Handle<Code> code);
+
   Handle<BytecodeArray> CopyBytecodeArray(Handle<BytecodeArray>);
 
   // Interface for creating error objects.

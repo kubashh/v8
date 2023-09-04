@@ -180,7 +180,9 @@ FullObjectSlot Builtins::builtin_tier0_slot(Builtin builtin) {
 }
 
 void Builtins::set_code(Builtin builtin, Code code) {
-  DCHECK_EQ(builtin, code->builtin_id());
+  // static int set_builtin_code_count = 0;
+  // printf("set_builtin_code_count: %d\n", set_builtin_code_count++);
+  DCHECK_EQ(builtin, code.builtin_id());
   DCHECK(Internals::HasHeapObjectTag(code.ptr()));
   // The given builtin may be uninitialized thus we cannot check its type here.
   isolate_->builtin_table()[Builtins::ToInt(builtin)] = code.ptr();
@@ -243,6 +245,7 @@ bool Builtins::HasJSLinkage(Builtin builtin) {
 const char* Builtins::name(Builtin builtin) {
   int index = ToInt(builtin);
   DCHECK(IsBuiltinId(index));
+  if (index >= kBuiltinCount) index -= kBuiltinCount;
   return builtin_metadata[index].name;
 }
 
