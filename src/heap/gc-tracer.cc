@@ -169,12 +169,13 @@ GCTracer::RecordGCPhasesInfo::RecordGCPhasesInfo(
   }
 }
 
-GCTracer::GCTracer(Heap* heap, GarbageCollectionReason initial_gc_reason)
+GCTracer::GCTracer(Heap* heap, base::TimeTicks startup_time,
+                   GarbageCollectionReason initial_gc_reason)
     : heap_(heap),
       current_(Event::Type::START, Event::State::NOT_RUNNING, initial_gc_reason,
                nullptr),
       previous_(current_),
-      previous_mark_compact_end_time_(base::TimeTicks::Now()) {
+      previous_mark_compact_end_time_(startup_time) {
   // All accesses to incremental_marking_scope assume that incremental marking
   // scopes come first.
   static_assert(0 == Scope::FIRST_INCREMENTAL_SCOPE);
@@ -189,7 +190,8 @@ GCTracer::GCTracer(Heap* heap, GarbageCollectionReason initial_gc_reason)
 
 void GCTracer::ResetForTesting() {
   this->~GCTracer();
-  new (this) GCTracer(heap_, GarbageCollectionReason::kTesting);
+  new (this) GCTracer(heap_, base::TimeTicks::Now(),
+                      GarbageCollectionReason::kTesting);
 }
 
 void GCTracer::StartObservablePause(base::TimeTicks time) {
@@ -290,7 +292,7 @@ void GCTracer::StartAtomicPause() {
   current_.state = Event::State::ATOMIC;
 }
 
-void GCTracer::StartInSafepoint() {
+void GCTracer::StartInSafepoint(base::TimeTicks time) {
   SampleAllocation(current_.start_time, heap_->NewSpaceAllocationCounter(),
                    heap_->OldGenerationAllocationCounter(),
                    heap_->EmbedderAllocationCounter());
@@ -302,13 +304,15 @@ void GCTracer::StartInSafepoint() {
   size_t new_lo_space_size =
       (heap_->new_lo_space() ? heap_->new_lo_space()->SizeOfObjects() : 0);
   current_.young_object_size = new_space_size + new_lo_space_size;
+  current_.atomic_pause_start_time = time;
 }
 
-void GCTracer::StopInSafepoint() {
+void GCTracer::StopInSafepoint(base::TimeTicks time) {
   current_.end_object_size = heap_->SizeOfObjects();
   current_.end_memory_size = heap_->memory_allocator()->Size();
   current_.end_holes_size = CountTotalHolesSize(heap_);
   current_.survived_young_object_size = heap_->SurvivedYoungObjectSize();
+  current_.atomic_pause_end_time = time;
 }
 
 void GCTracer::StopObservablePause(GarbageCollector collector,
@@ -361,30 +365,6 @@ void GCTracer::StopObservablePause(GarbageCollector collector,
     combined_mark_compact_speed_cache_ = 0.0;
     long_task_stats->gc_full_atomic_wall_clock_duration_us +=
         duration.InMicroseconds();
-    if (v8_flags.memory_balancer) {
-      size_t live_memory = current_.end_object_size;
-      double major_gc_bytes = current_.start_object_size +
-                              heap_->AllocatedExternalMemorySinceMarkCompact() +
-                              current_.incremental_marking_bytes;
-      const base::TimeDelta blocked_time_taken =
-          duration + current_.incremental_marking_duration;
-      const base::TimeDelta major_gc_duration =
-          blocked_time_taken + concurrent_gc_time_;
-      concurrent_gc_time_ = base::TimeDelta();
-      // Incremental gc may cause the difference to decrease, so we need to max.
-      double major_allocation_bytes = std::max<int64_t>(
-          0, current_.start_object_size - previous_.end_object_size +
-                 heap_->AllocatedExternalMemorySinceMarkCompact());
-      const base::TimeDelta major_allocation_duration =
-          (current_.end_time - previous_mark_compact_end_time_) -
-          blocked_time_taken;
-      CHECK_GT(major_allocation_duration, base::TimeDelta());
-      heap_->mb_->TracerUpdate(live_memory, major_allocation_bytes,
-                               major_allocation_duration.InMillisecondsF(),
-                               major_gc_bytes,
-                               major_gc_duration.InMillisecondsF());
-    }
-
     RecordMutatorUtilization(current_.end_time,
                              duration + incremental_marking_duration_);
   }
@@ -413,6 +393,27 @@ void GCTracer::StopObservablePause(GarbageCollector collector,
                          TRACE_EVENT_SCOPE_THREAD, "stats",
                          TRACE_STR_COPY(heap_stats.str().c_str()));
   }
+}
+
+void GCTracer::NotifyMemoryBalancer() {
+  DCHECK(v8_flags.memory_balancer);
+  size_t major_gc_bytes = current_.start_object_size;
+  const base::TimeDelta atomic_pause_duration =
+      current_.atomic_pause_end_time - current_.atomic_pause_start_time;
+  const base::TimeDelta blocked_time_taken =
+      atomic_pause_duration + current_.incremental_marking_duration;
+  const base::TimeDelta major_gc_duration =
+      blocked_time_taken + concurrent_gc_time_;
+  concurrent_gc_time_ = base::TimeDelta();
+  // Incremental gc may cause the difference to decrease, so we need to max.
+  double major_allocation_bytes = std::max<int64_t>(
+      0, current_.start_object_size - previous_.end_object_size);
+  const base::TimeDelta major_allocation_duration =
+      (current_.end_time - previous_mark_compact_end_time_) -
+      blocked_time_taken;
+  CHECK_GT(major_allocation_duration, base::TimeDelta());
+  heap_->mb_->NotifyGC(major_allocation_bytes, major_allocation_duration,
+                       major_gc_bytes, major_gc_duration);
 }
 
 void GCTracer::StopAtomicPause() {
