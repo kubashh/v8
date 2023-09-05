@@ -440,8 +440,13 @@ void NativeModuleSerializer::WriteCode(const WasmCode* code, Writer* writer) {
              RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE_ENCODED);
   RelocIterator orig_iter(code->instructions(), code->reloc_info(),
                           code->constant_pool(), mask);
+  ThreadIsolation::WritableJitAllocation jit_allocation =
+      ThreadIsolation::WritableJitAllocation::ForNonExecutableMemory(
+          reinterpret_cast<Address>(code_start), code->instructions().size(),
+          ThreadIsolation::JitAllocationType::kWasmCode);
   for (WritableRelocIterator iter(
-           {code_start, code->instructions().size()}, code->reloc_info(),
+           jit_allocation, {code_start, code->instructions().size()},
+           code->reloc_info(),
            reinterpret_cast<Address>(code_start) + code->constant_pool_offset(),
            mask);
        !iter.done(); iter.next(), orig_iter.next()) {
@@ -843,7 +848,7 @@ void NativeModuleDeserializer::CopyAndRelocate(
              RelocInfo::ModeMask(RelocInfo::EXTERNAL_REFERENCE) |
              RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE) |
              RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE_ENCODED);
-  for (WritableRelocIterator iter(unit.code->instructions(),
+  for (WritableRelocIterator iter(jit_allocation, unit.code->instructions(),
                                   unit.code->reloc_info(),
                                   unit.code->constant_pool(), mask);
        !iter.done(); iter.next()) {

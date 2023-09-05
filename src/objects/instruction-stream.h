@@ -10,6 +10,7 @@
 #endif
 
 #include "src/codegen/code-desc.h"
+#include "src/common/code-memory-access.h"
 #include "src/objects/heap-object.h"
 
 // Has to be the last include (doesn't have include guards):
@@ -105,7 +106,8 @@ class InstructionStream : public HeapObject {
       Address location_of_address);
 
   // Relocate the code by delta bytes.
-  void Relocate(intptr_t delta);
+  void Relocate(ThreadIsolation::WritableJitAllocation& jit_allocation,
+                intptr_t delta);
 
   static V8_INLINE Tagged<InstructionStream> Initialize(
       Tagged<HeapObject> self, Tagged<Map> map, uint32_t body_size,
@@ -173,9 +175,10 @@ class InstructionStream : public HeapObject {
   // since the former needs write access to executable memory and we need to
   // keep this critical section minimal since any memory write poses attack
   // surface for CFI and will require special validation.
-  WriteBarrierPromise RelocateFromDesc(Heap* heap, const CodeDesc& desc,
-                                       Address constant_pool,
-                                       const DisallowGarbageCollection& no_gc);
+  WriteBarrierPromise RelocateFromDesc(
+      ThreadIsolation::WritableJitAllocation& jit_allocation, Heap* heap,
+      const CodeDesc& desc, Address constant_pool,
+      const DisallowGarbageCollection& no_gc);
   void RelocateFromDescWriteBarriers(Heap* heap, const CodeDesc& desc,
                                      Address constant_pool,
                                      WriteBarrierPromise& promise,
