@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f18b832c_100a87a5",
+        "filename": "src/maglev/arm/maglev-assembler-arm-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-09-05T16:01:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcc1f942_4a783f36",
+      "range": {
+        "startLine": 260,
+        "startChar": 4,
+        "endLine": 260,
+        "endChar": 7
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b562b328_bc13078b",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-09-05T12:56:37Z",
       "side": 1,
       "message": "shouldn\u0027t this also be on overflow?",
+      "range": {
+        "startLine": 402,
+        "startChar": 6,
+        "endLine": 402,
+        "endChar": 18
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b68ce8d2_62fb9e2e",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-09-05T16:01:44Z",
+      "side": 1,
+      "message": "Ah yes.. I wasn\u0027t thinking about smis on non-pointer compressed builds being shifted to the top bits.",
+      "parentUuid": "b562b328_bc13078b",
       "range": {
         "startLine": 402,
         "startChar": 6,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "978c781b_f321bae2",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 5990,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-09-05T16:01:44Z",
+      "side": 1,
+      "message": "Nice idea!\nThe only thing that\u0027s less clean with this version is the unique kind count (required for the correct predecessor count for `do_return`).\nWe could get it efficiently by using a bitmap and popcount though, if you don\u0027t think that\u0027s too complex.",
+      "parentUuid": "e86b6a9f_a7979f6f",
+      "range": {
+        "startLine": 5990,
+        "startChar": 67,
+        "endLine": 5990,
+        "endChar": 68
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6e35482_0f54e2d8",
         "filename": "src/maglev/maglev-graph-builder.cc",
         "patchSetId": 10
@@ -100,6 +172,30 @@
       "writtenOn": "2023-09-05T12:56:37Z",
       "side": 1,
       "message": "nit: `do_return` or similar, `return_value` sounds like a `ValueNode*`",
+      "range": {
+        "startLine": 6023,
+        "startChar": 31,
+        "endLine": 6023,
+        "endChar": 43
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "150e89ad_9ef373d6",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 6023,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-09-05T16:01:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6e35482_0f54e2d8",
       "range": {
         "startLine": 6023,
         "startChar": 31,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57559684_0a0a88d5",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 6061,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-09-05T16:01:44Z",
+      "side": 1,
+      "message": "TIL Map packing. Done.",
+      "parentUuid": "ffd4d422_005fe00b",
+      "range": {
+        "startLine": 6061,
+        "startChar": 58,
+        "endLine": 6061,
+        "endChar": 68
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14d5cae9_c24d6cb4",
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddf81488_f3036869",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 6070,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-09-05T16:01:44Z",
+      "side": 1,
+      "message": "Args, right. Thanks for pointing this out. I wasn\u0027t thinking about that case.\nAdded a test.",
+      "parentUuid": "14d5cae9_c24d6cb4",
+      "range": {
+        "startLine": 6069,
+        "startChar": 6,
+        "endLine": 6070,
+        "endChar": 6
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14f82e60_0f7567cb",
@@ -169,6 +313,30 @@
       "writtenOn": "2023-09-05T12:56:37Z",
       "side": 1,
       "message": "also here, overflow.",
+      "range": {
+        "startLine": 273,
+        "startChar": 6,
+        "endLine": 273,
+        "endChar": 18
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbafa439_6cce7862",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-09-05T16:01:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14f82e60_0f7567cb",
       "range": {
         "startLine": 273,
         "startChar": 6,
