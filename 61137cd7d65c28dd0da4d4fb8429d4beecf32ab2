@@ -68,6 +68,24 @@
       "message": "Thanks Omer and Andrey.\nHow can I proceed with this fix?",
       "revId": "61137cd7d65c28dd0da4d4fb8429d4beecf32ab2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d04f2db4_758a5054",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-09-05T07:08:00Z",
+      "side": 1,
+      "message": "Andrey wrote lgtm in his comment but didn\u0027t press +1, so you\u0027re still missing owners approval. Once you have that, you could submit your CL.",
+      "parentUuid": "4ea138c7_350c281a",
+      "revId": "61137cd7d65c28dd0da4d4fb8429d4beecf32ab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
