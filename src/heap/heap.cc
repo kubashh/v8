@@ -2319,6 +2319,8 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
     memory_allocator()->unmapper()->EnsureUnmappingCompleted();
   }
 
+  const base::TimeTicks atomic_pause_start_time = base::TimeTicks::Now();
+
   base::Optional<SafepointScope> safepoint_scope;
   {
     AllowGarbageCollection allow_shared_gc;
@@ -2370,7 +2372,7 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
         });
   }
 
-  tracer()->StartInSafepoint();
+  tracer()->StartInSafepoint(atomic_pause_start_time);
 
   GarbageCollectionPrologueInSafepoint();
 
@@ -2436,19 +2438,14 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
     CppHeap::From(cpp_heap())->TraceEpilogue();
   }
 
-  RecomputeLimits(collector);
-
   if (collector == GarbageCollector::MARK_COMPACTOR) {
-    // After every full GC the old generation allocation limit should be
-    // configured.
-    DCHECK(old_generation_allocation_limit_configured_);
-
     ClearStubCaches(isolate());
   }
 
   GarbageCollectionEpilogueInSafepoint(collector);
 
-  tracer()->StopInSafepoint();
+  const base::TimeTicks atomic_pause_end_time = base::TimeTicks::Now();
+  tracer()->StopInSafepoint(atomic_pause_end_time);
 
   HeapVerifier::VerifyHeapIfEnabled(this);
 
@@ -2463,6 +2460,13 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
   } else {
     DCHECK(paused_clients.empty());
   }
+
+  RecomputeLimits(collector, atomic_pause_end_time);
+
+  // After every full GC the old generation allocation limit should be
+  // configured.
+  DCHECK_IMPLIES(collector == GarbageCollector::MARK_COMPACTOR,
+                 old_generation_allocation_limit_configured_);
 }
 
 bool Heap::CollectGarbageShared(LocalHeap* local_heap,
@@ -2538,7 +2542,7 @@ void Heap::EnsureSweepingCompletedForObject(Tagged<HeapObject> object) {
   sweeper()->EnsurePageIsSwept(page);
 }
 
-void Heap::RecomputeLimits(GarbageCollector collector) {
+void Heap::RecomputeLimits(GarbageCollector collector, base::TimeTicks time) {
   if (!((collector == GarbageCollector::MARK_COMPACTOR) ||
         (HasLowYoungGenerationAllocationRate() &&
          old_generation_allocation_limit_configured_))) {
@@ -2581,8 +2585,19 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
             this, GlobalSizeOfObjects(), min_global_memory_size_,
             max_global_memory_size_, new_space_capacity, global_growing_factor,
             mode);
-    SetOldGenerationAndGlobalAllocationLimit(
-        new_old_generation_allocation_limit, new_global_allocation_limit);
+
+    if (v8_flags.memory_balancer) {
+      // Update allocation rate and gc speed first.
+      tracer()->NotifyMemoryBalancer();
+      // Now recompute the new allocation limit.
+      mb_->RecomputeLimits(
+          new_global_allocation_limit - new_old_generation_allocation_limit,
+          time);
+    } else {
+      SetOldGenerationAndGlobalAllocationLimit(
+          new_old_generation_allocation_limit, new_global_allocation_limit);
+    }
+
     CheckIneffectiveMarkCompact(
         old_gen_size, tracer()->AverageMarkCompactMutatorUtilization());
   } else if (HasLowYoungGenerationAllocationRate() &&
@@ -2609,12 +2624,6 @@ void Heap::RecomputeLimits(GarbageCollector collector) {
   CHECK_EQ(max_global_memory_size_,
            GlobalMemorySizeFromV8Size(max_old_generation_size_));
   CHECK_GE(global_allocation_limit_, old_generation_allocation_limit_);
-
-  if (v8_flags.memory_balancer) {
-    mb_->UpdateExternalAllocationLimit(global_allocation_limit_ -
-                                       old_generation_allocation_limit_);
-    mb_->NotifyGC();
-  }
 }
 
 void Heap::CallGCPrologueCallbacks(GCType gc_type, GCCallbackFlags flags,
@@ -5475,9 +5484,6 @@ void Heap::SetUp(LocalHeap* main_thread_local_heap) {
     AddGCEpilogueCallback(HeapLayoutTracer::GCEpiloguePrintHeapLayout, gc_type,
                           nullptr);
   }
-  if (v8_flags.memory_balancer) {
-    mb_.reset(new MemoryBalancer(this));
-  }
 }
 
 void Heap::SetUpFromReadOnlyHeap(ReadOnlyHeap* ro_heap) {
@@ -5577,7 +5583,9 @@ void Heap::SetUpSpaces(LinearAllocationArea& new_allocation_info,
     deferred_counters_[i] = 0;
   }
 
-  tracer_.reset(new GCTracer(this));
+  base::TimeTicks startup_time = base::TimeTicks::Now();
+
+  tracer_.reset(new GCTracer(this, startup_time));
   array_buffer_sweeper_.reset(new ArrayBufferSweeper(this));
   gc_idle_time_handler_.reset(new GCIdleTimeHandler());
   memory_measurement_.reset(new MemoryMeasurement(isolate()));
@@ -5631,6 +5639,10 @@ void Heap::SetUpSpaces(LinearAllocationArea& new_allocation_info,
 
   main_thread_local_heap()->SetUpMainThread();
   heap_allocator_.Setup();
+
+  if (v8_flags.memory_balancer) {
+    mb_.reset(new MemoryBalancer(this, startup_time));
+  }
 }
 
 void Heap::InitializeHashSeed() {
