@@ -4668,14 +4668,9 @@ void Heap::IterateRoots(RootVisitor* v, base::EnumSet<SkipRoot> options,
 
     if (!options.contains(SkipRoot::kGlobalHandles)) {
       if (options.contains(SkipRoot::kWeak)) {
-        if (options.contains(SkipRoot::kOldGeneration)) {
-          // Skip handles that are either weak or old.
-          isolate_->global_handles()->IterateYoungStrongAndDependentRoots(v);
-          isolate_->traced_handles()->IterateYoungRoots(v);
-        } else {
-          // Skip handles that are weak.
-          isolate_->global_handles()->IterateStrongRoots(v);
-        }
+        DCHECK(!options.contains(SkipRoot::kOldGeneration));
+        // Skip handles that are weak.
+        isolate_->global_handles()->IterateStrongRoots(v);
       } else {
         if (options.contains(SkipRoot::kOldGeneration)) {
           UNREACHABLE();
