@@ -16,6 +16,86 @@
       "message": "PTAL",
       "revId": "fb4d257f2b31464ae1fbbc67ef35f20a87d1bb7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c47058cf_a7ed0d69",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-09-05T07:12:26Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the return type be `WasmCode::RuntimeStubId`?",
+      "range": {
+        "startLine": 212,
+        "startChar": 50,
+        "endLine": 212,
+        "endChar": 57
+      },
+      "revId": "fb4d257f2b31464ae1fbbc67ef35f20a87d1bb7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7dc212c_de4943a6",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2066,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-09-05T07:12:26Z",
+      "side": 1,
+      "message": "Could you use a more precise type here, like `V\u003cObject\u003e` or better?",
+      "range": {
+        "startLine": 2066,
+        "startChar": 25,
+        "endLine": 2066,
+        "endChar": 32
+      },
+      "revId": "fb4d257f2b31464ae1fbbc67ef35f20a87d1bb7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e99791a_a1490201",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2068,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-09-05T07:12:26Z",
+      "side": 1,
+      "message": "Can this case happen, after WebAssembly validation? If not, could we change it to a check?",
+      "revId": "fb4d257f2b31464ae1fbbc67ef35f20a87d1bb7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7169460f_9a742bf9",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2104,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-09-05T07:12:26Z",
+      "side": 1,
+      "message": "Shouldn\u0027t there be a return here?\nDo you have an idea how we could have a test that catches that the return here is missing?",
+      "revId": "fb4d257f2b31464ae1fbbc67ef35f20a87d1bb7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
