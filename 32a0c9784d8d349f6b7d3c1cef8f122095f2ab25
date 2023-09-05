@@ -16,6 +16,24 @@
       "message": "LGTM.\n\nSorry, I didn\u0027t mean that you could not do it as part of the other CL, just that for future CLs you could consider it. Sorry that I didn\u0027t make it more clear.",
       "revId": "32a0c9784d8d349f6b7d3c1cef8f122095f2ab25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "723d349c_b19c69ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-09-05T08:09:07Z",
+      "side": 1,
+      "message": "I thought the suggestion made sense and it was easy enough to do so I figured why not :)",
+      "parentUuid": "e24ad87a_c94bf917",
+      "revId": "32a0c9784d8d349f6b7d3c1cef8f122095f2ab25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
