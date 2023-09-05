@@ -849,6 +849,14 @@ int OS::GetUserTime(uint32_t* secs, uint32_t* usecs) {
 }
 #endif
 
+int OS::GetPeakMemoryUsageKb() {
+  struct rusage usage;
+
+  if (getrusage(RUSAGE_SELF, &usage) < 0) return -1;
+
+  return static_cast<int>(usage.ru_maxrss);
+}
+
 double OS::TimeCurrentMillis() {
   return Time::Now().ToJsTime();
 }
