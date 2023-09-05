@@ -16,6 +16,167 @@
       "message": "PTAL",
       "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcc1f942_4a783f36",
+        "filename": "src/maglev/arm/maglev-assembler-arm-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-05T12:56:37Z",
+      "side": 1,
+      "message": "use `Move` in case `dst \u003d\u003d src` (throughout)",
+      "range": {
+        "startLine": 260,
+        "startChar": 4,
+        "endLine": 260,
+        "endChar": 7
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b562b328_bc13078b",
+        "filename": "src/maglev/arm64/maglev-assembler-arm64-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-05T12:56:37Z",
+      "side": 1,
+      "message": "shouldn\u0027t this also be on overflow?",
+      "range": {
+        "startLine": 402,
+        "startChar": 6,
+        "endLine": 402,
+        "endChar": 18
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e86b6a9f_a7979f6f",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 5990,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-05T12:56:37Z",
+      "side": 1,
+      "message": "since there\u0027s only three kinds we care about, and they\u0027re paired up in the first 6 values of ElementsKinds, you could use a size 3 array here and index by `static_cast\u003cint\u003e(kind)/2`. That should let you avoid needing to loop over map_kinds to find a match below, you could directly do\n\n```\nstd::array\u003cSmallZoneVector\u003ccompiler::MapRef, 2\u003e, 3\u003e map_kinds \u003d {\n  SmallZoneVector\u003ccompiler::MapRef, 2\u003e(zone()),\n  SmallZoneVector\u003ccompiler::MapRef, 2\u003e(zone()),\n  SmallZoneVector\u003ccompiler::MapRef, 2\u003e(zone())\n};\nfor (compiler::MapRef map : possible_maps) {\n  // Check fast array resize etc...\n  map_kinds[static_cast\u003cint\u003e(map.elements_kind())/2].push_back(map);\n}\n```",
+      "range": {
+        "startLine": 5990,
+        "startChar": 67,
+        "endLine": 5990,
+        "endChar": 68
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6e35482_0f54e2d8",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 6023,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-05T12:56:37Z",
+      "side": 1,
+      "message": "nit: `do_return` or similar, `return_value` sounds like a `ValueNode*`",
+      "range": {
+        "startLine": 6023,
+        "startChar": 31,
+        "endLine": 6023,
+        "endChar": 43
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffd4d422_005fe00b",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 6061,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-05T12:56:37Z",
+      "side": 1,
+      "message": "this is currently incompatible with V8_MAP_PACKING, can you add a DCHECK that it isn\u0027t enabled and a TODO to add support?",
+      "range": {
+        "startLine": 6061,
+        "startChar": 58,
+        "endLine": 6061,
+        "endChar": 68
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14d5cae9_c24d6cb4",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 6070,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-05T12:56:37Z",
+      "side": 1,
+      "message": "you\u0027re only checking two maps? I think multiple maps is possible if there are JSArrays that also contain named fields, e.g.\n\n```\nlet a \u003d [];\nlet b \u003d [];\nlet c \u003d [];\na.x \u003d \"\";\nb.y \u003d \"\";\nc.z \u003d \"\";\n\nfunction push(arr) {\n  arr.push(0);\n}\npush(a);\npush(b);\npush(c);\n```",
+      "range": {
+        "startLine": 6069,
+        "startChar": 6,
+        "endLine": 6070,
+        "endChar": 6
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14f82e60_0f7567cb",
+        "filename": "src/maglev/x64/maglev-assembler-x64-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-05T12:56:37Z",
+      "side": 1,
+      "message": "also here, overflow.",
+      "range": {
+        "startLine": 273,
+        "startChar": 6,
+        "endLine": 273,
+        "endChar": 18
+      },
+      "revId": "084dc8a5431bf1f498a6f5bb3ddfd8efae49c381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
