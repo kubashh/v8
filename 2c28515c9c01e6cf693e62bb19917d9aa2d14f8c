@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f6a7244_32c1e317",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-09-05T20:22:33Z",
+      "side": 1,
+      "message": "This looks like you are doing lowering/optimization already in during graph construction. Would it be cleaner to do it as part of a lowering?",
+      "revId": "2c28515c9c01e6cf693e62bb19917d9aa2d14f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
