@@ -576,9 +576,11 @@ class V8_EXPORT_PRIVATE RelocIterator : public RelocIteratorBase<RelocInfo> {
 class V8_EXPORT_PRIVATE WritableRelocIterator
     : public RelocIteratorBase<WritableRelocInfo> {
  public:
-  WritableRelocIterator(Tagged<InstructionStream> istream,
+  WritableRelocIterator(ThreadIsolation::WritableJitAllocation& jit_allocation,
+                        Tagged<InstructionStream> istream,
                         Address constant_pool, int mode_mask);
-  WritableRelocIterator(base::Vector<uint8_t> instructions,
+  WritableRelocIterator(ThreadIsolation::WritableJitAllocation& jit_allocation,
+                        base::Vector<uint8_t> instructions,
                         base::Vector<const uint8_t> reloc_info,
                         Address constant_pool, int mode_mask = kAllModesMask);
 };
