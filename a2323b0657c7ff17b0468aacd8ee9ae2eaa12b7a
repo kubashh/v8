@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e51d279_4d879d02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-09-05T07:42:37Z",
+      "side": 1,
+      "message": "Now that\u0027s a fast fix!!",
+      "revId": "a2323b0657c7ff17b0468aacd8ee9ae2eaa12b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "324928b0_38097f9e",
+        "filename": "test/mjsunit/regress/wasm/regress-1478848.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-09-05T07:42:37Z",
+      "side": 1,
+      "message": "This flag is not necessary for the checked-in test, test variants will take care of it.",
+      "range": {
+        "startLine": 5,
+        "startChar": 33,
+        "endLine": 5,
+        "endChar": 45
+      },
+      "revId": "a2323b0657c7ff17b0468aacd8ee9ae2eaa12b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
