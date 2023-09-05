@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63aad248_b395c043",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-05T10:09:48Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "1e517cd97f14230d7734317f389f59193eae4e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec9d404f_c4a44769",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-05T10:09:48Z",
+      "side": 1,
+      "message": "Obviously we could do better by not printing `5` or some other integer but that should still be enough to identify exactly what\u0027s going wrong.",
+      "range": {
+        "startLine": 47,
+        "startChar": 34,
+        "endLine": 47,
+        "endChar": 36
+      },
+      "revId": "1e517cd97f14230d7734317f389f59193eae4e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e763f4bb_88eb676e",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-05T10:09:48Z",
+      "side": 1,
+      "message": "`FATAL` expects a `printf` format string. `RegisterRepresentation` overloads `operator\u003c\u003c`, so this doesn\u0027t align very well.\n\nHow many ways are there to format a string? C++: Yes.\n(Once we have C++20\u0027s `std::format`, we\u0027ll have yet another way by custom `std::formatter`.)",
+      "range": {
+        "startLine": 239,
+        "startChar": 64,
+        "endLine": 239,
+        "endChar": 66
+      },
+      "revId": "1e517cd97f14230d7734317f389f59193eae4e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
