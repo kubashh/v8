@@ -39,6 +39,30 @@
       },
       "revId": "a2323b0657c7ff17b0468aacd8ee9ae2eaa12b7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cae74796_e419c9f6",
+        "filename": "test/mjsunit/regress/wasm/regress-1478848.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-09-05T08:26:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "324928b0_38097f9e",
+      "range": {
+        "startLine": 5,
+        "startChar": 33,
+        "endLine": 5,
+        "endChar": 45
+      },
+      "revId": "a2323b0657c7ff17b0468aacd8ee9ae2eaa12b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
