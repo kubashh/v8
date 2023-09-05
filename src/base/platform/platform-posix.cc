@@ -849,6 +849,23 @@ int OS::GetUserTime(uint32_t* secs, uint32_t* usecs) {
 }
 #endif
 
+int OS::GetPeakMemoryUsageKb() {
+#if defined(V8_OS_FUCHSIA)
+  // Fuchsia does not implement getrusage()
+  return -1;
+#else
+  struct rusage usage;
+  if (getrusage(RUSAGE_SELF, &usage) < 0) return -1;
+
+#if defined(V8_OS_MACOS)
+  // MacOS ru_maxrss uses bytes
+  return static_cast<int>(usage.ru_maxrss / 1024);
+#else
+  // Most other cases (at least Linux, IOS, return kilobytes)
+  return static_cast<int>(usage.ru_maxrss);
+#endif
+}
+
 double OS::TimeCurrentMillis() {
   return Time::Now().ToJsTime();
 }
