@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26265e18_5acdec99",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-09-06T11:11:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff74bff2_0d66f963",
+      "range": {
+        "startLine": 269,
+        "startChar": 2,
+        "endLine": 269,
+        "endChar": 10
+      },
+      "revId": "b40d654a94d07678c6934a15c68c14b888a0fc53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6c32302_6dda469a",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-09-06T10:04:21Z",
       "side": 1,
       "message": "not explicit",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "b40d654a94d07678c6934a15c68c14b888a0fc53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "994c3b7a_767f308b",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-09-06T11:11:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6c32302_6dda469a",
       "range": {
         "startLine": 23,
         "startChar": 2,
