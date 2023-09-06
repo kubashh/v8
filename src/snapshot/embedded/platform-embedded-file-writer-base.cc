@@ -130,7 +130,7 @@ EmbeddedTargetOs ToEmbeddedTargetOs(const char* s) {
   }
 
   std::string string(s);
-  if (string == "aix") {
+  if (string == "aix" || string == "os400") {
     return EmbeddedTargetOs::kAIX;
   } else if (string == "chromeos") {
     return EmbeddedTargetOs::kChromeOS;
