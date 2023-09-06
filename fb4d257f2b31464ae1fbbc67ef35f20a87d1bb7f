@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e512ba1_14c64367",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-06T08:41:07Z",
+      "side": 1,
+      "message": "We can\u0027t `reinterpret_cast` it for the assignment without risking that `RuntimeStubId` might have a different representation than `int64_t` or `int32_t` or whatever representation we might pick here, so that\u0027s quite risky.\nI think it\u0027s somewhat fine to return a generic type here as that\u0027s what\u0027s stored in the constant. (It\u0027s consistent with how we store the constant via `asm_.RelocatableConstant()` which expects an `int64_t`.",
+      "parentUuid": "f95bc605_7b37e844",
+      "range": {
+        "startLine": 212,
+        "startChar": 50,
+        "endLine": 212,
+        "endChar": 57
+      },
+      "revId": "fb4d257f2b31464ae1fbbc67ef35f20a87d1bb7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7dc212c_de4943a6",
