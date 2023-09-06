@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bfb525e_9c159ed7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-06T09:28:10Z",
+      "side": 1,
+      "message": "pro tip: write `Fixed:` instead of `Bug:` to make some bot automatically mark the bug as fixed when the CL has landed.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 3
+      },
+      "revId": "e98a3e10622ef2068fca77f7570ea01da1ca0cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "08cb32f9_7a773c63",
@@ -14,6 +37,23 @@
       "writtenOn": "2023-09-05T05:02:47Z",
       "side": 1,
       "message": "Could you please review this patch?",
+      "revId": "e98a3e10622ef2068fca77f7570ea01da1ca0cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88e1468a_b5362246",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-06T09:28:10Z",
+      "side": 1,
+      "message": "LGTM. Sorry for the latency.",
       "revId": "e98a3e10622ef2068fca77f7570ea01da1ca0cc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
