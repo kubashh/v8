@@ -16,6 +16,23 @@
       "message": "Matthias, PTAL.",
       "revId": "fe7b6659f9e21658797a895b5e0cfab36a8e281e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5087f6bd_5115c1fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-06T08:55:08Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "fe7b6659f9e21658797a895b5e0cfab36a8e281e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
