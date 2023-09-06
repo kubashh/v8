@@ -27,5 +27,5 @@ var bt_empty_star = /(?:a?b??)*/;
 // backtracking correctly matches "ab"
 assertEquals(["ab"], bt_empty_star.exec(str));
 
-// experimental does not match "ab" but instead "a"
-assertEquals(["a"], exp_empty_star.exec(str));
+// experimental correctly matches "ab"
+assertEquals(["ab"], exp_empty_star.exec(str));
