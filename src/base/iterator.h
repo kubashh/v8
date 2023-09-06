@@ -68,7 +68,7 @@ struct DerefPtrIterator : base::iterator<std::bidirectional_iterator_tag, T> {
 
   explicit DerefPtrIterator(T* const* ptr) : ptr(ptr) {}
 
-  T& operator*() { return **ptr; }
+  T& operator*() const { return **ptr; }
   DerefPtrIterator& operator++() {
     ++ptr;
     return *this;
@@ -77,7 +77,12 @@ struct DerefPtrIterator : base::iterator<std::bidirectional_iterator_tag, T> {
     --ptr;
     return *this;
   }
-  bool operator!=(DerefPtrIterator other) { return ptr != other.ptr; }
+  bool operator!=(const DerefPtrIterator& other) const {
+    return ptr != other.ptr;
+  }
+  bool operator==(const DerefPtrIterator& other) const {
+    return ptr == other.ptr;
+  }
 };
 
 // {Reversed} returns a container adapter usable in a range-based "for"
