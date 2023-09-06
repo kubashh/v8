@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5b5a92e_dd295676",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-06T10:04:21Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "b40d654a94d07678c6934a15c68c14b888a0fc53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff74bff2_0d66f963",
+        "filename": "src/heap/gc-tracer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-06T10:04:21Z",
+      "side": 1,
+      "message": "Let\u0027s remove explicit :)",
+      "range": {
+        "startLine": 269,
+        "startChar": 2,
+        "endLine": 269,
+        "endChar": 10
+      },
+      "revId": "b40d654a94d07678c6934a15c68c14b888a0fc53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6c32302_6dda469a",
+        "filename": "src/heap/memory-balancer.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-06T10:04:21Z",
+      "side": 1,
+      "message": "not explicit",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "b40d654a94d07678c6934a15c68c14b888a0fc53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
