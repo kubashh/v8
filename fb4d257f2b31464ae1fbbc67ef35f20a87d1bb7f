@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f95bc605_7b37e844",
+        "filename": "src/compiler/turboshaft/operation-matcher.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-09-06T08:35:23Z",
+      "side": 1,
+      "message": "Hmm, maybe it would be good to move `WasmCode::RuntimeStubId` out of wasm-code-manager.h into a header file that can be shared, but that would be done in a separate CL.\n\nSince this is just a pointer, could the implementation be based completely on forward declarations? I mean, declare stub_id as `WasmCode::RuntimeStubId*`, and reinterpret_cast it for the assignment.\n\nIf not, the current implementation is okay for me.",
+      "parentUuid": "7548aa5b_c5a5cebe",
+      "range": {
+        "startLine": 212,
+        "startChar": 50,
+        "endLine": 212,
+        "endChar": 57
+      },
+      "revId": "fb4d257f2b31464ae1fbbc67ef35f20a87d1bb7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c7dc212c_de4943a6",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 1

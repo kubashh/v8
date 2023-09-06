@@ -51,6 +51,24 @@
       "parentUuid": "3f6a7244_32c1e317",
       "revId": "2c28515c9c01e6cf693e62bb19917d9aa2d14f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f654fa75_efbdf536",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-09-06T08:35:23Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4c26095f_b2d97d6b",
+      "revId": "2c28515c9c01e6cf693e62bb19917d9aa2d14f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
