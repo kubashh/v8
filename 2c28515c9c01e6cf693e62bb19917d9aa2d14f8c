@@ -33,6 +33,24 @@
       "message": "This looks like you are doing lowering/optimization already in during graph construction. Would it be cleaner to do it as part of a lowering?",
       "revId": "2c28515c9c01e6cf693e62bb19917d9aa2d14f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c26095f_b2d97d6b",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-06T08:22:42Z",
+      "side": 1,
+      "message": "Yes, it would be cleaner to do it as part of an optimization (which we don\u0027t have in turboshaft yet. This is porting the Turbofan implementation including this optimization and the `TODO` to move it to an optimization.\nFor being able to pattern-match this in an optimization, we\u0027d need some `StringNewWtf8ArrayOp` or something similar as otherwise it will be impossible to write a proper match for the pattern.\nThat\u0027s why it wasn\u0027t done that way directly.",
+      "parentUuid": "3f6a7244_32c1e317",
+      "revId": "2c28515c9c01e6cf693e62bb19917d9aa2d14f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
