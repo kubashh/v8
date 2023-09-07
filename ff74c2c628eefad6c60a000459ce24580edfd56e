@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29e58442_54d0bab0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-09-07T05:43:30Z",
+      "side": 1,
+      "message": "LGTM with a comment",
+      "revId": "ff74c2c628eefad6c60a000459ce24580edfd56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b297bd0_eb864a34",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-base.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-09-07T05:43:30Z",
+      "side": 1,
+      "message": "Please add a brief comment, e.g. relevant parts of the commit msg would be fine.",
+      "revId": "ff74c2c628eefad6c60a000459ce24580edfd56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
