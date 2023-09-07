@@ -16,6 +16,70 @@
       "message": "@dmercadier@chromium.org: PTAL. This seems to be particularly easy to get wrong.\nIs there any way to make these issues easier to discover or prevent?\nI\u0027m feeling that we might want to have a mode where we compile in a mode where the initial state is already unreachable to get better coverage for this?\nOr am I missing something and typically one doesn\u0027t run into these bugs?",
       "revId": "ddb48043ffc24c121c0ad5efe66343c1331fc95e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d178af0f_c3e6c601",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-09-07T14:42:21Z",
+      "side": 1,
+      "message": "Yea it\u0027s a bit annoying when this things happen. In general, you should consider starting most of your Turboshaft code-generating helpers with `if (__ generating_unreachable_operations()) return` or something like that. \n\nStarting to compile from an unreachable initial state is an interesting idea. It requires a bit of tooling (because we still want compilation to be valid, so we basically have to run every phase twice, once in unreachable mode for testing and once for real), but it sounds doable and could be useful.",
+      "parentUuid": "c216c4bb_aa7350f3",
+      "revId": "ddb48043ffc24c121c0ad5efe66343c1331fc95e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f450a8c_5ef791ad",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4752,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-09-07T14:42:21Z",
+      "side": 1,
+      "message": "I think that `if (asm_.generating_unreachable_operations()) return false;` is a bit better (the real cause for the early return is the `generating_unreachable_operations()`, and `!op.valid()` is a consequence of this). But you can also keep your current fix, I\u0027m fine with that :)",
+      "range": {
+        "startLine": 4751,
+        "startChar": 4,
+        "endLine": 4752,
+        "endChar": 34
+      },
+      "revId": "ddb48043ffc24c121c0ad5efe66343c1331fc95e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8febb792_c4bf541d",
+        "filename": "test/mjsunit/regress/wasm/regress-1479926.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-09-07T14:42:21Z",
+      "side": 1,
+      "message": "What a repro 😮",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 38
+      },
+      "revId": "ddb48043ffc24c121c0ad5efe66343c1331fc95e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
