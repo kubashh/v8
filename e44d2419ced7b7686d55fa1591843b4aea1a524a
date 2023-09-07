@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36fadd89_48b51f73",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-09-07T16:49:08Z",
+      "side": 1,
+      "message": "Yup, after checking the NodeJS implementation, they just fixed it a few months ago. See https://github.com/libuv/libuv/commit/65c1402ee66a37d8cdd294f64bfd6def4b9fcf3f\n\nWe want this to apply to both IOS and MACOS.",
+      "parentUuid": "217b9426_2f0a1ee1",
+      "range": {
+        "startLine": 860,
+        "startChar": 12,
+        "endLine": 860,
+        "endChar": 23
+      },
+      "revId": "e44d2419ced7b7686d55fa1591843b4aea1a524a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ce28bea_71973703",
         "filename": "src/base/platform/platform-posix.cc",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2023-09-07T16:33:27Z",
       "side": 1,
       "message": "nit: you can use the KB constant",
+      "range": {
+        "startLine": 862,
+        "startChar": 44,
+        "endLine": 862,
+        "endChar": 48
+      },
+      "revId": "e44d2419ced7b7686d55fa1591843b4aea1a524a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e897e005_0ec30631",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-09-07T16:49:08Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5ce28bea_71973703",
       "range": {
         "startLine": 862,
         "startChar": 44,
@@ -60,6 +108,30 @@
       "writtenOn": "2023-09-07T16:33:27Z",
       "side": 1,
       "message": "nit: you can use the `KB` constant",
+      "range": {
+        "startLine": 499,
+        "startChar": 60,
+        "endLine": 499,
+        "endChar": 64
+      },
+      "revId": "e44d2419ced7b7686d55fa1591843b4aea1a524a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f07a81c_73819306",
+        "filename": "src/base/platform/platform-win32.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-09-07T16:49:08Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4b93a369_f8298a2b",
       "range": {
         "startLine": 499,
         "startChar": 60,
