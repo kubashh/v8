@@ -61,6 +61,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "04e08f29_82e24dff",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4752,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-07T14:54:53Z",
+      "side": 1,
+      "message": "Done. I added a TODO to do it probably in all exposed functions for graph building.\nRight now, it seems we don\u0027t lookup any inputs in other code paths here, so we should be save but it would still be a nice to have protection when changing the code.",
+      "parentUuid": "2f450a8c_5ef791ad",
+      "range": {
+        "startLine": 4751,
+        "startChar": 4,
+        "endLine": 4752,
+        "endChar": 34
+      },
+      "revId": "ddb48043ffc24c121c0ad5efe66343c1331fc95e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8febb792_c4bf541d",
         "filename": "test/mjsunit/regress/wasm/regress-1479926.js",
         "patchSetId": 2
@@ -72,6 +96,30 @@
       "writtenOn": "2023-09-07T14:42:21Z",
       "side": 1,
       "message": "What a repro 😮",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 213,
+        "endChar": 38
+      },
+      "revId": "ddb48043ffc24c121c0ad5efe66343c1331fc95e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00c9987a_6f9af54a",
+        "filename": "test/mjsunit/regress/wasm/regress-1479926.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-07T14:54:53Z",
+      "side": 1,
+      "message": "It\u0027s the generated JS test case for the clusterfuzz minified test case! 😂\n(I didn\u0027t look at the non-minified one.)\nThat said, the wasm_compile_fuzzer is particularly bad for minification as any bit change in the input data might cause the whole test to change completely...",
+      "parentUuid": "8febb792_c4bf541d",
       "range": {
         "startLine": 1,
         "startChar": 0,
