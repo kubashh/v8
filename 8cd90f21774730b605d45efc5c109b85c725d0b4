@@ -16,6 +16,23 @@
       "message": "leszeks@, PTAL. For context, PDFium fails to build since it builds with C++17. See https://chromium-review.googlesource.com/c/v8/v8/+/4753150/comment/4fcd2096_c1e61517/. Thanks!",
       "revId": "8cd90f21774730b605d45efc5c109b85c725d0b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "046c2fab_cdf3276c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-07T08:44:14Z",
+      "side": 1,
+      "message": "thanks for the fix, sorry for not getting around to it myself.",
+      "revId": "8cd90f21774730b605d45efc5c109b85c725d0b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
