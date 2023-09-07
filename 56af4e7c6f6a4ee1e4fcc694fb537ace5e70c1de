@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94d523fb_91477534",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-07T15:38:12Z",
+      "side": 1,
+      "message": "LGTM % nit",
+      "revId": "56af4e7c6f6a4ee1e4fcc694fb537ace5e70c1de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4988b4d7_eea1d352",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-07T15:38:12Z",
+      "side": 1,
+      "message": "nit: I have used `Rep` as an alias for that in other places and I think it\u0027s a bit better here than `RR`, but feel free to ignore.",
+      "range": {
+        "startLine": 81,
+        "startChar": 6,
+        "endLine": 81,
+        "endChar": 39
+      },
+      "revId": "56af4e7c6f6a4ee1e4fcc694fb537ace5e70c1de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
