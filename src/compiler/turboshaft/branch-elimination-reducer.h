@@ -247,7 +247,7 @@ class BranchEliminationReducer : public Next {
           Block* merge_block = true_goto->destination;
           if (!merge_block->HasPhis(Asm().input_graph())) {
             // Using `ReduceInputGraphGoto()` here enables more optimizations.
-            Asm().Goto(merge_block->MapToNextGraph());
+            __ Goto(merge_block->MapToNextGraph());
             return OpIndex::Invalid();
           }
         }
@@ -258,7 +258,8 @@ class BranchEliminationReducer : public Next {
       // We already know the value of {cond}. We thus remove the branch (this is
       // the "first" optimization in the documentation at the top of this
       // module).
-      return Asm().ReduceGoto(*cond_value ? if_true : if_false);
+      __ Goto(*cond_value ? if_true : if_false);
+      return OpIndex::Invalid();
     }
     // We can't optimize this branch.
     goto no_change;
@@ -384,15 +385,15 @@ class BranchEliminationReducer : public Next {
       goto no_change;
     }
 
-    if (Asm().template Is<ConstantOp>(condition)) {
+    if (Asm().matcher().template Is<ConstantOp>(condition)) {
       goto no_change;
     }
 
     OpIndex static_condition = Asm().Word32Constant(*condition_value);
     if (negated) {
-      Asm().TrapIfNot(static_condition, frame_state, trap_id);
+      __ TrapIfNot(static_condition, frame_state, trap_id);
     } else {
-      Asm().TrapIf(static_condition, frame_state, trap_id);
+      __ TrapIf(static_condition, frame_state, trap_id);
     }
     return OpIndex::Invalid();
   }

@@ -213,8 +213,8 @@ class MemoryOptimizationReducer : public Next {
     // runtime call. This is needed because we cannot allocation-fold large and
     // normal-sized objects.
     uint64_t constant_size{};
-    if (!__ MatchWordConstant(size, WordRepresentation::PointerSized(),
-                              &constant_size) ||
+    if (!Asm().matcher().MatchWordConstant(
+            size, WordRepresentation::PointerSized(), &constant_size) ||
         constant_size > kMaxRegularHeapObjectSize) {
       Variable result =
           Asm().NewLoopInvariantVariable(RegisterRepresentation::Tagged());
