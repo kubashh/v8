@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c216c4bb_aa7350f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-07T14:32:03Z",
+      "side": 1,
+      "message": "@dmercadier@chromium.org: PTAL. This seems to be particularly easy to get wrong.\nIs there any way to make these issues easier to discover or prevent?\nI\u0027m feeling that we might want to have a mode where we compile in a mode where the initial state is already unreachable to get better coverage for this?\nOr am I missing something and typically one doesn\u0027t run into these bugs?",
+      "revId": "ddb48043ffc24c121c0ad5efe66343c1331fc95e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
