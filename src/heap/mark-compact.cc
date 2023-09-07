@@ -1486,7 +1486,7 @@ class EvacuateVisitorBase : public HeapObjectVisitor {
                                                                  size);
         base->heap_->CopyBlock(dst_addr, src_addr, size);
         Tagged<InstructionStream> istream = InstructionStream::cast(dst);
-        istream->Relocate(dst_addr - src_addr);
+        istream->Relocate(writable_allocation, dst_addr - src_addr);
       }
       if (mode != MigrationMode::kFast) {
         base->ExecuteMigrationObservers(dest, src, dst, size);
