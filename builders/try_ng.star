@@ -78,6 +78,7 @@ trybot_pair(
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     properties = {"target_platform": "android", "target_arch": "arm"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -88,6 +89,7 @@ trybot_pair(
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     properties = {"target_platform": "fuchsia"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -111,6 +113,7 @@ trybot_pair(
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -225,6 +228,7 @@ trybot_pair(
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -233,6 +237,7 @@ trybot_pair(
     dimensions = {"host_class": "strong", "os": "Ubuntu-20.04", "cpu": "x86-64"},
     build_timeout = 5400,
     total_timeout = 6300,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -320,6 +325,7 @@ trybot_pair(
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -327,6 +333,7 @@ trybot_pair(
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -334,6 +341,7 @@ trybot_pair(
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -341,6 +349,7 @@ trybot_pair(
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -606,6 +615,7 @@ trybot_pair(
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -613,6 +623,7 @@ trybot_pair(
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -620,6 +631,7 @@ trybot_pair(
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -628,6 +640,7 @@ trybot_pair(
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
     properties = {"target_arch": "arm"},
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
@@ -642,6 +655,7 @@ trybot_pair(
     cq_properties = CQ.OPTIONAL,
     dimensions = {"os": "Windows-10", "cpu": "x86-64"},
     build_timeout = 3600,
+    disable_resultdb_exports = True,
 )
 
 trybot_pair(
