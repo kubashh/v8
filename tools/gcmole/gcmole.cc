@@ -643,14 +643,15 @@ static std::string THIS("this");
 
 class FunctionAnalyzer {
  public:
-  FunctionAnalyzer(clang::MangleContext* ctx, clang::CXXRecordDecl* object_decl,
+  FunctionAnalyzer(clang::MangleContext* ctx,
+                   clang::CXXRecordDecl* heap_object_decl,
                    clang::CXXRecordDecl* maybe_object_decl,
                    clang::CXXRecordDecl* smi_decl,
                    clang::ClassTemplateDecl* tagged_decl,
                    clang::CXXRecordDecl* no_gc_mole_decl,
                    clang::DiagnosticsEngine& d, clang::SourceManager& sm)
       : ctx_(ctx),
-        object_decl_(object_decl),
+        heap_object_decl_(heap_object_decl),
         maybe_object_decl_(maybe_object_decl),
         smi_decl_(smi_decl),
         tagged_decl_(tagged_decl),
@@ -1249,32 +1250,6 @@ class FunctionAnalyzer {
     return (record == base) || record->isDerivedFrom(base);
   }
 
-  // Tagged<T> -> T
-  const clang::CXXRecordDecl* ExtractPointedToTypeIfTagged(
-      const clang::CXXRecordDecl* record) {
-    if (record == nullptr) return nullptr;
-    if (!InV8Namespace(record)) return nullptr;
-    auto* specialization =
-        llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(record);
-    if (!specialization) return record;
-    auto* template_decl =
-        specialization->getSpecializedTemplate()->getCanonicalDecl();
-    if (template_decl != tagged_decl_) return record;
-    auto& template_args = specialization->getTemplateArgs();
-    if (template_args.size() != 1) {
-      llvm::errs() << "v8::internal::Tagged<T> should have exactly one "
-                      "template argument\n";
-      specialization->dump(llvm::errs());
-      return nullptr;
-    }
-    if (template_args[0].getKind() != clang::TemplateArgument::Type) {
-      llvm::errs() << "v8::internal::Tagged<T>, T should be a type argument\n";
-      specialization->dump(llvm::errs());
-      return nullptr;
-    }
-    return template_args[0].getAsType()->getAsCXXRecordDecl();
-  }
-
   const clang::CXXRecordDecl* GetDefinitionOrNull(
       const clang::CXXRecordDecl* record) {
     if (record == nullptr) return nullptr;
@@ -1284,11 +1259,38 @@ class FunctionAnalyzer {
   }
 
   bool IsDerivedFromInternalPointer(const clang::CXXRecordDecl* record) {
-    record = ExtractPointedToTypeIfTagged(record);
+    if (record == nullptr) return false;
+    if (!InV8Namespace(record)) return false;
+    auto* specialization =
+        llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(record);
+    if (specialization) {
+      auto* template_decl =
+          specialization->getSpecializedTemplate()->getCanonicalDecl();
+      if (template_decl == tagged_decl_) {
+        auto& template_args = specialization->getTemplateArgs();
+        if (template_args.size() != 1) {
+          llvm::errs() << "v8::internal::Tagged<T> should have exactly one "
+                          "template argument\n";
+          specialization->dump(llvm::errs());
+          return false;
+        }
+        if (template_args[0].getKind() != clang::TemplateArgument::Type) {
+          llvm::errs()
+              << "v8::internal::Tagged<T>, T should be a type argument\n";
+          specialization->dump(llvm::errs());
+          return false;
+        }
+
+        auto* tagged_type_record =
+            template_args[0].getAsType()->getAsCXXRecordDecl();
+        return !IsDerivedFrom(tagged_type_record, smi_decl_);
+      }
+    }
+
     const clang::CXXRecordDecl* definition = GetDefinitionOrNull(record);
     if (!definition) return false;
-    if (IsDerivedFrom(record, object_decl_)) {
-      return !IsDerivedFrom(record, smi_decl_);
+    if (IsDerivedFrom(record, heap_object_decl_)) {
+      return true;
     }
     if (IsDerivedFrom(record, maybe_object_decl_)) {
       return true;
@@ -1439,7 +1441,7 @@ class FunctionAnalyzer {
   }
 
   clang::MangleContext* ctx_;
-  clang::CXXRecordDecl* object_decl_;
+  clang::CXXRecordDecl* heap_object_decl_;
   clang::CXXRecordDecl* maybe_object_decl_;
   clang::CXXRecordDecl* smi_decl_;
   clang::ClassTemplateDecl* tagged_decl_;
@@ -1521,8 +1523,8 @@ class ProblemsFinder : public clang::ASTConsumer,
     clang::CXXRecordDecl* no_gc_mole_decl =
         v8_internal.Resolve<clang::CXXRecordDecl>("DisableGCMole");
 
-    clang::CXXRecordDecl* object_decl =
-        v8_internal.Resolve<clang::CXXRecordDecl>("Object");
+    clang::CXXRecordDecl* heap_object_decl =
+        v8_internal.Resolve<clang::CXXRecordDecl>("HeapObject");
 
     clang::CXXRecordDecl* maybe_object_decl =
         v8_internal.Resolve<clang::CXXRecordDecl>("MaybeObject");
@@ -1533,7 +1535,9 @@ class ProblemsFinder : public clang::ASTConsumer,
     clang::ClassTemplateDecl* tagged_decl =
         v8_internal.Resolve<clang::ClassTemplateDecl>("Tagged");
 
-    if (object_decl != nullptr) object_decl = object_decl->getDefinition();
+    if (heap_object_decl != nullptr) {
+      heap_object_decl = heap_object_decl->getDefinition();
+    }
 
     if (maybe_object_decl != nullptr) {
       maybe_object_decl = maybe_object_decl->getDefinition();
@@ -1543,15 +1547,15 @@ class ProblemsFinder : public clang::ASTConsumer,
 
     if (tagged_decl != nullptr) tagged_decl = tagged_decl->getCanonicalDecl();
 
-    if (object_decl != nullptr && smi_decl != nullptr &&
+    if (heap_object_decl != nullptr && smi_decl != nullptr &&
         maybe_object_decl != nullptr && tagged_decl != nullptr) {
       function_analyzer_ = new FunctionAnalyzer(
-          clang::ItaniumMangleContext::create(ctx, d_), object_decl,
+          clang::ItaniumMangleContext::create(ctx, d_), heap_object_decl,
           maybe_object_decl, smi_decl, tagged_decl, no_gc_mole_decl, d_, sm_);
       TraverseDecl(ctx.getTranslationUnitDecl());
     } else if (g_verbose) {
-      if (object_decl == nullptr) {
-        llvm::errs() << "Failed to resolve v8::internal::Object\n";
+      if (heap_object_decl == nullptr) {
+        llvm::errs() << "Failed to resolve v8::internal::HeapObject\n";
       }
       if (maybe_object_decl == nullptr) {
         llvm::errs() << "Failed to resolve v8::internal::MaybeObject\n";
