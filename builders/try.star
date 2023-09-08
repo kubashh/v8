@@ -39,6 +39,7 @@ def presubmit_builder(
         execution_timeout = timeout + 2 * 60,
         properties = {"runhooks": True, "timeout": timeout},
         priority = 25,
+        disable_resultdb_exports = True,
     )
 
 presubmit_builder(
@@ -83,6 +84,7 @@ try_builder(
     cq_branch_properties = CQ.BLOCK,
     executable = "recipe:v8/presubmit",
     dimensions = {"os": "Ubuntu-22.04", "cpu": "x86-64"},
+    disable_resultdb_exports = True,
 )
 
 try_builder(
@@ -123,6 +125,7 @@ try_builder(
     },
     execution_timeout = 7200,
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 try_builder(
@@ -136,6 +139,7 @@ try_builder(
         "coverage": "llvm",
     },
     use_remoteexec = RECLIENT.DEFAULT_UNTRUSTED,
+    disable_resultdb_exports = True,
 )
 
 try_builder(
@@ -304,6 +308,7 @@ try_builder(
     cq_properties = CQ.on_files("tools/clusterfuzz/js_fuzzer/.+"),
     executable = "recipe:v8/test_tools",
     dimensions = {"host_class": "docker", "os": "Ubuntu-22.04", "cpu": "x86-64"},
+    disable_resultdb_exports = True,
 )
 
 try_builder(
@@ -331,6 +336,7 @@ try_builder(
     bucket = "try.triggered",
     executable = "recipe:v8/flako",
     execution_timeout = 14400,
+    disable_resultdb_exports = True,
 )
 
 try_builder(
@@ -339,4 +345,5 @@ try_builder(
     executable = "recipe:v8/verify_flakes",
     execution_timeout = 16200,
     schedule = "with 3h interval",
+    disable_resultdb_exports = True,
 )
