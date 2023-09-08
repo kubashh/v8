@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ff6a057_16693ec7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-09-08T09:56:47Z",
+      "side": 1,
+      "message": "PTAL\n\nThe performance is not great currently, but I think that we should still land (but disabled), because most of the code will be useful for loop peeling and WASM loop unrolling (and also, this way the WASM folks can start experimenting with WASM heuristics while we experiment with JS heuristics).\n\nThe rebases are starting to be a bit annoying, so I think it makes sense to land.",
+      "revId": "844423dc8e6fda82eca4e72fa864913597f54132",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
