@@ -33,6 +33,23 @@
       "message": "@dmercadier@chromium.org: I tagged you in a comment but somehow forgot to add you as a reviewer:\nPTAL, sorry for the deja vu, it would\u0027ve been nice if I had noted this additional problem on the previous bug already.",
       "revId": "fcb3f55d2174f00694455b4857121c6a06217061",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff4de98b_e3d5b537",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-09-08T14:09:12Z",
+      "side": 1,
+      "message": "Another fix would be to start `ArrayFillImpl` with `if (asm_.generating_unreachable_operations()) return;`, but your fix is also fine :)",
+      "revId": "fcb3f55d2174f00694455b4857121c6a06217061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
