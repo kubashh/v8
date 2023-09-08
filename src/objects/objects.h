@@ -303,7 +303,7 @@ ShouldThrow GetShouldThrow(Isolate* isolate, Maybe<ShouldThrow> should_throw);
 // There must only be a single data member in Object: the Address ptr,
 // containing the tagged heap pointer that this Object instance refers to.
 // For a design overview, see https://goo.gl/Ph4CGz.
-class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
+class Object : public AllStatic {
  public:
   // Whether the object is in the RO heap and the RO heap is shared, or in the
   // writable shared heap.
@@ -680,19 +680,6 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   // target or unregister token of a FinalizationRegistry.
   static inline bool CanBeHeldWeakly(Tagged<Object> obj);
 
- protected:
-  struct SkipTypeCheckTag {};
-  constexpr Object() : TaggedImpl(kNullAddress) {}
-  explicit constexpr Object(Address ptr) : TaggedImpl(ptr) {}
-  explicit constexpr Object(Address ptr, SkipTypeCheckTag) : Object(ptr) {}
-
-  // Static overwrites of TaggedImpl's IsSmi/IsHeapObject, to avoid conflicts
-  // with IsSmi(Tagged<Object>) inside Object subclasses' methods.
-  template <typename T>
-  static bool IsSmi(T obj);
-  template <typename T>
-  static bool IsHeapObject(T obj);
-
  private:
   friend class CompressedObjectSlot;
   friend class FullObjectSlot;
@@ -739,13 +726,6 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
                  MessageTemplate error_index);
 };
 
-// Implicit conversions to/from raw pointers
-// TODO(leszeks): Remove once we're using Tagged everywhere.
-// NOLINTNEXTLINE
-constexpr Tagged<Object>::Tagged(Object raw) : TaggedBase(raw.ptr()) {
-  static_assert(kTaggedCanConvertToRawObjects);
-}
-
 V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,
                                            Tagged<Object> obj);
 
@@ -791,17 +771,6 @@ V8_INLINE bool IsSmi(Tagged<Smi> obj) { return true; }
 V8_INLINE bool IsHeapObject(Tagged<Object> obj) { return obj.IsHeapObject(); }
 V8_INLINE bool IsHeapObject(Tagged<HeapObject> obj) { return true; }
 V8_INLINE bool IsHeapObject(Tagged<Smi> obj) { return false; }
-
-template <typename T>
-// static
-bool Object::IsSmi(T obj) {
-  return i::IsSmi(obj);
-}
-template <typename T>
-// static
-bool Object::IsHeapObject(T obj) {
-  return i::IsHeapObject(obj);
-}
 
 V8_INLINE bool IsTaggedIndex(Tagged<Object> obj);
 
