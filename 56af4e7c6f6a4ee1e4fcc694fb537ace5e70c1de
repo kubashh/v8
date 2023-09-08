@@ -39,6 +39,30 @@
       },
       "revId": "56af4e7c6f6a4ee1e4fcc694fb537ace5e70c1de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3f3b1fb_52ed4a29",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-09-08T06:32:28Z",
+      "side": 1,
+      "message": "Good idea, better be consistent :) (in particular in a CL that tries to bring more consistency to Turboshaft 😄)",
+      "parentUuid": "4988b4d7_eea1d352",
+      "range": {
+        "startLine": 81,
+        "startChar": 6,
+        "endLine": 81,
+        "endChar": 39
+      },
+      "revId": "56af4e7c6f6a4ee1e4fcc694fb537ace5e70c1de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
