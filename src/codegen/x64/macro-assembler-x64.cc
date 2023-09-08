@@ -1804,6 +1804,9 @@ void MacroAssembler::SmiTag(Register reg) {
   } else {
     shlq(reg, Immediate(kSmiShift));
   }
+#ifdef ENABLE_SLOW_DCHECKS
+  ClobberUnusedSmiBits(reg);
+#endif
 }
 
 void MacroAssembler::SmiTag(Register dst, Register src) {
@@ -1897,6 +1900,7 @@ void MacroAssembler::SmiToInt32(Register reg) {
 }
 
 void MacroAssembler::SmiToInt32(Register dst, Register src) {
+  AssertSmi(src);
   if (dst != src) {
     mov_tagged(dst, src);
   }
@@ -1955,6 +1959,18 @@ void MacroAssembler::Cmp(Operand dst, Tagged<Smi> src) {
   cmp_tagged(dst, smi_reg);
 }
 
+void MacroAssembler::ClobberUnusedSmiBits(Register src) {
+  ASM_CODE_COMMENT(this);
+  static constexpr int clobber_mask = 0x515100;
+  static_assert((clobber_mask & kSmiTagMask) == 0);
+  static constexpr int rot_to_unused =
+      64 - kSmiShiftSize - kSmiTagSize - kSmiValueSize;
+  static_assert(rot_to_unused >= 0);
+  if (rot_to_unused) rolq(src, Immediate(rot_to_unused));
+  xorq(src, Immediate(clobber_mask));
+  if (rot_to_unused) rorq(src, Immediate(rot_to_unused));
+}
+
 Condition MacroAssembler::CheckSmi(Register src) {
   static_assert(kSmiTag == 0);
   testb(src, Immediate(kSmiTagMask));
@@ -2006,6 +2022,7 @@ void MacroAssembler::SmiAddConstant(Operand dst, Tagged<Smi> constant) {
 }
 
 SmiIndex MacroAssembler::SmiToIndex(Register dst, Register src, int shift) {
+  AssertSmi(src);
   if (SmiValuesAre32Bits()) {
     DCHECK(is_uint6(shift));
     // There is a possible optimization if shift is in the range 60-63, but that
@@ -3010,6 +3027,9 @@ void MacroAssembler::AssertSmi(Register object) {
   ASM_CODE_COMMENT(this);
   Condition is_smi = CheckSmi(object);
   Check(is_smi, AbortReason::kOperandIsNotASmi);
+#ifdef ENABLE_SLOW_DCHECKS
+  ClobberUnusedSmiBits(object);
+#endif
 }
 
 void MacroAssembler::AssertSmi(Operand object) {
