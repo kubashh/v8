@@ -255,7 +255,8 @@ DEFINE_BOOL(js_shipping, true, "enable all shipped JavaScript features")
   V(harmony_temporal, "Temporal")                                              \
   V(harmony_shadow_realm, "harmony ShadowRealm")                               \
   V(harmony_struct, "harmony structs, shared structs, and shared arrays")      \
-  V(harmony_array_from_async, "harmony Array.fromAsync")
+  V(harmony_array_from_async, "harmony Array.fromAsync")                       \
+  V(harmony_async_context, "harmony AsyncContext")
 
 #define JAVASCRIPT_INPROGRESS_FEATURES_BASE(V)
 
