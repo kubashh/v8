@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "c14640e98540a359f8dd270a09bad2ea4f31bf23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b1956fb_be1b0eae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-09-08T08:36:49Z",
+      "side": 1,
+      "message": "`disable_resultdb_exports` is set to True on anything other than builders in ci bucket. No need to set it on try builders.",
+      "revId": "c14640e98540a359f8dd270a09bad2ea4f31bf23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
