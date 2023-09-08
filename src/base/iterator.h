@@ -6,6 +6,8 @@
 #define V8_BASE_ITERATOR_H_
 
 #include <iterator>
+#include <tuple>
+#include <utility>
 
 namespace v8 {
 namespace base {
@@ -68,7 +70,7 @@ struct DerefPtrIterator : base::iterator<std::bidirectional_iterator_tag, T> {
 
   explicit DerefPtrIterator(T* const* ptr) : ptr(ptr) {}
 
-  T& operator*() { return **ptr; }
+  T& operator*() const { return **ptr; }
   DerefPtrIterator& operator++() {
     ++ptr;
     return *this;
@@ -77,7 +79,12 @@ struct DerefPtrIterator : base::iterator<std::bidirectional_iterator_tag, T> {
     --ptr;
     return *this;
   }
-  bool operator!=(DerefPtrIterator other) { return ptr != other.ptr; }
+  bool operator!=(const DerefPtrIterator& other) const {
+    return ptr != other.ptr;
+  }
+  bool operator==(const DerefPtrIterator& other) const {
+    return ptr == other.ptr;
+  }
 };
 
 // {Reversed} returns a container adapter usable in a range-based "for"
@@ -128,6 +135,53 @@ template <typename T>
 auto IterateWithoutLast(const iterator_range<T>& t) {
   iterator_range<T> range_copy = {t.begin(), t.end()};
   return IterateWithoutLast(range_copy);
+}
+
+template <class... Iterators>
+class TupleIterator
+    : public base::iterator<
+          std::bidirectional_iterator_tag,
+          std::tuple<decltype(*std::declval<const Iterators>())...>> {
+ public:
+  using value_type = std::tuple<decltype(*std::declval<const Iterators>())...>;
+
+  explicit TupleIterator(Iterators... its) : its_(its...) {}
+
+  TupleIterator& operator++() {
+    std::apply([](auto&... iterators) { (++iterators, ...); }, its_);
+    return *this;
+  }
+
+  template <class Other>
+  bool operator!=(const Other& other) const {
+    return not_equal_impl(other, std::index_sequence_for<Iterators...>{});
+  }
+
+  value_type operator*() const {
+    return std::apply(
+        [](auto&... this_iterators) { return value_type{*this_iterators...}; },
+        its_);
+  }
+
+ private:
+  template <class Other, size_t... indices>
+  bool not_equal_impl(const Other& other,
+                      std::index_sequence<indices...>) const {
+    return (... || (std::get<indices>(its_) != std::get<indices>(other.its_)));
+  }
+
+  std::tuple<Iterators...> its_;
+};
+
+template <class... Containers>
+base::iterator_range<
+    TupleIterator<decltype(std::declval<Containers>().begin())...>>
+zip(Containers&... containers) {
+  return base::make_iterator_range(
+      TupleIterator<decltype(std::declval<Containers>().begin())...>(
+          containers.begin()...),
+      TupleIterator<decltype(std::declval<Containers>().begin())...>(
+          containers.end()...));
 }
 
 }  // namespace base
