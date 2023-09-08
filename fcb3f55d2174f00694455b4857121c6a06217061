@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b25efe32_fe1f6ab1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-08T09:30:26Z",
+      "side": 1,
+      "message": "@dmercadier@chromium.org: PTAL, sorry for the deja vu, it would\u0027ve been nice if I had noted this additional problem on the previous bug already.",
+      "revId": "fcb3f55d2174f00694455b4857121c6a06217061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

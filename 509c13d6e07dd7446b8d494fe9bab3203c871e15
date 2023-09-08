@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b387521a_b6d68df1",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1807,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-08T09:30:26Z",
+      "side": 1,
+      "message": "It is anyways much cleaner to figure out the default value in `ArrayNewDefault` and not in the shared code...",
+      "range": {
+        "startLine": 1807,
+        "startChar": 28,
+        "endLine": 1807,
+        "endChar": 40
+      },
+      "revId": "509c13d6e07dd7446b8d494fe9bab3203c871e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de5798fd_68071ac0",
+        "filename": "test/mjsunit/wasm/turboshaft/array-new-unreachable.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-08T09:30:26Z",
+      "side": 1,
+      "message": "Code from the test case below. As these are so similar, I think it makes sense to keep them together.",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 37
+      },
+      "revId": "509c13d6e07dd7446b8d494fe9bab3203c871e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
