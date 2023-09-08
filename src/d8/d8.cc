@@ -1600,10 +1600,15 @@ PerIsolateData::~PerIsolateData() {
 #endif
 }
 
-void PerIsolateData::SetTimeout(Local<Function> callback,
-                                Local<Context> context) {
+void PerIsolateData::SetTimeout(
+    Local<Function> callback, Local<Context> context,
+    MaybeLocal<AsyncContext::Snapshot> async_snapshot) {
   set_timeout_callbacks_.emplace(isolate_, callback);
   set_timeout_contexts_.emplace(isolate_, context);
+  if (!async_snapshot.IsEmpty()) {
+    set_timeout_async_snapshots_.emplace(isolate_,
+                                         async_snapshot.ToLocalChecked());
+  }
 }
 
 MaybeLocal<Function> PerIsolateData::GetTimeoutCallback() {
@@ -1617,6 +1622,15 @@ MaybeLocal<Context> PerIsolateData::GetTimeoutContext() {
   if (set_timeout_contexts_.empty()) return MaybeLocal<Context>();
   Local<Context> result = set_timeout_contexts_.front().Get(isolate_);
   set_timeout_contexts_.pop();
+  return result;
+}
+
+MaybeLocal<AsyncContext::Snapshot> PerIsolateData::GetTimeoutAsyncSnapshot() {
+  if (set_timeout_async_snapshots_.empty())
+    return MaybeLocal<AsyncContext::Snapshot>();
+  Local<AsyncContext::Snapshot> result =
+      set_timeout_async_snapshots_.front().Get(isolate_);
+  set_timeout_async_snapshots_.pop();
   return result;
 }
 
@@ -2702,7 +2716,11 @@ void Shell::SetTimeout(const v8::FunctionCallbackInfo<v8::Value>& info) {
   if (info.Length() == 0 || !info[0]->IsFunction()) return;
   Local<Function> callback = info[0].As<Function>();
   Local<Context> context = isolate->GetCurrentContext();
-  PerIsolateData::Get(isolate)->SetTimeout(callback, context);
+  MaybeLocal<AsyncContext::Snapshot> async_snapshot;
+  if (i::v8_flags.harmony_async_context) {
+    async_snapshot = AsyncContext::Snapshot::New(isolate);
+  }
+  PerIsolateData::Get(isolate)->SetTimeout(callback, context, async_snapshot);
 }
 
 void Shell::ReadCodeTypeAndArguments(
@@ -5278,11 +5296,25 @@ bool RunSetTimeoutCallback(Isolate* isolate, bool* did_run) {
   if (!data->GetTimeoutCallback().ToLocal(&callback)) return true;
   Local<Context> context;
   if (!data->GetTimeoutContext().ToLocal(&context)) return true;
+  MaybeLocal<AsyncContext::Snapshot> async_snapshot;
+  if (i::v8_flags.harmony_async_context) {
+    async_snapshot = data->GetTimeoutAsyncSnapshot();
+    if (async_snapshot.IsEmpty()) return true;
+  }
   TryCatch try_catch(isolate);
   try_catch.SetVerbose(true);
   Context::Scope context_scope(context);
-  if (callback->Call(context, Undefined(isolate), 0, nullptr).IsEmpty()) {
-    return false;
+  // TODO(abotella): Is there some better way to do this?
+  if (async_snapshot.IsEmpty()) {
+    if (callback->Call(context, Undefined(isolate), 0, nullptr).IsEmpty()) {
+      return false;
+    }
+  } else {
+    AsyncContext::SnapshotScope async_snapshot_scope(
+        async_snapshot.ToLocalChecked());
+    if (callback->Call(context, Undefined(isolate), 0, nullptr).IsEmpty()) {
+      return false;
+    }
   }
   *did_run = true;
   return true;

@@ -185,6 +185,8 @@
   V(_, as_string, "as")                                                       \
   V(_, assert_string, "assert")                                               \
   V(_, async_string, "async")                                                 \
+  V(_, AsyncContextVariable_string, "AsyncContext.Variable")                  \
+  V(_, AsyncContextSnapshot_string, "AsyncContext.Snapshot")                  \
   V(_, AtomicsCondition_string, "Atomics.Condition")                          \
   V(_, AtomicsMutex_string, "Atomics.Mutex")                                  \
   V(_, auto_string, "auto")                                                   \
