@@ -1829,7 +1829,7 @@ DEFINE_NEG_NEG_IMPLICATION(cppheap_incremental_marking,
                            cppheap_concurrent_marking)
 DEFINE_WEAK_IMPLICATION(concurrent_marking, cppheap_concurrent_marking)
 
-DEFINE_BOOL(memory_balancer, false,
+DEFINE_BOOL(memory_balancer, true,
             "use membalancer, "
             "a new heap limit balancing algorithm")
 DEFINE_FLOAT(memory_balancer_c_value, 3e-10,

@@ -58,6 +58,8 @@ void MemoryBalancer::RefreshLimit() {
 
 void MemoryBalancer::UpdateGCSpeed(size_t major_gc_bytes,
                                    base::TimeDelta major_gc_duration) {
+  if (major_gc_duration.IsZero()) return;
+  CHECK_GT(major_gc_duration, base::TimeDelta());
   if (!major_gc_speed_) {
     major_gc_speed_ = SmoothedBytesAndDuration{
         major_gc_bytes, major_gc_duration.InMillisecondsF()};
@@ -69,6 +71,8 @@ void MemoryBalancer::UpdateGCSpeed(size_t major_gc_bytes,
 
 void MemoryBalancer::UpdateAllocationRate(
     size_t major_allocation_bytes, base::TimeDelta major_allocation_duration) {
+  if (major_allocation_duration.IsZero()) return;
+  CHECK_GT(major_allocation_duration, base::TimeDelta());
   if (!major_allocation_rate_) {
     major_allocation_rate_ = SmoothedBytesAndDuration{
         major_allocation_bytes, major_allocation_duration.InMillisecondsF()};
