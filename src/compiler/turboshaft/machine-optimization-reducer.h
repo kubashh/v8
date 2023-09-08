@@ -1598,8 +1598,7 @@ class MachineOptimizationReducer : public Next {
     goto no_change;
   }
 
-  OpIndex REDUCE(Switch)(OpIndex input,
-                         base::Vector<const SwitchOp::Case> cases,
+  OpIndex REDUCE(Switch)(OpIndex input, base::Vector<SwitchOp::Case> cases,
                          Block* default_case, BranchHint default_hint) {
     LABEL_BLOCK(no_change) {
       return Next::ReduceSwitch(input, cases, default_case, default_hint);
@@ -1683,7 +1682,7 @@ class MachineOptimizationReducer : public Next {
           // Only few loads should be loading the map from a ConstantOp
           // HeapObject, so unparking the JSHeapBroker here rather than before
           // the optimization pass itself it probably more efficient.
-          UnparkedScopeIfNeeded scope(PipelineData::Get().broker());
+          UnparkedScopeIfNeeded scope(broker);
           AllowHandleDereference allow_handle_dereference;
 
           OptionalMapRef map = TryMakeRef(broker, base.handle()->map());
