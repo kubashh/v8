@@ -232,8 +232,8 @@ class BranchEliminationReducer : public Next {
     }
     if (ShouldSkipOptimizationStep()) goto no_change;
 
-    if (const Block* if_true_origin = if_true->OriginForBlockStart()) {
-      if (const Block* if_false_origin = if_false->OriginForBlockStart()) {
+    if (const Block* if_true_origin = Asm().OriginForBlockStart(if_true)) {
+      if (const Block* if_false_origin = Asm().OriginForBlockStart(if_false)) {
         const Operation& first_op_true =
             if_true_origin->FirstOperation(Asm().input_graph());
         const Operation& first_op_false =
@@ -247,7 +247,7 @@ class BranchEliminationReducer : public Next {
           Block* merge_block = true_goto->destination;
           if (!merge_block->HasPhis(Asm().input_graph())) {
             // Using `ReduceInputGraphGoto()` here enables more optimizations.
-            Asm().Goto(merge_block->MapToNextGraph());
+            Asm().Goto(Asm().MapToNewGraph(merge_block));
             return OpIndex::Invalid();
           }
         }
@@ -286,8 +286,10 @@ class BranchEliminationReducer : public Next {
     LABEL_BLOCK(no_change) { return Next::ReduceGoto(destination); }
     if (ShouldSkipOptimizationStep()) goto no_change;
 
-    const Block* destination_origin = destination->OriginForBlockStart();
-    if (!destination_origin || !destination_origin->IsMerge()) goto no_change;
+    const Block* destination_origin = Asm().OriginForBlockStart(destination);
+    if (!destination_origin || !destination_origin->IsMerge()) {
+      goto no_change;
+    }
 
     if (destination_origin->HasExactlyNPredecessors(1)) {
       // There is no point in trying the 2nd optimization: this would remove
