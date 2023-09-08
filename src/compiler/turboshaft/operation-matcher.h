@@ -235,9 +235,9 @@ class OperationMatcher {
     const WordBinopOp* op = TryCast<WordBinopOp>(matched);
     if (!op) return false;
     *kind = op->kind;
-    *rep = op->rep;
     *left = op->left();
     *right = op->right();
+    if (rep) *rep = op->rep;
     return true;
   }
 
@@ -382,6 +382,14 @@ class OperationMatcher {
       *input = op->left();
       *amount = static_cast<uint16_t>(rhs_constant);
       return true;
+    }
+    return false;
+  }
+
+  bool MatchPhi(OpIndex matched,
+                base::Optional<int> input_count = base::nullopt) {
+    if (const PhiOp* phi = TryCast<PhiOp>(matched)) {
+      return !input_count.has_value() || phi->input_count == *input_count;
     }
     return false;
   }
