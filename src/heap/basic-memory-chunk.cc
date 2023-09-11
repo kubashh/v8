@@ -73,6 +73,14 @@ bool BasicMemoryChunk::InLargeObjectSpace() const {
   return owner()->identity() == LO_SPACE;
 }
 
+bool BasicMemoryChunk::InTrustedSpace() const {
+  return owner()->identity() == TRUSTED_SPACE;
+}
+
+bool BasicMemoryChunk::InTrustedLargeObjectSpace() const {
+  return owner()->identity() == TRUSTED_LO_SPACE;
+}
+
 #ifdef THREAD_SANITIZER
 void BasicMemoryChunk::SynchronizedHeapLoad() const {
   CHECK(reinterpret_cast<Heap*>(

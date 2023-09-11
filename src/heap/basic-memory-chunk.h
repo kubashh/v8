@@ -256,6 +256,13 @@ class BasicMemoryChunk {
   bool InOldSpace() const;
   V8_EXPORT_PRIVATE bool InLargeObjectSpace() const;
 
+  bool InTrustedSpace() const;
+  V8_EXPORT_PRIVATE bool InTrustedLargeObjectSpace() const;
+
+  bool IsTrusted() const {
+    return InTrustedSpace() || InTrustedLargeObjectSpace();
+  }
+
   bool InWritableSharedSpace() const {
     return IsFlagSet(IN_WRITABLE_SHARED_SPACE);
   }
