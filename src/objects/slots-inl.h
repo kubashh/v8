@@ -164,19 +164,17 @@ void FullHeapObjectSlot::StoreHeapObject(Tagged<HeapObject> value) const {
   *location() = value.ptr();
 }
 
-void ExternalPointerSlot::init(Isolate* isolate, Address value,
-                               ExternalPointerTag tag) {
+void ExternalPointerSlot::init(Isolate* isolate, Address value) {
 #ifdef V8_ENABLE_SANDBOX
-  DCHECK_NE(tag, kExternalPointerNullTag);
-  ExternalPointerTable& table = GetExternalPointerTableForTag(isolate, tag);
+  ExternalPointerTable& table = GetExternalPointerTableForTag(isolate, tag_);
   ExternalPointerHandle handle = table.AllocateAndInitializeEntry(
-      GetDefaultExternalPointerSpace(isolate, tag), value, tag);
+      GetDefaultExternalPointerSpace(isolate, tag_), value, tag_);
   // Use a Release_Store to ensure that the store of the pointer into the
   // table is not reordered after the store of the handle. Otherwise, other
   // threads may access an uninitialized table entry and crash.
   Release_StoreHandle(handle);
 #else
-  store(isolate, value, tag);
+  store(isolate, value);
 #endif  // V8_ENABLE_SANDBOX
 }
 
@@ -196,26 +194,22 @@ void ExternalPointerSlot::Release_StoreHandle(
 }
 #endif  // V8_ENABLE_SANDBOX
 
-Address ExternalPointerSlot::load(const Isolate* isolate,
-                                  ExternalPointerTag tag) {
+Address ExternalPointerSlot::load(const Isolate* isolate) {
 #ifdef V8_ENABLE_SANDBOX
-  DCHECK_NE(tag, kExternalPointerNullTag);
   const ExternalPointerTable& table =
-      GetExternalPointerTableForTag(isolate, tag);
+      GetExternalPointerTableForTag(isolate, tag_);
   ExternalPointerHandle handle = Relaxed_LoadHandle();
-  return table.Get(handle, tag);
+  return table.Get(handle, tag_);
 #else
   return ReadMaybeUnalignedValue<Address>(address());
 #endif  // V8_ENABLE_SANDBOX
 }
 
-void ExternalPointerSlot::store(Isolate* isolate, Address value,
-                                ExternalPointerTag tag) {
+void ExternalPointerSlot::store(Isolate* isolate, Address value) {
 #ifdef V8_ENABLE_SANDBOX
-  DCHECK_NE(tag, kExternalPointerNullTag);
-  ExternalPointerTable& table = GetExternalPointerTableForTag(isolate, tag);
+  ExternalPointerTable& table = GetExternalPointerTableForTag(isolate, tag_);
   ExternalPointerHandle handle = Relaxed_LoadHandle();
-  table.Set(handle, value, tag);
+  table.Set(handle, value, tag_);
 #else
   WriteMaybeUnalignedValue<Address>(address(), value);
 #endif  // V8_ENABLE_SANDBOX
@@ -267,6 +261,7 @@ uint32_t ExternalPointerSlot::GetContentAsIndexAfterDeserialization(
 #ifdef V8_ENABLE_SANDBOX
 const ExternalPointerTable& ExternalPointerSlot::GetExternalPointerTableForTag(
     const Isolate* isolate, ExternalPointerTag tag) {
+  DCHECK_NE(tag, kExternalPointerNullTag);
   return IsSharedExternalPointerType(tag)
              ? isolate->shared_external_pointer_table()
              : isolate->external_pointer_table();
@@ -274,6 +269,7 @@ const ExternalPointerTable& ExternalPointerSlot::GetExternalPointerTableForTag(
 
 ExternalPointerTable& ExternalPointerSlot::GetExternalPointerTableForTag(
     Isolate* isolate, ExternalPointerTag tag) {
+  DCHECK_NE(tag, kExternalPointerNullTag);
   return IsSharedExternalPointerType(tag)
              ? isolate->shared_external_pointer_table()
              : isolate->external_pointer_table();
@@ -295,25 +291,22 @@ ExternalPointerSlot::GetDefaultExternalPointerSpace(Isolate* isolate,
 }
 #endif  // V8_ENABLE_SANDBOX
 
-Tagged<Object> IndirectPointerSlot::load(const Isolate* isolate,
-                                         IndirectPointerTag tag) const {
-  return Relaxed_Load(isolate, tag);
+Tagged<Object> IndirectPointerSlot::load(const Isolate* isolate) const {
+  return Relaxed_Load(isolate);
 }
 
 void IndirectPointerSlot::store(Tagged<ExposedTrustedObject> value) const {
   return Relaxed_Store(value);
 }
 
-Tagged<Object> IndirectPointerSlot::Relaxed_Load(const Isolate* isolate,
-                                                 IndirectPointerTag tag) const {
+Tagged<Object> IndirectPointerSlot::Relaxed_Load(const Isolate* isolate) const {
   IndirectPointerHandle handle = Relaxed_LoadHandle();
-  return ResolveHandle(handle, isolate, tag);
+  return ResolveHandle(handle, isolate);
 }
 
-Tagged<Object> IndirectPointerSlot::Acquire_Load(const Isolate* isolate,
-                                                 IndirectPointerTag tag) const {
+Tagged<Object> IndirectPointerSlot::Acquire_Load(const Isolate* isolate) const {
   IndirectPointerHandle handle = Acquire_LoadHandle();
-  return ResolveHandle(handle, isolate, tag);
+  return ResolveHandle(handle, isolate);
 }
 
 void IndirectPointerSlot::Relaxed_Store(
@@ -357,14 +350,13 @@ void IndirectPointerSlot::Release_StoreHandle(
 }
 
 Tagged<Object> IndirectPointerSlot::ResolveHandle(
-    IndirectPointerHandle handle, const Isolate* isolate,
-    IndirectPointerTag tag) const {
+    IndirectPointerHandle handle, const Isolate* isolate) const {
 #ifdef V8_CODE_POINTER_SANDBOXING
   // TODO(saelo) Maybe come up with a different entry encoding scheme that
   // returns Smi::zero for kNullCodePointerHandle?
   if (!handle) return Smi::zero();
 
-  if (tag == kCodeIndirectPointerTag) {
+  if (tag_ == kCodeIndirectPointerTag) {
     // These are special as they use the code pointer table.
     Address addr = GetProcessWideCodePointerTable()->GetCodeObject(handle);
     return Tagged<Object>(addr);

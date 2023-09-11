@@ -585,7 +585,7 @@
   do {                                                                       \
     DCHECK_NOT_NULL(GetHeapFromWritableObject(object));                      \
     IndirectPointerWriteBarrier(                                             \
-        object, Tagged(object)->RawIndirectPointerField(offset), tag, value, \
+        object, Tagged(object)->RawIndirectPointerField(offset, tag), value, \
         UPDATE_WRITE_BARRIER);                                               \
   } while (false)
 #endif
@@ -637,7 +637,7 @@
   do {                                                                         \
     DCHECK_NOT_NULL(GetHeapFromWritableObject(object));                        \
     IndirectPointerWriteBarrier(                                               \
-        object, (object).RawIndirectPointerField(offset), tag, value, mode);   \
+        object, (object).RawIndirectPointerField(offset, tag), value, mode);   \
   } while (false)
 #endif
 
