@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "eea3feaa_43129ac6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-11T16:58:49Z",
+      "side": 1,
+      "message": "I found this transition a little weird. Do we have too many static calls on `Object`? E.g., `SetProperty()` should only really work on  JSReceiver downwards? (Please correct me)",
+      "range": {
+        "startLine": 15,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 57
+      },
+      "revId": "4dcf04382474bbc05b1814e69e688067968dcb25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "aef56b18_eba74951",
@@ -14,6 +37,23 @@
       "writtenOn": "2023-09-11T14:58:43Z",
       "side": 1,
       "message": "PTAL, fingers crossed for bots.",
+      "revId": "4dcf04382474bbc05b1814e69e688067968dcb25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "803d9342_6db17836",
+        "filename": "tools/gcmole/gcmole.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-11T16:58:49Z",
+      "side": 1,
+      "message": "I feel your pain :/",
       "revId": "4dcf04382474bbc05b1814e69e688067968dcb25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
