@@ -287,6 +287,9 @@ class JsonParser final {
     ReportUnexpectedToken(JsonToken::EOS);
   }
 
+  // Reads the character pointed to by cursor_ and sets its token type in next_.
+  void ReadNextCharacter();
+
   // The JSON lexical grammar is specified in the ECMAScript 5 standard,
   // section 15.12.1.1. The only allowed whitespace characters between tokens
   // are tab, carriage-return, newline and space.

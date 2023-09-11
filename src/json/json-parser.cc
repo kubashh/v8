@@ -564,14 +564,26 @@ MaybeHandle<Object> JsonParser<Char>::ParseJson(Handle<Object> reviver) {
 MaybeHandle<Object> InternalizeJsonProperty(Handle<JSObject> holder,
                                             Handle<String> key);
 
+namespace {
+template <typename Char>
+JsonToken GetTokenForCharacter(Char c) {
+  return V8_LIKELY(c <= unibrow::Latin1::kMaxChar) ? one_char_json_tokens[c]
+                                                   : JsonToken::ILLEGAL;
+}
+}  // namespace
+
+template <typename Char>
+void JsonParser<Char>::ReadNextCharacter() {
+  next_ = V8_UNLIKELY(cursor_ == end_) ? JsonToken::EOS
+                                       : GetTokenForCharacter(*cursor_);
+}
+
 template <typename Char>
 void JsonParser<Char>::SkipWhitespace() {
   next_ = JsonToken::EOS;
 
   cursor_ = std::find_if(cursor_, end_, [this](Char c) {
-    JsonToken current = V8_LIKELY(c <= unibrow::Latin1::kMaxChar)
-                            ? one_char_json_tokens[c]
-                            : JsonToken::ILLEGAL;
+    JsonToken current = GetTokenForCharacter(c);
     bool result = current != JsonToken::WHITESPACE;
     if (result) next_ = current;
     return result;
@@ -959,9 +971,7 @@ bool JsonParser<Char>::ParseRawJson() {
         MessageTemplate::kInvalidRawJsonValue));
     return false;
   }
-  next_ = V8_LIKELY(*cursor_ <= unibrow::Latin1::kMaxChar)
-              ? one_char_json_tokens[*cursor_]
-              : JsonToken::ILLEGAL;
+  next_ = GetTokenForCharacter(*cursor_);
   switch (peek()) {
     case JsonToken::STRING:
       Consume(JsonToken::STRING);
@@ -1059,7 +1069,7 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
     // objects and arrays will cause the loop to continue until a first member
     // is completed.
     while (true) {
-      SkipWhitespace();
+      ReadNextCharacter();
       // The switch is immediately followed by 'break' so we can use 'break' to
       // break out of the loop, and 'continue' to continue the loop.
 
@@ -1174,7 +1184,9 @@ MaybeHandle<Object> JsonParser<Char>::ParseJsonValue(Handle<Object> reviver) {
           return MaybeHandle<Object>();
 
         case JsonToken::WHITESPACE:
-          UNREACHABLE();
+          advance();
+          SkipWhitespace();
+          continue;
       }
       // Done producing a value, consume it.
       break;
