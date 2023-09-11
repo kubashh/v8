@@ -237,6 +237,68 @@ void SpaceWithLinearArea::InvokeAllocationObservers(
             allocation_counter_.NextBytes());
 }
 
+AllocationResult SpaceWithLinearArea::AllocateRawUnaligned(
+    int size_in_bytes, AllocationOrigin origin) {
+  DCHECK(!v8_flags.enable_third_party_heap);
+  int max_aligned_size;
+  if (!EnsureAllocation(size_in_bytes, kTaggedAligned, origin,
+                        &max_aligned_size)) {
+    return AllocationResult::Failure();
+  }
+
+  DCHECK_EQ(max_aligned_size, size_in_bytes);
+  DCHECK_LE(allocation_info_.start(), allocation_info_.top());
+
+  AllocationResult result = AllocateFastUnaligned(size_in_bytes, origin);
+  DCHECK(!result.IsFailure());
+
+  if (v8_flags.trace_allocations_origins) {
+    UpdateAllocationOrigins(origin);
+  }
+
+  InvokeAllocationObservers(result.ToAddress(), size_in_bytes, size_in_bytes,
+                            size_in_bytes);
+
+  return result;
+}
+
+AllocationResult SpaceWithLinearArea::AllocateRawAligned(
+    int size_in_bytes, AllocationAlignment alignment, AllocationOrigin origin) {
+  DCHECK(!v8_flags.enable_third_party_heap);
+  int max_aligned_size;
+  if (!EnsureAllocation(size_in_bytes, alignment, origin, &max_aligned_size)) {
+    return AllocationResult::Failure();
+  }
+
+  DCHECK_GE(max_aligned_size, size_in_bytes);
+  DCHECK_LE(allocation_info_.start(), allocation_info_.top());
+
+  int aligned_size_in_bytes;
+
+  AllocationResult result = AllocateFastAligned(
+      size_in_bytes, &aligned_size_in_bytes, alignment, origin);
+  DCHECK_GE(max_aligned_size, aligned_size_in_bytes);
+  DCHECK(!result.IsFailure());
+
+  if (v8_flags.trace_allocations_origins) {
+    UpdateAllocationOrigins(origin);
+  }
+
+  InvokeAllocationObservers(result.ToAddress(), size_in_bytes,
+                            aligned_size_in_bytes, max_aligned_size);
+
+  return result;
+}
+
+AllocationResult SpaceWithLinearArea::AllocateRawSlow(
+    int size_in_bytes, AllocationAlignment alignment, AllocationOrigin origin) {
+  AllocationResult result =
+      USE_ALLOCATION_ALIGNMENT_BOOL && alignment != kTaggedAligned
+          ? AllocateRawAligned(size_in_bytes, alignment, origin)
+          : AllocateRawUnaligned(size_in_bytes, origin);
+  return result;
+}
+
 #if DEBUG
 void SpaceWithLinearArea::VerifyTop() const {
   // Ensure validity of LAB: start <= top <= limit

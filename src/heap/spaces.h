@@ -386,12 +386,12 @@ class SpaceWithLinearArea : public Space {
 
   // Allocate the requested number of bytes in the space if possible, return a
   // failure object if not.
-  V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult AllocateRawUnaligned(
+  V8_WARN_UNUSED_RESULT AllocationResult AllocateRawUnaligned(
       int size_in_bytes, AllocationOrigin origin = AllocationOrigin::kRuntime);
 
   // Allocate the requested number of bytes in the space double aligned if
   // possible, return a failure object if not.
-  V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult
+  V8_WARN_UNUSED_RESULT AllocationResult
   AllocateRawAligned(int size_in_bytes, AllocationAlignment alignment,
                      AllocationOrigin origin = AllocationOrigin::kRuntime);
 
@@ -429,7 +429,7 @@ class SpaceWithLinearArea : public Space {
                       AllocationAlignment alignment, AllocationOrigin origin);
 
   // Slow path of allocation function
-  V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult
+  V8_WARN_UNUSED_RESULT AllocationResult
   AllocateRawSlow(int size_in_bytes, AllocationAlignment alignment,
                   AllocationOrigin origin);
 
