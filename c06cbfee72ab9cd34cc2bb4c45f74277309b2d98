@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "797d85da_e475804f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-11T12:15:10Z",
+      "side": 1,
+      "message": "This should be ready for review now. See CLs later in this chain for how this will be used, as well as the design document linked at the referenced bug.\n+Nico for src/compiler\n+Michael for src/heap\n+Jakob for src/snapshot\n+Igor for everything else",
+      "revId": "c06cbfee72ab9cd34cc2bb4c45f74277309b2d98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

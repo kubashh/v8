@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "624fff0b_f45978b7",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-11T12:15:10Z",
+      "side": 1,
+      "message": "This is mostly identical code to the generic write barrier above. I can reuse most of the implementation though (see interface-descriptors-inl.h), so it\u0027s not too much copy+paste.\nInstead of adding this, I also tried encoding the tag into the top bits of the slot pointer. That works, but feels a little hacky. You can see it here: https://chromium-review.googlesource.com/c/v8/v8/+/4827602/15/src/codegen/x64/macro-assembler-x64.cc\nIt still requires a scratch register and some ORing/ANDing, and it\u0027s probably not worth the reduced register count since these write barriers are fairly rare.",
+      "revId": "5db7aa50f62f761e0b3d261dcffc76ab8babe3f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
