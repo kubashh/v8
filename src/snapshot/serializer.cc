@@ -1215,7 +1215,7 @@ void Serializer::ObjectSerializer::OutputRawData(Address up_to) {
       // recomputed after deserialization.
       static uint8_t field_value[kIndirectPointerSlotSize] = {0};
       OutputRawWithCustomField(sink_, object_start, base, bytes_to_output,
-                               Code::kCodePointerTableEntryOffset,
+                               Code::kInstructionStartOffset,
                                sizeof(field_value), field_value);
 #else
       // instruction_start field contains a raw value that will be recomputed

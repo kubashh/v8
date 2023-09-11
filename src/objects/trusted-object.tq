@@ -1,0 +1,13 @@
+// Copyright 2023 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+@abstract
+extern class TrustedObject extends HeapObject {}
+
+@abstract
+extern class ExposedTrustedObject extends TrustedObject {
+  // Indirect pointers are only used when the sandbox is enabled, so we only
+  // reserve the space for the pointer table entry in that case.
+  @if(V8_ENABLE_SANDBOX) self_indirect_pointer: IndirectPointer;
+}

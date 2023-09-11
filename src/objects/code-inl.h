@@ -12,6 +12,7 @@
 #include "src/objects/deoptimization-data-inl.h"
 #include "src/objects/instance-type-inl.h"
 #include "src/objects/instruction-stream-inl.h"
+#include "src/objects/trusted-object-inl.h"
 #include "src/snapshot/embedded/embedded-data-inl.h"
 
 // Has to be the last include (doesn't have include guards):
@@ -20,7 +21,7 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(Code, HeapObject)
+OBJECT_CONSTRUCTORS_IMPL(Code, ExposedTrustedObject)
 OBJECT_CONSTRUCTORS_IMPL(GcSafeCode, HeapObject)
 
 CAST_ACCESSOR(GcSafeCode)
@@ -599,7 +600,8 @@ void Code::init_instruction_start(Isolate* isolate, Address value) {
 #ifdef V8_CODE_POINTER_SANDBOXING
   // In this case, the instruction_start is stored in this Code's code pointer
   // table entry, so initialize that instead.
-  InitCodePointerTableEntryField(kCodePointerTableEntryOffset, isolate, *this,
+  // TODO(saelo) can we unify these into a InitCodeEntrypointField or so?
+  InitCodePointerTableEntryField(kSelfIndirectPointerOffset, isolate, *this,
                                  value);
 #else
   WriteCodeEntrypointField(kInstructionStartOffset, value);
@@ -625,7 +627,8 @@ void Code::SetInstructionStartForOffHeapBuiltin(Isolate* isolate_for_sandbox,
 
 void Code::ClearInstructionStartForSerialization(Isolate* isolate) {
 #ifdef V8_CODE_POINTER_SANDBOXING
-  WriteField<CodePointerHandle>(kInstructionStartOffset,
+  // The instruction start is stored in this object's code pointer table.
+  WriteField<CodePointerHandle>(kSelfIndirectPointerOffset,
                                 kNullCodePointerHandle);
 #else
   set_instruction_start(isolate, kNullAddress);
