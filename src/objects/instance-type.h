@@ -310,6 +310,7 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,
 #define UNIQUE_INSTANCE_TYPE_MAP_LIST_GENERATOR(V, _)                 \
   UNIQUE_LEAF_INSTANCE_TYPE_MAP_LIST_GENERATOR(V, _)                  \
   V(_, ByteArrayMap, byte_array_map, ByteArray)                       \
+  V(_, TrustedByteArrayMap, trusted_byte_array_map, TrustedByteArray) \
   V(_, NameDictionaryMap, name_dictionary_map, NameDictionary)        \
   V(_, OrderedNameDictionaryMap, ordered_name_dictionary_map,         \
     OrderedNameDictionary)                                            \

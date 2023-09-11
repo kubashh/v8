@@ -9,6 +9,7 @@
 #include "src/objects/heap-object.h"
 #include "src/objects/megadom-handler.h"
 #include "src/objects/objects.h"
+#include "src/objects/trusted-byte-array.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"

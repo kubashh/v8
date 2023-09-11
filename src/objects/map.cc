@@ -101,6 +101,9 @@ VisitorId Map::GetVisitorId(Tagged<Map> map) {
     case BYTE_ARRAY_TYPE:
       return kVisitByteArray;
 
+    case TRUSTED_BYTE_ARRAY_TYPE:
+      return kVisitTrustedByteArray;
+
     case BYTECODE_ARRAY_TYPE:
       return kVisitBytecodeArray;
 
