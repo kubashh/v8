@@ -293,9 +293,12 @@ class WasmLoweringReducer : public Next {
       UNREACHABLE();
     } while (false);
 
-    DCHECK(result.valid());
+    // Further optimizations may transform a GOTO_IF to a GOTO, resulting in a
+    // state where the assembler emits unreachable operations.
+    DCHECK_IMPLIES(!result.valid(), __ generating_unreachable_operations());
     GOTO(end_label, result);
     BIND(end_label, final_result);
+    DCHECK(final_result.valid());
     return final_result;
   }
 
