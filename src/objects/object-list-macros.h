@@ -88,6 +88,7 @@ class ZoneForwardList;
   V(BooleanWrapper)                             \
   V(ByteArray)                                  \
   V(ExternalPointerArray)                       \
+  V(TrustedByteArray)                           \
   V(BytecodeArray)                              \
   V(CallHandlerInfo)                            \
   V(Callable)                                   \

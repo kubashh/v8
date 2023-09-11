@@ -104,6 +104,7 @@ class RootVisitor;
   V(Map, array_list_map, ArrayListMap)                                         \
   V(Map, bigint_map, BigIntMap)                                                \
   V(Map, object_boilerplate_description_map, ObjectBoilerplateDescriptionMap)  \
+  V(Map, trusted_byte_array_map, TrustedByteArrayMap)                          \
   V(Map, bytecode_array_map, BytecodeArrayMap)                                 \
   V(Map, code_map, CodeMap)                                                    \
   V(Map, coverage_info_map, CoverageInfoMap)                                   \

@@ -37,6 +37,7 @@
 #include "src/objects/template-objects-inl.h"
 #include "src/objects/torque-defined-classes-inl.h"
 #include "src/objects/transitions.h"
+#include "src/objects/trusted-byte-array-inl.h"
 #include "src/objects/turbofan-types-inl.h"
 #include "src/objects/turboshaft-types-inl.h"
 
@@ -454,6 +455,18 @@ class ByteArray::BodyDescriptor final : public BodyDescriptorBase {
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> obj) {
     return ByteArray::SizeFor(
         ByteArray::unchecked_cast(obj)->length(kAcquireLoad));
+  }
+};
+
+class TrustedByteArray::BodyDescriptor final : public BodyDescriptorBase {
+ public:
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Tagged<Map> map, Tagged<HeapObject> obj,
+                                 int object_size, ObjectVisitor* v) {}
+
+  static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> obj) {
+    return TrustedByteArray::SizeFor(
+        TrustedByteArray::unchecked_cast(obj)->length(kAcquireLoad));
   }
 };
 

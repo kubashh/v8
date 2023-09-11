@@ -37,6 +37,7 @@
 #include "src/objects/js-atomics-synchronization-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/objects/objects.h"
+#include "src/objects/trusted-byte-array-inl.h"
 #include "src/objects/trusted-object.h"
 #include "src/objects/turbofan-types-inl.h"
 #include "src/objects/turboshaft-types-inl.h"
@@ -190,6 +191,9 @@ void HeapObject::HeapObjectVerify(Isolate* isolate) {
   CHECK(IsMap(map(cage_base), cage_base));
 
   CHECK(CheckRequiredAlignment(isolate));
+
+  // Only TrustedObjects live in trusted space. See also TrustedObjectVerify.
+  CHECK_IMPLIES(!IsTrustedSpaceObject(*this), !IsTrustedSpaceObject(*this));
 
   switch (map(cage_base)->instance_type()) {
 #define STRING_TYPE_CASE(TYPE, size, name, CamelName) case TYPE:
@@ -1172,9 +1176,9 @@ void PropertyCell::PropertyCellVerify(Isolate* isolate) {
 
 void TrustedObject::TrustedObjectVerify(Isolate* isolate) {
 #if defined(V8_CODE_POINTER_SANDBOXING)
-  // TODO(saelo): check here that the object lives in trusted space once we
-  // actually allocate them there. If possible, also check (elsewhere in this
-  // file) that no other type of object lives in trusted space.
+  // All trusted objects must live in trusted space.
+  // TODO(saelo): Code objects are trusted but do not yet live in trusted space.
+  CHECK(IsCode(*this) || IsTrustedSpaceObject(*this));
 #endif
 }
 
@@ -1191,6 +1195,11 @@ void ExposedTrustedObject::ExposedTrustedObjectVerify(Isolate* isolate) {
       RawIndirectPointerField(kSelfIndirectPointerOffset, tag).load(isolate);
   CHECK_EQ(self, *this);
 #endif
+}
+
+void TrustedByteArray::TrustedByteArrayVerify(Isolate* isolate) {
+  ExposedTrustedObjectVerify(isolate);
+  CHECK_EQ(map(), ReadOnlyRoots(isolate).trusted_byte_array_map());
 }
 
 void Code::CodeVerify(Isolate* isolate) {
