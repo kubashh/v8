@@ -124,6 +124,42 @@ class ArrayBuiltinsAssembler : public CodeStubAssembler {
   ElementsKind source_elements_kind_ = ElementsKind::NO_ELEMENTS;
 };
 
+class ArrayBuiltins {
+ public:
+  enum ArrayFromAsyncResolveContextSlots {
+    kArrayFromAsyncResolveResumeStateStepSlot = Context::MIN_CONTEXT_SLOTS,
+    kArrayFromAsyncResolveResumeStateAwaitedValueSlot,
+    kArrayFromAsyncResolveResumeStateLenSlot,
+    kArrayFromAsyncResolveResumeStateIndexSlot,
+    kArrayFromAsyncResolvePromiseSlot,
+    kArrayFromAsyncResolveResultArraySlot,
+    kArrayFromAsyncResolveIteratorSlot,
+    kArrayFromAsyncResolveNextMethodSlot,
+    kArrayFromAsyncResolveErrorSlot,
+    kArrayFromAsyncResolveThisSlot,
+    kArrayFromAsyncResolveItemsSlot,
+    kArrayFromAsyncResolveMapfnSlot,
+    kArrayFromAsyncResolveThisArgSlot,
+    kArrayFromAsyncResolveLength
+  };
+
+  enum ArrayFromAsyncLabels {
+    kStart,
+    kGetIteratorStep,
+    kCheckIteratorValueAndMapping,
+    kIteratorMapping,
+    kGetIteratorValueWithMapping,
+    kAddIteratorValueToTheArray,
+    kGetArrayLikeValue,
+    kCheckArrayLikeValueAndMapping,
+    kGetArrayLikeValueWithMapping,
+    kAddArrayLikeValueToTheArray,
+    kDoneAndResolvePromise,
+    kCloseAsyncIterator,
+    kRejectPromise
+  };
+};
+
 }  // namespace internal
 }  // namespace v8
 
