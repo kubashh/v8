@@ -241,11 +241,6 @@ transitioning macro CreateArrayFromIterableAsynchronously(
           //     1. Let A be ? ArrayCreate(len).
           //   vi. Let k be 0.
 
-          // TODO(v8:13321): Array-like path should be implemeneted later.
-          // That means code inside the following labels are incomplete:
-          // kGetArrayLikeValue, kCheckArrayLikeValueAndMapping,
-          // kGetArrayLikeValueWithMapping, kAddArrayLikeValueToTheArray.
-
           // resumeState.step = ArrayFromAsyncLabels::kGetArrayLikeValue;
         } label SyncIteratorNotCallable(_value: JSAny)
         deferred {
