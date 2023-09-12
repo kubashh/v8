@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b29cc26a_63ce66a0",
+        "filename": "src/codegen/reloc-info.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-09-12T05:57:35Z",
+      "side": 1,
+      "message": "Will these be used in the future? If not, please make them const.",
+      "revId": "55b0d2eb5b5bde5d4e442f005cfccb03f46ad86a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6270e93a_5e2cbbc0",
+        "filename": "src/objects/instruction-stream.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-09-12T05:57:35Z",
+      "side": 1,
+      "message": "Could you forward-decl instead? I tried to keep the includes here minimal.",
+      "revId": "55b0d2eb5b5bde5d4e442f005cfccb03f46ad86a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
