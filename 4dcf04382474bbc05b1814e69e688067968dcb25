@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "59324443_b90fc9a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-12T08:59:39Z",
+      "side": 1,
+      "message": "I thought the methods would be low-level and already require the caller to handle the Smi case. If they are really just synonyms for JS, then I agree that free functions within some new namespace would make sense.",
+      "parentUuid": "ffb51b90_72fa0b9e",
+      "range": {
+        "startLine": 15,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 57
+      },
+      "revId": "4dcf04382474bbc05b1814e69e688067968dcb25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "aef56b18_eba74951",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
