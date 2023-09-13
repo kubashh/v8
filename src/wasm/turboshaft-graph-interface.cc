@@ -2151,10 +2151,6 @@ class TurboshaftGraphBuildingInterface {
                             br_depth, null_succeeds);
   }
 
-  void RefIsStruct(FullDecoder* decoder, const Value& object, Value* result) {
-    Bailout(decoder);  // Deprecated: Do not implement!
-  }
-
   void RefAsStruct(FullDecoder* decoder, const Value& object, Value* result) {
     Bailout(decoder);  // Deprecated: Do not implement!
   }
@@ -2171,10 +2167,6 @@ class TurboshaftGraphBuildingInterface {
     Bailout(decoder);  // Deprecated: Do not implement!
   }
 
-  void RefIsArray(FullDecoder* decoder, const Value& object, Value* result) {
-    Bailout(decoder);  // Deprecated: Do not implement!
-  }
-
   void RefAsArray(FullDecoder* decoder, const Value& object, Value* result) {
     Bailout(decoder);  // Deprecated: Do not implement!
   }
@@ -2188,10 +2180,6 @@ class TurboshaftGraphBuildingInterface {
   void BrOnNonArray(FullDecoder* decoder, const Value& object,
                     Value* value_on_fallthrough, uint32_t br_depth,
                     bool null_succeeds) {
-    Bailout(decoder);  // Deprecated: Do not implement!
-  }
-
-  void RefIsI31(FullDecoder* decoder, const Value& object, Value* result) {
     Bailout(decoder);  // Deprecated: Do not implement!
   }
 
