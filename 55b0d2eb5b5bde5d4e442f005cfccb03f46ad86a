@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffe0997d_d9c2acf9",
+        "filename": "src/codegen/reloc-info.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-09-13T12:22:59Z",
+      "side": 1,
+      "message": "Yeah, we want the JIT writes to go through these objects eventually.",
+      "parentUuid": "b29cc26a_63ce66a0",
+      "revId": "55b0d2eb5b5bde5d4e442f005cfccb03f46ad86a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6270e93a_5e2cbbc0",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-12T05:57:35Z",
       "side": 1,
       "message": "Could you forward-decl instead? I tried to keep the includes here minimal.",
+      "revId": "55b0d2eb5b5bde5d4e442f005cfccb03f46ad86a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3287851d_435b4a6e",
+        "filename": "src/objects/instruction-stream.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-09-13T12:22:59Z",
+      "side": 1,
+      "message": "done, I had to move out WritableJitAllocation from ThreadIsolation since you can\u0027t forward declare inner classes.",
+      "parentUuid": "6270e93a_5e2cbbc0",
       "revId": "55b0d2eb5b5bde5d4e442f005cfccb03f46ad86a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
