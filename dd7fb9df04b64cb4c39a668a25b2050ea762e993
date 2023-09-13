@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84816223_db9e382b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-09-13T12:24:52Z",
+      "side": 1,
+      "message": "+mliedtke@ for wasm/*\n+nikolaos@ for heap/mark-compact",
+      "revId": "dd7fb9df04b64cb4c39a668a25b2050ea762e993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
