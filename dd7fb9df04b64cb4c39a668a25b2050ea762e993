@@ -16,6 +16,46 @@
       "message": "+mliedtke@ for wasm/*\n+nikolaos@ for heap/mark-compact",
       "revId": "dd7fb9df04b64cb4c39a668a25b2050ea762e993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3af85d59_ffcb3352",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-13T12:35:59Z",
+      "side": 1,
+      "message": "LGTM for wasm/ with one clarification question",
+      "revId": "dd7fb9df04b64cb4c39a668a25b2050ea762e993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddbd3df3_525b1a4c",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-13T12:35:59Z",
+      "side": 1,
+      "message": "Just to clarify: This is `NonExecutableMemory` because we write the new code object and we only set the executable bit after having it written, correct?\nSo, this memory location will be executable once it has been written and finalized?",
+      "range": {
+        "startLine": 444,
+        "startChar": 29,
+        "endLine": 444,
+        "endChar": 51
+      },
+      "revId": "dd7fb9df04b64cb4c39a668a25b2050ea762e993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
