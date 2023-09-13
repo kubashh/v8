@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb7c8b3a_d5d11ae5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1593042
+      },
+      "writtenOn": "2023-09-13T23:19:56Z",
+      "side": 1,
+      "message": "Thanks! I added the comment",
+      "parentUuid": "c42fa177_90f339ea",
+      "revId": "ff74c2c628eefad6c60a000459ce24580edfd56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b297bd0_eb864a34",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Ok. going to make a fixup commit with the comment",
       "parentUuid": "5b297bd0_eb864a34",
+      "revId": "ff74c2c628eefad6c60a000459ce24580edfd56e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1077a5b_f58957cd",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-base.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1593042
+      },
+      "writtenOn": "2023-09-13T23:19:56Z",
+      "side": 1,
+      "message": "Added the comment!",
+      "parentUuid": "3aab6172_edfb4087",
       "revId": "ff74c2c628eefad6c60a000459ce24580edfd56e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
