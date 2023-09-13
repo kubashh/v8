@@ -56,6 +56,30 @@
       },
       "revId": "dd7fb9df04b64cb4c39a668a25b2050ea762e993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5264cd8_534bbd3c",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-09-13T13:56:09Z",
+      "side": 1,
+      "message": "As I understand the code, this function serializes the code into a buffer that stays non-executable. And I assume during deserialization, we will copy it over into executable memory.",
+      "parentUuid": "ddbd3df3_525b1a4c",
+      "range": {
+        "startLine": 444,
+        "startChar": 29,
+        "endLine": 444,
+        "endChar": 51
+      },
+      "revId": "dd7fb9df04b64cb4c39a668a25b2050ea762e993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
