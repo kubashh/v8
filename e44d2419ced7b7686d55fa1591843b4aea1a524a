@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07279a40_e03e89f1",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-09-13T18:20:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36fadd89_48b51f73",
+      "range": {
+        "startLine": 860,
+        "startChar": 12,
+        "endLine": 860,
+        "endChar": 23
+      },
+      "revId": "e44d2419ced7b7686d55fa1591843b4aea1a524a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ce28bea_71973703",
