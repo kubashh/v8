@@ -1827,6 +1827,8 @@ namespace internal {
   CPP(LocalePrototypeCollation)                                        \
   /* ecma402 #sec-Intl.Locale.prototype.collations */                  \
   CPP(LocalePrototypeCollations)                                       \
+  /* ecma402 #sec-Intl.Locale.prototype.firstDayofWeek */              \
+  CPP(LocalePrototypeFirstDayOfWeek)                                   \
   /* ecma402 #sec-Intl.Locale.prototype.getCalendars */                \
   CPP(LocalePrototypeGetCalendars)                                     \
   /* ecma402 #sec-Intl.Locale.prototype.getCollations */               \
