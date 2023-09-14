@@ -16,6 +16,23 @@
       "message": "This should be ready for review now. See CLs later in this chain for how this will be used, as well as the design document linked at the referenced bug.\n+Nico for src/compiler\n+Michael for src/heap\n+Jakob for src/snapshot\n+Igor for everything else",
       "revId": "c06cbfee72ab9cd34cc2bb4c45f74277309b2d98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32a5f92a_ac7ef0a5",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-09-14T06:23:02Z",
+      "side": 1,
+      "message": "Why not use a ExternalReference load here as well? (It\u0027d be the same root-relative load underneath)",
+      "revId": "c06cbfee72ab9cd34cc2bb4c45f74277309b2d98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
