@@ -116,9 +116,6 @@
 #define DECL_RELAXED_UINT16_ACCESSORS(name) \
   DECL_RELAXED_PRIMITIVE_ACCESSORS(name, uint16_t)
 
-// TODO(ishell): eventually isolate-less getters should not be used anymore.
-// For full pointer-mode the C++ compiler should optimize away unused isolate
-// parameter.
 #define DECL_GETTER(name, type) \
   inline type name() const;     \
   inline type name(PtrComprCageBase cage_base) const;
@@ -268,6 +265,17 @@
 
 #define ACCESSORS(holder, name, type, offset) \
   ACCESSORS_CHECKED(holder, name, type, offset, true)
+
+#define ACCESSORS_NOCAGE(holder, name, type, offset)                \
+  type holder::name() const {                                       \
+    PtrComprCageBase cage_base = GetPtrComprCageBase(*this);        \
+    type value = TaggedField<type, offset>::load(cage_base, *this); \
+    return value;                                                   \
+  }                                                                 \
+  void holder::set_##name(type value, WriteBarrierMode mode) {      \
+    TaggedField<type, offset>::store(*this, value);                 \
+    CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);          \
+  }
 
 #define RENAME_TORQUE_ACCESSORS(holder, name, torque_name, type)      \
   inline type holder::name() const {                                  \
