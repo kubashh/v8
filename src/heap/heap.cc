@@ -2405,7 +2405,7 @@ void Heap::PerformGarbageCollection(GarbageCollector collector,
   // capacity is set in the epilogue.
   PauseAllocationObserversScope pause_observers(this);
 
-  size_t new_space_capacity_before_gc = NewSpaceTargetCapacity();
+  size_t new_space_capacity_before_gc = NewSpaceCapacity();
 
   if (collector == GarbageCollector::MARK_COMPACTOR) {
     MarkCompact();
