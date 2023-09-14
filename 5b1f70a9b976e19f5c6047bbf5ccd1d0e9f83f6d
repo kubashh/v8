@@ -16,6 +16,23 @@
       "message": "Thanks for the review. I addressed your comments in patchset 38 (38! :o), PTAL!",
       "revId": "5b1f70a9b976e19f5c6047bbf5ccd1d0e9f83f6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98115045_659b3f64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-09-14T14:17:54Z",
+      "side": 1,
+      "message": "Clemens, PTAL src/base/iterator.h :)",
+      "revId": "5b1f70a9b976e19f5c6047bbf5ccd1d0e9f83f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
