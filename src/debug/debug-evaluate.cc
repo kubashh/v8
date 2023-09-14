@@ -913,6 +913,7 @@ DebugInfo::SideEffectState BuiltinGetSideEffectState(Builtin id) {
     case Builtin::kLocalePrototypeCaseFirst:
     case Builtin::kLocalePrototypeCollation:
     case Builtin::kLocalePrototypeCollations:
+    case Builtin::kLocalePrototypeFirstDayOfWeek:
     case Builtin::kLocalePrototypeGetCalendars:
     case Builtin::kLocalePrototypeGetCollations:
     case Builtin::kLocalePrototypeGetHourCycles:

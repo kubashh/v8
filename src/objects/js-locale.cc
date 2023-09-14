@@ -54,10 +54,14 @@ Maybe<bool> InsertOptionsIntoLocale(Isolate* isolate,
                                                       "h24"};
   const std::vector<const char*> case_first_values = {"upper", "lower",
                                                       "false"};
+  const std::vector<const char*> first_day_of_week_values = {
+      "sun", "mon", "tue", "wed", "thu", "fri", "sat", "0",
+      "1",   "2",   "3",   "4",   "5",   "6",   "7"};
   const std::vector<const char*> empty_values = {};
-  const std::array<OptionData, 6> kOptionToUnicodeTagMap = {
+  const std::array<OptionData, 7> kOptionToUnicodeTagMap = {
       {{"calendar", "ca", &empty_values, false},
        {"collation", "co", &empty_values, false},
+       {"firstDayOfWeek", "fw", &first_day_of_week_values, false},
        {"hourCycle", "hc", &hour_cycle_values, false},
        {"caseFirst", "kf", &case_first_values, false},
        {"numeric", "kn", &empty_values, true},
@@ -85,6 +89,15 @@ Maybe<bool> InsertOptionsIntoLocale(Isolate* isolate,
     if (option_to_bcp47.is_bool_value) {
       value_str = value_bool ? isolate->factory()->true_string()->ToCString()
                              : isolate->factory()->false_string()->ToCString();
+    } else if (strcmp(option_to_bcp47.key, "fw") == 0) {
+      if (value_str.get()[1] == '\0') {
+        int32_t index = value_str.get()[0] - '0';
+        DCHECK_LE(index, 7);
+        value_str =
+            isolate->factory()
+                ->NewStringFromAsciiChecked(first_day_of_week_values[index % 7])
+                ->ToCString();
+      }
     }
     DCHECK_NOT_NULL(value_str.get());
 
@@ -801,6 +814,26 @@ Handle<Object> JSLocale::CaseFirst(Isolate* isolate, Handle<JSLocale> locale) {
 
 Handle<Object> JSLocale::Collation(Isolate* isolate, Handle<JSLocale> locale) {
   return UnicodeKeywordValue(isolate, locale, "co");
+}
+
+Handle<Object> JSLocale::FirstDayOfWeek(Isolate* isolate,
+                                        Handle<JSLocale> locale) {
+  const std::vector<const char*> first_day_of_week_values = {
+      "mon", "tue", "wed", "thu", "fri", "sat", "sun", "0",
+      "1",   "2",   "3",   "4",   "5",   "6",   "7"};
+  icu::Locale* icu_locale = locale->icu_locale()->raw();
+  UErrorCode status = U_ZERO_ERROR;
+  std::string value =
+      icu_locale->getUnicodeKeywordValue<std::string>("fw", status);
+  if (status == U_ILLEGAL_ARGUMENT_ERROR || value == "") {
+    return isolate->factory()->undefined_value();
+  }
+  for (size_t i = 0; i < first_day_of_week_values.size(); i++) {
+    if (strcmp(first_day_of_week_values.at(i), value.c_str()) == 0) {
+      return handle(Smi::FromInt(static_cast<int>(i + 1)), isolate);
+    }
+  }
+  UNREACHABLE();
 }
 
 Handle<Object> JSLocale::HourCycle(Isolate* isolate, Handle<JSLocale> locale) {

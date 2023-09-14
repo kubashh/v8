@@ -30,6 +30,8 @@
 [ALWAYS, {
   # TODO(v8:13649): The following test is flaky and slow.
   'overrides/caching': [SKIP],
+  # https://bugs.chromium.org/p/v8/issues/detail?id=14159
+  'locale/iso8601-firstDayOfWeek-getWeekInfo': [FAIL]
 }],  # ALWAYS
 
 ################################################################################

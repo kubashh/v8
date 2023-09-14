@@ -62,6 +62,8 @@ class JSLocale : public TorqueGeneratedJSLocale<JSLocale, JSObject> {
   static Handle<Object> Calendar(Isolate* isolate, Handle<JSLocale> locale);
   static Handle<Object> CaseFirst(Isolate* isolate, Handle<JSLocale> locale);
   static Handle<Object> Collation(Isolate* isolate, Handle<JSLocale> locale);
+  static Handle<Object> FirstDayOfWeek(Isolate* isolate,
+                                       Handle<JSLocale> locale);
   static Handle<Object> HourCycle(Isolate* isolate, Handle<JSLocale> locale);
   static Handle<Object> Numeric(Isolate* isolate, Handle<JSLocale> locale);
   static Handle<Object> NumberingSystem(Isolate* isolate,
