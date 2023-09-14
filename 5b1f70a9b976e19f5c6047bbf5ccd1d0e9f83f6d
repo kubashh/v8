@@ -33,6 +33,23 @@
       "message": "Clemens, PTAL src/base/iterator.h :)",
       "revId": "5b1f70a9b976e19f5c6047bbf5ccd1d0e9f83f6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac8f86d0_87a8004e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T14:26:35Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "5b1f70a9b976e19f5c6047bbf5ccd1d0e9f83f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
