@@ -673,6 +673,10 @@ void EmbedderDataArray::EmbedderDataArrayVerify(Isolate* isolate) {
   }
 }
 
+void FixedArrayBase::FixedArrayBaseVerify(Isolate* isolate) {
+  CHECK(IsSmi(TaggedField<Object>::load(*this, kLengthOffset)));
+}
+
 void FixedArray::FixedArrayVerify(Isolate* isolate) {
   FixedArrayBaseVerify(isolate);
 
@@ -2373,6 +2377,24 @@ bool TransitionsAccessor::IsConsistentWithBackPointers() {
     if (!CheckOneBackPointer(map_, target)) return false;
   }
   return true;
+}
+
+void SloppyArgumentsElements::SloppyArgumentsElementsVerify(Isolate* isolate) {
+  FixedArrayBaseVerify(isolate);
+  {
+    auto o = context();
+    Object::VerifyPointer(isolate, o);
+    CHECK(IsContext(o));
+  }
+  {
+    auto o = arguments();
+    Object::VerifyPointer(isolate, o);
+    CHECK(IsFixedArray(o));
+  }
+  for (int i = 0; i < length(); ++i) {
+    auto o = mapped_entries(i, kRelaxedLoad);
+    CHECK(IsSmi(o) || IsTheHole(o));
+  }
 }
 
 #undef USE_TORQUE_VERIFIER
