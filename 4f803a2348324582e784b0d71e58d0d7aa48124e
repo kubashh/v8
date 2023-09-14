@@ -1,0 +1,584 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ade41429_09d00485",
+        "filename": "src/base/iterator.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "I think it should be possible to phrase this more easily. Something like `Iterators::value_type...` (or better `std::iterator_traits\u003cIterators\u003e::value_type...`).",
+      "range": {
+        "startLine": 146,
+        "startChar": 21,
+        "endLine": 146,
+        "endChar": 66
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f822138_1743c9b7",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 3281,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "Just out of curiousity: How did this not cause problems before?",
+      "range": {
+        "startLine": 3281,
+        "startChar": 17,
+        "endLine": 3281,
+        "endChar": 18
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9c6b837_b7d753c0",
+        "filename": "src/compiler/turboshaft/branch-elimination-reducer.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: `__`",
+      "range": {
+        "startLine": 290,
+        "startChar": 38,
+        "endLine": 290,
+        "endChar": 44
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ff9df92_95be3303",
+        "filename": "src/compiler/turboshaft/graph.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: Debugging artifact?",
+      "range": {
+        "startLine": 587,
+        "startChar": 4,
+        "endLine": 587,
+        "endChar": 67
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e485dfc_be27d4e8",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "Maybe add one more `DCHECK` here to check that the block index of the backedge is larger (or equal) to the header.",
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20e1449e_1c1d9cbb",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "I guess that is not the exact operation count because operations can have multiple ids, but for what we are doing here this should be good enough (maybe even what we want).",
+      "range": {
+        "startLine": 53,
+        "startChar": 21,
+        "endLine": 53,
+        "endChar": 58
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7df6eee_ea69ef3a",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "We should have this return a `bool`. Same below",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 3
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6c8cfca_71ff80d1",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: Might want to take this as a `const\u0026`",
+      "range": {
+        "startLine": 85,
+        "startChar": 46,
+        "endLine": 85,
+        "endChar": 66
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "104e0bfc_ffc7ce21",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "It would be nice if we could have this as a more general predicate on the matcher (e.g. `bool MatchCanoncicalForLoop(...)`).",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 59
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "555a2e78_39c3e30e",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: Why not turn this into the traditional \"match\" signature (return a `bool` and take out parameters)?",
+      "range": {
+        "startLine": 112,
+        "startChar": 2,
+        "endLine": 113,
+        "endChar": 63
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "204df123_47a6f6b8",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: `cst cmp phi`?",
+      "range": {
+        "startLine": 114,
+        "startChar": 41,
+        "endLine": 114,
+        "endChar": 52
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b6f87b8_41557b64",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: Add `DCHECK(BinopKindIsSupported(kind));` to have at least a basic check that those functions are in sync. Same below.",
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fab4955b_0c3e778a",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: `DCHECK_EQ`",
+      "range": {
+        "startLine": 341,
+        "startChar": 2,
+        "endLine": 341,
+        "endChar": 8
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60c38603_97c81acf",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "It\u0027s really unfortunate that we have to iterate here, but I guess that\u0027s the simplest way to compute the count, but we need to make sure that this is always limited to small number, maybe add a DCHECK here with a comment.",
+      "range": {
+        "startLine": 348,
+        "startChar": 2,
+        "endLine": 348,
+        "endChar": 35
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52945f55_28ce9b9a",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "Can we rely on those values to be small enough that those casts are safe?",
+      "range": {
+        "startLine": 372,
+        "startChar": 23,
+        "endLine": 374,
+        "endChar": 43
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60a82f20_7796fb25",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "Is this supposed to return a reference? Otherwise the `const` doesn\u0027t make much sense.",
+      "range": {
+        "startLine": 75,
+        "startChar": 2,
+        "endLine": 75,
+        "endChar": 42
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79f1a6c7_85ea63a4",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: `parent_loops_` is slightly confusing here. What does it mean? I would think that the \"parent\" of an inner loop is the surrounding loop. One would think that `GetLoopHeader` would return an entry from the `loop_headers_`. Can we change names such that this looks more consistent / less like there is a mistake here?",
+      "range": {
+        "startLine": 78,
+        "startChar": 46,
+        "endLine": 78,
+        "endChar": 59
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "463d4f66_d0449e58",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: Maybe `loop_header_info_` is a better name for this to avoid the confusion mentioned above (then `parent_loops_` can be renamed to `loop_headers_`)?",
+      "range": {
+        "startLine": 81,
+        "startChar": 14,
+        "endLine": 81,
+        "endChar": 27
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d348666_0b97ab8d",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: `__` same below.",
+      "range": {
+        "startLine": 224,
+        "startChar": 8,
+        "endLine": 224,
+        "endChar": 13
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0d5f000_dbc13d94",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "We basically check here that this is the forward jump into the block (not the back edge)?\n\nnit: Both of those cases share 3 checks, maybe you can rearrange the branches a bit to check this only once?",
+      "range": {
+        "startLine": 230,
+        "startChar": 15,
+        "endLine": 230,
+        "endChar": 68
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b0ffee4_d2d1f1a4",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "The following code should never hit `ReduceInputGraphGoto`, no?",
+      "range": {
+        "startLine": 355,
+        "startChar": 5,
+        "endLine": 356,
+        "endChar": 38
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e5dbc98_16ee0553",
+        "filename": "src/compiler/turboshaft/loop-unrolling-reducer.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "can we break the loop early if we found something other than a `Phi` (exploit that Phis are always at the beginning)?",
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a446fe5_7e72af23",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "can you add a short comment why we need this exactly?",
+      "range": {
+        "startLine": 265,
+        "startChar": 40,
+        "endLine": 265,
+        "endChar": 56
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a327e416_63cc10ca",
+        "filename": "src/compiler/turboshaft/optimization-phase.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "Again, can we break the loop early here if we found a non-Phi?",
+      "range": {
+        "startLine": 353,
+        "startChar": 8,
+        "endLine": 353,
+        "endChar": 9
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13252c46_c7233659",
+        "filename": "src/compiler/turboshaft/store-store-elimination-phase.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: Why do we need this here?",
+      "range": {
+        "startLine": 9,
+        "startChar": 9,
+        "endLine": 9,
+        "endChar": 59
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2748250_4dc94295",
+        "filename": "src/compiler/turboshaft/value-numbering-reducer.h",
+        "patchSetId": 37
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-14T08:17:33Z",
+      "side": 1,
+      "message": "nit: I think this sentence has a typo or two",
+      "range": {
+        "startLine": 98,
+        "startChar": 9,
+        "endLine": 98,
+        "endChar": 67
+      },
+      "revId": "4f803a2348324582e784b0d71e58d0d7aa48124e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
