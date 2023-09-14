@@ -50,6 +50,29 @@
       "message": "LGTM",
       "revId": "5b1f70a9b976e19f5c6047bbf5ccd1d0e9f83f6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d18ea710_43faeb5f",
+        "filename": "src/base/iterator.h",
+        "patchSetId": 38
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-09-14T15:05:54Z",
+      "side": 1,
+      "message": "We shouldn\u0027t need to write the type three times.\nEither\n1) use `auto` as the return type, and/or\n2) use `return {...}` in the body, and/or\n3) write the type name on the `base::make_iterator_range` function instead of on the arguments.\n\nI guess that there is a way to only write it once instead of three times.",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 67
+      },
+      "revId": "5b1f70a9b976e19f5c6047bbf5ccd1d0e9f83f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
