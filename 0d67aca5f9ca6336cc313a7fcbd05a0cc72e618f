@@ -63,6 +63,30 @@
       },
       "revId": "0d67aca5f9ca6336cc313a7fcbd05a0cc72e618f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d33def3_63ac0905",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-09-14T10:27:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "244d47e8_55dc248b",
+      "range": {
+        "startLine": 447,
+        "startChar": 4,
+        "endLine": 447,
+        "endChar": 23
+      },
+      "revId": "0d67aca5f9ca6336cc313a7fcbd05a0cc72e618f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
