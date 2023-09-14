@@ -39,6 +39,30 @@
       },
       "revId": "8d737ac726c4ae054f256fd3b0f055e0d3e82ec2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e89976a5_fc30914c",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-09-14T09:32:08Z",
+      "side": 1,
+      "message": "I just declared them in the methods, as KB is not available in base.",
+      "parentUuid": "9de2e29d_d3f0d528",
+      "range": {
+        "startLine": 862,
+        "startChar": 44,
+        "endLine": 862,
+        "endChar": 46
+      },
+      "revId": "8d737ac726c4ae054f256fd3b0f055e0d3e82ec2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
