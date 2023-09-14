@@ -16,6 +16,29 @@
       "message": "PTAL. Note objects-visiting.h will be touched regularly during object-def ports, we should probably define file-specific common owners for it. Wdyt?",
       "revId": "0d67aca5f9ca6336cc313a7fcbd05a0cc72e618f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24085b9d_37ddf37c",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-14T09:58:15Z",
+      "side": 1,
+      "message": "doesn\u0027t matter too much in this case, since it\u0027s just printing, but prefer to avoid std::function since it needs to allocate + do virtual calls for the type erasure. You could have a raw function pointer here I think since none of the getters are capturing, or have the function be a template parameter.",
+      "range": {
+        "startLine": 447,
+        "startChar": 4,
+        "endLine": 447,
+        "endChar": 23
+      },
+      "revId": "0d67aca5f9ca6336cc313a7fcbd05a0cc72e618f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
