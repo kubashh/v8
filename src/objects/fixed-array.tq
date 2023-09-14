@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 @abstract
+@cppObjectDefinition
 extern class FixedArrayBase extends HeapObject {
   // length of the array.
   const length: Smi;

@@ -1409,6 +1409,14 @@ class FixedArray::BodyDescriptor final
   }
 };
 
+class SloppyArgumentsElements::BodyDescriptor final
+    : public SuffixRangeBodyDescriptor<HeapObject::kHeaderSize> {
+ public:
+  static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> raw_object) {
+    return SloppyArgumentsElements::unchecked_cast(raw_object)->AllocatedSize();
+  }
+};
+
 #include "torque-generated/objects-body-descriptors-inl.inc"
 
 }  // namespace internal
