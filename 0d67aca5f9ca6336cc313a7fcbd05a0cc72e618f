@@ -39,6 +39,30 @@
       },
       "revId": "0d67aca5f9ca6336cc313a7fcbd05a0cc72e618f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "244d47e8_55dc248b",
+        "filename": "src/diagnostics/objects-printer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-09-14T10:06:24Z",
+      "side": 1,
+      "message": "Right I knew about that but went for std::function since the syntax is easy to recall and indeed perf doesn\u0027t matter for printers. Can switch to raw pointers though.",
+      "parentUuid": "24085b9d_37ddf37c",
+      "range": {
+        "startLine": 447,
+        "startChar": 4,
+        "endLine": 447,
+        "endChar": 23
+      },
+      "revId": "0d67aca5f9ca6336cc313a7fcbd05a0cc72e618f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
