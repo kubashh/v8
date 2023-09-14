@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e484301a_6823d61f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-09-14T09:54:59Z",
+      "side": 1,
+      "message": "PTAL. Note objects-visiting.h will be touched regularly during object-def ports, we should probably define file-specific common owners for it. Wdyt?",
+      "revId": "0d67aca5f9ca6336cc313a7fcbd05a0cc72e618f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
