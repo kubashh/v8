@@ -45,6 +45,54 @@
       },
       "revId": "e162756c0ccfd506dcdfae6228f24ecce63d16d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94302348_17e99b20",
+        "filename": "include/v8-local-handle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-09-15T14:57:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7d23b447_d6f06933",
+      "range": {
+        "startLine": 344,
+        "startChar": 3,
+        "endLine": 349,
+        "endChar": 45
+      },
+      "revId": "e162756c0ccfd506dcdfae6228f24ecce63d16d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbb01760_99cd7762",
+        "filename": "include/v8-local-handle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-09-15T14:57:17Z",
+      "side": 1,
+      "message": "Ack. Because of a bug in GCC \u003c\u003d 10, this could not work uniformly for all the compilers that we need to support. I\u0027m removing this class entirely. Thanks!",
+      "parentUuid": "d8d96165_f37c0c4b",
+      "range": {
+        "startLine": 349,
+        "startChar": 34,
+        "endLine": 349,
+        "endChar": 38
+      },
+      "revId": "e162756c0ccfd506dcdfae6228f24ecce63d16d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
