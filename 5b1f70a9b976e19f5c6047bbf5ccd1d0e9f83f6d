@@ -97,6 +97,30 @@
       },
       "revId": "5b1f70a9b976e19f5c6047bbf5ccd1d0e9f83f6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "489d03bc_38d9aeb5",
+        "filename": "src/base/iterator.h",
+        "patchSetId": 38
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-09-15T09:46:41Z",
+      "side": 1,
+      "message": "Nice!",
+      "parentUuid": "15f5ff23_f85f80e0",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 67
+      },
+      "revId": "5b1f70a9b976e19f5c6047bbf5ccd1d0e9f83f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
