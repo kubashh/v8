@@ -33,6 +33,24 @@
       "message": "Why not use a ExternalReference load here as well? (It\u0027d be the same root-relative load underneath)",
       "revId": "c06cbfee72ab9cd34cc2bb4c45f74277309b2d98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a84635b7_2d7b1b51",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-15T11:01:19Z",
+      "side": 1,
+      "message": "Like this?\nSo how does the ExternalReference case work with isolate-dependent external references? We realize that we can load the reference from the isolate and then always emit a isolate-relative load for them?",
+      "parentUuid": "32a5f92a_ac7ef0a5",
+      "revId": "c06cbfee72ab9cd34cc2bb4c45f74277309b2d98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
