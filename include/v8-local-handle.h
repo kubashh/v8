@@ -7,9 +7,11 @@
 
 #include <stddef.h>
 
+#include <array>
 #include <type_traits>
 
 #include "v8-handle-base.h"  // NOLINT(build/include_directory)
+#include "v8-memory-span.h"  // NOLINT(build/include_directory)
 
 namespace v8 {
 
@@ -332,6 +334,25 @@ class Local : public LocalBase<T> {
                                 const BasicTracedReference<T>& that) {
     return New(isolate, that.template value<T>());
   }
+
+  // Containers of local handles.
+  // This is not simply a type alias, so that template deduction can infer the
+  // array size.
+  template <size_t N>
+  class Array : public std::array<Local<T>, N> {
+   public:
+    template <typename... Us,
+              typename = std::enable_if_t<
+                  std::conjunction_v<std::is_convertible<Us, Local<T>>...>>,
+              typename = std::enable_if_t<N == sizeof...(Us)>>
+    Array(Us&&... args)  // NOLINT(runtime/explicit)
+        : std::array<Local<T>, N>{args...} {}
+  };
+
+  template <
+      typename U, typename... Us,
+      typename = std::enable_if_t<std::conjunction_v<std::is_same<U, Us>...>>>
+  Array(U, Us...) -> Array<1 + sizeof...(Us)>;
 
  private:
   friend class TracedReferenceBase;

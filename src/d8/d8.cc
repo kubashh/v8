@@ -1141,7 +1141,7 @@ MaybeLocal<Module> Shell::FetchModuleTree(Local<Module> referrer,
       return MaybeLocal<Module>();
     }
 
-    std::vector<Local<String>> export_names{
+    Local<String>::Array export_names{
         String::NewFromUtf8(isolate, "default").ToLocalChecked()};
 
     module = v8::Module::CreateSyntheticModule(

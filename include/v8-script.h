@@ -285,9 +285,14 @@ class V8_EXPORT Module : public Data {
    * module_name is used solely for logging/debugging and doesn't affect module
    * behavior.
    */
+  V8_DEPRECATE_SOON("Please use the version that takes a MemorySpan")
   static Local<Module> CreateSyntheticModule(
       Isolate* isolate, Local<String> module_name,
       const std::vector<Local<String>>& export_names,
+      SyntheticModuleEvaluationSteps evaluation_steps);
+  static Local<Module> CreateSyntheticModule(
+      Isolate* isolate, Local<String> module_name,
+      const MemorySpan<const Local<String>>& export_names,
       SyntheticModuleEvaluationSteps evaluation_steps);
 
   /**
