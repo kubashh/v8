@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d23b447_d6f06933",
+        "filename": "include/v8-local-handle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-09-15T12:27:46Z",
+      "side": 1,
+      "message": "as discussed offline, maybe, to support aggregate initialization (and keep the type aggregate, we can remove the ctor entirely.",
+      "range": {
+        "startLine": 344,
+        "startChar": 3,
+        "endLine": 349,
+        "endChar": 45
+      },
+      "revId": "e162756c0ccfd506dcdfae6228f24ecce63d16d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8d96165_f37c0c4b",
+        "filename": "include/v8-local-handle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-09-15T12:27:46Z",
+      "side": 1,
+      "message": "std::forward\u003cUs\u003e(args)...",
+      "range": {
+        "startLine": 349,
+        "startChar": 34,
+        "endLine": 349,
+        "endChar": 38
+      },
+      "revId": "e162756c0ccfd506dcdfae6228f24ecce63d16d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
