@@ -53,6 +53,7 @@
 #include "src/base/bits.h"
 #include "src/base/overflowing-math.h"
 #include "src/base/vector.h"
+#include "src/builtins/builtins-utils-gen-inl.h"
 #include "src/codegen/assembler-inl.h"
 #include "src/codegen/constants-arch.h"
 #include "src/codegen/macro-assembler.h"
