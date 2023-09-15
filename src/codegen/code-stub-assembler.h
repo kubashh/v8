@@ -129,7 +129,11 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(ProxyRevokeSharedFun, proxy_revoke_shared_fun, ProxyRevokeSharedFun)       \
   V(ShadowRealmImportValueFulfilledSFI,                                        \
     shadow_realm_import_value_fulfilled_sfi,                                   \
-    ShadowRealmImportValueFulfilledSFI)
+    ShadowRealmImportValueFulfilledSFI)                                        \
+  V(ArrayFromAsyncResolveSharedFun, array_from_async_resolve_shared_fun,       \
+    ArrayFromAsyncResolveSharedFun)                                            \
+  V(ArrayFromAsyncRejectSharedFun, array_from_async_reject_shared_fun,         \
+    ArrayFromAsyncRejectSharedFun)
 
 #define UNIQUE_INSTANCE_TYPE_IMMUTABLE_IMMOVABLE_MAP_ADAPTER( \
     V, rootIndexName, rootAccessorName, class_name)           \
@@ -179,6 +183,7 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
     IsConcatSpreadableSymbol)                                                \
   V(iterator_symbol, iterator_symbol, IteratorSymbol)                        \
   V(keys_string, keys_string, KeysString)                                    \
+  V(async_iterator_symbol, async_iterator_symbol, AsyncIteratorSymbol)       \
   V(length_string, length_string, LengthString)                              \
   V(ManyClosuresCellMap, many_closures_cell_map, ManyClosuresCellMap)        \
   V(match_symbol, match_symbol, MatchSymbol)                                 \

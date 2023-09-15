@@ -326,7 +326,11 @@ class RootVisitor;
   V(SharedFunctionInfo, source_text_module_execute_async_module_fulfilled_sfi, \
     SourceTextModuleExecuteAsyncModuleFulfilledSFI)                            \
   V(SharedFunctionInfo, source_text_module_execute_async_module_rejected_sfi,  \
-    SourceTextModuleExecuteAsyncModuleRejectedSFI)
+    SourceTextModuleExecuteAsyncModuleRejectedSFI)                             \
+  V(SharedFunctionInfo, array_from_async_resolve_shared_fun,                   \
+    ArrayFromAsyncResolveSharedFun)                                            \
+  V(SharedFunctionInfo, array_from_async_reject_shared_fun,                    \
+    ArrayFromAsyncRejectSharedFun)
 
 // These root references can be updated by the mutator.
 #define STRONG_MUTABLE_MOVABLE_ROOT_LIST(V)                                 \
