@@ -7,9 +7,11 @@
 
 #include <stddef.h>
 
+#include <array>
 #include <type_traits>
 
 #include "v8-handle-base.h"  // NOLINT(build/include_directory)
+#include "v8-memory-span.h"  // NOLINT(build/include_directory)
 
 namespace v8 {
 
