@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f214484_c5958435",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-09-15T18:22:16Z",
+      "side": 1,
+      "message": "This CL is ready for review. Thanks!",
+      "revId": "64b677c9a3e4e3ec9377dbdb16640612bc8228bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b05f59b_16a1ee11",
+        "filename": "src/builtins/array-from-async.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-09-15T18:22:16Z",
+      "side": 1,
+      "message": "Again, as I said on the other CL, I did not see setting the length when add elements to the array so I did not check anything before doing that.",
+      "range": {
+        "startLine": 366,
+        "startChar": 8,
+        "endLine": 366,
+        "endChar": 57
+      },
+      "revId": "64b677c9a3e4e3ec9377dbdb16640612bc8228bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbdd3cb4_62f7e9e9",
+        "filename": "src/builtins/array-from-async.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-09-15T18:22:16Z",
+      "side": 1,
+      "message": "We have to initialize these values anyway. the `arr` will be overwritten for sure before creating the context. `IteratorRecord` will be overwritten if we have an iterable object (and will never be used if we have an array-like object). `arrayLike` will be overwritten if we have an array-like object (and will never be used if we have an iterable object). So, I think we are good with these initialization values.",
+      "range": {
+        "startLine": 558,
+        "startChar": 24,
+        "endLine": 558,
+        "endChar": 38
+      },
+      "revId": "64b677c9a3e4e3ec9377dbdb16640612bc8228bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9abd0516_fe875461",
+        "filename": "src/builtins/array-from-async.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-09-15T18:22:16Z",
+      "side": 1,
+      "message": "I saw this fast path in `array-from.tq` so I guess we can add it here as well.",
+      "range": {
+        "startLine": 595,
+        "startChar": 7,
+        "endLine": 597,
+        "endChar": 31
+      },
+      "revId": "64b677c9a3e4e3ec9377dbdb16640612bc8228bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
