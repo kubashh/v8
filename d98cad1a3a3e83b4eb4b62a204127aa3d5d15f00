@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "505b633f_e22c34af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-09-15T12:47:46Z",
+      "side": 1,
+      "message": "Thanks for the review, Clemens and Nico! :)",
+      "revId": "d98cad1a3a3e83b4eb4b62a204127aa3d5d15f00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
