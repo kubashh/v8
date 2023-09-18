@@ -16,6 +16,46 @@
       "message": "PTAL.",
       "revId": "c598562255efc5efa4122cce69d444ad20029bfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ddf5fe3_bc72e0fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-18T13:50:30Z",
+      "side": 1,
+      "message": "LGTM modulo the test failures due to build flags.",
+      "revId": "c598562255efc5efa4122cce69d444ad20029bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f172ca5_544e875f",
+        "filename": "test/mjsunit/regress/wasm/regress-crbug-1483481.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-18T13:50:30Z",
+      "side": 1,
+      "message": "You need `--allow-natives-syntax`.",
+      "range": {
+        "startLine": 5,
+        "startChar": 3,
+        "endLine": 5,
+        "endChar": 8
+      },
+      "revId": "c598562255efc5efa4122cce69d444ad20029bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
