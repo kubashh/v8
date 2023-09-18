@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b677aa5_f45ab551",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-18T10:40:08Z",
+      "side": 1,
+      "message": "I\u0027d avoid the ctor on L37 and stay compatible so that we can actually move away.",
+      "parentUuid": "1218971f_da2d83a0",
+      "range": {
+        "startLine": 25,
+        "startChar": 56,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "5b18bd18259987050751bb5c1dc41cbf184c5fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93fcfd51_2837aea1",
         "filename": "include/v8-memory-span.h",
         "patchSetId": 3
