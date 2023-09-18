@@ -2624,14 +2624,16 @@ const Operator* MachineOperatorBuilder::LoadStackPointer() {
   return zone_->New<LoadStackPointerOperator>();
 }
 
-const Operator* MachineOperatorBuilder::SetStackPointer() {
-  class SetStackPointerOperator final : public Operator {
+const Operator* MachineOperatorBuilder::SetStackPointer(
+    bool can_access_with_sp) {
+  class SetStackPointerOperator final : public Operator1<bool> {
    public:
-    SetStackPointerOperator()
-        : Operator(IrOpcode::kSetStackPointer, kNoProperties, "SetStackPointer",
-                   1, 1, 0, 0, 1, 0) {}
+    explicit SetStackPointerOperator(bool can_access_with_sp)
+        : Operator1<bool>(IrOpcode::kSetStackPointer, kNoProperties,
+                          "SetStackPointer", 1, 1, 0, 0, 1, 0,
+                          can_access_with_sp) {}
   };
-  return zone_->New<SetStackPointerOperator>();
+  return zone_->New<SetStackPointerOperator>(can_access_with_sp);
 }
 
 #undef PURE_BINARY_OP_LIST_32
