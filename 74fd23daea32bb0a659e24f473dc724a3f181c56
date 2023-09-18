@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cabbe00_49b382cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-18T11:56:34Z",
+      "side": 1,
+      "message": "LGTM\n\nThanks for fixing, I missed that one",
+      "revId": "74fd23daea32bb0a659e24f473dc724a3f181c56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
