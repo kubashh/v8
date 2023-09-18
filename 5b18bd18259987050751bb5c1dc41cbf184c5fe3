@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a20a681_1199e1b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-18T10:09:15Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "5b18bd18259987050751bb5c1dc41cbf184c5fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8c1e9dd_df668373",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-18T10:09:15Z",
+      "side": 1,
+      "message": "Is this still the case?",
+      "range": {
+        "startLine": 25,
+        "startChar": 56,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "5b18bd18259987050751bb5c1dc41cbf184c5fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93fcfd51_2837aea1",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-18T10:09:15Z",
+      "side": 1,
+      "message": "nit: :et\u0027s move that op to copy ctor.",
+      "range": {
+        "startLine": 73,
+        "startChar": 14,
+        "endLine": 73,
+        "endChar": 22
+      },
+      "revId": "5b18bd18259987050751bb5c1dc41cbf184c5fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05c4ee5a_5e98397b",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5124,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-18T10:09:15Z",
+      "side": 1,
+      "message": "nit: array (or similar)",
+      "range": {
+        "startLine": 5124,
+        "startChar": 7,
+        "endLine": 5124,
+        "endChar": 13
+      },
+      "revId": "5b18bd18259987050751bb5c1dc41cbf184c5fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
