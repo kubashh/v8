@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08446adf_71313983",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-09-18T18:01:48Z",
+      "side": 1,
+      "message": "nit: I guess we should be fine using constexpr vars from C++17 as traits here, i.e.:\n```\ntemplate \u003ctypename It\u003e\nstatic constexpr is_random_access_iterator_v \u003d std::is_base_v\u003c...\u003e;\n```\nand avoid `::value`.",
+      "range": {
+        "startLine": 32,
+        "startChar": 2,
+        "endLine": 32,
+        "endChar": 7
+      },
+      "revId": "62970f9b8b72fb8c6b5f1219bddc230b2c91bb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0366dbf8_6c564163",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-09-18T18:01:48Z",
+      "side": 1,
+      "message": "I\u0027d avoid declaring the copy-ctor and the copy-asgn-opr, since user-declaring them implicitly deletes the move-ctor and the move-asgn-opr: https://godbolt.org/z/vrcoKP4h4.\n\nIn the context of span maybe it\u0027s probably not important, but IIRC according the styleguide we do prefer \"The rule of zero\".",
+      "revId": "62970f9b8b72fb8c6b5f1219bddc230b2c91bb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41722216_e2f2dc4e",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-09-18T18:01:48Z",
+      "side": 1,
+      "message": "I think `std::enable_if_t` is missing here. Otherwise the function-declaration won\u0027t be SFINAEd out and just instantiated with the specialization of `std::is_convertible\u003c\u003e` that inherits from `std::false_type`: https://godbolt.org/z/6P5P4GT96",
+      "range": {
+        "startLine": 57,
+        "startChar": 35,
+        "endLine": 57,
+        "endChar": 62
+      },
+      "revId": "62970f9b8b72fb8c6b5f1219bddc230b2c91bb4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
