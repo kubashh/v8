@@ -4,6 +4,7 @@
 
 #include "src/objects/js-atomics-synchronization.h"
 
+#include "include/v8-function.h"
 #include "src/base/macros.h"
 #include "src/base/platform/condition-variable.h"
 #include "src/base/platform/mutex.h"
@@ -12,6 +13,7 @@
 #include "src/execution/isolate-inl.h"
 #include "src/heap/parked-scope-inl.h"
 #include "src/objects/js-atomics-synchronization-inl.h"
+#include "src/objects/js-promise-inl.h"
 #include "src/sandbox/external-pointer-inl.h"
 
 namespace v8 {
@@ -48,7 +50,7 @@ namespace detail {
 //    and that main thread is the head of the waiter list), the Isolate's
 //    external pointer points to that WaiterQueueNode. Otherwise the external
 //    pointer points to null.
-class V8_NODISCARD WaiterQueueNode final {
+class V8_NODISCARD WaiterQueueNode {
  public:
   explicit WaiterQueueNode(Isolate* requester)
       : requester_(requester)
@@ -253,12 +255,7 @@ class V8_NODISCARD WaiterQueueNode final {
     return result;
   }
 
-  void Notify() {
-    base::MutexGuard guard(&wait_lock_);
-    should_wait = false;
-    wait_cond_var_.NotifyOne();
-    SetNotInListForVerification();
-  }
+  virtual void Notify() = 0;
 
   uint32_t NotifyAllInList() {
     WaiterQueueNode* cur = this;
@@ -299,11 +296,307 @@ class V8_NODISCARD WaiterQueueNode final {
 
   base::Mutex wait_lock_;
   base::ConditionVariable wait_cond_var_;
+
+ protected:
+  base::Mutex* GetWaitLock() { return &wait_lock_; }
+  base::ConditionVariable* GetWaitConditionVariable() {
+    return &wait_cond_var_;
+  }
+  Isolate* GetRequester() { return requester_; }
+  void SetNotInListForVerificationWrapper() { SetNotInListForVerification(); }
 };
+
+class AsyncWaiterQueueNode;
+
+class AsyncWaiterQueueTask : public CancelableTask {
+ public:
+  AsyncWaiterQueueTask(CancelableTaskManager* cancelable_task_manager,
+                       AsyncWaiterQueueNode* node)
+      : CancelableTask(cancelable_task_manager), node_(node) {}
+
+  void RunInternal() override;
+
+ private:
+  friend class detail::AsyncWaiterQueueNode;
+  AsyncWaiterQueueNode* node_;
+};
+class AsyncWaiterNotifyTask : public CancelableTask {
+ public:
+  AsyncWaiterNotifyTask(CancelableTaskManager* cancelable_task_manager,
+                        AsyncWaiterQueueNode* node)
+      : CancelableTask(cancelable_task_manager), node_(node) {}
+
+  void RunInternal() override;
+
+ private:
+  friend class detail::AsyncWaiterQueueNode;
+  AsyncWaiterQueueNode* node_;
+};
+
+class V8_NODISCARD AsyncWaiterQueueNode final : public WaiterQueueNode {
+ public:
+  explicit AsyncWaiterQueueNode(Isolate* requester, Handle<JSObject> mutex,
+                                Handle<JSObject> callable,
+                                Handle<JSObject> promise)
+      : WaiterQueueNode(requester) {
+    v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(requester);
+    task_runner_ =
+        V8::GetCurrentPlatform()->GetForegroundTaskRunner(v8_isolate);
+
+    v8::Local<v8::Object> local_mutex = Utils::ToLocal(mutex);
+    mutex_.Reset(v8_isolate, local_mutex);
+    // mutex_.SetWeak();
+
+    v8::Local<v8::Object> local_callable = Utils::ToLocal(callable);
+    callback_.Reset(v8_isolate, local_callable);
+
+    v8::Local<v8::Promise> local_promise = Utils::PromiseToLocal(promise);
+    promise_.Reset(v8_isolate, local_promise);
+  }
+
+  ~AsyncWaiterQueueNode() {
+    callback_.Reset();
+    promise_.Reset();
+    mutex_.Reset();
+  }
+
+  void HandleNotify() {
+    if (GetRequester()->cancelable_task_manager()->canceled()) return;
+    Isolate* isolate = GetRequester();
+    v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
+    HandleScope scope(isolate);
+
+    Handle<JSAtomicsMutex> mutex_lock = Handle<JSAtomicsMutex>::cast(
+        Utils::OpenHandle(*mutex_.Get(v8_isolate)));
+    // If the mutex is available, then we can run the callback immediately.
+    // We won't assume that the mutex is available, so we'll try to lock it.
+    if (mutex_lock->TryLockExplicitAndSetOwner() ||
+        JSAtomicsMutex::SpinLockSetOwner(mutex_lock)) {
+      auto task = std::make_unique<AsyncWaiterQueueTask>(
+          GetRequester()->cancelable_task_manager(), this);
+      task_runner_->PostNonNestableDelayedTask(std::move(task), 0.0);
+      return;
+    }
+
+    JSAtomicsMutex::EnqueueAsync(GetRequester(), mutex_lock, this);
+  }
+
+  void Notify() override {
+    if (GetRequester()->cancelable_task_manager()->canceled()) return;
+    // Post a task back to the thread that owns this node
+    auto task = std::make_unique<AsyncWaiterNotifyTask>(
+        GetRequester()->cancelable_task_manager(), this);
+    task_runner_->PostNonNestableDelayedTask(std::move(task), 0.0);
+  }
+
+  static Handle<JSFunction> CreateResolveUnlockCallback(
+      Isolate* isolate, Handle<JSAtomicsMutex> mutex) {
+    Factory* factory = isolate->factory();
+    Handle<NativeContext> context(isolate->native_context());
+
+    Handle<SharedFunctionInfo> info = factory->NewSharedFunctionInfoForBuiltin(
+        isolate->factory()->empty_string(), Builtin::kAtomicsMutexAsyncUnlock);
+    info->set_language_mode(LanguageMode::kStrict);
+
+    Handle<JSFunction> resolver_callback =
+        Factory::JSFunctionBuilder{isolate, info, context}
+            .set_map(isolate->strict_function_without_prototype_map())
+            .Build();
+
+    JSObject::AddProperty(isolate, resolver_callback, "Lock",
+                          Handle<Object>::cast(mutex),
+                          PropertyAttributes::NONE);
+
+    return resolver_callback;
+  }
+
+ private:
+  friend class AsyncWaiterQueueTask;
+  std::shared_ptr<TaskRunner> task_runner_;
+  v8::Global<v8::Object> mutex_;
+  v8::Global<v8::Object> callback_;
+  v8::Global<v8::Promise> promise_;
+  v8::Global<v8::Context> native_context_;
+  Handle<Object> result_;
+};
+
+class V8_NODISCARD SyncWaiterQueueNode final : public WaiterQueueNode {
+ public:
+  explicit SyncWaiterQueueNode(Isolate* requester)
+      : WaiterQueueNode(requester) {}
+  void Notify() override {
+    base::MutexGuard guard(GetWaitLock());
+    should_wait = false;
+    GetWaitConditionVariable()->NotifyOne();
+    SetNotInListForVerificationWrapper();
+  }
+};
+
+void AsyncWaiterQueueTask::RunInternal() {
+  Isolate* isolate = node_->GetRequester();
+  v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
+  HandleScope scope(isolate);
+
+  Handle<JSObject> callback = Handle<JSObject>::cast(
+      Utils::OpenHandle(*node_->callback_.Get(v8_isolate)));
+  Handle<JSObject> promise = Handle<JSObject>::cast(
+      Utils::OpenHandle(*node_->promise_.Get(v8_isolate)));
+  Handle<JSAtomicsMutex> mutex = Handle<JSAtomicsMutex>::cast(
+      Utils::OpenHandle(*node_->mutex_.Get(v8_isolate)));
+
+  Object result =
+      JSAtomicsMutex::RunCallable(mutex, isolate, callback, promise);
+  USE(result);
+  delete node_;
+}
+void AsyncWaiterNotifyTask::RunInternal() { node_->HandleNotify(); }
 
 }  // namespace detail
 
+using detail::AsyncWaiterQueueNode;
+using detail::SyncWaiterQueueNode;
 using detail::WaiterQueueNode;
+
+// static
+Object JSAtomicsMutex::RunCallable(Handle<JSAtomicsMutex> mutex,
+                                   Isolate* isolate,
+                                   Handle<JSObject> run_under_lock,
+                                   Handle<JSObject> promise) {
+  Handle<JSFunction> JSCallback = Handle<JSFunction>::cast(run_under_lock);
+  Handle<NativeContext> native_context =
+      handle(JSCallback->context().native_context(), isolate);
+  v8::Local<v8::Context> local_native_context =
+      Utils::ToLocal(Handle<Context>::cast(native_context));
+  v8::Context::Scope contextScope(local_native_context);
+
+  Handle<Object> result;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, result,
+      Execution::Call(isolate, run_under_lock,
+                      isolate->factory()->undefined_value(), 0, nullptr));
+
+  // If result is a promise, create a JS Function that will resolve the
+  // promise and unlock the mutex through result->then
+  if (result->IsJSPromise()) {
+    Handle<JSFunction> resolver_callback =
+        AsyncWaiterQueueNode::CreateResolveUnlockCallback(isolate, mutex);
+
+    Local<Function> local_resolver_callback = Utils::ToLocal(resolver_callback);
+    v8::Local<v8::Promise> local_promise =
+        Utils::PromiseToLocal(Handle<JSObject>::cast(result));
+
+    MaybeLocal<Promise> junk_promise = local_promise->Then(
+        local_native_context, local_resolver_callback, local_resolver_callback);
+    USE(junk_promise);
+  }
+
+  Handle<JSPromise> HandlePromise = Handle<JSPromise>::cast(promise);
+
+  if (!result->IsJSPromise()) mutex->Unlock(isolate);
+  MaybeHandle<Object> resolve_result =
+      JSPromise::Resolve(HandlePromise, result);
+  USE(resolve_result);
+  return *result;
+}
+
+// static
+bool JSAtomicsMutex::SpinLockSetOwner(Handle<JSAtomicsMutex> mutex) {
+  // Spin for a little bit to try to acquire the lock, so as to be fast under
+  // microcontention.
+  //
+  // The backoff algorithm is copied from PartitionAlloc's SpinningMutex.
+  constexpr int kSpinCount = 64;
+  constexpr int kMaxBackoff = 16;
+
+  int tries = 0;
+  int backoff = 1;
+  do {
+    if (mutex->TryLockExplicitAndSetOwner()) return true;
+
+    for (int yields = 0; yields < backoff; yields++) {
+      YIELD_PROCESSOR;
+      tries++;
+    }
+
+    backoff = std::min(kMaxBackoff, backoff << 1);
+  } while (tries < kSpinCount);
+
+  return false;
+}
+
+// static
+void JSAtomicsMutex::RunOrQueueCallableSlowPath(Handle<JSAtomicsMutex> mutex,
+                                                Isolate* isolate,
+                                                Handle<JSObject> run_under_lock,
+                                                Handle<JSObject> promise) {
+  if (SpinLockSetOwner(mutex)) {
+    Object result = RunCallable(mutex, isolate, run_under_lock, promise);
+    USE(result);
+    return;
+  }
+  // If we don't obtain the Mutex, enqueue the callable.
+  JSAtomicsMutex::EnqueueAsyncNode(isolate, mutex, run_under_lock, promise);
+}
+
+// static
+Handle<JSObject> JSAtomicsMutex::RunOrQueueCallable(
+    Handle<JSAtomicsMutex> mutex, Isolate* isolate,
+    Handle<JSObject> run_under_lock) {
+  Handle<JSObject> promise = isolate->factory()->NewJSPromise();
+
+  if (!mutex->TryLock()) {
+    RunOrQueueCallableSlowPath(mutex, isolate, run_under_lock, promise);
+  } else {
+    Object result = RunCallable(mutex, isolate, run_under_lock, promise);
+    USE(result);
+  }
+
+  return promise;
+}
+
+// static
+void JSAtomicsMutex::EnqueueAsync(Isolate* isolate,
+                                  Handle<JSAtomicsMutex> mutex,
+                                  AsyncWaiterQueueNode* node) {
+  std::atomic<StateT>* state = mutex->AtomicStatePtr();
+  // Try to acquire the queue lock, which is a spinlock.
+  StateT current_state = state->load(std::memory_order_relaxed);
+  for (;;) {
+    if ((current_state & kIsLockedBit) &&
+        TryLockWaiterQueueExplicit(state, current_state)) {
+      break;
+    }
+    YIELD_PROCESSOR;
+  }
+
+  // With the queue lock held, enqueue the requester onto the waiter queue.
+  WaiterQueueNode* waiter_head =
+      WaiterQueueNode::DestructivelyDecodeHead<JSAtomicsMutex>(isolate,
+                                                               current_state);
+  WaiterQueueNode::Enqueue(&waiter_head, node);
+
+  // Release the queue lock and install the new waiter queue head by
+  // creating a new state.
+  DCHECK_EQ(state->load(), current_state | kIsWaiterQueueLockedBit);
+  StateT new_state =
+      WaiterQueueNode::EncodeHead<JSAtomicsMutex>(isolate, waiter_head);
+  DCHECK(current_state & kIsLockedBit);
+  new_state |= kIsLockedBit;
+  state->store(new_state, std::memory_order_release);
+}
+
+// static
+void JSAtomicsMutex::EnqueueAsyncNode(Isolate* isolate,
+                                      Handle<JSAtomicsMutex> mutex,
+                                      Handle<JSObject> callable,
+                                      Handle<JSObject> promise) {
+  // Since this is asynchronous, this needs to live on the heap and beyond this
+  // function's scope.
+  AsyncWaiterQueueNode* this_waiter = new AsyncWaiterQueueNode(
+      isolate, Handle<JSObject>::cast(mutex), callable, promise);
+
+  JSAtomicsMutex::EnqueueAsync(isolate, mutex, this_waiter);
+}
 
 // static
 bool JSAtomicsMutex::TryLockExplicit(std::atomic<StateT>* state,
@@ -358,7 +651,7 @@ void JSAtomicsMutex::LockSlowPath(Isolate* requester,
 
     // Allocate a waiter queue node on-stack, since this thread is going to
     // sleep and will be blocked anyway.
-    WaiterQueueNode this_waiter(requester);
+    SyncWaiterQueueNode this_waiter(requester);
 
     {
       // Try to acquire the queue lock, which is itself a spinlock.
@@ -456,7 +749,7 @@ bool JSAtomicsCondition::WaitFor(Isolate* requester,
 
   // Allocate a waiter queue node on-stack, since this thread is going to sleep
   // and will be blocked anyway.
-  WaiterQueueNode this_waiter(requester);
+  SyncWaiterQueueNode this_waiter(requester);
 
   {
     // The state pointer should not be used outside of this block as a shared GC

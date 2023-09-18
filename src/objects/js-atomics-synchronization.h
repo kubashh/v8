@@ -22,6 +22,8 @@ namespace internal {
 
 namespace detail {
 class WaiterQueueNode;
+class AsyncWaiterQueueNode;
+class SyncWaiterQueueNode;
 }  // namespace detail
 
 // Base class for JSAtomicsMutex and JSAtomicsCondition
@@ -117,6 +119,23 @@ class JSAtomicsMutex
   static inline void Lock(Isolate* requester, Handle<JSAtomicsMutex> mutex);
 
   V8_WARN_UNUSED_RESULT inline bool TryLock();
+  inline bool TryLockExplicitAndSetOwner();
+  static bool SpinLockSetOwner(Handle<JSAtomicsMutex> mutex);
+  static Object RunCallable(Handle<JSAtomicsMutex> mutex, Isolate* isolate,
+                            Handle<JSObject> run_under_lock,
+                            Handle<JSObject> promise);
+  static Handle<JSObject> RunOrQueueCallable(Handle<JSAtomicsMutex> mutex,
+                                             Isolate* isolate,
+                                             Handle<JSObject> run_under_lock);
+  static void RunOrQueueCallableSlowPath(Handle<JSAtomicsMutex> mutex,
+                                         Isolate* isolate,
+                                         Handle<JSObject> run_under_lock,
+                                         Handle<JSObject> promise);
+  static void EnqueueAsyncNode(Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+                               Handle<JSObject> callable,
+                               Handle<JSObject> promise);
+  static void EnqueueAsync(Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+                           detail::AsyncWaiterQueueNode* node);
 
   inline void Unlock(Isolate* requester);
 
@@ -128,6 +147,8 @@ class JSAtomicsMutex
  private:
   friend class Factory;
   friend class detail::WaiterQueueNode;
+  friend class detail::SyncWaiterQueueNode;
+  friend class detail::AsyncWaiterQueueNode;
 
   // There are 2 lock bits: whether the lock itself is locked, and whether the
   // associated waiter queue is locked.
