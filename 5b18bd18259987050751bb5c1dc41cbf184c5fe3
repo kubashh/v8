@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1218971f_da2d83a0",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-09-18T10:37:38Z",
+      "side": 1,
+      "message": "Yes, except for the constructor in line 37. For `std::span\u003cT, dynamic_extent\u003e` there is an implicit conversion from `std::array`, but not for other standard containers. If we stick to that interface, for a vector we would need:\n\n```\nstd::vector\u003cint\u003e v(10);\nvoid foo(const MemorySpan\u003cint\u003e\u0026 span);\n\nfoo(MemorySpan\u003cint\u003e(v.begin(), 10));\n```\n\nIf we don\u0027t mind this, I could restrict the constructor in line 37 to only accept `std::array` and then this would be indeed a subset of `std::span`.\n\nOr I could add a sentence to the comment about this implicit constructor.",
+      "parentUuid": "b8c1e9dd_df668373",
+      "range": {
+        "startLine": 25,
+        "startChar": 56,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "5b18bd18259987050751bb5c1dc41cbf184c5fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93fcfd51_2837aea1",
         "filename": "include/v8-memory-span.h",
         "patchSetId": 3
