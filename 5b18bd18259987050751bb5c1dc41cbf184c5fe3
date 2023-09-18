@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "513030c5_51f425bf",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-09-18T16:43:33Z",
+      "side": 1,
+      "message": "Done. I removed this one and added constructors just as in `std::span`, from:\n- iterator and count\n- two iterators\n- C-style array (implicit)\n- `std::array` and `const std::array` (implicit)\n\nIn fact, the existing constructor from pointer and size is not exactly how it\u0027s done in `std::span`; there, this would be just one special case of \"iterator\" and count. But it\u0027s more-or-less compatible and, as we already had it, I didn\u0027t want to deprecate it. I changed it a bit, in a backwards-compatible way, so that it doesn\u0027t break the other changes.\n\nAnton, maybe it would help if you could take a look here, in case I\u0027m missing something.",
+      "parentUuid": "6b677aa5_f45ab551",
+      "range": {
+        "startLine": 25,
+        "startChar": 56,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "5b18bd18259987050751bb5c1dc41cbf184c5fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93fcfd51_2837aea1",
         "filename": "include/v8-memory-span.h",
         "patchSetId": 3
@@ -102,6 +126,30 @@
       "writtenOn": "2023-09-18T10:09:15Z",
       "side": 1,
       "message": "nit: :et\u0027s move that op to copy ctor.",
+      "range": {
+        "startLine": 73,
+        "startChar": 14,
+        "endLine": 73,
+        "endChar": 22
+      },
+      "revId": "5b18bd18259987050751bb5c1dc41cbf184c5fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e42dd0b0_d2d74af7",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-09-18T16:43:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93fcfd51_2837aea1",
       "range": {
         "startLine": 73,
         "startChar": 14,
@@ -125,6 +173,30 @@
       "writtenOn": "2023-09-18T10:09:15Z",
       "side": 1,
       "message": "nit: array (or similar)",
+      "range": {
+        "startLine": 5124,
+        "startChar": 7,
+        "endLine": 5124,
+        "endChar": 13
+      },
+      "revId": "5b18bd18259987050751bb5c1dc41cbf184c5fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a5909c0_49d00185",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5124,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-09-18T16:43:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05c4ee5a_5e98397b",
       "range": {
         "startLine": 5124,
         "startChar": 7,
