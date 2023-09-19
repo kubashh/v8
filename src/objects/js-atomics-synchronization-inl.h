@@ -68,6 +68,16 @@ void JSAtomicsMutex::Lock(Isolate* requester, Handle<JSAtomicsMutex> mutex) {
   mutex->SetCurrentThreadAsOwner();
 }
 
+bool JSAtomicsMutex::TryLockExplicitAndSetOwner() {
+  std::atomic<StateT>* state = AtomicStatePtr();
+  StateT current_state = state->load(std::memory_order_relaxed);
+  if (TryLockExplicit(state, current_state)) {
+    SetCurrentThreadAsOwner();
+    return true;
+  }
+  return false;
+}
+
 bool JSAtomicsMutex::TryLock() {
   DisallowGarbageCollection no_gc;
   StateT expected = kUnlocked;
