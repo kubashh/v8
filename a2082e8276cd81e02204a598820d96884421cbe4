@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6908afa5_68df431a",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-09-19T05:51:10Z",
+      "side": 1,
+      "message": "+1. I mean, it certainly works to do the low-level work here yourself, but ExternalRefs would be the intended mechanism at masm level.",
+      "revId": "a2082e8276cd81e02204a598820d96884421cbe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
