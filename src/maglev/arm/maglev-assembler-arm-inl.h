@@ -360,8 +360,10 @@ void MaglevAssembler::LoadFixedArrayElement(Register result, Register array,
     AssertNotSmi(array);
     IsObjectType(array, FIXED_ARRAY_TYPE);
     Assert(kEqual, AbortReason::kUnexpectedValue);
-    CompareInt32(index, 0);
-    Assert(kUnsignedGreaterThanEqual, AbortReason::kUnexpectedNegativeValue);
+    Label pass;
+    CompareInt32AndJumpIf(index, 0, kUnsignedGreaterThanEqual, &pass);
+    Abort(AbortReason::kUnexpectedNegativeValue);
+    bind(&pass);
   }
   LoadTaggedFieldByIndex(result, array, index, kTaggedSize,
                          FixedArray::kHeaderSize);
@@ -382,8 +384,10 @@ void MaglevAssembler::LoadFixedDoubleArrayElement(DoubleRegister result,
     AssertNotSmi(array);
     IsObjectType(array, FIXED_DOUBLE_ARRAY_TYPE);
     Assert(kEqual, AbortReason::kUnexpectedValue);
-    CompareInt32(index, 0);
-    Assert(kUnsignedGreaterThanEqual, AbortReason::kUnexpectedNegativeValue);
+    Label pass;
+    CompareInt32AndJumpIf(index, 0, kUnsignedGreaterThanEqual, &pass);
+    Abort(AbortReason::kUnexpectedNegativeValue);
+    bind(&pass);
   }
   add(scratch, array, Operand(index, LSL, kDoubleSizeLog2));
   vldr(result, FieldMemOperand(scratch, FixedArray::kHeaderSize));
@@ -780,15 +784,6 @@ inline void MaglevAssembler::CompareTagged(Register reg,
 inline void MaglevAssembler::CompareTagged(Register src1, Register src2) {
   cmp(src1, src2);
 }
-
-inline void MaglevAssembler::CompareInt32(Register reg, int32_t imm) {
-  cmp(reg, Operand(imm));
-}
-
-inline void MaglevAssembler::CompareInt32(Register src1, Register src2) {
-  cmp(src1, src2);
-}
-
 inline void MaglevAssembler::CompareFloat64(DoubleRegister src1,
                                             DoubleRegister src2) {
   VFPCompareAndSetFlags(src1, src2);
@@ -918,6 +913,24 @@ inline void MaglevAssembler::CompareInt32AndJumpIf(Register r1, int32_t value,
                                                    Label::Distance distance) {
   cmp(r1, Operand(value));
   b(cond, target);
+}
+
+inline void MaglevAssembler::CompareInt32AndBranch(Register r1, int32_t value,
+                                                   Condition cond,
+                                                   BasicBlock* if_true,
+                                                   BasicBlock* if_false,
+                                                   BasicBlock* next_block) {
+  cmp(r1, Operand(value));
+  Branch(cond, if_true, if_false, next_block);
+}
+
+inline void MaglevAssembler::CompareInt32AndBranch(Register r1, Register r2,
+                                                   Condition cond,
+                                                   BasicBlock* if_true,
+                                                   BasicBlock* if_false,
+                                                   BasicBlock* next_block) {
+  cmp(r1, r2);
+  Branch(cond, if_true, if_false, next_block);
 }
 
 inline void MaglevAssembler::CompareSmiAndJumpIf(Register r1, Tagged<Smi> value,
