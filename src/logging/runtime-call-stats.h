@@ -138,6 +138,8 @@ class RuntimeCallTimer final {
   V(Array_CloneElementAt)                                  \
   V(Array_Iterate)                                         \
   V(Array_New)                                             \
+  V(AsyncContext_Variable_New)                             \
+  V(AsyncContext_Snapshot_New)                             \
   V(BigInt64Array_New)                                     \
   V(BigInt_NewFromWords)                                   \
   V(BigIntObject_BigIntValue)                              \

@@ -1256,6 +1256,7 @@ void Heap::CreateInitialMutableObjects() {
   set_functions_marked_for_manual_optimization(roots.undefined_value());
   set_shared_wasm_memories(roots.empty_weak_array_list());
   set_locals_block_list_cache(roots.undefined_value());
+  set_async_context_store(roots.undefined_value());
 #ifdef V8_ENABLE_WEBASSEMBLY
   set_active_continuation(roots.undefined_value());
   set_active_suspender(roots.undefined_value());
