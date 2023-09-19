@@ -520,8 +520,10 @@ void MaglevAssembler::LoadFixedArrayElement(Register result, Register array,
     AssertNotSmi(array);
     IsObjectType(array, FIXED_ARRAY_TYPE);
     Assert(kEqual, AbortReason::kUnexpectedValue);
-    CompareInt32(index, 0);
-    Assert(kUnsignedGreaterThanEqual, AbortReason::kUnexpectedNegativeValue);
+    Label pass;
+    CompareInt32AndJumpIf(index, 0, kUnsignedGreaterThanEqual, &pass);
+    Abort(AbortReason::kUnexpectedNegativeValue);
+    bind(&pass);
   }
   LoadTaggedFieldByIndex(result, array, index, kTaggedSize,
                          FixedArray::kHeaderSize);
@@ -533,8 +535,10 @@ void MaglevAssembler::LoadFixedArrayElementWithoutDecompressing(
     AssertNotSmi(array);
     IsObjectType(array, FIXED_ARRAY_TYPE);
     Assert(kEqual, AbortReason::kUnexpectedValue);
-    CompareInt32(index, 0);
-    Assert(kUnsignedGreaterThanEqual, AbortReason::kUnexpectedNegativeValue);
+    Label pass;
+    CompareInt32AndJumpIf(index, 0, kUnsignedGreaterThanEqual, &pass);
+    Abort(AbortReason::kUnexpectedNegativeValue);
+    bind(&pass);
   }
   Add(result, array, Operand(index, LSL, kTaggedSizeLog2));
   MacroAssembler::LoadTaggedFieldWithoutDecompressing(
@@ -550,8 +554,10 @@ void MaglevAssembler::LoadFixedDoubleArrayElement(DoubleRegister result,
     AssertNotSmi(array);
     IsObjectType(array, FIXED_DOUBLE_ARRAY_TYPE);
     Assert(kEqual, AbortReason::kUnexpectedValue);
-    CompareInt32(index, 0);
-    Assert(kUnsignedGreaterThanEqual, AbortReason::kUnexpectedNegativeValue);
+    Label pass;
+    CompareInt32AndJumpIf(index, 0, kUnsignedGreaterThanEqual, &pass);
+    Abort(AbortReason::kUnexpectedNegativeValue);
+    bind(&pass);
   }
   Add(scratch, array, Operand(index, LSL, kDoubleSizeLog2));
   Ldr(result, FieldMemOperand(scratch, FixedArray::kHeaderSize));
@@ -916,14 +922,6 @@ inline void MaglevAssembler::CompareTagged(Register reg,
 
 inline void MaglevAssembler::CompareTagged(Register src1, Register src2) {
   CmpTagged(src1, src2);
-}
-
-inline void MaglevAssembler::CompareInt32(Register reg, int32_t imm) {
-  Cmp(reg.W(), Immediate(imm));
-}
-
-inline void MaglevAssembler::CompareInt32(Register src1, Register src2) {
-  Cmp(src1.W(), src2.W());
 }
 
 inline void MaglevAssembler::CompareFloat64(DoubleRegister src1,
