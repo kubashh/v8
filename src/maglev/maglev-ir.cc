@@ -1126,8 +1126,11 @@ void AssertInt32::SetValueLocationConstraints() {
 }
 void AssertInt32::GenerateCode(MaglevAssembler* masm,
                                const ProcessingState& state) {
-  __ CompareInt32(ToRegister(left_input()), ToRegister(right_input()));
-  __ Check(ToCondition(condition_), reason_);
+  Label pass;
+  __ CompareInt32AndJumpIf(ToRegister(left_input()), ToRegister(right_input()),
+                           ToCondition(condition_), &pass);
+  __ Abort(reason_);
+  __ bind(&pass);
 }
 
 void CheckUint32IsSmi::SetValueLocationConstraints() { UseRegister(input()); }
@@ -2205,8 +2208,10 @@ void StoreFixedDoubleArrayElement::GenerateCode(MaglevAssembler* masm,
     __ AssertNotSmi(elements);
     __ IsObjectType(elements, FIXED_DOUBLE_ARRAY_TYPE);
     __ Assert(kEqual, AbortReason::kUnexpectedValue);
-    __ CompareInt32(index, 0);
-    __ Assert(kUnsignedGreaterThanEqual, AbortReason::kUnexpectedNegativeValue);
+    Label pass;
+    __ CompareInt32AndJumpIf(index, 0, kUnsignedGreaterThanEqual, &pass);
+    __ Abort(AbortReason::kUnexpectedNegativeValue);
+    __ bind(&pass);
   }
   __ StoreFixedDoubleArrayElement(elements, index, value);
 }
@@ -2756,8 +2761,10 @@ void CheckValueEqualsInt32::SetValueLocationConstraints() {
 void CheckValueEqualsInt32::GenerateCode(MaglevAssembler* masm,
                                          const ProcessingState& state) {
   Register target = ToRegister(target_input());
-  __ CompareInt32(target, value());
-  __ EmitEagerDeoptIfNotEqual(DeoptimizeReason::kWrongValue, this);
+  Label pass;
+  __ CompareInt32AndJumpIf(target, value(), equal, &pass);
+  __ EmitEagerDeopt(this, DeoptimizeReason::kWrongValue);
+  __ bind(&pass);
 }
 
 void CheckValueEqualsFloat64::SetValueLocationConstraints() {
@@ -2801,8 +2808,11 @@ void CheckValueEqualsString::GenerateCode(MaglevAssembler* masm,
         Register target = D::GetRegisterParameter(D::kLeft);
         Register string_length = D::GetRegisterParameter(D::kLength);
         __ StringLength(string_length, target);
-        __ CompareInt32(string_length, node->value().length());
-        __ EmitEagerDeoptIf(kNotEqual, DeoptimizeReason::kWrongValue, node);
+        Label pass;
+        __ CompareInt32AndJumpIf(string_length, node->value().length(), kEqual,
+                                 &pass);
+        __ EmitEagerDeopt(node, DeoptimizeReason::kWrongValue);
+        __ bind(&pass);
         RegisterSnapshot snapshot = node->register_snapshot();
         AddDeoptRegistersToSnapshot(&snapshot, node->eager_deopt_info());
         {
@@ -2929,9 +2939,10 @@ void CheckInt32Condition::SetValueLocationConstraints() {
 }
 void CheckInt32Condition::GenerateCode(MaglevAssembler* masm,
                                        const ProcessingState& state) {
-  __ CompareInt32(ToRegister(left_input()), ToRegister(right_input()));
-  __ EmitEagerDeoptIf(NegateCondition(ToCondition(condition())), reason(),
-                      this);
+  Label pass;
+  __ CompareInt32AndJumpIf(ToRegister(left_input()), ToRegister(right_input()),
+                           ToCondition(condition()), &pass);
+  __ EmitEagerDeopt(this, reason());
 }
 
 void CheckString::SetValueLocationConstraints() {
@@ -3538,11 +3549,13 @@ void UpdateJSArrayLength::GenerateCode(MaglevAssembler* masm,
     __ Assert(kEqual, AbortReason::kUnexpectedValue);
     static_assert(Internals::IsValidSmi(FixedArray::kMaxLength),
                   "MaxLength not a Smi");
-    __ CompareInt32(index, FixedArray::kMaxLength);
-    __ Assert(kUnsignedLessThan, AbortReason::kUnexpectedValue);
+    Label pass;
+    __ CompareInt32AndJumpIf(index, FixedArray::kMaxLength, kUnsignedLessThan,
+                             &pass);
+    __ Abort(AbortReason::kUnexpectedValue);
+    __ bind(&pass);
   }
-  __ CompareInt32(index, length);
-  __ JumpIf(kUnsignedLessThan, &done);
+  __ CompareInt32AndJumpIf(index, length, kUnsignedLessThan, &done);
   __ IncrementInt32(index);  // This cannot overflow.
   __ SmiTag(index);
   __ StoreTaggedSignedField(object, JSArray::kLengthOffset, index);
@@ -3584,42 +3597,43 @@ void MaybeGrowAndEnsureWritableFastElements::GenerateCode(
   DCHECK_EQ(elements, ToRegister(result()));
 
   ZoneLabelRef done(masm);
-  __ CompareInt32(index, elements_length);
-  __ JumpToDeferredIf(
-      kUnsignedGreaterThanEqual,
-      [](MaglevAssembler* masm, ZoneLabelRef done, Register object,
-         Register index, Register result_reg,
-         MaybeGrowAndEnsureWritableFastElements* node) {
-        {
-          RegisterSnapshot snapshot = node->register_snapshot();
-          AddDeoptRegistersToSnapshot(&snapshot, node->eager_deopt_info());
-          snapshot.live_registers.clear(result_reg);
-          snapshot.live_tagged_registers.clear(result_reg);
-          SaveRegisterStateForCall save_register_state(masm, snapshot);
-          using D = GrowArrayElementsDescriptor;
-          if (index == D::GetRegisterParameter(D::kObject)) {
-            // That implies that the first parameter move will clobber the index
-            // value. So we use the result register as temporary.
-            // TODO(leszeks): Use parallel moves to resolve cases like this.
-            __ SmiTag(result_reg, index);
-            index = result_reg;
-          } else {
-            __ SmiTag(index);
-          }
-          if (IsDoubleElementsKind(node->elements_kind())) {
-            __ CallBuiltin<Builtin::kGrowFastDoubleElements>(object, index);
-          } else {
-            __ CallBuiltin<Builtin::kGrowFastSmiOrObjectElements>(object,
-                                                                  index);
-          }
-          save_register_state.DefineSafepoint();
-          __ Move(result_reg, kReturnRegister0);
-        }
-        __ EmitEagerDeoptIfSmi(node, result_reg,
-                               DeoptimizeReason::kCouldNotGrowElements);
-        __ Jump(*done);
-      },
-      done, object, index, elements, this);
+
+  __ CompareInt32AndJumpIf(
+      index, elements_length, kUnsignedGreaterThanEqual,
+      __ MakeDeferredCode(
+          [](MaglevAssembler* masm, ZoneLabelRef done, Register object,
+             Register index, Register result_reg,
+             MaybeGrowAndEnsureWritableFastElements* node) {
+            {
+              RegisterSnapshot snapshot = node->register_snapshot();
+              AddDeoptRegistersToSnapshot(&snapshot, node->eager_deopt_info());
+              snapshot.live_registers.clear(result_reg);
+              snapshot.live_tagged_registers.clear(result_reg);
+              SaveRegisterStateForCall save_register_state(masm, snapshot);
+              using D = GrowArrayElementsDescriptor;
+              if (index == D::GetRegisterParameter(D::kObject)) {
+                // That implies that the first parameter move will clobber the
+                // index value. So we use the result register as temporary.
+                // TODO(leszeks): Use parallel moves to resolve cases like this.
+                __ SmiTag(result_reg, index);
+                index = result_reg;
+              } else {
+                __ SmiTag(index);
+              }
+              if (IsDoubleElementsKind(node->elements_kind())) {
+                __ CallBuiltin<Builtin::kGrowFastDoubleElements>(object, index);
+              } else {
+                __ CallBuiltin<Builtin::kGrowFastSmiOrObjectElements>(object,
+                                                                      index);
+              }
+              save_register_state.DefineSafepoint();
+              __ Move(result_reg, kReturnRegister0);
+            }
+            __ EmitEagerDeoptIfSmi(node, result_reg,
+                                   DeoptimizeReason::kCouldNotGrowElements);
+            __ Jump(*done);
+          },
+          done, object, index, elements, this));
 
   if (IsSmiOrObjectElementsKind(elements_kind())) {
     MaglevAssembler::ScratchRegisterScope temps(masm);
@@ -4078,8 +4092,8 @@ void StringEqual::GenerateCode(MaglevAssembler* masm,
 
   __ StringLength(left_length, left);
   __ StringLength(right_length, right);
-  __ CompareInt32(left_length, right_length);
-  __ JumpIf(kNotEqual, &if_not_equal, Label::Distance::kNear);
+  __ CompareInt32AndJumpIf(left_length, right_length, kNotEqual, &if_not_equal,
+                           Label::Distance::kNear);
 
   // The inputs are already in the right registers. The |left| and |right|
   // inputs were required to come in in the left/right inputs of the builtin,
@@ -4576,10 +4590,8 @@ void Int32ToUint8Clamped::GenerateCode(MaglevAssembler* masm,
   Register result_reg = ToRegister(result());
   DCHECK_EQ(value, result_reg);
   Label min, done;
-  __ CompareInt32(value, 0);
-  __ JumpIf(kLessThanEqual, &min);
-  __ CompareInt32(value, 255);
-  __ JumpIf(kLessThanEqual, &done);
+  __ CompareInt32AndJumpIf(value, 0, kLessThanEqual, &min);
+  __ CompareInt32AndJumpIf(value, 255, kLessThanEqual, &done);
   __ Move(result_reg, 255);
   __ Jump(&done, Label::Distance::kNear);
   __ bind(&min);
@@ -4596,8 +4608,8 @@ void Uint32ToUint8Clamped::GenerateCode(MaglevAssembler* masm,
   Register value = ToRegister(input());
   DCHECK_EQ(value, ToRegister(result()));
   Label done;
-  __ CompareInt32(value, 255);
-  __ JumpIf(kUnsignedLessThanEqual, &done, Label::Distance::kNear);
+  __ CompareInt32AndJumpIf(value, 255, kUnsignedLessThanEqual, &done,
+                           Label::Distance::kNear);
   __ Move(value, 255);
   __ bind(&done);
 }
@@ -4717,10 +4729,8 @@ void CheckedNumberToUint8Clamped::GenerateCode(MaglevAssembler* masm,
   // If Smi, convert to Int32.
   __ SmiToInt32(value);
   // Clamp.
-  __ CompareInt32(value, 0);
-  __ JumpIf(kLessThanEqual, &min);
-  __ CompareInt32(value, 255);
-  __ JumpIf(kGreaterThanEqual, &max);
+  __ CompareInt32AndJumpIf(value, 0, kLessThanEqual, &min);
+  __ CompareInt32AndJumpIf(value, 255, kGreaterThanEqual, &max);
   __ Jump(&done);
   __ bind(&is_not_smi);
   // Check if HeapNumber, deopt otherwise.
@@ -5652,10 +5662,11 @@ void TryOnStackReplacement::GenerateCode(MaglevAssembler* masm,
   // expensive OSR logic.
   static_assert(FeedbackVector::MaybeHasTurbofanOsrCodeBit::encode(true) >
                 FeedbackVector::kMaxOsrUrgency);
-  __ CompareInt32(osr_state, loop_depth_);
-  __ JumpToDeferredIf(kUnsignedGreaterThan, AttemptOnStackReplacement,
-                      no_code_for_osr, this, scratch0, scratch1, loop_depth_,
-                      feedback_slot_, osr_offset_);
+  __ CompareInt32AndJumpIf(
+      osr_state, loop_depth_, kUnsignedGreaterThan,
+      __ MakeDeferredCode(AttemptOnStackReplacement, no_code_for_osr, this,
+                          scratch0, scratch1, loop_depth_, feedback_slot_,
+                          osr_offset_));
   __ bind(*no_code_for_osr);
 }
 
@@ -5697,8 +5708,8 @@ void BranchIfInt32ToBooleanTrue::SetValueLocationConstraints() {
 }
 void BranchIfInt32ToBooleanTrue::GenerateCode(MaglevAssembler* masm,
                                               const ProcessingState& state) {
-  __ CompareInt32(ToRegister(condition_input()), 0);
-  __ Branch(kNotEqual, if_true(), if_false(), state.next_block());
+  __ CompareInt32AndBranch(ToRegister(condition_input()), 0, kNotEqual,
+                           if_true(), if_false(), state.next_block());
 }
 
 void BranchIfFloat64ToBooleanTrue::SetValueLocationConstraints() {
@@ -5780,9 +5791,8 @@ void BranchIfInt32Compare::GenerateCode(MaglevAssembler* masm,
                                         const ProcessingState& state) {
   Register left = ToRegister(left_input());
   Register right = ToRegister(right_input());
-  __ CompareInt32(left, right);
-  __ Branch(ConditionFor(operation_), if_true(), if_false(),
-            state.next_block());
+  __ CompareInt32AndBranch(left, right, ConditionFor(operation_), if_true(),
+                           if_false(), state.next_block());
 }
 
 void BranchIfUndefinedOrNull::SetValueLocationConstraints() {

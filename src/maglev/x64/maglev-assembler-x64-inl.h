@@ -235,6 +235,36 @@ inline void MaglevAssembler::BindBlock(BasicBlock* block) {
   bind(block->label());
 }
 
+inline void MaglevAssembler::Branch(Condition condition, BasicBlock* if_true,
+                                    BasicBlock* if_false,
+                                    BasicBlock* next_block) {
+  Branch(condition, if_true->label(), Label::kFar, if_true == next_block,
+         if_false->label(), Label::kFar, if_false == next_block);
+}
+
+inline void MaglevAssembler::Branch(Condition condition, Label* if_true,
+                                    Label::Distance true_distance,
+                                    bool fallthrough_when_true, Label* if_false,
+                                    Label::Distance false_distance,
+                                    bool fallthrough_when_false) {
+  if (fallthrough_when_false) {
+    if (fallthrough_when_true) {
+      // If both paths are a fallthrough, do nothing.
+      DCHECK_EQ(if_true, if_false);
+      return;
+    }
+    // Jump over the false block if true, otherwise fall through into it.
+    JumpIf(condition, if_true, true_distance);
+  } else {
+    // Jump to the false block if true.
+    JumpIf(NegateCondition(condition), if_false, false_distance);
+    // Jump to the true block if it's not the next block.
+    if (!fallthrough_when_true) {
+      Jump(if_true, true_distance);
+    }
+  }
+}
+
 inline void MaglevAssembler::SmiTagInt32AndSetFlags(Register dst,
                                                     Register src) {
   Move(dst, src);
@@ -378,8 +408,10 @@ void MaglevAssembler::LoadFixedArrayElement(Register result, Register array,
     AssertNotSmi(array);
     IsObjectType(array, FIXED_ARRAY_TYPE);
     Assert(kEqual, AbortReason::kUnexpectedValue);
-    CompareInt32(index, 0);
-    Assert(kUnsignedGreaterThanEqual, AbortReason::kUnexpectedNegativeValue);
+    Label pass;
+    CompareInt32AndJumpIf(index, 0, kUnsignedGreaterThanEqual, &pass);
+    Abort(AbortReason::kUnexpectedNegativeValue);
+    bind(&pass);
   }
   LoadTaggedFieldByIndex(result, array, index, kTaggedSize,
                          FixedArray::kHeaderSize);
@@ -391,8 +423,10 @@ void MaglevAssembler::LoadFixedArrayElementWithoutDecompressing(
     AssertNotSmi(array);
     IsObjectType(array, FIXED_ARRAY_TYPE);
     Assert(kEqual, AbortReason::kUnexpectedValue);
-    CompareInt32(index, 0);
-    Assert(kUnsignedGreaterThanEqual, AbortReason::kUnexpectedNegativeValue);
+    Label pass;
+    CompareInt32AndJumpIf(index, 0, kUnsignedGreaterThanEqual, &pass);
+    Abort(AbortReason::kUnexpectedNegativeValue);
+    bind(&pass);
   }
   MacroAssembler::LoadTaggedFieldWithoutDecompressing(
       result,
@@ -406,8 +440,10 @@ void MaglevAssembler::LoadFixedDoubleArrayElement(DoubleRegister result,
     AssertNotSmi(array);
     IsObjectType(array, FIXED_DOUBLE_ARRAY_TYPE);
     Assert(kEqual, AbortReason::kUnexpectedValue);
-    CompareInt32(index, 0);
-    Assert(kUnsignedGreaterThanEqual, AbortReason::kUnexpectedNegativeValue);
+    Label pass;
+    CompareInt32AndJumpIf(index, 0, kUnsignedGreaterThanEqual, &pass);
+    Abort(AbortReason::kUnexpectedNegativeValue);
+    bind(&pass);
   }
   Movsd(result,
         FieldOperand(array, index, times_8, FixedDoubleArray::kHeaderSize));
@@ -755,14 +791,6 @@ inline void MaglevAssembler::CompareTagged(Register src1, Register src2) {
   cmp_tagged(src1, src2);
 }
 
-inline void MaglevAssembler::CompareInt32(Register reg, int32_t imm) {
-  Cmp(reg, imm);
-}
-
-inline void MaglevAssembler::CompareInt32(Register src1, Register src2) {
-  cmpl(src1, src2);
-}
-
 inline void MaglevAssembler::CompareFloat64(DoubleRegister src1,
                                             DoubleRegister src2) {
   Ucomisd(src1, src2);
@@ -888,7 +916,7 @@ void MaglevAssembler::JumpIfNotHoleNan(MemOperand operand, Label* target,
 void MaglevAssembler::CompareInt32AndJumpIf(Register r1, Register r2,
                                             Condition cond, Label* target,
                                             Label::Distance distance) {
-  CompareInt32(r1, r2);
+  cmpl(r1, r2);
   JumpIf(cond, target, distance);
 }
 
@@ -896,8 +924,26 @@ inline void MaglevAssembler::CompareInt32AndJumpIf(Register r1, int32_t value,
                                                    Condition cond,
                                                    Label* target,
                                                    Label::Distance distance) {
-  CompareInt32(r1, value);
+  Cmp(r1, value);
   JumpIf(cond, target, distance);
+}
+
+inline void MaglevAssembler::CompareInt32AndBranch(Register r1, int32_t value,
+                                                   Condition cond,
+                                                   BasicBlock* if_true,
+                                                   BasicBlock* if_false,
+                                                   BasicBlock* next_block) {
+  Cmp(r1, value);
+  Branch(cond, if_true, if_false, next_block);
+}
+
+inline void MaglevAssembler::CompareInt32AndBranch(Register r1, Register value,
+                                                   Condition cond,
+                                                   BasicBlock* if_true,
+                                                   BasicBlock* if_false,
+                                                   BasicBlock* next_block) {
+  cmpl(r1, value);
+  Branch(cond, if_true, if_false, next_block);
 }
 
 inline void MaglevAssembler::CompareSmiAndJumpIf(Register r1, Tagged<Smi> value,
