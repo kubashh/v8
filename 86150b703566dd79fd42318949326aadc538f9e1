@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b126af3f_23171d73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-09-19T15:09:35Z",
+      "side": 1,
+      "message": "The metaprogramming in `MemorySpan` was largely revisited. Thanks Anton! PTAL",
+      "revId": "86150b703566dd79fd42318949326aadc538f9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eb69b5b_89ac4fce",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-09-19T15:09:35Z",
+      "side": 1,
+      "message": "The constructor `MemorySpan(T*, size_t)` that was removed is a special case of the one introduced in line 76 below. The only missing case is `MemorySpan{nullptr, 0}`, which is covered by this constructor here. We may want to deprecate this and replace all uses by `MemorySpan{}`.",
+      "revId": "86150b703566dd79fd42318949326aadc538f9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

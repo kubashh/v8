@@ -113,6 +113,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2c4af1b_83cb336a",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-09-19T15:09:35Z",
+      "side": 1,
+      "message": "Done, just one \"incompatible\" constructor (for `nullptr`), as discussed in another comment.",
+      "parentUuid": "513030c5_51f425bf",
+      "range": {
+        "startLine": 25,
+        "startChar": 56,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "5b18bd18259987050751bb5c1dc41cbf184c5fe3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93fcfd51_2837aea1",
