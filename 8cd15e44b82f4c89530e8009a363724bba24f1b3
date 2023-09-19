@@ -16,6 +16,23 @@
       "message": "PTAL again - for some reason, existing votes were reset.",
       "revId": "8cd15e44b82f4c89530e8009a363724bba24f1b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82cb27b5_586080f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-09-19T07:20:46Z",
+      "side": 1,
+      "message": "src/heap LGTM",
+      "revId": "8cd15e44b82f4c89530e8009a363724bba24f1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
