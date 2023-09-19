@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "091df00c_dd46cd36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-09-19T07:14:49Z",
+      "side": 1,
+      "message": "PTAL again - for some reason, existing votes were reset.",
+      "revId": "8cd15e44b82f4c89530e8009a363724bba24f1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
