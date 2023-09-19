@@ -2142,7 +2142,7 @@ Tagged<Object> Isolate::UnwindAndFindHandler() {
             DCHECK_LT(0, wasm_to_js_counter);
             suspender->set_wasm_to_js_counter(wasm_to_js_counter - 1);
 
-#if V8_TARGET_ARCH_X64
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
             // If the wasm-to-js wrapper was on a secondary stack and switched
             // to the central stack, handle the implicit switch back.
             Address central_stack_sp = *reinterpret_cast<Address*>(
@@ -3261,14 +3261,15 @@ void Isolate::RecordStackSwitchForScanning() {
     auto cont = WasmContinuationObject::cast(current);
     auto* wasm_stack =
         Managed<wasm::StackMemory>::cast(cont->stack())->get().get();
-#if !V8_TARGET_ARCH_X64
+#if !V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_ARM64
     stack().AddStackSegment(
         reinterpret_cast<const void*>(wasm_stack->base()),
         reinterpret_cast<const void*>(wasm_stack->jmpbuf()->sp));
 #endif
-    // On x64 we don't need to record the stack segments for conservative stack
-    // scanning. We switch to the central stack for foreign calls, so secondary
-    // stacks only contain wasm frames which use the precise GC.
+    // On x64 and arm64 we don't need to record the stack segments for
+    // conservative stack scanning. We switch to the central stack for foreign
+    // calls, so secondary stacks only contain wasm frames which use the precise
+    // GC.
     current = cont->parent();
     if (!updated_central_stack &&
         IsOnCentralStack(this, wasm_stack->jmpbuf()->sp)) {
