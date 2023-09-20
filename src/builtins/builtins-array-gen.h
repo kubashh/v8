@@ -138,6 +138,7 @@ class ArrayBuiltins {
     kArrayFromAsyncResolveResultArraySlot,
     kArrayFromAsyncResolveIteratorSlot,
     kArrayFromAsyncResolveNextMethodSlot,
+    kArrayFromAsyncResolveArrayLikeSlot,
     kArrayFromAsyncResolveErrorSlot,
     kArrayFromAsyncResolveMapfnSlot,
     kArrayFromAsyncResolveThisArgSlot,
