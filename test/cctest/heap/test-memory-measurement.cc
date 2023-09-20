@@ -186,7 +186,7 @@ class MockMeasureMemoryDelegate : public v8::MeasureMemoryDelegate {
  public:
   bool ShouldMeasure(v8::Local<v8::Context> context) override { return true; }
 
-  void MeasurementComplete(Result result) override {
+  void MeasurementComplete(ResultNew result) override {
     // Empty.
   }
 };

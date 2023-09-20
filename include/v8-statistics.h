@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "v8-local-handle.h"  // NOLINT(build/include_directory)
+#include "v8-memory-span.h"   // NOLINT(build/include_directory)
 #include "v8-promise.h"       // NOLINT(build/include_directory)
 #include "v8config.h"         // NOLINT(build/include_directory)
 
@@ -70,14 +71,14 @@ class V8_EXPORT MeasureMemoryDelegate {
    * \param unattributed_size_in_bytes total size of objects that were not
    *   attributed to any context (i.e. are likely shared objects).
    */
-  V8_DEPRECATE_SOON("Please use the version that takes a result struct")
+  V8_DEPRECATE_SOON("Please use the version that takes a ResultNew struct")
   virtual void MeasurementComplete(
       const std::vector<std::pair<Local<Context>, size_t>>&
           context_sizes_in_bytes,
       size_t unattributed_size_in_bytes) {}
 
   /** Holds the result of a memory measurement request. */
-  struct Result {
+  struct V8_DEPRECATE_SOON("Please use ResultNew") Result {
     /**
      * a vector of (context, size) pairs that includes each context for
      * which ShouldMeasure returned true and that was not garbage collected
@@ -99,12 +100,39 @@ class V8_EXPORT MeasureMemoryDelegate {
     size_t wasm_metadata_size_in_bytes;
   };
 
+  /** Holds the result of a memory measurement request. */
+  struct ResultNew {
+    /**
+     * two spans of equal length: the first includes each context for which
+     * ShouldMeasure returned true and that was not garbage collected while
+     * the memory measurement was in progress; the second includes the size
+     * of the respective context.
+     */
+    const MemorySpan<const Local<Context>>& contexts;
+    const MemorySpan<const size_t>& sizes_in_bytes;
+
+    /**
+     * total size of objects that were not attributed to any context (i.e. are
+     * likely shared objects).
+     */
+    size_t unattributed_size_in_bytes;
+
+    /** total size of generated code for Wasm (shared across contexts). */
+    size_t wasm_code_size_in_bytes;
+
+    /** total size of Wasm metadata (except code; shared across contexts). */
+    size_t wasm_metadata_size_in_bytes;
+  };
+
   /**
    * This function is called when memory measurement finishes.
    *
    * \param result the result of the measurement.
    */
+  V8_DEPRECATE_SOON("Please use the version that takes a ResultNew struct")
   virtual void MeasurementComplete(Result result) {}
+
+  virtual void MeasurementComplete(ResultNew result) {}
 
   /**
    * Returns a default delegate that resolves the given promise when

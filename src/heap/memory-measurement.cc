@@ -112,7 +112,7 @@ class V8_EXPORT_PRIVATE MeasureMemoryDelegate
 
   // v8::MeasureMemoryDelegate overrides:
   bool ShouldMeasure(v8::Local<v8::Context> context) override;
-  void MeasurementComplete(Result result) override;
+  void MeasurementComplete(ResultNew result) override;
 
  private:
   Isolate* isolate_;
@@ -141,7 +141,7 @@ bool MeasureMemoryDelegate::ShouldMeasure(v8::Local<v8::Context> context) {
   return context_->security_token() == native_context->security_token();
 }
 
-void MeasureMemoryDelegate::MeasurementComplete(Result result) {
+void MeasureMemoryDelegate::MeasurementComplete(ResultNew result) {
   size_t shared_size = result.unattributed_size_in_bytes;
   size_t wasm_code = result.wasm_code_size_in_bytes;
   size_t wasm_metadata = result.wasm_metadata_size_in_bytes;
@@ -150,10 +150,11 @@ void MeasureMemoryDelegate::MeasurementComplete(Result result) {
   v8::Context::Scope scope(v8_context);
   size_t total_size = 0;
   size_t current_size = 0;
-  for (const auto& context_and_size : result.context_sizes_in_bytes) {
-    total_size += context_and_size.second;
-    if (*Utils::OpenHandle(*context_and_size.first) == *context_) {
-      current_size = context_and_size.second;
+  DCHECK_EQ(result.contexts.size(), result.sizes_in_bytes.size());
+  for (size_t i = 0; i < result.contexts.size(); ++i) {
+    total_size += result.sizes_in_bytes[i];
+    if (*Utils::OpenHandle(*result.contexts[i]) == *context_) {
+      current_size = result.sizes_in_bytes[i];
     }
   }
   MemoryMeasurementResultBuilder result_builder(isolate_, isolate_->factory());
@@ -165,9 +166,9 @@ void MeasureMemoryDelegate::MeasurementComplete(Result result) {
   if (mode_ == v8::MeasureMemoryMode::kDetailed) {
     result_builder.AddCurrent(current_size, current_size,
                               current_size + shared_size);
-    for (const auto& context_and_size : result.context_sizes_in_bytes) {
-      if (*Utils::OpenHandle(*context_and_size.first) != *context_) {
-        size_t other_size = context_and_size.second;
+    for (size_t i = 0; i < result.contexts.size(); ++i) {
+      if (*Utils::OpenHandle(*result.contexts[i]) != *context_) {
+        size_t other_size = result.sizes_in_bytes[i];
         result_builder.AddOther(other_size, other_size,
                                 other_size + shared_size);
       }
@@ -336,6 +337,8 @@ void MemoryMeasurement::ReportResults() {
     Request request = std::move(done_.front());
     done_.pop_front();
     HandleScope handle_scope(isolate_);
+    v8::Local<v8::Context>::Vector contexts(
+        reinterpret_cast<v8::Isolate*>(isolate_), request.contexts->length());
     std::vector<std::pair<v8::Local<v8::Context>, size_t>> sizes;
     DCHECK_EQ(request.sizes.size(),
               static_cast<size_t>(request.contexts->length()));
@@ -344,16 +347,22 @@ void MemoryMeasurement::ReportResults() {
       if (!request.contexts->Get(i).GetHeapObject(&raw_context)) {
         continue;
       }
-      v8::Local<v8::Context> context = Utils::Convert<HeapObject, v8::Context>(
+      contexts[i] = Utils::Convert<HeapObject, v8::Context>(
           handle(raw_context, isolate_));
-      sizes.push_back(std::make_pair(context, request.sizes[i]));
+      sizes.emplace_back(contexts[i], request.sizes[i]);
     }
     START_ALLOW_USE_DEPRECATED()
     // Temporarily call both old and new callbacks.
     request.delegate->MeasurementComplete(sizes, request.shared);
-    END_ALLOW_USE_DEPRECATED()
     request.delegate->MeasurementComplete(
         {sizes, request.shared, request.wasm_code, request.wasm_metadata});
+    END_ALLOW_USE_DEPRECATED()
+    request.delegate->MeasurementComplete(
+        {{contexts.begin(), contexts.end()},
+         {request.sizes.begin(), request.sizes.end()},
+         request.shared,
+         request.wasm_code,
+         request.wasm_metadata});
     isolate_->counters()->measure_memory_delay_ms()->AddSample(
         static_cast<int>(request.timer.Elapsed().InMilliseconds()));
   }

@@ -8,6 +8,7 @@
 #include <stddef.h>
 
 #include <type_traits>
+#include <vector>
 
 #include "v8-handle-base.h"  // NOLINT(build/include_directory)
 
@@ -332,6 +333,25 @@ class Local : public LocalBase<T> {
                                 const BasicTracedReference<T>& that) {
     return New(isolate, that.template value<T>());
   }
+
+#ifdef V8_ENABLE_DIRECT_LOCAL
+  class Vector
+      : public std::vector<Local<T>, internal::StrongRootAllocator<Local<T>>> {
+   public:
+    template <typename... Args>
+    explicit Vector(v8::Isolate* isolate, Args... args)
+        : std::vector<Local<T>, internal::StrongRootAllocator<Local<T>>>(
+              args..., internal::StrongRootAllocator<Local<T>>(
+                           reinterpret_cast<internal::Isolate*>(isolate))) {}
+  };
+#else
+  class Vector : public std::vector<Local<T>> {
+   public:
+    template <typename... Args>
+    explicit Vector(v8::Isolate* isolate, Args... args)
+        : std::vector<Local<T>>(args...) {}
+  };
+#endif
 
  private:
   friend class TracedReferenceBase;
