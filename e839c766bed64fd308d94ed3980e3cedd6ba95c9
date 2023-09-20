@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5320d69_bf1d46f4",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1592783
+      },
+      "writtenOn": "2023-09-20T22:05:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b937d87_7df7aadf",
+      "range": {
+        "startLine": 126,
+        "startChar": 55,
+        "endLine": 126,
+        "endChar": 59
+      },
+      "revId": "e839c766bed64fd308d94ed3980e3cedd6ba95c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e394d4c_bd66bd14",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-09-20T08:38:55Z",
       "side": 1,
       "message": "Shouldn\u0027t this be `node-\u003emin() + 1`?",
+      "range": {
+        "startLine": 129,
+        "startChar": 27,
+        "endLine": 129,
+        "endChar": 39
+      },
+      "revId": "e839c766bed64fd308d94ed3980e3cedd6ba95c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eff8b9de_c92344c9",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1592783
+      },
+      "writtenOn": "2023-09-20T22:05:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e394d4c_bd66bd14",
       "range": {
         "startLine": 129,
         "startChar": 27,
