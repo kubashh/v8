@@ -24,6 +24,8 @@ class Isolate;
 namespace internal {
 
 class Isolate;
+template <typename T>
+class StrongRootAllocator;
 
 typedef uintptr_t Address;
 static constexpr Address kNullAddress = 0;
