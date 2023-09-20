@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cd6a2b6_8f246a9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-09-20T08:17:47Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "86150b703566dd79fd42318949326aadc538f9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4eb69b5b_89ac4fce",
@@ -31,6 +48,29 @@
       "writtenOn": "2023-09-19T15:09:35Z",
       "side": 1,
       "message": "The constructor `MemorySpan(T*, size_t)` that was removed is a special case of the one introduced in line 76 below. The only missing case is `MemorySpan{nullptr, 0}`, which is covered by this constructor here. We may want to deprecate this and replace all uses by `MemorySpan{}`.",
+      "revId": "86150b703566dd79fd42318949326aadc538f9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceff1bb2_b5776bd5",
+        "filename": "include/v8-memory-span.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-09-20T08:17:47Z",
+      "side": 1,
+      "message": "nit: I understand that this is likely copied from libc++, but the identifiers that start with `__` are reserved by the implementer. There are static analyzers that complain about it, so it\u0027d be better to rename it.",
+      "range": {
+        "startLine": 169,
+        "startChar": 45,
+        "endLine": 169,
+        "endChar": 48
+      },
       "revId": "86150b703566dd79fd42318949326aadc538f9e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
