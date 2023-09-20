@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72f7201b_6155ef45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-09-20T11:43:54Z",
+      "side": 1,
+      "message": "PTAL. After chromium stopped using them, we can finally deprecate them.",
+      "revId": "b4592f3328b116446240cc696bad546014ab0324",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
