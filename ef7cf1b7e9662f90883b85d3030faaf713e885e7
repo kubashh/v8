@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c038e64d_ad6c540f",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1592783
+      },
+      "writtenOn": "2023-09-21T13:59:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a20afbc_235272e0",
+      "revId": "ef7cf1b7e9662f90883b85d3030faaf713e885e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c5fc50b_a42173ac",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9c48d04_7e935c1f",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1592783
+      },
+      "writtenOn": "2023-09-21T13:59:57Z",
+      "side": 1,
+      "message": "This code is actually unreachable, since the condition `node-\u003emax() \u003d\u003d RegExpTree::kInfinity` is contained in `can_be_reduced_to_non_nullable_plus`.",
+      "parentUuid": "7c5fc50b_a42173ac",
+      "revId": "ef7cf1b7e9662f90883b85d3030faaf713e885e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecc70166_55619701",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-09-21T05:42:14Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "ef7cf1b7e9662f90883b85d3030faaf713e885e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afac2b35_9a871f7b",
+        "filename": "src/regexp/experimental/experimental-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1592783
+      },
+      "writtenOn": "2023-09-21T13:59:57Z",
+      "side": 1,
+      "message": "Same as above",
+      "parentUuid": "ecc70166_55619701",
       "revId": "ef7cf1b7e9662f90883b85d3030faaf713e885e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
