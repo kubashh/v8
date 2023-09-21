@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30fe7daf_da216730",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-09-21T23:16:48Z",
+      "side": 1,
+      "message": "This looks mostly correct to me but it occurs to me that it might cleaner to make a different async \"body\" function, so that CreateArrayFromIterableAsynchronously _only_ deals with the iterable case, and the new function (CreateArrayFromArrayLikeAsynchronously?) would only deal with the array-like case.\n\nWe know whether the input is arraylike or an iterable synchronously ahead of time, so we can make the decision ahead of time. This function is really 2 different functions in 1.\n\nThis way, we can have tailor-fit contexts for each version as well. Might be easier to read all around as well.\n\nSorry for not thinking of this idea earlier. WDYT?",
+      "revId": "309a73aab028ea7ac4ca147479fa4f8ed6e609f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
