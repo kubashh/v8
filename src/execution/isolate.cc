@@ -5978,13 +5978,13 @@ void Isolate::SetRAILMode(RAILMode rail_mode) {
   }
   rail_mode_.store(rail_mode);
   if (old_rail_mode == PERFORMANCE_LOAD && rail_mode != PERFORMANCE_LOAD) {
+    if (auto* job = heap()->minor_gc_job()) {
+      job->SchedulePreviouslyRequestedTask();
+    }
     if (auto* job = heap()->incremental_marking()->incremental_marking_job()) {
       // The task will start incremental marking (if needed not already started)
       // and advance marking if incremental marking is active.
       job->ScheduleTask();
-    }
-    if (auto* job = heap()->minor_gc_job()) {
-      job->SchedulePreviouslyRequestedTask();
     }
   }
   if (v8_flags.trace_rail) {
