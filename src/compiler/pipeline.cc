@@ -111,6 +111,7 @@
 #include "src/logging/counters.h"
 #include "src/logging/runtime-call-stats-scope.h"
 #include "src/logging/runtime-call-stats.h"
+#include "src/objects/code-kind.h"
 #include "src/objects/shared-function-info.h"
 #include "src/objects/string-inl.h"
 #include "src/tracing/trace-event.h"
@@ -134,6 +135,7 @@
 #include "src/wasm/function-body-decoder.h"
 #include "src/wasm/function-compiler.h"
 #include "src/wasm/turboshaft-graph-interface.h"
+#include "src/wasm/wasm-builtin-list.h"
 #include "src/wasm/wasm-engine.h"
 #endif  // V8_ENABLE_WEBASSEMBLY
 
@@ -2070,12 +2072,17 @@ struct MemoryOptimizationPhase {
     }
 
     // Optimize allocations and load/store operations.
+#if V8_ENABLE_WEBASSEMBLY
+    bool is_wasm = data->info()->IsWasm() || data->info()->IsWasmBuiltin();
+#else
+    bool is_wasm = false;
+#endif
     MemoryOptimizer optimizer(
         data->broker(), data->jsgraph(), temp_zone,
         data->info()->allocation_folding()
             ? MemoryLowering::AllocationFolding::kDoAllocationFolding
             : MemoryLowering::AllocationFolding::kDontAllocationFolding,
-        data->debug_name(), &data->info()->tick_counter());
+        data->debug_name(), &data->info()->tick_counter(), is_wasm);
     optimizer.Optimize();
   }
 };

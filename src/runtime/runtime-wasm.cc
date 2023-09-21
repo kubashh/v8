@@ -1704,5 +1704,41 @@ RUNTIME_FUNCTION(Runtime_WasmStringHash) {
   return Smi::FromInt(static_cast<int>(hash));
 }
 
+RUNTIME_FUNCTION(Runtime_WasmAllocateInYoungGeneration) {
+  ClearThreadInWasmScope flag_scope(isolate);
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+  // TODO(v8:13070): Align allocations in the builtins that call this.
+  int size = ALIGN_TO_ALLOCATION_ALIGNMENT(args.smi_value_at(0));
+  int flags = args.smi_value_at(1);
+  AllocationAlignment alignment =
+      AllocateDoubleAlignFlag::decode(flags) ? kDoubleAligned : kTaggedAligned;
+  CHECK(IsAligned(size, kTaggedSize));
+  CHECK_GT(size, 0);
+
+  // TODO(v8:9472): Until double-aligned allocation is fixed for new-space
+  // allocations, don't request it.
+  alignment = kTaggedAligned;
+
+  return *isolate->factory()->NewFillerObject(size, alignment,
+                                              AllocationType::kYoung,
+                                              AllocationOrigin::kGeneratedCode);
+}
+
+RUNTIME_FUNCTION(Runtime_WasmAllocateInOldGeneration) {
+  ClearThreadInWasmScope flag_scope(isolate);
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+  // TODO(v8:13070): Align allocations in the builtins that call this.
+  int size = ALIGN_TO_ALLOCATION_ALIGNMENT(args.smi_value_at(0));
+  int flags = args.smi_value_at(1);
+  AllocationAlignment alignment =
+      AllocateDoubleAlignFlag::decode(flags) ? kDoubleAligned : kTaggedAligned;
+  CHECK(IsAligned(size, kTaggedSize));
+  CHECK_GT(size, 0);
+  return *isolate->factory()->NewFillerObject(
+      size, alignment, AllocationType::kOld, AllocationOrigin::kGeneratedCode);
+}
+
 }  // namespace internal
 }  // namespace v8

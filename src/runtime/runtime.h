@@ -671,7 +671,9 @@ namespace internal {
   F(WasmStringViewWtf8Slice, 3, 1)            \
   F(WasmStringFromCodePoint, 1, 1)            \
   F(WasmStringHash, 1, 1)                     \
-  F(WasmSubstring, 3, 1)
+  F(WasmSubstring, 3, 1)                      \
+  F(WasmAllocateInYoungGeneration, 2, 1)      \
+  F(WasmAllocateInOldGeneration, 2, 1)
 
 #define FOR_EACH_INTRINSIC_WASM_TEST(F, I)  \
   F(CountUnoptimizedWasmToJSWrapper, 1, 1)  \

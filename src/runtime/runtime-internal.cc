@@ -16,13 +16,8 @@
 #include "src/logging/counters.h"
 #include "src/numbers/conversions.h"
 #include "src/objects/template-objects-inl.h"
-#include "src/utils/ostreams.h"
-
-#if V8_ENABLE_WEBASSEMBLY
-// TODO(chromium:1236668): Drop this when the "SaveAndClearThreadInWasmFlag"
-// approach is no longer needed.
 #include "src/trap-handler/trap-handler.h"
-#endif  // V8_ENABLE_WEBASSEMBLY
+#include "src/utils/ostreams.h"
 
 namespace v8 {
 namespace internal {
@@ -457,34 +452,6 @@ RUNTIME_FUNCTION(Runtime_BytecodeBudgetInterruptWithStackCheck_Maglev) {
   return BytecodeBudgetInterruptWithStackCheck(isolate, args, CodeKind::MAGLEV);
 }
 
-namespace {
-
-#if V8_ENABLE_WEBASSEMBLY
-class V8_NODISCARD SaveAndClearThreadInWasmFlag {
- public:
-  SaveAndClearThreadInWasmFlag() {
-    if (trap_handler::IsTrapHandlerEnabled()) {
-      if (trap_handler::IsThreadInWasm()) {
-        thread_was_in_wasm_ = true;
-        trap_handler::ClearThreadInWasm();
-      }
-    }
-  }
-  ~SaveAndClearThreadInWasmFlag() {
-    if (thread_was_in_wasm_) {
-      trap_handler::SetThreadInWasm();
-    }
-  }
-
- private:
-  bool thread_was_in_wasm_{false};
-};
-#else
-class SaveAndClearThreadInWasmFlag {};
-#endif  // V8_ENABLE_WEBASSEMBLY
-
-}  // namespace
-
 RUNTIME_FUNCTION(Runtime_AllocateInYoungGeneration) {
   HandleScope scope(isolate);
   DCHECK_EQ(2, args.length());
@@ -497,11 +464,9 @@ RUNTIME_FUNCTION(Runtime_AllocateInYoungGeneration) {
   CHECK_GT(size, 0);
 
 #if V8_ENABLE_WEBASSEMBLY
-  // When this is called from WasmGC code, clear the "thread in wasm" flag,
-  // which is important in case any GC needs to happen.
-  // TODO(chromium:1236668): Find a better fix, likely by replacing the global
-  // flag.
-  SaveAndClearThreadInWasmFlag clear_wasm_flag;
+  // Wasm should call WasmAllocateInYoungGeneration.
+  DCHECK_IMPLIES(trap_handler::IsTrapHandlerEnabled(),
+                 !trap_handler::IsThreadInWasm());
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   // TODO(v8:9472): Until double-aligned allocation is fixed for new-space
