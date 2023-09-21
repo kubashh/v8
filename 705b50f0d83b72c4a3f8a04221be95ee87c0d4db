@@ -16,6 +16,121 @@
       "message": "Leaving this review to Leszek",
       "revId": "705b50f0d83b72c4a3f8a04221be95ee87c0d4db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b13d348_e8367078",
+        "filename": "src/maglev/arm/maglev-assembler-arm-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-21T08:11:00Z",
+      "side": 1,
+      "message": "we do this enough in these examples that it deserves a helper (e.g. `CompareInt32AndAbortIf`)",
+      "range": {
+        "startLine": 363,
+        "startChar": 4,
+        "endLine": 363,
+        "endChar": 15
+      },
+      "revId": "705b50f0d83b72c4a3f8a04221be95ee87c0d4db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d5a915c_a0e58e6a",
+        "filename": "src/maglev/arm/maglev-assembler-arm-inl.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-21T08:11:00Z",
+      "side": 1,
+      "message": "while you\u0027re here, please fix these to use JumpIf, so that they work with deopt stress mode (once that is implemented for arm)",
+      "range": {
+        "startLine": 907,
+        "startChar": 2,
+        "endLine": 907,
+        "endChar": 3
+      },
+      "revId": "705b50f0d83b72c4a3f8a04221be95ee87c0d4db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b897779_d97e80f5",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2765,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-21T08:11:00Z",
+      "side": 1,
+      "message": "please jump to the deopt if kNotEqual, using `GetDeoptLabel`, rather than jumping over the deopt if kEqual.",
+      "range": {
+        "startLine": 2765,
+        "startChar": 5,
+        "endLine": 2765,
+        "endChar": 26
+      },
+      "revId": "705b50f0d83b72c4a3f8a04221be95ee87c0d4db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5160efe6_c7451151",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2812,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-21T08:11:00Z",
+      "side": 1,
+      "message": "also here",
+      "range": {
+        "startLine": 2812,
+        "startChar": 11,
+        "endLine": 2812,
+        "endChar": 32
+      },
+      "revId": "705b50f0d83b72c4a3f8a04221be95ee87c0d4db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f21d5298_bf3ece60",
+        "filename": "src/maglev/maglev-ir.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2943,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-09-21T08:11:00Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 2943,
+        "startChar": 5,
+        "endLine": 2943,
+        "endChar": 26
+      },
+      "revId": "705b50f0d83b72c4a3f8a04221be95ee87c0d4db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
