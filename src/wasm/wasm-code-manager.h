@@ -97,6 +97,9 @@ enum class WellKnownImport : uint8_t;
   V(RecordWriteSaveFP)                   \
   V(RecordWriteIgnoreFP)                 \
   V(ToNumber)                            \
+  V(ThrowDataViewGetInt32TypeError)      \
+  V(ThrowDataViewGetInt32DetachedError)  \
+  V(ThrowDataViewGetInt32OutOfBounds)    \
   IF_TSAN(V, TSANRelaxedStore8IgnoreFP)  \
   IF_TSAN(V, TSANRelaxedStore8SaveFP)    \
   IF_TSAN(V, TSANRelaxedStore16IgnoreFP) \
