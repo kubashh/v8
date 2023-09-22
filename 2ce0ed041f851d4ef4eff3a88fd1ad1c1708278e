@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73a0913e_1d6d00b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-09-22T22:52:44Z",
+      "side": 1,
+      "message": "Shu, I restructured the code as you suggested. Now that it is done, I think this version has a lot of semi-duplicate code (same logic, different contexts). Take a look at this version and let me know what you think. I am not sure if it is more readable or cleaner than the first version. Thanks.",
+      "revId": "2ce0ed041f851d4ef4eff3a88fd1ad1c1708278e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
