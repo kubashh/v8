@@ -21,7 +21,8 @@ class MinorGCJob {
   explicit MinorGCJob(Heap* heap) V8_NOEXCEPT : heap_(heap) {}
 
   void ScheduleTask();
-  void SchedulePreviouslyRequestedTask();
+
+  void RunGCIfPreviouslyRequested();
 
   void CancelTaskIfScheduled();
 
@@ -32,10 +33,12 @@ class MinorGCJob {
 
   static bool YoungGenerationSizeTaskTriggerReached(Heap* heap);
 
+  void PerformGC(GarbageCollectionReason);
+
   Heap* const heap_;
   CancelableTaskManager::Id current_task_id_ =
       CancelableTaskManager::kInvalidTaskId;
-  bool task_requested_ = false;
+  bool was_requested_ = false;
 };
 }  // namespace internal
 }  // namespace v8

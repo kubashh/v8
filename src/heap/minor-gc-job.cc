@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "src/base/platform/time.h"
+#include "src/common/globals.h"
 #include "src/execution/isolate.h"
 #include "src/execution/vm-state-inl.h"
 #include "src/flags/flags.h"
@@ -54,10 +55,9 @@ void MinorGCJob::ScheduleTask() {
   // sweeping may be less than live bytes during marking), new space size may
   // decrease while the observer step size remains the same.
   if (v8_flags.minor_ms && heap_->ShouldOptimizeForLoadTime()) {
-    task_requested_ = true;
+    was_requested_ = true;
     return;
   }
-  task_requested_ = false;
   std::shared_ptr<v8::TaskRunner> taskrunner = heap_->GetForegroundTaskRunner();
   if (taskrunner->NonNestableTasksEnabled()) {
     std::unique_ptr<Task> task = std::make_unique<Task>(heap_->isolate(), this);
@@ -66,13 +66,12 @@ void MinorGCJob::ScheduleTask() {
   }
 }
 
-void MinorGCJob::SchedulePreviouslyRequestedTask() {
-  if (!task_requested_) return;
-  ScheduleTask();
+void MinorGCJob::RunGCIfPreviouslyRequested() {
+  if (!was_requested_) return;
+  PerformGC(GarbageCollectionReason::kPreviouslyRequestedDuringLoading);
 }
 
 void MinorGCJob::CancelTaskIfScheduled() {
-  task_requested_ = false;
   if (current_task_id_ == CancelableTaskManager::kInvalidTaskId) return;
   // The task may have ran and bailed out already if major incremental marking
   // was running, in which `TryAbort` will return `kTaskRemoved`.
@@ -87,19 +86,23 @@ void MinorGCJob::Task::RunInternal() {
   DCHECK_EQ(job_->current_task_id_, id());
   job_->current_task_id_ = CancelableTaskManager::kInvalidTaskId;
 
-  Heap* heap = isolate()->heap();
-  if (v8_flags.minor_ms && heap->ShouldOptimizeForLoadTime()) {
-    job_->task_requested_ = true;
+  job_->PerformGC(GarbageCollectionReason::kTask);
+}
+
+void MinorGCJob::PerformGC(GarbageCollectionReason reason) {
+  was_requested_ = false;
+
+  if (v8_flags.minor_ms && heap_->ShouldOptimizeForLoadTime()) {
+    was_requested_ = true;
     return;
   }
 
-  if (v8_flags.minor_ms &&
-      isolate()->heap()->incremental_marking()->IsMajorMarking()) {
+  if (v8_flags.minor_ms && heap_->incremental_marking()->IsMajorMarking()) {
     // Don't trigger a MinorMS cycle while major incremental marking is active.
     return;
   }
 
-  heap->CollectGarbage(NEW_SPACE, GarbageCollectionReason::kTask);
+  heap_->CollectGarbage(NEW_SPACE, reason);
 }
 
 }  // namespace internal
