@@ -17,6 +17,10 @@ const char* WellKnownImportName(WellKnownImport wki) {
       return "generic";
 
     // Functions:
+    case WellKnownImport::kDataViewGetInt32:
+      return "DataView.getI32";
+    case WellKnownImport::kDataViewSetInt32:
+      return "DataView.setI32";
     case WellKnownImport::kDoubleToString:
       return "DoubleToString";
     case WellKnownImport::kIntToString:
