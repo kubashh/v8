@@ -16,6 +16,24 @@
       "message": "Shu, I restructured the code as you suggested. Now that it is done, I think this version has a lot of semi-duplicate code (same logic, different contexts). Take a look at this version and let me know what you think. I am not sure if it is more readable or cleaner than the first version. Thanks.",
       "revId": "2ce0ed041f851d4ef4eff3a88fd1ad1c1708278e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "045dad60_d9d9384c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-09-22T23:44:47Z",
+      "side": 1,
+      "message": "Will take a closer look next week (though on APAC time). I took a quick glance and see what you mean. I think it\u0027s conceptually cleaner, though. There are probably opportunities to refactor some of the Torque macros to be templated, where the context type and its slots are template arguments. There are some examples of this kind of generic programming elsewhere. You can get a sense of it by searching for the word `Functor` in the various Torque files.",
+      "parentUuid": "73a0913e_1d6d00b9",
+      "revId": "2ce0ed041f851d4ef4eff3a88fd1ad1c1708278e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
