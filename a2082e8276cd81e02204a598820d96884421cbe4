@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fa3b558_ce5ebb69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-22T13:03:08Z",
+      "side": 1,
+      "message": "LGTM % comments",
+      "revId": "a2082e8276cd81e02204a598820d96884421cbe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6908afa5_68df431a",
@@ -14,6 +31,52 @@
       "writtenOn": "2023-09-19T05:51:10Z",
       "side": 1,
       "message": "+1. I mean, it certainly works to do the low-level work here yourself, but ExternalRefs would be the intended mechanism at masm level.",
+      "revId": "a2082e8276cd81e02204a598820d96884421cbe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e06c6efb_897ed72e",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-22T13:03:08Z",
+      "side": 1,
+      "message": "Why not use the `kCodePointerTableEntrySizeLog2` here?",
+      "range": {
+        "startLine": 489,
+        "startChar": 52,
+        "endLine": 489,
+        "endChar": 59
+      },
+      "revId": "a2082e8276cd81e02204a598820d96884421cbe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "532c6a8c_2f46ffa1",
+        "filename": "src/compiler/machine-operator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-09-22T13:03:08Z",
+      "side": 1,
+      "message": "nit: This name looks confusing, maybe `StoreIndirectPointerWithIndirectPointerWriteBarrierOperator`?",
+      "range": {
+        "startLine": 1433,
+        "startChar": 9,
+        "endLine": 1433,
+        "endChar": 64
+      },
       "revId": "a2082e8276cd81e02204a598820d96884421cbe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
