@@ -4,13 +4,16 @@
 
 #include "src/wasm/turboshaft-graph-interface.h"
 
+#include "src/base/logging.h"
 #include "src/common/globals.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/graph.h"
+#include "src/compiler/turboshaft/machine-lowering-reducer.h"
 #include "src/compiler/turboshaft/required-optimization-reducer.h"
 #include "src/compiler/turboshaft/select-lowering-reducer.h"
 #include "src/compiler/turboshaft/variable-reducer.h"
 #include "src/compiler/wasm-compiler-definitions.h"
+#include "src/objects/js-array-buffer.h"
 #include "src/trap-handler/trap-handler.h"
 #include "src/wasm/compilation-environment.h"
 #include "src/wasm/function-body-decoder-impl.h"
@@ -29,6 +32,7 @@ namespace v8::internal::wasm {
 using Assembler =
     compiler::turboshaft::Assembler<compiler::turboshaft::reducer_list<
         compiler::turboshaft::SelectLoweringReducer,
+        compiler::turboshaft::MachineLoweringReducer,
         compiler::turboshaft::VariableReducer,
         compiler::turboshaft::RequiredOptimizationReducer>>;
 using compiler::AccessBuilder;
@@ -1024,6 +1028,86 @@ class TurboshaftGraphBuildingInterface {
       case WKI::kStringIndexOf:
       case WKI::kStringToLocaleLowerCaseStringref:
       case WKI::kStringToLowerCaseStringref:
+        return false;
+      case WKI::kDataViewGetInt32: {
+        V<Tagged> dataview = args[0].op;
+        V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
+        V<Word32> is_little_endian = args[2].op;
+
+        // Offset bounds check.
+        Label<> out_of_bounds_label(&asm_);
+        Label<> no_out_of_bounds_label(&asm_);
+        GOTO_IF(__ IntPtrLessThan(offset, 0), out_of_bounds_label);
+        GOTO(no_out_of_bounds_label);
+
+        BIND(out_of_bounds_label);
+        CallBuiltinFromRuntimeStub(
+            decoder, WasmCode::kThrowDataViewGetInt32OutOfBounds, {});
+        __ Unreachable();
+
+        BIND(no_out_of_bounds_label);
+
+        // Typecheck of `dataview`.
+        Label<> type_error_label(&asm_);
+        Label<> no_type_error_label(&asm_);
+        GOTO_IF_NOT(
+            __ HasInstanceType(dataview, InstanceType::JS_DATA_VIEW_TYPE),
+            type_error_label);
+        GOTO(no_type_error_label);
+
+        BIND(type_error_label);
+        CallBuiltinFromRuntimeStub(
+            decoder, WasmCode::kThrowDataViewGetInt32TypeError, {dataview});
+        __ Unreachable();
+
+        BIND(no_type_error_label);
+
+        // Check if the `buffer` is detached,
+        V<Object> buffer = __ LoadField<Object>(
+            dataview, compiler::AccessBuilder::ForJSArrayBufferViewBuffer());
+        V<Word32> bit_field = __ LoadField<Word32>(
+            buffer, compiler::AccessBuilder::ForJSArrayBufferBitField());
+        V<Word32> is_detached = __ Word32BitwiseAnd(
+            bit_field, JSArrayBuffer::WasDetachedBit::kMask);
+        // ThrowDataViewGetInt32DetachedError
+        Label<> detached_error_label(&asm_);
+        Label<> no_detached_error_label(&asm_);
+        GOTO_IF(is_detached, detached_error_label);
+        GOTO(no_detached_error_label);
+
+        BIND(detached_error_label);
+        CallBuiltinFromRuntimeStub(
+            decoder, WasmCode::kThrowDataViewGetInt32DetachedError, {});
+        __ Unreachable();
+
+        BIND(no_detached_error_label);
+
+        // Viewsize bounds check.
+        V<WordPtr> byte_length = __ LoadField<WordPtr>(
+            dataview, AccessBuilder::ForJSArrayBufferViewByteLength());
+        // Check for Int32 size constant instead of 4.
+        V<WordPtr> bytelength_minus_size = __ WordPtrSub(byte_length, 4);
+        // Offset out of bounds check.
+        Label<> viewsize_boundscheck_done_label(&asm_);
+        Label<> viewsize_out_of_bounds_label(&asm_);
+        GOTO_IF(__ IntPtrLessThan(bytelength_minus_size, offset),
+                viewsize_out_of_bounds_label);
+        GOTO(viewsize_boundscheck_done_label);
+
+        BIND(viewsize_out_of_bounds_label);
+        CallBuiltinFromRuntimeStub(
+            decoder, WasmCode::kThrowDataViewGetInt32OutOfBounds, {});
+        __ Unreachable();
+
+        BIND(viewsize_boundscheck_done_label);
+
+        V<WordPtr> data_ptr = __ LoadField<WordPtr>(
+            dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
+        result = __ LoadDataViewElement(dataview, data_ptr, offset,
+                                        is_little_endian, kExternalInt32Array);
+        break;
+      }
+      case WKI::kDataViewSetInt32:
         return false;
     }
     if (v8_flags.trace_wasm_inlining) {
