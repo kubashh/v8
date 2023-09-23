@@ -22,6 +22,7 @@
 #include "src/base/enum-set.h"
 #include "src/base/platform/condition-variable.h"
 #include "src/base/platform/mutex.h"
+#include "src/base/platform/time.h"
 #include "src/builtins/accessors.h"
 #include "src/common/assert-scope.h"
 #include "src/common/code-memory-access.h"
@@ -116,6 +117,7 @@ class ObjectStats;
 class Page;
 class PagedSpace;
 class PagedNewSpace;
+class PostLoadTask;
 class ReadOnlyHeap;
 class RootVisitor;
 class RwxMemoryWriteScope;
@@ -1614,6 +1616,11 @@ class Heap final {
 
   bool ShouldUseBackgroundThreads() const;
 
+  void NotifyLoadStarted();
+  void NotifyLoadEnded();
+  void UpdateLoadStartTime();
+  void NotifyMinorGCRequestedDuringLoad();
+
  private:
   class AllocationTrackerForDebugging;
 
@@ -1890,7 +1897,8 @@ class Heap final {
   // This constant limits the effect of load RAIL mode on GC.
   // The value is arbitrary and chosen as the largest load time observed in
   // v8 browsing benchmarks.
-  static const int kMaxLoadTimeMs = 7000;
+  static constexpr base::TimeDelta kMaxLoadTime =
+      base::TimeDelta::FromMilliseconds(7000);
 
   V8_EXPORT_PRIVATE bool ShouldOptimizeForLoadTime();
 
@@ -2362,6 +2370,10 @@ class Heap final {
 
   std::unique_ptr<MemoryBalancer> mb_;
 
+  base::Optional<base::TimeTicks> load_start_time_;
+  CancelableTaskManager::Id post_load_task_id_;
+  bool minor_gc_requested_during_load_ = false;
+
   // Classes in "heap" can be friends.
   friend class ActivateMemoryReducerTask;
   friend class AlwaysAllocateScope;
@@ -2399,6 +2411,7 @@ class Heap final {
   friend class PagedSpaceBase;
   friend class PagedSpaceForNewSpace;
   friend class PauseAllocationObserversScope;
+  friend class PostLoadTask;
   friend class PretenuringHandler;
   friend class ReadOnlyRoots;
   friend class DisableConservativeStackScanningScopeForTesting;
