@@ -879,6 +879,11 @@ void JitLogger::LogRecordedBuffer(Tagged<AbstractCode> code,
 #if V8_ENABLE_WEBASSEMBLY
 void JitLogger::LogRecordedBuffer(const wasm::WasmCode* code, const char* name,
                                   int length) {
+  if (code->IsAnonymous()) {
+    DCHECK_EQ(code->kind(), wasm::WasmCode::Kind::kWasmToJsWrapper);
+    return;
+  }
+
   JitCodeEvent event;
   event.type = JitCodeEvent::CODE_ADDED;
   event.code_type = JitCodeEvent::WASM_CODE;
