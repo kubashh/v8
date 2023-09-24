@@ -1009,7 +1009,7 @@ class BackingStoreBase {};
 
 // The maximum value in enum GarbageCollectionReason, defined in heap.h.
 // This is needed for histograms sampling garbage collection reasons.
-constexpr int kGarbageCollectionReasonMaxValue = 27;
+constexpr int kGarbageCollectionReasonMaxValue = 28;
 
 }  // namespace internal
 }  // namespace v8
