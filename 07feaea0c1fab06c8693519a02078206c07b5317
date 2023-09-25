@@ -56,6 +56,30 @@
       },
       "revId": "07feaea0c1fab06c8693519a02078206c07b5317",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59fcdd06_633bbbbf",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-25T12:17:54Z",
+      "side": 1,
+      "message": "Right, I think I see what you mean. So this is the `RecordMigratedSlotVisitor`, which doesn\u0027t yet update any references? So the fact that it updates these specific references is a bit odd.\nIs there another visitor that would be better suited for this?\n\nIn any case, I\u0027ve added a TODO here. I\u0027d anyway prefer to move this around in a separate CL.",
+      "parentUuid": "91fd7851_fde7f06d",
+      "range": {
+        "startLine": 1317,
+        "startChar": 40,
+        "endLine": 1317,
+        "endChar": 53
+      },
+      "revId": "07feaea0c1fab06c8693519a02078206c07b5317",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
