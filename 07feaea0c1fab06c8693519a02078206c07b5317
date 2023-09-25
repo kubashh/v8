@@ -16,6 +16,46 @@
       "message": "Thanks!",
       "revId": "07feaea0c1fab06c8693519a02078206c07b5317",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7805efb7_5b8c0dbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-25T09:39:55Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "07feaea0c1fab06c8693519a02078206c07b5317",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91fd7851_fde7f06d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-25T09:39:55Z",
+      "side": 1,
+      "message": "I was tripping over this line here (which is not new though): Conceptually we first record reloc slots which we then update via pointers updating visitors.\n\nI guess we can already rewrite the slot here but that is very implicit in that we e.g. are not allowed to use this visitor in earler phases that still require an immutable graph. (I don\u0027t have a good example right now but this feels like something that breaks once we move arounda recording visitor.)\n\nI wonder if we should tackle this, or just accept that we already rewrite things in here.",
+      "range": {
+        "startLine": 1317,
+        "startChar": 40,
+        "endLine": 1317,
+        "endChar": 53
+      },
+      "revId": "07feaea0c1fab06c8693519a02078206c07b5317",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
