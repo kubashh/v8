@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9937acb_1a11461f",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6431,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-09-25T08:46:01Z",
+      "side": 1,
+      "message": "Right. My brain defaults to default capture by reference somehow.\nChanged here and also in previous methods I added (`push`/`pop`).",
+      "parentUuid": "03dd4f2f_7d1e5125",
+      "range": {
+        "startLine": 6431,
+        "startChar": 33,
+        "endLine": 6431,
+        "endChar": 34
+      },
+      "revId": "99ac2b74db5ef0a8154bed30823ccac900ab0ccf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbeacebd_4307b8dd",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-09-25T08:25:40Z",
       "side": 1,
       "message": "The same for this.",
+      "range": {
+        "startLine": 6435,
+        "startChar": 33,
+        "endLine": 6435,
+        "endChar": 34
+      },
+      "revId": "99ac2b74db5ef0a8154bed30823ccac900ab0ccf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fbcc901_5e5f0512",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 6435,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-09-25T08:46:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbeacebd_4307b8dd",
       "range": {
         "startLine": 6435,
         "startChar": 33,
