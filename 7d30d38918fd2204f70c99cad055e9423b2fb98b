@@ -33,6 +33,24 @@
       "message": "Wouldn\u0027t we want to log the code anyway, using only the provided `name` and `length`? I.e. only skipping the source map lookup?",
       "revId": "7d30d38918fd2204f70c99cad055e9423b2fb98b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1170fd37_ce88001e",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1472029
+      },
+      "writtenOn": "2023-09-25T13:38:13Z",
+      "side": 1,
+      "message": "Good point. I wasn\u0027t sure we wanted to log WasmToJsWrappers, but it makes sense we do.",
+      "parentUuid": "b672c7ff_2c7b9213",
+      "revId": "7d30d38918fd2204f70c99cad055e9423b2fb98b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
