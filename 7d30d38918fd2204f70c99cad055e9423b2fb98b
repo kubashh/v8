@@ -16,6 +16,23 @@
       "message": "I don\u0027t think I can give any feedback on the CL.",
       "revId": "7d30d38918fd2204f70c99cad055e9423b2fb98b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b672c7ff_2c7b9213",
+        "filename": "src/logging/log.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 884,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-09-25T12:11:41Z",
+      "side": 1,
+      "message": "Wouldn\u0027t we want to log the code anyway, using only the provided `name` and `length`? I.e. only skipping the source map lookup?",
+      "revId": "7d30d38918fd2204f70c99cad055e9423b2fb98b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
