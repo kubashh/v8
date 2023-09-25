@@ -1226,6 +1226,7 @@ enum class GarbageCollectionReason : int {
   kBackgroundAllocationFailure = 25,
   kFinalizeConcurrentMinorMS = 26,
   kCppHeapAllocationFailure = 27,
+  kMinorGCRequestedDuringLoad = 28,
 
   NUM_REASONS,
 };
@@ -1292,6 +1293,8 @@ constexpr const char* ToString(GarbageCollectionReason reason) {
       return "finalize concurrent MinorMS";
     case GarbageCollectionReason::kCppHeapAllocationFailure:
       return "CppHeap allocation failure";
+    case GarbageCollectionReason::kMinorGCRequestedDuringLoad:
+      return "Minor GC requested during load";
     case GarbageCollectionReason::NUM_REASONS:
       UNREACHABLE();
   }
