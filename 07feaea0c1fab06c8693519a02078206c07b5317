@@ -80,6 +80,30 @@
       },
       "revId": "07feaea0c1fab06c8693519a02078206c07b5317",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cc82610_93136aaf",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-09-25T12:28:48Z",
+      "side": 1,
+      "message": "I don\u0027t think there\u0027s anything better suited because we don\u0027t invoke `PointersUpdatingVisitor` on all pages/objects. \n\nTo keep it modular we\u0027d just record some slot in here and then add another piece that reuses the recorded info. I don\u0027t think it\u0027s worth it right now.",
+      "parentUuid": "59fcdd06_633bbbbf",
+      "range": {
+        "startLine": 1317,
+        "startChar": 40,
+        "endLine": 1317,
+        "endChar": 53
+      },
+      "revId": "07feaea0c1fab06c8693519a02078206c07b5317",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
