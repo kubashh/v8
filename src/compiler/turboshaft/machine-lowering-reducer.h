@@ -1970,7 +1970,7 @@ class MachineLoweringReducer : public Next {
     return result;
   }
 
-  OpIndex REDUCE(LoadDataViewElement)(V<Object> object, V<Object> storage,
+  OpIndex REDUCE(LoadDataViewElement)(V<Object> object, V<WordPtr> storage,
                                       V<WordPtr> index,
                                       V<Word32> is_little_endian,
                                       ExternalArrayType element_type) {
