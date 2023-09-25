@@ -3014,6 +3014,7 @@ void InstructionSelectorT<TurbofanAdapter>::VisitNode(Node* node) {
       return VisitLoadLane(node);
     }
     case IrOpcode::kStore:
+    case IrOpcode::kStoreIndirectPointer:
       return VisitStore(node);
     case IrOpcode::kStorePair:
       return VisitStorePair(node);
