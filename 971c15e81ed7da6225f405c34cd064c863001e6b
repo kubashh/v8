@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba2f075c_8897dbac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-09-25T13:24:00Z",
+      "side": 1,
+      "message": "lgtm with comments",
+      "revId": "971c15e81ed7da6225f405c34cd064c863001e6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5a44ae2_fd1bd64f",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-09-25T13:24:00Z",
+      "side": 1,
+      "message": "If the number of indirect pointer kinds that\u0027ll be actually stored from optimized code is not that big we could have encoded the tag in a `write_barrier_kind` by having separate write barrier implementations for each indirect pointer kind.",
+      "revId": "971c15e81ed7da6225f405c34cd064c863001e6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
