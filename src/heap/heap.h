@@ -22,6 +22,7 @@
 #include "src/base/enum-set.h"
 #include "src/base/platform/condition-variable.h"
 #include "src/base/platform/mutex.h"
+#include "src/base/platform/time.h"
 #include "src/builtins/accessors.h"
 #include "src/common/assert-scope.h"
 #include "src/common/code-memory-access.h"
@@ -47,6 +48,7 @@
 #include "src/sandbox/code-pointer-table.h"
 #include "src/sandbox/external-pointer-table.h"
 #include "src/sandbox/indirect-pointer-table.h"
+#include "src/tasks/cancelable-task.h"
 #include "src/utils/allocation.h"
 #include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
 
@@ -116,6 +118,7 @@ class ObjectStats;
 class Page;
 class PagedSpace;
 class PagedNewSpace;
+class PostLoadTask;
 class ReadOnlyHeap;
 class RootVisitor;
 class RwxMemoryWriteScope;
@@ -1614,6 +1617,11 @@ class Heap final {
 
   bool ShouldUseBackgroundThreads() const;
 
+  void NotifyLoadStart();
+  void NotifyLoadEnd();
+  void UpdateLoadStartTime();
+  void NotifyMinorGCRequestedDuringLoad();
+
  private:
   class AllocationTrackerForDebugging;
 
@@ -1890,7 +1898,8 @@ class Heap final {
   // This constant limits the effect of load RAIL mode on GC.
   // The value is arbitrary and chosen as the largest load time observed in
   // v8 browsing benchmarks.
-  static const int kMaxLoadTimeMs = 7000;
+  static constexpr base::TimeDelta kMaxLoadTime =
+      base::TimeDelta::FromMilliseconds(7000);
 
   V8_EXPORT_PRIVATE bool ShouldOptimizeForLoadTime();
 
@@ -2362,6 +2371,11 @@ class Heap final {
 
   std::unique_ptr<MemoryBalancer> mb_;
 
+  base::Optional<base::TimeTicks> max_load_end_time_;
+  CancelableTaskManager::Id post_load_task_id_ =
+      CancelableTaskManager::kInvalidTaskId;
+  bool minor_gc_requested_during_load_ = false;
+
   // Classes in "heap" can be friends.
   friend class ActivateMemoryReducerTask;
   friend class AlwaysAllocateScope;
@@ -2399,6 +2413,7 @@ class Heap final {
   friend class PagedSpaceBase;
   friend class PagedSpaceForNewSpace;
   friend class PauseAllocationObserversScope;
+  friend class PostLoadTask;
   friend class PretenuringHandler;
   friend class ReadOnlyRoots;
   friend class DisableConservativeStackScanningScopeForTesting;
