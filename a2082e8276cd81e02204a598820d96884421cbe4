@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "faa30599_5083c192",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-25T09:13:33Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6908afa5_68df431a",
+      "revId": "a2082e8276cd81e02204a598820d96884421cbe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e06c6efb_897ed72e",
@@ -60,6 +78,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "75f1db1f_f2ac91cc",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-25T09:13:33Z",
+      "side": 1,
+      "message": "Because the entry size is 16, and IIUC these immediate shifts can only go up to `times_8` (but we\u0027d need `times_16`). Is that correct? I\u0027ve left a comment here to explain that, but please double-check.",
+      "parentUuid": "e06c6efb_897ed72e",
+      "range": {
+        "startLine": 489,
+        "startChar": 52,
+        "endLine": 489,
+        "endChar": 59
+      },
+      "revId": "a2082e8276cd81e02204a598820d96884421cbe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "532c6a8c_2f46ffa1",
         "filename": "src/compiler/machine-operator.cc",
         "patchSetId": 25
@@ -71,6 +113,30 @@
       "writtenOn": "2023-09-22T13:03:08Z",
       "side": 1,
       "message": "nit: This name looks confusing, maybe `StoreIndirectPointerWithIndirectPointerWriteBarrierOperator`?",
+      "range": {
+        "startLine": 1433,
+        "startChar": 9,
+        "endLine": 1433,
+        "endChar": 64
+      },
+      "revId": "a2082e8276cd81e02204a598820d96884421cbe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbb18c24_01207cfe",
+        "filename": "src/compiler/machine-operator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 1433,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-25T09:13:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "532c6a8c_2f46ffa1",
       "range": {
         "startLine": 1433,
         "startChar": 9,
