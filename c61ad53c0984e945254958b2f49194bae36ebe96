@@ -16,6 +16,24 @@
       "message": "Michael: PTAL. The alternative to this revert would be to backmerge fixes for the linked bugs. Considering that the optimization already needed two merges, and we\u0027re not even sure that we\u0027ve caught all bugs now, I think it\u0027s safer to revert it from 11.8 entirely. The revert was clean (no conflicts), tests pass locally.\n\nTao Pan: FYI. The optimization is still present on the main branch, and will go into 11.9 if we\u0027re confident by then that it\u0027s correct now.",
       "revId": "c61ad53c0984e945254958b2f49194bae36ebe96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5bd63ed_fb459ce2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1313365
+      },
+      "writtenOn": "2023-09-25T01:43:37Z",
+      "side": 1,
+      "message": "Thanks for your information and sorry for the trouble!",
+      "parentUuid": "10783af0_a09fb7a3",
+      "revId": "c61ad53c0984e945254958b2f49194bae36ebe96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
