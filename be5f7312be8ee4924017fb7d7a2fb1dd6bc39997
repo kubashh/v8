@@ -16,6 +16,24 @@
       "message": "Without this change, the compiler adds a static initializer and some test fails due to that: https://logs.chromium.org/logs/chromium/buildbucket/cr-buildbucket/8768981995199126129/+/u/check_static_initializers__with_patch_/stdout Turning this into a `constexpr` fixes that, but now the users need to to the `.bits()` conversion as that isn\u0027t `constexpr`.\n\nI have no idea why this hasn\u0027t happened before though, I can\u0027t see how my changes would have any effect on that...",
       "revId": "be5f7312be8ee4924017fb7d7a2fb1dd6bc39997",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b5361e8_504f7c39",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-26T08:45:22Z",
+      "side": 1,
+      "message": "@nicohartmann@chromium.org FYI, I added a comment now",
+      "parentUuid": "34365fed_1c23c8a9",
+      "revId": "be5f7312be8ee4924017fb7d7a2fb1dd6bc39997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
