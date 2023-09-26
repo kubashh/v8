@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f620abe8_68465a0e",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-26T17:17:02Z",
+      "side": 1,
+      "message": "Previously, I used only a `ThrowRangeError` in `wasm.tq`: `builtin ThrowDataViewGetInt32OutOfBounds()`.\nThis made [this fail](https://ci.chromium.org/ui/p/v8/builders/try/v8_linux64_dbg/b8768882574794822977/test-results?q\u003dExactID%3A%2F%2Fmjsunit%2Fwasm%2Fimported-dataview%2F%2Fturboshaft+VHash%3A5c83de743c1b384a\u0026clean\u003d\u0026sortby\u003d\u0026groupby\u003d) with the error: `trap_handler::IsTrapHandlerEnabled() implies !trap_handler::IsThreadInWasm()`.\n\n\nThe problem was that `ThrowRangeError` does not reset the `thread_in_wasm` flag, therefore, I created a Wasm version that resets it.",
+      "range": {
+        "startLine": 268,
+        "startChar": 0,
+        "endLine": 268,
+        "endChar": 45
+      },
+      "revId": "a7e6b833e4e0edadeef6a3e991b250d6070adeb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
