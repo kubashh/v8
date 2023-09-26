@@ -42,6 +42,19 @@ bool MinorGCJob::YoungGenerationSizeTaskTriggerReached(Heap* heap) {
   return heap->new_space()->Size() >= YoungGenerationTaskTriggerSize(heap);
 }
 
+namespace {
+class EmptyTask : public CancelableTask {
+ public:
+  EmptyTask(Heap* heap) : CancelableTask(heap->isolate()), heap_(heap) {}
+
+  // CancelableTask overrides.
+  void RunInternal() override;
+
+ private:
+  Heap* const heap_;
+};
+}  // namespace
+
 void MinorGCJob::ScheduleTask() {
   if (!v8_flags.minor_gc_task) return;
   if (current_task_id_ != CancelableTaskManager::kInvalidTaskId) return;
@@ -53,12 +66,14 @@ void MinorGCJob::ScheduleTask() {
   // due to refining allocated bytes after sweeping (allocated bytes after
   // sweeping may be less than live bytes during marking), new space size may
   // decrease while the observer step size remains the same.
+  std::shared_ptr<v8::TaskRunner> taskrunner = heap_->GetForegroundTaskRunner();
   if (v8_flags.minor_ms && heap_->ShouldOptimizeForLoadTime()) {
     task_requested_ = true;
+    heap_->GetForegroundTaskRunner()->PostNonNestableTask(
+        std::make_unique<EmptyTask>(heap_));
     return;
   }
   task_requested_ = false;
-  std::shared_ptr<v8::TaskRunner> taskrunner = heap_->GetForegroundTaskRunner();
   if (taskrunner->NonNestableTasksEnabled()) {
     std::unique_ptr<Task> task = std::make_unique<Task>(heap_->isolate(), this);
     current_task_id_ = task->id();
@@ -90,6 +105,8 @@ void MinorGCJob::Task::RunInternal() {
   Heap* heap = isolate()->heap();
   if (v8_flags.minor_ms && heap->ShouldOptimizeForLoadTime()) {
     job_->task_requested_ = true;
+    heap->GetForegroundTaskRunner()->PostNonNestableTask(
+        std::make_unique<EmptyTask>(heap));
     return;
   }
 
@@ -100,6 +117,13 @@ void MinorGCJob::Task::RunInternal() {
   }
 
   heap->CollectGarbage(NEW_SPACE, GarbageCollectionReason::kTask);
+}
+
+void EmptyTask::RunInternal() {
+  DCHECK(v8_flags.minor_ms);
+  if (!heap_->ShouldOptimizeForLoadTime()) return;
+  heap_->GetForegroundTaskRunner()->PostNonNestableTask(
+      std::make_unique<EmptyTask>(heap_));
 }
 
 }  // namespace internal

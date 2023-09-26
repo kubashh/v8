@@ -1614,7 +1614,7 @@ class Heap final {
 
   bool ShouldUseBackgroundThreads() const;
 
- private:
+  //  private:
   class AllocationTrackerForDebugging;
 
   using ExternalStringTableUpdaterCallback =
