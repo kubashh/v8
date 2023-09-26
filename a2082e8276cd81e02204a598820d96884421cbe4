@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9901c6cc_4c814191",
+        "filename": "src/codegen/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 3628,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-26T07:56:33Z",
+      "side": 1,
+      "message": "Sure!",
+      "parentUuid": "8886d1cd_ff9ff7d9",
+      "revId": "a2082e8276cd81e02204a598820d96884421cbe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6908afa5_68df431a",
@@ -107,6 +125,30 @@
       "side": 1,
       "message": "Because the entry size is 16, and IIUC these immediate shifts can only go up to `times_8` (but we\u0027d need `times_16`). Is that correct? I\u0027ve left a comment here to explain that, but please double-check.",
       "parentUuid": "e06c6efb_897ed72e",
+      "range": {
+        "startLine": 489,
+        "startChar": 52,
+        "endLine": 489,
+        "endChar": 59
+      },
+      "revId": "a2082e8276cd81e02204a598820d96884421cbe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "345db7ca_52e1fd5e",
+        "filename": "src/codegen/x64/macro-assembler-x64.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-26T07:56:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75f1db1f_f2ac91cc",
       "range": {
         "startLine": 489,
         "startChar": 52,

@@ -34,6 +34,24 @@
       "parentUuid": "624fff0b_f45978b7",
       "revId": "5db7aa50f62f761e0b3d261dcffc76ab8babe3f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeb81f73_6386db31",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-26T07:56:33Z",
+      "side": 1,
+      "message": "Yes, probably there aren\u0027t. I think it\u0027s nice to have a clean generic implementation for now until we have a better picture of who stores what kinds of indirect pointers (since this is also needed for CSA code, for example). I don\u0027t think it should be a performance problem, but we can still optimize these if necessary.",
+      "parentUuid": "dd2a684a_273f8e44",
+      "revId": "5db7aa50f62f761e0b3d261dcffc76ab8babe3f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

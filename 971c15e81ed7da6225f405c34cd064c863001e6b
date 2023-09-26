@@ -33,6 +33,24 @@
       "message": "If the number of indirect pointer kinds that\u0027ll be actually stored from optimized code is not that big we could have encoded the tag in a `write_barrier_kind` by having separate write barrier implementations for each indirect pointer kind.",
       "revId": "971c15e81ed7da6225f405c34cd064c863001e6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1e36b0b_973cb9cf",
+        "filename": "src/compiler/memory-lowering.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-26T07:56:33Z",
+      "side": 1,
+      "message": "Right, I considered something along these lines as well (I think I considered having one opcode per indirect pointer type, not one `write_barrier_kind`, but probably similar enough). In the end I decided against that since (1) adding the tag to turboshaft is actually very easy, it\u0027s only the turbofan implementation that\u0027s a bit messy, and (2) I\u0027d prefer to have a generic implementation for now. I don\u0027t think we\u0027ll have very many indirect pointers, but this code will also be used e.g. for stores coming from CSA, so we might have some more uses.",
+      "parentUuid": "c5a44ae2_fd1bd64f",
+      "revId": "971c15e81ed7da6225f405c34cd064c863001e6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
