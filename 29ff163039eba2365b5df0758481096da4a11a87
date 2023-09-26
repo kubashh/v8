@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "669e1700_a84f0f46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-26T13:40:27Z",
+      "side": 1,
+      "message": "Hi!\nCould you please take a look? After this CL I will add the other Get/Set operations",
+      "revId": "29ff163039eba2365b5df0758481096da4a11a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3204fc35_99b00ce1",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2359,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-26T13:40:27Z",
+      "side": 1,
+      "message": "Had to be added, as I had [failing tests](https://ci.chromium.org/ui/p/v8/builders/try/v8_linux64_dbg/b8768958713091394257/test-results?sortby\u003d\u0026groupby\u003d) in a previous patch.\n\nSome functions, like [F32Trunc](https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket/8768958713091394257/+/u/Check_-_extra/RunWasmTurbofan_F32Trunc), call this `REDUCE` and it\u0027s implemented only for `Float64`.",
+      "range": {
+        "startLine": 2357,
+        "startChar": 0,
+        "endLine": 2359,
+        "endChar": 9
+      },
+      "revId": "29ff163039eba2365b5df0758481096da4a11a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d773677_024b3f51",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-26T13:40:27Z",
+      "side": 1,
+      "message": "Follows the description from [ECMAScript](https://tc39.es/ecma262/#sec-getviewvalue)",
+      "range": {
+        "startLine": 1027,
+        "startChar": 6,
+        "endLine": 1027,
+        "endChar": 34
+      },
+      "revId": "29ff163039eba2365b5df0758481096da4a11a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc67e72e_47788758",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-26T13:40:27Z",
+      "side": 1,
+      "message": "I was wondering whether this is okay or some transformations are needed (e.g. shouldn\u0027t it be UInt32), though `__ LoadDataViewElement` receives a Word32.\n\n[ECMAScript ToBoolean link](https://tc39.es/ecma262/#sec-toboolean)",
+      "range": {
+        "startLine": 1030,
+        "startChar": 8,
+        "endLine": 1030,
+        "endChar": 48
+      },
+      "revId": "29ff163039eba2365b5df0758481096da4a11a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
