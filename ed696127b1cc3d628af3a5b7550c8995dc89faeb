@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0750c893_e5924c53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-09-26T22:10:59Z",
+      "side": 1,
+      "message": "Shu, I managed to make two sets of the macros templates. I think `OnFulfilled` and `Onrejected` macros also could be changed using the `target` variable (their callee). This version is what we have so far.",
+      "revId": "ed696127b1cc3d628af3a5b7550c8995dc89faeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
