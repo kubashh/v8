@@ -603,6 +603,9 @@ class V8_EXPORT_PRIVATE PagedSpaceForNewSpace final : public PagedSpaceBase {
     return PagedSpaceBase::Available() + limit() - top();
   }
 
+  void NotifyLoadStart() { is_loading_ = true; }
+  void NotifyLoadEnd() { is_loading_ = false; }
+
  private:
   size_t UsableCapacity() const {
     DCHECK_LE(free_list_->wasted_bytes(), current_capacity_);
@@ -620,6 +623,7 @@ class V8_EXPORT_PRIVATE PagedSpaceForNewSpace final : public PagedSpaceBase {
 
   bool force_allocation_success_ = false;
   bool should_exceed_target_capacity_ = false;
+  bool is_loading_ = false;
 };
 
 // TODO(v8:12612): PagedNewSpace is a bridge between the NewSpace interface and

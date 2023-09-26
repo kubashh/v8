@@ -1049,8 +1049,7 @@ bool PagedSpaceForNewSpace::AddPageBeyondCapacity(int size_in_bytes,
   // Allocate another page is `force_allocation_success_` is true,
   // `UsableCapacity()` is below `TotalCapacity()` and allocating another page
   // won't exceed `TotalCapacity()`, or `ShouldOptimizeForLoadTime()` is true.
-  should_exceed_target_capacity_ =
-      force_allocation_success_ || heap_->ShouldOptimizeForLoadTime();
+  should_exceed_target_capacity_ = force_allocation_success_ || is_loading_;
   if (should_exceed_target_capacity_ ||
       ((UsableCapacity() < TotalCapacity()) &&
        (TotalCapacity() - UsableCapacity() >= Page::kPageSize))) {
@@ -1123,6 +1122,12 @@ bool PagedSpaceForNewSpace::EnsureAllocation(int size_in_bytes,
                                              AllocationAlignment alignment,
                                              AllocationOrigin origin,
                                              int* out_max_aligned_size) {
+  if (is_loading_ != heap_->ShouldOptimizeForLoadTime()) {
+    if (is_loading_)
+      heap_->NotifyLoadEnd();
+    else
+      heap_->NotifyLoadStart();
+  }
   if (last_lab_page_) {
     last_lab_page_->DecreaseAllocatedLabSize(limit() - top());
     SetLimit(top());
