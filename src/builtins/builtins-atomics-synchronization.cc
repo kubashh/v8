@@ -4,6 +4,7 @@
 
 #include "src/builtins/builtins-utils-inl.h"
 #include "src/objects/js-atomics-synchronization-inl.h"
+#include "src/objects/promise-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -86,6 +87,45 @@ BUILTIN(AtomicsMutexTryLock) {
   }
 
   return ReadOnlyRoots(isolate).false_value();
+}
+
+BUILTIN(AtomicsMutexLockAsync) {
+  DCHECK(v8_flags.harmony_struct);
+  constexpr char method_name[] = "Atomics.Mutex.lockAsync";
+  HandleScope scope(isolate);
+
+  Handle<Object> js_mutex_obj = args.atOrUndefined(isolate, 1);
+  if (!IsJSAtomicsMutex(*js_mutex_obj)) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kMethodInvokedOnWrongType,
+                              isolate->factory()->NewStringFromAsciiChecked(
+                                  method_name)));
+  }
+  Handle<JSAtomicsMutex> js_mutex = Handle<JSAtomicsMutex>::cast(js_mutex_obj);
+  Handle<JSObject> run_under_lock =
+      Handle<JSObject>::cast(args.atOrUndefined(isolate, 2));
+  if (!IsCallable(*run_under_lock)) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kNotCallable, run_under_lock));
+  }
+
+  Handle<JSPromise> result_promise =
+      JSAtomicsMutex::RunOrQueueCallable(isolate, js_mutex, run_under_lock);
+
+  return *result_promise;
+}
+
+BUILTIN(AtomicsMutexAsyncUnlock) {
+  DCHECK(v8_flags.harmony_struct);
+  HandleScope scope(isolate);
+
+  Handle<Object> mutex;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, mutex, JSReceiver::GetProperty(isolate, args.target(), "Lock"));
+  Handle<JSAtomicsMutex> js_mutex = Handle<JSAtomicsMutex>::cast(mutex);
+
+  js_mutex->Unlock(isolate);
+  return *mutex;
 }
 
 BUILTIN(AtomicsConditionConstructor) {
