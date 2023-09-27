@@ -265,6 +265,24 @@ RUNTIME_FUNCTION(Runtime_WasmThrowTypeError) {
   THROW_NEW_ERROR_RETURN_FAILURE(isolate, NewTypeError(message_id, arg));
 }
 
+RUNTIME_FUNCTION(Runtime_WasmThrowRangeError) {
+  ClearThreadInWasmScope clear_wasm_flag(isolate);
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  MessageTemplate message_id = MessageTemplateFromInt(args.smi_value_at(0));
+  THROW_NEW_ERROR_RETURN_FAILURE(isolate, NewRangeError(message_id));
+}
+
+RUNTIME_FUNCTION(Runtime_WasmThrowTypeErrorTwoArgs) {
+  ClearThreadInWasmScope clear_wasm_flag(isolate);
+  HandleScope scope(isolate);
+  DCHECK_EQ(3, args.length());
+  MessageTemplate message_id = MessageTemplateFromInt(args.smi_value_at(0));
+  Handle<Object> arg(args[1], isolate);
+  Handle<Object> arg2(args[2], isolate);
+  THROW_NEW_ERROR_RETURN_FAILURE(isolate, NewTypeError(message_id, arg, arg2));
+}
+
 RUNTIME_FUNCTION(Runtime_WasmThrow) {
   ClearThreadInWasmScope clear_wasm_flag(isolate);
   HandleScope scope(isolate);
