@@ -22,6 +22,8 @@ namespace internal {
 
 namespace detail {
 class WaiterQueueNode;
+class AsyncWaiterQueueNode;
+class SyncWaiterQueueNode;
 }  // namespace detail
 
 // Base class for JSAtomicsMutex and JSAtomicsCondition
@@ -109,6 +111,26 @@ class JSAtomicsMutex
     bool locked_;
   };
 
+  using EnqueueAction =
+      std::function<void(detail::WaiterQueueNode**, detail::WaiterQueueNode*)>;
+  class V8_NODISCARD AsyncLockGuard final {
+   public:
+    inline AsyncLockGuard(Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+                          Handle<JSObject> run_under_lock,
+                          Handle<JSPromise> promise,
+                          EnqueueAction enqueue_action);
+    AsyncLockGuard(const AsyncLockGuard&) = delete;
+    AsyncLockGuard& operator=(const AsyncLockGuard&) = delete;
+    inline ~AsyncLockGuard();
+    bool locked() const { return locked_; }
+    void Release() { locked_ = false; }
+
+   private:
+    Isolate* isolate_;
+    Handle<JSAtomicsMutex> mutex_;
+    bool locked_;
+  };
+
   DECL_CAST(JSAtomicsMutex)
   DECL_PRINTER(JSAtomicsMutex)
   EXPORT_DECL_VERIFIER(JSAtomicsMutex)
@@ -117,6 +139,21 @@ class JSAtomicsMutex
   static inline void Lock(Isolate* requester, Handle<JSAtomicsMutex> mutex);
 
   V8_WARN_UNUSED_RESULT inline bool TryLock();
+  static V8_WARN_UNUSED_RESULT inline bool AsyncLock(
+      Isolate* requester, Handle<JSAtomicsMutex> mutex,
+      Handle<JSObject> run_under_lock, Handle<JSPromise> promise,
+      EnqueueAction enqueue_action);
+  inline bool TryLockExplicitAndSetOwner();
+  static bool TryLockExplicit(std::atomic<StateT>* state, StateT& expected);
+  static Handle<JSPromise> RunOrQueueCallable(Isolate* isolate,
+                                              Handle<JSAtomicsMutex> mutex,
+                                              Handle<JSObject> run_under_lock);
+  static bool AsyncLockSlowPath(Handle<JSAtomicsMutex> mutex, Isolate* isolate,
+                                Handle<JSObject> run_under_lock,
+                                Handle<JSPromise> promise,
+                                std::atomic<StateT>* state,
+                                EnqueueAction enqueue_action);
+  static void HandleAsyncNotify(detail::AsyncWaiterQueueNode* node);
 
   inline void Unlock(Isolate* requester);
 
@@ -128,6 +165,8 @@ class JSAtomicsMutex
  private:
   friend class Factory;
   friend class detail::WaiterQueueNode;
+  friend class detail::SyncWaiterQueueNode;
+  friend class detail::AsyncWaiterQueueNode;
 
   // There are 2 lock bits: whether the lock itself is locked, and whether the
   // associated waiter queue is locked.
@@ -146,7 +185,6 @@ class JSAtomicsMutex
 
   inline std::atomic<int32_t>* AtomicOwnerThreadIdPtr();
 
-  static bool TryLockExplicit(std::atomic<StateT>* state, StateT& expected);
   static bool TryLockWaiterQueueExplicit(std::atomic<StateT>* state,
                                          StateT& expected);
 
@@ -155,6 +193,20 @@ class JSAtomicsMutex
                                              std::atomic<StateT>* state);
   V8_EXPORT_PRIVATE void UnlockSlowPath(Isolate* requester,
                                         std::atomic<StateT>* state);
+
+  V8_EXPORT_PRIVATE static bool SpinningMutexTryLock(
+      Isolate* requester, Handle<JSAtomicsMutex> mutex,
+      std::atomic<StateT>* state);
+
+  V8_EXPORT_PRIVATE static bool MaybeEnqueueNode(
+      Isolate* requester, Handle<JSAtomicsMutex> mutex,
+      std::atomic<StateT>* state, detail::WaiterQueueNode* this_waiter,
+      EnqueueAction enqueue_action);
+
+  V8_EXPORT_PRIVATE static MaybeHandle<Object> RunOrQueueCallableInternal(
+      Isolate* isolate, Handle<JSAtomicsMutex> mutex,
+      Handle<JSObject> run_under_lock, Handle<JSPromise> promise,
+      EnqueueAction enqueue_action);
 
   using TorqueGeneratedJSAtomicsMutex<
       JSAtomicsMutex, JSSynchronizationPrimitive>::owner_thread_id;
