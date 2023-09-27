@@ -22,6 +22,7 @@
 #include "src/base/enum-set.h"
 #include "src/base/platform/condition-variable.h"
 #include "src/base/platform/mutex.h"
+#include "src/base/platform/time.h"
 #include "src/builtins/accessors.h"
 #include "src/common/assert-scope.h"
 #include "src/common/code-memory-access.h"
@@ -1614,6 +1615,12 @@ class Heap final {
 
   bool ShouldUseBackgroundThreads() const;
 
+  void NotifyLoadStart();
+  void NotifyLoadEnd();
+  void UpdateLoadStartTime();
+  void NotifyMinorGCRequestedDuringLoad();
+  void UpdateLoadStateIfNeeded();
+
  private:
   class AllocationTrackerForDebugging;
 
@@ -1890,7 +1897,8 @@ class Heap final {
   // This constant limits the effect of load RAIL mode on GC.
   // The value is arbitrary and chosen as the largest load time observed in
   // v8 browsing benchmarks.
-  static const int kMaxLoadTimeMs = 7000;
+  static constexpr base::TimeDelta kMaxLoadTime =
+      base::TimeDelta::FromMilliseconds(7000);
 
   V8_EXPORT_PRIVATE bool ShouldOptimizeForLoadTime();
 
@@ -2361,6 +2369,9 @@ class Heap final {
   ResizeNewSpaceMode resize_new_space_mode_ = ResizeNewSpaceMode::kNone;
 
   std::unique_ptr<MemoryBalancer> mb_;
+
+  base::Optional<base::TimeTicks> max_load_end_time_;
+  bool minor_gc_requested_during_load_ = false;
 
   // Classes in "heap" can be friends.
   friend class ActivateMemoryReducerTask;

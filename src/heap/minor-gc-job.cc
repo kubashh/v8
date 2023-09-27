@@ -54,10 +54,9 @@ void MinorGCJob::ScheduleTask() {
   // sweeping may be less than live bytes during marking), new space size may
   // decrease while the observer step size remains the same.
   if (v8_flags.minor_ms && heap_->ShouldOptimizeForLoadTime()) {
-    task_requested_ = true;
+    heap_->NotifyMinorGCRequestedDuringLoad();
     return;
   }
-  task_requested_ = false;
   std::shared_ptr<v8::TaskRunner> taskrunner = heap_->GetForegroundTaskRunner();
   if (taskrunner->NonNestableTasksEnabled()) {
     std::unique_ptr<Task> task = std::make_unique<Task>(heap_->isolate(), this);
@@ -66,13 +65,7 @@ void MinorGCJob::ScheduleTask() {
   }
 }
 
-void MinorGCJob::SchedulePreviouslyRequestedTask() {
-  if (!task_requested_) return;
-  ScheduleTask();
-}
-
 void MinorGCJob::CancelTaskIfScheduled() {
-  task_requested_ = false;
   if (current_task_id_ == CancelableTaskManager::kInvalidTaskId) return;
   // The task may have ran and bailed out already if major incremental marking
   // was running, in which `TryAbort` will return `kTaskRemoved`.
@@ -89,7 +82,7 @@ void MinorGCJob::Task::RunInternal() {
 
   Heap* heap = isolate()->heap();
   if (v8_flags.minor_ms && heap->ShouldOptimizeForLoadTime()) {
-    job_->task_requested_ = true;
+    job_->heap_->NotifyMinorGCRequestedDuringLoad();
     return;
   }
 

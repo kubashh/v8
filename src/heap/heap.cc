@@ -21,6 +21,7 @@
 #include "src/base/optional.h"
 #include "src/base/platform/memory.h"
 #include "src/base/platform/mutex.h"
+#include "src/base/platform/time.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/builtins/accessors.h"
 #include "src/codegen/assembler-inl.h"
@@ -5196,10 +5197,11 @@ bool Heap::AllocationLimitOvershotByLargeMargin() const {
 }
 
 bool Heap::ShouldOptimizeForLoadTime() {
-  return isolate()->rail_mode() == PERFORMANCE_LOAD &&
-         !AllocationLimitOvershotByLargeMargin() &&
-         MonotonicallyIncreasingTimeInMs() <
-             isolate()->LoadStartTimeMs() + kMaxLoadTimeMs;
+  if (!max_load_end_time_.has_value()) return false;
+  if (AllocationLimitOvershotByLargeMargin()) return false;
+  if (base::TimeTicks::Now() >= max_load_end_time_.value()) return false;
+  DCHECK_EQ(PERFORMANCE_LOAD, isolate()->rail_mode());
+  return true;
 }
 
 // This predicate is called when an old generation space cannot allocated from
@@ -7315,6 +7317,56 @@ void Heap::EnsureYoungSweepingCompleted() {
 void Heap::DrainSweepingWorklistForSpace(AllocationSpace space) {
   if (!sweeper()->sweeping_in_progress_for_space(space)) return;
   sweeper()->DrainSweepingWorklistForSpace(space);
+}
+
+void Heap::NotifyLoadStart() {
+  DCHECK(!max_load_end_time_.has_value());
+  max_load_end_time_.emplace(base::TimeTicks::Now() + kMaxLoadTime);
+}
+
+void Heap::NotifyLoadEnd() {
+  if (!max_load_end_time_.has_value()) return;
+  DCHECK_IMPLIES(!v8_flags.minor_ms, !minor_gc_requested_during_load_);
+  if (v8_flags.minor_ms && new_space()) {
+    if (incremental_marking()->IsStopped()) {
+      StartMinorMSIncrementalMarkingIfNeeded();
+    }
+    if (incremental_marking()->IsStopped()) {
+      auto* paged_space = paged_new_space()->paged_space();
+      if (paged_space->Size() >= paged_space->TotalCapacity()) {
+        CollectGarbage(NEW_SPACE,
+                       GarbageCollectionReason::kMinorGCRequestedDuringLoad);
+      } else if (minor_gc_requested_during_load_) {
+        ScheduleMinorGCTaskIfNeeded();
+      }
+    }
+    minor_gc_requested_during_load_ = false;
+  }
+  if (auto* job = incremental_marking()->incremental_marking_job()) {
+    // The task will start incremental marking (if not already started)
+    // and advance marking if incremental marking is active.
+    job->ScheduleTask();
+  }
+  max_load_end_time_.reset();
+}
+
+void Heap::UpdateLoadStartTime() {
+  if (isolate()->rail_mode() != PERFORMANCE_LOAD) {
+    DCHECK(!max_load_end_time_.has_value());
+    return;
+  }
+  max_load_end_time_.emplace(base::TimeTicks::Now() + kMaxLoadTime);
+}
+
+void Heap::UpdateLoadStateIfNeeded() {
+  if (!max_load_end_time_.has_value()) return;
+  if (!ShouldOptimizeForLoadTime()) {
+    NotifyLoadEnd();
+  }
+}
+
+void Heap::NotifyMinorGCRequestedDuringLoad() {
+  minor_gc_requested_during_load_ = true;
 }
 
 EmbedderStackStateScope::EmbedderStackStateScope(Heap* heap, Origin origin,
