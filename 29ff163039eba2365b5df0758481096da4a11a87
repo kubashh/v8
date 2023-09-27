@@ -181,6 +181,30 @@
       },
       "revId": "29ff163039eba2365b5df0758481096da4a11a87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b45ae521_0b7f874c",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-27T17:48:34Z",
+      "side": 1,
+      "message": "Thanks a lot for adding it. Regarding `isHTMLDDA` and ToBoolean in general I\u0027m not really familiar with the details. @jkummerow@chromium.org: Can you help out here?",
+      "parentUuid": "af004a3b_2257d042",
+      "range": {
+        "startLine": 1030,
+        "startChar": 8,
+        "endLine": 1030,
+        "endChar": 48
+      },
+      "revId": "29ff163039eba2365b5df0758481096da4a11a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

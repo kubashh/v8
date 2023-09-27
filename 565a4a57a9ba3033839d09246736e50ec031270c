@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f97797b0_fe534061",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-27T17:48:34Z",
+      "side": 1,
+      "message": "LGTM from a turboshaft perspective and general review. I am not familiar with the details about data views, so I\u0027ll leave that to Jakob to review if this matches.",
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
