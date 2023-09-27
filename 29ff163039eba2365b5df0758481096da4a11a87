@@ -109,6 +109,30 @@
       },
       "revId": "29ff163039eba2365b5df0758481096da4a11a87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a857391_8e36ba47",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-27T15:53:57Z",
+      "side": 1,
+      "message": "First I wanted to add some asserts to the test like:\n```assertEquals(0x78563412, instance.exports.getInt32(dataview, 4, undefined));```\nand other similar cases that need to be false. \n\nBut then Tobias made me realise that I first import `getInt32()` from JS to Wasm, and then I export it back to JS, so the JS-to-Wasm wrapper already handled the bool conversion.\n\nAlso in this case, as far as I understand, the parameters are already converted to Int32 values, so no need for checks.",
+      "parentUuid": "06a8f859_b4604b71",
+      "range": {
+        "startLine": 1030,
+        "startChar": 8,
+        "endLine": 1030,
+        "endChar": 48
+      },
+      "revId": "29ff163039eba2365b5df0758481096da4a11a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
