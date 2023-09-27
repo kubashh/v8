@@ -157,6 +157,30 @@
       },
       "revId": "29ff163039eba2365b5df0758481096da4a11a87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af004a3b_2257d042",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-27T17:38:02Z",
+      "side": 1,
+      "message": "I added them.\n\nNote:\nI was curious whether a non-empty string as the `littleEndian` parameter gets converted to `true`, but it was converted to `false`:\n```assertEquals(42, instance.exports.getInt32(dataview, 0, \"blabla\"));```\nThe specification says in point 3 in the ToBoolean conversion: *If argument is an Object and argument has an [[IsHTMLDDA]] internal slot, return false.*\nI wonder if this is the case here, I didn\u0027t figure out how to check this internal property.\nJust in case I also tried running this assert without the flag `--variants\u003dturboshaft` and it was still converted to `false`.",
+      "parentUuid": "08deddde_53c47156",
+      "range": {
+        "startLine": 1030,
+        "startChar": 8,
+        "endLine": 1030,
+        "endChar": 48
+      },
+      "revId": "29ff163039eba2365b5df0758481096da4a11a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
