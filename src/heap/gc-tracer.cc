@@ -1623,9 +1623,12 @@ void GCTracer::ReportFullCycleToRecorder() {
   if (current_.type == Event::Type::INCREMENTAL_MARK_COMPACTOR) {
     event.main_thread_incremental.mark_wall_clock_duration_in_us =
         incremental_marking.InMicroseconds();
-    event.incremental_marking_start_stop_wall_clock_duration_in_us =
-        (current_.start_time - incremental_marking_start_time_)
-            .InMicroseconds();
+    if (!incremental_marking_start_time_.IsNull()) {
+      DCHECK_GE(current_.start_time, incremental_marking_start_time_);
+      event.incremental_marking_start_stop_wall_clock_duration_in_us =
+          (current_.start_time - incremental_marking_start_time_)
+              .InMicroseconds();
+    }
   } else {
     DCHECK(incremental_marking.IsZero());
     event.main_thread_incremental.mark_wall_clock_duration_in_us = -1;
