@@ -268,8 +268,9 @@ class Arm64OperandConverter final : public InstructionOperandConverter {
     if (offset.from_frame_pointer()) {
       int from_sp = offset.offset() + frame_access_state()->GetSPToFPOffset();
       // Convert FP-offsets to SP-offsets if it results in better code.
-      if (Assembler::IsImmLSUnscaled(from_sp) ||
-          Assembler::IsImmLSScaled(from_sp, 3)) {
+      if (frame_access_state()->CanAccessWithSP() &&
+          (Assembler::IsImmLSUnscaled(from_sp) ||
+           Assembler::IsImmLSScaled(from_sp, 3))) {
         offset = FrameOffset::FromStackPointer(from_sp);
       }
     }
@@ -986,8 +987,29 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     case kArchStackPointer:
-    case kArchSetStackPointer:
-      UNREACHABLE();
+      __ mov(i.OutputRegister(), sp);
+      break;
+    case kArchSetStackPointer: {
+      DCHECK(instr->InputAt(0)->IsRegister());
+      UseScratchRegisterScope temps(masm());
+      if (masm()->options().enable_simulator_code) {
+        Register scratch = temps.AcquireX();
+        __ Mov(scratch, x16);
+        __ LoadStackLimit(x16, StackLimitKind::kRealStackLimit);
+        __ hlt(kImmExceptionIsSwitchStackLimit);
+        __ Mov(x16, scratch);
+      }
+      __ mov(sp, i.InputRegister(0));
+      bool can_access_with_sp = MiscField::decode(instr->opcode());
+      if (can_access_with_sp) {
+        frame_access_state()->SetFrameAccessToDefault();
+      } else {
+        DCHECK(frame_access_state()->has_frame());
+        frame_access_state()->SetFrameAccessToFP();
+      }
+      frame_access_state()->SetCanAccessWithSP(can_access_with_sp);
+      break;
+    }
     case kArchStackPointerGreaterThan: {
       // Potentially apply an offset to the current stack pointer before the
       // comparison to consider the size difference of an optimized frame versus
@@ -3367,7 +3389,19 @@ void CodeGenerator::AssembleConstructFrame() {
         __ Claim(required_slots);
         break;
       }
-      case CallDescriptor::kCallWasmImportWrapper:
+      case CallDescriptor::kCallWasmImportWrapper: {
+        UseScratchRegisterScope temps(masm());
+        Register scratch = temps.AcquireX();
+        __ Mov(scratch,
+               StackFrame::TypeToMarker(info()->GetOutputStackFrameType()));
+        // This stack slot is only used for printing stack traces in V8. Also,
+        // it holds a WasmApiFunctionRef instead of the instance itself, which
+        // is taken care of in the frames accessors.
+        __ Push(scratch, kWasmInstanceRegister);
+        __ Push(xzr, xzr);
+        __ Claim(required_slots);
+        break;
+      }
       case CallDescriptor::kCallWasmCapiFunction: {
         UseScratchRegisterScope temps(masm());
         Register scratch = temps.AcquireX();
@@ -3377,11 +3411,7 @@ void CodeGenerator::AssembleConstructFrame() {
         // it holds a WasmApiFunctionRef instead of the instance itself, which
         // is taken care of in the frames accessors.
         __ Push(scratch, kWasmInstanceRegister);
-        int extra_slots =
-            call_descriptor->kind() == CallDescriptor::kCallWasmImportWrapper
-                ? 0   // Import wrapper: none.
-                : 1;  // C-API function: PC.
-        __ Claim(required_slots + extra_slots);
+        __ Claim(required_slots + 1 /* PC */);
         break;
       }
 #endif  // V8_ENABLE_WEBASSEMBLY
