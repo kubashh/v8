@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8f057da_bc3cf400",
+        "filename": "src/compiler/turboshaft/machine-lowering-reducer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2359,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3204fc35_99b00ce1",
+      "range": {
+        "startLine": 2357,
+        "startChar": 0,
+        "endLine": 2359,
+        "endChar": 9
+      },
+      "revId": "29ff163039eba2365b5df0758481096da4a11a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d773677_024b3f51",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-09-26T13:40:27Z",
       "side": 1,
       "message": "Follows the description from [ECMAScript](https://tc39.es/ecma262/#sec-getviewvalue)",
+      "range": {
+        "startLine": 1027,
+        "startChar": 6,
+        "endLine": 1027,
+        "endChar": 34
+      },
+      "revId": "29ff163039eba2365b5df0758481096da4a11a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "121fe246_20cebcdc",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9d773677_024b3f51",
       "range": {
         "startLine": 1027,
         "startChar": 6,
@@ -197,6 +245,30 @@
       "side": 1,
       "message": "Thanks a lot for adding it. Regarding `isHTMLDDA` and ToBoolean in general I\u0027m not really familiar with the details. @jkummerow@chromium.org: Can you help out here?",
       "parentUuid": "af004a3b_2257d042",
+      "range": {
+        "startLine": 1030,
+        "startChar": 8,
+        "endLine": 1030,
+        "endChar": 48
+      },
+      "revId": "29ff163039eba2365b5df0758481096da4a11a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd8d45db_5fbeb561",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "We don\u0027t need to deal with any conversions here (see my comment in `module-instantiate.cc`).\nI think what happens to `\"blabla\"` is that it\u0027s converted to the integer `0`, which is then interpreted as `false` in a boolean context. (The fact that non-empty strings are tru-ish in JS, e.g. `if (\"blabla\") {...}`, doesn\u0027t matter here.)",
+      "parentUuid": "b45ae521_0b7f874c",
       "range": {
         "startLine": 1030,
         "startChar": 8,

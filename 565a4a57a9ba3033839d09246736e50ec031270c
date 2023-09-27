@@ -16,6 +16,368 @@
       "message": "LGTM from a turboshaft perspective and general review. I am not familiar with the details about data views, so I\u0027ll leave that to Jakob to review if this matches.",
       "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0ef3e21_cdf164a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "Nice! LGTM with minor comments.\n\nSorry for the latency.",
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21a0d923_531fba3e",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2004,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "nit: please alpha-sort",
+      "range": {
+        "startLine": 2004,
+        "startChar": 18,
+        "endLine": 2004,
+        "endChar": 53
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9054bbf_d275a751",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "This here is the reason why we don\u0027t need to deal with ToBoolean conversions: as far as we\u0027re concerned, the third parameter is always an i32.",
+      "range": {
+        "startLine": 508,
+        "startChar": 10,
+        "endLine": 508,
+        "endChar": 44
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b536b66_d99500e7",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "Please merge this into `viewsize_out_of_bounds_label` below (keep the shorter name, and the later position, because `GOTO_IF` can only jump forward). There\u0027s no reason to duplicate the jump to the OOB builtin.",
+      "range": {
+        "startLine": 1048,
+        "startChar": 16,
+        "endLine": 1048,
+        "endChar": 35
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46cc034d_3404995d",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "I believe this could be an immutable load (because you can\u0027t change an existing DataView\u0027s buffer). Please either do that right away, or add a `TODO` comment to revisit it later.",
+      "range": {
+        "startLine": 1061,
+        "startChar": 30,
+        "endLine": 1061,
+        "endChar": 39
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e6b6590_6db11567",
+        "filename": "src/wasm/well-known-imports.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "nit: `getInt32` for consistency. Same below (`setInt32`).",
+      "range": {
+        "startLine": 21,
+        "startChar": 23,
+        "endLine": 21,
+        "endChar": 29
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47c6c160_e726a3a4",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "nit: space after `:` please",
+      "range": {
+        "startLine": 25,
+        "startChar": 18,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8136cf16_8eec1758",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "nit: please break the line after 80 columns (in this case, after `startsWith(`). Or, even better: pull out the expected string into a variable and reuse it in line 53.",
+      "range": {
+        "startLine": 50,
+        "startChar": 80,
+        "endLine": 50,
+        "endChar": 81
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db176dbe_1cc99cd1",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "nit: `Artificially` (or just drop the comment: it\u0027s obvious that the next line prints something).",
+      "range": {
+        "startLine": 51,
+        "startChar": 7,
+        "endLine": 51,
+        "endChar": 18
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c5de72_3e801f89",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "nit: +4 spaces indentation when breaking lines like this, or even align the backtick with the backtick on the previous line. Same for the next two lines.",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 4
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e6d50ab_68eba10a",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "nit: I think `assertUnreachable()` would read slightly less weird here.",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 21
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fedc5b05_657a0d7b",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "Feel free to inline this for simplicity, if you like.\nFor the string-related test that we copied this pattern from, it was useful to define the same builder (and matching `kImports`) globally, and have several test functions reuse it. The way this test is shaping up, I don\u0027t see similar benefits here, so we could simplify this. (I also don\u0027t mind keeping it as-is.)",
+      "range": {
+        "startLine": 62,
+        "startChar": 16,
+        "endLine": 62,
+        "endChar": 27
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0beed349_f1b369aa",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "nit: one space is enough",
+      "range": {
+        "startLine": 72,
+        "startChar": 10,
+        "endLine": 72,
+        "endChar": 12
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bf447c6_b37dd2da",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "I don\u0027t mind keeping these, but we also don\u0027t really need them, because the conversion of JS parameters to Wasm values isn\u0027t what\u0027s interesting. What we care about is the call *from Wasm* to the inlined imported function. We\u0027re only using the small exported Wasm function because writing the test itself (`assertEquals` etc) in JS is so much more convenient.",
+      "range": {
+        "startLine": 81,
+        "startChar": 2,
+        "endLine": 87,
+        "endChar": 69
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53932410_0b9252ed",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "This, too, isn\u0027t really needed (any more), because `CheckStackTrace` covers it. (I don\u0027t mind keeping it if you like the explicitness.)",
+      "range": {
+        "startLine": 90,
+        "startChar": 2,
+        "endLine": 90,
+        "endChar": 80
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c254d47_7045d3c4",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-09-27T22:36:00Z",
+      "side": 1,
+      "message": "nit: 80 chars per line",
+      "range": {
+        "startLine": 103,
+        "startChar": 80,
+        "endLine": 103,
+        "endChar": 86
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
