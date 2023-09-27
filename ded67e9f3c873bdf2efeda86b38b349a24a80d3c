@@ -46,6 +46,30 @@
       },
       "revId": "ded67e9f3c873bdf2efeda86b38b349a24a80d3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9db28eaa_3f353a35",
+        "filename": "src/compiler/turboshaft/assembler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1826,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-09-27T16:00:40Z",
+      "side": 1,
+      "message": "Yeah, but then we aren\u0027t going to replace them with immutable loads.\nMaybe it should become a parameter that is passed from the outside.\nSo we should probably keep a comment saying something like \"For wasm, these loads should be immutable\".\nI don\u0027t think we have a good answer yet on how to handle wasm specific helpers in the assembler without causing potential confusion for JS folks.",
+      "parentUuid": "b27d2a7c_c953efa2",
+      "range": {
+        "startLine": 1826,
+        "startChar": 7,
+        "endLine": 1826,
+        "endChar": 21
+      },
+      "revId": "ded67e9f3c873bdf2efeda86b38b349a24a80d3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
