@@ -724,17 +724,6 @@ DEFINE_BOOL(page_promotion, true, "promote pages based on utilization")
 DEFINE_INT(page_promotion_threshold, 70,
            "min percentage of live bytes on a page to enable fast evacuation "
            "in full GCs")
-DEFINE_INT(minor_ms_page_promotion_threshold, 50,
-           "min percentage of live bytes on a page to enable fast evacuation "
-           "in MinorMS")
-DEFINE_INT(minor_ms_page_promotion_max_lab_threshold, 30,
-           "max percentage of labs out of a page to still be considered for "
-           "page promotion")
-DEFINE_UINT(minor_ms_max_page_age, 4,
-            "max age for a page after which it is force promoted to old space")
-DEFINE_UINT(minor_ms_max_new_space_capacity_mb, 72,
-            "max new space capacity in MBs when using MinorMS. When pointer "
-            "compression is disabled, twice the capacity is used.")
 DEFINE_UINT(scavenger_max_new_space_capacity_mb, 8,
             "max new space capacity in MBs when using Scavenger. When pointer "
             "compression is disabled, twice the capacity is used.")
@@ -748,14 +737,6 @@ DEFINE_BOOL(trace_block_coverage, false,
             "trace collected block coverage information")
 DEFINE_BOOL(trace_protector_invalidation, false,
             "trace protector cell invalidations")
-
-#ifdef V8_MINORMS_STRING_SHORTCUTTING
-DEFINE_BOOL(minor_ms_shortcut_strings, false,
-            "short cut strings during marking")
-#else
-DEFINE_BOOL_READONLY(minor_ms_shortcut_strings, false,
-                     "short cut strings during marking")
-#endif
 
 DEFINE_BOOL(feedback_normalization, false,
             "feed back normalization to constructors")
@@ -1611,8 +1592,6 @@ DEFINE_INT(trace_duplicate_threshold_kb, 0,
 DEFINE_BOOL(trace_fragmentation, false, "report fragmentation for old space")
 DEFINE_BOOL(trace_fragmentation_verbose, false,
             "report fragmentation for old space (detailed)")
-DEFINE_BOOL(minor_ms_trace_fragmentation, false,
-            "trace fragmentation after marking")
 DEFINE_BOOL(trace_evacuation, false, "report evacuation statistics")
 DEFINE_BOOL(trace_mutator_utilization, false,
             "print mutator utilization, allocation speed, gc speed")
@@ -2395,11 +2374,39 @@ DEFINE_NEG_NEG_IMPLICATION(text_is_readable, partial_constant_pool)
 //
 // Minor mark sweep collector flags.
 //
-DEFINE_BOOL(trace_minor_ms_parallel_marking, false,
-            "trace parallel marking for the young generation")
+
 DEFINE_BOOL(minor_ms, false, "perform young generation mark sweep GCs")
 DEFINE_IMPLICATION(minor_ms, separate_gc_phases)
 DEFINE_IMPLICATION(minor_ms, page_promotion)
+
+DEFINE_UINT(minor_ms_page_promotion_threshold, 50,
+            "min percentage of live bytes on a page to enable fast evacuation "
+            "in MinorMS")
+DEFINE_UINT(minor_ms_page_promotion_max_lab_threshold, 30,
+            "max percentage of labs out of a page to still be considered for "
+            "page promotion")
+DEFINE_UINT(minor_ms_max_page_age, 4,
+            "max age for a page after which it is force promoted to old space")
+DEFINE_UINT(minor_ms_max_new_space_capacity_mb, 72,
+            "max new space capacity in MBs when using MinorMS. When pointer "
+            "compression is disabled, twice the capacity is used.")
+DEFINE_UINT(minor_ms_max_empty_pages_swept_in_atomic_pause, 1,
+            "max number of empty pages to sweep during the atomic pause "
+            "(additional pages are deferred to concurrent sweeping)")
+
+#ifdef V8_MINORMS_STRING_SHORTCUTTING
+DEFINE_BOOL(minor_ms_shortcut_strings, false,
+            "short cut strings during marking")
+#else
+DEFINE_BOOL_READONLY(minor_ms_shortcut_strings, false,
+                     "short cut strings during marking")
+#endif
+
+DEFINE_BOOL(trace_minor_ms_parallel_marking, false,
+            "trace parallel marking for the young generation")
+
+DEFINE_BOOL(minor_ms_trace_fragmentation, false,
+            "trace fragmentation after marking")
 
 DEFINE_BOOL(concurrent_minor_ms_marking, true,
             "perform young generation marking concurrently")
