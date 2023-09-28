@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96e107bb_13b603eb",
+        "filename": "src/execution/frames.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2004,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21a0d923_531fba3e",
+      "range": {
+        "startLine": 2004,
+        "startChar": 18,
+        "endLine": 2004,
+        "endChar": 53
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9054bbf_d275a751",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-09-27T22:36:00Z",
       "side": 1,
       "message": "This here is the reason why we don\u0027t need to deal with ToBoolean conversions: as far as we\u0027re concerned, the third parameter is always an i32.",
+      "range": {
+        "startLine": 508,
+        "startChar": 10,
+        "endLine": 508,
+        "endChar": 44
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aed3da76_c2683ee2",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Acknowledged, thanks",
+      "parentUuid": "f9054bbf_d275a751",
       "range": {
         "startLine": 508,
         "startChar": 10,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50147236_b9ea0545",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1048,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b536b66_d99500e7",
+      "range": {
+        "startLine": 1048,
+        "startChar": 16,
+        "endLine": 1048,
+        "endChar": 35
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46cc034d_3404995d",
@@ -117,6 +189,30 @@
       "writtenOn": "2023-09-27T22:36:00Z",
       "side": 1,
       "message": "I believe this could be an immutable load (because you can\u0027t change an existing DataView\u0027s buffer). Please either do that right away, or add a `TODO` comment to revisit it later.",
+      "range": {
+        "startLine": 1061,
+        "startChar": 30,
+        "endLine": 1061,
+        "endChar": 39
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7bb600c_ad1a1c61",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "I added a TODO.",
+      "parentUuid": "46cc034d_3404995d",
       "range": {
         "startLine": 1061,
         "startChar": 30,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfd8f130_45ef0b53",
+        "filename": "src/wasm/well-known-imports.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e6b6590_6db11567",
+      "range": {
+        "startLine": 21,
+        "startChar": 23,
+        "endLine": 21,
+        "endChar": 29
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47c6c160_e726a3a4",
@@ -163,6 +283,30 @@
       "writtenOn": "2023-09-27T22:36:00Z",
       "side": 1,
       "message": "nit: space after `:` please",
+      "range": {
+        "startLine": 25,
+        "startChar": 18,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ebe5754_45463613",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Yeah, sorry, I forgot git cl format doesn\u0027t format my js files.",
+      "parentUuid": "47c6c160_e726a3a4",
       "range": {
         "startLine": 25,
         "startChar": 18,
@@ -196,6 +340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b34a27e_9fb24ba4",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8136cf16_8eec1758",
+      "range": {
+        "startLine": 50,
+        "startChar": 80,
+        "endLine": 50,
+        "endChar": 81
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db176dbe_1cc99cd1",
@@ -219,6 +387,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae6127ef_751b9e94",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db176dbe_1cc99cd1",
+      "range": {
+        "startLine": 51,
+        "startChar": 7,
+        "endLine": 51,
+        "endChar": 18
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87c5de72_3e801f89",
@@ -232,6 +424,30 @@
       "writtenOn": "2023-09-27T22:36:00Z",
       "side": 1,
       "message": "nit: +4 spaces indentation when breaking lines like this, or even align the backtick with the backtick on the previous line. Same for the next two lines.",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 4
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96b3cb1c_39f7ab4f",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87c5de72_3e801f89",
       "range": {
         "startLine": 53,
         "startChar": 0,
@@ -267,6 +483,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1a0b896f_2c7fd7fe",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e6d50ab_68eba10a",
+      "range": {
+        "startLine": 56,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 21
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fedc5b05_657a0d7b",
         "filename": "test/mjsunit/wasm/imported-dataview.js",
         "patchSetId": 12
@@ -278,6 +518,30 @@
       "writtenOn": "2023-09-27T22:36:00Z",
       "side": 1,
       "message": "Feel free to inline this for simplicity, if you like.\nFor the string-related test that we copied this pattern from, it was useful to define the same builder (and matching `kImports`) globally, and have several test functions reuse it. The way this test is shaping up, I don\u0027t see similar benefits here, so we could simplify this. (I also don\u0027t mind keeping it as-is.)",
+      "range": {
+        "startLine": 62,
+        "startChar": 16,
+        "endLine": 62,
+        "endChar": 27
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3f75c61_245c0037",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "I thought it would be nice for the other cases (other `get` and `set` functions) to have one builder with all of them added as imports.",
+      "parentUuid": "fedc5b05_657a0d7b",
       "range": {
         "startLine": 62,
         "startChar": 16,
@@ -311,6 +575,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6950fe9_749d60a5",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0beed349_f1b369aa",
+      "range": {
+        "startLine": 72,
+        "startChar": 10,
+        "endLine": 72,
+        "endChar": 12
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bf447c6_b37dd2da",
@@ -324,6 +612,30 @@
       "writtenOn": "2023-09-27T22:36:00Z",
       "side": 1,
       "message": "I don\u0027t mind keeping these, but we also don\u0027t really need them, because the conversion of JS parameters to Wasm values isn\u0027t what\u0027s interesting. What we care about is the call *from Wasm* to the inlined imported function. We\u0027re only using the small exported Wasm function because writing the test itself (`assertEquals` etc) in JS is so much more convenient.",
+      "range": {
+        "startLine": 81,
+        "startChar": 2,
+        "endLine": 87,
+        "endChar": 69
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abc963f5_119d2b7a",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Okay. I am gonna remove them then so nobody thinks that we test JS-to-Wasm conversion.",
+      "parentUuid": "9bf447c6_b37dd2da",
       "range": {
         "startLine": 81,
         "startChar": 2,
@@ -357,6 +669,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e914894e_7f846d5c",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "I leave this one here then for my preference 😜",
+      "parentUuid": "53932410_0b9252ed",
+      "range": {
+        "startLine": 90,
+        "startChar": 2,
+        "endLine": 90,
+        "endChar": 80
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c254d47_7045d3c4",
@@ -370,6 +706,30 @@
       "writtenOn": "2023-09-27T22:36:00Z",
       "side": 1,
       "message": "nit: 80 chars per line",
+      "range": {
+        "startLine": 103,
+        "startChar": 80,
+        "endLine": 103,
+        "endChar": 86
+      },
+      "revId": "565a4a57a9ba3033839d09246736e50ec031270c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63b6c5d6_9948c8fd",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-09-28T13:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c254d47_7045d3c4",
       "range": {
         "startLine": 103,
         "startChar": 80,
