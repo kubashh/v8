@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7035ff65_a7702ab8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-09-28T17:56:00Z",
+      "side": 1,
+      "message": "One of the comments is still unresolved. Let me know what you think about my explanation.",
+      "revId": "17be45862183af04e1870184e780e97ae3039e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

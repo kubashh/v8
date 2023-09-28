@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2640cca7_1c8dd26a",
+        "filename": "src/builtins/array-from-async.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-09-28T17:56:00Z",
+      "side": 1,
+      "message": "I think we added this comment because in line `37`, `value` is wrapped up in a `promise`, but `value` itself could be a built-in promise?\nHowever, I am not sure if this is possible to have a `value` as a built-in promise (we should have an iterable/array-like of promises?).",
+      "parentUuid": "2a4e927d_89dac75c",
+      "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3e04c5e2_21a3add8",
         "filename": "src/builtins/array-from-async.tq",
         "patchSetId": 12
@@ -65,6 +83,24 @@
       "writtenOn": "2023-09-28T01:08:56Z",
       "side": 1,
       "message": "This is pretty verbose with all the slots being passed explicitly. I wonder if Torque is good enough to take a 2nd template argument for the slots? If not, WDYT about a wrapper convenience macro,\n\n```\nmacro ArrayFromAsyncIterableAwaitPoint(...) {\n  return ArrayFromAsyncAwaitPoint\u003cArrayFromAsyncIterableResolveContext\u003e(\n            context,\n            ArrayFromAsyncIterableResolveContextSlots::\n                kArrayFromAsyncIterableResolveResumeStateStepSlot,\n            ArrayFromAsyncIterableResolveContextSlots::\n                kArrayFromAsyncIterableResolvePromiseFunctionSlot,\n            ArrayFromAsyncIterableResolveContextSlots::\n                kArrayFromAsyncIterableResolveOnFulfilledFunctionSlot,\n            ArrayFromAsyncIterableResolveContextSlots::\n                kArrayFromAsyncIterableResolveOnRejectedFunctionSlot,\n            ...);\n}\n```",
+      "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bea8404e_7af0036b",
+        "filename": "src/builtins/array-from-async.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-09-28T17:56:00Z",
+      "side": 1,
+      "message": "Torque does not accept the second argument for the slots, so I added the wrapper.",
+      "parentUuid": "3e04c5e2_21a3add8",
       "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +118,24 @@
       "writtenOn": "2023-09-28T01:08:56Z",
       "side": 1,
       "message": "Ditto on verbosity here. A convenience wrapper macro for the array-like case as well woudl be nice.",
+      "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e3b91e2_e9769d19",
+        "filename": "src/builtins/array-from-async.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-09-28T17:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39c28b87_dc368947",
       "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
