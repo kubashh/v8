@@ -51,6 +51,13 @@ UseMap::UseMap(const Graph& graph, Zone* zone)
       }
 
       // Add uses.
+      if (op.saturated_use_count.IsZero() &&
+          !op.Effects().is_required_when_unused()) {
+        // Operations that are not required_when_unused and have a use_count of
+        // 0 are ignored (note that they don't count towards the use_count of
+        // their inputs anyways).
+        continue;
+      }
       for (OpIndex input_index : op.inputs()) {
         AddUse(&graph, input_index, op_index);
       }
