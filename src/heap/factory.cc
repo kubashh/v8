@@ -452,7 +452,7 @@ MaybeHandle<FixedArray> Factory::TryNewFixedArray(
   result->set_map_after_allocation(*fixed_array_map(), SKIP_WRITE_BARRIER);
   Tagged<FixedArray> array = Tagged<FixedArray>::cast(result);
   array->set_length(length);
-  MemsetTagged(array->data_start(), *undefined_value(), length);
+  MemsetTagged(array->RawFieldOfFirstElement(), *undefined_value(), length);
   return handle(array, isolate());
 }
 
@@ -2296,7 +2296,7 @@ Handle<T> Factory::CopyArrayAndGrow(Handle<T> src, int grow_by,
   // Copy the content.
   WriteBarrierMode mode = result->GetWriteBarrierMode(no_gc);
   result->CopyElements(isolate(), 0, *src, 0, old_len, mode);
-  MemsetTagged(ObjectSlot(result->data_start() + old_len),
+  MemsetTagged(ObjectSlot(result->RawFieldOfElementAt(0) + old_len),
                read_only_roots().undefined_value(), grow_by);
   return handle(result, isolate());
 }
@@ -3756,27 +3756,6 @@ void Factory::SetRegExpExperimentalData(Handle<JSRegExp> regexp,
   store->set(JSRegExp::kIrregexpTicksUntilTierUpIndex, uninitialized);
   store->set(JSRegExp::kIrregexpBacktrackLimit, uninitialized);
   regexp->set_data(store);
-}
-
-Handle<RegExpMatchInfo> Factory::NewRegExpMatchInfo() {
-  // Initially, the last match info consists of all fixed fields plus space for
-  // the match itself (i.e., 2 capture indices).
-  static const int kInitialSize = RegExpMatchInfo::kFirstCaptureIndex +
-                                  RegExpMatchInfo::kInitialCaptureIndices;
-
-  Handle<FixedArray> elems =
-      NewFixedArray(kInitialSize, AllocationType::kYoung);
-  Handle<RegExpMatchInfo> result = Handle<RegExpMatchInfo>::cast(elems);
-  {
-    DisallowGarbageCollection no_gc;
-    Tagged<RegExpMatchInfo> raw = *result;
-    raw->SetNumberOfCaptureRegisters(RegExpMatchInfo::kInitialCaptureIndices);
-    raw->SetLastSubject(*empty_string(), SKIP_WRITE_BARRIER);
-    raw->SetLastInput(*undefined_value(), SKIP_WRITE_BARRIER);
-    raw->SetCapture(0, 0);
-    raw->SetCapture(1, 0);
-  }
-  return result;
 }
 
 Handle<Object> Factory::GlobalConstantFor(Handle<Name> name) {

@@ -197,7 +197,7 @@ class OrderedHashTable : public FixedArray {
   // optimize that case.
   static const int kClearedTableSentinel = -1;
   static constexpr int MaxCapacity() {
-    return (FixedArray::kMaxLength - HashTableStartIndex()) /
+    return (FixedArrayBase::kMaxLength - HashTableStartIndex()) /
            (1 + (kEntrySize * kLoadFactor));
   }
 

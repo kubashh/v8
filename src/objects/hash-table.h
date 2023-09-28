@@ -184,7 +184,7 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) HashTable
   // FixedArray. Staying below kMaxCapacity also ensures that EntryToIndex
   // cannot overflow.
   static const int kMaxCapacity =
-      (FixedArray::kMaxLength - kElementsStartIndex) / kEntrySize;
+      (FixedArrayBase::kMaxLength - kElementsStartIndex) / kEntrySize;
 
   // Don't shrink a HashTable below this capacity.
   static const int kMinShrinkCapacity = 16;
@@ -257,7 +257,7 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) HashTable
  private:
   // Ensure that kMaxRegularCapacity yields a non-large object dictionary.
   static_assert(EntryToIndex(InternalIndex(kMaxRegularCapacity)) <
-                kMaxRegularLength);
+                FixedArrayBase::kMaxRegularLength);
   static_assert(v8::base::bits::IsPowerOfTwo(kMaxRegularCapacity));
   static const int kMaxRegularEntry = kMaxRegularCapacity / kEntrySize;
   static const int kMaxRegularIndex =
