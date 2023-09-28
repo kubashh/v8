@@ -1755,6 +1755,8 @@ filegroup(
         "src/logging/log-inl.h",
         "src/logging/metrics.cc",
         "src/logging/metrics.h",
+        "src/logging/perfetto-jit.cc",
+        "src/logging/perfetto-jit.h",
         "src/logging/runtime-call-stats.h",
         "src/logging/runtime-call-stats-scope.h",
         "src/logging/tracing-flags.cc",

@@ -74,6 +74,7 @@
 #include "src/logging/counters.h"
 #include "src/logging/log.h"
 #include "src/logging/metrics.h"
+#include "src/logging/perfetto-jit.h"
 #include "src/logging/runtime-call-stats-scope.h"
 #include "src/numbers/hash-seed-inl.h"
 #include "src/objects/backing-store.h"
@@ -3792,6 +3793,7 @@ void Isolate::Deinit() {
 
   main_thread_local_isolate_.reset();
 
+  JitDataSource::UnregisterIsolate(this);
   FILE* logfile = v8_file_logger_->TearDownAndGetLogFile();
   if (logfile != nullptr) base::Fclose(logfile);
 
@@ -4494,6 +4496,8 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
 
   // Enable logging before setting up the heap
   v8_file_logger_->SetUp(this);
+
+  JitDataSource::RegisterIsolate(this);
 
   metrics_recorder_ = std::make_shared<metrics::Recorder>();
 

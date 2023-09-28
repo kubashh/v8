@@ -7,6 +7,8 @@
 #include <fstream>
 
 #include "include/cppgc/platform.h"
+#include "perfetto/tracing/tracing.h"
+#include "protos/perfetto/common/data_source_descriptor.gen.h"
 #include "src/api/api.h"
 #include "src/base/atomicops.h"
 #include "src/base/once.h"
@@ -21,6 +23,7 @@
 #include "src/execution/simulator.h"
 #include "src/init/bootstrapper.h"
 #include "src/libsampler/sampler.h"
+#include "src/logging/perfetto-jit.h"
 #include "src/objects/elements.h"
 #include "src/objects/objects-inl.h"
 #include "src/profiler/heap-profiler.h"
@@ -106,7 +109,14 @@ void V8::InitializePlatform(v8::Platform* platform) {
     v8::internal::ETWJITInterface::Register();
   }
 #endif
-
+#if defined(V8_USE_PERFETTO)
+  if (perfetto::Tracing::IsInitialized()) {
+    perfetto::DataSourceDescriptor dsd;
+    dsd.set_name("dev.v8.jitdump");
+    dsd.set_handles_incremental_state_clear(true);
+    v8::internal::JitDataSource::Register(dsd);
+  }
+#endif
   // Initialization needs to happen on platform-level, as this sets up some
   // cppgc internals that are needed to allow gracefully failing during cppgc
   // platform setup.
