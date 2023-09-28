@@ -526,7 +526,8 @@ class Graph {
         ,
         block_type_refinement_(graph_zone)
 #endif
-  {
+        ,
+        use_count_stack_(graph_zone) {
   }
 
   // Reset the graph to recycle its memory.
@@ -605,8 +606,39 @@ class Graph {
   }
 
   void RemoveLast() {
-    DecrementInputUses(*AllOperations().rbegin());
+    Operation& op = *AllOperations().rbegin();
+    if (op.IsRequiredWhenUnused()) {
+      DecrementInputUsesForExistingOp(op);
+    }
     operations_.RemoveLast();
+  }
+
+  // Increments the use_count of {op} and those of its inputs. This is applied
+  // recursively for inputs whose use counts are 0.
+  void IncrementUseCounts(Operation& op) {
+    DCHECK(op.IsRequiredWhenUnused());
+    use_count_stack_.clear();
+    use_count_stack_.push_back(&op);
+
+    while (!use_count_stack_.empty()) {
+      Operation* curr = use_count_stack_.back();
+      use_count_stack_.pop_back();
+      // Tuples never have any uses, so they should never be the input of
+      // something and should never end up in this function.
+      DCHECK(!curr->Is<TupleOp>());
+
+      bool use_count_is_0 = curr->saturated_use_count.IsZero();
+      curr->saturated_use_count.Incr();
+      if (!use_count_is_0) {
+        // If the initial use_count for {curr} is not 0, then the use_counts of
+        // its inputs have already been incremented.
+        continue;
+      }
+
+      for (OpIndex input_idx : curr->inputs()) {
+        use_count_stack_.push_back(&Get(input_idx));
+      }
+    }
   }
 
   template <class Op, class... Args>
@@ -615,7 +647,6 @@ class Graph {
     OpIndex result = next_operation_index();
 #endif  // DEBUG
     Op& op = Op::New(this, args...);
-    IncrementInputUses(op);
 
     if (op.IsRequiredWhenUnused()) {
       // Once the graph is built, an operation with a `saturated_use_count` of 0
@@ -623,7 +654,7 @@ class Graph {
       // operations that never have uses (such as Goto or Branch), we set the
       // `saturated_use_count` of Operations that are `IsRequiredWhenUnused()`
       // to 1.
-      op.saturated_use_count.SetToOne();
+      IncrementUseCounts(op);
     }
 
     DCHECK_EQ(result, Index(op));
@@ -641,15 +672,15 @@ class Graph {
     static_assert(std::is_trivially_destructible<Op>::value);
 
     const Operation& old_op = Get(replaced);
-    DecrementInputUses(old_op);
     auto old_uses = old_op.saturated_use_count;
+    if (!old_uses.IsZero()) IncrementInputUsesForExistingOp(old_op);
     Op* new_op;
     {
       OperationBuffer::ReplaceScope replace_scope(&operations_, replaced);
       new_op = &Op::New(this, args...);
     }
     new_op->saturated_use_count = old_uses;
-    IncrementInputUses(*new_op);
+    if (!old_uses.IsZero()) DecrementInputUsesForExistingOp(*new_op);
   }
 
   V8_INLINE Block* NewLoopHeader(const Block* origin = nullptr) {
@@ -947,15 +978,28 @@ class Graph {
     return true;
   }
 
+  // When creating a new operation, IncrementUseCounts should be used to
+  // increment its input use counts rather than IncrementInputUsesForExistingOp
+  // (because it will also recursively increment the use_count of its inputs).
+  // When replacing/removing an operation, IncrementInputUsesForExistingOp and
+  // DecrementInputUsesForExistingOp can be used to increment/decrement the
+  // use_count of its inputs.
   template <class Op>
-  void IncrementInputUses(const Op& op) {
+  void IncrementInputUsesForExistingOp(const Op& op) {
+    DCHECK(!op.saturated_use_count.IsZero());
+    // TupleOp never counts towards uses, so IncrementInputUses shouldn't be
+    // called for TupleOp.
+    DCHECK(!op.template Is<TupleOp>());
     for (OpIndex input : op.inputs()) {
       Get(input).saturated_use_count.Incr();
     }
   }
-
   template <class Op>
-  void DecrementInputUses(const Op& op) {
+  void DecrementInputUsesForExistingOp(const Op& op) {
+    DCHECK(!op.saturated_use_count.IsZero());
+    // TupleOp never counts towards uses, so DecrementInputUses shouldn't be
+    // called for TupleOp.
+    DCHECK(!op.template Is<TupleOp>());
     for (OpIndex input : op.inputs()) {
       Get(input).saturated_use_count.Decr();
     }
@@ -977,6 +1021,11 @@ class Graph {
 #ifdef DEBUG
   GrowingBlockSidetable<TypeRefinements> block_type_refinement_;
 #endif
+
+  // {use_count_stack_} is use to increment use_counts, which is done
+  // recursively, but with a stack for better performance and avoid deep
+  // recursions. It's allocated only once per Graph to save memory.
+  ZoneVector<Operation*> use_count_stack_;
 
   std::unique_ptr<Graph> companion_ = {};
 #ifdef DEBUG
