@@ -767,6 +767,17 @@ struct alignas(OpIndex) Operation {
   // We use such a small type to save memory and because nodes with a high
   // number of uses are rare. Additionally, we usually only care if the number
   // of uses is 0, 1 or bigger than 1.
+  //
+  // Note that we increment use counts only for operations used in
+  // required_when_unused operations (and recursively). For instance, if we have
+  //    x = Word32And(a, b)
+  //    y = Word32Xor(x, c)
+  //    CallOp(y)
+  // Then we won't increment the use_count of `a` and `b` when creating
+  // `Word32And(a, b)`, and we won't increment the use_count of `x` and `c` when
+  // creating `Word32Xor(x, c)`. However, when creating `CallOp(y)`, we'll
+  // increment the use_count of `y`, which will in turn increment the use_count
+  // of `c` and `x`, which will in turn increment the use_count of `a` and `b`.
   SaturatedUint8 saturated_use_count;
 
   const uint16_t input_count;

@@ -998,14 +998,6 @@ struct TurboshaftAdapter : public turboshaft::OperationMatcher {
       }
       return false;
     }
-    if (value_op.Is<turboshaft::ProjectionOp>()) {
-      // Projections always have a Tuple use, but it shouldn't count as a use as
-      // far as is_exclusive_user_of is concerned, since no instructions are
-      // emitted for the TupleOp, which is just a Turboshaft "meta operation".
-      // We thus increase the use_count by 1, to attribute the TupleOp use to
-      // the current operation.
-      use_count++;
-    }
     DCHECK_LE(use_count, graph_->Get(value).saturated_use_count.Get());
     return (value_op.saturated_use_count.Get() == use_count) &&
            !value_op.saturated_use_count.IsSaturated();
