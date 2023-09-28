@@ -746,6 +746,7 @@ bool PagedSpaceBase::EnsureAllocation(int size_in_bytes,
                                       AllocationAlignment alignment,
                                       AllocationOrigin origin,
                                       int* out_max_aligned_size) {
+  heap_->UpdateLoadStateIfNeeded();
   if (!is_compaction_space() &&
       !((identity() == NEW_SPACE) && heap_->ShouldOptimizeForLoadTime())) {
     // Start incremental marking before the actual allocation, this allows the
