@@ -138,19 +138,20 @@ void BytecodeArray::Disassemble(Handle<BytecodeArray> handle,
   }
 #endif
 
-  os << "Handler Table (size = " << handle->handler_table()->length() << ")\n";
+  os << "Handler Table (size = " << handle->handler_table()->capacity()
+     << ")\n";
 #ifdef ENABLE_DISASSEMBLER
-  if (handle->handler_table()->length() > 0) {
+  if (handle->handler_table()->capacity() > 0) {
     HandlerTable table(*handle);
     table.HandlerTableRangePrint(os);
   }
 #endif
 
   Tagged<ByteArray> source_position_table = handle->SourcePositionTable();
-  os << "Source Position Table (size = " << source_position_table->length()
+  os << "Source Position Table (size = " << source_position_table->capacity()
      << ")\n";
 #ifdef OBJECT_PRINT
-  if (source_position_table->length() > 0) {
+  if (source_position_table->capacity() > 0) {
     os << Brief(source_position_table) << std::endl;
   }
 #endif

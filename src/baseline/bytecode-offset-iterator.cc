@@ -15,8 +15,8 @@ namespace baseline {
 BytecodeOffsetIterator::BytecodeOffsetIterator(Handle<ByteArray> mapping_table,
                                                Handle<BytecodeArray> bytecodes)
     : mapping_table_(mapping_table),
-      data_start_address_(mapping_table_->GetDataStartAddress()),
-      data_length_(mapping_table_->length()),
+      data_start_address_(mapping_table_->begin()),
+      data_length_(mapping_table_->capacity()),
       current_index_(0),
       bytecode_iterator_(bytecodes),
       local_heap_(LocalHeap::Current()
@@ -28,8 +28,8 @@ BytecodeOffsetIterator::BytecodeOffsetIterator(Handle<ByteArray> mapping_table,
 
 BytecodeOffsetIterator::BytecodeOffsetIterator(Tagged<ByteArray> mapping_table,
                                                Tagged<BytecodeArray> bytecodes)
-    : data_start_address_(mapping_table->GetDataStartAddress()),
-      data_length_(mapping_table->length()),
+    : data_start_address_(mapping_table->begin()),
+      data_length_(mapping_table->capacity()),
       current_index_(0),
       bytecode_handle_storage_(bytecodes),
       // In the non-handlified version, no GC is allowed. We use a "dummy"
@@ -59,7 +59,7 @@ void BytecodeOffsetIterator::Initialize() {
 void BytecodeOffsetIterator::UpdatePointers() {
   DisallowGarbageCollection no_gc;
   DCHECK(!mapping_table_.is_null());
-  data_start_address_ = mapping_table_->GetDataStartAddress();
+  data_start_address_ = mapping_table_->begin();
 }
 
 }  // namespace baseline

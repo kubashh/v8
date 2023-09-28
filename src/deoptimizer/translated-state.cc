@@ -2111,14 +2111,14 @@ void TranslatedState::EnsurePropertiesAllocatedAndMarked(
 
 Handle<ByteArray> TranslatedState::AllocateStorageFor(TranslatedValue* slot) {
   int allocate_size =
-      ByteArray::LengthFor(slot->GetChildrenCount() * kTaggedSize);
+      ByteArray::CapacityFor(slot->GetChildrenCount() * kTaggedSize);
   // It is important to allocate all the objects tenured so that the marker
   // does not visit them.
   Handle<ByteArray> object_storage =
       isolate()->factory()->NewByteArray(allocate_size, AllocationType::kOld);
   DisallowGarbageCollection no_gc;
   Tagged<ByteArray> raw_object_storage = *object_storage;
-  for (int i = 0; i < object_storage->length(); i++) {
+  for (int i = 0; i < object_storage->capacity(); i++) {
     raw_object_storage->set(i, kStoreTagged);
   }
   return object_storage;

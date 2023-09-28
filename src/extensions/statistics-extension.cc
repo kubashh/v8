@@ -170,7 +170,7 @@ void StatisticsExtension::GetCounters(
       if (!IsByteArray(maybe_source_positions)) continue;
       Tagged<ByteArray> source_positions =
           ByteArray::cast(maybe_source_positions);
-      if (source_positions->length() == 0) continue;
+      if (source_positions->capacity() == 0) continue;
       source_position_table_total += source_positions->AllocatedSize();
     }
   }

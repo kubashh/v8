@@ -4822,7 +4822,7 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions) {
   Tagged<ByteArray> source_position_table =
       bytecode_array->SourcePositionTable();
   CHECK(bytecode_array->HasSourcePositionTable());
-  CHECK_GT(source_position_table->length(), 0);
+  CHECK_GT(source_position_table->capacity(), 0);
 }
 
 TEST_F(InterpreterTest, InterpreterCollectSourcePositions_StackOverflow) {
@@ -4851,14 +4851,14 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions_StackOverflow) {
   Tagged<ByteArray> source_position_table =
       bytecode_array->SourcePositionTable();
   CHECK(!bytecode_array->HasSourcePositionTable());
-  CHECK_EQ(source_position_table->length(), 0);
+  CHECK_EQ(source_position_table->capacity(), 0);
 
   // Reset the stack limit and try again.
   i_isolate()->stack_guard()->SetStackLimit(previous_limit);
   Compiler::CollectSourcePositions(i_isolate(), sfi);
   source_position_table = bytecode_array->SourcePositionTable();
   CHECK(bytecode_array->HasSourcePositionTable());
-  CHECK_GT(source_position_table->length(), 0);
+  CHECK_GT(source_position_table->capacity(), 0);
 }
 
 TEST_F(InterpreterTest, InterpreterCollectSourcePositions_ThrowFrom1stFrame) {
@@ -4985,7 +4985,7 @@ TEST_F(InterpreterTest, InterpreterCollectSourcePositions_GenerateStackTrace) {
   CHECK(bytecode_array->HasSourcePositionTable());
   Tagged<ByteArray> source_position_table =
       bytecode_array->SourcePositionTable();
-  CHECK_GT(source_position_table->length(), 0);
+  CHECK_GT(source_position_table->capacity(), 0);
 }
 
 TEST_F(InterpreterTest, InterpreterLookupNameOfBytecodeHandler) {

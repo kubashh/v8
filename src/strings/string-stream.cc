@@ -345,7 +345,7 @@ void StringStream::PrintFixedArray(Tagged<FixedArray> array,
 }
 
 void StringStream::PrintByteArray(Tagged<ByteArray> byte_array) {
-  unsigned int limit = byte_array->length();
+  unsigned int limit = byte_array->capacity();
   for (unsigned int i = 0; i < 10 && i < limit; i++) {
     uint8_t b = byte_array->get(i);
     Add("             %d: %3d 0x%02x", i, b, b);

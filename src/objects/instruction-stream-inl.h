@@ -105,8 +105,8 @@ void InstructionStream::Finalize(Tagged<Code> code,
 
   // Copy the relocation info first before we unlock the Jit allocation.
   // TODO(sroettger): reloc info should live in protected memory.
-  DCHECK_EQ(reloc_info->length(), desc.reloc_size);
-  CopyBytes(reloc_info->GetDataStartAddress(), desc.buffer + desc.reloc_offset,
+  DCHECK_EQ(reloc_info->capacity(), desc.reloc_size);
+  CopyBytes(reloc_info->begin(), desc.buffer + desc.reloc_offset,
             static_cast<size_t>(desc.reloc_size));
 
   {
@@ -200,15 +200,15 @@ Tagged<ByteArray> InstructionStream::unchecked_relocation_info() const {
 }
 
 uint8_t* InstructionStream::relocation_start() const {
-  return relocation_info()->GetDataStartAddress();
+  return relocation_info()->begin();
 }
 
 uint8_t* InstructionStream::relocation_end() const {
-  return relocation_info()->GetDataEndAddress();
+  return relocation_info()->end();
 }
 
 int InstructionStream::relocation_size() const {
-  return relocation_info()->length();
+  return relocation_info()->capacity();
 }
 
 int InstructionStream::Size() const { return SizeFor(body_size()); }
