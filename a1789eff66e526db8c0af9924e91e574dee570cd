@@ -16,6 +16,74 @@
       "message": "It is the final version on my side. Please take a look when you have time. Thanks.",
       "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "701e0b73_34b6536c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-09-28T01:08:56Z",
+      "side": 1,
+      "message": "lgtm! Only nits and stylistic suggestions.",
+      "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a4e927d_89dac75c",
+        "filename": "src/builtins/array-from-async.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-09-28T01:08:56Z",
+      "side": 1,
+      "message": "I\u0027m confused by this comment, since there\u0027s an unconditional `UnsafeCast\u003cJSPromise\u003e` below, suggesting this resultPromise is already a built-in promise.",
+      "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e04c5e2_21a3add8",
+        "filename": "src/builtins/array-from-async.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-09-28T01:08:56Z",
+      "side": 1,
+      "message": "This is pretty verbose with all the slots being passed explicitly. I wonder if Torque is good enough to take a 2nd template argument for the slots? If not, WDYT about a wrapper convenience macro,\n\n```\nmacro ArrayFromAsyncIterableAwaitPoint(...) {\n  return ArrayFromAsyncAwaitPoint\u003cArrayFromAsyncIterableResolveContext\u003e(\n            context,\n            ArrayFromAsyncIterableResolveContextSlots::\n                kArrayFromAsyncIterableResolveResumeStateStepSlot,\n            ArrayFromAsyncIterableResolveContextSlots::\n                kArrayFromAsyncIterableResolvePromiseFunctionSlot,\n            ArrayFromAsyncIterableResolveContextSlots::\n                kArrayFromAsyncIterableResolveOnFulfilledFunctionSlot,\n            ArrayFromAsyncIterableResolveContextSlots::\n                kArrayFromAsyncIterableResolveOnRejectedFunctionSlot,\n            ...);\n}\n```",
+      "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39c28b87_dc368947",
+        "filename": "src/builtins/array-from-async.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-09-28T01:08:56Z",
+      "side": 1,
+      "message": "Ditto on verbosity here. A convenience wrapper macro for the array-like case as well woudl be nice.",
+      "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
