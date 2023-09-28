@@ -171,7 +171,10 @@ class ValueNumberingReducer : public Next {
             (!same_block_only ||
              entry.block == Asm().current_block()->index()) &&
             entry_op.Cast<Op>().EqualsForGVN(op)) {
-          Next::RemoveLast(op_idx);
+          // Tuples don't count towards uses, so RemoveLast shouldn't call
+          // DecrementInputUses for TupleOp (this is controled by the 2nd
+          // argument to RemoveLast).
+          Next::RemoveLast(op_idx, std::is_same_v<Op, TupleOp>);
           return entry.value;
         }
       }

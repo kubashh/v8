@@ -604,8 +604,8 @@ class Graph {
     return operations_.Allocate(slot_count);
   }
 
-  void RemoveLast() {
-    DecrementInputUses(*AllOperations().rbegin());
+  void RemoveLast(bool decrement_input_uses) {
+    if (decrement_input_uses) DecrementInputUses(*AllOperations().rbegin());
     operations_.RemoveLast();
   }
 
@@ -615,7 +615,10 @@ class Graph {
     OpIndex result = next_operation_index();
 #endif  // DEBUG
     Op& op = Op::New(this, args...);
-    IncrementInputUses(op);
+    if constexpr (!std::is_same_v<Op, TupleOp>) {
+      // We never increment uses for Tuples.
+      IncrementInputUses(op);
+    }
 
     if (op.IsRequiredWhenUnused()) {
       // Once the graph is built, an operation with a `saturated_use_count` of 0
@@ -949,6 +952,10 @@ class Graph {
 
   template <class Op>
   void IncrementInputUses(const Op& op) {
+    // TupleOp never counts towards uses, so IncrementInputUses shouldn't be
+    // called for TupleOp.
+    DCHECK(!op.template Is<TupleOp>());
+
     for (OpIndex input : op.inputs()) {
       Get(input).saturated_use_count.Incr();
     }
@@ -956,6 +963,9 @@ class Graph {
 
   template <class Op>
   void DecrementInputUses(const Op& op) {
+    // TupleOp never counts towards uses, so DecrementInputUses shouldn't be
+    // called for TupleOp.
+    DCHECK(!op.template Is<TupleOp>());
     for (OpIndex input : op.inputs()) {
       Get(input).saturated_use_count.Decr();
     }

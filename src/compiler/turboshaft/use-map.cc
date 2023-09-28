@@ -51,6 +51,10 @@ UseMap::UseMap(const Graph& graph, Zone* zone)
       }
 
       // Add uses.
+      if (op.Is<TupleOp>()) {
+        // Tuples don't count towards uses.
+        continue;
+      }
       for (OpIndex input_index : op.inputs()) {
         AddUse(&graph, input_index, op_index);
       }

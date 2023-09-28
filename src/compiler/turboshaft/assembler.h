@@ -680,8 +680,8 @@ class ReducerBase : public ReducerBaseForwarder<Next> {
   void Verify(OpIndex old_index, OpIndex new_index) {}
 #endif  // DEBUG
 
-  void RemoveLast(OpIndex index_of_last_operation) {
-    Asm().output_graph().RemoveLast();
+  void RemoveLast(OpIndex index_of_last_operation, bool decrement_input_uses) {
+    Asm().output_graph().RemoveLast(decrement_input_uses);
   }
 
   void FixLoopPhi(const PhiOp& input_phi, OpIndex output_index,

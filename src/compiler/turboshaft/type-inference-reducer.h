@@ -403,7 +403,7 @@ class TypeInferenceReducer
     return index;
   }
 
-  void RemoveLast(OpIndex index_of_last_operation) {
+  void RemoveLast(OpIndex index_of_last_operation, bool decrement_input_uses) {
     if (op_to_key_mapping_[index_of_last_operation]) {
       op_to_key_mapping_[index_of_last_operation] = base::nullopt;
       TURBOSHAFT_TRACE_TYPING_OK(
@@ -417,7 +417,7 @@ class TypeInferenceReducer
           GetType(index_of_last_operation).ToString().substr(0, 40).c_str());
       output_graph_types_[index_of_last_operation] = Type::Invalid();
     }
-    Next::RemoveLast(index_of_last_operation);
+    Next::RemoveLast(index_of_last_operation, decrement_input_uses);
   }
 
  private:
