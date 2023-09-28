@@ -207,8 +207,7 @@ class SnapshotTable {
     // use its parent instead.
     if (current_snapshot_->log_begin == current_snapshot_->log_end) {
       SnapshotData* parent = current_snapshot_->parent;
-      DCHECK_EQ(current_snapshot_, &snapshots_.back());
-      snapshots_.pop_back();
+      snapshot_pool_.Delete(current_snapshot_);
       current_snapshot_ = parent;
       return Snapshot{*parent};
     }
@@ -251,7 +250,7 @@ class SnapshotTable {
   // before all modifications to the table.
   // Keys have identity, and the data embedded in the key is mutable.
   Key NewKey(KeyData data, Value initial_value = Value{}) {
-    return Key{table_.emplace_back(
+    return Key{*zone_->New<TableEntry>(
         TableEntry{std::move(initial_value), std::move(data)})};
   }
   Key NewKey(Value initial_value = Value{}) {
@@ -263,8 +262,7 @@ class SnapshotTable {
 
  private:
   Zone* zone_;
-  ZoneDeque<TableEntry> table_{zone_};
-  ZoneDeque<SnapshotData> snapshots_{zone_};
+  ZonePool<SnapshotData> snapshot_pool_{zone_};
   // While logically each snapshot has its own log, we allocate the memory as a
   // single global log with each snapshot pointing to a section of it to reduce
   // the number of allocations.
@@ -282,7 +280,7 @@ class SnapshotTable {
 #endif
 
   SnapshotData& NewSnapshot(SnapshotData* parent) {
-    return snapshots_.emplace_back(parent, log_.size());
+    return *snapshot_pool_.New(parent, log_.size());
   }
 
   base::Vector<LogEntry> LogEntries(SnapshotData* s) {

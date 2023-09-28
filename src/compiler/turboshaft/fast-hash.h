@@ -5,6 +5,7 @@
 #ifndef V8_COMPILER_TURBOSHAFT_FAST_HASH_H_
 #define V8_COMPILER_TURBOSHAFT_FAST_HASH_H_
 
+#include <iostream>
 #include <tuple>
 
 #include "src/base/functional.h"
@@ -13,8 +14,7 @@
 namespace v8::internal::compiler::turboshaft {
 
 // fast_hash_combine() / fast_hash_value() produce a bad but very fast to
-// compute hash, intended for hash-tables and only usable for data that is
-// sufficiently random already and has high variance in their low bits.
+// compute hash. There is no guarantee that all bits have high entropy.
 
 V8_INLINE size_t fast_hash_combine() { return 0u; }
 V8_INLINE size_t fast_hash_combine(size_t acc) { return acc; }
@@ -27,6 +27,9 @@ V8_INLINE size_t fast_hash_combine(T const& v, Ts const&... vs);
 template <class T>
 struct fast_hash {
   size_t operator()(const T& v) const {
+    if constexpr (std::is_integral_v<T>) {
+      return static_cast<size_t>(v);
+    }
     if constexpr (std::is_enum<T>::value) {
       return static_cast<size_t>(v);
     } else {
@@ -40,6 +43,11 @@ struct fast_hash<std::pair<T1, T2>> {
   size_t operator()(const std::pair<T1, T2>& v) const {
     return fast_hash_combine(v.first, v.second);
   }
+};
+
+template <typename T>
+struct fast_hash<T*> {
+  size_t operator()(T* v) const { return reinterpret_cast<size_t>(v); }
 };
 
 template <class... Ts>

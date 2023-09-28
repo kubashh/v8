@@ -3024,6 +3024,7 @@ filegroup(
         "src/compiler/turboshaft/machine-optimization-reducer.h",
         "src/compiler/turboshaft/memory-optimization-reducer.cc",
         "src/compiler/turboshaft/memory-optimization-reducer.h",
+        "src/compiler/turboshaft/nested-hash-map.h",
         "src/compiler/turboshaft/operation-matching.h",
         "src/compiler/turboshaft/operations.cc",
         "src/compiler/turboshaft/operations.h",

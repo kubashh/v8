@@ -554,6 +554,7 @@ v8_source_set("v8_unittests_sources") {
       "compiler/sloppy-equality-unittest.cc",
       "compiler/state-values-utils-unittest.cc",
       "compiler/turboshaft/doubly-threaded-list-unittest.cc",
+      "compiler/turboshaft/nested-hash-map-unittest.cc",
       "compiler/turboshaft/snapshot-table-unittest.cc",
       "compiler/turboshaft/turboshaft-typer-unittest.cc",
       "compiler/turboshaft/turboshaft-types-unittest.cc",

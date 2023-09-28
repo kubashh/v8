@@ -5,9 +5,12 @@
 #ifndef V8_COMPILER_TURBOSHAFT_LATE_LOAD_ELIMINATION_REDUCER_H_
 #define V8_COMPILER_TURBOSHAFT_LATE_LOAD_ELIMINATION_REDUCER_H_
 
+#include "src/base/optional.h"
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/doubly-threaded-list.h"
 #include "src/compiler/turboshaft/graph.h"
+#include "src/compiler/turboshaft/index.h"
+#include "src/compiler/turboshaft/nested-hash-map.h"
 #include "src/compiler/turboshaft/snapshot-table.h"
 #include "src/compiler/turboshaft/utils.h"
 #include "src/zone/zone.h"
@@ -179,9 +182,10 @@ class SparseOpIndexSnapshotTable : public SnapshotTable<Value, KeyData> {
 
   using Base::Get;
   Value Get(OpIndex idx) const {
-    auto it = indices_to_keys_.find(idx);
-    if (it == indices_to_keys_.end()) return Value{};
-    return Base::Get(it->second);
+    if (const Key* key = indices_to_keys_.Find(idx)) {
+      return Base::Get(*key);
+    }
+    return Value{};
   }
 
   using Base::Set;
@@ -198,33 +202,31 @@ class SparseOpIndexSnapshotTable : public SnapshotTable<Value, KeyData> {
     NewKey(idx, KeyData{}, initial_value);
   }
 
-  bool HasKeyFor(OpIndex idx) const {
-    return indices_to_keys_.find(idx) != indices_to_keys_.end();
-  }
+  bool HasKeyFor(OpIndex idx) const { return indices_to_keys_.Contains(idx); }
 
   base::Optional<Key> TryGetKeyFor(OpIndex idx) const {
-    auto it = indices_to_keys_.find(idx);
-    if (it != indices_to_keys_.end()) return it->second;
+    const Key* key = indices_to_keys_.Find(idx);
+    if (key) return *key;
     return base::nullopt;
   }
 
  private:
   Key GetOrCreateKey(OpIndex idx) {
-    auto it = indices_to_keys_.find(idx);
-    if (it != indices_to_keys_.end()) return it->second;
-    Key key = Base::NewKey();
-    indices_to_keys_.insert({idx, key});
+    Key& key = indices_to_keys_[idx];
+    if (!key.valid()) {
+      key = Base::NewKey();
+    }
     return key;
   }
-  ZoneUnorderedMap<OpIndex, Key> indices_to_keys_;
+  NestedHashMap<OpIndex, Key> indices_to_keys_;
 };
 
 struct MemoryAddress {
-  OpIndex base;
-  OpIndex index;
-  int32_t offset;
-  uint8_t element_size_log2;
-  uint8_t size;
+  OpIndex base = OpIndex::Invalid();
+  OpIndex index = OpIndex::Invalid();
+  int32_t offset = 0;
+  uint8_t element_size_log2 = 0;
+  uint8_t size = 0;
 
   bool operator==(const MemoryAddress& other) const {
     return base == other.base && index == other.index &&
@@ -234,7 +236,7 @@ struct MemoryAddress {
 };
 
 inline size_t hash_value(MemoryAddress const& mem) {
-  return fast_hash_combine(mem.base, mem.index, mem.offset,
+  return fast_hash_combine(mem.base, mem.offset, mem.index,
                            mem.element_size_log2, mem.size);
 }
 
@@ -315,27 +317,26 @@ class MemoryContentTable
     if (non_aliasing_objects_.Get(base)) {
       // Since {base} is non-aliasing, it's enough to just iterate the values at
       // this base.
-      auto base_keys = base_keys_.find(base);
-      if (base_keys == base_keys_.end()) return;
-      for (auto it = base_keys->second.with_offsets.begin();
-           it != base_keys->second.with_offsets.end();) {
+      auto& base_keys = base_keys_[base];
+      for (auto it = base_keys.with_offsets.begin();
+           it != base_keys.with_offsets.end();) {
         Key key = *it;
         DCHECK_EQ(key.data().mem.base, base);
         DCHECK(!key.data().mem.index.valid());
         if (index.valid() || offset == key.data().mem.offset) {
           // Overwrites {key}.
-          it = base_keys->second.with_offsets.RemoveAt(it);
+          it = base_keys.with_offsets.RemoveAt(it);
           Set(key, OpIndex::Invalid());
         } else {
           ++it;
         }
       }
       // Invalidating all of the value with valid Index at base {base}.
-      for (auto it = base_keys->second.with_indices.begin();
-           it != base_keys->second.with_indices.end();) {
+      for (auto it = base_keys.with_indices.begin();
+           it != base_keys.with_indices.end();) {
         Key key = *it;
         DCHECK(key.data().mem.index.valid());
-        it = base_keys->second.with_indices.RemoveAt(it);
+        it = base_keys.with_indices.RemoveAt(it);
         Set(key, OpIndex::Invalid());
       }
     } else {
@@ -371,25 +372,24 @@ class MemoryContentTable
     // for whole buckets non-aliasing buckets (if we had gone through
     // {offset_keys_} instead, then for each key we would've had to check
     // whether it was non-aliasing or not).
-    for (auto& base_keys : base_keys_) {
-      OpIndex base = base_keys.first;
-      if (non_aliasing_objects_.Get(base)) continue;
-      for (auto it = base_keys.second.with_offsets.begin();
-           it != base_keys.second.with_offsets.end();) {
+    base_keys_.ForEach([&](OpIndex base, BaseData& base_data) {
+      if (non_aliasing_objects_.Get(base)) return;
+      for (auto it = base_data.with_offsets.begin();
+           it != base_data.with_offsets.end();) {
         Key key = *it;
         // It's important to remove with RemoveAt before Setting the key to
         // invalid, otherwise OnKeyChange will remove {key} from {base_keys},
         // which will invalidate {it}.
-        it = base_keys.second.with_offsets.RemoveAt(it);
+        it = base_data.with_offsets.RemoveAt(it);
         Set(key, OpIndex::Invalid());
       }
-      for (auto it = base_keys.second.with_indices.begin();
-           it != base_keys.second.with_indices.end();) {
+      for (auto it = base_data.with_indices.begin();
+           it != base_data.with_indices.end();) {
         Key key = *it;
-        it = base_keys.second.with_indices.RemoveAt(it);
+        it = base_data.with_indices.RemoveAt(it);
         Set(key, OpIndex::Invalid());
       }
-    }
+    });
   }
 
   OpIndex Find(const LoadOp& load) {
@@ -400,9 +400,11 @@ class MemoryContentTable
     uint8_t size = load.loaded_rep.SizeInBytes();
 
     MemoryAddress mem{base, index, offset, element_size_log2, size};
-    auto key = all_keys_.find(mem);
-    if (key == all_keys_.end()) return OpIndex::Invalid();
-    return Get(key->second);
+    auto key = all_keys_[mem];
+    if (key.valid()) {
+      return Get(key);
+    }
+    return OpIndex::Invalid();
   }
 
   void Insert(const StoreOp& store) {
@@ -429,20 +431,20 @@ class MemoryContentTable
 #ifdef DEBUG
   void Print() {
     std::cout << "MemoryContentTable:\n";
-    for (const auto& base_keys : base_keys_) {
-      for (Key key : base_keys.second.with_offsets) {
+    base_keys_.ForEach([&](OpIndex base, BaseData& base_data) {
+      for (Key key : base_data.with_offsets) {
         std::cout << "  * " << key.data().mem.base << " - "
                   << key.data().mem.index << " - " << key.data().mem.offset
                   << " - " << key.data().mem.element_size_log2 << " ==> "
                   << Get(key) << "\n";
       }
-      for (Key key : base_keys.second.with_indices) {
+      for (Key key : base_data.with_indices) {
         std::cout << "  * " << key.data().mem.base << " - "
                   << key.data().mem.index << " - " << key.data().mem.offset
                   << " - " << key.data().mem.element_size_log2 << " ==> "
                   << Get(key) << "\n";
       }
-    }
+    });
   }
 #endif
 
@@ -452,24 +454,17 @@ class MemoryContentTable
     DCHECK_EQ(base, ResolveBase(base));
 
     MemoryAddress mem{base, index, offset, element_size_log2, size};
-    auto existing_key = all_keys_.find(mem);
-    if (existing_key != all_keys_.end()) {
-      Set(existing_key->second, value);
-      return;
+    auto& key = all_keys_[mem];
+    if (!key.valid()) {
+      key = NewKey({mem});
     }
-
-    // Creating a new key.
-    Key key = NewKey({mem});
-    all_keys_.insert({mem, key});
     Set(key, value);
   }
 
   void InvalidateAtOffset(int32_t offset, OpIndex base) {
     MapMaskAndOr base_maps = object_maps_.Get(base);
-    auto offset_keys = offset_keys_.find(offset);
-    if (offset_keys == offset_keys_.end()) return;
-    for (auto it = offset_keys->second.begin();
-         it != offset_keys->second.end();) {
+    auto& offset_keys = offset_keys_[offset];
+    for (auto it = offset_keys.begin(); it != offset_keys.end();) {
       Key key = *it;
       DCHECK_EQ(offset, key.data().mem.offset);
       // It can overwrite previous stores to any base (except non-aliasing
@@ -486,7 +481,7 @@ class MemoryContentTable
         ++it;
         continue;
       }
-      it = offset_keys->second.RemoveAt(it);
+      it = offset_keys.RemoveAt(it);
       Set(key, OpIndex::Invalid());
     }
   }
@@ -500,23 +495,10 @@ class MemoryContentTable
 
   void AddKeyInBaseOffsetMaps(Key key) {
     // Inserting in {base_keys_}.
-    OpIndex base = key.data().mem.base;
-    auto base_keys = base_keys_.find(base);
-    if (base_keys != base_keys_.end()) {
-      if (key.data().mem.index.valid()) {
-        base_keys->second.with_indices.Add(key);
-      } else {
-        base_keys->second.with_offsets.Add(key);
-      }
-    } else {
-      BaseData data;
-      if (key.data().mem.index.valid()) {
-        data.with_indices.Add(key);
-      } else {
-        data.with_offsets.Add(key);
-      }
-      base_keys_.insert({base, std::move(data)});
-    }
+    auto& base_keys = base_keys_[key.data().mem.base];
+    auto& base_keys_set = key.data().mem.index.valid() ? base_keys.with_indices
+                                                       : base_keys.with_offsets;
+    base_keys_set.Add(key);
 
     if (key.data().mem.index.valid()) {
       // Inserting in {index_keys_}
@@ -524,14 +506,7 @@ class MemoryContentTable
     } else {
       // Inserting in {offset_keys_}.
       int offset = key.data().mem.offset;
-      auto offset_keys = offset_keys_.find(offset);
-      if (offset_keys != offset_keys_.end()) {
-        offset_keys->second.Add(key);
-      } else {
-        DoublyThreadedList<Key, OffsetListTraits> list;
-        list.Add(key);
-        offset_keys_.insert({offset, std::move(list)});
-      }
+      offset_keys_[offset].Add(key);
     }
   }
 
@@ -550,11 +525,11 @@ class MemoryContentTable
 
   // A map containing all of the keys, for fast lookup of a specific
   // MemoryAddress.
-  ZoneUnorderedMap<MemoryAddress, Key> all_keys_;
+  NestedHashMap<MemoryAddress, Key> all_keys_;
   // Map from base OpIndex to keys associated with this base.
-  ZoneUnorderedMap<OpIndex, BaseData> base_keys_;
+  NestedHashMap<OpIndex, BaseData> base_keys_;
   // Map from offsets to keys associated with this offset.
-  ZoneUnorderedMap<int, DoublyThreadedList<Key, OffsetListTraits>> offset_keys_;
+  NestedHashMap<int, DoublyThreadedList<Key, OffsetListTraits>> offset_keys_;
 
   // List of all of the keys that have a valid index.
   DoublyThreadedList<Key, OffsetListTraits> index_keys_;

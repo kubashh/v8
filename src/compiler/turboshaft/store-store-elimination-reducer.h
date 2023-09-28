@@ -7,6 +7,7 @@
 
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/graph.h"
+#include "src/compiler/turboshaft/nested-hash-map.h"
 #include "src/compiler/turboshaft/operations.h"
 #include "src/compiler/turboshaft/sidetable.h"
 #include "src/compiler/turboshaft/snapshot-table.h"
@@ -132,9 +133,8 @@ class MaybeRedundantStoresTable
 
     // Collect the snapshots of all successors.
     {
-      auto successors = SuccessorBlocks(block->LastOperation(graph_));
       successor_snapshots_.clear();
-      for (const Block* s : successors) {
+      for (const Block* s : SuccessorBlocks(block->LastOperation(graph_))) {
         base::Optional<Snapshot> s_snapshot =
             block_to_snapshot_mapping_[s->index()];
         // When we visit the loop for the first time, the loop header hasn't
@@ -237,13 +237,12 @@ class MaybeRedundantStoresTable
 
  private:
   Key map_to_key(OpIndex base, int32_t offset, uint8_t size) {
-    std::pair p{base, offset};
-    auto it = key_mapping_.find(p);
-    if (it != key_mapping_.end()) return it->second;
-    Key new_key = NewKey(MaybeRedundantStoresKeyData{base, offset, size},
-                         StoreObservability::kObservable);
-    key_mapping_.emplace(p, new_key);
-    return new_key;
+    Key& key = key_mapping_[{base, offset}];
+    if (!key.valid()) {
+      key = NewKey(MaybeRedundantStoresKeyData{base, offset, size},
+                   StoreObservability::kObservable);
+    }
+    return key;
   }
   struct GetActiveKeysIndex {
     IntrusiveSetIndex& operator()(Key key) const {
@@ -253,7 +252,7 @@ class MaybeRedundantStoresTable
 
   const Graph& graph_;
   GrowingBlockSidetable<base::Optional<Snapshot>> block_to_snapshot_mapping_;
-  ZoneUnorderedMap<std::pair<OpIndex, int32_t>, Key> key_mapping_;
+  NestedHashMap<std::pair<OpIndex, int32_t>, Key> key_mapping_;
   // In `active_keys_`, we track the keys of all stores that arge gc-observable
   // or unobservable. Keys that are mapped to the default value (observable) are
   // removed from the `active_keys_`.
@@ -291,7 +290,6 @@ class RedundantStoreAnalysis {
         }
       }
     }
-    eliminable_stores_ = nullptr;
   }
 
   void ProcessBlock(const Block& block) {

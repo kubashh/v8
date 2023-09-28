@@ -67,43 +67,33 @@ namespace base {
 template <typename>
 struct hash;
 
-// Thomas Wang, Integer Hash Functions.
-// https://gist.github.com/badboy/6267743
 template <typename T>
 V8_INLINE size_t hash_value_unsigned_impl(T v) {
+  const uint64_t seed = 0x9ddfea08eb382d69;
   switch (sizeof(T)) {
     case 4: {
-      // "32 bit Mix Functions"
-      v = ~v + (v << 15);  // v = (v << 15) - v - 1;
-      v = v ^ (v >> 12);
-      v = v + (v << 2);
-      v = v ^ (v >> 4);
-      v = v * 2057;  // v = (v + (v << 3)) + (v << 11);
-      v = v ^ (v >> 16);
-      return static_cast<size_t>(v);
+      uint64_t mul_result = uint64_t{static_cast<uint32_t>(seed)} *
+                            uint64_t{static_cast<uint32_t>(v)};
+      return static_cast<uint32_t>(mul_result) +
+             static_cast<uint32_t>(mul_result >> 32);
     }
     case 8: {
       switch (sizeof(size_t)) {
         case 4: {
-          // "64 bit to 32 bit Hash Functions"
-          v = ~v + (v << 18);  // v = (v << 18) - v - 1;
-          v = v ^ (v >> 31);
-          v = v * 21;  // v = (v + (v << 2)) + (v << 4);
-          v = v ^ (v >> 11);
-          v = v + (v << 6);
-          v = v ^ (v >> 22);
-          return static_cast<size_t>(v);
+          uint64_t mul_result_low = uint64_t{static_cast<uint32_t>(seed)} *
+                                    uint64_t{static_cast<uint32_t>(v)};
+          uint64_t mul_result_high =
+              (seed >> 32) * (static_cast<uint64_t>(v) >> 32);
+          return static_cast<uint32_t>(mul_result_low) +
+                 static_cast<uint32_t>(mul_result_low >> 32) +
+                 (static_cast<uint32_t>(mul_result_high) +
+                  static_cast<uint32_t>(mul_result_high >> 32));
         }
         case 8: {
-          // "64 bit Mix Functions"
-          v = ~v + (v << 21);  // v = (v << 21) - v - 1;
-          v = v ^ (v >> 24);
-          v = (v + (v << 3)) + (v << 8);  // v * 265
-          v = v ^ (v >> 14);
-          v = (v + (v << 2)) + (v << 4);  // v * 21
-          v = v ^ (v >> 28);
-          v = v + (v << 31);
-          return static_cast<size_t>(v);
+          __uint128_t mul_result =
+              __uint128_t{seed} * __uint128_t{static_cast<uint64_t>(v)};
+          return static_cast<uint64_t>(mul_result) +
+                 static_cast<uint64_t>(mul_result >> 64);
         }
       }
     }

@@ -25,6 +25,35 @@
 namespace v8 {
 namespace internal {
 
+template <class T>
+class ZonePool {
+ public:
+  static const size_t kAllocSize = std::max(sizeof(T), sizeof(void*));
+  ZonePool(Zone* zone) : zone_(zone) {}
+
+  template <class... Args>
+  T* New(Args&&... args) {
+    void* ptr;
+    if (free_list_) {
+      ptr = free_list_;
+      free_list_ = *reinterpret_cast<void**>(free_list_);
+    } else {
+      ptr = zone_->Allocate<T>(sizeof(T));
+    }
+    return new (ptr) T(std::forward<Args>(args)...);
+  }
+
+  void Delete(T* recycled) {
+    recycled->~T();
+    *reinterpret_cast<void**>(recycled) = free_list_;
+    free_list_ = recycled;
+  }
+
+ private:
+  Zone* zone_;
+  void* free_list_ = nullptr;
+};
+
 // A drop-in replacement for std::vector that uses a Zone for its allocations,
 // and (contrary to a std::vector subclass with custom allocator) gives us
 // precise control over its implementation and performance characteristics.

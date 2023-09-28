@@ -3473,20 +3473,21 @@ struct fast_hash<SwitchOp::Case> {
   }
 };
 
-inline base::SmallVector<Block*, 4> SuccessorBlocks(const Operation& op) {
+V8_INLINE base::SmallVector<Block*, 4> SuccessorBlocks(const Operation& op) {
+  base::SmallVector<Block*, 4> result;
   DCHECK(op.IsBlockTerminator());
   switch (op.opcode) {
     case Opcode::kCheckException: {
       auto& casted = op.Cast<CheckExceptionOp>();
-      return {casted.didnt_throw_block, casted.catch_block};
+      return result = {casted.didnt_throw_block, casted.catch_block};
     }
     case Opcode::kGoto: {
       auto& casted = op.Cast<GotoOp>();
-      return {casted.destination};
+      return result = {casted.destination};
     }
     case Opcode::kBranch: {
       auto& casted = op.Cast<BranchOp>();
-      return {casted.if_true, casted.if_false};
+      return result = {casted.if_true, casted.if_false};
     }
     case Opcode::kReturn:
     case Opcode::kDeoptimize:
@@ -3494,7 +3495,6 @@ inline base::SmallVector<Block*, 4> SuccessorBlocks(const Operation& op) {
       return base::SmallVector<Block*, 4>{};
     case Opcode::kSwitch: {
       auto& casted = op.Cast<SwitchOp>();
-      base::SmallVector<Block*, 4> result;
       for (const SwitchOp::Case& c : casted.cases) {
         result.push_back(c.destination);
       }
