@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e51a34c8_d6f1d7c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-09-28T13:36:17Z",
+      "side": 1,
+      "message": "A small refactoring in preparation of https://crrev.com/c/4898689; PTAL.",
+      "revId": "ea4e0624b8776faf27a074a2d5cfeb2a8b8add42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
