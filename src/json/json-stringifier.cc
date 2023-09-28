@@ -6,6 +6,7 @@
 
 #include "src/base/strings.h"
 #include "src/common/message-template.h"
+#include "src/execution/protectors-inl.h"
 #include "src/numbers/conversions.h"
 #include "src/objects/heap-number-inl.h"
 #include "src/objects/js-array-inl.h"
@@ -206,6 +207,10 @@ class JsonStringifier {
 
   Result SerializeJSProxy(Handle<JSProxy> object, Handle<Object> key);
   Result SerializeJSReceiverSlow(Handle<JSReceiver> object);
+  template <typename ArrayT, typename FuncT>
+  bool SerializeFixedArrayFast(const ArrayT elements, uint32_t& i,
+                               uint32_t limit, FuncT&& serialize_element,
+                               bool is_holey, bool bailout_on_hole);
   Result SerializeArrayLikeSlow(Handle<JSReceiver> object, uint32_t start,
                                 uint32_t length);
 
@@ -954,6 +959,22 @@ JsonStringifier::Result JsonStringifier::SerializeDouble(double number) {
   return SUCCESS;
 }
 
+namespace {
+
+bool CanTreatHoleAsUndefined(Isolate* isolate, Tagged<JSArray> object) {
+  if (!Protectors::IsNoElementsIntact(isolate)) return false;
+  // Check that the prototype is the initial array or object prototype.
+  Tagged<HeapObject> proto = object->map(isolate)->prototype();
+  if (!isolate->IsInAnyContext(proto, Context::INITIAL_ARRAY_PROTOTYPE_INDEX) &&
+      !isolate->IsInAnyContext(proto,
+                               Context::INITIAL_OBJECT_PROTOTYPE_INDEX)) {
+    return false;
+  }
+  return true;
+}
+
+}  // namespace
+
 JsonStringifier::Result JsonStringifier::SerializeJSArray(
     Handle<JSArray> object, Handle<Object> key) {
   uint32_t length = 0;
@@ -978,14 +999,22 @@ JsonStringifier::Result JsonStringifier::SerializeJSArray(
     const uint32_t kMaxAllowedFastPackedLength =
         std::numeric_limits<uint32_t>::max() - kInterruptLength;
     static_assert(FixedArray::kMaxLength < kMaxAllowedFastPackedLength);
+    ElementsKind kind = object->GetElementsKind(cage_base);
     switch (object->GetElementsKind(cage_base)) {
+      case HOLEY_SMI_ELEMENTS:
       case PACKED_SMI_ELEMENTS: {
         Handle<FixedArray> elements(
             FixedArray::cast(object->elements(cage_base)), isolate_);
+        const bool is_holey = IsHoleyElementsKind(kind);
+        const bool bailout_on_hole =
+            is_holey ? !CanTreatHoleAsUndefined(isolate_, *object) : true;
         while (true) {
-          for (; i < limit; i++) {
-            Separator(i == 0);
-            SerializeSmi(Smi::cast(elements->get(cage_base, i)));
+          auto serialize_element = [&](int i) {
+            return SerializeSmi(Smi::cast(elements->get(cage_base, i)));
+          };
+          if (!SerializeFixedArrayFast(elements, i, limit, serialize_element,
+                                       is_holey, bailout_on_hole)) {
+            break;
           }
           if (i >= length) break;
           DCHECK_LT(limit, kMaxAllowedFastPackedLength);
@@ -998,13 +1027,20 @@ JsonStringifier::Result JsonStringifier::SerializeJSArray(
         }
         break;
       }
+      case HOLEY_DOUBLE_ELEMENTS:
       case PACKED_DOUBLE_ELEMENTS: {
         Handle<FixedDoubleArray> elements(
             FixedDoubleArray::cast(object->elements(cage_base)), isolate_);
+        const bool is_holey = IsHoleyElementsKind(kind);
+        const bool bailout_on_hole =
+            is_holey ? !CanTreatHoleAsUndefined(isolate_, *object) : true;
         while (true) {
-          for (; i < limit; i++) {
-            Separator(i == 0);
-            SerializeDouble(elements->get_scalar(i));
+          auto serialize_element = [&](int i) {
+            return SerializeDouble(elements->get_scalar(i));
+          };
+          if (!SerializeFixedArrayFast(elements, i, limit, serialize_element,
+                                       is_holey, bailout_on_hole)) {
+            break;
           }
           if (i >= length) break;
           DCHECK_LT(limit, kMaxAllowedFastPackedLength);
@@ -1017,25 +1053,34 @@ JsonStringifier::Result JsonStringifier::SerializeJSArray(
         }
         break;
       }
+      case HOLEY_ELEMENTS:
       case PACKED_ELEMENTS: {
         HandleScope handle_scope(isolate_);
         Handle<Object> old_length(object->length(), isolate_);
         for (i = 0; i < length; i++) {
-          if (object->length() != *old_length ||
-              object->GetElementsKind(cage_base) != PACKED_ELEMENTS) {
+          if (object->length() != *old_length) {
             // Fall back to slow path.
             break;
           }
-          Separator(i == 0);
-          Result result = SerializeElement(
-              isolate_,
-              handle(FixedArray::cast(object->elements())->get(cage_base, i),
-                     isolate_),
-              i);
-          if (result == UNCHANGED) {
+          Tagged<FixedArray> elements = FixedArray::cast(object->elements());
+          const bool is_holey =
+              IsHoleyElementsKind(object->GetElementsKind(cage_base));
+          if (is_holey && elements->is_the_hole(isolate_, i)) {
+            DCHECK(IsHoleyElementsKind(object->GetElementsKind(cage_base)));
+            if (!CanTreatHoleAsUndefined(isolate_, *object)) {
+              break;
+            }
+            Separator(i == 0);
             AppendCStringLiteral("null");
-          } else if (result != SUCCESS) {
-            return result;
+          } else {
+            Separator(i == 0);
+            Result result = SerializeElement(
+                isolate_, handle(elements->get(cage_base, i), isolate_), i);
+            if (result == UNCHANGED) {
+              AppendCStringLiteral("null");
+            } else if (result != SUCCESS) {
+              return result;
+            }
           }
         }
         break;
@@ -1054,6 +1099,27 @@ JsonStringifier::Result JsonStringifier::SerializeJSArray(
   AppendCharacter(']');
   StackPop();
   return SUCCESS;
+}
+
+template <typename ArrayT, typename FuncT>
+bool JsonStringifier::SerializeFixedArrayFast(const ArrayT elements,
+                                              uint32_t& i, uint32_t limit,
+                                              FuncT&& serialize_element,
+                                              bool is_holey,
+                                              bool bailout_on_hole) {
+  for (; i < limit; i++) {
+    if (is_holey && elements->is_the_hole(isolate_, i)) {
+      if (bailout_on_hole) {
+        return false;
+      }
+      Separator(i == 0);
+      AppendCStringLiteral("null");
+    } else {
+      Separator(i == 0);
+      serialize_element(i);
+    }
+  }
+  return true;
 }
 
 JsonStringifier::Result JsonStringifier::SerializeArrayLikeSlow(
