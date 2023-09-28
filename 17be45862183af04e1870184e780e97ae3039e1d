@@ -16,6 +16,23 @@
       "message": "One of the comments is still unresolved. Let me know what you think about my explanation.",
       "revId": "17be45862183af04e1870184e780e97ae3039e1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70aceeba_caf89c98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-09-28T23:28:05Z",
+      "side": 1,
+      "message": "lgtm for codegen/, heap/, roots/",
+      "revId": "17be45862183af04e1870184e780e97ae3039e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
