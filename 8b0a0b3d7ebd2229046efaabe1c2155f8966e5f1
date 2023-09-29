@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6257659_7e3ca901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-09-29T19:23:53Z",
+      "side": 1,
+      "message": "PTAL.\nThe difference in the reland is between PS#2 and PS#4 (the ManualGCScopes in the tests).",
+      "revId": "8b0a0b3d7ebd2229046efaabe1c2155f8966e5f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
