@@ -7162,6 +7162,7 @@ void Context::SetAbortScriptExecution(
   }
 }
 
+#ifdef V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
 Local<Value> Context::GetContinuationPreservedEmbedderData() const {
   i::Handle<i::NativeContext> context = Utils::OpenHandle(this);
   i::Isolate* i_isolate = context->GetIsolate();
@@ -7179,6 +7180,7 @@ void Context::SetContinuationPreservedEmbedderData(Local<Value> data) {
   context->native_context()->set_continuation_preserved_embedder_data(
       *i::Handle<i::HeapObject>::cast(Utils::OpenHandle(*data)));
 }
+#endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
 
 void v8::Context::SetPromiseHooks(Local<Function> init_hook,
                                   Local<Function> before_hook,
