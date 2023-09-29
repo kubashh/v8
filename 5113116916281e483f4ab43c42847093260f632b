@@ -16,6 +16,24 @@
       "message": "Can you help me remember: Why don\u0027t we need to adjust cage base for the trusted space?",
       "revId": "5113116916281e483f4ab43c42847093260f632b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "751920b8_d24b1c4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-09-29T08:02:48Z",
+      "side": 1,
+      "message": "Do you mean adjusting it to a 4GB-aligned address?\nFor the trusted range it should work similar to the code range: we only make sure that the cage doesn\u0027t cross a 4GB byte boundary:\n\n```\n  // The allocatable region must not cross a 4GB boundary so that the default\n  // pointer compression scheme of truncating pointers to 32-bits still works.\n  const size_t base_alignment \u003d base::bits::RoundUpToPowerOfTwo(requested);\n```\nThen compressed pointers inside the trusted space work. Not every compressed pointer points into trusted space though. For example, 0x0 might actually point to outside of the cage then, but that\u0027s fine. \n\nThings might change if we add a trusted RO space later on, at least if we just mmap it into the space without adjusting pointers between RO objects. But I would wait with any changes in that regard until we actually need/build that trusted RO space.\n\nDoes that answer your question?",
+      "parentUuid": "9c6eb31d_b3b388be",
+      "revId": "5113116916281e483f4ab43c42847093260f632b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
