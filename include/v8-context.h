@@ -7,6 +7,12 @@
 
 #include <stdint.h>
 
+#ifdef DEBUG
+// TODO(chromium:1454114): This will be removed when deprecation of
+// FreezeEmbedderObjectAndGetChildren is complete.
+#include <iostream>
+#endif
+
 #include <vector>
 
 #include "v8-data.h"          // NOLINT(build/include_directory)
@@ -181,8 +187,32 @@ class V8_EXPORT Context : public Data {
      * also be considered for freezing should be added to the children_out
      * parameter. Returns true if the operation completed successfully.
      */
+    V8_DEPRECATE_SOON("Please use the version that takes a LocalVector&")
     virtual bool FreezeEmbedderObjectAndGetChildren(
-        Local<Object> obj, std::vector<Local<Object>>& children_out) = 0;
+        Local<Object> obj, std::vector<Local<Object>>& children_out) {
+      // TODO(chromium:1454114): This method is temporarily defined and
+      // aborts, if called, in order to smoothen the transition to the
+      // version that follows.
+#ifdef DEBUG
+      std::cerr << __FILE__ << ":" << __LINE__ << ": ";
+      std::cerr << "FreezeEmbedderObjectAndGetChildren must be defined\n";
+#endif
+      abort();
+    }
+    virtual bool FreezeEmbedderObjectAndGetChildren(
+        Local<Object> obj, LocalVector<Object>& children_out) {
+      // TODO(chromium:1454114): This method is temporarily defined and
+      // calls the previous version, soon to be deprecated, in order to
+      // smoothen the transition. When deprecation is completed, this
+      // will become an abstract method.
+      std::vector<Local<Object>> children;
+      START_ALLOW_USE_DEPRECATED()
+      // Temporarily use the old callback.
+      bool result = FreezeEmbedderObjectAndGetChildren(obj, children);
+      END_ALLOW_USE_DEPRECATED()
+      children_out.insert(children_out.end(), children.begin(), children.end());
+      return result;
+    }
   };
 
   /**
