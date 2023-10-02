@@ -472,24 +472,20 @@ class StrongRootAllocator<LocalUnchecked<T>> : public StrongRootAllocatorBase {
 
 template <typename T>
 class LocalVector {
- private:
-  using element_type = internal::LocalUnchecked<T>;
-
  public:
   using value_type = Local<T>;
   using reference = value_type&;
   using const_reference = const value_type&;
   using size_type = size_t;
   using difference_type = ptrdiff_t;
-  using allocator_type = internal::StrongRootAllocator<element_type>;
   using iterator = Local<T>*;
   using const_iterator = const Local<T>*;
 
-  explicit LocalVector(Isolate* isolate) : backing_(allocator_type(isolate)) {}
+  explicit LocalVector(Isolate* isolate) : backing_(make_allocator(isolate)) {}
   LocalVector(Isolate* isolate, size_t n)
-      : backing_(n, allocator_type(isolate)) {}
+      : backing_(n, make_allocator(isolate)) {}
   explicit LocalVector(Isolate* isolate, std::initializer_list<Local<T>> init)
-      : backing_(allocator_type(isolate)) {
+      : backing_(make_allocator(isolate)) {
     if (init.size() == 0) return;
     backing_.reserve(init.size());
     backing_.insert(backing_.end(), init.begin(), init.end());
@@ -566,6 +562,22 @@ class LocalVector {
   }
 
  private:
+  using element_type = internal::LocalUnchecked<T>;
+
+#ifdef V8_ENABLE_DIRECT_LOCAL
+  using allocator_type = internal::StrongRootAllocator<element_type>;
+
+  static allocator_type make_allocator(Isolate* isolate) noexcept {
+    return allocator_type(isolate);
+  }
+#else
+  using allocator_type = std::allocator<element_type>;
+
+  static allocator_type make_allocator(Isolate* isolate) noexcept {
+    return allocator_type();
+  }
+#endif  // V8_ENABLE_DIRECT_LOCAL
+
   using vector_type = std::vector<element_type, allocator_type>;
 
   static constexpr iterator to_iter(typename vector_type::iterator it) {
