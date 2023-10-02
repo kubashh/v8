@@ -1039,15 +1039,21 @@ class V8_EXPORT StrongRootAllocatorBase {
 // and internal::StrongRootAllocator<v8::Local<T>> register the allocated range
 // as strong roots.
 template <typename T>
-class StrongRootAllocator : public StrongRootAllocatorBase,
-                            public std::allocator<T> {
+class StrongRootAllocator : public StrongRootAllocatorBase {
  public:
+  using value_type = T;
+
   explicit StrongRootAllocator(Heap* heap) : StrongRootAllocatorBase(heap) {}
   explicit StrongRootAllocator(v8::Isolate* isolate)
       : StrongRootAllocatorBase(isolate) {}
   template <typename U>
   StrongRootAllocator(const StrongRootAllocator<U>& other) noexcept
       : StrongRootAllocatorBase(other) {}
+
+  value_type* allocate(size_t n) { return std::allocator<T>().allocate(n); }
+  void deallocate(value_type* p, size_t n) noexcept {
+    return std::allocator<T>().deallocate(p, n);
+  }
 };
 
 }  // namespace internal
