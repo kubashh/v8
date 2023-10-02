@@ -16,6 +16,24 @@
       "message": "The compiler error in the NodeJS build here https://crrev.com/c/4877014\nis most probably related to this CL. Expect a patch to fix the allocator.",
       "revId": "66aad140ac2a07b4fae2871517a95c91417809d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74f2fea6_a5c849cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-10-02T20:39:40Z",
+      "side": 1,
+      "message": "Done. Inheriting from `std::allocator` was a mistake that prevented rebinding to work correctly.",
+      "parentUuid": "c6ab9b5a_42886df8",
+      "revId": "66aad140ac2a07b4fae2871517a95c91417809d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
