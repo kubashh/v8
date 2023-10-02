@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60c7d9ca_2d9bc8fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-10-02T13:40:23Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "4afd267cac2d2dd7959e776013f6c6e12e60a426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36ffddfa_726d87bd",
+        "filename": "generated/project.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-10-02T13:40:23Z",
+      "side": 1,
+      "message": "I\u0027ve no clue what the consequence of this is. Probably none. I run with updated lucicfg and my cmd line returns:\n[P3587232 15:39:03.315 generate.go:94 I] Generating configs using lucicfg v1.39.19..",
+      "range": {
+        "startLine": 10,
+        "startChar": 12,
+        "endLine": 10,
+        "endChar": 19
+      },
+      "revId": "4afd267cac2d2dd7959e776013f6c6e12e60a426",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
