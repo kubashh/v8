@@ -3419,6 +3419,25 @@ void Parser::InsertSloppyBlockFunctionVarBindings(DeclarationScope* scope) {
 // ----------------------------------------------------------------------------
 // Parser support
 
+namespace {
+
+template <typename IsolateT>
+void RecordSourceMapUrlStyle(IsolateT* isolate,
+                             Scanner::SourceMapReferenceStyle value);
+
+void RecordSourceMapUrlStyle(Isolate* isolate,
+                             Scanner::SourceMapReferenceStyle value) {
+  isolate->counters()->source_map_ref_style()->AddSample(
+      static_cast<int>(value));
+}
+
+void RecordSourceMapUrlStyle(LocalIsolate* isolate,
+                             Scanner::SourceMapReferenceStyle value) {
+  // TODO(): Figure out how to report this from the background thread.
+}
+
+}  // namespace
+
 template <typename IsolateT>
 void Parser::HandleSourceURLComments(IsolateT* isolate, Handle<Script> script) {
   Handle<String> source_url = scanner_.SourceUrl(isolate);
@@ -3428,9 +3447,16 @@ void Parser::HandleSourceURLComments(IsolateT* isolate, Handle<Script> script) {
   Handle<String> source_mapping_url = scanner_.SourceMappingUrl(isolate);
   // The API can provide a source map URL and the API should take precedence.
   // Let's make sure we do not override the API with the magic comment.
-  if (!source_mapping_url.is_null() &&
-      IsUndefined(script->source_mapping_url(isolate), isolate)) {
+  if (!IsUndefined(script->source_mapping_url(isolate), isolate)) {
+    RecordSourceMapUrlStyle(isolate, Scanner::SourceMapReferenceStyle::kApi);
+  } else if (!source_mapping_url.is_null()) {
     script->set_source_mapping_url(*source_mapping_url);
+    Scanner::SourceMapReferenceStyle style =
+        scanner_.GetSourceMapReferenceStyle();
+    DCHECK_NE(style, Scanner::SourceMapReferenceStyle::kNone);
+    RecordSourceMapUrlStyle(isolate, style);
+  } else {
+    RecordSourceMapUrlStyle(isolate, Scanner::SourceMapReferenceStyle::kNone);
   }
 }
 
