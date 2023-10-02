@@ -189,4 +189,4 @@ dp(obj1, "romeo", { set: setter });
 obj2 = Object.create(obj1);
 obj3 = Object.create(obj2);
 obj4 = Object.create(obj2);
-assertTrue(%HaveSameMap(obj3, obj4));
+assertFalse(%HaveSameMap(obj3, obj4));
