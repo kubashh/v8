@@ -30,7 +30,7 @@ class ResultsTracker(base.TestProcObserver):
 
   def _on_result_for(self, test, result):
     self.remaining -= 1
-    if result.has_unexpected_output:
+    if result.has_unexpected_output or result.is_rerun:
       self.failed += 1
       if self.max_failures and self.failed >= self.max_failures:
         print('>>> Too many failures, exiting...')
