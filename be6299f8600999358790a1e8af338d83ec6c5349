@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "559f15a8_0d310057",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2023-10-03T14:11:04Z",
+      "side": 1,
+      "message": "Hello Almothana, would you please review this change? Thanks!",
+      "revId": "be6299f8600999358790a1e8af338d83ec6c5349",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
