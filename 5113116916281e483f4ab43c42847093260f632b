@@ -52,6 +52,24 @@
       "parentUuid": "751920b8_d24b1c4c",
       "revId": "5113116916281e483f4ab43c42847093260f632b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62a2be0a_1c82c0b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-10-03T09:00:29Z",
+      "side": 1,
+      "message": "Ah! Well we don\u0027t need that *yet* since we don\u0027t have any objects in TrustedSpace yet. The idea is to migrate them one-by-one, and then we\u0027ll probably need a new `cage_base()` for some compressed-pointer field accessors.\nFor example, my idea is to move `BytecodeArrays` into trusted space by (~ 1+ CLs per item)\n- Turning BytecodeArrays into ExposedTrustedObjects so they get a indirect pointer table entry. This is https://chromium-review.googlesource.com/c/v8/v8/+/4866547\n- Referencing them via indirect pointers from the V8 heap (while still leaving them in the regular heap)\n- Moving BytecodeArray into TrustedSpace _but keeping the other objects they reference in the main heap_. The existing compressed-pointer accessors (that take a cage_base) still work since the compressed pointers point into the main cage\n- One-by-one moving the objects referenced from BytecodeArray into TrustedSpace and changing the compressed-pointer accessors on BytecodeArray to take the trusted_cage_base()\n\nThis way, the work can be split into many smaller pieces that all leave V8 in a functional state, and so can be landed and tested individually. Does that make sense?",
+      "parentUuid": "6e891f34_6dcebf74",
+      "revId": "5113116916281e483f4ab43c42847093260f632b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
