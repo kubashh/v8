@@ -40,6 +40,13 @@ void UnifiedHeapMarkingState::MarkAndPush(
   if (!traced_handle_location) {
     return;
   }
+
+  if (TracedHandles::IsWeak(traced_handle_location)) {
+    if (record_weak_traced_references_)
+      local_weak_traced_reference_worklist_.Push(&reference);
+    return;
+  }
+
   Tagged<Object> object =
       TracedHandles::Mark(traced_handle_location, mark_mode_);
   if (!IsHeapObject(object)) {
