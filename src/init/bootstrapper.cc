@@ -5080,26 +5080,29 @@ void Genesis::InitializeGlobal_harmony_string_is_well_formed() {
                         Builtin::kStringPrototypeToWellFormed, 0, false);
 }
 
-void Genesis::InitializeGlobal_harmony_temporal() {
-  if (!v8_flags.harmony_temporal) return;
+namespace {
+
+void InitializeTemporal(v8::Local<v8::Name> name,
+                        const v8::PropertyCallbackInfo<v8::Value>& info) {
+  Isolate* isolate = reinterpret_cast<Isolate*>(info.GetIsolate());
+  Handle<NativeContext> native_context = isolate->native_context();
+
   // -- T e m p o r a l
   // #sec-temporal-objects
-  Handle<JSObject> temporal =
-      factory()->NewJSObject(isolate_->object_function(), AllocationType::kOld);
-  Handle<JSGlobalObject> global(native_context()->global_object(), isolate());
-  JSObject::AddProperty(isolate_, global, "Temporal", temporal, DONT_ENUM);
+  Handle<JSObject> temporal = isolate->factory()->NewJSObject(
+      isolate->object_function(), AllocationType::kOld);
 
   // The initial value of the @@toStringTag property is the string value
   // *"Temporal"*.
   // https://github.com/tc39/proposal-temporal/issues/1539
-  InstallToStringTag(isolate_, temporal, "Temporal");
+  InstallToStringTag(isolate, temporal, "Temporal");
 
   {  // -- N o w
     // #sec-temporal-now-object
-    Handle<JSObject> now = factory()->NewJSObject(isolate_->object_function(),
-                                                  AllocationType::kOld);
-    JSObject::AddProperty(isolate_, temporal, "Now", now, DONT_ENUM);
-    InstallToStringTag(isolate_, now, "Temporal.Now");
+    Handle<JSObject> now = isolate->factory()->NewJSObject(
+        isolate->object_function(), AllocationType::kOld);
+    JSObject::AddProperty(isolate, temporal, "Now", now, DONT_ENUM);
+    InstallToStringTag(isolate, now, "Temporal.Now");
 
     // Note: There are NO Temporal.Now.plainTime
     // See https://github.com/tc39/proposal-temporal/issues/1540
@@ -5115,7 +5118,7 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(plainTimeISO, PlainTimeISO, 0)
 
 #define INSTALL_NOW_FUNC(p, N, n) \
-  SimpleInstallFunction(isolate(), now, #p, Builtin::kTemporalNow##N, n, false);
+  SimpleInstallFunction(isolate, now, #p, Builtin::kTemporalNow##N, n, false);
 
     NOW_LIST(INSTALL_NOW_FUNC)
 #undef INSTALL_NOW_FUNC
@@ -5123,19 +5126,19 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   }
 #define INSTALL_TEMPORAL_CTOR_AND_PROTOTYPE(N, U, NUM_ARGS)                    \
   Handle<JSFunction> obj_func = InstallFunction(                               \
-      isolate(), temporal, #N, JS_TEMPORAL_##U##_TYPE,                         \
-      JSTemporal##N::kHeaderSize, 0, factory()->the_hole_value(),              \
+      isolate, temporal, #N, JS_TEMPORAL_##U##_TYPE,                           \
+      JSTemporal##N::kHeaderSize, 0, isolate->factory()->the_hole_value(),     \
       Builtin::kTemporal##N##Constructor);                                     \
   obj_func->shared()->set_length(NUM_ARGS);                                    \
   obj_func->shared()->DontAdaptArguments();                                    \
-  InstallWithIntrinsicDefaultProto(isolate_, obj_func,                         \
+  InstallWithIntrinsicDefaultProto(isolate, obj_func,                          \
                                    Context::JS_TEMPORAL_##U##_FUNCTION_INDEX); \
   Handle<JSObject> prototype(JSObject::cast(obj_func->instance_prototype()),   \
-                             isolate());                                       \
-  InstallToStringTag(isolate(), prototype, "Temporal." #N);
+                             isolate);                                         \
+  InstallToStringTag(isolate, prototype, "Temporal." #N);
 
-#define INSTALL_TEMPORAL_FUNC(T, name, N, arg)                                \
-  SimpleInstallFunction(isolate(), obj_func, #name, Builtin::kTemporal##T##N, \
+#define INSTALL_TEMPORAL_FUNC(T, name, N, arg)                              \
+  SimpleInstallFunction(isolate, obj_func, #name, Builtin::kTemporal##T##N, \
                         arg, false);
 
   {  // -- P l a i n D a t e
@@ -5169,8 +5172,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(monthsInYear, MonthsInYear)   \
   V(inLeapYear, InLeapYear)
 
-#define INSTALL_PLAIN_DATE_GETTER_FUNC(p, N)                                   \
-  SimpleInstallGetter(isolate(), prototype, isolate_->factory()->p##_string(), \
+#define INSTALL_PLAIN_DATE_GETTER_FUNC(p, N)                                \
+  SimpleInstallGetter(isolate, prototype, isolate->factory()->p##_string(), \
                       Builtin::kTemporalPlainDatePrototype##N, true);
 
     PLAIN_DATE_GETTER_LIST(INSTALL_PLAIN_DATE_GETTER_FUNC)
@@ -5197,8 +5200,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(toJSON, ToJSON, 0)                     \
   V(valueOf, ValueOf, 0)
 
-#define INSTALL_PLAIN_DATE_FUNC(p, N, min)        \
-  SimpleInstallFunction(isolate(), prototype, #p, \
+#define INSTALL_PLAIN_DATE_FUNC(p, N, min)      \
+  SimpleInstallFunction(isolate, prototype, #p, \
                         Builtin::kTemporalPlainDatePrototype##N, min, false);
     PLAIN_DATE_FUNC_LIST(INSTALL_PLAIN_DATE_FUNC)
 #undef PLAIN_DATE_FUNC_LIST
@@ -5220,8 +5223,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(microsecond, Microsecond)     \
   V(nanosecond, Nanosecond)
 
-#define INSTALL_PLAIN_TIME_GETTER_FUNC(p, N)                                   \
-  SimpleInstallGetter(isolate(), prototype, isolate_->factory()->p##_string(), \
+#define INSTALL_PLAIN_TIME_GETTER_FUNC(p, N)                                \
+  SimpleInstallGetter(isolate, prototype, isolate->factory()->p##_string(), \
                       Builtin::kTemporalPlainTimePrototype##N, true);
 
     PLAIN_TIME_GETTER_LIST(INSTALL_PLAIN_TIME_GETTER_FUNC)
@@ -5244,8 +5247,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(toJSON, ToJSON, 0)                   \
   V(valueOf, ValueOf, 0)
 
-#define INSTALL_PLAIN_TIME_FUNC(p, N, min)        \
-  SimpleInstallFunction(isolate(), prototype, #p, \
+#define INSTALL_PLAIN_TIME_FUNC(p, N, min)      \
+  SimpleInstallFunction(isolate, prototype, #p, \
                         Builtin::kTemporalPlainTimePrototype##N, min, false);
     PLAIN_TIME_FUNC_LIST(INSTALL_PLAIN_TIME_FUNC)
 #undef PLAIN_TIME_FUNC_LIST
@@ -5288,8 +5291,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(monthsInYear, MonthsInYear)        \
   V(inLeapYear, InLeapYear)
 
-#define INSTALL_PLAIN_DATE_TIME_GETTER_FUNC(p, N)                              \
-  SimpleInstallGetter(isolate(), prototype, isolate_->factory()->p##_string(), \
+#define INSTALL_PLAIN_DATE_TIME_GETTER_FUNC(p, N)                           \
+  SimpleInstallGetter(isolate, prototype, isolate->factory()->p##_string(), \
                       Builtin::kTemporalPlainDateTimePrototype##N, true);
 
     PLAIN_DATE_TIME_GETTER_LIST(INSTALL_PLAIN_DATE_TIME_GETTER_FUNC)
@@ -5320,7 +5323,7 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(getISOFields, GetISOFields, 0)
 
 #define INSTALL_PLAIN_DATE_TIME_FUNC(p, N, min)                           \
-  SimpleInstallFunction(isolate(), prototype, #p,                         \
+  SimpleInstallFunction(isolate, prototype, #p,                           \
                         Builtin::kTemporalPlainDateTimePrototype##N, min, \
                         false);
     PLAIN_DATE_TIME_FUNC_LIST(INSTALL_PLAIN_DATE_TIME_FUNC)
@@ -5372,8 +5375,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(offsetNanoseconds, OffsetNanoseconds) \
   V(offset, Offset)
 
-#define INSTALL_ZONED_DATE_TIME_GETTER_FUNC(p, N)                              \
-  SimpleInstallGetter(isolate(), prototype, isolate_->factory()->p##_string(), \
+#define INSTALL_ZONED_DATE_TIME_GETTER_FUNC(p, N)                           \
+  SimpleInstallGetter(isolate, prototype, isolate->factory()->p##_string(), \
                       Builtin::kTemporalZonedDateTimePrototype##N, true);
 
     ZONED_DATE_TIME_GETTER_LIST(INSTALL_ZONED_DATE_TIME_GETTER_FUNC)
@@ -5407,7 +5410,7 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(getISOFields, GetISOFields, 0)
 
 #define INSTALL_ZONED_DATE_TIME_FUNC(p, N, min)                           \
-  SimpleInstallFunction(isolate(), prototype, #p,                         \
+  SimpleInstallFunction(isolate, prototype, #p,                           \
                         Builtin::kTemporalZonedDateTimePrototype##N, min, \
                         false);
     ZONED_DATE_TIME_FUNC_LIST(INSTALL_ZONED_DATE_TIME_FUNC)
@@ -5435,8 +5438,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(sign, Sign)                 \
   V(blank, Blank)
 
-#define INSTALL_DURATION_GETTER_FUNC(p, N)                                     \
-  SimpleInstallGetter(isolate(), prototype, isolate_->factory()->p##_string(), \
+#define INSTALL_DURATION_GETTER_FUNC(p, N)                                  \
+  SimpleInstallGetter(isolate, prototype, isolate->factory()->p##_string(), \
                       Builtin::kTemporalDurationPrototype##N, true);
 
     DURATION_GETTER_LIST(INSTALL_DURATION_GETTER_FUNC)
@@ -5456,8 +5459,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(toJSON, ToJSON, 0)                 \
   V(valueOf, ValueOf, 0)
 
-#define INSTALL_DURATION_FUNC(p, N, min)          \
-  SimpleInstallFunction(isolate(), prototype, #p, \
+#define INSTALL_DURATION_FUNC(p, N, min)        \
+  SimpleInstallFunction(isolate, prototype, #p, \
                         Builtin::kTemporalDurationPrototype##N, min, false);
     DURATION_FUNC_LIST(INSTALL_DURATION_FUNC)
 #undef DURATION_FUNC_LIST
@@ -5483,8 +5486,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(epochMicroseconds, EpochMicroseconds) \
   V(epochNanoseconds, EpochNanoseconds)
 
-#define INSTALL_INSTANT_GETTER_FUNC(p, N)                                      \
-  SimpleInstallGetter(isolate(), prototype, isolate_->factory()->p##_string(), \
+#define INSTALL_INSTANT_GETTER_FUNC(p, N)                                   \
+  SimpleInstallGetter(isolate, prototype, isolate->factory()->p##_string(), \
                       Builtin::kTemporalInstantPrototype##N, true);
 
     INSTANT_GETTER_LIST(INSTALL_INSTANT_GETTER_FUNC)
@@ -5505,8 +5508,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(toZonedDateTime, ToZonedDateTime, 1) \
   V(toZonedDateTimeISO, ToZonedDateTimeISO, 1)
 
-#define INSTALL_INSTANT_FUNC(p, N, min)           \
-  SimpleInstallFunction(isolate(), prototype, #p, \
+#define INSTALL_INSTANT_FUNC(p, N, min)         \
+  SimpleInstallFunction(isolate, prototype, #p, \
                         Builtin::kTemporalInstantPrototype##N, min, false);
     INSTANT_FUNC_LIST(INSTALL_INSTANT_FUNC)
 #undef INSTANT_FUNC_LIST
@@ -5538,8 +5541,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(monthsInYear, MonthsInYear)         \
   V(inLeapYear, InLeapYear)
 
-#define INSTALL_PLAIN_YEAR_MONTH_GETTER_FUNC(p, N)                             \
-  SimpleInstallGetter(isolate(), prototype, isolate_->factory()->p##_string(), \
+#define INSTALL_PLAIN_YEAR_MONTH_GETTER_FUNC(p, N)                          \
+  SimpleInstallGetter(isolate, prototype, isolate->factory()->p##_string(), \
                       Builtin::kTemporalPlainYearMonthPrototype##N, true);
 
     PLAIN_YEAR_MONTH_GETTER_LIST(INSTALL_PLAIN_YEAR_MONTH_GETTER_FUNC)
@@ -5562,7 +5565,7 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(getISOFields, GetISOFields, 0)
 
 #define INSTALL_PLAIN_YEAR_MONTH_FUNC(p, N, min)                           \
-  SimpleInstallFunction(isolate(), prototype, #p,                          \
+  SimpleInstallFunction(isolate, prototype, #p,                            \
                         Builtin::kTemporalPlainYearMonthPrototype##N, min, \
                         false);
     PLAIN_YEAR_MONTH_FUNC_LIST(INSTALL_PLAIN_YEAR_MONTH_FUNC)
@@ -5581,8 +5584,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(monthCode, MonthCode)              \
   V(day, Day)
 
-#define INSTALL_PLAIN_MONTH_DAY_GETTER_FUNC(p, N)                              \
-  SimpleInstallGetter(isolate(), prototype, isolate_->factory()->p##_string(), \
+#define INSTALL_PLAIN_MONTH_DAY_GETTER_FUNC(p, N)                           \
+  SimpleInstallGetter(isolate, prototype, isolate->factory()->p##_string(), \
                       Builtin::kTemporalPlainMonthDayPrototype##N, true);
 
     PLAIN_MONTH_DAY_GETTER_LIST(INSTALL_PLAIN_MONTH_DAY_GETTER_FUNC)
@@ -5600,7 +5603,7 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(getISOFields, GetISOFields, 0)
 
 #define INSTALL_PLAIN_MONTH_DAY_FUNC(p, N, min)                           \
-  SimpleInstallFunction(isolate(), prototype, #p,                         \
+  SimpleInstallFunction(isolate, prototype, #p,                           \
                         Builtin::kTemporalPlainMonthDayPrototype##N, min, \
                         false);
     PLAIN_MONTH_DAY_FUNC_LIST(INSTALL_PLAIN_MONTH_DAY_FUNC)
@@ -5614,7 +5617,7 @@ void Genesis::InitializeGlobal_harmony_temporal() {
     INSTALL_TEMPORAL_FUNC(TimeZone, from, From, 1)
 
     // #sec-get-temporal.timezone.prototype.id
-    SimpleInstallGetter(isolate(), prototype, factory()->id_string(),
+    SimpleInstallGetter(isolate, prototype, isolate->factory()->id_string(),
                         Builtin::kTemporalTimeZonePrototypeId, true);
 
 #define TIME_ZONE_FUNC_LIST(V)                           \
@@ -5628,8 +5631,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(toString, ToString, 0)                               \
   V(toJSON, ToJSON, 0)
 
-#define INSTALL_TIME_ZONE_FUNC(p, N, min)         \
-  SimpleInstallFunction(isolate(), prototype, #p, \
+#define INSTALL_TIME_ZONE_FUNC(p, N, min)       \
+  SimpleInstallFunction(isolate, prototype, #p, \
                         Builtin::kTemporalTimeZonePrototype##N, min, false);
     TIME_ZONE_FUNC_LIST(INSTALL_TIME_ZONE_FUNC)
 #undef TIME_ZONE_FUNC_LIST
@@ -5642,7 +5645,7 @@ void Genesis::InitializeGlobal_harmony_temporal() {
     INSTALL_TEMPORAL_FUNC(Calendar, from, From, 1)
 
     // #sec-get-temporal.calendar.prototype.id
-    SimpleInstallGetter(isolate(), prototype, factory()->id_string(),
+    SimpleInstallGetter(isolate, prototype, isolate->factory()->id_string(),
                         Builtin::kTemporalCalendarPrototypeId, true);
 
 #ifdef V8_INTL_SUPPORT
@@ -5677,8 +5680,8 @@ void Genesis::InitializeGlobal_harmony_temporal() {
   V(toString, ToString, 0)                       \
   V(toJSON, ToJSON, 0)
 
-#define INSTALL_CALENDAR_FUNC(p, N, min)          \
-  SimpleInstallFunction(isolate(), prototype, #p, \
+#define INSTALL_CALENDAR_FUNC(p, N, min)        \
+  SimpleInstallFunction(isolate, prototype, #p, \
                         Builtin::kTemporalCalendarPrototype##N, min, false);
     CALENDAR_FUNC_LIST(INSTALL_CALENDAR_FUNC)
 #undef CALENDAR_FUNC_LIST
@@ -5690,35 +5693,52 @@ void Genesis::InitializeGlobal_harmony_temporal() {
 
   {  // -- D a t e
     // #sec-date.prototype.totemporalinstant
-    Handle<JSFunction> date_func(native_context()->date_function(), isolate());
+    Handle<JSFunction> date_func(native_context->date_function(), isolate);
     // Setup %DatePrototype%.
     Handle<JSObject> date_prototype(
-        JSObject::cast(date_func->instance_prototype()), isolate());
+        JSObject::cast(date_func->instance_prototype()), isolate);
 
     // Install the Date.prototype.toTemporalInstant().
-    SimpleInstallFunction(isolate_, date_prototype, "toTemporalInstant",
+    SimpleInstallFunction(isolate, date_prototype, "toTemporalInstant",
                           Builtin::kDatePrototypeToTemporalInstant, 0, false);
   }
 
   // The StringListFromIterable functions is created but not
   // exposed, as it is used internally by CalendarFields.
   {
-    Handle<JSFunction> func = SimpleCreateFunction(
-        isolate_,
-        factory()->InternalizeUtf8String("StringFixedArrayFromIterable"),
-        Builtin::kStringFixedArrayFromIterable, 1, false);
-    native_context()->set_string_fixed_array_from_iterable(*func);
+    Handle<JSFunction> func =
+        SimpleCreateFunction(isolate,
+                             isolate->factory()->InternalizeUtf8String(
+                                 "StringFixedArrayFromIterable"),
+                             Builtin::kStringFixedArrayFromIterable, 1, false);
+    native_context->set_string_fixed_array_from_iterable(*func);
   }
   // The TemporalInsantFixedArrayFromIterable functions is created but not
   // exposed, as it is used internally by GetPossibleInstantsFor.
   {
     Handle<JSFunction> func = SimpleCreateFunction(
-        isolate_,
-        factory()->InternalizeUtf8String(
+        isolate,
+        isolate->factory()->InternalizeUtf8String(
             "TemporalInstantFixedArrayFromIterable"),
         Builtin::kTemporalInstantFixedArrayFromIterable, 1, false);
-    native_context()->set_temporal_instant_fixed_array_from_iterable(*func);
+    native_context->set_temporal_instant_fixed_array_from_iterable(*func);
   }
+
+  info.GetReturnValue().Set(v8::Utils::ToLocal(temporal));
+}
+
+}  // namespace
+
+void Genesis::InitializeGlobal_harmony_temporal() {
+  if (!v8_flags.harmony_temporal) return;
+
+  // The Temporal object is set up lazily upon first access.
+  Handle<JSGlobalObject> global(native_context()->global_object(), isolate());
+  Handle<String> temporal_string = factory()->InternalizeUtf8String("Temporal");
+  Handle<AccessorInfo> lazy_accessor = Accessors::MakeAccessor(
+      isolate(), temporal_string, InitializeTemporal, nullptr);
+  JSObject::SetAccessor(global, temporal_string, lazy_accessor, DONT_ENUM)
+      .Check();
 }
 
 #ifdef V8_INTL_SUPPORT
