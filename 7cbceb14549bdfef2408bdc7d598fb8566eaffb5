@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f04effae_0c5242b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Nodes? Operations? Can you clarify this sentence, even with this word replaced I am not fully sure what it means other than that parameters of the inlinee should be replaced with the arguments of the caller and returns should pass it on to a common block with phi values?",
+      "range": {
+        "startLine": 13,
+        "startChar": 13,
+        "endLine": 13,
+        "endChar": 18
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "12d11b4d_761a1913",
@@ -14,6 +37,414 @@
       "writtenOn": "2023-10-04T11:49:48Z",
       "side": 1,
       "message": "Matthias, PTAL.",
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d123a7ce_38bb5363",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Great work! Sorry for the large amount of comments, most of them are nits that could either be ignored, resolved by adding a `TODO` or by minor modifications. 😊",
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da43f2a1_d506758f",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "`WithHandler` somehow sounds like `TrapHandler`, so this might be confusing (at least I was confused. 😊)\nMaybe `KInlinedWithCatch` or `kInlinedIntoTry` or `kInlinedWithContinuation`?",
+      "range": {
+        "startLine": 100,
+        "startChar": 43,
+        "endLine": 100,
+        "endChar": 62
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60c0fa4a_7014d737",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Looking at the usage these are the arguments, not the \"real parameters\". The real parameters would be the parameters of the outer-most function, while these are the arguments passed into the call to the function to be inlined. So even with one level of inlining, some of these operations might not be parameters at all.\nMaybe rename it to `caller_args`?",
+      "range": {
+        "startLine": 141,
+        "startChar": 64,
+        "endLine": 141,
+        "endChar": 79
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3045fab4_9574660b",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Nit: Let\u0027s add `DCHECK_NE(real_parameters_, nullptr);`",
+      "range": {
+        "startLine": 151,
+        "startChar": 42,
+        "endLine": 151,
+        "endChar": 43
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91050bd0_790d146b",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "So, this `emplace_back` constructs an `OpIndex` from another `OpIndex`, so it calls the copy constructor while a `push_back` should just do the same, right? So I\u0027d be in favor of using `push_back` if we want to copy or move an object and only use `emplace_back` if we want to construct it from argument(s).",
+      "range": {
+        "startLine": 487,
+        "startChar": 35,
+        "endLine": 487,
+        "endChar": 47
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd499476_8c75ce92",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "I missed the code change for only enabling inlining on wasm-gc but I\u0027m not sure I agree with this approach:\nA) Looking at the flags, it will look like wasm-inlining is diasbled.\nB) The wasm-inlining flag is part of --feature but we ship all the code behind that flag as part of `wasm-gc` which is not --future.\nC) Passing `--no-wasm-inlining` therefore shouldn\u0027t have any effect as it will not disable inlining because the flag is already false?\nD) Liftoff and TurboFan should be in sync and now they have to check two values instead of one.\n\nSo unrelated to this change, but I\u0027d be in favor if we enable the flag but ignore it if `!decoder-\u003emodule_-\u003eis_wasm_gc`, so that the flag still can be used to disable inlining. Ideally, we\u0027d also encode this in `decoder-\u003eenabled_`, so that Liftoff and TurboFan don\u0027t have to care about this and only the module controls this.",
+      "range": {
+        "startLine": 1160,
+        "startChar": 10,
+        "endLine": 1160,
+        "endChar": 77
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e2af910_133caaa9",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "`should_inline` / `shall_be_inlined`?",
+      "range": {
+        "startLine": 1161,
+        "startChar": 10,
+        "endLine": 1161,
+        "endChar": 20
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1003569_7670bfc4",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4572,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Nit: This is exactly the same as what `CallAndMaybeCatchException` would do if it shouldn\u0027t catch. So maybe we should just forward the parameter into that function and check it there to simplify the call code?",
+      "range": {
+        "startLine": 4571,
+        "startChar": 13,
+        "endLine": 4572,
+        "endChar": 33
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d537c42f_896a3bbb",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4601,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Doesn\u0027t this break stack traces as if we don\u0027t tail call but regularly call we\u0027d end up having an additional frame?",
+      "range": {
+        "startLine": 4601,
+        "startChar": 27,
+        "endLine": 4601,
+        "endChar": 30
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5f3cd6e_25c4f0f2",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4681,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Nit: `push_back`",
+      "range": {
+        "startLine": 4681,
+        "startChar": 29,
+        "endLine": 4681,
+        "endChar": 41
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd87562c_853a21cc",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5255,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Nit: Let\u0027s use `const WasmFunction\u0026` to make it more obvious that this can\u0027t be null.",
+      "range": {
+        "startLine": 5255,
+        "startChar": 10,
+        "endLine": 5255,
+        "endChar": 23
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef2ba743_6351708d",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5301,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Is this just for the first version? If so, totally fine but in the end I think our assumption was that we need to evaluate inlining candidates prior to inlining them, so that we don\u0027t prefer functions at the top.",
+      "range": {
+        "startLine": 5301,
+        "startChar": 4,
+        "endLine": 5301,
+        "endChar": 70
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cae7f0e_09f77593",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5302,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Nit: Now this could be an `emplace_back` 😊 but on the other hand the additional move / copy of 16 bytes really doesn\u0027t matter.",
+      "range": {
+        "startLine": 5302,
+        "startChar": 25,
+        "endLine": 5302,
+        "endChar": 56
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03e75052_23f393d6",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5307,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Nit: I\u0027d prefer a `size_t inlining_id \u003d inlining_positions_-\u003esize()` above line 5302 because the magic `-1` after the push_back seems to be more complicated to understand.",
+      "range": {
+        "startLine": 5306,
+        "startChar": 48,
+        "endLine": 5307,
+        "endChar": 49
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8bec22e_a1d198e4",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5316,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Nit: Is the following true?\n```\nDCHECK_IMPLIES(inlinee_mode !\u003d kInlinedWithHandler, \n    inlinee_decoder.interface().return_exception_phis().empty());\n```\nIf so, let\u0027s add it to the code.",
+      "range": {
+        "startLine": 5316,
+        "startChar": 9,
+        "endLine": 5316,
+        "endChar": 68
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce97656d_c5aa4e5f",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5334,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "So, if I have nested inlining, does this mean that if the outer function has a `catch`, then every inlinee would add a new `callee_catch_block` that then has a goto to the next outer `callee_catch_block`?\nCould we just \"forward\" the outermost callee_catch_block to inner inlinees?",
+      "range": {
+        "startLine": 5334,
+        "startChar": 8,
+        "endLine": 5334,
+        "endChar": 55
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2b60d6c_2cd216a7",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5362,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "Why do we shift by 3? Isn\u0027t that way too small? Or is the shift in `base::BitField` a shift in bytes and not in bits (which I\u0027d find surprising)?\nOr is it just for the first version where we anyways only inline 2 functions max?",
+      "range": {
+        "startLine": 5362,
+        "startChar": 45,
+        "endLine": 5362,
+        "endChar": 46
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e72b8ad_bb4f6be5",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5403,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-04T15:52:52Z",
+      "side": 1,
+      "message": "I think this shouldn\u0027t be done as part of `can_inline` which sounds like a const function without side effects.",
+      "range": {
+        "startLine": 5403,
+        "startChar": 45,
+        "endLine": 5403,
+        "endChar": 47
+      },
       "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
