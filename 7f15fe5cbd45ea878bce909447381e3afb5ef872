@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2327e62_1a13a3ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2023-10-04T18:41:03Z",
+      "side": 1,
+      "message": "Oops. That symbol error should be resolved now. 😅",
+      "revId": "7f15fe5cbd45ea878bce909447381e3afb5ef872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
