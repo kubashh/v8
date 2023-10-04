@@ -3705,8 +3705,7 @@ void Pipeline::GenerateCodeForWasmFunction(
 bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
     OptimizedCompilationInfo* info, wasm::CompilationEnv* env,
     WasmCompilationData& compilation_data, MachineGraph* mcgraph,
-    const wasm::FunctionBody& body, wasm::WasmFeatures* detected,
-    CallDescriptor* call_descriptor) {
+    wasm::WasmFeatures* detected, CallDescriptor* call_descriptor) {
   auto* wasm_engine = wasm::GetWasmEngine();
   const wasm::WasmModule* module = env->module;
   base::TimeTicks start_time;
@@ -3738,6 +3737,9 @@ bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
   }
   Linkage linkage(call_descriptor);
 
+  Zone inlining_positions_zone(wasm_engine->allocator(), ZONE_NAME);
+  ZoneVector<WasmInliningPosition> inlining_positions(&inlining_positions_zone);
+
   {
     base::Optional<turboshaft::PipelineData::Scope> turboshaft_scope(
         pipeline.CreateTurboshaftPipeline());
@@ -3748,9 +3750,11 @@ bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
 
     AccountingAllocator allocator;
     if (!wasm::BuildTSGraph(&allocator, env->enabled_features, env->module,
-                            detected, body, turboshaft_pipeline.Value().graph(),
+                            detected, turboshaft_pipeline.Value().graph(),
+                            compilation_data.func_body,
+                            compilation_data.wire_bytes_storage,
                             data.node_origins(), compilation_data.assumptions,
-                            compilation_data.func_index)) {
+                            &inlining_positions, compilation_data.func_index)) {
       return false;
     }
     CodeTracer* code_tracer = nullptr;
@@ -3820,6 +3824,7 @@ bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
   result->frame_slot_count = code_generator->frame()->GetTotalFrameSlotCount();
   result->tagged_parameter_slots = call_descriptor->GetTaggedParameterSlots();
   result->source_positions = code_generator->GetSourcePositionTable();
+  result->inlining_positions = SerializeInliningPositions(inlining_positions);
   result->protected_instructions_data =
       code_generator->GetProtectedInstructionsData();
   result->result_tier = wasm::ExecutionTier::kTurbofan;

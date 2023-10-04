@@ -36,7 +36,7 @@ d8.file.execute("test/mjsunit/wasm/wasm-module-builder.js");
   let callee = builder.addFunction("callee", kSig_ii_i)
     .addBody([kExprLocalGet, 0, kExprI32Const, 1, kExprI32Sub,
               kExprLocalGet, 0, kExprI32Const, 1, kExprI32Add]);
-  // g(x) = { let (a, b) = f(x); a * b}
+  // g(x) = { let (a, b) = f(x); a * b }
   builder.addFunction("main", kSig_i_i)
     .addBody([kExprLocalGet, 0, kExprCallFunction, callee.index, kExprI32Mul])
     .exportAs("main");
