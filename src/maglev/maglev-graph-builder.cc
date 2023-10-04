@@ -5354,8 +5354,16 @@ bool MaglevGraphBuilder::ShouldInlineCall(
                         << v8_flags.min_maglev_inlining_frequency << ")");
     return false;
   }
+  if (inlining_depth() > v8_flags.max_maglev_hard_inline_depth) {
+    TRACE_CANNOT_INLINE("inlining depth ("
+                        << inlining_depth() << ") >= hard-max-depth ("
+                        << v8_flags.max_maglev_hard_inline_depth << ")");
+    return false;
+  }
   if (bytecode.length() < v8_flags.max_maglev_inlined_bytecode_size_small) {
-    TRACE_INLINING("  inlining " << shared << ": small function");
+    TRACE_INLINING("  inlining "
+                   << shared
+                   << ": small function, skipping max-size and max-depth");
     return true;
   }
   if (bytecode.length() > v8_flags.max_maglev_inlined_bytecode_size) {
