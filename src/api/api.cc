@@ -7160,21 +7160,29 @@ void Context::SetAbortScriptExecution(
 }
 
 Local<Value> Context::GetContinuationPreservedEmbedderData() const {
+#ifdef V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
   i::Handle<i::NativeContext> context = Utils::OpenHandle(this);
   i::Isolate* i_isolate = context->GetIsolate();
   i::Handle<i::Object> data(
       context->native_context()->continuation_preserved_embedder_data(),
       i_isolate);
   return ToApiHandle<Object>(data);
+#else
+  i::Handle<i::NativeContext> context = Utils::OpenHandle(this);
+  i::Isolate* i_isolate = context->GetIsolate();
+  return v8::Undefined(reinterpret_cast<v8::Isolate*>(i_isolate));
+#endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
 }
 
 void Context::SetContinuationPreservedEmbedderData(Local<Value> data) {
+#ifdef V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
   i::Handle<i::NativeContext> context = Utils::OpenHandle(this);
   i::Isolate* i_isolate = context->GetIsolate();
   if (data.IsEmpty())
     data = v8::Undefined(reinterpret_cast<v8::Isolate*>(i_isolate));
   context->native_context()->set_continuation_preserved_embedder_data(
       *i::Handle<i::HeapObject>::cast(Utils::OpenHandle(*data)));
+#endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
 }
 
 void v8::Context::SetPromiseHooks(Local<Function> init_hook,
