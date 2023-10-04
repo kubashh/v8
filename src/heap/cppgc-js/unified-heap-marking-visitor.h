@@ -77,9 +77,10 @@ class V8_EXPORT_PRIVATE MutatorUnifiedHeapMarkingVisitor
 class V8_EXPORT_PRIVATE ConcurrentUnifiedHeapMarkingVisitor
     : public UnifiedHeapMarkingVisitorBase {
  public:
-  ConcurrentUnifiedHeapMarkingVisitor(HeapBase&, Heap*,
-                                      cppgc::internal::ConcurrentMarkingState&,
-                                      CppHeap::CollectionType);
+  ConcurrentUnifiedHeapMarkingVisitor(
+      HeapBase&, Heap*,
+      WeakTracedReferenceWorklist& weak_traced_reference_worklist,
+      cppgc::internal::ConcurrentMarkingState&, CppHeap::CollectionType);
   ~ConcurrentUnifiedHeapMarkingVisitor() override;
 
  protected:
@@ -93,6 +94,7 @@ class V8_EXPORT_PRIVATE ConcurrentUnifiedHeapMarkingVisitor
   // thread. Dynamically allocated as it is only present when the heaps are
   // attached.
   std::unique_ptr<MarkingWorklists::Local> local_marking_worklist_;
+  WeakTracedReferenceWorklist::Local local_weak_traced_reference_worklist_;
   UnifiedHeapMarkingState concurrent_unified_heap_marking_state_;
 };
 
