@@ -3634,8 +3634,6 @@ void Heap::CreateFillerForArray(Tagged<T> object, int elements_to_trim,
 }
 
 void Heap::MakeHeapIterable() {
-  EnsureSweepingCompleted(SweepingForcedFinalizationMode::kV8Only);
-
   safepoint()->IterateLocalHeaps([](LocalHeap* local_heap) {
     local_heap->MakeLinearAllocationAreaIterable();
   });
@@ -3652,6 +3650,11 @@ void Heap::MakeHeapIterable() {
   if (shared_space_allocator_) {
     shared_space_allocator_->MakeLinearAllocationAreaIterable();
   }
+
+  // Finishing sweeping after making LABs iterable. This is because finishing
+  // sweeping might perform heap verification and the heap needs to be iterable
+  // for this.
+  EnsureSweepingCompleted(SweepingForcedFinalizationMode::kV8Only);
 }
 
 void Heap::FreeLinearAllocationAreas() {
