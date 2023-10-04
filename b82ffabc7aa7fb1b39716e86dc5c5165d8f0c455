@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61064451_c68ef62e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-10-04T06:45:18Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "b82ffabc7aa7fb1b39716e86dc5c5165d8f0c455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4020f244_4907d13f",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-10-04T06:45:18Z",
+      "side": 1,
+      "message": "As a side-effect, we\u0027d also bail out of testing earlier if there are too many flakes. Which is good, but which I think never happened. The limit for this value is currently 100 on our bots.",
+      "range": {
+        "startLine": 36,
+        "startChar": 6,
+        "endLine": 38,
+        "endChar": 19
+      },
+      "revId": "b82ffabc7aa7fb1b39716e86dc5c5165d8f0c455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4d91e1e_c2dc2f65",
+        "filename": "tools/testrunner/testproc/progress.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-10-04T06:45:18Z",
+      "side": 1,
+      "message": "The exit code is calculated based on the existence of failures here.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 42
+      },
+      "revId": "b82ffabc7aa7fb1b39716e86dc5c5165d8f0c455",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
