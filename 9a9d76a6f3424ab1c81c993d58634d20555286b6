@@ -33,6 +33,24 @@
       "message": "\u0027EnsureProcessWideTrustedRange\u0027 or \u0027InitProcessWideTrustedRange\u0027?",
       "revId": "9a9d76a6f3424ab1c81c993d58634d20555286b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71d9b118_2cd81428",
+        "filename": "src/heap/trusted-range.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-10-04T11:35:28Z",
+      "side": 1,
+      "message": "Ah yes, thanks! I reworded this comment and added one for the method above as well.",
+      "parentUuid": "1e352e06_f6747d87",
+      "revId": "9a9d76a6f3424ab1c81c993d58634d20555286b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
