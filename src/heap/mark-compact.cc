@@ -2404,6 +2404,7 @@ void MarkCompactCollector::MarkLiveObjects() {
         incremental_marking->current_trace_id(), TRACE_EVENT_FLAG_FLOW_IN);
     DCHECK(incremental_marking->IsMajorMarking());
     incremental_marking->Stop();
+    heap_->isolate()->traced_handles()->SetIsMarking(false);
     MarkingBarrier::PublishAll(heap_);
   }
 
@@ -2411,6 +2412,10 @@ void MarkCompactCollector::MarkLiveObjects() {
   DCHECK(state_ == PREPARE_GC);
   state_ = MARK_LIVE_OBJECTS;
 #endif
+
+  // `ComputeWeaknessForYoungObjects` should be called after
+  // `IncrementalMarking::Stop` and before `CppHeap::EnterFinalPause`.
+  heap_->isolate()->traced_handles()->ComputeWeaknessForYoungObjects();
 
   if (heap_->cpp_heap_) {
     CppHeap::From(heap_->cpp_heap_)
@@ -2476,7 +2481,6 @@ void MarkCompactCollector::MarkLiveObjects() {
     // finished as it will reset page flags that share the same bitmap as
     // the evacuation candidate bit.
     MarkingBarrier::DeactivateAll(heap_);
-    heap_->isolate()->traced_handles()->SetIsMarking(false);
   }
 
   epoch_++;
