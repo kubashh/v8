@@ -16,6 +16,24 @@
       "message": "Nit: Can we somehow keep this DCHECK? Might be nice for document as well.",
       "revId": "8dc6c2165322c8bc839c650f87c32d2e39f3b8fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31d8a018_f5ce9eb4",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4612,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-10-05T13:21:26Z",
+      "side": 0,
+      "message": "It still here, just rewritten in line 4607. I replaced the DCHECK with a DCHECK_IMPLIES using the branch condition required to get here.",
+      "parentUuid": "c786aa71_514473df",
+      "revId": "8dc6c2165322c8bc839c650f87c32d2e39f3b8fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
