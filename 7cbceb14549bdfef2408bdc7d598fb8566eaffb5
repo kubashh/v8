@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9339cb59_d9147daa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "I meant \"functions\".",
+      "parentUuid": "f04effae_0c5242b0",
+      "range": {
+        "startLine": 13,
+        "startChar": 13,
+        "endLine": 13,
+        "endChar": 18
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "12d11b4d_761a1913",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29e65457_71b081a4",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da43f2a1_d506758f",
+      "range": {
+        "startLine": 100,
+        "startChar": 43,
+        "endLine": 100,
+        "endChar": 62
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60c0fa4a_7014d737",
@@ -94,6 +142,30 @@
       "writtenOn": "2023-10-04T15:52:52Z",
       "side": 1,
       "message": "Looking at the usage these are the arguments, not the \"real parameters\". The real parameters would be the parameters of the outer-most function, while these are the arguments passed into the call to the function to be inlined. So even with one level of inlining, some of these operations might not be parameters at all.\nMaybe rename it to `caller_args`?",
+      "range": {
+        "startLine": 141,
+        "startChar": 64,
+        "endLine": 141,
+        "endChar": 79
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26860227_7d54fc68",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "I think \"real parameters\" is a term that is synonymous to arguments that are passed to a function, as opposed to \"formal parameters\" which are the arguments that the function declares. So I think it\u0027s fine to leave this as-is.",
+      "parentUuid": "60c0fa4a_7014d737",
       "range": {
         "startLine": 141,
         "startChar": 64,
@@ -127,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7925e5e_94e0ab0c",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3045fab4_9574660b",
+      "range": {
+        "startLine": 151,
+        "startChar": 42,
+        "endLine": 151,
+        "endChar": 43
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91050bd0_790d146b",
@@ -140,6 +236,30 @@
       "writtenOn": "2023-10-04T15:52:52Z",
       "side": 1,
       "message": "So, this `emplace_back` constructs an `OpIndex` from another `OpIndex`, so it calls the copy constructor while a `push_back` should just do the same, right? So I\u0027d be in favor of using `push_back` if we want to copy or move an object and only use `emplace_back` if we want to construct it from argument(s).",
+      "range": {
+        "startLine": 487,
+        "startChar": 35,
+        "endLine": 487,
+        "endChar": 47
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f20b5491_6c9780f8",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91050bd0_790d146b",
       "range": {
         "startLine": 487,
         "startChar": 35,
@@ -173,6 +293,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f4868ed_03080d74",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "The issue is that we still have not decided on shipping inlining, which would be a consequence of always having the flag active.",
+      "parentUuid": "fd499476_8c75ce92",
+      "range": {
+        "startLine": 1160,
+        "startChar": 10,
+        "endLine": 1160,
+        "endChar": 77
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e2af910_133caaa9",
@@ -196,6 +340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d064b16b_09985482",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e2af910_133caaa9",
+      "range": {
+        "startLine": 1161,
+        "startChar": 10,
+        "endLine": 1161,
+        "endChar": 20
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1003569_7670bfc4",
@@ -209,6 +377,30 @@
       "writtenOn": "2023-10-04T15:52:52Z",
       "side": 1,
       "message": "Nit: This is exactly the same as what `CallAndMaybeCatchException` would do if it shouldn\u0027t catch. So maybe we should just forward the parameter into that function and check it there to simplify the call code?",
+      "range": {
+        "startLine": 4571,
+        "startChar": 13,
+        "endLine": 4572,
+        "endChar": 33
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea657691_992cbb3d",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4572,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Leaving a TODO.",
+      "parentUuid": "c1003569_7670bfc4",
       "range": {
         "startLine": 4571,
         "startChar": 13,
@@ -265,6 +457,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "499c0b89_3bbceb63",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4681,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5f3cd6e_25c4f0f2",
+      "range": {
+        "startLine": 4681,
+        "startChar": 29,
+        "endLine": 4681,
+        "endChar": 41
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd87562c_853a21cc",
@@ -278,6 +494,30 @@
       "writtenOn": "2023-10-04T15:52:52Z",
       "side": 1,
       "message": "Nit: Let\u0027s use `const WasmFunction\u0026` to make it more obvious that this can\u0027t be null.",
+      "range": {
+        "startLine": 5255,
+        "startChar": 10,
+        "endLine": 5255,
+        "endChar": 23
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51bc7fcf_407442c6",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5255,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd87562c_853a21cc",
       "range": {
         "startLine": 5255,
         "startChar": 10,
@@ -311,6 +551,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9623a438_3bc8a52a",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5301,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Yes, this is just the first version. Proper ahead-of-time analysis of collected feedback will come later.",
+      "parentUuid": "ef2ba743_6351708d",
+      "range": {
+        "startLine": 5301,
+        "startChar": 4,
+        "endLine": 5301,
+        "endChar": 70
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2cae7f0e_09f77593",
@@ -324,6 +588,30 @@
       "writtenOn": "2023-10-04T15:52:52Z",
       "side": 1,
       "message": "Nit: Now this could be an `emplace_back` 😊 but on the other hand the additional move / copy of 16 bytes really doesn\u0027t matter.",
+      "range": {
+        "startLine": 5302,
+        "startChar": 25,
+        "endLine": 5302,
+        "endChar": 56
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6687dfb5_926ffc55",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5302,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cae7f0e_09f77593",
       "range": {
         "startLine": 5302,
         "startChar": 25,
@@ -357,6 +645,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eed9eb5_b7e7baad",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5307,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03e75052_23f393d6",
+      "range": {
+        "startLine": 5306,
+        "startChar": 48,
+        "endLine": 5307,
+        "endChar": 49
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8bec22e_a1d198e4",
@@ -370,6 +682,30 @@
       "writtenOn": "2023-10-04T15:52:52Z",
       "side": 1,
       "message": "Nit: Is the following true?\n```\nDCHECK_IMPLIES(inlinee_mode !\u003d kInlinedWithHandler, \n    inlinee_decoder.interface().return_exception_phis().empty());\n```\nIf so, let\u0027s add it to the code.",
+      "range": {
+        "startLine": 5316,
+        "startChar": 9,
+        "endLine": 5316,
+        "endChar": 68
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10c9238d_07ff0705",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5316,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8bec22e_a1d198e4",
       "range": {
         "startLine": 5316,
         "startChar": 9,
@@ -403,6 +739,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fcf0816_2c718cad",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5334,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Let\u0027s leave this for future work. Leaving a TODO.",
+      "parentUuid": "ce97656d_c5aa4e5f",
+      "range": {
+        "startLine": 5334,
+        "startChar": 8,
+        "endLine": 5334,
+        "endChar": 55
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2b60d6c_2cd216a7",
@@ -426,6 +786,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20d6e7cb_c16fc0d1",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5362,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "The shift by 3 is so the resulting OpIndices have offsets which are multiples of sizeof(OperationStorageSlot), which is required. The order of bits from LSB to MSB is: 3 bits shift (as explained), 23 bits position, 6 bits inlining id.",
+      "parentUuid": "a2b60d6c_2cd216a7",
+      "range": {
+        "startLine": 5362,
+        "startChar": 45,
+        "endLine": 5362,
+        "endChar": 46
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e72b8ad_bb4f6be5",
@@ -439,6 +823,30 @@
       "writtenOn": "2023-10-04T15:52:52Z",
       "side": 1,
       "message": "I think this shouldn\u0027t be done as part of `can_inline` which sounds like a const function without side effects.",
+      "range": {
+        "startLine": 5403,
+        "startChar": 45,
+        "endLine": 5403,
+        "endChar": 47
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df98d0ca_8a7c98dc",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5403,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T08:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e72b8ad_bb4f6be5",
       "range": {
         "startLine": 5403,
         "startChar": 45,
