@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "456b0ca2_d8bffb92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-10-05T13:18:08Z",
+      "side": 1,
+      "message": "Nice! I\u0027ll leave it for Leszek to review isolate.cc",
+      "revId": "78b4be5f72fe6007063b9da8075b13cee8a26751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
