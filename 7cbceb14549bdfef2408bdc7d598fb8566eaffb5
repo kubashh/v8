@@ -434,6 +434,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c504fc7_e89b6900",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4601,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-05T15:14:47Z",
+      "side": 1,
+      "message": "We will handle tail call stack traces as follow-up work.",
+      "parentUuid": "d537c42f_896a3bbb",
+      "range": {
+        "startLine": 4601,
+        "startChar": 27,
+        "endLine": 4601,
+        "endChar": 30
+      },
+      "revId": "7cbceb14549bdfef2408bdc7d598fb8566eaffb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5f3cd6e_25c4f0f2",
