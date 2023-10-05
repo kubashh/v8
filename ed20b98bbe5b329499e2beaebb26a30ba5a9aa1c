@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a73c97_309b6aeb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-05T10:11:36Z",
+      "side": 1,
+      "message": "Thanks a lot!\nLGTM, we can (or even should) tackle the tail call question as a follow-up and not in this CL. 😊",
+      "revId": "ed20b98bbe5b329499e2beaebb26a30ba5a9aa1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
