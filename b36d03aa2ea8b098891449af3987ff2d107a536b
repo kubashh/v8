@@ -262,6 +262,24 @@
       "parentUuid": "9730cb34_31f3fc4f",
       "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1baaa06_ac03af33",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-05T16:51:25Z",
+      "side": 1,
+      "message": "There might be holes in the middle or in the end of array too.\nYes, your understanding re `bool should_recheck_CanTreatHoleAsUndefined` is correct.",
+      "parentUuid": "12ede22f_d674bba9",
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
