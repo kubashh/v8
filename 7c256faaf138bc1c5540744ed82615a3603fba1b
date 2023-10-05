@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e43e143_facc457d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2023-10-05T09:48:49Z",
+      "side": 1,
+      "message": "Branching this CL out from https://chromium-review.googlesource.com/c/v8/v8/+/4891695 as the original CL got messed up by a submodule update.",
+      "revId": "7c256faaf138bc1c5540744ed82615a3603fba1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
