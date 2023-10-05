@@ -161,6 +161,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "793933bc_ef898739",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-10-05T12:43:52Z",
+      "side": 1,
+      "message": "yes I meant a potential transition away (can be just a DCHECK for now).",
+      "parentUuid": "6bb775dd_2d5a71ad",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1067,
+        "endChar": 70
+      },
+      "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab6a552a_15083f93",
         "filename": "src/json/json-stringifier.cc",
         "patchSetId": 1
