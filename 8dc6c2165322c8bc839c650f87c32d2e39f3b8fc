@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c786aa71_514473df",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4612,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-10-05T12:49:08Z",
+      "side": 0,
+      "message": "Nit: Can we somehow keep this DCHECK? Might be nice for document as well.",
+      "revId": "8dc6c2165322c8bc839c650f87c32d2e39f3b8fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
