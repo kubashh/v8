@@ -43,6 +43,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1565423b_d40e451b",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T11:32:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8f4c6f9_86db7db9",
+      "range": {
+        "startLine": 1003,
+        "startChar": 3,
+        "endLine": 1003,
+        "endChar": 49
+      },
+      "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "38e31f14_b0a80c4f",
         "filename": "src/json/json-stringifier.cc",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2023-10-05T10:24:14Z",
       "side": 1,
       "message": "just noticed these helpers are not `constexpr` but I guess that doesn\u0027t matter all that much here.",
+      "range": {
+        "startLine": 1008,
+        "startChar": 30,
+        "endLine": 1008,
+        "endChar": 49
+      },
+      "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "081a1e93_8846b996",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T11:32:59Z",
+      "side": 1,
+      "message": "I actually can\u0027t imagine a case (besides asserts) where the argument to these helpers would be a `constexpr`.",
+      "parentUuid": "38e31f14_b0a80c4f",
       "range": {
         "startLine": 1008,
         "startChar": 30,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6bb775dd_2d5a71ad",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T11:32:59Z",
+      "side": 1,
+      "message": "I don\u0027t think I understand what you mean.\n`kind \u003d\u003d HOLEY_ELEMENTS || kind \u003d\u003d PACKED_ELEMENTS` is guaranteed here by the switch-case.\nOr do you mean checking the potentially transitioned elements kind (if there was a potential transition from `HOLEY_ELEMENTS`/`PACKED_ELEMENTS` to something different, if we introduce such transitions in the future)?",
+      "parentUuid": "de99716c_d4c91822",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1067,
+        "endChar": 70
+      },
+      "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab6a552a_15083f93",
         "filename": "src/json/json-stringifier.cc",
         "patchSetId": 1
@@ -100,6 +172,30 @@
       "writtenOn": "2023-10-05T10:24:14Z",
       "side": 1,
       "message": "Would it make sense to only load this once before the hole check?",
+      "range": {
+        "startLine": 1078,
+        "startChar": 33,
+        "endLine": 1078,
+        "endChar": 60
+      },
+      "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f46626fe_4a980fcd",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T11:32:59Z",
+      "side": 1,
+      "message": "Yes it does. Was missing that after some refactor (because it doesn\u0027t work for Double).\nDone",
+      "parentUuid": "ab6a552a_15083f93",
       "range": {
         "startLine": 1078,
         "startChar": 33,
