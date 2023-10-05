@@ -34,6 +34,46 @@
       "parentUuid": "4fc4e366_cb943344",
       "revId": "6e57360c5744addf516ef727a4a0a5bd1453d36c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "837c4d1c_db63e86f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-05T08:19:02Z",
+      "side": 1,
+      "message": "overall looks good",
+      "revId": "6e57360c5744addf516ef727a4a0a5bd1453d36c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d9dedf4_b96dfc98",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5705,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-05T08:19:02Z",
+      "side": 1,
+      "message": "This builtin loads temporal constructor via `native_context.temporal_instant_function()` but IIUC the function might not be installed yet. Please add a regression test for this case.\n\nIt seems to be the only non-Temporal builtin that requires updating.",
+      "range": {
+        "startLine": 5705,
+        "startChar": 35,
+        "endLine": 5705,
+        "endChar": 66
+      },
+      "revId": "6e57360c5744addf516ef727a4a0a5bd1453d36c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
