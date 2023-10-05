@@ -33,6 +33,23 @@
       "message": "I am not very familiar with this code at all. I couldn\u0027t spot anything that\u0027s obviously wrong.\n\nLGTM",
       "revId": "47699e74cf2f2c2b0ae0dce78d4e49583548723a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55b78315_269179b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2023-10-05T14:39:41Z",
+      "side": 1,
+      "message": "Thanks for reviewing!",
+      "revId": "47699e74cf2f2c2b0ae0dce78d4e49583548723a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
