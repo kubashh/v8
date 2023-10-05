@@ -16,6 +16,98 @@
       "message": "PTAL",
       "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8f4c6f9_86db7db9",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-10-05T10:24:14Z",
+      "side": 1,
+      "message": "```suggestion\n    switch (kind) {\n```",
+      "range": {
+        "startLine": 1003,
+        "startChar": 3,
+        "endLine": 1003,
+        "endChar": 49
+      },
+      "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38e31f14_b0a80c4f",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-10-05T10:24:14Z",
+      "side": 1,
+      "message": "just noticed these helpers are not `constexpr` but I guess that doesn\u0027t matter all that much here.",
+      "range": {
+        "startLine": 1008,
+        "startChar": 30,
+        "endLine": 1008,
+        "endChar": 49
+      },
+      "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de99716c_d4c91822",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-10-05T10:24:14Z",
+      "side": 1,
+      "message": "Should we also explicitly check for `kind \u003d\u003d HOLEY_ELEMENTS || kind \u003d\u003d PACKED_ELEMENTS` in case we ever break this assumption?",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1067,
+        "endChar": 70
+      },
+      "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab6a552a_15083f93",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-10-05T10:24:14Z",
+      "side": 1,
+      "message": "Would it make sense to only load this once before the hole check?",
+      "range": {
+        "startLine": 1078,
+        "startChar": 33,
+        "endLine": 1078,
+        "endChar": 60
+      },
+      "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
