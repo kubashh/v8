@@ -1071,6 +1071,8 @@ struct DateTimeRecord {
   TimeRecord time;
 };
 
+void EnsureTemporalIsInitialized(Isolate* isolate);
+
 // #sec-temporal-createtemporaldatetime
 V8_WARN_UNUSED_RESULT MaybeHandle<JSTemporalPlainDateTime>
 CreateTemporalDateTime(Isolate* isolate, const DateTimeRecord& date_time,
