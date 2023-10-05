@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f927f54_1a27c868",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T16:32:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed1a3a5c_c2be6401",
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b69e56c4_c4a596e9",
@@ -48,6 +66,30 @@
       "writtenOn": "2023-10-05T14:28:38Z",
       "side": 1,
       "message": "Nit: leaving raw values is generally not nice. It has only one usage, so please inline this variable to the use place.",
+      "range": {
+        "startLine": 1065,
+        "startChar": 10,
+        "endLine": 1065,
+        "endChar": 37
+      },
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b10849e4_e10d2026",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T16:32:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b69e56c4_c4a596e9",
       "range": {
         "startLine": 1065,
         "startChar": 10,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "343fa163_76f182bd",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T16:32:21Z",
+      "side": 1,
+      "message": "Nice catch! I didn\u0027t think about the transition to dictionary mode 😞\nAdded as condition for fall back to slow path above (line 1065).",
+      "parentUuid": "e455cc98_fb53f68a",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1069,
+        "endChar": 0
+      },
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82d1a4dc_e2cd25b7",
@@ -94,6 +160,24 @@
       "writtenOn": "2023-10-05T14:28:38Z",
       "side": 1,
       "message": "Here we can try to avoid wrapping the current element into handle in case it\u0027s a hole.",
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28b86676_fbe26074",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T16:32:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82d1a4dc_e2cd25b7",
       "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -121,6 +205,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00f98310_c115ff30",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T16:32:21Z",
+      "side": 1,
+      "message": "Right, removed.",
+      "parentUuid": "1a604ec3_463c2493",
+      "range": {
+        "startLine": 1073,
+        "startChar": 12,
+        "endLine": 1073,
+        "endChar": 53
+      },
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9730cb34_31f3fc4f",
@@ -134,6 +242,24 @@
       "writtenOn": "2023-10-05T14:28:38Z",
       "side": 1,
       "message": "In case of the fast path this is a heavy call. We can skip it as long as we haven\u0027t called `SerializeElement()`.",
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12ede22f_d674bba9",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T16:32:21Z",
+      "side": 1,
+      "message": "I don\u0027t think that a lot of holes in the beginning of an array is very common. My general understand is that holes are rather rare in the wild (while holey elements kinds are not that rare because of common patterns like `new Array(n)`), but I could be wrong.\nI am also not a 100% sure I understand what you are suggesting.\nIIUC you are suggesting to add a bool variable indicating whether we need to check `CanTreatHoleAsUndefined` when loading the hole. This variable is initially true and is reset everytime after `SerializeElement()`?",
+      "parentUuid": "9730cb34_31f3fc4f",
       "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
