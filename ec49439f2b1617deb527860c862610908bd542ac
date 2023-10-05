@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d203f80e_ba7ed59d",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-10-05T11:23:21Z",
+      "side": 1,
+      "message": "I had to move this code up, unfortunately this makes the diff harder to read. Changes are:\n\n- at the start of the function we check if the temporal object already exists, if so return it.\n- removed Date.toTemporalInstant installation (that now happens lazily).\n- when done, set_temporal_object and return it.",
+      "revId": "ec49439f2b1617deb527860c862610908bd542ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

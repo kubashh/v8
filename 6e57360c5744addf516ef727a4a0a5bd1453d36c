@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0db6a13_5012843c",
+        "filename": "src/init/bootstrapper.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5704,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-10-05T11:23:21Z",
+      "side": 1,
+      "message": "Good point! I\u0027ve gone with the approach we discussed offline that splits Temporal object creation from Temporal object installation and Date.toTemporalInstant function installation. PTAL",
+      "parentUuid": "63ae8525_3f039bc5",
+      "range": {
+        "startLine": 5704,
+        "startChar": 4,
+        "endLine": 5704,
+        "endChar": 25
+      },
+      "revId": "6e57360c5744addf516ef727a4a0a5bd1453d36c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d9dedf4_b96dfc98",
