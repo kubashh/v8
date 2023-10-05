@@ -16,6 +16,29 @@
       "message": "I had to move this code up, unfortunately this makes the diff harder to read. Changes are:\n\n- at the start of the function we check if the temporal object already exists, if so return it.\n- removed Date.toTemporalInstant installation (that now happens lazily).\n- when done, set_temporal_object and return it.",
       "revId": "ec49439f2b1617deb527860c862610908bd542ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dff1fcf5_8d9ed2d1",
+        "filename": "src/objects/js-temporal-objects.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-10-05T11:27:59Z",
+      "side": 1,
+      "message": "unused?",
+      "range": {
+        "startLine": 1074,
+        "startChar": 0,
+        "endLine": 1074,
+        "endChar": 51
+      },
+      "revId": "ec49439f2b1617deb527860c862610908bd542ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
