@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50d89411_d0cef62b",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2537,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2023-10-05T14:49:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "712a9115_1d9a48bb",
+      "range": {
+        "startLine": 2537,
+        "startChar": 4,
+        "endLine": 2537,
+        "endChar": 42
+      },
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "314c069f_f9284fff",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-10-05T13:14:26Z",
       "side": 1,
       "message": "We could also invert + continue here.",
+      "range": {
+        "startLine": 2545,
+        "startChar": 0,
+        "endLine": 2545,
+        "endChar": 47
+      },
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c613fe5f_13f7aa50",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2545,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2023-10-05T14:49:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "314c069f_f9284fff",
       "range": {
         "startLine": 2545,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5134c91_d32b9ab9",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2552,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2023-10-05T14:49:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee877f3f_26a920ca",
+      "range": {
+        "startLine": 2550,
+        "startChar": 0,
+        "endLine": 2552,
+        "endChar": 46
+      },
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c20e7b55_5073d49a",
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee69a95f_a7137c55",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2564,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2023-10-05T14:49:54Z",
+      "side": 1,
+      "message": "I had to think about why I did it this way in the first place. The issue is that this callback is called many times, and I want to know if is_caught was true once or is_blackboxed was false once. But the return statement should ensure that this callback isn\u0027t called again once one of those conditions is met, so your change works.",
+      "parentUuid": "c20e7b55_5073d49a",
+      "range": {
+        "startLine": 2559,
+        "startChar": 0,
+        "endLine": 2564,
+        "endChar": 21
+      },
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76987b46_f804d6f3",
@@ -123,6 +219,30 @@
       "writtenOn": "2023-10-05T13:14:26Z",
       "side": 1,
       "message": "Not sure I understand why it\u0027s `else if` and not just `if`: Currently if \n\ninclude_async \u003d true\nprediction \u003d CAUGHT_BY_ASYNC_AWAIT\nstop_at_caught \u003d true\n\nWe\u0027d keep walking to the next stack frame. Is that intended?",
+      "range": {
+        "startLine": 2573,
+        "startChar": 7,
+        "endLine": 2573,
+        "endChar": 71
+      },
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d36c847_981d828c",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2573,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2023-10-05T14:49:54Z",
+      "side": 1,
+      "message": "Yes that is intended. If we\u0027re looking at async frames, CAUGHT_BY_ASYNC_AWAIT doesn\u0027t really mean caught unless we walk the promise tree and set is_caught to true, in which case we return. If not, we will want to keep walking and find other async awaits.",
+      "parentUuid": "76987b46_f804d6f3",
       "range": {
         "startLine": 2573,
         "startChar": 7,
