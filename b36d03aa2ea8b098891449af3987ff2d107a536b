@@ -16,6 +16,126 @@
       "message": "Thanks Camillo!\n+Igor, PTAL as owner",
       "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed1a3a5c_c2be6401",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-05T14:28:38Z",
+      "side": 1,
+      "message": "Please add a comment here (taken from `AllowConvertHoleElementToUndefined`):\n```\n  // For other JSObjects (including JSArrays) we can only continue if\n  // the {receiver}s prototype is either the initial Object.prototype\n  // or the initial Array.prototype, which are both guarded by the\n  // \"no elements\" protector checked above.\n```",
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b69e56c4_c4a596e9",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-05T14:28:38Z",
+      "side": 1,
+      "message": "Nit: leaving raw values is generally not nice. It has only one usage, so please inline this variable to the use place.",
+      "range": {
+        "startLine": 1065,
+        "startChar": 10,
+        "endLine": 1065,
+        "endChar": 37
+      },
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e455cc98_fb53f68a",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1069,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-05T14:28:38Z",
+      "side": 1,
+      "message": "IIUC `SerializeElement()` call below might cause any side effects so the object\u0027s elements kind can change to dictionary mode.",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1069,
+        "endChar": 0
+      },
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82d1a4dc_e2cd25b7",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-05T14:28:38Z",
+      "side": 1,
+      "message": "Here we can try to avoid wrapping the current element into handle in case it\u0027s a hole.",
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a604ec3_463c2493",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-05T14:28:38Z",
+      "side": 1,
+      "message": "Nit: given the `is_holey` condition this DCHECK seems redundant.",
+      "range": {
+        "startLine": 1073,
+        "startChar": 12,
+        "endLine": 1073,
+        "endChar": 53
+      },
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9730cb34_31f3fc4f",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-05T14:28:38Z",
+      "side": 1,
+      "message": "In case of the fast path this is a heavy call. We can skip it as long as we haven\u0027t called `SerializeElement()`.",
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
