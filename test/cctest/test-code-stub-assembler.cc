@@ -1954,7 +1954,7 @@ TEST(AllocationFoldingCSA) {
       } else {
         CHECK(IsAligned(current_array.address(), kTaggedSize));
       }
-      CHECK_EQ(current_array->length(), i * kTaggedSize);
+      CHECK_EQ(current_array->capacity(), i * kTaggedSize);
       if (i != 1) {
         // TODO(v8:13070): Align prev_array.AllocatedSize() to the allocation
         // size.

@@ -453,7 +453,7 @@ class ByteArray::BodyDescriptor final : public BodyDescriptorBase {
 
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> obj) {
     return ByteArray::SizeFor(
-        ByteArray::unchecked_cast(obj)->length(kAcquireLoad));
+        ByteArray::unchecked_cast(obj)->capacity(kAcquireLoad));
   }
 };
 

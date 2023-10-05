@@ -1784,13 +1784,13 @@ TEST_F(RegExpTest, PeepholeNoChange) {
 
   v8_flags.regexp_peephole_optimization = false;
   Handle<ByteArray> array = Handle<ByteArray>::cast(orig.GetCode(source));
-  int length = array->length();
-  uint8_t* byte_array = array->GetDataStartAddress();
+  int length = array->capacity();
+  uint8_t* byte_array = array->begin();
 
   v8_flags.regexp_peephole_optimization = true;
   Handle<ByteArray> array_optimized =
       Handle<ByteArray>::cast(opt.GetCode(source));
-  uint8_t* byte_array_optimized = array_optimized->GetDataStartAddress();
+  uint8_t* byte_array_optimized = array_optimized->begin();
 
   CHECK_EQ(0, memcmp(byte_array, byte_array_optimized, length));
 }
@@ -1819,12 +1819,12 @@ TEST_F(RegExpTest, PeepholeSkipUntilChar) {
 
   v8_flags.regexp_peephole_optimization = false;
   Handle<ByteArray> array = Handle<ByteArray>::cast(orig.GetCode(source));
-  int length = array->length();
+  int length = array->capacity();
 
   v8_flags.regexp_peephole_optimization = true;
   Handle<ByteArray> array_optimized =
       Handle<ByteArray>::cast(opt.GetCode(source));
-  int length_optimized = array_optimized->length();
+  int length_optimized = array_optimized->capacity();
 
   int length_expected = RegExpBytecodeLength(BC_LOAD_CURRENT_CHAR) +
                         RegExpBytecodeLength(BC_CHECK_CHAR) +
@@ -1872,12 +1872,12 @@ TEST_F(RegExpTest, PeepholeSkipUntilBitInTable) {
 
   v8_flags.regexp_peephole_optimization = false;
   Handle<ByteArray> array = Handle<ByteArray>::cast(orig.GetCode(source));
-  int length = array->length();
+  int length = array->capacity();
 
   v8_flags.regexp_peephole_optimization = true;
   Handle<ByteArray> array_optimized =
       Handle<ByteArray>::cast(opt.GetCode(source));
-  int length_optimized = array_optimized->length();
+  int length_optimized = array_optimized->capacity();
 
   int length_expected = RegExpBytecodeLength(BC_LOAD_CURRENT_CHAR) +
                         RegExpBytecodeLength(BC_CHECK_BIT_IN_TABLE) +
@@ -1919,12 +1919,12 @@ TEST_F(RegExpTest, PeepholeSkipUntilCharPosChecked) {
 
   v8_flags.regexp_peephole_optimization = false;
   Handle<ByteArray> array = Handle<ByteArray>::cast(orig.GetCode(source));
-  int length = array->length();
+  int length = array->capacity();
 
   v8_flags.regexp_peephole_optimization = true;
   Handle<ByteArray> array_optimized =
       Handle<ByteArray>::cast(opt.GetCode(source));
-  int length_optimized = array_optimized->length();
+  int length_optimized = array_optimized->capacity();
 
   int length_expected = RegExpBytecodeLength(BC_CHECK_CURRENT_POSITION) +
                         RegExpBytecodeLength(BC_LOAD_CURRENT_CHAR_UNCHECKED) +
@@ -1967,12 +1967,12 @@ TEST_F(RegExpTest, PeepholeSkipUntilCharAnd) {
 
   v8_flags.regexp_peephole_optimization = false;
   Handle<ByteArray> array = Handle<ByteArray>::cast(orig.GetCode(source));
-  int length = array->length();
+  int length = array->capacity();
 
   v8_flags.regexp_peephole_optimization = true;
   Handle<ByteArray> array_optimized =
       Handle<ByteArray>::cast(opt.GetCode(source));
-  int length_optimized = array_optimized->length();
+  int length_optimized = array_optimized->capacity();
 
   int length_expected = RegExpBytecodeLength(BC_CHECK_CURRENT_POSITION) +
                         RegExpBytecodeLength(BC_LOAD_CURRENT_CHAR_UNCHECKED) +
@@ -2015,12 +2015,12 @@ TEST_F(RegExpTest, PeepholeSkipUntilCharOrChar) {
 
   v8_flags.regexp_peephole_optimization = false;
   Handle<ByteArray> array = Handle<ByteArray>::cast(orig.GetCode(source));
-  int length = array->length();
+  int length = array->capacity();
 
   v8_flags.regexp_peephole_optimization = true;
   Handle<ByteArray> array_optimized =
       Handle<ByteArray>::cast(opt.GetCode(source));
-  int length_optimized = array_optimized->length();
+  int length_optimized = array_optimized->capacity();
 
   int length_expected = RegExpBytecodeLength(BC_LOAD_CURRENT_CHAR) +
                         RegExpBytecodeLength(BC_CHECK_CHAR) +
@@ -2074,12 +2074,12 @@ TEST_F(RegExpTest, PeepholeSkipUntilGtOrNotBitInTable) {
 
   v8_flags.regexp_peephole_optimization = false;
   Handle<ByteArray> array = Handle<ByteArray>::cast(orig.GetCode(source));
-  int length = array->length();
+  int length = array->capacity();
 
   v8_flags.regexp_peephole_optimization = true;
   Handle<ByteArray> array_optimized =
       Handle<ByteArray>::cast(opt.GetCode(source));
-  int length_optimized = array_optimized->length();
+  int length_optimized = array_optimized->capacity();
 
   int length_expected = RegExpBytecodeLength(BC_LOAD_CURRENT_CHAR) +
                         RegExpBytecodeLength(BC_CHECK_GT) +
@@ -2179,8 +2179,8 @@ TEST_F(RegExpTest, PeepholeLabelFixupsInside) {
   for (int label_idx = 0; label_idx < 3; label_idx++) {
     for (int pos_idx = 0; pos_idx < 2; pos_idx++) {
       int label_pos = label_positions[label_idx][pos_idx] + pos_fixups[pos_idx];
-      int jump_address = *reinterpret_cast<uint32_t*>(
-          array_optimized->GetDataStartAddress() + label_pos);
+      int jump_address =
+          *reinterpret_cast<uint32_t*>(array_optimized->begin() + label_pos);
       int expected_jump_address =
           labels[label_idx]->pos() + target_fixups[label_idx];
       CHECK_EQ(expected_jump_address, jump_address);
@@ -2289,8 +2289,8 @@ TEST_F(RegExpTest, PeepholeLabelFixupsComplex) {
   for (int label_idx = 0; label_idx < 4; label_idx++) {
     for (int pos_idx = 0; pos_idx < 3; pos_idx++) {
       int label_pos = label_positions[label_idx][pos_idx] + pos_fixups[pos_idx];
-      int jump_address = *reinterpret_cast<uint32_t*>(
-          array_optimized->GetDataStartAddress() + label_pos);
+      int jump_address =
+          *reinterpret_cast<uint32_t*>(array_optimized->begin() + label_pos);
       int expected_jump_address =
           labels[label_idx]->pos() + target_fixups[label_idx];
       CHECK_EQ(expected_jump_address, jump_address);

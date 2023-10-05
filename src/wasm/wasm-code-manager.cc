@@ -909,11 +909,12 @@ WasmCode* NativeModule::AddCodeForTesting(Handle<Code> code) {
   }
   Handle<ByteArray> source_pos_table(code->source_position_table(),
                                      code->instruction_stream()->GetIsolate());
+  int source_pos_table_capacity = source_pos_table->capacity();
   base::OwnedVector<uint8_t> source_pos =
-      base::OwnedVector<uint8_t>::NewForOverwrite(source_pos_table->length());
-  if (source_pos_table->length() > 0) {
-    source_pos_table->copy_out(0, source_pos.begin(),
-                               source_pos_table->length());
+      base::OwnedVector<uint8_t>::NewForOverwrite(source_pos_table_capacity);
+  if (source_pos_table_capacity > 0) {
+    MemCopy(source_pos.begin(), source_pos_table->begin(),
+            source_pos_table_capacity);
   }
   static_assert(InstructionStream::kOnHeapBodyIsContiguous);
   base::Vector<const uint8_t> instructions(

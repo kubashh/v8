@@ -1915,7 +1915,7 @@ int HeapObject::SizeFromMap(Tagged<Map> map) const {
   }
   if (instance_type == BYTE_ARRAY_TYPE) {
     return ByteArray::SizeFor(
-        ByteArray::unchecked_cast(*this)->length(kAcquireLoad));
+        ByteArray::unchecked_cast(*this)->capacity(kAcquireLoad));
   }
   if (instance_type == BYTECODE_ARRAY_TYPE) {
     return BytecodeArray::SizeFor(

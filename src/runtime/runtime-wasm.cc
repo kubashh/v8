@@ -1609,7 +1609,7 @@ RUNTIME_FUNCTION(Runtime_WasmStringAsWtf8) {
   auto utf8_variant = unibrow::Utf8Variant::kWtf8;
   auto get_writable_bytes =
       [&](const DisallowGarbageCollection&) -> base::Vector<char> {
-    return {reinterpret_cast<char*>(array->GetDataStartAddress()),
+    return {reinterpret_cast<char*>(array->begin()),
             static_cast<size_t>(wtf8_length)};
   };
   EncodeWtf8(isolate, utf8_variant, string, get_writable_bytes, 0,
@@ -1631,7 +1631,7 @@ RUNTIME_FUNCTION(Runtime_WasmStringViewWtf8Encode) {
   DCHECK(utf8_variant_value <=
          static_cast<uint32_t>(unibrow::Utf8Variant::kLastUtf8Variant));
   DCHECK_LE(start, end);
-  DCHECK(base::IsInBounds<size_t>(start, end - start, array->length()));
+  DCHECK(base::IsInBounds<size_t>(start, end - start, array->capacity()));
 
   auto utf8_variant = static_cast<unibrow::Utf8Variant>(utf8_variant_value);
   size_t length = end - start;
@@ -1642,8 +1642,7 @@ RUNTIME_FUNCTION(Runtime_WasmStringViewWtf8Encode) {
   }
 
   uint8_t* memory_start = reinterpret_cast<uint8_t*>(instance->memory0_start());
-  const uint8_t* src =
-      reinterpret_cast<const uint8_t*>(array->GetDataStartAddress() + start);
+  const uint8_t* src = reinterpret_cast<const uint8_t*>(array->begin() + start);
   uint8_t* dst = memory_start + addr;
 
   std::vector<size_t> surrogates;
@@ -1677,7 +1676,7 @@ RUNTIME_FUNCTION(Runtime_WasmStringViewWtf8Slice) {
   uint32_t end = NumberToUint32(args[2]);
 
   DCHECK_LT(start, end);
-  DCHECK(base::IsInBounds<size_t>(start, end - start, array->length()));
+  DCHECK(base::IsInBounds<size_t>(start, end - start, array->capacity()));
 
   // This can't throw because the result can't be too long if the input wasn't,
   // and encoding failures are ruled out too because {start}/{end} are aligned.

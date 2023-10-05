@@ -58,9 +58,9 @@ bool SatisfiesAssertion(RegExpAssertion::Type type,
 base::Vector<RegExpInstruction> ToInstructionVector(
     Tagged<ByteArray> raw_bytes, const DisallowGarbageCollection& no_gc) {
   RegExpInstruction* inst_begin =
-      reinterpret_cast<RegExpInstruction*>(raw_bytes->GetDataStartAddress());
-  int inst_num = raw_bytes->length() / sizeof(RegExpInstruction);
-  DCHECK_EQ(sizeof(RegExpInstruction) * inst_num, raw_bytes->length());
+      reinterpret_cast<RegExpInstruction*>(raw_bytes->begin());
+  int inst_num = raw_bytes->capacity() / sizeof(RegExpInstruction);
+  DCHECK_EQ(sizeof(RegExpInstruction) * inst_num, raw_bytes->capacity());
   return base::Vector<RegExpInstruction>(inst_begin, inst_num);
 }
 
@@ -148,8 +148,8 @@ class NfaInterpreter {
         input_(ToCharacterVector<Character>(input, no_gc_)),
         input_index_(input_index),
         pc_last_input_index_(
-            zone->AllocateArray<LastInputIndex>(bytecode->length()),
-            bytecode->length()),
+            zone->AllocateArray<LastInputIndex>(bytecode->capacity()),
+            bytecode->capacity()),
         active_threads_(0, zone),
         blocked_threads_(0, zone),
         register_array_allocator_(zone),
