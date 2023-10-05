@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9156d1a8_e38e0d5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T13:08:52Z",
+      "side": 1,
+      "message": "Thanks Camillo!\n+Igor, PTAL as owner",
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

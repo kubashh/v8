@@ -183,6 +183,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a763b796_f370774c",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-05T13:08:52Z",
+      "side": 1,
+      "message": "ok thanks for the clarification. Added.",
+      "parentUuid": "793933bc_ef898739",
+      "range": {
+        "startLine": 1067,
+        "startChar": 0,
+        "endLine": 1067,
+        "endChar": 70
+      },
+      "revId": "1f81d4ffb74859abc01b840849d4b88260fabfe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab6a552a_15083f93",
