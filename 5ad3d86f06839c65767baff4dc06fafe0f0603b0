@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f95f36f_2d7f68aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-10-05T13:14:26Z",
+      "side": 1,
+      "message": "Awesome, thanks!\n\nlgtm with some readability suggestions. Feel free to ignore the ones you don\u0027t like.\n\nAlso one question for my understanding :)",
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "712a9115_1d9a48bb",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2537,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-10-05T13:14:26Z",
+      "side": 1,
+      "message": "Let\u0027s reduce nesting by one level via\n\n`if (!stop_at_caught \u0026\u0026 !include_async) continue;`",
+      "range": {
+        "startLine": 2537,
+        "startChar": 4,
+        "endLine": 2537,
+        "endChar": 42
+      },
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "314c069f_f9284fff",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2545,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-10-05T13:14:26Z",
+      "side": 1,
+      "message": "We could also invert + continue here.",
+      "range": {
+        "startLine": 2545,
+        "startChar": 0,
+        "endLine": 2545,
+        "endChar": 47
+      },
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee877f3f_26a920ca",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2552,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-10-05T13:14:26Z",
+      "side": 1,
+      "message": "Another way to do this in V8 is:\n\n```\nHandle\u003cJSObject\u003e object_handle;\nif (maybe_promise.ToHandle(\u0026object_handle) \u0026\u0026 IsJSPromise(*object_handle)) {\n```",
+      "range": {
+        "startLine": 2550,
+        "startChar": 0,
+        "endLine": 2552,
+        "endChar": 46
+      },
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c20e7b55_5073d49a",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2564,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-10-05T13:14:26Z",
+      "side": 1,
+      "message": "```\nis_caught \u003d handler.catches;\nis_blackboxed \u003d ReceiverIsBlackboxed(isolate_, handler.receiver);\n```",
+      "range": {
+        "startLine": 2559,
+        "startChar": 0,
+        "endLine": 2564,
+        "endChar": 21
+      },
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76987b46_f804d6f3",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2573,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-10-05T13:14:26Z",
+      "side": 1,
+      "message": "Not sure I understand why it\u0027s `else if` and not just `if`: Currently if \n\ninclude_async \u003d true\nprediction \u003d CAUGHT_BY_ASYNC_AWAIT\nstop_at_caught \u003d true\n\nWe\u0027d keep walking to the next stack frame. Is that intended?",
+      "range": {
+        "startLine": 2573,
+        "startChar": 7,
+        "endLine": 2573,
+        "endChar": 71
+      },
+      "revId": "5ad3d86f06839c65767baff4dc06fafe0f0603b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
