@@ -931,6 +931,8 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void JumpIfLessThan(Register x, int32_t y, Label* dest);
 
   void LoadMap(Register destination, Register object);
+  void LoadCompressedMap(Register dst, Register object,
+                         Register scratch = no_reg);
 
   void LoadFeedbackVector(Register dst, Register closure, Register scratch,
                           Label* fbv_undef);
@@ -1592,6 +1594,21 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   // Type_reg can be no_reg. In that case ip is used.
   void CompareObjectType(Register heap_object, Register map, Register type_reg,
                          InstanceType type);
+  // Variant of the above, which only guarantees to set the correct eq/ne flag.
+  // Neither map, nor type_reg might be set to any particular value.
+  void IsObjectType(Register heap_object, Register scratch1, Register scratch2,
+                    InstanceType type);
+
+  // Compare object type for heap object, and branch if equal (or not.)
+  // heap_object contains a non-Smi whose object type should be compared with
+  // the given type.  This both sets the flags and leaves the object type in
+  // the type_reg register. It leaves the map in the map register (unless the
+  // type_reg and map register are the same register).  It leaves the heap
+  // object in the heap_object register unless the heap_object register is the
+  // same register as one of the other registers.
+  void JumpIfObjectType(Register object, Register map, Register type_reg,
+                        InstanceType type, Label* if_cond_pass,
+                        Condition cond = eq);
 
   // Compare instance type in a map.  map contains a valid map object whose
   // object type should be compared with the given type.  This both
@@ -1632,6 +1649,17 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
                     unsigned higher_limit);
   void JumpIfIsInRange(Register value, unsigned lower_limit,
                        unsigned higher_limit, Label* on_in_range);
+
+  void JumpIfJSAnyIsNotPrimitive(
+      Register heap_object, Register scratch, Label* target,
+      Label::Distance distance = Label::kFar,
+      Condition condition = Condition::kUnsignedGreaterThanEqual);
+  void JumpIfJSAnyIsPrimitive(Register heap_object, Register scratch,
+                              Label* target,
+                              Label::Distance distance = Label::kFar) {
+    return JumpIfJSAnyIsNotPrimitive(heap_object, scratch, target, distance,
+                                     Condition::kUnsignedLessThan);
+  }
 
   // Tiering support.
   void AssertFeedbackCell(Register object,
