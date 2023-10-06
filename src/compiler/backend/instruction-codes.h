@@ -418,8 +418,13 @@ using MiscField = FlagsConditionField::Next<int, 10>;
 // back fixes that add new opcodes.
 // It is OK to temporarily reduce the required slack if we have a tracking bug
 // to reduce the number of used opcodes again.
+#ifdef V8_TARGET_ARCH_PPC64
+static_assert(ArchOpcodeField::kMax - kLastArchOpcode >= 15,
+              "We are running close to the number of available opcodes.");
+#else
 static_assert(ArchOpcodeField::kMax - kLastArchOpcode >= 16,
               "We are running close to the number of available opcodes.");
+#endif
 
 }  // namespace compiler
 }  // namespace internal
