@@ -464,7 +464,7 @@ if (v8_enable_snapshot_native_code_counters == "") {
 }
 if (v8_enable_pointer_compression == "") {
   v8_enable_pointer_compression =
-      v8_current_cpu == "arm64" || v8_current_cpu == "x64"
+      v8_current_cpu == "arm64" || v8_current_cpu == "x64" || v8_current_cpu == "ppc64"
 }
 
 # Toggle pointer compression for correctness fuzzing when building the
