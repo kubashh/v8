@@ -608,7 +608,9 @@ void MacroAssembler::MultiPopF64AndV128(DoubleRegList dregs,
 
 void MacroAssembler::LoadTaggedRoot(Register destination, RootIndex index) {
   ASM_CODE_COMMENT(this);
-  if (CanBeImmediate(index)) {
+  if (V8_STATIC_ROOTS_BOOL && RootsTable::IsReadOnly(index) &&
+      is_int12(ReadOnlyRootPtr(index))) {
+    // int12 can always be immediate on ppc64
     mov(destination, Operand(ReadOnlyRootPtr(index), RelocInfo::Mode::NO_INFO));
     return;
   }
@@ -618,8 +620,10 @@ void MacroAssembler::LoadTaggedRoot(Register destination, RootIndex index) {
 void MacroAssembler::LoadRoot(Register destination, RootIndex index,
                               Condition cond) {
   DCHECK(cond == al);
-  if (CanBeImmediate(index)) {
-    DecompressTagged(destination, ReadOnlyRootPtr(index));
+  if (V8_STATIC_ROOTS_BOOL && RootsTable::IsReadOnly(index) &&
+      is_int12(ReadOnlyRootPtr(index))) {
+    // int12 can always be immediate on ppc64
+    DecompressTagged(destination, (int32_t)ReadOnlyRootPtr(index));
     return;
   }
   LoadU64(destination,
@@ -742,6 +746,56 @@ void MacroAssembler::RecordWriteField(Register object, int offset,
     mov(value, Operand(base::bit_cast<intptr_t>(kZapValue + 4)));
     mov(slot_address, Operand(base::bit_cast<intptr_t>(kZapValue + 8)));
   }
+}
+
+void MacroAssembler::JumpIfObjectType(Register object, Register map,
+                                      Register type_reg, InstanceType type,
+                                      Label* if_cond_pass, Condition cond) {
+  ASM_CODE_COMMENT(this);
+  CompareObjectType(object, map, type_reg, type);
+
+  if (cond == ne) {
+    bne(if_cond_pass);
+  }
+  if (cond == eq) {
+    beq(if_cond_pass);
+  }
+}
+
+void MacroAssembler::JumpIfJSAnyIsNotPrimitive(Register heap_object,
+                                               Register scratch, Label* target,
+                                               Label::Distance distance,
+                                               Condition cc) {
+  CHECK(cc == Condition::kUnsignedLessThan ||
+        cc == Condition::kUnsignedGreaterThanEqual);
+  if (V8_STATIC_ROOTS_BOOL) {
+#ifdef DEBUG
+    Label ok;
+    LoadMap(scratch, heap_object);
+    CompareInstanceTypeRange(scratch, scratch, FIRST_JS_RECEIVER_TYPE,
+                             LAST_JS_RECEIVER_TYPE);
+    ble(&ok);
+    LoadMap(scratch, heap_object);
+    CompareInstanceTypeRange(scratch, scratch, FIRST_PRIMITIVE_HEAP_OBJECT_TYPE,
+                             LAST_PRIMITIVE_HEAP_OBJECT_TYPE);
+    ble(&ok);
+    Abort(AbortReason::kInvalidReceiver);
+    bind(&ok);
+#endif  // DEBUG
+
+    // All primitive object's maps are allocated at the start of the read only
+    // heap. Thus JS_RECEIVER's must have maps with larger (compressed)
+    // addresses.
+    UseScratchRegisterScope temps(this);
+    Register scratch2 = temps.Acquire();
+    LoadCompressedMap(scratch, heap_object, scratch2);
+    mov(scratch2, Operand(InstanceTypeChecker::kNonJsReceiverMapLimit));
+    CompareTagged(scratch, scratch2);
+  } else {
+    static_assert(LAST_JS_RECEIVER_TYPE == LAST_TYPE);
+    CompareObjectType(heap_object, scratch, scratch, FIRST_JS_RECEIVER_TYPE);
+  }
+  b(to_condition(cc), target);
 }
 
 void MacroAssembler::MaybeSaveRegisters(RegList registers) {
@@ -1693,6 +1747,27 @@ void MacroAssembler::PopStackHandler() {
   Drop(1);  // Drop padding.
 }
 
+// Sets equality condition flags.
+void MacroAssembler::IsObjectType(Register object, Register scratch1,
+                                  Register scratch2, InstanceType type) {
+  ASM_CODE_COMMENT(this);
+
+  if (V8_STATIC_ROOTS_BOOL) {
+    if (base::Optional<RootIndex> expected =
+            InstanceTypeChecker::UniqueMapOfInstanceType(type)) {
+      Tagged_t ptr = ReadOnlyRootPtr(*expected);
+      if (scratch1 != scratch2) {
+        LoadCompressedMap(scratch1, object, scratch2);
+        Move(scratch2, ptr);
+        CompareTagged(scratch1, scratch2);
+        return;
+      }
+    }
+  }
+
+  CompareObjectType(object, scratch1, scratch2, type);
+}
+
 void MacroAssembler::CompareObjectType(Register object, Register map,
                                        Register type_reg, InstanceType type) {
   const Register temp = type_reg == no_reg ? r0 : type_reg;
@@ -1734,13 +1809,18 @@ void MacroAssembler::CompareInstanceTypeRange(Register map, Register type_reg,
 }
 
 void MacroAssembler::CompareRoot(Register obj, RootIndex index) {
-  DCHECK(obj != r0);
+  ASM_CODE_COMMENT(this);
+  // Use r0 as a safe scratch register here, since temps.Acquire() tends
+  // to spit back the register being passed as an argument in obj...
+  Register temp = r0;
   if (V8_STATIC_ROOTS_BOOL && RootsTable::IsReadOnly(index)) {
-    LoadTaggedRoot(r0, index);
-  } else {
-    LoadRoot(r0, index);
+    mov(temp, Operand(ReadOnlyRootPtr(index)));
+    CompareTagged(obj, temp);
+    return;
   }
-  CmpS64(obj, r0);
+  DCHECK(!AreAliased(obj, temp));
+  LoadRoot(temp, index);
+  CompareTagged(obj, temp);
 }
 
 void MacroAssembler::AddAndCheckForOverflow(Register dst, Register left,
@@ -2292,6 +2372,12 @@ void MacroAssembler::LoadFeedbackVector(Register dst, Register closure,
   b(fbv_undef);
 
   bind(&done);
+}
+
+void MacroAssembler::LoadCompressedMap(Register dst, Register object,
+                                       Register scratch) {
+  ASM_CODE_COMMENT(this);
+  LoadS32(dst, FieldMemOperand(object, HeapObject::kMapOffset), scratch);
 }
 
 void MacroAssembler::LoadNativeContextSlot(Register dst, int index) {
