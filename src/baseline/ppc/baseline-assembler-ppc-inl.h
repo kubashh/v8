@@ -169,12 +169,37 @@ void BaselineAssembler::JumpIfObjectTypeFast(Condition cc, Register object,
                                              Label::Distance distance) {
   ScratchRegisterScope temps(this);
   Register scratch = temps.AcquireScratch();
-  if (cc == eq || cc = ne) {
+  if (cc == eq || cc == ne) {
     Register scratch2 = temps.AcquireScratch();
     __ IsObjectType(object, scratch, scratch2, instance_type);
     __ b(cc, target);
     return;
-    JumpIfObjectType(cc, object, instance_type, scratch, target, distance);
+  }
+  JumpIfObjectType(cc, object, instance_type, scratch, target, distance);
+}
+
+void BaselineAssembler::JumpIfObjectType(Condition cc, Register object,
+                                         InstanceType instance_type,
+                                         Register map, Label* target,
+                                         Label::Distance) {
+  ASM_CODE_COMMENT(masm_);
+  ScratchRegisterScope temps(this);
+  Register type = temps.AcquireScratch();
+  __ LoadMap(map, object);
+  __ LoadU16(type, FieldMemOperand(map, Map::kInstanceTypeOffset), r0);
+  JumpIf(cc, type, Operand(instance_type), target);
+}
+
+void BaselineAssembler::JumpIfInstanceType(Condition cc, Register map,
+                                           InstanceType instance_type,
+                                           Label* target, Label::Distance) {
+  ASM_CODE_COMMENT(masm_);
+  ScratchRegisterScope temps(this);
+  Register type = temps.AcquireScratch();
+  if (v8_flags.debug_code) {
+    __ AssertNotSmi(map);
+    __ CompareObjectType(map, type, type, MAP_TYPE);
+    __ Assert(eq, AbortReason::kUnexpectedValue);
   }
 
   void BaselineAssembler::JumpIfObjectType(
