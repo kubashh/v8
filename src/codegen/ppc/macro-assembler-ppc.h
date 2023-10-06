@@ -553,6 +553,10 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void CallEphemeronKeyBarrier(Register object, Register slot_address,
                                SaveFPRegsMode fp_mode);
 
+  void CallIndirectPointerBarrier(Register object, Register slot_address,
+                                  SaveFPRegsMode fp_mode,
+                                  IndirectPointerTag tag);
+
   void CallRecordWriteStubSaveRegisters(
       Register object, Register slot_address, SaveFPRegsMode fp_mode,
       StubCallMode mode = StubCallMode::kCallBuiltinPointer);
@@ -806,6 +810,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void Move(Register dst, ExternalReference reference);
   void Move(Register dst, Register src, Condition cond = al);
   void Move(DoubleRegister dst, DoubleRegister src);
+  void Move(Register dst, intptr_t x) {
+      mov(dst, Operand(x));
+  }
   void Move(Register dst, const MemOperand& src) {
     // TODO: use scratch register scope instead of r0
     LoadU64(dst, src, r0);
@@ -1011,6 +1018,62 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void ExceptionHandler() {}
   // Define an exception handler and bind a label.
   void BindExceptionHandler(Label* label) { bind(label); }
+
+  // ---------------------------------------------------------------------------
+  // V8 Sandbox support
+
+  // Transform a SandboxedPointer from/to its encoded form, which is used when
+  // the pointer is stored on the heap and ensures that the pointer will always
+  // point into the sandbox.
+  void DecodeSandboxedPointer(Register value);
+  void LoadSandboxedPointerField(Register destination,
+                                 const MemOperand& field_operand,
+                                 Register scratch = no_reg);
+  void StoreSandboxedPointerField(Register value,
+                                 const MemOperand& dst_field_operand,
+                                 Register scratch = no_reg);
+
+  // Loads a field containing off-heap pointer and does necessary decoding
+  // if sandboxed external pointers are enabled.
+  void LoadExternalPointerField(Register destination, MemOperand field_operand,
+                                ExternalPointerTag tag,
+                                Register isolate_root = no_reg,
+                                Register scratch = no_reg);
+
+  // Load an indirect pointer field.
+  // Only available when the sandbox is enabled.
+  void LoadIndirectPointerField(Register destination, MemOperand field_operand,
+                                IndirectPointerTag tag,
+                                Register scratch);
+
+  // Store an indirect pointer field.
+  // Only available when the sandbox is enabled.
+  void StoreIndirectPointerField(Register value,
+                                 MemOperand dst_field_operand,
+                                 Register scratch);
+
+  // Store a trusted pointer field.
+  // When the sandbox is enabled, these are indirect pointers using the trusted
+  // pointer table. Otherwise they are regular tagged fields.
+  void StoreTrustedPointerField(Register value,
+                                      MemOperand dst_field_operand,
+                                      Register scratch = no_reg);
+
+  // Store a code pointer field.
+  // These are special versions of trusted pointers that, when the sandbox is
+  // enabled, reference code objects through the code pointer table.
+  void StoreCodePointerField(Register value,
+                                      MemOperand dst_field_operand,
+                                      Register scratch = no_reg) {
+    StoreTrustedPointerField(value, dst_field_operand, scratch);
+  }
+
+  // Load the pointer to a Code's entrypoint via a code pointer.
+  // Only available when the sandbox is enabled as it requires the code pointer
+  // table.
+  void LoadCodeEntrypointViaCodePointer(Register destination,
+                                            MemOperand field_operand,
+                                            Register scratch = no_reg);
 
   // ---------------------------------------------------------------------------
   // Pointer compression Support
@@ -1501,16 +1564,18 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   // The offset is the offset from the start of the object, not the offset from
   // the tagged HeapObject pointer.  For use with FieldMemOperand(reg, off).
   void RecordWriteField(Register object, int offset, Register value,
-                        Register slot_address, LinkRegisterStatus lr_status,
-                        SaveFPRegsMode save_fp,
-                        SmiCheck smi_check = SmiCheck::kInline);
+                 Register slot_address, LinkRegisterStatus lr_status,
+                 SaveFPRegsMode save_fp,
+                 SmiCheck smi_check = SmiCheck::kInline,
+                 SlotDescriptor slot = SlotDescriptor::ForDirectPointerSlot());
 
   // For a given |object| notify the garbage collector that the slot |address|
   // has been written.  |value| is the object being stored. The value and
   // address registers are clobbered by the operation.
   void RecordWrite(Register object, Register slot_address, Register value,
-                   LinkRegisterStatus lr_status, SaveFPRegsMode save_fp,
-                   SmiCheck smi_check = SmiCheck::kInline);
+                 LinkRegisterStatus lr_status, SaveFPRegsMode save_fp,
+                 SmiCheck smi_check = SmiCheck::kInline,
+                 SlotDescriptor slot = SlotDescriptor::ForDirectPointerSlot());
 
   // Enter exit frame.
   // stack_space - extra stack space, used for parameters before call to C.
