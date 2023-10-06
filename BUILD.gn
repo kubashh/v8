@@ -321,7 +321,8 @@ declare_args() {
   # Enable heap reservation of size 4GB. Only possible for 64bit archs.
   cppgc_enable_caged_heap =
       v8_current_cpu == "x64" || v8_current_cpu == "arm64" ||
-      v8_current_cpu == "loong64" || v8_current_cpu == "riscv64"
+      v8_current_cpu == "loong64" || v8_current_cpu == "ppc64" ||
+      v8_current_cpu == "riscv64"
 
   # Enables additional heap verification phases and checks.
   cppgc_enable_verify_heap = ""
@@ -469,7 +470,7 @@ if (v8_enable_snapshot_native_code_counters == "") {
 }
 if (v8_enable_pointer_compression == "") {
   v8_enable_pointer_compression =
-      v8_current_cpu == "arm64" || v8_current_cpu == "x64"
+      v8_current_cpu == "arm64" || v8_current_cpu == "x64" || v8_current_cpu == "ppc64"
 }
 
 # Toggle pointer compression for correctness fuzzing when building the
@@ -506,7 +507,7 @@ if (v8_enable_external_code_space == "") {
   v8_enable_external_code_space =
       v8_enable_pointer_compression &&
       v8_enable_pointer_compression_shared_cage &&
-      (v8_current_cpu == "x64" || v8_current_cpu == "arm64")
+      (v8_current_cpu == "x64" || v8_current_cpu == "arm64" || v8_current_cpu == "ppc64")
 }
 if (v8_enable_sparkplug == "") {
   v8_enable_sparkplug = !v8_jitless
@@ -705,7 +706,7 @@ assert(!v8_enable_unconditional_write_barriers || !v8_disable_write_barriers,
 
 assert(!cppgc_enable_caged_heap || v8_current_cpu == "x64" ||
            v8_current_cpu == "arm64" || v8_current_cpu == "loong64" ||
-           v8_current_cpu == "riscv64",
+           v8_current_cpu == "ppc64" || v8_current_cpu == "riscv64",
        "CppGC caged heap requires 64bit platforms")
 
 assert(!cppgc_enable_young_generation || cppgc_enable_caged_heap,
@@ -1676,6 +1677,9 @@ config("toolchain") {
       # of `this` in capture-by-value lambdas and preventing a build roll which
       # enables C++20 (see https://crbug.com/1374227).
       "-Wno-deprecated",
+
+      # RAJA FIXME ppc64 only...
+      "-mlongcall",
     ]
   }
 

@@ -420,6 +420,8 @@ class ManagedConfig(RawConfig):
       cpu = "loong64"
     elif self.arch == "mips64el" and _get_machine() == "mips64":
       cpu = "mips64el"
+    elif self.arch == "ppc64" and _get_machine() == "ppc64le":
+      cpu = "ppc64"
     elif "64" in self.arch or self.arch == "s390x":
       # Native x64 or simulator build.
       cpu = "x64"
@@ -445,7 +447,7 @@ class ManagedConfig(RawConfig):
     return []
 
   def get_specialized_compiler(self):
-    if _get_machine() in ("aarch64", "mips64", "loongarch64"):
+    if _get_machine() in ("aarch64", "mips64", "loongarch64", "ppc64"):
       # We have no prebuilt Clang for arm64, mips64 or loongarch64 on Linux,
       # so use the system Clang instead.
       return ["clang_base_path = \"/usr\"", "clang_use_chrome_plugins = false"]

@@ -106,7 +106,6 @@ def _default_args():
             "@v8//bazel/config:is_posix": [
                 "-fPIC",
                 "-fno-strict-aliasing",
-                "-Werror",
                 "-Wextra",
                 "-Wno-unknown-warning-option",
                 "-Wno-bitwise-instead-of-logical",
@@ -131,7 +130,6 @@ def _default_args():
                 "-Wno-deprecated-declarations",
                 "-Wno-implicit-fallthrough",
                 "-Wno-int-in-bool-context",
-                "-Wno-maybe-uninitialized",
                 "-Wno-mismatched-new-delete",
                 "-Wno-redundant-move",
                 "-Wno-return-type",
