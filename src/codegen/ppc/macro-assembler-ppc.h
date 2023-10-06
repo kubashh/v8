@@ -553,6 +553,10 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void CallEphemeronKeyBarrier(Register object, Register slot_address,
                                SaveFPRegsMode fp_mode);
 
+  void CallIndirectPointerBarrier(Register object, Register slot_address,
+                                  SaveFPRegsMode fp_mode,
+                                  IndirectPointerTag tag);
+
   void CallRecordWriteStubSaveRegisters(
       Register object, Register slot_address, SaveFPRegsMode fp_mode,
       StubCallMode mode = StubCallMode::kCallBuiltinPointer);
@@ -1011,6 +1015,87 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void ExceptionHandler() {}
   // Define an exception handler and bind a label.
   void BindExceptionHandler(Label* label) { bind(label); }
+
+  // ---------------------------------------------------------------------------
+  // V8 Sandbox support
+
+  // Transform a SandboxedPointer from/to its encoded form, which is used when
+  // the pointer is stored on the heap and ensures that the pointer will always
+  // point into the sandbox.
+  void DecodeSandboxedPointer(Register value);
+  void LoadSandboxedPointerField(Register destination,
+                                 const MemOperand& field_operand,
+                                 Register scratch = no_reg);
+  void StoreSandboxedPointerField(Register value,
+                                 const MemOperand& dst_field_operand,
+                                 Register scratch = no_reg);
+
+  // Loads a field containing off-heap pointer and does necessary decoding
+  // if sandboxed external pointers are enabled.
+  void LoadExternalPointerField(Register destination, MemOperand field_operand,
+                                ExternalPointerTag tag,
+                                Register isolate_root = no_reg,
+                                Register scratch = no_reg);
+
+  // Load a trusted pointer field.
+  // When the sandbox is enabled, these are indirect pointers using the trusted
+  // pointer table. Otherwise they are regular tagged fields.
+  void LoadTrustedPointerField(Register destination, MemOperand field_operand,
+                                 IndirectPointerTag tag,
+                                 Register scratch = no_reg);
+
+  // Store a trusted pointer field.
+  // When the sandbox is enabled, these are indirect pointers using the trusted
+  // pointer table. Otherwise they are regular tagged fields.
+  void StoreTrustedPointerField(Register value,
+                                      MemOperand dst_field_operand,
+                                      Register scratch = no_reg);
+
+  // Store a code pointer field.
+  // These are special versions of trusted pointers that, when the sandbox is
+  // enabled, reference code objects through the code pointer table.
+  void StoreCodePointerField(Register value,
+                                      MemOperand dst_field_operand,
+                                      Register scratch = no_reg) {
+    StoreTrustedPointerField(value, dst_field_operand, scratch);
+  }
+
+  // Load an indirect pointer field.
+  // Only available when the sandbox is enabled.
+  void LoadIndirectPointerField(Register destination, MemOperand field_operand,
+                                IndirectPointerTag tag,
+                                Register scratch);
+
+  // Store an indirect pointer field.
+  // Only available when the sandbox is enabled.
+  void StoreIndirectPointerField(Register value,
+                                 MemOperand dst_field_operand,
+                                 Register scratch);
+
+#ifdef V8_ENABLE_SANDBOX
+  // Retrieve the heap object referenced by the given indirect pointer handle,
+  // which can either be a trusted pointer handle or a code pointer handle.
+  void ResolveIndirectPointerHandle(Register destination, Register handle,
+                                    IndirectPointerTag tag,
+                                    Register scratch = no_reg);
+
+  // Retrieve the heap object referenced by the given trusted pointer handle.
+  void ResolveTrustedPointerHandle(Register destination, Register handle,
+                                   IndirectPointerTag tag,
+                                   Register scratch = no_reg);
+
+  // Retrieve the Code object referenced by the given code pointer handle.
+  void ResolveCodePointerHandle(Register destination, Register handle,
+                                           Register scratch = no_reg);
+
+  // Load the pointer to a Code's entrypoint via a code pointer.
+  // Only available when the sandbox is enabled as it requires the code pointer
+  // table.
+  void LoadCodeEntrypointViaCodePointer(Register destination,
+                                            MemOperand field_operand,
+                                            Register scratch = no_reg);
+
+#endif
 
   // ---------------------------------------------------------------------------
   // Pointer compression Support
@@ -1501,16 +1586,18 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   // The offset is the offset from the start of the object, not the offset from
   // the tagged HeapObject pointer.  For use with FieldMemOperand(reg, off).
   void RecordWriteField(Register object, int offset, Register value,
-                        Register slot_address, LinkRegisterStatus lr_status,
-                        SaveFPRegsMode save_fp,
-                        SmiCheck smi_check = SmiCheck::kInline);
+                 Register slot_address, LinkRegisterStatus lr_status,
+                 SaveFPRegsMode save_fp,
+                 SmiCheck smi_check = SmiCheck::kInline,
+                 SlotDescriptor slot = SlotDescriptor::ForDirectPointerSlot());
 
   // For a given |object| notify the garbage collector that the slot |address|
   // has been written.  |value| is the object being stored. The value and
   // address registers are clobbered by the operation.
   void RecordWrite(Register object, Register slot_address, Register value,
-                   LinkRegisterStatus lr_status, SaveFPRegsMode save_fp,
-                   SmiCheck smi_check = SmiCheck::kInline);
+                 LinkRegisterStatus lr_status, SaveFPRegsMode save_fp,
+                 SmiCheck smi_check = SmiCheck::kInline,
+                 SlotDescriptor slot = SlotDescriptor::ForDirectPointerSlot());
 
   // Enter exit frame.
   // stack_space - extra stack space, used for parameters before call to C.
@@ -1598,6 +1685,16 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   // Neither map, nor type_reg might be set to any particular value.
   void IsObjectType(Register heap_object, Register scratch1, Register scratch2,
                     InstanceType type);
+
+#if V8_STATIC_ROOTS_BOOL
+  // Fast variant which is guaranteed to not actually load the instance type
+  // from the map.
+  void IsObjectTypeFast(Register heap_object, Register compressed_map_scratch,
+                        InstanceType type);
+  void CompareInstanceTypeWithUniqueCompressedMap(Register map,
+                                                  Register scratch,
+                                                  InstanceType type);
+#endif  // V8_STATIC_ROOTS_BOOL
 
   // Compare object type for heap object, and branch if equal (or not.)
   // heap_object contains a non-Smi whose object type should be compared with
