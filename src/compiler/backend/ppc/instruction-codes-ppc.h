@@ -408,6 +408,9 @@ namespace compiler {
   V(PPC_IExtractLaneU)               \
   V(PPC_IExtractLaneS)               \
   V(PPC_StoreCompressTagged)         \
+  V(PPC_StoreIndirectPointer)        \
+  V(PPC_LoadDecodeSandboxedPointer)  \
+  V(PPC_StoreEncodeSandboxedPointer) \
   V(PPC_LoadDecompressTaggedSigned)  \
   V(PPC_LoadDecompressTagged)
 

@@ -7,6 +7,7 @@
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/node-properties.h"
 #include "src/execution/ppc/frame-constants-ppc.h"
+#include "src/roots/roots-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -41,6 +42,25 @@ class PPCOperandGeneratorT final : public OperandGeneratorT<Adapter> {
   }
 
   bool CanBeImmediate(Node* node, ImmediateMode mode) {
+    if (node->opcode() == IrOpcode::kCompressedHeapConstant) {
+      if (!COMPRESS_POINTERS_BOOL) return false;
+      // For builtin code we need static roots
+      if (selector()->isolate()->bootstrapper() && !V8_STATIC_ROOTS_BOOL) {
+        return false;
+      }
+      const RootsTable& roots_table = selector()->isolate()->roots_table();
+      RootIndex root_index;
+      CompressedHeapObjectMatcher m(node);
+      if (m.HasResolvedValue() &&
+          roots_table.IsRootHandle(m.ResolvedValue(), &root_index)) {
+        if (!RootsTable::IsReadOnly(root_index)) return false;
+        return CanBeImmediate(MacroAssemblerBase::ReadOnlyRootPtr(
+                                  root_index, selector()->isolate()),
+                              mode);
+      }
+      return false;
+    }
+
     int64_t value;
     if (node->opcode() == IrOpcode::kInt32Constant)
       value = OpParameter<int32_t>(node->op());
@@ -223,15 +243,18 @@ static void VisitLoadCommon(InstructionSelectorT<Adapter>* selector, Node* node,
         break;
       case MachineRepresentation::kCompressedPointer:  // Fall through.
       case MachineRepresentation::kCompressed:
-      case MachineRepresentation::kIndirectPointer:  // Fall through.
-      case MachineRepresentation::kSandboxedPointer:  // Fall through.
 #ifdef V8_COMPRESS_POINTERS
-      opcode = kPPC_LoadWordS32;
-      if (mode != kInt34Imm) mode = kInt16Imm_4ByteAligned;
-      break;
+        opcode = kPPC_LoadWordS32;
+        if (mode != kInt34Imm) mode = kInt16Imm_4ByteAligned;
 #else
-      UNREACHABLE();
+        UNREACHABLE();
 #endif
+        break;
+      case MachineRepresentation::kIndirectPointer:
+        UNREACHABLE();
+      case MachineRepresentation::kSandboxedPointer:
+        opcode = kPPC_LoadDecodeSandboxedPointer;
+        break;
 #ifdef V8_COMPRESS_POINTERS
     case MachineRepresentation::kTaggedSigned:
       opcode = kPPC_LoadDecompressTaggedSigned;
@@ -323,15 +346,15 @@ void VisitStoreCommon(InstructionSelectorT<Adapter>* selector, Node* node,
   }
 
   if (v8_flags.enable_unconditional_write_barriers &&
-      CanBeTaggedOrCompressedPointer(rep)) {
+      CanBeTaggedOrCompressedOrIndirectPointer(rep)) {
     write_barrier_kind = kFullWriteBarrier;
   }
 
   if (write_barrier_kind != kNoWriteBarrier &&
       !v8_flags.disable_write_barriers) {
-    DCHECK(CanBeTaggedOrCompressedPointer(rep));
+    DCHECK(CanBeTaggedOrCompressedOrIndirectPointer(rep));
     AddressingMode addressing_mode;
-    InstructionOperand inputs[3];
+    InstructionOperand inputs[4];
     size_t input_count = 0;
     inputs[input_count++] = g.UseUniqueRegister(base);
     // OutOfLineRecordWrite uses the offset in an 'add' instruction as well as
@@ -352,7 +375,17 @@ void VisitStoreCommon(InstructionSelectorT<Adapter>* selector, Node* node,
         WriteBarrierKindToRecordWriteMode(write_barrier_kind);
     InstructionOperand temps[] = {g.TempRegister(), g.TempRegister()};
     size_t const temp_count = arraysize(temps);
-    InstructionCode code = kArchStoreWithWriteBarrier;
+    InstructionCode code;
+    if (rep == MachineRepresentation::kIndirectPointer) {
+      DCHECK_EQ(node->opcode(), IrOpcode::kStoreIndirectPointer);
+      DCHECK_EQ(write_barrier_kind, kIndirectPointerWriteBarrier);
+      // In this case we need to add the IndirectPointerTag as additional input.
+      code = kArchStoreIndirectWithWriteBarrier;
+      Node* tag = node->InputAt(3);
+      inputs[input_count++] = g.UseImmediate(tag);
+    } else {
+      code = kArchStoreWithWriteBarrier;
+    }
     code |= AddressingModeField::encode(addressing_mode);
     code |= RecordWriteModeField::encode(record_write_mode);
     CHECK_EQ(is_atomic, false);
@@ -390,14 +423,21 @@ void VisitStoreCommon(InstructionSelectorT<Adapter>* selector, Node* node,
         break;
       case MachineRepresentation::kCompressedPointer:  // Fall through.
       case MachineRepresentation::kCompressed:
-      case MachineRepresentation::kIndirectPointer:  // Fall through.
-      case MachineRepresentation::kSandboxedPointer:  // Fall through.
 #ifdef V8_COMPRESS_POINTERS
+        if (mode != kInt34Imm) mode = kInt16Imm_4ByteAligned;
         opcode = kPPC_StoreCompressTagged;
-        break;
 #else
         UNREACHABLE();
 #endif
+        break;
+      case MachineRepresentation::kIndirectPointer:
+        if (mode != kInt34Imm) mode = kInt16Imm_4ByteAligned;
+        opcode = kPPC_StoreIndirectPointer;
+        break;
+      case MachineRepresentation::kSandboxedPointer:
+        if (mode != kInt34Imm) mode = kInt16Imm_4ByteAligned;
+        opcode = kPPC_StoreEncodeSandboxedPointer;
+        break;
       case MachineRepresentation::kTaggedSigned:   // Fall through.
       case MachineRepresentation::kTaggedPointer:  // Fall through.
       case MachineRepresentation::kTagged:
@@ -2604,8 +2644,43 @@ void InstructionSelectorT<Adapter>::VisitWord32Equal(node_t const node) {
   if constexpr (Adapter::IsTurboshaft) {
   UNIMPLEMENTED();
   } else {
-  FlagsContinuation cont = FlagsContinuation::ForSet(kEqual, node);
-  VisitWord32Compare(this, node, &cont);
+    FlagsContinuation cont = FlagsContinuation::ForSet(kEqual, node);
+    if (isolate() && (V8_STATIC_ROOTS_BOOL ||
+                      (COMPRESS_POINTERS_BOOL && !isolate()->bootstrapper()))) {
+      PPCOperandGeneratorT<Adapter> g(this);
+      const RootsTable& roots_table = isolate()->roots_table();
+      RootIndex root_index;
+      Node* left = nullptr;
+      Handle<HeapObject> right;
+      // HeapConstants and CompressedHeapConstants can be treated the same when
+      // using them as an input to a 32-bit comparison. Check whether either is
+      // present.
+      {
+        CompressedHeapObjectBinopMatcher m(node);
+        if (m.right().HasResolvedValue()) {
+          left = m.left().node();
+          right = m.right().ResolvedValue();
+        } else {
+          HeapObjectBinopMatcher m2(node);
+          if (m2.right().HasResolvedValue()) {
+            left = m2.left().node();
+            right = m2.right().ResolvedValue();
+          }
+        }
+      }
+      if (!right.is_null() && roots_table.IsRootHandle(right, &root_index)) {
+        DCHECK_NE(left, nullptr);
+        if (RootsTable::IsReadOnly(root_index)) {
+          Tagged_t ptr =
+              MacroAssemblerBase::ReadOnlyRootPtr(root_index, isolate());
+          if (g.CanBeImmediate(ptr, kInt16Imm)) {
+            return VisitCompare(this, kPPC_Cmp32, g.UseRegister(left),
+                                g.TempImmediate(ptr), &cont);
+          }
+        }
+      }
+    }
+    VisitWord32Compare(this, node, &cont);
   }
 }
 
