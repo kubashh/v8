@@ -280,6 +280,24 @@
       "parentUuid": "12ede22f_d674bba9",
       "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8cbbf5e_91c94309",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-06T08:15:34Z",
+      "side": 1,
+      "message": "Thanks for the confirmation. Changed as you suggested.",
+      "parentUuid": "d1baaa06_ac03af33",
+      "revId": "b36d03aa2ea8b098891449af3987ff2d107a536b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
