@@ -200,8 +200,6 @@ void BaselineAssembler::JumpIfInstanceType(Condition cc, Register map,
     __ CompareObjectType(map, type, type, MAP_TYPE);
     __ Assert(eq, AbortReason::kUnexpectedValue);
   }
-  __ LoadU16(type, FieldMemOperand(map, Map::kInstanceTypeOffset), r0);
-  JumpIf(cc, type, Operand(instance_type), target);
 }
 
 void BaselineAssembler::JumpIfPointer(Condition cc, Register value,
