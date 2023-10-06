@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d607c25_4e803dc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-10-06T11:45:07Z",
+      "side": 1,
+      "message": "I just extracted LoopFinder from LoopUnrollingReducer but didn\u0027t change anything besides that. \nI have more changes coming that will additionally change a few things in LoopFinder, so I thought that it would be easier to review if extraction and modification are in separate CLs ;)",
+      "revId": "b1720546b3590a4ef362fadd1a53f2fa144d9bf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
