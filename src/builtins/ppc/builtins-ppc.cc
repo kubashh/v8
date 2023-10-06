@@ -3214,7 +3214,11 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
         IsolateAddressId::kPendingExceptionAddress, masm->isolate());
 
     __ Move(r6, pending_exception_address);
+#ifndef V8_ENABLE_SANDBOX
     __ LoadU64(r6, MemOperand(r6));
+#else
+    __ LoadU32(r6, MemOperand(r6));
+#endif
     __ CompareRoot(r6, RootIndex::kTheHoleValue);
     // Cannot use check here as it attempts to generate call into runtime.
     __ beq(&okay);
@@ -3578,10 +3582,11 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
         FieldMemOperand(callback, CallHandlerInfo::kOwnerTemplateOffset), r0);
     __ StoreU64(scratch, MemOperand(sp, 0 * kSystemPointerSize));
 
-    __ LoadU64(api_function_address,
-               FieldMemOperand(callback,
-                               CallHandlerInfo::kMaybeRedirectedCallbackOffset),
-               r0);
+    __ LoadExternalPointerField(
+        api_function_address,
+        FieldMemOperand(callback,
+                        CallHandlerInfo::kMaybeRedirectedCallbackOffset),
+        kCallHandlerInfoCallbackTag, no_reg, scratch);
 
     __ EnterExitFrame(kApiStackSpace, StackFrame::API_CALLBACK_EXIT);
   } else {
@@ -3748,10 +3753,10 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
           Operand(accessorInfoSlot * kSystemPointerSize));
 
   __ RecordComment("Load api_function_address");
-  __ LoadU64(
+  __ LoadExternalPointerField(
       api_function_address,
       FieldMemOperand(callback, AccessorInfo::kMaybeRedirectedGetterOffset),
-      r0);
+      kAccessorInfoGetterTag, no_reg, scratch);
 
   DCHECK(
       !AreAliased(api_function_address, property_callback_info_arg, name_arg));
