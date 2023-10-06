@@ -174,8 +174,8 @@ void BaselineAssembler::JumpIfObjectTypeFast(Condition cc, Register object,
     __ IsObjectType(object, scratch, scratch2, instance_type);
     __ b(cc, target);
     return;
-    JumpIfObjectType(cc, object, instance_type, scratch, target, distance);
   }
+  JumpIfObjectType(cc, object, instance_type, scratch, target, distance);
 }
 
 void BaselineAssembler::JumpIfObjectType(Condition cc, Register object,
@@ -201,8 +201,6 @@ void BaselineAssembler::JumpIfInstanceType(Condition cc, Register map,
     __ CompareObjectType(map, type, type, MAP_TYPE);
     __ Assert(eq, AbortReason::kUnexpectedValue);
   }
-  __ LoadU16(type, FieldMemOperand(map, Map::kInstanceTypeOffset), r0);
-  JumpIf(cc, type, Operand(instance_type), target);
 }
 
 void BaselineAssembler::JumpIfPointer(Condition cc, Register value,
