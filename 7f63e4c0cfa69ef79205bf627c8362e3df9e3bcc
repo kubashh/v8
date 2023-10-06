@@ -103,6 +103,24 @@
       "parentUuid": "07cad0dc_4ede2854",
       "revId": "7f63e4c0cfa69ef79205bf627c8362e3df9e3bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15e846e0_1083026e",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-06T13:10:18Z",
+      "side": 1,
+      "message": "Making refactoring in this CL sounds better ))",
+      "parentUuid": "94f07357_fdca1d7c",
+      "revId": "7f63e4c0cfa69ef79205bf627c8362e3df9e3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
