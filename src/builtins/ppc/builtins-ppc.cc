@@ -45,36 +45,60 @@ static void AssertCodeIsBaseline(MacroAssembler* masm, Register code,
   __ Assert(eq, AbortReason::kExpectedBaselineData);
 }
 
-static void GetSharedFunctionInfoBytecodeOrBaseline(MacroAssembler* masm,
-                                                    Register sfi_data,
-                                                    Register scratch1,
-                                                    Label* is_baseline) {
-  USE(GetSharedFunctionInfoBytecodeOrBaseline);
-  ASM_CODE_COMMENT(masm);
-  Label done;
-  __ LoadMap(scratch1, sfi_data);
-
-#ifndef V8_JITLESS
-  __ CompareInstanceType(scratch1, scratch1, CODE_TYPE);
+static void CheckSharedFunctionInfoBytecodeOrBaseline(MacroAssembler* masm,
+                                                      Register data,
+                                                      Register scratch,
+                                                      Label* is_baseline,
+                                                      Label* is_bytecode) {
+#if V8_STATIC_ROOTS_BOOL
+  __ IsObjectTypeFast(data, scratch, CODE_TYPE);
+#else
+  __ CompareObjectType(data, scratch, scratch, CODE_TYPE);
+#endif  // V8_STATIC_ROOTS_BOOL
   if (v8_flags.debug_code) {
     Label not_baseline;
     __ b(ne, &not_baseline);
-    AssertCodeIsBaseline(masm, sfi_data, scratch1);
-    __ beq(is_baseline);
+    AssertCodeIsBaseline(masm, data, scratch);
+    __ b(eq, is_baseline);
     __ bind(&not_baseline);
   } else {
-    __ beq(is_baseline);
+    __ b(eq, is_baseline);
   }
-  __ CmpS32(scratch1, Operand(INTERPRETER_DATA_TYPE), r0);
+
+#if V8_STATIC_ROOTS_BOOL
+  // scratch already contains the compressed map.
+  __ CompareInstanceTypeWithUniqueCompressedMap(scratch, Register::no_reg(),
+                                                INTERPRETER_DATA_TYPE);
 #else
-  __ CompareInstanceType(scratch1, scratch1, INTERPRETER_DATA_TYPE);
-#endif  // !V8_JITLESS
+  // scratch already contains the instance type.
+  __ CmpU64(scratch, Operand(INTERPRETER_DATA_TYPE), r0);
+#endif  // V8_STATIC_ROOTS_BOOL
+  __ b(ne, is_bytecode);
+}
 
-  __ bne(&done);
-  __ LoadTaggedField(
-      sfi_data,
-      FieldMemOperand(sfi_data, InterpreterData::kBytecodeArrayOffset), r0);
+static void GetSharedFunctionInfoBytecodeOrBaseline(MacroAssembler* masm,
+                                                    Register sfi,
+                                                    Register bytecode,
+                                                    Register scratch1,
+                                                    Label* is_baseline) {
+  USE(GetSharedFunctionInfoBytecodeOrBaseline);
+  DCHECK(!AreAliased(bytecode, scratch1));
+  ASM_CODE_COMMENT(masm);
+  Label done;
+  Register data = bytecode;
+  GetSharedFunctionInfoData(masm, data, sfi, scratch1);
 
+  if (V8_JITLESS_BOOL) {
+    __ IsObjectType(data, scratch1, scratch1, INTERPRETER_DATA_TYPE);
+    __ b(ne, &done);
+  } else {
+    CheckSharedFunctionInfoBytecodeOrBaseline(masm, data, scratch1, is_baseline,
+                                              &done);
+  }
+
+  __ LoadTrustedPointerField(
+      bytecode, FieldMemOperand(data, InterpreterData::kBytecodeArrayOffset),
+      kBytecodeArrayIndirectPointerTag, r0);
   __ bind(&done);
 }
 
@@ -737,12 +761,13 @@ void Builtins::Generate_ResumeGeneratorTrampoline(MacroAssembler* masm) {
   // Underlying function needs to have bytecode available.
   if (v8_flags.debug_code) {
     Label is_baseline;
+    Register sfi = r6;
+    Register bytecode = r6;
     __ LoadTaggedField(
-        r6, FieldMemOperand(r7, JSFunction::kSharedFunctionInfoOffset), r0);
-    __ LoadTaggedField(
-        r6, FieldMemOperand(r6, SharedFunctionInfo::kFunctionDataOffset), r0);
-    GetSharedFunctionInfoBytecodeOrBaseline(masm, r6, ip, &is_baseline);
-    __ CompareObjectType(r6, r6, r6, BYTECODE_ARRAY_TYPE);
+        sfi, FieldMemOperand(r7, JSFunction::kSharedFunctionInfoOffset), r0);
+    GetSharedFunctionInfoBytecodeOrBaseline(masm, sfi, bytecode, ip,
+                                            &is_baseline);
+    __ CompareObjectType(bytecode, r6, r6, BYTECODE_ARRAY_TYPE);
     __ Assert(eq, AbortReason::kMissingBytecodeArray);
     __ bind(&is_baseline);
   }
@@ -1376,17 +1401,14 @@ void Builtins::Generate_InterpreterEntryTrampoline(
 
   // Get the bytecode array from the function object and load it into
   // kInterpreterBytecodeArrayRegister.
+  Register sfi = r7;
   __ LoadTaggedField(
-      r7, FieldMemOperand(closure, JSFunction::kSharedFunctionInfoOffset), r0);
-  ResetSharedFunctionInfoAge(masm, r7, ip);
-  // Load original bytecode array or the debug copy.
-  __ LoadTaggedField(
-      kInterpreterBytecodeArrayRegister,
-      FieldMemOperand(r7, SharedFunctionInfo::kFunctionDataOffset), r0);
+      sfi, FieldMemOperand(closure, JSFunction::kSharedFunctionInfoOffset));
+  ResetSharedFunctionInfoAge(masm, sfi, ip);
 
   Label is_baseline;
   GetSharedFunctionInfoBytecodeOrBaseline(
-      masm, kInterpreterBytecodeArrayRegister, ip, &is_baseline);
+      masm, sfi, kInterpreterBytecodeArrayRegister, ip, &is_baseline);
 
   // The bytecode array could have been flushed from the shared function info,
   // if so, call into CompileLazy.
@@ -1992,8 +2014,7 @@ static void Generate_InterpreterEnterBytecode(MacroAssembler* masm) {
   __ LoadU64(r5, MemOperand(fp, StandardFrameConstants::kFunctionOffset));
   __ LoadTaggedField(
       r5, FieldMemOperand(r5, JSFunction::kSharedFunctionInfoOffset), r0);
-  __ LoadTaggedField(
-      r5, FieldMemOperand(r5, SharedFunctionInfo::kFunctionDataOffset), r0);
+  GetSharedFunctionInfoData(masm, r5, r5, r6);
   __ CompareObjectType(r5, kInterpreterDispatchTableRegister,
                        kInterpreterDispatchTableRegister,
                        INTERPRETER_DATA_TYPE);
