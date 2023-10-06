@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ec78cc7_625c1e2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-06T12:05:27Z",
+      "side": 1,
+      "message": "looks good, just some suggestions for further optimizations",
+      "revId": "7f63e4c0cfa69ef79205bf627c8362e3df9e3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc0e11e6_df1cbc17",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-06T12:05:27Z",
+      "side": 1,
+      "message": "Not sure how hot this code is but note that you are adding an unnecessary dynamic `is_holey` variable check for packed case. Maybe it\u0027s worth splitting holey and packed cases and make `is_holey` a compile-time parameter of `SerializeFixedArrayFast()`.\nDo we have a benchmark for this?",
+      "revId": "7f63e4c0cfa69ef79205bf627c8362e3df9e3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07cad0dc_4ede2854",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-06T12:05:27Z",
+      "side": 1,
+      "message": "Note that this block is the same as the one for double elements modulo `serialize_element` and `elements` type. You might want to unify them too by moving the while loop inside `SerializeFixedArrayFast`.",
+      "revId": "7f63e4c0cfa69ef79205bf627c8362e3df9e3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
