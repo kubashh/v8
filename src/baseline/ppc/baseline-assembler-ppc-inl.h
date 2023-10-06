@@ -169,11 +169,12 @@ void BaselineAssembler::JumpIfObjectTypeFast(Condition cc, Register object,
                                              Label::Distance distance) {
   ScratchRegisterScope temps(this);
   Register scratch = temps.AcquireScratch();
-  if (cc == eq || cc = ne) {
+  if (cc == eq || cc == ne) {
     Register scratch2 = temps.AcquireScratch();
     __ IsObjectType(object, scratch, scratch2, instance_type);
     __ b(cc, target);
     return;
+  }
   JumpIfObjectType(cc, object, instance_type, scratch, target, distance);
 }
 
