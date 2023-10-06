@@ -16,6 +16,10 @@ EvacuationAllocator::EvacuationAllocator(
       compaction_spaces_(heap, compaction_space_kind),
       new_space_lab_(LocalAllocationBuffer::InvalidBuffer()),
       lab_allocation_will_fail_(false) {
+  if (new_space_) {
+    new_space_allocator_ = heap_->allocator()->new_space_allocator();
+  }
+
   old_space_allocator_.emplace(heap, compaction_spaces_.Get(OLD_SPACE),
                                compaction_space_kind,
                                MainAllocator::SupportsExtendingLAB::kNo);
@@ -38,6 +42,12 @@ EvacuationAllocator::EvacuationAllocator(
                                    MainAllocator::SupportsExtendingLAB::kNo);
   compaction_spaces_.Get(TRUSTED_SPACE)
       ->set_main_allocator(trusted_space_allocator());
+}
+
+AllocationResult EvacuationAllocator::AllocateInNewSpaceSynchronized(
+    int size_in_bytes, AllocationOrigin origin, AllocationAlignment alignment) {
+  base::MutexGuard guard(new_space_->mutex());
+  return new_space_allocator()->AllocateRaw(size_in_bytes, alignment, origin);
 }
 
 void EvacuationAllocator::Finalize() {
