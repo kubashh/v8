@@ -93,8 +93,8 @@ AllocationResult EvacuationAllocator::AllocateInLAB(
 
 bool EvacuationAllocator::NewLocalAllocationBuffer() {
   if (lab_allocation_will_fail_) return false;
-  AllocationResult result =
-      new_space_->AllocateRawSynchronized(kLabSize, kTaggedAligned);
+  AllocationResult result = AllocateInNewSpaceSynchronized(
+      kLabSize, AllocationOrigin::kGC, kTaggedAligned);
   if (result.IsFailure()) {
     lab_allocation_will_fail_ = true;
     return false;
@@ -111,7 +111,7 @@ bool EvacuationAllocator::NewLocalAllocationBuffer() {
 AllocationResult EvacuationAllocator::AllocateInNewSpace(
     int object_size, AllocationOrigin origin, AllocationAlignment alignment) {
   if (object_size > kMaxLabObjectSize) {
-    return new_space_->AllocateRawSynchronized(object_size, alignment, origin);
+    return AllocateInNewSpaceSynchronized(object_size, origin, alignment);
   }
   return AllocateInLAB(object_size, alignment);
 }
