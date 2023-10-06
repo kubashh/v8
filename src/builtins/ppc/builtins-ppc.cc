@@ -48,9 +48,36 @@ static void AssertCodeIsBaseline(MacroAssembler* masm, Register code,
 // Equivalent of SharedFunctionInfo::GetData
 static void GetSharedFunctionInfoData(MacroAssembler* masm, Register data,
                                       Register sfi, Register scratch) {
+#ifdef V8_ENABLE_SANDBOX
+  Register scratch2 = r0;
+
+  DCHECK(!AreAliased(data, scratch));
+  DCHECK(!AreAliased(sfi, scratch));
+  DCHECK(!AreAliased(scratch2, scratch));
+
+  // Use trusted_function_data if non-empy, otherwise the regular function_data.
+  Label use_tagged_field, done;
+  __ LoadU32(
+      scratch,
+      FieldMemOperand(sfi, SharedFunctionInfo::kTrustedFunctionDataOffset),
+      scratch2);
+
+  __ cmpwi(scratch, Operand::Zero());
+  __ beq(&use_tagged_field);
+  __ ResolveIndirectPointerHandle(data, scratch, kUnknownIndirectPointerTag,
+                                  scratch2);
+  __ b(&done);
+
+  __ bind(&use_tagged_field);
+  __ LoadTaggedField(
+      data, FieldMemOperand(sfi, SharedFunctionInfo::kFunctionDataOffset));
+
+  __ bind(&done);
+#else
   __ LoadTaggedField(
       data, FieldMemOperand(sfi, SharedFunctionInfo::kFunctionDataOffset),
       scratch);
+#endif  // V8_ENABLE_SANDBOX
 }
 
 static void CheckSharedFunctionInfoBytecodeOrBaseline(MacroAssembler* masm,
@@ -176,9 +203,7 @@ void Generate_BaselineOrInterpreterEntry(MacroAssembler* masm,
     ResetSharedFunctionInfoAge(masm, code_obj, r6);
   }
 
-  __ LoadTaggedField(
-      code_obj,
-      FieldMemOperand(code_obj, SharedFunctionInfo::kFunctionDataOffset), r0);
+  GetSharedFunctionInfoData(masm, code_obj, code_obj, r6);
 
   // Check if we have baseline code. For OSR entry it is safe to assume we
   // always have baseline code.
@@ -3318,10 +3343,11 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
     Label okay;
     ExternalReference pending_exception_address = ExternalReference::Create(
         IsolateAddressId::kPendingExceptionAddress, masm->isolate());
-
-    __ Move(r6, pending_exception_address);
-    __ LoadU64(r6, MemOperand(r6));
-    __ CompareRoot(r6, RootIndex::kTheHoleValue);
+    __ LoadU64(r6,
+               masm->ExternalReferenceAsOperand(pending_exception_address, ip),
+               r0);
+    __ LoadRoot(r0, RootIndex::kTheHoleValue);
+    __ CompareTagged(r0, r6);
     // Cannot use check here as it attempts to generate call into runtime.
     __ beq(&okay);
     __ stop();
@@ -3684,10 +3710,11 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
         FieldMemOperand(callback, CallHandlerInfo::kOwnerTemplateOffset), r0);
     __ StoreU64(scratch, MemOperand(sp, 0 * kSystemPointerSize));
 
-    __ LoadU64(api_function_address,
-               FieldMemOperand(callback,
-                               CallHandlerInfo::kMaybeRedirectedCallbackOffset),
-               r0);
+    __ LoadExternalPointerField(
+        api_function_address,
+        FieldMemOperand(callback,
+                        CallHandlerInfo::kMaybeRedirectedCallbackOffset),
+        kCallHandlerInfoCallbackTag, no_reg, scratch);
 
     __ EnterExitFrame(kApiStackSpace, StackFrame::API_CALLBACK_EXIT);
   } else {
@@ -3854,10 +3881,10 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
           Operand(accessorInfoSlot * kSystemPointerSize));
 
   __ RecordComment("Load api_function_address");
-  __ LoadU64(
+  __ LoadExternalPointerField(
       api_function_address,
       FieldMemOperand(callback, AccessorInfo::kMaybeRedirectedGetterOffset),
-      r0);
+      kAccessorInfoGetterTag, no_reg, scratch);
 
   DCHECK(
       !AreAliased(api_function_address, property_callback_info_arg, name_arg));
