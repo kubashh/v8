@@ -587,110 +587,113 @@ static inline bool IsContiguousMask64(uint64_t value, int* mb, int* me) {
 }
 #endif
 
+template <>
+void InstructionSelectorT<TurboshaftAdapter>::VisitWord32And(
+    turboshaft::OpIndex) {
+  UNIMPLEMENTED();
+}
+
 // TODO(mbrandy): Absorb rotate-right into rlwinm?
-template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitWord32And(node_t node) {
-  if constexpr (Adapter::IsTurboshaft) {
-    UNIMPLEMENTED();
-  } else {
-    PPCOperandGeneratorT<Adapter> g(this);
-    Int32BinopMatcher m(node);
-    int mb = 0;
-    int me = 0;
-    if (m.right().HasResolvedValue() &&
-        IsContiguousMask32(m.right().ResolvedValue(), &mb, &me)) {
-      int sh = 0;
-      Node* left = m.left().node();
-      if ((m.left().IsWord32Shr() || m.left().IsWord32Shl()) &&
-          CanCover(node, left)) {
-        // Try to absorb left/right shift into rlwinm
-        Int32BinopMatcher mleft(m.left().node());
-        if (mleft.right().IsInRange(0, 31)) {
-          left = mleft.left().node();
-          sh = mleft.right().ResolvedValue();
-          if (m.left().IsWord32Shr()) {
-            // Adjust the mask such that it doesn't include any rotated bits.
-            if (mb > 31 - sh) mb = 31 - sh;
-            sh = (32 - sh) & 0x1F;
-          } else {
-            // Adjust the mask such that it doesn't include any rotated bits.
-            if (me < sh) me = sh;
-          }
+template <>
+void InstructionSelectorT<TurbofanAdapter>::VisitWord32And(Node* node) {
+  PPCOperandGeneratorT<TurbofanAdapter> g(this);
+  Int32BinopMatcher m(node);
+  int mb = 0;
+  int me = 0;
+  if (m.right().HasResolvedValue() &&
+      IsContiguousMask32(m.right().ResolvedValue(), &mb, &me)) {
+    int sh = 0;
+    Node* left = m.left().node();
+    if ((m.left().IsWord32Shr() || m.left().IsWord32Shl()) &&
+        CanCover(node, left)) {
+      // Try to absorb left/right shift into rlwinm
+      Int32BinopMatcher mleft(m.left().node());
+      if (mleft.right().IsInRange(0, 31)) {
+        left = mleft.left().node();
+        sh = mleft.right().ResolvedValue();
+        if (m.left().IsWord32Shr()) {
+          // Adjust the mask such that it doesn't include any rotated bits.
+          if (mb > 31 - sh) mb = 31 - sh;
+          sh = (32 - sh) & 0x1F;
+        } else {
+          // Adjust the mask such that it doesn't include any rotated bits.
+          if (me < sh) me = sh;
         }
       }
-      if (mb >= me) {
-        Emit(kPPC_RotLeftAndMask32, g.DefineAsRegister(node),
-             g.UseRegister(left), g.TempImmediate(sh), g.TempImmediate(mb),
-             g.TempImmediate(me));
-        return;
-      }
     }
-    VisitLogical<Adapter, Int32BinopMatcher>(
-        this, node, &m, kPPC_And, CanCover(node, m.left().node()),
-        CanCover(node, m.right().node()), kInt16Imm_Unsigned);
+    if (mb >= me) {
+      Emit(kPPC_RotLeftAndMask32, g.DefineAsRegister(node),
+           g.UseRegister(left), g.TempImmediate(sh), g.TempImmediate(mb),
+           g.TempImmediate(me));
+      return;
+    }
   }
+  VisitLogical<TurbofanAdapter, Int32BinopMatcher>(
+      this, node, &m, kPPC_And, CanCover(node, m.left().node()),
+      CanCover(node, m.right().node()), kInt16Imm_Unsigned);
 }
 
 #if V8_TARGET_ARCH_PPC64
+template <>
+void InstructionSelectorT<TurboshaftAdapter>::VisitWord64And(node_t node) {
+  UNIMPLEMENTED();
+}
+
 // TODO(mbrandy): Absorb rotate-right into rldic?
-template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitWord64And(node_t node) {
-  if constexpr (Adapter::IsTurboshaft) {
-    UNIMPLEMENTED();
-  } else {
-    PPCOperandGeneratorT<Adapter> g(this);
-    Int64BinopMatcher m(node);
-    int mb = 0;
-    int me = 0;
-    if (m.right().HasResolvedValue() &&
-        IsContiguousMask64(m.right().ResolvedValue(), &mb, &me)) {
-      int sh = 0;
-      Node* left = m.left().node();
-      if ((m.left().IsWord64Shr() || m.left().IsWord64Shl()) &&
-          CanCover(node, left)) {
-        // Try to absorb left/right shift into rldic
-        Int64BinopMatcher mleft(m.left().node());
-        if (mleft.right().IsInRange(0, 63)) {
-          left = mleft.left().node();
-          sh = mleft.right().ResolvedValue();
-          if (m.left().IsWord64Shr()) {
-            // Adjust the mask such that it doesn't include any rotated bits.
-            if (mb > 63 - sh) mb = 63 - sh;
-            sh = (64 - sh) & 0x3F;
-          } else {
-            // Adjust the mask such that it doesn't include any rotated bits.
-            if (me < sh) me = sh;
-          }
-        }
-      }
-      if (mb >= me) {
-        bool match = false;
-        ArchOpcode opcode;
-        int mask;
-        if (me == 0) {
-          match = true;
-          opcode = kPPC_RotLeftAndClearLeft64;
-          mask = mb;
-        } else if (mb == 63) {
-          match = true;
-          opcode = kPPC_RotLeftAndClearRight64;
-          mask = me;
-        } else if (sh && me <= sh && m.left().IsWord64Shl()) {
-          match = true;
-          opcode = kPPC_RotLeftAndClear64;
-          mask = mb;
-        }
-        if (match) {
-          Emit(opcode, g.DefineAsRegister(node), g.UseRegister(left),
-               g.TempImmediate(sh), g.TempImmediate(mask));
-          return;
+template <>
+void InstructionSelectorT<TurbofanAdapter>::VisitWord64And(Node* node) {
+  PPCOperandGeneratorT<TurbofanAdapter> g(this);
+  Int64BinopMatcher m(node);
+  int mb = 0;
+  int me = 0;
+  if (m.right().HasResolvedValue() &&
+      IsContiguousMask64(m.right().ResolvedValue(), &mb, &me)) {
+    int sh = 0;
+    Node* left = m.left().node();
+    if ((m.left().IsWord64Shr() || m.left().IsWord64Shl()) &&
+        CanCover(node, left)) {
+      // Try to absorb left/right shift into rldic
+      Int64BinopMatcher mleft(m.left().node());
+      if (mleft.right().IsInRange(0, 63)) {
+        left = mleft.left().node();
+        sh = mleft.right().ResolvedValue();
+        if (m.left().IsWord64Shr()) {
+          // Adjust the mask such that it doesn't include any rotated bits.
+          if (mb > 63 - sh) mb = 63 - sh;
+          sh = (64 - sh) & 0x3F;
+        } else {
+          // Adjust the mask such that it doesn't include any rotated bits.
+          if (me < sh) me = sh;
         }
       }
     }
-    VisitLogical<Adapter, Int64BinopMatcher>(
-        this, node, &m, kPPC_And, CanCover(node, m.left().node()),
-        CanCover(node, m.right().node()), kInt16Imm_Unsigned);
+    if (mb >= me) {
+      bool match = false;
+      ArchOpcode opcode;
+      int mask;
+      if (me == 0) {
+        match = true;
+        opcode = kPPC_RotLeftAndClearLeft64;
+        mask = mb;
+      } else if (mb == 63) {
+        match = true;
+        opcode = kPPC_RotLeftAndClearRight64;
+        mask = me;
+      } else if (sh && me <= sh && m.left().IsWord64Shl()) {
+        match = true;
+        opcode = kPPC_RotLeftAndClear64;
+        mask = mb;
+      }
+      if (match) {
+        Emit(opcode, g.DefineAsRegister(node), g.UseRegister(left),
+             g.TempImmediate(sh), g.TempImmediate(mask));
+        return;
+      }
+    }
   }
+  VisitLogical<TurbofanAdapter, Int64BinopMatcher>(
+      this, node, &m, kPPC_And, CanCover(node, m.left().node()),
+      CanCover(node, m.right().node()), kInt16Imm_Unsigned);
 }
 #endif
 
