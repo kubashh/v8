@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6327f69_22f12b44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1566654
+      },
+      "writtenOn": "2023-10-08T01:41:29Z",
+      "side": 1,
+      "message": "Update V8 DEPS (trusted)\n\nRolling v8/buildtools: https://chromium.googlesource.com/chromium/src/buildtools/+log/d953546..878f3f1\n\nRolling v8/third_party/libc++/src: https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxx/+log/3023d15..24bdc4f\n\nRoll created at https://cr-buildbucket.appspot.com/build/8767880684603981985\n\nChange-Id: If18a9e7f96dddd595110ea31e74ab75d718eb86c\nReviewed-on: https://chromium-review.googlesource.com/c/v8/v8/+/4919714\nCommit-Queue: v8-ci-autoroll-builder \u003cv8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com\u003e\nBot-Commit: v8-ci-autoroll-builder \u003cv8-ci-autoroll-builder@chops-service-accounts.iam.gserviceaccount.com\u003e\nCr-Commit-Position: refs/heads/main@{#90286}",
+      "revId": "c79092ca6783e75314354a260449ae0a3501ef8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
