@@ -16,6 +16,24 @@
       "message": "PPC contributors, please pre-review this. I\u0027m lacking a bit context for this stream of work, like a tracker bug, which is already approved.",
       "revId": "4e30bf28b1195d7838840791ac1a22fc8d53fe75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38d130e9_8711b118",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-09T14:02:20Z",
+      "side": 1,
+      "message": "Tracking bug is here:\nhttps://bugs.chromium.org/p/v8/issues/detail?id\u003d14365\n\nI had originally included this bug in the GIT logs, but looks like it got munged when things got split up for upload to Gerrit.  I can re-add if needed.\n\nReviewers have been updated.  Thanks!",
+      "parentUuid": "e33df9a7_03f8fc41",
+      "revId": "4e30bf28b1195d7838840791ac1a22fc8d53fe75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
