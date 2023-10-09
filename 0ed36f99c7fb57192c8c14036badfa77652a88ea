@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "08e57883_7c26a231",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-09T15:11:02Z",
+      "side": 1,
+      "message": "Let\u0027s be a bit more specific, maybe `Add TODOC for PropertyCell`. 😊",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 18
+      },
+      "revId": "0ed36f99c7fb57192c8c14036badfa77652a88ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "077993c5_69be00dc",
@@ -14,6 +37,23 @@
       "writtenOn": "2023-10-09T15:09:38Z",
       "side": 1,
       "message": "ptal",
+      "revId": "0ed36f99c7fb57192c8c14036badfa77652a88ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1395e16_9e808c57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-09T15:11:02Z",
+      "side": 1,
+      "message": "LGTM with one nit.",
       "revId": "0ed36f99c7fb57192c8c14036badfa77652a88ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
