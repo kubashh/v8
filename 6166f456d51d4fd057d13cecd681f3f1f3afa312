@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0587435_3b84f787",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-09T08:41:18Z",
+      "side": 1,
+      "message": "Please send this CL for review to somebody from `./PPC_OWNERS`.",
+      "revId": "6166f456d51d4fd057d13cecd681f3f1f3afa312",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
