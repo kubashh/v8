@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf901739_d6ba345b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-10-09T07:55:16Z",
+      "side": 1,
+      "message": "Can you please send these CLs to actual owners in the directory?",
+      "revId": "cbf694ad100bf3aa89b6f334abc07cfcba08f79f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
