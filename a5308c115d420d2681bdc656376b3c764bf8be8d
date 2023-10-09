@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9445c8ad_c4166816",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-10-09T07:13:49Z",
+      "side": 1,
+      "message": "Hi Timothy,\nYou picked a lot of reviewers. It would be good if you could clarify who should do an overall review, and from whom you need owner reviews for specific files. In principle one main reviewer + owner reviewers is sufficient.\nCheers, Andreas",
+      "revId": "a5308c115d420d2681bdc656376b3c764bf8be8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
