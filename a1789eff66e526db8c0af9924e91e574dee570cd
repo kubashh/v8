@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8c2e675_c6e4ee39",
+        "filename": "src/builtins/array-from-async.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-09T21:09:02Z",
+      "side": 1,
+      "message": "Ah, okay, In the case that `value` is already a `JSPromise`, `promise::PromiseResolve` already does the right thing, so you can remove this comment. After checking that the built-in `JSPromise` prototype chain is intact and an additional protector check, it returns `value` as-is.",
+      "parentUuid": "2640cca7_1c8dd26a",
+      "revId": "a1789eff66e526db8c0af9924e91e574dee570cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3e04c5e2_21a3add8",
         "filename": "src/builtins/array-from-async.tq",
         "patchSetId": 12
