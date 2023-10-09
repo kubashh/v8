@@ -72,6 +72,7 @@ class WasmGCTypeAnalyzer {
   void ProcessGlobalGet(const GlobalGetOp& global_get);
   void ProcessRefFunc(const WasmRefFuncOp& ref_func);
   void ProcessAllocateArray(const WasmAllocateArrayOp& allocate_array);
+  void ProcessPhi(const PhiOp& phi);
 
   void CreateMergeSnapshot(const Block& block);
 
@@ -95,6 +96,7 @@ class WasmGCTypeAnalyzer {
   // For any operation that could potentially refined, this map stores an entry
   // to the inferred input type based on the analysis.
   ZoneUnorderedMap<OpIndex, wasm::ValueType> input_type_map_{phase_zone_};
+  bool is_in_loop_header_ = false;
 };
 
 #include "src/compiler/turboshaft/define-assembler-macros.inc"
