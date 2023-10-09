@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e1c6541_7c02bba0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-09T15:12:37Z",
+      "side": 1,
+      "message": "Thanks for adding it! I think you are the first one excluding my example CL.",
+      "revId": "9ec63570b6a7329e39835f3e6ba6bbec702e87a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
