@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b969e51_22418589",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-10T14:04:32Z",
+      "side": 1,
+      "message": "Hi Timothy,\n\nThis also cannot be enabled by default for the reasons explained under https://crrev.com/c/4917708",
+      "revId": "f4d86a22f1a002300f158658c6e9f54b553227fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
