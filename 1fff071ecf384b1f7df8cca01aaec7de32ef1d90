@@ -51,6 +51,24 @@
       "parentUuid": "1b4fefdb_284d3279",
       "revId": "1fff071ecf384b1f7df8cca01aaec7de32ef1d90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94e12440_6d37857e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-10T18:48:53Z",
+      "side": 1,
+      "message": "We test them in our internal CI by individually enabling the flags within args.gn, upstream changes are monitored and ported accordingly.\n\nWe do have plans to fully port these to all supported sub-system but even then as Node has no plans in using them yet we are not planning to enable it by default. We ask our users to enable them individually if they need the feature in the meantime.",
+      "parentUuid": "3416c5bf_a817d1d0",
+      "revId": "1fff071ecf384b1f7df8cca01aaec7de32ef1d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
