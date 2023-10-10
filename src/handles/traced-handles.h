@@ -17,6 +17,7 @@ namespace v8::internal {
 
 class Isolate;
 class TracedHandlesImpl;
+class TracedNode;
 
 // TracedHandles hold handles that must go through cppgc's tracing methods. The
 // handles do otherwise not keep their pointees alive.
@@ -32,6 +33,10 @@ class V8_EXPORT_PRIVATE TracedHandles final {
   static Tagged<Object> MarkConservatively(Address* inner_location,
                                            Address* traced_node_block_base,
                                            MarkMode mark_mode);
+
+  enum class WeaknessComputationMode { kUseCached, kRecompute };
+  static bool IsWeak(Address* location, Heap* heap,
+                     WeaknessComputationMode weakness_computation_mode);
 
   explicit TracedHandles(Isolate*);
   ~TracedHandles();
@@ -63,12 +68,13 @@ class V8_EXPORT_PRIVATE TracedHandles final {
   // Computes whether young weak objects should be considered roots for young
   // generation garbage collections  or just be treated weakly. Per default
   // objects are considered as roots. Objects are treated not as root when both
-  // - `is_unmodified()` returns true;
+  // - `JSObject::IsUnmodifiedApiObject` returns true;
   // - the `EmbedderRootsHandler` also does not consider them as roots;
-  void ComputeWeaknessForYoungObjects(WeakSlotCallback is_unmodified);
+  void ComputeWeaknessForYoungObjects();
 
   void ProcessYoungObjects(RootVisitor* v,
-                           WeakSlotCallbackWithHeap should_reset_handle);
+                           WeakSlotCallbackWithHeap should_reset_handle,
+                           bool is_minor_gc);
 
   void Iterate(RootVisitor*);
   void IterateYoung(RootVisitor*);

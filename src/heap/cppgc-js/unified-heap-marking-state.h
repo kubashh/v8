@@ -9,9 +9,13 @@
 #include "src/handles/traced-handles.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/marking-worklist.h"
+#include "v8-traced-handle.h"
 
 namespace v8 {
 namespace internal {
+
+using WeakTracedReferenceWorklist =
+    ::heap::base::Worklist<const TracedReferenceBase*, 64>;
 
 // `UnifiedHeapMarkingState` is used to handle `TracedReferenceBase` and
 // friends. It is used when `CppHeap` is attached but also detached. In detached
@@ -19,6 +23,7 @@ namespace internal {
 class UnifiedHeapMarkingState final {
  public:
   UnifiedHeapMarkingState(Heap*, MarkingWorklists::Local*,
+                          WeakTracedReferenceWorklist::Local&,
                           cppgc::internal::CollectionType);
 
   UnifiedHeapMarkingState(const UnifiedHeapMarkingState&) = delete;
@@ -29,12 +34,16 @@ class UnifiedHeapMarkingState final {
   V8_INLINE void MarkAndPush(const TracedReferenceBase&);
   V8_INLINE bool ShouldMarkObject(Tagged<HeapObject> object) const;
 
+  void NotifyAtomicPauseEntered() { is_in_atomic_pause_ = true; }
+
  private:
   Heap* const heap_;
   const bool has_shared_space_;
   const bool is_shared_space_isolate_;
   MarkingState* const marking_state_;
-  MarkingWorklists::Local* local_marking_worklist_ = nullptr;
+  MarkingWorklists::Local* local_marking_worklist_;
+  WeakTracedReferenceWorklist::Local& local_weak_traced_reference_worklist_;
+  bool is_in_atomic_pause_ = false;
   const bool track_retaining_path_;
   const TracedHandles::MarkMode mark_mode_;
 };
