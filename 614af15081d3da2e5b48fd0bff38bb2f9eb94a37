@@ -33,6 +33,23 @@
       "message": "Let\u0027s stage Array.fromAsync",
       "revId": "614af15081d3da2e5b48fd0bff38bb2f9eb94a37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de6f1951_c0c62353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-10T22:31:49Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "614af15081d3da2e5b48fd0bff38bb2f9eb94a37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
