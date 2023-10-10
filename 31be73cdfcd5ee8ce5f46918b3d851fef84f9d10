@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c9903c_c5dc3bee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-10T14:15:59Z",
+      "side": 1,
+      "message": "Hello,\n\nPlease don\u0027t enable this by default, refer to this CL for more detail: https://crrev.com/c/4917708",
+      "revId": "31be73cdfcd5ee8ce5f46918b3d851fef84f9d10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
