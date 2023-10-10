@@ -1694,7 +1694,9 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   void SetUseCounterCallback(v8::Isolate::UseCounterCallback callback);
   void CountUsage(v8::Isolate::UseCounterFeature feature);
-  void CountUsage(v8::Isolate::UseCounterFeature feature, int count);
+  // Count multiple usages at once; cheaper than calling the {CountUsage}
+  // separately for each feature.
+  void CountUsage(base::Vector<const v8::Isolate::UseCounterFeature> features);
 
   static std::string GetTurboCfgFileName(Isolate* isolate);
 
