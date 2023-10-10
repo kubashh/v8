@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3524e9c6_4a813631",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-10-10T08:34:23Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "dbadfb8b076f365647279d96d0dc58971ab2cdbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d587ee9_579a3b16",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-10-10T08:34:23Z",
+      "side": 1,
+      "message": "nit: I wonder now, why not inherit from std::allocator\u003c\u003e privately? That would enable empty-base-optimization and you could do\n`using std::allocator\u003cT\u003e::allocate;`\ninstead of instantiating a temporary allocator each time we allocate.",
+      "range": {
+        "startLine": 1054,
+        "startChar": 11,
+        "endLine": 1054,
+        "endChar": 39
+      },
+      "revId": "dbadfb8b076f365647279d96d0dc58971ab2cdbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
