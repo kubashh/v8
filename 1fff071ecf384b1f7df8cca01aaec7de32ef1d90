@@ -33,6 +33,24 @@
       "message": "Please don\u0027t enable by default. You can enable it by adding the option in args.gn",
       "revId": "1fff071ecf384b1f7df8cca01aaec7de32ef1d90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3416c5bf_a817d1d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-10T17:38:01Z",
+      "side": 1,
+      "message": "How will we get test coverage so that upstream doesn\u0027t inadvertently break this feature when refactoring?\n\nAlso, for Linux systems we probably do want compression and sandboxing both to avoid ppc64 using more RAM than a comparable x64/arm64 server and for the security benefits of the sandbox.  Is there a potential path to resolving the issues short of having each downstream distro enable by default?  Would a patch that only enables by default on Linux/ppc64 (handling AIX/ppc64 as a separate system entirely) be acceptable?\n\nEither way, having the main sandbox patches in tree, even deactivated by default, would greatly simplify our future maintainance efforts..",
+      "parentUuid": "1b4fefdb_284d3279",
+      "revId": "1fff071ecf384b1f7df8cca01aaec7de32ef1d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
