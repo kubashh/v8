@@ -629,7 +629,8 @@ class Heap final {
 
   void VisitExternalResources(v8::ExternalResourceVisitor* visitor);
 
-  void IncrementDeferredCount(v8::Isolate::UseCounterFeature feature);
+  void IncrementDeferredCounts(
+      base::Vector<const v8::Isolate::UseCounterFeature> features);
 
   inline int NextScriptId();
   inline int NextDebuggingId();

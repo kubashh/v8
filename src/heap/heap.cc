@@ -855,12 +855,16 @@ void Heap::DumpJSONHeapStatistics(std::stringstream& stream) {
 }
 
 void Heap::ReportStatisticsAfterGC() {
+  base::SmallVector<v8::Isolate::UseCounterFeature, 16> features;
   for (int i = 0; i < static_cast<int>(v8::Isolate::kUseCounterFeatureCount);
        ++i) {
-    isolate()->CountUsage(static_cast<v8::Isolate::UseCounterFeature>(i),
-                          deferred_counters_[i]);
+    if (deferred_counters_[i] == 0) continue;
+    features.insert(features.end(), deferred_counters_[i],
+                    static_cast<v8::Isolate::UseCounterFeature>(i));
     deferred_counters_[i] = 0;
   }
+
+  isolate()->CountUsage(base::VectorOf(features));
 }
 
 class Heap::AllocationTrackerForDebugging final
@@ -1160,8 +1164,11 @@ void Heap::AddRetainingRoot(Root root, Tagged<HeapObject> object) {
   }
 }
 
-void Heap::IncrementDeferredCount(v8::Isolate::UseCounterFeature feature) {
-  deferred_counters_[feature]++;
+void Heap::IncrementDeferredCounts(
+    base::Vector<const v8::Isolate::UseCounterFeature> features) {
+  for (auto feature : features) {
+    deferred_counters_[feature]++;
+  }
 }
 
 void Heap::GarbageCollectionPrologue(
