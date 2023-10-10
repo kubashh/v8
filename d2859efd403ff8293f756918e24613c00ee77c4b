@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf677c36_7e0c8a92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-10-10T09:48:26Z",
+      "side": 1,
+      "message": "PTAL. Planning to make this bot blocking next to reduce reverts.",
+      "revId": "d2859efd403ff8293f756918e24613c00ee77c4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
