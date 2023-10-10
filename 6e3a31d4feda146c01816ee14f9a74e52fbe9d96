@@ -16,6 +16,23 @@
       "message": "Hello,\n\nPlease don\u0027t enable this by default, refer to this CL for more detail: https://crrev.com/c/4917708",
       "revId": "6e3a31d4feda146c01816ee14f9a74e52fbe9d96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ed0153e_4c215c4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1453398
+      },
+      "writtenOn": "2023-10-10T16:20:26Z",
+      "side": 1,
+      "message": "as memtioned by Milad, please don\u0027t enable this by default.",
+      "revId": "6e3a31d4feda146c01816ee14f9a74e52fbe9d96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
