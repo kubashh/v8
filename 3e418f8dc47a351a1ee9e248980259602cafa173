@@ -16,6 +16,24 @@
       "message": "@clemensb@chromium.org: Do you agree with this? It just caused some confusion on a chromium bug (and I also run into this issue regularly when using --wasm-fuzzer-gen-test).",
       "revId": "3e418f8dc47a351a1ee9e248980259602cafa173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f3cf7ba_66b9b010",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-10-10T14:33:22Z",
+      "side": 1,
+      "message": "Yeah, I see the output of `--wasm-fuzzer-gen-test` more as a template to create the actual regression test. Sometimes we don\u0027t need to execute at all, but `builder.toModule()` is enough to trigger the bug, maybe together with `--no-wasm-lazy-compilation`.\nBut adding the try-catch here doesn\u0027t hurt, it can still easily be removed when minimizing the test manually.",
+      "parentUuid": "94804c92_07d0b22d",
+      "revId": "3e418f8dc47a351a1ee9e248980259602cafa173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
