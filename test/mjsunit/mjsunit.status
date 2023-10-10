@@ -197,7 +197,7 @@
   'es6/large-classes-*': [PASS, HEAVY],
   'harmony/sharedarraybuffer-stress': [PASS, HEAVY],
   'harmony/sharedarraybuffer-worker-gc-stress': [PASS, HEAVY],
-  'huge-typedarrays': [PASS, HEAVY],
+  'huge-typedarrays': [PASS, HEAVY, ['system == windows and mode == debug', SKIP]],
   'ignition/regress-672027': [PASS, HEAVY],
   'json2': [PASS, HEAVY],
   'regress/regress-500980': [PASS, HEAVY],
@@ -214,6 +214,7 @@
   'wasm/grow-huge-memory': [PASS, HEAVY],
   'wasm/huge-memory': [PASS, HEAVY],
   'wasm/huge-typedarray': [PASS, HEAVY],
+  'wasm/memory64': [PASS, HEAVY, ['system == windows and mode == debug', SKIP]],
   'wasm/simd-lane-memory64': [PASS, HEAVY],
 
   # TODO(v8:10915): Fails with --future.
