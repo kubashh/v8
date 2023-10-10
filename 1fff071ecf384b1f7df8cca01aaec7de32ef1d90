@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b4fefdb_284d3279",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-10T14:02:47Z",
+      "side": 1,
+      "message": "Hi Timothy,\n\nWe can\u0027t enable pntr compression by default. Port off PPC is directly used on Node.js which doesn\u0027t use pntr compression as of yet. We also haven\u0027t ported/tested this feature on AIX yet. If you need to build a PPC binary with this feature enabled then please compile it with the flag added to your args.gn",
+      "revId": "1fff071ecf384b1f7df8cca01aaec7de32ef1d90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
