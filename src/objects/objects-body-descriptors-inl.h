@@ -1043,6 +1043,8 @@ auto BodyDescriptorApply(InstanceType type, Args&&... args) {
       return CALL_APPLY(FixedArray);
     case REG_EXP_MATCH_INFO_TYPE:
       return CALL_APPLY(RegExpMatchInfo);
+    case ARRAY_LIST_TYPE:
+      return CALL_APPLY(ArrayList);
     case SLOPPY_ARGUMENTS_ELEMENTS_TYPE:
       return CALL_APPLY(SloppyArgumentsElements);
     case EPHEMERON_HASH_TABLE_TYPE:
@@ -1414,6 +1416,7 @@ class CallHandlerInfo::BodyDescriptor final : public BodyDescriptorBase {
   }
 };
 
+// TODO(jgruber): Combine these into generic Suffix descriptors.
 class FixedArray::BodyDescriptor final
     : public SuffixRangeBodyDescriptor<HeapObject::kHeaderSize> {
  public:
@@ -1435,6 +1438,14 @@ class RegExpMatchInfo::BodyDescriptor final
  public:
   static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> raw_object) {
     return RegExpMatchInfo::unchecked_cast(raw_object)->AllocatedSize();
+  }
+};
+
+class ArrayList::BodyDescriptor final
+    : public SuffixRangeBodyDescriptor<HeapObject::kHeaderSize> {
+ public:
+  static inline int SizeOf(Tagged<Map> map, Tagged<HeapObject> raw_object) {
+    return ArrayList::unchecked_cast(raw_object)->AllocatedSize();
   }
 };
 
