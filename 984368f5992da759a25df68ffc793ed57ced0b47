@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61e4ce82_bf344ebb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1423652
+      },
+      "writtenOn": "2023-10-11T16:49:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4e914cb_4b933f23",
+      "revId": "984368f5992da759a25df68ffc793ed57ced0b47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fd328dd_90f900ac",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-11T09:29:03Z",
       "side": 1,
       "message": "Can you elaborate what exactly is failing? Wasm memory allocations in the tests themselves should already throw an exception on failure, which should be allowed by the test(s).\nIf the problem is other tests that are failing, then is it enough to mark the `memory64` test as `HEAVY` in order to run it in isolation?",
+      "revId": "984368f5992da759a25df68ffc793ed57ced0b47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc855422_99737712",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1423652
+      },
+      "writtenOn": "2023-10-11T16:49:15Z",
+      "side": 1,
+      "message": "Yes, the problem is other tests failing. I tried marking just `memory64` test as `HEAVY`, but that was not enough. My observation is that there are many other tests using 1-5GB that are not marked as HEAVY (such as memory_4gb_oob, regress-9017, readonly, and many others), and HEAVY tests still can run with other non-HEAVY tests in parallel. So, `huge-typedarrays` or `memory64` tests use 15~25GB of memory, and that does not give enough memory for other tests.",
+      "parentUuid": "6fd328dd_90f900ac",
       "revId": "984368f5992da759a25df68ffc793ed57ced0b47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
