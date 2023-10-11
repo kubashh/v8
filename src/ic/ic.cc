@@ -478,9 +478,8 @@ MaybeHandle<Object> LoadGlobalIC::Load(Handle<Name> name,
 
     VariableLookupResult lookup_result;
     if (script_contexts->Lookup(str_name, &lookup_result)) {
-      Handle<Context> script_context = ScriptContextTable::GetContext(
-          isolate(), script_contexts, lookup_result.context_index);
-
+      Handle<Context> script_context(
+          script_contexts->get(lookup_result.context_index), isolate());
       Handle<Object> result(script_context->get(lookup_result.slot_index),
                             isolate());
 
@@ -1610,8 +1609,8 @@ MaybeHandle<Object> StoreGlobalIC::Store(Handle<Name> name,
 
   VariableLookupResult lookup_result;
   if (script_contexts->Lookup(str_name, &lookup_result)) {
-    Handle<Context> script_context = ScriptContextTable::GetContext(
-        isolate(), script_contexts, lookup_result.context_index);
+    Handle<Context> script_context(
+        script_contexts->get(lookup_result.context_index), isolate());
     if (lookup_result.mode == VariableMode::kConst) {
       return TypeError(MessageTemplate::kConstAssign, global, name);
     }
@@ -2915,8 +2914,8 @@ RUNTIME_FUNCTION(Runtime_StoreGlobalIC_Slow) {
 
   VariableLookupResult lookup_result;
   if (script_contexts->Lookup(name, &lookup_result)) {
-    Handle<Context> script_context = ScriptContextTable::GetContext(
-        isolate, script_contexts, lookup_result.context_index);
+    Handle<Context> script_context(
+        script_contexts->get(lookup_result.context_index), isolate);
     if (lookup_result.mode == VariableMode::kConst) {
       THROW_NEW_ERROR_RETURN_FAILURE(
           isolate, NewTypeError(MessageTemplate::kConstAssign, global, name));
