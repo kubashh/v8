@@ -253,7 +253,10 @@ class V8_TRIVIAL_ABI BasicMember final : private MemberBase<StorageType>,
     other = tmp;
   }
 
-  V8_INLINE explicit operator bool() const { return !Base::IsCleared(); }
+  // No explicit operator to allow implicit conversions to bool in e.g. return
+  // statements.
+  // NOLINTNEXTLINE
+  V8_INLINE operator bool() const { return !Base::IsCleared(); }
   V8_INLINE operator T*() const { return Get(); }
   V8_INLINE T* operator->() const { return Get(); }
   V8_INLINE T& operator*() const { return *Get(); }
