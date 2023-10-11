@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c713b94_a09219f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-11T18:34:31Z",
+      "side": 1,
+      "message": "PTAL.",
+      "revId": "21d04218528ed780b38b5dd8a7faec3c5efc3d7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3ec9512_52c7e6db",
+        "filename": "test/mjsunit/regress/wasm/regress-1491415.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-11T18:34:31Z",
+      "side": 1,
+      "message": "I might not find time to reduce this further until mid of next week.\nShould we merge as is?",
+      "range": {
+        "startLine": 5,
+        "startChar": 3,
+        "endLine": 5,
+        "endChar": 8
+      },
+      "revId": "21d04218528ed780b38b5dd8a7faec3c5efc3d7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
