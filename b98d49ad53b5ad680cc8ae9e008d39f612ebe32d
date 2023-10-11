@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c3cb094_de05b8f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-10-11T15:17:10Z",
+      "side": 1,
+      "message": "lgtm.\n\nAs discussed offline, had we had both `operator T*` and `operator bool` explicit, we wouldn\u0027t have had the issue in the first place. It\u0027d be ideal to make them both epxplicit and have rewrite the code with a custom clang-tidy rewriter.",
+      "revId": "b98d49ad53b5ad680cc8ae9e008d39f612ebe32d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
