@@ -341,6 +341,7 @@ void IncrementalMarking::StartMarkingMajor() {
 
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_MARK_ROOTS);
+    isolate()->traced_handles()->ComputeWeaknessForYoungObjects();
     MarkRoots();
   }
 
