@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4e914cb_4b933f23",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-10-11T09:29:03Z",
+      "side": 1,
+      "message": "Please wrap lines at 80 characters (unfortunately Gerrit does not do that automatically).",
+      "revId": "984368f5992da759a25df68ffc793ed57ced0b47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fd328dd_90f900ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-10-11T09:29:03Z",
+      "side": 1,
+      "message": "Can you elaborate what exactly is failing? Wasm memory allocations in the tests themselves should already throw an exception on failure, which should be allowed by the test(s).\nIf the problem is other tests that are failing, then is it enough to mark the `memory64` test as `HEAVY` in order to run it in isolation?",
+      "revId": "984368f5992da759a25df68ffc793ed57ced0b47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "281ff395_395adfbe",
