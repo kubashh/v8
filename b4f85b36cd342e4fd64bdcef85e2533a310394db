@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9433bac3_c7e15a3d",
+        "filename": "include/v8-context.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-11T17:50:38Z",
+      "side": 1,
+      "message": "Why is this changed from pure virtual? (It\u0027s okay to implement one with the other.)",
+      "range": {
+        "startLine": 192,
+        "startChar": 17,
+        "endLine": 192,
+        "endChar": 51
+      },
+      "revId": "b4f85b36cd342e4fd64bdcef85e2533a310394db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a9fa404_c22fabc5",
+        "filename": "include/v8-statistics.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-11T17:50:38Z",
+      "side": 1,
+      "message": "We can also put these in the `Result` struct and populate it accordingly, right? This way we don\u0027t need to maintain a `_v2` (which we rarely have on out APIs)",
+      "range": {
+        "startLine": 111,
+        "startChar": 44,
+        "endLine": 111,
+        "endChar": 52
+      },
+      "revId": "b4f85b36cd342e4fd64bdcef85e2533a310394db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
