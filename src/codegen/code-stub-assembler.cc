@@ -2521,6 +2521,12 @@ TNode<IntPtrT> CodeStubAssembler::LoadArrayLength(
 
 template <>
 TNode<IntPtrT> CodeStubAssembler::LoadArrayLength(
+    TNode<ScriptContextTable> array) {
+  return SmiUntag(LoadArrayCapacity(array));
+}
+
+template <>
+TNode<IntPtrT> CodeStubAssembler::LoadArrayLength(
     TNode<RegExpMatchInfo> array) {
   return SmiUntag(LoadArrayCapacity(array));
 }
@@ -11696,11 +11702,7 @@ TNode<Context> CodeStubAssembler::LoadScriptContext(
   TNode<NativeContext> native_context = LoadNativeContext(context);
   TNode<ScriptContextTable> script_context_table = CAST(
       LoadContextElement(native_context, Context::SCRIPT_CONTEXT_TABLE_INDEX));
-
-  TNode<Context> script_context = CAST(LoadFixedArrayElement(
-      script_context_table, context_index,
-      ScriptContextTable::kFirstContextSlotIndex * kTaggedSize));
-  return script_context;
+  return LoadArrayElement(script_context_table, context_index);
 }
 
 namespace {
