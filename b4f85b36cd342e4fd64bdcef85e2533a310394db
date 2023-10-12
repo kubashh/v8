@@ -93,6 +93,30 @@
       },
       "revId": "b4f85b36cd342e4fd64bdcef85e2533a310394db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a03c981b_d1f87db6",
+        "filename": "include/v8-statistics.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-12T15:00:32Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t like `_v2` either but I see two problems with just adding more fields here.\n\u003e \n\u003e 1.  Old code using this looks like (line 356 in `memory-measurement.cc`):\n\u003e     ```\n\u003e     foo-\u003eMeasurementComplete(\n\u003e         {sizes, request.shared, request.wasm_code, request.wasm_metadata});\n\u003e     ```\n\u003e     This will break if more fields are introduced, so no more backwards\n\u003e     compatibility.\n\nThat\u0027s called from V8 and the embedder merely picks up the result, right? I think the caller can be easily adjusted.\n\n\u003e \n\u003e 2.  These are vector references, so it\u0027s not clear what the \"unpopulated\"\n\u003e     value would be. Plus, we need a way to determine which one is populated\n\u003e     (at run-time).\n\nIt could refer to an empty vector which could signal to look at the span.",
+      "parentUuid": "51e09bb9_cc6bbaf5",
+      "range": {
+        "startLine": 111,
+        "startChar": 44,
+        "endLine": 111,
+        "endChar": 52
+      },
+      "revId": "b4f85b36cd342e4fd64bdcef85e2533a310394db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
