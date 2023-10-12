@@ -3072,7 +3072,8 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
 
     Run<turboshaft::MachineLoweringPhase>();
 
-    if (v8_flags.turboshaft_loop_unrolling) {
+    if (v8_flags.turboshaft_loop_unrolling ||
+        v8_flags.turboshaft_loop_peeling) {
       Run<turboshaft::LoopUnrollingPhase>();
     }
 

@@ -15,7 +15,9 @@ class CallWithReduceArgsHelper {
   explicit CallWithReduceArgsHelper(Callback callback)
       : callback_(std::move(callback)) {}
 
-  OpIndex operator()(const GotoOp& op) { return callback_(op.destination); }
+  OpIndex operator()(const GotoOp& op) {
+    return callback_(op.destination, op.is_backedge);
+  }
 
   OpIndex operator()(const BranchOp& op) {
     return callback_(op.condition(), op.if_true, op.if_false, op.hint);

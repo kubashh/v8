@@ -524,7 +524,8 @@ class GraphVisitor {
   // blocks accordingly.
   V8_INLINE OpIndex AssembleOutputGraphGoto(const GotoOp& op) {
     Block* destination = MapToNewGraph(op.destination);
-    if (destination->IsBound()) {
+    if (op.is_backedge) {
+      DCHECK(destination->IsBound());
       DCHECK(destination->IsLoop());
       FixLoopPhis(op.destination);
     }
@@ -532,7 +533,7 @@ class GraphVisitor {
     // because reducing the `Goto` can have side effects, in particular, it can
     // modify affect the SnapshotTable of `VariableReducer`, which is also used
     // by `FixLoopPhis()`.
-    assembler().ReduceGoto(destination);
+    assembler().ReduceGoto(destination, op.is_backedge);
     return OpIndex::Invalid();
   }
   V8_INLINE OpIndex AssembleOutputGraphBranch(const BranchOp& op) {

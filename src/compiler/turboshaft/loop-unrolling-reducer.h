@@ -106,12 +106,12 @@ class LoopUnrollingAnalyzer {
   // unrolled if they are small enough.
  public:
   LoopUnrollingAnalyzer(Zone* phase_zone, Graph* input_graph)
-      : phase_zone_(phase_zone),
-        input_graph_(input_graph),
+      : input_graph_(input_graph),
         matcher_(*input_graph),
         loop_finder_(phase_zone, input_graph),
         loop_iteration_count_(phase_zone),
         canonical_loop_matcher_(matcher_, kPartialUnrollingCount) {
+    if (!v8_flags.turboshaft_loop_unrolling) return;
     DetectUnrollableLoops();
   }
 
@@ -142,12 +142,9 @@ class LoopUnrollingAnalyzer {
     return it->second;
   }
 
-  struct BlockCmp {
-    bool operator()(Block* a, Block* b) const {
-      return a->index().id() < b->index().id();
-    }
-  };
-  ZoneSet<Block*, BlockCmp> GetLoopBody(Block* loop_header);
+  ZoneSet<Block*, LoopFinder::BlockCmp> GetLoopBody(Block* loop_header) {
+    return loop_finder_.GetLoopBody(loop_header);
+  }
 
   Block* GetLoopHeader(Block* block) {
     return loop_finder_.GetLoopHeader(block);
@@ -166,7 +163,6 @@ class LoopUnrollingAnalyzer {
   bool CanFullyUnrollLoop(const LoopFinder::LoopInfo& info,
                           int* iter_count) const;
 
-  Zone* phase_zone_;
   Graph* input_graph_;
   OperationMatcher matcher_;
   LoopFinder loop_finder_;
@@ -178,7 +174,16 @@ class LoopUnrollingAnalyzer {
 };
 
 template <class Next>
+class LoopPeelingReducer;
+
+template <class Next>
 class LoopUnrollingReducer : public Next {
+#if defined(__clang__)
+  // Loop peeling should always go before loop unrolling; otherwise
+  // LoopUnrolling could try to unroll the peeled iteration of the loop.
+  static_assert(!next_contains_reducer<Next, LoopPeelingReducer>::value);
+#endif
+
  public:
   TURBOSHAFT_REDUCER_BOILERPLATE()
 
@@ -188,10 +193,11 @@ class LoopUnrollingReducer : public Next {
     // This is because the backedge skipping is not an optimization but a
     // mandatory lowering when unrolling is being performed.
     LABEL_BLOCK(no_change) { return Next::ReduceInputGraphGoto(ig_idx, gto); }
+    if (!v8_flags.turboshaft_loop_unrolling) goto no_change;
 
     Block* dst = gto.destination;
     if (unrolling_ == UnrollingStatus::kNotUnrolling && dst->IsLoop() &&
-        __ current_input_block() != dst->LastPredecessor()) {
+        !gto.is_backedge) {
       // We trigger unrolling when reaching the GotoOp that jumps to the loop
       // header (note that loop headers only have 2 predecessor, including the
       // backedge), and that isn't the backedge.
@@ -213,11 +219,15 @@ class LoopUnrollingReducer : public Next {
       // PartiallyUnrollLoop will emit a Goto to the next unrolled iteration.
       return OpIndex::Invalid();
     }
-
     goto no_change;
   }
 
   OpIndex REDUCE_INPUT_GRAPH(Branch)(OpIndex ig_idx, const BranchOp& branch) {
+    LABEL_BLOCK(no_change) {
+      return Next::ReduceInputGraphBranch(ig_idx, branch);
+    }
+    if (!v8_flags.turboshaft_loop_unrolling) goto no_change;
+
     if (unrolling_ == UnrollingStatus::kRemoveLoop) {
       // We know that the branch of the final inlined header of a fully unrolled
       // loop never actually goes to the loop, so we can replace it by a Goto
@@ -243,10 +253,12 @@ class LoopUnrollingReducer : public Next {
         DCHECK(is_true_in_loop && is_false_in_loop);
       }
     }
-    return Next::ReduceInputGraphBranch(ig_idx, branch);
+    goto no_change;
   }
 
   OpIndex REDUCE_INPUT_GRAPH(Call)(OpIndex ig_idx, const CallOp& call) {
+    if (!v8_flags.turboshaft_loop_unrolling) goto no_change;
+
     LABEL_BLOCK(no_change) { return Next::ReduceInputGraphCall(ig_idx, call); }
     if (ShouldSkipOptimizationStep()) goto no_change;
 
