@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d5cb88e_d4d7d1d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-10-12T07:56:34Z",
+      "side": 1,
+      "message": "PTAL. Note the ubsan test failure has been fixed in a predecessor.",
+      "revId": "f7b1238a6c7ed4d28b1e121219061345315f397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
