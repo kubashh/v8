@@ -209,6 +209,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b924bb24_fcbefff6",
+        "filename": "src/runtime/runtime-scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-10-12T12:20:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "306e12de_6f6513c4",
+      "revId": "f7b1238a6c7ed4d28b1e121219061345315f397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4ec1c54_cc7d52f2",
@@ -222,6 +240,24 @@
       "writtenOn": "2023-10-12T09:21:36Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "f7b1238a6c7ed4d28b1e121219061345315f397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e9d1559_a1c2efb9",
+        "filename": "test/cctest/test-inobject-slack-tracking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-10-12T12:20:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4ec1c54_cc7d52f2",
       "revId": "f7b1238a6c7ed4d28b1e121219061345315f397e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
