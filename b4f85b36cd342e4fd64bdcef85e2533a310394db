@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3dae0aaf_736cd788",
+        "filename": "include/v8-context.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-10-12T08:36:12Z",
+      "side": 1,
+      "message": "If any of the two is pure virtual, derived classes will need to implement it.\nFor some time, there will be old versions implementing just the old one, and new versions implementing just the new one, so one of the two kinds will not compile. I can\u0027t see how this can be solved without defining both.\n\nI\u0027m implementing the new one with the old one, and just calling the new one from api.cc. In this way, new code is faster and old code works too. The default implementation of the old one just aborts if called. If there\u0027s a simpler acceptable behaviour, we can change it.",
+      "parentUuid": "9433bac3_c7e15a3d",
+      "range": {
+        "startLine": 192,
+        "startChar": 17,
+        "endLine": 192,
+        "endChar": 51
+      },
+      "revId": "b4f85b36cd342e4fd64bdcef85e2533a310394db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a9fa404_c22fabc5",
         "filename": "include/v8-statistics.h",
         "patchSetId": 9
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-11T17:50:38Z",
       "side": 1,
       "message": "We can also put these in the `Result` struct and populate it accordingly, right? This way we don\u0027t need to maintain a `_v2` (which we rarely have on out APIs)",
+      "range": {
+        "startLine": 111,
+        "startChar": 44,
+        "endLine": 111,
+        "endChar": 52
+      },
+      "revId": "b4f85b36cd342e4fd64bdcef85e2533a310394db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51e09bb9_cc6bbaf5",
+        "filename": "include/v8-statistics.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-10-12T08:36:12Z",
+      "side": 1,
+      "message": "I don\u0027t like `_v2` either but I see two problems with just adding more fields here.\n\n1.  Old code using this looks like (line 356 in `memory-measurement.cc`):\n    ```\n    foo-\u003eMeasurementComplete(\n        {sizes, request.shared, request.wasm_code, request.wasm_metadata});\n    ```\n    This will break if more fields are introduced, so no more backwards\n    compatibility.\n\n2.  These are vector references, so it\u0027s not clear what the \"unpopulated\"\n    value would be. Plus, we need a way to determine which one is populated\n    (at run-time).",
+      "parentUuid": "2a9fa404_c22fabc5",
       "range": {
         "startLine": 111,
         "startChar": 44,
