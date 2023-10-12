@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2c204ae_bf8b9614",
+        "filename": "test/mjsunit/regress/wasm/regress-1491415.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-12T07:35:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "180e5dd1_603e86f3",
+      "range": {
+        "startLine": 21,
+        "startChar": 29,
+        "endLine": 21,
+        "endChar": 33
+      },
+      "revId": "498dd7232f8b3c4749b06cce80d78919f5c21794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "158043f9_fcbc7088",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-11T19:12:51Z",
       "side": 1,
       "message": "This is 3x the same pattern. For some reason 2x doesn\u0027t reproduce the issue, so there is some non-trivial stuff happening there in the combination of load elimination and dead code elimination that results in the kDead operation leading to another kDeadValue operation as a result in some way.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 53
+      },
+      "revId": "498dd7232f8b3c4749b06cce80d78919f5c21794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c691c16_ce600166",
+        "filename": "test/mjsunit/regress/wasm/regress-1491415.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-12T07:35:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "158043f9_fcbc7088",
       "range": {
         "startLine": 23,
         "startChar": 0,
