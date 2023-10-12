@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e305f5cd_b342b839",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2023-10-12T04:35:22Z",
+      "side": 1,
+      "message": "no this is just a bug caused by some bad merge . not a spec change",
+      "parentUuid": "26b41aeb_25d3ff7e",
+      "revId": "baa3132690ebda0784f7d552444ecc4c6dbee58a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ad90906c_c80b2aa5",
