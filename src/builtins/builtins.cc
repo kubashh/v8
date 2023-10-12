@@ -272,6 +272,11 @@ const char* Builtins::NameForStackTrace(Builtin builtin) {
     case Builtin::kThrowDataViewGetInt32OutOfBounds:
     case Builtin::kThrowDataViewGetInt32TypeError:
       return "DataView.getInt32";
+    case Builtin::kDataViewPrototypeSetBigInt64:
+    case Builtin::kThrowDataViewSetBigInt64DetachedError:
+    case Builtin::kThrowDataViewSetBigInt64OutOfBounds:
+    case Builtin::kThrowDataViewSetBigInt64TypeError:
+      return "DataView.setBigInt64";
     case Builtin::kDataViewPrototypeSetInt32:
     case Builtin::kThrowDataViewSetInt32DetachedError:
     case Builtin::kThrowDataViewSetInt32OutOfBounds:

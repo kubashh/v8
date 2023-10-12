@@ -10,8 +10,10 @@ d8.file.execute('test/mjsunit/wasm/wasm-module-builder.js');
 let kSig_l_rii = makeSig([kWasmExternRef, kWasmI32, kWasmI32], [kWasmI64]);
 let kSig_i_rii = makeSig([kWasmExternRef, kWasmI32, kWasmI32], [kWasmI32]);
 let kSig_v_riii = makeSig([kWasmExternRef, kWasmI32, kWasmI32, kWasmI32], []);
+let kSig_v_rili = makeSig([kWasmExternRef, kWasmI32, kWasmI64, kWasmI32], []);
 
 let kDataViewGetBigInt64;
+let kDataViewSetBigInt64;
 let kDataViewGetInt32;
 let kDataViewSetInt32;
 
@@ -20,6 +22,8 @@ function MakeBuilder() {
 
   kDataViewGetBigInt64 =
       builder.addImport('DataView', 'getBigInt64Import', kSig_l_rii);
+  kDataViewSetBigInt64 =
+      builder.addImport('DataView', 'setBigInt64Import', kSig_v_rili);
   kDataViewGetInt32 =
       builder.addImport('DataView', 'getInt32Import', kSig_i_rii);
   kDataViewSetInt32 =
@@ -32,6 +36,8 @@ let kImports = {
   DataView: {
     getBigInt64Import:
         Function.prototype.call.bind(DataView.prototype.getBigInt64),
+    setBigInt64Import:
+        Function.prototype.call.bind(DataView.prototype.setBigInt64),
     getInt32Import: Function.prototype.call.bind(DataView.prototype.getInt32),
     setInt32Import: Function.prototype.call.bind(DataView.prototype.setInt32),
   },
@@ -119,6 +125,54 @@ function CheckStackTrace(thrower, reference, topmost_wasm_func) {
   CheckStackTrace(
       () => instance.exports.getBigInt64(dataview, 0, 1),
       () => DataView.prototype.getBigInt64.call(dataview, 0, 1), 'getBigInt64');
+})();
+
+(function TestSetBigInt64() {
+  print(arguments.callee.name);
+  let builder = MakeBuilder();
+  builder.addFunction("setBigInt64", kSig_v_rili).exportFunc().addBody([
+    kExprLocalGet, 0,
+    kExprLocalGet, 1,
+    kExprLocalGet, 2,
+    kExprLocalGet, 3,
+    kExprCallFunction, kDataViewSetBigInt64,
+    ]);
+  let instance = builder.instantiate(kImports);
+  let array = new BigInt64Array(2);
+  array[0] = 0x0123456789ABCDEFn;
+  array[1] = 123n;
+
+  let dataview = new DataView(array.buffer);
+
+  instance.exports.setBigInt64(dataview, 0, 0x7FFFFFFFFFFFFFFFn, 1);
+  assertEquals(0x7FFFFFFFFFFFFFFFn, array[0]);
+  instance.exports.setBigInt64(dataview, 8, 0x12345678n, 0);
+  assertEquals(0x7856341200000000n, array[1]);
+
+  // Incompatible receiver.
+  CheckStackTrace(
+      () => instance.exports.setBigInt64('test_string', 0, 50n, 1),
+      () => DataView.prototype.setBigInt64.call('test_string', 0, 50n, 1),
+      'setBigInt64');
+
+  // Offset bounds check.
+  CheckStackTrace(
+      () => instance.exports.setBigInt64(dataview, -1, 50n, 1),
+      () => DataView.prototype.setBigInt64.call(dataview, -1, 50n, 1),
+      'setBigInt64');
+
+  // Dataview bounds check.
+  CheckStackTrace(
+      () => instance.exports.setBigInt64(dataview, 16, 50n, 1),
+      () => DataView.prototype.setBigInt64.call(dataview, 16, 50n, 1),
+      'setBigInt64');
+
+  // Detached buffer.
+  %ArrayBufferDetach(array.buffer);
+  CheckStackTrace(
+      () => instance.exports.setBigInt64(dataview, 0, 50n, 1),
+      () => DataView.prototype.setBigInt64.call(dataview, 0, 50n, 1),
+      'setBigInt64');
 })();
 
 (function TestGetInt32() {
