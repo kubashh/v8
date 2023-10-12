@@ -51,6 +51,24 @@
       "parentUuid": "590d31de_d6cc15b3",
       "revId": "7f15fe5cbd45ea878bce909447381e3afb5ef872",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7274a64f_eacb0acf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2023-10-12T10:10:52Z",
+      "side": 1,
+      "message": "Chrome does rely on the API to work indeed, so disabling that by default isn\u0027t going to work. I\u0027ll let Camillo speak to what he actually wanted when he\u0027s back next week.",
+      "parentUuid": "b1ac0dfc_caca46b2",
+      "revId": "7f15fe5cbd45ea878bce909447381e3afb5ef872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
