@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9840f2a_401c603c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-10-12T15:01:46Z",
+      "side": 1,
+      "message": "PTAL (see linked bug for the trigger to remove this now; I think we never really needed it, and it\u0027s disabled for non-Wasm backing stores since 2019).",
+      "revId": "5d409709f67eae39bfa6fedbd15c7f003bbe176c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
