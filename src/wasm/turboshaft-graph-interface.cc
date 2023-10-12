@@ -72,29 +72,70 @@ using compiler::turboshaft::WordPtr;
 
 namespace {
 
-enum class DataViewOp {
-  kGetBigInt64,
-  kGetBigUint64,
-  kGetFloat32,
-  kGetFloat64,
-  kGetInt8,
-  kGetInt16,
-  kGetInt32,
-  kGetUint8,
-  kGetUint16,
-  kGetUint32,
+#define DATAVIEW_OP_LIST(V) \
+  V(BigInt64)               \
+  V(BigUint64)              \
+  V(Float32)                \
+  V(Float64)                \
+  V(Int8)                   \
+  V(Int16)                  \
+  V(Int32)                  \
+  V(Uint8)                  \
+  V(Uint16)                 \
+  V(Uint32)
 
-  kSetBigInt64,
-  kSetBigUint64,
-  kSetFloat32,
-  kSetFloat64,
-  kSetInt8,
-  kSetInt16,
-  kSetInt32,
-  kSetUint8,
-  kSetUint16,
-  kSetUint32,
+enum class DataViewOp {
+#define V(Name) kGet##Name, kSet##Name,
+  DATAVIEW_OP_LIST(V)
+#undef V
 };
+
+ExternalArrayType GetExternalArrayType(enum DataViewOp op_type) {
+  switch (op_type) {
+#define V(Name)                    \
+  case DataViewOp::kGet##Name:     \
+    return kExternal##Name##Array; \
+  case DataViewOp::kSet##Name:     \
+    return kExternal##Name##Array;
+    DATAVIEW_OP_LIST(V)
+#undef V
+    default:
+      UNREACHABLE();
+  }
+}
+
+int GetTypeSize(enum DataViewOp op_type) {
+  switch (op_type) {
+    case DataViewOp::kGetBigInt64:
+    case DataViewOp::kSetBigInt64:
+    case DataViewOp::kGetBigUint64:
+    case DataViewOp::kSetBigUint64:
+      return kInt64Size;
+    case DataViewOp::kGetFloat32:
+    case DataViewOp::kSetFloat32:
+      return kFloatSize;
+    case DataViewOp::kGetFloat64:
+    case DataViewOp::kSetFloat64:
+      return kDoubleSize;
+    case DataViewOp::kGetInt8:
+    case DataViewOp::kSetInt8:
+    case DataViewOp::kGetUint8:
+    case DataViewOp::kSetUint8:
+      return kInt8Size;
+    case DataViewOp::kGetInt16:
+    case DataViewOp::kSetInt16:
+    case DataViewOp::kGetUint16:
+    case DataViewOp::kSetUint16:
+      return kInt16Size;
+    case DataViewOp::kGetInt32:
+    case DataViewOp::kSetInt32:
+    case DataViewOp::kGetUint32:
+    case DataViewOp::kSetUint32:
+      return kInt32Size;
+    default:
+      UNREACHABLE();
+  }
+}
 
 }  // namespace
 
@@ -949,6 +990,8 @@ class TurboshaftGraphBuildingInterface {
         case DataViewOp::kGetUint16:
         case DataViewOp::kGetUint32:
         case DataViewOp::kSetBigInt64:
+          builtin_to_call = Builtin::kThrowDataViewSetBigInt64TypeError;
+          break;
         case DataViewOp::kSetBigUint64:
         case DataViewOp::kSetFloat32:
         case DataViewOp::kSetFloat64:
@@ -991,6 +1034,8 @@ class TurboshaftGraphBuildingInterface {
         case DataViewOp::kGetUint32:
         case DataViewOp::kSetBigInt64:
         case DataViewOp::kSetBigUint64:
+          builtin_to_call = Builtin::kThrowDataViewSetBigInt64OutOfBounds;
+          break;
         case DataViewOp::kSetFloat32:
         case DataViewOp::kSetFloat64:
         case DataViewOp::kSetInt8:
@@ -1038,6 +1083,8 @@ class TurboshaftGraphBuildingInterface {
         case DataViewOp::kGetUint16:
         case DataViewOp::kGetUint32:
         case DataViewOp::kSetBigInt64:
+          builtin_to_call = Builtin::kThrowDataViewSetBigInt64DetachedError;
+          break;
         case DataViewOp::kSetBigUint64:
         case DataViewOp::kSetFloat32:
         case DataViewOp::kSetFloat64:
@@ -1059,16 +1106,47 @@ class TurboshaftGraphBuildingInterface {
   }
 
   void PerformDataViewChecks(FullDecoder* decoder, V<Tagged> dataview,
-                             V<WordPtr> offset, DataViewOp op_type,
-                             int type_size) {
+                             V<WordPtr> offset, DataViewOp op_type) {
     TypeCheckDataView(decoder, dataview, op_type);
     DataViewRelatedBoundsCheck(decoder, offset, __ IntPtrConstant(0), op_type);
     DetachedDataViewBufferCheck(decoder, dataview, op_type);
 
     V<WordPtr> byte_length = __ LoadField<WordPtr>(
         dataview, AccessBuilder::ForJSArrayBufferViewByteLength());
-    V<WordPtr> bytelength_minus_size = __ WordPtrSub(byte_length, type_size);
+    V<WordPtr> bytelength_minus_size =
+        __ WordPtrSub(byte_length, GetTypeSize(op_type));
     DataViewRelatedBoundsCheck(decoder, bytelength_minus_size, offset, op_type);
+  }
+
+  OpIndex DataViewGetter(FullDecoder* decoder, const Value args[],
+                         DataViewOp op_type) {
+    V<Tagged> dataview = args[0].op;
+    V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
+    V<Word32> is_little_endian =
+        GetTypeSize(op_type) == kInt8Size ? __ Word32Constant(1) : args[2].op;
+
+    PerformDataViewChecks(decoder, dataview, offset, op_type);
+
+    V<WordPtr> data_ptr = __ LoadField<WordPtr>(
+        dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
+    return __ LoadDataViewElement(dataview, data_ptr, offset, is_little_endian,
+                                  GetExternalArrayType(op_type));
+  }
+
+  void DataViewSetter(FullDecoder* decoder, const Value args[],
+                      DataViewOp op_type) {
+    V<Tagged> dataview = args[0].op;
+    V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
+    V<Word32> value = args[2].op;
+    V<Word32> is_little_endian =
+        GetTypeSize(op_type) == kInt8Size ? __ Word32Constant(1) : args[3].op;
+
+    PerformDataViewChecks(decoder, dataview, offset, op_type);
+
+    V<WordPtr> data_ptr = __ LoadField<WordPtr>(
+        dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
+    __ StoreDataViewElement(dataview, data_ptr, offset, value, is_little_endian,
+                            GetExternalArrayType(op_type));
   }
 
   bool HandleWellKnownImport(FullDecoder* decoder, uint32_t index,
@@ -1206,18 +1284,7 @@ class TurboshaftGraphBuildingInterface {
 
       // DataView related imports.
       case WKI::kDataViewGetBigInt64: {
-        V<Tagged> dataview = args[0].op;
-        V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
-        V<Word32> is_little_endian = args[2].op;
-
-        PerformDataViewChecks(decoder, dataview, offset,
-                              DataViewOp::kGetBigInt64, kInt64Size);
-
-        V<WordPtr> data_ptr = __ LoadField<WordPtr>(
-            dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
-        result =
-            __ LoadDataViewElement(dataview, data_ptr, offset, is_little_endian,
-                                   kExternalBigInt64Array);
+        result = DataViewGetter(decoder, args, DataViewOp::kGetBigInt64);
         break;
       }
       case WKI::kDataViewGetBigUint64:
@@ -1227,23 +1294,15 @@ class TurboshaftGraphBuildingInterface {
       case WKI::kDataViewGetInt16:
         return false;
       case WKI::kDataViewGetInt32: {
-        V<Tagged> dataview = args[0].op;
-        V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
-        V<Word32> is_little_endian = args[2].op;
-
-        PerformDataViewChecks(decoder, dataview, offset, DataViewOp::kGetInt32,
-                              kInt32Size);
-
-        V<WordPtr> data_ptr = __ LoadField<WordPtr>(
-            dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
-        result = __ LoadDataViewElement(dataview, data_ptr, offset,
-                                        is_little_endian, kExternalInt32Array);
+        result = DataViewGetter(decoder, args, DataViewOp::kGetInt32);
         break;
       }
       case WKI::kDataViewGetUint8:
       case WKI::kDataViewGetUint16:
       case WKI::kDataViewGetUint32:
       case WKI::kDataViewSetBigInt64:
+        DataViewSetter(decoder, args, DataViewOp::kSetBigInt64);
+        break;
       case WKI::kDataViewSetBigUint64:
       case WKI::kDataViewSetFloat32:
       case WKI::kDataViewSetFloat64:
@@ -1251,18 +1310,7 @@ class TurboshaftGraphBuildingInterface {
       case WKI::kDataViewSetInt16:
         return false;
       case WKI::kDataViewSetInt32: {
-        V<Tagged> dataview = args[0].op;
-        V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
-        V<Word32> value = args[2].op;
-        V<Word32> is_little_endian = args[3].op;
-
-        PerformDataViewChecks(decoder, dataview, offset, DataViewOp::kSetInt32,
-                              kInt32Size);
-
-        V<WordPtr> data_ptr = __ LoadField<WordPtr>(
-            dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
-        __ StoreDataViewElement(dataview, data_ptr, offset, value,
-                                is_little_endian, kExternalInt32Array);
+        DataViewSetter(decoder, args, DataViewOp::kSetInt32);
         break;
       }
       case WKI::kDataViewSetUint8:

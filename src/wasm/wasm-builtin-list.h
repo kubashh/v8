@@ -67,6 +67,9 @@ namespace v8::internal::wasm {
   V(ThrowDataViewGetInt32DetachedError)    \
   V(ThrowDataViewGetInt32OutOfBounds)      \
   V(ThrowDataViewGetInt32TypeError)        \
+  V(ThrowDataViewSetBigInt64DetachedError) \
+  V(ThrowDataViewSetBigInt64OutOfBounds)   \
+  V(ThrowDataViewSetBigInt64TypeError)     \
   V(ThrowDataViewSetInt32DetachedError)    \
   V(ThrowDataViewSetInt32OutOfBounds)      \
   V(ThrowDataViewSetInt32TypeError)        \
