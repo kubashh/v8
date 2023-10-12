@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89fb9e2c_ce7c7665",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-10-12T07:15:23Z",
+      "side": 1,
+      "message": "Thanks Igor - note I didn\u0027t impl your ideas in this CL since they\u0027re all nontrivial. SG?\n\nDominik, ptal at heap/",
+      "revId": "f4c2200a2e47dc19b7d227a60df2d85160349221",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
