@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9df5cdcc_a1d77732",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1423652
+      },
+      "writtenOn": "2023-10-12T16:03:16Z",
+      "side": 1,
+      "message": "oh yeah, it seems to be fixed by the change. Thanks!",
+      "parentUuid": "7df55430_801c7d3f",
+      "revId": "984368f5992da759a25df68ffc793ed57ced0b47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "281ff395_395adfbe",
