@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bff2fc1e_bb3aa043",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-10-12T12:09:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd0fddd9_13da610e",
+      "revId": "f7b1238a6c7ed4d28b1e121219061345315f397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b80f96e1_0abef574",
@@ -82,6 +100,24 @@
       "writtenOn": "2023-10-12T09:21:36Z",
       "side": 1,
       "message": "Not related to your CL, but creation of this handle doesn\u0027t seem necessary.",
+      "revId": "f7b1238a6c7ed4d28b1e121219061345315f397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b52a3e12_5289f8f1",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-10-12T12:09:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b80f96e1_0abef574",
       "revId": "f7b1238a6c7ed4d28b1e121219061345315f397e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +139,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09bf44bd_d21bbaa0",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-10-12T12:09:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5572d27_1fd30374",
+      "revId": "f7b1238a6c7ed4d28b1e121219061345315f397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43fa98e7_8bafc729",
@@ -116,6 +170,24 @@
       "writtenOn": "2023-10-12T09:21:36Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "f7b1238a6c7ed4d28b1e121219061345315f397e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f35a9baa_265f6833",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2925,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2023-10-12T12:09:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43fa98e7_8bafc729",
       "revId": "f7b1238a6c7ed4d28b1e121219061345315f397e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
