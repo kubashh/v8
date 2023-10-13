@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "dff09a8b_f58ab0f8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-13T13:21:04Z",
+      "side": 1,
+      "message": "Please add `Bug: v8:13466` to the description.",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2c158da3_214b5235",
