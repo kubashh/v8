@@ -117,6 +117,30 @@
       },
       "revId": "b4f85b36cd342e4fd64bdcef85e2533a310394db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8023de92_1e514bad",
+        "filename": "include/v8-statistics.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-10-13T07:51:12Z",
+      "side": 1,
+      "message": "Thank you for this suggestion!\n\nFixed: New fields are now added to `Result` and both versions are populated consistently when calling this method. The recipient can use either (until deprecation is complete). PTAL.",
+      "parentUuid": "a03c981b_d1f87db6",
+      "range": {
+        "startLine": 111,
+        "startChar": 44,
+        "endLine": 111,
+        "endChar": 52
+      },
+      "revId": "b4f85b36cd342e4fd64bdcef85e2533a310394db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
