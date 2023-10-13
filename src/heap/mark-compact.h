@@ -5,6 +5,7 @@
 #ifndef V8_HEAP_MARK_COMPACT_H_
 #define V8_HEAP_MARK_COMPACT_H_
 
+#include <atomic>
 #include <vector>
 
 #include "include/v8-internal.h"
@@ -165,6 +166,10 @@ class MarkCompactCollector final {
 
   explicit MarkCompactCollector(Heap* heap);
   ~MarkCompactCollector();
+
+  bool is_in_atomic_pause() const {
+    return is_in_atomic_pause_.load(std::memory_order_relaxed);
+  }
 
  private:
   using ResizeNewSpaceMode = Heap::ResizeNewSpaceMode;
@@ -407,6 +412,8 @@ class MarkCompactCollector final {
   std::vector<Page*> empty_new_space_pages_to_be_swept_;
 
   bool use_background_threads_in_cycle_ = false;
+
+  std::atomic<bool> is_in_atomic_pause_{false};
 
   friend class Evacuator;
   friend class RecordMigratedSlotVisitor;
