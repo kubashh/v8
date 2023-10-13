@@ -267,11 +267,26 @@ const char* Builtins::NameForStackTrace(Builtin builtin) {
     case Builtin::kThrowDataViewGetBigInt64OutOfBounds:
     case Builtin::kThrowDataViewGetBigInt64TypeError:
       return "DataView.getBigInt64";
+    case Builtin::kDataViewPrototypeGetBigUint64:
+    case Builtin::kThrowDataViewGetBigUint64DetachedError:
+    case Builtin::kThrowDataViewGetBigUint64OutOfBounds:
+    case Builtin::kThrowDataViewGetBigUint64TypeError:
+      return "DataView.getBigUint64";
+    case Builtin::kDataViewPrototypeGetFloat32:
+    case Builtin::kThrowDataViewGetFloat32DetachedError:
+    case Builtin::kThrowDataViewGetFloat32OutOfBounds:
+    case Builtin::kThrowDataViewGetFloat32TypeError:
+      return "DataView.getFloat32";
     case Builtin::kDataViewPrototypeGetInt32:
     case Builtin::kThrowDataViewGetInt32DetachedError:
     case Builtin::kThrowDataViewGetInt32OutOfBounds:
     case Builtin::kThrowDataViewGetInt32TypeError:
       return "DataView.getInt32";
+    case Builtin::kDataViewPrototypeSetBigInt64:
+    case Builtin::kThrowDataViewSetBigInt64DetachedError:
+    case Builtin::kThrowDataViewSetBigInt64OutOfBounds:
+    case Builtin::kThrowDataViewSetBigInt64TypeError:
+      return "DataView.setBigInt64";
     case Builtin::kDataViewPrototypeSetInt32:
     case Builtin::kThrowDataViewSetInt32DetachedError:
     case Builtin::kThrowDataViewSetInt32OutOfBounds:
