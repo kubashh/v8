@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbc8b435_ce291b31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-13T10:13:16Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "1d44c7fe76587a37459b429119ba7e90b28bb703",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b143fc13_010f127a",
@@ -31,6 +48,24 @@
       "writtenOn": "2023-10-10T17:50:12Z",
       "side": 1,
       "message": "I *think* that this `SmallVector` will use considerably less space than 131 integers. Let me know if you don\u0027t want such a \"complex\" member on the heap and I can revert to the integer array.",
+      "revId": "1d44c7fe76587a37459b429119ba7e90b28bb703",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "983b2362_1edddc91",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2203,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-13T10:13:16Z",
+      "side": 1,
+      "message": "As long as there\u0027s no other constraints, I think we are good.",
+      "parentUuid": "b143fc13_010f127a",
       "revId": "1d44c7fe76587a37459b429119ba7e90b28bb703",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
