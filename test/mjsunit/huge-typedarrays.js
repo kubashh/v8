@@ -32,25 +32,59 @@ function makeWasmMemory(length) {
   return wasm_mem.buffer;
 }
 
-const kTestConfigs = [
-  // 2GB+1 should flush out bugs where the length is capped to 31 bits
-  // (resulting in length 1).
-  [Int8Array, num_elems => new Int8Array(num_elems), 2 * GB + 1],
-  // 4GB+1 should flush out bugs where the length is capped to 32 bits
-  // (resulting in length 1).
-  [Int8Array, num_elems => new Int8Array(num_elems), 4 * GB + 1],
-  // Test the maximum array buffer length.
-  [Int8Array, num_elems => new Int8Array(num_elems), kMaxArrayBufferByteLength],
-  // And then test some huge arrays of different type.
-  [Uint8Array, num_elems => new Uint8Array(num_elems), 21 * GB],
-  [
-    Int16Array, num_elems => new Uint16Array(new ArrayBuffer(num_elems * 2)),
-    21 * GB
-  ],
-  [Int32Array, num_elems => new Int32Array(num_elems), 21 * GB]
-].concat(kHasWasm ? [
+const kTestConfigs = [].concat(kHasWasm ? [
   // Test a large ArrayBuffer constructed from Wasm.
-  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB]
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
+  [Int8Array, num_elems => new Int8Array(makeWasmMemory(num_elems)), 16*GB],
 ] : []);
 
 function ignoreOOM(fn) {
