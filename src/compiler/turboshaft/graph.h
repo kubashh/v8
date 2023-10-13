@@ -435,6 +435,12 @@ class Block : public RandomAccessStackDominatorNode<Block> {
     }
     return false;
   }
+
+  // {has_peeled_iteration_} is currently only updated for loops peeled in
+  // Turboshaft. So be aware that while Turbofan loop peeling is enabled, this
+  // is not a reliable way to check if a loop has a peeled iteration.
+  bool has_peeled_iteration() const { return has_peeled_iteration_; }
+  void set_has_peeled_iteration() { has_peeled_iteration_ = true; }
 #endif
 
   // Computes the dominators of the this block, assuming that the dominators of
@@ -504,6 +510,8 @@ class Block : public RandomAccessStackDominatorNode<Block> {
 #ifdef DEBUG
   CustomDataKind custom_data_kind_for_debug_check_ = CustomDataKind::kUnset;
   size_t graph_generation_ = 0;
+  // True if this is a loop header of a loop with a peeled iteration.
+  bool has_peeled_iteration_ = false;
 #endif
 
   template <class Assembler>
