@@ -721,7 +721,7 @@ class ReducerBase : public ReducerBaseForwarder<Next> {
     return Base::ReducePendingLoopPhi(args...);
   }
 
-  OpIndex ReduceGoto(Block* destination) {
+  OpIndex ReduceGoto(Block* destination, bool is_backedge) {
     // Calling Base::Goto will call Emit<Goto>, which will call FinalizeBlock,
     // which will reset {current_block_}. We thus save {current_block_} before
     // calling Base::Goto, as we'll need it for AddPredecessor. Note also that
@@ -729,7 +729,7 @@ class ReducerBase : public ReducerBaseForwarder<Next> {
     // split an edge, which means that it has to run after Base::Goto
     // (otherwise, the current Goto could be inserted in the wrong block).
     Block* saved_current_block = Asm().current_block();
-    OpIndex new_opindex = Base::ReduceGoto(destination);
+    OpIndex new_opindex = Base::ReduceGoto(destination, is_backedge);
     Asm().AddPredecessor(saved_current_block, destination, false);
     return new_opindex;
   }
@@ -1979,7 +1979,13 @@ class AssemblerOpInterface {
 
   OpIndex LoadRootRegister() { return ReduceIfReachableLoadRootRegister(); }
 
-  void Goto(Block* destination) { ReduceIfReachableGoto(destination); }
+  void Goto(Block* destination) {
+    bool is_backedge = destination->IsBound();
+    Goto(destination, is_backedge);
+  }
+  void Goto(Block* destination, bool is_backedge) {
+    ReduceIfReachableGoto(destination, is_backedge);
+  }
   void Branch(V<Word32> condition, Block* if_true, Block* if_false,
               BranchHint hint = BranchHint::kNone) {
     ReduceIfReachableBranch(condition, if_true, if_false, hint);
