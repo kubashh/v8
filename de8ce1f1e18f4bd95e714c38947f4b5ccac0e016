@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e1698dc_de662938",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1572588
+      },
+      "writtenOn": "2023-10-13T00:26:27Z",
+      "side": 1,
+      "message": "Fix CP related cases later.",
+      "revId": "de8ce1f1e18f4bd95e714c38947f4b5ccac0e016",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
