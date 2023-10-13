@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c158da3_214b5235",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-13T13:18:28Z",
+      "side": 1,
+      "message": "Hi Timothy,\n\nGreat work on this port. \nBeside the added comments you might also need to port some more changes from these CLs, please take a look:\n\nhttps://crrev.com/c/4205918:\n`IsObjectType` to `CompareObjectType` under builtins and macro-asm.\n\nhttps://crrev.com/c/4205918:\nbuiltins changes.",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27085f22_0c815201",
+        "filename": "src/baseline/ppc/baseline-assembler-ppc-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-13T13:18:28Z",
+      "side": 1,
+      "message": "Maybe we can use `__ b(cc, target, cr)` and avoid the if/else? just make sure cr is passed correctly and make use of `to_condition()`.",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b03a21e3_eaf34c86",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-13T13:18:28Z",
+      "side": 1,
+      "message": "Why is this change needed? They were unified to `CanBeImmediate` in this CL:\nhttps://crrev.com/c/4234266\n\naddi can take 16 bit immediates, on p10 pli can take in 34 bits.\nbut even then mov can load using the const pool if values are bigger, would that be an issue?",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "282226ca_05f2da2a",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-13T13:18:28Z",
+      "side": 1,
+      "message": "Same comment as above.",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d3ed932_abca58e7",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-13T13:18:28Z",
+      "side": 1,
+      "message": "This function doesn\u0027t seem to be used anywhere, is it needed?",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9ba5185_3f702aaa",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-13T13:18:28Z",
+      "side": 1,
+      "message": "nit, `LoadCompressedMap` also uses the scratch register, comment could be removed.",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9894e80_01f148ba",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-13T13:18:28Z",
+      "side": 1,
+      "message": "Needs to be changed to `mov(scratch2, Operand(ptr));`, similar to line 1825.",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
