@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8bcda6b_87b08e3c",
+        "filename": "include/v8-context.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-13T08:10:22Z",
+      "side": 1,
+      "message": "\u003e If any of the two is pure virtual, derived classes will need to implement it.\n\u003e For some time, there will be old versions implementing just the old one, and new versions implementing just the new one, so one of the two kinds will not compile. I can\u0027t see how this can be solved without defining both.\n\u003e \n\nSg. Then I am a little confused about the `abort()` and the error case. It seems like just returning true is a valid implementation that works as a default case?\n\n\u003e I\u0027m implementing the new one with the old one, and just calling the new one from api.cc. In this way, new code is faster and old code works too. The default implementation of the old one just aborts if called. If there\u0027s a simpler acceptable behaviour, we can change it.",
+      "parentUuid": "3dae0aaf_736cd788",
+      "range": {
+        "startLine": 192,
+        "startChar": 17,
+        "endLine": 192,
+        "endChar": 51
+      },
+      "revId": "b4f85b36cd342e4fd64bdcef85e2533a310394db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a9fa404_c22fabc5",
         "filename": "include/v8-statistics.h",
         "patchSetId": 9
