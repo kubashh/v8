@@ -3671,6 +3671,7 @@ void AssembleBranchToLabels(CodeGenerator* gen, MacroAssembler* masm,
       __ slliw(temp0, left, 0);
       left = temp0;
       if (temp1 != no_reg) {
+        CHECK_NE(temp0, right.rm());
         __ slliw(temp1, right.rm(), 0);
         right = Operand(temp1);
       }
@@ -3839,6 +3840,7 @@ void CodeGenerator::AssembleArchBoolean(Instruction* instr,
       __ slliw(temp0, left, 0);
       left = temp0;
       if (temp1 != no_reg) {
+        CHECK_NE(temp0, right.rm());
         __ slliw(temp1, right.rm(), 0);
         right = Operand(temp1);
       }
