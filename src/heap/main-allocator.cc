@@ -27,6 +27,7 @@ MainAllocator::MainAllocator(Heap* heap, SpaceWithLinearArea* space,
       compaction_space_kind_(compaction_space_kind),
       supports_extending_lab_(supports_extending_lab),
       allocation_info_(allocation_info),
+      lab_origins_handle_(heap->lab_original_limits().AllocateLabHandle()),
       allocator_policy_(space->CreateAllocatorPolicy(this)) {}
 
 MainAllocator::MainAllocator(Heap* heap, SpaceWithLinearArea* space,
@@ -37,6 +38,7 @@ MainAllocator::MainAllocator(Heap* heap, SpaceWithLinearArea* space,
       compaction_space_kind_(compaction_space_kind),
       supports_extending_lab_(supports_extending_lab),
       allocation_info_(owned_allocation_info_),
+      lab_origins_handle_(heap->lab_original_limits().AllocateLabHandle()),
       allocator_policy_(space->CreateAllocatorPolicy(this)) {}
 
 Address MainAllocator::AlignTopForTesting(AllocationAlignment alignment,
@@ -103,8 +105,13 @@ void MainAllocator::AdvanceAllocationObservers() {
   }
 }
 
-void MainAllocator::MarkLabStartInitialized() {
+Address MainAllocator::ResetLabStart() {
   allocation_info().ResetStart();
+  return top();
+}
+
+void MainAllocator::MarkLabStartInitialized() {
+  ResetLabStart();
   if (identity() == NEW_SPACE) {
     MoveOriginalTopForward();
 
@@ -215,7 +222,7 @@ AllocationResult MainAllocator::AllocateRawSlowAligned(
 
 void MainAllocator::MakeLinearAllocationAreaIterable() {
   Address current_top = top();
-  Address current_limit = original_limit_relaxed();
+  Address current_limit = lab_origins_handle_.top_and_limit().second;
   DCHECK_GE(current_limit, limit());
   if (current_top != kNullAddress && current_top != current_limit) {
     heap_->CreateFillerObjectAt(current_top,
@@ -223,32 +230,9 @@ void MainAllocator::MakeLinearAllocationAreaIterable() {
   }
 }
 
-void MainAllocator::MarkLinearAllocationAreaBlack() {
-  DCHECK(heap()->incremental_marking()->black_allocation());
-  Address current_top = top();
-  Address current_limit = limit();
-  if (current_top != kNullAddress && current_top != current_limit) {
-    Page::FromAllocationAreaAddress(current_top)
-        ->CreateBlackArea(current_top, current_limit);
-  }
-}
-
-void MainAllocator::UnmarkLinearAllocationArea() {
-  Address current_top = top();
-  Address current_limit = limit();
-  if (current_top != kNullAddress && current_top != current_limit) {
-    Page::FromAllocationAreaAddress(current_top)
-        ->DestroyBlackArea(current_top, current_limit);
-  }
-}
-
 void MainAllocator::MoveOriginalTopForward() {
   DCHECK(!is_compaction_space());
-  base::SharedMutexGuard<base::kExclusive> guard(
-      linear_area_original_data_.linear_area_lock());
-  DCHECK_GE(top(), linear_area_original_data_.get_original_top_acquire());
-  DCHECK_LE(top(), linear_area_original_data_.get_original_limit_relaxed());
-  linear_area_original_data_.set_original_top_release(top());
+  lab_origins_handle_.AdvanceTop(top());
 }
 
 void MainAllocator::ResetLab(Address start, Address end, Address extended_end) {
@@ -261,19 +245,13 @@ void MainAllocator::ResetLab(Address start, Address end, Address extended_end) {
 
   allocation_info().Reset(start, end);
 
-  base::Optional<base::SharedMutexGuard<base::kExclusive>> guard;
-  if (!is_compaction_space())
-    guard.emplace(linear_area_original_data_.linear_area_lock());
-  linear_area_original_data().set_original_limit_relaxed(extended_end);
-  linear_area_original_data().set_original_top_release(start);
+  lab_origins_handle_.UpdateLimits(start, extended_end);
+  limit_cached_ = extended_end;
 }
 
 bool MainAllocator::IsPendingAllocation(Address object_address) {
   DCHECK(!is_compaction_space());
-  base::SharedMutexGuard<base::kShared> guard(
-      linear_area_original_data_.linear_area_lock());
-  Address top = original_top_acquire();
-  Address limit = original_limit_relaxed();
+  auto [top, limit] = lab_origins_handle_.top_and_limit();
   DCHECK_LE(top, limit);
   return top && top <= object_address && object_address < limit;
 }
@@ -282,10 +260,7 @@ void MainAllocator::MaybeFreeUnusedLab(LinearAllocationArea lab) {
   DCHECK(!is_compaction_space());
 
   if (allocation_info().MergeIfAdjacent(lab)) {
-    base::SharedMutexGuard<base::kExclusive> guard(
-        linear_area_original_data_.linear_area_lock());
-    linear_area_original_data().set_original_top_release(
-        allocation_info().top());
+    lab_origins_handle_.SetTop(allocation_info().top());
   }
 
 #if DEBUG
@@ -310,7 +285,7 @@ void MainAllocator::FreeLinearAllocationArea() {
 
 void MainAllocator::ExtendLAB(Address limit) {
   DCHECK(supports_extending_lab());
-  DCHECK_LE(limit, original_limit_relaxed());
+  DCHECK_LE(limit, original_limit());
   allocation_info().SetLimit(limit);
 }
 
@@ -361,12 +336,11 @@ void MainAllocator::Verify() const {
     DCHECK_EQ(page->owner_identity(), identity());
   }
 
+  auto [top, limit] = lab_origins_handle_.top_and_limit();
   // Ensure that original_top <= top <= limit <= original_limit.
-  DCHECK_LE(linear_area_original_data().get_original_top_acquire(),
-            allocation_info().top());
+  DCHECK_LE(top, allocation_info().top());
   DCHECK_LE(allocation_info().top(), allocation_info().limit());
-  DCHECK_LE(allocation_info().limit(),
-            linear_area_original_data().get_original_limit_relaxed());
+  DCHECK_LE(allocation_info().limit(), limit);
 }
 #endif  // DEBUG
 
@@ -674,13 +648,6 @@ void PagedSpaceAllocatorPolicy::SetLinearAllocationArea(Address top,
                                                         Address limit,
                                                         Address end) {
   allocator_->ResetLab(top, limit, end);
-  if (top != kNullAddress && top != limit) {
-    Page* page = Page::FromAllocationAreaAddress(top);
-    if ((allocator_->identity() != NEW_SPACE) &&
-        heap()->incremental_marking()->black_allocation()) {
-      page->CreateBlackArea(top, limit);
-    }
-  }
 }
 
 void PagedSpaceAllocatorPolicy::DecreaseLimit(Address new_limit) {
@@ -694,7 +661,7 @@ void PagedSpaceAllocatorPolicy::DecreaseLimit(Address new_limit) {
     }
 
     PagedSpace::ConcurrentAllocationMutex guard(space_);
-    Address old_max_limit = allocator_->original_limit_relaxed();
+    Address old_max_limit = allocator_->original_limit();
     if (!allocator_->supports_extending_lab()) {
       DCHECK_EQ(old_max_limit, old_limit);
       allocator_->ResetLab(allocator_->top(), new_limit, new_limit);
@@ -704,11 +671,6 @@ void PagedSpaceAllocatorPolicy::DecreaseLimit(Address new_limit) {
       allocator_->ExtendLAB(new_limit);
       heap()->CreateFillerObjectAt(new_limit,
                                    static_cast<int>(old_max_limit - new_limit));
-    }
-    if (heap()->incremental_marking()->black_allocation() &&
-        allocator_->identity() != NEW_SPACE) {
-      Page::FromAllocationAreaAddress(new_limit)->DestroyBlackArea(new_limit,
-                                                                   old_limit);
     }
   }
 }
@@ -729,9 +691,9 @@ bool PagedSpaceAllocatorPolicy::TryAllocationFromFreeListMain(
             size_in_bytes);
 
   // Mark the old linear allocation area with a free space map so it can be
-  // skipped when scanning the heap.  This also puts it back in the free list
-  // if it is big enough.
-  FreeLinearAllocationAreaUnsynchronized();
+  // skipped when scanning the heap. This also puts it back in the free list
+  // if it is big enough. Don't reset the lab yet, since it'll be done later.
+  CreateFillerAtLab();
 
   size_t new_node_size = 0;
   Tagged<FreeSpace> new_node =
@@ -775,7 +737,7 @@ bool PagedSpaceAllocatorPolicy::TryExtendLAB(int size_in_bytes) {
   Address current_top = allocator_->top();
   if (current_top == kNullAddress) return false;
   Address current_limit = allocator_->limit();
-  Address max_limit = allocator_->original_limit_relaxed();
+  Address max_limit = allocator_->original_limit();
   if (current_top + size_in_bytes > max_limit) {
     return false;
   }
@@ -808,15 +770,21 @@ void PagedSpaceAllocatorPolicy::FreeLinearAllocationArea() {
 }
 
 void PagedSpaceAllocatorPolicy::FreeLinearAllocationAreaUnsynchronized() {
+  CreateFillerAtLab();
+  allocator_->ResetLab(kNullAddress, kNullAddress, kNullAddress);
+}
+
+void PagedSpaceAllocatorPolicy::CreateFillerAtLab() {
   // Mark the old linear allocation area with a free space map so it can be
   // skipped when scanning the heap.
   Address current_top = allocator_->top();
   Address current_limit = allocator_->limit();
+  USE(current_limit);
   if (current_top == kNullAddress) {
     DCHECK_EQ(kNullAddress, current_limit);
     return;
   }
-  Address current_max_limit = allocator_->original_limit_relaxed();
+  Address current_max_limit = allocator_->original_limit();
   DCHECK_IMPLIES(!allocator_->supports_extending_lab(),
                  current_max_limit == current_limit);
 
@@ -828,15 +796,7 @@ void PagedSpaceAllocatorPolicy::FreeLinearAllocationAreaUnsynchronized() {
         "FreeLinearAllocationArea writes to the page header.");
   }
 
-  if (allocator_->identity() != NEW_SPACE && current_top != current_limit &&
-      heap()->incremental_marking()->black_allocation()) {
-    Page::FromAddress(current_top)
-        ->DestroyBlackArea(current_top, current_limit);
-  }
-
-  allocator_->ResetLab(kNullAddress, kNullAddress, kNullAddress);
   DCHECK_GE(current_limit, current_top);
-
   DCHECK_IMPLIES(current_limit - current_top >= 2 * kTaggedSize,
                  heap()->marking_state()->IsUnmarked(
                      HeapObject::FromAddress(current_top)));

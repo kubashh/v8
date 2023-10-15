@@ -200,40 +200,6 @@ void HeapAllocator::VerifyLinearAllocationAreas() const {
 }
 #endif  // DEBUG
 
-void HeapAllocator::MarkLinearAllocationAreasBlack() {
-  old_space_allocator_->MarkLinearAllocationAreaBlack();
-  trusted_space_allocator_->MarkLinearAllocationAreaBlack();
-
-  {
-    CodePageHeaderModificationScope rwx_write_scope(
-        "Marking Code objects requires write access to the Code page header");
-    code_space_allocator_->MarkLinearAllocationAreaBlack();
-  }
-}
-
-void HeapAllocator::UnmarkLinearAllocationsArea() {
-  old_space_allocator_->UnmarkLinearAllocationArea();
-  trusted_space_allocator_->UnmarkLinearAllocationArea();
-
-  {
-    CodePageHeaderModificationScope rwx_write_scope(
-        "Marking Code objects requires write access to the Code page header");
-    code_space_allocator_->UnmarkLinearAllocationArea();
-  }
-}
-
-void HeapAllocator::MarkSharedLinearAllocationAreasBlack() {
-  if (shared_space_allocator_) {
-    shared_space_allocator_->MarkLinearAllocationAreaBlack();
-  }
-}
-
-void HeapAllocator::UnmarkSharedLinearAllocationAreas() {
-  if (shared_space_allocator_) {
-    shared_space_allocator_->UnmarkLinearAllocationArea();
-  }
-}
-
 void HeapAllocator::FreeLinearAllocationAreas() {
   if (new_space_allocator_) {
     new_space_allocator_->FreeLinearAllocationArea();
@@ -254,18 +220,51 @@ void HeapAllocator::FreeLinearAllocationAreas() {
 }
 
 void HeapAllocator::PublishPendingAllocations() {
+  Address new_space_top = kNullAddress;
   if (new_space_allocator_) {
-    new_space_allocator_->MarkLabStartInitialized();
+    new_space_top = new_space_allocator_->ResetLabStart();
+    // new_space_allocator_->MarkLabStartInitialized();
   }
+  // fprintf(stderr, "Publish pending allocations\n");
 
-  old_space_allocator_->MoveOriginalTopForward();
-  trusted_space_allocator_->MoveOriginalTopForward();
-  code_space_allocator_->MoveOriginalTopForward();
+  auto& limits = heap_->lab_original_limits();
+  limits.AdvanceTopsAndResetPendingObjectHandles(
+      {new_space_top ? &new_space_allocator_->lab_origins_handle() : nullptr,
+       &old_space_allocator_->lab_origins_handle(),
+       &trusted_space_allocator_->lab_origins_handle(),
+       &code_space_allocator_->lab_origins_handle()},
+      {new_space_top, old_space_allocator_->top(),
+       trusted_space_allocator_->top(), code_space_allocator_->top()},
+      {&lo_space()->pending_object_handle(),
+       new_lo_space() ? &new_lo_space()->pending_object_handle() : nullptr,
+       &code_lo_space()->pending_object_handle(),
+       &trusted_lo_space()->pending_object_handle()});
+#if 0
+  //old_space_allocator_->MoveOriginalTopForward();
+  //trusted_space_allocator_->MoveOriginalTopForward();
+  //code_space_allocator_->MoveOriginalTopForward();
+#endif
 
+#if 0
+  if (new_lo_space()) {
+    limits.ResetPendingObjectHandles(
+        {&lo_space()->pending_object_handle(),
+         &new_lo_space()->pending_object_handle(),
+         &code_lo_space()->pending_object_handle(),
+         &trusted_lo_space()->pending_object_handle()});
+  } else {
+    limits.ResetPendingObjectHandles(
+        {&lo_space()->pending_object_handle(),
+         &code_lo_space()->pending_object_handle(),
+         &trusted_lo_space()->pending_object_handle()});
+  }
+#endif
+#if 0
   lo_space()->ResetPendingObject();
   if (new_lo_space()) new_lo_space()->ResetPendingObject();
   code_lo_space()->ResetPendingObject();
   trusted_lo_space()->ResetPendingObject();
+#endif
 }
 
 void HeapAllocator::AddAllocationObserver(

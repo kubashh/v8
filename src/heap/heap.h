@@ -1624,6 +1624,8 @@ class Heap final {
 
   HeapAllocator* allocator() { return &heap_allocator_; }
 
+  LabOriginalLimits& lab_original_limits() { return lab_original_limits_; }
+
  private:
   class AllocationTrackerForDebugging;
 
@@ -1712,10 +1714,6 @@ class Heap final {
 
   // Make all LABs of all threads iterable.
   void MakeLinearAllocationAreasIterable();
-
-  // Enables/Disables black allocation in shared LABs.
-  void MarkSharedLinearAllocationAreasBlack();
-  void UnmarkSharedLinearAllocationAreas();
 
   // Performs garbage collection in a safepoint.
   void PerformGarbageCollection(GarbageCollector collector,
@@ -2045,6 +2043,10 @@ class Heap final {
   // This can be calculated directly from a pointer to the heap; however, it is
   // more expedient to get at the isolate directly from within Heap methods.
   Isolate* isolate_ = nullptr;
+
+  // LabOriginalLimits must be created (and destroyed) after the heap_allocator_
+  // that contains handles to it.
+  LabOriginalLimits lab_original_limits_;
 
   HeapAllocator heap_allocator_;
 
