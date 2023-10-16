@@ -2965,6 +2965,7 @@ v8_header_set("v8_headers") {
     "include/v8-initialization.h",
     "include/v8-internal.h",
     "include/v8-isolate.h",
+    "include/v8-iterator.h",
     "include/v8-json.h",
     "include/v8-local-handle.h",
     "include/v8-locker.h",
