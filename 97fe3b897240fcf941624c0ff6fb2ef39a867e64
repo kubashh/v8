@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ce6bf60_207e5b68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1569532
+      },
+      "writtenOn": "2023-10-16T16:01:04Z",
+      "side": 1,
+      "message": "Shu, this is the fix for fuzzer-filed issue. It seems that we cannot load context and passing the context would fix the issue. Please take a look. Thanks!",
+      "revId": "97fe3b897240fcf941624c0ff6fb2ef39a867e64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
