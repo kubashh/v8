@@ -72,29 +72,70 @@ using compiler::turboshaft::WordPtr;
 
 namespace {
 
-enum class DataViewOp {
-  kGetBigInt64,
-  kGetBigUint64,
-  kGetFloat32,
-  kGetFloat64,
-  kGetInt8,
-  kGetInt16,
-  kGetInt32,
-  kGetUint8,
-  kGetUint16,
-  kGetUint32,
+#define DATAVIEW_OP_LIST(V) \
+  V(BigInt64)               \
+  V(BigUint64)              \
+  V(Float32)                \
+  V(Float64)                \
+  V(Int8)                   \
+  V(Int16)                  \
+  V(Int32)                  \
+  V(Uint8)                  \
+  V(Uint16)                 \
+  V(Uint32)
 
-  kSetBigInt64,
-  kSetBigUint64,
-  kSetFloat32,
-  kSetFloat64,
-  kSetInt8,
-  kSetInt16,
-  kSetInt32,
-  kSetUint8,
-  kSetUint16,
-  kSetUint32,
+enum class DataViewOp {
+#define V(Name) kGet##Name, kSet##Name,
+  DATAVIEW_OP_LIST(V)
+#undef V
 };
+
+ExternalArrayType GetExternalArrayType(enum DataViewOp op_type) {
+  switch (op_type) {
+#define V(Name)                    \
+  case DataViewOp::kGet##Name:     \
+    return kExternal##Name##Array; \
+  case DataViewOp::kSet##Name:     \
+    return kExternal##Name##Array;
+    DATAVIEW_OP_LIST(V)
+#undef V
+    default:
+      UNREACHABLE();
+  }
+}
+
+int GetTypeSize(enum DataViewOp op_type) {
+  switch (op_type) {
+    case DataViewOp::kGetBigInt64:
+    case DataViewOp::kSetBigInt64:
+    case DataViewOp::kGetBigUint64:
+    case DataViewOp::kSetBigUint64:
+      return kInt64Size;
+    case DataViewOp::kGetFloat32:
+    case DataViewOp::kSetFloat32:
+      return kFloatSize;
+    case DataViewOp::kGetFloat64:
+    case DataViewOp::kSetFloat64:
+      return kDoubleSize;
+    case DataViewOp::kGetInt8:
+    case DataViewOp::kSetInt8:
+    case DataViewOp::kGetUint8:
+    case DataViewOp::kSetUint8:
+      return kInt8Size;
+    case DataViewOp::kGetInt16:
+    case DataViewOp::kSetInt16:
+    case DataViewOp::kGetUint16:
+    case DataViewOp::kSetUint16:
+      return kInt16Size;
+    case DataViewOp::kGetInt32:
+    case DataViewOp::kSetInt32:
+    case DataViewOp::kGetUint32:
+    case DataViewOp::kSetUint32:
+      return kInt32Size;
+    default:
+      UNREACHABLE();
+  }
+}
 
 }  // namespace
 
@@ -939,31 +980,62 @@ class TurboshaftGraphBuildingInterface {
           builtin_to_call = Builtin::kThrowDataViewGetBigInt64TypeError;
           break;
         case DataViewOp::kGetBigUint64:
+          builtin_to_call = Builtin::kThrowDataViewGetBigUint64TypeError;
+          break;
         case DataViewOp::kGetFloat32:
+          builtin_to_call = Builtin::kThrowDataViewGetFloat32TypeError;
+          break;
         case DataViewOp::kGetFloat64:
+          builtin_to_call = Builtin::kThrowDataViewGetFloat64TypeError;
+          break;
         case DataViewOp::kGetInt8:
+          builtin_to_call = Builtin::kThrowDataViewGetInt8TypeError;
+          break;
         case DataViewOp::kGetInt16:
-          UNIMPLEMENTED();
+          builtin_to_call = Builtin::kThrowDataViewGetInt16TypeError;
+          break;
         case DataViewOp::kGetInt32:
           builtin_to_call = Builtin::kThrowDataViewGetInt32TypeError;
           break;
         case DataViewOp::kGetUint8:
+          builtin_to_call = Builtin::kThrowDataViewGetUint8TypeError;
+          break;
         case DataViewOp::kGetUint16:
+          builtin_to_call = Builtin::kThrowDataViewGetUint16TypeError;
+          break;
         case DataViewOp::kGetUint32:
+          builtin_to_call = Builtin::kThrowDataViewGetUint32TypeError;
+          break;
         case DataViewOp::kSetBigInt64:
+          builtin_to_call = Builtin::kThrowDataViewSetBigInt64TypeError;
+          break;
         case DataViewOp::kSetBigUint64:
+          builtin_to_call = Builtin::kThrowDataViewSetBigUint64TypeError;
+          break;
         case DataViewOp::kSetFloat32:
+          builtin_to_call = Builtin::kThrowDataViewSetFloat32TypeError;
+          break;
         case DataViewOp::kSetFloat64:
+          builtin_to_call = Builtin::kThrowDataViewSetFloat64TypeError;
+          break;
         case DataViewOp::kSetInt8:
+          builtin_to_call = Builtin::kThrowDataViewSetInt8TypeError;
+          break;
         case DataViewOp::kSetInt16:
-          UNIMPLEMENTED();
+          builtin_to_call = Builtin::kThrowDataViewSetInt16TypeError;
+          break;
         case DataViewOp::kSetInt32:
           builtin_to_call = Builtin::kThrowDataViewSetInt32TypeError;
           break;
         case DataViewOp::kSetUint8:
+          builtin_to_call = Builtin::kThrowDataViewSetUint8TypeError;
+          break;
         case DataViewOp::kSetUint16:
+          builtin_to_call = Builtin::kThrowDataViewSetUint16TypeError;
+          break;
         case DataViewOp::kSetUint32:
-          UNIMPLEMENTED();
+          builtin_to_call = Builtin::kThrowDataViewSetUint32TypeError;
+          break;
       }
       CallBuiltinThroughJumptable(decoder, builtin_to_call, {dataview});
       __ Unreachable();
@@ -980,31 +1052,62 @@ class TurboshaftGraphBuildingInterface {
           builtin_to_call = Builtin::kThrowDataViewGetBigInt64OutOfBounds;
           break;
         case DataViewOp::kGetBigUint64:
+          builtin_to_call = Builtin::kThrowDataViewGetBigUint64OutOfBounds;
+          break;
         case DataViewOp::kGetFloat32:
+          builtin_to_call = Builtin::kThrowDataViewGetFloat32OutOfBounds;
+          break;
         case DataViewOp::kGetFloat64:
+          builtin_to_call = Builtin::kThrowDataViewGetFloat64OutOfBounds;
+          break;
         case DataViewOp::kGetInt8:
+          builtin_to_call = Builtin::kThrowDataViewGetInt8OutOfBounds;
+          break;
         case DataViewOp::kGetInt16:
-          UNIMPLEMENTED();
+          builtin_to_call = Builtin::kThrowDataViewGetInt16OutOfBounds;
+          break;
         case DataViewOp::kGetInt32:
           builtin_to_call = Builtin::kThrowDataViewGetInt32OutOfBounds;
           break;
         case DataViewOp::kGetUint8:
+          builtin_to_call = Builtin::kThrowDataViewGetUint8OutOfBounds;
+          break;
         case DataViewOp::kGetUint16:
+          builtin_to_call = Builtin::kThrowDataViewGetUint16OutOfBounds;
+          break;
         case DataViewOp::kGetUint32:
+          builtin_to_call = Builtin::kThrowDataViewGetUint32OutOfBounds;
+          break;
         case DataViewOp::kSetBigInt64:
+          builtin_to_call = Builtin::kThrowDataViewSetBigInt64OutOfBounds;
+          break;
         case DataViewOp::kSetBigUint64:
+          builtin_to_call = Builtin::kThrowDataViewSetBigUint64OutOfBounds;
+          break;
         case DataViewOp::kSetFloat32:
+          builtin_to_call = Builtin::kThrowDataViewSetFloat32OutOfBounds;
+          break;
         case DataViewOp::kSetFloat64:
+          builtin_to_call = Builtin::kThrowDataViewSetFloat64OutOfBounds;
+          break;
         case DataViewOp::kSetInt8:
+          builtin_to_call = Builtin::kThrowDataViewSetInt8OutOfBounds;
+          break;
         case DataViewOp::kSetInt16:
-          UNIMPLEMENTED();
+          builtin_to_call = Builtin::kThrowDataViewSetInt16OutOfBounds;
+          break;
         case DataViewOp::kSetInt32:
           builtin_to_call = Builtin::kThrowDataViewSetInt32OutOfBounds;
           break;
         case DataViewOp::kSetUint8:
+          builtin_to_call = Builtin::kThrowDataViewSetUint8OutOfBounds;
+          break;
         case DataViewOp::kSetUint16:
+          builtin_to_call = Builtin::kThrowDataViewSetUint16OutOfBounds;
+          break;
         case DataViewOp::kSetUint32:
-          UNIMPLEMENTED();
+          builtin_to_call = Builtin::kThrowDataViewSetUint32OutOfBounds;
+          break;
       }
       CallBuiltinThroughJumptable(decoder, builtin_to_call, {});
       __ Unreachable();
@@ -1028,31 +1131,62 @@ class TurboshaftGraphBuildingInterface {
           builtin_to_call = Builtin::kThrowDataViewGetBigInt64DetachedError;
           break;
         case DataViewOp::kGetBigUint64:
+          builtin_to_call = Builtin::kThrowDataViewGetBigUint64DetachedError;
+          break;
         case DataViewOp::kGetFloat32:
+          builtin_to_call = Builtin::kThrowDataViewGetFloat32DetachedError;
+          break;
         case DataViewOp::kGetFloat64:
+          builtin_to_call = Builtin::kThrowDataViewGetFloat64DetachedError;
+          break;
         case DataViewOp::kGetInt8:
+          builtin_to_call = Builtin::kThrowDataViewGetInt8DetachedError;
+          break;
         case DataViewOp::kGetInt16:
-          UNIMPLEMENTED();
+          builtin_to_call = Builtin::kThrowDataViewGetInt16DetachedError;
+          break;
         case DataViewOp::kGetInt32:
           builtin_to_call = Builtin::kThrowDataViewGetInt32DetachedError;
           break;
         case DataViewOp::kGetUint8:
+          builtin_to_call = Builtin::kThrowDataViewGetUint8DetachedError;
+          break;
         case DataViewOp::kGetUint16:
+          builtin_to_call = Builtin::kThrowDataViewGetUint16DetachedError;
+          break;
         case DataViewOp::kGetUint32:
+          builtin_to_call = Builtin::kThrowDataViewGetUint32DetachedError;
+          break;
         case DataViewOp::kSetBigInt64:
+          builtin_to_call = Builtin::kThrowDataViewSetBigInt64DetachedError;
+          break;
         case DataViewOp::kSetBigUint64:
+          builtin_to_call = Builtin::kThrowDataViewSetBigUint64DetachedError;
+          break;
         case DataViewOp::kSetFloat32:
+          builtin_to_call = Builtin::kThrowDataViewSetFloat32DetachedError;
+          break;
         case DataViewOp::kSetFloat64:
+          builtin_to_call = Builtin::kThrowDataViewSetFloat64DetachedError;
+          break;
         case DataViewOp::kSetInt8:
+          builtin_to_call = Builtin::kThrowDataViewSetInt8DetachedError;
+          break;
         case DataViewOp::kSetInt16:
-          UNIMPLEMENTED();
+          builtin_to_call = Builtin::kThrowDataViewSetInt16DetachedError;
+          break;
         case DataViewOp::kSetInt32:
           builtin_to_call = Builtin::kThrowDataViewSetInt32DetachedError;
           break;
         case DataViewOp::kSetUint8:
+          builtin_to_call = Builtin::kThrowDataViewSetUint8DetachedError;
+          break;
         case DataViewOp::kSetUint16:
+          builtin_to_call = Builtin::kThrowDataViewSetUint16DetachedError;
+          break;
         case DataViewOp::kSetUint32:
-          UNIMPLEMENTED();
+          builtin_to_call = Builtin::kThrowDataViewSetUint32DetachedError;
+          break;
       }
       CallBuiltinThroughJumptable(decoder, builtin_to_call, {});
       __ Unreachable();
@@ -1061,16 +1195,47 @@ class TurboshaftGraphBuildingInterface {
   }
 
   void PerformDataViewChecks(FullDecoder* decoder, V<Tagged> dataview,
-                             V<WordPtr> offset, DataViewOp op_type,
-                             int type_size) {
+                             V<WordPtr> offset, DataViewOp op_type) {
     TypeCheckDataView(decoder, dataview, op_type);
     DataViewRelatedBoundsCheck(decoder, offset, __ IntPtrConstant(0), op_type);
     DetachedDataViewBufferCheck(decoder, dataview, op_type);
 
     V<WordPtr> byte_length = __ LoadField<WordPtr>(
         dataview, AccessBuilder::ForJSArrayBufferViewByteLength());
-    V<WordPtr> bytelength_minus_size = __ WordPtrSub(byte_length, type_size);
+    V<WordPtr> bytelength_minus_size =
+        __ WordPtrSub(byte_length, GetTypeSize(op_type));
     DataViewRelatedBoundsCheck(decoder, bytelength_minus_size, offset, op_type);
+  }
+
+  OpIndex DataViewGetter(FullDecoder* decoder, const Value args[],
+                         DataViewOp op_type) {
+    V<Tagged> dataview = args[0].op;
+    V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
+    V<Word32> is_little_endian =
+        GetTypeSize(op_type) == kInt8Size ? __ Word32Constant(1) : args[2].op;
+
+    PerformDataViewChecks(decoder, dataview, offset, op_type);
+
+    V<WordPtr> data_ptr = __ LoadField<WordPtr>(
+        dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
+    return __ LoadDataViewElement(dataview, data_ptr, offset, is_little_endian,
+                                  GetExternalArrayType(op_type));
+  }
+
+  void DataViewSetter(FullDecoder* decoder, const Value args[],
+                      DataViewOp op_type) {
+    V<Tagged> dataview = args[0].op;
+    V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
+    V<Word32> value = args[2].op;
+    V<Word32> is_little_endian =
+        GetTypeSize(op_type) == kInt8Size ? __ Word32Constant(1) : args[3].op;
+
+    PerformDataViewChecks(decoder, dataview, offset, op_type);
+
+    V<WordPtr> data_ptr = __ LoadField<WordPtr>(
+        dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
+    __ StoreDataViewElement(dataview, data_ptr, offset, value, is_little_endian,
+                            GetExternalArrayType(op_type));
   }
 
   bool HandleWellKnownImport(FullDecoder* decoder, uint32_t index,
@@ -1208,69 +1373,67 @@ class TurboshaftGraphBuildingInterface {
 
       // DataView related imports.
       case WKI::kDataViewGetBigInt64: {
-        V<Tagged> dataview = args[0].op;
-        V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
-        V<Word32> is_little_endian = args[2].op;
-
-        PerformDataViewChecks(decoder, dataview, offset,
-                              DataViewOp::kGetBigInt64, kInt64Size);
-
-        V<WordPtr> data_ptr = __ LoadField<WordPtr>(
-            dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
-        result =
-            __ LoadDataViewElement(dataview, data_ptr, offset, is_little_endian,
-                                   kExternalBigInt64Array);
+        result = DataViewGetter(decoder, args, DataViewOp::kGetBigInt64);
         break;
       }
       case WKI::kDataViewGetBigUint64:
-      case WKI::kDataViewGetFloat32:
-      case WKI::kDataViewGetFloat64:
-      case WKI::kDataViewGetInt8:
-      case WKI::kDataViewGetInt16:
-        return false;
-      case WKI::kDataViewGetInt32: {
-        V<Tagged> dataview = args[0].op;
-        V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
-        V<Word32> is_little_endian = args[2].op;
-
-        PerformDataViewChecks(decoder, dataview, offset, DataViewOp::kGetInt32,
-                              kInt32Size);
-
-        V<WordPtr> data_ptr = __ LoadField<WordPtr>(
-            dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
-        result = __ LoadDataViewElement(dataview, data_ptr, offset,
-                                        is_little_endian, kExternalInt32Array);
+        result = DataViewGetter(decoder, args, DataViewOp::kGetBigUint64);
         break;
-      }
+      case WKI::kDataViewGetFloat32:
+        result = DataViewGetter(decoder, args, DataViewOp::kGetFloat32);
+        break;
+      case WKI::kDataViewGetFloat64:
+        result = DataViewGetter(decoder, args, DataViewOp::kGetFloat64);
+        break;
+      case WKI::kDataViewGetInt8:
+        result = DataViewGetter(decoder, args, DataViewOp::kGetInt8);
+        break;
+      case WKI::kDataViewGetInt16:
+        result = DataViewGetter(decoder, args, DataViewOp::kGetInt16);
+        break;
+      case WKI::kDataViewGetInt32:
+        result = DataViewGetter(decoder, args, DataViewOp::kGetInt32);
+        break;
       case WKI::kDataViewGetUint8:
+        result = DataViewGetter(decoder, args, DataViewOp::kGetUint8);
+        break;
       case WKI::kDataViewGetUint16:
+        result = DataViewGetter(decoder, args, DataViewOp::kGetUint16);
+        break;
       case WKI::kDataViewGetUint32:
+        result = DataViewGetter(decoder, args, DataViewOp::kGetUint32);
+        break;
       case WKI::kDataViewSetBigInt64:
+        DataViewSetter(decoder, args, DataViewOp::kSetBigInt64);
+        break;
       case WKI::kDataViewSetBigUint64:
+        DataViewSetter(decoder, args, DataViewOp::kSetBigUint64);
+        break;
       case WKI::kDataViewSetFloat32:
+        DataViewSetter(decoder, args, DataViewOp::kSetFloat32);
+        break;
       case WKI::kDataViewSetFloat64:
+        DataViewSetter(decoder, args, DataViewOp::kSetFloat64);
+        break;
       case WKI::kDataViewSetInt8:
+        DataViewSetter(decoder, args, DataViewOp::kSetInt8);
+        break;
       case WKI::kDataViewSetInt16:
-        return false;
+        DataViewSetter(decoder, args, DataViewOp::kSetInt16);
+        break;
       case WKI::kDataViewSetInt32: {
-        V<Tagged> dataview = args[0].op;
-        V<WordPtr> offset = __ ChangeInt32ToIntPtr(args[1].op);
-        V<Word32> value = args[2].op;
-        V<Word32> is_little_endian = args[3].op;
-
-        PerformDataViewChecks(decoder, dataview, offset, DataViewOp::kSetInt32,
-                              kInt32Size);
-
-        V<WordPtr> data_ptr = __ LoadField<WordPtr>(
-            dataview, compiler::AccessBuilder::ForJSDataViewDataPointer());
-        __ StoreDataViewElement(dataview, data_ptr, offset, value,
-                                is_little_endian, kExternalInt32Array);
+        DataViewSetter(decoder, args, DataViewOp::kSetInt32);
         break;
       }
       case WKI::kDataViewSetUint8:
+        DataViewSetter(decoder, args, DataViewOp::kSetUint8);
+        break;
       case WKI::kDataViewSetUint16:
+        DataViewSetter(decoder, args, DataViewOp::kSetUint16);
+        break;
       case WKI::kDataViewSetUint32:
-        return false;
+        DataViewSetter(decoder, args, DataViewOp::kSetUint32);
+        break;
     }
     if (v8_flags.trace_wasm_inlining) {
       PrintF("[function %d: call to %d is well-known %s]\n", func_index_, index,
