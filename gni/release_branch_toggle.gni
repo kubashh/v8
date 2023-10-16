@@ -4,4 +4,5 @@
 
 declare_args() {
   is_on_release_branch = false
+  v8_is_on_release_branch = is_on_release_branch
 }
