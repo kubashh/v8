@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd9b8092_4c1ec596",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-10-16T07:13:02Z",
+      "side": 1,
+      "message": "PTAL :)\nThe redness is because of a Merge conflict that I\u0027d like to fix by relanding part of a CL that was reverted (that\u0027s a CL from Andreas that removed the \"signaling_nan_possible\" from MachineOptimizationReducer and use an instance variable instead in order to share more Wasm and JS code).",
+      "revId": "1b1d95b2491efa7b336c05be4467f40cd6bd480f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
