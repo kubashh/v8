@@ -267,11 +267,61 @@ const char* Builtins::NameForStackTrace(Builtin builtin) {
     case Builtin::kThrowDataViewGetBigInt64OutOfBounds:
     case Builtin::kThrowDataViewGetBigInt64TypeError:
       return "DataView.getBigInt64";
+    case Builtin::kDataViewPrototypeGetBigUint64:
+    case Builtin::kThrowDataViewGetBigUint64DetachedError:
+    case Builtin::kThrowDataViewGetBigUint64OutOfBounds:
+    case Builtin::kThrowDataViewGetBigUint64TypeError:
+      return "DataView.getBigUint64";
+    case Builtin::kDataViewPrototypeGetFloat32:
+    case Builtin::kThrowDataViewGetFloat32DetachedError:
+    case Builtin::kThrowDataViewGetFloat32OutOfBounds:
+    case Builtin::kThrowDataViewGetFloat32TypeError:
+      return "DataView.getFloat32";
+    case Builtin::kDataViewPrototypeGetFloat64:
+    case Builtin::kThrowDataViewGetFloat64DetachedError:
+    case Builtin::kThrowDataViewGetFloat64OutOfBounds:
+    case Builtin::kThrowDataViewGetFloat64TypeError:
+      return "DataView.getFloat64";
+    case Builtin::kDataViewPrototypeGetInt8:
+    case Builtin::kThrowDataViewGetInt8DetachedError:
+    case Builtin::kThrowDataViewGetInt8OutOfBounds:
+    case Builtin::kThrowDataViewGetInt8TypeError:
+      return "DataView.getInt8";
+    case Builtin::kDataViewPrototypeGetInt16:
+    case Builtin::kThrowDataViewGetInt16DetachedError:
+    case Builtin::kThrowDataViewGetInt16OutOfBounds:
+    case Builtin::kThrowDataViewGetInt16TypeError:
+      return "DataView.getInt16";
     case Builtin::kDataViewPrototypeGetInt32:
     case Builtin::kThrowDataViewGetInt32DetachedError:
     case Builtin::kThrowDataViewGetInt32OutOfBounds:
     case Builtin::kThrowDataViewGetInt32TypeError:
       return "DataView.getInt32";
+    case Builtin::kDataViewPrototypeGetUint8:
+    case Builtin::kThrowDataViewGetUint8DetachedError:
+    case Builtin::kThrowDataViewGetUint8OutOfBounds:
+    case Builtin::kThrowDataViewGetUint8TypeError:
+      return "DataView.getUint8";
+    case Builtin::kDataViewPrototypeGetUint16:
+    case Builtin::kThrowDataViewGetUint16DetachedError:
+    case Builtin::kThrowDataViewGetUint16OutOfBounds:
+    case Builtin::kThrowDataViewGetUint16TypeError:
+      return "DataView.getUint16";
+    case Builtin::kDataViewPrototypeGetUint32:
+    case Builtin::kThrowDataViewGetUint32DetachedError:
+    case Builtin::kThrowDataViewGetUint32OutOfBounds:
+    case Builtin::kThrowDataViewGetUint32TypeError:
+      return "DataView.getUint32";
+    case Builtin::kDataViewPrototypeSetBigInt64:
+    case Builtin::kThrowDataViewSetBigInt64DetachedError:
+    case Builtin::kThrowDataViewSetBigInt64OutOfBounds:
+    case Builtin::kThrowDataViewSetBigInt64TypeError:
+      return "DataView.setBigInt64";
+    case Builtin::kDataViewPrototypeSetBigUint64:
+    case Builtin::kThrowDataViewSetBigUint64DetachedError:
+    case Builtin::kThrowDataViewSetBigUint64OutOfBounds:
+    case Builtin::kThrowDataViewSetBigUint64TypeError:
+      return "DataView.setBigUint64";
     case Builtin::kDataViewPrototypeSetInt32:
     case Builtin::kThrowDataViewSetInt32DetachedError:
     case Builtin::kThrowDataViewSetInt32OutOfBounds:

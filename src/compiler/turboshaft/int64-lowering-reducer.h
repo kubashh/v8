@@ -199,6 +199,7 @@ class Int64LoweringReducer : public Next {
           auto [low, high] = Unpack(input);
           V<Word32> reversed_low = __ Word32ReverseBytes(low);
           V<Word32> reversed_high = __ Word32ReverseBytes(high);
+          //__ input_graph().Get(input)
           return __ Tuple(reversed_high, reversed_low);
         }
         default:
@@ -259,14 +260,15 @@ class Int64LoweringReducer : public Next {
           loaded_rep == MemoryRepresentation::Uint64()) {
         return __ AtomicWord32PairLoad(base, index, offset);
       }
-      if (kind.is_atomic && result_rep == RegisterRepresentation::Word64()) {
+      if (result_rep == RegisterRepresentation::Word64()) {
         return __ Tuple(
             __ Load(base, index, kind, loaded_rep,
                     RegisterRepresentation::Word32(), offset, element_scale),
             __ Word32Constant(0));
       }
     }
-    if (loaded_rep == MemoryRepresentation::Int64()) {
+    if (loaded_rep == MemoryRepresentation::Int64() ||
+        loaded_rep == MemoryRepresentation::Uint64()) {
       return __ Tuple(
           Next::ReduceLoad(base, index, kind, MemoryRepresentation::Int32(),
                            RegisterRepresentation::Word32(), offset,
