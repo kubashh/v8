@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08d52861_10bc89ce",
+        "filename": "gni/release_branch_toggle.gni",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-10-16T08:18:03Z",
+      "side": 1,
+      "message": "Maybe leave a TODO comment to avoid confusion - also referring to this bug.",
+      "range": {
+        "startLine": 6,
+        "startChar": 2,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "3a0cfdc3074a64af302f71b775ca90fd3d55c0d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
