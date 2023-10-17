@@ -697,11 +697,6 @@ bool SemiSpaceNewSpace::ContainsSlow(Address a) const {
 size_t SemiSpaceNewSpace::Size() const {
   size_t top = allocation_top();
 
-  if (allocator_ && allocator_->IsLabValid()) {
-    DCHECK_LE(allocator_->top(), top);
-    top = allocator_->top();
-  }
-
   DCHECK_GE(top, to_space_.page_low());
   return (to_space_.current_capacity() - Page::kPageSize) / Page::kPageSize *
              MemoryChunkLayout::AllocatableMemoryInDataPage() +
@@ -1015,6 +1010,11 @@ bool PagedSpaceForNewSpace::IsPromotionCandidate(
          static_cast<size_t>(
              Page::kPageSize *
              v8_flags.minor_ms_page_promotion_max_lab_threshold / 100);
+}
+
+size_t PagedSpaceForNewSpace::AllocatedSinceLastGC() const {
+  DCHECK(!allocator_->IsLabValid());
+  return Size() - size_at_last_gc_;
 }
 
 #ifdef VERIFY_HEAP
