@@ -1,0 +1,429 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "376edc5c_5f07fb25",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3581,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "ifdef shouldn\u0027t be needed as LoadExternalPointerField already includes this check.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4304fa6b_978cb2db",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3759,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "shouldn\u0027t be needed as LoadExternalPointerField already includes this check.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2780f24_aa51cafa",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "ShiftRightU64",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86a07807_c0ee2fb3",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "SubS64",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2901043_9e9ba8ba",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "ShiftLeftU64",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9949272d_a484dbd0",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "ShiftRightU64.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfc79efd_dd240374",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "ShiftLeftU64.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce3d13ec_e6e92481",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "AndU64, this way you can eliminate `mov` as AndU64 does it if required.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8c97a89_6221f894",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "temp scope is not used, can be removed?",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94492d50_c5592068",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "You can use OrU64 and remove the `mov` above it.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5c95854_f504347e",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "better to avoid having ra() and scratch be the same register, we usually use r0 and ip (r12) as scratch regs on ppc.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ef5869b_7a0067cd",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "We can implement it with `MoveObjectAndSlot`? this way we are in sync with arm.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04ff4465_ea8a8619",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "Also can be implemented with `MoveObjectAndSlot`.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95684dfc_d10feae5",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "maybe change to `mov(tag_parameter, Operand(tag));` to be consistent?",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a01711f_796f49fe",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "r11 is not universally known to be a scratch on ppc, maybe r12 (ip) can be used?",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae3dd274_cb9813df",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5498,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "Could you try removing these tabs and run a \"git cl format\"?",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8956fb51_12434770",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5515,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "What do you mean by consistency in the branch handling code?\n\nThe comment regarding `TailCallBuiltin` only applies to arm64.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dc546fa_67fd63b9",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "This won\u0027t be needed anymore if the 2 places using it are changed to `mov(..., Operand(...));`.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b9b6308_29988864",
+        "filename": "src/compiler/backend/instruction-codes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "Let\u0027s not change this for ppc. We have been patching this issue whenever it comes up, ie:\nhttps://crrev.com/c/3097449\nhttps://crrev.com/c/4864159\n\nI should be able to merge some more simd ops to free more opcodes.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be57806a_72c91426",
+        "filename": "src/compiler/backend/ppc/code-generator-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "Why do we need this? doesn\u0027t seem to be used anywhere.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f45d31a_0fe82eed",
+        "filename": "src/compiler/backend/ppc/code-generator-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7fc27a5_801ea9d9",
+        "filename": "src/compiler/backend/ppc/instruction-selector-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "When using pntr-compression it seems like we only use `stw` which doesn\u0027t need alignment?\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/ppc/macro-assembler-ppc.cc;l\u003d655",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9f4dd50_b62ea4c5",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "Most of this logic is already implemented under macro-asm:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/ppc/macro-assembler-ppc.cc;l\u003d3518\n\nmaybe we can try adding the missing ops such as a \"shift\" separately per function? i.e:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h;l\u003d326",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff2d1b55_2e960c81",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "ifdef may not be needed as LoadExternalPointerField already includes this check and LoadFullPointer also does a LoadU64?",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d73487a1_2f136d8f",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-17T19:54:01Z",
+      "side": 1,
+      "message": "Would be a good idea to keep it as kZero to be in sync with arm.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
