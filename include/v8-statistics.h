@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "v8-local-handle.h"  // NOLINT(build/include_directory)
+#include "v8-memory-span.h"   // NOLINT(build/include_directory)
 #include "v8-promise.h"       // NOLINT(build/include_directory)
 #include "v8config.h"         // NOLINT(build/include_directory)
 
@@ -83,8 +84,18 @@ class V8_EXPORT MeasureMemoryDelegate {
      * which ShouldMeasure returned true and that was not garbage collected
      * while the memory measurement was in progress.
      */
+    V8_DEPRECATE_SOON("Please use contexts and sizes_in_bytes")
     const std::vector<std::pair<Local<Context>, size_t>>&
         context_sizes_in_bytes;
+
+    /**
+     * two spans of equal length: the first includes each context for which
+     * ShouldMeasure returned true and that was not garbage collected while
+     * the memory measurement was in progress; the second includes the size
+     * of the respective context.
+     */
+    const MemorySpan<const Local<Context>>& contexts;
+    const MemorySpan<const size_t>& sizes_in_bytes;
 
     /**
      * total size of objects that were not attributed to any context (i.e. are
