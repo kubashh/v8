@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82e9b2b0_1d4d50a3",
+        "filename": "include/v8-context.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-10-17T07:42:49Z",
+      "side": 1,
+      "message": "If returning `true` is an acceptable behaviour, then let\u0027s do that.\nThanks!",
+      "parentUuid": "f8bcda6b_87b08e3c",
+      "range": {
+        "startLine": 192,
+        "startChar": 17,
+        "endLine": 192,
+        "endChar": 51
+      },
+      "revId": "b4f85b36cd342e4fd64bdcef85e2533a310394db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a9fa404_c22fabc5",
