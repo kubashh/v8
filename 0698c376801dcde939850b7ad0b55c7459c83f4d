@@ -22,6 +22,30 @@
       },
       "revId": "0698c376801dcde939850b7ad0b55c7459c83f4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd5a33da_7bb9b631",
+        "filename": "src/objects/heap-object.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-18T12:16:13Z",
+      "side": 1,
+      "message": "yes it is, well noticed.",
+      "parentUuid": "04026e2e_3d9d4b90",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 348,
+        "endChar": 22
+      },
+      "revId": "0698c376801dcde939850b7ad0b55c7459c83f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
