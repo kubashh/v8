@@ -327,6 +327,7 @@ class JSReceiver : public TorqueGeneratedJSReceiver<JSReceiver, HeapObject> {
 class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
  public:
   static bool IsUnmodifiedApiObject(FullObjectSlot o);
+  static bool IsUnmodifiedApiObjectThreadSafe(FullObjectSlot o);
 
   V8_EXPORT_PRIVATE static V8_WARN_UNUSED_RESULT MaybeHandle<JSObject> New(
       Handle<JSFunction> constructor, Handle<JSReceiver> new_target,
