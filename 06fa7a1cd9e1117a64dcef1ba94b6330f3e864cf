@@ -326,6 +326,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe81e12b_55481240",
+        "filename": "src/compiler/backend/instruction-codes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-10-18T16:41:49Z",
+      "side": 1,
+      "message": "This will free 4 opcodes once it lands: \nhttps://crrev.com/c/4953095",
+      "parentUuid": "1b9b6308_29988864",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be57806a_72c91426",
         "filename": "src/compiler/backend/ppc/code-generator-ppc.cc",
         "patchSetId": 6
