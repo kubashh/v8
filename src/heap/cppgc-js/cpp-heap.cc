@@ -208,11 +208,12 @@ class UnifiedHeapConcurrentMarker
       cppgc::internal::MarkingWorklists& marking_worklists,
       ::heap::base::IncrementalMarkingSchedule& incremental_marking_schedule,
       cppgc::Platform* platform,
-      UnifiedHeapMarkingState& unified_heap_marking_state,
+      WeakTracedReferenceWorklist& weak_traced_reference_worklist,
       CppHeap::CollectionType collection_type)
       : cppgc::internal::ConcurrentMarkerBase(
             heap, marking_worklists, incremental_marking_schedule, platform),
         v8_heap_(v8_heap),
+        weak_traced_reference_worklist_(weak_traced_reference_worklist),
         collection_type_(collection_type) {}
 
   std::unique_ptr<cppgc::Visitor> CreateConcurrentMarkingVisitor(
@@ -220,6 +221,7 @@ class UnifiedHeapConcurrentMarker
 
  private:
   Heap* const v8_heap_;
+  WeakTracedReferenceWorklist& weak_traced_reference_worklist_;
   CppHeap::CollectionType collection_type_;
 };
 
@@ -227,7 +229,8 @@ std::unique_ptr<cppgc::Visitor>
 UnifiedHeapConcurrentMarker::CreateConcurrentMarkingVisitor(
     cppgc::internal::ConcurrentMarkingState& marking_state) const {
   return std::make_unique<ConcurrentUnifiedHeapMarkingVisitor>(
-      heap(), v8_heap_, marking_state, collection_type_);
+      heap(), v8_heap_, weak_traced_reference_worklist_, marking_state,
+      collection_type_);
 }
 
 void FatalOutOfMemoryHandlerImpl(const std::string& reason,
@@ -279,6 +282,8 @@ class UnifiedHeapMarker final : public cppgc::internal::MarkerBase {
 
   void AddObject(void*);
 
+  void ProcessWeakTracedReferences();
+
   cppgc::internal::MarkingWorklists& GetMarkingWorklists() {
     return marking_worklists_;
   }
@@ -303,6 +308,8 @@ class UnifiedHeapMarker final : public cppgc::internal::MarkerBase {
   }
 
  private:
+  WeakTracedReferenceWorklist weak_traced_reference_worklist_;
+  WeakTracedReferenceWorklist::Local local_weak_traced_reference_worklist_;
   UnifiedHeapMarkingState mutator_unified_heap_marking_state_;
   std::unique_ptr<MutatorUnifiedHeapMarkingVisitor> marking_visitor_;
   UnifiedHeapConservativeMarkingVisitor conservative_marking_visitor_;
@@ -313,7 +320,9 @@ UnifiedHeapMarker::UnifiedHeapMarker(Heap* v8_heap,
                                      cppgc::Platform* platform,
                                      cppgc::internal::MarkingConfig config)
     : cppgc::internal::MarkerBase(heap, platform, config),
+      local_weak_traced_reference_worklist_(weak_traced_reference_worklist_),
       mutator_unified_heap_marking_state_(v8_heap, nullptr,
+                                          local_weak_traced_reference_worklist_,
                                           config.collection_type),
       marking_visitor_(std::make_unique<MutatorUnifiedHeapMarkingVisitor>(
           heap, mutator_marking_state_, mutator_unified_heap_marking_state_)),
@@ -321,12 +330,24 @@ UnifiedHeapMarker::UnifiedHeapMarker(Heap* v8_heap,
                                     *marking_visitor_) {
   concurrent_marker_ = std::make_unique<UnifiedHeapConcurrentMarker>(
       heap_, v8_heap, marking_worklists_, *schedule_, platform_,
-      mutator_unified_heap_marking_state_, config.collection_type);
+      weak_traced_reference_worklist_, config.collection_type);
 }
 
 void UnifiedHeapMarker::AddObject(void* object) {
   mutator_marking_state_.MarkAndPush(
       cppgc::internal::HeapObjectHeader::FromObject(object));
+}
+
+void UnifiedHeapMarker::ProcessWeakTracedReferences() {
+  cppgc::internal::StatsCollector::EnabledScope stats_scope(
+      heap().stats_collector(),
+      cppgc::internal::StatsCollector::kMarkTracedReferences);
+  const TracedReferenceBase* item;
+  while (local_weak_traced_reference_worklist_.Pop(&item)) {
+    mutator_unified_heap_marking_state_
+        .MarkAndPush<UnifiedHeapMarkingState::MarkedNodeHandling::kVerify>(
+            *item);
+  }
 }
 
 void CppHeap::MetricRecorderAdapter::AddMainThreadEvent(
@@ -787,6 +808,7 @@ bool CppHeap::AdvanceTracing(v8::base::TimeDelta max_duration) {
   if (in_atomic_pause_) {
     marker_->NotifyConcurrentMarkingOfWorkIfNeeded(
         cppgc::TaskPriority::kUserBlocking);
+    marker_->To<UnifiedHeapMarker>().ProcessWeakTracedReferences();
   }
   // TODO(chromium:1056170): Replace when unified heap transitions to
   // bytes-based deadline.
@@ -823,6 +845,7 @@ void CppHeap::EnterFinalPause(cppgc::EmbedderStackState stack_state) {
   }
   marker.EnterAtomicPause(stack_state);
   compactor_.CancelIfShouldNotCompact(MarkingType::kAtomic, stack_state);
+  marker.GetMutatorUnifiedHeapMarkingState().NotifyAtomicPauseEntered();
 }
 
 bool CppHeap::FinishConcurrentMarkingIfNeeded() {
