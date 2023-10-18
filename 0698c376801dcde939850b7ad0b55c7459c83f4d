@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04026e2e_3d9d4b90",
+        "filename": "src/objects/heap-object.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1369666
+      },
+      "writtenOn": "2023-10-18T12:13:08Z",
+      "side": 1,
+      "message": "This appears to do nothing; was it supposed to be a debug check?",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 348,
+        "endChar": 22
+      },
+      "revId": "0698c376801dcde939850b7ad0b55c7459c83f4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
