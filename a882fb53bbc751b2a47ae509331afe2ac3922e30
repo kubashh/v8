@@ -215,6 +215,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58440246_c66c4426",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T16:01:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd79ec54_98f0e095",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 36
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75f7295d_3390b7f2",
@@ -228,6 +252,30 @@
       "writtenOn": "2023-10-19T10:38:46Z",
       "side": 1,
       "message": "nit: I don\u0027t think we need this.",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 20
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39acf718_d205bb86",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T16:01:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75f7295d_3390b7f2",
       "range": {
         "startLine": 103,
         "startChar": 4,
@@ -310,6 +358,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "169feaa3_c68a3e1d",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T16:01:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2f1109d_66760f92",
+      "range": {
+        "startLine": 118,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 20
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f65ef9f8_a2ecb20a",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 12
@@ -355,6 +427,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b2f3b4c_4f3ea910",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T16:01:40Z",
+      "side": 1,
+      "message": "Ok, changed it to explicitly list the types.",
+      "parentUuid": "d3977f60_3396836b",
+      "range": {
+        "startLine": 1253,
+        "startChar": 4,
+        "endLine": 1254,
+        "endChar": 78
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee70e834_7a036aca",
@@ -378,6 +474,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d1c1198_ae4155c5",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T16:01:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee70e834_7a036aca",
+      "range": {
+        "startLine": 1464,
+        "startChar": 35,
+        "endLine": 1464,
+        "endChar": 36
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f4e6d5b_41ef313f",
@@ -391,6 +511,30 @@
       "writtenOn": "2023-10-19T10:06:09Z",
       "side": 1,
       "message": "Maybe now it\u0027s time to add a block comment here to align it to exactly 80 chars... 😊",
+      "range": {
+        "startLine": 19,
+        "startChar": 44,
+        "endLine": 19,
+        "endChar": 45
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63fc959a_7d60bddc",
+        "filename": "src/wasm/wasm-builtin-list.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T16:01:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f4e6d5b_41ef313f",
       "range": {
         "startLine": 19,
         "startChar": 44,
@@ -438,6 +582,30 @@
       "side": 1,
       "message": "The value-checking code is specific to each type (e.g. lines 215-223), so that probably makes sense to keep separate.\n\nBut the error message checking code (e.g. lines 225-248) seems very easy to consolidate into a loop that loops over an array `[\u0027getInt32\u0027, \u0027setInt8\u0027, ...]`.\nIt might be helpful to move all the `builder.addFunction(...)` calls into `MakeBuilder()`. To save time, it\u0027s probably also enough to then only call `MakeBuilder()` and `.instantiate(kImports)` once, and reuse the instance for all tests -- only the `array` needs to be recreated every time, because we detach the buffer at the end, which is irreversible.",
       "parentUuid": "a2187182_f2255cd6",
+      "range": {
+        "startLine": 204,
+        "startChar": 10,
+        "endLine": 204,
+        "endChar": 26
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fefe1086_b3a5ca21",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T16:01:40Z",
+      "side": 1,
+      "message": "I simplified it",
+      "parentUuid": "05d8e47a_184295d2",
       "range": {
         "startLine": 204,
         "startChar": 10,
