@@ -20,6 +20,46 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7a0a8a48_830e5fb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-19T10:06:09Z",
+      "side": 1,
+      "message": "LGTM with minor comments.",
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3eb2571_d675ca4e",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-19T10:06:09Z",
+      "side": 1,
+      "message": "If we don\u0027t think that we\u0027ll find an alternative to having all the builtins as discussed in a previous CL, I think we have reached a count of cases where it would be easier to read if we used a macro to generate these mappings for the `DataView` specific builtins here.",
+      "range": {
+        "startLine": 304,
+        "startChar": 26,
+        "endLine": 304,
+        "endChar": 31
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a466cb59_60cdea16",
         "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
         "patchSetId": 12
@@ -66,6 +106,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "da06bb57_15540f5b",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-19T10:06:09Z",
+      "side": 1,
+      "message": "That\u0027s fine. It didn\u0027t exist before because webassembly doesn\u0027t have unsigned loads other than for packed types (8 / 16 bytes).\nI guess, https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/access-builder.cc;l\u003d1213 is where your Uint64 machine type comes from that then gets remapped to a `MemoryRepresentation`.",
+      "parentUuid": "6a74e6a6_8cc79b79",
+      "range": {
+        "startLine": 270,
+        "startChar": 8,
+        "endLine": 270,
+        "endChar": 18
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "eb1aafc2_12065837",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 12
@@ -82,6 +146,52 @@
         "startChar": 0,
         "endLine": 74,
         "endChar": 9
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd79ec54_98f0e095",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-19T10:06:09Z",
+      "side": 1,
+      "message": "This line seems redundant, let\u0027s remove it.",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 36
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94533ec8_9ea2f659",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-19T10:06:09Z",
+      "side": 1,
+      "message": "Checking other usages of `TYPED_ARRAYS`, this seems to be the parameter names we use.\nNit: Can we come up with better names that make it clear what the first 3 parameters mean?",
+      "range": {
+        "startLine": 111,
+        "startChar": 38,
+        "endLine": 111,
+        "endChar": 54
       },
       "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -105,6 +215,76 @@
         "startChar": 4,
         "endLine": 1254,
         "endChar": 78
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3977f60_3396836b",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-19T10:06:09Z",
+      "side": 1,
+      "message": "I think I\u0027d slightly prefer that.",
+      "parentUuid": "f65ef9f8_a2ecb20a",
+      "range": {
+        "startLine": 1253,
+        "startChar": 4,
+        "endLine": 1254,
+        "endChar": 78
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f4e6d5b_41ef313f",
+        "filename": "src/wasm/wasm-builtin-list.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-19T10:06:09Z",
+      "side": 1,
+      "message": "Maybe now it\u0027s time to add a block comment here to align it to exactly 80 chars... 😊",
+      "range": {
+        "startLine": 19,
+        "startChar": 44,
+        "endLine": 19,
+        "endChar": 45
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2187182_f2255cd6",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-19T10:06:09Z",
+      "side": 1,
+      "message": "My feeling is that these test cases are too much copy-paste. Whenever we\u0027d add a new check for a dataview getter or setter e.g. due to a bug we found, we might end up having to add it to many test cases etc.\n\nHow much work would it be to define a single `TestDataViewGet` and `TestDataViewSet` that iterates over testcases defined in an array?\n(It should print the type at each iteration, so it\u0027s the same level of logging on what\u0027s going on when it fails.)",
+      "range": {
+        "startLine": 204,
+        "startChar": 10,
+        "endLine": 204,
+        "endChar": 26
       },
       "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
