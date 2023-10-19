@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ced3562_981cc82f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-19T10:38:46Z",
+      "side": 1,
+      "message": "LGTM with minor comments. Nice work!",
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3eb2571_d675ca4e",
@@ -48,6 +65,30 @@
       "writtenOn": "2023-10-19T10:06:09Z",
       "side": 1,
       "message": "If we don\u0027t think that we\u0027ll find an alternative to having all the builtins as discussed in a previous CL, I think we have reached a count of cases where it would be easier to read if we used a macro to generate these mappings for the `DataView` specific builtins here.",
+      "range": {
+        "startLine": 304,
+        "startChar": 26,
+        "endLine": 304,
+        "endChar": 31
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98691dfb_aa813777",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-19T10:38:46Z",
+      "side": 1,
+      "message": "We\u0027re planning to come up with a way to merge all these builtins.",
+      "parentUuid": "a3eb2571_d675ca4e",
       "range": {
         "startLine": 304,
         "startChar": 26,
@@ -176,6 +217,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "75f7295d_3390b7f2",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-19T10:38:46Z",
+      "side": 1,
+      "message": "nit: I don\u0027t think we need this.",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 20
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "94533ec8_9ea2f659",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 12
@@ -192,6 +256,53 @@
         "startChar": 38,
         "endLine": 111,
         "endChar": 54
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c80f2ab3_808cd9fa",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-19T10:38:46Z",
+      "side": 1,
+      "message": "I think these are descriptive names: they all mean the type, in \"Capitalized\", \"all-lowercase\", and \"ALL_CAPS\" spelling. That\u0027s because the C preprocessor has no String.toLowerCase function :-)",
+      "parentUuid": "94533ec8_9ea2f659",
+      "range": {
+        "startLine": 111,
+        "startChar": 38,
+        "endLine": 111,
+        "endChar": 54
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2f1109d_66760f92",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-19T10:38:46Z",
+      "side": 1,
+      "message": "nit: I don\u0027t think we need this either.",
+      "range": {
+        "startLine": 118,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 20
       },
       "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -246,6 +357,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee70e834_7a036aca",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-19T10:38:46Z",
+      "side": 1,
+      "message": "nit: unnecessary",
+      "range": {
+        "startLine": 1464,
+        "startChar": 35,
+        "endLine": 1464,
+        "endChar": 36
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f4e6d5b_41ef313f",
         "filename": "src/wasm/wasm-builtin-list.h",
         "patchSetId": 12
@@ -280,6 +414,30 @@
       "writtenOn": "2023-10-19T10:06:09Z",
       "side": 1,
       "message": "My feeling is that these test cases are too much copy-paste. Whenever we\u0027d add a new check for a dataview getter or setter e.g. due to a bug we found, we might end up having to add it to many test cases etc.\n\nHow much work would it be to define a single `TestDataViewGet` and `TestDataViewSet` that iterates over testcases defined in an array?\n(It should print the type at each iteration, so it\u0027s the same level of logging on what\u0027s going on when it fails.)",
+      "range": {
+        "startLine": 204,
+        "startChar": 10,
+        "endLine": 204,
+        "endChar": 26
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05d8e47a_184295d2",
+        "filename": "test/mjsunit/wasm/imported-dataview.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-19T10:38:46Z",
+      "side": 1,
+      "message": "The value-checking code is specific to each type (e.g. lines 215-223), so that probably makes sense to keep separate.\n\nBut the error message checking code (e.g. lines 225-248) seems very easy to consolidate into a loop that loops over an array `[\u0027getInt32\u0027, \u0027setInt8\u0027, ...]`.\nIt might be helpful to move all the `builder.addFunction(...)` calls into `MakeBuilder()`. To save time, it\u0027s probably also enough to then only call `MakeBuilder()` and `.instantiate(kImports)` once, and reuse the instance for all tests -- only the `array` needs to be recreated every time, because we detach the buffer at the end, which is irreversible.",
+      "parentUuid": "a2187182_f2255cd6",
       "range": {
         "startLine": 204,
         "startChar": 10,
