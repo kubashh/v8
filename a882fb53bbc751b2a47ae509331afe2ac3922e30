@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e99e935_613c61fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T09:37:08Z",
+      "side": 1,
+      "message": "Could you please take a look?",
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a466cb59_60cdea16",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T09:37:08Z",
+      "side": 1,
+      "message": "Not related to my CL, just redundant.",
+      "range": {
+        "startLine": 262,
+        "startChar": 9,
+        "endLine": 262,
+        "endChar": 10
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a74e6a6_8cc79b79",
+        "filename": "src/compiler/turboshaft/int64-lowering-reducer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T09:37:08Z",
+      "side": 1,
+      "message": "Needed, otherwise [bots fail](https://ci.chromium.org/ui/p/v8/builders/try/v8_linux_arm_rel/b8767080641391787921/overview).",
+      "range": {
+        "startLine": 270,
+        "startChar": 8,
+        "endLine": 270,
+        "endChar": 18
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb1aafc2_12065837",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T09:37:08Z",
+      "side": 1,
+      "message": "I don\u0027t know which implementation is the nicest. This one seems the shortest.\nJust to not forget: we would like to pass the operation type to the error builtins, so the enum is needed.",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 9
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f65ef9f8_a2ecb20a",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-19T09:37:08Z",
+      "side": 1,
+      "message": "Maybe it\u0027s nicer to list if op_type is (get/set)(Uint|Int)8?",
+      "range": {
+        "startLine": 1253,
+        "startChar": 4,
+        "endLine": 1254,
+        "endChar": 78
+      },
+      "revId": "a882fb53bbc751b2a47ae509331afe2ac3922e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
