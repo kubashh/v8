@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82740ab4_1f2264cb",
+        "filename": "BUILD.gn",
+        "patchSetId": 16
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-20T10:59:47Z",
+      "side": 1,
+      "message": "should we either merge `V8_ENABLE_CET_IBT` into this, or rename this to something like `V8_ENABLE_ARM64_PAC`?",
+      "range": {
+        "startLine": 1125,
+        "startChar": 18,
+        "endLine": 1125,
+        "endChar": 50
+      },
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
