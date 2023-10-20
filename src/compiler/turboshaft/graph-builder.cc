@@ -154,7 +154,7 @@ struct GraphBuilder {
             ReadOnlyRoots(isolate->heap()).optimized_out_map()) {
       // Nothing to do in this case.
     } else {
-      ProcessStateValues(builder, stack);
+      ProcessDeoptInput(builder, stack, MachineType::AnyTagged());
     }
   }
 
