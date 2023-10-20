@@ -570,6 +570,10 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
                       FullObjectSlot(&thread->pending_message_));
   v->VisitRootPointer(Root::kStackRoots, nullptr,
                       FullObjectSlot(&thread->context_));
+  // v->VisitRootPointer(Root::kStackRoots, nullptr,
+  //                     FullObjectSlot(&thread->caller_context_));
+  v->VisitRootPointer(Root::kStackRoots, nullptr,
+                      FullObjectSlot(&thread->incumbent_context_));
   v->VisitRootPointer(Root::kStackRoots, nullptr,
                       FullObjectSlot(&thread->scheduled_exception_));
 
@@ -3182,13 +3186,17 @@ Handle<NativeContext> Isolate::GetIncumbentContext() {
   if (!it.done() &&
       (!top_backup_incumbent || it.frame()->sp() < top_backup_incumbent)) {
     Tagged<Context> context = Context::cast(it.frame()->context());
+    DCHECK_EQ(*GetIncumbentContextFast(), context->native_context());
     return Handle<NativeContext>(context->native_context(), this);
   }
 
   // 2nd candidate: the last Context::Scope's incumbent context if any.
   if (top_backup_incumbent_scope()) {
-    return Utils::OpenHandle(
-        *top_backup_incumbent_scope()->backup_incumbent_context_);
+    v8::Local<v8::Context> incumbent_context =
+        top_backup_incumbent_scope()->backup_incumbent_context_;
+    DCHECK_EQ(*GetIncumbentContextFast(),
+              *Utils::OpenHandle(*incumbent_context));
+    return Utils::OpenHandle(*incumbent_context);
   }
 
   // Last candidate: the entered context or microtask context.
@@ -3197,6 +3205,7 @@ Handle<NativeContext> Isolate::GetIncumbentContext() {
   // the entry realm.
   v8::Local<v8::Context> entered_context =
       reinterpret_cast<v8::Isolate*>(this)->GetEnteredOrMicrotaskContext();
+  DCHECK_EQ(*GetIncumbentContextFast(), *Utils::OpenHandle(*entered_context));
   return Utils::OpenHandle(*entered_context);
 }
 

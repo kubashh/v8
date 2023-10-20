@@ -1002,21 +1002,25 @@ void Context::Enter() {
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
   i::HandleScopeImplementer* impl = i_isolate->handle_scope_implementer();
   impl->EnterContext(env);
+  impl->SaveContext(i_isolate->incumbent_context());
   impl->SaveContext(i_isolate->context());
+  i_isolate->set_incumbent_context(env);
   i_isolate->set_context(env);
 }
 
 void Context::Exit() {
-  i::DirectHandle<i::NativeContext> env = Utils::OpenDirectHandle(this);
+  i::DisallowGarbageCollection no_gc;
+  i::Tagged<i::NativeContext> env = *Utils::OpenDirectHandle(this);
   i::Isolate* i_isolate = env->GetIsolate();
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
   i::HandleScopeImplementer* impl = i_isolate->handle_scope_implementer();
-  if (!Utils::ApiCheck(impl->LastEnteredContextWas(*env), "v8::Context::Exit()",
+  if (!Utils::ApiCheck(impl->LastEnteredContextWas(env), "v8::Context::Exit()",
                        "Cannot exit non-entered context")) {
     return;
   }
-  impl->LeaveContext();
   i_isolate->set_context(impl->RestoreContext());
+  i_isolate->set_incumbent_context(impl->RestoreContext());
+  impl->LeaveContext();
 }
 
 Context::BackupIncumbentScope::BackupIncumbentScope(
@@ -1033,6 +1037,11 @@ Context::BackupIncumbentScope::BackupIncumbentScope(
 
   prev_ = i_isolate->top_backup_incumbent_scope();
   i_isolate->set_top_backup_incumbent_scope(this);
+
+  // The fast implementation.
+  i::HandleScopeImplementer* impl = i_isolate->handle_scope_implementer();
+  impl->SaveContext(i_isolate->incumbent_context());
+  i_isolate->set_incumbent_context(*env);
 }
 
 Context::BackupIncumbentScope::~BackupIncumbentScope() {
@@ -1043,6 +1052,10 @@ Context::BackupIncumbentScope::~BackupIncumbentScope() {
   i::SimulatorStack::UnregisterJSStackComparableAddress(i_isolate);
 
   i_isolate->set_top_backup_incumbent_scope(prev_);
+
+  // The fast implementation.
+  i::HandleScopeImplementer* impl = i_isolate->handle_scope_implementer();
+  i_isolate->set_incumbent_context(impl->RestoreContext());
 }
 
 static_assert(i::Internals::kEmbedderDataSlotSize == i::kEmbedderDataSlotSize);
@@ -11649,6 +11662,8 @@ bool ValidateFunctionCallbackInfo(const FunctionCallbackInfo<T>& info) {
   }
   auto* i_isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
   CHECK_EQ(i_isolate, Isolate::Current());
+  CHECK_EQ(*i_isolate->GetIncumbentContext(),
+           *i_isolate->GetIncumbentContextFast());
   CHECK(info.This()->IsValue());
   CHECK(info.Holder()->IsObject());
   CHECK(!info.Data().IsEmpty());

@@ -59,6 +59,8 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> HandleApiCallHelper(
     Isolate* isolate, Handle<HeapObject> new_target,
     Handle<FunctionTemplateInfo> fun_data, Handle<Object> receiver,
     Address* argv, int argc) {
+  DCHECK_EQ(*isolate->GetIncumbentContext(),
+            *isolate->GetIncumbentContextFast());
   Handle<JSReceiver> js_receiver;
   Tagged<JSReceiver> raw_holder;
   if (is_construct) {

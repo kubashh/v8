@@ -18,6 +18,8 @@ void ThreadLocalTop::Clear() {
   try_catch_handler_ = nullptr;
   isolate_ = nullptr;
   context_ = Context();
+  caller_context_ = Context();
+  incumbent_context_ = Context();
   thread_id_ = ThreadId();
   pending_handler_entrypoint_ = kNullAddress;
   pending_handler_constant_pool_ = kNullAddress;

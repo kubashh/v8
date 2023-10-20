@@ -4298,6 +4298,7 @@ void MacroAssembler::I64x2AllTrue(Register dst, VRegister src) {
 void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
                               Register function_address,
                               ExternalReference thunk_ref, Register thunk_arg,
+                              MemOperand* prev_incumbent_context_operand,
                               int stack_space, MemOperand* stack_space_operand,
                               MemOperand return_value_operand, Label* done) {
   ASM_CODE_COMMENT(masm);
@@ -4312,6 +4313,8 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
       ER::handle_scope_limit_address(isolate), no_reg);
   MemOperand level_mem_op = __ ExternalReferenceAsOperand(
       ER::handle_scope_level_address(isolate), no_reg);
+  MemOperand incumbent_context_mem_op =
+      __ ExternalReferenceAsOperand(ER::incumbent_context(isolate), no_reg);
 
   Register return_value = x0;
   Register scratch = x4;
@@ -4376,6 +4379,11 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
   __ RecordComment("Load the value from ReturnValue");
   __ Ldr(return_value, return_value_operand);
 
+  if (prev_incumbent_context_operand) {
+    ASM_CODE_COMMENT_STRING(masm, "Restore previous incumbent context.");
+    __ Ldr(scratch, incumbent_context_mem_op);
+    __ Str(scratch, *prev_incumbent_context_operand);
+  }
   {
     ASM_CODE_COMMENT_STRING(
         masm,

@@ -2236,6 +2236,8 @@ enum class AliasingKind {
   C(CFunction, c_function)                                          \
   C(Context, context)                                               \
   C(PendingException, pending_exception)                            \
+  C(CallerContext, caller_context)                                  \
+  C(IncumbentContext, incumbent_context)                            \
   C(PendingHandlerContext, pending_handler_context)                 \
   C(PendingHandlerEntrypoint, pending_handler_entrypoint)           \
   C(PendingHandlerConstantPool, pending_handler_constant_pool)      \

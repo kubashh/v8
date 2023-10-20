@@ -773,6 +773,24 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   inline void set_context(Tagged<Context> context);
   Tagged<Context>* context_address() { return &thread_local_top()->context_; }
 
+  // Access to top context (where the current function object was created).
+  // Tagged<Context> caller_context() const {
+  //   return thread_local_top()->caller_context_;
+  // }
+  // inline void set_caller_context(Tagged<Context> context);
+  Tagged<Context>* caller_context_address() {
+    return &thread_local_top()->caller_context_;
+  }
+
+  // Current incumbent context.
+  Tagged<Context> incumbent_context() const {
+    return thread_local_top()->incumbent_context_;
+  }
+  inline void set_incumbent_context(Tagged<Context> context);
+  Tagged<Context>* incumbent_context_address() {
+    return &thread_local_top()->incumbent_context_;
+  }
+
   // Access to current thread id.
   inline void set_thread_id(ThreadId id) {
     thread_local_top()->thread_id_.store(id, std::memory_order_relaxed);
@@ -1109,6 +1127,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   inline Handle<NativeContext> native_context();
   inline Tagged<NativeContext> raw_native_context();
 
+  inline Handle<NativeContext> GetIncumbentContextFast();
   Handle<NativeContext> GetIncumbentContext();
 
   void RegisterTryCatchHandler(v8::TryCatch* that);
