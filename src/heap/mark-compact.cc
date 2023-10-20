@@ -396,6 +396,7 @@ void MarkCompactCollector::CollectGarbage() {
   // update the state as they proceed.
   DCHECK(state_ == PREPARE_GC);
 
+  is_in_atomic_pause_.store(true, std::memory_order_relaxed);
   MarkLiveObjects();
   // This will walk dead object graphs and so requires that all references are
   // still intact.
@@ -407,6 +408,7 @@ void MarkCompactCollector::CollectGarbage() {
   Sweep();
   Evacuate();
   Finish();
+  is_in_atomic_pause_.store(false, std::memory_order_relaxed);
 }
 
 #ifdef VERIFY_HEAP
@@ -2413,6 +2415,7 @@ void MarkCompactCollector::MarkLiveObjects() {
         incremental_marking->current_trace_id(), TRACE_EVENT_FLAG_FLOW_IN);
     DCHECK(incremental_marking->IsMajorMarking());
     incremental_marking->Stop();
+    heap_->isolate()->traced_handles()->SetIsMarking(false);
     MarkingBarrier::PublishAll(heap_);
   }
 
@@ -2485,7 +2488,6 @@ void MarkCompactCollector::MarkLiveObjects() {
     // finished as it will reset page flags that share the same bitmap as
     // the evacuation candidate bit.
     MarkingBarrier::DeactivateAll(heap_);
-    heap_->isolate()->traced_handles()->SetIsMarking(false);
   }
 
   epoch_++;
@@ -2759,6 +2761,8 @@ void MarkCompactCollector::ClearNonLiveReferences() {
     // CPU profiler.
     isolate->global_handles()->IterateWeakRootsForPhantomHandles(
         &IsUnmarkedHeapObject);
+    isolate->traced_handles()->ProcessYoungObjects(
+        nullptr, &IsUnmarkedHeapObject, false);
     isolate->traced_handles()->ResetDeadNodes(&IsUnmarkedHeapObject);
 
     if (isolate->is_shared_space_isolate()) {
