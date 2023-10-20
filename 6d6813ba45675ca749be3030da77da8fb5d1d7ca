@@ -16,6 +16,46 @@
       "message": "PTAL, thanks",
       "revId": "6d6813ba45675ca749be3030da77da8fb5d1d7ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b9f2034_293c807b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-10-20T10:06:51Z",
+      "side": 1,
+      "message": "I\u0027m not super familiar with this, so I\u0027ll +1 anything that works and doesn\u0027t look crazy (what you did doesn\u0027t look crazy but doesn\u0027t work so... I\u0027ll +1 anyways and you can submit once it works xD)",
+      "revId": "6d6813ba45675ca749be3030da77da8fb5d1d7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34dccb31_63377625",
+        "filename": "src/compiler/turboshaft/graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-10-20T10:06:51Z",
+      "side": 1,
+      "message": "ProcessDeoptInput cannot be directly called on TypedStateValues (which is what `stack` probably is): ProcessStateValues should take care of calling ProcessDeoptInput with the input of the TypeStateValues of `stack`.",
+      "range": {
+        "startLine": 157,
+        "startChar": 6,
+        "endLine": 157,
+        "endChar": 23
+      },
+      "revId": "6d6813ba45675ca749be3030da77da8fb5d1d7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
