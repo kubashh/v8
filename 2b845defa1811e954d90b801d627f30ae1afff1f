@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69f3db70_9f7dd351",
+        "filename": "src/compiler/turboshaft/graph.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-10-20T14:49:14Z",
+      "side": 1,
+      "message": "It\u0027s only set for loop headers of loops that have been peeled. I\u0027ve updated the comment and added a `DCHECK(IsLoop())`.",
+      "parentUuid": "e755e887_c7975cb1",
+      "range": {
+        "startLine": 442,
+        "startChar": 2,
+        "endLine": 442,
+        "endChar": 68
+      },
+      "revId": "2b845defa1811e954d90b801d627f30ae1afff1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81c11272_fdd7b5cb",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-10-20T08:02:09Z",
       "side": 1,
       "message": "I\u0027m curious. Would it be beneficial to also peel outer iterations?",
+      "range": {
+        "startLine": 23,
+        "startChar": 46,
+        "endLine": 23,
+        "endChar": 61
+      },
+      "revId": "2b845defa1811e954d90b801d627f30ae1afff1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84e93d2b_c9ff5479",
+        "filename": "src/compiler/turboshaft/loop-peeling-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-10-20T14:49:14Z",
+      "side": 1,
+      "message": "Could be yea. I think that the reason we don\u0027t do it in Turbofan is to avoid generating too much code. We could experiment with peeling outer loops at some point.",
+      "parentUuid": "81c11272_fdd7b5cb",
       "range": {
         "startLine": 23,
         "startChar": 46,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cce8b24c_f90c93e2",
+        "filename": "src/compiler/turboshaft/loop-peeling-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-10-20T14:49:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63445b74_a979aef9",
+      "range": {
+        "startLine": 60,
+        "startChar": 2,
+        "endLine": 60,
+        "endChar": 28
+      },
+      "revId": "2b845defa1811e954d90b801d627f30ae1afff1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee1aeaa3_730f90a5",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-10-20T08:02:09Z",
       "side": 1,
       "message": "I\u0027m not sure I understand why we clone here again? Wouldn\u0027t we emit this anyway or rather: Are we now not emitting the (unpeeled) body twice?",
+      "range": {
+        "startLine": 133,
+        "startChar": 7,
+        "endLine": 133,
+        "endChar": 20
+      },
+      "revId": "2b845defa1811e954d90b801d627f30ae1afff1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb31020e_b72f40af",
+        "filename": "src/compiler/turboshaft/loop-peeling-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-10-20T14:49:14Z",
+      "side": 1,
+      "message": "I\u0027ll start with your 2nd question: no, we\u0027ll only emit the unpeeled body once, because the \"regular\" loop (the one that OptimizationPhase would try to emit) is not reachable anymore because we\u0027ve skipped the forward edge to the loop and have instead manually cloned the loop.\n\nAs to why we do this: as you\u0027ve seen above, while emitting the unpeeled loop, we need a special handling for loop phis, which is done here in ReduceInputGraphPhi. By manually emitting the loop, I think that it\u0027s a bit clearer when this special handling of loop phis is happening. However, it\u0027s not strictly required, and I could here just emit a Goto to the regular loop header, and remove the `!IsEmittingUnpeeledBody()` from ReduceInputGraphLoopPhi (it is anyways redundant with `current_input_block() !\u003d current_loop_header_`; I just added it to try to make things clearer, but maybe it doesn\u0027t :D )",
+      "parentUuid": "ee1aeaa3_730f90a5",
       "range": {
         "startLine": 133,
         "startChar": 7,
