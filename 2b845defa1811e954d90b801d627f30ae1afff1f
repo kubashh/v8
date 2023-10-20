@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d02e20a_c748ab81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-10-20T08:02:09Z",
+      "side": 1,
+      "message": "LGTM % comments",
+      "revId": "2b845defa1811e954d90b801d627f30ae1afff1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e755e887_c7975cb1",
+        "filename": "src/compiler/turboshaft/graph.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-10-20T08:02:09Z",
+      "side": 1,
+      "message": "For which blocks do we set this? The loop header (the peeled one or the original one)? Every block in the loop?\n\nPlease put a comment (DCHECK on kind?) to clarify things.",
+      "range": {
+        "startLine": 442,
+        "startChar": 2,
+        "endLine": 442,
+        "endChar": 68
+      },
+      "revId": "2b845defa1811e954d90b801d627f30ae1afff1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81c11272_fdd7b5cb",
+        "filename": "src/compiler/turboshaft/loop-peeling-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-10-20T08:02:09Z",
+      "side": 1,
+      "message": "I\u0027m curious. Would it be beneficial to also peel outer iterations?",
+      "range": {
+        "startLine": 23,
+        "startChar": 46,
+        "endLine": 23,
+        "endChar": 61
+      },
+      "revId": "2b845defa1811e954d90b801d627f30ae1afff1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63445b74_a979aef9",
+        "filename": "src/compiler/turboshaft/loop-peeling-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-10-20T08:02:09Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be obsolete once we have `StackCheckOp` until the very end? Maybe leave a TODO",
+      "range": {
+        "startLine": 60,
+        "startChar": 2,
+        "endLine": 60,
+        "endChar": 28
+      },
+      "revId": "2b845defa1811e954d90b801d627f30ae1afff1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee1aeaa3_730f90a5",
+        "filename": "src/compiler/turboshaft/loop-peeling-reducer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-10-20T08:02:09Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand why we clone here again? Wouldn\u0027t we emit this anyway or rather: Are we now not emitting the (unpeeled) body twice?",
+      "range": {
+        "startLine": 133,
+        "startChar": 7,
+        "endLine": 133,
+        "endChar": 20
+      },
+      "revId": "2b845defa1811e954d90b801d627f30ae1afff1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
