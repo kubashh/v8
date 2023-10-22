@@ -129,7 +129,7 @@ class FunctionCallbackInfo {
 
   static constexpr int kHolderIndex = 0;
   static constexpr int kIsolateIndex = 1;
-  static constexpr int kUnusedIndex = 2;
+  static constexpr int kPrevIncumbentContextIndex = 2;
   static constexpr int kReturnValueIndex = 3;
   static constexpr int kDataIndex = 4;
   static constexpr int kNewTargetIndex = 5;

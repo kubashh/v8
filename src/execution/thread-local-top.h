@@ -29,7 +29,7 @@ class ThreadLocalTop {
   // TODO(all): This is not particularly beautiful. We should probably
   // refactor this to really consist of just Addresses and 32-bit
   // integer fields.
-  static constexpr uint32_t kSizeInBytes = 30 * kSystemPointerSize;
+  static constexpr uint32_t kSizeInBytes = 32 * kSystemPointerSize;
 
   // Does early low-level initialization that does not depend on the
   // isolate being present.
@@ -102,6 +102,14 @@ class ThreadLocalTop {
   Tagged<Context> context_;
   std::atomic<ThreadId> thread_id_;
   Tagged<Object> pending_exception_ = Smi::zero();
+
+  // Communication channel between various builtins that might call Api
+  // getter/setter callbacks or Api function callbacks and the CallApiCallback.
+  // Stores context that was current before the call switches to a target
+  // function's context.
+  Tagged<Context> caller_context_;
+
+  Tagged<Context> incumbent_context_;
 
   // Communication channel between Isolate::FindHandler and the CEntry.
   Tagged<Context> pending_handler_context_;
