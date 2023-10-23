@@ -16,6 +16,24 @@
       "message": "Hi Clemens,\n\nThis is causing a test failure on platforms without the wrapper support:\n\n```\ninspector-test test/inspector/protocol-test.js test/inspector/cpu-profiler/console-profile-wasm.js\n.\n.\n.\nRunning fib with increasing input until it shows up in the profile.\nError: fib did not show up in the profile within 30000ms (after 40 executions)\n```\nshould the test be skipped until the support is added?",
       "revId": "b769f67d3f5c73b10edbbef5f9b3c5aebf1055b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3fff414_b967fc9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-10-23T15:14:19Z",
+      "side": 1,
+      "message": "Sure, feel free to skip this on not-officially-supported platforms.",
+      "parentUuid": "a6125e97_e1a02e72",
+      "revId": "b769f67d3f5c73b10edbbef5f9b3c5aebf1055b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
