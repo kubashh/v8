@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad6c025a_01cafaf7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-10-23T07:33:15Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "29a888dbf6546e5bf849c9414fab8adaab129199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca4101ad_2cb2fbb9",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2023-10-23T07:33:15Z",
+      "side": 1,
+      "message": "The protocol dictionary doesn\u0027t support `unsigned long`/`size_t` so we stash it as a double.",
+      "range": {
+        "startLine": 468,
+        "startChar": 11,
+        "endLine": 468,
+        "endChar": 20
+      },
+      "revId": "29a888dbf6546e5bf849c9414fab8adaab129199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
