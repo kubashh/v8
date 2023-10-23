@@ -773,6 +773,24 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   inline void set_context(Tagged<Context> context);
   Tagged<Context>* context_address() { return &thread_local_top()->context_; }
 
+  // Access to top context (where the current function object was created).
+  Tagged<Context> caller_context() const {
+    return thread_local_top()->caller_context_;
+  }
+  inline void clear_caller_context();
+  Tagged<Context>* caller_context_address() {
+    return &thread_local_top()->caller_context_;
+  }
+
+  // Current incumbent context.
+  Tagged<Context> incumbent_context() const {
+    return thread_local_top()->incumbent_context_;
+  }
+  inline void set_incumbent_context(Tagged<Context> context);
+  Tagged<Context>* incumbent_context_address() {
+    return &thread_local_top()->incumbent_context_;
+  }
+
   // Access to current thread id.
   inline void set_thread_id(ThreadId id) {
     thread_local_top()->thread_id_.store(id, std::memory_order_relaxed);
@@ -1109,6 +1127,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   inline Handle<NativeContext> native_context();
   inline Tagged<NativeContext> raw_native_context();
 
+  inline Handle<NativeContext> GetIncumbentContextFast();
   Handle<NativeContext> GetIncumbentContext();
 
   void RegisterTryCatchHandler(v8::TryCatch* that);
@@ -2658,6 +2677,19 @@ class V8_EXPORT_PRIVATE SaveContext {
 class V8_EXPORT_PRIVATE SaveAndSwitchContext : public SaveContext {
  public:
   SaveAndSwitchContext(Isolate* isolate, Tagged<Context> new_context);
+};
+
+// Like SaveContext, but also switches the Context to a new one in the
+// constructor.
+class V8_EXPORT_PRIVATE SaveAndSwitchContextForCall {
+ public:
+  SaveAndSwitchContextForCall(Isolate* isolate,
+                              Tagged<Context> function_context);
+  ~SaveAndSwitchContextForCall();
+
+ private:
+  Isolate* const isolate_;
+  Handle<Context> incumbent_context_;
 };
 
 // A scope which sets the given isolate's context to null for its lifetime to
