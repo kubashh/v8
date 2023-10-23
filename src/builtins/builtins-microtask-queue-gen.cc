@@ -35,12 +35,14 @@ class MicrotaskQueueBuiltinsAssembler : public CodeStubAssembler {
                                            TNode<IntPtrT> index);
 
   void PrepareForContext(TNode<Context> microtask_context, Label* bailout);
-  void RunSingleMicrotask(TNode<Context> current_context,
-                          TNode<Microtask> microtask);
+  void RunSingleMicrotask(TNode<Microtask> microtask);
   void IncrementFinishedMicrotaskCount(TNode<RawPtrT> microtask_queue);
 
   TNode<Context> GetCurrentContext();
   void SetCurrentContext(TNode<Context> context);
+
+  TNode<Context> GetCurrentIncumbentContext();
+  void SetCurrentIncumbentContext(TNode<Context> context);
 
   TNode<IntPtrT> GetEnteredContextCount();
   void EnterContext(TNode<Context> native_context);
@@ -112,11 +114,13 @@ void MicrotaskQueueBuiltinsAssembler::PrepareForContext(
          bailout);
 
   EnterContext(native_context);
+  CSA_DCHECK(this, IsContext(native_context));
   SetCurrentContext(native_context);
+  SetCurrentIncumbentContext(native_context);
 }
 
 void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
-    TNode<Context> current_context, TNode<Microtask> microtask) {
+    TNode<Microtask> microtask) {
   CSA_DCHECK(this, TaggedIsNotSmi(microtask));
   CSA_DCHECK(this, Word32BinaryNot(IsExecutionTerminating()));
 
@@ -159,7 +163,6 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
       Call(microtask_context, callable, UndefinedConstant());
     }
     RewindEnteredContext(saved_entered_context_count);
-    SetCurrentContext(current_context);
     Goto(&done);
   }
 
@@ -182,7 +185,7 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     // of CallHandlerTasks (which is not a realistic use case anyways).
     {
       ScopedExceptionHandler handler(this, &if_exception, &var_exception);
-      CallRuntime(Runtime::kRunMicrotaskCallback, current_context,
+      CallRuntime(Runtime::kRunMicrotaskCallback, NoContextConstant(),
                   microtask_callback, microtask_data);
     }
     Goto(&done);
@@ -216,7 +219,6 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
                    CAST(promise_to_resolve));
 
     RewindEnteredContext(saved_entered_context_count);
-    SetCurrentContext(current_context);
     Goto(&done);
   }
 
@@ -269,7 +271,6 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     BIND(&preserved_data_reset_done);
 
     RewindEnteredContext(saved_entered_context_count);
-    SetCurrentContext(current_context);
     Goto(&done);
   }
 
@@ -322,7 +323,6 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     BIND(&preserved_data_reset_done);
 
     RewindEnteredContext(saved_entered_context_count);
-    SetCurrentContext(current_context);
     Goto(&done);
   }
 
@@ -335,7 +335,6 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     CallRuntime(Runtime::kReportMessageFromMicrotask, GetCurrentContext(),
                 var_exception.value());
     RewindEnteredContext(saved_entered_context_count);
-    SetCurrentContext(current_context);
     Goto(&done);
   }
 
@@ -363,6 +362,19 @@ TNode<Context> MicrotaskQueueBuiltinsAssembler::GetCurrentContext() {
 void MicrotaskQueueBuiltinsAssembler::SetCurrentContext(
     TNode<Context> context) {
   auto ref = ExternalReference::Create(kContextAddress, isolate());
+  StoreFullTaggedNoWriteBarrier(ExternalConstant(ref), context);
+}
+
+TNode<Context> MicrotaskQueueBuiltinsAssembler::GetCurrentIncumbentContext() {
+  auto ref = ExternalReference::Create(kIncumbentContextAddress, isolate());
+  // TODO(delphick): Add a checked cast. For now this is not possible as context
+  // can actually be Tagged<Smi>(0).
+  return TNode<Context>::UncheckedCast(LoadFullTagged(ExternalConstant(ref)));
+}
+
+void MicrotaskQueueBuiltinsAssembler::SetCurrentIncumbentContext(
+    TNode<Context> context) {
+  auto ref = ExternalReference::Create(kIncumbentContextAddress, isolate());
   StoreFullTaggedNoWriteBarrier(ExternalConstant(ref), context);
 }
 
@@ -558,8 +570,8 @@ TF_BUILTIN(EnqueueMicrotask, MicrotaskQueueBuiltinsAssembler) {
 }
 
 TF_BUILTIN(RunMicrotasks, MicrotaskQueueBuiltinsAssembler) {
-  // Load the current context from the isolate.
-  TNode<Context> current_context = GetCurrentContext();
+  TNode<Context> prev_context = GetCurrentContext();
+  TNode<Context> prev_incumbent_context = GetCurrentIncumbentContext();
 
   auto microtask_queue =
       UncheckedParameter<RawPtrT>(Descriptor::kMicrotaskQueue);
@@ -591,12 +603,23 @@ TF_BUILTIN(RunMicrotasks, MicrotaskQueueBuiltinsAssembler) {
   SetMicrotaskQueueSize(microtask_queue, new_size);
   SetMicrotaskQueueStart(microtask_queue, new_start);
 
-  RunSingleMicrotask(current_context, microtask);
+  if (DEBUG_BOOL) {
+    // Zap contexts to ensure that a microtask execution sets them appropriately
+    // if necessary.
+    SetCurrentContext(ReinterpretCast<Context>(
+        BitcastWordToTaggedSigned(IntPtrConstant(kZapValue))));
+    SetCurrentIncumbentContext(ReinterpretCast<Context>(NoContextConstant()));
+  }
+  RunSingleMicrotask(microtask);
   IncrementFinishedMicrotaskCount(microtask_queue);
   Goto(&loop);
 
   BIND(&done);
   {
+    // Restore contexts.
+    SetCurrentContext(prev_context);
+    SetCurrentIncumbentContext(prev_incumbent_context);
+
     // Reset the "current microtask" on the isolate.
     StoreRoot(RootIndex::kCurrentMicrotask, UndefinedConstant());
     Return(UndefinedConstant());

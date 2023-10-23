@@ -716,6 +716,7 @@ struct MoveCycleState {
 void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
                               Register function_address,
                               ExternalReference thunk_ref, Register thunk_arg,
+                              Operand* prev_incumbent_context_operand,
                               int stack_space, Operand* stack_space_operand,
                               Operand return_value_operand);
 

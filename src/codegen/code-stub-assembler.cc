@@ -10607,9 +10607,10 @@ TNode<Object> CodeStubAssembler::CallGetterIfAccessor(
         }
         TNode<NativeContext> creation_context =
             GetCreationContext(CAST(holder), if_bailout);
+        TNode<Context> caller_context = context;
         var_value = CallBuiltin(
             Builtin::kCallFunctionTemplate_Generic, creation_context, getter,
-            Int32Constant(i::JSParameterCount(0)), js_receiver);
+            Int32Constant(i::JSParameterCount(0)), caller_context, js_receiver);
         Goto(&done);
 
         if (mode == kCallJSGetterUseCachedName) {

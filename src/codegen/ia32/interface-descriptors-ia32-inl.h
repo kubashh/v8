@@ -192,6 +192,14 @@ constexpr auto CallFunctionTemplateDescriptor::registers() {
 }
 
 // static
+constexpr auto CallFunctionTemplateGenericDescriptor::registers() {
+  // edx: the function template info
+  // ecx: number of arguments (on the stack)
+  // edi: caller context
+  return RegisterArray(edx, ecx, edi);
+}
+
+// static
 constexpr auto CallWithSpreadDescriptor::registers() {
   // eax : number of arguments (on the stack)
   // edi : the target to call
@@ -301,6 +309,10 @@ constexpr Register CallApiCallbackOptimizedDescriptor::HolderRegister() {
 constexpr Register
 CallApiCallbackGenericDescriptor::ActualArgumentsCountRegister() {
   return ecx;
+}
+// static
+constexpr Register CallApiCallbackGenericDescriptor::CallerContextRegister() {
+  return eax;
 }
 // static
 constexpr Register CallApiCallbackGenericDescriptor::CallHandlerInfoRegister() {

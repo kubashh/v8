@@ -1493,11 +1493,12 @@ MaybeHandle<Object> Object::GetPropertyWithAccessor(LookupIterator* it) {
   // Regular accessor.
   Handle<Object> getter(accessor_pair->getter(), isolate);
   if (IsFunctionTemplateInfo(*getter)) {
-    SaveAndSwitchContext save(isolate,
-                              *holder->GetCreationContext().ToHandleChecked());
+    Handle<NativeContext> getter_context =
+        holder->GetCreationContext().ToHandleChecked();
     return Builtins::InvokeApiFunction(
-        isolate, false, Handle<FunctionTemplateInfo>::cast(getter), receiver, 0,
-        nullptr, isolate->factory()->undefined_value());
+        isolate, false, getter_context,
+        Handle<FunctionTemplateInfo>::cast(getter), receiver, 0, nullptr,
+        isolate->factory()->undefined_value());
   } else if (IsCallable(*getter)) {
     // TODO(rossberg): nicer would be to cast to some JSCallable here...
     return Object::GetPropertyWithDefinedGetter(
@@ -1565,12 +1566,12 @@ Maybe<bool> Object::SetPropertyWithAccessor(
   // Regular accessor.
   Handle<Object> setter(AccessorPair::cast(*structure)->setter(), isolate);
   if (IsFunctionTemplateInfo(*setter)) {
-    SaveAndSwitchContext save(isolate,
-                              *holder->GetCreationContext().ToHandleChecked());
+    Handle<NativeContext> setter_context =
+        holder->GetCreationContext().ToHandleChecked();
     Handle<Object> argv[] = {value};
     RETURN_ON_EXCEPTION_VALUE(
         isolate,
-        Builtins::InvokeApiFunction(isolate, false,
+        Builtins::InvokeApiFunction(isolate, false, setter_context,
                                     Handle<FunctionTemplateInfo>::cast(setter),
                                     receiver, arraysize(argv), argv,
                                     isolate->factory()->undefined_value()),

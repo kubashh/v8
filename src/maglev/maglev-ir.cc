@@ -5026,12 +5026,13 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   Register scratch2 = temps.Acquire();
 
   using FCA = FunctionCallbackArguments;
+  using ER = ExternalReference;
 
   static_assert(FCA::kArgsLength == 6);
   static_assert(FCA::kNewTargetIndex == 5);
   static_assert(FCA::kDataIndex == 4);
   static_assert(FCA::kReturnValueIndex == 3);
-  static_assert(FCA::kUnusedIndex == 2);
+  static_assert(FCA::kPrevIncumbentContextIndex == 2);
   static_assert(FCA::kIsolateIndex == 1);
   static_assert(FCA::kHolderIndex == 0);
 
@@ -5040,7 +5041,7 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   // Target state:
   //   sp[0 * kSystemPointerSize]: kHolder   <= implicit_args_
   //   sp[1 * kSystemPointerSize]: kIsolate
-  //   sp[2 * kSystemPointerSize]: undefined (padding, unused)
+  //   sp[2 * kSystemPointerSize]: kPrevIncumbentContext
   //   sp[3 * kSystemPointerSize]: undefined (kReturnValue)
   //   sp[4 * kSystemPointerSize]: kData
   //   sp[5 * kSystemPointerSize]: undefined (kNewTarget)
@@ -5048,16 +5049,26 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   //   sp[6 * kSystemPointerSize]:          <= FCA:::values_
 
   ASM_CODE_COMMENT_STRING(masm, "inlined CallApiCallbackOptimized builtin");
+
   __ LoadRoot(scratch, RootIndex::kUndefinedValue);
-  // kNewTarget, kData, kReturnValue, kUnused
+
+  // Save previous and set new incumbent context.
+  // Currently we don't inline cross-context Api calls into optimized code,
+  // so just use current context as a caller context.
+  MemOperand incumbent_context_mem_op = __ ExternalReferenceAsOperand(
+      ER::incumbent_context(masm->isolate()), no_reg);
+  __ Move(scratch2, incumbent_context_mem_op);
+  __ Move(incumbent_context_mem_op, kContextRegister);
+
+  // kNewTarget, kData, kReturnValue, kPrevIncumbentContext
   if (data_.IsSmi()) {
-    __ Push(scratch, Smi::FromInt(data_.AsSmi()), scratch, scratch);
+    __ Push(scratch, Smi::FromInt(data_.AsSmi()), scratch, scratch2);
   } else {
     __ Push(scratch, Handle<HeapObject>::cast(data_.object()), scratch,
-            scratch);
+            scratch2);
   }
 
-  __ Move(scratch, ExternalReference::isolate_address(masm->isolate()));
+  __ Move(scratch, ER::isolate_address(masm->isolate()));
   // kIsolate, kHolder
   if (api_holder_.has_value()) {
     __ Push(scratch, api_holder_.value().object());
@@ -5086,7 +5097,7 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   // from the stack after the callback in non-GCed space of the exit frame.
   static constexpr int kApiStackSpace = 4;
   static_assert((kApiStackSpace - 1) * kSystemPointerSize == FCA::kSize);
-  const int exit_frame_params_size = 0;
+  const int exit_frame_params_count = 0;
 
   Label done;
   // Make it look like as if the code starting from EnterExitFrame was called
@@ -5126,8 +5137,10 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
 
   DCHECK(!AreAliased(api_function_address, function_callback_info_arg));
 
+  MemOperand prev_incumbent_context_operand = ExitFrameCallerStackSlotOperand(
+      FCA::kPrevIncumbentContextIndex + exit_frame_params_count);
   MemOperand return_value_operand = ExitFrameCallerStackSlotOperand(
-      FCA::kReturnValueIndex + exit_frame_params_size);
+      FCA::kReturnValueIndex + exit_frame_params_count);
   const int kStackUnwindSpace =
       FCA::kArgsLengthWithReceiver + num_args() + kMaybePCOnTheStack;
 
@@ -5136,7 +5149,8 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   Register no_thunk_arg = no_reg;
 
   CallApiFunctionAndReturn(masm, with_profiling, api_function_address,
-                           no_thunk_ref, no_thunk_arg, kStackUnwindSpace,
+                           no_thunk_ref, no_thunk_arg,
+                           &prev_incumbent_context_operand, kStackUnwindSpace,
                            nullptr, return_value_operand, &done);
 
   __ bind(&done);
