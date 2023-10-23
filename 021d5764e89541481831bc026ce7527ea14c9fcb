@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27627678_663dca54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-10-23T17:40:44Z",
+      "side": 1,
+      "message": "Thinking about this a bit more, I don\u0027t see a reason why the test would fail if the generic wrapper is not available. This looks like code logging is missing on some path. But given that it works on the officially supported platforms and these profiling tests are difficult to debug, you can also choose to just skip the test instead of debugging why it fails.",
+      "revId": "021d5764e89541481831bc026ce7527ea14c9fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
