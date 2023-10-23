@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1c186b8_111be67a",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-23T18:17:18Z",
+      "side": 1,
+      "message": "First I wanted to implement the handling in the following way:\n```\n    if (args[0].type.is_nullable()) {\n        IF (__ IsNull(args[0].op, wasm::kWasmStringRef)) {\n            result \u003d\n                __ Float64Constant(std::numeric_limits\u003cdouble\u003e::quiet_NaN());\n        }\n        ELSE {\n            BuildModifyThreadInWasmFlag(false);\n            result \u003d CallBuiltinThroughJumptable(\n                decoder, Builtin::kWasmStringToDouble, {args[0].op},\n                Operator::kEliminatable);\n            BuildModifyThreadInWasmFlag(true);\n        }\n        END_IF\n        } else {\n            BuildModifyThreadInWasmFlag(false);\n            result \u003d CallBuiltinThroughJumptable(\n                decoder, Builtin::kWasmStringToDouble, {args[0].op},\n                Operator::kEliminatable);\n            BuildModifyThreadInWasmFlag(true);\n        }\n        decoder-\u003edetected_-\u003eAdd(kFeature_imported_strings);\n        break;\n```\n\nBut I got the error for the corresponding test case:\n```\nInput #38 does not dominate its use.\n67: Return(#66, #38)\n\n# Fatal error in ../../src/compiler/turboshaft/assembler.h, line 3397\n# Debug check failed: ValidInputs(result).\n```\n\nQuestions:\n1. I assumed it\u0027s because I cannot assign the values to `result` in this IF-ELSE block. Is this because I should be assigning to only locally created variables in the IF-ELSE scope and NOT assign to ones with scope outside of the IF-ELSE block? Or why can\u0027t I do this?\n\n2. I was wondering how to debug this error. Is there a flag to give me an output to understand this #38, #66, .. notation?\n\n3. I wanted to use turbolizer. I added the flag `--trace-turbo`, and I got these json files. Shouldn\u0027t I see ParseFloat there too?\n```\nturbo-call_doubletostring-0.json\nturbo-call_indexof-0.json\nturbo-call_inttostring-0.json\nturbo-call_stringtodouble-0.json\nturbo-call_tolower-0.json\nturbo.cfg\nturbo-c-wasm-entry--i-0.json\nturbo-testing-0.json\nturbo-wasm-function#0-0.json\nturbo-wasm-to-js-30-d-n-0.json\nturbo-wasm-to-js-30-ii-n-0.json\nturbo-wasm-to-js-30-n-n-0.json\nturbo-wasm-to-js-30-nni-i-0.json\nturbo-wasm-to-js-30-nn-n-0.json\nturbo-wasm-to-js-5-d-n-0.json\nturbo-wasm-to-js-5-ii-n-0.json\nturbo-wasm-to-js-5-n-d-0.json\nturbo-wasm-to-js-5-n-n-0.json\nturbo-wasm-to-js-5-nni-i-0.json\nturbo-wasm-to-js-5-nn-n-0.json\nturbo-wasm-to-js-6-n-n-0.json\n```",
+      "range": {
+        "startLine": 1453,
+        "startChar": 29,
+        "endLine": 1453,
+        "endChar": 30
+      },
+      "revId": "3cb65ac238a2bda198af84a33ae3f0d43a331859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e33e384_349931f4",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-23T18:17:18Z",
+      "side": 1,
+      "message": "Corresponding Turbofan version is [here](https://source.chromium.org/chromium/chromium/src/+/f838a10847b49e760d312e0efd6320f300018d0f:v8/src/compiler/wasm-compiler.cc;l\u003d6768;bpv\u003d1;bpt\u003d0)",
+      "range": {
+        "startLine": 1453,
+        "startChar": 16,
+        "endLine": 1453,
+        "endChar": 27
+      },
+      "revId": "3cb65ac238a2bda198af84a33ae3f0d43a331859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
