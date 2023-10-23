@@ -66,6 +66,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eada8c63_71aa3d52",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-10-23T08:45:21Z",
+      "side": 1,
+      "message": "This shouldn\u0027t happen. Can we have a DCHECK instead?",
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e3fe0f3e_d2b37302",
         "filename": "src/wasm/jump-table-assembler.cc",
         "patchSetId": 16
@@ -100,6 +117,23 @@
       "writtenOn": "2023-10-23T05:17:25Z",
       "side": 1,
       "message": "Can you add a comment why these 4 bytes are needed?",
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d765764c_a99826f8",
+        "filename": "src/wasm/jump-table-assembler.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-10-23T08:45:21Z",
+      "side": 1,
+      "message": "Just a note: This nearly doubles the size of the jump table slot. We should re-evaluate if this is still more efficient than having a table of targets and doing an indirect jump/call to the address loaded from that table instead. That would also be a lot more platform-independent.",
       "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
