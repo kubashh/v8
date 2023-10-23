@@ -46,6 +46,30 @@
       },
       "revId": "751e87105ad9acbd9d69a0b1a100e488aaf1a983",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bb6ff46_cd34a219",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-10-23T15:42:11Z",
+      "side": 1,
+      "message": "correct! (and sorry if I caused confusions about this)",
+      "parentUuid": "b671007e_af28dfc3",
+      "range": {
+        "startLine": 370,
+        "startChar": 0,
+        "endLine": 370,
+        "endChar": 56
+      },
+      "revId": "751e87105ad9acbd9d69a0b1a100e488aaf1a983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
