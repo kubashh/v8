@@ -1450,7 +1450,54 @@ class TurboshaftGraphBuildingInterface {
         decoder->detected_->Add(kFeature_imported_strings);
         break;
       // TODO(14108): Implement the other string-related imports.
-      case WKI::kParseFloat:
+      case WKI::kParseFloat: {
+        // if (args[0].type.is_nullable()) {
+        //   IF (__ IsNull(args[0].op, wasm::kWasmStringRef)) {
+        //     result =
+        //         __ Float64Constant(std::numeric_limits<double>::quiet_NaN());
+        //   }
+        //   ELSE {
+        //     BuildModifyThreadInWasmFlag(false);
+        //     result = CallBuiltinThroughJumptable(
+        //         decoder, Builtin::kWasmStringToDouble, {args[0].op},
+        //         Operator::kEliminatable);
+        //     BuildModifyThreadInWasmFlag(true);
+        //   }
+        //   END_IF
+        // } else {
+        //   BuildModifyThreadInWasmFlag(false);
+        //   result = CallBuiltinThroughJumptable(
+        //       decoder, Builtin::kWasmStringToDouble, {args[0].op},
+        //       Operator::kEliminatable);
+        //   BuildModifyThreadInWasmFlag(true);
+        // }
+        // decoder->detected_->Add(kFeature_imported_strings);
+        // break;
+        if (args[0].type.is_nullable()) {
+          Label<Float64> done(&asm_);
+          Label<> if_null(&asm_);
+          GOTO_IF(__ IsNull(args[0].op, wasm::kWasmStringRef), if_null);
+          BuildModifyThreadInWasmFlag(false);
+          V<Float64> f64 = CallBuiltinThroughJumptable(
+              decoder, Builtin::kWasmStringToDouble, {args[0].op},
+              Operator::kEliminatable);
+          BuildModifyThreadInWasmFlag(true);
+          GOTO(done, f64);
+          BIND(if_null);
+          GOTO(done,
+               __ Float64Constant(std::numeric_limits<double>::quiet_NaN()));
+          BIND(done, result_f64);
+          result = result_f64;
+        } else {
+          BuildModifyThreadInWasmFlag(false);
+          result = CallBuiltinThroughJumptable(
+              decoder, Builtin::kWasmStringToDouble, {args[0].op},
+              Operator::kEliminatable);
+          BuildModifyThreadInWasmFlag(true);
+        }
+        decoder->detected_->Add(kFeature_imported_strings);
+        break;
+      }
       case WKI::kStringIndexOf:
       case WKI::kStringToLocaleLowerCaseStringref:
       case WKI::kStringToLowerCaseStringref:
