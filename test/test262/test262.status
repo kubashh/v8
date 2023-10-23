@@ -383,8 +383,6 @@
   'built-ins/Temporal/ZonedDateTime/prototype/since/order-of-operations': [FAIL],
   'built-ins/Temporal/ZonedDateTime/prototype/until/order-of-operations': [FAIL],
 
-  'built-ins/Temporal/Duration/prototype/round/nanoseconds-to-days-precision-exact-mathematical-values-1': [FAIL],
-  'built-ins/Temporal/Duration/prototype/round/nanoseconds-to-days-precision-exact-mathematical-values-2': [FAIL],
 
   'built-ins/Temporal/PlainDate/prototype/dayOfWeek/validate-calendar-value': [FAIL],
   'built-ins/Temporal/PlainDate/prototype/dayOfYear/validate-calendar-value': [FAIL],
@@ -946,7 +944,6 @@
   'built-ins/Temporal/Duration/prototype/subtract/relativeto-propertybag-timezone-string': [FAIL],
   'built-ins/Temporal/Duration/prototype/total/relativeto-propertybag-calendar-string': [FAIL],
   'built-ins/Temporal/Duration/prototype/total/relativeto-propertybag-timezone-string': [FAIL],
-  'built-ins/Temporal/Duration/prototype/total/zero-day-length-2': [FAIL],
   'built-ins/Temporal/Instant/prototype/epochMicroseconds/basic': [FAIL],
   'built-ins/Temporal/Instant/prototype/epochMilliseconds/basic': [FAIL],
   'built-ins/Temporal/Instant/prototype/epochSeconds/basic': [FAIL],
