@@ -7,6 +7,7 @@
 
 #include "src/base/optional.h"
 #include "src/handles/handles.h"
+#include "src/heap/memory-chunk.h"
 #include "src/objects/embedder-data-slot.h"
 // TODO(jkummerow): Consider forward-declaring instead.
 #include "src/objects/internal-index.h"
@@ -326,7 +327,8 @@ class JSReceiver : public TorqueGeneratedJSReceiver<JSReceiver, HeapObject> {
 // caching.
 class JSObject : public TorqueGeneratedJSObject<JSObject, JSReceiver> {
  public:
-  static bool IsUnmodifiedApiObject(FullObjectSlot o);
+  enum class MarkingMode { kAtomic, kConcurrent };
+  static bool IsUnmodifiedApiObjectForMarking(FullObjectSlot o, MarkingMode);
 
   V8_EXPORT_PRIVATE static V8_WARN_UNUSED_RESULT MaybeHandle<JSObject> New(
       Handle<JSFunction> constructor, Handle<JSReceiver> new_target,
