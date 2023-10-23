@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf60cb9e_9bfdbd79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-10-23T12:03:42Z",
+      "side": 1,
+      "message": "Jakob, PTAL. I think this is good enough for now, and unblocks shipping multi-memory.",
+      "revId": "ae4bbbe654d137965192b2f9d0020a006c56c4bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
