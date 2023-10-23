@@ -70,6 +70,30 @@
       },
       "revId": "751e87105ad9acbd9d69a0b1a100e488aaf1a983",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13d73862_dad4e494",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2023-10-23T15:45:24Z",
+      "side": 1,
+      "message": "Great! I just submitted the change. Let me know if there\u0027s anything else you need for that. 🙂",
+      "parentUuid": "2bb6ff46_cd34a219",
+      "range": {
+        "startLine": 370,
+        "startChar": 0,
+        "endLine": 370,
+        "endChar": 56
+      },
+      "revId": "751e87105ad9acbd9d69a0b1a100e488aaf1a983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
