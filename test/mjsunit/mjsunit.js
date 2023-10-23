@@ -236,6 +236,22 @@ var isMaglevved;
 // Returns true if given function is compiled by TurboFan.
 var isTurboFanned;
 
+// Returns true if the current frame in interpreted according to the status
+// passed as a parameter.
+var currentFrameIsInterpreted;
+
+// Returns true if the current frame in baseline according to the status
+// passed as a parameter.
+var currentFrameIsBaseline;
+
+// Returns true if the current frame in compiled by Maglev according to the
+// status passed as a parameter.
+var currentFrameIsMaglevved;
+
+// Returns true if the current frame in compiled by Turbofan according to the
+// status passed as a parameter.
+var currentFrameIsTurboFanned;
+
 // Monkey-patchable all-purpose failure handler.
 var failWithMessage;
 
@@ -892,6 +908,23 @@ var prettyPrinted;
     return (opt_status & V8OptimizationStatus.kOptimized) !== 0 &&
            (opt_status & V8OptimizationStatus.kTurboFanned) !== 0;
   }
+
+  currentFrameIsInterpreted = function currentFrameIsInterpreted(opt_status) {
+    assertNotEquals(opt_status, undefined);
+    return (opt_status & V8OptimizationStatus.kTopmostFrameIsInterpreted) !== 0;
+  }
+
+  currentFrameIsBaseline = function currentFrameIsBaseline(opt_status) {
+    assertNotEquals(opt_status, undefined);
+    return (opt_status & V8OptimizationStatus.kTopmostFrameIsBaseline) !== 0;
+  }
+
+  currentFrameIsMaglevved = function currentFrameIsMaglevved(opt_status) {
+    assertNotEquals(opt_status, undefined);
+    return (opt_status & V8OptimizationStatus.kTopmostFrameIsMaglev) !== 0;
+  }
+
+  currentFrameIsTurboFanned = "lol";
 
   // Custom V8-specific stack trace formatter that is temporarily installed on
   // the Error object.
