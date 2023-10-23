@@ -39,6 +39,30 @@
       },
       "revId": "29a888dbf6546e5bf849c9414fab8adaab129199",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71f42207_1c14ee97",
+        "filename": "src/inspector/v8-debugger-agent-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2023-10-23T07:41:50Z",
+      "side": 1,
+      "message": "Makes sense.",
+      "parentUuid": "ca4101ad_2cb2fbb9",
+      "range": {
+        "startLine": 468,
+        "startChar": 11,
+        "endLine": 468,
+        "endChar": 20
+      },
+      "revId": "29a888dbf6546e5bf849c9414fab8adaab129199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
