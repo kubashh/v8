@@ -16,6 +16,23 @@
       "message": "Jakob, PTAL. I think this is good enough for now, and unblocks shipping multi-memory.",
       "revId": "ae4bbbe654d137965192b2f9d0020a006c56c4bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57161cd7_e58ee04b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-23T12:39:13Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "ae4bbbe654d137965192b2f9d0020a006c56c4bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
