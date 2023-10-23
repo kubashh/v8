@@ -22,6 +22,30 @@
       },
       "revId": "751e87105ad9acbd9d69a0b1a100e488aaf1a983",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b671007e_af28dfc3",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2023-10-23T15:27:07Z",
+      "side": 1,
+      "message": "So still have the build flag as it is but just enabled by default? Is that enough to enable my other two changes landing?",
+      "parentUuid": "09033cdb_ff42f7de",
+      "range": {
+        "startLine": 370,
+        "startChar": 0,
+        "endLine": 370,
+        "endChar": 56
+      },
+      "revId": "751e87105ad9acbd9d69a0b1a100e488aaf1a983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
