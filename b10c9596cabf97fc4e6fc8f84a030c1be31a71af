@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e159a2f_3d7449ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-10-23T05:17:25Z",
+      "side": 1,
+      "message": "LGTM from my side, but Clemens is the real expert on the jump table, there may be details I don\u0027t know about.",
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82740ab4_1f2264cb",
@@ -20,6 +37,69 @@
         "endLine": 1125,
         "endChar": 50
       },
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c49abb7_b1de556f",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-10-23T05:17:25Z",
+      "side": 1,
+      "message": "why is this not within the parentheses?",
+      "range": {
+        "startLine": 79,
+        "startChar": 47,
+        "endLine": 79,
+        "endChar": 64
+      },
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3fe0f3e_d2b37302",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-10-23T05:17:25Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 90,
+        "startChar": 49,
+        "endLine": 90,
+        "endChar": 66
+      },
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb0700c7_d3111d34",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-10-23T05:17:25Z",
+      "side": 1,
+      "message": "Can you add a comment why these 4 bytes are needed?",
       "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
