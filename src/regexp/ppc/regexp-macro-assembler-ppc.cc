@@ -1210,7 +1210,8 @@ void RegExpMacroAssemblerPPC::ClearRegisters(int reg_from, int reg_to) {
 
 // Private methods:
 
-void RegExpMacroAssemblerPPC::CallCheckStackGuardState(Register scratch) {
+void RegExpMacroAssemblerPPC::CallCheckStackGuardState(Register scratch,
+                                                       Operand extra_space) {
   DCHECK(!isolate()->IsGeneratingEmbeddedBuiltins());
   DCHECK(!masm_->options().isolate_independent_code);
 
@@ -1241,10 +1242,12 @@ void RegExpMacroAssemblerPPC::CallCheckStackGuardState(Register scratch) {
   __ li(r0, Operand::Zero());
   __ StoreU64WithUpdate(r0, MemOperand(sp, -stack_space * kSystemPointerSize));
 
+  // Extra space for variables to consider in stack check.
+  __ mov(arg_reg_4, extra_space);
   // RegExp code frame pointer.
-  __ mr(r5, frame_pointer());
+  __ mr(arg_reg_3, frame_pointer());
   // InstructionStream of self.
-  __ mov(r4, Operand(masm_->CodeObject()));
+  __ mov(arg_reg_2, Operand(masm_->CodeObject()));
   // r3 will point to the return address, placed by DirectCEntry.
   __ addi(r3, sp, Operand(kStackFrameExtraParamSlot * kSystemPointerSize));
 
@@ -1268,7 +1271,6 @@ void RegExpMacroAssemblerPPC::CallCheckStackGuardState(Register scratch) {
   __ mov(code_pointer(), Operand(masm_->CodeObject()));
 }
 
-
 // Helper function for reading a value out of a stack frame.
 template <typename T>
 static T& frame_entry(Address re_frame, int frame_offset) {
@@ -1283,7 +1285,8 @@ static T* frame_entry_address(Address re_frame, int frame_offset) {
 
 int RegExpMacroAssemblerPPC::CheckStackGuardState(Address* return_address,
                                                   Address raw_code,
-                                                  Address re_frame) {
+                                                  Address re_frame,
+                                                  uintptr_t extra_space) {
   Tagged<InstructionStream> re_code =
       InstructionStream::cast(Tagged<Object>(raw_code));
   return NativeRegExpMacroAssembler::CheckStackGuardState(
@@ -1294,9 +1297,9 @@ int RegExpMacroAssemblerPPC::CheckStackGuardState(Address* return_address,
       return_address, re_code,
       frame_entry_address<Address>(re_frame, kInputStringOffset),
       frame_entry_address<const uint8_t*>(re_frame, kInputStartOffset),
-      frame_entry_address<const uint8_t*>(re_frame, kInputEndOffset));
+      frame_entry_address<const uint8_t*>(re_frame, kInputEndOffset),
+      extra_space);
 }
-
 
 MemOperand RegExpMacroAssemblerPPC::register_location(int register_index) {
   DCHECK(register_index < (1 << 30));
