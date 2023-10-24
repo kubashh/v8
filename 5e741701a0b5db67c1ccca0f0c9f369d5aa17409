@@ -151,6 +151,30 @@
       },
       "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3db44097_6cc1e2b4",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-24T14:18:18Z",
+      "side": 1,
+      "message": "It could, but that\u0027s its own complexity tradeoff, no?\n\nAdditionally, can the builtin be written only using arch-independent code given the stack poking it needs to do to forward args? If the complexity we\u0027re saving is a bytecode and the plumbing around that, my feeling is that it\u0027s a wash. If we can avoid arch-dependent builtins that would definitely be simpler.",
+      "parentUuid": "3daa3858_d303d712",
+      "range": {
+        "startLine": 73,
+        "startChar": 21,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
