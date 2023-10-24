@@ -6,6 +6,8 @@
 Tools for tracking process statistics like memory consumption.
 """
 
+import os
+
 from contextlib import contextmanager
 from threading import Thread, Event
 
@@ -56,7 +58,16 @@ class PSUtilProcessLogger(EmptyProcessLogger):
   @contextmanager
   def log_stats(self, process):
     try:
-      process_handle = psutil.Process(process.pid)
+      pid = process.pid
+      try:
+        with open(f'/proc/{pid}/task/{pid}/children') as f:
+          children = list(filter(bool, f.read().strip().split(' ')))
+          if len(children) == 1:
+            pid = int(children[0])
+            print('*************************** Found appropriate child process')
+      except FileNotFoundError:
+        pass
+      process_handle = psutil.Process(pid)
     except psutil.NoSuchProcess:
       # Fetching process stats has an expected race condition with the
       # running process, which might just have ended already.
