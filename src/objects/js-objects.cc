@@ -3082,6 +3082,7 @@ void JSObject::PrintInstanceMigration(FILE* file, Tagged<Map> original_map,
   PrintF(file, "\n");
 }
 
+// static
 bool JSObject::IsUnmodifiedApiObject(FullObjectSlot o) {
   Tagged<Object> object = *o;
   if (IsSmi(object)) return false;
@@ -3096,6 +3097,22 @@ bool JSObject::IsUnmodifiedApiObject(FullObjectSlot o) {
   // Check that the object is not a key in a WeakMap (over-approximation).
   if (!IsUndefined(js_object->GetIdentityHash())) return false;
 
+  return constructor->initial_map() == heap_object->map();
+}
+
+// static
+bool JSObject::IsUnmodifiedApiObjectThreadSafe(FullObjectSlot o) {
+  Tagged<Object> object = o.Relaxed_Load();
+  if (IsSmi(object)) return false;
+  Tagged<HeapObject> heap_object = HeapObject::cast(object);
+  if (!IsJSObject(object)) return false;
+  Tagged<JSObject> js_object = JSObject::cast(object);
+  if (!js_object->IsDroppableApiObject()) return false;
+  Tagged<Object> maybe_constructor = js_object->map()->GetConstructor();
+  if (!IsJSFunction(maybe_constructor)) return false;
+  Tagged<JSFunction> constructor = JSFunction::cast(maybe_constructor);
+  if (js_object->elements(kRelaxedLoad)->length(kAcquireLoad) != 0)
+    return false;
   return constructor->initial_map() == heap_object->map();
 }
 

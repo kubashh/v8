@@ -359,8 +359,7 @@ void ScavengerCollector::CollectGarbage() {
       TRACE_GC(
           heap_->tracer(),
           GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_IDENTIFY);
-      isolate_->traced_handles()->ComputeWeaknessForYoungObjects(
-          &JSObject::IsUnmodifiedApiObject);
+      isolate_->traced_handles()->ComputeWeaknessForYoungObjects();
     }
     {
       // Copy roots.
@@ -413,7 +412,7 @@ void ScavengerCollector::CollectGarbage() {
       isolate_->global_handles()->ProcessWeakYoungObjects(
           &visitor, &IsUnscavengedHeapObjectSlot);
       isolate_->traced_handles()->ProcessYoungObjects(
-          &visitor, &IsUnscavengedHeapObjectSlot);
+          &visitor, &IsUnscavengedHeapObjectSlot, GarbageCollector::SCAVENGER);
     }
 
     {
