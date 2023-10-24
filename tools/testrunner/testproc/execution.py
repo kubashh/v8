@@ -3,6 +3,8 @@
 # found in the LICENSE file.
 
 import collections
+import psutil
+import random
 
 from . import base
 
@@ -74,4 +76,15 @@ class ExecutionProc(base.TestProc):
 
     test, result.cmd = self._tests[test_id]
     del self._tests[test_id]
+
+    # TODO(https://crbug.com/v8/14373): Temporary investigation logging.
+    if random.random() < 0:
+      print('Random list of processes:')
+      for pid, cmdline in self.ctx.list_processes():
+        print(cmdline)
+        try:
+          print(psutil.Process(pid).memory_info().rss)
+        except psutil.NoSuchProcess:
+          pass
+
     self._send_result(test, result)
