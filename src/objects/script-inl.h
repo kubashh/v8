@@ -15,6 +15,7 @@
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
+#include "src/roots/roots.h"
 
 namespace v8 {
 namespace internal {
@@ -158,6 +159,10 @@ ScriptOriginOptions Script::origin_options() {
 void Script::set_origin_options(ScriptOriginOptions origin_options) {
   DCHECK(!(origin_options.Flags() & ~((1 << OriginOptionsBits::kSize) - 1)));
   set_flags(OriginOptionsBits::update(flags(), origin_options.Flags()));
+}
+
+bool Script::has_host_defined_options() {
+  return host_defined_options() != ReadOnlyRoots(GetHeap()).empty_fixed_array();
 }
 
 bool Script::HasValidSource() {

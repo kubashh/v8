@@ -955,6 +955,7 @@ bool Shell::ExecuteString(Isolate* isolate, Local<String> source,
           i::Script::cast(Utils::OpenHandle(*script)->shared()->script()),
           i_isolate);
       // TODO(cbruni, chromium:1244145): remove once context-allocated.
+      DCHECK(!i_script->has_host_defined_options());
       i_script->set_host_defined_options(i::FixedArray::cast(
           *Utils::OpenHandle(*(origin.GetHostDefinedOptions()))));
     }
