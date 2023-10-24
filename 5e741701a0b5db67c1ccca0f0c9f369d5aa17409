@@ -127,6 +127,30 @@
       },
       "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3daa3858_d303d712",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-24T14:14:17Z",
+      "side": 1,
+      "message": "Could the builtin not do the same optimisation?",
+      "parentUuid": "6126015b_0ad5a14b",
+      "range": {
+        "startLine": 73,
+        "startChar": 21,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
