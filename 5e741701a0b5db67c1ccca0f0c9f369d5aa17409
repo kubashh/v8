@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "163edac6_f05c1d35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-24T01:56:24Z",
+      "side": 1,
+      "message": "Leszek, this CL isn\u0027t complete yet but would appreciate feedback on the approach before I fill out the rest of the arches and compiler tiers. This is the simplest approach I came up with after a few iterations.",
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
