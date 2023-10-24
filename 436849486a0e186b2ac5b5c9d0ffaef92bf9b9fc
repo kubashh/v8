@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f051dabb_8712ace2",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1442,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-24T11:54:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d43dd29c_1e88c463",
+      "range": {
+        "startLine": 1442,
+        "startChar": 32,
+        "endLine": 1442,
+        "endChar": 57
+      },
+      "revId": "436849486a0e186b2ac5b5c9d0ffaef92bf9b9fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f69c79b9_2b2da994",
@@ -118,6 +142,30 @@
       "writtenOn": "2023-10-24T09:50:21Z",
       "side": 1,
       "message": "`kFeature_stringref`",
+      "range": {
+        "startLine": 1475,
+        "startChar": 32,
+        "endLine": 1475,
+        "endChar": 57
+      },
+      "revId": "436849486a0e186b2ac5b5c9d0ffaef92bf9b9fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "516c938a_281d5f69",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1475,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-10-24T11:54:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ce1a03b_7013e920",
       "range": {
         "startLine": 1475,
         "startChar": 32,
