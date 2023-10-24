@@ -199,6 +199,30 @@
       },
       "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae1de643_ddb5022c",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-24T14:29:15Z",
+      "side": 1,
+      "message": "My hope would be that a builtin could then use the existing ForwardVarargs mechanism and be otherwise arch independent, since there\u0027s no longer the issue of the separate interpreter stack frame being in the way.",
+      "parentUuid": "957b3842_2564a446",
+      "range": {
+        "startLine": 73,
+        "startChar": 21,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
