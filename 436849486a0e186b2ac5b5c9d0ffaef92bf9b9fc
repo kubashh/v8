@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6b7abea_9a9ffc1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-24T09:50:21Z",
+      "side": 1,
+      "message": "LGTM with minor comments.",
+      "revId": "436849486a0e186b2ac5b5c9d0ffaef92bf9b9fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d43dd29c_1e88c463",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1442,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-24T09:50:21Z",
+      "side": 1,
+      "message": "Sorry I didn\u0027t notice it earlier, this is slightly incorrect. I think it should be\n```\n  args[0].type.is_reference_to(wasm::HeapType::kString)\n      ? kFeature_stringref\n      : kFeature_imported_strings\n```\nSame in line 1450.",
+      "range": {
+        "startLine": 1442,
+        "startChar": 32,
+        "endLine": 1442,
+        "endChar": 57
+      },
+      "revId": "436849486a0e186b2ac5b5c9d0ffaef92bf9b9fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f69c79b9_2b2da994",
@@ -36,6 +76,53 @@
         "startChar": 10,
         "endLine": 1459,
         "endChar": 37
+      },
+      "revId": "436849486a0e186b2ac5b5c9d0ffaef92bf9b9fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcf2b9d7_4758b8bc",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-24T09:50:21Z",
+      "side": 1,
+      "message": "While the immediate call target has been introduced for Wasm\u0027s needs, it ends up calling through to code written for JavaScript.\nA simple way to think about it is: we\u0027re manually inlining a custom-tailored version of the WasmToJS wrapper here, and part of what that wrapper does is toggling the thread-in-wasm flag. From a security perspective, the thread-in-wasm flag should be set as precisely as possible around execution of any generated code that may need the Wasm trap handler (for linear-memory OOB accesses, or handler-powered WasmNull traps).\nA more detailed way to think about it is: anything that can end up calling into C++ and allocating there *must* toggle the flag. For calls where we can guarantee that that won\u0027t happen, we can argue that as a special case they don\u0027t need to toggle the flag. That\u0027s more complicated though, and potentially more brittle.",
+      "parentUuid": "f69c79b9_2b2da994",
+      "range": {
+        "startLine": 1459,
+        "startChar": 10,
+        "endLine": 1459,
+        "endChar": 37
+      },
+      "revId": "436849486a0e186b2ac5b5c9d0ffaef92bf9b9fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ce1a03b_7013e920",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1475,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-24T09:50:21Z",
+      "side": 1,
+      "message": "`kFeature_stringref`",
+      "range": {
+        "startLine": 1475,
+        "startChar": 32,
+        "endLine": 1475,
+        "endChar": 57
       },
       "revId": "436849486a0e186b2ac5b5c9d0ffaef92bf9b9fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
