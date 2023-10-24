@@ -175,6 +175,30 @@
       },
       "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "957b3842_2564a446",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-24T14:27:06Z",
+      "side": 1,
+      "message": "Actually if a builtin means avoiding supporting a new bytecode in all the tiers, that\u0027s also definitely a win.",
+      "parentUuid": "3db44097_6cc1e2b4",
+      "range": {
+        "startLine": 73,
+        "startChar": 21,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
