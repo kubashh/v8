@@ -88,6 +88,7 @@ namespace internal {
   V(InterpreterCEntry1)                              \
   V(InterpreterCEntry2)                              \
   V(InterpreterDispatch)                             \
+  V(InterpreterForwardArgsThenConstruct)             \
   V(InterpreterPushArgsThenCall)                     \
   V(InterpreterPushArgsThenConstruct)                \
   V(JSTrampoline)                                    \
@@ -2006,6 +2007,18 @@ class InterpreterPushArgsThenConstructDescriptor
                          MachineType::AnyTagged(),  // kNewTarget
                          MachineType::AnyTagged())  // kFeedbackElement
   DECLARE_DESCRIPTOR(InterpreterPushArgsThenConstructDescriptor)
+
+  static constexpr inline auto registers();
+};
+
+class InterpreterForwardArgsThenConstructDescriptor
+    : public StaticCallInterfaceDescriptor<
+          InterpreterForwardArgsThenConstructDescriptor> {
+ public:
+  DEFINE_PARAMETERS(kConstructor, kNewTarget)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kConstructor
+                         MachineType::AnyTagged())  // kNewTarget
+  DECLARE_DESCRIPTOR(InterpreterForwardArgsThenConstructDescriptor)
 
   static constexpr inline auto registers();
 };

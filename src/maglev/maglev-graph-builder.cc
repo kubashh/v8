@@ -7705,6 +7705,8 @@ void MaglevGraphBuilder::VisitConstructWithSpread() {
   SetAccumulator(construct);
 }
 
+void MaglevGraphBuilder::VisitConstructForwardArgs() { UNIMPLEMENTED(); }
+
 void MaglevGraphBuilder::VisitTestEqual() {
   VisitCompareOperation<Operation::kEqual>();
 }

@@ -191,6 +191,8 @@ namespace internal {
       InterpreterPushArgsThenConstruct)                                        \
   ASM(InterpreterPushArgsThenConstructWithFinalSpread,                         \
       InterpreterPushArgsThenConstruct)                                        \
+  ASM(InterpreterForwardArgsThenConstruct,                                     \
+      InterpreterForwardArgsThenConstruct)                                     \
   ASM(InterpreterEnterAtBytecode, Void)                                        \
   ASM(InterpreterEnterAtNextBytecode, Void)                                    \
   ASM(InterpreterOnStackReplacement, OnStackReplacement)                       \

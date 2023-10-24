@@ -1499,6 +1499,8 @@ void BaselineCompiler::VisitConstructWithSpread() {
       args);
 }
 
+void BaselineCompiler::VisitConstructForwardArgs() { UNIMPLEMENTED(); }
+
 void BaselineCompiler::VisitTestEqual() {
   CallBuiltin<Builtin::kEqual_Baseline>(
       RegisterOperand(0), kInterpreterAccumulatorRegister, Index(1));

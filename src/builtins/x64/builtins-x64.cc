@@ -1395,6 +1395,55 @@ void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
   }
 }
 
+// static
+void Builtins::Generate_InterpreterForwardArgsThenConstruct(
+    MacroAssembler* masm) {
+  // ----------- S t a t e -------------
+  //  -- rdx : the new target (either the same as the constructor or
+  //           the JSFunction on which new was invoked initially)
+  //  -- rdi : the constructor to call (can be any Object)
+  // -----------------------------------
+  Label stack_overflow;
+
+  // Load the interpreted frame, which is the parent frame, into rcx.
+  __ movq(rcx, Operand(rbp, StandardFrameConstants::kCallerFPOffset));
+
+  // Load the argument count into rax.
+  __ movq(rax, Operand(rcx, StandardFrameConstants::kArgCOffset));
+
+  // Add a stack check before copying arguments.
+  __ StackOverflowCheck(rax, &stack_overflow);
+
+  // Pop return address to allow tail-call after forwarding arguments.
+  __ PopReturnAddressTo(kScratchRegister);
+
+  // Point rcx to the base of the argument list to forward, excluding the
+  // receiver.
+  __ addq(rcx, Immediate((StandardFrameConstants::kFixedSlotCountAboveFp + 1) *
+                         kSystemPointerSize));
+
+  // Copy the arguments on the stack. r8 is a scratch register.
+  Register argc_without_receiver = r11;
+  __ leaq(argc_without_receiver, Operand(rax, -kJSArgcReceiverSlots));
+  __ PushArray(rcx, argc_without_receiver, r8);
+
+  // Push slot for the receiver to be constructed.
+  __ Push(Immediate(0));
+
+  __ PushReturnAddressFrom(kScratchRegister);
+
+  // Call the constructor (rax, rdx, rdi passed on).
+  __ Jump(BUILTIN_CODE(masm->isolate(), Construct), RelocInfo::CODE_TARGET);
+
+  // Throw stack overflow exception.
+  __ bind(&stack_overflow);
+  {
+    __ TailCallRuntime(Runtime::kThrowStackOverflow);
+    // This should be unreachable.
+    __ int3();
+  }
+}
+
 namespace {
 
 void NewImplicitReceiver(MacroAssembler* masm) {
@@ -2311,6 +2360,7 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
     __ bind(&new_target_constructor);
   }
 
+  __ DebugBreak();
   Label stack_done, stack_overflow;
   __ movq(r8, Operand(rbp, StandardFrameConstants::kArgCOffset));
   __ decq(r8);  // Exclude receiver.

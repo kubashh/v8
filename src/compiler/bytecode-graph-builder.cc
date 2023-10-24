@@ -2765,6 +2765,22 @@ void BytecodeGraphBuilder::VisitConstructWithSpread() {
   environment()->BindAccumulator(node, Environment::kAttachFrameState);
 }
 
+void BytecodeGraphBuilder::VisitConstructForwardArgs() {
+#if 0
+  PrepareEagerCheckpoint();
+  interpreter::Register callee_reg = bytecode_iterator().GetRegisterOperand(0);
+  size_t reg_count = bytecode_iterator().GetRegisterCountOperand(2);
+  int const slot_id = bytecode_iterator().GetIndexOperand(3);
+  FeedbackSource feedback = CreateFeedbackSource(slot_id);
+
+  Node* new_target = environment()->LookupAccumulator();
+  Node* callee = environment()->LookupRegister(callee_reg);
+
+  CallFrequency frequency = ComputeCallFrequency(slot_id);
+#endif
+  UNIMPLEMENTED();
+}
+
 void BytecodeGraphBuilder::VisitInvokeIntrinsic() {
   PrepareEagerCheckpoint();
   Runtime::FunctionId functionId = bytecode_iterator().GetIntrinsicIdOperand(0);
