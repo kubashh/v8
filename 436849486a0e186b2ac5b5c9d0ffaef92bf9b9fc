@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cff4588_af857aa9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-24T08:25:45Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "436849486a0e186b2ac5b5c9d0ffaef92bf9b9fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f69c79b9_2b2da994",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-24T08:25:45Z",
+      "side": 1,
+      "message": "@jkummerow@chromium.org: Why do we need to change the flags for these builtins (even though they are wasm-specific builtins) but for other builtins we can rely on the builtins handling it?",
+      "range": {
+        "startLine": 1459,
+        "startChar": 10,
+        "endLine": 1459,
+        "endChar": 37
+      },
+      "revId": "436849486a0e186b2ac5b5c9d0ffaef92bf9b9fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

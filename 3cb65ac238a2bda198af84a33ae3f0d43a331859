@@ -45,6 +45,30 @@
       },
       "revId": "3cb65ac238a2bda198af84a33ae3f0d43a331859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa17aa71_3dcf19b3",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-24T08:25:45Z",
+      "side": 1,
+      "message": "1) Yes, the issue is that your `result \u003d ` is a C++ assignment an dthe `IF``ELSE` isn\u0027t C++-control flow but generates control flow statements in the graph, so both will be unconditionally executed and `result` then holds only the value of the `ELSE` branch.\n\nA solution to this would be (besides the `GOTO_IF` which I think is the simplest solution here) to introduce a `ScopedVar` (see e.g. https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/int64-lowering-reducer.h;l\u003d482).\n2) `--trace-turbo` would be the easiest if it actually finishes but it might abort before generating the json, or gdb with some `print` calls.\n3) `--trace-turbo` will create a json for each wasm function, in this case you need the exported name of the test-defined wasm function that contains the `parseFloat` (`turbo-call_doubletostring-0.json`?).",
+      "parentUuid": "c1c186b8_111be67a",
+      "range": {
+        "startLine": 1453,
+        "startChar": 29,
+        "endLine": 1453,
+        "endChar": 30
+      },
+      "revId": "3cb65ac238a2bda198af84a33ae3f0d43a331859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
