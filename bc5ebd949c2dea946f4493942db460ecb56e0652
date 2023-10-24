@@ -16,6 +16,24 @@
       "message": "A rather unwanted side effect of this change is, that I\u0027ll become a catch-all for fuzz tests reproducing only with this runtime function and dating to an older culprit than this change. \n\nIn this case the recipe would be to replace the function with the older OptimizeFunctionOnNextCall using a Maglev config param and reuploading the test case.",
       "revId": "bc5ebd949c2dea946f4493942db460ecb56e0652",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a43b7365_04ca1817",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1551842
+      },
+      "writtenOn": "2023-10-24T08:37:45Z",
+      "side": 1,
+      "message": "Yes, one could also just figure out what flags exactly are needed to repro and then re-upload with `--allow-natives-syntax` and no `--fuzzing` :)",
+      "parentUuid": "d4031cee_ccad6a17",
+      "revId": "bc5ebd949c2dea946f4493942db460ecb56e0652",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
