@@ -247,6 +247,30 @@
       },
       "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dafecc4_ec8bfba8",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-24T21:35:04Z",
+      "side": 1,
+      "message": "I gave the builtin a try, but it turns out it\u0027s also awfully complex in its own way. While the default derived constructor\u0027s \"body\" is just the (non-user observable equivalent of) `super(...args)`, we fold other logic into `super()` at bytecode generation time: the private brand for private methods, and instance member initialization. To reproduce all of that in a builtin is not simple, and I\u0027m not comfortable duplicating it because I don\u0027t think that stuff is widely understood.\n\nMy conclusion is all things considered, this current approach is still, surprisingly, simpler.",
+      "parentUuid": "d3def9e6_b6b87719",
+      "range": {
+        "startLine": 73,
+        "startChar": 21,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
