@@ -16,6 +16,52 @@
       "message": "Leszek, this CL isn\u0027t complete yet but would appreciate feedback on the approach before I fill out the rest of the arches and compiler tiers. This is the simplest approach I came up with after a few iterations.",
       "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb6c8157_3bfeac42",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-24T11:15:54Z",
+      "side": 1,
+      "message": "Diffing against your builtin, we can never get an allocation site there right?\n\nIn general, I was thinking of suggesting merging this function with the below and adding a new `InterpreterPushArgsMode::kForwardArgs`, but probably they have more differences than similarities...",
+      "range": {
+        "startLine": 1336,
+        "startChar": 9,
+        "endLine": 1336,
+        "endChar": 12
+      },
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f53f515a_ef4f2ccc",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-24T11:15:54Z",
+      "side": 1,
+      "message": "Since we can\u0027t actually create this call in user-authored code, is it even worth emitting a function with bytecode for these default constructors? Could we implement the entire constructor as a JS-linkage builtin and avoid the interpreter entirely?",
+      "range": {
+        "startLine": 73,
+        "startChar": 21,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
