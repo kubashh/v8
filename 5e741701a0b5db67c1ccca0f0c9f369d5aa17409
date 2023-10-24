@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a561344_c9477085",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-24T14:12:33Z",
+      "side": 1,
+      "message": "Marja, please see the comment for parser.cc#73.",
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb6c8157_3bfeac42",
@@ -43,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0522225c_3ea4d627",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-24T14:12:33Z",
+      "side": 1,
+      "message": "Re: never getting an allocation site, that\u0027s correct. The existing `InterpreterPushArgsThenConstruct` builtins assert that the site is always undefined, so I just removed it in this one.\n\nRe: merging, yes, that\u0027s my feeling. I started out with a different mode, but found the resulting code harder to read given the additional branching at codegen time.",
+      "parentUuid": "bb6c8157_3bfeac42",
+      "range": {
+        "startLine": 1336,
+        "startChar": 9,
+        "endLine": 1336,
+        "endChar": 12
+      },
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f53f515a_ef4f2ccc",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 1
@@ -54,6 +95,30 @@
       "writtenOn": "2023-10-24T11:15:54Z",
       "side": 1,
       "message": "Since we can\u0027t actually create this call in user-authored code, is it even worth emitting a function with bytecode for these default constructors? Could we implement the entire constructor as a JS-linkage builtin and avoid the interpreter entirely?",
+      "range": {
+        "startLine": 73,
+        "startChar": 21,
+        "endLine": 73,
+        "endChar": 44
+      },
+      "revId": "5e741701a0b5db67c1ccca0f0c9f369d5aa17409",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6126015b_0ad5a14b",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-24T14:12:33Z",
+      "side": 1,
+      "message": "The tradeoff for that approach is mainly around the super call optimization, which seems nice to get for default derived constructors. Before Marja\u0027s optimization I think a builtin would\u0027ve been unquestionably the right way to go. Now I\u0027m not so sure. Maybe Marja can weigh in?",
+      "parentUuid": "f53f515a_ef4f2ccc",
       "range": {
         "startLine": 73,
         "startChar": 21,
