@@ -33,6 +33,24 @@
       "message": "I updated the comments for this test case to reflect reality.",
       "revId": "25d21af52c3638892412e07d46d829c19aa32254",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62776400_964f49a4",
+        "filename": "test/mjsunit/wasm/gc-optimizations.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-10-25T12:12:39Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ab9a1199_d912b1d0",
+      "revId": "25d21af52c3638892412e07d46d829c19aa32254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
