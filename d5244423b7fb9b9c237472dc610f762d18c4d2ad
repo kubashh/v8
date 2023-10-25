@@ -16,6 +16,24 @@
       "message": "Sorry, missed this in the review: This still reserves memory for the field.",
       "revId": "d5244423b7fb9b9c237472dc610f762d18c4d2ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "192ba4e0_2c8f33f0",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-10-25T12:00:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87a7f704_de4a9454",
+      "revId": "d5244423b7fb9b9c237472dc610f762d18c4d2ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
