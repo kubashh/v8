@@ -23,15 +23,23 @@ class TracedHandlesImpl;
 class V8_EXPORT_PRIVATE TracedHandles final {
  public:
   enum class MarkMode : uint8_t { kOnlyYoung, kAll };
+  enum class WeaknessCompuationMode { kAtomic, kConcurrent };
 
   static void Destroy(Address* location);
   static void Copy(const Address* const* from, Address** to);
   static void Move(Address** from, Address** to);
 
-  static Tagged<Object> Mark(Address* location, MarkMode mark_mode);
+  // Returns the object referenced by the relevant node and whether the node was
+  // marked.
+  static std::pair<Tagged<Object>, bool> Mark(Address* location,
+                                              MarkMode mark_mode);
   static Tagged<Object> MarkConservatively(Address* inner_location,
                                            Address* traced_node_block_base,
                                            MarkMode mark_mode);
+
+  static bool IsWeak(Address* location,
+                     EmbedderRootsHandler* embedder_root_handler,
+                     WeaknessCompuationMode mode);
 
   static bool IsValidInUseNode(Address* location);
 
@@ -65,12 +73,13 @@ class V8_EXPORT_PRIVATE TracedHandles final {
   // Computes whether young weak objects should be considered roots for young
   // generation garbage collections  or just be treated weakly. Per default
   // objects are considered as roots. Objects are treated not as root when both
-  // - `is_unmodified()` returns true;
+  // - `JSObject::IsUnmodifiedApiObject` returns true;
   // - the `EmbedderRootsHandler` also does not consider them as roots;
-  void ComputeWeaknessForYoungObjects(WeakSlotCallback is_unmodified);
+  void ComputeWeaknessForYoungObjects();
 
   void ProcessYoungObjects(RootVisitor* v,
-                           WeakSlotCallbackWithHeap should_reset_handle);
+                           WeakSlotCallbackWithHeap should_reset_handle,
+                           GarbageCollector garbage_collector);
 
   void Iterate(RootVisitor*);
   void IterateYoung(RootVisitor*);
