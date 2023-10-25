@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e76dff93_8db443dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2023-10-25T21:38:26Z",
+      "side": 1,
+      "message": "This looks like great work! I\u0027m looking forward to this getting to stage 3!\n\nI\u0027ve left a few comments, one of which is mostly for myself to investigate later, but feel free to explore it yourself if you want more work to do. 😅",
+      "revId": "c1d997fe38f79cef7c6f07b5d2b7def4b1bd039c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4ff9954_ab3f8292",
+        "filename": "src/builtins/builtins-async-context.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2023-10-25T21:38:26Z",
+      "side": 1,
+      "message": "Note to future self: might be worth converting these to TFJ to avoid the native barrier cross.\n\nAs it is this will leave JS to call the builtin, return to JS to call the scope function, leave JS again to end the scope, then return to JS one again after the builtin ends. All the transitions will slow these builtins down and I\u0027m pretty sure everything they do can be done in generated code too.",
+      "revId": "c1d997fe38f79cef7c6f07b5d2b7def4b1bd039c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "382c6454_46a5452f",
+        "filename": "src/builtins/builtins-async-context.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2023-10-25T21:38:26Z",
+      "side": 1,
+      "message": "The async context store should probably actually be a WeakMap, otherwise the use of an AsyncContext will hold itself open by virtue of it placing itself as a key in the isolate-rooted async context store map which creates a strong reference. Creating and discarding AsyncContext frequently (while probably bad practice...) would leak those instances as this storage map would hold on to them even if nothing else would.",
+      "revId": "c1d997fe38f79cef7c6f07b5d2b7def4b1bd039c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a75721ec_47e284f9",
+        "filename": "src/builtins/finalization-registry.tq",
+        "patchSetId": 44
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2023-10-25T21:38:26Z",
+      "side": 1,
+      "message": "Scope exits only ever need a write and not a read so probably worth splitting the writing part of `AsyncContextSwap(store)` to a `SetAsyncContextStore(store)` and have `AsyncContextSwap(store)` just be sugar for calling both that and `GetAsyncContextStore()` internally. It\u0027s wasting a few instructions reading and discarding here.",
+      "revId": "c1d997fe38f79cef7c6f07b5d2b7def4b1bd039c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
