@@ -140,6 +140,9 @@ class Script : public TorqueGeneratedScript<Script, Struct> {
   inline v8::ScriptOriginOptions origin_options();
   inline void set_origin_options(ScriptOriginOptions origin_options);
 
+  // DCHECK'ed wrapper around set_host_defined_options.
+  inline void SetHostDefinedOptions(Tagged<FixedArray> options);
+
   DECL_ACCESSORS(compiled_lazy_function_positions, Tagged<Object>)
 
   // If script source is an external string, check that the underlying
