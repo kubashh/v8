@@ -7085,6 +7085,16 @@ TNode<BoolT> CodeStubAssembler::IsJSApiObject(TNode<HeapObject> object) {
   return IsJSApiObjectMap(LoadMap(object));
 }
 
+TNode<BoolT> CodeStubAssembler::IsJSAsyncContextVariable(
+    TNode<HeapObject> object) {
+  return HasInstanceType(object, JS_ASYNC_CONTEXT_VARIABLE_TYPE);
+}
+
+TNode<BoolT> CodeStubAssembler::IsJSAsyncContextSnapshot(
+    TNode<HeapObject> object) {
+  return HasInstanceType(object, JS_ASYNC_CONTEXT_SNAPSHOT_TYPE);
+}
+
 TNode<BoolT> CodeStubAssembler::IsJSFinalizationRegistryMap(TNode<Map> map) {
   return InstanceTypeEqual(LoadMapInstanceType(map),
                            JS_FINALIZATION_REGISTRY_TYPE);

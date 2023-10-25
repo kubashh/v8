@@ -250,7 +250,8 @@ DEFINE_BOOL(js_shipping, true, "enable all shipped JavaScript features")
     "harmony weak references with FinalizationRegistry.prototype.cleanupSome") \
   V(harmony_temporal, "Temporal")                                              \
   V(harmony_shadow_realm, "harmony ShadowRealm")                               \
-  V(harmony_struct, "harmony structs, shared structs, and shared arrays")
+  V(harmony_struct, "harmony structs, shared structs, and shared arrays")      \
+  V(harmony_async_context, "harmony AsyncContext")
 
 #define JAVASCRIPT_INPROGRESS_FEATURES_BASE(V)
 
@@ -290,14 +291,14 @@ DEFINE_WEAK_IMPLICATION(harmony_rab_gsab_transfer, harmony_rab_gsab)
 #endif
 
 // Features that are shipping (turned on by default, but internal flag remains).
-#define HARMONY_SHIPPING_BASE(V)                                       \
-  V(harmony_import_assertions, "harmony import assertions")            \
-  V(harmony_change_array_by_copy, "harmony change-Array-by-copy")      \
-  V(harmony_rab_gsab,                                                  \
-    "harmony ResizableArrayBuffer / GrowableSharedArrayBuffer")        \
-  V(harmony_regexp_unicode_sets, "harmony RegExp Unicode Sets")        \
-  V(harmony_json_parse_with_source, "harmony json parse with source")  \
-  V(harmony_rab_gsab_transfer, "harmony ArrayBuffer.transfer")         \
+#define HARMONY_SHIPPING_BASE(V)                                      \
+  V(harmony_import_assertions, "harmony import assertions")           \
+  V(harmony_change_array_by_copy, "harmony change-Array-by-copy")     \
+  V(harmony_rab_gsab,                                                 \
+    "harmony ResizableArrayBuffer / GrowableSharedArrayBuffer")       \
+  V(harmony_regexp_unicode_sets, "harmony RegExp Unicode Sets")       \
+  V(harmony_json_parse_with_source, "harmony json parse with source") \
+  V(harmony_rab_gsab_transfer, "harmony ArrayBuffer.transfer")        \
   V(harmony_array_grouping, "harmony array grouping")
 
 #define JAVASCRIPT_SHIPPING_FEATURES_BASE(V) \

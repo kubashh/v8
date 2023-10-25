@@ -888,6 +888,8 @@ bool CanSubclassHaveInobjectProperties(InstanceType instance_type) {
     case JS_SEGMENTS_TYPE:
     case JS_V8_BREAK_ITERATOR_TYPE:
 #endif
+    case JS_ASYNC_CONTEXT_VARIABLE_TYPE:
+    case JS_ASYNC_CONTEXT_SNAPSHOT_TYPE:
     case JS_ASYNC_FUNCTION_OBJECT_TYPE:
     case JS_ASYNC_GENERATOR_OBJECT_TYPE:
     case JS_MAP_TYPE:
