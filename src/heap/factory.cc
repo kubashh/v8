@@ -52,6 +52,7 @@
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-buffer.h"
 #include "src/objects/js-array-inl.h"
+#include "src/objects/js-async-context-inl.h"
 #include "src/objects/js-atomics-synchronization-inl.h"
 #include "src/objects/js-collection-inl.h"
 #include "src/objects/js-generator-inl.h"
@@ -4071,6 +4072,25 @@ Handle<JSAtomicsCondition> Factory::NewJSAtomicsCondition() {
       NewJSObjectFromMap(map, AllocationType::kSharedOld));
   cond->set_state(JSAtomicsCondition::kEmptyState);
   return cond;
+}
+
+Handle<JSAsyncContextVariable> Factory::NewJSAsyncContextVariable() {
+  Handle<Map> map = isolate()->initial_async_context_variable_map();
+  Handle<JSAsyncContextVariable> async_variable =
+      Handle<JSAsyncContextVariable>::cast(NewJSObjectFromMap(map));
+  async_variable->set_name(*isolate()->factory()->empty_string());
+  async_variable->set_defaultValue(*undefined_value());
+  return async_variable;
+}
+
+Handle<JSAsyncContextSnapshot> Factory::NewJSAsyncContextSnapshot(
+    Handle<HeapObject> snapshot) {
+  CHECK(IsUndefined(*snapshot) || IsOrderedHashMap(*snapshot));
+  Handle<Map> map = isolate()->initial_async_context_snapshot_map();
+  Handle<JSAsyncContextSnapshot> async_snapshot =
+      Handle<JSAsyncContextSnapshot>::cast(NewJSObjectFromMap(map));
+  async_snapshot->set_snapshot(*snapshot);
+  return async_snapshot;
 }
 
 Factory::JSFunctionBuilder::JSFunctionBuilder(Isolate* isolate,
