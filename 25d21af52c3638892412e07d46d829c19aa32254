@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af7db6e5_a1f5342d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-25T10:56:13Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL.",
+      "revId": "25d21af52c3638892412e07d46d829c19aa32254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab9a1199_d912b1d0",
+        "filename": "test/mjsunit/wasm/gc-optimizations.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-10-25T10:56:13Z",
+      "side": 1,
+      "message": "I updated the comments for this test case to reflect reality.",
+      "revId": "25d21af52c3638892412e07d46d829c19aa32254",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
