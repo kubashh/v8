@@ -18,6 +18,10 @@
 #include <utility>
 #include <vector>
 
+#include "src/common/assert-scope.h"
+#include "src/objects/fixed-array.h"
+#include "src/objects/tagged.h"
+
 #ifdef ENABLE_VTUNE_JIT_INTERFACE
 #include "src/third_party/vtune/v8-vtune.h"
 #endif
@@ -951,12 +955,13 @@ bool Shell::ExecuteString(Isolate* isolate, Local<String> source,
     }
     if (options.compile_only) return true;
     if (options.compile_options == ScriptCompiler::kConsumeCodeCache) {
-      i::Handle<i::Script> i_script(
-          i::Script::cast(Utils::OpenHandle(*script)->shared()->script()),
-          i_isolate);
+      i::DisallowGarbageCollection no_gc;
+      i::Tagged<i::Script> i_script =
+          i::Script::cast(Utils::OpenHandle(*script)->shared()->script());
       // TODO(cbruni, chromium:1244145): remove once context-allocated.
-      i_script->set_host_defined_options(i::FixedArray::cast(
-          *Utils::OpenHandle(*(origin.GetHostDefinedOptions()))));
+      i::Tagged<i::FixedArray> host_defined_options = i::FixedArray::cast(
+          *Utils::OpenHandle(*(origin.GetHostDefinedOptions())));
+      i_script->SetHostDefinedOptions(host_defined_options);
     }
     maybe_result = script->Run(realm);
     if (options.code_cache_options ==
