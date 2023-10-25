@@ -381,7 +381,8 @@ void TracedReferenceBase::SetWrapperClassId(uint16_t class_id) {
   if (IsEmpty()) return;
   uint8_t* addr =
       reinterpret_cast<uint8_t*>(slot()) + I::kTracedNodeClassIdOffset;
-  *reinterpret_cast<uint16_t*>(addr) = class_id;
+  reinterpret_cast<std::atomic<uint16_t>*>(addr)->store(
+      class_id, std::memory_order_relaxed);
 }
 
 uint16_t TracedReferenceBase::WrapperClassId() const {
@@ -389,7 +390,8 @@ uint16_t TracedReferenceBase::WrapperClassId() const {
   if (IsEmpty()) return 0;
   uint8_t* addr =
       reinterpret_cast<uint8_t*>(slot()) + I::kTracedNodeClassIdOffset;
-  return *reinterpret_cast<uint16_t*>(addr);
+  return reinterpret_cast<std::atomic<uint16_t>*>(addr)->load(
+      std::memory_order_relaxed);
 }
 
 }  // namespace v8
