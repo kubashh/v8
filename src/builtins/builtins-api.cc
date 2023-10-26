@@ -59,6 +59,8 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> HandleApiCallHelper(
     Isolate* isolate, Handle<HeapObject> new_target,
     Handle<FunctionTemplateInfo> fun_data, Handle<Object> receiver,
     Address* argv, int argc) {
+  DCHECK_EQ(*isolate->GetIncumbentContext(),
+            *isolate->GetIncumbentContextFast());
   Handle<JSReceiver> js_receiver;
   Tagged<JSReceiver> raw_holder;
   if (is_construct) {
@@ -138,12 +140,23 @@ BUILTIN(HandleApiConstruct) {
   Handle<Object> receiver = args.receiver();
   Handle<HeapObject> new_target = args.new_target();
   DCHECK(!IsUndefined(*new_target, isolate));
-  Handle<FunctionTemplateInfo> fun_data(
+  Handle<FunctionTemplateInfo> function(
       args.target()->shared()->api_func_data(), isolate);
   int argc = args.length() - 1;
   Address* argv = args.address_of_first_argument();
+  // TODO(ishell): This BackupIncumbentScope is only necessary to make the
+  // old scheme aware of this call. Remove once the new scheme sticks.
+  Handle<NativeContext> caller_context(
+      isolate->caller_context()->native_context(), isolate);
+  v8::Context::BackupIncumbentScope backup_incumbent_scope(
+      v8::Utils::ToLocal(caller_context));
+  // Tagged<Context> function_context(isolate->context());
+  // SaveAndSwitchContextForCall save_contexts(isolate, function_context);
+  // isolate->set_incumbent_context(isolate->caller_context());
+  DCHECK_EQ(*isolate->GetIncumbentContext(),
+            isolate->caller_context()->native_context());
   RETURN_RESULT_OR_FAILURE(
-      isolate, HandleApiCallHelper<true>(isolate, new_target, fun_data,
+      isolate, HandleApiCallHelper<true>(isolate, new_target, function,
                                          receiver, argv, argc));
 }
 
@@ -173,9 +186,17 @@ class RelocatableArguments : public Relocatable {
 }  // namespace
 
 MaybeHandle<Object> Builtins::InvokeApiFunction(
-    Isolate* isolate, bool is_construct, Handle<FunctionTemplateInfo> function,
-    Handle<Object> receiver, int argc, Handle<Object> args[],
-    Handle<HeapObject> new_target) {
+    Isolate* isolate, bool is_construct, Handle<Context> function_context,
+    Handle<FunctionTemplateInfo> function, Handle<Object> receiver, int argc,
+    Handle<Object> args[], Handle<HeapObject> new_target) {
+  // TODO(ishell): This BackupIncumbentScope is only necessary to make the
+  // old scheme aware of this call. Remove once the new scheme sticks.
+  v8::Local<v8::Context> current_context =
+      v8::Utils::ToLocal(isolate->native_context());
+  v8::Context::BackupIncumbentScope backup_incumbent_scope(current_context);
+  SaveAndSwitchContext save(isolate, *function_context);
+  // SaveAndSwitchContextForCall save(isolate, *function_context);
+
   RCS_SCOPE(isolate, RuntimeCallCounterId::kInvokeApiFunction);
 
   // Do proper receiver conversion for non-strict mode api functions.
