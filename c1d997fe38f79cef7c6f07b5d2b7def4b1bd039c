@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27906a55_7c145fef",
+        "filename": "src/builtins/builtins-async-context.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1531717
+      },
+      "writtenOn": "2023-10-26T13:37:42Z",
+      "side": 1,
+      "message": "We have discussed this a few times, and it seems like making this a WeakMap might increase the GC cost significantly, just to make a bad practice not leak memory. At least that\u0027s what Dan Ehrenberg and Chengzhong Wu seem to think.",
+      "parentUuid": "382c6454_46a5452f",
+      "revId": "c1d997fe38f79cef7c6f07b5d2b7def4b1bd039c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a75721ec_47e284f9",
         "filename": "src/builtins/finalization-registry.tq",
         "patchSetId": 44
