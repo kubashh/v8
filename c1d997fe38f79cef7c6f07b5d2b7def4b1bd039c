@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9ce0214d_0306cbf1",
+        "filename": "src/builtins/builtins-async-context.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1498403
+      },
+      "writtenOn": "2023-10-26T20:53:14Z",
+      "side": 1,
+      "message": "We\u0027d have to be very careful about educating people correctly as that\u0027s a fairly easy mistake to make.\n\nDo you have numbers on that impact? I would think we should generally prefer a bit less performance over always leaking memory, especially given that it should only have an impact when the feature is used? 🤔",
+      "parentUuid": "27906a55_7c145fef",
+      "revId": "c1d997fe38f79cef7c6f07b5d2b7def4b1bd039c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a75721ec_47e284f9",
         "filename": "src/builtins/finalization-registry.tq",
         "patchSetId": 44
