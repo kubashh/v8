@@ -702,7 +702,7 @@ constexpr bool CallOrConstructBuiltinsAssembler::IsAccessCheckRequired(
 void CallOrConstructBuiltinsAssembler::CallFunctionTemplate(
     CallFunctionTemplateMode mode,
     TNode<FunctionTemplateInfo> function_template_info, TNode<Int32T> argc,
-    TNode<Context> context) {
+    TNode<Context> context, TNode<Context> caller_context) {
   CodeStubArguments args(this, argc);
   Label throw_illegal_invocation(this, Label::kDeferred);
 
@@ -795,7 +795,7 @@ void CallOrConstructBuiltinsAssembler::CallFunctionTemplate(
       TailCallStub(
           Builtins::CallableFor(isolate(), Builtin::kCallApiCallbackGeneric),
           context, TruncateIntPtrToInt32(args.GetLengthWithoutReceiver()),
-          call_handler_info, holder);
+          caller_context, call_handler_info, holder);
       break;
 
     case CallFunctionTemplateMode::kCheckAccess:
@@ -820,8 +820,9 @@ TF_BUILTIN(CallFunctionTemplate_Generic, CallOrConstructBuiltinsAssembler) {
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  auto caller_context = UncheckedParameter<Context>(Descriptor::kCallerContext);
   CallFunctionTemplate(CallFunctionTemplateMode::kGeneric,
-                       function_template_info, argc, context);
+                       function_template_info, argc, context, caller_context);
 }
 
 TF_BUILTIN(CallFunctionTemplate_CheckAccess, CallOrConstructBuiltinsAssembler) {
@@ -829,8 +830,9 @@ TF_BUILTIN(CallFunctionTemplate_CheckAccess, CallOrConstructBuiltinsAssembler) {
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  auto caller_context = context;
   CallFunctionTemplate(CallFunctionTemplateMode::kCheckAccess,
-                       function_template_info, argc, context);
+                       function_template_info, argc, context, caller_context);
 }
 
 TF_BUILTIN(CallFunctionTemplate_CheckCompatibleReceiver,
@@ -839,8 +841,9 @@ TF_BUILTIN(CallFunctionTemplate_CheckCompatibleReceiver,
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  auto caller_context = context;
   CallFunctionTemplate(CallFunctionTemplateMode::kCheckCompatibleReceiver,
-                       function_template_info, argc, context);
+                       function_template_info, argc, context, caller_context);
 }
 
 TF_BUILTIN(CallFunctionTemplate_CheckAccessAndCompatibleReceiver,
@@ -849,9 +852,10 @@ TF_BUILTIN(CallFunctionTemplate_CheckAccessAndCompatibleReceiver,
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  auto caller_context = context;
   CallFunctionTemplate(
       CallFunctionTemplateMode::kCheckAccessAndCompatibleReceiver,
-      function_template_info, argc, context);
+      function_template_info, argc, context, caller_context);
 }
 
 TF_BUILTIN(HandleApiCallOrConstruct, CallOrConstructBuiltinsAssembler) {
@@ -870,10 +874,15 @@ TF_BUILTIN(HandleApiCallOrConstruct, CallOrConstructBuiltinsAssembler) {
     TNode<FunctionTemplateInfo> function_template_info =
         CAST(LoadSharedFunctionInfoFunctionData(shared));
 
+    TNode<ExternalReference> caller_context_ptr =
+        ExternalConstant(ExternalReference::caller_context(isolate()));
+
+    TNode<Context> caller_context = CAST(LoadFullTagged(caller_context_ptr));
+
     // Tail call to the stub while leaving all the incoming JS arguments on
     // the stack.
     TailCallBuiltin(Builtin::kCallFunctionTemplate_Generic, context,
-                    function_template_info, argc);
+                    function_template_info, argc, caller_context);
   }
   BIND(&if_construct);
   {
