@@ -26,6 +26,9 @@ class StatsCounter;
 #define EXTERNAL_REFERENCE_LIST_WITH_ISOLATE(V)                                \
   V(isolate_address, "isolate")                                                \
   V(builtins_table, "builtins_table")                                          \
+  /* V(context, "context") */                                                  \
+  V(caller_context, "caller_context")                                          \
+  V(incumbent_context, "incumbent_context")                                    \
   V(handle_scope_implementer_address,                                          \
     "Isolate::handle_scope_implementer_address")                               \
   V(address_of_interpreter_entry_trampoline_instruction_start,                 \
