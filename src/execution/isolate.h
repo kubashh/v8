@@ -1568,6 +1568,8 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
       Handle<JSObject> object);
   void UpdateNumberStringNotRegexpLikeProtectorOnSetPrototype(
       Handle<JSObject> object);
+  void UpdateToStringLookupChainProtectorOnSetPrototype(
+      Handle<JSObject> object);
   void UpdateNoElementsProtectorOnNormalizeElements(Handle<JSObject> object) {
     UpdateNoElementsProtectorOnSetElement(object);
   }

@@ -636,7 +636,8 @@ void Map::MapVerify(Isolate* isolate) {
     }
   }
 
-  if (!may_have_interesting_properties()) {
+  if (!may_have_interesting_properties() &&
+      instance_type() != JS_OBJECT_PROTOTYPE_TYPE) {
     CHECK(!has_named_interceptor());
     CHECK(!is_dictionary_map());
     CHECK(!is_access_check_needed());

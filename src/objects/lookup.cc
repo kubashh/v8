@@ -337,6 +337,15 @@ void LookupIterator::InternalUpdateProtector(Isolate* isolate,
         (IsJSPrimitiveWrapper(*receiver) || IsJSObjectPrototype(*receiver))) {
       Protectors::InvalidateNumberStringNotRegexpLike(isolate);
     }
+  } else if (*name == roots.toString_string()) {
+    // PrintF("toString found!\n");
+    if (!Protectors::IsToStringLookupChainIntact(isolate)) return;
+    // PrintF("invalidate toString proctector!\n");
+    if (receiver->map()->is_prototype_map() && IsJSObjectPrototype(*receiver)) {
+      // The protector only protects object prototype.
+      Protectors::InvalidateToStringLookupChain(isolate);
+    }
+    // PrintF("toString found finished!\n");
   }
 }
 
