@@ -1,0 +1,245 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26101602_f1559d03",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 39
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "There\u0027s unittests for dropping in https://source.chromium.org/chromium/chromium/src/+/main:v8/test/unittests/heap/global-handles-unittest.cc",
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cbd6c1b_c27e3f1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "Did you run regular benchmarks as well? How does GC time look like on v8.browsing? If this regresses we need to think about puting this behind memory reducing GCs already now.",
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a6853d2_9ab4d074",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "Can you land the change that turns around weakness and root separately? Code looks good but since there were issues in the past with this flag I think it makes sense to land separately.",
+      "range": {
+        "startLine": 925,
+        "startChar": 5,
+        "endLine": 925,
+        "endChar": 34
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "555c7e3d_7ca71cb5",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "I really don\u0027t like this parameter here. We should not have GC-dependent processing inside this area.",
+      "range": {
+        "startLine": 963,
+        "startChar": 21,
+        "endLine": 963,
+        "endChar": 38
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3f26f17_c0fce375",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "Can you land this and the related changes separately?",
+      "range": {
+        "startLine": 975,
+        "startChar": 14,
+        "endLine": 975,
+        "endChar": 34
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02be3dbe_c60ec67b",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "TryMarkObject",
+      "range": {
+        "startLine": 1181,
+        "startChar": 32,
+        "endLine": 1181,
+        "endChar": 42
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f040655_5b5901f5",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "Since you are here: Let\u0027s add braces. (also below)",
+      "range": {
+        "startLine": 1185,
+        "startChar": 4,
+        "endLine": 1185,
+        "endChar": 10
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0874ceb1_33c244c3",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "TryMark",
+      "range": {
+        "startLine": 1197,
+        "startChar": 47,
+        "endLine": 1197,
+        "endChar": 51
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "019fb825_0e275543",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "IsWeakForYoungGenGC()?",
+      "range": {
+        "startLine": 1226,
+        "startChar": 20,
+        "endLine": 1226,
+        "endChar": 26
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56929127_55d6f461",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "Should this go into `EnterFinalPause`? We only do this once, right?",
+      "range": {
+        "startLine": 820,
+        "startChar": 37,
+        "endLine": 820,
+        "endChar": 64
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d24ee3d2_9d2aeb5a",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-10-27T12:00:21Z",
+      "side": 1,
+      "message": "I think `kVerify` is a bit misleading name. It really rechecks a condition.\n\nAren\u0027t the modes something like \"opportunistic\" and \"exact\"?",
+      "range": {
+        "startLine": 34,
+        "startChar": 34,
+        "endLine": 34,
+        "endChar": 41
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
