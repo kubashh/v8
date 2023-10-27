@@ -85,6 +85,12 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
 
   __ StackOverflowCheck(eax, ecx, &stack_overflow);
 
+  // Store caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ mov(masm->ExternalReferenceAsOperand(
+             ExternalReference::caller_context(masm->isolate()), no_reg),
+         esi);
+
   // Enter a construct frame.
   {
     FrameScope scope(masm, StackFrame::CONSTRUCT);
@@ -1466,6 +1472,12 @@ void Builtins::Generate_InterpreterPushArgsThenFastConstructFunction(
   Label stack_overflow;
   __ StackOverflowCheck(eax, edx, &stack_overflow, true);
 
+  // Store caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ mov(masm->ExternalReferenceAsOperand(
+             ExternalReference::caller_context(masm->isolate()), no_reg),
+         esi);
+
   // Spill number of arguments.
   __ movd(xmm0, eax);
 
@@ -2458,6 +2470,12 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
   // -----------------------------------
   StackArgumentsAccessor args(eax);
   __ AssertCallableFunction(edi, edx);
+
+  // Store caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ mov(masm->ExternalReferenceAsOperand(
+             ExternalReference::caller_context(masm->isolate()), no_reg),
+         esi);
 
   __ mov(edx, FieldOperand(edi, JSFunction::kSharedFunctionInfoOffset));
 
@@ -3642,17 +3660,22 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   Register call_data = no_reg;
   Register callback = no_reg;
   Register holder = no_reg;
+  Register caller_context = no_reg;
 
   switch (mode) {
     case CallApiCallbackMode::kGeneric:
-      api_function_address = eax;
       argc = CallApiCallbackGenericDescriptor::ActualArgumentsCountRegister();
+      caller_context =
+          CallApiCallbackGenericDescriptor::CallerContextRegister();
       callback = CallApiCallbackGenericDescriptor::CallHandlerInfoRegister();
       holder = CallApiCallbackGenericDescriptor::HolderRegister();
       break;
 
     case CallApiCallbackMode::kOptimizedNoProfiling:
     case CallApiCallbackMode::kOptimized:
+      // Caller context is always equal to current context because we don't
+      // inline Api calls cross-context.
+      caller_context = kContextRegister;
       api_function_address =
           CallApiCallbackOptimizedDescriptor::ApiFunctionAddressRegister();
       argc = CallApiCallbackOptimizedDescriptor::ActualArgumentsCountRegister();
@@ -3660,15 +3683,17 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
       holder = CallApiCallbackOptimizedDescriptor::HolderRegister();
       break;
   }
-  DCHECK(!AreAliased(api_function_address, argc, call_data, callback, holder));
+  DCHECK(!AreAliased(api_function_address, caller_context, argc, call_data,
+                     callback, holder));
 
   using FCA = FunctionCallbackArguments;
+  using ER = ExternalReference;
 
   static_assert(FCA::kArgsLength == 6);
   static_assert(FCA::kNewTargetIndex == 5);
   static_assert(FCA::kDataIndex == 4);
   static_assert(FCA::kReturnValueIndex == 3);
-  static_assert(FCA::kUnusedIndex == 2);
+  static_assert(FCA::kPrevIncumbentContextIndex == 2);
   static_assert(FCA::kIsolateIndex == 1);
   static_assert(FCA::kHolderIndex == 0);
 
@@ -3681,7 +3706,7 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   //   esp[0 * kSystemPointerSize]: return address
   //   esp[1 * kSystemPointerSize]: kHolder   <= implicit_args_
   //   esp[2 * kSystemPointerSize]: kIsolate
-  //   esp[3 * kSystemPointerSize]: undefined (padding, unused)
+  //   esp[3 * kSystemPointerSize]: kPrevIncumbentContext
   //   esp[4 * kSystemPointerSize]: undefined (kReturnValue)
   //   esp[5 * kSystemPointerSize]: kData
   //   esp[6 * kSystemPointerSize]: undefined (kNewTarget)
@@ -3704,8 +3729,17 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
       break;
   }
   __ PushRoot(RootIndex::kUndefinedValue);  // kReturnValue
-  __ Push(Smi::zero());                     // kUnused
-  __ Push(Immediate(ExternalReference::isolate_address(masm->isolate())));
+
+  // Save previous and set new incumbent context.
+  MemOperand incumbent_context_mem_op = __ ExternalReferenceAsOperand(
+      ER::incumbent_context(masm->isolate()), no_reg);
+  __ Push(incumbent_context_mem_op);  // kPrevIncumbentContext
+  __ mov(incumbent_context_mem_op, caller_context);
+  if (mode == CallApiCallbackMode::kGeneric) {
+    api_function_address = ReassignRegister(caller_context);
+  }
+
+  __ Push(Immediate(ER::isolate_address(masm->isolate())));
   __ Push(holder);
   // Keep a pointer to kHolder (= implicit_args) in a {holder} register.
   // We use it below to set up the FunctionCallbackInfo object.
@@ -3811,6 +3845,8 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   // checking is enabled.
   Register thunk_arg = api_function_address;
 
+  Operand prev_incumbent_context_operand = ExitFrameCallerStackSlotOperand(
+      FCA::kPrevIncumbentContextIndex + exit_frame_params_count);
   Operand return_value_operand = ExitFrameCallerStackSlotOperand(
       FCA::kReturnValueIndex + exit_frame_params_count);
   static constexpr int kUseStackSpaceOperand = 0;
@@ -3819,9 +3855,10 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
 
   const bool with_profiling =
       mode != CallApiCallbackMode::kOptimizedNoProfiling;
-  CallApiFunctionAndReturn(masm, with_profiling, api_function_address,
-                           thunk_ref, thunk_arg, kUseStackSpaceOperand,
-                           &stack_space_operand, return_value_operand);
+  CallApiFunctionAndReturn(
+      masm, with_profiling, api_function_address, thunk_ref, thunk_arg,
+      &prev_incumbent_context_operand, kUseStackSpaceOperand,
+      &stack_space_operand, return_value_operand);
 }
 
 void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
@@ -3929,14 +3966,16 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   // checking is enabled.
   Register thunk_arg = callback;
 
+  Operand* const kDontRestoreIncumbentContext = nullptr;
   Operand return_value_operand = ExitFrameCallerStackSlotOperand(
       PCA::kReturnValueIndex + kNameOnStackSize);
   Operand* const kUseStackSpaceConstant = nullptr;
 
   const bool with_profiling = true;
   CallApiFunctionAndReturn(masm, with_profiling, api_function_address,
-                           thunk_ref, thunk_arg, kStackUnwindSpace,
-                           kUseStackSpaceConstant, return_value_operand);
+                           thunk_ref, thunk_arg, kDontRestoreIncumbentContext,
+                           kStackUnwindSpace, kUseStackSpaceConstant,
+                           return_value_operand);
 }
 
 void Builtins::Generate_DirectCEntry(MacroAssembler* masm) {

@@ -226,7 +226,7 @@ class Builtins {
   }
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> InvokeApiFunction(
-      Isolate* isolate, bool is_construct,
+      Isolate* isolate, bool is_construct, Handle<Context> function_context,
       Handle<FunctionTemplateInfo> function, Handle<Object> receiver, int argc,
       Handle<Object> args[], Handle<HeapObject> new_target);
 

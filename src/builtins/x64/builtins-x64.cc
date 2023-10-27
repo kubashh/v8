@@ -90,6 +90,12 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
   Label stack_overflow;
   __ StackOverflowCheck(rax, &stack_overflow, Label::kFar);
 
+  // Store caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ movq(masm->ExternalReferenceAsOperand(
+              ExternalReference::caller_context(masm->isolate()), no_reg),
+          rsi);
+
   // Enter a construct frame.
   {
     FrameScope scope(masm, StackFrame::CONSTRUCT);
@@ -1463,6 +1469,12 @@ void Builtins::Generate_InterpreterPushArgsThenFastConstructFunction(
   Label stack_overflow;
   __ StackOverflowCheck(rax, &stack_overflow);
 
+  // Store caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ movq(masm->ExternalReferenceAsOperand(
+              ExternalReference::caller_context(masm->isolate()), no_reg),
+          rsi);
+
   // Enter a construct frame.
   FrameScope scope(masm, StackFrame::MANUAL);
   __ EnterFrame(StackFrame::FAST_CONSTRUCT);
@@ -1991,6 +2003,13 @@ void Builtins::Generate_FunctionPrototypeApply(MacroAssembler* masm) {
   //  -- rsp[8]  : thisArg
   // -----------------------------------
 
+  // Restore caller context to ensure that the Call builtin does not overwrite
+  // it with the Function.prototype.apply's context.
+  // TODO(ishell): consider introducing a new Call/CallFunction builtins that
+  // don't overwrite caller context instead.
+  __ movq(rsi, masm->ExternalReferenceAsOperand(
+                   ExternalReference::caller_context(masm->isolate()), no_reg));
+
   // 2. We don't need to check explicitly for callable receiver here,
   // since that's the first thing the Call/CallWithArrayLike builtins
   // will do.
@@ -2053,6 +2072,14 @@ void Builtins::Generate_FunctionPrototypeCall(MacroAssembler* masm) {
   // 5. Call the callable.
   // Since we did not create a frame for Function.prototype.call() yet,
   // we use a normal Call builtin here.
+
+  // Restore caller context to ensure that the Call builtin does not overwrite
+  // it with the Function.prototype.call's context.
+  // TODO(ishell): consider introducing a new Call/CallFunction builtins that
+  // don't overwrite caller context instead.
+  __ movq(rsi, masm->ExternalReferenceAsOperand(
+                   ExternalReference::caller_context(masm->isolate()), no_reg));
+
   __ Jump(masm->isolate()->builtins()->Call(), RelocInfo::CODE_TARGET);
 }
 
@@ -2095,6 +2122,13 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
   //  -- rsp[0]  : return address
   //  -- rsp[8]  : thisArgument
   // -----------------------------------
+
+  // Restore caller context to ensure that the Call builtin does not overwrite
+  // it with the Reflect.apply's context.
+  // TODO(ishell): consider introducing a new Call/CallFunction builtins that
+  // don't overwrite caller context instead.
+  __ movq(rsi, masm->ExternalReferenceAsOperand(
+                   ExternalReference::caller_context(masm->isolate()), no_reg));
 
   // 2. We don't need to check explicitly for callable target here,
   // since that's the first thing the Call/CallWithArrayLike builtins
@@ -2378,6 +2412,12 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
 
   StackArgumentsAccessor args(rax);
   __ AssertCallableFunction(rdi);
+
+  // Store caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ movq(masm->ExternalReferenceAsOperand(
+              ExternalReference::caller_context(masm->isolate()), no_reg),
+          rsi);
 
   __ LoadTaggedField(rdx,
                      FieldOperand(rdi, JSFunction::kSharedFunctionInfoOffset));
@@ -4206,20 +4246,25 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   Register call_data = no_reg;
   Register callback = no_reg;
   Register holder = no_reg;
+  Register caller_context = no_reg;
   Register scratch = rax;
   Register scratch2 = no_reg;
 
   switch (mode) {
     case CallApiCallbackMode::kGeneric:
-      api_function_address = rdx;
       scratch2 = r9;
       argc = CallApiCallbackGenericDescriptor::ActualArgumentsCountRegister();
+      caller_context =
+          CallApiCallbackGenericDescriptor::CallerContextRegister();
       callback = CallApiCallbackGenericDescriptor::CallHandlerInfoRegister();
       holder = CallApiCallbackGenericDescriptor::HolderRegister();
       break;
 
     case CallApiCallbackMode::kOptimizedNoProfiling:
     case CallApiCallbackMode::kOptimized:
+      // Caller context is always equal to current context because we don't
+      // inline Api calls cross-context.
+      caller_context = kContextRegister;
       api_function_address =
           CallApiCallbackOptimizedDescriptor::ApiFunctionAddressRegister();
       argc = CallApiCallbackOptimizedDescriptor::ActualArgumentsCountRegister();
@@ -4227,16 +4272,17 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
       holder = CallApiCallbackOptimizedDescriptor::HolderRegister();
       break;
   }
-  DCHECK(!AreAliased(api_function_address, argc, holder, call_data, callback,
-                     scratch, scratch2, kScratchRegister));
+  DCHECK(!AreAliased(api_function_address, caller_context, argc, holder,
+                     call_data, callback, scratch, scratch2, kScratchRegister));
 
   using FCA = FunctionCallbackArguments;
+  using ER = ExternalReference;
 
   static_assert(FCA::kArgsLength == 6);
   static_assert(FCA::kNewTargetIndex == 5);
   static_assert(FCA::kDataIndex == 4);
   static_assert(FCA::kReturnValueIndex == 3);
-  static_assert(FCA::kUnusedIndex == 2);
+  static_assert(FCA::kPrevIncumbentContextIndex == 2);
   static_assert(FCA::kIsolateIndex == 1);
   static_assert(FCA::kHolderIndex == 0);
 
@@ -4249,7 +4295,7 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   //   rsp[0 * kSystemPointerSize]: return address
   //   rsp[1 * kSystemPointerSize]: kHolder   <= implicit_args_
   //   rsp[2 * kSystemPointerSize]: kIsolate
-  //   rsp[3 * kSystemPointerSize]: undefined (padding, unused)
+  //   rsp[3 * kSystemPointerSize]: kPrevIncumbentContext
   //   rsp[4 * kSystemPointerSize]: undefined (kReturnValue)
   //   rsp[5 * kSystemPointerSize]: kData
   //   rsp[6 * kSystemPointerSize]: undefined (kNewTarget)
@@ -4271,8 +4317,17 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
       break;
   }
   __ Push(kScratchRegister);  // kReturnValue
-  __ Push(kScratchRegister);  // kUnused
-  __ PushAddress(ExternalReference::isolate_address(masm->isolate()));
+
+  // Save previous and set new incumbent context.
+  MemOperand incumbent_context_mem_op = __ ExternalReferenceAsOperand(
+      ER::incumbent_context(masm->isolate()), no_reg);
+  __ Push(incumbent_context_mem_op);  // kPrevIncumbentContext
+  __ movq(incumbent_context_mem_op, caller_context);
+  if (mode == CallApiCallbackMode::kGeneric) {
+    api_function_address = ReassignRegister(caller_context);
+  }
+
+  __ PushAddress(ER::isolate_address(masm->isolate()));
   __ Push(holder);
   // Keep a pointer to kHolder (= implicit_args) in a {holder} register.
   // We use it below to set up the FunctionCallbackInfo object.
@@ -4363,6 +4418,8 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   // checking is enabled.
   Register thunk_arg = api_function_address;
 
+  Operand prev_incumbent_context_operand = ExitFrameCallerStackSlotOperand(
+      FCA::kPrevIncumbentContextIndex + exit_frame_params_count);
   Operand return_value_operand = ExitFrameCallerStackSlotOperand(
       FCA::kReturnValueIndex + exit_frame_params_count);
   static constexpr int kUseExitFrameStackSlotOperand = 0;
@@ -4371,9 +4428,10 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   const bool with_profiling =
       mode != CallApiCallbackMode::kOptimizedNoProfiling;
   Label* no_done = nullptr;
-  CallApiFunctionAndReturn(masm, with_profiling, api_function_address,
-                           thunk_ref, thunk_arg, kUseExitFrameStackSlotOperand,
-                           &stack_space_operand, return_value_operand, no_done);
+  CallApiFunctionAndReturn(
+      masm, with_profiling, api_function_address, thunk_ref, thunk_arg,
+      &prev_incumbent_context_operand, kUseExitFrameStackSlotOperand,
+      &stack_space_operand, return_value_operand, no_done);
 }
 
 void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
@@ -4483,15 +4541,17 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
   // checking is enabled.
   Register thunk_arg = callback;
 
+  Operand* const kDontRestoreIncumbentContext = nullptr;
   Operand return_value_operand = ExitFrameCallerStackSlotOperand(
       PCA::kReturnValueIndex + kNameOnStackSize);
   Operand* const kUseStackSpaceConstant = nullptr;
 
   const bool with_profiling = true;
   Label* no_done = nullptr;
-  CallApiFunctionAndReturn(
-      masm, with_profiling, api_function_address, thunk_ref, thunk_arg,
-      kStackUnwindSpace, kUseStackSpaceConstant, return_value_operand, no_done);
+  CallApiFunctionAndReturn(masm, with_profiling, api_function_address,
+                           thunk_ref, thunk_arg, kDontRestoreIncumbentContext,
+                           kStackUnwindSpace, kUseStackSpaceConstant,
+                           return_value_operand, no_done);
 }
 
 void Builtins::Generate_DirectCEntry(MacroAssembler* masm) {

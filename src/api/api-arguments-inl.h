@@ -111,6 +111,8 @@ PropertyCallbackArguments::~PropertyCallbackArguments(){
 //                  "Unexpected side effect detected");
 // }
 #endif  // DEBUG
+  isolate()->set_incumbent_context(
+      Context::unchecked_cast(*slot_at(T::kUnusedIndex)));
 }
 
 // -------------------------------------------------------------------------

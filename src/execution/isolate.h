@@ -773,6 +773,24 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   inline void set_context(Tagged<Context> context);
   Tagged<Context>* context_address() { return &thread_local_top()->context_; }
 
+  // Access to top context (where the current function object was created).
+  Tagged<Context> caller_context() const {
+    return thread_local_top()->caller_context_;
+  }
+  inline void clear_caller_context();
+  Tagged<Context>* caller_context_address() {
+    return &thread_local_top()->caller_context_;
+  }
+
+  // Current incumbent context.
+  Tagged<Context> incumbent_context() const {
+    return thread_local_top()->incumbent_context_;
+  }
+  inline void set_incumbent_context(Tagged<Context> context);
+  Tagged<Context>* incumbent_context_address() {
+    return &thread_local_top()->incumbent_context_;
+  }
+
   // Access to current thread id.
   inline void set_thread_id(ThreadId id) {
     thread_local_top()->thread_id_.store(id, std::memory_order_relaxed);
@@ -1109,6 +1127,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   inline Handle<NativeContext> native_context();
   inline Tagged<NativeContext> raw_native_context();
 
+  inline Handle<NativeContext> GetIncumbentContextFast();
   Handle<NativeContext> GetIncumbentContext();
 
   void RegisterTryCatchHandler(v8::TryCatch* that);
@@ -1970,11 +1989,12 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   const v8::Context::BackupIncumbentScope* top_backup_incumbent_scope() const {
-    return top_backup_incumbent_scope_;
+    return thread_local_top()->top_backup_incumbent_scope_;
   }
   void set_top_backup_incumbent_scope(
       const v8::Context::BackupIncumbentScope* top_backup_incumbent_scope) {
-    top_backup_incumbent_scope_ = top_backup_incumbent_scope;
+    thread_local_top()->top_backup_incumbent_scope_ =
+        top_backup_incumbent_scope;
   }
 
   void SetIdle(bool is_idle);
@@ -2557,10 +2577,6 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   EmbeddedFileWriterInterface* embedded_file_writer_ = nullptr;
 
-  // The top entry of the v8::Context::BackupIncumbentScope stack.
-  const v8::Context::BackupIncumbentScope* top_backup_incumbent_scope_ =
-      nullptr;
-
   PrepareStackTraceCallback prepare_stack_trace_callback_ = nullptr;
 
 #if defined(V8_OS_WIN) && defined(V8_ENABLE_ETW_STACK_WALKING)
@@ -2653,6 +2669,7 @@ class V8_EXPORT_PRIVATE SaveContext {
  private:
   Isolate* const isolate_;
   Handle<Context> context_;
+  Handle<Context> incumbent_context_;
 };
 
 // Like SaveContext, but also switches the Context to a new one in the
@@ -2660,6 +2677,19 @@ class V8_EXPORT_PRIVATE SaveContext {
 class V8_EXPORT_PRIVATE SaveAndSwitchContext : public SaveContext {
  public:
   SaveAndSwitchContext(Isolate* isolate, Tagged<Context> new_context);
+};
+
+// Like SaveContext, but also switches the Context to a new one in the
+// constructor.
+class V8_EXPORT_PRIVATE SaveAndSwitchContextForCall {
+ public:
+  SaveAndSwitchContextForCall(Isolate* isolate,
+                              Tagged<Context> function_context);
+  ~SaveAndSwitchContextForCall();
+
+ private:
+  Isolate* const isolate_;
+  Handle<Context> incumbent_context_;
 };
 
 // A scope which sets the given isolate's context to null for its lifetime to
@@ -2674,11 +2704,15 @@ class AssertNoContextChange {
 #ifdef DEBUG
  public:
   explicit AssertNoContextChange(Isolate* isolate);
-  ~AssertNoContextChange() { DCHECK(isolate_->context() == *context_); }
+  ~AssertNoContextChange() {
+    DCHECK_EQ(isolate_->context(), *context_);
+    DCHECK_EQ(isolate_->incumbent_context(), *incumbent_context_);
+  }
 
  private:
   Isolate* isolate_;
   Handle<Context> context_;
+  Handle<Context> incumbent_context_;
 #else
  public:
   explicit AssertNoContextChange(Isolate* isolate) {}

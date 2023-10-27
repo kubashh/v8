@@ -95,6 +95,7 @@ using ::v8::Boolean;
 using ::v8::BooleanObject;
 using ::v8::Context;
 using ::v8::Extension;
+using ::v8::External;
 using ::v8::FixedArray;
 using ::v8::Function;
 using ::v8::FunctionTemplate;
@@ -14853,6 +14854,222 @@ THREADED_TEST(CrossContextNew) {
   context1->Exit();
 }
 
+// This callback creates a default object and checks that the incumbent context
+// is equal to the expected one.
+static void DefaultConstructHandlerWithIncumbentCheck(
+    const v8::FunctionCallbackInfo<v8::Value>& info) {
+  Local<Context>* expected_incumbent_context =
+      reinterpret_cast<Local<Context>*>(
+          info.Data().As<v8::External>()->Value());
+
+  v8::Isolate* isolate = info.GetIsolate();
+  v8::Local<v8::Context> context = isolate->GetCurrentContext();
+  CHECK_EQ(*expected_incumbent_context, isolate->GetIncumbentContext());
+
+  if (info.IsConstructCall()) {
+    v8::MaybeLocal<v8::Object> instance =
+        Function::New(context, EmptyHandler)
+            .ToLocalChecked()
+            ->NewInstance(context, 0, nullptr);
+    info.GetReturnValue().Set(instance.ToLocalChecked());
+  } else {
+    Local<Value> value =
+        context->Global()->Get(context, v8_str("x")).ToLocalChecked();
+    // value = CompileRun("Object.prototype.x");
+    info.GetReturnValue().Set(value);
+  }
+}
+
+// Test that cross-context new calls use the context of the callee to
+// create the new JavaScript object.
+THREADED_TEST(CrossContextNewApiCallback) {
+  v8::Isolate* isolate = CcTest::isolate();
+  v8::HandleScope scope(isolate);
+  v8::Local<Context> context0 = Context::New(isolate);
+  v8::Local<Context> context1 = Context::New(isolate);
+  v8::Local<Context> context2 = Context::New(isolate);
+  v8::Local<Context> contexts[] = {context0, context1, context2};
+  i::Isolate* i_isolate = CcTest::i_isolate();
+
+  i::StdoutStream os;
+  os << "context0: " << *v8::Utils::OpenHandle(*context0) << "\n"
+     << "context1: " << *v8::Utils::OpenHandle(*context1) << "\n"
+     << "context2: " << *v8::Utils::OpenHandle(*context2) << "\n";
+
+  // Allow cross-domain access.
+  Local<String> token = v8_str("<security token>");
+  context0->SetSecurityToken(token);
+  context1->SetSecurityToken(token);
+  context2->SetSecurityToken(token);
+
+  Local<Context> expected_incumbent_context;
+  int expected_function_context_id;
+  Local<External> expected_incumbent_context_ptr =
+      v8::External::New(isolate, &expected_incumbent_context);
+
+  // Create cross-realm references in every realm's global object and
+  // a constructor function that also checks the incumbent context.
+  for (int i = 0; i < static_cast<int>(arraysize(contexts)); i++) {
+    Local<Context> context = contexts[i];
+    Context::Scope context_scope(context);
+    CHECK(context->Global()
+              ->Set(context, v8_str("realm0"), context0->Global())
+              .FromJust());
+    CHECK(context->Global()
+              ->Set(context, v8_str("realm1"), context1->Global())
+              .FromJust());
+    CHECK(context->Global()
+              ->Set(context, v8_str("realm2"), context2->Global())
+              .FromJust());
+    // Create some helper functions so we can chain calls:
+    //   call2(call1, call0, f)
+    //   call2(call1, construct0, f)
+    CompileRun(R"JS(
+        function call_spread(g, ...args) { return g(...args); }
+        function call_via_apply(g, args_array) {
+          return g.apply(undefined, args_array);
+        }
+        function call_via_reflect(g, args_array) {
+          return Reflect.apply(g, undefined, args_array);
+        }
+        function construct_spread(g, ...args) { return new g(...args); }
+        function construct_via_reflect(g, args_array) {
+          return Reflect.construct(g, args_array);
+        }
+
+        function call0(g) { return g(); }
+        function call0_via_call(g, self) { return g.call(self); }
+
+        function construct0(g) { return new g(); }
+
+        function call1(f, arg) { return f(arg); }
+        function call1_via_call(g, self, arg) { return g.call(self, arg); }
+
+        function call2(f, arg1, arg2) { return f(arg1, arg2); }
+        function call2_via_call(g, self, arg1, arg2) {
+          return g.call(self, arg1, arg2);
+        }
+    )JS");
+
+    Local<Function> func =
+        Function::New(context, DefaultConstructHandlerWithIncumbentCheck,
+                      expected_incumbent_context_ptr)
+            .ToLocalChecked();
+
+    v8::base::ScopedVector<char> name(30);
+    v8::base::SNPrintF(name, "realm%d.f", i);
+    func->SetName(v8_str(name.begin()));
+
+    CHECK(context->Global()->Set(context, v8_str("f"), func).FromJust());
+  }
+
+  Local<Value> value;
+
+  // Set an 'x' property on the Object prototype in each realm.
+  {
+    v8::Local<Context> context = context0;
+    Context::Scope context_scope(context);
+
+    CompileRun("realm0.Object.prototype.x = 0;");
+    CompileRun("realm1.Object.prototype.x = 1;");
+    CompileRun("realm2.Object.prototype.x = 2;");
+
+    value = CompileRun("realm0.x");
+    CHECK_EQ(0, value.As<v8::Integer>()->Value());
+
+    value = CompileRun("realm1.x");
+    CHECK_EQ(1, value.As<v8::Integer>()->Value());
+
+    value = CompileRun("realm2.x");
+    CHECK_EQ(2, value.As<v8::Integer>()->Value());
+  }
+
+  auto check_case = [&](const char* source) {
+    i_isolate->clear_caller_context();
+    Local<Value> value = CompileRun(source);
+    CHECK(!value.IsEmpty());
+    CHECK_EQ(expected_function_context_id, value.As<v8::Integer>()->Value());
+  };
+
+  // Check calls and construct calls using various sequences of context to
+  // context switches. Check that the result returned matches the target
+  // function's context by checking the value of 'x' property.
+  for (int i = 0; i < static_cast<int>(arraysize(contexts)); i++) {
+    Local<Context> context = contexts[i];
+    Context::Scope context_scope(context);
+
+    os << "=====================================\n"
+       << "context: " << *v8::Utils::OpenHandle(*context) << "\n";
+
+    {
+      // context -> context0.
+      expected_incumbent_context = context;
+      expected_function_context_id = 0;
+
+      check_case("realm0.f()");
+      check_case("realm0.f.call(realm0)");
+      check_case("realm0.f.apply(realm0)");
+      check_case("Reflect.apply(realm0.f, undefined, [])");
+      check_case("call_spread(realm0.f)");
+
+      check_case("new realm0.f().x");
+    }
+    os << "==== 1\n";
+
+    {
+      // context -> context -> context0.
+      expected_incumbent_context = context;
+      expected_function_context_id = 0;
+
+      check_case("call0(realm0.f)");
+      check_case("call0_via_call(realm0.f, realm0)");
+      check_case("call_via_apply(realm0.f, [realm0])");
+      check_case("call_via_reflect(realm0.f, [realm0])");
+      check_case("call_spread(realm0.f, /* args */ 1, 2, 3)");
+
+      check_case("construct0(realm0.f).x");
+      check_case("Reflect.construct(realm0.f, []).x");
+      check_case("construct_spread(realm0.f, /* args */ 1, 2, 3).x");
+    }
+    os << "==== 2\n";
+
+    {
+      // context -> context2 -> context1 -> context.
+      expected_incumbent_context = context1;
+      expected_function_context_id = i;
+
+      check_case("realm2.call1(realm1.call0, f)");
+      check_case("realm2.call1_via_call(realm1.call0, realm1, f)");
+      check_case("realm2.call_via_apply(realm1.call0, [f])");
+      check_case("realm2.call_via_reflect(realm1.call0, [f])");
+      check_case("realm2.call_spread(realm1.call_spread, f, 1, 2, 3)");
+
+      check_case("realm2.call1(realm1.construct0, f).x");
+      check_case(
+          "realm2.call_spread(realm1.construct_via_reflect, f, [1, 2, 3]).x");
+      check_case("realm2.call_spread(realm1.construct_spread, f, 1, 2, 3).x");
+    }
+    os << "==== 3\n";
+
+    {
+      // context -> context0 -> context -> context1.
+      expected_incumbent_context = context;
+      expected_function_context_id = 1;
+
+      check_case("realm0.call1(call0, realm1.f)");
+      check_case("realm0.call1_via_call(call0, undefined, realm1.f)");
+      check_case("realm0.call_via_apply(call0, [realm1.f])");
+      check_case("realm0.call_via_reflect(call0, [realm1.f])");
+      check_case("realm0.call_spread(call_spread, realm1.f, 1, 2, 3)");
+
+      check_case("realm0.call1(construct0, realm1.f).x");
+      check_case(
+          "realm0.call_spread(construct_via_reflect, realm1.f, [1, 2]).x");
+      check_case("realm0.call_spread(construct_spread, realm1.f, 1, 2).x");
+    }
+    os << "==== 4\n";
+  }
+}
 
 // Verify that we can clone an object
 TEST(ObjectClone) {
