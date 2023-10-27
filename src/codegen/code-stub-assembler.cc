@@ -6836,6 +6836,15 @@ TNode<BoolT> CodeStubAssembler::IsMapIteratorProtectorCellInvalid() {
   return TaggedEqual(cell_value, invalid);
 }
 
+TNode<BoolT> CodeStubAssembler::IsToStringLookupChainCellInvalid() {
+  TNode<Smi> invalid = SmiConstant(Protectors::kProtectorInvalid);
+  TNode<PropertyCell> cell = ToStringLookupChainProtectorConstant();
+  // Print("CSA cell:");
+  // Print(cell);
+  TNode<Object> cell_value = LoadObjectField(cell, PropertyCell::kValueOffset);
+  return TaggedEqual(cell_value, invalid);
+}
+
 TNode<BoolT> CodeStubAssembler::IsPrototypeInitialArrayPrototype(
     TNode<Context> context, TNode<Map> map) {
   const TNode<NativeContext> native_context = LoadNativeContext(context);
@@ -7071,6 +7080,24 @@ TNode<BoolT> CodeStubAssembler::IsJSApiObjectInstanceType(
 
 TNode<BoolT> CodeStubAssembler::IsJSObjectMap(TNode<Map> map) {
   return IsJSObjectInstanceType(LoadMapInstanceType(map));
+}
+
+/*TNode<BoolT> CodeStubAssembler::IsBasicJSObjectType(
+    TNode<Int32T> instance_type) {
+  return InstanceTypeEqual(instance_type, JS_OBJECT_TYPE);
+}
+
+TNode<BoolT> CodeStubAssembler::IsBasicJSObjectMap(TNode<Map> map) {
+  return IsBasicJSObjectType(LoadMapInstanceType(map));
+}*/
+
+TNode<BoolT> CodeStubAssembler::IsJSObjectPrototypeInstanceType(
+    TNode<Int32T> instance_type) {
+  return Word32Equal(instance_type, Int32Constant(JS_OBJECT_PROTOTYPE_TYPE));
+}
+
+TNode<BoolT> CodeStubAssembler::IsJSObjectPrototypeMap(TNode<Map> map) {
+  return IsJSObjectPrototypeInstanceType(LoadMapInstanceType(map));
 }
 
 TNode<BoolT> CodeStubAssembler::IsJSApiObjectMap(TNode<Map> map) {
@@ -10900,6 +10927,7 @@ TNode<BoolT> CodeStubAssembler::IsInterestingProperty(TNode<Name> name) {
   // these strings and interesting symbols.
   GotoIf(IsToJSONString(name), &return_true);
   GotoIf(IsGetString(name), &return_true);
+  GotoIf(IsToStringString(name), &return_true);
   GotoIfNot(InstanceTypeEqual(LoadMapInstanceType(LoadMap(name)), SYMBOL_TYPE),
             &return_false);
   Branch(IsSetWord32<Symbol::IsInterestingSymbolBit>(
@@ -10988,6 +11016,95 @@ TNode<Object> CodeStubAssembler::GetInterestingProperty(
   return CallBuiltin(Builtin::kGetPropertyWithReceiver, context,
                      (*var_holder).value(), name, receiver,
                      SmiConstant(OnNonExistent::kReturnUndefined));
+}
+
+TNode<BoolT> CodeStubAssembler::HasInterestingProperty(
+    TNode<Context> context, TNode<JSReceiver> receiver) {
+  TVARIABLE(HeapObject, var_holder, receiver);
+  TVARIABLE(Map, var_holder_map, LoadMap(receiver));
+
+  return HasInterestingProperty(context, receiver, &var_holder,
+                                &var_holder_map);
+}
+
+TNode<BoolT> CodeStubAssembler::HasInterestingProperty(
+    TNode<Context> context, TNode<Object> receiver,
+    TVariable<HeapObject>* var_holder, TVariable<Map>* var_holder_map) {
+  // Print("HasInterestingProperty");
+  //  The lookup starts at the var_holder and var_holder_map must contain
+  //  var_holder's map.
+  CSA_DCHECK(this, TaggedEqual(LoadMap((*var_holder).value()),
+                               (*var_holder_map).value()));
+  TVARIABLE(BoolT, var_result, BoolConstant(true));
+  TVARIABLE(Map, last_map, (*var_holder_map).value());
+
+  // Check if all relevant maps (including the prototype maps) don't
+  // have any interesting properties (i.e. that none of them have the
+  // @@toStringTag or @@toPrimitive property).
+  Label loop(this, {var_holder, var_holder_map, &last_map}),
+      met_null(this, {&last_map, &var_result}),
+      return_label(this, {&var_result});
+  Goto(&loop);
+  BIND(&loop);
+  {
+    Label interesting_properties(this);
+    TNode<HeapObject> holder = (*var_holder).value();
+    TNode<Map> holder_map = (*var_holder_map).value();
+    // Print("holder is");
+    // Print(holder);
+    // Print("holder map is");
+    // Print(holder_map);
+    GotoIf(IsNull(holder), &met_null);
+    TNode<Uint32T> holder_bit_field3 = LoadMapBitField3(holder_map);
+    GotoIf(IsSetWord32<Map::Bits3::MayHaveInterestingPropertiesBit>(
+               holder_bit_field3),
+           &interesting_properties);
+    last_map = holder_map;
+    // Print("loop last_map is");
+    // Print(last_map.value());
+    *var_holder = LoadMapPrototype(holder_map);
+    *var_holder_map = LoadMap((*var_holder).value());
+    Goto(&loop);
+    BIND(&interesting_properties);
+    {
+      // Check flags for dictionary objects.
+      GotoIf(IsClearWord32<Map::Bits3::IsDictionaryMapBit>(holder_bit_field3),
+             &return_label);
+      // JSProxy has dictionary properties but has to be handled in runtime.
+      GotoIf(InstanceTypeEqual(LoadMapInstanceType(holder_map), JS_PROXY_TYPE),
+             &return_label);
+      TNode<Object> properties =
+          LoadObjectField(holder, JSObject::kPropertiesOrHashOffset);
+      CSA_DCHECK(this, TaggedIsNotSmi(properties));
+      // TODO(pthier): Support swiss dictionaries.
+      if constexpr (!V8_ENABLE_SWISS_NAME_DICTIONARY_BOOL) {
+        CSA_DCHECK(this, IsNameDictionary(CAST(properties)));
+        TNode<Smi> flags =
+            GetNameDictionaryFlags<NameDictionary>(CAST(properties));
+        GotoIf(IsSetSmi(flags,
+                        NameDictionary::MayHaveInterestingPropertiesBit::kMask),
+               &return_label);
+        last_map = holder_map;
+        // Print("interesting_properties map is");
+        // Print(last_map.value());
+        *var_holder = LoadMapPrototype(holder_map);
+        *var_holder_map = LoadMap((*var_holder).value());
+      }
+      Goto(&loop);
+    }
+  }
+
+  BIND(&met_null);
+  {
+    // Print("met_null");
+    // Print(last_map.value());
+    GotoIfNot(IsJSObjectPrototypeMap(last_map.value()), &return_label);
+    var_result = BoolConstant(false);
+    Goto(&return_label);
+  }
+
+  BIND(&return_label);
+  return var_result.value();
 }
 
 void CodeStubAssembler::TryLookupElement(
