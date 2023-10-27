@@ -63,6 +63,30 @@
       },
       "revId": "da456715086b4ca059f62dd6e2dc7ed70aa4543a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0267a358_d98943fc",
+        "filename": "tools/testrunner/local/testsuite.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-10-27T12:09:33Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "4cd14ba4_ad5f2fd0",
+      "range": {
+        "startLine": 237,
+        "startChar": 10,
+        "endLine": 237,
+        "endChar": 16
+      },
+      "revId": "da456715086b4ca059f62dd6e2dc7ed70aa4543a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
