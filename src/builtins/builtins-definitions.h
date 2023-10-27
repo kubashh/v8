@@ -211,6 +211,12 @@ namespace internal {
   ASM(MaglevOptimizeCodeOrTailCallOptimizedCodeSlot,                           \
       MaglevOptimizeCodeOrTailCallOptimizedCodeSlot)                           \
                                                                                \
+  /* Helpers common to standard frames */                                      \
+  ASM(ForwardStandardFrameArgsThenConstruct,                                   \
+      ForwardStandardFrameArgsThenConstruct)                                   \
+  ASM(ForwardCurrentStandardFrameArgsThenConstruct,                            \
+      ForwardCurrentStandardFrameArgsThenConstruct)                            \
+                                                                               \
   /* Code life-cycle */                                                        \
   TFC(CompileLazy, JSTrampoline)                                               \
   TFC(CompileLazyDeoptimizedCode, JSTrampoline)                                \

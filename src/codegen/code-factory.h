@@ -79,6 +79,7 @@ class V8_EXPORT_PRIVATE CodeFactory final {
                                               InterpreterPushArgsMode mode);
   static Callable InterpreterPushArgsThenConstruct(
       Isolate* isolate, InterpreterPushArgsMode mode);
+  static Callable ForwardStandardFrameArgsThenConstruct(Isolate* isolate);
   static Callable InterpreterCEntry(Isolate* isolate, int result_size = 1);
   static Callable InterpreterOnStackReplacement(Isolate* isolate);
   static Callable InterpreterOnStackReplacement_ToBaseline(Isolate* isolate);
