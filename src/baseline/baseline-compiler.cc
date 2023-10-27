@@ -1499,6 +1499,18 @@ void BaselineCompiler::VisitConstructWithSpread() {
       args);
 }
 
+void BaselineCompiler::VisitConstructForwardArgs() {
+  using Descriptor = CallInterfaceDescriptorFor<
+      Builtin::kForwardCurrentStandardFrameArgsThenConstruct>::type;
+  Register new_target =
+      Descriptor::GetRegisterParameter(Descriptor::kNewTarget);
+  __ Move(new_target, kInterpreterAccumulatorRegister);
+
+  CallBuiltin<Builtin::kForwardCurrentStandardFrameArgsThenConstruct>(
+      RegisterOperand(0),  // kFunction
+      new_target);         // kNewTarget
+}
+
 void BaselineCompiler::VisitTestEqual() {
   CallBuiltin<Builtin::kEqual_Baseline>(
       RegisterOperand(0), kInterpreterAccumulatorRegister, Index(1));

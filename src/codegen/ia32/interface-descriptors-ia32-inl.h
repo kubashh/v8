@@ -332,6 +332,20 @@ constexpr auto InterpreterPushArgsThenConstructDescriptor::registers() {
 }
 
 // static
+constexpr auto ForwardStandardFrameArgsThenConstructDescriptor::registers() {
+  return RegisterArray(ecx,   // frame pointer
+                       edi,   // the constructor
+                       edx);  // the new target
+}
+
+// static
+constexpr auto
+ForwardCurrentStandardFrameArgsThenConstructDescriptor::registers() {
+  return RegisterArray(edi,   // the constructor
+                       edx);  // the new target
+}
+
+// static
 constexpr auto ResumeGeneratorDescriptor::registers() {
   return RegisterArray(eax,   // the value to pass to the generator
                        edx);  // the JSGeneratorObject to resume
