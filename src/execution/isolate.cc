@@ -5249,6 +5249,24 @@ void Isolate::UpdateNumberStringNotRegexpLikeProtectorOnSetPrototype(
   }
 }
 
+void Isolate::UpdateToStringLookupChainProtectorOnSetPrototype(
+    Handle<JSObject> object) {
+  if (!Protectors::IsToStringLookupChainIntact(this)) {
+    return;
+  }
+  // We need to protect the prototype chain of `Number.prototype` and
+  // `String.prototype`.
+  // Since `Object.prototype.__proto__` is not writable, we can assume it
+  // doesn't occur here. We detect `Number.prototype` and `String.prototype` by
+  // checking for a prototype that is a JSPrimitiveWrapper. This is a safe
+  // approximation. Using JSPrimitiveWrapper as prototype should be
+  // sufficiently rare.
+  DCHECK(!IsJSObjectPrototype(*object));
+  if (object->map()->is_prototype_map() && (IsJSPrimitiveWrapper(*object))) {
+    Protectors::InvalidateToStringLookupChain(this);
+  }
+}
+
 static base::RandomNumberGenerator* ensure_rng_exists(
     base::RandomNumberGenerator** rng, int seed) {
   if (*rng == nullptr) {

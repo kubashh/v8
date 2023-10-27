@@ -539,6 +539,7 @@ type NumberOrUndefined = Number|Undefined;
 
 extern macro DefaultStringConstant(): String;
 extern macro EmptyStringConstant(): EmptyString;
+extern macro ObjectToStringConstant(): String;
 extern macro ErrorsStringConstant(): String;
 extern macro FalseConstant(): False;
 extern macro GetStringConstant(): String;
@@ -581,6 +582,7 @@ const kReturnString: String = ReturnStringConstant();
 const kSizeString: String = SizeStringConstant();
 const kHasString: String = HasStringConstant();
 const kKeysString: String = KeysStringConstant();
+const kObjectToString: String = ObjectToStringConstant();
 
 const kNaN: NaN = NanConstant();
 const kZero: Zero = %RawDownCast<Zero>(SmiConstant(0));
@@ -713,6 +715,8 @@ extern transitioning macro GetProperty(
 extern macro IsInterestingProperty(Name): bool;
 extern macro GetInterestingProperty(Context, JSReceiver, Name): JSAny
     labels NotFound;
+extern macro HasInterestingProperty(Context, JSReceiver): bool;
+extern macro IsToStringLookupChainCellInvalid(): bool;
 extern transitioning builtin SetProperty(
     implicit context: Context)(JSAny, JSAny, JSAny): JSAny;
 extern transitioning builtin SetPropertyIgnoreAttributes(
