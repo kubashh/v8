@@ -311,6 +311,20 @@ let instance = MakeInstance();
   // Note: `SharedArrayBuffer` cannot become detached.
 })();
 
+(function TestDataViewResizableArrayBuffer() {
+  print(arguments.callee.name);
+  // Create a resizable buffer.
+  let buffer = new ArrayBuffer(4, {maxByteLength: 8});
+  let array = new Int32Array(buffer);
+  let dataview = new DataView(buffer);
+
+  // Resizable buffers are not supported yet for the well-known DataView
+  // imports.
+  assertThrows(
+      () => {instance.exports.setInt32(dataview, 0, 100, 1)}, TypeError);
+  assertThrows(() => {instance.exports.getInt32(dataview, 0, 1)}, TypeError);
+})();
+
 (function TestGetBigInt64() {
   print(arguments.callee.name);
   let array = new BigInt64Array(2);
