@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8e1feef_f7d255be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Apologies for the delay, there was some upstream churn I had to work around before I could resubmit.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "376edc5c_5f07fb25",
@@ -14,6 +31,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "ifdef shouldn\u0027t be needed as LoadExternalPointerField already includes this check.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "161bc77f_30556a21",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3581,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "376edc5c_5f07fb25",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -35,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57157454_f6c0db04",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3759,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4304fa6b_978cb2db",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2780f24_aa51cafa",
@@ -48,6 +101,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "ShiftRightU64",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51a3092e_481a1947",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2780f24_aa51cafa",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3811d3e_3ba2731b",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86a07807_c0ee2fb3",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2901043_9e9ba8ba",
@@ -82,6 +171,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "ShiftLeftU64",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03557732_98181664",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2901043_9e9ba8ba",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb4d388d_b876e4d3",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9949272d_a484dbd0",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfc79efd_dd240374",
@@ -116,6 +241,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "ShiftLeftU64.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "669ea942_c3e3a874",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfc79efd_dd240374",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +280,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c61751eb_31733402",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Tried this and it caused test failures, likely because the scratch register used by the function is actually a register that is being used by something else...will leave the mov() in but update the function call.",
+      "parentUuid": "ce3d13ec_e6e92481",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8c97a89_6221f894",
@@ -154,6 +315,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bc73462_d38e99a7",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8c97a89_6221f894",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94492d50_c5592068",
@@ -167,6 +346,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "You can use OrU64 and remove the `mov` above it.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb5a3e13_ecb94853",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Tried this and it caused test failures, likely because the scratch register used by the function is actually a register that is being used by something else...will leave the mov() in but update the function call.",
+      "parentUuid": "94492d50_c5592068",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -190,6 +387,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c9d72b9_39fc9456",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "We do need another scratch register, there aren\u0027t enough to make this work.  Trying to use the \"standard\" ppc scratch registers ends up trampling on a prior use of the scratch register in a caller function somewhere, and causes crashes.  Is there any way we can take this as-is for now?",
+      "parentUuid": "e5c95854_f504347e",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ef5869b_7a0067cd",
         "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
         "patchSetId": 6
@@ -201,6 +416,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "We can implement it with `MoveObjectAndSlot`? this way we are in sync with arm.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e360ce97_256912b5",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Can I do this in a follow-on patch?  I\u0027m having to rebase and fix up quote often due to upstream code churn, and the patch series is somewhat large which makes that process quite time consuming.",
+      "parentUuid": "6ef5869b_7a0067cd",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -224,6 +457,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8066b46b_ff34bf25",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Can I do this in a follow-on patch?  I\u0027m having to rebase and fix up quote often due to upstream code churn, and the patch series is somewhat large which makes that process quite time consuming.",
+      "parentUuid": "04ff4465_ea8a8619",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95684dfc_d10feae5",
         "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
         "patchSetId": 6
@@ -235,6 +486,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "maybe change to `mov(tag_parameter, Operand(tag));` to be consistent?",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db6c277f_f8a94ded",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95684dfc_d10feae5",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -258,6 +527,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94d7303d_83a50868",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "kScratchReg is defined as r11, and both r0 and r12 are already in use.  Is there a reason kScratchReg shouldn\u0027t be used here?",
+      "parentUuid": "2a01711f_796f49fe",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ae3dd274_cb9813df",
         "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
         "patchSetId": 6
@@ -269,6 +556,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "Could you try removing these tabs and run a \"git cl format\"?",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e9d0d9f_1ef557e1",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5498,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae3dd274_cb9813df",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -290,6 +595,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d52ed9da_9b477440",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5515,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "This was a comment copy+paste from arm64 left over from debugging -- the code itself is different than the arm64 code, but the comment remained.",
+      "parentUuid": "8956fb51_12434770",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6dc546fa_67fd63b9",
@@ -303,6 +626,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "This won\u0027t be needed anymore if the 2 places using it are changed to `mov(..., Operand(...));`.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20e7f139_556ddb69",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "The Move() functions are cleaner in my opinion.  Is there a reason we should use the mov() function instead?  I note for example that we tend to use a lot of other wrapper functions, e.g. LoadU64() etc., and having two forms of Move sprinkled throughout the codebase could be somewhat confusing.\n\nThat said, I can implement if you would prefer it this way.",
+      "parentUuid": "6dc546fa_67fd63b9",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -342,6 +683,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9411b5cf_0611d3cf",
+        "filename": "src/compiler/backend/instruction-codes.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe81e12b_55481240",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be57806a_72c91426",
@@ -359,6 +718,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99e008da_ac071f27",
+        "filename": "src/compiler/backend/ppc/code-generator-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Looks like this was left over from the initial port, then upstream churn removed the need for it in the final patch set.  Removed.",
+      "parentUuid": "be57806a_72c91426",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3f45d31a_0fe82eed",
@@ -372,6 +749,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "Why is this needed?",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6494c11_9cb93377",
+        "filename": "src/compiler/backend/ppc/code-generator-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Looks like this was left over from the initial port, then upstream churn removed the need for it in the final patch set.  Removed.",
+      "parentUuid": "3f45d31a_0fe82eed",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -395,6 +790,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86eb9a4b_13b07519",
+        "filename": "src/compiler/backend/ppc/instruction-selector-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Without this the code generator will try to use an addressing mode that is not compatible (IIRC it tries to use 64 bit immediate address loads), leading to a failure in the snapshot generator.",
+      "parentUuid": "d7fc27a5_801ea9d9",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9f4dd50_b62ea4c5",
         "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
         "patchSetId": 6
@@ -406,6 +819,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "Most of this logic is already implemented under macro-asm:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/ppc/macro-assembler-ppc.cc;l\u003d3518\n\nmaybe we can try adding the missing ops such as a \"shift\" separately per function? i.e:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h;l\u003d326",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe18a817_418c78b2",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "Can I do this in a follow-on patch? I\u0027m having to rebase and fix up quote often due to upstream code churn, and the patch series is somewhat large which makes that process quite time consuming.",
+      "parentUuid": "c9f4dd50_b62ea4c5",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -429,6 +860,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7fd999a1_f5f58cc7",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "I\u0027m not super comfortable with the change, this is a bit clearer as to what we\u0027re trying to do and I think it will be more maintainable over time.  That said, if you really want me to condense it down I will.",
+      "parentUuid": "ff2d1b55_2e960c81",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d73487a1_2f136d8f",
         "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
         "patchSetId": 6
@@ -440,6 +889,24 @@
       "writtenOn": "2023-10-17T19:54:01Z",
       "side": 1,
       "message": "Would be a good idea to keep it as kZero to be in sync with arm.",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "099c37f4_647d4306",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-10-28T16:02:42Z",
+      "side": 1,
+      "message": "This was very opaque to me the first time I saw it.  I would rather see arm64 updated to be clearer than revert to kZero -- this line is at least clear that we are checking for equality.  It took me a while to figure out what this line was supposed to do with the to_condition(kZero) field.\n\nIs there a good reason to use to_condition(kZero) instead of eq other than to keep things looking similar to the arm64 codebase?",
+      "parentUuid": "d73487a1_2f136d8f",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
