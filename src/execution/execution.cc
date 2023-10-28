@@ -307,17 +307,17 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(Isolate* isolate,
     if ((!params.is_construct || IsConstructor(*function)) &&
         function->shared()->IsApiFunction() &&
         !function->shared()->BreakAtEntry(isolate)) {
-      SaveAndSwitchContext save(isolate, function->context());
       DCHECK(IsJSGlobalObject(function->context()->global_object()));
 
       Handle<Object> receiver = params.is_construct
                                     ? isolate->factory()->the_hole_value()
                                     : params.receiver;
-      Handle<FunctionTemplateInfo> fun_data(function->shared()->api_func_data(),
-                                            isolate);
+      Handle<FunctionTemplateInfo> fun_template(
+          function->shared()->api_func_data(), isolate);
       auto value = Builtins::InvokeApiFunction(
-          isolate, params.is_construct, fun_data, receiver, params.argc,
-          params.argv, Handle<HeapObject>::cast(params.new_target));
+          isolate, params.is_construct, handle(function->context(), isolate),
+          fun_template, receiver, params.argc, params.argv,
+          Handle<HeapObject>::cast(params.new_target));
       bool has_exception = value.is_null();
       DCHECK(has_exception == isolate->has_pending_exception());
       if (has_exception) {

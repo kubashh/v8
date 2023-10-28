@@ -75,7 +75,8 @@ class PropertyCallbackArguments final
   static constexpr int kArgsLength = T::kArgsLength;
   static constexpr int kThisIndex = T::kThisIndex;
   static constexpr int kDataIndex = T::kDataIndex;
-  static constexpr int kUnusedIndex = T::kUnusedIndex;
+  static constexpr int kPrevIncumbentContextIndex =
+      T::kPrevIncumbentContextIndex;
   static constexpr int kHolderIndex = T::kHolderIndex;
   static constexpr int kIsolateIndex = T::kIsolateIndex;
   static constexpr int kShouldThrowOnErrorIndex = T::kShouldThrowOnErrorIndex;
@@ -179,7 +180,8 @@ class FunctionCallbackArguments
 
   static constexpr int kHolderIndex = T::kHolderIndex;
   static constexpr int kIsolateIndex = T::kIsolateIndex;
-  static constexpr int kUnusedIndex = T::kUnusedIndex;
+  static constexpr int kPrevIncumbentContextIndex =
+      T::kPrevIncumbentContextIndex;
   static constexpr int kDataIndex = T::kDataIndex;
   static constexpr int kNewTargetIndex = T::kNewTargetIndex;
 
