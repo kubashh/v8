@@ -291,9 +291,9 @@ class Builtins {
 
   static void Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode);
 
-  enum class CallOrConstructMode { kCall, kConstruct };
   static void Generate_CallOrConstructVarargs(MacroAssembler* masm,
                                               Handle<Code> code);
+  enum class CallOrConstructMode { kCall, kConstruct };
   static void Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
                                                      CallOrConstructMode mode,
                                                      Handle<Code> code);
@@ -319,6 +319,9 @@ class Builtins {
 
   static void Generate_InterpreterPushArgsThenConstructImpl(
       MacroAssembler* masm, InterpreterPushArgsMode mode);
+
+  static void Generate_ForwardStandardFrameArgsThenConstructImpl(
+      MacroAssembler* masm);
 
   static void Generate_CallApiCallbackImpl(MacroAssembler* masm,
                                            CallApiCallbackMode mode);

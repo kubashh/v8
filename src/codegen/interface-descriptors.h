@@ -80,6 +80,8 @@ namespace internal {
   V(FastNewObject)                                   \
   V(FindNonDefaultConstructorOrConstruct)            \
   V(ForInPrepare)                                    \
+  V(ForwardCurrentStandardFrameArgsThenConstruct)    \
+  V(ForwardStandardFrameArgsThenConstruct)           \
   V(GetIteratorStackParameter)                       \
   V(GetProperty)                                     \
   V(GrowArrayElements)                               \
@@ -2006,6 +2008,31 @@ class InterpreterPushArgsThenConstructDescriptor
                          MachineType::AnyTagged(),  // kNewTarget
                          MachineType::AnyTagged())  // kFeedbackElement
   DECLARE_DESCRIPTOR(InterpreterPushArgsThenConstructDescriptor)
+
+  static constexpr inline auto registers();
+};
+
+class ForwardStandardFrameArgsThenConstructDescriptor
+    : public StaticCallInterfaceDescriptor<
+          ForwardStandardFrameArgsThenConstructDescriptor> {
+ public:
+  DEFINE_PARAMETERS(kFrame, kConstructor, kNewTarget)
+  DEFINE_PARAMETER_TYPES(MachineType::Pointer(),    // kFrame
+                         MachineType::AnyTagged(),  // kConstructor
+                         MachineType::AnyTagged())  // kNewTarget
+  DECLARE_DESCRIPTOR(ForwardStandardFrameArgsThenConstructDescriptor)
+
+  static constexpr inline auto registers();
+};
+
+class ForwardCurrentStandardFrameArgsThenConstructDescriptor
+    : public StaticCallInterfaceDescriptor<
+          ForwardCurrentStandardFrameArgsThenConstructDescriptor> {
+ public:
+  DEFINE_PARAMETERS(kConstructor, kNewTarget)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kConstructor
+                         MachineType::AnyTagged())  // kNewTarget
+  DECLARE_DESCRIPTOR(ForwardCurrentStandardFrameArgsThenConstructDescriptor)
 
   static constexpr inline auto registers();
 };
