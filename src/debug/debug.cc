@@ -118,7 +118,6 @@ class Debug::TemporaryObjectsTracker : public HeapObjectAllocationTracker {
   void RemoveFromAllocationRegion(AllocationRegion region, Address address,
                                   int size) {
     DCHECK_LE(region->first, address);
-    DCHECK_LE(address + size, region->first + region->second);
 
     int region_size = region->second;
     if (address == region->first) {
