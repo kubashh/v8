@@ -49,6 +49,22 @@ JSAtomicsMutex::TryLockGuard::~TryLockGuard() {
   if (locked_) mutex_->Unlock(isolate_);
 }
 
+// JSAtomicsMutex::AsyncLockGuard::AsyncLockGuard(Isolate* isolate,
+//                                                Handle<JSAtomicsMutex> mutex,
+//                                                Handle<JSObject>
+//                                                run_under_lock,
+//                                                Handle<JSPromise> promise,
+//                                                EnqueueAction enqueue_action)
+//     : isolate_(isolate),
+//       mutex_(mutex),
+//       locked_(JSAtomicsMutex::AsyncLock(isolate, mutex, run_under_lock,
+//       promise,
+//                                         enqueue_action)) {}
+
+// JSAtomicsMutex::AsyncLockGuard::~AsyncLockGuard() {
+//   if (locked_) mutex_->Unlock(isolate_);
+// }
+
 // static
 void JSAtomicsMutex::Lock(Isolate* requester, Handle<JSAtomicsMutex> mutex) {
   DisallowGarbageCollection no_gc;
@@ -66,6 +82,36 @@ void JSAtomicsMutex::Lock(Isolate* requester, Handle<JSAtomicsMutex> mutex) {
     LockSlowPath(requester, mutex, state);
   }
   mutex->SetCurrentThreadAsOwner();
+}
+
+// static
+bool JSAtomicsMutex::AsyncLock(Isolate* requester, Handle<JSAtomicsMutex> mutex,
+                               Handle<JSPromise> promise) {
+  // First try to lock an uncontended mutex, which should be the common case. If
+  // this fails, then go to the slow path to possibly put the current thread to
+  // sleep.
+  //
+  // The fast path is done using a weak CAS which may fail spuriously on
+  // architectures with load-link/store-conditional instructions.
+  std::atomic<StateT>* state = mutex->AtomicStatePtr();
+  StateT expected = kUnlocked;
+  if (V8_UNLIKELY(!state->compare_exchange_weak(expected, kLockedUncontended,
+                                                std::memory_order_acquire,
+                                                std::memory_order_relaxed))) {
+    return AsyncLockSlowPath(mutex, requester, promise, state);
+  }
+  mutex->SetCurrentThreadAsOwner();
+  return true;
+}
+
+bool JSAtomicsMutex::TryLockExplicitAndSetOwner() {
+  std::atomic<StateT>* state = AtomicStatePtr();
+  StateT current_state = state->load(std::memory_order_relaxed);
+  if (TryLockExplicit(state, current_state)) {
+    SetCurrentThreadAsOwner();
+    return true;
+  }
+  return false;
 }
 
 bool JSAtomicsMutex::TryLock() {
