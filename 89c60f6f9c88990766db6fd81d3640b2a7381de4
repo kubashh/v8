@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14b4950a_41c9f48c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-30T23:37:11Z",
+      "side": 1,
+      "message": "I\u0027ve also",
+      "revId": "89c60f6f9c88990766db6fd81d3640b2a7381de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26ea6948_7e57e6b4",
@@ -31,6 +48,30 @@
       "writtenOn": "2023-10-30T08:06:16Z",
       "side": 1,
       "message": "maybe we should print this differently, since it\u0027s not strictly correct.",
+      "range": {
+        "startLine": 497,
+        "startChar": 10,
+        "endLine": 497,
+        "endChar": 17
+      },
+      "revId": "89c60f6f9c88990766db6fd81d3640b2a7381de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddc1ef81_82b6e7d0",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-30T23:37:11Z",
+      "side": 1,
+      "message": "Good point. I settled on `(...forwarded args...)` but I don\u0027t love it. Thoughts?",
+      "parentUuid": "26ea6948_7e57e6b4",
       "range": {
         "startLine": 497,
         "startChar": 10,
@@ -64,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f8bf17a_3fa2dc1a",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-30T23:37:11Z",
+      "side": 1,
+      "message": "Good idea. I\u0027ve renamed the parent frame pointer version to `InterpreterForwardAllArgsThenConstruct` and the current frame pointer version to `ConstructForwardAllArgs`.",
+      "parentUuid": "fd4765bd_d65e389c",
+      "range": {
+        "startLine": 1402,
+        "startChar": 9,
+        "endLine": 1402,
+        "endChar": 33
+      },
+      "revId": "89c60f6f9c88990766db6fd81d3640b2a7381de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38fb8a70_f4e60a89",
@@ -77,6 +142,30 @@
       "writtenOn": "2023-10-30T08:06:16Z",
       "side": 1,
       "message": "is it worth sharing this code with `VisitSuperCall`? I guess it\u0027s not too much code vs the mess we\u0027d need to make with `constructor_then_instance`...",
+      "range": {
+        "startLine": 6217,
+        "startChar": 0,
+        "endLine": 6230,
+        "endChar": 55
+      },
+      "revId": "89c60f6f9c88990766db6fd81d3640b2a7381de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad0637c6_016a6be1",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6230,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-10-30T23:37:11Z",
+      "side": 1,
+      "message": "I\u0027ve refactored out this particular part into its own helper.",
+      "parentUuid": "38fb8a70_f4e60a89",
       "range": {
         "startLine": 6217,
         "startChar": 0,
