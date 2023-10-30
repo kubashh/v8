@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7a7394e_d33fc710",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-10-30T15:35:35Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "82a2e0be87ad096453acd08299be4b559231ef30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "485bee86_e5779281",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-10-30T15:35:35Z",
+      "side": 1,
+      "message": "HEAVY is also SLOW implicitly. This test for example is still in the list of slowest tests.\n\nThe other way around with the two below.",
+      "range": {
+        "startLine": 100,
+        "startChar": 34,
+        "endLine": 100,
+        "endChar": 38
+      },
+      "revId": "82a2e0be87ad096453acd08299be4b559231ef30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
