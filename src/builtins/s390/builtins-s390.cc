@@ -1778,6 +1778,70 @@ void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
   }
 }
 
+// static
+void Builtins::Generate_InterpreterForwardAllArgsThenConstruct(
+    MacroAssembler* masm) {
+  // ----------- S t a t e -------------
+  // -- r5 : new target
+  // -- r3 : constructor to call
+  // -----------------------------------
+
+  // Load the interpreted frame into r6.
+  __ LoadU64(r6, MemOperand(fp, StandardFrameConstants::kCallerFPOffset));
+  Generate_ConstructForwardAllArgsImpl(masm);
+}
+
+// static
+void Builtins::Generate_ConstructForwardAllArgs(MacroAssembler* masm) {
+  // ----------- S t a t e -------------
+  // -- r5 : new target
+  // -- r3 : constructor to call
+  // -----------------------------------
+
+  // Load the frame pointer into r6.
+  __ mov(r6, fp);
+  Generate_ConstructForwardAllArgsImpl(masm);
+}
+
+// static
+void Builtins::Generate_ConstructForwardAllArgsImpl(MacroAssembler* masm) {
+  // ----------- S t a t e -------------
+  // -- r6 : frame pointer
+  // -- r5 : new target
+  // -- r3 : constructor to call
+  // -----------------------------------
+  Label stack_overflow;
+
+  // Load the argument count into r2.
+  __ LoadU64(r2, MemOperand(r6, StandardFrameConstants::kArgCOffset));
+  __ StackOverflowCheck(r2, ip, &stack_overflow);
+
+  // Point r6 to the base of the argument list to forward, excluding the
+  // receiver.
+  __ AddS64(r6, r6,
+            Operand((StandardFrameConstants::kFixedSlotCountAboveFp + 1) *
+                    kSystemPointerSize));
+
+  // Copy arguments on the stack. r5 is a scratch register.
+  Register argc_without_receiver = ip;
+  __ SubS64(argc_without_receiver, r2, Operand(kJSArgcReceiverSlots));
+  __ PushArray(r6, argc_without_receiver, r1, r7);
+
+  // Push a slot for the receiver.
+  __ mov(r0, Operand::Zero());
+  __ push(r0);
+
+  // Call the constructor with r2, r5, and r3 unmodifdied.
+  __ Jump(BUILTIN_CODE(masm->isolate(), Construct), RelocInfo::CODE_TARGET);
+
+  __ bind(&stack_overflow);
+  {
+    __ TailCallRuntime(Runtime::kThrowStackOverflow);
+    // Unreachable Code.
+    __ bkpt(0);
+  }
+}
+
 namespace {
 
 void NewImplicitReceiver(MacroAssembler* masm) {
