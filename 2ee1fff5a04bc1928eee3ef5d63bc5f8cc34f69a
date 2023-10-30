@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "2ee1fff5a04bc1928eee3ef5d63bc5f8cc34f69a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10962116_79c20b35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-10-30T09:27:24Z",
+      "side": 1,
+      "message": "Sorry for missing that in the earlier review. LGTM\nNot triggering auto-submit because of the merge conflict.",
+      "revId": "2ee1fff5a04bc1928eee3ef5d63bc5f8cc34f69a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
