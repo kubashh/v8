@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b72e498b_48cb0adb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-30T08:06:16Z",
+      "side": 1,
+      "message": "General +1, some comments",
+      "revId": "89c60f6f9c88990766db6fd81d3640b2a7381de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26ea6948_7e57e6b4",
+        "filename": "src/ast/prettyprinter.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-30T08:06:16Z",
+      "side": 1,
+      "message": "maybe we should print this differently, since it\u0027s not strictly correct.",
+      "range": {
+        "startLine": 497,
+        "startChar": 10,
+        "endLine": 497,
+        "endChar": 17
+      },
+      "revId": "89c60f6f9c88990766db6fd81d3640b2a7381de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd4765bd_d65e389c",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-30T08:06:16Z",
+      "side": 1,
+      "message": "this will always be the parent frame pointer, right? Would it be preferable to have an explicit \"for interpreter handler\" and \"for native code\" version, where one does `__ movq(rcx, rbp)` and the other does `__ movq(rcx, [rbp])`? This would be more consistent with `Call` and `InterpreterCall`",
+      "range": {
+        "startLine": 1402,
+        "startChar": 9,
+        "endLine": 1402,
+        "endChar": 33
+      },
+      "revId": "89c60f6f9c88990766db6fd81d3640b2a7381de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38fb8a70_f4e60a89",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6230,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-30T08:06:16Z",
+      "side": 1,
+      "message": "is it worth sharing this code with `VisitSuperCall`? I guess it\u0027s not too much code vs the mess we\u0027d need to make with `constructor_then_instance`...",
+      "range": {
+        "startLine": 6217,
+        "startChar": 0,
+        "endLine": 6230,
+        "endChar": 55
+      },
+      "revId": "89c60f6f9c88990766db6fd81d3640b2a7381de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dd92345_80f45071",
+        "filename": "test/unittests/interpreter/bytecode-array-builder-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-10-30T08:06:16Z",
+      "side": 1,
+      "message": "Unrelated: I\u0027m wondering whether we should remove this test, I\u0027ve never seen it catch anything, it doesn\u0027t check whether the built output matches the inputs, and it\u0027s just annoying when adding bytecodes.",
+      "range": {
+        "startLine": 259,
+        "startChar": 2,
+        "endLine": 259,
+        "endChar": 9
+      },
+      "revId": "89c60f6f9c88990766db6fd81d3640b2a7381de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
