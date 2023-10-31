@@ -39,6 +39,10 @@ void ExternalCodeCompressionScheme::set_base_non_inlined(Address base) {
 }
 #endif  // V8_EXTERNAL_CODE_SPACE
 
+#ifdef V8_ENABLE_SANDBOX
+uintptr_t TrustedHeapCompressionScheme::base_ = kNullAddress;
+#endif  // V8_ENABLE_SANDBOX
+
 #undef THREAD_LOCAL_IF_MULTICAGE
 
 #endif  // V8_COMPRESS_POINTERS

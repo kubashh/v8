@@ -623,6 +623,20 @@ Page* MemoryAllocator::AllocatePage(MemoryAllocator::AllocationMode alloc_mode,
   return page;
 }
 
+ReadOnlyPage* MemoryAllocator::AllocateReadOnlyPage(TrustedSpace* space,
+                                                    Address hint) {
+  DCHECK_EQ(space->identity(), TRUSTED_SPACE);
+  // TODO
+  size_t size = MemoryChunkLayout::AllocatableMemoryInMemoryChunk(RO_SPACE);
+  base::Optional<MemoryChunkAllocationResult> chunk_info =
+      AllocateUninitializedChunkAt(space, size, NOT_EXECUTABLE, hint,
+                                   PageSize::kRegular);
+  if (!chunk_info) return nullptr;
+  return new (chunk_info->start) ReadOnlyPage(
+      isolate_->heap(), space, chunk_info->size, chunk_info->area_start,
+      chunk_info->area_end, std::move(chunk_info->reservation));
+}
+
 ReadOnlyPage* MemoryAllocator::AllocateReadOnlyPage(ReadOnlySpace* space,
                                                     Address hint) {
   DCHECK_EQ(space->identity(), RO_SPACE);

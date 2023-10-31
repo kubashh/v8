@@ -116,6 +116,20 @@ class ExternalCodeCompressionScheme {
 #endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 };
 
+#ifdef V8_ENABLE_SANDBOX
+class TrustedHeapCompressionScheme {
+ public:
+  V8_INLINE static Address PrepareCageBaseAddress(Address on_heap_addr);
+
+  // Process-wide cage base value used for decompression.
+  V8_INLINE static void InitBase(Address base);
+  V8_INLINE static Address base();
+
+ private:
+  static V8_EXPORT_PRIVATE uintptr_t base_ V8_CONSTINIT;
+};
+#endif  // V8_ENABLE_SANDBOX
+
 #endif  // V8_EXTERNAL_CODE_SPACE
 
 // Accessors for fields that may be unaligned due to pointer compression.

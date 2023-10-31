@@ -25,7 +25,7 @@ bool TrustedRange::InitReservation(size_t requested) {
 
   // The allocatable region must not cross a 4GB boundary so that the default
   // pointer compression scheme of truncating pointers to 32-bits still works.
-  const size_t base_alignment = base::bits::RoundUpToPowerOfTwo(requested);
+  const size_t base_alignment = kPtrComprCageBaseAlignment;
 
   const Address requested_start_hint =
       RoundDown(reinterpret_cast<Address>(page_allocator->GetRandomMmapAddr()),
@@ -53,6 +53,9 @@ void InitProcessWideTrustedRange(size_t requested_size) {
         nullptr, "Failed to reserve virtual memory for TrustedRange");
   }
   process_wide_trusted_range_ = trusted_range;
+
+  // Set the global cage base.
+  TrustedHeapCompressionScheme::InitBase(trusted_range->base());
 }
 }  // namespace
 

@@ -36,6 +36,7 @@ class TestMemoryAllocatorScope;
 class Heap;
 class Isolate;
 class ReadOnlyPage;
+class TrustedSpace;
 
 // ----------------------------------------------------------------------------
 // A space acquires chunks of memory from the operating system. The memory
@@ -201,6 +202,8 @@ class MemoryAllocator {
                                                  size_t object_size,
                                                  Executability executable);
 
+  ReadOnlyPage* AllocateReadOnlyPage(TrustedSpace* space,
+                                     Address hint = kNullAddress);
   ReadOnlyPage* AllocateReadOnlyPage(ReadOnlySpace* space,
                                      Address hint = kNullAddress);
 

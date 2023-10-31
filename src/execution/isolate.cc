@@ -4640,6 +4640,34 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   heap_.SetUpSpaces(isolate_data_.new_allocation_info_,
                     isolate_data_.old_allocation_info_);
 
+  int actual_page_index = 0;
+  std::vector<ReadOnlyPage*> pages;
+  for (auto p : read_only_heap()->read_only_space()->pages()) {
+    int ro_offset =
+        static_cast<int>(p->area_start() - GetPtrComprCage()->base());
+    printf("ro page %d at %p size %d cage-base offset %d\n",
+           static_cast<int>(actual_page_index),
+           reinterpret_cast<void*>(p->area_start()),
+           static_cast<int>(p->area_size()), ro_offset);
+
+    TrustedSpace* tspace = heap_.trusted_space();
+    ReadOnlyPage* q = heap_.memory_allocator()->AllocateReadOnlyPage(tspace);
+    pages.push_back(q);
+    int trusted_offset = static_cast<int>(q->area_start() -
+                                          TrustedHeapCompressionScheme::base());
+    printf(
+        "trusted page %d at %p size %d cage-base offset %d (ro offset + %d)\n",
+        static_cast<int>(actual_page_index),
+        reinterpret_cast<void*>(q->area_start()),
+        static_cast<int>(q->area_size()), trusted_offset,
+        trusted_offset - ro_offset);
+    actual_page_index++;
+  }
+
+  for (ReadOnlyPage* p : pages) {
+    heap_.memory_allocator()->FreeReadOnlyPage(p);
+  }
+
   DCHECK_EQ(this, Isolate::Current());
   PerIsolateThreadData* const current_data = CurrentPerIsolateThreadData();
   DCHECK_EQ(current_data->isolate(), this);

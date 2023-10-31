@@ -298,6 +298,32 @@ PtrComprCageAccessScope::~PtrComprCageAccessScope() {
 
 #endif  // V8_COMPRESS_POINTERS_IN_ISOLATE_CAGE
 
+#ifdef V8_ENABLE_SANDBOX
+
+// static
+Address TrustedHeapCompressionScheme::PrepareCageBaseAddress(
+    Address on_heap_addr) {
+  return RoundDown<kPtrComprCageBaseAlignment>(on_heap_addr);
+}
+
+// static
+void TrustedHeapCompressionScheme::InitBase(Address base) {
+  CHECK_EQ(base, PrepareCageBaseAddress(base));
+  base_ = base;
+}
+
+V8_CONST Address TrustedHeapCompressionScheme::base() {
+  Address base = base_;
+  // V8_ASSUME_ALIGNED is often not preserved across ptr-to-int casts (i.e. when
+  // casting to an Address). To increase our chances we additionally encode the
+  // same information in this V8_ASSUME.
+  V8_ASSUME((base & kPtrComprCageBaseMask) == base);
+  return reinterpret_cast<Address>(V8_ASSUME_ALIGNED(
+      reinterpret_cast<void*>(base), kPtrComprCageBaseAlignment));
+}
+
+#endif  // V8_ENABLE_SANDBOX
+
 }  // namespace internal
 }  // namespace v8
 

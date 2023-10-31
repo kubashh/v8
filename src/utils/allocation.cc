@@ -223,6 +223,7 @@ VirtualMemory::VirtualMemory(v8::PageAllocator* page_allocator, size_t size,
   if (address != kNullAddress) {
     DCHECK(IsAligned(address, alignment));
     region_ = base::AddressRegion(address, size);
+    printf("VM %p\n", reinterpret_cast<void*>(address));
   }
 }
 

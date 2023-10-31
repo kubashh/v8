@@ -554,6 +554,13 @@ void ReadOnlySpace::EnsureSpaceForAllocation(int size_in_bytes) {
       heap()->memory_allocator()->AllocateReadOnlyPage(this);
   capacity_ += AreaSize();
 
+  int ro_offset =
+      static_cast<int>(chunk->area_start() - V8HeapCompressionScheme::base());
+  printf("ro page %d at %p size %d cage-base offset %d\n",
+         static_cast<int>(pages_.size()),
+         reinterpret_cast<void*>(chunk->area_start()),
+         static_cast<int>(chunk->area_size()), ro_offset);
+
   accounting_stats_.IncreaseCapacity(chunk->area_size());
   AccountCommitted(chunk->size());
   CHECK_NOT_NULL(chunk);
