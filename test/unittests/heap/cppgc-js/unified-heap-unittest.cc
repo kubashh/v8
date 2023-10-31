@@ -11,9 +11,11 @@
 #include "include/cppgc/internal/api-constants.h"
 #include "include/cppgc/persistent.h"
 #include "include/cppgc/testing.h"
+#include "include/cppgc/visitor.h"
 #include "include/libplatform/libplatform.h"
 #include "include/v8-context.h"
 #include "include/v8-cppgc.h"
+#include "include/v8-function.h"
 #include "include/v8-local-handle.h"
 #include "include/v8-object.h"
 #include "include/v8-traced-handle.h"
@@ -787,6 +789,137 @@ TEST_F(UnifiedHeapTest, CppgcSweepingDuringMinorV8Sweeping) {
   heap->EnsureSweepingCompleted(
       Heap::SweepingForcedFinalizationMode::kUnifiedHeap);
   v8_flags.single_threaded_gc = single_threaded_gc_flag;
+}
+
+namespace {
+
+class TracedReferenceWrapper
+    : public cppgc::GarbageCollected<TracedReferenceWrapper> {
+ public:
+  void Trace(cppgc::Visitor* v) const { v->Trace(handle); }
+
+  v8::TracedReference<v8::Object> handle;
+};
+
+class NonRootingEmbedderRootsHandler final : public v8::EmbedderRootsHandler {
+ public:
+  explicit NonRootingEmbedderRootsHandler(
+      cppgc::Persistent<TracedReferenceWrapper>& wrapper)
+      : wrapper_(wrapper) {}
+
+  bool IsRoot(const v8::TracedReference<v8::Value>& handle) final {
+    return false;
+  }
+
+  void ResetRoot(const v8::TracedReference<v8::Value>& handle) final {
+    if (wrapper_->handle == handle) {
+      wrapper_->handle.Reset();
+    }
+  }
+
+ private:
+  cppgc::Persistent<TracedReferenceWrapper>& wrapper_;
+};
+
+void ConstructJSObject(v8::Isolate* isolate, v8::Local<v8::Context> context,
+                       TracedReferenceWrapper* traced_reference_wrapper) {
+  CHECK(traced_reference_wrapper->handle.IsEmpty());
+  v8::HandleScope handle_scope(isolate);
+  v8::Local<v8::Object> object(v8::Object::New(isolate));
+  CHECK(!object.IsEmpty());
+  traced_reference_wrapper->handle.Reset(isolate, object);
+  CHECK(!traced_reference_wrapper->handle.IsEmpty());
+}
+
+void SimpleCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  v8::Isolate* isolate = info.GetIsolate();
+  info.GetReturnValue().Set(v8::Number::New(isolate, 0));
+}
+
+void ConstructJSApiObject(v8::Isolate* isolate, v8::Local<v8::Context> context,
+                          TracedReferenceWrapper* traced_reference_wrapper) {
+  CHECK(traced_reference_wrapper->handle.IsEmpty());
+  v8::HandleScope handle_scope(isolate);
+  v8::Local<v8::FunctionTemplate> fun =
+      v8::FunctionTemplate::New(isolate, SimpleCallback);
+  v8::Local<v8::Object> object = fun->GetFunction(context)
+                                     .ToLocalChecked()
+                                     ->NewInstance(context)
+                                     .ToLocalChecked();
+  CHECK(!object.IsEmpty());
+  traced_reference_wrapper->handle.Reset(isolate, object);
+  CHECK(!traced_reference_wrapper->handle.IsEmpty());
+}
+
+enum class SurvivalMode { kSurvives, kDies };
+template <typename ConstructFunction, typename ModifierFunction>
+void TracedReferenceTestWithUnifiedHeapGC(UnifiedHeapTest* test,
+                                          ConstructFunction construct_function,
+                                          ModifierFunction modifier_function,
+                                          SurvivalMode survives) {
+  ManualGCScope manual_gc(test->isolate());
+  v8::Isolate* isolate = test->v8_isolate();
+  DisableConservativeStackScanningScopeForTesting no_stack_scanning(
+      test->isolate()->heap());
+  v8::HandleScope scope(isolate);
+  v8::Local<v8::Context> context = v8::Context::New(isolate);
+  v8::Context::Scope context_scope(context);
+
+  cppgc::Persistent<TracedReferenceWrapper> traced_reference_wrapper =
+      cppgc::MakeGarbageCollected<TracedReferenceWrapper>(
+          test->allocation_handle());
+
+  NonRootingEmbedderRootsHandler roots_handler(traced_reference_wrapper);
+  isolate->SetEmbedderRootsHandler(&roots_handler);
+
+  construct_function(isolate, context, traced_reference_wrapper.Get());
+  modifier_function(traced_reference_wrapper.Get());
+  test->InvokeMajorGC();
+  // GC resets the original handle, so we can check the handle directly here.
+  CHECK_IMPLIES(survives == SurvivalMode::kSurvives,
+                !traced_reference_wrapper->handle.IsEmpty());
+  CHECK_IMPLIES(survives == SurvivalMode::kDies,
+                traced_reference_wrapper->handle.IsEmpty());
+
+  isolate->SetEmbedderRootsHandler(nullptr);
+}
+
+}  // namespace
+
+TEST_F(UnifiedHeapTest,
+       TracedReferenceToUnmodifiedJSObjectSurvivesUnifiedHeapGC) {
+  TracedReferenceTestWithUnifiedHeapGC(
+      this, &ConstructJSObject,
+      [](TracedReferenceWrapper* traced_reference_wrapper) {},
+      SurvivalMode::kSurvives);
+}
+
+TEST_F(UnifiedHeapTest,
+       TracedReferenceToUnmodifiedJSApiObjectDiesOnUnifiedHeapGC) {
+  TracedReferenceTestWithUnifiedHeapGC(
+      this, &ConstructJSApiObject,
+      [](TracedReferenceWrapper* traced_reference_wrapper) {},
+      SurvivalMode::kDies);
+}
+
+TEST_F(UnifiedHeapTest,
+       TracedReferenceToJSApiObjectWithIdentityHashSurvivesUnifiedHeapGC) {
+  Isolate* isolate = i_isolate();
+  HandleScope scope(isolate);
+  Handle<JSWeakMap> weakmap = isolate->factory()->NewJSWeakMap();
+
+  TracedReferenceTestWithUnifiedHeapGC(
+      this, &ConstructJSApiObject,
+      [this, &weakmap,
+       isolate](TracedReferenceWrapper* traced_reference_wrapper) {
+        v8::HandleScope scope(v8_isolate());
+        Handle<JSReceiver> key = Utils::OpenHandle(
+            *traced_reference_wrapper->handle.Get(v8_isolate()));
+        Handle<Smi> smi(Smi::FromInt(23), isolate);
+        int32_t hash = Object::GetOrCreateHash(*key, isolate).value();
+        JSWeakCollection::Set(weakmap, key, smi, hash);
+      },
+      SurvivalMode::kSurvives);
 }
 
 }  // namespace v8::internal
