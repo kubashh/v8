@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0db9e30b_9be92598",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-10-31T08:59:23Z",
+      "side": 1,
+      "message": "Do you mean \"now\" instead of \"not\" here?",
+      "revId": "6b255ab0e07d1e2552bf1474f81129e4b1e19187",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4c93b462_bf588c67",
@@ -14,6 +31,23 @@
       "writtenOn": "2023-10-31T08:52:16Z",
       "side": 1,
       "message": "This does not resolve https://crbug.com/1497251, it just fixes the immediate issue.\nIf you are interested, read the comments there.",
+      "revId": "6b255ab0e07d1e2552bf1474f81129e4b1e19187",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fb7e8a3_304e0fd2",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-10-31T08:59:23Z",
+      "side": 1,
+      "message": "Nit: Bug ID missing? It would be nice to mention the specific reason TSAN breaks here in the commit message.",
       "revId": "6b255ab0e07d1e2552bf1474f81129e4b1e19187",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
