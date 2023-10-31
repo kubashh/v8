@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b35e77fa_e4d9f6c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-10-31T09:14:27Z",
+      "side": 1,
+      "message": "Sgtm, thanks!",
+      "parentUuid": "c29c4505_a32973ff",
+      "revId": "6b255ab0e07d1e2552bf1474f81129e4b1e19187",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4c93b462_bf588c67",
