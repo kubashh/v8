@@ -47,6 +47,9 @@
   # than one memory. Github issue:
   # https://github.com/WebAssembly/multi-memory/issues/49
   'limits': [FAIL],
+
+  # Tests that need to run sequentially (e.g. due to memory consumption).
+  'wasm-js/limits': [PASS, HEAVY],
 }], # ALWAYS
 
 ['system == android', {
