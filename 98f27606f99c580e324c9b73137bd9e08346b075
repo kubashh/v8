@@ -16,6 +16,23 @@
       "message": "Igor, PTAL here: https://ci.chromium.org/ui/p/v8/builders/try/v8_linux64_dbg/b8765732138885109217/overview\nWould it be better to disable the new test entirely, for the time being?\nIt seems that it may not only be failing for TSAN.",
       "revId": "98f27606f99c580e324c9b73137bd9e08346b075",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d6f331f_dafd2465",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-10-31T12:04:20Z",
+      "side": 1,
+      "message": "rubberstamp lgtm modulo redness",
+      "revId": "98f27606f99c580e324c9b73137bd9e08346b075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
