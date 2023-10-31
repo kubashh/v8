@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e61ab669_574235f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-10-31T09:34:32Z",
+      "side": 1,
+      "message": "Igor, PTAL here: https://ci.chromium.org/ui/p/v8/builders/try/v8_linux64_dbg/b8765732138885109217/overview\nWould it be better to disable the new test entirely, for the time being?\nIt seems that it may not only be failing for TSAN.",
+      "revId": "98f27606f99c580e324c9b73137bd9e08346b075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
