@@ -474,7 +474,8 @@ void MinorMarkSweepCollector::ClearNonLiveReferences() {
           &IsUnmarkedObjectInYoungGeneration);
     } else {
       isolate->traced_handles()->ProcessYoungObjects(
-          nullptr, &IsUnmarkedObjectInYoungGeneration);
+          nullptr, &IsUnmarkedObjectInYoungGeneration,
+          GarbageCollector::MINOR_MARK_SWEEPER);
     }
   }
 
