@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56435828_9131ecb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-10-31T12:56:01Z",
+      "side": 1,
+      "message": "The new test is failing in other builds as well (besides TSAN), so as we discussed offline I am disabling it for now, until https://crbug.com/1497251 is fixed.",
+      "revId": "b77f7dca6041a1da3191e601b583b0138f7f5f46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
