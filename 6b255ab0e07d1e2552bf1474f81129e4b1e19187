@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "855b0bda_27f3a212",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-10-31T09:03:32Z",
+      "side": 1,
+      "message": "I meant \"not\". After that (old) CL, there\u0027s no parking (or unparking) the main thread while compiling. This CL fixes an unconditional `UnparkedScope` that had somehow remained.\n\nIf you find the message hard to understand, I can rephrase it.",
+      "parentUuid": "0db9e30b_9be92598",
+      "revId": "6b255ab0e07d1e2552bf1474f81129e4b1e19187",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4c93b462_bf588c67",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-10-31T08:59:23Z",
       "side": 1,
       "message": "Nit: Bug ID missing? It would be nice to mention the specific reason TSAN breaks here in the commit message.",
+      "revId": "6b255ab0e07d1e2552bf1474f81129e4b1e19187",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbc1dde3_70d20cb2",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-10-31T09:03:32Z",
+      "side": 1,
+      "message": "Oh, yes, of course, that\u0027s what I meant to do. Sorry...",
+      "parentUuid": "6fb7e8a3_304e0fd2",
       "revId": "6b255ab0e07d1e2552bf1474f81129e4b1e19187",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
