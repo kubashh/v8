@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daf49cb0_fdfd7e3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-31T13:09:34Z",
+      "side": 1,
+      "message": "LGTM with a nit.",
+      "revId": "1504505b721c1d1c182fe9140ef0a6673672806b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "739b8b02_9b3169b9",
+        "filename": "src/asmjs/asm-js.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-10-31T13:09:34Z",
+      "side": 1,
+      "message": "nit: you can use the `handle` shorthand, see line 285 for precedent. Which means in this particular care, it\u0027d be best to pull out the handle construction as `Handle\u003cScript\u003e script(Script::cast(shared_info-\u003escript()), isolate);` around line 269, and then use `script` here and below.",
+      "range": {
+        "startLine": 275,
+        "startChar": 14,
+        "endLine": 275,
+        "endChar": 28
+      },
+      "revId": "1504505b721c1d1c182fe9140ef0a6673672806b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
