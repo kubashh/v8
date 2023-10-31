@@ -1148,9 +1148,11 @@ void FillUpOneNewSpacePage(Isolate* isolate, Heap* heap,
       DCHECK(heap->new_space()->Contains(*padding));
       space_remaining -= padding->Size();
     } else {
-      // Not enough room to create another fixed array. Create a filler.
-      heap->CreateFillerObjectAt(*heap->NewSpaceAllocationTopAddress(),
-                                 space_remaining);
+      // Not enough room to create another fixed array. Create a filler instead.
+      // First free current LAB. This ensures that all memory is returned to the
+      // new space before creating the filler object.
+      heap->FreeMainThreadLinearAllocationAreas();
+      space->FillCurrentPageForTesting();
       break;
     }
   }
