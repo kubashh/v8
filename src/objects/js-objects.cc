@@ -3085,8 +3085,9 @@ void JSObject::PrintInstanceMigration(FILE* file, Tagged<Map> original_map,
 }
 
 // static
-bool JSObject::IsUnmodifiedApiObject(FullObjectSlot o) {
-  Tagged<Object> object = *o;
+bool JSObject::IsUnmodifiedApiObject(
+    FullObjectSlot o, TracedHandles::WeaknessCompuationMode mode) {
+  Tagged<Object> object = o.Relaxed_Load();
   if (IsSmi(object)) return false;
   Tagged<HeapObject> heap_object = HeapObject::cast(object);
   Tagged<Map> map = heap_object->map();
@@ -3095,12 +3096,19 @@ bool JSObject::IsUnmodifiedApiObject(FullObjectSlot o) {
   Tagged<Object> maybe_constructor = map->GetConstructor();
   if (!IsJSFunction(maybe_constructor)) return false;
   Tagged<JSObject> js_object = JSObject::cast(object);
-  if (js_object->elements()->length() != 0) return false;
-  // Check that the object is not a key in a WeakMap (over-approximation).
-  if (!IsUndefined(js_object->GetIdentityHash())) return false;
-
+  if (js_object->elements(kRelaxedLoad)->length(kAcquireLoad) != 0)
+    return false;
   Tagged<JSFunction> constructor = JSFunction::cast(maybe_constructor);
-  return constructor->initial_map() == map;
+  if (constructor->initial_map() != map) return false;
+
+  if (mode == TracedHandles::WeaknessCompuationMode::kConcurrent) {
+    // The checks below this branch are not thread safe and should only be used
+    // for marking in the atomic pause.
+    return true;
+  }
+
+  // Check that the object is not a key in a WeakMap (over-approximation).
+  return IsUndefined(js_object->GetIdentityHash());
 }
 
 // static
