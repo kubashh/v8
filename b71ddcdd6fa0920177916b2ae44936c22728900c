@@ -16,6 +16,23 @@
       "message": "I think these threads are resolved.",
       "revId": "b71ddcdd6fa0920177916b2ae44936c22728900c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09b5ad70_da7cb3f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-11-01T16:16:06Z",
+      "side": 1,
+      "message": "LGTM, thanks a lot for the patience 👍",
+      "revId": "b71ddcdd6fa0920177916b2ae44936c22728900c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
