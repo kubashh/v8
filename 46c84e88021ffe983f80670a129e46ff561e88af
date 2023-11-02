@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7754e1c2_d5795a70",
+        "filename": "src/baseline/ppc/baseline-assembler-ppc-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:15Z",
+      "side": 1,
+      "message": "I mean something like this? could reduce some duplicated code:\n```\n  if (cc \u003d\u003d eq || cc \u003d\u003d ne) {\n    Register scratch2 \u003d temps.AcquireScratch();\n    __ IsObjectType(object, scratch, scratch2, instance_type);\n    __ b(cc, target);\n    return;\n  }\n ```\n similar to arm https://source.chromium.org/chromium/chromium/src/+/main:v8/src/baseline/arm64/baseline-assembler-arm64-inl.h;l\u003d135",
+      "parentUuid": "4195a243_3ad5356f",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b03a21e3_eaf34c86",
         "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
         "patchSetId": 3
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Using the const pool does potentially result in additional memory congestion, and on p9 especially random memory access is a major bottleneck for JIT performance (I\u0027ve profiled this over time).  The question is, does LoadTaggedRoot get called enough for this to be a concern at all?\n\nIf you would prefer I revert this, I will. I don\u0027t have a major concern either way.",
       "parentUuid": "b03a21e3_eaf34c86",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "338b8c26_93dfcdb3",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:15Z",
+      "side": 1,
+      "message": "How about revert for now but leave a TODO to investigate the question and apply the changes if necessary. wdyt?",
+      "parentUuid": "1505f1a5_da760098",
       "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -140,6 +176,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5683c16e_c377730d",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a505275a_97763124",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d3ed932_abca58e7",
@@ -171,6 +225,24 @@
       "side": 1,
       "message": "I\u0027m not sure -- other architectures have it, and I\u0027d rather not be surprised / have to implement again if it ends up being used by a global change to v8.  I could submit a patch series to remove it from the other architectures if that makes more sense?",
       "parentUuid": "7d3ed932_abca58e7",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ac74bc1_d8891dde",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:15Z",
+      "side": 1,
+      "message": "On the officially supported platforms it\u0027s only on arm64 and it was added a very long time ago (way before static-roots) and probably was never cleaned up. Is it part of any of the static-root ports on x64/arm64?",
+      "parentUuid": "5fcc64ee_1f7ee608",
       "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -241,6 +313,24 @@
       "side": 1,
       "message": "I\u0027m still not clear on why we prefer the \"raw\" function here vs. the aliased, somewhat cleaner code that Move() provides.  We use aliased functions all over the rest of the ppc64 codebase, e.g. SubS64() instread of sub(), what is the benefit of using mov() here?",
       "parentUuid": "e9894e80_01f148ba",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3ea9468_e36a8fc0",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:15Z",
+      "side": 1,
+      "message": "Please take a look at my comment on the sandbox port.",
+      "parentUuid": "3139aacf_6b12635d",
       "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
