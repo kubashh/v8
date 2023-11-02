@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "823acbd8_11a9a372",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-11-02T12:59:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c8be489_328e0877",
+      "range": {
+        "startLine": 120,
+        "startChar": 70,
+        "endLine": 120,
+        "endChar": 73
+      },
+      "revId": "24b7e338038ddc6fed41f1b0f3ce8b51ad555923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6a3a983_081152c8",
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3522df50_0382660c",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-11-02T12:59:11Z",
+      "side": 1,
+      "message": "I think some of mey keyboard\u0027s keys are not very responsive anymore",
+      "parentUuid": "a6a3a983_081152c8",
+      "revId": "24b7e338038ddc6fed41f1b0f3ce8b51ad555923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25e88a09_bc556ee4",
@@ -71,6 +113,30 @@
       "writtenOn": "2023-11-02T12:53:06Z",
       "side": 1,
       "message": "How likely could this recursion run into stack overflow? I have the impression that using a loop is not much more complicated here, even if less elegant.",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 34
+      },
+      "revId": "24b7e338038ddc6fed41f1b0f3ce8b51ad555923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0da0a559_a4bdd4f9",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-11-02T12:59:11Z",
+      "side": 1,
+      "message": "I thought about that too, but I thought that 1) it\u0027s not very likely that this has more than very few steps and 2) that it\u0027s most likely tailcall-optimized anyway, but I\u0027ll change it into a loop to be safe.",
+      "parentUuid": "25e88a09_bc556ee4",
       "range": {
         "startLine": 135,
         "startChar": 4,
