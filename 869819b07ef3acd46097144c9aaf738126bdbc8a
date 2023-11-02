@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b9c5347_9ae75548",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-11-02T10:56:57Z",
+      "side": 1,
+      "message": "I\u0027d like to get machenbach@\u0027s take here, unfortunately he\u0027s OOO till next week.",
+      "revId": "869819b07ef3acd46097144c9aaf738126bdbc8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
