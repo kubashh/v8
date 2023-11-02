@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4f8241d_5e45661b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-02T10:54:07Z",
+      "side": 1,
+      "message": "@adamk@chromium.org: PTAL. Also fine to request more approvals for this change.",
+      "revId": "c0d1bf56df1bdd2ba5f9c67c124ba7de42870d4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
