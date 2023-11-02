@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c6d64a_cea0ceda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "No problem, you might also need to port this recent change:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/4994347",
+      "parentUuid": "e8e1feef_f7d255be",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "376edc5c_5f07fb25",
@@ -405,6 +423,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37241c03_eecabbc0",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "I agree. Refactoring our `UseScratchRegisterScope` is a TODO were we can also try to introduce at least 1 new scratch reg to ppc.\n\nscratch shouldn\u0027t even be used here tho, both destination and table are registers and offset is `0` so `ldx` should get used? Can it be changed to `no_reg`?",
+      "parentUuid": "8c9d72b9_39fc9456",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ef5869b_7a0067cd",
         "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
         "patchSetId": 6
@@ -440,6 +476,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cbcf2ffa_6c1ac80b",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "Oh yes I was just talking about updating the comment to reflect it, function itself can be implemented later.",
+      "parentUuid": "e360ce97_256912b5",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04ff4465_ea8a8619",
         "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
         "patchSetId": 6
@@ -469,6 +523,24 @@
       "side": 1,
       "message": "Can I do this in a follow-on patch?  I\u0027m having to rebase and fix up quote often due to upstream code churn, and the patch series is somewhat large which makes that process quite time consuming.",
       "parentUuid": "04ff4465_ea8a8619",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7f1eb89_ad817cc2",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "Same as above.",
+      "parentUuid": "8066b46b_ff34bf25",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -539,6 +611,24 @@
       "side": 1,
       "message": "kScratchReg is defined as r11, and both r0 and r12 are already in use.  Is there a reason kScratchReg shouldn\u0027t be used here?",
       "parentUuid": "2a01711f_796f49fe",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10e6a9a0_a0be92da",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "it\u0027s defined as r11 only in codegen. If this function ever gets used outside of codegen (not sure if it will) then it could crash.\n\nWe can leave it as is but could you add a TODO to make use of `UseScratchRegisterScope` after we refactor it.",
+      "parentUuid": "94d7303d_83a50868",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -644,6 +734,24 @@
       "side": 1,
       "message": "The Move() functions are cleaner in my opinion.  Is there a reason we should use the mov() function instead?  I note for example that we tend to use a lot of other wrapper functions, e.g. LoadU64() etc., and having two forms of Move sprinkled throughout the codebase could be somewhat confusing.\n\nThat said, I can implement if you would prefer it this way.",
       "parentUuid": "6dc546fa_67fd63b9",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43ffc9d3_f2c19da8",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "Personally seeing the word Operand gives me a hint that we may be loading an immediate and not a register/memory slot.\n\n`mov(..., Operand(...));` is also used extensively all over ppc/s390/arm/ia32. May not be a good idea to create a separate function specifically for ppc which is only used in a few places.\n\nBeing in sync with arm is really important for us, we don\u0027t want to diverge the code in any way unless it\u0027s necessary, i.e we use `LoadU64` and not `Ldr` as it\u0027s arm specific but `mov` is universal.",
+      "parentUuid": "20e7f139_556ddb69",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -808,6 +916,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cefcc2e8_14fbe94b",
+        "filename": "src/compiler/backend/ppc/instruction-selector-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "What if it\u0027s changed to just `kInt16Imm`?",
+      "parentUuid": "86eb9a4b_13b07519",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9f4dd50_b62ea4c5",
         "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
         "patchSetId": 6
@@ -837,6 +963,24 @@
       "side": 1,
       "message": "Can I do this in a follow-on patch? I\u0027m having to rebase and fix up quote often due to upstream code churn, and the patch series is somewhat large which makes that process quite time consuming.",
       "parentUuid": "c9f4dd50_b62ea4c5",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec351798_e431f46d",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "Sure but please add a TODO here.",
+      "parentUuid": "fe18a817_418c78b2",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -878,6 +1022,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d03f925_72f7b101",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "Not a problem, we can leave it as is.",
+      "parentUuid": "7fd999a1_f5f58cc7",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d73487a1_2f136d8f",
         "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
         "patchSetId": 6
@@ -907,6 +1069,24 @@
       "side": 1,
       "message": "This was very opaque to me the first time I saw it.  I would rather see arm64 updated to be clearer than revert to kZero -- this line is at least clear that we are checking for equality.  It took me a while to figure out what this line was supposed to do with the to_condition(kZero) field.\n\nIs there a good reason to use to_condition(kZero) instead of eq other than to keep things looking similar to the arm64 codebase?",
       "parentUuid": "d73487a1_2f136d8f",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89a3fc1d_23e376fd",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "So as I mentioned in the first comment, being inline with arm is very important for us. We would prefer to get rid of `to_condition` altogether and keep using our own conditions but we also don\u0027t want diverge unless its necessary.",
+      "parentUuid": "099c37f4_647d4306",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

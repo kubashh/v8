@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2f336df_cc2a7e0e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-02T18:26:09Z",
+      "side": 1,
+      "message": "Please add `Bug: v8:10391`.",
+      "revId": "4ff41cd70282b0f1c1c6900fb9b3e32076c440ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
