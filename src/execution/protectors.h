@@ -62,6 +62,7 @@ class Protectors : public AllStatic {
     promise_resolve_protector)                                                \
   V(PromiseSpeciesLookupChain, PromiseSpeciesProtector,                       \
     promise_species_protector)                                                \
+  V(ToStringLookupChain, ToStringLookupChainProtector, ToString_protector)    \
                                                                               \
   /* The SetIterator protector protects the original iteration behavior of */ \
   /* Set.prototype.keys(), Set.prototype.values(),                         */ \

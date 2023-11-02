@@ -248,7 +248,8 @@ bool Name::IsInteresting(Isolate* isolate) {
   // these strings and interesting symbols.
   return (IsSymbol(*this) && Symbol::cast(*this)->is_interesting_symbol()) ||
          *this == *isolate->factory()->toJSON_string() ||
-         *this == *isolate->factory()->get_string();
+         *this == *isolate->factory()->get_string() ||
+         *this == *isolate->factory()->toString_string();
 }
 
 DEF_GETTER(Name, IsPrivate, bool) {
