@@ -13,9 +13,7 @@ const kPromiseBuiltinsPromiseContextLength: constexpr int31
 // together with the values array. Since all closures for a single Promise.all
 // call use the same context, we need to store the indices for the individual
 // closures somewhere else (we put them into the identity hash field of the
-// closures), and we also need to have a separate marker for when the closure
-// was called already (we slap the native context onto the closure in that
-// case to mark it's done).
+// closures).
 macro CreatePromiseAllResolveElementContext(
     implicit context: Context)(capability: PromiseCapability,
     nativeContext: NativeContext): PromiseAllResolveElementContext {
