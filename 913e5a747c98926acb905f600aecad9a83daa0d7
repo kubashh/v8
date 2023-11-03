@@ -88,6 +88,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fed8e322_da300f40",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-11-03T20:10:10Z",
+      "side": 1,
+      "message": "`rcx` is used here (and every other builtin) to point to argv below, which would need to become conditional on `which_frame` if I fold the argc load.",
+      "parentUuid": "ab925d22_495bf634",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0365662a_fe542819",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 9
@@ -99,6 +117,30 @@
       "writtenOn": "2023-11-03T19:37:16Z",
       "side": 1,
       "message": "I think it\u0027s generally safer to pass the respective frame pointer here as an argument (or even `argc` + `argv`).\n\nI\u0027m worried that TF might decide to generate or not generate a frame for caller builtin/bytecode handler/optimized function. There\u0027s `CSA::LoadParentFramePointer()` which handles this issue and there must be something similar in TF too.\n\nThis will also let you combine two versions into one.",
+      "range": {
+        "startLine": 1414,
+        "startChar": 27,
+        "endLine": 1414,
+        "endChar": 30
+      },
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0994f5e5_0ff66e5d",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-11-03T20:10:10Z",
+      "side": 1,
+      "message": "I had a version (see PS3) that took the frame pointer manually in the beginning, but Leszek preferred an interpreter-vs-not-interpreter organization (see https://chromium-review.googlesource.com/c/v8/v8/+/4970116/4..9/src/builtins/x64/builtins-x64.cc#b1402). I can see where he\u0027s coming from. Do you think we should change it back to the explicit argument version given that comment?\n\nTurboFan currently asserts that emitted calls to `ConstructForwardAllArgs` are always in outermost, non-inlined frames, which I copied from how TF deals with the `JSCreateArguments` operator, which has the same issue. That is, I\u0027m not worried about TF to the extent that TF already depends on this behavior.",
+      "parentUuid": "0365662a_fe542819",
       "range": {
         "startLine": 1414,
         "startChar": 27,
@@ -139,6 +181,24 @@
       "writtenOn": "2023-11-03T19:37:16Z",
       "side": 1,
       "message": "... and then `Construct`-\u003e`ConstructFunction`-\u003e`JSConstructStubGeneric` will push them again.\nWe already fixed this for regular construct calls: https://chromium-review.googlesource.com/c/v8/v8/+/4710611",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be91a08d_03481726",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-11-03T20:10:10Z",
+      "side": 1,
+      "message": "As discussed in chat, we\u0027ll need a generic version anyways as the regular construct calls do, so let\u0027s do the `FastConstructForwardAllArgs` as a followup optimization.",
+      "parentUuid": "817c695c_e671d498",
       "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
