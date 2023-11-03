@@ -50,6 +50,131 @@
       "message": "Could not spot any issues in src/compiler",
       "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "454b5905_52db5ee5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-03T19:37:16Z",
+      "side": 1,
+      "message": "looks good modulo potential parent frame issue",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab925d22_495bf634",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-03T19:37:16Z",
+      "side": 1,
+      "message": "Nit: this could have been just a\n`__ movq(rax, Operand(rbp, StandardFrameConstants::kArgCOffset));`",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0365662a_fe542819",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-03T19:37:16Z",
+      "side": 1,
+      "message": "I think it\u0027s generally safer to pass the respective frame pointer here as an argument (or even `argc` + `argv`).\n\nI\u0027m worried that TF might decide to generate or not generate a frame for caller builtin/bytecode handler/optimized function. There\u0027s `CSA::LoadParentFramePointer()` which handles this issue and there must be something similar in TF too.\n\nThis will also let you combine two versions into one.",
+      "range": {
+        "startLine": 1414,
+        "startChar": 27,
+        "endLine": 1414,
+        "endChar": 30
+      },
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5e794e7_2f313bb4",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-03T19:37:16Z",
+      "side": 1,
+      "message": "Here we push arguments first time ...",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "817c695c_e671d498",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-03T19:37:16Z",
+      "side": 1,
+      "message": "... and then `Construct`-\u003e`ConstructFunction`-\u003e`JSConstructStubGeneric` will push them again.\nWe already fixed this for regular construct calls: https://chromium-review.googlesource.com/c/v8/v8/+/4710611",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e433ad10_d580a711",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-03T19:37:16Z",
+      "side": 1,
+      "message": "Please move it up to its siblings.",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1821b6c_1fe8b24c",
+        "filename": "src/codegen/interface-descriptors.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-03T19:37:16Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
