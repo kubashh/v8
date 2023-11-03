@@ -106,6 +106,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ddbdc250_9e8153b7",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-11-03T20:11:05Z",
+      "side": 1,
+      "message": "Clarifiying that by \"every other builtin\" I mean \"every other version of this builtin in other archs also have a dedicated register to load the fp, which later get repointed to argv\".",
+      "parentUuid": "fed8e322_da300f40",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0365662a_fe542819",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 9
