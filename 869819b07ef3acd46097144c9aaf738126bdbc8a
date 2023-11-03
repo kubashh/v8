@@ -16,6 +16,23 @@
       "message": "I\u0027d like to get machenbach@\u0027s take here, unfortunately he\u0027s OOO till next week.",
       "revId": "869819b07ef3acd46097144c9aaf738126bdbc8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2871e6d2_80e6957a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-11-03T08:04:17Z",
+      "side": 1,
+      "message": "Given my team size, this is very reasonable. Thanks!",
+      "revId": "869819b07ef3acd46097144c9aaf738126bdbc8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
