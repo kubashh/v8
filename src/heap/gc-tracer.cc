@@ -1785,13 +1785,13 @@ GarbageCollector GCTracer::GetCurrentCollector() const {
   }
 }
 
+bool GCTracer::IsInAtomicPause() const {
+  return current_.state == Event::State::ATOMIC;
+}
+
 #ifdef DEBUG
 bool GCTracer::IsInObservablePause() const {
   return start_of_observable_pause_.has_value();
-}
-
-bool GCTracer::IsInAtomicPause() const {
-  return current_.state == Event::State::ATOMIC;
 }
 
 bool GCTracer::IsConsistentWithCollector(GarbageCollector collector) const {

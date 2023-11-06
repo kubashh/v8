@@ -307,9 +307,10 @@ class V8_EXPORT_PRIVATE GCTracer {
   void NotifyYoungCppGCRunning();
   void NotifyYoungCppGCCompleted();
 
+  bool IsInAtomicPause() const;
+
 #ifdef DEBUG
   bool IsInObservablePause() const;
-  bool IsInAtomicPause() const;
 
   // Checks if the current event is consistent with a collector.
   bool IsConsistentWithCollector(GarbageCollector collector) const;

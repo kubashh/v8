@@ -49,6 +49,11 @@ TEST_F(SpacesTest, CompactionSpaceMerge) {
   OldSpace* old_space = heap->old_space();
   EXPECT_TRUE(old_space != nullptr);
 
+  heap->tracer()->StartCycle(GarbageCollector::MARK_COMPACTOR,
+                             GarbageCollectionReason::kTesting, nullptr,
+                             GCTracer::MarkingType::kIncremental);
+  heap->tracer()->StartAtomicPause();
+
   CompactionSpace* compaction_space =
       new CompactionSpace(heap, OLD_SPACE, NOT_EXECUTABLE,
                           CompactionSpaceKind::kCompactionSpaceForMarkCompact);
@@ -85,6 +90,9 @@ TEST_F(SpacesTest, CompactionSpaceMerge) {
             old_space->CountTotalPages());
 
   delete compaction_space;
+
+  heap->tracer()->StopAtomicPause();
+  heap->tracer()->NotifyFullSweepingCompleted();
 }
 
 TEST_F(SpacesTest, WriteBarrierFromHeapObject) {
