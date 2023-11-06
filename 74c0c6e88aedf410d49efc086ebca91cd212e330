@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c3161e8_64018628",
+        "filename": "src/heap/main-allocator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-06T15:12:05Z",
+      "side": 0,
+      "message": "Is this a recent regression? Shouldn\u0027t the Scavenger get an allocator that is _not_ the MainAllocator?",
+      "range": {
+        "startLine": 289,
+        "startChar": 7,
+        "endLine": 289,
+        "endChar": 26
+      },
+      "revId": "74c0c6e88aedf410d49efc086ebca91cd212e330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
