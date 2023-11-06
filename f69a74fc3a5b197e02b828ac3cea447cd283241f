@@ -56,6 +56,29 @@
       },
       "revId": "f69a74fc3a5b197e02b828ac3cea447cd283241f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "017ff2f5_0da3a738",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3677,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-11-06T16:51:53Z",
+      "side": 1,
+      "message": "What are your plans to support the other memories? Did you not add support because it is hard to eliminate the load of the memory start array?",
+      "range": {
+        "startLine": 3677,
+        "startChar": 15,
+        "endLine": 3677,
+        "endChar": 28
+      },
+      "revId": "f69a74fc3a5b197e02b828ac3cea447cd283241f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
