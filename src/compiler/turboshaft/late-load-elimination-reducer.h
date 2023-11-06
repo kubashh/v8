@@ -179,6 +179,12 @@ struct MemoryAddress {
            offset == other.offset &&
            element_size_log2 == other.element_size_log2 && size == other.size;
   }
+
+  template <typename H>
+  friend H AbslHashValue(H h, const MemoryAddress& mem) {
+    return H::combine(std::move(h), mem.base, mem.index, mem.offset,
+                      mem.element_size_log2, mem.size);
+  }
 };
 
 inline size_t hash_value(MemoryAddress const& mem) {
@@ -530,16 +536,14 @@ class MemoryContentTable
   SparseOpIndexSnapshotTable<MapMaskAndOr>& object_maps_;
   FixedOpIndexSidetable<OpIndex>& replacements_;
 
-  // TODO(dmercadier): consider using a faster datastructure than
-  // ZoneUnorderedMap for {all_keys_}, {base_keys_} and {offset_keys_}.
-
   // A map containing all of the keys, for fast lookup of a specific
   // MemoryAddress.
-  ZoneUnorderedMap<MemoryAddress, Key> all_keys_;
+  ZoneAbslFlatHashMap<MemoryAddress, Key> all_keys_;
   // Map from base OpIndex to keys associated with this base.
-  ZoneUnorderedMap<OpIndex, BaseData> base_keys_;
+  ZoneAbslFlatHashMap<OpIndex, BaseData> base_keys_;
   // Map from offsets to keys associated with this offset.
-  ZoneUnorderedMap<int, DoublyThreadedList<Key, OffsetListTraits>> offset_keys_;
+  ZoneAbslFlatHashMap<int, DoublyThreadedList<Key, OffsetListTraits>>
+      offset_keys_;
 
   // List of all of the keys that have a valid index.
   DoublyThreadedList<Key, OffsetListTraits> index_keys_;
@@ -688,12 +692,76 @@ class LateLoadEliminationAnalyzer {
   ZoneVector<MemorySnapshot> predecessor_memory_snapshots_;
 };
 
+// #include <unordered_map>
+// #include <chrono>
+
+// struct Obj {
+//   int a;
+//   char b;
+
+//   Obj(int a, char b) : a(a), b(b) {}
+
+//   explicit Obj(int i) : a(i), b(static_cast<char>(i % 256)) {}
+
+//   bool operator==(const Obj& other) const {
+//     return a == other.a && b == other.b;
+//   }
+
+//   template <typename H>
+//   friend H AbslHashValue(H h, const Obj& obj) {
+//     return H::combine(std::move(h), obj.a, obj.b);
+//   }
+// };
+
+// inline size_t hash_value(Obj const& obj) {
+//   return fast_hash_combine(obj.a, obj.b);
+// }
+
+// #define REPETITIONS 1500
+// #define SIZE 10000
+// #define FIND_REPEAT 5
+// #define MAP_T absl::flat_hash_map
+// //#define MAP_T std::unordered_map
+
+// inline void bench_map() {
+//   MAP_T<Obj, int> map;
+//   for (int j = 0; j < REPETITIONS; j++) {
+//     for (int i = 0; i < SIZE; i++) {
+//       Obj obj(i);
+//       map.insert({obj, i});
+//     }
+//     int count = 0;
+//     for (int i = 0; i < SIZE * FIND_REPEAT; i++) {
+//       Obj obj(i % SIZE);
+//       const auto it = map.find(obj);
+//       if (it != map.end() && it->second == (i % SIZE)) count++;
+//     }
+//     if (count != SIZE * FIND_REPEAT) UNREACHABLE();
+//     for (int i = 0; i < SIZE; i++) {
+//       Obj obj(i);
+//       map.erase(obj);
+//     }
+//   }
+// }
+
 template <class Next>
 class LateLoadEliminationReducer : public Next {
  public:
   TURBOSHAFT_REDUCER_BOILERPLATE()
 
   void Analyze() {
+    // auto start = std::chrono::high_resolution_clock::now();
+    // bench_map();
+    // auto end = std::chrono::high_resolution_clock::now();
+    // auto time = duration_cast<std::chrono::milliseconds>(end - start);
+    // std::cout << "Total time: " << time << "\n";
+
+    for (int i = 0; i < 30; i++) {
+      LateLoadEliminationAnalyzer analyzer(Asm().modifiable_input_graph(),
+                                           Asm().phase_zone(),
+                                           PipelineData::Get().broker());
+      analyzer.Run();
+    }
     if (v8_flags.turboshaft_load_elimination) {
       DCHECK(AllowHandleDereference::IsAllowed());
       analyzer_.Run();
