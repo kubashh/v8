@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b08354e_28c8f410",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-06T18:36:05Z",
+      "side": 1,
+      "message": "That is an excellent question. We should explore that separately, I think.",
+      "parentUuid": "6e8a9a84_a82da689",
+      "range": {
+        "startLine": 55,
+        "startChar": 19,
+        "endLine": 55,
+        "endChar": 29
+      },
+      "revId": "f69a74fc3a5b197e02b828ac3cea447cd283241f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "017ff2f5_0da3a738",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-11-06T16:51:53Z",
       "side": 1,
       "message": "What are your plans to support the other memories? Did you not add support because it is hard to eliminate the load of the memory start array?",
+      "range": {
+        "startLine": 3677,
+        "startChar": 15,
+        "endLine": 3677,
+        "endChar": 28
+      },
+      "revId": "f69a74fc3a5b197e02b828ac3cea447cd283241f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b08dd6b_c493014b",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3677,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-06T18:36:05Z",
+      "side": 1,
+      "message": "My current plan is to port the dynamic selection of a single cached memory from TF, see the TODOs in lines 3640/5048/5069.\nI\u0027m also open to other options. We could go as far as caching all memories.",
+      "parentUuid": "017ff2f5_0da3a738",
       "range": {
         "startLine": 3677,
         "startChar": 15,
