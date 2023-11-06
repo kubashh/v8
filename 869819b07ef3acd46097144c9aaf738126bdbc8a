@@ -33,6 +33,23 @@
       "message": "Given my team size, this is very reasonable. Thanks!",
       "revId": "869819b07ef3acd46097144c9aaf738126bdbc8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5865979_7a07a445",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-11-06T16:35:04Z",
+      "side": 1,
+      "message": "lgtm, thanks for acting on this, Matthias!",
+      "revId": "869819b07ef3acd46097144c9aaf738126bdbc8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
