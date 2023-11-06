@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60a75f54_858e4b56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-06T14:07:58Z",
+      "side": 1,
+      "message": "ptal.\n\nThese crashes only occur when running with RCS enabled and will have the following stacktrace:\n#0 0x55e77671d262 base::debug::CollectStackTrace()\n#1 0x55e776709ba3 base::debug::StackTrace::StackTrace()\n#2 0x55e77671cc81 base::debug::(anonymous namespace)::StackDumpSignalHandler()\n#3 0x7f7587a7e510 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x3c50f)\n#4 0x55e77669ae26 base::strings::internal::SafeSNPrintf()\n#5 0x55e77853b93c (anonymous namespace)::PrintAndSetSeccompCrashKey()\n#6 0x55e77853b78d sandbox::CrashSIGSYS_Handler()\n#7 0x55e77853ea9c sandbox::Trap::SigSys()\n#8 0x7f7587a7e510 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x3c50f)\n#9 0x7f7587b152c7 alarm\n#10 0x55e77671d1b8 base::debug::(anonymous namespace)::StackDumpSignalHandler()\n#11 0x7f7587a7e510 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x3c50f)\n#12 0x55e7783b4466 v8::base::OS::Abort()\n#13 0x55e7783ab762 V8_Fatal()\n#14 0x55e7735eadb5 v8::internal::RuntimeCallStats::Leave()\n#15 0x55e7734d631c v8::internal::MainAllocator::AllocateRawSlowUnaligned()\n#16 0x55e7734841c1 v8::internal::EvacuationAllocator::AllocateInNewSpaceSynchronized()\n#17 0x55e773538f7e v8::internal::Scavenger::ScavengeObject\u003c\u003e()\n#18 0x55e7735307c5 v8::internal::Scavenger::Process()\n#19 0x55e77352f2d7 v8::internal::ScavengerCollector::JobTask::ProcessItems()\n#20 0x55e77352ef75 v8::internal::ScavengerCollector::JobTask::Run()",
+      "revId": "921aacca4e6adc7f463ace4f7f07cf9bb90fa6ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
