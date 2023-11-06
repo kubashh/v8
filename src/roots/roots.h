@@ -269,6 +269,7 @@ class RootVisitor;
   V(PropertyCell, string_iterator_protector, StringIteratorProtector)          \
   V(PropertyCell, number_string_not_regexp_like_protector,                     \
     NumberStringNotRegexpLikeProtector)                                        \
+  V(PropertyCell, ToString_protector, ToStringLookupChainProtector)            \
   /* Caches */                                                                 \
   V(FixedArray, string_split_cache, StringSplitCache)                          \
   V(FixedArray, regexp_multiple_cache, RegExpMultipleCache)                    \

@@ -5249,6 +5249,17 @@ void Isolate::UpdateNumberStringNotRegexpLikeProtectorOnSetPrototype(
   }
 }
 
+void Isolate::UpdateToStringLookupChainProtectorOnSetPrototype(
+    Handle<JSObject> object) {
+  if (!Protectors::IsToStringLookupChainIntact(this)) {
+    return;
+  }
+  DCHECK(!IsJSObjectPrototype(*object));
+  if (object->map()->is_prototype_map() && (IsJSPrimitiveWrapper(*object))) {
+    Protectors::InvalidateToStringLookupChain(this);
+  }
+}
+
 static base::RandomNumberGenerator* ensure_rng_exists(
     base::RandomNumberGenerator** rng, int seed) {
   if (*rng == nullptr) {
