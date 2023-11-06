@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2468dd9_2d308aec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-06T17:21:15Z",
+      "side": 1,
+      "message": "Abseil have now made the hardening checks cheaper, and I\u0027ve confirmed locally that using Abseil does indeed improve performance quite a bit in the compiler. Landing this now sounds reasonable imo :)",
+      "revId": "945b6b8e442af3cbff4e28e24b0295ab909bf590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
