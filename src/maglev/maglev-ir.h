@@ -195,6 +195,7 @@ class MergePointInterpreterFrameState;
   V(LoadNamedGeneric)                               \
   V(LoadNamedFromSuperGeneric)                      \
   V(MaybeGrowAndEnsureWritableFastElements)         \
+  V(OsrValue)                                       \
   V(SetNamedGeneric)                                \
   V(DefineNamedOwnGeneric)                          \
   V(StoreInArrayLiteralGeneric)                     \
@@ -4217,6 +4218,24 @@ class InitialValue : public FixedInputValueNodeT<0, InitialValue> {
 
  public:
   explicit InitialValue(uint64_t bitfield, interpreter::Register source);
+
+  interpreter::Register source() const { return source_; }
+  uint32_t stack_slot() const;
+  static uint32_t stack_slot(uint32_t register_idx);
+
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
+
+ private:
+  const interpreter::Register source_;
+};
+
+class OsrValue : public FixedInputValueNodeT<0, OsrValue> {
+  using Base = FixedInputValueNodeT<0, OsrValue>;
+
+ public:
+  explicit OsrValue(uint64_t bitfield, interpreter::Register source);
 
   interpreter::Register source() const { return source_; }
   uint32_t stack_slot() const;

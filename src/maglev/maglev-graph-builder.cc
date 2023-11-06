@@ -703,7 +703,7 @@ void MaglevGraphBuilder::BuildRegisterFrameInitialization(
   if (compilation_unit_->is_osr()) {
     for (; register_index < register_count(); register_index++) {
       auto val =
-          AddNewNode<InitialValue>({}, interpreter::Register(register_index));
+          AddNewNode<OsrValue>({}, interpreter::Register(register_index));
       InitializeRegister(interpreter::Register(register_index), val);
       graph_->osr_values().push_back(val);
     }

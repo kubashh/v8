@@ -560,7 +560,8 @@ bool MaglevCompiler::Compile(LocalIsolate* local_isolate,
                  "V8.Maglev.RegisterAllocation");
     StraightForwardRegisterAllocator allocator(compilation_info, graph);
 
-    if (v8_flags.print_maglev_graph || v8_flags.print_maglev_graphs) {
+    if (graph->is_osr() &&
+        (v8_flags.print_maglev_graph || v8_flags.print_maglev_graphs)) {
       UnparkedScopeIfOnBackground unparked_scope(local_isolate->heap());
       std::cout << "After register allocation" << std::endl;
       PrintGraph(std::cout, compilation_info, graph);

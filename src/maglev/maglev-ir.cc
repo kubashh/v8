@@ -907,6 +907,29 @@ uint32_t InitialValue::stack_slot() const {
   return stack_slot(source_.index());
 }
 
+OsrValue::OsrValue(uint64_t bitfield, interpreter::Register source)
+    : Base(bitfield), source_(source) {}
+
+void OsrValue::SetValueLocationConstraints() {
+  result().SetUnallocated(compiler::UnallocatedOperand::FIXED_SLOT,
+                          stack_slot(), kNoVreg);
+}
+void OsrValue::GenerateCode(MaglevAssembler* masm,
+                            const ProcessingState& state) {
+  // No-op, the value is already in the appropriate slot.
+}
+
+// static
+uint32_t OsrValue::stack_slot(uint32_t register_index) {
+  // TODO(leszeks): Make this nicer.
+  return (StandardFrameConstants::kExpressionsOffset -
+          UnoptimizedFrameConstants::kRegisterFileFromFp) /
+             kSystemPointerSize +
+         register_index;
+}
+
+uint32_t OsrValue::stack_slot() const { return stack_slot(source_.index()); }
+
 int FunctionEntryStackCheck::MaxCallStackArgs() const { return 0; }
 void FunctionEntryStackCheck::SetValueLocationConstraints() {
   set_temporaries_needed(2);
@@ -6156,6 +6179,11 @@ void DeleteProperty::PrintParams(std::ostream& os,
 
 void InitialValue::PrintParams(std::ostream& os,
                                MaglevGraphLabeller* graph_labeller) const {
+  os << "(" << source().ToString() << ")";
+}
+
+void OsrValue::PrintParams(std::ostream& os,
+                           MaglevGraphLabeller* graph_labeller) const {
   os << "(" << source().ToString() << ")";
 }
 

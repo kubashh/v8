@@ -529,7 +529,7 @@ DEFINE_EXPERIMENTAL_FEATURE(
 DEFINE_IMPLICATION(maglev_future, maglev)
 DEFINE_BOOL(maglev_inlining, true,
             "enable inlining in the maglev optimizing compiler")
-DEFINE_BOOL(maglev_loop_peeling, false,
+DEFINE_BOOL(maglev_loop_peeling, true,
             "enable loop peeling in the maglev optimizing compiler")
 DEFINE_BOOL(maglev_deopt_data_on_background, true,
             "Generate deopt data on background thread")

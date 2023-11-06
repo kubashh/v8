@@ -798,7 +798,7 @@ void StraightForwardRegisterAllocator::AllocateNodeResult(ValueNode* node) {
       compiler::UnallocatedOperand::cast(node->result().operand());
 
   if (operand.basic_policy() == compiler::UnallocatedOperand::FIXED_SLOT) {
-    DCHECK(node->Is<InitialValue>());
+    DCHECK(node->Is<InitialValue>() || node->Is<OsrValue>());
     DCHECK_IMPLIES(!graph_->is_osr(), operand.fixed_slot_index() < 0);
     // Set the stack slot to exactly where the value is.
     compiler::AllocatedOperand location(compiler::AllocatedOperand::STACK_SLOT,
