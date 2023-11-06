@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df3fab4f_433ac6f7",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4212,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-06T16:05:30Z",
+      "side": 1,
+      "message": "Note that all the `TryCast`, `MatchIntegralZero`, `equal-\u003eleft()` etc. make it nearly impossible to share anything between Turbofan and Turboshaft which is why the whole function is duplicated.",
+      "range": {
+        "startLine": 4212,
+        "startChar": 46,
+        "endLine": 4212,
+        "endChar": 66
+      },
+      "revId": "1627f5d8965d4abdd25e3f7dbaef32e541f0cad9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40ef2cf2_a5b95c6f",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4424,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-06T16:05:30Z",
+      "side": 1,
+      "message": "Using this generic accessor is the only difference in `VisitSwitch` and removing the `if constexpr(IsTurboshaft)` thingy which results in a decrease in indentation.",
+      "range": {
+        "startLine": 4424,
+        "startChar": 51,
+        "endLine": 4424,
+        "endChar": 75
+      },
+      "revId": "1627f5d8965d4abdd25e3f7dbaef32e541f0cad9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

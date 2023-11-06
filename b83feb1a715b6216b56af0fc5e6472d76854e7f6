@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d882da80_abe870a5",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3495,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-06T16:05:30Z",
+      "side": 1,
+      "message": "Useless scope to keep the diff smaller. These implementations will anyways be removed once we switched over instruction selection fully.",
+      "range": {
+        "startLine": 3495,
+        "startChar": 1,
+        "endLine": 3495,
+        "endChar": 3
+      },
+      "revId": "b83feb1a715b6216b56af0fc5e6472d76854e7f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
