@@ -122,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c13f2ff_afb16126",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1411,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-06T16:07:51Z",
+      "side": 1,
+      "message": "Ah, right. It\u0027s ok then.",
+      "parentUuid": "ddbdc250_9e8153b7",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0365662a_fe542819",
@@ -169,6 +187,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcbed729_1d84b296",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-06T16:07:51Z",
+      "side": 1,
+      "message": "Ok, let\u0027s keep it this way.",
+      "parentUuid": "0994f5e5_0ff66e5d",
+      "range": {
+        "startLine": 1414,
+        "startChar": 27,
+        "endLine": 1414,
+        "endChar": 30
+      },
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5e794e7_2f313bb4",
@@ -182,6 +224,24 @@
       "writtenOn": "2023-11-03T19:37:16Z",
       "side": 1,
       "message": "Here we push arguments first time ...",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe5d3699_7cbd0fe3",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-06T16:07:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a5e794e7_2f313bb4",
       "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -217,6 +277,24 @@
       "side": 1,
       "message": "As discussed in chat, we\u0027ll need a generic version anyways as the regular construct calls do, so let\u0027s do the `FastConstructForwardAllArgs` as a followup optimization.",
       "parentUuid": "817c695c_e671d498",
+      "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faf9cd9a_9fcade6a",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-06T16:07:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "be91a08d_03481726",
       "revId": "913e5a747c98926acb905f600aecad9a83daa0d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
