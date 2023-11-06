@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7c82e32_853c8e67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-06T13:18:35Z",
+      "side": 1,
+      "message": "PTAL.\nAt first I started sketching out what we would need from a LoadElimination-like separate pass to accomplish this, and then arrived at the conclusion that building it right into graph building was the easiest (and probably highest-performing) way to do it.\nThis should help asm.js benchmarks quite a bit, and might even provide minor gains to other Wasm workloads.",
+      "revId": "ffc34840fb1bd2a02bba0a6fecb0371500787cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
