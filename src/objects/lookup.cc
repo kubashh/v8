@@ -337,6 +337,10 @@ void LookupIterator::InternalUpdateProtector(Isolate* isolate,
         (IsJSPrimitiveWrapper(*receiver) || IsJSObjectPrototype(*receiver))) {
       Protectors::InvalidateNumberStringNotRegexpLike(isolate);
     }
+  } else if (*name == roots.toString_string()) {
+    if (receiver->map()->is_prototype_map() && IsJSObjectPrototype(*receiver)) {
+      receiver->map()->set_may_have_interesting_properties(true);
+    }
   }
 }
 

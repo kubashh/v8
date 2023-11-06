@@ -2374,6 +2374,13 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     SimpleInstallFunction(isolate_, isolate_->initial_object_prototype(),
                           "toLocaleString",
                           Builtin::kObjectPrototypeToLocaleString, 0, true);
+
+    // Set the interesting property bit as false for initial_object_prototype,
+    // because all its behaviour is by default, but we may set it as true by
+    // adding toString property.
+    isolate_->initial_object_prototype()
+        ->map()
+        ->set_may_have_interesting_properties(false);
   }
 
   Handle<JSObject> global(native_context()->global_object(), isolate());

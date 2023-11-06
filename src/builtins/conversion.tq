@@ -261,6 +261,10 @@ transitioning builtin OrdinaryToPrimitive_String(
 transitioning macro OrdinaryToPrimitive_String_Inline(
     implicit context: Context)(input: JSAny): JSPrimitive {
   try {
+    const receiver = UnsafeCast<JSReceiver>(input);
+    if (!HasInterestingProperty(context, receiver)) {
+      return kObjectToString;
+    }
     return TryToPrimitiveMethod(input, ToStringStringConstant())
         otherwise String;
   } label String {

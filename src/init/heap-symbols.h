@@ -446,7 +446,6 @@
   V(_, timed_out_string, "timed-out")                                         \
   V(_, timeZone_string, "timeZone")                                           \
   V(_, toJSON_string, "toJSON")                                               \
-  V(_, toString_string, "toString")                                           \
   V(_, true_string, "true")                                                   \
   V(_, total_string, "total")                                                 \
   V(_, TypeError_string, "TypeError")                                         \
@@ -548,7 +547,8 @@
   V(_, constructor_string, "constructor")                      \
   V(_, next_string, "next")                                    \
   V(_, resolve_string, "resolve")                              \
-  V(_, then_string, "then")
+  V(_, then_string, "then")                                    \
+  V(_, toString_string, "toString")
 
 // Note that the description string should be part of the internalized
 // string roots to make sure we don't accidentally end up allocating the

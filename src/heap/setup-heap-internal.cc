@@ -1343,6 +1343,7 @@ void Heap::CreateInitialMutableObjects() {
   set_string_length_protector(*factory->NewProtector());
   set_number_string_not_regexp_like_protector(*factory->NewProtector());
   set_typed_array_species_protector(*factory->NewProtector());
+  set_ToString_protector(*factory->NewProtector());
 
   set_serialized_objects(roots.empty_fixed_array());
   set_serialized_global_proxy_sizes(roots.empty_fixed_array());

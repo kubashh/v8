@@ -63,6 +63,8 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(NumberStringNotRegexpLikeProtector,                                        \
     number_string_not_regexp_like_protector,                                   \
     NumberStringNotRegexpLikeProtector)                                        \
+  V(ToStringLookupChainProtector, ToString_protector,                          \
+    ToStringLookupChainProtector)                                              \
   V(PromiseResolveProtector, promise_resolve_protector,                        \
     PromiseResolveProtector)                                                   \
   V(PromiseSpeciesProtector, promise_species_protector,                        \
@@ -2862,6 +2864,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<BoolT> IsJSGlobalProxy(TNode<HeapObject> object);
   TNode<BoolT> IsJSObjectInstanceType(TNode<Int32T> instance_type);
   TNode<BoolT> IsJSObjectMap(TNode<Map> map);
+  // TNode<BoolT> IsBasicJSObjectType(TNode<Int32T> instance_type);
+  // TNode<BoolT> IsBasicJSObjectMap(TNode<Map> map);
+  TNode<BoolT> IsJSObjectPrototypeInstanceType(TNode<Int32T> instance_type);
+  TNode<BoolT> IsJSObjectPrototypeMap(TNode<Map> map);
   TNode<BoolT> IsJSObject(TNode<HeapObject> object);
   TNode<BoolT> IsJSApiObjectInstanceType(TNode<Int32T> instance_type);
   TNode<BoolT> IsJSApiObjectMap(TNode<Map> map);
@@ -2956,6 +2962,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<BoolT> IsNumberStringNotRegexpLikeProtectorCellInvalid();
   TNode<BoolT> IsSetIteratorProtectorCellInvalid();
   TNode<BoolT> IsMapIteratorProtectorCellInvalid();
+  TNode<BoolT> IsToStringLookupChainCellInvalid();
 
   TNode<IntPtrT> LoadBasicMemoryChunkFlags(TNode<HeapObject> object);
 
@@ -3582,6 +3589,12 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                        TVariable<HeapObject>* var_holder,
                                        TVariable<Map>* var_holder_map,
                                        TNode<Name> name, Label* if_not_found);
+  TNode<BoolT> HasInterestingProperty(TNode<Context> context,
+                                      TNode<JSReceiver> receiver);
+  TNode<BoolT> HasInterestingProperty(TNode<Context> context,
+                                      TNode<Object> receiver,
+                                      TVariable<HeapObject>* var_holder,
+                                      TVariable<Map>* var_holder_map);
 
   TNode<Object> SetPropertyStrict(TNode<Context> context,
                                   TNode<Object> receiver, TNode<Object> key,
