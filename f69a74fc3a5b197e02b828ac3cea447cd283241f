@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7ca1d1f_590a559e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-11-06T14:07:25Z",
+      "side": 1,
+      "message": "Just a first comment. I read over the CL quickly, and it looks good, but I didn\u0027t do a proper review yet.",
+      "revId": "f69a74fc3a5b197e02b828ac3cea447cd283241f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e8a9a84_a82da689",
+        "filename": "src/compiler/turboshaft/late-load-elimination-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-11-06T14:07:25Z",
+      "side": 1,
+      "message": "Is the late load elimination worth the compile time overhead if it does not remove loads from the wasm instance anymore? Does it bring enough value for wasm-gc? If it was just linear wasm I think it should be removed from the wasm pipeline.",
+      "range": {
+        "startLine": 55,
+        "startChar": 19,
+        "endLine": 55,
+        "endChar": 29
+      },
+      "revId": "f69a74fc3a5b197e02b828ac3cea447cd283241f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
