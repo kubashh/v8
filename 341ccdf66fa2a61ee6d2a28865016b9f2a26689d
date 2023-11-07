@@ -33,6 +33,29 @@
       "message": "Perfect, thanks! :)",
       "revId": "341ccdf66fa2a61ee6d2a28865016b9f2a26689d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "190eda6e_a039d3d4",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3128,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-07T15:43:52Z",
+      "side": 1,
+      "message": "OK, looking at the CI it seems I can\u0027t DCHECK it. Removing it then. The instruction selection will be complaining then about the unexpected unlowered instructions.",
+      "range": {
+        "startLine": 3127,
+        "startChar": 4,
+        "endLine": 3128,
+        "endChar": 70
+      },
+      "revId": "341ccdf66fa2a61ee6d2a28865016b9f2a26689d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
