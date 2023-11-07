@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bce5ae95_bb1d18c9",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3267,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-07T11:31:56Z",
+      "side": 1,
+      "message": "Good catch. Luckily the `UNREACHABLE` below would save us once we have coverage for this.",
+      "parentUuid": "e135e510_32591f1c",
+      "range": {
+        "startLine": 3267,
+        "startChar": 34,
+        "endLine": 3267,
+        "endChar": 36
+      },
+      "revId": "6c293c9b75dc123dfeda6ece6737b196c27c03f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9edea1d9_ca281adb",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8418718d_5562c931",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4001,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-07T11:31:56Z",
+      "side": 1,
+      "message": "Sure, it\u0027ll slightly increase the diff but it\u0027s cleaner I guess.",
+      "parentUuid": "9edea1d9_ca281adb",
+      "range": {
+        "startLine": 4001,
+        "startChar": 26,
+        "endLine": 4001,
+        "endChar": 33
+      },
+      "revId": "6c293c9b75dc123dfeda6ece6737b196c27c03f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c16001b_ea4c38c0",
@@ -94,6 +142,30 @@
       "writtenOn": "2023-11-07T10:39:12Z",
       "side": 1,
       "message": "Maybe add a kWord64Equal Opmask?",
+      "range": {
+        "startLine": 4233,
+        "startChar": 4,
+        "endLine": 4234,
+        "endChar": 59
+      },
+      "revId": "6c293c9b75dc123dfeda6ece6737b196c27c03f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7ba79b8_ba0d99db",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4234,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-07T11:31:56Z",
+      "side": 1,
+      "message": "Done. I really dislike the definitions of them polluting the operations.h with the various `using OpXMask \u003d MaskBuilder` and the various inline `namespace Opmask` definitions.\nHow do you feel about moving them into a separate file (no worries, in a different CL)? The file has already accrued quite some size and it\u0027s hard to justify that all of this needs to be put together.",
+      "parentUuid": "5c16001b_ea4c38c0",
       "range": {
         "startLine": 4233,
         "startChar": 4,
