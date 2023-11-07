@@ -117,7 +117,8 @@ class FreeListCategory {
   FreeListCategory* next_ = nullptr;
 
   friend class FreeList;
-  friend class FreeListManyCached;
+  template <typename Concrete>
+  friend class FreeListManyCachedBase;
   friend class PagedSpace;
   friend class MapSpace;
 };
@@ -340,25 +341,59 @@ class V8_EXPORT_PRIVATE FreeListMany : public FreeList {
   FRIEND_TEST(SpacesTest, FreeListManyGuaranteedAllocatable);
 };
 
+template <typename Concrete>
+class FreeListManyCachedBase : public FreeListMany {
+ public:
+  FreeListManyCachedBase() { static_cast<Concrete*>(this)->ResetCache(); }
+
+  bool AddCategory(FreeListCategory* category) override {
+    bool was_added = FreeList::AddCategory(category);
+
+    // Updating cache
+    if (was_added) {
+      static_cast<Concrete*>(this)->UpdateCacheAfterAddition(category->type_);
+    }
+
+#ifdef DEBUG
+    static_cast<Concrete*>(this)->CheckCacheIntegrity();
+#endif
+
+    return was_added;
+  }
+
+  void RemoveCategory(FreeListCategory* category) override {
+    FreeList::RemoveCategory(category);
+
+    // Updating cache
+    int type = category->type_;
+    if (categories_[type] == nullptr) {
+      static_cast<Concrete*>(this)->UpdateCacheAfterRemoval(type);
+    }
+
+#ifdef DEBUG
+    static_cast<Concrete*>(this)->CheckCacheIntegrity();
+#endif
+  }
+
+  void Reset() override {
+    static_cast<Concrete*>(this)->ResetCache();
+    FreeListMany::Reset();
+  }
+};
+
 // Same as FreeListMany but uses a cache to know which categories are empty.
 // The cache (|next_nonempty_category|) is maintained in a way such that for
 // each category c, next_nonempty_category[c] contains the first non-empty
 // category greater or equal to c, that may hold an object of size c.
 // Allocation is done using the same strategy as FreeListMany (ie, best fit).
-class V8_EXPORT_PRIVATE FreeListManyCached : public FreeListMany {
+class V8_EXPORT_PRIVATE FreeListManyCached
+    : public FreeListManyCachedBase<FreeListManyCached> {
  public:
-  FreeListManyCached();
-
   V8_WARN_UNUSED_RESULT Tagged<FreeSpace> Allocate(
       size_t size_in_bytes, size_t* node_size,
       AllocationOrigin origin) override;
 
   size_t Free(Address start, size_t size_in_bytes, FreeMode mode) override;
-
-  void Reset() override;
-
-  bool AddCategory(FreeListCategory* category) override;
-  void RemoveCategory(FreeListCategory* category) override;
 
  protected:
   // Updates the cache after adding something in the category |cat|.
@@ -403,6 +438,8 @@ class V8_EXPORT_PRIVATE FreeListManyCached : public FreeListMany {
     // declaration.
     next_nonempty_category[kNumberOfCategories] = kNumberOfCategories;
   }
+
+  friend class FreeListManyCachedBase<FreeListManyCached>;
 };
 
 // Same as FreeListManyCached but uses a fast path.
@@ -424,21 +461,8 @@ class V8_EXPORT_PRIVATE FreeListManyCached : public FreeListMany {
 // FreeListMany), which makes its fast path less fast in the Scavenger. This is
 // done on purpose, since this class's only purpose is to be used by
 // FreeListManyCachedOrigin, which is precise for the scavenger.
-class V8_EXPORT_PRIVATE FreeListManyCachedFastPathBase
-    : public FreeListManyCached {
+class V8_EXPORT_PRIVATE FreeListManyCachedFastPath : public FreeListManyCached {
  public:
-  enum class SmallBlocksMode { kAllow, kProhibit };
-
-  explicit FreeListManyCachedFastPathBase(SmallBlocksMode small_blocks_mode)
-      : small_blocks_mode_(small_blocks_mode) {
-    if (small_blocks_mode_ == SmallBlocksMode::kProhibit) {
-      min_block_size_ =
-          (v8_flags.minor_ms && (v8_flags.minor_ms_min_lab_size_kb > 0))
-              ? (v8_flags.minor_ms_min_lab_size_kb * KB)
-              : kFastPathStart;
-    }
-  }
-
   V8_WARN_UNUSED_RESULT Tagged<FreeSpace> Allocate(
       size_t size_in_bytes, size_t* node_size,
       AllocationOrigin origin) override;
@@ -472,24 +496,31 @@ class V8_EXPORT_PRIVATE FreeListManyCachedFastPathBase
   }
 
  private:
-  SmallBlocksMode small_blocks_mode_;
-
   FRIEND_TEST(
       SpacesTest,
       FreeListManyCachedFastPathSelectFastAllocationFreeListCategoryType);
 };
 
-class FreeListManyCachedFastPath : public FreeListManyCachedFastPathBase {
- public:
-  FreeListManyCachedFastPath()
-      : FreeListManyCachedFastPathBase(SmallBlocksMode::kAllow) {}
-};
+class FreeListManyWorstFit final
+    : public FreeListManyCachedBase<FreeListManyWorstFit> {
+  static constexpr unsigned kMinBlockSizeKB = 2;
 
-class FreeListManyCachedFastPathForNewSpace
-    : public FreeListManyCachedFastPathBase {
  public:
-  FreeListManyCachedFastPathForNewSpace()
-      : FreeListManyCachedFastPathBase(SmallBlocksMode::kProhibit) {}
+  FreeListManyWorstFit();
+  V8_WARN_UNUSED_RESULT Tagged<FreeSpace> Allocate(
+      size_t size_in_bytes, size_t* node_size, AllocationOrigin origin) final;
+
+ private:
+  void UpdateCacheAfterAddition(FreeListCategoryType cat);
+  void UpdateCacheAfterRemoval(FreeListCategoryType cat);
+  void ResetCache();
+#ifdef DEBUG
+  void CheckCacheIntegrity();
+#endif
+
+  FreeListCategoryType prev_nonempty_category[kNumberOfCategories];
+
+  friend class FreeListManyCachedBase<FreeListManyWorstFit>;
 };
 
 // Uses FreeListManyCached if in the GC; FreeListManyCachedFastPath otherwise.
@@ -500,7 +531,7 @@ class FreeListManyCachedFastPathForNewSpace
 // efficient, but reduces fragmentation (FreeListManyCached), while the strategy
 // for the later is one that is very efficient, but introduces some
 // fragmentation (FreeListManyCachedFastPath).
-class V8_EXPORT_PRIVATE FreeListManyCachedOrigin
+class V8_EXPORT_PRIVATE FreeListManyCachedOrigin final
     : public FreeListManyCachedFastPath {
  public:
   V8_WARN_UNUSED_RESULT Tagged<FreeSpace> Allocate(

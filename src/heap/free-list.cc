@@ -4,13 +4,16 @@
 
 #include "src/heap/free-list.h"
 
+#include "src/base/logging.h"
 #include "src/base/macros.h"
 #include "src/common/globals.h"
+#include "src/flags/flags.h"
 #include "src/heap/free-list-inl.h"
 #include "src/heap/heap.h"
 #include "src/heap/memory-chunk-inl.h"
 #include "src/heap/page-inl.h"
 #include "src/objects/free-space-inl.h"
+#include "src/objects/free-space.h"
 
 namespace v8 {
 namespace internal {
@@ -118,7 +121,7 @@ std::unique_ptr<FreeList> FreeList::CreateFreeList() {
 }
 
 std::unique_ptr<FreeList> FreeList::CreateFreeListForNewSpace() {
-  return std::make_unique<FreeListManyCachedFastPathForNewSpace>();
+  return std::make_unique<FreeListManyWorstFit>();
 }
 
 Tagged<FreeSpace> FreeList::TryFindNodeIn(FreeListCategoryType type,
@@ -246,42 +249,6 @@ Tagged<FreeSpace> FreeListMany::Allocate(size_t size_in_bytes,
 // ------------------------------------------------
 // FreeListManyCached implementation
 
-FreeListManyCached::FreeListManyCached() { ResetCache(); }
-
-void FreeListManyCached::Reset() {
-  ResetCache();
-  FreeListMany::Reset();
-}
-
-bool FreeListManyCached::AddCategory(FreeListCategory* category) {
-  bool was_added = FreeList::AddCategory(category);
-
-  // Updating cache
-  if (was_added) {
-    UpdateCacheAfterAddition(category->type_);
-  }
-
-#ifdef DEBUG
-  CheckCacheIntegrity();
-#endif
-
-  return was_added;
-}
-
-void FreeListManyCached::RemoveCategory(FreeListCategory* category) {
-  FreeList::RemoveCategory(category);
-
-  // Updating cache
-  int type = category->type_;
-  if (categories_[type] == nullptr) {
-    UpdateCacheAfterRemoval(type);
-  }
-
-#ifdef DEBUG
-  CheckCacheIntegrity();
-#endif
-}
-
 size_t FreeListManyCached::Free(Address start, size_t size_in_bytes,
                                 FreeMode mode) {
   Page* page = Page::FromAddress(start);
@@ -350,9 +317,9 @@ Tagged<FreeSpace> FreeListManyCached::Allocate(size_t size_in_bytes,
 }
 
 // ------------------------------------------------
-// FreeListManyCachedFastPathBase implementation
+// FreeListManyCachedFastPath implementation
 
-Tagged<FreeSpace> FreeListManyCachedFastPathBase::Allocate(
+Tagged<FreeSpace> FreeListManyCachedFastPath::Allocate(
     size_t size_in_bytes, size_t* node_size, AllocationOrigin origin) {
   USE(origin);
   DCHECK_GE(kMaxBlockSize, size_in_bytes);
@@ -369,18 +336,16 @@ Tagged<FreeSpace> FreeListManyCachedFastPathBase::Allocate(
   }
 
   // Fast path part 2: searching the medium categories for tiny objects
-  if (small_blocks_mode_ == SmallBlocksMode::kAllow) {
-    if (node.is_null()) {
-      if (size_in_bytes <= kTinyObjectMaxSize) {
-        DCHECK_EQ(kFastPathFirstCategory, first_category);
-        for (type = next_nonempty_category[kFastPathFallBackTiny];
-             type < kFastPathFirstCategory;
-             type = next_nonempty_category[type + 1]) {
-          node = TryFindNodeIn(type, size_in_bytes, node_size);
-          if (!node.is_null()) break;
-        }
-        first_category = kFastPathFallBackTiny;
+  if (node.is_null()) {
+    if (size_in_bytes <= kTinyObjectMaxSize) {
+      DCHECK_EQ(kFastPathFirstCategory, first_category);
+      for (type = next_nonempty_category[kFastPathFallBackTiny];
+           type < kFastPathFirstCategory;
+           type = next_nonempty_category[type + 1]) {
+        node = TryFindNodeIn(type, size_in_bytes, node_size);
+        if (!node.is_null()) break;
       }
+      first_category = kFastPathFallBackTiny;
     }
   }
 
@@ -425,6 +390,93 @@ Tagged<FreeSpace> FreeListManyCachedOrigin::Allocate(size_t size_in_bytes,
   } else {
     return FreeListManyCachedFastPath::Allocate(size_in_bytes, node_size,
                                                 origin);
+  }
+}
+
+// ------------------------------------------------
+// FreeListManyWorstFit implementation
+
+FreeListManyWorstFit::FreeListManyWorstFit() {
+  DCHECK(v8_flags.minor_ms);
+  min_block_size_ = KB * (v8_flags.minor_ms_min_lab_size_kb > 0
+                              ? v8_flags.minor_ms_min_lab_size_kb
+                              : kMinBlockSizeKB);
+}
+
+Tagged<FreeSpace> FreeListManyWorstFit::Allocate(size_t size_in_bytes,
+                                                 size_t* node_size,
+                                                 AllocationOrigin origin) {
+  DCHECK_GE(kMaxBlockSize, size_in_bytes);
+
+  FreeListCategoryType exact_type =
+      SelectFreeListCategoryType(std::max(size_in_bytes, min_block_size_));
+  DCHECK_GT(exact_type, kInvalidCategory);
+
+  FreeListCategoryType type = prev_nonempty_category[last_category_];
+  if (type < exact_type) {
+    // No non-empty categories for the requested size.
+    return FreeSpace();
+  }
+
+  Tagged<FreeSpace> node;
+  DCHECK(node.is_null());
+
+  for (; type > exact_type; type = prev_nonempty_category[type - 1]) {
+    DCHECK_NE(type, kInvalidCategory);
+    DCHECK_EQ(prev_nonempty_category[type], type);
+    node = TryFindNodeIn(type, size_in_bytes, node_size);
+    if (!node.is_null()) break;
+  }
+
+  if (node.is_null()) {
+    DCHECK_EQ(type, exact_type);
+    node = SearchForNodeInList(type, size_in_bytes, node_size);
+  }
+
+  if (!node.is_null()) {
+    if (categories_[type] == nullptr) UpdateCacheAfterRemoval(type);
+    Page::FromHeapObject(node)->IncreaseAllocatedBytes(*node_size);
+  }
+
+#ifdef DEBUG
+  CheckCacheIntegrity();
+#endif
+
+  VerifyAvailable();
+  return node;
+}
+
+// Updates the cache after adding something in the category |cat|.
+void FreeListManyWorstFit::UpdateCacheAfterAddition(FreeListCategoryType cat) {
+  for (int i = cat; i < kNumberOfCategories && prev_nonempty_category[i] < cat;
+       i++) {
+    prev_nonempty_category[i] = cat;
+  }
+}
+
+// Updates the cache after emptying category |cat|.
+void FreeListManyWorstFit::UpdateCacheAfterRemoval(FreeListCategoryType cat) {
+  for (int i = cat; i < kNumberOfCategories && prev_nonempty_category[i] == cat;
+       i++) {
+    prev_nonempty_category[i] = prev_nonempty_category[cat - 1];
+  }
+}
+
+#ifdef DEBUG
+void FreeListManyWorstFit::CheckCacheIntegrity() {
+  for (int i = last_category_; i >= kFirstCategory; i--) {
+    DCHECK_IMPLIES(prev_nonempty_category[i] != kInvalidCategory,
+                   categories_[prev_nonempty_category[i]] != nullptr);
+    for (int j = i; j > prev_nonempty_category[i]; j--) {
+      DCHECK_NULL(categories_[j]);
+    }
+  }
+}
+#endif
+
+void FreeListManyWorstFit::ResetCache() {
+  for (int i = 0; i < kNumberOfCategories; i++) {
+    prev_nonempty_category[i] = kInvalidCategory;
   }
 }
 
