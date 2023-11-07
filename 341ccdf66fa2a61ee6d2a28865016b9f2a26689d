@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cde1f857_f788f115",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-07T15:16:31Z",
+      "side": 1,
+      "message": "PTAL. We should really investigate how to reduce the binary size of phases. I added an entry to our turboshaft backlog for it.",
+      "revId": "341ccdf66fa2a61ee6d2a28865016b9f2a26689d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
