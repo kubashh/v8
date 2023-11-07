@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "adc8048e_66d948db",
+        "filename": ".bazelrc",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-07T08:04:01Z",
+      "side": 1,
+      "message": "Do we really need this?\nDoes this not work with C++17? We add the flag here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:v8/bazel/defs.bzl;drc\u003de1649301dfbfd34a448c3a0232c8a6206b716c73;l\u003d124",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 45
+      },
+      "revId": "945b6b8e442af3cbff4e28e24b0295ab909bf590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a2468dd9_2d308aec",
@@ -14,6 +37,23 @@
       "writtenOn": "2023-11-06T17:21:15Z",
       "side": 1,
       "message": "Abseil have now made the hardening checks cheaper, and I\u0027ve confirmed locally that using Abseil does indeed improve performance quite a bit in the compiler. Landing this now sounds reasonable imo :)",
+      "revId": "945b6b8e442af3cbff4e28e24b0295ab909bf590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58c71441_65ed4d77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-07T08:04:01Z",
+      "side": 1,
+      "message": "Sorry for another nitpick...",
       "revId": "945b6b8e442af3cbff4e28e24b0295ab909bf590",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
