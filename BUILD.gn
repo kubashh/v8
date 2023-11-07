@@ -3081,7 +3081,7 @@ v8_header_set("v8_flags") {
 }
 
 v8_header_set("v8_internal_headers") {
-  configs = [ ":internal_config" ]
+  configs = [ "src/inspector:inspector_config" ]
 
   sources = [
     ### gcmole(all) ###
