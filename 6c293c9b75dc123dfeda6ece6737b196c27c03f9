@@ -16,6 +16,92 @@
       "message": "@dmercadier@chromium.org: PTAL.",
       "revId": "6c293c9b75dc123dfeda6ece6737b196c27c03f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "543478b7_7435c618",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-07T10:39:12Z",
+      "side": 1,
+      "message": "LGTM % comments :)",
+      "revId": "6c293c9b75dc123dfeda6ece6737b196c27c03f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e135e510_32591f1c",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3267,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-07T10:39:12Z",
+      "side": 1,
+      "message": "This should be 32 I think. (for Turbofan, it\u0027s kWord32And)",
+      "range": {
+        "startLine": 3267,
+        "startChar": 34,
+        "endLine": 3267,
+        "endChar": 36
+      },
+      "revId": "6c293c9b75dc123dfeda6ece6737b196c27c03f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9edea1d9_ca281adb",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4001,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-07T10:39:12Z",
+      "side": 1,
+      "message": "Could you replace this by TurbofanAdapter?",
+      "range": {
+        "startLine": 4001,
+        "startChar": 26,
+        "endLine": 4001,
+        "endChar": 33
+      },
+      "revId": "6c293c9b75dc123dfeda6ece6737b196c27c03f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c16001b_ea4c38c0",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4234,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-07T10:39:12Z",
+      "side": 1,
+      "message": "Maybe add a kWord64Equal Opmask?",
+      "range": {
+        "startLine": 4233,
+        "startChar": 4,
+        "endLine": 4234,
+        "endChar": 59
+      },
+      "revId": "6c293c9b75dc123dfeda6ece6737b196c27c03f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
