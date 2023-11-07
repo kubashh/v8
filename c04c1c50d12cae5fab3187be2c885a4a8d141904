@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f95335a_89fb44ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-11-07T13:59:33Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "c04c1c50d12cae5fab3187be2c885a4a8d141904",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dc9d1a7_2fb9e280",
+        "filename": "src/heap/evacuation-allocator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-11-07T13:59:33Z",
+      "side": 1,
+      "message": "There is a single shared instance for all EvacuationAllocators here, so `FreeLinearAllocationArea` will mostly bail out because the LAB was already freed.",
+      "revId": "c04c1c50d12cae5fab3187be2c885a4a8d141904",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f87c662_c9c690cb",
+        "filename": "src/heap/main-allocator.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-11-07T13:59:33Z",
+      "side": 1,
+      "message": "Make that method private.",
+      "revId": "c04c1c50d12cae5fab3187be2c885a4a8d141904",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
