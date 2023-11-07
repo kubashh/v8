@@ -735,7 +735,6 @@ config("internal_config_base") {
     ".",
     "include",
     "$target_gen_dir",
-    "$target_gen_dir/include",
   ]
 }
 
@@ -796,7 +795,7 @@ config("libbase_config") {
   if (is_android && current_toolchain != host_toolchain) {
     libs += [ "log" ]
   }
-  include_dirs = [ "$target_gen_dir/include" ]
+  include_dirs = []
 }
 
 # Standalone cppgc cannot be built within chrome or with perfetto.
@@ -822,7 +821,6 @@ config("headers_config") {
   ]
   include_dirs = [
     "include",
-    "$target_gen_dir/include",
   ]
 }
 
