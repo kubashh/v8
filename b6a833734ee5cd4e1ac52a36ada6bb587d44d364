@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f392df26_3ac376fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-11-07T08:46:28Z",
+      "side": 1,
+      "message": "LGTM with comment",
+      "revId": "b6a833734ee5cd4e1ac52a36ada6bb587d44d364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f01b7155_05cc8481",
+        "filename": "src/heap/main-allocator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-11-07T08:46:28Z",
+      "side": 1,
+      "message": "Could we here also use. the existing `heap()-\u003egc_state()` here? It feels like we would have multiple ways to detect basically the same state by also making `IsInAtomicPause()` public. Or maybe define `IsInAtomicPause()` on Heap and use gc_state() internally.",
+      "revId": "b6a833734ee5cd4e1ac52a36ada6bb587d44d364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
