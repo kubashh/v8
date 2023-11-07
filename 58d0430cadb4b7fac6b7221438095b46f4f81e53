@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6dbf420_8ae39972",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-07T09:26:48Z",
+      "side": 0,
+      "message": "Note: This is then another reason not to use the signal handler for wasm inlined into JS. (We don\u0027t have it, so it\u0027s fine.)",
+      "revId": "58d0430cadb4b7fac6b7221438095b46f4f81e53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

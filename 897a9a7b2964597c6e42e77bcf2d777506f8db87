@@ -16,6 +16,46 @@
       "message": "PTAL, Jakob as the main reviewer, Matthias as a compiler owner.",
       "revId": "897a9a7b2964597c6e42e77bcf2d777506f8db87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a90e8e9_2aace07a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-07T09:26:48Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "897a9a7b2964597c6e42e77bcf2d777506f8db87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3718aaea_d5739a05",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-07T09:26:48Z",
+      "side": 1,
+      "message": "As it doesn\u0027t capture anything, any reason why this can\u0027t be \"just a function\"?\n(either as a regular function or a non-capturing lambda)",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 310,
+        "endChar": 2
+      },
+      "revId": "897a9a7b2964597c6e42e77bcf2d777506f8db87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
