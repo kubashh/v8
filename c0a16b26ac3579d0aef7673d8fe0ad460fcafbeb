@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90891a4a_3e6e15df",
+        "filename": "src/compiler/turboshaft/opmasks.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-07T13:17:26Z",
+      "side": 1,
+      "message": "Note that this is a change to before where the generic mask was not in the Opmask namespace but having them floating around in `compiler::turboshaft` seems worse.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 26
+      },
+      "revId": "c0a16b26ac3579d0aef7673d8fe0ad460fcafbeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
