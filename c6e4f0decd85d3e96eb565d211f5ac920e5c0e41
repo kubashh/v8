@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "482e3a13_acc9e19c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-07T13:42:47Z",
+      "side": 1,
+      "message": "Ugh, when you think your CLs are independent and can be landed independently, you might still be wrong...",
+      "revId": "c6e4f0decd85d3e96eb565d211f5ac920e5c0e41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
