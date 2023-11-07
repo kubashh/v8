@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2baa1147_819cfbce",
+        "filename": ".bazelrc",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-07T13:53:20Z",
+      "side": 1,
+      "message": "As discussed offline, this is not required now that the Bazel version of the bots have been updated :)",
+      "parentUuid": "adc8048e_66d948db",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 45
+      },
+      "revId": "945b6b8e442af3cbff4e28e24b0295ab909bf590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a2468dd9_2d308aec",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
