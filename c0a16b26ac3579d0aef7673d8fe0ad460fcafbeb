@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fce0be5_bdc20366",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-07T13:21:52Z",
+      "side": 1,
+      "message": "LGTM % comment; thanks for cleaning this :)",
+      "revId": "c0a16b26ac3579d0aef7673d8fe0ad460fcafbeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90891a4a_3e6e15df",
@@ -14,6 +31,30 @@
       "writtenOn": "2023-11-07T13:17:26Z",
       "side": 1,
       "message": "Note that this is a change to before where the generic mask was not in the Opmask namespace but having them floating around in `compiler::turboshaft` seems worse.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 26
+      },
+      "revId": "c0a16b26ac3579d0aef7673d8fe0ad460fcafbeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95873256_70b49b6c",
+        "filename": "src/compiler/turboshaft/opmasks.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-07T13:21:52Z",
+      "side": 1,
+      "message": "Sounds reasonable. Actually, should we put this whole file in the Opmask namespace?",
+      "parentUuid": "90891a4a_3e6e15df",
       "range": {
         "startLine": 123,
         "startChar": 0,
