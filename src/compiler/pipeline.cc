@@ -3117,11 +3117,16 @@ bool PipelineImpl::OptimizeGraph(Linkage* linkage) {
 
     Run<turboshaft::DeadCodeEliminationPhase>();
 
+#ifdef V8_ENABLE_DEBUG_CODE
     if (V8_UNLIKELY(v8_flags.turboshaft_enable_debug_features)) {
       // This phase has to run very late to allow all previous phases to use
       // debug features.
       Run<turboshaft::DebugFeatureLoweringPhase>();
     }
+#else
+    DCHECK_WITH_MSG(!v8_flags.turboshaft_enable_debug_features,
+                    "Debug features are not available in this build");
+#endif  // V8_ENABLE_DEBUG_CODE
 
     Run<turboshaft::DecompressionOptimizationPhase>();
 
