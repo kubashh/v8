@@ -96,6 +96,8 @@ v8_source_set("inspector") {
 
   configs = [ ":inspector_config" ]
 
+  public_configs = [ "../..:v8_internal_headers_config" ]
+
   sources = rebase_path(_protocol_generated, ".", target_gen_dir)
   sources += [
     "../../include/v8-inspector-protocol.h",

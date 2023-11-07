@@ -763,6 +763,11 @@ config("internal_config") {
   }
 }
 
+config("v8_internal_headers_config") {
+  # This is necessary for includes gen/v8/inspector/*.h from include/v8-inspector-protocol.h.
+  include_dirs = [ "$target_gen_dir/include" ]
+}
+
 # Should be applied to all targets that write trace events.
 config("v8_tracing_config") {
   if (v8_use_perfetto) {
@@ -3082,6 +3087,8 @@ v8_header_set("v8_flags") {
 
 v8_header_set("v8_internal_headers") {
   configs = [ ":internal_config" ]
+
+  public_configs = [ ":v8_internal_headers_config" ]
 
   sources = [
     ### gcmole(all) ###
