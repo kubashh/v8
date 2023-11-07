@@ -46,7 +46,7 @@ class EvacuationAllocator {
   void FreeLastInCompactionSpace(MainAllocator* allocator,
                                  Tagged<HeapObject> object, int object_size);
 
-  MainAllocator* new_space_allocator() { return new_space_allocator_; }
+  MainAllocator* new_space_allocator() { return &new_space_allocator_.value(); }
   MainAllocator* old_space_allocator() { return &old_space_allocator_.value(); }
   MainAllocator* code_space_allocator() {
     return &code_space_allocator_.value();
@@ -62,7 +62,7 @@ class EvacuationAllocator {
   NewSpace* const new_space_;
   CompactionSpaceCollection compaction_spaces_;
   LocalAllocationBuffer new_space_lab_;
-  MainAllocator* new_space_allocator_;
+  base::Optional<MainAllocator> new_space_allocator_;
   base::Optional<MainAllocator> old_space_allocator_;
   base::Optional<MainAllocator> code_space_allocator_;
   base::Optional<MainAllocator> shared_space_allocator_;
