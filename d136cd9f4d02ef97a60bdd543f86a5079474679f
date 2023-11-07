@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e6caa1f_5d10e60e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1312815
+      },
+      "writtenOn": "2023-11-07T17:30:41Z",
+      "side": 1,
+      "message": "Can y\u0027all expand on the motivation for this? When would we want to build V8 without the continuation data? (Might be worthwhile to add that in a comment)",
+      "revId": "d136cd9f4d02ef97a60bdd543f86a5079474679f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b6784c7_65b673de",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1312815
+      },
+      "writtenOn": "2023-11-07T17:30:41Z",
+      "side": 1,
+      "message": "The comment seems off",
+      "revId": "d136cd9f4d02ef97a60bdd543f86a5079474679f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
