@@ -57,10 +57,11 @@ inspector_protocol_generate("protocol_generated_sources") {
 }
 
 config("inspector_config") {
-  visibility = [ ":*" ]  # Only targets in this file can depend on this.
-
   configs = [ "../../:internal_config" ]
-  include_dirs = [ "../../include" ]
+  include_dirs = [
+    "../../include",
+    "$target_gen_dir/../../include",
+  ]
 }
 
 v8_header_set("inspector_test_headers") {
