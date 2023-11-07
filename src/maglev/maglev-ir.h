@@ -195,6 +195,7 @@ class MergePointInterpreterFrameState;
   V(LoadNamedGeneric)                               \
   V(LoadNamedFromSuperGeneric)                      \
   V(MaybeGrowAndEnsureWritableFastElements)         \
+  V(OsrValue)                                       \
   V(SetNamedGeneric)                                \
   V(DefineNamedOwnGeneric)                          \
   V(StoreInArrayLiteralGeneric)                     \
@@ -204,6 +205,7 @@ class MergePointInterpreterFrameState;
   V(DefineKeyedOwnGeneric)                          \
   V(Phi)                                            \
   V(RegisterInput)                                  \
+  V(CheckedSmiSizedInt32)                           \
   V(CheckedSmiTagInt32)                             \
   V(CheckedSmiTagUint32)                            \
   V(UnsafeSmiTag)                                   \
@@ -2959,6 +2961,30 @@ class CheckedSmiTagInt32 : public FixedInputValueNodeT<1, CheckedSmiTagInt32> {
   void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
 };
 
+// This is a check disguised as a conversion node so we can use it to override
+// untagging conversions.
+// TODO(olivf): Support overriding bigger with smaller instruction so we can use
+// CheckInt32IsSmi instead.
+class CheckedSmiSizedInt32
+    : public FixedInputValueNodeT<1, CheckedSmiSizedInt32> {
+  using Base = FixedInputValueNodeT<1, CheckedSmiSizedInt32>;
+
+ public:
+  explicit CheckedSmiSizedInt32(uint64_t bitfield) : Base(bitfield) {}
+
+  static constexpr OpProperties kProperties = OpProperties::EagerDeopt() |
+                                              OpProperties::Int32() |
+                                              OpProperties::ConversionNode();
+  static constexpr
+      typename Base::InputTypes kInputTypes{ValueRepresentation::kInt32};
+
+  Input& input() { return Node::input(0); }
+
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const {}
+};
+
 class CheckedSmiTagUint32
     : public FixedInputValueNodeT<1, CheckedSmiTagUint32> {
   using Base = FixedInputValueNodeT<1, CheckedSmiTagUint32>;
@@ -4217,6 +4243,24 @@ class InitialValue : public FixedInputValueNodeT<0, InitialValue> {
 
  public:
   explicit InitialValue(uint64_t bitfield, interpreter::Register source);
+
+  interpreter::Register source() const { return source_; }
+  uint32_t stack_slot() const;
+  static uint32_t stack_slot(uint32_t register_idx);
+
+  void SetValueLocationConstraints();
+  void GenerateCode(MaglevAssembler*, const ProcessingState&);
+  void PrintParams(std::ostream&, MaglevGraphLabeller*) const;
+
+ private:
+  const interpreter::Register source_;
+};
+
+class OsrValue : public FixedInputValueNodeT<0, OsrValue> {
+  using Base = FixedInputValueNodeT<0, OsrValue>;
+
+ public:
+  explicit OsrValue(uint64_t bitfield, interpreter::Register source);
 
   interpreter::Register source() const { return source_; }
   uint32_t stack_slot() const;
@@ -6951,11 +6995,18 @@ class Phi : public ValueNodeT<Phi> {
     key_ = key;
   }
 
+  // Remembers if a use is unsafely untagged. If that happens we must ensure to
+  // stay within the smi range, even when untagging.
+  void SetUseRequires31BitValue();
+  bool uses_require_31_bit_value() { return uses_require_31_bit_value_; }
+
  private:
   Phi** next() { return &next_; }
 
   const interpreter::Register owner_;
-  bool has_key_ = false;  // True if the {key_} field has been initialized.
+  // True if the {key_} field has been initialized.
+  bool has_key_ = false;
+  bool uses_require_31_bit_value_ = false;
   UseRepresentationSet uses_repr_hint_ = {};
   UseRepresentationSet same_loop_uses_repr_hint_ = {};
 

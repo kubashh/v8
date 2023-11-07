@@ -88,7 +88,7 @@ class Graph final : public ZoneObject {
   }
 
   ZoneMap<RootIndex, RootConstant*>& root() { return root_; }
-  ZoneVector<InitialValue*>& osr_values() { return osr_values_; }
+  ZoneVector<OsrValue*>& osr_values() { return osr_values_; }
   ZoneMap<int, SmiConstant*>& smi() { return smi_; }
   ZoneMap<int, TaggedIndexConstant*>& tagged_index() { return tagged_index_; }
   ZoneMap<int, Int32Constant*>& int32() { return int_; }
@@ -124,7 +124,7 @@ class Graph final : public ZoneObject {
   uint32_t max_deopted_stack_size_ = kMaxUInt32;
   ZoneVector<BasicBlock*> blocks_;
   ZoneMap<RootIndex, RootConstant*> root_;
-  ZoneVector<InitialValue*> osr_values_;
+  ZoneVector<OsrValue*> osr_values_;
   ZoneMap<int, SmiConstant*> smi_;
   ZoneMap<int, TaggedIndexConstant*> tagged_index_;
   ZoneMap<int, Int32Constant*> int_;
