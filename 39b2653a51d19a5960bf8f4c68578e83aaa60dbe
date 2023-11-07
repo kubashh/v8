@@ -16,6 +16,24 @@
       "message": "Looks very useful! I guess it\u0027s better though if someone from the infra team reviews this as I don\u0027t know that code well enough (or Python).\n\nPTAL, thanks!",
       "revId": "39b2653a51d19a5960bf8f4c68578e83aaa60dbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf5a991f_34a3203f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-11-07T11:07:35Z",
+      "side": 1,
+      "message": "Sure! I am not a Python developer either, so it is definitely a good idea that someone with proper Python background checks the change.\n\nBy the way, it could be also interesting to open the discussion to add the metric to the official tests, pinpoint, etc, also, so in the future we can observe the memory impact of those benchmarks in a timeline! Hope @liviurau@chromium.org and others from infra team could provide some insight about that too.",
+      "parentUuid": "91e4b945_866ec427",
+      "revId": "39b2653a51d19a5960bf8f4c68578e83aaa60dbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
