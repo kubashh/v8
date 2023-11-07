@@ -16,6 +16,23 @@
       "message": "ptal again",
       "revId": "1862822c591bcb0fea1a4514655eedc1a4c6335c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "440b5141_7997efd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-11-07T10:02:50Z",
+      "side": 1,
+      "message": "Thanks, LGTM. (Not selecting auto-submit because of red bots - is harmless though)",
+      "revId": "1862822c591bcb0fea1a4514655eedc1a4c6335c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
