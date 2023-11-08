@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0a4be0a_5b31192d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1312815
+      },
+      "writtenOn": "2023-11-08T07:00:46Z",
+      "side": 1,
+      "message": "Thanks! I\u0027m adding a comment to that effect in a separate CL.",
+      "parentUuid": "483b7e6a_b990a3c4",
+      "revId": "d136cd9f4d02ef97a60bdd543f86a5079474679f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b6784c7_65b673de",
