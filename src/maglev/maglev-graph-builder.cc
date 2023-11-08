@@ -419,7 +419,8 @@ MaglevGraphBuilder::MaglevSubGraphBuilder::MaglevSubGraphBuilder(
 
 MaglevGraphBuilder::MaglevSubGraphBuilder::LoopLabel
 MaglevGraphBuilder::MaglevSubGraphBuilder::BeginLoop(
-    std::initializer_list<Variable*> loop_vars) {
+    std::initializer_list<Variable*> loop_vars,
+    bool need_checkpointed_loop_entry) {
   // Create fake liveness and loop info for the loop, with all given loop vars
   // set to be live and assigned inside the loop.
   compiler::BytecodeLivenessState* loop_header_liveness =
@@ -435,8 +436,13 @@ MaglevGraphBuilder::MaglevSubGraphBuilder::BeginLoop(
 
   // Finish the current block, jumping (as a fallthrough) to the loop header.
   BasicBlockRef loop_header_ref;
-  BasicBlock* loop_predecessor =
-      builder_->FinishBlock<Jump>({}, &loop_header_ref);
+  BasicBlock* loop_predecessor;
+  if (need_checkpointed_loop_entry) {
+    loop_predecessor =
+        builder_->FinishBlock<CheckpointedJump>({}, &loop_header_ref);
+  } else {
+    loop_predecessor = builder_->FinishBlock<Jump>({}, &loop_header_ref);
+  }
 
   // Create a state for the loop header, with two predecessors (the above jump
   // and the back edge), and initialise with the current state.
@@ -669,7 +675,13 @@ void MaglevGraphBuilder::StartPrologue() {
 }
 
 BasicBlock* MaglevGraphBuilder::EndPrologue() {
-  BasicBlock* first_block = FinishBlock<Jump>({}, &jump_targets_[entrypoint_]);
+  BasicBlock* first_block;
+  if (need_checkpointed_loop_entry()) {
+    first_block =
+        FinishBlock<CheckpointedJump>({}, &jump_targets_[entrypoint_]);
+  } else {
+    first_block = FinishBlock<Jump>({}, &jump_targets_[entrypoint_]);
+  }
   MergeIntoFrameState(first_block, entrypoint_);
   return first_block;
 }
@@ -5602,7 +5614,7 @@ ReduceResult MaglevGraphBuilder::TryReduceArrayForEach(
   // ```
   sub_builder.set(var_index, GetSmiConstant(0));
   MaglevSubGraphBuilder::LoopLabel loop_header =
-      sub_builder.BeginLoop({&var_index});
+      sub_builder.BeginLoop({&var_index}, need_checkpointed_loop_entry());
 
   // Reset known state that is cleared by BeginLoop, but is known to be true on
   // the first iteration, and will be re-checked at the end of the loop.
@@ -8948,7 +8960,12 @@ void MaglevGraphBuilder::PeelLoop() {
         &bytecode_analysis_.GetLoopInfoFor(loop_header),
         /* has_been_peeled */ true);
 
-    BasicBlock* block = FinishBlock<Jump>({}, &jump_targets_[loop_header]);
+    BasicBlock* block;
+    if (need_checkpointed_loop_entry()) {
+      block = FinishBlock<CheckpointedJump>({}, &jump_targets_[loop_header]);
+    } else {
+      block = FinishBlock<Jump>({}, &jump_targets_[loop_header]);
+    }
     MergeIntoFrameState(block, loop_header);
   } else {
     merge_states_[loop_header] = nullptr;
