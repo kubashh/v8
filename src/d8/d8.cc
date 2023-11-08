@@ -981,6 +981,9 @@ bool Shell::ExecuteString(Isolate* isolate, Local<String> source,
           i::Script::cast(Utils::OpenHandle(*script)->shared()->script()),
           i_isolate);
       // TODO(cbruni, chromium:1244145): remove once context-allocated.
+      // The script-serializer should ignore the host-defined options.
+      CHECK_EQ(i_script->host_defined_options(),
+               i::ReadOnlyRoots(i_isolate).empty_fixed_array());
       i_script->SetHostDefinedOptions(i::FixedArray::cast(
           *Utils::OpenHandle(*(origin.GetHostDefinedOptions()))));
     }
