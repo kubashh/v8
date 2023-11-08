@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5efed8fc_8804f838",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-11-08T17:16:27Z",
+      "side": 1,
+      "message": "Yes! I fixed that, by returning immediately if the results count is 0.",
+      "parentUuid": "4b58b77c_0248b64d",
+      "range": {
+        "startLine": 61,
+        "startChar": 32,
+        "endLine": 61,
+        "endChar": 44
+      },
+      "revId": "e506cf63afce9243b88f8f306318c7459d6b96a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7e0d70f_22fa7646",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd574cf3_16fe3037",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-11-08T17:16:27Z",
+      "side": 1,
+      "message": "That would change the calculation formulae.\n\nI changed it a bit to return 0 if len(results) is not greater than 1. With 1 the result of sigma is 0.\n\nI cleaned up the calculation and now I think it is a bit more readable (the sigma formulae is exactly the original one, but making it more explicit when we apply the calculation thanks to the CALL if CONDITION else FALLBACK construct.",
+      "parentUuid": "a7e0d70f_22fa7646",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 64,
+        "endChar": 23
+      },
+      "revId": "e506cf63afce9243b88f8f306318c7459d6b96a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37360350_5ce690aa",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-11-08T16:03:10Z",
       "side": 1,
       "message": "Nit: for brevity you could return a tuple (namedtuple if you want expose the meaning of all items) and unpack:\n```\n( self.avgresult[test], \n  self.sigmaresult[test], \n  self.numresult[test]) \u003d self.ComputeResults(results)\n```",
+      "range": {
+        "startLine": 75,
+        "startChar": 6,
+        "endLine": 78,
+        "endChar": 54
+      },
+      "revId": "e506cf63afce9243b88f8f306318c7459d6b96a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c926077_fec7913b",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-11-08T17:16:27Z",
+      "side": 1,
+      "message": "I was looking for an idiomatic way to do that. I like your proposal. Thanks!",
+      "parentUuid": "37360350_5ce690aa",
       "range": {
         "startLine": 75,
         "startChar": 6,
