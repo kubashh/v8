@@ -81,6 +81,30 @@
       },
       "revId": "39b2653a51d19a5960bf8f4c68578e83aaa60dbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d28086f_b9c67909",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-11-08T15:50:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c83f61fe_ae19c6ae",
+      "range": {
+        "startLine": 61,
+        "startChar": 6,
+        "endLine": 70,
+        "endChar": 41
+      },
+      "revId": "39b2653a51d19a5960bf8f4c68578e83aaa60dbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
