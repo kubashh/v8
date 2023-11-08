@@ -118,7 +118,7 @@ std::unique_ptr<FreeList> FreeList::CreateFreeList() {
 }
 
 std::unique_ptr<FreeList> FreeList::CreateFreeListForNewSpace() {
-  return std::make_unique<FreeListManyCachedFastPathForNewSpace>();
+  return std::make_unique<FreeListManyWorstFit>();
 }
 
 Tagged<FreeSpace> FreeList::TryFindNodeIn(FreeListCategoryType type,
@@ -350,9 +350,9 @@ Tagged<FreeSpace> FreeListManyCached::Allocate(size_t size_in_bytes,
 }
 
 // ------------------------------------------------
-// FreeListManyCachedFastPathBase implementation
+// FreeListManyCachedFastPath implementation
 
-Tagged<FreeSpace> FreeListManyCachedFastPathBase::Allocate(
+Tagged<FreeSpace> FreeListManyCachedFastPath::Allocate(
     size_t size_in_bytes, size_t* node_size, AllocationOrigin origin) {
   USE(origin);
   DCHECK_GE(kMaxBlockSize, size_in_bytes);
@@ -369,18 +369,16 @@ Tagged<FreeSpace> FreeListManyCachedFastPathBase::Allocate(
   }
 
   // Fast path part 2: searching the medium categories for tiny objects
-  if (small_blocks_mode_ == SmallBlocksMode::kAllow) {
-    if (node.is_null()) {
-      if (size_in_bytes <= kTinyObjectMaxSize) {
-        DCHECK_EQ(kFastPathFirstCategory, first_category);
-        for (type = next_nonempty_category[kFastPathFallBackTiny];
-             type < kFastPathFirstCategory;
-             type = next_nonempty_category[type + 1]) {
-          node = TryFindNodeIn(type, size_in_bytes, node_size);
-          if (!node.is_null()) break;
-        }
-        first_category = kFastPathFallBackTiny;
+  if (node.is_null()) {
+    if (size_in_bytes <= kTinyObjectMaxSize) {
+      DCHECK_EQ(kFastPathFirstCategory, first_category);
+      for (type = next_nonempty_category[kFastPathFallBackTiny];
+           type < kFastPathFirstCategory;
+           type = next_nonempty_category[type + 1]) {
+        node = TryFindNodeIn(type, size_in_bytes, node_size);
+        if (!node.is_null()) break;
       }
+      first_category = kFastPathFallBackTiny;
     }
   }
 
@@ -426,6 +424,41 @@ Tagged<FreeSpace> FreeListManyCachedOrigin::Allocate(size_t size_in_bytes,
     return FreeListManyCachedFastPath::Allocate(size_in_bytes, node_size,
                                                 origin);
   }
+}
+
+// ------------------------------------------------
+// FreeListManyWorstFit implementation
+
+Tagged<FreeSpace> FreeListManyWorstFit::Allocate(size_t size_in_bytes,
+                                                 size_t* node_size,
+                                                 AllocationOrigin origin) {
+  DCHECK_GE(kMaxBlockSize, size_in_bytes);
+
+  FreeListCategoryType exact_type =
+      SelectFreeListCategoryType(std::max(size_in_bytes, min_block_size_));
+  DCHECK_GT(exact_type, kInvalidCategory);
+
+  Tagged<FreeSpace> node;
+  DCHECK(node.is_null());
+
+  FreeListCategoryType type = last_category_;
+  for (; type >= exact_type; type--) {
+    DCHECK_NE(type, kInvalidCategory);
+    node = TryFindNodeIn(type, size_in_bytes, node_size);
+    if (!node.is_null()) break;
+  }
+
+  if (node.is_null()) {
+    DCHECK_LT(type, exact_type);
+    node = SearchForNodeInList(exact_type, size_in_bytes, node_size);
+  }
+
+  if (!node.is_null()) {
+    Page::FromHeapObject(node)->IncreaseAllocatedBytes(*node_size);
+  }
+
+  VerifyAvailable();
+  return node;
 }
 
 // ------------------------------------------------
