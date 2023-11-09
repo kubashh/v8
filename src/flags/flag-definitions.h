@@ -578,6 +578,12 @@ DEFINE_BOOL(maglev_reuse_stack_slots, true,
             "reuse stack slots in the maglev optimizing compiler")
 DEFINE_BOOL(maglev_untagged_phis, true,
             "enable phi untagging in the maglev optimizing compiler")
+DEFINE_BOOL(maglev_hoist_osr_value_phi_untagging, true,
+            "enable phi untagging to hoist untagging of osr values")
+DEFINE_EXPERIMENTAL_FEATURE(
+    maglev_speculative_hoist_phi_untagging,
+    "enable phi untagging to hoist untagging of loop phi inputs (could "
+    "still cause deopt loops)")
 
 DEFINE_BOOL(
     optimize_on_next_call_optimizes_to_maglev, false,
