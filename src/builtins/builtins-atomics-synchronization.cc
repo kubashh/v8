@@ -28,9 +28,26 @@ BUILTIN(AtomicsMutexLock) {
   }
   Handle<JSAtomicsMutex> js_mutex = Handle<JSAtomicsMutex>::cast(js_mutex_obj);
   Handle<Object> run_under_lock = args.atOrUndefined(isolate, 2);
+  Handle<Object> timeout_obj = args.atOrUndefined(isolate, 3);
   if (!IsCallable(*run_under_lock)) {
     THROW_NEW_ERROR_RETURN_FAILURE(
         isolate, NewTypeError(MessageTemplate::kNotCallable, run_under_lock));
+  }
+
+  base::Optional<base::TimeDelta> timeout = base::nullopt;
+  if (!IsUndefined(*timeout_obj, isolate)) {
+    if (!IsNumber(*timeout_obj)) {
+      THROW_NEW_ERROR_RETURN_FAILURE(
+          isolate, NewTypeError(MessageTemplate::kIsNotNumber, timeout_obj,
+                                Object::TypeOf(isolate, timeout_obj)));
+    }
+    double ms = Object::Number(*timeout_obj);
+    if (!std::isnan(ms)) {
+      if (ms < 0) ms = 0;
+      if (ms <= static_cast<double>(std::numeric_limits<int64_t>::max())) {
+        timeout = base::TimeDelta::FromMilliseconds(static_cast<int64_t>(ms));
+      }
+    }
   }
 
   // Like Atomics.wait, synchronous locking may block, and so is disallowed on
@@ -46,11 +63,15 @@ BUILTIN(AtomicsMutexLock) {
 
   Handle<Object> result;
   {
-    JSAtomicsMutex::LockGuard lock_guard(isolate, js_mutex);
-    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
-        isolate, result,
-        Execution::Call(isolate, run_under_lock,
-                        isolate->factory()->undefined_value(), 0, nullptr));
+    JSAtomicsMutex::LockGuard lock_guard(isolate, js_mutex, timeout);
+    if (lock_guard.locked()) {
+      ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+          isolate, result,
+          Execution::Call(isolate, run_under_lock,
+                          isolate->factory()->undefined_value(), 0, nullptr));
+    } else {
+      result = isolate->factory()->NewJSObject(isolate->object_function());
+    }
   }
 
   return *result;

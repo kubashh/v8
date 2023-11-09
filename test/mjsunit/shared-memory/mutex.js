@@ -51,3 +51,16 @@ assertEquals(locked_count, 6);
   const box = new Box;
   box.payload = mutex;
 })();
+
+// Timeout must be a number.
+assertThrows(() => {
+  Atomics.Mutex.lock(mutex, () => {}, '12');
+})
+
+assertThrows(() => {
+  Atomics.Mutex.lock(mutex, () => {}, {});
+})
+
+assertThrows(() => {
+  Atomics.Mutex.lock(mutex, () => {}, [1]);
+})
