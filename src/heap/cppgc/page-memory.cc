@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cstddef>
 
+#include "src/base/lazy-instance.h"
 #include "src/base/macros.h"
 #include "src/base/sanitizer/asan.h"
 #include "src/heap/cppgc/memory.h"
@@ -125,6 +126,11 @@ void PageMemoryRegionTree::Remove(PageMemoryRegion* region) {
   DCHECK_EQ(1u, size);
 }
 
+NormalPageMemoryPool& NormalPageMemoryPool::Instance() {
+  static v8::base::LeakyObject<NormalPageMemoryPool> instance;
+  return *instance.get();
+}
+
 void NormalPageMemoryPool::Add(PageMemoryRegion* pmr) {
   DCHECK_NOT_NULL(pmr);
   DCHECK_EQ(pmr->GetPageMemory().overall_region().size(), kPageSize);
@@ -135,14 +141,19 @@ void NormalPageMemoryPool::Add(PageMemoryRegion* pmr) {
     AsanUnpoisonScope unpoison_for_memset(base, size);
     std::memset(base, 0, size);
   }
+  v8::base::MutexGuard guard(&mutex_);
   pool_.push_back(pmr);
 }
 
 PageMemoryRegion* NormalPageMemoryPool::Take() {
-  if (pool_.empty()) return nullptr;
-  auto* result = pool_.back();
-  DCHECK_NOT_NULL(result);
-  pool_.pop_back();
+  PageMemoryRegion* result = nullptr;
+  {
+    v8::base::MutexGuard guard(&mutex_);
+    if (pool_.empty()) return nullptr;
+    result = pool_.back();
+    DCHECK_NOT_NULL(result);
+    pool_.pop_back();
+  }
   void* base = result->GetPageMemory().writeable_region().base();
   const size_t size = result->GetPageMemory().writeable_region().size();
   ASAN_UNPOISON_MEMORY_REGION(base, size);
@@ -152,8 +163,15 @@ PageMemoryRegion* NormalPageMemoryPool::Take() {
   return result;
 }
 
-void NormalPageMemoryPool::DiscardPooledPages(PageAllocator& page_allocator) {
-  for (auto* pmr : pool_) {
+void NormalPageMemoryPool::DiscardPooledPages() {
+  // Discard pages using the global page allocator.
+  auto& page_allocator = cppgc::internal::GetGlobalPageAllocator();
+  decltype(pool_) copied_pool;
+  {
+    v8::base::MutexGuard guard(&mutex_);
+    copied_pool = pool_;
+  }
+  for (auto* pmr : copied_pool) {
     DCHECK_NOT_NULL(pmr);
     CHECK(TryDiscard(page_allocator, pmr->GetPageMemory()));
   }
@@ -168,7 +186,7 @@ PageBackend::~PageBackend() = default;
 
 Address PageBackend::TryAllocateNormalPageMemory() {
   v8::base::MutexGuard guard(&mutex_);
-  if (PageMemoryRegion* cached = page_pool_.Take()) {
+  if (PageMemoryRegion* cached = NormalPageMemoryPool::Instance().Take()) {
     const auto writeable_region = cached->GetPageMemory().writeable_region();
     DCHECK_NE(normal_page_memory_regions_.end(),
               normal_page_memory_regions_.find(cached));
@@ -194,7 +212,7 @@ void PageBackend::FreeNormalPageMemory(
   auto* pmr = page_memory_region_tree_.Lookup(writeable_base);
   DCHECK_NOT_NULL(pmr);
   page_memory_region_tree_.Remove(pmr);
-  page_pool_.Add(pmr);
+  NormalPageMemoryPool::Instance().Add(pmr);
   if (free_memory_handling == FreeMemoryHandling::kDiscardWherePossible) {
     CHECK(TryDiscard(normal_page_allocator_, pmr->GetPageMemory()));
   }
@@ -222,10 +240,6 @@ void PageBackend::FreeLargePageMemory(Address writeable_base) {
   auto size = large_page_memory_regions_.erase(pmr);
   USE(size);
   DCHECK_EQ(1u, size);
-}
-
-void PageBackend::DiscardPooledPages() {
-  page_pool_.DiscardPooledPages(normal_page_allocator_);
 }
 
 }  // namespace internal

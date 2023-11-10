@@ -235,14 +235,14 @@ TEST(PageBackendTreeTest, AddLookupRemoveMultiple) {
 TEST(PageBackendPoolTest, ConstructorEmpty) {
   v8::base::PageAllocator allocator;
   PageBackend backend(allocator, allocator);
-  auto& pool = backend.get_page_pool_for_testing();
+  auto& pool = NormalPageMemoryPool::Instance();
   EXPECT_EQ(nullptr, pool.Take());
 }
 
 TEST(PageBackendPoolTest, AddTake) {
   v8::base::PageAllocator allocator;
   PageBackend backend(allocator, allocator);
-  auto& pool = backend.get_page_pool_for_testing();
+  auto& pool = NormalPageMemoryPool::Instance();
   auto& raw_pool = pool.get_raw_pool_for_testing();
 
   EXPECT_TRUE(raw_pool.empty());
