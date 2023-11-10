@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ced4445_c8abbebe",
+        "filename": "src/flags/flag-definitions.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-11-10T10:17:35Z",
+      "side": 1,
+      "message": "good idea with maglev future.\n\nNot sure about osr implying the other. They are kinda different as the normal hoisting hoists it in front of the loop, whereas osr values are untagged in the prologue.",
+      "parentUuid": "a0e84173_48d7fa9a",
+      "range": {
+        "startLine": 584,
+        "startChar": 4,
+        "endLine": 584,
+        "endChar": 42
+      },
+      "revId": "36f5e5f67f049047573e552ee702fbaeaaf100a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6e89ad62_71d02249",
         "filename": "src/maglev/maglev-graph-builder.h",
         "patchSetId": 12
@@ -54,6 +78,30 @@
       "writtenOn": "2023-11-10T08:13:22Z",
       "side": 1,
       "message": "Shouldn\u0027t this be done only for loop headers?",
+      "range": {
+        "startLine": 687,
+        "startChar": 10,
+        "endLine": 688,
+        "endChar": 72
+      },
+      "revId": "36f5e5f67f049047573e552ee702fbaeaaf100a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81ea825c_94360fc7",
+        "filename": "src/maglev/maglev-graph-builder.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-11-10T10:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e89ad62_71d02249",
       "range": {
         "startLine": 687,
         "startChar": 10,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0a370d5_f2aed393",
+        "filename": "src/maglev/maglev-ir.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 8156,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-11-10T10:17:35Z",
+      "side": 1,
+      "message": "yes. also dead code elimination.",
+      "parentUuid": "c28381e2_3397fe44",
+      "range": {
+        "startLine": 8156,
+        "startChar": 20,
+        "endLine": 8156,
+        "endChar": 35
+      },
+      "revId": "36f5e5f67f049047573e552ee702fbaeaaf100a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "62eb1596_0a46be40",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-11-10T08:13:22Z",
       "side": 1,
       "message": "`input` is already defined earlier in this function with the same value.",
+      "range": {
+        "startLine": 488,
+        "startChar": 6,
+        "endLine": 488,
+        "endChar": 46
+      },
+      "revId": "36f5e5f67f049047573e552ee702fbaeaaf100a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17e73e1f_2a249b3d",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-11-10T10:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62eb1596_0a46be40",
       "range": {
         "startLine": 488,
         "startChar": 6,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03003e5a_1695daa8",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-11-10T10:17:35Z",
+      "side": 1,
+      "message": "I like the warnings when adding a new enum case...",
+      "parentUuid": "03469913_c85179a8",
+      "range": {
+        "startLine": 490,
+        "startChar": 23,
+        "endLine": 500,
+        "endChar": 7
+      },
+      "revId": "36f5e5f67f049047573e552ee702fbaeaaf100a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c95c48ca_bcab8497",
@@ -156,6 +276,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50c1ce7b_7032f405",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-11-10T10:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c95c48ca_bcab8497",
+      "range": {
+        "startLine": 506,
+        "startChar": 6,
+        "endLine": 507,
+        "endChar": 77
+      },
+      "revId": "36f5e5f67f049047573e552ee702fbaeaaf100a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "224e15ea_a476a2ab",
@@ -169,6 +313,30 @@
       "writtenOn": "2023-11-10T08:13:22Z",
       "side": 1,
       "message": "Why not UnsafeSmiUntag?",
+      "range": {
+        "startLine": 512,
+        "startChar": 45,
+        "endLine": 512,
+        "endChar": 75
+      },
+      "revId": "36f5e5f67f049047573e552ee702fbaeaaf100a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb0edeaf_26efbb9b",
+        "filename": "src/maglev/maglev-phi-representation-selector.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-11-10T10:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "224e15ea_a476a2ab",
       "range": {
         "startLine": 512,
         "startChar": 45,
