@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0efae70a_df0d7f1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-10T15:24:27Z",
+      "side": 1,
+      "message": "lgtm, please wait for saelo\n\n@saelo@chromium.org: The cage reservation is already process global. As an implementation detail, we never gave address back to the cage reservation. I guess it\u0027s okay to actualy reuse them across threads?",
+      "revId": "2bd9c66747866a5b8689962a8e33fabe1adeafb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
