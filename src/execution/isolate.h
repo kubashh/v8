@@ -2047,6 +2047,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   }
 
   ExternalPointerHandle GetOrCreateWaiterQueueNodeExternalPointer();
+  ExternalPointerHandle CreateWaiterQueueNodeExternalPointer();
 
   TrustedPointerTable& trusted_pointer_table() {
     return isolate_data_.trusted_pointer_table_;

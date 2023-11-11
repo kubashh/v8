@@ -6493,11 +6493,17 @@ ExternalPointerHandle Isolate::GetOrCreateWaiterQueueNodeExternalPointer() {
   if (waiter_queue_node_external_pointer_handle_ !=
       kNullExternalPointerHandle) {
     handle = waiter_queue_node_external_pointer_handle_;
+    DCHECK_NE(0, handle);
   } else {
-    handle = shared_external_pointer_table().AllocateAndInitializeEntry(
-        shared_external_pointer_space(), kNullAddress, kWaiterQueueNodeTag);
-    waiter_queue_node_external_pointer_handle_ = handle;
+    handle = CreateWaiterQueueNodeExternalPointer();
   }
+  return handle;
+}
+
+ExternalPointerHandle Isolate::CreateWaiterQueueNodeExternalPointer() {
+  ExternalPointerHandle handle =
+      shared_external_pointer_table().AllocateAndInitializeEntry(
+          shared_external_pointer_space(), kNullAddress, kWaiterQueueNodeTag);
   DCHECK_NE(0, handle);
   return handle;
 }
