@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d73a63cb_cc0785b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-11-13T17:00:19Z",
+      "side": 1,
+      "message": "Not sure I fully understand what this change is trying to achieve. What\u0027s the difference between `base::Vector` and `v8::MemorySpan`? I always considered one the internal thing and the other the external one (similar to `base::Optional` vs `v8::Maybe`).\nBoth can point to either stack-allocated or heap-allocated memory, no?\n\nAll usages that were replaced in this CL indeed used stack-allocated memory (either directly, or via `base::VectorOf({...})` which constructs an initializer list which has a stack-allocated backing array). Did any of these cause issues?",
+      "range": {
+        "startLine": 11,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "89c3816fc40ab1c48038e1b9d017aa4de56cf99b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
