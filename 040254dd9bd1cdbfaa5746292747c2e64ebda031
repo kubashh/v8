@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "880d8604_2db59c18",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-11-13T14:15:26Z",
+      "side": 1,
+      "message": "No. The only differences are:\n- `v8::Local` is external, `[Direct]Handle` is internal.\n- `v8::Local` will automatically switch to direct, eventually, and so will `DirectHandle`. On the other hand, `Handle` will stay indirect (unless we change our minds).\n\nIn both cases, if handles are direct, a backing store is needed (for storing the actual pointers) that must be registered as persistent roots, for CSS.",
+      "parentUuid": "4afe8dac_0b6c519f",
+      "range": {
+        "startLine": 11,
+        "startChar": 30,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "040254dd9bd1cdbfaa5746292747c2e64ebda031",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1cedc3ab_f645f5e3",
