@@ -16,6 +16,46 @@
       "message": "PTAL :)",
       "revId": "09a0f1d265eee4d1af4659f6c0bf659a3348cc58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19e3bdc3_59707794",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-13T18:08:51Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "09a0f1d265eee4d1af4659f6c0bf659a3348cc58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32da9778_9b7ce482",
+        "filename": "src/compiler/turboshaft/machine-optimization-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-13T18:08:51Z",
+      "side": 1,
+      "message": "Nit: I have to admit, I don\u0027t understand the different scoping for `amount` and `x`.\nI almost always prefer to define variables outside of ifs with the potential excpetions like `if (const T* x \u003d this_might_return_nullptr)` and don\u0027t mind that the scope is broader than it needs to be but better readability.",
+      "range": {
+        "startLine": 1064,
+        "startChar": 6,
+        "endLine": 1064,
+        "endChar": 21
+      },
+      "revId": "09a0f1d265eee4d1af4659f6c0bf659a3348cc58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
