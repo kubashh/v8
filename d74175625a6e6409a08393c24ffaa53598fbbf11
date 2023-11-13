@@ -34,6 +34,24 @@
       "parentUuid": "f5d435f9_67b6912e",
       "revId": "d74175625a6e6409a08393c24ffaa53598fbbf11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd90e7e_67d8e806",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-11-13T13:05:53Z",
+      "side": 1,
+      "message": "I\u0027ll make sure to make the timeouts big enough. And I\u0027ll monitor the CQ after the reland to potentially skip the test if it still flakes.",
+      "parentUuid": "4f6b4db9_7af2cd43",
+      "revId": "d74175625a6e6409a08393c24ffaa53598fbbf11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
