@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f8f795f_0ff73aeb",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-13T14:50:51Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "a0c0f76f_96450dfd",
+      "range": {
+        "startLine": 1005,
+        "startChar": 6,
+        "endLine": 1005,
+        "endChar": 21
+      },
+      "revId": "56f03322031b598759daacf81d80afc3de749636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "131e0be8_0ed184a0",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-13T14:37:33Z",
       "side": 0,
       "message": "Same as for the loads, this can\u0027t happen given the surrounding code.",
+      "range": {
+        "startLine": 1576,
+        "startChar": 6,
+        "endLine": 1576,
+        "endChar": 21
+      },
+      "revId": "56f03322031b598759daacf81d80afc3de749636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68600c5d_cec2e65a",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1576,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-13T14:50:51Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "131e0be8_0ed184a0",
       "range": {
         "startLine": 1576,
         "startChar": 6,

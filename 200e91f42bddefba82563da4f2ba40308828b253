@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1cd9c26_3424dfb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-13T14:50:51Z",
+      "side": 1,
+      "message": "LGTM :)",
+      "revId": "200e91f42bddefba82563da4f2ba40308828b253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09ab3c90_a690b165",
@@ -31,6 +48,30 @@
       "writtenOn": "2023-11-13T14:37:33Z",
       "side": 1,
       "message": "Unchanged (except for the name and explicit return type).\n\nI\u0027d rather not move around 100 lines but it\u0027s a huge struggle porting `VisitStore` and having 100 lines of lambda function in between that are completely unrelated to the rest doesn\u0027t make it easier, also as we currently have to support 3 cases: Turbofan kStorePair, Turbofan, Turboshaft and they all have different interfaces to interact with the store... :/",
+      "range": {
+        "startLine": 942,
+        "startChar": 43,
+        "endLine": 942,
+        "endChar": 69
+      },
+      "revId": "200e91f42bddefba82563da4f2ba40308828b253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0778b1dd_e7a67aa6",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-13T14:50:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "09ab3c90_a690b165",
       "range": {
         "startLine": 942,
         "startChar": 43,
