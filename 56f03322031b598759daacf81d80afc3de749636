@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0c0f76f_96450dfd",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-13T14:37:33Z",
+      "side": 0,
+      "message": "If this is null it will already crash in the `ExternalReferenceMatcher m(base);` 20 lines above (and in `g.UseRegister(base)` 10 lines below.",
+      "range": {
+        "startLine": 1005,
+        "startChar": 6,
+        "endLine": 1005,
+        "endChar": 21
+      },
+      "revId": "56f03322031b598759daacf81d80afc3de749636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "131e0be8_0ed184a0",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1576,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-13T14:37:33Z",
+      "side": 0,
+      "message": "Same as for the loads, this can\u0027t happen given the surrounding code.",
+      "range": {
+        "startLine": 1576,
+        "startChar": 6,
+        "endLine": 1576,
+        "endChar": 21
+      },
+      "revId": "56f03322031b598759daacf81d80afc3de749636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
