@@ -22,6 +22,30 @@
       },
       "revId": "89c3816fc40ab1c48038e1b9d017aa4de56cf99b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8494020c_17b683cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-11-13T18:00:28Z",
+      "side": 1,
+      "message": "Indeed, our `base::Vector` is quite different from a `std::vector` in that it doesn\u0027t own its backing store, which can be stack-allocated or heap-allocated. I personally find this very confusing and error-prone, especially the presence of `Vector::New`. E.g. here [1], if ever a `SimpleStringBuilder` is finalized by its destructor, there will be a memory leak.\n\nIn C++20, both `base::Vector` (used as here) and `v8::MemorySpan` would collapse to `std::span`, I guess.\n\nThe usages of `base::VectorOf` that were replaced in this CL pointed indeed to stack-allocated memory and they would not cause any issues. Heap-allocated vectors of handles would be problematic and this seems to be allowed (if not suggested, if we disregard our abuse of the term \"vector\" here) by the previous signature of e.g., `NewError`.\n\nThere\u0027s a lot of instances of `std::vector\u003cHandle\u003cT\u003e\u003e` in V8\u0027s code base and I will start replacing them too. This was something self-contained, not entirely necessary but in the same line of work.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:v8/src/numbers/conversions.cc;drc\u003d125dea0015c8b18e70d42e249437c3e49fe18ae1;l\u003d53",
+      "parentUuid": "d73a63cb_cc0785b0",
+      "range": {
+        "startLine": 11,
+        "startChar": 19,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "89c3816fc40ab1c48038e1b9d017aa4de56cf99b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
