@@ -34,6 +34,24 @@
       "parentUuid": "0efae70a_df0d7f1e",
       "revId": "2bd9c66747866a5b8689962a8e33fabe1adeafb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc6bd3e5_68a1cea2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-13T08:30:05Z",
+      "side": 1,
+      "message": "Previously, a \"pool\" would never return the reservation to the cage, yes.\n\nOk, looks like we are good, thanks!",
+      "parentUuid": "d12faa00_ac145ec0",
+      "revId": "2bd9c66747866a5b8689962a8e33fabe1adeafb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
