@@ -50,6 +50,47 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4afe8dac_0b6c519f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-13T13:57:15Z",
+      "side": 1,
+      "message": "Other than `Local` vs `Handle`, is there another diff between `DirectHandleVector\u003cT\u003e` and `LocalVector\u003cT\u003e`?",
+      "parentUuid": "7b0a73bf_2d5dee6d",
+      "range": {
+        "startLine": 11,
+        "startChar": 30,
+        "endLine": 11,
+        "endChar": 53
+      },
+      "revId": "040254dd9bd1cdbfaa5746292747c2e64ebda031",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cedc3ab_f645f5e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-13T13:57:15Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "040254dd9bd1cdbfaa5746292747c2e64ebda031",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f664c9e7_1bb06b97",
         "filename": "src/heap/factory.h",
         "patchSetId": 2
@@ -85,6 +126,30 @@
       "side": 1,
       "message": "This `sizeof...` counts the number of arguments in the parameter pack passed to this function template: https://en.cppreference.com/w/cpp/language/sizeof...\nIt is known at compile-time when the template is instantiated, hence the `constexpr` both in `N` and in the `if` below.",
       "parentUuid": "f664c9e7_1bb06b97",
+      "range": {
+        "startLine": 807,
+        "startChar": 25,
+        "endLine": 807,
+        "endChar": 40
+      },
+      "revId": "040254dd9bd1cdbfaa5746292747c2e64ebda031",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "550a276b_04d0afa3",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 807,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-13T13:57:15Z",
+      "side": 1,
+      "message": "Sorry, I thought this was the same method that started in line 798 above. I missed that these are 2 different methods.",
+      "parentUuid": "9db01e5f_014e326f",
       "range": {
         "startLine": 807,
         "startChar": 25,
