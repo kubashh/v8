@@ -11,6 +11,7 @@
 #include "src/heap/memory-chunk-inl.h"
 #include "src/heap/page-inl.h"
 #include "src/objects/free-space-inl.h"
+#include "src/objects/free-space.h"
 
 namespace v8 {
 namespace internal {
@@ -118,7 +119,7 @@ std::unique_ptr<FreeList> FreeList::CreateFreeList() {
 }
 
 std::unique_ptr<FreeList> FreeList::CreateFreeListForNewSpace() {
-  return std::make_unique<FreeListManyCachedFastPathForNewSpace>();
+  return std::make_unique<FreeListManyWorstFit>();
 }
 
 Tagged<FreeSpace> FreeList::TryFindNodeIn(FreeListCategoryType type,
@@ -246,42 +247,6 @@ Tagged<FreeSpace> FreeListMany::Allocate(size_t size_in_bytes,
 // ------------------------------------------------
 // FreeListManyCached implementation
 
-FreeListManyCached::FreeListManyCached() { ResetCache(); }
-
-void FreeListManyCached::Reset() {
-  ResetCache();
-  FreeListMany::Reset();
-}
-
-bool FreeListManyCached::AddCategory(FreeListCategory* category) {
-  bool was_added = FreeList::AddCategory(category);
-
-  // Updating cache
-  if (was_added) {
-    UpdateCacheAfterAddition(category->type_);
-  }
-
-#ifdef DEBUG
-  CheckCacheIntegrity();
-#endif
-
-  return was_added;
-}
-
-void FreeListManyCached::RemoveCategory(FreeListCategory* category) {
-  FreeList::RemoveCategory(category);
-
-  // Updating cache
-  int type = category->type_;
-  if (categories_[type] == nullptr) {
-    UpdateCacheAfterRemoval(type);
-  }
-
-#ifdef DEBUG
-  CheckCacheIntegrity();
-#endif
-}
-
 size_t FreeListManyCached::Free(Address start, size_t size_in_bytes,
                                 FreeMode mode) {
   Page* page = Page::FromAddress(start);
@@ -350,9 +315,9 @@ Tagged<FreeSpace> FreeListManyCached::Allocate(size_t size_in_bytes,
 }
 
 // ------------------------------------------------
-// FreeListManyCachedFastPathBase implementation
+// FreeListManyCachedFastPath implementation
 
-Tagged<FreeSpace> FreeListManyCachedFastPathBase::Allocate(
+Tagged<FreeSpace> FreeListManyCachedFastPath::Allocate(
     size_t size_in_bytes, size_t* node_size, AllocationOrigin origin) {
   USE(origin);
   DCHECK_GE(kMaxBlockSize, size_in_bytes);
@@ -369,18 +334,16 @@ Tagged<FreeSpace> FreeListManyCachedFastPathBase::Allocate(
   }
 
   // Fast path part 2: searching the medium categories for tiny objects
-  if (small_blocks_mode_ == SmallBlocksMode::kAllow) {
-    if (node.is_null()) {
-      if (size_in_bytes <= kTinyObjectMaxSize) {
-        DCHECK_EQ(kFastPathFirstCategory, first_category);
-        for (type = next_nonempty_category[kFastPathFallBackTiny];
-             type < kFastPathFirstCategory;
-             type = next_nonempty_category[type + 1]) {
-          node = TryFindNodeIn(type, size_in_bytes, node_size);
-          if (!node.is_null()) break;
-        }
-        first_category = kFastPathFallBackTiny;
+  if (node.is_null()) {
+    if (size_in_bytes <= kTinyObjectMaxSize) {
+      DCHECK_EQ(kFastPathFirstCategory, first_category);
+      for (type = next_nonempty_category[kFastPathFallBackTiny];
+           type < kFastPathFirstCategory;
+           type = next_nonempty_category[type + 1]) {
+        node = TryFindNodeIn(type, size_in_bytes, node_size);
+        if (!node.is_null()) break;
       }
+      first_category = kFastPathFallBackTiny;
     }
   }
 
@@ -426,6 +389,58 @@ Tagged<FreeSpace> FreeListManyCachedOrigin::Allocate(size_t size_in_bytes,
     return FreeListManyCachedFastPath::Allocate(size_in_bytes, node_size,
                                                 origin);
   }
+}
+
+// ------------------------------------------------
+// FreeListManyWorstFit implementation
+
+Tagged<FreeSpace> FreeListManyWorstFit::Allocate(size_t size_in_bytes,
+                                                 size_t* node_size,
+                                                 AllocationOrigin origin) {
+  DCHECK_GE(kMaxBlockSize, size_in_bytes);
+
+  FreeListCategoryType exact_type = SelectFreeListCategoryType(size_in_bytes);
+  DCHECK_GT(exact_type, kInvalidCategory);
+
+  FreeListCategoryType type = prev_nonempty_category[last_category_];
+  if (type < exact_type) {
+    // No non-empty categories for the requested size.
+    return FreeSpace();
+  }
+
+  Tagged<FreeSpace> node;
+  if (type > exact_type) {
+    node = TryFindNodeIn(type, size_in_bytes, node_size);
+    DCHECK(!node.is_null());
+  } else {
+    DCHECK_EQ(type, exact_type);
+    node = SearchForNodeInList(exact_type, size_in_bytes, node_size);
+    if (node.is_null()) {
+      return FreeSpace();
+    }
+  }
+
+  if (categories_[type] == nullptr) UpdateCacheAfterRemoval(type);
+  Page::FromHeapObject(node)->IncreaseAllocatedBytes(*node_size);
+
+#ifdef DEBUG
+  CheckCacheIntegrity();
+#endif
+
+  VerifyAvailable();
+  return node;
+}
+
+// Return the smallest category that could hold |size_in_bytes| bytes.
+FreeListCategoryType FreeListManyWorstFit::SelectFreeListCategoryType(
+    size_t size_in_bytes) {
+  DCHECK_NE(-1, min_category_);
+  for (int cat = min_category_; cat < last_category_; cat++) {
+    if (size_in_bytes < categories_min[cat + 1]) {
+      return cat;
+    }
+  }
+  return last_category_;
 }
 
 // ------------------------------------------------
