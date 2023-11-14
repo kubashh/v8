@@ -16,6 +16,24 @@
       "message": "Hi Matthias\nHere should it be \u003cWordRepresentation::Word64()\u003e;",
       "revId": "e0c226a43ad7151003fc63e1c15da8fc2e93decb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbdf5bdc_8394a3ca",
+        "filename": "src/compiler/turboshaft/opmasks.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-14T08:58:02Z",
+      "side": 1,
+      "message": "Good catch, I already found it as well, I have the fix in a CL which is in review:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/5016849/2/src/compiler/turboshaft/opmasks.h#b173.\nFeel free to fix it in your port as well, if you add both\n```\nusing kWord32Equal \u003d EqualMask::For\u003cWordRepresentation::Word32()\u003e;\nusing kWord64Equal \u003d EqualMask::For\u003cWordRepresentation::Word64()\u003e;\n```\nthen we shouldn\u0027t get any merge conflicts on it.",
+      "parentUuid": "7c8e9db6_fa2c47cf",
+      "revId": "e0c226a43ad7151003fc63e1c15da8fc2e93decb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
