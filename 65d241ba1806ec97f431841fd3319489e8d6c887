@@ -16,6 +16,40 @@
       "message": "A small follow-up to the recent lazy-code-logging fix. PTAL.",
       "revId": "65d241ba1806ec97f431841fd3319489e8d6c887",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64a89ca0_a84b1bd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-11-14T16:57:00Z",
+      "side": 1,
+      "message": "One comment, otherwise LGTM (if moving is not possible).",
+      "revId": "65d241ba1806ec97f431841fd3319489e8d6c887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51a3d51d_c00a5c39",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-11-14T16:57:00Z",
+      "side": 1,
+      "message": "Can you check if we can move this whole code to `WasmEngine::SyncCompileTranslatedAsmJs` (towards the end, where we also do `LogWasmCodes` for eager compilation)?",
+      "revId": "65d241ba1806ec97f431841fd3319489e8d6c887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
