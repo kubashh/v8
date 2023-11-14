@@ -523,8 +523,11 @@ Handle<WasmModuleObject> WasmEngine::FinalizeTranslatedAsmJs(
     base::MutexGuard guard(&mutex_);
     DCHECK_EQ(1, isolates_.count(isolate));
     auto& scripts = isolates_[isolate]->scripts;
-    DCHECK_EQ(0, scripts.count(native_module.get()));
-    scripts.emplace(native_module.get(), WeakScriptHandle(script));
+    // If the same asm.js module is instantiated repeatedly, then we
+    // deduplicate the NativeModule, so the script exists already.
+    if (scripts.count(native_module.get()) == 0) {
+      scripts.emplace(native_module.get(), WeakScriptHandle(script));
+    }
   }
   Handle<WasmModuleObject> module_object =
       WasmModuleObject::New(isolate, std::move(native_module), script);
