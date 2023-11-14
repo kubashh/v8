@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c8e9db6_fa2c47cf",
+        "filename": "src/compiler/turboshaft/opmasks.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1464828
+      },
+      "writtenOn": "2023-11-14T02:12:35Z",
+      "side": 1,
+      "message": "Hi Matthias\nHere should it be \u003cWordRepresentation::Word64()\u003e;",
+      "revId": "e0c226a43ad7151003fc63e1c15da8fc2e93decb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
