@@ -509,6 +509,18 @@ MaybeHandle<AsmWasmData> WasmEngine::SyncCompileTranslatedAsmJs(
   if (!native_module) return {};
 
   native_module->LogWasmCodes(isolate, *script);
+  {
+    // Register the script with the isolate. We do this unconditionally for
+    // consistency; it is in particular required for logging lazy-compiled code.
+    base::MutexGuard guard(&mutex_);
+    DCHECK_EQ(1, isolates_.count(isolate));
+    auto& scripts = isolates_[isolate]->scripts;
+    // If the same asm.js module is instantiated repeatedly, then we
+    // deduplicate the NativeModule, so the script exists already.
+    if (scripts.count(native_module.get()) == 0) {
+      scripts.emplace(native_module.get(), WeakScriptHandle(script));
+    }
+  }
 
   return AsmWasmData::New(isolate, std::move(native_module), uses_bitset);
 }
@@ -518,14 +530,6 @@ Handle<WasmModuleObject> WasmEngine::FinalizeTranslatedAsmJs(
     Handle<Script> script) {
   std::shared_ptr<NativeModule> native_module =
       asm_wasm_data->managed_native_module()->get();
-  // Register the script to make code logging work.
-  if (v8_flags.asm_wasm_lazy_compilation && native_module->log_code()) {
-    base::MutexGuard guard(&mutex_);
-    DCHECK_EQ(1, isolates_.count(isolate));
-    auto& scripts = isolates_[isolate]->scripts;
-    DCHECK_EQ(0, scripts.count(native_module.get()));
-    scripts.emplace(native_module.get(), WeakScriptHandle(script));
-  }
   Handle<WasmModuleObject> module_object =
       WasmModuleObject::New(isolate, std::move(native_module), script);
   return module_object;
