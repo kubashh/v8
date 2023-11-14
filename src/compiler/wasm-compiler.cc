@@ -7759,7 +7759,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     return resume.PhiAt(0);
   }
 
-#if V8_TARGET_ARCH_X64
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
   Node* BuildSwitchToTheCentralStack(Node* callable_node) {
     Node* stack_limit_slot = gasm_->IntPtrAdd(
         gasm_->LoadFramePointer(),
@@ -7775,7 +7775,9 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     Node* central_stack_sp =
         BuildCCall(&sig, do_switch, callable_node, stack_limit_slot);
     Node* old_sp = gasm_->LoadStackPointer();
-    gasm_->SetStackPointer(central_stack_sp);
+    // Temporarily disallow sp-relative offsets.
+    constexpr bool kCannotAccessWithSP = false;
+    gasm_->SetStackPointer(central_stack_sp, kCannotAccessWithSP);
     gasm_->Store(StoreRepresentation(MachineType::PointerRepresentation(),
                                      kNoWriteBarrier),
                  gasm_->LoadFramePointer(),
@@ -7799,14 +7801,15 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                  gasm_->LoadFramePointer(),
                  WasmImportWrapperFrameConstants::kCentralStackSPOffset,
                  gasm_->IntPtrConstant(0));
-    gasm_->SetStackPointer(old_sp);
+    constexpr bool kCanAccessWithSP = true;
+    gasm_->SetStackPointer(old_sp, kCanAccessWithSP);
   }
 #endif
 
   Node* BuildCallOnCentralStack(base::SmallVector<Node*, 16>& args, int& pos,
                                 CallDescriptor* call_descriptor,
                                 Node* callable_node) {
-#if V8_TARGET_ARCH_X64
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
     // If the current stack is a secondary stack, switch, perform the call and
     // switch back. Otherwise, just do the call.
     // Return the Phi of the calls in the two branches.

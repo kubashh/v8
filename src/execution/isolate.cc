@@ -2159,7 +2159,7 @@ Tagged<Object> Isolate::UnwindAndFindHandler() {
             DCHECK_LT(0, wasm_to_js_counter);
             suspender->set_wasm_to_js_counter(wasm_to_js_counter - 1);
 
-#if V8_TARGET_ARCH_X64
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
             // If the wasm-to-js wrapper was on a secondary stack and switched
             // to the central stack, handle the implicit switch back.
             Address central_stack_sp = *reinterpret_cast<Address*>(
@@ -2222,7 +2222,7 @@ Tagged<Object> Isolate::UnwindAndFindHandler() {
           DCHECK_NULL(wasm::GetWasmCodeManager()->LookupCode(frame->pc()));
         }
 #endif
-#if V8_TARGET_ARCH_X64
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
         if (v8_flags.experimental_wasm_stack_switching) {
           Tagged<Code> code = stub_frame->LookupCode();
           if (code->builtin_id() == Builtin::kWasmToJsWrapperCSA) {
@@ -3314,6 +3314,14 @@ bool Isolate::IsOnCentralStack(Address addr) {
 #endif
 }
 
+bool Isolate::IsOnCentralStack() {
+#if USE_SIMULATOR
+  return IsOnCentralStack(Simulator::current(this)->get_sp());
+#else
+  return IsOnCentralStack(GetCurrentStackPosition());
+#endif
+}
+
 void Isolate::AddSharedWasmMemory(Handle<WasmMemoryObject> memory_object) {
   Handle<WeakArrayList> shared_wasm_memories =
       factory()->shared_wasm_memories();
@@ -3372,14 +3380,15 @@ void Isolate::UpdateCentralStackInfo() {
     auto cont = WasmContinuationObject::cast(current);
     auto* wasm_stack =
         Managed<wasm::StackMemory>::cast(cont->stack())->get().get();
-#if !V8_TARGET_ARCH_X64
+#if !V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_ARM64
     stack().AddStackSegment(
         reinterpret_cast<const void*>(wasm_stack->base()),
         reinterpret_cast<const void*>(wasm_stack->jmpbuf()->sp));
 #endif
-    // On x64 we don't need to record the stack segments for conservative stack
-    // scanning. We switch to the central stack for foreign calls, so secondary
-    // stacks only contain wasm frames which use the precise GC.
+    // On x64 and arm64 we don't need to record the stack segments for
+    // conservative stack scanning. We switch to the central stack for foreign
+    // calls, so secondary stacks only contain wasm frames which use the precise
+    // GC.
     current = cont->parent();
     if (!updated_central_stack && IsOnCentralStack(wasm_stack->jmpbuf()->sp)) {
       // This is the most recent use of the central stack in the call chain.

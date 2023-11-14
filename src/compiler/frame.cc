@@ -45,6 +45,10 @@ void FrameAccessState::MarkHasFrame(bool state) {
   SetFrameAccessToDefault();
 }
 
+void FrameAccessState::SetCanAccessWithSP(bool state) {
+  can_access_with_sp_ = state;
+}
+
 void FrameAccessState::SetFrameAccessToDefault() {
   if (has_frame()) {
     SetFrameAccessToFP();
