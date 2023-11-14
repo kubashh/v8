@@ -399,7 +399,6 @@ void MinorMarkSweepCollector::CollectGarbage() {
 
   auto* isolate = heap_->isolate();
   isolate->global_handles()->UpdateListOfYoungNodes();
-  isolate->traced_handles()->UpdateListOfYoungNodes();
 
   isolate->stack_guard()->ClearGC();
   gc_finalization_requested_.store(false, std::memory_order_relaxed);
