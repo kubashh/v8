@@ -19,6 +19,12 @@ struct WasmOptimizePhase {
   void Run(Zone* temp_zone);
 };
 
+struct WasmMemoryOptimizePhase {
+  DECL_TURBOSHAFT_PHASE_CONSTANTS(WasmOptimize)
+
+  void Run(Zone* temp_zone);
+};
+
 }  // namespace v8::internal::compiler::turboshaft
 
 #endif  // V8_COMPILER_TURBOSHAFT_WASM_OPTIMIZE_PHASE_H_

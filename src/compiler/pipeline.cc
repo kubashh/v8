@@ -3764,6 +3764,8 @@ bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
     const bool is_asm_js = is_asmjs_module(module);
     if (v8_flags.wasm_opt || is_asm_js) {
       pipeline.Run<turboshaft::WasmOptimizePhase>();
+    } else {
+      pipeline.Run<turboshaft::WasmMemoryOptimizePhase>();
     }
 
     if (mcgraph->machine()->Is32()) {
