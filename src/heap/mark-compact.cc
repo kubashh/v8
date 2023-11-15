@@ -675,10 +675,6 @@ void MarkCompactCollector::Prepare() {
 
   DCHECK(!sweeper_->sweeping_in_progress());
 
-  // Unmapper tasks needs to be stopped during the GC, otherwise pages queued
-  // for freeing might get unmapped during the GC.
-  DCHECK(!heap_->memory_allocator()->unmapper()->IsRunning());
-
   DCHECK_IMPLIES(heap_->incremental_marking()->IsMarking(),
                  heap_->incremental_marking()->IsMajorMarking());
   if (!heap_->incremental_marking()->IsMarking()) {
@@ -830,11 +826,6 @@ void MarkCompactCollector::Finish() {
   if (UseBackgroundThreadsInCycle()) {
     sweeper_->StartMajorSweeperTasks();
   }
-
-  // Ensure unmapper tasks are stopped such that queued pages aren't freed
-  // before this point. We still need all pages to be accessible for the "update
-  // pointers" phase.
-  DCHECK(!heap_->memory_allocator()->unmapper()->IsRunning());
 
   // Shrink pages if possible after processing and filtering slots.
   ShrinkPagesToObjectSizes(heap_, heap_->lo_space());
@@ -5224,7 +5215,7 @@ void MarkCompactCollector::SweepLargeSpace(LargeObjectSpace* space) {
     if (!marking_state_->IsMarked(object)) {
       // Object is dead and page can be released.
       space->RemovePage(current);
-      heap_->memory_allocator()->Free(MemoryAllocator::FreeMode::kConcurrently,
+      heap_->memory_allocator()->Free(MemoryAllocator::FreeMode::kImmediately,
                                       current);
 
       continue;
