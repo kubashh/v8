@@ -180,6 +180,9 @@ void NormalPageMemoryPool::FreePageMemoryRegion(
   // Oilpan requires the pages to be zero-initialized. Either discard it or
   // memset to zero.
   if (free_memory_handling == FreeMemoryHandling::kDiscardWherePossible) {
+    // Unpoison the memory before giving back to the OS.
+    ASAN_UNPOISON_MEMORY_REGION(pmr->GetPageMemory().writeable_region().base(),
+                                pmr->GetPageMemory().writeable_region().size());
     CHECK(TryDiscard(page_allocator_, pmr->GetPageMemory()));
   } else {
     void* base = pmr->GetPageMemory().writeable_region().base();
@@ -201,6 +204,9 @@ void NormalPageMemoryPool::DiscardPooledPages() {
   }
   for (auto* pmr : copied_pool) {
     DCHECK_NOT_NULL(pmr);
+    // Unpoison the memory before giving back to the OS.
+    ASAN_UNPOISON_MEMORY_REGION(pmr->GetPageMemory().writeable_region().base(),
+                                pmr->GetPageMemory().writeable_region().size());
     CHECK(TryDiscard(page_allocator_, pmr->GetPageMemory()));
   }
 }
