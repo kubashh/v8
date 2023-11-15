@@ -3105,7 +3105,7 @@ class WasmFullDecoder : public WasmDecoder<ValidationTag, decoding_mode> {
   }
 
   DECODE(Throw) {
-    this->detected_->Add(kFeature_eh);
+    this->detected_->Add(kFeature_exnref);
     TagIndexImmediate imm(this, this->pc_ + 1, validate);
     if (!this->Validate(this->pc_ + 1, imm)) return 0;
     PoppedArgVector args = PopArgs(imm.tag->ToFunctionSig());
