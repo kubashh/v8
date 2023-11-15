@@ -320,7 +320,7 @@ TEST(SemiSpaceNewSpace) {
   CHECK_LT(0, successful_allocations);
 
   new_space.reset();
-  memory_allocator->unmapper()->EnsureUnmappingCompleted();
+  memory_allocator->pool()->DiscardPooledChunks();
 }
 
 TEST(PagedNewSpace) {
@@ -352,7 +352,7 @@ TEST(PagedNewSpace) {
   CHECK_LT(0, successful_allocations);
 
   new_space.reset();
-  memory_allocator->unmapper()->EnsureUnmappingCompleted();
+  memory_allocator->pool()->DiscardPooledChunks();
 }
 
 TEST(OldSpace) {
