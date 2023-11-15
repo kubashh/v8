@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "265ed9d7_de7445ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-15T14:12:09Z",
+      "side": 1,
+      "message": "LGTM, thanks! (I\u0027m not an OWNER though.)",
+      "revId": "1164459524f0799be9b416b5f2f73c2f607499e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
