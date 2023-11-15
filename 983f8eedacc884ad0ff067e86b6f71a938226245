@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36e12ae7_cfc791c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-11-15T18:59:13Z",
+      "side": 1,
+      "message": "Adam, WDYT? I don\u0027t love the extra branch on every string_table() but I don\u0027t know how much it matters relative to how expensive string internalization is already.",
+      "revId": "983f8eedacc884ad0ff067e86b6f71a938226245",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
