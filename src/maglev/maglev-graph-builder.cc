@@ -3306,7 +3306,7 @@ ReduceResult MaglevGraphBuilder::BuildCheckMaps(
 }
 
 ReduceResult MaglevGraphBuilder::BuildTransitionElementsKindOrCheckMap(
-    ValueNode* object, base::Vector<const compiler::MapRef> transition_sources,
+    ValueNode* object, const ZoneVector<compiler::MapRef>& transition_sources,
     compiler::MapRef transition_target) {
   // TODO(marja): Optimizations based on what we know about the intersection of
   // known maps and transition sources or transition target.
@@ -3335,6 +3335,34 @@ ReduceResult MaglevGraphBuilder::BuildTransitionElementsKindOrCheckMap(
     broker()->dependencies()->DependOnStableMap(transition_target);
   }
   return ReduceResult::Done();
+}
+
+void MaglevGraphBuilder::BuildCompareMaps(
+    ValueNode* object, base::Vector<const compiler::MapRef> maps,
+    MaglevSubGraphBuilder::Label* if_not_matched) {
+  MaglevSubGraphBuilder sub_graph{this, 0};
+  // TODO(pthier): Avoid relaoding the map. This also applies to CheckMaps,
+  // TransitionElementsKind, etc. We could change those nodes to optionally
+  // take a map as input and returning the map.
+  AddNewNode<CheckHeapObject>({object});
+  ValueNode* object_map =
+      AddNewNode<LoadTaggedField>({object}, HeapObject::kMapOffset);
+  // TODO(pthier): Support map packing.
+  DCHECK(!V8_MAP_PACKING_BOOL);
+  base::Optional<MaglevSubGraphBuilder::Label> map_matched;
+  if (maps.size() > 1) {
+    map_matched.emplace(&sub_graph, static_cast<int>(maps.size()));
+    for (size_t map_index = 1; map_index < maps.size(); map_index++) {
+      sub_graph.GotoIfTrue<BranchIfReferenceEqual>(
+          &*map_matched, {object_map, GetConstant(maps[map_index])});
+    }
+  }
+  sub_graph.GotoIfFalse<BranchIfReferenceEqual>(
+      &*if_not_matched, {object_map, GetConstant(maps[0])});
+  if (map_matched.has_value()) {
+    sub_graph.Goto(&*map_matched);
+    sub_graph.Bind(&*map_matched);
+  }
 }
 
 namespace {
@@ -4388,10 +4416,12 @@ ReduceResult MaglevGraphBuilder::TryBuildElementAccessOnJSArrayOrJSObject(
   }
 }
 
+template <bool is_any_store, typename GenericAccessFunc>
 ReduceResult MaglevGraphBuilder::TryBuildElementAccess(
     ValueNode* object, ValueNode* index_object,
     compiler::ElementAccessFeedback const& feedback,
-    compiler::FeedbackSource const& feedback_source) {
+    compiler::FeedbackSource const& feedback_source,
+    GenericAccessFunc&& build_generic_access) {
   const compiler::KeyedAccessMode& keyed_mode = feedback.keyed_mode();
   // Check for the megamorphic case.
   if (feedback.transition_groups().empty()) {
@@ -4474,11 +4504,11 @@ ReduceResult MaglevGraphBuilder::TryBuildElementAccess(
       return ReduceResult::Fail();
     }
 
-    compiler::MapRef transition_target =
-        access_info.lookup_start_object_maps().front();
     if (!access_info.transition_sources().empty()) {
-      base::Vector<compiler::MapRef> transition_sources =
-          zone()->CloneVector(base::VectorOf(access_info.transition_sources()));
+      compiler::MapRef transition_target =
+          access_info.lookup_start_object_maps().front();
+      const ZoneVector<compiler::MapRef>& transition_sources =
+          access_info.transition_sources();
       RETURN_IF_ABORT(BuildTransitionElementsKindOrCheckMap(
           object, transition_sources, transition_target));
     } else {
@@ -4492,9 +4522,105 @@ ReduceResult MaglevGraphBuilder::TryBuildElementAccess(
     return TryBuildElementAccessOnJSArrayOrJSObject(object, index_object,
                                                     access_info, keyed_mode);
   } else {
-    // TODO(victorgomes): polymorphic case.
-    return ReduceResult::Fail();
+    return TryBuildPolymorphicElementAccess<is_any_store>(
+        object, index_object, keyed_mode, access_infos, build_generic_access);
   }
+}
+
+template <bool is_any_store, typename GenericAccessFunc>
+ReduceResult MaglevGraphBuilder::TryBuildPolymorphicElementAccess(
+    ValueNode* object, ValueNode* index_object,
+    const compiler::KeyedAccessMode& keyed_mode,
+    const ZoneVector<compiler::ElementAccessInfo>& access_infos,
+    GenericAccessFunc&& build_generic_access) {
+  DCHECK_EQ(is_any_store, compiler::IsAnyStore(keyed_mode.access_mode()));
+
+  // Stores don't return a value, so we don't need a variable for the result.
+  MaglevSubGraphBuilder sub_graph(this, is_any_store ? 0 : 1);
+  base::Optional<MaglevSubGraphBuilder::Variable> ret_val;
+  base::Optional<MaglevSubGraphBuilder::Label> done;
+
+  if constexpr (is_any_store) {
+    done.emplace(&sub_graph, static_cast<int>(access_infos.size()));
+  } else {
+    ret_val.emplace(0);
+    done.emplace(
+        &sub_graph, static_cast<int>(access_infos.size()),
+        std::initializer_list<MaglevSubGraphBuilder::Variable*>{&*ret_val});
+  }
+  // TODO(pthier): We could do better here than just emitting code for each map,
+  // as many different maps can produce the exact samce code (e.g. TypedArray
+  // access for Uint16/Uint32/Int16/Int32/...).
+  for (size_t i = 0; i < access_infos.size(); i++) {
+    compiler::ElementAccessInfo const& access_info = access_infos[i];
+    base::Optional<MaglevSubGraphBuilder::Label> check_next_map;
+    const bool handle_transitions = !access_info.transition_sources().empty();
+    if (i == access_infos.size() - 1) {
+      if (handle_transitions) {
+        compiler::MapRef transition_target =
+            access_info.lookup_start_object_maps().front();
+        DCHECK(!transition_target.is_migration_target());
+        AddNewNode<TransitionElementsKindOrCheckMap>(
+            {object}, access_info.transition_sources(), transition_target,
+            CheckType::kCheckHeapObject);
+      } else {
+        // Don't use BuildCheckMaps as that would set the wrong known maps for
+        // this node. Gathering all possible maps for the polymorphic case and
+        // recording them is probably not worth it.
+        // TODO(pthier): Handle map migrations.
+        // Just using CheckMapsWithMigration here isn't enough as previous maps
+        // (handled below) could also be migration targets. TurboFan suffers
+        // from a similar problem where depending on the order of feedback, maps
+        // are migrated or code is deoptimized.
+        AddNewNode<CheckMaps>(
+            {object}, base::VectorOf(access_info.lookup_start_object_maps()),
+            CheckType::kCheckHeapObject, zone());
+      }
+    } else {
+      check_next_map.emplace(&sub_graph, 1);
+      if (handle_transitions) {
+        compiler::MapRef transition_target =
+            access_info.lookup_start_object_maps().front();
+        AddNewNode<TransitionElementsKind>(
+            {object}, access_info.transition_sources(), transition_target);
+        BuildCompareMaps(object, base::VectorOf({transition_target}),
+                         &*check_next_map);
+      } else {
+        BuildCompareMaps(object,
+                         base::VectorOf(access_info.lookup_start_object_maps()),
+                         &*check_next_map);
+      }
+    }
+    ReduceResult result;
+    // TODO(victorgomes): Support RAB/GSAB backed typed arrays.
+    if (IsRabGsabTypedArrayElementsKind(access_info.elements_kind())) {
+      result = ReduceResult::Fail();
+    } else if (IsTypedArrayElementsKind(access_info.elements_kind())) {
+      result = TryBuildElementAccessOnTypedArray(object, index_object,
+                                                 access_info, keyed_mode);
+    } else {
+      result = TryBuildElementAccessOnJSArrayOrJSObject(
+          object, index_object, access_info, keyed_mode);
+    }
+    if (result.IsDone()) {
+      DCHECK_NE(is_any_store, result.HasValue());
+      if constexpr (!is_any_store) {
+        sub_graph.set(*ret_val, result.value());
+      }
+    } else {
+      if constexpr (is_any_store) {
+        build_generic_access();
+      } else {
+        sub_graph.set(*ret_val, build_generic_access());
+      }
+    }
+    sub_graph.Goto(&*done);
+    if (check_next_map.has_value()) {
+      sub_graph.Bind(&*check_next_map);
+    }
+  }
+  sub_graph.Bind(&*done);
+  return is_any_store ? ReduceResult::Done() : sub_graph.get(*ret_val);
 }
 
 void MaglevGraphBuilder::RecordKnownProperty(ValueNode* lookup_start_object,
@@ -4714,6 +4840,12 @@ void MaglevGraphBuilder::VisitGetKeyedProperty() {
     return;
   }
 
+  auto build_generic_access = [this, object, feedback_source]() {
+    ValueNode* context = GetContext();
+    ValueNode* key = GetAccumulatorTagged();
+    return AddNewNode<GetKeyedGeneric>({context, object, key}, feedback_source);
+  };
+
   switch (processed_feedback.kind()) {
     case compiler::ProcessedFeedback::kInsufficient:
       RETURN_VOID_ON_ABORT(EmitUnconditionalDeopt(
@@ -4723,8 +4855,10 @@ void MaglevGraphBuilder::VisitGetKeyedProperty() {
       // Get the accumulator without conversion. TryBuildElementAccess
       // will try to pick the best representation.
       ValueNode* index = current_interpreter_frame_.accumulator();
-      ReduceResult result = TryBuildElementAccess(
-          object, index, processed_feedback.AsElementAccess(), feedback_source);
+      constexpr bool is_any_store = false;
+      ReduceResult result = TryBuildElementAccess<is_any_store>(
+          object, index, processed_feedback.AsElementAccess(), feedback_source,
+          build_generic_access);
       PROCESS_AND_RETURN_IF_DONE(result, SetAccumulator);
       break;
     }
@@ -4749,10 +4883,7 @@ void MaglevGraphBuilder::VisitGetKeyedProperty() {
   }
 
   // Create a generic load in the fallthrough.
-  ValueNode* context = GetContext();
-  ValueNode* key = GetAccumulatorTagged();
-  SetAccumulator(
-      AddNewNode<GetKeyedGeneric>({context, object, key}, feedback_source));
+  SetAccumulator(build_generic_access());
 }
 
 void MaglevGraphBuilder::VisitLdaModuleVariable() {
@@ -4930,6 +5061,13 @@ void MaglevGraphBuilder::VisitSetKeyedProperty() {
       broker()->GetFeedbackForPropertyAccess(
           feedback_source, compiler::AccessMode::kStore, base::nullopt);
 
+  auto build_generic_access = [this, object, feedback_source]() {
+    ValueNode* key = LoadRegisterTagged(1);
+    ValueNode* context = GetContext();
+    ValueNode* value = GetAccumulatorTagged();
+    AddNewNode<SetKeyedGeneric>({context, object, key, value}, feedback_source);
+  };
+
   switch (processed_feedback.kind()) {
     case compiler::ProcessedFeedback::kInsufficient:
       RETURN_VOID_ON_ABORT(EmitUnconditionalDeopt(
@@ -4940,9 +5078,10 @@ void MaglevGraphBuilder::VisitSetKeyedProperty() {
       // the best representation.
       ValueNode* index =
           current_interpreter_frame_.get(iterator_.GetRegisterOperand(1));
-      RETURN_VOID_IF_DONE(TryBuildElementAccess(
-          object, index, processed_feedback.AsElementAccess(),
-          feedback_source));
+      constexpr bool is_any_store = true;
+      RETURN_VOID_IF_DONE(TryBuildElementAccess<is_any_store>(
+          object, index, processed_feedback.AsElementAccess(), feedback_source,
+          build_generic_access));
     } break;
 
     default:
@@ -4950,10 +5089,7 @@ void MaglevGraphBuilder::VisitSetKeyedProperty() {
   }
 
   // Create a generic store in the fallthrough.
-  ValueNode* key = LoadRegisterTagged(1);
-  ValueNode* context = GetContext();
-  ValueNode* value = GetAccumulatorTagged();
-  AddNewNode<SetKeyedGeneric>({context, object, key, value}, feedback_source);
+  build_generic_access();
 }
 
 void MaglevGraphBuilder::VisitDefineKeyedOwnProperty() {
@@ -4985,15 +5121,23 @@ void MaglevGraphBuilder::VisitStaInArrayLiteral() {
           feedback_source, compiler::AccessMode::kStoreInLiteral,
           base::nullopt);
 
+  auto build_generic_access = [this, object, index, feedback_source]() {
+    ValueNode* context = GetContext();
+    ValueNode* value = GetAccumulatorTagged();
+    AddNewNode<StoreInArrayLiteralGeneric>(
+        {context, object, GetTaggedValue(index), value}, feedback_source);
+  };
+
   switch (processed_feedback.kind()) {
     case compiler::ProcessedFeedback::kInsufficient:
       RETURN_VOID_ON_ABORT(EmitUnconditionalDeopt(
           DeoptimizeReason::kInsufficientTypeFeedbackForGenericKeyedAccess));
 
     case compiler::ProcessedFeedback::kElementAccess: {
-      RETURN_VOID_IF_DONE(TryBuildElementAccess(
-          object, index, processed_feedback.AsElementAccess(),
-          feedback_source));
+      constexpr bool is_any_store = true;
+      RETURN_VOID_IF_DONE(TryBuildElementAccess<is_any_store>(
+          object, index, processed_feedback.AsElementAccess(), feedback_source,
+          build_generic_access));
       break;
     }
 
@@ -5002,10 +5146,7 @@ void MaglevGraphBuilder::VisitStaInArrayLiteral() {
   }
 
   // Create a generic store in the fallthrough.
-  ValueNode* context = GetContext();
-  ValueNode* value = GetAccumulatorTagged();
-  AddNewNode<StoreInArrayLiteralGeneric>(
-      {context, object, GetTaggedValue(index), value}, feedback_source);
+  build_generic_access();
 }
 
 void MaglevGraphBuilder::VisitDefineKeyedOwnPropertyInLiteral() {
