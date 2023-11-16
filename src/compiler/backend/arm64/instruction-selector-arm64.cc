@@ -3491,10 +3491,14 @@ void MaybeReplaceCmpZeroWithFlagSettingBinop(
     *opcode = no_output_opcode;
     *node = binop;
     *immediate_mode = binop_immediate_mode;
-  } else if (selector->IsOnlyUserOfNodeInSameBlock(*node, binop)) {
+  } else if (!cont->IsSelect() &&
+             selector->IsOnlyUserOfNodeInSameBlock(*node, binop)) {
     // We can also handle the case where the add and the compare are in the
     // same basic block, and the compare is the only use of add in this basic
     // block (the add has users in other basic blocks).
+    // We don't do this for selects because we omit the CanCover check in
+    // VisitWordCompareZero, which could lead this binop to be generated
+    // multiple times, each defining the same vreg!
     cont->Overwrite(MapForFlagSettingBinop(cond));
     *opcode = binop_opcode;
     *node = binop;
@@ -4308,7 +4312,8 @@ void InstructionSelectorT<TurbofanAdapter>::VisitWordCompareZero(
         break;
     }
 
-    if (CanCover(user, value)) {
+    if (CanCover(user, value) ||
+        (cont->IsSelect() && value->opcode() != IrOpcode::kProjection)) {
       switch (value->opcode()) {
         case IrOpcode::kWord32Equal:
           cont->OverwriteAndNegateIfEqual(kEqual);
@@ -4514,7 +4519,8 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitWordCompareZero(
     }
   }
 
-  if (CanCover(user, value)) {
+  if (CanCover(user, value) ||
+      (cont->IsSelect() && !value_op.TryCast<ProjectionOp>())) {
     if (const EqualOp* equal = value_op.TryCast<EqualOp>()) {
       switch (equal->rep.MapTaggedToWord().value()) {
         case RegisterRepresentation::Word32():

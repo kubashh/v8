@@ -2980,6 +2980,47 @@ TEST_F(InstructionSelectorTest, Float32SelectWithRegisters) {
   EXPECT_EQ(kNotEqual, s[0]->flags_condition());
 }
 
+TEST_F(InstructionSelectorTest, TwoFloat32SelectWithRegisters) {
+  StreamBuilder m(this, MachineType::Float32(), MachineType::Int32(),
+                  MachineType::Float32(), MachineType::Float32());
+  Node* cond =
+      m.Word32Equal(m.Parameter(0), BuildConstant(&m, MachineType::Int32(), 0));
+  Node* first_select = m.Float32Select(cond, m.Parameter(1), m.Parameter(2));
+  Node* second_select = m.Float32Select(cond, m.Parameter(2), m.Parameter(1));
+  m.Return(m.Float32Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Cmp32, s[0]->arch_opcode());
+  EXPECT_EQ(4U, s[0]->InputCount());
+  EXPECT_EQ(1U, s[0]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[0]->flags_mode());
+  EXPECT_EQ(kEqual, s[0]->flags_condition());
+  EXPECT_EQ(kArm64Cmp32, s[1]->arch_opcode());
+  EXPECT_EQ(4U, s[1]->InputCount());
+  EXPECT_EQ(1U, s[1]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kEqual, s[1]->flags_condition());
+}
+
+TEST_F(InstructionSelectorTest, TwoFloat32SelectWithFcmp) {
+  StreamBuilder m(this, MachineType::Float32(), MachineType::Float32(),
+                  MachineType::Float32(), MachineType::Float32());
+  Node* cond = m.Float32LessThan(m.Parameter(0), m.Parameter(1));
+  Node* first_select = m.Float32Select(cond, m.Parameter(1), m.Parameter(2));
+  Node* second_select = m.Float32Select(cond, m.Parameter(2), m.Parameter(1));
+  m.Return(m.Float32Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Float32Cmp, s[0]->arch_opcode());
+  EXPECT_EQ(4U, s[0]->InputCount());
+  EXPECT_EQ(1U, s[0]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[0]->flags_mode());
+  EXPECT_EQ(kFloatLessThan, s[0]->flags_condition());
+  EXPECT_EQ(kArm64Float32Cmp, s[1]->arch_opcode());
+  EXPECT_EQ(4U, s[1]->InputCount());
+  EXPECT_EQ(1U, s[1]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kFloatLessThan, s[1]->flags_condition());
+}
+
 TEST_F(InstructionSelectorTest, Float64SelectWithRegisters) {
   StreamBuilder m(this, MachineType::Int32(), MachineType::Float64(),
                   MachineType::Float64());
@@ -2991,6 +3032,47 @@ TEST_F(InstructionSelectorTest, Float64SelectWithRegisters) {
   EXPECT_EQ(1U, s[0]->OutputCount());
   EXPECT_EQ(kFlags_select, s[0]->flags_mode());
   EXPECT_EQ(kNotEqual, s[0]->flags_condition());
+}
+
+TEST_F(InstructionSelectorTest, TwoFloat64SelectWithRegisters) {
+  StreamBuilder m(this, MachineType::Float64(), MachineType::Int64(),
+                  MachineType::Float64(), MachineType::Float64());
+  Node* cond = m.Uint64LessThan(m.Parameter(0),
+                                BuildConstant(&m, MachineType::Int64(), 0));
+  Node* first_select = m.Float64Select(cond, m.Parameter(1), m.Parameter(2));
+  Node* second_select = m.Float64Select(cond, m.Parameter(2), m.Parameter(1));
+  m.Return(m.Float64Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Cmp, s[0]->arch_opcode());
+  EXPECT_EQ(4U, s[0]->InputCount());
+  EXPECT_EQ(1U, s[0]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[0]->flags_mode());
+  EXPECT_EQ(kUnsignedLessThan, s[0]->flags_condition());
+  EXPECT_EQ(kArm64Cmp, s[1]->arch_opcode());
+  EXPECT_EQ(4U, s[1]->InputCount());
+  EXPECT_EQ(1U, s[1]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kUnsignedLessThan, s[1]->flags_condition());
+}
+
+TEST_F(InstructionSelectorTest, TwoFloat64SelectWithFcmp) {
+  StreamBuilder m(this, MachineType::Float64(), MachineType::Float64(),
+                  MachineType::Float64(), MachineType::Float64());
+  Node* cond = m.Float64GreaterThan(m.Parameter(0), m.Parameter(1));
+  Node* first_select = m.Float64Select(cond, m.Parameter(1), m.Parameter(2));
+  Node* second_select = m.Float64Select(cond, m.Parameter(2), m.Parameter(1));
+  m.Return(m.Float64Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Float64Cmp, s[0]->arch_opcode());
+  EXPECT_EQ(4U, s[0]->InputCount());
+  EXPECT_EQ(1U, s[0]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[0]->flags_mode());
+  EXPECT_EQ(kFloatLessThan, s[0]->flags_condition());
+  EXPECT_EQ(kArm64Float64Cmp, s[1]->arch_opcode());
+  EXPECT_EQ(4U, s[1]->InputCount());
+  EXPECT_EQ(1U, s[1]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kFloatLessThan, s[1]->flags_condition());
 }
 
 TEST_F(InstructionSelectorTest, Word32SelectWithRegisters) {
@@ -3019,6 +3101,191 @@ TEST_F(InstructionSelectorTest, Word64SelectWithRegisters) {
   EXPECT_EQ(kNotEqual, s[0]->flags_condition());
 }
 
+TEST_F(InstructionSelectorTest, TwoWord32SelectWithRegisters) {
+  StreamBuilder m(this, MachineType::Int32(), MachineType::Int32(),
+                  MachineType::Int32(), MachineType::Int32());
+  Node* cond = m.Int32LessThan(m.Parameter(1),
+                               BuildConstant(&m, MachineType::Int32(), 0));
+  Node* first_select = m.Word32Select(cond, m.Parameter(0), m.Parameter(2));
+  Node* second_select = m.Word32Select(cond, m.Parameter(2), m.Parameter(1));
+  m.Return(m.Int32Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Cmp32, s[0]->arch_opcode());
+  EXPECT_EQ(4U, s[0]->InputCount());
+  EXPECT_EQ(1U, s[0]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[0]->flags_mode());
+  EXPECT_EQ(kSignedLessThan, s[0]->flags_condition());
+  EXPECT_EQ(kArm64Cmp32, s[1]->arch_opcode());
+  EXPECT_EQ(4U, s[1]->InputCount());
+  EXPECT_EQ(1U, s[1]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kSignedLessThan, s[1]->flags_condition());
+}
+
+TEST_F(InstructionSelectorTest, TwoWord32SelectWithRegistersFlag) {
+  StreamBuilder m(this, MachineType::Int64(), MachineType::Int32(),
+                  MachineType::Int32(), MachineType::Int32());
+  Node* add = m.Int32Add(m.Parameter(0), m.Parameter(1));
+  Node* cmp = m.Word32Equal(add, m.Int32Constant(0));
+  Node* first_select = m.Word32Select(cmp, m.Parameter(0), m.Parameter(2));
+  Node* second_select = m.Word32Select(cmp, m.Parameter(2), m.Parameter(1));
+  m.Return(m.Int64Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Cmn32, s[0]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[0]->flags_mode());
+  EXPECT_EQ(kEqual, s[0]->flags_condition());
+  EXPECT_EQ(kArm64Cmn32, s[1]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kEqual, s[1]->flags_condition());
+}
+
+TEST_F(InstructionSelectorTest, TwoWord32SelectWithRegistersFlag1) {
+  StreamBuilder m(this, MachineType::Int64(), MachineType::Int32(),
+                  MachineType::Int32(), MachineType::Int32());
+  Node* add = m.Int32Add(m.Parameter(0), m.Parameter(1));
+  Node* cmp = m.Word32Equal(add, m.Int32Constant(0));
+  Node* first_select = m.Word32Select(cmp, add, m.Parameter(2));
+  Node* second_select = m.Word32Select(cmp, m.Parameter(2), m.Parameter(1));
+  m.Return(m.Int64Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Add32, s[0]->arch_opcode());
+  EXPECT_EQ(1U, s[0]->OutputCount());
+  EXPECT_EQ(kArm64Cmp32, s[1]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kEqual, s[1]->flags_condition());
+  EXPECT_EQ(kArm64Cmp32, s[2]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[2]->flags_mode());
+  EXPECT_EQ(kEqual, s[2]->flags_condition());
+}
+
+TEST_F(InstructionSelectorTest, TwoWord32SelectWithRegistersFlag2) {
+  StreamBuilder m(this, MachineType::Int64(), MachineType::Int32(),
+                  MachineType::Int32(), MachineType::Int32());
+  Node* add = m.Int32Add(m.Parameter(0), m.Parameter(1));
+  Node* cmp = m.Word32Equal(add, m.Int32Constant(0));
+  Node* first_select = m.Word32Select(cmp, m.Parameter(0), m.Parameter(2));
+  Node* second_select = m.Word32Select(cmp, add, m.Parameter(1));
+  m.Return(m.Int64Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Add32, s[0]->arch_opcode());
+  EXPECT_EQ(1U, s[0]->OutputCount());
+  EXPECT_EQ(kArm64Cmp32, s[1]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kEqual, s[1]->flags_condition());
+  EXPECT_EQ(kArm64Cmp32, s[2]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[2]->flags_mode());
+  EXPECT_EQ(kEqual, s[2]->flags_condition());
+}
+
+TEST_F(InstructionSelectorTest, TwoWord32SelectWithRegistersFlag3) {
+  StreamBuilder m(this, MachineType::Int32(), MachineType::Int32(),
+                  MachineType::Int32(), MachineType::Int32());
+  Node* add = m.Int32Add(m.Parameter(0), m.Parameter(1));
+  Node* cmp = m.Int32LessThan(add, m.Int32Constant(0));
+  Node* first_select = m.Word32Select(cmp, m.Parameter(0), m.Parameter(2));
+  Node* second_select = m.Word32Select(cmp, m.Parameter(2), m.Parameter(1));
+  RawMachineLabel a, b;
+  m.Branch(m.Parameter(0), &a, &b);
+  m.Bind(&a);
+  m.Return(add);
+  m.Bind(&b);
+  m.Return(m.Int32Add(first_select, second_select));
+  Stream s = m.Build();
+}
+
+TEST_F(InstructionSelectorTest, TwoWord32SelectWithRegistersProjection) {
+  StreamBuilder m(this, MachineType::Int64(), MachineType::Int32(),
+                  MachineType::Int32(), MachineType::Int32());
+  Node* add = m.Int32AddWithOverflow(m.Parameter(0), m.Parameter(1));
+  Node* projection0 = m.Projection(0, add);
+  Node* projection1 = m.Projection(1, add);
+  Node* first_select = m.Word32Select(projection1, projection0, m.Parameter(2));
+  Node* second_select =
+      m.Word32Select(projection1, m.Parameter(2), m.Parameter(1));
+  m.Return(m.Int32Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Add32, s[0]->arch_opcode());
+  EXPECT_EQ(2U, s[0]->InputCount());
+  EXPECT_EQ(2U, s[0]->OutputCount());
+  EXPECT_EQ(kFlags_set, s[0]->flags_mode());
+  EXPECT_EQ(kOverflow, s[0]->flags_condition());
+  EXPECT_EQ(kArm64Tst32, s[1]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kNotEqual, s[1]->flags_condition());
+  EXPECT_EQ(kArm64Tst32, s[2]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[2]->flags_mode());
+  EXPECT_EQ(kNotEqual, s[2]->flags_condition());
+}
+
+TEST_F(InstructionSelectorTest, TwoWord32SelectWithRegistersProjection1) {
+  StreamBuilder m(this, MachineType::Int64(), MachineType::Int32(),
+                  MachineType::Int32(), MachineType::Int32());
+  Node* add = m.Int32AddWithOverflow(m.Parameter(0), m.Parameter(1));
+  Node* projection1 = m.Projection(1, add);
+  Node* first_select =
+      m.Word32Select(projection1, m.Parameter(0), m.Parameter(2));
+  Node* second_select =
+      m.Word32Select(projection1, m.Parameter(2), m.Parameter(1));
+  m.Return(m.Int32Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Add32, s[0]->arch_opcode());
+  EXPECT_EQ(2U, s[0]->InputCount());
+  EXPECT_EQ(2U, s[0]->OutputCount());
+  EXPECT_EQ(kFlags_set, s[0]->flags_mode());
+  EXPECT_EQ(kOverflow, s[0]->flags_condition());
+  EXPECT_EQ(kArm64Tst32, s[1]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kNotEqual, s[1]->flags_condition());
+  EXPECT_EQ(kArm64Tst32, s[2]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[2]->flags_mode());
+  EXPECT_EQ(kNotEqual, s[2]->flags_condition());
+}
+
+TEST_F(InstructionSelectorTest, TwoWord32SelectWithRegistersProjection2) {
+  StreamBuilder m(this, MachineType::Int64(), MachineType::Int32(),
+                  MachineType::Int32(), MachineType::Int32());
+  Node* add = m.Int32AddWithOverflow(m.Parameter(0), m.Parameter(1));
+  Node* projection0 = m.Projection(0, add);
+  Node* projection1 = m.Projection(1, add);
+  Node* first_select =
+      m.Word32Select(projection1, m.Parameter(1), m.Parameter(2));
+  Node* second_select =
+      m.Word32Select(projection1, projection0, m.Parameter(1));
+  m.Return(m.Int32Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Add32, s[0]->arch_opcode());
+  EXPECT_EQ(2U, s[0]->InputCount());
+  EXPECT_EQ(2U, s[0]->OutputCount());
+  EXPECT_EQ(kFlags_set, s[0]->flags_mode());
+  EXPECT_EQ(kOverflow, s[0]->flags_condition());
+  EXPECT_EQ(kArm64Tst32, s[1]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kNotEqual, s[1]->flags_condition());
+  EXPECT_EQ(kArm64Tst32, s[2]->arch_opcode());
+  EXPECT_EQ(kFlags_select, s[2]->flags_mode());
+  EXPECT_EQ(kNotEqual, s[2]->flags_condition());
+}
+
+TEST_F(InstructionSelectorTest, TwoWord64SelectWithRegisters) {
+  StreamBuilder m(this, MachineType::Int64(), MachineType::Int64(),
+                  MachineType::Int64(), MachineType::Int64());
+  Node* cond = m.Int64LessThanOrEqual(
+      m.Parameter(1), BuildConstant(&m, MachineType::Int64(), 0));
+  Node* first_select = m.Word64Select(cond, m.Parameter(0), m.Parameter(2));
+  Node* second_select = m.Word64Select(cond, m.Parameter(2), m.Parameter(1));
+  m.Return(m.Int32Add(first_select, second_select));
+  Stream s = m.Build();
+  EXPECT_EQ(kArm64Cmp, s[0]->arch_opcode());
+  EXPECT_EQ(4U, s[0]->InputCount());
+  EXPECT_EQ(1U, s[0]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[0]->flags_mode());
+  EXPECT_EQ(kSignedLessThanOrEqual, s[0]->flags_condition());
+  EXPECT_EQ(kArm64Cmp, s[1]->arch_opcode());
+  EXPECT_EQ(4U, s[1]->InputCount());
+  EXPECT_EQ(1U, s[1]->OutputCount());
+  EXPECT_EQ(kFlags_select, s[1]->flags_mode());
+  EXPECT_EQ(kSignedLessThanOrEqual, s[1]->flags_condition());
+}
 // -----------------------------------------------------------------------------
 // Conversions.
 
