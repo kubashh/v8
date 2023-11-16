@@ -51,6 +51,24 @@
       "message": "Thanks for putting this together. +1ing to note my approval but I don\u0027t feel strongly about this if you\u0027re worried about the performance.",
       "revId": "983f8eedacc884ad0ff067e86b6f71a938226245",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b49f7f51_49b59b4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-11-16T21:09:28Z",
+      "side": 1,
+      "message": "Happy to let that be a pinpoint-driven decision.",
+      "parentUuid": "7e9e2c90_ecfd17c7",
+      "revId": "983f8eedacc884ad0ff067e86b6f71a938226245",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
