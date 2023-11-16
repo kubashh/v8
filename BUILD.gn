@@ -366,7 +366,9 @@ declare_args() {
   # Allow for JS promise hooks (instead of just C++).
   v8_enable_javascript_promise_hooks = false
 
-  # Allow for JS promise hooks (instead of just C++).
+  # Allow embedder data to be saved on continuations. Used to support
+  # TaskAttribution and `scheduler.yield()`.
+  # The flag enables disabling the feature, to test this data's overhead.
   v8_enable_continuation_preserved_embedder_data = true
 
   # Enable allocation folding globally (sets -dV8_ALLOCATION_FOLDING).
@@ -3328,7 +3330,6 @@ v8_header_set("v8_internal_headers") {
     "src/compiler/turboshaft/decompression-optimization.h",
     "src/compiler/turboshaft/define-assembler-macros.inc",
     "src/compiler/turboshaft/deopt-data.h",
-    "src/compiler/turboshaft/doubly-threaded-list.h",
     "src/compiler/turboshaft/explicit-truncation-reducer.h",
     "src/compiler/turboshaft/fast-api-call-reducer.h",
     "src/compiler/turboshaft/fast-hash.h",
@@ -6138,6 +6139,7 @@ v8_component("v8_libbase") {
     "src/base/discriminated-union.h",
     "src/base/division-by-constant.cc",
     "src/base/division-by-constant.h",
+    "src/base/doubly-threaded-list.h",
     "src/base/emulated-virtual-address-subspace.cc",
     "src/base/emulated-virtual-address-subspace.h",
     "src/base/enum-set.h",

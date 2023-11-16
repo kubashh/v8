@@ -57,6 +57,8 @@ class Isolate;
   ISOLATE_DATA_FIELDS_POINTER_COMPRESSION(V)                                  \
   V(kApiCallbackThunkArgumentOffset, kSystemPointerSize,                      \
     api_callback_thunk_argument)                                              \
+  V(kContinuationPreservedEmbedderDataOffset, kSystemPointerSize,             \
+    continuation_preserved_embedder_data)                                     \
   /* Full tables (arbitrary size, potentially slower access). */              \
   V(kRootsTableOffset, RootsTable::kEntriesCount* kSystemPointerSize,         \
     roots_table)                                                              \
@@ -150,6 +152,12 @@ class IsolateData final {
   Address api_callback_thunk_argument() const {
     return api_callback_thunk_argument_;
   }
+  Tagged<Object> continuation_preserved_embedder_data() const {
+    return continuation_preserved_embedder_data_;
+  }
+  void set_continuation_preserved_embedder_data(Tagged<Object> data) {
+    continuation_preserved_embedder_data_ = data;
+  }
   const RootsTable& roots() const { return roots_table_; }
   ExternalReferenceTable* external_reference_table() {
     return &external_reference_table_;
@@ -171,6 +179,16 @@ class IsolateData final {
     Address start = reinterpret_cast<Address>(this);
     return (address - start) < sizeof(*this);
   }
+
+// Offset of a ThreadLocalTop member from {isolate_root()}.
+#define THREAD_LOCAL_TOP_MEMBER_OFFSET(Name)                              \
+  static uint32_t Name##_offset() {                                       \
+    return static_cast<uint32_t>(IsolateData::thread_local_top_offset() + \
+                                 OFFSET_OF(ThreadLocalTop, Name##_));     \
+  }
+
+  THREAD_LOCAL_TOP_MEMBER_OFFSET(is_on_central_stack_flag)
+#undef THREAD_LOCAL_TOP_MEMBER_OFFSET
 
  private:
   // Static layout definition.
@@ -269,6 +287,9 @@ class IsolateData final {
   // This is a storage for an additional argument for the Api callback thunk
   // functions, see InvokeAccessorGetterCallback and InvokeFunctionCallback.
   Address api_callback_thunk_argument_ = kNullAddress;
+
+  // This is data that should be preserved on newly created continuations.
+  Tagged<Object> continuation_preserved_embedder_data_ = Smi::zero();
 
   RootsTable roots_table_;
   ExternalReferenceTable external_reference_table_;
