@@ -771,19 +771,24 @@ DEF_GETTER(SharedFunctionInfo, InterpreterTrampoline, Tagged<Code>) {
 }
 
 DEF_GETTER(SharedFunctionInfo, HasInterpreterData, bool) {
-  Tagged<Object> data = function_data(cage_base, kAcquireLoad);
+  Isolate* isolate = GetIsolateForSandbox(*this);
+  Tagged<Object> data = GetData(isolate);
   if (IsCode(data, cage_base)) {
     Tagged<Code> baseline_code = Code::cast(data);
     DCHECK_EQ(baseline_code->kind(), CodeKind::BASELINE);
-    data = baseline_code->bytecode_or_interpreter_data(
-        GetIsolateForSandbox(*this));
+    data = baseline_code->bytecode_or_interpreter_data(isolate);
   }
   return IsInterpreterData(data, cage_base);
 }
 
 DEF_GETTER(SharedFunctionInfo, interpreter_data, Tagged<InterpreterData>) {
   DCHECK(HasInterpreterData(cage_base));
+#ifdef V8_ENABLE_SANDBOX
+  Tagged<Object> data =
+      trusted_function_data(GetIsolateForSandbox(*this), kAcquireLoad);
+#else
   Tagged<Object> data = function_data(cage_base, kAcquireLoad);
+#endif
   if (IsCode(data, cage_base)) {
     Tagged<Code> baseline_code = Code::cast(data);
     DCHECK_EQ(baseline_code->kind(), CodeKind::BASELINE);
@@ -797,7 +802,7 @@ void SharedFunctionInfo::set_interpreter_data(
     Tagged<InterpreterData> interpreter_data, WriteBarrierMode mode) {
   DCHECK(v8_flags.interpreted_frames_native_stack);
   DCHECK(!HasBaselineCode());
-  SetData(interpreter_data, kReleaseStore, DataType::kRegular, mode);
+  SetData(interpreter_data, kReleaseStore, DataType::kTrusted, mode);
 }
 
 DEF_GETTER(SharedFunctionInfo, HasBaselineCode, bool) {
