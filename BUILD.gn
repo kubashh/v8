@@ -366,7 +366,9 @@ declare_args() {
   # Allow for JS promise hooks (instead of just C++).
   v8_enable_javascript_promise_hooks = false
 
-  # Allow for JS promise hooks (instead of just C++).
+  # Allow embedder data to be saved on continuations. Used to support
+  # TaskAttribution and `scheduler.yield()`.
+  # The flag enables disabling the feature, to test this data's overhead.
   v8_enable_continuation_preserved_embedder_data = true
 
   # Enable allocation folding globally (sets -dV8_ALLOCATION_FOLDING).
@@ -855,7 +857,6 @@ external_v8_defines = [
   "V8_ENABLE_SANDBOX",
   "V8_DEPRECATION_WARNINGS",
   "V8_IMMINENT_DEPRECATION_WARNINGS",
-  "V8_NO_ARGUMENTS_ADAPTOR",
   "V8_USE_PERFETTO",
   "V8_MAP_PACKING",
   "V8_IS_TSAN",
@@ -3481,6 +3482,7 @@ v8_header_set("v8_internal_headers") {
     "src/handles/maybe-handles.h",
     "src/handles/persistent-handles.h",
     "src/handles/shared-object-conveyor-handles.h",
+    "src/handles/traced-handles-inl.h",
     "src/handles/traced-handles.h",
     "src/heap/allocation-observer.h",
     "src/heap/allocation-result.h",
