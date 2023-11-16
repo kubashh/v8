@@ -943,11 +943,15 @@ bool PagedSpaceForNewSpace::AddPageBeyondCapacity(int size_in_bytes,
   // Allocate another page is `force_allocation_success_` is true,
   // `UsableCapacity()` is below `TotalCapacity()` and allocating another page
   // won't exceed `TotalCapacity()`, or `ShouldOptimizeForLoadTime()` is true.
-  should_exceed_target_capacity_ =
-      force_allocation_success_ || heap_->ShouldOptimizeForLoadTime();
-  if (should_exceed_target_capacity_ ||
-      ((UsableCapacity() < TotalCapacity()) &&
-       (TotalCapacity() - UsableCapacity() >= Page::kPageSize))) {
+  size_t total_capacity_with_slack =
+      TotalCapacity() *
+      (100 + (heap_->ShouldOptimizeForLoadTime()
+                  ? v8_flags.minor_ms_capacity_slack_percentage_during_loading
+                  : 0)) /
+      100;
+  if (force_allocation_success_ ||
+      ((UsableCapacity() < total_capacity_with_slack) &&
+       (total_capacity_with_slack - UsableCapacity() >= Page::kPageSize))) {
     if (!heap()->CanExpandOldGeneration(
             Size() + heap()->new_lo_space()->Size() + Page::kPageSize)) {
       // Assuming all of new space is alive, doing a full GC and promoting all

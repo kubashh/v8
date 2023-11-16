@@ -2459,7 +2459,11 @@ DEFINE_UINT(minor_ms_concurrent_marking_trigger, 90,
 
 DEFINE_SIZE_T(minor_ms_min_lab_size_kb, 0,
               "override for the minimum lab size in KB to be used for new "
-              "space allocations with minor ms. ")
+              "space allocations with minor ms.")
+
+DEFINE_UINT(minor_ms_capacity_slack_percentage_during_loading, 100,
+            "Percentage of new space target capacity by which capacity can be "
+            "exceeded during loading.")
 
 //
 // Dev shell flags
