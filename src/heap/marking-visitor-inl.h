@@ -285,9 +285,11 @@ int MarkingVisitorBase<ConcreteVisitor>::VisitSharedFunctionInfo(
     // If the SharedFunctionInfo doesn't have old bytecode visit the function
     // data strongly.
 #ifdef V8_ENABLE_SANDBOX
-    VisitPointer(
-        shared_info,
-        shared_info->RawField(SharedFunctionInfo::kTrustedFunctionDataOffset));
+    VisitIndirectPointer(shared_info,
+                         shared_info->RawIndirectPointerField(
+                             SharedFunctionInfo::kTrustedFunctionDataOffset,
+                             kUnknownIndirectPointerTag),
+                         IndirectPointerMode::kStrong);
 #endif
     VisitPointer(shared_info, shared_info->RawField(
                                   SharedFunctionInfo::kFunctionDataOffset));

@@ -122,7 +122,7 @@ void SharedFunctionInfo::SetData(Tagged<Object> value, ReleaseStoreTag tag,
   if (type == DataType::kTrusted) {
     DCHECK(IsExposedTrustedObject(value));
     // Only one of trusted_function_data and function_data can be in use.
-    set_trusted_function_data(value, tag, mode);
+    set_trusted_function_data(ExposedTrustedObject::cast(value), tag, mode);
     clear_function_data(kReleaseStore);
   } else {
     DCHECK_EQ(type, DataType::kRegular);
@@ -151,16 +151,37 @@ bool SharedFunctionInfo::has_trusted_function_data() const {
          Smi::zero();
 }
 
-DEF_ACQUIRE_GETTER(SharedFunctionInfo, trusted_function_data, Tagged<Object>) {
-  return TaggedField<Object, kTrustedFunctionDataOffset>::Acquire_Load(
-      cage_base, *this);
+Tagged<ExposedTrustedObject> SharedFunctionInfo::trusted_function_data(
+    const Isolate* isolate, AcquireLoadTag) const {
+  Tagged<Object> trusted_data =
+      ReadIndirectPointerField<kUnknownIndirectPointerTag>(
+          kTrustedFunctionDataOffset, isolate);
+  DCHECK(!IsSmi(trusted_data));
+  return ExposedTrustedObject::cast(trusted_data);
 }
 
-void SharedFunctionInfo::set_trusted_function_data(Tagged<Object> value,
-                                                   ReleaseStoreTag,
-                                                   WriteBarrierMode mode) {
-  TaggedField<Object, kTrustedFunctionDataOffset>::Release_Store(*this, value);
-  CONDITIONAL_WRITE_BARRIER(*this, kTrustedFunctionDataOffset, value, mode);
+void SharedFunctionInfo::set_trusted_function_data(
+    Tagged<ExposedTrustedObject> value, ReleaseStoreTag,
+    WriteBarrierMode mode) {
+  WriteIndirectPointerField<kBytecodeArrayIndirectPointerTag>(
+      kTrustedFunctionDataOffset, value);
+  CONDITIONAL_INDIRECT_POINTER_WRITE_BARRIER(*this, kTrustedFunctionDataOffset,
+                                             kUnknownIndirectPointerTag, value,
+                                             mode);
+}
+
+IndirectPointerHandle SharedFunctionInfo::trusted_function_data_handle(
+    AcquireLoadTag) const {
+  return RawIndirectPointerField(kTrustedFunctionDataOffset,
+                                 kBytecodeArrayIndirectPointerTag)
+      .Acquire_LoadHandle();
+}
+
+void SharedFunctionInfo::set_trusted_function_data_handle(
+    IndirectPointerHandle handle, ReleaseStoreTag) {
+  RawIndirectPointerField(kTrustedFunctionDataOffset,
+                          kBytecodeArrayIndirectPointerTag)
+      .Release_StoreHandle(handle);
 }
 #endif  // V8_ENABLE_SANDBOX
 
@@ -177,11 +198,17 @@ void SharedFunctionInfo::set_function_data(Tagged<Object> value,
   CONDITIONAL_WRITE_BARRIER(*this, kFunctionDataOffset, value, mode);
 }
 
-Tagged<Object> SharedFunctionInfo::GetData() const {
+Tagged<Object> SharedFunctionInfo::GetData(const Isolate* isolate) const {
 #ifdef V8_ENABLE_SANDBOX
-  Tagged<Object> trusted_data = trusted_function_data(kAcquireLoad);
-  if (trusted_data != Smi::zero()) {
-    return trusted_data;
+  auto trusted_data_slot = RawIndirectPointerField(kTrustedFunctionDataOffset,
+                                                   kUnknownIndirectPointerTag);
+  IndirectPointerHandle trusted_data_handle =
+      trusted_data_slot.Acquire_LoadHandle();
+  if (trusted_data_handle != kNullIndirectPointerHandle) {
+    if (!isolate) {
+      isolate = GetIsolateForSandbox(*this);
+    }
+    return trusted_data_slot.ResolveHandle(trusted_data_handle, isolate);
   }
 #endif
   return function_data(kAcquireLoad);
@@ -775,21 +802,30 @@ void SharedFunctionInfo::set_interpreter_data(
 
 DEF_GETTER(SharedFunctionInfo, HasBaselineCode, bool) {
 #ifdef V8_ENABLE_SANDBOX
-  Tagged<Object> data = trusted_function_data(cage_base, kAcquireLoad);
+  // Micro-optimization: we just need to look at the indirect pointer handle
+  // stored in the trusted_function_data field and check if that is a code
+  // pointer handle.
+  IndirectPointerHandle handle = trusted_function_data_handle(kAcquireLoad);
+  if (handle & kCodePointerHandleMarker) {
+    DCHECK_EQ(Code::cast(GetData())->kind(), CodeKind::BASELINE);
+    return true;
+  }
+  return false;
 #else
   Tagged<Object> data = function_data(cage_base, kAcquireLoad);
-#endif
   if (IsCode(data, cage_base)) {
     DCHECK_EQ(Code::cast(data)->kind(), CodeKind::BASELINE);
     return true;
   }
   return false;
+#endif
 }
 
 DEF_ACQUIRE_GETTER(SharedFunctionInfo, baseline_code, Tagged<Code>) {
   DCHECK(HasBaselineCode(cage_base));
 #ifdef V8_ENABLE_SANDBOX
-  return Code::cast(trusted_function_data(cage_base, kAcquireLoad));
+  return Code::cast(
+      trusted_function_data(GetIsolateForSandbox(*this), kAcquireLoad));
 #else
   return Code::cast(function_data(cage_base, kAcquireLoad));
 #endif

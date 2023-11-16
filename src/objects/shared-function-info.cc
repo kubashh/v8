@@ -221,8 +221,8 @@ void SharedFunctionInfo::SetScript(ReadOnlyRoots roots,
 void SharedFunctionInfo::CopyFrom(Tagged<SharedFunctionInfo> other) {
   PtrComprCageBase cage_base = GetPtrComprCageBase(*this);
 #ifdef V8_ENABLE_SANDBOX
-  set_trusted_function_data(other->trusted_function_data(kAcquireLoad),
-                            kReleaseStore);
+  set_trusted_function_data_handle(
+      other->trusted_function_data_handle(kAcquireLoad), kReleaseStore);
 #endif
   set_function_data(other->function_data(cage_base, kAcquireLoad),
                     kReleaseStore);
