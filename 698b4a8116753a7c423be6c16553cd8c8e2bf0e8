@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66df0397_73fd0b27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-16T16:22:18Z",
+      "side": 1,
+      "message": "PTAL, and apologies for the noise. It\u0027s this fix again which was already reviewed:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/5024277\nBut got reverted.",
+      "revId": "698b4a8116753a7c423be6c16553cd8c8e2bf0e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
