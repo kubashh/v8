@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6078fb9_171cbdc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-16T13:59:59Z",
+      "side": 1,
+      "message": "PTAL. The fix was sent in a separate CL, so relanding as-is (modulo minor merge conflicts).\nI manually added the arm-asan bot that caused the revert, I\u0027ll wait for the result before submitting.",
+      "revId": "78eeb2d257abdec8ad4060074843c9e5d71db2e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
