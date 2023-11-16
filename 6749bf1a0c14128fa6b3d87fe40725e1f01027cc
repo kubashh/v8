@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8ad8dcf_8dbb7b44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-11-16T13:33:22Z",
+      "side": 1,
+      "message": "Hi!\n\nJust to note that I\u0027ve found FlagContinuations really hard to work with, and then pairing them with CanCover has been a mini nightmare :) We\u0027re now skipping a CanCover check in two places in the arm64 backend, that we know of, and this combination actually results in tests passing in a release build but fail when validating the SSA in debug mode. So, I was wondering whether there are any plans to give V8 a more robust instruction selection framework..?",
+      "revId": "6749bf1a0c14128fa6b3d87fe40725e1f01027cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
