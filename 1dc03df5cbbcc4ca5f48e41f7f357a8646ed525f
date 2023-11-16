@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8302aa8_e7882542",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-16T15:01:31Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "1dc03df5cbbcc4ca5f48e41f7f357a8646ed525f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0283edcd_c2d089c4",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-16T15:01:31Z",
+      "side": 1,
+      "message": "Note: the main change here is that this pushes the break types to the {blocks_} field. The rest is just to make the code simpler.",
+      "range": {
+        "startLine": 447,
+        "startChar": 6,
+        "endLine": 447,
+        "endChar": 16
+      },
+      "revId": "1dc03df5cbbcc4ca5f48e41f7f357a8646ed525f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
