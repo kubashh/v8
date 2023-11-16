@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b99cd01_a821367d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1565770
+      },
+      "writtenOn": "2023-11-16T19:39:09Z",
+      "side": 1,
+      "message": "This fixes the TSan issue and the NULL de-reference.",
+      "revId": "77c9b764a11c5997670b5c80e8dfdab0333883b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
