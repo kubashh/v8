@@ -3780,6 +3780,10 @@ bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
     turboshaft::PrintTurboshaftGraph(&printing_zone, code_tracer,
                                      "Graph generation");
 
+    if (v8_flags.wasm_loop_peeling) {
+      pipeline.Run<turboshaft::LoopPeelingPhase>();
+    }
+
     if (v8_flags.wasm_loop_unrolling) {
       pipeline.Run<turboshaft::LoopUnrollingPhase>();
     }
