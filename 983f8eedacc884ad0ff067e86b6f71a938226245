@@ -16,6 +16,41 @@
       "message": "Adam, WDYT? I don\u0027t love the extra branch on every string_table() but I don\u0027t know how much it matters relative to how expensive string internalization is already.",
       "revId": "983f8eedacc884ad0ff067e86b6f71a938226245",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e9e2c90_ecfd17c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-11-16T17:09:59Z",
+      "side": 1,
+      "message": "I do prefer this, largely because it matches the guidance that formed much of my basic C++ style, in https://google.github.io/styleguide/cppguide.html#Ownership_and_Smart_Pointers. But the style guide is often less performance-concerned than V8 typically is.\n\nI glanced at the callers of string_table() and my initial take matches what you said (the logic in those callers is already significant), so I\u0027d be fine with this. But I don\u0027t feel super-strongly.",
+      "parentUuid": "36e12ae7_cfc791c4",
+      "revId": "983f8eedacc884ad0ff067e86b6f71a938226245",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "729b52d8_7c29fb6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2023-11-16T17:09:59Z",
+      "side": 1,
+      "message": "Thanks for putting this together. +1ing to note my approval but I don\u0027t feel strongly about this if you\u0027re worried about the performance.",
+      "revId": "983f8eedacc884ad0ff067e86b6f71a938226245",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
