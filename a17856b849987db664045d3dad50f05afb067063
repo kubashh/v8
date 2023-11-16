@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b43cd92_e2c6047a",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2023-11-16T22:54:32Z",
+      "side": 1,
+      "message": "It might be time to address this TODO since I want to create a result object in `js-atomics-synchronization.cc`",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 60
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5543bd08_e2ed9b96",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2023-11-16T22:54:32Z",
+      "side": 1,
+      "message": "Is this really necessary? This may throw when running multiple unrelated calls to `asyncLock` in the same thread, which sounds like a terrible bug. I\u0027d prefer risking the program to block an asychronous task forever due to a recursive call rather than the almost impossible organization of tasks to guarantee that this won\u0027t throw.\n\nNote that in our current implementation, calling an `asyncLock` inside a sync `lock` will not block the thread in any way, the sync lock will exit successfully and then the async lock would be able to take the mutex.",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 3
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d36cd2a_bfe78f94",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 6542,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2023-11-16T22:54:32Z",
+      "side": 1,
+      "message": "I\u0027m not familiar with `ExternalPointerHandle`s but I think it should be fine to create them on demand for async waiters instead of reusing the one stored in the isolate for the sync waiters.",
+      "range": {
+        "startLine": 6536,
+        "startChar": 0,
+        "endLine": 6542,
+        "endChar": 1
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff7b9211_570420b0",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2023-11-16T22:54:32Z",
+      "side": 1,
+      "message": "I\u0027m not sure it there was a better way to recreate this logic rather than this trick with builtins and promises, WDYT?",
+      "range": {
+        "startLine": 903,
+        "startChar": 0,
+        "endLine": 903,
+        "endChar": 77
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "162b61eb_d6d7ff5f",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 1287,
+      "author": {
+        "id": 1506979
+      },
+      "writtenOn": "2023-11-16T22:54:32Z",
+      "side": 1,
+      "message": "I know we discussed about not allocating in the heap in this code, but I\u0027m not sure how we would store this node in other case.\n\nThe `shared_ptr` logic is a little convoluted here, but I wanted to avoid any explicit `delete`.",
+      "range": {
+        "startLine": 1287,
+        "startChar": 21,
+        "endLine": 1287,
+        "endChar": 62
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
