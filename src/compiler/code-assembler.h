@@ -755,7 +755,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   // Access to the stack pointer.
   TNode<RawPtrT> LoadStackPointer();
-  void SetStackPointer(TNode<RawPtrT> ptr);
+  void SetStackPointer(TNode<RawPtrT> ptr, bool enable_sp_relative_access);
 
   TNode<RawPtrT> LoadPointerFromRootRegister(TNode<IntPtrT> offset);
   TNode<Uint8T> LoadUint8FromRootRegister(TNode<IntPtrT> offset);
