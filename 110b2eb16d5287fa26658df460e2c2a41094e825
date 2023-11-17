@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c929c671_c57c749e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-11-17T19:18:53Z",
+      "side": 1,
+      "message": "src/handles LGTM",
+      "revId": "110b2eb16d5287fa26658df460e2c2a41094e825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "863c159a_278ac99d",
@@ -94,6 +111,30 @@
       "writtenOn": "2023-11-17T14:27:47Z",
       "side": 1,
       "message": "I introduce the invariant here that full blocks are immediately removed from the `used_blocks_` list to be able to rely on this in L518.",
+      "range": {
+        "startLine": 508,
+        "startChar": 25,
+        "endLine": 508,
+        "endChar": 31
+      },
+      "revId": "110b2eb16d5287fa26658df460e2c2a41094e825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6288d65_677588ff",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-11-17T19:18:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "95a98248_dc2dd0ec",
       "range": {
         "startLine": 508,
         "startChar": 25,
