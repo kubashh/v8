@@ -33,6 +33,24 @@
       "message": "Here and below: please call the argument `isolate_for_sandbox` to make it clear how it\u0027s going to be used.",
       "revId": "dc9a6b0f29f723e8ed151fb0283d766ccca0ecad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44dd6765_be075051",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-11-17T14:18:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cbb1c1e_0f7d7de7",
+      "revId": "dc9a6b0f29f723e8ed151fb0283d766ccca0ecad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
