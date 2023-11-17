@@ -16,6 +16,63 @@
       "message": "@nicohartmann@chromium.org: PS1 is the original patch set, PS2 the minimal fix to pass the test case again and PS3 adapts the VisitStore to align with the fact that \nthe `displacement` will now always be 0.",
       "revId": "6d4a7517ae93ead7477c6b3c48442c7497fd9f73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90894e2e_b9506e3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-11-17T14:00:29Z",
+      "side": 1,
+      "message": "LGTM % comments",
+      "revId": "6d4a7517ae93ead7477c6b3c48442c7497fd9f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fc8285f_7b6014f4",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-11-17T14:00:29Z",
+      "side": 1,
+      "message": "nit: Maybe add a `DCHECK_EQ(load.offset, 0)` here and a one line comment that this should have been normalized in the reducer before.",
+      "revId": "6d4a7517ae93ead7477c6b3c48442c7497fd9f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a64407c_cf29d90b",
+        "filename": "src/compiler/turboshaft/load-store-simplification-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-11-17T14:00:29Z",
+      "side": 1,
+      "message": "this check is redundant `OptionalOpIndex::has_value() \u003d\u003d OptionalOpIndex::valid()`.",
+      "range": {
+        "startLine": 84,
+        "startChar": 11,
+        "endLine": 84,
+        "endChar": 24
+      },
+      "revId": "6d4a7517ae93ead7477c6b3c48442c7497fd9f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
