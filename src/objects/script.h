@@ -208,6 +208,9 @@ class Script : public TorqueGeneratedScript<Script, Struct> {
   V8_EXPORT_PRIVATE bool GetPositionInfo(
       int position, PositionInfo* info,
       OffsetFlag offset_flag = OffsetFlag::kWithOffset) const;
+  V8_EXPORT_PRIVATE bool GetPositionInfoWithLineEnds(
+      int position, PositionInfo* info,
+      const String::LineEndsVector& line_ends) const;
 
   // Tells whether this script should be subject to debugging, e.g. for
   // - scope inspection
