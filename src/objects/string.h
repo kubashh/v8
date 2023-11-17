@@ -586,6 +586,14 @@ V8_OBJECT class String : public Name {
       Visitor* visitor, Tagged<String> string, int offset,
       const SharedStringAccessGuardIfNeeded& access_guard);
 
+  static int constexpr kInlineLineEndsSize = 32;
+  using LineEndsVector = base::SmallVector<int32_t, kInlineLineEndsSize>;
+
+  template <typename IsolateT>
+  static LineEndsVector CalculateLineEndsVector(IsolateT* isolate,
+                                                Handle<String> string,
+                                                bool include_ending_line);
+
   template <typename IsolateT>
   static Handle<FixedArray> CalculateLineEnds(IsolateT* isolate,
                                               Handle<String> string,
