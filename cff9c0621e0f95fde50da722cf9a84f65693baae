@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4badc593_28edbd0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-17T16:51:46Z",
+      "side": 1,
+      "message": "Thanks for the review! Landing.",
+      "revId": "cff9c0621e0f95fde50da722cf9a84f65693baae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd294a3d_84162554",
@@ -48,6 +65,30 @@
       "writtenOn": "2023-11-17T16:45:27Z",
       "side": 1,
       "message": "I assume you just added this to make it explicit? It shouldn\u0027t have an impact on behavior as that\u0027s also the default initialization for OpIndex / V\u003cT\u003e.",
+      "range": {
+        "startLine": 3692,
+        "startChar": 24,
+        "endLine": 3692,
+        "endChar": 44
+      },
+      "revId": "cff9c0621e0f95fde50da722cf9a84f65693baae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a1a5313_e2607526",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3692,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-17T16:51:46Z",
+      "side": 1,
+      "message": "I must admit I added it without checking what the default behavior is :-)\nNow that you pointed it out, I do like the explicitness in this case though, so I\u0027ll keep it if you don\u0027t mind.",
+      "parentUuid": "cd294a3d_84162554",
       "range": {
         "startLine": 3692,
         "startChar": 24,
