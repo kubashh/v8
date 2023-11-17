@@ -16,6 +16,46 @@
       "message": "Matthias: PTAL.\n\nManos: FYI, I\u0027ve verified locally that this unblocks Loop Peeling (i.e. crrev.com/c/5033018 rebased onto this patch passes the test suite).\nDarius: FYI, as discussed offline.\nAndreas: FYI, since you recently worked on stack checks.",
       "revId": "cff9c0621e0f95fde50da722cf9a84f65693baae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e71b5e7_139274b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-17T16:45:27Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "cff9c0621e0f95fde50da722cf9a84f65693baae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd294a3d_84162554",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3692,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-17T16:45:27Z",
+      "side": 1,
+      "message": "I assume you just added this to make it explicit? It shouldn\u0027t have an impact on behavior as that\u0027s also the default initialization for OpIndex / V\u003cT\u003e.",
+      "range": {
+        "startLine": 3692,
+        "startChar": 24,
+        "endLine": 3692,
+        "endChar": 44
+      },
+      "revId": "cff9c0621e0f95fde50da722cf9a84f65693baae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
