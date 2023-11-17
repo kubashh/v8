@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e2d9cec_6cf01112",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-17T13:46:23Z",
+      "side": 1,
+      "message": "@nicohartmann@chromium.org: PS1 is the original patch set, PS2 the minimal fix to pass the test case again and PS3 adapts the VisitStore to align with the fact that \nthe `displacement` will now always be 0.",
+      "revId": "6d4a7517ae93ead7477c6b3c48442c7497fd9f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
