@@ -339,7 +339,7 @@ class V8_EXPORT_PRIVATE GraphAssembler {
 
   Node* LoadFramePointer();
   Node* LoadStackPointer();
-  Node* SetStackPointer(Node* sp);
+  Node* SetStackPointer(Node* sp, bool can_access_with_sp);
 
   Node* LoadHeapNumberValue(Node* heap_number);
 
