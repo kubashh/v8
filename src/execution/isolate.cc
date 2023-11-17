@@ -585,6 +585,10 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
         FullObjectSlot(reinterpret_cast<Address>(&(block->message_obj_))));
   }
 
+  v->VisitRootPointer(
+      Root::kStackRoots, nullptr,
+      FullObjectSlot(continuation_preserved_embedder_data_address()));
+
   // Iterate over pointers on native execution stack.
 #if V8_ENABLE_WEBASSEMBLY
   wasm::WasmCodeRefScope wasm_code_ref_scope;
@@ -2163,7 +2167,7 @@ Tagged<Object> Isolate::UnwindAndFindHandler() {
       }
       case StackFrame::WASM_TO_JS:
         if (v8_flags.experimental_wasm_stack_switching) {
-          // Decrement the Wasm-to-JS counter.
+          // Decrement the Wasm-to-JS counter and reset the central-stack info.
           Tagged<Object> suspender_obj = root(RootIndex::kActiveSuspender);
           if (!IsUndefined(suspender_obj)) {
             Tagged<WasmSuspenderObject> suspender =
@@ -2171,6 +2175,23 @@ Tagged<Object> Isolate::UnwindAndFindHandler() {
             int wasm_to_js_counter = suspender->wasm_to_js_counter();
             DCHECK_LT(0, wasm_to_js_counter);
             suspender->set_wasm_to_js_counter(wasm_to_js_counter - 1);
+
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
+            // If the wasm-to-js wrapper was on a secondary stack and switched
+            // to the central stack, handle the implicit switch back.
+            Address central_stack_sp = *reinterpret_cast<Address*>(
+                frame->fp() +
+                WasmImportWrapperFrameConstants::kCentralStackSPOffset);
+            bool switched_stacks = central_stack_sp != kNullAddress;
+            if (switched_stacks) {
+              thread_local_top()->is_on_central_stack_flag_ = false;
+              Address secondary_stack_limit = Memory<Address>(
+                  frame->fp() +
+                  WasmImportWrapperFrameConstants::kSecondaryStackLimitOffset);
+              stack_guard()->SetStackLimitForStackSwitching(
+                  secondary_stack_limit);
+            }
+#endif
           }
         }
         break;
@@ -2211,9 +2232,31 @@ Tagged<Object> Isolate::UnwindAndFindHandler() {
         // Some stubs are able to handle exceptions.
         if (!catchable_by_js) break;
         StubFrame* stub_frame = static_cast<StubFrame*>(frame);
-#if defined(DEBUG) && V8_ENABLE_WEBASSEMBLY
+#if V8_ENABLE_WEBASSEMBLY
+#if DEBUG
         DCHECK_NULL(wasm::GetWasmCodeManager()->LookupCode(this, frame->pc()));
-#endif  // defined(DEBUG) && V8_ENABLE_WEBASSEMBLY
+#endif
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
+        if (v8_flags.experimental_wasm_stack_switching) {
+          Tagged<Code> code = stub_frame->LookupCode();
+          if (code->builtin_id() == Builtin::kWasmToJsWrapperCSA) {
+            // If the wasm-to-js wrapper was on a secondary stack and switched
+            // to the central stack, handle the implicit switch back.
+            Address central_stack_sp = *reinterpret_cast<Address*>(
+                frame->fp() + WasmToJSWrapperConstants::kCentralStackSPOffset);
+            bool switched_stacks = central_stack_sp != kNullAddress;
+            if (switched_stacks) {
+              thread_local_top()->is_on_central_stack_flag_ = false;
+              Address secondary_stack_limit = Memory<Address>(
+                  frame->fp() +
+                  WasmToJSWrapperConstants::kSecondaryStackLimitOffset);
+              stack_guard()->SetStackLimitForStackSwitching(
+                  secondary_stack_limit);
+            }
+          }
+        }
+#endif  // V8_TARGET_ARCH_X64
+#endif  // V8_ENABLE_WEBASSEMBLY
 
         // The code might be a dynamically generated stub or a turbofanned
         // embedded builtin.
@@ -3271,6 +3314,28 @@ void Isolate::UnregisterManagedPtrDestructor(ManagedPtrDestructor* destructor) {
 }
 
 #if V8_ENABLE_WEBASSEMBLY
+bool Isolate::IsOnCentralStack(Address addr) {
+#ifdef USE_SIMULATOR
+  auto simulator_stack = Simulator::current(this)->GetCurrentStackView();
+  uint8_t* addr_ptr = reinterpret_cast<uint8_t*>(addr);
+  return simulator_stack.begin() < addr_ptr &&
+         addr_ptr <= simulator_stack.end();
+#else
+  uintptr_t upper_bound = base::Stack::GetStackStart();
+  uintptr_t lower_bound = upper_bound - v8_flags.stack_size * KB -
+                          wasm::StackMemory::kJSLimitOffsetKB * KB;
+  return lower_bound < addr && addr <= upper_bound;
+#endif
+}
+
+bool Isolate::IsOnCentralStack() {
+#if USE_SIMULATOR
+  return IsOnCentralStack(Simulator::current(this)->get_sp());
+#else
+  return IsOnCentralStack(GetCurrentStackPosition());
+#endif
+}
+
 void Isolate::AddSharedWasmMemory(Handle<WasmMemoryObject> memory_object) {
   Handle<WeakArrayList> shared_wasm_memories =
       factory()->shared_wasm_memories();
@@ -3298,36 +3363,29 @@ void Isolate::SyncStackLimit() {
   }
   uintptr_t limit = reinterpret_cast<uintptr_t>(stack->jmpbuf()->stack_limit);
   stack_guard()->SetStackLimitForStackSwitching(limit);
-  RecordStackSwitchForScanning();
+  UpdateCentralStackInfo();
 }
 
-namespace {
-bool IsOnCentralStack(Isolate* isolate, Address addr) {
-#ifdef USE_SIMULATOR
-  auto simulator_stack = Simulator::current(isolate)->GetCurrentStackView();
-  uint8_t* addr_ptr = reinterpret_cast<uint8_t*>(addr);
-  return simulator_stack.begin() < addr_ptr &&
-         addr_ptr <= simulator_stack.end();
-#else
-  uintptr_t upper_bound = base::Stack::GetStackStart();
-  uintptr_t lower_bound = upper_bound - v8_flags.stack_size * KB;
-  return lower_bound < addr && addr <= upper_bound;
-#endif
-}
-}  // namespace
-
-void Isolate::RecordStackSwitchForScanning() {
+void Isolate::UpdateCentralStackInfo() {
   Tagged<Object> current = root(RootIndex::kActiveContinuation);
   DCHECK(!IsUndefined(current));
-  stack().ClearStackSegments();
   wasm::StackMemory* wasm_stack =
       Managed<wasm::StackMemory>::cast(
           WasmContinuationObject::cast(current)->stack())
           ->get()
           .get();
-  current = WasmContinuationObject::cast(current)->parent();
+  // On platforms where we switch to the central stack for foreign calls
+  // (runtime/JS), we don't need to scan secondary stacks conservatively. They
+  // only contain frames that use precise scanning.
+  // Otherwise register the active secondary stack start and the bounds of the
+  // inactive stacks in the Stack object.
+#if !V8_TARGET_ARCH_X64
+  stack().ClearStackSegments();
   heap()->SetStackStart(reinterpret_cast<void*>(wasm_stack->base()));
-  thread_local_top()->is_on_central_stack_flag_ = IsUndefined(current);
+#endif
+  current = WasmContinuationObject::cast(current)->parent();
+  thread_local_top()->is_on_central_stack_flag_ =
+      IsOnCentralStack(wasm_stack->base());
   // Update the central stack info on switch. Only consider the innermost stack
   bool updated_central_stack = false;
   // We don't need to add all inactive stacks. Only the ones in the active chain
@@ -3336,12 +3394,17 @@ void Isolate::RecordStackSwitchForScanning() {
     auto cont = WasmContinuationObject::cast(current);
     auto* wasm_stack =
         Managed<wasm::StackMemory>::cast(cont->stack())->get().get();
+#if !V8_TARGET_ARCH_X64 && !V8_TARGET_ARCH_ARM64
     stack().AddStackSegment(
         reinterpret_cast<const void*>(wasm_stack->base()),
         reinterpret_cast<const void*>(wasm_stack->jmpbuf()->sp));
+#endif
+    // On x64 and arm64 we don't need to record the stack segments for
+    // conservative stack scanning. We switch to the central stack for foreign
+    // calls, so secondary stacks only contain wasm frames which use the precise
+    // GC.
     current = cont->parent();
-    if (!updated_central_stack &&
-        IsOnCentralStack(this, wasm_stack->jmpbuf()->sp)) {
+    if (!updated_central_stack && IsOnCentralStack(wasm_stack->jmpbuf()->sp)) {
       // This is the most recent use of the central stack in the call chain.
       // Switch to this SP if we need to switch to the central stack in the
       // future.
@@ -3873,8 +3936,6 @@ void Isolate::Deinit() {
   delete heap_profiler_;
   heap_profiler_ = nullptr;
 
-  string_table_.reset();
-
 #if USE_SIMULATOR
   delete simulator_data_;
   simulator_data_ = nullptr;
@@ -3933,9 +3994,14 @@ void Isolate::Deinit() {
 
   if (OwnsStringTables()) {
     string_forwarding_table()->TearDown();
+  } else {
+    DCHECK_NULL(string_table_.get());
+    DCHECK_NULL(string_forwarding_table_.get());
   }
 
-  shared_struct_type_registry_.reset();
+  if (!is_shared_space_isolate()) {
+    DCHECK_NULL(shared_struct_type_registry_.get());
+  }
 
 #ifdef V8_COMPRESS_POINTERS
   external_pointer_table().TearDownSpace(heap()->external_pointer_space());
@@ -4000,6 +4066,8 @@ Isolate::~Isolate() {
   // The entry stack must be empty when we get here.
   DCHECK(entry_stack_ == nullptr ||
          entry_stack_.load()->previous_item == nullptr);
+
+  DCHECK(to_destroy_before_sudden_shutdown_.empty());
 
   delete entry_stack_;
   entry_stack_ = nullptr;
@@ -4511,6 +4579,26 @@ void Isolate::VerifyStaticRoots() {
 #endif  // V8_STATIC_ROOTS_BOOL
 }
 
+Isolate::ToDestroyBeforeSuddenShutdown::ToDestroyBeforeSuddenShutdown(
+    Isolate* isolate)
+    : isolate_(isolate) {
+  isolate->to_destroy_before_sudden_shutdown_.push_back(this);
+}
+
+Isolate::ToDestroyBeforeSuddenShutdown::~ToDestroyBeforeSuddenShutdown() {
+  // Since this class is only stack-allocated, the last instance created should
+  // be the first instance destroyed.
+  CHECK(!isolate_->to_destroy_before_sudden_shutdown_.empty() &&
+        isolate_->to_destroy_before_sudden_shutdown_.back() == this);
+  isolate_->to_destroy_before_sudden_shutdown_.pop_back();
+}
+
+void Isolate::PrepareForSuddenShutdown() {
+  while (!to_destroy_before_sudden_shutdown_.empty()) {
+    to_destroy_before_sudden_shutdown_.back()->~ToDestroyBeforeSuddenShutdown();
+  }
+}
+
 bool Isolate::Init(SnapshotData* startup_snapshot_data,
                    SnapshotData* read_only_snapshot_data,
                    SnapshotData* shared_heap_snapshot_data, bool can_rehash) {
@@ -4686,14 +4774,14 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
   SetIsolateThreadLocals(this, current_data);
 
   if (OwnsStringTables()) {
-    string_table_ = std::make_shared<StringTable>(this);
-    string_forwarding_table_ = std::make_shared<StringForwardingTable>(this);
+    string_table_ = std::make_unique<StringTable>(this);
+    string_forwarding_table_ = std::make_unique<StringForwardingTable>(this);
   } else {
     // Only refer to shared string table after attaching to the shared isolate.
     DCHECK(has_shared_space());
     DCHECK(!is_shared_space_isolate());
-    string_table_ = shared_space_isolate()->string_table_;
-    string_forwarding_table_ = shared_space_isolate()->string_forwarding_table_;
+    DCHECK_NOT_NULL(string_table());
+    DCHECK_NOT_NULL(string_forwarding_table());
   }
 
 #ifdef V8_EXTERNAL_CODE_SPACE
@@ -4869,6 +4957,9 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
     std::ofstream(GetTurboCfgFileName(this).c_str(), std::ios_base::trunc);
   }
 
+  isolate_data_.continuation_preserved_embedder_data_ =
+      *factory()->undefined_value();
+
   {
     HandleScope scope(this);
     ast_string_constants_ = new AstStringConstants(this, HashSeed(this));
@@ -4898,10 +4989,9 @@ bool Isolate::Init(SnapshotData* startup_snapshot_data,
     // Initialize or get the struct type registry shared by all isolates.
     if (is_shared_space_isolate()) {
       shared_struct_type_registry_ =
-          std::make_shared<SharedStructTypeRegistry>();
+          std::make_unique<SharedStructTypeRegistry>();
     } else {
-      shared_struct_type_registry_ =
-          shared_space_isolate()->shared_struct_type_registry_;
+      DCHECK_NOT_NULL(shared_struct_type_registry());
     }
   }
 

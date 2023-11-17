@@ -1051,9 +1051,8 @@ class Heap final {
   V8_EXPORT_PRIVATE void StartIncrementalMarkingOnInterrupt();
 
   V8_EXPORT_PRIVATE void StartIncrementalMarkingIfAllocationLimitIsReached(
-      GCFlags gc_flags,
+      LocalHeap* local_heap, GCFlags gc_flags,
       GCCallbackFlags gc_callback_flags = GCCallbackFlags::kNoGCCallbackFlags);
-  void StartIncrementalMarkingIfAllocationLimitIsReachedBackground();
 
   // Synchronously finalizes incremental marking.
   V8_EXPORT_PRIVATE void FinalizeIncrementalMarkingAtomically(
@@ -2172,7 +2171,7 @@ class Heap final {
 
   // The maximum percent of the marking limit reached without causing marking.
   // This is tracked when specifying --fuzzer-gc-analysis.
-  double max_marking_limit_reached_ = 0.0;
+  std::atomic<double> max_marking_limit_reached_ = 0.0;
 
   // How many mark-sweep collections happened.
   unsigned int ms_count_ = 0;

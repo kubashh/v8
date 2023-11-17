@@ -136,9 +136,9 @@ Node* GraphAssembler::LoadStackPointer() {
   return AddNode(graph()->NewNode(machine()->LoadStackPointer(), effect()));
 }
 
-Node* GraphAssembler::SetStackPointer(Node* node) {
-  return AddNode(graph()->NewNode(machine()->SetStackPointer(), node, effect(),
-                                  control()));
+Node* GraphAssembler::SetStackPointer(Node* node, bool can_access_with_sp) {
+  return AddNode(graph()->NewNode(
+      machine()->SetStackPointer(can_access_with_sp), node, effect()));
 }
 
 Node* GraphAssembler::LoadHeapNumberValue(Node* heap_number) {

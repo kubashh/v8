@@ -23,6 +23,10 @@
 #include "src/objects/shared-function-info.h"
 #include "src/objects/smi.h"
 
+#if V8_ENABLE_WEBASSEMBLY
+#include "src/wasm/wasm-builtin-list.h"
+#endif
+
 namespace v8 {
 namespace internal {
 
@@ -41,6 +45,14 @@ AssemblerOptions BuiltinAssemblerOptions(Isolate* isolate, Builtin builtin) {
   CHECK(!options.isolate_independent_code);
   CHECK(!options.collect_win64_unwind_info);
 
+#if V8_ENABLE_WEBASSEMBLY
+  if (wasm::BuiltinLookup::IsWasmBuiltinId(builtin) ||
+      builtin == Builtin::kJSToWasmWrapper ||
+      builtin == Builtin::kJSToWasmHandleReturns ||
+      builtin == Builtin::kWasmToJsWrapperCSA) {
+    options.is_wasm = true;
+  }
+#endif
   if (!isolate->IsGeneratingEmbeddedBuiltins()) {
     return options;
   }
@@ -101,9 +113,9 @@ Handle<Code> BuildPlaceholder(Isolate* isolate, Builtin builtin) {
   return scope.CloseAndEscape(code);
 }
 
-Tagged<Code> BuildWithMacroAssembler(Isolate* isolate, Builtin builtin,
-                                     MacroAssemblerGenerator generator,
-                                     const char* s_name) {
+V8_NOINLINE Tagged<Code> BuildWithMacroAssembler(
+    Isolate* isolate, Builtin builtin, MacroAssemblerGenerator generator,
+    const char* s_name) {
   HandleScope scope(isolate);
   uint8_t buffer[kBufferSize];
 
@@ -170,9 +182,9 @@ Tagged<Code> BuildAdaptor(Isolate* isolate, Builtin builtin,
 }
 
 // Builder for builtins implemented in TurboFan with JS linkage.
-Tagged<Code> BuildWithCodeStubAssemblerJS(Isolate* isolate, Builtin builtin,
-                                          CodeAssemblerGenerator generator,
-                                          int argc, const char* name) {
+V8_NOINLINE Tagged<Code> BuildWithCodeStubAssemblerJS(
+    Isolate* isolate, Builtin builtin, CodeAssemblerGenerator generator,
+    int argc, const char* name) {
   HandleScope scope(isolate);
 
   Zone zone(isolate->allocator(), ZONE_NAME, kCompressGraphZone);
@@ -186,7 +198,7 @@ Tagged<Code> BuildWithCodeStubAssemblerJS(Isolate* isolate, Builtin builtin,
 }
 
 // Builder for builtins implemented in TurboFan with CallStub linkage.
-Tagged<Code> BuildWithCodeStubAssemblerCS(
+V8_NOINLINE Tagged<Code> BuildWithCodeStubAssemblerCS(
     Isolate* isolate, Builtin builtin, CodeAssemblerGenerator generator,
     CallDescriptors::Key interface_descriptor, const char* name) {
   HandleScope scope(isolate);
@@ -282,9 +294,9 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
 
 namespace {
 
-Tagged<Code> GenerateBytecodeHandler(Isolate* isolate, Builtin builtin,
-                                     interpreter::OperandScale operand_scale,
-                                     interpreter::Bytecode bytecode) {
+V8_NOINLINE Tagged<Code> GenerateBytecodeHandler(
+    Isolate* isolate, Builtin builtin, interpreter::OperandScale operand_scale,
+    interpreter::Bytecode bytecode) {
   DCHECK(interpreter::Bytecodes::BytecodeHasHandler(bytecode, operand_scale));
   Handle<Code> code = interpreter::GenerateBytecodeHandler(
       isolate, Builtins::name(builtin), bytecode, operand_scale, builtin,

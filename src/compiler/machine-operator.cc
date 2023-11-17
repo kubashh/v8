@@ -2663,14 +2663,16 @@ const Operator* MachineOperatorBuilder::LoadStackPointer() {
   return zone_->New<LoadStackPointerOperator>();
 }
 
-const Operator* MachineOperatorBuilder::SetStackPointer() {
-  class SetStackPointerOperator final : public Operator {
+const Operator* MachineOperatorBuilder::SetStackPointer(
+    bool enable_sp_relative_access) {
+  class SetStackPointerOperator final : public Operator1<bool> {
    public:
-    SetStackPointerOperator()
-        : Operator(IrOpcode::kSetStackPointer, kNoProperties, "SetStackPointer",
-                   1, 1, 0, 0, 1, 0) {}
+    explicit SetStackPointerOperator(bool enable_sp_relative_access)
+        : Operator1<bool>(IrOpcode::kSetStackPointer, kNoProperties,
+                          "SetStackPointer", 1, 1, 0, 0, 1, 0,
+                          enable_sp_relative_access) {}
   };
-  return zone_->New<SetStackPointerOperator>();
+  return zone_->New<SetStackPointerOperator>(enable_sp_relative_access);
 }
 
 #undef PURE_BINARY_OP_LIST_32

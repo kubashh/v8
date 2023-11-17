@@ -52,6 +52,10 @@
 #include "src/runtime/runtime-utils.h"
 #endif
 
+#if V8_ENABLE_WEBASSEMBLY
+#include "src/wasm/stacks.h"
+#endif
+
 #ifdef V8_INTL_SUPPORT
 #include "unicode/uversion.h"  // Define U_ICU_NAMESPACE.
 namespace U_ICU_NAMESPACE {
@@ -179,7 +183,6 @@ class Recorder;
 }  // namespace metrics
 
 namespace wasm {
-class StackMemory;
 class WasmCodeLookupCache;
 }
 
@@ -763,13 +766,20 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   }
 
   // The isolate's string table.
-  StringTable* string_table() const { return string_table_.get(); }
+  StringTable* string_table() const {
+    return OwnsStringTables() ? string_table_.get()
+                              : shared_space_isolate()->string_table_.get();
+  }
   StringForwardingTable* string_forwarding_table() const {
-    return string_forwarding_table_.get();
+    return OwnsStringTables()
+               ? string_forwarding_table_.get()
+               : shared_space_isolate()->string_forwarding_table_.get();
   }
 
   SharedStructTypeRegistry* shared_struct_type_registry() const {
-    return shared_struct_type_registry_.get();
+    return is_shared_space_isolate()
+               ? shared_struct_type_registry_.get()
+               : shared_space_isolate()->shared_struct_type_registry_.get();
   }
 
   Address get_address_from_id(IsolateAddressId id);
@@ -1318,7 +1328,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   THREAD_LOCAL_TOP_ADDRESS(Address, thread_in_wasm_flag_address)
 
-  THREAD_LOCAL_TOP_ADDRESS(bool, is_on_central_stack_flag)
+  THREAD_LOCAL_TOP_ADDRESS(uint8_t, is_on_central_stack_flag)
 
   MaterializedObjectStore* materialized_object_store() const {
     return materialized_object_store_;
@@ -2073,6 +2083,11 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   }
 #endif  // V8_COMPRESS_POINTERS
 
+  Address continuation_preserved_embedder_data_address() {
+    return reinterpret_cast<Address>(
+        &isolate_data_.continuation_preserved_embedder_data_);
+  }
+
   struct PromiseHookFields {
     using HasContextPromiseHook = base::BitField<bool, 0, 1>;
     using HasIsolatePromiseHook = HasContextPromiseHook::Next<bool, 1>;
@@ -2102,7 +2117,7 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   // TODO(pthier): Unify with owns_shareable_data() once the flag
   // --shared-string-table is removed.
-  bool OwnsStringTables() {
+  bool OwnsStringTables() const {
     return !v8_flags.shared_string_table || is_shared_space_isolate();
   }
 
@@ -2113,12 +2128,15 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   ::heap::base::Stack& stack() { return stack_; }
 
 #ifdef V8_ENABLE_WEBASSEMBLY
+  bool IsOnCentralStack();
   wasm::StackMemory*& wasm_stacks() { return wasm_stacks_; }
   // Update the thread local's Stack object so that it is aware of the new stack
   // start and the inactive stacks.
-  void RecordStackSwitchForScanning();
+  void UpdateCentralStackInfo();
 
   void SyncStackLimit();
+#else
+  bool IsOnCentralStack() { return true; }
 #endif
 
   // Access to the global "locals block list cache". Caches outer-stack
@@ -2155,6 +2173,35 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   bool enable_ro_allocation_for_snapshot() const {
     return enable_ro_allocation_for_snapshot_;
   }
+
+  // If script calls quit(), then it is possible that the Isolate is disposed
+  // without giving on-stack objects any chance to clean up after themselves. By
+  // inheriting from this class, a class ensures that its destructor will be
+  // called before Isolate::Dispose.
+  class ToDestroyBeforeSuddenShutdown {
+   public:
+    explicit ToDestroyBeforeSuddenShutdown(Isolate* isolate);
+    virtual ~ToDestroyBeforeSuddenShutdown();
+
+    // This class only supports being allocated on the stack.
+    void* operator new(size_t) = delete;
+    void* operator new(size_t, void*) = delete;
+
+    // Copying is not allowed.
+    ToDestroyBeforeSuddenShutdown(const ToDestroyBeforeSuddenShutdown& other) =
+        delete;
+    ToDestroyBeforeSuddenShutdown& operator=(
+        const ToDestroyBeforeSuddenShutdown& other) = delete;
+
+    Isolate* isolate() const { return isolate_; }
+
+   private:
+    Isolate* isolate_;
+  };
+
+  // Called by d8 right before Dispose, if the shell is quitting with a dirty
+  // stack.
+  void PrepareForSuddenShutdown();
 
  private:
   explicit Isolate(std::unique_ptr<IsolateAllocator> isolate_allocator);
@@ -2261,6 +2308,11 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // Returns the Exception sentinel.
   Tagged<Object> ThrowInternal(Tagged<Object> exception,
                                MessageLocation* location);
+#if V8_ENABLE_WEBASSEMBLY
+  bool IsOnCentralStack(Address addr);
+#else
+  bool IsOnCentralStack(Address addr) { return true; }
+#endif
 
   // This class contains a collection of data accessible from both C++ runtime
   // and compiled code (including assembly stubs, builtins, interpreter bytecode
@@ -2274,8 +2326,10 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   Heap heap_;
   ReadOnlyHeap* read_only_heap_ = nullptr;
   std::shared_ptr<ReadOnlyArtifacts> artifacts_;
-  std::shared_ptr<StringTable> string_table_;
-  std::shared_ptr<StringForwardingTable> string_forwarding_table_;
+
+  // These are guaranteed empty when !OwnsStringTables().
+  std::unique_ptr<StringTable> string_table_;
+  std::unique_ptr<StringForwardingTable> string_forwarding_table_;
 
   const int id_;
   std::atomic<EntryStackItem*> entry_stack_ = nullptr;
@@ -2589,7 +2643,9 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   base::Optional<Isolate*> shared_space_isolate_;
 
   // Used to deduplicate registered SharedStructType shapes.
-  std::shared_ptr<SharedStructTypeRegistry> shared_struct_type_registry_;
+  //
+  // This is guaranteed empty when !is_shared_space_isolate().
+  std::unique_ptr<SharedStructTypeRegistry> shared_struct_type_registry_;
 
 #ifdef V8_COMPRESS_POINTERS
   // Stores the external pointer table space for the shared external pointer
@@ -2629,6 +2685,9 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   // predefined set of data as crash keys to be used in postmortem debugging
   // in case of a crash.
   AddCrashKeyCallback add_crash_key_callback_ = nullptr;
+
+  std::vector<ToDestroyBeforeSuddenShutdown*>
+      to_destroy_before_sudden_shutdown_;
 
   // Delete new/delete operators to ensure that Isolate::New() and
   // Isolate::Delete() are used for Isolate creation and deletion.
