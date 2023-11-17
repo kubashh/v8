@@ -4830,7 +4830,11 @@ void Heap::IterateConservativeStackRoots(RootVisitor* v,
 #ifdef V8_ENABLE_CONSERVATIVE_STACK_SCANNING
   if (!IsGCWithStack()) return;
 
-  TRACE_GC(tracer(), GCTracer::Scope::CONSERVATIVE_STACK_SCANNING);
+  ThreadKind thread_kind = roots_mode == IterateRootsMode::kClientIsolate
+                               ? ThreadKind::kBackground
+                               : ThreadKind::kMain;
+  TRACE_GC_EPOCH(tracer(), GCTracer::Scope::CONSERVATIVE_STACK_SCANNING,
+                 thread_kind);
 
   // In case of a shared GC, we're interested in the main isolate for CSS.
   Isolate* main_isolate = roots_mode == IterateRootsMode::kClientIsolate
