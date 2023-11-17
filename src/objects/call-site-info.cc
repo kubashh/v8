@@ -703,7 +703,7 @@ bool StringEndsWithMethodName(Isolate* isolate, Handle<String> subject,
 
     const base::uc32 subject_char = subject_reader.Get(subject_index);
     if (i == pattern_reader.length()) {
-      if (subject_char != '.') return false;
+      if (subject_char != '.' && subject_char != ' ') return false;
     } else if (subject_char != pattern_reader.Get(pattern_index)) {
       return false;
     }
