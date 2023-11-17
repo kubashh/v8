@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76548b82_b1df68a4",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-17T14:10:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fc8285f_7b6014f4",
+      "revId": "6d4a7517ae93ead7477c6b3c48442c7497fd9f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a64407c_cf29d90b",
@@ -65,6 +83,30 @@
       "writtenOn": "2023-11-17T14:00:29Z",
       "side": 1,
       "message": "this check is redundant `OptionalOpIndex::has_value() \u003d\u003d OptionalOpIndex::valid()`.",
+      "range": {
+        "startLine": 84,
+        "startChar": 11,
+        "endLine": 84,
+        "endChar": 24
+      },
+      "revId": "6d4a7517ae93ead7477c6b3c48442c7497fd9f73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d64f945_557449a1",
+        "filename": "src/compiler/turboshaft/load-store-simplification-reducer.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-17T14:10:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a64407c_cf29d90b",
       "range": {
         "startLine": 84,
         "startChar": 11,
