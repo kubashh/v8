@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfd1151f_5bbb226a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-17T14:27:47Z",
+      "side": 1,
+      "message": "@dinfuehr@chromium.org: PTAL\n@dmercadier@chromium.org: FYI",
+      "revId": "110b2eb16d5287fa26658df460e2c2a41094e825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "863c159a_278ac99d",
+        "filename": "src/base/doubly-threaded-list.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-17T14:27:47Z",
+      "side": 1,
+      "message": "We cannot use `std::find(begin(), end(), needle) !\u003d end()` because the iterators don\u0027t have the same type. We can fix this in a follow up.",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 7
+      },
+      "revId": "110b2eb16d5287fa26658df460e2c2a41094e825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "654dead9_8e6e25f2",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-17T14:27:47Z",
+      "side": 1,
+      "message": "DoublyThreadedList doesn\u0027t have a `Size()` because it wants to have a `static Remove(T x)` that can just unlink without knowing the head.",
+      "range": {
+        "startLine": 463,
+        "startChar": 9,
+        "endLine": 463,
+        "endChar": 20
+      },
+      "revId": "110b2eb16d5287fa26658df460e2c2a41094e825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95a98248_dc2dd0ec",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-17T14:27:47Z",
+      "side": 1,
+      "message": "I introduce the invariant here that full blocks are immediately removed from the `used_blocks_` list to be able to rely on this in L518.",
+      "range": {
+        "startLine": 508,
+        "startChar": 25,
+        "endLine": 508,
+        "endChar": 31
+      },
+      "revId": "110b2eb16d5287fa26658df460e2c2a41094e825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
