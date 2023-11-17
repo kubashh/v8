@@ -33,6 +33,24 @@
       "message": "The failure is a Node.js flake which I happen to be fixing too in the upstream https://github.com/nodejs/node/pull/50735 - not sure what\u0027s the better next step here..",
       "revId": "d94a90a72521f48ac4ec449ca2cd60a0ce8c3902",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c9a1d22_09722cfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2023-11-17T16:10:29Z",
+      "side": 1,
+      "message": "I landed https://github.com/nodejs/node/pull/50735 in the upstream. @pthier@chromium.org Can you update the Node.js CI branch to include it and see if it makes the flake go away? If not I think the next course of action is marking it as flaky/skip it.",
+      "parentUuid": "3145d0db_35b6dc1a",
+      "revId": "d94a90a72521f48ac4ec449ca2cd60a0ce8c3902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
