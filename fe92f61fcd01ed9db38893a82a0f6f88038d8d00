@@ -16,6 +16,23 @@
       "message": "PTAL (Leszek as main reviewer since he covers most ownership; Patrick for regexp).\n\nThis will be used in the follow-up CL; note how in particular arm64 only defined 4 of the existing 8 parameter registers.",
       "revId": "fe92f61fcd01ed9db38893a82a0f6f88038d8d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69fe28a4_2c03e501",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-17T15:26:33Z",
+      "side": 1,
+      "message": "regexp LGTM",
+      "revId": "fe92f61fcd01ed9db38893a82a0f6f88038d8d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
