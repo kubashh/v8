@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de80c0dd_fde34e38",
+        "filename": "src/execution/isolate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-17T15:01:09Z",
+      "side": 1,
+      "message": "Moved to the private section.",
+      "revId": "0d1549178302b8798aaac2e2dac3fb0d92e3e504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
