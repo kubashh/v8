@@ -16,6 +16,24 @@
       "message": "Please move this inside if.\nThere are read-only SFI objects, so we shouldn\u0027t call this method for them.",
       "revId": "1b5cad0d154d14ad14e97fed9304bcc162cf8451",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96dbe550_be108bab",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-11-17T11:31:49Z",
+      "side": 1,
+      "message": "So the Isolate is needed here anyway for the follow-up CL. Another option is to pass in the Isolate from the outside, which is anyway nice because we don\u0027t like `GetIsolateForSandbox` too much. I tried that now, PTAL!",
+      "parentUuid": "6687c373_93eec970",
+      "revId": "1b5cad0d154d14ad14e97fed9304bcc162cf8451",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
