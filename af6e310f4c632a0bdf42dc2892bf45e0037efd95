@@ -16,6 +16,144 @@
       "message": "PTAL",
       "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f111ee08_907627bc",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-11-17T14:31:40Z",
+      "side": 1,
+      "message": "ideally this should do the same intersection with known maps (via KnownMapsMerger) as BuildCheckMaps.",
+      "range": {
+        "startLine": 3340,
+        "startChar": 25,
+        "endLine": 3340,
+        "endChar": 41
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b5df3df_5d9bae46",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3361,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-11-17T14:31:40Z",
+      "side": 1,
+      "message": "can `maps` ever be empty?",
+      "range": {
+        "startLine": 3361,
+        "startChar": 49,
+        "endLine": 3361,
+        "endChar": 56
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fcf243d_45509cda",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4536,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-11-17T14:31:40Z",
+      "side": 1,
+      "message": "I think it\u0027d be ok to remove the template parameter, make the ifs non-constexpr, and dependent on `compiler::IsAnyStore(keyed_mode.access_mode())`. Writes to `ret_val` could even check for `ret_val.has_value()` directly.",
+      "range": {
+        "startLine": 4536,
+        "startChar": 2,
+        "endLine": 4536,
+        "endChar": 74
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db9334b4_adcf7ce0",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4568,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-11-17T14:31:40Z",
+      "side": 1,
+      "message": "why? AFAICT it should only set the known maps for this branch of the polymorphic access, which should be correct.",
+      "range": {
+        "startLine": 4567,
+        "startChar": 11,
+        "endLine": 4568,
+        "endChar": 21
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b32b0c2_a1d9660e",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4615,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-11-17T14:31:40Z",
+      "side": 1,
+      "message": "this will build one generic access per (unoptimized) access info, despite all generic accesses being the same. Maybe there should be a bailout label they jump to instead?",
+      "range": {
+        "startLine": 4611,
+        "startChar": 0,
+        "endLine": 4615,
+        "endChar": 7
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b2c6375_e30d5d6a",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4845,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-11-17T14:31:40Z",
+      "side": 1,
+      "message": "would it be cleaner to pass in the object, index, and feedback source as arguments to `build_generic_access`, since they\u0027re already being passed into `TryBuildElementAccess`, rather than closing over them here? Or would that be less clean since you\u0027d need to then pass them in to the fallthrough generic access?",
+      "range": {
+        "startLine": 4845,
+        "startChar": 4,
+        "endLine": 4845,
+        "endChar": 44
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
