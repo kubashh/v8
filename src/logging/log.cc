@@ -2526,11 +2526,12 @@ void ExistingCodeLogger::LogCompiledFunctions(
     if (ensure_source_positions_available) {
       SharedFunctionInfo::EnsureSourcePositionsAvailable(isolate_, shared);
     }
-    if (shared->HasInterpreterData()) {
+    if (shared->HasInterpreterData(isolate_)) {
       LogExistingFunction(
           shared,
           Handle<AbstractCode>(
-              AbstractCode::cast(shared->InterpreterTrampoline()), isolate_));
+              AbstractCode::cast(shared->InterpreterTrampoline(isolate_)),
+              isolate_));
     }
     if (shared->HasBaselineCode()) {
       LogExistingFunction(
