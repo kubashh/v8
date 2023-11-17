@@ -34,6 +34,24 @@
       "parentUuid": "6687c373_93eec970",
       "revId": "1b5cad0d154d14ad14e97fed9304bcc162cf8451",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e538157_b53a53d8",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-17T11:37:11Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "96dbe550_be108bab",
+      "revId": "1b5cad0d154d14ad14e97fed9304bcc162cf8451",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
