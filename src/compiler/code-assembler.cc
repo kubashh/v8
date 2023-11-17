@@ -583,8 +583,9 @@ TNode<RawPtrT> CodeAssembler::LoadStackPointer() {
   return UncheckedCast<RawPtrT>(raw_assembler()->LoadStackPointer());
 }
 
-void CodeAssembler::SetStackPointer(TNode<RawPtrT> ptr) {
-  raw_assembler()->SetStackPointer(ptr);
+void CodeAssembler::SetStackPointer(TNode<RawPtrT> ptr,
+                                    bool enable_sp_relative_access) {
+  raw_assembler()->SetStackPointer(ptr, enable_sp_relative_access);
 }
 
 TNode<RawPtrT> CodeAssembler::LoadPointerFromRootRegister(
