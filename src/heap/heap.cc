@@ -2082,13 +2082,14 @@ void Heap::StartIncrementalMarkingOnInterrupt() {
 
 void Heap::StartIncrementalMarkingIfAllocationLimitIsReached(
     GCFlags gc_flags, const GCCallbackFlags gc_callback_flags) {
-  if (v8_flags.separate_gc_phases && gc_callbacks_depth_ > 0) {
-    // Do not start incremental marking while invoking GC callbacks.
-    // Heap::CollectGarbage already decided which GC is going to be invoked. In
-    // case it chose a young-gen GC, starting an incremental full GC during
-    // callbacks would break the separate GC phases guarantee.
-    return;
-  }
+  // if (v8_flags.separate_gc_phases && gc_callbacks_depth_ > 0) {
+  //   // Do not start incremental marking while invoking GC callbacks.
+  //   // Heap::CollectGarbage already decided which GC is going to be invoked.
+  //   In
+  //   // case it chose a young-gen GC, starting an incremental full GC during
+  //   // callbacks would break the separate GC phases guarantee.
+  //   return;
+  // }
   if (incremental_marking()->IsStopped()) {
     switch (IncrementalMarkingLimitReached()) {
       case IncrementalMarkingLimit::kHardLimit:
@@ -2750,8 +2751,8 @@ void Heap::MarkCompactPrologue() {
 
 void Heap::Scavenge() {
   DCHECK_NOT_NULL(new_space());
-  DCHECK_IMPLIES(v8_flags.separate_gc_phases,
-                 !incremental_marking()->IsMarking());
+  CHECK_IMPLIES(v8_flags.separate_gc_phases,
+                !incremental_marking()->IsMarking());
 
   if (v8_flags.trace_incremental_marking &&
       !incremental_marking()->IsStopped()) {
