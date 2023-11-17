@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4c20530_4345d055",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4833,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-11-17T08:20:53Z",
+      "side": 0,
+      "message": "The broken DCHECK was in the marking verifier where we don\u0027t really care about this scope. I moved it to the callers into full GC and MinorMS where we also set up all other important GC scopes.",
+      "revId": "20179b9452c638f8f91438efc0c9381f1940baf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
