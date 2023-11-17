@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26dc6769_37563e9f",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3598,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-17T16:31:30Z",
+      "side": 0,
+      "message": "Overview of changes to this class:\n(1) Drop `memory_size_cached_` (by setting it to always-true and inlining it).\n(2) Remember `memory_is_shared_` to be able to bail out early in `ReloadCachedSharedMemorySize` when there is nothing to do.\n(3) Introduce `ReloadCachedSharedMemorySize` and `set_memory_size` for `StackCheck()`\u0027s needs.\n(4) To avoid the need to guard `memory0_size()` calls with conditionals, drop the `DCHECK(has_memory_);` from it, and return `OpIndex::Invalid()` instead.",
+      "range": {
+        "startLine": 3598,
+        "startChar": 8,
+        "endLine": 3598,
+        "endChar": 27
+      },
+      "revId": "e073ebd48598f60f4f531ec6ae00a214b0035053",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
