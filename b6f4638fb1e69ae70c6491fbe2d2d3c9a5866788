@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1781a896_80ebe5e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-11-17T14:19:19Z",
+      "side": 1,
+      "message": "+Leszek for (trivial) changes in src/serializer",
+      "revId": "b6f4638fb1e69ae70c6491fbe2d2d3c9a5866788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
