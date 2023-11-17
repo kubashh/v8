@@ -16,6 +16,46 @@
       "message": "Hi Jakob,\ncould you take another look, please? \n\n(After that I will mark your comments from [my previous CL](https://crrev.com/c/5033998) as resolved)",
       "revId": "c9356c794a02b9683f83eb6c9edf590fb9e16dd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a890c4c7_31bcc990",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-17T16:59:49Z",
+      "side": 1,
+      "message": "Nice! LGTM with a nit.",
+      "revId": "c9356c794a02b9683f83eb6c9edf590fb9e16dd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae7b90eb_ac8ea92a",
+        "filename": "src/objects/call-site-info.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-17T16:59:49Z",
+      "side": 1,
+      "message": "nit: `\u0027.\u0027 + pattern or \u0027 \u0027 + pattern`",
+      "range": {
+        "startLine": 688,
+        "startChar": 28,
+        "endLine": 688,
+        "endChar": 41
+      },
+      "revId": "c9356c794a02b9683f83eb6c9edf590fb9e16dd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
