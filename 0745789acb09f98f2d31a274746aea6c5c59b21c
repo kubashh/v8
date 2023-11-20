@@ -16,6 +16,24 @@
       "message": "Thibaud, PTAL.\nCC\u0027ed arm folks, please check if one sequence is preferred over the other.",
       "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9003d938_82aa44af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2023-11-20T16:02:48Z",
+      "side": 1,
+      "message": "Hi Clemens,\n\nFrom a performance perspective I\u0027m not 100% sure and I can ask around.\n\nHowever, from a correctness pov, discussing with Georgia, we remembered a previous unwinder issue, where it was important for the frame marker to be pushed on the stack first. Otherwise the unwinder may crash interpreting uninitialised memory as a frame marker: https://bugs.chromium.org/p/v8/issues/detail?id\u003d9907\n\nI\u0027m not sure if we fundamentally fixed this issue at the time, or if we just made less likely to occur.\n\nHope this is helpful!",
+      "parentUuid": "131a13de_29cac115",
+      "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
