@@ -86,7 +86,8 @@ declare_args() {
   # Enable runtime call stats.
   # TODO(liviurau): Remove old name after Chromium config update
   # https://crbug.com/1476977.
-  v8_enable_runtime_call_stats = !(is_on_release_branch || v8_is_on_release_branch)
+  v8_enable_runtime_call_stats =
+      !(is_on_release_branch || v8_is_on_release_branch)
 
   # Add fuzzilli fuzzer support.
   v8_fuzzilli = false
@@ -150,6 +151,9 @@ declare_args() {
   # Change code emission and runtime features to be CET shadow-stack compliant
   # (incomplete and experimental).
   v8_enable_cet_shadow_stack = false
+
+  # Emit CET IBT landing pad instructions in JIT generated code (experimental).
+  v8_enable_cet_ibt = false
 }
 
 if (v8_use_external_startup_data == "") {

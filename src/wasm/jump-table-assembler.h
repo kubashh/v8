@@ -174,9 +174,17 @@ class V8_EXPORT_PRIVATE JumpTableAssembler : public MacroAssembler {
 // boundaries. The jump table line size has been chosen to satisfy this.
 #if V8_TARGET_ARCH_X64
   static constexpr int kJumpTableLineSize = 64;
-  static constexpr int kJumpTableSlotSize = 5;
-  static constexpr int kFarJumpTableSlotSize = 16;
-  static constexpr int kLazyCompileTableSlotSize = 10;
+#ifdef V8_ENABLE_CET_IBT
+  static constexpr int kEndbrSize = 4;
+  static constexpr int kFarJumpTableSlotOffset = 2 * kSystemPointerSize;
+#else  // V8_ENABLE_CET_IBT
+  static constexpr int kEndbrSize = 0;
+  static constexpr int kFarJumpTableSlotOffset = kSystemPointerSize;
+#endif
+  static constexpr int kJumpTableSlotSize = 5 + kEndbrSize;
+  static constexpr int kFarJumpTableSlotSize =
+      16 + 2 * kEndbrSize;  // Can include an endbr64 plus extra 4 byte padding.
+  static constexpr int kLazyCompileTableSlotSize = 10 + kEndbrSize;
 #elif V8_TARGET_ARCH_IA32
   static constexpr int kJumpTableLineSize = 64;
   static constexpr int kJumpTableSlotSize = 5;
