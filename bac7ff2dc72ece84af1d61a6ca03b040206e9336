@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0ca56cd_34553d9a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4731,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-11-20T09:10:25Z",
+      "side": 1,
+      "message": "There was one more call site here.\nAnd this could be the one causing the DCHECK failure.",
+      "revId": "bac7ff2dc72ece84af1d61a6ca03b040206e9336",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
