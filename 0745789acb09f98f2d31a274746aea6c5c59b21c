@@ -52,6 +52,24 @@
       "parentUuid": "9003d938_82aa44af",
       "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b670a099_faf86002",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2023-11-20T16:45:13Z",
+      "side": 1,
+      "message": "Oh sorry I wasn\u0027t clear, I think that the new sequence may be incorrect wrt the profiler issue. As we first push the lr/fp, and only then the frame marker. I think it\u0027s safer to stick with the current sequence.",
+      "parentUuid": "3b480af1_0145fd4c",
+      "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
