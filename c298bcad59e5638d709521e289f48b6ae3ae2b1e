@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "378adc0c_73a52e24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-20T16:44:43Z",
+      "side": 1,
+      "message": "looks good modulo comments",
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d556916b_358240ac",
@@ -26,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b2a0c48_1b517dc9",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 17774,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-20T16:44:43Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "d556916b_358240ac",
+      "range": {
+        "startLine": 17774,
+        "startChar": 17,
+        "endLine": 17774,
+        "endChar": 41
+      },
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22fdc7b5_b1a883d6",
         "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
         "patchSetId": 10
@@ -37,6 +78,24 @@
       "writtenOn": "2023-11-20T15:28:48Z",
       "side": 1,
       "message": "Can you add a comment here why `sp` has to be copied to another register, instead of using `sp` directly?",
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c718bf0f_a0cb0e26",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-20T16:44:43Z",
+      "side": 1,
+      "message": "It seems to be the common pattern in TurboFan, the same applies to `kArchFramePointer`.",
+      "parentUuid": "22fdc7b5_b1a883d6",
       "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +130,30 @@
       "writtenOn": "2023-11-20T15:28:48Z",
       "side": 1,
       "message": "`scratch` here is probably `x16`, so the `Mov` is unnecessary. Maybe you could check that if `scratch` is `x16`, then you don\u0027t do the `Mov`. Also, it would be nice to give `x16` a name in `register-arm64.h`, similar to `kWasmTrapHandlerFaultAddressRegister`",
+      "range": {
+        "startLine": 986,
+        "startChar": 22,
+        "endLine": 986,
+        "endChar": 25
+      },
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53b6552e_dffd6acd",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-11-20T16:44:43Z",
+      "side": 1,
+      "message": "+1 for giving `x16` a dedicated name.",
+      "parentUuid": "cc04fab8_7a2c0147",
       "range": {
         "startLine": 986,
         "startChar": 22,
