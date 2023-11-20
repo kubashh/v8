@@ -64,6 +64,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "100fc226_534eb37f",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-11-20T10:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c49abb7_b1de556f",
+      "range": {
+        "startLine": 79,
+        "startChar": 47,
+        "endLine": 79,
+        "endChar": 64
+      },
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eada8c63_71aa3d52",
@@ -77,6 +101,24 @@
       "writtenOn": "2023-10-23T08:45:21Z",
       "side": 1,
       "message": "This shouldn\u0027t happen. Can we have a DCHECK instead?",
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec988f4a_38b95b7a",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-11-20T10:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eada8c63_71aa3d52",
       "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -104,6 +146,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "838fbb69_313a42ce",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-11-20T10:02:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3fe0f3e_d2b37302",
+      "range": {
+        "startLine": 90,
+        "startChar": 49,
+        "endLine": 90,
+        "endChar": 66
+      },
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb0700c7_d3111d34",
@@ -117,6 +183,24 @@
       "writtenOn": "2023-10-23T05:17:25Z",
       "side": 1,
       "message": "Can you add a comment why these 4 bytes are needed?",
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6b56e5a_2b900a10",
+        "filename": "src/wasm/jump-table-assembler.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-11-20T10:02:22Z",
+      "side": 1,
+      "message": "reverted this part again, looks like the endbr is not needed here",
+      "parentUuid": "cb0700c7_d3111d34",
       "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
