@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31aa179d_4e7eac4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-11-20T08:27:38Z",
+      "side": 1,
+      "message": "PTAL. I mainly added this test for the follow up. It was hard to work on the code without a test.",
+      "revId": "40494433553d20852edc609fbb05f2d69d8b8bf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc06f9fc_bcf33aa6",
+        "filename": "tools/release/roll_merge_gerrit_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-11-20T08:27:38Z",
+      "side": 1,
+      "message": "These are all ordered in the order they are called, except when they are called multiple times. Then only the first return value is in the place when it\u0027s called. E.g. CallGerritApi below.",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 8
+      },
+      "revId": "40494433553d20852edc609fbb05f2d69d8b8bf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5011ca4_bd511fe4",
+        "filename": "tools/release/roll_merge_gerrit_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-11-20T08:27:38Z",
+      "side": 1,
+      "message": "Here we could list all the mocks and verify more conditions on them. But for now let\u0027s go with verifying all the observable output.",
+      "range": {
+        "startLine": 50,
+        "startChar": 28,
+        "endLine": 50,
+        "endChar": 33
+      },
+      "revId": "40494433553d20852edc609fbb05f2d69d8b8bf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
