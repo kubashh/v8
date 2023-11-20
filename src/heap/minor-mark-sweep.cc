@@ -472,7 +472,8 @@ void MinorMarkSweepCollector::ClearNonLiveReferences() {
         cpp_heap && cpp_heap->generational_gc_supported()) {
       isolate->traced_handles()->ResetYoungDeadNodes(
           &IsUnmarkedObjectInYoungGeneration);
-    } else {
+    } else if (!v8_flags
+                    .reclaim_unmodified_wrappers_only_on_memory_reducing_gcs) {
       isolate->traced_handles()->ProcessYoungObjects(
           nullptr, &IsUnmarkedObjectInYoungGeneration,
           GarbageCollector::MINOR_MARK_SWEEPER);
@@ -556,10 +557,14 @@ void VisitObjectWithEmbedderFields(Tagged<JSObject> object,
 void MinorMarkSweepCollector::MarkRootsFromTracedHandles(
     YoungGenerationRootMarkingVisitor& root_visitor) {
   TRACE_GC(heap_->tracer(), GCTracer::Scope::MINOR_MS_MARK_TRACED_HANDLES);
+  Isolate* const isolate = heap_->isolate();
+  if (!v8_flags.reclaim_unmodified_wrappers_only_on_memory_reducing_gcs) {
+    isolate->traced_handles()->ComputeWeaknessForYoungObjects();
+  }
   if (auto* cpp_heap = CppHeap::From(heap_->cpp_heap_);
       cpp_heap && cpp_heap->generational_gc_supported()) {
     // Visit the Oilpan-to-V8 remembered set.
-    heap_->isolate()->traced_handles()->IterateAndMarkYoungRootsWithOldHosts(
+    isolate->traced_handles()->IterateAndMarkYoungRootsWithOldHosts(
         &root_visitor);
     // Visit the V8-to-Oilpan remembered set.
     cpp_heap->VisitCrossHeapRememberedSetIfNeeded([this](Tagged<JSObject> obj) {
@@ -567,32 +572,27 @@ void MinorMarkSweepCollector::MarkRootsFromTracedHandles(
     });
   } else {
     // Otherwise, visit all young roots.
-    heap_->isolate()->traced_handles()->IterateYoungRoots(&root_visitor);
+    isolate->traced_handles()->IterateYoungRoots(&root_visitor);
   }
 }
 
 void MinorMarkSweepCollector::MarkRoots(
     YoungGenerationRootMarkingVisitor& root_visitor,
     bool was_marked_incrementally) {
-  Isolate* isolate = heap_->isolate();
-
   // Seed the root set.
-  {
-    TRACE_GC(heap_->tracer(), GCTracer::Scope::MINOR_MS_MARK_SEED);
-    isolate->traced_handles()->ComputeWeaknessForYoungObjects();
-    // MinorMS treats all weak roots except for global handles as strong.
-    // That is why we don't set skip_weak = true here and instead visit
-    // global handles separately.
-    heap_->IterateRoots(
-        &root_visitor,
-        base::EnumSet<SkipRoot>{
-            SkipRoot::kExternalStringTable, SkipRoot::kGlobalHandles,
-            SkipRoot::kTracedHandles, SkipRoot::kOldGeneration,
-            SkipRoot::kReadOnlyBuiltins, SkipRoot::kConservativeStack});
-    isolate->global_handles()->IterateYoungStrongAndDependentRoots(
-        &root_visitor);
-    MarkRootsFromTracedHandles(root_visitor);
-  }
+  TRACE_GC(heap_->tracer(), GCTracer::Scope::MINOR_MS_MARK_SEED);
+  // MinorMS treats all weak roots except for global handles as strong.
+  // That is why we don't set skip_weak = true here and instead visit
+  // global handles separately.
+  heap_->IterateRoots(
+      &root_visitor,
+      base::EnumSet<SkipRoot>{
+          SkipRoot::kExternalStringTable, SkipRoot::kGlobalHandles,
+          SkipRoot::kTracedHandles, SkipRoot::kOldGeneration,
+          SkipRoot::kReadOnlyBuiltins, SkipRoot::kConservativeStack});
+  heap_->isolate()->global_handles()->IterateYoungStrongAndDependentRoots(
+      &root_visitor);
+  MarkRootsFromTracedHandles(root_visitor);
 }
 
 void MinorMarkSweepCollector::MarkRootsFromConservativeStack(

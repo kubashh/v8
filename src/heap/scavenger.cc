@@ -356,7 +356,7 @@ void ScavengerCollector::CollectGarbage() {
 
     RootScavengeVisitor root_scavenge_visitor(scavengers[kMainThreadId].get());
 
-    {
+    if (!v8_flags.reclaim_unmodified_wrappers_only_on_memory_reducing_gcs) {
       // Identify weak unmodified handles. Requires an unmodified graph.
       TRACE_GC(
           heap_->tracer(),
@@ -413,8 +413,11 @@ void ScavengerCollector::CollectGarbage() {
       GlobalHandlesWeakRootsUpdatingVisitor visitor;
       isolate_->global_handles()->ProcessWeakYoungObjects(
           &visitor, &IsUnscavengedHeapObjectSlot);
-      isolate_->traced_handles()->ProcessYoungObjects(
-          &visitor, &IsUnscavengedHeapObjectSlot, GarbageCollector::SCAVENGER);
+      if (!v8_flags.reclaim_unmodified_wrappers_only_on_memory_reducing_gcs) {
+        isolate_->traced_handles()->ProcessYoungObjects(
+            &visitor, &IsUnscavengedHeapObjectSlot,
+            GarbageCollector::SCAVENGER);
+      }
     }
 
     {

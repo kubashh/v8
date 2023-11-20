@@ -1807,6 +1807,9 @@ DEFINE_VALUE_IMPLICATION(fuzzer_gc_analysis, stress_scavenge, 99)
 DEFINE_BOOL(
     reclaim_unmodified_wrappers, true,
     "reclaim otherwise unreachable unmodified wrapper objects when possible")
+DEFINE_BOOL(reclaim_unmodified_wrappers_only_on_memory_reducing_gcs, true,
+            "enables the unmodified wrapper reclamation optimization only in "
+            "memory reducing full GCs")
 
 // These flags will be removed after experiments. Do not rely on them.
 DEFINE_BOOL(gc_experiment_less_compaction, false,
