@@ -21,6 +21,8 @@ using WeakTracedReferenceWorklist =
 // friends. It is used when `CppHeap` is attached but also detached. In detached
 // mode, the expectation is that no non-null `TracedReferenceBase` is found.
 class UnifiedHeapMarkingState final {
+  using WeaknessCompuationMode = TracedHandles::WeaknessCompuationMode;
+
  public:
   UnifiedHeapMarkingState(Heap*, MarkingWorklists::Local*,
                           WeakTracedReferenceWorklist::Local&,
@@ -36,19 +38,25 @@ class UnifiedHeapMarkingState final {
   V8_INLINE void MarkAndPush(const TracedReferenceBase&);
   V8_INLINE bool ShouldMarkObject(Tagged<HeapObject> object) const;
 
-  void EnterAtomicPause() { is_in_atomic_pause_ = true; }
+  void EnterAtomicPause() {
+    if (weakness_computation_mode_ != WeaknessCompuationMode::kNone) {
+      DCHECK_EQ(WeaknessCompuationMode::kConcurrent,
+                weakness_computation_mode_);
+      weakness_computation_mode_ = WeaknessCompuationMode::kAtomic;
+    }
+  }
 
  private:
   Heap* const heap_;
   const bool has_shared_space_;
   const bool is_shared_space_isolate_;
+  const bool track_retaining_path_;
+  const TracedHandles::MarkMode mark_mode_;
   MarkingState* const marking_state_;
   MarkingWorklists::Local* local_marking_worklist_;
   WeakTracedReferenceWorklist::Local& local_weak_traced_reference_worklist_;
-  const bool track_retaining_path_;
-  bool is_in_atomic_pause_ = false;
-  const TracedHandles::MarkMode mark_mode_;
   EmbedderRootsHandler* const embedder_root_handler_;
+  WeaknessCompuationMode weakness_computation_mode_;
 };
 
 }  // namespace internal

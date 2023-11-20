@@ -475,6 +475,7 @@ class TracedHandlesImpl final {
   void ProcessYoungObjects(RootVisitor* visitor,
                            WeakSlotCallbackWithHeap should_reset_handle,
                            GarbageCollector garbage_collector);
+  void ProcessWeakObjects();
 
   void Iterate(RootVisitor* visitor);
   void IterateYoung(RootVisitor* visitor);
@@ -876,6 +877,32 @@ void TracedHandlesImpl::ComputeWeaknessForYoungObjects() {
   }
 }
 
+namespace {
+V8_INLINE void ProcessTracedNode(RootVisitor* visitor,
+                                 WeakSlotCallbackWithHeap should_reset_handle,
+                                 EmbedderRootsHandler* handler, Heap* heap,
+                                 TracedNode* node) {
+  if (!node->is_in_use()) return;
+  if (!node->is_weak()) return;
+
+  bool should_reset = should_reset_handle(heap, node->location());
+  if (should_reset) {
+    v8::Value* value = ToApi<v8::Value>(node->handle());
+    handler->ResetRoot(
+        *reinterpret_cast<v8::TracedReference<v8::Value>*>(&value));
+    // We cannot check whether a node is in use here as the reset behavior
+    // depends on whether incremental marking is running when reclaiming
+    // young objects.
+  } else {
+    node->clear_weak();
+    if (visitor) {
+      visitor->VisitRootPointer(Root::kGlobalHandles, nullptr,
+                                node->location());
+    }
+  }
+}
+}  // namespace
+
 void TracedHandlesImpl::ProcessYoungObjects(
     RootVisitor* visitor, WeakSlotCallbackWithHeap should_reset_handle,
     GarbageCollector garbage_collector) {
@@ -884,6 +911,35 @@ void TracedHandlesImpl::ProcessYoungObjects(
                      (garbage_collector == GarbageCollector::MARK_COMPACTOR),
                  !is_marking_);
   if (is_marking_) return;
+
+  EmbedderRootsHandler* const handler =
+      isolate_->heap()->GetEmbedderRootsHandler();
+  if (!handler) return;
+
+  // ResetRoot should not trigger allocations in CppGC.
+  if (auto* cpp_heap = CppHeap::From(isolate_->heap()->cpp_heap())) {
+    cpp_heap->EnterDisallowGCScope();
+    cpp_heap->EnterNoGCScope();
+  }
+
+  for (TracedNode* node : young_nodes_) {
+    DCHECK_IMPLIES(node->is_weak() &&
+                       (garbage_collector == GarbageCollector::MARK_COMPACTOR),
+                   node->markbit<AccessMode::NON_ATOMIC>());
+    ProcessTracedNode(visitor, should_reset_handle, handler, isolate_->heap(),
+                      node);
+  }
+
+  if (auto* cpp_heap = CppHeap::From(isolate_->heap()->cpp_heap())) {
+    cpp_heap->LeaveNoGCScope();
+    cpp_heap->LeaveDisallowGCScope();
+  }
+}
+
+void TracedHandlesImpl::ProcessWeakObjects() {
+  if (!v8_flags.reclaim_unmodified_wrappers) return;
+  DCHECK(v8_flags.reclaim_unmodified_wrappers_only_on_memory_reducing_gcs);
+  DCHECK(!is_marking_);
 
   auto* const handler = isolate_->heap()->GetEmbedderRootsHandler();
   if (!handler) return;
@@ -894,28 +950,10 @@ void TracedHandlesImpl::ProcessYoungObjects(
     cpp_heap->EnterNoGCScope();
   }
 
-  for (TracedNode* node : young_nodes_) {
-    if (!node->is_in_use()) continue;
-    DCHECK_IMPLIES(node->is_weak() &&
-                       (garbage_collector == GarbageCollector::MARK_COMPACTOR),
-                   node->markbit<AccessMode::NON_ATOMIC>());
-    if (!node->is_weak()) continue;
-
-    bool should_reset = should_reset_handle(isolate_->heap(), node->location());
-    if (should_reset) {
-      CHECK(!is_marking_);
-      v8::Value* value = ToApi<v8::Value>(node->handle());
-      handler->ResetRoot(
-          *reinterpret_cast<v8::TracedReference<v8::Value>*>(&value));
-      // We cannot check whether a node is in use here as the reset behavior
-      // depends on whether incremental marking is running when reclaiming
-      // young objects.
-    } else {
-      node->clear_weak();
-      if (visitor) {
-        visitor->VisitRootPointer(Root::kGlobalHandles, nullptr,
-                                  node->location());
-      }
+  for (auto* block : blocks_) {
+    for (auto* node : *block) {
+      ProcessTracedNode(nullptr, &MarkCompactCollector::IsUnmarkedHeapObject,
+                        handler, isolate_->heap(), node);
     }
   }
 
@@ -1027,6 +1065,8 @@ void TracedHandles::ProcessYoungObjects(
     GarbageCollector garbage_collector) {
   impl_->ProcessYoungObjects(visitor, should_reset_handle, garbage_collector);
 }
+
+void TracedHandles::ProcessWeakObjects() { impl_->ProcessWeakObjects(); }
 
 void TracedHandles::Iterate(RootVisitor* visitor) { impl_->Iterate(visitor); }
 
@@ -1148,7 +1188,9 @@ bool TracedHandles::IsWeak(Address* location,
   if (!embedder_root_handler) return false;
   auto* node = TracedNode::FromLocation(location);
   DCHECK(node->is_in_use<AccessMode::ATOMIC>());
-  if (node->is_in_young_list<AccessMode::ATOMIC>()) {
+  if (mode != TracedHandles::WeaknessCompuationMode::kNone &&
+      (v8_flags.reclaim_unmodified_wrappers_only_on_memory_reducing_gcs ||
+       node->is_in_young_list<AccessMode::ATOMIC>())) {
     return ComputeWeaknessForYoungObject(embedder_root_handler, node, mode);
   }
   return false;

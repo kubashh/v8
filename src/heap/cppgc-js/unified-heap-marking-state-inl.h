@@ -64,12 +64,9 @@ void UnifiedHeapMarkingState::MarkAndPush(
   if (!ShouldMarkObject(heap_object)) return;
 
   if (v8_flags.reclaim_unmodified_wrappers) {
-    if (TracedHandles::IsWeak(
-            traced_handle_location, embedder_root_handler_,
-            is_in_atomic_pause_
-                ? TracedHandles::WeaknessCompuationMode::kAtomic
-                : TracedHandles::WeaknessCompuationMode::kConcurrent)) {
-      if (!is_in_atomic_pause_)
+    if (TracedHandles::IsWeak(traced_handle_location, embedder_root_handler_,
+                              weakness_computation_mode_)) {
+      if (weakness_computation_mode_ == WeaknessCompuationMode::kConcurrent)
         local_weak_traced_reference_worklist_.Push(&reference);
       return;
     }
