@@ -2979,9 +2979,9 @@ void MacroAssembler::EnterFrame(StackFrame::Type type) {
       } else {
         fourth_reg = padreg;
       }
-      Push<MacroAssembler::kSignLR>(lr, fp, type_reg, fourth_reg);
-      static constexpr int kSPToFPDelta  = 2 * kSystemPointerSize;
-      Add(fp, sp, kSPToFPDelta);
+      Push<MacroAssembler::kSignLR>(lr, fp);
+      Mov(fp, sp);
+      Push(type_reg, fourth_reg);
       // sp[3] : lr
       // sp[2] : fp
       // sp[1] : type
