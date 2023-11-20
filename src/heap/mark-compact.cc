@@ -2416,6 +2416,7 @@ void MarkCompactCollector::MarkLiveObjects() {
         incremental_marking->current_trace_id(), TRACE_EVENT_FLAG_FLOW_IN);
     DCHECK(incremental_marking->IsMajorMarking());
     incremental_marking->Stop();
+    heap_->isolate()->traced_handles()->SetIsMarking(false);
     MarkingBarrier::PublishAll(heap_);
   }
 
@@ -2488,7 +2489,6 @@ void MarkCompactCollector::MarkLiveObjects() {
     // finished as it will reset page flags that share the same bitmap as
     // the evacuation candidate bit.
     MarkingBarrier::DeactivateAll(heap_);
-    heap_->isolate()->traced_handles()->SetIsMarking(false);
   }
 
   epoch_++;
@@ -2831,6 +2831,8 @@ void MarkCompactCollector::ClearNonLiveReferences() {
     // CPU profiler.
     isolate->global_handles()->IterateWeakRootsForPhantomHandles(
         &IsUnmarkedHeapObject);
+    isolate->traced_handles()->ProcessYoungObjects(
+        nullptr, &IsUnmarkedHeapObject, GarbageCollector::MARK_COMPACTOR);
     isolate->traced_handles()->ResetDeadNodes(&IsUnmarkedHeapObject);
 
     if (isolate->is_shared_space_isolate()) {
