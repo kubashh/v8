@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dc0d78c7_58042d86",
+        "filename": "BUILD.gn",
+        "patchSetId": 16
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1120979
+      },
+      "writtenOn": "2023-11-20T10:14:32Z",
+      "side": 1,
+      "message": "I think it makes sense to have a generic build flag for CFI for the non-experimental parts. In that case, we would eventually merge the CET_IBT into this, once we want to ship it by default.\nDoes that make sense?",
+      "parentUuid": "82740ab4_1f2264cb",
+      "range": {
+        "startLine": 1125,
+        "startChar": 18,
+        "endLine": 1125,
+        "endChar": 50
+      },
+      "revId": "b10c9596cabf97fc4e6fc8f84a030c1be31a71af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2c49abb7_b1de556f",
         "filename": "src/wasm/jump-table-assembler.cc",
         "patchSetId": 16
