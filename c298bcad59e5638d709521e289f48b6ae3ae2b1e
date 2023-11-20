@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d556916b_358240ac",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 17774,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-11-20T15:28:48Z",
+      "side": 1,
+      "message": "Instead of the constexpr here you could use an enum parameter instead of a bool parameter.",
+      "range": {
+        "startLine": 17774,
+        "startChar": 17,
+        "endLine": 17774,
+        "endChar": 41
+      },
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22fdc7b5_b1a883d6",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-11-20T15:28:48Z",
+      "side": 1,
+      "message": "Can you add a comment here why `sp` has to be copied to another register, instead of using `sp` directly?",
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ba136cc_1b4a0a7c",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-11-20T15:28:48Z",
+      "side": 1,
+      "message": "Can you add code comments around the simulator block?",
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc04fab8_7a2c0147",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-11-20T15:28:48Z",
+      "side": 1,
+      "message": "`scratch` here is probably `x16`, so the `Mov` is unnecessary. Maybe you could check that if `scratch` is `x16`, then you don\u0027t do the `Mov`. Also, it would be nice to give `x16` a name in `register-arm64.h`, similar to `kWasmTrapHandlerFaultAddressRegister`",
+      "range": {
+        "startLine": 986,
+        "startChar": 22,
+        "endLine": 986,
+        "endChar": 25
+      },
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a97ac45a_4520b13f",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-11-20T15:28:48Z",
+      "side": 1,
+      "message": "So this flag actually means `switch frame state to fp-relative access only mode` or `switch frame state to allow sp-relative access`.\n\nI was struggling with the current name, because at first I thought it only affects the code generated for the `SetStackPointer`, but actually it means that either a scope is opened where sp-relative addressing is disallowed, or that this scope is closed.\n\nIf you introduce an enum, maybe the names could be `kEnterFPRelativeOnlyScope` and `kLeaveFpRelativeOnlyScope`.",
+      "range": {
+        "startLine": 993,
+        "startChar": 10,
+        "endLine": 993,
+        "endChar": 28
+      },
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
