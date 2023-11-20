@@ -1477,12 +1477,23 @@ bool InstanceBuilder::ExecuteStartFunction() {
   // v8::Context::Enter() and must happen in addition to the function call
   // sequence doing the compiled version of "isolate->set_context(...)".
   HandleScopeImplementer* hsi = isolate_->handle_scope_implementer();
-  hsi->EnterContext(start_function_->native_context());
-
+  {
+    // bool has_entered_context = hsi->EnteredContextCount() != 0;
+    Tagged<NativeContext> env = start_function_->native_context();
+    hsi->EnterContext(env);
+    hsi->SaveContext(isolate_->incumbent_context());
+    hsi->SaveContext(isolate_->context());
+    // if (!has_entered_context && !isolate_->top_backup_incumbent_scope()) {
+    isolate_->set_incumbent_context(env);
+    // }
+  }
   // Call the JS function.
   Handle<Object> undefined = isolate_->factory()->undefined_value();
   MaybeHandle<Object> retval =
       Execution::Call(isolate_, start_function_, undefined, 0, nullptr);
+
+  isolate_->set_context(hsi->RestoreContext());
+  isolate_->set_incumbent_context(hsi->RestoreContext());
   hsi->LeaveContext();
 
   if (retval.is_null()) {

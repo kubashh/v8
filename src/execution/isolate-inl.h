@@ -56,6 +56,29 @@ Tagged<NativeContext> Isolate::raw_native_context() {
   return context()->native_context();
 }
 
+void Isolate::set_caller_context(Tagged<Context> context) {
+  thread_local_top()->caller_context_ = context;
+}
+
+void Isolate::clear_caller_context() {
+  thread_local_top()->caller_context_ = Context();
+}
+
+void Isolate::set_incumbent_context(Tagged<Context> context) {
+  DCHECK(context.is_null() || IsContext(context));
+  thread_local_top()->incumbent_context_ = context;
+}
+
+Handle<NativeContext> Isolate::GetIncumbentContext() {
+  // return GetIncumbentContextFast();
+  return GetIncumbentContextSlow();
+}
+
+Handle<NativeContext> Isolate::GetIncumbentContextFast() {
+  DCHECK(!thread_local_top()->incumbent_context_.is_null());
+  return handle(thread_local_top()->incumbent_context_->native_context(), this);
+}
+
 void Isolate::set_pending_message(Tagged<Object> message_obj) {
   DCHECK(IsTheHole(message_obj, this) || IsJSMessageObject(message_obj));
   thread_local_top()->pending_message_ = message_obj;

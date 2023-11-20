@@ -757,7 +757,8 @@ void InterpreterAssembler::CallJSAndDispatch(TNode<Object> function,
   DCHECK(Bytecodes::IsCallOrConstruct(bytecode_) ||
          bytecode_ == Bytecode::kInvokeIntrinsic);
   DCHECK_EQ(Bytecodes::GetReceiverMode(bytecode_), receiver_mode);
-  Callable callable = CodeFactory::Call(isolate());
+  Callable callable =
+      CodeFactory::Call(isolate(), ConvertReceiverMode::kAny, CallerKind::kJS);
   TNode<Code> code_target = HeapConstantNoHole(callable.code());
 
   arg_count = JSParameterCount(arg_count);

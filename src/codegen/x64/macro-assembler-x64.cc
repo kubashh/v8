@@ -939,8 +939,8 @@ void MacroAssembler::Abort(AbortReason reason) {
   int3();
 }
 
-void MacroAssembler::CallRuntime(const Runtime::Function* f,
-                                 int num_arguments) {
+void MacroAssembler::CallRuntime(const Runtime::Function* f, int num_arguments,
+                                 CallerKind caller_kind) {
   ASM_CODE_COMMENT(this);
   // If the expected number of arguments of the runtime function is
   // constant, we check that the actual number of arguments match the
@@ -954,8 +954,9 @@ void MacroAssembler::CallRuntime(const Runtime::Function* f,
   Move(rax, num_arguments);
   LoadAddress(rbx, ExternalReference::Create(f));
   bool switch_to_central = this->options().is_wasm;
-  Handle<Code> code = CodeFactory::CEntry(
-      isolate(), f->result_size, ArgvMode::kStack, false, switch_to_central);
+  Handle<Code> code =
+      CodeFactory::CEntry(isolate(), f->result_size, ArgvMode::kStack, false,
+                          caller_kind, switch_to_central);
   Call(code, RelocInfo::CODE_TARGET);
 }
 
@@ -983,8 +984,8 @@ void MacroAssembler::JumpToExternalReference(const ExternalReference& ext,
   ASM_CODE_COMMENT(this);
   // Set the entry point and jump to the C entry runtime stub.
   LoadAddress(rbx, ext);
-  Handle<Code> code =
-      CodeFactory::CEntry(isolate(), 1, ArgvMode::kStack, builtin_exit_frame);
+  Handle<Code> code = CodeFactory::CEntry(
+      isolate(), 1, ArgvMode::kStack, builtin_exit_frame, CallerKind::kUnknown);
   Jump(code, RelocInfo::CODE_TARGET);
 }
 
@@ -1068,7 +1069,7 @@ void MacroAssembler::GenerateTailCallToReturnedCode(
     // Function is also the parameter to the runtime call.
     Push(kJavaScriptCallTargetRegister);
 
-    CallRuntime(function_id, 1);
+    CallRuntime(function_id, 1, CallerKind::kUnknown);
     movq(rcx, rax);
 
     // Restore target function, new target and actual argument count.
@@ -3615,7 +3616,7 @@ void MacroAssembler::CallDebugOnFunctionCall(Register fun, Register new_target,
   Push(fun);
   Push(fun);
   Push(kScratchRegister);
-  CallRuntime(Runtime::kDebugOnFunctionCall);
+  CallRuntime(Runtime::kDebugOnFunctionCall, CallerKind::kUnknown);
   Pop(fun);
   if (new_target.is_valid()) {
     Pop(new_target);

@@ -119,6 +119,10 @@ class Builtins {
     DCHECK(IsBuiltinId(id));
     return static_cast<int>(id);
   }
+  static constexpr bool IsBytecodeHandler(Builtin builtin) {
+    return Builtin::kFirstBytecodeHandler <= builtin &&
+           static_cast<int>(builtin) < kLastBytecodeHandlerPlusOne;
+  }
 
   // The different builtin kinds are documented in builtins-definitions.h.
   enum Kind { CPP, TFJ, TFC, TFS, TFH, BCH, ASM };
@@ -155,8 +159,10 @@ class Builtins {
   }
 
   // Convenience wrappers.
-  Handle<Code> CallFunction(ConvertReceiverMode = ConvertReceiverMode::kAny);
-  Handle<Code> Call(ConvertReceiverMode = ConvertReceiverMode::kAny);
+  Handle<Code> CallFunction(ConvertReceiverMode = ConvertReceiverMode::kAny,
+                            CallerKind = CallerKind::kUnknown);
+  Handle<Code> Call(ConvertReceiverMode = ConvertReceiverMode::kAny,
+                    CallerKind = CallerKind::kUnknown);
   Handle<Code> NonPrimitiveToPrimitive(
       ToPrimitiveHint hint = ToPrimitiveHint::kDefault);
   Handle<Code> OrdinaryToPrimitive(OrdinaryToPrimitiveHint hint);
@@ -227,7 +233,7 @@ class Builtins {
   }
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> InvokeApiFunction(
-      Isolate* isolate, bool is_construct,
+      Isolate* isolate, bool is_construct, Handle<Context> function_context,
       Handle<FunctionTemplateInfo> function, Handle<Object> receiver, int argc,
       Handle<Object> args[], Handle<HeapObject> new_target);
 
@@ -235,6 +241,7 @@ class Builtins {
 
   static void Generate_CEntry(MacroAssembler* masm, int result_size,
                               ArgvMode argv_mode, bool builtin_exit_frame,
+                              CallerKind caller_kind,
                               bool switch_to_central_stack);
 
   static bool AllowDynamicFunction(Isolate* isolate, Handle<JSFunction> target,
@@ -289,11 +296,13 @@ class Builtins {
 
  private:
   static void Generate_CallFunction(MacroAssembler* masm,
-                                    ConvertReceiverMode mode);
+                                    ConvertReceiverMode mode,
+                                    CallerKind caller_kind);
 
   static void Generate_CallBoundFunctionImpl(MacroAssembler* masm);
 
-  static void Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode);
+  static void Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode,
+                            CallerKind caller_kind);
 
   static void Generate_CallOrConstructVarargs(MacroAssembler* masm,
                                               Handle<Code> code);

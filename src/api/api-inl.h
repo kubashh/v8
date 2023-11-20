@@ -180,7 +180,7 @@ class V8_NODISCARD CallDepthScope {
   CallDepthScope(i::Isolate* isolate, Local<Context> context)
       : isolate_(isolate),
         context_(context),
-        did_enter_context_(false),
+        enter_context_mode_(kDidNotEnter),
         escaped_(false),
         safe_for_termination_(isolate->next_v8_call_is_safe_for_termination()),
         interrupts_scope_(isolate_, i::StackGuard::TERMINATE_EXECUTION,
@@ -193,27 +193,52 @@ class V8_NODISCARD CallDepthScope {
     isolate_->set_next_v8_call_is_safe_for_termination(false);
     if (!context.IsEmpty()) {
       i::DisallowGarbageCollection no_gc;
-      i::Tagged<i::Context> env = *Utils::OpenHandle(*context);
-      i::HandleScopeImplementer* impl = isolate->handle_scope_implementer();
-      if (isolate->context().is_null() ||
-          isolate->context()->native_context() != env->native_context()) {
+      i::Tagged<i::NativeContext> env = *Utils::OpenHandle(*context);
+      // isolate->set_caller_context(env);
+      //  DCHECK(!isolate->handle_scope_implementer()->LastEnteredContext().is_null());
+      if (isolate->context().is_null()) {
+        // We haven't entered any contexts yet, do full v8::Context::Enter.
+        i::HandleScopeImplementer* impl = isolate->handle_scope_implementer();
+        // DCHECK_NULL(isolate->top_backup_incumbent_scope());
+        // impl->EnterContext(env);
+        // impl->SaveContext(isolate->incumbent_context());
+        impl->SaveContext(isolate->context());
+        // isolate->set_incumbent_context(env);
+        // isolate->set_incumbent_context(i::Context());
+        isolate->set_context(env);
+        enter_context_mode_ = kFullyEntered;
+
+      } else if (isolate->context()->native_context() != env) {
+        i::HandleScopeImplementer* impl = isolate->handle_scope_implementer();
         impl->SaveContext(isolate->context());
         isolate->set_context(env);
-        did_enter_context_ = true;
+        enter_context_mode_ = kSavedOnly;
       }
+    } else {
+      // isolate->clear_caller_context();
+      // DCHECK(!isolate->context().is_null());
+      // DCHECK(IsContext(isolate->context()));
+      // DCHECK(!isolate->incumbent_context().is_null());
+      // DCHECK(IsContext(isolate->incumbent_context()));
+      // DCHECK(!isolate->handle_scope_implementer()->LastEnteredContext().is_null());
     }
     if (do_callback) isolate_->FireBeforeCallEnteredCallback();
   }
   ~CallDepthScope() {
     i::MicrotaskQueue* microtask_queue = isolate_->default_microtask_queue();
     if (!context_.IsEmpty()) {
-      if (did_enter_context_) {
+      if (enter_context_mode_ != kDidNotEnter) {
         i::HandleScopeImplementer* impl = isolate_->handle_scope_implementer();
         isolate_->set_context(impl->RestoreContext());
+        if (enter_context_mode_ == kFullyEntered) {
+          // isolate_->set_incumbent_context(impl->RestoreContext());
+          // impl->LeaveContext();
+          // DCHECK_NULL(isolate_->top_backup_incumbent_scope());
+        }
       }
 
-      i::Handle<i::Context> env = Utils::OpenHandle(*context_);
-      microtask_queue = env->native_context()->microtask_queue();
+      i::Handle<i::NativeContext> env = Utils::OpenHandle(*context_);
+      microtask_queue = env->microtask_queue();
     }
     if (!escaped_) isolate_->thread_local_top()->DecrementCallDepth(this);
     if (do_callback) isolate_->FireCallCompletedCallback(microtask_queue);
@@ -256,10 +281,11 @@ class V8_NODISCARD CallDepthScope {
            IsUndefined(isolate_->heap()->weak_refs_keep_during_job(), isolate_);
   }
 #endif
+  enum EnterContextMode { kDidNotEnter = 0, kSavedOnly, kFullyEntered };
 
   i::Isolate* const isolate_;
   Local<Context> context_;
-  bool did_enter_context_ : 1;
+  EnterContextMode enter_context_mode_ : 2;
   bool escaped_ : 1;
   bool safe_for_termination_ : 1;
   i::InterruptsScope interrupts_scope_;

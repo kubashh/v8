@@ -18,50 +18,101 @@
 namespace v8 {
 namespace internal {
 
-void Builtins::Generate_CallFunction_ReceiverIsNullOrUndefined(
+void Builtins::Generate_CallFunction_ReceiverIsNullOrUndefined_CallerJS(
     MacroAssembler* masm) {
-  Generate_CallFunction(masm, ConvertReceiverMode::kNullOrUndefined);
+  Generate_CallFunction(masm, ConvertReceiverMode::kNullOrUndefined,
+                        CallerKind::kJS);
 }
 
-void Builtins::Generate_CallFunction_ReceiverIsNotNullOrUndefined(
+void Builtins::Generate_CallFunction_ReceiverIsNullOrUndefined_CallerUnk(
     MacroAssembler* masm) {
-  Generate_CallFunction(masm, ConvertReceiverMode::kNotNullOrUndefined);
+  Generate_CallFunction(masm, ConvertReceiverMode::kNullOrUndefined,
+                        CallerKind::kUnknown);
 }
 
-void Builtins::Generate_CallFunction_ReceiverIsAny(MacroAssembler* masm) {
-  Generate_CallFunction(masm, ConvertReceiverMode::kAny);
+void Builtins::Generate_CallFunction_ReceiverIsNotNullOrUndefined_CallerJS(
+    MacroAssembler* masm) {
+  Generate_CallFunction(masm, ConvertReceiverMode::kNotNullOrUndefined,
+                        CallerKind::kJS);
+}
+
+void Builtins::Generate_CallFunction_ReceiverIsNotNullOrUndefined_CallerUnk(
+    MacroAssembler* masm) {
+  Generate_CallFunction(masm, ConvertReceiverMode::kNotNullOrUndefined,
+                        CallerKind::kUnknown);
+}
+
+void Builtins::Generate_CallFunction_ReceiverIsAny_CallerJS(
+    MacroAssembler* masm) {
+  Generate_CallFunction(masm, ConvertReceiverMode::kAny, CallerKind::kJS);
+}
+
+void Builtins::Generate_CallFunction_ReceiverIsAny_CallerUnk(
+    MacroAssembler* masm) {
+  Generate_CallFunction(masm, ConvertReceiverMode::kAny, CallerKind::kUnknown);
 }
 
 void Builtins::Generate_CallBoundFunction(MacroAssembler* masm) {
   Generate_CallBoundFunctionImpl(masm);
 }
 
-void Builtins::Generate_Call_ReceiverIsNullOrUndefined(MacroAssembler* masm) {
-  Generate_Call(masm, ConvertReceiverMode::kNullOrUndefined);
-}
-
-void Builtins::Generate_Call_ReceiverIsNotNullOrUndefined(
+void Builtins::Generate_Call_ReceiverIsNullOrUndefined_CallerJS(
     MacroAssembler* masm) {
-  Generate_Call(masm, ConvertReceiverMode::kNotNullOrUndefined);
+  Generate_Call(masm, ConvertReceiverMode::kNullOrUndefined, CallerKind::kJS);
 }
 
-void Builtins::Generate_Call_ReceiverIsAny(MacroAssembler* masm) {
-  Generate_Call(masm, ConvertReceiverMode::kAny);
+void Builtins::Generate_Call_ReceiverIsNullOrUndefined_CallerUnk(
+    MacroAssembler* masm) {
+  Generate_Call(masm, ConvertReceiverMode::kNullOrUndefined,
+                CallerKind::kUnknown);
 }
 
-void Builtins::Generate_CallVarargs(MacroAssembler* masm) {
-  Generate_CallOrConstructVarargs(masm, masm->isolate()->builtins()->Call());
+void Builtins::Generate_Call_ReceiverIsNotNullOrUndefined_CallerJS(
+    MacroAssembler* masm) {
+  Generate_Call(masm, ConvertReceiverMode::kNotNullOrUndefined,
+                CallerKind::kJS);
+}
+
+void Builtins::Generate_Call_ReceiverIsNotNullOrUndefined_CallerUnk(
+    MacroAssembler* masm) {
+  Generate_Call(masm, ConvertReceiverMode::kNotNullOrUndefined,
+                CallerKind::kUnknown);
+}
+
+void Builtins::Generate_Call_ReceiverIsAny_CallerJS(MacroAssembler* masm) {
+  Generate_Call(masm, ConvertReceiverMode::kAny, CallerKind::kJS);
+}
+
+void Builtins::Generate_Call_ReceiverIsAny_CallerUnk(MacroAssembler* masm) {
+  Generate_Call(masm, ConvertReceiverMode::kAny, CallerKind::kUnknown);
+}
+
+void Builtins::Generate_CallVarargs_CallerJS(MacroAssembler* masm) {
+  Generate_CallOrConstructVarargs(
+      masm, masm->isolate()->builtins()->Call(ConvertReceiverMode::kAny,
+                                              CallerKind::kJS));
+}
+
+void Builtins::Generate_CallVarargs_CallerUnk(MacroAssembler* masm) {
+  Generate_CallOrConstructVarargs(
+      masm, masm->isolate()->builtins()->Call(ConvertReceiverMode::kAny,
+                                              CallerKind::kUnknown));
 }
 
 void Builtins::Generate_CallForwardVarargs(MacroAssembler* masm) {
-  Generate_CallOrConstructForwardVarargs(masm, CallOrConstructMode::kCall,
-                                         masm->isolate()->builtins()->Call());
+  // This builtin is called only from optimized code, thus JS kind.
+  Generate_CallOrConstructForwardVarargs(
+      masm, CallOrConstructMode::kCall,
+      masm->isolate()->builtins()->Call(ConvertReceiverMode::kAny,
+                                        CallerKind::kJS));
 }
 
 void Builtins::Generate_CallFunctionForwardVarargs(MacroAssembler* masm) {
+  // This builtin is called only from optimized code, thus JS kind.
   Generate_CallOrConstructForwardVarargs(
       masm, CallOrConstructMode::kCall,
-      masm->isolate()->builtins()->CallFunction());
+      masm->isolate()->builtins()->CallFunction(ConvertReceiverMode::kAny,
+                                                CallerKind::kJS));
 }
 
 void Builtins::Generate_CallApiCallbackGeneric(MacroAssembler* masm) {
@@ -83,7 +134,8 @@ void Builtins::Generate_CallApiCallbackOptimized(MacroAssembler* masm) {
 TF_BUILTIN(Call_ReceiverIsNullOrUndefined_Baseline_Compact,
            CallOrConstructBuiltinsAssembler) {
   auto receiver = UndefinedConstant();
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsNullOrUndefined, receiver);
+  TailCallReceiver<Descriptor>(
+      Builtin::kCall_ReceiverIsNullOrUndefined_CallerJS, receiver);
 }
 
 TF_BUILTIN(Call_ReceiverIsNullOrUndefined_Baseline,
@@ -91,32 +143,34 @@ TF_BUILTIN(Call_ReceiverIsNullOrUndefined_Baseline,
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
   auto receiver = UndefinedConstant();
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsNullOrUndefined, argc, slot,
-                           receiver);
+  TailCallReceiver<Descriptor>(
+      Builtin::kCall_ReceiverIsNullOrUndefined_CallerJS, argc, slot, receiver);
 }
 
 TF_BUILTIN(Call_ReceiverIsNotNullOrUndefined_Baseline_Compact,
            CallOrConstructBuiltinsAssembler) {
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsNotNullOrUndefined);
+  TailCallReceiver<Descriptor>(
+      Builtin::kCall_ReceiverIsNotNullOrUndefined_CallerJS);
 }
 
 TF_BUILTIN(Call_ReceiverIsNotNullOrUndefined_Baseline,
            CallOrConstructBuiltinsAssembler) {
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsNotNullOrUndefined, argc,
-                           slot);
+  TailCallReceiver<Descriptor>(
+      Builtin::kCall_ReceiverIsNotNullOrUndefined_CallerJS, argc, slot);
 }
 
 TF_BUILTIN(Call_ReceiverIsAny_Baseline_Compact,
            CallOrConstructBuiltinsAssembler) {
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsAny);
+  TailCallReceiver<Descriptor>(Builtin::kCall_ReceiverIsAny_CallerJS);
 }
 
 TF_BUILTIN(Call_ReceiverIsAny_Baseline, CallOrConstructBuiltinsAssembler) {
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsAny, argc, slot);
+  TailCallReceiver<Descriptor>(Builtin::kCall_ReceiverIsAny_CallerJS, argc,
+                               slot);
 }
 
 TF_BUILTIN(Call_ReceiverIsNullOrUndefined_WithFeedback,
@@ -129,8 +183,8 @@ TF_BUILTIN(Call_ReceiverIsNullOrUndefined_WithFeedback,
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   CollectCallFeedback(
       target, [=] { return receiver; }, context, feedback_vector, slot);
-  TailCallBuiltin(Builtin::kCall_ReceiverIsNullOrUndefined, context, target,
-                  argc);
+  TailCallBuiltin(Builtin::kCall_ReceiverIsNullOrUndefined_CallerJS, context,
+                  target, argc);
 }
 
 TF_BUILTIN(Call_ReceiverIsNotNullOrUndefined_WithFeedback,
@@ -143,8 +197,8 @@ TF_BUILTIN(Call_ReceiverIsNotNullOrUndefined_WithFeedback,
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   CollectCallFeedback(
       target, [=] { return receiver; }, context, feedback_vector, slot);
-  TailCallBuiltin(Builtin::kCall_ReceiverIsNotNullOrUndefined, context, target,
-                  argc);
+  TailCallBuiltin(Builtin::kCall_ReceiverIsNotNullOrUndefined_CallerJS, context,
+                  target, argc);
 }
 
 TF_BUILTIN(Call_ReceiverIsAny_WithFeedback, CallOrConstructBuiltinsAssembler) {
@@ -156,12 +210,13 @@ TF_BUILTIN(Call_ReceiverIsAny_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   CollectCallFeedback(
       target, [=] { return receiver; }, context, feedback_vector, slot);
-  TailCallBuiltin(Builtin::kCall_ReceiverIsAny, context, target, argc);
+  TailCallBuiltin(Builtin::kCall_ReceiverIsAny_CallerJS, context, target, argc);
 }
 
 void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
     TNode<Object> target, base::Optional<TNode<Object>> new_target,
-    TNode<Object> arguments_list, TNode<Context> context) {
+    TNode<Object> arguments_list, TNode<Context> context,
+    CallerKind caller_kind) {
   Label if_done(this), if_arguments(this), if_array(this),
       if_holey_array(this, Label::kDeferred),
       if_runtime(this, Label::kDeferred);
@@ -176,7 +231,8 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
            &if_target_not_callable);
     BIND(&if_target_not_callable);
     {
-      CallRuntime(Runtime::kThrowApplyNonFunction, context, target);
+      CallRuntime(Runtime::kThrowApplyNonFunction, CallerKind::kUnknown,
+                  context, target);
       Unreachable();
     }
     BIND(&if_target_callable);
@@ -276,8 +332,9 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
   BIND(&if_runtime);
   {
     // Ask the runtime to create the list (actually a FixedArray).
-    var_elements = CAST(CallRuntime(Runtime::kCreateListFromArrayLike, context,
-                                    arguments_list));
+    var_elements =
+        CAST(CallRuntime(Runtime::kCreateListFromArrayLike,
+                         CallerKind::kUnknown, context, arguments_list));
     var_length = LoadAndUntagToWord32ObjectField(var_elements.value(),
                                                  FixedArray::kLengthOffset);
     Goto(&if_done);
@@ -312,7 +369,7 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
     BIND(&if_not_double);
     {
       if (!new_target) {
-        Callable callable = CodeFactory::CallVarargs(isolate());
+        Callable callable = CodeFactory::CallVarargs(isolate(), caller_kind);
         TailCallStub(callable, context, target, args_count, length, elements);
       } else {
         Callable callable = CodeFactory::ConstructVarargs(isolate());
@@ -325,9 +382,9 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
     {
       // Kind is hardcoded here because CreateListFromArrayLike will only
       // produce holey double arrays.
-      CallOrConstructDoubleVarargs(target, new_target, CAST(elements), length,
-                                   args_count, context,
-                                   Int32Constant(HOLEY_DOUBLE_ELEMENTS));
+      CallOrConstructDoubleVarargs(
+          target, new_target, CAST(elements), length, args_count, context,
+          Int32Constant(HOLEY_DOUBLE_ELEMENTS), caller_kind);
     }
   }
 }
@@ -338,7 +395,8 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
 void CallOrConstructBuiltinsAssembler::CallOrConstructDoubleVarargs(
     TNode<Object> target, base::Optional<TNode<Object>> new_target,
     TNode<FixedDoubleArray> elements, TNode<Int32T> length,
-    TNode<Int32T> args_count, TNode<Context> context, TNode<Int32T> kind) {
+    TNode<Int32T> args_count, TNode<Context> context, TNode<Int32T> kind,
+    CallerKind caller_kind) {
   const ElementsKind new_kind = PACKED_ELEMENTS;
   const WriteBarrierMode barrier_mode = UPDATE_WRITE_BARRIER;
   CSA_DCHECK(this, Int32LessThanOrEqual(length,
@@ -355,7 +413,7 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructDoubleVarargs(
                          new_elements, intptr_length, intptr_length,
                          barrier_mode);
   if (!new_target) {
-    Callable callable = CodeFactory::CallVarargs(isolate());
+    Callable callable = CodeFactory::CallVarargs(isolate(), caller_kind);
     TailCallStub(callable, context, target, args_count, length, new_elements);
   } else {
     Callable callable = CodeFactory::ConstructVarargs(isolate());
@@ -366,7 +424,8 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructDoubleVarargs(
 
 void CallOrConstructBuiltinsAssembler::CallOrConstructWithSpread(
     TNode<Object> target, base::Optional<TNode<Object>> new_target,
-    TNode<Object> spread, TNode<Int32T> args_count, TNode<Context> context) {
+    TNode<Object> spread, TNode<Int32T> args_count, TNode<Context> context,
+    CallerKind caller_kind) {
   Label if_smiorobject(this), if_double(this),
       if_generic(this, Label::kDeferred);
 
@@ -457,7 +516,7 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithSpread(
                          length, Int32Constant(FixedArray::kMaxLength)));
 
     if (!new_target) {
-      Callable callable = CodeFactory::CallVarargs(isolate());
+      Callable callable = CodeFactory::CallVarargs(isolate(), caller_kind);
       TailCallStub(callable, context, target, args_count, length, elements);
     } else {
       Callable callable = CodeFactory::ConstructVarargs(isolate());
@@ -473,12 +532,12 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithSpread(
     GotoIf(Word32Equal(length, Int32Constant(0)), &if_smiorobject);
     CallOrConstructDoubleVarargs(target, new_target, CAST(var_elements.value()),
                                  length, args_count, context,
-                                 var_elements_kind.value());
+                                 var_elements_kind.value(), caller_kind);
   }
 }
 
 template <class Descriptor>
-void CallOrConstructBuiltinsAssembler::CallReceiver(
+void CallOrConstructBuiltinsAssembler::TailCallReceiver(
     Builtin id, base::Optional<TNode<Object>> receiver) {
   static_assert(std::is_same<Descriptor,
                              CallTrampoline_Baseline_CompactDescriptor>::value,
@@ -491,11 +550,11 @@ void CallOrConstructBuiltinsAssembler::CallReceiver(
   TNode<UintPtrT> slot = ChangeUint32ToWord(
       DecodeWord32<CallTrampoline_Baseline_CompactDescriptor::SlotField>(
           bitfield));
-  CallReceiver<Descriptor>(id, argc, slot, receiver);
+  TailCallReceiver<Descriptor>(id, argc, slot, receiver);
 }
 
 template <class Descriptor>
-void CallOrConstructBuiltinsAssembler::CallReceiver(
+void CallOrConstructBuiltinsAssembler::TailCallReceiver(
     Builtin id, TNode<Int32T> argc, TNode<UintPtrT> slot,
     base::Optional<TNode<Object>> maybe_receiver) {
   auto target = Parameter<Object>(Descriptor::kFunction);
@@ -514,12 +573,22 @@ void CallOrConstructBuiltinsAssembler::CallReceiver(
   TailCallBuiltin(id, context, target, argc);
 }
 
-TF_BUILTIN(CallWithArrayLike, CallOrConstructBuiltinsAssembler) {
+TF_BUILTIN(CallWithArrayLike_CallerJS, CallOrConstructBuiltinsAssembler) {
   auto target = Parameter<Object>(Descriptor::kTarget);
   base::Optional<TNode<Object>> new_target = base::nullopt;
   auto arguments_list = Parameter<Object>(Descriptor::kArgumentsList);
   auto context = Parameter<Context>(Descriptor::kContext);
-  CallOrConstructWithArrayLike(target, new_target, arguments_list, context);
+  CallOrConstructWithArrayLike(target, new_target, arguments_list, context,
+                               CallerKind::kJS);
+}
+
+TF_BUILTIN(CallWithArrayLike_CallerUnk, CallOrConstructBuiltinsAssembler) {
+  auto target = Parameter<Object>(Descriptor::kTarget);
+  base::Optional<TNode<Object>> new_target = base::nullopt;
+  auto arguments_list = Parameter<Object>(Descriptor::kArgumentsList);
+  auto context = Parameter<Context>(Descriptor::kContext);
+  CallOrConstructWithArrayLike(target, new_target, arguments_list, context,
+                               CallerKind::kUnknown);
 }
 
 TF_BUILTIN(CallWithArrayLike_WithFeedback, CallOrConstructBuiltinsAssembler) {
@@ -532,7 +601,8 @@ TF_BUILTIN(CallWithArrayLike_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   CollectCallFeedback(
       target, [=] { return receiver; }, context, feedback_vector, slot);
-  CallOrConstructWithArrayLike(target, new_target, arguments_list, context);
+  CallOrConstructWithArrayLike(target, new_target, arguments_list, context,
+                               CallerKind::kJS);
 }
 
 TF_BUILTIN(CallWithSpread, CallOrConstructBuiltinsAssembler) {
@@ -541,7 +611,8 @@ TF_BUILTIN(CallWithSpread, CallOrConstructBuiltinsAssembler) {
   auto spread = Parameter<Object>(Descriptor::kSpread);
   auto args_count = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
   auto context = Parameter<Context>(Descriptor::kContext);
-  CallOrConstructWithSpread(target, new_target, spread, args_count, context);
+  CallOrConstructWithSpread(target, new_target, spread, args_count, context,
+                            CallerKind::kJS);
 }
 
 TF_BUILTIN(CallWithSpread_Baseline, CallOrConstructBuiltinsAssembler) {
@@ -556,7 +627,8 @@ TF_BUILTIN(CallWithSpread_Baseline, CallOrConstructBuiltinsAssembler) {
   CollectCallFeedback(
       target, [=] { return args.GetReceiver(); }, context, feedback_vector,
       slot);
-  CallOrConstructWithSpread(target, new_target, spread, args_count, context);
+  CallOrConstructWithSpread(target, new_target, spread, args_count, context,
+                            CallerKind::kJS);
 }
 
 TF_BUILTIN(CallWithSpread_WithFeedback, CallOrConstructBuiltinsAssembler) {
@@ -570,7 +642,8 @@ TF_BUILTIN(CallWithSpread_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   CollectCallFeedback(
       target, [=] { return receiver; }, context, feedback_vector, slot);
-  CallOrConstructWithSpread(target, new_target, spread, args_count, context);
+  CallOrConstructWithSpread(target, new_target, spread, args_count, context,
+                            CallerKind::kJS);
 }
 
 TNode<JSReceiver> CallOrConstructBuiltinsAssembler::GetCompatibleReceiver(
@@ -702,7 +775,7 @@ constexpr bool CallOrConstructBuiltinsAssembler::IsAccessCheckRequired(
 void CallOrConstructBuiltinsAssembler::CallFunctionTemplate(
     CallFunctionTemplateMode mode,
     TNode<FunctionTemplateInfo> function_template_info, TNode<Int32T> argc,
-    TNode<Context> context) {
+    TNode<Context> context, TNode<Context> caller_context) {
   CodeStubArguments args(this, argc);
   Label throw_illegal_invocation(this, Label::kDeferred);
 
@@ -795,7 +868,7 @@ void CallOrConstructBuiltinsAssembler::CallFunctionTemplate(
       TailCallStub(
           Builtins::CallableFor(isolate(), Builtin::kCallApiCallbackGeneric),
           context, TruncateIntPtrToInt32(args.GetLengthWithoutReceiver()),
-          call_handler_info, holder);
+          caller_context, call_handler_info, holder);
       break;
 
     case CallFunctionTemplateMode::kCheckAccess:
@@ -820,8 +893,9 @@ TF_BUILTIN(CallFunctionTemplate_Generic, CallOrConstructBuiltinsAssembler) {
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  auto caller_context = UncheckedParameter<Context>(Descriptor::kCallerContext);
   CallFunctionTemplate(CallFunctionTemplateMode::kGeneric,
-                       function_template_info, argc, context);
+                       function_template_info, argc, context, caller_context);
 }
 
 TF_BUILTIN(CallFunctionTemplate_CheckAccess, CallOrConstructBuiltinsAssembler) {
@@ -829,8 +903,9 @@ TF_BUILTIN(CallFunctionTemplate_CheckAccess, CallOrConstructBuiltinsAssembler) {
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  auto caller_context = context;
   CallFunctionTemplate(CallFunctionTemplateMode::kCheckAccess,
-                       function_template_info, argc, context);
+                       function_template_info, argc, context, caller_context);
 }
 
 TF_BUILTIN(CallFunctionTemplate_CheckCompatibleReceiver,
@@ -839,8 +914,9 @@ TF_BUILTIN(CallFunctionTemplate_CheckCompatibleReceiver,
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  auto caller_context = context;
   CallFunctionTemplate(CallFunctionTemplateMode::kCheckCompatibleReceiver,
-                       function_template_info, argc, context);
+                       function_template_info, argc, context, caller_context);
 }
 
 TF_BUILTIN(CallFunctionTemplate_CheckAccessAndCompatibleReceiver,
@@ -849,9 +925,10 @@ TF_BUILTIN(CallFunctionTemplate_CheckAccessAndCompatibleReceiver,
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  auto caller_context = context;
   CallFunctionTemplate(
       CallFunctionTemplateMode::kCheckAccessAndCompatibleReceiver,
-      function_template_info, argc, context);
+      function_template_info, argc, context, caller_context);
 }
 
 TF_BUILTIN(HandleApiCallOrConstruct, CallOrConstructBuiltinsAssembler) {
@@ -870,10 +947,15 @@ TF_BUILTIN(HandleApiCallOrConstruct, CallOrConstructBuiltinsAssembler) {
     TNode<FunctionTemplateInfo> function_template_info =
         CAST(LoadSharedFunctionInfoFunctionData(shared));
 
+    TNode<ExternalReference> caller_context_ptr =
+        ExternalConstant(ExternalReference::caller_context(isolate()));
+
+    TNode<Context> caller_context = CAST(LoadFullTagged(caller_context_ptr));
+
     // Tail call to the stub while leaving all the incoming JS arguments on
     // the stack.
     TailCallBuiltin(Builtin::kCallFunctionTemplate_Generic, context,
-                    function_template_info, argc);
+                    function_template_info, argc, caller_context);
   }
   BIND(&if_construct);
   {

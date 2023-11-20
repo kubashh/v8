@@ -677,7 +677,7 @@ constexpr auto CallApiCallbackOptimizedDescriptor::registers() {
 
 // static
 constexpr auto CallApiCallbackGenericDescriptor::registers() {
-  return RegisterArray(ActualArgumentsCountRegister(),
+  return RegisterArray(ActualArgumentsCountRegister(), CallerContextRegister(),
                        CallHandlerInfoRegister(), HolderRegister());
 }
 

@@ -6,6 +6,7 @@
 #define V8_EXECUTION_ARGUMENTS_H_
 
 #include "src/execution/clobber-registers.h"
+#include "src/execution/isolate.h"
 #include "src/handles/handles.h"
 #include "src/logging/runtime-call-stats-scope.h"
 #include "src/objects/objects.h"
@@ -130,18 +131,25 @@ FullObjectSlot Arguments<T>::slot_from_address_at(int index, int offset) const {
 
 #endif  // V8_RUNTIME_CALL_STATS
 
-#define RUNTIME_FUNCTION_RETURNS_TYPE(Type, InternalType, Convert, Name)   \
-  static V8_INLINE InternalType __RT_impl_##Name(RuntimeArguments args,    \
-                                                 Isolate* isolate);        \
-  RUNTIME_ENTRY_WITH_RCS(Type, InternalType, Convert, Name)                \
-  Type Name(int args_length, Address* args_object, Isolate* isolate) {     \
-    DCHECK(isolate->context().is_null() || IsContext(isolate->context())); \
-    CLOBBER_DOUBLE_REGISTERS();                                            \
-    TEST_AND_CALL_RCS(Name)                                                \
-    RuntimeArguments args(args_length, args_object);                       \
-    return Convert(__RT_impl_##Name(args, isolate));                       \
-  }                                                                        \
-                                                                           \
+#define RUNTIME_FUNCTION_RETURNS_TYPE(Type, InternalType, Convert, Name)       \
+  static V8_INLINE InternalType __RT_impl_##Name(RuntimeArguments args,        \
+                                                 Isolate* isolate);            \
+  RUNTIME_ENTRY_WITH_RCS(Type, InternalType, Convert, Name)                    \
+  Type Name(int args_length, Address* args_object, Isolate* isolate) {         \
+    DCHECK(isolate->context().is_null() || IsContext(isolate->context()));     \
+    CLOBBER_DOUBLE_REGISTERS();                                                \
+    TEST_AND_CALL_RCS(Name)                                                    \
+    if (DEBUG_BOOL && !isolate->context().is_null() &&                         \
+        RuntimeId::k##Name !=                                                  \
+            RuntimeId::kRuntime_UnwindAndFindExceptionHandler &&               \
+        RuntimeId::k##Name != RuntimeId::kRuntime_PromoteScheduledException) { \
+      HandleScope scope(isolate);                                              \
+      CHECK(!isolate->GetIncumbentContext().is_null());                        \
+    }                                                                          \
+    RuntimeArguments args(args_length, args_object);                           \
+    return Convert(__RT_impl_##Name(args, isolate));                           \
+  }                                                                            \
+                                                                               \
   static InternalType __RT_impl_##Name(RuntimeArguments args, Isolate* isolate)
 
 #ifdef DEBUG

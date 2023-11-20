@@ -25,7 +25,8 @@ void LazyBuiltinsAssembler::GenerateTailCallToJSCode(
 void LazyBuiltinsAssembler::GenerateTailCallToReturnedCode(
     Runtime::FunctionId function_id, TNode<JSFunction> function) {
   auto context = Parameter<Context>(Descriptor::kContext);
-  TNode<Code> code = CAST(CallRuntime(function_id, context, function));
+  TNode<Code> code =
+      CAST(CallRuntime(function_id, CallerKind::kUnknown, context, function));
   GenerateTailCallToJSCode(code, function);
 }
 
@@ -143,9 +144,9 @@ void LazyBuiltinsAssembler::CompileLazy(TNode<JSFunction> function) {
   code = Select<Code>(
       IsFeedbackVector(feedback_cell_value), [=]() { return sfi_code; },
       [=]() {
-        return CAST(CallRuntime(Runtime::kInstallBaselineCode,
-                                Parameter<Context>(Descriptor::kContext),
-                                function));
+        return CAST(
+            CallRuntime(Runtime::kInstallBaselineCode, CallerKind::kUnknown,
+                        Parameter<Context>(Descriptor::kContext), function));
       });
   Goto(&tailcall_code);
 

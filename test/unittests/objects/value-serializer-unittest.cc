@@ -3517,6 +3517,7 @@ TEST_F(ValueSerializerTest, DefaultErrorStack) {
       RoundTripTest("function hkalkcow() { return Error(); } hkalkcow();");
   ASSERT_TRUE(value->IsObject());
   Local<Object> error = value.As<Object>();
+  Context::Scope context_scope(deserialization_context());
 
   Local<Value> stack;
   ASSERT_TRUE(error->Get(deserialization_context(), StringFromUtf8("stack"))
@@ -3529,6 +3530,7 @@ TEST_F(ValueSerializerTest, ModifiedErrorStack) {
   Local<Value> value = RoundTripTest("let e = Error(); e.stack = 'hello'; e");
   ASSERT_TRUE(value->IsObject());
   Local<Object> error = value.As<Object>();
+  Context::Scope context_scope(deserialization_context());
 
   Local<Value> stack;
   ASSERT_TRUE(error->Get(deserialization_context(), StringFromUtf8("stack"))
@@ -3541,6 +3543,7 @@ TEST_F(ValueSerializerTest, NonStringErrorStack) {
   Local<Value> value = RoundTripTest("let e = Error(); e.stack = 17; e");
   ASSERT_TRUE(value->IsObject());
   Local<Object> error = value.As<Object>();
+  Context::Scope context_scope(deserialization_context());
 
   Local<Value> stack;
   ASSERT_TRUE(error->Get(deserialization_context(), StringFromUtf8("stack"))

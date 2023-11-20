@@ -160,6 +160,7 @@ class IC {
   }
 
   Isolate* isolate_;
+  //  SaveAndSwitchIncumbentContext switch_incumbent_context_;
 
   bool vector_set_;
   State old_state_;  // For saving if we marked as prototype failure.

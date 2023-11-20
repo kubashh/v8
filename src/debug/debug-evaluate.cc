@@ -1120,16 +1120,26 @@ static bool TransitivelyCalledBuiltinHasNoSideEffect(Builtin caller,
     case Builtin::kArraySomeLoopContinuation:
     case Builtin::kArrayTimSort:
     case Builtin::kArrayTimSortIntoCopy:
-    case Builtin::kCall_ReceiverIsAny:
-    case Builtin::kCall_ReceiverIsNotNullOrUndefined:
-    case Builtin::kCall_ReceiverIsNullOrUndefined:
-    case Builtin::kCallWithArrayLike:
-    case Builtin::kCEntry_Return1_ArgvOnStack_NoBuiltinExit:
-    case Builtin::kCEntry_Return1_ArgvOnStack_BuiltinExit:
-    case Builtin::kCEntry_Return1_ArgvInRegister_NoBuiltinExit:
-    case Builtin::kCEntry_Return2_ArgvOnStack_NoBuiltinExit:
-    case Builtin::kCEntry_Return2_ArgvOnStack_BuiltinExit:
-    case Builtin::kCEntry_Return2_ArgvInRegister_NoBuiltinExit:
+    case Builtin::kCall_ReceiverIsAny_CallerJS:
+    case Builtin::kCall_ReceiverIsAny_CallerUnk:
+    case Builtin::kCall_ReceiverIsNotNullOrUndefined_CallerJS:
+    case Builtin::kCall_ReceiverIsNotNullOrUndefined_CallerUnk:
+    case Builtin::kCall_ReceiverIsNullOrUndefined_CallerJS:
+    case Builtin::kCall_ReceiverIsNullOrUndefined_CallerUnk:
+    case Builtin::kCallWithArrayLike_CallerJS:
+    case Builtin::kCallWithArrayLike_CallerUnk:
+    case Builtin::kCEntry_Return1_ArgvOnStack_NoBuiltinExit_CallerJS:
+    case Builtin::kCEntry_Return1_ArgvOnStack_NoBuiltinExit_CallerUnk:
+    case Builtin::kCEntry_Return1_ArgvOnStack_BuiltinExit_CallerJS:
+    case Builtin::kCEntry_Return1_ArgvOnStack_BuiltinExit_CallerUnk:
+    case Builtin::kCEntry_Return1_ArgvInRegister_NoBuiltinExit_CallerJS:
+    case Builtin::kCEntry_Return1_ArgvInRegister_NoBuiltinExit_CallerUnk:
+    case Builtin::kCEntry_Return2_ArgvOnStack_NoBuiltinExit_CallerJS:
+    case Builtin::kCEntry_Return2_ArgvOnStack_NoBuiltinExit_CallerUnk:
+    case Builtin::kCEntry_Return2_ArgvOnStack_BuiltinExit_CallerJS:
+    case Builtin::kCEntry_Return2_ArgvOnStack_BuiltinExit_CallerUnk:
+    case Builtin::kCEntry_Return2_ArgvInRegister_NoBuiltinExit_CallerJS:
+    case Builtin::kCEntry_Return2_ArgvInRegister_NoBuiltinExit_CallerUnk:
     case Builtin::kWasmCEntry:
     case Builtin::kCloneFastJSArray:
     case Builtin::kConstruct:

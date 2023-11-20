@@ -15,19 +15,22 @@ namespace internal {
 
 // static
 Handle<Code> CodeFactory::RuntimeCEntry(Isolate* isolate, int result_size,
+                                        CallerKind caller_kind,
                                         bool switch_to_central_stack) {
   return CodeFactory::CEntry(isolate, result_size, ArgvMode::kStack, false,
-                             switch_to_central_stack);
+                             caller_kind, switch_to_central_stack);
 }
 
 // static
 Handle<Code> CodeFactory::CEntry(Isolate* isolate, int result_size,
                                  ArgvMode argv_mode, bool builtin_exit_frame,
+                                 CallerKind caller_kind,
                                  bool switch_to_central_stack) {
   // Aliases for readability below.
   const int rs = result_size;
   const ArgvMode am = argv_mode;
   const bool be = builtin_exit_frame;
+  const CallerKind ck = caller_kind;
 
   if (switch_to_central_stack) {
     DCHECK_EQ(result_size, 1);
@@ -36,18 +39,56 @@ Handle<Code> CodeFactory::CEntry(Isolate* isolate, int result_size,
     return BUILTIN_CODE(isolate, WasmCEntry);
   }
 
-  if (rs == 1 && am == ArgvMode::kStack && !be) {
-    return BUILTIN_CODE(isolate, CEntry_Return1_ArgvOnStack_NoBuiltinExit);
-  } else if (rs == 1 && am == ArgvMode::kStack && be) {
-    return BUILTIN_CODE(isolate, CEntry_Return1_ArgvOnStack_BuiltinExit);
-  } else if (rs == 1 && am == ArgvMode::kRegister && !be) {
-    return BUILTIN_CODE(isolate, CEntry_Return1_ArgvInRegister_NoBuiltinExit);
-  } else if (rs == 2 && am == ArgvMode::kStack && !be) {
-    return BUILTIN_CODE(isolate, CEntry_Return2_ArgvOnStack_NoBuiltinExit);
-  } else if (rs == 2 && am == ArgvMode::kStack && be) {
-    return BUILTIN_CODE(isolate, CEntry_Return2_ArgvOnStack_BuiltinExit);
-  } else if (rs == 2 && am == ArgvMode::kRegister && !be) {
-    return BUILTIN_CODE(isolate, CEntry_Return2_ArgvInRegister_NoBuiltinExit);
+  if (rs == 1 && am == ArgvMode::kStack && !be && ck == CallerKind::kJS) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return1_ArgvOnStack_NoBuiltinExit_CallerJS);
+  } else if (rs == 1 && am == ArgvMode::kStack && !be &&
+             ck == CallerKind::kUnknown) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return1_ArgvOnStack_NoBuiltinExit_CallerUnk);
+
+  } else if (rs == 1 && am == ArgvMode::kStack && be && ck == CallerKind::kJS) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return1_ArgvOnStack_BuiltinExit_CallerJS);
+  } else if (rs == 1 && am == ArgvMode::kStack && be &&
+             ck == CallerKind::kUnknown) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return1_ArgvOnStack_BuiltinExit_CallerUnk);
+
+  } else if (rs == 1 && am == ArgvMode::kRegister && !be &&
+             ck == CallerKind::kJS) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return1_ArgvInRegister_NoBuiltinExit_CallerJS);
+  } else if (rs == 1 && am == ArgvMode::kRegister && !be &&
+             ck == CallerKind::kUnknown) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return1_ArgvInRegister_NoBuiltinExit_CallerUnk);
+
+  } else if (rs == 2 && am == ArgvMode::kStack && !be &&
+             ck == CallerKind::kJS) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return2_ArgvOnStack_NoBuiltinExit_CallerJS);
+  } else if (rs == 2 && am == ArgvMode::kStack && !be &&
+             ck == CallerKind::kUnknown) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return2_ArgvOnStack_NoBuiltinExit_CallerUnk);
+
+  } else if (rs == 2 && am == ArgvMode::kStack && be && ck == CallerKind::kJS) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return2_ArgvOnStack_BuiltinExit_CallerJS);
+  } else if (rs == 2 && am == ArgvMode::kStack && be &&
+             ck == CallerKind::kUnknown) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return2_ArgvOnStack_BuiltinExit_CallerUnk);
+
+  } else if (rs == 2 && am == ArgvMode::kRegister && !be &&
+             ck == CallerKind::kJS) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return2_ArgvInRegister_NoBuiltinExit_CallerJS);
+  } else if (rs == 2 && am == ArgvMode::kRegister && !be &&
+             ck == CallerKind::kUnknown) {
+    return BUILTIN_CODE(isolate,
+                        CEntry_Return2_ArgvInRegister_NoBuiltinExit_CallerUnk);
   }
 
   UNREACHABLE();
@@ -131,8 +172,10 @@ Callable CodeFactory::FastNewFunctionContext(Isolate* isolate,
 }
 
 // static
-Callable CodeFactory::Call(Isolate* isolate, ConvertReceiverMode mode) {
-  return Callable(isolate->builtins()->Call(mode), CallTrampolineDescriptor{});
+Callable CodeFactory::Call(Isolate* isolate, ConvertReceiverMode mode,
+                           CallerKind caller_kind) {
+  return Callable(isolate->builtins()->Call(mode, caller_kind),
+                  CallTrampolineDescriptor{});
 }
 
 // static
@@ -153,8 +196,8 @@ Callable CodeFactory::Call_WithFeedback(Isolate* isolate,
 }
 
 // static
-Callable CodeFactory::CallWithArrayLike(Isolate* isolate) {
-  return Builtins::CallableFor(isolate, Builtin::kCallWithArrayLike);
+Callable CodeFactory::CallWithArrayLike_CallerJS(Isolate* isolate) {
+  return Builtins::CallableFor(isolate, Builtin::kCallWithArrayLike_CallerJS);
 }
 
 // static
@@ -163,14 +206,20 @@ Callable CodeFactory::CallWithSpread(Isolate* isolate) {
 }
 
 // static
-Callable CodeFactory::CallFunction(Isolate* isolate, ConvertReceiverMode mode) {
-  return Callable(isolate->builtins()->CallFunction(mode),
+Callable CodeFactory::CallFunction(Isolate* isolate, ConvertReceiverMode mode,
+                                   CallerKind caller_kind) {
+  return Callable(isolate->builtins()->CallFunction(mode, caller_kind),
                   CallTrampolineDescriptor{});
 }
 
 // static
-Callable CodeFactory::CallVarargs(Isolate* isolate) {
-  return Builtins::CallableFor(isolate, Builtin::kCallVarargs);
+Callable CodeFactory::CallVarargs(Isolate* isolate, CallerKind caller_kind) {
+  switch (caller_kind) {
+    case CallerKind::kJS:
+      return Builtins::CallableFor(isolate, Builtin::kCallVarargs_CallerJS);
+    case CallerKind::kUnknown:
+      return Builtins::CallableFor(isolate, Builtin::kCallVarargs_CallerUnk);
+  }
 }
 
 // static

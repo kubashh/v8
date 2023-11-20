@@ -27,11 +27,13 @@ class V8_EXPORT_PRIVATE CodeFactory final {
   // can't be expressed in CallInterfaceDescriptor. Therefore only the code
   // is exported here.
   static Handle<Code> RuntimeCEntry(Isolate* isolate, int result_size = 1,
+                                    CallerKind caller_kind = CallerKind::kJS,
                                     bool switch_to_central_stack = false);
 
   static Handle<Code> CEntry(Isolate* isolate, int result_size = 1,
                              ArgvMode argv_mode = ArgvMode::kStack,
                              bool builtin_exit_frame = false,
+                             CallerKind caller_kind = CallerKind::kJS,
                              bool switch_to_central_stack = false);
 
   // Initial states for ICs.
@@ -58,13 +60,16 @@ class V8_EXPORT_PRIVATE CodeFactory final {
                                          ScopeType scope_type);
 
   static Callable Call(Isolate* isolate,
-                       ConvertReceiverMode mode = ConvertReceiverMode::kAny);
+                       ConvertReceiverMode mode = ConvertReceiverMode::kAny,
+                       CallerKind caller_kind = CallerKind::kUnknown);
   static Callable Call_WithFeedback(Isolate* isolate, ConvertReceiverMode mode);
-  static Callable CallWithArrayLike(Isolate* isolate);
+  static Callable CallWithArrayLike_CallerJS(Isolate* isolate);
   static Callable CallWithSpread(Isolate* isolate);
   static Callable CallFunction(
-      Isolate* isolate, ConvertReceiverMode mode = ConvertReceiverMode::kAny);
-  static Callable CallVarargs(Isolate* isolate);
+      Isolate* isolate, ConvertReceiverMode mode = ConvertReceiverMode::kAny,
+      CallerKind caller_kind = CallerKind::kUnknown);
+  static Callable CallVarargs(Isolate* isolate,
+                              CallerKind caller_kind = CallerKind::kUnknown);
   static Callable CallForwardVarargs(Isolate* isolate);
   static Callable CallFunctionForwardVarargs(Isolate* isolate);
   static Callable Construct(Isolate* isolate);

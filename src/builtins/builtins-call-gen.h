@@ -18,23 +18,27 @@ class CallOrConstructBuiltinsAssembler : public CodeStubAssembler {
   void CallOrConstructWithArrayLike(TNode<Object> target,
                                     base::Optional<TNode<Object>> new_target,
                                     TNode<Object> arguments_list,
-                                    TNode<Context> context);
+                                    TNode<Context> context,
+                                    CallerKind caller_kind);
   void CallOrConstructDoubleVarargs(TNode<Object> target,
                                     base::Optional<TNode<Object>> new_target,
                                     TNode<FixedDoubleArray> elements,
                                     TNode<Int32T> length,
                                     TNode<Int32T> args_count,
-                                    TNode<Context> context, TNode<Int32T> kind);
+                                    TNode<Context> context, TNode<Int32T> kind,
+                                    CallerKind caller_kind);
   void CallOrConstructWithSpread(TNode<Object> target,
                                  base::Optional<TNode<Object>> new_target,
                                  TNode<Object> spread, TNode<Int32T> args_count,
-                                 TNode<Context> context);
+                                 TNode<Context> context,
+                                 CallerKind caller_kind);
 
   template <class Descriptor>
-  void CallReceiver(Builtin id, base::Optional<TNode<Object>> = base::nullopt);
+  void TailCallReceiver(Builtin id,
+                        base::Optional<TNode<Object>> = base::nullopt);
   template <class Descriptor>
-  void CallReceiver(Builtin id, TNode<Int32T> argc, TNode<UintPtrT> slot,
-                    base::Optional<TNode<Object>> = base::nullopt);
+  void TailCallReceiver(Builtin id, TNode<Int32T> argc, TNode<UintPtrT> slot,
+                        base::Optional<TNode<Object>> = base::nullopt);
 
   enum class CallFunctionTemplateMode : uint8_t {
     // This version is for using from IC system and generic builtins like
@@ -55,7 +59,8 @@ class CallOrConstructBuiltinsAssembler : public CodeStubAssembler {
 
   void CallFunctionTemplate(CallFunctionTemplateMode mode,
                             TNode<FunctionTemplateInfo> function_template_info,
-                            TNode<Int32T> argc, TNode<Context> context);
+                            TNode<Int32T> argc, TNode<Context> context,
+                            TNode<Context> caller_context);
 
   void BuildConstruct(TNode<Object> target, TNode<Object> new_target,
                       TNode<Int32T> argc, const LazyNode<Context>& context,

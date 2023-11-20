@@ -63,7 +63,8 @@ bool CallOp::IsStackCheck(const Graph& graph, JSHeapBroker* broker,
   auto builtin_id =
       TryGetBuiltinId(graph.Get(callee()).TryCast<ConstantOp>(), broker);
   if (!builtin_id.has_value()) return false;
-  if (*builtin_id != Builtin::kCEntry_Return1_ArgvOnStack_NoBuiltinExit) {
+  if (*builtin_id !=
+      Builtin::kCEntry_Return1_ArgvOnStack_NoBuiltinExit_CallerJS) {
     return false;
   }
   DCHECK_GE(input_count, 4);

@@ -1883,7 +1883,8 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
     // Compute flags for the call.
     CallDescriptor::Flags flags = CallDescriptor::kNeedsFrameState;
     // Patch {node} to an indirect call via the CallFunction builtin.
-    Callable callable = CodeFactory::CallFunction(isolate(), convert_mode);
+    Callable callable =
+        CodeFactory::CallFunction(isolate(), convert_mode, CallerKind::kJS);
     node->InsertInput(graph()->zone(), 0,
                       jsgraph()->HeapConstantNoHole(callable.code()));
     node->InsertInput(graph()->zone(), 2,

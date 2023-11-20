@@ -205,8 +205,9 @@ TF_BUILTIN(ShadowRealmGetWrappedValue, ShadowRealmBuiltinsAssembler) {
 
   BIND(&slow_wrap);
   {
-    Return(CallRuntime(Runtime::kShadowRealmWrappedFunctionCreate, context,
-                       creation_context, target.value()));
+    Return(CallRuntime(Runtime::kShadowRealmWrappedFunctionCreate,
+                       CallerKind::kUnknown, context, creation_context,
+                       target.value()));
   }
 
   BIND(&bailout);
@@ -215,6 +216,7 @@ TF_BUILTIN(ShadowRealmGetWrappedValue, ShadowRealmBuiltinsAssembler) {
 
 // https://tc39.es/proposal-shadowrealm/#sec-wrapped-function-exotic-objects-call-thisargument-argumentslist
 TF_BUILTIN(CallWrappedFunction, ShadowRealmBuiltinsAssembler) {
+  PreserveCallerContextAcrossCalls();
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   TNode<IntPtrT> argc_ptr = ChangeInt32ToIntPtr(argc);
   auto wrapped_function = Parameter<JSWrappedFunction>(Descriptor::kFunction);
@@ -349,7 +351,8 @@ TNode<Object> ShadowRealmBuiltinsAssembler::ImportValue(
   // 8. Resume the context that is now on the top of the execution context stack
   // as the running execution context.
   TNode<Object> inner_capability =
-      CallRuntime(Runtime::kShadowRealmImportValue, eval_context, specifier);
+      CallRuntime(Runtime::kShadowRealmImportValue, CallerKind::kUnknown,
+                  eval_context, specifier);
 
   // 9. Let steps be the steps of an ExportGetter function as described below.
   // 10. Let onFulfilled be ! CreateBuiltinFunction(steps, 1, "", «
@@ -402,8 +405,9 @@ TF_BUILTIN(ShadowRealmImportValueFulfilled, ShadowRealmBuiltinsAssembler) {
   {
     compiler::ScopedExceptionHandler handler(this, &get_export_exception,
                                              &var_exception);
-    value = CallRuntime(Runtime::kGetModuleNamespaceExport, eval_context,
-                        exports, export_name_string);
+    value =
+        CallRuntime(Runtime::kGetModuleNamespaceExport, CallerKind::kUnknown,
+                    eval_context, exports, export_name_string);
   }
 
   // 9. Return ? GetWrappedValue(realm, value).

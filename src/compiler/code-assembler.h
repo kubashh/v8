@@ -823,6 +823,16 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void UnsafeStoreNoWriteBarrier(MachineRepresentation rep, Node* base,
                                  Node* offset, Node* value);
 
+  template <class Type>
+  void StoreNoWriteBarrier(Node* base, Node* value) {
+    StoreNoWriteBarrier(MachineRepresentationOf<Type>::value, base, value);
+  }
+  template <class Type>
+  void StoreNoWriteBarrier(Node* base, Node* offset, Node* value) {
+    StoreNoWriteBarrier(MachineRepresentationOf<Type>::value, base, offset,
+                        value);
+  }
+
   // Stores uncompressed tagged value to (most likely off JS heap) memory
   // location without write barrier.
   void StoreFullTaggedNoWriteBarrier(TNode<RawPtrT> base,
@@ -1193,10 +1203,28 @@ class V8_EXPORT_PRIVATE CodeAssembler {
 
   // Calls
   template <class T = Object, class... TArgs>
+  TNode<T> CallRuntime(Runtime::FunctionId function, CallerKind caller_kind,
+                       TNode<Object> context, TArgs... args) {
+    return UncheckedCast<T>(
+        CallRuntimeImpl(function, caller_kind, context,
+                        {implicit_cast<TNode<Object>>(args)...}));
+  }
+
+  template <class T = Object, class... TArgs>
   TNode<T> CallRuntime(Runtime::FunctionId function, TNode<Object> context,
                        TArgs... args) {
-    return UncheckedCast<T>(CallRuntimeImpl(
-        function, context, {implicit_cast<TNode<Object>>(args)...}));
+    return UncheckedCast<T>(
+        CallRuntimeImpl(function, CallerKind::kJS, context,
+                        {implicit_cast<TNode<Object>>(args)...}));
+  }
+
+  template <class... TArgs>
+  void TailCallRuntime(Runtime::FunctionId function, CallerKind caller_kind,
+                       TNode<Object> context, TArgs... args) {
+    int argc = static_cast<int>(sizeof...(args));
+    TNode<Int32T> arity = Int32Constant(argc);
+    return TailCallRuntimeImpl(function, caller_kind, arity, context,
+                               {implicit_cast<TNode<Object>>(args)...});
   }
 
   template <class... TArgs>
@@ -1204,14 +1232,15 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                        TArgs... args) {
     int argc = static_cast<int>(sizeof...(args));
     TNode<Int32T> arity = Int32Constant(argc);
-    return TailCallRuntimeImpl(function, arity, context,
+    return TailCallRuntimeImpl(function, CallerKind::kJS, arity, context,
                                {implicit_cast<TNode<Object>>(args)...});
   }
 
   template <class... TArgs>
-  void TailCallRuntime(Runtime::FunctionId function, TNode<Int32T> arity,
-                       TNode<Object> context, TArgs... args) {
-    return TailCallRuntimeImpl(function, arity, context,
+  void TailCallRuntime(Runtime::FunctionId function, CallerKind caller_kind,
+                       TNode<Int32T> arity, TNode<Object> context,
+                       TArgs... args) {
+    return TailCallRuntimeImpl(function, caller_kind, arity, context,
                                {implicit_cast<TNode<Object>>(args)...});
   }
 
@@ -1222,6 +1251,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class T = Object, class... TArgs>
   TNode<T> CallStub(Callable const& callable, TNode<Object> context,
                     TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     return CallStub<T>(callable.descriptor(), target, context, args...);
   }
@@ -1229,6 +1259,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class T = Object, class... TArgs>
   TNode<T> CallStub(const CallInterfaceDescriptor& descriptor,
                     TNode<Code> target, TNode<Object> context, TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     return UncheckedCast<T>(CallStubR(StubCallMode::kCallCodeObject, descriptor,
                                       target, context, args...));
   }
@@ -1236,6 +1267,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class... TArgs>
   void CallStubVoid(Callable const& callable, TNode<Object> context,
                     TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     CallStubR(StubCallMode::kCallCodeObject, callable.descriptor(), target,
               context, args...);
@@ -1245,6 +1277,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   TNode<T> CallBuiltinPointer(const CallInterfaceDescriptor& descriptor,
                               TNode<BuiltinPtr> target, TNode<Object> context,
                               TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     return UncheckedCast<T>(CallStubR(StubCallMode::kCallBuiltinPointer,
                                       descriptor, target, context, args...));
   }
@@ -1252,6 +1285,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class... TArgs>
   void TailCallStub(Callable const& callable, TNode<Object> context,
                     TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     TailCallStub(callable.descriptor(), target, context, args...);
   }
@@ -1259,6 +1293,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class... TArgs>
   void TailCallStub(const CallInterfaceDescriptor& descriptor,
                     TNode<Code> target, TNode<Object> context, TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     TailCallStubImpl(descriptor, target, context, {args...});
   }
 
@@ -1392,11 +1427,12 @@ class V8_EXPORT_PRIVATE CodeAssembler {
       Node* function, MachineType return_type, SaveFPRegsMode mode,
       std::initializer_list<CFunctionArg> args);
 
-  Node* CallRuntimeImpl(Runtime::FunctionId function, TNode<Object> context,
+  Node* CallRuntimeImpl(Runtime::FunctionId function, CallerKind caller_kind,
+                        TNode<Object> context,
                         std::initializer_list<TNode<Object>> args);
 
-  void TailCallRuntimeImpl(Runtime::FunctionId function, TNode<Int32T> arity,
-                           TNode<Object> context,
+  void TailCallRuntimeImpl(Runtime::FunctionId function, CallerKind caller_kind,
+                           TNode<Int32T> arity, TNode<Object> context,
                            std::initializer_list<TNode<Object>> args);
 
   void TailCallStubImpl(const CallInterfaceDescriptor& descriptor,
@@ -1465,6 +1501,8 @@ class V8_EXPORT_PRIVATE CodeAssemblerVariable {
   bool IsBound() const;
 
  protected:
+  explicit CodeAssemblerVariable(CodeAssemblerState* state,
+                                 MachineRepresentation rep);
   explicit CodeAssemblerVariable(CodeAssembler* assembler,
                                  MachineRepresentation rep);
   CodeAssemblerVariable(CodeAssembler* assembler, MachineRepresentation rep,
@@ -1502,6 +1540,8 @@ class TypedCodeAssemblerVariable : public CodeAssemblerVariable {
   TypedCodeAssemblerVariable(TNode<T> initial_value, CodeAssembler* assembler)
       : CodeAssemblerVariable(assembler, PhiMachineRepresentationOf<T>,
                               initial_value) {}
+  explicit TypedCodeAssemblerVariable(CodeAssemblerState* state)
+      : CodeAssemblerVariable(state, PhiMachineRepresentationOf<T>) {}
   explicit TypedCodeAssemblerVariable(CodeAssembler* assembler)
       : CodeAssemblerVariable(assembler, PhiMachineRepresentationOf<T>) {}
 #if DEBUG
@@ -1673,11 +1713,35 @@ class V8_EXPORT_PRIVATE CodeAssemblerState {
   const char* name() const { return name_; }
   int parameter_count() const;
 
+  Builtin builtin() { return builtin_; }
+  CallerKind GetCallerKind();
+
 #if DEBUG
   void PrintCurrentBlock(std::ostream& os);
 #endif  // DEBUG
   bool InsideBlock();
   void SetInitialDebugInformation(const char* msg, const char* file, int line);
+
+  // TypedCodeAssemblerVariable<Context>* get_caller_context_var() {
+  //   return &var_caller_context_;
+  // }
+
+  // // When executing interpreted code or Incoming caller context variable
+  // stores the value of the
+  // // Isolate::caller_context() on builtin entry. is an implicit parameter
+  // passed via
+  // // Isolate::caller_context
+  // bool has_caller_context_var() {
+  //   return var_caller_context_.IsBound();
+  // }
+  // TNode<Context> get_topmost_user_js_context() {
+  //   return var_caller_context_.value();
+  // }
+  // void set_caller_context_var(TNode<Context> context) {
+  //   var_caller_context_ = context;
+  // }
+
+  Zone* zone();
 
  private:
   friend class CodeAssembler;
@@ -1707,6 +1771,7 @@ class V8_EXPORT_PRIVATE CodeAssemblerState {
   using VariableId = uint32_t;
   VariableId next_variable_id_ = 0;
   JSGraph* jsgraph_;
+  // TypedCodeAssemblerVariable<Context> var_caller_context_;
 
   // Only used by CodeStubAssembler builtins.
   std::vector<FileAndLine> macro_call_stack_;

@@ -84,17 +84,23 @@ namespace internal {
                                                                                \
   /* Calls */                                                                  \
   /* ES6 section 9.2.1 [[Call]] ( thisArgument, argumentsList) */              \
-  ASM(CallFunction_ReceiverIsNullOrUndefined, CallTrampoline)                  \
-  ASM(CallFunction_ReceiverIsNotNullOrUndefined, CallTrampoline)               \
-  ASM(CallFunction_ReceiverIsAny, CallTrampoline)                              \
+  ASM(CallFunction_ReceiverIsNullOrUndefined_CallerJS, CallTrampoline)         \
+  ASM(CallFunction_ReceiverIsNullOrUndefined_CallerUnk, CallTrampoline)        \
+  ASM(CallFunction_ReceiverIsNotNullOrUndefined_CallerJS, CallTrampoline)      \
+  ASM(CallFunction_ReceiverIsNotNullOrUndefined_CallerUnk, CallTrampoline)     \
+  ASM(CallFunction_ReceiverIsAny_CallerJS, CallTrampoline)                     \
+  ASM(CallFunction_ReceiverIsAny_CallerUnk, CallTrampoline)                    \
   /* ES6 section 9.4.1.1 [[Call]] ( thisArgument, argumentsList) */            \
   ASM(CallBoundFunction, CallTrampoline)                                       \
   /* #sec-wrapped-function-exotic-objects-call-thisargument-argumentslist */   \
   TFC(CallWrappedFunction, CallTrampoline)                                     \
   /* ES6 section 7.3.12 Call(F, V, [argumentsList]) */                         \
-  ASM(Call_ReceiverIsNullOrUndefined, CallTrampoline)                          \
-  ASM(Call_ReceiverIsNotNullOrUndefined, CallTrampoline)                       \
-  ASM(Call_ReceiverIsAny, CallTrampoline)                                      \
+  ASM(Call_ReceiverIsNullOrUndefined_CallerJS, CallTrampoline)                 \
+  ASM(Call_ReceiverIsNullOrUndefined_CallerUnk, CallTrampoline)                \
+  ASM(Call_ReceiverIsNotNullOrUndefined_CallerJS, CallTrampoline)              \
+  ASM(Call_ReceiverIsNotNullOrUndefined_CallerUnk, CallTrampoline)             \
+  ASM(Call_ReceiverIsAny_CallerJS, CallTrampoline)                             \
+  ASM(Call_ReceiverIsAny_CallerUnk, CallTrampoline)                            \
   TFC(Call_ReceiverIsNullOrUndefined_Baseline_Compact,                         \
       CallTrampoline_Baseline_Compact)                                         \
   TFC(Call_ReceiverIsNullOrUndefined_Baseline, CallTrampoline_Baseline)        \
@@ -111,17 +117,19 @@ namespace internal {
                                                                                \
   /* ES6 section 9.5.12[[Call]] ( thisArgument, argumentsList ) */             \
   TFC(CallProxy, CallTrampoline)                                               \
-  ASM(CallVarargs, CallVarargs)                                                \
+  ASM(CallVarargs_CallerJS, CallVarargs)                                       \
+  ASM(CallVarargs_CallerUnk, CallVarargs)                                      \
   TFC(CallWithSpread, CallWithSpread)                                          \
   TFC(CallWithSpread_Baseline, CallWithSpread_Baseline)                        \
   TFC(CallWithSpread_WithFeedback, CallWithSpread_WithFeedback)                \
-  TFC(CallWithArrayLike, CallWithArrayLike)                                    \
+  TFC(CallWithArrayLike_CallerJS, CallWithArrayLike)                           \
+  TFC(CallWithArrayLike_CallerUnk, CallWithArrayLike)                          \
   TFC(CallWithArrayLike_WithFeedback, CallWithArrayLike_WithFeedback)          \
   ASM(CallForwardVarargs, CallForwardVarargs)                                  \
   ASM(CallFunctionForwardVarargs, CallForwardVarargs)                          \
   /* Call an API callback via a {FunctionTemplateInfo}, doing appropriate */   \
   /* access and compatible receiver checks. */                                 \
-  TFC(CallFunctionTemplate_Generic, CallFunctionTemplate)                      \
+  TFC(CallFunctionTemplate_Generic, CallFunctionTemplateGeneric)               \
   TFC(CallFunctionTemplate_CheckAccess, CallFunctionTemplate)                  \
   TFC(CallFunctionTemplate_CheckCompatibleReceiver, CallFunctionTemplate)      \
   TFC(CallFunctionTemplate_CheckAccessAndCompatibleReceiver,                   \
@@ -354,6 +362,7 @@ namespace internal {
                                                                                \
   /* Array */                                                                  \
   TFC(ArrayConstructor, JSTrampoline)                                          \
+  /* TFJ(ArrayConstructor, kDontAdaptArgumentsSentinel) */                     \
   TFC(ArrayConstructorImpl, ArrayConstructor)                                  \
   TFC(ArrayNoArgumentConstructor_PackedSmi_DontOverride,                       \
       ArrayNoArgumentConstructor)                                              \
@@ -1118,12 +1127,18 @@ namespace internal {
   TFJ(AsyncIteratorValueUnwrap, kJSArgcReceiverSlots + 1, kReceiver, kValue)   \
                                                                                \
   /* CEntry */                                                                 \
-  ASM(CEntry_Return1_ArgvInRegister_NoBuiltinExit, CEntryDummy)                \
-  ASM(CEntry_Return1_ArgvOnStack_BuiltinExit, CEntry1ArgvOnStack)              \
-  ASM(CEntry_Return1_ArgvOnStack_NoBuiltinExit, CEntryDummy)                   \
-  ASM(CEntry_Return2_ArgvInRegister_NoBuiltinExit, CEntryDummy)                \
-  ASM(CEntry_Return2_ArgvOnStack_BuiltinExit, CEntryDummy)                     \
-  ASM(CEntry_Return2_ArgvOnStack_NoBuiltinExit, CEntryDummy)                   \
+  ASM(CEntry_Return1_ArgvInRegister_NoBuiltinExit_CallerJS, CEntryDummy)       \
+  ASM(CEntry_Return1_ArgvInRegister_NoBuiltinExit_CallerUnk, CEntryDummy)      \
+  ASM(CEntry_Return1_ArgvOnStack_BuiltinExit_CallerJS, CEntry1ArgvOnStack)     \
+  ASM(CEntry_Return1_ArgvOnStack_BuiltinExit_CallerUnk, CEntry1ArgvOnStack)    \
+  ASM(CEntry_Return1_ArgvOnStack_NoBuiltinExit_CallerJS, CEntryDummy)          \
+  ASM(CEntry_Return1_ArgvOnStack_NoBuiltinExit_CallerUnk, CEntryDummy)         \
+  ASM(CEntry_Return2_ArgvInRegister_NoBuiltinExit_CallerJS, CEntryDummy)       \
+  ASM(CEntry_Return2_ArgvInRegister_NoBuiltinExit_CallerUnk, CEntryDummy)      \
+  ASM(CEntry_Return2_ArgvOnStack_BuiltinExit_CallerJS, CEntryDummy)            \
+  ASM(CEntry_Return2_ArgvOnStack_BuiltinExit_CallerUnk, CEntryDummy)           \
+  ASM(CEntry_Return2_ArgvOnStack_NoBuiltinExit_CallerJS, CEntryDummy)          \
+  ASM(CEntry_Return2_ArgvOnStack_NoBuiltinExit_CallerUnk, CEntryDummy)         \
   ASM(WasmCEntry, CEntryDummy)                                                 \
   ASM(DirectCEntry, CEntryDummy)                                               \
                                                                                \

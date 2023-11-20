@@ -46,6 +46,7 @@ TEST_F(LapContextTest, CurrentContextInLazyAccessorOnPrototype) {
   Local<Context> receiver_context = Context::New(isolate());
   Local<Context> prototype_context = Context::New(isolate());
   Local<Context> caller_context = Context::New(isolate());
+  Context::Scope context_scope(receiver_context);
 
   static int call_count;  // The number of calls of the accessor callback.
   call_count = 0;
@@ -66,25 +67,33 @@ TEST_F(LapContextTest, CurrentContextInLazyAccessorOnPrototype) {
   function_template->PrototypeTemplate()->SetAccessorProperty(
       property_key, get_or_set, get_or_set);
 
-  // |object| is created in |receiver_context|, and |prototype| is created
-  // in |prototype_context|.  And then, object.__proto__ = prototype.
-  Local<Function> interface_for_receiver =
-      function_template->GetFunction(receiver_context).ToLocalChecked();
-  Local<Function> interface_for_prototype =
-      function_template->GetFunction(prototype_context).ToLocalChecked();
-  Local<String> prototype_key =
-      String::NewFromUtf8Literal(isolate(), "prototype");
-  Local<Object> prototype =
-      interface_for_prototype->Get(caller_context, prototype_key)
-          .ToLocalChecked()
-          .As<Object>();
-  Local<Object> object =
-      interface_for_receiver->NewInstance(receiver_context).ToLocalChecked();
-  object->SetPrototype(caller_context, prototype).ToChecked();
-  EXPECT_EQ(receiver_context, object->GetCreationContext().ToLocalChecked());
-  EXPECT_EQ(prototype_context,
-            prototype->GetCreationContext().ToLocalChecked());
-
+  Local<Object> object;
+  {
+    // |object| is created in |receiver_context|, and |prototype| is created
+    // in |prototype_context|.  And then, object.__proto__ = prototype.
+    Local<Function> interface_for_receiver =
+        function_template->GetFunction(receiver_context).ToLocalChecked();
+    Local<Function> interface_for_prototype =
+        function_template->GetFunction(prototype_context).ToLocalChecked();
+    Local<String> prototype_key =
+        String::NewFromUtf8Literal(isolate(), "prototype");
+    Local<Object> prototype =
+        interface_for_prototype->Get(caller_context, prototype_key)
+            .ToLocalChecked()
+            .As<Object>();
+    {
+      Context::Scope context_scope(receiver_context);
+      object = interface_for_receiver->NewInstance(receiver_context)
+                   .ToLocalChecked();
+    }
+    {
+      Context::Scope context_scope(caller_context);
+      object->SetPrototype(caller_context, prototype).ToChecked();
+    }
+    EXPECT_EQ(receiver_context, object->GetCreationContext().ToLocalChecked());
+    EXPECT_EQ(prototype_context,
+              prototype->GetCreationContext().ToLocalChecked());
+  }
   EXPECT_EQ(0, call_count);
   object->Get(caller_context, property_key).ToLocalChecked();
   EXPECT_EQ(1, call_count);
@@ -112,6 +121,7 @@ TEST_F(LapContextTest, CurrentContextInLazyAccessorOnPrototype) {
 TEST_F(LapContextTest, CurrentContextInLazyAccessorOnPlatformObject) {
   Local<Context> receiver_context = Context::New(isolate());
   Local<Context> caller_context = Context::New(isolate());
+  Context::Scope context_scope(receiver_context);
 
   static int call_count;  // The number of calls of the accessor callback.
   call_count = 0;
@@ -132,38 +142,47 @@ TEST_F(LapContextTest, CurrentContextInLazyAccessorOnPlatformObject) {
   function_template->InstanceTemplate()->SetAccessorProperty(
       property_key, get_or_set, get_or_set);
 
-  Local<Function> interface =
-      function_template->GetFunction(receiver_context).ToLocalChecked();
-  Local<Object> object =
-      interface->NewInstance(receiver_context).ToLocalChecked();
+  Local<Object> object;
+  {
+    Context::Scope context_scope(receiver_context);
+    Local<Function> interface =
+        function_template->GetFunction(receiver_context).ToLocalChecked();
+    object = interface->NewInstance(receiver_context).ToLocalChecked();
+  }
 
-  EXPECT_EQ(0, call_count);
-  object->Get(caller_context, property_key).ToLocalChecked();
-  EXPECT_EQ(1, call_count);
-  object->Set(caller_context, property_key, Null(isolate())).ToChecked();
-  EXPECT_EQ(2, call_count);
+  {
+    EXPECT_EQ(0, call_count);
+    object->Get(caller_context, property_key).ToLocalChecked();
+    EXPECT_EQ(1, call_count);
+    object->Set(caller_context, property_key, Null(isolate())).ToChecked();
+    EXPECT_EQ(2, call_count);
 
-  // Test with a compiled version.
-  Local<String> object_key = String::NewFromUtf8Literal(isolate(), "object");
-  caller_context->Global()->Set(caller_context, object_key, object).ToChecked();
-  const char script[] =
-      "function f() { object.property; object.property = 0; } "
-      "%PrepareFunctionForOptimization(f);"
-      "f(); f(); "
-      "%OptimizeFunctionOnNextCall(f); "
-      "f();";
-  Context::Scope scope(caller_context);
-  internal::v8_flags.allow_natives_syntax = true;
-  Script::Compile(caller_context, String::NewFromUtf8Literal(isolate(), script))
-      .ToLocalChecked()
-      ->Run(caller_context)
-      .ToLocalChecked();
-  EXPECT_EQ(8, call_count);
+    Context::Scope scope(caller_context);
+    // Test with a compiled version.
+    Local<String> object_key = String::NewFromUtf8Literal(isolate(), "object");
+    caller_context->Global()
+        ->Set(caller_context, object_key, object)
+        .ToChecked();
+    const char script[] =
+        "function f() { object.property; object.property = 0; } "
+        "%PrepareFunctionForOptimization(f);"
+        "f(); f(); "
+        "%OptimizeFunctionOnNextCall(f); "
+        "f();";
+    internal::v8_flags.allow_natives_syntax = true;
+    Script::Compile(caller_context,
+                    String::NewFromUtf8Literal(isolate(), script))
+        .ToLocalChecked()
+        ->Run(caller_context)
+        .ToLocalChecked();
+    EXPECT_EQ(8, call_count);
+  }
 }
 
 TEST_F(LapContextTest, CurrentContextInLazyAccessorOnInterface) {
   Local<Context> interface_context = Context::New(isolate());
   Local<Context> caller_context = Context::New(isolate());
+  Context::Scope context_scope(interface_context);
 
   static int call_count;  // The number of calls of the accessor callback.
   call_count = 0;

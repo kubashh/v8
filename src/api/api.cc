@@ -1002,22 +1002,47 @@ void Context::Enter() {
   i::Isolate* i_isolate = env->GetIsolate();
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
   i::HandleScopeImplementer* impl = i_isolate->handle_scope_implementer();
+
+  // TODO(ishell): once BackupIncumbentScope is switched to a new scheme
+  // the Isolate::top_backup_incumbent_scope field would be removed it
+  // wouldn't be necessary to save-restore it.
+  // i::Address top_backup_incumbent_scope =
+  //     reinterpret_cast<i::Address>(i_isolate->top_backup_incumbent_scope());
+  // DCHECK(HAS_SMI_TAG(top_backup_incumbent_scope));
+  // impl->SaveContext(i::Context::unchecked_cast(
+  //     i::Tagged<i::Object>(top_backup_incumbent_scope)));
+  // i_isolate->set_top_backup_incumbent_scope(nullptr);
+  // bool has_entered_context = impl->EnteredContextCount() != 0;
+
   impl->EnterContext(env);
+  impl->SaveContext(i_isolate->incumbent_context());
   impl->SaveContext(i_isolate->context());
+  // if (!has_entered_context && !i_isolate->top_backup_incumbent_scope()) {
+  i_isolate->set_incumbent_context(env);
+  //}
   i_isolate->set_context(env);
 }
 
 void Context::Exit() {
-  auto env = Utils::OpenDirectHandle(this);
+  i::DisallowGarbageCollection no_gc;
+  i::Tagged<i::NativeContext> env = *Utils::OpenDirectHandle(this);
   i::Isolate* i_isolate = env->GetIsolate();
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
   i::HandleScopeImplementer* impl = i_isolate->handle_scope_implementer();
-  if (!Utils::ApiCheck(impl->LastEnteredContextWas(*env), "v8::Context::Exit()",
+  if (!Utils::ApiCheck(impl->LastEnteredContextWas(env), "v8::Context::Exit()",
                        "Cannot exit non-entered context")) {
     return;
   }
-  impl->LeaveContext();
+  //  DCHECK_NULL(i_isolate->top_backup_incumbent_scope());
   i_isolate->set_context(impl->RestoreContext());
+  i_isolate->set_incumbent_context(impl->RestoreContext());
+  impl->LeaveContext();
+
+  // i::Address top_backup_incumbent_scope = impl->RestoreContext().ptr();
+  // DCHECK(HAS_SMI_TAG(top_backup_incumbent_scope));
+  // i_isolate->set_top_backup_incumbent_scope(
+  //     reinterpret_cast<v8::Context::BackupIncumbentScope*>(
+  //         top_backup_incumbent_scope));
 }
 
 Context::BackupIncumbentScope::BackupIncumbentScope(
@@ -1033,6 +1058,11 @@ Context::BackupIncumbentScope::BackupIncumbentScope(
 
   prev_ = i_isolate->top_backup_incumbent_scope();
   i_isolate->set_top_backup_incumbent_scope(this);
+
+  // The fast implementation.
+  i::HandleScopeImplementer* impl = i_isolate->handle_scope_implementer();
+  impl->SaveContext(i_isolate->incumbent_context());
+  i_isolate->set_incumbent_context(*env);
 }
 
 Context::BackupIncumbentScope::~BackupIncumbentScope() {
@@ -1042,6 +1072,10 @@ Context::BackupIncumbentScope::~BackupIncumbentScope() {
   i::SimulatorStack::UnregisterJSStackComparableAddress(i_isolate);
 
   i_isolate->set_top_backup_incumbent_scope(prev_);
+
+  // The fast implementation.
+  i::HandleScopeImplementer* impl = i_isolate->handle_scope_implementer();
+  i_isolate->set_incumbent_context(impl->RestoreContext());
 }
 
 static_assert(i::Internals::kEmbedderDataSlotSize == i::kEmbedderDataSlotSize);
@@ -3924,7 +3958,7 @@ bool Value::IsModuleNamespaceObject() const {
 MaybeLocal<String> Value::ToString(Local<Context> context) const {
   auto obj = Utils::OpenHandle(this);
   if (i::IsString(*obj)) return ToApiHandle<String>(obj);
-  PREPARE_FOR_EXECUTION(context, Object, ToString, String);
+  PREPARE_FOR_EXECUTION(/*Local<Context>{}*/ context, Object, ToString, String);
   Local<String> result;
   has_pending_exception =
       !ToLocal<String>(i::Object::ToString(i_isolate, obj), &result);
@@ -5455,8 +5489,8 @@ MaybeLocal<Object> Function::NewInstanceWithSideEffectType(
     SideEffectType side_effect_type) const {
   auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
   TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
-  ENTER_V8(i_isolate, context, Function, NewInstance, MaybeLocal<Object>(),
-           InternalEscapableScope);
+  ENTER_V8(i_isolate, /*Local<Context>{}*/ context, Function, NewInstance,
+           MaybeLocal<Object>(), InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
   i::NestedTimedHistogramScope execute_timer(i_isolate->counters()->execute(),
                                              i_isolate);
@@ -5493,8 +5527,9 @@ MaybeLocal<v8::Value> Function::Call(Local<Context> context,
                                      v8::Local<v8::Value> argv[]) {
   auto i_isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
   TRACE_EVENT_CALL_STATS_SCOPED(i_isolate, "v8", "V8.Execute");
-  ENTER_V8(i_isolate, context, Function, Call, MaybeLocal<Value>(),
-           InternalEscapableScope);
+  ENTER_V8(i_isolate, /*Local<Context>{}*/ context, Function, Call,
+           // ENTER_V8(i_isolate, Local<Context>{}, Function, Call,
+           MaybeLocal<Value>(), InternalEscapableScope);
   i::TimerEventScope<i::TimerEventExecute> timer_scope(i_isolate);
   i::NestedTimedHistogramScope execute_timer(i_isolate->counters()->execute(),
                                              i_isolate);
@@ -7383,6 +7418,7 @@ void v8::Signature::CheckCast(Data* that) {
 
 MaybeLocal<v8::Function> FunctionTemplate::GetFunction(Local<Context> context) {
   PREPARE_FOR_EXECUTION(context, FunctionTemplate, GetFunction, Function);
+  i::DisallowJavascriptExecutionDebugOnly __no_script__((i_isolate));
   auto self = Utils::OpenHandle(this);
   Local<Function> result;
   has_pending_exception =
@@ -11787,6 +11823,8 @@ bool ValidateFunctionCallbackInfo(const FunctionCallbackInfo<T>& info) {
   }
   auto* i_isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
   CHECK_EQ(i_isolate, Isolate::Current());
+  CHECK_EQ(*i_isolate->GetIncumbentContext(),
+           *i_isolate->GetIncumbentContextFast());
   CHECK(info.This()->IsValue());
   CHECK(info.Holder()->IsObject());
   CHECK(!info.Data().IsEmpty());

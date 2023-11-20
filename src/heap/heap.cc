@@ -4533,6 +4533,12 @@ void Heap::VerifyCommittedPhysicalMemory() {
 void Heap::IterateWeakRoots(RootVisitor* v, base::EnumSet<SkipRoot> options) {
   DCHECK(!options.contains(SkipRoot::kWeak));
 
+  if (!options.contains(SkipRoot::kUnserializable)) {
+    // Isolate::caller_context is treated weakly.
+    v->VisitRootPointer(Root::kWeakRoots, nullptr,
+                        FullObjectSlot(isolate()->caller_context_address()));
+  }
+
   if (!options.contains(SkipRoot::kOldGeneration) &&
       !options.contains(SkipRoot::kUnserializable) &&
       isolate()->OwnsStringTables()) {

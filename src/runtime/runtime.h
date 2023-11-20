@@ -816,6 +816,14 @@ FOR_EACH_INTRINSIC_RETURN_OBJECT(F)
 
 //---------------------------------------------------------------------------
 // Runtime provides access to all C++ runtime functions.
+enum class RuntimeId : int32_t {
+#define F(name, nargs, ressize) kRuntime_##name,
+#define I(name, nargs, ressize) kInlineRuntime_##name,
+  FOR_EACH_INTRINSIC(F) FOR_EACH_INLINE_INTRINSIC(I)
+#undef I
+#undef F
+      kNumFunctions,
+};
 
 class Runtime : public AllStatic {
  public:
@@ -827,6 +835,8 @@ class Runtime : public AllStatic {
 #undef F
         kNumFunctions,
   };
+  static_assert(static_cast<int>(kNumFunctions) ==
+                static_cast<int>(RuntimeId::kNumFunctions));
 
   static constexpr int kNumInlineFunctions =
 #define COUNT(...) +1

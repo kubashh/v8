@@ -1338,7 +1338,7 @@ void BaselineCompiler::VisitCallJSRuntime() {
   __ LoadContext(kContextRegister);
   __ LoadNativeContextSlot(kJavaScriptCallTargetRegister,
                            iterator().GetNativeContextIndexOperand(0));
-  CallBuiltin<Builtin::kCall_ReceiverIsNullOrUndefined>(
+  CallBuiltin<Builtin::kCall_ReceiverIsNullOrUndefined_CallerJS>(
       kJavaScriptCallTargetRegister,  // kFunction
       arg_count,                      // kActualArgumentsCount
       RootIndex::kUndefinedValue,     // kReceiver

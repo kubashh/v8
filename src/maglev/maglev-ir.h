@@ -7247,7 +7247,7 @@ class CallCPPBuiltin : public ValueNodeT<CallCPPBuiltin> {
   using Base = ValueNodeT<CallCPPBuiltin>;
   // Only 1 return value with arguments on the stack is supported.
   static constexpr Builtin kCEntry_Builtin =
-      Builtin::kCEntry_Return1_ArgvOnStack_BuiltinExit;
+      Builtin::kCEntry_Return1_ArgvOnStack_BuiltinExit_CallerJS;
 
  public:
   static constexpr int kTargetIndex = 0;

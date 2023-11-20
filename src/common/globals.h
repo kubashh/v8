@@ -1578,6 +1578,40 @@ enum class ConvertReceiverMode : unsigned {
   kAny                  // No specific knowledge about receiver.
 };
 
+// Defines info about the CallFunction builtin caller.
+// Knowning caller kind is necessary for explicit incumbent context tracking
+// which works as follows:
+// 1) All JSFunction calls go through JSEntry or CallFunction builtins.
+// 2) Before entering CallFunction builtin there might be several hops through
+//    other builtins, for example:
+//     - user JS code -> Call -> CallFunction ->
+//       -> user JS code
+//     - user JS code -> Call -> CallFunction ->
+//       -> Reflect.apply -> (tail)CallWithArrayLike -> Call -> CallFunction ->
+//       -> user JS code
+//     - user JS code -> Call -> CallFunction ->
+//       -> Array.p.forEach -> CallWithArrayLike -> Call -> CallFunction ->
+//       -> user JS code
+//
+// 2) In the former case the incumbent context is already recored before
+//    entering JSEntry (either by using v8::Context::BackupIncumbentScope or
+//    by running some other user JavaScript code).
+// 3) In the latter case we know that we are running either user JavaScript
+//    code (so current context or a builtin which is calling out to another
+//    JSFunction.
+// 4) There are two JSFunctions can
+//  -
+enum class CallerKind : unsigned {
+  // Caller is a user JavaScript code, so CallFunction builtin can record
+  // caller context as an incumbent context.
+  kJS,
+
+  // Caller is either user JavaScript code or a builtin code. Builtins that
+  // call out to JSFunctions via Call/CallFunction builtins use this kind.
+  // CallFunction builtin
+  kUnknown,
+};
+
 inline size_t hash_value(ConvertReceiverMode mode) {
   return base::bit_cast<unsigned>(mode);
 }
@@ -2237,6 +2271,8 @@ enum class AliasingKind {
   C(CFunction, c_function)                                          \
   C(Context, context)                                               \
   C(PendingException, pending_exception)                            \
+  C(CallerContext, caller_context)                                  \
+  C(IncumbentContext, incumbent_context)                            \
   C(PendingHandlerContext, pending_handler_context)                 \
   C(PendingHandlerEntrypoint, pending_handler_entrypoint)           \
   C(PendingHandlerConstantPool, pending_handler_constant_pool)      \
@@ -2301,8 +2337,7 @@ enum class IcCheckType { kElement, kProperty };
 
 // Helper stubs can be called in different ways depending on where the target
 // code is located and how the call sequence is expected to look like:
-//  - CodeObject: Call on-heap {Code} object via
-//  {RelocInfo::CODE_TARGET}.
+//  - CodeObject: Call on-heap {Code} object via {RelocInfo::CODE_TARGET}.
 //  - WasmRuntimeStub: Call native {WasmCode} stub via
 //    {RelocInfo::WASM_STUB_CALL}.
 //  - BuiltinPointer: Call a builtin based on a builtin pointer with dynamic

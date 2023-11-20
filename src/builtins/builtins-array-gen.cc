@@ -1820,6 +1820,10 @@ TF_BUILTIN(ArrayConstructor, ArrayBuiltinsAssembler) {
   auto function = Parameter<JSFunction>(Descriptor::kTarget);
   auto new_target = Parameter<Object>(Descriptor::kNewTarget);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
+  // auto function = Parameter<JSFunction>(Descriptor::kJSTarget);
+  // auto new_target = Parameter<Object>(Descriptor::kJSNewTarget);
+  // auto argc =
+  // UncheckedParameter<Int32T>(Descriptor::kJSActualArgumentsCount);
 
   // If new_target is undefined, then this is the 'Call' case, so set new_target
   // to function.
@@ -2125,8 +2129,8 @@ void ArrayBuiltinsAssembler::GenerateArrayNArgumentsConstructor(
   // +2 for new_target and maybe_allocation_site.
   argc = Int32Add(TruncateIntPtrToInt32(args.GetLengthWithReceiver()),
                   Int32Constant(2));
-  TailCallRuntime(Runtime::kNewArray, argc, context, new_target,
-                  maybe_allocation_site);
+  TailCallRuntime(Runtime::kNewArray, CallerKind::kUnknown, argc, context,
+                  new_target, maybe_allocation_site);
 }
 
 TF_BUILTIN(ArrayNArgumentsConstructor, ArrayBuiltinsAssembler) {

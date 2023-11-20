@@ -87,6 +87,12 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
 
   __ StackOverflowCheck(eax, ecx, &stack_overflow);
 
+  // Store caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ mov(masm->ExternalReferenceAsOperand(
+             ExternalReference::caller_context(masm->isolate()), no_reg),
+         esi);
+
   // Enter a construct frame.
   {
     FrameScope scope(masm, StackFrame::CONSTRUCT);
@@ -1588,6 +1594,12 @@ void Builtins::Generate_InterpreterPushArgsThenFastConstructFunction(
   Label stack_overflow;
   __ StackOverflowCheck(eax, edx, &stack_overflow, true);
 
+  // Store caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ mov(masm->ExternalReferenceAsOperand(
+             ExternalReference::caller_context(masm->isolate()), no_reg),
+         esi);
+
   // Spill number of arguments.
   __ movd(xmm0, eax);
 
@@ -2580,6 +2592,12 @@ void Builtins::Generate_CallFunction(MacroAssembler* masm,
   // -----------------------------------
   StackArgumentsAccessor args(eax);
   __ AssertCallableFunction(edi, edx);
+
+  // Store caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ mov(masm->ExternalReferenceAsOperand(
+             ExternalReference::caller_context(masm->isolate()), no_reg),
+         esi);
 
   __ mov(edx, FieldOperand(edi, JSFunction::kSharedFunctionInfoOffset));
 
@@ -4453,17 +4471,22 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   Register call_data = no_reg;
   Register callback = no_reg;
   Register holder = no_reg;
+  Register caller_context = no_reg;
 
   switch (mode) {
     case CallApiCallbackMode::kGeneric:
-      api_function_address = eax;
       argc = CallApiCallbackGenericDescriptor::ActualArgumentsCountRegister();
+      caller_context =
+          CallApiCallbackGenericDescriptor::CallerContextRegister();
       callback = CallApiCallbackGenericDescriptor::CallHandlerInfoRegister();
       holder = CallApiCallbackGenericDescriptor::HolderRegister();
       break;
 
     case CallApiCallbackMode::kOptimizedNoProfiling:
     case CallApiCallbackMode::kOptimized:
+      // Caller context is always equal to current context because we don't
+      // inline Api calls cross-context.
+      caller_context = kContextRegister;
       api_function_address =
           CallApiCallbackOptimizedDescriptor::ApiFunctionAddressRegister();
       argc = CallApiCallbackOptimizedDescriptor::ActualArgumentsCountRegister();
@@ -4471,7 +4494,8 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
       holder = CallApiCallbackOptimizedDescriptor::HolderRegister();
       break;
   }
-  DCHECK(!AreAliased(api_function_address, argc, call_data, callback, holder));
+  DCHECK(!AreAliased(api_function_address, caller_context, argc, call_data,
+                     callback, holder));
 
   using FCA = FunctionCallbackArguments;
 

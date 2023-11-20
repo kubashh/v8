@@ -187,6 +187,7 @@ void IC::TraceIC(const char* type, Handle<Object> name, State old_state,
 IC::IC(Isolate* isolate, Handle<FeedbackVector> vector, FeedbackSlot slot,
        FeedbackSlotKind kind)
     : isolate_(isolate),
+      // switch_incumbent_context_(isolate, isolate->context()),
       vector_set_(false),
       kind_(kind),
       target_maps_set_(false),

@@ -1063,6 +1063,7 @@ inline MemOperand ExitFrameCallerStackSlotOperand(int index) {
 void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
                               Register function_address,
                               ExternalReference thunk_ref, Register thunk_arg,
+                              MemOperand* prev_incumbent_context_operand,
                               int stack_space, MemOperand* stack_space_operand,
                               MemOperand return_value_operand);
 

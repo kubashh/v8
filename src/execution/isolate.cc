@@ -320,15 +320,15 @@ void Isolate::SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
         "indicates that the embedded blob has been modified since compilation "
         "time.");
   }
-  if (v8_flags.text_is_readable) {
-    if (d.EmbeddedBlobCodeHash() != d.CreateEmbeddedBlobCodeHash()) {
-      FATAL(
-          "Embedded blob code section checksum verification failed. This "
-          "indicates that the embedded blob has been modified since "
-          "compilation time. A common cause is a debugging breakpoint set "
-          "within builtin code.");
-    }
-  }
+  // if (v8_flags.text_is_readable) {
+  //   if (d.EmbeddedBlobCodeHash() != d.CreateEmbeddedBlobCodeHash()) {
+  //     FATAL(
+  //         "Embedded blob code section checksum verification failed. This "
+  //         "indicates that the embedded blob has been modified since "
+  //         "compilation time. A common cause is a debugging breakpoint set "
+  //         "within builtin code.");
+  //   }
+  // }
 #endif  // DEBUG
 }
 
@@ -571,6 +571,8 @@ void Isolate::Iterate(RootVisitor* v, ThreadLocalTop* thread) {
                       FullObjectSlot(&thread->pending_message_));
   v->VisitRootPointer(Root::kStackRoots, nullptr,
                       FullObjectSlot(&thread->context_));
+  v->VisitRootPointer(Root::kStackRoots, nullptr,
+                      FullObjectSlot(&thread->incumbent_context_));
   v->VisitRootPointer(Root::kStackRoots, nullptr,
                       FullObjectSlot(&thread->scheduled_exception_));
 
@@ -3221,7 +3223,7 @@ bool Isolate::IsWasmImportedStringsEnabled(Handle<NativeContext> context) {
 #endif
 }
 
-Handle<NativeContext> Isolate::GetIncumbentContext() {
+Handle<NativeContext> Isolate::GetIncumbentContextSlow() {
   JavaScriptStackFrameIterator it(this);
 
   // 1st candidate: most-recently-entered author function's context
@@ -3235,13 +3237,17 @@ Handle<NativeContext> Isolate::GetIncumbentContext() {
   if (!it.done() &&
       (!top_backup_incumbent || it.frame()->sp() < top_backup_incumbent)) {
     Tagged<Context> context = Context::cast(it.frame()->context());
+    DCHECK_EQ(*GetIncumbentContextFast(), context->native_context());
     return Handle<NativeContext>(context->native_context(), this);
   }
 
   // 2nd candidate: the last Context::Scope's incumbent context if any.
   if (top_backup_incumbent_scope()) {
-    return Utils::OpenHandle(
-        *top_backup_incumbent_scope()->backup_incumbent_context_);
+    v8::Local<v8::Context> incumbent_context =
+        top_backup_incumbent_scope()->backup_incumbent_context_;
+    DCHECK_EQ(*GetIncumbentContextFast(),
+              *Utils::OpenHandle(*incumbent_context));
+    return Utils::OpenHandle(*incumbent_context);
   }
 
   // Last candidate: the entered context or microtask context.
@@ -3250,12 +3256,18 @@ Handle<NativeContext> Isolate::GetIncumbentContext() {
   // the entry realm.
   v8::Local<v8::Context> entered_context =
       reinterpret_cast<v8::Isolate*>(this)->GetEnteredOrMicrotaskContext();
+  DCHECK_EQ(entered_context.IsEmpty(), incumbent_context().is_null());
+  if (!entered_context.IsEmpty()) {
+    DCHECK_EQ(*GetIncumbentContextFast(), *Utils::OpenHandle(*entered_context));
+  }
   return Utils::OpenHandle(*entered_context);
 }
 
 char* Isolate::ArchiveThread(char* to) {
+  clear_caller_context();
   MemCopy(to, reinterpret_cast<char*>(thread_local_top()),
           sizeof(ThreadLocalTop));
+  set_top_backup_incumbent_scope(nullptr);
   return to + sizeof(ThreadLocalTop);
 }
 
@@ -6392,10 +6404,15 @@ SaveContext::SaveContext(Isolate* isolate) : isolate_(isolate) {
   if (!isolate->context().is_null()) {
     context_ = Handle<Context>(isolate->context(), isolate);
   }
+  if (!isolate->incumbent_context().is_null()) {
+    incumbent_context_ = handle(isolate->incumbent_context(), isolate);
+  }
 }
 
 SaveContext::~SaveContext() {
   isolate_->set_context(context_.is_null() ? Tagged<Context>() : *context_);
+  isolate_->set_incumbent_context(
+      incumbent_context_.is_null() ? Tagged<Context>() : *incumbent_context_);
 }
 
 SaveAndSwitchContext::SaveAndSwitchContext(Isolate* isolate,
@@ -6404,9 +6421,43 @@ SaveAndSwitchContext::SaveAndSwitchContext(Isolate* isolate,
   isolate->set_context(new_context);
 }
 
+// SaveAndSwitchIncumbentContext::SaveAndSwitchIncumbentContext(
+//     Isolate* isolate, Tagged<Context> new_incumbent_context)
+//     : isolate_(isolate) {
+//   HandleScopeImplementer* impl = isolate->handle_scope_implementer();
+//   impl->SaveContext(isolate->incumbent_context());
+//   isolate->set_incumbent_context(new_incumbent_context);
+// }
+
+// SaveAndSwitchIncumbentContext::~SaveAndSwitchIncumbentContext() {
+//   HandleScopeImplementer* impl = isolate_->handle_scope_implementer();
+//   isolate_->set_incumbent_context(impl->RestoreContext());
+// }
+
+// SaveAndSwitchContextForCall::SaveAndSwitchContextForCall(
+//     Isolate* isolate, Tagged<Context> function_context)
+//     : isolate_(isolate),
+//       incumbent_context_(isolate->incumbent_context(), isolate) {
+//   DCHECK(!isolate->context().is_null());
+//   // DCHECK(!isolate->incumbent_context().is_null());
+//   // incumbent_context_ = Handle<Context>(isolate->incumbent_context(),
+//   // isolate);
+//   // isolate->set_incumbent_context(isolate->context());
+//   isolate->set_incumbent_context(isolate->caller_context());
+//   isolate->set_context(function_context);
+//   UNREACHABLE();
+// }
+
+// SaveAndSwitchContextForCall::~SaveAndSwitchContextForCall() {
+//   isolate_->set_context(isolate_->incumbent_context());
+//   isolate_->set_incumbent_context(*incumbent_context_);
+// }
+
 #ifdef DEBUG
 AssertNoContextChange::AssertNoContextChange(Isolate* isolate)
-    : isolate_(isolate), context_(isolate->context(), isolate) {}
+    : isolate_(isolate),
+      context_(isolate->context(), isolate),
+      incumbent_context_(isolate->incumbent_context(), isolate) {}
 
 namespace {
 

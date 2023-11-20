@@ -1282,7 +1282,8 @@ TF_BUILTIN(AdaptorWithBuiltinExitFrame, CodeStubAssembler) {
 
   const bool builtin_exit_frame = true;
   TNode<Code> code = HeapConstantNoHole(
-      CodeFactory::CEntry(isolate(), 1, ArgvMode::kStack, builtin_exit_frame));
+      CodeFactory::CEntry(isolate(), 1, ArgvMode::kStack, builtin_exit_frame,
+                          CallerKind::kUnknown));
 
   // Unconditionally push argc, target and new target as extra stack arguments.
   // They will be used by stack frame iterators when constructing stack trace.
@@ -1352,38 +1353,72 @@ TF_BUILTIN(AbortCSADcheck, CodeStubAssembler) {
   TailCallRuntime(Runtime::kAbortCSADcheck, NoContextConstant(), message);
 }
 
-void Builtins::Generate_CEntry_Return1_ArgvOnStack_NoBuiltinExit(
+void Builtins::Generate_CEntry_Return1_ArgvOnStack_NoBuiltinExit_CallerJS(
     MacroAssembler* masm) {
-  Generate_CEntry(masm, 1, ArgvMode::kStack, false, false);
+  Generate_CEntry(masm, 1, ArgvMode::kStack, false, CallerKind::kJS, false);
 }
 
-void Builtins::Generate_CEntry_Return1_ArgvOnStack_BuiltinExit(
+void Builtins::Generate_CEntry_Return1_ArgvOnStack_NoBuiltinExit_CallerUnk(
     MacroAssembler* masm) {
-  Generate_CEntry(masm, 1, ArgvMode::kStack, true, false);
+  Generate_CEntry(masm, 1, ArgvMode::kStack, false, CallerKind::kUnknown,
+                  false);
 }
 
-void Builtins::Generate_CEntry_Return1_ArgvInRegister_NoBuiltinExit(
+void Builtins::Generate_CEntry_Return1_ArgvOnStack_BuiltinExit_CallerJS(
     MacroAssembler* masm) {
-  Generate_CEntry(masm, 1, ArgvMode::kRegister, false, false);
+  Generate_CEntry(masm, 1, ArgvMode::kStack, true, CallerKind::kJS, false);
 }
 
-void Builtins::Generate_CEntry_Return2_ArgvOnStack_NoBuiltinExit(
+void Builtins::Generate_CEntry_Return1_ArgvOnStack_BuiltinExit_CallerUnk(
     MacroAssembler* masm) {
-  Generate_CEntry(masm, 2, ArgvMode::kStack, false, false);
+  Generate_CEntry(masm, 1, ArgvMode::kStack, true, CallerKind::kUnknown, false);
 }
 
-void Builtins::Generate_CEntry_Return2_ArgvOnStack_BuiltinExit(
+void Builtins::Generate_CEntry_Return1_ArgvInRegister_NoBuiltinExit_CallerJS(
     MacroAssembler* masm) {
-  Generate_CEntry(masm, 2, ArgvMode::kStack, true, false);
+  Generate_CEntry(masm, 1, ArgvMode::kRegister, false, CallerKind::kJS, false);
 }
 
-void Builtins::Generate_CEntry_Return2_ArgvInRegister_NoBuiltinExit(
+void Builtins::Generate_CEntry_Return1_ArgvInRegister_NoBuiltinExit_CallerUnk(
     MacroAssembler* masm) {
-  Generate_CEntry(masm, 2, ArgvMode::kRegister, false, false);
+  Generate_CEntry(masm, 1, ArgvMode::kRegister, false, CallerKind::kUnknown,
+                  false);
+}
+
+void Builtins::Generate_CEntry_Return2_ArgvOnStack_NoBuiltinExit_CallerJS(
+    MacroAssembler* masm) {
+  Generate_CEntry(masm, 2, ArgvMode::kStack, false, CallerKind::kJS, false);
+}
+
+void Builtins::Generate_CEntry_Return2_ArgvOnStack_NoBuiltinExit_CallerUnk(
+    MacroAssembler* masm) {
+  Generate_CEntry(masm, 2, ArgvMode::kStack, false, CallerKind::kUnknown,
+                  false);
+}
+
+void Builtins::Generate_CEntry_Return2_ArgvOnStack_BuiltinExit_CallerJS(
+    MacroAssembler* masm) {
+  Generate_CEntry(masm, 2, ArgvMode::kStack, true, CallerKind::kJS, false);
+}
+
+void Builtins::Generate_CEntry_Return2_ArgvOnStack_BuiltinExit_CallerUnk(
+    MacroAssembler* masm) {
+  Generate_CEntry(masm, 2, ArgvMode::kStack, true, CallerKind::kUnknown, false);
+}
+
+void Builtins::Generate_CEntry_Return2_ArgvInRegister_NoBuiltinExit_CallerJS(
+    MacroAssembler* masm) {
+  Generate_CEntry(masm, 2, ArgvMode::kRegister, false, CallerKind::kJS, false);
+}
+
+void Builtins::Generate_CEntry_Return2_ArgvInRegister_NoBuiltinExit_CallerUnk(
+    MacroAssembler* masm) {
+  Generate_CEntry(masm, 2, ArgvMode::kRegister, false, CallerKind::kUnknown,
+                  false);
 }
 
 void Builtins::Generate_WasmCEntry(MacroAssembler* masm) {
-  Generate_CEntry(masm, 1, ArgvMode::kStack, false, true);
+  Generate_CEntry(masm, 1, ArgvMode::kStack, false, CallerKind::kUnknown, true);
 }
 
 #if !defined(V8_TARGET_ARCH_ARM)

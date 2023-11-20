@@ -916,26 +916,33 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<RawPtrT> LoadCodeInstructionStart(TNode<Code> code);
   TNode<BoolT> IsMarkedForDeoptimization(TNode<Code> code);
 
+  void PreserveCallerContextAcrossCalls();
+
   // The following Call wrappers call an object according to the semantics that
   // one finds in the EcmaScript spec, operating on an Callable (e.g. a
   // JSFunction or proxy) rather than a InstructionStream object.
   template <class... TArgs>
   TNode<Object> Call(TNode<Context> context, TNode<Object> callable,
                      TNode<JSReceiver> receiver, TArgs... args) {
+    CallerKind caller_kind = state()->GetCallerKind();
     return CallJS(
-        CodeFactory::Call(isolate(), ConvertReceiverMode::kNotNullOrUndefined),
+        CodeFactory::Call(isolate(), ConvertReceiverMode::kNotNullOrUndefined,
+                          caller_kind),
         context, callable, receiver, args...);
   }
   template <class... TArgs>
   TNode<Object> Call(TNode<Context> context, TNode<Object> callable,
                      TNode<Object> receiver, TArgs... args) {
+    CallerKind caller_kind = state()->GetCallerKind();
     if (IsUndefinedConstant(receiver) || IsNullConstant(receiver)) {
       return CallJS(
-          CodeFactory::Call(isolate(), ConvertReceiverMode::kNullOrUndefined),
+          CodeFactory::Call(isolate(), ConvertReceiverMode::kNullOrUndefined,
+                            caller_kind),
           context, callable, receiver, args...);
     }
-    return CallJS(CodeFactory::Call(isolate()), context, callable, receiver,
-                  args...);
+    return CallJS(
+        CodeFactory::Call(isolate(), ConvertReceiverMode::kAny, caller_kind),
+        context, callable, receiver, args...);
   }
 
   TNode<Object> CallApiCallback(TNode<Object> context, TNode<RawPtrT> callback,

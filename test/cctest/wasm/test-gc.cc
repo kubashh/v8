@@ -44,7 +44,7 @@ class WasmGCTester {
         zone_(&allocator, ZONE_NAME),
         builder_(&zone_),
         isolate_(CcTest::InitIsolateOnce()),
-        scope(isolate_),
+        scope_(isolate_),
         thrower(isolate_, "Test wasm GC") {
     testing::SetupIsolateForWasmModule(isolate_);
   }
@@ -256,7 +256,7 @@ class WasmGCTester {
   WasmModuleBuilder builder_;
 
   Isolate* const isolate_;
-  const HandleScope scope;
+  const HandleScope scope_;
   Handle<WasmInstanceObject> instance_;
   ErrorThrower thrower;
 };

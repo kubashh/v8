@@ -6755,16 +6755,18 @@ void CodeStubAssembler::ThrowTypeError(TNode<Context> context,
                                        base::Optional<TNode<Object>> arg1,
                                        base::Optional<TNode<Object>> arg2) {
   TNode<Smi> template_index = SmiConstant(static_cast<int>(message));
+  CallerKind caller_kind = state()->GetCallerKind();
   if (!arg0) {
-    CallRuntime(Runtime::kThrowTypeError, context, template_index);
+    CallRuntime(Runtime::kThrowTypeError, caller_kind, context, template_index);
   } else if (!arg1) {
-    CallRuntime(Runtime::kThrowTypeError, context, template_index, *arg0);
+    CallRuntime(Runtime::kThrowTypeError, caller_kind, context, template_index,
+                *arg0);
   } else if (!arg2) {
-    CallRuntime(Runtime::kThrowTypeError, context, template_index, *arg0,
-                *arg1);
+    CallRuntime(Runtime::kThrowTypeError, caller_kind, context, template_index,
+                *arg0, *arg1);
   } else {
-    CallRuntime(Runtime::kThrowTypeError, context, template_index, *arg0, *arg1,
-                *arg2);
+    CallRuntime(Runtime::kThrowTypeError, caller_kind, context, template_index,
+                *arg0, *arg1, *arg2);
   }
   Unreachable();
 }
@@ -10687,9 +10689,10 @@ TNode<Object> CodeStubAssembler::CallGetterIfAccessor(
         }
         TNode<NativeContext> creation_context =
             GetCreationContext(CAST(holder), if_bailout);
+        TNode<Context> caller_context = context;
         var_value = CallBuiltin(
             Builtin::kCallFunctionTemplate_Generic, creation_context, getter,
-            Int32Constant(i::JSParameterCount(0)), js_receiver);
+            Int32Constant(i::JSParameterCount(0)), caller_context, js_receiver);
         Goto(&done);
 
         if (mode == kCallJSGetterUseCachedName) {
@@ -15182,6 +15185,8 @@ TNode<Boolean> CodeStubAssembler::InstanceOf(TNode<Object> object,
             &if_otherhandler);
   {
     // Call to Function.prototype[@@hasInstance] directly.
+    // Callable builtin = Builtins::CallableFor(
+    //    isolate(), Builtin::kFunctionPrototypeHasInstance);
     Callable builtin(BUILTIN_CODE(isolate(), FunctionPrototypeHasInstance),
                      CallTrampolineDescriptor{});
     var_result =
@@ -16597,14 +16602,39 @@ void CodeStubAssembler::PerformStackCheck(TNode<Context> context) {
   BIND(&ok);
 }
 
+void CodeStubAssembler::PreserveCallerContextAcrossCalls() {
+  // DCHECK(IsJSFunctionCall());
+  Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
+
+  // On builtin entry save the Isolate::caller_context value in the
+  // var_caller_context variable.
+  TNode<ExternalReference> caller_context_ref =
+      ExternalConstant(ExternalReference::caller_context(isolate()));
+  TNode<Object> caller_context = LoadFullTagged(caller_context_ref);
+
+  RegisterCallGenerationCallbacks(
+      // call_prologue
+      nullptr,
+      // call_epilogue
+      [=] {
+        Comment("===== CallEpilogue", __FUNCTION__, ", ", __FILE__, ":",
+                __LINE__);
+        // Since the builtin could theoretically call user JS code and thus the
+        // the Isolate::caller_context could be overwritten
+        // After calling out to another builtin restore the value of
+        // Isolate::caller_context in case the builtin will do another call.
+        StoreFullTaggedNoWriteBarrier(caller_context_ref, caller_context);
+      });
+}
+
 TNode<Object> CodeStubAssembler::CallRuntimeNewArray(
     TNode<Context> context, TNode<Object> receiver, TNode<Object> length,
     TNode<Object> new_target, TNode<Object> allocation_site) {
   // Runtime_NewArray receives arguments in the JS order (to avoid unnecessary
   // copy). Except the last two (new_target and allocation_site) which are add
   // on top of the stack later.
-  return CallRuntime(Runtime::kNewArray, context, length, receiver, new_target,
-                     allocation_site);
+  return CallRuntime(Runtime::kNewArray, CallerKind::kUnknown, context, length,
+                     receiver, new_target, allocation_site);
 }
 
 void CodeStubAssembler::TailCallRuntimeNewArray(TNode<Context> context,
@@ -16615,8 +16645,8 @@ void CodeStubAssembler::TailCallRuntimeNewArray(TNode<Context> context,
   // Runtime_NewArray receives arguments in the JS order (to avoid unnecessary
   // copy). Except the last two (new_target and allocation_site) which are add
   // on top of the stack later.
-  return TailCallRuntime(Runtime::kNewArray, context, length, receiver,
-                         new_target, allocation_site);
+  return TailCallRuntime(Runtime::kNewArray, CallerKind::kUnknown, context,
+                         length, receiver, new_target, allocation_site);
 }
 
 TNode<JSArray> CodeStubAssembler::ArrayCreate(TNode<Context> context,
@@ -17820,14 +17850,14 @@ TNode<Object> CodeStubAssembler::CallOnCentralStack(TNode<Context> context,
 
   TNode<RawPtrT> old_sp = SwitchToTheCentralStackForJS(target);
 
-  result = CallBuiltin(Builtin::kCallVarargs, context, target, Int32Constant(0),
-                       num_args, args);
+  result = CallBuiltin(Builtin::kCallVarargs_CallerUnk, context, target,
+                       Int32Constant(0), num_args, args);
   SwitchFromTheCentralStackForJS(old_sp, target);
   Goto(&end);
 
   Bind(&no_switch);
-  result = CallBuiltin(Builtin::kCallVarargs, context, target, Int32Constant(0),
-                       num_args, args);
+  result = CallBuiltin(Builtin::kCallVarargs_CallerUnk, context, target,
+                       Int32Constant(0), num_args, args);
   Goto(&end);
 
   Bind(&end);

@@ -1018,17 +1018,20 @@ class V8_EXPORT_PRIVATE MacroAssembler
   // Runtime calls
 
   // Call a runtime routine.
-  void CallRuntime(const Runtime::Function* f, int num_arguments);
+  void CallRuntime(const Runtime::Function* f, int num_arguments,
+                   CallerKind caller_kind = CallerKind::kJS);
 
   // Convenience function: Same as above, but takes the fid instead.
-  void CallRuntime(Runtime::FunctionId fid) {
+  void CallRuntime(Runtime::FunctionId fid,
+                   CallerKind caller_kind = CallerKind::kJS) {
     const Runtime::Function* function = Runtime::FunctionForId(fid);
-    CallRuntime(function, function->nargs);
+    CallRuntime(function, function->nargs, caller_kind);
   }
 
   // Convenience function: Same as above, but takes the fid instead.
-  void CallRuntime(Runtime::FunctionId fid, int num_arguments) {
-    CallRuntime(Runtime::FunctionForId(fid), num_arguments);
+  void CallRuntime(Runtime::FunctionId fid, int num_arguments,
+                   CallerKind caller_kind = CallerKind::kJS) {
+    CallRuntime(Runtime::FunctionForId(fid), num_arguments, caller_kind);
   }
 
   // Convenience function: tail call a runtime routine (jump)

@@ -4824,31 +4824,33 @@ void Call::GenerateCode(MaglevAssembler* masm, const ProcessingState& state) {
   if (target_type_ == TargetType::kAny) {
     switch (receiver_mode_) {
       case ConvertReceiverMode::kNullOrUndefined:
-        __ CallBuiltin<Builtin::kCall_ReceiverIsNullOrUndefined>(
+        __ CallBuiltin<Builtin::kCall_ReceiverIsNullOrUndefined_CallerJS>(
             context(), function(), arg_count);
         break;
       case ConvertReceiverMode::kNotNullOrUndefined:
-        __ CallBuiltin<Builtin::kCall_ReceiverIsNotNullOrUndefined>(
+        __ CallBuiltin<Builtin::kCall_ReceiverIsNotNullOrUndefined_CallerJS>(
             context(), function(), arg_count);
         break;
       case ConvertReceiverMode::kAny:
-        __ CallBuiltin<Builtin::kCall_ReceiverIsAny>(context(), function(),
-                                                     arg_count);
+        __ CallBuiltin<Builtin::kCall_ReceiverIsAny_CallerJS>(
+            context(), function(), arg_count);
         break;
     }
   } else {
     DCHECK_EQ(TargetType::kJSFunction, target_type_);
     switch (receiver_mode_) {
       case ConvertReceiverMode::kNullOrUndefined:
-        __ CallBuiltin<Builtin::kCallFunction_ReceiverIsNullOrUndefined>(
+        __ CallBuiltin<
+            Builtin::kCallFunction_ReceiverIsNullOrUndefined_CallerJS>(
             context(), function(), arg_count);
         break;
       case ConvertReceiverMode::kNotNullOrUndefined:
-        __ CallBuiltin<Builtin::kCallFunction_ReceiverIsNotNullOrUndefined>(
+        __ CallBuiltin<
+            Builtin::kCallFunction_ReceiverIsNotNullOrUndefined_CallerJS>(
             context(), function(), arg_count);
         break;
       case ConvertReceiverMode::kAny:
-        __ CallBuiltin<Builtin::kCallFunction_ReceiverIsAny>(
+        __ CallBuiltin<Builtin::kCallFunction_ReceiverIsAny_CallerJS>(
             context(), function(), arg_count);
         break;
     }
@@ -5047,6 +5049,14 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   Register scratch2 = temps.Acquire();
 
   using FCA = FunctionCallbackArguments;
+  using ER = ExternalReference;
+
+  // Save previous and set new incumbent context.
+  // Currently we don't inline cross-context Api calls into optimized code,
+  // so just use current context as a caller context.
+  MemOperand incumbent_context_mem_op = __ ExternalReferenceAsOperand(
+      ER::incumbent_context(masm->isolate()), no_reg);
+  __ Move(incumbent_context_mem_op, kContextRegister);
 
   static_assert(FCA::kArgsLength == 6);
   static_assert(FCA::kNewTargetIndex == 5);
@@ -5078,7 +5088,7 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
             scratch);
   }
 
-  __ Move(scratch, ExternalReference::isolate_address(masm->isolate()));
+  __ Move(scratch, ER::isolate_address(masm->isolate()));
   // kIsolate, kHolder
   if (api_holder_.has_value()) {
     __ Push(scratch, api_holder_.value().object());
@@ -5107,7 +5117,7 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   // from the stack after the callback in non-GCed space of the exit frame.
   static constexpr int kApiStackSpace = 4;
   static_assert((kApiStackSpace - 1) * kSystemPointerSize == FCA::kSize);
-  const int exit_frame_params_size = 0;
+  const int exit_frame_params_count = 0;
 
   Label done, call_api_callback_builtin_inline;
   __ Call(&call_api_callback_builtin_inline);
@@ -5149,7 +5159,7 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   DCHECK(!AreAliased(api_function_address, function_callback_info_arg));
 
   MemOperand return_value_operand = ExitFrameCallerStackSlotOperand(
-      FCA::kReturnValueIndex + exit_frame_params_size);
+      FCA::kReturnValueIndex + exit_frame_params_count);
   const int kStackUnwindSpace = FCA::kArgsLengthWithReceiver + num_args();
 
   const bool with_profiling = false;
@@ -5321,7 +5331,7 @@ void CallCPPBuiltin::GenerateCode(MaglevAssembler* masm,
 
   DCHECK_EQ(Builtins::CallInterfaceDescriptorFor(builtin()).GetReturnCount(),
             1);
-  __ CallBuiltin(Builtin::kCEntry_Return1_ArgvOnStack_BuiltinExit);
+  __ CallBuiltin(Builtin::kCEntry_Return1_ArgvOnStack_BuiltinExit_CallerJS);
 }
 
 int CallRuntime::MaxCallStackArgs() const { return num_args(); }
@@ -5371,11 +5381,13 @@ void CallWithSpread::GenerateCode(MaglevAssembler* masm,
 }
 
 int CallWithArrayLike::MaxCallStackArgs() const {
-  using D = CallInterfaceDescriptorFor<Builtin::kCallWithArrayLike>::type;
+  using D =
+      CallInterfaceDescriptorFor<Builtin::kCallWithArrayLike_CallerJS>::type;
   return D::GetStackParameterCount();
 }
 void CallWithArrayLike::SetValueLocationConstraints() {
-  using D = CallInterfaceDescriptorFor<Builtin::kCallWithArrayLike>::type;
+  using D =
+      CallInterfaceDescriptorFor<Builtin::kCallWithArrayLike_CallerJS>::type;
   UseFixed(function(), D::GetRegisterParameter(D::kTarget));
   UseAny(receiver());
   UseFixed(arguments_list(), D::GetRegisterParameter(D::kArgumentsList));
@@ -5388,10 +5400,10 @@ void CallWithArrayLike::GenerateCode(MaglevAssembler* masm,
   // stack, but doesn't explicitly list it as an extra argument. Push it
   // manually, and assert that there are no other stack arguments.
   static_assert(
-      CallInterfaceDescriptorFor<
-          Builtin::kCallWithArrayLike>::type::GetStackParameterCount() == 0);
+      CallInterfaceDescriptorFor<Builtin::kCallWithArrayLike_CallerJS>::type::
+          GetStackParameterCount() == 0);
   __ Push(receiver());
-  __ CallBuiltin<Builtin::kCallWithArrayLike>(
+  __ CallBuiltin<Builtin::kCallWithArrayLike_CallerJS>(
       context(),        // context
       function(),       // target
       arguments_list()  // arguments list

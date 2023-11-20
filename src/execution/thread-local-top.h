@@ -6,6 +6,7 @@
 #define V8_EXECUTION_THREAD_LOCAL_TOP_H_
 
 #include "include/v8-callbacks.h"
+#include "include/v8-context.h"
 #include "include/v8-exception.h"
 #include "include/v8-unwinder.h"
 #include "src/common/globals.h"
@@ -29,7 +30,7 @@ class ThreadLocalTop {
   // TODO(all): This is not particularly beautiful. We should probably
   // refactor this to really consist of just Addresses and 32-bit
   // integer fields.
-  static constexpr uint32_t kSizeInBytes = 30 * kSystemPointerSize;
+  static constexpr uint32_t kSizeInBytes = 33 * kSystemPointerSize;
 
   // Does early low-level initialization that does not depend on the
   // isolate being present.
@@ -100,8 +101,16 @@ class ThreadLocalTop {
   // meantime, assert that the memory layout is the same.
   static_assert(sizeof(Context) == kSystemPointerSize);
   Tagged<Context> context_;
+  Tagged<Context> incumbent_context_;
   std::atomic<ThreadId> thread_id_;
   Tagged<Object> pending_exception_ = Smi::zero();
+
+  // Communication channel between various builtins that might call Api
+  // getter/setter callbacks or Api function callbacks and the CallApiCallback.
+  // Stores context that was current before the call switches to a target
+  // function's context. This slot is cleared by GC which treats this reference
+  // as a weak one.
+  Tagged<Context> caller_context_;
 
   // Communication channel between Isolate::FindHandler and the CEntry.
   Tagged<Context> pending_handler_context_;
@@ -140,6 +149,9 @@ class ThreadLocalTop {
   ExternalCallbackScope* external_callback_scope_;
   StateTag current_vm_state_;
   EmbedderState* current_embedder_state_;
+
+  // The top entry of the v8::Context::BackupIncumbentScope stack.
+  const v8::Context::BackupIncumbentScope* top_backup_incumbent_scope_;
 
   // Call back function to report unsafe JS accesses.
   v8::FailedAccessCheckCallback failed_access_check_callback_;
