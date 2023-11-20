@@ -67,6 +67,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a5ead256_d3ee67e0",
+        "filename": "tools/release/roll_merge_gerrit_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-11-20T09:13:45Z",
+      "side": 1,
+      "message": "Yes. The order of the decorators doesn\u0027t matter at all. I just like to see the mock data in the order in which it is used in the code.",
+      "parentUuid": "77ac226a_1487c74e",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 8
+      },
+      "revId": "40494433553d20852edc609fbb05f2d69d8b8bf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c5011ca4_bd511fe4",
         "filename": "tools/release/roll_merge_gerrit_test.py",
         "patchSetId": 1
