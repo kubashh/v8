@@ -43,6 +43,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "77ac226a_1487c74e",
+        "filename": "tools/release/roll_merge_gerrit_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-11-20T08:43:34Z",
+      "side": 1,
+      "message": "Note that python applies decorators in reverse order, so this ordering is just for code aesthetics. I assume that\u0027s ok?",
+      "parentUuid": "fc06f9fc_bcf33aa6",
+      "range": {
+        "startLine": 30,
+        "startChar": 3,
+        "endLine": 30,
+        "endChar": 8
+      },
+      "revId": "40494433553d20852edc609fbb05f2d69d8b8bf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c5011ca4_bd511fe4",
         "filename": "tools/release/roll_merge_gerrit_test.py",
         "patchSetId": 1
