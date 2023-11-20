@@ -88,6 +88,24 @@
       "parentUuid": "b670a099_faf86002",
       "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30ccc6b4_46ca8b2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2023-11-20T17:13:29Z",
+      "side": 1,
+      "message": "That being said, now I\u0027m thinking about this more, I wonder if the unwinder will actually be an issue.\n\nWith the new sequence, doing two separate push pairs, if the unwinder triggers in the middle, it should not see uninitalized memory. In crbug 9907, the issue was that we allocated stack space in one step, and then wrote in another, leaving a gap where the memory (with the stack marker) was uninitialized.\n\nSo it might be OK actually! 😊, I admit we were quick to react to this with caution, as these kinds of profiler/unwinder bugs are flaky and hard to reproduce.\n\nFrom a performance PoV though, after a bit of discussion, we think the current sequence may be faster, sequences of `stp` with write-backs can put more pressure on the CPU, compared to a single write-back followed by stores. I\u0027m not sure if the differences would be enough to notice however, especially as this is only creating part of the frame.",
+      "parentUuid": "db09a070_8565443f",
+      "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
