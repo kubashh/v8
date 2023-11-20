@@ -34,6 +34,24 @@
       "parentUuid": "131a13de_29cac115",
       "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b480af1_0145fd4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-20T16:41:17Z",
+      "side": 1,
+      "message": "LGTM if this looks good to arm folks. It also looks like a potential improvement wrt to that profiler issue.",
+      "parentUuid": "9003d938_82aa44af",
+      "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
