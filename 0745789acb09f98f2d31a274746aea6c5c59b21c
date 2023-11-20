@@ -70,6 +70,24 @@
       "parentUuid": "3b480af1_0145fd4c",
       "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db09a070_8565443f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-20T16:52:13Z",
+      "side": 1,
+      "message": "Oops, my bad, I glanced over the issue too quickly. That makes sense now, removing my vote then.",
+      "parentUuid": "b670a099_faf86002",
+      "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
