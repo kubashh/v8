@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45574ec6_be19ef19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-20T11:03:10Z",
+      "side": 1,
+      "message": "Few more comments",
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2933d4b3_7d8b532c",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-20T11:03:10Z",
+      "side": 1,
+      "message": "This is relatively slow (we know this from perf profiles) and true for the majority of wrappers. Since all of this is approximate, we can only do this in the atomic pause and improve concurrent marking time?",
+      "range": {
+        "startLine": 850,
+        "startChar": 18,
+        "endLine": 850,
+        "endChar": 24
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebfe4872_4c107a3a",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-20T11:03:10Z",
+      "side": 1,
+      "message": "I think this should use `ObjectInYoungGeneration()` as we are only using `is_in_young_list()` for the iterations over nodes.",
+      "range": {
+        "startLine": 1102,
+        "startChar": 12,
+        "endLine": 1102,
+        "endChar": 28
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28d0774c_12305ffe",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-20T11:03:10Z",
+      "side": 1,
+      "message": "Reading this code again, I wonder if we should split `MarkAndPush()` for the two use cases:\n- Concurrent processing\n- Main thread processing that DCHECKs that markbit is set but otherwise assumes that object is not a smi, not in read only space, and the object should be marked otherwise.",
+      "range": {
+        "startLine": 32,
+        "startChar": 54,
+        "endLine": 32,
+        "endChar": 74
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

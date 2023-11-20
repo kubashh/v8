@@ -467,6 +467,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b8e0331_936b8cb8",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-20T11:03:10Z",
+      "side": 1,
+      "message": "So, the more parallel marking we have the more likely it is that we process a reference twice? \n\nThat seems inefficient to me.",
+      "parentUuid": "dcc35110_aa0f72ea",
+      "range": {
+        "startLine": 820,
+        "startChar": 37,
+        "endLine": 820,
+        "endChar": 64
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d24ee3d2_9d2aeb5a",
         "filename": "src/heap/cppgc-js/unified-heap-marking-state.h",
         "patchSetId": 39

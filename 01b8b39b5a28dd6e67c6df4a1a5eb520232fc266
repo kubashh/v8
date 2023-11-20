@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9de8223e_265cd97c",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-20T11:03:10Z",
+      "side": 0,
+      "message": "This feels wrong already. We should not touch anything non-young at all in a young gen GC. Otheriwse if we insert a check on the markbit anywhere (as you are now in the new CL), we would possibly bail out in the next GC.",
+      "range": {
+        "startLine": 1060,
+        "startChar": 32,
+        "endLine": 1060,
+        "endChar": 78
+      },
+      "revId": "01b8b39b5a28dd6e67c6df4a1a5eb520232fc266",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
