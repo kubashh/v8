@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a015253_7fc77b2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-11-20T12:25:43Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "80fd725be2399ebc61cb9e9b143858ff6d69969d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "796c2e6c_a1f5b4be",
+        "filename": "tools/release/roll_merge_gerrit.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-11-20T12:25:43Z",
+      "side": 1,
+      "message": "In my life test, I was running into this assert, since the last to-be-rolled commit already has a pgo tag. The regexp matched both. I intended to only match the raw, non-pgo version tag.\n\nWith the added test data, I reproduced the same assert failure in the test.",
+      "range": {
+        "startLine": 255,
+        "startChar": 4,
+        "endLine": 255,
+        "endChar": 74
+      },
+      "revId": "80fd725be2399ebc61cb9e9b143858ff6d69969d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
