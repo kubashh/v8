@@ -157,6 +157,30 @@
       },
       "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d473250_60a05609",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-21T15:16:16Z",
+      "side": 1,
+      "message": "This should not be fine in general but only in your version where you process it again after recording it concurrently.\n\nIn general, we can have a Smi here (or Undefined/True/False) which should trigger the check.",
+      "parentUuid": "d25a9b31_ccdb9fcb",
+      "range": {
+        "startLine": 32,
+        "startChar": 54,
+        "endLine": 32,
+        "endChar": 74
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
