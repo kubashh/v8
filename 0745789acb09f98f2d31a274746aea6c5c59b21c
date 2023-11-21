@@ -106,6 +106,24 @@
       "parentUuid": "db09a070_8565443f",
       "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5654513_816cb600",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-11-21T14:59:14Z",
+      "side": 1,
+      "message": "If the old sequence is preferrable from a performance perspective, then let\u0027s stick to that. I can quickly check if we can make TurboFan emit the same (better) sequence as `EnterFrame` (which is used from Liftoff).",
+      "parentUuid": "30ccc6b4_46ca8b2a",
+      "revId": "0745789acb09f98f2d31a274746aea6c5c59b21c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
