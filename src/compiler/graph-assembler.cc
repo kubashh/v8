@@ -136,9 +136,10 @@ Node* GraphAssembler::LoadStackPointer() {
   return AddNode(graph()->NewNode(machine()->LoadStackPointer(), effect()));
 }
 
-Node* GraphAssembler::SetStackPointer(Node* node) {
+Node* GraphAssembler::SetStackPointer(Node* node,
+                                      wasm::FPRelativeScope fp_scope) {
   return AddNode(
-      graph()->NewNode(machine()->SetStackPointer(), node, effect()));
+      graph()->NewNode(machine()->SetStackPointer(fp_scope), node, effect()));
 }
 
 Node* GraphAssembler::LoadHeapNumberValue(Node* heap_number) {
