@@ -2663,14 +2663,17 @@ const Operator* MachineOperatorBuilder::LoadStackPointer() {
   return zone_->New<LoadStackPointerOperator>();
 }
 
-const Operator* MachineOperatorBuilder::SetStackPointer() {
-  class SetStackPointerOperator final : public Operator {
+const Operator* MachineOperatorBuilder::SetStackPointer(
+    wasm::FPRelativeScope fp_scope) {
+  class SetStackPointerOperator final
+      : public Operator1<wasm::FPRelativeScope> {
    public:
-    SetStackPointerOperator()
-        : Operator(IrOpcode::kSetStackPointer, kNoProperties, "SetStackPointer",
-                   1, 1, 0, 0, 1, 0) {}
+    explicit SetStackPointerOperator(wasm::FPRelativeScope fp_scope)
+        : Operator1<wasm::FPRelativeScope>(IrOpcode::kSetStackPointer,
+                                           kNoProperties, "SetStackPointer", 1,
+                                           1, 0, 0, 1, 0, fp_scope) {}
   };
-  return zone_->New<SetStackPointerOperator>();
+  return zone_->New<SetStackPointerOperator>(fp_scope);
 }
 
 #undef PURE_BINARY_OP_LIST_32
