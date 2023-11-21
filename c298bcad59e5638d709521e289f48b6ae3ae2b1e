@@ -194,6 +194,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b75d593_24e067c9",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-11-21T11:00:05Z",
+      "side": 1,
+      "message": "It\u0027s a minor issue. I know that when I read assembly code, it is helpful for me to know which instructions I can ignore. I\u0027m not sure if I would be able to tell that setting the simulator stack limit ends after 2 instruction.\n\nBut then again, it\u0027s not clear that we ever have to read this assembly code at all.",
+      "parentUuid": "5a85ba61_50486fbf",
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc04fab8_7a2c0147",
