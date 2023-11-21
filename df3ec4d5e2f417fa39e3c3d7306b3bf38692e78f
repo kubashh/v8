@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dddb5b02_9ce6a446",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555292
+      },
+      "writtenOn": "2023-11-21T21:39:05Z",
+      "side": 1,
+      "message": "This is the other approach by \"instrumenting\" each script",
+      "revId": "df3ec4d5e2f417fa39e3c3d7306b3bf38692e78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
