@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "369a0444_e774bb4d",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 46
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-21T15:20:17Z",
+      "side": 1,
+      "message": "Now that I see this: We used to treat young nodes as roots during marking. Where is this handled in this patch?",
+      "range": {
+        "startLine": 959,
+        "startChar": 9,
+        "endLine": 959,
+        "endChar": 20
+      },
+      "revId": "24dd2d2edf19197953b242bc1c13cc35ab9deeea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
