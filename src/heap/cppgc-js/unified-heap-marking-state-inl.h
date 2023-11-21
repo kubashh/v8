@@ -42,14 +42,10 @@ void UnifiedHeapMarkingState::MarkAndPush(
   }
   Tagged<Object> object =
       TracedHandles::Mark(traced_handle_location, mark_mode_);
-  if (!IsHeapObject(object)) {
-    // The embedder is not aware of whether numbers are materialized as heap
-    // objects are just passed around as Smis.
-    return;
-  }
+  DCHECK(IsHeapObject(object));
   Tagged<HeapObject> heap_object = HeapObject::cast(object);
-  if (heap_object.InReadOnlySpace()) return;
-  if (!ShouldMarkObject(heap_object)) return;
+  DCHECK(!heap_object.InReadOnlySpace());
+  DCHECK(ShouldMarkObject(heap_object));
   if (marking_state_->TryMark(heap_object)) {
     local_marking_worklist_->Push(heap_object);
   }
