@@ -16,6 +16,23 @@
       "message": "This was a testing hypothesis for https://crbug.com/1502078 that was not true after all. But it could be a good thing to have. Appending a list to itself results in clearing the list.",
       "revId": "8aa6a418df5b0d84d96600676c897aa4b0fe3e17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc9a5638_ec528c74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-11-21T15:18:37Z",
+      "side": 1,
+      "message": "lgtm!",
+      "revId": "8aa6a418df5b0d84d96600676c897aa4b0fe3e17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
