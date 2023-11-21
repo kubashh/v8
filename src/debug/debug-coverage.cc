@@ -635,7 +635,8 @@ std::unique_ptr<Coverage> Coverage::Collect(
   Script::Iterator scriptIt(isolate);
   for (Tagged<Script> script = scriptIt.Next(); !script.is_null();
        script = scriptIt.Next()) {
-    if (script->IsUserJavaScript()) scripts.push_back(handle(script, isolate));
+    if (script->IsUserJavaScript() && script->IsOnCoverage())
+      scripts.push_back(handle(script, isolate));
   }
 
   for (Handle<Script> script : scripts) {

@@ -1,0 +1,107 @@
+Test collecting code coverage data with Profiler.collectCoverage and filtering.
+
+Running test: testPreciseCoverageFilter
+{
+    id : <messageId>
+    result : {
+        result : {
+            description : 8
+            type : number
+            value : 8
+        }
+    }
+}
+{
+    id : <messageId>
+    result : {
+        result : [
+            [0] : {
+                functions : [
+                    [0] : {
+                        functionName :
+                        isBlockCoverage : false
+                        ranges : [
+                            [0] : {
+                                count : 1
+                                endOffset : 221
+                                startOffset : 0
+                            }
+                        ]
+                    }
+                    [1] : {
+                        functionName : fib
+                        isBlockCoverage : false
+                        ranges : [
+                            [0] : {
+                                count : 15
+                                endOffset : 73
+                                startOffset : 1
+                            }
+                        ]
+                    }
+                    [2] : {
+                        functionName : is_optimized
+                        isBlockCoverage : false
+                        ranges : [
+                            [0] : {
+                                count : 0
+                                endOffset : 175
+                                startOffset : 74
+                            }
+                        ]
+                    }
+                    [3] : {
+                        functionName : iife
+                        isBlockCoverage : false
+                        ranges : [
+                            [0] : {
+                                count : 1
+                                endOffset : 208
+                                startOffset : 177
+                            }
+                        ]
+                    }
+                ]
+                scriptId : <scriptId>
+                url : file://tmp/foo.js
+            }
+        ]
+        timestamp : <timestamp>
+    }
+}
+{
+    id : <messageId>
+    result : {
+        result : [
+        ]
+        timestamp : <timestamp>
+    }
+}
+
+Running test: testPreciseCoverageFilterExclude
+{
+    id : <messageId>
+    result : {
+        result : {
+            description : 8
+            type : number
+            value : 8
+        }
+    }
+}
+{
+    id : <messageId>
+    result : {
+        result : [
+        ]
+        timestamp : <timestamp>
+    }
+}
+{
+    id : <messageId>
+    result : {
+        result : [
+        ]
+        timestamp : <timestamp>
+    }
+}

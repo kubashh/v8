@@ -2808,6 +2808,11 @@ DEFINE_NEG_IMPLICATION(single_threaded, maglev_build_code_on_background)
 #endif  // V8_ENABLE_MAGLEV
 
 //
+// Coverage related flags.
+//
+DEFINE_STRING(coverage_file_filter, "*", "filter by filename in coverage")
+
+//
 // Parallel and concurrent GC (Orinoco) related flags.
 //
 DEFINE_BOOL(single_threaded_gc, false, "disable the use of background gc tasks")

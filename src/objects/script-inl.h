@@ -5,6 +5,8 @@
 #ifndef V8_OBJECTS_SCRIPT_INL_H_
 #define V8_OBJECTS_SCRIPT_INL_H_
 
+#include <regex>
+
 #include "src/objects/managed.h"
 #include "src/objects/objects.h"
 #include "src/objects/script.h"
@@ -150,6 +152,20 @@ bool Script::deserialized() const { return DeserializedBit::decode(flags()); }
 
 void Script::set_deserialized(bool value) {
   set_flags(DeserializedBit::update(flags(), value));
+}
+
+bool Script::IsOnCoverage() {
+  // Fast check first.
+  if (V8_LIKELY(v8_flags.coverage_file_filter[0] == '*' &&
+                v8_flags.coverage_file_filter[1] == '\0')) {
+    return true;
+  }
+
+  // Check if the script name/file matches the filter.
+  bool match =
+      std::regex_search(String::cast(name())->ToCString().get(),
+                        std::regex(v8_flags.coverage_file_filter.value()));
+  return match;
 }
 
 bool Script::is_repl_mode() const { return IsReplModeBit::decode(flags()); }

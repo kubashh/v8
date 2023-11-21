@@ -175,6 +175,9 @@ class Script : public TorqueGeneratedScript<Script, Struct> {
   static void SetSource(Isolate* isolate, Handle<Script> script,
                         Handle<String> source);
 
+  // Retrieve if will be included in the coverage report.
+  inline bool IsOnCoverage();
+
   bool inline CanHaveLineEnds() const;
 
   // Carries information about a source position.
