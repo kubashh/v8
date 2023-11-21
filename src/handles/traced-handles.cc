@@ -361,15 +361,17 @@ const TracedNodeBlock& TracedNodeBlock::From(const TracedNode& node) {
 }
 
 TracedNode* TracedNodeBlock::AllocateNode() {
-  if (used_ == capacity_) {
-    DCHECK_EQ(first_free_node_, kInvalidFreeListNodeIndex);
-    return nullptr;
-  }
-
+  DCHECK_NE(used_, capacity_);
   DCHECK_NE(first_free_node_, kInvalidFreeListNodeIndex);
   auto* node = at(first_free_node_);
-  first_free_node_ = node->next_free();
+#ifdef V8_HAS_BUILTIN_PREFETCH
+  // We will need the node after updating the free list of the node block.
+  // Parameters: Memory location will be written (1) and we will need it
+  // immeditaly all the time (3).
+  __builtin_prefetch(node, 1, 3);
+#endif  // V8_HAS_BUILTIN_PREFETCH
   used_++;
+  first_free_node_ = node->next_free();
   DCHECK(!node->is_in_use());
   return node;
 }
@@ -560,6 +562,11 @@ bool TracedHandlesImpl::NeedsToBeRemembered(
     Tagged<Object> object, TracedNode* node, Address* slot,
     GlobalHandleStoreMode store_mode) const {
   DCHECK(!node->has_old_host());
+
+  auto* cpp_heap = GetCppHeapIfUnifiedYoungGC(isolate_);
+  if (!cpp_heap) {
+    return false;
+  }
   if (store_mode == GlobalHandleStoreMode::kInitializingStore) {
     // Don't record initializing stores.
     return false;
@@ -568,10 +575,9 @@ bool TracedHandlesImpl::NeedsToBeRemembered(
     // If marking is in progress, the marking barrier will be issued later.
     return false;
   }
-  auto* cpp_heap = GetCppHeapIfUnifiedYoungGC(isolate_);
-  if (!cpp_heap) return false;
-
-  if (!ObjectInYoungGeneration(object)) return false;
+  if (!ObjectInYoungGeneration(object)) {
+    return false;
+  }
   return IsCppGCHostOld(*cpp_heap, reinterpret_cast<Address>(slot));
 }
 
