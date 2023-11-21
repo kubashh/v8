@@ -82,6 +82,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9824a1b6_5fa407a5",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 17774,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-21T09:58:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b2a0c48_1b517dc9",
+      "range": {
+        "startLine": 17774,
+        "startChar": 17,
+        "endLine": 17774,
+        "endChar": 41
+      },
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22fdc7b5_b1a883d6",
@@ -117,6 +141,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e074cd8a_69b060e9",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-21T09:58:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c718bf0f_a0cb0e26",
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ba136cc_1b4a0a7c",
@@ -130,6 +172,24 @@
       "writtenOn": "2023-11-20T15:28:48Z",
       "side": 1,
       "message": "Can you add code comments around the simulator block?",
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a85ba61_50486fbf",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-21T09:58:38Z",
+      "side": 1,
+      "message": "I added one at the beginning, I\u0027m not sure one at the end would add much value since it\u0027s only two instructions, wdyt?",
+      "parentUuid": "9ba136cc_1b4a0a7c",
       "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -181,6 +241,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33e775dc_bed4fa41",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-21T09:58:38Z",
+      "side": 1,
+      "message": "Done. Actually I don\u0027t remember why I thought this move was necessary, x16 should always be available since it\u0027s not allocatable. I replaced it with a DCHECK.",
+      "parentUuid": "53b6552e_dffd6acd",
+      "range": {
+        "startLine": 986,
+        "startChar": 22,
+        "endLine": 986,
+        "endChar": 25
+      },
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a97ac45a_4520b13f",
@@ -194,6 +278,30 @@
       "writtenOn": "2023-11-20T15:28:48Z",
       "side": 1,
       "message": "So this flag actually means `switch frame state to fp-relative access only mode` or `switch frame state to allow sp-relative access`.\n\nI was struggling with the current name, because at first I thought it only affects the code generated for the `SetStackPointer`, but actually it means that either a scope is opened where sp-relative addressing is disallowed, or that this scope is closed.\n\nIf you introduce an enum, maybe the names could be `kEnterFPRelativeOnlyScope` and `kLeaveFpRelativeOnlyScope`.",
+      "range": {
+        "startLine": 993,
+        "startChar": 10,
+        "endLine": 993,
+        "endChar": 28
+      },
+      "revId": "c298bcad59e5638d709521e289f48b6ae3ae2b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79470432_d4ce7c46",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-21T09:58:38Z",
+      "side": 1,
+      "message": "Done, I like these names. I\u0027ve also renamed some functions and fields to match that.",
+      "parentUuid": "a97ac45a_4520b13f",
       "range": {
         "startLine": 993,
         "startChar": 10,
