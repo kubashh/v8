@@ -22,6 +22,30 @@
       },
       "revId": "24dd2d2edf19197953b242bc1c13cc35ab9deeea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98d50f19_bb5be41f",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 46
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-21T17:35:46Z",
+      "side": 1,
+      "message": "We still treat them as roots. `is_marking_` is in practice only true for Scavenger cycles interleaved with full GC, in which case we treat all nodes as strong (on ToT as well). In interleaved scavenges, this condition will be false (since it requires `!is_marking_`), and thus we don\u0027t bail out on any objects. The behavior of young GCs as not changed.",
+      "parentUuid": "369a0444_e774bb4d",
+      "range": {
+        "startLine": 959,
+        "startChar": 9,
+        "endLine": 959,
+        "endChar": 20
+      },
+      "revId": "24dd2d2edf19197953b242bc1c13cc35ab9deeea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

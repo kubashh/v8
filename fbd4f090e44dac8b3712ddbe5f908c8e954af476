@@ -181,6 +181,30 @@
       },
       "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b05919ff_9ac35377",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-21T17:35:46Z",
+      "side": 1,
+      "message": "Now I understand what you meant (it didn\u0027t make sense to me but I figured I might be missing something and it\u0027s worth at least trying out; anecdotally, if we replace the Smi and should be marked checks with CHECKs, our benchmarks still pass).\n\nWhat you actually suggesting is not a concurrent vs main thread split. It\u0027s a first time visiting an object/node vs revisiting a weak object/node. Visiting it for the first time can also happen on the main thread. Revisiting happens only on the main thread atm.\nHowever, node maybe updated between visiting them for the first time during concurrent marking and revisiting them in the atomic pause. Given that, I don\u0027t think we can assume that they still refer to a valid heap object, aren\u0027t read only, and should be marked.",
+      "parentUuid": "7d473250_60a05609",
+      "range": {
+        "startLine": 32,
+        "startChar": 54,
+        "endLine": 32,
+        "endChar": 74
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
