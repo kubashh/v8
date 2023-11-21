@@ -2366,7 +2366,9 @@ struct LoadOp : OperationT<LoadOp> {
   struct Kind {
     // The `base` input is a tagged pointer to a HeapObject.
     bool tagged_base : 1;
-    // The effective address might be unaligned.
+    // The effective address might be unaligned. This is only set to true if
+    // the platform does not support unaligned loads for the given
+    // MemoryRepresentation natively.
     bool maybe_unaligned : 1;
     // There is a Wasm trap handler for out-of-bounds accesses.
     bool with_trap_handler : 1;
@@ -2424,6 +2426,13 @@ struct LoadOp : OperationT<LoadOp> {
     }
     static constexpr Kind TrapOnNull() {
       return {true, false, true, true, false, false};
+    }
+    static constexpr Kind MaybeUnaligned(MemoryRepresentation rep) {
+      return rep == MemoryRepresentation::Int8() ||
+                     rep == MemoryRepresentation::Uint8() ||
+                     SupportedOperations::IsUnalignedLoadSupported(rep)
+                 ? LoadOp::Kind::RawAligned()
+                 : LoadOp::Kind::RawUnaligned();
     }
 
     constexpr Kind NotAlwaysCanonicallyAccessed() {
@@ -2511,6 +2520,8 @@ struct LoadOp : OperationT<LoadOp> {
             result_rep == RegisterRepresentation::Compressed()) ||
            kind.is_atomic);
     DCHECK_IMPLIES(element_size_log2 > 0, index().valid());
+    DCHECK_IMPLIES(kind.maybe_unaligned,
+                   !SupportedOperations::IsUnalignedLoadSupported(loaded_rep));
   }
   static LoadOp& New(Graph* graph, OpIndex base, OptionalOpIndex index,
                      Kind kind, MemoryRepresentation loaded_rep,
@@ -2894,6 +2905,8 @@ struct StoreOp : OperationT<StoreOp> {
   }
 
   void Validate(const Graph& graph) const {
+    DCHECK_IMPLIES(kind.maybe_unaligned,
+                   !SupportedOperations::IsUnalignedLoadSupported(stored_rep));
   }
   static StoreOp& New(
       Graph* graph, OpIndex base, OptionalOpIndex index, OpIndex value,
