@@ -16,6 +16,46 @@
       "message": "ptal",
       "revId": "45af686ee8e6ba63d84d2c0a8cd9e33b7700823a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f978d67b_f05aa623",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-11-21T15:21:31Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "45af686ee8e6ba63d84d2c0a8cd9e33b7700823a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4516b862_0a1cfc65",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-11-21T15:21:31Z",
+      "side": 1,
+      "message": "nit: immediately",
+      "range": {
+        "startLine": 370,
+        "startChar": 5,
+        "endLine": 370,
+        "endChar": 15
+      },
+      "revId": "45af686ee8e6ba63d84d2c0a8cd9e33b7700823a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
