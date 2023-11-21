@@ -16,6 +16,23 @@
       "message": "Hi!\n\nJust to note that I\u0027ve found FlagContinuations really hard to work with, and then pairing them with CanCover has been a mini nightmare :) We\u0027re now skipping a CanCover check in two places in the arm64 backend, that we know of, and this combination actually results in tests passing in a release build but fail when validating the SSA in debug mode. So, I was wondering whether there are any plans to give V8 a more robust instruction selection framework..?",
       "revId": "6749bf1a0c14128fa6b3d87fe40725e1f01027cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4840929e_f33b2d20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-21T12:41:58Z",
+      "side": 1,
+      "message": "This optimization looks very similar to what BranchConditionDuplicationReducer (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/branch-condition-duplication-reducer.h) tries to do. I think that it would make more sense to add a `REDUCE(Select)` to BranchConditionDuplicationReducer so that 1) it benefits other architectures as well, and 2) it\u0027s applied a bit more selectively (BranchConditionDuplicationReducer doesn\u0027t duplicate expensive operations like multiplications and divisions, and tries to only do it if it wouldn\u0027t increase register pressure too much, although that\u0027s not super precise).",
+      "revId": "6749bf1a0c14128fa6b3d87fe40725e1f01027cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
