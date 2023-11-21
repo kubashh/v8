@@ -276,6 +276,9 @@ void Decoder::PrintSoftwareInterrupt(SoftwareInterruptCodes svc) {
     case kBreakpoint:
       Print("breakpoint");
       return;
+    case kAdjustStackLimits:
+      Print("adjust stack limit");
+      return;
     default:
       if (svc >= kStopCode) {
         out_buffer_pos_ +=
