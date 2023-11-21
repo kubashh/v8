@@ -489,6 +489,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22afd294_ea81fb5d",
+        "filename": "src/heap/cppgc-js/cpp-heap.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-21T11:15:20Z",
+      "side": 1,
+      "message": "Yeah. We can \"publish\" an `is_in_atomic_pause` flag and let the concurrent markers check that as well and then we\u0027re less likely to revisit objects. We would still need to call this method multiple times in case a concurrent marker didn\u0027t observe the flag change.\nI had that in a previous version and it didn\u0027t impact benchmark scores.\nI\u0027ve restored this flag in the current patchset.",
+      "parentUuid": "7b8e0331_936b8cb8",
+      "range": {
+        "startLine": 820,
+        "startChar": 37,
+        "endLine": 820,
+        "endChar": 64
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d24ee3d2_9d2aeb5a",

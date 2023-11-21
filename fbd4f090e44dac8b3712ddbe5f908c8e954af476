@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d53b3fd9_03370d8e",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-21T11:15:20Z",
+      "side": 1,
+      "message": "Done (but I don\u0027t expect it will have an impact on benchmarks scores)",
+      "parentUuid": "2933d4b3_7d8b532c",
+      "range": {
+        "startLine": 850,
+        "startChar": 18,
+        "endLine": 850,
+        "endChar": 24
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebfe4872_4c107a3a",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38be8089_9045babb",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 44
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-21T11:15:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebfe4872_4c107a3a",
+      "range": {
+        "startLine": 1102,
+        "startChar": 12,
+        "endLine": 1102,
+        "endChar": 28
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28d0774c_12305ffe",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-11-20T11:03:10Z",
       "side": 1,
       "message": "Reading this code again, I wonder if we should split `MarkAndPush()` for the two use cases:\n- Concurrent processing\n- Main thread processing that DCHECKs that markbit is set but otherwise assumes that object is not a smi, not in read only space, and the object should be marked otherwise.",
+      "range": {
+        "startLine": 32,
+        "startChar": 54,
+        "endLine": 32,
+        "endChar": 74
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d25a9b31_ccdb9fcb",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-21T11:15:20Z",
+      "side": 1,
+      "message": "I split that off to crrev.com/c/5048912 to make sure these assumptions hold on ToT and benchmarks are happy with it (https://pinpoint-dot-chromeperf.appspot.com/job/160476d10e0000, https://pinpoint-dot-chromeperf.appspot.com/job/1009f6ea0e0000).",
+      "parentUuid": "28d0774c_12305ffe",
       "range": {
         "startLine": 32,
         "startChar": 54,
