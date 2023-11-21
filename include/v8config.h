@@ -387,6 +387,7 @@ path. Add it with -I<path> to the command line
 # define V8_HAS_BUILTIN_EXPECT (__has_builtin(__builtin_expect))
 # define V8_HAS_BUILTIN_FRAME_ADDRESS (__has_builtin(__builtin_frame_address))
 # define V8_HAS_BUILTIN_POPCOUNT (__has_builtin(__builtin_popcount))
+# define V8_HAS_BUILTIN_PREFETCH (__has_builtin(__builtin_prefetch))
 # define V8_HAS_BUILTIN_ADD_OVERFLOW (__has_builtin(__builtin_add_overflow))
 # define V8_HAS_BUILTIN_SUB_OVERFLOW (__has_builtin(__builtin_sub_overflow))
 # define V8_HAS_BUILTIN_MUL_OVERFLOW (__has_builtin(__builtin_mul_overflow))
