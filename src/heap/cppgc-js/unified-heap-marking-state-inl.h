@@ -15,6 +15,7 @@
 #include "src/heap/mark-compact.h"
 #include "src/heap/marking-state-inl.h"
 #include "src/heap/marking-worklist-inl.h"
+#include "src/objects/js-objects.h"
 #include "src/objects/objects-inl.h"
 
 namespace v8 {
@@ -28,6 +29,7 @@ class BasicTracedReferenceExtractor final {
   }
 };
 
+template <UnifiedHeapMarkingState::MarkedNodeHandling marked_node_handling>
 void UnifiedHeapMarkingState::MarkAndPush(
     const TracedReferenceBase& reference) {
   // The following code will crash with null pointer derefs when finding a
@@ -40,16 +42,41 @@ void UnifiedHeapMarkingState::MarkAndPush(
   if (!traced_handle_location) {
     return;
   }
-  Tagged<Object> object =
-      TracedHandles::Mark(traced_handle_location, mark_mode_);
+
+  Tagged<Object> object;
+  bool was_marked;
+  std::tie(object, was_marked) =
+      TracedHandles::TryMark(traced_handle_location, mark_mode_);
   if (!IsHeapObject(object)) {
     // The embedder is not aware of whether numbers are materialized as heap
     // objects are just passed around as Smis.
     return;
   }
+  if constexpr (marked_node_handling == MarkedNodeHandling::kBailout) {
+    if (!was_marked) return;
+  } else {
+    // marked_node_handling == MarkedNodeHandling::kVerify
+    DCHECK(!was_marked);
+  }
+
   Tagged<HeapObject> heap_object = HeapObject::cast(object);
   if (heap_object.InReadOnlySpace()) return;
   if (!ShouldMarkObject(heap_object)) return;
+
+  if (v8_flags.reclaim_unmodified_wrappers) {
+    bool is_in_atomic_pause =
+        heap_->mark_compact_collector()->is_in_atomic_pause();
+    if (TracedHandles::IsWeak(
+            traced_handle_location, embedder_root_handler_,
+            is_in_atomic_pause
+                ? TracedHandles::WeaknessCompuationMode::kAtomic
+                : TracedHandles::WeaknessCompuationMode::kConcurrent)) {
+      if (!is_in_atomic_pause)
+        local_weak_traced_reference_worklist_.Push(&reference);
+      return;
+    }
+  }
+
   if (marking_state_->TryMark(heap_object)) {
     local_marking_worklist_->Push(heap_object);
   }
