@@ -69,6 +69,42 @@
       "parentUuid": "90aab33e_bd0fe67c",
       "revId": "6749bf1a0c14128fa6b3d87fe40725e1f01027cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a589cb2_e1e5b34a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-22T12:57:38Z",
+      "side": 1,
+      "message": "Yea, I agree that FlagContinuations are definitely not the most intuitive thing of V8. However, changing the instruction selector anytime soon is not a priority (ie, we definitely won\u0027t do it 2024). The short-mid term plan for the instruction selector is to adapt it to work with Turboshaft, then remove the Turbofan parts, and then we can think about changing how things work.",
+      "parentUuid": "a8ad8dcf_8dbb7b44",
+      "revId": "6749bf1a0c14128fa6b3d87fe40725e1f01027cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d601c41e_2ce3dbe8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-22T12:57:38Z",
+      "side": 1,
+      "message": "Unfortunately, we haven\u0027t built much testing infrastructure for Turboshaft, and in particular we don\u0027t have a way to easily create graphs for testing.\nThat being said, generating Turboshaft graph is not very hard (you just need to allocate a graph and create an Assembler), so it shouldn\u0027t be too hard to implement a \"testing framework\" of some kind.\n(I\u0027m not sure I\u0027ll have time to do it anytime soon though)",
+      "parentUuid": "512fea91_fd215e98",
+      "revId": "6749bf1a0c14128fa6b3d87fe40725e1f01027cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
