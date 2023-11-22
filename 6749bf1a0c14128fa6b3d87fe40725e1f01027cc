@@ -33,6 +33,24 @@
       "message": "This optimization looks very similar to what BranchConditionDuplicationReducer (https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/branch-condition-duplication-reducer.h) tries to do. I think that it would make more sense to add a `REDUCE(Select)` to BranchConditionDuplicationReducer so that 1) it benefits other architectures as well, and 2) it\u0027s applied a bit more selectively (BranchConditionDuplicationReducer doesn\u0027t duplicate expensive operations like multiplications and divisions, and tries to only do it if it wouldn\u0027t increase register pressure too much, although that\u0027s not super precise).",
       "revId": "6749bf1a0c14128fa6b3d87fe40725e1f01027cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90aab33e_bd0fe67c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-11-22T10:43:45Z",
+      "side": 1,
+      "message": "Okay, thanks, that looks like exactly what I\u0027m trying to achieve, doing it an the IR level also removes my CanCover worries too.",
+      "parentUuid": "4840929e_f33b2d20",
+      "revId": "6749bf1a0c14128fa6b3d87fe40725e1f01027cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
