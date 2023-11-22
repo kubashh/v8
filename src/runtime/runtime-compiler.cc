@@ -336,7 +336,6 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   DCHECK(isolate->context().is_null());
 
   TimerEventScope<TimerEventDeoptimizeCode> timer(isolate);
-  TRACE_EVENT0("v8", "V8.DeoptimizeCode");
   Handle<JSFunction> function = deoptimizer->function();
   // For OSR the optimized code isn't installed on the function, so get the
   // code object from deoptimizer.
@@ -344,6 +343,8 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   const DeoptimizeKind deopt_kind = deoptimizer->deopt_kind();
   const DeoptimizeReason deopt_reason =
       deoptimizer->GetDeoptInfo().deopt_reason;
+  TRACE_EVENT2("v8", "V8.DeoptimizeCode", "kind", ToString(deopt_kind),
+               "reason", DeoptimizeReasonToString(deopt_reason));
 
   // TODO(turbofan): We currently need the native context to materialize
   // the arguments object, but only to get to its map.
