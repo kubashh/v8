@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "192d6d2e_515a3fec",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-22T15:58:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f111ee08_907627bc",
+      "range": {
+        "startLine": 3340,
+        "startChar": 25,
+        "endLine": 3340,
+        "endChar": 41
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b5df3df_5d9bae46",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-11-17T14:31:40Z",
       "side": 1,
       "message": "can `maps` ever be empty?",
+      "range": {
+        "startLine": 3361,
+        "startChar": 49,
+        "endLine": 3361,
+        "endChar": 56
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbd7a2a7_b8df7ab9",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3361,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-22T15:58:22Z",
+      "side": 1,
+      "message": "It should not, but I should have added a DCHECK at the beginning of the method to document the expectation.\nNow this is not relevant anymore, as we use the `KnownMapsMerger` and abort when the intersection of possible maps is empty.",
+      "parentUuid": "9b5df3df_5d9bae46",
       "range": {
         "startLine": 3361,
         "startChar": 49,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1c4ae0c_94f7982d",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4536,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-22T15:58:22Z",
+      "side": 1,
+      "message": "It needs to be constexpr for the `build_generic_access()` call (distinguishing versions with return value for loads and void for stores).\n\nI changed the lambda now to return a `ReduceResult` so we don\u0027t need the template argument anymore.",
+      "parentUuid": "0fcf243d_45509cda",
+      "range": {
+        "startLine": 4536,
+        "startChar": 2,
+        "endLine": 4536,
+        "endChar": 74
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db9334b4_adcf7ce0",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-11-17T14:31:40Z",
       "side": 1,
       "message": "why? AFAICT it should only set the known maps for this branch of the polymorphic access, which should be correct.",
+      "range": {
+        "startLine": 4567,
+        "startChar": 11,
+        "endLine": 4568,
+        "endChar": 21
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b8d9dc_04b65e82",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4568,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-22T15:58:22Z",
+      "side": 1,
+      "message": "Yeah I somehow missed something when I was checking if that will work (I convinced myself that it doesn\u0027t, but now after double checking convinced myself that it does indeed work).",
+      "parentUuid": "db9334b4_adcf7ce0",
       "range": {
         "startLine": 4567,
         "startChar": 11,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f825cc6f_92e45d69",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4615,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-22T15:58:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b32b0c2_a1d9660e",
+      "range": {
+        "startLine": 4611,
+        "startChar": 0,
+        "endLine": 4615,
+        "endChar": 7
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b2c6375_e30d5d6a",
@@ -146,6 +266,30 @@
       "writtenOn": "2023-11-17T14:31:40Z",
       "side": 1,
       "message": "would it be cleaner to pass in the object, index, and feedback source as arguments to `build_generic_access`, since they\u0027re already being passed into `TryBuildElementAccess`, rather than closing over them here? Or would that be less clean since you\u0027d need to then pass them in to the fallthrough generic access?",
+      "range": {
+        "startLine": 4845,
+        "startChar": 4,
+        "endLine": 4845,
+        "endChar": 44
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caa3ec95_6cafaff6",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4845,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-22T15:58:22Z",
+      "side": 1,
+      "message": "That\u0027s an option. I guess it is up to taste which is better.\nI went for the variant with captures as `build_generic_access()` is then always just a simple lambda without arguments.\nWhat I would dislike about passing object, index and feedback source as arguments is then we would either need to conditionally also pass the `value` for stores (and then we are back needing `is_any_store` as `constexpr`), or capturing some of the arguments (i.e. `value`) while others are passed as argument to the lambda.",
+      "parentUuid": "0b2c6375_e30d5d6a",
       "range": {
         "startLine": 4845,
         "startChar": 4,
