@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b66f4bc_55fe8676",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-22T13:54:03Z",
+      "side": 1,
+      "message": "I think this is confusing. Should we rename to v8_expose_public_symbols?\n\nIdea:\nWhy not something like:\n```\nif (v8_expose_public_symbols) {\n  defines +\u003d [ \"BUILDING_V8_SHARED\" ]\n} else if (is_component_build) {\n  defines +\u003d [ \"BUILDING_V8_SHARED_PRIVATE\" ]\n}\n```\n\nThen in config.h, set set\n```\n#ifdef BUILDING_V8_SHARED_PRIVATE\n#define BUILDING_V8_SHARED\n#endif\n```\n\nWe also need an assert in BUILD.gn checking\nv8_expose_public_symbols -\u003e is_component_build",
+      "range": {
+        "startLine": 759,
+        "startChar": 28,
+        "endLine": 759,
+        "endChar": 45
+      },
+      "revId": "691fdc2509ccfc0f745a5c278e376b583ad47a09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2075b24c_ee34376e",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-22T13:54:03Z",
+      "side": 1,
+      "message": "Why do we need the PRIVATE version if they are always defined together?",
+      "range": {
+        "startLine": 835,
+        "startChar": 7,
+        "endLine": 835,
+        "endChar": 30
+      },
+      "revId": "691fdc2509ccfc0f745a5c278e376b583ad47a09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f9fce5c_d22d6623",
+        "filename": "gni/v8.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-22T13:54:03Z",
+      "side": 1,
+      "message": "This didn\u0027t change right?",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 0
+      },
+      "revId": "691fdc2509ccfc0f745a5c278e376b583ad47a09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
