@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a4b6ec9_91d48252",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2258,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-22T21:42:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70de0510_1c831534",
+      "revId": "b158ad40dcff90c9fccdf4207897b3c5c3330a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af39fd9d_33287b44",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-11-22T19:37:26Z",
       "side": 1,
       "message": "This one doesn\u0027t need fixing?",
+      "revId": "b158ad40dcff90c9fccdf4207897b3c5c3330a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b814fe54_9fb876da",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3382,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-11-22T21:42:43Z",
+      "side": 1,
+      "message": "It does, thanks for noticing! I uploaded the fix.",
+      "parentUuid": "af39fd9d_33287b44",
       "revId": "b158ad40dcff90c9fccdf4207897b3c5c3330a0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
