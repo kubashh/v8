@@ -78,6 +78,7 @@ class Simulator : public SimulatorBase {
     r15,
     num_registers,
     fp = 11,
+    ip = 12,
     sp = 13,
     lr = 14,
     pc = 15,
@@ -235,6 +236,10 @@ class Simulator : public SimulatorBase {
   // Accessor to the internal simulator stack area. Adds a safety
   // margin to prevent overflows (kAdditionalStackMargin).
   uintptr_t StackLimit(uintptr_t c_limit) const;
+
+  // Accessor to change the stack limit
+  void SetStackLimit(uintptr_t limit);
+
   // Return current stack view, without additional safety margins.
   // Users, for example wasm::StackMemory, can add their own.
   base::Vector<uint8_t> GetCurrentStackView() const;
@@ -338,6 +343,10 @@ class Simulator : public SimulatorBase {
   void HandleVList(Instruction* inst);
   void SoftwareInterrupt(Instruction* instr);
   void DebugAtNextPC();
+
+  // Take a copy of v8 simulator tracing flag because flags are frozen after
+  // start.
+  bool instruction_tracing = v8_flags.trace_sim;
 
   // Helper to write back values to register.
   void AdvancedSIMDElementOrStructureLoadStoreWriteback(int Rn, int Rm,
@@ -469,8 +478,10 @@ class Simulator : public SimulatorBase {
   bool underflow_vfp_flag_;
   bool inexact_vfp_flag_;
 
-  // Simulator support.
+  // Simulator support for stacks.
   uint8_t* stack_;
+  uintptr_t stack_limit_;
+
   static const size_t kAllocatedStackSize = 1 * MB;
   // We leave a small buffer below the usable stack to protect against potential
   // stack underflows.
