@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "480e22b3_6ce19149",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-11-22T11:23:17Z",
+      "side": 1,
+      "message": "This broke compilation on arm64 for no-wasm:\nhttps://ci.chromium.org/ui/p/v8/builders/ci/V8%20Linux64%20-%20arm64%20-%20no%20wasm%20-%20debug%20builder/1703/overview\n\nI uploaded a fix: https://crrev.com/c/5052844",
+      "revId": "b158ad40dcff90c9fccdf4207897b3c5c3330a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
