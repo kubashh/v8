@@ -756,8 +756,11 @@ config("internal_config") {
     ":cppgc_header_features",
   ]
 
-  if (is_component_build) {
+  if (is_component_build || v8_expose_symbols) {
     defines += [ "BUILDING_V8_SHARED" ]
+  }
+  if (is_component_build) {
+    defines += [ "BUILDING_V8_SHARED_PRIVATE" ]
   }
 
   if (v8_current_cpu == "riscv64" || v8_current_cpu == "riscv32") {
@@ -827,7 +830,10 @@ config("external_config") {
   configs = [ ":headers_config" ]
   defines = []
   if (is_component_build) {
-    defines += [ "USING_V8_SHARED" ]
+    defines += [
+      "USING_V8_SHARED",
+      "USING_V8_SHARED_PRIVATE",
+    ]
   }
 
   if (current_cpu == "riscv64" || current_cpu == "riscv32") {
