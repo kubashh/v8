@@ -51,6 +51,24 @@
       "parentUuid": "4840929e_f33b2d20",
       "revId": "6749bf1a0c14128fa6b3d87fe40725e1f01027cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "512fea91_fd215e98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-11-22T12:38:36Z",
+      "side": 1,
+      "message": "I see that no tests were added when branch-condition-duplication-reducer was added. Is there anyway of testing the reducers?",
+      "parentUuid": "90aab33e_bd0fe67c",
+      "revId": "6749bf1a0c14128fa6b3d87fe40725e1f01027cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
