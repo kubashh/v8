@@ -20,6 +20,7 @@
 #include "src/compiler/schedule.h"
 #include "src/handles/handles-inl.h"
 #include "src/heap/factory-inl.h"
+#include "src/heap/heap.h"
 #include "src/numbers/conversions-inl.h"
 #include "src/objects/smi.h"
 #include "src/utils/memcopy.h"
@@ -1292,7 +1293,7 @@ void CodeAssembler::TailCallBytecodeDispatch(
 // CSA-generated code
 template V8_EXPORT_PRIVATE void CodeAssembler::TailCallBytecodeDispatch(
     const CallInterfaceDescriptor& descriptor, TNode<RawPtrT> target,
-    TNode<Object>, TNode<IntPtrT>, TNode<BytecodeArray>,
+    TNode<IgnitionRuntimeValue>, TNode<IntPtrT>, TNode<BytecodeArray>,
     TNode<ExternalReference>);
 
 void CodeAssembler::TailCallJSCode(TNode<Code> code, TNode<Context> context,

@@ -2009,7 +2009,7 @@ class V8_EXPORT_PRIVATE InterpreterDispatchDescriptor
  public:
   DEFINE_PARAMETERS(kAccumulator, kBytecodeOffset, kBytecodeArray,
                     kDispatchTable)
-  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kAccumulator
+  DEFINE_PARAMETER_TYPES(MachineType::IntPtr(),     // kAccumulator
                          MachineType::IntPtr(),     // kBytecodeOffset
                          MachineType::AnyTagged(),  // kBytecodeArray
                          MachineType::IntPtr())     // kDispatchTable

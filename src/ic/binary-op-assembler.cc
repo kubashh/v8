@@ -19,8 +19,9 @@ inline bool IsBigInt64OpSupported(BinaryOpAssembler* assembler, Operation op) {
 
 }  // namespace
 
-TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
-    const LazyNode<Context>& context, TNode<Object> lhs, TNode<Object> rhs,
+template <typename T>
+TNode<T> BinaryOpAssembler::Generate_AddWithFeedback(
+    const LazyNode<Context>& context, TNode<T> nan_lhs, TNode<T> nan_rhs,
     TNode<UintPtrT> slot_id, const LazyNode<HeapObject>& maybe_feedback_vector,
     UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi) {
   // Shared entry for floating point addition.
@@ -32,7 +33,10 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
   TVARIABLE(Float64T, var_fadd_lhs);
   TVARIABLE(Float64T, var_fadd_rhs);
   TVARIABLE(Smi, var_type_feedback);
-  TVARIABLE(Object, var_result);
+  TVARIABLE(T, var_result);
+  TVARIABLE(Object, rhs_when_checkingisoddball);
+
+  Label if_lhsisdouble(this, Label::kDeferred);
 
   // Check if the {lhs} is a Smi or a HeapObject.
   Label if_lhsissmi(this);
@@ -42,6 +46,18 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
   // Deferred.
   Label if_lhsisnotsmi(this,
                        rhs_known_smi ? Label::kDeferred : Label::kNonDeferred);
+
+  if constexpr (std::is_same_v<T, NanBoxed>) {
+    GotoIf(NanBoxedIsFloat64(nan_lhs), &if_lhsisdouble);
+  }
+
+  TNode<Object> lhs;
+  if constexpr (std::is_same_v<T, NanBoxed>) {
+    lhs = NanUnboxObject(nan_lhs);
+  } else {
+    lhs = nan_lhs;
+  }
+
   Branch(TaggedIsNotSmi(lhs), &if_lhsisnotsmi, &if_lhsissmi);
 
   BIND(&if_lhsissmi);
@@ -49,6 +65,18 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
     Comment("lhs is Smi");
     TNode<Smi> lhs_smi = CAST(lhs);
     if (!rhs_known_smi) {
+      Label if_rhsisdouble(this, Label::kDeferred);
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        GotoIf(NanBoxedIsFloat64(nan_rhs), &if_rhsisdouble);
+      }
+
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
+
       // Check if the {rhs} is also a Smi.
       Label if_rhsissmi(this), if_rhsisnotsmi(this);
       Branch(TaggedIsSmi(rhs), &if_rhsissmi, &if_rhsisnotsmi);
@@ -64,6 +92,15 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
         Goto(&do_fadd);
       }
 
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        BIND(&if_rhsisdouble);
+        {
+          var_fadd_lhs = SmiToFloat64(lhs_smi);
+          var_fadd_rhs = NanUnboxFloat64(nan_rhs);
+          Goto(&do_fadd);
+        }
+      }
+
       BIND(&if_rhsissmi);
     }
 
@@ -73,6 +110,12 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
       // is for AddSmi operation. For the normal Add operation, we want to fast
       // path both Smi and Number operations, so this path should not be marked
       // as Deferred.
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
       TNode<Smi> rhs_smi = CAST(rhs);
       Label if_overflow(this,
                         rhs_known_smi ? Label::kDeferred : Label::kNonDeferred);
@@ -82,7 +125,11 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
         var_type_feedback = SmiConstant(BinaryOperationFeedback::kSignedSmall);
         UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
                        slot_id, update_feedback_mode);
-        var_result = smi_result;
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(smi_result);
+        } else {
+          var_result = smi_result;
+        }
         Goto(&end);
       }
 
@@ -102,6 +149,18 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
     GotoIfNot(IsHeapNumber(lhs_heap_object), &if_lhsisnotnumber);
 
     if (!rhs_known_smi) {
+      Label if_rhsisdouble(this, Label::kDeferred);
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        GotoIf(NanBoxedIsFloat64(nan_rhs), &if_rhsisdouble);
+      }
+
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
+
       // Check if the {rhs} is Smi.
       Label if_rhsissmi(this), if_rhsisnotsmi(this);
       Branch(TaggedIsSmi(rhs), &if_rhsissmi, &if_rhsisnotsmi);
@@ -117,12 +176,82 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
         Goto(&do_fadd);
       }
 
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        BIND(&if_rhsisdouble);
+        {
+          var_fadd_lhs = LoadHeapNumberValue(lhs_heap_object);
+          var_fadd_rhs = NanUnboxFloat64(nan_rhs);
+          Goto(&do_fadd);
+        }
+      }
+
       BIND(&if_rhsissmi);
     }
     {
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
       var_fadd_lhs = LoadHeapNumberValue(lhs_heap_object);
       var_fadd_rhs = SmiToFloat64(CAST(rhs));
       Goto(&do_fadd);
+    }
+  }
+
+  if constexpr (std::is_same_v<T, NanBoxed>) {
+    BIND(&if_lhsisdouble);
+    {
+      Label do_fadd2(this);
+
+      TVARIABLE(Float64T, var_fadd_lhs2);
+      TVARIABLE(Float64T, var_fadd_rhs2);
+
+      if (!rhs_known_smi) {
+        Label if_rhsisdouble(this, Label::kDeferred);
+        GotoIf(NanBoxedIsFloat64(nan_rhs), &if_rhsisdouble);
+
+        TNode<Object> rhs = NanUnboxObject(nan_rhs);
+        // Check if the {rhs} is Smi.
+        Label if_rhsissmi(this), if_rhsisnotsmi(this);
+        Branch(TaggedIsSmi(rhs), &if_rhsissmi, &if_rhsisnotsmi);
+
+        BIND(&if_rhsisnotsmi);
+        {
+          // Check if the {rhs} is a HeapNumber.
+          TNode<HeapObject> rhs_heap_object = CAST(rhs);
+          GotoIfNot(IsHeapNumber(rhs_heap_object), &check_rhsisoddball);
+
+          var_fadd_lhs2 = NanUnboxFloat64(nan_lhs);
+          var_fadd_rhs2 = LoadHeapNumberValue(rhs_heap_object);
+          Goto(&do_fadd2);
+        }
+
+        BIND(&if_rhsisdouble);
+        {
+          var_fadd_lhs2 = NanUnboxFloat64(nan_lhs);
+          var_fadd_rhs2 = NanUnboxFloat64(nan_rhs);
+          Goto(&do_fadd2);
+        }
+
+        BIND(&if_rhsissmi);
+      }
+      {
+        var_fadd_lhs2 = NanUnboxFloat64(nan_lhs);
+        var_fadd_rhs2 = SmiToFloat64(CAST(NanUnboxObject(nan_rhs)));
+        Goto(&do_fadd2);
+      }
+      BIND(&do_fadd2);
+      {
+        var_type_feedback = SmiConstant(BinaryOperationFeedback::kNumber);
+        UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                       slot_id, update_feedback_mode);
+        TNode<Float64T> value =
+            Float64Add(var_fadd_lhs2.value(), var_fadd_rhs2.value());
+        var_result = NanBox(value);
+        Goto(&end);
+      }
     }
   }
 
@@ -133,8 +262,11 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
                    update_feedback_mode);
     TNode<Float64T> value =
         Float64Add(var_fadd_lhs.value(), var_fadd_rhs.value());
-    TNode<HeapNumber> result = AllocateHeapNumberWithValue(value);
-    var_result = result;
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      var_result = NanBox(value);
+    } else {
+      var_result = AllocateHeapNumberWithValue(value);
+    }
     Goto(&end);
   }
 
@@ -149,6 +281,16 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
 
     BIND(&if_lhsisoddball);
     {
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        GotoIf(NanBoxedIsFloat64(nan_rhs), &call_with_oddball_feedback);
+      }
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
+
       GotoIf(TaggedIsSmi(rhs), &call_with_oddball_feedback);
 
       // Check if {rhs} is a HeapNumber.
@@ -158,6 +300,16 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
 
     BIND(&if_lhsisnotoddball);
     {
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        GotoIf(NanBoxedIsFloat64(nan_rhs), &call_with_any_feedback);
+      }
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
+
       // Check if the {rhs} is a smi, and exit the string and bigint check early
       // if it is.
       GotoIf(TaggedIsSmi(rhs), &call_with_any_feedback);
@@ -192,8 +344,13 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
         var_type_feedback = SmiConstant(BinaryOperationFeedback::kString);
         UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
                        slot_id, update_feedback_mode);
-        var_result =
+        TNode<Object> result =
             CallBuiltin(Builtin::kStringAdd_CheckNone, context(), lhs, rhs);
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(result);
+        } else {
+          var_result = result;
+        }
 
         Goto(&end);
       }
@@ -204,6 +361,13 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
   {
     // Check if rhs is an oddball. At this point we know lhs is either a
     // Smi or number or oddball and rhs is not a number or Smi.
+    TNode<Object> rhs;
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      CSA_DCHECK(this, NanBoxedIsObject(nan_rhs));
+      rhs = NanUnboxObject(nan_rhs);
+    } else {
+      rhs = nan_rhs;
+    }
     TNode<Uint16T> rhs_instance_type = LoadInstanceType(CAST(rhs));
     TNode<BoolT> rhs_is_oddball =
         InstanceTypeEqual(rhs_instance_type, ODDBALL_TYPE);
@@ -214,6 +378,13 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
   if (Is64()) {
     BIND(&bigint64);
     {
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        CSA_DCHECK(this, NanBoxedIsObject(nan_rhs));
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
       // Both {lhs} and {rhs} are of BigInt type and can fit in 64-bit
       // registers.
       Label if_overflow(this);
@@ -221,9 +392,14 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
       TVARIABLE(UintPtrT, rhs_raw);
       BigIntToRawBytes(CAST(lhs), &lhs_raw, &lhs_raw);
       BigIntToRawBytes(CAST(rhs), &rhs_raw, &rhs_raw);
-      var_result = BigIntFromInt64(
+      TNode<Object> result = BigIntFromInt64(
           TryIntPtrAdd(UncheckedCast<IntPtrT>(lhs_raw.value()),
                        UncheckedCast<IntPtrT>(rhs_raw.value()), &if_overflow));
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        var_result = NanBox(result);
+      } else {
+        var_result = result;
+      }
 
       var_type_feedback = SmiConstant(BinaryOperationFeedback::kBigInt64);
       UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
@@ -237,11 +413,24 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
 
   BIND(&bigint);
   {
+    TNode<Object> rhs;
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      CSA_DCHECK(this, NanBoxedIsObject(nan_rhs));
+      rhs = NanUnboxObject(nan_rhs);
+    } else {
+      rhs = nan_rhs;
+    }
     // Both {lhs} and {rhs} are of BigInt type.
     Label bigint_too_big(this);
-    var_result = CallBuiltin(Builtin::kBigIntAddNoThrow, context(), lhs, rhs);
+    TNode<Object> result =
+        CallBuiltin(Builtin::kBigIntAddNoThrow, context(), lhs, rhs);
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      var_result = NanBox(result);
+    } else {
+      var_result = result;
+    }
     // Check for sentinel that signals BigIntTooBig exception.
-    GotoIf(TaggedIsSmi(var_result.value()), &bigint_too_big);
+    GotoIf(TaggedIsSmi(result), &bigint_too_big);
 
     var_type_feedback = SmiConstant(BinaryOperationFeedback::kBigInt);
     UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(), slot_id,
@@ -273,7 +462,22 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
   {
     UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(), slot_id,
                    update_feedback_mode);
-    var_result = CallBuiltin(Builtin::kAdd, context(), lhs, rhs);
+    TNode<Object> lhs;
+    TNode<Object> rhs;
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      // TODO: Check if we can eliminate this, or have in a different path!
+      lhs = GetTaggedObjectFromNanBox(nan_lhs);
+      rhs = GetTaggedObjectFromNanBox(nan_rhs);
+    } else {
+      lhs = nan_lhs;
+      rhs = nan_rhs;
+    }
+    TNode<Object> result = CallBuiltin(Builtin::kAdd, context(), lhs, rhs);
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      var_result = NanBox(result);
+    } else {
+      var_result = result;
+    }
     Goto(&end);
   }
 
@@ -281,8 +485,20 @@ TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
   return var_result.value();
 }
 
-TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
-    const LazyNode<Context>& context, TNode<Object> lhs, TNode<Object> rhs,
+template TNode<Object> BinaryOpAssembler::Generate_AddWithFeedback(
+    const LazyNode<Context>& context, TNode<Object> left, TNode<Object> right,
+    TNode<UintPtrT> slot, const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template TNode<NanBoxed> BinaryOpAssembler::Generate_AddWithFeedback(
+    const LazyNode<Context>& context, TNode<NanBoxed> left,
+    TNode<NanBoxed> right, TNode<UintPtrT> slot,
+    const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template <typename T>
+TNode<T> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
+    const LazyNode<Context>& context, TNode<T> nan_lhs, TNode<T> nan_rhs,
     TNode<UintPtrT> slot_id, const LazyNode<HeapObject>& maybe_feedback_vector,
     const SmiOperation& smiOperation, const FloatOperation& floatOperation,
     Operation op, UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi) {
@@ -293,7 +509,7 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
   TVARIABLE(Float64T, var_float_lhs);
   TVARIABLE(Float64T, var_float_rhs);
   TVARIABLE(Smi, var_type_feedback);
-  TVARIABLE(Object, var_result);
+  TVARIABLE(T, var_result);
 
   Label if_lhsissmi(this);
   // If rhs is known to be an Smi (in the SubSmi, MulSmi, DivSmi, ModSmi
@@ -302,6 +518,20 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
   // path should not be marked as Deferred.
   Label if_lhsisnotsmi(this,
                        rhs_known_smi ? Label::kDeferred : Label::kNonDeferred);
+
+  Label if_lhsisdouble(this, Label::kDeferred);
+
+  if constexpr (std::is_same_v<T, NanBoxed>) {
+    GotoIf(NanBoxedIsFloat64(nan_lhs), &if_lhsisdouble);
+  }
+
+  TNode<Object> lhs;
+  if constexpr (std::is_same_v<T, NanBoxed>) {
+    lhs = NanUnboxObject(nan_lhs);
+  } else {
+    lhs = nan_lhs;
+  }
+
   Branch(TaggedIsNotSmi(lhs), &if_lhsisnotsmi, &if_lhsissmi);
 
   // Check if the {lhs} is a Smi or a HeapObject.
@@ -310,6 +540,18 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
     Comment("lhs is Smi");
     TNode<Smi> lhs_smi = CAST(lhs);
     if (!rhs_known_smi) {
+      Label if_rhsisdouble(this, Label::kDeferred);
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        GotoIf(NanBoxedIsFloat64(nan_rhs), &if_rhsisdouble);
+      }
+
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
+
       // Check if the {rhs} is also a Smi.
       Label if_rhsissmi(this), if_rhsisnotsmi(this);
       Branch(TaggedIsSmi(rhs), &if_rhsissmi, &if_rhsisnotsmi);
@@ -326,12 +568,33 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
         Goto(&do_float_operation);
       }
 
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        BIND(&if_rhsisdouble);
+        {
+          var_float_lhs = SmiToFloat64(lhs_smi);
+          var_float_rhs = NanUnboxFloat64(nan_rhs);
+          Goto(&do_float_operation);
+        }
+      }
+
       BIND(&if_rhsissmi);
     }
 
     {
       Comment("perform smi operation");
-      var_result = smiOperation(lhs_smi, CAST(rhs), &var_type_feedback);
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
+      TNode<Object> smi_result =
+          smiOperation(lhs_smi, CAST(rhs), &var_type_feedback);
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        var_result = NanBox(smi_result);
+      } else {
+        var_result = smi_result;
+      }
       UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
                      slot_id, update_feedback_mode);
       Goto(&end);
@@ -346,6 +609,18 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
     GotoIfNot(IsHeapNumber(lhs_heap_object), &if_lhsisnotnumber);
 
     if (!rhs_known_smi) {
+      Label if_rhsisdouble(this, Label::kDeferred);
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        GotoIf(NanBoxedIsFloat64(nan_rhs), &if_rhsisdouble);
+      }
+
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
+
       // Check if the {rhs} is a Smi.
       Label if_rhsissmi(this), if_rhsisnotsmi(this);
       Branch(TaggedIsSmi(rhs), &if_rhsissmi, &if_rhsisnotsmi);
@@ -362,14 +637,86 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
         Goto(&do_float_operation);
       }
 
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        BIND(&if_rhsisdouble);
+        {
+          var_float_lhs = LoadHeapNumberValue(lhs_heap_object);
+          var_float_rhs = NanUnboxFloat64(nan_rhs);
+          Goto(&do_float_operation);
+        }
+      }
+
       BIND(&if_rhsissmi);
     }
 
     {
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
       // Perform floating point operation.
       var_float_lhs = LoadHeapNumberValue(lhs_heap_object);
       var_float_rhs = SmiToFloat64(CAST(rhs));
       Goto(&do_float_operation);
+    }
+  }
+
+  if constexpr (std::is_same_v<T, NanBoxed>) {
+    BIND(&if_lhsisdouble);
+    {
+      Label do_float_operation2(this);
+      TVARIABLE(Float64T, var_float_lhs2);
+      TVARIABLE(Float64T, var_float_rhs2);
+
+      if (!rhs_known_smi) {
+        Label if_rhsisdouble(this, Label::kDeferred);
+        GotoIf(NanBoxedIsFloat64(nan_rhs), &if_rhsisdouble);
+
+        TNode<Object> rhs = NanUnboxObject(nan_rhs);
+        // Check if the {rhs} is Smi.
+        Label if_rhsissmi(this), if_rhsisnotsmi(this);
+        Branch(TaggedIsSmi(rhs), &if_rhsissmi, &if_rhsisnotsmi);
+
+        BIND(&if_rhsisnotsmi);
+        {
+          // Check if the {rhs} is a HeapNumber.
+          TNode<HeapObject> rhs_heap_object = CAST(rhs);
+          GotoIfNot(IsHeapNumber(rhs_heap_object), &check_rhsisoddball);
+
+          var_float_lhs2 = NanUnboxFloat64(nan_lhs);
+          var_float_rhs2 = LoadHeapNumberValue(rhs_heap_object);
+          Goto(&do_float_operation2);
+        }
+
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          BIND(&if_rhsisdouble);
+          {
+            var_float_lhs2 = NanUnboxFloat64(nan_lhs);
+            var_float_rhs2 = NanUnboxFloat64(nan_rhs);
+            Goto(&do_float_operation2);
+          }
+        }
+
+        BIND(&if_rhsissmi);
+      }
+      {
+        var_float_lhs2 = NanUnboxFloat64(nan_lhs);
+        var_float_rhs2 = SmiToFloat64(CAST(NanUnboxObject(nan_rhs)));
+        Goto(&do_float_operation2);
+      }
+      BIND(&do_float_operation2);
+      {
+        var_type_feedback = SmiConstant(BinaryOperationFeedback::kNumber);
+        UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(),
+                       slot_id, update_feedback_mode);
+        TNode<Float64T> lhs_value = var_float_lhs2.value();
+        TNode<Float64T> rhs_value = var_float_rhs2.value();
+        TNode<Float64T> value = floatOperation(lhs_value, rhs_value);
+        var_result = NanBox(value);
+        Goto(&end);
+      }
     }
   }
 
@@ -381,7 +728,11 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
     TNode<Float64T> lhs_value = var_float_lhs.value();
     TNode<Float64T> rhs_value = var_float_rhs.value();
     TNode<Float64T> value = floatOperation(lhs_value, rhs_value);
-    var_result = AllocateHeapNumberWithValue(value);
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      var_result = NanBox(value);
+    } else {
+      var_result = AllocateHeapNumberWithValue(value);
+    }
     Goto(&end);
   }
 
@@ -398,6 +749,17 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
     BIND(&if_left_oddball);
     {
       Label if_rhsissmi(this), if_rhsisnotsmi(this);
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        // Same aproach as SMI.
+        GotoIf(NanBoxedIsFloat64(nan_rhs), &if_rhsissmi);
+      }
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
+
       Branch(TaggedIsSmi(rhs), &if_rhsissmi, &if_rhsisnotsmi);
 
       BIND(&if_rhsissmi);
@@ -420,6 +782,16 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
 
     BIND(&if_left_bigint);
     {
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        GotoIf(NanBoxedIsFloat64(nan_rhs), &call_with_any_feedback);
+      }
+
+      TNode<Object> rhs;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        rhs = NanUnboxObject(nan_rhs);
+      } else {
+        rhs = nan_rhs;
+      }
       GotoIf(TaggedIsSmi(rhs), &call_with_any_feedback);
       GotoIfNot(IsBigInt(CAST(rhs)), &call_with_any_feedback);
       if (IsBigInt64OpSupported(this, op)) {
@@ -436,6 +808,13 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
   {
     // Check if rhs is an oddball. At this point we know lhs is either a
     // Smi or number or oddball and rhs is not a number or Smi.
+    TNode<Object> rhs;
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      CSA_DCHECK(this, NanBoxedIsObject(nan_rhs));
+      rhs = NanUnboxObject(nan_rhs);
+    } else {
+      rhs = nan_rhs;
+    }
     TNode<Uint16T> rhs_instance_type = LoadInstanceType(CAST(rhs));
     TNode<BoolT> rhs_is_oddball =
         InstanceTypeEqual(rhs_instance_type, ODDBALL_TYPE);
@@ -447,6 +826,13 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
 
   if (IsBigInt64OpSupported(this, op)) {
     BIND(&if_both_bigint64);
+    TNode<Object> rhs;
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      CSA_DCHECK(this, NanBoxedIsObject(nan_rhs));
+      rhs = NanUnboxObject(nan_rhs);
+    } else {
+      rhs = nan_rhs;
+    }
     var_type_feedback = SmiConstant(BinaryOperationFeedback::kBigInt64);
     UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(), slot_id,
                    update_feedback_mode);
@@ -458,16 +844,26 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
 
     switch (op) {
       case Operation::kSubtract: {
-        var_result = BigIntFromInt64(TryIntPtrSub(
+        TNode<Object> result = BigIntFromInt64(TryIntPtrSub(
             UncheckedCast<IntPtrT>(lhs_raw.value()),
             UncheckedCast<IntPtrT>(rhs_raw.value()), &if_both_bigint));
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(result);
+        } else {
+          var_result = result;
+        }
         Goto(&end);
         break;
       }
       case Operation::kMultiply: {
-        var_result = BigIntFromInt64(TryIntPtrMul(
+        TNode<Object> result = BigIntFromInt64(TryIntPtrMul(
             UncheckedCast<IntPtrT>(lhs_raw.value()),
             UncheckedCast<IntPtrT>(rhs_raw.value()), &if_both_bigint));
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(result);
+        } else {
+          var_result = result;
+        }
         Goto(&end);
         break;
       }
@@ -475,9 +871,14 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
         // No need to check overflow because INT_MIN is excluded
         // from the range of small BigInts.
         Label if_div_zero(this);
-        var_result = BigIntFromInt64(TryIntPtrDiv(
+        TNode<Object> result = BigIntFromInt64(TryIntPtrDiv(
             UncheckedCast<IntPtrT>(lhs_raw.value()),
             UncheckedCast<IntPtrT>(rhs_raw.value()), &if_div_zero));
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(result);
+        } else {
+          var_result = result;
+        }
         Goto(&end);
 
         BIND(&if_div_zero);
@@ -492,9 +893,14 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
       }
       case Operation::kModulus: {
         Label if_div_zero(this);
-        var_result = BigIntFromInt64(TryIntPtrMod(
+        TNode<Object> result = BigIntFromInt64(TryIntPtrMod(
             UncheckedCast<IntPtrT>(lhs_raw.value()),
             UncheckedCast<IntPtrT>(rhs_raw.value()), &if_div_zero));
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(result);
+        } else {
+          var_result = result;
+        }
         Goto(&end);
 
         BIND(&if_div_zero);
@@ -517,13 +923,25 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
     var_type_feedback = SmiConstant(BinaryOperationFeedback::kBigInt);
     UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(), slot_id,
                    update_feedback_mode);
+    TNode<Object> rhs;
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      CSA_DCHECK(this, NanBoxedIsObject(nan_rhs));
+      rhs = NanUnboxObject(nan_rhs);
+    } else {
+      rhs = nan_rhs;
+    }
     switch (op) {
       case Operation::kSubtract: {
-        var_result =
+        TNode<Object> result =
             CallBuiltin(Builtin::kBigIntSubtractNoThrow, context(), lhs, rhs);
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(result);
+        } else {
+          var_result = result;
+        }
 
         // Check for sentinel that signals BigIntTooBig exception.
-        GotoIfNot(TaggedIsSmi(var_result.value()), &end);
+        GotoIfNot(TaggedIsSmi(result), &end);
 
         // Update feedback to prevent deopt loop.
         UpdateFeedback(SmiConstant(BinaryOperationFeedback::kAny),
@@ -533,14 +951,18 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
       }
       case Operation::kMultiply: {
         Label termination_requested(this, Label::kDeferred);
-        var_result =
+        TNode<Object> result =
             CallBuiltin(Builtin::kBigIntMultiplyNoThrow, context(), lhs, rhs);
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(result);
+        } else {
+          var_result = result;
+        }
 
-        GotoIfNot(TaggedIsSmi(var_result.value()), &end);
+        GotoIfNot(TaggedIsSmi(result), &end);
 
         // Check for sentinel that signals TerminationRequested exception.
-        GotoIf(TaggedEqual(var_result.value(), SmiConstant(1)),
-               &termination_requested);
+        GotoIf(TaggedEqual(result, SmiConstant(1)), &termination_requested);
 
         // Handles BigIntTooBig exception.
         // Update feedback to prevent deopt loop.
@@ -554,14 +976,18 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
       }
       case Operation::kDivide: {
         Label termination_requested(this, Label::kDeferred);
-        var_result =
+        TNode<Object> result =
             CallBuiltin(Builtin::kBigIntDivideNoThrow, context(), lhs, rhs);
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(result);
+        } else {
+          var_result = result;
+        }
 
-        GotoIfNot(TaggedIsSmi(var_result.value()), &end);
+        GotoIfNot(TaggedIsSmi(result), &end);
 
         // Check for sentinel that signals TerminationRequested exception.
-        GotoIf(TaggedEqual(var_result.value(), SmiConstant(1)),
-               &termination_requested);
+        GotoIf(TaggedEqual(result, SmiConstant(1)), &termination_requested);
 
         // Handles BigIntDivZero exception.
         // Update feedback to prevent deopt loop.
@@ -575,14 +1001,18 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
       }
       case Operation::kModulus: {
         Label termination_requested(this, Label::kDeferred);
-        var_result =
+        TNode<Object> result =
             CallBuiltin(Builtin::kBigIntModulusNoThrow, context(), lhs, rhs);
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(result);
+        } else {
+          var_result = result;
+        }
 
-        GotoIfNot(TaggedIsSmi(var_result.value()), &end);
+        GotoIfNot(TaggedIsSmi(result), &end);
 
         // Check for sentinel that signals TerminationRequested exception.
-        GotoIf(TaggedEqual(var_result.value(), SmiConstant(1)),
-               &termination_requested);
+        GotoIf(TaggedEqual(result, SmiConstant(1)), &termination_requested);
 
         // Handles BigIntDivZero exception.
         // Update feedback to prevent deopt loop.
@@ -596,8 +1026,13 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
       }
       case Operation::kExponentiate: {
         // TODO(panq): replace the runtime with builtin once it is implemented.
-        var_result = CallRuntime(Runtime::kBigIntBinaryOp, context(), lhs, rhs,
-                                 SmiConstant(op));
+        TNode<Object> result = CallRuntime(Runtime::kBigIntBinaryOp, context(),
+                                           lhs, rhs, SmiConstant(op));
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          var_result = NanBox(result);
+        } else {
+          var_result = result;
+        }
         Goto(&end);
         break;
       }
@@ -617,6 +1052,15 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
     UpdateFeedback(var_type_feedback.value(), maybe_feedback_vector(), slot_id,
                    update_feedback_mode);
     TNode<Object> result;
+    TNode<Object> lhs;
+    TNode<Object> rhs;
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      lhs = GetTaggedObjectFromNanBox(nan_lhs);
+      rhs = GetTaggedObjectFromNanBox(nan_rhs);
+    } else {
+      lhs = nan_lhs;
+      rhs = nan_rhs;
+    }
     switch (op) {
       case Operation::kSubtract:
         result = CallBuiltin(Builtin::kSubtract, context(), lhs, rhs);
@@ -636,7 +1080,11 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
       default:
         UNREACHABLE();
     }
-    var_result = result;
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      var_result = NanBox(result);
+    } else {
+      var_result = result;
+    }
     Goto(&end);
   }
 
@@ -644,8 +1092,9 @@ TNode<Object> BinaryOpAssembler::Generate_BinaryOperationWithFeedback(
   return var_result.value();
 }
 
-TNode<Object> BinaryOpAssembler::Generate_SubtractWithFeedback(
-    const LazyNode<Context>& context, TNode<Object> lhs, TNode<Object> rhs,
+template <typename T>
+TNode<T> BinaryOpAssembler::Generate_SubtractWithFeedback(
+    const LazyNode<Context>& context, TNode<T> lhs, TNode<T> rhs,
     TNode<UintPtrT> slot_id, const LazyNode<HeapObject>& maybe_feedback_vector,
     UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi) {
   auto smiFunction = [=](TNode<Smi> lhs, TNode<Smi> rhs,
@@ -680,8 +1129,20 @@ TNode<Object> BinaryOpAssembler::Generate_SubtractWithFeedback(
       floatFunction, Operation::kSubtract, update_feedback_mode, rhs_known_smi);
 }
 
-TNode<Object> BinaryOpAssembler::Generate_MultiplyWithFeedback(
-    const LazyNode<Context>& context, TNode<Object> lhs, TNode<Object> rhs,
+template TNode<Object> BinaryOpAssembler::Generate_SubtractWithFeedback(
+    const LazyNode<Context>& context, TNode<Object> left, TNode<Object> right,
+    TNode<UintPtrT> slot, const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template TNode<NanBoxed> BinaryOpAssembler::Generate_SubtractWithFeedback(
+    const LazyNode<Context>& context, TNode<NanBoxed> left,
+    TNode<NanBoxed> right, TNode<UintPtrT> slot,
+    const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template <typename T>
+TNode<T> BinaryOpAssembler::Generate_MultiplyWithFeedback(
+    const LazyNode<Context>& context, TNode<T> lhs, TNode<T> rhs,
     TNode<UintPtrT> slot_id, const LazyNode<HeapObject>& maybe_feedback_vector,
     UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi) {
   auto smiFunction = [=](TNode<Smi> lhs, TNode<Smi> rhs,
@@ -700,10 +1161,20 @@ TNode<Object> BinaryOpAssembler::Generate_MultiplyWithFeedback(
       floatFunction, Operation::kMultiply, update_feedback_mode, rhs_known_smi);
 }
 
-TNode<Object> BinaryOpAssembler::Generate_DivideWithFeedback(
-    const LazyNode<Context>& context, TNode<Object> dividend,
-    TNode<Object> divisor, TNode<UintPtrT> slot_id,
-    const LazyNode<HeapObject>& maybe_feedback_vector,
+template TNode<Object> BinaryOpAssembler::Generate_MultiplyWithFeedback(
+    const LazyNode<Context>& context, TNode<Object> lhs, TNode<Object> rhs,
+    TNode<UintPtrT> slot_id, const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template TNode<NanBoxed> BinaryOpAssembler::Generate_MultiplyWithFeedback(
+    const LazyNode<Context>& context, TNode<NanBoxed> lhs, TNode<NanBoxed> rhs,
+    TNode<UintPtrT> slot_id, const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template <typename T>
+TNode<T> BinaryOpAssembler::Generate_DivideWithFeedback(
+    const LazyNode<Context>& context, TNode<T> dividend, TNode<T> divisor,
+    TNode<UintPtrT> slot_id, const LazyNode<HeapObject>& maybe_feedback_vector,
     UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi) {
   auto smiFunction = [=](TNode<Smi> lhs, TNode<Smi> rhs,
                          TVariable<Smi>* var_type_feedback) {
@@ -737,10 +1208,22 @@ TNode<Object> BinaryOpAssembler::Generate_DivideWithFeedback(
       floatFunction, Operation::kDivide, update_feedback_mode, rhs_known_smi);
 }
 
-TNode<Object> BinaryOpAssembler::Generate_ModulusWithFeedback(
+template TNode<Object> BinaryOpAssembler::Generate_DivideWithFeedback(
     const LazyNode<Context>& context, TNode<Object> dividend,
     TNode<Object> divisor, TNode<UintPtrT> slot_id,
     const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template TNode<NanBoxed> BinaryOpAssembler::Generate_DivideWithFeedback(
+    const LazyNode<Context>& context, TNode<NanBoxed> dividend,
+    TNode<NanBoxed> divisor, TNode<UintPtrT> slot_id,
+    const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template <typename T>
+TNode<T> BinaryOpAssembler::Generate_ModulusWithFeedback(
+    const LazyNode<Context>& context, TNode<T> dividend, TNode<T> divisor,
+    TNode<UintPtrT> slot_id, const LazyNode<HeapObject>& maybe_feedback_vector,
     UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi) {
   auto smiFunction = [=](TNode<Smi> lhs, TNode<Smi> rhs,
                          TVariable<Smi>* var_type_feedback) {
@@ -758,10 +1241,22 @@ TNode<Object> BinaryOpAssembler::Generate_ModulusWithFeedback(
       floatFunction, Operation::kModulus, update_feedback_mode, rhs_known_smi);
 }
 
-TNode<Object> BinaryOpAssembler::Generate_ExponentiateWithFeedback(
-    const LazyNode<Context>& context, TNode<Object> base,
-    TNode<Object> exponent, TNode<UintPtrT> slot_id,
+template TNode<Object> BinaryOpAssembler::Generate_ModulusWithFeedback(
+    const LazyNode<Context>& context, TNode<Object> dividend,
+    TNode<Object> divisor, TNode<UintPtrT> slot_id,
     const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template TNode<NanBoxed> BinaryOpAssembler::Generate_ModulusWithFeedback(
+    const LazyNode<Context>& context, TNode<NanBoxed> dividend,
+    TNode<NanBoxed> divisor, TNode<UintPtrT> slot_id,
+    const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template <typename T>
+TNode<T> BinaryOpAssembler::Generate_ExponentiateWithFeedback(
+    const LazyNode<Context>& context, TNode<T> base, TNode<T> exponent,
+    TNode<UintPtrT> slot_id, const LazyNode<HeapObject>& maybe_feedback_vector,
     UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi) {
   auto smiFunction = [=](TNode<Smi> base, TNode<Smi> exponent,
                          TVariable<Smi>* var_type_feedback) {
@@ -778,12 +1273,25 @@ TNode<Object> BinaryOpAssembler::Generate_ExponentiateWithFeedback(
       rhs_known_smi);
 }
 
-TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
-    Operation bitwise_op, TNode<Object> left, TNode<Object> right,
+template TNode<Object> BinaryOpAssembler::Generate_ExponentiateWithFeedback(
+    const LazyNode<Context>& context, TNode<Object> base,
+    TNode<Object> exponent, TNode<UintPtrT> slot_id,
+    const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template TNode<NanBoxed> BinaryOpAssembler::Generate_ExponentiateWithFeedback(
+    const LazyNode<Context>& context, TNode<NanBoxed> base,
+    TNode<NanBoxed> exponent, TNode<UintPtrT> slot_id,
+    const LazyNode<HeapObject>& maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode, bool rhs_known_smi);
+
+template <typename T>
+TNode<T> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
+    Operation bitwise_op, TNode<T> left, TNode<T> right,
     const LazyNode<Context>& context, TNode<UintPtrT>* slot,
     const LazyNode<HeapObject>* maybe_feedback_vector,
     UpdateFeedbackMode update_feedback_mode) {
-  TVARIABLE(Object, result);
+  TVARIABLE(T, result);
   TVARIABLE(Smi, var_left_feedback);
   TVARIABLE(Smi, var_right_feedback);
   TVARIABLE(Word32T, var_left_word32);
@@ -822,13 +1330,25 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
 
   BIND(&do_number_op);
   {
-    result = BitwiseOp(var_left_word32.value(), var_right_word32.value(),
-                       bitwise_op);
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      result = BitwiseOpNanBoxedResult(var_left_word32.value(),
+                                       var_right_word32.value(), bitwise_op);
+    } else {
+      result = BitwiseOp(var_left_word32.value(), var_right_word32.value(),
+                         bitwise_op);
+    }
 
     if (slot) {
-      TNode<Smi> result_type = SelectSmiConstant(
-          TaggedIsSmi(result.value()), BinaryOperationFeedback::kSignedSmall,
-          BinaryOperationFeedback::kNumber);
+      TNode<Smi> result_type;
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        result_type = SelectSmiConstant(NanBoxedIsObject(result.value()),
+                                        BinaryOperationFeedback::kSignedSmall,
+                                        BinaryOperationFeedback::kNumber);
+      } else {
+        result_type = SelectSmiConstant(TaggedIsSmi(result.value()),
+                                        BinaryOperationFeedback::kSignedSmall,
+                                        BinaryOperationFeedback::kNumber);
+      }
       TNode<Smi> input_feedback =
           SmiOr(var_left_feedback.value(), var_right_feedback.value());
       TNode<Smi> feedback = SmiOr(result_type, input_feedback);
@@ -870,20 +1390,35 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
 
       switch (bitwise_op) {
         case Operation::kBitwiseAnd: {
-          result = BigIntFromInt64(UncheckedCast<IntPtrT>(
+          TNode<Object> result_object = BigIntFromInt64(UncheckedCast<IntPtrT>(
               WordAnd(left_raw.value(), right_raw.value())));
+          if constexpr (std::is_same_v<T, NanBoxed>) {
+            result = NanBox(result_object);
+          } else {
+            result = result_object;
+          }
           Goto(&done);
           break;
         }
         case Operation::kBitwiseOr: {
-          result = BigIntFromInt64(UncheckedCast<IntPtrT>(
+          TNode<Object> result_object = BigIntFromInt64(UncheckedCast<IntPtrT>(
               WordOr(left_raw.value(), right_raw.value())));
+          if constexpr (std::is_same_v<T, NanBoxed>) {
+            result = NanBox(result_object);
+          } else {
+            result = result_object;
+          }
           Goto(&done);
           break;
         }
         case Operation::kBitwiseXor: {
-          result = BigIntFromInt64(UncheckedCast<IntPtrT>(
+          TNode<Object> result_object = BigIntFromInt64(UncheckedCast<IntPtrT>(
               WordXor(left_raw.value(), right_raw.value())));
+          if constexpr (std::is_same_v<T, NanBoxed>) {
+            result = NanBox(result_object);
+          } else {
+            result = result_object;
+          }
           Goto(&done);
           break;
         }
@@ -905,11 +1440,16 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
 
       switch (bitwise_op) {
         case Operation::kBitwiseAnd: {
-          result =
+          TNode<Object> result_object =
               CallBuiltin(Builtin::kBigIntBitwiseAndNoThrow, context(),
                           var_left_bigint.value(), var_right_bigint.value());
+          if constexpr (std::is_same_v<T, NanBoxed>) {
+            result = NanBox(result_object);
+          } else {
+            result = result_object;
+          }
           // Check for sentinel that signals BigIntTooBig exception.
-          GotoIfNot(TaggedIsSmi(result.value()), &done);
+          GotoIfNot(TaggedIsSmi(result_object), &done);
 
           if (slot) {
             // Update feedback to prevent deopt loop.
@@ -921,11 +1461,16 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
           break;
         }
         case Operation::kBitwiseOr: {
-          result =
+          TNode<Object> result_object =
               CallBuiltin(Builtin::kBigIntBitwiseOrNoThrow, context(),
                           var_left_bigint.value(), var_right_bigint.value());
+          if constexpr (std::is_same_v<T, NanBoxed>) {
+            result = NanBox(result_object);
+          } else {
+            result = result_object;
+          }
           // Check for sentinel that signals BigIntTooBig exception.
-          GotoIfNot(TaggedIsSmi(result.value()), &done);
+          GotoIfNot(TaggedIsSmi(result_object), &done);
 
           if (slot) {
             // Update feedback to prevent deopt loop.
@@ -937,11 +1482,16 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
           break;
         }
         case Operation::kBitwiseXor: {
-          result =
+          TNode<Object> result_object =
               CallBuiltin(Builtin::kBigIntBitwiseXorNoThrow, context(),
                           var_left_bigint.value(), var_right_bigint.value());
+          if constexpr (std::is_same_v<T, NanBoxed>) {
+            result = NanBox(result_object);
+          } else {
+            result = result_object;
+          }
           // Check for sentinel that signals BigIntTooBig exception.
-          GotoIfNot(TaggedIsSmi(result.value()), &done);
+          GotoIfNot(TaggedIsSmi(result_object), &done);
 
           if (slot) {
             // Update feedback to prevent deopt loop.
@@ -953,11 +1503,16 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
           break;
         }
         case Operation::kShiftLeft: {
-          result =
+          TNode<Object> result_object =
               CallBuiltin(Builtin::kBigIntShiftLeftNoThrow, context(),
                           var_left_bigint.value(), var_right_bigint.value());
+          if constexpr (std::is_same_v<T, NanBoxed>) {
+            result = NanBox(result_object);
+          } else {
+            result = result_object;
+          }
           // Check for sentinel that signals BigIntTooBig exception.
-          GotoIfNot(TaggedIsSmi(result.value()), &done);
+          GotoIfNot(TaggedIsSmi(result_object), &done);
 
           if (slot) {
             // Update feedback to prevent deopt loop.
@@ -969,11 +1524,16 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
           break;
         }
         case Operation::kShiftRight: {
-          result =
+          TNode<Object> result_object =
               CallBuiltin(Builtin::kBigIntShiftRightNoThrow, context(),
                           var_left_bigint.value(), var_right_bigint.value());
+          if constexpr (std::is_same_v<T, NanBoxed>) {
+            result = NanBox(result_object);
+          } else {
+            result = result_object;
+          }
           // Check for sentinel that signals BigIntTooBig exception.
-          GotoIfNot(TaggedIsSmi(result.value()), &done);
+          GotoIfNot(TaggedIsSmi(result_object), &done);
 
           if (slot) {
             // Update feedback to prevent deopt loop.
@@ -1015,35 +1575,73 @@ TNode<Object> BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
   return result.value();
 }
 
-TNode<Object>
-BinaryOpAssembler::Generate_BitwiseBinaryOpWithSmiOperandAndOptionalFeedback(
+template TNode<Object>
+BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
     Operation bitwise_op, TNode<Object> left, TNode<Object> right,
+    const LazyNode<Context>& context, TNode<UintPtrT>* slot,
+    const LazyNode<HeapObject>* maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode);
+
+template TNode<NanBoxed>
+BinaryOpAssembler::Generate_BitwiseBinaryOpWithOptionalFeedback(
+    Operation bitwise_op, TNode<NanBoxed> left, TNode<NanBoxed> right,
+    const LazyNode<Context>& context, TNode<UintPtrT>* slot,
+    const LazyNode<HeapObject>* maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode);
+
+template <typename T>
+TNode<T>
+BinaryOpAssembler::Generate_BitwiseBinaryOpWithSmiOperandAndOptionalFeedback(
+    Operation bitwise_op, TNode<T> nan_left, TNode<Object> right,
     const LazyNode<Context>& context, TNode<UintPtrT>* slot,
     const LazyNode<HeapObject>* maybe_feedback_vector,
     UpdateFeedbackMode update_feedback_mode) {
   TNode<Smi> right_smi = CAST(right);
-  TVARIABLE(Object, result);
+  TVARIABLE(T, result);
   TVARIABLE(Smi, var_left_feedback);
   TVARIABLE(Word32T, var_left_word32);
   TVARIABLE(BigInt, var_left_bigint);
   TVARIABLE(Smi, feedback);
   // Check if the {lhs} is a Smi or a HeapObject.
   Label if_lhsissmi(this), if_lhsisnotsmi(this, Label::kDeferred);
+  Label if_lhsisdouble(this, Label::kDeferred);
   Label do_number_op(this), if_bigint_mix(this), done(this);
+
+  if constexpr (std::is_same_v<T, NanBoxed>) {
+    GotoIf(NanBoxedIsFloat64(nan_left), &if_lhsisdouble);
+  }
+
+  TNode<Object> left;
+  if constexpr (std::is_same_v<T, NanBoxed>) {
+    left = NanUnboxObject(nan_left);
+  } else {
+    left = nan_left;
+  }
 
   Branch(TaggedIsSmi(left), &if_lhsissmi, &if_lhsisnotsmi);
 
   BIND(&if_lhsissmi);
   {
     TNode<Smi> left_smi = CAST(left);
-    result = BitwiseSmiOp(left_smi, right_smi, bitwise_op);
+    if constexpr (std::is_same_v<T, NanBoxed>) {
+      result = BitwiseSmiOpNanBoxedResult(left_smi, right_smi, bitwise_op);
+    } else {
+      result = BitwiseSmiOp(left_smi, right_smi, bitwise_op);
+    }
     if (slot) {
       if (IsBitwiseOutputKnownSmi(bitwise_op)) {
         feedback = SmiConstant(BinaryOperationFeedback::kSignedSmall);
       } else {
-        feedback = SelectSmiConstant(TaggedIsSmi(result.value()),
-                                     BinaryOperationFeedback::kSignedSmall,
-                                     BinaryOperationFeedback::kNumber);
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          // If the result is a tagged object, it must be an smi.
+          feedback = SelectSmiConstant(NanBoxedIsObject(result.value()),
+                                       BinaryOperationFeedback::kSignedSmall,
+                                       BinaryOperationFeedback::kNumber);
+        } else {
+          feedback = SelectSmiConstant(TaggedIsSmi(result.value()),
+                                       BinaryOperationFeedback::kSignedSmall,
+                                       BinaryOperationFeedback::kNumber);
+        }
       }
     }
     Goto(&done);
@@ -1059,12 +1657,25 @@ BinaryOpAssembler::Generate_BitwiseBinaryOpWithSmiOperandAndOptionalFeedback(
         &if_bigint_mix, nullptr, &var_left_bigint, feedback_values);
     BIND(&do_number_op);
     {
-      result =
-          BitwiseOp(var_left_word32.value(), SmiToInt32(right_smi), bitwise_op);
+      if constexpr (std::is_same_v<T, NanBoxed>) {
+        result = BitwiseOpNanBoxedResult(var_left_word32.value(),
+                                         SmiToInt32(right_smi), bitwise_op);
+      } else {
+        result = BitwiseOp(var_left_word32.value(), SmiToInt32(right_smi),
+                           bitwise_op);
+      }
       if (slot) {
-        TNode<Smi> result_type = SelectSmiConstant(
-            TaggedIsSmi(result.value()), BinaryOperationFeedback::kSignedSmall,
-            BinaryOperationFeedback::kNumber);
+        TNode<Smi> result_type;
+        if constexpr (std::is_same_v<T, NanBoxed>) {
+          // If the result is a tagged object, it must be an smi.
+          result_type = SelectSmiConstant(NanBoxedIsObject(result.value()),
+                                          BinaryOperationFeedback::kSignedSmall,
+                                          BinaryOperationFeedback::kNumber);
+        } else {
+          result_type = SelectSmiConstant(TaggedIsSmi(result.value()),
+                                          BinaryOperationFeedback::kSignedSmall,
+                                          BinaryOperationFeedback::kNumber);
+        }
         feedback = SmiOr(result_type, var_left_feedback.value());
       }
       Goto(&done);
@@ -1081,6 +1692,16 @@ BinaryOpAssembler::Generate_BitwiseBinaryOpWithSmiOperandAndOptionalFeedback(
     }
   }
 
+  if constexpr (std::is_same_v<T, NanBoxed>) {
+    BIND(&if_lhsisdouble);
+    {
+      // TODO(victorgomes):
+      result = NanBox(SmiConstant(0));
+      DebugBreak();
+      Goto(&done);
+    }
+  }
+
   BIND(&done);
   if (slot) {
     UpdateFeedback(feedback.value(), (*maybe_feedback_vector)(), *slot,
@@ -1088,6 +1709,20 @@ BinaryOpAssembler::Generate_BitwiseBinaryOpWithSmiOperandAndOptionalFeedback(
   }
   return result.value();
 }
+
+template TNode<Object>
+BinaryOpAssembler::Generate_BitwiseBinaryOpWithSmiOperandAndOptionalFeedback(
+    Operation bitwise_op, TNode<Object> left, TNode<Object> right,
+    const LazyNode<Context>& context, TNode<UintPtrT>* slot,
+    const LazyNode<HeapObject>* maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode);
+
+template TNode<NanBoxed>
+BinaryOpAssembler::Generate_BitwiseBinaryOpWithSmiOperandAndOptionalFeedback(
+    Operation bitwise_op, TNode<NanBoxed> nan_left, TNode<Object> right,
+    const LazyNode<Context>& context, TNode<UintPtrT>* slot,
+    const LazyNode<HeapObject>* maybe_feedback_vector,
+    UpdateFeedbackMode update_feedback_mode);
 
 }  // namespace internal
 }  // namespace v8

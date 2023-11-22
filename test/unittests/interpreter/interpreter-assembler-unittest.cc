@@ -50,7 +50,11 @@ InterpreterAssemblerTest::InterpreterAssemblerForTest::
     ClobberAccumulator(NullConstant());
   }
   if (Bytecodes::WritesImplicitRegister(bytecode())) {
+#ifdef V8_IGNITION_NAN_BOXING
+    StoreRegisterForShortStar(NanBox(NullConstant()), IntPtrConstant(2));
+#else
     StoreRegisterForShortStar(NullConstant(), IntPtrConstant(2));
+#endif
   }
 }
 

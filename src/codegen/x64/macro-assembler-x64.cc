@@ -5,6 +5,8 @@
 #include <climits>
 #include <cstdint>
 
+#include "src/codegen/interface-descriptors.h"
+
 #if V8_TARGET_ARCH_X64
 
 #include "src/base/bits.h"
@@ -2429,16 +2431,25 @@ void MacroAssembler::Push(Handle<HeapObject> source) {
   Push(kScratchRegister);
 }
 
-void MacroAssembler::PushArray(Register array, Register size, Register scratch,
+void MacroAssembler::PushArray(Register array, Register size, Register scratch1,
+                               Register scratch2, Register scratch3,
                                PushArrayOrder order) {
-  DCHECK(!AreAliased(array, size, scratch));
-  Register counter = scratch;
-  Label loop, entry;
+  DCHECK(!AreAliased(array, size, scratch1, scratch2, scratch3));
+  Register counter = scratch1;
+  Register value = scratch2;
+  Register floatOffset = scratch3;
+  Label loop, entry, float64_value, cont, done;
+  Move(floatOffset, 1);
+  shlq(floatOffset, Immediate(48));  // 2^48
   if (order == PushArrayOrder::kReverse) {
     Move(counter, 0);
     jmp(&entry);
     bind(&loop);
-    Push(Operand(array, counter, times_system_pointer_size, 0));
+    movq(value, Operand(array, counter, times_system_pointer_size, 0));
+    cmpq(value, floatOffset);
+    j(kUnsignedGreaterThanEqual, &float64_value, Label::kNear);
+    bind(&cont);
+    Push(value);
     incq(counter);
     bind(&entry);
     cmpq(counter, size);
@@ -2447,11 +2458,61 @@ void MacroAssembler::PushArray(Register array, Register size, Register scratch,
     movq(counter, size);
     jmp(&entry);
     bind(&loop);
-    Push(Operand(array, counter, times_system_pointer_size, 0));
+    movq(value, Operand(array, counter, times_system_pointer_size, 0));
+    cmpq(value, floatOffset);
+    j(kUnsignedGreaterThanEqual, &float64_value, Label::kNear);
+    bind(&cont);
+    Push(value);
     bind(&entry);
     decq(counter);
     j(greater_equal, &loop, Label::kNear);
   }
+  jmp(&done);
+
+  bind(&float64_value);
+  // TODO(victorgomes): Remove this check for negative extended smis.
+  // Check it is not 0XFFFF
+  // I am not sure, but I think r9 is not used.
+  movq(r9, value);
+  shrq(r9, Immediate(48));
+  cmpl(r9, Immediate(0xFFFF));
+  j(equal, &cont, Label::kNear);
+
+  subq(value, floatOffset);
+  using D = NewHeapNumberDescriptor;
+  movq(D::GetDoubleRegisterParameter(D::kValue), value);
+
+  {
+    FrameScope scope(this, StackFrame::INTERNAL);
+    // Save registers.
+    // Returned value is there. Pushing this is a problem for GC I guess!!
+    // TODO: I would need to create a frame type so GC knows how to parse this!
+    Push(kScratchRegister);
+    Push(rax);
+    Push(rdx);
+    Push(rdi);
+    Push(rbx);
+    Push(rcx);
+    Push(rsi);
+    Push(r8);
+    // TODO(victorgomes): We can create a NewHeapNumber that receiver the
+    // encoded float64 value.
+    CallBuiltin(Builtin::kNewHeapNumber);
+    Pop(r8);
+    Pop(rsi);
+    Pop(rcx);
+    Pop(rbx);
+    Pop(rdi);
+    Pop(rdx);
+    movq(value, rax);
+    Pop(rax);
+    Pop(kScratchRegister);
+    // Re-do floatOffset.
+    Move(floatOffset, 1);
+    shlq(floatOffset, Immediate(48));  // 2^48
+  }
+  jmp(&cont, Label::kNear);
+  bind(&done);
 }
 
 void MacroAssembler::Move(Register result, Handle<HeapObject> object,

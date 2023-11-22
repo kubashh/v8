@@ -381,6 +381,9 @@ declare_args() {
   # Enable global allocation site tracking.
   v8_allocation_site_tracking = true
 
+  # Enable NanBoxing tagging on Ignition.
+  v8_enable_ignition_nan_boxing = false
+
   # TODO(cbruni, v8:12302): Remove once API is migrated
   # Enable legacy mode for ScriptOrModule's lifetime. By default it's a
   # temporary object, if enabled it will be kept alive by the parent Script.
@@ -408,7 +411,7 @@ declare_args() {
 
   # Enable Sparkplug
   # Sets -DV8_ENABLE_SPARKPLUG.
-  v8_enable_sparkplug = ""
+  v8_enable_sparkplug = true
 
   # Enable Maglev's graph printer.
   # Sets -DV8_ENABLE_MAGLEV_GRAPH_PRINTER.
@@ -645,6 +648,12 @@ if (v8_builtins_profiling_log_file == "default") {
 if (v8_enable_webassembly && !target_is_simulator && v8_current_cpu == "x64") {
   v8_enable_wasm_simd256_revec = true
 }
+
+# assert(!v8_enable_ignition_nan_boxing || !v8_enable_sparkplug,
+#        "Ignition nan boxing does not currently work with sparkplug")
+
+assert(!v8_enable_ignition_nan_boxing || v8_enable_pointer_compression,
+       "Ignition nan boxing requires pointer compression")
 
 assert(!v8_disable_write_barriers || v8_enable_single_generation,
        "Disabling write barriers works only with single generation")
@@ -1182,6 +1191,9 @@ config("features") {
   }
   if (v8_allocation_site_tracking) {
     defines += [ "V8_ALLOCATION_SITE_TRACKING" ]
+  }
+  if (v8_enable_ignition_nan_boxing) {
+    defines += [ "V8_IGNITION_NAN_BOXING" ]
   }
   if (v8_scriptormodule_legacy_lifetime) {
     defines += [ "V8_SCRIPTORMODULE_LEGACY_LIFETIME" ]

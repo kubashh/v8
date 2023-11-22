@@ -867,6 +867,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Number> BitwiseSmiOp(TNode<Smi> left32, TNode<Smi> right32,
                              Operation bitwise_op);
 
+  TNode<NanBoxed> BitwiseOpNanBoxedResult(TNode<Word32T> left32,
+                                          TNode<Word32T> right32,
+                                          Operation bitwise_op);
+  TNode<NanBoxed> BitwiseSmiOpNanBoxedResult(TNode<Smi> left32,
+                                             TNode<Smi> right32,
+                                             Operation bitwise_op);
+
   // Align the value to kObjectAlignment8GbHeap if V8_COMPRESS_POINTERS_8GB is
   // defined.
   TNode<IntPtrT> AlignToAllocationAlignment(TNode<IntPtrT> value);
@@ -2130,6 +2137,21 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return AllocateHeapNumberWithValue(Float64Constant(value));
   }
 
+  TNode<EncodedFloat64> EncodeFloat64(TNode<Float64T> value);
+  TNode<Float64T> DecodeFloat64(TNode<EncodedFloat64> value);
+
+  TNode<NanBoxed> NanBox(TNode<Object> value);
+  TNode<NanBoxed> NanBox(TNode<Float64T> value);
+
+  TNode<Object> NanUnboxObject(TNode<NanBoxed> value);
+  TNode<Float64T> NanUnboxFloat64(TNode<NanBoxed> value);
+
+  TNode<BoolT> NanBoxedIsObject(TNode<NanBoxed> value);
+  TNode<BoolT> NanBoxedIsFloat64(TNode<NanBoxed> value);
+
+  // This will allocate a HeapNumber if necessary.
+  TNode<Object> GetTaggedObjectFromNanBox(TNode<NanBoxed> value);
+
   // Allocate a BigInt with {length} digits. Sets the sign bit to {false}.
   // Does not initialize the digits.
   TNode<BigInt> AllocateBigInt(TNode<IntPtrT> length);
@@ -2721,6 +2743,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                           Label* if_bigint, Label* if_bigint64,
                                           TVariable<BigInt>* var_maybe_bigint,
                                           const FeedbackValues& feedback);
+  void TaggedToWord32OrBigIntWithFeedback(
+      TNode<Context> context, TNode<NanBoxed> value, Label* if_number,
+      TVariable<Word32T>* var_word32, Label* if_bigint, Label* if_bigint64,
+      TVariable<BigInt>* var_maybe_bigint, const FeedbackValues& feedback);
   void TaggedPointerToWord32OrBigIntWithFeedback(
       TNode<Context> context, TNode<HeapObject> pointer, Label* if_number,
       TVariable<Word32T>* var_word32, Label* if_bigint, Label* if_bigint64,
@@ -2743,6 +2769,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Uint32T> ChangeNumberToUint32(TNode<Number> value);
   TNode<Float64T> ChangeNumberToFloat64(TNode<Number> value);
 
+  TNode<NanBoxed> ChangeInt32ToNanBoxed(TNode<Int32T> value);
+  TNode<NanBoxed> ChangeUint32ToNanBoxed(TNode<Uint32T> value);
+
   TNode<Int32T> ChangeTaggedNonSmiToInt32(TNode<Context> context,
                                           TNode<HeapObject> input);
   TNode<Float64T> ChangeTaggedToFloat64(TNode<Context> context,
@@ -2751,6 +2780,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Int32T> ChangeBoolToInt32(TNode<BoolT> b);
 
   void TaggedToBigInt(TNode<Context> context, TNode<Object> value,
+                      Label* if_not_bigint, Label* if_bigint,
+                      Label* if_bigint64, TVariable<BigInt>* var_bigint,
+                      TVariable<Smi>* var_feedback);
+
+  void TaggedToBigInt(TNode<Context> context, TNode<NanBoxed> value,
                       Label* if_not_bigint, Label* if_bigint,
                       Label* if_bigint64, TVariable<BigInt>* var_bigint,
                       TVariable<Smi>* var_feedback);
@@ -4692,6 +4726,14 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   template <Object::Conversion conversion>
   void TaggedToWord32OrBigIntImpl(
       TNode<Context> context, TNode<Object> value, Label* if_number,
+      TVariable<Word32T>* var_word32,
+      IsKnownTaggedPointer is_known_tagged_pointer,
+      const FeedbackValues& feedback, Label* if_bigint = nullptr,
+      Label* if_bigint64 = nullptr,
+      TVariable<BigInt>* var_maybe_bigint = nullptr);
+  template <Object::Conversion conversion>
+  void TaggedToWord32OrBigIntImpl(
+      TNode<Context> context, TNode<NanBoxed> value, Label* if_number,
       TVariable<Word32T>* var_word32,
       IsKnownTaggedPointer is_known_tagged_pointer,
       const FeedbackValues& feedback, Label* if_bigint = nullptr,

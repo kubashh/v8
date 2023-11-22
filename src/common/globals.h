@@ -343,6 +343,8 @@ constexpr int kMinInt31 = kMinInt / 2;
 constexpr uint32_t kMaxUInt32 = 0xFFFFFFFFu;
 constexpr int kMinUInt32 = 0;
 
+constexpr uint64_t kFloat64EncodeOffset = 0x1000000000000llu;
+
 constexpr int kInt8Size = sizeof(int8_t);
 constexpr int kUInt8Size = sizeof(uint8_t);
 constexpr int kByteSize = 1;

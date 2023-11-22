@@ -10,6 +10,7 @@
 #include "src/codegen/code-factory.h"
 #include "src/codegen/interface-descriptors-inl.h"
 #include "src/codegen/machine-type.h"
+#include "src/codegen/tnode.h"
 #include "src/interpreter/bytecodes.h"
 #include "src/interpreter/interpreter.h"
 #include "src/objects/objects-inl.h"
@@ -37,9 +38,9 @@ InterpreterAssembler::InterpreterAssembler(CodeAssemblerState* state,
       TVARIABLE_CONSTRUCTOR(dispatch_table_,
                             UncheckedParameter<ExternalReference>(
                                 InterpreterDispatchDescriptor::kDispatchTable)),
-      TVARIABLE_CONSTRUCTOR(
-          accumulator_,
-          Parameter<Object>(InterpreterDispatchDescriptor::kAccumulator)),
+      TVARIABLE_CONSTRUCTOR(accumulator_,
+                            UncheckedParameter<IgnitionRuntimeValue>(
+                                InterpreterDispatchDescriptor::kAccumulator)),
       implicit_register_use_(ImplicitRegisterUse::kNone),
       made_call_(false),
       reloaded_frame_ptr_(false),
@@ -147,30 +148,59 @@ TNode<ExternalReference> InterpreterAssembler::DispatchTablePointer() {
   return dispatch_table_.value();
 }
 
-TNode<Object> InterpreterAssembler::GetAccumulatorUnchecked() {
+TNode<IgnitionRuntimeValue> InterpreterAssembler::GetAccumulatorUnchecked() {
   return accumulator_.value();
 }
 
-TNode<Object> InterpreterAssembler::GetAccumulator() {
+TNode<IgnitionRuntimeValue> InterpreterAssembler::GetAccumulator() {
   DCHECK(Bytecodes::ReadsAccumulator(bytecode_));
   implicit_register_use_ =
       implicit_register_use_ | ImplicitRegisterUse::kReadAccumulator;
   return GetAccumulatorUnchecked();
 }
 
-void InterpreterAssembler::SetAccumulator(TNode<Object> value) {
+TNode<Object> InterpreterAssembler::UnsafeGetAccumulatorAsTaggedObject() {
+#ifdef V8_IGNITION_NAN_BOXING
+  return NanUnboxObject(GetAccumulator());
+#else
+  return GetAccumulator();
+#endif
+}
+
+TNode<Object> InterpreterAssembler::GetAccumulatorAsTaggedObject() {
+#ifdef V8_IGNITION_NAN_BOXING
+  return GetTaggedObjectFromNanBox(GetAccumulator());
+#else
+  return GetAccumulator();
+#endif
+}
+
+void InterpreterAssembler::SetAccumulator(TNode<IgnitionRuntimeValue> value) {
   DCHECK(Bytecodes::WritesAccumulator(bytecode_));
   implicit_register_use_ =
       implicit_register_use_ | ImplicitRegisterUse::kWriteAccumulator;
   accumulator_ = value;
 }
 
-void InterpreterAssembler::ClobberAccumulator(TNode<Object> clobber_value) {
+#ifdef V8_IGNITION_NAN_BOXING
+void InterpreterAssembler::SetAccumulator(TNode<Object> value) {
+  SetAccumulator(NanBox(value));
+}
+#endif
+
+void InterpreterAssembler::ClobberAccumulator(
+    TNode<IgnitionRuntimeValue> clobber_value) {
   DCHECK(Bytecodes::ClobbersAccumulator(bytecode_));
   implicit_register_use_ =
       implicit_register_use_ | ImplicitRegisterUse::kClobberAccumulator;
   accumulator_ = clobber_value;
 }
+
+#ifdef V8_IGNITION_NAN_BOXING
+void InterpreterAssembler::ClobberAccumulator(TNode<Object> clobber_value) {
+  ClobberAccumulator(NanBox(clobber_value));
+}
+#endif
 
 TNode<Context> InterpreterAssembler::GetContext() {
   return CAST(LoadRegister(Register::current_context()));
@@ -221,7 +251,18 @@ TNode<IntPtrT> InterpreterAssembler::RegisterFrameOffset(TNode<IntPtrT> index) {
   return TimesSystemPointerSize(index);
 }
 
-TNode<Object> InterpreterAssembler::LoadRegister(TNode<IntPtrT> reg_index) {
+TNode<IgnitionRuntimeValue> InterpreterAssembler::LoadRegister(
+    TNode<IntPtrT> reg_index) {
+#ifdef V8_IGNITION_NAN_BOXING
+  return UncheckedCast<NanBoxed>(Load<RawPtrT>(GetInterpretedFramePointer(),
+                                               RegisterFrameOffset(reg_index)));
+#else
+  return LoadObjectAtRegister(reg_index);
+#endif
+}
+
+TNode<Object> InterpreterAssembler::LoadObjectAtRegister(
+    TNode<IntPtrT> reg_index) {
   return LoadFullTagged(GetInterpretedFramePointer(),
                         RegisterFrameOffset(reg_index));
 }
@@ -244,9 +285,24 @@ TNode<IntPtrT> InterpreterAssembler::LoadAndUntagRegister(Register reg) {
   }
 }
 
-TNode<Object> InterpreterAssembler::LoadRegisterAtOperandIndex(
+TNode<IgnitionRuntimeValue> InterpreterAssembler::LoadRegisterAtOperandIndex(
     int operand_index) {
   return LoadRegister(BytecodeOperandReg(operand_index));
+}
+
+TNode<Object> InterpreterAssembler::LoadRegisterAtOperandIndexAsTaggedObject(
+    int operand_index) {
+#ifdef V8_IGNITION_NAN_BOXING
+  return GetTaggedObjectFromNanBox(
+      LoadRegister(BytecodeOperandReg(operand_index)));
+#else
+  return LoadRegister(BytecodeOperandReg(operand_index));
+#endif
+}
+
+TNode<Object> InterpreterAssembler::LoadObjectRegisterAtOperandIndex(
+    int operand_index) {
+  return LoadObjectAtRegister(BytecodeOperandReg(operand_index));
 }
 
 std::pair<TNode<Object>, TNode<Object>>
@@ -255,8 +311,8 @@ InterpreterAssembler::LoadRegisterPairAtOperandIndex(int operand_index) {
             Bytecodes::GetOperandType(bytecode_, operand_index));
   TNode<IntPtrT> first_reg_index = BytecodeOperandReg(operand_index);
   TNode<IntPtrT> second_reg_index = NextRegister(first_reg_index);
-  return std::make_pair(LoadRegister(first_reg_index),
-                        LoadRegister(second_reg_index));
+  return std::make_pair(LoadObjectAtRegister(first_reg_index),
+                        LoadObjectAtRegister(second_reg_index));
 }
 
 InterpreterAssembler::RegListNodePair
@@ -298,8 +354,8 @@ void InterpreterAssembler::StoreRegister(TNode<Object> value,
                                 RegisterFrameOffset(reg_index), value);
 }
 
-void InterpreterAssembler::StoreRegisterForShortStar(TNode<Object> value,
-                                                     TNode<WordT> opcode) {
+void InterpreterAssembler::StoreRegisterForShortStar(
+    TNode<IgnitionRuntimeValue> value, TNode<WordT> opcode) {
   DCHECK(Bytecodes::IsShortStar(bytecode_));
   implicit_register_use_ =
       implicit_register_use_ | ImplicitRegisterUse::kWriteShortStar;
@@ -324,8 +380,27 @@ void InterpreterAssembler::StoreRegisterForShortStar(TNode<Object> value,
   TNode<IntPtrT> offset =
       IntPtrAdd(RegisterFrameOffset(Signed(opcode)),
                 IntPtrConstant(short_star_to_operand * kSystemPointerSize));
+#ifdef V8_IGNITION_NAN_BOXING
+  StoreNoWriteBarrier(MachineType::PointerRepresentation(),
+                      GetInterpretedFramePointer(), offset, value);
+#else
   StoreFullTaggedNoWriteBarrier(GetInterpretedFramePointer(), offset, value);
+#endif  // V8_IGNITION_NAN_BOXING
 }
+
+#ifdef V8_IGNITION_NAN_BOXING
+void InterpreterAssembler::StoreRegister(TNode<NanBoxed> value,
+                                         TNode<IntPtrT> reg_index) {
+  StoreNoWriteBarrier(MachineType::PointerRepresentation(),
+                      GetInterpretedFramePointer(),
+                      RegisterFrameOffset(reg_index), value);
+}
+
+void InterpreterAssembler::StoreRegisterAtOperandIndex(TNode<NanBoxed> value,
+                                                       int operand_index) {
+  StoreRegister(value, BytecodeOperandReg(operand_index));
+}
+#endif  // V8_IGNITION_NAN_BOXING
 
 void InterpreterAssembler::StoreRegisterAtOperandIndex(TNode<Object> value,
                                                        int operand_index) {
@@ -799,7 +874,9 @@ void InterpreterAssembler::CallJSWithSpreadAndDispatch(
 
 #ifndef V8_JITLESS
   TNode<HeapObject> maybe_feedback_vector = LoadFeedbackVector();
-  LazyNode<Object> receiver = [=] { return LoadRegisterAtOperandIndex(1); };
+  LazyNode<Object> receiver = [=] {
+    return LoadObjectRegisterAtOperandIndex(1);
+  };
   CollectCallFeedback(function, receiver, context, maybe_feedback_vector,
                       slot_id);
 #endif  // !V8_JITLESS
@@ -1265,7 +1342,8 @@ void InterpreterAssembler::InlineShortStar(TNode<WordT> target_bytecode) {
   TraceBytecode(Runtime::kTraceUnoptimizedBytecodeEntry);
 #endif
 
-  StoreRegisterForShortStar(GetAccumulator(), target_bytecode);
+  auto accumulator = GetAccumulator();
+  StoreRegisterForShortStar(accumulator, target_bytecode);
 
   DCHECK_EQ(implicit_register_use_,
             Bytecodes::GetImplicitRegisterUse(bytecode_));
@@ -1305,8 +1383,9 @@ void InterpreterAssembler::DispatchToBytecode(
 
 void InterpreterAssembler::DispatchToBytecodeHandlerEntry(
     TNode<RawPtrT> handler_entry, TNode<IntPtrT> bytecode_offset) {
+  auto accumulator = GetAccumulatorUnchecked();
   TailCallBytecodeDispatch(
-      InterpreterDispatchDescriptor{}, handler_entry, GetAccumulatorUnchecked(),
+      InterpreterDispatchDescriptor{}, handler_entry, accumulator,
       bytecode_offset, BytecodeArrayTaggedPointer(), DispatchTablePointer());
 }
 
@@ -1474,8 +1553,13 @@ void InterpreterAssembler::OnStackReplacement(
 }
 
 void InterpreterAssembler::TraceBytecode(Runtime::FunctionId function_id) {
+#ifdef V8_IGNITION_NAN_BOXING
+  auto accumulator = GetTaggedObjectFromNanBox(GetAccumulatorUnchecked());
+#else
+  auto accumulator = GetAccumulatorUnchecked();
+#endif
   CallRuntime(function_id, GetContext(), BytecodeArrayTaggedPointer(),
-              SmiTag(BytecodeOffset()), GetAccumulatorUnchecked());
+              SmiTag(BytecodeOffset()), accumulator);
 }
 
 void InterpreterAssembler::TraceBytecodeDispatch(TNode<WordT> target_bytecode) {
@@ -1536,6 +1620,42 @@ void InterpreterAssembler::AbortIfRegisterCountInvalid(
   BIND(&ok);
 }
 
+void InterpreterAssembler::EnsureRegisterListAreTaggedValues(
+    const RegListNodePair& registers) {
+#ifdef V8_IGNITION_NAN_BOXING
+  TNode<UintPtrT> register_count = ChangeUint32ToWord(registers.reg_count());
+  {
+    TVARIABLE(IntPtrT, var_index);
+    var_index = IntPtrConstant(0);
+
+    // Ensure frame pointer is bound.
+    GetInterpretedFramePointer();
+
+    Label loop(this, {&var_index, &interpreted_frame_pointer_}),
+        done_loop(this);
+    TNode<IntPtrT> reg_base =
+        IntPtrConstant(Register::FromParameterIndex(0).ToOperand());
+
+    Goto(&loop);
+    BIND(&loop);
+    {
+      TNode<IntPtrT> index = var_index.value();
+      GotoIfNot(UintPtrLessThan(index, register_count), &done_loop);
+
+      TNode<IntPtrT> reg_index = IntPtrSub(reg_base, index);
+      TNode<NanBoxed> nanboxed = LoadRegister(reg_index);
+      TNode<Object> value = GetTaggedObjectFromNanBox(nanboxed);
+
+      StoreRegister(value, reg_index);
+
+      var_index = IntPtrAdd(index, IntPtrConstant(1));
+      Goto(&loop);
+    }
+    BIND(&done_loop);
+  }
+#endif  // V8_IGNITION_NAN_BOXING
+}
+
 TNode<FixedArray> InterpreterAssembler::ExportParametersAndRegisterFile(
     TNode<FixedArray> array, const RegListNodePair& registers,
     TNode<Int32T> formal_parameter_count) {
@@ -1569,7 +1689,12 @@ TNode<FixedArray> InterpreterAssembler::ExportParametersAndRegisterFile(
                 &done_loop);
 
       TNode<IntPtrT> reg_index = IntPtrAdd(reg_base, index);
+#ifdef V8_IGNITION_NAN_BOXING
+      TNode<NanBoxed> nanboxed = LoadRegister(reg_index);
+      TNode<Object> value = GetTaggedObjectFromNanBox(nanboxed);
+#else
       TNode<Object> value = LoadRegister(reg_index);
+#endif
 
       StoreFixedArrayElement(array, index, value);
 
@@ -1595,7 +1720,7 @@ TNode<FixedArray> InterpreterAssembler::ExportParametersAndRegisterFile(
 
       TNode<IntPtrT> reg_index =
           IntPtrSub(IntPtrConstant(Register(0).ToOperand()), index);
-      TNode<Object> value = LoadRegister(reg_index);
+      TNode<Object> value = LoadObjectAtRegister(reg_index);
 
       TNode<IntPtrT> array_index =
           IntPtrAdd(formal_parameter_count_intptr, index);
@@ -1657,27 +1782,35 @@ int InterpreterAssembler::CurrentBytecodeSize() const {
 }
 
 void InterpreterAssembler::ToNumberOrNumeric(Object::Conversion mode) {
-  TNode<Object> object = GetAccumulator();
+  auto accumulator = GetAccumulator();
   TNode<Context> context = GetContext();
 
   TVARIABLE(Smi, var_type_feedback);
-  TVARIABLE(Numeric, var_result);
-  Label if_done(this), if_objectissmi(this), if_objectisheapnumber(this),
+  TVARIABLE(IgnitionRuntimeValue, var_result);
+  Label if_done(this), if_objectissmi(this), if_float64_or_heapnumber(this),
       if_objectisother(this, Label::kDeferred);
 
+#ifdef V8_IGNITION_NAN_BOXING
+  GotoIf(NanBoxedIsFloat64(accumulator), &if_float64_or_heapnumber);
+  TNode<Object> object = NanUnboxObject(accumulator);
+#else
+  TNode<Object> object = accumulator;
+#endif
+
   GotoIf(TaggedIsSmi(object), &if_objectissmi);
-  Branch(IsHeapNumber(CAST(object)), &if_objectisheapnumber, &if_objectisother);
+  Branch(IsHeapNumber(CAST(object)), &if_float64_or_heapnumber,
+         &if_objectisother);
 
   BIND(&if_objectissmi);
   {
-    var_result = CAST(object);
+    var_result = accumulator;
     var_type_feedback = SmiConstant(BinaryOperationFeedback::kSignedSmall);
     Goto(&if_done);
   }
 
-  BIND(&if_objectisheapnumber);
+  BIND(&if_float64_or_heapnumber);
   {
-    var_result = CAST(object);
+    var_result = accumulator;
     var_type_feedback = SmiConstant(BinaryOperationFeedback::kNumber);
     Goto(&if_done);
   }
@@ -1691,7 +1824,11 @@ void InterpreterAssembler::ToNumberOrNumeric(Object::Conversion mode) {
       Label not_bigint(this);
       GotoIfNot(IsBigInt(CAST(object)), &not_bigint);
       {
-        var_result = CAST(object);
+#ifdef V8_IGNITION_NAN_BOXING
+        var_result = NanBox(object);
+#else
+        var_result = object;
+#endif
         var_type_feedback = SmiConstant(BinaryOperationFeedback::kBigInt);
         Goto(&if_done);
       }
@@ -1699,7 +1836,11 @@ void InterpreterAssembler::ToNumberOrNumeric(Object::Conversion mode) {
     }
 
     // Convert {object} by calling out to the appropriate builtin.
-    var_result = CAST(CallBuiltin(builtin, context, object));
+#ifdef V8_IGNITION_NAN_BOXING
+    var_result = NanBox(CallBuiltin(builtin, context, object));
+#else
+    var_result = CallBuiltin(builtin, context, object);
+#endif
     var_type_feedback = SmiConstant(BinaryOperationFeedback::kAny);
     Goto(&if_done);
   }
@@ -1712,7 +1853,6 @@ void InterpreterAssembler::ToNumberOrNumeric(Object::Conversion mode) {
 
   MaybeUpdateFeedback(var_type_feedback.value(), maybe_feedback_vector,
                       slot_index);
-
   SetAccumulator(var_result.value());
   Dispatch();
 }

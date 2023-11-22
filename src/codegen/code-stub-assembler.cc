@@ -3892,6 +3892,85 @@ TNode<HeapNumber> CodeStubAssembler::AllocateHeapNumberWithValue(
   return result;
 }
 
+TNode<EncodedFloat64> CodeStubAssembler::EncodeFloat64(TNode<Float64T> value) {
+  return IntPtrAdd(BitcastFloat64ToInt64(value),
+                   IntPtrConstant(kFloat64EncodeOffset));
+}
+
+TNode<Float64T> CodeStubAssembler::DecodeFloat64(TNode<EncodedFloat64> value) {
+  return BitcastInt64ToFloat64(
+      IntPtrSub(value, IntPtrConstant(kFloat64EncodeOffset)));
+}
+
+TNode<NanBoxed> CodeStubAssembler::NanBox(TNode<Object> value) {
+  return BitcastTaggedToWord(value);
+}
+
+TNode<NanBoxed> CodeStubAssembler::NanBox(TNode<Float64T> value) {
+  return EncodeFloat64(value);
+}
+
+TNode<Object> CodeStubAssembler::NanUnboxObject(TNode<NanBoxed> value) {
+  // CSA_DCHECK(this, NanBoxedIsObject(value));
+  return BitcastWordToTagged(value);
+}
+
+TNode<Float64T> CodeStubAssembler::NanUnboxFloat64(TNode<NanBoxed> value) {
+  // CSA_DCHECK(this, NanBoxedIsFloat64(value));
+  return DecodeFloat64(value);
+}
+
+TNode<BoolT> CodeStubAssembler::NanBoxedIsObject(TNode<NanBoxed> value) {
+  TVARIABLE(BoolT, result, BoolConstant(true));
+  Label done(this);
+  TNode<WordT> tag = WordShr(value, IntPtrConstant(48));
+  GotoIf(WordEqual(tag, IntPtrConstant(0)), &done);
+  {
+    // TODO(victorgomes): deferred code? or enfornce smis to have top part
+    // zeroed. A negative smi may have the tag as FFFF
+    result = WordEqual(tag, IntPtrConstant(0xFFFF));
+    Goto(&done);
+  }
+  BIND(&done);
+  return result.value();
+}
+
+TNode<BoolT> CodeStubAssembler::NanBoxedIsFloat64(TNode<NanBoxed> value) {
+  TVARIABLE(BoolT, result, BoolConstant(false));
+  Label done(this);
+  TNode<WordT> tag = WordShr(value, IntPtrConstant(48));
+  GotoIf(WordEqual(tag, IntPtrConstant(0)), &done);
+  {
+    // TODO(victorgomes): deferred code? or enfornce smis to have top part
+    // zeroed. A negative smi may have the tag as FFFF
+    result = WordNotEqual(tag, IntPtrConstant(0xFFFF));
+    Goto(&done);
+  }
+  BIND(&done);
+  return result.value();
+}
+
+TNode<Object> CodeStubAssembler::GetTaggedObjectFromNanBox(
+    TNode<NanBoxed> value) {
+  TVARIABLE(Object, result);
+  Label is_float(this), done(this);
+  GotoIf(NanBoxedIsFloat64(value), &is_float);
+  {
+    result = NanUnboxObject(value);
+    Goto(&done);
+  }
+  // TODO(victorgomes): Add this in a deferred code?
+  BIND(&is_float);
+  {
+    TNode<Float64T> number = NanUnboxFloat64(value);
+    // TODO(victorgomes): Should I check is smi-able here?
+    result = AllocateHeapNumberWithValue(number);
+    Goto(&done);
+  }
+  BIND(&done);
+  return result.value();
+}
+
 TNode<Object> CodeStubAssembler::CloneIfMutablePrimitive(TNode<Object> object) {
   TVARIABLE(Object, result, object);
   Label done(this);
@@ -6107,6 +6186,14 @@ void CodeStubAssembler::TaggedToWord32OrBigIntWithFeedback(
       context, value, if_number, var_word32, IsKnownTaggedPointer::kNo,
       feedback, if_bigint, if_bigint64, var_maybe_bigint);
 }
+void CodeStubAssembler::TaggedToWord32OrBigIntWithFeedback(
+    TNode<Context> context, TNode<NanBoxed> value, Label* if_number,
+    TVariable<Word32T>* var_word32, Label* if_bigint, Label* if_bigint64,
+    TVariable<BigInt>* var_maybe_bigint, const FeedbackValues& feedback) {
+  TaggedToWord32OrBigIntImpl<Object::Conversion::kToNumeric>(
+      context, value, if_number, var_word32, IsKnownTaggedPointer::kNo,
+      feedback, if_bigint, if_bigint64, var_maybe_bigint);
+}
 
 // Truncate {pointer} to word32 and jump to {if_number} if it is a Number,
 // or find that it is a BigInt and jump to {if_bigint}. In either case,
@@ -6118,6 +6205,29 @@ void CodeStubAssembler::TaggedPointerToWord32OrBigIntWithFeedback(
   TaggedToWord32OrBigIntImpl<Object::Conversion::kToNumeric>(
       context, pointer, if_number, var_word32, IsKnownTaggedPointer::kYes,
       feedback, if_bigint, if_bigint64, var_maybe_bigint);
+}
+
+template <Object::Conversion conversion>
+void CodeStubAssembler::TaggedToWord32OrBigIntImpl(
+    TNode<Context> context, TNode<NanBoxed> nanboxed_value, Label* if_number,
+    TVariable<Word32T>* var_word32,
+    IsKnownTaggedPointer is_known_tagged_pointer,
+    const FeedbackValues& feedback, Label* if_bigint, Label* if_bigint64,
+    TVariable<BigInt>* var_maybe_bigint) {
+  OverwriteFeedback(feedback.var_feedback, BinaryOperationFeedback::kNone);
+
+  Label is_float64(this, Label::kDeferred);
+  GotoIf(NanBoxedIsFloat64(nanboxed_value), &is_float64);
+  TNode<Object> value = NanUnboxObject(nanboxed_value);
+  TaggedToWord32OrBigIntImpl<conversion>(
+      context, value, if_number, var_word32, is_known_tagged_pointer, feedback,
+      if_bigint, if_bigint64, var_maybe_bigint);
+
+  BIND(&is_float64);
+  TNode<Float64T> float64_value = NanUnboxFloat64(nanboxed_value);
+  *var_word32 = Signed(TruncateFloat64ToWord32(float64_value));
+  CombineFeedback(feedback.var_feedback, BinaryOperationFeedback::kNumber);
+  Goto(if_number);
 }
 
 template <Object::Conversion conversion>
@@ -6385,6 +6495,35 @@ TNode<Number> CodeStubAssembler::ChangeInt32ToTagged(TNode<Int32T> value) {
   return var_result.value();
 }
 
+TNode<NanBoxed> CodeStubAssembler::ChangeInt32ToNanBoxed(TNode<Int32T> value) {
+  if (SmiValuesAre32Bits()) {
+    return NanBox(SmiTag(ChangeInt32ToIntPtr(value)));
+  }
+  DCHECK(SmiValuesAre31Bits());
+  TVARIABLE(NanBoxed, var_result);
+  TNode<PairT<Int32T, BoolT>> pair = Int32AddWithOverflow(value, value);
+  TNode<BoolT> overflow = Projection<1>(pair);
+  Label if_overflow(this, Label::kDeferred), if_notoverflow(this),
+      if_join(this);
+  Branch(overflow, &if_overflow, &if_notoverflow);
+  BIND(&if_overflow);
+  {
+    TNode<Float64T> value64 = ChangeInt32ToFloat64(value);
+    var_result = NanBox(value64);
+    Goto(&if_join);
+  }
+  BIND(&if_notoverflow);
+  {
+    TNode<IntPtrT> almost_tagged_value =
+        ChangeInt32ToIntPtr(Projection<0>(pair));
+    TNode<Smi> result = BitcastWordToTaggedSigned(almost_tagged_value);
+    var_result = NanBox(result);
+    Goto(&if_join);
+  }
+  BIND(&if_join);
+  return var_result.value();
+}
+
 TNode<Number> CodeStubAssembler::ChangeInt32ToTaggedNoOverflow(
     TNode<Int32T> value) {
   if (SmiValuesAre32Bits()) {
@@ -6416,6 +6555,33 @@ TNode<Number> CodeStubAssembler::ChangeUint32ToTagged(TNode<Uint32T> value) {
   {
     TNode<Float64T> float64_value = ChangeUint32ToFloat64(value);
     var_result = AllocateHeapNumberWithValue(float64_value);
+  }
+  Goto(&if_join);
+
+  BIND(&if_join);
+  return var_result.value();
+}
+
+TNode<NanBoxed> CodeStubAssembler::ChangeUint32ToNanBoxed(
+    TNode<Uint32T> value) {
+  Label if_overflow(this, Label::kDeferred), if_not_overflow(this),
+      if_join(this);
+  TVARIABLE(NanBoxed, var_result);
+  // If {value} > 2^31 - 1, we need to store it in a HeapNumber.
+  Branch(Uint32LessThan(Uint32Constant(Smi::kMaxValue), value), &if_overflow,
+         &if_not_overflow);
+
+  BIND(&if_not_overflow);
+  {
+    // The {value} is definitely in valid Smi range.
+    var_result = NanBox(SmiTag(Signed(ChangeUint32ToWord(value))));
+  }
+  Goto(&if_join);
+
+  BIND(&if_overflow);
+  {
+    TNode<Float64T> float64_value = ChangeUint32ToFloat64(value);
+    var_result = NanBox(float64_value);
   }
   Goto(&if_join);
 
@@ -8548,6 +8714,26 @@ void CodeStubAssembler::TaggedToBigInt(TNode<Context> context,
   BIND(&is_oddball);
   OverwriteFeedback(var_feedback, BinaryOperationFeedback::kNumberOrOddball);
   Goto(if_not_bigint);
+}
+
+void CodeStubAssembler::TaggedToBigInt(TNode<Context> context,
+                                       TNode<NanBoxed> value,
+                                       Label* if_not_bigint, Label* if_bigint,
+                                       Label* if_bigint64,
+                                       TVariable<BigInt>* var_bigint,
+                                       TVariable<Smi>* var_feedback) {
+  Label tagged(this);
+  GotoIf(NanBoxedIsObject(value), &tagged);
+
+  OverwriteFeedback(var_feedback, BinaryOperationFeedback::kNumber);
+  Goto(if_not_bigint);
+
+  BIND(&tagged);
+  {
+    TNode<Object> value_object = NanUnboxObject(value);
+    TaggedToBigInt(context, value_object, if_not_bigint, if_bigint, if_bigint64,
+                   var_bigint, var_feedback);
+  }
 }
 
 // ES#sec-touint32
@@ -15436,6 +15622,60 @@ TNode<Number> CodeStubAssembler::BitwiseSmiOp(TNode<Smi> left, TNode<Smi> right,
       TNode<Int32T> right32 =
           Signed(NormalizeShift32OperandIfNecessary(SmiToInt32(right)));
       return ChangeInt32ToTaggedNoOverflow(Word32Sar(left32, right32));
+    }
+    default:
+      break;
+  }
+  UNREACHABLE();
+}
+
+TNode<NanBoxed> CodeStubAssembler::BitwiseOpNanBoxedResult(
+    TNode<Word32T> left32, TNode<Word32T> right32, Operation bitwise_op) {
+  switch (bitwise_op) {
+    case Operation::kBitwiseAnd:
+      return ChangeInt32ToNanBoxed(Signed(Word32And(left32, right32)));
+    case Operation::kBitwiseOr:
+      return ChangeInt32ToNanBoxed(Signed(Word32Or(left32, right32)));
+    case Operation::kBitwiseXor:
+      return ChangeInt32ToNanBoxed(Signed(Word32Xor(left32, right32)));
+    case Operation::kShiftLeft:
+      right32 = NormalizeShift32OperandIfNecessary(right32);
+      return ChangeInt32ToNanBoxed(Signed(Word32Shl(left32, right32)));
+    case Operation::kShiftRight:
+      right32 = NormalizeShift32OperandIfNecessary(right32);
+      return ChangeInt32ToNanBoxed(Signed(Word32Sar(left32, right32)));
+    case Operation::kShiftRightLogical:
+      right32 = NormalizeShift32OperandIfNecessary(right32);
+      return ChangeUint32ToNanBoxed(Unsigned(Word32Shr(left32, right32)));
+    default:
+      break;
+  }
+  UNREACHABLE();
+}
+
+TNode<NanBoxed> CodeStubAssembler::BitwiseSmiOpNanBoxedResult(
+    TNode<Smi> left, TNode<Smi> right, Operation bitwise_op) {
+  switch (bitwise_op) {
+    case Operation::kBitwiseAnd:
+      return NanBox(SmiAnd(left, right));
+    case Operation::kBitwiseOr:
+      return NanBox(SmiOr(left, right));
+    case Operation::kBitwiseXor:
+      return NanBox(SmiXor(left, right));
+    // Smi shift left and logical shift rihgt can have (Heap)Number output, so
+    // perform int32 operation.
+    case Operation::kShiftLeft:
+    case Operation::kShiftRightLogical:
+      // TODO(victorgomes): The only difference is here!
+      return BitwiseOpNanBoxedResult(SmiToInt32(left), SmiToInt32(right),
+                                     bitwise_op);
+    // Arithmetic shift right of a Smi can't overflow to the heap number, so
+    // perform int32 operation but don't check for overflow.
+    case Operation::kShiftRight: {
+      TNode<Int32T> left32 = SmiToInt32(left);
+      TNode<Int32T> right32 =
+          Signed(NormalizeShift32OperandIfNecessary(SmiToInt32(right)));
+      return NanBox(ChangeInt32ToTaggedNoOverflow(Word32Sar(left32, right32)));
     }
     default:
       break;

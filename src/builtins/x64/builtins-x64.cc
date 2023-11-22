@@ -1305,16 +1305,17 @@ void Builtins::Generate_InterpreterEntryTrampoline(
 
 static void GenerateInterpreterPushArgs(MacroAssembler* masm, Register num_args,
                                         Register start_address,
-                                        Register scratch) {
+                                        Register scratch1, Register scratch2,
+                                        Register scratch3) {
   ASM_CODE_COMMENT(masm);
   // Find the argument with lowest address.
-  __ movq(scratch, num_args);
-  __ negq(scratch);
+  __ movq(scratch1, num_args);
+  __ negq(scratch1);
   __ leaq(start_address,
-          Operand(start_address, scratch, times_system_pointer_size,
+          Operand(start_address, scratch1, times_system_pointer_size,
                   kSystemPointerSize));
   // Push the arguments.
-  __ PushArray(start_address, num_args, scratch,
+  __ PushArray(start_address, num_args, scratch1, scratch2, scratch3,
                MacroAssembler::PushArrayOrder::kReverse);
 }
 
@@ -1349,7 +1350,7 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
   __ PopReturnAddressTo(kScratchRegister);
 
   // rbx and rdx will be modified.
-  GenerateInterpreterPushArgs(masm, rcx, rbx, rdx);
+  GenerateInterpreterPushArgs(masm, rcx, rbx, rdx, r8, r15);
 
   // Push "undefined" as the receiver arg if we need to.
   if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {
@@ -1412,7 +1413,7 @@ void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
   // rcx and r8 will be modified.
   Register argc_without_receiver = r11;
   __ leaq(argc_without_receiver, Operand(rax, -kJSArgcReceiverSlots));
-  GenerateInterpreterPushArgs(masm, argc_without_receiver, rcx, r8);
+  GenerateInterpreterPushArgs(masm, argc_without_receiver, rcx, r8, r12, r15);
 
   // Push slot for the receiver to be constructed.
   __ Push(Immediate(0));
@@ -1490,7 +1491,7 @@ void Builtins::Generate_ConstructForwardAllArgsImpl(
   // Copy the arguments on the stack. r8 is a scratch register.
   Register argc_without_receiver = r11;
   __ leaq(argc_without_receiver, Operand(rax, -kJSArgcReceiverSlots));
-  __ PushArray(rcx, argc_without_receiver, r8);
+  __ PushArray(rcx, argc_without_receiver, r8, r12, r15);
 
   // Push slot for the receiver to be constructed.
   __ Push(Immediate(0));
@@ -1587,7 +1588,7 @@ void Builtins::Generate_InterpreterPushArgsThenFastConstructFunction(
   // Push arguments + implicit receiver.
   Register argc_without_receiver = r11;
   __ leaq(argc_without_receiver, Operand(rax, -kJSArgcReceiverSlots));
-  GenerateInterpreterPushArgs(masm, argc_without_receiver, rcx, r12);
+  GenerateInterpreterPushArgs(masm, argc_without_receiver, rcx, r8, r12, r15);
   // Implicit receiver as part of the arguments (patched later if needed).
   __ PushRoot(RootIndex::kTheHoleValue);
 
