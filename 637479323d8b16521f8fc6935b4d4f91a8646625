@@ -16,6 +16,24 @@
       "message": "Hello,\n\nWe do not have his feature implemented yet on PPC/s390, is it possible to keep this ifdef for the time being?",
       "revId": "637479323d8b16521f8fc6935b4d4f91a8646625",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72dbf222_227c4ca1",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-11-22T18:38:12Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "905111dd_38004f59",
+      "revId": "637479323d8b16521f8fc6935b4d4f91a8646625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
