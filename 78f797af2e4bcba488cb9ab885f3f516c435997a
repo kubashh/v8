@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "291eccb4_2697ddff",
+        "filename": "test/test262/tools/v8configs.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1368735
+      },
+      "writtenOn": "2023-11-22T14:44:17Z",
+      "side": 1,
+      "message": "Exclude import cl that was not marked with noexport.",
+      "range": {
+        "startLine": 59,
+        "startChar": 9,
+        "endLine": 59,
+        "endChar": 49
+      },
+      "revId": "78f797af2e4bcba488cb9ab885f3f516c435997a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
