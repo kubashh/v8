@@ -86,7 +86,8 @@ declare_args() {
   # Enable runtime call stats.
   # TODO(liviurau): Remove old name after Chromium config update
   # https://crbug.com/1476977.
-  v8_enable_runtime_call_stats = !(is_on_release_branch || v8_is_on_release_branch)
+  v8_enable_runtime_call_stats =
+      !(is_on_release_branch || v8_is_on_release_branch)
 
   # Add fuzzilli fuzzer support.
   v8_fuzzilli = false
@@ -257,8 +258,7 @@ if (v8_symbol_level != symbol_level) {
   }
 }
 
-if ((is_posix || is_fuchsia) &&
-    (v8_enable_backtrace || v8_monolithic || v8_expose_symbols)) {
+if ((is_posix || is_fuchsia) && (v8_enable_backtrace || v8_monolithic)) {
   v8_remove_configs += [ "//build/config/gcc:symbol_visibility_hidden" ]
   v8_add_configs += [ "//build/config/gcc:symbol_visibility_default" ]
 }
