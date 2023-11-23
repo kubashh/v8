@@ -459,6 +459,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "443868db_54bccfeb",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "That does seem to work, changed.",
+      "parentUuid": "37241c03_eecabbc0",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ef5869b_7a0067cd",
         "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
         "patchSetId": 6
@@ -506,6 +524,24 @@
       "side": 1,
       "message": "Oh yes I was just talking about updating the comment to reflect it, function itself can be implemented later.",
       "parentUuid": "e360ce97_256912b5",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1026aacb_f292e171",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbcf2ffa_6c1ac80b",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -559,6 +595,24 @@
       "side": 1,
       "message": "Same as above.",
       "parentUuid": "8066b46b_ff34bf25",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e05e5205_95c670bd",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1016,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7f1eb89_ad817cc2",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -647,6 +701,24 @@
       "side": 1,
       "message": "it\u0027s defined as r11 only in codegen. If this function ever gets used outside of codegen (not sure if it will) then it could crash.\n\nWe can leave it as is but could you add a TODO to make use of `UseScratchRegisterScope` after we refactor it.",
       "parentUuid": "94d7303d_83a50868",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87fa9b12_7fe7cc3d",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10e6a9a0_a0be92da",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -770,6 +842,24 @@
       "side": 1,
       "message": "Personally seeing the word Operand gives me a hint that we may be loading an immediate and not a register/memory slot.\n\n`mov(..., Operand(...));` is also used extensively all over ppc/s390/arm/ia32. May not be a good idea to create a separate function specifically for ppc which is only used in a few places.\n\nBeing in sync with arm is really important for us, we don\u0027t want to diverge the code in any way unless it\u0027s necessary, i.e we use `LoadU64` and not `Ldr` as it\u0027s arm specific but `mov` is universal.",
       "parentUuid": "20e7f139_556ddb69",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84573521_184568b0",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "While I still don\u0027t like the readability I\u0027m not going to fight city hall on this. :)  Reverted.",
+      "parentUuid": "43ffc9d3_f2c19da8",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -950,6 +1040,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68331048_5f340b81",
+        "filename": "src/compiler/backend/ppc/instruction-selector-ppc.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "Seems to work.  Changed.",
+      "parentUuid": "cefcc2e8_14fbe94b",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9f4dd50_b62ea4c5",
@@ -999,6 +1107,24 @@
       "side": 1,
       "message": "Sure but please add a TODO here.",
       "parentUuid": "fe18a817_418c78b2",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf0d66c8_6f4c68fd",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec351798_e431f46d",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1056,6 +1182,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c26b92_bb6ce4ce",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d03f925_72f7b101",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d73487a1_2f136d8f",
@@ -1105,6 +1249,24 @@
       "side": 1,
       "message": "So as I mentioned in the first comment, being inline with arm is very important for us. We would prefer to get rid of `to_condition` altogether and keep using our own conditions but we also don\u0027t want diverge unless its necessary.",
       "parentUuid": "099c37f4_647d4306",
+      "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91595d2a_acbcc0e9",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "OK, I reverted but added a comment to help people understand that the first glance read of the code is likely not correct. ;)",
+      "parentUuid": "89a3fc1d_23e376fd",
       "revId": "06fa7a1cd9e1117a64dcef1ba94b6330f3e864cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -16,6 +16,24 @@
       "message": "Please add `Bug: v8:10391`.",
       "revId": "4ff41cd70282b0f1c1c6900fb9b3e32076c440ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66985ecc_7dd7a86a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2f336df_cc2a7e0e",
+      "revId": "4ff41cd70282b0f1c1c6900fb9b3e32076c440ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

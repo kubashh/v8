@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fa69df7_da36c6ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:34:42Z",
+      "side": 1,
+      "message": "Sorry for the extended delay on fixing the issues, I was pulled onto MariaDB MDEV-30728 which ended up being a nasty ppc64-specifc bug in the Linux kernel\n\nSpent a while dealing with the code churn but this patchset should be good to go again -- any chance of a quick merge before the churn breaks it again? 😊",
+      "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
