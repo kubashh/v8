@@ -23,17 +23,30 @@ class TracedHandlesImpl;
 class V8_EXPORT_PRIVATE TracedHandles final {
  public:
   enum class MarkMode : uint8_t { kOnlyYoung, kAll };
+  enum class WeaknessCompuationMode { kAtomic, kConcurrent };
 
   static void Destroy(Address* location);
   static void Copy(const Address* const* from, Address** to);
   static void Move(Address** from, Address** to);
 
-  static Tagged<Object> Mark(Address* location, MarkMode mark_mode);
+  // Returns the object referenced by the relevant node and whether the node was
+  // marked.
+  static Tagged<Object> TryMark(Address* location, MarkMode mark_mode);
   static Tagged<Object> MarkConservatively(Address* inner_location,
                                            Address* traced_node_block_base,
                                            MarkMode mark_mode);
 
+  static Tagged<Object> LoadObject(Address* location);
+
+  static bool IsWeak(Address* location,
+                     EmbedderRootsHandler* embedder_root_handler,
+                     WeaknessCompuationMode mode);
+
   static bool IsValidInUseNode(Address* location);
+
+#if DEBUG
+  static void VerifyMarked(Address* location);
+#endif  // DEBUG
 
   explicit TracedHandles(Isolate*);
   ~TracedHandles();
@@ -70,7 +83,8 @@ class V8_EXPORT_PRIVATE TracedHandles final {
   void ComputeWeaknessForYoungObjects();
 
   void ProcessYoungObjects(RootVisitor* v,
-                           WeakSlotCallbackWithHeap should_reset_handle);
+                           WeakSlotCallbackWithHeap should_reset_handle,
+                           GarbageCollector garbage_collector);
 
   void Iterate(RootVisitor*);
   void IterateYoung(RootVisitor*);

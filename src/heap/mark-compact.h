@@ -164,6 +164,10 @@ class MarkCompactCollector final {
 
   Heap* heap() { return heap_; }
 
+  bool is_in_atomic_pause() const {
+    return is_in_atomic_pause_.load(std::memory_order_relaxed);
+  }
+
   explicit MarkCompactCollector(Heap* heap);
   ~MarkCompactCollector();
 
@@ -408,6 +412,8 @@ class MarkCompactCollector final {
   std::vector<Page*> empty_new_space_pages_to_be_swept_;
 
   bool use_background_threads_in_cycle_ = false;
+
+  std::atomic<bool> is_in_atomic_pause_{false};
 
   friend class Evacuator;
   friend class RecordMigratedSlotVisitor;

@@ -15,6 +15,7 @@
 #include "src/heap/mark-compact.h"
 #include "src/heap/marking-state-inl.h"
 #include "src/heap/marking-worklist-inl.h"
+#include "src/objects/js-objects.h"
 #include "src/objects/objects-inl.h"
 
 namespace v8 {
@@ -40,16 +41,67 @@ void UnifiedHeapMarkingState::MarkAndPush(
   if (!traced_handle_location) {
     return;
   }
+
   Tagged<Object> object =
-      TracedHandles::Mark(traced_handle_location, mark_mode_);
+      TracedHandles::TryMark(traced_handle_location, mark_mode_);
+  // `TryMark` returns a smi if the traced handle was already marked.
   if (!IsHeapObject(object)) {
     // The embedder is not aware of whether numbers are materialized as heap
     // objects are just passed around as Smis.
     return;
   }
+
   Tagged<HeapObject> heap_object = HeapObject::cast(object);
   if (heap_object.InReadOnlySpace()) return;
   if (!ShouldMarkObject(heap_object)) return;
+
+  if (v8_flags.reclaim_unmodified_wrappers) {
+    bool is_in_atomic_pause =
+        heap_->mark_compact_collector()->is_in_atomic_pause();
+    if (TracedHandles::IsWeak(
+            traced_handle_location, embedder_root_handler_,
+            is_in_atomic_pause
+                ? TracedHandles::WeaknessCompuationMode::kAtomic
+                : TracedHandles::WeaknessCompuationMode::kConcurrent)) {
+      if (!is_in_atomic_pause)
+        local_weak_traced_reference_worklist_.Push(&reference);
+      return;
+    }
+  }
+
+  if (marking_state_->TryMark(heap_object)) {
+    local_marking_worklist_->Push(heap_object);
+  }
+  if (V8_UNLIKELY(track_retaining_path_)) {
+    heap_->AddRetainingRoot(Root::kTracedHandles, heap_object);
+  }
+}
+
+void UnifiedHeapMarkingState::MarkAndPushForRevisitedWeakTracedReference(
+    const TracedReferenceBase& reference) {
+  // The following code will crash with null pointer derefs when finding a
+  // non-empty `TracedReferenceBase` when `CppHeap` is in detached mode.
+  Address* traced_handle_location =
+      BasicTracedReferenceExtractor::GetObjectSlotForMarking(reference);
+  DCHECK_NOT_NULL(traced_handle_location);
+
+#if DEBUG
+  TracedHandles::VerifyMarked(traced_handle_location);
+#endif  // DEBUG
+
+  Tagged<Object> object = TracedHandles::LoadObject(traced_handle_location);
+  DCHECK(IsHeapObject(object));
+
+  Tagged<HeapObject> heap_object = HeapObject::cast(object);
+  DCHECK(!heap_object.InReadOnlySpace());
+  DCHECK(ShouldMarkObject(heap_object));
+
+  if (v8_flags.reclaim_unmodified_wrappers &&
+      TracedHandles::IsWeak(traced_handle_location, embedder_root_handler_,
+                            TracedHandles::WeaknessCompuationMode::kAtomic)) {
+    return;
+  }
+
   if (marking_state_->TryMark(heap_object)) {
     local_marking_worklist_->Push(heap_object);
   }
