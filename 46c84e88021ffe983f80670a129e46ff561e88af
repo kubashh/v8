@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "424ce60d_a5e4866a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:28:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dff09a8b_f58ab0f8",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2c158da3_214b5235",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "I mean something like this? could reduce some duplicated code:\n```\n  if (cc \u003d\u003d eq || cc \u003d\u003d ne) {\n    Register scratch2 \u003d temps.AcquireScratch();\n    __ IsObjectType(object, scratch, scratch2, instance_type);\n    __ b(cc, target);\n    return;\n  }\n ```\n similar to arm https://source.chromium.org/chromium/chromium/src/+/main:v8/src/baseline/arm64/baseline-assembler-arm64-inl.h;l\u003d135",
       "parentUuid": "4195a243_3ad5356f",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be30c371_ee49db37",
+        "filename": "src/baseline/ppc/baseline-assembler-ppc-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:28:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7754e1c2_d5795a70",
       "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -331,6 +367,24 @@
       "side": 1,
       "message": "Please take a look at my comment on the sandbox port.",
       "parentUuid": "3139aacf_6b12635d",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6392b82f_453bdfe7",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:28:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3ea9468_e36a8fc0",
       "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
