@@ -298,6 +298,30 @@
       },
       "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2553849_cb32c473",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4845,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-11-23T11:38:18Z",
+      "side": 1,
+      "message": "sg, I\u0027m fine with both.",
+      "parentUuid": "caa3ec95_6cafaff6",
+      "range": {
+        "startLine": 4845,
+        "startChar": 4,
+        "endLine": 4845,
+        "endChar": 44
+      },
+      "revId": "af6e310f4c632a0bdf42dc2892bf45e0037efd95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
