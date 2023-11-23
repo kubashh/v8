@@ -414,7 +414,7 @@ void ScavengerCollector::CollectGarbage() {
       isolate_->global_handles()->ProcessWeakYoungObjects(
           &visitor, &IsUnscavengedHeapObjectSlot);
       isolate_->traced_handles()->ProcessYoungObjects(
-          &visitor, &IsUnscavengedHeapObjectSlot);
+          &visitor, &IsUnscavengedHeapObjectSlot, GarbageCollector::SCAVENGER);
     }
 
     {
