@@ -253,6 +253,30 @@
       },
       "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3225863_40f8cd77",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-23T12:11:27Z",
+      "side": 1,
+      "message": "Actually, never mind.\nIf we were dealing with a new node, I also couldn\u0027t check that it\u0027s marked as I do now.",
+      "parentUuid": "6a0ef245_2838d7a6",
+      "range": {
+        "startLine": 32,
+        "startChar": 54,
+        "endLine": 32,
+        "endChar": 74
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
