@@ -63,6 +63,30 @@
       },
       "revId": "24dd2d2edf19197953b242bc1c13cc35ab9deeea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e054c89_8b0b96c9",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 46
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-23T10:52:48Z",
+      "side": 1,
+      "message": "So, `is_marking_` is off during IM start and the atomic pause, right?",
+      "parentUuid": "98d50f19_bb5be41f",
+      "range": {
+        "startLine": 959,
+        "startChar": 9,
+        "endLine": 959,
+        "endChar": 20
+      },
+      "revId": "24dd2d2edf19197953b242bc1c13cc35ab9deeea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

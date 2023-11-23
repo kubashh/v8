@@ -418,6 +418,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb1ec8f8_20cfaa04",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-23T10:52:48Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a998a4ce_9c996eab",
+      "range": {
+        "startLine": 1226,
+        "startChar": 20,
+        "endLine": 1226,
+        "endChar": 26
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56929127_55d6f461",
