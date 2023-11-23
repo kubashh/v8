@@ -177,6 +177,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9b947d0_65186037",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:29:37Z",
+      "side": 1,
+      "message": "Looking closer, let\u0027s just leave as-is, isn\u0027t worth cluttering things up with another TODO, especially with how fast the v8 codebase changes.",
+      "parentUuid": "338b8c26_93dfcdb3",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "282226ca_05f2da2a",
@@ -279,6 +297,24 @@
       "side": 1,
       "message": "On the officially supported platforms it\u0027s only on arm64 and it was added a very long time ago (way before static-roots) and probably was never cleaned up. Is it part of any of the static-root ports on x64/arm64?",
       "parentUuid": "5fcc64ee_1f7ee608",
+      "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53b25f70_d1a5b151",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-23T23:29:37Z",
+      "side": 1,
+      "message": "I\u0027ll just remove it for now.",
+      "parentUuid": "9ac74bc1_d8891dde",
       "revId": "46c84e88021ffe983f80670a129e46ff561e88af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
