@@ -35,6 +35,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1951eefe_e739f81d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555292
+      },
+      "writtenOn": "2023-11-23T18:51:17Z",
+      "side": 1,
+      "message": "Got it, got it! I\u0027m maybe more confused than you, what/how would you instrument the scripts then? I can pivot this CL into something else.",
+      "parentUuid": "756fb47f_ab63b879",
+      "revId": "df3ec4d5e2f417fa39e3c3d7306b3bf38692e78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5125b127_889e503f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555292
+      },
+      "writtenOn": "2023-11-23T18:51:17Z",
+      "side": 1,
+      "message": "Thanks for taking the time to review this!",
+      "revId": "df3ec4d5e2f417fa39e3c3d7306b3bf38692e78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "afafe922_b58aecc0",
@@ -48,6 +83,30 @@
       "writtenOn": "2023-11-22T08:31:15Z",
       "side": 1,
       "message": "I\u0027m skeptical about using std::regex. I don\u0027t think we link that into V8 anywhere else (other than tests).\n\nFor Maglev, we filter like here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/codegen/compiler.cc;l\u003d1176;drc\u003dd4a7d3fb6f5100019d6153d5cf00c60f06b1d0a2;bpv\u003d1;bpt\u003d1",
+      "range": {
+        "startLine": 166,
+        "startChar": 11,
+        "endLine": 166,
+        "endChar": 23
+      },
+      "revId": "df3ec4d5e2f417fa39e3c3d7306b3bf38692e78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96809176_05a1ad63",
+        "filename": "src/objects/script-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1555292
+      },
+      "writtenOn": "2023-11-23T18:51:17Z",
+      "side": 1,
+      "message": "Makes sense, I could change that once this CL gets the shape that we truly want!",
+      "parentUuid": "afafe922_b58aecc0",
       "range": {
         "startLine": 166,
         "startChar": 11,
