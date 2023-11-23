@@ -87,6 +87,30 @@
       },
       "revId": "24dd2d2edf19197953b242bc1c13cc35ab9deeea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c49f453_d5af3b57",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 46
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-23T12:03:27Z",
+      "side": 1,
+      "message": "Yes, that will be the case after this CL (see change in `mark-compact.cc` that moves setting `is_marking_` to false when we stop incremental marking instead of at the end of the atomic pause).",
+      "parentUuid": "1e054c89_8b0b96c9",
+      "range": {
+        "startLine": 959,
+        "startChar": 9,
+        "endLine": 959,
+        "endChar": 20
+      },
+      "revId": "24dd2d2edf19197953b242bc1c13cc35ab9deeea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

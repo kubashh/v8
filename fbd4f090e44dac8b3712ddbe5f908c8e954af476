@@ -229,6 +229,30 @@
       },
       "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a0ef245_2838d7a6",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-23T12:03:27Z",
+      "side": 1,
+      "message": "Sorry, I misphrased.\nWe\u0027re revisiting the `TracedReference`. Even if the node is immutable, the `TracedReference` could now be pointing to another node, no?",
+      "parentUuid": "1093392c_980cfb6e",
+      "range": {
+        "startLine": 32,
+        "startChar": 54,
+        "endLine": 32,
+        "endChar": 74
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
