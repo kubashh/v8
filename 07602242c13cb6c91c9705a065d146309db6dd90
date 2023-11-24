@@ -16,6 +16,46 @@
       "message": "PTAL, thanks",
       "revId": "07602242c13cb6c91c9705a065d146309db6dd90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4de0300_e1fa91e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-24T14:41:07Z",
+      "side": 1,
+      "message": "LGTM with one nit.",
+      "revId": "07602242c13cb6c91c9705a065d146309db6dd90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be374e75_d28155cf",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4136,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-24T14:41:07Z",
+      "side": 1,
+      "message": "So, the arm64 implementation is currently broken, see https://chromium-review.googlesource.com/c/v8/v8/+/5057289/comment/2c58454a_3186f69b/\nStill, this is somewhat ugly and hard to read.\n\nI\u0027d propose\n```\nwhile (const ComparisonOp* equal \u003d Get(value).TryCast\u003cOpmask::kWord32Equal\u003e()) {\n  if (!MatchIntegralZero(equal-\u003eright()) break;\n  user \u003d value;\n  value \u003d equal-\u003eleft();\n  cont-\u003eNegate();\n}\n```\nWould that work?\nIf yes, can you also adapt the arm64 `VisitWordCompareZero` to do the same.",
+      "range": {
+        "startLine": 4129,
+        "startChar": 4,
+        "endLine": 4136,
+        "endChar": 47
+      },
+      "revId": "07602242c13cb6c91c9705a065d146309db6dd90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
