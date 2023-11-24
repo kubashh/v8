@@ -38,6 +38,7 @@ extern class PromiseReaction extends Struct {
   promise_or_capability: JSPromise|PromiseCapability|Undefined;
   @if(V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA)
   continuation_preserved_embedder_data: Object|Undefined;
+  async_context_store: Object|Undefined;
 }
 
 // PromiseReactionJobTask constants
@@ -63,6 +64,7 @@ extern class PromiseReactionJobTask extends Microtask {
   promise_or_capability: JSPromise|PromiseCapability|Undefined;
   @if(V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA)
   continuation_preserved_embedder_data: Object|Undefined;
+  async_context_store: Object|Undefined;
 }
 
 extern class PromiseFulfillReactionJobTask extends PromiseReactionJobTask {}
@@ -74,4 +76,6 @@ extern class PromiseResolveThenableJobTask extends Microtask {
   promise_to_resolve: JSPromise;
   thenable: JSReceiver;
   then: JSReceiver;
+  continuation_preserved_embedder_data: Object|Undefined;
+  async_context_store: Object|Undefined;
 }

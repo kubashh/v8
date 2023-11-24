@@ -51,7 +51,7 @@ void DisableHook(const v8::FunctionCallbackInfo<v8::Value>& info) {
 }  // namespace
 
 AsyncHooks::AsyncHooks(v8::Isolate* v8_isolate) : v8_isolate_(v8_isolate) {
-  AsyncContext ctx;
+  D8AsyncContext ctx;
   ctx.execution_async_id = 1;
   ctx.trigger_async_id = 0;
   asyncContexts.push(ctx);
@@ -223,7 +223,7 @@ void AsyncHooks::ShellPromiseHook(PromiseHookType type, Local<Promise> promise,
                             Integer::New(v8_isolate, 0));
       }
     } else if (type == PromiseHookType::kBefore) {
-      AsyncContext ctx;
+      D8AsyncContext ctx;
       ctx.execution_async_id =
           promise
               ->GetPrivate(currentContext,
