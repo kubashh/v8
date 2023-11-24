@@ -16,6 +16,24 @@
       "message": "Looks good to me!",
       "revId": "0865746315f2c4d6de5b03aeee9ccd6e437ed87e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8f1de61_05c1ac73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1447139
+      },
+      "writtenOn": "2023-11-24T18:26:11Z",
+      "side": 1,
+      "message": "BTW if in the future you think that it might be useful if one of the Arm engineers working on V8 would look at a change, you could add `v8-arm-ports@googlegroups.com` to CC.",
+      "parentUuid": "65393ab8_69e82674",
+      "revId": "0865746315f2c4d6de5b03aeee9ccd6e437ed87e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
