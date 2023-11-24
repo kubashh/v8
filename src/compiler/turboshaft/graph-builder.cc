@@ -320,8 +320,7 @@ V<Word32> GraphBuilder::BuildUint32Mod(V<Word32> lhs, V<Word32> rhs) {
     GOTO(done, __ Uint32Mod(lhs, rhs));
   }
 
-  BIND(done, result);
-  return result;
+  return BIND(done);
 }
 
 OpIndex GraphBuilder::Process(
@@ -1649,7 +1648,7 @@ OpIndex GraphBuilder::Process(
         }
         END_IF
 
-        BIND(done, value);
+        auto value = BIND(done);
         V<Word32> lossless = __ Word32Equal(lhs, __ Word32Mul(value, rhs));
         __ DeoptimizeIfNot(lossless, dominating_frame_state,
                            DeoptimizeReason::kLostPrecision, FeedbackSource{});
@@ -1753,7 +1752,7 @@ OpIndex GraphBuilder::Process(
       ELSE { GOTO(rhs_checked, rhs); }
       END_IF
 
-      BIND(rhs_checked, rhs_value);
+      auto rhs_value = BIND(rhs_checked);
 
       IF(__ Int32LessThan(lhs, 0)) {
         // The {lhs} is a negative integer. This is very unlikely and
@@ -1773,8 +1772,7 @@ OpIndex GraphBuilder::Process(
       }
       END_IF
 
-      BIND(done, result);
-      return result;
+      return BIND(done);
     }
 
     case IrOpcode::kCheckedInt64Mod: {
@@ -2126,8 +2124,7 @@ OpIndex GraphBuilder::Process(
       }
       END_IF
 
-      BIND(done, result);
-      return result;
+      return BIND(done);
     }
 
     case IrOpcode::kRuntimeAbort:

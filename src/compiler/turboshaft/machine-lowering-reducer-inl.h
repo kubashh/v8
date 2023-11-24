@@ -236,8 +236,7 @@ class MachineLoweringReducer : public Next {
           GOTO(done, 0);
         }
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case ObjectIsOp::Kind::kUndetectable:
         if (DependOnNoUndetectableObjectsProtector()) {
@@ -333,8 +332,7 @@ class MachineLoweringReducer : public Next {
         }
         GOTO(done, check);
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case ObjectIsOp::Kind::kSmi: {
         // If we statically know that this is a heap object, it cannot be a Smi.
@@ -355,8 +353,7 @@ class MachineLoweringReducer : public Next {
         GOTO(done,
              __ TaggedEqual(map, __ HeapConstant(factory_->heap_number_map())));
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
 
 #if V8_STATIC_ROOTS_BOOL
@@ -373,8 +370,7 @@ class MachineLoweringReducer : public Next {
                        __ TruncateWordPtrToWord32(__ BitcastTaggedToWord(map)),
                        __ Word32Constant(InstanceTypeChecker::kLastStringMap)));
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case ObjectIsOp::Kind::kSymbol: {
         Label<Word32> done(this);
@@ -389,8 +385,7 @@ class MachineLoweringReducer : public Next {
                        __ TruncateWordPtrToWord32(__ BitcastTaggedToWord(map)),
                        __ Word32Constant(StaticReadOnlyRoot::kSymbolMap)));
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
 #else
       case ObjectIsOp::Kind::kString:
@@ -429,8 +424,7 @@ class MachineLoweringReducer : public Next {
         }
         GOTO(done, check);
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case ObjectIsOp::Kind::kInternalizedString: {
         DCHECK_EQ(input_assumptions, ObjectIsOp::InputAssumptions::kHeapObject);
@@ -460,8 +454,7 @@ class MachineLoweringReducer : public Next {
         // check. See http://crbug.com/v8/8264 for details.
         GOTO(done, __ Word32Equal(__ Float64ExtractHighWord32(value),
                                   kHoleNanUpper32));
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case NumericKind::kFinite: {
         V<Float64> diff = __ Float64Sub(value, value);
@@ -481,8 +474,7 @@ class MachineLoweringReducer : public Next {
             __ Float64LessThanOrEqual(__ Float64Abs(trunc), kMaxSafeInteger);
         GOTO(done, in_range);
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case NumericKind::kMinusZero: {
         if (Is64()) {
@@ -495,8 +487,7 @@ class MachineLoweringReducer : public Next {
           V<Word32> value_hi = __ Float64ExtractHighWord32(value);
           GOTO(done, __ Word32Equal(value_hi, kMinusZeroHiBits));
 
-          BIND(done, result);
-          return result;
+          return BIND(done);
         }
       }
       case NumericKind::kNaN: {
@@ -537,8 +528,7 @@ class MachineLoweringReducer : public Next {
         input, AccessBuilder::ForHeapNumberValue());
     GOTO(done, __ FloatIs(value, kind, input_rep));
 
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   V<Object> REDUCE(Convert)(V<Object> input, ConvertOp::Kind from,
@@ -571,8 +561,7 @@ class MachineLoweringReducer : public Next {
             input, AccessBuilder::ForHeapNumberOrOddballValue());
         GOTO(done, __ TagSmi(__ ReversibleFloat64ToInt32(value)));
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       default:
         UNREACHABLE();
@@ -620,8 +609,7 @@ class MachineLoweringReducer : public Next {
           GOTO(done, AllocateBigInt(__ Word32Constant(bitfield), input));
         }
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case ConvertUntaggedToJSPrimitiveOp::JSPrimitiveKind::kNumber: {
         if (input_rep == RegisterRepresentation::Word32()) {
@@ -637,13 +625,12 @@ class MachineLoweringReducer : public Next {
 
               TagSmiOrOverflow(input, &overflow, &done);
 
-              if (BIND(overflow)) {
+              if (BIND_IF_REACHABLE(overflow)) {
                 GOTO(done, AllocateHeapNumberWithValue(
                                __ ChangeInt32ToFloat64(input)));
               }
 
-              BIND(done, result);
-              return result;
+              return BIND(done);
             }
             case ConvertUntaggedToJSPrimitiveOp::InputInterpretation::
                 kUnsigned: {
@@ -654,8 +641,7 @@ class MachineLoweringReducer : public Next {
               GOTO(done, AllocateHeapNumberWithValue(
                              __ ChangeUint32ToFloat64(input)));
 
-              BIND(done, result);
-              return result;
+              return BIND(done);
             }
             case ConvertUntaggedToJSPrimitiveOp::InputInterpretation::kCharCode:
             case ConvertUntaggedToJSPrimitiveOp::InputInterpretation::
@@ -678,13 +664,12 @@ class MachineLoweringReducer : public Next {
                 TagSmiOrOverflow(v32, &outside_smi_range, &done);
               }
 
-              if (BIND(outside_smi_range)) {
+              if (BIND_IF_REACHABLE(outside_smi_range)) {
                 GOTO(done, AllocateHeapNumberWithValue(
                                __ ChangeInt64ToFloat64(input)));
               }
 
-              BIND(done, result);
-              return result;
+              return BIND(done);
             }
             case ConvertUntaggedToJSPrimitiveOp::InputInterpretation::
                 kUnsigned: {
@@ -695,8 +680,7 @@ class MachineLoweringReducer : public Next {
               GOTO(done,
                    AllocateHeapNumberWithValue(__ ChangeInt64ToFloat64(input)));
 
-              BIND(done, result);
-              return result;
+              return BIND(done);
             }
             case ConvertUntaggedToJSPrimitiveOp::InputInterpretation::kCharCode:
             case ConvertUntaggedToJSPrimitiveOp::InputInterpretation::
@@ -728,12 +712,11 @@ class MachineLoweringReducer : public Next {
             TagSmiOrOverflow(v32, &outside_smi_range, &done);
           }
 
-          if (BIND(outside_smi_range)) {
+          if (BIND_IF_REACHABLE(outside_smi_range)) {
             GOTO(done, AllocateHeapNumberWithValue(input));
           }
 
-          BIND(done, result);
-          return result;
+          return BIND(done);
         }
         UNREACHABLE();
         break;
@@ -760,8 +743,7 @@ class MachineLoweringReducer : public Next {
         ELSE { GOTO(done, __ HeapConstant(factory_->false_value())); }
         END_IF
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case ConvertUntaggedToJSPrimitiveOp::JSPrimitiveKind::kString: {
         Label<Word32> single_code(this);
@@ -822,7 +804,8 @@ class MachineLoweringReducer : public Next {
           GOTO(done, __ FinishInitialization(std::move(string)));
         }
 
-        if (BIND(single_code, code)) {
+        if (auto bound_values = BIND_IF_REACHABLE(single_code)) {
+          auto [code] = *bound_values;
           // Check if the {code} is a one byte character.
           IF(LIKELY(
               __ Uint32LessThanOrEqual(code, String::kMaxOneByteCharCode))) {
@@ -867,8 +850,7 @@ class MachineLoweringReducer : public Next {
           END_IF
         }
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
     }
 
@@ -958,8 +940,7 @@ class MachineLoweringReducer : public Next {
           }
           END_IF
 
-          BIND(done, result);
-          return result;
+          return BIND(done);
         } else {
           DCHECK_EQ(input_assumptions, ConvertJSPrimitiveToUntaggedOp::
                                            InputAssumptions::kPlainPrimitive);
@@ -971,8 +952,7 @@ class MachineLoweringReducer : public Next {
           V<Float64> f64 = __ template LoadField<Float64>(
               V<HeapNumber>::Cast(number), AccessBuilder::ForHeapNumberValue());
           GOTO(done, __ JSTruncateFloat64ToWord32(f64));
-          BIND(done, result);
-          return result;
+          return BIND(done);
         }
         UNREACHABLE();
       case ConvertJSPrimitiveToUntaggedOp::UntaggedKind::kInt64:
@@ -994,8 +974,7 @@ class MachineLoweringReducer : public Next {
           }
           END_IF
 
-          BIND(done, result);
-          return result;
+          return BIND(done);
         }
         UNREACHABLE();
       case ConvertJSPrimitiveToUntaggedOp::UntaggedKind::kUint32: {
@@ -1014,8 +993,7 @@ class MachineLoweringReducer : public Next {
         }
         END_IF
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case ConvertJSPrimitiveToUntaggedOp::UntaggedKind::kBit:
         DCHECK_EQ(input_assumptions,
@@ -1036,8 +1014,7 @@ class MachineLoweringReducer : public Next {
           }
           END_IF
 
-          BIND(done, result);
-          return result;
+          return BIND(done);
         } else {
           DCHECK_EQ(input_assumptions, ConvertJSPrimitiveToUntaggedOp::
                                            InputAssumptions::kPlainPrimitive);
@@ -1051,8 +1028,7 @@ class MachineLoweringReducer : public Next {
           V<Float64> f64 = __ template LoadField<Float64>(
               V<HeapNumber>::Cast(number), AccessBuilder::ForHeapNumberValue());
           GOTO(done, f64);
-          BIND(done, result);
-          return result;
+          return BIND(done);
         }
       }
     }
@@ -1095,8 +1071,7 @@ class MachineLoweringReducer : public Next {
           }
           END_IF
 
-          BIND(done, result);
-          return result;
+          return BIND(done);
         }
       }
       case ConvertJSPrimitiveToUntaggedOrDeoptOp::UntaggedKind::kInt64: {
@@ -1121,8 +1096,7 @@ class MachineLoweringReducer : public Next {
         }
         END_IF
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case ConvertJSPrimitiveToUntaggedOrDeoptOp::UntaggedKind::kFloat64: {
         Label<Float64> done(this);
@@ -1138,8 +1112,7 @@ class MachineLoweringReducer : public Next {
         }
         END_IF
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case ConvertJSPrimitiveToUntaggedOrDeoptOp::UntaggedKind::kArrayIndex: {
         DCHECK_EQ(from_kind, ConvertJSPrimitiveToUntaggedOrDeoptOp::
@@ -1225,8 +1198,7 @@ class MachineLoweringReducer : public Next {
         }
         END_IF
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
     }
     UNREACHABLE();
@@ -1251,8 +1223,7 @@ class MachineLoweringReducer : public Next {
         }
         END_IF
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case TruncateJSPrimitiveToUntaggedOp::UntaggedKind::kInt64: {
         DCHECK_EQ(input_assumptions,
@@ -1274,8 +1245,7 @@ class MachineLoweringReducer : public Next {
         }
         END_IF
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case TruncateJSPrimitiveToUntaggedOp::UntaggedKind::kBit: {
         Label<Word32> done(this);
@@ -1379,8 +1349,7 @@ class MachineLoweringReducer : public Next {
         // All other values that reach here are true.
         GOTO(done, 1);
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
     }
     UNREACHABLE();
@@ -1404,8 +1373,7 @@ class MachineLoweringReducer : public Next {
         input, frame_state, input_requirement, feedback);
     GOTO(done, __ JSTruncateFloat64ToWord32(number_value));
 
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   V<Word32> JSAnyIsNotPrimitiveHeapObject(V<Object> value,
@@ -1447,7 +1415,7 @@ class MachineLoweringReducer : public Next {
         GOTO(done, value);
 
         // Wrap the primitive {value} into a JSPrimitiveWrapper.
-        if (BIND(convert_to_object)) {
+        if (BIND_IF_REACHABLE(convert_to_object)) {
           if (mode != ConvertReceiverMode::kNotNullOrUndefined) {
             // Replace the {value} with the {global_proxy}.
             GOTO_IF(UNLIKELY(__ TaggedEqual(
@@ -1463,8 +1431,7 @@ class MachineLoweringReducer : public Next {
           GOTO(done, __ CallBuiltin_ToObject(isolate_, native_context, value));
         }
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
     }
     UNREACHABLE();
@@ -1497,7 +1464,7 @@ class MachineLoweringReducer : public Next {
     }
 
     // Allocate the resulting ConsString.
-    BIND(allocate_string, map);
+    auto map = BIND(allocate_string);
     auto string = __ template Allocate<String>(
         __ IntPtrConstant(ConsString::kSize), AllocationType::kYoung);
     __ InitializeField(string, AccessBuilder::ForMap(), map);
@@ -1572,8 +1539,7 @@ class MachineLoweringReducer : public Next {
       GOTO(loop, __ WordPtrAdd(index, 1));
     }
 
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   OpIndex REDUCE(DoubleArrayMinMax)(V<Tagged> array,
@@ -1662,7 +1628,7 @@ class MachineLoweringReducer : public Next {
       END_IF
     }
 
-    if (BIND(double_field)) {
+    if (BIND_IF_REACHABLE(double_field)) {
       // If field is a Double field, either unboxed in the object on 64 bit
       // architectures, or a mutable HeapNumber.
       V<WordPtr> double_index = __ WordPtrShiftRightArithmetic(index, 1);
@@ -1692,7 +1658,8 @@ class MachineLoweringReducer : public Next {
       }
       END_IF
 
-      if (BIND(loaded_field, field)) {
+      if (auto bound_values = BIND_IF_REACHABLE(loaded_field)) {
+        auto [field] = *bound_values;
         // We may have transitioned in-place away from double, so check that
         // this is a HeapNumber -- otherwise the load is fine and we don't need
         // to copy anything anyway.
@@ -1708,8 +1675,7 @@ class MachineLoweringReducer : public Next {
       }
     }
 
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   OpIndex REDUCE(BigIntBinop)(V<Tagged> left, V<Tagged> right,
@@ -1889,7 +1855,7 @@ class MachineLoweringReducer : public Next {
         }
         END_IF
 
-        if (BIND(runtime)) {
+        if (BIND_IF_REACHABLE(runtime)) {
           V<Word32> value = __ UntagSmi(__ CallRuntime_StringCharCodeAt(
               isolate_, __ NoContextConstant(), *receiver,
               __ TagSmi(__ TruncateWordPtrToWord32(*position))));
@@ -1897,8 +1863,7 @@ class MachineLoweringReducer : public Next {
         }
       }
 
-      BIND(done, result);
-      return result;
+      return BIND(done);
     } else {
       DCHECK_EQ(kind, StringAtOp::Kind::kCodePoint);
       Label<Word32> done(this);
@@ -1924,8 +1889,7 @@ class MachineLoweringReducer : public Next {
                        __ Word32Add(second_code_unit, surrogate_offset));
       GOTO(done, value);
 
-      BIND(done, result);
-      return result;
+      return BIND(done);
     }
 
     UNREACHABLE();
@@ -1983,8 +1947,7 @@ class MachineLoweringReducer : public Next {
     }
     ELSE { GOTO(done, __ HeapConstant(factory_->false_value())); }
 
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   V<String> REDUCE(StringConcat)(V<String> left, V<String> right) {
@@ -2021,7 +1984,7 @@ class MachineLoweringReducer : public Next {
       ELSE { GOTO(done, rest_length); }
       END_IF
 
-      BIND(done, value);
+      auto value = BIND(done);
       return __ TagSmi(__ TruncateWordPtrToWord32(value));
     }
   }
@@ -2173,7 +2136,7 @@ class MachineLoweringReducer : public Next {
 
         GOTO(do_store, elements_kind);
 
-        BIND(do_store, store_kind);
+        auto store_kind = BIND(do_store);
         V<Object> elements = __ template LoadField<Object>(
             array, AccessBuilder::ForJSObjectElements());
         IF (__ Int32LessThan(HOLEY_ELEMENTS, store_kind)) {
@@ -2428,8 +2391,7 @@ class MachineLoweringReducer : public Next {
           }
           END_IF
 
-          BIND(done, result);
-          return result;
+          return BIND(done);
         } else if (kind == FloatUnaryOp::Kind::kRoundDown) {
           // General case for floor.
           //
@@ -2480,8 +2442,7 @@ class MachineLoweringReducer : public Next {
           }
           END_IF
 
-          BIND(done, result);
-          return result;
+          return BIND(done);
         } else if (kind == FloatUnaryOp::Kind::kRoundTiesEven) {
           // Generate case for round ties to even:
           //
@@ -2510,8 +2471,7 @@ class MachineLoweringReducer : public Next {
           GOTO_IF(__ Float64Equal(temp2, 0.0), done, value);
           GOTO(done, __ Float64Add(value, 1.0));
 
-          BIND(done, result);
-          return result;
+          return BIND(done);
         } else if (kind == FloatUnaryOp::Kind::kRoundToZero) {
           // General case for trunc.
           //
@@ -2566,8 +2526,7 @@ class MachineLoweringReducer : public Next {
           }
           END_IF
 
-          BIND(done, result);
-          return result;
+          return BIND(done);
         }
         UNREACHABLE();
       }
@@ -2698,8 +2657,7 @@ class MachineLoweringReducer : public Next {
     }
     END_IF
 
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   OpIndex REDUCE(RuntimeAbort)(AbortReason reason) {
@@ -2725,8 +2683,7 @@ class MachineLoweringReducer : public Next {
         __ CallBuiltin_CopyFastSmiOrObjectElements(isolate_, object);
     GOTO(done, copy);
 
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   V<Object> REDUCE(MaybeGrowFastElements)(V<Object> object, V<Object> elements,
@@ -2756,8 +2713,7 @@ class MachineLoweringReducer : public Next {
                     DeoptimizeReason::kCouldNotGrowElements, feedback);
     GOTO(done, new_elements);
 
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   OpIndex REDUCE(TransitionElementsKind)(V<HeapObject> object,
@@ -2849,8 +2805,7 @@ class MachineLoweringReducer : public Next {
           GOTO(loop, next_entry);
         }
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case FindOrderedHashEntryOp::Kind::kFindOrderedHashSetEntry:
         return __ CallBuiltin_FindOrderedHashSetEntry(
@@ -2979,8 +2934,7 @@ class MachineLoweringReducer : public Next {
     }
     END_IF
 
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   void MigrateInstanceOrDeopt(V<HeapObject> heap_object, V<Map> heap_object_map,

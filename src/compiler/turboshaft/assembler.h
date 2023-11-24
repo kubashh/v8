@@ -125,6 +125,27 @@ struct make_const_or_v<
 template <typename T>
 using make_const_or_v_t = typename make_const_or_v<T, void>::type;
 
+template <typename... Ts>
+struct tuple_or_singleton {
+  using type = std::tuple<Ts...>;
+};
+template <typename T>
+struct tuple_or_singleton<T> {
+  using type = T;
+};
+
+template <typename... Ts>
+using tuple_or_singleton_t = tuple_or_singleton<Ts...>::type;
+
+template <typename... Ts>
+tuple_or_singleton_t<Ts...> UnpackSingletonTuple(std::tuple<Ts...> tuple) {
+  if constexpr (sizeof...(Ts) == 1) {
+    return std::get<0>(tuple);
+  } else {
+    return tuple;
+  }
+}
+
 template <typename A, typename ConstOrValues>
 auto ResolveAll(A& assembler, const ConstOrValues& const_or_values) {
   return std::apply(
@@ -143,6 +164,7 @@ class LabelBase {
  public:
   static constexpr bool is_loop = loop;
   using values_t = std::tuple<V<Ts>...>;
+  using values_or_singleton_t = detail::tuple_or_singleton_t<V<Ts>...>;
   using const_or_values_t = std::tuple<detail::make_const_or_v_t<Ts>...>;
   using recorded_values_t = std::tuple<base::SmallVector<V<Ts>, 2>...>;
 
@@ -182,13 +204,19 @@ class LabelBase {
   }
 
   template <typename A>
-  base::prepend_tuple_type<bool, values_t> Bind(A& assembler) {
+  values_or_singleton_t Bind(A& assembler) {
     DCHECK(!data_.block->IsBound());
-    if (!assembler.Bind(data_.block)) {
-      return std::tuple_cat(std::tuple{false}, values_t{});
-    }
+    if (!assembler.Bind(data_.block)) return {};
     DCHECK_EQ(data_.block, assembler.current_block());
-    return std::tuple_cat(std::tuple{true}, MaterializePhis(assembler));
+    return detail::UnpackSingletonTuple(MaterializePhis(assembler));
+  }
+
+  template <typename A>
+  base::Optional<values_or_singleton_t> BindIfReachable(A& assembler) {
+    DCHECK(!data_.block->IsBound());
+    if (!assembler.Bind(data_.block)) return base::nullopt;
+    DCHECK_EQ(data_.block, assembler.current_block());
+    return detail::UnpackSingletonTuple(MaterializePhis(assembler));
   }
 
  protected:
@@ -350,9 +378,9 @@ class LoopLabel : public LabelBase<true, Ts...> {
   }
 
   template <typename A>
-  base::prepend_tuple_type<bool, values_t> Bind(A& assembler) {
+  void Bind(A& assembler) {
     // LoopLabels must not be bound  using `Bind`, but with `Loop`.
-    UNREACHABLE();
+    static_assert(sizeof(A) < 0);
   }
 
   template <typename A>
@@ -371,19 +399,13 @@ class LoopLabel : public LabelBase<true, Ts...> {
   template <typename A>
   void EndLoop(A& assembler) {
     // First, we need to bind the backedge block.
-    auto bind_result = this->super::Bind(assembler);
-    // `Bind` returns a tuple with a `bool` as first entry that indicates
-    // whether the block was bound. The rest of the tuple contains the phi
-    // values. Check if this block was bound (aka is reachable).
-    if (std::get<0>(bind_result)) {
+    if (auto values = this->super::BindIfReachable(assembler)) {
       // The block is bound.
       DCHECK_EQ(assembler.current_block(), this->super::block());
       // Now we build a jump from this block to the loop header.
-      // Remove the "bound"-flag from the beginning of the tuple.
-      auto values = base::tuple_drop<1>(bind_result);
       assembler.Goto(loop_header_data_.block);
       // Finalize Phis in the loop header.
-      FixLoopPhis(assembler, values);
+      FixLoopPhis(assembler, *values);
     }
     assembler.FinalizeLoop(loop_header_data_.block);
   }
@@ -3095,16 +3117,23 @@ class AssemblerOpInterface {
 
   // These methods are used by the assembler macros (IF, ELSE, ELSE_IF, END_IF).
   template <typename L>
-  auto ControlFlowHelper_Bind(L& label)
-      -> base::prepend_tuple_type<bool, typename L::values_t> {
+  L::values_or_singleton_t ControlFlowHelper_Bind(L& label) {
     // LoopLabels need to be bound with `LOOP` instead of `BIND`.
     static_assert(!L::is_loop);
     return label.Bind(Asm());
   }
 
   template <typename L>
-  auto ControlFlowHelper_BindLoop(L& label)
-      -> base::prepend_tuple_type<bool, typename L::values_t> {
+  base::Optional<typename L::values_t> ControlFlowHelper_BindIfReachable(
+      L& label) {
+    // LoopLabels need to be bound with `LOOP` instead of `BIND`.
+    static_assert(!L::is_loop);
+    return label.BindIfReachable(Asm());
+  }
+
+  template <typename L>
+  base::prepend_tuple_type<bool, typename L::values_t>
+  ControlFlowHelper_BindLoop(L& label) {
     // Only LoopLabels can be bound with `LOOP`. Otherwise use `BIND`.
     static_assert(L::is_loop);
     return label.BindLoop(Asm());

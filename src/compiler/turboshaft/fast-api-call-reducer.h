@@ -123,13 +123,13 @@ class FastApiCallReducer : public Next {
     }
     GOTO(done, FastApiCallOp::kSuccessValue, fast_call_result);
 
-    if (BIND(handle_error)) {
+    if (BIND_IF_REACHABLE(handle_error)) {
       // We pass Tagged<Smi>(0) as the value here, although this should never be
       // visible when calling code reacts to `kFailureValue` properly.
       GOTO(done, FastApiCallOp::kFailureValue, __ TagSmi(0));
     }
 
-    BIND(done, state, value);
+    auto [state, value] = BIND(done);
     return __ Tuple(state, value);
   }
 
@@ -193,7 +193,7 @@ class FastApiCallReducer : public Next {
     }
     GOTO(handle_error);
 
-    BIND(done, callee, arg);
+    auto [callee, arg] = BIND(done);
     return {callee, arg};
   }
 
@@ -268,8 +268,7 @@ class FastApiCallReducer : public Next {
                              V<HeapObject>::Cast(argument),
                              AccessBuilder::ForJSExternalObjectValue()));
 
-              BIND(done, result);
-              return result;
+              return BIND(done);
             }
             case CTypeInfo::Type::kSeqOneByteString: {
               // Check that the value is a HeapObject.
@@ -380,7 +379,7 @@ class FastApiCallReducer : public Next {
     GOTO_IF(__ Float64IsNaN(rounded), done, 0.0);
     GOTO(done, rounded);
 
-    BIND(done, rounded_result);
+    auto rounded_result = BIND(done);
     switch (scalar_type) {
       case CTypeInfo::Type::kInt32:
         return __ ReversibleFloat64ToInt32(rounded_result);
@@ -597,8 +596,7 @@ class FastApiCallReducer : public Next {
 #endif  // V8_ENABLE_SANDBOX
     GOTO(done, __ FinishInitialization(std::move(external)));
 
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   OpIndex WrapFastCall(const TSCallDescriptor* descriptor, OpIndex callee,

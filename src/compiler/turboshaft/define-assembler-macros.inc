@@ -18,11 +18,8 @@
 #define LIKELY(...) ConditionWithHint(__VA_ARGS__, BranchHint::kTrue)
 #define UNLIKELY(...) ConditionWithHint(__VA_ARGS__, BranchHint::kFalse)
 
-#define BIND(label, ...)                                                  \
-  auto [CONCAT(is_bound_, __LINE__), ##__VA_ARGS__] =                     \
-    Asm().ControlFlowHelper_Bind(label);                                  \
-    (::v8::internal::compiler::turboshaft::detail::SuppressUnusedWarning( \
-        CONCAT(is_bound_, __LINE__)))
+#define BIND(label, ...) Asm().ControlFlowHelper_Bind(label)
+#define BIND_IF_REACHABLE(label, ...) Asm().ControlFlowHelper_BindIfReachable(label)
 #define LOOP(loop_label, ...) \
   for(auto [CONCAT(run_loop_, __LINE__), ##__VA_ARGS__] =                      \
     Asm().ControlFlowHelper_BindLoop(loop_label); CONCAT(run_loop_, __LINE__); \

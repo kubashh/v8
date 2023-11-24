@@ -168,8 +168,7 @@ class WasmLoweringReducer : public Next {
                   done, __ Word32Constant(0));
       V<Word32> value_hi = __ Float64ExtractHighWord32(float_value);
       GOTO(done, __ Word32Equal(value_hi, __ Word32Constant(kMinusZeroHiBits)));
-      BIND(done, phi_is_minus_zero);
-      is_minus_zero = phi_is_minus_zero;
+      std::tie(is_minus_zero) = BIND(done);
     }
     GOTO_IF(is_minus_zero, end_label, object);
     // Check if value is integral.
@@ -182,16 +181,14 @@ class WasmLoweringReducer : public Next {
     BIND(int_to_smi_label);
     GOTO(end_label, __ TagSmi(int_value));
 
-    BIND(end_label, result);
-    return result;
+    return BIND(end_label);
   }
 
   OpIndex REDUCE(ExternConvertAny)(V<Tagged> object) {
     Label<Tagged> end(&Asm());
     GOTO_IF_NOT(__ IsNull(object, wasm::kWasmAnyRef), end, object);
     GOTO(end, Null(wasm::kWasmExternRef));
-    BIND(end, result);
-    return result;
+    return BIND(end);
   }
 
   OpIndex REDUCE(WasmTypeAnnotation)(OpIndex value, wasm::ValueType type) {
@@ -348,7 +345,7 @@ class WasmLoweringReducer : public Next {
       GOTO(done, V<WasmInternalFunction>::Cast(maybe_function));
     }
     END_IF
-    BIND(done, result_value);
+    auto result_value = BIND(done);
     return result_value;
   }
 
@@ -360,8 +357,7 @@ class WasmLoweringReducer : public Next {
     GOTO_IF(__ Word32Equal(string_representation, kSeqStringTag), done, string);
     GOTO(done, __ CallBuiltin(Builtin::kWasmStringAsWtf16, {string},
                               Operator::kPure));
-    BIND(done, result);
-    return result;
+    return BIND(done);
   }
 
   OpIndex REDUCE(StringPrepareForGetCodeUnit)(V<Tagged> original_string) {
@@ -437,7 +433,7 @@ class WasmLoweringReducer : public Next {
       GOTO(dispatch, first, first_type, offset);
     }
     {
-      BIND(direct_string, string, instance_type, offset);
+      auto [string, instance_type, offset] = BIND(direct_string);
 
       V<Word32> is_onebyte =
           __ Word32BitwiseAnd(instance_type, kStringEncodingMask);
@@ -474,7 +470,7 @@ class WasmLoweringReducer : public Next {
            charwidth_shift);
     }
     {
-      BIND(done, base, final_offset, charwidth_shift);
+      auto [base, final_offset, charwidth_shift] = BIND(done);
       return __ Tuple({base, final_offset, charwidth_shift});
     }
   }
@@ -599,7 +595,7 @@ class WasmLoweringReducer : public Next {
 
     DCHECK(__ generating_unreachable_operations() || result.valid());
     GOTO(end_label, result);
-    BIND(end_label, final_result);
+    auto final_result = BIND(end_label);
     return final_result;
   }
 
@@ -819,8 +815,7 @@ class WasmLoweringReducer : public Next {
       GOTO(end_label, __ TaggedEqual(maybe_match, rtt));
     }
 
-    BIND(end_label, result);
-    return result;
+    return BIND(end_label);
   }
 
   OpIndex LowerGlobalSetOrGet(OpIndex instance, OpIndex value,
