@@ -16,6 +16,92 @@
       "message": "Sorry for the extended delay on fixing the issues, I was pulled onto MariaDB MDEV-30728 which ended up being a nasty ppc64-specifc bug in the Linux kernel\n\nSpent a while dealing with the code churn but this patchset should be good to go again -- any chance of a quick merge before the churn breaks it again? 😊",
       "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "137b0f28_35aa60cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-24T17:40:48Z",
+      "side": 1,
+      "message": "Not a problem, just a few nits left. A related CL also needs to be ported to your https://crrev.com/c/4917706 CL, i\u0027ve left a comment there.",
+      "parentUuid": "1fa69df7_da36c6ab",
+      "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7745363_bce392a0",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-24T17:40:48Z",
+      "side": 1,
+      "message": "Can you add a CHECK to make sure this isn\u0027t the same as scratch.",
+      "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b479df95_f3c58855",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-24T17:40:48Z",
+      "side": 1,
+      "message": "Can you add a CHECK to make sure sure external_table and scratch are not the same, we have limited scratch regs right now.",
+      "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0b9d7dc_b0470595",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-24T17:40:48Z",
+      "side": 1,
+      "message": "Also need to check scratch2 !\u003d scratch",
+      "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54d74b42_b2b77dd5",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-24T17:40:48Z",
+      "side": 1,
+      "message": "What if we just use `scratch` for now? once `test bit \u003cAndU64\u003e` is done we don\u0027t need its value anymore.",
+      "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
