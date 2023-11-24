@@ -16,6 +16,24 @@
       "message": "Will you be adding https://crrev.com/c/5054646 to your CL at https://chromium-review.googlesource.com/c/v8/v8/+/4917706? it\u0027s linked with these CLs.",
       "revId": "f9c4e7134a5818387b654500529e1f0cf7f77144",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "735eb175_dcc97626",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-24T20:37:41Z",
+      "side": 1,
+      "message": "I can do that.  Give me half an hour to verify the change.",
+      "parentUuid": "170494f6_c070cb7b",
+      "revId": "f9c4e7134a5818387b654500529e1f0cf7f77144",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
