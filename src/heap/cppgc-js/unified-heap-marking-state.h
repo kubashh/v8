@@ -40,11 +40,12 @@ class UnifiedHeapMarkingState final {
   Heap* const heap_;
   const bool has_shared_space_;
   const bool is_shared_space_isolate_;
+  const bool track_retaining_path_;
+  const bool should_reclaim_weak_nodes_;
+  const TracedHandles::MarkMode mark_mode_;
   MarkingState* const marking_state_;
   MarkingWorklists::Local* local_marking_worklist_;
   WeakTracedReferenceWorklist::Local& local_weak_traced_reference_worklist_;
-  const bool track_retaining_path_;
-  const TracedHandles::MarkMode mark_mode_;
   EmbedderRootsHandler* const embedder_root_handler_;
 };
 

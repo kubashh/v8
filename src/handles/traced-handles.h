@@ -23,7 +23,7 @@ class TracedHandlesImpl;
 class V8_EXPORT_PRIVATE TracedHandles final {
  public:
   enum class MarkMode : uint8_t { kOnlyYoung, kAll };
-  enum class WeaknessCompuationMode { kAtomic, kConcurrent };
+  enum class WeaknessCompuationMode : uint8_t { kNone, kAtomic, kConcurrent };
 
   static void Destroy(Address* location);
   static void Copy(const Address* const* from, Address** to);
@@ -80,6 +80,7 @@ class V8_EXPORT_PRIVATE TracedHandles final {
   void ProcessYoungObjects(RootVisitor* v,
                            WeakSlotCallbackWithHeap should_reset_handle,
                            GarbageCollector garbage_collector);
+  void ProcessWeakObjects();
 
   void Iterate(RootVisitor*);
   void IterateYoung(RootVisitor*);
