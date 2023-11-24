@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eef57f89_79400b03",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-24T19:43:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7745363_bce392a0",
+      "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b479df95_f3c58855",
@@ -66,6 +84,24 @@
       "writtenOn": "2023-11-24T17:40:48Z",
       "side": 1,
       "message": "Can you add a CHECK to make sure sure external_table and scratch are not the same, we have limited scratch regs right now.",
+      "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32fe328c_a346342d",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-24T19:43:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b479df95_f3c58855",
       "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -87,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ad4c3ec_ce5b08a7",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-24T19:43:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0b9d7dc_b0470595",
+      "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54d74b42_b2b77dd5",
@@ -100,6 +154,24 @@
       "writtenOn": "2023-11-24T17:40:48Z",
       "side": 1,
       "message": "What if we just use `scratch` for now? once `test bit \u003cAndU64\u003e` is done we don\u0027t need its value anymore.",
+      "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "079e02bf_3bb80e37",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-24T19:43:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54d74b42_b2b77dd5",
       "revId": "be12eb2fdf52c3b79e58447dbdb948e59ef14b08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
