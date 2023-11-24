@@ -33,54 +33,12 @@ AllocationResult LocalHeap::AllocateRaw(int size_in_bytes, AllocationType type,
   DCHECK(IsRunning());
 #endif
 
+  CHECK_NOT_NULL(heap_allocator_);
+
   // Each allocation is supposed to be a safepoint.
   Safepoint();
 
-  bool large_object = size_in_bytes > heap_->MaxRegularHeapObjectSize(type);
-
-  if (type == AllocationType::kCode) {
-    CodePageHeaderModificationScope header_modification_scope(
-        "Code allocation needs header access.");
-
-    AllocationResult alloc;
-    if (large_object) {
-      alloc = heap()->code_lo_space()->AllocateRaw(this, size_in_bytes);
-    } else {
-      alloc =
-          code_space_allocator()->AllocateRaw(size_in_bytes, alignment, origin);
-    }
-    Tagged<HeapObject> object;
-    if (heap::ShouldZapGarbage() && alloc.To(&object) &&
-        !V8_ENABLE_THIRD_PARTY_HEAP_BOOL) {
-      heap::ZapCodeBlock(object.address(), size_in_bytes);
-    }
-    return alloc;
-  }
-
-  if (type == AllocationType::kOld) {
-    if (large_object)
-      return heap()->lo_space()->AllocateRaw(this, size_in_bytes);
-    else
-      return old_space_allocator()->AllocateRaw(size_in_bytes, alignment,
-                                                origin);
-  }
-
-  if (type == AllocationType::kTrusted) {
-    if (large_object)
-      return heap()->trusted_lo_space()->AllocateRaw(this, size_in_bytes);
-    else
-      return trusted_space_allocator()->AllocateRaw(size_in_bytes, alignment,
-                                                    origin);
-  }
-
-  DCHECK_EQ(type, AllocationType::kSharedOld);
-  if (large_object) {
-    return heap()->shared_lo_allocation_space()->AllocateRaw(this,
-                                                             size_in_bytes);
-  } else {
-    return shared_old_space_allocator()->AllocateRaw(size_in_bytes, alignment,
-                                                     origin);
-  }
+  return heap_allocator_->AllocateRaw(size_in_bytes, type, origin, alignment);
 }
 
 template <typename LocalHeap::AllocationRetryMode mode>
