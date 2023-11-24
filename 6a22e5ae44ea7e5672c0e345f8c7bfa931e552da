@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3714a07_b34977a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-11-24T15:39:42Z",
+      "side": 1,
+      "message": "Hey,\nsorry, these are just tiny fixes I somehow found only now.\n(I checked for other leftover `result \u003d __ Word32Constant(___)` in turboshaft-graph-interface, and seems like there are no more now at least 😄)",
+      "revId": "6a22e5ae44ea7e5672c0e345f8c7bfa931e552da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94924810_35232df3",
+        "filename": "test/mjsunit/wasm/imported-strings.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-11-24T15:39:42Z",
+      "side": 1,
+      "message": "In the recognize-import.js they used this style for signature constants and I forgot to match the style, sorry",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 14
+      },
+      "revId": "6a22e5ae44ea7e5672c0e345f8c7bfa931e552da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

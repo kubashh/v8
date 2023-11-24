@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "026051ff_78d9db17",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-11-24T15:39:42Z",
+      "side": 0,
+      "message": "Who would have thought that I added it twice... 😂",
+      "range": {
+        "startLine": 1554,
+        "startChar": 0,
+        "endLine": 1554,
+        "endChar": 40
+      },
+      "revId": "35b6a5c48ae8d6a864657d07e4867e22d7148c55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
