@@ -34,6 +34,24 @@
       "parentUuid": "40df66e5_b3df838d",
       "revId": "0e5c20f6bd5664faf4d35b2fd239fa8220f80ef5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ae22d2a_be16565c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-24T19:58:14Z",
+      "side": 1,
+      "message": "Would you be able to move it into this CL instead?\nWe generally try to avoid bundling CLs together. If we end up reverting his CL due to unforeseen bugs then we end up reverting all its dependants too.\n\nI also noticed https://chromium-review.googlesource.com/c/v8/v8/+/4917704 is part of your `Submitted together` list. We are really glad to see another maintainer join the force but we need to collaborate a bit longer before we can add you do the list, hope you understand.",
+      "parentUuid": "af182a29_d6f3358f",
+      "revId": "0e5c20f6bd5664faf4d35b2fd239fa8220f80ef5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
