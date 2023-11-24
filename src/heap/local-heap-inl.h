@@ -12,6 +12,7 @@
 #include "src/heap/concurrent-allocator-inl.h"
 #include "src/heap/heap.h"
 #include "src/heap/local-heap.h"
+#include "src/heap/main-allocator-inl.h"
 #include "src/heap/parked-scope.h"
 #include "src/heap/zapping.h"
 
@@ -32,6 +33,12 @@ AllocationResult LocalHeap::AllocateRaw(int size_in_bytes, AllocationType type,
   DCHECK(state == Heap::TEAR_DOWN || state == Heap::NOT_IN_GC);
   DCHECK(IsRunning());
 #endif
+
+  DCHECK_IMPLIES(is_main_thread_, heap_allocator_ != nullptr);
+
+  if (heap_allocator_) {
+    return heap_allocator_->AllocateRaw(size_in_bytes, type, origin, alignment);
+  }
 
   // Each allocation is supposed to be a safepoint.
   Safepoint();

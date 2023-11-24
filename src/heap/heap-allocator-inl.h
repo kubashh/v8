@@ -88,7 +88,7 @@ V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult HeapAllocator::AllocateRaw(
 #endif  // DEBUG
 
   if (heap_->CanSafepoint()) {
-    heap_->main_thread_local_heap()->Safepoint();
+    local_heap_->Safepoint();
   }
 
   const size_t large_object_threshold = heap_->MaxRegularHeapObjectSize(type);

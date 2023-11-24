@@ -59,7 +59,7 @@ LocalHeap::LocalHeap(Heap* heap, ThreadKind kind,
       handles_(new LocalHandles),
       persistent_handles_(std::move(persistent_handles)) {
   DCHECK_IMPLIES(!is_main_thread(), heap_->deserialization_complete());
-  if (!is_main_thread()) SetUp();
+  if (!is_main_thread()) SetUpAllocators();
 
   heap_->safepoint()->AddLocalHeap(this, [this] {
     if (!is_main_thread()) {
@@ -109,17 +109,18 @@ LocalHeap::~LocalHeap() {
 
 void LocalHeap::SetUpMainThreadForTesting() {
   Unpark();
-  SetUpMainThread();
+  SetUpMainThread(nullptr);
 }
 
-void LocalHeap::SetUpMainThread() {
+void LocalHeap::SetUpMainThread(HeapAllocator* allocator) {
   DCHECK(is_main_thread());
   DCHECK(IsRunning());
-  SetUp();
+  heap_allocator_ = allocator;
+  SetUpAllocators();
   SetUpSharedMarking();
 }
 
-void LocalHeap::SetUp() {
+void LocalHeap::SetUpAllocators() {
   DCHECK_NULL(old_space_allocator_);
   old_space_allocator_ =
       std::make_unique<MainAllocator>(this, heap_->old_space());

@@ -18,8 +18,13 @@ class Heap;
 
 HeapAllocator::HeapAllocator(Heap* heap) : heap_(heap) {}
 
-void HeapAllocator::Setup(LinearAllocationArea& new_allocation_info,
-                          LinearAllocationArea& old_allocation_info) {
+void HeapAllocator::SetupMain(LocalHeap* local_heap,
+                              LinearAllocationArea& new_allocation_info,
+                              LinearAllocationArea& old_allocation_info) {
+  DCHECK_NULL(local_heap_);
+  local_heap_ = local_heap;
+  DCHECK_NOT_NULL(local_heap_);
+
   for (int i = FIRST_SPACE; i <= LAST_SPACE; ++i) {
     spaces_[i] = heap_->space(i);
   }
@@ -34,12 +39,9 @@ void HeapAllocator::Setup(LinearAllocationArea& new_allocation_info,
   code_space_allocator_.emplace(heap_, heap_->code_space());
 
   if (heap_->isolate()->has_shared_space()) {
-    Heap* heap = heap_->isolate()->shared_space_isolate()->heap();
-
-    shared_space_allocator_.emplace(heap_->main_thread_local_heap(),
-                                    heap->shared_space_);
-
-    shared_lo_space_ = heap->shared_lo_allocation_space();
+    shared_space_allocator_.emplace(local_heap_,
+                                    heap_->shared_allocation_space());
+    shared_lo_space_ = heap_->shared_lo_allocation_space();
   }
 }
 
@@ -53,20 +55,15 @@ AllocationResult HeapAllocator::AllocateRawLargeInternal(
   DCHECK_GT(size_in_bytes, heap_->MaxRegularHeapObjectSize(allocation));
   switch (allocation) {
     case AllocationType::kYoung:
-      return new_lo_space()->AllocateRaw(heap_->main_thread_local_heap(),
-                                         size_in_bytes);
+      return new_lo_space()->AllocateRaw(local_heap_, size_in_bytes);
     case AllocationType::kOld:
-      return lo_space()->AllocateRaw(heap_->main_thread_local_heap(),
-                                     size_in_bytes);
+      return lo_space()->AllocateRaw(local_heap_, size_in_bytes);
     case AllocationType::kCode:
-      return code_lo_space()->AllocateRaw(heap_->main_thread_local_heap(),
-                                          size_in_bytes);
+      return code_lo_space()->AllocateRaw(local_heap_, size_in_bytes);
     case AllocationType::kSharedOld:
-      return shared_lo_space()->AllocateRaw(heap_->main_thread_local_heap(),
-                                            size_in_bytes);
+      return shared_lo_space()->AllocateRaw(local_heap_, size_in_bytes);
     case AllocationType::kTrusted:
-      return trusted_lo_space()->AllocateRaw(heap_->main_thread_local_heap(),
-                                             size_in_bytes);
+      return trusted_lo_space()->AllocateRaw(local_heap_, size_in_bytes);
     case AllocationType::kMap:
     case AllocationType::kReadOnly:
     case AllocationType::kSharedMap:
@@ -106,14 +103,18 @@ AllocationResult HeapAllocator::AllocateRawWithLightRetrySlowPath(
   // Two GCs before returning failure.
   for (int i = 0; i < 2; i++) {
     if (IsSharedAllocationType(allocation)) {
-      heap_->CollectGarbageShared(heap_->main_thread_local_heap(),
+      heap_->CollectGarbageShared(local_heap_,
                                   GarbageCollectionReason::kAllocationFailure);
-    } else {
+    } else if (local_heap_->is_main_thread()) {
       AllocationSpace space_to_gc = AllocationTypeToGCSpace(allocation);
       heap_->CollectGarbage(space_to_gc,
                             GarbageCollectionReason::kAllocationFailure);
+    } else {
+      heap_->CollectGarbageFromAnyThread(local_heap_);
     }
+
     result = AllocateRaw(size, allocation, origin, alignment);
+
     if (!result.IsFailure()) {
       return result;
     }
@@ -129,7 +130,7 @@ AllocationResult HeapAllocator::AllocateRawWithRetryOrFailSlowPath(
   if (!result.IsFailure()) return result;
 
   if (IsSharedAllocationType(allocation)) {
-    heap_->CollectGarbageShared(heap_->main_thread_local_heap(),
+    heap_->CollectGarbageShared(local_heap_,
                                 GarbageCollectionReason::kLastResort);
 
     // We need always_allocate() to be true both on the client- and
@@ -138,8 +139,13 @@ AllocationResult HeapAllocator::AllocateRawWithRetryOrFailSlowPath(
         heap_->isolate()->shared_space_isolate()->heap());
     AlwaysAllocateScope client_scope(heap_);
     result = AllocateRaw(size, allocation, origin, alignment);
-  } else {
+  } else if (local_heap_->is_main_thread()) {
     heap_->CollectAllAvailableGarbage(GarbageCollectionReason::kLastResort);
+
+    AlwaysAllocateScope scope(heap_);
+    result = AllocateRaw(size, allocation, origin, alignment);
+  } else {
+    heap_->CollectGarbageFromAnyThread(local_heap_);
 
     AlwaysAllocateScope scope(heap_);
     result = AllocateRaw(size, allocation, origin, alignment);

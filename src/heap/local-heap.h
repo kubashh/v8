@@ -24,6 +24,7 @@ namespace v8 {
 namespace internal {
 
 class Heap;
+class HeapAllocator;
 class LocalHandles;
 class MarkingBarrier;
 class MemoryChunk;
@@ -344,8 +345,8 @@ class V8_EXPORT_PRIVATE LocalHeap {
   void InvokeGCEpilogueCallbacksInSafepoint(
       GCCallbacksInSafepoint::GCType gc_type);
 
-  void SetUpMainThread();
-  void SetUp();
+  void SetUpMainThread(HeapAllocator* allocator);
+  void SetUpAllocators();
   void SetUpSharedMarking();
 
   Heap* heap_;
@@ -365,6 +366,8 @@ class V8_EXPORT_PRIVATE LocalHeap {
   std::unique_ptr<MarkingBarrier> marking_barrier_;
 
   GCCallbacksInSafepoint gc_epilogue_callbacks_;
+
+  HeapAllocator* heap_allocator_ = nullptr;
 
   std::unique_ptr<MainAllocator> old_space_allocator_;
   std::unique_ptr<MainAllocator> code_space_allocator_;
