@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b85a6e42_0f28271a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-11-24T14:37:29Z",
+      "side": 1,
+      "message": "Hey Leszek, WDYT of this? I\u0027m fairly certain that we\u0027ll need fixed- and byte arrays in trusted space, and it seems fairly easy to introduce trusted variants of the existing arrays after Jakob\u0027s recent refactoring by just using TrustedObject (instead of HeapObject) as the super class. This CL only introduces TrustedFixedArrays (I\u0027ll use them e.g. for DeoptimizationData, potentially we could use them for bytecode constant pools as well), TrustedByteArrays would be a separate but similar CL.",
+      "revId": "50a8569d048913fcc165e607bd3b6de1f6f7e9e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

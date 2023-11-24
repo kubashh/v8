@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3735858b_1becab35",
+        "filename": "src/objects/fixed-array-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1519522
+      },
+      "writtenOn": "2023-11-24T14:37:29Z",
+      "side": 1,
+      "message": "Even though the template parameter is called `Super` in the .h file, here `S` was already taken so I\u0027m using `P` (for \"Parent\", I guess). Should I make this uniform and also call it `Parent` in the .h file?",
+      "revId": "b391525d319e062ed2f7c882ca370e7695769ee3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
