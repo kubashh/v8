@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dec7667e_8f3217b0",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-24T21:36:57Z",
+      "side": 1,
+      "message": "Need to remove this, similar to how it was done here https://chromium-review.googlesource.com/c/v8/v8/+/4994347\n\nRegular builds won\u0027t compile.",
+      "revId": "26eecd02de7c3d28f717a194b3a285f3351479d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
