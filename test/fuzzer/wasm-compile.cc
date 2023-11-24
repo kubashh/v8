@@ -418,6 +418,7 @@ class WasmGenerator {
       }
       ConsumeAndGenerate(param_types, return_types, data);
       builder_->Emit(kExprEnd);
+      blocks_.pop_back();
       builder_->EmitWithI32V(kExprBr, static_cast<int32_t>(catch_cases.size()));
       return;
     }
