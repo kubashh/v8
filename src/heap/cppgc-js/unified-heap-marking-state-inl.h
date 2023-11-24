@@ -63,7 +63,7 @@ void UnifiedHeapMarkingState::MarkAndPush(
   if (heap_object.InReadOnlySpace()) return;
   if (!ShouldMarkObject(heap_object)) return;
 
-  if (v8_flags.reclaim_unmodified_wrappers) {
+  if (should_reclaim_weak_nodes_) {
     bool is_in_atomic_pause =
         heap_->mark_compact_collector()->is_in_atomic_pause();
     if (TracedHandles::IsWeak(
