@@ -749,6 +749,14 @@ void FixedArray::FixedArrayVerify(Isolate* isolate) {
   }
 }
 
+void TrustedFixedArray::TrustedFixedArrayVerify(Isolate* isolate) {
+  CHECK(IsSmi(TaggedField<Object>::load(*this, kLengthOffset)));
+
+  for (int i = 0; i < length(); ++i) {
+    Object::VerifyPointer(isolate, get(i));
+  }
+}
+
 void RegExpMatchInfo::RegExpMatchInfoVerify(Isolate* isolate) {
   CHECK(IsSmi(TaggedField<Object>::load(*this, kCapacityOffset)));
   CHECK_GE(capacity(), kMinCapacity);

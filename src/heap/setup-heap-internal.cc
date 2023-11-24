@@ -461,6 +461,8 @@ bool Heap::CreateEarlyReadOnlyMapsAndObjects() {
 
   {  // Partial map allocation
     ALLOCATE_PARTIAL_MAP(FIXED_ARRAY_TYPE, kVariableSizeSentinel, fixed_array);
+    ALLOCATE_PARTIAL_MAP(TRUSTED_FIXED_ARRAY_TYPE, kVariableSizeSentinel,
+                         trusted_fixed_array);
     ALLOCATE_PARTIAL_MAP(WEAK_FIXED_ARRAY_TYPE, kVariableSizeSentinel,
                          weak_fixed_array);
     ALLOCATE_PARTIAL_MAP(WEAK_ARRAY_LIST_TYPE, kVariableSizeSentinel,
@@ -550,6 +552,7 @@ bool Heap::CreateEarlyReadOnlyMapsAndObjects() {
   // Fix the instance_descriptors for the existing maps.
   FinalizePartialMap(roots.meta_map());
   FinalizePartialMap(roots.fixed_array_map());
+  FinalizePartialMap(roots.trusted_fixed_array_map());
   FinalizePartialMap(roots.weak_fixed_array_map());
   FinalizePartialMap(roots.weak_array_list_map());
   FinalizePartialMap(roots.fixed_cow_array_map());
@@ -1187,6 +1190,17 @@ bool Heap::CreateReadOnlyObjects() {
                                   SKIP_WRITE_BARRIER);
     ExternalPointerArray::cast(obj)->set_length(0);
     set_empty_external_pointer_array(ExternalPointerArray::cast(obj));
+  }
+
+  // EmptyTrustedFixedArray:
+  {
+    if (!AllocateRaw(TrustedFixedArray::SizeFor(0), AllocationType::kReadOnly)
+             .To(&obj))
+      return false;
+    obj->set_map_after_allocation(roots.trusted_fixed_array_map(),
+                                  SKIP_WRITE_BARRIER);
+    TrustedFixedArray::cast(obj)->set_length(0);
+    set_empty_trusted_fixed_array(TrustedFixedArray::cast(obj));
   }
 
   // Initialize the wasm null_value.
