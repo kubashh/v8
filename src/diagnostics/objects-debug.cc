@@ -195,9 +195,9 @@ void HeapObject::HeapObjectVerify(Isolate* isolate) {
   // TODO(saelo): currently, Code and InterpreterData objects are still outside
   // of trusted space.
   if (!IsFreeSpace(*this)) {
-    CHECK_EQ(IsTrustedObject(*this), IsTrustedSpaceObject(*this) ||
-                                         IsCode(*this) ||
-                                         IsInterpreterData(*this));
+    CHECK_EQ(IsTrustedObject(*this),
+             IsTrustedSpaceObject(*this) || IsCode(*this) ||
+                 IsInterpreterData(*this) || IsTrustedFixedArray(*this));
   }
 
   switch (map(cage_base)->instance_type()) {
@@ -746,6 +746,14 @@ void FixedArray::FixedArrayVerify(Isolate* isolate) {
   if (*this == ReadOnlyRoots(isolate).empty_fixed_array()) {
     CHECK_EQ(length(), 0);
     CHECK_EQ(map(), ReadOnlyRoots(isolate).fixed_array_map());
+  }
+}
+
+void TrustedFixedArray::TrustedFixedArrayVerify(Isolate* isolate) {
+  CHECK(IsSmi(TaggedField<Object>::load(*this, kLengthOffset)));
+
+  for (int i = 0; i < length(); ++i) {
+    Object::VerifyPointer(isolate, get(i));
   }
 }
 

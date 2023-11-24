@@ -151,6 +151,7 @@ class RootVisitor;
   V(Map, embedder_data_array_map, EmbedderDataArrayMap)                        \
   V(Map, weak_cell_map, WeakCellMap)                                           \
   V(Map, external_pointer_array_map, ExternalPointerArrayMap)                  \
+  V(Map, trusted_fixed_array_map, TrustedFixedArrayMap)                        \
   V(Map, interpreter_data_map, InterpreterDataMap)                             \
   /* String maps */                                                            \
   V(Map, seq_two_byte_string_map, SeqTwoByteStringMap)                         \
@@ -198,6 +199,7 @@ class RootVisitor;
   V(ByteArray, empty_byte_array, EmptyByteArray)                               \
   V(ExternalPointerArray, empty_external_pointer_array,                        \
     EmptyExternalPointerArray)                                                 \
+  V(TrustedFixedArray, empty_trusted_fixed_array, EmptyTrustedFixedArray)      \
   V(ObjectBoilerplateDescription, empty_object_boilerplate_description,        \
     EmptyObjectBoilerplateDescription)                                         \
   V(ArrayBoilerplateDescription, empty_array_boilerplate_description,          \
