@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "389f0ff7_741aa9c2",
+        "filename": "gni/v8.gni",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-11-24T08:29:19Z",
+      "side": 0,
+      "message": "Need to rename also https://source.chromium.org/chromium/chromium/src/+/main:v8/third_party/googletest/BUILD.gn?q\u003dv8_expose_symbols",
+      "range": {
+        "startLine": 52,
+        "startChar": 2,
+        "endLine": 52,
+        "endChar": 19
+      },
+      "revId": "7475f6d195655fa58f8dc95c62fb23d3aa08097a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
