@@ -1005,7 +1005,7 @@ class TurboshaftGraphBuildingInterface {
       }
       END_IF
 
-      BIND(done, result_64);
+      auto result_64 = BIND(done);
 
       result->op = result_64;
     }
@@ -1043,7 +1043,7 @@ class TurboshaftGraphBuildingInterface {
         string, compiler::AccessBuilder::ForStringLength());
     GOTO_IF(__ Int32LessThan(start, length), clamped_start_label, start);
     GOTO(clamped_start_label, length);
-    BIND(clamped_start_label, clamped_start);
+    auto clamped_start = BIND(clamped_start_label);
     start = clamped_start;
 
     // This can't overflow because we've clamped `start` above.
@@ -1186,8 +1186,7 @@ class TurboshaftGraphBuildingInterface {
                __ TruncateFloat64ToInt32OverflowUndefined(float_value)));
     }
 
-    BIND(done_label, length);
-    return length;
+    return BIND(done_label);
   }
 
   // An `ArrayBuffer` can be resizable, i.e. it can shrink or grow.
@@ -1286,7 +1285,7 @@ class TurboshaftGraphBuildingInterface {
     BIND(type_error_label);
     ThrowDataViewTypeError(decoder, dataview, op_type);
 
-    BIND(done_label, final_view_byte_length);
+    auto final_view_byte_length = BIND(done_label);
     return final_view_byte_length;
   }
 
@@ -1502,7 +1501,7 @@ class TurboshaftGraphBuildingInterface {
           BuildModifyThreadInWasmFlag(true);
           GOTO(done, not_null_res);
 
-          BIND(done, result_f64);
+          auto result_f64 = BIND(done);
           result = result_f64;
         } else {
           BuildModifyThreadInWasmFlag(false);
@@ -1536,7 +1535,7 @@ class TurboshaftGraphBuildingInterface {
           GOTO_IF_NOT(__ IsNull(search, wasm::kWasmStringRef),
                       search_done_label, search);
           GOTO(search_done_label, LOAD_ROOT(null_string));
-          BIND(search_done_label, search_value);
+          auto search_value = BIND(search_done_label);
           search = search_value;
         }
 
@@ -2201,7 +2200,7 @@ class TurboshaftGraphBuildingInterface {
       BIND(no_catch_merge);
       __ Goto(if_no_catch);
 
-      BIND(if_catch, caught_exception);
+      auto caught_exception = BIND(if_catch);
       // The first unpacked value is the exception itself in the case of a JS
       // exception.
       values[0].op = caught_exception;
@@ -3263,7 +3262,7 @@ class TurboshaftGraphBuildingInterface {
     // TODO(jkummerow): Call Builtin::kStringEqual directly.
     GOTO(done, CallBuiltinThroughJumptable(decoder, Builtin::kWasmStringEqual,
                                            {a, b}, Operator::kEliminatable));
-    BIND(done, eq_result);
+    auto eq_result = BIND(done);
     return eq_result;
   }
 
@@ -3378,7 +3377,7 @@ class TurboshaftGraphBuildingInterface {
                    decoder, Builtin::kWasmStringViewWtf16GetCodeUnit,
                    {string, offset}, Operator::kPure));
 
-    BIND(done, final_result);
+    auto final_result = BIND(done);
     // Make sure the original string is kept alive as long as we're operating
     // on pointers extracted from it (otherwise e.g. external strings' resources
     // might get freed prematurely).
@@ -3459,7 +3458,7 @@ class TurboshaftGraphBuildingInterface {
          CallBuiltinThroughJumptable(decoder, Builtin::kWasmStringCodePointAt,
                                      {string, offset}, Operator::kPure));
 
-    BIND(done, final_result);
+    auto final_result = BIND(done);
     // Make sure the original string is kept alive as long as we're operating
     // on pointers extracted from it (otherwise e.g. external strings' resources
     // might get freed prematurely).
@@ -3574,7 +3573,7 @@ class TurboshaftGraphBuildingInterface {
                                     {string_val}, Operator::kEliminatable);
     GOTO(end_label, hash_runtime);
 
-    BIND(end_label, hash_val);
+    auto hash_val = BIND(end_label);
     result->op = hash_val;
   }
 
@@ -4124,9 +4123,7 @@ class TurboshaftGraphBuildingInterface {
           END_IF
         }
         END_IF
-        BIND(done, result);
-
-        return result;
+        return BIND(done);
       }
       case kExprI32UConvertSatF32: {
         V<Float32> truncated = UnOpImpl(kExprF32Trunc, arg, kWasmF32);
@@ -4161,9 +4158,7 @@ class TurboshaftGraphBuildingInterface {
           END_IF
         }
         END_IF
-        BIND(done, result);
-
-        return result;
+        return BIND(done);
       }
       case kExprI32SConvertSatF64: {
         V<Float64> truncated = UnOpImpl(kExprF64Trunc, arg, kWasmF64);
@@ -4199,9 +4194,7 @@ class TurboshaftGraphBuildingInterface {
           END_IF
         }
         END_IF
-        BIND(done, result);
-
-        return result;
+        return BIND(done);
       }
       case kExprI32UConvertSatF64: {
         V<Float64> truncated = UnOpImpl(kExprF64Trunc, arg, kWasmF64);
@@ -4236,9 +4229,7 @@ class TurboshaftGraphBuildingInterface {
           END_IF
         }
         END_IF
-        BIND(done, result);
-
-        return result;
+        return BIND(done);
       }
       case kExprI64SConvertSatF32: {
         if constexpr (!Is64()) {
@@ -4281,9 +4272,7 @@ class TurboshaftGraphBuildingInterface {
           END_IF
         }
         END_IF
-        BIND(done, result);
-
-        return result;
+        return BIND(done);
       }
       case kExprI64UConvertSatF32: {
         if constexpr (!Is64()) {
@@ -4326,9 +4315,7 @@ class TurboshaftGraphBuildingInterface {
           END_IF
         }
         END_IF
-        BIND(done, result);
-
-        return result;
+        return BIND(done);
       }
       case kExprI64SConvertSatF64: {
         if constexpr (!Is64()) {
@@ -4372,9 +4359,7 @@ class TurboshaftGraphBuildingInterface {
           END_IF
         }
         END_IF
-        BIND(done, result);
-
-        return result;
+        return BIND(done);
       }
       case kExprI64UConvertSatF64: {
         if constexpr (!Is64()) {
@@ -4417,9 +4402,7 @@ class TurboshaftGraphBuildingInterface {
           END_IF
         }
         END_IF
-        BIND(done, result);
-
-        return result;
+        return BIND(done);
       }
       case kExprF32ConvertF64:
         return __ ChangeFloat64ToFloat32(arg);
@@ -4577,8 +4560,7 @@ class TurboshaftGraphBuildingInterface {
                  CallC(&sig, ExternalReference::wasm_word32_ctz(), lower_word));
           }
           END_IF
-          BIND(done, result);
-          return __ ChangeUint32ToUint64(result);
+          return __ ChangeUint32ToUint64(BIND(done));
         }
       case kExprI64Popcnt:
         if (SupportedOperations::word64_popcnt() ||
@@ -4714,8 +4696,7 @@ class TurboshaftGraphBuildingInterface {
         }
         END_IF;
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case kExprI32RemU:
         __ TrapIf(__ Word32Equal(rhs, 0), OpIndex::Invalid(),
@@ -4808,8 +4789,7 @@ class TurboshaftGraphBuildingInterface {
         }
         END_IF;
 
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case kExprI64RemU:
         if constexpr (!Is64()) {
@@ -4960,8 +4940,7 @@ class TurboshaftGraphBuildingInterface {
           END_IF
         }
         END_IF
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case kExprI32AsmjsDivU: {
         // asmjs semantics return 0 when dividing by 0.
@@ -4976,8 +4955,7 @@ class TurboshaftGraphBuildingInterface {
           GOTO(done, __ Uint32Div(lhs, rhs));
         }
         END_IF
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case kExprI32AsmjsRemS: {
         // General case for signed integer modulus, with optimization for
@@ -5026,8 +5004,7 @@ class TurboshaftGraphBuildingInterface {
           END_IF
         }
         END_IF
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case kExprI32AsmjsRemU: {
         // asmjs semantics return 0 for mod with 0.
@@ -5039,8 +5016,7 @@ class TurboshaftGraphBuildingInterface {
           GOTO(done, __ Uint32Mod(lhs, rhs));
         }
         END_IF
-        BIND(done, result);
-        return result;
+        return BIND(done);
       }
       case kExprI32AsmjsStoreMem8:
         AsmjsStoreMem(lhs, rhs, MemoryRepresentation::Int8());
@@ -5480,7 +5456,7 @@ class TurboshaftGraphBuildingInterface {
     }
     END_IF
 
-    BIND(done, final_target);
+    auto final_target = BIND(done);
 
     return {final_target, ref};
   }

@@ -725,6 +725,8 @@ class Graph {
     return result;
   }
 
+  // Add a block and return true if it has any predecessors. Return false
+  // otherwise.
   V8_INLINE bool Add(Block* block) {
     DCHECK_EQ(block->graph_generation_, generation_);
     if (!bound_blocks_.empty() && !block->HasPredecessors()) return false;
