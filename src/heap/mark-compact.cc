@@ -2835,8 +2835,14 @@ void MarkCompactCollector::ClearNonLiveReferences() {
     // CPU profiler.
     isolate->global_handles()->IterateWeakRootsForPhantomHandles(
         &IsUnmarkedHeapObject);
-    isolate->traced_handles()->ProcessYoungObjects(
-        nullptr, &IsUnmarkedHeapObject, GarbageCollector::MARK_COMPACTOR);
+    if (v8_flags.reclaim_unmodified_wrappers_only_on_memory_reducing_gcs) {
+      if (heap_->ShouldReduceMemory()) {
+        isolate->traced_handles()->ProcessWeakObjects();
+      }
+    } else {
+      isolate->traced_handles()->ProcessYoungObjects(
+          nullptr, &IsUnmarkedHeapObject, GarbageCollector::MARK_COMPACTOR);
+    }
     isolate->traced_handles()->ResetDeadNodes(&IsUnmarkedHeapObject);
 
     if (isolate->is_shared_space_isolate()) {

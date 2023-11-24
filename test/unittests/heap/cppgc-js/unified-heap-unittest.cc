@@ -852,11 +852,13 @@ void ConstructJSApiObject(v8::Isolate* isolate, v8::Local<v8::Context> context,
 }
 
 enum class SurvivalMode { kSurvives, kDies };
+enum class GCMode { kRegular, kMemoryReducing };
 template <typename ConstructFunction, typename ModifierFunction>
 void TracedReferenceTestWithUnifiedHeapGC(UnifiedHeapTest* test,
                                           ConstructFunction construct_function,
                                           ModifierFunction modifier_function,
-                                          SurvivalMode survives) {
+                                          SurvivalMode survives,
+                                          GCMode gc_mode) {
   ManualGCScope manual_gc(test->isolate());
   v8::Isolate* isolate = test->v8_isolate();
   DisableConservativeStackScanningScopeForTesting no_stack_scanning(
@@ -874,7 +876,11 @@ void TracedReferenceTestWithUnifiedHeapGC(UnifiedHeapTest* test,
 
   construct_function(isolate, context, traced_reference_wrapper.Get());
   modifier_function(traced_reference_wrapper.Get());
-  test->InvokeMajorGC();
+  if (gc_mode == GCMode::kRegular) {
+    test->InvokeMajorGC();
+  } else {
+    test->InvokeMemoryReducingMajorGCs();
+  }
   // GC resets the original handle, so we can check the handle directly here.
   CHECK_IMPLIES(survives == SurvivalMode::kSurvives,
                 !traced_reference_wrapper->handle.IsEmpty());
@@ -893,7 +899,7 @@ TEST_F(UnifiedHeapTest,
   TracedReferenceTestWithUnifiedHeapGC(
       this, &ConstructJSObject,
       [](TracedReferenceWrapper* traced_reference_wrapper) {},
-      SurvivalMode::kSurvives);
+      SurvivalMode::kSurvives, GCMode::kMemoryReducing);
 }
 
 TEST_F(UnifiedHeapTest,
@@ -903,7 +909,21 @@ TEST_F(UnifiedHeapTest,
   TracedReferenceTestWithUnifiedHeapGC(
       this, &ConstructJSApiObject,
       [](TracedReferenceWrapper* traced_reference_wrapper) {},
-      SurvivalMode::kDies);
+      v8_flags.reclaim_unmodified_wrappers_only_on_memory_reducing_gcs
+          ? SurvivalMode::kSurvives
+          : SurvivalMode::kDies,
+      GCMode::kRegular);
+}
+
+TEST_F(
+    UnifiedHeapTest,
+    TracedReferenceToUnmodifiedJSApiObjectDiesOnMemoryReducingUnifiedHeapGC) {
+  if (v8_flags.single_generation) return;
+
+  TracedReferenceTestWithUnifiedHeapGC(
+      this, &ConstructJSApiObject,
+      [](TracedReferenceWrapper* traced_reference_wrapper) {},
+      SurvivalMode::kDies, GCMode::kMemoryReducing);
 }
 
 TEST_F(UnifiedHeapTest,
@@ -925,7 +945,7 @@ TEST_F(UnifiedHeapTest,
         int32_t hash = Object::GetOrCreateHash(*key, isolate).value();
         JSWeakCollection::Set(weakmap, key, smi, hash);
       },
-      SurvivalMode::kSurvives);
+      SurvivalMode::kSurvives, GCMode::kMemoryReducing);
 }
 
 }  // namespace v8::internal

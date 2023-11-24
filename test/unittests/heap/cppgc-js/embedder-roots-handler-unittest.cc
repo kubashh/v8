@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/flags/flags.h"
 #include "src/handles/handles.h"
 #include "src/handles/traced-handles.h"
 #include "test/unittests/heap/cppgc-js/unified-heap-utils.h"
@@ -84,6 +85,7 @@ void SetupOptimizedAndNonOptimizedHandle(v8::Isolate* isolate,
 TEST_F(EmbedderRootsHandlerTest,
        TracedReferenceNoDestructorReclaimedOnScavenge) {
   if (v8_flags.single_generation) return;
+  if (v8_flags.reclaim_unmodified_wrappers_only_on_memory_reducing_gcs) return;
 
   ManualGCScope manual_gc(i_isolate());
   v8::HandleScope scope(v8_isolate());
@@ -267,6 +269,7 @@ TEST_F(
     EmbedderRootsHandlerTest,
     TracedReferenceToUnmodifiedJSApiObjectDiesOnScavengeWhenExcludedFromRoots) {
   if (v8_flags.single_generation) return;
+  if (v8_flags.reclaim_unmodified_wrappers_only_on_memory_reducing_gcs) return;
 
   ManualGCScope manual_gc(i_isolate());
   ClearingEmbedderRootsHandler handler(kClassIdToOptimize);
