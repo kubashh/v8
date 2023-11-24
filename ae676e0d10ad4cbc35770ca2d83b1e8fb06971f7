@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19be3659_bed722f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1589453
+      },
+      "writtenOn": "2023-11-24T09:42:40Z",
+      "side": 1,
+      "message": "PTAL. If it\u0027s OK, please also run tryjobs - looks like I don\u0027t have enough permissions in V8 repo.",
+      "revId": "ae676e0d10ad4cbc35770ca2d83b1e8fb06971f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
