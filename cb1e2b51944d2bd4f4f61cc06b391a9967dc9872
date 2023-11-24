@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7507df1_2f71e544",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-24T19:59:36Z",
+      "side": 1,
+      "message": "Better to move this over to https://chromium-review.googlesource.com/c/v8/v8/+/4917707",
+      "revId": "cb1e2b51944d2bd4f4f61cc06b391a9967dc9872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
