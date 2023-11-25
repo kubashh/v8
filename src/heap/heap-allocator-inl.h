@@ -67,7 +67,7 @@ bool HeapAllocator::CanAllocateInReadOnlySpace() const {
 template <AllocationType type>
 V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult HeapAllocator::AllocateRaw(
     int size_in_bytes, AllocationOrigin origin, AllocationAlignment alignment) {
-  DCHECK_EQ(heap_->gc_state(), Heap::NOT_IN_GC);
+  DCHECK(!heap_->IsInGC());
   DCHECK(AllowHandleAllocation::IsAllowed());
   DCHECK(AllowHeapAllocation::IsAllowed());
 
@@ -77,7 +77,8 @@ V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult HeapAllocator::AllocateRaw(
 
 #ifdef V8_ENABLE_ALLOCATION_TIMEOUT
   if (v8_flags.random_gc_interval > 0 || v8_flags.gc_interval >= 0) {
-    if (!heap_->always_allocate() && allocation_timeout_-- <= 0) {
+    if (!heap_->always_allocate() && allocation_timeout_-- <= 0 &&
+        local_heap_->is_main_thread()) {
       return AllocationResult::Failure();
     }
   }
@@ -88,7 +89,7 @@ V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult HeapAllocator::AllocateRaw(
 #endif  // DEBUG
 
   if (heap_->CanSafepoint()) {
-    heap_->main_thread_local_heap()->Safepoint();
+    local_heap_->Safepoint();
   }
 
   const size_t large_object_threshold = heap_->MaxRegularHeapObjectSize(type);
@@ -148,8 +149,10 @@ V8_WARN_UNUSED_RESULT V8_INLINE AllocationResult HeapAllocator::AllocateRaw(
       heap::ZapCodeBlock(object.address(), size_in_bytes);
     }
 
-    for (auto& tracker : heap_->allocation_trackers_) {
-      tracker->AllocationEvent(object.address(), size_in_bytes);
+    if (local_heap_->is_main_thread()) {
+      for (auto& tracker : heap_->allocation_trackers_) {
+        tracker->AllocationEvent(object.address(), size_in_bytes);
+      }
     }
   }
 
