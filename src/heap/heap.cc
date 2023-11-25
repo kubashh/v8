@@ -5634,8 +5634,9 @@ void Heap::SetUpSpaces(LinearAllocationArea& new_allocation_info,
   trusted_lo_space_ =
       static_cast<TrustedLargeObjectSpace*>(space_[TRUSTED_LO_SPACE].get());
 
-  heap_allocator_.Setup(new_allocation_info, old_allocation_info);
-  main_thread_local_heap()->SetUpMainThread();
+  heap_allocator_.SetupMain(main_thread_local_heap(), new_allocation_info,
+                            old_allocation_info);
+  main_thread_local_heap()->SetUpMainThread(&heap_allocator_);
 
   base::TimeTicks startup_time = base::TimeTicks::Now();
 
