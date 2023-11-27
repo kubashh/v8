@@ -418,6 +418,7 @@ class WasmGenerator {
       }
       ConsumeAndGenerate(param_types, return_types, data);
       builder_->Emit(kExprEnd);
+      blocks_.pop_back();
       builder_->EmitWithI32V(kExprBr, static_cast<int32_t>(catch_cases.size()));
       return;
     }
@@ -2866,6 +2867,12 @@ void WasmGenerator::GenerateRef(HeapType type, DataRange* data,
       builder_->EmitWithPrefix(kExprRefI31);
       return;
     }
+    case HeapType::kExn: {
+      // TODO(manoskouk): Can we somehow come up with a nontrivial exnref?
+      DCHECK_EQ(nullability, kNullable);
+      ref_null(type, data);
+      return;
+    }
     case HeapType::kExtern:
       if (data->get<bool>()) {
         GenerateRef(HeapType(HeapType::kAny), data);
@@ -2879,6 +2886,7 @@ void WasmGenerator::GenerateRef(HeapType type, DataRange* data,
     case HeapType::kNoExtern:
     case HeapType::kNoFunc:
     case HeapType::kNone:
+    case HeapType::kNoExn:
       ref_null(type, data);
       if (nullability == kNonNullable) {
         builder_->Emit(kExprRefAsNonNull);
