@@ -16,6 +16,24 @@
       "message": "Maybe we can make this similar to x64, something like this?\n```\nExternalReference pending_exception_address \u003d\n        ExternalReference::Create(IsolateAddressId::kPendingExceptionAddress, masm-\u003eisolate());\n__ LoadU64(r6, masm-\u003eExternalReferenceAsOperand(pending_exception_address, ip), r0);\n__ LoadRoot(r0, RootIndex::kTheHoleValue);\n__ CompareTagged(r0, r6);\n```",
       "revId": "b2153a0c680eca2d1c97615d9e2de0e100336179",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58e44710_faa113d3",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 3346,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-27T19:39:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92c2c87b_3080f9ef",
+      "revId": "b2153a0c680eca2d1c97615d9e2de0e100336179",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
