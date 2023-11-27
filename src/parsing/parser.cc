@@ -829,8 +829,14 @@ Expression* Parser::WrapREPLResult(Expression* value) {
   ObjectLiteralProperty* property =
       factory()->NewObjectLiteralProperty(property_name, value, true);
 
+  Literal* proto_name = factory()->NewStringLiteral(
+      ast_value_factory()->proto_string(), kNoSourcePosition);
+  ObjectLiteralProperty* prototype = factory()->NewObjectLiteralProperty(
+      proto_name, factory()->NewNullLiteral(kNoSourcePosition), false);
+
   ScopedPtrList<ObjectLiteralProperty> properties(pointer_buffer());
   properties.Add(property);
+  properties.Add(prototype);
   return factory()->NewObjectLiteral(properties, false, kNoSourcePosition,
                                      false);
 }
