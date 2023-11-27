@@ -582,6 +582,30 @@
       },
       "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82ebf8b5_7cb5ca26",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-27T16:00:18Z",
+      "side": 1,
+      "message": "Resolving",
+      "parentUuid": "722e5881_5bff2b5d",
+      "range": {
+        "startLine": 34,
+        "startChar": 34,
+        "endLine": 34,
+        "endChar": 41
+      },
+      "revId": "593227e84639abaa83cda180cb1dcb2d622b58d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

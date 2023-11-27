@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "419f7e35_86189765",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-27T16:00:18Z",
+      "side": 1,
+      "message": "It\u0027s true that it\u0027s set only after the markbit is set (added a DCHECK is TracedHandles::IsWeak), but we can also clear on the main thread when revisiting a node previously marked off the main thread. In practice we use atomic reads and writes for this field (like we do for the markbit) for this reason.",
+      "parentUuid": "deb1c34a_62f9b80e",
+      "range": {
+        "startLine": 160,
+        "startChar": 8,
+        "endLine": 160,
+        "endChar": 14
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8753cc78_60780b9e",
         "filename": "src/handles/traced-handles.cc",
         "patchSetId": 48
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-27T14:36:41Z",
       "side": 1,
       "message": "There\u0027s now 2 flags that are set concurrently.",
+      "range": {
+        "startLine": 161,
+        "startChar": 24,
+        "endLine": 161,
+        "endChar": 33
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a77f4e52_a70dc1de",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-27T16:00:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8753cc78_60780b9e",
       "range": {
         "startLine": 161,
         "startChar": 24,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cedae675_6be3db7c",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-27T16:00:18Z",
+      "side": 1,
+      "message": "Is `UpdateIsWeak` better?",
+      "parentUuid": "69ac697d_6cf2b79b",
+      "range": {
+        "startLine": 1147,
+        "startChar": 20,
+        "endLine": 1147,
+        "endChar": 26
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa05a22a_b58ea132",
         "filename": "src/handles/traced-handles.cc",
         "patchSetId": 48
@@ -83,6 +155,30 @@
       "writtenOn": "2023-11-27T14:36:41Z",
       "side": 1,
       "message": "Why only young list nodes?",
+      "range": {
+        "startLine": 1153,
+        "startChar": 12,
+        "endLine": 1153,
+        "endChar": 28
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48699772_f09ec832",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-27T16:00:18Z",
+      "side": 1,
+      "message": "This CL only reclaims young unmodified API objects.\nSince they are still also claimed in minor GC, and this CL claims in all full GCs, there was no need to reclaim non-young objects (and we assumed there will be no benefit from reclaiming all nodes).\nSetting the IsWeak bit for non-young nodes violates invariants we have when resetting and releasing nodes later.\n\nThis will change when the optimization is only used during memory reducing full GC (in which case we will reclaim both young and old objects).",
+      "parentUuid": "aa05a22a_b58ea132",
       "range": {
         "startLine": 1153,
         "startChar": 12,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "069310be_748c36af",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 48
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-27T16:00:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f1317af_0ce9d35c",
+      "range": {
+        "startLine": 47,
+        "startChar": 7,
+        "endLine": 47,
+        "endChar": 17
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d809b9e6_b56919ce",
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fbfc4f5_aa0e3f80",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 48
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-27T16:00:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d809b9e6_b56919ce",
+      "range": {
+        "startLine": 55,
+        "startChar": 60,
+        "endLine": 55,
+        "endChar": 68
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7220079_3f5a6c74",
@@ -152,6 +296,30 @@
       "writtenOn": "2023-11-27T14:36:41Z",
       "side": 1,
       "message": "We should cache at least `reclaim_unmodified_wrappers` in the visitor.\n\n(I also wonder if we should also cache the `is_in_atomic_pause`. After all, this code here is executed per reference. It seems harder to update though.)",
+      "range": {
+        "startLine": 66,
+        "startChar": 15,
+        "endLine": 66,
+        "endChar": 42
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "313128da_a4b832bc",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 48
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-27T16:00:18Z",
+      "side": 1,
+      "message": "\u003e We should cache at least reclaim_unmodified_wrappers in the visitor.\n\nDone\n\n\u003e (I also wonder if we should also cache the is_in_atomic_pause. After all, this code here is executed per reference. It seems harder to update though.)\n\nI agree it\u0027s not great and I considered caching `is_in_atomic_pause` before.\nIf we want to update it and switch from concurrent to parallel (without somehow forcing creating a new marking state), even by \"push\" from the main thread, we at least need a relaxed atomic here (which is equivalent to the current impl).\nOtoh, if we cache it and never update, we risk falling back to processing all objects twice. Likely that\u0027s good enough for benchmarks, but it\u0027s essentially the same as the patchset I originally sent out which we didn\u0027t like.",
+      "parentUuid": "c7220079_3f5a6c74",
       "range": {
         "startLine": 66,
         "startChar": 15,
