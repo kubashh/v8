@@ -16,6 +16,24 @@
       "message": "The node tests now run into a bunch of symbol lookup errors:\n    /b/s/w/ir/cache/builder/node-ci/out/Release/node: symbol lookup error: /b/s/w/ir/cache/builder/node-ci/out/Release/gen/node/test/addons/buffer-free-callback/build/Release/binding.node: undefined symbol: _ZN2v87Isolate10GetCurrentEv",
       "revId": "ede694e007c53f541b9a7f5ada97740222634ab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a1049a_db91170b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1255853
+      },
+      "writtenOn": "2023-11-27T08:25:48Z",
+      "side": 1,
+      "message": "We need to replace `v8_expose_symbols\u003dtrue` with `v8_expose_public_symbols\u003dtrue` in node-ci, but it is in another repo and I don\u0027t know how to change both sides at the same time.",
+      "parentUuid": "29a4994a_12b719ea",
+      "revId": "ede694e007c53f541b9a7f5ada97740222634ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
