@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c320ea82_c87b8583",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T16:07:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "419f7e35_86189765",
+      "range": {
+        "startLine": 160,
+        "startChar": 8,
+        "endLine": 160,
+        "endChar": 14
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8753cc78_60780b9e",
@@ -144,6 +168,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee7addb2_6444142b",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T16:07:24Z",
+      "side": 1,
+      "message": "Yip, sg.",
+      "parentUuid": "cedae675_6be3db7c",
+      "range": {
+        "startLine": 1147,
+        "startChar": 20,
+        "endLine": 1147,
+        "endChar": 26
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa05a22a_b58ea132",
         "filename": "src/handles/traced-handles.cc",
         "patchSetId": 48
@@ -179,6 +227,30 @@
       "side": 1,
       "message": "This CL only reclaims young unmodified API objects.\nSince they are still also claimed in minor GC, and this CL claims in all full GCs, there was no need to reclaim non-young objects (and we assumed there will be no benefit from reclaiming all nodes).\nSetting the IsWeak bit for non-young nodes violates invariants we have when resetting and releasing nodes later.\n\nThis will change when the optimization is only used during memory reducing full GC (in which case we will reclaim both young and old objects).",
       "parentUuid": "aa05a22a_b58ea132",
+      "range": {
+        "startLine": 1153,
+        "startChar": 12,
+        "endLine": 1153,
+        "endChar": 28
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c3761ad_cc86242a",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T16:07:24Z",
+      "side": 1,
+      "message": "This is counter intuitive. A full GC should get rid of all nodes. \n\nDoes this make it even more complicated?\n\nWhether we move this behind memory reducing GCs is a different story.",
+      "parentUuid": "48699772_f09ec832",
       "range": {
         "startLine": 1153,
         "startChar": 12,
@@ -320,6 +392,30 @@
       "side": 1,
       "message": "\u003e We should cache at least reclaim_unmodified_wrappers in the visitor.\n\nDone\n\n\u003e (I also wonder if we should also cache the is_in_atomic_pause. After all, this code here is executed per reference. It seems harder to update though.)\n\nI agree it\u0027s not great and I considered caching `is_in_atomic_pause` before.\nIf we want to update it and switch from concurrent to parallel (without somehow forcing creating a new marking state), even by \"push\" from the main thread, we at least need a relaxed atomic here (which is equivalent to the current impl).\nOtoh, if we cache it and never update, we risk falling back to processing all objects twice. Likely that\u0027s good enough for benchmarks, but it\u0027s essentially the same as the patchset I originally sent out which we didn\u0027t like.",
       "parentUuid": "c7220079_3f5a6c74",
+      "range": {
+        "startLine": 66,
+        "startChar": 15,
+        "endLine": 66,
+        "endChar": 42
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31e3db9b_055c0235",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 48
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T16:07:24Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "313128da_a4b832bc",
       "range": {
         "startLine": 66,
         "startChar": 15,

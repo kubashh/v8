@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0519cbc0_b01b47e9",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 49
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T16:07:24Z",
+      "side": 1,
+      "message": "\"at the same time\": Let\u0027s drop this as the sentence is weird (what does it mean setting at the same time with a CAS on flags that are serialized)",
+      "range": {
+        "startLine": 161,
+        "startChar": 24,
+        "endLine": 161,
+        "endChar": 40
+      },
+      "revId": "4fa1ca7f58a8dce5871c4b7e3568e482878bafcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
