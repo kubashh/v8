@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deb1c34a_62f9b80e",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T14:36:41Z",
+      "side": 1,
+      "message": "This needs a comment: It is set concurrently only _after_ the markbit is set and only thus only set/cleared by a single thread (but off main thread).",
+      "range": {
+        "startLine": 160,
+        "startChar": 8,
+        "endLine": 160,
+        "endChar": 14
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8753cc78_60780b9e",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T14:36:41Z",
+      "side": 1,
+      "message": "There\u0027s now 2 flags that are set concurrently.",
+      "range": {
+        "startLine": 161,
+        "startChar": 24,
+        "endLine": 161,
+        "endChar": 33
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69ac697d_6cf2b79b",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T14:36:41Z",
+      "side": 1,
+      "message": "It\u0027s not intuitive that this updates the internal node flags. Not sure how to solve this but essentially `IsWeak` also updates the internal weakness state.",
+      "range": {
+        "startLine": 1147,
+        "startChar": 20,
+        "endLine": 1147,
+        "endChar": 26
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa05a22a_b58ea132",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T14:36:41Z",
+      "side": 1,
+      "message": "Why only young list nodes?",
+      "range": {
+        "startLine": 1153,
+        "startChar": 12,
+        "endLine": 1153,
+        "endChar": 28
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f1317af_0ce9d35c",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 48
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T14:36:41Z",
+      "side": 1,
+      "message": "nit: you can use destructuring here",
+      "range": {
+        "startLine": 47,
+        "startChar": 7,
+        "endLine": 47,
+        "endChar": 17
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d809b9e6_b56919ce",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 48
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T14:36:41Z",
+      "side": 1,
+      "message": "I think instead of `kBailout` and `kVerify` I would use `kInitialOpportunistic` and `kFinal`.\n\nThe verification can stay the same but really we are having two passes over the marked nodes here.",
+      "range": {
+        "startLine": 55,
+        "startChar": 60,
+        "endLine": 55,
+        "endChar": 68
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7220079_3f5a6c74",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 48
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T14:36:41Z",
+      "side": 1,
+      "message": "We should cache at least `reclaim_unmodified_wrappers` in the visitor.\n\n(I also wonder if we should also cache the `is_in_atomic_pause`. After all, this code here is executed per reference. It seems harder to update though.)",
+      "range": {
+        "startLine": 66,
+        "startChar": 15,
+        "endLine": 66,
+        "endChar": 42
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

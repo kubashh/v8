@@ -301,6 +301,30 @@
       },
       "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5190ad83_5832f1bf",
+        "filename": "src/heap/cppgc-js/unified-heap-marking-state-inl.h",
+        "patchSetId": 44
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-27T14:36:41Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "80f8b7e6_a345f23b",
+      "range": {
+        "startLine": 32,
+        "startChar": 54,
+        "endLine": 32,
+        "endChar": 74
+      },
+      "revId": "fbd4f090e44dac8b3712ddbe5f908c8e954af476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
