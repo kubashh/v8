@@ -190,6 +190,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6544217a_57bbc287",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-27T18:43:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee7addb2_6444142b",
+      "range": {
+        "startLine": 1147,
+        "startChar": 20,
+        "endLine": 1147,
+        "endChar": 26
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa05a22a_b58ea132",
@@ -251,6 +275,30 @@
       "side": 1,
       "message": "This is counter intuitive. A full GC should get rid of all nodes. \n\nDoes this make it even more complicated?\n\nWhether we move this behind memory reducing GCs is a different story.",
       "parentUuid": "48699772_f09ec832",
+      "range": {
+        "startLine": 1153,
+        "startChar": 12,
+        "endLine": 1153,
+        "endChar": 28
+      },
+      "revId": "ddd1a380c80dc1fe5d6e7147d55ad913996e2ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8e68819_2222e5d0",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 48
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-27T18:43:31Z",
+      "side": 1,
+      "message": "Updated the CL to handle all objects.",
+      "parentUuid": "3c3761ad_cc86242a",
       "range": {
         "startLine": 1153,
         "startChar": 12,
