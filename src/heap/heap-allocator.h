@@ -17,6 +17,7 @@ namespace internal {
 class AllocationObserver;
 class CodeLargeObjectSpace;
 class Heap;
+class LocalHeap;
 class LinearAllocationArea;
 class MainAllocator;
 class NewSpace;
@@ -30,10 +31,11 @@ class Space;
 // right bottleneck.
 class V8_EXPORT_PRIVATE HeapAllocator final {
  public:
-  explicit HeapAllocator(Heap*);
+  explicit HeapAllocator(LocalHeap*);
 
-  void Setup(LinearAllocationArea& new_allocation_info,
-             LinearAllocationArea& old_allocation_info);
+  void SetupMain(LinearAllocationArea& new_allocation_info,
+                 LinearAllocationArea& old_allocation_info);
+  void SetupBackground();
   void SetReadOnlySpace(ReadOnlySpace*);
 
   // Supports all `AllocationType` types.
@@ -150,6 +152,7 @@ class V8_EXPORT_PRIVATE HeapAllocator final {
   void IncrementObjectCounters();
 #endif  // DEBUG
 
+  LocalHeap* local_heap_;
   Heap* const heap_;
   Space* spaces_[LAST_SPACE + 1];
   ReadOnlySpace* read_only_space_;
