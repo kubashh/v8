@@ -52,6 +52,24 @@
       "parentUuid": "b1a1049a_db91170b",
       "revId": "ede694e007c53f541b9a7f5ada97740222634ab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d8f5458_f1c0e453",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-11-27T08:59:01Z",
+      "side": 1,
+      "message": "In order to rename this, we need a 3-way change. Both arguments need to exist for a grace period (e.g. one defaulting the other). During that period, a change to https://chromium.googlesource.com/v8/node-ci/+/refs/heads/main/.gn#82 could be applied and landed. You can clone that repo and upload a CL to it as well. Afterwards, a clean-up on the V8 side can land and remove the old.",
+      "parentUuid": "40404784_3e9cb78e",
+      "revId": "ede694e007c53f541b9a7f5ada97740222634ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
