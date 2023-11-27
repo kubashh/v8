@@ -34,6 +34,24 @@
       "parentUuid": "dec7667e_8f3217b0",
       "revId": "26eecd02de7c3d28f717a194b3a285f3351479d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d395827_045e48aa",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-27T16:14:30Z",
+      "side": 1,
+      "message": "Thanks, LGTM with a small nit in builtins. Let me know if you need help landing the CLs.",
+      "parentUuid": "2d54f35b_9a9386e0",
+      "revId": "26eecd02de7c3d28f717a194b3a285f3351479d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
