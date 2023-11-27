@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "9a68bb289a3be3ff78ee951cc2cbfa0e134260cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bb6b845_e4ccdd6c",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-11-27T09:13:27Z",
+      "side": 1,
+      "message": "add it here too, for documentation.",
+      "range": {
+        "startLine": 821,
+        "startChar": 39,
+        "endLine": 821,
+        "endChar": 40
+      },
+      "revId": "9a68bb289a3be3ff78ee951cc2cbfa0e134260cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
