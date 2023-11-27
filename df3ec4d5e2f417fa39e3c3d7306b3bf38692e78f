@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f47aad36_81c67973",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2023-11-27T10:37:33Z",
+      "side": 1,
+      "message": "I\u0027m not super familiar with V8 anymore, but here is where you could start:\n\n- when you enable coverage, SwitchMode is called. At the end of it, it sets a flag on: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/debug/debug-coverage.cc;l\u003d820;drc\u003d75ac2867aaa550defd45ae43379da6171eefa2c1\n- that flag is called code_coverage_mode: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/isolate.h;l\u003d1968;drc\u003dd4a7d3fb6f5100019d6153d5cf00c60f06b1d0a2\n- that flag, among other things, is used in the parser, both to determine whether we need code coverage at all, or whether we even need to collect coverage per basic block: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/parsing/parse-info.cc;l\u003d31;drc\u003dd4a7d3fb6f5100019d6153d5cf00c60f06b1d0a2\n\nBtw I\u0027m not on the V8 team anymore and am probably not the right person to review a change that also touches the parser.",
+      "parentUuid": "1951eefe_e739f81d",
+      "revId": "df3ec4d5e2f417fa39e3c3d7306b3bf38692e78f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "afafe922_b58aecc0",
