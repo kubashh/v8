@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f78b254_a7f93007",
+        "filename": "test/fuzzer/wasm-compile.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2874,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-11-28T13:07:14Z",
+      "side": 1,
+      "message": "If we can\u0027t just emit a `kExprRefAsNonNull` after the nullref, see also the `kExtern` handling below. It isn\u0027t great but it should be fine. (for the extern case we could actually use `ref.as_non_null(extern.convert_any(x))` where x is `GenerateRef(HeapType::kAnyRef)` to not always create something that traps.",
+      "range": {
+        "startLine": 2874,
+        "startChar": 9,
+        "endLine": 2874,
+        "endChar": 24
+      },
+      "revId": "7cd2e993b81981466ee6d30ec6a4146588f40c27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
