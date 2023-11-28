@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a7a4a74_97e42b6d",
+        "filename": "src/baseline/ppc/baseline-assembler-ppc-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-28T19:03:28Z",
+      "side": 1,
+      "message": "You seem to have one or more brackets missing, try to recompile the CL.",
+      "revId": "2a2fedb8cbf0cfb6b203660d8cf1654709aa1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
