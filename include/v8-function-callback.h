@@ -132,6 +132,9 @@ class FunctionCallbackInfo {
   /** The ReturnValue for the call. */
   V8_INLINE ReturnValue<T> GetReturnValue() const;
 
+  /* Returns incumbent context for this call. */
+  V8_INLINE Local<Context> GetIncumbentContext() const;
+
  private:
   friend class internal::FunctionCallbackArguments;
   friend class internal::CustomArguments<FunctionCallbackInfo>;
@@ -495,6 +498,12 @@ Isolate* FunctionCallbackInfo<T>::GetIsolate() const {
 template <typename T>
 ReturnValue<T> FunctionCallbackInfo<T>::GetReturnValue() const {
   return ReturnValue<T>(&implicit_args_[kReturnValueIndex]);
+}
+
+template <typename T>
+Local<Context> FunctionCallbackInfo<T>::GetIncumbentContext() const {
+  Local<Context> incumbent_context = GetIsolate()->GetIncumbentContext();
+  return incumbent_context;
 }
 
 template <typename T>
