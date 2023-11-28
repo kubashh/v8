@@ -33,6 +33,46 @@
       "message": "PTAL",
       "revId": "116cf0310ff7999f862a0e4b2515781e9ac0c704",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a2e9c15_79f0dc1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-28T07:38:02Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "116cf0310ff7999f862a0e4b2515781e9ac0c704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3172792d_ad1730d5",
+        "filename": "src/heap/heap-allocator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-28T07:38:02Z",
+      "side": 1,
+      "message": "Since this is for disabling, we could set to `0` via `allocation_timeout_ \u003d std::max(0, interval);\n` and also have the following below:\n\n```\n#ifdef V8_ENABLE_ALLOCATION_TIMEOUT\n  if (v8_flags.random_gc_interval \u003e 0 || v8_flags.gc_interval \u003e\u003d 0) {\n    if (!heap_-\u003ealways_allocate() \u0026\u0026 allocation_timeout_ \u003e 0 \u0026\u0026 --allocation_timeout_ \u003d\u003d 0 \u0026\u0026\n        local_heap_-\u003eis_main_thread()) {\n      return AllocationResult::Failure();\n    }\n  }\n#endif  // V8_ENABLE_ALLOCATION_TIMEOUT\n```\n\nwdyt?",
+      "range": {
+        "startLine": 359,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 8
+      },
+      "revId": "116cf0310ff7999f862a0e4b2515781e9ac0c704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
