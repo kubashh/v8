@@ -15,6 +15,7 @@
 #include "src/heap/mark-compact.h"
 #include "src/heap/marking-state-inl.h"
 #include "src/heap/marking-worklist-inl.h"
+#include "src/objects/js-objects.h"
 #include "src/objects/objects-inl.h"
 
 namespace v8 {
@@ -29,7 +30,8 @@ class BasicTracedReferenceExtractor final {
 };
 
 void UnifiedHeapMarkingState::MarkAndPush(
-    const TracedReferenceBase& reference) {
+    const TracedReferenceBase& reference,
+    MarkedNodeHandling marked_node_handling) {
   // The following code will crash with null pointer derefs when finding a
   // non-empty `TracedReferenceBase` when `CppHeap` is in detached mode.
   Address* traced_handle_location =
@@ -40,16 +42,48 @@ void UnifiedHeapMarkingState::MarkAndPush(
   if (!traced_handle_location) {
     return;
   }
-  Tagged<Object> object =
-      TracedHandles::Mark(traced_handle_location, mark_mode_);
+
+  // GCMole alerts on the destructured assignment to `object`, claiming it may
+  // be stale due to GCs. Since this is only running during the marking phase of
+  // a unified heap GC, we are guaranteed that objects will not be moved by the
+  // GC while this code is executed.
+  DisableGCMole no_gcmole;
+
+  const auto [object, was_marked] =
+      TracedHandles::TryMark(traced_handle_location, mark_mode_);
   if (!IsHeapObject(object)) {
     // The embedder is not aware of whether numbers are materialized as heap
     // objects are just passed around as Smis.
     return;
   }
+
+  // Nodes are not shared between TracedReferences and objects are only traced
+  // if they were unmarked, so expect nodes to also be unmarked during the
+  // initial processing.
+  DCHECK_IMPLIES(
+      marked_node_handling == MarkedNodeHandling::kInitialOpportunistic,
+      was_marked);
+  DCHECK_IMPLIES(marked_node_handling == MarkedNodeHandling::kFinal,
+                 !was_marked);
+
   Tagged<HeapObject> heap_object = HeapObject::cast(object);
   if (heap_object.InReadOnlySpace()) return;
   if (!ShouldMarkObject(heap_object)) return;
+
+  if (reclaim_unmodified_wrappers_) {
+    bool is_in_atomic_pause =
+        heap_->mark_compact_collector()->is_in_atomic_pause();
+    if (TracedHandles::UpdateIsWeak(
+            traced_handle_location, embedder_root_handler_,
+            is_in_atomic_pause
+                ? TracedHandles::WeaknessCompuationMode::kAtomic
+                : TracedHandles::WeaknessCompuationMode::kConcurrent)) {
+      if (!is_in_atomic_pause)
+        local_weak_traced_reference_worklist_.Push(&reference);
+      return;
+    }
+  }
+
   if (marking_state_->TryMark(heap_object)) {
     local_marking_worklist_->Push(heap_object);
   }

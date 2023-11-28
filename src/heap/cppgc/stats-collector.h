@@ -53,6 +53,7 @@ namespace internal {
   V(MarkVisitPersistents)                   \
   V(MarkVisitCrossThreadPersistents)        \
   V(MarkVisitStack)                         \
+  V(MarkTracedReferences)                   \
   V(MarkVisitRememberedSets)                \
   V(WeakContainerCallbacksProcessing)       \
   V(CustomCallbacksProcessing)              \
