@@ -1053,8 +1053,12 @@ TEST_F(ThreadTerminationTest, TerminateInMicrotask) {
 }
 
 void TerminationMicrotask(void* data) {
-  Isolate::GetCurrent()->TerminateExecution();
-  CompileRun(Isolate::GetCurrent()->GetCurrentContext(), "");
+  Local<Context> context = *reinterpret_cast<Local<Context>*>(data);
+  v8::Isolate* isolate = context->GetIsolate();
+  HandleScope scope(isolate);
+  Context::Scope context_scope(context);
+  isolate->TerminateExecution();
+  CompileRun(context, "");
 }
 
 void UnreachableMicrotask(void* data) { UNREACHABLE(); }
@@ -1070,7 +1074,9 @@ TEST_F(ThreadTerminationTest, TerminateInApiMicrotask) {
     TryCatch try_catch(isolate());
     Context::Scope context_scope(context);
     CHECK(!isolate()->IsExecutionTerminating());
-    isolate()->EnqueueMicrotask(TerminationMicrotask);
+    // Passing &context works here because the microtask must be run in a
+    // checkpoint while the context local is still on the stack.
+    isolate()->EnqueueMicrotask(TerminationMicrotask, &context);
     isolate()->EnqueueMicrotask(UnreachableMicrotask);
     isolate()->PerformMicrotaskCheckpoint();
     CHECK(try_catch.HasCaught());

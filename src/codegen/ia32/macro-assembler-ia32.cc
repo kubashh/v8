@@ -2237,6 +2237,7 @@ void MacroAssembler::DebugBreak() { int3(); }
 void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
                               Register function_address,
                               ExternalReference thunk_ref, Register thunk_arg,
+                              Operand* prev_incumbent_context_operand,
                               int stack_space, Operand* stack_space_operand,
                               Operand return_value_operand) {
   ASM_CODE_COMMENT(masm);
@@ -2300,6 +2301,14 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
 
   __ RecordComment("Load the value from ReturnValue");
   __ mov(return_value, return_value_operand);
+
+  if (prev_incumbent_context_operand) {
+    ASM_CODE_COMMENT_STRING(masm, "Restore previous incumbent context.");
+    MemOperand incumbent_context_mem_op =
+        __ ExternalReferenceAsOperand(ER::incumbent_context(isolate), no_reg);
+    __ mov(scratch, incumbent_context_mem_op);
+    __ mov(*prev_incumbent_context_operand, scratch);
+  }
 
   Label promote_scheduled_exception;
   Label delete_allocated_handles;

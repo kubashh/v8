@@ -132,6 +132,8 @@ class FunctionCallbackInfo {
   /** The ReturnValue for the call. */
   V8_INLINE ReturnValue<T> GetReturnValue() const;
 
+  V8_INLINE Local<Context> GetIncumbentContext() const;
+
  private:
   friend class internal::FunctionCallbackArguments;
   friend class internal::CustomArguments<FunctionCallbackInfo>;
@@ -139,7 +141,7 @@ class FunctionCallbackInfo {
 
   static constexpr int kHolderIndex = 0;
   static constexpr int kIsolateIndex = 1;
-  static constexpr int kUnusedIndex = 2;
+  static constexpr int kMaybeIncumbentContextIndex = 2;
   static constexpr int kReturnValueIndex = 3;
   static constexpr int kDataIndex = 4;
   static constexpr int kNewTargetIndex = 5;
@@ -468,6 +470,12 @@ Local<Value> FunctionCallbackInfo<T>::operator[](int i) const {
 
 template <typename T>
 Local<Object> FunctionCallbackInfo<T>::This() const {
+#ifdef V8_ENABLE_CHECKS
+  if (V8_LIKELY(implicit_args_[kMaybeIncumbentContextIndex])) {
+    // Stress-test GetIncumbentContext() implementation.
+    GetIncumbentContext();
+  }
+#endif
   // values_ points to the first argument (not the receiver).
   return Local<Object>::FromSlot(values_ + kThisValuesIndex);
 }
@@ -495,6 +503,32 @@ Isolate* FunctionCallbackInfo<T>::GetIsolate() const {
 template <typename T>
 ReturnValue<T> FunctionCallbackInfo<T>::GetReturnValue() const {
   return ReturnValue<T>(&implicit_args_[kReturnValueIndex]);
+}
+
+template <typename T>
+Local<Context> FunctionCallbackInfo<T>::GetIncumbentContext() const {
+  using I = internal::Internals;
+  using A = internal::Address;
+  A maybe_incumbent_context = implicit_args_[kMaybeIncumbentContextIndex];
+  if (V8_LIKELY(maybe_incumbent_context)) {
+    // Fast path, a context was provided in the MaybeIncumbentContext slot,
+    // load NativeContext and store it back in the slot to avoid handle
+    // allocation.
+    implicit_args_[kMaybeIncumbentContextIndex] =
+        I::LoadNativeContext(maybe_incumbent_context);
+
+    Local<Context> incumbent_context =
+        Local<Context>::FromSlot(&implicit_args_[kMaybeIncumbentContextIndex]);
+#ifdef V8_ENABLE_CHECKS
+    internal::VerifyIncumbentContext(GetIsolate(), *incumbent_context);
+#endif
+    return incumbent_context;
+  }
+  Local<Context> incumbent_context = GetIsolate()->GetIncumbentContext();
+  // Cache it here in case it's needed again.
+  implicit_args_[kMaybeIncumbentContextIndex] =
+      internal::ValueHelper::ValueAsAddress(*incumbent_context);
+  return incumbent_context;
 }
 
 template <typename T>

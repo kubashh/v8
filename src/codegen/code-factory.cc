@@ -131,8 +131,10 @@ Callable CodeFactory::FastNewFunctionContext(Isolate* isolate,
 }
 
 // static
-Callable CodeFactory::Call(Isolate* isolate, ConvertReceiverMode mode) {
-  return Callable(isolate->builtins()->Call(mode), CallTrampolineDescriptor{});
+Callable CodeFactory::Call(Isolate* isolate, ConvertReceiverMode mode,
+                           CallerKind caller_kind) {
+  return Callable(isolate->builtins()->Call(mode, caller_kind),
+                  CallTrampolineDescriptor{});
 }
 
 // static
@@ -153,8 +155,8 @@ Callable CodeFactory::Call_WithFeedback(Isolate* isolate,
 }
 
 // static
-Callable CodeFactory::CallWithArrayLike(Isolate* isolate) {
-  return Builtins::CallableFor(isolate, Builtin::kCallWithArrayLike);
+Callable CodeFactory::CallWithArrayLike_CallerJS(Isolate* isolate) {
+  return Builtins::CallableFor(isolate, Builtin::kCallWithArrayLike_CallerJS);
 }
 
 // static
@@ -163,14 +165,20 @@ Callable CodeFactory::CallWithSpread(Isolate* isolate) {
 }
 
 // static
-Callable CodeFactory::CallFunction(Isolate* isolate, ConvertReceiverMode mode) {
-  return Callable(isolate->builtins()->CallFunction(mode),
+Callable CodeFactory::CallFunction(Isolate* isolate, ConvertReceiverMode mode,
+                                   CallerKind caller_kind) {
+  return Callable(isolate->builtins()->CallFunction(mode, caller_kind),
                   CallTrampolineDescriptor{});
 }
 
 // static
-Callable CodeFactory::CallVarargs(Isolate* isolate) {
-  return Builtins::CallableFor(isolate, Builtin::kCallVarargs);
+Callable CodeFactory::CallVarargs(Isolate* isolate, CallerKind caller_kind) {
+  switch (caller_kind) {
+    case CallerKind::kJS:
+      return Builtins::CallableFor(isolate, Builtin::kCallVarargs_CallerJS);
+    case CallerKind::kUnknown:
+      return Builtins::CallableFor(isolate, Builtin::kCallVarargs_CallerUnk);
+  }
 }
 
 // static

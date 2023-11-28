@@ -56,6 +56,10 @@ Tagged<NativeContext> Isolate::raw_native_context() {
   return context()->native_context();
 }
 
+void Isolate::clear_caller_context() {
+  thread_local_top()->caller_context_ = Context();
+}
+
 void Isolate::set_pending_message(Tagged<Object> message_obj) {
   DCHECK(IsTheHole(message_obj, this) || IsJSMessageObject(message_obj));
   thread_local_top()->pending_message_ = message_obj;

@@ -101,7 +101,8 @@ TF_BUILTIN(ConstructWithArrayLike, CallOrConstructBuiltinsAssembler) {
   auto new_target = Parameter<Object>(Descriptor::kNewTarget);
   auto arguments_list = Parameter<Object>(Descriptor::kArgumentsList);
   auto context = Parameter<Context>(Descriptor::kContext);
-  CallOrConstructWithArrayLike(target, new_target, arguments_list, context);
+  CallOrConstructWithArrayLike(target, new_target, arguments_list, context,
+                               CallerKind::kJS);
 }
 
 TF_BUILTIN(ConstructWithArrayLike_WithFeedback,
@@ -124,7 +125,8 @@ TF_BUILTIN(ConstructWithArrayLike_WithFeedback,
   Goto(&if_construct_generic);  // Not implemented.
 
   BIND(&if_construct_generic);
-  CallOrConstructWithArrayLike(target, new_target, arguments_list, context);
+  CallOrConstructWithArrayLike(target, new_target, arguments_list, context,
+                               CallerKind::kJS);
 }
 
 TF_BUILTIN(ConstructWithSpread, CallOrConstructBuiltinsAssembler) {
@@ -134,7 +136,8 @@ TF_BUILTIN(ConstructWithSpread, CallOrConstructBuiltinsAssembler) {
   auto args_count =
       UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto context = Parameter<Context>(Descriptor::kContext);
-  CallOrConstructWithSpread(target, new_target, spread, args_count, context);
+  CallOrConstructWithSpread(target, new_target, spread, args_count, context,
+                            CallerKind::kJS);
 }
 
 TF_BUILTIN(ConstructWithSpread_Baseline, CallOrConstructBuiltinsAssembler) {
@@ -184,7 +187,8 @@ void CallOrConstructBuiltinsAssembler::BuildConstructWithSpread(
   Goto(&if_construct_generic);  // Not implemented.
 
   BIND(&if_construct_generic);
-  CallOrConstructWithSpread(target, new_target, spread, argc, eager_context);
+  CallOrConstructWithSpread(target, new_target, spread, argc, eager_context,
+                            CallerKind::kJS);
 }
 
 TF_BUILTIN(ConstructForwardAllArgs_Baseline, CallOrConstructBuiltinsAssembler) {

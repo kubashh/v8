@@ -215,6 +215,7 @@ TF_BUILTIN(ShadowRealmGetWrappedValue, ShadowRealmBuiltinsAssembler) {
 
 // https://tc39.es/proposal-shadowrealm/#sec-wrapped-function-exotic-objects-call-thisargument-argumentslist
 TF_BUILTIN(CallWrappedFunction, ShadowRealmBuiltinsAssembler) {
+  PreserveCallerContextAcrossCalls();
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   TNode<IntPtrT> argc_ptr = ChangeInt32ToIntPtr(argc);
   auto wrapped_function = Parameter<JSWrappedFunction>(Descriptor::kFunction);

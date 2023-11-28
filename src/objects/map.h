@@ -874,6 +874,8 @@ class Map : public TorqueGeneratedMap<Map, HeapObject> {
   static const int kMaxPreAllocatedPropertyFields = 255;
 
   static_assert(kInstanceTypeOffset == Internals::kMapInstanceTypeOffset);
+  static_assert(kConstructorOrBackPointerOrNativeContextOffset ==
+                Internals::kMapConstructorOrBackPointerOrNativeContextOffset);
 
   class BodyDescriptor;
 

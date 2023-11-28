@@ -122,26 +122,67 @@ const char* Builtins::Lookup(Address pc) {
   return nullptr;
 }
 
-Handle<Code> Builtins::CallFunction(ConvertReceiverMode mode) {
+Handle<Code> Builtins::CallFunction(ConvertReceiverMode mode,
+                                    CallerKind caller_kind) {
   switch (mode) {
     case ConvertReceiverMode::kNullOrUndefined:
-      return code_handle(Builtin::kCallFunction_ReceiverIsNullOrUndefined);
+      switch (caller_kind) {
+        case CallerKind::kJS:
+          return code_handle(
+              Builtin::kCallFunction_ReceiverIsNullOrUndefined_CallerJS);
+        case CallerKind::kUnknown:
+          return code_handle(
+              Builtin::kCallFunction_ReceiverIsNullOrUndefined_CallerUnk);
+      }
     case ConvertReceiverMode::kNotNullOrUndefined:
-      return code_handle(Builtin::kCallFunction_ReceiverIsNotNullOrUndefined);
+      switch (caller_kind) {
+        case CallerKind::kJS:
+          return code_handle(
+              Builtin::kCallFunction_ReceiverIsNotNullOrUndefined_CallerJS);
+        case CallerKind::kUnknown:
+          return code_handle(
+              Builtin::kCallFunction_ReceiverIsNotNullOrUndefined_CallerUnk);
+      }
+
     case ConvertReceiverMode::kAny:
-      return code_handle(Builtin::kCallFunction_ReceiverIsAny);
+      switch (caller_kind) {
+        case CallerKind::kJS:
+          return code_handle(Builtin::kCallFunction_ReceiverIsAny_CallerJS);
+        case CallerKind::kUnknown:
+          return code_handle(Builtin::kCallFunction_ReceiverIsAny_CallerUnk);
+      }
   }
   UNREACHABLE();
 }
 
-Handle<Code> Builtins::Call(ConvertReceiverMode mode) {
+Handle<Code> Builtins::Call(ConvertReceiverMode mode, CallerKind caller_kind) {
   switch (mode) {
     case ConvertReceiverMode::kNullOrUndefined:
-      return code_handle(Builtin::kCall_ReceiverIsNullOrUndefined);
+      switch (caller_kind) {
+        case CallerKind::kJS:
+          return code_handle(Builtin::kCall_ReceiverIsNullOrUndefined_CallerJS);
+        case CallerKind::kUnknown:
+          return code_handle(
+              Builtin::kCall_ReceiverIsNullOrUndefined_CallerUnk);
+      }
+
     case ConvertReceiverMode::kNotNullOrUndefined:
-      return code_handle(Builtin::kCall_ReceiverIsNotNullOrUndefined);
+      switch (caller_kind) {
+        case CallerKind::kJS:
+          return code_handle(
+              Builtin::kCall_ReceiverIsNotNullOrUndefined_CallerJS);
+        case CallerKind::kUnknown:
+          return code_handle(
+              Builtin::kCall_ReceiverIsNotNullOrUndefined_CallerUnk);
+      }
+
     case ConvertReceiverMode::kAny:
-      return code_handle(Builtin::kCall_ReceiverIsAny);
+      switch (caller_kind) {
+        case CallerKind::kJS:
+          return code_handle(Builtin::kCall_ReceiverIsAny_CallerJS);
+        case CallerKind::kUnknown:
+          return code_handle(Builtin::kCall_ReceiverIsAny_CallerUnk);
+      }
   }
   UNREACHABLE();
 }

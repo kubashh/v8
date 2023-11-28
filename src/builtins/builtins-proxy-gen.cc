@@ -86,6 +86,7 @@ TNode<JSFunction> ProxiesCodeStubAssembler::AllocateProxyRevokeFunction(
 }
 
 TF_BUILTIN(CallProxy, ProxiesCodeStubAssembler) {
+  PreserveCallerContextAcrossCalls();
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   TNode<IntPtrT> argc_ptr = ChangeInt32ToIntPtr(argc);
   auto proxy = Parameter<JSProxy>(Descriptor::kFunction);
@@ -133,7 +134,9 @@ TF_BUILTIN(CallProxy, ProxiesCodeStubAssembler) {
   BIND(&trap_undefined);
   {
     // 6.a. Return Call(target, thisArgument, argumentsList).
-    TailCallStub(CodeFactory::Call(isolate()), context, target, argc);
+    TailCallStub(CodeFactory::Call(isolate(), ConvertReceiverMode::kAny,
+                                   CallerKind::kUnknown),
+                 context, target, argc);
   }
 
   BIND(&throw_proxy_handler_revoked);

@@ -89,6 +89,8 @@ int CodeAssemblerState::parameter_count() const {
   return static_cast<int>(raw_assembler_->call_descriptor()->ParameterCount());
 }
 
+Zone* CodeAssemblerState::zone() { return jsgraph_->zone(); }
+
 CodeAssembler::~CodeAssembler() = default;
 
 #if DEBUG
@@ -1073,6 +1075,32 @@ class NodeArray {
 
 }  // namespace
 
+CallerKind CodeAssemblerState::GetCallerKind() {
+  CallerKind caller_kind;
+  // if (builtin_ == Builtin::kCompileLazy
+  //     //|| builtin_ == Builtin::kArrayConstructor
+  //   ) {
+  //   caller_kind = CallerKind::kUnknown;
+  // } else
+  if (Builtins::IsBuiltinId(builtin_)) {
+    // Builtins::Kind builtin_kind = Builtins::KindOf(builtin_);
+    // caller_kind = (builtin_kind == Builtins::TFJ)
+    //               ||
+    //               (builtin_kind == Builtins::BCH)
+    //               || builtin_ == Builtin::kArrayConstructor
+    //                   ? CallerKind::kJS
+    //                   : CallerKind::kUnknown;
+    caller_kind = (builtin_ == Builtin::kCallProxy) ||
+                          (builtin_ == Builtin::kShadowRealmGetWrappedValue)
+                      ? CallerKind::kUnknown
+                      : CallerKind::kJS;
+    // caller_kind = CallerKind::kJS;
+  } else {
+    caller_kind = CallerKind::kJS;
+  }
+  return caller_kind;
+}
+
 Node* CodeAssembler::CallRuntimeImpl(
     Runtime::FunctionId function, TNode<Object> context,
     std::initializer_list<TNode<Object>> args) {
@@ -1489,11 +1517,16 @@ bool CodeAssemblerVariable::ImplComparator::operator()(
   return *a < *b;
 }
 
+CodeAssemblerVariable::CodeAssemblerVariable(CodeAssemblerState* state,
+                                             MachineRepresentation rep)
+    : impl_(state->zone()->New<Impl>(rep, state->NextVariableId())),
+      state_(state) {
+  state_->variables_.insert(impl_);
+}
+
 CodeAssemblerVariable::CodeAssemblerVariable(CodeAssembler* assembler,
                                              MachineRepresentation rep)
-    : impl_(assembler->zone()->New<Impl>(rep,
-                                         assembler->state()->NextVariableId())),
-      state_(assembler->state()) {
+    : CodeAssemblerVariable(assembler->state(), rep) {
   state_->variables_.insert(impl_);
 }
 

@@ -193,7 +193,7 @@ class V8_NODISCARD CallDepthScope {
     isolate_->set_next_v8_call_is_safe_for_termination(false);
     if (!context.IsEmpty()) {
       i::DisallowGarbageCollection no_gc;
-      i::Tagged<i::Context> env = *Utils::OpenHandle(*context);
+      i::Tagged<i::NativeContext> env = *Utils::OpenHandle(*context);
       i::HandleScopeImplementer* impl = isolate->handle_scope_implementer();
       if (isolate->context().is_null() ||
           isolate->context()->native_context() != env->native_context()) {
@@ -212,8 +212,8 @@ class V8_NODISCARD CallDepthScope {
         isolate_->set_context(impl->RestoreContext());
       }
 
-      i::Handle<i::Context> env = Utils::OpenHandle(*context_);
-      microtask_queue = env->native_context()->microtask_queue();
+      i::Handle<i::NativeContext> env = Utils::OpenHandle(*context_);
+      microtask_queue = env->microtask_queue();
     }
     if (!escaped_) isolate_->thread_local_top()->DecrementCallDepth(this);
     if (do_callback) isolate_->FireCallCompletedCallback(microtask_queue);

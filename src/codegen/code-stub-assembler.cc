@@ -10687,9 +10687,10 @@ TNode<Object> CodeStubAssembler::CallGetterIfAccessor(
         }
         TNode<NativeContext> creation_context =
             GetCreationContext(CAST(holder), if_bailout);
+        TNode<Context> caller_context = context;
         var_value = CallBuiltin(
             Builtin::kCallFunctionTemplate_Generic, creation_context, getter,
-            Int32Constant(i::JSParameterCount(0)), js_receiver);
+            Int32Constant(i::JSParameterCount(0)), caller_context, js_receiver);
         Goto(&done);
 
         if (mode == kCallJSGetterUseCachedName) {
@@ -16597,6 +16598,31 @@ void CodeStubAssembler::PerformStackCheck(TNode<Context> context) {
   BIND(&ok);
 }
 
+void CodeStubAssembler::PreserveCallerContextAcrossCalls() {
+  // DCHECK(IsJSFunctionCall());
+  Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
+
+  // On builtin entry save the Isolate::caller_context value in the
+  // var_caller_context variable.
+  TNode<ExternalReference> caller_context_ref =
+      ExternalConstant(ExternalReference::caller_context(isolate()));
+  TNode<Object> caller_context = LoadFullTagged(caller_context_ref);
+
+  RegisterCallGenerationCallbacks(
+      // call_prologue
+      nullptr,
+      // call_epilogue
+      [=] {
+        Comment("===== CallEpilogue", __FUNCTION__, ", ", __FILE__, ":",
+                __LINE__);
+        // Since the builtin could theoretically call user JS code and thus the
+        // the Isolate::caller_context could be overwritten
+        // After calling out to another builtin restore the value of
+        // Isolate::caller_context in case the builtin will do another call.
+        StoreFullTaggedNoWriteBarrier(caller_context_ref, caller_context);
+      });
+}
+
 TNode<Object> CodeStubAssembler::CallRuntimeNewArray(
     TNode<Context> context, TNode<Object> receiver, TNode<Object> length,
     TNode<Object> new_target, TNode<Object> allocation_site) {
@@ -17820,14 +17846,14 @@ TNode<Object> CodeStubAssembler::CallOnCentralStack(TNode<Context> context,
 
   TNode<RawPtrT> old_sp = SwitchToTheCentralStackForJS(target);
 
-  result = CallBuiltin(Builtin::kCallVarargs, context, target, Int32Constant(0),
-                       num_args, args);
+  result = CallBuiltin(Builtin::kCallVarargs_CallerUnk, context, target,
+                       Int32Constant(0), num_args, args);
   SwitchFromTheCentralStackForJS(old_sp, target);
   Goto(&end);
 
   Bind(&no_switch);
-  result = CallBuiltin(Builtin::kCallVarargs, context, target, Int32Constant(0),
-                       num_args, args);
+  result = CallBuiltin(Builtin::kCallVarargs_CallerUnk, context, target,
+                       Int32Constant(0), num_args, args);
   Goto(&end);
 
   Bind(&end);

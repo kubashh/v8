@@ -8018,8 +8018,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       case wasm::ImportCallKind::kUseCallBuiltin: {
         base::SmallVector<Node*, 16> args(wasm_count + 7 - suspend);
         int pos = 0;
-        args[pos++] =
-            gasm_->GetBuiltinPointerTarget(Builtin::kCall_ReceiverIsAny);
+        args[pos++] = gasm_->GetBuiltinPointerTarget(
+            Builtin::kCall_ReceiverIsAny_CallerJS);
         args[pos++] = callable_node;
         args[pos++] = Int32Constant(
             JSParameterCount(wasm_count - suspend));         // argument count
@@ -8351,8 +8351,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
           int wasm_count = static_cast<int>(sig_->parameter_count());
           base::SmallVector<Node*, 16> args(wasm_count + 7);
           int pos = 0;
-          args[pos++] =
-              gasm_->GetBuiltinPointerTarget(Builtin::kCall_ReceiverIsAny);
+          args[pos++] = gasm_->GetBuiltinPointerTarget(
+              Builtin::kCall_ReceiverIsAny_CallerJS);
           args[pos++] = callable_node;
           args[pos++] =
               Int32Constant(JSParameterCount(wasm_count));  // argument count
@@ -8422,7 +8422,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     // Call the underlying closure.
     base::SmallVector<Node*, 16> args(wasm_count + 7);
     int pos = 0;
-    args[pos++] = gasm_->GetBuiltinPointerTarget(Builtin::kCall_ReceiverIsAny);
+    args[pos++] =
+        gasm_->GetBuiltinPointerTarget(Builtin::kCall_ReceiverIsAny_CallerJS);
     args[pos++] = callable;
     args[pos++] =
         Int32Constant(JSParameterCount(wasm_count));  // argument count

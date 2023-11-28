@@ -138,12 +138,12 @@ BUILTIN(HandleApiConstruct) {
   Handle<Object> receiver = args.receiver();
   Handle<HeapObject> new_target = args.new_target();
   DCHECK(!IsUndefined(*new_target, isolate));
-  Handle<FunctionTemplateInfo> fun_data(
+  Handle<FunctionTemplateInfo> function(
       args.target()->shared()->api_func_data(), isolate);
   int argc = args.length() - 1;
   Address* argv = args.address_of_first_argument();
   RETURN_RESULT_OR_FAILURE(
-      isolate, HandleApiCallHelper<true>(isolate, new_target, fun_data,
+      isolate, HandleApiCallHelper<true>(isolate, new_target, function,
                                          receiver, argv, argc));
 }
 
@@ -173,10 +173,11 @@ class RelocatableArguments : public Relocatable {
 }  // namespace
 
 MaybeHandle<Object> Builtins::InvokeApiFunction(
-    Isolate* isolate, bool is_construct, Handle<FunctionTemplateInfo> function,
-    Handle<Object> receiver, int argc, Handle<Object> args[],
-    Handle<HeapObject> new_target) {
+    Isolate* isolate, bool is_construct, Handle<Context> function_context,
+    Handle<FunctionTemplateInfo> function, Handle<Object> receiver, int argc,
+    Handle<Object> args[], Handle<HeapObject> new_target) {
   RCS_SCOPE(isolate, RuntimeCallCounterId::kInvokeApiFunction);
+  SaveAndSwitchContext save(isolate, *function_context);
 
   // Do proper receiver conversion for non-strict mode api functions.
   if (!is_construct && !IsJSReceiver(*receiver)) {

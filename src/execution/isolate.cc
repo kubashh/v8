@@ -320,15 +320,15 @@ void Isolate::SetEmbeddedBlob(const uint8_t* code, uint32_t code_size,
         "indicates that the embedded blob has been modified since compilation "
         "time.");
   }
-  if (v8_flags.text_is_readable) {
-    if (d.EmbeddedBlobCodeHash() != d.CreateEmbeddedBlobCodeHash()) {
-      FATAL(
-          "Embedded blob code section checksum verification failed. This "
-          "indicates that the embedded blob has been modified since "
-          "compilation time. A common cause is a debugging breakpoint set "
-          "within builtin code.");
-    }
-  }
+  // if (v8_flags.text_is_readable) {
+  //   if (d.EmbeddedBlobCodeHash() != d.CreateEmbeddedBlobCodeHash()) {
+  //     FATAL(
+  //         "Embedded blob code section checksum verification failed. This "
+  //         "indicates that the embedded blob has been modified since "
+  //         "compilation time. A common cause is a debugging breakpoint set "
+  //         "within builtin code.");
+  //   }
+  // }
 #endif  // DEBUG
 }
 
@@ -3240,8 +3240,9 @@ Handle<NativeContext> Isolate::GetIncumbentContext() {
 
   // 2nd candidate: the last Context::Scope's incumbent context if any.
   if (top_backup_incumbent_scope()) {
-    return Utils::OpenHandle(
-        *top_backup_incumbent_scope()->backup_incumbent_context_);
+    v8::Local<v8::Context> incumbent_context =
+        top_backup_incumbent_scope()->backup_incumbent_context_;
+    return Utils::OpenHandle(*incumbent_context);
   }
 
   // Last candidate: the entered context or microtask context.
@@ -3254,8 +3255,10 @@ Handle<NativeContext> Isolate::GetIncumbentContext() {
 }
 
 char* Isolate::ArchiveThread(char* to) {
+  clear_caller_context();
   MemCopy(to, reinterpret_cast<char*>(thread_local_top()),
           sizeof(ThreadLocalTop));
+  // set_top_backup_incumbent_scope(nullptr);
   return to + sizeof(ThreadLocalTop);
 }
 

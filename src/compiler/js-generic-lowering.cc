@@ -1022,7 +1022,7 @@ void JSGenericLowering::LowerJSCall(Node* node) {
 
   node->RemoveInput(n.FeedbackVectorIndex());
 
-  Callable callable = CodeFactory::Call(isolate(), mode);
+  Callable callable = CodeFactory::Call(isolate(), mode, CallerKind::kJS);
   CallDescriptor::Flags flags = FrameStateFlagForCall(node);
   auto call_descriptor = Linkage::GetStubCallDescriptor(
       zone(), callable.descriptor(), arg_count + 1, flags);
@@ -1044,7 +1044,7 @@ void JSGenericLowering::LowerJSCallWithArrayLike(Node* node) {
   static constexpr int kReceiver = 1;
 
   const int stack_argument_count = arg_count - kArgumentsList + kReceiver;
-  Callable callable = CodeFactory::CallWithArrayLike(isolate());
+  Callable callable = CodeFactory::CallWithArrayLike_CallerJS(isolate());
   auto call_descriptor = Linkage::GetStubCallDescriptor(
       zone(), callable.descriptor(), stack_argument_count, flags);
   Node* stub_code = jsgraph()->HeapConstantNoHole(callable.code());

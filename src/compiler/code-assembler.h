@@ -825,6 +825,16 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void UnsafeStoreNoWriteBarrier(MachineRepresentation rep, Node* base,
                                  Node* offset, Node* value);
 
+  template <class Type>
+  void StoreNoWriteBarrier(Node* base, Node* value) {
+    StoreNoWriteBarrier(MachineRepresentationOf<Type>::value, base, value);
+  }
+  template <class Type>
+  void StoreNoWriteBarrier(Node* base, Node* offset, Node* value) {
+    StoreNoWriteBarrier(MachineRepresentationOf<Type>::value, base, offset,
+                        value);
+  }
+
   // Stores uncompressed tagged value to (most likely off JS heap) memory
   // location without write barrier.
   void StoreFullTaggedNoWriteBarrier(TNode<RawPtrT> base,
@@ -1224,6 +1234,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class T = Object, class... TArgs>
   TNode<T> CallStub(Callable const& callable, TNode<Object> context,
                     TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     return CallStub<T>(callable.descriptor(), target, context, args...);
   }
@@ -1231,6 +1242,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class T = Object, class... TArgs>
   TNode<T> CallStub(const CallInterfaceDescriptor& descriptor,
                     TNode<Code> target, TNode<Object> context, TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     return UncheckedCast<T>(CallStubR(StubCallMode::kCallCodeObject, descriptor,
                                       target, context, args...));
   }
@@ -1238,6 +1250,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class... TArgs>
   void CallStubVoid(Callable const& callable, TNode<Object> context,
                     TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     CallStubR(StubCallMode::kCallCodeObject, callable.descriptor(), target,
               context, args...);
@@ -1247,6 +1260,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   TNode<T> CallBuiltinPointer(const CallInterfaceDescriptor& descriptor,
                               TNode<BuiltinPtr> target, TNode<Object> context,
                               TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     return UncheckedCast<T>(CallStubR(StubCallMode::kCallBuiltinPointer,
                                       descriptor, target, context, args...));
   }
@@ -1254,6 +1268,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class... TArgs>
   void TailCallStub(Callable const& callable, TNode<Object> context,
                     TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     TailCallStub(callable.descriptor(), target, context, args...);
   }
@@ -1261,6 +1276,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class... TArgs>
   void TailCallStub(const CallInterfaceDescriptor& descriptor,
                     TNode<Code> target, TNode<Object> context, TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     TailCallStubImpl(descriptor, target, context, {args...});
   }
 
@@ -1467,6 +1483,8 @@ class V8_EXPORT_PRIVATE CodeAssemblerVariable {
   bool IsBound() const;
 
  protected:
+  explicit CodeAssemblerVariable(CodeAssemblerState* state,
+                                 MachineRepresentation rep);
   explicit CodeAssemblerVariable(CodeAssembler* assembler,
                                  MachineRepresentation rep);
   CodeAssemblerVariable(CodeAssembler* assembler, MachineRepresentation rep,
@@ -1504,6 +1522,8 @@ class TypedCodeAssemblerVariable : public CodeAssemblerVariable {
   TypedCodeAssemblerVariable(TNode<T> initial_value, CodeAssembler* assembler)
       : CodeAssemblerVariable(assembler, PhiMachineRepresentationOf<T>,
                               initial_value) {}
+  explicit TypedCodeAssemblerVariable(CodeAssemblerState* state)
+      : CodeAssemblerVariable(state, PhiMachineRepresentationOf<T>) {}
   explicit TypedCodeAssemblerVariable(CodeAssembler* assembler)
       : CodeAssemblerVariable(assembler, PhiMachineRepresentationOf<T>) {}
 #if DEBUG
@@ -1675,11 +1695,16 @@ class V8_EXPORT_PRIVATE CodeAssemblerState {
   const char* name() const { return name_; }
   int parameter_count() const;
 
+  Builtin builtin() { return builtin_; }
+  CallerKind GetCallerKind();
+
 #if DEBUG
   void PrintCurrentBlock(std::ostream& os);
 #endif  // DEBUG
   bool InsideBlock();
   void SetInitialDebugInformation(const char* msg, const char* file, int line);
+
+  Zone* zone();
 
  private:
   friend class CodeAssembler;
