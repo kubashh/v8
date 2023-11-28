@@ -83,7 +83,7 @@
 }
 
 ol.linenums {
-  -webkit-padding-start: 8px;
+  padding-inline-start: 8px;
 }
 
 ol.linenums.constants {
