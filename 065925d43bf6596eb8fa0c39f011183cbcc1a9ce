@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0368997f_d2b3a0a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-28T15:36:40Z",
+      "side": 1,
+      "message": "Overall looks good, thanks for implementing this! :)",
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "657d59e3_2ff3e5d8",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-28T15:36:40Z",
+      "side": 1,
+      "message": "Could you add a `DCHECK(new_cond.valid())` here?",
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17f4ab2b_1e819440",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-28T15:36:40Z",
+      "side": 1,
+      "message": "Could you add a `DCHECK(new_cond.valid())` here as well?",
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ea953f1_367c57cc",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-28T15:36:40Z",
+      "side": 1,
+      "message": "You should return the `__ Select` instead of `OpIndex::Invalid()`. For `Branch`, we return `OpIndex::Invalid()` because a Branch cannot be used as an input, and `__ Branch` doesn\u0027t return anything, but `__ Select` should return an OpIndex (`__` refers to the Assembler, and `__ Branch` and `__ Select` are defined here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/assembler.h;l\u003d1991-2002;drc\u003dc56336a064ed11369f4c1b48e49c806e8fd46ceb).",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 30
+      },
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39c6eadc_1ed3c001",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-28T15:36:40Z",
+      "side": 1,
+      "message": "What about `MaybeDuplicateCond`?",
+      "range": {
+        "startLine": 98,
+        "startChar": 7,
+        "endLine": 98,
+        "endChar": 25
+      },
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be9d16d2_5b0c3c3b",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-28T15:36:40Z",
+      "side": 1,
+      "message": "Could you take a pointer rather than a reference as argument here? It\u0027s just a personal preference, but I like to see clearly from the callsite that something could be modified / is likely an additional output (like `ShouldOptimizeCond(..., \u0026new_cond)` shows).",
+      "range": {
+        "startLine": 99,
+        "startChar": 26,
+        "endLine": 99,
+        "endChar": 43
+      },
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
