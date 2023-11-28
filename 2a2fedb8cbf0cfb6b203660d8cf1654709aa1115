@@ -52,6 +52,24 @@
       "parentUuid": "d03ffebb_cd9db908",
       "revId": "2a2fedb8cbf0cfb6b203660d8cf1654709aa1115",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cccc299_2e4ce9c4",
+        "filename": "src/baseline/ppc/baseline-assembler-ppc-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-28T20:11:34Z",
+      "side": 1,
+      "message": "I know, I am having to fix other sandbox issues due to churn over the past couple of days.  Can we try to land the static roots commit while I work on fixing the new crash issues in the sandbox patch?",
+      "parentUuid": "4960366d_b2b11729",
+      "revId": "2a2fedb8cbf0cfb6b203660d8cf1654709aa1115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
