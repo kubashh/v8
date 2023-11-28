@@ -16,6 +16,40 @@
       "message": "I believe we discussed earlier to leave it as is? they were all changed here https://crrev.com/c/4234266",
       "revId": "803599734449f4817218546c33ac1e1f1a2b0de9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04da43b5_afbb2971",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-28T20:50:25Z",
+      "side": 1,
+      "message": "why is this changed to r0?",
+      "revId": "803599734449f4817218546c33ac1e1f1a2b0de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3fc7f3e_84d2b920",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-28T20:50:25Z",
+      "side": 1,
+      "message": "mksnapshot is failing, LoadCompressedMap \u003cLoadS32\u003e needs a scratch register. Please remove this default arg so every call has to pass a scratch reg.",
+      "revId": "803599734449f4817218546c33ac1e1f1a2b0de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
