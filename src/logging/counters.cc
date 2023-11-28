@@ -109,12 +109,8 @@ void TimedHistogram::RecordAbandon(base::ElapsedTimer* timer,
 
 #ifdef DEBUG
 bool TimedHistogram::ToggleRunningState(bool expect_to_run) const {
-  static thread_local base::LazyInstance<
-      std::unordered_map<const TimedHistogram*, bool>>::type active_timer =
-      LAZY_INSTANCE_INITIALIZER;
-  bool is_running = (*active_timer.Pointer())[this];
-  DCHECK_NE(is_running, expect_to_run);
-  (*active_timer.Pointer())[this] = !is_running;
+  DCHECK_NE(is_running_, expect_to_run);
+  is_running_ = !is_running_;
   return true;
 }
 #endif

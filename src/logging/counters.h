@@ -295,6 +295,10 @@ class TimedHistogram : public Histogram {
                  Counters* counters)
       : Histogram(name, min, max, num_buckets, counters),
         resolution_(resolution) {}
+
+#ifdef DEBUG
+   bool is_running_ = false;
+#endif  // DEBUG
 };
 
 class NestedTimedHistogramScope;
