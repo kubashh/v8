@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21082cff_059e18e7",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-28T20:43:11Z",
+      "side": 1,
+      "message": "I believe we discussed earlier to leave it as is? they were all changed here https://crrev.com/c/4234266",
+      "revId": "803599734449f4817218546c33ac1e1f1a2b0de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
