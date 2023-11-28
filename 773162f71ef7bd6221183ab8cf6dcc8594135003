@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da0ffaa3_9f24d101",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3360,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-28T12:48:40Z",
+      "side": 1,
+      "message": "Why fail? `DoneWithAbort` is the same result we use for `UnconditionalDeopt` (so both `BuildCheckMaps` and `BuildCompareMaps` return the same result when the requested map is impossible), so I think this is the best option.\nAnother argument for `DoneWithAbort`: We are \"done\" checking maps and should \"abort\" the current branch.",
+      "parentUuid": "fe86de93_42f08106",
+      "range": {
+        "startLine": 3360,
+        "startChar": 4,
+        "endLine": 3360,
+        "endChar": 41
+      },
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0a397edf_7f54ca6d",
         "filename": "src/maglev/maglev-graph-builder.cc",
         "patchSetId": 4
@@ -54,6 +78,30 @@
       "writtenOn": "2023-11-28T12:23:35Z",
       "side": 1,
       "message": "This is a bit confusing. DoneWithAbort usually mean: we reach a point where we don\u0027t have feedback, we should emit an eager deopt and kill the rest of the branch. That\u0027s why it is \"Done\", kind of a success.\n\nI guess BuildTransitionElementsKindOrCheckMap and BuildCompareMaps are abusing the ReduceResult type. Should they actually return a bool (on success)? BuildTransitionElementsKindAndCompareMaps could actually just be a void, since it always succeed.\n\nI guess the BuildCheckMaps is still following the semantics of emitting a soft deopt. That works, because it is called for the last access_info?",
+      "range": {
+        "startLine": 4647,
+        "startChar": 0,
+        "endLine": 4651,
+        "endChar": 15
+      },
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d04d52e_10d5f7d2",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4651,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-28T12:48:40Z",
+      "side": 1,
+      "message": "IMO \"kill the rest of the branch\" perfectly fits the use case here. This branch is dead so we don\u0027t emit any code for it. The only diff to the full use case you describe is that we don\u0027t eagerly deopt, but check the next set of maps.\n\n\u003e BuildTransitionElementsKindAndCompareMaps could actually just be a void, since it always succeed.\n\nTrue right now, But I added a TODO to also calculate the map intersection in this method and then it could also return `DoneWithAbort`.\n\n\u003e That works, because it is called for the last access_info?\n\nCorrect. When we end up executing `CheckMaps` all previous maps of the polymorphic access weren\u0027t matching the current map. So if the last check also fails, we deopt.",
+      "parentUuid": "0a397edf_7f54ca6d",
       "range": {
         "startLine": 4647,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d26d358_2484a69a",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4665,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-28T12:48:40Z",
+      "side": 1,
+      "message": "Good catch. `DoneWithAbort` should be handled in the else branch, emitting the generic access.",
+      "parentUuid": "461192c8_94765527",
+      "range": {
+        "startLine": 4665,
+        "startChar": 5,
+        "endLine": 4665,
+        "endChar": 50
+      },
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cc3b86a_6e6c8b5e",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-11-28T12:23:35Z",
       "side": 1,
       "message": "Very opinionated nit (fine if you disagree): I don\u0027t think it is a nice idea to depend on the return of postfix ++, I prefer `if (a \u003d\u003d 0) { ... } a++; ...`",
+      "range": {
+        "startLine": 4671,
+        "startChar": 6,
+        "endLine": 4671,
+        "endChar": 47
+      },
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e3128d9_b90b81f8",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4671,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-11-28T12:48:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1cc3b86a_6e6c8b5e",
       "range": {
         "startLine": 4671,
         "startChar": 6,
