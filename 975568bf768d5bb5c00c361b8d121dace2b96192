@@ -39,6 +39,30 @@
       },
       "revId": "975568bf768d5bb5c00c361b8d121dace2b96192",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65430299_e4201219",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1255853
+      },
+      "writtenOn": "2023-11-28T00:23:50Z",
+      "side": 1,
+      "message": "When building native modules, node-gyp must set the same V8 defines with the Node/Electron version targeted, otherwise the declarations in V8 headers will be different between native modules and Node/Electron, and crash will happen.\n\nThe defines in `external_v8_defines` are particularly important because these are the defines used in V8 headers and any mismatch of these defines will almost certainly lead to crashes. So any feature flag that affects `external_v8_defines` must be listed in `v8_generate_features_json`.\n\nIn the meanwhile `v8_generate_features_json` does not list every V8 feature flag, there are just too many of them and most of them are not related to native modules. We don\u0027t need V8 to add every new feature flag to `v8_generate_features_json`, for most times we only care about the flags related to `external_v8_defines`.",
+      "parentUuid": "14ec8ce7_cd4beb40",
+      "range": {
+        "startLine": 850,
+        "startChar": 2,
+        "endLine": 850,
+        "endChar": 6
+      },
+      "revId": "975568bf768d5bb5c00c361b8d121dace2b96192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
