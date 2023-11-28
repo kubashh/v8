@@ -28,7 +28,7 @@ namespace wasm {
   failed_ = true;                                                        \
   failure_message_ = msg;                                                \
   failure_location_ = static_cast<int>(scanner_.Position());             \
-  if (FLAG_trace_asm_parser) {                                           \
+  if (v8_flags.trace_asm_parser) {                                       \
     PrintF("[asm.js failure: %s, token: '%s', see: %s:%d]\n", msg,       \
            scanner_.Name(scanner_.Token()).c_str(), __FILE__, __LINE__); \
   }                                                                      \
@@ -208,9 +208,7 @@ wasm::AsmJsParser::VarInfo* AsmJsParser::GetVarInfo(
   if (is_global && index + 1 > num_globals_) num_globals_ = index + 1;
   if (index + 1 > old_capacity) {
     size_t new_size = std::max(2 * old_capacity, index + 1);
-    base::Vector<VarInfo> new_info{zone_->NewArray<VarInfo>(new_size),
-                                   new_size};
-    std::uninitialized_fill(new_info.begin(), new_info.end(), VarInfo{});
+    base::Vector<VarInfo> new_info = zone_->NewVector<VarInfo>(new_size);
     std::copy(var_info.begin(), var_info.end(), new_info.begin());
     var_info = new_info;
   }
@@ -228,7 +226,8 @@ void AsmJsParser::AddGlobalImport(base::Vector<const char> name, AsmType* type,
   // Allocate a separate variable for the import.
   // TODO(asmjs): Consider using the imported global directly instead of
   // allocating a separate global variable for immutable (i.e. const) imports.
-  DeclareGlobal(info, mutable_variable, type, vtype);
+  DeclareGlobal(info, mutable_variable, type, vtype,
+                WasmInitExpr::DefaultValue(vtype));
 
   // Record the need to initialize the global from the import.
   global_imports_.push_back({name, vtype, info});
@@ -239,7 +238,7 @@ void AsmJsParser::DeclareGlobal(VarInfo* info, bool mutable_variable,
                                 WasmInitExpr init) {
   info->kind = VarKind::kGlobal;
   info->type = type;
-  info->index = module_builder_->AddGlobal(vtype, true, std::move(init));
+  info->index = module_builder_->AddGlobal(vtype, true, init);
   info->mutable_variable = mutable_variable;
 }
 
@@ -259,10 +258,7 @@ uint32_t AsmJsParser::TempVariable(int index) {
 }
 
 base::Vector<const char> AsmJsParser::CopyCurrentIdentifierString() {
-  const std::string& str = scanner_.GetIdentifierString();
-  char* buffer = zone()->NewArray<char>(str.size());
-  str.copy(buffer, str.size());
-  return base::Vector<const char>(buffer, static_cast<int>(str.size()));
+  return zone()->CloneVector(base::VectorOf(scanner_.GetIdentifierString()));
 }
 
 void AsmJsParser::SkipSemicolon() {
@@ -398,12 +394,18 @@ void AsmJsParser::ValidateModuleParameters() {
         FAIL("Expected foreign parameter");
       }
       foreign_name_ = Consume();
+      if (stdlib_name_ == foreign_name_) {
+        FAIL("Duplicate parameter name");
+      }
       if (!Peek(')')) {
         EXPECT_TOKEN(',');
         if (!scanner_.IsGlobal()) {
           FAIL("Expected heap parameter");
         }
         heap_name_ = Consume();
+        if (heap_name_ == stdlib_name_ || heap_name_ == foreign_name_) {
+          FAIL("Duplicate parameter name");
+        }
       }
     }
   }
@@ -436,7 +438,12 @@ void AsmJsParser::ValidateModuleVar(bool mutable_variable) {
   if (!scanner_.IsGlobal()) {
     FAIL("Expected identifier");
   }
-  VarInfo* info = GetVarInfo(Consume());
+  AsmJsScanner::token_t identifier = Consume();
+  if (identifier == stdlib_name_ || identifier == foreign_name_ ||
+      identifier == heap_name_) {
+    FAIL("Cannot shadow parameters");
+  }
+  VarInfo* info = GetVarInfo(identifier);
   if (info->kind != VarKind::kUnused) {
     FAIL("Redefinition of variable");
   }
@@ -754,7 +761,7 @@ void AsmJsParser::ValidateFunction() {
   ValidateFunctionParams(&params);
 
   // Check against limit on number of parameters.
-  if (params.size() >= kV8MaxWasmFunctionParams) {
+  if (params.size() > kV8MaxWasmFunctionParams) {
     FAIL("Number of parameters exceeds internal limit");
   }
 
@@ -2234,12 +2241,15 @@ AsmType* AsmJsParser::ValidateCall() {
     function_type->AsFunctionType()->AddArgument(t);
   }
   FunctionSig* sig = ConvertSignature(return_type, param_types);
-  uint32_t signature_index = module_builder_->AddSignature(sig);
+  uint32_t signature_index = module_builder_->AddSignature(sig, true);
 
   // Emit actual function invocation depending on the kind. At this point we
   // also determined the complete function type and can perform checking against
   // the expected type or update the expected type in case of first occurrence.
   if (function_info->kind == VarKind::kImportedFunction) {
+    if (param_types.size() > kV8MaxWasmFunctionParams) {
+      FAILn("Number of parameters exceeds internal limit");
+    }
     for (auto t : param_specific_types) {
       if (!t->IsA(AsmType::Extern())) {
         FAILn("Imported function args must be type extern");

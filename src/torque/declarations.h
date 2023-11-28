@@ -93,9 +93,9 @@ class Declarations {
   static Namespace* DeclareNamespace(const std::string& name);
   static TypeAlias* DeclareType(const Identifier* name, const Type* type);
 
-  static const TypeAlias* PredeclareTypeAlias(const Identifier* name,
-                                              TypeDeclaration* type,
-                                              bool redeclaration);
+  static TypeAlias* PredeclareTypeAlias(const Identifier* name,
+                                        TypeDeclaration* type,
+                                        bool redeclaration);
   static TorqueMacro* CreateTorqueMacro(std::string external_name,
                                         std::string readable_name,
                                         bool exported_to_csa,
@@ -123,9 +123,10 @@ class Declarations {
 
   static Builtin* CreateBuiltin(std::string external_name,
                                 std::string readable_name, Builtin::Kind kind,
-                                Signature signature,
+                                Builtin::Flags flags, Signature signature,
                                 base::Optional<Statement*> body);
   static Builtin* DeclareBuiltin(const std::string& name, Builtin::Kind kind,
+                                 Builtin::Flags flags,
                                  const Signature& signature,
                                  base::Optional<Statement*> body);
 

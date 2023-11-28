@@ -10,108 +10,96 @@
 #define V8_COMPILER_WASM_INLINING_H_
 
 #include "src/compiler/graph-reducer.h"
-#include "src/compiler/js-graph.h"
+#include "src/compiler/machine-graph.h"
 
 namespace v8 {
 namespace internal {
 
+class SourcePosition;
+struct WasmInliningPosition;
+
 namespace wasm {
 struct CompilationEnv;
+struct DanglingExceptions;
+class WasmFeatures;
 struct WasmModule;
-struct WasmFunction;
-class WireBytesStorage;
 }  // namespace wasm
-
-class BytecodeOffset;
-class OptimizedCompilationInfo;
 
 namespace compiler {
 
-class NodeOriginTable;
-class SourcePositionTable;
+struct WasmCompilationData;
 
 // The WasmInliner provides the core graph inlining machinery for Webassembly
-// graphs. Note that this class only deals with the mechanics of how to inline
-// one graph into another; heuristics that decide what and how much to inline
-// are provided by {WasmInliningHeuristics}.
+// graphs.
 class WasmInliner final : public AdvancedReducer {
  public:
   WasmInliner(Editor* editor, wasm::CompilationEnv* env,
-              uint32_t function_index, SourcePositionTable* source_positions,
-              NodeOriginTable* node_origins, MachineGraph* mcgraph,
-              const wasm::WireBytesStorage* wire_bytes)
+              WasmCompilationData& data, MachineGraph* mcgraph,
+              const char* debug_name,
+              ZoneVector<WasmInliningPosition>* inlining_positions,
+              wasm::WasmFeatures* detected)
       : AdvancedReducer(editor),
         env_(env),
-        function_index_(function_index),
-        source_positions_(source_positions),
-        node_origins_(node_origins),
+        data_(data),
         mcgraph_(mcgraph),
-        wire_bytes_(wire_bytes),
+        debug_name_(debug_name),
         initial_graph_size_(mcgraph->graph()->NodeCount()),
         current_graph_size_(initial_graph_size_),
-        inlining_candidates_() {}
+        inlining_candidates_(),
+        inlining_positions_(inlining_positions),
+        detected_(detected) {}
 
   const char* reducer_name() const override { return "WasmInliner"; }
 
+  // Registers (tail) calls to possibly be inlined, prioritized by inlining
+  // heuristics provided by {LexicographicOrdering}.
+  // Only locally defined functions are inlinable, and a limited number of
+  // inlinings of a specific function is allowed.
   Reduction Reduce(Node* node) final;
+  // Inlines calls registered by {Reduce}, until an inlining budget is exceeded.
   void Finalize() final;
 
-  static bool any_inlining_impossible(size_t initial_graph_size) {
-    return size_limit(initial_graph_size) - initial_graph_size <
-           kMinimumFunctionNodeCount;
+  static bool graph_size_allows_inlining(size_t graph_size,
+                                         size_t initial_graph_size) {
+    size_t budget =
+        std::max<size_t>(v8_flags.wasm_inlining_min_budget,
+                         v8_flags.wasm_inlining_factor * initial_graph_size);
+    // Independent of the wasm_inlining_budget, for large functions we should
+    // still allow some inlining.
+    size_t full_budget = std::max<size_t>(v8_flags.wasm_inlining_budget,
+                                          initial_graph_size * 1.1);
+    budget = std::min<size_t>(full_budget, budget);
+    return graph_size < budget;
   }
 
  private:
   struct CandidateInfo {
     Node* node;
     uint32_t inlinee_index;
-    bool is_speculative_call_ref;
     int call_count;
     int wire_byte_size;
+
+    int64_t score() const {
+      // Note that the zero-point is arbitrary. Functions with negative score
+      // can still get inlined.
+
+      // Note(mliedtke): Adding information about "this call has constant
+      // arguments" didn't seem to provide measurable gains at the current
+      // state, still this would be an interesting measure to retry at a later
+      // point potentially together with other metrics.
+      const int count_factor = 2;
+      const int size_factor = 3;
+      return int64_t{call_count} * count_factor -
+             int64_t{wire_byte_size} * size_factor;
+    }
   };
 
   struct LexicographicOrdering {
     // Returns if c1 should be prioritized less than c2.
     bool operator()(CandidateInfo& c1, CandidateInfo& c2) {
-      if (c1.is_speculative_call_ref && !c2.is_speculative_call_ref) {
-        return false;
-      }
-      if (c2.is_speculative_call_ref && !c1.is_speculative_call_ref) {
-        return true;
-      }
-      if (c1.call_count > c2.call_count) return false;
-      if (c2.call_count > c1.call_count) return true;
-      return c1.wire_byte_size > c2.wire_byte_size;
+      return c1.score() < c2.score();
     }
   };
-
-  // TODO(manoskouk): This has not been found to be useful, but something
-  // similar may be tried again in the future.
-  // struct AdvancedOrdering {
-  //  // Returns if c1 should be prioritized less than c2.
-  //  bool operator()(CandidateInfo& c1, CandidateInfo& c2) {
-  //    if (c1.is_speculative_call_ref && c2.is_speculative_call_ref) {
-  //      if (c1.call_count > c2.call_count) return false;
-  //      if (c2.call_count > c1.call_count) return true;
-  //      return c1.wire_byte_size > c2.wire_byte_size;
-  //    }
-  //    if (!c1.is_speculative_call_ref && !c2.is_speculative_call_ref) {
-  //      return c1.wire_byte_size > c2.wire_byte_size;
-  //    }
-  //
-  //    constexpr int kAssumedCallCountForDirectCalls = 3;
-  //
-  //    int c1_call_count = c1.is_speculative_call_ref
-  //                            ? c1.call_count
-  //                            : kAssumedCallCountForDirectCalls;
-  //    int c2_call_count = c2.is_speculative_call_ref
-  //                            ? c2.call_count
-  //                            : kAssumedCallCountForDirectCalls;
-  //
-  //    return static_cast<float>(c1_call_count) / c1.wire_byte_size <
-  //           static_cast<float>(c2_call_count) / c2.wire_byte_size;
-  //  }
-  //};
 
   Zone* zone() const { return mcgraph_->zone(); }
   CommonOperatorBuilder* common() const { return mcgraph_->common(); }
@@ -119,36 +107,32 @@ class WasmInliner final : public AdvancedReducer {
   MachineGraph* mcgraph() const { return mcgraph_; }
   const wasm::WasmModule* module() const;
 
-  // A limit to the size of the inlined graph as a function of its initial size.
-  static size_t size_limit(size_t initial_graph_size) {
-    return initial_graph_size +
-           std::min(FLAG_wasm_inlining_max_size,
-                    FLAG_wasm_inlining_budget_factor / initial_graph_size);
-  }
-
-  // The smallest size in TF nodes any meaningful wasm function can have
-  // (start, instance parameter, end).
-  static constexpr size_t kMinimumFunctionNodeCount = 3;
-
   Reduction ReduceCall(Node* call);
   void InlineCall(Node* call, Node* callee_start, Node* callee_end,
                   const wasm::FunctionSig* inlinee_sig,
-                  size_t subgraph_min_node_id);
+                  SourcePosition parent_pos,
+                  wasm::DanglingExceptions* dangling_exceptions);
   void InlineTailCall(Node* call, Node* callee_start, Node* callee_end);
   void RewireFunctionEntry(Node* call, Node* callee_start);
 
+  int GetCallCount(Node* call);
+
+  void Trace(Node* call, int inlinee, const char* decision);
+  void Trace(const CandidateInfo& candidate, const char* decision);
+
   wasm::CompilationEnv* const env_;
-  uint32_t function_index_;
-  SourcePositionTable* const source_positions_;
-  NodeOriginTable* const node_origins_;
+  WasmCompilationData& data_;
   MachineGraph* const mcgraph_;
-  const wasm::WireBytesStorage* const wire_bytes_;
+  const char* debug_name_;
   const size_t initial_graph_size_;
   size_t current_graph_size_;
   std::priority_queue<CandidateInfo, std::vector<CandidateInfo>,
                       LexicographicOrdering>
       inlining_candidates_;
   std::unordered_set<Node*> seen_;
+  std::unordered_map<uint32_t, int> function_inlining_count_;
+  ZoneVector<WasmInliningPosition>* inlining_positions_;
+  wasm::WasmFeatures* detected_;
 };
 
 }  // namespace compiler

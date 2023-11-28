@@ -17,12 +17,9 @@
 #include "src/base/compiler-specific.h"
 #include "src/base/logging.h"
 #include "src/base/macros.h"
-#include "src/base/platform/platform.h"
 #include "src/base/safe_conversions.h"
-#include "src/base/v8-fallthrough.h"
 #include "src/base/vector.h"
 #include "src/common/globals.h"
-#include "src/utils/allocation.h"
 
 #if defined(V8_USE_SIPHASH)
 #include "src/third_party/siphash/halfsiphash.h"
@@ -30,6 +27,12 @@
 
 #if defined(V8_OS_AIX)
 #include <fenv.h>  // NOLINT(build/c++11)
+#endif
+
+#if defined(V8_TARGET_ARCH_ARM64) && \
+    (defined(__ARM_NEON) || defined(__ARM_NEON__))
+#define V8_OPTIMIZE_WITH_NEON
+#include <arm_neon.h>
 #endif
 
 namespace v8 {
@@ -231,7 +234,7 @@ inline T RoundingAverageUnsigned(T a, T b) {
 
 // Compare two offsets with static cast
 #define STATIC_ASSERT_FIELD_OFFSETS_EQUAL(Offset1, Offset2) \
-  STATIC_ASSERT(static_cast<int>(Offset1) == Offset2)
+  static_assert(static_cast<int>(Offset1) == Offset2)
 // ----------------------------------------------------------------------------
 // Hash function.
 
@@ -320,13 +323,83 @@ class SetOncePointer {
   T* pointer_ = nullptr;
 };
 
+#if defined(V8_OPTIMIZE_WITH_NEON)
+template <typename IntType, typename Char>
+V8_INLINE bool OverlappingCompare(const Char* lhs, const Char* rhs,
+                                  size_t count) {
+  static_assert(sizeof(Char) == 1);
+  return *reinterpret_cast<const IntType*>(lhs) ==
+             *reinterpret_cast<const IntType*>(rhs) &&
+         *reinterpret_cast<const IntType*>(lhs + count - sizeof(IntType)) ==
+             *reinterpret_cast<const IntType*>(rhs + count - sizeof(IntType));
+}
+
+template <typename Char>
+V8_INLINE bool SimdMemEqual(const Char* lhs, const Char* rhs, size_t count) {
+  static_assert(sizeof(Char) == 1);
+  if (count == 0) {
+    return true;
+  }
+  if (count == 1) {
+    return *lhs == *rhs;
+  }
+  const size_t order =
+      sizeof(count) * CHAR_BIT - base::bits::CountLeadingZeros(count - 1);
+  switch (order) {
+    case 1:  // count: [2, 2]
+      return *reinterpret_cast<const uint16_t*>(lhs) ==
+             *reinterpret_cast<const uint16_t*>(rhs);
+    case 2:  // count: [3, 4]
+      return OverlappingCompare<uint16_t>(lhs, rhs, count);
+    case 3:  // count: [5, 8]
+      return OverlappingCompare<uint32_t>(lhs, rhs, count);
+    case 4:  // count: [9, 16]
+      return OverlappingCompare<uint64_t>(lhs, rhs, count);
+    case 5:  // count: [17, 32]
+    {
+      // Utilize more simd registers for better pipelining.
+      const auto lhs0 = vld1q_u8(lhs);
+      const auto lhs1 = vld1q_u8(lhs + count - sizeof(uint8x16_t));
+      const auto rhs0 = vld1q_u8(rhs);
+      const auto rhs1 = vld1q_u8(rhs + count - sizeof(uint8x16_t));
+      const auto xored0 = veorq_u8(lhs0, rhs0);
+      const auto xored1 = veorq_u8(lhs1, rhs1);
+      const auto ored = vorrq_u8(xored0, xored1);
+      return !static_cast<bool>(vgetq_lane_u64(vpmaxq_u8(ored, ored), 0));
+    }
+    default:  // count: [33, ...]
+    {
+      const auto lhs0 = vld1q_u8(lhs);
+      const auto rhs0 = vld1q_u8(rhs);
+      const auto xored = veorq_u8(lhs0, rhs0);
+      if (static_cast<bool>(vgetq_lane_u64(vpmaxq_u8(xored, xored), 0)))
+        return false;
+      for (size_t i = count % sizeof(uint8x16_t); i < count;
+           i += sizeof(uint8x16_t)) {
+        const auto lhs0 = vld1q_u8(lhs + i);
+        const auto rhs0 = vld1q_u8(rhs + i);
+        const auto xored = veorq_u8(lhs0, rhs0);
+        if (static_cast<bool>(vgetq_lane_u64(vpmaxq_u8(xored, xored), 0)))
+          return false;
+      }
+      return true;
+    }
+  }
+}
+#endif  // defined(V8_OPTIMIZE_WITH_NEON)
+
 // Compare 8bit/16bit chars to 8bit/16bit chars.
 template <typename lchar, typename rchar>
 inline bool CompareCharsEqualUnsigned(const lchar* lhs, const rchar* rhs,
                                       size_t chars) {
-  STATIC_ASSERT(std::is_unsigned<lchar>::value);
-  STATIC_ASSERT(std::is_unsigned<rchar>::value);
-  if (sizeof(*lhs) == sizeof(*rhs)) {
+  static_assert(std::is_unsigned<lchar>::value);
+  static_assert(std::is_unsigned<rchar>::value);
+  if constexpr (sizeof(*lhs) == sizeof(*rhs)) {
+#if defined(V8_OPTIMIZE_WITH_NEON)
+    if constexpr (sizeof(*lhs) == 1) {
+      return SimdMemEqual(lhs, rhs, chars);
+    }
+#endif
     // memcmp compares byte-by-byte, but for equality it doesn't matter whether
     // two-byte char comparison is little- or big-endian.
     return memcmp(lhs, rhs, chars * sizeof(*lhs)) == 0;
@@ -350,8 +423,8 @@ inline bool CompareCharsEqual(const lchar* lhs, const rchar* rhs,
 template <typename lchar, typename rchar>
 inline int CompareCharsUnsigned(const lchar* lhs, const rchar* rhs,
                                 size_t chars) {
-  STATIC_ASSERT(std::is_unsigned<lchar>::value);
-  STATIC_ASSERT(std::is_unsigned<rchar>::value);
+  static_assert(std::is_unsigned<lchar>::value);
+  static_assert(std::is_unsigned<rchar>::value);
   if (sizeof(*lhs) == sizeof(char) && sizeof(*rhs) == sizeof(char)) {
     // memcmp compares byte-by-byte, yielding wrong results for two-byte
     // strings on little-endian systems.
@@ -395,19 +468,19 @@ inline int32_t signed_bitextract_32(int msb, int lsb, uint32_t x) {
 }
 
 // Check number width.
-inline bool is_intn(int64_t x, unsigned n) {
+inline constexpr bool is_intn(int64_t x, unsigned n) {
   DCHECK((0 < n) && (n < 64));
   int64_t limit = static_cast<int64_t>(1) << (n - 1);
   return (-limit <= x) && (x < limit);
 }
 
-inline bool is_uintn(int64_t x, unsigned n) {
+inline constexpr bool is_uintn(int64_t x, unsigned n) {
   DCHECK((0 < n) && (n < (sizeof(x) * kBitsPerByte)));
   return !(x >> n);
 }
 
 template <class T>
-inline T truncate_to_intn(T x, unsigned n) {
+inline constexpr T truncate_to_intn(T x, unsigned n) {
   DCHECK((0 < n) && (n < (sizeof(x) * kBitsPerByte)));
   return (x & ((static_cast<T>(1) << n) - 1));
 }
@@ -424,23 +497,32 @@ inline T truncate_to_intn(T x, unsigned n) {
 // clang-format on
 
 #define DECLARE_IS_INT_N(N) \
-  inline bool is_int##N(int64_t x) { return is_intn(x, N); }
-#define DECLARE_IS_UINT_N(N)    \
-  template <class T>            \
-  inline bool is_uint##N(T x) { \
-    return is_uintn(x, N);      \
+  inline constexpr bool is_int##N(int64_t x) { return is_intn(x, N); }
+#define DECLARE_IS_UINT_N(N)              \
+  template <class T>                      \
+  inline constexpr bool is_uint##N(T x) { \
+    return is_uintn(x, N);                \
   }
-#define DECLARE_TRUNCATE_TO_INT_N(N) \
-  template <class T>                 \
-  inline T truncate_to_int##N(T x) { \
-    return truncate_to_intn(x, N);   \
+#define DECLARE_TRUNCATE_TO_INT_N(N)           \
+  template <class T>                           \
+  inline constexpr T truncate_to_int##N(T x) { \
+    return truncate_to_intn(x, N);             \
+  }
+
+#define DECLARE_CHECKED_TRUNCATE_TO_INT_N(N)           \
+  template <class T>                                   \
+  inline constexpr T checked_truncate_to_int##N(T x) { \
+    CHECK(is_int##N(x));                               \
+    return truncate_to_intn(x, N);                     \
   }
 INT_1_TO_63_LIST(DECLARE_IS_INT_N)
 INT_1_TO_63_LIST(DECLARE_IS_UINT_N)
 INT_1_TO_63_LIST(DECLARE_TRUNCATE_TO_INT_N)
+INT_1_TO_63_LIST(DECLARE_CHECKED_TRUNCATE_TO_INT_N)
 #undef DECLARE_IS_INT_N
 #undef DECLARE_IS_UINT_N
 #undef DECLARE_TRUNCATE_TO_INT_N
+#undef DECLARE_CHECKED_TRUNCATE_TO_INT_N
 
 // clang-format off
 #define INT_0_TO_127_LIST(V)                                          \
@@ -490,10 +572,10 @@ V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os, FeedbackSlot);
 
 class BytecodeOffset {
  public:
-  explicit BytecodeOffset(int id) : id_(id) {}
-  int ToInt() const { return id_; }
+  explicit constexpr BytecodeOffset(int id) : id_(id) {}
+  constexpr int ToInt() const { return id_; }
 
-  static BytecodeOffset None() { return BytecodeOffset(kNoneId); }
+  static constexpr BytecodeOffset None() { return BytecodeOffset(kNoneId); }
 
   // Special bailout id support for deopting into the {JSConstructStub} stub.
   // The following hard-coded deoptimization points are supported by the stub:
@@ -501,12 +583,8 @@ class BytecodeOffset {
   //  - {ConstructStubInvoke} maps to {construct_stub_invoke_deopt_pc_offset}.
   static BytecodeOffset ConstructStubCreate() { return BytecodeOffset(1); }
   static BytecodeOffset ConstructStubInvoke() { return BytecodeOffset(2); }
-  bool IsValidForConstructStub() const {
-    return id_ == ConstructStubCreate().ToInt() ||
-           id_ == ConstructStubInvoke().ToInt();
-  }
 
-  bool IsNone() const { return id_ == kNoneId; }
+  constexpr bool IsNone() const { return id_ == kNoneId; }
   bool operator==(const BytecodeOffset& other) const {
     return id_ == other.id_;
   }
@@ -556,7 +634,7 @@ int WriteChars(const char* filename, const char* str, int size,
 
 // Write size bytes to the file given by filename.
 // The file is overwritten. Returns the number of bytes written.
-int WriteBytes(const char* filename, const byte* bytes, int size,
+int WriteBytes(const char* filename, const uint8_t* bytes, int size,
                bool verbose = true);
 
 // Simple support to read a file into std::string.
@@ -657,6 +735,21 @@ V8_EXPORT_PRIVATE bool PassesFilter(base::Vector<const char> name,
 V8_INLINE void ZapCode(Address addr, size_t size_in_bytes) {
   static constexpr int kZapByte = 0xCC;
   std::memset(reinterpret_cast<void*>(addr), kZapByte, size_in_bytes);
+}
+
+inline bool RoundUpToPageSize(size_t byte_length, size_t page_size,
+                              size_t max_allowed_byte_length, size_t* pages) {
+  // This check is needed, since the arithmetic in RoundUp only works when
+  // byte_length is not too close to the size_t limit.
+  if (byte_length > max_allowed_byte_length) {
+    return false;
+  }
+  size_t bytes_wanted = RoundUp(byte_length, page_size);
+  if (bytes_wanted > max_allowed_byte_length) {
+    return false;
+  }
+  *pages = bytes_wanted / page_size;
+  return true;
 }
 
 }  // namespace internal

@@ -78,7 +78,7 @@ RegisterAllocatorVerifier::RegisterAllocatorVerifier(
     VerifyEmptyGaps(instr);
     const size_t operand_count = OperandCount(instr);
     OperandConstraint* op_constraints =
-        zone->NewArray<OperandConstraint>(operand_count);
+        zone->AllocateArray<OperandConstraint>(operand_count);
     size_t count = 0;
     for (size_t i = 0; i < instr->InputCount(); ++i, ++count) {
       BuildConstraint(instr->InputAt(i), &op_constraints[count]);
@@ -362,7 +362,7 @@ bool BlockAssessments::IsStaleReferenceStackSlot(InstructionOperand op) {
 
 void BlockAssessments::Print() const {
   StdoutStream os;
-  for (const auto pair : map()) {
+  for (const auto& pair : map()) {
     const InstructionOperand op = pair.first;
     const Assessment* assessment = pair.second;
     // Use operator<< so we can write the assessment on the same

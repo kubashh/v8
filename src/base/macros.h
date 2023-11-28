@@ -10,7 +10,6 @@
 
 #include "src/base/compiler-specific.h"
 #include "src/base/logging.h"
-#include "src/base/platform/wrappers.h"
 
 // No-op macro which is used to work around MSVC's funky VA_ARGS support.
 #define EXPAND(x) x
@@ -23,12 +22,7 @@
 // Creates an unique identifier. Useful for scopes to avoid shadowing names.
 #define UNIQUE_IDENTIFIER(base) CONCAT(base, __COUNTER__)
 
-// TODO(all) Replace all uses of this macro with C++'s offsetof. To do that, we
-// have to make sure that only standard-layout types and simple field
-// designators are used.
-#define OFFSET_OF(type, field) \
-  (reinterpret_cast<intptr_t>(&(reinterpret_cast<type*>(16)->field)) - 16)
-
+#define OFFSET_OF(type, field) offsetof(type, field)
 
 // The arraysize(arr) macro returns the # of elements in an array arr.
 // The expression is a compile-time constant, and therefore can be
@@ -105,6 +99,7 @@ char (&ArraySizeHelper(const T (&array)[N]))[N];
 //
 // WARNING: if Dest or Source is a non-POD type, the result of the memcpy
 // is likely to surprise you.
+namespace v8::base {
 template <class Dest, class Source>
 V8_INLINE Dest bit_cast(Source const& source) {
   static_assert(sizeof(Dest) == sizeof(Source),
@@ -113,6 +108,7 @@ V8_INLINE Dest bit_cast(Source const& source) {
   memcpy(&dest, &source, sizeof(dest));
   return dest;
 }
+}  // namespace v8::base
 
 // Explicitly declare the assignment operator as deleted.
 // Note: This macro is deprecated and will be removed soon. Please explicitly
@@ -178,20 +174,19 @@ V8_INLINE Dest bit_cast(Source const& source) {
 #define DISABLE_CFI_PERF V8_CLANG_NO_SANITIZE("cfi")
 
 // DISABLE_CFI_ICALL -- Disable Control Flow Integrity indirect call checks,
-// useful because calls into JITed code can not be CFI verified.
+// useful because calls into JITed code can not be CFI verified. Same for
+// UBSan's function pointer type checks.
 #ifdef V8_OS_WIN
 // On Windows, also needs __declspec(guard(nocf)) for CFG.
 #define DISABLE_CFI_ICALL           \
   V8_CLANG_NO_SANITIZE("cfi-icall") \
+  V8_CLANG_NO_SANITIZE("function")  \
   __declspec(guard(nocf))
 #else
-#define DISABLE_CFI_ICALL V8_CLANG_NO_SANITIZE("cfi-icall")
+#define DISABLE_CFI_ICALL           \
+  V8_CLANG_NO_SANITIZE("cfi-icall") \
+  V8_CLANG_NO_SANITIZE("function")
 #endif
-
-// A convenience wrapper around static_assert without a string message argument.
-// Once C++17 becomes the default, this macro can be removed in favor of the
-// new static_assert(condition) overload.
-#define STATIC_ASSERT(test) static_assert(test, #test)
 
 namespace v8 {
 namespace base {
@@ -243,19 +238,13 @@ struct is_trivially_copyable {
 // The arguments are guaranteed to be evaluated from left to right.
 struct Use {
   template <typename T>
-  Use(T&&) {}  // NOLINT(runtime/explicit)
+  constexpr Use(T&&) {}  // NOLINT(runtime/explicit)
 };
 #define USE(...)                                                   \
   do {                                                             \
     ::v8::base::Use unused_tmp_array_for_use_macro[]{__VA_ARGS__}; \
     (void)unused_tmp_array_for_use_macro;                          \
   } while (false)
-
-// Evaluate the instantiations of an expression with parameter packs.
-// Since USE has left-to-right evaluation order of it's arguments,
-// the parameter pack is iterated from left to right and side effects
-// have defined behavior.
-#define ITERATE_PACK(...) USE(0, ((__VA_ARGS__), 0)...)
 
 }  // namespace base
 }  // namespace v8
@@ -313,7 +302,7 @@ V8_INLINE A implicit_cast(A x) {
 #endif
 
 // Fix for Mac OS X defining uintptr_t as "unsigned long":
-#if V8_OS_MACOSX
+#if V8_OS_DARWIN
 #undef V8PRIxPTR
 #define V8PRIxPTR "lx"
 #undef V8PRIdPTR
@@ -330,28 +319,33 @@ inline uint64_t make_uint64(uint32_t high, uint32_t low) {
 // Return the largest multiple of m which is <= x.
 template <typename T>
 inline T RoundDown(T x, intptr_t m) {
-  STATIC_ASSERT(std::is_integral<T>::value);
+  static_assert(std::is_integral<T>::value);
   // m must be a power of two.
   DCHECK(m != 0 && ((m & (m - 1)) == 0));
   return x & static_cast<T>(-m);
 }
 template <intptr_t m, typename T>
 constexpr inline T RoundDown(T x) {
-  STATIC_ASSERT(std::is_integral<T>::value);
+  static_assert(std::is_integral<T>::value);
   // m must be a power of two.
-  STATIC_ASSERT(m != 0 && ((m & (m - 1)) == 0));
+  static_assert(m != 0 && ((m & (m - 1)) == 0));
   return x & static_cast<T>(-m);
 }
 
 // Return the smallest multiple of m which is >= x.
 template <typename T>
 inline T RoundUp(T x, intptr_t m) {
-  STATIC_ASSERT(std::is_integral<T>::value);
-  return RoundDown<T>(static_cast<T>(x + m - 1), m);
+  static_assert(std::is_integral<T>::value);
+  DCHECK_GE(x, 0);
+  DCHECK_GE(std::numeric_limits<T>::max() - x, m - 1);  // Overflow check.
+  return RoundDown<T>(static_cast<T>(x + (m - 1)), m);
 }
+
 template <intptr_t m, typename T>
 constexpr inline T RoundUp(T x) {
-  STATIC_ASSERT(std::is_integral<T>::value);
+  static_assert(std::is_integral<T>::value);
+  DCHECK_GE(x, 0);
+  DCHECK_GE(std::numeric_limits<T>::max() - x, m - 1);  // Overflow check.
   return RoundDown<m, T>(static_cast<T>(x + (m - 1)));
 }
 
@@ -393,9 +387,10 @@ bool is_inbounds(float_t v) {
 #ifdef V8_OS_WIN
 
 // Setup for Windows shared library export.
-#ifdef BUILDING_V8_SHARED
+#define V8_EXPORT_ENUM
+#ifdef BUILDING_V8_SHARED_PRIVATE
 #define V8_EXPORT_PRIVATE __declspec(dllexport)
-#elif USING_V8_SHARED
+#elif USING_V8_SHARED_PRIVATE
 #define V8_EXPORT_PRIVATE __declspec(dllimport)
 #else
 #define V8_EXPORT_PRIVATE
@@ -405,13 +400,16 @@ bool is_inbounds(float_t v) {
 
 // Setup for Linux shared library export.
 #if V8_HAS_ATTRIBUTE_VISIBILITY
-#ifdef BUILDING_V8_SHARED
+#ifdef BUILDING_V8_SHARED_PRIVATE
 #define V8_EXPORT_PRIVATE __attribute__((visibility("default")))
+#define V8_EXPORT_ENUM V8_EXPORT_PRIVATE
 #else
 #define V8_EXPORT_PRIVATE
+#define V8_EXPORT_ENUM
 #endif
 #else
 #define V8_EXPORT_PRIVATE
+#define V8_EXPORT_ENUM
 #endif
 
 #endif  // V8_OS_WIN
@@ -432,7 +430,25 @@ bool is_inbounds(float_t v) {
 #define IF_TSAN(V, ...) EXPAND(V(__VA_ARGS__))
 #else
 #define IF_TSAN(V, ...)
-#endif  // V8_ENABLE_WEBASSEMBLY
+#endif  // V8_IS_TSAN
+
+// Defines IF_INTL, to be used in macro lists for elements that should only be
+// there if INTL is enabled.
+#ifdef V8_INTL_SUPPORT
+// EXPAND is needed to work around MSVC's broken __VA_ARGS__ expansion.
+#define IF_INTL(V, ...) EXPAND(V(__VA_ARGS__))
+#else
+#define IF_INTL(V, ...)
+#endif  // V8_INTL_SUPPORT
+
+// Defines IF_TARGET_ARCH_64_BIT, to be used in macro lists for elements that
+// should only be there if the target architecture is a 64-bit one.
+#if V8_TARGET_ARCH_64_BIT
+// EXPAND is needed to work around MSVC's broken __VA_ARGS__ expansion.
+#define IF_TARGET_ARCH_64_BIT(V, ...) EXPAND(V(__VA_ARGS__))
+#else
+#define IF_TARGET_ARCH_64_BIT(V, ...)
+#endif
 
 #ifdef GOOGLE3
 // Disable FRIEND_TEST macro in Google3.

@@ -12,7 +12,8 @@
 namespace v8 {
 namespace internal {
 
-Symbolizer::Symbolizer(CodeMap* code_map) : code_map_(code_map) {}
+Symbolizer::Symbolizer(InstructionStreamMap* instruction_stream_map)
+    : code_map_(instruction_stream_map) {}
 
 CodeEntry* Symbolizer::FindEntry(Address address,
                                  Address* out_instruction_start) {
@@ -80,9 +81,9 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
         pc_entry = FindEntry(attributed_pc, &pc_entry_instruction_start);
       }
       // If pc is in the function code before it set up stack frame or after the
-      // frame was destroyed, SafeStackFrameIterator incorrectly thinks that
-      // ebp contains the return address of the current function and skips the
-      // caller's frame. Check for this case and just skip such samples.
+      // frame was destroyed, StackFrameIteratorForProfiler incorrectly thinks
+      // that ebp contains the return address of the current function and skips
+      // the caller's frame. Check for this case and just skip such samples.
       if (pc_entry) {
         int pc_offset =
             static_cast<int>(attributed_pc - pc_entry_instruction_start);
@@ -125,8 +126,8 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
             entry->GetInlineStack(pc_offset);
         if (inline_stack) {
           int most_inlined_frame_line_number = entry->GetSourceLine(pc_offset);
-          for (auto entry : *inline_stack) {
-            stack_trace.push_back(entry);
+          for (auto inline_stack_entry : *inline_stack) {
+            stack_trace.push_back(inline_stack_entry);
           }
 
           // This is a bit of a messy hack. The line number for the most-inlined
@@ -161,7 +162,7 @@ Symbolizer::SymbolizedSample Symbolizer::SymbolizeTickSample(
     }
   }
 
-  if (FLAG_prof_browser_mode) {
+  if (v8_flags.prof_browser_mode) {
     bool no_symbolized_entries = true;
     for (auto e : stack_trace) {
       if (e.code_entry != nullptr) {

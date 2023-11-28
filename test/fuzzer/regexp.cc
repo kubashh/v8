@@ -13,8 +13,8 @@
 #include "include/v8-isolate.h"
 #include "include/v8-local-handle.h"
 #include "src/base/strings.h"
+#include "src/execution/isolate-inl.h"
 #include "src/heap/factory.h"
-#include "src/objects/objects-inl.h"
 #include "test/fuzzer/fuzzer-support.h"
 
 namespace i = v8::internal;
@@ -60,7 +60,8 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
                                             'b', 'a',    0x2603};
 
   CHECK(!i_isolate->has_pending_exception());
-  i::Handle<i::RegExpMatchInfo> results_array = factory->NewRegExpMatchInfo();
+  i::Handle<i::RegExpMatchInfo> results_array =
+      i::RegExpMatchInfo::New(i_isolate, 2);
   i::Handle<i::String> one_byte =
       factory
           ->NewStringFromOneByte(

@@ -69,9 +69,9 @@ class V8_EXPORT_PRIVATE MapUpdater {
 
   // As above but does not mutate maps; instead, we attempt to replay existing
   // transitions to find an updated map. No lock is taken.
-  static base::Optional<Map> TryUpdateNoLock(Isolate* isolate, Map old_map,
-                                             ConcurrencyMode cmode)
-      V8_WARN_UNUSED_RESULT;
+  static base::Optional<Tagged<Map>> TryUpdateNoLock(
+      Isolate* isolate, Tagged<Map> old_map,
+      ConcurrencyMode cmode) V8_WARN_UNUSED_RESULT;
 
   static Handle<Map> ReconfigureExistingProperty(Isolate* isolate,
                                                  Handle<Map> map,
@@ -86,8 +86,10 @@ class V8_EXPORT_PRIVATE MapUpdater {
                               Representation new_representation,
                               Handle<FieldType> new_field_type);
 
-  static void ShrinkInstanceSize(base::SharedMutex* map_updater_access, Map map,
-                                 int slack);
+  // Completes inobject slack tracking for the transition tree starting at the
+  // initial map.
+  static void CompleteInobjectSlackTracking(Isolate* isolate,
+                                            Tagged<Map> initial_map);
 
  private:
   enum State {
@@ -159,7 +161,7 @@ class V8_EXPORT_PRIVATE MapUpdater {
   State Normalize(const char* reason);
 
   // Returns name of a |descriptor| property.
-  inline Name GetKey(InternalIndex descriptor) const;
+  inline Tagged<Name> GetKey(InternalIndex descriptor) const;
 
   // Returns property details of a |descriptor| in "updated" |old_descriptors_|
   // array.
@@ -167,11 +169,11 @@ class V8_EXPORT_PRIVATE MapUpdater {
 
   // Returns value of a |descriptor| with kDescriptor location in "updated"
   // |old_descriptors_| array.
-  inline Object GetValue(InternalIndex descriptor) const;
+  inline Tagged<Object> GetValue(InternalIndex descriptor) const;
 
   // Returns field type for a |descriptor| with kField location in "updated"
   // |old_descriptors_| array.
-  inline FieldType GetFieldType(InternalIndex descriptor) const;
+  inline Tagged<FieldType> GetFieldType(InternalIndex descriptor) const;
 
   // If a |descriptor| property in "updated" |old_descriptors_| has kField
   // location then returns its field type, otherwise computes the optimal field
@@ -227,7 +229,7 @@ class V8_EXPORT_PRIVATE MapUpdater {
   // If |modified_descriptor_.is_found()|, then the fields below form
   // an "update" of the |old_map_|'s descriptors.
   InternalIndex modified_descriptor_ = InternalIndex::NotFound();
-  PropertyKind new_kind_ = kData;
+  PropertyKind new_kind_ = PropertyKind::kData;
   PropertyAttributes new_attributes_ = NONE;
   PropertyConstness new_constness_ = PropertyConstness::kMutable;
   PropertyLocation new_location_ = PropertyLocation::kField;

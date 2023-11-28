@@ -63,10 +63,10 @@ size_t PersistentRegionBase::NodesInUse() const {
   return nodes_in_use_;
 }
 
-void PersistentRegionBase::EnsureNodeSlots() {
+void PersistentRegionBase::RefillFreeList() {
   auto node_slots = std::make_unique<PersistentNodeSlots>();
   if (!node_slots.get()) {
-    oom_handler_("Oilpan: PersistentRegionBase::EnsureNodeSlots()");
+    oom_handler_("Oilpan: PersistentRegionBase::RefillFreeList()");
   }
   nodes_.push_back(std::move(node_slots));
   for (auto& node : *nodes_.back()) {
@@ -75,13 +75,21 @@ void PersistentRegionBase::EnsureNodeSlots() {
   }
 }
 
-void PersistentRegionBase::Trace(Visitor* visitor) {
+PersistentNode* PersistentRegionBase::RefillFreeListAndAllocateNode(
+    void* owner, TraceRootCallback trace) {
+  RefillFreeList();
+  auto* node = TryAllocateNodeFromFreeList(owner, trace);
+  CPPGC_DCHECK(node);
+  return node;
+}
+
+void PersistentRegionBase::Iterate(RootVisitor& root_visitor) {
   free_list_head_ = nullptr;
   for (auto& slots : nodes_) {
     bool is_empty = true;
     for (auto& node : *slots) {
       if (node.IsUsed()) {
-        node.Trace(visitor);
+        node.Trace(root_visitor);
         is_empty = false;
       } else {
         node.InitializeAsFreeNode(free_list_head_);
@@ -109,8 +117,8 @@ PersistentRegion::PersistentRegion(const FatalOutOfMemoryHandler& oom_handler)
   USE(creation_thread_id_);
 }
 
-void PersistentRegion::CheckIsCreationThread() {
-  DCHECK_EQ(creation_thread_id_, v8::base::OS::GetCurrentThreadId());
+bool PersistentRegion::IsCreationThread() {
+  return creation_thread_id_ == v8::base::OS::GetCurrentThreadId();
 }
 
 PersistentRegionLock::PersistentRegionLock() {
@@ -137,9 +145,9 @@ CrossThreadPersistentRegion::~CrossThreadPersistentRegion() {
   // PersistentRegionBase destructor will be a noop.
 }
 
-void CrossThreadPersistentRegion::Trace(Visitor* visitor) {
+void CrossThreadPersistentRegion::Iterate(RootVisitor& root_visitor) {
   PersistentRegionLock::AssertLocked();
-  PersistentRegionBase::Trace(visitor);
+  PersistentRegionBase::Iterate(root_visitor);
 }
 
 size_t CrossThreadPersistentRegion::NodesInUse() const {

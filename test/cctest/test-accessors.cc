@@ -32,6 +32,7 @@
 #include "src/execution/frames-inl.h"
 #include "src/strings/string-stream.h"
 #include "test/cctest/cctest.h"
+#include "test/cctest/heap/heap-utils.h"
 
 using ::v8::ObjectTemplate;
 using ::v8::Value;
@@ -184,34 +185,37 @@ THREADED_TEST(GlobalVariableAccess) {
   CHECK_EQ(7, foo);
 }
 
-
 static int x_register[2] = {0, 0};
-static v8::Local<v8::Object> x_receiver;
-static v8::Local<v8::Object> x_holder;
+static v8::Global<v8::Object> x_receiver_global;
+static v8::Global<v8::Object> x_holder_global;
 
 template<class Info>
 static void XGetter(const Info& info, int offset) {
   ApiTestFuzzer::Fuzz();
   v8::Isolate* isolate = CcTest::isolate();
   CHECK_EQ(isolate, info.GetIsolate());
-  CHECK(
-      x_receiver->Equals(isolate->GetCurrentContext(), info.This()).FromJust());
+  CHECK(x_receiver_global.Get(isolate)
+            ->Equals(isolate->GetCurrentContext(), info.This())
+            .FromJust());
   info.GetReturnValue().Set(v8_num(x_register[offset]));
 }
 
 
 static void XGetter(Local<String> name,
                     const v8::PropertyCallbackInfo<v8::Value>& info) {
-  CHECK(x_holder->Equals(info.GetIsolate()->GetCurrentContext(), info.Holder())
+  v8::Isolate* isolate = info.GetIsolate();
+  CHECK(x_holder_global.Get(isolate)
+            ->Equals(isolate->GetCurrentContext(), info.Holder())
             .FromJust());
   XGetter(info, 0);
 }
 
 
 static void XGetter(const v8::FunctionCallbackInfo<v8::Value>& info) {
-  CHECK(
-      x_receiver->Equals(info.GetIsolate()->GetCurrentContext(), info.Holder())
-          .FromJust());
+  v8::Isolate* isolate = info.GetIsolate();
+  CHECK(x_receiver_global.Get(isolate)
+            ->Equals(isolate->GetCurrentContext(), info.Holder())
+            .FromJust());
   XGetter(info, 1);
 }
 
@@ -220,12 +224,14 @@ template<class Info>
 static void XSetter(Local<Value> value, const Info& info, int offset) {
   v8::Isolate* isolate = CcTest::isolate();
   CHECK_EQ(isolate, info.GetIsolate());
-  CHECK(x_holder->Equals(info.GetIsolate()->GetCurrentContext(), info.This())
+  CHECK(x_holder_global.Get(isolate)
+            ->Equals(isolate->GetCurrentContext(), info.This())
             .FromJust());
-  CHECK(x_holder->Equals(info.GetIsolate()->GetCurrentContext(), info.Holder())
+  CHECK(x_holder_global.Get(isolate)
+            ->Equals(isolate->GetCurrentContext(), info.Holder())
             .FromJust());
   x_register[offset] =
-      value->Int32Value(info.GetIsolate()->GetCurrentContext()).FromJust();
+      value->Int32Value(isolate->GetCurrentContext()).FromJust();
   info.GetReturnValue().Set(v8_num(-1));
 }
 
@@ -252,11 +258,14 @@ THREADED_TEST(AccessorIC) {
   obj->SetAccessorProperty(v8_str("x1"),
                            v8::FunctionTemplate::New(isolate, XGetter),
                            v8::FunctionTemplate::New(isolate, XSetter));
-  x_holder = obj->NewInstance(context.local()).ToLocalChecked();
+  v8::Local<v8::Object> x_holder =
+      obj->NewInstance(context.local()).ToLocalChecked();
+  x_holder_global.Reset(isolate, x_holder);
   CHECK(context->Global()
             ->Set(context.local(), v8_str("holder"), x_holder)
             .FromJust());
-  x_receiver = v8::Object::New(isolate);
+  v8::Local<v8::Object> x_receiver = v8::Object::New(isolate);
+  x_receiver_global.Reset(isolate, x_receiver);
   CHECK(context->Global()
             ->Set(context.local(), v8_str("obj"), x_receiver)
             .FromJust());
@@ -286,6 +295,8 @@ THREADED_TEST(AccessorIC) {
               ->Equals(context.local(), entry)
               .FromJust());
   }
+  x_holder_global.Reset();
+  x_receiver_global.Reset();
 }
 
 
@@ -342,8 +353,8 @@ static void CheckAccessorArgsCorrect(
   CHECK(info.Data()
             ->Equals(info.GetIsolate()->GetCurrentContext(), v8_str("data"))
             .FromJust());
-  CcTest::CollectAllGarbage();
   CHECK(info.GetIsolate() == CcTest::isolate());
+  i::heap::InvokeMajorGC(CcTest::heap());
   CHECK(info.This() == info.Holder());
   CHECK(info.Data()
             ->Equals(info.GetIsolate()->GetCurrentContext(), v8_str("data"))
@@ -533,9 +544,8 @@ static void StackCheck(Local<String> name,
   for (int i = 0; !iter.done(); i++) {
     i::StackFrame* frame = iter.frame();
     CHECK(i != 0 || (frame->type() == i::StackFrame::EXIT));
-    i::Code code = frame->LookupCode();
-    CHECK(code.IsCode());
-    CHECK(code.contains(isolate, frame->pc()));
+    i::Tagged<i::Code> code = frame->LookupCode();
+    CHECK(code->contains(isolate, frame->pc()));
     iter.Advance();
   }
 }
@@ -630,13 +640,13 @@ THREADED_TEST(JSONStringifyNamedInterceptorObject) {
             .FromJust());
 }
 
-
-static v8::Local<v8::Context> expected_current_context;
-
+static v8::Global<v8::Context> expected_current_context_global;
 
 static void check_contexts(const v8::FunctionCallbackInfo<v8::Value>& info) {
   ApiTestFuzzer::Fuzz();
-  CHECK(expected_current_context == info.GetIsolate()->GetCurrentContext());
+  v8::Isolate* isolate = info.GetIsolate();
+  CHECK_EQ(expected_current_context_global.Get(isolate),
+           isolate->GetCurrentContext());
 }
 
 
@@ -651,11 +661,12 @@ THREADED_TEST(AccessorPropertyCrossContext) {
             ->Set(switch_context.local(), v8_str("fun"), fun)
             .FromJust());
   v8::TryCatch try_catch(isolate);
-  expected_current_context = env.local();
+  expected_current_context_global.Reset(isolate, env.local());
   CompileRun(
       "var o = Object.create(null, { n: { get:fun } });"
       "for (var i = 0; i < 10; i++) o.n;");
   CHECK(!try_catch.HasCaught());
+  expected_current_context_global.Reset();
 }
 
 
@@ -679,29 +690,25 @@ THREADED_TEST(GlobalObjectAccessor) {
   // JSGlobalProxy as a receiver regardless of the current IC state and
   // the order in which ICs are executed.
   for (int i = 0; i < 10; i++) {
-    CHECK(
-        v8::Utils::OpenHandle(*check_getter->Run(env.local()).ToLocalChecked())
-            ->IsJSGlobalProxy());
+    CHECK(IsJSGlobalProxy(*v8::Utils::OpenHandle(
+        *check_getter->Run(env.local()).ToLocalChecked())));
   }
   for (int i = 0; i < 10; i++) {
-    CHECK(
-        v8::Utils::OpenHandle(*check_setter->Run(env.local()).ToLocalChecked())
-            ->IsJSGlobalProxy());
+    CHECK(IsJSGlobalProxy(*v8::Utils::OpenHandle(
+        *check_setter->Run(env.local()).ToLocalChecked())));
   }
   for (int i = 0; i < 10; i++) {
-    CHECK(
-        v8::Utils::OpenHandle(*check_getter->Run(env.local()).ToLocalChecked())
-            ->IsJSGlobalProxy());
-    CHECK(
-        v8::Utils::OpenHandle(*check_setter->Run(env.local()).ToLocalChecked())
-            ->IsJSGlobalProxy());
+    CHECK(IsJSGlobalProxy(*v8::Utils::OpenHandle(
+        *check_getter->Run(env.local()).ToLocalChecked())));
+    CHECK(IsJSGlobalProxy(*v8::Utils::OpenHandle(
+        *check_setter->Run(env.local()).ToLocalChecked())));
   }
 }
 
 
 static void EmptyGetter(Local<Name> name,
                         const v8::PropertyCallbackInfo<v8::Value>& info) {
-  ApiTestFuzzer::Fuzz();
+  // The request is not intercepted so don't call ApiTestFuzzer::Fuzz() here.
 }
 
 
@@ -739,7 +746,7 @@ static bool SecurityTestCallback(Local<v8::Context> accessing_context,
 
 
 TEST(PrototypeGetterAccessCheck) {
-  i::FLAG_allow_natives_syntax = true;
+  i::v8_flags.allow_natives_syntax = true;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   v8::HandleScope scope(isolate);
@@ -906,7 +913,7 @@ TEST(ObjectSetLazyDataPropertyForIndex) {
 }
 
 TEST(ObjectTemplateSetLazyPropertySurvivesIC) {
-  i::FLAG_allow_natives_syntax = true;
+  i::v8_flags.allow_natives_syntax = true;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   v8::HandleScope scope(isolate);

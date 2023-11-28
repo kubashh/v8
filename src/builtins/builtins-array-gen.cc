@@ -11,10 +11,12 @@
 #include "src/builtins/builtins.h"
 #include "src/codegen/code-stub-assembler.h"
 #include "src/codegen/interface-descriptors-inl.h"
+#include "src/codegen/tnode.h"
 #include "src/execution/frame-constants.h"
 #include "src/heap/factory-inl.h"
 #include "src/objects/allocation-site-inl.h"
 #include "src/objects/arguments-inl.h"
+#include "src/objects/elements-kind.h"
 #include "src/objects/property-cell.h"
 
 namespace v8 {
@@ -36,7 +38,19 @@ void ArrayBuiltinsAssembler::TypedArrayMapResultGenerator() {
       context(), method_name, original_array, len());
   // In the Spec and our current implementation, the length check is already
   // performed in TypedArraySpeciesCreate.
-  CSA_DCHECK(this, UintPtrLessThanOrEqual(len(), LoadJSTypedArrayLength(a)));
+#ifdef DEBUG
+  Label detached_or_out_of_bounds(this), done(this);
+  CSA_DCHECK(this, UintPtrLessThanOrEqual(
+                       len(), LoadJSTypedArrayLengthAndCheckDetached(
+                                  a, &detached_or_out_of_bounds)));
+  Goto(&done);
+  BIND(&detached_or_out_of_bounds);
+  Unreachable();
+  BIND(&done);
+#endif  // DEBUG
+
+  // TODO(v8:11111): Make storing fast when the elements kinds only differ
+  // because of their RAB/GSABness.
   fast_typed_array_target_ =
       Word32Equal(LoadElementsKind(original_array), LoadElementsKind(a));
   a_ = a;
@@ -63,17 +77,21 @@ TNode<Object> ArrayBuiltinsAssembler::TypedArrayMapProcessor(
   // numValue be ? ToBigInt(v).
   // 3. Otherwise, let numValue be ? ToNumber(value).
   TNode<Object> num_value;
-  if (source_elements_kind_ == BIGINT64_ELEMENTS ||
-      source_elements_kind_ == BIGUINT64_ELEMENTS) {
+  if (IsBigIntTypedArrayElementsKind(source_elements_kind_)) {
     num_value = ToBigInt(context(), mapped_value);
   } else {
     num_value = ToNumber_Inline(context(), mapped_value);
   }
 
-  // The only way how this can bailout is because of a detached buffer.
+  // The only way how this can bailout is because of a detached or out of bounds
+  // buffer.
   // TODO(v8:4153): Consider checking IsDetachedBuffer() and calling
   // TypedArrayBuiltinsAssembler::StoreJSTypedArrayElementFromNumeric() here
   // instead to avoid converting k_number back to UintPtrT.
+
+  // Using source_elements_kind_ (not "target elements kind") is correct here,
+  // because the fast branch is taken only when the source and the target
+  // elements kinds match.
   EmitElementStore(CAST(a()), k_number, num_value, source_elements_kind_,
                    KeyedAccessStoreMode::STANDARD_STORE, &detached, context());
   Goto(&done);
@@ -128,11 +146,8 @@ void ArrayBuiltinsAssembler::GenerateIteratingTypedArrayBuiltinBody(
   TNode<JSTypedArray> typed_array = CAST(receiver_);
   o_ = typed_array;
 
-  // TODO(v8:11111): Support RAB / GSAB.
-  TNode<JSArrayBuffer> array_buffer = LoadJSArrayBufferViewBuffer(typed_array);
-  ThrowIfArrayBufferIsDetached(context_, array_buffer, name_);
-
-  len_ = LoadJSTypedArrayLength(typed_array);
+  Label throw_detached(this, Label::kDeferred);
+  len_ = LoadJSTypedArrayLengthAndCheckDetached(typed_array, &throw_detached);
 
   Label throw_not_callable(this, Label::kDeferred);
   Label distinguish_types(this);
@@ -146,13 +161,16 @@ void ArrayBuiltinsAssembler::GenerateIteratingTypedArrayBuiltinBody(
   BIND(&throw_not_callable);
   ThrowTypeError(context_, MessageTemplate::kCalledNonCallable, callbackfn_);
 
+  BIND(&throw_detached);
+  ThrowTypeError(context_, MessageTemplate::kDetachedOperation, name_);
+
   Label unexpected_instance_type(this);
   BIND(&unexpected_instance_type);
   Unreachable();
 
   std::vector<int32_t> elements_kinds = {
 #define ELEMENTS_KIND(Type, type, TYPE, ctype) TYPE##_ELEMENTS,
-      TYPED_ARRAYS(ELEMENTS_KIND)
+      TYPED_ARRAYS(ELEMENTS_KIND) RAB_GSAB_TYPED_ARRAYS(ELEMENTS_KIND)
 #undef ELEMENTS_KIND
   };
   std::list<Label> labels;
@@ -168,6 +186,7 @@ void ArrayBuiltinsAssembler::GenerateIteratingTypedArrayBuiltinBody(
 
   generator(this);
 
+  TNode<JSArrayBuffer> array_buffer = LoadJSArrayBufferViewBuffer(typed_array);
   TNode<Int32T> elements_kind = LoadMapElementsKind(typed_array_map);
   Switch(elements_kind, &unexpected_instance_type, elements_kinds.data(),
          label_ptrs.data(), labels.size());
@@ -184,7 +203,6 @@ void ArrayBuiltinsAssembler::GenerateIteratingTypedArrayBuiltinBody(
 void ArrayBuiltinsAssembler::VisitAllTypedArrayElements(
     TNode<JSArrayBuffer> array_buffer, const CallResultProcessor& processor,
     ForEachDirection direction, TNode<JSTypedArray> typed_array) {
-  // TODO(v8:11111): Support RAB / GSAB.
   VariableList list({&a_, &k_}, zone());
 
   TNode<UintPtrT> start = UintPtrConstant(0);
@@ -197,17 +215,33 @@ void ArrayBuiltinsAssembler::VisitAllTypedArrayElements(
     incr = -1;
   }
   k_ = start;
+
+  // TODO(v8:11111): Only RAB-backed TAs need special handling here since the
+  // backing store can shrink mid-iteration. This implementation has an
+  // overzealous check for GSAB-backed length-tracking TAs. Then again, the
+  // non-RAB/GSAB code also has an overzealous detached check for SABs.
+  ElementsKind effective_elements_kind = source_elements_kind_;
+  bool is_rab_gsab = IsRabGsabTypedArrayElementsKind(effective_elements_kind);
+  if (is_rab_gsab) {
+    effective_elements_kind =
+        GetCorrespondingNonRabGsabElementsKind(effective_elements_kind);
+  }
   BuildFastLoop<UintPtrT>(
       list, start, end,
       [&](TNode<UintPtrT> index) {
         TVARIABLE(Object, value);
         Label detached(this, Label::kDeferred);
         Label process(this);
-        GotoIf(IsDetachedBuffer(array_buffer), &detached);
+        if (is_rab_gsab) {
+          // If `index` is out of bounds, Get returns undefined.
+          CheckJSTypedArrayIndex(typed_array, index, &detached);
+        } else {
+          GotoIf(IsDetachedBuffer(array_buffer), &detached);
+        }
         {
           TNode<RawPtrT> data_ptr = LoadJSTypedArrayDataPtr(typed_array);
           value = LoadFixedTypedArrayElementAsTagged(data_ptr, index,
-                                                     source_elements_kind_);
+                                                     effective_elements_kind);
           Goto(&process);
         }
 
@@ -223,7 +257,7 @@ void ArrayBuiltinsAssembler::VisitAllTypedArrayElements(
           a_ = processor(this, value.value(), index);
         }
       },
-      incr, advance_mode);
+      incr, LoopUnrollingMode::kNo, advance_mode);
 }
 
 TF_BUILTIN(ArrayPrototypePop, CodeStubAssembler) {
@@ -250,33 +284,34 @@ TF_BUILTIN(ArrayPrototypePop, CodeStubAssembler) {
   {
     TNode<JSArray> array_receiver = CAST(receiver);
     CSA_DCHECK(this, TaggedIsPositiveSmi(LoadJSArrayLength(array_receiver)));
-    TNode<IntPtrT> length =
-        LoadAndUntagObjectField(array_receiver, JSArray::kLengthOffset);
+    TNode<Int32T> length =
+        LoadAndUntagToWord32ObjectField(array_receiver, JSArray::kLengthOffset);
     Label return_undefined(this), fast_elements(this);
 
     // 2) Ensure that the length is writable.
     EnsureArrayLengthWritable(context, LoadMap(array_receiver), &runtime);
 
-    GotoIf(IntPtrEqual(length, IntPtrConstant(0)), &return_undefined);
+    GotoIf(Word32Equal(length, Int32Constant(0)), &return_undefined);
 
     // 3) Check that the elements backing store isn't copy-on-write.
     TNode<FixedArrayBase> elements = LoadElements(array_receiver);
     GotoIf(TaggedEqual(LoadMap(elements), FixedCOWArrayMapConstant()),
            &runtime);
 
-    TNode<IntPtrT> new_length = IntPtrSub(length, IntPtrConstant(1));
+    TNode<Int32T> new_length = Int32Sub(length, Int32Constant(1));
 
     // 4) Check that we're not supposed to shrink the backing store, as
     //    implemented in elements.cc:ElementsAccessorBase::SetLengthImpl.
-    TNode<IntPtrT> capacity = SmiUntag(LoadFixedArrayBaseLength(elements));
-    GotoIf(IntPtrLessThan(
-               IntPtrAdd(IntPtrAdd(new_length, new_length),
-                         IntPtrConstant(JSObject::kMinAddedElementsCapacity)),
+    TNode<Int32T> capacity = SmiToInt32(LoadFixedArrayBaseLength(elements));
+    GotoIf(Int32LessThan(
+               Int32Add(Int32Add(new_length, new_length),
+                        Int32Constant(JSObject::kMinAddedElementsCapacity)),
                capacity),
            &runtime);
 
+    TNode<IntPtrT> new_length_intptr = ChangePositiveInt32ToIntPtr(new_length);
     StoreObjectFieldNoWriteBarrier(array_receiver, JSArray::kLengthOffset,
-                                   SmiTag(new_length));
+                                   SmiTag(new_length_intptr));
 
     TNode<Int32T> elements_kind = LoadElementsKind(array_receiver);
     GotoIf(Int32LessThanOrEqual(elements_kind,
@@ -287,9 +322,9 @@ TF_BUILTIN(ArrayPrototypePop, CodeStubAssembler) {
       TNode<FixedDoubleArray> elements_known_double_array =
           ReinterpretCast<FixedDoubleArray>(elements);
       TNode<Float64T> value = LoadFixedDoubleArrayElement(
-          elements_known_double_array, new_length, &return_undefined);
+          elements_known_double_array, new_length_intptr, &return_undefined);
 
-      StoreFixedDoubleArrayHole(elements_known_double_array, new_length);
+      StoreFixedDoubleArrayHole(elements_known_double_array, new_length_intptr);
       args.PopAndReturn(AllocateHeapNumberWithValue(value));
     }
 
@@ -297,8 +332,8 @@ TF_BUILTIN(ArrayPrototypePop, CodeStubAssembler) {
     {
       TNode<FixedArray> elements_known_fixed_array = CAST(elements);
       TNode<Object> value =
-          LoadFixedArrayElement(elements_known_fixed_array, new_length);
-      StoreFixedArrayElement(elements_known_fixed_array, new_length,
+          LoadFixedArrayElement(elements_known_fixed_array, new_length_intptr);
+      StoreFixedArrayElement(elements_known_fixed_array, new_length_intptr,
                              TheHoleConstant());
       GotoIf(TaggedEqual(value, TheHoleConstant()), &return_undefined);
       args.PopAndReturn(value);
@@ -572,12 +607,15 @@ class ArrayIncludesIndexofAssembler : public CodeStubAssembler {
 
   enum SearchVariant { kIncludes, kIndexOf };
 
+  enum class SimpleElementKind { kSmiOrHole, kAny };
+
   void Generate(SearchVariant variant, TNode<IntPtrT> argc,
                 TNode<Context> context);
   void GenerateSmiOrObject(SearchVariant variant, TNode<Context> context,
                            TNode<FixedArray> elements,
                            TNode<Object> search_element,
-                           TNode<Smi> array_length, TNode<Smi> from_index);
+                           TNode<Smi> array_length, TNode<Smi> from_index,
+                           SimpleElementKind array_kind);
   void GeneratePackedDoubles(SearchVariant variant,
                              TNode<FixedDoubleArray> elements,
                              TNode<Object> search_element,
@@ -593,6 +631,22 @@ class ArrayIncludesIndexofAssembler : public CodeStubAssembler {
     Return(value);
     BIND(&done);
   }
+
+ private:
+  // Use SIMD code for arrays larger than kSIMDThreshold (in builtins that have
+  // SIMD implementations).
+  const int kSIMDThreshold = 48;
+
+  // For now, we can vectorize if:
+  //   - SSE3/AVX are present (x86/x64). Note that if __AVX__ is defined, then
+  //     __SSE3__ will be as well, so we just check __SSE3__.
+  //   - Neon is present and the architecture is 64-bit (because Neon on 32-bit
+  //     architecture lacks some instructions).
+#if defined(__SSE3__) || defined(V8_HOST_ARCH_ARM64)
+  const bool kCanVectorize = true;
+#else
+  const bool kCanVectorize = false;
+#endif
 };
 
 void ArrayIncludesIndexofAssembler::Generate(SearchVariant variant,
@@ -622,7 +676,7 @@ void ArrayIncludesIndexofAssembler::Generate(SearchVariant variant,
   // JSArray length is always a positive Smi for fast arrays.
   CSA_DCHECK(this, TaggedIsPositiveSmi(LoadJSArrayLength(array)));
   TNode<Smi> array_length = LoadFastJSArrayLength(array);
-  TNode<IntPtrT> array_length_untagged = SmiUntag(array_length);
+  TNode<IntPtrT> array_length_untagged = PositiveSmiUntag(array_length);
 
   {
     // Initialize fromIndex.
@@ -665,14 +719,17 @@ void ArrayIncludesIndexofAssembler::Generate(SearchVariant variant,
   GotoIf(IntPtrGreaterThanOrEqual(index_var.value(), array_length_untagged),
          &return_not_found);
 
-  Label if_smiorobjects(this), if_packed_doubles(this), if_holey_doubles(this);
+  Label if_smi(this), if_smiorobjects(this), if_packed_doubles(this),
+      if_holey_doubles(this);
 
   TNode<Int32T> elements_kind = LoadElementsKind(array);
   TNode<FixedArrayBase> elements = LoadElements(array);
-  STATIC_ASSERT(PACKED_SMI_ELEMENTS == 0);
-  STATIC_ASSERT(HOLEY_SMI_ELEMENTS == 1);
-  STATIC_ASSERT(PACKED_ELEMENTS == 2);
-  STATIC_ASSERT(HOLEY_ELEMENTS == 3);
+  static_assert(PACKED_SMI_ELEMENTS == 0);
+  static_assert(HOLEY_SMI_ELEMENTS == 1);
+  static_assert(PACKED_ELEMENTS == 2);
+  static_assert(HOLEY_ELEMENTS == 3);
+  GotoIf(IsElementsKindLessThanOrEqual(elements_kind, HOLEY_SMI_ELEMENTS),
+         &if_smi);
   GotoIf(IsElementsKindLessThanOrEqual(elements_kind, HOLEY_ELEMENTS),
          &if_smiorobjects);
   GotoIf(
@@ -684,6 +741,16 @@ void ArrayIncludesIndexofAssembler::Generate(SearchVariant variant,
                                        LAST_ANY_NONEXTENSIBLE_ELEMENTS_KIND),
          &if_smiorobjects);
   Goto(&return_not_found);
+
+  BIND(&if_smi);
+  {
+    Callable callable = Builtins::CallableFor(
+        isolate(), (variant == kIncludes) ? Builtin::kArrayIncludesSmi
+                                          : Builtin::kArrayIndexOfSmi);
+    TNode<Object> result = CallStub(callable, context, elements, search_element,
+                                    array_length, SmiTag(index_var.value()));
+    args.PopAndReturn(result);
+  }
 
   BIND(&if_smiorobjects);
   {
@@ -744,10 +811,10 @@ void ArrayIncludesIndexofAssembler::Generate(SearchVariant variant,
 void ArrayIncludesIndexofAssembler::GenerateSmiOrObject(
     SearchVariant variant, TNode<Context> context, TNode<FixedArray> elements,
     TNode<Object> search_element, TNode<Smi> array_length,
-    TNode<Smi> from_index) {
+    TNode<Smi> from_index, SimpleElementKind array_kind) {
   TVARIABLE(IntPtrT, index_var, SmiUntag(from_index));
   TVARIABLE(Float64T, search_num);
-  TNode<IntPtrT> array_length_untagged = SmiUntag(array_length);
+  TNode<IntPtrT> array_length_untagged = PositiveSmiUntag(array_length);
 
   Label ident_loop(this, &index_var), heap_num_loop(this, &search_num),
       string_loop(this), bigint_loop(this, &index_var),
@@ -771,7 +838,29 @@ void ArrayIncludesIndexofAssembler::GenerateSmiOrObject(
   TNode<Uint16T> search_type = LoadMapInstanceType(map);
   GotoIf(IsStringInstanceType(search_type), &string_loop);
   GotoIf(IsBigIntInstanceType(search_type), &bigint_loop);
-  Goto(&ident_loop);
+
+  // Use UniqueInt32Constant instead of BoolConstant here in order to ensure
+  // that the graph structure does not depend on the value of the predicate
+  // (BoolConstant uses cached nodes).
+  GotoIfNot(UniqueInt32Constant(kCanVectorize), &ident_loop);
+  {
+    Label simd_call(this);
+    Branch(
+        UintPtrLessThan(array_length_untagged, IntPtrConstant(kSIMDThreshold)),
+        &ident_loop, &simd_call);
+    BIND(&simd_call);
+    TNode<ExternalReference> simd_function = ExternalConstant(
+        ExternalReference::array_indexof_includes_smi_or_object());
+    TNode<IntPtrT> result = UncheckedCast<IntPtrT>(CallCFunction(
+        simd_function, MachineType::UintPtr(),
+        std::make_pair(MachineType::TaggedPointer(), elements),
+        std::make_pair(MachineType::UintPtr(), array_length_untagged),
+        std::make_pair(MachineType::UintPtr(), index_var.value()),
+        std::make_pair(MachineType::TaggedPointer(), search_element)));
+    index_var = ReinterpretCast<IntPtrT>(result);
+    Branch(IntPtrLessThan(index_var.value(), IntPtrConstant(0)),
+           &return_not_found, &return_found);
+  }
 
   BIND(&ident_loop);
   {
@@ -803,7 +892,35 @@ void ArrayIncludesIndexofAssembler::GenerateSmiOrObject(
   {
     Label nan_loop(this, &index_var), not_nan_loop(this, &index_var);
     Label* nan_handling = variant == kIncludes ? &nan_loop : &return_not_found;
-    BranchIfFloat64IsNaN(search_num.value(), nan_handling, &not_nan_loop);
+    GotoIfNot(Float64Equal(search_num.value(), search_num.value()),
+              nan_handling);
+
+    // Use UniqueInt32Constant instead of BoolConstant here in order to ensure
+    // that the graph structure does not depend on the value of the predicate
+    // (BoolConstant uses cached nodes).
+    GotoIfNot(UniqueInt32Constant(kCanVectorize &&
+                                  array_kind == SimpleElementKind::kSmiOrHole),
+              &not_nan_loop);
+    {
+      Label smi_check(this), simd_call(this);
+      Branch(UintPtrLessThan(array_length_untagged,
+                             IntPtrConstant(kSIMDThreshold)),
+             &not_nan_loop, &smi_check);
+      BIND(&smi_check);
+      Branch(TaggedIsSmi(search_element), &simd_call, &not_nan_loop);
+      BIND(&simd_call);
+      TNode<ExternalReference> simd_function = ExternalConstant(
+          ExternalReference::array_indexof_includes_smi_or_object());
+      TNode<IntPtrT> result = UncheckedCast<IntPtrT>(CallCFunction(
+          simd_function, MachineType::UintPtr(),
+          std::make_pair(MachineType::TaggedPointer(), elements),
+          std::make_pair(MachineType::UintPtr(), array_length_untagged),
+          std::make_pair(MachineType::UintPtr(), index_var.value()),
+          std::make_pair(MachineType::TaggedPointer(), search_element)));
+      index_var = ReinterpretCast<IntPtrT>(result);
+      Branch(IntPtrLessThan(index_var.value(), IntPtrConstant(0)),
+             &return_not_found, &return_found);
+    }
 
     BIND(&not_nan_loop);
     {
@@ -919,17 +1036,17 @@ void ArrayIncludesIndexofAssembler::GeneratePackedDoubles(
     TNode<Object> search_element, TNode<Smi> array_length,
     TNode<Smi> from_index) {
   TVARIABLE(IntPtrT, index_var, SmiUntag(from_index));
-  TNode<IntPtrT> array_length_untagged = SmiUntag(array_length);
+  TNode<IntPtrT> array_length_untagged = PositiveSmiUntag(array_length);
 
-  Label nan_loop(this, &index_var), not_nan_loop(this, &index_var),
-      hole_loop(this, &index_var), search_notnan(this), return_found(this),
-      return_not_found(this);
+  Label nan_loop(this, &index_var), not_nan_case(this),
+      not_nan_loop(this, &index_var), hole_loop(this, &index_var),
+      search_notnan(this), return_found(this), return_not_found(this);
   TVARIABLE(Float64T, search_num);
   search_num = Float64Constant(0);
 
   GotoIfNot(TaggedIsSmi(search_element), &search_notnan);
   search_num = SmiToFloat64(CAST(search_element));
-  Goto(&not_nan_loop);
+  Goto(&not_nan_case);
 
   BIND(&search_notnan);
   GotoIfNot(IsHeapNumber(CAST(search_element)), &return_not_found);
@@ -937,7 +1054,31 @@ void ArrayIncludesIndexofAssembler::GeneratePackedDoubles(
   search_num = LoadHeapNumberValue(CAST(search_element));
 
   Label* nan_handling = variant == kIncludes ? &nan_loop : &return_not_found;
-  BranchIfFloat64IsNaN(search_num.value(), nan_handling, &not_nan_loop);
+  BranchIfFloat64IsNaN(search_num.value(), nan_handling, &not_nan_case);
+
+  BIND(&not_nan_case);
+  // Use UniqueInt32Constant instead of BoolConstant here in order to ensure
+  // that the graph structure does not depend on the value of the predicate
+  // (BoolConstant uses cached nodes).
+  GotoIfNot(UniqueInt32Constant(kCanVectorize), &not_nan_loop);
+  {
+    Label simd_call(this);
+    Branch(
+        UintPtrLessThan(array_length_untagged, IntPtrConstant(kSIMDThreshold)),
+        &not_nan_loop, &simd_call);
+    BIND(&simd_call);
+    TNode<ExternalReference> simd_function =
+        ExternalConstant(ExternalReference::array_indexof_includes_double());
+    TNode<IntPtrT> result = UncheckedCast<IntPtrT>(CallCFunction(
+        simd_function, MachineType::UintPtr(),
+        std::make_pair(MachineType::TaggedPointer(), elements),
+        std::make_pair(MachineType::UintPtr(), array_length_untagged),
+        std::make_pair(MachineType::UintPtr(), index_var.value()),
+        std::make_pair(MachineType::TaggedPointer(), search_element)));
+    index_var = ReinterpretCast<IntPtrT>(result);
+    Branch(IntPtrLessThan(index_var.value(), IntPtrConstant(0)),
+           &return_not_found, &return_found);
+  }
 
   BIND(&not_nan_loop);
   {
@@ -987,17 +1128,17 @@ void ArrayIncludesIndexofAssembler::GenerateHoleyDoubles(
     TNode<Object> search_element, TNode<Smi> array_length,
     TNode<Smi> from_index) {
   TVARIABLE(IntPtrT, index_var, SmiUntag(from_index));
-  TNode<IntPtrT> array_length_untagged = SmiUntag(array_length);
+  TNode<IntPtrT> array_length_untagged = PositiveSmiUntag(array_length);
 
-  Label nan_loop(this, &index_var), not_nan_loop(this, &index_var),
-      hole_loop(this, &index_var), search_notnan(this), return_found(this),
-      return_not_found(this);
+  Label nan_loop(this, &index_var), not_nan_case(this),
+      not_nan_loop(this, &index_var), hole_loop(this, &index_var),
+      search_notnan(this), return_found(this), return_not_found(this);
   TVARIABLE(Float64T, search_num);
   search_num = Float64Constant(0);
 
   GotoIfNot(TaggedIsSmi(search_element), &search_notnan);
   search_num = SmiToFloat64(CAST(search_element));
-  Goto(&not_nan_loop);
+  Goto(&not_nan_case);
 
   BIND(&search_notnan);
   if (variant == kIncludes) {
@@ -1008,7 +1149,31 @@ void ArrayIncludesIndexofAssembler::GenerateHoleyDoubles(
   search_num = LoadHeapNumberValue(CAST(search_element));
 
   Label* nan_handling = variant == kIncludes ? &nan_loop : &return_not_found;
-  BranchIfFloat64IsNaN(search_num.value(), nan_handling, &not_nan_loop);
+  BranchIfFloat64IsNaN(search_num.value(), nan_handling, &not_nan_case);
+
+  BIND(&not_nan_case);
+  // Use UniqueInt32Constant instead of BoolConstant here in order to ensure
+  // that the graph structure does not depend on the value of the predicate
+  // (BoolConstant uses cached nodes).
+  GotoIfNot(UniqueInt32Constant(kCanVectorize), &not_nan_loop);
+  {
+    Label simd_call(this);
+    Branch(
+        UintPtrLessThan(array_length_untagged, IntPtrConstant(kSIMDThreshold)),
+        &not_nan_loop, &simd_call);
+    BIND(&simd_call);
+    TNode<ExternalReference> simd_function =
+        ExternalConstant(ExternalReference::array_indexof_includes_double());
+    TNode<IntPtrT> result = UncheckedCast<IntPtrT>(CallCFunction(
+        simd_function, MachineType::UintPtr(),
+        std::make_pair(MachineType::TaggedPointer(), elements),
+        std::make_pair(MachineType::UintPtr(), array_length_untagged),
+        std::make_pair(MachineType::UintPtr(), index_var.value()),
+        std::make_pair(MachineType::TaggedPointer(), search_element)));
+    index_var = ReinterpretCast<IntPtrT>(result);
+    Branch(IntPtrLessThan(index_var.value(), IntPtrConstant(0)),
+           &return_not_found, &return_found);
+  }
 
   BIND(&not_nan_loop);
   {
@@ -1082,6 +1247,17 @@ TF_BUILTIN(ArrayIncludes, ArrayIncludesIndexofAssembler) {
   Generate(kIncludes, argc, context);
 }
 
+TF_BUILTIN(ArrayIncludesSmi, ArrayIncludesIndexofAssembler) {
+  auto context = Parameter<Context>(Descriptor::kContext);
+  auto elements = Parameter<FixedArray>(Descriptor::kElements);
+  auto search_element = Parameter<Object>(Descriptor::kSearchElement);
+  auto array_length = Parameter<Smi>(Descriptor::kLength);
+  auto from_index = Parameter<Smi>(Descriptor::kFromIndex);
+
+  GenerateSmiOrObject(kIncludes, context, elements, search_element,
+                      array_length, from_index, SimpleElementKind::kSmiOrHole);
+}
+
 TF_BUILTIN(ArrayIncludesSmiOrObject, ArrayIncludesIndexofAssembler) {
   auto context = Parameter<Context>(Descriptor::kContext);
   auto elements = Parameter<FixedArray>(Descriptor::kElements);
@@ -1090,7 +1266,7 @@ TF_BUILTIN(ArrayIncludesSmiOrObject, ArrayIncludesIndexofAssembler) {
   auto from_index = Parameter<Smi>(Descriptor::kFromIndex);
 
   GenerateSmiOrObject(kIncludes, context, elements, search_element,
-                      array_length, from_index);
+                      array_length, from_index, SimpleElementKind::kAny);
 }
 
 TF_BUILTIN(ArrayIncludesPackedDoubles, ArrayIncludesIndexofAssembler) {
@@ -1123,6 +1299,17 @@ TF_BUILTIN(ArrayIndexOf, ArrayIncludesIndexofAssembler) {
   Generate(kIndexOf, argc, context);
 }
 
+TF_BUILTIN(ArrayIndexOfSmi, ArrayIncludesIndexofAssembler) {
+  auto context = Parameter<Context>(Descriptor::kContext);
+  auto elements = Parameter<FixedArray>(Descriptor::kElements);
+  auto search_element = Parameter<Object>(Descriptor::kSearchElement);
+  auto array_length = Parameter<Smi>(Descriptor::kLength);
+  auto from_index = Parameter<Smi>(Descriptor::kFromIndex);
+
+  GenerateSmiOrObject(kIndexOf, context, elements, search_element, array_length,
+                      from_index, SimpleElementKind::kSmiOrHole);
+}
+
 TF_BUILTIN(ArrayIndexOfSmiOrObject, ArrayIncludesIndexofAssembler) {
   auto context = Parameter<Context>(Descriptor::kContext);
   auto elements = Parameter<FixedArray>(Descriptor::kElements);
@@ -1131,7 +1318,7 @@ TF_BUILTIN(ArrayIndexOfSmiOrObject, ArrayIncludesIndexofAssembler) {
   auto from_index = Parameter<Smi>(Descriptor::kFromIndex);
 
   GenerateSmiOrObject(kIndexOf, context, elements, search_element, array_length,
-                      from_index);
+                      from_index, SimpleElementKind::kAny);
 }
 
 TF_BUILTIN(ArrayIndexOfPackedDoubles, ArrayIncludesIndexofAssembler) {
@@ -1187,7 +1374,7 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
   auto context = Parameter<Context>(Descriptor::kContext);
   auto maybe_iterator = Parameter<Object>(Descriptor::kReceiver);
 
-  TVARIABLE(Oddball, var_done, TrueConstant());
+  TVARIABLE(Boolean, var_done, TrueConstant());
   TVARIABLE(Object, var_value, UndefinedConstant());
 
   Label allocate_entry_if_needed(this);
@@ -1488,7 +1675,7 @@ class ArrayFlattenAssembler : public CodeStubAssembler {
           // 2. Perform ? CreateDataPropertyOrThrow(target,
           //                                        ! ToString(targetIndex),
           //                                        element).
-          CallRuntime(Runtime::kCreateDataProperty, context, target,
+          CallBuiltin(Builtin::kFastCreateDataProperty, context, target,
                       target_index, element);
 
           // 3. Increase targetIndex by 1.
@@ -1648,7 +1835,7 @@ TF_BUILTIN(ArrayConstructor, ArrayBuiltinsAssembler) {
 void ArrayBuiltinsAssembler::TailCallArrayConstructorStub(
     const Callable& callable, TNode<Context> context, TNode<JSFunction> target,
     TNode<HeapObject> allocation_site_or_undefined, TNode<Int32T> argc) {
-  TNode<Code> code = HeapConstant(callable.code());
+  TNode<Code> code = HeapConstantNoHole(callable.code());
 
   // We are going to call here ArrayNoArgumentsConstructor or
   // ArraySingleArgumentsConstructor which in addition to the register arguments
@@ -1724,12 +1911,12 @@ void ArrayBuiltinsAssembler::CreateArrayDispatchSingleArgument(
     TNode<Smi> transition_info = LoadTransitionInfo(*allocation_site);
 
     // Least significant bit in fast array elements kind means holeyness.
-    STATIC_ASSERT(PACKED_SMI_ELEMENTS == 0);
-    STATIC_ASSERT(HOLEY_SMI_ELEMENTS == 1);
-    STATIC_ASSERT(PACKED_ELEMENTS == 2);
-    STATIC_ASSERT(HOLEY_ELEMENTS == 3);
-    STATIC_ASSERT(PACKED_DOUBLE_ELEMENTS == 4);
-    STATIC_ASSERT(HOLEY_DOUBLE_ELEMENTS == 5);
+    static_assert(PACKED_SMI_ELEMENTS == 0);
+    static_assert(HOLEY_SMI_ELEMENTS == 1);
+    static_assert(PACKED_ELEMENTS == 2);
+    static_assert(HOLEY_ELEMENTS == 3);
+    static_assert(PACKED_DOUBLE_ELEMENTS == 4);
+    static_assert(HOLEY_DOUBLE_ELEMENTS == 5);
 
     Label normal_sequence(this);
     TVARIABLE(Int32T, var_elements_kind,

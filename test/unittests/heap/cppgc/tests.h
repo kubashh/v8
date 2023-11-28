@@ -48,7 +48,7 @@ class DelegatingTracingController : public TracingController {
 };
 
 class TestWithPlatform : public ::testing::Test {
- protected:
+ public:
   static void SetUpTestSuite();
   static void TearDownTestSuite();
 
@@ -67,8 +67,9 @@ class TestWithPlatform : public ::testing::Test {
 };
 
 class TestWithHeap : public TestWithPlatform {
- protected:
+ public:
   TestWithHeap();
+  ~TestWithHeap() override;
 
   void PreciseGC() {
     heap_->ForceGarbageCollectionSlow(
@@ -86,10 +87,9 @@ class TestWithHeap : public TestWithPlatform {
   // size of the heap and corresponding pages.
   void ConservativeMemoryDiscardingGC() {
     internal::Heap::From(GetHeap())->CollectGarbage(
-        {GarbageCollector::Config::CollectionType::kMajor,
-         Heap::StackState::kMayContainHeapPointers, Heap::MarkingType::kAtomic,
-         Heap::SweepingType::kAtomic,
-         GarbageCollector::Config::FreeMemoryHandling::kDiscardWherePossible});
+        {CollectionType::kMajor, Heap::StackState::kMayContainHeapPointers,
+         cppgc::Heap::MarkingType::kAtomic, cppgc::Heap::SweepingType::kAtomic,
+         GCConfig::FreeMemoryHandling::kDiscardWherePossible});
   }
 
   cppgc::Heap* GetHeap() const { return heap_.get(); }
@@ -103,11 +103,7 @@ class TestWithHeap : public TestWithPlatform {
   }
 
   std::unique_ptr<MarkerBase>& GetMarkerRef() {
-    return Heap::From(GetHeap())->marker_;
-  }
-
-  const std::unique_ptr<MarkerBase>& GetMarkerRef() const {
-    return Heap::From(GetHeap())->marker_;
+    return Heap::From(GetHeap())->GetMarkerRefForTesting();
   }
 
   void ResetLinearAllocationBuffers();
@@ -126,6 +122,7 @@ class TestSupportingAllocationOnly : public TestWithHeap {
   TestSupportingAllocationOnly();
 
  private:
+  CPPGC_STACK_ALLOCATED_IGNORE("permitted for test code")
   subtle::NoGarbageCollectionScope no_gc_scope_;
 };
 

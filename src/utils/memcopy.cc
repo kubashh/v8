@@ -4,7 +4,7 @@
 
 #include "src/utils/memcopy.h"
 
-#include "src/snapshot/embedded/embedded-data.h"
+#include "src/snapshot/embedded/embedded-data-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -38,19 +38,19 @@ void init_memcopy_functions() {
   if (Isolate::CurrentEmbeddedBlobIsBinaryEmbedded()) {
     EmbeddedData d = EmbeddedData::FromBlob();
     memmove_function = reinterpret_cast<MemMoveFunction>(
-        d.InstructionStartOfBuiltin(Builtin::kMemMove));
+        d.InstructionStartOf(Builtin::kMemMove));
   }
 #elif(V8_OS_POSIX || V8_OS_STARBOARD) && V8_HOST_ARCH_ARM
   if (Isolate::CurrentEmbeddedBlobIsBinaryEmbedded()) {
     EmbeddedData d = EmbeddedData::FromBlob();
     memcopy_uint8_function = reinterpret_cast<MemCopyUint8Function>(
-        d.InstructionStartOfBuiltin(Builtin::kMemCopyUint8Uint8));
+        d.InstructionStartOf(Builtin::kMemCopyUint8Uint8));
   }
 #elif V8_OS_POSIX && V8_HOST_ARCH_MIPS
   if (Isolate::CurrentEmbeddedBlobIsBinaryEmbedded()) {
     EmbeddedData d = EmbeddedData::FromBlob();
     memcopy_uint8_function = reinterpret_cast<MemCopyUint8Function>(
-        d.InstructionStartOfBuiltin(Builtin::kMemCopyUint8Uint8));
+        d.InstructionStartOf(Builtin::kMemCopyUint8Uint8));
   }
 #endif
 }

@@ -8,14 +8,6 @@
 
 d8.file.execute('test/mjsunit/typedarray-helpers.js');
 
-function CreateResizableArrayBuffer(byteLength, maxByteLength) {
-  return new ArrayBuffer(byteLength, {maxByteLength: maxByteLength});
-}
-
-function CreateGrowableSharedArrayBuffer(byteLength, maxByteLength) {
-  return new SharedArrayBuffer(byteLength, {maxByteLength: maxByteLength});
-}
-
 function resizeHelper(ab, value) {
   const return_value = ab.resize(value);
   assertEquals(undefined, return_value);
@@ -615,4 +607,44 @@ const arrayBufferCtors = [[ArrayBuffer, (b) => b.resizable],
   assertEquals(2, rab.byteLength);
   assertEquals(4, sliced.byteLength);
   assertEquals([1, 1, 0, 0], ToNumbers(new Uint8Array(sliced)));
+})();
+
+(function DecommitMemory() {
+  const pageSize = 4096;
+  const rab = new ArrayBuffer(6 * pageSize, {maxByteLength: 12 * pageSize});
+  const ta = new Uint8Array(rab);
+  for (let i = 0; i < 6 * pageSize; ++i) {
+    ta[i] = 1;
+  }
+  for (let i = 0; i < 6 * pageSize; ++i) {
+    assertEquals(1, ta[i]);
+  }
+
+  // This resize decommits.
+  rab.resize(2 * pageSize);
+
+  for (let i = 0; i < 2 * pageSize; ++i) {
+    assertEquals(1, ta[i]);
+  }
+
+  for (let i = 2 * pageSize; i < 6 * pageSize; ++i) {
+    assertEquals(undefined, ta[i]);
+  }
+
+  // Test that the pages get re-committed and can be used normally.
+  rab.resize(12 * pageSize);
+
+  for (let i = 0; i < 2 * pageSize; ++i) {
+    assertEquals(1, ta[i]);
+  }
+  // Test that the decommitted and then again committed memory is zeroed.
+  for (let i = 2 * pageSize; i < 12 * pageSize; ++i) {
+    assertEquals(0, ta[i]);
+  }
+  for (let i = 0; i < 12 * pageSize; ++i) {
+    ta[i] = 2;
+  }
+  for (let i = 0; i < 12 * pageSize; ++i) {
+    assertEquals(2, ta[i]);
+  }
 })();

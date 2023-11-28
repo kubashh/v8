@@ -7,17 +7,13 @@
 
 #include "src/codegen/handler-table.h"
 #include "src/interpreter/bytecode-register.h"
-#include "src/interpreter/bytecodes.h"
 #include "src/objects/fixed-array.h"
 #include "src/zone/zone-containers.h"
 
 namespace v8 {
 namespace internal {
 
-template <typename T>
-class Handle;
 class HandlerTable;
-class Isolate;
 
 namespace interpreter {
 

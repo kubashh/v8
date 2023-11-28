@@ -11,7 +11,6 @@
 #include <cmath>
 
 #include "src/ast/ast-value-factory.h"
-#include "src/base/platform/wrappers.h"
 #include "src/base/strings.h"
 #include "src/numbers/conversions-inl.h"
 #include "src/objects/bigint.h"
@@ -211,20 +210,20 @@ Token::Value Scanner::SkipSingleLineComment() {
   // separately by the lexical grammar and becomes part of the
   // stream of input elements for the syntactic grammar (see
   // ECMA-262, section 7.4).
-  AdvanceUntil([](base::uc32 c0_) { return unibrow::IsLineTerminator(c0_); });
+  AdvanceUntil([](base::uc32 c0) { return unibrow::IsLineTerminator(c0); });
 
   return Token::WHITESPACE;
 }
 
-Token::Value Scanner::SkipSourceURLComment() {
-  TryToParseSourceURLComment();
+Token::Value Scanner::SkipMagicComment(base::uc32 hash_or_at_sign) {
+  TryToParseMagicComment(hash_or_at_sign);
   if (unibrow::IsLineTerminator(c0_) || c0_ == kEndOfInput) {
     return Token::WHITESPACE;
   }
   return SkipSingleLineComment();
 }
 
-void Scanner::TryToParseSourceURLComment() {
+void Scanner::TryToParseMagicComment(base::uc32 hash_or_at_sign) {
   // Magic comments are of the form: //[#@]\s<name>=\s*<value>\s*.* and this
   // function will just return if it cannot parse a magic comment.
   DCHECK(!IsWhiteSpaceOrLineTerminator(kEndOfInput));
@@ -241,10 +240,16 @@ void Scanner::TryToParseSourceURLComment() {
   if (!name.is_one_byte()) return;
   base::Vector<const uint8_t> name_literal = name.one_byte_literal();
   LiteralBuffer* value;
+  LiteralBuffer compile_hints_value;
   if (name_literal == base::StaticOneByteVector("sourceURL")) {
     value = &source_url_;
   } else if (name_literal == base::StaticOneByteVector("sourceMappingURL")) {
     value = &source_mapping_url_;
+    DCHECK(hash_or_at_sign == '#' || hash_or_at_sign == '@');
+    saw_source_mapping_url_magic_comment_at_sign_ = hash_or_at_sign == '@';
+  } else if (name_literal ==
+             base::StaticOneByteVector("experimentalChromiumCompileHints")) {
+    value = &compile_hints_value;
   } else {
     return;
   }
@@ -269,6 +274,13 @@ void Scanner::TryToParseSourceURLComment() {
       break;
     }
     Advance();
+  }
+  if (value == &compile_hints_value) {
+    base::Vector<const uint8_t> value_literal =
+        compile_hints_value.one_byte_literal();
+    if (value_literal == base::StaticOneByteVector("all")) {
+      saw_magic_comment_compile_hints_all_ = true;
+    }
   }
 }
 
@@ -497,15 +509,17 @@ Token::Value Scanner::ScanPrivateName() {
   next().literal_chars.Start();
   DCHECK_EQ(c0_, '#');
   DCHECK(!IsIdentifierStart(kEndOfInput));
-  if (!IsIdentifierStart(Peek())) {
-    ReportScannerError(source_pos(),
-                       MessageTemplate::kInvalidOrUnexpectedToken);
-    return Token::ILLEGAL;
+  int pos = source_pos();
+  Advance();
+  if (IsIdentifierStart(c0_) ||
+      (CombineSurrogatePair() && IsIdentifierStart(c0_))) {
+    AddLiteralChar('#');
+    Token::Value token = ScanIdentifierOrKeywordInner();
+    return token == Token::ILLEGAL ? Token::ILLEGAL : Token::PRIVATE_NAME;
   }
 
-  AddLiteralCharAdvance();
-  Token::Value token = ScanIdentifierOrKeywordInner();
-  return token == Token::ILLEGAL ? Token::ILLEGAL : Token::PRIVATE_NAME;
+  ReportScannerError(pos, MessageTemplate::kInvalidOrUnexpectedToken);
+  return Token::ILLEGAL;
 }
 
 Token::Value Scanner::ScanTemplateSpan() {
@@ -936,7 +950,7 @@ Token::Value Scanner::ScanIdentifierOrKeywordInnerSlow(bool escaped,
 
     if (!escaped) return token;
 
-    STATIC_ASSERT(Token::LET + 1 == Token::STATIC);
+    static_assert(Token::LET + 1 == Token::STATIC);
     if (base::IsInRange(token, Token::LET, Token::STATIC)) {
       return Token::ESCAPED_STRICT_RESERVED_WORD;
     }
@@ -994,12 +1008,13 @@ base::Optional<RegExpFlags> Scanner::ScanRegExpFlags() {
   DCHECK_EQ(Token::REGEXP_LITERAL, next().token);
 
   RegExpFlags flags;
+  next().literal_chars.Start();
   while (IsIdentifierPart(c0_)) {
     base::Optional<RegExpFlag> maybe_flag = JSRegExp::FlagFromChar(c0_);
     if (!maybe_flag.has_value()) return {};
     RegExpFlag flag = maybe_flag.value();
     if (flags & flag) return {};
-    Advance();
+    AddLiteralCharAdvance();
     flags |= flag;
   }
 
@@ -1043,7 +1058,7 @@ const char* Scanner::CurrentLiteralAsCString(Zone* zone) const {
   DCHECK(is_literal_one_byte());
   base::Vector<const uint8_t> vector = literal_one_byte_string();
   int length = vector.length();
-  char* buffer = zone->NewArray<char>(length + 1);
+  char* buffer = zone->AllocateArray<char>(length + 1);
   memcpy(buffer, vector.begin(), length);
   buffer[length] = '\0';
   return buffer;

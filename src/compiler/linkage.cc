@@ -72,7 +72,8 @@ std::ostream& operator<<(std::ostream& os, const CallDescriptor& d) {
 MachineSignature* CallDescriptor::GetMachineSignature(Zone* zone) const {
   size_t param_count = ParameterCount();
   size_t return_count = ReturnCount();
-  MachineType* types = zone->NewArray<MachineType>(param_count + return_count);
+  MachineType* types =
+      zone->AllocateArray<MachineType>(param_count + return_count);
   int current = 0;
   for (size_t i = 0; i < return_count; ++i) {
     types[current++] = GetReturnType(i);
@@ -199,13 +200,33 @@ int CallDescriptor::CalculateFixedFrameSize(CodeKind code_kind) const {
       return TypedFrameConstants::kFixedSlotCount;
 #if V8_ENABLE_WEBASSEMBLY
     case kCallWasmFunction:
-    case kCallWasmImportWrapper:
       return WasmFrameConstants::kFixedSlotCount;
+    case kCallWasmImportWrapper:
+      return WasmImportWrapperFrameConstants::kFixedSlotCount;
     case kCallWasmCapiFunction:
       return WasmExitFrameConstants::kFixedSlotCount;
 #endif  // V8_ENABLE_WEBASSEMBLY
   }
   UNREACHABLE();
+}
+
+EncodedCSignature CallDescriptor::ToEncodedCSignature() const {
+  int parameter_count = static_cast<int>(ParameterCount());
+  EncodedCSignature sig(parameter_count);
+  CHECK_LT(parameter_count, EncodedCSignature::kInvalidParamCount);
+
+  for (int i = 0; i < parameter_count; ++i) {
+    if (IsFloatingPoint(GetParameterType(i).representation())) {
+      sig.SetFloat(i);
+    }
+  }
+  if (ReturnCount() > 0) {
+    DCHECK_EQ(1, ReturnCount());
+    if (IsFloatingPoint(GetReturnType(0).representation())) {
+      sig.SetFloat(EncodedCSignature::kReturnIndex);
+    }
+  }
+  return sig;
 }
 
 void CallDescriptor::ComputeParamCounts() const {
@@ -230,10 +251,10 @@ CallDescriptor* Linkage::ComputeIncoming(Zone* zone,
   if (!info->closure().is_null()) {
     // If we are compiling a JS function, use a JS call descriptor,
     // plus the receiver.
-    SharedFunctionInfo shared = info->closure()->shared();
+    Tagged<SharedFunctionInfo> shared = info->closure()->shared();
     return GetJSCallDescriptor(
         zone, info->is_osr(),
-        shared.internal_formal_parameter_count_with_receiver(),
+        shared->internal_formal_parameter_count_with_receiver(),
         CallDescriptor::kCanUseRoots);
   }
   return nullptr;  // TODO(titzer): ?
@@ -249,14 +270,15 @@ bool Linkage::NeedsFrameStateInput(Runtime::FunctionId function) {
     case Runtime::kAbort:
     case Runtime::kAllocateInOldGeneration:
     case Runtime::kCreateIterResultObject:
+    case Runtime::kGrowableSharedArrayBufferByteLength:
     case Runtime::kIncBlockCounter:
-    case Runtime::kIsFunction:
     case Runtime::kNewClosure:
     case Runtime::kNewClosure_Tenured:
     case Runtime::kNewFunctionContext:
     case Runtime::kPushBlockContext:
     case Runtime::kPushCatchContext:
     case Runtime::kReThrow:
+    case Runtime::kReThrowWithMessage:
     case Runtime::kStringEqual:
     case Runtime::kStringLessThan:
     case Runtime::kStringLessThanOrEqual:
@@ -352,7 +374,7 @@ CallDescriptor* Linkage::GetCEntryStubCallDescriptor(
       js_parameter_count,               // stack_parameter_count
       properties,                       // properties
       kNoCalleeSaved,                   // callee-saved
-      kNoCalleeSaved,                   // callee-saved fp
+      kNoCalleeSavedFp,                 // callee-saved fp
       flags,                            // flags
       debug_name,                       // debug name
       stack_order);                     // stack order
@@ -360,7 +382,8 @@ CallDescriptor* Linkage::GetCEntryStubCallDescriptor(
 
 CallDescriptor* Linkage::GetJSCallDescriptor(Zone* zone, bool is_osr,
                                              int js_parameter_count,
-                                             CallDescriptor::Flags flags) {
+                                             CallDescriptor::Flags flags,
+                                             Operator::Properties properties) {
   const size_t return_count = 1;
   const size_t context_count = 1;
   const size_t new_target_count = 1;
@@ -395,20 +418,23 @@ CallDescriptor* Linkage::GetJSCallDescriptor(Zone* zone, bool is_osr,
   MachineType target_type = MachineType::AnyTagged();
   // When entering into an OSR function from unoptimized code the JSFunction
   // is not in a register, but it is on the stack in the marker spill slot.
-  LinkageLocation target_loc =
-      is_osr ? LinkageLocation::ForSavedCallerFunction()
-             : regloc(kJSFunctionRegister, MachineType::AnyTagged());
-  return zone->New<CallDescriptor>(     // --
-      CallDescriptor::kCallJSFunction,  // kind
-      target_type,                      // target MachineType
-      target_loc,                       // target location
-      locations.Build(),                // location_sig
-      js_parameter_count,               // stack_parameter_count
-      Operator::kNoProperties,          // properties
-      kNoCalleeSaved,                   // callee-saved
-      kNoCalleeSaved,                   // callee-saved fp
-      flags,                            // flags
-      "js-call");                       // debug name
+  // For kind == JSDescKind::kBuiltin, we should still use the regular
+  // kJSFunctionRegister, so that frame attribution for stack traces works.
+  LinkageLocation target_loc = is_osr
+                                   ? LinkageLocation::ForSavedCallerFunction()
+                                   : regloc(kJSFunctionRegister, target_type);
+  CallDescriptor::Kind descriptor_kind = CallDescriptor::kCallJSFunction;
+  return zone->New<CallDescriptor>(  // --
+      descriptor_kind,               // kind
+      target_type,                   // target MachineType
+      target_loc,                    // target location
+      locations.Build(),             // location_sig
+      js_parameter_count,            // stack_parameter_count
+      properties,                    // properties
+      kNoCalleeSaved,                // callee-saved
+      kNoCalleeSavedFp,              // callee-saved fp
+      flags,                         // flags
+      "js-call");                    // debug name
 }
 
 // TODO(turbofan): cache call descriptors for code stub calls.
@@ -430,24 +456,18 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
 
   DCHECK_GE(stack_parameter_count, descriptor.GetStackParameterCount());
 
-  size_t return_count = descriptor.GetReturnCount();
+  int return_count = descriptor.GetReturnCount();
   LocationSignature::Builder locations(zone, return_count, parameter_count);
 
   // Add returns.
-  static constexpr Register return_registers[] = {
-      kReturnRegister0, kReturnRegister1, kReturnRegister2};
-  size_t num_returns = 0;
-  size_t num_fp_returns = 0;
-  for (size_t i = 0; i < locations.return_count_; i++) {
+  for (int i = 0; i < return_count; i++) {
     MachineType type = descriptor.GetReturnType(static_cast<int>(i));
     if (IsFloatingPoint(type.representation())) {
-      DCHECK_LT(num_fp_returns, 1);  // Only 1 FP return is supported.
-      locations.AddReturn(regloc(kFPReturnRegister0, type));
-      num_fp_returns++;
+      DoubleRegister reg = descriptor.GetDoubleRegisterReturn(i);
+      locations.AddReturn(regloc(reg, type));
     } else {
-      DCHECK_LT(num_returns, arraysize(return_registers));
-      locations.AddReturn(regloc(return_registers[num_returns], type));
-      num_returns++;
+      Register reg = descriptor.GetRegisterReturn(i);
+      locations.AddReturn(regloc(reg, type));
     }
   }
 
@@ -455,15 +475,14 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
   for (int i = 0; i < js_parameter_count; i++) {
     if (i < register_parameter_count) {
       // The first parameters go in registers.
-      // TODO(bbudge) Add floating point registers to the InterfaceDescriptor
-      // and use them for FP types. Currently, this works because on most
-      // platforms, all FP registers are available for use. On ia32, xmm0 is
-      // not allocatable and so we must work around that with platform-specific
-      // descriptors, adjusting the GP register set to avoid eax, which has
-      // register code 0.
-      Register reg = descriptor.GetRegisterParameter(i);
       MachineType type = descriptor.GetParameterType(i);
-      locations.AddParam(regloc(reg, type));
+      if (IsFloatingPoint(type.representation())) {
+        DoubleRegister reg = descriptor.GetDoubleRegisterParameter(i);
+        locations.AddParam(regloc(reg, type));
+      } else {
+        Register reg = descriptor.GetRegisterParameter(i);
+        locations.AddParam(regloc(reg, type));
+      }
     } else {
       // The rest of the parameters go on the stack.
       int stack_slot = i - register_parameter_count - stack_parameter_count;
@@ -502,7 +521,7 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
   RegList callee_saved_registers = kNoCalleeSaved;
   if (descriptor.CalleeSaveRegisters()) {
     callee_saved_registers = allocatable_registers;
-    DCHECK(callee_saved_registers);
+    DCHECK(!callee_saved_registers.is_empty());
   }
   LinkageLocation target_loc = LinkageLocation::ForAnyRegister(target_type);
   return zone->New<CallDescriptor>(          // --
@@ -513,7 +532,7 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
       stack_parameter_count,                 // stack_parameter_count
       properties,                            // properties
       callee_saved_registers,                // callee-saved registers
-      kNoCalleeSaved,                        // callee-saved fp
+      kNoCalleeSavedFp,                      // callee-saved fp
       CallDescriptor::kCanUseRoots | flags,  // flags
       descriptor.DebugName(),                // debug name
       descriptor.GetStackArgumentOrder(),    // stack order
@@ -560,7 +579,7 @@ CallDescriptor* Linkage::GetBytecodeDispatchCallDescriptor(
       stack_parameter_count,         // stack_parameter_count
       Operator::kNoProperties,       // properties
       kNoCalleeSaved,                // callee-saved registers
-      kNoCalleeSaved,                // callee-saved fp
+      kNoCalleeSavedFp,              // callee-saved fp
       kFlags,                        // flags
       descriptor.DebugName());
 }

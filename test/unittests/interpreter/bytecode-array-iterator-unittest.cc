@@ -31,14 +31,14 @@ TEST_F(BytecodeArrayIteratorTest, IteratesBytecodeArray) {
                               HashSeed(isolate()));
   double heap_num_0 = 2.718;
   double heap_num_1 = 2.0 * Smi::kMaxValue;
-  Smi zero = Smi::zero();
-  Smi smi_0 = Smi::FromInt(64);
-  Smi smi_1 = Smi::FromInt(-65536);
+  Tagged<Smi> zero = Smi::zero();
+  Tagged<Smi> smi_0 = Smi::FromInt(64);
+  Tagged<Smi> smi_1 = Smi::FromInt(-65536);
   Register reg_0(0);
   Register reg_16(16);  // Something not eligible for short Star.
   RegisterList pair = BytecodeUtils::NewRegisterList(0, 2);
   RegisterList triple = BytecodeUtils::NewRegisterList(0, 3);
-  Register param = Register::FromParameterIndex(2, builder.parameter_count());
+  Register param = Register::FromParameterIndex(2);
   const AstRawString* name = ast_factory.GetOneByteString("abc");
   uint32_t name_index = 2;
   uint32_t load_feedback_slot = feedback_spec.AddLoadICSlot().ToInt();
@@ -78,7 +78,7 @@ TEST_F(BytecodeArrayIteratorTest, IteratesBytecodeArray) {
   EXPECT_EQ(iterator.current_bytecode(), Bytecode::kLdaConstant);
   EXPECT_EQ(iterator.current_offset(), offset);
   EXPECT_EQ(iterator.current_operand_scale(), OperandScale::kSingle);
-  EXPECT_EQ(iterator.GetConstantForIndexOperand(0, isolate())->Number(),
+  EXPECT_EQ(Object::Number(*iterator.GetConstantForIndexOperand(0, isolate())),
             heap_num_0);
   CHECK(!iterator.done());
   offset += Bytecodes::Size(Bytecode::kLdaConstant, OperandScale::kSingle);
@@ -94,7 +94,7 @@ TEST_F(BytecodeArrayIteratorTest, IteratesBytecodeArray) {
   EXPECT_EQ(iterator.current_bytecode(), Bytecode::kLdaConstant);
   EXPECT_EQ(iterator.current_offset(), offset);
   EXPECT_EQ(iterator.current_operand_scale(), OperandScale::kSingle);
-  EXPECT_EQ(iterator.GetConstantForIndexOperand(0, isolate())->Number(),
+  EXPECT_EQ(Object::Number(*iterator.GetConstantForIndexOperand(0, isolate())),
             heap_num_1);
   CHECK(!iterator.done());
   offset += Bytecodes::Size(Bytecode::kLdaConstant, OperandScale::kSingle);
@@ -180,14 +180,14 @@ TEST_F(BytecodeArrayIteratorTest, IteratesBytecodeArray) {
   offset += Bytecodes::Size(Bytecode::kStar, OperandScale::kSingle);
   iterator.Advance();
 
-  EXPECT_EQ(iterator.current_bytecode(), Bytecode::kLdaNamedProperty);
+  EXPECT_EQ(iterator.current_bytecode(), Bytecode::kGetNamedProperty);
   EXPECT_EQ(iterator.current_offset(), offset);
   EXPECT_EQ(iterator.current_operand_scale(), OperandScale::kSingle);
   EXPECT_EQ(iterator.GetRegisterOperand(0).index(), reg_16.index());
   EXPECT_EQ(iterator.GetIndexOperand(1), name_index);
   EXPECT_EQ(iterator.GetIndexOperand(2), load_feedback_slot);
   CHECK(!iterator.done());
-  offset += Bytecodes::Size(Bytecode::kLdaNamedProperty, OperandScale::kSingle);
+  offset += Bytecodes::Size(Bytecode::kGetNamedProperty, OperandScale::kSingle);
   iterator.Advance();
 
   EXPECT_EQ(iterator.current_bytecode(), Bytecode::kAdd);

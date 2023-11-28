@@ -6,7 +6,6 @@
 #define V8_TORQUE_TYPES_H_
 
 #include <algorithm>
-#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -98,7 +97,7 @@ using MaybeSpecializationKey = base::Optional<SpecializationKey<GenericType>>;
 struct TypeChecker {
   // The type of the object. This string is not guaranteed to correspond to a
   // C++ class, but just to a type checker function: for any type "Foo" here,
-  // the function Object::IsFoo must exist.
+  // the function IsFoo must exist.
   std::string type;
   // If {type} is "MaybeObject", then {weak_ref_to} indicates the corresponding
   // strong object type. Otherwise, {weak_ref_to} is empty.
@@ -117,7 +116,7 @@ class V8_EXPORT_PRIVATE Type : public TypeBase {
   // Used for naming generated code.
   virtual std::string SimpleName() const;
 
-  std::string UnhandlifiedCppTypeName() const;
+  std::string TagglifiedCppTypeName() const;
   std::string HandlifiedCppTypeName() const;
 
   const Type* parent() const { return parent_; }
@@ -128,6 +127,8 @@ class V8_EXPORT_PRIVATE Type : public TypeBase {
     return IsAbstractName(CONSTEXPR_BOOL_TYPE_STRING);
   }
   bool IsVoidOrNever() const { return IsVoid() || IsNever(); }
+  bool IsFloat32() const { return IsAbstractName(FLOAT32_TYPE_STRING); }
+  bool IsFloat64() const { return IsAbstractName(FLOAT64_TYPE_STRING); }
   std::string GetGeneratedTypeName() const;
   std::string GetGeneratedTNodeTypeName() const;
   virtual bool IsConstexpr() const {
@@ -226,7 +227,7 @@ struct Field {
   // because we don't support the struct field for on-heap layouts.
   base::Optional<size_t> offset;
 
-  bool is_weak;
+  bool custom_weak_marking;
   bool const_qualified;
   FieldSynchronization read_synchronization;
   FieldSynchronization write_synchronization;
@@ -522,6 +523,8 @@ class V8_EXPORT_PRIVATE BitFieldStructType final : public Type {
 
   const BitField& LookupField(const std::string& name) const;
 
+  const SourcePosition GetPosition() const { return decl_->pos; }
+
  private:
   friend class TypeOracle;
   BitFieldStructType(Namespace* nspace, const Type* parent,
@@ -618,9 +621,9 @@ class StructType final : public AggregateType {
 
   enum class ClassificationFlag {
     kEmpty = 0,
-    kTagged = 1 << 0,
-    kUntagged = 1 << 1,
-    kMixed = kTagged | kUntagged,
+    kStrongTagged = 1 << 0,
+    kWeakTagged = 1 << 1,
+    kUntagged = 1 << 2,
   };
   using Classification = base::Flags<ClassificationFlag>;
 
@@ -669,33 +672,57 @@ class ClassType final : public AggregateType {
   std::string GetGeneratedTNodeTypeNameImpl() const override;
   bool IsExtern() const { return flags_ & ClassFlag::kExtern; }
   bool ShouldGeneratePrint() const {
-    return !IsExtern() || (ShouldGenerateCppClassDefinitions() &&
-                           !IsAbstract() && !HasUndefinedLayout());
+    if (flags_ & ClassFlag::kCppObjectDefinition) return false;
+    if (flags_ & ClassFlag::kCppObjectLayoutDefinition) return false;
+    if (!IsExtern()) return true;
+    if (!ShouldGenerateCppClassDefinitions()) return false;
+    return !IsAbstract() && !HasUndefinedLayout();
   }
   bool ShouldGenerateVerify() const {
-    return !IsExtern() || (ShouldGenerateCppClassDefinitions() &&
-                           !HasUndefinedLayout() && !IsShape());
+    if (flags_ & ClassFlag::kCppObjectDefinition) return false;
+    if (flags_ & ClassFlag::kCppObjectLayoutDefinition) return false;
+    if (!IsExtern()) return true;
+    if (!ShouldGenerateCppClassDefinitions()) return false;
+    return !HasUndefinedLayout() && !IsShape();
   }
   bool ShouldGenerateBodyDescriptor() const {
-    return flags_ & ClassFlag::kGenerateBodyDescriptor ||
-           (!IsAbstract() && !IsExtern());
+    if (flags_ & ClassFlag::kCppObjectDefinition) return false;
+    if (flags_ & ClassFlag::kCppObjectLayoutDefinition) return false;
+    if (flags_ & ClassFlag::kGenerateBodyDescriptor) return true;
+    return !IsAbstract() && !IsExtern();
   }
   bool DoNotGenerateCast() const {
     return flags_ & ClassFlag::kDoNotGenerateCast;
   }
   bool IsTransient() const override { return flags_ & ClassFlag::kTransient; }
   bool IsAbstract() const { return flags_ & ClassFlag::kAbstract; }
+  bool IsLayoutDefinedInCpp() const {
+    return flags_ & ClassFlag::kCppObjectLayoutDefinition;
+  }
   bool HasSameInstanceTypeAsParent() const {
     return flags_ & ClassFlag::kHasSameInstanceTypeAsParent;
   }
   bool ShouldGenerateCppClassDefinitions() const {
+    if (flags_ & ClassFlag::kCppObjectDefinition) return false;
+    if (flags_ & ClassFlag::kCppObjectLayoutDefinition) return false;
     return (flags_ & ClassFlag::kGenerateCppClassDefinitions) || !IsExtern();
   }
-  bool ShouldGenerateFullClassDefinition() const {
-    return !IsExtern() && !(flags_ & ClassFlag::kCustomCppClass);
+  bool ShouldGenerateCppObjectDefinitionAsserts() const {
+    return flags_ & ClassFlag::kCppObjectDefinition;
   }
-  // Class with multiple or non-standard maps, do not auto-generate map.
-  bool HasCustomMap() const { return flags_ & ClassFlag::kCustomMap; }
+  bool ShouldGenerateCppObjectLayoutDefinitionAsserts() const {
+    return flags_ & ClassFlag::kCppObjectLayoutDefinition &&
+           flags_ & ClassFlag::kGenerateCppClassDefinitions;
+  }
+  bool ShouldGenerateFullClassDefinition() const { return !IsExtern(); }
+  bool ShouldGenerateUniqueMap() const {
+    return (flags_ & ClassFlag::kGenerateUniqueMap) ||
+           (!IsExtern() && !IsAbstract());
+  }
+  bool ShouldGenerateFactoryFunction() const {
+    return (flags_ & ClassFlag::kGenerateFactoryFunction) ||
+           (ShouldExport() && !IsAbstract());
+  }
   bool ShouldExport() const { return flags_ & ClassFlag::kExport; }
   bool IsShape() const { return flags_ & ClassFlag::kIsShape; }
   bool HasStaticSize() const;
@@ -726,7 +753,7 @@ class ClassType final : public AggregateType {
   // what kind of GC visiting the individual slots require.
   std::vector<ObjectSlotKind> ComputeHeaderSlotKinds() const;
   base::Optional<ObjectSlotKind> ComputeArraySlotKind() const;
-  bool HasNoPointerSlots() const;
+  bool HasNoPointerSlotsExceptMap() const;
   bool HasIndexedFieldsIncludingInParents() const;
   const Field* GetFieldPreceding(size_t field_index) const;
 

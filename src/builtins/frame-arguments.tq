@@ -8,12 +8,13 @@ struct Arguments {
   const base: RawPtr;
   // length is the number of arguments without the receiver.
   const length: intptr;
-  // actual_count is the actual number of arguments on the stack (depending on
-  // kJSArgcIncludesReceiver may or may not include the receiver).
+  // actual_count is the actual number of arguments on the stack (including the
+  // receiver).
   const actual_count: intptr;
 }
 
 extern operator '[]' macro GetArgumentValue(Arguments, intptr): JSAny;
+extern operator '[]=' macro SetArgumentValue(Arguments, intptr, Object): void;
 extern macro GetFrameArguments(FrameWithArguments, intptr): Arguments;
 
 struct ArgumentsIterator {

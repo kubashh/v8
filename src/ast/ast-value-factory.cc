@@ -29,14 +29,10 @@
 
 #include "src/base/hashmap-entry.h"
 #include "src/base/logging.h"
-#include "src/base/platform/wrappers.h"
 #include "src/common/globals.h"
 #include "src/heap/factory-inl.h"
 #include "src/heap/local-factory-inl.h"
-#include "src/objects/objects-inl.h"
-#include "src/objects/objects.h"
 #include "src/objects/string.h"
-#include "src/strings/char-predicates-inl.h"
 #include "src/strings/string-hasher.h"
 #include "src/utils/utils-inl.h"
 
@@ -48,14 +44,14 @@ namespace {
 // For using StringToIndex.
 class OneByteStringStream {
  public:
-  explicit OneByteStringStream(base::Vector<const byte> lb)
+  explicit OneByteStringStream(base::Vector<const uint8_t> lb)
       : literal_bytes_(lb), pos_(0) {}
 
   bool HasMore() { return pos_ < literal_bytes_.length(); }
   uint16_t GetNext() { return literal_bytes_[pos_++]; }
 
  private:
-  base::Vector<const byte> literal_bytes_;
+  base::Vector<const uint8_t> literal_bytes_;
   int pos_;
 };
 
@@ -84,7 +80,7 @@ template EXPORT_TEMPLATE_DEFINE(
 bool AstRawString::AsArrayIndex(uint32_t* index) const {
   // The StringHasher will set up the hash. Bail out early if we know it
   // can't be convertible to an array index.
-  if ((raw_hash_field_ & Name::kIsNotIntegerIndexMask) != 0) return false;
+  if (!IsIntegerIndex()) return false;
   if (length() <= Name::kMaxCachedArrayIndexLength) {
     *index = Name::ArrayIndexValueBits::decode(raw_hash_field_);
     return true;
@@ -97,7 +93,7 @@ bool AstRawString::AsArrayIndex(uint32_t* index) const {
 }
 
 bool AstRawString::IsIntegerIndex() const {
-  return (raw_hash_field_ & Name::kIsNotIntegerIndexMask) == 0;
+  return Name::IsIntegerIndex(raw_hash_field_);
 }
 
 bool AstRawString::IsOneByteEqualTo(const char* data) const {
@@ -184,6 +180,10 @@ int AstRawString::Compare(const AstRawString* lhs, const AstRawString* rhs) {
 
   return lhs->byte_length() - rhs->byte_length();
 }
+
+#ifdef OBJECT_PRINT
+void AstRawString::Print() const { printf("%.*s", byte_length(), raw_data()); }
+#endif  // OBJECT_PRINT
 
 template <typename IsolateT>
 Handle<String> AstConsString::Allocate(IsolateT* isolate) const {
@@ -335,13 +335,15 @@ const AstRawString* AstValueFactory::GetTwoByteStringInternal(
   uint32_t raw_hash_field = StringHasher::HashSequentialString<uint16_t>(
       literal.begin(), literal.length(), hash_seed_);
   return GetString(raw_hash_field, false,
-                   base::Vector<const byte>::cast(literal));
+                   base::Vector<const uint8_t>::cast(literal));
 }
 
-const AstRawString* AstValueFactory::GetString(Handle<String> literal) {
+const AstRawString* AstValueFactory::GetString(
+    Tagged<String> literal,
+    const SharedStringAccessGuardIfNeeded& access_guard) {
   const AstRawString* result = nullptr;
   DisallowGarbageCollection no_gc;
-  String::FlatContent content = literal->GetFlatContent(no_gc);
+  String::FlatContent content = literal->GetFlatContent(no_gc, access_guard);
   if (content.IsOneByte()) {
     result = GetOneByteStringInternal(content.ToOneByteVector());
   } else {
@@ -351,32 +353,23 @@ const AstRawString* AstValueFactory::GetString(Handle<String> literal) {
   return result;
 }
 
-const AstRawString* AstValueFactory::CloneFromOtherFactory(
-    const AstRawString* raw_string) {
-  const AstRawString* result =
-      GetString(raw_string->raw_hash_field(), raw_string->is_one_byte(),
-                base::Vector<const byte>(raw_string->raw_data(),
-                                         raw_string->byte_length()));
-  return result;
-}
-
 AstConsString* AstValueFactory::NewConsString() {
-  return zone()->New<AstConsString>();
+  return single_parse_zone()->New<AstConsString>();
 }
 
 AstConsString* AstValueFactory::NewConsString(const AstRawString* str) {
-  return NewConsString()->AddString(zone(), str);
+  return NewConsString()->AddString(single_parse_zone(), str);
 }
 
 AstConsString* AstValueFactory::NewConsString(const AstRawString* str1,
                                               const AstRawString* str2) {
-  return NewConsString()->AddString(zone(), str1)->AddString(zone(), str2);
+  return NewConsString()
+      ->AddString(single_parse_zone(), str1)
+      ->AddString(single_parse_zone(), str2);
 }
 
 template <typename IsolateT>
 void AstValueFactory::Internalize(IsolateT* isolate) {
-  if (!zone_) return;
-
   // Strings need to be internalized before values, because values refer to
   // strings.
   for (AstRawString* current = strings_; current != nullptr;) {
@@ -386,7 +379,6 @@ void AstValueFactory::Internalize(IsolateT* isolate) {
   }
 
   ResetStrings();
-  zone_ = nullptr;
 }
 template EXPORT_TEMPLATE_DEFINE(
     V8_EXPORT_PRIVATE) void AstValueFactory::Internalize(Isolate* isolate);
@@ -395,7 +387,7 @@ template EXPORT_TEMPLATE_DEFINE(
 
 const AstRawString* AstValueFactory::GetString(
     uint32_t raw_hash_field, bool is_one_byte,
-    base::Vector<const byte> literal_bytes) {
+    base::Vector<const uint8_t> literal_bytes) {
   // literal_bytes here points to whatever the user passed, and this is OK
   // because we use vector_compare (which checks the contents) to compare
   // against the AstRawStrings which are in the string_table_. We should not
@@ -406,10 +398,11 @@ const AstRawString* AstValueFactory::GetString(
       [&]() {
         // Copy literal contents for later comparison.
         int length = literal_bytes.length();
-        byte* new_literal_bytes = zone()->NewArray<byte>(length);
+        uint8_t* new_literal_bytes =
+            ast_raw_string_zone()->AllocateArray<uint8_t>(length);
         memcpy(new_literal_bytes, literal_bytes.begin(), length);
-        AstRawString* new_string = zone()->New<AstRawString>(
-            is_one_byte, base::Vector<const byte>(new_literal_bytes, length),
+        AstRawString* new_string = ast_raw_string_zone()->New<AstRawString>(
+            is_one_byte, base::Vector<const uint8_t>(new_literal_bytes, length),
             raw_hash_field);
         CHECK_NOT_NULL(new_string);
         AddString(new_string);

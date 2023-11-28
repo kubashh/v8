@@ -21,21 +21,33 @@
 #include "unicode/locid.h"
 #include "unicode/uversion.h"
 
-#define V8_MINIMUM_ICU_VERSION 69
+#define V8_MINIMUM_ICU_VERSION 73
 
 namespace U_ICU_NAMESPACE {
 class BreakIterator;
 class Collator;
 class FormattedValue;
 class StringEnumeration;
+class TimeZone;
 class UnicodeString;
 }  // namespace U_ICU_NAMESPACE
 
 namespace v8 {
 namespace internal {
 
-template <typename T>
-class Handle;
+struct NumberFormatSpan {
+  int32_t field_id;
+  int32_t begin_pos;
+  int32_t end_pos;
+
+  NumberFormatSpan() = default;
+  NumberFormatSpan(int32_t field_id, int32_t begin_pos, int32_t end_pos)
+      : field_id(field_id), begin_pos(begin_pos), end_pos(end_pos) {}
+};
+
+V8_EXPORT_PRIVATE std::vector<NumberFormatSpan> FlattenRegionsToParts(
+    std::vector<NumberFormatSpan>* regions);
+
 class JSCollator;
 
 class Intl {
@@ -44,6 +56,24 @@ class Intl {
     kBoundFunction = Context::MIN_CONTEXT_SLOTS,
     kLength
   };
+
+  enum class FormatRangeSource { kShared, kStartRange, kEndRange };
+
+  class FormatRangeSourceTracker {
+   public:
+    FormatRangeSourceTracker();
+    void Add(int32_t field, int32_t start, int32_t limit);
+    FormatRangeSource GetSource(int32_t start, int32_t limit) const;
+
+   private:
+    int32_t start_[2];
+    int32_t limit_[2];
+
+    bool FieldContains(int32_t field, int32_t start, int32_t limit) const;
+  };
+
+  static Handle<String> SourceString(Isolate* isolate,
+                                     FormatRangeSource source);
 
   // Build a set of ICU locales from a list of Locales. If there is a locale
   // with a script tag then the locales also include a locale without the
@@ -100,8 +130,9 @@ class Intl {
     kNone,
     kTryFastPath,
   };
+  template <class IsolateT>
   V8_EXPORT_PRIVATE static CompareStringsOptions CompareStringsOptionsFor(
-      Isolate* isolate, Handle<Object> locales, Handle<Object> options);
+      IsolateT* isolate, Handle<Object> locales, Handle<Object> options);
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static int CompareStrings(
       Isolate* isolate, const icu::Collator& collator, Handle<String> s1,
       Handle<String> s2,
@@ -113,6 +144,44 @@ class Intl {
       Isolate* isolate, Handle<Object> num, Handle<Object> locales,
       Handle<Object> options, const char* method_name);
 
+  // [[RoundingPriority]] is one of the String values "auto", "morePrecision",
+  // or "lessPrecision", specifying the rounding priority for the number.
+  enum class RoundingPriority {
+    kAuto,
+    kMorePrecision,
+    kLessPrecision,
+  };
+
+  enum class RoundingType {
+    kFractionDigits,
+    kSignificantDigits,
+    kMorePrecision,
+    kLessPrecision,
+  };
+
+  // [[RoundingMode]] is one of the String values "ceil", "floor", "expand",
+  // "trunc", "halfCeil", "halfFloor", "halfExpand", "halfTrunc", or "halfEven",
+  // specifying the rounding strategy for the number.
+  enum class RoundingMode {
+    kCeil,
+    kFloor,
+    kExpand,
+    kTrunc,
+    kHalfCeil,
+    kHalfFloor,
+    kHalfExpand,
+    kHalfTrunc,
+    kHalfEven,
+  };
+
+  // [[TrailingZeroDisplay]] is one of the String values "auto" or
+  // "stripIfInteger", specifying the strategy for displaying trailing zeros on
+  // whole number.
+  enum class TrailingZeroDisplay {
+    kAuto,
+    kStripIfInteger,
+  };
+
   // ecma402/#sec-setnfdigitoptions
   struct NumberFormatDigitOptions {
     int minimum_integer_digits;
@@ -120,11 +189,16 @@ class Intl {
     int maximum_fraction_digits;
     int minimum_significant_digits;
     int maximum_significant_digits;
+    RoundingPriority rounding_priority;
+    RoundingType rounding_type;
+    int rounding_increment;
+    RoundingMode rounding_mode;
+    TrailingZeroDisplay trailing_zero_display;
   };
   V8_WARN_UNUSED_RESULT static Maybe<NumberFormatDigitOptions>
   SetNumberFormatDigitOptions(Isolate* isolate, Handle<JSReceiver> options,
                               int mnfd_default, int mxfd_default,
-                              bool notation_is_compact);
+                              bool notation_is_compact, const char* service);
 
   // Helper function to convert a UnicodeString to a Handle<String>
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> ToString(
@@ -141,8 +215,9 @@ class Intl {
 
   // Helper function to convert number field id to type string.
   static Handle<String> NumberFieldToType(Isolate* isolate,
-                                          Handle<Object> numeric_obj,
-                                          int32_t field_id);
+                                          const NumberFormatSpan& part,
+                                          const icu::UnicodeString& text,
+                                          bool is_nan);
 
   // A helper function to implement formatToParts which add element to array as
   // $array[$index] = { type: $field_type_string, value: $value }
@@ -159,6 +234,12 @@ class Intl {
                          Handle<String> field_type_string, Handle<String> value,
                          Handle<String> additional_property_name,
                          Handle<String> additional_property_value);
+
+  // A helper function to implement formatToParts which add element to array
+  static Maybe<int> AddNumberElements(Isolate* isolate,
+                                      const icu::FormattedValue& formatted,
+                                      Handle<JSArray> result, int start_index,
+                                      Handle<String> unit);
 
   // In ECMA 402 v1, Intl constructors supported a mode of operation
   // where calling them with an existing object as a receiver would
@@ -273,7 +354,12 @@ class Intl {
 
   static const uint8_t* ToLatin1LowerTable();
 
-  static String ConvertOneByteToLower(String src, String dst);
+  static const uint8_t* AsciiCollationWeightsL1();
+  static const uint8_t* AsciiCollationWeightsL3();
+  static const int kAsciiCollationWeightsLength;
+
+  static Tagged<String> ConvertOneByteToLower(Tagged<String> src,
+                                              Tagged<String> dst);
 
   static const std::set<std::string>& GetAvailableLocales();
 
@@ -290,6 +376,62 @@ class Intl {
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSArray> AvailableCalendars(
       Isolate* isolate);
+
+  V8_WARN_UNUSED_RESULT static bool IsValidTimeZoneName(
+      const icu::TimeZone& tz);
+  V8_WARN_UNUSED_RESULT static bool IsValidTimeZoneName(Isolate* isolate,
+                                                        const std::string& id);
+  V8_WARN_UNUSED_RESULT static bool IsValidTimeZoneName(Isolate* isolate,
+                                                        Handle<String> id);
+
+  // Function to support Temporal
+  V8_WARN_UNUSED_RESULT static std::string TimeZoneIdFromIndex(int32_t index);
+
+  // Return the index of timezone which later could be used with
+  // TimeZoneIdFromIndex. Returns -1 while the identifier is not a built-in
+  // TimeZone name.
+  static int32_t GetTimeZoneIndex(Isolate* isolate, Handle<String> identifier);
+
+  enum class Transition { kNext, kPrevious };
+
+  // Functions to support Temporal
+
+  // Return the epoch of transition in BigInt or null if there are no
+  // transition.
+  static Handle<Object> GetTimeZoneOffsetTransitionNanoseconds(
+      Isolate* isolate, int32_t time_zone_index,
+      Handle<BigInt> nanosecond_epoch, Transition transition);
+
+  // Return the Time Zone offset, in the unit of nanosecond by int64_t, during
+  // the time of the nanosecond_epoch.
+  static int64_t GetTimeZoneOffsetNanoseconds(Isolate* isolate,
+                                              int32_t time_zone_index,
+                                              Handle<BigInt> nanosecond_epoch);
+
+  // This function may return the result, the std::vector<int64_t> in one of
+  // the following three condictions:
+  // 1. While nanosecond_epoch fall into the daylight saving time change
+  // moment that skipped one (or two or even six, in some Time Zone) hours
+  // later in local time:
+  //    [],
+  // 2. In other moment not during daylight saving time change:
+  //    [offset_former], and
+  // 3. when nanosecond_epoch fall into they daylight saving time change hour
+  // which the clock time roll back one (or two or six, in some Time Zone) hour:
+  //    [offset_former, offset_later]
+  // The unit of the return values in BigInt is nanosecond.
+  static std::vector<Handle<BigInt>> GetTimeZonePossibleOffsetNanoseconds(
+      Isolate* isolate, int32_t time_zone_index,
+      Handle<BigInt> nanosecond_epoch);
+
+  static Handle<String> DefaultTimeZone(Isolate* isolate);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> CanonicalizeTimeZoneName(
+      Isolate* isolate, Handle<String> identifier);
+
+  // ecma402/#sec-coerceoptionstoobject
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSReceiver> CoerceOptionsToObject(
+      Isolate* isolate, Handle<Object> options, const char* service);
 };
 
 }  // namespace internal

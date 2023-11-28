@@ -26,6 +26,49 @@ void MutableBigInt_AbsoluteAddAndCanonicalize(Address result_addr,
 int32_t MutableBigInt_AbsoluteCompare(Address x_addr, Address y_addr);
 void MutableBigInt_AbsoluteSubAndCanonicalize(Address result_addr,
                                               Address x_addr, Address y_addr);
+int32_t MutableBigInt_AbsoluteMulAndCanonicalize(Address result_addr,
+                                                 Address x_addr,
+                                                 Address y_addr);
+int32_t MutableBigInt_AbsoluteDivAndCanonicalize(Address result_addr,
+                                                 Address x_addr,
+                                                 Address y_addr);
+int32_t MutableBigInt_AbsoluteModAndCanonicalize(Address result_addr,
+                                                 Address x_addr,
+                                                 Address y_addr);
+void MutableBigInt_BitwiseAndPosPosAndCanonicalize(Address result_addr,
+                                                   Address x_addr,
+                                                   Address y_addr);
+void MutableBigInt_BitwiseAndNegNegAndCanonicalize(Address result_addr,
+                                                   Address x_addr,
+                                                   Address y_addr);
+void MutableBigInt_BitwiseAndPosNegAndCanonicalize(Address result_addr,
+                                                   Address x_addr,
+                                                   Address y_addr);
+void MutableBigInt_BitwiseOrPosPosAndCanonicalize(Address result_addr,
+                                                  Address x_addr,
+                                                  Address y_addr);
+void MutableBigInt_BitwiseOrNegNegAndCanonicalize(Address result_addr,
+                                                  Address x_addr,
+                                                  Address y_addr);
+void MutableBigInt_BitwiseOrPosNegAndCanonicalize(Address result_addr,
+                                                  Address x_addr,
+                                                  Address y_addr);
+void MutableBigInt_BitwiseXorPosPosAndCanonicalize(Address result_addr,
+                                                   Address x_addr,
+                                                   Address y_addr);
+void MutableBigInt_BitwiseXorNegNegAndCanonicalize(Address result_addr,
+                                                   Address x_addr,
+                                                   Address y_addr);
+void MutableBigInt_BitwiseXorPosNegAndCanonicalize(Address result_addr,
+                                                   Address x_addr,
+                                                   Address y_addr);
+void MutableBigInt_LeftShiftAndCanonicalize(Address result_addr, Address x_addr,
+                                            intptr_t shift);
+uint32_t RightShiftResultLength(Address x_addr, uint32_t x_sign,
+                                intptr_t shift);
+void MutableBigInt_RightShiftAndCanonicalize(Address result_addr,
+                                             Address x_addr, intptr_t shift,
+                                             uint32_t must_round_down);
 
 class BigInt;
 class ValueDeserializer;
@@ -59,10 +102,10 @@ class BigIntBase : public PrimitiveHeapObject {
   // Sign and length are stored in the same bitfield.  Since the GC needs to be
   // able to read the length concurrently, the getters and setters are atomic.
   static const int kLengthFieldBits = 30;
-  STATIC_ASSERT(kMaxLength <= ((1 << kLengthFieldBits) - 1));
+  static_assert(kMaxLength <= ((1 << kLengthFieldBits) - 1));
   using SignBits = base::BitField<bool, 0, 1>;
   using LengthBits = SignBits::Next<int, kLengthFieldBits>;
-  STATIC_ASSERT(LengthBits::kLastUsedBit < 32);
+  static_assert(LengthBits::kLastUsedBit < 32);
 
   // Layout description.
 #define BIGINT_FIELDS(V)                                                  \
@@ -90,7 +133,7 @@ class BigIntBase : public PrimitiveHeapObject {
   using digit_t = uintptr_t;
   static const int kDigitSize = sizeof(digit_t);
   // kMaxLength definition assumes this:
-  STATIC_ASSERT(kDigitSize == kSystemPointerSize);
+  static_assert(kDigitSize == kSystemPointerSize);
 
   static const int kDigitBits = kDigitSize * kBitsPerByte;
   static const int kHalfDigitBits = kDigitBits / 2;
@@ -125,9 +168,10 @@ class FreshlyAllocatedBigInt : public BigIntBase {
   //   (and no explicit operator is provided either).
 
  public:
-  inline static FreshlyAllocatedBigInt cast(Object object);
-  inline static FreshlyAllocatedBigInt unchecked_cast(Object o) {
-    return bit_cast<FreshlyAllocatedBigInt>(o);
+  inline static Tagged<FreshlyAllocatedBigInt> cast(Tagged<Object> object);
+  inline static Tagged<FreshlyAllocatedBigInt> unchecked_cast(
+      Tagged<Object> o) {
+    return base::bit_cast<FreshlyAllocatedBigInt>(o);
   }
 
   // Clear uninitialized padding space.
@@ -141,7 +185,9 @@ class FreshlyAllocatedBigInt : public BigIntBase {
 
  private:
   // Only serves to make macros happy; other code should use IsBigInt.
-  bool IsFreshlyAllocatedBigInt() const { return true; }
+  static bool IsFreshlyAllocatedBigInt(Tagged<FreshlyAllocatedBigInt>) {
+    return true;
+  }
 
   OBJECT_CONSTRUCTORS(FreshlyAllocatedBigInt, BigIntBase);
 };
@@ -176,7 +222,7 @@ class BigInt : public BigIntBase {
                                                 Handle<BigInt> y);
   // More convenient version of "bool LessThan(x, y)".
   static ComparisonResult CompareToBigInt(Handle<BigInt> x, Handle<BigInt> y);
-  static bool EqualToBigInt(BigInt x, BigInt y);
+  static bool EqualToBigInt(Tagged<BigInt> x, Tagged<BigInt> y);
   static MaybeHandle<BigInt> BitwiseAnd(Isolate* isolate, Handle<BigInt> x,
                                         Handle<BigInt> y);
   static MaybeHandle<BigInt> BitwiseXor(Isolate* isolate, Handle<BigInt> x,
@@ -213,7 +259,8 @@ class BigInt : public BigIntBase {
 
   V8_EXPORT_PRIVATE static Handle<BigInt> FromInt64(Isolate* isolate,
                                                     int64_t n);
-  static Handle<BigInt> FromUint64(Isolate* isolate, uint64_t n);
+  V8_EXPORT_PRIVATE static Handle<BigInt> FromUint64(Isolate* isolate,
+                                                     uint64_t n);
   static MaybeHandle<BigInt> FromWords64(Isolate* isolate, int sign_bit,
                                          int words64_count,
                                          const uint64_t* words);
@@ -232,6 +279,12 @@ class BigInt : public BigIntBase {
   static MaybeHandle<String> ToString(Isolate* isolate, Handle<BigInt> bigint,
                                       int radix = 10,
                                       ShouldThrow should_throw = kThrowOnError);
+  // Like the above, but adapted for the needs of producing error messages:
+  // doesn't care about termination requests, and returns a default string
+  // for inputs beyond a relatively low upper bound.
+  static Handle<String> NoSideEffectsToString(Isolate* isolate,
+                                              Handle<BigInt> bigint);
+
   // "The Number value for x", see:
   // https://tc39.github.io/ecma262/#sec-ecmascript-language-types-number-type
   // Returns a Smi or HeapNumber.
@@ -242,7 +295,8 @@ class BigInt : public BigIntBase {
       Isolate* isolate, Handle<Object> number);
 
   // ECMAScript's ToBigInt (throws for Number input)
-  static MaybeHandle<BigInt> FromObject(Isolate* isolate, Handle<Object> obj);
+  V8_EXPORT_PRIVATE static MaybeHandle<BigInt> FromObject(Isolate* isolate,
+                                                          Handle<Object> obj);
 
   class BodyDescriptor;
 

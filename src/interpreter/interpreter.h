@@ -13,11 +13,11 @@
 #include "src/base/macros.h"
 #include "src/builtins/builtins.h"
 #include "src/interpreter/bytecodes.h"
-#include "src/runtime/runtime.h"
 
 namespace v8 {
 namespace internal {
 
+class AccountingAllocator;
 class BytecodeArray;
 class Callable;
 class UnoptimizedCompilationJob;
@@ -46,7 +46,7 @@ class Interpreter {
   // Additionally, if |eager_inner_literals| is not null, adds any eagerly
   // compilable inner FunctionLiterals to this list.
   static std::unique_ptr<UnoptimizedCompilationJob> NewCompilationJob(
-      ParseInfo* parse_info, FunctionLiteral* literal,
+      ParseInfo* parse_info, FunctionLiteral* literal, Handle<Script> script,
       AccountingAllocator* allocator,
       std::vector<FunctionLiteral*>* eager_inner_literals,
       LocalIsolate* local_isolate);
@@ -62,15 +62,12 @@ class Interpreter {
 
   // If the bytecode handler for |bytecode| and |operand_scale| has not yet
   // been loaded, deserialize it. Then return the handler.
-  V8_EXPORT_PRIVATE Code GetBytecodeHandler(Bytecode bytecode,
-                                            OperandScale operand_scale);
+  V8_EXPORT_PRIVATE Tagged<Code> GetBytecodeHandler(Bytecode bytecode,
+                                                    OperandScale operand_scale);
 
   // Set the bytecode handler for |bytecode| and |operand_scale|.
   void SetBytecodeHandler(Bytecode bytecode, OperandScale operand_scale,
-                          Code handler);
-
-  // Disassembler support.
-  V8_EXPORT_PRIVATE const char* LookupNameOfBytecodeHandler(const Code code);
+                          Tagged<Code> handler);
 
   V8_EXPORT_PRIVATE Handle<JSObject> GetDispatchCountersObject();
 

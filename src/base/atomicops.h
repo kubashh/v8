@@ -68,13 +68,14 @@ using Atomic64 = intptr_t;
 #endif  // defined(V8_HOST_ARCH_64_BIT)
 #endif  // V8_OS_STARBOARD
 
-// Use AtomicWord for a machine-sized pointer.  It will use the Atomic32 or
+// Use AtomicWord for a machine-sized pointer. It will use the Atomic32 or
 // Atomic64 routines below, depending on your architecture.
-#if defined(V8_OS_STARBOARD)
-using AtomicWord = SbAtomicPtr;
+#if defined(V8_HOST_ARCH_64_BIT)
+using AtomicWord = Atomic64;
 #else
-using AtomicWord = intptr_t;
+using AtomicWord = Atomic32;
 #endif
+static_assert(sizeof(void*) == sizeof(AtomicWord));
 
 namespace helper {
 template <typename T>
@@ -130,6 +131,12 @@ inline Atomic32 Relaxed_AtomicExchange(volatile Atomic32* ptr,
                                        std::memory_order_relaxed);
 }
 
+inline Atomic32 SeqCst_AtomicExchange(volatile Atomic32* ptr,
+                                      Atomic32 new_value) {
+  return std::atomic_exchange_explicit(helper::to_std_atomic(ptr), new_value,
+                                       std::memory_order_seq_cst);
+}
+
 inline Atomic32 Relaxed_AtomicIncrement(volatile Atomic32* ptr,
                                         Atomic32 increment) {
   return increment + std::atomic_fetch_add_explicit(helper::to_std_atomic(ptr),
@@ -168,6 +175,14 @@ inline Atomic32 AcquireRelease_CompareAndSwap(volatile Atomic32* ptr,
   atomic_compare_exchange_strong_explicit(
       helper::to_std_atomic(ptr), &old_value, new_value,
       std::memory_order_acq_rel, std::memory_order_acquire);
+  return old_value;
+}
+
+inline Atomic32 SeqCst_CompareAndSwap(volatile Atomic32* ptr,
+                                      Atomic32 old_value, Atomic32 new_value) {
+  atomic_compare_exchange_strong_explicit(
+      helper::to_std_atomic(ptr), &old_value, new_value,
+      std::memory_order_seq_cst, std::memory_order_seq_cst);
   return old_value;
 }
 
@@ -241,6 +256,16 @@ inline Atomic32 Acquire_Load(volatile const Atomic32* ptr) {
                                    std::memory_order_acquire);
 }
 
+inline Atomic8 SeqCst_Load(volatile const Atomic8* ptr) {
+  return std::atomic_load_explicit(helper::to_std_atomic_const(ptr),
+                                   std::memory_order_seq_cst);
+}
+
+inline Atomic32 SeqCst_Load(volatile const Atomic32* ptr) {
+  return std::atomic_load_explicit(helper::to_std_atomic_const(ptr),
+                                   std::memory_order_seq_cst);
+}
+
 #if defined(V8_HOST_ARCH_64_BIT)
 
 inline Atomic64 Relaxed_CompareAndSwap(volatile Atomic64* ptr,
@@ -255,6 +280,12 @@ inline Atomic64 Relaxed_AtomicExchange(volatile Atomic64* ptr,
                                        Atomic64 new_value) {
   return std::atomic_exchange_explicit(helper::to_std_atomic(ptr), new_value,
                                        std::memory_order_relaxed);
+}
+
+inline Atomic64 SeqCst_AtomicExchange(volatile Atomic64* ptr,
+                                      Atomic64 new_value) {
+  return std::atomic_exchange_explicit(helper::to_std_atomic(ptr), new_value,
+                                       std::memory_order_seq_cst);
 }
 
 inline Atomic64 Relaxed_AtomicIncrement(volatile Atomic64* ptr,
@@ -289,6 +320,14 @@ inline Atomic64 AcquireRelease_CompareAndSwap(volatile Atomic64* ptr,
   return old_value;
 }
 
+inline Atomic64 SeqCst_CompareAndSwap(volatile Atomic64* ptr,
+                                      Atomic64 old_value, Atomic64 new_value) {
+  std::atomic_compare_exchange_strong_explicit(
+      helper::to_std_atomic(ptr), &old_value, new_value,
+      std::memory_order_seq_cst, std::memory_order_seq_cst);
+  return old_value;
+}
+
 inline void Relaxed_Store(volatile Atomic64* ptr, Atomic64 value) {
   std::atomic_store_explicit(helper::to_std_atomic(ptr), value,
                              std::memory_order_relaxed);
@@ -312,6 +351,11 @@ inline Atomic64 Relaxed_Load(volatile const Atomic64* ptr) {
 inline Atomic64 Acquire_Load(volatile const Atomic64* ptr) {
   return std::atomic_load_explicit(helper::to_std_atomic_const(ptr),
                                    std::memory_order_acquire);
+}
+
+inline Atomic64 SeqCst_Load(volatile const Atomic64* ptr) {
+  return std::atomic_load_explicit(helper::to_std_atomic_const(ptr),
+                                   std::memory_order_seq_cst);
 }
 
 #endif  // defined(V8_HOST_ARCH_64_BIT)
@@ -378,13 +422,65 @@ inline void Relaxed_Memmove(volatile Atomic8* dst, volatile const Atomic8* src,
   }
 }
 
+namespace helper {
+inline int MemcmpNotEqualFundamental(Atomic8 u1, Atomic8 u2) {
+  DCHECK_NE(u1, u2);
+  return u1 < u2 ? -1 : 1;
+}
+inline int MemcmpNotEqualFundamental(AtomicWord u1, AtomicWord u2) {
+  DCHECK_NE(u1, u2);
+#if defined(V8_TARGET_BIG_ENDIAN)
+  return u1 < u2 ? -1 : 1;
+#else
+  for (size_t i = 0; i < sizeof(AtomicWord); ++i) {
+    uint8_t byte1 = u1 & 0xFF;
+    uint8_t byte2 = u2 & 0xFF;
+    if (byte1 != byte2) return byte1 < byte2 ? -1 : 1;
+    u1 >>= 8;
+    u2 >>= 8;
+  }
+  UNREACHABLE();
+#endif
+}
+}  // namespace helper
+
+inline int Relaxed_Memcmp(volatile const Atomic8* s1,
+                          volatile const Atomic8* s2, size_t len) {
+  constexpr size_t kAtomicWordSize = sizeof(AtomicWord);
+  while (len > 0 &&
+         !(IsAligned(reinterpret_cast<uintptr_t>(s1), kAtomicWordSize) &&
+           IsAligned(reinterpret_cast<uintptr_t>(s2), kAtomicWordSize))) {
+    Atomic8 u1 = Relaxed_Load(s1++);
+    Atomic8 u2 = Relaxed_Load(s2++);
+    if (u1 != u2) return helper::MemcmpNotEqualFundamental(u1, u2);
+    --len;
+  }
+
+  if (IsAligned(reinterpret_cast<uintptr_t>(s1), kAtomicWordSize) &&
+      IsAligned(reinterpret_cast<uintptr_t>(s2), kAtomicWordSize)) {
+    while (len >= kAtomicWordSize) {
+      AtomicWord u1 =
+          Relaxed_Load(reinterpret_cast<const volatile AtomicWord*>(s1));
+      AtomicWord u2 =
+          Relaxed_Load(reinterpret_cast<const volatile AtomicWord*>(s2));
+      if (u1 != u2) return helper::MemcmpNotEqualFundamental(u1, u2);
+      s1 += kAtomicWordSize;
+      s2 += kAtomicWordSize;
+      len -= kAtomicWordSize;
+    }
+  }
+
+  while (len > 0) {
+    Atomic8 u1 = Relaxed_Load(s1++);
+    Atomic8 u2 = Relaxed_Load(s2++);
+    if (u1 != u2) return helper::MemcmpNotEqualFundamental(u1, u2);
+    --len;
+  }
+
+  return 0;
+}
+
 }  // namespace base
 }  // namespace v8
-
-// On some platforms we need additional declarations to make
-// AtomicWord compatible with our other Atomic* types.
-#if defined(V8_OS_MACOSX) || defined(V8_OS_OPENBSD) || defined(V8_OS_AIX)
-#include "src/base/atomicops_internals_atomicword_compat.h"
-#endif
 
 #endif  // V8_BASE_ATOMICOPS_H_

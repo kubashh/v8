@@ -9,68 +9,80 @@
 #error This header should only be included if WebAssembly is enabled.
 #endif  // !V8_ENABLE_WEBASSEMBLY
 
-#include "src/base/build_config.h"
 #include "src/common/globals.h"
-#include "src/execution/isolate.h"
 #include "src/utils/allocation.h"
 
 namespace v8 {
-namespace internal {
-namespace wasm {
+class Isolate;
+}
+
+namespace v8::internal::wasm {
 
 struct JumpBuffer {
-  void* sp;
-  void* fp;
+  Address sp;
+  Address fp;
+  Address pc;
   void* stack_limit;
-  // TODO(thibaudm/fgm): Add general-purpose registers.
+  enum StackState : int32_t { Active, Inactive, Retired };
+  StackState state;
 };
 
 constexpr int kJmpBufSpOffset = offsetof(JumpBuffer, sp);
 constexpr int kJmpBufFpOffset = offsetof(JumpBuffer, fp);
+constexpr int kJmpBufPcOffset = offsetof(JumpBuffer, pc);
 constexpr int kJmpBufStackLimitOffset = offsetof(JumpBuffer, stack_limit);
+constexpr int kJmpBufStateOffset = offsetof(JumpBuffer, state);
 
 class StackMemory {
  public:
-  static StackMemory* New() { return new StackMemory(); }
+  static StackMemory* New(Isolate* isolate) { return new StackMemory(isolate); }
 
-  // Returns a non-owning view of the current stack.
-  static StackMemory* GetCurrentStackView(Isolate* isolate) {
-    byte* limit =
-        *reinterpret_cast<byte**>(isolate->stack_guard()->address_of_jslimit());
-    return new StackMemory(limit);
+  // Returns a non-owning view of the current (main) stack. This may be
+  // the simulator's stack when running on the simulator.
+  static StackMemory* GetCurrentStackView(Isolate* isolate);
+
+  ~StackMemory();
+  void* jslimit() const { return limit_ + kJSLimitOffsetKB * KB; }
+  Address base() const { return reinterpret_cast<Address>(limit_ + size_); }
+  JumpBuffer* jmpbuf() { return &jmpbuf_; }
+  bool Contains(Address addr) {
+    return reinterpret_cast<Address>(jslimit()) <= addr && addr < base();
   }
+  int id() { return id_; }
 
-  ~StackMemory() {
-    PageAllocator* allocator = GetPlatformPageAllocator();
-    if (owned_) allocator->DecommitPages(limit_, size_);
-  }
+  // Insert a stack in the linked list after this stack.
+  void Add(StackMemory* stack);
 
-  void* limit() { return limit_; }
-  void* base() { return limit_ + size_; }
+  StackMemory* next() { return next_; }
 
   // Track external memory usage for Managed<StackMemory> objects.
   size_t owned_size() { return sizeof(StackMemory) + (owned_ ? size_ : 0); }
+  bool IsActive() { return jmpbuf_.state == JumpBuffer::Active; }
+
+#ifdef DEBUG
+  static constexpr int kJSLimitOffsetKB = 80;
+#else
+  static constexpr int kJSLimitOffsetKB = 40;
+#endif
 
  private:
   // This constructor allocates a new stack segment.
-  StackMemory() : owned_(true) {
-    PageAllocator* allocator = GetPlatformPageAllocator();
-    size_ = allocator->AllocatePageSize();
-    // TODO(thibaudm): Leave space for runtime functions.
-    limit_ = static_cast<byte*>(allocator->AllocatePages(
-        nullptr, size_, size_, PageAllocator::kReadWrite));
-  }
+  explicit StackMemory(Isolate* isolate);
 
   // Overload to represent a view of the libc stack.
-  explicit StackMemory(byte* limit) : limit_(limit), size_(0), owned_(false) {}
+  StackMemory(Isolate* isolate, uint8_t* limit, size_t size);
 
-  byte* limit_;
+  Isolate* isolate_;
+  uint8_t* limit_;
   size_t size_;
   bool owned_;
+  JumpBuffer jmpbuf_;
+  int id_;
+  // Stacks form a circular doubly linked list per isolate.
+  StackMemory* next_ = this;
+  StackMemory* prev_ = this;
 };
 
-}  // namespace wasm
-}  // namespace internal
-}  // namespace v8
+}  // namespace v8::internal::wasm
 
 #endif  // V8_WASM_STACKS_H_

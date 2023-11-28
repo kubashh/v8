@@ -12,9 +12,6 @@ namespace internal {
 
 class MicrotaskQueue;
 
-template <typename T>
-class Handle;
-
 class Execution final : public AllStatic {
  public:
   // Whether to report pending messages, or keep them pending on the isolate.
@@ -33,7 +30,7 @@ class Execution final : public AllStatic {
   // caller has to provide it at all times.
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeHandle<Object> CallScript(
       Isolate* isolate, Handle<JSFunction> callable, Handle<Object> receiver,
-      Handle<FixedArray> host_defined_options);
+      Handle<Object> host_defined_options);
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> CallBuiltin(
       Isolate* isolate, Handle<JSFunction> builtin, Handle<Object> receiver,
@@ -68,9 +65,8 @@ class Execution final : public AllStatic {
       bool reschedule_terminate = true);
 
   // Convenience method for performing RunMicrotasks
-  static MaybeHandle<Object> TryRunMicrotasks(
-      Isolate* isolate, MicrotaskQueue* microtask_queue,
-      MaybeHandle<Object>* exception_out);
+  static MaybeHandle<Object> TryRunMicrotasks(Isolate* isolate,
+                                              MicrotaskQueue* microtask_queue);
 
 #if V8_ENABLE_WEBASSEMBLY
   // Call a Wasm function identified by {wasm_call_target} through the
@@ -78,7 +74,7 @@ class Execution final : public AllStatic {
   // Upon return, either isolate->has_pending_exception() is true, or
   // the function's return values are in {packed_args}.
   V8_EXPORT_PRIVATE static void CallWasm(Isolate* isolate,
-                                         Handle<CodeT> wrapper_code,
+                                         Handle<Code> wrapper_code,
                                          Address wasm_call_target,
                                          Handle<Object> object_ref,
                                          Address packed_args);

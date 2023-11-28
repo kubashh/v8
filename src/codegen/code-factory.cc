@@ -14,68 +14,48 @@ namespace v8 {
 namespace internal {
 
 // static
-Handle<Code> CodeFactory::RuntimeCEntry(Isolate* isolate, int result_size) {
-  return CodeFactory::CEntry(isolate, result_size);
+Handle<Code> CodeFactory::RuntimeCEntry(Isolate* isolate, int result_size,
+                                        bool switch_to_central_stack) {
+  return CodeFactory::CEntry(isolate, result_size, ArgvMode::kStack, false,
+                             switch_to_central_stack);
 }
-
-#define CENTRY_CODE(RS, SD, AM, BE) \
-  BUILTIN_CODE(isolate, CEntry_##RS##_##SD##_##AM##_##BE)
 
 // static
 Handle<Code> CodeFactory::CEntry(Isolate* isolate, int result_size,
-                                 SaveFPRegsMode save_doubles,
-                                 ArgvMode argv_mode, bool builtin_exit_frame) {
+                                 ArgvMode argv_mode, bool builtin_exit_frame,
+                                 bool switch_to_central_stack) {
   // Aliases for readability below.
   const int rs = result_size;
-  const SaveFPRegsMode sd = save_doubles;
   const ArgvMode am = argv_mode;
   const bool be = builtin_exit_frame;
 
-  if (rs == 1 && sd == SaveFPRegsMode::kIgnore && am == ArgvMode::kStack &&
-      !be) {
-    return CENTRY_CODE(Return1, DontSaveFPRegs, ArgvOnStack, NoBuiltinExit);
-  } else if (rs == 1 && sd == SaveFPRegsMode::kIgnore &&
-             am == ArgvMode::kStack && be) {
-    return CENTRY_CODE(Return1, DontSaveFPRegs, ArgvOnStack, BuiltinExit);
-  } else if (rs == 1 && sd == SaveFPRegsMode::kIgnore &&
-             am == ArgvMode::kRegister && !be) {
-    return CENTRY_CODE(Return1, DontSaveFPRegs, ArgvInRegister, NoBuiltinExit);
-  } else if (rs == 1 && sd == SaveFPRegsMode::kSave && am == ArgvMode::kStack &&
-             !be) {
-    return CENTRY_CODE(Return1, SaveFPRegs, ArgvOnStack, NoBuiltinExit);
-  } else if (rs == 1 && sd == SaveFPRegsMode::kSave && am == ArgvMode::kStack &&
-             be) {
-    return CENTRY_CODE(Return1, SaveFPRegs, ArgvOnStack, BuiltinExit);
-  } else if (rs == 2 && sd == SaveFPRegsMode::kIgnore &&
-             am == ArgvMode::kStack && !be) {
-    return CENTRY_CODE(Return2, DontSaveFPRegs, ArgvOnStack, NoBuiltinExit);
-  } else if (rs == 2 && sd == SaveFPRegsMode::kIgnore &&
-             am == ArgvMode::kStack && be) {
-    return CENTRY_CODE(Return2, DontSaveFPRegs, ArgvOnStack, BuiltinExit);
-  } else if (rs == 2 && sd == SaveFPRegsMode::kIgnore &&
-             am == ArgvMode::kRegister && !be) {
-    return CENTRY_CODE(Return2, DontSaveFPRegs, ArgvInRegister, NoBuiltinExit);
-  } else if (rs == 2 && sd == SaveFPRegsMode::kSave && am == ArgvMode::kStack &&
-             !be) {
-    return CENTRY_CODE(Return2, SaveFPRegs, ArgvOnStack, NoBuiltinExit);
-  } else if (rs == 2 && sd == SaveFPRegsMode::kSave && am == ArgvMode::kStack &&
-             be) {
-    return CENTRY_CODE(Return2, SaveFPRegs, ArgvOnStack, BuiltinExit);
+  if (switch_to_central_stack) {
+    DCHECK_EQ(result_size, 1);
+    DCHECK_EQ(argv_mode, ArgvMode::kStack);
+    DCHECK_EQ(builtin_exit_frame, false);
+    return BUILTIN_CODE(isolate, WasmCEntry);
+  }
+
+  if (rs == 1 && am == ArgvMode::kStack && !be) {
+    return BUILTIN_CODE(isolate, CEntry_Return1_ArgvOnStack_NoBuiltinExit);
+  } else if (rs == 1 && am == ArgvMode::kStack && be) {
+    return BUILTIN_CODE(isolate, CEntry_Return1_ArgvOnStack_BuiltinExit);
+  } else if (rs == 1 && am == ArgvMode::kRegister && !be) {
+    return BUILTIN_CODE(isolate, CEntry_Return1_ArgvInRegister_NoBuiltinExit);
+  } else if (rs == 2 && am == ArgvMode::kStack && !be) {
+    return BUILTIN_CODE(isolate, CEntry_Return2_ArgvOnStack_NoBuiltinExit);
+  } else if (rs == 2 && am == ArgvMode::kStack && be) {
+    return BUILTIN_CODE(isolate, CEntry_Return2_ArgvOnStack_BuiltinExit);
+  } else if (rs == 2 && am == ArgvMode::kRegister && !be) {
+    return BUILTIN_CODE(isolate, CEntry_Return2_ArgvInRegister_NoBuiltinExit);
   }
 
   UNREACHABLE();
 }
 
-#undef CENTRY_CODE
-
 // static
 Callable CodeFactory::ApiGetter(Isolate* isolate) {
   return Builtins::CallableFor(isolate, Builtin::kCallApiGetter);
-}
-
-// static
-Callable CodeFactory::CallApiCallback(Isolate* isolate) {
-  return Builtins::CallableFor(isolate, Builtin::kCallApiCallback);
 }
 
 // static
@@ -95,12 +75,12 @@ Callable CodeFactory::LoadGlobalICInOptimizedCode(Isolate* isolate,
                                      Builtin::kLoadGlobalICInsideTypeof);
 }
 
-Callable CodeFactory::StoreOwnIC(Isolate* isolate) {
-  return Builtins::CallableFor(isolate, Builtin::kStoreOwnICTrampoline);
+Callable CodeFactory::DefineNamedOwnIC(Isolate* isolate) {
+  return Builtins::CallableFor(isolate, Builtin::kDefineNamedOwnICTrampoline);
 }
 
-Callable CodeFactory::StoreOwnICInOptimizedCode(Isolate* isolate) {
-  return Builtins::CallableFor(isolate, Builtin::kStoreOwnIC);
+Callable CodeFactory::DefineNamedOwnICInOptimizedCode(Isolate* isolate) {
+  return Builtins::CallableFor(isolate, Builtin::kDefineNamedOwnIC);
 }
 
 // static
@@ -278,11 +258,20 @@ Callable CodeFactory::InterpreterPushArgsThenConstruct(
 }
 
 // static
+Callable CodeFactory::InterpreterForwardAllArgsThenConstruct(Isolate* isolate) {
+  return Builtins::CallableFor(
+      isolate, Builtin::kInterpreterForwardAllArgsThenConstruct);
+}
+
+// static
+Callable CodeFactory::ConstructForwardAllArgs(Isolate* isolate) {
+  return Builtins::CallableFor(isolate, Builtin::kConstructForwardAllArgs);
+}
+
+// static
 Callable CodeFactory::InterpreterCEntry(Isolate* isolate, int result_size) {
-  // Note: If we ever use fpregs in the interpreter then we will need to
-  // save fpregs too.
-  Handle<Code> code = CodeFactory::CEntry(
-      isolate, result_size, SaveFPRegsMode::kIgnore, ArgvMode::kRegister);
+  Handle<Code> code =
+      CodeFactory::CEntry(isolate, result_size, ArgvMode::kRegister);
   if (result_size == 1) {
     return Callable(code, InterpreterCEntry1Descriptor{});
   } else {

@@ -24,13 +24,13 @@ class ConstantPoolEntry {
  public:
   ConstantPoolEntry() = default;
   ConstantPoolEntry(int position, intptr_t value, bool sharing_ok,
-                    RelocInfo::Mode rmode = RelocInfo::NONE)
+                    RelocInfo::Mode rmode = RelocInfo::NO_INFO)
       : position_(position),
         merged_index_(sharing_ok ? SHARING_ALLOWED : SHARING_PROHIBITED),
         value_(value),
         rmode_(rmode) {}
   ConstantPoolEntry(int position, base::Double value,
-                    RelocInfo::Mode rmode = RelocInfo::NONE)
+                    RelocInfo::Mode rmode = RelocInfo::NO_INFO)
       : position_(position),
         merged_index_(SHARING_ALLOWED),
         value64_(value.AsUint64()),
@@ -163,16 +163,17 @@ class ConstantPoolBuilder {
 
 #endif  // defined(V8_TARGET_ARCH_PPC) || defined(V8_TARGET_ARCH_PPC64)
 
-#if defined(V8_TARGET_ARCH_ARM64) || defined(V8_TARGET_ARCH_RISCV64)
+#if defined(V8_TARGET_ARCH_ARM64) || defined(V8_TARGET_ARCH_RISCV64) || \
+    defined(V8_TARGET_ARCH_RISCV32)
 
 class ConstantPoolKey {
  public:
   explicit ConstantPoolKey(uint64_t value,
-                           RelocInfo::Mode rmode = RelocInfo::NONE)
+                           RelocInfo::Mode rmode = RelocInfo::NO_INFO)
       : is_value32_(false), value64_(value), rmode_(rmode) {}
 
   explicit ConstantPoolKey(uint32_t value,
-                           RelocInfo::Mode rmode = RelocInfo::NONE)
+                           RelocInfo::Mode rmode = RelocInfo::NO_INFO)
       : is_value32_(true), value32_(value), rmode_(rmode) {}
 
   uint64_t value64() const {
@@ -342,10 +343,12 @@ class ConstantPool {
   size_t entry32_count_ = 0;
   size_t entry64_count_ = 0;
   int next_check_ = 0;
+  int old_next_check_ = 0;
   int blocked_nesting_ = 0;
 };
 
-#endif  // defined(V8_TARGET_ARCH_ARM64)
+#endif  // defined(V8_TARGET_ARCH_ARM64) || defined(V8_TARGET_ARCH_RISCV64) ||
+        // defined(V8_TARGET_ARCH_RISCV32)
 
 }  // namespace internal
 }  // namespace v8

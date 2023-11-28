@@ -39,7 +39,6 @@
 #endif
 #include "src/base/vector.h"
 #include "src/codegen/assembler-inl.h"
-#include "src/codegen/string-constants.h"
 #include "src/deoptimizer/deoptimizer.h"
 #include "src/diagnostics/disassembler.h"
 #include "src/execution/isolate.h"
@@ -68,29 +67,21 @@ AssemblerOptions AssemblerOptions::Default(Isolate* isolate) {
 
   // So here we enable simulator specific code if not generating the snapshot or
   // if we are but we are targetting the simulator *only*.
-  options.enable_simulator_code = !serializer || FLAG_target_is_simulator;
+  options.enable_simulator_code = !serializer || v8_flags.target_is_simulator;
 #endif
-  options.inline_offheap_trampolines &= !generating_embedded_builtin;
-#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64
-  const base::AddressRegion& code_range = isolate->heap()->code_region();
-  DCHECK_IMPLIES(code_range.begin() != kNullAddress, !code_range.is_empty());
-  options.code_range_start = code_range.begin();
+
+#if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_LOONG64
+  options.code_range_base = isolate->heap()->code_range_base();
 #endif
-  options.short_builtin_calls =
+  bool short_builtin_calls =
       isolate->is_short_builtin_calls_enabled() &&
       !generating_embedded_builtin &&
-      (options.code_range_start != kNullAddress) &&
-      // Serialization of RUNTIME_ENTRY reloc infos is not supported yet.
+      (options.code_range_base != kNullAddress) &&
+      // Serialization of NEAR_BUILTIN_ENTRY reloc infos is not supported yet.
       !serializer;
-  return options;
-}
-
-AssemblerOptions AssemblerOptions::DefaultForOffHeapTrampoline(
-    Isolate* isolate) {
-  AssemblerOptions options = AssemblerOptions::Default(isolate);
-  // Off-heap trampolines may not contain any metadata since their metadata
-  // offsets refer to the off-heap metadata area.
-  options.emit_code_comments = false;
+  if (short_builtin_calls) {
+    options.builtin_call_jump_mode = BuiltinCallJumpMode::kPCRelative;
+  }
   return options;
 }
 
@@ -102,11 +93,11 @@ class DefaultAssemblerBuffer : public AssemblerBuffer {
       : buffer_(base::OwnedVector<uint8_t>::NewForOverwrite(
             std::max(AssemblerBase::kMinimalBufferSize, size))) {
 #ifdef DEBUG
-    ZapCode(reinterpret_cast<Address>(buffer_.start()), buffer_.size());
+    ZapCode(reinterpret_cast<Address>(buffer_.begin()), buffer_.size());
 #endif
   }
 
-  byte* start() const override { return buffer_.start(); }
+  uint8_t* start() const override { return buffer_.begin(); }
 
   int size() const override { return static_cast<int>(buffer_.size()); }
 
@@ -121,10 +112,10 @@ class DefaultAssemblerBuffer : public AssemblerBuffer {
 
 class ExternalAssemblerBufferImpl : public AssemblerBuffer {
  public:
-  ExternalAssemblerBufferImpl(byte* start, int size)
+  ExternalAssemblerBufferImpl(uint8_t* start, int size)
       : start_(start), size_(size) {}
 
-  byte* start() const override { return start_; }
+  uint8_t* start() const override { return start_; }
 
   int size() const override { return size_; }
 
@@ -136,7 +127,7 @@ class ExternalAssemblerBufferImpl : public AssemblerBuffer {
   void operator delete(void* ptr) noexcept;
 
  private:
-  byte* const start_;
+  uint8_t* const start_;
   const int size_;
 };
 
@@ -169,7 +160,7 @@ void ExternalAssemblerBufferImpl::operator delete(void* ptr) noexcept {
 std::unique_ptr<AssemblerBuffer> ExternalAssemblerBuffer(void* start,
                                                          int size) {
   return std::make_unique<ExternalAssemblerBufferImpl>(
-      reinterpret_cast<byte*>(start), size);
+      reinterpret_cast<uint8_t*>(start), size);
 }
 
 std::unique_ptr<AssemblerBuffer> NewAssemblerBuffer(int size) {
@@ -224,33 +215,34 @@ CpuFeatureScope::~CpuFeatureScope() {
 
 bool CpuFeatures::initialized_ = false;
 bool CpuFeatures::supports_wasm_simd_128_ = false;
+bool CpuFeatures::supports_cetss_ = false;
 unsigned CpuFeatures::supported_ = 0;
 unsigned CpuFeatures::icache_line_size_ = 0;
 unsigned CpuFeatures::dcache_line_size_ = 0;
 
-HeapObjectRequest::HeapObjectRequest(double heap_number, int offset)
-    : kind_(kHeapNumber), offset_(offset) {
-  value_.heap_number = heap_number;
-  DCHECK(!IsSmiDouble(value_.heap_number));
-}
-
-HeapObjectRequest::HeapObjectRequest(const StringConstantBase* string,
-                                     int offset)
-    : kind_(kStringConstant), offset_(offset) {
-  value_.string = string;
-  DCHECK_NOT_NULL(value_.string);
+HeapNumberRequest::HeapNumberRequest(double heap_number, int offset)
+    : offset_(offset) {
+  value_ = heap_number;
+  DCHECK(!IsSmiDouble(value_));
 }
 
 // Platform specific but identical code for all the platforms.
 
 void Assembler::RecordDeoptReason(DeoptimizeReason reason, uint32_t node_id,
                                   SourcePosition position, int id) {
-  EnsureSpace ensure_space(this);
-  RecordRelocInfo(RelocInfo::DEOPT_SCRIPT_OFFSET, position.ScriptOffset());
-  RecordRelocInfo(RelocInfo::DEOPT_INLINING_ID, position.InliningId());
-  RecordRelocInfo(RelocInfo::DEOPT_REASON, static_cast<int>(reason));
-  RecordRelocInfo(RelocInfo::DEOPT_ID, id);
+  static_assert(RelocInfoWriter::kMaxSize * 2 <= kGap);
+  {
+    EnsureSpace space(this);
+    RecordRelocInfo(RelocInfo::DEOPT_SCRIPT_OFFSET, position.ScriptOffset());
+    RecordRelocInfo(RelocInfo::DEOPT_INLINING_ID, position.InliningId());
+  }
+  {
+    EnsureSpace space(this);
+    RecordRelocInfo(RelocInfo::DEOPT_REASON, static_cast<int>(reason));
+    RecordRelocInfo(RelocInfo::DEOPT_ID, id);
+  }
 #ifdef DEBUG
+  EnsureSpace space(this);
   RecordRelocInfo(RelocInfo::DEOPT_NODE_ID, node_id);
 #endif  // DEBUG
 }
@@ -265,9 +257,9 @@ void Assembler::DataAlign(int m) {
   }
 }
 
-void AssemblerBase::RequestHeapObject(HeapObjectRequest request) {
+void AssemblerBase::RequestHeapNumber(HeapNumberRequest request) {
   request.set_offset(pc_offset());
-  heap_object_requests_.push_front(request);
+  heap_number_requests_.push_front(request);
 }
 
 int AssemblerBase::AddCodeTarget(Handle<Code> target) {
@@ -310,7 +302,7 @@ Handle<HeapObject> AssemblerBase::GetEmbeddedObject(
 
 
 int Assembler::WriteCodeComments() {
-  if (!FLAG_code_comments) return 0;
+  if (!v8_flags.code_comments) return 0;
   CHECK_IMPLIES(code_comments_writer_.entry_count() > 0,
                 options().emit_code_comments);
   if (code_comments_writer_.entry_count() == 0) return 0;

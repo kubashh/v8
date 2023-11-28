@@ -3,17 +3,23 @@
 // found in the LICENSE file.
 
 @abstract
-@export
-@customCppClass
 // We normally don't generate a BodyDescriptor for an abstact class, but here we
 // do since all context classes share the same BodyDescriptor.
 @generateBodyDescriptor
-class Context extends HeapObject {
+extern class Context extends HeapObject {
   macro GetScopeInfo(): ScopeInfo {
     return *ContextSlot(this, ContextSlot::SCOPE_INFO_INDEX);
   }
   const length: Smi;
   elements[length]: Object;
+}
+
+@cppObjectDefinition
+extern class ScriptContextTable extends HeapObject {
+  const capacity: Smi;
+  length: Smi;
+  names_to_context_index: NameToIndexHashTable;
+  objects[capacity]: Context;
 }
 
 extern class AwaitContext extends Context generates 'TNode<Context>';
@@ -84,8 +90,8 @@ macro NativeContextSlot<T: type>(
     context: Context, index: Slot<NativeContext, T>):&T {
   return ContextSlot(LoadNativeContext(context), index);
 }
-macro NativeContextSlot<C: type, T: type>(implicit context: C)(
-    index: Slot<NativeContext, T>):&T {
+macro NativeContextSlot<C: type, T: type>(
+    implicit context: C)(index: Slot<NativeContext, T>):&T {
   return NativeContextSlot(context, index);
 }
 
@@ -103,8 +109,17 @@ extern enum ContextSlot extends intptr constexpr 'Context::Field' {
   ARRAY_JOIN_STACK_INDEX: Slot<NativeContext, Undefined|FixedArray>,
   OBJECT_FUNCTION_INDEX: Slot<NativeContext, JSFunction>,
   ITERATOR_RESULT_MAP_INDEX: Slot<NativeContext, Map>,
+  ITERATOR_MAP_HELPER_MAP_INDEX: Slot<NativeContext, Map>,
+  ITERATOR_FILTER_HELPER_MAP_INDEX: Slot<NativeContext, Map>,
+  ITERATOR_TAKE_HELPER_MAP_INDEX: Slot<NativeContext, Map>,
+  ITERATOR_DROP_HELPER_MAP_INDEX: Slot<NativeContext, Map>,
+  ITERATOR_FLAT_MAP_HELPER_MAP_INDEX: Slot<NativeContext, Map>,
+  ITERATOR_FUNCTION_INDEX: Slot<NativeContext, JSFunction>,
+  VALID_ITERATOR_WRAPPER_MAP_INDEX: Slot<NativeContext, Map>,
   JS_ARRAY_PACKED_ELEMENTS_MAP_INDEX: Slot<NativeContext, Map>,
   JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX: Slot<NativeContext, Map>,
+  JS_MAP_MAP_INDEX: Slot<NativeContext, Map>,
+  JS_SET_MAP_INDEX: Slot<NativeContext, Map>,
   MATH_RANDOM_CACHE_INDEX: Slot<NativeContext, FixedDoubleArray>,
   MATH_RANDOM_INDEX_INDEX: Slot<NativeContext, Smi>,
   NUMBER_FUNCTION_INDEX: Slot<NativeContext, JSFunction>,
@@ -145,6 +160,9 @@ extern enum ContextSlot extends intptr constexpr 'Context::Field' {
   RAB_GSAB_BIGUINT64_ARRAY_MAP_INDEX: Slot<NativeContext, Map>,
   RAB_GSAB_BIGINT64_ARRAY_MAP_INDEX: Slot<NativeContext, Map>,
 
+  ACCESSOR_PROPERTY_DESCRIPTOR_MAP_INDEX: Slot<NativeContext, Map>,
+  DATA_PROPERTY_DESCRIPTOR_MAP_INDEX: Slot<NativeContext, Map>,
+
   PROMISE_FUNCTION_INDEX: Slot<NativeContext, JSFunction>,
   PROMISE_THEN_INDEX: Slot<NativeContext, JSFunction>,
   PROMISE_PROTOTYPE_INDEX: Slot<NativeContext, JSObject>,
@@ -155,10 +173,13 @@ extern enum ContextSlot extends intptr constexpr 'Context::Field' {
   PROMISE_HOOK_AFTER_FUNCTION_INDEX: Slot<NativeContext, Undefined|Callable>,
   PROMISE_HOOK_RESOLVE_FUNCTION_INDEX: Slot<NativeContext, Undefined|Callable>,
 
+  // @if(V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA)
   CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX: Slot<NativeContext, HeapObject>,
 
   BOUND_FUNCTION_WITH_CONSTRUCTOR_MAP_INDEX: Slot<NativeContext, Map>,
   BOUND_FUNCTION_WITHOUT_CONSTRUCTOR_MAP_INDEX: Slot<NativeContext, Map>,
+
+  WRAPPED_FUNCTION_MAP_INDEX: Slot<NativeContext, Map>,
 
   MIN_CONTEXT_SLOTS,
   ...

@@ -7,6 +7,7 @@
 
 #include "src/ast/ast.h"
 #include "src/ast/scopes.h"
+#include "src/execution/isolate.h"
 
 namespace v8 {
 namespace internal {
@@ -577,6 +578,13 @@ void AstTraversalVisitor<Subclass>::VisitSuperCallReference(
   PROCESS_EXPRESSION(expr);
   RECURSE_EXPRESSION(VisitVariableProxy(expr->new_target_var()));
   RECURSE_EXPRESSION(VisitVariableProxy(expr->this_function_var()));
+}
+
+template <class Subclass>
+void AstTraversalVisitor<Subclass>::VisitSuperCallForwardArgs(
+    SuperCallForwardArgs* expr) {
+  PROCESS_EXPRESSION(expr);
+  RECURSE_EXPRESSION(Visit(expr->expression()));
 }
 
 #undef PROCESS_NODE

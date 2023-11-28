@@ -40,7 +40,7 @@ class CanBeHandledVisitor final : private RegExpVisitor {
         RegExpFlag::kGlobal | RegExpFlag::kSticky | RegExpFlag::kMultiline |
         RegExpFlag::kDotAll | RegExpFlag::kLinear;
     // We support Unicode iff kUnicode is among the supported flags.
-    STATIC_ASSERT(ExperimentalRegExp::kSupportsUnicode ==
+    static_assert(ExperimentalRegExp::kSupportsUnicode ==
                   IsUnicode(kAllowedFlags));
     return (flags & ~kAllowedFlags) == 0;
   }
@@ -65,7 +65,18 @@ class CanBeHandledVisitor final : private RegExpVisitor {
     return nullptr;
   }
 
-  void* VisitCharacterClass(RegExpCharacterClass* node, void*) override {
+  void* VisitClassRanges(RegExpClassRanges* node, void*) override {
+    return nullptr;
+  }
+
+  void* VisitClassSetOperand(RegExpClassSetOperand* node, void*) override {
+    result_ = !node->has_strings();
+    return nullptr;
+  }
+
+  void* VisitClassSetExpression(RegExpClassSetExpression* node,
+                                void*) override {
+    result_ = false;
     return nullptr;
   }
 
@@ -73,9 +84,7 @@ class CanBeHandledVisitor final : private RegExpVisitor {
     return nullptr;
   }
 
-  void* VisitAtom(RegExpAtom* node, void*) override {
-    return nullptr;
-  }
+  void* VisitAtom(RegExpAtom* node, void*) override { return nullptr; }
 
   void* VisitText(RegExpText* node, void*) override {
     for (TextElement& el : *node->elements()) {
@@ -113,7 +122,12 @@ class CanBeHandledVisitor final : private RegExpVisitor {
 
     int local_replication;
     if (node->max() == RegExpTree::kInfinity) {
-      local_replication = node->min() + 1;
+      if (node->min() > 0 && node->min_match() > 0) {
+        // Quantifier can be reduced to a non nullable plus.
+        local_replication = std::max(node->min(), 1);
+      } else {
+        local_replication = node->min() + 1;
+      }
     } else {
       local_replication = node->max();
     }
@@ -141,7 +155,13 @@ class CanBeHandledVisitor final : private RegExpVisitor {
   }
 
   void* VisitCapture(RegExpCapture* node, void*) override {
-    node->body()->Accept(this, nullptr);
+    if (inside_positive_lookbehind_) {
+      // Positive lookbehinds with capture groups are not currently supported
+      result_ = false;
+    } else {
+      node->body()->Accept(this, nullptr);
+    }
+
     return nullptr;
   }
 
@@ -151,9 +171,16 @@ class CanBeHandledVisitor final : private RegExpVisitor {
   }
 
   void* VisitLookaround(RegExpLookaround* node, void*) override {
-    // TODO(mbid, v8:10765): This will be hard to support, but not impossible I
-    // think.  See product automata.
-    result_ = false;
+    bool parent_is_positive_lookbehind = inside_positive_lookbehind_;
+    inside_positive_lookbehind_ = node->is_positive();
+
+    if (node->type() == RegExpLookaround::Type::LOOKAHEAD) {
+      result_ = false;
+    } else {
+      node->body()->Accept(this, nullptr);
+    }
+
+    inside_positive_lookbehind_ = parent_is_positive_lookbehind;
     return nullptr;
   }
 
@@ -168,6 +195,10 @@ class CanBeHandledVisitor final : private RegExpVisitor {
  private:
   // See comment in `VisitQuantifier`:
   int replication_factor_ = 1;
+
+  // The current implementation does not support capture groups in positive
+  // lookbehinds.
+  bool inside_positive_lookbehind_ = false;
 
   bool result_ = true;
 };
@@ -221,7 +252,7 @@ class BytecodeAssembler {
 
   void Accept() { code_.Add(RegExpInstruction::Accept(), zone_); }
 
-  void Assertion(RegExpAssertion::AssertionType t) {
+  void Assertion(RegExpAssertion::Type t) {
     code_.Add(RegExpInstruction::Assertion(t), zone_);
   }
 
@@ -247,6 +278,18 @@ class BytecodeAssembler {
 
   void SetRegisterToCp(int32_t register_index) {
     code_.Add(RegExpInstruction::SetRegisterToCp(register_index), zone_);
+  }
+
+  void BeginLoop() { code_.Add(RegExpInstruction::BeginLoop(), zone_); }
+
+  void EndLoop() { code_.Add(RegExpInstruction::EndLoop(), zone_); }
+
+  void WriteLookTable(int index) {
+    code_.Add(RegExpInstruction::WriteLookTable(index), zone_);
+  }
+
+  void ReadLookTable(int index, bool is_positive) {
+    code_.Add(RegExpInstruction::ReadLookTable(index, is_positive), zone_);
   }
 
   void Bind(Label& target) {
@@ -312,11 +355,29 @@ class CompileVisitor : private RegExpVisitor {
     compiler.assembler_.SetRegisterToCp(1);
     compiler.assembler_.Accept();
 
+    // To handle captureless lookbehinds, we run independent automata for each
+    // lookbehind in lockstep with the main expression. To do so, we compile
+    // each lookbehind to a separate bytecode that we append to the main
+    // expression bytecode. At the end of each lookbehind, we add a
+    // WriteLookTable instruction, writing to a truth table that the lookbehind
+    // holds at the current position.
+    compiler.inside_lookaround_ = true;
+    while (!compiler.lookbehinds_.empty()) {
+      auto node = compiler.lookbehinds_.front();
+      node->body()->Accept(&compiler, nullptr);
+      compiler.assembler_.WriteLookTable(node->index());
+      compiler.lookbehinds_.pop_front();
+    }
+
     return std::move(compiler.assembler_).IntoCode();
   }
 
  private:
-  explicit CompileVisitor(Zone* zone) : zone_(zone), assembler_(zone) {}
+  explicit CompileVisitor(Zone* zone)
+      : zone_(zone),
+        lookbehinds_(zone),
+        assembler_(zone),
+        inside_lookaround_(false) {}
 
   // Generate a disjunction of code fragments compiled by a function `alt_gen`.
   // `alt_gen` is called repeatedly with argument `int i = 0, 1, ..., alt_num -
@@ -385,11 +446,10 @@ class CompileVisitor : private RegExpVisitor {
     return nullptr;
   }
 
-  void* VisitCharacterClass(RegExpCharacterClass* node, void*) override {
+  void CompileCharacterRanges(ZoneList<CharacterRange>* ranges, bool negated) {
     // A character class is compiled as Disjunction over its `CharacterRange`s.
-    ZoneList<CharacterRange>* ranges = node->ranges(zone_);
     CharacterRange::Canonicalize(ranges);
-    if (node->is_negated()) {
+    if (negated) {
       // The complement of a disjoint, non-adjacent (i.e. `Canonicalize`d)
       // union of k intervals is a union of at most k + 1 intervals.
       ZoneList<CharacterRange>* negated =
@@ -402,7 +462,7 @@ class CompileVisitor : private RegExpVisitor {
     CompileDisjunction(ranges->length(), [&](int i) {
       // We don't support utf16 for now, so only ranges that can be specified
       // by (complements of) ranges with base::uc16 bounds.
-      STATIC_ASSERT(kMaxSupportedCodepoint <=
+      static_assert(kMaxSupportedCodepoint <=
                     std::numeric_limits<base::uc16>::max());
 
       base::uc32 from = (*ranges)[i].from();
@@ -416,7 +476,24 @@ class CompileVisitor : private RegExpVisitor {
 
       assembler_.ConsumeRange(from_uc16, to_uc16);
     });
+  }
+
+  void* VisitClassRanges(RegExpClassRanges* node, void*) override {
+    CompileCharacterRanges(node->ranges(zone_), node->is_negated());
     return nullptr;
+  }
+
+  void* VisitClassSetOperand(RegExpClassSetOperand* node, void*) override {
+    // TODO(v8:11935): Support strings.
+    DCHECK(!node->has_strings());
+    CompileCharacterRanges(node->ranges(), false);
+    return nullptr;
+  }
+
+  void* VisitClassSetExpression(RegExpClassSetExpression* node,
+                                void*) override {
+    // TODO(v8:11935): Add support.
+    UNREACHABLE();
   }
 
   void* VisitAtom(RegExpAtom* node, void*) override {
@@ -445,7 +522,9 @@ class CompileVisitor : private RegExpVisitor {
     //
     //   begin:
     //     FORK end
+    //     BEGIN_LOOP
     //     <body>
+    //     END_LOOP
     //     JMP begin
     //   end:
     //     ...
@@ -457,7 +536,9 @@ class CompileVisitor : private RegExpVisitor {
 
     assembler_.Bind(begin);
     assembler_.Fork(end);
+    assembler_.BeginLoop();
     emit_body();
+    assembler_.EndLoop();
     assembler_.Jmp(begin);
 
     assembler_.Bind(end);
@@ -471,7 +552,9 @@ class CompileVisitor : private RegExpVisitor {
     //     FORK body
     //     JMP end
     //   body:
+    //     BEGIN_LOOP
     //     <body>
+    //     END_LOOP
     //     FORK body
     //   end:
     //     ...
@@ -483,7 +566,9 @@ class CompileVisitor : private RegExpVisitor {
     assembler_.Jmp(end);
 
     assembler_.Bind(body);
+    assembler_.BeginLoop();
     emit_body();
+    assembler_.EndLoop();
     assembler_.Fork(body);
 
     assembler_.Bind(end);
@@ -495,20 +580,29 @@ class CompileVisitor : private RegExpVisitor {
     // This is compiled into
     //
     //     FORK end
+    //     BEGIN_LOOP
     //     <body>
+    //     END_LOOP
     //     FORK end
+    //     BEGIN_LOOP
     //     <body>
+    //     END_LOOP
     //     ...
     //     ...
     //     FORK end
     //     <body>
     //   end:
     //     ...
+    //
+    // We add `BEGIN_LOOP` and `END_LOOP` instructions because these optional
+    // repetitions of the body cannot match the empty string.
 
     Label end;
     for (int i = 0; i != max_repetition_num; ++i) {
       assembler_.Fork(end);
+      assembler_.BeginLoop();
       emit_body();
+      assembler_.EndLoop();
     }
     assembler_.Bind(end);
   }
@@ -521,17 +615,27 @@ class CompileVisitor : private RegExpVisitor {
     //     FORK body0
     //     JMP end
     //   body0:
+    //     BEGIN_LOOP
     //     <body>
+    //     END_LOOP
+    //
     //     FORK body1
     //     JMP end
     //   body1:
+    //     BEGIN_LOOP
     //     <body>
+    //     END_LOOP
     //     ...
     //     ...
     //   body{max_repetition_num - 1}:
+    //     BEGIN_LOOP
     //     <body>
+    //     END_LOOP
     //   end:
     //     ...
+    //
+    // We add `BEGIN_LOOP` and `END_LOOP` instructions because these optional
+    // repetitions of the body cannot match the empty string.
 
     Label end;
     for (int i = 0; i != max_repetition_num; ++i) {
@@ -540,9 +644,67 @@ class CompileVisitor : private RegExpVisitor {
       assembler_.Jmp(end);
 
       assembler_.Bind(body);
+      assembler_.BeginLoop();
       emit_body();
+      assembler_.EndLoop();
     }
     assembler_.Bind(end);
+  }
+
+  // In the general case, the first repetition of <body>+ is different
+  // from the following ones as it is allowed to match the empty string. This is
+  // compiled by repeating <body>, but it can result in a bytecode that grows
+  // quadratically with the size of the regex when nesting pluses or repetition
+  // upper-bounded with infinity.
+  //
+  // In the particular case where <body> cannot match the empty string, the
+  // plus can be compiled without duplicating the bytecode of <body>, resulting
+  // in a bytecode linear in the size of the regex in case of nested
+  // non-nullable pluses.
+  //
+  // E.g. `/.+/` will compile `/./` once, while `/(?:.?)+/` will be compiled as
+  // `/(?:.?)(?:.?)*/`, resulting in two repetitions of the body.
+
+  // Emit bytecode corresponding to /<emit_body>+/, with <emit_body> not
+  // nullable.
+  template <class F>
+  void CompileNonNullableGreedyPlus(F&& emit_body) {
+    // This is compiled into
+    //
+    //   begin:
+    //     <body>
+    //
+    //     FORK end
+    //     JMP begin
+    //   end:
+    //     ...
+    Label begin, end;
+
+    assembler_.Bind(begin);
+    emit_body();
+
+    assembler_.Fork(end);
+    assembler_.Jmp(begin);
+    assembler_.Bind(end);
+  }
+
+  // Emit bytecode corresponding to /<emit_body>+?/, with <emit_body> not
+  // nullable.
+  template <class F>
+  void CompileNonNullableNonGreedyPlus(F&& emit_body) {
+    // This is compiled into
+    //
+    //   begin:
+    //     <body>
+    //
+    //     FORK begin
+    //     ...
+    Label begin;
+
+    assembler_.Bind(begin);
+    emit_body();
+
+    assembler_.Fork(begin);
   }
 
   void* VisitQuantifier(RegExpQuantifier* node, void*) override {
@@ -560,40 +722,90 @@ class CompileVisitor : private RegExpVisitor {
       node->body()->Accept(this, nullptr);
     };
 
-    // First repeat the body `min()` times.
-    for (int i = 0; i != node->min(); ++i) emit_body();
+    bool can_be_reduced_to_non_nullable_plus =
+        node->min() > 0 && node->max() == RegExpTree::kInfinity &&
+        node->min_match() > 0;
 
-    switch (node->quantifier_type()) {
-      case RegExpQuantifier::POSSESSIVE:
-        UNREACHABLE();
-      case RegExpQuantifier::GREEDY: {
-        if (node->max() == RegExpTree::kInfinity) {
-          CompileGreedyStar(emit_body);
-        } else {
-          DCHECK_NE(node->max(), RegExpTree::kInfinity);
-          CompileGreedyRepetition(emit_body, node->max() - node->min());
-        }
-        break;
+    if (can_be_reduced_to_non_nullable_plus) {
+      // Compile <body>+ with an optimization allowing linear sized bytecode in
+      // the case of nested pluses. Repetitions with infinite upperbound like
+      // <body>{n,}, with n != 0, are compiled into <body>{n-1}<body+>, avoiding
+      // one repetition, compared to <body>{n}<body>*.
+
+      // Compile the mandatory repetitions. We repeat `min() - 1` times, such
+      // that the last repetition, compiled later, can be reused in a loop.
+      for (int i = 0; i < node->min() - 1; ++i) {
+        emit_body();
       }
-      case RegExpQuantifier::NON_GREEDY: {
-        if (node->max() == RegExpTree::kInfinity) {
-          CompileNonGreedyStar(emit_body);
-        } else {
-          DCHECK_NE(node->max(), RegExpTree::kInfinity);
-          CompileNonGreedyRepetition(emit_body, node->max() - node->min());
+
+      // Compile the optional repetitions, using an optimized plus when
+      // possible.
+      switch (node->quantifier_type()) {
+        case RegExpQuantifier::POSSESSIVE:
+          UNREACHABLE();
+        case RegExpQuantifier::GREEDY: {
+          // Compile both last mandatory repetition and optional ones.
+          CompileNonNullableGreedyPlus(emit_body);
+          break;
+        }
+        case RegExpQuantifier::NON_GREEDY: {
+          // Compile both last mandatory repetition and optional ones.
+          CompileNonNullableNonGreedyPlus(emit_body);
+          break;
+        }
+      }
+    } else {
+      // Compile <body>+ into <body><body>*, and <body>{n,}, with n != 0, into
+      // <body>{n}<body>*.
+
+      // Compile the first `min()` repetitions.
+      for (int i = 0; i < node->min(); ++i) {
+        emit_body();
+      }
+
+      // Compile the optional repetitions, using stars or repetitions.
+      switch (node->quantifier_type()) {
+        case RegExpQuantifier::POSSESSIVE:
+          UNREACHABLE();
+        case RegExpQuantifier::GREEDY: {
+          if (node->max() == RegExpTree::kInfinity) {
+            CompileGreedyStar(emit_body);
+          } else {
+            DCHECK_NE(node->max(), RegExpTree::kInfinity);
+            CompileGreedyRepetition(emit_body, node->max() - node->min());
+          }
+          break;
+        }
+        case RegExpQuantifier::NON_GREEDY: {
+          if (node->max() == RegExpTree::kInfinity) {
+            CompileNonGreedyStar(emit_body);
+          } else {
+            DCHECK_NE(node->max(), RegExpTree::kInfinity);
+            CompileNonGreedyRepetition(emit_body, node->max() - node->min());
+          }
+          break;
         }
       }
     }
+
     return nullptr;
   }
 
   void* VisitCapture(RegExpCapture* node, void*) override {
-    int index = node->index();
-    int start_register = RegExpCapture::StartRegister(index);
-    int end_register = RegExpCapture::EndRegister(index);
-    assembler_.SetRegisterToCp(start_register);
-    node->body()->Accept(this, nullptr);
-    assembler_.SetRegisterToCp(end_register);
+    // Only negative lookbehinds contain captures (enforced by the
+    // `CanBeHandled` visitor). Capture groups inside negative lookarounds
+    // always yield undefined, so we can avoid the SetRegister instructions.
+    if (inside_lookaround_) {
+      node->body()->Accept(this, nullptr);
+    } else {
+      int index = node->index();
+      int start_register = RegExpCapture::StartRegister(index);
+      int end_register = RegExpCapture::EndRegister(index);
+      assembler_.SetRegisterToCp(start_register);
+      node->body()->Accept(this, nullptr);
+      assembler_.SetRegisterToCp(end_register);
+    }
+
     return nullptr;
   }
 
@@ -603,8 +815,12 @@ class CompileVisitor : private RegExpVisitor {
   }
 
   void* VisitLookaround(RegExpLookaround* node, void*) override {
-    // TODO(mbid,v8:10765): Support this case.
-    UNREACHABLE();
+    assembler_.ReadLookTable(node->index(), node->is_positive());
+
+    // Add the lookbehind to the queue of lookbehinds to be compiled.
+    lookbehinds_.push_back(node);
+
+    return nullptr;
   }
 
   void* VisitBackReference(RegExpBackReference* node, void*) override {
@@ -622,7 +838,13 @@ class CompileVisitor : private RegExpVisitor {
 
  private:
   Zone* zone_;
+
+  // Stores the AST of the lookbehinds encountered in a queue. They are compiled
+  // after the main expression, in breadth-first order.
+  ZoneLinkedList<RegExpLookaround*> lookbehinds_;
+
   BytecodeAssembler assembler_;
+  bool inside_lookaround_;
 };
 
 }  // namespace

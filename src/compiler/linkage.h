@@ -8,22 +8,17 @@
 #include "src/base/compiler-specific.h"
 #include "src/base/flags.h"
 #include "src/codegen/interface-descriptors.h"
+#include "src/codegen/linkage-location.h"
 #include "src/codegen/machine-type.h"
-#include "src/codegen/register-arch.h"
+#include "src/codegen/register.h"
 #include "src/codegen/reglist.h"
 #include "src/codegen/signature.h"
 #include "src/common/globals.h"
 #include "src/compiler/frame.h"
 #include "src/compiler/operator.h"
+#include "src/execution/encoded-c-signature.h"
 #include "src/runtime/runtime.h"
 #include "src/zone/zone.h"
-
-#if !defined(__clang__) && defined(_M_ARM64)
-// _M_ARM64 is an MSVC-specific macro that clang-cl emulates.
-#define NO_INLINE_FOR_ARM64_MSVC __declspec(noinline)
-#else
-#define NO_INLINE_FOR_ARM64_MSVC
-#endif
 
 namespace v8 {
 class CFunctionInfo;
@@ -35,154 +30,10 @@ class OptimizedCompilationInfo;
 
 namespace compiler {
 
-const RegList kNoCalleeSaved = 0;
+constexpr RegList kNoCalleeSaved;
+constexpr DoubleRegList kNoCalleeSavedFp;
 
 class OsrHelper;
-
-// Describes the location for a parameter or a return value to a call.
-class LinkageLocation {
- public:
-  bool operator==(const LinkageLocation& other) const {
-    return bit_field_ == other.bit_field_ &&
-           machine_type_ == other.machine_type_;
-  }
-
-  bool operator!=(const LinkageLocation& other) const {
-    return !(*this == other);
-  }
-
-  static bool IsSameLocation(const LinkageLocation& a,
-                             const LinkageLocation& b) {
-    // Different MachineTypes may end up at the same physical location. With the
-    // sub-type check we make sure that types like {AnyTagged} and
-    // {TaggedPointer} which would end up with the same physical location are
-    // considered equal here.
-    return (a.bit_field_ == b.bit_field_) &&
-           (IsSubtype(a.machine_type_.representation(),
-                      b.machine_type_.representation()) ||
-            IsSubtype(b.machine_type_.representation(),
-                      a.machine_type_.representation()));
-  }
-
-  static LinkageLocation ForAnyRegister(
-      MachineType type = MachineType::None()) {
-    return LinkageLocation(REGISTER, ANY_REGISTER, type);
-  }
-
-  static LinkageLocation ForRegister(int32_t reg,
-                                     MachineType type = MachineType::None()) {
-    DCHECK_LE(0, reg);
-    return LinkageLocation(REGISTER, reg, type);
-  }
-
-  static LinkageLocation ForCallerFrameSlot(int32_t slot, MachineType type) {
-    DCHECK_GT(0, slot);
-    return LinkageLocation(STACK_SLOT, slot, type);
-  }
-
-  static LinkageLocation ForCalleeFrameSlot(int32_t slot, MachineType type) {
-    // TODO(titzer): bailout instead of crashing here.
-    DCHECK(slot >= 0 && slot < LinkageLocation::MAX_STACK_SLOT);
-    return LinkageLocation(STACK_SLOT, slot, type);
-  }
-
-  static LinkageLocation ForSavedCallerReturnAddress() {
-    return ForCalleeFrameSlot((StandardFrameConstants::kCallerPCOffset -
-                               StandardFrameConstants::kCallerPCOffset) /
-                                  kSystemPointerSize,
-                              MachineType::Pointer());
-  }
-
-  static LinkageLocation ForSavedCallerFramePtr() {
-    return ForCalleeFrameSlot((StandardFrameConstants::kCallerPCOffset -
-                               StandardFrameConstants::kCallerFPOffset) /
-                                  kSystemPointerSize,
-                              MachineType::Pointer());
-  }
-
-  static LinkageLocation ForSavedCallerConstantPool() {
-    DCHECK(V8_EMBEDDED_CONSTANT_POOL);
-    return ForCalleeFrameSlot((StandardFrameConstants::kCallerPCOffset -
-                               StandardFrameConstants::kConstantPoolOffset) /
-                                  kSystemPointerSize,
-                              MachineType::AnyTagged());
-  }
-
-  static LinkageLocation ForSavedCallerFunction() {
-    return ForCalleeFrameSlot((StandardFrameConstants::kCallerPCOffset -
-                               StandardFrameConstants::kFunctionOffset) /
-                                  kSystemPointerSize,
-                              MachineType::AnyTagged());
-  }
-
-  static LinkageLocation ConvertToTailCallerLocation(
-      LinkageLocation caller_location, int stack_param_delta) {
-    if (!caller_location.IsRegister()) {
-      return LinkageLocation(STACK_SLOT,
-                             caller_location.GetLocation() + stack_param_delta,
-                             caller_location.GetType());
-    }
-    return caller_location;
-  }
-
-  MachineType GetType() const { return machine_type_; }
-
-  int GetSizeInPointers() const {
-    return ElementSizeInPointers(GetType().representation());
-  }
-
-  int32_t GetLocation() const {
-    // We can't use LocationField::decode here because it doesn't work for
-    // negative values!
-    return static_cast<int32_t>(bit_field_ & LocationField::kMask) >>
-           LocationField::kShift;
-  }
-
-  NO_INLINE_FOR_ARM64_MSVC bool IsRegister() const {
-    return TypeField::decode(bit_field_) == REGISTER;
-  }
-  bool IsAnyRegister() const {
-    return IsRegister() && GetLocation() == ANY_REGISTER;
-  }
-  bool IsCallerFrameSlot() const { return !IsRegister() && GetLocation() < 0; }
-  bool IsCalleeFrameSlot() const { return !IsRegister() && GetLocation() >= 0; }
-
-  int32_t AsRegister() const {
-    DCHECK(IsRegister());
-    return GetLocation();
-  }
-  int32_t AsCallerFrameSlot() const {
-    DCHECK(IsCallerFrameSlot());
-    return GetLocation();
-  }
-  int32_t AsCalleeFrameSlot() const {
-    DCHECK(IsCalleeFrameSlot());
-    return GetLocation();
-  }
-
- private:
-  enum LocationType { REGISTER, STACK_SLOT };
-
-  using TypeField = base::BitField<LocationType, 0, 1>;
-  using LocationField = TypeField::Next<int32_t, 31>;
-
-  static constexpr int32_t ANY_REGISTER = -1;
-  static constexpr int32_t MAX_STACK_SLOT = 32767;
-
-  LinkageLocation(LocationType type, int32_t location,
-                  MachineType machine_type) {
-    bit_field_ = TypeField::encode(type) |
-                 // {location} can be -1 (ANY_REGISTER).
-                 ((static_cast<uint32_t>(location) << LocationField::kShift) &
-                  LocationField::kMask);
-    machine_type_ = machine_type;
-  }
-
-  int32_t bit_field_;
-  MachineType machine_type_;
-};
-
-using LocationSignature = Signature<LinkageLocation>;
 
 // Describes a call to various parts of the compiler. Every call has the notion
 // of a "target", which is the first input to the call.
@@ -231,7 +82,7 @@ class V8_EXPORT_PRIVATE CallDescriptor final
     // 3. JS runtime arguments are not attached as inputs to the TailCall node.
     // 4. Prior to the tail call, frame and register state is torn down to just
     //    before the caller frame was constructed.
-    // 5. Unlike normal tail calls, arguments adaptor frames (if present) are
+    // 5. Unlike normal tail calls, inlined arguments frames (if present) are
     //    *not* torn down.
     //
     // In other words, behavior is identical to a jmp instruction prior caller
@@ -252,10 +103,10 @@ class V8_EXPORT_PRIVATE CallDescriptor final
                  LocationSignature* location_sig, size_t param_slot_count,
                  Operator::Properties properties,
                  RegList callee_saved_registers,
-                 RegList callee_saved_fp_registers, Flags flags,
+                 DoubleRegList callee_saved_fp_registers, Flags flags,
                  const char* debug_name = "",
                  StackArgumentOrder stack_order = StackArgumentOrder::kDefault,
-                 const RegList allocatable_registers = 0,
+                 const RegList allocatable_registers = {},
                  size_t return_slot_count = 0)
       : kind_(kind),
         target_type_(target_type),
@@ -299,6 +150,7 @@ class V8_EXPORT_PRIVATE CallDescriptor final
 #if V8_ENABLE_WEBASSEMBLY
     if (IsWasmFunctionCall()) return true;
 #endif  // V8_ENABLE_WEBASSEMBLY
+    if (CalleeSavedRegisters() != kNoCalleeSaved) return true;
     return false;
   }
 
@@ -402,7 +254,9 @@ class V8_EXPORT_PRIVATE CallDescriptor final
   RegList CalleeSavedRegisters() const { return callee_saved_registers_; }
 
   // Get the callee-saved FP registers, if any, across this call.
-  RegList CalleeSavedFPRegisters() const { return callee_saved_fp_registers_; }
+  DoubleRegList CalleeSavedFPRegisters() const {
+    return callee_saved_fp_registers_;
+  }
 
   const char* debug_name() const { return debug_name_; }
 
@@ -431,8 +285,10 @@ class V8_EXPORT_PRIVATE CallDescriptor final
   RegList AllocatableRegisters() const { return allocatable_registers_; }
 
   bool HasRestrictedAllocatableRegisters() const {
-    return allocatable_registers_ != 0;
+    return !allocatable_registers_.is_empty();
   }
+
+  EncodedCSignature ToEncodedCSignature() const;
 
  private:
   void ComputeParamCounts() const;
@@ -447,7 +303,7 @@ class V8_EXPORT_PRIVATE CallDescriptor final
   const size_t return_slot_count_;
   const Operator::Properties properties_;
   const RegList callee_saved_registers_;
-  const RegList callee_saved_fp_registers_;
+  const DoubleRegList callee_saved_fp_registers_;
   // Non-zero value means restricting the set of allocatable registers for
   // register allocator to use.
   const RegList allocatable_registers_;
@@ -491,9 +347,12 @@ class V8_EXPORT_PRIVATE Linkage : public NON_EXPORTED_BASE(ZoneObject) {
   // The call descriptor for this compilation unit describes the locations
   // of incoming parameters and the outgoing return value(s).
   CallDescriptor* GetIncomingDescriptor() const { return incoming_; }
-  static CallDescriptor* GetJSCallDescriptor(Zone* zone, bool is_osr,
-                                             int parameter_count,
-                                             CallDescriptor::Flags flags);
+  // Calls to JSFunctions should never overwrite the {properties}, but calls to
+  // known builtins might.
+  static CallDescriptor* GetJSCallDescriptor(
+      Zone* zone, bool is_osr, int parameter_count, CallDescriptor::Flags flags,
+      Operator::Properties properties =
+          Operator::kNoProperties /* use with care! */);
 
   static CallDescriptor* GetRuntimeCallDescriptor(
       Zone* zone, Runtime::FunctionId function, int js_parameter_count,
@@ -572,7 +431,8 @@ class V8_EXPORT_PRIVATE Linkage : public NON_EXPORTED_BASE(ZoneObject) {
   }
 
   // A special {Parameter} index for JSCalls that represents the closure.
-  static constexpr int kJSCallClosureParamIndex = -1;
+  static constexpr int kJSCallClosureParamIndex = kJSCallClosureParameterIndex;
+  static_assert(kJSCallClosureParamIndex == -1);
 
   // A special {OsrValue} index to indicate the context spill slot.
   static const int kOsrContextSpillSlotIndex = -1;

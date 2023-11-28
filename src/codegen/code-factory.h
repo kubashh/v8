@@ -26,19 +26,20 @@ class V8_EXPORT_PRIVATE CodeFactory final {
   // stack and the arguments count is passed via register) which currently
   // can't be expressed in CallInterfaceDescriptor. Therefore only the code
   // is exported here.
-  static Handle<Code> RuntimeCEntry(Isolate* isolate, int result_size = 1);
+  static Handle<Code> RuntimeCEntry(Isolate* isolate, int result_size = 1,
+                                    bool switch_to_central_stack = false);
 
-  static Handle<Code> CEntry(
-      Isolate* isolate, int result_size = 1,
-      SaveFPRegsMode save_doubles = SaveFPRegsMode::kIgnore,
-      ArgvMode argv_mode = ArgvMode::kStack, bool builtin_exit_frame = false);
+  static Handle<Code> CEntry(Isolate* isolate, int result_size = 1,
+                             ArgvMode argv_mode = ArgvMode::kStack,
+                             bool builtin_exit_frame = false,
+                             bool switch_to_central_stack = false);
 
   // Initial states for ICs.
   static Callable LoadGlobalIC(Isolate* isolate, TypeofMode typeof_mode);
   static Callable LoadGlobalICInOptimizedCode(Isolate* isolate,
                                               TypeofMode typeof_mode);
-  static Callable StoreOwnIC(Isolate* isolate);
-  static Callable StoreOwnICInOptimizedCode(Isolate* isolate);
+  static Callable DefineNamedOwnIC(Isolate* isolate);
+  static Callable DefineNamedOwnICInOptimizedCode(Isolate* isolate);
 
   static Callable ResumeGenerator(Isolate* isolate);
 
@@ -71,6 +72,7 @@ class V8_EXPORT_PRIVATE CodeFactory final {
   static Callable ConstructFunction(Isolate* isolate);
   static Callable ConstructVarargs(Isolate* isolate);
   static Callable ConstructForwardVarargs(Isolate* isolate);
+  static Callable ConstructForwardAllArgs(Isolate* isolate);
   static Callable ConstructFunctionForwardVarargs(Isolate* isolate);
 
   static Callable InterpreterPushArgsThenCall(Isolate* isolate,
@@ -78,6 +80,7 @@ class V8_EXPORT_PRIVATE CodeFactory final {
                                               InterpreterPushArgsMode mode);
   static Callable InterpreterPushArgsThenConstruct(
       Isolate* isolate, InterpreterPushArgsMode mode);
+  static Callable InterpreterForwardAllArgsThenConstruct(Isolate* isolate);
   static Callable InterpreterCEntry(Isolate* isolate, int result_size = 1);
   static Callable InterpreterOnStackReplacement(Isolate* isolate);
   static Callable InterpreterOnStackReplacement_ToBaseline(Isolate* isolate);

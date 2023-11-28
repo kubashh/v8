@@ -5,6 +5,7 @@
 #ifndef V8_DATE_DATE_H_
 #define V8_DATE_DATE_H_
 
+#include "src/base/small-vector.h"
 #include "src/base/timezone-cache.h"
 #include "src/common/globals.h"
 #include "src/objects/smi.h"
@@ -155,7 +156,7 @@ class V8_EXPORT_PRIVATE DateCache {
   // We increment the stamp each time when the timezone information changes.
   // JSDate objects perform stamp check and invalidate their caches if
   // their saved stamp is not equal to the current stamp.
-  Smi stamp() { return stamp_; }
+  Tagged<Smi> stamp() { return stamp_; }
   void* stamp_address() { return &stamp_; }
 
   // These functions are virtual so that we can override them when testing.
@@ -212,7 +213,7 @@ class V8_EXPORT_PRIVATE DateCache {
     return segment->start_sec > segment->end_sec;
   }
 
-  Smi stamp_;
+  Tagged<Smi> stamp_;
 
   // Daylight Saving Time cache.
   DST dst_[kDSTSize];
@@ -246,6 +247,20 @@ double MakeDay(double year, double month, double date);
 
 // ES6 section 20.3.1.12 MakeTime (hour, min, sec, ms)
 double MakeTime(double hour, double min, double sec, double ms);
+
+using DateBuffer = base::SmallVector<char, 128>;
+
+enum class ToDateStringMode {
+  kLocalDate,
+  kLocalTime,
+  kLocalDateAndTime,
+  kUTCDateAndTime,
+  kISODateAndTime
+};
+
+// ES6 section 20.3.4.41.1 ToDateString(tv)
+DateBuffer ToDateString(double time_val, DateCache* date_cache,
+                        ToDateStringMode mode);
 
 }  // namespace internal
 }  // namespace v8

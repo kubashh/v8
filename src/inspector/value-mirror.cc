@@ -19,7 +19,9 @@
 #include "src/base/optional.h"
 #include "src/debug/debug-interface.h"
 #include "src/inspector/v8-debugger.h"
+#include "src/inspector/v8-deep-serializer.h"
 #include "src/inspector/v8-inspector-impl.h"
+#include "src/inspector/v8-serialization-duplicate-tracker.h"
 #include "src/inspector/v8-value-utils.h"
 
 namespace v8_inspector {
@@ -29,6 +31,13 @@ using protocol::Runtime::EntryPreview;
 using protocol::Runtime::ObjectPreview;
 using protocol::Runtime::PropertyPreview;
 using protocol::Runtime::RemoteObject;
+
+#if defined(V8_USE_ADDRESS_SANITIZER) && V8_OS_DARWIN
+// For whatever reason, ASan on MacOS has bigger stack frames.
+static const int kMaxProtocolDepth = 900;
+#else
+static const int kMaxProtocolDepth = 1000;
+#endif
 
 Response toProtocolValue(v8::Local<v8::Context> context,
                          v8::Local<v8::Value> value, int maxDepth,
@@ -94,7 +103,8 @@ std::unique_ptr<protocol::FundamentalValue> toProtocolValue(
     double doubleValue) {
   if (doubleValue >= std::numeric_limits<int>::min() &&
       doubleValue <= std::numeric_limits<int>::max() &&
-      bit_cast<int64_t>(doubleValue) != bit_cast<int64_t>(-0.0)) {
+      v8::base::bit_cast<int64_t>(doubleValue) !=
+          v8::base::bit_cast<int64_t>(-0.0)) {
     int intValue = static_cast<int>(doubleValue);
     if (intValue == doubleValue) {
       return protocol::FundamentalValue::create(intValue);
@@ -152,13 +162,7 @@ Response toProtocolValue(v8::Local<v8::Context> context,
                          v8::Local<v8::Value> value,
                          std::unique_ptr<protocol::Value>* result) {
   if (value->IsUndefined()) return Response::Success();
-#if defined(V8_USE_ADDRESS_SANITIZER) && V8_OS_MACOSX
-  // For whatever reason, ASan on MacOS has bigger stack frames.
-  static const int kMaxDepth = 900;
-#else
-  static const int kMaxDepth = 1000;
-#endif
-  return toProtocolValue(context, value, kMaxDepth, result);
+  return toProtocolValue(context, value, kMaxProtocolDepth, result);
 }
 
 namespace {
@@ -209,10 +213,9 @@ String16 descriptionForSymbol(v8::Local<v8::Context> context,
 String16 descriptionForBigInt(v8::Local<v8::Context> context,
                               v8::Local<v8::BigInt> value) {
   v8::Isolate* isolate = context->GetIsolate();
-  v8::TryCatch tryCatch(isolate);
-  v8::Local<v8::String> description;
-  if (!value->ToString(context).ToLocal(&description)) return String16();
-  return toProtocolString(isolate, description) + "n";
+  v8::Local<v8::String> description =
+      v8::debug::GetBigIntDescription(isolate, value);
+  return toProtocolString(isolate, description);
 }
 
 String16 descriptionForPrimitiveType(v8::Local<v8::Context> context,
@@ -242,6 +245,7 @@ String16 descriptionForRegExp(v8::Isolate* isolate,
   if (flags & v8::RegExp::Flags::kMultiline) description.append('m');
   if (flags & v8::RegExp::Flags::kDotAll) description.append('s');
   if (flags & v8::RegExp::Flags::kUnicode) description.append('u');
+  if (flags & v8::RegExp::Flags::kUnicodeSets) description.append('v');
   if (flags & v8::RegExp::Flags::kSticky) description.append('y');
   return description.toString();
 }
@@ -306,14 +310,19 @@ String16 descriptionForObject(v8::Isolate* isolate,
   return toProtocolString(isolate, object->GetConstructorName());
 }
 
+String16 descriptionForProxy(v8::Isolate* isolate, v8::Local<v8::Proxy> proxy) {
+  v8::Local<v8::Value> target = proxy->GetTarget();
+  if (target->IsObject()) {
+    return String16::concat(
+        "Proxy(", descriptionForObject(isolate, target.As<v8::Object>()), ")");
+  }
+  return String16("Proxy");
+}
+
 String16 descriptionForDate(v8::Local<v8::Context> context,
                             v8::Local<v8::Date> date) {
   v8::Isolate* isolate = context->GetIsolate();
-  v8::TryCatch tryCatch(isolate);
-  v8::Local<v8::String> description;
-  if (!date->ToString(context).ToLocal(&description)) {
-    return descriptionForObject(isolate, date);
-  }
+  v8::Local<v8::String> description = v8::debug::GetDateDescription(date);
   return toProtocolString(isolate, description);
 }
 
@@ -396,6 +405,24 @@ String16 descriptionForFunction(v8::Local<v8::Function> value) {
   return toProtocolString(isolate, description);
 }
 
+String16 descriptionForPrivateMethodList(v8::Local<v8::Array> list) {
+  return String16::concat(
+      "PrivateMethods[",
+      String16::fromInteger(static_cast<size_t>(list->Length())), ']');
+}
+
+String16 descriptionForPrivateMethod(v8::Local<v8::Context> context,
+                                     v8::Local<v8::Object> object) {
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::Local<v8::Value> value;
+  if (!object->GetRealNamedProperty(context, toV8String(isolate, "value"))
+           .ToLocal(&value)) {
+    return String16();
+  }
+  DCHECK(value->IsFunction());
+  return descriptionForFunction(value.As<v8::Function>());
+}
+
 class PrimitiveValueMirror final : public ValueMirror {
  public:
   PrimitiveValueMirror(v8::Local<v8::Value> value, const String16& type)
@@ -403,7 +430,7 @@ class PrimitiveValueMirror final : public ValueMirror {
 
   v8::Local<v8::Value> v8Value() const override { return m_value; }
   Response buildRemoteObject(
-      v8::Local<v8::Context> context, WrapMode mode,
+      v8::Local<v8::Context> context, const WrapOptions& wrapOptions,
       std::unique_ptr<RemoteObject>* result) const override {
     std::unique_ptr<protocol::Value> protocolValue;
     toProtocolValue(context, m_value, &protocolValue);
@@ -443,6 +470,51 @@ class PrimitiveValueMirror final : public ValueMirror {
       (*preview)->setSubtype(RemoteObject::SubtypeEnum::Null);
   }
 
+  Response buildDeepSerializedValue(
+      v8::Local<v8::Context> context, int maxDepth,
+      v8::Local<v8::Object> additionalParameters,
+      V8SerializationDuplicateTracker& duplicateTracker,
+      std::unique_ptr<protocol::DictionaryValue>* result) const override {
+    if (m_value->IsUndefined()) {
+      *result = protocol::DictionaryValue::create();
+      (*result)->setString(
+          "type", protocol::Runtime::DeepSerializedValue::TypeEnum::Undefined);
+      return Response::Success();
+    }
+    if (m_value->IsNull()) {
+      *result = protocol::DictionaryValue::create();
+      (*result)->setString(
+          "type", protocol::Runtime::DeepSerializedValue::TypeEnum::Null);
+      return Response::Success();
+    }
+    if (m_value->IsString()) {
+      *result = protocol::DictionaryValue::create();
+      (*result)->setString(
+          "type", protocol::Runtime::DeepSerializedValue::TypeEnum::String);
+      (*result)->setString("value", toProtocolString(context->GetIsolate(),
+                                                     m_value.As<v8::String>()));
+      return Response::Success();
+    }
+    if (m_value->IsBoolean()) {
+      *result = protocol::DictionaryValue::create();
+      (*result)->setString(
+          "type", protocol::Runtime::DeepSerializedValue::TypeEnum::Boolean);
+      (*result)->setBoolean("value", m_value.As<v8::Boolean>()->Value());
+      return Response::Success();
+    }
+
+    // Fallback in case of unexpected type.
+    bool isKnown;
+    *result = duplicateTracker.LinkExistingOrCreate(m_value, &isKnown);
+    if (isKnown) {
+      return Response::Success();
+    }
+
+    (*result)->setString(
+        "type", protocol::Runtime::DeepSerializedValue::TypeEnum::Object);
+    return Response::Success();
+  }
+
  private:
   v8::Local<v8::Value> m_value;
   String16 m_type;
@@ -455,7 +527,7 @@ class NumberMirror final : public ValueMirror {
   v8::Local<v8::Value> v8Value() const override { return m_value; }
 
   Response buildRemoteObject(
-      v8::Local<v8::Context> context, WrapMode mode,
+      v8::Local<v8::Context> context, const WrapOptions& wrapOptions,
       std::unique_ptr<RemoteObject>* result) const override {
     bool unserializable = false;
     String16 descriptionValue = description(&unserializable);
@@ -493,6 +565,27 @@ class NumberMirror final : public ValueMirror {
             .build();
   }
 
+  Response buildDeepSerializedValue(
+      v8::Local<v8::Context> context, int maxDepth,
+      v8::Local<v8::Object> additionalParameters,
+      V8SerializationDuplicateTracker& duplicateTracker,
+      std::unique_ptr<protocol::DictionaryValue>* result) const override {
+    *result = protocol::DictionaryValue::create();
+    (*result)->setString(
+        "type", protocol::Runtime::DeepSerializedValue::TypeEnum::Number);
+
+    bool unserializable = false;
+    String16 descriptionValue = description(&unserializable);
+    if (unserializable) {
+      (*result)->setValue("value",
+                          protocol::StringValue::create(descriptionValue));
+    } else {
+      (*result)->setValue("value",
+                          toProtocolValue(m_value.As<v8::Number>()->Value()));
+    }
+    return Response::Success();
+  }
+
  private:
   String16 description(bool* unserializable) const {
     *unserializable = true;
@@ -514,13 +607,13 @@ class BigIntMirror final : public ValueMirror {
   explicit BigIntMirror(v8::Local<v8::BigInt> value) : m_value(value) {}
 
   Response buildRemoteObject(
-      v8::Local<v8::Context> context, WrapMode mode,
+      v8::Local<v8::Context> context, const WrapOptions& wrapOptions,
       std::unique_ptr<RemoteObject>* result) const override {
     String16 description = descriptionForBigInt(context, m_value);
     *result = RemoteObject::create()
                   .setType(RemoteObject::TypeEnum::Bigint)
                   .setUnserializableValue(description)
-                  .setDescription(description)
+                  .setDescription(abbreviateString(description, kMiddle))
                   .build();
     return Response::Success();
   }
@@ -544,13 +637,31 @@ class BigIntMirror final : public ValueMirror {
     *preview =
         ObjectPreview::create()
             .setType(RemoteObject::TypeEnum::Bigint)
-            .setDescription(descriptionForBigInt(context, m_value))
+            .setDescription(abbreviateString(
+                descriptionForBigInt(context, m_value), kMiddle))
             .setOverflow(false)
             .setProperties(std::make_unique<protocol::Array<PropertyPreview>>())
             .build();
   }
 
   v8::Local<v8::Value> v8Value() const override { return m_value; }
+
+  Response buildDeepSerializedValue(
+      v8::Local<v8::Context> context, int maxDepth,
+      v8::Local<v8::Object> additionalParameters,
+      V8SerializationDuplicateTracker& duplicateTracker,
+      std::unique_ptr<protocol::DictionaryValue>* result) const override {
+    v8::Local<v8::String> stringValue =
+        v8::debug::GetBigIntStringValue(context->GetIsolate(), m_value);
+
+    *result = protocol::DictionaryValue::create();
+    (*result)->setString(
+        "type", protocol::Runtime::DeepSerializedValue::TypeEnum::Bigint);
+
+    (*result)->setValue("value", protocol::StringValue::create(toProtocolString(
+                                     context->GetIsolate(), stringValue)));
+    return Response::Success();
+  }
 
  private:
   v8::Local<v8::BigInt> m_value;
@@ -562,9 +673,9 @@ class SymbolMirror final : public ValueMirror {
       : m_symbol(value.As<v8::Symbol>()) {}
 
   Response buildRemoteObject(
-      v8::Local<v8::Context> context, WrapMode mode,
+      v8::Local<v8::Context> context, const WrapOptions& wrapOptions,
       std::unique_ptr<RemoteObject>* result) const override {
-    if (mode == WrapMode::kForceValue) {
+    if (wrapOptions.mode == WrapMode::kJson) {
       return Response::ServerError("Object couldn't be returned by value");
     }
     *result = RemoteObject::create()
@@ -586,7 +697,35 @@ class SymbolMirror final : public ValueMirror {
                    .build();
   }
 
+  void buildEntryPreview(
+      v8::Local<v8::Context> context, int* nameLimit, int* indexLimit,
+      std::unique_ptr<ObjectPreview>* preview) const override {
+    *preview =
+        ObjectPreview::create()
+            .setType(RemoteObject::TypeEnum::Symbol)
+            .setDescription(descriptionForSymbol(context, m_symbol))
+            .setOverflow(false)
+            .setProperties(std::make_unique<protocol::Array<PropertyPreview>>())
+            .build();
+  }
+
   v8::Local<v8::Value> v8Value() const override { return m_symbol; }
+
+  Response buildDeepSerializedValue(
+      v8::Local<v8::Context> context, int maxDepth,
+      v8::Local<v8::Object> additionalParameters,
+      V8SerializationDuplicateTracker& duplicateTracker,
+      std::unique_ptr<protocol::DictionaryValue>* result) const override {
+    bool isKnown;
+    *result = duplicateTracker.LinkExistingOrCreate(m_symbol, &isKnown);
+    if (isKnown) {
+      return Response::Success();
+    }
+
+    (*result)->setString(
+        "type", protocol::Runtime::DeepSerializedValue::TypeEnum::Symbol);
+    return Response::Success();
+  }
 
  private:
   v8::Local<v8::Symbol> m_symbol;
@@ -616,7 +755,7 @@ class LocationMirror final : public ValueMirror {
   }
 
   Response buildRemoteObject(
-      v8::Local<v8::Context> context, WrapMode mode,
+      v8::Local<v8::Context> context, const WrapOptions& wrapOptions,
       std::unique_ptr<RemoteObject>* result) const override {
     auto location = protocol::DictionaryValue::create();
     location->setString("scriptId", String16::fromInteger(m_scriptId));
@@ -631,6 +770,22 @@ class LocationMirror final : public ValueMirror {
     return Response::Success();
   }
   v8::Local<v8::Value> v8Value() const override { return m_value; }
+
+  Response buildDeepSerializedValue(
+      v8::Local<v8::Context> context, int maxDepth,
+      v8::Local<v8::Object> additionalParameters,
+      V8SerializationDuplicateTracker& duplicateTracker,
+      std::unique_ptr<protocol::DictionaryValue>* result) const override {
+    bool isKnown;
+    *result = duplicateTracker.LinkExistingOrCreate(m_value, &isKnown);
+    if (isKnown) {
+      return Response::Success();
+    }
+
+    (*result)->setString(
+        "type", protocol::Runtime::DeepSerializedValue::TypeEnum::Object);
+    return Response::Success();
+  }
 
  private:
   static std::unique_ptr<LocationMirror> create(v8::Local<v8::Value> value,
@@ -666,10 +821,10 @@ class FunctionMirror final : public ValueMirror {
   v8::Local<v8::Value> v8Value() const override { return m_value; }
 
   Response buildRemoteObject(
-      v8::Local<v8::Context> context, WrapMode mode,
+      v8::Local<v8::Context> context, const WrapOptions& wrapOptions,
       std::unique_ptr<RemoteObject>* result) const override {
     // TODO(alph): drop this functionality.
-    if (mode == WrapMode::kForceValue) {
+    if (wrapOptions.mode == WrapMode::kJson) {
       std::unique_ptr<protocol::Value> protocolValue;
       Response response = toProtocolValue(context, m_value, &protocolValue);
       if (!response.IsSuccess()) return response;
@@ -709,37 +864,56 @@ class FunctionMirror final : public ValueMirror {
             .build();
   }
 
+  Response buildDeepSerializedValue(
+      v8::Local<v8::Context> context, int maxDepth,
+      v8::Local<v8::Object> additionalParameters,
+      V8SerializationDuplicateTracker& duplicateTracker,
+      std::unique_ptr<protocol::DictionaryValue>* result) const override {
+    bool isKnown;
+    *result = duplicateTracker.LinkExistingOrCreate(m_value, &isKnown);
+    if (isKnown) {
+      return Response::Success();
+    }
+
+    (*result)->setString(
+        "type", protocol::Runtime::DeepSerializedValue::TypeEnum::Function);
+    return Response::Success();
+  }
+
  private:
   v8::Local<v8::Function> m_value;
 };
 
 bool isArrayLike(v8::Local<v8::Context> context, v8::Local<v8::Value> value,
                  size_t* length) {
-  if (!value->IsObject()) return false;
-  v8::Isolate* isolate = context->GetIsolate();
-  v8::TryCatch tryCatch(isolate);
-  v8::MicrotasksScope microtasksScope(isolate,
-                                      v8::MicrotasksScope::kDoNotRunMicrotasks);
-  v8::Local<v8::Object> object = value.As<v8::Object>();
-  v8::Local<v8::Value> spliceValue;
-  if (!object->IsArgumentsObject() &&
-      (!object->GetRealNamedProperty(context, toV8String(isolate, "splice"))
-            .ToLocal(&spliceValue) ||
-       !spliceValue->IsFunction())) {
-    return false;
+  if (value->IsArray()) {
+    *length = value.As<v8::Array>()->Length();
+    return true;
   }
-  v8::Local<v8::Value> lengthValue;
-  v8::Maybe<bool> result =
-      object->HasOwnProperty(context, toV8String(isolate, "length"));
-  if (result.IsNothing()) return false;
-  if (!result.FromJust() ||
-      !object->Get(context, toV8String(isolate, "length"))
-           .ToLocal(&lengthValue) ||
-      !lengthValue->IsUint32()) {
-    return false;
+  if (value->IsArgumentsObject()) {
+    v8::Isolate* isolate = context->GetIsolate();
+    v8::TryCatch tryCatch(isolate);
+    v8::MicrotasksScope microtasksScope(
+        context, v8::MicrotasksScope::kDoNotRunMicrotasks);
+    v8::Local<v8::Object> object = value.As<v8::Object>();
+    v8::Local<v8::Value> lengthDescriptor;
+    if (!object
+             ->GetOwnPropertyDescriptor(context, toV8String(isolate, "length"))
+             .ToLocal(&lengthDescriptor)) {
+      return false;
+    }
+    v8::Local<v8::Value> lengthValue;
+    if (!lengthDescriptor->IsObject() ||
+        !lengthDescriptor.As<v8::Object>()
+             ->Get(context, toV8String(isolate, "value"))
+             .ToLocal(&lengthValue) ||
+        !lengthValue->IsUint32()) {
+      return false;
+    }
+    *length = lengthValue.As<v8::Uint32>()->Value();
+    return true;
   }
-  *length = lengthValue.As<v8::Uint32>()->Value();
-  return true;
+  return false;
 }
 
 struct EntryMirror {
@@ -829,8 +1003,7 @@ bool getPropertiesForPreview(v8::Local<v8::Context> context,
                              std::vector<PropertyMirror>* properties) {
   std::vector<String16> blocklist;
   size_t length = 0;
-  if (object->IsArray() || isArrayLike(context, object, &length) ||
-      object->IsStringObject()) {
+  if (isArrayLike(context, object, &length) || object->IsStringObject()) {
     blocklist.push_back("length");
 #if V8_ENABLE_WEBASSEMBLY
   } else if (v8::debug::WasmValueObject::IsWasmValueObject(object)) {
@@ -873,6 +1046,8 @@ void getInternalPropertiesForPreview(
     allowlist.emplace_back("[[PromiseResult]]");
   } else if (object->IsGeneratorObject()) {
     allowlist.emplace_back("[[GeneratorState]]");
+  } else if (object->IsWeakRef()) {
+    allowlist.emplace_back("[[WeakRefTarget]]");
   }
   for (auto& mirror : mirrors) {
     if (std::find(allowlist.begin(), allowlist.end(), mirror.name) ==
@@ -893,7 +1068,8 @@ void getPrivatePropertiesForPreview(
     int* nameLimit, bool* overflow,
     protocol::Array<PropertyPreview>* privateProperties) {
   std::vector<PrivatePropertyMirror> mirrors =
-      ValueMirror::getPrivateProperties(context, object);
+      ValueMirror::getPrivateProperties(context, object,
+                                        /* accessPropertiesOnly */ false);
   for (auto& mirror : mirrors) {
     std::unique_ptr<PropertyPreview> propertyPreview;
     if (mirror.value) {
@@ -931,9 +1107,9 @@ class ObjectMirror final : public ValueMirror {
   v8::Local<v8::Value> v8Value() const override { return m_value; }
 
   Response buildRemoteObject(
-      v8::Local<v8::Context> context, WrapMode mode,
+      v8::Local<v8::Context> context, const WrapOptions& wrapOptions,
       std::unique_ptr<RemoteObject>* result) const override {
-    if (mode == WrapMode::kForceValue) {
+    if (wrapOptions.mode == WrapMode::kJson) {
       std::unique_ptr<protocol::Value> protocolValue;
       Response response = toProtocolValue(context, m_value, &protocolValue);
       if (!response.IsSuccess()) return response;
@@ -950,7 +1126,7 @@ class ObjectMirror final : public ValueMirror {
                     .setDescription(m_description)
                     .build();
       if (m_hasSubtype) (*result)->setSubtype(m_subtype);
-      if (mode == WrapMode::kWithPreview) {
+      if (wrapOptions.mode == WrapMode::kPreview) {
         std::unique_ptr<ObjectPreview> previewValue;
         int nameLimit = 5;
         int indexLimit = 100;
@@ -991,6 +1167,52 @@ class ObjectMirror final : public ValueMirror {
                                                                      : kEnd))
                   .build();
     if (m_hasSubtype) (*result)->setSubtype(m_subtype);
+  }
+
+  Response buildDeepSerializedValue(
+      v8::Local<v8::Context> context, int maxDepth,
+      v8::Local<v8::Object> additionalParameters,
+      V8SerializationDuplicateTracker& duplicateTracker,
+      std::unique_ptr<protocol::DictionaryValue>* result) const override {
+    maxDepth = std::min(kMaxProtocolDepth, maxDepth);
+    bool isKnown;
+    *result = duplicateTracker.LinkExistingOrCreate(m_value, &isKnown);
+    if (isKnown) {
+      return Response::Success();
+    }
+
+    // Check if embedder implemented custom serialization.
+    std::unique_ptr<v8_inspector::DeepSerializationResult>
+        embedderDeepSerializedResult = clientFor(context)->deepSerialize(
+            m_value, maxDepth, additionalParameters);
+    if (embedderDeepSerializedResult) {
+      // Embedder-implemented serialization.
+
+      if (!embedderDeepSerializedResult->isSuccess)
+        return Response::ServerError(
+            toString16(embedderDeepSerializedResult->errorMessage->string())
+                .utf8());
+
+      (*result)->setString(
+          "type",
+          toString16(
+              embedderDeepSerializedResult->serializedValue->type->string()));
+      v8::Local<v8::Value> v8Value;
+      if (embedderDeepSerializedResult->serializedValue->value.ToLocal(
+              &v8Value)) {
+        // Embedder-implemented serialization has value.
+        std::unique_ptr<protocol::Value> protocolValue;
+        Response response = toProtocolValue(context, v8Value, &protocolValue);
+        if (!response.IsSuccess()) return response;
+        (*result)->setValue("value", std::move(protocolValue));
+      }
+      return Response::Success();
+    }
+
+    // No embedder-implemented serialization. Serialize as V8 Object.
+    return V8DeepSerializer::serializeV8Value(
+        m_value, context, maxDepth, additionalParameters, duplicateTracker,
+        *(result->get()));
   }
 
  private:
@@ -1152,7 +1374,6 @@ void nativeSetterCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
       !object->IsObject()) {
     return;
   }
-  v8::Local<v8::Value> value;
   if (!object.As<v8::Object>()->Set(context, name, info[0]).IsNothing()) return;
 }
 
@@ -1179,6 +1400,43 @@ std::unique_ptr<ValueMirror> createNativeSetter(v8::Local<v8::Context> context,
   return ValueMirror::create(context, function);
 }
 
+bool doesAttributeHaveObservableSideEffectOnGet(v8::Local<v8::Context> context,
+                                                v8::Local<v8::Object> object,
+                                                v8::Local<v8::Name> name) {
+  // TODO(dgozman): we should remove this, annotate more embedder properties as
+  // side-effect free, and call all getters which do not produce side effects.
+  if (!name->IsString()) return false;
+  v8::Isolate* isolate = context->GetIsolate();
+  if (!name.As<v8::String>()->StringEquals(toV8String(isolate, "body"))) {
+    return false;
+  }
+
+  v8::TryCatch tryCatch(isolate);
+  v8::Local<v8::Value> request;
+  if (context->Global()
+          ->GetRealNamedProperty(context, toV8String(isolate, "Request"))
+          .ToLocal(&request)) {
+    if (request->IsObject() &&
+        object->InstanceOf(context, request.As<v8::Object>())
+            .FromMaybe(false)) {
+      return true;
+    }
+  }
+  if (tryCatch.HasCaught()) tryCatch.Reset();
+
+  v8::Local<v8::Value> response;
+  if (context->Global()
+          ->GetRealNamedProperty(context, toV8String(isolate, "Response"))
+          .ToLocal(&response)) {
+    if (response->IsObject() &&
+        object->InstanceOf(context, response.As<v8::Object>())
+            .FromMaybe(false)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 }  // anonymous namespace
 
 ValueMirror::~ValueMirror() = default;
@@ -1193,7 +1451,7 @@ bool ValueMirror::getProperties(v8::Local<v8::Context> context,
   v8::TryCatch tryCatch(isolate);
   v8::Local<v8::Set> set = v8::Set::New(isolate);
 
-  v8::MicrotasksScope microtasksScope(isolate,
+  v8::MicrotasksScope microtasksScope(context,
                                       v8::MicrotasksScope::kDoNotRunMicrotasks);
   V8InternalValueType internalType = v8InternalValueTypeFrom(context, object);
   if (internalType == V8InternalValueType::kScope) {
@@ -1205,7 +1463,8 @@ bool ValueMirror::getProperties(v8::Local<v8::Context> context,
       object = value.As<v8::Object>();
     }
   }
-  if (internalType == V8InternalValueType::kScopeList) {
+  if (internalType == V8InternalValueType::kScopeList ||
+      internalType == V8InternalValueType::kPrivateMethodList) {
     if (!set->Add(context, toV8String(isolate, "length")).ToLocal(&set)) {
       return false;
     }
@@ -1294,12 +1553,12 @@ bool ValueMirror::getProperties(v8::Local<v8::Context> context,
           }
           isAccessorProperty = getterMirror || setterMirror;
           if (name != "__proto__" && !getterFunction.IsEmpty() &&
-              getterFunction->ScriptId() == v8::UnboundScript::kNoScriptId) {
+              getterFunction->ScriptId() == v8::UnboundScript::kNoScriptId &&
+              !doesAttributeHaveObservableSideEffectOnGet(context, object,
+                                                          v8Name)) {
             v8::TryCatch tryCatchFunction(isolate);
             v8::Local<v8::Value> value;
-            if (v8::debug::CallFunctionOn(context, getterFunction, object, 0,
-                                          nullptr, true)
-                    .ToLocal(&value)) {
+            if (object->Get(context, v8Name).ToLocal(&value)) {
               if (value->IsPromise() &&
                   value.As<v8::Promise>()->State() == v8::Promise::kRejected) {
                 value.As<v8::Promise>()->MarkAsHandled();
@@ -1329,7 +1588,7 @@ bool ValueMirror::getProperties(v8::Local<v8::Context> context,
     if (!accumulator->Add(std::move(mirror))) return true;
 
     if (!iterator->Advance().FromMaybe(false)) {
-      CHECK(tryCatch.HasCaught());
+      CHECK(tryCatchAttributes.HasCaught());
       return false;
     }
   }
@@ -1341,7 +1600,7 @@ void ValueMirror::getInternalProperties(
     v8::Local<v8::Context> context, v8::Local<v8::Object> object,
     std::vector<InternalPropertyMirror>* mirrors) {
   v8::Isolate* isolate = context->GetIsolate();
-  v8::MicrotasksScope microtasksScope(isolate,
+  v8::MicrotasksScope microtasksScope(context,
                                       v8::MicrotasksScope::kDoNotRunMicrotasks);
   v8::TryCatch tryCatch(isolate);
   if (object->IsFunction()) {
@@ -1392,17 +1651,20 @@ void ValueMirror::getInternalProperties(
 
 // static
 std::vector<PrivatePropertyMirror> ValueMirror::getPrivateProperties(
-    v8::Local<v8::Context> context, v8::Local<v8::Object> object) {
+    v8::Local<v8::Context> context, v8::Local<v8::Object> object,
+    bool accessorPropertiesOnly) {
   std::vector<PrivatePropertyMirror> mirrors;
   v8::Isolate* isolate = context->GetIsolate();
-  v8::MicrotasksScope microtasksScope(isolate,
+  v8::MicrotasksScope microtasksScope(context,
                                       v8::MicrotasksScope::kDoNotRunMicrotasks);
   v8::TryCatch tryCatch(isolate);
-  v8::Local<v8::Array> privateProperties;
 
-  std::vector<v8::Local<v8::Value>> names;
-  std::vector<v8::Local<v8::Value>> values;
-  if (!v8::debug::GetPrivateMembers(context, object, &names, &values))
+  v8::LocalVector<v8::Value> names(isolate);
+  v8::LocalVector<v8::Value> values(isolate);
+  int filter =
+      static_cast<int>(v8::debug::PrivateMemberFilter::kPrivateAccessors) |
+      static_cast<int>(v8::debug::PrivateMemberFilter::kPrivateFields);
+  if (!v8::debug::GetPrivateMembers(context, object, filter, &names, &values))
     return mirrors;
 
   size_t len = values.size();
@@ -1425,6 +1687,8 @@ std::vector<PrivatePropertyMirror> ValueMirror::getPrivateProperties(
       if (!setter->IsNull()) {
         setterMirror = ValueMirror::create(context, setter);
       }
+    } else if (accessorPropertiesOnly) {
+      continue;
     } else {
       valueMirror = ValueMirror::create(context, value);
     }
@@ -1437,102 +1701,14 @@ std::vector<PrivatePropertyMirror> ValueMirror::getPrivateProperties(
   return mirrors;
 }
 
-String16 descriptionForNode(v8::Local<v8::Context> context,
-                            v8::Local<v8::Value> value) {
-  if (!value->IsObject()) return String16();
-  v8::Local<v8::Object> object = value.As<v8::Object>();
-  v8::Isolate* isolate = context->GetIsolate();
-  v8::TryCatch tryCatch(isolate);
-  v8::Local<v8::Value> nodeName;
-  if (!object->Get(context, toV8String(isolate, "nodeName"))
-           .ToLocal(&nodeName)) {
-    return String16();
-  }
-  String16 description;
-  v8::Local<v8::Function> toLowerCase =
-      v8::debug::GetBuiltin(isolate, v8::debug::kStringToLowerCase);
-  if (nodeName->IsString()) {
-    if (!toLowerCase->Call(context, nodeName, 0, nullptr).ToLocal(&nodeName))
-      return String16();
-    if (nodeName->IsString()) {
-      description = toProtocolString(isolate, nodeName.As<v8::String>());
-    }
-  }
-  if (!description.length()) {
-    v8::Local<v8::Value> constructor;
-    if (!object->Get(context, toV8String(isolate, "constructor"))
-             .ToLocal(&constructor) ||
-        !constructor->IsObject()) {
-      return String16();
-    }
-    if (!value.As<v8::Object>()
-             ->Get(context, toV8String(isolate, "name"))
-             .ToLocal(&value) ||
-        !value->IsString()) {
-      return String16();
-    }
-    description = toProtocolString(isolate, value.As<v8::String>());
-  }
-  v8::Local<v8::Value> nodeType;
-  if (!object->Get(context, toV8String(isolate, "nodeType"))
-           .ToLocal(&nodeType) ||
-      !nodeType->IsInt32()) {
-    return description;
-  }
-  if (nodeType.As<v8::Int32>()->Value() == 1) {
-    v8::Local<v8::Value> idValue;
-    if (!object->Get(context, toV8String(isolate, "id")).ToLocal(&idValue)) {
-      return description;
-    }
-    if (idValue->IsString()) {
-      String16 id = toProtocolString(isolate, idValue.As<v8::String>());
-      if (id.length()) {
-        description = String16::concat(description, '#', id);
-      }
-    }
-    v8::Local<v8::Value> classNameValue;
-    if (!object->Get(context, toV8String(isolate, "className"))
-             .ToLocal(&classNameValue)) {
-      return description;
-    }
-    if (classNameValue->IsString() &&
-        classNameValue.As<v8::String>()->Length()) {
-      String16 classes =
-          toProtocolString(isolate, classNameValue.As<v8::String>());
-      String16Builder output;
-      bool previousIsDot = false;
-      for (size_t i = 0; i < classes.length(); ++i) {
-        if (classes[i] == ' ') {
-          if (!previousIsDot) {
-            output.append('.');
-            previousIsDot = true;
-          }
-        } else {
-          output.append(classes[i]);
-          previousIsDot = classes[i] == '.';
-        }
-      }
-      description = String16::concat(description, '.', output.toString());
-    }
-  } else if (nodeType.As<v8::Int32>()->Value() == 1) {
-    return String16::concat("<!DOCTYPE ", description, '>');
-  }
-  return description;
-}
-
 std::unique_ptr<ValueMirror> clientMirror(v8::Local<v8::Context> context,
                                           v8::Local<v8::Value> value,
                                           const String16& subtype) {
-  // TODO(alph): description and length retrieval should move to embedder.
   auto descriptionForValueSubtype =
       clientFor(context)->descriptionForValueSubtype(context, value);
   if (descriptionForValueSubtype) {
     return std::make_unique<ObjectMirror>(
         value, subtype, toString16(descriptionForValueSubtype->string()));
-  }
-  if (subtype == "node") {
-    return std::make_unique<ObjectMirror>(value, subtype,
-                                          descriptionForNode(context, value));
   }
   if (subtype == "error") {
     return std::make_unique<ObjectMirror>(
@@ -1602,7 +1778,8 @@ std::unique_ptr<ValueMirror> ValueMirror::create(v8::Local<v8::Context> context,
   }
   if (value->IsProxy()) {
     return std::make_unique<ObjectMirror>(
-        value, RemoteObject::SubtypeEnum::Proxy, "Proxy");
+        value, RemoteObject::SubtypeEnum::Proxy,
+        descriptionForProxy(isolate, value.As<v8::Proxy>()));
   }
   if (value->IsFunction()) {
     return std::make_unique<FunctionMirror>(value);
@@ -1704,6 +1881,12 @@ std::unique_ptr<ValueMirror> ValueMirror::create(v8::Local<v8::Context> context,
         value, "internal#scopeList",
         descriptionForScopeList(value.As<v8::Array>()));
   }
+  if (value->IsArray() &&
+      internalType == V8InternalValueType::kPrivateMethodList) {
+    return std::make_unique<ObjectMirror>(
+        value, "internal#privateMethodList",
+        descriptionForPrivateMethodList(value.As<v8::Array>()));
+  }
   if (value->IsObject() && internalType == V8InternalValueType::kEntry) {
     return std::make_unique<ObjectMirror>(
         value, "internal#entry",
@@ -1714,9 +1897,14 @@ std::unique_ptr<ValueMirror> ValueMirror::create(v8::Local<v8::Context> context,
         value, "internal#scope",
         descriptionForScope(context, value.As<v8::Object>()));
   }
+  if (value->IsObject() &&
+      internalType == V8InternalValueType::kPrivateMethod) {
+    return std::make_unique<ObjectMirror>(
+        value, "internal#privateMethod",
+        descriptionForPrivateMethod(context, value.As<v8::Object>()));
+  }
   size_t length = 0;
-  if (value->IsArray() || isArrayLike(context, value, &length)) {
-    length = value->IsArray() ? value.As<v8::Array>()->Length() : length;
+  if (isArrayLike(context, value, &length)) {
     return std::make_unique<ObjectMirror>(
         value, RemoteObject::SubtypeEnum::Array,
         descriptionForCollection(isolate, value.As<v8::Object>(), length));

@@ -5,6 +5,8 @@
 #ifndef V8_HEAP_LINEAR_ALLOCATION_AREA_H_
 #define V8_HEAP_LINEAR_ALLOCATION_AREA_H_
 
+// This header file is included outside of src/heap/.
+// Avoid including src/heap/ internals.
 #include "include/v8-internal.h"
 #include "src/common/checks.h"
 
@@ -32,7 +34,7 @@ class LinearAllocationArea final {
 
   void ResetStart() { start_ = top_; }
 
-  V8_INLINE bool CanIncrementTop(size_t bytes) {
+  V8_INLINE bool CanIncrementTop(size_t bytes) const {
     Verify();
     return (top_ + bytes) <= limit_;
   }
@@ -96,9 +98,15 @@ class LinearAllocationArea final {
 #ifdef DEBUG
     SLOW_DCHECK(start_ <= top_);
     SLOW_DCHECK(top_ <= limit_);
-    SLOW_DCHECK(top_ == kNullAddress || (top_ & kHeapObjectTagMask) == 0);
+    if (V8_COMPRESS_POINTERS_8GB_BOOL) {
+      SLOW_DCHECK(IsAligned(top_, kObjectAlignment8GbHeap));
+    } else {
+      SLOW_DCHECK(IsAligned(top_, kObjectAlignment));
+    }
 #endif  // DEBUG
   }
+
+  static constexpr int kSize = 3 * kSystemPointerSize;
 
  private:
   // The start of the LAB. Initially coincides with `top_`. As top is moved
@@ -110,6 +118,10 @@ class LinearAllocationArea final {
   // Limit of the LAB the denotes the end of the valid range for allocation.
   Address limit_ = kNullAddress;
 };
+
+static_assert(sizeof(LinearAllocationArea) == LinearAllocationArea::kSize,
+              "LinearAllocationArea's size must be small because it "
+              "is included in IsolateData.");
 
 }  // namespace internal
 }  // namespace v8

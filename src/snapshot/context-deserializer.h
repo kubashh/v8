@@ -7,7 +7,6 @@
 
 #include "src/snapshot/deserializer.h"
 #include "src/snapshot/snapshot-data.h"
-#include "src/snapshot/snapshot.h"
 
 namespace v8 {
 namespace internal {
@@ -21,8 +20,8 @@ class V8_EXPORT_PRIVATE ContextDeserializer final
     : public Deserializer<Isolate> {
  public:
   static MaybeHandle<Context> DeserializeContext(
-      Isolate* isolate, const SnapshotData* data, bool can_rehash,
-      Handle<JSGlobalProxy> global_proxy,
+      Isolate* isolate, const SnapshotData* data, size_t context_index,
+      bool can_rehash, Handle<JSGlobalProxy> global_proxy,
       v8::DeserializeEmbedderFieldsCallback embedder_fields_deserializer);
 
  private:
@@ -38,8 +37,6 @@ class V8_EXPORT_PRIVATE ContextDeserializer final
 
   void DeserializeEmbedderFields(
       v8::DeserializeEmbedderFieldsCallback embedder_fields_deserializer);
-
-  void SetupOffHeapArrayBufferBackingStores();
 };
 
 }  // namespace internal

@@ -5,11 +5,42 @@
 #include 'src/builtins/builtins-string-gen.h'
 
 @abstract
-@reserveBitsInInstanceType(6)
+@reserveBitsInInstanceType(7)
 extern class String extends Name {
   macro StringInstanceType(): StringInstanceType {
     return %RawDownCast<StringInstanceType>(
         Convert<uint16>(this.map.instance_type));
+  }
+
+  macro IsNotInternalized(): bool {
+    return this.StringInstanceType().is_not_internalized;
+  }
+
+  // Keep this in sync with the C++ String::IsOneByteRepresentationUnderneath.
+  macro IsOneByteRepresentationUnderneath(): bool {
+    let string = this;
+    while (true) {
+      typeswitch (string) {
+        case (cons: ConsString): {
+          dcheck(cons.IsFlat());
+          string = cons.first;
+        }
+        case (thin: ThinString): {
+          // Internalized strings can't change representation.
+          dcheck(
+              thin.StringInstanceType().is_one_byte ==
+              thin.actual.StringInstanceType().is_one_byte);
+          return thin.StringInstanceType().is_one_byte;
+        }
+        case (slice: SlicedString): {
+          string = slice.parent;
+        }
+        case (String): {
+          return string.StringInstanceType().is_one_byte;
+        }
+      }
+    }
+    VerifiedUnreachable();
   }
 
   const length: int32;
@@ -28,6 +59,7 @@ bitfield struct StringInstanceType extends uint16 {
   is_one_byte: bool: 1 bit;
   is_uncached: bool: 1 bit;
   is_not_internalized: bool: 1 bit;
+  is_shared: bool: 1 bit;
 }
 
 @generateBodyDescriptor
@@ -91,13 +123,11 @@ extern class ExternalTwoByteString extends ExternalString {
 }
 
 @doNotGenerateCast
-extern class InternalizedString extends String {
-}
+extern class InternalizedString extends String {}
 
 @abstract
 @doNotGenerateCast
-extern class SeqString extends String {
-}
+extern class SeqString extends String {}
 @generateBodyDescriptor
 @doNotGenerateCast
 extern class SeqOneByteString extends SeqString {
@@ -129,8 +159,8 @@ type DirectString extends String;
 macro AllocateNonEmptySeqOneByteString<Iterator: type>(
     length: uint32, content: Iterator): SeqOneByteString {
   dcheck(length != 0 && length <= kStringMaxLength);
-  return new SeqOneByteString{
-    map: kOneByteStringMap,
+  return new (ClearPadding) SeqOneByteString{
+    map: kSeqOneByteStringMap,
     raw_hash_field: kNameEmptyHashField,
     length: Signed(length),
     chars: ...content
@@ -140,8 +170,8 @@ macro AllocateNonEmptySeqOneByteString<Iterator: type>(
 macro AllocateNonEmptySeqTwoByteString<Iterator: type>(
     length: uint32, content: Iterator): SeqTwoByteString {
   dcheck(length > 0 && length <= kStringMaxLength);
-  return new SeqTwoByteString{
-    map: kStringMap,
+  return new (ClearPadding) SeqTwoByteString{
+    map: kSeqTwoByteStringMap,
     raw_hash_field: kNameEmptyHashField,
     length: Signed(length),
     chars: ...content
@@ -168,12 +198,14 @@ macro AllocateSeqTwoByteString<Iterator: type>(
 }
 
 @export
-macro AllocateSeqOneByteString(length: uint32): SeqOneByteString|EmptyString {
+macro AllocateSeqOneByteString(length: uint32): SeqOneByteString|
+    EmptyString {
   return AllocateSeqOneByteString(length, UninitializedIterator{});
 }
 
 @export
-macro AllocateSeqTwoByteString(length: uint32): SeqTwoByteString|EmptyString {
+macro AllocateSeqTwoByteString(length: uint32): SeqTwoByteString|
+    EmptyString {
   return AllocateSeqTwoByteString(length, UninitializedIterator{});
 }
 
@@ -362,8 +394,9 @@ macro Call<A: type, B: type>(
       Convert<intptr>(self.fromIndex)));
 }
 
-macro AbstractStringIndexOf(implicit context: Context)(
-    string: String, searchString: String, fromIndex: Smi): Smi {
+macro AbstractStringIndexOf(
+    implicit context: Context)(string: String, searchString: String,
+    fromIndex: Smi): Smi {
   // Special case the empty string.
   const searchStringLength = searchString.length_intptr;
   const stringLength = string.length_intptr;
@@ -382,7 +415,6 @@ macro AbstractStringIndexOf(implicit context: Context)(
       string, searchString, AbstractStringIndexOfFunctor{fromIndex: fromIndex});
 }
 
-builtin StringIndexOf(implicit context: Context)(
-    s: String, searchString: String, start: Smi): Smi {
+builtin StringIndexOf(s: String, searchString: String, start: Smi): Smi {
   return AbstractStringIndexOf(s, searchString, SmiMax(start, 0));
 }

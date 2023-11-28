@@ -6,13 +6,11 @@
 #define V8_BASE_MEMORY_H_
 
 #include "src/base/macros.h"
-#include "src/base/platform/wrappers.h"
 
 namespace v8 {
 namespace base {
 
 using Address = uintptr_t;
-using byte = uint8_t;
 
 // Memory provides an interface to 'raw' memory. It encapsulates the casts
 // that typically are needed when incompatible pointer types are used.
@@ -24,7 +22,7 @@ inline T& Memory(Address addr) {
   return *reinterpret_cast<T*>(addr);
 }
 template <class T>
-inline T& Memory(byte* addr) {
+inline T& Memory(uint8_t* addr) {
   return Memory<T>(reinterpret_cast<Address>(addr));
 }
 
@@ -48,8 +46,8 @@ static inline V ReadLittleEndianValue(Address p) {
   return ReadUnalignedValue<V>(p);
 #elif defined(V8_TARGET_BIG_ENDIAN)
   V ret{};
-  const byte* src = reinterpret_cast<const byte*>(p);
-  byte* dst = reinterpret_cast<byte*>(&ret);
+  const uint8_t* src = reinterpret_cast<const uint8_t*>(p);
+  uint8_t* dst = reinterpret_cast<uint8_t*>(&ret);
   for (size_t i = 0; i < sizeof(V); i++) {
     dst[i] = src[sizeof(V) - i - 1];
   }
@@ -62,8 +60,8 @@ static inline void WriteLittleEndianValue(Address p, V value) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
   WriteUnalignedValue<V>(p, value);
 #elif defined(V8_TARGET_BIG_ENDIAN)
-  byte* src = reinterpret_cast<byte*>(&value);
-  byte* dst = reinterpret_cast<byte*>(p);
+  uint8_t* src = reinterpret_cast<uint8_t*>(&value);
+  uint8_t* dst = reinterpret_cast<uint8_t*>(p);
   for (size_t i = 0; i < sizeof(V); i++) {
     dst[i] = src[sizeof(V) - i - 1];
   }

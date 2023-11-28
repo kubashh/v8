@@ -42,6 +42,7 @@ static const char* const UNINITIALIZED_HEAP_OBJECT_TYPE_STRING =
     "UninitializedHeapObject";
 static const char* const RAWPTR_TYPE_STRING = "RawPtr";
 static const char* const EXTERNALPTR_TYPE_STRING = "ExternalPointer";
+static const char* const INDIRECTPTR_TYPE_STRING = "IndirectPointer";
 static const char* const CONST_STRING_TYPE_STRING = "constexpr string";
 static const char* const STRING_TYPE_STRING = "String";
 static const char* const NUMBER_TYPE_STRING = "Number";
@@ -67,6 +68,8 @@ static const char* const FLOAT64_OR_HOLE_TYPE_STRING = "float64_or_hole";
 static const char* const CONST_INT31_TYPE_STRING = "constexpr int31";
 static const char* const CONST_INT32_TYPE_STRING = "constexpr int32";
 static const char* const CONST_FLOAT64_TYPE_STRING = "constexpr float64";
+static const char* const INTEGER_LITERAL_TYPE_STRING =
+    "constexpr IntegerLiteral";
 static const char* const TORQUE_INTERNAL_NAMESPACE_STRING = "torque_internal";
 static const char* const MUTABLE_REFERENCE_TYPE_STRING = "MutableReference";
 static const char* const CONST_REFERENCE_TYPE_STRING = "ConstReference";
@@ -102,10 +105,17 @@ static const char* const ANNOTATION_IF = "@if";
 static const char* const ANNOTATION_IFNOT = "@ifnot";
 static const char* const ANNOTATION_GENERATE_BODY_DESCRIPTOR =
     "@generateBodyDescriptor";
+static const char* const ANNOTATION_GENERATE_UNIQUE_MAP = "@generateUniqueMap";
+static const char* const ANNOTATION_GENERATE_FACTORY_FUNCTION =
+    "@generateFactoryFunction";
 static const char* const ANNOTATION_EXPORT = "@export";
 static const char* const ANNOTATION_DO_NOT_GENERATE_CAST = "@doNotGenerateCast";
 static const char* const ANNOTATION_USE_PARENT_TYPE_CHECKER =
     "@useParentTypeChecker";
+static const char* const ANNOTATION_CPP_OBJECT_DEFINITION =
+    "@cppObjectDefinition";
+static const char* const ANNOTATION_CPP_OBJECT_LAYOUT_DEFINITION =
+    "@cppObjectLayoutDefinition";
 // Generate C++ accessors with relaxed store semantics.
 // Weak<T> and MaybeObject fields always use relaxed store.
 static const char* const ANNOTATION_CPP_RELAXED_STORE = "@cppRelaxedStore";
@@ -115,6 +125,11 @@ static const char* const ANNOTATION_CPP_RELAXED_LOAD = "@cppRelaxedLoad";
 static const char* const ANNOTATION_CPP_RELEASE_STORE = "@cppReleaseStore";
 // Generate C++ accessors with acquire load semantics.
 static const char* const ANNOTATION_CPP_ACQUIRE_LOAD = "@cppAcquireLoad";
+// Generate BodyDescriptor using IterateCustomWeakPointers.
+static const char* const ANNOTATION_CUSTOM_WEAK_MARKING = "@customWeakMarking";
+// Do not generate a interface descriptor for this builtin.
+static const char* const ANNOTATION_CUSTOM_INTERFACE_DESCRIPTOR =
+    "@customInterfaceDescriptor";
 
 inline bool IsConstexprName(const std::string& name) {
   return name.substr(0, std::strlen(CONSTEXPR_TYPE_PREFIX)) ==
@@ -147,14 +162,16 @@ enum class ClassFlag {
   kIsShape = 1 << 3,
   kHasSameInstanceTypeAsParent = 1 << 4,
   kGenerateCppClassDefinitions = 1 << 5,
-  kCustomCppClass = 1 << 6,
-  kHighestInstanceTypeWithinParent = 1 << 7,
-  kLowestInstanceTypeWithinParent = 1 << 8,
-  kUndefinedLayout = 1 << 9,
-  kGenerateBodyDescriptor = 1 << 10,
-  kExport = 1 << 11,
-  kDoNotGenerateCast = 1 << 12,
-  kCustomMap = 1 << 13,
+  kHighestInstanceTypeWithinParent = 1 << 6,
+  kLowestInstanceTypeWithinParent = 1 << 7,
+  kUndefinedLayout = 1 << 8,
+  kGenerateBodyDescriptor = 1 << 9,
+  kExport = 1 << 10,
+  kDoNotGenerateCast = 1 << 11,
+  kGenerateUniqueMap = 1 << 12,
+  kGenerateFactoryFunction = 1 << 13,
+  kCppObjectDefinition = 1 << 14,
+  kCppObjectLayoutDefinition = 1 << 15,
 };
 using ClassFlags = base::Flags<ClassFlag>;
 

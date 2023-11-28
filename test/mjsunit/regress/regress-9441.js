@@ -2,7 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --allow-natives-syntax --opt --no-always-opt
+// Flags: --allow-natives-syntax --turbofan --no-always-turbofan
+
+// This test does not work well if we flush the feedback vector, which causes
+// deoptimization.
+// Flags: --no-stress-flush-code --no-flush-bytecode
 
 function foo(a, b) {
     return a - b;

@@ -14,7 +14,11 @@
 #include "src/base/logging.h"
 #include "src/base/platform/platform.h"
 #include "src/base/platform/wrappers.h"
-#include "src/base/strings.h"
+#include "src/utils/allocation.h"
+
+#ifdef V8_CC_MSVC
+#include <intrin.h>  // _AddressOfReturnAddress()
+#endif
 
 namespace v8 {
 namespace internal {
@@ -194,7 +198,7 @@ int WriteChars(const char* filename, const char* str, int size, bool verbose) {
   return written;
 }
 
-int WriteBytes(const char* filename, const byte* bytes, int size,
+int WriteBytes(const char* filename, const uint8_t* bytes, int size,
                bool verbose) {
   const char* str = reinterpret_cast<const char*>(bytes);
   return WriteChars(filename, str, size, verbose);

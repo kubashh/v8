@@ -45,7 +45,7 @@ class IC {
   void MarkRecomputeHandler(Handle<Object> name) {
     DCHECK(RecomputeHandlerForName(name));
     old_state_ = state_;
-    state_ = RECOMPUTE_HANDLER;
+    state_ = InlineCacheState::RECOMPUTE_HANDLER;
   }
 
   bool IsAnyHas() const { return IsKeyedHasIC(); }
@@ -53,16 +53,18 @@ class IC {
     return IsLoadIC() || IsLoadGlobalIC() || IsKeyedLoadIC();
   }
   bool IsAnyStore() const {
-    return IsStoreIC() || IsStoreOwnIC() || IsStoreGlobalIC() ||
+    return IsSetNamedIC() || IsDefineNamedOwnIC() || IsStoreGlobalIC() ||
            IsKeyedStoreIC() || IsStoreInArrayLiteralICKind(kind()) ||
-           IsDefineOwnIC();
+           IsDefineKeyedOwnIC();
   }
-  bool IsAnyStoreOwn() const { return IsStoreOwnIC() || IsDefineOwnIC(); }
+  bool IsAnyDefineOwn() const {
+    return IsDefineNamedOwnIC() || IsDefineKeyedOwnIC();
+  }
 
   static inline bool IsHandler(MaybeObject object);
 
   // Nofity the IC system that a feedback has changed.
-  static void OnFeedbackChanged(Isolate* isolate, FeedbackVector vector,
+  static void OnFeedbackChanged(Isolate* isolate, Tagged<FeedbackVector> vector,
                                 FeedbackSlot slot, const char* reason);
 
   void OnFeedbackChanged(const char* reason);
@@ -76,8 +78,6 @@ class IC {
 
   bool is_vector_set() { return vector_set_; }
   inline bool vector_needs_update();
-
-  inline Handle<Object> CodeHandler(Builtin builtin);
 
   // Configure for most states.
   bool ConfigureVectorState(IC::State new_state, Handle<Object> key);
@@ -110,7 +110,8 @@ class IC {
   StubCache* stub_cache();
 
   void CopyICToMegamorphicCache(Handle<Name> name);
-  bool IsTransitionOfMonomorphicTarget(Map source_map, Map target_map);
+  bool IsTransitionOfMonomorphicTarget(Tagged<Map> source_map,
+                                       Tagged<Map> target_map);
   void SetCache(Handle<Name> name, Handle<Object> handler);
   void SetCache(Handle<Name> name, const MaybeObjectHandle& handler);
   FeedbackSlotKind kind() const { return kind_; }
@@ -119,15 +120,17 @@ class IC {
   bool IsLoadGlobalIC() const { return IsLoadGlobalICKind(kind_); }
   bool IsKeyedLoadIC() const { return IsKeyedLoadICKind(kind_); }
   bool IsStoreGlobalIC() const { return IsStoreGlobalICKind(kind_); }
-  bool IsStoreIC() const { return IsStoreICKind(kind_); }
-  bool IsStoreOwnIC() const { return IsStoreOwnICKind(kind_); }
-  bool IsDefineOwnIC() const { return IsDefineOwnICKind(kind_); }
+  bool IsSetNamedIC() const { return IsSetNamedICKind(kind_); }
+  bool IsDefineNamedOwnIC() const { return IsDefineNamedOwnICKind(kind_); }
+  bool IsStoreInArrayLiteralIC() const {
+    return IsStoreInArrayLiteralICKind(kind_);
+  }
   bool IsKeyedStoreIC() const { return IsKeyedStoreICKind(kind_); }
   bool IsKeyedHasIC() const { return IsKeyedHasICKind(kind_); }
+  bool IsDefineKeyedOwnIC() const { return IsDefineKeyedOwnICKind(kind_); }
   bool is_keyed() const {
-    return IsKeyedLoadIC() || IsKeyedStoreIC() ||
-           IsStoreInArrayLiteralICKind(kind_) || IsKeyedHasIC() ||
-           IsKeyedDefineOwnICKind(kind_);
+    return IsKeyedLoadIC() || IsKeyedStoreIC() || IsStoreInArrayLiteralIC() ||
+           IsKeyedHasIC() || IsDefineKeyedOwnIC();
   }
   bool ShouldRecomputeHandler(Handle<String> name);
 
@@ -141,9 +144,9 @@ class IC {
     }
   }
 
-  Map FirstTargetMap() {
+  Tagged<Map> FirstTargetMap() {
     FindTargetMaps();
-    return !target_maps_.empty() ? *target_maps_[0] : Map();
+    return !target_maps_.empty() ? *target_maps_[0] : Tagged<Map>();
   }
 
   const FeedbackNexus* nexus() const { return &nexus_; }
@@ -201,7 +204,7 @@ class LoadIC : public IC {
   void UpdateCaches(LookupIterator* lookup);
 
  private:
-  Handle<Object> ComputeHandler(LookupIterator* lookup);
+  MaybeObjectHandle ComputeHandler(LookupIterator* lookup);
 
   friend class IC;
   friend class NamedLoadHandlerCompiler;

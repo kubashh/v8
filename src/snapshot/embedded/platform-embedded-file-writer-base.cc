@@ -6,7 +6,6 @@
 
 #include <string>
 
-#include "src/base/platform/wrappers.h"
 #include "src/common/globals.h"
 #include "src/snapshot/embedded/platform-embedded-file-writer-aix.h"
 #include "src/snapshot/embedded/platform-embedded-file-writer-generic.h"
@@ -116,7 +115,7 @@ EmbeddedTargetArch ToEmbeddedTargetArch(const char* s) {
 EmbeddedTargetOs DefaultEmbeddedTargetOs() {
 #if defined(V8_OS_AIX)
   return EmbeddedTargetOs::kAIX;
-#elif defined(V8_OS_MACOSX)
+#elif defined(V8_OS_DARWIN)
   return EmbeddedTargetOs::kMac;
 #elif defined(V8_OS_WIN)
   return EmbeddedTargetOs::kWin;
@@ -131,7 +130,8 @@ EmbeddedTargetOs ToEmbeddedTargetOs(const char* s) {
   }
 
   std::string string(s);
-  if (string == "aix") {
+  // Python 3.9+ on IBM i returns os400 as sys.platform instead of aix
+  if (string == "aix" || string == "os400") {
     return EmbeddedTargetOs::kAIX;
   } else if (string == "chromeos") {
     return EmbeddedTargetOs::kChromeOS;

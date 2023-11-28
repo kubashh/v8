@@ -32,11 +32,9 @@
 #define V8_INSPECTOR_V8_RUNTIME_AGENT_IMPL_H_
 
 #include <memory>
-#include <set>
 #include <unordered_map>
 
 #include "include/v8-persistent-handle.h"
-// #include "include/v8-function-callback.h"
 #include "src/base/macros.h"
 #include "src/inspector/protocol/Forward.h"
 #include "src/inspector/protocol/Runtime.h"
@@ -51,6 +49,7 @@ class InjectedScript;
 class InspectedContext;
 class RemoteObjectIdBase;
 class V8ConsoleMessage;
+class V8DebuggerBarrier;
 class V8InspectorImpl;
 class V8InspectorSessionImpl;
 
@@ -60,7 +59,8 @@ using protocol::Maybe;
 class V8RuntimeAgentImpl : public protocol::Runtime::Backend {
  public:
   V8RuntimeAgentImpl(V8InspectorSessionImpl*, protocol::FrontendChannel*,
-                     protocol::DictionaryValue* state);
+                     protocol::DictionaryValue* state,
+                     std::shared_ptr<V8DebuggerBarrier>);
   ~V8RuntimeAgentImpl() override;
   V8RuntimeAgentImpl(const V8RuntimeAgentImpl&) = delete;
   V8RuntimeAgentImpl& operator=(const V8RuntimeAgentImpl&) = delete;
@@ -69,15 +69,16 @@ class V8RuntimeAgentImpl : public protocol::Runtime::Backend {
   // Part of the protocol.
   Response enable() override;
   Response disable() override;
-  void evaluate(const String16& expression, Maybe<String16> objectGroup,
-                Maybe<bool> includeCommandLineAPI, Maybe<bool> silent,
-                Maybe<int> executionContextId, Maybe<bool> returnByValue,
-                Maybe<bool> generatePreview, Maybe<bool> userGesture,
-                Maybe<bool> awaitPromise, Maybe<bool> throwOnSideEffect,
-                Maybe<double> timeout, Maybe<bool> disableBreaks,
-                Maybe<bool> replMode, Maybe<bool> allowUnsafeEvalBlockedByCSP,
-                Maybe<String16> uniqueContextId,
-                std::unique_ptr<EvaluateCallback>) override;
+  void evaluate(
+      const String16& expression, Maybe<String16> objectGroup,
+      Maybe<bool> includeCommandLineAPI, Maybe<bool> silent,
+      Maybe<int> executionContextId, Maybe<bool> returnByValue,
+      Maybe<bool> generatePreview, Maybe<bool> userGesture,
+      Maybe<bool> awaitPromise, Maybe<bool> throwOnSideEffect,
+      Maybe<double> timeout, Maybe<bool> disableBreaks, Maybe<bool> replMode,
+      Maybe<bool> allowUnsafeEvalBlockedByCSP, Maybe<String16> uniqueContextId,
+      Maybe<protocol::Runtime::SerializationOptions> serializationOptions,
+      std::unique_ptr<EvaluateCallback>) override;
   void awaitPromise(const String16& promiseObjectId, Maybe<bool> returnByValue,
                     Maybe<bool> generatePreview,
                     std::unique_ptr<AwaitPromiseCallback>) override;
@@ -88,6 +89,8 @@ class V8RuntimeAgentImpl : public protocol::Runtime::Backend {
       Maybe<bool> generatePreview, Maybe<bool> userGesture,
       Maybe<bool> awaitPromise, Maybe<int> executionContextId,
       Maybe<String16> objectGroup, Maybe<bool> throwOnSideEffect,
+      Maybe<String16> uniqueContextId,
+      Maybe<protocol::Runtime::SerializationOptions> serializationOptions,
       std::unique_ptr<CallFunctionOnCallback>) override;
   Response releaseObject(const String16& objectId) override;
   Response getProperties(
@@ -130,6 +133,9 @@ class V8RuntimeAgentImpl : public protocol::Runtime::Backend {
                       Maybe<String16> executionContextName) override;
   Response removeBinding(const String16& name) override;
   void addBindings(InspectedContext* context);
+  Response getExceptionDetails(const String16& errorObjectId,
+                               Maybe<protocol::Runtime::ExceptionDetails>*
+                                   out_exceptionDetails) override;
 
   void reset();
   void reportExecutionContextCreated(InspectedContext*);
@@ -143,7 +149,7 @@ class V8RuntimeAgentImpl : public protocol::Runtime::Backend {
  private:
   bool reportMessage(V8ConsoleMessage*, bool generatePreview);
 
-  static void bindingCallback(const v8::FunctionCallbackInfo<v8::Value>& args);
+  static void bindingCallback(const v8::FunctionCallbackInfo<v8::Value>& info);
   void bindingCalled(const String16& name, const String16& payload,
                      int executionContextId);
   void addBinding(InspectedContext* context, const String16& name);
@@ -152,6 +158,7 @@ class V8RuntimeAgentImpl : public protocol::Runtime::Backend {
   protocol::DictionaryValue* m_state;
   protocol::Runtime::Frontend m_frontend;
   V8InspectorImpl* m_inspector;
+  std::shared_ptr<V8DebuggerBarrier> m_debuggerBarrier;
   bool m_enabled;
   std::unordered_map<String16, std::unique_ptr<v8::Global<v8::Script>>>
       m_compiledScripts;

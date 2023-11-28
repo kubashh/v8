@@ -5,8 +5,7 @@
 import {App} from '../index.mjs'
 
 import {FocusEvent, ToolTipEvent} from './events.mjs';
-import {groupBy, LazyTable} from './helper.mjs';
-import {CollapsableElement, DOM} from './helper.mjs';
+import {CollapsableElement, DOM, groupBy, LazyTable} from './helper.mjs';
 
 DOM.defineCustomElement('view/list-panel',
                         (templateText) =>
@@ -112,6 +111,7 @@ DOM.defineCustomElement('view/list-panel',
 
   createSubgroups(group) {
     const map = new Map();
+    const tempGroups = [];
     for (let propertyName of this._propertyNames) {
       map.set(
           propertyName,
@@ -127,7 +127,7 @@ DOM.defineCustomElement('view/list-panel',
 
   _logEntryMouseOverHandler(e) {
     const group = e.currentTarget.group;
-    this.dispatchEvent(new ToolTipEvent(group.key, e.currentTarget));
+    this.dispatchEvent(new ToolTipEvent(group.key, e.currentTarget, e.ctrlKey));
   }
 
   _handleDetailsClick(event) {
@@ -176,9 +176,6 @@ DOM.defineCustomElement('view/list-panel',
   _render(groups, table) {
     let last;
     new LazyTable(table, groups, group => {
-      if (last && last.count < group.length) {
-        console.log(last, group);
-      }
       last = group;
       const tr = DOM.tr();
       tr.group = group;

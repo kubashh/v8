@@ -8,8 +8,9 @@
 #include "include/v8-exception.h"
 #include "include/v8-microtask-queue.h"
 #include "include/v8-template.h"
-#include "src/base/vector.h"
+#include "src/init/v8.h"
 #include "src/inspector/test-interface.h"
+#include "test/inspector/frontend-channel.h"
 #include "test/inspector/task-runner.h"
 #include "test/inspector/utils.h"
 
@@ -55,6 +56,7 @@ InspectorIsolateData::InspectorIsolateData(
   params.snapshot_blob = startup_data;
   params.only_terminate_in_safe_scope = true;
   isolate_.reset(v8::Isolate::New(params));
+  v8::Isolate::Scope isolate_scope(isolate_.get());
   isolate_->SetMicrotasksPolicy(v8::MicrotasksPolicy::kScoped);
   if (with_inspector) {
     isolate_->AddMessageListener(&InspectorIsolateData::MessageHandler);
@@ -74,6 +76,30 @@ InspectorIsolateData* InspectorIsolateData::FromContext(
     v8::Local<v8::Context> context) {
   return static_cast<InspectorIsolateData*>(
       context->GetAlignedPointerFromEmbedderData(kIsolateDataIndex));
+}
+
+InspectorIsolateData::~InspectorIsolateData() {
+  // Enter the isolate before destructing this InspectorIsolateData, so that
+  // destructors that run before the Isolate's destructor still see it as
+  // entered. Use a v8::Locker, in case the thread destroying the isolate is
+  // not the last one that entered it.
+  locker_.emplace(isolate());
+  isolate()->Enter();
+
+  // Sessions need to be deleted before channels can be cleaned up, and channels
+  // must be deleted before the isolate gets cleaned up. This means we first
+  // clean up all the sessions and immedatly after all the channels used by
+  // those sessions.
+  for (const auto& pair : sessions_) {
+    session_ids_for_cleanup_.insert(pair.first);
+  }
+
+  context_group_by_session_.clear();
+  sessions_.clear();
+
+  for (int session_id : session_ids_for_cleanup_) {
+    ChannelHolder::RemoveChannel(session_id);
+  }
 }
 
 int InspectorIsolateData::CreateContextGroup() {
@@ -158,23 +184,65 @@ v8::MaybeLocal<v8::Module> InspectorIsolateData::ModuleResolveCallback(
   return maybe_module;
 }
 
-int InspectorIsolateData::ConnectSession(
+base::Optional<int> InspectorIsolateData::ConnectSession(
     int context_group_id, const v8_inspector::StringView& state,
-    v8_inspector::V8Inspector::Channel* channel) {
+    std::unique_ptr<FrontendChannelImpl> channel, bool is_fully_trusted) {
+  if (contexts_.find(context_group_id) == contexts_.end()) return base::nullopt;
+
   v8::SealHandleScope seal_handle_scope(isolate());
   int session_id = ++last_session_id_;
-  sessions_[session_id] = inspector_->connect(context_group_id, channel, state);
+  // It's important that we register the channel before the `connect` as the
+  // inspector will already send notifications.
+  auto* c = channel.get();
+  ChannelHolder::AddChannel(session_id, std::move(channel));
+  sessions_[session_id] = inspector_->connect(
+      context_group_id, c, state,
+      is_fully_trusted ? v8_inspector::V8Inspector::kFullyTrusted
+                       : v8_inspector::V8Inspector::kUntrusted,
+      waiting_for_debugger_
+          ? v8_inspector::V8Inspector::kWaitingForDebugger
+          : v8_inspector::V8Inspector::kNotWaitingForDebugger);
   context_group_by_session_[sessions_[session_id].get()] = context_group_id;
   return session_id;
 }
 
-std::vector<uint8_t> InspectorIsolateData::DisconnectSession(int session_id) {
+namespace {
+
+class RemoveChannelTask : public TaskRunner::Task {
+ public:
+  explicit RemoveChannelTask(int session_id) : session_id_(session_id) {}
+  ~RemoveChannelTask() override = default;
+  bool is_priority_task() final { return false; }
+
+ private:
+  void Run(InspectorIsolateData* data) override {
+    ChannelHolder::RemoveChannel(session_id_);
+  }
+  int session_id_;
+};
+
+}  // namespace
+
+std::vector<uint8_t> InspectorIsolateData::DisconnectSession(
+    int session_id, TaskRunner* context_task_runner) {
   v8::SealHandleScope seal_handle_scope(isolate());
   auto it = sessions_.find(session_id);
   CHECK(it != sessions_.end());
   context_group_by_session_.erase(it->second.get());
   std::vector<uint8_t> result = it->second->state();
   sessions_.erase(it);
+
+  // The InspectorSession destructor does cleanup work like disabling agents.
+  // This could send some more notifications. We'll delay removing the channel
+  // so notification tasks have time to get sent.
+  // Note: This only works for tasks scheduled immediately by the desctructor.
+  //       Any task scheduled in turn by one of the "cleanup tasks" will run
+  //       AFTER the channel was removed.
+  context_task_runner->Append(std::make_unique<RemoveChannelTask>(session_id));
+
+  // In case we shutdown the test runner before the above task can run, we
+  // let the desctructor clean up the channel.
+  session_ids_for_cleanup_.insert(session_id);
   return result;
 }
 
@@ -193,6 +261,12 @@ void InspectorIsolateData::BreakProgram(
     auto it = sessions_.find(session_id);
     if (it != sessions_.end()) it->second->breakProgram(reason, details);
   }
+}
+
+void InspectorIsolateData::Stop(int session_id) {
+  v8::SealHandleScope seal_handle_scope(isolate());
+  auto it = sessions_.find(session_id);
+  if (it != sessions_.end()) it->second->stop();
 }
 
 void InspectorIsolateData::SchedulePauseOnNextStatement(
@@ -339,10 +413,16 @@ void InspectorIsolateData::PromiseRejectHandler(v8::PromiseRejectMessage data) {
   int exception_id = HandleMessage(
       v8::Exception::CreateMessage(isolate, exception), exception);
   if (exception_id) {
-    promise
-        ->SetPrivate(isolate->GetCurrentContext(), id_private,
-                     v8::Int32::New(isolate, exception_id))
-        .ToChecked();
+    if (promise
+            ->SetPrivate(isolate->GetCurrentContext(), id_private,
+                         v8::Int32::New(isolate, exception_id))
+            .IsNothing()) {
+      // Handling the |message| above calls back into JavaScript (by reporting
+      // it via CDP) in case of `inspector-test`, and can lead to terminating
+      // execution on the |isolate|, in which case the API call above will
+      // return immediately.
+      DCHECK(isolate->IsExecutionTerminating());
+    }
   }
 }
 
@@ -381,7 +461,7 @@ bool InspectorIsolateData::isInspectableHeapObject(
     v8::Local<v8::Object> object) {
   v8::Local<v8::Context> context = isolate()->GetCurrentContext();
   v8::MicrotasksScope microtasks_scope(
-      isolate(), v8::MicrotasksScope::kDoNotRunMicrotasks);
+      context, v8::MicrotasksScope::kDoNotRunMicrotasks);
   return !object->HasPrivate(context, not_inspectable_private_.Get(isolate()))
               .FromMaybe(false);
 }
@@ -398,7 +478,7 @@ void InspectorIsolateData::SetCurrentTimeMS(double time) {
 
 double InspectorIsolateData::currentTimeMS() {
   if (current_time_set_) return current_time_;
-  return V8::GetCurrentPlatform()->CurrentClockTimeMillis();
+  return V8::GetCurrentPlatform()->CurrentClockTimeMillisecondsHighResolution();
 }
 
 void InspectorIsolateData::SetMemoryInfo(v8::Local<v8::Value> memory_info) {
@@ -430,6 +510,10 @@ void InspectorIsolateData::runMessageLoopOnPause(int) {
   task_runner_->RunMessageLoop(true);
 }
 
+void InspectorIsolateData::runIfWaitingForDebugger(int) {
+  quitMessageLoopOnPause();
+}
+
 void InspectorIsolateData::quitMessageLoopOnPause() {
   v8::SealHandleScope seal_handle_scope(isolate());
   task_runner_->QuitMessageLoop();
@@ -441,8 +525,8 @@ void InspectorIsolateData::installAdditionalCommandLineAPI(
   CHECK(context->GetIsolate() == isolate());
   v8::HandleScope handle_scope(isolate());
   v8::Context::Scope context_scope(context);
-  v8::ScriptOrigin origin(isolate(), v8::String::NewFromUtf8Literal(
-                                         isolate(), "internal-console-api"));
+  v8::ScriptOrigin origin(
+      v8::String::NewFromUtf8Literal(isolate(), "internal-console-api"));
   v8::ScriptCompiler::Source scriptSource(
       additional_console_api_.Get(isolate()), origin);
   v8::MaybeLocal<v8::Script> script =
@@ -456,6 +540,25 @@ void InspectorIsolateData::consoleAPIMessage(
     const v8_inspector::StringView& url, unsigned lineNumber,
     unsigned columnNumber, v8_inspector::V8StackTrace* stack) {
   if (!log_console_api_message_calls_) return;
+  switch (level) {
+    case v8::Isolate::kMessageLog:
+      fprintf(stdout, "log: ");
+      break;
+    case v8::Isolate::kMessageDebug:
+      fprintf(stdout, "debug: ");
+      break;
+    case v8::Isolate::kMessageInfo:
+      fprintf(stdout, "info: ");
+      break;
+    case v8::Isolate::kMessageError:
+      fprintf(stdout, "error: ");
+      break;
+    case v8::Isolate::kMessageWarning:
+      fprintf(stdout, "warning: ");
+      break;
+    case v8::Isolate::kMessageAll:
+      break;
+  }
   Print(isolate_.get(), message);
   fprintf(stdout, " (");
   Print(isolate_.get(), url);
@@ -478,6 +581,13 @@ bool InspectorIsolateData::AssociateExceptionData(
     v8::Local<v8::Value> value) {
   return inspector_->associateExceptionData(
       this->isolate()->GetCurrentContext(), exception, key, value);
+}
+
+void InspectorIsolateData::WaitForDebugger(int context_group_id) {
+  DCHECK(!waiting_for_debugger_);
+  waiting_for_debugger_ = true;
+  runMessageLoopOnPause(context_group_id);
+  waiting_for_debugger_ = false;
 }
 
 namespace {
@@ -511,6 +621,28 @@ int64_t InspectorIsolateData::generateUniqueId() {
   // Keep it not too random for tests.
   return ++last_unique_id;
 }
+
+// static
+void ChannelHolder::AddChannel(int session_id,
+                               std::unique_ptr<FrontendChannelImpl> channel) {
+  CHECK_NE(channel.get(), nullptr);
+  channel->set_session_id(session_id);
+  channels_[session_id] = std::move(channel);
+}
+
+// static
+FrontendChannelImpl* ChannelHolder::GetChannel(int session_id) {
+  auto it = channels_.find(session_id);
+  return it != channels_.end() ? it->second.get() : nullptr;
+}
+
+// static
+void ChannelHolder::RemoveChannel(int session_id) {
+  channels_.erase(session_id);
+}
+
+// static
+std::map<int, std::unique_ptr<FrontendChannelImpl>> ChannelHolder::channels_;
 
 }  // namespace internal
 }  // namespace v8

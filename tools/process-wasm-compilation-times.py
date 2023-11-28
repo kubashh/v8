@@ -25,6 +25,8 @@ def Size(number):
 
 modules = {}
 max_module = 0
+total_lo_time = 0
+total_lo_size = 0
 total_tf_time = 0
 total_tf_size = 0
 
@@ -70,13 +72,13 @@ class Function:
     self.has_tf = True
     # 0        1        2  3     4         5    6 7  8   9     10 11
     # Compiled function #6 using TurboFan, took 0 ms and 14440 / 44656
-    # 12        13     14       15 16   17
-    # max/total bytes, codesize 24 name wasm-function#6
+    # 12        13     14       15 16       17 18   19
+    # max/total bytes; bodysize 12 codesize 24 name wasm-function#6
     self.time_tf = int(words[6])
     self.mem_tf_max = int(words[9])
     self.mem_tf_total = int(words[11])
-    self.size_tf = int(words[15])
-    self.name = words[17]
+    self.size_tf = int(words[17])
+    self.name = words[19]
 
   def AddLiftoffLine(self, words):
     assert self.index == words[2], "wrong function"
@@ -109,7 +111,8 @@ if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help", "help"):
 with open(sys.argv[1], "r") as f:
   for line in f.readlines():
     words = line.strip().split(" ")
-    if words[0] != "Compiled": continue
+    if words[0] != "Compiled" or words[1] != "function":
+      continue
     name = words[2]
     RegisterName(name)
     if name in funcs_dict:
@@ -123,8 +126,16 @@ with open(sys.argv[1], "r") as f:
 funcs_list.sort(key=lambda fun: fun.time_tf)
 for f in funcs_list:
   print(f)
-  total_tf_time += f.time_tf
-  total_tf_size += f.size_tf
+  if f.time_tf > 0:
+    total_tf_time += f.time_tf
+  if f.size_tf > 0:
+    total_tf_size += f.size_tf
+  if f.time_lo > 0:
+    total_lo_time += f.time_lo
+  if f.size_lo > 0:
+    total_lo_size += f.size_lo
 
 print("Total TF time: %d" % total_tf_time)
 print("Total TF size: %d" % total_tf_size)
+print("Total LO time: %d" % total_lo_time)
+print("Total LO size: %d" % total_lo_size)

@@ -20,6 +20,7 @@ class String;
 namespace internal {
 class ExternalString;
 class ScopedExternalStringLock;
+class StringForwardingTable;
 }  // namespace internal
 
 /**
@@ -54,12 +55,22 @@ class V8_EXPORT Boolean : public Primitive {
  * This is passed back to the embedder as part of
  * HostImportModuleDynamicallyCallback for module loading.
  */
-class V8_EXPORT PrimitiveArray {
+class V8_EXPORT PrimitiveArray : public Data {
  public:
   static Local<PrimitiveArray> New(Isolate* isolate, int length);
   int Length() const;
   void Set(Isolate* isolate, int index, Local<Primitive> item);
   Local<Primitive> Get(Isolate* isolate, int index);
+
+  V8_INLINE static PrimitiveArray* Cast(Data* data) {
+#ifdef V8_ENABLE_CHECKS
+    CheckCast(data);
+#endif
+    return reinterpret_cast<PrimitiveArray*>(data);
+  }
+
+ private:
+  static void CheckCast(Data* obj);
 };
 
 /**
@@ -259,6 +270,7 @@ class V8_EXPORT String : public Name {
    private:
     friend class internal::ExternalString;
     friend class v8::String;
+    friend class internal::StringForwardingTable;
     friend class internal::ScopedExternalStringLock;
   };
 
@@ -479,9 +491,10 @@ class V8_EXPORT String : public Name {
   bool MakeExternal(ExternalOneByteStringResource* resource);
 
   /**
-   * Returns true if this string can be made external.
+   * Returns true if this string can be made external, given the encoding for
+   * the external string resource.
    */
-  bool CanMakeExternal() const;
+  bool CanMakeExternal(Encoding encoding) const;
 
   /**
    * Returns true if the strings values are equal. Same as JS ==/===.
@@ -575,8 +588,6 @@ class V8_EXPORT Symbol : public Name {
   /**
    * Returns the description string of the symbol, or undefined if none.
    */
-  V8_DEPRECATE_SOON("Use Symbol::Description(isolate)")
-  Local<Value> Description() const;
   Local<Value> Description(Isolate* isolate) const;
 
   /**
@@ -628,9 +639,19 @@ class V8_EXPORT Symbol : public Name {
 };
 
 /**
+ * A JavaScript numeric value (either Number or BigInt).
+ * https://tc39.es/ecma262/#sec-numeric-types
+ */
+class V8_EXPORT Numeric : public Primitive {
+ private:
+  Numeric();
+  static void CheckCast(v8::Data* that);
+};
+
+/**
  * A JavaScript number value (ECMA-262, 4.3.20)
  */
-class V8_EXPORT Number : public Primitive {
+class V8_EXPORT Number : public Numeric {
  public:
   double Value() const;
   static Local<Number> New(Isolate* isolate, double value);
@@ -705,7 +726,7 @@ class V8_EXPORT Uint32 : public Integer {
 /**
  * A JavaScript BigInt value (https://tc39.github.io/proposal-bigint)
  */
-class V8_EXPORT BigInt : public Primitive {
+class V8_EXPORT BigInt : public Numeric {
  public:
   static Local<BigInt> New(Isolate* isolate, int64_t value);
   static Local<BigInt> NewFromUnsigned(Isolate* isolate, uint64_t value);
@@ -766,21 +787,20 @@ Local<String> String::Empty(Isolate* isolate) {
   using S = internal::Address;
   using I = internal::Internals;
   I::CheckInitialized(isolate);
-  S* slot = I::GetRoot(isolate, I::kEmptyStringRootIndex);
-  return Local<String>(reinterpret_cast<String*>(slot));
+  S* slot = I::GetRootSlot(isolate, I::kEmptyStringRootIndex);
+  return Local<String>::FromSlot(slot);
 }
 
 String::ExternalStringResource* String::GetExternalStringResource() const {
   using A = internal::Address;
   using I = internal::Internals;
-  A obj = *reinterpret_cast<const A*>(this);
+  A obj = internal::ValueHelper::ValueAsAddress(this);
 
   ExternalStringResource* result;
   if (I::IsExternalTwoByteString(I::GetInstanceType(obj))) {
-    internal::Isolate* isolate = I::GetIsolateForHeapSandbox(obj);
-    A value =
-        I::ReadExternalPointerField(isolate, obj, I::kStringResourceOffset,
-                                    internal::kExternalStringResourceTag);
+    Isolate* isolate = I::GetIsolateForSandbox(obj);
+    A value = I::ReadExternalPointerField<internal::kExternalStringResourceTag>(
+        isolate, obj, I::kStringResourceOffset);
     result = reinterpret_cast<String::ExternalStringResource*>(value);
   } else {
     result = GetExternalStringResourceSlow();
@@ -795,16 +815,15 @@ String::ExternalStringResourceBase* String::GetExternalStringResourceBase(
     String::Encoding* encoding_out) const {
   using A = internal::Address;
   using I = internal::Internals;
-  A obj = *reinterpret_cast<const A*>(this);
-  int type = I::GetInstanceType(obj) & I::kFullStringRepresentationMask;
+  A obj = internal::ValueHelper::ValueAsAddress(this);
+  int type = I::GetInstanceType(obj) & I::kStringRepresentationAndEncodingMask;
   *encoding_out = static_cast<Encoding>(type & I::kStringEncodingMask);
   ExternalStringResourceBase* resource;
   if (type == I::kExternalOneByteRepresentationTag ||
       type == I::kExternalTwoByteRepresentationTag) {
-    internal::Isolate* isolate = I::GetIsolateForHeapSandbox(obj);
-    A value =
-        I::ReadExternalPointerField(isolate, obj, I::kStringResourceOffset,
-                                    internal::kExternalStringResourceTag);
+    Isolate* isolate = I::GetIsolateForSandbox(obj);
+    A value = I::ReadExternalPointerField<internal::kExternalStringResourceTag>(
+        isolate, obj, I::kStringResourceOffset);
     resource = reinterpret_cast<ExternalStringResourceBase*>(value);
   } else {
     resource = GetExternalStringResourceBaseSlow(encoding_out);
@@ -821,32 +840,32 @@ V8_INLINE Local<Primitive> Undefined(Isolate* isolate) {
   using S = internal::Address;
   using I = internal::Internals;
   I::CheckInitialized(isolate);
-  S* slot = I::GetRoot(isolate, I::kUndefinedValueRootIndex);
-  return Local<Primitive>(reinterpret_cast<Primitive*>(slot));
+  S* slot = I::GetRootSlot(isolate, I::kUndefinedValueRootIndex);
+  return Local<Primitive>::FromSlot(slot);
 }
 
 V8_INLINE Local<Primitive> Null(Isolate* isolate) {
   using S = internal::Address;
   using I = internal::Internals;
   I::CheckInitialized(isolate);
-  S* slot = I::GetRoot(isolate, I::kNullValueRootIndex);
-  return Local<Primitive>(reinterpret_cast<Primitive*>(slot));
+  S* slot = I::GetRootSlot(isolate, I::kNullValueRootIndex);
+  return Local<Primitive>::FromSlot(slot);
 }
 
 V8_INLINE Local<Boolean> True(Isolate* isolate) {
   using S = internal::Address;
   using I = internal::Internals;
   I::CheckInitialized(isolate);
-  S* slot = I::GetRoot(isolate, I::kTrueValueRootIndex);
-  return Local<Boolean>(reinterpret_cast<Boolean*>(slot));
+  S* slot = I::GetRootSlot(isolate, I::kTrueValueRootIndex);
+  return Local<Boolean>::FromSlot(slot);
 }
 
 V8_INLINE Local<Boolean> False(Isolate* isolate) {
   using S = internal::Address;
   using I = internal::Internals;
   I::CheckInitialized(isolate);
-  S* slot = I::GetRoot(isolate, I::kFalseValueRootIndex);
-  return Local<Boolean>(reinterpret_cast<Boolean*>(slot));
+  S* slot = I::GetRootSlot(isolate, I::kFalseValueRootIndex);
+  return Local<Boolean>::FromSlot(slot);
 }
 
 Local<Boolean> Boolean::New(Isolate* isolate, bool value) {

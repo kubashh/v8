@@ -21,6 +21,7 @@ namespace internal {
 
 class BreakPoint;
 class BytecodeArray;
+class StructBodyDescriptor;
 
 #include "torque-generated/src/objects/debug-objects-tq.inc"
 
@@ -53,8 +54,11 @@ class DebugInfo : public TorqueGeneratedDebugInfo<DebugInfo, Struct> {
   // and DebugBytecodeArray returns the instrumented bytecode.
   inline bool HasInstrumentedBytecodeArray();
 
-  inline BytecodeArray OriginalBytecodeArray();
-  inline BytecodeArray DebugBytecodeArray();
+  inline Tagged<BytecodeArray> OriginalBytecodeArray(Isolate* isolate);
+  inline Tagged<BytecodeArray> DebugBytecodeArray(Isolate* isolate);
+
+  DECL_TRUSTED_POINTER_ACCESSORS(original_bytecode_array, BytecodeArray)
+  DECL_TRUSTED_POINTER_ACCESSORS(debug_bytecode_array, BytecodeArray)
 
   // --- Break points ---
   // --------------------
@@ -132,9 +136,11 @@ class DebugInfo : public TorqueGeneratedDebugInfo<DebugInfo, Struct> {
 
   static const int kEstimatedNofBreakPointsInFunction = 4;
 
+  class BodyDescriptor;
+
  private:
   // Get the break point info object for a source position.
-  Object GetBreakPointInfo(Isolate* isolate, int source_position);
+  Tagged<Object> GetBreakPointInfo(Isolate* isolate, int source_position);
 
   TQ_OBJECT_CONSTRUCTORS(DebugInfo)
 };
@@ -162,6 +168,8 @@ class BreakPointInfo
   int GetBreakPointCount(Isolate* isolate);
 
   int GetStatementPosition(Handle<DebugInfo> debug_info);
+
+  using BodyDescriptor = StructBodyDescriptor;
 
   TQ_OBJECT_CONSTRUCTORS(BreakPointInfo)
 };
@@ -193,7 +201,70 @@ class CoverageInfo
 // Holds breakpoint related information. This object is used by inspector.
 class BreakPoint : public TorqueGeneratedBreakPoint<BreakPoint, Struct> {
  public:
+  using BodyDescriptor = StructBodyDescriptor;
+
   TQ_OBJECT_CONSTRUCTORS(BreakPoint)
+};
+
+class StackFrameInfo
+    : public TorqueGeneratedStackFrameInfo<StackFrameInfo, Struct> {
+ public:
+  NEVER_READ_ONLY_SPACE
+
+  static int GetSourcePosition(Handle<StackFrameInfo> info);
+
+  // The script for the stack frame.
+  inline Tagged<Script> script() const;
+
+  // The bytecode offset or source position for the stack frame.
+  DECL_INT_ACCESSORS(bytecode_offset_or_source_position)
+
+  // Indicates that the frame corresponds to a 'new' invocation.
+  DECL_BOOLEAN_ACCESSORS(is_constructor)
+
+  // Dispatched behavior.
+  DECL_VERIFIER(StackFrameInfo)
+
+  // Bit positions in |flags|.
+  DEFINE_TORQUE_GENERATED_STACK_FRAME_INFO_FLAGS()
+
+  using BodyDescriptor = StructBodyDescriptor;
+
+ private:
+  TQ_OBJECT_CONSTRUCTORS(StackFrameInfo)
+};
+
+class ErrorStackData
+    : public TorqueGeneratedErrorStackData<ErrorStackData, Struct> {
+ public:
+  NEVER_READ_ONLY_SPACE
+
+  inline bool HasFormattedStack() const;
+  DECL_ACCESSORS(formatted_stack, Tagged<Object>)
+  inline bool HasCallSiteInfos() const;
+  DECL_ACCESSORS(call_site_infos, Tagged<FixedArray>)
+
+  static void EnsureStackFrameInfos(Isolate* isolate,
+                                    Handle<ErrorStackData> error_stack);
+
+  DECL_VERIFIER(ErrorStackData)
+
+  using BodyDescriptor = StructBodyDescriptor;
+
+  TQ_OBJECT_CONSTRUCTORS(ErrorStackData)
+};
+
+class PromiseOnStack
+    : public TorqueGeneratedPromiseOnStack<PromiseOnStack, Struct> {
+ public:
+  NEVER_READ_ONLY_SPACE
+
+  static MaybeHandle<JSObject> GetPromise(
+      Handle<PromiseOnStack> promise_on_stack);
+
+  class BodyDescriptor;
+
+  TQ_OBJECT_CONSTRUCTORS(PromiseOnStack)
 };
 
 }  // namespace internal

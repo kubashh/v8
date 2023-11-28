@@ -5,14 +5,9 @@
 #include "src/runtime/runtime.h"
 
 #include "src/base/hashmap.h"
-#include "src/base/platform/wrappers.h"
-#include "src/codegen/reloc-info.h"
 #include "src/execution/isolate.h"
-#include "src/handles/handles-inl.h"
-#include "src/heap/heap.h"
-#include "src/objects/contexts.h"
-#include "src/objects/objects-inl.h"
 #include "src/runtime/runtime-utils.h"
+#include "src/strings/string-hasher-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -104,8 +99,6 @@ bool Runtime::NeedsExactContext(FunctionId id) {
       // us to usually eliminate the catch context for the implicit
       // try-catch in async function.
       return false;
-    case Runtime::kAddPrivateField:
-    case Runtime::kAddPrivateBrand:
     case Runtime::kCreatePrivateAccessors:
     case Runtime::kCopyDataProperties:
     case Runtime::kCreateDataProperty:
@@ -114,6 +107,7 @@ bool Runtime::NeedsExactContext(FunctionId id) {
     case Runtime::kLoadPrivateGetter:
     case Runtime::kLoadPrivateSetter:
     case Runtime::kReThrow:
+    case Runtime::kReThrowWithMessage:
     case Runtime::kThrow:
     case Runtime::kThrowApplyNonFunction:
     case Runtime::kThrowCalledNonCallable:
@@ -138,6 +132,7 @@ bool Runtime::NeedsExactContext(FunctionId id) {
     case Runtime::kThrowThrowMethodMissing:
     case Runtime::kThrowTypeError:
     case Runtime::kThrowUnsupportedSuperError:
+    case Runtime::kTerminateExecution:
 #if V8_ENABLE_WEBASSEMBLY
     case Runtime::kThrowWasmError:
     case Runtime::kThrowWasmStackOverflow:
@@ -156,6 +151,7 @@ bool Runtime::IsNonReturning(FunctionId id) {
     case Runtime::kThrowSuperAlreadyCalledError:
     case Runtime::kThrowSuperNotCalled:
     case Runtime::kReThrow:
+    case Runtime::kReThrowWithMessage:
     case Runtime::kThrow:
     case Runtime::kThrowApplyNonFunction:
     case Runtime::kThrowCalledNonCallable:
@@ -175,6 +171,7 @@ bool Runtime::IsNonReturning(FunctionId id) {
     case Runtime::kThrowSymbolAsyncIteratorInvalid:
     case Runtime::kThrowTypeError:
     case Runtime::kThrowConstAssignError:
+    case Runtime::kTerminateExecution:
 #if V8_ENABLE_WEBASSEMBLY
     case Runtime::kThrowWasmError:
     case Runtime::kThrowWasmStackOverflow:
@@ -196,7 +193,7 @@ bool Runtime::MayAllocate(FunctionId id) {
 }
 
 bool Runtime::IsAllowListedForFuzzing(FunctionId id) {
-  CHECK(FLAG_fuzzing);
+  CHECK(v8_flags.fuzzing);
   switch (id) {
     // Runtime functions allowlisted for all fuzzers. Only add functions that
     // help increase coverage.
@@ -209,10 +206,12 @@ bool Runtime::IsAllowListedForFuzzing(FunctionId id) {
     case Runtime::kGetUndetectable:
     case Runtime::kNeverOptimizeFunction:
     case Runtime::kOptimizeFunctionOnNextCall:
+    case Runtime::kOptimizeMaglevOnNextCall:
     case Runtime::kOptimizeOsr:
     case Runtime::kPrepareFunctionForOptimization:
     case Runtime::kPretenureAllocationSite:
     case Runtime::kSetAllocationTimeout:
+    case Runtime::kSetForceSlowPath:
     case Runtime::kSimulateNewspaceFull:
     case Runtime::kWaitForBackgroundOptimization:
       return true;
@@ -222,11 +221,18 @@ bool Runtime::IsAllowListedForFuzzing(FunctionId id) {
     case Runtime::kGetOptimizationStatus:
     case Runtime::kHeapObjectVerify:
     case Runtime::kIsBeingInterpreted:
+      return !v8_flags.allow_natives_for_differential_fuzzing;
     case Runtime::kVerifyType:
-      return !FLAG_allow_natives_for_differential_fuzzing;
+      return !v8_flags.allow_natives_for_differential_fuzzing &&
+             !v8_flags.concurrent_recompilation;
+    case Runtime::kLeakHole:
+      return v8_flags.hole_fuzzing;
     case Runtime::kBaselineOsr:
     case Runtime::kCompileBaseline:
-      return ENABLE_SPARKPLUG;
+#ifdef V8_ENABLE_SPARKPLUG
+      return true;
+#endif
+      // Fallthrough.
     default:
       return false;
   }

@@ -36,10 +36,6 @@ class PredictablePlatform final : public Platform {
     platform_->OnCriticalMemoryPressure();
   }
 
-  bool OnCriticalMemoryPressure(size_t length) override {
-    return platform_->OnCriticalMemoryPressure(length);
-  }
-
   std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
       v8::Isolate* isolate) override {
     return platform_->GetForegroundTaskRunner(isolate);
@@ -52,7 +48,9 @@ class PredictablePlatform final : public Platform {
     return platform_->NumberOfWorkerThreads();
   }
 
-  void CallOnWorkerThread(std::unique_ptr<Task> task) override {
+  void PostTaskOnWorkerThreadImpl(TaskPriority priority,
+                                  std::unique_ptr<Task> task,
+                                  const SourceLocation& location) override {
     // We post worker tasks on the foreground task runner of the
     // {kProcessGlobalPredictablePlatformWorkerTaskQueue} isolate. The task
     // queue of the {kProcessGlobalPredictablePlatformWorkerTaskQueue} isolate
@@ -62,18 +60,31 @@ class PredictablePlatform final : public Platform {
     // background thread. The reason is that code is executed sequentially with
     // the PredictablePlatform, and that the {DefaultPlatform} does not access
     // the isolate but only uses it as the key in a HashMap.
-    GetForegroundTaskRunner(kProcessGlobalPredictablePlatformWorkerTaskQueue)
+    platform_
+        ->GetForegroundTaskRunner(
+            kProcessGlobalPredictablePlatformWorkerTaskQueue)
         ->PostTask(std::move(task));
   }
 
-  void CallDelayedOnWorkerThread(std::unique_ptr<Task> task,
-                                 double delay_in_seconds) override {
+  void PostDelayedTaskOnWorkerThreadImpl(
+      TaskPriority priority, std::unique_ptr<Task> task,
+      double delay_in_seconds, const SourceLocation& location) override {
     // Never run delayed tasks.
   }
 
   bool IdleTasksEnabled(Isolate* isolate) override { return false; }
 
   std::unique_ptr<JobHandle> PostJob(
+      TaskPriority priority, std::unique_ptr<JobTask> job_task) override {
+    // Do not call {platform_->PostJob} here, as this would create a job that
+    // posts tasks directly to the underlying default platform.
+    std::unique_ptr<JobHandle> handle =
+        CreateJob(priority, std::move(job_task));
+    handle->NotifyConcurrencyIncrease();
+    return handle;
+  }
+
+  std::unique_ptr<JobHandle> CreateJob(
       TaskPriority priority, std::unique_ptr<JobTask> job_task) override {
     // Do not call {platform_->PostJob} here, as this would create a job that
     // posts tasks directly to the underlying default platform.
@@ -141,10 +152,6 @@ class DelayedTasksPlatform final : public Platform {
     platform_->OnCriticalMemoryPressure();
   }
 
-  bool OnCriticalMemoryPressure(size_t length) override {
-    return platform_->OnCriticalMemoryPressure(length);
-  }
-
   std::shared_ptr<TaskRunner> GetForegroundTaskRunner(
       v8::Isolate* isolate) override {
     std::shared_ptr<TaskRunner> runner =
@@ -188,6 +195,11 @@ class DelayedTasksPlatform final : public Platform {
   std::unique_ptr<JobHandle> PostJob(
       TaskPriority priority, std::unique_ptr<JobTask> job_task) override {
     return platform_->PostJob(priority, MakeDelayedJob(std::move(job_task)));
+  }
+
+  std::unique_ptr<JobHandle> CreateJob(
+      TaskPriority priority, std::unique_ptr<JobTask> job_task) override {
+    return platform_->CreateJob(priority, MakeDelayedJob(std::move(job_task)));
   }
 
   double MonotonicallyIncreasingTime() override {

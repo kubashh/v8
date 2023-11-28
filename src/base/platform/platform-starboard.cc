@@ -71,14 +71,13 @@ static LazyInstance<RandomNumberGenerator>::type
     platform_random_number_generator = LAZY_INSTANCE_INITIALIZER;
 static LazyMutex rng_mutex = LAZY_MUTEX_INITIALIZER;
 
-bool g_hard_abort = false;
 // We only use this stack size to get the topmost stack frame.
 const int kStackSize = 1;
 
 }  // namespace
 
-void OS::Initialize(bool hard_abort, const char* const gc_fake_mmap) {
-  g_hard_abort = hard_abort;
+void OS::Initialize(AbortMode abort_mode, const char* const gc_fake_mmap) {
+  g_abort_mode = abort_mode;
   // This is only used on Posix, we don't need to use it for anything.
 }
 
@@ -172,14 +171,14 @@ void* OS::Allocate(void* address, size_t size, size_t alignment,
   if (aligned_base != base) {
     DCHECK_LT(base, aligned_base);
     size_t prefix_size = static_cast<size_t>(aligned_base - base);
-    CHECK(Free(base, prefix_size));
+    Free(base, prefix_size);
     request_size -= prefix_size;
   }
   // Unmap memory allocated after the potentially unaligned end.
   if (size != request_size) {
     DCHECK_LT(size, request_size);
     size_t suffix_size = request_size - size;
-    CHECK(Free(aligned_base + size, suffix_size));
+    Free(aligned_base + size, suffix_size);
     request_size -= suffix_size;
   }
 
@@ -188,13 +187,13 @@ void* OS::Allocate(void* address, size_t size, size_t alignment,
 }
 
 // static
-bool OS::Free(void* address, const size_t size) {
-  return SbMemoryUnmap(address, size);
+void OS::Free(void* address, const size_t size) {
+  CHECK(SbMemoryUnmap(address, size));
 }
 
 // static
-bool OS::Release(void* address, size_t size) {
-  return SbMemoryUnmap(address, size);
+void OS::Release(void* address, size_t size) {
+  CHECK(SbMemoryUnmap(address, size));
 }
 
 // static
@@ -222,6 +221,11 @@ bool OS::SetPermissions(void* address, size_t size, MemoryPermission access) {
       return false;
   }
   return SbMemoryProtect(address, size, new_protection);
+}
+
+// static
+bool OS::RecommitPages(void* address, size_t size, MemoryPermission access) {
+  return SetPermissions(address, size, access);
 }
 
 // static
