@@ -87,6 +87,30 @@
       },
       "revId": "975568bf768d5bb5c00c361b8d121dace2b96192",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a01f6832_681cb26d",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1255853
+      },
+      "writtenOn": "2023-11-28T09:10:56Z",
+      "side": 1,
+      "message": "The additional ones are the ones currently outputted by Node\u0027s `configure.py` script:\nhttps://github.com/nodejs/node/blob/main/configure.py\n\nThere is no rule on which variables are outputted, people just add things when there are needs.",
+      "parentUuid": "612d7f87_37bb896b",
+      "range": {
+        "startLine": 850,
+        "startChar": 2,
+        "endLine": 850,
+        "endChar": 6
+      },
+      "revId": "975568bf768d5bb5c00c361b8d121dace2b96192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
