@@ -93,6 +93,11 @@ class TestCase(testcase.TestCase):
         ["--gtest_print_time=0"]
     )
 
+  def get_flags(self):
+    flags = super().get_flags()
+    print(f"*** Flags: {flags}")
+    return flags
+
   def get_shell(self):
     return SHELL
 
