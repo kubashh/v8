@@ -5618,18 +5618,44 @@ void NumberDictionary::CopyValuesTo(Tagged<FixedArray> elements) {
 }
 
 template <typename Derived, typename Shape>
-int Dictionary<Derived, Shape>::NumberOfEnumerableProperties() {
+template <typename Visitor>
+void Dictionary<Derived, Shape>::VisitEnumerableStringsProperties(
+    Visitor visit) {
   ReadOnlyRoots roots = this->GetReadOnlyRoots();
-  int result = 0;
   for (InternalIndex i : this->IterateEntries()) {
     Tagged<Object> k;
     if (!this->ToKey(roots, i, &k)) continue;
     if (Object::FilterKey(k, ENUMERABLE_STRINGS)) continue;
     PropertyDetails details = this->DetailsAt(i);
     PropertyAttributes attr = details.attributes();
-    if ((int{attr} & ONLY_ENUMERABLE) == 0) result++;
+    if ((int{attr} & ONLY_ENUMERABLE) == 0) {
+      visit(details);
+    }
   }
+}
+
+template <typename Derived, typename Shape>
+int Dictionary<Derived, Shape>::NumberOfEnumerableProperties() {
+  int result = 0;
+  this->VisitEnumerableStringsProperties([&](PropertyDetails) { result++; });
   return result;
+}
+
+template <typename Derived, typename Shape>
+DictionaryIndexStatistics
+Dictionary<Derived, Shape>::GetEnumerablePropertiesDictionaryIndexStatistics() {
+  int count = 0, max_dictionary_index = 0,
+      min_dictionary_index =
+          static_cast<int>(PropertyDetails::DictionaryStorageField::kMax) + 1;
+  this->VisitEnumerableStringsProperties([&](PropertyDetails details) {
+    count++;
+    int dictionary_index = details.dictionary_index();
+    max_dictionary_index = std::max(max_dictionary_index, dictionary_index);
+    min_dictionary_index = std::min(min_dictionary_index, dictionary_index);
+  });
+
+  return DictionaryIndexStatistics(count, max_dictionary_index,
+                                   min_dictionary_index);
 }
 
 template <typename Derived, typename Shape>

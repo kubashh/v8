@@ -26,6 +26,8 @@ using PropertyDictionary = SwissNameDictionary;
 using PropertyDictionary = NameDictionary;
 #endif
 
+class DictionaryIndexStatistics;
+
 template <typename Derived, typename Shape>
 class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Dictionary
     : public HashTable<Derived, Shape> {
@@ -78,6 +80,8 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Dictionary
 
   int NumberOfEnumerableProperties();
 
+  DictionaryIndexStatistics GetEnumerablePropertiesDictionaryIndexStatistics();
+
   // Returns the key (slow).
   Tagged<Object> SlowReverseLookup(Tagged<Object> value);
 
@@ -125,6 +129,10 @@ class EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE) Dictionary
   static void UncheckedAtPut(Isolate* isolate, Handle<Derived> dictionary,
                              Key key, Handle<Object> value,
                              PropertyDetails details);
+
+ private:
+  template <typename Visitor>
+  void VisitEnumerableStringsProperties(Visitor visit);
 
   OBJECT_CONSTRUCTORS(Dictionary, HashTable<Derived, TodoShape>);
 };
@@ -455,6 +463,37 @@ struct EnumIndexComparator {
     return da.dictionary_index() < db.dictionary_index();
   }
   Tagged<Dictionary> dict;
+};
+
+class DictionaryIndexStatistics {
+ public:
+  DictionaryIndexStatistics(int count, int max_dictionary_index,
+                            int min_dictionary_index)
+      : count_(count),
+        max_dictionary_index_(max_dictionary_index),
+        min_dictionary_index_(min_dictionary_index) {
+    if (count_ != 0) {
+      DCHECK_LE(min_dictionary_index_, max_dictionary_index_);
+      DCHECK_LE(count_, max_dictionary_index_ - min_dictionary_index_ + 1);
+    }
+  }
+
+  int count() { return count_; }
+
+  int max_dictionary_index() {
+    DCHECK_NE(count_, 0);
+    return max_dictionary_index_;
+  }
+
+  int min_dictionary_index() {
+    DCHECK_NE(count_, 0);
+    return min_dictionary_index_;
+  }
+
+ private:
+  int count_;
+  int max_dictionary_index_;
+  int min_dictionary_index_;
 };
 
 }  // namespace internal
