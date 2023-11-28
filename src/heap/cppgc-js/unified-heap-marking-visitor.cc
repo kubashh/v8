@@ -116,18 +116,22 @@ MutatorUnifiedHeapMarkingVisitor::MutatorUnifiedHeapMarkingVisitor(
 
 ConcurrentUnifiedHeapMarkingVisitor::ConcurrentUnifiedHeapMarkingVisitor(
     HeapBase& heap, Heap* v8_heap,
+    WeakTracedReferenceWorklist& weak_traced_reference_worklist,
     cppgc::internal::ConcurrentMarkingState& marking_state,
     CppHeap::CollectionType collection_type)
     : UnifiedHeapMarkingVisitorBase(heap, marking_state,
                                     concurrent_unified_heap_marking_state_),
       local_marking_worklist_(GetV8MarkingWorklists(v8_heap, collection_type)),
+      local_weak_traced_reference_worklist_(weak_traced_reference_worklist),
       concurrent_unified_heap_marking_state_(
-          v8_heap, local_marking_worklist_.get(), collection_type) {}
+          v8_heap, local_marking_worklist_.get(),
+          local_weak_traced_reference_worklist_, collection_type) {}
 
 ConcurrentUnifiedHeapMarkingVisitor::~ConcurrentUnifiedHeapMarkingVisitor() {
   if (local_marking_worklist_) {
     local_marking_worklist_->Publish();
   }
+  local_weak_traced_reference_worklist_.Publish();
 }
 
 bool ConcurrentUnifiedHeapMarkingVisitor::DeferTraceToMutatorThreadIfConcurrent(

@@ -181,6 +181,7 @@ class V8_EXPORT_PRIVATE HeapBase : public cppgc::HeapHandle {
   void Terminate();
 
   bool in_disallow_gc_scope() const { return disallow_gc_scope_ > 0; }
+  bool in_no_gc_scope() const { return no_gc_scope_ > 0; }
   bool in_atomic_pause() const { return in_atomic_pause_; }
 
   HeapStatistics CollectStatistics(HeapStatistics::DetailLevel);
@@ -263,8 +264,6 @@ class V8_EXPORT_PRIVATE HeapBase : public cppgc::HeapHandle {
       cppgc::Heap::StackState) = 0;
 
   virtual bool IsGCAllowed() const;
-
-  bool in_no_gc_scope() const { return no_gc_scope_ > 0; }
 
   bool IsMarking() const { return marker_.get(); }
 

@@ -23,6 +23,7 @@ include_rules = [
   "+src/heap/factory-inl.h",
   # TODO(v8:10496): Don't expose so much (through transitive includes) outside
   # of heap/.
+  "+src/heap/cppgc-js/cpp-heap.h",
   "+src/heap/gc-tracer.h",
   "+src/heap/gc-tracer-inl.h",
   "+src/heap/heap.h",

@@ -407,6 +407,8 @@ void MarkCompactCollector::CollectGarbage() {
   // update the state as they proceed.
   DCHECK(state_ == PREPARE_GC);
 
+  is_in_atomic_pause_.store(true, std::memory_order_relaxed);
+
   MarkLiveObjects();
   // This will walk dead object graphs and so requires that all references are
   // still intact.
@@ -418,6 +420,8 @@ void MarkCompactCollector::CollectGarbage() {
   Sweep();
   Evacuate();
   Finish();
+
+  is_in_atomic_pause_.store(false, std::memory_order_relaxed);
 }
 
 #ifdef VERIFY_HEAP
