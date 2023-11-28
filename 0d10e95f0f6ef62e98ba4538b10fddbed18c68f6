@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3128831_e9a5b7d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-28T15:54:36Z",
+      "side": 1,
+      "message": "LGTM % comment, thanks again :)",
+      "revId": "0d10e95f0f6ef62e98ba4538b10fddbed18c68f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b75d8720_2e74fa86",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-11-28T15:54:36Z",
+      "side": 1,
+      "message": "Add braces please (our linter is a bit weak, but our coding style says that the only case where we can emit braces after a `if` is when the body of the `if` is on the same line as the condition).",
+      "range": {
+        "startLine": 75,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 6
+      },
+      "revId": "0d10e95f0f6ef62e98ba4538b10fddbed18c68f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
