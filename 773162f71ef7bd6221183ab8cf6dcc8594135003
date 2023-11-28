@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51ded403_1bf6212b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-28T12:23:35Z",
+      "side": 1,
+      "message": "Nice! Just a couple of nits...",
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe86de93_42f08106",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3360,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-28T12:23:35Z",
+      "side": 1,
+      "message": "Nit: Maybe fail instead? Or use a boolean?",
+      "range": {
+        "startLine": 3360,
+        "startChar": 4,
+        "endLine": 3360,
+        "endChar": 41
+      },
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a397edf_7f54ca6d",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4651,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-28T12:23:35Z",
+      "side": 1,
+      "message": "This is a bit confusing. DoneWithAbort usually mean: we reach a point where we don\u0027t have feedback, we should emit an eager deopt and kill the rest of the branch. That\u0027s why it is \"Done\", kind of a success.\n\nI guess BuildTransitionElementsKindOrCheckMap and BuildCompareMaps are abusing the ReduceResult type. Should they actually return a bool (on success)? BuildTransitionElementsKindAndCompareMaps could actually just be a void, since it always succeed.\n\nI guess the BuildCheckMaps is still following the semantics of emitting a soft deopt. That works, because it is called for the last access_info?",
+      "range": {
+        "startLine": 4647,
+        "startChar": 0,
+        "endLine": 4651,
+        "endChar": 15
+      },
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "461192c8_94765527",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4665,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-28T12:23:35Z",
+      "side": 1,
+      "message": "What happen if result returns DoneWithAbort?\nMaybe this cannot happen currently (since map_check_result would also return DoneWithAbort?). How are we sure about this?",
+      "range": {
+        "startLine": 4665,
+        "startChar": 5,
+        "endLine": 4665,
+        "endChar": 50
+      },
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cc3b86a_6e6c8b5e",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4671,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-28T12:23:35Z",
+      "side": 1,
+      "message": "Very opinionated nit (fine if you disagree): I don\u0027t think it is a nice idea to depend on the return of postfix ++, I prefer `if (a \u003d\u003d 0) { ... } a++; ...`",
+      "range": {
+        "startLine": 4671,
+        "startChar": 6,
+        "endLine": 4671,
+        "endChar": 47
+      },
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
