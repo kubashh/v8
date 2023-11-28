@@ -73,6 +73,30 @@
       },
       "revId": "116cf0310ff7999f862a0e4b2515781e9ac0c704",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "017c8b98_2f1f6451",
+        "filename": "src/heap/heap-allocator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-11-28T08:19:15Z",
+      "side": 1,
+      "message": "Good point. That should work. I guess we can then even replace the flag checks with `allocation_timeout_ \u003e 0` and also then there is no need to check for `is_main_thread()` (its allocation_timeout_ will never be \u003e0).",
+      "parentUuid": "3172792d_ad1730d5",
+      "range": {
+        "startLine": 359,
+        "startChar": 4,
+        "endLine": 359,
+        "endChar": 8
+      },
+      "revId": "116cf0310ff7999f862a0e4b2515781e9ac0c704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
