@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59edf017_9cfa1aba",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3360,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-28T13:06:29Z",
+      "side": 1,
+      "message": "I disagree. CheckMaps is emitting a unconditional deopt, while CompareMaps is not. But I understand the desire of having the same returned value for both. Ultimately, either is fine.",
+      "parentUuid": "da0ffaa3_9f24d101",
+      "range": {
+        "startLine": 3360,
+        "startChar": 4,
+        "endLine": 3360,
+        "endChar": 41
+      },
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a397edf_7f54ca6d",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "IMO \"kill the rest of the branch\" perfectly fits the use case here. This branch is dead so we don\u0027t emit any code for it. The only diff to the full use case you describe is that we don\u0027t eagerly deopt, but check the next set of maps.\n\n\u003e BuildTransitionElementsKindAndCompareMaps could actually just be a void, since it always succeed.\n\nTrue right now, But I added a TODO to also calculate the map intersection in this method and then it could also return `DoneWithAbort`.\n\n\u003e That works, because it is called for the last access_info?\n\nCorrect. When we end up executing `CheckMaps` all previous maps of the polymorphic access weren\u0027t matching the current map. So if the last check also fails, we deopt.",
       "parentUuid": "0a397edf_7f54ca6d",
+      "range": {
+        "startLine": 4647,
+        "startChar": 0,
+        "endLine": 4651,
+        "endChar": 15
+      },
+      "revId": "773162f71ef7bd6221183ab8cf6dcc8594135003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73ac9205_0d920c25",
+        "filename": "src/maglev/maglev-graph-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4651,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-28T13:06:29Z",
+      "side": 1,
+      "message": "\u003e IMO \"kill the rest of the branch\" perfectly fits the use case here. This branch is dead so we don\u0027t emit any code for it. The only diff to the full use case you describe is that we don\u0027t eagerly deopt, but check the next set of maps.\n\nI disagree. CheckMaps is emitting the soft deopt, while CompareMaps is not. But up to you... not that important.\n \n\u003e \u003e BuildTransitionElementsKindAndCompareMaps could actually just be a void, since it always succeed.\n\u003e \n\u003e True right now, But I added a TODO to also calculate the map intersection in this method and then it could also return `DoneWithAbort`.\n\nAck.\n\n\u003e \n\u003e \u003e That works, because it is called for the last access_info?\n\u003e \n\u003e Correct. When we end up executing `CheckMaps` all previous maps of the polymorphic access weren\u0027t matching the current map. So if the last check also fails, we deopt.\n\nAck.",
+      "parentUuid": "1d04d52e_10d5f7d2",
       "range": {
         "startLine": 4647,
         "startChar": 0,

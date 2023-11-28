@@ -16,6 +16,23 @@
       "message": "Thanks for the feedback",
       "revId": "c61457a636aa1a4d07e93681db9cfb1ab6b0cd51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "450369ed_841fac59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-11-28T13:06:29Z",
+      "side": 1,
+      "message": "I still disagree with the return type of BuildCompareMaps, but minor nit! LGTM otherwise.",
+      "revId": "c61457a636aa1a4d07e93681db9cfb1ab6b0cd51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
