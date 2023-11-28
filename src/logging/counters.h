@@ -268,6 +268,11 @@ class TimedHistogram : public Histogram {
     Histogram::Initialize(name, min, max, num_buckets, counters);
     resolution_ = resolution;
   }
+
+#ifdef DEBUG
+  // Per-thread state mapping.
+  std::unordered_map<int, bool> active_timer_;
+#endif
 };
 
 class NestedTimedHistogramScope;
