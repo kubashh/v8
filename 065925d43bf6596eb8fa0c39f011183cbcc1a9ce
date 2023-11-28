@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b76df3bd_e6ea504b",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-11-28T15:47:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "657d59e3_2ff3e5d8",
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17f4ab2b_1e819440",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75c5a594_34862fed",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-11-28T15:47:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17f4ab2b_1e819440",
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ea953f1_367c57cc",
@@ -65,6 +101,30 @@
       "writtenOn": "2023-11-28T15:36:40Z",
       "side": 1,
       "message": "You should return the `__ Select` instead of `OpIndex::Invalid()`. For `Branch`, we return `OpIndex::Invalid()` because a Branch cannot be used as an input, and `__ Branch` doesn\u0027t return anything, but `__ Select` should return an OpIndex (`__` refers to the Assembler, and `__ Branch` and `__ Select` are defined here: https://source.chromium.org/chromium/chromium/src/+/main:v8/src/compiler/turboshaft/assembler.h;l\u003d1991-2002;drc\u003dc56336a064ed11369f4c1b48e49c806e8fd46ceb).",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 30
+      },
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c27c93d_c172689d",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-11-28T15:47:16Z",
+      "side": 1,
+      "message": "Ah, makes sense.",
+      "parentUuid": "6ea953f1_367c57cc",
       "range": {
         "startLine": 94,
         "startChar": 4,
@@ -98,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78834d7f_29663abc",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-11-28T15:47:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39c6eadc_1ed3c001",
+      "range": {
+        "startLine": 98,
+        "startChar": 7,
+        "endLine": 98,
+        "endChar": 25
+      },
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be9d16d2_5b0c3c3b",
@@ -111,6 +195,30 @@
       "writtenOn": "2023-11-28T15:36:40Z",
       "side": 1,
       "message": "Could you take a pointer rather than a reference as argument here? It\u0027s just a personal preference, but I like to see clearly from the callsite that something could be modified / is likely an additional output (like `ShouldOptimizeCond(..., \u0026new_cond)` shows).",
+      "range": {
+        "startLine": 99,
+        "startChar": 26,
+        "endLine": 99,
+        "endChar": 43
+      },
+      "revId": "065925d43bf6596eb8fa0c39f011183cbcc1a9ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "010b6d59_913bdadb",
+        "filename": "src/compiler/turboshaft/branch-condition-duplication-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1500921
+      },
+      "writtenOn": "2023-11-28T15:47:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be9d16d2_5b0c3c3b",
       "range": {
         "startLine": 99,
         "startChar": 26,
