@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3fcbdbf_11ed4ded",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-29T17:45:10Z",
+      "side": 1,
+      "message": "I had only updated the sandbox patch, the revert is now in the correct loctaion here.  Sorry about that!",
+      "parentUuid": "21082cff_059e18e7",
+      "revId": "803599734449f4817218546c33ac1e1f1a2b0de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04da43b5_afbb2971",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93a4f13d_2462a36f",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-29T17:45:10Z",
+      "side": 1,
+      "message": "In one of the earlier patchsets using scratch caused an assert.  Something changed where that is no longer happening, so I\u0027ve set it back to scratch.",
+      "parentUuid": "04da43b5_afbb2971",
+      "revId": "803599734449f4817218546c33ac1e1f1a2b0de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3fc7f3e_84d2b920",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-11-28T20:50:25Z",
       "side": 1,
       "message": "mksnapshot is failing, LoadCompressedMap \u003cLoadS32\u003e needs a scratch register. Please remove this default arg so every call has to pass a scratch reg.",
+      "revId": "803599734449f4817218546c33ac1e1f1a2b0de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54456a11_a5b67f95",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-29T17:45:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3fc7f3e_84d2b920",
       "revId": "803599734449f4817218546c33ac1e1f1a2b0de9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
