@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1ce39a7_a9dc0b00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-11-29T20:22:29Z",
+      "side": 1,
+      "message": "Kept the ifdef to allow for other architectures to catch up.",
+      "revId": "80777b5d53846dd79e94558d8e4934a8bd3b2f4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
