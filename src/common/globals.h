@@ -1004,7 +1004,12 @@ class CompressedObjectSlot;
 class CompressedMaybeObjectSlot;
 class CompressedMapWordSlot;
 class CompressedHeapObjectSlot;
-class V8HeapCompressionScheme;
+template <typename Cage>
+class V8HeapCompressionSchemeImpl;
+struct MainCage;
+struct TrustedCage;
+using V8HeapCompressionScheme = V8HeapCompressionSchemeImpl<MainCage>;
+using TrustedSpaceCompressionScheme = V8HeapCompressionSchemeImpl<TrustedCage>;
 class ExternalCodeCompressionScheme;
 template <typename CompressionScheme>
 class OffHeapCompressedObjectSlot;
