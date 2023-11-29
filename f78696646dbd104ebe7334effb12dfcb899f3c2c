@@ -16,6 +16,23 @@
       "message": "https://chromium-review.googlesource.com/c/v8/v8/+/5062777 has been ported here and tests look good.",
       "revId": "f78696646dbd104ebe7334effb12dfcb899f3c2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "687eea4f_9923b307",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-29T18:15:07Z",
+      "side": 1,
+      "message": "Looks like we\u0027re chasing that CL, it keeps going in and out of tree.  Since it\u0027s out of tree at the moment I\u0027ve split the ppc version off into https://chromium-review.googlesource.com/c/v8/v8/+/5072692 for now",
+      "revId": "f78696646dbd104ebe7334effb12dfcb899f3c2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
