@@ -34,6 +34,41 @@
       "parentUuid": "c1ce39a7_a9dc0b00",
       "revId": "80777b5d53846dd79e94558d8e4934a8bd3b2f4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df7dffb7_c1b11921",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-11-29T20:48:42Z",
+      "side": 1,
+      "message": "Currently JSPI is behind a flag. That is not likely to change in the near future.\nJSPI is an API, so is not affected by the main wasm compiler.",
+      "parentUuid": "c6a8821a_09cb8543",
+      "revId": "80777b5d53846dd79e94558d8e4934a8bd3b2f4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6235fea7_818350d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-11-29T20:48:42Z",
+      "side": 1,
+      "message": "Response in comment",
+      "revId": "80777b5d53846dd79e94558d8e4934a8bd3b2f4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
