@@ -41,11 +41,11 @@ class UnifiedHeapMarkingState final {
   const bool has_shared_space_;
   const bool is_shared_space_isolate_;
   const bool reclaim_unmodified_wrappers_;
+  const bool track_retaining_path_;
+  const TracedHandles::MarkMode mark_mode_;
   MarkingState* const marking_state_;
   MarkingWorklists::Local* local_marking_worklist_;
   WeakTracedReferenceWorklist::Local& local_weak_traced_reference_worklist_;
-  const bool track_retaining_path_;
-  const TracedHandles::MarkMode mark_mode_;
   EmbedderRootsHandler* const embedder_root_handler_;
 };
 

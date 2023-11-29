@@ -357,13 +357,6 @@ void ScavengerCollector::CollectGarbage() {
     RootScavengeVisitor root_scavenge_visitor(scavengers[kMainThreadId].get());
 
     {
-      // Identify weak unmodified handles. Requires an unmodified graph.
-      TRACE_GC(
-          heap_->tracer(),
-          GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_IDENTIFY);
-      isolate_->traced_handles()->ComputeWeaknessForYoungObjects();
-    }
-    {
       // Copy roots.
       TRACE_GC(heap_->tracer(), GCTracer::Scope::SCAVENGER_SCAVENGE_ROOTS);
       // Scavenger treats all weak roots except for global handles as strong.
@@ -412,8 +405,6 @@ void ScavengerCollector::CollectGarbage() {
                GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_PROCESS);
       GlobalHandlesWeakRootsUpdatingVisitor visitor;
       isolate_->global_handles()->ProcessWeakYoungObjects(
-          &visitor, &IsUnscavengedHeapObjectSlot);
-      isolate_->traced_handles()->ProcessYoungObjects(
           &visitor, &IsUnscavengedHeapObjectSlot);
     }
 

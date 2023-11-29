@@ -81,35 +81,6 @@ void SetupOptimizedAndNonOptimizedHandle(v8::Isolate* isolate,
 
 }  // namespace
 
-TEST_F(EmbedderRootsHandlerTest,
-       TracedReferenceNoDestructorReclaimedOnScavenge) {
-  if (v8_flags.single_generation) return;
-
-  ManualGCScope manual_gc(i_isolate());
-  v8::HandleScope scope(v8_isolate());
-
-  DisableConservativeStackScanningScopeForTesting no_stack_scanning(heap());
-
-  ClearingEmbedderRootsHandler handler(kClassIdToOptimize);
-  TemporaryEmbedderRootsHandleScope roots_handler_scope(v8_isolate(), &handler);
-
-  auto* traced_handles = i_isolate()->traced_handles();
-  const size_t initial_count = traced_handles->used_node_count();
-  auto* optimized_handle = new v8::TracedReference<v8::Value>();
-  auto* non_optimized_handle = new v8::TracedReference<v8::Value>();
-  SetupOptimizedAndNonOptimizedHandle(v8_isolate(), kClassIdToOptimize,
-                                      optimized_handle, non_optimized_handle);
-  EXPECT_EQ(initial_count + 2, traced_handles->used_node_count());
-  InvokeMinorGC();
-  EXPECT_EQ(initial_count + 1, traced_handles->used_node_count());
-  EXPECT_TRUE(optimized_handle->IsEmpty());
-  delete optimized_handle;
-  EXPECT_FALSE(non_optimized_handle->IsEmpty());
-  non_optimized_handle->Reset();
-  delete non_optimized_handle;
-  EXPECT_EQ(initial_count, traced_handles->used_node_count());
-}
-
 namespace {
 
 void ConstructJSObject(v8::Isolate* isolate, v8::Local<v8::Context> context,
@@ -259,29 +230,6 @@ TEST_F(EmbedderRootsHandlerTest,
       v8_isolate(), ConstructJSApiObject<TracedReference<v8::Object>>,
       [](const TracedReference<v8::Object>&) {}, [this]() { InvokeMinorGC(); },
       SurvivalMode::kSurvives);
-}
-
-// EmbedderRootsHandler resets API objects for handles that have their class ids
-// set to being optimized.
-TEST_F(
-    EmbedderRootsHandlerTest,
-    TracedReferenceToUnmodifiedJSApiObjectDiesOnScavengeWhenExcludedFromRoots) {
-  if (v8_flags.single_generation) return;
-
-  ManualGCScope manual_gc(i_isolate());
-  ClearingEmbedderRootsHandler handler(kClassIdToOptimize);
-  TemporaryEmbedderRootsHandleScope roots_handler_scope(v8_isolate(), &handler);
-  TracedReferenceTest(
-      v8_isolate(), ConstructJSApiObject<TracedReference<v8::Object>>,
-      [this](TracedReference<v8::Object>& handle) {
-        handle.SetWrapperClassId(kClassIdToOptimize);
-        {
-          HandleScope handles(i_isolate());
-          auto local = handle.Get(v8_isolate());
-          local->SetAlignedPointerInInternalField(0, &handle);
-        }
-      },
-      [this]() { InvokeMinorGC(); }, SurvivalMode::kDies);
 }
 
 }  // namespace v8::internal
