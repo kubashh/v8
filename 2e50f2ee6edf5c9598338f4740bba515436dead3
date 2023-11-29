@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42123de0_45558448",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1378037
+      },
+      "writtenOn": "2023-11-29T09:37:50Z",
+      "side": 1,
+      "message": "Thanks for your review, I fixed the typos.",
+      "revId": "2e50f2ee6edf5c9598338f4740bba515436dead3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
