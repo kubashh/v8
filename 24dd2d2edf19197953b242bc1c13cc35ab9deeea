@@ -111,6 +111,30 @@
       },
       "revId": "24dd2d2edf19197953b242bc1c13cc35ab9deeea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5913119f_f01b64f0",
+        "filename": "src/handles/traced-handles.cc",
+        "patchSetId": 46
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1356087
+      },
+      "writtenOn": "2023-11-29T09:27:52Z",
+      "side": 1,
+      "message": "I moved the setting of `is_marking_` back to where it was. Now that this CL handles both young and old objects, I\u0027m no longer reusing the young object methods and the flag can remain true for the duration of the full GC.",
+      "parentUuid": "9c49f453_d5af3b57",
+      "range": {
+        "startLine": 959,
+        "startChar": 9,
+        "endLine": 959,
+        "endChar": 20
+      },
+      "revId": "24dd2d2edf19197953b242bc1c13cc35ab9deeea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
