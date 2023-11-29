@@ -69,6 +69,24 @@
       "message": "Response in comment",
       "revId": "80777b5d53846dd79e94558d8e4934a8bd3b2f4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14d5394b_7b74dd33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-29T21:27:09Z",
+      "side": 1,
+      "message": "So to confirm, central stack switching is a feature used by jspi (which relies on WasmSuspend, WasmResume, WasmReject) and their usage is currently behind a flag and not having them enabled won\u0027t interfere with wasm execution?",
+      "parentUuid": "df7dffb7_c1b11921",
+      "revId": "80777b5d53846dd79e94558d8e4934a8bd3b2f4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
