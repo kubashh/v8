@@ -351,6 +351,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   // The return address on the stack is used by frame iteration.
   void StoreReturnAddressAndCall(Register target);
 
+  // Enforce appropriate stack alignment.
+  void EnforceStackAlignment();
+
   void BailoutIfDeoptimized();
   void CallForDeoptimization(Builtin target, int deopt_id, Label* exit,
                              DeoptimizeKind kind, Label* ret,
@@ -618,6 +621,8 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
     SmiTst(src);
     return eq;
   }
+
+  void Zero(const MemOperand& tgt);
 
   void DecompressTagged(const Register& destination,
                         const MemOperand& field_operand) {
