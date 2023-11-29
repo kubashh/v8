@@ -398,6 +398,13 @@ void MacroAssembler::Drop(Register count, Condition cond) {
   add(sp, sp, Operand(count, LSL, kPointerSizeLog2), LeaveCC, cond);
 }
 
+// Enforce alignment of sp.
+void MacroAssembler::EnforceStackAlignment() {
+  int frame_alignment = MacroAssembler::ActivationFrameAlignment();
+  uint32_t frame_alignment_mask = ~((uint32_t)frame_alignment - 1);
+  MacroAssembler::And(sp, sp, Operand(frame_alignment_mask));
+}
+
 void MacroAssembler::TestCodeIsMarkedForDeoptimization(Register code,
                                                        Register scratch) {
   ldr(scratch, FieldMemOperand(code, Code::kFlagsOffset));
@@ -681,6 +688,15 @@ void MacroAssembler::RecordWriteField(Register object, int offset,
               save_fp, SmiCheck::kOmit);
 
   bind(&done);
+}
+
+void MacroAssembler::Zero(const MemOperand& tgt) {
+  ASM_CODE_COMMENT(this);
+  UseScratchRegisterScope temps(this);
+  Register scratch = temps.Acquire();
+
+  mov(scratch, Operand::Zero());
+  str(scratch, tgt);
 }
 
 void MacroAssembler::MaybeSaveRegisters(RegList registers) {

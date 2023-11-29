@@ -2097,5 +2097,13 @@ RUNTIME_FUNCTION(Runtime_GetWeakCollectionSize) {
       EphemeronHashTable::cast(collection->table())->NumberOfElements());
 }
 
+RUNTIME_FUNCTION(Runtime_IsOnCentralStack) {
+  HandleScope scope(isolate);
+  if (args.length() != 0) {
+    return CrashUnlessFuzzing(isolate);
+  }
+  return ReadOnlyRoots(isolate).boolean_value(isolate->IsOnCentralStack());
+}
+
 }  // namespace internal
 }  // namespace v8

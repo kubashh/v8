@@ -611,7 +611,8 @@ namespace internal {
   F(TypedArraySpeciesProtector, 0, 1)         \
   F(WaitForBackgroundOptimization, 0, 1)      \
   I(DeoptimizeNow, 0, 1)                      \
-  F(LeakHole, 0, 1)
+  F(LeakHole, 0, 1)                           \
+  F(IsOnCentralStack, 0, 1)
 
 #define FOR_EACH_INTRINSIC_TYPEDARRAY(F, I)    \
   F(ArrayBufferDetach, -1, 1)                  \

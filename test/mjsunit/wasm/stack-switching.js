@@ -117,6 +117,8 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
 
 (function TestStackSwitchSuspend() {
   print(arguments.callee.name);
+  assertTrue(%IsOnCentralStack());
+
   let builder = new WasmModuleBuilder();
   import_index = builder.addImport('m', 'import', kSig_i_r);
   builder.addFunction("test", kSig_i_r)
@@ -152,6 +154,7 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
   wrapped_export = ToPromising(instance.exports.test);
   combined_promise = wrapped_export();
   assertPromiseResult(combined_promise, v => assertEquals(42, v));
+  assertTrue(%IsOnCentralStack());
 })();
 
 // Check that we can suspend back out of a resumed computation.
@@ -627,6 +630,8 @@ function TestNestedSuspenders(suspend) {
 
 (function TestSwitchingToTheCentralStackForRuntime() {
   print(arguments.callee.name);
+  assertTrue(%IsOnCentralStack());
+
   let builder = new WasmModuleBuilder();
   let table = builder.addTable(kWasmExternRef, 1);
   let array_index = builder.addArray(kWasmI32, true);
@@ -664,6 +669,7 @@ function TestNestedSuspenders(suspend) {
     fn();
     return %WasmSwitchToTheCentralStackCount() - beforeCall;
   }
+
   // Calling exported functions from the central stack.
   assertEquals(0, switchesToCS(() => instance.exports.test({})));
   assertEquals(0, switchesToCS(() => instance.exports.test2({})));
@@ -678,6 +684,7 @@ function TestNestedSuspenders(suspend) {
   switchesToCS(wrapper3);
   // Runtime call for array.new.
   switchesToCS(wrapper4);
+  assertTrue(%IsOnCentralStack());
 })();
 
 (function TestSwitchingToTheCentralStackForJS() {
@@ -692,7 +699,7 @@ function TestNestedSuspenders(suspend) {
   let js_import = new WebAssembly.Function(
       {parameters: ['externref'], results: ['i32']},
       () => {
-        %CheckIsOnCentralStack();
+       assertTrue(%IsOnCentralStack());
         return 123;
       },
       {suspending: 'first'});
