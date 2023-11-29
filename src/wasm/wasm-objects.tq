@@ -89,6 +89,12 @@ extern class WasmResumeData extends HeapObject {
   on_resume: Smi;  // See wasm::OnResume enum.
 }
 
+extern class WasmFastApiCallData extends HeapObject {
+  receiver: JSObject;
+  // Tagged with kWasmFastApiCallTargetTag.
+  c_call_target: ExternalPointer;
+}
+
 extern class WasmIndirectFunctionTable extends Struct {
   sig_ids: ByteArray;
   targets: ByteArray;

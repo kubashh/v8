@@ -49,6 +49,7 @@ TQ_OBJECT_CONSTRUCTORS_IMPL(WasmTableObject)
 TQ_OBJECT_CONSTRUCTORS_IMPL(AsmWasmData)
 TQ_OBJECT_CONSTRUCTORS_IMPL(WasmFunctionData)
 TQ_OBJECT_CONSTRUCTORS_IMPL(WasmApiFunctionRef)
+TQ_OBJECT_CONSTRUCTORS_IMPL(WasmFastApiCallData)
 TQ_OBJECT_CONSTRUCTORS_IMPL(WasmInternalFunction)
 TQ_OBJECT_CONSTRUCTORS_IMPL(WasmTypeInfo)
 TQ_OBJECT_CONSTRUCTORS_IMPL(WasmStruct)
@@ -276,6 +277,10 @@ WasmExportedFunction::WasmExportedFunction(Address ptr) : JSFunction(ptr) {
   SLOW_DCHECK(IsWasmExportedFunction(*this));
 }
 CAST_ACCESSOR(WasmExportedFunction)
+
+// WasmFastApiCallData
+EXTERNAL_POINTER_ACCESSORS(WasmFastApiCallData, c_call_target, Address,
+                           kCCallTargetOffset, kWasmFastApiCallTargetTag)
 
 // WasmInternalFunction
 EXTERNAL_POINTER_ACCESSORS(WasmInternalFunction, call_target, Address,

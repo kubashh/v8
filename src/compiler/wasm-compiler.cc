@@ -6636,6 +6636,224 @@ Node* WasmGraphBuilder::WellKnown_IntToString(Node* n, Node* radix) {
   return result;
 }
 
+Node* WasmGraphBuilder::WellKnown_BoundFastApiCall(
+    int func_index, const wasm::FunctionSig* sig, Node** args,
+    int options_count, bool module_has_memory, Node** out_slow_call,
+    wasm::WasmCodePosition position) {
+  DCHECK(options_count == 0 || options_count == 1);
+  Node* imports_array =
+      LOAD_INSTANCE_FIELD(WellKnownImports, MachineType::TaggedPointer());
+  Node* data =
+      gasm_->LoadFixedArrayElementPtr(imports_array, func_index);
+  Node* receiver_node = gasm_->Load(
+      MachineType::TaggedPointer(), data,
+      wasm::ObjectAccess::ToTagged(WasmFastApiCallData::kReceiverOffset));
+  Node* c_call_target = gasm_->BuildLoadExternalPointerFromObject(
+      data, WasmFastApiCallData::kCCallTargetOffset, kWasmFastApiCallTargetTag,
+      BuildLoadIsolateRoot());
+
+  constexpr size_t kTargetCount = 1;
+  constexpr size_t kReceiverCount = 1;
+  constexpr size_t kEffectControlCount = 2;
+
+  const size_t param_count = sig->parameter_count();
+  const size_t return_count = sig->return_count();
+  DCHECK_LE(return_count, 1);
+
+  auto store_stack = [this](Node* node) -> Node* {
+    constexpr int kAlign = alignof(uintptr_t);
+    constexpr int kSize = sizeof(uintptr_t);
+    Node* stack_slot = gasm_->StackSlot(kSize, kAlign);
+    gasm_->Store(StoreRepresentation(MachineType::PointerRepresentation(),
+                                     kNoWriteBarrier),
+                 stack_slot, 0, node);
+    return stack_slot;
+  };
+
+  size_t inputs_size = kTargetCount + kReceiverCount + param_count +
+                       options_count + kEffectControlCount;
+  Node** const inputs = graph()->zone()->NewArray<Node*>(inputs_size);
+  MachineSignature::Builder builder(
+      graph()->zone(), return_count,
+      kReceiverCount + param_count + options_count);
+  size_t pos = 0;
+  // Target.
+  inputs[pos++] = c_call_target;
+  // Receiver.
+  builder.AddParam(MachineType::AnyTagged());
+  inputs[pos++] = store_stack(receiver_node);
+  // Parameters.
+  for (size_t i = 0; i < param_count; ++i) {
+    MachineType type = sig->GetParam(i).machine_type();
+    builder.AddParam(type);
+    Node* arg = args[i];
+    // This bakes in the assumption that all "tagged" parameters of Fast API
+    // calls are in fact handlified.
+    if (type == MachineType::AnyTagged()) {
+      arg = store_stack(arg);
+    }
+    inputs[pos++] = arg;
+  }
+  // Options, if present.
+  Node* options_stack_slot = nullptr;
+  if (options_count) {
+    builder.AddParam(MachineType::Pointer());  // stack_slot
+    const int kOptionsAlign = alignof(v8::FastApiCallbackOptions);
+    const int kOptionsSize = sizeof(v8::FastApiCallbackOptions);
+    // If this check fails, you've probably added new fields to
+    // v8::FastApiCallbackOptions, which means you'll need to write code
+    // that initializes and reads from them too.
+    static_assert(kOptionsSize == sizeof(uintptr_t) * 3);
+    // TODO(jkummerow): See if it would be more efficient to allocate a single
+    // stack block to hold options, data, and wasm_memory.
+    // More radical idea: factor out the creation of the options object into
+    // a separate Node which can be hoisted out of loops.
+    options_stack_slot = gasm_->StackSlot(kOptionsSize, kOptionsAlign);
+    // v8::FastApiCallbackOptions::fallback.
+    gasm_->Store(
+        StoreRepresentation(MachineRepresentation::kWord32, kNoWriteBarrier),
+        options_stack_slot,
+        static_cast<int>(offsetof(v8::FastApiCallbackOptions, fallback)),
+        gasm_->Int32Constant(0));
+    // v8::FastApiCallbackOptions::data.
+    Node* data_stack_slot =
+        gasm_->StackSlot(sizeof(uintptr_t), alignof(uintptr_t));
+    Node* data_argument = UndefinedValue();
+    gasm_->Store(StoreRepresentation(MachineType::PointerRepresentation(),
+                                     kNoWriteBarrier),
+                 data_stack_slot, 0, gasm_->BitcastTaggedToWord(data_argument));
+    gasm_->Store(StoreRepresentation(MachineType::PointerRepresentation(),
+                                     kNoWriteBarrier),
+                 options_stack_slot,
+                 static_cast<int>(offsetof(v8::FastApiCallbackOptions, data)),
+                 data_stack_slot);
+    // v8::FastApiCallbackOptions::wasm_memory.
+    Node* memory_node;
+    if (module_has_memory) {
+      constexpr int kMemorySize = sizeof(FastApiTypedArray<uint8_t>);
+      constexpr int kMemoryAlign = alignof(FastApiTypedArray<uint8_t>);
+      memory_node = gasm_->StackSlot(kMemorySize, kMemoryAlign);
+      Node* mem_start = LOAD_INSTANCE_FIELD_NO_ELIMINATION(
+          Memory0Start, kMaybeSandboxedPointer);
+      Node* mem_size = LOAD_INSTANCE_FIELD_NO_ELIMINATION(
+          Memory0Size, MachineType::UintPtr());
+      constexpr int kLengthOffset = 0;
+      constexpr int kStartOffset = sizeof(size_t);
+      // Asserting correctness of {kLengthOffset} and {kStartOffset} is
+      // difficult: we can't use {offsetof} because derived classes aren't
+      // standard-layout; and we can't use {OFFSET_OF} because the fields aren't
+      // public. So we'll do our best to approximate it: If the size of the base
+      // class, which contains only the length field, equals the size of that
+      // length field, then the field's offset must be 0. Similar for the
+      // derived class.
+      static_assert(sizeof(FastApiTypedArrayBase) == sizeof(size_t));
+      static_assert(sizeof(FastApiTypedArray<uint8_t>) ==
+                    sizeof(size_t) + sizeof(void*));
+      gasm_->Store(StoreRepresentation(MachineType::PointerRepresentation(),
+                                       kNoWriteBarrier),
+                   memory_node, kLengthOffset, mem_size);
+      gasm_->Store(StoreRepresentation(MachineType::PointerRepresentation(),
+                                       kNoWriteBarrier),
+                   memory_node, kStartOffset, mem_start);
+
+    } else {
+      memory_node = gasm_->IntPtrConstant(0);
+    }
+    gasm_->Store(
+        StoreRepresentation(MachineType::PointerRepresentation(),
+                            kNoWriteBarrier),
+        options_stack_slot,
+        static_cast<int>(offsetof(v8::FastApiCallbackOptions, wasm_memory)),
+        memory_node);
+    inputs[pos++] = options_stack_slot;
+  }
+  inputs[pos++] = effect();
+  inputs[pos++] = control();
+  DCHECK_EQ(inputs_size, pos);
+
+  if (return_count > 0) {
+    builder.AddReturn(sig->GetReturn(0).machine_type());
+  }
+
+  CallDescriptor* call_descriptor =
+      Linkage::GetSimplifiedCDescriptor(graph()->zone(), builder.Build());
+
+  int profiling_target_offset = IsolateData::fast_api_call_target_offset();
+  StoreRepresentation profiling_target_rep(MachineType::PointerRepresentation(),
+                                           kNoWriteBarrier);
+  gasm_->Store(profiling_target_rep, gasm_->LoadRootRegister(),
+               profiling_target_offset, c_call_target);
+
+#if DEBUG
+  // When DCHECKs are enabled, disallow JS execution.
+  const uint32_t assert_offset = Isolate::javascript_execution_assert_offset();
+  if (v8_flags.debug_code) {
+    // Assert that JS execution is currently allowed.
+    auto good = gasm_->MakeLabel();
+    Node* old_value = gasm_->Load(MachineType::Int8(),
+                                  gasm_->LoadRootRegister(), assert_offset);
+    gasm_->GotoIf(gasm_->Word32Equal(old_value, gasm_->Int32Constant(1)),
+                  &good);
+    gasm_->Unreachable();
+    gasm_->Bind(&good);
+  }
+  StoreRepresentation bool_rep(MachineRepresentation::kWord8, kNoWriteBarrier);
+  gasm_->Store(bool_rep, gasm_->LoadRootRegister(), assert_offset,
+               gasm_->Int32Constant(0));
+#endif
+
+  BuildModifyThreadInWasmFlag(false);
+  Node* fast_call =
+      gasm_->Call(call_descriptor, static_cast<int>(inputs_size), inputs);
+  BuildModifyThreadInWasmFlag(true);
+
+#if DEBUG
+  gasm_->Store(bool_rep, gasm_->LoadRootRegister(), assert_offset,
+               gasm_->Int32Constant(1));
+#endif
+
+  gasm_->Store(profiling_target_rep, gasm_->LoadRootRegister(),
+               profiling_target_offset, gasm_->IntPtrConstant(0));
+
+  Node* result;
+  if (options_count) {
+    Node* fallback_requested = gasm_->Load(
+        MachineType::Int32(), options_stack_slot,
+        static_cast<int>(offsetof(v8::FastApiCallbackOptions, fallback)));
+
+    MachineRepresentation result_rep = MachineRepresentation::kNone;
+    if (return_count) {
+      result_rep = sig->GetReturn(0).machine_representation();
+    }
+    auto if_fallback = gasm_->MakeDeferredLabel();
+    auto merge = gasm_->MakeLabel(result_rep);
+    gasm_->GotoIfNot(
+        gasm_->Word32Equal(fallback_requested, gasm_->Int32Constant(0)),
+        &if_fallback);
+    gasm_->Goto(&merge, fast_call);
+
+    gasm_->Bind(&if_fallback);
+    {
+      base::SmallVector<Node*, 8> arg_nodes(param_count + 1);
+      arg_nodes[0] = nullptr;  // For the call target.
+      for (size_t i = 0; i < param_count; i++) arg_nodes[i + 1] = args[i];
+      DCHECK_LE(return_count, 1);
+      Node* return_node;
+      Node* slow_call = *out_slow_call =
+          BuildImportCall(sig, base::VectorOf(arg_nodes),
+                          base::VectorOf(&return_node, return_count), position,
+                          func_index, kCallContinues);
+      // We don't need {StoreCallCount} because we're not inlining imports.
+      gasm_->Goto(&merge, slow_call);
+    }
+    gasm_->Bind(&merge);
+    result = merge.PhiAt(0);
+  } else {
+    result = fast_call;
+  }
+  return result;
+}
+
 Node* WasmGraphBuilder::I31New(Node* input) {
   if constexpr (SmiValuesAre31Bits()) {
     return gasm_->Word32Shl(input, gasm_->BuildSmiShiftBitsConstant32());

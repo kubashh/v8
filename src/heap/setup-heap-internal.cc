@@ -658,6 +658,8 @@ bool Heap::CreateLateReadOnlyNonJSReceiverMaps() {
             WasmCapiFunctionData::kSize, wasm_capi_function_data)
     IF_WASM(ALLOCATE_MAP, WASM_EXPORTED_FUNCTION_DATA_TYPE,
             WasmExportedFunctionData::kSize, wasm_exported_function_data)
+    IF_WASM(ALLOCATE_MAP, WASM_FAST_API_CALL_DATA_TYPE,
+            WasmFastApiCallData::kSize, wasm_fast_api_call_data)
     IF_WASM(ALLOCATE_MAP, WASM_INTERNAL_FUNCTION_TYPE,
             WasmInternalFunction::kSize, wasm_internal_function)
     IF_WASM(ALLOCATE_MAP, WASM_JS_FUNCTION_DATA_TYPE, WasmJSFunctionData::kSize,

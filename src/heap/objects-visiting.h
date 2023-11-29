@@ -71,6 +71,7 @@ namespace internal {
   IF_WASM(V, WasmArray)                 \
   IF_WASM(V, WasmCapiFunctionData)      \
   IF_WASM(V, WasmExportedFunctionData)  \
+  IF_WASM(V, WasmFastApiCallData)       \
   IF_WASM(V, WasmFunctionData)          \
   IF_WASM(V, WasmIndirectFunctionTable) \
   IF_WASM(V, WasmInstanceObject)        \

@@ -141,6 +141,7 @@ class Symbol;
   IF_WASM(V, Map, wasm_capi_function_data_map, WasmCapiFunctionDataMap)        \
   IF_WASM(V, Map, wasm_exported_function_data_map,                             \
           WasmExportedFunctionDataMap)                                         \
+  IF_WASM(V, Map, wasm_fast_api_call_data_map, WasmFastApiCallDataMap)         \
   IF_WASM(V, Map, wasm_internal_function_map, WasmInternalFunctionMap)         \
   IF_WASM(V, Map, wasm_js_function_data_map, WasmJSFunctionDataMap)            \
   IF_WASM(V, Map, wasm_resume_data_map, WasmResumeDataMap)                     \

@@ -2330,6 +2330,14 @@ void WasmCapiFunctionData::WasmCapiFunctionDataPrint(std::ostream& os) {
   os << "\n";
 }
 
+void WasmFastApiCallData::WasmFastApiCallDataPrint(std::ostream& os) {
+  PrintHeader(os, "WasmFastApiCallData");
+  Isolate* isolate = GetIsolateForSandbox(*this);
+  os << "\n - receiver: " << Brief(receiver());
+  os << "\n - call target: " << reinterpret_cast<void*>(c_call_target(isolate));
+  os << "\n";
+}
+
 void WasmExceptionPackage::WasmExceptionPackagePrint(std::ostream& os) {
   PrintHeader(os, "WasmExceptionPackage");
   os << "\n";

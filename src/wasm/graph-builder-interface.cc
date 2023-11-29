@@ -728,7 +728,8 @@ class WasmGraphBuildingInterface {
   }
 
   bool HandleWellKnownImport(FullDecoder* decoder, uint32_t index,
-                             const Value args[], Value returns[]) {
+                             const wasm::FunctionSig* sig, const Value args[],
+                             Value returns[]) {
     if (!decoder->module_) return false;  // Only needed for tests.
     if (index >= decoder->module_->num_imported_functions) return false;
     WellKnownImportsList& well_known_imports =
@@ -736,6 +737,7 @@ class WasmGraphBuildingInterface {
     using WKI = WellKnownImport;
     WKI import = well_known_imports.get(index);
     TFNode* result = nullptr;
+    TFNode* slow_call = nullptr;
     switch (import) {
       case WKI::kUninstantiated:
       case WKI::kGeneric:
@@ -766,10 +768,26 @@ class WasmGraphBuildingInterface {
         result = builder_->WellKnown_StringToLowerCaseStringref(
             args[0].node, NullCheckFor(args[0].type));
         break;
+      case WKI::kBoundFastApiCall:
+      case WKI::kBoundFastApiCallWithOptions: {
+        bool has_memory = !decoder->module_->memories.empty();
+        int options_count = import == WKI::kBoundFastApiCallWithOptions ? 1 : 0;
+        size_t param_count = sig->parameter_count();
+        NodeVector arg_nodes(param_count);
+        for (size_t i = 0; i < param_count; i++) arg_nodes[i] = args[i].node;
+        result = builder_->WellKnown_BoundFastApiCall(
+            index, sig, arg_nodes.data(), options_count, has_memory, &slow_call,
+            decoder->position());
+        break;
+      }
     }
     if (v8_flags.trace_wasm_inlining) {
       PrintF("[function %d: call to %d is well-known %s]\n", func_index_, index,
              WellKnownImportName(import));
+    }
+    if (slow_call != nullptr) {
+      CheckForException(decoder, slow_call);
+      ReloadInstanceCacheIntoSsa(ssa_env_, decoder->module_);
     }
     assumptions_->RecordAssumption(index, import);
     SetAndTypeNode(&returns[0], result);
@@ -785,7 +803,9 @@ class WasmGraphBuildingInterface {
       maybe_call_count = feedback.call_count(0);
     }
     // This must happen after the {next_call_feedback()} call.
-    if (HandleWellKnownImport(decoder, imm.index, args, returns)) return;
+    if (HandleWellKnownImport(decoder, imm.index, imm.sig, args, returns)) {
+      return;
+    }
     DoCall(decoder, CallInfo::CallDirect(imm.index, maybe_call_count), imm.sig,
            args, returns);
   }

@@ -1271,6 +1271,11 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   THREAD_LOCAL_TOP_ADDRESS(Address, thread_in_wasm_flag_address)
 
+  static uint32_t javascript_execution_assert_offset() {
+    return static_cast<uint32_t>(
+        OFFSET_OF(Isolate, javascript_execution_assert_) - isolate_root_bias());
+  }
+
   MaterializedObjectStore* materialized_object_store() const {
     return materialized_object_store_;
   }

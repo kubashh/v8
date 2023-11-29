@@ -601,6 +601,11 @@ class WasmGraphBuilder {
   Node* WellKnown_DoubleToString(Node* n);
   Node* WellKnown_IntToString(Node* n, Node* radix);
 
+  Node* WellKnown_BoundFastApiCall(int func_index, const wasm::FunctionSig* sig,
+                                   Node** args, int options_count,
+                                   bool module_has_memory, Node** out_slow_call,
+                                   wasm::WasmCodePosition position);
+
   bool has_simd() const { return has_simd_; }
 
   Node* DefaultValue(wasm::ValueType type);

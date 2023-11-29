@@ -399,6 +399,8 @@ VisitorId Map::GetVisitorId(Map map) {
       return kVisitWasmResumeData;
     case WASM_API_FUNCTION_REF_TYPE:
       return kVisitWasmApiFunctionRef;
+    case WASM_FAST_API_CALL_DATA_TYPE:
+      return kVisitWasmFastApiCallData;
     case WASM_EXPORTED_FUNCTION_DATA_TYPE:
       return kVisitWasmExportedFunctionData;
     case WASM_CAPI_FUNCTION_DATA_TYPE:

@@ -361,6 +361,7 @@ WellKnownImport CheckForWellKnownImport(Handle<WasmInstanceObject> instance,
                                         Handle<JSReceiver> callable,
                                         const wasm::FunctionSig* sig) {
   WellKnownImport kGeneric = WellKnownImport::kGeneric;  // "using" is C++20.
+  DisallowHeapAllocation no_gc;  // Would have to handlify things otherwise.
   // Check for plain JS functions.
   if (callable->IsJSFunction()) {
     SharedFunctionInfo sfi = JSFunction::cast(*callable).shared();
@@ -384,19 +385,102 @@ WellKnownImport CheckForWellKnownImport(Handle<WasmInstanceObject> instance,
   }
 
   // Check for bound JS functions.
-  // First part: check that the callable is a bound function whose target
-  // is {Function.prototype.call}, and which only binds a receiver.
   if (!callable->IsJSBoundFunction()) return kGeneric;
   Handle<JSBoundFunction> bound = Handle<JSBoundFunction>::cast(callable);
   if (bound->bound_arguments().length() != 0) return kGeneric;
   if (!bound->bound_target_function().IsJSFunction()) return kGeneric;
+  Object bound_this = bound->bound_this();
   SharedFunctionInfo sfi =
       JSFunction::cast(bound->bound_target_function()).shared();
+  // We support API functions that pass the "fast API call" requirements.
+  if (sfi.IsApiFunction()) {
+    FunctionTemplateInfo func_data = sfi.get_api_func_data();
+    // The "data" field doesn't appear to be used by either Chromium or Node,
+    // so to save overhead, we don't support it.
+    Object call_code = func_data.call_code(kAcquireLoad);
+    if (!call_code.IsUndefined()) {
+      CallHandlerInfo call_handler = CallHandlerInfo::cast(call_code);
+      if (!call_handler.data().IsUndefined()) return kGeneric;
+    }
+    if (func_data.GetCFunctionsCount() == 0) return kGeneric;
+    // TODO(jkummerow): To support (limited, argument count based) overload
+    // resolution, iterate over all available signatures, and pick the one
+    // whose parameter count matches {sig}.
+    const CFunctionInfo* info = func_data.GetCSignature(0);
+    Address c_call_target = func_data.GetCFunction(0);
+    if (!compiler::IsFastCallSupportedSignature(info)) return kGeneric;
+    CTypeInfo return_info = info->ReturnInfo();
+    if (sig->return_count() > 1) return kGeneric;
+    if (sig->return_count() == 0 &&
+        return_info.GetType() != CTypeInfo::Type::kVoid) {
+      return kGeneric;
+    }
+    if (sig->return_count() == 1) {
+      if (return_info.GetType() == CTypeInfo::Type::kVoid) return kGeneric;
+      if (NormalizeFastApiRepresentation(return_info) !=
+          sig->GetReturn(0).machine_representation()) {
+        return kGeneric;
+      }
+    }
+    // Argument 0 is the receiver.
+    CTypeInfo receiver_arg = info->ArgumentInfo(0);
+    if (receiver_arg.GetSequenceType() != CTypeInfo::SequenceType::kScalar ||
+        receiver_arg.GetType() != CTypeInfo::Type::kV8Value ||
+        !bound_this.IsJSObject()) {
+      // The current implementation only supports bound receiver objects.
+      return kGeneric;
+    }
+    if (sig->parameter_count() != info->ArgumentCount() - 1) return kGeneric;
+    for (uint32_t i = 0; i < sig->parameter_count(); i++) {
+      CTypeInfo arg = info->ArgumentInfo(i + 1);
+      if (arg.GetSequenceType() != CTypeInfo::SequenceType::kScalar) {
+        // Wasm can't construct JSArrays or TypedArrays anyway.
+        return kGeneric;
+      }
+      if (NormalizeFastApiRepresentation(arg) !=
+          sig->GetParam(i).machine_representation()) {
+        return kGeneric;
+      }
+    }
+    // The "accept_any_receiver" bit indicates whether access checks are
+    // required. We don't support that yet.
+    if (!func_data.accept_any_receiver()) {
+      // Special case: JSGlobalProxies start needing access checks when they
+      // are detached, so we can't check that ahead of time.
+      if (bound_this.IsJSGlobalProxy()) return kGeneric;
+      if (bound_this.IsAccessCheckNeeded()) return kGeneric;
+    }
+    // The "signature" field indicates an "instanceof" requirement for the
+    // receiver.
+    HeapObject signature = func_data.signature();
+    if (!signature.IsUndefined()) {
+      if (!signature.IsFunctionTemplateInfo()) return kGeneric;
+      // Already checked above.
+      DCHECK(bound_this.IsJSObject());
+      if (!FunctionTemplateInfo::cast(signature).IsTemplateFor(
+              JSObject::cast(bound_this))) {
+        // If {bound_this} happens to be a JSGlobalProxy, we could check its
+        // (hidden) prototype, but for now we just don't support that case.
+        return kGeneric;
+      }
+    }
+    // All checks passed \o/
+    if (!instance.is_null()) {
+      Isolate* isolate = instance->GetIsolate();
+      Handle<JSObject> receiver(JSObject::cast(bound_this), isolate);
+      AllowHeapAllocation handlified;
+      Handle<WasmFastApiCallData> data =
+          isolate->factory()->NewWasmFastApiCallData(receiver, c_call_target);
+      instance->well_known_imports().set(func_index, *data);
+    }
+    return info->HasOptions() ? WellKnownImport::kBoundFastApiCallWithOptions
+                              : WellKnownImport::kBoundFastApiCall;
+  }
+
+  // We also support {Function.prototype.call} bound to certain JS builtins
+  // (which are the receiver of "call").
   if (!sfi.HasBuiltinId()) return kGeneric;
   if (sfi.builtin_id() != Builtin::kFunctionPrototypeCall) return kGeneric;
-  // Second part: check if the bound receiver is one of the builtins for which
-  // we have special-cased support.
-  Object bound_this = bound->bound_this();
   if (!bound_this.IsJSFunction()) return kGeneric;
   sfi = JSFunction::cast(bound_this).shared();
   if (!sfi.HasBuiltinId()) return kGeneric;

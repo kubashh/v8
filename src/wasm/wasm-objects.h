@@ -760,6 +760,20 @@ class WasmApiFunctionRef
   TQ_OBJECT_CONSTRUCTORS(WasmApiFunctionRef)
 };
 
+class WasmFastApiCallData
+    : public TorqueGeneratedWasmFastApiCallData<WasmFastApiCallData,
+                                                HeapObject> {
+ public:
+  DECL_EXTERNAL_POINTER_ACCESSORS(c_call_target, Address)
+
+  // Dispatched behavior.
+  DECL_PRINTER(WasmFastApiCallData)
+
+  class BodyDescriptor;
+
+  TQ_OBJECT_CONSTRUCTORS(WasmFastApiCallData)
+};
+
 class WasmInternalFunction
     : public TorqueGeneratedWasmInternalFunction<WasmInternalFunction,
                                                  HeapObject> {

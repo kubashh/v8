@@ -1686,6 +1686,18 @@ Handle<WasmApiFunctionRef> Factory::NewWasmApiFunctionRef(
   return handle(result, isolate());
 }
 
+Handle<WasmFastApiCallData> Factory::NewWasmFastApiCallData(
+    Handle<JSObject> receiver, Address c_call_target) {
+  Map map = *wasm_fast_api_call_data_map();
+  WasmFastApiCallData result =
+      WasmFastApiCallData::cast(AllocateRawWithImmortalMap(
+          map.instance_size(), AllocationType::kOld, map));
+  DisallowGarbageCollection no_gc;
+  result.set_receiver(*receiver);
+  result.init_c_call_target(isolate(), c_call_target);
+  return handle(result, isolate());
+}
+
 Handle<WasmInternalFunction> Factory::NewWasmInternalFunction(
     Address opt_call_target, Handle<HeapObject> ref, Handle<Map> rtt,
     int function_index) {

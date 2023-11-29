@@ -114,6 +114,8 @@ bool CanOptimizeFastSignature(const CFunctionInfo* c_signature) {
     // Clamp lowering in EffectControlLinearizer uses rounding.
     uint8_t flags = uint8_t(c_signature->ArgumentInfo(i).GetFlags());
     if (flags & uint8_t(CTypeInfo::Flags::kClampBit)) {
+      // Note: returning immediately here is safe because (and as long as)
+      // the x64 platform has no other reasons to bail out.
       return CpuFeatures::IsSupported(SSE4_2);
     }
 #endif  // V8_TARGET_ARCH_X64
@@ -180,14 +182,16 @@ Node* FastApiCallBuilder::WrapFastCall(const CallDescriptor* call_descriptor,
                                        Node* target,
                                        const CFunctionInfo* c_signature,
                                        int c_arg_count, Node* stack_slot) {
-  // CPU profiler support
+  // CPU profiler support.
   Node* target_address = __ ExternalConstant(
       ExternalReference::fast_api_call_target_address(isolate()));
   __ Store(StoreRepresentation(MachineType::PointerRepresentation(),
                                kNoWriteBarrier),
            target_address, 0, __ BitcastTaggedToWord(target));
 
-  // Disable JS execution
+#if DEBUG
+  // Disable JS execution. We only do this in Debug mode, because the stored
+  // value is only consumed by DCHECKs.
   Node* javascript_execution_assert = __ ExternalConstant(
       ExternalReference::javascript_execution_assert(isolate()));
   static_assert(sizeof(bool) == 1, "Wrong assumption about boolean size.");
@@ -204,8 +208,9 @@ Node* FastApiCallBuilder::WrapFastCall(const CallDescriptor* call_descriptor,
   }
   __ Store(StoreRepresentation(MachineRepresentation::kWord8, kNoWriteBarrier),
            javascript_execution_assert, 0, __ Int32Constant(0));
+#endif
 
-  // Update effect and control
+  // Update effect and control.
   if (stack_slot != nullptr) {
     inputs[c_arg_count + 1] = stack_slot;
     inputs[c_arg_count + 2] = __ effect();
@@ -215,12 +220,14 @@ Node* FastApiCallBuilder::WrapFastCall(const CallDescriptor* call_descriptor,
     inputs[c_arg_count + 2] = __ control();
   }
 
-  // Create the fast call
+  // Create the fast call.
   Node* call = __ Call(call_descriptor, inputs_size, inputs);
 
-  // Reenable JS execution
+#if DEBUG
+  // Reenable JS execution.
   __ Store(StoreRepresentation(MachineRepresentation::kWord8, kNoWriteBarrier),
            javascript_execution_assert, 0, __ Int32Constant(1));
+#endif
 
   // Reset the CPU profiler target address.
   __ Store(StoreRepresentation(MachineType::PointerRepresentation(),

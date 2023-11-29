@@ -23,7 +23,11 @@ enum class WellKnownImport : uint8_t {
   kUninstantiated,
   kGeneric,
 
-  // Functions:
+  // Groups of functions:
+  kBoundFastApiCall,
+  kBoundFastApiCallWithOptions,
+
+  // Specific functions:
   kDoubleToString,
   kIntToString,
   kParseFloat,

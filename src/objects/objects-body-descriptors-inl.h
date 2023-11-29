@@ -768,6 +768,25 @@ class WasmApiFunctionRef::BodyDescriptor final : public BodyDescriptorBase {
   static inline int SizeOf(Map map, HeapObject object) { return kSize; }
 };
 
+class WasmFastApiCallData::BodyDescriptor final : public BodyDescriptorBase {
+ public:
+  static bool IsValidSlot(Map map, HeapObject obj, int offset) {
+    UNREACHABLE();
+  }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Map map, HeapObject obj, int object_size,
+                                 ObjectVisitor* v) {
+    IteratePointers(obj, kStartOfStrongFieldsOffset, kEndOfStrongFieldsOffset,
+                    v);
+    v->VisitExternalPointer(obj,
+                            obj.RawExternalPointerField(kCCallTargetOffset),
+                            kWasmFastApiCallTargetTag);
+  }
+
+  static inline int SizeOf(Map map, HeapObject object) { return kSize; }
+};
+
 class WasmExportedFunctionData::BodyDescriptor final
     : public BodyDescriptorBase {
  public:
@@ -1231,6 +1250,8 @@ auto BodyDescriptorApply(InstanceType type, Args&&... args) {
       return CALL_APPLY(WasmExceptionPackage);
     case WASM_EXPORTED_FUNCTION_DATA_TYPE:
       return CALL_APPLY(WasmExportedFunctionData);
+    case WASM_FAST_API_CALL_DATA_TYPE:
+      return CALL_APPLY(WasmFastApiCallData);
     case WASM_INTERNAL_FUNCTION_TYPE:
       return CALL_APPLY(WasmInternalFunction);
     case WASM_JS_FUNCTION_DATA_TYPE:

@@ -16,7 +16,13 @@ const char* WellKnownImportName(WellKnownImport wki) {
     case WellKnownImport::kGeneric:
       return "generic";
 
-    // Functions:
+    // Groups of functions:
+    case WellKnownImport::kBoundFastApiCall:
+      return "fast API call (bound)";
+    case WellKnownImport::kBoundFastApiCallWithOptions:
+      return "fast API call (bound, with options)";
+
+    // Specific functions:
     case WellKnownImport::kDoubleToString:
       return "DoubleToString";
     case WellKnownImport::kIntToString:
