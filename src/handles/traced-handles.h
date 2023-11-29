@@ -23,15 +23,24 @@ class TracedHandlesImpl;
 class V8_EXPORT_PRIVATE TracedHandles final {
  public:
   enum class MarkMode : uint8_t { kOnlyYoung, kAll };
+  enum class WeaknessCompuationMode { kAtomic, kConcurrent };
 
   static void Destroy(Address* location);
   static void Copy(const Address* const* from, Address** to);
   static void Move(Address** from, Address** to);
 
-  static Tagged<Object> Mark(Address* location, MarkMode mark_mode);
+  // Returns the object referenced by the relevant node and whether the node was
+  // marked.
+  static std::pair<Tagged<Object>, bool> TryMark(Address* location,
+                                                 MarkMode mark_mode);
   static Tagged<Object> MarkConservatively(Address* inner_location,
                                            Address* traced_node_block_base,
                                            MarkMode mark_mode);
+
+  // Update a node's IsWeak bit and returns the new value.
+  static bool UpdateIsWeak(Address* location,
+                           EmbedderRootsHandler* embedder_root_handler,
+                           WeaknessCompuationMode mode);
 
   static bool IsValidInUseNode(Address* location);
 
