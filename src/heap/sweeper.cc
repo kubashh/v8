@@ -521,7 +521,7 @@ class PromotedPageRecordMigratedSlotVisitor final
 
  private:
   V8_INLINE void VerifyHost(Tagged<HeapObject> host) {
-    DCHECK(!host.InWritableSharedSpace());
+    DCHECK(!InWritableSharedSpace(host));
     DCHECK(!Heap::InYoungGeneration(host));
     DCHECK(!MemoryChunk::FromHeapObject(host)->SweepingDone());
     DCHECK_EQ(MemoryChunk::FromHeapObject(host), host_chunk_);
