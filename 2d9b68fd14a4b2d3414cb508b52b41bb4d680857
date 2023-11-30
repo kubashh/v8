@@ -87,6 +87,24 @@
       "parentUuid": "c31443fb_5538c8d3",
       "revId": "2d9b68fd14a4b2d3414cb508b52b41bb4d680857",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbbd4d66_ddfd7896",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-30T17:51:40Z",
+      "side": 1,
+      "message": "yes that\u0027s the failure. I also noticed your sandbox CL is still dependent on this CL, so please make them fully separate, run all the tests then we can do a review.",
+      "parentUuid": "5766b81d_11eb16e8",
+      "revId": "2d9b68fd14a4b2d3414cb508b52b41bb4d680857",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
