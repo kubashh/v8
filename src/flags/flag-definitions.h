@@ -1240,11 +1240,12 @@ DEFINE_BOOL(turboshaft, true, "enable TurboFan's Turboshaft phases for JS")
 DEFINE_BOOL(turboshaft_enable_debug_features, false,
             "enables Turboshaft's DebugPrint, StaticAssert and "
             "CheckTurboshaftTypeOf operations")
-DEFINE_EXPERIMENTAL_FEATURE(turboshaft_wasm,
-                            "enable TurboFan's Turboshaft phases for wasm")
+DEFINE_BOOL(turboshaft_wasm, false,
+            "enable TurboFan's Turboshaft phases for wasm")
+DEFINE_WEAK_IMPLICATION(future, turboshaft_wasm)
 DEFINE_WEAK_IMPLICATION(turboshaft_wasm, turboshaft_load_elimination)
-DEFINE_EXPERIMENTAL_FEATURE(turboshaft_wasm_load_elimination,
-                            "enable Turboshaft's WasmLoadElimination")
+DEFINE_BOOL(turboshaft_wasm_load_elimination, false,
+            "enable Turboshaft's WasmLoadElimination")
 DEFINE_WEAK_IMPLICATION(turboshaft_wasm, turboshaft_wasm_load_elimination)
 DEFINE_EXPERIMENTAL_FEATURE(turboshaft_typed_optimizations,
                             "enable an additional Turboshaft phase that "
