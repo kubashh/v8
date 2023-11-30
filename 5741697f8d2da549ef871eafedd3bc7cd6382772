@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f7c4495_aea95307",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-11-30T23:15:06Z",
+      "side": 1,
+      "message": "Thanks for looking at the simulator \u0026 assembler.\nTBH, there may still be issues with the simulator\u0027s stack mgt. Will continue to look at this.",
+      "revId": "5741697f8d2da549ef871eafedd3bc7cd6382772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
