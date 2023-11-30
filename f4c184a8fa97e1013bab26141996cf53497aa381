@@ -16,6 +16,299 @@
       "message": "Thanks in advance for taking the time to review this CL. Although it is long, it is essentially equivalent to existing code for ia32,x64,arm64 except for the fact that it\u0027s targeted at ARM.",
       "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32d62919_3f5d6bff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "When assigning several reviewers to such a large CL, please give some direction who should review what (e.g. a primary reviewer for the meat of the change, and OWNERS reviewers for certain directories).\n\nFor now, I\u0027ve taken a look at everything except builtins-arm.cc, and have some comments there.",
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bef4e77_0d73b98c",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "nit: no need to repeat the class\u0027s own name when calling its methods.",
+      "range": {
+        "startLine": 403,
+        "startChar": 24,
+        "endLine": 403,
+        "endChar": 40
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0539b6f7_d08f005d",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "Please don\u0027t use C-style casts. If you want to cast, this would be `static_cast\u003cuint32_t\u003e(frame_alignment)`.\nHowever, looking at precedent at existing uses of `MacroAssembler::ActivationFrameAlignment` (e.g. right in this file around line 1480), you don\u0027t need either the cast or the manual negation, just use:\n```\n  if (frame_alignment \u003e 0) {  \n    DCHECK(base::bits::IsPowerOfTwo(frame_alignment));\n    and_(sp, sp, Operand(-frame_alignment));\n  }\n```\nand since you\u0027re introducing this helper now, please also use it where applicable in existing code.",
+      "range": {
+        "startLine": 404,
+        "startChar": 36,
+        "endLine": 404,
+        "endChar": 46
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0442631c_bdca2a23",
+        "filename": "src/codegen/arm/macro-assembler-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "nit: this comment provides no information. I\u0027d either drop it, or explain what \"appropriate\" means.",
+      "range": {
+        "startLine": 354,
+        "startChar": 2,
+        "endLine": 354,
+        "endChar": 41
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6560d95_2de07e51",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "Considering the two direct accesses to `sim_-\u003einstruction_tracing` two lines above, having this helper function isn\u0027t really pulling its weight.\n\nHow about defining two public functions:\n```\n  bool instruction_tracing_enabled() { return instruction_tracing_; }\n  void ToggleInstructionTracing() {\n    instruction_tracing_ \u003d !instruction_tracing_;\n  }\n```\non the `Simulator` class?\nOr just inline both of them here, `ArmDebugger` is a `friend` of `Simulator` anyways, so that would still work with a private field.",
+      "range": {
+        "startLine": 531,
+        "startChar": 11,
+        "endLine": 531,
+        "endChar": 31
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf94516b_5edddec9",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "nit: this comment provides no information. (Also, all comments should end with punctuation; but in this case I think you can just drop it.)",
+      "range": {
+        "startLine": 1144,
+        "startChar": 0,
+        "endLine": 1144,
+        "endChar": 37
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bad7d34c_1c380d3f",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "I guess you meant to drop this? `stack_limit_` already contains the `kAdditionalStackMargin`.",
+      "range": {
+        "startLine": 1160,
+        "startChar": 21,
+        "endLine": 1160,
+        "endChar": 46
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00cbd3bc_45e41be0",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "This comment now contradicts what the updated code is doing.",
+      "range": {
+        "startLine": 1164,
+        "startChar": 2,
+        "endLine": 1166,
+        "endChar": 31
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16c77443_c6dadfea",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "nit: we\u0027re in the `Simulator`, just use the `instruction_tracing_` field directly.",
+      "range": {
+        "startLine": 1713,
+        "startChar": 12,
+        "endLine": 1713,
+        "endChar": 50
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e600bb7f_37c52d2c",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "same here, and several more times below.",
+      "range": {
+        "startLine": 1787,
+        "startChar": 12,
+        "endLine": 1787,
+        "endChar": 50
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c4e08d4_388518b4",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "This comment provides adds no information to the name of the function. Just drop it. (Also, all comments should end with punctuation.)",
+      "range": {
+        "startLine": 240,
+        "startChar": 2,
+        "endLine": 240,
+        "endChar": 39
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7a83895_48a771ce",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "This no longer reflects what the updated code does. Is that change in behavior intentional?",
+      "range": {
+        "startLine": 243,
+        "startChar": 32,
+        "endLine": 244,
+        "endChar": 61
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10ae3a32_21bf5232",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-11-30T13:58:47Z",
+      "side": 1,
+      "message": "nit: please put this somewhere in the `private:` section, along with the other fields, and make its name end with `_`.",
+      "range": {
+        "startLine": 349,
+        "startChar": 2,
+        "endLine": 349,
+        "endChar": 48
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
