@@ -149,7 +149,7 @@ class IterateAndScavengePromotedObjectsVisitor final : public ObjectVisitor {
           MemoryChunk::FromHeapObject(host), slot.address());
     }
 
-    if (target.InWritableSharedSpace()) {
+    if (InWritableSharedSpace(target)) {
       MemoryChunk* chunk = MemoryChunk::FromHeapObject(host);
       RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::ATOMIC>(chunk,
                                                                slot.address());
@@ -863,7 +863,7 @@ void Scavenger::CheckOldToNewSlotForSharedUntyped(MemoryChunk* chunk,
   Tagged<HeapObject> heap_object;
 
   if (object.GetHeapObject(&heap_object) &&
-      heap_object.InWritableSharedSpace()) {
+      InWritableSharedSpace(heap_object)) {
     RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::ATOMIC>(chunk,
                                                              slot.address());
   }
@@ -876,7 +876,7 @@ void Scavenger::CheckOldToNewSlotForSharedTyped(MemoryChunk* chunk,
   Tagged<HeapObject> heap_object;
 
   if (new_target.GetHeapObject(&heap_object) &&
-      heap_object.InWritableSharedSpace()) {
+      InWritableSharedSpace(heap_object)) {
     const uintptr_t offset = slot_address - chunk->address();
     DCHECK_LT(offset, static_cast<uintptr_t>(TypedSlotSet::kMaxOffset));
 

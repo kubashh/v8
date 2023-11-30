@@ -309,7 +309,7 @@ bool Heap::InYoungGeneration(Tagged<HeapObject> heap_object) {
 bool Heap::InWritableSharedSpace(MaybeObject object) {
   Tagged<HeapObject> heap_object;
   return object.GetHeapObject(&heap_object) &&
-         heap_object.InWritableSharedSpace();
+         i::InWritableSharedSpace(heap_object);
 }
 
 // static

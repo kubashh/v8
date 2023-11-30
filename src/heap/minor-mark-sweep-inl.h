@@ -98,7 +98,7 @@ void YoungGenerationRememberedSetsMarkingWorklist::MarkingItem::
 #ifdef THREAD_SANITIZER
   BasicMemoryChunk::FromHeapObject(heap_object)->SynchronizedHeapLoad();
 #endif  // THREAD_SANITIZER
-  if (heap_object.InWritableSharedSpace()) {
+  if (InWritableSharedSpace(heap_object)) {
     RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::ATOMIC>(chunk,
                                                              slot_address);
   }
@@ -113,7 +113,7 @@ void YoungGenerationRememberedSetsMarkingWorklist::MarkingItem::
 #ifdef THREAD_SANITIZER
   BasicMemoryChunk::FromHeapObject(heap_object)->SynchronizedHeapLoad();
 #endif  // THREAD_SANITIZER
-  if (heap_object.InWritableSharedSpace()) {
+  if (InWritableSharedSpace(heap_object)) {
     const uintptr_t offset = slot_address - chunk->address();
     DCHECK_LT(offset, static_cast<uintptr_t>(TypedSlotSet::kMaxOffset));
     RememberedSet<OLD_TO_SHARED>::InsertTyped(chunk, slot_type,

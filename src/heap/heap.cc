@@ -6129,7 +6129,7 @@ void Heap::AddRetainedMaps(Handle<NativeContext> context,
     DisallowGarbageCollection no_gc;
     Tagged<WeakArrayList> raw_array = *array;
     for (Handle<Map> map : maps) {
-      DCHECK(!map->InAnySharedSpace());
+      DCHECK(!InAnySharedSpace(*map));
 
       if (map->is_in_retained_map_list()) {
         continue;
@@ -6976,7 +6976,7 @@ void Heap::CombinedGenerationalAndSharedBarrierSlow(Tagged<HeapObject> object,
 
   } else {
     DCHECK(value_chunk->InWritableSharedSpace());
-    DCHECK(!object->InWritableSharedSpace());
+    DCHECK(!i::InWritableSharedSpace(object));
     Heap::SharedHeapBarrierSlow(object, slot);
   }
 }
@@ -6991,7 +6991,7 @@ void Heap::CombinedGenerationalAndSharedEphemeronBarrierSlow(
 
   } else {
     DCHECK(value_chunk->InWritableSharedSpace());
-    DCHECK(!table->InWritableSharedSpace());
+    DCHECK(!i::InWritableSharedSpace(table));
     Heap::SharedHeapBarrierSlow(table, slot);
   }
 }
@@ -7061,7 +7061,7 @@ void Heap::WriteBarrierForRangeImpl(MemoryChunk* source_page,
       if (Heap::InYoungGeneration(value_heap_object)) {
         RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(
             source_page, slot.address());
-      } else if (value_heap_object.InWritableSharedSpace()) {
+      } else if (i::InWritableSharedSpace(value_heap_object)) {
         RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::ATOMIC>(
             source_page, slot.address());
       }
