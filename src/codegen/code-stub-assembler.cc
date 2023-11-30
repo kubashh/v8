@@ -17770,7 +17770,6 @@ TNode<RawPtrT> CodeStubAssembler::SwitchToTheCentralStackForJS(
       CallCFunction(do_switch, MachineType::Pointer(),
                     std::make_pair(MachineType::TaggedPointer(), callable),
                     std::make_pair(MachineType::Pointer(), stack_limit_slot)));
-
   TNode<RawPtrT> old_sp = LoadStackPointer();
   SetStackPointer(central_stack_sp, wasm::kEnterFPRelativeOnlyScope);
   StoreNoWriteBarrier(
