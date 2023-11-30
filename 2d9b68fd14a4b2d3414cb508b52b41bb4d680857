@@ -34,6 +34,23 @@
       "parentUuid": "516b5dff_9dd87dab",
       "revId": "2d9b68fd14a4b2d3414cb508b52b41bb4d680857",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb8ee08c_df9bc695",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-30T17:24:39Z",
+      "side": 1,
+      "message": "I\u0027ve been trying to provoke a failure on real hardware for the past couple of hours (I test in various configurations, release and debug), but the only thing I see *iff* I roll back to this commit and run the tests with pointer compression off is a weird failure in one unit test:\n\nv8/test/mjsunit/mjsunit.js:416: Failure:\nexpected:\n\"Iterator result null is not an object\"\nfound:\n\"Cannot read properties of null (reading \u0027done\u0027)\"\n\nStack: MjsUnitAssertionError\n    at assertEquals                           v8/test/mjsunit/mjsunit.js 511:7\n    at test_iterator_result_object_non_object v8/test/mjsunit/es6/iteration-semantics.js 349:3\n    at                                        v8/test/mjsunit/es6/iteration-semantics.js 352:1\n    throw new MjsUnitAssertionError(\n    ^\nMjsUnitAssertionError\n    at assertEquals                           v8/test/mjsunit/mjsunit.js 511:7\n    at test_iterator_result_object_non_object v8/test/mjsunit/es6/iteration-semantics.js 349:3\n    at                                        v8/test/mjsunit/es6/iteration-semantics.js 352:1\nCommand: out/ppc64.release/d8 --test test/mjsunit/mjsunit.js test/mjsunit/es6/iteration-semantics.js --random-seed\u003d-1934383415 --nohard-abort --testing-d8-test-runner",
+      "revId": "2d9b68fd14a4b2d3414cb508b52b41bb4d680857",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
