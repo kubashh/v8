@@ -105,6 +105,24 @@
       "parentUuid": "5766b81d_11eb16e8",
       "revId": "2d9b68fd14a4b2d3414cb508b52b41bb4d680857",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6f965ad_58b94c69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-11-30T20:45:40Z",
+      "side": 1,
+      "message": "The sandbox itself is technically dependent on the functionality addded in this CL.  Can we review / merge this CL then work on the sandbox?\n\nIt looks like that one failure was introduced way back when we were working on simplifying the branch logic in BaselineAssembler::JumpIfObjectTypeFast().  I simplified it even further and it\u0027s passing all tests now.",
+      "parentUuid": "cbbd4d66_ddfd7896",
+      "revId": "2d9b68fd14a4b2d3414cb508b52b41bb4d680857",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
