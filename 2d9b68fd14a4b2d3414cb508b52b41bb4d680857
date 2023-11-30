@@ -16,6 +16,24 @@
       "message": "This now seems to fail a test on non-pntr compressed builds on the ppc simulator:\n```\nd8 --test test/mjsunit/mjsunit.js test/mjsunit/es6/iteration-semantics.js\n```\n\nPlease run a full set of tests on release, debug (with gn flag is_debug \u003d true) and the simulator before we do a review. We need to do this ourselves as chromium bots don\u0027t test our platforms when committing a CL.\n\nA simulator release build can be initiated on an x64 machine using these gn flags:\n```\nis_component_build \u003d false\nis_debug \u003d false\ntarget_cpu \u003d \"x64\"\nv8_target_cpu \u003d \"ppc64\"\nuse_goma \u003d false\nv8_enable_backtrace \u003d true\nv8_enable_disassembler \u003d true\nv8_enable_object_print \u003d true\nv8_enable_verify_heap \u003d true\ndcheck_always_on \u003d false\n```",
       "revId": "2d9b68fd14a4b2d3414cb508b52b41bb4d680857",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "930dd80c_9bbf831a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-11-30T14:58:00Z",
+      "side": 1,
+      "message": "These also need to be applied based on the feature you are testing for pntr compressed builds:\n```\nv8_enable_pointer_compression \u003d true\nv8_enable_external_code_space \u003d true\n\nv8_enable_static_roots \u003d true\nv8_enable_sandbox \u003d true\n```",
+      "parentUuid": "516b5dff_9dd87dab",
+      "revId": "2d9b68fd14a4b2d3414cb508b52b41bb4d680857",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
