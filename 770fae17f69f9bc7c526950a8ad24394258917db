@@ -68,6 +68,23 @@
       "message": "regexp LGTM",
       "revId": "770fae17f69f9bc7c526950a8ad24394258917db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33aacd1f_de116c11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-11-30T10:25:24Z",
+      "side": 1,
+      "message": "lgtm stamp",
+      "revId": "770fae17f69f9bc7c526950a8ad24394258917db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
