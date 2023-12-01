@@ -983,13 +983,14 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     case kArchSetStackPointer: {
       DCHECK(instr->InputAt(0)->IsRegister());
-#if USE_SIMULATOR
-      __ RecordComment("-- Set simulator stack limit --");
-      DCHECK(__ TmpList()->IncludesAliasOf(kSimulatorHltArgument));
-      __ LoadStackLimit(kSimulatorHltArgument, StackLimitKind::kRealStackLimit);
-      __ hlt(kImmExceptionIsSwitchStackLimit);
-#endif  // USE_SIMULATOR
-      __ mov(sp, i.InputRegister(0));
+      if (masm()->options().enable_simulator_code) {
+        __ RecordComment("-- Set simulator stack limit --");
+        DCHECK(__ TmpList()->IncludesAliasOf(kSimulatorHltArgument));
+        __ LoadStackLimit(kSimulatorHltArgument,
+                          StackLimitKind::kRealStackLimit);
+        __ hlt(kImmExceptionIsSwitchStackLimit);
+      }
+      __ Mov(sp, i.InputRegister(0));
       auto fp_scope = static_cast<wasm::FPRelativeScope>(
           MiscField::decode(instr->opcode()));
       if (fp_scope == wasm::kEnterFPRelativeOnlyScope) {
@@ -3299,6 +3300,13 @@ void CodeGenerator::AssembleConstructFrame() {
         // The C-API function has one extra slot for the PC.
         required_slots++;
       } else if (call_descriptor->IsWasmImportWrapper()) {
+        // If the wrapper is running on a secondary stack, it will switch to the
+        // central stack and fill these slots with the central stack pointer and
+        // secondary stack limit. Otherwise the slots remain empty.
+        static_assert(WasmImportWrapperFrameConstants::kCentralStackSPOffset ==
+                      -24);
+        static_assert(
+            WasmImportWrapperFrameConstants::kSecondaryStackLimitOffset == -32);
         __ Push(xzr, xzr);
       }
 #endif  // V8_ENABLE_WEBASSEMBLY

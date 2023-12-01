@@ -491,7 +491,7 @@ class V8_EXPORT_PRIVATE MacroAssembler
   void Jump(Handle<Code> code_object, RelocInfo::Mode rmode);
   void Jump(Handle<Code> code_object, RelocInfo::Mode rmode, Condition cc);
 
-  void BailoutIfDeoptimized(Register scratch1, Register scratch2);
+  void BailoutIfDeoptimized(Register scratch);
   void CallForDeoptimization(Builtin target, int deopt_id, Label* exit,
                              DeoptimizeKind kind, Label* ret,
                              Label* jump_deoptimization_entry_label);
@@ -500,6 +500,7 @@ class V8_EXPORT_PRIVATE MacroAssembler
   void DebugBreak();
 
   void CompareRoot(Register with, RootIndex index);
+  void CompareTaggedRoot(Register with, RootIndex index);
   void CompareRoot(Operand with, RootIndex index);
 
   // Generates function and stub prologue code.
@@ -653,13 +654,18 @@ class V8_EXPORT_PRIVATE MacroAssembler
 
   // Control-flow integrity:
 
-  // Define a function entrypoint. This doesn't emit any code for this
-  // architecture, as control-flow integrity is not supported for it.
-  void CodeEntry() {}
+  // Define a function entrypoint which will emit a landing pad instruction if
+  // required by the build config.
+  void CodeEntry();
   // Define an exception handler.
-  void ExceptionHandler() {}
+  void ExceptionHandler() { CodeEntry(); }
   // Define an exception handler and bind a label.
-  void BindExceptionHandler(Label* label) { bind(label); }
+  void BindExceptionHandler(Label* label) { BindJumpTarget(label); }
+  // Bind a jump target and mark it as a valid code entry.
+  void BindJumpTarget(Label* label) {
+    bind(label);
+    CodeEntry();
+  }
 
   // ---------------------------------------------------------------------------
   // Pointer compression support
@@ -729,15 +735,9 @@ class V8_EXPORT_PRIVATE MacroAssembler
   // Store a trusted pointer field.
   void StoreTrustedPointerField(Operand dst_field_operand, Register value);
 
-  // Load a code pointer field.
+  // Store a code pointer field.
   // These are special versions of trusted pointers that, when the sandbox is
   // enabled, reference code objects through the code pointer table.
-  void LoadCodePointerField(Register destination, Operand field_operand,
-                            Register scratch) {
-    LoadTrustedPointerField(destination, field_operand, kCodeIndirectPointerTag,
-                            scratch);
-  }
-  // Store a code pointer field.
   void StoreCodePointerField(Operand dst_field_operand, Register value) {
     StoreTrustedPointerField(dst_field_operand, value);
   }

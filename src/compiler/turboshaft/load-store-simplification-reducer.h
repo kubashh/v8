@@ -9,6 +9,7 @@
 #include "src/compiler/turboshaft/assembler.h"
 #include "src/compiler/turboshaft/operation-matcher.h"
 #include "src/compiler/turboshaft/operations.h"
+#include "src/compiler/turboshaft/phase.h"
 
 namespace v8::internal::compiler::turboshaft {
 
@@ -24,7 +25,8 @@ class LoadStoreSimplificationReducer : public Next {
   // Turboshaft's loads and stores follow the pattern of
   // *(base + index * element_size_log2 + displacement), but architectures
   // typically support only a limited `element_size_log2`.
-#if V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_RISCV64 || V8_TARGET_ARCH_LOONG64
+#if V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_RISCV64 || \
+    V8_TARGET_ARCH_LOONG64 || V8_TARGET_ARCH_MIPS64
   static constexpr int kMaxElementSizeLog2 = 0;
 #else
   static constexpr int kMaxElementSizeLog2 = 3;
@@ -65,7 +67,8 @@ class LoadStoreSimplificationReducer : public Next {
 
       // TODO(12783): This needs to be extended for all architectures that don't
       // have loads with the base + index * element_size + offset pattern.
-#if V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_RISCV64 || V8_TARGET_ARCH_LOONG64
+#if V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_RISCV64 || \
+    V8_TARGET_ARCH_LOONG64 || V8_TARGET_ARCH_MIPS64
       // If an index is present, the element_size_log2 is changed to zero
       // (above). So any load follows the form *(base + offset). To simplify
       // instruction selection, both static and dynamic offsets are stored in
@@ -100,10 +103,16 @@ class LoadStoreSimplificationReducer : public Next {
   bool is_wasm_ = PipelineData::Get().is_wasm();
   // TODO(12783): Remove this flag once the Turbofan instruction selection has
   // been replaced.
+#if V8_TARGET_ARCH_X64
   bool lowering_enabled_ =
-      (is_wasm_ && v8_flags.turboshaft_wasm_instruction_selection) ||
+      (is_wasm_ && v8_flags.turboshaft_wasm_instruction_selection_staged) ||
       (!is_wasm_ && v8_flags.turboshaft_instruction_selection);
-
+#else
+  bool lowering_enabled_ =
+      (is_wasm_ &&
+       v8_flags.turboshaft_wasm_instruction_selection_experimental) ||
+      (!is_wasm_ && v8_flags.turboshaft_instruction_selection);
+#endif
   OperationMatcher matcher_{__ output_graph()};
 };
 

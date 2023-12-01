@@ -640,15 +640,19 @@ TEST(BytecodeArray) {
     constant_pool->set(i, *number);
   }
 
+  Handle<TrustedByteArray> handler_table = factory->NewTrustedByteArray(3);
+
   // Allocate and initialize BytecodeArray
-  Handle<BytecodeArray> array = factory->NewBytecodeArray(
-      kRawBytesSize, kRawBytes, kFrameSize, kParameterCount, constant_pool);
+  Handle<BytecodeArray> array =
+      factory->NewBytecodeArray(kRawBytesSize, kRawBytes, kFrameSize,
+                                kParameterCount, constant_pool, handler_table);
 
   CHECK(IsBytecodeArray(*array));
   CHECK_EQ(array->length(), (int)sizeof(kRawBytes));
   CHECK_EQ(array->frame_size(), kFrameSize);
   CHECK_EQ(array->parameter_count(), kParameterCount);
   CHECK_EQ(array->constant_pool(), *constant_pool);
+  CHECK_EQ(array->handler_table(), *handler_table);
   CHECK_LE(array->address(), array->GetFirstBytecodeAddress());
   CHECK_GE(array->address() + array->BytecodeArraySize(),
            array->GetFirstBytecodeAddress() + array->length());
@@ -4975,6 +4979,45 @@ static void InterruptCallback357137(v8::Isolate* isolate, void* data) { }
 static void RequestInterrupt(const v8::FunctionCallbackInfo<v8::Value>& info) {
   CHECK(i::ValidateCallbackInfo(info));
   CcTest::isolate()->RequestInterrupt(&InterruptCallback357137, nullptr);
+}
+
+HEAP_TEST(Regress538257) {
+  ManualGCScope manual_gc_scope;
+  heap::ManualEvacuationCandidatesSelectionScope
+      manual_evacuation_candidate_selection_scope(manual_gc_scope);
+  v8::Isolate::CreateParams create_params;
+  // Set heap limits.
+  create_params.constraints.set_max_young_generation_size_in_bytes(3 * MB);
+#ifdef DEBUG
+  create_params.constraints.set_max_old_generation_size_in_bytes(20 * MB);
+#else
+  create_params.constraints.set_max_old_generation_size_in_bytes(6 * MB);
+#endif
+  create_params.array_buffer_allocator = CcTest::array_buffer_allocator();
+  v8::Isolate* isolate = v8::Isolate::New(create_params);
+  isolate->Enter();
+  {
+    i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+    Heap* heap = i_isolate->heap();
+    HandleScope handle_scope(i_isolate);
+    PagedSpace* old_space = heap->old_space();
+    const int kMaxObjects = 10000;
+    const int kFixedArrayLen = 512;
+    Handle<FixedArray> objects[kMaxObjects];
+    for (int i = 0; (i < kMaxObjects) &&
+                    heap->CanExpandOldGeneration(old_space->AreaSize());
+         i++) {
+      objects[i] = i_isolate->factory()->NewFixedArray(kFixedArrayLen,
+                                                       AllocationType::kOld);
+      heap::ForceEvacuationCandidate(Page::FromHeapObject(*objects[i]));
+    }
+    heap::SimulateFullSpace(old_space);
+    heap::InvokeMajorGC(heap);
+    // If we get this far, we've successfully aborted compaction. Any further
+    // allocations might trigger OOM.
+  }
+  isolate->Exit();
+  isolate->Dispose();
 }
 
 

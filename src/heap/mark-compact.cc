@@ -1324,10 +1324,10 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
 
     if (slot.tag() == kCodeIndirectPointerTag) {
       DCHECK(IsCode(host));
-      GetProcessWideCodePointerTable()->SetCodeObject(handle, host.ptr());
+      GetProcessWideCodePointerTable()->SetCodeObject(handle, host.address());
     } else {
       TrustedPointerTable& table = heap_->isolate()->trusted_pointer_table();
-      table.Set(handle, host.ptr(), slot.tag());
+      table.Set(handle, host.address(), slot.tag());
     }
 #else
     UNREACHABLE();
@@ -1350,22 +1350,22 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
 
         MemoryChunk* chunk = MemoryChunk::FromHeapObject(host);
         DCHECK(chunk->SweepingDone());
-        RememberedSet<OLD_TO_NEW>::Insert<AccessMode::ATOMIC>(chunk, slot);
+        RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(chunk, slot);
       } else if (p->IsEvacuationCandidate()) {
         MemoryChunk* host_chunk = MemoryChunk::FromHeapObject(host);
         if (p->IsFlagSet(MemoryChunk::IS_EXECUTABLE)) {
-          RememberedSet<OLD_TO_CODE>::Insert<AccessMode::ATOMIC>(
+          RememberedSet<OLD_TO_CODE>::Insert<AccessMode::NON_ATOMIC>(
               MemoryChunk::FromHeapObject(host), slot);
         } else if (p->IsFlagSet(MemoryChunk::IS_TRUSTED) &&
                    host_chunk->IsFlagSet(MemoryChunk::IS_TRUSTED)) {
           RememberedSet<TRUSTED_TO_TRUSTED>::Insert<AccessMode::NON_ATOMIC>(
               MemoryChunk::FromHeapObject(host), slot);
         } else {
-          RememberedSet<OLD_TO_OLD>::Insert<AccessMode::ATOMIC>(
+          RememberedSet<OLD_TO_OLD>::Insert<AccessMode::NON_ATOMIC>(
               MemoryChunk::FromHeapObject(host), slot);
         }
       } else if (p->InWritableSharedSpace() && !host.InWritableSharedSpace()) {
-        RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::ATOMIC>(
+        RememberedSet<OLD_TO_SHARED>::Insert<AccessMode::NON_ATOMIC>(
             MemoryChunk::FromHeapObject(host), slot);
       }
     }
@@ -4036,7 +4036,8 @@ class Evacuator final : public Malloced {
       : heap_(heap),
         local_pretenuring_feedback_(
             PretenuringHandler::kInitialFeedbackCapacity),
-        local_allocator_(heap_),
+        local_allocator_(heap_,
+                         CompactionSpaceKind::kCompactionSpaceForMarkCompact),
         shared_old_allocator_(CreateSharedOldAllocator(heap_)),
         record_visitor_(heap_),
         new_space_visitor_(heap_, &local_allocator_,

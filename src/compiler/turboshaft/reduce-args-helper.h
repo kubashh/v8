@@ -269,10 +269,6 @@ class CallWithReduceArgsHelper {
     return callback_(op.left(), op.right(), op.frame_state(), op.kind);
   }
 
-  OpIndex operator()(const BigIntEqualOp& op) {
-    return callback_(op.left(), op.right());
-  }
-
   OpIndex operator()(const BigIntComparisonOp& op) {
     return callback_(op.left(), op.right(), op.kind);
   }
@@ -310,10 +306,6 @@ class CallWithReduceArgsHelper {
   }
 
   OpIndex operator()(const StringConcatOp& op) {
-    return callback_(op.left(), op.right());
-  }
-
-  OpIndex operator()(const StringEqualOp& op) {
     return callback_(op.left(), op.right());
   }
 
