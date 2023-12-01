@@ -227,6 +227,19 @@ void MarkingVisitorBase<ConcreteVisitor>::VisitTrustedPointerTableEntry(
 #endif
 }
 
+template <typename ConcreteVisitor>
+V8_INLINE void
+MarkingVisitorBase<ConcreteVisitor>::VisitCompressedTrustedPointer(
+    Tagged<TrustedObject> host, CompressedTrustedPointerSlot slot) {
+  // TODO wrong cage base
+  Tagged<Object> object =
+      slot.Relaxed_Load(ObjectVisitorWithCageBases::cage_base());
+  Tagged<HeapObject> heap_object;
+  if (object.GetHeapObjectIfStrong(&heap_object)) {
+    ProcessStrongHeapObject(host, slot, heap_object);
+  }
+}
+
 // ===========================================================================
 // Object participating in bytecode flushing =================================
 // ===========================================================================

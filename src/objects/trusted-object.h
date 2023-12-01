@@ -35,6 +35,14 @@ class TrustedObject : public HeapObject {
   DECL_CAST(TrustedObject)
   DECL_VERIFIER(TrustedObject)
 
+  // Compressed trusted pointers, i.e. compressed pointers within the trusted
+  // space, must only be used to reference a trusted object from another
+  // trusted object. Using them from inside the sandbox would not be safe. As
+  // such, the slot accessor for these slots only exists on TrustedObjects but
+  // not on any other HeapObjects.
+  inline CompressedTrustedPointerSlot RawCompressedTrustedPointerField(
+      int byte_offset) const;
+
   static constexpr int kHeaderSize = HeapObject::kHeaderSize;
   static constexpr int kize = kHeaderSize;
 

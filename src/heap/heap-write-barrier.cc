@@ -98,6 +98,12 @@ void WriteBarrier::MarkingSlow(Tagged<HeapObject> host,
   marking_barrier->Write(host, slot);
 }
 
+void WriteBarrier::MarkingSlow(Tagged<TrustedObject> host,
+                               CompressedTrustedPointerSlot slot) {
+  MarkingBarrier* marking_barrier = CurrentMarkingBarrier(host);
+  marking_barrier->Write(host, slot);
+}
+
 int WriteBarrier::MarkingFromCode(Address raw_host, Address raw_slot) {
   Tagged<HeapObject> host = HeapObject::cast(Tagged<Object>(raw_host));
   MaybeObjectSlot slot(raw_slot);

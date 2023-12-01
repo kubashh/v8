@@ -47,6 +47,7 @@ class CompressedObjectSlot : public SlotBase<CompressedObjectSlot, Tagged_t> {
   // TODO(leszeks): Consider deprecating the operator* load, and always pass the
   // Isolate.
   inline Tagged<Object> operator*() const;
+  inline Tagged<Object> load() const;
   inline Tagged<Object> load(PtrComprCageBase cage_base) const;
   inline void store(Tagged<Object> value) const;
   inline void store_map(Tagged<Map> map) const;
@@ -150,6 +151,7 @@ class OffHeapCompressedObjectSlot
   explicit OffHeapCompressedObjectSlot(const uint32_t* ptr)
       : TSlotBase(reinterpret_cast<Address>(ptr)) {}
 
+  inline Tagged<Object> load() const;
   inline Tagged<Object> load(PtrComprCageBase cage_base) const;
   inline void store(Tagged<Object> value) const;
 

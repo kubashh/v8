@@ -17,6 +17,11 @@ namespace internal {
 CAST_ACCESSOR(TrustedObject)
 OBJECT_CONSTRUCTORS_IMPL(TrustedObject, HeapObject)
 
+CompressedTrustedPointerSlot TrustedObject::RawCompressedTrustedPointerField(
+    int byte_offset) const {
+  return CompressedTrustedPointerSlot(field_address(byte_offset));
+}
+
 CAST_ACCESSOR(ExposedTrustedObject)
 OBJECT_CONSTRUCTORS_IMPL(ExposedTrustedObject, TrustedObject)
 

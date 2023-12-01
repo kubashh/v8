@@ -77,6 +77,27 @@ void MarkingBarrier::Write(Tagged<HeapObject> host, IndirectPointerSlot slot) {
   // take care of updating the pointer to itself if it is relocated.
 }
 
+void MarkingBarrier::Write(Tagged<TrustedObject> host,
+                           CompressedTrustedPointerSlot slot) {
+  DCHECK(IsCurrentMarkingBarrier(host));
+  DCHECK(is_activated_ || shared_heap_worklist_.has_value());
+  DCHECK(MemoryChunk::FromHeapObject(host)->IsMarking());
+
+  // We must see a HeaObject here since we wouldn't execute a write barrier when
+  // storing a smi value.
+  Tagged<HeapObject> value = HeapObject::cast(slot.load());
+  MarkValue(host, value);
+
+  // Trusted compressed pointers are only used for references between objects in
+  // trusted space.
+  DCHECK(!Heap::InYoungGeneration(value));
+  DCHECK(!value.InWritableSharedSpace());
+
+  if (IsCompacting(host)) {
+    MarkCompactCollector::RecordSlot(host, slot, value);
+  }
+}
+
 void MarkingBarrier::WriteWithoutHost(Tagged<HeapObject> value) {
   DCHECK(is_main_thread_barrier_);
   DCHECK(is_activated_);

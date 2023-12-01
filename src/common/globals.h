@@ -1090,6 +1090,19 @@ using OffHeapObjectSlot = SlotTraits::TOffHeapObjectSlot;
 // value for code space.
 using InstructionStreamSlot = SlotTraits::TInstructionStreamSlot;
 
+// These slots only exist when the sandbox is enabled. Then they are used for
+// references between TrustedObjects, i.e. within trusted space. When the
+// sandbox is disabled, these slots become regular OffHeapFullObjectSlot, but
+// only to ensure that the code compiles. They should never be used in that
+// case. TODO(saelo): could we have a kind of "InvalidSlot" for this case and
+// the InstructionStreamSlot above?
+#ifdef V8_ENABLE_SANDBOX
+using CompressedTrustedPointerSlot =
+    OffHeapCompressedObjectSlot<TrustedSpaceCompressionScheme>;
+#else
+using CompressedTrustedPointerSlot = OffHeapFullObjectSlot;
+#endif
+
 using WeakSlotCallback = bool (*)(FullObjectSlot pointer);
 
 using WeakSlotCallbackWithHeap = bool (*)(Heap* heap, FullObjectSlot pointer);

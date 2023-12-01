@@ -44,6 +44,7 @@ class MarkingBarrier {
 
   void Write(Tagged<HeapObject> host, HeapObjectSlot, Tagged<HeapObject> value);
   void Write(Tagged<HeapObject> host, IndirectPointerSlot slot);
+  void Write(Tagged<TrustedObject> host, CompressedTrustedPointerSlot slot);
   void Write(Tagged<InstructionStream> host, RelocInfo*,
              Tagged<HeapObject> value);
   void Write(Tagged<JSArrayBuffer> host, ArrayBufferExtension*);

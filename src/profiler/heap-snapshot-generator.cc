@@ -1156,25 +1156,23 @@ class IndexedReferencesExtractor : public ObjectVisitorWithCageBases {
 
   void VisitIndirectPointer(Tagged<HeapObject> host, IndirectPointerSlot slot,
                             IndirectPointerMode mode) override {
-    int field_index =
-        static_cast<int>(slot.address() - parent_start_.address()) /
-        kIndirectPointerSize;
-    DCHECK_GE(field_index, 0);
-    if (generator_->visited_fields_[field_index]) {
-      generator_->visited_fields_[field_index] = false;
-    } else {
-      Tagged<Object> content = slot.load(generator_->isolate());
-      if (IsHeapObject(content)) {
-        VisitHeapObjectImpl(HeapObject::cast(content), field_index);
-      }
-    }
+    VisitSlotImpl(generator_->isolate(), slot);
+  }
+
+  void VisitCompressedTrustedPointer(
+      Tagged<TrustedObject> host, CompressedTrustedPointerSlot slot) override {
+    VisitSlotImpl(trusted_cage_base(), slot);
   }
 
  private:
-  template <typename TSlot>
-  V8_INLINE void VisitSlotImpl(PtrComprCageBase cage_base, TSlot slot) {
+  // TODO(saelo): if IndirectPointerSlots would store the Isolate directly, we
+  // could just use the load() variant without any arguments here for all slots.
+  template <typename TIsolateOrCageBase, typename TSlot>
+  V8_INLINE void VisitSlotImpl(TIsolateOrCageBase isolate_or_cage_base,
+                               TSlot slot) {
     int field_index =
-        static_cast<int>(MaybeObjectSlot(slot.address()) - parent_start_);
+        static_cast<int>(slot.address() - parent_start_.address()) /
+        TSlot::kSlotDataSize;
 #ifdef V8_TARGET_BIG_ENDIAN
     field_index += AdjustEmbedderFieldIndex(parent_obj_, field_index);
 #endif
@@ -1183,7 +1181,7 @@ class IndexedReferencesExtractor : public ObjectVisitorWithCageBases {
       generator_->visited_fields_[field_index] = false;
     } else {
       Tagged<HeapObject> heap_object;
-      auto loaded_value = slot.load(cage_base);
+      auto loaded_value = slot.load(isolate_or_cage_base);
       if (loaded_value.GetHeapObjectIfStrong(&heap_object)) {
         VisitHeapObjectImpl(heap_object, field_index);
       } else if (loaded_value.GetHeapObjectIfWeak(&heap_object)) {
