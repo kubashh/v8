@@ -24,6 +24,7 @@
 #include "src/objects/js-array-buffer.h"
 #include "src/objects/objects-inl.h"
 #include "test/common/flag-utils.h"
+#include "test/unittests/heap/heap-utils.h"
 #include "test/unittests/test-utils.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -2723,6 +2724,8 @@ class ValueSerializerTestWithSharedArrayBufferClone
 
 TEST_F(ValueSerializerTestWithSharedArrayBufferClone,
        RoundTripSharedArrayBufferClone) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   InitializeData({0x00, 0x01, 0x80, 0xFF}, false);
 
   EXPECT_CALL(serializer_delegate_,
@@ -2758,6 +2761,8 @@ TEST_F(ValueSerializerTestWithSharedArrayBufferClone,
 #if V8_ENABLE_WEBASSEMBLY
 TEST_F(ValueSerializerTestWithSharedArrayBufferClone,
        RoundTripWebAssemblyMemory) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   std::vector<uint8_t> data = {0x00, 0x01, 0x80, 0xFF};
   data.resize(65536);
   InitializeData(data, true);
@@ -2790,6 +2795,8 @@ TEST_F(ValueSerializerTestWithSharedArrayBufferClone,
   // It ensures that WasmMemoryObject can deserialize even if its underlying
   // buffer was already encountered, and so will be encoded with an object
   // backreference.
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   std::vector<uint8_t> data = {0x00, 0x01, 0x80, 0xFF};
   data.resize(65536);
   InitializeData(data, true);
@@ -2916,6 +2923,8 @@ class ValueSerializerTestWithHostObject : public ValueSerializerTest {
 const uint8_t ValueSerializerTestWithHostObject::kExampleHostObjectTag = 'T';
 
 TEST_F(ValueSerializerTestWithHostObject, RoundTripUint32) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   // The host can serialize data as uint32_t.
   EXPECT_CALL(serializer_delegate_, WriteHostObject(isolate(), _))
       .WillRepeatedly(Invoke([this](Isolate*, Local<Object> object) {
@@ -2948,6 +2957,8 @@ TEST_F(ValueSerializerTestWithHostObject, RoundTripUint32) {
 }
 
 TEST_F(ValueSerializerTestWithHostObject, RoundTripUint64) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   // The host can serialize data as uint64_t.
   EXPECT_CALL(serializer_delegate_, WriteHostObject(isolate(), _))
       .WillRepeatedly(Invoke([this](Isolate*, Local<Object> object) {
@@ -2990,6 +3001,8 @@ TEST_F(ValueSerializerTestWithHostObject, RoundTripUint64) {
 }
 
 TEST_F(ValueSerializerTestWithHostObject, RoundTripDouble) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   // The host can serialize data as double.
   EXPECT_CALL(serializer_delegate_, WriteHostObject(isolate(), _))
       .WillRepeatedly(Invoke([this](Isolate*, Local<Object> object) {
@@ -3028,6 +3041,8 @@ TEST_F(ValueSerializerTestWithHostObject, RoundTripDouble) {
 }
 
 TEST_F(ValueSerializerTestWithHostObject, RoundTripRawBytes) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   // The host can serialize arbitrary raw bytes.
   const struct {
     uint64_t u64;
@@ -3060,6 +3075,8 @@ TEST_F(ValueSerializerTestWithHostObject, RoundTripRawBytes) {
 }
 
 TEST_F(ValueSerializerTestWithHostObject, RoundTripSameObject) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   // If the same object exists in two places, the delegate should be invoked
   // only once, and the objects should be the same (by reference equality) on
   // the other side.
@@ -3079,6 +3096,8 @@ TEST_F(ValueSerializerTestWithHostObject, RoundTripSameObject) {
 }
 
 TEST_F(ValueSerializerTestWithHostObject, DecodeSimpleHostObject) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   EXPECT_CALL(deserializer_delegate_, ReadHostObject(isolate()))
       .WillRepeatedly(Invoke([this](Isolate*) {
         EXPECT_TRUE(ReadExampleHostObjectTag());
@@ -3093,12 +3112,16 @@ TEST_F(ValueSerializerTestWithHostObject, DecodeSimpleHostObject) {
 
 TEST_F(ValueSerializerTestWithHostObject,
        RoundTripHostJSObjectWithoutCustomHostObject) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   EXPECT_CALL(serializer_delegate_, HasCustomHostObject(isolate()))
       .WillOnce(Invoke([](Isolate* isolate) { return false; }));
   RoundTripTest("({ a: { my_host_object: true }, get b() { return this.a; }})");
 }
 
 TEST_F(ValueSerializerTestWithHostObject, RoundTripHostJSObject) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   EXPECT_CALL(serializer_delegate_, HasCustomHostObject(isolate()))
       .WillOnce(Invoke([](Isolate* isolate) { return true; }));
   EXPECT_CALL(serializer_delegate_, IsHostObject(isolate(), _))
@@ -3138,6 +3161,8 @@ class ValueSerializerTestWithHostArrayBufferView
 };
 
 TEST_F(ValueSerializerTestWithHostArrayBufferView, RoundTripUint8ArrayInput) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   EXPECT_CALL(serializer_delegate_, WriteHostObject(isolate(), _))
       .WillOnce(Invoke([this](Isolate*, Local<Object> object) {
         EXPECT_TRUE(object->IsUint8Array());
@@ -3472,6 +3497,8 @@ class ValueSerializerTestWithLimitedMemory : public ValueSerializerTest {
 };
 
 TEST_F(ValueSerializerTestWithLimitedMemory, FailIfNoMemoryInWriteHostObject) {
+  i::DisableHandleChecksForMockingScope mocking_scope;
+
   EXPECT_CALL(serializer_delegate_, WriteHostObject(isolate(), _))
       .WillRepeatedly(Invoke([this](Isolate*, Local<Object>) {
         static const char kDummyData[1024] = {};
