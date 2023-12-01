@@ -1370,6 +1370,13 @@ inline std::ostream& operator<<(std::ostream& os, GarbageCollector collector) {
   return os << ToString(collector);
 }
 
+enum class CompactionSpaceKind {
+  kNone,
+  kCompactionSpaceForScavenge,
+  kCompactionSpaceForMarkCompact,
+  kCompactionSpaceForMinorMarkSweep,
+};
+
 enum Executability { NOT_EXECUTABLE, EXECUTABLE };
 
 enum class PageSize { kRegular, kLarge };
@@ -2260,7 +2267,6 @@ enum class AliasingKind {
   C(PendingHandlerFP, pending_handler_fp)                           \
   C(PendingHandlerSP, pending_handler_sp)                           \
   C(NumFramesAbovePendingHandler, num_frames_above_pending_handler) \
-  C(ExternalCaughtException, external_caught_exception)             \
   C(IsOnCentralStackFlag, is_on_central_stack_flag)                 \
   C(JSEntrySP, js_entry_sp)
 

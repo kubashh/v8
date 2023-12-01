@@ -1641,6 +1641,15 @@ bool increment_effect_level_for_node(TurboshaftAdapter* adapter,
   // We need to increment the effect level if the operation consumes any of the
   // dimensions of the {kTurboshaftEffectLevelMask}.
   const turboshaft::Operation& op = adapter->Get(node);
+  if (op.Is<turboshaft::RetainOp>()) {
+    // Retain has CanWrite effect so that it's not reordered before the last
+    // read it protects, but it shouldn't increment the effect level, since
+    // doing a Load(x) after a Retain(x) is safe as long as there is not call
+    // (or something that can trigger GC) in between Retain(x) and Load(x), and
+    // if there were, then this call would increment the effect level, which
+    // would prevent covering in the ISEL.
+    return false;
+  }
   return (op.Effects().consumes.bits() & kTurboshaftEffectLevelMask.bits()) !=
          0;
 }
@@ -1659,7 +1668,6 @@ void InstructionSelectorT<Adapter>::VisitBlock(block_t block) {
   int effect_level = 0;
   for (node_t node : this->nodes(block)) {
     SetEffectLevel(node, effect_level);
-    current_effect_level_ = effect_level;
     if (increment_effect_level_for_node(this, node)) {
       ++effect_level;
     }
@@ -1730,6 +1738,7 @@ void InstructionSelectorT<Adapter>::VisitBlock(block_t block) {
     } else if (!IsDefined(node)) {
       // Generate code for this node "top down", but schedule the code "bottom
       // up".
+      current_effect_level_ = GetEffectLevel(node);
       VisitNode(node);
       if (!FinishEmittedInstructions(node, current_node_end)) return;
     }
@@ -4918,8 +4927,8 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitNode(
     }
     case Opcode::kLoad: {
       const LoadOp& load = op.Cast<LoadOp>();
-      MachineType loaded_type = load.loaded_rep.ToMachineType();
-      MarkAsRepresentation(load.result_rep, node);
+      MachineType loaded_type = load.machine_type();
+      MarkAsRepresentation(loaded_type.representation(), node);
       if (load.kind.maybe_unaligned) {
         DCHECK(!load.kind.with_trap_handler);
         if (loaded_type.representation() == MachineRepresentation::kWord8 ||

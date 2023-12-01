@@ -51,6 +51,12 @@ Operand StackArgumentsAccessor::GetArgumentOperand(int index) const {
   return Operand(rsp, kPCOnStackSize + index * kSystemPointerSize);
 }
 
+void MacroAssembler::CodeEntry() {
+#ifdef V8_ENABLE_CET_IBT
+  endbr64();
+#endif
+}
+
 void MacroAssembler::Load(Register destination, ExternalReference source) {
   if (root_array_available_ && options().enable_root_relative_access) {
     intptr_t delta = RootRegisterOffsetForExternalReference(isolate(), source);
@@ -194,18 +200,24 @@ void MacroAssembler::PushRoot(RootIndex index) {
 }
 
 void MacroAssembler::CompareRoot(Register with, RootIndex index) {
+  if (!base::IsInRange(index, RootIndex::kFirstStrongOrReadOnlyRoot,
+                       RootIndex::kLastStrongOrReadOnlyRoot)) {
+    // Some smi roots contain system pointer size values like stack limits.
+    cmpq(with, RootAsOperand(index));
+  }
+  return CompareTaggedRoot(with, index);
+}
+
+void MacroAssembler::CompareTaggedRoot(Register with, RootIndex index) {
   if (CanBeImmediate(index)) {
     cmp_tagged(with, Immediate(static_cast<uint32_t>(ReadOnlyRootPtr(index))));
     return;
   }
   DCHECK(root_array_available_);
-  if (base::IsInRange(index, RootIndex::kFirstStrongOrReadOnlyRoot,
-                      RootIndex::kLastStrongOrReadOnlyRoot)) {
-    cmp_tagged(with, RootAsOperand(index));
-  } else {
-    // Some smi roots contain system pointer size values like stack limits.
-    cmpq(with, RootAsOperand(index));
-  }
+  // Some smi roots contain system pointer size values like stack limits.
+  DCHECK(base::IsInRange(index, RootIndex::kFirstStrongOrReadOnlyRoot,
+                         RootIndex::kLastStrongOrReadOnlyRoot));
+  cmp_tagged(with, RootAsOperand(index));
 }
 
 void MacroAssembler::CompareRoot(Operand with, RootIndex index) {
@@ -2186,7 +2198,12 @@ void MacroAssembler::Switch(Register scratch, Register reg, int case_value_base,
   cmpq(reg, Immediate(num_labels));
   j(above_equal, &fallthrough);
   leaq(table, MemOperand(&jump_table));
+#ifdef V8_ENABLE_CET_IBT
+  // Add the notrack prefix to disable landing pad enforcement.
+  jmp(MemOperand(table, reg, times_8, 0), /*notrack=*/true);
+#else
   jmp(MemOperand(table, reg, times_8, 0));
+#endif
   // Emit the jump table inline, under the assumption that it's not too big.
   Align(kSystemPointerSize);
   bind(&jump_table);
@@ -3972,12 +3989,10 @@ void MacroAssembler::ComputeCodeStartAddress(Register dst) {
 //       the flags in the referenced {Code} object;
 //    2. test kMarkedForDeoptimizationBit in those flags; and
 //    3. if it is not zero then it jumps to the builtin.
-void MacroAssembler::BailoutIfDeoptimized(Register scratch1,
-                                          Register scratch2) {
+void MacroAssembler::BailoutIfDeoptimized(Register scratch) {
   int offset = InstructionStream::kCodeOffset - InstructionStream::kHeaderSize;
-  LoadCodePointerField(
-      scratch1, Operand(kJavaScriptCallCodeStartRegister, offset), scratch2);
-  TestCodeIsMarkedForDeoptimization(scratch1);
+  LoadTaggedField(scratch, Operand(kJavaScriptCallCodeStartRegister, offset));
+  TestCodeIsMarkedForDeoptimization(scratch);
   Jump(BUILTIN_CODE(isolate(), CompileLazyDeoptimizedCode),
        RelocInfo::CODE_TARGET, not_zero);
 }
@@ -4010,7 +4025,7 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
                               int stack_space, Operand* stack_space_operand,
                               Operand return_value_operand) {
   ASM_CODE_COMMENT(masm);
-  Label promote_scheduled_exception;
+  Label propagate_exception;
   Label delete_allocated_handles;
   Label leave_exit_frame;
 
@@ -4104,9 +4119,9 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
     ASM_CODE_COMMENT_STRING(masm,
                             "Check if the function scheduled an exception.");
     __ CompareRoot(__ ExternalReferenceAsOperand(
-                       ER::scheduled_exception_address(isolate), no_reg),
+                       ER::pending_exception_address(isolate), no_reg),
                    RootIndex::kTheHoleValue);
-    __ j(not_equal, &promote_scheduled_exception);
+    __ j(not_equal, &propagate_exception);
   }
 
   {
@@ -4145,9 +4160,9 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
     __ Call(thunk_ref);
     __ jmp(&done_api_call);
   }
-  __ RecordComment("Re-throw by promoting a scheduled exception.");
-  __ bind(&promote_scheduled_exception);
-  __ TailCallRuntime(Runtime::kPromoteScheduledException);
+  __ RecordComment("An exception was thrown. Propagate it.");
+  __ bind(&propagate_exception);
+  __ TailCallRuntime(Runtime::kPropagateException);
   {
     ASM_CODE_COMMENT_STRING(
         masm, "HandleScope limit has changed. Delete allocated extensions.");

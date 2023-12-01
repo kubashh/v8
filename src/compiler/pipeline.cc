@@ -3307,10 +3307,6 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
   DCHECK_NOT_NULL(data.schedule());
 
   if (v8_flags.turboshaft_csa) {
-    // TODO(chromium:1489500, nicohartmann@): Reenable once turboshaft csa
-    // pipeline crashes are fixed.
-    UNIMPLEMENTED();
-#if 0
     UnparkedScopeIfNeeded scope(data.broker(),
                                 v8_flags.turboshaft_trace_reduction);
     base::Optional<turboshaft::PipelineData::Scope> turboshaft_pipeline(
@@ -3331,7 +3327,6 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
     data.set_schedule(new_schedule);
     TraceSchedule(data.info(), &data, data.schedule(),
                   turboshaft::RecreateSchedulePhase::phase_name());
-#endif
   }
 
   // First run code generation on a copy of the pipeline, in order to be able to
@@ -3773,12 +3768,11 @@ bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
     DCHECK_NOT_NULL(turboshaft::PipelineData::Get().wasm_module());
 
     AccountingAllocator allocator;
-    if (!wasm::BuildTSGraph(&allocator, env->enabled_features, env->module,
-                            detected, turboshaft_pipeline.Value().graph(),
-                            compilation_data.func_body,
-                            compilation_data.wire_bytes_storage,
-                            data.node_origins(), compilation_data.assumptions,
-                            &inlining_positions, compilation_data.func_index)) {
+    if (!wasm::BuildTSGraph(
+            &allocator, env->enabled_features, env->module, detected,
+            turboshaft_pipeline.Value().graph(), compilation_data.func_body,
+            compilation_data.wire_bytes_storage, compilation_data.assumptions,
+            &inlining_positions, compilation_data.func_index)) {
       return false;
     }
     CodeTracer* code_tracer = nullptr;
@@ -3794,9 +3788,10 @@ bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
 
     data.BeginPhaseKind("V8.WasmOptimization");
 
-    if (v8_flags.wasm_loop_peeling &&
-        (detected->has_gc() || detected->has_stringref() ||
-         detected->has_imported_strings())) {
+    const bool uses_wasm_gc_features = detected->has_gc() ||
+                                       detected->has_stringref() ||
+                                       detected->has_imported_strings();
+    if (v8_flags.wasm_loop_peeling && uses_wasm_gc_features) {
       pipeline.Run<turboshaft::LoopPeelingPhase>();
     }
 
@@ -3804,8 +3799,7 @@ bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
       pipeline.Run<turboshaft::LoopUnrollingPhase>();
     }
 
-    if (v8_flags.wasm_opt && (detected->has_gc() || detected->has_stringref() ||
-                              detected->has_imported_strings())) {
+    if (v8_flags.wasm_opt && uses_wasm_gc_features) {
       pipeline.Run<turboshaft::WasmGCOptimizePhase>();
     }
 
@@ -3834,9 +3828,21 @@ bool Pipeline::GenerateWasmCodeFromTurboshaftGraph(
       pipeline.Run<turboshaft::DebugFeatureLoweringPhase>();
     }
 
+    if (uses_wasm_gc_features) {
+      pipeline.Run<turboshaft::DecompressionOptimizationPhase>();
+    }
+
     data.BeginPhaseKind("V8.InstructionSelection");
 
-    if (v8_flags.turboshaft_wasm_instruction_selection) {
+#if V8_TARGET_ARCH_X64
+    bool use_turboshaft_instruction_selection =
+        v8_flags.turboshaft_wasm_instruction_selection_staged;
+#else
+    bool use_turboshaft_instruction_selection =
+        v8_flags.turboshaft_wasm_instruction_selection_experimental;
+#endif
+
+    if (use_turboshaft_instruction_selection) {
       // Run Turboshaft instruction selection.
       if (!pipeline.SelectInstructionsTurboshaft(&linkage)) {
         return false;

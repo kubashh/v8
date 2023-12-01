@@ -83,7 +83,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Fuchsia sdk
   # and whatever else without interference from each other.
-  'fuchsia_version': 'version:16.20231117.2.1',
+  'fuchsia_version': 'version:16.20231129.1.1',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling android_sdk_build-tools_version
@@ -123,9 +123,9 @@ deps = {
   'base/trace_event/common':
     Var('chromium_url') + '/chromium/src/base/trace_event/common.git' + '@' + '29ac73db520575590c3aceb0a6f1f58dda8934f6',
   'build':
-    Var('chromium_url') + '/chromium/src/build.git' + '@' + '4ddd07ca4ab1a5298f25911e293f5bd29b021445',
+    Var('chromium_url') + '/chromium/src/build.git' + '@' + 'a443f73cbc103648cedf848ee27c79a2062431da',
   'buildtools':
-    Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + 'c65da25aed99c711ef83d26343733f1a70e5ad1b',
+    Var('chromium_url') + '/chromium/src/buildtools.git' + '@' + 'ba3cb9e951b0fb7a8779a981cc4eda74af782225',
   'buildtools/linux64': {
     'packages': [
       {
@@ -225,7 +225,7 @@ deps = {
     'dep_type': 'cipd',
   },
   'third_party/catapult': {
-    'url': Var('chromium_url') + '/catapult.git' + '@' + '71fc601b51dbdc95b287037510ea20ce9c3fb948',
+    'url': Var('chromium_url') + '/catapult.git' + '@' + 'be49b4d0664bf485ea13b1affb6f810d79626733',
     'condition': 'checkout_android',
   },
   'third_party/clang-format/script':
@@ -239,9 +239,9 @@ deps = {
     'condition': 'checkout_android',
   },
   'third_party/depot_tools':
-    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + '9e5fc28b6b27ad4ffb4c3ddc66388e53e4f0f5b0',
+    Var('chromium_url') + '/chromium/tools/depot_tools.git' + '@' + 'cccca95d8fca2274aee9c6550e63d6787d648694',
   'third_party/fuchsia-gn-sdk': {
-    'url': Var('chromium_url') + '/chromium/src/third_party/fuchsia-gn-sdk.git' + '@' + 'c078b56f45230567dd7aabd6e9b7e5d79622bc5d',
+    'url': Var('chromium_url') + '/chromium/src/third_party/fuchsia-gn-sdk.git' + '@' + '93e031cd9e2503bf6f1f2d9e6fd643785bdce6e8',
     'condition': 'checkout_fuchsia',
   },
   # Exists for rolling the Fuchsia SDK. Check out of the SDK should always
@@ -276,11 +276,11 @@ deps = {
   'third_party/jsoncpp/source':
     Var('chromium_url') + '/external/github.com/open-source-parsers/jsoncpp.git'+ '@' + '42e892d96e47b1f6e29844cc705e148ec4856448',
   'third_party/libc++/src':
-    Var('chromium_url') + '/external/github.com/llvm/llvm-project/libcxx.git' + '@' + '6cd38f6d30dda7bed3df08427db0b2a4e3fa9e47',
+    Var('chromium_url') + '/external/github.com/llvm/llvm-project/libcxx.git' + '@' + '3467ae2512627f51e25ee4a851a873c7a3083a6a',
   'third_party/libc++abi/src':
-    Var('chromium_url') + '/external/github.com/llvm/llvm-project/libcxxabi.git' + '@' + 'c21fd3819a09fb151561b738ce1e4fdb6dbf3627',
+    Var('chromium_url') + '/external/github.com/llvm/llvm-project/libcxxabi.git' + '@' + '4cb5c2cefedc025433f81735bacbc0f773fdcd8f',
   'third_party/libunwind/src':
-    Var('chromium_url') + '/external/github.com/llvm/llvm-project/libunwind.git' + '@' + '85df028e4c5e8a3eaa38fe75e0d78157bee2d668',
+    Var('chromium_url') + '/external/github.com/llvm/llvm-project/libunwind.git' + '@' + '278e5fbafc5b1707a5c4d09c3fc351cd4aa1630a',
   'third_party/logdog/logdog':
     Var('chromium_url') + '/infra/luci/luci-py/client/libs/logdog' + '@' + '0b2078a90f7a638d576b3a7c407d136f2fb62399',
   'third_party/markupsafe':
@@ -304,9 +304,9 @@ deps = {
       'condition': 'checkout_android',
   },
   'third_party/zlib':
-    Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + '7b4829c7a3e887e38faa37c14154fa8f1951c4b0',
+    Var('chromium_url') + '/chromium/src/third_party/zlib.git'+ '@' + '67da756b882fc98a6461a22a3bc916d897ed7f87',
   'tools/clang':
-    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + '990e9cdeeb4b639b6468a7f11206d22b6ecc258e',
+    Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + '22c6d2c55478e78d1bd7d8880f3dc8828c321735',
   'tools/luci-go': {
       'packages': [
         {
@@ -322,7 +322,7 @@ deps = {
       'dep_type': 'cipd',
   },
   'third_party/abseil-cpp': {
-    'url': Var('chromium_url') + '/chromium/src/third_party/abseil-cpp.git' + '@' + 'ec903ccd87fb656084639f68e61516bf31d084cc',
+    'url': Var('chromium_url') + '/chromium/src/third_party/abseil-cpp.git' + '@' + '0764ad493e54a79c7e3e02fc3412ef55b4835b9e',
     'condition': 'not build_with_chromium',
   }
 }

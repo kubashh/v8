@@ -244,6 +244,11 @@ TryMatchBaseWithScaledIndexAndDisplacement32(
 }
 
 base::Optional<BaseWithScaledIndexAndDisplacementMatch<TurboshaftAdapter>>
+TryMatchBaseWithScaledIndexAndDisplacement64ForWordBinop(
+    InstructionSelectorT<TurboshaftAdapter>* selector, turboshaft::OpIndex left,
+    turboshaft::OpIndex right);
+
+base::Optional<BaseWithScaledIndexAndDisplacementMatch<TurboshaftAdapter>>
 TryMatchBaseWithScaledIndexAndDisplacement64(
     InstructionSelectorT<TurboshaftAdapter>* selector,
     turboshaft::OpIndex node) {
@@ -309,15 +314,27 @@ TryMatchBaseWithScaledIndexAndDisplacement64(
     return base::nullopt;
   }
 
+  const WordBinopOp& binop = op.Cast<WordBinopOp>();
+  OpIndex left = binop.left();
+  OpIndex right = binop.right();
+  return TryMatchBaseWithScaledIndexAndDisplacement64ForWordBinop(selector,
+                                                                  left, right);
+}
+
+base::Optional<BaseWithScaledIndexAndDisplacementMatch<TurboshaftAdapter>>
+TryMatchBaseWithScaledIndexAndDisplacement64ForWordBinop(
+    InstructionSelectorT<TurboshaftAdapter>* selector, turboshaft::OpIndex left,
+    turboshaft::OpIndex right) {
+  using namespace turboshaft;  // NOLINT(build/namespaces)
+
+  BaseWithScaledIndexAndDisplacementMatch<TurboshaftAdapter> result;
+  result.displacement_mode = kPositiveDisplacement;
+
   auto OwnedByAddressingOperand = [](OpIndex) {
     // TODO(nicohartmann@): Consider providing this. For now we just allow
     // everything to be covered regardless of other uses.
     return true;
   };
-
-  const WordBinopOp& binop = op.Cast<WordBinopOp>();
-  OpIndex left = binop.left();
-  OpIndex right = binop.right();
 
   // Check (S + ...)
   if (MatchScaledIndex(selector, left, &result.index, &result.scale, nullptr) &&
@@ -720,6 +737,30 @@ class X64OperandGeneratorT final : public OperandGeneratorT<Adapter> {
   }
 };
 
+namespace {
+
+struct LoadStoreView {
+  explicit LoadStoreView(const turboshaft::Operation& op) {
+    DCHECK(op.Is<turboshaft::LoadOp>() || op.Is<turboshaft::StoreOp>());
+    if (const turboshaft::LoadOp* load = op.TryCast<turboshaft::LoadOp>()) {
+      base = load->base();
+      index = load->index();
+      offset = load->offset;
+    } else {
+      DCHECK(op.Is<turboshaft::StoreOp>());
+      const turboshaft::StoreOp& store = op.Cast<turboshaft::StoreOp>();
+      base = store.base();
+      index = store.index();
+      offset = store.offset;
+    }
+  }
+  turboshaft::OpIndex base;
+  turboshaft::OptionalOpIndex index;
+  int32_t offset;
+};
+
+}  // namespace
+
 template <>
 AddressingMode
 X64OperandGeneratorT<TurboshaftAdapter>::GetEffectiveAddressMemoryOperand(
@@ -728,13 +769,14 @@ X64OperandGeneratorT<TurboshaftAdapter>::GetEffectiveAddressMemoryOperand(
   using namespace turboshaft;  // NOLINT(build/namespaces)
 
   const Operation& op = Get(operand);
-  if (const LoadOp* load = op.TryCast<LoadOp>()) {
+  if (op.Is<LoadOp>() || op.Is<StoreOp>()) {
+    LoadStoreView load_or_store = LoadStoreView(op);
     if (ExternalReference reference;
-        MatchExternalConstant(load->base(), &reference) &&
-        !load->index().valid()) {
+        MatchExternalConstant(load_or_store.base, &reference) &&
+        !load_or_store.index.valid()) {
       if (selector()->CanAddressRelativeToRootsRegister(reference)) {
         const ptrdiff_t delta =
-            load->offset +
+            load_or_store.offset +
             MacroAssemblerBase::RootRegisterOffsetForExternalReference(
                 selector()->isolate(), reference);
         if (is_int32(delta)) {
@@ -2225,22 +2267,47 @@ template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitInt32Add(node_t node) {
   X64OperandGeneratorT<Adapter> g(this);
 
-  // No need to truncate the values before Int32Add.
+  base::Optional<BaseWithScaledIndexAndDisplacementMatch<Adapter>> m;
   if constexpr (Adapter::IsTurbofan) {
     DCHECK_EQ(node->InputCount(), 2);
     Node* left = node->InputAt(0);
     Node* right = node->InputAt(1);
-    // TODO(nicohartmann): Also optimize this on turboshaft.
+    // No need to truncate the values before Int32Add.
     if (left->opcode() == IrOpcode::kTruncateInt64ToInt32) {
       node->ReplaceInput(0, left->InputAt(0));
     }
     if (right->opcode() == IrOpcode::kTruncateInt64ToInt32) {
       node->ReplaceInput(1, right->InputAt(0));
     }
+
+    // Try to match the Add to a leal pattern
+    m = TryMatchBaseWithScaledIndexAndDisplacement32(this, node);
+
+  } else {
+    const turboshaft::WordBinopOp& add =
+        this->Get(node).template Cast<turboshaft::WordBinopOp>();
+    turboshaft::OpIndex left = add.left();
+    turboshaft::OpIndex right = add.right();
+    // No need to truncate the values before Int32Add.
+    if (const turboshaft::ChangeOp* change =
+            this->Get(left)
+                .template TryCast<
+                    turboshaft::Opmask::kTruncateInt64ToInt32>()) {
+      left = change->input();
+    }
+    if (const turboshaft::ChangeOp* change =
+            this->Get(right)
+                .template TryCast<
+                    turboshaft::Opmask::kTruncateInt64ToInt32>()) {
+      right = change->input();
+    }
+
+    // Try to match the Add to a leal pattern
+    m = TryMatchBaseWithScaledIndexAndDisplacement64ForWordBinop(this, left,
+                                                                 right);
   }
 
-  // Try to match the Add to a leal pattern
-  if (auto m = TryMatchBaseWithScaledIndexAndDisplacement32(this, node)) {
+  if (m.has_value()) {
     if (m->displacement == 0 || g.ValueFitsIntoImmediate(m->displacement)) {
       EmitLea(this, kX64Lea32, node, m->index, m->scale, m->base,
               m->displacement, m->displacement_mode);
@@ -3947,13 +4014,15 @@ void VisitCompareZero(InstructionSelectorT<TurboshaftAdapter>* selector,
 
   int effect_level = selector->GetEffectLevel(node, cont);
   if (const auto load = op.TryCast<turboshaft::LoadOp>()) {
-    if (load->loaded_rep == turboshaft::MemoryRepresentation::Int8()) {
+    if (load->loaded_rep == turboshaft::MemoryRepresentation::Int8() ||
+        load->loaded_rep == turboshaft::MemoryRepresentation::Uint8()) {
       if (opcode == kX64Cmp32) {
         opcode = kX64Cmp8;
       } else if (opcode == kX64Test32) {
         opcode = kX64Test8;
       }
-    } else if (load->loaded_rep == turboshaft::MemoryRepresentation::Int16()) {
+    } else if (load->loaded_rep == turboshaft::MemoryRepresentation::Int16() ||
+               load->loaded_rep == turboshaft::MemoryRepresentation::Uint16()) {
       if (opcode == kX64Cmp32) {
         opcode = kX64Cmp16;
       } else if (opcode == kX64Test32) {

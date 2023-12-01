@@ -19,9 +19,9 @@
 #include "src/compiler/operator.h"
 #include "src/compiler/simplified-operator.h"
 #include "src/compiler/turboshaft/assembler.h"
+#include "src/compiler/turboshaft/copying-phase.h"
 #include "src/compiler/turboshaft/index.h"
 #include "src/compiler/turboshaft/operations.h"
-#include "src/compiler/turboshaft/optimization-phase.h"
 #include "src/compiler/turboshaft/phase.h"
 #include "src/compiler/turboshaft/reducer-traits.h"
 #include "src/compiler/turboshaft/representations.h"
@@ -1761,18 +1761,16 @@ class MachineLoweringReducer : public Next {
     UNREACHABLE();
   }
 
-  V<Word32> REDUCE(BigIntEqual)(V<Tagged> left, V<Tagged> right) {
-    return CallBuiltinForBigIntOp(Builtin::kBigIntEqual, {left, right});
-  }
-
-  V<Word32> REDUCE(BigIntComparison)(V<Tagged> left, V<Tagged> right,
-                                     BigIntComparisonOp::Kind kind) {
-    if (kind == BigIntComparisonOp::Kind::kLessThan) {
-      return CallBuiltinForBigIntOp(Builtin::kBigIntLessThan, {left, right});
-    } else {
-      DCHECK_EQ(kind, BigIntComparisonOp::Kind::kLessThanOrEqual);
-      return CallBuiltinForBigIntOp(Builtin::kBigIntLessThanOrEqual,
-                                    {left, right});
+  V<Boolean> REDUCE(BigIntComparison)(V<Tagged> left, V<Tagged> right,
+                                      BigIntComparisonOp::Kind kind) {
+    switch (kind) {
+      case BigIntComparisonOp::Kind::kEqual:
+        return CallBuiltinForBigIntOp(Builtin::kBigIntEqual, {left, right});
+      case BigIntComparisonOp::Kind::kLessThan:
+        return CallBuiltinForBigIntOp(Builtin::kBigIntLessThan, {left, right});
+      case BigIntComparisonOp::Kind::kLessThanOrEqual:
+        return CallBuiltinForBigIntOp(Builtin::kBigIntLessThanOrEqual,
+                                      {left, right});
     }
   }
 
@@ -1805,10 +1803,10 @@ class MachineLoweringReducer : public Next {
         V<Word32> representation =
             __ Word32BitwiseAnd(instance_type, kStringRepresentationMask);
 
-        IF(__ Int32LessThanOrEqual(representation, kConsStringTag)) {
+        IF (__ Int32LessThanOrEqual(representation, kConsStringTag)) {
           {
             // if_lessthanoreq_cons
-            IF(__ Word32Equal(representation, kConsStringTag)) {
+            IF (__ Word32Equal(representation, kConsStringTag)) {
               // if_consstring
               V<String> second = __ template LoadField<String>(
                   *receiver, AccessBuilder::ForConsStringSecond());
@@ -1833,13 +1831,13 @@ class MachineLoweringReducer : public Next {
         ELSE {
           // if_greaterthan_cons
           {
-            IF(__ Word32Equal(representation, kThinStringTag)) {
+            IF (__ Word32Equal(representation, kThinStringTag)) {
               // if_thinstring
               receiver = __ template LoadField<String>(
                   *receiver, AccessBuilder::ForThinStringActual());
               GOTO(loop);
             }
-            ELSE_IF(__ Word32Equal(representation, kExternalStringTag)) {
+            ELSE_IF (__ Word32Equal(representation, kExternalStringTag)) {
               // if_externalstring
               // We need to bailout to the runtime for uncached external
               // strings.
@@ -1851,9 +1849,9 @@ class MachineLoweringReducer : public Next {
 
               OpIndex data = __ LoadField(
                   *receiver, AccessBuilder::ForExternalStringResourceData());
-              IF(__ Word32Equal(
-                  __ Word32BitwiseAnd(instance_type, kStringEncodingMask),
-                  kTwoByteStringTag)) {
+              IF (__ Word32Equal(
+                      __ Word32BitwiseAnd(instance_type, kStringEncodingMask),
+                      kTwoByteStringTag)) {
                 // if_twobyte
                 constexpr uint8_t twobyte_size_log2 = 1;
                 V<Word32> value = __ Load(
@@ -1883,7 +1881,9 @@ class MachineLoweringReducer : public Next {
                   *position, __ ChangeInt32ToIntPtr(__ UntagSmi(offset)));
               GOTO(loop);
             }
-            ELSE { GOTO(runtime); }
+            ELSE {
+              GOTO(runtime);
+            }
             END_IF
           }
         }
@@ -1966,27 +1966,6 @@ class MachineLoweringReducer : public Next {
     return __ CallBuiltin_StringSubstring(isolate_, string, s, e);
   }
 
-  V<Boolean> REDUCE(StringEqual)(V<String> left, V<String> right) {
-    Label<Boolean> done(this);
-
-    GOTO_IF(__ TaggedEqual(left, right), done,
-            __ HeapConstant(factory_->true_value()));
-
-    V<Word32> left_length =
-        __ template LoadField<Word32>(left, AccessBuilder::ForStringLength());
-    V<Word32> right_length =
-        __ template LoadField<Word32>(right, AccessBuilder::ForStringLength());
-    IF(__ Word32Equal(left_length, right_length)) {
-      GOTO(done,
-           __ CallBuiltin_StringEqual(isolate_, left, right,
-                                      __ ChangeInt32ToIntPtr(left_length)));
-    }
-    ELSE { GOTO(done, __ HeapConstant(factory_->false_value())); }
-
-    BIND(done, result);
-    return result;
-  }
-
   V<String> REDUCE(StringConcat)(V<String> left, V<String> right) {
     // TODO(nicohartmann@): Port StringBuilder once it is stable.
     return __ CallBuiltin_StringAdd_CheckNone(isolate_, __ NoContextConstant(),
@@ -1996,6 +1975,28 @@ class MachineLoweringReducer : public Next {
   V<Boolean> REDUCE(StringComparison)(V<String> left, V<String> right,
                                       StringComparisonOp::Kind kind) {
     switch (kind) {
+      case StringComparisonOp::Kind::kEqual: {
+        Label<Boolean> done(this);
+
+        GOTO_IF(__ TaggedEqual(left, right), done,
+                __ HeapConstant(factory_->true_value()));
+
+        V<Word32> left_length = __ template LoadField<Word32>(
+            left, AccessBuilder::ForStringLength());
+        V<Word32> right_length = __ template LoadField<Word32>(
+            right, AccessBuilder::ForStringLength());
+        IF (__ Word32Equal(left_length, right_length)) {
+          GOTO(done,
+               __ CallBuiltin_StringEqual(isolate_, left, right,
+                                          __ ChangeInt32ToIntPtr(left_length)));
+        }
+        ELSE {
+          GOTO(done, __ HeapConstant(factory_->false_value()));
+        }
+
+        BIND(done, result);
+        return result;
+      }
       case StringComparisonOp::Kind::kLessThan:
         return __ CallBuiltin_StringLessThan(isolate_, left, right);
       case StringComparisonOp::Kind::kLessThanOrEqual:

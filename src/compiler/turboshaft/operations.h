@@ -92,7 +92,7 @@ using Variable = SnapshotTable<OpIndex, VariableData>::Key;
 //   representation of the outputs and inputs of this operations.
 // After defining the struct here, you'll also need to integrate it in
 // Turboshaft:
-// - Add an AssembleOutputGraphFoo method in OptimizationPhase (don't forget to
+// - Add an AssembleOutputGraphFoo method in CopyingPhase (don't forget to
 //   MapToNewGraph the OpIndices and the Blocks).
 // - Add one or more Foo(...) helper in AssemblerOpInterface (at least one of
 //   these Foo helper should probably call ReduceIfReachableFoo().
@@ -170,7 +170,6 @@ using Variable = SnapshotTable<OpIndex, VariableData>::Key;
   V(ArgumentsLength)                            \
   V(BigIntBinop)                                \
   V(BigIntComparison)                           \
-  V(BigIntEqual)                                \
   V(BigIntUnary)                                \
   V(CheckedClosure)                             \
   V(CheckEqualsInternalizedString)              \
@@ -210,7 +209,6 @@ using Variable = SnapshotTable<OpIndex, VariableData>::Key;
   V(StringAt)                                   \
   V(StringComparison)                           \
   V(StringConcat)                               \
-  V(StringEqual)                                \
   V(StringFromCodePointAt)                      \
   V(StringIndexOf)                              \
   V(StringLength)                               \
@@ -2436,6 +2434,8 @@ struct LoadOp : OperationT<LoadOp> {
     return base::VectorOf(&result_rep, 1);
   }
 
+  MachineType machine_type() const;
+
   base::Vector<const MaybeRegisterRepresentation> inputs_rep(
       ZoneVector<MaybeRegisterRepresentation>& storage) const {
     base::Vector<const MaybeRegisterRepresentation> result =
@@ -3482,16 +3482,10 @@ struct CatchBlockBeginOp : FixedArityOperationT<0, CatchBlockBeginOp> {
 // The correct way to produce `CheckExceptionOp` is to create an
 // `Assembler::CatchScope`, which will cause all throwing operations
 // to add a `CheckExceptionOp` automatically while the scope is active.
-// Since `OptimizationPhase` does this automatically, lowering throwing
+// Since `CopyingPhase` does this automatically, lowering throwing
 // operations into an arbitrary subgraph works automatically.
 struct DidntThrowOp : FixedArityOperationT<1, DidntThrowOp> {
-  // TODO(chromium:1489500, nicohartmann@): Reenable once turboshaft csa
-  // pipeline crashes are fixed.
-#if 0
   static constexpr OpEffects effects = OpEffects().RequiredWhenUnused();
-#else
-  static constexpr OpEffects effects = OpEffects().CanCallAnything();
-#endif
 
   // If there is a `CheckException` operation with a catch block for
   // `throwing_operation`.
@@ -4589,34 +4583,9 @@ struct BigIntBinopOp : FixedArityOperationT<3, BigIntBinopOp> {
 };
 std::ostream& operator<<(std::ostream& os, BigIntBinopOp::Kind kind);
 
-struct BigIntEqualOp : FixedArityOperationT<2, BigIntEqualOp> {
-  static constexpr OpEffects effects =
-      OpEffects()
-          // We rely on the inputs having BigInt type.
-          .CanDependOnChecks();
-  base::Vector<const RegisterRepresentation> outputs_rep() const {
-    return RepVector<RegisterRepresentation::Tagged()>();
-  }
-
-  base::Vector<const MaybeRegisterRepresentation> inputs_rep(
-      ZoneVector<MaybeRegisterRepresentation>& storage) const {
-    return MaybeRepVector<MaybeRegisterRepresentation::Tagged(),
-                          MaybeRegisterRepresentation::Tagged()>();
-  }
-
-  OpIndex left() const { return Base::input(0); }
-  OpIndex right() const { return Base::input(1); }
-
-  BigIntEqualOp(OpIndex left, OpIndex right) : Base(left, right) {}
-
-  void Validate(const Graph& graph) const {
-  }
-
-  auto options() const { return std::tuple{}; }
-};
-
 struct BigIntComparisonOp : FixedArityOperationT<2, BigIntComparisonOp> {
   enum class Kind : uint8_t {
+    kEqual,
     kLessThan,
     kLessThanOrEqual,
   };
@@ -4635,6 +4604,8 @@ struct BigIntComparisonOp : FixedArityOperationT<2, BigIntComparisonOp> {
     return MaybeRepVector<MaybeRegisterRepresentation::Tagged(),
                           MaybeRegisterRepresentation::Tagged()>();
   }
+
+  static bool IsCommutative(Kind kind) { return kind == Kind::kEqual; }
 
   OpIndex left() const { return Base::input(0); }
   OpIndex right() const { return Base::input(1); }
@@ -4920,35 +4891,9 @@ struct StringConcatOp : FixedArityOperationT<2, StringConcatOp> {
   auto options() const { return std::tuple{}; }
 };
 
-struct StringEqualOp : FixedArityOperationT<2, StringEqualOp> {
-  static constexpr OpEffects effects =
-      // String content is immutable, so the operation is pure.
-      OpEffects()
-          // We rely on the input being strings.
-          .CanDependOnChecks();
-  base::Vector<const RegisterRepresentation> outputs_rep() const {
-    return RepVector<RegisterRepresentation::Tagged()>();
-  }
-
-  base::Vector<const MaybeRegisterRepresentation> inputs_rep(
-      ZoneVector<MaybeRegisterRepresentation>& storage) const {
-    return MaybeRepVector<MaybeRegisterRepresentation::Tagged(),
-                          MaybeRegisterRepresentation::Tagged()>();
-  }
-
-  OpIndex left() const { return Base::input(0); }
-  OpIndex right() const { return Base::input(1); }
-
-  StringEqualOp(OpIndex left, OpIndex right) : Base(left, right) {}
-
-  void Validate(const Graph& graph) const {
-  }
-
-  auto options() const { return std::tuple{}; }
-};
-
 struct StringComparisonOp : FixedArityOperationT<2, StringComparisonOp> {
   enum class Kind : uint8_t {
+    kEqual,
     kLessThan,
     kLessThanOrEqual,
   };
@@ -4968,6 +4913,8 @@ struct StringComparisonOp : FixedArityOperationT<2, StringComparisonOp> {
     return MaybeRepVector<MaybeRegisterRepresentation::Tagged(),
                           MaybeRegisterRepresentation::Tagged()>();
   }
+
+  static bool IsCommutative(Kind kind) { return kind == Kind::kEqual; }
 
   OpIndex left() const { return Base::input(0); }
   OpIndex right() const { return Base::input(1); }

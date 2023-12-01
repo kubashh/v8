@@ -14,10 +14,10 @@ namespace v8 {
 namespace internal {
 
 void CodePointerTableEntry::MakeCodePointerEntry(Address code,
-                                                 Address entrypoint) {
-  // The marking bit is the LSB of the code pointer, which should always be set
-  // here since it is supposed to be a tagged pointer.
-  DCHECK_EQ(code & kMarkingBit, kMarkingBit);
+                                                 Address entrypoint,
+                                                 bool mark_as_alive) {
+  DCHECK_EQ(code & kMarkingBit, 0);
+  if (mark_as_alive) code |= kMarkingBit;
   entrypoint_.store(entrypoint, std::memory_order_relaxed);
   code_.store(code, std::memory_order_relaxed);
 }
@@ -36,21 +36,16 @@ Address CodePointerTableEntry::GetCodeObject() const {
   DCHECK(!IsFreelistEntry());
   // We reuse the heap object tag bit as marking bit, so we need to explicitly
   // set it here when accessing the pointer.
-  return code_.load(std::memory_order_acquire) | kMarkingBit;
+  return code_.load(std::memory_order_relaxed) | kMarkingBit;
 }
 
-void CodePointerTableEntry::SetCodeObject(Address value) {
-  DCHECK_EQ(value & kMarkingBit, kMarkingBit);
+void CodePointerTableEntry::SetCodeObject(Address new_value) {
   DCHECK(!IsFreelistEntry());
-  // Currently, we need release-acquire semantics here as this can be a
-  // publishing store: during mark-compact GC, one thread might relocate a Code
-  // object and call SetCodeObject afterwards, while another thread might
-  // access it when processing the associated InstructionStream object. We can
-  // again use relaxed semantics here if one of the following becomes true:
-  // * We no longer access the Code object when relocating an InstructionStream.
-  // * We update the pointers to heap objects in our pointer tables during
-  //   UpdatePointersAfterEvacuation, instead of right after moving the object.
-  code_.store(value, std::memory_order_release);
+  // SetContent shouldn't change the marking state of the entry. Currently this
+  // is always automatically the case, but if this ever fails, we might need to
+  // manually copy the marking bit.
+  DCHECK_EQ(code_ & kMarkingBit, new_value & kMarkingBit);
+  code_.store(new_value, std::memory_order_relaxed);
 }
 
 void CodePointerTableEntry::MakeFreelistEntry(uint32_t next_entry_index) {
@@ -118,7 +113,7 @@ CodePointerHandle CodePointerTable::AllocateAndInitializeEntry(
     Space* space, Address code, Address entrypoint) {
   DCHECK(space->BelongsTo(this));
   uint32_t index = AllocateEntry(space);
-  at(index).MakeCodePointerEntry(code, entrypoint);
+  at(index).MakeCodePointerEntry(code, entrypoint, space->allocate_black());
   return IndexToHandle(index);
 }
 

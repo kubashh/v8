@@ -1591,14 +1591,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   // Store a trusted pointer field.
   void StoreTrustedPointerField(Register value, MemOperand dst_field_operand);
 
-  // Load a code pointer field.
+  // Store a code pointer field.
   // These are special versions of trusted pointers that, when the sandbox is
   // enabled, reference code objects through the code pointer table.
-  void LoadCodePointerField(Register destination, MemOperand field_operand) {
-    LoadTrustedPointerField(destination, field_operand,
-                            kCodeIndirectPointerTag);
-  }
-  // Store a code pointer field.
   void StoreCodePointerField(Register value, MemOperand dst_field_operand) {
     StoreTrustedPointerField(value, dst_field_operand);
   }
@@ -2134,6 +2129,7 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
 
   // Compare the object in a register to a value from the root list.
   void CompareRoot(const Register& obj, RootIndex index);
+  void CompareTaggedRoot(const Register& with, RootIndex index);
 
   // Compare the object in a register to a value and jump if they are equal.
   void JumpIfRoot(const Register& obj, RootIndex index, Label* if_equal);
