@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c50ccb0_3ae8bc6a",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-01T16:02:13Z",
+      "side": 1,
+      "message": "Please add a CHECK(r0 !\u003d scratch)",
+      "revId": "b107b095c90ab2589c2dea55e50816a9b4ce3ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bb9e757_42714bd5",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-01T16:02:13Z",
+      "side": 1,
+      "message": "Just an FYI this needs to be updated in your sandbox CL based on this change:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/5079305",
+      "revId": "b107b095c90ab2589c2dea55e50816a9b4ce3ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "501c2088_4f1bec82",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-01T16:02:13Z",
+      "side": 1,
+      "message": "FYI this is also changed by the above CL.",
+      "revId": "b107b095c90ab2589c2dea55e50816a9b4ce3ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0df89619_41011f4d",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-01T16:02:13Z",
+      "side": 1,
+      "message": "FYI same with this section.",
+      "revId": "b107b095c90ab2589c2dea55e50816a9b4ce3ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b963333c_339869a4",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-01T16:02:13Z",
+      "side": 1,
+      "message": "CHECK scratch2 !\u003d scratch",
+      "revId": "b107b095c90ab2589c2dea55e50816a9b4ce3ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e6076ce_e5191ce6",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1828,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-01T16:02:13Z",
+      "side": 1,
+      "message": "I\u0027m guessing this was changed based on this CL? https://chromium-review.googlesource.com/c/v8/v8/+/5068539\n\nIf so maybe we should include the whole change and create separate `CompareRoot` and `CompareTaggedRoot` functions?",
+      "revId": "b107b095c90ab2589c2dea55e50816a9b4ce3ffd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
