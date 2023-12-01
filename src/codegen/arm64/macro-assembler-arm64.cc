@@ -6,6 +6,7 @@
 
 #include "src/base/bits.h"
 #include "src/base/division-by-constant.h"
+#include "src/builtins/builtins-inl.h"
 #include "src/codegen/assembler.h"
 #include "src/codegen/callable.h"
 #include "src/codegen/code-factory.h"
@@ -3717,9 +3718,7 @@ void MacroAssembler::CallEphemeronKeyBarrier(Register object, Operand offset,
                     WriteBarrierDescriptor::SlotAddressRegister(), object,
                     offset);
 
-  Call(isolate()->builtins()->code_handle(
-           Builtins::GetEphemeronKeyBarrierStub(fp_mode)),
-       RelocInfo::CODE_TARGET);
+  CallBuiltin(Builtins::EphemeronKeyBarrier(fp_mode));
   MaybeRestoreRegisters(registers);
 }
 
@@ -3738,7 +3737,7 @@ void MacroAssembler::CallIndirectPointerBarrier(Register object, Operand offset,
   Mov(IndirectPointerWriteBarrierDescriptor::IndirectPointerTagRegister(),
       Operand(tag));
 
-  CallBuiltin(Builtins::GetIndirectPointerBarrierStub(fp_mode));
+  CallBuiltin(Builtins::IndirectPointerBarrier(fp_mode));
   MaybeRestoreRegisters(registers);
 }
 
@@ -3775,8 +3774,7 @@ void MacroAssembler::CallRecordWriteStub(Register object, Register slot_address,
   if (false) {
 #endif
   } else {
-    Builtin builtin = Builtins::GetRecordWriteStub(fp_mode);
-    CallBuiltin(builtin);
+    CallBuiltin(Builtins::RecordWrite(fp_mode));
   }
 }
 
