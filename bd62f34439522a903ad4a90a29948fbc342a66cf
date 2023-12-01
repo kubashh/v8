@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0636befa_d3d2dc01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-12-01T17:19:13Z",
+      "side": 1,
+      "message": "This fixes the last remaining out-of-stack locals in tests, related to mocking.",
+      "revId": "bd62f34439522a903ad4a90a29948fbc342a66cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
