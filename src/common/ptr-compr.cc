@@ -14,16 +14,27 @@ namespace v8::internal {
 #define THREAD_LOCAL_IF_MULTICAGE thread_local
 #endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
-THREAD_LOCAL_IF_MULTICAGE uintptr_t V8HeapCompressionScheme::base_ =
-    kNullAddress;
+template <>
+THREAD_LOCAL_IF_MULTICAGE uintptr_t
+    V8HeapCompressionSchemeImpl<MainCage>::base_ = kNullAddress;
 
 // static
-Address V8HeapCompressionScheme::base_non_inlined() { return base_; }
+template <>
+Address V8HeapCompressionSchemeImpl<MainCage>::base_non_inlined() {
+  return base_;
+}
 
 // static
-void V8HeapCompressionScheme::set_base_non_inlined(Address base) {
+template <>
+void V8HeapCompressionSchemeImpl<MainCage>::set_base_non_inlined(Address base) {
   base_ = base;
 }
+
+#ifdef V8_ENABLE_SANDBOX
+
+template <>
+uintptr_t V8HeapCompressionSchemeImpl<TrustedCage>::base_ = kNullAddress;
+#endif  // V8_ENABLE_SANDBOX
 
 #ifdef V8_EXTERNAL_CODE_SPACE
 
