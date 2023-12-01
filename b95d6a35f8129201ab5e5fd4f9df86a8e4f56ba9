@@ -16,6 +16,40 @@
       "message": "ishell: could you please review this CL and let me know what you think? Thank you!",
       "revId": "b95d6a35f8129201ab5e5fd4f9df86a8e4f56ba9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fb55161_7649adfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-01T13:46:29Z",
+      "side": 1,
+      "message": "interesting idea!",
+      "revId": "b95d6a35f8129201ab5e5fd4f9df86a8e4f56ba9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f32ff27_b131417e",
+        "filename": "src/objects/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5655,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-01T13:46:29Z",
+      "side": 1,
+      "message": "I wonder if we can use the diff between `next_enumeration_index()` and `NumberOfElements()` for deciding whether to skip this additional iteration and go straight to the pigeonhole case?\n\nIf the diff is large then a lot of properties were deleted during dictionary lifetime, so it\u0027s worth compacting the indices first (as it does the `NextEnumerationIndex()`).\n\nThen we can approximate `[min_dictionary_index, max_dictionary_index]` with just `[0, dictionary-\u003enext_enumeration_index()]`.",
+      "revId": "b95d6a35f8129201ab5e5fd4f9df86a8e4f56ba9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
