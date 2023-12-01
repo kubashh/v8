@@ -72,6 +72,8 @@ class V8_EXPORT_PRIVATE WriteBarrier {
   static inline void Marking(Tagged<DescriptorArray>,
                              int number_of_own_descriptors);
   static inline void Marking(Tagged<HeapObject> host, IndirectPointerSlot slot);
+  static inline void Marking(Tagged<TrustedObject> host,
+                             CompressedTrustedPointerSlot slot);
 
   static inline void Shared(Tagged<InstructionStream> host, RelocInfo*,
                             Tagged<HeapObject> value);
@@ -117,6 +119,8 @@ class V8_EXPORT_PRIVATE WriteBarrier {
   static void MarkingSlow(Tagged<DescriptorArray>,
                           int number_of_own_descriptors);
   static void MarkingSlow(Tagged<HeapObject> host, IndirectPointerSlot slot);
+  static void MarkingSlow(Tagged<TrustedObject> host,
+                          CompressedTrustedPointerSlot slot);
   static void MarkingSlowFromGlobalHandle(Tagged<HeapObject> value);
   static void MarkingSlowFromInternalFields(Heap* heap, Tagged<JSObject> host);
 

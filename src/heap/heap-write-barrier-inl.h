@@ -272,6 +272,25 @@ inline void IndirectPointerWriteBarrier(Tagged<HeapObject> host,
   WriteBarrier::Marking(host, slot);
 }
 
+inline void CompressedTrustedPointerWriteBarrier(
+    Tagged<TrustedObject> host, CompressedTrustedPointerSlot slot,
+    Tagged<TrustedObject> value, WriteBarrierMode mode) {
+  // Compressted trusted pointers are only used when the sandbox is enabled.
+  DCHECK(V8_ENABLE_SANDBOX_BOOL);
+
+  if (mode == SKIP_WRITE_BARRIER) {
+    SLOW_DCHECK(!WriteBarrier::IsRequired(host, value));
+    return;
+  }
+
+  // Trusted compressed pointers are only used between pointers in trusted
+  // space.
+  DCHECK(!heap_internals::MemoryChunk::FromHeapObject(value)
+              ->IsYoungOrSharedChunk());
+
+  WriteBarrier::Marking(host, slot);
+}
+
 inline void GenerationalBarrierForCode(Tagged<InstructionStream> host,
                                        RelocInfo* rinfo,
                                        Tagged<HeapObject> object) {
@@ -388,6 +407,12 @@ void WriteBarrier::Marking(Tagged<DescriptorArray> descriptor_array,
 }
 
 void WriteBarrier::Marking(Tagged<HeapObject> host, IndirectPointerSlot slot) {
+  if (!IsMarking(host)) return;
+  MarkingSlow(host, slot);
+}
+
+void WriteBarrier::Marking(Tagged<TrustedObject> host,
+                           CompressedTrustedPointerSlot slot) {
   if (!IsMarking(host)) return;
   MarkingSlow(host, slot);
 }
