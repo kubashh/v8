@@ -2346,7 +2346,7 @@ void MacroAssembler::Abort(AbortReason reason) {
       LoadEntryFromBuiltin(Builtin::kAbort, ip);
       Call(ip);
     } else {
-      Call(BUILTIN_CODE(isolate(), Abort), RelocInfo::CODE_TARGET);
+      CallBuiltin(Builtin::kAbort);
     }
   }
   // will not return here
@@ -2836,8 +2836,7 @@ void MacroAssembler::BailoutIfDeoptimized() {
   ldr(scratch, MemOperand(kJavaScriptCallCodeStartRegister, offset));
   ldr(scratch, FieldMemOperand(scratch, Code::kFlagsOffset));
   tst(scratch, Operand(1 << Code::kMarkedForDeoptimizationBit));
-  Jump(BUILTIN_CODE(isolate(), CompileLazyDeoptimizedCode),
-       RelocInfo::CODE_TARGET, ne);
+  TailCallBuiltin(Builtin::kCompileLazyDeoptimizedCode, ne);
 }
 
 void MacroAssembler::CallForDeoptimization(Builtin target, int, Label* exit,
