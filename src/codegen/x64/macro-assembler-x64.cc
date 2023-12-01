@@ -925,7 +925,7 @@ void MacroAssembler::Abort(AbortReason reason) {
       // when v8_flags.debug_code is enabled.
       Call(EntryFromBuiltinAsOperand(Builtin::kAbort));
     } else {
-      Call(BUILTIN_CODE(isolate(), Abort), RelocInfo::CODE_TARGET);
+      CallBuiltin(Builtin::kAbort);
     }
   }
 
@@ -3972,8 +3972,7 @@ void MacroAssembler::BailoutIfDeoptimized(Register scratch1,
   LoadCodePointerField(
       scratch1, Operand(kJavaScriptCallCodeStartRegister, offset), scratch2);
   TestCodeIsMarkedForDeoptimization(scratch1);
-  Jump(BUILTIN_CODE(isolate(), CompileLazyDeoptimizedCode),
-       RelocInfo::CODE_TARGET, not_zero);
+  TailCallBuiltin(Builtin::kCompileLazyDeoptimizedCode, not_zero);
 }
 
 void MacroAssembler::CallForDeoptimization(Builtin target, int, Label* exit,
