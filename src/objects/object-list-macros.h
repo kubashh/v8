@@ -149,6 +149,8 @@ namespace internal {
   V(JSAsyncFromSyncIterator)                    \
   V(JSAsyncFunctionObject)                      \
   V(JSAsyncGeneratorObject)                     \
+  V(JSAsyncContextVariable)                     \
+  V(JSAsyncContextSnapshot)                     \
   V(JSAtomicsCondition)                         \
   V(JSAtomicsMutex)                             \
   V(JSBoundFunction)                            \
