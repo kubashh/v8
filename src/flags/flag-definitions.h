@@ -252,8 +252,9 @@ DEFINE_BOOL(js_shipping, true, "enable all shipped JavaScript features")
   V(harmony_shadow_realm, "harmony ShadowRealm")                               \
   V(harmony_struct, "harmony structs, shared structs, and shared arrays")
 
-#define JAVASCRIPT_INPROGRESS_FEATURES_BASE(V) \
-  V(js_explicit_resource_management, "explicit resource management")
+#define JAVASCRIPT_INPROGRESS_FEATURES_BASE(V)                       \
+  V(js_explicit_resource_management, "explicit resource management") \
+  V(js_async_context, "AsyncContext")
 
 #ifdef V8_INTL_SUPPORT
 #define HARMONY_INPROGRESS(V)                                           \
@@ -1473,9 +1474,8 @@ FOREACH_WASM_STAGING_FEATURE_FLAG(WASM_STAGING_IMPLICATION)
 #undef WASM_STAGING_IMPLICATION
 
 DEFINE_BOOL(wasm_opt, true, "enable wasm optimization")
-DEFINE_BOOL(
-    wasm_bounds_checks, true,
-    "enable bounds checks (disable for performance testing only)")
+DEFINE_BOOL(wasm_bounds_checks, true,
+            "enable bounds checks (disable for performance testing only)")
 DEFINE_BOOL(wasm_stack_checks, true,
             "enable stack checks (disable for performance testing only)")
 DEFINE_BOOL(

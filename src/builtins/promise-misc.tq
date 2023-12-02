@@ -30,6 +30,8 @@ extern macro PromiseBuiltinsAssembler::IsIsolatePromiseHookEnabled(uint32):
 
 extern macro PromiseBuiltinsAssembler::PromiseHookFlags(): uint32;
 
+extern macro PromiseBuiltinsAssembler::GetAsyncContextStore(): HeapObject;
+
 namespace promise {
 extern macro IsFunctionWithPrototypeSlotMap(Map): bool;
 
@@ -89,7 +91,8 @@ macro NewPromiseFulfillReactionJobTask(
       context_continuation_preserved_embedder_data:
           *ContextSlot(
           nativeContext,
-          ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX)
+          ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX),
+      async_context_store: GetAsyncContextStore()
     };
   }
 
@@ -99,7 +102,8 @@ macro NewPromiseFulfillReactionJobTask(
       argument,
       context: handlerContext,
       handler,
-      promise_or_capability: promiseOrCapability
+      promise_or_capability: promiseOrCapability,
+      async_context_store: GetAsyncContextStore()
     };
   }
 }
@@ -122,7 +126,8 @@ macro NewPromiseRejectReactionJobTask(
       context_continuation_preserved_embedder_data:
           *ContextSlot(
           nativeContext,
-          ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX)
+          ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX),
+      async_context_store: GetAsyncContextStore()
     };
   }
 
@@ -132,7 +137,8 @@ macro NewPromiseRejectReactionJobTask(
       argument,
       context: handlerContext,
       handler,
-      promise_or_capability: promiseOrCapability
+      promise_or_capability: promiseOrCapability,
+      async_context_store: GetAsyncContextStore()
     };
   }
 }
@@ -323,7 +329,8 @@ macro NewPromiseReaction(
       context_continuation_preserved_embedder_data:
           *ContextSlot(
           nativeContext,
-          ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX)
+          ContextSlot::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX),
+      async_context_store: GetAsyncContextStore()
     };
   }
 
@@ -334,7 +341,8 @@ macro NewPromiseReaction(
       next: next,
       reject_handler: rejectHandler,
       fulfill_handler: fulfillHandler,
-      promise_or_capability: promiseOrCapability
+      promise_or_capability: promiseOrCapability,
+      async_context_store: GetAsyncContextStore()
     };
   }
 }
@@ -360,12 +368,15 @@ macro NewPromiseResolveThenableJobTask(
   // 1. Let job be a new Job abstract closure with no parameters that
   //    captures promiseToResolve, thenable, and then...
   // 5. Return { [[Job]]: job, [[Realm]]: thenRealm }.
+  const continuationData = GetContinuationPreservedEmbedderData();
   return new PromiseResolveThenableJobTask{
     map: PromiseResolveThenableJobTaskMapConstant(),
     context: nativeContext,
     promise_to_resolve: promiseToResolve,
     thenable,
-    then
+    then,
+    continuation_preserved_embedder_data: continuationData,
+    async_context_store: GetAsyncContextStore()
   };
 }
 
