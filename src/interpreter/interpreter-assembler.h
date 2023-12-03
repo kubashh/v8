@@ -165,6 +165,22 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
 #endif  // !V8_JITLESS
   }
 
+  // template <class... TArgs>
+  // void TailCallBytecodeDispatch(const CallInterfaceDescriptor& descriptor,
+  //                               TNode<RawPtrT> target, TArgs... args);
+
+  // template <class... TArgs>
+  // void TailCallBuiltinThenBytecodeDispatch(Builtin builtin,
+  //                                          TNode<Context> context,
+  //                                          TNode<Object> function,
+  //                                          TNode<Word32T> args_count,
+  //                                          TNode<IntPtrT> base_reg_location,
+  //                                          TArgs... args) {
+  //   TailCallBuiltin(builtin, context, args_count, base_reg_location,
+  //   function,
+  //                   args...);
+  // }
+
   // Call JSFunction or Callable |function| with |args| arguments, possibly
   // including the receiver depending on |receiver_mode|. After the call returns
   // directly dispatches to the next bytecode.
