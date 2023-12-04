@@ -192,10 +192,10 @@ class V8_NODISCARD CallDepthScope {
     isolate_->set_next_v8_call_is_safe_for_termination(false);
     DCHECK(!context.IsEmpty());
     i::DisallowGarbageCollection no_gc;
-    i::Tagged<i::Context> env = *Utils::OpenHandle(*context);
+    i::Tagged<i::NativeContext> env = *Utils::OpenHandle(*context);
     i::HandleScopeImplementer* impl = isolate->handle_scope_implementer();
     if (isolate->context().is_null() ||
-        isolate->context()->native_context() != env->native_context()) {
+        isolate->context()->native_context() != env) {
       impl->SaveContext(isolate->context());
       isolate->set_context(env);
       did_enter_context_ = true;
