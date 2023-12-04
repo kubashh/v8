@@ -3485,7 +3485,9 @@ struct CatchBlockBeginOp : FixedArityOperationT<0, CatchBlockBeginOp> {
 // Since `CopyingPhase` does this automatically, lowering throwing
 // operations into an arbitrary subgraph works automatically.
 struct DidntThrowOp : FixedArityOperationT<1, DidntThrowOp> {
-  static constexpr OpEffects effects = OpEffects().RequiredWhenUnused();
+  // TODO(chromium:1489500, nicohartmann@): Relax effects once turboshaft csa
+  // pipeline crashes are fixed.
+  static constexpr OpEffects effects = OpEffects().CanCallAnything();
 
   // If there is a `CheckException` operation with a catch block for
   // `throwing_operation`.
