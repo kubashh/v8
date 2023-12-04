@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ac8237d_40d7ebbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-04T12:31:56Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "cc72e2239a24851b4b3bbe737bf28ee268701997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b28a33a_54650ed1",
@@ -72,6 +89,30 @@
       "side": 1,
       "message": "I\u0027ll leave it for port maintainers.",
       "parentUuid": "2b28a33a_54650ed1",
+      "range": {
+        "startLine": 2570,
+        "startChar": 5,
+        "endLine": 2570,
+        "endChar": 20
+      },
+      "revId": "cc72e2239a24851b4b3bbe737bf28ee268701997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3eff7f4_3ca41932",
+        "filename": "src/builtins/loong64/builtins-loong64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2570,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-04T12:31:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5f6c35e8_304dcbee",
       "range": {
         "startLine": 2570,
         "startChar": 5,
@@ -129,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a29b947e_7adaeecb",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2516,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-04T12:31:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0c801e2e_ef0eaa7b",
+      "range": {
+        "startLine": 2516,
+        "startChar": 5,
+        "endLine": 2516,
+        "endChar": 20
+      },
+      "revId": "cc72e2239a24851b4b3bbe737bf28ee268701997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c3cda29_048421e7",
@@ -166,6 +231,30 @@
       "side": 1,
       "message": "Ditto.",
       "parentUuid": "9c3cda29_048421e7",
+      "range": {
+        "startLine": 2657,
+        "startChar": 5,
+        "endLine": 2657,
+        "endChar": 20
+      },
+      "revId": "cc72e2239a24851b4b3bbe737bf28ee268701997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9a3c865_176e2c0a",
+        "filename": "src/builtins/riscv/builtins-riscv.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2657,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-04T12:31:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "07b69f24_6bee89ef",
       "range": {
         "startLine": 2657,
         "startChar": 5,
