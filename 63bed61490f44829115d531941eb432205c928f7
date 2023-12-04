@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73456b47_7864310f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-12-04T17:48:23Z",
+      "side": 1,
+      "message": "LGTM.\n\nThe DCHECK is a bit debatable (the general rule is: *either* a situation shouldn\u0027t happen, as indicated by DCHECKs, *or* we write code to handle it, such as a `return NoChange()`), but if it leads to the outcome that someone stumbles upon a repro case and files a bug (or comments on the linked bug), then that\u0027d be great, so in light of that hope I support leaving it in.",
+      "revId": "63bed61490f44829115d531941eb432205c928f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
