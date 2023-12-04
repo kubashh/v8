@@ -3126,7 +3126,7 @@ bool Isolate::IsWasmImportedStringsEnabled(Handle<NativeContext> context) {
 #endif
 }
 
-Handle<NativeContext> Isolate::GetIncumbentContext() {
+Handle<NativeContext> Isolate::GetIncumbentContext(bool allow_empty_handle) {
   JavaScriptStackFrameIterator it(this);
 
   // 1st candidate: most-recently-entered author function's context
@@ -3155,7 +3155,7 @@ Handle<NativeContext> Isolate::GetIncumbentContext() {
   // the entry realm.
   v8::Local<v8::Context> entered_context =
       reinterpret_cast<v8::Isolate*>(this)->GetEnteredOrMicrotaskContext();
-  return Utils::OpenHandle(*entered_context);
+  return Utils::OpenHandle(*entered_context, allow_empty_handle);
 }
 
 char* Isolate::ArchiveThread(char* to) {

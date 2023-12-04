@@ -1089,7 +1089,11 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   inline Handle<NativeContext> native_context();
   inline Tagged<NativeContext> raw_native_context();
 
-  Handle<NativeContext> GetIncumbentContext();
+  // Returns incumbent context. |allow_empty_handle| allows it to return an
+  // empty handle in case there's no BackupIncumbentScope, no user JavaScript
+  // code and no entered context (this mode is used for testing).
+  // Otherwise it'll hit a DCHECK.
+  Handle<NativeContext> GetIncumbentContext(bool allow_empty_handle = false);
 
   void RegisterTryCatchHandler(v8::TryCatch* that);
   void UnregisterTryCatchHandler(v8::TryCatch* that);
@@ -1964,11 +1968,12 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 #endif  // V8_ENABLE_WEBASSEMBLY
 
   const v8::Context::BackupIncumbentScope* top_backup_incumbent_scope() const {
-    return top_backup_incumbent_scope_;
+    return thread_local_top()->top_backup_incumbent_scope_;
   }
   void set_top_backup_incumbent_scope(
       const v8::Context::BackupIncumbentScope* top_backup_incumbent_scope) {
-    top_backup_incumbent_scope_ = top_backup_incumbent_scope;
+    thread_local_top()->top_backup_incumbent_scope_ =
+        top_backup_incumbent_scope;
   }
 
   void SetIdle(bool is_idle);
@@ -2595,10 +2600,6 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
   std::unique_ptr<TracingCpuProfilerImpl> tracing_cpu_profiler_;
 
   EmbeddedFileWriterInterface* embedded_file_writer_ = nullptr;
-
-  // The top entry of the v8::Context::BackupIncumbentScope stack.
-  const v8::Context::BackupIncumbentScope* top_backup_incumbent_scope_ =
-      nullptr;
 
   PrepareStackTraceCallback prepare_stack_trace_callback_ = nullptr;
 
