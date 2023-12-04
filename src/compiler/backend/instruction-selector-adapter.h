@@ -1246,6 +1246,10 @@ struct TurboshaftAdapter : public turboshaft::OperationMatcher {
         DCHECK_EQ(change_op->to, turboshaft::RegisterRepresentation::Word32());
         return true;
       }
+      if (change_op->kind == turboshaft::ChangeOp::Kind::kBitcastSmiWord) {
+        // TODO: should I check something else here?
+        return true;
+      }
     }
     return false;
   }

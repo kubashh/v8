@@ -1483,6 +1483,31 @@ class TurboshaftAssemblerOpInterface
                          RegisterRepresentation::Tagged());
   }
 
+  V<Smi> BitcastWord32ToSmi(V<Word32> word) {
+    return ReduceIfReachableChange(word, ChangeOp::Kind::kBitcastSmiWord,
+                                   ChangeOp::Assumption::kNoAssumption,
+                                   RegisterRepresentation::Word32(),
+                                   RegisterRepresentation::Tagged());
+  }
+  V<Word32> BitcastSmiToWord32(V<Smi> word) {
+    return ReduceIfReachableChange(word, ChangeOp::Kind::kBitcastSmiWord,
+                                   ChangeOp::Assumption::kNoAssumption,
+                                   RegisterRepresentation::Tagged(),
+                                   RegisterRepresentation::Word32());
+  }
+  V<Smi> BitcastWordPtrToSmi(V<WordPtr> word) {
+    return ReduceIfReachableChange(word, ChangeOp::Kind::kBitcastSmiWord,
+                                   ChangeOp::Assumption::kNoAssumption,
+                                   RegisterRepresentation::PointerSized(),
+                                   RegisterRepresentation::Tagged());
+  }
+  V<WordPtr> BitcastSmiToWordPtr(V<Smi> word) {
+    return ReduceIfReachableChange(word, ChangeOp::Kind::kBitcastSmiWord,
+                                   ChangeOp::Assumption::kNoAssumption,
+                                   RegisterRepresentation::Tagged(),
+                                   RegisterRepresentation::PointerSized());
+  }
+
   V<Word32> ObjectIs(V<Object> input, ObjectIsOp::Kind kind,
                      ObjectIsOp::InputAssumptions input_assumptions) {
     return ReduceIfReachableObjectIs(input, kind, input_assumptions);
@@ -1905,24 +1930,21 @@ class TurboshaftAssemblerOpInterface
       V<Word32> shifted = Word32ShiftLeft(resolve(input), kSmiShiftBits);
       // In pointer compression, we smi-corrupt. Then, the upper bits are not
       // important.
-      return V<Smi>::Cast(
-          COMPRESS_POINTERS_BOOL
-              ? BitcastWord32ToTagged(shifted)
-              : BitcastWordPtrToTagged(ChangeInt32ToIntPtr(shifted)));
+      return BitcastWord32ToSmi(shifted);
     } else {
-      return V<Smi>::Cast(BitcastWordPtrToTagged(WordPtrShiftLeft(
-          ChangeInt32ToIntPtr(resolve(input)), kSmiShiftBits)));
+      return BitcastWordPtrToSmi(
+          WordPtrShiftLeft(ChangeInt32ToIntPtr(resolve(input)), kSmiShiftBits));
     }
   }
 
-  V<Word32> UntagSmi(V<Tagged> input) {
+  V<Word32> UntagSmi(V<Smi> input) {
     constexpr int kSmiShiftBits = kSmiShiftSize + kSmiTagSize;
     if constexpr (Is64() && SmiValuesAre31Bits()) {
-      return Word32ShiftRightArithmeticShiftOutZeros(
-          TruncateWordPtrToWord32(BitcastTaggedToWord(input)), kSmiShiftBits);
+      return Word32ShiftRightArithmeticShiftOutZeros(BitcastSmiToWord32(input),
+                                                     kSmiShiftBits);
     }
     return TruncateWordPtrToWord32(WordPtrShiftRightArithmeticShiftOutZeros(
-        BitcastTaggedToWord(input), kSmiShiftBits));
+        BitcastSmiToWordPtr(input), kSmiShiftBits));
   }
 
   OpIndex AtomicRMW(V<WordPtr> base, V<WordPtr> index, OpIndex value,

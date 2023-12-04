@@ -340,6 +340,8 @@ std::ostream& operator<<(std::ostream& os, ChangeOp::Kind kind) {
       return os << "Truncate";
     case ChangeOp::Kind::kBitcast:
       return os << "Bitcast";
+    case ChangeOp::Kind::kBitcastSmiWord:
+      return os << "BitcastSmiWord";
   }
 }
 

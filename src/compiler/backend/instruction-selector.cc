@@ -4453,6 +4453,37 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitNode(
           DCHECK_EQ(change.to, Rep::Word32());
           MarkAsWord32(node);
           return VisitTruncateInt64ToInt32(node);
+        case ChangeOp::Kind::kBitcastSmiWord:
+          if constexpr (Is64() && SmiValuesAre31Bits()) {
+            if (change.from == RegisterRepresentation::Tagged() &&
+                change.to == RegisterRepresentation::Word32()) {
+              MarkAsWord32(node);
+              return VisitTruncateInt64ToInt32(node);
+            } else if (change.from == RegisterRepresentation::Word32() &&
+                       change.to == RegisterRepresentation::Tagged()) {
+              MarkAsRepresentation(MachineRepresentation::kTaggedSigned, node);
+              return EmitIdentity(node);
+            } else {
+              UNREACHABLE();
+            }
+          } else {
+            if (change.from == RegisterRepresentation::Tagged() &&
+                change.to == RegisterRepresentation::PointerSized()) {
+              if constexpr (Is64()) {
+                MarkAsWord32(node);
+                return VisitTruncateInt64ToInt32(node);
+              } else {
+                MarkAsWord32(node);
+                return EmitIdentity(node);
+              }
+            } else if (change.from == RegisterRepresentation::PointerSized() &&
+                       change.to == RegisterRepresentation::Tagged()) {
+              MarkAsRepresentation(MachineRepresentation::kTaggedSigned, node);
+              return VisitBitcastWordToTagged(node);
+            } else {
+              UNREACHABLE();
+            }
+          }
         case ChangeOp::Kind::kBitcast:
           switch (multi(change.from, change.to)) {
             case multi(Rep::Word32(), Rep::Word64()):

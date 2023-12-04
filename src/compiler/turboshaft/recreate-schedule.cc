@@ -797,6 +797,33 @@ Node* ScheduleBuilder::ProcessOperation(const ChangeOp& op) {
         UNIMPLEMENTED();
       }
       break;
+    case Kind::kBitcastSmiWord:
+      if constexpr (Is64() && SmiValuesAre31Bits()) {
+        if (op.from == RegisterRepresentation::Tagged() &&
+            op.to == RegisterRepresentation::Word32()) {
+          o = machine.TruncateInt64ToInt32();
+        } else if (op.from == RegisterRepresentation::Word32() &&
+                   op.to == RegisterRepresentation::Tagged()) {
+          o = machine.BitcastWordToTaggedSigned();
+        } else {
+          UNREACHABLE();
+        }
+      } else {
+        if (op.from == RegisterRepresentation::Tagged() &&
+            op.to == RegisterRepresentation::PointerSized()) {
+          if constexpr (Is64()) {
+            o = machine.TruncateInt64ToInt32();
+          } else {
+            return GetNode(op.input());
+          }
+        } else if (op.from == RegisterRepresentation::PointerSized() &&
+                   op.to == RegisterRepresentation::Tagged()) {
+          o = machine.BitcastWordToTaggedSigned();
+        } else {
+          UNREACHABLE();
+        }
+      }
+      break;
     case Kind::kSignExtend:
       if (op.from == WordRepresentation::Word32() &&
           op.to == WordRepresentation::Word64()) {

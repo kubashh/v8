@@ -1679,7 +1679,10 @@ struct ChangeOp : FixedArityOperationT<1, ChangeOp> {
     // truncate word64 to word32
     kTruncate,
     // preserve bits, change meaning
-    kBitcast
+    kBitcast,
+    // convert Smi to word32 or word32 to Smi (word64 on non-pointer compression
+    // 64-bit builds)
+    kBitcastSmiWord
   };
   // Violated assumptions result in undefined behavior.
   enum class Assumption : uint8_t {
@@ -1751,6 +1754,8 @@ struct ChangeOp : FixedArityOperationT<1, ChangeOp> {
         return reverse_kind == Kind::kBitcast;
       case Kind::kBitcast:
         return reverse_kind == Kind::kBitcast;
+      case Kind::kBitcastSmiWord:
+        return reverse_kind == Kind::kBitcastSmiWord;
     }
   }
 
@@ -1782,6 +1787,19 @@ struct ChangeOp : FixedArityOperationT<1, ChangeOp> {
     DCHECK_IMPLIES(kind == Kind::kBitcast,
                    from != RegisterRepresentation::Tagged() &&
                        to != RegisterRepresentation::Tagged());
+    if (kind == Kind::kBitcastSmiWord) {
+      if (Is64() && SmiValuesAre31Bits()) {
+        DCHECK((from == RegisterRepresentation::Tagged() &&
+                to == RegisterRepresentation::Word32()) ||
+               (from == RegisterRepresentation::Word32() &&
+                to == RegisterRepresentation::Tagged()));
+      } else {
+        DCHECK((from == RegisterRepresentation::Tagged() &&
+                to == RegisterRepresentation::PointerSized()) ||
+               (from == RegisterRepresentation::PointerSized() &&
+                to == RegisterRepresentation::Tagged()));
+      }
+    }
   }
   auto options() const { return std::tuple{kind, assumption, from, to}; }
 };
@@ -1949,6 +1967,8 @@ struct TaggedBitcastOp : FixedArityOperationT<1, TaggedBitcastOp> {
     DCHECK((from.IsWord() && to == RegisterRepresentation::Tagged()) ||
            (from == RegisterRepresentation::Tagged() &&
             to == RegisterRepresentation::PointerSized()) ||
+           (from == RegisterRepresentation::Tagged() &&
+            to == RegisterRepresentation::Word32()) ||
            (from == RegisterRepresentation::Compressed() &&
             to == RegisterRepresentation::Word32()));
   }
