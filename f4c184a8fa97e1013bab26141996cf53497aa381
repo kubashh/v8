@@ -246,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82bc4111_233ca3f2",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-04T18:14:54Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bf94516b_5edddec9",
+      "range": {
+        "startLine": 1144,
+        "startChar": 0,
+        "endLine": 1144,
+        "endChar": 37
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bad7d34c_1c380d3f",
@@ -494,6 +518,30 @@
       "writtenOn": "2023-11-30T13:58:47Z",
       "side": 1,
       "message": "This no longer reflects what the updated code does. Is that change in behavior intentional?",
+      "range": {
+        "startLine": 243,
+        "startChar": 32,
+        "endLine": 244,
+        "endChar": 61
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae1722a1_b47b1162",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-04T18:14:54Z",
+      "side": 1,
+      "message": "Comment should now be correct.",
+      "parentUuid": "c7a83895_48a771ce",
       "range": {
         "startLine": 243,
         "startChar": 32,

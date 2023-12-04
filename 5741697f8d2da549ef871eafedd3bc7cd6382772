@@ -16,6 +16,23 @@
       "message": "Thanks for looking at the simulator \u0026 assembler.\nTBH, there may still be issues with the simulator\u0027s stack mgt. Will continue to look at this.",
       "revId": "5741697f8d2da549ef871eafedd3bc7cd6382772",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a42d10f_80f499a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-04T18:14:54Z",
+      "side": 1,
+      "message": "Please take a look, specifically at the changes I needed to make to the arm simulator. Thanks.",
+      "revId": "5741697f8d2da549ef871eafedd3bc7cd6382772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
