@@ -1306,6 +1306,7 @@ class MaglevFrameTranslationBuilder {
 
   void BuildDeoptFrameSingleValue(const ValueNode* value,
                                   const InputLocation*& input_location) {
+    DCHECK(!value->Is<Identity>());
     if (input_location->operand().IsConstant()) {
       translation_array_builder_->StoreLiteral(
           GetDeoptLiteral(*value->Reify(local_isolate_)));
@@ -1365,6 +1366,9 @@ class MaglevFrameTranslationBuilder {
               i++;
             }
             DCHECK_EQ(i, reg.index());
+            if (value->Is<Identity>()) {
+              value = value->input(0).node();
+            }
             BuildDeoptFrameSingleValue(value, input_location);
             i++;
           });
