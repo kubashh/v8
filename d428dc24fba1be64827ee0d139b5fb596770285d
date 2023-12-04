@@ -16,6 +16,46 @@
       "message": "well, as you said, my fix was not pretty and actually failed to fully handle it...\n\nunfortunately I am still unsure how to do it in a nicer way.",
       "revId": "d428dc24fba1be64827ee0d139b5fb596770285d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e738687c_fb5ad3b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-12-04T14:25:37Z",
+      "side": 1,
+      "message": "LGTM + suggestion.",
+      "revId": "d428dc24fba1be64827ee0d139b5fb596770285d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6f7d71c_6aa27e1f",
+        "filename": "src/maglev/maglev-code-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1368302
+      },
+      "writtenOn": "2023-12-04T14:25:37Z",
+      "side": 1,
+      "message": "Wouldn\u0027t make sense to put this in BuildDeoptFrameSingleValue?\n\nThis argument is also valid for the previous CL actually. Shouldn\u0027t we just update node in MarkUse.",
+      "range": {
+        "startLine": 1369,
+        "startChar": 0,
+        "endLine": 1371,
+        "endChar": 13
+      },
+      "revId": "d428dc24fba1be64827ee0d139b5fb596770285d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
