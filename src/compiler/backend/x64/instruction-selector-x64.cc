@@ -3812,6 +3812,9 @@ void VisitWordCompare(InstructionSelectorT<Adapter>* selector,
     }
   }
 
+  // left = selector->bypass_tagged_bitcast(left);
+  // right = selector->bypass_tagged_bitcast(right);
+
   opcode = TryNarrowOpcodeSize(selector, opcode, left, right, cont);
 
   // If one of the two inputs is an immediate, make sure it's on the right, or

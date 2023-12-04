@@ -1190,7 +1190,8 @@ class TurboshaftGraphBuildingInterface {
     GOTO(heapnumber_label);
 
     BIND(smi_label);
-    V<WordPtr> smi_length = __ ChangeInt32ToIntPtr(__ UntagSmi(tagged));
+    V<WordPtr> smi_length =
+        __ ChangeInt32ToIntPtr(__ UntagSmi(V<Smi>::Cast(tagged)));
     GOTO(done_label, smi_length);
 
     BIND(heapnumber_label);

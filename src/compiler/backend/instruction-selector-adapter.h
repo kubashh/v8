@@ -587,6 +587,13 @@ struct TurbofanAdapter {
   bool is_truncate_word64_to_word32(node_t node) const {
     return node->opcode() == IrOpcode::kTruncateInt64ToInt32;
   }
+  node_t bypass_tagged_bitcast(node_t node) const {
+    while (node->opcode() == IrOpcode::kBitcastTaggedToWord ||
+           node->opcode() == IrOpcode::kBitcastWordToTagged) {
+      node = node->InputAt(0);
+    }
+    return node;
+  }
 
   bool is_stack_slot(node_t node) const {
     return node->opcode() == IrOpcode::kStackSlot;
@@ -1246,9 +1253,20 @@ struct TurboshaftAdapter : public turboshaft::OperationMatcher {
         DCHECK_EQ(change_op->to, turboshaft::RegisterRepresentation::Word32());
         return true;
       }
+      if (change_op->kind == turboshaft::ChangeOp::Kind::kBitcastSmiWord) {
+        // TODO: should I check something else here?
+        return true;
+      }
     }
     return false;
   }
+
+  // node_t bypass_tagged_bitcast(node_t node) const {
+  //   while (graph_->Get(node).Is<turboshaft::TaggedBitcastOp>()) {
+  //     node = graph_->Get(node).Cast<turboshaft::TaggedBitcastOp>().input();
+  //   }
+  //   return node;
+  // }
 
   bool is_stack_slot(node_t node) const {
     return graph_->Get(node).Is<turboshaft::StackSlotOp>();
