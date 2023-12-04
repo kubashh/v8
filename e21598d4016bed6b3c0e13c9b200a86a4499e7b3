@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71dc42ae_271ea030",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-12-04T09:17:24Z",
+      "side": 1,
+      "message": "+syg. I don\u0027t know much about the github approval process.",
+      "revId": "e21598d4016bed6b3c0e13c9b200a86a4499e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11142cc9_6be9ed75",
+        "filename": "test/test262/tools/v8_exporter.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-12-04T09:17:24Z",
+      "side": 1,
+      "message": "nit: Please rewrite this without pointing to google-internal screenshots. The shots and the links should be in the design doc.",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 25,
+        "endChar": 11
+      },
+      "revId": "e21598d4016bed6b3c0e13c9b200a86a4499e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bad00c61_697c301b",
+        "filename": "test/test262/tools/v8_exporter.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2023-12-04T09:17:24Z",
+      "side": 1,
+      "message": "[?",
+      "range": {
+        "startLine": 42,
+        "startChar": 33,
+        "endLine": 42,
+        "endChar": 34
+      },
+      "revId": "e21598d4016bed6b3c0e13c9b200a86a4499e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
