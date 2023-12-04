@@ -661,7 +661,7 @@ class Internals {
   static const int kBuiltinTier0EntryTableSize = 7 * kApiSystemPointerSize;
   static const int kBuiltinTier0TableSize = 7 * kApiSystemPointerSize;
   static const int kLinearAllocationAreaSize = 3 * kApiSystemPointerSize;
-  static const int kThreadLocalTopSize = 28 * kApiSystemPointerSize;
+  static const int kThreadLocalTopSize = 29 * kApiSystemPointerSize;
   static const int kHandleScopeDataSize =
       2 * kApiSystemPointerSize + 2 * kApiInt32Size;
 
@@ -720,12 +720,11 @@ class Internals {
   static const int kIsolateApiCallbackThunkArgumentOffset =
       kIsolateEmbedderDataOffset + kNumIsolateDataSlots * kApiSystemPointerSize;
 #endif  // V8_COMPRESS_POINTERS
-  static const int kWasm64OOBOffsetOffset =
-      kIsolateApiCallbackThunkArgumentOffset + kApiSystemPointerSize;
   static const int kContinuationPreservedEmbedderDataOffset =
-      kWasm64OOBOffsetOffset + sizeof(int64_t);
-  static const int kIsolateRootsOffset =
+      kIsolateApiCallbackThunkArgumentOffset + kApiSystemPointerSize;
+  static const int kWasm64OOBOffsetOffset =
       kContinuationPreservedEmbedderDataOffset + kApiSystemPointerSize;
+  static const int kIsolateRootsOffset = kWasm64OOBOffsetOffset + kApiInt64Size;
 
 #if V8_STATIC_ROOTS_BOOL
 

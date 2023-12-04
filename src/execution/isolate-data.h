@@ -59,9 +59,9 @@ class Isolate;
   ISOLATE_DATA_FIELDS_SANDBOX(V)                                              \
   V(kApiCallbackThunkArgumentOffset, kSystemPointerSize,                      \
     api_callback_thunk_argument)                                              \
-  V(kWasm64OOBOffset, kInt64Size, wasm64_oob_offset)                          \
   V(kContinuationPreservedEmbedderDataOffset, kSystemPointerSize,             \
     continuation_preserved_embedder_data)                                     \
+  V(kWasm64OOBOffset, kInt64Size, wasm64_oob_offset)                          \
   /* Full tables (arbitrary size, potentially slower access). */              \
   V(kRootsTableOffset, RootsTable::kEntriesCount* kSystemPointerSize,         \
     roots_table)                                                              \
@@ -304,13 +304,13 @@ class IsolateData final {
   // functions, see InvokeAccessorGetterCallback and InvokeFunctionCallback.
   Address api_callback_thunk_argument_ = kNullAddress;
 
+  // This is data that should be preserved on newly created continuations.
+  Tagged<Object> continuation_preserved_embedder_data_ = Smi::zero();
+
   // An offset that always generates an invalid address when added to any
   // start address of a Wasm memory. This is used to force an out-of-bounds
   // access on Wasm memory64.
   int64_t wasm64_oob_offset_ = 0xf000'0000'0000'0000;
-
-  // This is data that should be preserved on newly created continuations.
-  Tagged<Object> continuation_preserved_embedder_data_ = Smi::zero();
 
   RootsTable roots_table_;
   ExternalReferenceTable external_reference_table_;
@@ -352,10 +352,19 @@ void IsolateData::AssertPredictableLayout() {
   static_assert(std::is_standard_layout<ExternalReferenceTable>::value);
   static_assert(std::is_standard_layout<IsolateData>::value);
   static_assert(std::is_standard_layout<LinearAllocationArea>::value);
-#define V(Offset, Size, Name) \
-  static_assert(offsetof(IsolateData, Name##_) == Offset);
+#define V(Offset, Size, Name)                                          \
+  static_assert(                                                       \
+      std::is_standard_layout<decltype(IsolateData::Name##_)>::value); \
+  static_assert(offsetof(IsolateData, Name##_) == Offset);             \
+  static_assert(IsAligned(offsetof(IsolateData, Name##_),              \
+                          alignof(decltype(IsolateData::Name##_))));
   ISOLATE_DATA_FIELDS(V)
 #undef V
+  // Some C++ compilers on some 32-bits configurations want to align |int64_t|
+  // field to 8 while normally, Clang aligns this field to 4. In particular,
+  // when building for Android/arm or Windows/ia32. Catch this issue early.
+  static_assert(IsAligned(offsetof(IsolateData, wasm64_oob_offset_),
+                          sizeof(IsolateData::wasm64_oob_offset_)));
   static_assert(sizeof(IsolateData) == IsolateData::kSize);
 }
 
