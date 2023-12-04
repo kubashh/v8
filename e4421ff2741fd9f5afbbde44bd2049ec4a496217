@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c6d40b0_9eeffc7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-04T20:49:09Z",
+      "side": 1,
+      "message": "still seems to fail during mksnapshot due to no scratch reg being passed.",
+      "revId": "e4421ff2741fd9f5afbbde44bd2049ec4a496217",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
