@@ -95,6 +95,7 @@ using ::v8::Boolean;
 using ::v8::BooleanObject;
 using ::v8::Context;
 using ::v8::Extension;
+using ::v8::External;
 using ::v8::FixedArray;
 using ::v8::Function;
 using ::v8::FunctionTemplate;
@@ -165,6 +166,7 @@ static void IncrementingSignatureCallback(
 }
 
 static void Returns42(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  CHECK(i::ValidateCallbackInfo(info));
   info.GetReturnValue().Set(42);
 }
 
@@ -377,7 +379,13 @@ THREADED_TEST(ReceiverSignature) {
   }
 }
 
-static void DoNothingCallback(const v8::FunctionCallbackInfo<v8::Value>&) {}
+namespace {
+
+void DoNothingCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  CHECK(i::ValidateCallbackInfo(info));
+}
+
+}  // namespace
 
 // Regression test for issue chromium:1188563.
 THREADED_TEST(Regress1188563) {
@@ -1065,7 +1073,9 @@ THREADED_TEST(GlobalProperties) {
 
 static void handle_callback_impl(const v8::FunctionCallbackInfo<Value>& info,
                                  i::Address callback) {
+  CHECK(i::ValidateCallbackInfo(info));
   ApiTestFuzzer::Fuzz();
+  CHECK(i::ValidateCallbackInfo(info));
   CheckReturnValue(info, callback);
   info.GetReturnValue().Set(v8_str("bad value"));
   info.GetReturnValue().Set(v8_num(102));
@@ -14760,6 +14770,220 @@ THREADED_TEST(CrossContextNew) {
   context1->Exit();
 }
 
+// This callback creates a default object and checks that the incumbent context
+// is equal to the expected one.
+static void DefaultConstructHandlerWithIncumbentCheck(
+    const v8::FunctionCallbackInfo<v8::Value>& info) {
+  Local<Context>* expected_incumbent_context =
+      reinterpret_cast<Local<Context>*>(
+          info.Data().As<v8::External>()->Value());
+
+  v8::Isolate* isolate = info.GetIsolate();
+  v8::Local<v8::Context> context = isolate->GetCurrentContext();
+  CHECK_EQ(*expected_incumbent_context, isolate->GetIncumbentContext());
+
+  if (info.IsConstructCall()) {
+    v8::MaybeLocal<v8::Object> instance =
+        Function::New(context, EmptyHandler)
+            .ToLocalChecked()
+            ->NewInstance(context, 0, nullptr);
+    info.GetReturnValue().Set(instance.ToLocalChecked());
+  } else {
+    Local<Value> value =
+        context->Global()->Get(context, v8_str("x")).ToLocalChecked();
+    // value = CompileRun("Object.prototype.x");
+    info.GetReturnValue().Set(value);
+  }
+}
+
+// Test that cross-context new calls use the context of the callee to
+// create the new JavaScript object.
+THREADED_TEST(CrossContextNewApiCallback) {
+  v8::Isolate* isolate = CcTest::isolate();
+  v8::HandleScope scope(isolate);
+  v8::Local<Context> context0 = Context::New(isolate);
+  v8::Local<Context> context1 = Context::New(isolate);
+  v8::Local<Context> context2 = Context::New(isolate);
+  v8::Local<Context> contexts[] = {context0, context1, context2};
+
+  i::StdoutStream os;
+  os << "context0: " << *v8::Utils::OpenHandle(*context0) << "\n"
+     << "context1: " << *v8::Utils::OpenHandle(*context1) << "\n"
+     << "context2: " << *v8::Utils::OpenHandle(*context2) << "\n";
+
+  // Allow cross-domain access.
+  Local<String> token = v8_str("<security token>");
+  context0->SetSecurityToken(token);
+  context1->SetSecurityToken(token);
+  context2->SetSecurityToken(token);
+
+  Local<Context> expected_incumbent_context;
+  int expected_function_context_id;
+  Local<External> expected_incumbent_context_ptr =
+      v8::External::New(isolate, &expected_incumbent_context);
+
+  // Create cross-realm references in every realm's global object and
+  // a constructor function that also checks the incumbent context.
+  for (int i = 0; i < static_cast<int>(arraysize(contexts)); i++) {
+    Local<Context> context = contexts[i];
+    Context::Scope context_scope(context);
+    CHECK(context->Global()
+              ->Set(context, v8_str("realm0"), context0->Global())
+              .FromJust());
+    CHECK(context->Global()
+              ->Set(context, v8_str("realm1"), context1->Global())
+              .FromJust());
+    CHECK(context->Global()
+              ->Set(context, v8_str("realm2"), context2->Global())
+              .FromJust());
+    // Create some helper functions so we can chain calls:
+    //   call2(call1, call0, f)
+    //   call2(call1, construct0, f)
+    CompileRun(R"JS(
+        function call_spread(g, ...args) { return g(...args); }
+        function call_via_apply(g, args_array) {
+          return g.apply(undefined, args_array);
+        }
+        function call_via_reflect(g, args_array) {
+          return Reflect.apply(g, undefined, args_array);
+        }
+        function construct_spread(g, ...args) { return new g(...args); }
+        function construct_via_reflect(g, args_array) {
+          return Reflect.construct(g, args_array);
+        }
+
+        function call0(g) { return g(); }
+        function call0_via_call(g, self) { return g.call(self); }
+
+        function construct0(g) { return new g(); }
+
+        function call1(f, arg) { return f(arg); }
+        function call1_via_call(g, self, arg) { return g.call(self, arg); }
+
+        function call2(f, arg1, arg2) { return f(arg1, arg2); }
+        function call2_via_call(g, self, arg1, arg2) {
+          return g.call(self, arg1, arg2);
+        }
+    )JS");
+
+    Local<Function> func =
+        Function::New(context, DefaultConstructHandlerWithIncumbentCheck,
+                      expected_incumbent_context_ptr)
+            .ToLocalChecked();
+
+    v8::base::ScopedVector<char> name(30);
+    v8::base::SNPrintF(name, "realm%d.f", i);
+    func->SetName(v8_str(name.begin()));
+
+    CHECK(context->Global()->Set(context, v8_str("f"), func).FromJust());
+  }
+
+  Local<Value> value;
+
+  // Set an 'x' property on the Object prototype in each realm.
+  {
+    v8::Local<Context> context = context0;
+    Context::Scope context_scope(context);
+
+    CompileRun("realm0.Object.prototype.x = 0;");
+    CompileRun("realm1.Object.prototype.x = 1;");
+    CompileRun("realm2.Object.prototype.x = 2;");
+
+    value = CompileRun("realm0.x");
+    CHECK_EQ(0, value.As<v8::Integer>()->Value());
+
+    value = CompileRun("realm1.x");
+    CHECK_EQ(1, value.As<v8::Integer>()->Value());
+
+    value = CompileRun("realm2.x");
+    CHECK_EQ(2, value.As<v8::Integer>()->Value());
+  }
+
+  auto check_case = [&](const char* source) {
+    Local<Value> value = CompileRun(source);
+    CHECK(!value.IsEmpty());
+    CHECK_EQ(expected_function_context_id, value.As<v8::Integer>()->Value());
+  };
+
+  // Check calls and construct calls using various sequences of context to
+  // context switches. Check that the result returned matches the target
+  // function's context by checking the value of 'x' property.
+  for (int i = 0; i < static_cast<int>(arraysize(contexts)); i++) {
+    Local<Context> context = contexts[i];
+    Context::Scope context_scope(context);
+
+    os << "=====================================\n"
+       << "context: " << *v8::Utils::OpenHandle(*context) << "\n";
+
+    {
+      // context -> context0.
+      expected_incumbent_context = context;
+      expected_function_context_id = 0;
+
+      check_case("realm0.f()");
+      check_case("realm0.f.call(realm0)");
+      // check_case("realm0.f.apply(realm0)");
+      check_case("Reflect.apply(realm0.f, undefined, [])");
+      check_case("call_spread(realm0.f)");
+
+      check_case("new realm0.f().x");
+    }
+    os << "==== 1\n";
+
+    {
+      // context -> context -> context0.
+      expected_incumbent_context = context;
+      expected_function_context_id = 0;
+
+      check_case("call0(realm0.f)");
+      check_case("call0_via_call(realm0.f, realm0)");
+      // check_case("call_via_apply(realm0.f, [realm0])");
+      check_case("call_via_reflect(realm0.f, [realm0])");
+      check_case("call_spread(realm0.f, /* args */ 1, 2, 3)");
+
+      check_case("construct0(realm0.f).x");
+      check_case("Reflect.construct(realm0.f, []).x");
+      check_case("construct_spread(realm0.f, /* args */ 1, 2, 3).x");
+    }
+    os << "==== 2\n";
+
+    {
+      // context -> context2 -> context1 -> context.
+      expected_incumbent_context = context1;
+      expected_function_context_id = i;
+
+      check_case("realm2.call1(realm1.call0, f)");
+      check_case("realm2.call1_via_call(realm1.call0, realm1, f)");
+      // check_case("realm2.call_via_apply(realm1.call0, [f])");
+      check_case("realm2.call_via_reflect(realm1.call0, [f])");
+      check_case("realm2.call_spread(realm1.call_spread, f, 1, 2, 3)");
+
+      check_case("realm2.call1(realm1.construct0, f).x");
+      check_case(
+          "realm2.call_spread(realm1.construct_via_reflect, f, [1, 2, 3]).x");
+      check_case("realm2.call_spread(realm1.construct_spread, f, 1, 2, 3).x");
+    }
+    os << "==== 3\n";
+
+    {
+      // context -> context0 -> context -> context1.
+      expected_incumbent_context = context;
+      expected_function_context_id = 1;
+
+      check_case("realm0.call1(call0, realm1.f)");
+      check_case("realm0.call1_via_call(call0, undefined, realm1.f)");
+      check_case("realm0.call_via_apply(call0, [realm1.f])");
+      check_case("realm0.call_via_reflect(call0, [realm1.f])");
+      check_case("realm0.call_spread(call_spread, realm1.f, 1, 2, 3)");
+
+      check_case("realm0.call1(construct0, realm1.f).x");
+      check_case(
+          "realm0.call_spread(construct_via_reflect, realm1.f, [1, 2]).x");
+      check_case("realm0.call_spread(construct_spread, realm1.f, 1, 2).x");
+    }
+    os << "==== 4\n";
+  }
+}
 
 // Verify that we can clone an object
 TEST(ObjectClone) {
@@ -25521,13 +25745,14 @@ THREADED_TEST(ImmutableProto) {
 v8::Global<v8::Context> call_eval_context_global;
 v8::Global<v8::Function> call_eval_bound_function_global;
 
-static void CallEval(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
+static void CallEval(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  CHECK(i::ValidateCallbackInfo(info));
+  v8::Isolate* isolate = info.GetIsolate();
   Local<v8::Context> call_eval_context = call_eval_context_global.Get(isolate);
   Local<v8::Function> call_eval_bound_function =
       call_eval_bound_function_global.Get(isolate);
   v8::Context::Scope scope(call_eval_context);
-  args.GetReturnValue().Set(
+  info.GetReturnValue().Set(
       call_eval_bound_function
           ->Call(call_eval_context, call_eval_context->Global(), 0, nullptr)
           .ToLocalChecked());
@@ -27284,7 +27509,8 @@ static v8::Isolate* isolate_2;
 v8::Persistent<v8::Context> context_1;
 v8::Persistent<v8::Context> context_2;
 
-static void CallIsolate1(const v8::FunctionCallbackInfo<v8::Value>& args) {
+static void CallIsolate1(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  CHECK(i::ValidateCallbackInfo(info));
   v8::Isolate::Scope isolate_scope(isolate_1);
   v8::HandleScope handle_scope(isolate_1);
   v8::Local<v8::Context> context =
@@ -27293,7 +27519,8 @@ static void CallIsolate1(const v8::FunctionCallbackInfo<v8::Value>& args) {
   CompileRun("f1() //# sourceURL=isolate1b");
 }
 
-static void CallIsolate2(const v8::FunctionCallbackInfo<v8::Value>& args) {
+static void CallIsolate2(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  CHECK(i::ValidateCallbackInfo(info));
   v8::Isolate::Scope isolate_scope(isolate_2);
   v8::HandleScope handle_scope(isolate_2);
   v8::Local<v8::Context> context =
@@ -27502,6 +27729,7 @@ struct BasicApiChecker {
   }
 
   static void SlowCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    CHECK(i::ValidateCallbackInfo(info));
     Impl::SlowCallback(info);
   }
 
@@ -27600,6 +27828,7 @@ struct ApiNumberChecker : BasicApiChecker<T, ApiNumberChecker<T>, void> {
   }
 
   static void SlowCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    CHECK(i::ValidateCallbackInfo(info));
     v8::Object* receiver = v8::Object::Cast(*info.Holder());
     if (!IsValidUnwrapObject(receiver)) {
       info.GetIsolate()->ThrowException(v8_str("Called with a non-object."));
@@ -27642,6 +27871,7 @@ struct UnexpectedObjectChecker
   }
 
   static void SlowCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    CHECK(i::ValidateCallbackInfo(info));
     v8::Object* receiver_obj = v8::Object::Cast(*info.Holder());
     UnexpectedObjectChecker* receiver_ptr =
         GetInternalField<UnexpectedObjectChecker>(receiver_obj);
@@ -27676,6 +27906,7 @@ struct ApiObjectChecker
     argument_ptr->data = receiver_ptr->initial_data_;
   }
   static void SlowCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    CHECK(i::ValidateCallbackInfo(info));
     v8::Object* receiver_obj = v8::Object::Cast(*info.Holder());
     ApiObjectChecker* receiver_ptr =
         GetInternalField<ApiObjectChecker>(receiver_obj);
@@ -27935,6 +28166,7 @@ struct ReturnValueChecker : BasicApiChecker<T, ReturnValueChecker<T>, T> {
   }
 
   static void SlowCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+    CHECK(i::ValidateCallbackInfo(info));
     v8::Object* receiver_obj = v8::Object::Cast(*info.Holder());
     ReturnValueChecker<T>* receiver_ptr =
         GetInternalField<ReturnValueChecker<T>>(receiver_obj);
@@ -28687,9 +28919,10 @@ void FastCallback4Scalar(v8::Local<v8::Object> receiver, int arg0, float arg1) {
 void FastCallback5DifferentArity(v8::Local<v8::Object> receiver, int arg0,
                                  v8::Local<v8::Array> arg1, float arg2) {}
 
-void SequenceSlowCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  Trivial* self = UnwrapTrivialObject(args.This());
+void SequenceSlowCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  CHECK(i::ValidateCallbackInfo(info));
+  v8::Isolate* isolate = info.GetIsolate();
+  Trivial* self = UnwrapTrivialObject(info.This());
   if (!self) {
     isolate->ThrowError("This method is not defined on the given receiver.");
     return;
@@ -28698,24 +28931,24 @@ void SequenceSlowCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
 
   HandleScope handle_scope(isolate);
 
-  if (args.Length() < 2 || !args[0]->IsNumber()) {
+  if (info.Length() < 2 || !info[0]->IsNumber()) {
     isolate->ThrowError(
         "This method expects at least 2 arguments,"
         " first one a number.");
     return;
   }
-  int64_t len = args[0]->IntegerValue(isolate->GetCurrentContext()).FromJust();
-  if (args[1]->IsTypedArray()) {
-    v8::Local<v8::TypedArray> typed_array_arg = args[1].As<v8::TypedArray>();
+  int64_t len = info[0]->IntegerValue(isolate->GetCurrentContext()).FromJust();
+  if (info[1]->IsTypedArray()) {
+    v8::Local<v8::TypedArray> typed_array_arg = info[1].As<v8::TypedArray>();
     size_t length = typed_array_arg->Length();
     CHECK_EQ(len, length);
     return;
   }
-  if (!args[1]->IsArray()) {
+  if (!info[1]->IsArray()) {
     isolate->ThrowError("This method expects an array as a second argument.");
     return;
   }
-  v8::Local<v8::Array> seq_arg = args[1].As<v8::Array>();
+  v8::Local<v8::Array> seq_arg = info[1].As<v8::Array>();
   uint32_t length = seq_arg->Length();
   CHECK_EQ(len, length);
   return;
@@ -29053,6 +29286,7 @@ TEST(CodeLikeEval) {
   // One code-like, one not, and otherwise identical.
   auto string_fn = v8::FunctionTemplate::New(
       isolate, [](const v8::FunctionCallbackInfo<v8::Value>& info) {
+        CHECK(i::ValidateCallbackInfo(info));
         info.GetReturnValue().Set(v8_str("2+2"));
       });
   SetupCodeLike(&env, "CodeLike", string_fn, true);
@@ -29118,6 +29352,7 @@ TEST(CodeLikeFunction) {
   // One code kind, one not, and otherwise identical.
   auto string_fn = v8::FunctionTemplate::New(
       isolate, [](const v8::FunctionCallbackInfo<v8::Value>& info) {
+        CHECK(i::ValidateCallbackInfo(info));
         info.GetReturnValue().Set(v8_str("return 2+2"));
       });
   SetupCodeLike(&env, "CodeLike", string_fn, true);
@@ -29229,9 +29464,10 @@ TEST(TestSetSabConstructorEnabledCallback) {
 }
 
 namespace {
-void NodeTypeCallback(const v8::FunctionCallbackInfo<v8::Value>& args) {
-  v8::Isolate* isolate = args.GetIsolate();
-  args.GetReturnValue().Set(v8::Number::New(isolate, 1));
+void NodeTypeCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {
+  CHECK(i::ValidateCallbackInfo(info));
+  v8::Isolate* isolate = info.GetIsolate();
+  info.GetReturnValue().Set(v8::Number::New(isolate, 1));
 }
 }  // namespace
 
@@ -29614,7 +29850,6 @@ TEST(DeepFreezeAllowsSyntax) {
 }
 
 namespace {
-void DoNothing(const v8::FunctionCallbackInfo<v8::Value>& ignored) {}
 
 class AllowEmbedderObjects : public v8::Context::DeepFreezeDelegate {
  public:
@@ -29672,7 +29907,7 @@ TEST(DeepFreezesJSApiObjectWithDelegate) {
     v8::Local<v8::ObjectTemplate> global_template =
         v8::ObjectTemplate::New(isolate);
     v8::Local<v8::FunctionTemplate> v8_template =
-        v8::FunctionTemplate::New(isolate, &DoNothing);
+        v8::FunctionTemplate::New(isolate, &DoNothingCallback);
     v8_template->RemovePrototype();
     global_template->Set(v8_str("jsApiObject"), v8_template);
 
@@ -29760,7 +29995,7 @@ TEST(DeepFreezeDoesntFreezeJSApiObjectFunctionData) {
   v8::Local<v8::ObjectTemplate> global_template =
       v8::ObjectTemplate::New(isolate);
   v8::Local<v8::FunctionTemplate> v8_template =
-      v8::FunctionTemplate::New(isolate, &DoNothing, /*data=*/v8_foo);
+      v8::FunctionTemplate::New(isolate, &DoNothingCallback, /*data=*/v8_foo);
   v8_template->RemovePrototype();
   global_template->Set(v8_str("jsApiObject"), v8_template);
 
