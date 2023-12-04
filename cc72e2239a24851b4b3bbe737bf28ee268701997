@@ -33,6 +33,75 @@
       "message": "Patrick, PTAL @ all\nNico, PTAL @ compiler",
       "revId": "cc72e2239a24851b4b3bbe737bf28ee268701997",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b28a33a_54650ed1",
+        "filename": "src/builtins/loong64/builtins-loong64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2570,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-04T11:05:49Z",
+      "side": 1,
+      "message": "I don\u0027t think this will compile for loong64. There is no `TailCallBuiltin` overload that accepts condition arguments.",
+      "range": {
+        "startLine": 2570,
+        "startChar": 5,
+        "endLine": 2570,
+        "endChar": 20
+      },
+      "revId": "cc72e2239a24851b4b3bbe737bf28ee268701997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e85fde1_b2402b00",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2516,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-04T11:05:49Z",
+      "side": 1,
+      "message": "Also here (same as for loong64) there is a missing `TailCallBuiltin` overload with condition args.",
+      "range": {
+        "startLine": 2516,
+        "startChar": 5,
+        "endLine": 2516,
+        "endChar": 20
+      },
+      "revId": "cc72e2239a24851b4b3bbe737bf28ee268701997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c3cda29_048421e7",
+        "filename": "src/builtins/riscv/builtins-riscv.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2657,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-04T11:05:49Z",
+      "side": 1,
+      "message": "Also missing the overload with conditions for Risc-V",
+      "range": {
+        "startLine": 2657,
+        "startChar": 5,
+        "endLine": 2657,
+        "endChar": 20
+      },
+      "revId": "cc72e2239a24851b4b3bbe737bf28ee268701997",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
