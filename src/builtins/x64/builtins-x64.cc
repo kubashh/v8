@@ -4118,6 +4118,15 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
       kReservedStackSlots,
       builtin_exit_frame ? StackFrame::BUILTIN_EXIT : StackFrame::EXIT, rbx);
 
+  __ Push(rax);
+  __ Move(rax, 0x40);
+  Label loop;
+  __ bind(&loop);
+  __ decq(rax);
+  __ testq(rax, rax);
+  __ j(not_zero, &loop);
+  __ Pop(rax);
+
   // Set up argv in a callee-saved register. It is reused below so it must be
   // retained across the C call. In case of ArgvMode::kRegister, r15 has
   // already been set by the caller.
