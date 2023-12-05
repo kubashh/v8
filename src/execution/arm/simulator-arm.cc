@@ -522,9 +522,9 @@ bool ArmDebugger::ExecDebugCommand(ArrayUniquePtr<char> line_ptr) {
       PrintF("Wrong usage. Use help command for more information.\n");
     }
   } else if ((strcmp(cmd, "t") == 0) || strcmp(cmd, "trace") == 0) {
-    v8_flags.trace_sim = !v8_flags.trace_sim;
+    sim_->ToggleInstructionTracing();
     PrintF("Trace of executed instructions is %s\n",
-           v8_flags.trace_sim ? "on" : "off");
+           sim_->InstructionTracingEnabled() ? "on" : "off");
   } else if ((strcmp(cmd, "h") == 0) || (strcmp(cmd, "help") == 0)) {
     PrintF("cont\n");
     PrintF("  continue execution (alias 'c')\n");
@@ -592,6 +592,12 @@ bool ArmDebugger::ExecDebugCommand(ArrayUniquePtr<char> line_ptr) {
 
 #undef STR
 #undef XSTR
+}
+
+bool Simulator::InstructionTracingEnabled() { return instruction_tracing_; }
+
+void Simulator::ToggleInstructionTracing() {
+  instruction_tracing_ = !instruction_tracing_;
 }
 
 bool Simulator::ICacheMatch(void* one, void* two) {
@@ -684,6 +690,8 @@ Simulator::Simulator(Isolate* isolate) : isolate_(isolate) {
   // Set up simulator support first. Some of this information is needed to
   // setup the architecture state.
   stack_ = reinterpret_cast<uint8_t*>(base::Malloc(kAllocatedStackSize));
+  stack_limit_ = reinterpret_cast<uintptr_t>(stack_);
+
   pc_modified_ = false;
   icount_ = 0;
   break_pc_ = nullptr;
@@ -721,7 +729,7 @@ Simulator::Simulator(Isolate* isolate) : isolate_(isolate) {
 
   // The sp is initialized to point to the bottom (high address) of the
   // usable stack area.
-  registers_[sp] = reinterpret_cast<int32_t>(stack_) + kUsableStackSize;
+  registers_[sp] = stack_limit_ + kUsableStackSize;
   // The lr and pc are initialized to a known bad value that will cause an
   // access violation if the simulator ever tries to execute it.
   registers_[pc] = bad_lr;
@@ -1135,6 +1143,11 @@ int Simulator::WriteExDW(int32_t addr, int32_t value1, int32_t value2) {
   }
 }
 
+void Simulator::SetStackLimit(uintptr_t limit) {
+  DCHECK(limit != stack_limit_);  // Should always be different to new limit.
+  stack_limit_ = limit;
+}
+
 // Returns the limit of the stack area to enable checking for stack overflows.
 uintptr_t Simulator::StackLimit(uintptr_t c_limit) const {
   // The simulator uses a separate JS stack. If we have exhausted the C stack,
@@ -1145,14 +1158,15 @@ uintptr_t Simulator::StackLimit(uintptr_t c_limit) const {
 
   // Otherwise the limit is the JS stack. Leave a safety margin to prevent
   // overrunning the stack when pushing values.
-  return reinterpret_cast<uintptr_t>(stack_) + kAdditionalStackMargin;
+  return stack_limit_ + kAdditionalStackMargin;
 }
 
 base::Vector<uint8_t> Simulator::GetCurrentStackView() const {
   // We do not add an additional safety margin as above in
   // Simulator::StackLimit, as this is currently only used in wasm::StackMemory,
   // which adds its own margin.
-  return base::VectorOf(stack_, kUsableStackSize);
+  return base::VectorOf(reinterpret_cast<uint8_t*>(stack_limit_),
+                        kUsableStackSize);
 }
 
 // Unsupported instructions use Format to print an error and stop execution.
@@ -1651,7 +1665,7 @@ int64_t UnsafeGenericFunctionCall(intptr_t function, int32_t arg0, int32_t arg1,
 // C-based V8 runtime.
 void Simulator::SoftwareInterrupt(Instruction* instr) {
   int svc = instr->SvcValue();
-  switch (svc) {
+  switch (svc & interruptCodeMask) {
     case kCallRtRedirected: {
       // Check if stack is aligned. Error if not aligned is reported below to
       // include information on the function called.
@@ -1697,7 +1711,7 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
         int64_t iresult = 0;  // integer return value
         double dresult = 0;   // double return value
         GetFpArgs(&dval0, &dval1, &ival);
-        if (v8_flags.trace_sim || !stack_aligned) {
+        if (InstructionTracingEnabled() || !stack_aligned) {
           SimulatorRuntimeCall generic_target =
               reinterpret_cast<SimulatorRuntimeCall>(external);
           switch (redirection->type()) {
@@ -1771,7 +1785,7 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
           default:
             UNREACHABLE();
         }
-        if (v8_flags.trace_sim) {
+        if (InstructionTracingEnabled()) {
           switch (redirection->type()) {
             case ExternalReference::BUILTIN_COMPARE_CALL:
               PrintF("Returned %08x\n", static_cast<int32_t>(iresult));
@@ -1787,7 +1801,7 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
         }
       } else if (redirection->type() ==
                  ExternalReference::BUILTIN_FP_POINTER_CALL) {
-        if (v8_flags.trace_sim || !stack_aligned) {
+        if (InstructionTracingEnabled() || !stack_aligned) {
           PrintF("Call to host function at %p args %08x",
                  reinterpret_cast<void*>(external), arg0);
           if (!stack_aligned) {
@@ -1803,12 +1817,12 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
         TrashCallerSaveRegisters();
 #endif
         SetFpResult(dresult);
-        if (v8_flags.trace_sim) {
+        if (InstructionTracingEnabled()) {
           PrintF("Returned %f\n", dresult);
         }
       } else if (redirection->type() == ExternalReference::DIRECT_API_CALL) {
         // void f(v8::FunctionCallbackInfo&)
-        if (v8_flags.trace_sim || !stack_aligned) {
+        if (InstructionTracingEnabled() || !stack_aligned) {
           PrintF("Call to host function at %p args %08x",
                  reinterpret_cast<void*>(external), arg0);
           if (!stack_aligned) {
@@ -1825,7 +1839,7 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
 #endif
       } else if (redirection->type() == ExternalReference::DIRECT_GETTER_CALL) {
         // void f(v8::Local<String> property, v8::PropertyCallbackInfo& info)
-        if (v8_flags.trace_sim || !stack_aligned) {
+        if (InstructionTracingEnabled() || !stack_aligned) {
           PrintF("Call to host function at %p args %08x %08x",
                  reinterpret_cast<void*>(external), arg0, arg1);
           if (!stack_aligned) {
@@ -1855,7 +1869,7 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
         DCHECK(redirection->type() == ExternalReference::BUILTIN_CALL ||
                redirection->type() == ExternalReference::BUILTIN_CALL_PAIR ||
                redirection->type() == ExternalReference::FAST_C_CALL);
-        if (v8_flags.trace_sim || !stack_aligned) {
+        if (InstructionTracingEnabled() || !stack_aligned) {
           PrintF(
               "Call to host function at %p "
               "args %08x, %08x, %08x, %08x, %08x, %08x, %08x, %08x, %08x, "
@@ -1879,7 +1893,7 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
 #endif
         int32_t lo_res = static_cast<int32_t>(result);
         int32_t hi_res = static_cast<int32_t>(result >> 32);
-        if (v8_flags.trace_sim) {
+        if (InstructionTracingEnabled()) {
           PrintF("Returned %08x\n", lo_res);
         }
         set_register(r0, lo_res);
@@ -1892,6 +1906,11 @@ void Simulator::SoftwareInterrupt(Instruction* instr) {
     case kBreakpoint:
       ArmDebugger(this).Debug();
       break;
+    case kSwitchStackLimit: {
+      const uintptr_t stack_limit = get_register(svc & ~interruptCodeMask);
+      SetStackLimit(stack_limit);
+      break;
+    }
     // stop uses all codes greater than 1 << 23.
     default:
       if (svc >= (1 << 23)) {
@@ -6118,7 +6137,7 @@ void Simulator::InstructionDecode(Instruction* instr) {
     CheckICache(i_cache(), instr);
   }
   pc_modified_ = false;
-  if (v8_flags.trace_sim) {
+  if (InstructionTracingEnabled()) {
     disasm::NameConverter converter;
     disasm::Disassembler dasm(converter);
     // use a reasonably large buffer

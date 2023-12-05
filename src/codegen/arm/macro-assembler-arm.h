@@ -351,6 +351,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   // The return address on the stack is used by frame iteration.
   void StoreReturnAddressAndCall(Register target);
 
+  // Enforce platform specific stack alignment.
+  void EnforceStackAlignment();
+
   void BailoutIfDeoptimized();
   void CallForDeoptimization(Builtin target, int deopt_id, Label* exit,
                              DeoptimizeKind kind, Label* ret,
@@ -457,6 +460,8 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
   void Jump(Address target, RelocInfo::Mode rmode, Condition cond = al);
   void Jump(Handle<Code> code, RelocInfo::Mode rmode, Condition cond = al);
   void Jump(const ExternalReference& reference);
+
+  void GetLabelAddress(Register dst, Label* target);
 
   // Perform a floating-point min or max operation with the
   // (IEEE-754-compatible) semantics of ARM64's fmin/fmax. Some cases, typically
@@ -618,6 +623,9 @@ class V8_EXPORT_PRIVATE MacroAssembler : public MacroAssemblerBase {
     SmiTst(src);
     return eq;
   }
+
+  void Zero(const MemOperand& tgt);
+  void Zero(const MemOperand& tgt1, const MemOperand& tgt2);
 
   void DecompressTagged(const Register& destination,
                         const MemOperand& field_operand) {
