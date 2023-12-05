@@ -4042,6 +4042,15 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
   Register return_value = rax;
   Register scratch = kCArgRegs[3];
 
+  __ Push(rax);
+  __ Move(rax, 0x20);
+  Label loop;
+  __ bind(&loop);
+  __ decq(rax);
+  __ testq(rax, rax);
+  __ j(not_zero, &loop);
+  __ Pop(rax);
+
   // Allocate HandleScope in callee-saved registers.
   // We will need to restore the HandleScope after the call to the API function,
   // by allocating it in callee-saved registers it'll be preserved by C code.

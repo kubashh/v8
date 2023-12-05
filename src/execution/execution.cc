@@ -165,6 +165,16 @@ InvokeParams InvokeParams::SetUpForRunMicrotasks(
 
 Handle<Code> JSEntry(Isolate* isolate, Execution::Target execution_target,
                      bool is_construct) {
+  asm volatile(
+      "movq $0x20, %%r10\n"
+      "1: dec %%r10\n"
+      "test %%r10, %%r10\n"
+      "jnz 1b\n"
+      "\n"
+      :
+      :
+      : "r10", "cc");
+
   if (is_construct) {
     DCHECK_EQ(Execution::Target::kCallable, execution_target);
     return BUILTIN_CODE(isolate, JSConstructEntry);
