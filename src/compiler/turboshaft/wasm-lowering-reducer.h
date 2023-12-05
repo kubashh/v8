@@ -132,7 +132,7 @@ class WasmLoweringReducer : public Next {
       GOTO(end_label, object);
     } else {
       Label<> convert_to_heap_number_label(&Asm());
-      V<Word32> int_value = __ UntagSmi(object);
+      V<Word32> int_value = __ UntagSmi(V<Smi>::Cast(object));
 
       // Convert to heap number if the int32 does not fit into an i31ref.
       GOTO_IF(__ Int32LessThan(__ Word32Constant(kInt31MaxValue), int_value),
@@ -913,7 +913,7 @@ class WasmLoweringReducer : public Next {
                    IsolateData::root_slot_offset(index));
   }
 
-  V<WordPtr> ChangeSmiToWordPtr(V<Tagged> smi) {
+  V<WordPtr> ChangeSmiToWordPtr(V<Smi> smi) {
     return __ ChangeInt32ToIntPtr(__ UntagSmi(smi));
   }
 
