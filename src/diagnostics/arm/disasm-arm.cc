@@ -269,13 +269,18 @@ void Decoder::PrintPU(Instruction* instr) {
 // Print SoftwareInterrupt codes. Factoring this out reduces the complexity of
 // the FormatOption method.
 void Decoder::PrintSoftwareInterrupt(SoftwareInterruptCodes svc) {
-  switch (svc) {
+  switch (svc & interruptCodeMask) {
     case kCallRtRedirected:
       Print("call rt redirected");
       return;
     case kBreakpoint:
       Print("breakpoint");
       return;
+    case kSwitchStackLimit: {
+      Print("adjust stack limit: ");
+      PrintRegister(svc & ~interruptCodeMask);
+      return;
+    }
     default:
       if (svc >= kStopCode) {
         out_buffer_pos_ +=
