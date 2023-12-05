@@ -1190,7 +1190,8 @@ class TurboshaftGraphBuildingInterface {
     GOTO(heapnumber_label);
 
     BIND(smi_label);
-    V<WordPtr> smi_length = __ ChangeInt32ToIntPtr(__ UntagSmi(tagged));
+    V<WordPtr> smi_length =
+        __ ChangeInt32ToIntPtr(__ UntagSmi(V<Smi>::Cast(tagged)));
     GOTO(done_label, smi_length);
 
     BIND(heapnumber_label);
@@ -2599,7 +2600,7 @@ class TurboshaftGraphBuildingInterface {
                            MachineType::Uint32(), MachineType::Uint32());
     V<Word32> result =
         CallC(&sig, ExternalReference::wasm_memory_init(),
-              {__ BitcastTaggedToWord(instance_node()),
+              {__ BitcastHeapObjectToWordPtr(instance_node()),
                __ Word32Constant(imm.memory.index), dst_uintptr, src.op,
                __ Word32Constant(imm.data_segment.index), size.op});
     __ TrapIfNot(result, OpIndex::Invalid(), TrapId::kTrapMemOutOfBounds);
@@ -2620,7 +2621,7 @@ class TurboshaftGraphBuildingInterface {
                            MachineType::Uint32(), MachineType::UintPtr(),
                            MachineType::UintPtr(), MachineType::UintPtr());
     V<Word32> result = CallC(&sig, ExternalReference::wasm_memory_copy(),
-                             {__ BitcastTaggedToWord(instance_node()),
+                             {__ BitcastHeapObjectToWordPtr(instance_node()),
                               __ Word32Constant(imm.memory_dst.index),
                               __ Word32Constant(imm.memory_src.index),
                               dst_uintptr, src_uintptr, size_uintptr});
@@ -2640,8 +2641,8 @@ class TurboshaftGraphBuildingInterface {
                            MachineType::UintPtr());
     V<Word32> result = CallC(
         &sig, ExternalReference::wasm_memory_fill(),
-        {__ BitcastTaggedToWord(instance_node()), __ Word32Constant(imm.index),
-         dst_uintptr, value.op, size_uintptr});
+        {__ BitcastHeapObjectToWordPtr(instance_node()),
+         __ Word32Constant(imm.index), dst_uintptr, value.op, size_uintptr});
 
     __ TrapIfNot(result, OpIndex::Invalid(), TrapId::kTrapMemOutOfBounds);
   }
@@ -3007,13 +3008,14 @@ class TurboshaftGraphBuildingInterface {
     V<Tagged> input_non_null = NullCheck(input);
     if constexpr (SmiValuesAre31Bits()) {
       result->op = __ Word32ShiftRightArithmeticShiftOutZeros(
-          __ TruncateWordPtrToWord32(__ BitcastTaggedToWord(input_non_null)),
+          __ TruncateWordPtrToWord32(
+              __ BitcastAnyTaggedToWordPtr(input_non_null)),
           kSmiTagSize + kSmiShiftSize);
     } else {
       // Topmost bit is already sign-extended.
       result->op = __ TruncateWordPtrToWord32(
           __ WordPtrShiftRightArithmeticShiftOutZeros(
-              __ BitcastTaggedToWord(input_non_null),
+              __ BitcastAnyTaggedToWordPtr(input_non_null),
               kSmiTagSize + kSmiShiftSize));
     }
   }
@@ -3022,12 +3024,13 @@ class TurboshaftGraphBuildingInterface {
     V<Tagged> input_non_null = NullCheck(input);
     if constexpr (SmiValuesAre31Bits()) {
       result->op = __ Word32ShiftRightLogical(
-          __ TruncateWordPtrToWord32(__ BitcastTaggedToWord(input_non_null)),
+          __ TruncateWordPtrToWord32(
+              __ BitcastAnyTaggedToWordPtr(input_non_null)),
           kSmiTagSize + kSmiShiftSize);
     } else {
       // Topmost bit is sign-extended, remove it.
       result->op = __ TruncateWordPtrToWord32(__ WordPtrShiftRightLogical(
-          __ WordPtrShiftLeft(__ BitcastTaggedToWord(input_non_null), 1),
+          __ WordPtrShiftLeft(__ BitcastAnyTaggedToWordPtr(input_non_null), 1),
           kSmiTagSize + kSmiShiftSize + 1));
     }
   }
@@ -3424,7 +3427,7 @@ class TurboshaftGraphBuildingInterface {
     // Bitcast the tagged to a wordptr as the offset already contains the
     // kHeapObjectTag handling. Furthermore, in case of external strings the
     // tagged value is a smi 0, which doesn't really encode a tagged load.
-    V<WordPtr> base_ptr = __ BitcastTaggedToWord(base);
+    V<WordPtr> base_ptr = __ BitcastAnyTaggedToWordPtr(base);
     V<Word32> result_value =
         __ Load(base_ptr, object_offset, LoadOp::Kind::RawAligned().Immutable(),
                 MemoryRepresentation::Uint16());
@@ -3436,7 +3439,7 @@ class TurboshaftGraphBuildingInterface {
     // Bitcast the tagged to a wordptr as the offset already contains the
     // kHeapObjectTag handling. Furthermore, in case of external strings the
     // tagged value is a smi 0, which doesn't really encode a tagged load.
-    base_ptr = __ BitcastTaggedToWord(base);
+    base_ptr = __ BitcastAnyTaggedToWordPtr(base);
     result_value =
         __ Load(base_ptr, object_offset, LoadOp::Kind::RawAligned().Immutable(),
                 MemoryRepresentation::Uint8());
@@ -3491,7 +3494,7 @@ class TurboshaftGraphBuildingInterface {
     // Bitcast the tagged to a wordptr as the offset already contains the
     // kHeapObjectTag handling. Furthermore, in case of external strings the
     // tagged value is a smi 0, which doesn't really encode a tagged load.
-    V<WordPtr> base_ptr = __ BitcastTaggedToWord(base);
+    V<WordPtr> base_ptr = __ BitcastAnyTaggedToWordPtr(base);
     V<Word32> lead =
         __ Load(base_ptr, object_offset, LoadOp::Kind::RawAligned().Immutable(),
                 MemoryRepresentation::Uint16());
@@ -3518,7 +3521,7 @@ class TurboshaftGraphBuildingInterface {
     // Bitcast the tagged to a wordptr as the offset already contains the
     // kHeapObjectTag handling. Furthermore, in case of external strings the
     // tagged value is a smi 0, which doesn't really encode a tagged load.
-    base_ptr = __ BitcastTaggedToWord(base);
+    base_ptr = __ BitcastAnyTaggedToWordPtr(base);
     result =
         __ Load(base_ptr, object_offset, LoadOp::Kind::RawAligned().Immutable(),
                 MemoryRepresentation::Uint8());
@@ -5455,7 +5458,8 @@ class TurboshaftGraphBuildingInterface {
             LoadOp::Kind::TaggedBase(), MemoryRepresentation::TaggedPointer(),
             WeakArrayList::kHeaderSize, kTaggedSizeLog2);
         V<Map> real_rtt = V<Map>::Cast(__ WordPtrBitwiseAnd(
-            __ BitcastTaggedToWord(weak_rtt), ~kWeakHeapObjectMask));
+            __ BitcastHeapObjectToWordPtr(V<HeapObject>::Cast(weak_rtt)),
+            ~kWeakHeapObjectMask));
         V<WasmTypeInfo> type_info =
             __ Load(real_rtt, LoadOp::Kind::TaggedBase(),
                     MemoryRepresentation::TaggedPointer(),

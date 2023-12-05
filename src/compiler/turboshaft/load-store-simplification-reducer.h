@@ -79,7 +79,7 @@ class LoadStoreSimplificationReducer : public Next {
       if (kind.tagged_base) {
         kind.tagged_base = false;
         offset -= kHeapObjectTag;
-        base = __ BitcastTaggedToWord(base);
+        base = __ BitcastHeapObjectToWord(base);
       }
 
       DCHECK_EQ(element_size_log2, 0);

@@ -8,6 +8,7 @@
 #include "src/base/safe_conversions.h"
 #include "src/base/small-vector.h"
 #include "src/base/template-utils.h"
+#include "src/base/v8-fallthrough.h"
 #include "src/base/vector.h"
 #include "src/codegen/callable.h"
 #include "src/codegen/machine-type.h"
@@ -867,17 +868,25 @@ Node* ScheduleBuilder::ProcessOperation(
                  {temp, GetNode(op.low_word32())});
 }
 Node* ScheduleBuilder::ProcessOperation(const TaggedBitcastOp& op) {
+  using Rep = RegisterRepresentation;
   const Operator* o;
-  if (op.from == RegisterRepresentation::Tagged() &&
-      op.to == RegisterRepresentation::PointerSized()) {
-    o = machine.BitcastTaggedToWord();
-  } else if (op.from.IsWord() && op.to == RegisterRepresentation::Tagged()) {
-    o = machine.BitcastWordToTagged();
-  } else if (op.from == RegisterRepresentation::Compressed() &&
-             op.to == RegisterRepresentation::Word32()) {
-    o = machine.BitcastTaggedToWord();
-  } else {
-    UNIMPLEMENTED();
+  switch (multi(op.from, op.to)) {
+    case multi(Rep::Tagged(), Rep::PointerSized()):
+      o = machine.BitcastTaggedToWord();
+      break;
+    case multi(Rep::Word32(), Rep::Tagged()):
+    case multi(Rep::Word64(), Rep::Tagged()):
+      if (op.kind == TaggedBitcastOp::Kind::kSmi) {
+        o = machine.BitcastWordToTaggedSigned();
+      } else {
+        o = machine.BitcastWordToTagged();
+      }
+      break;
+    case multi(Rep::Compressed(), Rep::Word32()):
+      o = machine.BitcastTaggedToWord();
+      break;
+    default:
+      UNIMPLEMENTED();
   }
   return AddNode(o, {GetNode(op.input())});
 }
