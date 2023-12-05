@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cef5a94_aa3bedad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-05T17:21:30Z",
+      "side": 1,
+      "message": "Another micro-optimization that speeds up Wasm graph building by ~7-8%, and thus total compile time by 0.5-1%. Could you take a look? (Or let me know if someone else would be a good person to review.)\nThanks!",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d34ece25_f28f1107",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3839,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-05T17:21:30Z",
+      "side": 1,
+      "message": "Moved below `InstanceCache` such that it is already defined.",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2ef8b51_38dafd9d",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3842,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-05T17:21:30Z",
+      "side": 1,
+      "message": "Partially extracted from `NewBlockWithPhis`.",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2281b175_df1e0772",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3876,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-05T17:21:30Z",
+      "side": 1,
+      "message": "Partially extracted from `StartFunction`.",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de3bcf11_04b71765",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3897,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-05T17:21:30Z",
+      "side": 1,
+      "message": "This is extremely hot, so some micro-optimizations like avoiding divisions, multiplications, and keeping some fields close together pay out.",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
