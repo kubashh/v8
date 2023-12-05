@@ -913,7 +913,7 @@ class WasmLoweringReducer : public Next {
                    IsolateData::root_slot_offset(index));
   }
 
-  V<WordPtr> ChangeSmiToWordPtr(V<Tagged> smi) {
+  V<WordPtr> ChangeSmiToWordPtr(V<Smi> smi) {
     return __ ChangeInt32ToIntPtr(__ UntagSmi(smi));
   }
 

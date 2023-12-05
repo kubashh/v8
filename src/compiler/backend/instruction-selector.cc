@@ -4990,8 +4990,13 @@ void InstructionSelectorT<TurboshaftAdapter>::VisitNode(
         return VisitBitcastTaggedToWord(node);
       } else if (cast.from.IsWord() &&
                  cast.to == RegisterRepresentation::Tagged()) {
-        MarkAsTagged(node);
-        return VisitBitcastWordToTagged(node);
+        if (cast.kind == TaggedBitcastOp::Kind::kSmi) {
+          MarkAsRepresentation(MachineRepresentation::kTaggedSigned, node);
+          return EmitIdentity(node);
+        } else {
+          MarkAsTagged(node);
+          return VisitBitcastWordToTagged(node);
+        }
       } else if (cast.from == RegisterRepresentation::Compressed() &&
                  cast.to == RegisterRepresentation::Word32()) {
         MarkAsRepresentation(MachineType::PointerRepresentation(), node);
