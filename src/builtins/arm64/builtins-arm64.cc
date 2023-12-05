@@ -3599,6 +3599,7 @@ void ResetStackSwitchFrameStackSlots(MacroAssembler* masm) {
   __ Str(xzr, MemOperand(fp, StackSwitchFrameConstants::kInstanceOffset));
 }
 
+// TODO: (irezvov) Consolodate with arm RegisterAllocator
 class RegisterAllocator {
  public:
   class Scoped {
