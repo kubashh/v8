@@ -437,4 +437,25 @@ DEFINE_CHECK_OP_IMPL(GT, > )
 #define DCHECK_IMPLIES(v1, v2) ((void) 0)
 #endif
 
+// When the sandbox is enabled, a SBXCHECK behaves exactly like a CHECK, but
+// indicates that the check is required for the sandbox, i.e. prevents a
+// sandbox bypass. When the sandbox is off, it becomes a DCHECK.
+#ifdef V8_ENABLE_SANDBOX
+#define SBXCHECK(condition) CHECK(condition)
+#define SBXCHECK_EQ(lhs, rhs) CHECK_EQ(lhs, rhs)
+#define SBXCHECK_NE(lhs, rhs) CHECK_NE(lhs, rhs)
+#define SBXCHECK_GT(lhs, rhs) CHECK_GT(lhs, rhs)
+#define SBXCHECK_GE(lhs, rhs) CHECK_GE(lhs, rhs)
+#define SBXCHECK_LT(lhs, rhs) CHECK_LT(lhs, rhs)
+#define SBXCHECK_LE(lhs, rhs) CHECK_LE(lhs, rhs)
+#else
+#define SBXCHECK(condition) DCHECK(condition)
+#define SBXCHECK_EQ(lhs, rhs) DCHECK_EQ(lhs, rhs)
+#define SBXCHECK_NE(lhs, rhs) DCHECK_NE(lhs, rhs)
+#define SBXCHECK_GT(lhs, rhs) DCHECK_GT(lhs, rhs)
+#define SBXCHECK_GE(lhs, rhs) DCHECK_GE(lhs, rhs)
+#define SBXCHECK_LT(lhs, rhs) DCHECK_LT(lhs, rhs)
+#define SBXCHECK_LE(lhs, rhs) DCHECK_LE(lhs, rhs)
+#endif
+
 #endif  // V8_BASE_LOGGING_H_
