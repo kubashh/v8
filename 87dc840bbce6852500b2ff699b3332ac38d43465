@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13172d37_7c0b8cff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-05T10:29:42Z",
+      "side": 1,
+      "message": "We discussed this before. Even though the improvement in terms of elapsed compile time is small, it is still statistically significant on my machine (with 20 repetitions, maybe also due to less noise on a workstation), and the effect in terms of CPU cycles and on the graph building phase in isolation is clear enough to warrant this change.\nWDYT, and could you please take a look?",
+      "revId": "87dc840bbce6852500b2ff699b3332ac38d43465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
