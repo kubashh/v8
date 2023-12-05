@@ -33,6 +33,24 @@
       "message": "lgtm",
       "revId": "1616e01d656f85584c255a2f54424ee5e3551146",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4e01ebc_900ceb01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-05T10:43:00Z",
+      "side": 1,
+      "message": "It would be nice to add an example why something has to be a CHECK with enabled sandbox while it\u0027s enough to be a DCHECK for non-sandbox case.",
+      "parentUuid": "779f4558_5e296070",
+      "revId": "1616e01d656f85584c255a2f54424ee5e3551146",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
