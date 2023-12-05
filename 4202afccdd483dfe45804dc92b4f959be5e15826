@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37bd4b21_52f96c03",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-05T10:45:13Z",
+      "side": 0,
+      "message": "Once I check for the right node here, the branches below aren\u0027t unreachable any more... :/",
+      "range": {
+        "startLine": 552,
+        "startChar": 41,
+        "endLine": 552,
+        "endChar": 45
+      },
+      "revId": "4202afccdd483dfe45804dc92b4f959be5e15826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
