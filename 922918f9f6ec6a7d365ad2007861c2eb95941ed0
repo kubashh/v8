@@ -16,6 +16,23 @@
       "message": "PTAL, thanks!",
       "revId": "922918f9f6ec6a7d365ad2007861c2eb95941ed0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02fd75b3_eb2e11ba",
+        "filename": "src/builtins/loong64/builtins-loong64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2584,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-05T09:12:30Z",
+      "side": 1,
+      "message": "Could you please create a TailCallBuiltin() variant with condition and operand as we have for respective MacroAssembler::Jump()?\nThere will be more such use cases in the next CLs: https://chromium-review.googlesource.com/c/v8/v8/+/5079408",
+      "revId": "922918f9f6ec6a7d365ad2007861c2eb95941ed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
