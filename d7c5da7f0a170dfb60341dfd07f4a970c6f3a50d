@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c137501_f4b6d8c4",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2955,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-05T16:31:42Z",
+      "side": 1,
+      "message": "Nit: it would be nice to have similar names between ports. On Arm64 we seem to call it `SwitchStackLimit`.",
+      "range": {
+        "startLine": 2955,
+        "startChar": 11,
+        "endLine": 2955,
+        "endChar": 29
+      },
+      "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d524f6f_eb1acb69",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2982,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-05T16:31:42Z",
+      "side": 1,
+      "message": "Recently I did a similar thing but in a slightly simpler way not requiring a temp register, see https://chromium-review.googlesource.com/c/v8/v8/+/4714689/10/src/maglev/arm/maglev-assembler-arm-inl.h",
+      "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ecb6487_40b83af7",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3127,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-05T16:31:42Z",
+      "side": 1,
+      "message": "Nit: it would be nice to load zero only once.",
+      "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f64b39e_610c42a5",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3130,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-05T16:31:42Z",
+      "side": 1,
+      "message": "This class is mostly arch-independent modulo RegList method names. It would be nice to unify the implementations at some point. Could you please add a TODO here and in arm64.",
+      "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
