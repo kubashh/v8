@@ -56,6 +56,30 @@
       },
       "revId": "5e9902433779b521508a91fcd3323b622f8245ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f46fc7f4_1d446797",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-05T11:02:45Z",
+      "side": 1,
+      "message": "Done and also in the places below.\nNote however that in general throughout this file I have used the `Is\u003cOpmask\u003e` followed by a cast a lot. I somewhat prefer it over defining variables in an if that then typically spans over multiple lines etc.\nAlso there are then cases where it can\u0027t be merged like line 567 where we also need to check for `CanCover`.\n\n`1 file changed, 9 insertions(+), 9 deletions(-)`\nAt least in this case, it didn\u0027t save a single line. 😄",
+      "parentUuid": "6c520860_04caa590",
+      "range": {
+        "startLine": 553,
+        "startChar": 6,
+        "endLine": 554,
+        "endChar": 63
+      },
+      "revId": "5e9902433779b521508a91fcd3323b622f8245ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
