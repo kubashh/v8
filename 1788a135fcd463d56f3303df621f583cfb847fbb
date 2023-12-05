@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60a7feed_0e9bee76",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-12-05T11:10:54Z",
+      "side": 1,
+      "message": "Actually, you should probably check this first and CanCover second, since this is probably faster than CanCover.",
+      "range": {
+        "startLine": 568,
+        "startChar": 8,
+        "endLine": 568,
+        "endChar": 46
+      },
+      "revId": "1788a135fcd463d56f3303df621f583cfb847fbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
