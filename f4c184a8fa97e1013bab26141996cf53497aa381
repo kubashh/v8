@@ -129,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b509243_14f31077",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-05T21:52:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6ea94f86_5152fb6e",
+      "range": {
+        "startLine": 404,
+        "startChar": 36,
+        "endLine": 404,
+        "endChar": 46
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0442631c_bdca2a23",
@@ -166,6 +190,30 @@
       "side": 1,
       "message": "Hmm. I believe the correct comment might read:\n// Enforce platform specific stack alignment.\nMy reasoning is that this stack alignment is required by some ABIs. The specific stack alignment does not seem to be appropriate to mention here since it could conceivably change in the future.",
       "parentUuid": "0442631c_bdca2a23",
+      "range": {
+        "startLine": 354,
+        "startChar": 2,
+        "endLine": 354,
+        "endChar": 41
+      },
+      "revId": "f4c184a8fa97e1013bab26141996cf53497aa381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "755207d4_0f7a8e37",
+        "filename": "src/codegen/arm/macro-assembler-arm.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-05T21:52:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fc0e239b_ecce3db8",
       "range": {
         "startLine": 354,
         "startChar": 2,
