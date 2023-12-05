@@ -2521,9 +2521,14 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   __ LoadMap(map, target);
   __ GetInstanceTypeRange(map, instance_type, FIRST_CALLABLE_JS_FUNCTION_TYPE,
                           scratch);
-  __ TailCallBuiltin(Builtins::CallFunction(mode), ls, scratch,
-                     Operand(LAST_CALLABLE_JS_FUNCTION_TYPE -
-                             FIRST_CALLABLE_JS_FUNCTION_TYPE));
+  {
+    Label skip_call;
+    __ Branch(&skip_call, NegateCondition(ls), scratch,
+              Operand(LAST_CALLABLE_JS_FUNCTION_TYPE -
+                      FIRST_CALLABLE_JS_FUNCTION_TYPE));
+    __ TailCallBuiltin(Builtins::CallFunction(mode));
+    __ bind(&skip_call);
+  }
   __ Jump(BUILTIN_CODE(masm->isolate(), CallBoundFunction),
           RelocInfo::CODE_TARGET, eq, instance_type,
           Operand(JS_BOUND_FUNCTION_TYPE));
