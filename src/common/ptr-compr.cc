@@ -14,14 +14,15 @@ namespace v8::internal {
 #define THREAD_LOCAL_IF_MULTICAGE thread_local
 #endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 
-THREAD_LOCAL_IF_MULTICAGE uintptr_t V8HeapCompressionScheme::base_ =
-    kNullAddress;
+// static
+template <typename Cage>
+Address V8HeapCompressionSchemeImpl<Cage>::base_non_inlined() {
+  return base_;
+}
 
 // static
-Address V8HeapCompressionScheme::base_non_inlined() { return base_; }
-
-// static
-void V8HeapCompressionScheme::set_base_non_inlined(Address base) {
+template <typename Cage>
+void V8HeapCompressionSchemeImpl<Cage>::set_base_non_inlined(Address base) {
   base_ = base;
 }
 
@@ -38,6 +39,14 @@ void ExternalCodeCompressionScheme::set_base_non_inlined(Address base) {
   base_ = base;
 }
 #endif  // V8_EXTERNAL_CODE_SPACE
+
+// Explicitly instantiate the V8HeapCompressionScheme.
+template class V8HeapCompressionSchemeImpl<MainCage>;
+
+#ifdef V8_ENABLE_SANDBOX
+// Explicitly instantiate the TrustedSpaceCompressionScheme.
+template class V8HeapCompressionSchemeImpl<TrustedCage>;
+#endif  // V8_ENABLE_SANDBOX
 
 #undef THREAD_LOCAL_IF_MULTICAGE
 

@@ -10,12 +10,11 @@
 
 namespace v8::internal {
 
-// This is just a collection of compression scheme related functions. Having
-// such a class allows plugging different decompression scheme in certain
-// places by introducing another CompressionScheme class with a customized
-// implementation. This is useful, for example, for Code::code
-// field (see InstructionStreamSlot).
-class V8HeapCompressionScheme {
+// This is just a collection of common compression scheme related functions.
+// Each pointer compression cage then has its own compression scheme, which
+// mainly differes in the cage base address they use.
+template <typename Cage>
+class V8HeapCompressionSchemeImpl {
  public:
   V8_INLINE static Address GetPtrComprCageBaseAddress(Address on_heap_addr);
 
@@ -50,7 +49,7 @@ class V8HeapCompressionScheme {
 
   // Process-wide cage base value used for decompression.
   V8_INLINE static void InitBase(Address base);
-  V8_INLINE static Address base();
+  V8_CONST V8_INLINE static Address base();
 
  private:
   // These non-inlined accessors to base_ field are used in component builds
@@ -65,11 +64,25 @@ class V8HeapCompressionScheme {
 #endif  // V8_COMPRESS_POINTERS_IN_SHARED_CAGE
 };
 
+// The main pointer compression cage, used for most objects.
+struct MainCage {};
+using V8HeapCompressionScheme = V8HeapCompressionSchemeImpl<MainCage>;
+#ifdef V8_ENABLE_SANDBOX
+
+// Compression scheme used for compressed pointer fields of trusted objects
+// referencing other trusted objects ("compressed trusted pointers").
+struct TrustedCage {};
+using TrustedSpaceCompressionScheme = V8HeapCompressionSchemeImpl<TrustedCage>;
+#endif  // V8_ENABLE_SANDBOX
+
 #ifdef V8_EXTERNAL_CODE_SPACE
 
 // Compression scheme used for fields containing InstructionStream objects
 // (namely for the Code::code field). Same as
 // V8HeapCompressionScheme but with a different base value.
+// TODO(ishell): consider also using V8HeapCompressionSchemeImpl here unless
+// this becomes a different compression scheme that allows crossing the 4GB
+// boundary.
 class ExternalCodeCompressionScheme {
  public:
   V8_INLINE static Address PrepareCageBaseAddress(Address on_heap_addr);
