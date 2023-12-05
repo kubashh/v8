@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebea948c_7e58006c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-12-05T11:11:22Z",
+      "side": 1,
+      "message": "(trying to reset the +2, without much success it seems 😭)",
+      "revId": "1788a135fcd463d56f3303df621f583cfb847fbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "60a7feed_0e9bee76",
