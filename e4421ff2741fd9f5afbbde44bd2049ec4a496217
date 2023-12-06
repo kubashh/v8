@@ -16,6 +16,24 @@
       "message": "still seems to fail during mksnapshot due to no scratch reg being passed.",
       "revId": "e4421ff2741fd9f5afbbde44bd2049ec4a496217",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01664c89_2120cd16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-12-06T16:03:31Z",
+      "side": 1,
+      "message": "In which configuration?  I can\u0027t even build upstream GIT head on ppc64 right now, there are compilation failures in CEntry stemming from 8de6dcc377690a0ea0fd95ba6bbef802f55da683",
+      "parentUuid": "8c6d40b0_9eeffc7d",
+      "revId": "e4421ff2741fd9f5afbbde44bd2049ec4a496217",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
