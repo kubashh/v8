@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adda8513_130dd550",
+        "filename": "src/codegen/arm/macro-assembler-arm.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T20:43:20Z",
+      "side": 1,
+      "message": "Why not call it like `__ JumpIfEqual(tmp, old_state, \u0026ok);` and let the int32_t overload take care of the `Operand()`?",
+      "revId": "593df0f638737205568d133dad9255b170a6e39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
