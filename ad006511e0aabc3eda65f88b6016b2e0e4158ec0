@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "905061c5_0071ff6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-06T12:53:14Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: PTAL.",
+      "revId": "ad006511e0aabc3eda65f88b6016b2e0e4158ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf177b2b_e704c13c",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 6301,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-06T12:53:14Z",
+      "side": 1,
+      "message": "@manoskouk@chromium.org: Does it make sense what I check here, i.e. the parameters of the inlinee must be a subtype of the static type, while for the returns the static type must be a subtype of the inlinee return types?",
+      "range": {
+        "startLine": 6301,
+        "startChar": 1,
+        "endLine": 6301,
+        "endChar": 6
+      },
+      "revId": "ad006511e0aabc3eda65f88b6016b2e0e4158ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
