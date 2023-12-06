@@ -381,7 +381,7 @@ void BytecodeArray::BytecodeArrayVerify(Isolate* isolate) {
   {
     auto o = handler_table();
     Object::VerifyPointer(isolate, o);
-    CHECK(IsByteArray(o));
+    CHECK(IsTrustedByteArray(o));
   }
   {
     auto o = wrapper();
