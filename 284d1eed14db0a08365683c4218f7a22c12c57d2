@@ -64,6 +64,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab51c9fe_65e9355a",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2921,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "825f5e4a_ef7cbbec",
+      "range": {
+        "startLine": 2918,
+        "startChar": 0,
+        "endLine": 2921,
+        "endChar": 0
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a48d95b_9f026a08",
@@ -77,6 +101,30 @@
       "writtenOn": "2023-12-06T13:34:55Z",
       "side": 1,
       "message": "nit: `target`, the style guide encourages spelling out words unless they are well documented abbreviations (also below).",
+      "range": {
+        "startLine": 2943,
+        "startChar": 66,
+        "endLine": 2943,
+        "endChar": 69
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ccdf25f_8e371c57",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2943,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0a48d95b_9f026a08",
       "range": {
         "startLine": 2943,
         "startChar": 66,
@@ -110,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa6310de_e9f8af39",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2944,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b640ad08_8b045021",
+      "range": {
+        "startLine": 2944,
+        "startChar": 29,
+        "endLine": 2944,
+        "endChar": 33
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cf14e88_f82af282",
@@ -127,6 +199,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f90360_3058d6c4",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8cf14e88_f82af282",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8161a95d_fc0e4326",
@@ -140,6 +230,30 @@
       "writtenOn": "2023-12-06T13:34:55Z",
       "side": 1,
       "message": "`JumpIfRoot()`",
+      "range": {
+        "startLine": 3071,
+        "startChar": 0,
+        "endLine": 3074,
+        "endChar": 0
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b119bd2a_f4125b71",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3074,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8161a95d_fc0e4326",
       "range": {
         "startLine": 3071,
         "startChar": 0,
@@ -173,6 +287,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1c3a157_1a97876c",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3082,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b2c726bc_814a6a5c",
+      "range": {
+        "startLine": 3080,
+        "startChar": 0,
+        "endLine": 3082,
+        "endChar": 0
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b9ad864_8bf21977",
@@ -186,6 +324,30 @@
       "writtenOn": "2023-12-06T13:34:55Z",
       "side": 1,
       "message": "nit: typo, and missing punctuation.",
+      "range": {
+        "startLine": 3099,
+        "startChar": 19,
+        "endLine": 3099,
+        "endChar": 30
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8128e51c_faec4626",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3099,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4b9ad864_8bf21977",
       "range": {
         "startLine": 3099,
         "startChar": 19,
@@ -213,6 +375,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "091eec3a_fa03ec4c",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3346,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "I assume you mean just the trap. The rest seems necessary.",
+      "parentUuid": "9e52f868_c53ad9c5",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3753417f_42757220",
@@ -226,6 +406,30 @@
       "writtenOn": "2023-12-06T13:34:55Z",
       "side": 1,
       "message": "`JumpIfEqual()`",
+      "range": {
+        "startLine": 3398,
+        "startChar": 0,
+        "endLine": 3400,
+        "endChar": 0
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ec1ece6_8cecdd1c",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3400,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3753417f_42757220",
       "range": {
         "startLine": 3398,
         "startChar": 0,
@@ -253,6 +457,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "caf516ac_88a45f78",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3494,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bbbe2749_1e96267f",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf14d45c_8414fb70",
@@ -266,6 +488,30 @@
       "writtenOn": "2023-12-06T13:34:55Z",
       "side": 1,
       "message": "You don\u0027t use r4 afaict.",
+      "range": {
+        "startLine": 3935,
+        "startChar": 5,
+        "endLine": 3935,
+        "endChar": 39
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5b8d85f_c2eda5b7",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3935,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bf14d45c_8414fb70",
       "range": {
         "startLine": 3935,
         "startChar": 5,
@@ -293,6 +539,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26632f42_1ef528c5",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4024,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bfd6d74e_f1d02e0b",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f8e7297_e2dbe939",
@@ -306,6 +570,30 @@
       "writtenOn": "2023-12-06T13:34:55Z",
       "side": 1,
       "message": "nit: typo.",
+      "range": {
+        "startLine": 3602,
+        "startChar": 19,
+        "endLine": 3602,
+        "endChar": 30
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f161963f_a4184ced",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3602,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7f8e7297_e2dbe939",
       "range": {
         "startLine": 3602,
         "startChar": 19,
@@ -339,6 +627,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d9c9886_d1d4134b",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Ok. But I got push back when I tried to do this before.",
+      "parentUuid": "10535a27_2725e10c",
+      "range": {
+        "startLine": 141,
+        "startChar": 30,
+        "endLine": 142,
+        "endChar": 71
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "136a681a_77629183",
@@ -352,6 +664,24 @@
       "writtenOn": "2023-12-06T13:34:55Z",
       "side": 1,
       "message": "Maybe a naive question, but why do we need to change the stack limit in the simulator if the simulator did not make use of the stack limit in the first place?\nOn arm64 there is a stack access check which fails if we don\u0027t update the stack limit, but I don\u0027t see such a check in the arm simulator. Did I miss it?",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "613d548c_d44c0ecd",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "It is used via Simulator::GetCurrentStackView, in for example, in https://source.chromium.org/chromium/chromium/src/+/main:v8/src/execution/isolate.cc;drc\u003d9b1e5f0eacc5d9e823f440e101730f759757bf0c;l\u003d3224",
+      "parentUuid": "136a681a_77629183",
       "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -373,6 +703,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfdc2b82_c0f993ca",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "db756328_dae5d0ac",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f862793_ab3e80ef",
@@ -390,6 +738,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48df38c4_e9cf30d3",
+        "filename": "test/mjsunit/wasm/stack-switching.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Removed it.",
+      "parentUuid": "1f862793_ab3e80ef",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bf99e39_0e15be8b",
@@ -403,6 +769,24 @@
       "writtenOn": "2023-12-06T13:34:55Z",
       "side": 1,
       "message": "nit: indentation.",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62890a6f_387bccbd",
+        "filename": "test/mjsunit/wasm/stack-switching.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T20:03:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1bf99e39_0e15be8b",
       "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
