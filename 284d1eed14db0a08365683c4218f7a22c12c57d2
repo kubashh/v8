@@ -742,6 +742,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "140a2453_96ed0005",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T22:24:33Z",
+      "side": 1,
+      "message": "Maybe the simulator needs to be amended to actually check for stack overflow?",
+      "parentUuid": "4fc9959b_d68006c1",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db756328_dae5d0ac",
         "filename": "src/runtime/runtime-wasm.cc",
         "patchSetId": 10
