@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e1b7885_7f07c61c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T08:22:44Z",
+      "side": 1,
+      "message": "Great work, thanks! LGTM with some minor comments.",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "215b0d30_e661b63d",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3835,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T08:22:44Z",
+      "side": 1,
+      "message": "Since we are cleaning up, please mention the instance cache also.",
+      "range": {
+        "startLine": 3835,
+        "startChar": 23,
+        "endLine": 3835,
+        "endChar": 24
+      },
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d34ece25_f28f1107",
@@ -31,6 +71,24 @@
       "writtenOn": "2023-12-05T17:21:30Z",
       "side": 1,
       "message": "Moved below `InstanceCache` such that it is already defined.",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3457a652_4aa73807",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3839,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T08:22:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d34ece25_f28f1107",
       "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +110,70 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a150ad46_7e8f91d6",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3842,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T08:22:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c2ef8b51_38dafd9d",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94e0fb6f_8f028263",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3844,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T08:22:44Z",
+      "side": 1,
+      "message": "nit: please run the formatter.",
+      "range": {
+        "startLine": 3844,
+        "startChar": 38,
+        "endLine": 3844,
+        "endChar": 42
+      },
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccb0b9f0_55b393f4",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3861,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T08:22:44Z",
+      "side": 1,
+      "message": "`ValueType` is a `uin32_t` under the hood, we can copy it trivially.",
+      "range": {
+        "startLine": 3854,
+        "startChar": 6,
+        "endLine": 3861,
+        "endChar": 7
+      },
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2281b175_df1e0772",
@@ -69,6 +191,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8945654c_7fdd27a1",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3876,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T08:22:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2281b175_df1e0772",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de3bcf11_04b71765",
@@ -82,6 +222,47 @@
       "writtenOn": "2023-12-05T17:21:30Z",
       "side": 1,
       "message": "This is extremely hot, so some micro-optimizations like avoiding divisions, multiplications, and keeping some fields close together pay out.",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35daeaed_8943ad22",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3897,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T08:22:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "de3bcf11_04b71765",
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c44c641_5e919633",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3911,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T08:22:44Z",
+      "side": 1,
+      "message": "Again here, I think we do not need the `new` operator, just setting it will call the trivial copy constructor.",
+      "range": {
+        "startLine": 3911,
+        "startChar": 6,
+        "endLine": 3911,
+        "endChar": 68
+      },
       "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
