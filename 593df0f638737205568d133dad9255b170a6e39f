@@ -16,6 +16,24 @@
       "message": "Why not call it like `__ JumpIfEqual(tmp, old_state, \u0026ok);` and let the int32_t overload take care of the `Operand()`?",
       "revId": "593df0f638737205568d133dad9255b170a6e39f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1d476e4_5e9a35a2",
+        "filename": "src/codegen/arm/macro-assembler-arm.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-06T21:18:29Z",
+      "side": 1,
+      "message": "I thought about doing that. However, it seems contrary to how many other macro assembler features are built. OTOH, I also tried removing the integer-only version; but that appears to be also used in many places.",
+      "parentUuid": "adda8513_130dd550",
+      "revId": "593df0f638737205568d133dad9255b170a6e39f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
