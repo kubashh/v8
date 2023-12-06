@@ -45,6 +45,7 @@
 #include "src/objects/js-break-iterator-inl.h"
 #include "src/objects/js-collator-inl.h"
 #endif  // V8_INTL_SUPPORT
+#include "src/objects/js-async-context-inl.h"
 #include "src/objects/js-collection-inl.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-date-time-format-inl.h"
@@ -1475,6 +1476,8 @@ void JSMapIterator::JSMapIteratorVerify(Isolate* isolate) {
   CHECK(IsSmi(index()));
 }
 
+USE_TORQUE_VERIFIER(JSAsyncContextVariable)
+USE_TORQUE_VERIFIER(JSAsyncContextSnapshot)
 USE_TORQUE_VERIFIER(JSShadowRealm)
 
 namespace {
