@@ -364,6 +364,9 @@ using SoftwareInterruptCodes = int;
 constexpr SoftwareInterruptCodes kCallRtRedirected = 0x10;
 // break point
 constexpr SoftwareInterruptCodes kBreakpoint = 0x20;
+// Adjust stack bounds
+constexpr SoftwareInterruptCodes kSwitchStackLimit = 0x40;
+constexpr uint32_t interruptCodeMask = ~0xf;
 // stop
 constexpr SoftwareInterruptCodes kStopCode = 1 << 23;
 constexpr uint32_t kStopCodeMask = kStopCode - 1;
