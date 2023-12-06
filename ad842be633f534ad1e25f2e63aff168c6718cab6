@@ -199,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "240208b5_8073e0b5",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3844,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T14:30:43Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "61f20cac_3408fab7",
+      "range": {
+        "startLine": 3844,
+        "startChar": 38,
+        "endLine": 3844,
+        "endChar": 42
+      },
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ccb0b9f0_55b393f4",
@@ -236,6 +260,30 @@
       "side": 1,
       "message": "While it doesn\u0027t make a difference in this case (because `ValueType` is trivially copy-able, as you say), IIUC assigning or copying into `phi_types_` is actually undefined behavior, so `std::uninitialized_copy` and placement-new is required here.\n\nThe reasoning is that assigning/copy-constructing would conceptually call the assignment operator/copy-constructor on the uninitialized elements in `phi_types_`, which is UB. See https://stackoverflow.com/a/60910342.\n\nIn practice, the compiler optimizes it to be a memcpy either way (which I checked locally).",
       "parentUuid": "ccb0b9f0_55b393f4",
+      "range": {
+        "startLine": 3854,
+        "startChar": 6,
+        "endLine": 3861,
+        "endChar": 7
+      },
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59c7bbab_32f02a75",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3861,
+      "author": {
+        "id": 1411293
+      },
+      "writtenOn": "2023-12-06T14:30:43Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "55901f9c_9e6291c0",
       "range": {
         "startLine": 3854,
         "startChar": 6,
