@@ -1,0 +1,410 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d58af9ce_123c7435",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "Very nice, thanks! Mostly minor comments.\nNote that the mjsunit tests are still skipped on arm, please edit test/mjsunit/mjsunit.status to enable them.\nAnd if there are any places in the builtins that you had to modify in any non-trivial way beyond just translating the instructions 1:1 please leave a comment on gerrit (or in the code) as this could be easy to miss in the review.",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23f51ad2_40dff815",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2913,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "Here and in many similar places, I think we should consider using a `UseScratchRegisterScope` inside the function to allocate the temp instead of passing it as a parameter.\nThat doesn\u0027t need to be addressed in this CL, especially since we also don\u0027t do it on arm64.",
+      "range": {
+        "startLine": 2913,
+        "startChar": 61,
+        "endLine": 2913,
+        "endChar": 73
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "825f5e4a_ef7cbbec",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2921,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "This could be simplified using `JumpIfEqual`.",
+      "range": {
+        "startLine": 2918,
+        "startChar": 0,
+        "endLine": 2921,
+        "endChar": 0
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a48d95b_9f026a08",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2943,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "nit: `target`, the style guide encourages spelling out words unless they are well documented abbreviations (also below).",
+      "range": {
+        "startLine": 2943,
+        "startChar": 66,
+        "endLine": 2943,
+        "endChar": 69
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b640ad08_8b045021",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2944,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "nit: just `tmp` since there is only one.",
+      "range": {
+        "startLine": 2944,
+        "startChar": 29,
+        "endLine": 2944,
+        "endChar": 33
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cf14e88_f82af282",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2995,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "This guard looks redundant (also on arm64). I guess it was introduced because the wasm_sync_stack_limit symbol below would not be defined on no-wasm builds.\nBut this function and all of the surrounding code is already in an `#if V8_ENABLE_WEBASSEMBLY` scope now, which starts l.2748 and ends l.3018.",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8161a95d_fc0e4326",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3074,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "`JumpIfRoot()`",
+      "range": {
+        "startLine": 3071,
+        "startChar": 0,
+        "endLine": 3074,
+        "endChar": 0
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2c726bc_814a6a5c",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3082,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "`JumpIfEqual()`",
+      "range": {
+        "startLine": 3080,
+        "startChar": 0,
+        "endLine": 3082,
+        "endChar": 0
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b9ad864_8bf21977",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3099,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "nit: typo, and missing punctuation.",
+      "range": {
+        "startLine": 3099,
+        "startChar": 19,
+        "endLine": 3099,
+        "endChar": 30
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e52f868_c53ad9c5",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3346,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "This trap could be inside an `if (v8_flags.debug_code)` block (I forgot to do it in the original x64 impl).",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3753417f_42757220",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3400,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "`JumpIfEqual()`",
+      "range": {
+        "startLine": 3398,
+        "startChar": 0,
+        "endLine": 3400,
+        "endChar": 0
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbbe2749_1e96267f",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3494,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "Same here, this trap could be emitted only if `v8_flags.debug_code` is true.",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf14d45c_8414fb70",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3935,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "You don\u0027t use r4 afaict.",
+      "range": {
+        "startLine": 3935,
+        "startChar": 5,
+        "endLine": 3935,
+        "endChar": 39
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfd6d74e_f1d02e0b",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 4024,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "nit: extra newline.",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f8e7297_e2dbe939",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3602,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "nit: typo.",
+      "range": {
+        "startLine": 3602,
+        "startChar": 19,
+        "endLine": 3602,
+        "endChar": 30
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10535a27_2725e10c",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "Let\u0027s remove this condition since these are all the supported platforms.\nFor other architectures, the handler offset will be set to 0, but it won\u0027t be used anyway until JSPI is supported.",
+      "range": {
+        "startLine": 141,
+        "startChar": 30,
+        "endLine": 142,
+        "endChar": 71
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "136a681a_77629183",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "Maybe a naive question, but why do we need to change the stack limit in the simulator if the simulator did not make use of the stack limit in the first place?\nOn arm64 there is a stack access check which fails if we don\u0027t update the stack limit, but I don\u0027t see such a check in the arm simulator. Did I miss it?",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db756328_dae5d0ac",
+        "filename": "src/runtime/runtime-wasm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "We should be able to remove this condition now, ia32 support landed yesterday.",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f862793_ab3e80ef",
+        "filename": "test/mjsunit/wasm/stack-switching.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "What is the reason for checking this here specifically? Same question below.\nIf the purpose is to check that the previous test correctly returned to the central stack, then let\u0027s add the check there instead.\nAlso, note that this check has no effect on arm at the moment because of the guard in the runtime function. I guess you can\u0027t enable it yet because it will fail on tests that rely on switching at the wasm/JS boundary.",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bf99e39_0e15be8b",
+        "filename": "test/mjsunit/wasm/stack-switching.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T13:34:55Z",
+      "side": 1,
+      "message": "nit: indentation.",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
