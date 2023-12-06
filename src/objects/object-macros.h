@@ -569,6 +569,25 @@
 #define CODE_POINTER_ACCESSORS(holder, name, offset) \
   TRUSTED_POINTER_ACCESSORS(holder, name, Code, offset, kCodeIndirectPointerTag)
 
+// Accessors for tagged pointer references in trusted space, i.e. from one
+// trusted object to another trusted object.
+#define DECL_TRUSTED_TAGGED_POINTER_ACCESSORS(name, type) \
+  inline Tagged<type> name() const;                       \
+  inline void set_##name(Tagged<type> value,              \
+                         WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
+
+#define TRUSTED_TAGGED_POINTER_ACCESSORS(holder, name, type, offset)        \
+  Tagged<type> holder::name() const {                                       \
+    return TaggedField<type, offset, TrustedSpaceCompressionScheme>::load(  \
+        *this);                                                             \
+  }                                                                         \
+  void holder::set_##name(Tagged<type> value, WriteBarrierMode mode) {      \
+    TaggedField<type, offset, TrustedSpaceCompressionScheme>::store(*this,  \
+                                                                    value); \
+    CONDITIONAL_TRUSTED_TAGGED_POINTER_WRITE_BARRIER(*this, offset, value,  \
+                                                     mode);                 \
+  }
+
 #define BIT_FIELD_ACCESSORS2(holder, get_field, set_field, name, BitField) \
   typename BitField::FieldType holder::name() const {                      \
     return BitField::decode(get_field());                                  \
@@ -738,6 +757,31 @@
 #define CONDITIONAL_CODE_POINTER_WRITE_BARRIER(object, offset, value, mode) \
   CONDITIONAL_TRUSTED_POINTER_WRITE_BARRIER(                                \
       object, offset, kCodeIndirectPointerTag, value, mode)
+
+#ifdef V8_DISABLE_WRITE_BARRIERS
+#define CONDITIONAL_COMPRESSED_TRUSTED_POINTER_WRITE_BARRIER(object, offset, \
+                                                             value, mode)
+#else
+#define CONDITIONAL_COMPRESSED_TRUSTED_POINTER_WRITE_BARRIER(object, offset, \
+                                                             value, mode)    \
+  do {                                                                       \
+    DCHECK_NOT_NULL(GetHeapFromWritableObject(object));                      \
+    CompressedTrustedPointerWriteBarrier(                                    \
+        object, (object).RawCompressedTrustedPointerField(offset), value,    \
+        mode);                                                               \
+  } while (false)
+#endif
+
+#ifdef V8_ENABLE_SANDBOX
+#define CONDITIONAL_TRUSTED_TAGGED_POINTER_WRITE_BARRIER(object, offset,      \
+                                                         value, mode)         \
+  CONDITIONAL_COMPRESSED_TRUSTED_POINTER_WRITE_BARRIER(object, offset, value, \
+                                                       mode)
+#else
+#define CONDITIONAL_TRUSTED_TAGGED_POINTER_WRITE_BARRIER(object, offset, \
+                                                         value, mode)    \
+  CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);
+#endif
 
 #define ACQUIRE_READ_INT8_FIELD(p, offset) \
   static_cast<int8_t>(base::Acquire_Load(  \

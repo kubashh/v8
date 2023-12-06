@@ -194,6 +194,14 @@ class ObjectVisitor {
   virtual void VisitTrustedPointerTableEntry(Tagged<HeapObject> host,
                                              IndirectPointerSlot slot) {}
 
+  // When V8_ENABLE_SANDBOX, visits a compressed pointer into trusted space.
+  // These slots can only be used by trusted objects (as having them inside the
+  // sandbox would not be secure), so the host must always be a TrustedObject.
+  // Not used when V8_ENABLE_SANDBOX is not enabled as the objects use regular
+  // compressed pointers in that case and so are visited by VisitPointer.
+  virtual void VisitCompressedTrustedPointer(
+      Tagged<TrustedObject> host, CompressedTrustedPointerSlot slot) {}
+
   virtual void VisitMapPointer(Tagged<HeapObject> host) { UNREACHABLE(); }
 };
 
@@ -209,7 +217,7 @@ class ObjectVisitorWithCageBases : public ObjectVisitor {
   // The pointer compression cage base value used for decompression of all
   // tagged values except references to InstructionStream objects.
   PtrComprCageBase cage_base() const {
-#if V8_COMPRESS_POINTERS
+#ifdef V8_COMPRESS_POINTERS
     return cage_base_;
 #else
     return PtrComprCageBase{};
@@ -227,7 +235,7 @@ class ObjectVisitorWithCageBases : public ObjectVisitor {
   }
 
  private:
-#if V8_COMPRESS_POINTERS
+#ifdef V8_COMPRESS_POINTERS
   const PtrComprCageBase cage_base_;
 #ifdef V8_EXTERNAL_CODE_SPACE
   const PtrComprCageBase code_cage_base_;

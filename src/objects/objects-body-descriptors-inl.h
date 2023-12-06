@@ -186,6 +186,18 @@ void BodyDescriptorBase::IterateSelfIndirectPointer(Tagged<HeapObject> obj,
 #endif
 }
 
+template <typename ObjectVisitor>
+void BodyDescriptorBase::IterateTrustedTaggedPointer(Tagged<TrustedObject> obj,
+                                                     int offset,
+                                                     ObjectVisitor* v) {
+#ifdef V8_ENABLE_SANDBOX
+  v->VisitCompressedTrustedPointer(
+      obj, obj->RawCompressedTrustedPointerField(offset));
+#else
+  IteratePointer(obj, offset, v);
+#endif
+}
+
 class HeapNumber::BodyDescriptor final : public BodyDescriptorBase {
  public:
   template <typename ObjectVisitor>

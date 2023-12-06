@@ -28,6 +28,13 @@ enum RememberedSetType {
   OLD_TO_OLD,
   OLD_TO_SHARED,
   OLD_TO_CODE,
+#ifdef V8_ENABLE_SANDBOX
+  // The TRUSTED_TO_TRUSTED set is only used when the sandbox is enabled and
+  // used for pointers within trusted space (from one trusted object to
+  // another). When the sandbox is off, the trusted space is no different from
+  // the old space, and so OLD_TO_OLD will be used instead.
+  TRUSTED_TO_TRUSTED,
+#endif
   NUMBER_OF_REMEMBERED_SET_TYPES
 };
 
