@@ -16,6 +16,23 @@
       "message": "Thanks, great work! Still LGTM.",
       "revId": "426a715b571cd33c1675af260d74a53e01023d61",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c5eb044_4ba46027",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-06T15:04:42Z",
+      "side": 1,
+      "message": "Thanks for the review! :)",
+      "revId": "426a715b571cd33c1675af260d74a53e01023d61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
