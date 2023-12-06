@@ -34,6 +34,24 @@
       "parentUuid": "8c6d40b0_9eeffc7d",
       "revId": "e4421ff2741fd9f5afbbde44bd2049ec4a496217",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c7e3c63_50941cb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-06T17:01:25Z",
+      "side": 1,
+      "message": "head goes down frequently until we patch, use a hash from this page https://ci.chromium.org/p/v8/g/ports/console that\u0027s green under IBM platforms.\n\nfailure was under `v8_enable_static_roots \u003d true`, please build release/debug/\u003cfeature\u003e and run tests whenever there are changes applied.",
+      "parentUuid": "01664c89_2120cd16",
+      "revId": "e4421ff2741fd9f5afbbde44bd2049ec4a496217",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
