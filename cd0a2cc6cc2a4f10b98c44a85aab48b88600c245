@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a32a7612_6f346b99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-12-06T09:22:37Z",
+      "side": 1,
+      "message": "Thanks, LGTM.\n+Mathias for owner\u0027s review.",
+      "revId": "cd0a2cc6cc2a4f10b98c44a85aab48b88600c245",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
