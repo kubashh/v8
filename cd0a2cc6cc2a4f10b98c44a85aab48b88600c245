@@ -16,6 +16,23 @@
       "message": "Thanks, LGTM.\n+Mathias for owner\u0027s review.",
       "revId": "cd0a2cc6cc2a4f10b98c44a85aab48b88600c245",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a01e1f0_46df51d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-06T09:39:04Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "cd0a2cc6cc2a4f10b98c44a85aab48b88600c245",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
