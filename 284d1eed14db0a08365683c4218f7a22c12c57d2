@@ -688,6 +688,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2112d359_7bbfc339",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-06T20:29:53Z",
+      "side": 1,
+      "message": "That function should really be called `GetCentralStackView()`. It is expected to return the initial simulator-allocated stack in this case: this is how we check that a pointer is on the central stack, and changing the limit on stack-switch would invalidate that.\nThe other use of that function is to initialize the \"central stack continuation\", and it is called before the first stack switch. So in that case the \"current stack\" and \"central stack\" are necessarily the same (which is where the confusing name comes from).",
+      "parentUuid": "613d548c_d44c0ecd",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db756328_dae5d0ac",
         "filename": "src/runtime/runtime-wasm.cc",
         "patchSetId": 10
