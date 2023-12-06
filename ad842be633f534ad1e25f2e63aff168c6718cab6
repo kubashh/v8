@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "330a89cd_b0438b14",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3835,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-06T11:58:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "215b0d30_e661b63d",
+      "range": {
+        "startLine": 3835,
+        "startChar": 23,
+        "endLine": 3835,
+        "endChar": 24
+      },
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d34ece25_f28f1107",
@@ -153,6 +177,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "61f20cac_3408fab7",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3844,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-06T11:58:42Z",
+      "side": 1,
+      "message": "Oh, I think this is a bug in `clang-format`. I ran it before uploading and when I remove the spaces manually and rerun, it adds them back.\n\nI searched for related issues, but could only find https://github.com/llvm/llvm-project/issues/43196 (from 2019), where it interpreted some arrows as trailing return arrows, thus adding spaces around them. It could be a similar cause here.\n\nI don\u0027t want to invest time debugging `clang-format` right now, so I just fixed this manually.",
+      "parentUuid": "94e0fb6f_8f028263",
+      "range": {
+        "startLine": 3844,
+        "startChar": 38,
+        "endLine": 3844,
+        "endChar": 42
+      },
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ccb0b9f0_55b393f4",
         "filename": "src/wasm/turboshaft-graph-interface.cc",
         "patchSetId": 1
@@ -164,6 +212,30 @@
       "writtenOn": "2023-12-06T08:22:44Z",
       "side": 1,
       "message": "`ValueType` is a `uin32_t` under the hood, we can copy it trivially.",
+      "range": {
+        "startLine": 3854,
+        "startChar": 6,
+        "endLine": 3861,
+        "endChar": 7
+      },
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55901f9c_9e6291c0",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3861,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-06T11:58:42Z",
+      "side": 1,
+      "message": "While it doesn\u0027t make a difference in this case (because `ValueType` is trivially copy-able, as you say), IIUC assigning or copying into `phi_types_` is actually undefined behavior, so `std::uninitialized_copy` and placement-new is required here.\n\nThe reasoning is that assigning/copy-constructing would conceptually call the assignment operator/copy-constructor on the uninitialized elements in `phi_types_`, which is UB. See https://stackoverflow.com/a/60910342.\n\nIn practice, the compiler optimizes it to be a memcpy either way (which I checked locally).",
+      "parentUuid": "ccb0b9f0_55b393f4",
       "range": {
         "startLine": 3854,
         "startChar": 6,
@@ -257,6 +329,30 @@
       "writtenOn": "2023-12-06T08:22:44Z",
       "side": 1,
       "message": "Again here, I think we do not need the `new` operator, just setting it will call the trivial copy constructor.",
+      "range": {
+        "startLine": 3911,
+        "startChar": 6,
+        "endLine": 3911,
+        "endChar": 68
+      },
+      "revId": "ad842be633f534ad1e25f2e63aff168c6718cab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30d55b3f_debe81d8",
+        "filename": "src/wasm/turboshaft-graph-interface.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3911,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-06T11:58:42Z",
+      "side": 1,
+      "message": "See above, same argument. IIUC, we must use placement-new since `phi_inputs_` is uninitialized storage, so calling the copy-constructor on its elements is UB.",
+      "parentUuid": "4c44c641_5e919633",
       "range": {
         "startLine": 3911,
         "startChar": 6,
