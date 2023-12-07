@@ -651,6 +651,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76e4fffd_4913b09a",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-12-07T16:04:33Z",
+      "side": 1,
+      "message": "If dropping the condition breaks other platforms (e.g. their ability to successfully run the test suite), then we should keep it until they are ready.\n(I don\u0027t know enough background to have an opinion; just pointing out the criterion.)",
+      "parentUuid": "2d9c9886_d1d4134b",
+      "range": {
+        "startLine": 141,
+        "startChar": 30,
+        "endLine": 142,
+        "endChar": 71
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "136a681a_77629183",
