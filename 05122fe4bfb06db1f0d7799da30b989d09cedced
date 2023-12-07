@@ -16,6 +16,24 @@
       "message": "`Array.prototype.flat` loads length before `ToInteger(depth)` which might change the array length, so this equality is not guaranteed.",
       "revId": "05122fe4bfb06db1f0d7799da30b989d09cedced",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9f0d638_e3b3a478",
+        "filename": "src/builtins/array-flat.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-07T10:45:26Z",
+      "side": 0,
+      "message": "Thanks for the explainer.",
+      "parentUuid": "e91a1bf0_f3a1a057",
+      "revId": "05122fe4bfb06db1f0d7799da30b989d09cedced",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
