@@ -16,6 +16,29 @@
       "message": "Hey, could you please take a look?",
       "revId": "9989806a3cd276890047cb662b94e708293995de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84509b81_eccc6b32",
+        "filename": "src/compiler/turboshaft/wasm-lowering-reducer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-12-07T18:26:25Z",
+      "side": 1,
+      "message": "I did not manage to find a given ValueType\u0027s mutability property :/",
+      "range": {
+        "startLine": 253,
+        "startChar": 46,
+        "endLine": 253,
+        "endChar": 55
+      },
+      "revId": "9989806a3cd276890047cb662b94e708293995de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
