@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "cfdbcff9aa121b96aaaa40d7fab1bd1310c46078",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43e1bca3_2a88023d",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-12-07T18:49:40Z",
+      "side": 1,
+      "message": "will this cause issues when there is no profile available? `v8_enable_builtins_optimization` is not on by default in V8, and is currently only enabled when `build_with_chromium` (which has been a separate source of confusion).",
+      "range": {
+        "startLine": 645,
+        "startChar": 2,
+        "endLine": 645,
+        "endChar": 31
+      },
+      "revId": "cfdbcff9aa121b96aaaa40d7fab1bd1310c46078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
