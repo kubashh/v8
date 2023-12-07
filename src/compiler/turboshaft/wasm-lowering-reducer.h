@@ -73,7 +73,7 @@ class WasmLoweringReducer : public Next {
           static_assert(WasmStruct::kHeaderSize > kTaggedSize);
           static_assert(WasmArray::kHeaderSize > kTaggedSize);
           static_assert(WasmInternalFunction::kHeaderSize > kTaggedSize);
-          __ Load(object, LoadOp::Kind::TrapOnNull(),
+          __ Load(object, LoadOp::Kind::TrapOnNull().Immutable(),
                   MemoryRepresentation::Int32(), kTaggedSize);
         }
       }
@@ -215,6 +215,9 @@ class WasmLoweringReducer : public Next {
 
     LoadOp::Kind load_kind = implicit_null_check ? LoadOp::Kind::TrapOnNull()
                                                  : LoadOp::Kind::TaggedBase();
+    if (!type->mutability(field_index)) {
+      load_kind = load_kind.Immutable();
+    }
     MemoryRepresentation repr =
         RepresentationFor(type->field(field_index), is_signed);
 
@@ -276,8 +279,9 @@ class WasmLoweringReducer : public Next {
                 TrapId::kTrapNullDereference);
     }
 
-    LoadOp::Kind load_kind = implicit_null_check ? LoadOp::Kind::TrapOnNull()
-                                                 : LoadOp::Kind::TaggedBase();
+    LoadOp::Kind load_kind = implicit_null_check
+                                 ? LoadOp::Kind::TrapOnNull().Immutable()
+                                 : LoadOp::Kind::TaggedBase().Immutable();
 
     return __ Load(array, load_kind, RepresentationFor(wasm::kWasmI32, true),
                    WasmArray::kLengthOffset);
