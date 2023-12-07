@@ -70,6 +70,24 @@
       "parentUuid": "5bd9ff58_5fa56887",
       "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98d434f1_cd41404b",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-07T20:31:59Z",
+      "side": 1,
+      "message": "no no I\u0027m not suggesting to change any of the calls to use r0. I\u0027m just saying the passed scratch register could be r0 anyways. \n\nYour `CompareInstanceTypeWithUniqueCompressedMap` is using r11 if no_reg is passed which is fine but for `LoadCompressedMap` why can\u0027t we just pass scratch2 regardless? Arm doesn\u0027t need a scratch when loading but we do.",
+      "parentUuid": "fdbead5b_0ab92572",
+      "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
