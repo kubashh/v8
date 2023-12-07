@@ -675,6 +675,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "019ab00c_95688aa9",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-07T16:38:36Z",
+      "side": 1,
+      "message": "I just double checked, there is one DCHECK that will fail on non-JSPI enabled platforms if we remove this condition. The DCHECK checks that the handler offset is non-zero.\nIt\u0027s ok for it to be 0 for the reason I explained in the first comment, so we could also skip the DCHECK on these platforms. But keeping the guard here might be a better option.",
+      "parentUuid": "76e4fffd_4913b09a",
+      "range": {
+        "startLine": 141,
+        "startChar": 30,
+        "endLine": 142,
+        "endChar": 71
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "136a681a_77629183",
