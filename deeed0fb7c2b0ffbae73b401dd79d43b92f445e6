@@ -16,6 +16,24 @@
       "message": "How about just pass scratch1 and scratch2 directly:\n```\nLoadCompressedMap(scratch1, object, scratch2);\nCompareInstanceTypeWithUniqueCompressedMap(scratch1, scratch2, type);\n```",
       "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c077aba6_e363f770",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-12-07T19:48:42Z",
+      "side": 1,
+      "message": "This is mirroring the arm64 code in src/codegen/arm64/macro-assembler-arm64.cc.  I thought we wanted to stay as close to arm64 as we can?",
+      "parentUuid": "6ed58535_503a581d",
+      "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
