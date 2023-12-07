@@ -39,6 +39,30 @@
       },
       "revId": "cfdbcff9aa121b96aaaa40d7fab1bd1310c46078",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c22757b_eaccf522",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-07T20:18:26Z",
+      "side": 1,
+      "message": "No, it will not. This flag affects things only when PGO profiles are available (i.e. `v8_builtins_profiling_log_file` is set to a PGO profile file which in turn requires `v8_enable_builtins_optimization` to be true): https://source.chromium.org/chromium/chromium/src/+/main:v8/BUILD.gn;l\u003d2393?q\u003dv8_enable_builtins_reordering\u0026ss\u003dchromium%2Fchromium%2Fsrc",
+      "parentUuid": "43e1bca3_2a88023d",
+      "range": {
+        "startLine": 645,
+        "startChar": 2,
+        "endLine": 645,
+        "endChar": 31
+      },
+      "revId": "cfdbcff9aa121b96aaaa40d7fab1bd1310c46078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
