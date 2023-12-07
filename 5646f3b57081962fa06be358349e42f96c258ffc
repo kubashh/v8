@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e010bd1_1ef4bcae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-12-07T15:05:20Z",
+      "side": 1,
+      "message": "Makes a lot of sense. Actually, we might even be able to store this inside Blocks themselves rather than having a Set, do you think we should do this, or is your fix probably enough?",
+      "revId": "5646f3b57081962fa06be358349e42f96c258ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
