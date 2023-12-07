@@ -16,6 +16,24 @@
       "message": "Makes a lot of sense. Actually, we might even be able to store this inside Blocks themselves rather than having a Set, do you think we should do this, or is your fix probably enough?",
       "revId": "5646f3b57081962fa06be358349e42f96c258ffc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb938201_78da042b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-07T17:53:46Z",
+      "side": 1,
+      "message": "Mhm, good question. I just now played locally with the idea (adding a `needs_variables_` field on `Block`).\nIt reduces code size further and gives another 1% reduction in total compile time, so that\u0027s great.\nOn the other hand, it feels a bit dirty, because now every Block carries around that field, even though only this copy phase needs it. And I need to mutate the `input_block` through a `const` pointer (in order to update the field), which is less than ideal.\nI\u0027ll upload that version in a bit and let\u0027s discuss further how we could clean this up.",
+      "parentUuid": "3e010bd1_1ef4bcae",
+      "revId": "5646f3b57081962fa06be358349e42f96c258ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
