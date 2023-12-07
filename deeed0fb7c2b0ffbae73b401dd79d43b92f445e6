@@ -88,6 +88,24 @@
       "parentUuid": "fdbead5b_0ab92572",
       "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7660cdfa_36982aad",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-12-07T20:57:07Z",
+      "side": 1,
+      "message": "For LoadCompressedMap IIRC there were failures in one of the test configurations because this function tends to have the same register passed for both scratch1 and scratch2, which doesn\u0027t always work.\n\nIf this is something that needs to be analyzed prior to merge I\u0027ll end up needing to spend a day checking the various configurations to see what was going wrong (6 or more build + test cycles), so I\u0027d prefer to only do that if it\u0027s absolutely necessary. ;)",
+      "parentUuid": "98d434f1_cd41404b",
+      "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
