@@ -52,6 +52,24 @@
       "parentUuid": "c077aba6_e363f770",
       "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdbead5b_0ab92572",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1305638
+      },
+      "writtenOn": "2023-12-07T20:02:35Z",
+      "side": 1,
+      "message": "There are a lot of calls that pass the same register for scratch1 and scratch2, I don\u0027t think it\u0027s a great idea to modify all of them to pass r0 for scratch2 instead as it will introduce significant discrepancy with the arm64 codebase.  Passing no_reg causes failures, as does blindly using the same scratch register for both operations.\n\nThoughts?  Can we merge and revisit when we\u0027re not carrying both of these patchsets out of tree?",
+      "parentUuid": "5bd9ff58_5fa56887",
+      "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
