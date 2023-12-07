@@ -824,6 +824,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c4b584f_743ac233",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-07T23:07:57Z",
+      "side": 1,
+      "message": "As discussed off line, I have taken out the changes to the simulator and the builtins.",
+      "parentUuid": "300deda1_9ae41e07",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db756328_dae5d0ac",
