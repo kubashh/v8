@@ -760,6 +760,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "300deda1_9ae41e07",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-07T15:24:56Z",
+      "side": 1,
+      "message": "Note that it\u0027s a below-sp access check rather than a stack-overflow check.\nAnyway, sure, having the check in the arm simulator would make sense to me too. I just meant that this would be a separate change, so your simulator changes could be stashed until then.",
+      "parentUuid": "140a2453_96ed0005",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db756328_dae5d0ac",
         "filename": "src/runtime/runtime-wasm.cc",
         "patchSetId": 10
