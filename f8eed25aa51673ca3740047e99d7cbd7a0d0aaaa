@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2de23ad5_37d8ea96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2023-12-07T18:51:45Z",
+      "side": 1,
+      "message": "PTAL:\nNikos to check whether I\u0027m holding `SetMarkerIfNeededAndCallback` right. I understand that usually we\u0027d want the exact same marker to be in place for both the preceding GC run and the subsequent snapshot taking, but that seems difficult to achieve in this case (see the two call sites of `WriteSnapshotToDiskAfterGC` in heap.cc: neither of them has easy access to the previous marker), and this approximation appears to be good enough in manual testing.\n\nMichael for OWNERS (technically inherited from ENG_REVIEW_OWNERS, but seems appropriate for a heap-related patch).",
+      "revId": "f8eed25aa51673ca3740047e99d7cbd7a0d0aaaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
