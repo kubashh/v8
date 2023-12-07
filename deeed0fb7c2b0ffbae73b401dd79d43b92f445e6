@@ -106,6 +106,24 @@
       "parentUuid": "98d434f1_cd41404b",
       "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "405f4c74_a8c80af6",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-07T21:12:18Z",
+      "side": 1,
+      "message": "Not necessary to do it before merge but then can you add `DCHECK ((scratch1 !\u003d scratch2) || scratch1 !\u003d r0)`. All registers being r0 can be ugly.",
+      "parentUuid": "7660cdfa_36982aad",
+      "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
