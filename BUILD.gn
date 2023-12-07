@@ -196,7 +196,7 @@ declare_args() {
 
   # This build flag is used to control whether reorder builtins acoording to
   # the call graph with C3 algorithm based builtin PGO profiling.
-  v8_enable_builtins_reordering = false
+  v8_enable_builtins_reordering = ""
 
   # Provides the given V8 log file as an input to mksnapshot, where it can be
   # used for profile-guided optimization of builtins.
@@ -640,6 +640,9 @@ if (v8_builtins_profiling_log_file == "default") {
           "tools/builtins-pgo/profiles/x86" + pgo_profile_suffix + ".profile"
     }
   }
+}
+if (v8_enable_builtins_reordering == "") {
+  v8_enable_builtins_reordering = true
 }
 
 if (v8_enable_webassembly && !target_is_simulator && v8_current_cpu == "x64") {
