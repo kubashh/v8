@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6213f6a8_345e527e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-12-07T10:40:10Z",
+      "side": 1,
+      "message": "Nice, LGTM. We could also use a `SmallZoneVector` here for better tracking of peak memory usage, but it shouldn\u0027t make a big difference.\n\nNot triggering CQ+2 yet so you can decide whether you want to switch to `SmallZoneVector`.",
+      "revId": "48339158fdc06fd2c88d3017bd0e6e4a2f257837",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
