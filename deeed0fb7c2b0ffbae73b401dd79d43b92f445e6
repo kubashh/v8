@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ed58535_503a581d",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-07T18:40:43Z",
+      "side": 1,
+      "message": "How about just pass scratch1 and scratch2 directly:\n```\nLoadCompressedMap(scratch1, object, scratch2);\nCompareInstanceTypeWithUniqueCompressedMap(scratch1, scratch2, type);\n```",
+      "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
