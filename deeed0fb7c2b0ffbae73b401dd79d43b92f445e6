@@ -34,6 +34,24 @@
       "parentUuid": "6ed58535_503a581d",
       "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bd9ff58_5fa56887",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-07T19:55:02Z",
+      "side": 1,
+      "message": "Correct, as long as it doesn\u0027t violate anything on our platforms. Some of our Load ops must have a scratch register passed to them which may not be the case on arm, scratch1 or 2 could be passed as r0 on ppc so we might as well use both scratch registers without the if-else check.",
+      "parentUuid": "c077aba6_e363f770",
+      "revId": "deeed0fb7c2b0ffbae73b401dd79d43b92f445e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
