@@ -723,6 +723,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b84d9ef_dc109ee9",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-08T20:15:30Z",
+      "side": 1,
+      "message": "Reverted.",
+      "parentUuid": "fab4ff80_14a5fe74",
+      "range": {
+        "startLine": 141,
+        "startChar": 30,
+        "endLine": 142,
+        "endChar": 71
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "136a681a_77629183",

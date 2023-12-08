@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38fe5867_31c35d60",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-08T20:15:30Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5b6adc04_84fb8c7c",
+      "range": {
+        "startLine": 719,
+        "startChar": 44,
+        "endLine": 719,
+        "endChar": 47
+      },
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "985aa92e_224d9d9b",
@@ -54,6 +78,24 @@
       "writtenOn": "2023-12-08T12:38:52Z",
       "side": 1,
       "message": "nit: extra newline.",
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f464336a_d44805ae",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-08T20:15:30Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "985aa92e_224d9d9b",
       "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74e9b761_3a4dca2d",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-08T20:15:30Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8ccb52ae_acf8cb58",
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "525a3f32_f57a33ff",
@@ -92,6 +152,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe76f5d_3bee8f96",
+        "filename": "test/mjsunit/wasm/stack-switching.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-08T20:15:30Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "525a3f32_f57a33ff",
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3ed0530_e019b5c4",
@@ -105,6 +183,24 @@
       "writtenOn": "2023-12-08T12:38:52Z",
       "side": 1,
       "message": "Same question as before, why are we checking this at the beginning of the test?",
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33030458_71143dcf",
+        "filename": "test/mjsunit/wasm/stack-switching.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-08T20:15:30Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "f3ed0530_e019b5c4",
       "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
