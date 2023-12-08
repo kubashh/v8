@@ -63,6 +63,30 @@
       },
       "revId": "f8a1d6ced9a7173ba29223dfa6b98b55c6ebccbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8deac84d_66eab8cc",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-08T16:21:01Z",
+      "side": 1,
+      "message": "`+ \"]\" on the end` 🔥",
+      "parentUuid": "89ea6912_c4618068",
+      "range": {
+        "startLine": 1575,
+        "startChar": 2,
+        "endLine": 1577,
+        "endChar": 44
+      },
+      "revId": "f8a1d6ced9a7173ba29223dfa6b98b55c6ebccbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
