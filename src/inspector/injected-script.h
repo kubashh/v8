@@ -160,7 +160,7 @@ class InjectedScript final {
     void allowCodeGenerationFromStrings();
     v8::Local<v8::Context> context() const { return m_context; }
     InjectedScript* injectedScript() const { return m_injectedScript; }
-    const v8::TryCatch& tryCatch() const { return m_tryCatch; }
+    v8::TryCatch& tryCatch() { return m_tryCatch; }
     V8InspectorImpl* inspector() const { return m_inspector; }
 
    protected:
