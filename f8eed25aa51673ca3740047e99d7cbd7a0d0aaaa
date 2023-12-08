@@ -37,6 +37,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6bd00f93_fc609929",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-12-08T08:58:13Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "f8eed25aa51673ca3740047e99d7cbd7a0d0aaaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c5d5c215_00fd96f0",
         "filename": "src/profiler/heap-profiler.cc",
         "patchSetId": 1
