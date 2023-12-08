@@ -403,6 +403,21 @@ struct TurbofanAdapter {
   };
 
 #if V8_ENABLE_WEBASSEMBLY
+  class Word32AtomicPairStoreView {
+   public:
+    explicit Word32AtomicPairStoreView(node_t node) : node_(node) {
+      DCHECK(node_->opcode() == IrOpcode::kWord32AtomicPairStore);
+    }
+
+    node_t base() const { return node_->InputAt(0); }
+    node_t index() const { return node_->InputAt(1); }
+    node_t value_low() const { return node_->InputAt(2); }
+    node_t value_high() const { return node_->InputAt(3); }
+
+   private:
+    node_t node_;
+  };
+
   class SimdShuffleView {
    public:
     explicit SimdShuffleView(node_t node) : node_(node) {
@@ -489,6 +504,9 @@ struct TurbofanAdapter {
   DeoptimizeView deoptimize_view(node_t node) { return DeoptimizeView(node); }
   AtomicRMWView atomic_rmw_view(node_t node) { return AtomicRMWView(node); }
 #if V8_ENABLE_WEBASSEMBLY
+  Word32AtomicPairStoreView word32_atomic_pair_store_view(node_t node) {
+    return Word32AtomicPairStoreView(node);
+  }
   SimdShuffleView simd_shuffle_view(node_t node) {
     return SimdShuffleView(node);
   }
@@ -1010,6 +1028,21 @@ struct TurboshaftAdapter : public turboshaft::OperationMatcher {
   };
 
 #if V8_ENABLE_WEBASSEMBLY
+  class Word32AtomicPairStoreView {
+   public:
+    explicit Word32AtomicPairStoreView(const turboshaft::Graph* graph,
+                                       node_t node)
+        : store_(graph->Get(node).Cast<turboshaft::AtomicWord32PairOp>()) {}
+
+    node_t base() const { return store_.base(); }
+    node_t index() const { return store_.index().value(); }
+    node_t value_low() const { return store_.value_low().value(); }
+    node_t value_high() const { return store_.value_high().value(); }
+
+   private:
+    const turboshaft::AtomicWord32PairOp& store_;
+  };
+
   class SimdShuffleView {
    public:
     explicit SimdShuffleView(const turboshaft::Graph* graph, node_t node)
@@ -1080,6 +1113,9 @@ struct TurboshaftAdapter : public turboshaft::OperationMatcher {
     return AtomicRMWView(graph_, node);
   }
 #if V8_ENABLE_WEBASSEMBLY
+  Word32AtomicPairStoreView word32_atomic_pair_store_view(node_t node) {
+    return Word32AtomicPairStoreView(graph_, node);
+  }
   SimdShuffleView simd_shuffle_view(node_t node) {
     return SimdShuffleView(graph_, node);
   }
