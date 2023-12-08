@@ -39,6 +39,30 @@
       },
       "revId": "f8a1d6ced9a7173ba29223dfa6b98b55c6ebccbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89ea6912_c4618068",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1440073
+      },
+      "writtenOn": "2023-12-08T16:13:42Z",
+      "side": 1,
+      "message": "Looks nicer yes, I copied your code + \"]\" on the end.",
+      "parentUuid": "b3210195_a184787d",
+      "range": {
+        "startLine": 1575,
+        "startChar": 2,
+        "endLine": 1577,
+        "endChar": 44
+      },
+      "revId": "f8a1d6ced9a7173ba29223dfa6b98b55c6ebccbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
