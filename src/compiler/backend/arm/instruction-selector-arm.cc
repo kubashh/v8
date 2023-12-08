@@ -154,10 +154,14 @@ void VisitRRRShuffle(InstructionSelectorT<TurbofanAdapter>* selector,
 template <typename Adapter>
 void VisitRRI(InstructionSelectorT<Adapter>* selector, ArchOpcode opcode,
               typename Adapter::node_t node) {
+  ArmOperandGeneratorT<Adapter> g(selector);
   if constexpr (Adapter::IsTurboshaft) {
-    UNIMPLEMENTED();
+    using namespace turboshaft;  // NOLINT(build/namespaces)
+    const Operation& op = selector->Get(node);
+    int imm = op.template Cast<Simd128ExtractLaneOp>().lane;
+    selector->Emit(opcode, g.DefineAsRegister(node), g.UseRegister(op.input(0)),
+                   g.UseImmediate(imm));
   } else {
-    ArmOperandGeneratorT<Adapter> g(selector);
     int32_t imm = OpParameter<int32_t>(node->op());
     selector->Emit(opcode, g.DefineAsRegister(node),
                    g.UseRegister(node->InputAt(0)), g.UseImmediate(imm));
@@ -167,10 +171,14 @@ void VisitRRI(InstructionSelectorT<Adapter>* selector, ArchOpcode opcode,
 template <typename Adapter>
 void VisitRRIR(InstructionSelectorT<Adapter>* selector, ArchOpcode opcode,
                typename Adapter::node_t node) {
+  ArmOperandGeneratorT<Adapter> g(selector);
   if constexpr (Adapter::IsTurboshaft) {
-    UNIMPLEMENTED();
+    using namespace turboshaft;  // NOLINT(build/namespaces)
+    const turboshaft::Simd128ReplaceLaneOp& op =
+        selector->Get(node).template Cast<turboshaft::Simd128ReplaceLaneOp>();
+    selector->Emit(opcode, g.DefineAsRegister(node), g.UseRegister(op.into()),
+                   g.UseImmediate(op.lane), g.UseUniqueRegister(op.new_lane()));
   } else {
-    ArmOperandGeneratorT<Adapter> g(selector);
     int32_t imm = OpParameter<int32_t>(node->op());
     selector->Emit(opcode, g.DefineAsRegister(node),
                    g.UseRegister(node->InputAt(0)), g.UseImmediate(imm),
@@ -674,13 +682,14 @@ void EmitStore(InstructionSelectorT<Adapter>* selector, InstructionCode opcode,
 }
 
 template <typename Adapter>
-void VisitPairAtomicBinOp(InstructionSelectorT<Adapter>* selector, Node* node,
-                          ArchOpcode opcode) {
+void VisitPairAtomicBinOp(InstructionSelectorT<Adapter>* selector,
+                          typename Adapter::node_t node, ArchOpcode opcode) {
   ArmOperandGeneratorT<Adapter> g(selector);
-  Node* base = node->InputAt(0);
-  Node* index = node->InputAt(1);
-  Node* value = node->InputAt(2);
-  Node* value_high = node->InputAt(3);
+  using node_t = typename Adapter::node_t;
+  node_t base = selector->input_at(node, 0);
+  node_t index = selector->input_at(node, 1);
+  node_t value = selector->input_at(node, 2);
+  node_t value_high = selector->input_at(node, 3);
   AddressingMode addressing_mode = kMode_Offset_RR;
   InstructionCode code = opcode | AddressingModeField::encode(addressing_mode);
   InstructionOperand inputs[] = {
@@ -694,14 +703,14 @@ void VisitPairAtomicBinOp(InstructionSelectorT<Adapter>* selector, Node* node,
   temps[temp_count++] = g.TempRegister(r6);
   temps[temp_count++] = g.TempRegister(r7);
   temps[temp_count++] = g.TempRegister();
-  Node* projection0 = NodeProperties::FindProjection(node, 0);
-  Node* projection1 = NodeProperties::FindProjection(node, 1);
-  if (projection0) {
+  node_t projection0 = selector->FindProjection(node, 0);
+  node_t projection1 = selector->FindProjection(node, 1);
+  if (selector->valid(projection0)) {
     outputs[output_count++] = g.DefineAsFixed(projection0, r2);
   } else {
     temps[temp_count++] = g.TempRegister(r2);
   }
-  if (projection1) {
+  if (selector->valid(projection1)) {
     outputs[output_count++] = g.DefineAsFixed(projection1, r3);
   } else {
     temps[temp_count++] = g.TempRegister(r3);
@@ -2817,11 +2826,14 @@ void VisitWordCompare(InstructionSelectorT<Adapter>* selector,
     } else if (TryMatchImmediateOrShift(selector, &opcode, lhs, &input_count,
                                         &inputs[1])) {
       if constexpr (Adapter::IsTurboshaft) {
-        if (!turboshaft::ComparisonOp::IsCommutative(
-                selector->Get(node)
-                    .template Cast<turboshaft::ComparisonOp>()
-                    .kind)) {
-          cont->Commute();
+        using namespace turboshaft;  // NOLINT(build/namespaces)
+        const Operation& op = selector->Get(node);
+        if (const ComparisonOp* cmp = op.TryCast<ComparisonOp>()) {
+          if (!ComparisonOp::IsCommutative(cmp->kind)) cont->Commute();
+        } else if (const WordBinopOp* binop = op.TryCast<WordBinopOp>()) {
+          if (!WordBinopOp::IsCommutative(binop->kind)) cont->Commute();
+        } else {
+          UNREACHABLE();
         }
       } else {
         if (!node->op()->HasProperty(Operator::kCommutative)) cont->Commute();
@@ -3437,41 +3449,51 @@ void InstructionSelectorT<Adapter>::VisitWord32AtomicStore(node_t node) {
                    store_params.order());
 }
 
-template <>
-void InstructionSelectorT<TurboshaftAdapter>::VisitWord32AtomicExchange(
-    node_t node) {
-  UNIMPLEMENTED();
-}
-
-template <>
-void InstructionSelectorT<TurbofanAdapter>::VisitWord32AtomicExchange(
-    Node* node) {
-  ArmOperandGeneratorT<TurbofanAdapter> g(this);
-  Node* base = node->InputAt(0);
-  Node* index = node->InputAt(1);
-  Node* value = node->InputAt(2);
+template <typename Adapter>
+void InstructionSelectorT<Adapter>::VisitWord32AtomicExchange(node_t node) {
+  ArmOperandGeneratorT<Adapter> g(this);
+  auto atomic_op = this->atomic_rmw_view(node);
   ArchOpcode opcode;
-  MachineType type = AtomicOpType(node->op());
-  if (type == MachineType::Int8()) {
-    opcode = kAtomicExchangeInt8;
-  } else if (type == MachineType::Uint8()) {
-    opcode = kAtomicExchangeUint8;
-  } else if (type == MachineType::Int16()) {
-    opcode = kAtomicExchangeInt16;
-  } else if (type == MachineType::Uint16()) {
-    opcode = kAtomicExchangeUint16;
-  } else if (type == MachineType::Int32() || type == MachineType::Uint32()) {
-    opcode = kAtomicExchangeWord32;
+  if constexpr (Adapter::IsTurboshaft) {
+    using namespace turboshaft;  // NOLINT(build/namespaces)
+    const AtomicRMWOp& atomic_op = this->Get(node).template Cast<AtomicRMWOp>();
+    if (atomic_op.input_rep == MemoryRepresentation::Int8()) {
+      opcode = kAtomicExchangeInt8;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Uint8()) {
+      opcode = kAtomicExchangeUint8;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Int16()) {
+      opcode = kAtomicExchangeInt16;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Uint16()) {
+      opcode = kAtomicExchangeUint16;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Int32() ||
+               atomic_op.input_rep == MemoryRepresentation::Uint32()) {
+      opcode = kAtomicExchangeWord32;
+    } else {
+      UNREACHABLE();
+    }
   } else {
-    UNREACHABLE();
+    MachineType type = AtomicOpType(node->op());
+    if (type == MachineType::Int8()) {
+      opcode = kAtomicExchangeInt8;
+    } else if (type == MachineType::Uint8()) {
+      opcode = kAtomicExchangeUint8;
+    } else if (type == MachineType::Int16()) {
+      opcode = kAtomicExchangeInt16;
+    } else if (type == MachineType::Uint16()) {
+      opcode = kAtomicExchangeUint16;
+    } else if (type == MachineType::Int32() || type == MachineType::Uint32()) {
+      opcode = kAtomicExchangeWord32;
+    } else {
+      UNREACHABLE();
+    }
   }
 
   AddressingMode addressing_mode = kMode_Offset_RR;
   InstructionOperand inputs[3];
   size_t input_count = 0;
-  inputs[input_count++] = g.UseRegister(base);
-  inputs[input_count++] = g.UseRegister(index);
-  inputs[input_count++] = g.UseUniqueRegister(value);
+  inputs[input_count++] = g.UseRegister(atomic_op.base());
+  inputs[input_count++] = g.UseRegister(atomic_op.index());
+  inputs[input_count++] = g.UseUniqueRegister(atomic_op.value());
   InstructionOperand outputs[1];
   outputs[0] = g.DefineAsRegister(node);
   InstructionOperand temps[] = {g.TempRegister(), g.TempRegister()};
@@ -3479,34 +3501,48 @@ void InstructionSelectorT<TurbofanAdapter>::VisitWord32AtomicExchange(
   Emit(code, 1, outputs, input_count, inputs, arraysize(temps), temps);
 }
 
-template <>
-void InstructionSelectorT<TurboshaftAdapter>::VisitWord32AtomicCompareExchange(
+template <typename Adapter>
+void InstructionSelectorT<Adapter>::VisitWord32AtomicCompareExchange(
     node_t node) {
-  UNIMPLEMENTED();
-}
-
-template <>
-void InstructionSelectorT<TurbofanAdapter>::VisitWord32AtomicCompareExchange(
-    Node* node) {
-  ArmOperandGeneratorT<TurbofanAdapter> g(this);
-  Node* base = node->InputAt(0);
-  Node* index = node->InputAt(1);
-  Node* old_value = node->InputAt(2);
-  Node* new_value = node->InputAt(3);
+  ArmOperandGeneratorT<Adapter> g(this);
+  auto atomic_op = this->atomic_rmw_view(node);
+  node_t base = atomic_op.base();
+  node_t index = atomic_op.index();
+  node_t old_value = atomic_op.expected();
+  node_t new_value = atomic_op.value();
   ArchOpcode opcode;
-  MachineType type = AtomicOpType(node->op());
-  if (type == MachineType::Int8()) {
-    opcode = kAtomicCompareExchangeInt8;
-  } else if (type == MachineType::Uint8()) {
-    opcode = kAtomicCompareExchangeUint8;
-  } else if (type == MachineType::Int16()) {
-    opcode = kAtomicCompareExchangeInt16;
-  } else if (type == MachineType::Uint16()) {
-    opcode = kAtomicCompareExchangeUint16;
-  } else if (type == MachineType::Int32() || type == MachineType::Uint32()) {
-    opcode = kAtomicCompareExchangeWord32;
+  if constexpr (Adapter::IsTurboshaft) {
+    using namespace turboshaft;  // NOLINT(build/namespaces)
+    const AtomicRMWOp& atomic_op = this->Get(node).template Cast<AtomicRMWOp>();
+    if (atomic_op.input_rep == MemoryRepresentation::Int8()) {
+      opcode = kAtomicCompareExchangeInt8;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Uint8()) {
+      opcode = kAtomicCompareExchangeUint8;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Int16()) {
+      opcode = kAtomicCompareExchangeInt16;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Uint16()) {
+      opcode = kAtomicCompareExchangeUint16;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Int32() ||
+               atomic_op.input_rep == MemoryRepresentation::Uint32()) {
+      opcode = kAtomicCompareExchangeWord32;
+    } else {
+      UNREACHABLE();
+    }
   } else {
-    UNREACHABLE();
+    MachineType type = AtomicOpType(node->op());
+    if (type == MachineType::Int8()) {
+      opcode = kAtomicCompareExchangeInt8;
+    } else if (type == MachineType::Uint8()) {
+      opcode = kAtomicCompareExchangeUint8;
+    } else if (type == MachineType::Int16()) {
+      opcode = kAtomicCompareExchangeInt16;
+    } else if (type == MachineType::Uint16()) {
+      opcode = kAtomicCompareExchangeUint16;
+    } else if (type == MachineType::Int32() || type == MachineType::Uint32()) {
+      opcode = kAtomicCompareExchangeWord32;
+    } else {
+      UNREACHABLE();
+    }
   }
 
   AddressingMode addressing_mode = kMode_Offset_RR;
@@ -3524,42 +3560,53 @@ void InstructionSelectorT<TurbofanAdapter>::VisitWord32AtomicCompareExchange(
   Emit(code, 1, outputs, input_count, inputs, arraysize(temps), temps);
 }
 
-template <>
-void InstructionSelectorT<TurboshaftAdapter>::VisitWord32AtomicBinaryOperation(
-    node_t node, ArchOpcode, ArchOpcode, ArchOpcode, ArchOpcode, ArchOpcode) {
-  UNIMPLEMENTED();
-}
-
-template <>
-void InstructionSelectorT<TurbofanAdapter>::VisitWord32AtomicBinaryOperation(
-    Node* node, ArchOpcode int8_op, ArchOpcode uint8_op, ArchOpcode int16_op,
+template <typename Adapter>
+void InstructionSelectorT<Adapter>::VisitWord32AtomicBinaryOperation(
+    node_t node, ArchOpcode int8_op, ArchOpcode uint8_op, ArchOpcode int16_op,
     ArchOpcode uint16_op, ArchOpcode word32_op) {
-  ArmOperandGeneratorT<TurbofanAdapter> g(this);
-  Node* base = node->InputAt(0);
-  Node* index = node->InputAt(1);
-  Node* value = node->InputAt(2);
+  ArmOperandGeneratorT<Adapter> g(this);
+  auto atomic_op = this->atomic_rmw_view(node);
   ArchOpcode opcode;
-  MachineType type = AtomicOpType(node->op());
-  if (type == MachineType::Int8()) {
-    opcode = int8_op;
-  } else if (type == MachineType::Uint8()) {
-    opcode = uint8_op;
-  } else if (type == MachineType::Int16()) {
-    opcode = int16_op;
-  } else if (type == MachineType::Uint16()) {
-    opcode = uint16_op;
-  } else if (type == MachineType::Int32() || type == MachineType::Uint32()) {
-    opcode = word32_op;
+  if constexpr (Adapter::IsTurboshaft) {
+    using namespace turboshaft;  // NOLINT(build/namespaces)
+    const AtomicRMWOp& atomic_op = this->Get(node).template Cast<AtomicRMWOp>();
+    if (atomic_op.input_rep == MemoryRepresentation::Int8()) {
+      opcode = int8_op;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Uint8()) {
+      opcode = uint8_op;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Int16()) {
+      opcode = int16_op;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Uint16()) {
+      opcode = uint16_op;
+    } else if (atomic_op.input_rep == MemoryRepresentation::Int32() ||
+               atomic_op.input_rep == MemoryRepresentation::Uint32()) {
+      opcode = word32_op;
+    } else {
+      UNREACHABLE();
+    }
   } else {
-    UNREACHABLE();
+    MachineType type = AtomicOpType(node->op());
+    if (type == MachineType::Int8()) {
+      opcode = int8_op;
+    } else if (type == MachineType::Uint8()) {
+      opcode = uint8_op;
+    } else if (type == MachineType::Int16()) {
+      opcode = int16_op;
+    } else if (type == MachineType::Uint16()) {
+      opcode = uint16_op;
+    } else if (type == MachineType::Int32() || type == MachineType::Uint32()) {
+      opcode = word32_op;
+    } else {
+      UNREACHABLE();
+    }
   }
 
   AddressingMode addressing_mode = kMode_Offset_RR;
   InstructionOperand inputs[3];
   size_t input_count = 0;
-  inputs[input_count++] = g.UseRegister(base);
-  inputs[input_count++] = g.UseRegister(index);
-  inputs[input_count++] = g.UseUniqueRegister(value);
+  inputs[input_count++] = g.UseRegister(atomic_op.base());
+  inputs[input_count++] = g.UseRegister(atomic_op.index());
+  inputs[input_count++] = g.UseUniqueRegister(atomic_op.value());
   InstructionOperand outputs[1];
   outputs[0] = g.DefineAsRegister(node);
   InstructionOperand temps[] = {g.TempRegister(), g.TempRegister(),
@@ -3571,13 +3618,9 @@ void InstructionSelectorT<TurbofanAdapter>::VisitWord32AtomicBinaryOperation(
 #define VISIT_ATOMIC_BINOP(op)                                             \
   template <typename Adapter>                                              \
   void InstructionSelectorT<Adapter>::VisitWord32Atomic##op(node_t node) { \
-    if constexpr (Adapter::IsTurboshaft) {                                 \
-      UNIMPLEMENTED();                                                     \
-    } else {                                                               \
-      VisitWord32AtomicBinaryOperation(                                    \
-          node, kAtomic##op##Int8, kAtomic##op##Uint8, kAtomic##op##Int16, \
-          kAtomic##op##Uint16, kAtomic##op##Word32);                       \
-    }                                                                      \
+    VisitWord32AtomicBinaryOperation(                                      \
+        node, kAtomic##op##Int8, kAtomic##op##Uint8, kAtomic##op##Int16,   \
+        kAtomic##op##Uint16, kAtomic##op##Word32);                         \
   }
 VISIT_ATOMIC_BINOP(Add)
 VISIT_ATOMIC_BINOP(Sub)
@@ -3587,10 +3630,10 @@ VISIT_ATOMIC_BINOP(Xor)
 #undef VISIT_ATOMIC_BINOP
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitWord32AtomicPairLoad(Node* node) {
+void InstructionSelectorT<Adapter>::VisitWord32AtomicPairLoad(node_t node) {
   ArmOperandGeneratorT<Adapter> g(this);
-  Node* base = node->InputAt(0);
-  Node* index = node->InputAt(1);
+  node_t base = this->input_at(node, 0);
+  node_t index = this->input_at(node, 1);
   InstructionOperand inputs[3];
   size_t input_count = 0;
   inputs[input_count++] = g.UseUniqueRegister(base);
@@ -3600,16 +3643,16 @@ void InstructionSelectorT<Adapter>::VisitWord32AtomicPairLoad(Node* node) {
   InstructionOperand outputs[2];
   size_t output_count = 0;
 
-  Node* projection0 = NodeProperties::FindProjection(node, 0);
-  Node* projection1 = NodeProperties::FindProjection(node, 1);
-  if (projection0 && projection1) {
+  node_t projection0 = FindProjection(node, 0);
+  node_t projection1 = FindProjection(node, 1);
+  if (this->valid(projection0) && this->valid(projection1)) {
     outputs[output_count++] = g.DefineAsFixed(projection0, r0);
     outputs[output_count++] = g.DefineAsFixed(projection1, r1);
     temps[temp_count++] = g.TempRegister();
-  } else if (projection0) {
+  } else if (this->valid(projection0)) {
     inputs[input_count++] = g.UseImmediate(0);
     outputs[output_count++] = g.DefineAsRegister(projection0);
-  } else if (projection1) {
+  } else if (this->valid(projection1)) {
     inputs[input_count++] = g.UseImmediate(4);
     temps[temp_count++] = g.TempRegister();
     outputs[output_count++] = g.DefineAsRegister(projection1);
@@ -3622,12 +3665,12 @@ void InstructionSelectorT<Adapter>::VisitWord32AtomicPairLoad(Node* node) {
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitWord32AtomicPairStore(Node* node) {
+void InstructionSelectorT<Adapter>::VisitWord32AtomicPairStore(node_t node) {
   ArmOperandGeneratorT<Adapter> g(this);
-  Node* base = node->InputAt(0);
-  Node* index = node->InputAt(1);
-  Node* value_low = node->InputAt(2);
-  Node* value_high = node->InputAt(3);
+  node_t base = this->input_at(node, 0);
+  node_t index = this->input_at(node, 1);
+  node_t value_low = this->input_at(node, 2);
+  node_t value_high = this->input_at(node, 3);
   AddressingMode addressing_mode = kMode_Offset_RR;
   InstructionOperand inputs[] = {
       g.UseUniqueRegister(base), g.UseUniqueRegister(index),
@@ -3640,57 +3683,57 @@ void InstructionSelectorT<Adapter>::VisitWord32AtomicPairStore(Node* node) {
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitWord32AtomicPairAdd(Node* node) {
+void InstructionSelectorT<Adapter>::VisitWord32AtomicPairAdd(node_t node) {
   VisitPairAtomicBinOp(this, node, kArmWord32AtomicPairAdd);
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitWord32AtomicPairSub(Node* node) {
+void InstructionSelectorT<Adapter>::VisitWord32AtomicPairSub(node_t node) {
   VisitPairAtomicBinOp(this, node, kArmWord32AtomicPairSub);
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitWord32AtomicPairAnd(Node* node) {
+void InstructionSelectorT<Adapter>::VisitWord32AtomicPairAnd(node_t node) {
   VisitPairAtomicBinOp(this, node, kArmWord32AtomicPairAnd);
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitWord32AtomicPairOr(Node* node) {
+void InstructionSelectorT<Adapter>::VisitWord32AtomicPairOr(node_t node) {
   VisitPairAtomicBinOp(this, node, kArmWord32AtomicPairOr);
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitWord32AtomicPairXor(Node* node) {
+void InstructionSelectorT<Adapter>::VisitWord32AtomicPairXor(node_t node) {
   VisitPairAtomicBinOp(this, node, kArmWord32AtomicPairXor);
 }
 
 template <typename Adapter>
-void InstructionSelectorT<Adapter>::VisitWord32AtomicPairExchange(Node* node) {
+void InstructionSelectorT<Adapter>::VisitWord32AtomicPairExchange(node_t node) {
   ArmOperandGeneratorT<Adapter> g(this);
-  Node* base = node->InputAt(0);
-  Node* index = node->InputAt(1);
-  Node* value = node->InputAt(2);
-  Node* value_high = node->InputAt(3);
+  node_t base = this->input_at(node, 0);
+  node_t index = this->input_at(node, 1);
+  node_t value = this->input_at(node, 2);
+  node_t value_high = this->input_at(node, 3);
   AddressingMode addressing_mode = kMode_Offset_RR;
   InstructionOperand inputs[] = {
       g.UseFixed(value, r0), g.UseFixed(value_high, r1),
       g.UseUniqueRegister(base), g.UseUniqueRegister(index)};
   InstructionCode code = kArmWord32AtomicPairExchange |
                          AddressingModeField::encode(addressing_mode);
-  Node* projection0 = NodeProperties::FindProjection(node, 0);
-  Node* projection1 = NodeProperties::FindProjection(node, 1);
+  node_t projection0 = FindProjection(node, 0);
+  node_t projection1 = FindProjection(node, 1);
   InstructionOperand outputs[2];
   size_t output_count = 0;
   InstructionOperand temps[4];
   size_t temp_count = 0;
   temps[temp_count++] = g.TempRegister();
   temps[temp_count++] = g.TempRegister();
-  if (projection0) {
+  if (this->valid(projection0)) {
     outputs[output_count++] = g.DefineAsFixed(projection0, r6);
   } else {
     temps[temp_count++] = g.TempRegister(r6);
   }
-  if (projection1) {
+  if (this->valid(projection1)) {
     outputs[output_count++] = g.DefineAsFixed(projection1, r7);
   } else {
     temps[temp_count++] = g.TempRegister(r7);
@@ -3701,31 +3744,31 @@ void InstructionSelectorT<Adapter>::VisitWord32AtomicPairExchange(Node* node) {
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitWord32AtomicPairCompareExchange(
-    Node* node) {
+    node_t node) {
   ArmOperandGeneratorT<Adapter> g(this);
   AddressingMode addressing_mode = kMode_Offset_RR;
-  InstructionOperand inputs[] = {g.UseFixed(node->InputAt(2), r4),
-                                 g.UseFixed(node->InputAt(3), r5),
-                                 g.UseFixed(node->InputAt(4), r8),
-                                 g.UseFixed(node->InputAt(5), r9),
-                                 g.UseUniqueRegister(node->InputAt(0)),
-                                 g.UseUniqueRegister(node->InputAt(1))};
+  InstructionOperand inputs[] = {g.UseFixed(this->input_at(node, 2), r4),
+                                 g.UseFixed(this->input_at(node, 3), r5),
+                                 g.UseFixed(this->input_at(node, 4), r8),
+                                 g.UseFixed(this->input_at(node, 5), r9),
+                                 g.UseUniqueRegister(this->input_at(node, 0)),
+                                 g.UseUniqueRegister(this->input_at(node, 1))};
   InstructionCode code = kArmWord32AtomicPairCompareExchange |
                          AddressingModeField::encode(addressing_mode);
-  Node* projection0 = NodeProperties::FindProjection(node, 0);
-  Node* projection1 = NodeProperties::FindProjection(node, 1);
+  node_t projection0 = FindProjection(node, 0);
+  node_t projection1 = FindProjection(node, 1);
   InstructionOperand outputs[2];
   size_t output_count = 0;
   InstructionOperand temps[4];
   size_t temp_count = 0;
   temps[temp_count++] = g.TempRegister();
   temps[temp_count++] = g.TempRegister();
-  if (projection0) {
+  if (this->valid(projection0)) {
     outputs[output_count++] = g.DefineAsFixed(projection0, r2);
   } else {
     temps[temp_count++] = g.TempRegister(r2);
   }
-  if (projection1) {
+  if (this->valid(projection1)) {
     outputs[output_count++] = g.DefineAsFixed(projection1, r3);
   } else {
     temps[temp_count++] = g.TempRegister(r3);
@@ -3938,12 +3981,8 @@ void InstructionSelectorT<TurbofanAdapter>::VisitS128Const(Node* node) {
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitS128Zero(node_t node) {
-  if constexpr (Adapter::IsTurboshaft) {
-    UNIMPLEMENTED();
-  } else {
-    ArmOperandGeneratorT<Adapter> g(this);
-    Emit(kArmS128Zero, g.DefineAsRegister(node));
-  }
+  ArmOperandGeneratorT<Adapter> g(this);
+  Emit(kArmS128Zero, g.DefineAsRegister(node));
 }
 
 template <typename Adapter>
@@ -4122,15 +4161,11 @@ void InstructionSelectorT<Adapter>::VisitI64x2Neg(node_t node) {
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitI64x2Mul(node_t node) {
-  if constexpr (Adapter::IsTurboshaft) {
-    UNIMPLEMENTED();
-  } else {
     ArmOperandGeneratorT<Adapter> g(this);
     InstructionOperand temps[] = {g.TempSimd128Register()};
     Emit(kArmI64x2Mul, g.DefineAsRegister(node),
-         g.UseUniqueRegister(node->InputAt(0)),
-         g.UseUniqueRegister(node->InputAt(1)), arraysize(temps), temps);
-  }
+         g.UseUniqueRegister(this->input_at(node, 0)),
+         g.UseUniqueRegister(this->input_at(node, 1)), arraysize(temps), temps);
 }
 
 template <typename Adapter>
@@ -4638,11 +4673,17 @@ void InstructionSelectorT<Adapter>::VisitI32x4RelaxedTruncF64x2UZero(
 
 template <typename Adapter>
 void InstructionSelectorT<Adapter>::VisitTruncateFloat32ToInt32(node_t node) {
+  ArmOperandGeneratorT<Adapter> g(this);
   if constexpr (Adapter::IsTurboshaft) {
-    UNIMPLEMENTED();
+    using namespace turboshaft;  // NOLINT(build/namespaces)
+    const Operation& op = this->Get(node);
+    InstructionCode opcode = kArmVcvtS32F32;
+    if (op.Is<Opmask::kTruncateFloat32ToInt32OverflowToMin>()) {
+      opcode |= MiscField::encode(true);
+    }
+    Emit(opcode, g.DefineAsRegister(node),
+         g.UseRegister(this->input_at(node, 0)));
   } else {
-    ArmOperandGeneratorT<Adapter> g(this);
-
     InstructionCode opcode = kArmVcvtS32F32;
     TruncateKind kind = OpParameter<TruncateKind>(node->op());
     if (kind == TruncateKind::kSetOverflowToMin) {
