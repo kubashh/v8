@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c450e2bf_673fbe99",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-08T10:59:07Z",
+      "side": 1,
+      "message": "Ah, right. Thanks!",
+      "parentUuid": "cb2d52d8_207d94dd",
+      "range": {
+        "startLine": 199,
+        "startChar": 34,
+        "endLine": 199,
+        "endChar": 36
+      },
+      "revId": "cfdbcff9aa121b96aaaa40d7fab1bd1310c46078",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43e1bca3_2a88023d",
