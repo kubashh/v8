@@ -1121,10 +1121,17 @@ static bool TransitivelyCalledBuiltinHasNoSideEffect(Builtin caller,
     case Builtin::kArraySomeLoopContinuation:
     case Builtin::kArrayTimSort:
     case Builtin::kArrayTimSortIntoCopy:
-    case Builtin::kCall_ReceiverIsAny:
-    case Builtin::kCall_ReceiverIsNotNullOrUndefined:
-    case Builtin::kCall_ReceiverIsNullOrUndefined:
-    case Builtin::kCallWithArrayLike:
+    case Builtin::kCall_IncmbC_RcvIsAny:
+    case Builtin::kCall_IncmbU_RcvIsAny:
+    case Builtin::kCall_IncmbP_RcvIsAny:
+    case Builtin::kCall_IncmbC_RcvIsNotNullOrUndefined:
+    case Builtin::kCall_IncmbU_RcvIsNotNullOrUndefined:
+    case Builtin::kCall_IncmbP_RcvIsNotNullOrUndefined:
+    case Builtin::kCall_IncmbC_RcvIsNullOrUndefined:
+    case Builtin::kCall_IncmbU_RcvIsNullOrUndefined:
+    case Builtin::kCall_IncmbP_RcvIsNullOrUndefined:
+    case Builtin::kCallWithArrayLike_IncmbC:
+    case Builtin::kCallWithArrayLike_IncmbP:
     case Builtin::kCEntry_Return1_ArgvOnStack_NoBuiltinExit:
     case Builtin::kCEntry_Return1_ArgvOnStack_BuiltinExit:
     case Builtin::kCEntry_Return1_ArgvInRegister_NoBuiltinExit:

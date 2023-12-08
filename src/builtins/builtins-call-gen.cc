@@ -18,17 +18,75 @@
 namespace v8 {
 namespace internal {
 
-void Builtins::Generate_CallFunction_ReceiverIsNullOrUndefined(
+//
+// CallFunction_RcvIsNullOrUndefined...
+//
+void Builtins::Generate_CallFunction_IncmbC_RcvIsNullOrUndefined(
     MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kSameAsCurrentContext,
+      Builtins::CallFunction(IncumbentHint::kInherited,
+                             ConvertReceiverMode::kNullOrUndefined));
+}
+
+void Builtins::Generate_CallFunction_IncmbU_RcvIsNullOrUndefined(
+    MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kUnknown,
+      Builtins::CallFunction(IncumbentHint::kInherited,
+                             ConvertReceiverMode::kNullOrUndefined));
+}
+
+void Builtins::Generate_CallFunction_IncmbP_RcvIsNullOrUndefined(
+    MacroAssembler* masm) {
+  // Generates IncumbentHint::kInherited version.
   Generate_CallFunction(masm, ConvertReceiverMode::kNullOrUndefined);
 }
 
-void Builtins::Generate_CallFunction_ReceiverIsNotNullOrUndefined(
+//
+// CallFunction_RcvIsNotNullOrUndefined...
+//
+void Builtins::Generate_CallFunction_IncmbC_RcvIsNotNullOrUndefined(
     MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kSameAsCurrentContext,
+      Builtins::CallFunction(IncumbentHint::kInherited,
+                             ConvertReceiverMode::kNotNullOrUndefined));
+}
+
+void Builtins::Generate_CallFunction_IncmbU_RcvIsNotNullOrUndefined(
+    MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kUnknown,
+      Builtins::CallFunction(IncumbentHint::kInherited,
+                             ConvertReceiverMode::kNotNullOrUndefined));
+}
+
+void Builtins::Generate_CallFunction_IncmbP_RcvIsNotNullOrUndefined(
+    MacroAssembler* masm) {
+  // Generates IncumbentHint::kInherited version.
   Generate_CallFunction(masm, ConvertReceiverMode::kNotNullOrUndefined);
 }
 
-void Builtins::Generate_CallFunction_ReceiverIsAny(MacroAssembler* masm) {
+//
+// CallFunction_RcvIsAny...
+//
+void Builtins::Generate_CallFunction_IncmbC_RcvIsAny(MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kUnknown,
+      Builtins::CallFunction(IncumbentHint::kInherited,
+                             ConvertReceiverMode::kAny));
+}
+
+void Builtins::Generate_CallFunction_IncmbU_RcvIsAny(MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kUnknown,
+      Builtins::CallFunction(IncumbentHint::kInherited,
+                             ConvertReceiverMode::kAny));
+}
+
+void Builtins::Generate_CallFunction_IncmbP_RcvIsAny(MacroAssembler* masm) {
+  // Generates IncumbentHint::kInherited version.
   Generate_CallFunction(masm, ConvertReceiverMode::kAny);
 }
 
@@ -36,31 +94,106 @@ void Builtins::Generate_CallBoundFunction(MacroAssembler* masm) {
   Generate_CallBoundFunctionImpl(masm);
 }
 
-void Builtins::Generate_Call_ReceiverIsNullOrUndefined(MacroAssembler* masm) {
+//
+// Call_RcvIsNullOrUndefined...
+//
+void Builtins::Generate_Call_IncmbC_RcvIsNullOrUndefined(MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kSameAsCurrentContext,
+      Builtins::Call(IncumbentHint::kInherited,
+                     ConvertReceiverMode::kNullOrUndefined));
+}
+
+void Builtins::Generate_Call_IncmbU_RcvIsNullOrUndefined(MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kUnknown,
+      Builtins::Call(IncumbentHint::kInherited,
+                     ConvertReceiverMode::kNullOrUndefined));
+}
+
+void Builtins::Generate_Call_IncmbP_RcvIsNullOrUndefined(MacroAssembler* masm) {
+  // Generates IncumbentHint::kInherited version.
   Generate_Call(masm, ConvertReceiverMode::kNullOrUndefined);
 }
 
-void Builtins::Generate_Call_ReceiverIsNotNullOrUndefined(
+//
+// Call_RcvIsNotNullOrUndefined...
+//
+void Builtins::Generate_Call_IncmbC_RcvIsNotNullOrUndefined(
     MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kSameAsCurrentContext,
+      Builtins::Call(IncumbentHint::kInherited,
+                     ConvertReceiverMode::kNotNullOrUndefined));
+}
+
+void Builtins::Generate_Call_IncmbU_RcvIsNotNullOrUndefined(
+    MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kUnknown,
+      Builtins::Call(IncumbentHint::kInherited,
+                     ConvertReceiverMode::kNotNullOrUndefined));
+}
+
+void Builtins::Generate_Call_IncmbP_RcvIsNotNullOrUndefined(
+    MacroAssembler* masm) {
+  // Generates IncumbentHint::kInherited version.
   Generate_Call(masm, ConvertReceiverMode::kNotNullOrUndefined);
 }
 
-void Builtins::Generate_Call_ReceiverIsAny(MacroAssembler* masm) {
+//
+// Call_RcvIsAny...
+//
+void Builtins::Generate_Call_IncmbC_RcvIsAny(MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kSameAsCurrentContext,
+      Builtins::Call(IncumbentHint::kInherited, ConvertReceiverMode::kAny));
+}
+
+void Builtins::Generate_Call_IncmbU_RcvIsAny(MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kUnknown,
+      Builtins::Call(IncumbentHint::kInherited, ConvertReceiverMode::kAny));
+}
+
+void Builtins::Generate_Call_IncmbP_RcvIsAny(MacroAssembler* masm) {
+  // Generates IncumbentHint::kInherited version.
   Generate_Call(masm, ConvertReceiverMode::kAny);
 }
 
-void Builtins::Generate_CallVarargs(MacroAssembler* masm) {
-  Generate_CallOrConstructVarargs(masm, Builtins::Call());
+void Builtins::Generate_CallVarargs_IncmbC(MacroAssembler* masm) {
+  Generate_CallOrConstructVarargs(
+      masm, Builtins::Call(IncumbentHint::kSameAsCurrentContext,
+                           ConvertReceiverMode::kAny));
+}
+
+void Builtins::Generate_CallVarargs_IncmbU(MacroAssembler* masm) {
+  Generate_CallOrConstructVarargs(
+      masm, Builtins::Call(IncumbentHint::kUnknown, ConvertReceiverMode::kAny));
+}
+
+void Builtins::Generate_CallVarargs_IncmbP(MacroAssembler* masm) {
+  Generate_CallOrConstructVarargs(
+      masm,
+      Builtins::Call(IncumbentHint::kInherited, ConvertReceiverMode::kAny));
 }
 
 void Builtins::Generate_CallForwardVarargs(MacroAssembler* masm) {
-  Generate_CallOrConstructForwardVarargs(masm, CallOrConstructMode::kCall,
-                                         Builtins::Call());
+  // This builtin is called only from optimized code, thus
+  // IncumbentHint::kSameAsCurrentContext.
+  Generate_CallOrConstructForwardVarargs(
+      masm, CallOrConstructMode::kCall,
+      Builtins::Call(IncumbentHint::kSameAsCurrentContext,
+                     ConvertReceiverMode::kAny));
 }
 
 void Builtins::Generate_CallFunctionForwardVarargs(MacroAssembler* masm) {
-  Generate_CallOrConstructForwardVarargs(masm, CallOrConstructMode::kCall,
-                                         Builtins::CallFunction());
+  // This builtin is called only from optimized code, thus
+  // IncumbentHint::kSameAsCurrentContext.
+  Generate_CallOrConstructForwardVarargs(
+      masm, CallOrConstructMode::kCall,
+      Builtins::CallFunction(IncumbentHint::kSameAsCurrentContext,
+                             ConvertReceiverMode::kAny));
 }
 
 void Builtins::Generate_CallApiCallbackGeneric(MacroAssembler* masm) {
@@ -79,46 +212,46 @@ void Builtins::Generate_CallApiCallbackOptimized(MacroAssembler* masm) {
 
 // TODO(cbruni): Try reusing code between builtin versions to avoid binary
 // overhead.
-TF_BUILTIN(Call_ReceiverIsNullOrUndefined_Baseline_Compact,
+TF_BUILTIN(Call_RcvIsNullOrUndefined_Baseline_Compact,
            CallOrConstructBuiltinsAssembler) {
   auto receiver = UndefinedConstant();
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsNullOrUndefined, receiver);
+  TailCallReceiver<Descriptor>(Builtin::kCall_IncmbC_RcvIsNullOrUndefined,
+                               receiver);
 }
 
-TF_BUILTIN(Call_ReceiverIsNullOrUndefined_Baseline,
+TF_BUILTIN(Call_RcvIsNullOrUndefined_Baseline,
            CallOrConstructBuiltinsAssembler) {
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
   auto receiver = UndefinedConstant();
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsNullOrUndefined, argc, slot,
-                           receiver);
+  TailCallReceiver<Descriptor>(Builtin::kCall_IncmbC_RcvIsNullOrUndefined, argc,
+                               slot, receiver);
 }
 
-TF_BUILTIN(Call_ReceiverIsNotNullOrUndefined_Baseline_Compact,
+TF_BUILTIN(Call_RcvIsNotNullOrUndefined_Baseline_Compact,
            CallOrConstructBuiltinsAssembler) {
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsNotNullOrUndefined);
+  TailCallReceiver<Descriptor>(Builtin::kCall_IncmbC_RcvIsNotNullOrUndefined);
 }
 
-TF_BUILTIN(Call_ReceiverIsNotNullOrUndefined_Baseline,
+TF_BUILTIN(Call_RcvIsNotNullOrUndefined_Baseline,
            CallOrConstructBuiltinsAssembler) {
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsNotNullOrUndefined, argc,
-                           slot);
+  TailCallReceiver<Descriptor>(Builtin::kCall_IncmbC_RcvIsNotNullOrUndefined,
+                               argc, slot);
 }
 
-TF_BUILTIN(Call_ReceiverIsAny_Baseline_Compact,
-           CallOrConstructBuiltinsAssembler) {
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsAny);
+TF_BUILTIN(Call_RcvIsAny_Baseline_Compact, CallOrConstructBuiltinsAssembler) {
+  TailCallReceiver<Descriptor>(Builtin::kCall_IncmbC_RcvIsAny);
 }
 
-TF_BUILTIN(Call_ReceiverIsAny_Baseline, CallOrConstructBuiltinsAssembler) {
+TF_BUILTIN(Call_RcvIsAny_Baseline, CallOrConstructBuiltinsAssembler) {
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto slot = UncheckedParameter<UintPtrT>(Descriptor::kSlot);
-  CallReceiver<Descriptor>(Builtin::kCall_ReceiverIsAny, argc, slot);
+  TailCallReceiver<Descriptor>(Builtin::kCall_IncmbC_RcvIsAny, argc, slot);
 }
 
-TF_BUILTIN(Call_ReceiverIsNullOrUndefined_WithFeedback,
+TF_BUILTIN(Call_RcvIsNullOrUndefined_WithFeedback,
            CallOrConstructBuiltinsAssembler) {
   auto target = Parameter<Object>(Descriptor::kFunction);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
@@ -128,11 +261,11 @@ TF_BUILTIN(Call_ReceiverIsNullOrUndefined_WithFeedback,
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   CollectCallFeedback(
       target, [=] { return receiver; }, context, feedback_vector, slot);
-  TailCallBuiltin(Builtin::kCall_ReceiverIsNullOrUndefined, context, target,
+  TailCallBuiltin(Builtin::kCall_IncmbC_RcvIsNullOrUndefined, context, target,
                   argc);
 }
 
-TF_BUILTIN(Call_ReceiverIsNotNullOrUndefined_WithFeedback,
+TF_BUILTIN(Call_RcvIsNotNullOrUndefined_WithFeedback,
            CallOrConstructBuiltinsAssembler) {
   auto target = Parameter<Object>(Descriptor::kFunction);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
@@ -142,11 +275,11 @@ TF_BUILTIN(Call_ReceiverIsNotNullOrUndefined_WithFeedback,
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   CollectCallFeedback(
       target, [=] { return receiver; }, context, feedback_vector, slot);
-  TailCallBuiltin(Builtin::kCall_ReceiverIsNotNullOrUndefined, context, target,
-                  argc);
+  TailCallBuiltin(Builtin::kCall_IncmbC_RcvIsNotNullOrUndefined, context,
+                  target, argc);
 }
 
-TF_BUILTIN(Call_ReceiverIsAny_WithFeedback, CallOrConstructBuiltinsAssembler) {
+TF_BUILTIN(Call_RcvIsAny_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto target = Parameter<Object>(Descriptor::kFunction);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto context = Parameter<Context>(Descriptor::kContext);
@@ -155,7 +288,7 @@ TF_BUILTIN(Call_ReceiverIsAny_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   CollectCallFeedback(
       target, [=] { return receiver; }, context, feedback_vector, slot);
-  TailCallBuiltin(Builtin::kCall_ReceiverIsAny, context, target, argc);
+  TailCallBuiltin(Builtin::kCall_IncmbC_RcvIsAny, context, target, argc);
 }
 
 void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
@@ -311,8 +444,8 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithArrayLike(
     BIND(&if_not_double);
     {
       if (!new_target) {
-        TailCallBuiltin(Builtin::kCallVarargs, context, target, args_count,
-                        length, elements);
+        TailCallBuiltin(Builtins::CallVarargs(IncumbentHint::kInherited),
+                        context, target, args_count, length, elements);
       } else {
         TailCallBuiltin(Builtin::kConstructVarargs, context, target,
                         *new_target, args_count, length, elements);
@@ -353,8 +486,11 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructDoubleVarargs(
                          new_elements, intptr_length, intptr_length,
                          barrier_mode);
   if (!new_target) {
-    TailCallBuiltin(Builtin::kCallVarargs, context, target, args_count, length,
-                    new_elements);
+    // We use IncumbentHint::kInherited mode here because the builtin
+    // who called this one must have taken care of setting/clearing the
+    // caller context.
+    TailCallBuiltin(Builtins::CallVarargs(IncumbentHint::kInherited), context,
+                    target, args_count, length, new_elements);
   } else {
     TailCallBuiltin(Builtin::kConstructVarargs, context, target, *new_target,
                     args_count, length, new_elements);
@@ -363,7 +499,8 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructDoubleVarargs(
 
 void CallOrConstructBuiltinsAssembler::CallOrConstructWithSpread(
     TNode<Object> target, base::Optional<TNode<Object>> new_target,
-    TNode<Object> spread, TNode<Int32T> args_count, TNode<Context> context) {
+    TNode<Object> spread, TNode<Int32T> args_count, TNode<Context> context,
+    IncumbentHint incumbent_hint) {
   Label if_smiorobject(this), if_double(this),
       if_generic(this, Label::kDeferred);
 
@@ -454,8 +591,8 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithSpread(
                          length, Int32Constant(FixedArray::kMaxLength)));
 
     if (!new_target) {
-      TailCallBuiltin(Builtin::kCallVarargs, context, target, args_count,
-                      length, elements);
+      TailCallBuiltin(Builtins::CallVarargs(incumbent_hint), context, target,
+                      args_count, length, elements);
     } else {
       TailCallBuiltin(Builtin::kConstructVarargs, context, target, *new_target,
                       args_count, length, elements);
@@ -474,7 +611,7 @@ void CallOrConstructBuiltinsAssembler::CallOrConstructWithSpread(
 }
 
 template <class Descriptor>
-void CallOrConstructBuiltinsAssembler::CallReceiver(
+void CallOrConstructBuiltinsAssembler::TailCallReceiver(
     Builtin id, base::Optional<TNode<Object>> receiver) {
   static_assert(std::is_same<Descriptor,
                              CallTrampoline_Baseline_CompactDescriptor>::value,
@@ -487,11 +624,11 @@ void CallOrConstructBuiltinsAssembler::CallReceiver(
   TNode<UintPtrT> slot = ChangeUint32ToWord(
       DecodeWord32<CallTrampoline_Baseline_CompactDescriptor::SlotField>(
           bitfield));
-  CallReceiver<Descriptor>(id, argc, slot, receiver);
+  TailCallReceiver<Descriptor>(id, argc, slot, receiver);
 }
 
 template <class Descriptor>
-void CallOrConstructBuiltinsAssembler::CallReceiver(
+void CallOrConstructBuiltinsAssembler::TailCallReceiver(
     Builtin id, TNode<Int32T> argc, TNode<UintPtrT> slot,
     base::Optional<TNode<Object>> maybe_receiver) {
   auto target = Parameter<Object>(Descriptor::kFunction);
@@ -510,7 +647,23 @@ void CallOrConstructBuiltinsAssembler::CallReceiver(
   TailCallBuiltin(id, context, target, argc);
 }
 
-TF_BUILTIN(CallWithArrayLike, CallOrConstructBuiltinsAssembler) {
+//
+// CallWithArrayLike...
+//
+void Builtins::Generate_CallWithArrayLike_IncmbC(MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kSameAsCurrentContext,
+      Builtins::CallWithArrayLike(IncumbentHint::kInherited));
+}
+
+void Builtins::Generate_CallWithArrayLike_IncmbU(MacroAssembler* masm) {
+  Generate_CallWithIncumbentTrampoline(
+      masm, IncumbentHint::kUnknown,
+      Builtins::CallWithArrayLike(IncumbentHint::kInherited));
+}
+
+// Generates IncumbentHint::kInherited version.
+TF_BUILTIN(CallWithArrayLike_IncmbP, CallOrConstructBuiltinsAssembler) {
   auto target = Parameter<Object>(Descriptor::kTarget);
   base::Optional<TNode<Object>> new_target = base::nullopt;
   auto arguments_list = Parameter<Object>(Descriptor::kArgumentsList);
@@ -518,6 +671,7 @@ TF_BUILTIN(CallWithArrayLike, CallOrConstructBuiltinsAssembler) {
   CallOrConstructWithArrayLike(target, new_target, arguments_list, context);
 }
 
+// TODO(ishell): not used, consider removing.
 TF_BUILTIN(CallWithArrayLike_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto target = Parameter<Object>(Descriptor::kTarget);
   base::Optional<TNode<Object>> new_target = base::nullopt;
@@ -537,7 +691,8 @@ TF_BUILTIN(CallWithSpread, CallOrConstructBuiltinsAssembler) {
   auto spread = Parameter<Object>(Descriptor::kSpread);
   auto args_count = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
   auto context = Parameter<Context>(Descriptor::kContext);
-  CallOrConstructWithSpread(target, new_target, spread, args_count, context);
+  CallOrConstructWithSpread(target, new_target, spread, args_count, context,
+                            IncumbentHint::kSameAsCurrentContext);
 }
 
 TF_BUILTIN(CallWithSpread_Baseline, CallOrConstructBuiltinsAssembler) {
@@ -552,7 +707,8 @@ TF_BUILTIN(CallWithSpread_Baseline, CallOrConstructBuiltinsAssembler) {
   CollectCallFeedback(
       target, [=] { return args.GetReceiver(); }, context, feedback_vector,
       slot);
-  CallOrConstructWithSpread(target, new_target, spread, args_count, context);
+  CallOrConstructWithSpread(target, new_target, spread, args_count, context,
+                            IncumbentHint::kSameAsCurrentContext);
 }
 
 TF_BUILTIN(CallWithSpread_WithFeedback, CallOrConstructBuiltinsAssembler) {
@@ -566,7 +722,8 @@ TF_BUILTIN(CallWithSpread_WithFeedback, CallOrConstructBuiltinsAssembler) {
   auto receiver = Parameter<Object>(Descriptor::kReceiver);
   CollectCallFeedback(
       target, [=] { return receiver; }, context, feedback_vector, slot);
-  CallOrConstructWithSpread(target, new_target, spread, args_count, context);
+  CallOrConstructWithSpread(target, new_target, spread, args_count, context,
+                            IncumbentHint::kSameAsCurrentContext);
 }
 
 TNode<JSReceiver> CallOrConstructBuiltinsAssembler::GetCompatibleReceiver(
@@ -698,7 +855,7 @@ constexpr bool CallOrConstructBuiltinsAssembler::IsAccessCheckRequired(
 void CallOrConstructBuiltinsAssembler::CallFunctionTemplate(
     CallFunctionTemplateMode mode,
     TNode<FunctionTemplateInfo> function_template_info, TNode<Int32T> argc,
-    TNode<Context> context) {
+    TNode<Context> context, TNode<Object> maybe_incumbent_context) {
   CodeStubArguments args(this, argc);
   Label throw_illegal_invocation(this, Label::kDeferred);
 
@@ -790,7 +947,7 @@ void CallOrConstructBuiltinsAssembler::CallFunctionTemplate(
     case CallFunctionTemplateMode::kGeneric:
       TailCallBuiltin(Builtin::kCallApiCallbackGeneric, context,
                       TruncateIntPtrToInt32(args.GetLengthWithoutReceiver()),
-                      call_handler_info, holder);
+                      maybe_incumbent_context, call_handler_info, holder);
       break;
 
     case CallFunctionTemplateMode::kCheckAccess:
@@ -814,8 +971,13 @@ TF_BUILTIN(CallFunctionTemplate_Generic, CallOrConstructBuiltinsAssembler) {
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  // This builtin is called from IC where the caller context is known precisely
+  // and from Builtins::kHandleApiCallOrConstruct where caller context is not
+  // guranteed to be known.
+  auto maybe_incumbent_context = Parameter<Object>(Descriptor::kCallerContext);
   CallFunctionTemplate(CallFunctionTemplateMode::kGeneric,
-                       function_template_info, argc, context);
+                       function_template_info, argc, context,
+                       maybe_incumbent_context);
 }
 
 TF_BUILTIN(CallFunctionTemplate_CheckAccess, CallOrConstructBuiltinsAssembler) {
@@ -823,8 +985,13 @@ TF_BUILTIN(CallFunctionTemplate_CheckAccess, CallOrConstructBuiltinsAssembler) {
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  // This builtin is called from optimized code where the caller context is
+  // always equal to the current context because we don't inline calls cross
+  // context.
+  auto incumbent_context = context;
   CallFunctionTemplate(CallFunctionTemplateMode::kCheckAccess,
-                       function_template_info, argc, context);
+                       function_template_info, argc, context,
+                       incumbent_context);
 }
 
 TF_BUILTIN(CallFunctionTemplate_CheckCompatibleReceiver,
@@ -833,8 +1000,13 @@ TF_BUILTIN(CallFunctionTemplate_CheckCompatibleReceiver,
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  // This builtin is called from optimized code where the caller context is
+  // always equal to the current context because we don't inline calls cross
+  // context.
+  auto incumbent_context = context;
   CallFunctionTemplate(CallFunctionTemplateMode::kCheckCompatibleReceiver,
-                       function_template_info, argc, context);
+                       function_template_info, argc, context,
+                       incumbent_context);
 }
 
 TF_BUILTIN(CallFunctionTemplate_CheckAccessAndCompatibleReceiver,
@@ -843,9 +1015,13 @@ TF_BUILTIN(CallFunctionTemplate_CheckAccessAndCompatibleReceiver,
   auto function_template_info = UncheckedParameter<FunctionTemplateInfo>(
       Descriptor::kFunctionTemplateInfo);
   auto argc = UncheckedParameter<Int32T>(Descriptor::kArgumentsCount);
+  // This builtin is called from optimized code where the caller context is
+  // always equal to the current context because we don't inline calls cross
+  // context.
+  auto incumbent_context = context;
   CallFunctionTemplate(
       CallFunctionTemplateMode::kCheckAccessAndCompatibleReceiver,
-      function_template_info, argc, context);
+      function_template_info, argc, context, incumbent_context);
 }
 
 TF_BUILTIN(HandleApiCallOrConstruct, CallOrConstructBuiltinsAssembler) {
@@ -864,10 +1040,21 @@ TF_BUILTIN(HandleApiCallOrConstruct, CallOrConstructBuiltinsAssembler) {
     TNode<FunctionTemplateInfo> function_template_info =
         CAST(LoadSharedFunctionInfoFunctionData(shared));
 
+    TNode<ExternalReference> caller_context_ptr =
+        ExternalConstant(ExternalReference::caller_context(isolate()));
+    // The caller context is guaranteed to be incumbent context only if current
+    // Api JSFunction was called from JavaScript code directly (i.e. from
+    // bytecode handler, baseline or optimized code). If the builtin is called
+    // via Execution::Call then the caller context is not guaranteed to be the
+    // incumbent context and thus not set (computation of incumbent from
+    // arbitrary C++ code requres a stack walk, so we delay this until it's
+    // really needed).
+    TNode<Object> maybe_incumbent_context = LoadFullTagged(caller_context_ptr);
+
     // Tail call to the stub while leaving all the incoming JS arguments on
     // the stack.
     TailCallBuiltin(Builtin::kCallFunctionTemplate_Generic, context,
-                    function_template_info, argc);
+                    function_template_info, argc, maybe_incumbent_context);
   }
   BIND(&if_construct);
   {

@@ -1580,6 +1580,60 @@ constexpr int kIeeeDoubleExponentWordOffset = 0;
 // Prediction hint for branches.
 enum class BranchHint : uint8_t { kNone, kTrue, kFalse };
 
+// This enum defines how builtins treat the cached incumbent context value
+// durint their execution. On certain call boundaries it's known that the
+// caller context is the incumbent context for the callee function, so
+// the builtin can record current context as the incument context.
+// On other boundaries, the incumbent context might become unknown.
+// Depending on the builtin semantics it might not be allowed to call another
+// builtin with a different semantics or additional steps must be made on the
+// call boundaries. CodeStubAssembler has a machinery for handling and
+// verifying correctness of the cached incumbent context value for CSA/Torque
+// builtins (see CodeStubAssembler::InitIncumbentPropagation()).
+enum class IncumbentHint : unsigned {
+  // When a JavaScript code calls another JSFunction the current context can
+  // be recorded as the incumbent context.
+  kSameAsCurrentContext,
+
+  // This value means that the incumbent context is no longer known and
+  // has to be recomputed using the generic stack walk if it's necessary.
+  // The incumbent context recomputation is enforced by clearing the value.
+  // The examples are:
+  //  - JSEntry builtin (we don't track what happened outside of JS code),
+  //  - WasmToJS/JSToWasm builtins (we don't try to propagate incumbent
+  //    context on Wasm side because it's too complex),
+  //  - builtins which are too complex and for which the proper propagation
+  //    of the incumbent context is too expensive (for example, builtins
+  //    that have to call JSFunction).
+  kUnknown,
+
+  // This means that the caller of current builtin has already recorded or
+  // cleared the incumbent context value.
+  // The builtins with this kind are usually the common part of the other two
+  // variants and usually are Call/CallXXX builtins. If the builtin does
+  // multiple calls of other builtins it must ensure that the value of the
+  // incumbent context is either preserved or cleared in case it has to
+  // call another builtin with IncumbentHint::kInherited. So, use with care.
+  // It's save to call runtime function as they are guaranteed to preserve
+  // the incumbent context value.
+  kInherited,
+};
+
+constexpr const char* ToString(IncumbentHint hint) {
+  switch (hint) {
+    case IncumbentHint::kSameAsCurrentContext:
+      return "SameAsCurrentContext";
+    case IncumbentHint::kUnknown:
+      return "Unknown";
+    case IncumbentHint::kInherited:
+      return "Inherited";
+  }
+}
+
+inline std::ostream& operator<<(std::ostream& os, IncumbentHint hint) {
+  return os << ToString(hint);
+}
+
 // Defines hints about receiver values based on structural knowledge.
 enum class ConvertReceiverMode : unsigned {
   kNullOrUndefined,     // Guaranteed to be null or undefined.
@@ -2246,6 +2300,7 @@ enum class AliasingKind {
   C(CFunction, c_function)                                          \
   C(Context, context)                                               \
   C(Exception, exception)                                           \
+  C(CallerContext, caller_context)                                  \
   C(PendingHandlerContext, pending_handler_context)                 \
   C(PendingHandlerEntrypoint, pending_handler_entrypoint)           \
   C(PendingHandlerConstantPool, pending_handler_constant_pool)      \
@@ -2309,8 +2364,7 @@ enum class IcCheckType { kElement, kProperty };
 
 // Helper stubs can be called in different ways depending on where the target
 // code is located and how the call sequence is expected to look like:
-//  - CodeObject: Call on-heap {Code} object via
-//  {RelocInfo::CODE_TARGET}.
+//  - CodeObject: Call on-heap {Code} object via {RelocInfo::CODE_TARGET}.
 //  - WasmRuntimeStub: Call native {WasmCode} stub via
 //    {RelocInfo::WASM_STUB_CALL}.
 //  - BuiltinPointer: Call a builtin based on a builtin pointer with dynamic

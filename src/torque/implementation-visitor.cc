@@ -223,7 +223,8 @@ void ImplementationVisitor::Visit(NamespaceConstant* decl) {
   f.PrintDeclaration(csa_headerfile());
 
   f.PrintDefinition(csa_ccfile(), [&](std::ostream& stream) {
-    stream << "  compiler::CodeAssembler ca_(state_);\n";
+    // stream << "  compiler::CodeAssembler ca_(state_);\n";
+    stream << "  CodeStubAssembler ca_(state_);\n";
 
     DCHECK(!signature.return_type->IsVoidOrNever());
 
@@ -424,7 +425,8 @@ void ImplementationVisitor::VisitMacroCommon(Macro* macro) {
     // generate C++ code that can allocate, then it should be handlified.
     csa_ccfile() << "  DisallowGarbageCollection no_gc;\n";
   } else if (output_type_ == OutputType::kCSA) {
-    csa_ccfile() << "  compiler::CodeAssembler ca_(state_);\n";
+    // csa_ccfile() << "  compiler::CodeAssembler ca_(state_);\n";
+    csa_ccfile() << "  CodeStubAssembler ca_(state_);\n";
     csa_ccfile()
         << "  compiler::CodeAssembler::SourcePositionScope pos_scope(&ca_);\n";
   }
@@ -585,7 +587,8 @@ void ImplementationVisitor::Visit(Builtin* builtin) {
   const Signature& signature = builtin->signature();
   csa_ccfile() << "TF_BUILTIN(" << name << ", CodeStubAssembler) {\n"
                << "  compiler::CodeAssemblerState* state_ = state();"
-               << "  compiler::CodeAssembler ca_(state());\n";
+               //               << "  compiler::CodeAssembler ca_(state());\n";
+               << "  CodeStubAssembler ca_(state());\n";
 
   Stack<const Type*> parameter_types;
   Stack<std::string> parameters;

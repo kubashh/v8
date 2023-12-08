@@ -112,6 +112,7 @@ void MicrotaskQueueBuiltinsAssembler::PrepareForContext(
          bailout);
 
   EnterContext(native_context);
+  CSA_DCHECK(this, IsContext(native_context));
   SetCurrentContext(native_context);
 }
 
@@ -159,7 +160,6 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
       Call(microtask_context, callable, UndefinedConstant());
     }
     RewindEnteredContext(saved_entered_context_count);
-    SetCurrentContext(current_context);
     Goto(&done);
   }
 
@@ -216,7 +216,6 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
                    CAST(promise_to_resolve));
 
     RewindEnteredContext(saved_entered_context_count);
-    SetCurrentContext(current_context);
     Goto(&done);
   }
 
@@ -292,7 +291,6 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
 #endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
 
     RewindEnteredContext(saved_entered_context_count);
-    SetCurrentContext(current_context);
     Goto(&done);
   }
 
@@ -368,7 +366,6 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
 #endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
 
     RewindEnteredContext(saved_entered_context_count);
-    SetCurrentContext(current_context);
     Goto(&done);
   }
 
@@ -381,7 +378,6 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     CallRuntime(Runtime::kReportMessageFromMicrotask, GetCurrentContext(),
                 var_exception.value());
     RewindEnteredContext(saved_entered_context_count);
-    SetCurrentContext(current_context);
     Goto(&done);
   }
 
@@ -604,8 +600,7 @@ TF_BUILTIN(EnqueueMicrotask, MicrotaskQueueBuiltinsAssembler) {
 }
 
 TF_BUILTIN(RunMicrotasks, MicrotaskQueueBuiltinsAssembler) {
-  // Load the current context from the isolate.
-  TNode<Context> current_context = GetCurrentContext();
+  TNode<Context> prev_context = GetCurrentContext();
 
   auto microtask_queue =
       UncheckedParameter<RawPtrT>(Descriptor::kMicrotaskQueue);
@@ -637,7 +632,7 @@ TF_BUILTIN(RunMicrotasks, MicrotaskQueueBuiltinsAssembler) {
   SetMicrotaskQueueSize(microtask_queue, new_size);
   SetMicrotaskQueueStart(microtask_queue, new_start);
 
-  RunSingleMicrotask(current_context, microtask);
+  RunSingleMicrotask(prev_context, microtask);
   IncrementFinishedMicrotaskCount(microtask_queue);
   Goto(&loop);
 

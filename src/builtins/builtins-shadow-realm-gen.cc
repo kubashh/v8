@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/builtins/builtins-inl.h"
 #include "src/builtins/builtins-utils-gen.h"
-#include "src/builtins/builtins.h"
 #include "src/codegen/code-stub-assembler-inl.h"
 #include "src/objects/descriptor-array.h"
 #include "src/objects/js-shadow-realm.h"
@@ -281,8 +281,9 @@ TF_BUILTIN(CallWrappedFunction, ShadowRealmBuiltinsAssembler) {
 
     // 9. Let result be the Completion Record of Call(target,
     // wrappedThisArgument, wrappedArgs).
-    result = CallBuiltin(Builtin::kCallVarargs, target_context, target,
-                         args_count, argc, wrapped_args);
+    result =
+        CallBuiltin(Builtins::CallVarargs(IncumbentHint::kInherited),
+                    target_context, target, args_count, argc, wrapped_args);
   }
 
   // 10. If result.[[Type]] is normal or result.[[Type]] is return, then

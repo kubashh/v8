@@ -1002,7 +1002,8 @@ void JSGenericLowering::LowerJSCallForwardVarargs(Node* node) {
   CallForwardVarargsParameters p = CallForwardVarargsParametersOf(node->op());
   int const arg_count = static_cast<int>(p.arity() - 2);
   CallDescriptor::Flags flags = FrameStateFlagForCall(node);
-  Callable callable = CodeFactory::CallForwardVarargs(isolate());
+  Callable callable = CodeFactory::CallForwardVarargs(
+      isolate(), IncumbentHint::kSameAsCurrentContext);
   auto call_descriptor = Linkage::GetStubCallDescriptor(
       zone(), callable.descriptor(), arg_count + 1, flags);
   Node* stub_code = jsgraph()->HeapConstantNoHole(callable.code());
@@ -1022,7 +1023,8 @@ void JSGenericLowering::LowerJSCall(Node* node) {
 
   node->RemoveInput(n.FeedbackVectorIndex());
 
-  Callable callable = CodeFactory::Call(isolate(), mode);
+  Callable callable =
+      CodeFactory::Call(isolate(), IncumbentHint::kSameAsCurrentContext, mode);
   CallDescriptor::Flags flags = FrameStateFlagForCall(node);
   auto call_descriptor = Linkage::GetStubCallDescriptor(
       zone(), callable.descriptor(), arg_count + 1, flags);
@@ -1044,7 +1046,8 @@ void JSGenericLowering::LowerJSCallWithArrayLike(Node* node) {
   static constexpr int kReceiver = 1;
 
   const int stack_argument_count = arg_count - kArgumentsList + kReceiver;
-  Callable callable = CodeFactory::CallWithArrayLike(isolate());
+  Callable callable = CodeFactory::CallWithArrayLike(
+      isolate(), IncumbentHint::kSameAsCurrentContext);
   auto call_descriptor = Linkage::GetStubCallDescriptor(
       zone(), callable.descriptor(), stack_argument_count, flags);
   Node* stub_code = jsgraph()->HeapConstantNoHole(callable.code());

@@ -35,6 +35,7 @@ PropertyCallbackArguments::PropertyCallbackArguments(
   slot_at(T::kUnusedIndex).store(Smi::zero());
   DCHECK(IsHeapObject(*slot_at(T::kHolderIndex)));
   DCHECK(IsSmi(*slot_at(T::kIsolateIndex)));
+  // isolate->clear_caller_context();
 }
 
 FunctionCallbackArguments::FunctionCallbackArguments(
@@ -56,6 +57,7 @@ FunctionCallbackArguments::FunctionCallbackArguments(
   slot_at(T::kUnusedIndex).store(Smi::zero());
   DCHECK(IsHeapObject(*slot_at(T::kHolderIndex)));
   DCHECK(IsSmi(*slot_at(T::kIsolateIndex)));
+  // isolate->clear_caller_context();
 }
 
 }  // namespace internal

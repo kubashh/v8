@@ -40,31 +40,54 @@ constexpr Builtin Builtins::EphemeronKeyBarrier(SaveFPRegsMode fp_mode) {
   }
 }
 
-// static
-constexpr Builtin Builtins::CallFunction(ConvertReceiverMode mode) {
-  switch (mode) {
-    case ConvertReceiverMode::kNullOrUndefined:
-      return Builtin::kCallFunction_ReceiverIsNullOrUndefined;
-    case ConvertReceiverMode::kNotNullOrUndefined:
-      return Builtin::kCallFunction_ReceiverIsNotNullOrUndefined;
-    case ConvertReceiverMode::kAny:
-      return Builtin::kCallFunction_ReceiverIsAny;
+#define INCUMBENT_MODES_MATRIX(PREFIX, SUFFIX, incumbent_hint) \
+  switch (incumbent_hint) {                                    \
+    case IncumbentHint::kSameAsCurrentContext:                 \
+      return Builtin::k##PREFIX##_IncmbC##SUFFIX;              \
+    case IncumbentHint::kUnknown:                              \
+      return Builtin::k##PREFIX##_IncmbU##SUFFIX;              \
+    case IncumbentHint::kInherited:                            \
+      return Builtin::k##PREFIX##_IncmbP##SUFFIX;              \
   }
+
+#define CALL_MODES_MATRIX(NAME, incumbent_hint, receiver_mode)               \
+  switch (mode) {                                                            \
+    case ConvertReceiverMode::kNullOrUndefined:                              \
+      INCUMBENT_MODES_MATRIX(NAME, _RcvIsNullOrUndefined, incumbent_hint)    \
+    case ConvertReceiverMode::kNotNullOrUndefined:                           \
+      INCUMBENT_MODES_MATRIX(NAME, _RcvIsNotNullOrUndefined, incumbent_hint) \
+    case ConvertReceiverMode::kAny:                                          \
+      INCUMBENT_MODES_MATRIX(NAME, _RcvIsAny, incumbent_hint)                \
+  }
+
+// static
+constexpr Builtin Builtins::CallFunction(IncumbentHint incumbent_hint,
+                                         ConvertReceiverMode mode) {
+  CALL_MODES_MATRIX(CallFunction, incumbent_hint, mode);
   UNREACHABLE();
 }
 
 // static
-constexpr Builtin Builtins::Call(ConvertReceiverMode mode) {
-  switch (mode) {
-    case ConvertReceiverMode::kNullOrUndefined:
-      return Builtin::kCall_ReceiverIsNullOrUndefined;
-    case ConvertReceiverMode::kNotNullOrUndefined:
-      return Builtin::kCall_ReceiverIsNotNullOrUndefined;
-    case ConvertReceiverMode::kAny:
-      return Builtin::kCall_ReceiverIsAny;
-  }
+constexpr Builtin Builtins::Call(IncumbentHint incumbent_hint,
+                                 ConvertReceiverMode mode) {
+  CALL_MODES_MATRIX(Call, incumbent_hint, mode);
   UNREACHABLE();
 }
+
+// static
+constexpr Builtin Builtins::CallVarargs(IncumbentHint incumbent_hint) {
+  INCUMBENT_MODES_MATRIX(CallVarargs, , incumbent_hint)
+  UNREACHABLE();
+}
+
+// static
+constexpr Builtin Builtins::CallWithArrayLike(IncumbentHint incumbent_hint) {
+  INCUMBENT_MODES_MATRIX(CallWithArrayLike, , incumbent_hint)
+  UNREACHABLE();
+}
+
+#undef INCUMBENT_MODES_MATRIX
+#undef CALL_MODES_MATRIX
 
 // static
 constexpr Builtin Builtins::NonPrimitiveToPrimitive(ToPrimitiveHint hint) {

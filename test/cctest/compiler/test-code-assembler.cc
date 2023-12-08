@@ -156,8 +156,8 @@ TEST(SimpleCallJSFunction0Arg) {
 
     auto receiver = SmiTag(&m, m.IntPtrConstant(42));
 
-    TNode<Object> result =
-        m.CallJS(Builtins::Call(), context, function, {}, receiver);
+    TNode<Object> result = m.CallJS(Builtins::Call(IncumbentHint::kUnknown),
+                                    context, function, {}, receiver);
     m.Return(result);
   }
   FunctionTester ft(asm_tester.GenerateCode(), kNumParams);
@@ -179,8 +179,8 @@ TEST(SimpleCallJSFunction1Arg) {
     auto receiver = SmiTag(&m, m.IntPtrConstant(42));
     auto a = SmiTag(&m, m.IntPtrConstant(13));
 
-    TNode<Object> result =
-        m.CallJS(Builtins::Call(), context, function, {}, receiver, a);
+    TNode<Object> result = m.CallJS(Builtins::Call(IncumbentHint::kUnknown),
+                                    context, function, {}, receiver, a);
     m.Return(result);
   }
   FunctionTester ft(asm_tester.GenerateCode(), kNumParams);
@@ -203,8 +203,8 @@ TEST(SimpleCallJSFunction2Arg) {
     auto a = SmiTag(&m, m.IntPtrConstant(13));
     auto b = SmiTag(&m, m.IntPtrConstant(153));
 
-    TNode<Object> result =
-        m.CallJS(Builtins::Call(), context, function, {}, receiver, a, b);
+    TNode<Object> result = m.CallJS(Builtins::Call(IncumbentHint::kUnknown),
+                                    context, function, {}, receiver, a, b);
     m.Return(result);
   }
   FunctionTester ft(asm_tester.GenerateCode(), kNumParams);

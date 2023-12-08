@@ -1728,7 +1728,8 @@ Reduction JSTypedLowering::ReduceJSCallForwardVarargs(Node* node) {
     // Compute flags for the call.
     CallDescriptor::Flags flags = CallDescriptor::kNeedsFrameState;
     // Patch {node} to an indirect call via CallFunctionForwardVarargs.
-    Callable callable = CodeFactory::CallFunctionForwardVarargs(isolate());
+    Callable callable = CodeFactory::CallFunctionForwardVarargs(
+        isolate(), IncumbentHint::kSameAsCurrentContext);
     node->InsertInput(graph()->zone(), 0,
                       jsgraph()->HeapConstantNoHole(callable.code()));
     node->InsertInput(graph()->zone(), 2,
@@ -1883,7 +1884,8 @@ Reduction JSTypedLowering::ReduceJSCall(Node* node) {
     // Compute flags for the call.
     CallDescriptor::Flags flags = CallDescriptor::kNeedsFrameState;
     // Patch {node} to an indirect call via the CallFunction builtin.
-    Callable callable = CodeFactory::CallFunction(isolate(), convert_mode);
+    Callable callable = CodeFactory::CallFunction(
+        isolate(), IncumbentHint::kSameAsCurrentContext, convert_mode);
     node->InsertInput(graph()->zone(), 0,
                       jsgraph()->HeapConstantNoHole(callable.code()));
     node->InsertInput(graph()->zone(), 2,

@@ -131,7 +131,8 @@ TF_BUILTIN(ConstructWithSpread, CallOrConstructBuiltinsAssembler) {
   auto args_count =
       UncheckedParameter<Int32T>(Descriptor::kActualArgumentsCount);
   auto context = Parameter<Context>(Descriptor::kContext);
-  CallOrConstructWithSpread(target, new_target, spread, args_count, context);
+  CallOrConstructWithSpread(target, new_target, spread, args_count, context,
+                            IncumbentHint::kSameAsCurrentContext);
 }
 
 TF_BUILTIN(ConstructWithSpread_Baseline, CallOrConstructBuiltinsAssembler) {
@@ -181,7 +182,8 @@ void CallOrConstructBuiltinsAssembler::BuildConstructWithSpread(
   Goto(&if_construct_generic);  // Not implemented.
 
   BIND(&if_construct_generic);
-  CallOrConstructWithSpread(target, new_target, spread, argc, eager_context);
+  CallOrConstructWithSpread(target, new_target, spread, argc, eager_context,
+                            IncumbentHint::kSameAsCurrentContext);
 }
 
 TF_BUILTIN(ConstructForwardAllArgs_Baseline, CallOrConstructBuiltinsAssembler) {

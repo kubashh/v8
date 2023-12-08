@@ -6,6 +6,7 @@
 #define V8_BUILTINS_BUILTINS_H_
 
 #include "src/base/flags.h"
+#include "src/base/optional.h"
 #include "src/builtins/builtins-definitions.h"
 #include "src/common/globals.h"
 #include "src/objects/type-hints.h"
@@ -120,6 +121,10 @@ class Builtins {
     DCHECK(IsBuiltinId(id));
     return static_cast<int>(id);
   }
+  static constexpr bool IsBytecodeHandler(Builtin builtin) {
+    return Builtin::kFirstBytecodeHandler <= builtin &&
+           static_cast<int>(builtin) < kLastBytecodeHandlerPlusOne;
+  }
 
   // The different builtin kinds are documented in builtins-definitions.h.
   enum Kind { CPP, TFJ, TFC, TFS, TFH, BCH, ASM };
@@ -136,9 +141,16 @@ class Builtins {
   static inline constexpr Builtin EphemeronKeyBarrier(SaveFPRegsMode fp_mode);
 
   static inline constexpr Builtin CallFunction(
+      IncumbentHint incumbent_hint,
       ConvertReceiverMode = ConvertReceiverMode::kAny);
   static inline constexpr Builtin Call(
+      IncumbentHint incumbent_hint,
       ConvertReceiverMode = ConvertReceiverMode::kAny);
+
+  static inline constexpr Builtin CallVarargs(IncumbentHint incumbent_hint);
+
+  static inline constexpr Builtin CallWithArrayLike(
+      IncumbentHint incumbent_hint);
 
   static inline constexpr Builtin NonPrimitiveToPrimitive(
       ToPrimitiveHint hint = ToPrimitiveHint::kDefault);
@@ -195,6 +207,8 @@ class Builtins {
 
   static bool IsCpp(Builtin builtin);
 
+  static IncumbentHint GetIncumbentMode(Builtin builtin);
+
   // True, iff the given code object is a builtin. Note that this does not
   // necessarily mean that its kind is InstructionStream::BUILTIN.
   static bool IsBuiltin(const Tagged<Code> code);
@@ -231,7 +245,7 @@ class Builtins {
   }
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> InvokeApiFunction(
-      Isolate* isolate, bool is_construct,
+      Isolate* isolate, bool is_construct, Handle<Context> function_context,
       Handle<FunctionTemplateInfo> function, Handle<Object> receiver, int argc,
       Handle<Object> args[], Handle<HeapObject> new_target);
 
@@ -282,11 +296,17 @@ class Builtins {
   enum class ForwardWhichFrame { kCurrentFrame, kParentFrame };
 
  private:
+  static void Generate_CallWithIncumbentTrampoline(
+      MacroAssembler* masm, IncumbentHint incumbent_hint,
+      Builtin pass_through_builtin);
+
+  // Generate IncumbentHint::kInherited variant.
   static void Generate_CallFunction(MacroAssembler* masm,
                                     ConvertReceiverMode mode);
 
   static void Generate_CallBoundFunctionImpl(MacroAssembler* masm);
 
+  // Generate IncumbentHint::kInherited variant.
   static void Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode);
 
   static void Generate_CallOrConstructVarargs(MacroAssembler* masm,

@@ -74,6 +74,9 @@ TF_BUILTIN(ReturnReceiver, CodeStubAssembler) {
 }
 
 TF_BUILTIN(DebugBreakTrampoline, CodeStubAssembler) {
+  // // TODO(ishell): behaves like a user JS code but it's not one.
+  // StoreCallerContext(NoContextConstant());
+
   Label tailcall_to_shared(this);
   auto context = Parameter<Context>(Descriptor::kContext);
   auto new_target = Parameter<Object>(Descriptor::kJSNewTarget);

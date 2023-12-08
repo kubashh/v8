@@ -626,10 +626,9 @@ void CSAGenerator::EmitInstruction(
   decls() << "  TNode<" << generated_type << "> " << stack->Top() << ";\n";
   out() << stack->Top() << " = ";
   if (generated_type != "Object") out() << "TORQUE_CAST(";
-  out() << "CodeStubAssembler(state_).CallBuiltinPointer(Builtins::"
-           "CallInterfaceDescriptorFor("
+  out() << "CodeStubAssembler(state_).CallBuiltinPointer("
            "ExampleBuiltinForTorqueFunctionPointerType("
-        << instruction.type->function_pointer_type_id() << ")), " << function;
+        << instruction.type->function_pointer_type_id() << "), " << function;
   if (!instruction.type->HasContextParameter()) {
     // Add dummy context parameter to satisfy the CallBuiltinPointer signature.
     out() << ", TNode<Object>()";

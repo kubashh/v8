@@ -561,6 +561,10 @@ ExternalReference ExternalReference::isolate_root(Isolate* isolate) {
   return ExternalReference(isolate->isolate_root());
 }
 
+ExternalReference ExternalReference::caller_context(Isolate* isolate) {
+  return ExternalReference(isolate->caller_context_address());
+}
+
 ExternalReference ExternalReference::allocation_sites_list_address(
     Isolate* isolate) {
   return ExternalReference(isolate->heap()->allocation_sites_list_address());

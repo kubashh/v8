@@ -52,8 +52,13 @@ class CodeAssemblerState;
     Name##Assembler assembler(state);                                       \
     state->SetInitialDebugInformation(#Name, __FILE__, __LINE__);           \
     if (Builtins::KindOf(Builtin::k##Name) == Builtins::TFJ) {              \
-      assembler.PerformStackCheck(assembler.GetJSContextParameter());       \
+      TNode<Context> context = assembler.GetJSContextParameter();           \
+      assembler.PerformStackCheck(context);                                 \
+      /* assembler.InitIncumbentPropagationForUserJSCode(context); */       \
+    } else {                                                                \
+      /* assembler.InitIncumbentPropagationForBuiltin(); */                 \
     }                                                                       \
+    assembler.InitIncumbentPropagation();                                   \
     assembler.Generate##Name##Impl();                                       \
   }                                                                         \
   void Name##Assembler::Generate##Name##Impl()
