@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0243cc0_b7f1ba15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-08T12:38:52Z",
+      "side": 1,
+      "message": "LGTM after the platform guard has been reverted (see comment below) and some nits.",
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b6adc04_84fb8c7c",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-08T12:38:52Z",
+      "side": 1,
+      "message": "nit: target (also below and in the header).",
+      "range": {
+        "startLine": 719,
+        "startChar": 44,
+        "endLine": 719,
+        "endChar": 47
+      },
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "985aa92e_224d9d9b",
+        "filename": "src/execution/arm/simulator-arm.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-08T12:38:52Z",
+      "side": 1,
+      "message": "nit: extra newline.",
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ccb52ae_acf8cb58",
+        "filename": "src/execution/arm/simulator-arm.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-08T12:38:52Z",
+      "side": 1,
+      "message": "nit: extra newline.",
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "525a3f32_f57a33ff",
+        "filename": "test/mjsunit/wasm/stack-switching.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-08T12:38:52Z",
+      "side": 1,
+      "message": "nit: extra newline.",
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3ed0530_e019b5c4",
+        "filename": "test/mjsunit/wasm/stack-switching.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-08T12:38:52Z",
+      "side": 1,
+      "message": "Same question as before, why are we checking this at the beginning of the test?",
+      "revId": "77b6977788358726a5d192ffaa8ffef5b20b31ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

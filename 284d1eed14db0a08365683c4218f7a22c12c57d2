@@ -701,6 +701,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fab4ff80_14a5fe74",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1345975
+      },
+      "writtenOn": "2023-12-08T12:38:52Z",
+      "side": 1,
+      "message": "Francis, please either revert this change or skip the DCHECK in `Builtins::jspi_prompt_handler_offset()` for other platforms (and sorry for the initial comment which was based on the incorrect assumption that this would not break these platforms).",
+      "parentUuid": "019ab00c_95688aa9",
+      "range": {
+        "startLine": 141,
+        "startChar": 30,
+        "endLine": 142,
+        "endChar": 71
+      },
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "136a681a_77629183",
         "filename": "src/execution/arm/simulator-arm.h",
         "patchSetId": 10
