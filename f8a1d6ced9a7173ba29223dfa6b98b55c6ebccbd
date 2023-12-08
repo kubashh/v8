@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9748e9b_2125c89e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-08T15:18:43Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "f8a1d6ced9a7173ba29223dfa6b98b55c6ebccbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3210195_a184787d",
+        "filename": "src/compiler/turboshaft/operations.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-08T15:18:43Z",
+      "side": 1,
+      "message": "Nit: How about\n```\n  os \u003c\u003c \"[\"\n     \u003c\u003c (is_signed ? \"signed \" : \"\")\n     \u003c\u003c (array_type-\u003emutability() ? \"\" : \"immutable \")\n     \u003c\u003c array_type-\u003eelement_type();\n```\nthat would give us things like:\n`ArrayGetOp[signed i8]` or `ArrayGetOp[immutable ref 1]`.\nIt would be more concise without losing much information (other than implicit \"mutable\").",
+      "range": {
+        "startLine": 1575,
+        "startChar": 2,
+        "endLine": 1577,
+        "endChar": 44
+      },
+      "revId": "f8a1d6ced9a7173ba29223dfa6b98b55c6ebccbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
