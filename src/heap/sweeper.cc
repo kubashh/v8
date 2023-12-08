@@ -1018,8 +1018,7 @@ int Sweeper::RawSweep(Page* p, FreeSpaceTreatmentMode free_space_treatment_mode,
     ThreadIsolation::UnregisterInstructionStreamsInPageExcept(p, code_objects);
   }
 
-  return static_cast<int>(
-      p->owner()->free_list()->GuaranteedAllocatable(max_freed_bytes));
+  return static_cast<int>(max_freed_bytes);
 }
 
 bool Sweeper::IsIteratingPromotedPages() const {
@@ -1070,11 +1069,11 @@ size_t Sweeper::ConcurrentMajorSweepingPageCount() {
   return count;
 }
 
-int Sweeper::ParallelSweepSpace(AllocationSpace identity,
-                                SweepingMode sweeping_mode,
-                                int required_freed_bytes, int max_pages) {
+void Sweeper::ParallelSweepSpace(AllocationSpace identity,
+                                 SweepingMode sweeping_mode,
+                                 int required_freed_bytes, int max_pages) {
   DCHECK_IMPLIES(identity == NEW_SPACE, heap_->IsMainThread());
-  return main_thread_local_sweeper_.ParallelSweepSpace(
+  main_thread_local_sweeper_.ParallelSweepSpace(
       identity, sweeping_mode, required_freed_bytes, max_pages);
 }
 

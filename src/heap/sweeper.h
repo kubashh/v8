@@ -111,8 +111,8 @@ class Sweeper {
   void AddNewSpacePage(Page* page);
   void AddPromotedPage(MemoryChunk* chunk);
 
-  int ParallelSweepSpace(AllocationSpace identity, SweepingMode sweeping_mode,
-                         int required_freed_bytes, int max_pages = 0);
+  void ParallelSweepSpace(AllocationSpace identity, SweepingMode sweeping_mode,
+                          int required_freed_bytes, int max_pages = 0);
 
   void EnsurePageIsSwept(Page* page);
   void WaitForPageToBeSwept(Page* page);
