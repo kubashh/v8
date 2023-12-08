@@ -16,6 +16,91 @@
       "message": "@syg@chromium.org Can you take a look? I think this CL is in a good state for a first review. There is still some duplicated code, and I left some questions in the comments below, but the core pieces are already implemeted and I\u0027d like to get some feedback. Thanks!",
       "revId": "ca9fdea2998fb64c6cb63ca235abcc6fcfe341d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfdd7de5_880b9f80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-12-08T18:46:16Z",
+      "side": 1,
+      "message": "Still need to noodle on this some more, but posting what I have now since the waiter node lifetime stuff requires non-trivial work.",
+      "revId": "ca9fdea2998fb64c6cb63ca235abcc6fcfe341d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24559f74_0da18748",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 6532,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-12-08T18:46:16Z",
+      "side": 1,
+      "message": "If I\u0027m reading this correctly this seems to be removing the caching of the synchronous WaiterQueueNode, which doesn\u0027t seem right.",
+      "revId": "ca9fdea2998fb64c6cb63ca235abcc6fcfe341d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1d357de_3e765a91",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-12-08T18:46:16Z",
+      "side": 1,
+      "message": "You don\u0027t need to do this API song-and-dance to do a PerformPromiseThen, you can do:\n\n```\n  Handle\u003cObject\u003e argv[] \u003d {on_fulfilled, on_rejected};\n  Execution::CallBuiltin(isolate, isolate-\u003epromise_then(), promise_capability,\n                         arraysize(argv), argv);\n```",
+      "revId": "ca9fdea2998fb64c6cb63ca235abcc6fcfe341d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55942c1b_a781aed6",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-12-08T18:46:16Z",
+      "side": 1,
+      "message": "This would also need to be refactored when you move away from setting properties on the handler functions in favor of using contexts.",
+      "revId": "ca9fdea2998fb64c6cb63ca235abcc6fcfe341d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b465c63a_0ed81e66",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-12-08T18:46:16Z",
+      "side": 1,
+      "message": "The lifetime of this is fishy to me, see comment above for the external pointer table.",
+      "revId": "ca9fdea2998fb64c6cb63ca235abcc6fcfe341d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

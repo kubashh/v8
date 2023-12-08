@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "458c6b3d_c6d7f308",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-12-08T18:46:16Z",
+      "side": 1,
+      "message": "Sounds like a good idea to me.",
+      "parentUuid": "2b43cd92_e2c6047a",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 60
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5543bd08_e2ed9b96",
         "filename": "src/builtins/builtins-atomics-synchronization.cc",
         "patchSetId": 24
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-16T22:54:32Z",
       "side": 1,
       "message": "Is this really necessary? This may throw when running multiple unrelated calls to `asyncLock` in the same thread, which sounds like a terrible bug. I\u0027d prefer risking the program to block an asychronous task forever due to a recursive call rather than the almost impossible organization of tasks to guarantee that this won\u0027t throw.\n\nNote that in our current implementation, calling an `asyncLock` inside a sync `lock` will not block the thread in any way, the sync lock will exit successfully and then the async lock would be able to take the mutex.",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 3
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8641b478_86a91d8d",
+        "filename": "src/builtins/builtins-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-12-08T18:46:16Z",
+      "side": 1,
+      "message": "To make sure I understand, you\u0027re saying there\u0027s a use case where you\u0027re on a thread with the lock already held, but you\u0027d like to queue up some more promises on the same lock to be resolved after you release the lock, for when it\u0027s locked next time?",
+      "parentUuid": "5543bd08_e2ed9b96",
       "range": {
         "startLine": 215,
         "startChar": 0,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "068e3342_1940e6b9",
+        "filename": "src/execution/isolate.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 6542,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-12-08T18:46:16Z",
+      "side": 1,
+      "message": "With the V8 sandboxing effort, there is an invariant that V8 heap objects (which `JSSynchronizationPrimitive`s are) should not directly point to things outside of the heap sandbox. `WaiterQueueNode`s before this CL are always allocated on the C stack, which is outside of the heap sandbox, and so must be indirected through an external pointer table when stored as the `state` field in a mutex or condvar. Moreover, external pointers in the table are GCed: they must be marked like other GC things, and unmarked entries are removed during GC.\n\nBefore this CL, a `WaiterQueueNode` is in at most one `state` field of a mutex or condvar, and there is exactly one per isolate, so its external pointer is unconditionally marked when marking the isolate.\n\nThis CL changes that, so we need to think more carefully how to proceed.\n\n- There is still exactly 1 synchronous `WaiterQueueNode` per isolate.\n- Each `JSSynchronizationPrimitive` may have an async waiter list head now, so there is at most 1 external pointer needed _per_ `JSSynchronizationPrimitive`.\n- Marking of the external pointer needs to be implemented as well to avoid it being swept. The liveness of the state is the same as the liveness of the owner `JSSynchronizationPrimitive`.\n\nThis makes me think this CL should implement having an external pointer per `JSSynchronizationPrimitive` that is marked (like a normal external reference) instead of the current, more fixed scheme.",
+      "parentUuid": "1d36cd2a_bfe78f94",
+      "range": {
+        "startLine": 6536,
+        "startChar": 0,
+        "endLine": 6542,
+        "endChar": 1
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff7b9211_570420b0",
         "filename": "src/objects/js-atomics-synchronization.cc",
         "patchSetId": 24
@@ -83,6 +155,30 @@
       "writtenOn": "2023-11-16T22:54:32Z",
       "side": 1,
       "message": "I\u0027m not sure it there was a better way to recreate this logic rather than this trick with builtins and promises, WDYT?",
+      "range": {
+        "startLine": 903,
+        "startChar": 0,
+        "endLine": 903,
+        "endChar": 77
+      },
+      "revId": "a17856b849987db664045d3dad50f05afb067063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e4654ae_44bc35be",
+        "filename": "src/objects/js-atomics-synchronization.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1362925
+      },
+      "writtenOn": "2023-12-08T18:46:16Z",
+      "side": 1,
+      "message": "The usual way to do this in V8 is to create a context with slots to hold internal state needed by the handlers (lock and unlockPromise in this case), and then the then handler functions would have that special context as their function context. Various Promise combinators do this, though their Torque code is kind of hard to read. E.g. https://source.chromium.org/chromium/chromium/src/+/main:v8/src/builtins/promise-all.tq;l\u003d17;drc\u003dec53113a6d7d95cf8b255aec7fc91b17acd33d80",
+      "parentUuid": "ff7b9211_570420b0",
       "range": {
         "startLine": 903,
         "startChar": 0,
