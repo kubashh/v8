@@ -87,6 +87,12 @@ void Generate_JSBuiltinsConstructStubHelper(MacroAssembler* masm) {
 
   __ StackOverflowCheck(eax, ecx, &stack_overflow);
 
+  // Record caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ mov(masm->ExternalReferenceAsOperand(
+             ExternalReference::caller_context(masm->isolate()), no_reg),
+         esi);
+
   // Enter a construct frame.
   {
     FrameScope scope(masm, StackFrame::CONSTRUCT);
@@ -502,7 +508,8 @@ static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
     __ mov(edi, Operand(scratch2, EntryFrameConstants::kFunctionArgOffset));
 
     // Invoke the code.
-    Builtin builtin = is_construct ? Builtin::kConstruct : Builtins::Call();
+    Builtin builtin = is_construct ? Builtin::kConstruct
+                                   : Builtins::Call(IncumbentHint::kInherited);
     __ CallBuiltin(builtin);
 
     // Exit the internal frame. Notice that this also removes the empty.
@@ -1235,7 +1242,8 @@ void Builtins::Generate_InterpreterPushArgsThenCallImpl(
   if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
     __ TailCallBuiltin(Builtin::kCallWithSpread);
   } else {
-    __ TailCallBuiltin(Builtins::Call(receiver_mode));
+    __ TailCallBuiltin(
+        Builtins::Call(IncumbentHint::kSameAsCurrentContext, receiver_mode));
   }
 
   __ bind(&stack_overflow);
@@ -1338,6 +1346,12 @@ void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
       masm, eax, ecx, edx, edi,
       InterpreterPushArgsThenConstructDescriptor::GetStackParameterCount(),
       &stack_overflow);
+
+  // Record caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ mov(masm->ExternalReferenceAsOperand(
+             ExternalReference::caller_context(masm->isolate()), no_reg),
+         esi);
 
   // Call the appropriate constructor. eax and ecx already contain intended
   // values, remaining registers still need to be initialized from the stack.
@@ -1579,6 +1593,12 @@ void Builtins::Generate_InterpreterPushArgsThenFastConstructFunction(
   // Add a stack check before pushing arguments.
   Label stack_overflow;
   __ StackOverflowCheck(eax, edx, &stack_overflow, true);
+
+  // Record caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ mov(masm->ExternalReferenceAsOperand(
+             ExternalReference::caller_context(masm->isolate()), no_reg),
+         esi);
 
   // Spill number of arguments.
   __ movd(xmm0, eax);
@@ -2145,14 +2165,14 @@ void Builtins::Generate_FunctionPrototypeApply(MacroAssembler* masm) {
   __ JumpIfRoot(edx, RootIndex::kUndefinedValue, &no_arguments, Label::kNear);
 
   // 4a. Apply the receiver to the given argArray.
-  __ TailCallBuiltin(Builtin::kCallWithArrayLike);
+  __ TailCallBuiltin(Builtins::CallWithArrayLike(IncumbentHint::kInherited));
 
   // 4b. The argArray is either null or undefined, so we tail call without any
   // arguments to the receiver.
   __ bind(&no_arguments);
   {
     __ Move(eax, JSParameterCount(0));
-    __ TailCallBuiltin(Builtins::Call());
+    __ TailCallBuiltin(Builtins::Call(IncumbentHint::kInherited));
   }
 }
 
@@ -2193,7 +2213,7 @@ void Builtins::Generate_FunctionPrototypeCall(MacroAssembler* masm) {
   __ dec(eax);  // One fewer argument (first argument is new receiver).
 
   // 5. Call the callable.
-  __ TailCallBuiltin(Builtins::Call());
+  __ TailCallBuiltin(Builtins::Call(IncumbentHint::kInherited));
 }
 
 void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
@@ -2248,7 +2268,7 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
   // will do.
 
   // 3. Apply the target to the given argumentsList.
-  __ TailCallBuiltin(Builtin::kCallWithArrayLike);
+  __ TailCallBuiltin(Builtins::CallWithArrayLike(IncumbentHint::kInherited));
 }
 
 void Builtins::Generate_ReflectConstruct(MacroAssembler* masm) {
@@ -2559,6 +2579,34 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
 }
 
 // static
+void Builtins::Generate_CallWithIncumbentTrampoline(
+    MacroAssembler* masm, IncumbentHint incumbent_hint,
+    Builtin pass_through_builtin) {
+  Isolate* isolate = masm->isolate();
+  MemOperand incumbent_context_mem_op = __ ExternalReferenceAsOperand(
+      ExternalReference::caller_context(isolate), no_reg);
+
+  switch (incumbent_hint) {
+    case IncumbentHint::kSameAsCurrentContext:
+      // Record caller context as an incumbent context.
+      __ mov(incumbent_context_mem_op, kContextRegister);
+      __ TailCallBuiltin(pass_through_builtin);
+      return;
+
+    case IncumbentHint::kUnknown:
+      // Clear incumbent context.
+      __ mov(incumbent_context_mem_op, Immediate(0));
+      __ TailCallBuiltin(pass_through_builtin);
+      return;
+
+    case IncumbentHint::kInherited:
+      // The |code| is the pass-through variant, this trampoline is not
+      // necessary.
+      UNREACHABLE();
+  }
+}
+
+// static
 void Builtins::Generate_CallFunction(MacroAssembler* masm,
                                      ConvertReceiverMode mode) {
   // ----------- S t a t e -------------
@@ -2752,7 +2800,7 @@ void Builtins::Generate_CallBoundFunctionImpl(MacroAssembler* masm) {
 
   // Call the [[BoundTargetFunction]] via the Call builtin.
   __ mov(edi, FieldOperand(edi, JSBoundFunction::kBoundTargetFunctionOffset));
-  __ TailCallBuiltin(Builtins::Call());
+  __ TailCallBuiltin(Builtins::Call(IncumbentHint::kInherited));
 }
 
 // static
@@ -2778,7 +2826,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
                           FIRST_CALLABLE_JS_FUNCTION_TYPE,
                           LAST_CALLABLE_JS_FUNCTION_TYPE);
   __ j(above, &non_callable_jsfunction);
-  __ TailCallBuiltin(Builtins::CallFunction(mode));
+  __ TailCallBuiltin(Builtins::CallFunction(IncumbentHint::kInherited, mode));
 
   __ bind(&non_callable_jsfunction);
   __ cmpw(instance_type, Immediate(JS_BOUND_FUNCTION_TYPE));
@@ -2816,8 +2864,8 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
   __ mov(args.GetReceiverOperand(), target);
   // Let the "call_as_function_delegate" take care of the rest.
   __ LoadNativeContextSlot(target, Context::CALL_AS_FUNCTION_DELEGATE_INDEX);
-  __ TailCallBuiltin(
-      Builtins::CallFunction(ConvertReceiverMode::kNotNullOrUndefined));
+  __ TailCallBuiltin(Builtins::CallFunction(
+      IncumbentHint::kInherited, ConvertReceiverMode::kNotNullOrUndefined));
 
   // 3. Call to something that is not callable.
   __ bind(&non_callable);
@@ -2948,7 +2996,8 @@ void Builtins::Generate_Construct(MacroAssembler* masm) {
     // Let the "call_as_constructor_delegate" take care of the rest.
     __ LoadNativeContextSlot(target,
                              Context::CALL_AS_CONSTRUCTOR_DELEGATE_INDEX);
-    __ TailCallBuiltin(Builtins::CallFunction());
+    __ TailCallBuiltin(
+        Builtins::CallFunction(IncumbentHint::kSameAsCurrentContext));
   }
 
   // Called Construct on an Object that doesn't have a [[Construct]] internal
@@ -3583,6 +3632,13 @@ void GenerateExceptionHandlingLandingPad(MacroAssembler* masm,
 void JSToWasmWrapperHelper(MacroAssembler* masm, bool stack_switch) {
   __ EnterFrame(stack_switch ? StackFrame::STACK_SWITCH
                              : StackFrame::JS_TO_WASM);
+
+  Isolate* isolate = masm->isolate();
+
+  // Clear incumbent context as we can't track it across Wasm code.
+  __ mov(__ ExternalReferenceAsOperand(
+             ExternalReference::caller_context(isolate), no_reg),
+         Immediate(0));
 
   constexpr int kNumSpillSlots = StackSwitchFrameConstants::kNumSpillSlots;
   __ sub(esp, Immediate(kNumSpillSlots * kSystemPointerSize));
@@ -4426,17 +4482,22 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   Register call_data = no_reg;
   Register callback = no_reg;
   Register holder = no_reg;
+  Register caller_context = no_reg;
 
   switch (mode) {
     case CallApiCallbackMode::kGeneric:
-      api_function_address = eax;
       argc = CallApiCallbackGenericDescriptor::ActualArgumentsCountRegister();
+      caller_context =
+          CallApiCallbackGenericDescriptor::CallerContextRegister();
       callback = CallApiCallbackGenericDescriptor::CallHandlerInfoRegister();
       holder = CallApiCallbackGenericDescriptor::HolderRegister();
       break;
 
     case CallApiCallbackMode::kOptimizedNoProfiling:
     case CallApiCallbackMode::kOptimized:
+      // Caller context is always equal to current context because we don't
+      // inline Api calls cross-context.
+      caller_context = kContextRegister;
       api_function_address =
           CallApiCallbackOptimizedDescriptor::ApiFunctionAddressRegister();
       argc = CallApiCallbackOptimizedDescriptor::ActualArgumentsCountRegister();
@@ -4444,9 +4505,11 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
       holder = CallApiCallbackOptimizedDescriptor::HolderRegister();
       break;
   }
-  DCHECK(!AreAliased(api_function_address, argc, call_data, callback, holder));
+  DCHECK(!AreAliased(api_function_address, caller_context, argc, call_data,
+                     callback, holder));
 
   using FCA = FunctionCallbackArguments;
+  using ER = ExternalReference;
 
   static_assert(FCA::kArgsLength == 6);
   static_assert(FCA::kNewTargetIndex == 5);
@@ -4465,7 +4528,7 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   //   esp[0 * kSystemPointerSize]: return address
   //   esp[1 * kSystemPointerSize]: kHolder   <= implicit_args_
   //   esp[2 * kSystemPointerSize]: kIsolate
-  //   esp[3 * kSystemPointerSize]: undefined (padding, unused)
+  //   esp[3 * kSystemPointerSize]: kUnused
   //   esp[4 * kSystemPointerSize]: undefined (kReturnValue)
   //   esp[5 * kSystemPointerSize]: kData
   //   esp[6 * kSystemPointerSize]: undefined (kNewTarget)
@@ -4489,7 +4552,15 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   }
   __ PushRoot(RootIndex::kUndefinedValue);  // kReturnValue
   __ Push(Smi::zero());                     // kUnused
-  __ Push(Immediate(ExternalReference::isolate_address(masm->isolate())));
+
+  __ mov(__ ExternalReferenceAsOperand(ER::caller_context(masm->isolate()),
+                                       no_reg),
+         caller_context);
+  if (mode == CallApiCallbackMode::kGeneric) {
+    api_function_address = ReassignRegister(caller_context);
+  }
+
+  __ Push(Immediate(ER::isolate_address(masm->isolate())));
   __ Push(holder);
   // Keep a pointer to kHolder (= implicit_args) in a {holder} register.
   // We use it below to set up the FunctionCallbackInfo object.

@@ -4080,6 +4080,14 @@ void CallApiFunctionAndReturn(MacroAssembler* masm, bool with_profiling,
   __ call(function_address);
   __ bind(&done_api_call);
 
+  if ((true)) {
+    // After returning from the callback the value of caller_context quickly
+    // becomes outdated, so clear it to ensure that we are not accidentally
+    // use it from a wrong place.
+    __ movq(__ ExternalReferenceAsOperand(ER::caller_context(isolate), no_reg),
+            Immediate(0));
+  }
+
   __ RecordComment("Load the value from ReturnValue");
   __ movq(return_value, return_value_operand);
 

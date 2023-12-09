@@ -37,6 +37,7 @@ class AsmWasmData;
 class AsyncGeneratorRequest;
 struct AssemblerOptions;
 class BigInt;
+class IncumbentTrackingScope;
 class CallInterfaceDescriptor;
 class Callable;
 class Factory;
@@ -825,6 +826,16 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void UnsafeStoreNoWriteBarrier(MachineRepresentation rep, Node* base,
                                  Node* offset, Node* value);
 
+  template <class Type>
+  void StoreNoWriteBarrier(Node* base, Node* value) {
+    StoreNoWriteBarrier(MachineRepresentationOf<Type>::value, base, value);
+  }
+  template <class Type>
+  void StoreNoWriteBarrier(Node* base, Node* offset, Node* value) {
+    StoreNoWriteBarrier(MachineRepresentationOf<Type>::value, base, offset,
+                        value);
+  }
+
   // Stores uncompressed tagged value to (most likely off JS heap) memory
   // location without write barrier.
   void StoreFullTaggedNoWriteBarrier(TNode<RawPtrT> base,
@@ -1223,23 +1234,23 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   //
 
   template <typename T = Object, class... TArgs>
-  TNode<T> CallBuiltin(Builtin id, TNode<Object> context, TArgs... args) {
-    Callable callable = Builtins::CallableFor(isolate(), id);
+  TNode<T> CallBuiltin(Builtin builtin, TNode<Object> context, TArgs... args) {
+    Callable callable = Builtins::CallableFor(isolate(), builtin);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     return CallStub<T>(callable.descriptor(), target, context, args...);
   }
 
   template <class... TArgs>
-  void CallBuiltinVoid(Builtin id, TNode<Object> context, TArgs... args) {
-    Callable callable = Builtins::CallableFor(isolate(), id);
+  void CallBuiltinVoid(Builtin builtin, TNode<Object> context, TArgs... args) {
+    Callable callable = Builtins::CallableFor(isolate(), builtin);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     CallStubR(StubCallMode::kCallCodeObject, callable.descriptor(), target,
               context, args...);
   }
 
   template <class... TArgs>
-  void TailCallBuiltin(Builtin id, TNode<Object> context, TArgs... args) {
-    Callable callable = Builtins::CallableFor(isolate(), id);
+  void TailCallBuiltin(Builtin builtin, TNode<Object> context, TArgs... args) {
+    Callable callable = Builtins::CallableFor(isolate(), builtin);
     TNode<Code> target = HeapConstantNoHole(callable.code());
     TailCallStub(callable.descriptor(), target, context, args...);
   }
@@ -1251,14 +1262,18 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class T = Object, class... TArgs>
   TNode<T> CallStub(const CallInterfaceDescriptor& descriptor,
                     TNode<Code> target, TNode<Object> context, TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     return UncheckedCast<T>(CallStubR(StubCallMode::kCallCodeObject, descriptor,
                                       target, context, args...));
   }
 
   template <class T = Object, class... TArgs>
-  TNode<T> CallBuiltinPointer(const CallInterfaceDescriptor& descriptor,
+  TNode<T> CallBuiltinPointer(Builtin example_builtin_for_call_descriptor,
                               TNode<BuiltinPtr> target, TNode<Object> context,
                               TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
+    CallInterfaceDescriptor descriptor = Builtins::CallInterfaceDescriptorFor(
+        example_builtin_for_call_descriptor);
     return UncheckedCast<T>(CallStubR(StubCallMode::kCallBuiltinPointer,
                                       descriptor, target, context, args...));
   }
@@ -1266,6 +1281,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   template <class... TArgs>
   void TailCallStub(const CallInterfaceDescriptor& descriptor,
                     TNode<Code> target, TNode<Object> context, TArgs... args) {
+    Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
     TailCallStubImpl(descriptor, target, context, {args...});
   }
 
@@ -1691,6 +1707,17 @@ class V8_EXPORT_PRIVATE CodeAssemblerState {
   const char* name() const { return name_; }
   int parameter_count() const;
 
+  Builtin builtin() { return builtin_; }
+
+  IncumbentTrackingScope* incumbent_tracking_scope() {
+    return incumbent_tracking_scope_;
+  }
+  void set_incumbent_tracking_scope(IncumbentTrackingScope* scope) {
+    // It must not be set twice but it can be cleared.
+    DCHECK_NE(incumbent_tracking_scope_ == nullptr, scope == nullptr);
+    incumbent_tracking_scope_ = scope;
+  }
+
 #if DEBUG
   void PrintCurrentBlock(std::ostream& os);
 #endif  // DEBUG
@@ -1716,6 +1743,7 @@ class V8_EXPORT_PRIVATE CodeAssemblerState {
   CodeKind kind_;
   const char* name_;
   Builtin builtin_;
+  IncumbentTrackingScope* incumbent_tracking_scope_ = nullptr;
   bool code_generated_;
   ZoneSet<CodeAssemblerVariable::Impl*, CodeAssemblerVariable::ImplComparator>
       variables_;

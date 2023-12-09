@@ -899,6 +899,11 @@ void Deoptimizer::DoComputeOutputFrames() {
                                             isolate()->cage_base());
 #endif
 
+  // The incumbent context value becomes outdated after deoptimization.
+  isolate()->clear_caller_context();
+  // isolate()->set_caller_context(
+  //     Context::unchecked_cast(Tagged<Object>(topmost->GetContext())));
+
   // Don't reset the tiering state for OSR code since we might reuse OSR code
   // after deopt, and we still want to tier up to non-OSR code even if OSR code
   // deoptimized.

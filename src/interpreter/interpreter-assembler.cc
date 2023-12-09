@@ -48,8 +48,6 @@ InterpreterAssembler::InterpreterAssembler(CodeAssemblerState* state,
 #ifdef V8_TRACE_UNOPTIMIZED
   TraceBytecode(Runtime::kTraceUnoptimizedBytecodeEntry);
 #endif
-  RegisterCallGenerationCallbacks([this] { CallPrologue(); },
-                                  [this] { CallEpilogue(); });
 
   // Save the bytecode offset immediately if bytecode will make a call along
   // the critical path, or it is a return bytecode.
@@ -57,6 +55,40 @@ InterpreterAssembler::InterpreterAssembler(CodeAssemblerState* state,
       Bytecodes::Returns(bytecode)) {
     SaveBytecodeOffset();
   }
+
+  // Install callbacks which
+  // 1) save and restores interpreter bytecode offset to the interpreter stack
+  //    frame when performing a call,
+  // 2) implement incumbent context propagation similarly to
+  //    CodeStubAssembler::InitIncumbentPropagationForUserJSCode():
+  //    - set incumbent to current context on interpreter entry (done by the
+  //      interpreter entry builtin) and after calls,
+  //    - clear incument context on return.
+  // InitIncumbentPropagationForUserJSCode([=] { return GetContext(); }, ...);
+  // RegisterCallGenerationCallbacks(
+  InitIncumbentPropagation(
+      // call_prologue
+      [=] {
+        if (!Bytecodes::MakesCallAlongCriticalPath(bytecode_)) {
+          // Bytecodes that make a call along the critical path save the
+          // bytecode offset in the bytecode handler's prologue. For other
+          // bytecodes, if there are multiple calls in the bytecode handler,
+          // you need to spill before each of them, unless SaveBytecodeOffset
+          // has explicitly been called in a path that dominates _all_ of those
+          // calls (which we don't track).
+          SaveBytecodeOffset();
+        }
+        bytecode_array_valid_ = false;
+        made_call_ = true;
+      },
+      // call_epilogue
+      [=] {
+        Comment("Set incumbent to current context after call");
+        // The handler could theoretically call user JS code and thus
+        // the Isolate::caller_context could be overwritten. Restore it
+        // back in case it needs to call again.
+        // StoreCallerContext(GetContext());
+      });
 }
 
 InterpreterAssembler::~InterpreterAssembler() {
@@ -706,22 +738,6 @@ TNode<HeapObject> InterpreterAssembler::LoadFeedbackVector() {
   return CAST(LoadRegister(Register::feedback_vector()));
 }
 
-void InterpreterAssembler::CallPrologue() {
-  if (!Bytecodes::MakesCallAlongCriticalPath(bytecode_)) {
-    // Bytecodes that make a call along the critical path save the bytecode
-    // offset in the bytecode handler's prologue. For other bytecodes, if
-    // there are multiple calls in the bytecode handler, you need to spill
-    // before each of them, unless SaveBytecodeOffset has explicitly been called
-    // in a path that dominates _all_ of those calls (which we don't track).
-    SaveBytecodeOffset();
-  }
-
-  bytecode_array_valid_ = false;
-  made_call_ = true;
-}
-
-void InterpreterAssembler::CallEpilogue() {}
-
 void InterpreterAssembler::CallJSAndDispatch(
     TNode<Object> function, TNode<Context> context, const RegListNodePair& args,
     ConvertReceiverMode receiver_mode) {
@@ -756,7 +772,8 @@ void InterpreterAssembler::CallJSAndDispatch(TNode<Object> function,
   DCHECK(Bytecodes::IsCallOrConstruct(bytecode_) ||
          bytecode_ == Bytecode::kInvokeIntrinsic);
   DCHECK_EQ(Bytecodes::GetReceiverMode(bytecode_), receiver_mode);
-  Builtin builtin = Builtins::Call();
+  Builtin builtin = Builtins::Call(IncumbentHint::kSameAsCurrentContext,
+                                   ConvertReceiverMode::kAny);
 
   arg_count = JSParameterCount(arg_count);
   if (receiver_mode == ConvertReceiverMode::kNullOrUndefined) {

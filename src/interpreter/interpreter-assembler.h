@@ -356,11 +356,6 @@ class V8_EXPORT_PRIVATE InterpreterAssembler : public CodeStubAssembler {
   TNode<Object> LoadRegister(TNode<IntPtrT> reg_index);
   void StoreRegister(TNode<Object> value, TNode<IntPtrT> reg_index);
 
-  // Saves and restores interpreter bytecode offset to the interpreter stack
-  // frame when performing a call.
-  void CallPrologue();
-  void CallEpilogue();
-
   // Increment the dispatch counter for the (current, next) bytecode pair.
   void TraceBytecodeDispatch(TNode<WordT> target_bytecode);
 

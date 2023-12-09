@@ -463,6 +463,83 @@ bool Builtins::IsCpp(Builtin builtin) {
 }
 
 // static
+IncumbentHint Builtins::GetIncumbentMode(Builtin builtin) {
+  if (!Builtins::IsBuiltinId(builtin)) {
+    // This it a CA/CSA/Torque test, don't try to propagate incumbent context.
+    return IncumbentHint::kUnknown;
+  }
+  Builtins::Kind builtin_kind = Builtins::KindOf(builtin);
+  if (builtin_kind == Builtins::TFJ || builtin_kind == Builtins::BCH) {
+    return IncumbentHint::kSameAsCurrentContext;
+  }
+  if (builtin_kind == Builtins::TFH) {
+    // Various IC builtins, they are called from user JS code and thus for
+    // them the incumbent context is always the current context.
+    return IncumbentHint::kSameAsCurrentContext;
+  }
+
+  switch (builtin) {
+    //
+    // Various Call/CallFunction/CallVarargs/CallXXX variants.
+    //
+    case Builtin::kCall_IncmbC_RcvIsNullOrUndefined:
+    case Builtin::kCall_IncmbC_RcvIsNotNullOrUndefined:
+    case Builtin::kCall_IncmbC_RcvIsAny:
+    case Builtin::kCallFunction_IncmbC_RcvIsNullOrUndefined:
+    case Builtin::kCallFunction_IncmbC_RcvIsNotNullOrUndefined:
+    case Builtin::kCallFunction_IncmbC_RcvIsAny:
+    case Builtin::kCallVarargs_IncmbC:
+    case Builtin::kCallWithArrayLike_IncmbC:
+      return IncumbentHint::kSameAsCurrentContext;
+
+    case Builtin::kCall_IncmbU_RcvIsNullOrUndefined:
+    case Builtin::kCall_IncmbU_RcvIsNotNullOrUndefined:
+    case Builtin::kCall_IncmbU_RcvIsAny:
+    case Builtin::kCallFunction_IncmbU_RcvIsNullOrUndefined:
+    case Builtin::kCallFunction_IncmbU_RcvIsNotNullOrUndefined:
+    case Builtin::kCallFunction_IncmbU_RcvIsAny:
+    case Builtin::kCallVarargs_IncmbU:
+    case Builtin::kCallWithArrayLike_IncmbU:
+      return IncumbentHint::kUnknown;
+
+    case Builtin::kCall_IncmbP_RcvIsNullOrUndefined:
+    case Builtin::kCall_IncmbP_RcvIsNotNullOrUndefined:
+    case Builtin::kCall_IncmbP_RcvIsAny:
+    case Builtin::kCallFunction_IncmbP_RcvIsNullOrUndefined:
+    case Builtin::kCallFunction_IncmbP_RcvIsNotNullOrUndefined:
+    case Builtin::kCallFunction_IncmbP_RcvIsAny:
+    case Builtin::kCallVarargs_IncmbP:
+    case Builtin::kCallWithArrayLike_IncmbP:
+      return IncumbentHint::kInherited;
+
+    case Builtin::kCallBoundFunction:
+    case Builtin::kCallProxy:
+    case Builtin::kCallWrappedFunction:
+      return IncumbentHint::kInherited;
+
+    case Builtin::kShadowRealmGetWrappedValue:
+      return IncumbentHint::kInherited;
+
+    // Baseline builtins:
+    case Builtin::kCall_RcvIsNullOrUndefined_Baseline:
+    case Builtin::kCall_RcvIsNullOrUndefined_Baseline_Compact:
+    case Builtin::kCall_RcvIsNotNullOrUndefined_Baseline:
+    case Builtin::kCall_RcvIsNotNullOrUndefined_Baseline_Compact:
+    case Builtin::kCall_RcvIsAny_Baseline:
+    case Builtin::kCall_RcvIsAny_Baseline_Compact:
+      return IncumbentHint::kSameAsCurrentContext;
+
+    // Various helper builtins that operate in the current context.
+    case Builtin::kGetIteratorWithFeedback:
+    case Builtin::kGetIteratorBaseline:  // move up?
+      return IncumbentHint::kSameAsCurrentContext;
+
+    default:
+      return IncumbentHint::kUnknown;
+  }
+}
+
+// static
 bool Builtins::AllowDynamicFunction(Isolate* isolate, Handle<JSFunction> target,
                                     Handle<JSObject> target_global_proxy) {
   if (v8_flags.allow_unsafe_function_constructor) return true;

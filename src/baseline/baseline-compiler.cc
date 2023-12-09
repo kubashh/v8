@@ -2,16 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/baseline/baseline-compiler.h"
+
 #include <algorithm>
 #include <type_traits>
 
 #include "src/base/bits.h"
 #include "src/baseline/baseline-assembler-inl.h"
 #include "src/baseline/baseline-assembler.h"
-#include "src/baseline/baseline-compiler.h"
 #include "src/builtins/builtins-constructor.h"
 #include "src/builtins/builtins-descriptors.h"
-#include "src/builtins/builtins.h"
+#include "src/builtins/builtins-inl.h"
 #include "src/codegen/assembler.h"
 #include "src/codegen/compiler.h"
 #include "src/codegen/interface-descriptors-inl.h"
@@ -1192,21 +1193,21 @@ constexpr Builtin ConvertReceiverModeToCompactBuiltin(
     ConvertReceiverMode mode) {
   switch (mode) {
     case ConvertReceiverMode::kAny:
-      return Builtin::kCall_ReceiverIsAny_Baseline_Compact;
+      return Builtin::kCall_RcvIsAny_Baseline_Compact;
     case ConvertReceiverMode::kNullOrUndefined:
-      return Builtin::kCall_ReceiverIsNullOrUndefined_Baseline_Compact;
+      return Builtin::kCall_RcvIsNullOrUndefined_Baseline_Compact;
     case ConvertReceiverMode::kNotNullOrUndefined:
-      return Builtin::kCall_ReceiverIsNotNullOrUndefined_Baseline_Compact;
+      return Builtin::kCall_RcvIsNotNullOrUndefined_Baseline_Compact;
   }
 }
 constexpr Builtin ConvertReceiverModeToBuiltin(ConvertReceiverMode mode) {
   switch (mode) {
     case ConvertReceiverMode::kAny:
-      return Builtin::kCall_ReceiverIsAny_Baseline;
+      return Builtin::kCall_RcvIsAny_Baseline;
     case ConvertReceiverMode::kNullOrUndefined:
-      return Builtin::kCall_ReceiverIsNullOrUndefined_Baseline;
+      return Builtin::kCall_RcvIsNullOrUndefined_Baseline;
     case ConvertReceiverMode::kNotNullOrUndefined:
-      return Builtin::kCall_ReceiverIsNotNullOrUndefined_Baseline;
+      return Builtin::kCall_RcvIsNotNullOrUndefined_Baseline;
   }
 }
 }  // namespace
@@ -1334,7 +1335,8 @@ void BaselineCompiler::VisitCallJSRuntime() {
   __ LoadContext(kContextRegister);
   __ LoadNativeContextSlot(kJavaScriptCallTargetRegister,
                            iterator().GetNativeContextIndexOperand(0));
-  CallBuiltin<Builtin::kCall_ReceiverIsNullOrUndefined>(
+  CallBuiltin<Builtins::Call(IncumbentHint::kSameAsCurrentContext,
+                             ConvertReceiverMode::kNullOrUndefined)>(
       kJavaScriptCallTargetRegister,  // kFunction
       arg_count,                      // kActualArgumentsCount
       RootIndex::kUndefinedValue,     // kReceiver

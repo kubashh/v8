@@ -84,44 +84,58 @@ namespace internal {
                                                                                \
   /* Calls */                                                                  \
   /* ES6 section 9.2.1 [[Call]] ( thisArgument, argumentsList) */              \
-  ASM(CallFunction_ReceiverIsNullOrUndefined, CallTrampoline)                  \
-  ASM(CallFunction_ReceiverIsNotNullOrUndefined, CallTrampoline)               \
-  ASM(CallFunction_ReceiverIsAny, CallTrampoline)                              \
+  ASM(CallFunction_IncmbC_RcvIsNullOrUndefined, CallTrampoline)                \
+  ASM(CallFunction_IncmbU_RcvIsNullOrUndefined, CallTrampoline)                \
+  ASM(CallFunction_IncmbP_RcvIsNullOrUndefined, CallTrampoline)                \
+  ASM(CallFunction_IncmbC_RcvIsNotNullOrUndefined, CallTrampoline)             \
+  ASM(CallFunction_IncmbU_RcvIsNotNullOrUndefined, CallTrampoline)             \
+  ASM(CallFunction_IncmbP_RcvIsNotNullOrUndefined, CallTrampoline)             \
+  ASM(CallFunction_IncmbC_RcvIsAny, CallTrampoline)                            \
+  ASM(CallFunction_IncmbU_RcvIsAny, CallTrampoline)                            \
+  ASM(CallFunction_IncmbP_RcvIsAny, CallTrampoline)                            \
   /* ES6 section 9.4.1.1 [[Call]] ( thisArgument, argumentsList) */            \
   ASM(CallBoundFunction, CallTrampoline)                                       \
   /* #sec-wrapped-function-exotic-objects-call-thisargument-argumentslist */   \
   TFC(CallWrappedFunction, CallTrampoline)                                     \
   /* ES6 section 7.3.12 Call(F, V, [argumentsList]) */                         \
-  ASM(Call_ReceiverIsNullOrUndefined, CallTrampoline)                          \
-  ASM(Call_ReceiverIsNotNullOrUndefined, CallTrampoline)                       \
-  ASM(Call_ReceiverIsAny, CallTrampoline)                                      \
-  TFC(Call_ReceiverIsNullOrUndefined_Baseline_Compact,                         \
+  ASM(Call_IncmbC_RcvIsNullOrUndefined, CallTrampoline)                        \
+  ASM(Call_IncmbU_RcvIsNullOrUndefined, CallTrampoline)                        \
+  ASM(Call_IncmbP_RcvIsNullOrUndefined, CallTrampoline)                        \
+  ASM(Call_IncmbC_RcvIsNotNullOrUndefined, CallTrampoline)                     \
+  ASM(Call_IncmbU_RcvIsNotNullOrUndefined, CallTrampoline)                     \
+  ASM(Call_IncmbP_RcvIsNotNullOrUndefined, CallTrampoline)                     \
+  ASM(Call_IncmbC_RcvIsAny, CallTrampoline)                                    \
+  ASM(Call_IncmbU_RcvIsAny, CallTrampoline)                                    \
+  ASM(Call_IncmbP_RcvIsAny, CallTrampoline)                                    \
+  TFC(Call_RcvIsNullOrUndefined_Baseline_Compact,                              \
       CallTrampoline_Baseline_Compact)                                         \
-  TFC(Call_ReceiverIsNullOrUndefined_Baseline, CallTrampoline_Baseline)        \
-  TFC(Call_ReceiverIsNotNullOrUndefined_Baseline_Compact,                      \
+  TFC(Call_RcvIsNullOrUndefined_Baseline, CallTrampoline_Baseline)             \
+  TFC(Call_RcvIsNotNullOrUndefined_Baseline_Compact,                           \
       CallTrampoline_Baseline_Compact)                                         \
-  TFC(Call_ReceiverIsNotNullOrUndefined_Baseline, CallTrampoline_Baseline)     \
-  TFC(Call_ReceiverIsAny_Baseline_Compact, CallTrampoline_Baseline_Compact)    \
-  TFC(Call_ReceiverIsAny_Baseline, CallTrampoline_Baseline)                    \
-  TFC(Call_ReceiverIsNullOrUndefined_WithFeedback,                             \
-      CallTrampoline_WithFeedback)                                             \
-  TFC(Call_ReceiverIsNotNullOrUndefined_WithFeedback,                          \
-      CallTrampoline_WithFeedback)                                             \
-  TFC(Call_ReceiverIsAny_WithFeedback, CallTrampoline_WithFeedback)            \
+  TFC(Call_RcvIsNotNullOrUndefined_Baseline, CallTrampoline_Baseline)          \
+  TFC(Call_RcvIsAny_Baseline_Compact, CallTrampoline_Baseline_Compact)         \
+  TFC(Call_RcvIsAny_Baseline, CallTrampoline_Baseline)                         \
+  TFC(Call_RcvIsNullOrUndefined_WithFeedback, CallTrampoline_WithFeedback)     \
+  TFC(Call_RcvIsNotNullOrUndefined_WithFeedback, CallTrampoline_WithFeedback)  \
+  TFC(Call_RcvIsAny_WithFeedback, CallTrampoline_WithFeedback)                 \
                                                                                \
   /* ES6 section 9.5.12[[Call]] ( thisArgument, argumentsList ) */             \
   TFC(CallProxy, CallTrampoline)                                               \
-  ASM(CallVarargs, CallVarargs)                                                \
+  ASM(CallVarargs_IncmbC, CallVarargs)                                         \
+  ASM(CallVarargs_IncmbU, CallVarargs)                                         \
+  ASM(CallVarargs_IncmbP, CallVarargs)                                         \
   TFC(CallWithSpread, CallWithSpread)                                          \
   TFC(CallWithSpread_Baseline, CallWithSpread_Baseline)                        \
   TFC(CallWithSpread_WithFeedback, CallWithSpread_WithFeedback)                \
-  TFC(CallWithArrayLike, CallWithArrayLike)                                    \
+  ASM(CallWithArrayLike_IncmbC, CallWithArrayLike)                             \
+  ASM(CallWithArrayLike_IncmbU, CallWithArrayLike)                             \
+  TFC(CallWithArrayLike_IncmbP, CallWithArrayLike)                             \
   TFC(CallWithArrayLike_WithFeedback, CallWithArrayLike_WithFeedback)          \
   ASM(CallForwardVarargs, CallForwardVarargs)                                  \
   ASM(CallFunctionForwardVarargs, CallForwardVarargs)                          \
   /* Call an API callback via a {FunctionTemplateInfo}, doing appropriate */   \
   /* access and compatible receiver checks. */                                 \
-  TFC(CallFunctionTemplate_Generic, CallFunctionTemplate)                      \
+  TFC(CallFunctionTemplate_Generic, CallFunctionTemplateGeneric)               \
   TFC(CallFunctionTemplate_CheckAccess, CallFunctionTemplate)                  \
   TFC(CallFunctionTemplate_CheckCompatibleReceiver, CallFunctionTemplate)      \
   TFC(CallFunctionTemplate_CheckAccessAndCompatibleReceiver,                   \

@@ -355,6 +355,66 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
 #define CSA_SLOW_DCHECK(csa, ...) ((void)0)
 #endif
 
+class IncumbentTrackingScope {
+ public:
+  IncumbentTrackingScope(compiler::CodeAssemblerState* state, Builtin target,
+                         TNode<Object> context)
+      : state_(state), current_context_(context) {
+    target_incumbent_hint_ = Builtins::GetIncumbentMode(target);
+    direct_target_ = target;
+    state->set_incumbent_tracking_scope(this);
+
+    // Builtin caller = state->builtin();
+    // IncumbentHint caller_hint = Builtins::GetIncumbentMode(caller);
+    // IncumbentHint target_hint = Builtins::GetIncumbentMode(target);
+    // PrintF("=== %s (%s) -> %s (%s)\n", Builtins::name(caller),
+    //        ToString(caller_hint), Builtins::name(target),
+    //        ToString(target_hint));
+  }
+
+  IncumbentTrackingScope(compiler::CodeAssemblerState* state,
+                         TNode<Code> target,
+                         IncumbentHint target_incumbent_hint,
+                         TNode<Object> context)
+      : state_(state), current_context_(context) {
+    target_incumbent_hint_ = target_incumbent_hint;
+    indirect_target_ = target;
+    state->set_incumbent_tracking_scope(this);
+  }
+
+  IncumbentTrackingScope(compiler::CodeAssemblerState* state,
+                         TNode<BuiltinPtr> target,
+                         IncumbentHint target_incumbent_hint,
+                         TNode<Object> context)
+      : state_(state), current_context_(context) {
+    target_incumbent_hint_ = target_incumbent_hint;
+    indirect_target_ = target;
+    state->set_incumbent_tracking_scope(this);
+  }
+
+  ~IncumbentTrackingScope() { state_->set_incumbent_tracking_scope(nullptr); }
+
+  IncumbentHint target_incumbent_hint() { return target_incumbent_hint_; }
+
+  TNode<Object> current_context() { return current_context_; }
+
+  Builtin direct_target() { return direct_target_; }
+
+  TNode<Object> indirect_target() { return indirect_target_; }
+
+ private:
+  compiler::CodeAssemblerState* state_;
+  // Data being propagated from the call site to call prologue/epilogue
+  // callbacks installed by CodeStubAssembler::InitIncumbentPropagation().
+  TNode<Object> current_context_;
+  IncumbentHint target_incumbent_hint_;
+  // The builtin being called in case of direct target.
+  // if available (indirect calls to IC handlers and  // ).
+  Builtin direct_target_ = Builtin::kNoBuiltinId;
+  // BuiltinPtr or Code for checking the value dynamically.
+  TNode<Object> indirect_target_;
+};
+
 // Provides JavaScript-specific "macro-assembler" functionality on top of the
 // CodeAssembler. By factoring the JavaScript-isms out of the CodeAssembler,
 // it's possible to add JavaScript-specific useful CodeAssembler "macros"
@@ -364,6 +424,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     : public compiler::CodeAssembler,
       public TorqueGeneratedExportedMacrosAssembler {
  public:
+  using CodeAssemblerCallback = compiler::CodeAssemblerCallback;
   using ScopedExceptionHandler = compiler::ScopedExceptionHandler;
 
   template <typename T>
@@ -914,6 +975,102 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<RawPtrT> LoadCodeInstructionStart(TNode<Code> code);
   TNode<BoolT> IsMarkedForDeoptimization(TNode<Code> code);
+
+  TNode<Object> LoadCallerContext();
+  void StoreCallerContext(TNode<Object> maybe_context);
+
+  // Set incumbent to current context on builtin entry and after calls,
+  // clear on return.
+  // Current implementation of Isolate::GetIncumbentContext() treats all
+  // builtins with JS linkage as user code.
+  // void InitIncumbentPropagationForUserJSCode(
+  //     TNode<Context> context, const CodeAssemblerCallback& call_prologue =
+  //     {}, const CodeAssemblerCallback& call_epilogue = {});
+  // Save incumbent context on entry, restore it back on return.
+  //  void InitIncumbentPropagationForBuiltin();
+  void InitIncumbentPropagation(
+      const CodeAssemblerCallback& call_prologue = {},
+      const CodeAssemblerCallback& call_epilogue = {});
+
+  template <class T = Object, class... TArgs>
+  inline TNode<T> CallRuntime(Runtime::FunctionId function,
+                              TNode<Object> context, TArgs... args) {
+    // IncumbentTrackingScope call_scope(state(), Builtins::RuntimeCEntry(1),
+    // context);
+    IncumbentTrackingScope call_scope(
+        state(), Builtin::kCEntry_Return1_ArgvOnStack_BuiltinExit, context);
+    return CodeAssembler::CallRuntime<T>(function, context, args...);
+  }
+
+  template <class... TArgs>
+  void TailCallRuntime(Runtime::FunctionId function, TNode<Object> context,
+                       TArgs... args) {
+    CodeAssembler::TailCallRuntime(function, context, args...);
+  }
+
+  template <class... TArgs>
+  void TailCallRuntime(Runtime::FunctionId function, TNode<Int32T> arity,
+                       TNode<Object> context, TArgs... args) {
+    CodeAssembler::TailCallRuntime(function, arity, context, args...);
+  }
+
+  template <typename T = Object, class... TArgs>
+  inline TNode<T> CallBuiltin(Builtin builtin, TNode<Object> context,
+                              TArgs... args) {
+    IncumbentTrackingScope call_scope(state(), builtin, context);
+    return CodeAssembler::CallBuiltin<T>(builtin, context, args...);
+  }
+
+  template <class... TArgs>
+  inline void CallBuiltinVoid(Builtin builtin, TNode<Object> context,
+                              TArgs... args) {
+    IncumbentTrackingScope call_scope(state(), builtin, context);
+    CodeAssembler::CallBuiltinVoid(builtin, context, args...);
+  }
+
+  template <class... TArgs>
+  inline void TailCallBuiltin(Builtin builtin, TNode<Object> context,
+                              TArgs... args) {
+    CodeAssembler::TailCallBuiltin(builtin, context, args...);
+  }
+
+  // This helper function is used by Torque compiler for calling builtins
+  // as virtual functions. Those builtins
+  template <class T = Object, class... TArgs>
+  TNode<T> CallBuiltinPointer(Builtin example_builtin_for_call_descriptor,
+                              TNode<BuiltinPtr> target, TNode<Object> context,
+                              TArgs... args) {
+    IncumbentTrackingScope call_scope(state(), target, IncumbentHint::kUnknown,
+                                      context);
+    return CodeAssembler::CallBuiltinPointer(
+        example_builtin_for_call_descriptor, target, context, args...);
+  }
+
+  template <class... TArgs>
+  TNode<Object> CallJS(Builtin builtin, TNode<Context> context,
+                       TNode<Object> function,
+                       base::Optional<TNode<Object>> new_target,
+                       TNode<Object> receiver, TArgs... args) {
+    IncumbentTrackingScope call_scope(state(), builtin, context);
+    return CodeAssembler::CallJS(builtin, context, function, new_target,
+                                 receiver, args...);
+  }
+
+  template <class... TArgs>
+  TNode<Object> ConstructJSWithTarget(Builtin builtin, TNode<Context> context,
+                                      TNode<Object> function,
+                                      TNode<Object> new_target, TArgs... args) {
+    IncumbentTrackingScope call_scope(state(), builtin, context);
+    return CodeAssembler::ConstructJSWithTarget(builtin, context, function,
+                                                new_target, args...);
+  }
+
+  template <class... TArgs>
+  TNode<Object> ConstructJS(Builtin builtin, TNode<Context> context,
+                            TNode<Object> target, TArgs... args) {
+    IncumbentTrackingScope call_scope(state(), builtin, context);
+    return CodeAssembler::ConstructJS(builtin, context, target, args...);
+  }
 
   // The following Call wrappers call an object according to the semantics that
   // one finds in the EcmaScript spec, operating on an Callable (e.g. a

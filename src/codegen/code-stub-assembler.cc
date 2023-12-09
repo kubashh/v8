@@ -10696,9 +10696,10 @@ TNode<Object> CodeStubAssembler::CallGetterIfAccessor(
         }
         TNode<NativeContext> creation_context =
             GetCreationContext(CAST(holder), if_bailout);
+        TNode<Context> caller_context = context;
         var_value = CallBuiltin(
             Builtin::kCallFunctionTemplate_Generic, creation_context, getter,
-            Int32Constant(i::JSParameterCount(0)), js_receiver);
+            Int32Constant(i::JSParameterCount(0)), caller_context, js_receiver);
         Goto(&done);
 
         if (mode == kCallJSGetterUseCachedName) {
@@ -15194,10 +15195,13 @@ TNode<Boolean> CodeStubAssembler::InstanceOf(TNode<Object> object,
   {
     // Call to Function.prototype[@@hasInstance] directly without using the
     // Builtins::Call().
-    var_result = CAST(CallJS(Builtin::kFunctionPrototypeHasInstance, context,
-                             inst_of_handler,
-                             UndefinedConstant(),  // new_target
-                             callable, object));
+    // TODO(ishell): introduce IncumbentHint::kSameAsCurrentContext version of
+    // the bulitin. var_result =
+    // CAST(CallJS(Builtin::kFunctionPrototypeHasInstance, context,
+    //                          inst_of_handler,
+    //                          UndefinedConstant(),  // new_target
+    //                          callable, object));
+    var_result = CAST(Call(context, inst_of_handler, callable, object));
     Goto(&return_result);
   }
 
@@ -16609,6 +16613,183 @@ void CodeStubAssembler::PerformStackCheck(TNode<Context> context) {
   BIND(&ok);
 }
 
+TNode<Object> CodeStubAssembler::LoadCallerContext() {
+  TNode<ExternalReference> caller_context_ref =
+      ExternalConstant(ExternalReference::caller_context(isolate()));
+  return LoadFullTagged(caller_context_ref);
+}
+
+void CodeStubAssembler::StoreCallerContext(TNode<Object> maybe_context) {
+  TNode<ExternalReference> caller_context_ref =
+      ExternalConstant(ExternalReference::caller_context(isolate()));
+  StoreFullTaggedNoWriteBarrier(caller_context_ref, maybe_context);
+}
+
+void CodeStubAssembler::InitIncumbentPropagation(
+    const CodeAssemblerCallback& call_prologue,
+    const CodeAssemblerCallback& call_epilogue) {
+  Comment("===== ", __FUNCTION__, ", ", __FILE__, ":", __LINE__);
+
+  Builtin caller = state()->builtin();
+  IncumbentHint caller_incumbent_hint = Builtins::GetIncumbentMode(caller);
+
+  if (caller_incumbent_hint == IncumbentHint::kSameAsCurrentContext) {
+    RegisterCallGenerationCallbacks(
+        // call_prologue
+        [=] {
+          if (call_prologue) {
+            call_prologue();
+          }
+          IncumbentTrackingScope* incumbent_tracking_scope =
+              state()->incumbent_tracking_scope();
+          DCHECK_NOT_NULL(incumbent_tracking_scope);
+
+          switch (incumbent_tracking_scope->target_incumbent_hint()) {
+            case IncumbentHint::kSameAsCurrentContext:
+            case IncumbentHint::kUnknown:
+              // These builtins are allowed to be called as is from
+              // IncumbentHint::kSameAsCurrentContext builtin.
+              break;
+
+            case IncumbentHint::kInherited: {
+              // Such builtins expects caller context to be properly set.
+              Comment("Set incumbent before call");
+              TNode<Object> maybe_context =
+                  incumbent_tracking_scope->current_context();
+              StoreCallerContext(maybe_context ? maybe_context
+                                               : NoContextConstant());
+              break;
+            }
+          }
+        },
+        // No actions are required after calls.
+        // call_epilogue
+        [=] {
+          if (call_epilogue) {
+            call_epilogue();
+          }
+        });
+
+  } else if (caller_incumbent_hint == IncumbentHint::kUnknown) {
+    RegisterCallGenerationCallbacks(
+        // call_prologue
+        [=] {
+          if (call_prologue) {
+            call_prologue();
+          }
+          IncumbentTrackingScope* incumbent_tracking_scope =
+              state()->incumbent_tracking_scope();
+          DCHECK_NOT_NULL(incumbent_tracking_scope);
+          Builtin target = incumbent_tracking_scope->direct_target();
+          IncumbentHint target_incumbent_hint =
+              incumbent_tracking_scope->target_incumbent_hint();
+
+          switch (target_incumbent_hint) {
+            case IncumbentHint::kSameAsCurrentContext:
+              if (target == Builtin::kNoBuiltinId) {
+                FATAL(
+                    "Incompatible IncumbentHint for a direct builtin call "
+                    "%s (%s) -> %s (%s)",
+                    Builtins::name(caller), ToString(caller_incumbent_hint),
+                    Builtins::name(target), ToString(target_incumbent_hint));
+              } else {
+                FATAL(
+                    "Incompatible IncumbentHint for an indirect call "
+                    "%s (%s) -> ... (%s)",
+                    Builtins::name(caller), ToString(caller_incumbent_hint),
+                    ToString(target_incumbent_hint));
+              }
+
+            case IncumbentHint::kUnknown:
+              break;
+
+            case IncumbentHint::kInherited:
+              // Such builtins expect caller context to be properly set.
+              Comment("Clear incumbent before call");
+              StoreCallerContext(NoContextConstant());
+              break;
+          }
+        },
+        // No actions are required after calls.
+        // call_epilogue
+        [=] {
+          if (call_epilogue) {
+            call_epilogue();
+          }
+        });
+
+  } else {
+    DCHECK_EQ(caller_incumbent_hint, IncumbentHint::kInherited);
+
+    // The value of the incoming caller context.
+    TNode<Object> incoming_caller_context = LoadCallerContext();
+
+    RegisterCallGenerationCallbacks(
+        // call_prologue
+        [=] {
+          if (call_prologue) {
+            call_prologue();
+          }
+          IncumbentTrackingScope* incumbent_tracking_scope =
+              state()->incumbent_tracking_scope();
+          DCHECK_NOT_NULL(incumbent_tracking_scope);
+          Builtin target = incumbent_tracking_scope->direct_target();
+          IncumbentHint target_incumbent_hint =
+              incumbent_tracking_scope->target_incumbent_hint();
+
+          switch (target_incumbent_hint) {
+            case IncumbentHint::kSameAsCurrentContext:
+              if (target == Builtin::kNoBuiltinId) {
+                FATAL(
+                    "Incompatible IncumbentHint for a direct builtin call "
+                    "%s (%s) -> %s (%s)",
+                    Builtins::name(caller), ToString(caller_incumbent_hint),
+                    Builtins::name(target), ToString(target_incumbent_hint));
+              } else {
+                FATAL(
+                    "Incompatible IncumbentHint for an indirect call "
+                    "%s (%s) -> ... (%s)",
+                    Builtins::name(caller), ToString(caller_incumbent_hint),
+                    ToString(target_incumbent_hint));
+              }
+
+            case IncumbentHint::kUnknown:
+              break;
+
+            case IncumbentHint::kInherited:
+              // Such builtins expect caller context to be properly set,
+              // but it should have been handled by the caller's caller.
+              break;
+          }
+        },
+        // call_epilogue
+        [=] {
+          if (call_epilogue) {
+            call_epilogue();
+          }
+          IncumbentTrackingScope* incumbent_tracking_scope =
+              state()->incumbent_tracking_scope();
+          DCHECK_NOT_NULL(incumbent_tracking_scope);
+          IncumbentHint target_incumbent_hint =
+              incumbent_tracking_scope->target_incumbent_hint();
+
+          switch (target_incumbent_hint) {
+            case IncumbentHint::kSameAsCurrentContext:
+              // Prologue callback must have been reported this error.
+              UNREACHABLE();
+
+            case IncumbentHint::kUnknown:
+            case IncumbentHint::kInherited:
+              // The call has or might have corrupted the caller context value,
+              // restore it.
+              Comment("Restore incumbent after call");
+              StoreCallerContext(incoming_caller_context);
+              break;
+          }
+        });
+  }
+}
+
 TNode<Object> CodeStubAssembler::CallRuntimeNewArray(
     TNode<Context> context, TNode<Object> receiver, TNode<Object> length,
     TNode<Object> new_target, TNode<Object> allocation_site) {
@@ -17832,14 +18013,14 @@ TNode<Object> CodeStubAssembler::CallOnCentralStack(TNode<Context> context,
 
   TNode<RawPtrT> old_sp = SwitchToTheCentralStackForJS(target);
 
-  result = CallBuiltin(Builtin::kCallVarargs, context, target, Int32Constant(0),
-                       num_args, args);
+  result = CallBuiltin(Builtins::CallVarargs(IncumbentHint::kUnknown), context,
+                       target, Int32Constant(0), num_args, args);
   SwitchFromTheCentralStackForJS(old_sp, target);
   Goto(&end);
 
   Bind(&no_switch);
-  result = CallBuiltin(Builtin::kCallVarargs, context, target, Int32Constant(0),
-                       num_args, args);
+  result = CallBuiltin(Builtins::CallVarargs(IncumbentHint::kUnknown), context,
+                       target, Int32Constant(0), num_args, args);
   Goto(&end);
 
   Bind(&end);

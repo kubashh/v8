@@ -49,17 +49,20 @@ class V8_EXPORT_PRIVATE CodeFactory final {
   static Callable FastNewFunctionContext(Isolate* isolate,
                                          ScopeType scope_type);
 
-  static Callable Call(Isolate* isolate,
+  static Callable Call(Isolate* isolate, IncumbentHint incumbent_hint,
                        ConvertReceiverMode mode = ConvertReceiverMode::kAny);
   // TODO(ishell): not used, remove.
   static Callable Call_WithFeedback(Isolate* isolate, ConvertReceiverMode mode);
-  static Callable CallWithArrayLike(Isolate* isolate);
+  static Callable CallWithArrayLike(Isolate* isolate,
+                                    IncumbentHint incumbent_hint);
   static Callable CallWithSpread(Isolate* isolate);
   static Callable CallFunction(
-      Isolate* isolate, ConvertReceiverMode mode = ConvertReceiverMode::kAny);
-
-  static Callable CallForwardVarargs(Isolate* isolate);
-  static Callable CallFunctionForwardVarargs(Isolate* isolate);
+      Isolate* isolate, IncumbentHint incumbent_hint,
+      ConvertReceiverMode mode = ConvertReceiverMode::kAny);
+  static Callable CallForwardVarargs(Isolate* isolate,
+                                     IncumbentHint incumbent_hint);
+  static Callable CallFunctionForwardVarargs(Isolate* isolate,
+                                             IncumbentHint incumbent_hint);
   static Callable Construct(Isolate* isolate);
   static Callable ConstructWithSpread(Isolate* isolate);
   static Callable ConstructForwardVarargs(Isolate* isolate);

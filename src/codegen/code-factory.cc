@@ -71,8 +71,9 @@ Callable CodeFactory::FastNewFunctionContext(Isolate* isolate,
 }
 
 // static
-Callable CodeFactory::Call(Isolate* isolate, ConvertReceiverMode mode) {
-  return Builtins::CallableFor(isolate, Builtins::Call(mode));
+Callable CodeFactory::Call(Isolate* isolate, IncumbentHint incumbent_hint,
+                           ConvertReceiverMode mode) {
+  return Builtins::CallableFor(isolate, Builtins::Call(incumbent_hint, mode));
 }
 
 // static
@@ -81,20 +82,22 @@ Callable CodeFactory::Call_WithFeedback(Isolate* isolate,
   switch (mode) {
     case ConvertReceiverMode::kNullOrUndefined:
       return Builtins::CallableFor(
-          isolate, Builtin::kCall_ReceiverIsNullOrUndefined_WithFeedback);
+          isolate, Builtin::kCall_RcvIsNullOrUndefined_WithFeedback);
     case ConvertReceiverMode::kNotNullOrUndefined:
       return Builtins::CallableFor(
-          isolate, Builtin::kCall_ReceiverIsNotNullOrUndefined_WithFeedback);
+          isolate, Builtin::kCall_RcvIsNotNullOrUndefined_WithFeedback);
     case ConvertReceiverMode::kAny:
       return Builtins::CallableFor(isolate,
-                                   Builtin::kCall_ReceiverIsAny_WithFeedback);
+                                   Builtin::kCall_RcvIsAny_WithFeedback);
   }
   UNREACHABLE();
 }
 
 // static
-Callable CodeFactory::CallWithArrayLike(Isolate* isolate) {
-  return Builtins::CallableFor(isolate, Builtin::kCallWithArrayLike);
+Callable CodeFactory::CallWithArrayLike(Isolate* isolate,
+                                        IncumbentHint incumbent_hint) {
+  return Builtins::CallableFor(isolate,
+                               Builtins::CallWithArrayLike(incumbent_hint));
 }
 
 // static
@@ -103,17 +106,26 @@ Callable CodeFactory::CallWithSpread(Isolate* isolate) {
 }
 
 // static
-Callable CodeFactory::CallFunction(Isolate* isolate, ConvertReceiverMode mode) {
-  return Builtins::CallableFor(isolate, Builtins::CallFunction(mode));
+Callable CodeFactory::CallFunction(Isolate* isolate,
+                                   IncumbentHint incumbent_hint,
+                                   ConvertReceiverMode mode) {
+  return Builtins::CallableFor(isolate,
+                               Builtins::CallFunction(incumbent_hint, mode));
 }
 
 // static
-Callable CodeFactory::CallForwardVarargs(Isolate* isolate) {
+Callable CodeFactory::CallForwardVarargs(Isolate* isolate,
+                                         IncumbentHint incumbent_hint) {
+  // This builtin is used only from optimized code.
+  DCHECK_EQ(incumbent_hint, IncumbentHint::kSameAsCurrentContext);
   return Builtins::CallableFor(isolate, Builtin::kCallForwardVarargs);
 }
 
 // static
-Callable CodeFactory::CallFunctionForwardVarargs(Isolate* isolate) {
+Callable CodeFactory::CallFunctionForwardVarargs(Isolate* isolate,
+                                                 IncumbentHint incumbent_hint) {
+  // This builtin is used only from optimized code.
+  DCHECK_EQ(incumbent_hint, IncumbentHint::kSameAsCurrentContext);
   return Builtins::CallableFor(isolate, Builtin::kCallFunctionForwardVarargs);
 }
 

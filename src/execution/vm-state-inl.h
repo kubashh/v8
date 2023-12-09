@@ -5,7 +5,7 @@
 #ifndef V8_EXECUTION_VM_STATE_INL_H_
 #define V8_EXECUTION_VM_STATE_INL_H_
 
-#include "src/execution/isolate.h"
+#include "src/execution/isolate-inl.h"
 #include "src/execution/simulator.h"
 #include "src/execution/vm-state.h"
 #include "src/logging/log.h"
@@ -64,10 +64,14 @@ ExternalCallbackScope::ExternalCallbackScope(Isolate* isolate, Address callback)
   TRACE_EVENT_BEGIN0(TRACE_DISABLED_BY_DEFAULT("v8.runtime"),
                      "V8.ExternalCallback");
 #endif
+  // Caller context must be cleared when calling out to Api callbacks from C++
+  // since it's not known without a stack walk.
+  vm_state_.isolate_->clear_caller_context();
 }
 
 ExternalCallbackScope::~ExternalCallbackScope() {
   vm_state_.isolate_->set_external_callback_scope(previous_scope_);
+  vm_state_.isolate_->clear_caller_context();
 #ifdef V8_RUNTIME_CALL_STATS
   TRACE_EVENT_END0(TRACE_DISABLED_BY_DEFAULT("v8.runtime"),
                    "V8.ExternalCallback");

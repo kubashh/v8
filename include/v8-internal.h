@@ -634,6 +634,10 @@ class Internals {
   // the implementation of v8.
   static const int kHeapObjectMapOffset = 0;
   static const int kMapInstanceTypeOffset = 1 * kApiTaggedSize + kApiInt32Size;
+  static const int kMapConstructorOrBackPointerOrNativeContextOffset =
+      1 * kApiTaggedSize + 3 * kApiInt32Size +
+      (kApiTaggedSize == 8 ? kApiInt32Size : 0) +  // optional_padding
+      1 * kApiTaggedSize;
   static const int kStringResourceOffset =
       1 * kApiTaggedSize + 2 * kApiInt32Size;
 
@@ -661,7 +665,7 @@ class Internals {
   static const int kBuiltinTier0EntryTableSize = 7 * kApiSystemPointerSize;
   static const int kBuiltinTier0TableSize = 7 * kApiSystemPointerSize;
   static const int kLinearAllocationAreaSize = 3 * kApiSystemPointerSize;
-  static const int kThreadLocalTopSize = 28 * kApiSystemPointerSize;
+  static const int kThreadLocalTopSize = 30 * kApiSystemPointerSize;
   static const int kHandleScopeDataSize =
       2 * kApiSystemPointerSize + 2 * kApiInt32Size;
 
@@ -849,6 +853,22 @@ class Internals {
     map = UnpackMapWord(map);
 #endif
     return map;
+  }
+
+  V8_INLINE static Address LoadNativeContext(Address context) {
+#ifdef V8_COMPRESS_POINTERS
+    Address base = GetPtrComprCageBaseFromOnHeapAddress(context);
+    Address map = base + ReadRawField<uint32_t>(context, kHeapObjectMapOffset);
+    Address native_context =
+        base + ReadRawField<uint32_t>(
+                   map, kMapConstructorOrBackPointerOrNativeContextOffset);
+    return native_context;
+#else
+    Address map = ReadRawField<Address>(context, kHeapObjectMapOffset);
+    Address native_context = ReadRawField<Address>(
+        map, kMapConstructorOrBackPointerOrNativeContextOffset);
+    return native_context;
+#endif
   }
 
   V8_INLINE static int GetOddballKind(Address obj) {
@@ -1360,6 +1380,8 @@ class HandleHelper final {
 };
 
 V8_EXPORT void VerifyHandleIsNonEmpty(bool is_empty);
+V8_EXPORT void VerifyIncumbentContext(v8::Isolate* isolate,
+                                      v8::Context* incumbent_context);
 
 }  // namespace internal
 }  // namespace v8

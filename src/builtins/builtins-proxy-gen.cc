@@ -134,7 +134,9 @@ TF_BUILTIN(CallProxy, ProxiesCodeStubAssembler) {
   BIND(&trap_undefined);
   {
     // 6.a. Return Call(target, thisArgument, argumentsList).
-    TailCallBuiltin(Builtins::Call(), context, target, argc);
+    TailCallBuiltin(
+        Builtins::Call(IncumbentHint::kInherited, ConvertReceiverMode::kAny),
+        context, target, argc);
   }
 
   BIND(&throw_proxy_handler_revoked);
