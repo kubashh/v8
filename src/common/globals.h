@@ -2246,6 +2246,7 @@ enum class AliasingKind {
   C(CFunction, c_function)                                          \
   C(Context, context)                                               \
   C(Exception, exception)                                           \
+  C(CallerContext, caller_context)                                  \
   C(PendingHandlerContext, pending_handler_context)                 \
   C(PendingHandlerEntrypoint, pending_handler_entrypoint)           \
   C(PendingHandlerConstantPool, pending_handler_constant_pool)      \
@@ -2309,8 +2310,7 @@ enum class IcCheckType { kElement, kProperty };
 
 // Helper stubs can be called in different ways depending on where the target
 // code is located and how the call sequence is expected to look like:
-//  - CodeObject: Call on-heap {Code} object via
-//  {RelocInfo::CODE_TARGET}.
+//  - CodeObject: Call on-heap {Code} object via {RelocInfo::CODE_TARGET}.
 //  - WasmRuntimeStub: Call native {WasmCode} stub via
 //    {RelocInfo::WASM_STUB_CALL}.
 //  - BuiltinPointer: Call a builtin based on a builtin pointer with dynamic

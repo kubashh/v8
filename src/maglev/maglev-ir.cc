@@ -5046,6 +5046,7 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   Register scratch2 = temps.Acquire();
 
   using FCA = FunctionCallbackArguments;
+  using ER = ExternalReference;
 
   static_assert(FCA::kArgsLength == 6);
   static_assert(FCA::kNewTargetIndex == 5);
@@ -5076,8 +5077,13 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
     __ Push(scratch, Handle<HeapObject>::cast(data_.object()), scratch,
             scratch);
   }
+  // Record caller context in case we'll end up calling an Api function which
+  // will use it as a new incumbent context.
+  __ Move(masm->ExternalReferenceAsOperand(
+              ExternalReference::caller_context(masm->isolate()), no_reg),
+          kContextRegister);
 
-  __ Move(scratch, ExternalReference::isolate_address(masm->isolate()));
+  __ Move(scratch, ER::isolate_address(masm->isolate()));
   // kIsolate, kHolder
   if (api_holder_.has_value()) {
     __ Push(scratch, api_holder_.value().object());
@@ -5106,7 +5112,7 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   // from the stack after the callback in non-GCed space of the exit frame.
   static constexpr int kApiStackSpace = 4;
   static_assert((kApiStackSpace - 1) * kSystemPointerSize == FCA::kSize);
-  const int exit_frame_params_size = 0;
+  const int exit_frame_params_count = 0;
 
   Label done, call_api_callback_builtin_inline;
   __ Call(&call_api_callback_builtin_inline);
@@ -5148,9 +5154,8 @@ void CallKnownApiFunction::GenerateCallApiCallbackOptimizedInline(
   DCHECK(!AreAliased(api_function_address, function_callback_info_arg));
 
   MemOperand return_value_operand = ExitFrameCallerStackSlotOperand(
-      FCA::kReturnValueIndex + exit_frame_params_size);
+      FCA::kReturnValueIndex + exit_frame_params_count);
   const int kStackUnwindSpace = FCA::kArgsLengthWithReceiver + num_args();
-
   const bool with_profiling = false;
   ExternalReference no_thunk_ref;
   Register no_thunk_arg = no_reg;
