@@ -6,6 +6,7 @@
 
 #include "src/api/api-arguments-inl.h"
 #include "src/api/api.h"
+#include "src/base/bits.h"
 #include "src/common/assert-scope.h"
 #include "src/common/globals.h"
 #include "src/execution/isolate-inl.h"
@@ -827,13 +828,32 @@ base::Optional<int> CollectOwnPropertyNamesInternal(
   return first_skipped;
 }
 
-// Logic shared between different specializations of CopyEnumKeysTo.
-template <typename Dictionary>
-void CommonCopyEnumKeysTo(Isolate* isolate, Handle<Dictionary> dictionary,
-                          Handle<FixedArray> storage, KeyCollectionMode mode,
-                          KeyAccumulator* accumulator) {
+namespace {
+
+enum class SortStrategy {
+  kDictionaryIsAlreadyOrdered,
+  kComparisonSort,
+  kPigeonholeSort,
+};
+
+}
+
+// Logic shared between different specializations of CopyEnumKeysTo. Returns
+// the number of keys written to storage, aka the number of enumerable
+// properties.
+template <typename Dictionary, SortStrategy sort_strategy>
+int CommonCopyEnumKeysTo(Isolate* isolate, Handle<Dictionary> dictionary,
+                         Handle<FixedArray> storage, KeyCollectionMode mode,
+                         KeyAccumulator* accumulator) {
+  if constexpr (Dictionary::kIsOrderedDictionaryType) {
+    static_assert(sort_strategy == SortStrategy::kDictionaryIsAlreadyOrdered);
+  } else {
+    static_assert(sort_strategy != SortStrategy::kDictionaryIsAlreadyOrdered);
+  }
+
   DCHECK_IMPLIES(mode != KeyCollectionMode::kOwnOnly, accumulator != nullptr);
   int length = storage->length();
+
   int properties = 0;
   ReadOnlyRoots roots(isolate);
 
@@ -855,37 +875,57 @@ void CommonCopyEnumKeysTo(Isolate* isolate, Handle<Dictionary> dictionary,
       // This might allocate, but {key} is not used afterwards.
       accumulator->AddShadowingKey(key, &allow_gc);
       continue;
-    } else {
-      if (Dictionary::kIsOrderedDictionaryType) {
-        storage->set(properties, Name::cast(key));
-      } else {
-        // If the dictionary does not store elements in enumeration order,
-        // we need to sort it afterwards in CopyEnumKeysTo. To enable this we
-        // need to store indices at this point, rather than the values at the
-        // given indices.
-        storage->set(properties, Smi::FromInt(i.as_int()));
-      }
     }
+
+    if constexpr (sort_strategy == SortStrategy::kDictionaryIsAlreadyOrdered) {
+      storage->set(properties, Name::cast(key));
+    } else if constexpr (sort_strategy == SortStrategy::kComparisonSort) {
+      // CopyEnumKeysTo needs us to store indices at this point, rather
+      // than the values at the given indices.
+      storage->set(properties, Smi::FromInt(i.as_int()));
+    } else if constexpr (sort_strategy == SortStrategy::kPigeonholeSort) {
+      // If we're doing pigeonhole sorting, we just need to store the value
+      // at the appropriate index. The sort continues in the caller
+      // CollectEnumKeysUsingPigeonholeSorting.
+
+      // Subtract to make the index zero-based.
+      int shifted_index =
+          details.dictionary_index() - PropertyDetails::kInitialIndex;
+
+      // Dictionary indexes should be distinct, unless we've overflowed the
+      // next_enumeration_index counter, in which case we should not have
+      // called this function.
+      DCHECK(storage->is_the_hole(isolate, shifted_index));
+
+      storage->set(shifted_index, Name::cast(key));
+    } else {
+      // `static_assert(false)` in this else clause was an unconditional error
+      // before CWG2518. See https://reviews.llvm.org/D144285
+#if defined(__clang__) && __clang_major__ >= 17
+      static_assert(false);
+#endif
+    }
+
     properties++;
     if (mode == KeyCollectionMode::kOwnOnly && properties == length) break;
   }
 
-  CHECK_EQ(length, properties);
+  return properties;
 }
 
 // Copies enumerable keys to preallocated fixed array.
-// Does not throw for uninitialized exports in module namespace objects, so
-// this has to be checked separately.
 template <typename Dictionary>
 void CopyEnumKeysTo(Isolate* isolate, Handle<Dictionary> dictionary,
                     Handle<FixedArray> storage, KeyCollectionMode mode,
                     KeyAccumulator* accumulator) {
   static_assert(!Dictionary::kIsOrderedDictionaryType);
 
-  CommonCopyEnumKeysTo<Dictionary>(isolate, dictionary, storage, mode,
-                                   accumulator);
-
   int length = storage->length();
+
+  int number_of_enumerable_properties =
+      CommonCopyEnumKeysTo<Dictionary, SortStrategy::kComparisonSort>(
+          isolate, dictionary, storage, mode, accumulator);
+  CHECK_EQ(number_of_enumerable_properties, length);
 
   DisallowGarbageCollection no_gc;
   Tagged<Dictionary> raw_dictionary = *dictionary;
@@ -901,19 +941,85 @@ void CopyEnumKeysTo(Isolate* isolate, Handle<Dictionary> dictionary,
   }
 }
 
+// Copies enumerable keys to fixed array using pigeonhole sorting:
+// https://en.wikipedia.org/wiki/Pigeonhole_sort
+template <typename Dictionary>
+Handle<FixedArray> CollectEnumKeysUsingPigeonholeSorting(
+    Isolate* isolate, Handle<Dictionary> dictionary, KeyCollectionMode mode,
+    KeyAccumulator* accumulator) {
+  static_assert(!Dictionary::kIsOrderedDictionaryType);
+
+  // We do at most two passes through storage. In the first pass, we populate
+  // the array so that each name in the dictionary is stored at
+  // storage[dictionary_index - PropertyDetails::kInitialIndex]. Since
+  // dictionary indexes are distinct, each name gets mapped to a unique slot.
+  // But since dictionary indexes are non-contiguous, this may lead to holes.
+  // In the second pass, we compact the array and right-trim off the excess.
+
+  // Allocating max_enumeration_index elements ensures that
+  // dictionary_index - PropertyDetails::kInitialIndex is always a valid index
+  // into the array.
+  int max_enumeration_index = dictionary->next_enumeration_index() - 1;
+  Handle<FixedArray> storage =
+      isolate->factory()->NewFixedArrayWithHoles(max_enumeration_index);
+
+  // CommonCopyEnumKeysTo does the first pass.
+  int number_of_enumerable_properties =
+      CommonCopyEnumKeysTo<Dictionary, SortStrategy::kPigeonholeSort>(
+          isolate, dictionary, storage, mode, accumulator);
+
+  if (number_of_enumerable_properties < max_enumeration_index) {
+    // Second pass. There are holes in the array. We'll need to compact the
+    // array so that all the non-holes are at the beginning, and then trim off
+    // the suffix of the array which contains garbage.
+    DisallowGarbageCollection no_gc;
+    Tagged<FixedArray> raw_storage = *storage;
+
+    int j = 0;
+    for (int i = 0;
+         i < max_enumeration_index && j < number_of_enumerable_properties;
+         i++) {
+      Tagged<Object> o = raw_storage->get(i);
+      if (IsTheHole(o, isolate)) continue;
+
+      raw_storage->set(j, o);
+      j++;
+    }
+
+    CHECK_EQ(j, number_of_enumerable_properties);
+    storage = FixedArray::RightTrimOrEmpty(isolate, storage,
+                                           number_of_enumerable_properties);
+  } else {
+    CHECK_EQ(max_enumeration_index, number_of_enumerable_properties);
+  }
+
+#ifdef DEBUG
+  for (int i = 0; i < storage->length(); i++) {
+    DCHECK(IsName(storage->get(i)));
+  }
+#endif
+
+  return storage;
+}
+
 template <>
 void CopyEnumKeysTo(Isolate* isolate, Handle<SwissNameDictionary> dictionary,
                     Handle<FixedArray> storage, KeyCollectionMode mode,
                     KeyAccumulator* accumulator) {
-  CommonCopyEnumKeysTo<SwissNameDictionary>(isolate, dictionary, storage, mode,
-                                            accumulator);
+  int number_of_enumerable_properties =
+      CommonCopyEnumKeysTo<SwissNameDictionary,
+                           SortStrategy::kDictionaryIsAlreadyOrdered>(
+          isolate, dictionary, storage, mode, accumulator);
+  CHECK_EQ(number_of_enumerable_properties, storage->length());
 
   // No need to sort, as CommonCopyEnumKeysTo on OrderedNameDictionary
-  // adds entries to |storage| in the dict's insertion order
-  // Further, the template argument true above means that |storage|
-  // now contains the actual values from |dictionary|, rather than indices.
+  // adds entries to |storage| in the dict's insertion order.
+  // Further, the template argument SwissNameDictionary above means that
+  // |storage| now contains the names from |dictionary|, rather than indices.
 }
 
+// Does not throw for uninitialized exports in module namespace objects, so
+// this has to be checked separately.
 template <class T>
 Handle<FixedArray> GetOwnEnumPropertyDictionaryKeys(Isolate* isolate,
                                                     KeyCollectionMode mode,
@@ -921,11 +1027,57 @@ Handle<FixedArray> GetOwnEnumPropertyDictionaryKeys(Isolate* isolate,
                                                     Handle<JSObject> object,
                                                     Tagged<T> raw_dictionary) {
   Handle<T> dictionary(raw_dictionary, isolate);
-  if (dictionary->NumberOfElements() == 0) {
+  int number_of_elements = dictionary->NumberOfElements();
+  if (number_of_elements == 0) {
     return isolate->factory()->empty_fixed_array();
   }
-  int length = dictionary->NumberOfEnumerableProperties();
-  Handle<FixedArray> storage = isolate->factory()->NewFixedArray(length);
+
+  if constexpr (!T::kIsOrderedDictionaryType) {
+    // Heuristically select between pigeonhole sorting and comparison sorting.
+    // Let N = number_of_elements and R = next_enumeration_index.
+    //
+    // Pigeonhole sorting runs in O(N + R).
+    // Comparison sorting runs in O(N log N).
+    //
+    // Pigeonhole sorting is almost always faster in practice, however it can
+    // be much slower in degenerate cases when R is much larger than N. A
+    // linear regression showed that the ratio of runtimes of pigeonhole
+    // sorting to the comparison sort implementation is roughly (R/4) / N lg N,
+    // so we use an approximation to that to decide which algorithm to invoke.
+    bool should_use_pigeonhole_sorting;
+    int next_enumeration_index = dictionary->next_enumeration_index();
+
+    if (!PropertyDetails::IsValidIndex(next_enumeration_index)) {
+      // If next_enumeration_index is not a valid dictionary index, that
+      // indicates that the enumeration index has overflowed, and it's possible
+      // that we have two properties with the same dictionary index. It's not
+      // valid to use pigeonhole sorting in that case, fallback to comparison
+      // sorting.
+      //
+      // See v8:7521 for more details.
+      should_use_pigeonhole_sorting = false;
+    } else {
+      int pigeonhole_sorting_time = next_enumeration_index >> 2;
+
+      int lg_number_of_elements =
+          31 - base::bits::CountLeadingZeros32(number_of_elements);
+      int comparison_sorting_time = number_of_elements * lg_number_of_elements;
+
+      should_use_pigeonhole_sorting =
+          pigeonhole_sorting_time < comparison_sorting_time;
+    }
+
+    if (should_use_pigeonhole_sorting) {
+      Handle<FixedArray> storage = CollectEnumKeysUsingPigeonholeSorting(
+          isolate, dictionary, mode, accumulator);
+      return storage;
+    }
+  }
+
+  int number_of_enumerable_properties =
+      dictionary->NumberOfEnumerableProperties();
+  Handle<FixedArray> storage =
+      isolate->factory()->NewFixedArray(number_of_enumerable_properties);
   CopyEnumKeysTo(isolate, dictionary, storage, mode, accumulator);
   return storage;
 }
