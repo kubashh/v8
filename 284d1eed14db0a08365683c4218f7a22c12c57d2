@@ -749,6 +749,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bdf71cd0_d2e3b9fa",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-11T14:42:13Z",
+      "side": 1,
+      "message": "I think we can remove this reference.",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97dc993c_e8b57473",
+        "filename": "src/codegen/arm/macro-assembler-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-11T14:42:13Z",
+      "side": 1,
+      "message": "dst",
+      "revId": "284d1eed14db0a08365683c4218f7a22c12c57d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "136a681a_77629183",
         "filename": "src/execution/arm/simulator-arm.h",
         "patchSetId": 10

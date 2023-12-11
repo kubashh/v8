@@ -151,6 +151,75 @@
       "parentUuid": "9f64b39e_610c42a5",
       "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28dc39ad_0110042d",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3391,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-11T14:42:13Z",
+      "side": 1,
+      "message": "r1",
+      "range": {
+        "startLine": 3391,
+        "startChar": 51,
+        "endLine": 3391,
+        "endChar": 53
+      },
+      "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eb14982_6fb8c506",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3414,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-11T14:42:13Z",
+      "side": 1,
+      "message": "`resume_data` might be a better name for this register.",
+      "range": {
+        "startLine": 3414,
+        "startChar": 13,
+        "endLine": 3414,
+        "endChar": 26
+      },
+      "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aad697d_95cd7604",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3418,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-11T14:42:13Z",
+      "side": 1,
+      "message": "Given that we have the similar comment around `suspender` register definition we can probably drop this outdated comment (same applies to arm64).",
+      "range": {
+        "startLine": 3418,
+        "startChar": 66,
+        "endLine": 3418,
+        "endChar": 69
+      },
+      "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
