@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10cb7b0d_ae9f8825",
+        "filename": "src/heap/free-list.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-12-11T08:24:28Z",
+      "side": 0,
+      "message": "Here we were also slightly off from `SelectFreeListCategoryType` for the first category.",
+      "revId": "7cd955494906ecd724215ad7183e445835577d80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3817980c_eb234e28",
+        "filename": "src/heap/main-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1357035
+      },
+      "writtenOn": "2023-12-11T08:24:28Z",
+      "side": 0,
+      "message": "I don\u0027t think the TRACE_GC scope for the RefillFreeList() alone was particularly helpful. We can then move all variables needed for the scope into the ContributeToSweeping() method instead.",
+      "revId": "7cd955494906ecd724215ad7183e445835577d80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
