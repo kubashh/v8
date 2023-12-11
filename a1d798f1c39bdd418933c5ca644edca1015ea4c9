@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "44f2f401_0824760a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-12-11T09:50:04Z",
+      "side": 1,
+      "message": "Would a loop for\n```\nSweepPage();\nRetryAllocation();\n```\n\nbe close to actually making use of `required_freed_bytes` (assuming no concurrent allocation)? I guess if we don\u0027t search the free list it\u0027s close?\n\nI wonder if we can get to this information without constraining us too much here.\n\nIf we don\u0027t remove the largest free block, we can at least maintain a fast check here.",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 20,
+        "endChar": 24
+      },
+      "revId": "a1d798f1c39bdd418933c5ca644edca1015ea4c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "32a17cef_c68bb6cc",
