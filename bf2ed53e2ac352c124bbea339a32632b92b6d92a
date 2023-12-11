@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00128030_8082d297",
+        "filename": "src/compiler/turboshaft/operations.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5898,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-11T16:53:35Z",
+      "side": 0,
+      "message": "One `TODO` less. 😊",
+      "range": {
+        "startLine": 5898,
+        "startChar": 7,
+        "endLine": 5898,
+        "endChar": 22
+      },
+      "revId": "bf2ed53e2ac352c124bbea339a32632b92b6d92a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
