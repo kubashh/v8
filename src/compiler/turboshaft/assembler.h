@@ -580,7 +580,8 @@ class GenericReducerBase;
 #define TURBOSHAFT_REDUCER_BOILERPLATE()   \
   TURBOSHAFT_REDUCER_GENERIC_BOILERPLATE() \
   using node_t = typename Next::node_t;    \
-  using block_t = typename Next::block_t;
+  using block_t = typename Next::block_t;  \
+  using graph_t = typename Next::graph_t;
 
 template <class T, class Assembler>
 class ScopedVariable : Variable {
@@ -690,6 +691,7 @@ class TSReducerBase : public Next {
   TURBOSHAFT_REDUCER_GENERIC_BOILERPLATE()
   using node_t = OpIndex;
   using block_t = Block;
+  using graph_t = Graph;
 
   template <class Op, class... Args>
   OpIndex Emit(Args... args) {
@@ -708,7 +710,151 @@ class TSReducerBase : public Next {
     return result;
   }
 
+  // TODO(dmercadier): consider maing AddPredecessor and SplitEdge more generic
+  // (= not Turboshaft specific) and move them back to Assembler.
+  // Adds {source} to the predecessors of {destination}.
+  void AddPredecessor(Block* source, Block* destination, bool branch) {
+    DCHECK_IMPLIES(branch, source->EndsWithBranchingOp(Asm().output_graph()));
+    if (destination->LastPredecessor() == nullptr) {
+      // {destination} has currently no predecessors.
+      DCHECK(destination->IsLoopOrMerge());
+      if (branch && destination->IsLoop()) {
+        // We always split Branch edges that go to loop headers.
+        SplitEdge(source, destination);
+      } else {
+        destination->AddPredecessor(source);
+        if (branch) {
+          DCHECK(!destination->IsLoop());
+          destination->SetKind(Block::Kind::kBranchTarget);
+        }
+      }
+      return;
+    } else if (destination->IsBranchTarget()) {
+      // {destination} used to be a BranchTarget, but branch targets can only
+      // have one predecessor. We'll thus split its (single) incoming edge, and
+      // change its type to kMerge.
+      DCHECK_EQ(destination->PredecessorCount(), 1);
+      Block* pred = destination->LastPredecessor();
+      destination->ResetLastPredecessor();
+      destination->SetKind(Block::Kind::kMerge);
+      // We have to split `pred` first to preserve order of predecessors.
+      SplitEdge(pred, destination);
+      if (branch) {
+        // A branch always goes to a BranchTarget. We thus split the edge: we'll
+        // insert a new Block, to which {source} will branch, and which will
+        // "Goto" to {destination}.
+        SplitEdge(source, destination);
+      } else {
+        // {destination} is a Merge, and {source} just does a Goto; nothing
+        // special to do.
+        destination->AddPredecessor(source);
+      }
+      return;
+    }
+
+    DCHECK(destination->IsLoopOrMerge());
+
+    if (branch) {
+      // A branch always goes to a BranchTarget. We thus split the edge: we'll
+      // insert a new Block, to which {source} will branch, and which will
+      // "Goto" to {destination}.
+      SplitEdge(source, destination);
+    } else {
+      // {destination} is a Merge, and {source} just does a Goto; nothing
+      // special to do.
+      destination->AddPredecessor(source);
+    }
+  }
+
  private:
+  // Insert a new Block between {source} and {destination}, in order to maintain
+  // the split-edge form.
+  void SplitEdge(Block* source, Block* destination) {
+    DCHECK(source->EndsWithBranchingOp(Asm().output_graph()));
+    // Creating the new intermediate block
+    Block* intermediate_block = Asm().NewBlock();
+    intermediate_block->SetKind(Block::Kind::kBranchTarget);
+    // Updating "predecessor" edge of {intermediate_block}. This needs to be
+    // done before calling Bind, because otherwise Bind will think that this
+    // block is not reachable.
+    intermediate_block->AddPredecessor(source);
+
+    // Updating {source}'s last Branch/Switch/CheckException. Note that
+    // this must be done before Binding {intermediate_block}, otherwise,
+    // Reducer::Bind methods will see an invalid block being bound (because its
+    // predecessor would be a branch, but none of its targets would be the block
+    // being bound).
+    Operation& op = Asm().output_graph().Get(
+        Asm().output_graph().PreviousIndex(source->end()));
+    switch (op.opcode) {
+      case Opcode::kBranch: {
+        BranchOp& branch = op.Cast<BranchOp>();
+        if (branch.if_true == destination) {
+          branch.if_true = intermediate_block;
+          // We enforce that Branches if_false and if_true can never be the same
+          // (there is a DCHECK in Assembler::Branch enforcing that).
+          DCHECK_NE(branch.if_false, destination);
+        } else {
+          DCHECK_EQ(branch.if_false, destination);
+          branch.if_false = intermediate_block;
+        }
+        break;
+      }
+      case Opcode::kCheckException: {
+        CheckExceptionOp& catch_exception_op = op.Cast<CheckExceptionOp>();
+        if (catch_exception_op.didnt_throw_block == destination) {
+          catch_exception_op.didnt_throw_block = intermediate_block;
+          // We assume that CheckException's successor and catch_block
+          // can never be the same (there is a DCHECK in
+          // CheckExceptionOp::Validate enforcing that).
+          DCHECK_NE(catch_exception_op.catch_block, destination);
+        } else {
+          DCHECK_EQ(catch_exception_op.catch_block, destination);
+          catch_exception_op.catch_block = intermediate_block;
+          // A catch block always has to start with a `CatchBlockBeginOp`.
+          Asm().BindReachable(intermediate_block);
+          intermediate_block->SetOrigin(source->OriginForBlockEnd());
+          Asm().CatchBlockBegin();
+          Asm().Goto(destination);
+          return;
+        }
+        break;
+      }
+      case Opcode::kSwitch: {
+        SwitchOp& switch_op = op.Cast<SwitchOp>();
+        bool found = false;
+        for (auto& case_block : switch_op.cases) {
+          if (case_block.destination == destination) {
+            case_block.destination = intermediate_block;
+            DCHECK(!found);
+            found = true;
+#ifndef DEBUG
+            break;
+#endif
+          }
+        }
+        DCHECK_IMPLIES(found, switch_op.default_case != destination);
+        if (!found) {
+          DCHECK_EQ(switch_op.default_case, destination);
+          switch_op.default_case = intermediate_block;
+        }
+        break;
+      }
+
+      default:
+        UNREACHABLE();
+    }
+
+    Asm().BindReachable(intermediate_block);
+    intermediate_block->SetOrigin(source->OriginForBlockEnd());
+    // Inserting a Goto in {intermediate_block} to {destination}. This will
+    // create the edge from {intermediate_block} to {destination}. Note that
+    // this will call AddPredecessor, but we've already removed the eventual
+    // edge of {destination} that need splitting, so no risks of infinite
+    // recursion here.
+    Asm().Goto(destination);
+  }
+
 #ifdef DEBUG
   GrowingOpIndexSidetable<Block*> op_to_block_{Asm().phase_zone(),
                                                &Asm().output_graph()};
@@ -3456,26 +3602,32 @@ class TurboshaftAssemblerOpInterface
 // extracted to the AssemblerData class, so that they can be initialized before
 // the rest of the stack, and thus don't need to be passed as argument to all of
 // the constructors of the stack.
+template <typename graph_t>
 struct AssemblerData {
   // TODO(dmercadier): consider removing input_graph from this, and only having
   // it in GraphVisitor for Stacks that have it.
-  AssemblerData(Graph& input_graph, Graph& output_graph, Zone* phase_zone)
+  AssemblerData(graph_t& input_graph, graph_t& output_graph, Zone* phase_zone)
       : phase_zone(phase_zone),
         input_graph(input_graph),
         output_graph(output_graph) {}
   Zone* phase_zone;
-  Graph& input_graph;
-  Graph& output_graph;
+  graph_t& input_graph;
+  graph_t& output_graph;
 };
 
 template <class Reducers>
-class Assembler : public AssemblerData,
+class Assembler : public AssemblerData<
+                      typename reducer_stack_type<Reducers>::type::graph_t>,
                   public reducer_stack_type<Reducers>::type {
   using Stack = typename reducer_stack_type<Reducers>::type;
   using node_t = typename Stack::node_t;
+  using block_t = typename Stack::block_t;
+  using graph_t = typename Stack::graph_t;
+  using AssemblerData = AssemblerData<graph_t>;
 
  public:
-  explicit Assembler(Graph& input_graph, Graph& output_graph, Zone* phase_zone)
+  explicit Assembler(graph_t& input_graph, graph_t& output_graph,
+                     Zone* phase_zone)
       : AssemblerData(input_graph, output_graph, phase_zone), Stack() {
     SupportedOperations::Initialize();
   }
@@ -3483,18 +3635,18 @@ class Assembler : public AssemblerData,
   using Stack::Asm;
 
   Zone* phase_zone() { return AssemblerData::phase_zone; }
-  const Graph& input_graph() const { return AssemblerData::input_graph; }
-  Graph& output_graph() const { return AssemblerData::output_graph; }
+  const graph_t& input_graph() const { return AssemblerData::input_graph; }
+  graph_t& output_graph() const { return AssemblerData::output_graph; }
   Zone* graph_zone() const { return output_graph().graph_zone(); }
 
   // Analyzers set Operations' saturated_use_count to zero when they are unused,
   // and thus need to have a non-const input graph.
-  Graph& modifiable_input_graph() const { return AssemblerData::input_graph; }
+  graph_t& modifiable_input_graph() const { return AssemblerData::input_graph; }
 
-  Block* NewLoopHeader() { return this->output_graph().NewLoopHeader(); }
-  Block* NewBlock() { return this->output_graph().NewBlock(); }
+  block_t* NewLoopHeader() { return this->output_graph().NewLoopHeader(); }
+  block_t* NewBlock() { return this->output_graph().NewBlock(); }
 
-  V8_INLINE bool Bind(Block* block) {
+  V8_INLINE bool Bind(block_t* block) {
 #ifdef DEBUG
     set_conceptually_in_a_block(true);
 #endif
@@ -3508,7 +3660,7 @@ class Assembler : public AssemblerData,
   }
 
   // TODO(nicohartmann@): Remove this.
-  V8_INLINE void BindReachable(Block* block) {
+  V8_INLINE void BindReachable(block_t* block) {
     bool bound = Bind(block);
     DCHECK(bound);
     USE(bound);
@@ -3516,13 +3668,13 @@ class Assembler : public AssemblerData,
 
   // Every loop should be finalized once, after it is certain that no backedge
   // can be added anymore.
-  void FinalizeLoop(Block* loop_header) {
+  void FinalizeLoop(block_t* loop_header) {
     if (loop_header->IsLoop() && loop_header->PredecessorCount() == 1) {
       this->output_graph().TurnLoopIntoMerge(loop_header);
     }
   }
 
-  void SetCurrentOrigin(OpIndex operation_origin) {
+  void SetCurrentOrigin(node_t operation_origin) {
     current_operation_origin_ = operation_origin;
   }
 
@@ -3533,69 +3685,15 @@ class Assembler : public AssemblerData,
   bool conceptually_in_a_block() { return conceptually_in_a_block_; }
 #endif
 
-  Block* current_block() const { return current_block_; }
-  Block* current_catch_block() const { return current_catch_block_; }
+  block_t* current_block() const { return current_block_; }
+  block_t* current_catch_block() const { return current_catch_block_; }
   bool generating_unreachable_operations() const {
     return current_block() == nullptr;
   }
-  OpIndex current_operation_origin() const { return current_operation_origin_; }
+  node_t current_operation_origin() const { return current_operation_origin_; }
 
   const Operation& Get(OpIndex op_idx) const {
     return this->output_graph().Get(op_idx);
-  }
-
-  // Adds {source} to the predecessors of {destination}.
-  void AddPredecessor(Block* source, Block* destination, bool branch) {
-    DCHECK_IMPLIES(branch, source->EndsWithBranchingOp(this->output_graph()));
-    if (destination->LastPredecessor() == nullptr) {
-      // {destination} has currently no predecessors.
-      DCHECK(destination->IsLoopOrMerge());
-      if (branch && destination->IsLoop()) {
-        // We always split Branch edges that go to loop headers.
-        SplitEdge(source, destination);
-      } else {
-        destination->AddPredecessor(source);
-        if (branch) {
-          DCHECK(!destination->IsLoop());
-          destination->SetKind(Block::Kind::kBranchTarget);
-        }
-      }
-      return;
-    } else if (destination->IsBranchTarget()) {
-      // {destination} used to be a BranchTarget, but branch targets can only
-      // have one predecessor. We'll thus split its (single) incoming edge, and
-      // change its type to kMerge.
-      DCHECK_EQ(destination->PredecessorCount(), 1);
-      Block* pred = destination->LastPredecessor();
-      destination->ResetLastPredecessor();
-      destination->SetKind(Block::Kind::kMerge);
-      // We have to split `pred` first to preserve order of predecessors.
-      SplitEdge(pred, destination);
-      if (branch) {
-        // A branch always goes to a BranchTarget. We thus split the edge: we'll
-        // insert a new Block, to which {source} will branch, and which will
-        // "Goto" to {destination}.
-        SplitEdge(source, destination);
-      } else {
-        // {destination} is a Merge, and {source} just does a Goto; nothing
-        // special to do.
-        destination->AddPredecessor(source);
-      }
-      return;
-    }
-
-    DCHECK(destination->IsLoopOrMerge());
-
-    if (branch) {
-      // A branch always goes to a BranchTarget. We thus split the edge: we'll
-      // insert a new Block, to which {source} will branch, and which will
-      // "Goto" to {destination}.
-      SplitEdge(source, destination);
-    } else {
-      // {destination} is a Merge, and {source} just does a Goto; nothing
-      // special to do.
-      destination->AddPredecessor(source);
-    }
   }
 
  private:
@@ -3607,96 +3705,8 @@ class Assembler : public AssemblerData,
 #endif
   }
 
-  // Insert a new Block between {source} and {destination}, in order to maintain
-  // the split-edge form.
-  void SplitEdge(Block* source, Block* destination) {
-    DCHECK(source->EndsWithBranchingOp(this->output_graph()));
-    // Creating the new intermediate block
-    Block* intermediate_block = NewBlock();
-    intermediate_block->SetKind(Block::Kind::kBranchTarget);
-    // Updating "predecessor" edge of {intermediate_block}. This needs to be
-    // done before calling Bind, because otherwise Bind will think that this
-    // block is not reachable.
-    intermediate_block->AddPredecessor(source);
-
-    // Updating {source}'s last Branch/Switch/CheckException. Note that
-    // this must be done before Binding {intermediate_block}, otherwise,
-    // Reducer::Bind methods will see an invalid block being bound (because its
-    // predecessor would be a branch, but none of its targets would be the block
-    // being bound).
-    Operation& op = this->output_graph().Get(
-        this->output_graph().PreviousIndex(source->end()));
-    switch (op.opcode) {
-      case Opcode::kBranch: {
-        BranchOp& branch = op.Cast<BranchOp>();
-        if (branch.if_true == destination) {
-          branch.if_true = intermediate_block;
-          // We enforce that Branches if_false and if_true can never be the same
-          // (there is a DCHECK in Assembler::Branch enforcing that).
-          DCHECK_NE(branch.if_false, destination);
-        } else {
-          DCHECK_EQ(branch.if_false, destination);
-          branch.if_false = intermediate_block;
-        }
-        break;
-      }
-      case Opcode::kCheckException: {
-        CheckExceptionOp& catch_exception_op = op.Cast<CheckExceptionOp>();
-        if (catch_exception_op.didnt_throw_block == destination) {
-          catch_exception_op.didnt_throw_block = intermediate_block;
-          // We assume that CheckException's successor and catch_block
-          // can never be the same (there is a DCHECK in
-          // CheckExceptionOp::Validate enforcing that).
-          DCHECK_NE(catch_exception_op.catch_block, destination);
-        } else {
-          DCHECK_EQ(catch_exception_op.catch_block, destination);
-          catch_exception_op.catch_block = intermediate_block;
-          // A catch block always has to start with a `CatchBlockBeginOp`.
-          BindReachable(intermediate_block);
-          intermediate_block->SetOrigin(source->OriginForBlockEnd());
-          this->CatchBlockBegin();
-          this->Goto(destination);
-          return;
-        }
-        break;
-      }
-      case Opcode::kSwitch: {
-        SwitchOp& switch_op = op.Cast<SwitchOp>();
-        bool found = false;
-        for (auto& case_block : switch_op.cases) {
-          if (case_block.destination == destination) {
-            case_block.destination = intermediate_block;
-            DCHECK(!found);
-            found = true;
-#ifndef DEBUG
-            break;
-#endif
-          }
-        }
-        DCHECK_IMPLIES(found, switch_op.default_case != destination);
-        if (!found) {
-          DCHECK_EQ(switch_op.default_case, destination);
-          switch_op.default_case = intermediate_block;
-        }
-        break;
-      }
-
-      default:
-        UNREACHABLE();
-    }
-
-    BindReachable(intermediate_block);
-    intermediate_block->SetOrigin(source->OriginForBlockEnd());
-    // Inserting a Goto in {intermediate_block} to {destination}. This will
-    // create the edge from {intermediate_block} to {destination}. Note that
-    // this will call AddPredecessor, but we've already removed the eventual
-    // edge of {destination} that need splitting, so no risks of infinite
-    // recursion here.
-    this->Goto(destination);
-  }
-
-  Block* current_block_ = nullptr;
-  Block* current_catch_block_ = nullptr;
+  block_t* current_block_ = nullptr;
+  block_t* current_catch_block_ = nullptr;
 
   // `current_block_` is nullptr after emitting a block terminator and before
   // Binding the next block. During this time, emitting an operation doesn't do
@@ -3753,7 +3763,7 @@ class Assembler : public AssemblerData,
 
   // TODO(dmercadier,tebbi): remove {current_operation_origin_} and pass instead
   // additional parameters to ReduceXXX methods.
-  OpIndex current_operation_origin_ = OpIndex::Invalid();
+  node_t current_operation_origin_ = node_t::Invalid();
 
   template <class Next>
   friend class TSReducerBase;
@@ -3764,7 +3774,8 @@ class Assembler : public AssemblerData,
 template <class AssemblerT>
 class CatchScopeImpl {
  public:
-  CatchScopeImpl(AssemblerT& assembler, Block* catch_block)
+  CatchScopeImpl(AssemblerT& assembler,
+                 typename AssemblerT::block_t* catch_block)
       : assembler_(assembler),
         previous_catch_block_(assembler.current_catch_block_) {
     assembler_.current_catch_block_ = catch_block;
@@ -3785,9 +3796,9 @@ class CatchScopeImpl {
 
  private:
   AssemblerT& assembler_;
-  Block* previous_catch_block_;
+  typename AssemblerT::block_t* previous_catch_block_;
 #ifdef DEBUG
-  Block* catch_block = nullptr;
+  typename AssemblerT::block_t* catch_block = nullptr;
 #endif
 
   template <class Reducers>

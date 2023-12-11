@@ -505,6 +505,8 @@ class Block : public RandomAccessStackDominatorNode<Block> {
   friend class Graph;
   template <class Reducers>
   friend class Assembler;
+  template <class Next>
+  friend class TSReducerBase;
 
   Kind kind_;
   OpIndex begin_ = OpIndex::Invalid();
