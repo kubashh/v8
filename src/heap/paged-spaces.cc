@@ -335,7 +335,7 @@ size_t PagedSpaceBase::Available() const {
 }
 
 void PagedSpaceBase::ReleasePage(Page* page) {
-  ReleasePageImpl(page, MemoryAllocator::FreeMode::kConcurrently);
+  ReleasePageImpl(page, MemoryAllocator::FreeMode::kImmediately);
 }
 
 void PagedSpaceBase::ReleasePageImpl(Page* page,
