@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "825d7eea_ae11c86a",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2837,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-11T16:49:48Z",
+      "side": 1,
+      "message": "We might need some generic `IsCommmutative` at some point in time but here it should be only these 2 operations that can ever appear here.",
+      "range": {
+        "startLine": 2831,
+        "startChar": 8,
+        "endLine": 2837,
+        "endChar": 9
+      },
+      "revId": "e5536cfefe6416215d5627aaee7d3948017e6a2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

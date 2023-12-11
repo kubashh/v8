@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5f28804_445d40a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-11T16:49:48Z",
+      "side": 1,
+      "message": "@nicohartmann@chromium.org: PTAL. This should be the last one (excluding any follow-up fixes 😊).",
+      "revId": "cf3d27bb49de235c5493ae859de60ef5b34756da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f82ef2ad_bca1eb8e",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3864,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-11T16:49:48Z",
+      "side": 1,
+      "message": "This is super unfortunate, on the other hand this inconsistency only exists as long as we need the isel for both Turbofan and Turboshaft, so once Turbofan is gone, also this horrible piece of code will be removed.",
+      "range": {
+        "startLine": 3861,
+        "startChar": 2,
+        "endLine": 3864,
+        "endChar": 60
+      },
+      "revId": "cf3d27bb49de235c5493ae859de60ef5b34756da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
