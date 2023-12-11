@@ -1,0 +1,52 @@
+// Copyright 2023 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// Flags: --js-regexp-modifiers
+
+function test_invalid(re) {
+  assertEarlyError(`/${re}/`);
+  assertThrowsAtRuntime(`new RegExp('${re}')`, SyntaxError);
+}
+
+test_invalid('(?-:.)');
+test_invalid('(?mm:.)');
+test_invalid('(?ii:.)');
+test_invalid('(?ss:.)');
+test_invalid('(?-mm:.)');
+test_invalid('(?-ii:.)');
+test_invalid('(?-ss:.)');
+test_invalid('(?g-:.)');
+test_invalid('(?-u:.)');
+test_invalid('(?m-m:.)');
+test_invalid('(?i-i:.)');
+test_invalid('(?s-s:.)');
+test_invalid('(?msi-ims:.)');
+
+function test(re, expectedMatch, expectedNoMatch = []) {
+  for (const match of expectedMatch) {
+    assertTrue(re.test(match), `${re}.test(${match})`);
+  }
+  for (const match of expectedNoMatch) {
+    assertFalse(re.test(match), `${re}.test(${match})`);
+  }
+}
+
+test(/(?i:ba)r/, ['bar', 'Bar', 'BAr'], ['BAR', 'BaR']);
+test(/(?-i:ba)r/i, ['bar', 'baR'], ['Bar', 'BAR']);
+test(/F(?i:oo(?-i:b)a)r/, ['Foobar', 'FoObAr'], ['FooBar', 'FoobaR']);
+test(/F(?i:oo(?i:b)a)r/, ['Foobar', 'FoObAr', 'FOOBAr'], ['FoobaR']);
+test(/^[a-z](?-i:[a-z])$/i, ['ab', 'Ab'], ['aB']);
+test(/^(?i:[a-z])[a-z]$/, ['ab', 'Ab'], ['aB']);
+test(
+    /FooB[\q{ĀĂĄ|AaA}--\q{āăą}]r/vi, ['FooBaaar', 'FoobAAAr'],
+    ['FooBĀĂĄr']);
+test(
+    /Foo(?i:B[\q{ĀĂĄ|AaA}--\q{āăą}])r/v, ['FooBaaar', 'FoobAAAr'],
+    ['FooBĀĂĄr', 'FooBaaaR']);
+
+test(/(?m:^foo$)/, ['foo', '\nfoo', 'foo\n', '\nfoo\n']);
+
+test(
+    /(?s:^.$)/, ['a', 'A', '0', '\n', '\r', '\u2028', '\u2029', 'π'],
+    ['\u{10300}']);
