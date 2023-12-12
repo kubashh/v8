@@ -489,6 +489,9 @@ class Block : public RandomAccessStackDominatorNode<Block> {
 #endif
   }
 
+  bool needs_variables() const { return needs_variables_; }
+  void set_needs_variables() const { needs_variables_ = true; }
+
  private:
   // AddPredecessor should never be called directly except from Assembler's
   // AddPredecessor and SplitEdge methods, which takes care of maintaining
@@ -507,13 +510,26 @@ class Block : public RandomAccessStackDominatorNode<Block> {
   friend class Assembler;
 
   Kind kind_;
+  // This flag is used by `CopyingPhase`/`GraphVisitor`. It is true if a block
+  // uses Variables rather than a simple/direct old to new OpIndex mapping.
+  // This is typically the case when the block has been cloned.
+  // Once a block uses variables, it can never go back (i.e., the set of blocks
+  // using variables is monotonically increasing in size).
+  // It is always "safe" or correct to use variables more often than needed,
+  // but might slow down compilation time and may use a bit more memory.
+  // The field is `mutable` to avoid having to remove `const`-ness from all
+  // input graphs, i.e., this keeps the mutability more local.
+  mutable bool needs_variables_ = false;
+
   OpIndex begin_ = OpIndex::Invalid();
   OpIndex end_ = OpIndex::Invalid();
   BlockIndex index_ = BlockIndex::Invalid();
+
   Block* last_predecessor_ = nullptr;
   Block* neighboring_predecessor_ = nullptr;
   uint32_t predecessor_count_ = 0;
   const Block* origin_ = nullptr;
+
   // The {custom_data_} field can be used by algorithms to temporarily store
   // block-specific data. This field is not preserved when constructing a new
   // output graph and algorithms cannot rely on this field being properly reset

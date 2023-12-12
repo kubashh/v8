@@ -55,7 +55,6 @@ class GraphVisitor : public Next {
                     Asm().phase_zone(), &Asm().input_graph()),
         block_mapping_(Asm().input_graph().block_count(), nullptr,
                        Asm().phase_zone()),
-        blocks_needing_variables_(Asm().phase_zone()),
         old_opindex_to_variables(Asm().input_graph().op_id_count(),
                                  Asm().phase_zone(), &Asm().input_graph()) {
     Asm().output_graph().Reset();
@@ -129,9 +128,8 @@ class GraphVisitor : public Next {
     // normally, Variables are used when emitting its content, so that
     // they can later be merged when control flow merges with the current
     // version of {input_block} that we just cloned.
-    blocks_needing_variables_.insert(input_block->index());
-
-    ScopedModification<bool> set_true(&current_block_needs_variables_, true);
+    input_block->set_needs_variables();
+    constexpr bool kBlockNeedsVariables = true;
 
     // Similarly as VisitBlock does, we visit the Phis first, then update all of
     // the Phi mappings at once and visit the rest of the block.
@@ -152,7 +150,8 @@ class GraphVisitor : public Next {
     int phi_num = 0;
     for (OpIndex index : Asm().input_graph().OperationIndices(*input_block)) {
       if (Asm().input_graph().Get(index).template Is<PhiOp>()) {
-        CreateOldToNewMapping(index, new_phi_values[phi_num++]);
+        CreateOldToNewMapping(index, new_phi_values[phi_num++],
+                              kBlockNeedsVariables);
       } else {
         if (!VisitOpAndUpdateMapping<false>(index, input_block)) break;
       }
@@ -256,7 +255,7 @@ class GraphVisitor : public Next {
     Asm().Goto(start);
     // Visiting `sub_graph`.
     for (Block* block : sub_graph) {
-      blocks_needing_variables_.insert(block->index());
+      block->set_needs_variables();
       VisitBlock<false>(block);
     }
 
@@ -304,9 +303,6 @@ class GraphVisitor : public Next {
   template <bool trace_reduction>
   void VisitBlock(const Block* input_block) {
     current_input_block_ = input_block;
-    current_block_needs_variables_ =
-        blocks_needing_variables_.find(input_block->index()) !=
-        blocks_needing_variables_.end();
     if constexpr (trace_reduction) {
       std::cout << "\nold " << PrintAsBlockHeader{*input_block} << "\n";
       std::cout << "new "
@@ -356,7 +352,8 @@ class GraphVisitor : public Next {
         for (OpIndex index :
              Asm().input_graph().OperationIndices(*input_block)) {
           if (Asm().input_graph().Get(index).template Is<PhiOp>()) {
-            CreateOldToNewMapping(index, new_phi_values[phi_num++]);
+            CreateOldToNewMapping(index, new_phi_values[phi_num++],
+                                  input_block->needs_variables());
           } else {
             if (!VisitOpAndUpdateMapping<trace_reduction>(index, input_block)) {
               break;
@@ -392,7 +389,7 @@ class GraphVisitor : public Next {
         VisitOpNoMappingUpdate<trace_reduction>(index, input_block);
     const Operation& op = Asm().input_graph().Get(index);
     if (CanBeUsedAsInput(op) && new_index.valid()) {
-      CreateOldToNewMapping(index, new_index);
+      CreateOldToNewMapping(index, new_index, input_block->needs_variables());
     }
     return true;
   }
@@ -1277,14 +1274,15 @@ class GraphVisitor : public Next {
   }
 #endif  // V8_ENABLE_WEBASSEMBLY
 
-  void CreateOldToNewMapping(OpIndex old_index, OpIndex new_index) {
+  void CreateOldToNewMapping(OpIndex old_index, OpIndex new_index,
+                             bool block_needs_variables) {
     DCHECK(old_index.valid());
     DCHECK(Asm().input_graph().BelongsToThisGraph(old_index));
     DCHECK_IMPLIES(new_index.valid(),
                    Asm().output_graph().BelongsToThisGraph(new_index));
     if constexpr (reducer_list_contains<typename Next::ReducerList,
                                         VariableReducer>::value) {
-      if (current_block_needs_variables_) {
+      if (block_needs_variables) {
         MaybeVariable var = GetVariableFor(old_index);
         if (!var.has_value()) {
           MaybeRegisterRepresentation rep =
@@ -1299,7 +1297,7 @@ class GraphVisitor : public Next {
         return;
       }
     } else {
-      DCHECK(!current_block_needs_variables_);
+      DCHECK(!block_needs_variables);
     }
     DCHECK(!op_mapping_[old_index].valid());
     op_mapping_[old_index] = new_index;
@@ -1355,20 +1353,11 @@ class GraphVisitor : public Next {
   // Mappings from old blocks to new blocks.
   FixedBlockSidetable<Block*> block_mapping_;
 
-  // {current_block_needs_variables_} is set to true if the current block should
-  // use Variables to map old to new OpIndex rather than just {op_mapping}. This
-  // is typically the case when the block has been cloned.
-  bool current_block_needs_variables_ = false;
-
   // When {turn_loop_without_backedge_into_merge_} is true (the default), when
   // processing an input block that ended with a loop backedge but doesn't
   // anymore, the loop header is turned into a regular merge. This can be turned
   // off when unrolling a loop for instance.
   bool turn_loop_without_backedge_into_merge_ = true;
-
-  // Set of Blocks for which Variables should be used rather than
-  // {op_mapping}.
-  ZoneSet<BlockIndex> blocks_needing_variables_;
 
   // Mapping from old OpIndex to Variables.
   FixedOpIndexSidetable<MaybeVariable> old_opindex_to_variables;
