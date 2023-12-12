@@ -34,6 +34,24 @@
       "parentUuid": "3e010bd1_1ef4bcae",
       "revId": "5646f3b57081962fa06be358349e42f96c258ffc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aba50c3e_09e2c874",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557311
+      },
+      "writtenOn": "2023-12-12T15:26:23Z",
+      "side": 1,
+      "message": "After our discussion, I tried two things out, both of which were unfortunately not beneficial/successful:\n1. Removing the `ScopedModification` and `current_block_needs_variables_` field, replacing that with an explicitly passed argument to `CreateOldToNewMapping` fails ~50 tests in the test suite. After debugging for 1.5 hours, I gave up on this (what was only meant to be a cleanup). Apparently, the interaction/dataflow into `current_block_needs_variables_` is more complex than thought, which is worrying, but I don\u0027t really have the time or expertise to fix this (and it\u0027s quite a long side-track from the initial performance investigation).\n2. After I got it functionally correct (by keeping `current_block_needs_variables_`), storing the `needs_variables` flag inline at each `Block` is actually a performance regression (~2%) compared with the bit set initially proposed in this CL. I presume this is because of worse cache locality.\n\nHence, let\u0027s use this minimally invasive data structure change, which does speed compilation up and is correct.",
+      "parentUuid": "bb938201_78da042b",
+      "revId": "5646f3b57081962fa06be358349e42f96c258ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
