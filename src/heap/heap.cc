@@ -5234,9 +5234,8 @@ bool Heap::ShouldExpandOldGenerationOnSlowAllocation(LocalHeap* local_heap,
     return !AllocationLimitOvershotByLargeMargin();
   }
 
-  if (incremental_marking()->IsStopped() &&
-      IncrementalMarkingLimitReached() == IncrementalMarkingLimit::kNoLimit) {
-    // We cannot start incremental marking.
+  if (incremental_marking()->IsMajorMarking() &&
+      AllocationLimitOvershotByLargeMargin()) {
     return false;
   }
   return true;
