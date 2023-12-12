@@ -34,6 +34,24 @@
       "parentUuid": "2e0bef4b_079f0cf2",
       "revId": "e1ed34926d18d8c74e192ba7ecb41558eef93854",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f70c2867_b096c8c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-12T17:46:18Z",
+      "side": 1,
+      "message": "This CL needs to be ported: https://chromium-review.googlesource.com/c/v8/v8/+/5110559",
+      "parentUuid": "050a1073_4a8f9dfd",
+      "revId": "e1ed34926d18d8c74e192ba7ecb41558eef93854",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
