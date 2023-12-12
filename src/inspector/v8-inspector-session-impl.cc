@@ -32,7 +32,6 @@ namespace {
 using v8_crdtp::span;
 using v8_crdtp::SpanFrom;
 using v8_crdtp::Status;
-using v8_crdtp::cbor::CheckCBORMessage;
 using v8_crdtp::json::ConvertCBORToJSON;
 using v8_crdtp::json::ConvertJSONToCBOR;
 
