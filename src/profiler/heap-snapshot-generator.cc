@@ -2986,7 +2986,6 @@ bool HeapSnapshotGenerator::GenerateSnapshot() {
   IsolateSafepointScope scope(heap_);
 
   Isolate* isolate = heap_->isolate();
-  v8_heap_explorer_.PopulateLineEnds();
   auto temporary_global_object_tags =
       v8_heap_explorer_.CollectTemporaryGlobalObjectsTags();
 
@@ -2998,6 +2997,7 @@ bool HeapSnapshotGenerator::GenerateSnapshot() {
   // DisallowGarbageCollection scope as the HeapObjectIterator used during
   // snapshot creation enters a safepoint as well. However, in practice we
   // already enter a safepoint above so that should never trigger a GC.
+  DisallowPositionInfoSlow no_position_info_slow;
 
   NullContextForSnapshotScope null_context_scope(isolate);
 
@@ -3008,6 +3008,7 @@ bool HeapSnapshotGenerator::GenerateSnapshot() {
 
   snapshot_->AddSyntheticRootEntries();
 
+  v8_heap_explorer_.PopulateLineEnds();
   if (!FillReferences()) return false;
 
   snapshot_->FillChildren();
@@ -3078,6 +3079,7 @@ bool HeapSnapshotGenerator::FillReferences() {
 const int HeapSnapshotJSONSerializer::kNodeFieldsCount = 7;
 
 void HeapSnapshotJSONSerializer::Serialize(v8::OutputStream* stream) {
+  DisallowHeapAllocation no_heap_allocation;
   v8::base::ElapsedTimer timer;
   timer.Start();
   if (AllocationTracker* allocation_tracker =
