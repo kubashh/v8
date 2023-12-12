@@ -4313,6 +4313,7 @@ namespace {
 template <typename Char>
 bool GetPositionInfoSlowImpl(base::Vector<Char> source, int position,
                              Script::PositionInfo* info) {
+  DCHECK(DisallowPositionInfoSlow::IsAllowed());
   if (position < 0) {
     position = 0;
   }
