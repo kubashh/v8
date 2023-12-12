@@ -43,7 +43,7 @@ class VariableReducer;
 template <class Next>
 class GraphVisitor : public Next {
   template <typename N>
-  friend class ReducerBaseForwarder;
+  friend class TSReducerBase;
 
  public:
   TURBOSHAFT_REDUCER_BOILERPLATE()

@@ -21,6 +21,7 @@
 #include "src/compiler/heap-refs.h"
 #include "src/compiler/js-heap-broker.h"
 #include "src/compiler/processed-feedback.h"
+#include "src/compiler/turboshaft/assembler.h"
 #include "src/deoptimizer/deoptimize-reason.h"
 #include "src/flags/flags.h"
 #include "src/interpreter/bytecode-array-iterator.h"
@@ -43,6 +44,263 @@ namespace internal {
 namespace maglev {
 
 class CallArguments;
+
+#define __ Asm().
+
+// Defines a few helpers to use the Assembler and its stack in Reducers.
+#define MAGLEV_REDUCER_BOILERPLATE()   \
+  TURBOSHAFT_REDUCER_GENERIC_BOILERPLATE() \
+  using node_t = typename Next::node_t;    \
+  using block_t = typename Next::block_t;  \
+  using graph_t = typename Next::graph_t;
+
+template <class Next>
+class MaglevAssemblerOpInterface : public Next {
+ public:
+  MAGLEV_REDUCER_BOILERPLATE()
+
+  // TODO(dmercadier): change the name of {phase_zone} is Assembler to `zone`,
+  // for more concistency.
+  Zone* zone() { return Asm().phase_zone(); }
+
+#define UNARY_WITH_FEEDBACK(Name)                                              \
+  Generic##Name* MakeGeneric##Name(ValueNode* input,                           \
+                                   const compiler::FeedbackSource& feedback) { \
+    return Next::ReduceGeneric##Name({input}, feedback);                       \
+  }
+#define BINARY_WITH_FEEDBACK(Name)                                             \
+  Generic##Name* MakeGeneric##Name(ValueNode* left, ValueNode* right,          \
+                                   const compiler::FeedbackSource& feedback) { \
+    return Next::ReduceGeneric##Name({left, right}, feedback);                 \
+  }
+  UNARY_OPERATION_LIST(UNARY_WITH_FEEDBACK)
+  ARITHMETIC_OPERATION_LIST(BINARY_WITH_FEEDBACK)
+  COMPARISON_OPERATION_LIST(BINARY_WITH_FEEDBACK)
+#undef UNARY_WITH_FEEDBACK
+#undef BINARY_WITH_FEEDBACK
+
+  template <Operation kOperation>
+  struct NodeForOperationHelper;
+
+#define NODE_FOR_OPERATION_HELPER(Name)               \
+  template <>                                         \
+  struct NodeForOperationHelper<Operation::k##Name> { \
+    using generic_type = Generic##Name;               \
+  };
+  OPERATION_LIST(NODE_FOR_OPERATION_HELPER)
+#undef NODE_FOR_OPERATION_HELPER
+
+  template <Operation kOperation>
+  using GenericNodeForOperation =
+      typename NodeForOperationHelper<kOperation>::generic_type;
+
+  template <Operation kOperation>
+  GenericNodeForOperation<kOperation>* MakeGenericBinop(
+      ValueNode* left, ValueNode* right,
+      const compiler::FeedbackSource& feedback) {
+#define IF_OP(Name)                                  \
+  if constexpr (kOperation == Operation::k##Name) {  \
+    return MakeGeneric##Name(left, right, feedback); \
+  }
+    ARITHMETIC_OPERATION_LIST(IF_OP)
+    COMPARISON_OPERATION_LIST(IF_OP)
+#undef IF_OP
+    UNREACHABLE();
+  }
+
+  template <Operation kOperation>
+  GenericNodeForOperation<kOperation>* MakeGenericUnop(
+      ValueNode* input, const compiler::FeedbackSource& feedback) {
+#define IF_OP(Name)                                 \
+  if constexpr (kOperation == Operation::k##Name) { \
+    return MakeGeneric##Name(input, feedback);      \
+  }
+    UNARY_OPERATION_LIST(IF_OP)
+#undef IF_OP
+    UNREACHABLE();
+  }
+
+  BasicBlock* MakeBranchIfRootConstant(ValueNode* node, RootIndex root_index,
+                                       BasicBlockRef* if_true_refs,
+                                       BasicBlockRef* if_false_refs) {
+    return Next::ReduceBranchIfRootConstant({node}, root_index, if_true_refs,
+                                            if_false_refs);
+  }
+  BasicBlock* MakeBranchIfReferenceEqual(ValueNode* left, ValueNode* right,
+                                         BasicBlockRef* if_true_refs,
+                                         BasicBlockRef* if_false_refs) {
+    return Next::ReduceBranchIfReferenceEqual({left, right}, if_true_refs,
+                                              if_false_refs);
+  }
+  BasicBlock* MakeBranchIfInt32Compare(ValueNode* left, ValueNode* right,
+                                       Operation operation,
+                                       BasicBlockRef* if_true_refs,
+                                       BasicBlockRef* if_false_refs) {
+    return Next::ReduceBranchIfInt32Compare({left, right}, operation,
+                                            if_true_refs, if_false_refs);
+  }
+  BasicBlock* MakeBranchIfFloat64Compare(ValueNode* left, ValueNode* right,
+                                         Operation operation,
+                                         BasicBlockRef* if_true_refs,
+                                         BasicBlockRef* if_false_refs) {
+    return Next::ReduceBranchIfFloat64Compare({left, right}, operation,
+                                              if_true_refs, if_false_refs);
+  }
+  BasicBlock* MakeBranchIfInt32ToBooleanTrue(ValueNode* node,
+                                             BasicBlockRef* if_true_refs,
+                                             BasicBlockRef* if_false_refs) {
+    return Next::ReduceBranchIfInt32ToBooleanTrue({node}, if_true_refs,
+                                                  if_false_refs);
+  }
+  BasicBlock* MakeBranchIfFloat64ToBooleanTrue(ValueNode* node,
+                                               BasicBlockRef* if_true_refs,
+                                               BasicBlockRef* if_false_refs) {
+    return Next::ReduceBranchIfFloat64ToBooleanTrue({node}, if_true_refs,
+                                                    if_false_refs);
+  }
+  BasicBlock* MakeBranchIfUndefinedOrNull(ValueNode* node,
+                                          BasicBlockRef* if_true_refs,
+                                          BasicBlockRef* if_false_refs) {
+    return Next::ReduceBranchIfUndefinedOrNull({node}, if_true_refs,
+                                               if_false_refs);
+  }
+  BasicBlock* MakeBranchIfJSReceiver(ValueNode* node,
+                                     BasicBlockRef* if_true_refs,
+                                     BasicBlockRef* if_false_refs) {
+    return Next::ReduceBranchIfJSReceiver({node}, if_true_refs, if_false_refs);
+  }
+  BasicBlock* MakeBranchIfUndetectable(ValueNode* node, CheckType check_type,
+                                       BasicBlockRef* if_true_refs,
+                                       BasicBlockRef* if_false_refs) {
+    return Next::ReduceBranchIfUndetectable({node}, check_type, if_true_refs,
+                                            if_false_refs);
+  }
+  BasicBlock* MakeBranchIfToBooleanTrue(ValueNode* node, CheckType check_type,
+                                        BasicBlockRef* if_true_refs,
+                                        BasicBlockRef* if_false_refs) {
+    return Next::ReduceBranchIfToBooleanTrue({node}, check_type, if_true_refs,
+                                             if_false_refs);
+  }
+
+  BasicBlock* MakeSwitch(
+      ValueNode* node, int value_base, BasicBlockRef* targets, int size,
+      base::Optional<BasicBlockRef*> fallthrough = base::nullopt) {
+    if (fallthrough.has_value()) {
+      return Next::ReduceSwitch({node}, value_base, targets, size,
+                                *fallthrough);
+    } else {
+      return Next::ReduceSwitch({node}, value_base, targets, size);
+    }
+  }
+  BasicBlock* MakeDeopt(DeoptimizeReason reason) {
+    return Next::ReduceDeopt({}, reason);
+  }
+  BasicBlock* MakeAbort(AbortReason reason) {
+    return Next::ReduceAbort({}, reason);
+  }
+  BasicBlock* MakeReturn(ValueNode* node) {
+    return Next::ReduceReturn({node});
+  }
+
+  BasicBlock* MakeJump(BasicBlockRef* dst) { return Next::ReduceJump({}, dst); }
+  BasicBlock* MakeJumpLoop(BasicBlock* dst) {
+    return Next::ReduceJumpLoop({}, dst);
+  }
+  BasicBlock* MakeJumpLoop(BasicBlockRef* dst) {
+    return Next::ReduceJumpLoop({}, dst);
+  }
+  BasicBlock* MakeCheckpointedJump(BasicBlockRef* dst) {
+    return Next::ReduceCheckpointedJump({}, dst);
+  }
+};
+
+template <class Next>
+class MaglevReducerBase : public Next {
+ public:
+  static constexpr bool kIsBottomOfStack = true;
+  TURBOSHAFT_REDUCER_GENERIC_BOILERPLATE()
+  using node_t = NodeBase*;
+  using block_t = BasicBlock;
+  using graph_t = Graph;
+
+#define EMIT_REGULAR_MAGLEV(Name)                                      \
+  template <class... Args>                                             \
+  maglev::Name* Reduce##Name(std::initializer_list<ValueNode*> inputs, \
+                             Args... args) {                           \
+    return Emit<maglev::Name>(inputs, args...);                        \
+  }
+#define EMIT_CONTROL_MAGLEV(Name)                                      \
+  template <class... Args>                                             \
+  BasicBlock* Reduce##Name(std::initializer_list<ValueNode*> inputs, \
+                             Args... args) {                           \
+    return EmitControl<maglev::Name>(inputs, args...);         \
+  }
+  NODE_LIST(EMIT_REGULAR_MAGLEV)
+  CONTROL_NODE_LIST(EMIT_CONTROL_MAGLEV)
+#undef EMIT_REGULAR_MAGLEV
+#undef EMIT_CONTROL_MAGLEV
+
+
+  template <class NodeT, typename... Args>
+  NodeT* Emit(std::initializer_list<ValueNode*> inputs, Args&&... args) {
+    static_assert(!IsControlNode(NodeBase::opcode_of<NodeT>));
+    NodeT* node =
+        NodeBase::New<NodeT>(Asm().zone(), inputs, std::forward<Args>(args)...);
+    return Asm().AttachExtraInfoAndAddToGraph(node);
+  }
+
+  template <class ControlNodeT, typename... Args>
+  BasicBlock* EmitControl(std::initializer_list<ValueNode*> inputs,
+                          Args&&... args) {
+    ControlNodeT* control_node = NodeBase::New<ControlNodeT>(
+        Asm().zone(), inputs, std::forward<Args>(args)...);
+    Asm().AttachEagerDeoptInfo(control_node);
+    Asm().AttachDeoptCheckpoint(control_node);
+    static_assert(!ControlNodeT::kProperties.can_lazy_deopt());
+    static_assert(!ControlNodeT::kProperties.can_throw());
+    static_assert(!ControlNodeT::kProperties.can_write());
+    return Asm().FinishBlock(control_node);
+  }
+
+  node_t Invalid() const { return nullptr; }
+};
+
+// This class allows the reducer stack to call methods of the
+// MaglevGraphBuilder.
+// TODO(dmercadier): maintain the state directly in a reducer rather than in the
+// MaglevGraphBuilder. That is, move things from the GraphBuilder into this
+// class so that we don't need a pointer to the MaglevGraphBuilder here anymore.
+template <class Next>
+class MaglevGraphBuilderInterfaceReducer : public Next {
+ public:
+  void SetGraphBuilder(MaglevGraphBuilder* graph_builder) {
+    graph_builder_ = graph_builder;
+  }
+
+  template <class NodeT>
+  NodeT* AttachExtraInfoAndAddToGraph(NodeT* node);
+  template <class NodeT>
+  void AttachEagerDeoptInfo(NodeT* node);
+  template <class NodeT>
+  void AttachDeoptCheckpoint(NodeT* node);
+
+  BasicBlock* FinishBlock(ControlNode* node);
+
+ private:
+  MaglevGraphBuilder* graph_builder_;
+};
+
+// TODO: This will probably break because of EmitProjectionReducer.
+template <template <class> class... Reducers>
+class MaglevGraphAssembler
+    : public compiler::turboshaft::Assembler<compiler::turboshaft::reducer_list<
+          MaglevGraphBuilderInterfaceReducer, MaglevAssemblerOpInterface, Reducers...,
+          MaglevReducerBase>> {
+ public:
+  using compiler::turboshaft::Assembler<compiler::turboshaft::reducer_list<
+      MaglevGraphBuilderInterfaceReducer, MaglevAssemblerOpInterface, Reducers...,
+      MaglevReducerBase>>::Assembler;
+};
 
 class V8_NODISCARD ReduceResult {
  public:
@@ -387,6 +645,8 @@ class MaglevGraphBuilder {
   compiler::JSHeapBroker* broker() const { return broker_; }
   LocalIsolate* local_isolate() const { return local_isolate_; }
 
+  MaglevGraphAssembler<>& Asm() { return graph_assembler_; }
+
   bool has_graph_labeller() const {
     return compilation_unit_->has_graph_labeller();
   }
@@ -440,6 +700,8 @@ class MaglevGraphBuilder {
     void Bind(Label* label);
     void set(Variable& var, ValueNode* value);
     ValueNode* get(const Variable& var) const;
+
+    MaglevGraphAssembler<> Asm() { return builder_->Asm(); }
 
    private:
     class BorrowParentKnownNodeAspects;
@@ -499,7 +761,7 @@ class MaglevGraphBuilder {
     }
     DCHECK_NULL(current_block_);
     current_block_ = zone()->New<BasicBlock>(nullptr, zone());
-    BasicBlock* result = FinishBlock<Jump>({}, &jump_targets);
+    BasicBlock* result = __ MakeJump(&jump_targets);
     result->set_edge_split_block(predecessor);
 #ifdef DEBUG
     new_nodes_.clear();
@@ -608,7 +870,7 @@ class MaglevGraphBuilder {
   ReduceResult EmitUnconditionalDeopt(DeoptimizeReason reason) {
     // Create a block rather than calling finish, since we don't yet know the
     // next block's offset before the loop skipping the rest of the bytecodes.
-    FinishBlock<Deopt>({}, reason);
+    __ MakeDeopt(reason);
     return ReduceResult::DoneWithAbort();
   }
 
@@ -688,10 +950,9 @@ class MaglevGraphBuilder {
         BasicBlock* predecessor;
         if (merge_state->is_loop() && !merge_state->is_resumable_loop() &&
             need_checkpointed_loop_entry()) {
-          predecessor =
-              FinishBlock<CheckpointedJump>({}, &jump_targets_[offset]);
+          predecessor = __ MakeCheckpointedJump(&jump_targets_[offset]);
         } else {
-          predecessor = FinishBlock<Jump>({}, &jump_targets_[offset]);
+          predecessor = __ MakeJump(&jump_targets_[offset]);
         }
         merge_state->Merge(this, current_interpreter_frame_, predecessor);
       }
@@ -1020,7 +1281,7 @@ class MaglevGraphBuilder {
   void BuildAbort(AbortReason reason) {
     // Create a block rather than calling finish, since we don't yet know the
     // next block's offset before the loop skipping the rest of the bytecodes.
-    FinishBlock<Abort>({}, reason);
+    __ MakeAbort(reason);
     MarkBytecodeDead();
   }
 
@@ -1537,6 +1798,11 @@ class MaglevGraphBuilder {
     static_assert(!ControlNodeT::kProperties.can_lazy_deopt());
     static_assert(!ControlNodeT::kProperties.can_throw());
     static_assert(!ControlNodeT::kProperties.can_write());
+
+    return FinishBlock(control_node);
+  }
+
+  BasicBlock* FinishBlock(ControlNode* control_node) {
     current_block_->set_control_node(control_node);
 
     BasicBlock* block = current_block_;
@@ -2151,6 +2417,7 @@ class MaglevGraphBuilder {
   compiler::JSHeapBroker* broker_ = compilation_unit_->broker();
 
   Graph* const graph_;
+  MaglevGraphAssembler<> graph_assembler_;
   compiler::BytecodeAnalysis bytecode_analysis_;
   interpreter::BytecodeArrayIterator iterator_;
   SourcePositionTableIterator source_position_iterator_;
@@ -2226,7 +2493,35 @@ class MaglevGraphBuilder {
   }
   std::unordered_set<Node*> new_nodes_;
 #endif
+
+  template <class Next>
+  friend class MaglevGraphBuilderInterfaceReducer;
 };
+
+template <class Next>
+template <class NodeT>
+NodeT* MaglevGraphBuilderInterfaceReducer<Next>::AttachExtraInfoAndAddToGraph(
+    NodeT* node) {
+  return graph_builder_->AttachExtraInfoAndAddToGraph(node);
+}
+template <class Next>
+template <class NodeT>
+void MaglevGraphBuilderInterfaceReducer<Next>::AttachEagerDeoptInfo(
+    NodeT* node) {
+  return graph_builder_->AttachEagerDeoptInfo(node);
+}
+template <class Next>
+template <class NodeT>
+void MaglevGraphBuilderInterfaceReducer<Next>::AttachDeoptCheckpoint(
+    NodeT* node) {
+  return graph_builder_->AttachDeoptCheckpoint(node);
+}
+
+template <class Next>
+BasicBlock* MaglevGraphBuilderInterfaceReducer<Next>::FinishBlock(
+    ControlNode* node) {
+  return graph_builder_->FinishBlock(node);
+}
 
 }  // namespace maglev
 }  // namespace internal
