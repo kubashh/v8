@@ -16,6 +16,46 @@
       "message": "I reverted back to the version that you initially reviewed (see the other comment: inlining the flag into blocks was actually slower). Could you give a +1 again?",
       "revId": "d95f48ed410c271b1bb8a111dc47b0c73f616771",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d20e28c0_87a69aad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-12-12T15:53:45Z",
+      "side": 1,
+      "message": "LGTM % comment\n\nThanks a lot for taking the time to look into alternatives and benchmarking things properly! :)",
+      "revId": "d95f48ed410c271b1bb8a111dc47b0c73f616771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "783e58f5_446c293f",
+        "filename": "src/compiler/turboshaft/copying-phase.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1372,
+      "author": {
+        "id": 1535927
+      },
+      "writtenOn": "2023-12-12T15:53:45Z",
+      "side": 1,
+      "message": "This doesn\u0027t actually grow: the only blocks that can need variables are input blocks, and the number of input blocks is fixed. Maybe using a non-growable bit vector would make things a bit faster (no need for resizing checks) ?",
+      "range": {
+        "startLine": 1372,
+        "startChar": 2,
+        "endLine": 1372,
+        "endChar": 19
+      },
+      "revId": "d95f48ed410c271b1bb8a111dc47b0c73f616771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
