@@ -475,6 +475,8 @@ class OldSpace final : public PagedSpace {
 
   void AddPromotedPage(Page* page);
 
+  void ReleasePage(Page* page) override;
+
   size_t ExternalBackingStoreBytes(ExternalBackingStoreType type) const final {
     if (type == ExternalBackingStoreType::kArrayBuffer)
       return heap()->OldArrayBufferBytes();
