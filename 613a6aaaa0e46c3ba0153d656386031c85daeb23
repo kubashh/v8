@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "628c055c_02c89d6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-12-13T12:32:23Z",
+      "side": 1,
+      "message": "LGTM % comments",
+      "revId": "613a6aaaa0e46c3ba0153d656386031c85daeb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dffd325_305e2be5",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-12-13T12:32:23Z",
+      "side": 1,
+      "message": "Is this always a `Simd128ExtractLaneOp`?",
+      "range": {
+        "startLine": 172,
+        "startChar": 17,
+        "endLine": 172,
+        "endChar": 60
+      },
+      "revId": "613a6aaaa0e46c3ba0153d656386031c85daeb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "511ee805_1200da52",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4180,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-12-13T12:32:23Z",
+      "side": 1,
+      "message": "I wonder if it\u0027s really worth having this huge macro just for the two instantiations. Maybe we should turn those into proper functions (with some shared helpers)?",
+      "range": {
+        "startLine": 4180,
+        "startChar": 8,
+        "endLine": 4180,
+        "endChar": 22
+      },
+      "revId": "613a6aaaa0e46c3ba0153d656386031c85daeb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

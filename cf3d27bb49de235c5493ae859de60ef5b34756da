@@ -56,6 +56,30 @@
       },
       "revId": "cf3d27bb49de235c5493ae859de60ef5b34756da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdd5fbcb_58ac1dce",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3864,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-12-13T12:32:23Z",
+      "side": 1,
+      "message": "Yes. In the `AtomicRMWOp` case this is solved with a View, but I think just for that it\u0027s not worth introducing another view. We can live with this temporary solutation, I guess.",
+      "parentUuid": "f82ef2ad_bca1eb8e",
+      "range": {
+        "startLine": 3861,
+        "startChar": 2,
+        "endLine": 3864,
+        "endChar": 60
+      },
+      "revId": "cf3d27bb49de235c5493ae859de60ef5b34756da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
