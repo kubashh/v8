@@ -16,6 +16,144 @@
       "message": "PTAL :)",
       "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6da48d2_e11ece3c",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4993,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-12-13T12:00:47Z",
+      "side": 1,
+      "message": "This seems unnecessary (see above)",
+      "range": {
+        "startLine": 4993,
+        "startChar": 12,
+        "endLine": 4993,
+        "endChar": 30
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "431f789f_659983ee",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 4996,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-12-13T12:00:47Z",
+      "side": 1,
+      "message": "This seems wrong. We are converting to `Word32` and we already `MarkAsWord32` above",
+      "range": {
+        "startLine": 4996,
+        "startChar": 12,
+        "endLine": 4996,
+        "endChar": 77
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d64af4f_82815c3a",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5000,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-12-13T12:00:47Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 5000,
+        "startChar": 44,
+        "endLine": 5000,
+        "endChar": 67
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7a863b1_b0215acb",
+        "filename": "src/compiler/backend/instruction-selector.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5012,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-12-13T12:00:47Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 5012,
+        "startChar": 45,
+        "endLine": 5012,
+        "endChar": 67
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d618d91_a5b72b25",
+        "filename": "src/compiler/turboshaft/recreate-schedule.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-12-13T12:00:47Z",
+      "side": 1,
+      "message": "nit: looks unused",
+      "range": {
+        "startLine": 11,
+        "startChar": 10,
+        "endLine": 11,
+        "endChar": 36
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f218cd18_68e52b34",
+        "filename": "src/compiler/turboshaft/recreate-schedule.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1374077
+      },
+      "writtenOn": "2023-12-13T12:00:47Z",
+      "side": 1,
+      "message": "What\u0027s the advantage of this over `BitcastTaggedToWord()`?",
+      "range": {
+        "startLine": 878,
+        "startChar": 7,
+        "endLine": 878,
+        "endChar": 42
+      },
+      "revId": "d426d846259abedcb6f83e7ea7f59a7e57728171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
