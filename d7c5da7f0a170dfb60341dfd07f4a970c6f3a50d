@@ -176,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4527207d_a550a4f9",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3391,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-13T18:28:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "28dc39ad_0110042d",
+      "range": {
+        "startLine": 3391,
+        "startChar": 51,
+        "endLine": 3391,
+        "endChar": 53
+      },
+      "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8eb14982_6fb8c506",
@@ -199,6 +223,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e09b19a_2e0085cc",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3414,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-13T18:28:02Z",
+      "side": 1,
+      "message": "Ok.",
+      "parentUuid": "8eb14982_6fb8c506",
+      "range": {
+        "startLine": 3414,
+        "startChar": 13,
+        "endLine": 3414,
+        "endChar": 26
+      },
+      "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3aad697d_95cd7604",
@@ -212,6 +260,30 @@
       "writtenOn": "2023-12-11T14:42:13Z",
       "side": 1,
       "message": "Given that we have the similar comment around `suspender` register definition we can probably drop this outdated comment (same applies to arm64).",
+      "range": {
+        "startLine": 3418,
+        "startChar": 66,
+        "endLine": 3418,
+        "endChar": 69
+      },
+      "revId": "d7c5da7f0a170dfb60341dfd07f4a970c6f3a50d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "541ee7fb_56d15d0b",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3418,
+      "author": {
+        "id": 1315011
+      },
+      "writtenOn": "2023-12-13T18:28:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3aad697d_95cd7604",
       "range": {
         "startLine": 3418,
         "startChar": 66,
