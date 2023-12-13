@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "286ed2cd_6e83971f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2023-12-13T18:40:48Z",
+      "side": 1,
+      "message": "PTAL.\n\nI also sorted in that file for clarity.",
+      "parentUuid": "ce65d027_87025149",
+      "range": {
+        "startLine": 14,
+        "startChar": 21,
+        "endLine": 16,
+        "endChar": 11
+      },
+      "revId": "9dcb227b1b3645e65121e9b289fda9fd30cd3826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9b8f85ed_0e793659",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -114,6 +138,24 @@
       "writtenOn": "2023-12-13T08:01:19Z",
       "side": 1,
       "message": "Looks good already.",
+      "revId": "9dcb227b1b3645e65121e9b289fda9fd30cd3826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de141ef3_b0908b15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2023-12-13T18:40:48Z",
+      "side": 1,
+      "message": "Thanks.\n\nI tried to keep the use of bit_cast when I could easily figure out a way to use it. If you have any thoughts about how to use it in other cases, please let me know.",
+      "parentUuid": "6206b829_7df04493",
       "revId": "9dcb227b1b3645e65121e9b289fda9fd30cd3826",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
