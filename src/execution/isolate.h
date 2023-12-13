@@ -1947,6 +1947,17 @@ class V8_EXPORT_PRIVATE Isolate final : private HiddenFactory {
 
   bool IsIsolateInBackground() { return is_isolate_in_background_; }
 
+  bool UseEfficiencyMode() {
+    return V8_UNLIKELY(v8_flags.efficiency_mode ||
+                       (v8_flags.efficiency_mode_for_background_isolate &&
+                        IsIsolateInBackground()));
+  }
+
+  bool UseBatterySaverMode() {
+    return V8_UNLIKELY(v8_flags.battery_saver_mode ||
+                       battery_saver_mode_enabled());
+  }
+
   PRINTF_FORMAT(2, 3) void PrintWithTimestamp(const char* format, ...);
 
   void set_allow_atomics_wait(bool set) { allow_atomics_wait_ = set; }

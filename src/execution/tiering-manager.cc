@@ -199,8 +199,7 @@ int TieringManager::InterruptBudgetFor(
     Isolate* isolate, Tagged<JSFunction> function,
     base::Optional<CodeKind> override_active_tier) {
   DCHECK(function->shared()->is_compiled());
-  const int bytecode_length =
-      function->shared()->GetBytecodeArray(isolate)->length();
+  int bytecode_length = function->shared()->GetBytecodeArray(isolate)->length();
 
   if (FirstTimeTierUpToSparkplug(isolate, function)) {
     return bytecode_length * v8_flags.invocation_count_for_feedback_allocation;
@@ -300,9 +299,12 @@ void TieringManager::MaybeOptimizeFrame(Tagged<JSFunction> function,
        function->HasAvailableCodeKind(isolate_, CodeKind::TURBOFAN)) ||
       (maglev_osr && current_code_kind < CodeKind::MAGLEV &&
        function->HasAvailableCodeKind(isolate_, CodeKind::MAGLEV))) {
-    if (maglev_osr && current_code_kind == CodeKind::MAGLEV &&
-        !v8_flags.osr_from_maglev)
+    if (V8_UNLIKELY(maglev_osr && current_code_kind == CodeKind::MAGLEV &&
+                    (!v8_flags.osr_from_maglev ||
+                     isolate_->UseEfficiencyMode() ||
+                     isolate_->UseBatterySaverMode()))) {
       return;
+    }
 
     // OSR kicks in only once we've previously decided to tier up, but we are
     // still in a lower-tier frame (this implies a long-running loop).
@@ -329,22 +331,29 @@ void TieringManager::MaybeOptimizeFrame(Tagged<JSFunction> function,
     }
   }
 
+  if (isolate_->UseEfficiencyMode()) {
+    d.concurrency_mode = ConcurrencyMode::kSynchronous;
+  }
+
   if (d.should_optimize()) Optimize(function, d);
 }
 
 OptimizationDecision TieringManager::ShouldOptimize(
     Tagged<FeedbackVector> feedback_vector, CodeKind current_code_kind) {
   Tagged<SharedFunctionInfo> shared = feedback_vector->shared_function_info();
+  if (current_code_kind == CodeKind::TURBOFAN) {
+    return OptimizationDecision::DoNotOptimize();
+  }
+
   if (TiersUpToMaglev(current_code_kind) &&
       shared->PassesFilter(v8_flags.maglev_filter) &&
       !shared->maglev_compilation_failed()) {
     return OptimizationDecision::Maglev();
-  } else if (current_code_kind == CodeKind::TURBOFAN) {
-    // Already in the top tier.
-    return OptimizationDecision::DoNotOptimize();
   }
 
-  if (!v8_flags.turbofan || !shared->PassesFilter(v8_flags.turbo_filter)) {
+  if (V8_UNLIKELY(
+          !v8_flags.turbofan || !shared->PassesFilter(v8_flags.turbo_filter) ||
+          isolate_->UseEfficiencyMode() || isolate_->UseBatterySaverMode())) {
     return OptimizationDecision::DoNotOptimize();
   }
 
