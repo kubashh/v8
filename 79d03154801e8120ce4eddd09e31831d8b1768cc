@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f95d79e5_fbf7b887",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1559107
+      },
+      "writtenOn": "2023-12-13T17:10:55Z",
+      "side": 1,
+      "message": "this is wip, I have not yet done a proper evaluation if this actually does what we want in term of numbers. but I just want to quickly ask on feedback on the api and general direction before going to deep.",
+      "revId": "79d03154801e8120ce4eddd09e31831d8b1768cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
