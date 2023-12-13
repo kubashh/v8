@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8667ae8e_809d0739",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-13T18:50:13Z",
+      "side": 1,
+      "message": "Would just `b(cond,...)` work?",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3073237c_79a05cdc",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-13T18:50:13Z",
+      "side": 1,
+      "message": "maybe pass `scratch` instead of handle.",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2d709cc_a1cd5d43",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-13T18:50:13Z",
+      "side": 1,
+      "message": "maybe pass scratch instead of destination.",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf269a80_87a7d874",
+        "filename": "src/codegen/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 32
+      },
+      "lineNbr": 5646,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-13T18:50:13Z",
+      "side": 1,
+      "message": "I this section only added for PPC?",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b473bcfb_705d1ff4",
+        "filename": "src/wasm/baseline/ppc/liftoff-assembler-ppc-inl.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2023-12-13T18:50:13Z",
+      "side": 1,
+      "message": "nit, extra space.",
+      "revId": "3cf3a101aa22317af7178f1325baad1c984f51aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
