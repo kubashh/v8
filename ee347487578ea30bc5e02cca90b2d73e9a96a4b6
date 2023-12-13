@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f774bfd5_ac2db92c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-12-13T12:22:19Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "ee347487578ea30bc5e02cca90b2d73e9a96a4b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6669d674_7857a2c5",
+        "filename": "include/v8-handle-base.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-12-13T12:22:19Z",
+      "side": 1,
+      "message": "nit: we usually put API classes not aimed for the direct use by the user into the `internal` namespace, but I see that this is missing for other classes below, i.e. IndirectHandleBase, so feel free to leave as is.",
+      "range": {
+        "startLine": 13,
+        "startChar": 6,
+        "endLine": 13,
+        "endChar": 20
+      },
+      "revId": "ee347487578ea30bc5e02cca90b2d73e9a96a4b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dead1dc_72cd269a",
+        "filename": "include/v8-handle-base.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-12-13T12:22:19Z",
+      "side": 1,
+      "message": "nit: It doesn\u0027t make a functional difference, but I suppose just for the sake of clearness since you inherit from `StackAllocate\u003cfalse\u003e` it would be clearer to call forward into the parent, e.g. `StackAllocated(no_checking_tag tag): StackAllocated\u003cfalse\u003e(tag) {}`",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 55
+      },
+      "revId": "ee347487578ea30bc5e02cca90b2d73e9a96a4b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
