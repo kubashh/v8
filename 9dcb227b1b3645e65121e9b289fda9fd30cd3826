@@ -139,6 +139,30 @@
       },
       "revId": "9dcb227b1b3645e65121e9b289fda9fd30cd3826",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "773a424f_31e43772",
+        "filename": "src/base/macros.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-12-13T17:32:48Z",
+      "side": 1,
+      "message": "Nevermind here. I played around with it and neithe `reinterpret_cast` nor `bit_cast` would work with wrong sizes.\n\nhttps://godbolt.org/z/77cddrW4c",
+      "parentUuid": "f7167a97_e02c1323",
+      "range": {
+        "startLine": 60,
+        "startChar": 15,
+        "endLine": 60,
+        "endChar": 23
+      },
+      "revId": "9dcb227b1b3645e65121e9b289fda9fd30cd3826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
