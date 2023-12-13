@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a773ec6_a08bc75f",
+        "filename": "include/v8-handle-base.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-12-13T14:15:51Z",
+      "side": 1,
+      "message": "Done. I moved all the helper classes defined in v8-handle-base.h to `v8::api_internal`. I did not move them to `v8::internal`, because of name clashes with existing classes there.",
+      "parentUuid": "53f29e87_091c1e74",
+      "range": {
+        "startLine": 13,
+        "startChar": 6,
+        "endLine": 13,
+        "endChar": 20
+      },
+      "revId": "ee347487578ea30bc5e02cca90b2d73e9a96a4b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7dead1dc_72cd269a",
@@ -78,6 +102,30 @@
       "writtenOn": "2023-12-13T12:22:19Z",
       "side": 1,
       "message": "nit: It doesn\u0027t make a functional difference, but I suppose just for the sake of clearness since you inherit from `StackAllocate\u003cfalse\u003e` it would be clearer to call forward into the parent, e.g. `StackAllocated(no_checking_tag tag): StackAllocated\u003cfalse\u003e(tag) {}`",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 55
+      },
+      "revId": "ee347487578ea30bc5e02cca90b2d73e9a96a4b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eab8aa3_0c614169",
+        "filename": "include/v8-handle-base.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1147189
+      },
+      "writtenOn": "2023-12-13T14:15:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dead1dc_72cd269a",
       "range": {
         "startLine": 40,
         "startChar": 0,
