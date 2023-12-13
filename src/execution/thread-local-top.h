@@ -30,7 +30,7 @@ class ThreadLocalTop {
   // TODO(all): This is not particularly beautiful. We should probably
   // refactor this to really consist of just Addresses and 32-bit
   // integer fields.
-  static constexpr uint32_t kSizeInBytes = 29 * kSystemPointerSize;
+  static constexpr uint32_t kSizeInBytes = 30 * kSystemPointerSize;
 
   // Does early low-level initialization that does not depend on the
   // isolate being present.
@@ -106,6 +106,13 @@ class ThreadLocalTop {
   // meantime, assert that the memory layout is the same.
   static_assert(sizeof(Tagged<Context>) == kSystemPointerSize);
   Tagged<Context> context_;
+
+  // Communication channel between various builtins that might call Api
+  // getter/setter callbacks or Api function callbacks and the CallApiCallback.
+  // Stores context that was current before the call switches to a target
+  // function's context. This slot is cleared by GC which treats this reference
+  // as a weak one.
+  Tagged<Context> caller_context_;
 
   // This field is updated along with context_ on every operation triggered
   // via V8 Api.

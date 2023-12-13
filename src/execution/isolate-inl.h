@@ -56,6 +56,27 @@ Tagged<NativeContext> Isolate::raw_native_context() {
   return context()->native_context();
 }
 
+void Isolate::set_caller_context(Tagged<Context> context) {
+  DCHECK(context.is_null() || IsContext(context));
+  thread_local_top()->caller_context_ = context;
+}
+
+void Isolate::clear_caller_context() {
+  thread_local_top()->caller_context_ = Context();
+}
+
+Handle<NativeContext> Isolate::GetIncumbentContext() {
+  Tagged<Context> maybe_caller_context = caller_context();
+  if (V8_LIKELY(!maybe_caller_context.is_null())) {
+    // Fast path, a caller context was provided.
+    Tagged<NativeContext> incumbent_context =
+        maybe_caller_context->native_context();
+    DCHECK_EQ(incumbent_context, *GetIncumbentContextSlow());
+    return handle(incumbent_context, this);
+  }
+  return GetIncumbentContextSlow();
+}
+
 void Isolate::set_pending_message(Tagged<Object> message_obj) {
   DCHECK(IsTheHole(message_obj, this) || IsJSMessageObject(message_obj));
   thread_local_top()->pending_message_ = message_obj;

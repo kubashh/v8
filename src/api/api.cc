@@ -729,6 +729,18 @@ void VerifyHandleIsNonEmpty(bool is_empty) {
                   "SetNonEmpty() called with empty handle.");
 }
 
+void VerifyIncumbentContext(v8::Isolate* isolate,
+                            v8::Context* incumbent_context) {
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  i::Handle<i::NativeContext> expected = i_isolate->GetIncumbentContext();
+
+  i::Handle<NativeContext> context = Utils::OpenHandle(incumbent_context);
+
+  Utils::ApiCheck(expected.is_identical_to(context),
+                  "v8::FunctionCallbackInfo<T>::GetIncumbentContext",
+                  "Incorrect incumbent context value.");
+}
+
 i::Address* GlobalizeTracedReference(
     i::Isolate* i_isolate, i::Address value, internal::Address* slot,
     TracedReferenceStoreMode store_mode,
@@ -1037,6 +1049,7 @@ Context::BackupIncumbentScope::BackupIncumbentScope(
 
   prev_ = i_isolate->top_backup_incumbent_scope();
   i_isolate->set_top_backup_incumbent_scope(this);
+  i_isolate->clear_caller_context();
 }
 
 Context::BackupIncumbentScope::~BackupIncumbentScope() {
@@ -11747,7 +11760,7 @@ bool ConvertDouble(double d) {
 template <typename T>
 bool ValidateFunctionCallbackInfo(const FunctionCallbackInfo<T>& info) {
   CHECK_GE(info.Length(), 0);
-  // Theorticall args-length is unlimited, practically we run out of stack
+  // Theortically args-length is unlimited, practically we run out of stack
   // space. This should guard against accidentally used raw pointers.
   CHECK_LE(info.Length(), 0xFFFFF);
   if (info.Length() > 0) {
@@ -11756,6 +11769,7 @@ bool ValidateFunctionCallbackInfo(const FunctionCallbackInfo<T>& info) {
   }
   auto* i_isolate = reinterpret_cast<i::Isolate*>(info.GetIsolate());
   CHECK_EQ(i_isolate, Isolate::Current());
+  CHECK(!i_isolate->GetIncumbentContext().is_null());
   CHECK(info.This()->IsValue());
   CHECK(info.Holder()->IsObject());
   CHECK(!info.Data().IsEmpty());

@@ -21,6 +21,7 @@ void ThreadLocalTop::Clear() {
   c_entry_fp_ = kNullAddress;
   c_function_ = kNullAddress;
   context_ = Context();
+  caller_context_ = Context();
   thread_id_ = ThreadId();
   pending_handler_entrypoint_ = kNullAddress;
   pending_handler_constant_pool_ = kNullAddress;
