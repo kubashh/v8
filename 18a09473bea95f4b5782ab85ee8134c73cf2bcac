@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d7a4bca_65bc1995",
+        "filename": "include/v8-version.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-12-13T17:42:16Z",
+      "side": 1,
+      "message": "I think this comes from the release commit (and similar to WATCHLISTS).",
+      "revId": "18a09473bea95f4b5782ab85ee8134c73cf2bcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "471788b1_2aff9c99",
+        "filename": "src/base/macros.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-12-13T17:42:16Z",
+      "side": 1,
+      "message": "please mention that the `static_cast` is preferred when the argument is `void*` and the target is a pointer.",
+      "range": {
+        "startLine": 56,
+        "startChar": 3,
+        "endLine": 56,
+        "endChar": 23
+      },
+      "revId": "18a09473bea95f4b5782ab85ee8134c73cf2bcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1448797_7be25140",
+        "filename": "src/base/macros.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-12-13T17:42:16Z",
+      "side": 1,
+      "message": "Since `source` is not a forwarding reference and is already an lvalue-ref, `Source` can never be deduced as a reference, so the static_assert will never trigger. Maybe at least worth a comment, so that the reader is not confused.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 64
+      },
+      "revId": "18a09473bea95f4b5782ab85ee8134c73cf2bcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
