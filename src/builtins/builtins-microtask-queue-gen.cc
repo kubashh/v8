@@ -10,6 +10,7 @@
 #include "src/objects/microtask-inl.h"
 #include "src/objects/promise.h"
 #include "src/objects/smi-inl.h"
+#include "src/roots/roots.h"
 
 namespace v8 {
 namespace internal {
@@ -203,8 +204,40 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     const TNode<Object> thenable = LoadObjectField(
         microtask, PromiseResolveThenableJobTask::kThenableOffset);
 
+#ifdef V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
+    TNode<Object> isolate_preserved_embedder_data = LoadObjectField(
+        microtask, PromiseResolveThenableJobTask::
+                       kIsolateContinuationPreservedEmbedderDataOffset);
+    Label isolate_preserved_data_done(this);
+    GotoIf(IsUndefined(isolate_preserved_embedder_data),
+           &isolate_preserved_data_done);
+    SetContinuationPreservedEmbedderData(isolate_preserved_embedder_data);
+    Goto(&isolate_preserved_data_done);
+    BIND(&isolate_preserved_data_done);
+
+    TNode<Object> context_preserved_embedder_data = LoadObjectField(
+        microtask, PromiseResolveThenableJobTask::
+                       kContextContinuationPreservedEmbedderDataOffset);
+    Label context_preserved_data_done(this);
+    GotoIf(IsUndefined(context_preserved_embedder_data),
+           &context_preserved_data_done);
+    StoreContextElement(native_context,
+                        Context::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX,
+                        context_preserved_embedder_data);
+    Goto(&context_preserved_data_done);
+    BIND(&context_preserved_data_done);
+#endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
+
+    TNode<Object> async_context_store = LoadObjectField(
+        microtask, PromiseResolveThenableJobTask::kAsyncContextStoreOffset);
+    Label async_context_store_done(this);
+    GotoIf(IsUndefined(async_context_store), &async_context_store_done);
+    StoreRoot(RootIndex::kAsyncContextStore, async_context_store);
+    Goto(&async_context_store_done);
+    BIND(&async_context_store_done);
+
     RunAllPromiseHooks(PromiseHookType::kBefore, microtask_context,
-                   CAST(promise_to_resolve));
+                       CAST(promise_to_resolve));
 
     {
       ScopedExceptionHandler handler(this, &if_exception, &var_exception);
@@ -213,7 +246,31 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     }
 
     RunAllPromiseHooks(PromiseHookType::kAfter, microtask_context,
-                   CAST(promise_to_resolve));
+                       CAST(promise_to_resolve));
+
+#ifdef V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
+    Label isolate_preserved_data_reset_done(this);
+    GotoIf(IsUndefined(isolate_preserved_embedder_data),
+           &isolate_preserved_data_reset_done);
+    SetContinuationPreservedEmbedderData(UndefinedConstant());
+    Goto(&isolate_preserved_data_reset_done);
+    BIND(&isolate_preserved_data_reset_done);
+
+    Label context_preserved_data_reset_done(this);
+    GotoIf(IsUndefined(context_preserved_embedder_data),
+           &context_preserved_data_reset_done);
+    StoreContextElement(native_context,
+                        Context::CONTINUATION_PRESERVED_EMBEDDER_DATA_INDEX,
+                        UndefinedConstant());
+    Goto(&context_preserved_data_reset_done);
+    BIND(&context_preserved_data_reset_done);
+#endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
+
+    Label async_context_store_reset_done(this);
+    GotoIf(IsUndefined(async_context_store), &async_context_store_reset_done);
+    StoreRoot(RootIndex::kAsyncContextStore, UndefinedConstant());
+    Goto(&async_context_store_reset_done);
+    BIND(&async_context_store_reset_done);
 
     RewindEnteredContext(saved_entered_context_count);
     SetCurrentContext(current_context);
@@ -259,6 +316,14 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     BIND(&context_preserved_data_done);
 #endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
 
+    TNode<Object> async_context_store = LoadObjectField(
+        microtask, PromiseReactionJobTask::kAsyncContextStoreOffset);
+    Label async_context_store_done(this);
+    GotoIf(IsUndefined(async_context_store), &async_context_store_done);
+    StoreRoot(RootIndex::kAsyncContextStore, async_context_store);
+    Goto(&async_context_store_done);
+    BIND(&async_context_store_done);
+
     // Run the promise before/debug hook if enabled.
     RunAllPromiseHooks(PromiseHookType::kBefore, microtask_context,
                        promise_or_capability);
@@ -290,6 +355,12 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     Goto(&context_preserved_data_reset_done);
     BIND(&context_preserved_data_reset_done);
 #endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
+
+    Label async_context_store_reset_done(this);
+    GotoIf(IsUndefined(async_context_store), &async_context_store_reset_done);
+    StoreRoot(RootIndex::kAsyncContextStore, UndefinedConstant());
+    Goto(&async_context_store_reset_done);
+    BIND(&async_context_store_reset_done);
 
     RewindEnteredContext(saved_entered_context_count);
     SetCurrentContext(current_context);
@@ -335,6 +406,14 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     BIND(&context_preserved_data_done);
 #endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
 
+    TNode<Object> async_context_store = LoadObjectField(
+        microtask, PromiseReactionJobTask::kAsyncContextStoreOffset);
+    Label async_context_store_done(this);
+    GotoIf(IsUndefined(async_context_store), &async_context_store_done);
+    StoreRoot(RootIndex::kAsyncContextStore, async_context_store);
+    Goto(&async_context_store_done);
+    BIND(&async_context_store_done);
+
     // Run the promise before/debug hook if enabled.
     RunAllPromiseHooks(PromiseHookType::kBefore, microtask_context,
                        promise_or_capability);
@@ -366,6 +445,12 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
     Goto(&context_preserved_data_reset_done);
     BIND(&context_preserved_data_reset_done);
 #endif  // V8_ENABLE_CONTINUATION_PRESERVED_EMBEDDER_DATA
+
+    Label async_context_store_reset_done(this);
+    GotoIf(IsUndefined(async_context_store), &async_context_store_reset_done);
+    StoreRoot(RootIndex::kAsyncContextStore, UndefinedConstant());
+    Goto(&async_context_store_reset_done);
+    BIND(&async_context_store_reset_done);
 
     RewindEnteredContext(saved_entered_context_count);
     SetCurrentContext(current_context);
@@ -531,11 +616,11 @@ void MicrotaskQueueBuiltinsAssembler::RunAllPromiseHooks(
 
 void MicrotaskQueueBuiltinsAssembler::RunPromiseHook(
     Runtime::FunctionId id, TNode<Context> context,
-    TNode<HeapObject> promise_or_capability,
-    TNode<Uint32T> promiseHookFlags) {
+    TNode<HeapObject> promise_or_capability, TNode<Uint32T> promiseHookFlags) {
   Label hook(this, Label::kDeferred), done_hook(this);
   Branch(IsIsolatePromiseHookEnabledOrDebugIsActiveOrHasAsyncEventDelegate(
-      promiseHookFlags), &hook, &done_hook);
+             promiseHookFlags),
+         &hook, &done_hook);
   BIND(&hook);
   {
     // Get to the underlying JSPromise instance.
