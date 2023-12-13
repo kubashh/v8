@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07c9be52_e097b6ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-12-13T18:58:10Z",
+      "side": 1,
+      "message": "Thanks, lgtm\n\nPlease wait for Anton as well",
+      "revId": "0f3d73cf3b1fb6d34c2774e249ca21286abf55b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
