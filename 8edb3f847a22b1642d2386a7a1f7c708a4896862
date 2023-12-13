@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bc3889b_2985fbaa",
+        "filename": "include/v8-value.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-13T10:45:12Z",
+      "side": 1,
+      "message": "It\u0027s also properly forward declared in \"v8-local-handle.h\". \nGiven that the type used in this file I\u0027d keep it.",
+      "parentUuid": "479c16f8_5f537e35",
+      "range": {
+        "startLine": 19,
+        "startChar": 6,
+        "endLine": 19,
+        "endChar": 15
+      },
+      "revId": "8edb3f847a22b1642d2386a7a1f7c708a4896862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2923216c_473ea31c",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54e1043f_99d4ed58",
+        "filename": "test/cctest/test-api-incumbent.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-13T10:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2923216c_473ea31c",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 11
+      },
+      "revId": "8edb3f847a22b1642d2386a7a1f7c708a4896862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e08df422_70167f97",
@@ -94,6 +142,30 @@
       "writtenOn": "2023-12-12T17:38:24Z",
       "side": 1,
       "message": "```suggestion\n// 5) Each context gets an Api function \"f\" which checks current context\n```",
+      "range": {
+        "startLine": 130,
+        "startChar": 50,
+        "endLine": 130,
+        "endChar": 52
+      },
+      "revId": "8edb3f847a22b1642d2386a7a1f7c708a4896862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "543c4b01_5b5509a8",
+        "filename": "test/cctest/test-api-incumbent.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-13T10:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e08df422_70167f97",
       "range": {
         "startLine": 130,
         "startChar": 50,
