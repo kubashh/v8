@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce65d027_87025149",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-12-13T08:01:19Z",
+      "side": 1,
+      "message": "We can switch to an intrinsic as well. Historically, this is handled via `v8/include/v8config.h`.\n\nExample: https://source.chromium.org/chromium/chromium/src/+/main:v8/include/v8config.h;l\u003d484?q\u003dv8config.h\u0026ss\u003dchromium",
+      "parentUuid": "1d05725e_d0ead451",
+      "range": {
+        "startLine": 14,
+        "startChar": 21,
+        "endLine": 16,
+        "endChar": 11
+      },
+      "revId": "9dcb227b1b3645e65121e9b289fda9fd30cd3826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9b8f85ed_0e793659",
@@ -55,6 +79,64 @@
       "side": 1,
       "message": "PTAL primarily at `src/base/macros.h`. I don’t know how qualified you are for all the other files; if this looks reasonable to you, if you can help find me appropriate reviewers that’d be appreciated.",
       "parentUuid": "9b8f85ed_0e793659",
+      "revId": "9dcb227b1b3645e65121e9b289fda9fd30cd3826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6206b829_7df04493",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-12-13T08:01:19Z",
+      "side": 1,
+      "message": "I am comfortable reviewing the whole CL here. Bringing in @bikineev@chromium.org as another pair of eyes.",
+      "parentUuid": "7c38fba0_625f3a95",
+      "revId": "9dcb227b1b3645e65121e9b289fda9fd30cd3826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d4bf32c_61843610",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-12-13T08:01:19Z",
+      "side": 1,
+      "message": "Looks good already.",
+      "revId": "9dcb227b1b3645e65121e9b289fda9fd30cd3826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7167a97_e02c1323",
+        "filename": "src/base/macros.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2023-12-13T08:01:19Z",
+      "side": 1,
+      "message": "Do we care about function pointers and pointers to members functions? They are not blessed with a size requirement and as such `reinterpret_cast` may or may not work?\n\n(Not even sure V8 has such uses...)",
+      "range": {
+        "startLine": 60,
+        "startChar": 15,
+        "endLine": 60,
+        "endChar": 23
+      },
       "revId": "9dcb227b1b3645e65121e9b289fda9fd30cd3826",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
