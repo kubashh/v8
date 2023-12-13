@@ -16,6 +16,98 @@
       "message": "PTAL (no hurry)",
       "revId": "add43de520c25152448964048a693a062b32db2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddb68f59_c125455f",
+        "filename": "src/regexp/regexp-compiler-tonode.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-12-13T23:53:24Z",
+      "side": 1,
+      "message": "nit: I guess this could be const.",
+      "range": {
+        "startLine": 1143,
+        "startChar": 0,
+        "endLine": 1143,
+        "endChar": 30
+      },
+      "revId": "add43de520c25152448964048a693a062b32db2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22baf1d3_004f74e7",
+        "filename": "test/mjsunit/harmony/regexp-modifiers.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-12-13T23:53:24Z",
+      "side": 1,
+      "message": "Triggering the double dash error is missing no?\n```\ntest_invalid(\u0027(?--:.)\u0027);\n```",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 23
+      },
+      "revId": "add43de520c25152448964048a693a062b32db2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70eef112_04f2b44d",
+        "filename": "test/mjsunit/harmony/regexp-modifiers.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-12-13T23:53:24Z",
+      "side": 1,
+      "message": "Could you also add an enable + disable combo?",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 51
+      },
+      "revId": "add43de520c25152448964048a693a062b32db2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c3ed1a1_3be2d729",
+        "filename": "test/mjsunit/harmony/regexp-modifiers.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-12-13T23:53:24Z",
+      "side": 1,
+      "message": "Maybe also enable one flag and then another one in the subgroup?",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 69
+      },
+      "revId": "add43de520c25152448964048a693a062b32db2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
