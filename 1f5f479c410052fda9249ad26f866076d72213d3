@@ -16,6 +16,23 @@
       "message": "Andreas and Mathias, PTAL and double-check if you agree that this should improve the effectiveness of this fuzzer.",
       "revId": "1f5f479c410052fda9249ad26f866076d72213d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f6dce57_e7b76cc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-14T11:45:49Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "1f5f479c410052fda9249ad26f866076d72213d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
