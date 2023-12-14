@@ -134,14 +134,6 @@ class HeapObject : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   // This is slower, but safe to call during bootstrapping.
   inline ReadOnlyRoots EarlyGetReadOnlyRoots() const;
 
-  // Whether the object is in the RO heap and the RO heap is shared, or in the
-  // writable shared heap.
-  V8_INLINE bool InAnySharedSpace() const;
-
-  V8_INLINE bool InWritableSharedSpace() const;
-
-  V8_INLINE bool InReadOnlySpace() const;
-
   // Converts an address to a HeapObject pointer.
   static inline Tagged<HeapObject> FromAddress(Address address) {
     DCHECK_TAG_ALIGNED(address);
@@ -493,6 +485,12 @@ IS_TYPE_FUNCTION_DECL(NullOrUndefined, , /* unused */)
                           PtrComprCageBase cage_base);
 STRUCT_LIST(DECL_STRUCT_PREDICATE)
 #undef DECL_STRUCT_PREDICATE
+
+// Whether the object is in the RO heap and the RO heap is shared, or in the
+// writable shared heap.
+V8_INLINE bool InAnySharedSpace(Tagged<HeapObject> obj);
+V8_INLINE bool InWritableSharedSpace(Tagged<HeapObject> obj);
+V8_INLINE bool InReadOnlySpace(Tagged<HeapObject> obj);
 
 }  // namespace internal
 }  // namespace v8
