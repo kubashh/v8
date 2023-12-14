@@ -677,6 +677,26 @@ DEFINE_WEAK_VALUE_IMPLICATION(max_opt < 2, maglev, false)
 DEFINE_WEAK_VALUE_IMPLICATION(max_opt < 1, sparkplug, false)
 #endif  // V8_ENABLE_SPARKPLUG
 
+// Flags to override efficiency and battery saver mode settings for debugging
+// and testing.
+DEFINE_MAYBE_BOOL(efficiency_mode,
+                  "Forces efficiency mode on or off, disregarding any dynamic "
+                  "signals. Efficiency mode is optimized for situations with "
+                  "no latency requirements and uses fewer threads.")
+DEFINE_MAYBE_BOOL(
+    battery_saver_mode,
+    "Forces battery saver mode on or off, disregarding any dynamic signals. "
+    "Battery saver tries to conserve overal cpu cycles spent.")
+
+// Flags to experiment with the new efficiency mode
+DEFINE_BOOL(efficiency_mode_for_background_isolate, false,
+            "Automatically enable efficiency_mode for background isolates.")
+DEFINE_BOOL(efficiency_mode_disable_turbofan, false,
+            "Defer tier-up to turbofan while in efficiency mode.")
+DEFINE_FLOAT(
+    efficiency_mode_delay_turbofan, 1.0,
+    "Delay tier-up to turbofan by a fixed factor while in efficiency mode.")
+
 // Flag to select wasm trace mark type
 DEFINE_STRING(
     wasm_trace_native, nullptr,
@@ -1115,7 +1135,7 @@ DEFINE_INT(max_inlined_bytecode_size_small, 27,
            "maximum size of bytecode considered for small function inlining")
 DEFINE_INT(max_optimized_bytecode_size, 60 * KB,
            "maximum bytecode size to "
-           "be considered for optimization; too high values may cause "
+           "be considered for turbofan optimization; too high values may cause "
            "the compiler to hit (release) assertions")
 DEFINE_FLOAT(min_inlining_frequency, 0.15, "minimum frequency for inlining")
 DEFINE_BOOL(polymorphic_inlining, true, "polymorphic inlining")
