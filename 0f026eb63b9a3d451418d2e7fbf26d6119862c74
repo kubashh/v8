@@ -16,6 +16,24 @@
       "message": "Done!\n\nOne rookie question we expect thus that GC would cleanup the extra space allocated?",
       "revId": "0f026eb63b9a3d451418d2e7fbf26d6119862c74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a41b03d0_8cb02205",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-14T11:25:38Z",
+      "side": 1,
+      "message": "No, GC can only cleanup dead (unused) objects. The extra space allocated in the table will stay there until \"delete element\" function decide to shrink the table.",
+      "parentUuid": "3f687752_5e38a2a8",
+      "revId": "0f026eb63b9a3d451418d2e7fbf26d6119862c74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
