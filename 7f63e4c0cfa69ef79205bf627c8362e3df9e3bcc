@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f1c558e_337c6a37",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-14T08:49:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "905aa2f9_6a04576d",
+      "revId": "7f63e4c0cfa69ef79205bf627c8362e3df9e3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07cad0dc_4ede2854",
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "Making refactoring in this CL sounds better ))",
       "parentUuid": "94f07357_fdca1d7c",
+      "revId": "7f63e4c0cfa69ef79205bf627c8362e3df9e3bcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa14909a_2356166c",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-14T08:49:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15e846e0_1083026e",
       "revId": "7f63e4c0cfa69ef79205bf627c8362e3df9e3bcc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
