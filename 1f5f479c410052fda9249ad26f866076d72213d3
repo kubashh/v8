@@ -51,6 +51,23 @@
       "parentUuid": "d0a7697a_252ee8c7",
       "revId": "1f5f479c410052fda9249ad26f866076d72213d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81c027dc_791c0d70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2023-12-14T12:06:44Z",
+      "side": 1,
+      "message": "Is it good to use the size as the deciding flag for liftoff? I mean, the fuzzer thinks it\u0027s doing a small, local change by adding one byte, but actually it is suddenly fuzzing a completely different part of the system.\n\nOn the other hand, because of the size fields of all sections it\u0027s hard for the fuzzer to produce modules of different sizes anyways.\n\nAnd also, I think this fuzzer mostly fuzzes section decoding, so it may not be a big deal.\n\nStill, using `(size \u003e 10) \u0026\u0026 (data[9] % 2)` may be better.\n\nAnyways, I think it makes not much a difference, if you think your solution is better, then I\u0027m okay with it.\n\nDid you look at the wasm-code fuzzer as well? There picking the right compiler and eager compilation is much more important I think.",
+      "revId": "1f5f479c410052fda9249ad26f866076d72213d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
