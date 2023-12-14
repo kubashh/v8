@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d3e7dfb_a1195435",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1468500
+      },
+      "writtenOn": "2023-12-14T09:32:29Z",
+      "side": 1,
+      "message": "Thanks Camillo!\n\n+Shu as owner of src/init (this also serves as FYI that this is done 😊)",
+      "revId": "fd85608fd56a6b1f160be480df772fa372e0ebc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
