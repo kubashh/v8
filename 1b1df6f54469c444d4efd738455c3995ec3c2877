@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3f044ad_d67b7a04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-14T18:32:01Z",
+      "side": 1,
+      "message": "@evih@chromium.org: PTAL.\n@manoskouk@chromium.org: FYI, maybe you can also take a look at my thoughts on `Dead()` becoming `DeadValue()` so maybe we should adapt all those places.",
+      "revId": "1b1df6f54469c444d4efd738455c3995ec3c2877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
