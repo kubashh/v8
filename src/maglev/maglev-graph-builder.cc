@@ -4424,9 +4424,10 @@ ReduceResult MaglevGraphBuilder::TryBuildElementStoreOnJSArrayOrJSObject(
 
       // Update length if necessary.
       if (is_jsarray) {
-        AddNewNode<UpdateJSArrayLength>({object, index, length_int32});
-        RecordKnownProperty(object, broker()->length_string(), length, false,
-                            compiler::AccessMode::kStore);
+        ValueNode* new_length = AddNewNode<UpdateJSArrayLength>(
+            {length, length_int32, index, object});
+        RecordKnownProperty(object, broker()->length_string(), new_length,
+                            false, compiler::AccessMode::kStore);
       }
     } else {
       AddNewNode<CheckInt32Condition>({index, length_int32},

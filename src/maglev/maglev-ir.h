@@ -255,6 +255,7 @@ class MergePointInterpreterFrameState;
   V(ToObject)                                       \
   V(ToString)                                       \
   V(NumberToString)                                 \
+  V(UpdateJSArrayLength)                            \
   CONSTANT_VALUE_NODE_LIST(V)                       \
   INT32_OPERATIONS_NODE_LIST(V)                     \
   FLOAT64_OPERATIONS_NODE_LIST(V)                   \
@@ -316,7 +317,6 @@ class MergePointInterpreterFrameState;
   V(ThrowIfNotSuperConstructor)             \
   V(TransitionElementsKind)                 \
   V(TransitionElementsKindOrCheckMap)       \
-  V(UpdateJSArrayLength)                    \
   GAP_MOVE_NODE_LIST(V)                     \
   VALUE_NODE_LIST(V)
 
@@ -6439,8 +6439,9 @@ class StoreGlobal : public FixedInputValueNodeT<2, StoreGlobal> {
   const compiler::FeedbackSource feedback_;
 };
 
-class UpdateJSArrayLength : public FixedInputNodeT<3, UpdateJSArrayLength> {
-  using Base = FixedInputNodeT<3, UpdateJSArrayLength>;
+class UpdateJSArrayLength
+    : public FixedInputValueNodeT<4, UpdateJSArrayLength> {
+  using Base = FixedInputValueNodeT<4, UpdateJSArrayLength>;
 
  public:
   explicit UpdateJSArrayLength(uint64_t bitfield) : Base(bitfield) {}
@@ -6448,14 +6449,20 @@ class UpdateJSArrayLength : public FixedInputNodeT<3, UpdateJSArrayLength> {
   static constexpr OpProperties kProperties = OpProperties::CanWrite();
   static constexpr typename Base::InputTypes kInputTypes{
       ValueRepresentation::kTagged, ValueRepresentation::kInt32,
-      ValueRepresentation::kInt32};
+      ValueRepresentation::kInt32, ValueRepresentation::kTagged};
 
-  static constexpr int kObjectIndex = 0;
-  static constexpr int kIndexIndex = 1;
-  static constexpr int kLengthIndex = 2;
-  Input& object_input() { return input(kObjectIndex); }
-  Input& index_input() { return input(kIndexIndex); }
+  // TODO(pthier): Use a more natural order once we can define the result
+  // register to be equal to any input register.
+  // The current order avoids any extra moves in the common case where index is
+  // less than length
+  static constexpr int kLengthSmiIndex = 0;
+  static constexpr int kLengthIndex = 1;
+  static constexpr int kIndexIndex = 2;
+  static constexpr int kObjectIndex = 3;
+  Input& length_smi_input() { return input(kLengthSmiIndex); }
   Input& length_input() { return input(kLengthIndex); }
+  Input& index_input() { return input(kIndexIndex); }
+  Input& object_input() { return input(kObjectIndex); }
 
   void SetValueLocationConstraints();
   void GenerateCode(MaglevAssembler*, const ProcessingState&);

@@ -3576,15 +3576,20 @@ void DefineNamedOwnGeneric::GenerateCode(MaglevAssembler* masm,
 }
 
 void UpdateJSArrayLength::SetValueLocationConstraints() {
+  UseRegister(length_smi_input());
   UseRegister(object_input());
   UseAndClobberRegister(index_input());
   UseRegister(length_input());
+  DefineSameAsFirst(this);
 }
 void UpdateJSArrayLength::GenerateCode(MaglevAssembler* masm,
                                        const ProcessingState& state) {
-  Register object = ToRegister(object_input());
-  Register index = ToRegister(index_input());
+  Register length_smi = ToRegister(length_smi_input());
   Register length = ToRegister(length_input());
+  Register index = ToRegister(index_input());
+  Register object = ToRegister(object_input());
+  DCHECK_EQ(length_smi, ToRegister(result()));
+
   Label done;
   if (v8_flags.debug_code) {
     __ CompareObjectTypeAndAssert(object, JS_ARRAY_TYPE, kEqual,
@@ -3596,8 +3601,8 @@ void UpdateJSArrayLength::GenerateCode(MaglevAssembler* masm,
   }
   __ CompareInt32AndJumpIf(index, length, kUnsignedLessThan, &done);
   __ IncrementInt32(index);  // This cannot overflow.
-  __ SmiTag(index);
-  __ StoreTaggedSignedField(object, JSArray::kLengthOffset, index);
+  __ SmiTag(length_smi, index);
+  __ StoreTaggedSignedField(object, JSArray::kLengthOffset, length_smi);
   __ bind(&done);
 }
 
