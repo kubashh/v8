@@ -176,7 +176,8 @@ Reduction WasmLoadElimination::ReduceWasmStructGet(Node* node) {
   const WasmFieldInfo& field_info = OpParameter<WasmFieldInfo>(node->op());
   bool is_mutable = field_info.type->mutability(field_info.field_index);
 
-  if (!NodeProperties::IsTyped(input_struct)) {
+  if (!NodeProperties::IsTyped(input_struct) ||
+      !NodeProperties::GetType(input_struct).IsWasm()) {
     // The input should always be typed.  https://crbug.com/1507106 reported
     // that we can end up with Type None here instead of a wasm type.
     // In the worst case this only means that we miss a potential optimization,
