@@ -16,6 +16,52 @@
       "message": "Sorry for this being stale for so long. There were regressions that I wasn\u0027t able to repro locally and perf debugging with pinpoint was not particularly fast.\n\nPTAL again",
       "revId": "33d16a291d56579ebda9ef816560ed245f793fc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86f58736_139aca10",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-12-14T19:26:18Z",
+      "side": 1,
+      "message": "drive-by: could this be sped up by combining this into a custom helper that checks both indices at the same time while walking the context list? (I\u0027ve seen this combo pop up elsewhere).",
+      "range": {
+        "startLine": 1001,
+        "startChar": 0,
+        "endLine": 1003,
+        "endChar": 74
+      },
+      "revId": "33d16a291d56579ebda9ef816560ed245f793fc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "029aab4f_c0004291",
+        "filename": "src/json/json-stringifier.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2023-12-14T19:26:18Z",
+      "side": 1,
+      "message": "is this still needed?",
+      "range": {
+        "startLine": 1158,
+        "startChar": 8,
+        "endLine": 1158,
+        "endChar": 9
+      },
+      "revId": "33d16a291d56579ebda9ef816560ed245f793fc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
