@@ -246,6 +246,10 @@ BaselineBatchCompiler::~BaselineBatchCompiler() {
   }
 }
 
+bool BaselineBatchCompiler::concurrent() const {
+  return v8_flags.concurrent_sparkplug && !isolate_->UseEfficiencyMode();
+}
+
 void BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
   Handle<SharedFunctionInfo> shared(function->shared(), isolate_);
   // Immediately compile the function if batch compilation is disabled.
@@ -257,7 +261,7 @@ void BaselineBatchCompiler::EnqueueFunction(Handle<JSFunction> function) {
     return;
   }
   if (ShouldCompileBatch(*shared)) {
-    if (v8_flags.concurrent_sparkplug) {
+    if (concurrent()) {
       CompileBatchConcurrent(*shared);
     } else {
       CompileBatch(function);
