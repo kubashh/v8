@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "420961cd_28475b40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2023-12-14T15:39:00Z",
+      "side": 1,
+      "message": "FYI, the revert was due to a GCC bot failing, but the GCC trybot being offline.\n\nThis works on GCC 11, but it seems like you have an earlier version.\n\nWill upload a new version that is more careful in that regard.",
+      "revId": "45501c0ed506bdc8c1b1d96e5bfb81bfaba995e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
