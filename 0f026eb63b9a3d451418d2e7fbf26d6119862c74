@@ -54,6 +54,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d58761d3_b9550405",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-12-14T11:48:18Z",
+      "side": 1,
+      "message": "Ref to the comment on the other",
+      "revId": "0f026eb63b9a3d451418d2e7fbf26d6119862c74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9757512f_220fd545",
@@ -67,6 +84,24 @@
       "writtenOn": "2023-12-14T11:41:07Z",
       "side": 1,
       "message": "You are right, in case of the array with a lot of duplicates we\u0027ll overallocate the  table. \nI forgot that the old implementation ignored the `at_least_space_for` value. Let\u0027s get back to the original logic for the array case.\nPlease add \n```\n  static_assert(OrderedHashSet::kInitialCapacity \u003d\u003d\n                OrderedHashMap::kInitialCapacity);\n```\nand use `IntPtrConstant(OrderedHashSet::kInitialCapacity)`.",
+      "revId": "0f026eb63b9a3d451418d2e7fbf26d6119862c74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70265520_6a122f8d",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1574369
+      },
+      "writtenOn": "2023-12-14T11:48:18Z",
+      "side": 1,
+      "message": "Done! so i am continuing to try and debug then making so far i noticed weakset is properly hitting the fast paths so seems unlikely we broke some previous control flow",
+      "parentUuid": "9757512f_220fd545",
       "revId": "0f026eb63b9a3d451418d2e7fbf26d6119862c74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
