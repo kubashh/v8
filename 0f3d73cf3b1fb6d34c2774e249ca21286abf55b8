@@ -16,6 +16,23 @@
       "message": "Thanks, lgtm\n\nPlease wait for Anton as well",
       "revId": "0f3d73cf3b1fb6d34c2774e249ca21286abf55b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f67abf0_94071e4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1344750
+      },
+      "writtenOn": "2023-12-14T09:29:40Z",
+      "side": 1,
+      "message": "lgtm, thanks!",
+      "revId": "0f3d73cf3b1fb6d34c2774e249ca21286abf55b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
