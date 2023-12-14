@@ -68,6 +68,24 @@
       "message": "Is it good to use the size as the deciding flag for liftoff? I mean, the fuzzer thinks it\u0027s doing a small, local change by adding one byte, but actually it is suddenly fuzzing a completely different part of the system.\n\nOn the other hand, because of the size fields of all sections it\u0027s hard for the fuzzer to produce modules of different sizes anyways.\n\nAnd also, I think this fuzzer mostly fuzzes section decoding, so it may not be a big deal.\n\nStill, using `(size \u003e 10) \u0026\u0026 (data[9] % 2)` may be better.\n\nAnyways, I think it makes not much a difference, if you think your solution is better, then I\u0027m okay with it.\n\nDid you look at the wasm-code fuzzer as well? There picking the right compiler and eager compilation is much more important I think.",
       "revId": "1f5f479c410052fda9249ad26f866076d72213d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "463416e7_96580bca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2023-12-14T13:47:58Z",
+      "side": 1,
+      "message": "The wasm-code fuzzer uses different infrastructure (via the `WasmExecutionFuzzer`). It chooses Liftoff vs TurboFan per function, but also seems to not disable lazy compilation. I\u0027d like to fix that in a separate CL though.\n\nI thought about other options (instead of just using the LSB of the size), but I think it all has similar problems. Using the 10th byte is also pretty random - we have no idea what that byte is.\nUsing the size is the most simple method I could think of and it\u0027s not worse than the alternatives. It still gives the fuzzer ways to minimize crashes, even though it might get a bit harder.\n\nIf you have a better idea, we can still fix this later. I\u0027ll go ahead and land this CL as it moves us in the right direction.",
+      "parentUuid": "81c027dc_791c0d70",
+      "revId": "1f5f479c410052fda9249ad26f866076d72213d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
