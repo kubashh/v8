@@ -67,7 +67,8 @@ void BaseCollectionsAssembler::AddConstructorEntries(
   BIND(&if_fast_js_array);
   {
     var_mode = Int32Constant(kFastJSArray);
-    var_at_least_space_for = IntPtrConstant(0);
+    var_at_least_space_for =
+        PositiveSmiUntag(LoadFastJSArrayLength(CAST(initial_entries)));
     Goto(&allocate_table);
   }
   TVARIABLE(JSReceiver, var_iterator_object);
