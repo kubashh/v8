@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3008086a_bfc39838",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-14T09:56:10Z",
+      "side": 1,
+      "message": "Yes, there is one caller (`SIMD_VISIT_EXTRACT_LANE`). The name sounds super-generic but also the Turbofan implementation assumes that there is an `int32_t` operator property, so it has a similar issue.",
+      "parentUuid": "8dffd325_305e2be5",
+      "range": {
+        "startLine": 172,
+        "startChar": 17,
+        "endLine": 172,
+        "endChar": 60
+      },
+      "revId": "613a6aaaa0e46c3ba0153d656386031c85daeb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "511ee805_1200da52",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-12-13T12:32:23Z",
       "side": 1,
       "message": "I wonder if it\u0027s really worth having this huge macro just for the two instantiations. Maybe we should turn those into proper functions (with some shared helpers)?",
+      "range": {
+        "startLine": 4180,
+        "startChar": 8,
+        "endLine": 4180,
+        "endChar": 22
+      },
+      "revId": "613a6aaaa0e46c3ba0153d656386031c85daeb23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58c4279f_d2b2b459",
+        "filename": "src/compiler/backend/arm/instruction-selector-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4180,
+      "author": {
+        "id": 1549182
+      },
+      "writtenOn": "2023-12-14T09:56:10Z",
+      "side": 1,
+      "message": "I agree. Given that it isn\u0027t really a degradation from the existing code as it already was this somewhat questionable macro, I just added a TODO with my name on it for now as this shouldn\u0027t block landing this CL.",
+      "parentUuid": "511ee805_1200da52",
       "range": {
         "startLine": 4180,
         "startChar": 8,
