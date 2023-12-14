@@ -5190,10 +5190,11 @@ bool Heap::AllocationLimitOvershotByLargeMargin() const {
 }
 
 bool Heap::ShouldOptimizeForLoadTime() {
-  return isolate()->rail_mode() == PERFORMANCE_LOAD &&
-         !AllocationLimitOvershotByLargeMargin() &&
-         MonotonicallyIncreasingTimeInMs() <
-             isolate()->LoadStartTimeMs() + kMaxLoadTimeMs;
+  if (!max_load_end_time_.has_value()) return false;
+  if (AllocationLimitOvershotByLargeMargin()) return false;
+  if (base::TimeTicks::Now() >= max_load_end_time_.value()) return false;
+  DCHECK_EQ(PERFORMANCE_LOAD, isolate()->rail_mode());
+  return true;
 }
 
 // This predicate is called when an old generation space cannot allocated from
@@ -7431,6 +7432,59 @@ void Heap::EnsureYoungSweepingCompleted() {
 void Heap::DrainSweepingWorklistForSpace(AllocationSpace space) {
   if (!sweeper()->sweeping_in_progress_for_space(space)) return;
   sweeper()->DrainSweepingWorklistForSpace(space);
+}
+
+class PostLoadTask final : public CancelableTask {
+ public:
+  PostLoadTask(Heap* heap) : CancelableTask(heap->isolate()), heap_(heap) {}
+
+  void RunInternal() override {
+    DCHECK_GE(base::TimeTicks::Now(), heap_->max_load_end_time_.value());
+    heap_->post_load_task_id_ = CancelableTaskManager::kInvalidTaskId;
+    heap_->NotifyLoadEnd();
+  }
+
+ private:
+  Heap* const heap_;
+};
+
+void Heap::NotifyLoadStart() {
+  DCHECK(!max_load_end_time_.has_value());
+  max_load_end_time_.emplace(base::TimeTicks::Now() + kMaxLoadTime);
+  auto task = std::make_unique<PostLoadTask>(this);
+  post_load_task_id_ = task->id();
+  GetForegroundTaskRunner()->PostDelayedTask(std::move(task),
+                                             kMaxLoadTime.InSecondsF());
+}
+
+void Heap::NotifyLoadEnd() {
+  if (!max_load_end_time_.has_value()) return;
+  max_load_end_time_.reset();
+  if (post_load_task_id_ != CancelableTaskManager::kInvalidTaskId) {
+    isolate()->cancelable_task_manager()->TryAbort(post_load_task_id_);
+    post_load_task_id_ = CancelableTaskManager::kInvalidTaskId;
+  }
+  if (auto* job = incremental_marking()->incremental_marking_job()) {
+    // The task will start incremental marking (if not already started)
+    // and advance marking if incremental marking is active.
+    job->ScheduleTask();
+  }
+}
+
+void Heap::UpdateLoadStartTime() {
+  if (isolate()->rail_mode() != PERFORMANCE_LOAD) {
+    DCHECK(!max_load_end_time_.has_value());
+    DCHECK_EQ(CancelableTaskManager::kInvalidTaskId, post_load_task_id_);
+    return;
+  }
+  if (post_load_task_id_ != CancelableTaskManager::kInvalidTaskId) {
+    isolate()->cancelable_task_manager()->TryAbort(post_load_task_id_);
+  }
+  max_load_end_time_.emplace(base::TimeTicks::Now() + kMaxLoadTime);
+  auto task = std::make_unique<PostLoadTask>(this);
+  post_load_task_id_ = task->id();
+  GetForegroundTaskRunner()->PostDelayedTask(std::move(task),
+                                             kMaxLoadTime.InSecondsF());
 }
 
 EmbedderStackStateScope::EmbedderStackStateScope(Heap* heap, Origin origin,
