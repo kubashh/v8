@@ -104,6 +104,24 @@
       "parentUuid": "9757512f_220fd545",
       "revId": "0f026eb63b9a3d451418d2e7fbf26d6119862c74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96de806d_4d328775",
+        "filename": "src/builtins/builtins-collections-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2023-12-14T11:53:00Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "70265520_6a122f8d",
+      "revId": "0f026eb63b9a3d451418d2e7fbf26d6119862c74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
