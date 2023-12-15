@@ -213,10 +213,11 @@ int TieringManager::InterruptBudgetFor(
     // operation for forward jump.
     return INT_MAX / 2;
   }
-  return ::i::InterruptBudgetFor(override_active_tier
-                                     ? override_active_tier
-                                     : function->GetActiveTier(isolate),
-                                 function->tiering_state(), bytecode_length);
+  auto active_tier = override_active_tier.has_value()
+                         ? *override_active_tier
+                         : function->GetActiveTier(isolate);
+  return ::i::InterruptBudgetFor(active_tier, function->tiering_state(),
+                                 bytecode_length);
 }
 
 namespace {
@@ -300,9 +301,12 @@ void TieringManager::MaybeOptimizeFrame(Tagged<JSFunction> function,
        function->HasAvailableCodeKind(isolate_, CodeKind::TURBOFAN)) ||
       (maglev_osr && current_code_kind < CodeKind::MAGLEV &&
        function->HasAvailableCodeKind(isolate_, CodeKind::MAGLEV))) {
-    if (maglev_osr && current_code_kind == CodeKind::MAGLEV &&
-        !v8_flags.osr_from_maglev)
+    if (V8_UNLIKELY(maglev_osr && current_code_kind == CodeKind::MAGLEV &&
+                    (!v8_flags.osr_from_maglev ||
+                     isolate_->UseEfficiencyMode() ||
+                     isolate_->UseBatterySaverMode()))) {
       return;
+    }
 
     // OSR kicks in only once we've previously decided to tier up, but we are
     // still in a lower-tier frame (this implies a long-running loop).
@@ -320,7 +324,8 @@ void TieringManager::MaybeOptimizeFrame(Tagged<JSFunction> function,
   // We might be stuck in a baseline frame that wants to tier up to Maglev, but
   // is in a loop, and can't OSR, because Maglev doesn't have OSR. Allow it to
   // skip over Maglev by re-checking ShouldOptimize as if we were in Maglev.
-  if (!maglev_osr && d.should_optimize() && d.code_kind == CodeKind::MAGLEV) {
+  if (!isolate_->UseEfficiencyMode() && !maglev_osr && d.should_optimize() &&
+      d.code_kind == CodeKind::MAGLEV) {
     bool is_marked_for_maglev_optimization =
         IsRequestMaglev(tiering_state) ||
         function->HasAvailableCodeKind(isolate_, CodeKind::MAGLEV);
@@ -329,22 +334,38 @@ void TieringManager::MaybeOptimizeFrame(Tagged<JSFunction> function,
     }
   }
 
+  if (isolate_->UseEfficiencyMode() && d.code_kind != CodeKind::TURBOFAN) {
+    d.concurrency_mode = ConcurrencyMode::kSynchronous;
+  }
+
   if (d.should_optimize()) Optimize(function, d);
 }
 
 OptimizationDecision TieringManager::ShouldOptimize(
     Tagged<FeedbackVector> feedback_vector, CodeKind current_code_kind) {
   Tagged<SharedFunctionInfo> shared = feedback_vector->shared_function_info();
+  if (current_code_kind == CodeKind::TURBOFAN) {
+    return OptimizationDecision::DoNotOptimize();
+  }
+
   if (TiersUpToMaglev(current_code_kind) &&
       shared->PassesFilter(v8_flags.maglev_filter) &&
       !shared->maglev_compilation_failed()) {
     return OptimizationDecision::Maglev();
-  } else if (current_code_kind == CodeKind::TURBOFAN) {
-    // Already in the top tier.
+  }
+
+  if (V8_UNLIKELY(!v8_flags.turbofan ||
+                  !shared->PassesFilter(v8_flags.turbo_filter) ||
+                  (v8_flags.efficiency_mode_disable_turbofan &&
+                   isolate_->UseEfficiencyMode()) ||
+                  isolate_->UseBatterySaverMode())) {
     return OptimizationDecision::DoNotOptimize();
   }
 
-  if (!v8_flags.turbofan || !shared->PassesFilter(v8_flags.turbo_filter)) {
+  if (isolate_->UseEfficiencyMode() &&
+      v8_flags.efficiency_mode_delay_turbofan &&
+      feedback_vector->invocation_count() <
+          v8_flags.efficiency_mode_delay_turbofan) {
     return OptimizationDecision::DoNotOptimize();
   }
 

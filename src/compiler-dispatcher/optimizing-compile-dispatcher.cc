@@ -149,7 +149,8 @@ void OptimizingCompileDispatcher::AwaitCompileTasks() {
   }
   // Join kills the job handle, so drop it and post a new one.
   job_handle_ = V8::GetCurrentPlatform()->PostJob(
-      kTaskPriority, std::make_unique<CompileTask>(isolate_, this));
+      isolate_->UseEfficiencyMode() ? kEfficiencyTaskPriority : kTaskPriority,
+      std::make_unique<CompileTask>(isolate_, this));
 
 #ifdef DEBUG
   base::MutexGuard access_input_queue(&input_queue_mutex_);
