@@ -826,6 +826,7 @@ void ByteArray::ByteArrayVerify(Isolate* isolate) {
 }
 
 void TrustedByteArray::TrustedByteArrayVerify(Isolate* isolate) {
+  TrustedObjectVerify(isolate);
   CHECK(IsSmi(TaggedField<Object>::load(*this, kLengthOffset)));
 }
 

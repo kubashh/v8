@@ -117,6 +117,7 @@ class FullObjectSlot : public SlotBase<FullObjectSlot, Address> {
   inline bool Relaxed_ContainsMapValue(Address raw_value) const;
 
   inline Tagged<Object> operator*() const;
+  inline Tagged<Object> load() const;
   inline Tagged<Object> load(PtrComprCageBase cage_base) const;
   inline void store(Tagged<Object> value) const;
   inline void store_map(Tagged<Map> map) const;
@@ -283,7 +284,6 @@ class OffHeapFullObjectSlot : public FullObjectSlot {
   inline Tagged<Object> operator*() const = delete;
 
   using FullObjectSlot::Relaxed_Load;
-  inline Tagged<Object> Relaxed_Load() const = delete;
 };
 
 // An ExternalPointerSlot instance describes a kExternalPointerSlotSize-sized

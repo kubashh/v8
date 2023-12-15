@@ -191,6 +191,9 @@ class ObjectVisitor {
                                     IndirectPointerSlot slot,
                                     IndirectPointerMode mode) {}
 
+  virtual void VisitProtectedPointer(Tagged<TrustedObject> host,
+                                     ProtectedPointerSlot slot) {}
+
   virtual void VisitTrustedPointerTableEntry(Tagged<HeapObject> host,
                                              IndirectPointerSlot slot) {}
 
@@ -209,7 +212,7 @@ class ObjectVisitorWithCageBases : public ObjectVisitor {
   // The pointer compression cage base value used for decompression of all
   // tagged values except references to InstructionStream objects.
   PtrComprCageBase cage_base() const {
-#if V8_COMPRESS_POINTERS
+#ifdef V8_COMPRESS_POINTERS
     return cage_base_;
 #else
     return PtrComprCageBase{};
@@ -227,7 +230,7 @@ class ObjectVisitorWithCageBases : public ObjectVisitor {
   }
 
  private:
-#if V8_COMPRESS_POINTERS
+#ifdef V8_COMPRESS_POINTERS
   const PtrComprCageBase cage_base_;
 #ifdef V8_EXTERNAL_CODE_SPACE
   const PtrComprCageBase code_cage_base_;
