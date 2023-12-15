@@ -4426,17 +4426,22 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   Register call_data = no_reg;
   Register callback = no_reg;
   Register holder = no_reg;
+  Register caller_context = no_reg;
 
   switch (mode) {
     case CallApiCallbackMode::kGeneric:
-      api_function_address = eax;
       argc = CallApiCallbackGenericDescriptor::ActualArgumentsCountRegister();
+      caller_context =
+          CallApiCallbackGenericDescriptor::CallerContextRegister();
       callback = CallApiCallbackGenericDescriptor::CallHandlerInfoRegister();
       holder = CallApiCallbackGenericDescriptor::HolderRegister();
       break;
 
     case CallApiCallbackMode::kOptimizedNoProfiling:
     case CallApiCallbackMode::kOptimized:
+      // Caller context is always equal to current context because we don't
+      // inline Api calls cross-context.
+      caller_context = kContextRegister;
       api_function_address =
           CallApiCallbackOptimizedDescriptor::ApiFunctionAddressRegister();
       argc = CallApiCallbackOptimizedDescriptor::ActualArgumentsCountRegister();
@@ -4444,9 +4449,11 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
       holder = CallApiCallbackOptimizedDescriptor::HolderRegister();
       break;
   }
-  DCHECK(!AreAliased(api_function_address, argc, call_data, callback, holder));
+  DCHECK(!AreAliased(api_function_address, caller_context, argc, call_data,
+                     callback, holder));
 
   using FCA = FunctionCallbackArguments;
+  using ER = ExternalReference;
 
   static_assert(FCA::kArgsLength == 6);
   static_assert(FCA::kNewTargetIndex == 5);
@@ -4465,7 +4472,7 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   //   esp[0 * kSystemPointerSize]: return address
   //   esp[1 * kSystemPointerSize]: kHolder   <= implicit_args_
   //   esp[2 * kSystemPointerSize]: kIsolate
-  //   esp[3 * kSystemPointerSize]: undefined (padding, unused)
+  //   esp[3 * kSystemPointerSize]: kUnused
   //   esp[4 * kSystemPointerSize]: undefined (kReturnValue)
   //   esp[5 * kSystemPointerSize]: kData
   //   esp[6 * kSystemPointerSize]: undefined (kNewTarget)
@@ -4489,7 +4496,15 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
   }
   __ PushRoot(RootIndex::kUndefinedValue);  // kReturnValue
   __ Push(Smi::zero());                     // kUnused
-  __ Push(Immediate(ExternalReference::isolate_address(masm->isolate())));
+
+  __ StoreRootRelative(IsolateData::topmost_script_having_context_offset(),
+                       caller_context);
+
+  if (mode == CallApiCallbackMode::kGeneric) {
+    api_function_address = ReassignRegister(caller_context);
+  }
+
+  __ Push(Immediate(ER::isolate_address(masm->isolate())));
   __ Push(holder);
   // Keep a pointer to kHolder (= implicit_args) in a {holder} register.
   // We use it below to set up the FunctionCallbackInfo object.
@@ -4589,8 +4604,7 @@ void Builtins::Generate_CallApiCallbackImpl(MacroAssembler* masm,
          ExitFrameStackSlotOperand(kApiArgsSize + FCA::kImplicitArgsOffset));
   __ mov(ExitFrameStackSlotOperand(kApiArg0Offset), scratch);
 
-  ExternalReference thunk_ref =
-      ExternalReference::invoke_function_callback(mode);
+  ExternalReference thunk_ref = ER::invoke_function_callback(mode);
   // Pass api function address to thunk wrapper in case profiler or side-effect
   // checking is enabled.
   Register thunk_arg = api_function_address;
