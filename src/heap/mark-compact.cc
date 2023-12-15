@@ -1311,6 +1311,12 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
   inline void VisitTrustedPointerTableEntry(Tagged<HeapObject> host,
                                             IndirectPointerSlot slot) final {}
 
+  inline void VisitProtectedPointer(Tagged<TrustedObject> host,
+                                    ProtectedPointerSlot slot) final {
+    RecordMigratedSlot(host, MaybeObject::FromObject(slot.load()),
+                       slot.address());
+  }
+
  protected:
   inline void RecordMigratedSlot(Tagged<HeapObject> host, MaybeObject value,
                                  Address slot) {
@@ -1323,8 +1329,13 @@ class RecordMigratedSlotVisitor : public ObjectVisitorWithCageBases {
         DCHECK(chunk->SweepingDone());
         RememberedSet<OLD_TO_NEW>::Insert<AccessMode::NON_ATOMIC>(chunk, slot);
       } else if (p->IsEvacuationCandidate()) {
+        MemoryChunk* host_chunk = MemoryChunk::FromHeapObject(host);
         if (p->IsFlagSet(MemoryChunk::IS_EXECUTABLE)) {
           RememberedSet<OLD_TO_CODE>::Insert<AccessMode::NON_ATOMIC>(
+              MemoryChunk::FromHeapObject(host), slot);
+        } else if (p->IsFlagSet(MemoryChunk::IS_TRUSTED) &&
+                   host_chunk->IsFlagSet(MemoryChunk::IS_TRUSTED)) {
+          RememberedSet<TRUSTED_TO_TRUSTED>::Insert<AccessMode::NON_ATOMIC>(
               MemoryChunk::FromHeapObject(host), slot);
         } else {
           RememberedSet<OLD_TO_OLD>::Insert<AccessMode::NON_ATOMIC>(
@@ -3683,6 +3694,15 @@ MakeSlotValue<InstructionStreamSlot, HeapObjectReferenceType::STRONG>(
 }
 #endif  // V8_EXTERNAL_CODE_SPACE
 
+#ifdef V8_ENABLE_SANDBOX
+template <>
+Tagged<Object>
+MakeSlotValue<ProtectedPointerSlot, HeapObjectReferenceType::STRONG>(
+    Tagged<HeapObject> heap_object) {
+  return heap_object;
+}
+#endif  // V8_ENABLE_SANDBOX
+
 // The following specialization
 //   MakeSlotValue<FullMaybeObjectSlot, HeapObjectReferenceType::WEAK>()
 // is not used.
@@ -3696,7 +3716,8 @@ static inline void UpdateSlot(PtrComprCageBase cage_base, TSlot slot,
                     std::is_same<TSlot, FullMaybeObjectSlot>::value ||
                     std::is_same<TSlot, MaybeObjectSlot>::value ||
                     std::is_same<TSlot, OffHeapObjectSlot>::value ||
-                    std::is_same<TSlot, InstructionStreamSlot>::value,
+                    std::is_same<TSlot, InstructionStreamSlot>::value ||
+                    std::is_same<TSlot, ProtectedPointerSlot>::value,
                 "Only [Full|OffHeap]ObjectSlot, [Full]MaybeObjectSlot "
                 "or InstructionStreamSlot are expected here");
   MapWord map_word = heap_obj->map_word(cage_base, kRelaxedLoad);
@@ -4697,6 +4718,7 @@ class RememberedSetUpdatingItem : public UpdatingItem {
     UpdateUntypedOldToNewPointers<OLD_TO_NEW_BACKGROUND>();
     UpdateUntypedOldToOldPointers();
     UpdateUntypedOldToCodePointers();
+    UpdateUntypedTrustedToTrustedPointers();
   }
 
   template <RememberedSetType old_to_new_type>
@@ -4769,6 +4791,25 @@ class RememberedSetUpdatingItem : public UpdatingItem {
           },
           SlotSet::FREE_EMPTY_BUCKETS);
       chunk_->ReleaseSlotSet(OLD_TO_CODE);
+    }
+  }
+
+  void UpdateUntypedTrustedToTrustedPointers() {
+    if (chunk_->slot_set<TRUSTED_TO_TRUSTED, AccessMode::NON_ATOMIC>()) {
+      // TODO(saelo) we can probably drop all the cage_bases here once we no
+      // longer need to pass them into our slot implementations.
+      const PtrComprCageBase unused_cage_base(kNullAddress);
+      RememberedSet<TRUSTED_TO_TRUSTED>::Iterate(
+          chunk_,
+          [=](MaybeObjectSlot slot) {
+            UpdateStrongSlot(unused_cage_base,
+                             ProtectedPointerSlot(slot.address()));
+            // Always keep slot since all slots are dropped at once after
+            // iteration.
+            return KEEP_SLOT;
+          },
+          SlotSet::FREE_EMPTY_BUCKETS);
+      chunk_->ReleaseSlotSet(TRUSTED_TO_TRUSTED);
     }
   }
 
