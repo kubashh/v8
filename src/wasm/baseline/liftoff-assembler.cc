@@ -347,9 +347,10 @@ int LiftoffAssembler::GetTotalFrameSlotCountForGC() const {
 
 namespace {
 
-AssemblerOptions DefaultLiftoffOptions() {
+AssemblerOptions DefaultLiftoffAssemblerOptions() {
   AssemblerOptions options = AssemblerOptions{};
   options.is_wasm = true;
+  options.enable_root_relative_access = true;
   return options;
 }
 
@@ -357,8 +358,8 @@ AssemblerOptions DefaultLiftoffOptions() {
 
 LiftoffAssembler::LiftoffAssembler(Zone* zone,
                                    std::unique_ptr<AssemblerBuffer> buffer)
-    : MacroAssembler(nullptr, DefaultLiftoffOptions(), CodeObjectRequired::kNo,
-                     std::move(buffer)),
+    : MacroAssembler(nullptr, DefaultLiftoffAssemblerOptions(),
+                     CodeObjectRequired::kNo, std::move(buffer)),
       cache_state_(zone) {
   set_abort_hard(true);  // Avoid calls to Abort.
 }
