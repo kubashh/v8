@@ -16,6 +16,98 @@
       "message": "ptal",
       "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12a50e20_6dc59de0",
+        "filename": "src/baseline/baseline-batch-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-12-15T12:32:16Z",
+      "side": 1,
+      "message": "what happens if `UseEfficiencyMode` changes after this? I guess here it\u0027s ok, we\u0027ll end up having some things in the concurrent queue but will anyway try to main thread optimise them eventually through normal tierup",
+      "range": {
+        "startLine": 264,
+        "startChar": 8,
+        "endLine": 264,
+        "endChar": 18
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6e5156b_426e0b36",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-12-15T12:32:16Z",
+      "side": 1,
+      "message": "this posting doesn\u0027t happen very often, we should talk to scheduler folks about getting an API for changing the job\u0027s priority.",
+      "range": {
+        "startLine": 151,
+        "startChar": 42,
+        "endLine": 151,
+        "endChar": 49
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3419417e_e96839d5",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-12-15T12:32:16Z",
+      "side": 1,
+      "message": "also here.",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 21
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bf5da6a_9f2feb0c",
+        "filename": "src/execution/tiering-manager.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2023-12-15T12:32:16Z",
+      "side": 1,
+      "message": "I wonder if this should bottleneck elsewhere (e.g. in `JSFunction::MarkForOptimization`, where we also check for `concurrent_recompilation_enabled`)",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 339,
+        "endChar": 3
+      },
+      "revId": "235c3dd24ae34efa5720da00ffcc261fefed7f8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
