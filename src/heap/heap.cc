@@ -6240,7 +6240,7 @@ void Heap::AddRetainedMaps(Handle<NativeContext> context,
     DisallowGarbageCollection no_gc;
     Tagged<WeakArrayList> raw_array = *array;
     for (Handle<Map> map : maps) {
-      DCHECK(!map->InAnySharedSpace());
+      DCHECK(!i::InAnySharedSpace(*map));
 
       if (map->is_in_retained_map_list()) {
         continue;
@@ -7087,7 +7087,7 @@ void Heap::CombinedGenerationalAndSharedBarrierSlow(Tagged<HeapObject> object,
 
   } else {
     DCHECK(value_chunk->InWritableSharedSpace());
-    DCHECK(!object->InWritableSharedSpace());
+    DCHECK(!i::InWritableSharedSpace(object));
     Heap::SharedHeapBarrierSlow(object, slot);
   }
 }
@@ -7102,7 +7102,7 @@ void Heap::CombinedGenerationalAndSharedEphemeronBarrierSlow(
 
   } else {
     DCHECK(value_chunk->InWritableSharedSpace());
-    DCHECK(!table->InWritableSharedSpace());
+    DCHECK(!i::InWritableSharedSpace(table));
     Heap::SharedHeapBarrierSlow(table, slot);
   }
 }
